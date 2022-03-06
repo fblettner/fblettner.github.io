@@ -30,6 +30,7 @@ All public repositories developed by NOMANA-IT
 ## Company Website
 {: .smallcaps}
 Company specialized in consulting, integration and development of solutions based on Oracle, JD Edwards and GPL products.
+
 [NOMANA-IT](https://nomana-it.fr){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
 
 ---
