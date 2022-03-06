@@ -1,13 +1,13 @@
 ---
 layout: default
-title: JDEBIP
+title: Export XML source or PDF Output from JD Edwards
 permalink: /jdedwards/jde-api/jdebip
 parent: JD Edwards API
 grand_parent: JD Edwards
 nav_order: 1
 ---
 
-# JAVA API for JD EDWARDS
+# JDEBIP
 ### Built with VSCode and JDK 1.8
 
 ## Functionalities

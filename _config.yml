@@ -68,6 +68,8 @@ aux_links:
     - "//nomana-it.fr"
   "GITHUB":
     - "//github.com/fblettner"
+  "SUPPORT":
+    - "https://nomana-it.freshdesk.com/support/home"
 
 # Makes Aux links open in a new tab. Default is false
 aux_links_new_tab: true

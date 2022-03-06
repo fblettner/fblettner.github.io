@@ -1,13 +1,13 @@
 ---
 layout: default
-title: JDEBSFN
+title: Export source code for BSFN from JD Edwards
 permalink: /jdedwards/jde-api/jdebsfn
 parent: JD Edwards API
 grand_parent: JD Edwards
 nav_order: 2
 ---
 
-# JAVA API for JD EDWARDS
+# JDEBSFN
 ### Built with VSCode and JDK 1.8
 
 ## Functionalities
