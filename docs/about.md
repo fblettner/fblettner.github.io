@@ -2,7 +2,7 @@
 layout: page
 title: About
 permalink: /about/
-nav_order: 4
+nav_order: 5
 ---
 
 ## ![NOMASX-1](/assets/about/fbl_logo.png){: width="140" } Franck BLETTNER 
