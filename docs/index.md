@@ -16,5 +16,16 @@ Information about our products and services with targeted solutions, getting sta
 
 ---
 
-## Getting started
+# Support
 
+If you need support, create a ticket after register to the portal
+
+[SUPPORT PORTAL](https://nomana-it.freshdesk.com/support/home){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
+
+---
+
+# Open source projects
+
+All public repositories developed by NOMANA-IT
+
+[Go to Github](https://github.com/fblettner?tab=repositories){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
