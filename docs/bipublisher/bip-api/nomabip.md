@@ -7,10 +7,17 @@ grand_parent: BI Publisher
 nav_order: 2
 ---
 
-# JAVA package with Oracle BI Publisher API
-### Built with VSCode and JDK 1.8
+## JAVA package with Oracle BI Publisher API
+### *Built with VSCode and JDK 1.8*
+
+1. [Functionalities](#functionalities)
+1. [Global Settings](#settings)
+1. [Template Settings](#template)
+1. [Usage](#usage)
+1. [Screenshots](#screenshots)
 
 ## Functionalities
+{: .textbox #functionalities} 
 This api was initially developed to integrate easily JDEdwards and BI Publisher regardless of JDEdwards Tools Release.\
 Nothing to install, only to use. Samples scripts are provided into the test directory. It can now be used for any spool with or without JD Edwards (BI Publisher license is needed).
 - Generate PDF and XML files simultaneously from a xml spool
@@ -21,6 +28,7 @@ Nothing to install, only to use. Samples scripts are provided into the test dire
 - Integrate Java class NOMABC to print Barcode 128 (see github repository)
 
 ## Global Settings
+{: .textbox #settings} 
 
 | Parameter     | Description                       |
 | ---           | ---                               |
@@ -38,11 +46,11 @@ Nothing to install, only to use. Samples scripts are provided into the test dire
 
 
 ## Template Settings
-
+{: .textbox #template} 
 Set template location, ID of fields used to name the output document in case of bursting and mandatory fields when update database is on.
 
 ## Usage
-
+{: .textbox #usage} 
 - Simple java application to configure and generate documents\
 java -jar ../dist/nomabip.jar -config ./config/config.properties
 - Encrypt password for config file\
@@ -51,7 +59,7 @@ java -jar ../dist/nomabip.jar -password \<PASSWORD>
 java -jar ../dist/nomabip.jar -run ./config/config.properties \<TEMPLATE> \<DOCUMENT_NAME> \<MODE> \<DOCUMENT_ID> 
 
 ## Screenshot
-
+{: .textbox #screenshots} 
 ![NOMASX-1](/assets/nomabip/nomabip_gui.png){: width="600"}
 
 ![NOMASX-1](/assets/nomabip/nomabip_sample_pdf.png){: width="600"}

@@ -7,13 +7,15 @@ grand_parent: JD Edwards
 nav_order: 1
 ---
 
-# JDEBIP
-### Built with VSCode and JDK 1.8
+## JDEBIP
+### *Built with VSCode and JDK 1.8*
 
 ## Functionalities
+{: .textbox}
 - jdebip : export XML source or PDF Output from JD Edwards BLOB fields
 
-## JDEBIP
+## Settings
+{: .textbox}
 This class can be used to export blob column for BI Publisher from JD Edwards Database. This class can be extended to export BLOB for all tables.
 
 | Parameter     | Description                       |
@@ -29,6 +31,7 @@ This class can be used to export blob column for BI Publisher from JD Edwards Da
 | DELETE_F95630 | SQL query to delete record into F95630 |
 
 ## Usage
+{: .textbox}
 - Extract XML Source\
 java -cp ../dist/nomajde.jar jdebip XML \<OBJECT_NAME> \<VERSION> \<LANGUAGE> \<JOB_NUMBER>
 - Extract PDF output\

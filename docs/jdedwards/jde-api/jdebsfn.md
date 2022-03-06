@@ -7,13 +7,15 @@ grand_parent: JD Edwards
 nav_order: 2
 ---
 
-# JDEBSFN
-### Built with VSCode and JDK 1.8
+## JDEBSFN
+### *Built with VSCode and JDK 1.8*
 
 ## Functionalities
+{: .textbox}
 - jdebsn : export source code for BSFN from JD Edwards BLOB field (F98780R)
 
-## JDEBSFN
+## Settings
+{: .textbox}
 This class can be used to export blob column for BSFN from JD Edwards Database. This class can be extended to export BLOB for all tables.
 
 | Parameter     | Description                       |
@@ -25,5 +27,6 @@ This class can be used to export blob column for BSFN from JD Edwards Database. 
 | F98780R   | SQL Query to get source code for BSFN |
 
 ## Usage
+{: .textbox}
 - Extract source code\
 java -cp ../dist/nomajde.jar jdebsfn F98780R \<BSFN_OR_TABLE>
