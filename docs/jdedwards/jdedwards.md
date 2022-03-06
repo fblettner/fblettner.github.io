@@ -7,5 +7,5 @@ has_children: true
 ---
 
 ## JD Edwards
-Oracle’s JD Edwards software meets the demands for a modern and simplified user experience. Our purpose-built applications are aligned to how your users work. Integrated with digital technologies, our innovative approach increases productivity enabling your company to work smarter, faster, and ultimately achieve more.
+Oracle’s JD Edwards EnterpriseOne is an integrated applications suite of comprehensive enterprise resource planning software that combines business value, standards-based technology, and deep industry experience into a business solution with a low total cost of ownership.
 
