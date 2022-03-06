@@ -66,7 +66,7 @@ heading_anchors: true
 aux_links:
   "NOMANA-IT":
     - "//nomana-it.fr"
-  "Github":
+  "GITHUB":
     - "//github.com/fblettner"
 
 # Makes Aux links open in a new tab. Default is false

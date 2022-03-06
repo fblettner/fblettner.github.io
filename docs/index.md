@@ -12,8 +12,9 @@ permalink: /
 Information about our products and services with targeted solutions, getting started guides, and content for advanced use cases.
 {: .fs-6 .fw-300 }
 
-[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [GitHub Repository](https://github.com/fblettner){: .btn .fs-5 .mb-4 .mb-md-0 }
+![NOMASX-1](/assets/nomasx1.png){: width="40" } [NOMASX-1](/nomasx1){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [JD Edwards](/jdedwards){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2} [About](/about){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
 ## Getting started
+
