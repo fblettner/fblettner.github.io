@@ -14,3 +14,10 @@
     }
     max-width: 100%;
 }
+
+.textbox {
+    padding: $sp-3;
+    margin-bottom: $sp-3;
+    overflow: auto;
+    border: 1px solid $border-color;
+}
