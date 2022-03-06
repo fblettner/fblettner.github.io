@@ -18,10 +18,14 @@
 .textbox {
     padding: $sp-3;
     margin-bottom: $sp-3;
-    overflow: auto;
     border: 1px solid $border-color;
     font-variant: small-caps;
     font-weight: bolder;
+}
+
+.smallcaps {
+    font-variant: small-caps;
+    font-weight: bold;
 }
 
 
