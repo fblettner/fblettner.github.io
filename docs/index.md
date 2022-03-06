@@ -17,7 +17,7 @@ Information about our products and services with targeted solutions, getting sta
 {: .smallcaps}
 If you need support, create a ticket through the portal (registration is required)
 
-[SUPPORT PORTAL](https://nomana-it.freshdesk.com/support/home){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
+[Support Portal](https://nomana-it.freshdesk.com/support/home){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
 
 ---
 ## Open source projects
@@ -25,13 +25,6 @@ If you need support, create a ticket through the portal (registration is require
 All public repositories developed by NOMANA-IT
 
 [Go to Github](https://github.com/fblettner?tab=repositories){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
-
----
-## Company Website
-{: .smallcaps}
-Company specialized in consulting, integration and development of solutions based on Oracle, JD Edwards and GPL products.
-
-[NOMANA-IT](https://nomana-it.fr){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
 
 ---
 ![NOMASX-1](/assets/nomasx1.png){: width="100" .image-right}
@@ -45,3 +38,10 @@ Intuitive and centralized management of all the security of your information sys
 Login : demo
 Password : demo
 ```
+
+---
+## Company Website
+{: .smallcaps}
+Company specialized in consulting, integration and development of solutions based on Oracle, JD Edwards and GPL products.
+
+[NOMANA-IT](https://nomana-it.fr){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
