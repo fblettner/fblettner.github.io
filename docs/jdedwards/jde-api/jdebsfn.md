@@ -8,6 +8,7 @@ nav_order: 2
 ---
 
 ## JDEBSFN
+[Download](https://github.com/fblettner/jde-nomajde){: style="float: right;" .btn-primary .btn .fs-5 .mb-4 .mb-md-0 target="_blank"}
 ### *Built with VSCode and JDK 1.8*
 
 ## Functionalities

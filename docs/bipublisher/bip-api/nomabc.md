@@ -8,6 +8,7 @@ nav_order: 1
 ---
 
 ## Simple JAVA CLASS to encode string and display barcode 128 with BI Publisher RTF template
+[Download](https://github.com/fblettner/bip-nomabc){: style="float: right;" .btn-primary .btn .fs-5 .mb-4 .mb-md-0 target="_blank"}
 ### *Built with VSCode and JDK 11*
 
 ### Steps to use this java class

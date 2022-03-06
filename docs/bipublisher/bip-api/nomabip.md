@@ -8,6 +8,7 @@ nav_order: 2
 ---
 
 ## JAVA package with Oracle BI Publisher API
+[Download](https://github.com/fblettner/bip-nomabip){: style="float: right;" .btn-primary .btn .fs-5 .mb-4 .mb-md-0 target="_blank"}
 ### *Built with VSCode and JDK 1.8*
 
 1. [Functionalities](#functionalities)
