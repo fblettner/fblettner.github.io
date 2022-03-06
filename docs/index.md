@@ -6,7 +6,7 @@ description: "Knowledge base for NOMANA-IT containing documentation for NOMASX1 
 permalink: /
 ---
 
-## Knowledge base.
+## Knowledge base
 {: .smallcaps}
 Information about our products and services with targeted solutions, getting started guides, and content for advanced use cases.
 
@@ -29,6 +29,7 @@ All public repositories developed by NOMANA-IT
 ---
 ## Company Website
 {: .smallcaps}
+Company specialized in consulting, integration and development of solutions based on Oracle, JD Edwards and GPL products.
 [NOMANA-IT](https://nomana-it.fr){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
 
 ---
