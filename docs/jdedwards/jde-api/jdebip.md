@@ -12,7 +12,7 @@ nav_order: 1
 
 ## Functionalities
 {: .textbox}
-- jdebip : export XML source or PDF Output from JD Edwards BLOB fields
+- Export XML source or PDF Output from JD Edwards BLOB fields
 
 ## Settings
 {: .textbox}

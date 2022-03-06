@@ -12,7 +12,7 @@ nav_order: 2
 
 ## Functionalities
 {: .textbox}
-- jdebsn : export source code for BSFN from JD Edwards BLOB field (F98780R)
+- Export source code for BSFN from JD Edwards BLOB field (F98780R)
 
 ## Settings
 {: .textbox}
