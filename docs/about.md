@@ -12,7 +12,7 @@ With 20 years of experience with JD Edwards, I have developed know-how, knowledg
 
 Technical expertise, Architect, Project management, Application development
 
-Oracle JD Edwards, Oracle Database, Oracle Data Integrator, Oracle Analytics Server, Oracle Cloud Infrastructure, Amazon AWS, Talend, NodeJS, Java, Linux, Rundeck...
+Oracle JD Edwards, Oracle Database, Oracle Data Integrator, Oracle Analytics Server, Oracle Cloud Infrastructure, Amazon AWS, Talend, Oracle Jet, NodeJS, Java, Linux, Rundeck, Jekyll, Ruby...
  
 [![NOMASX-1](/assets/about/linkedin.png)](http://www.linkedin.com/in/franck-blettner-72509510){:target="_blank"}
 [![NOMASX-1](/assets/about/twitter.png)](https://twitter.com/fblettner){:target="_blank"}
