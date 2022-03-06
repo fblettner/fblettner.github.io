@@ -17,5 +17,3 @@ Information about our products and services with targeted solutions, getting sta
 ---
 
 ## Getting started
-
-![NOMASX-1](/assets/nomasx1.png)
