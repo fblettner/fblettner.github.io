@@ -6,10 +6,10 @@ description: "Knowledge base for NOMANA-IT containing documentation for NOMASX1 
 permalink: /
 ---
 
-# Knowledge base for NOMANA-IT containing documentation for NOMASX1 and others usefull references.
+# Knowledge base.
 {: .fs-9 }
 
-Under construction.
+Information about our products and services with targeted solutions, getting started guides, and content for advanced use cases.
 {: .fs-6 .fw-300 }
 
 [Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [GitHub Repository](https://github.com/fblettner){: .btn .fs-5 .mb-4 .mb-md-0 }
