@@ -33,4 +33,4 @@ Intuitive and centralized management of all the security of your information sys
 * LDAP: Connection to an LDAP directory (MSAD…), account verification and reconciliation
 * Data enrichment: Technical accounts, generic accounts, privileged accounts, renamed accounts, custom queries and databases
 {: }
-Compliance with your Oracle license agreements (OBIEE, ODI, BI Publisher, Database, JDEdwards)
+Compliancy with your Oracle license agreements (OBIEE, ODI, BI Publisher, Database, JDEdwards)
