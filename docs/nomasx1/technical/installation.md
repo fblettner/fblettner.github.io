@@ -2,9 +2,9 @@
 layout: default
 title: Installation
 permalink: /nomasx1/technical/installation
-parent: Technical Guides
+parent: Technical Guide
 grand_parent: NOMASX-1
-nav_order: 1
+nav_order: 2
 ---
 
 ## Installing NOMASX-1

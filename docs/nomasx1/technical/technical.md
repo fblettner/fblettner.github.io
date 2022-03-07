@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Technical Guides
+title: Technical Guide
 permalink: /nomasx1/technical
 parent: NOMASX-1
 has_children: true
