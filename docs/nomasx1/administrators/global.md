@@ -25,43 +25,73 @@ nav_order: 1
 * Native connector for Microsoft Active Directory
 * All databases accessibles with jdbc can be set
 
+![NOMASX-1](/assets/nomasx1/application-0.png){: width="600"}
+
+Click on add or edit to set a new datasource or modify an existing datasource and follow the wizard
+
 ### 1.1. Global Settings
-{: .underline #global}
+{: .underline .lh-default #global}
 
-To set a new datasource or modify an existing datasource, click on add or edit
-
-![NOMASX-1](/assets/nomasx1/application-1.png){: width="600"}
+![NOMASX-1](/assets/nomasx1/application-1.png){: width="450"}
 
 Parameters:
 {: .underline}
 
-|Parameter|Description|Comments
+|Parameter|Description|Comments|
 |Application ID|Unique ID|Automatic increment number used in all table joins|
 |Application Name|Name of your application||
 |Application Type|Native or custom connector|JD Edwards, Database, LDAP, Weblogic, Custom Application|
 |Database|Type of database|Oracle, MySQL, IBM DB2, Microsoft SQL Server, LDAP|
 
-
 ### 1.2. Connections
 {: .underline #connections}
 
-Parameters differs depending on the type of the application
+![NOMASX-1](/assets/nomasx1/application-2.png){: width="450"}
 
-* JD Edwards
+Some parameters could be hidden depending on the type of the application
 
-
-* Database
-
-* LDAP
-
-
+|Parameter|Description|Comments|
+|Host|Database server||
+|Port|Database port||
+|Database|Service Name|Service Name and not SID for Oracle later than 12.2|
+|User|Login to database|login could have read-only rights but with access to dictionary or catalog|
+|Password|Password for the user|
 
 
 ### 1.3. Options
 {: .underline #options}
 
+Parameters differs depending on the type of the application
 
+* JD Edwards
+{: .underline}
 
+![NOMASX-1](/assets/nomasx1/application-3.png){: width="450"}
+
+|Parameter|Description|Comments|
+|JDE DTA|Business Data|PRODDTA|
+|JDE CTL|Control Tables|PRODCTL|
+|JDE CO|Central Objects|PD920|
+|JDE SY|System Tables|SY920|
+|JDE SVM|Server Map|SVM920|
+|JDE OL|Object Librarian|OL920|
+|F00950|Security table location (sometimes not in SYSTEM)|SY920|
+|Standard Menu (Y/N)|Collect Tasks Menus||
+|E1 Pages (Y/N)|Collect E1 Pages|Before Tools Release 9.2 and E1 composite|
+|E1 Composite (Y/N)|Collect E1 Composite Pages|After Tools Release 9.2|
+
+* Database / Custom Application
+{: .underline}
+
+NONE
+
+* LDAP
+{: .underline}
+
+|Parameter|Description|Comments|
+|LDAP Context|Search|OU=Utilisateurs,DC=nomana-it,DC=fr|
+|LDAP Filter|Filtering type of object|(&(objectClass=user))|
+|LDAP Exclude|Exclude node|OU=Applications,OU=Utilisateurs,DC=nomana-it,DC=fr|
 
 ### 2. Users
 {: .textbox #applications}
