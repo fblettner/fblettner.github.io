@@ -36,6 +36,41 @@ groupadd nomasx1
 useradd -g nomasx1 nomasx1
 ```
 
+Check if SELINUX is enabled and change mode to permissive
+```scss
+sestatus
+
+SELinux status:                 enabled
+SELinuxfs mount:                /sys/fs/selinux
+SELinux root directory:         /etc/selinux
+Loaded policy name:             targeted
+********************
+** CHECK MODE **
+Current mode:                   enforcing
+Mode from config file:          enforcing
+********************
+Policy MLS status:              enabled
+Policy deny_unknown status:     allowed
+Memory protection checking:     actual (secure)
+Max kernel policy version:      31
+```
+
+Set secure Linux to permissive by editing the "/etc/selinux/config" file, making sure the SELINUX flag is set as follows.
+```scss
+SELINUX=permissive
+```
+Once the change is complete, restart the server or run the following command.
+```scss
+setenforce Permissive
+```
+
+Disable firewall
+```scss
+systemctl stop firewalld
+systemctl disable firewalld
+systemctl status firewalld
+```
+
 ### Install Podman
 {: .textbox #podman}
 ```scss
