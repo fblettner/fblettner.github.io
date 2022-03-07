@@ -1,8 +1,9 @@
 ---
 layout: default
 title: Installation
-permalink: /nomasx1/installation
-parent: NOMASX-1
+permalink: /nomasx1/technical/installation
+parent: Technical Guides
+grand_parent: NOMASX-1
 nav_order: 1
 ---
 
