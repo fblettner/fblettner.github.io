@@ -22,7 +22,7 @@ TIP
 PODMAN is fastest way to install NOMASX-1. Even if it is possible to install each component separately, using podman is better because all is preconfigured
 ```
 
-### Requirements
+### 1. Requirements
 {: .textbox #requirements}
 * RAM : 8Go
 * DISK : 60 Go
@@ -72,7 +72,7 @@ systemctl disable firewalld
 systemctl status firewalld
 ```
 
-### Install Podman
+### 2. Install Podman
 {: .textbox #podman}
 ```scss
 dnf -y install podman podman-docker buildah skopeo dnf-utils zip unzip tar gzip git
@@ -85,14 +85,14 @@ usermod --add-subuids 100000-165535 --add-subgids 100000-165535 nomasx1
 podman system migrate
 ```
 
-### Enable service and check status
+### 3. Enable service and check status
 {: .textbox #service}
 ```scss
 systemctl enable --now podman.socket
 systemctl status podman.socket
 ```
 
-### Download components
+### 4. Download components
 {: .textbox #github}
 The Repository is private because this application is under licence. Ask for credentials to download
 ```scss
@@ -106,7 +106,7 @@ Give rights for user inside the container
 podman unshare chown -R 54321:54321 data/oradata
 ```
 
-### Start all containers
+### 5. Start all containers
 {: .textbox #containers}
 Login to OCI to be able to start all containers (this is a one time only task)
 ```scss
