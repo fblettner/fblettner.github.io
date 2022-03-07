@@ -32,13 +32,13 @@ PODMAN is fastest way to install NOMASX-1. Even if it is possible to install eac
 The server should have an access to internet to download all images and applications sources from Github and Oracle Registry Container.
 
 Podman works rootless, you can create a user to start all containers with a specific user and without using root
-```scss
+```bash
 groupadd nomasx1
 useradd -g nomasx1 nomasx1
 ```
 
 Check if SELINUX is enabled and change mode to permissive
-```scss
+```bash
 sestatus
 
 SELinux status:                 enabled
@@ -57,16 +57,16 @@ Max kernel policy version:      31
 ```
 
 Set secure Linux to permissive by editing the "/etc/selinux/config" file, making sure the SELINUX flag is set as follows.
-```scss
+```bash
 SELINUX=permissive
 ```
 Once the change is complete, restart the server or run the following command.
-```scss
+```bash
 setenforce Permissive
 ```
 
 Disable firewall
-```scss
+```bash
 systemctl stop firewalld
 systemctl disable firewalld
 systemctl status firewalld
@@ -74,12 +74,12 @@ systemctl status firewalld
 
 ### 2. Install Podman
 {: .textbox #podman}
-```scss
+```bash
 dnf -y install podman podman-docker buildah skopeo dnf-utils zip unzip tar gzip git
 dnf -y update
 ```
 Add the user created previously to be able to start container rootless
-```scss
+```bash
 touch /etc/subuid /etc/subgid
 usermod --add-subuids 100000-165535 --add-subgids 100000-165535 nomasx1
 podman system migrate
@@ -87,7 +87,7 @@ podman system migrate
 
 ### 3. Enable service and check status
 {: .textbox #service}
-```scss
+```bash
 systemctl enable --now podman.socket
 systemctl status podman.socket
 ```
@@ -95,7 +95,7 @@ systemctl status podman.socket
 ### 4. Download components
 {: .textbox #github}
 The Repository is private because this application is under licence. Ask for credentials to download
-```scss
+```bash
 git clone https://github.com/fblettner/nomasx1-containers.git
 Enter login and password
 
@@ -109,12 +109,12 @@ podman unshare chown -R 54321:54321 data/oradata
 ### 5. Start all containers
 {: .textbox #containers}
 Login to OCI to be able to start all containers (this is a one time only task)
-```scss
+```bash
 podman login https://lhr.ocir.io
 Enter login and password
 ```
 
 Start the containers
-```scss
+```bash
 podman play kube nomasx1w.yaml --configmap .nomasx1.yaml,.rundeck.yaml
 ```

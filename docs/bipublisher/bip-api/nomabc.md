@@ -24,14 +24,17 @@ nav_order: 1
 {: .textbox #xdo} 
 Add the line below to declare the truetype font. The font is delivered into the dist directory. (Thanks to GrandZebu for explanation and font : http://grandzebu.net/informatique/codbar/code128.htm)
 
-\<font family="Code 128z" style="normal" weight="normal"><truetype path="d:/BIP/java/fonts/code128z.TTF"/></font>
-
+```html
+<font family="Code 128z" style="normal" weight="normal"><truetype path="d:/BIP/java/fonts/code128z.TTF"/></font>
+```
 
 ### Declaration of a custom function into a RTF Template
 {: .textbox #custom}
 Add a field into the template and set the property like this
 
-\<?register-barcode-vendor:'nomabc.BarcodeUtil';'NOMANA’?>
+```xml
+<?register-barcode-vendor:'nomabc.BarcodeUtil';'NOMANA’?>
+```
 
 ![NOMASX-1](/assets/nomabc/custom_function.png){: width="600"}
 
@@ -39,7 +42,9 @@ Add a field into the template and set the property like this
 {: .textbox #convert}
 Add the field with the value to convert and modify the property with the following script
 
-\<?format-barcode:DataBarreCode;'code128';'NOMANA’?>
+```xml
+<?format-barcode:DataBarreCode;'code128';'NOMANA’?>
+```
 
 ![NOMASX-1](/assets/nomabc/convert_barcode.png){: width="600"}
 

@@ -35,7 +35,11 @@ This class can be used to export blob column for BI Publisher from JD Edwards Da
 
 ## Usage
 {: .textbox}
-- Extract XML Source\
-java -cp ../dist/nomajde.jar jdebip XML \<OBJECT_NAME> \<VERSION> \<LANGUAGE> \<JOB_NUMBER>
+- Extract XML Source
+```bash
+java -cp ../dist/nomajde.jar jdebip XML <OBJECT_NAME> <VERSION> <LANGUAGE> <JOB_NUMBER>
+```
 - Extract PDF output\
-java -cp ../dist/nomajde.jar jdebip PDF \<OBJECT_NAME> \<VERSION> \<LANGUAGE> \<JOB_NUMBER>
+```bash
+java -cp ../dist/nomajde.jar jdebip PDF <OBJECT_NAME> <VERSION> <LANGUAGE> <JOB_NUMBER>
+```

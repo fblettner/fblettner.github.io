@@ -52,12 +52,18 @@ Set template location, ID of fields used to name the output document in case of 
 
 ## Usage
 {: .textbox #usage} 
-- Simple java application to configure and generate documents\
+- Simple java application to configure and generate documents
+```bash
 java -jar ../dist/nomabip.jar -config ./config/config.properties
-- Encrypt password for config file\
-java -jar ../dist/nomabip.jar -password \<PASSWORD>
-- Generate documents\
-java -jar ../dist/nomabip.jar -run ./config/config.properties \<TEMPLATE> \<DOCUMENT_NAME> \<MODE> \<DOCUMENT_ID> 
+```
+- Encrypt password for config file
+```bash
+java -jar ../dist/nomabip.jar -password <PASSWORD>
+```
+- Generate documents
+```bash
+java -jar ../dist/nomabip.jar -run ./config/config.properties <TEMPLATE> <DOCUMENT_NAME> <MODE> <DOCUMENT_ID> 
+```
 
 ## Screenshot
 {: .textbox #screenshots} 

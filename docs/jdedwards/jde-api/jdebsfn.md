@@ -30,4 +30,6 @@ This class can be used to export blob column for BSFN from JD Edwards Database. 
 ## Usage
 {: .textbox}
 - Extract source code\
-java -cp ../dist/nomajde.jar jdebsfn F98780R \<BSFN_OR_TABLE>
+```bash
+java -cp ../dist/nomajde.jar jdebsfn F98780R <BSFN_OR_TABLE>
+```
