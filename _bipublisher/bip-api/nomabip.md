@@ -67,6 +67,6 @@ java -jar ../dist/nomabip.jar -run ./config/config.properties <TEMPLATE> <DOCUME
 ```
 
 ## 5. Screenshot
-![NOMASX-1](../../assets/nomabip/nomabip_gui.png)
+![NOMASX-1](https://docs.nomana-it.fr/assets/nomabip/nomabip_gui.png)
 
-![NOMASX-1](../../assets/nomabip/nomabip_sample_pdf.png)
+![NOMASX-1](https://docs.nomana-it.fr/assets/nomabip/nomabip_sample_pdf.png)
