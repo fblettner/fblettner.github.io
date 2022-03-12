@@ -108,8 +108,7 @@ color_scheme: dark
 ga_tracking: UA-46510658-2
 ga_tracking_anonymize_ip: true # Use GDPR compliant Google Analytics settings (true/nil by default)
 
-#remote_theme: just-the-docs/just-the-docs
-remote_theme: pdmosses/just-the-docs@rec-nav-2
+remote_theme: fblettner/just-the-docs
 
 plugins:
   - jekyll-seo-tag
