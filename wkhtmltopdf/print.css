@@ -1,0 +1,146 @@
+
+.site-footer,
+.site-button,
+#edit-this-page,
+#back-to-top,
+.site-nav,
+.site-header,
+.main-header {
+  display: none !important;
+}
+
+.side-bar {
+  width: 100%;
+  height: auto;
+  border-right: 0 !important;
+}
+
+
+.text-small {
+  font-size: 8pt !important;
+}
+
+pre.highlight {
+  border: 1px solid #1863be;
+}
+
+.main {
+  max-width: none;
+  margin-left: 0;
+}
+
+body, h1, h2, h3,h4 {
+  background-color: transparent !important;
+  color: #000000 !important;
+}
+
+.highlight{
+  background-color: #302d36 !important;
+  color: #ffffff !important;
+}
+
+h2 {
+  padding: 5px;
+  border: 1px solid #272626;
+  font-variant: small-caps;
+  font-weight: bolder;
+}
+
+h3 {
+  font-size: 18px !important;
+  font-variant: small-caps;
+}
+
+
+h4 {
+  font-size: 16px !important;
+  font-variant: small-caps;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.table-wrapper {
+  background-color: transparent !important;
+  color: #000000 !important;
+}
+
+table {
+  display: block;
+  overflow: auto;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+
+table tr {
+  background-color: #fff !important;
+  border-top: 1px solid #c6cbd1;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f6f8fa !important;
+}
+
+table th {
+  background-color: #1863be !important;
+  font-weight: 600;
+  color: #ffffff !important;
+}
+
+table td {
+  border: 1px solid #dfe2e5;
+  padding: 6px 13px;
+  background-color: transparent !important;
+}
+
+table tr {
+  background-color: #fff !important;
+  border-top: 1px solid #c6cbd1;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+table > thead > tr > th {
+  border-bottom: 0;
+}
+/* End of table styles */
+
+.textbox {
+  background-color: transparent !important;
+  color: #000000 !important;
+  font-variant: small-caps;
+  font-weight: bolder !important;
+}
+
+
+.site-header {
+  border-bottom: 1px solid #000000;
+}
+
+.site-title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+.text-small {
+  font-size: 8pt !important;
+}
+
+pre.highlight {
+  border: 1px solid #000000;
+}
+
+.main {
+  max-width: none;
+  margin-left: 0;
+}
+
+
