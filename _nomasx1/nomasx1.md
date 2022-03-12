@@ -11,7 +11,7 @@ Intuitive and centralized management of all the security of your information sys
 
 [Go to Demo](http://dev.nomana-it.fr:3000/){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
 
-```scss
-Login : demo
-Password : demo
+```ini
+Login = demo
+Password = demo
 ```
