@@ -31,13 +31,13 @@ nav_order: 1
 * Native connector for Microsoft Active Directory
 * All databases accessibles with jdbc can be set
 
-![NOMASX-1](../../assets/nomasx1/application-0.png)
+![NOMASX-1](https://docs.nomana-it.fr/assets/nomasx1/application-0.png)
 
 Click on add or edit to set a new datasource or modify an existing datasource and follow the wizard
 
 ### 1.1. Global Settings
 
-![NOMASX-1](../../assets/nomasx1/application-1.png)
+![NOMASX-1](https://docs.nomana-it.fr/assets/nomasx1/application-1.png)
 
 
 | Parameter        | Description                | Comments                                                 |
@@ -50,7 +50,7 @@ Click on add or edit to set a new datasource or modify an existing datasource an
 
 ### 1.2. Connections
 
-![NOMASX-1](../../assets/nomasx1/application-2.png)
+![NOMASX-1](https://docs.nomana-it.fr/assets/nomasx1/application-2.png)
 
 Some parameters could be hidden depending on the type of the application
 
@@ -69,7 +69,7 @@ Parameters differs depending on the type of the application
 
 #### 1.3.1. JD Edwards
 
-![NOMASX-1](../../assets/nomasx1/application-3.png)
+![NOMASX-1](https://docs.nomana-it.fr/assets/nomasx1/application-3.png)
 
 | Parameter           | Description                                       | Comments                                  |
 |---------------------|---------------------------------------------------|-------------------------------------------|

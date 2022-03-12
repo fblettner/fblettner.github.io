@@ -35,7 +35,7 @@ Add a field into the template and set the property like this
 <?register-barcode-vendor:'nomabc.BarcodeUtil';'NOMANA’?>
 ```
 
-![NOMASX-1](../../assets/nomabc/custom_function.png)
+![NOMASX-1](https://docs.nomana-it.fr/assets/nomabc/custom_function.png)
 
 ## 3. Convert into BarCode 128
 Add the field with the value to convert and modify the property with the following script
@@ -44,9 +44,9 @@ Add the field with the value to convert and modify the property with the followi
 <?format-barcode:DataBarreCode;'code128';'NOMANA’?>
 ```
 
-![NOMASX-1](../../assets/nomabc/convert_barcode.png)
+![NOMASX-1](https://docs.nomana-it.fr/assets/nomabc/convert_barcode.png)
 
 ## 4. Display BarCode
 Modify the font for the field in RTF with and select "Code 128z". If the truetype is not declared into Windows fonts, you will not see the font but you can simply modify it by typing the font name as screenshot below
 
-![NOMASX-1](../../assets/nomabc/display_barcode.png)
+![NOMASX-1](https://docs.nomana-it.fr/assets/nomabc/display_barcode.png)
