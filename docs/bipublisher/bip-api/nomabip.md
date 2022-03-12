@@ -7,18 +7,25 @@ grand_parent: BI Publisher
 nav_order: 2
 ---
 
-## JAVA package with Oracle BI Publisher API
+## JAVA package with Oracle BI Publisher API  <!-- omit in toc -->
 [Download](https://github.com/fblettner/bip-nomabip){: style="float: right;" .btn-primary .btn .fs-5 .mb-4 .mb-md-0 target="_blank"}
-### *Built with VSCode and JDK 1.8*
+### *Built with VSCode and JDK 1.8*  <!-- omit in toc -->
 
-1. [Functionalities](#functionalities)
-1. [Global Settings](#settings)
-1. [Template Settings](#template)
-1. [Usage](#usage)
-1. [Screenshots](#screenshots)
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
 
-## Functionalities
-{: .textbox #functionalities} 
+- [1. Functionalities](#1-functionalities)
+- [2. Global Settings](#2-global-settings)
+- [3. Template Settings](#3-template-settings)
+- [4. Usage](#4-usage)
+- [5. Screenshot](#5-screenshot)
+</details>
+
+## 1. Functionalities
+{: .textbox} 
 This api was initially developed to integrate easily JDEdwards and BI Publisher regardless of JDEdwards Tools Release.\
 Nothing to install, only to use. Samples scripts are provided into the test directory. It can now be used for any spool with or without JD Edwards (BI Publisher license is needed).
 - Generate PDF and XML files simultaneously from a xml spool
@@ -28,8 +35,8 @@ Nothing to install, only to use. Samples scripts are provided into the test dire
 - Document indexation and errors into an Oracle Database (optional)
 - Integrate Java class NOMABC to print Barcode 128 (see github repository)
 
-## Global Settings
-{: .textbox #settings} 
+## 2. Global Settings
+{: .textbox} 
 
 | Parameter     | Description                       |
 | ---           | ---                               |
@@ -46,11 +53,11 @@ Nothing to install, only to use. Samples scripts are provided into the test dire
 | updateDB      | Update Oracle database (Y/N) with index and logs  |
 
 
-## Template Settings
-{: .textbox #template} 
+## 3. Template Settings
+{: .textbox} 
 Set template location, ID of fields used to name the output document in case of bursting and mandatory fields when update database is on.
 
-## Usage
+## 4. Usage
 {: .textbox #usage} 
 - Simple java application to configure and generate documents
 ```bash
@@ -65,8 +72,8 @@ java -jar ../dist/nomabip.jar -password <PASSWORD>
 java -jar ../dist/nomabip.jar -run ./config/config.properties <TEMPLATE> <DOCUMENT_NAME> <MODE> <DOCUMENT_ID> 
 ```
 
-## Screenshot
-{: .textbox #screenshots} 
+## 5. Screenshot
+{: .textbox} 
 ![NOMASX-1](/assets/nomabip/nomabip_gui.png){: width="600"}
 
 ![NOMASX-1](/assets/nomabip/nomabip_sample_pdf.png){: width="600"}

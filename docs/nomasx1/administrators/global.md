@@ -6,19 +6,27 @@ parent: Administrator's Guide
 grand_parent: NOMASX-1
 nav_order: 1
 ---
+## Global Settings <!-- omit in toc -->
 
-## Topics
-1. [Applications](#applications)
-    * [Global Settings](#global)
-    * [Connections](#connections)
-    * [Options](#options)
-2. [Users](#users)
-3. [Query](#query)
-4. [DWH](#dwh)
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
 
+- [1. Applications](#1-applications)
+  - [1.1. Global Settings](#11-global-settings)
+  - [1.2. Connections](#12-connections)
+  - [1.3. Options](#13-options)
+    - [1.3.1. JD Edwards](#131-jd-edwards)
+    - [1.3.2. Database / Custom Application](#132-database--custom-application)
+    - [1.3.3. LDAP](#133-ldap)
+- [2. Users](#2-users)
+- [3. Query](#3-query)
+- [4. DWH](#4-dwh)
+</details>
 
-### 1. Applications
-{: .textbox #applications }
+## 1. Applications
+{: .textbox}
 
 * Native connector for JD Edwards (Oracle, DB2 or MS-SQL)
 * Native connector for Oracle Database
@@ -30,7 +38,7 @@ nav_order: 1
 Click on add or edit to set a new datasource or modify an existing datasource and follow the wizard
 
 ### 1.1. Global Settings
-{: .underline .lh-default #global}
+{: .underline .lh-default}
 
 ![NOMASX-1](/assets/nomasx1/application-1.png){: width="450"}
 
@@ -43,8 +51,9 @@ Parameters:
 |Application Type|Native or custom connector|JD Edwards, Database, LDAP, Weblogic, Custom Application|
 |Database|Type of database|Oracle, MySQL, IBM DB2, Microsoft SQL Server, LDAP|
 
+
 ### 1.2. Connections
-{: .underline #connections}
+{: .underline}
 
 ![NOMASX-1](/assets/nomasx1/application-2.png){: width="450"}
 
@@ -59,11 +68,11 @@ Some parameters could be hidden depending on the type of the application
 
 
 ### 1.3. Options
-{: .underline #options}
+{: .underline}
 
 Parameters differs depending on the type of the application
 
-* JD Edwards
+#### 1.3.1. JD Edwards
 {: .underline}
 
 ![NOMASX-1](/assets/nomasx1/application-3.png){: width="450"}
@@ -80,12 +89,12 @@ Parameters differs depending on the type of the application
 |E1 Pages (Y/N)|Collect E1 Pages|Before Tools Release 9.2 and E1 composite|
 |E1 Composite (Y/N)|Collect E1 Composite Pages|After Tools Release 9.2|
 
-* Database / Custom Application
+####  1.3.2. Database / Custom Application
 {: .underline}
 
 NONE
 
-* LDAP
+####  1.3.3. LDAP
 {: .underline}
 
 |Parameter|Description|Comments|
@@ -93,13 +102,13 @@ NONE
 |LDAP Filter|Filtering type of object|(&(objectClass=user))|
 |LDAP Exclude|Exclude node|OU=Applications,OU=Utilisateurs,DC=nomana-it,DC=fr|
 
-### 2. Users
-{: .textbox #applications}
+## 2. Users
+{: .textbox}
 
 
-### 3. Query
-{: .textbox #applications}
+## 3. Query
+{: .textbox}
 
 
-### 4. DWH
-{: .textbox #applications}
+## 4. DWH
+{: .textbox}

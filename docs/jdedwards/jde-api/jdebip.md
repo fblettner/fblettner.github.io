@@ -7,17 +7,27 @@ grand_parent: JD Edwards
 nav_order: 1
 ---
 
-## JDEBIP 
+## JDEBIP <!-- omit in toc -->
 [Download](https://github.com/fblettner/jde-nomajde){: style="float: right;" .btn-primary .btn .fs-5 .mb-4 .mb-md-0 target="_blank"}
 
-### *Built with VSCode and JDK 1.8*
+### *Built with VSCode and JDK 1.8* <!-- omit in toc -->
+
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+
+- [1. Functionalities](#1-functionalities)
+- [2. Settings](#2-settings)
+- [3. Usage](#3-usage)
+</details>
 
 
-## Functionalities
+## 1. Functionalities
 {: .textbox}
 - Export XML source or PDF Output from JD Edwards BLOB fields
 
-## Settings
+## 2. Settings
 {: .textbox}
 This class can be used to export blob column for BI Publisher from JD Edwards Database. This class can be extended to export BLOB for all tables.
 
@@ -33,7 +43,7 @@ This class can be used to export blob column for BI Publisher from JD Edwards Da
 | DELETE_F9563110 | SQL query to delete record into F9563110 |
 | DELETE_F95630 | SQL query to delete record into F95630 |
 
-## Usage
+## 3. Usage
 {: .textbox}
 - Extract XML Source
 ```bash

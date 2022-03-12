@@ -1,18 +1,25 @@
 ---
 layout: default
-title: Installation
+title: Installing NOMASX-1 on Linux
 permalink: /nomasx1/technical/installation
 parent: Technical Guide
 grand_parent: NOMASX-1
 nav_order: 2
 ---
 
-## Installing NOMASX-1
-1. [Requirements](#requirements)
-1. [Install Podman](#podman)
-1. [Enable service and check status](#service)
-1. [Download components](#github)
-1. [Start all containers](#containers)
+## Installing NOMASX-1 on Linux <!-- omit in toc -->
+
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+
+- [1. Requirements](#1-requirements)
+- [2. Install Podman](#2-install-podman)
+- [3. Enable service and check status](#3-enable-service-and-check-status)
+- [4. Download components](#4-download-components)
+- [5. Start all containers](#5-start-all-containers)
+</details>
 
 ---
 TIP
@@ -22,8 +29,8 @@ TIP
 PODMAN is fastest way to install NOMASX-1. Even if it is possible to install each component separately, using podman is better because all is preconfigured
 ```
 
-### 1. Requirements
-{: .textbox #requirements}
+## 1. Requirements
+{: .textbox}
 * RAM : 8Go
 * DISK : 60 Go
 * CPU : 2vCPU
@@ -72,8 +79,8 @@ systemctl disable firewalld
 systemctl status firewalld
 ```
 
-### 2. Install Podman
-{: .textbox #podman}
+## 2. Install Podman
+{: .textbox}
 ```bash
 dnf -y install podman podman-docker buildah skopeo dnf-utils zip unzip tar gzip git
 dnf -y update
@@ -85,14 +92,14 @@ usermod --add-subuids 100000-165535 --add-subgids 100000-165535 nomasx1
 podman system migrate
 ```
 
-### 3. Enable service and check status
-{: .textbox #service}
+## 3. Enable service and check status
+{: .textbox}
 ```bash
 systemctl enable --now podman.socket
 systemctl status podman.socket
 ```
 
-### 4. Download components
+## 4. Download components
 {: .textbox #github}
 The Repository is private because this application is under licence. Ask for credentials to download
 ```bash
@@ -106,8 +113,8 @@ Give rights for user inside the container
 podman unshare chown -R 54321:54321 data/oradata
 ```
 
-### 5. Start all containers
-{: .textbox #containers}
+## 5. Start all containers
+{: .textbox}
 Login to OCI to be able to start all containers (this is a one time only task)
 ```bash
 podman login https://lhr.ocir.io
