@@ -12,7 +12,6 @@ nav_order: 1
   <summary>
     Table of contents
   </summary>
-  {: .text-delta }
 
 - [1. Applications](#1-applications)
   - [1.1. Global Settings](#11-global-settings)
@@ -33,16 +32,13 @@ nav_order: 1
 * Native connector for Microsoft Active Directory
 * All databases accessibles with jdbc can be set
 
-![NOMASX-1](../../../assets/nomasx1/application-0.png){: width="600"}
+![NOMASX-1](../../../assets/nomasx1/application-0.png)
 
 Click on add or edit to set a new datasource or modify an existing datasource and follow the wizard
 
 ### 1.1. Global Settings
 
-![NOMASX-1](../../../assets/nomasx1/application-1.png){: width="450"}
-
-Parameters:
-{: .underline}
+![NOMASX-1](../../../assets/nomasx1/application-1.png)
 
 
 | Parameter        | Description                | Comments                                                 |
@@ -55,7 +51,7 @@ Parameters:
 
 ### 1.2. Connections
 
-![NOMASX-1](../../../assets/nomasx1/application-2.png){: width="450"}
+![NOMASX-1](../../../assets/nomasx1/application-2.png)
 
 Some parameters could be hidden depending on the type of the application
 
@@ -74,7 +70,7 @@ Parameters differs depending on the type of the application
 
 #### 1.3.1. JD Edwards
 
-![NOMASX-1](../../../assets/nomasx1/application-3.png){: width="450"}
+![NOMASX-1](../../../assets/nomasx1/application-3.png)
 
 | Parameter           | Description                                       | Comments                                  |
 |---------------------|---------------------------------------------------|-------------------------------------------|

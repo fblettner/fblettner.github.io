@@ -4,9 +4,7 @@ title: About
 permalink: /about/
 nav_order: 5
 ---
-
-## ![NOMASX-1](/assets/about/fbl_logo.png){: width="140" } Franck BLETTNER 
----
+## ![NOMASX-1](../assets/about/fbl_logo.png) Franck BLETTNER 
 
 With 20 years of experience with JD Edwards, I have developed know-how, knowledge and a network of partners in the integration and around this ERP. Architectures, Interfaces, Technologies, Security are the key words of this experience which led me, among other things, to develop a management tool around the security and compliance of Oracle licenses.
 
@@ -14,8 +12,8 @@ Technical expertise, Architect, Project management, Application development
 
 Oracle JD Edwards, Oracle Database, Oracle Data Integrator, Oracle Analytics Server, Oracle Cloud Infrastructure, Amazon AWS, Talend, Oracle Jet, NodeJS, Java, Linux, Rundeck, Jekyll, Ruby...
  
-[![NOMASX-1](/assets/about/linkedin.png)](http://www.linkedin.com/in/franck-blettner-72509510){:target="_blank"}
-[![NOMASX-1](/assets/about/twitter.png)](https://twitter.com/fblettner){:target="_blank"}
+[![NOMASX-1](../assets/about/linkedin.png)](http://www.linkedin.com/in/franck-blettner-72509510){: target="_blank"} 
+[![NOMASX-1](../assets/about/twitter.png)](https://twitter.com/fblettner){: target="_blank"} 
 
 ---
 ## NOMANA-IT
@@ -36,5 +34,5 @@ Intuitive and centralized management of all the security of your information sys
 * Data analysis: Checking for unassigned roles, users without roles, duplicate users, matrix of used roles
 * LDAP: Connection to an LDAP directory (MSAD…), account verification and reconciliation
 * Data enrichment: Technical accounts, generic accounts, privileged accounts, renamed accounts, custom queries and databases
-{: }
+
 Compliancy with your Oracle license agreements (OBIEE, ODI, BI Publisher, Database, JDEdwards)

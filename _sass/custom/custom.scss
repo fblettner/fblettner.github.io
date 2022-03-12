@@ -56,3 +56,14 @@ table th {
     font-weight: 600;
     color: #ffffff !important;
   }
+
+summary {
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 12px !important;
+}
+
+img[src~="large"] {
+    width: 600px;
+ }

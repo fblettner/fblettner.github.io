@@ -34,7 +34,6 @@ PODMAN is fastest way to install NOMASX-1. Even if it is possible to install eac
 * DISK : 60 Go
 * CPU : 2vCPU
 
-{: .lh-0 }
 The server should have an access to internet to download all images and applications sources from Github and Oracle Registry Container.
 
 Podman works rootless, you can create a user to start all containers with a specific user and without using root

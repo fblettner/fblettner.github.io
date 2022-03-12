@@ -15,7 +15,6 @@ nav_order: 2
   <summary>
     Table of contents
   </summary>
-  {: .text-delta }
 
 - [1. Functionalities](#1-functionalities)
 - [2. Global Settings](#2-global-settings)
@@ -69,6 +68,6 @@ java -jar ../dist/nomabip.jar -run ./config/config.properties <TEMPLATE> <DOCUME
 ```
 
 ## 5. Screenshot
-![NOMASX-1](../../../assets/nomabip/nomabip_gui.png){: width="600"}
+![NOMASX-1](../../../assets/nomabip/nomabip_gui.png)
 
-![NOMASX-1](../../../assets/nomabip/nomabip_sample_pdf.png){: width="600"}
+![NOMASX-1](../../../assets/nomabip/nomabip_sample_pdf.png)
