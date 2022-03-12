@@ -20,7 +20,6 @@ url: "https://docs.nomana-it.fr" # the base hostname & protocol for your site, e
 
 permalink: pretty
 exclude: ["node_modules/", "*.gemspec", "*.gem", "Gemfile", "Gemfile.lock", "package.json", "package-lock.json",  "script/", "LICENSE.txt", "lib/", "bin/", "README.md", "Rakefile"
-, "docs/tests/"
 ]
 
 # Regression tests
@@ -109,8 +108,8 @@ color_scheme: dark
 ga_tracking: UA-46510658-2
 ga_tracking_anonymize_ip: true # Use GDPR compliant Google Analytics settings (true/nil by default)
 
-remote_theme: just-the-docs/just-the-docs
-#remote_theme: pdmosses/just-the-docs@rec-nav-2
+#remote_theme: just-the-docs/just-the-docs
+remote_theme: pdmosses/just-the-docs@rec-nav-2
 
 plugins:
   - jekyll-seo-tag
@@ -130,3 +129,29 @@ compress_html:
   profile: false
   # ignore:
   #   envs: all
+
+
+collections:
+  home:
+    permalink: "/:collection/:path/"
+    output: true
+  nomasx1:
+    permalink: "/:collection/:path/"
+    output: true
+  jdedwards:
+    permalink: "/:collection/:path/"
+    output: true
+  bipublisher:
+    permalink: "/:collection/:path/"
+    output: true
+
+just_the_docs:
+  collections:
+    home:
+      name: HOME
+    nomasx1:
+      name: NOMASX-1
+    jdedwards:
+      name: JD EDWARDS      
+    bipublisher:
+      name: BI PUBLISHER            
