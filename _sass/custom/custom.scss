@@ -19,7 +19,7 @@
     max-width: 100%;
 }
 
-.textbox {
+h2 {
     padding: $sp-3;
     margin-bottom: $sp-3;
     border: 1px solid $border-color;
@@ -27,15 +27,18 @@
     font-weight: bolder;
 }
 
-.underline {
-    text-decoration: underline;
-}
-
-.smallcaps {
+h3 {
+    font-size: 18px !important;
     font-variant: small-caps;
-    font-weight: bold;
 }
 
+
+h4 {
+    font-size: 16px !important;
+    font-variant: small-caps;
+    text-transform: none;
+    letter-spacing: normal;
+}
 
 .image-center
 {
@@ -47,3 +50,9 @@
 {
     float: right;
 }
+
+table th {
+    background-color: #1863be !important;
+    font-weight: 600;
+    color: #ffffff !important;
+  }

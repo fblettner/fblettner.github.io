@@ -1,0 +1,67 @@
+h2 {
+    padding: 5px;
+    border: 1px solid #272626;
+    font-variant: small-caps;
+    font-weight: bolder;
+}
+
+.text-delta {
+    font-size: 11px !important;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.table-wrapper {
+    background-color: transparent !important;
+    color: #000000 !important;
+  }
+  
+  table {
+    display: block;
+    overflow: auto;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  
+  tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+  }
+  
+  table tr {
+    background-color: #fff !important;
+    border-top: 1px solid #c6cbd1;
+  }
+  
+  table tr:nth-child(2n) {
+    background-color: #f6f8fa !important;
+  }
+  
+  table th {
+    background-color: #1863be !important;
+    font-weight: 600;
+    color: #ffffff !important;
+  }
+  
+  table td {
+    border: 1px solid #dfe2e5;
+    padding: 6px 13px;
+    background-color: transparent !important;
+  }
+  
+  table tr {
+    background-color: #fff !important;
+    border-top: 1px solid #c6cbd1;
+  }
+  
+  table tr:nth-child(2n) {
+    background-color: #f6f8fa;
+  }
+  
+  table > thead > tr > th {
+    border-bottom: 0;
+  }
+  /* End of table styles */

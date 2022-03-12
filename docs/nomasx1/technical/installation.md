@@ -30,7 +30,6 @@ PODMAN is fastest way to install NOMASX-1. Even if it is possible to install eac
 ```
 
 ## 1. Requirements
-{: .textbox}
 * RAM : 8Go
 * DISK : 60 Go
 * CPU : 2vCPU
@@ -80,7 +79,6 @@ systemctl status firewalld
 ```
 
 ## 2. Install Podman
-{: .textbox}
 ```bash
 dnf -y install podman podman-docker buildah skopeo dnf-utils zip unzip tar gzip git
 dnf -y update
@@ -93,14 +91,12 @@ podman system migrate
 ```
 
 ## 3. Enable service and check status
-{: .textbox}
 ```bash
 systemctl enable --now podman.socket
 systemctl status podman.socket
 ```
 
 ## 4. Download components
-{: .textbox #github}
 The Repository is private because this application is under licence. Ask for credentials to download
 ```bash
 git clone https://github.com/fblettner/nomasx1-containers.git
@@ -114,7 +110,6 @@ podman unshare chown -R 54321:54321 data/oradata
 ```
 
 ## 5. Start all containers
-{: .textbox}
 Login to OCI to be able to start all containers (this is a one time only task)
 ```bash
 podman login https://lhr.ocir.io

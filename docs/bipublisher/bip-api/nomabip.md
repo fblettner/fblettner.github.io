@@ -25,7 +25,6 @@ nav_order: 2
 </details>
 
 ## 1. Functionalities
-{: .textbox} 
 This api was initially developed to integrate easily JDEdwards and BI Publisher regardless of JDEdwards Tools Release.\
 Nothing to install, only to use. Samples scripts are provided into the test directory. It can now be used for any spool with or without JD Edwards (BI Publisher license is needed).
 - Generate PDF and XML files simultaneously from a xml spool
@@ -36,29 +35,26 @@ Nothing to install, only to use. Samples scripts are provided into the test dire
 - Integrate Java class NOMABC to print Barcode 128 (see github repository)
 
 ## 2. Global Settings
-{: .textbox} 
 
-| Parameter     | Description                       |
-| ---           | ---                               |
-| cmdGS         | Call ghostscript to transform PDF after generation (ie, version 1.6 to 1.5)   |
-| runGS         | Call GS script Y/N |
-| xdo           | Settings for fonts, subtemplate directory... |
-| appHome       | Running script directory  |
-| burstOutput   | Output directory for bursting documents    |
-| singleOutput  | Output directory for single mode  |
-| processHome   | Process directory    |
-| dirOutput     | Temp Output directory    |
-| copyXSL       | XSL transformation to generate copies |
-| routageXSL    | Used for JD Edwards to copy back into the Printqueue   |
-| updateDB      | Update Oracle database (Y/N) with index and logs  |
+| Parameter    | Description                                                                 |
+|--------------|-----------------------------------------------------------------------------|
+| cmdGS        | Call ghostscript to transform PDF after generation (ie, version 1.6 to 1.5) |
+| runGS        | Call GS script Y/N                                                          |
+| xdo          | Settings for fonts, subtemplate directory...                                |
+| appHome      | Running script directory                                                    |
+| burstOutput  | Output directory for bursting documents                                     |
+| singleOutput | Output directory for single mode                                            |
+| processHome  | Process directory                                                           |
+| dirOutput    | Temp Output directory                                                       |
+| copyXSL      | XSL transformation to generate copies                                       |
+| routageXSL   | Used for JD Edwards to copy back into the Printqueue                        |
+| updateDB     | Update Oracle database (Y/N) with index and logs                            |
 
 
 ## 3. Template Settings
-{: .textbox} 
 Set template location, ID of fields used to name the output document in case of bursting and mandatory fields when update database is on.
 
 ## 4. Usage
-{: .textbox #usage} 
 - Simple java application to configure and generate documents
 ```bash
 java -jar ../dist/nomabip.jar -config ./config/config.properties
@@ -73,7 +69,6 @@ java -jar ../dist/nomabip.jar -run ./config/config.properties <TEMPLATE> <DOCUME
 ```
 
 ## 5. Screenshot
-{: .textbox} 
 ![NOMASX-1](/assets/nomabip/nomabip_gui.png){: width="600"}
 
 ![NOMASX-1](/assets/nomabip/nomabip_sample_pdf.png){: width="600"}

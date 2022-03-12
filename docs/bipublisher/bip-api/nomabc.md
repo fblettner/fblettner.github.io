@@ -24,7 +24,6 @@ nav_order: 1
 </details>
 
 ## 1. Modify xdo.cfg
-{: .textbox} 
 Add the line below to declare the truetype font. The font is delivered into the dist directory. (Thanks to GrandZebu for explanation and font : http://grandzebu.net/informatique/codbar/code128.htm)
 
 ```html
@@ -32,7 +31,6 @@ Add the line below to declare the truetype font. The font is delivered into the 
 ```
 
 ## 2. Declaration of a custom function into a RTF Template
-{: .textbox #custom}
 Add a field into the template and set the property like this
 
 ```xml
@@ -42,7 +40,6 @@ Add a field into the template and set the property like this
 ![NOMASX-1](/assets/nomabc/custom_function.png){: width="600"}
 
 ## 3. Convert into BarCode 128
-{: .textbox}
 Add the field with the value to convert and modify the property with the following script
 
 ```xml
@@ -52,7 +49,6 @@ Add the field with the value to convert and modify the property with the followi
 ![NOMASX-1](/assets/nomabc/convert_barcode.png){: width="600"}
 
 ## 4. Display BarCode
-{: .textbox}
 Modify the font for the field in RTF with and select "Code 128z". If the truetype is not declared into Windows fonts, you will not see the font but you can simply modify it by typing the font name as screenshot below
 
 ![NOMASX-1](/assets/nomabc/display_barcode.png){: width="600"}
