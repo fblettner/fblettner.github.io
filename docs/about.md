@@ -15,7 +15,6 @@ Oracle JD Edwards, Oracle Database, Oracle Data Integrator, Oracle Analytics Ser
 [![NOMASX-1](../assets/about/linkedin.png)](http://www.linkedin.com/in/franck-blettner-72509510){: target="_blank"} 
 [![NOMASX-1](../assets/about/twitter.png)](https://twitter.com/fblettner){: target="_blank"} 
 
----
 ## NOMANA-IT
 
 Company specialized in consulting, integration and development of solutions based on Oracle, JD Edwards and GPL products.
@@ -25,7 +24,6 @@ SOA, Web Services, Cloud, ETL, EAI, Business Intelligence, Open Source, GED, dif
 
 Part of our services cover skills on JD Edwards products, Oracle Data Integrator (ODI), Oracle Business Intelligence (OBIEE), Oracle BI Publisher (XMLP), website development, Node JS application development, but also the definition of technical and software architecture, optimization of business continuity and recovery plan, integration…
 
----
 ## NOMASX-1
 
 Intuitive and centralized management of all the security of your information system. Application consolidation, user rights management, conflict management (SOD).
