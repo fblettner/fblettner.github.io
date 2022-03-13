@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 nav_order: 5
 ---
-## ![NOMASX-1](https://docs.nomana-it.fr/assets/about/fbl_logo.png) Franck BLETTNER 
+## ![NOMASX-1](https://docs.nomana-it.fr/assets/about/fbl_logo.png) Franck Blettner 
 
 With 20 years of experience with JD Edwards, I have developed know-how, knowledge and a network of partners in the integration and around this ERP. Architectures, Interfaces, Technologies, Security are the key words of this experience which led me, among other things, to develop a management tool around the security and compliance of Oracle licenses.
 
