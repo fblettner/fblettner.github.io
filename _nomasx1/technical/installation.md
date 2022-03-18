@@ -87,6 +87,14 @@ touch /etc/subuid /etc/subgid
 usermod --add-subuids 100000-165535 --add-subgids 100000-165535 nomasx1
 podman system migrate
 ```
+Set storage for images and volume (optional). By default, if podman is running rootless, stoage path is into $HOME directory for the user. You can change the path by modifying the config file /etc/containers/storage.conf
+```bash
+# Storage path for rootless users
+#
+# rootless_storage_path = "$HOME/.local/share/containers/storage"
+rootless_storage_path = "/app/containers/$USER/storage"
+
+```
 
 ## 3. Enable service and check status
 ```bash
