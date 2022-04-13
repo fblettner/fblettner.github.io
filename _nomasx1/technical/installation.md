@@ -133,6 +133,8 @@ Create directory for systemd into $USER directory
 ```bash
 mkdir $HOME/.config/systemd/user
 cd $HOME/.config/systemd/user
+loginctl enable-linger $USER
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
 ```
 
 Create unit files
