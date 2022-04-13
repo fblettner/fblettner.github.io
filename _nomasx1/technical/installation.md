@@ -145,6 +145,6 @@ podman generate systemd --files --name nomasx1
 Enable services
 ```bash
 systemctl --user daemon-reload
-systemctl --user enable nomasx1
-systemctl --user start nomasx1
+systemctl --user enable pod-nomasx1.service
+systemctl --user start pod-nomasx1.service
 ```
