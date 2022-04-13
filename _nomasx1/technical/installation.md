@@ -18,6 +18,7 @@ nav_order: 2
 - [3. Enable service and check status](#3-enable-service-and-check-status)
 - [4. Download components](#4-download-components)
 - [5. Start all containers](#5-start-all-containers)
+- [6. Configure services](#6-configure-services)
 </details>
 
 ---
@@ -125,4 +126,23 @@ Enter login and password
 Start the containers
 ```bash
 podman play kube nomasx1w.yaml --configmap .nomasx1.yaml,.rundeck.yaml
+```
+
+## 6. Configure services
+Create directory for systemd into $USER directory
+```bash
+mkdir $HOME/.config/systemd/user
+cd $HOME/.config/systemd/user
+```
+
+Create unit files
+```bash
+podman generate systemd --files --name nomasx1
+```
+
+Enable services
+```bash
+systemctl --user daemon-reload
+systemctl --user enable nomasx1
+systemctl --user start nomasx1
 ```
