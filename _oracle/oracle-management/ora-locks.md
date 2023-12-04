@@ -14,6 +14,7 @@ nav_order: 1
   </summary>
 
 - [1. Gather locks for current session](#1-gather-locks-for-current-session)
+</details>
 
 ## 1. Gather locks for current session
 ```bash
