@@ -22,7 +22,7 @@ bundle exec jekyll serve
 ```
 
 
-## Not need for jekkyll to serve
+## Not needed for jekyll to serve
 For compilers to find ruby you may need to set:
   export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
   export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
