@@ -1,9 +1,9 @@
 ---
 layout: default
-title: Management Tips
+title: Management
 permalink: /oracle/management
 has_children: true
 nav_order: 2
 ---
 
-## Management Tips
+## Management
