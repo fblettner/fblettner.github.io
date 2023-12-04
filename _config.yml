@@ -147,6 +147,9 @@ collections:
   bipublisher:
     permalink: "/:collection/:path/"
     output: true
+  oracle:
+    permalink: "/:collection/:path/"
+    output: true    
 
 just_the_docs:
   collections:
@@ -158,3 +161,5 @@ just_the_docs:
       name: JD EDWARDS      
     bipublisher:
       name: BI PUBLISHER            
+    oracle:
+      name: ORACLE                  
