@@ -8,7 +8,7 @@ nav_order: 1
 
 ## Database size <!-- omit in toc -->
 
-details open markdown="block">
+<details open markdown="block">
   <summary>
     Table of contents
   </summary>
