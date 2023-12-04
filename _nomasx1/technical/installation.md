@@ -19,6 +19,7 @@ nav_order: 2
 - [4. Download components](#4-download-components)
 - [5. Start all containers](#5-start-all-containers)
 - [6. Configure services](#6-configure-services)
+- [7. Known issues on linux](#7-known-issues-on-linux)
 </details>
 
 ---
@@ -148,3 +149,24 @@ systemctl --user daemon-reload
 systemctl --user enable pod-nomasx1.service
 systemctl --user start pod-nomasx1.service
 ```
+
+## 7. Known issues on linux
+
+Issue with network card when starting a container
+```bash
+/etc/sysconfig/network-scripts/ifcfg-ens192
+PREFIX=8 (modify to 24)
+```
+
+Issue with permissions
+```bash
+Connect with a user with root privileges
+loginctl enable-linger nomasx1
+```
+
+Issue with latest version of podman
+```bash
+Downgrade to the previous verions
+dnf downgrade podman
+```
+
