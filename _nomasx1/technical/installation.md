@@ -158,15 +158,13 @@ Issue with network card when starting a container
 PREFIX=8 (modify to 24)
 ```
 
-Issue with permissions
+Issue with permissions : connect with a user with root privileges
 ```bash
-Connect with a user with root privileges
 loginctl enable-linger nomasx1
 ```
 
-Issue with latest version of podman
+Issue with latest version of podman : downgrade to the previous verions
 ```bash
-Downgrade to the previous verions
 dnf downgrade podman
 ```
 
