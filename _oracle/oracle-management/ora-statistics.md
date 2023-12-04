@@ -8,6 +8,15 @@ nav_order: 1
 
 ## Statistics Management <!-- omit in toc -->
 
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+
+- [1. Gather statistics for a table](#1-gather-statistics-for-a-table)
+- [2. Gather statistics for a schema](#2-gather-statistics-for-a-schema)
+</details>
+
 ## 1. Gather statistics for a table
 ```bash
 BEGIN
@@ -16,7 +25,7 @@ BEGIN
 END;
 ```
 
-## 1. Gather statistics for a schema
+## 2. Gather statistics for a schema
 ```bash
 exec dbms_stats.gather_schema_stats( -
     ownname          => '<SCHEMA_NAME>', -
