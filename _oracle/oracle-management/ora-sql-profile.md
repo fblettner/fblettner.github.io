@@ -1,10 +1,12 @@
 ---
 layout: default
-title: Transport SQL profile from one base to another
-permalink: /oracle/management/sql-profile
+title: SQL Profile
+permalink: /oracle/management/ora-sql-profile
 parent: Management
 nav_order: 1
 ---
+
+## Transport SQL profile from one base to another <!-- omit in toc -->
 
 <details open markdown="block">
   <summary>
