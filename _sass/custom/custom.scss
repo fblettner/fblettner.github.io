@@ -15,7 +15,26 @@
     max-width: 100%;
 }
 
+h2 {
+    padding: $sp-3;
+    margin-bottom: $sp-3;
+    border-bottom: 1px solid $border-color;
+    font-variant: small-caps;
+    font-weight: bolder;
+}
 
+h3 {
+    font-size: 18px !important;
+    font-variant: small-caps;
+}
+
+
+h4 {
+    font-size: 16px !important;
+    font-variant: small-caps;
+    text-transform: none;
+    letter-spacing: normal;
+}
 
 .image-center
 {
