@@ -15,5 +15,3 @@ Intuitive and centralized management of all the security of your information sys
 Login = demo
 Password = demo
 ```
-
-Coming soon, a new development framework... Please contact me if you need more information

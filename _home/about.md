@@ -4,25 +4,37 @@ title: About
 permalink: /about/
 nav_order: 5
 ---
-## ![NOMASX-1](https://docs.nomana-it.fr/assets/about/fbl_logo.png) Franck Blettner 
 
-With 20 years of experience with JD Edwards, I have developed know-how, knowledge and a network of partners in the integration and around this ERP. Architectures, Interfaces, Technologies, Security are the key words of this experience which led me, among other things, to develop a management tool around the security and compliance of Oracle licenses.
+## ABOUT US
 
-Technical expertise, Architect, Project management, Application development
-
-Oracle JD Edwards, Oracle Database, Oracle Data Integrator, Oracle Analytics Server, Oracle Cloud Infrastructure, Amazon AWS, Talend, Oracle Jet, NodeJS, Java, Linux, Rundeck, Jekyll, Ruby...
+With over two decades of experience in JD Edwards, I have gained deep expertise in enterprise resource planning (ERP) systems and integration ecosystems. My journey has involved:
+- Designing complex architectures and interfaces
+- Adopting cutting-edge technologies
+- Ensuring robust security measures
+One of my key accomplishments is the creation of a comprehensive management tool that enhances the security and compliance of Oracle licenses. This tool is integrated with the Liberty Framework, which provides a no-code platform for creating secure, compliant, and scalable applications. By leveraging the power of Liberty Framework, users can easily manage license compliance, access rights, and task segregation, ensuring that enterprise systems remain both efficient and compliant with Oracle's stringent requirements.
  
 [![NOMASX-1](https://docs.nomana-it.fr/assets/about/linkedin.png)](http://www.linkedin.com/in/franck-blettner-72509510){: target="_blank"} 
 [![NOMASX-1](https://docs.nomana-it.fr/assets/about/twitter.png)](https://twitter.com/fblettner){: target="_blank"} 
+[![NOMASX-1](https://docs.nomana-it.fr/assets/about/github.png)](https://github.com/fblettner){: target="_blank"} 
 
-## NOMANA-IT
+## LIBERTY FRAMEWORK
 
-Company specialized in consulting, integration and development of solutions based on Oracle, JD Edwards and GPL products.
-You encounter performance problems, you want to secure your information system, you wonder how to reduce your administration and operating costs, you hesitate to outsource your infrastructure, NOMANA-IT can help you in your reflection and give you recommendations based on its expertise, its references and its partners.
+Welcome to **Liberty Framework**, a **no-code development platform** designed for rapid and efficient web application creation using the latest in **React**, **Node.js**, and **PostgreSQL** technologies. Whether you're a developer or a non-technical user, Liberty Framework empowers you to build robust applications with **zero coding skills** required.
 
-SOA, Web Services, Cloud, ETL, EAI, Business Intelligence, Open Source, GED, difficulties to understand all these acronyms, difficulties to choose the adapted software, NOMANA-IT brings you its expertise to make the best choices.
+## Why Choose Liberty Framework? 🤔
 
-Part of our services cover skills on JD Edwards products, Oracle Data Integrator (ODI), Oracle Business Intelligence (OBIEE), Oracle BI Publisher (XMLP), website development, Node JS application development, but also the definition of technical and software architecture, optimization of business continuity and recovery plan, integration…
+- **Cutting-Edge Technology**: Built with modern web technologies like **React**, **Node.js**, and **PostgreSQL**, ensuring scalability, flexibility, and performance.
+  
+- **Management Tools Included**: Integrated with essential management tools like:
+  - 🌐 **Traefik**: A powerful reverse proxy for routing and load balancing.
+  - ⚙️ **Rundeck**: Automate and manage workflows effortlessly.
+  - 🐘 **pgAdmin**: Manage your PostgreSQL database visually with ease.
+  
+- **No-Code Development**: Create feature-rich web applications without writing a single line of code, making it accessible to **developers and non-developers** alike.
+
+- **JD Edwards Integration**: **Native connector** for **JD Edwards**, making access management, task segregation, and Oracle license compliance a breeze. Perfect for **enterprise-level** operations.
+
+- **Fast Application Design**: With Liberty Framework’s **modern architecture**, you can design and deploy powerful applications in record time! 🚀
 
 ## NOMASX-1
 
