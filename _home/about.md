@@ -11,6 +11,7 @@ With over two decades of experience in JD Edwards, I have gained deep expertise 
 - Designing complex architectures and interfaces
 - Adopting cutting-edge technologies
 - Ensuring robust security measures
+
 One of my key accomplishments is the creation of a comprehensive management tool that enhances the security and compliance of Oracle licenses. This tool is integrated with the Liberty Framework, which provides a no-code platform for creating secure, compliant, and scalable applications. By leveraging the power of Liberty Framework, users can easily manage license compliance, access rights, and task segregation, ensuring that enterprise systems remain both efficient and compliant with Oracle's stringent requirements.
  
 [![NOMASX-1](https://docs.nomana-it.fr/assets/about/linkedin.png)](http://www.linkedin.com/in/franck-blettner-72509510){: target="_blank"} 
