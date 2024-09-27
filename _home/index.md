@@ -22,18 +22,19 @@ All public repositories developed by NOMANA-IT
 
 [Go to Github](https://github.com/fblettner?tab=repositories){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
 
-![NOMASX-1](https://docs.nomana-it.fr/assets/nomasx1.png){: .image-right}
-## Nomasx-1
-Intuitive and centralized management of all the security of your information system. Application consolidation, user rights management, conflict management (SOD). Compliancy with your Oracle license agreements (OBIEE, ODI, BI Publisher, Database, JDEdwards)
+![NOMASX-1](https://docs.nomana-it.fr/assets/logo_ly.png){: .image-right}
+## Liberty Framework
+Welcome to **Liberty Framework**, a **no-code development platform** designed for rapid and efficient web application creation using the latest in **React**, **Node.js**, and **PostgreSQL** technologies. Whether you're a developer or a non-technical user, Liberty Framework empowers you to build robust applications with **zero coding skills** required.
 
-[Go to Demo](http://dev.nomana-it.fr:3000/){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
+[Go to Demo](https://liberty.nomana-it.fr/){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
 
 ```ini
 Login = demo
 Password = demo
+Appplication = LIBERTY, NOMASX-1 and NOMAJDE
 ```
 
 ## Company Website
-Company specialized in consulting, integration and development of solutions based on Oracle, JD Edwards and GPL products.
+Company specialized in consulting, integration and development.
 
 [NOMANA-IT](https://nomana-it.fr){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 target="_blank"} 
