@@ -43,8 +43,8 @@ Create a directory where you will download and store the Docker Compose file.
 1. Open a terminal.
 2. Create a new directory:
     ```bash
-    mkdir liberty-deployment
-    cd liberty-deployment
+    mkdir -p /app/liberty-admin
+    cd /app/liberty-admin
     ```
 
 ## Step 3: Download the Docker Compose File
@@ -63,11 +63,11 @@ Next, download the Docker Compose file from the provided URL.
 
 ## Step 4: Deploy the Docker Container using Docker Compose
 
-Once you have the `docker-compose.yml` file downloaded into your `liberty-deployment` directory, use Docker Compose to deploy the container.
+Once you have the `docker-compose.yml` file downloaded into your `liberty-admin` directory, use Docker Compose to deploy the container.
 
-1. In the terminal, navigate to the `liberty-deployment` directory (if not already there):
+1. In the terminal, navigate to the `liberty-admin` directory (if not already there):
     ```bash
-    cd liberty-deployment
+    cd /app/liberty-admin
     ```
 
 2. Deploy the Docker container:
@@ -99,9 +99,9 @@ You should see the following containers running as defined in the `docker-compos
 # Log in to Docker
 docker login
 
-# Create and navigate to the deployment directory
-mkdir liberty-deployment
-cd liberty-deployment
+# Create and navigate to the admin directory
+mkdir -p /app/liberty-admin
+cd /app/liberty-admin
 
 # Download the Docker Compose file
 curl -L -o docker-compose.yml https://raw.githubusercontent.com/fblettner/liberty-public/release/latest/liberty-admin.yml
