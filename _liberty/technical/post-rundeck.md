@@ -22,7 +22,7 @@ This guide provides essential instructions for updating the Rundeck Framework co
 
 2. Enter your credentials and click **Login**.
 
-   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9fc30968-ed32-4ee6-a2f8-18c4f2c8cbc0/user_cropped_screenshot.jpeg?width=500)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9fc30968-ed32-4ee6-a2f8-18c4f2c8cbc0/user_cropped_screenshot.jpeg?width=800)
 
    **Administrator Note**: If you are unsure of your credentials, please check with the system administrator or the setup documentation for the default credentials.
 
@@ -30,7 +30,7 @@ This guide provides essential instructions for updating the Rundeck Framework co
 
 3. Navigate to the `rundeck` directory to access the configuration settings.
 
-   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/b8a53ec7-cfde-44d4-a4ea-9c5e51a9a8d7/ascreenshot.jpeg?width=500)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/b8a53ec7-cfde-44d4-a4ea-9c5e51a9a8d7/ascreenshot.jpeg?width=800)
 
    **Administrator Note**: Ensure you have the correct permissions to view and modify the files in this directory.
 
@@ -38,17 +38,17 @@ This guide provides essential instructions for updating the Rundeck Framework co
 
 4. Click on the `framework.properties` file to edit it.
 
-   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/bad8b33e-1efc-4934-befc-61d9da4cdbcf/ascreenshot.jpeg?width=500)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/bad8b33e-1efc-4934-befc-61d9da4cdbcf/ascreenshot.jpeg?width=800)
 
 5. Modify the URL to replace it with your server name or domain name.
 
-   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/5ad190ef-bd52-4407-9ee7-277ac9f97208/user_cropped_screenshot.jpeg?width=500)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/5ad190ef-bd52-4407-9ee7-277ac9f97208/user_cropped_screenshot.jpeg?width=800)
 
    **Administrator Note**: Be cautious when modifying URLs. Ensure that the domain is correctly formatted and accessible from the client machines. Example: `https://liberty.nomana-it.fr`. Avoid typos, as this can lead to connection issues.
 
 6. Click **Save**.
 
-   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/33e79fff-725e-4176-b106-3c399f456386/ascreenshot.jpeg?width=500)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/33e79fff-725e-4176-b106-3c399f456386/ascreenshot.jpeg?width=800)
 
 ### Step 4: Edit the `rundeck-config.properties` File
 
@@ -56,21 +56,21 @@ This guide provides essential instructions for updating the Rundeck Framework co
 
 8. Now, click on the `rundeck-config.properties` file to edit the domain configuration.
 
-   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/88671014-5f89-4321-8de9-9c9644f0fe7e/user_cropped_screenshot.jpeg?width=500)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/88671014-5f89-4321-8de9-9c9644f0fe7e/user_cropped_screenshot.jpeg?width=800)
 
 9. Modify the URL with your server name or DNS.
 
-   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9c2725c9-4be4-45d6-bbfc-596df0d988af/user_cropped_screenshot.jpeg?width=500)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9c2725c9-4be4-45d6-bbfc-596df0d988af/user_cropped_screenshot.jpeg?width=800)
 
    **Administrator Note**: Both configuration files (`framework.properties` and `rundeck-config.properties`) should have consistent URLs to prevent any mismatch in accessing the server.
 
 10. Click **Save**.
 
-   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/b182708b-a011-4b18-8fd8-288394d30762/ascreenshot.jpeg?width=500)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/b182708b-a011-4b18-8fd8-288394d30762/ascreenshot.jpeg?width=800)
 
 11. After saving, click **Close**.
 
-   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/68e36d94-cf4a-43e7-a755-bfcca9a60434/ascreenshot.jpeg?width=500)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/68e36d94-cf4a-43e7-a755-bfcca9a60434/ascreenshot.jpeg?width=800)
 
 ---
 
