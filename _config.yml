@@ -138,6 +138,9 @@ collections:
   home:
     permalink: "/:collection/:path/"
     output: true
+  liberty:
+    permalink: "/:collection/:path/"
+    output: true    
   nomasx1:
     permalink: "/:collection/:path/"
     output: true
@@ -155,6 +158,8 @@ just_the_docs:
   collections:
     home:
       name: HOME
+    liberty:
+      name: LIBERTY      
     nomasx1:
       name: NOMASX-1
     jdedwards:
