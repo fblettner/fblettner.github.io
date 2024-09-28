@@ -116,8 +116,8 @@ docker-compose up -d
 
 After deployment, you can access the services with the following URLs:
 
-- **Traefik Dashboard**: Accessible at http://<your_server_ip>:8080/dashboard/ (authentication may be required).
-- **Portainer**: Accessible at http://<your_server_ip>:3000/portainer or https://<your_server_ip>:3443/portainer.
+- **Traefik Dashboard**: Accessible at http://`<your_server_ip>`:8080/dashboard/ (authentication may be required).
+- **Portainer**: Accessible at http://`<your_server_ip>`:3000/portainer or https://`<your_server_ip>`:3443/portainer.
 
-Replace <your_server_ip> with the IP address or hostname of your server.
+Replace `<your_server_ip>` with the IP address or hostname of your server.
 Feel free to reach out if you have any further questions or run into any issues!
