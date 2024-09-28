@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Installation Tools Deployment Guide
-permalink: /liberty/technical/deployment
+permalink: /liberty/technical/tools-deployment
 parent: Technical Guide
 nav_order: 3
 ---
@@ -53,12 +53,12 @@ Next, download the Docker Compose file from the provided URL.
 
 1. Using `curl`:
     ```bash
-    curl -L -o docker-compose.yml https://raw.githubusercontent.com/fblettner/liberty-public/release/latest/liberty-admin.yml
+    curl -L -o docker-compose.yml https://github.com/fblettner/liberty-public/blob/main/release/latest/liberty-admin.yml
     ```
 
 2. Alternatively, using `wget`:
     ```bash
-    wget -O docker-compose.yml https://raw.githubusercontent.com/fblettner/liberty-public/release/latest/liberty-admin.yml
+    wget -O docker-compose.yml https://github.com/fblettner/liberty-public/blob/main/release/latest/liberty-admin.yml
     ```
 
 ## Step 4: Deploy the Docker Container using Docker Compose
