@@ -63,7 +63,8 @@ This guide provides essential instructions for updating the Rundeck Framework co
 
    ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9c2725c9-4be4-45d6-bbfc-596df0d988af/user_cropped_screenshot.jpeg?width=800)
 
-   **Administrator Note**: Both configuration files (`framework.properties` and `rundeck-config.properties`) should have consistent URLs to prevent any mismatch in accessing the server. grails.serverURL must end by /rundeck
+   **Administrator Note**: Both configuration files (`framework.properties` and `rundeck-config.properties`) should have consistent URLs to prevent any mismatch in accessing the server. 
+   **grails.serverURL must end by `/rundeck`**
 
 10. Click **Save**.
 
