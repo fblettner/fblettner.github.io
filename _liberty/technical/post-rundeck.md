@@ -1,13 +1,12 @@
 ---
 layout: default
-title: Post Installation Tasks
-permalink: /liberty/technical/post-install
+title: Updating Rundek Framework Configuration Files
+permalink: /liberty/technical/post-rundeck
 parent: Technical Guide
 nav_order: 6
 ---
 
-# Updating Rundek Framework Configuration Files
-#### [Made by Franck Blettner with Scribe](https://scribehow.com/shared/Updating_Rundek_Framework_Configuration_Files__lJtYGAs7SUWeCvooCHfoFw)
+# Updating Rundeck Framework Configuration Files
 This guide provides essential instructions for updating the Rundek Framework configuration files. This is a mandatory step to change the default configuration with your custom server name and domain
 
 1\. Navigate to [https://&lt;your_server&gt;/filebrowser](https://liberty.nomana-it.fr/filebrowser/login)
