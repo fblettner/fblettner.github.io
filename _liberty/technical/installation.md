@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Installing Docker on Linux
+title: Docker Installation Guide
 permalink: /liberty/technical/installation
 parent: Technical Guide
 nav_order: 2
@@ -142,10 +142,11 @@ sudo rm /usr/local/bin/docker-compose
 
 - Amazon Linux or Amazon Linux 2
 - Root or sudo access
+- Minimum 2GB of RAM recommended, 8GB of RAM recommended for all Liberty Framework Services.
 
 ### Step 1: Update System Packages
 
-First, ensure your system packages are up to date.
+Before starting the installation, update your system to ensure all packages are up-to-date.
 
 ```bash
 sudo yum update -y
