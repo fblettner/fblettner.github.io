@@ -1,62 +1,77 @@
 ---
 layout: default
-title: Updating Rundek Framework Configuration Files
+title: Updating Rundek Configuration
 permalink: /liberty/technical/post-rundeck
 parent: Technical Guide
 nav_order: 6
 ---
 
 # Updating Rundeck Framework Configuration Files
-This guide provides essential instructions for updating the Rundek Framework configuration files. This is a mandatory step to change the default configuration with your custom server name and domain
 
-1\. Navigate to [https://&lt;your_server&gt;/filebrowser](https://liberty.nomana-it.fr/filebrowser/login)
+This guide provides essential instructions for updating the Rundeck Framework configuration files. This is a mandatory step to change the default configuration with your custom server name and domain. Please ensure you follow these steps carefully to avoid any configuration issues.
 
+### Prerequisites:
+- Administrator access to the Rundeck server.
+- Correct server name and domain ready for input.
 
-2\. Enter you credentials and click *Login*
+### Step 1: Access the File Browser
 
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9fc30968-ed32-4ee6-a2f8-18c4f2c8cbc0/user_cropped_screenshot.jpeg?tl_px=281,499&br_px=2000,1460&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,276)
+1. Navigate to [https://&lt;your_server&gt;/filebrowser](https://liberty.nomana-it.fr/filebrowser/login)
 
+   **Administrator Note**: Ensure that you replace `<your_server>` with the actual server IP or domain name where the FileBrowser is hosted.
 
-3\. Go to "rundeck" to modify Rundeck settings
+2. Enter your credentials and click **Login**.
 
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/b8a53ec7-cfde-44d4-a4ea-9c5e51a9a8d7/ascreenshot.jpeg?tl_px=0,39&br_px=1719,1000&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=482,277)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9fc30968-ed32-4ee6-a2f8-18c4f2c8cbc0/user_cropped_screenshot.jpeg?tl_px=281,499&br_px=2000,1460&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,276)
 
+   **Administrator Note**: If you are unsure of your credentials, please check with the system administrator or the setup documentation for the default credentials.
 
-4\. Click "framework.properties"
+### Step 2: Locate the Rundeck Directory
 
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/bad8b33e-1efc-4934-befc-61d9da4cdbcf/ascreenshot.jpeg?tl_px=4,0&br_px=1724,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,228)
+3. Navigate to the `rundeck` directory to access the configuration settings.
 
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/b8a53ec7-cfde-44d4-a4ea-9c5e51a9a8d7/ascreenshot.jpeg?tl_px=0,39&br_px=1719,1000&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=482,277)
 
-5\. Modify the url with your server name or dns
+   **Administrator Note**: Ensure you have the correct permissions to view and modify the files in this directory. If you're using a shared environment, verify that the changes won't affect other users or applications.
 
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/5ad190ef-bd52-4407-9ee7-277ac9f97208/user_cropped_screenshot.jpeg?tl_px=0,193&br_px=1719,1155&force_format=jpeg&q=100&width=1120.0)
+### Step 3: Edit the `framework.properties` File
 
+4. Click on the `framework.properties` file to edit it.
 
-6\. Click "save"
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/bad8b33e-1efc-4934-befc-61d9da4cdbcf/ascreenshot.jpeg?tl_px=4,0&br_px=1724,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,228)
 
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/33e79fff-725e-4176-b106-3c399f456386/ascreenshot.jpeg?tl_px=546,0&br_px=2266,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=1043,14)
+5. Modify the URL to replace it with your server name or domain name.
 
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/5ad190ef-bd52-4407-9ee7-277ac9f97208/user_cropped_screenshot.jpeg?tl_px=0,193&br_px=1719,1155&force_format=jpeg&q=100&width=1120.0)
 
-7\. Click "close"
+   **Administrator Note**: Be cautious when modifying URLs. Ensure that the domain is correctly formatted and accessible from the client machines. Example: `https://rundeck.mycompany.com`. Avoid typos, as this can lead to connection issues.
 
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/95494fc8-9cf9-4b97-beab-2275184a9903/ascreenshot.jpeg?tl_px=0,0&br_px=1719,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=17,8)
+6. Click **Save**.
 
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/33e79fff-725e-4176-b106-3c399f456386/ascreenshot.jpeg?tl_px=546,0&br_px=2266,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=1043,14)
 
-8\. Click "rundeck-config.properties"
+### Step 4: Edit the `rundeck-config.properties` File
 
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/88671014-5f89-4321-8de9-9c9644f0fe7e/user_cropped_screenshot.jpeg?tl_px=273,266&br_px=1992,1227&force_format=jpeg&q=100&width=1120.0)
+7. After saving, click **Close** to return to the file browser.
 
+8. Now, click on the `rundeck-config.properties` file to edit the domain configuration.
 
-9\. Modify the url with your server name or dns
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/88671014-5f89-4321-8de9-9c9644f0fe7e/user_cropped_screenshot.jpeg?tl_px=273,266&br_px=1992,1227&force_format=jpeg&q=100&width=1120.0)
 
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9c2725c9-4be4-45d6-bbfc-596df0d988af/user_cropped_screenshot.jpeg?tl_px=273,266&br_px=1992,1227&force_format=jpeg&q=100&width=1120.0)
+9. Modify the URL with your server name or DNS.
 
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9c2725c9-4be4-45d6-bbfc-596df0d988af/user_cropped_screenshot.jpeg?tl_px=273,266&br_px=1992,1227&force_format=jpeg&q=100&width=1120.0)
 
-10\. Click "save"
+   **Administrator Note**: Both configuration files (`framework.properties` and `rundeck-config.properties`) should have consistent URLs to prevent any mismatch in accessing the server.
 
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/b182708b-a011-4b18-8fd8-288394d30762/ascreenshot.jpeg?tl_px=546,0&br_px=2266,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=1034,12)
+10. Click **Save**.
 
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/b182708b-a011-4b18-8fd8-288394d30762/ascreenshot.jpeg?tl_px=546,0&br_px=2266,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=1034,12)
 
-11\. Click "close"
+11. After saving, click **Close**.
 
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/68e36d94-cf4a-43e7-a755-bfcca9a60434/ascreenshot.jpeg?tl_px=0,0&br_px=1719,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=18,10)
+   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/68e36d94-cf4a-43e7-a755-bfcca9a60434/ascreenshot.jpeg?tl_px=0,0&br_px=1719,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=18,10)
+
+---
+
+**Final Administrator Note**: After updating both configuration files, it is recommended to restart the Rundeck service to apply the new settings. 
