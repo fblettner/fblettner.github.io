@@ -23,14 +23,16 @@ This guide will walk you through deploying Liberty Framework using Portainer, ba
 
 Before you begin, ensure the following prerequisites are met:
 
-- You have Docker and Portainer installed and running on your server.
-- You have access to the Portainer web interface.
+- You have Docker installed and running on your server. Installation instructions can be found [here](https://docs.nomana-it.fr/liberty/technical/installation).
+- You have Portainer installed and running on your server. Installation instructions can be found [here](https://docs.nomana-it.fr/liberty/technical/tools-deployment).
+- You have access to the Portainer web interface. The URL typically looks like `http://your-server-ip:3000` or `https://your-server-ip:3443`.
 
 ## Accessing Portainer
 
-1. Open a web browser and navigate to the Portainer web interface. The URL typically looks like `http://your-server-ip:3000` or `https://your-server-ip:3443`.
+1. Open a web browser and navigate to the Portainer web interface.
 
-2. Log in with your Portainer credentials.
+2. Log in with your Portainer credentials. 
+- Set a password first time you log into Portainer
 
 ## Logging into a Custom Registry
 
