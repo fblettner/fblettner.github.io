@@ -10,11 +10,11 @@ nav_order: 6
 
 This guide provides essential instructions for updating the Rundeck Framework configuration files. This is a mandatory step to change the default configuration with your custom server name and domain. Please ensure you follow these steps carefully to avoid any configuration issues.
 
-### Prerequisites:
+## Prerequisites:
 - Administrator access to FileBrowser.
 - Correct server name and domain ready for input.
 
-### Step 1: Access the File Browser
+## Step 1: Access the File Browser
 
 1. Navigate to [https://&lt;your_server&gt;/filebrowser](https://liberty.nomana-it.fr/filebrowser/login)
 
@@ -24,9 +24,10 @@ This guide provides essential instructions for updating the Rundeck Framework co
 
    ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9fc30968-ed32-4ee6-a2f8-18c4f2c8cbc0/user_cropped_screenshot.jpeg?width=800)
 
+
    **Administrator Note**: If you are unsure of your credentials, please check with the system administrator or the setup documentation for the default credentials.
 
-### Step 2: Locate the Rundeck Directory
+## Step 2: Locate the Rundeck Directory
 
 3. Navigate to the `rundeck` directory to access the configuration settings.
 
@@ -34,7 +35,7 @@ This guide provides essential instructions for updating the Rundeck Framework co
 
    **Administrator Note**: Ensure you have the correct permissions to view and modify the files in this directory.
 
-### Step 3: Edit the `framework.properties` File
+## Step 3: Edit the `framework.properties` File
 
 4. Click on the `framework.properties` file to edit it.
 
@@ -50,7 +51,7 @@ This guide provides essential instructions for updating the Rundeck Framework co
 
    ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/33e79fff-725e-4176-b106-3c399f456386/ascreenshot.jpeg?width=800)
 
-### Step 4: Edit the `rundeck-config.properties` File
+## Step 4: Edit the `rundeck-config.properties` File
 
 7. After saving, click **Close** to return to the file browser.
 
