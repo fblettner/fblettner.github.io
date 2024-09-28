@@ -101,21 +101,21 @@ Before you begin, ensure the following prerequisites are met:
 
     ```sh
     sudo systemctl enable docker-liberty.service
-    sudo systemctl enable docker-svm.service
+    sudo systemctl enable docker-admin.service
     ```
 
 2. Start the services immediately:
 
     ```sh
     sudo systemctl start docker-liberty.service
-    sudo systemctl start docker-svm.service
+    sudo systemctl start docker-admin.service
     ```
 
 3. Check the status of the services to ensure they are running:
 
     ```sh
     sudo systemctl status docker-liberty.service
-    sudo systemctl status docker-svm.service
+    sudo systemctl status docker-admin.service
     ```
 
 ## Additional Resources

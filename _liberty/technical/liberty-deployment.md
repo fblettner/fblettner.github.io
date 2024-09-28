@@ -17,7 +17,9 @@ This guide will walk you through deploying Liberty Framework using Portainer, ba
 3. [Logging into a Custom Registry](#logging-into-a-custom-registry)
 4. [Deploy the Stack](#deploy-the-stack)
 5. [Verify Deployment](#verify-deployment)
-6. [Additional Resources](#additional-resources)
+6. [Alternative: Pull Docker Images from Terminal](#alternative-pull-docker-images-from-terminal)
+7. [Steps for AWS Users](#steps-for-aws-users)
+8. [Additional Resources](#additional-resources)
 
 ## Prerequisites
 
@@ -31,8 +33,9 @@ Before you begin, ensure the following prerequisites are met:
 
 1. Open a web browser and navigate to the Portainer web interface.
 
-2. Log in with your Portainer credentials. 
-- Set a password first time you log into Portainer
+2. Log in with your Portainer credentials.
+   
+   - Set a password first time you log into Portainer
 
 ## Logging into a Custom Registry
 
@@ -43,7 +46,7 @@ Before you begin, ensure the following prerequisites are met:
 3. Provide the following details for your custom registry:
     - **Name:** A friendly name for your registry.
     - **URL:** The URL of your custom registry (e.g., `ghcr.io/fblettner`).
-    - **Username:** Your registry username  (this user will be provided by Nomana-IT).
+    - **Username:** Your registry username (this user will be provided by Nomana-IT).
     - **Password:** Your registry password (this token will be provided by Nomana-IT).
 
 4. After filling in the details, click on the `Add Registry` button to save the registry.
@@ -83,6 +86,49 @@ Before you begin, ensure the following prerequisites are met:
 
 3. Access the services through the designated ports to ensure everything is functioning as expected.
 
+## Alternative: Pull Docker Images from Terminal
+
+If you prefer to pull Docker images directly from the terminal, you can do so using the following commands:
+
+1. Open a terminal and log in to the custom registry:
+
+    ```sh
+    docker login ghcr.io
+    ```
+
+    When prompted, enter your username and password (token).
+
+2. Pull the required Docker images manually:
+
+    ```sh
+    docker pull ghcr.io/fblettner/liberty-node:latest
+    docker pull ghcr.io/fblettner/liberty-pg:latest
+    docker pull ghcr.io/fblettner/liberty-pgadmin:latest
+    docker pull ghcr.io/fblettner/liberty-rundeck:latest
+    docker pull ghcr.io/fblettner/liberty-keycloak:latest
+    docker pull ghcr.io/fblettner/liberty-filebrowser:latest
+    ```
+
+## Steps for AWS Users
+
+If you are using AWS and need to connect via AWS CLI, follow these steps:
+
+1. Configure your AWS CLI:
+
+    ```sh
+    aws configure
+    ```
+
+    Follow the prompts to enter your AWS Access Key, Secret Access Key, default region name, and output format.
+
+2. Log in to the AWS Elastic Container Registry (ECR):
+
+    ```sh
+    aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin <your-aws-account-id>.dkr.ecr.eu-west-1.amazonaws.com
+    ```
+
+    Replace `<your-aws-account-id>` with your actual AWS account ID.
+
 ## Additional Resources
 
 - [Portainer Documentation](https://documentation.portainer.io/)
@@ -92,7 +138,6 @@ Before you begin, ensure the following prerequisites are met:
 ---
 
 By following this guide, you should be able to deploy Liberty Framework using Portainer seamlessly. If you run into any issues or have any questions, refer to the additional resources provided or reach out to the respective support communities.
-
 
 ## Summary
 
@@ -113,4 +158,3 @@ By following this guide, you should be able to deploy Liberty Framework using Po
 - **filebrowser:** ghcr.io/fblettner/liberty-filebrowser:latest (Port 80)
 
 Details of all Liberty Framework Services can be found [here](https://docs.nomana-it.fr/liberty/technical/architecture).
-
