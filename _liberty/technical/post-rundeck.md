@@ -72,4 +72,4 @@ This guide provides essential instructions for updating the Rundeck Framework co
 
 **Final Administrator Note**: After updating both configuration files, it is required to restart the Rundeck service to apply the new settings. Use Portainer to restart the stack or only the Rundeck container
 
-<iframe src="https://scribehow.com/embed/Updating_Rundeck_Framework_Configuration_Files__lJtYGAs7SUWeCvooCHfoFw" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
+<iframe src="https://scribehow.com/embed/Updating_Rundeck_Framework_Configuration_Files__lJtYGAs7SUWeCvooCHfoFw" width="100%" height="800" allowfullscreen frameborder="0"></iframe>
