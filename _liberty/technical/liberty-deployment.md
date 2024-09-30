@@ -63,7 +63,7 @@ Before you begin, ensure the following prerequisites are met:
 
     - Enter the **Repository URL**: 
       ```
-      https://github.com/fblettner/liberty-public/blob/main/release/latest/liberty-framework.yml
+      https://github.com/fblettner/liberty-public
       ```
 
     - Optionally, you can specify a repository reference (branch or tag). For example:
