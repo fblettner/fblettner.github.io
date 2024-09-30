@@ -6,6 +6,8 @@ parent: Technical Guide
 nav_order: 6
 ---
 
+<iframe src="https://scribehow.com/embed/Updating_Rundeck_Framework_Configuration_Files__lJtYGAs7SUWeCvooCHfoFw?as=scrollable" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
+
 # Updating Rundeck Framework Configuration Files
 
 This guide provides essential instructions for updating the Rundeck Framework configuration files. This is a mandatory step to change the default configuration with your custom server name and domain. Please ensure you follow these steps carefully to avoid any configuration issues.
