@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Updating Rundek Configuration
+title: Updating Rundeck Configuration
 permalink: /liberty/technical/post-rundeck
 parent: Technical Guide
 nav_order: 6
