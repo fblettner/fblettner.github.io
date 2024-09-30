@@ -10,6 +10,8 @@ nav_order: 6
 
 This guide provides essential instructions for updating the Rundeck Framework configuration files. This is a mandatory step to change the default configuration with your custom server name and domain. Please ensure you follow these steps carefully to avoid any configuration issues.
 
+<iframe src="https://scribehow.com/embed/Updating_Rundeck_Framework_Configuration_Files__lJtYGAs7SUWeCvooCHfoFw" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
+
 ## Prerequisites:
 - Administrator access to FileBrowser.
 - Correct server name and domain ready for input.
@@ -71,5 +73,3 @@ This guide provides essential instructions for updating the Rundeck Framework co
 ---
 
 **Final Administrator Note**: After updating both configuration files, it is required to restart the Rundeck service to apply the new settings. Use Portainer to restart the stack or only the Rundeck container
-
-<iframe src="https://scribehow.com/embed/Updating_Rundeck_Framework_Configuration_Files__lJtYGAs7SUWeCvooCHfoFw" width="100%" height="800" allowfullscreen frameborder="0"></iframe>
