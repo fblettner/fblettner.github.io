@@ -6,9 +6,11 @@ parent: Technical Guide
 nav_order: 7
 ---
 
-# Enable SSL 
+# Enable SSL with Traefik
 
 By default, SSL is enabled with a self signed certificate. You have to copy your own certificates according to your domain
+
+<iframe src="https://scribehow.com/embed/Enable_SSL_with_Traefik__OwYGZvfgQDu0cgiXULfgfg" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
 
 ## Prerequisites:
 - Administrator access to FileBrowser.
