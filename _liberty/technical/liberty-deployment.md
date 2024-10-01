@@ -66,11 +66,6 @@ Before you begin, ensure the following prerequisites are met:
       https://github.com/fblettner/liberty-public
       ```
 
-    - Optionally, you can specify a repository reference (branch or tag). For example:
-      ```
-      main
-      ```
-
     - In the **Compose path** field, specify:
       ```
       release/latest/liberty-framework.yml
