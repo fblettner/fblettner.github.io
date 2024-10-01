@@ -10,36 +10,35 @@ nav_order: 7
 
 By default, SSL is enabled with a self signed certificate. You have to copy your own certificates according to your domain
 
-<iframe src="https://scribehow.com/embed/Enable_SSL_with_Traefik__OwYGZvfgQDu0cgiXULfgfg" width="100%" height="640" allowfullscreen frameborder="0"></iframe>
-
 ## Prerequisites:
-- Administrator access to FileBrowser.
-- Certificates for you domain
+- `mkcert` installed to create a new self-signed certificate.
+- Certificates for your domain
 
-## Step 1: Access File Browser
+## Step 1: Copy your certificates files
 
-1. Navigate to [https://&lt;your_server&gt;/filebrowser](https://liberty.nomana-it.fr/filebrowser/login)
+1. Copy your certificates files to the server hosting Liberty Framework
 
-   **Administrator Note**: Ensure that you replace `<your_server>` with the actual server IP or domain name where the FileBrowser is hosted.
+2. Transfer you certificate to the Docker container
+```bash
+docker cp <your_certificate_directory>/cert.pem traefik:/etc/certs/cert.pem
+docker cp <your_certificate_directory>/key.pem traefik:/etc/certs/key.pem
+```
 
-2. Enter your credentials and click **Login**.
+**Final Administrator Note**: Certificates must be transferred to the Docker container with each renewal
 
-   ![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-28/9fc30968-ed32-4ee6-a2f8-18c4f2c8cbc0/user_cropped_screenshot.jpeg?width=800)
+## Step2: Create a self-signed certificate (optional)
 
+1. Connect to the server hosting Liberty Framework
 
-   **Administrator Note**: If you are unsure of your credentials, please check with the system administrator or the setup documentation for the default credentials.
+2. Create a new self signed certificate
+```bash
+mkcert -key-file ./certs/key.pem -cert-file ./certs/cert.pem '<server_name>'
+```
 
+3. Transfer you certificate to the Docker container
+```bash
+docker cp ./certs/cert.pem traefik:/etc/certs/cert.pem
+docker cp ./certs/key.pem traefik:/etc/certs/key.pem
+```
 
-## Step 2: Copy your certificates files
-
-3. Navigate to the `traefik` and `certificates` directory to access the certificates files.
-
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-30/3f2e66cf-2f84-41b4-a722-5b386f24c472/ascreenshot.jpeg?tl_px=0,433&br_px=1719,1394&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=444,276)
-
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-30/33837bfe-be53-4a7d-bce3-7eb79c974342/ascreenshot.jpeg?tl_px=0,0&br_px=1719,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=484,221)
-
-4. Click `file_upload` and replace the two files with your own certificates from your local drive
-
-![](https://ajeuwbhvhr.cloudimg.io/colony-recorder.s3.amazonaws.com/files/2024-09-30/fb0cfd6d-b630-42a3-9bee-e9fd261ce550/ascreenshot.jpeg?tl_px=546,0&br_px=2266,961&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=929,4)
-
-**Final Administrator Note**: After updating both files, it is required to restart the Rundeck service to apply the new settings. Use Portainer to restart the stack or only the Rundeck container
+**Final Administrator Note**: After updating both files, it is required to restart the Traefik service to apply the new settings.
