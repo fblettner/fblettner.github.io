@@ -57,7 +57,7 @@ sudo yum update -y
 Install the necessary packages required to set up the Docker repository.
 
 ```bash
-sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+sudo yum install -y yum-utils 
 ```
 
 ### Step 3: Set Up the Docker Repository
@@ -73,7 +73,7 @@ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/dock
 Install Docker Engine, CLI, and Containerd.
 
 ```bash
-sudo yum install -y docker-ce docker-ce-cli containerd.io
+sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
 ### Step 5: Start and Enable Docker
@@ -95,27 +95,8 @@ sudo docker run hello-world
 
 If the container runs and displays a welcome message, Docker is installed correctly.
 
-### Step 7: Install Docker Compose
 
-Download the current stable release of Docker Compose:
-
-```bash
-sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -Po '"tag_name": "\K.*?(?=")')/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-```
-
-Apply executable permissions to the binary:
-
-```bash
-sudo chmod +x /usr/local/bin/docker-compose
-```
-
-Verify that the installation was successful:
-
-```bash
-docker-compose --version
-```
-
-### Step 8: Adding Your User to the Docker Group (Optional)
+### Step 7: Adding Your User to the Docker Group (Optional)
 
 To run Docker commands without `sudo`, add your user to the Docker group.
 
@@ -130,10 +111,9 @@ Log out and log back in to apply the group changes.
 To remove Docker, the CLI, Containerd, and Docker Compose, use the following commands:
 
 ```bash
-sudo yum remove docker-ce docker-ce-cli containerd.io
+sudo yum remove docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
 sudo rm -rf /var/lib/docker
 sudo rm -rf /var/lib/containerd
-sudo rm /usr/local/bin/docker-compose
 ```
 
 ## Docker Installation for Amazon Linux OS
