@@ -13,28 +13,30 @@ This guide covers the installation of Docker and Docker Compose on **CentOS** an
 
 ## Index
 
-- [Docker Installation for CentOS](#docker-installation-for-centos)
-  - [Prerequisites](#prerequisites)
-  - [Step 1: Update System Packages](#step-1-update-system-packages)
-  - [Step 2: Install Required Dependencies](#step-2-install-required-dependencies)
-  - [Step 3: Set Up the Docker Repository](#step-3-set-up-the-docker-repository)
-  - [Step 4: Install Docker](#step-4-install-docker)
-  - [Step 5: Start and Enable Docker](#step-5-start-and-enable-docker)
-  - [Step 6: Verify Docker Installation](#step-6-verify-docker-installation)
-  - [Step 7: Install Docker Compose](#step-7-install-docker-compose)
-  - [Step 8: Adding Your User to the Docker Group (Optional)](#step-8-adding-your-user-to-the-docker-group-optional)
-  - [Uninstall Docker](#uninstall-docker)
-- [Docker Installation for Amazon Linux OS](#docker-installation-for-amazon-linux-os)
-  - [Prerequisites](#prerequisites-1)
-  - [Step 1: Update System Packages](#step-1-update-system-packages-1)
-  - [Step 2: Install Docker](#step-2-install-docker)
-  - [Step 3: Start and Enable Docker](#step-3-start-and-enable-docker)
-  - [Step 4: Verify Docker Installation](#step-4-verify-docker-installation)
-  - [Step 5: Install Docker Compose](#step-5-install-docker-compose)
-  - [Step 6: Adding Your User to the Docker Group (Optional)](#step-6-adding-your-user-to-the-docker-group-optional-1)
-  - [Uninstall Docker](#uninstall-docker-1)
-- [Conclusion](#conclusion)
-- [References](#references)
+- [Docker Installation Guide](#docker-installation-guide)
+  - [Index](#index)
+  - [Docker Installation for CentOS](#docker-installation-for-centos)
+    - [Prerequisites](#prerequisites)
+    - [Step 1: Update System Packages](#step-1-update-system-packages)
+    - [Step 2: Install Required Dependencies](#step-2-install-required-dependencies)
+    - [Step 3: Set Up the Docker Repository](#step-3-set-up-the-docker-repository)
+    - [Step 4: Install Docker](#step-4-install-docker)
+    - [Step 5: Start and Enable Docker](#step-5-start-and-enable-docker)
+    - [Step 6: Verify Docker Installation](#step-6-verify-docker-installation)
+    - [Step 7: Adding Your User to the Docker Group (Optional)](#step-7-adding-your-user-to-the-docker-group-optional)
+    - [Uninstall Docker](#uninstall-docker)
+  - [Docker Installation for Amazon Linux OS](#docker-installation-for-amazon-linux-os)
+    - [Prerequisites](#prerequisites-1)
+    - [Step 1: Update System Packages](#step-1-update-system-packages-1)
+    - [Step 2: Install Docker](#step-2-install-docker)
+    - [Step 3: Start and Enable Docker](#step-3-start-and-enable-docker)
+    - [Step 4: Verify Docker Installation](#step-4-verify-docker-installation)
+    - [Step 5: Install Docker Compose](#step-5-install-docker-compose)
+    - [Step 6: Adding Your User to the Docker Group (Optional)](#step-6-adding-your-user-to-the-docker-group-optional)
+    - [Uninstall Docker](#uninstall-docker-1)
+  - [Post installation tasks](#post-installation-tasks)
+  - [Conclusion](#conclusion)
+  - [References](#references)
 
 ## Docker Installation for CentOS
 
@@ -197,6 +199,27 @@ To remove Docker, the CLI, Containerd, and Docker Compose, use the following com
 sudo yum remove docker
 sudo rm -rf /var/lib/docker
 sudo rm /usr/local/bin/docker-compose
+```
+
+## Post installation tasks
+
+If you want to set a custom directory for docker and if you are running behin a proxy, the docker service must be modified
+
+Edit the service: /lib/systemd/system/docker.service
+```bash
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+ExecStart=/usr/bin/dockerd --data-root <CUSTOM_DIRECTORY> -H fd:// --containerd=/run/containerd/containerd.sock
+ExecReload=/bin/kill -s HUP $MAINPID
+TimeoutStartSec=0
+RestartSec=2
+Restart=always
+Environment="HTTP_PROXY=<PROXY_URL>"
+Environment="HTTPS_PROXY=<PROXY_URL>"
+
 ```
 
 ## Conclusion
