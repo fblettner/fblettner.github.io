@@ -34,7 +34,7 @@ This guide covers the installation of Docker and Docker Compose on **CentOS** an
     - [Step 5: Install Docker Compose](#step-5-install-docker-compose)
     - [Step 6: Adding Your User to the Docker Group (Optional)](#step-6-adding-your-user-to-the-docker-group-optional)
     - [Uninstall Docker](#uninstall-docker-1)
-  - [Post installation tasks](#post-installation-tasks)
+  - [Post installation Tasks](#post-installation-tasks)
   - [Conclusion](#conclusion)
   - [References](#references)
 
@@ -201,9 +201,9 @@ sudo rm -rf /var/lib/docker
 sudo rm /usr/local/bin/docker-compose
 ```
 
-## Post installation tasks
+## Post installation Tasks
 
-If you want to set a custom directory for docker and if you are running behin a proxy, the docker service must be modified
+If you want to set a custom directory for docker and if you are running behind a proxy, the docker service must be modified
 
 Edit the service: /lib/systemd/system/docker.service
 ```bash
