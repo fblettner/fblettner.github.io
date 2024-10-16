@@ -54,6 +54,14 @@ Before starting the installation, update your system to ensure all packages are 
 sudo yum update -y
 ```
 
+if Podman is installed, remove all packages, artifacts and containers storage
+
+```bash
+yum remove buildah skopeo podman containers-common atomic-registries docker container-tools
+rm -rf /etc/containers/* /var/lib/containers/* /etc/docker /etc/subuid* /etc/subgid*
+cd ~ && rm -rf /.local/share/containers/
+```
+
 ### Step 2: Install Required Dependencies
 
 Install the necessary packages required to set up the Docker repository.
@@ -206,6 +214,7 @@ sudo rm /usr/local/bin/docker-compose
 If you want to set a custom directory for docker and if you are running behind a proxy, the docker service must be modified
 
 Edit the service: /lib/systemd/system/docker.service
+
 ```bash
 [Service]
 Type=notify
@@ -219,7 +228,21 @@ RestartSec=2
 Restart=always
 Environment="HTTP_PROXY=<PROXY_URL>"
 Environment="HTTPS_PROXY=<PROXY_URL>"
+```
 
+If you want to change the default IP range (172.17.x.x) for docker
+Edit the file: /etc/docker/daemon.json
+
+```bash
+# Set the ip range according to your requirements
+# bip is for the internal interface
+# default-address-pools is for all new networks
+{
+  "bip": "172.26.0.1/16",
+  "default-address-pools": [
+    { "base": "172.27.0.0/16", "size": 24 }
+  ]
+}
 ```
 
 ## Conclusion
