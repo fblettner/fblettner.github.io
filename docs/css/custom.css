@@ -1,0 +1,21 @@
+/* Standardized button sizes */
+
+/* Small Button */
+.md-button--small {
+    font-size: 0.8rem;   /* Smaller text */
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+}
+
+/* Medium Button (default) */
+.md-button--medium {
+    font-size: 1rem;     /* Default text size */
+    padding: 8px 16px;   /* Default padding */
+}
+
+/* Large Button */
+.md-button--large {
+    font-size: 1.2rem;   /* Larger text */
+    padding: 12px 20px;  /* Spacious padding */
+    border-radius: 6px;  /* Slightly rounded corners */
+}

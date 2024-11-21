@@ -1,0 +1,104 @@
+site_name: Documentation
+site_url: https://docs.nomana-it.fr
+
+theme:
+  name: material
+  logo: assets/logo_ly.png
+  favicon: assets/logo_ly.png
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      primary: blue grey
+      accent: amber
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      primary: blue grey
+      accent: amber
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode   
+  features:
+    - content.code.copy     
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.tabs
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+nav:
+  - Home: index.md
+  - Liberty:
+      - Getting Started: liberty/getting-started.md
+      - Installation: 
+        - Architecture: liberty/technical/architecture.md
+        - Docker Installation Guide: liberty/technical/installation.md
+        - Installation Tools Deployment Guide: liberty/technical/tools-deployment.md
+        - Liberty Deployment Guide: liberty/technical/liberty-deployment.md
+        - Create Linux Services: liberty/technical/linux-services.md
+        - Enable SSL with Traefik: liberty/technical/post-ssl.md
+      - Nomasx-1:
+          - Administrator's Guide: 
+            - Global Settings: liberty/nomasx1/admin/global-settings.md       
+      - Release Notes: liberty/release-notes.md
+      - Issues: liberty/issues.md
+      - Incidents: liberty/incidents.md        
+
+  - API:
+      - Getting Started: api/getting-started.md
+      - JD Edwards API: 
+        - Export XML source or PDF Output from JD Edwards BLOB fields: api/jde-api/jdebip.md        
+        - Export source code for BSFN from JD Edwards BLOB field (F98780R): api/jde-api/jdebsfn.md        
+      - BI Publisher API: 
+        - Simple JAVA CLASS to encode string and display barcode 128 with BI Publisher RTF template: api/bip-api/nomabc.md        
+        - JAVA package with Oracle BI Publisher API: api/bip-api/nomabip.md        
+  - Blog:
+    - blog/index.md
+plugins:
+  - search
+  - awesome-pages
+  - minify
+  - blog
+  - privacy
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/fblettner
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/franck-blettner-72509510/          
+  consent:
+    title: Cookie consent
+    actions:
+      - accept
+      - manage
+      - reject
+    description: >- 
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.      
+markdown_extensions:
+  - attr_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+      linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+extra_css:
+  - css/custom.css
+extra_files:
+  - docs/robots.txt  
+copyright: >
+  Copyright &copy; 2024 Nomana-IT –
+  <a href="#__consent">Change cookie settings</a>
