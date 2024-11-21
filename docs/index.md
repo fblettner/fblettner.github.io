@@ -1,7 +1,7 @@
 ## Knowledge base
 Information about our products and services with targeted solutions, getting started guides, and content for advanced use cases.
 
-[LIBERTY](liberty/getting-started.md){ .md-button .md-button--primary .md-button--small } [NOMASX-1](nomasx1/getting-started.md){ .md-button .md-button--small } [API](api/getting-started.md){ .md-button .md-button--small }
+[LIBERTY](liberty/getting-started.md){ .md-button .md-button--primary .md-button--small } [API](api/getting-started.md){ .md-button .md-button--small } [BLOG](blog){ .md-button .md-button--small }
 
 ## Open source projects
 All public repositories developed by NOMANA-IT
