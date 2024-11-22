@@ -5,6 +5,7 @@ theme:
   name: material
   logo: assets/logo_ly.png
   favicon: assets/logo_ly.png
+  custom_dir: overrides
   palette:
     - media: "(prefers-color-scheme: light)"
       primary: blue grey
@@ -97,8 +98,6 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
 extra_css:
   - css/custom.css
-extra_files:
-  - docs/robots.txt  
 copyright: >
   Copyright &copy; 2024 Nomana-IT –
   <a href="#__consent">Change cookie settings</a>
