@@ -64,13 +64,15 @@ plugins:
   - awesome-pages
   - minify
   - blog
-  - privacy
 extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/fblettner
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/franck-blettner-72509510/          
+  meta:
+      - name: Content-Security-Policy
+        value: frame-ancestors 'self' https://giscus.app;      
   consent:
     title: Cookie consent
     actions:
@@ -81,7 +83,7 @@ extra:
       We use cookies to recognize your repeated visits and preferences, as well
       as to measure the effectiveness of our documentation and whether users
       find what they're searching for. With your consent, you're helping us to
-      make our documentation better.      
+      make our documentation better.         
 markdown_extensions:
   - attr_list
   - pymdownx.highlight:
