@@ -4,7 +4,6 @@ authors:
   - fblettner
 categories:
   - Oracle
-comments: true
 ---
 
 # Locks Management
