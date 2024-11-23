@@ -1,9 +1,23 @@
 ---
+title: "Information about NOMANA-IT products and services" 
 hide:
   - footer
   - navigation
   - toc
+  - title
 ---
+<style>
+  .md-main__inner {
+    margin-top: 0 !important; /* Remove extra spacing */
+  }
+  .md-typeset h1,
+  .md-content__button {
+    display: none;
+  }
+    .md-typeset h2:first-of-type {
+    margin-top: 0 !important; /* Remove margin only for the first h2 */
+  }
+</style>
 ## Knowledge base
 Information about our products and services with targeted solutions, getting started guides, and content for advanced use cases.
 
