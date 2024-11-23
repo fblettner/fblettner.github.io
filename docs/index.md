@@ -1,6 +1,6 @@
 ---
-title: "Information about NOMANA-IT products and services" 
-description: "Learn how to quickly get started with Liberty Framework, a no-code platform for building scalable web applications"
+title: "NOMANA-IT - Documentation, Blog and Resources" 
+description: "Information about NOMANA-IT products and services with targeted solutions, getting started guides, and content for advanced use cases"
 hide:
   - footer
   - navigation
