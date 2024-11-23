@@ -22,7 +22,7 @@
     
     
       
-        <title>Architecture - Documentation</title>
+        <title>Architecture - NOMANA-IT - Documentation, Blog and Resources</title>
       
     
     
@@ -90,7 +90,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="Documentation" class="md-header__button md-logo" aria-label="Documentation" data-md-component="logo">
+    <a href="../../.." title="NOMANA-IT - Documentation, Blog and Resources" class="md-header__button md-logo" aria-label="NOMANA-IT - Documentation, Blog and Resources" data-md-component="logo">
       
   <img src="../../../assets/logo_ly.png" alt="logo">
 
@@ -103,7 +103,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Documentation
+            NOMANA-IT - Documentation, Blog and Resources
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -294,12 +294,12 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Documentation" class="md-nav__button md-logo" aria-label="Documentation" data-md-component="logo">
+    <a href="../../.." title="NOMANA-IT - Documentation, Blog and Resources" class="md-nav__button md-logo" aria-label="NOMANA-IT - Documentation, Blog and Resources" data-md-component="logo">
       
   <img src="../../../assets/logo_ly.png" alt="logo">
 
     </a>
-    Documentation
+    NOMANA-IT - Documentation, Blog and Resources
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -504,9 +504,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-rundeck-service-liberty-rundeck" class="md-nav__link">
+  <a href="#4-airflow-service-liberty-airflow" class="md-nav__link">
     <span class="md-ellipsis">
-      4. Rundeck Service (liberty-rundeck) 🛠️
+      4. Airflow Service (liberty-airflow) 🛠️
     </span>
   </a>
   
@@ -522,9 +522,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-filebrowser-service-liberty-filebrowser" class="md-nav__link">
+  <a href="#6-gitea-service-liberty-gitea" class="md-nav__link">
     <span class="md-ellipsis">
-      6. Filebrowser Service (liberty-filebrowser) 📂
+      6. Gitea Service (liberty-gitea) 📂
     </span>
   </a>
   
@@ -1353,9 +1353,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-rundeck-service-liberty-rundeck" class="md-nav__link">
+  <a href="#4-airflow-service-liberty-airflow" class="md-nav__link">
     <span class="md-ellipsis">
-      4. Rundeck Service (liberty-rundeck) 🛠️
+      4. Airflow Service (liberty-airflow) 🛠️
     </span>
   </a>
   
@@ -1371,9 +1371,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-filebrowser-service-liberty-filebrowser" class="md-nav__link">
+  <a href="#6-gitea-service-liberty-gitea" class="md-nav__link">
     <span class="md-ellipsis">
-      6. Filebrowser Service (liberty-filebrowser) 📂
+      6. Gitea Service (liberty-gitea) 📂
     </span>
   </a>
   
@@ -1414,7 +1414,7 @@
 
   <h1>Architecture</h1>
 
-<p>This document provides an overview of the functionality and configuration of the services within the <strong>Liberty Framework</strong>, including <strong>Node.js</strong>, <strong>PostgreSQL</strong>, <strong>pgAdmin</strong>, <strong>Rundeck</strong>, <strong>OIDC</strong>, and <strong>Filebrowser</strong>. These services are integrated with <strong>Traefik</strong> as a reverse proxy, enabling both HTTP and HTTPS access with automated routing. </p>
+<p>This document provides an overview of the functionality and configuration of the services within the <strong>Liberty Framework</strong>, including <strong>Node.js</strong>, <strong>PostgreSQL</strong>, <strong>pgAdmin</strong>, <strong>Airflow</strong>, <strong>OIDC</strong>, and <strong>Gitea</strong>. These services are integrated with <strong>Traefik</strong> as a reverse proxy, enabling both HTTP and HTTPS access with automated routing. </p>
 <hr />
 <h2 id="1-nodejs-service-liberty-node">1. <strong>Node.js Service (<code>liberty-node</code>)</strong> 🟢</h2>
 <ul>
@@ -1463,21 +1463,20 @@
 <li>🔌 <strong>Port</strong>: Exposed on port <code>3003</code>.</li>
 </ul>
 <hr />
-<h2 id="4-rundeck-service-liberty-rundeck">4. <strong>Rundeck Service (<code>liberty-rundeck</code>)</strong> 🛠️</h2>
+<h2 id="4-airflow-service-liberty-airflow">4. <strong>Airflow Service (<code>liberty-airflow</code>)</strong> 🛠️</h2>
 <ul>
-<li><strong>Image</strong>: <code>ghcr.io/fblettner/liberty-rundeck:latest</code></li>
+<li><strong>Image</strong>: <code>ghcr.io/fblettner/liberty-airflow:latest</code></li>
 <li><strong>Security Options</strong>:</li>
 <li>🔒 Disables SELinux labels.</li>
 <li>⚙️ Drops capabilities <code>MKNOD</code> and <code>AUDIT_WRITE</code>.</li>
 <li><strong>Volumes</strong>: </li>
-<li>Data stored in the <code>rundeck-data</code> volume.</li>
-<li>Configurations in <code>rundeck-config</code> and <code>talend-config</code>.</li>
-<li><strong>Depends on</strong>: PostgreSQL (<code>pg</code>).</li>
+<li>Logs stored in the <code>airflow-logs</code> volume.</li>
+<li><strong>Depends on</strong>: PostgreSQL (<code>pg</code>), Gitea (<code>gitea</code>).</li>
 <li><strong>Networks</strong>: Connected to <code>liberty-network</code>.</li>
 <li><strong>Traefik Configuration</strong>:</li>
-<li>🌐 <strong>Routing</strong>: Handles HTTP and HTTPS requests for <code>/rundeck</code>.</li>
+<li>🌐 <strong>Routing</strong>: Handles HTTP and HTTPS requests for <code>/airflow/home</code>.</li>
 <li>⚠️ <strong>Error Pages Middleware</strong>: Applied to both HTTP and HTTPS routes.</li>
-<li>🔌 <strong>Port</strong>: Exposed on port <code>4440</code>.</li>
+<li>🔌 <strong>Port</strong>: Exposed on port <code>8080</code>.</li>
 </ul>
 <hr />
 <h2 id="5-oidc-service-liberty-keycloak">5. <strong>OIDC Service (<code>liberty-keycloak</code>)</strong> 🔐</h2>
@@ -1495,31 +1494,30 @@
 <li>🌍 <strong>CORS Middleware</strong>: Configures Cross-Origin Resource Sharing (CORS) for all origins and credentials.</li>
 </ul>
 <hr />
-<h2 id="6-filebrowser-service-liberty-filebrowser">6. <strong>Filebrowser Service (<code>liberty-filebrowser</code>)</strong> 📂</h2>
+<h2 id="6-gitea-service-liberty-gitea">6. <strong>Gitea Service (<code>liberty-gitea</code>)</strong> 📂</h2>
 <ul>
-<li><strong>Image</strong>: <code>ghcr.io/fblettner/liberty-filebrowser:latest</code></li>
-<li><strong>Healthcheck</strong>: Ensures service health by checking <code>/health</code> endpoint every 30 seconds.</li>
+<li><strong>Image</strong>: <code>ghcr.io/fblettner/liberty-gitea:latest</code></li>
+<li><strong>Healthcheck</strong>: Ensures service health by checking <code>/</code> endpoint every 30 seconds.</li>
 <li><strong>Volumes</strong>: </li>
-<li>Configuration in <code>fb-config</code> and data in <code>fb-data</code>.</li>
-<li>Shares Rundeck, Talend, Traefik certificates, and configuration via other volumes.</li>
+<li>Configuration and data in <code>liberty-gitea</code>.</li>
 <li><strong>Restart Policy</strong>: Set to <code>unless-stopped</code>.</li>
 <li><strong>Networks</strong>: Connected to <code>liberty-network</code>.</li>
 <li><strong>Traefik Configuration</strong>:</li>
-<li>🌐 <strong>Routing</strong>: Routes HTTP requests to <code>/filebrowser</code>.</li>
-<li>🛠️ <strong>Middleware</strong>: Uses <code>stripprefix</code> to remove <code>/filebrowser</code> from the path for internal routing.</li>
-<li>🔌 <strong>Port</strong>: Exposed on port <code>80</code>.</li>
+<li>🌐 <strong>Routing</strong>: Routes HTTP requests to <code>/gitea</code>.</li>
+<li>🛠️ <strong>Middleware</strong>: Uses <code>stripprefix</code> to remove <code>/gitea</code> from the path for internal routing.</li>
+<li>🔌 <strong>Port</strong>: Exposed on port <code>3000</code>.</li>
 </ul>
 <hr />
 <h2 id="volumes">Volumes 🗃️</h2>
 <ul>
-<li><strong>fb-config</strong>: Stores Filebrowser configuration.</li>
-<li><strong>fb-data</strong>: Stores Filebrowser data.</li>
+<li><strong>node-logs</strong>: Stores Logs for backend and frontend.</li>
 <li><strong>pg-data</strong>: Stores PostgreSQL data.</li>
+<li><strong>pg-logs</strong>: Stores Logs for database.</li>
 <li><strong>pgadmin-data</strong>: Stores pgAdmin data.</li>
-<li><strong>rundeck-data</strong>: Stores Rundeck data.</li>
-<li><strong>rundeck-config</strong>: Stores Rundeck configuration.</li>
-<li><strong>talend-config</strong>: Stores Talend configuration.</li>
-<li><strong>nginx-config</strong>: Stores Nginx configuration.</li>
+<li><strong>liberty-gitea</strong>: Stores gitea config and data.</li>
+<li><strong>airflow-logs</strong>: Stores logs for Airflow.</li>
+<li><strong>airflow-dags</strong>: Stores Dags for Airflow.</li>
+<li><strong>airflow-plugins</strong>: Stores Plugins for Airflow.</li>
 <li><strong>traefik-certs</strong>: Stores Traefik certificates (external).</li>
 <li><strong>traefik-config</strong>: Stores Traefik configuration (external).</li>
 <li><strong>shared-data</strong>: Stores shared data (external).</li>
@@ -1530,7 +1528,7 @@
 <li><strong>liberty-network</strong>: External network for inter-service communication.</li>
 </ul>
 <hr />
-<p>This configuration enables a scalable, containerized microservice architecture with <strong>Node.js</strong> for application logic, <strong>PostgreSQL</strong> for database management, <strong>pgAdmin</strong> for database administration, <strong>Rundeck</strong> for automation, <strong>Keycloak OIDC</strong> for authentication, and <strong>Filebrowser</strong> for file management. <strong>Traefik</strong> serves as the reverse proxy, handling routing and applying security middleware for all services.</p>
+<p>This configuration enables a scalable, containerized microservice architecture with <strong>Node.js</strong> for application logic, <strong>PostgreSQL</strong> for database management, <strong>pgAdmin</strong> for database administration, <strong>Airflow</strong> for automation, <strong>Keycloak OIDC</strong> for authentication, and <strong>Gitea</strong> for file management and versioning. <strong>Traefik</strong> serves as the reverse proxy, handling routing and applying security middleware for all services.</p>
 
 
 
