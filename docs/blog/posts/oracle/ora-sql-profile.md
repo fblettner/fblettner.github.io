@@ -4,6 +4,8 @@ authors:
   - fblettner
 categories:
   - Oracle
+hide:
+  - footer
 ---
 
 # Transport SQL profile from one base to another <!-- omit in toc -->

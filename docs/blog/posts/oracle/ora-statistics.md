@@ -4,6 +4,8 @@ authors:
   - fblettner
 categories:
   - Oracle
+hide:
+  - footer
 ---
 
 # Statistics Management <!-- omit in toc -->

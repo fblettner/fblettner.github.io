@@ -4,6 +4,8 @@ authors:
   - fblettner
 categories:
   - Oracle
+hide:
+  - footer 
 ---
 
 # Database size <!-- omit in toc -->

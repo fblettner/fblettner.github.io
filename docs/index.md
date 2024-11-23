@@ -1,3 +1,9 @@
+---
+hide:
+  - footer
+  - navigation
+  - toc
+---
 ## Knowledge base
 Information about our products and services with targeted solutions, getting started guides, and content for advanced use cases.
 
