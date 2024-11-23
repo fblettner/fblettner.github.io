@@ -1,8 +1,6 @@
 ---
-layout: default
-title: Getting started
-permalink: /jdedwards/
-nav_order: 1
+title: Open source API for JD Edwards and BI Publisher
+description: "Open source API for JD Edwards and BI Publisher"
 ---
 
 ## JD Edwards

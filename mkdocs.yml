@@ -56,8 +56,8 @@ nav:
         - Export XML source or PDF Output from JD Edwards BLOB fields: api/jde-api/jdebip.md        
         - Export source code for BSFN from JD Edwards BLOB field (F98780R): api/jde-api/jdebsfn.md        
       - BI Publisher API: 
-        - Simple JAVA CLASS to encode string and display barcode 128 with BI Publisher RTF template: api/bip-api/nomabc.md        
-        - JAVA package with Oracle BI Publisher API: api/bip-api/nomabip.md        
+        - Simple java class to encode string and display barcode 128 with BI Publisher RTF template: api/bip-api/nomabc.md        
+        - Java package with Oracle BI Publisher API: api/bip-api/nomabip.md        
   - Blog:
     - blog/index.md
 plugins:

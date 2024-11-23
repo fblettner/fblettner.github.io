@@ -1,15 +1,22 @@
+---
+title: "NOMABIP - Java package with Oracle BI Publisher API" 
+description: "API to integrate easily JDEdwards and BI Publisher regardless of JDEdwards Tools Release"
+---
 [Download](https://github.com/fblettner/bip-nomabip){: style="float: right;" .btn-primary .btn .fs-5 .mb-4 .mb-md-0 target="_blank"}
 **Built with VSCode and JDK 1.8**
 
 ## 1. Functionalities
-This api was initially developed to integrate easily JDEdwards and BI Publisher regardless of JDEdwards Tools Release.\
-Nothing to install, only to use. Samples scripts are provided into the test directory. It can now be used for any spool with or without JD Edwards (BI Publisher license is needed).
-- Generate PDF and XML files simultaneously from a xml spool
-- Burst or single mode
-- Number of CPU for parallel processing and improving performance
-- Add Ghostscript for PDF compatibility
-- Document indexation and errors into an Oracle Database (optional)
-- Integrate Java class NOMABC to print Barcode 128 (see github repository)
+This API was initially developed to integrate easily **JD Edwards** and **BI Publisher**, regardless of JD Edwards Tools Release.
+
+Nothing to install, only to use. Sample scripts are provided in the `test` directory. It can now be used for any spool with or without JD Edwards (*BI Publisher license is needed*).
+
+### Features:
+- **Generate PDF and XML files** simultaneously from a XML spool.
+- **Burst or single mode** for flexible processing.
+- Configure the **number of CPUs** for parallel processing and performance improvements.
+- Add **Ghostscript** for enhanced PDF compatibility.
+- **Document indexation and error tracking** in an Oracle Database (*optional*).
+- Integrate the **Java class NOMABC** to print Barcode 128 ([see GitHub repository](#)).
 
 ## 2. Global Settings
 
