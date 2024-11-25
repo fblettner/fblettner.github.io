@@ -19,3 +19,13 @@
     padding: 12px 20px;  /* Spacious padding */
     border-radius: 6px;  /* Slightly rounded corners */
 }
+
+@media print {
+    @page {
+        margin: 0;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+    }
+  }

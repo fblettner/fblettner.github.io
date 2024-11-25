@@ -49,7 +49,6 @@ nav:
       - Release Notes: liberty/release-notes.md
       - Issues: liberty/issues.md
       - Incidents: liberty/incidents.md        
-
   - API:
       - Getting Started: api/getting-started.md
       - JD Edwards API: 
@@ -94,11 +93,7 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.superfences
 extra_css:
   - css/custom.css
 copyright: >
