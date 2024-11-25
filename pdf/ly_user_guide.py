@@ -292,20 +292,19 @@ def generate_pdf_with_cover_and_toc(base_url, pages_with_titles):
                         margin-top: 10px !important;
                     }
                     @page {
-                        margin: 0.5in 0.1in 0.5in 0.1in; /* Default margin for all pages */
+                        margin: 0.7in 0.2in 1.5in 0.2in; /* Increased bottom margin for all pages */
                     }
-
                     @page:first {
-                        margin: 0 !important; /* Adjust or remove the margin for the first page */
+                        margin: 0 0.2in 2in 0.2in; /* Adjusted bottom margin for the first page */
                         padding: 0 !important;
-                    }  
+                    }   
                 """)
 
                 page.pdf(
                     path=output_path,
                     format="A4",
                     print_background=True,
-                    margin={"top": "1in", "bottom": "1in"},
+                    margin={"top": "1in", "bottom": "1.2in"},  # Adjust bottom margin
                     display_header_footer=True,
                     header_template=f'''
                         <div style="
@@ -317,6 +316,7 @@ def generate_pdf_with_cover_and_toc(base_url, pages_with_titles):
                                 font-weight: bold;
                                 border-bottom: 0.5px solid #7393B3; 
                                 font-variant-caps: small-caps;
+                                box-sizing: border-box; /* Prevent overflow issues */
                                 ">
                             {title}
                         </div>
@@ -324,14 +324,16 @@ def generate_pdf_with_cover_and_toc(base_url, pages_with_titles):
                     footer_template=f'''
                         <div style="
                             font-size: 12px; 
-                            padding-left: 20px; 
-                            padding-right: 20px; 
-                            padding-bottom: 5px; 
+                            padding: 5px 20px; /* Reduced padding for footer */
                             width: 100%; 
                             display: flex; 
                             justify-content: space-between; 
                             align-items: center; 
-                            font-style: italic;">
+                            font-style: italic;
+                            box-sizing: border-box; /* Ensure proper sizing */
+                            border-top: 0.5px solid #7393B3; /* Optional separator line */
+                            background-color: #f9f9f9; /* Optional background for clarity */
+                            ">
                             <div style="text-align: left;">
                                 © Nomana-IT | Edited: {edited_date}
                             </div>
