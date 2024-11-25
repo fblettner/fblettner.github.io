@@ -5,9 +5,10 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 
 BASE_URL = "http://docs.nomana-it.fr"
+TEMP_FOLDER = "pdf-temp"
 OUTPUT_FOLDER = "pdf-output"
 COVER_FOLDER = "pdf-cover"
-PDF_NAME = "final_documentation.pdf"
+PDF_NAME = "Liberty_User_Guide.pdf"
 COVER_FILE = os.path.join(COVER_FOLDER, "liberty_cover.pdf")
 
 # Hardcoded Navigation Structure
@@ -110,7 +111,7 @@ def generate_toc(pages_with_numbers):
 </body>
 </html>
 """
-    toc_file = os.path.join(OUTPUT_FOLDER, "toc.html")
+    toc_file = os.path.join(TEMP_FOLDER, "toc.html")
     with open(toc_file, "w") as file:
         file.write(toc_html)
     print(f"TOC generated as {toc_file}")
@@ -156,8 +157,9 @@ def add_page_numbers(input_file, output_file):
     print(f"PDF with page numbers saved to {output_file}")
 
 # Generate PDF with Playwright
-def generate_pdf_with_cover_and_toc(base_url, pages_with_titles, output_folder):
-    os.makedirs(output_folder, exist_ok=True)
+def generate_pdf_with_cover_and_toc(base_url, pages_with_titles):
+    os.makedirs(TEMP_FOLDER, exist_ok=True)
+    os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
     with sync_playwright() as p:
         browser = p.chromium.launch()
@@ -174,7 +176,7 @@ def generate_pdf_with_cover_and_toc(base_url, pages_with_titles, output_folder):
                 continue
 
             url = f"{base_url}/{page_path}"
-            output_path = os.path.join(output_folder, f"{page_path.replace('/', '_')}.pdf")
+            output_path = os.path.join(TEMP_FOLDER, f"{page_path.replace('/', '_')}.pdf")
             page = context.new_page()
             page.goto(url, wait_until="networkidle")
             handle_cookie_consent(page)
@@ -200,7 +202,7 @@ def generate_pdf_with_cover_and_toc(base_url, pages_with_titles, output_folder):
 
   
 
-        toc_file = os.path.join(output_folder, "toc.pdf")
+        toc_file = os.path.join(TEMP_FOLDER, "toc.pdf")
         generate_toc(page_numbers)
 
         toc_page = context.new_page()
@@ -212,12 +214,12 @@ def generate_pdf_with_cover_and_toc(base_url, pages_with_titles, output_folder):
         )
 
 
-        merged_output = os.path.join(output_folder, PDF_NAME)
+        merged_output = os.path.join(TEMP_FOLDER, PDF_NAME)
         merge_pdfs(pdf_paths, merged_output)
         add_page_numbers(merged_output, merged_output)
 
         final_pdf_paths = [COVER_FILE, toc_file, merged_output]
-        final_output_path = os.path.join(output_folder, PDF_NAME)
+        final_output_path = os.path.join(OUTPUT_FOLDER, PDF_NAME)
         merge_pdfs(final_pdf_paths, final_output_path)
 
         browser.close()
@@ -233,4 +235,4 @@ def merge_pdfs(input_files, output_file):
 
 if __name__ == "__main__":
     pages_with_titles = flatten_nav(NAV)
-    generate_pdf_with_cover_and_toc(BASE_URL, pages_with_titles, OUTPUT_FOLDER)
+    generate_pdf_with_cover_and_toc(BASE_URL, pages_with_titles)
