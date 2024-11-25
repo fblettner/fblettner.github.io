@@ -254,14 +254,16 @@ def generate_pdf_with_cover_and_toc(base_url, pages_with_titles):
                     footer_template=f'''
                         <div style="
                             font-size: 12px; 
-                            padding-left: 20px; 
-                            padding-right: 20px; 
-                            padding-bottom: 5px; 
+                            padding: 5px 20px; /* Reduced padding for footer */
                             width: 100%; 
                             display: flex; 
                             justify-content: space-between; 
                             align-items: center; 
-                            font-style: italic;">
+                            font-style: italic;
+                            box-sizing: border-box; /* Ensure proper sizing */
+                            border-top: 0.5px solid #7393B3; /* Optional separator line */
+                            background-color: #f9f9f9; /* Optional background for clarity */
+                            ">
                             <div style="text-align: right;">
                                 © Nomana-IT | Edited: {edited_date}
                             </div>
