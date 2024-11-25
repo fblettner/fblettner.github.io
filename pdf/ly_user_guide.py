@@ -7,7 +7,7 @@ from datetime import datetime
 
 BASE_URL = "http://docs.nomana-it.fr"
 TEMP_FOLDER = "pdf-temp"
-OUTPUT_FOLDER = "pdf-output"
+OUTPUT_FOLDER = "../docs/assets/pdf"
 COVER_FOLDER = "pdf-cover"
 PDF_NAME = "Liberty_User_Guide.pdf"
 COVER_FILE = os.path.join(COVER_FOLDER, "liberty_cover.pdf")
@@ -61,7 +61,7 @@ def flatten_nav(nav, level=1, parent_number=""):
     return pages
 
 # Generate a title page for a chapter
-def generate_title_page(title, description, output_file):
+def generate_title_page(title, description, output_file, logo_path):
     title_html = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -95,6 +95,7 @@ def generate_title_page(title, description, output_file):
     </head>
     <body>
         <div class="container">
+             <img src="file://{logo_path}" alt="Logo" style="max-height: 100px; max-width: 200px;" />
             <h1>{title}</h1>
             <p>{description}</p>
         </div>
@@ -226,7 +227,8 @@ def generate_pdf_with_cover_and_toc(base_url, pages_with_titles):
             if description:  # Generate a title page
                 title_page_path = os.path.join(TEMP_FOLDER, f"{title.replace(' ', '_')}_title.html")
                 title_pdf_path = os.path.join(TEMP_FOLDER, f"{title.replace(' ', '_')}_title.pdf")
-                generate_title_page(title, description, title_page_path)
+                logo_path = os.path.abspath(os.path.join(COVER_FOLDER, "logo_ly.png"))
+                generate_title_page(title, description, title_page_path, logo_path)
 
                 title_page = context.new_page()
                 title_page.goto(f"file://{os.path.abspath(title_page_path)}")

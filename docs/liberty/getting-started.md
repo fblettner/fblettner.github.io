@@ -13,3 +13,9 @@ Login = demo
 Password = demo
 Appplication = LIBERTY, NOMASX-1 and NOMAJDE
 ```
+
+### Documentation
+
+Download the complete Liberty Framework User Guide in PDF format:
+
+[Download Liberty Framework User Guide](/assets/pdf/Liberty_User_Guide.pdf){ .md-button .md-button--secondary .md-button--small target="_blank"}
