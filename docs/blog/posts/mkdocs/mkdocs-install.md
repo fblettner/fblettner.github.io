@@ -1,3 +1,13 @@
+---
+date: 2024-11-26
+authors:
+  - fblettner
+categories:
+  - MkDocs Materials
+hide:
+  - footer 
+---
+
 # Installing and Deploying MkDocs Material with GitHub Pages
 
 This guide explains how to install and deploy MkDocs Material for creating beautiful documentation sites. It also includes steps to automate deployment to GitHub Pages.
