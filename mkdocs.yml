@@ -96,6 +96,8 @@ markdown_extensions:
   - pymdownx.superfences
 extra_css:
   - css/custom.css
+extra_javascript:
+  - js/extra.js  
 copyright: >
   Copyright &copy; 2024 Nomana-IT –
   <a href="#__consent">Change cookie settings</a>

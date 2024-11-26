@@ -25,4 +25,9 @@
         margin: 0.5in 0.1in 0.5in 0.1in; /* Adjust margins for header/footer space */
     }
 
+
+    /* Hide the print button when printing */
+    .print-button {
+        display: none;
+    }
   }
