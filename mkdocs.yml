@@ -63,7 +63,8 @@ plugins:
   - search
   - awesome-pages
   - minify
-  - blog
+  - blog:
+      blog_toc: true
 extra:
   social:
     - icon: fontawesome/brands/github

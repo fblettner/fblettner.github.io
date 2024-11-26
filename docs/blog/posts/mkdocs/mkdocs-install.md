@@ -45,6 +45,8 @@ The provided MkDocs Material configuration is designed to support a comprehensiv
     - CSP (Content Security Policy) meta tag for enhanced security.
     - Custom CSS and JavaScript to further tailor the site's appearance and functionality.
 
+<!-- more -->
+
 ### Repository Features
 
 The repository includes:

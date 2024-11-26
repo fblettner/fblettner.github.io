@@ -26,6 +26,8 @@ User: demo
 Password: nomana
 ```
 
+<!-- more -->
+
 ## Prerequisites
 
 Before starting, ensure you have the following:
