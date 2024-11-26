@@ -7,6 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
         printButton.addEventListener('click', function () {
             window.print();
         });
-        header.after(printButton); // Add the button after the title
+        header.before(printButton); // Add the button after the title
     }
 });

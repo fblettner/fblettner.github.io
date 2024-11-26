@@ -31,3 +31,13 @@
         display: none;
     }
   }
+
+
+.print-button {
+    float: right; /* Moves the button to the right */
+    margin-left: 1em; /* Adds spacing from the content */
+    padding: 0.5em 1em; /* Padding for better aesthetics */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Change cursor on hover */
+}
