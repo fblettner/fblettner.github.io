@@ -32,6 +32,7 @@ theme:
     - navigation.top
     - navigation.footer
     - header.autohide
+    - content.tooltips
 nav:
   - Home: index.md
   - Liberty:
@@ -45,7 +46,8 @@ nav:
         - Enable SSL with Traefik: liberty/technical/post-ssl.md
       - Nomasx-1:
           - Administrator's Guide: 
-            - Global Settings: liberty/nomasx1/admin/global-settings.md       
+            - Global Settings: liberty/nomasx1/admin/global-settings.md   
+      - API Documentation: liberty/api/liberty-api.md
       - Release Notes: liberty/release-notes.md
       - Issues: liberty/issues.md
       - Incidents: liberty/incidents.md        
@@ -62,7 +64,7 @@ nav:
 plugins:
   - search
   - awesome-pages
-  - minify
+  - minify  
   - blog:
       blog_toc: true
 extra:
@@ -95,6 +97,10 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
 extra_css:
   - css/custom.css
 extra_javascript:
