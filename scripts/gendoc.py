@@ -5,6 +5,17 @@ from collections import defaultdict
 with open("../json/liberty-api.json", "r") as f:
     openapi_data = json.load(f)
 
+# Store schema definitions
+schemas = openapi_data.get("components", {}).get("schemas", {})
+
+
+def resolve_schema(ref):
+    """Resolve a $ref schema reference."""
+    if ref.startswith("#/components/schemas/"):
+        schema_name = ref.split("/")[-1]
+        return schemas.get(schema_name, {})
+    return {}
+
 # Add background color for method
 def method_with_style(method):
     color_map = {
@@ -56,6 +67,10 @@ for tag, endpoints in tagged_paths.items():
         if "parameters" in details:
             for param in details["parameters"]:
                 required = " (**Required**)" if param.get("required", False) else ""
+                param_schema = param.get("schema", {})
+                if "$ref" in param_schema:
+                    param_schema = resolve_schema(param_schema["$ref"])  # Resolve $ref
+
                 default = f" *(Default: `{param['schema']['default']}`)*" if "default" in param["schema"] else ""
                 markdown += f"    - **`{param['name']}`** *(in {param['in']})*: {param.get('description', 'No description')}{required}{default}\n"
         else:
@@ -67,7 +82,10 @@ for tag, endpoints in tagged_paths.items():
             request_body = details["requestBody"]["content"]
             for content_type, body_details in request_body.items():
                 markdown += f"    - **Content-Type:** `{content_type}`\n"
-                body_json = json.dumps(body_details.get('schema', {}), indent=4)
+                body_schema = body_details.get("schema", {})
+                if "$ref" in body_schema:
+                    body_schema = resolve_schema(body_schema["$ref"])  # Resolve $ref
+                body_json = json.dumps(body_schema, indent=4)
                 json_block = "\n".join([f"        {line}" for line in body_json.splitlines()])
                 markdown += f"      - **Example:**\n\n"
                 markdown += f"        ```json\n{json_block}\n        ```\n"

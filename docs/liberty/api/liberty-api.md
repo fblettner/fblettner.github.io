@@ -1,6 +1,32 @@
 # Liberty API
 
-**Description:** API For Liberty Framework
+**Description:** 
+**Liberty API** provides a powerful and scalable backend for managing authentication, 
+database operations, and framework functionalities in the **Liberty Framework**. 
+
+### 🔹 Key Features:
+- **Authentication & Authorization**: Secure endpoints with JWT tokens and OAuth2.
+- **Database Management**: Query, insert, update, and delete records across multiple pools.
+- **Framework Controls**: Manage modules, applications, themes, and logs.
+- **Security & Encryption**: Encrypt data and ensure safe database access.
+- **Logging & Auditing**: Retrieve and analyze logs for security and debugging.
+
+### 🔹 Authentication
+- **`/api/auth/token`** - Generate a JWT token for authentication.
+- **`/api/auth/user`** - Retrieve authenticated user details.
+
+### 🔹 Database Operations
+- **`/api/db/check`** - Validate database connection.
+- **`/api/db/query`** - Retrieve, insert, update, or delete records.
+- **`/api/db/audit/{table}/{user}`** - Audit changes on a specific table.
+
+### 🔹 Framework Features
+- **`/api/fmw/modules`** - Retrieve framework modules.
+- **`/api/fmw/applications`** - Retrieve available applications.
+- **`/api/fmw/themes`** - Manage application themes.
+
+**🔗 Explore the API using Swagger UI (`/api/test`) or Redoc (`/api`).**
+
 
 **Version:** 1.0.0
 
@@ -43,32 +69,8 @@ Retrieve user information.
             "status": "success"
         }
         ```
-??? warning "Response `422`: Validation Error"
+??? warning "Response `422`: Unprocessable Entity"
     - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
 ??? danger "Response `500`: Internal server error"
     - **Content-Type:** `application/json`
       - **Example:**
@@ -98,7 +100,29 @@ Generate a JWT token for the user.
 
         ```json
         {
-            "$ref": "#/components/schemas/LoginRequest"
+            "properties": {
+                "user": {
+                    "type": "string",
+                    "title": "User"
+                },
+                "password": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "title": "Password"
+                }
+            },
+            "type": "object",
+            "required": [
+                "user",
+                "password"
+            ],
+            "title": "LoginRequest"
         }
         ```
 **📥 Responses:**
@@ -620,7 +644,7 @@ Performs a basic check to ensure the database connection is functional. Returns 
             "rows": [
                 {
                     "ROW_ID": 1,
-                    "CURRENT_TIME": "2025-01-27T08:14:13.809494+00:00"
+                    "CURRENT_DATE": "2025-01-27T08:14:13.809494+00:00"
                 }
             ],
             "rowCount": 1,
@@ -630,7 +654,7 @@ Performs a basic check to ensure the database connection is functional. Returns 
                     "type": "int"
                 },
                 {
-                    "name": "CURRENT_TIME",
+                    "name": "CURRENT_DATE",
                     "type": "datetime"
                 }
             ]
@@ -927,10 +951,75 @@ Audit user actions on a table.
     - **`user`** *(in path)*: No description (**Required**)
 **📥 Responses:**
 
-??? success "Response `200`: Successful Response"
+??? success "Response `200`: Data inserted/updated successfully"
     - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "items": [],
+            "status": "success",
+            "count": 0
+        }
+        ```
+??? warning "Response `400`: Bad Request"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "status": "failed",
+            "message": "Request body cannot be empty. JSON object with key-value pairs is required."
+        }
+        ```
 ??? warning "Response `422`: Validation Error"
     - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "detail": [
+                {
+                    "loc": [
+                        "query",
+                        "name"
+                    ],
+                    "msg": "field required",
+                    "type": "value_error.missing"
+                },
+                {
+                    "loc": [
+                        "query",
+                        "quantity"
+                    ],
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer"
+                }
+            ]
+        }
+        ```
+??? danger "Response `500`: Internal server error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "status": "failed",
+            "message": {
+                "items": [
+                    {
+                        "message": "Error: Query execution failed: Query execution failed: INSERT INTO...",
+                        "line": {
+                            "field1": "<string>",
+                            "field2": "<string>"
+                        }
+                    }
+                ],
+                "status": "error",
+                "count": 0
+            }
+        }
+        ```
 
 ---
 
