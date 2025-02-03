@@ -1317,3 +1317,412 @@ Delete data into a table.
 
 ---
 
+## Setup
+
+### SETUP - Current
+
+Get the current version deployed
+
+<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/setup/current`**
+
+!!! abstract "Query Parameters"
+    - **None**
+
+**📥 Responses:**
+
+??? success "Response `200`: Installation successful"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "items": [],
+            "status": "success",
+            "count": 0
+        }
+        ```
+??? warning "Response `422`: Validation Error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "detail": [
+                {
+                    "loc": [
+                        "query",
+                        "name"
+                    ],
+                    "msg": "field required",
+                    "type": "value_error.missing"
+                },
+                {
+                    "loc": [
+                        "query",
+                        "quantity"
+                    ],
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer"
+                }
+            ]
+        }
+        ```
+??? danger "Response `500`: Internal server error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "status": "failed",
+            "message": "Setup failed"
+        }
+        ```
+
+---
+
+### SETUP - Downgrade
+
+Downgrade databases to a specific version
+
+<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/setup/downgrade/{version}`**
+
+!!! abstract "Query Parameters"
+    - **None**
+
+**📥 Responses:**
+
+??? success "Response `200`: Installation successful"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "items": [],
+            "status": "success",
+            "count": 0
+        }
+        ```
+??? warning "Response `422`: Validation Error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "detail": [
+                {
+                    "loc": [
+                        "query",
+                        "name"
+                    ],
+                    "msg": "field required",
+                    "type": "value_error.missing"
+                },
+                {
+                    "loc": [
+                        "query",
+                        "quantity"
+                    ],
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer"
+                }
+            ]
+        }
+        ```
+??? danger "Response `500`: Internal server error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "status": "failed",
+            "message": "Setup failed"
+        }
+        ```
+
+---
+
+### SETUP - Installation
+
+Configure the postgres database.
+
+<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/setup/install`**
+
+!!! abstract "Query Parameters"
+    - **None**
+
+!!! abstract "Request Body"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "properties": {
+                "host": {
+                    "type": "string",
+                    "title": "Host"
+                },
+                "port": {
+                    "type": "integer",
+                    "title": "Port"
+                },
+                "database": {
+                    "type": "string",
+                    "title": "Database"
+                },
+                "user": {
+                    "type": "string",
+                    "title": "User"
+                },
+                "password": {
+                    "type": "string",
+                    "title": "Password"
+                }
+            },
+            "type": "object",
+            "required": [
+                "host",
+                "port",
+                "database",
+                "user",
+                "password"
+            ],
+            "title": "SetupRequest"
+        }
+        ```
+**📥 Responses:**
+
+??? success "Response `200`: Installation successful"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "items": [],
+            "status": "success",
+            "count": 0
+        }
+        ```
+??? warning "Response `422`: Validation Error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "detail": [
+                {
+                    "loc": [
+                        "query",
+                        "name"
+                    ],
+                    "msg": "field required",
+                    "type": "value_error.missing"
+                },
+                {
+                    "loc": [
+                        "query",
+                        "quantity"
+                    ],
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer"
+                }
+            ]
+        }
+        ```
+??? danger "Response `500`: Internal server error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "status": "failed",
+            "message": "Setup failed"
+        }
+        ```
+
+---
+
+### SETUP - Revision
+
+Create a new revision for the database
+
+<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/setup/revision`**
+
+!!! abstract "Query Parameters"
+    - **None**
+
+**📥 Responses:**
+
+??? success "Response `200`: Installation successful"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "items": [],
+            "status": "success",
+            "count": 0
+        }
+        ```
+??? warning "Response `422`: Validation Error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "detail": [
+                {
+                    "loc": [
+                        "query",
+                        "name"
+                    ],
+                    "msg": "field required",
+                    "type": "value_error.missing"
+                },
+                {
+                    "loc": [
+                        "query",
+                        "quantity"
+                    ],
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer"
+                }
+            ]
+        }
+        ```
+??? danger "Response `500`: Internal server error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "status": "failed",
+            "message": "Setup failed"
+        }
+        ```
+
+---
+
+### SETUP - Upgrade
+
+Upgrade databases to latest version
+
+<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/setup/upgrade`**
+
+!!! abstract "Query Parameters"
+    - **None**
+
+**📥 Responses:**
+
+??? success "Response `200`: Installation successful"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "items": [],
+            "status": "success",
+            "count": 0
+        }
+        ```
+??? warning "Response `422`: Validation Error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "detail": [
+                {
+                    "loc": [
+                        "query",
+                        "name"
+                    ],
+                    "msg": "field required",
+                    "type": "value_error.missing"
+                },
+                {
+                    "loc": [
+                        "query",
+                        "quantity"
+                    ],
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer"
+                }
+            ]
+        }
+        ```
+??? danger "Response `500`: Internal server error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "status": "failed",
+            "message": "Setup failed"
+        }
+        ```
+
+---
+
+## Export
+
+### EXPORT - Repository for Deployment
+
+Export all tables models and data.
+
+<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/export/repository`**
+
+!!! abstract "Query Parameters"
+    - **None**
+
+**📥 Responses:**
+
+??? success "Response `200`: Installation successful"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "items": [],
+            "status": "success",
+            "count": 0
+        }
+        ```
+??? warning "Response `422`: Validation Error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "detail": [
+                {
+                    "loc": [
+                        "query",
+                        "name"
+                    ],
+                    "msg": "field required",
+                    "type": "value_error.missing"
+                },
+                {
+                    "loc": [
+                        "query",
+                        "quantity"
+                    ],
+                    "msg": "value is not a valid integer",
+                    "type": "type_error.integer"
+                }
+            ]
+        }
+        ```
+??? danger "Response `500`: Internal server error"
+    - **Content-Type:** `application/json`
+      - **Example:**
+
+        ```json
+        {
+            "status": "failed",
+            "message": "Setup failed"
+        }
+        ```
+
+---
+
