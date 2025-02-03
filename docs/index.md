@@ -19,6 +19,8 @@ hide:
     margin-top: 0 !important; /* Remove margin only for the first h2 */
   }
 </style>
+<iframe src="https://github.com/sponsors/fblettner/button" title="Sponsor fblettner" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+
 ## Knowledge base
 Information about our products and services with targeted solutions, getting started guides, and content for advanced use cases.
 
