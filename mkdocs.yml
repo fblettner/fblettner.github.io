@@ -47,6 +47,19 @@ nav:
       - Nomasx-1:
           - Administrator's Guide: 
             - Global Settings: liberty/nomasx1/admin/global-settings.md   
+      - Core:
+        - Getting Started: liberty/core/getting-started.md
+        - New Project: liberty/core/new-project.md
+        - Services:
+          - AppProvider: liberty/core/services/appprovider.md
+          - Modules: liberty/core/services/modules.md
+          - Applications: liberty/core/services/applications.md
+          - Users: liberty/core/services/users.md
+          - Authentication: liberty/core/services/authentication.md
+          - Use Media Query: liberty/core/services/use-media-query.md
+          - Themes: liberty/core/services/themes.md
+          - Error Boundary: liberty/core/services/error-boundary.md
+          - Translations: liberty/core/services/translations.md
       - API Documentation: liberty/api/liberty-api.md
       - Release Notes: liberty/release-notes.md
       - Issues: liberty/issues.md
