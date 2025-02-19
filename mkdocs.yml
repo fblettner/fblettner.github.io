@@ -60,6 +60,12 @@ nav:
           - Themes: liberty/core/services/themes.md
           - Error Boundary: liberty/core/services/error-boundary.md
           - Translations: liberty/core/services/translations.md
+        - Core Components:
+          - UI Elements: 
+            - Alert: liberty/core/components/ui-elements/alert.md
+            - AlertMessage: liberty/core/components/ui-elements/alert-message.md
+            - Button: liberty/core/components/ui-elements/button.md
+            - Card: liberty/core/components/ui-elements/card.md
       - API Documentation: liberty/api/liberty-api.md
       - Release Notes: liberty/release-notes.md
       - Issues: liberty/issues.md
