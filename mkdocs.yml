@@ -47,7 +47,7 @@ nav:
       - Nomasx-1:
           - Administrator's Guide: 
             - Global Settings: liberty/nomasx1/admin/global-settings.md   
-      - Core:
+      - React Components:
         - Getting Started: liberty/core/getting-started.md
         - New Project: liberty/core/new-project.md
         - Services:
@@ -66,6 +66,51 @@ nav:
             - AlertMessage: liberty/core/components/ui-elements/alert-message.md
             - Button: liberty/core/components/ui-elements/button.md
             - Card: liberty/core/components/ui-elements/card.md
+            - Checkbox: liberty/core/components/ui-elements/checkbox.md
+            - CircularProgress: liberty/core/components/ui-elements/circular-progress.md
+            - Collapse: liberty/core/components/ui-elements/collapse.md
+            - Flex: liberty/core/components/ui-elements/flex.md
+            - Flex Advanced: liberty/core/components/ui-elements/flex-advanced.md
+            - Icon Button: liberty/core/components/ui-elements/icon-button.md
+            - Loading Indicator: liberty/core/components/ui-elements/loading-indicator.md
+            - Markdown: liberty/core/components/ui-elements/markdown.md
+            - Snack Message: liberty/core/components/ui-elements/snack-message.md
+            - Toggle Button: liberty/core/components/ui-elements/toggle-button.md
+            - Tooltip: liberty/core/components/ui-elements/tooltip.md
+            - Typography: liberty/core/components/ui-elements/typography.md
+          - Inputs & Forms:
+            - Checkbox: liberty/core/components/inputs-forms/checkbox.md
+            - Color Picker: liberty/core/components/inputs-forms/color-picker.md
+            - Date Picker: liberty/core/components/inputs-forms/date-picker.md
+            - Enum: liberty/core/components/inputs-forms/enum.md
+            - File Upload: liberty/core/components/inputs-forms/file-upload.md
+            - Input: liberty/core/components/inputs-forms/input.md
+            - Select: liberty/core/components/inputs-forms/select.md
+          - Dialogs & Overlays:
+            - Dialog: liberty/core/components/dialogs-overlays/dialog.md
+            - Confirmation: liberty/core/components/dialogs-overlays/confirmation.md
+            - Export: liberty/core/components/dialogs-overlays/export.md
+            - Popper: liberty/core/components/dialogs-overlays/popper.md
+            - Tabs: liberty/core/components/dialogs-overlays/tabs.md
+          - Tables & Lists:
+            - Grid: liberty/core/components/tables-lists/grid.md
+            - Table: liberty/core/components/tables-lists/table.md
+            - List: liberty/core/components/tables-lists/list.md
+            - Context Menus: liberty/core/components/tables-lists/context-menus.md
+            - Tree: liberty/core/components/tables-lists/tree.md
+          - Charts:
+            - Bar: liberty/core/components/charts/bar.md
+            - Line: liberty/core/components/charts/line.md
+            - Pie: liberty/core/components/charts/pie.md
+          - Main Components:
+            - Header: liberty/core/components/main-components/header.md
+            - Content: liberty/core/components/main-components/content.md
+            - Login: liberty/core/components/main-components/login.md
+            - Menus: liberty/core/components/main-components/menus.md
+            - Users: liberty/core/components/main-components/users.md
+          - Forms Components:
+            - Dashboard: liberty/core/components/forms-components/dashboard.md
+
       - API Documentation: liberty/api/liberty-api.md
       - Release Notes: liberty/release-notes.md
       - Issues: liberty/issues.md

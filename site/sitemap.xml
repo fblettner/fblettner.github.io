@@ -2,178 +2,334 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.nomana-it.fr/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/api/getting-started/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/api/bip-api/nomabc/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/api/bip-api/nomabip/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/api/jde-api/jdebip/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/api/jde-api/jdebsfn/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/2024/11/26/setting-up-a-jd-edwards-enterpriseone-trial-instance-on-oracle-cloud/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/2024/11/26/installing-and-deploying-mkdocs-material-with-github-pages/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/2024/11/21/locks-management/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/2024/11/21/database-size/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/2024/11/21/transport-sql-profile-from-one-base-to-another/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/2024/11/21/statistics-management/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/getting-started/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/incidents/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/issues/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/release-notes/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/api/liberty-api/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/getting-started/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/new-project/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/charts/bar/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/charts/line/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/charts/pie/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/dialogs-overlays/confirmation/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/dialogs-overlays/dialog/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/dialogs-overlays/export/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/dialogs-overlays/popper/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/dialogs-overlays/tabs/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/forms-components/dashboard/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/inputs-forms/checkbox/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/inputs-forms/color-picker/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/inputs-forms/date-picker/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/inputs-forms/enum/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/inputs-forms/file-upload/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/inputs-forms/input/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/inputs-forms/select/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/main-components/content/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/main-components/header/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/main-components/login/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/main-components/menus/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/main-components/users/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/tables-lists/context-menus/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/tables-lists/grid/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/tables-lists/list/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/tables-lists/table/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/tables-lists/tree/</loc>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/alert-message/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/alert/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/button/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/card/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/checkbox/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/circular-progress/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/collapse/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/divider/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/flex-advanced/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/flex/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/icon-button/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/loading-indicator/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/markdown/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/snack-message/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/toggle-button/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/tooltip/</loc>
+         <lastmod>2025-02-20</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.nomana-it.fr/liberty/core/components/ui-elements/typography/</loc>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/services/applications/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/services/appprovider/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/services/authentication/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/services/error-boundary/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/services/modules/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/services/themes/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/services/translations/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/services/use-media-query/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/core/services/users/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/nomasx1/admin/global-settings/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/technical/architecture/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/technical/installation/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/technical/liberty-deployment/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/technical/linux-services/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/technical/post-ssl/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/liberty/technical/tools-deployment/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/archive/2024/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/category/jd-edwards/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/category/mkdocs-materials/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
     <url>
          <loc>https://docs.nomana-it.fr/blog/category/oracle/</loc>
-         <lastmod>2025-02-19</lastmod>
+         <lastmod>2025-02-20</lastmod>
     </url>
 </urlset>
