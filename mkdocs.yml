@@ -102,14 +102,14 @@ nav:
             - Bar: liberty/core/components/charts/bar.md
             - Line: liberty/core/components/charts/line.md
             - Pie: liberty/core/components/charts/pie.md
-          - Main Components:
-            - Header: liberty/core/components/main-components/header.md
-            - Content: liberty/core/components/main-components/content.md
-            - Login: liberty/core/components/main-components/login.md
-            - Menus: liberty/core/components/main-components/menus.md
-            - Users: liberty/core/components/main-components/users.md
-          - Forms Components:
-            - Dashboard: liberty/core/components/forms-components/dashboard.md
+        - Main Components:
+          - Header: liberty/core/components/main-components/header.md
+          - Content: liberty/core/components/main-components/content.md
+          - Login: liberty/core/components/main-components/login.md
+          - Menus: liberty/core/components/main-components/menus.md
+          - Users: liberty/core/components/main-components/users.md
+        - Forms Components:
+          - Dashboard: liberty/core/components/forms-components/dashboard.md
 
       - API Documentation: liberty/api/liberty-api.md
       - Release Notes: liberty/release-notes.md
