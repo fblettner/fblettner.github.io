@@ -17,7 +17,7 @@ The `ErrorBoundary` component is a React class component that catches JavaScript
 
 ## Example Usage
 ```tsx
-import { ErrorBoundary } from "liberty-core";
+import { ErrorBoundary } from "@nomana-it/liberty-core"
 import { MyComponent } from "./MyComponent";
 
 export const MyApp = () => {

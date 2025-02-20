@@ -21,7 +21,7 @@ It supports:
 ## Example Usage
 ```tsx
 import React, { useState } from "react";
-import { AppsUser } from "liberty-core";
+import { AppsUser } from "@nomana-it/liberty-core"
 import { Button } from "@ly_common/Button";
 
 export const UserSettingsDialogExample = () => {
@@ -52,7 +52,7 @@ By default, **AppsUser** retrieves user settings internally. However, you can ov
 
 ### **Example User Data**
 ```tsx
-import { EUsers, IUsersProps, UIDisplayMode } from "liberty-core";
+import { EUsers, IUsersProps, UIDisplayMode } from "@nomana-it/liberty-core"
 
 export const user = [
     {

@@ -35,7 +35,7 @@ The `Card` component is a versatile container that can display structured conten
 
 ## Example Usage
 ```tsx
-import { Card, CardHeader, CardContent, CardActionArea, CardActions, Button } from "liberty-core";
+import { Card, CardHeader, CardContent, CardActionArea, CardActions, Button } from "@nomana-it/liberty-core"
 
 export const CardExample = () => {
   return (

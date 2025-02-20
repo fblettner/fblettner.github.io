@@ -26,7 +26,7 @@ A dashboard consists of **header metadata** and **content components** that can 
 
 ## Example Usage
 ```tsx
-import { getDashboard } from "liberty-core";
+import { getDashboard } from "@nomana-it/liberty-core"
 
 export const DashboardExample = async () => {
   const dashboard = await getDashboard(1);

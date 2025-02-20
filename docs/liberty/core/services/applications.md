@@ -20,7 +20,7 @@ The `Applications Configuration` defines multiple applications within the Libert
 
 ## Example Usage
 ```tsx
-import { useAppContext } from "liberty-core";
+import { useAppContext } from "@nomana-it/liberty-core"
 
 export const ApplicationsExample = () => {
   const { appsProperties } = useAppContext();

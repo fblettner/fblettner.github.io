@@ -19,7 +19,7 @@ The `AppsHeader` component provides a standard header with multiple actions such
 
 ## Example Usage
 ```tsx
-import { AppsHeader } from "liberty-core";
+import { AppsHeader } from "@nomana-it/liberty-core"
 
 export const AppHeaderExample = () => {
   const onToggleMenusDrawer = () => {

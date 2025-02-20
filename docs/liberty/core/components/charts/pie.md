@@ -15,7 +15,7 @@ The `PieChart` component provides a customizable **Doughnut/Pie Chart** using Ch
 
 ## Example Usage
 ```tsx
-import { PieChart } from "liberty-core";
+import { PieChart } from "@nomana-it/liberty-core"
 
 const chartData = [
   { value: 40, label: "Product A" },

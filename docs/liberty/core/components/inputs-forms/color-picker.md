@@ -18,7 +18,7 @@ The `InputColor` component allows users to select colors using an interactive co
 
 ## Example Usage
 ```tsx
-import { InputColor } from "liberty-core";
+import { InputColor } from "@nomana-it/liberty-core"
 import { useState } from "react";
 
 export const InputColorExample = () => {

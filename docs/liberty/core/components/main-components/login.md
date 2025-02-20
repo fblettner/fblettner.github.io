@@ -16,7 +16,7 @@ The `AppsLogin` component provides the authentication interface for Liberty Core
 
 ## Example Usage
 ```tsx
-import { AppProvider, AppsLogin } from "liberty-core";
+import { AppProvider, AppsLogin } from "@nomana-it/liberty-core"
 
 export const MyApp = () => {
   return (

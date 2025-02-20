@@ -11,7 +11,7 @@ The `Tooltip` component provides a simple way to display contextual hints when h
 
 ## Example Usage
 ```tsx
-import { Tooltip, Button } from "liberty-core";
+import { Tooltip, Button } from "@nomana-it/liberty-core"
 
 export const TooltipExample = () => {
   return (

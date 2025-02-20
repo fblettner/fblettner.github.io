@@ -13,7 +13,7 @@ The `Modules` configuration determines which application features are enabled or
 
 ## Example Usage
 ```tsx
-import { useAppContext } from "liberty-core";
+import { useAppContext } from "@nomana-it/liberty-core"
 
 export const ModulesExample = () => {
   const { modulesProperties } = useAppContext();

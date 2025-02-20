@@ -17,7 +17,7 @@ The `Popper` component provides a floating UI container that appears next to an 
 ## Example Usage
 ```tsx
 import { useState } from "react";
-import { Popper, Button } from "liberty-core";
+import { Popper, Button } from "@nomana-it/liberty-core"
 
 export const PopperExample = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);

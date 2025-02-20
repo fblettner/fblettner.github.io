@@ -17,7 +17,7 @@ The `AlertMessage` component is a wrapper around the `Alert` component that prov
 
 ## Example Usage
 ```tsx
-import { AlertMessage } from "liberty-core";
+import { AlertMessage } from "@nomana-it/liberty-core"
 import { useState } from "react";
 
 export const AlertMessageExample = () => {

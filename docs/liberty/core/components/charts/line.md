@@ -20,7 +20,7 @@ The `LineChart` component provides a customizable line chart using Chart.js. It 
 
 ## Example Usage
 ```tsx
-import { LineChart } from "liberty-core";
+import { LineChart } from "@nomana-it/liberty-core"
 
 const dataset = [
   { month: "Jan", sales: 100, revenue: 200 },

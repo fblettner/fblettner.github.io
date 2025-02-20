@@ -14,7 +14,7 @@ The `CircularProgress` component displays a rotating loader, commonly used to in
 
 ## Example Usage
 ```tsx
-import { CircularProgress } from "liberty-core";
+import { CircularProgress } from "@nomana-it/liberty-core"
 
 export const CircularProgressExample = () => {
   return (

@@ -14,7 +14,7 @@ The `Tree` component is used to display hierarchical data in an expandable and c
 
 ## Example Usage
 ```tsx
-import { Tree } from "liberty-core";
+import { Tree } from "@nomana-it/liberty-core"
 
 const treeData = [
   { id: "1", label: "Root", children: [

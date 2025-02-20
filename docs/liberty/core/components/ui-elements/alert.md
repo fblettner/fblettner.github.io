@@ -12,7 +12,7 @@ The `Alert` component provides a styled alert message with various severity leve
 
 ## Example Usage
 ```tsx
-import { Alert } from "liberty-core";
+import { Alert } from "@nomana-it/liberty-core"
 
 export const AlertExample = () => {
   return (

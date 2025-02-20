@@ -12,7 +12,7 @@ The `LoadingIndicator` component provides a visual loading state indicator with 
 
 ## Example Usage
 ```tsx
-import { LoadingIndicator } from "liberty-core";
+import { LoadingIndicator } from "@nomana-it/liberty-core"
 
 export const LoadingIndicatorExample = () => {
   return (

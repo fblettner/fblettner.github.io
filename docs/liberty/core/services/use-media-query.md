@@ -12,7 +12,7 @@ This hook detects if the user is on a mobile or tablet device.
 ## Example Usage
 ```tsx
 import { useMediaQuery, useDeviceDetection } from "@ly_common/UseMediaQuery";
-import { Typography } from "liberty-core";
+import { Typography } from "@nomana-it/liberty-core"
 
 export const MediaQueryExample = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");

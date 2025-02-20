@@ -24,7 +24,7 @@ The `GridContainer` and `GridItem` components provide a **flexible grid layout**
 
 ## Example Usage
 ```tsx
-import { GridContainer, GridItem } from "liberty-core";
+import { GridContainer, GridItem } from "@nomana-it/liberty-core"
 
 export const GridExample = () => {
   return (

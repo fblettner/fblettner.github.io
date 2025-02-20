@@ -19,7 +19,7 @@ To use the `TranslationProvider`, wrap it around your application inside **React
 ```tsx
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { AppProvider, TranslationProvider } from "liberty-core";
+import { AppProvider, TranslationProvider } from "@nomana-it/liberty-core"
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

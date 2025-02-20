@@ -90,7 +90,7 @@ By overriding `getMenus`, you can **customize navigation dynamically** based on:
 
 ## Example Usage
 ```tsx
-import { AppsMenus } from "liberty-core";
+import { AppsMenus } from "@nomana-it/liberty-core"
 
 <AppsMenus 
     isOpen={true} 

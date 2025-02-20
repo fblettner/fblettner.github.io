@@ -17,7 +17,7 @@ The `InputFile` component allows users to upload files via a button-based interf
 
 ## Example Usage
 ```tsx
-import { InputFile } from "liberty-core";
+import { InputFile } from "@nomana-it/liberty-core"
 import { useRef } from "react";
 
 export const InputFileExample = () => {

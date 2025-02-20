@@ -28,8 +28,8 @@ It provides a dynamic way to **override** and **customize** themes using the **A
 
 ## Example Usage
 ```tsx
-import { AppProvider, LYThemeProvider } from "liberty-core";
-import { theme } from "liberty-core";
+import { AppProvider, LYThemeProvider } from "@nomana-it/liberty-core"
+import { theme } from "@nomana-it/liberty-core"
 
 export const ThemeExample = () => {
   return (

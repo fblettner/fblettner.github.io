@@ -37,7 +37,7 @@ The `Table` component provides a structured way to display data in rows and colu
 
 ## Example Usage
 ```tsx
-import { Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel } from "liberty-core";
+import { Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel } from "@nomana-it/liberty-core"
 import { useState } from "react";
 
 export const TableExample = () => {

@@ -1,7 +1,7 @@
 # AdvancedFlexPanels Component
 
 ## Description
-The \`AdvancedFlexPanels\` component is a **bi-dimensional, resizable** layout system that allows for:
+The `AdvancedFlexPanels` component is a **bi-dimensional, resizable** layout system that allows for:
 - **Dynamic resizing of both rows and columns**
 - **Drag-and-drop reordering of child elements**
 - **Smooth animations for user interactions**
@@ -9,13 +9,13 @@ The \`AdvancedFlexPanels\` component is a **bi-dimensional, resizable** layout s
 ## Props
 | Prop         | Type                     | Default | Description |
 |-------------|-------------------------|---------|-------------|
-| \`rows\`     | \`number\`               | \`2\`     | Number of rows in the layout. |
-| \`columns\`  | \`number\`               | \`2\`     | Number of columns in each row. |
-| \`children\` | \`ReactNode[][]\`        | \`-\`     | Bi-dimensional array of child components. |
+| `rows`     | `number`               | `2`     | Number of rows in the layout. |
+| `columns`  | `number`               | `2`     | Number of columns in each row. |
+| `children` | `ReactNode[][]`        | `-`     | Bi-dimensional array of child components. |
 
 ## Example Usage
-\`\`\`tsx
-import { AdvancedFlexPanels } from "liberty-core";
+```tsx
+import { AdvancedFlexPanels } from "@nomana-it/liberty-core"
 
 export const AdvancedFlexPanelsExample = () => {
   return (
@@ -33,7 +33,7 @@ export const AdvancedFlexPanelsExample = () => {
     </AdvancedFlexPanels>
   );
 };
-\`\`\`
+```
 
 ## Useful Links
 🔗 **GitHub Repository (Core):** [Liberty Core](https://github.com/fblettner/liberty-core/)  

@@ -22,7 +22,7 @@ The `Dialog` component is a modal dialog that appears over the main content. It 
 
 ## Example Usage
 ```tsx
-import { Dialog, Button, Dialog_Title, Dialog_Content, Dialog_Actions } from "liberty-core";
+import { Dialog, Button, Dialog_Title, Dialog_Content, Dialog_Actions } from "@nomana-it/liberty-core"
 import { useState } from "react";
 import { t } from "i18next";
 import { LYCancelIcon } from "@ly_styles/icons";

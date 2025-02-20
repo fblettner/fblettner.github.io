@@ -32,7 +32,7 @@ The `Menu` component is a floating menu that appears next to an anchor element. 
 ## Example Usage
 ```tsx
 import { useState } from "react";
-import { Menu, MenuItem, SubMenu, Popper, Divider, Button } from "liberty-core";
+import { Menu, MenuItem, SubMenu, Popper, Divider, Button } from "@nomana-it/liberty-core"
 
 export const MenuExample = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);

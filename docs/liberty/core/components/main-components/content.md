@@ -19,7 +19,7 @@ The `AppsContent` component is the **core layout container** for Liberty Core ap
 
 ## Example Usage
 ```tsx
-import { AppProvider, AppsContent } from "liberty-core";
+import { AppProvider, AppsContent } from "@nomana-it/liberty-core"
 
 export const MyApp = () => {
   return (

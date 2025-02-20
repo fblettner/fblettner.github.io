@@ -47,7 +47,7 @@ ListItemButton,
 ListItemIcon, 
 ListItemText, 
 Collapse 
-} from "liberty-core";
+} from "@nomana-it/liberty-core"
 import { LYReactIcon } from "@ly_styles/icons";
 import { LYHomeIcon, LYSettingsIcon, LYMenusExpandMoreIcon, LYMenusExpandLessIcon } from "@ly_styles/icons";
 import { useState, Fragment } from "react";

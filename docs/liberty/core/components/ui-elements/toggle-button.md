@@ -20,7 +20,7 @@ The `Toggle` component represents a selectable button that can be used alone or 
 
 ## Example Usage
 ```tsx
-import { Toggle, ToggleGroup } from "liberty-core";
+import { Toggle, ToggleGroup } from "@nomana-it/liberty-core"
 import { useState } from "react";
 
 export const ToggleExample = () => {

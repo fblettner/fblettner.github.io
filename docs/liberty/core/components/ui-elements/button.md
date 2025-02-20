@@ -21,7 +21,7 @@ It supports different styles, icons, full-width mode, and disabled states.
 
 ## Example Usage
 ```tsx
-import { Button } from "liberty-core";
+import { Button } from "@nomana-it/liberty-core"
 import { FaCheck } from "react-icons/fa";
 
 export const ButtonExample = () => {

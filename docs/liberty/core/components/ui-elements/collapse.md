@@ -12,7 +12,7 @@ The `Collapse` component allows content to expand and collapse smoothly with an 
 
 ## Example Usage
 ```tsx
-import { Collapse, Button } from "liberty-core";
+import { Collapse, Button } from "@nomana-it/liberty-core"
 import { useState } from "react";
 
 export const CollapseExample = () => {

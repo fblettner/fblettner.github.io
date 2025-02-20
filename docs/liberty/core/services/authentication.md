@@ -30,7 +30,7 @@ The authentication system in Liberty Framework uses an access token mechanism. A
 
 ## Example Usage
 ```tsx
-import { getToken } from "liberty-core";
+import { getToken } from "@nomana-it/liberty-core"
 
 export const AuthenticationExample = async () => {
   const response = await getToken("admin", "admin");

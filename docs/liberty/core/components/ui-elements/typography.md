@@ -20,7 +20,7 @@ The `Typography` component is used for consistent text styling across the applic
 
 ## Example Usage
 ```tsx
-import { Typography } from "liberty-core";
+import { Typography } from "@nomana-it/liberty-core"
 
 export const TypographyExample = () => {
   return (

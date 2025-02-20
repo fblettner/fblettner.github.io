@@ -14,7 +14,7 @@ The `Checkbox` component is a custom-styled checkbox that supports indeterminate
 
 ## Example Usage
 ```tsx
-import { Checkbox } from "liberty-core";
+import { Checkbox } from "@nomana-it/liberty-core"
 
 export const CheckboxExample = () => {
   return (

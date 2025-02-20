@@ -24,7 +24,7 @@ This provider allows injecting custom functions for retrieving data such as appl
 
 ## Example Usage
 ```tsx
-import { AppProvider, useAppContext } from "liberty-core";
+import { AppProvider, useAppContext } from "@nomana-it/liberty-core"
 
 export const AppProviderExample = () => {
   return (

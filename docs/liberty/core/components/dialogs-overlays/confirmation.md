@@ -15,7 +15,7 @@ The `ConfirmationDialog` component provides a standard confirmation popup with c
 
 ## Example Usage
 ```tsx
-import { ConfirmationDialog, Button } from "liberty-core";
+import { ConfirmationDialog, Button } from "@nomana-it/liberty-core"
 import { useState } from "react";
 
 export const ConfirmationDialogExample = () => {

@@ -20,7 +20,7 @@ The `BarChart` component is a customizable bar chart using Chart.js. It supports
 
 ## Example Usage
 ```tsx
-import { BarChart } from "liberty-core";
+import { BarChart } from "@nomana-it/liberty-core"
 
 const dataset = [
   { month: "Jan", revenue: 10000, profit: 3000 },

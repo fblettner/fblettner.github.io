@@ -27,7 +27,7 @@ The `DialogExport` component provides a modal dialog to select export options be
 
 ## Example Usage
 ```tsx
-import { DialogExport, Button } from "liberty-core";
+import { DialogExport, Button } from "@nomana-it/liberty-core"
 import { useState } from "react";
 import { EExportType, IExportOptions } from "@ly_utils/commonUtils";
 

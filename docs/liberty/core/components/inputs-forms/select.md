@@ -29,7 +29,7 @@ The `Select` component provides a dropdown for selecting options, with support f
 ## Example Usage
 ```tsx
 import { useState } from "react";
-import { Select, MenuItem } from "liberty-core";
+import { Select, MenuItem } from "@nomana-it/liberty-core"
 
 export const SelectExample = () => {
   const [value, setValue] = useState(null);

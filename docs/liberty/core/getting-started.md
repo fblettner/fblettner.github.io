@@ -44,7 +44,7 @@ npm install @nomana-it/liberty-core
 
 Then import the necessary components:
 \`\`\`tsx
-import { AppProvider, Button, Dialog } from "liberty-core";
+import { AppProvider, Button, Dialog } from "@nomana-it/liberty-core";
 
 export const MyApp = () => (
   <AppProvider>

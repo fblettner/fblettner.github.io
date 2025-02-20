@@ -21,7 +21,7 @@ It supports:
 
 ## Example Usage
 ```tsx
-import { DatePicker } from "liberty-core";
+import { DatePicker } from "@nomana-it/liberty-core"
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 

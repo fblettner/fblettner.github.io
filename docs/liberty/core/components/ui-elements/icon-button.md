@@ -18,7 +18,7 @@ The `IconButton` component is a button wrapper specifically for **icons**, offer
 
 ## Example Usage
 ```tsx
-import { IconButton } from "liberty-core";
+import { IconButton } from "@nomana-it/liberty-core"
 import { LYThumbUpIcon, LYThumbDownOffIcon } from "@ly_styles/icons";
 
 export const IconButtonExample = () => {

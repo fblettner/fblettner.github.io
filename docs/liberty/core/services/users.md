@@ -20,7 +20,7 @@ The `Users Configuration` defines user profiles within the Liberty Framework. Ea
 
 ## Example Usage
 ```tsx
-import { useAppContext } from "liberty-core";
+import { useAppContext } from "@nomana-it/liberty-core"
 
 export const UsersExample = () => {
   const { userProperties } = useAppContext();

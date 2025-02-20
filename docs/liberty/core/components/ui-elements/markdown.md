@@ -11,7 +11,7 @@ The `MarkDown` component renders markdown content and supports syntax highlighti
 
 ## Example Usage
 ```tsx
-import { MarkDown } from "liberty-core";
+import { MarkDown } from "@nomana-it/liberty-core"
 
 const markdownText = `
 # Sample Markdown

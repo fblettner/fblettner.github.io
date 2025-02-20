@@ -13,7 +13,7 @@ The `Divider` component is used to separate content with a thin line. It can be 
 
 ## Example Usage
 ```tsx
-import { Divider } from "liberty-core";
+import { Divider } from "@nomana-it/liberty-core"
 
 export const DividerExample = () => {
   return (

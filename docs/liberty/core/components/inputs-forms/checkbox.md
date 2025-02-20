@@ -18,7 +18,7 @@ The `InputCheckbox` component is a reusable checkbox input with built-in state m
 
 ## Example Usage
 ```tsx
-import { InputCheckbox } from "liberty-core";
+import { InputCheckbox } from "@nomana-it/liberty-core"
 import { useState } from "react";
 
 export const InputCheckboxExample = () => {

@@ -28,7 +28,7 @@ Create a new file called \`main.tsx\` inside \`src/\` with the following setup:
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { App } from "./App" 
-import { AppProvider, Div, ErrorBoundary, TranslationProvider } from "liberty-core"
+import { AppProvider, Div, ErrorBoundary, TranslationProvider } from "@nomana-it/liberty-core"
 import { AuthProvider, useAuth as oidcUseAuth } from "react-oidc-context";
 
 // OIDC Configuration
@@ -60,7 +60,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 Now, create a file named \`App.tsx\` inside \`src/\` and add:
 
 ```tsx
-import { AppsContent, LYThemeProvider, useAppContext } from 'liberty-core';
+import { AppsContent, LYThemeProvider, useAppContext } from "@nomana-it/liberty-core"
 
 export function App() {
   const { userProperties, appsProperties, modulesProperties } = useAppContext();
@@ -91,7 +91,7 @@ Your **Liberty Core** app is now running! 🎉
 Modify the theme inside \`App.tsx\`:
 
 ```tsx
-import { AppsContent, LYThemeProvider } from 'liberty-core';
+import { AppsContent, LYThemeProvider } from "@nomana-it/liberty-core"
 import { theme } from './theme';  // Create a theme file
 
 export function App() {

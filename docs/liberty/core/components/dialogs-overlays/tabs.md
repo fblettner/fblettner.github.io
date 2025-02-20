@@ -22,7 +22,7 @@ The `Tabs` and `Tab` components allow navigation between different views or sett
 
 ## Example Usage
 ```tsx
-import { Tab, Tabs } from "liberty-core";
+import { Tab, Tabs } from "@nomana-it/liberty-core"
 import { useState } from "react";
 
 export const TabsExample = () => {

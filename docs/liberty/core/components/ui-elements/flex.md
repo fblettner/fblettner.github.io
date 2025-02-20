@@ -13,7 +13,7 @@ The `FlexPanels` component is a flexible, resizable layout container that allows
 
 ## Example Usage
 ```tsx
-import { FlexPanels } from "liberty-core";
+import { FlexPanels } from "@nomana-it/liberty-core"
 
 export const FlexPanelsExample = () => {
   return (
