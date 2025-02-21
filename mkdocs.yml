@@ -110,6 +110,7 @@ nav:
           - Users: liberty/core/components/main-components/users.md
         - Forms Components:
           - Dashboard: liberty/core/components/forms-components/dashboard.md
+          - Advanced Grid: liberty/core/components/forms-components/advanced-grid.md
 
       - API Documentation: liberty/api/liberty-api.md
       - Release Notes: liberty/release-notes.md
