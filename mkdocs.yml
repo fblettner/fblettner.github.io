@@ -113,7 +113,22 @@ nav:
           - Advanced Grid: liberty/core/components/forms-components/advanced-grid.md
         - Styled Elements:
           - Button: liberty/core/components/styled-elements/button.md
+          - Card: liberty/core/components/styled-elements/card.md
+          - Dialog: liberty/core/components/styled-elements/dialog.md
           - Div: liberty/core/components/styled-elements/div.md
+          - Form: liberty/core/components/styled-elements/form.md
+          - Global Styles: liberty/core/components/styled-elements/global-styles.md
+          - Icon Button: liberty/core/components/styled-elements/icon-button.md
+          - Icons: liberty/core/components/styled-elements/icons.md
+          - Input: liberty/core/components/styled-elements/input.md
+          - List: liberty/core/components/styled-elements/list.md
+          - Main: liberty/core/components/styled-elements/main.md
+          - Menus: liberty/core/components/styled-elements/menus.md
+          - Paper: liberty/core/components/styled-elements/paper.md
+          - Stack: liberty/core/components/styled-elements/stack.md
+          - Table: liberty/core/components/styled-elements/table.md
+          - Tabs: liberty/core/components/styled-elements/tabs.md
+          - Typography: liberty/core/components/styled-elements/typography.md
       - API Documentation: liberty/api/liberty-api.md
       - Release Notes: liberty/release-notes.md
       - Issues: liberty/issues.md

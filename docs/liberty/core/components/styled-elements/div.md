@@ -128,3 +128,10 @@ Liberty Core provides a collection of predefined styled `Div` components to simp
 - `Div_AppsTabsHeader`
 - `Div_AppsDialogTabPanel`
 ```
+
+
+## Useful Links
+🔗 **GitHub Repository (Core):** [Liberty Core](https://github.com/fblettner/liberty-core/)  
+🔗 **GitHub Repository (Test Project):** [Liberty Test](https://github.com/fblettner/liberty-test/)  
+📖 **Live Documentation:** [Liberty Core Docs](https://docs.nomana-it.fr/liberty-core/)  
+💖 **Sponsor & Support:** [Sponsor Liberty Core](https://github.com/sponsors/fblettner) 
