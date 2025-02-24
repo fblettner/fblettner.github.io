@@ -111,7 +111,9 @@ nav:
         - Forms Components:
           - Dashboard: liberty/core/components/forms-components/dashboard.md
           - Advanced Grid: liberty/core/components/forms-components/advanced-grid.md
-
+        - Styled Elements:
+          - Button: liberty/core/components/styled-elements/button.md
+          - Div: liberty/core/components/styled-elements/div.md
       - API Documentation: liberty/api/liberty-api.md
       - Release Notes: liberty/release-notes.md
       - Issues: liberty/issues.md
