@@ -1,0 +1,43 @@
+/* Standardized button sizes */
+
+/* Small Button */
+.md-button--small {
+    font-size: 0.8rem;   /* Smaller text */
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+}
+
+/* Medium Button (default) */
+.md-button--medium {
+    font-size: 1rem;     /* Default text size */
+    padding: 8px 16px;   /* Default padding */
+}
+
+/* Large Button */
+.md-button--large {
+    font-size: 1.2rem;   /* Larger text */
+    padding: 12px 20px;  /* Spacious padding */
+    border-radius: 6px;  /* Slightly rounded corners */
+}
+
+@media print {
+    @page {
+        margin: 0.5in 0.1in 0.5in 0.1in; /* Adjust margins for header/footer space */
+    }
+
+
+    /* Hide the print button when printing */
+    .print-button {
+        display: none;
+    }
+  }
+
+
+.print-button {
+    float: right; /* Moves the button to the right */
+    margin-left: 1em; /* Adds spacing from the content */
+    padding: 0.5em 1em; /* Padding for better aesthetics */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Change cursor on hover */
+}
