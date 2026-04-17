@@ -14,14 +14,23 @@ java -version
 # java version "17.x.x" ...
 ```
 
-### Oracle JD Edwards
+### Oracle database
 
-NomaUBL is designed to run in a JDE environment. The following are required:
+NomaUBL stores invoice lifecycle data in Oracle tables and reads configuration from an Oracle schema. The following are required:
 
 - **Oracle JDBC driver** — `ojdbc8.jar` or compatible (must be on the classpath)
-- **Oracle XDO / BI Publisher libraries** — for RTF→PDF generation
 - Oracle database accessible via JDBC thin driver (`jdbc:oracle:thin:@host:port:SID`)
-- JDE XML spool output files produced by UBE jobs
+
+### XML input source
+
+NomaUBL processes any XML file as input — it is not tied to a specific ERP. The XSLT stylesheet defined in each document template is responsible for transforming the source XML into a valid UBL 2.1 document. Common sources include:
+
+- JD Edwards UBE XML spool output
+- Any other ERP or system that produces structured XML
+
+### Optional: Oracle XDO / BI Publisher
+
+Required only if PDF generation is needed (`SINGLE`, `BURST`, or `BOTH` processing modes). Not required for pure UBL processing (`UBL`, `UBL_VALIDATE`).
 
 ### Platform Agréée (PA)
 
@@ -51,7 +60,7 @@ No additional download is required if using the pre-built JAR.
 
 ### XSLT stylesheet
 
-Each document template references an XSLT stylesheet that transforms JDE XML into UBL 2.1 XML. These stylesheets must be provided and configured per template (via the `transform` property in the document template).
+Each document template references an XSLT stylesheet that transforms your source XML into a UBL 2.1 invoice. These stylesheets must be provided and configured per template (via the `transform` property in the document template).
 
 ### Optional: Ghostscript
 
