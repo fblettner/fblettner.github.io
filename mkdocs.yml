@@ -133,6 +133,32 @@ nav:
       - Release Notes: liberty/release-notes.md
       - Issues: liberty/issues.md
       - Incidents: liberty/incidents.md        
+  - NomaUBL:
+      - Getting Started: nomaubl/getting-started.md
+      - Installation:
+          - Prerequisites: nomaubl/installation/prerequisites.md
+          - Build & Installation: nomaubl/installation/build.md
+      - Configuration:
+          - Global Template: nomaubl/configuration/global.md
+          - E-Invoicing Template: nomaubl/configuration/e-invoicing.md
+          - E-Directory Template: nomaubl/configuration/e-directory.md
+          - Document Templates: nomaubl/configuration/document-templates.md
+      - User Guide:
+          - CLI Reference: nomaubl/user-guide/cli.md
+          - Web Interface: nomaubl/user-guide/web-interface.md
+          - Invoice Workflow: nomaubl/user-guide/workflow.md
+      - Features:
+          - UBL Generation: nomaubl/features/ubl-generation.md
+          - UBL Validation: nomaubl/features/validation.md
+          - Platform Agréée Integration: nomaubl/features/pa-integration.md
+          - Import Status Polling: nomaubl/features/import-status.md
+      - Reference:
+          - Processing Types: nomaubl/reference/processing-types.md
+          - Status Codes: nomaubl/reference/status-codes.md
+          - Database Schema: nomaubl/reference/database-schema.md
+          - Reference Lists: nomaubl/reference/reference-lists.md
+          - REST API: nomaubl/reference/api.md
+      - Release Notes: nomaubl/release-notes.md
   - API:
       - Getting Started: api/getting-started.md
       - JD Edwards API: 

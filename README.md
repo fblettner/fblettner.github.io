@@ -67,15 +67,24 @@ Before starting, ensure you have the following:
    source venv/bin/activate # On Windows, use venv\Scripts\activate
    ```
 
-2. **Install MkDocs Material**:
+2. **Install MkDocs Material and required plugins**:
    ```bash
-   pip install mkdocs-material
+   pip install mkdocs-material mkdocs-awesome-pages-plugin mkdocs-minify-plugin
    ```
 
 3. **Verify Installation**:
    ```bash
    mkdocs --version
    ```
+
+## Run Locally
+
+To preview the site locally with live reload:
+```bash
+mkdocs serve
+```
+
+The site will be available at `http://127.0.0.1:8000`.
 
 ---
 
