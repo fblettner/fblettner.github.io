@@ -41,8 +41,9 @@ The **Generate Report** page triggers the `-run` processing pipeline from the br
 
 The page displays a real-time log output as the job runs, showing validation results, PA submission status, and any errors.
 
-!!! tip "UBL_VALIDATE mode"
-    Use `UBL_VALIDATE` to test your XSLT stylesheet and verify the generated UBL passes all validation rules before enabling live PA submission.
+:::tip[UBL_VALIDATE mode]
+Use `UBL_VALIDATE` to test your XSLT stylesheet and verify the generated UBL passes all validation rules before enabling live PA submission.
+:::
 
 ---
 

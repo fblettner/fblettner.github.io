@@ -13,7 +13,7 @@ The `Applications Configuration` defines multiple applications within the Libert
 | `APPS_OFFSET`    | `number` | The default offset value for queries. |
 | `APPS_LIMIT`     | `number` | The maximum number of records per query. |
 | `APPS_VERSION`   | `string` | The current version of the application. |
-| `APPS_DASHBOARD` | `number | undefined` | The dashboard ID associated with the app. |
+| `APPS_DASHBOARD` | `number \| undefined` | The dashboard ID associated with the app. |
 | `APPS_THEME`     | `string` | The theme applied to the application. |
 | `APPS_SESSION`   | `string` | The session mode (e.g., `session`). |
 | `APPS_JWT_TOKEN` | `string` | JWT token for authentication (if applicable). |

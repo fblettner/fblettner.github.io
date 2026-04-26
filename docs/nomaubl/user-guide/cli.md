@@ -151,8 +151,9 @@ java -jar nomaubl.jar -password MySecretPass123
 
 Copy the output into `DBPassword` in your `global` configuration template.
 
-!!! info
-    This command is only for encoding the Oracle DB password (`DBPassword` in the `global` template).
+:::info
+This command is only for encoding the Oracle DB password (`DBPassword` in the `global` template).
+:::
 
 ---
 

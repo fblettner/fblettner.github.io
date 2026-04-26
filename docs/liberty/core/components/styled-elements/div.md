@@ -7,7 +7,7 @@ The `Div` component is a styled wrapper based on `styled.div` from Emotion. It p
 | Prop             | Type               | Default  | Description                                   |
 |-----------------|-------------------|----------|-----------------------------------------------|
 | `display`  | `string` | `block`  | Defines the CSS display property. Supports 'flex', 'grid', etc. |
-| `flexDirection`  | `'row' | 'row-reverse' | 'column' | 'column-reverse'` | `undefined` | Sets the flex direction when using flexbox. |
+| `flexDirection`  | `'row' \| 'row-reverse' \| 'column' \| 'column-reverse'` | `undefined` | Sets the flex direction when using flexbox. |
 | `justifyContent` | `string` | `undefined` | Aligns children within the div along the main axis. |
 | `alignItems` | `string` | `undefined` | Aligns children within the div along the cross-axis. |
 | `gap` | `string, number` | `undefined` | Specifies the spacing between child elements. |

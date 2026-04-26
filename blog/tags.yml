@@ -1,0 +1,14 @@
+jd-edwards:
+  label: JD Edwards
+  permalink: /jd-edwards
+  description: Posts tagged JD Edwards.
+
+mkdocs:
+  label: MkDocs Materials
+  permalink: /mkdocs
+  description: Posts tagged MkDocs Materials.
+
+oracle:
+  label: Oracle
+  permalink: /oracle
+  description: Posts tagged Oracle.

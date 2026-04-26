@@ -18,8 +18,9 @@ The `e-directory` template is a **reserved system template** that configures the
 | `paApiPassword` | Password for directory API authentication | `mypassword` |
 | `paApiDirectoryEndpoint` | Directory lookup endpoint (literal `{identifier}` placeholder) | `/api/v1/utils/ppf-directory/routing-lines/{identifier}` |
 
-!!! info "Separate credentials"
-    The directory API uses its own `TokenManager` instance and credentials, independent of the `e-invoicing` template. This allows the directory and invoice APIs to be hosted on different platforms with different authentication.
+:::info[Separate credentials]
+The directory API uses its own `TokenManager` instance and credentials, independent of the `e-invoicing` template. This allows the directory and invoice APIs to be hosted on different platforms with different authentication.
+:::
 
 ### How the lookup works
 
@@ -40,8 +41,9 @@ with `{identifier}` replaced by the recipient's SIRET or SIREN number extracted 
 | HTTP 404 | Recipient not registered in PPF | Warning logged, invoice sent anyway |
 | Network error | Directory API unreachable | Warning logged, invoice sent anyway |
 
-!!! warning "Non-blocking check"
-    The directory lookup **never blocks** the invoice submission. If the lookup fails for any reason (not found, network error, `platform=false`), NomaUBL logs a warning and proceeds with the submission. The error is also recorded in the lifecycle table (F564235).
+:::warning[Non-blocking check]
+The directory lookup **never blocks** the invoice submission. If the lookup fails for any reason (not found, network error, `platform=false`), NomaUBL logs a warning and proceeds with the submission. The error is also recorded in the lifecycle table (F564235).
+:::
 
 ### Endpoint format
 

@@ -18,7 +18,7 @@ It provides a dynamic way to **override** and **customize** themes using the **A
 ### Theme Fields
 | Field Name       | Type    | Description |
 |-----------------|--------|-------------|
-| `palette.mode` | `"light" | "dark"` | Determines the color scheme. |
+| `palette.mode` | `"light" \| "dark"` | Determines the color scheme. |
 | `palette.primary.main` | `string` | Primary color. |
 | `palette.secondary.main` | `string` | Secondary color. |
 | `background.default` | `string` | Main background color. |

@@ -1,3 +1,8 @@
+---
+description: "Step-by-step guide to bootstrap a new React project with Liberty Core: OIDC authentication, translations and error handling included."
+keywords: [Liberty Core, React project, OIDC, scaffolding, tutorial]
+---
+
 # Creating a New React App with Liberty Core
 
 ## **Description**

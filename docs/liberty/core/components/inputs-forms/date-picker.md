@@ -13,8 +13,8 @@ It supports:
 | Prop          | Type                   | Default | Description |
 |--------------|----------------------|---------|-------------|
 | `id`        | `string`            | -       | Unique identifier for the input. |
-| `value`     | `Dayjs | null`     | `null`  | The selected date. |
-| `onChange`  | `(date: Dayjs | null) => void` | - | Callback triggered when a date is selected. |
+| `value`     | `Dayjs \| null`     | `null`  | The selected date. |
+| `onChange`  | `(date: Dayjs \| null) => void` | - | Callback triggered when a date is selected. |
 | `disabled`  | `boolean`          | `false` | Disables date selection. |
 | `fullWidth` | `boolean`          | `true` | Expands input width to 100%. |
 | `label`     | `string`            | -       | Label for the date input. |

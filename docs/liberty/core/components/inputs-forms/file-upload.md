@@ -11,7 +11,7 @@ The `InputFile` component allows users to upload files via a button-based interf
 | Prop          | Type                     | Default | Description |
 |--------------|--------------------------|---------|-------------|
 | `onFileChange` | `(e: React.ChangeEvent<HTMLInputElement>) => void` | - | Callback triggered when a file is selected. |
-| `fileInputRef` | `React.RefObject<HTMLInputElement | null>` | - | Ref to access the file input element. |
+| `fileInputRef` | `React.RefObject<HTMLInputElement \| null>` | - | Ref to access the file input element. |
 | `disabled` | `boolean` | `false` | Disables file selection. |
 | `accept` | `string` | `""` | Specifies accepted file types (e.g., ".png,.jpg"). |
 

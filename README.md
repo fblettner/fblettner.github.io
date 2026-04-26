@@ -1,253 +1,80 @@
-# Installing and Deploying MkDocs Material with GitHub Pages
+# NOMANA-IT Documentation
 
-This guide explains how to install and deploy MkDocs Material for creating beautiful documentation sites. It also includes steps to automate deployment to GitHub Pages.
+Source for [docs.nomana-it.fr](https://docs.nomana-it.fr) — documentation, blog and resources for **Liberty Framework**, **NomaUBL**, and the **JD Edwards / BI Publisher** API recipes.
 
-### What's Included in the Site
+Built with [Docusaurus](https://docusaurus.io/) (TypeScript), deployed to GitHub Pages via GitHub Actions.
 
-The provided MkDocs Material configuration is designed to support a comprehensive documentation site with the following features:
+## Stack
 
-- **Navigation**:
-    * Multi-level navigation with tabs and collapsible sections.
-    * Support for documentation, guides, blog posts, API references, and release notes.
+- **Docusaurus 3** with the classic preset (TypeScript)
+- **Local search** via `@easyops-cn/docusaurus-search-local` (will switch to Algolia DocSearch once approved)
+- **Giscus** comments on blog posts (GitHub Discussions backend)
+- **i18n** wired for `en` + `fr` (FR content falls back to EN until translated)
+- **Custom theme**: dark-mode-first, deep navy background, blue/purple gradient accents
+- **Custom domain** `docs.nomana-it.fr` shipped via `static/CNAME`
 
-- **Customization**:
-    * Custom logo and favicon.
-    * Light and dark themes with a toggle switch.
-    * Customizable color palettes to match your branding.
+## Local development
 
-- **Enhanced User Experience**:
-    - Instant navigation with prefetching for fast transitions.
-    - Sticky top navigation for ease of access.
-    - Copy button for code snippets to improve developer productivity.
+Requires Node.js 20+.
 
-- **Plugins**:
-    - `awesome-pages`: Automatically organizes navigation based on folder structure.
-    - `minify`: Optimizes site assets for faster loading.
-    - `blog`: Supports structured and visually appealing blog posts.
-    - `search`: Integrated full-text search for quick access to content.
-
-- **Content Types**:
-    - Documentation sections for getting started, installation guides, and tutorials.
-    - Blog posts with structured navigation and metadata.
-
-- **Technical Enhancements**:
-    - Cookie consent settings to comply with privacy policies.
-    - CSP (Content Security Policy) meta tag for enhanced security.
-    - Custom CSS and JavaScript to further tailor the site's appearance and functionality.
-
-### Repository Features
-
-The repository includes:
-
-1. A complete `mkdocs.yml` configuration with navigation, theme, and plugin settings.
-2. A `docs/` directory with pre-structured files and folders for easy customization.
-3. Workflow configuration (`.github/workflows/deploy.yml`) to automate deployment to GitHub Pages.
-4. Sample blog posts, API documentation, and guides to demonstrate how to structure content.
-5. Custom assets for branding, including a logo and favicon.
-
-By cloning this repository, you can start with a fully functional MkDocs Material site and focus on adding your content instead of setting up the structure.
-
-## Step 1: Prerequisites
-
-Before starting, ensure you have the following:
-- **Python 3.x** installed (verify with `python --version`).
-  
-- **pip** installed (verify with `pip --version`).
-  
-- A **GitHub repository** to host your documentation.
-  
-- Git configured locally with a GitHub personal access token if needed.
-
-
-## Step 2: Install MkDocs Material
-
-1. **Create a Virtual Environment** (optional but recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate # On Windows, use venv\Scripts\activate
-   ```
-
-2. **Install MkDocs Material and required plugins**:
-   ```bash
-   pip install mkdocs-material mkdocs-awesome-pages-plugin mkdocs-minify-plugin
-   ```
-
-3. **Verify Installation**:
-   ```bash
-   mkdocs --version
-   ```
-
-## Run Locally
-
-To preview the site locally with live reload:
 ```bash
-mkdocs serve
+npm install        # one-time
+npm run start      # dev server with hot reload at http://localhost:3000
+npm run build      # production build to ./build
+npm run serve      # serve the production build locally
+npm run typecheck  # tsc, no emit
 ```
 
-The site will be available at `http://127.0.0.1:8000`.
+To preview the French locale (dev mode is single-locale):
 
----
+```bash
+npm run start -- --locale fr
+```
 
-## Step 3: Create the MkDocs Project
+## Project layout
 
-1. **Create a New MkDocs Project**:
-   ```bash
-   mkdocs new my-project
-   cd my-project
-   ```
+```
+.
+├── docs/                       # documentation pages (Liberty, NomaUBL, API)
+├── blog/                       # blog posts (date-prefixed filenames)
+├── src/
+│   ├── pages/index.tsx         # custom React homepage
+│   ├── theme/                  # swizzled components
+│   │   ├── BlogPostItem/       # adds Giscus comments to blog posts
+│   │   └── BackToTopButton/    # always-visible scroll-to-top
+│   └── css/custom.css          # palette, navbar, sidebar, print styles
+├── static/
+│   ├── assets/                 # images, logos, PDFs
+│   ├── CNAME                   # custom domain
+│   └── robots.txt
+├── docusaurus.config.ts        # site config, navbar, plugins, SEO meta + JSON-LD
+├── sidebars.ts                 # explicit nav structure
+└── .github/workflows/deploy.yml
+```
 
-2. **Edit the `mkdocs.yml` File**:
-   Replace the default configuration with the following:
+## Deployment
 
-   ```yaml
-   site_name: Your Site Name
-   site_url: Your Site URL
+Pushes to `main` trigger `.github/workflows/deploy.yml`, which builds the site and publishes via `actions/deploy-pages@v4`. The repo Pages source must be set to **GitHub Actions** (Settings → Pages → Build and deployment → Source).
 
-   theme:
-     name: material
-     logo: assets/your_logo.png
-     favicon: assets/your_logo.png
-     custom_dir: overrides
-     palette:
-       - media: "(prefers-color-scheme: light)"
-         primary: blue grey
-         accent: amber
-         scheme: default
-         toggle:
-           icon: material/weather-night
-           name: Switch to dark mode
-       - media: "(prefers-color-scheme: dark)"
-         primary: blue grey
-         accent: amber
-         scheme: slate
-         toggle:
-           icon: material/weather-sunny
-           name: Switch to light mode   
-     features:
-       - content.code.copy     
-       - navigation.instant
-       - navigation.tabs
-       - navigation.path
-       - navigation.top
-       - navigation.footer
-       - header.autohide
+## Adding content
 
-   # example of navigation
-   nav:
-     - Home: index.md
-     - Liberty:
-         - Getting Started: liberty/getting-started.md
-         - Installation:
-           - Architecture: liberty/technical/architecture.md
-           - Docker Installation Guide: liberty/technical/installation.md
-           - Installation Tools Deployment Guide: liberty/technical/tools-deployment.md
-           - Liberty Deployment Guide: liberty/technical/liberty-deployment.md
-           - Create Linux Services: liberty/technical/linux-services.md
-           - Enable SSL with Traefik: liberty/technical/post-ssl.md    
-     - Blog:
-       - blog/index.md
+- **A doc page**: drop a `.md` (or `.mdx`) file under `docs/<section>/` and add it to the matching sidebar in [sidebars.ts](sidebars.ts).
+- **A blog post**: create `blog/YYYY-MM-DD-slug.md` with frontmatter `authors:`, `tags:`. Reuse tags from [blog/tags.yml](blog/tags.yml) or add new ones there.
+- **Authors**: defined in [blog/authors.yml](blog/authors.yml).
+- **SEO**: every hub page should set `description:` in frontmatter; per-page `keywords:` is supported.
 
-   plugins:
-     - search
-     - awesome-pages
-     - minify
-     - blog
+## Search
 
-   extra:
-     social:
-       - icon: fontawesome/brands/github
-         link: your social link for github
-       - icon: fontawesome/brands/linkedin
-         link: your social link for linkedin          
-     meta:
-         - name: Content-Security-Policy
-           value: frame-ancestors 'self' https://giscus.app;      
-     consent:
-       title: Cookie consent
-       actions:
-         - accept
-         - manage
-         - reject
-       description: >- 
-         We use cookies to recognize your repeated visits and preferences,
-         as well as to measure the effectiveness of our documentation.
-     markdown_extensions:
-       - attr_list
-       - pymdownx.highlight:
-           anchor_linenums: true
-           linenums: true
-           line_spans: __span
-           pygments_lang_class: true
-       - pymdownx.inlinehilite
-       - pymdownx.snippets
-       - pymdownx.superfences
-   extra_css:
-     - css/custom.css
-   extra_javascript:
-     - js/extra.js  
-   copyright: >
-     Copyright &copy; 2024 Nomana-IT –
-     <a href="#__consent">Change cookie settings</a>
-   ```
+Local search runs in-browser. To migrate to Algolia DocSearch (free for OSS) once approved:
 
-3. **Add Your Documentation Files**:
-   Organize your files under the `docs/` folder as per the navigation structure defined in the `mkdocs.yml`.
+1. Apply at https://docsearch.algolia.com/apply/
+2. Replace the local search plugin entry in [docusaurus.config.ts](docusaurus.config.ts) with `themeConfig.algolia: { appId, apiKey, indexName }`
+3. `npm uninstall @easyops-cn/docusaurus-search-local`
 
----
+## Comments
 
-## Step 4: Deploy to GitHub Pages
+Giscus is configured in [src/theme/BlogPostItem/index.tsx](src/theme/BlogPostItem/index.tsx) and only renders on individual blog post pages (gated by `useBlogPost().isBlogPostPage`). Discussions are mapped by URL pathname so existing threads stay linked.
 
-1. **Set Up GitHub Actions**:
-   Add the following configuration in `.github/workflows/deploy.yml`:
+## License
 
-   ```yaml
-   name: ci 
-   on:
-     push:
-       branches:
-         - master 
-         - main
-   permissions:
-     contents: write
-   jobs:
-     deploy:
-       runs-on: ubuntu-latest
-       steps:
-         - uses: actions/checkout@v4
-         - name: Configure Git Credentials
-           run: |
-             git config user.name github-actions[bot]
-             git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-         - uses: actions/setup-python@v5
-           with:
-             python-version: 3.x
-         - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
-         - uses: actions/cache@v4
-           with:
-             key: mkdocs-material-${{ env.cache_id }}
-             path: .cache
-             restore-keys: |
-               mkdocs-material-
-         - run: pip install mkdocs-material mkdocs-awesome-pages-plugin mkdocs-minify-plugin
-         - run: mkdocs gh-deploy --force
-   ```
-
-2. **Push Your Changes**:
-   Commit and push your project to the `main` branch of your GitHub repository:
-   ```bash
-   git add .
-   git commit -m "Initial documentation setup"
-   git push origin main
-   ```
-
-3. **Access Your Site**:
-   After GitHub Actions finish deploying, your site will be live at:
-   ```
-   https://<your-github-username>.github.io/<repository-name>/
-   ```
-
----
-
-## Conclusion
-
-Your MkDocs Material documentation is now installed and deployed with GitHub Pages! This workflow ensures automated deployment and a professional look for your documentation site.
+Content © Nomana-IT. Code MIT-licensed.

@@ -3,7 +3,7 @@ title: "NOMABC - Barcode 128 for BI Publisher"
 description: "Simple java class to encode string and display barcode 128 with BI Publisher RTF template"
 ---
 
-[Download](https://github.com/fblettner/bip-nomabc){: style="float: right;" .btn-primary .btn .fs-5 .mb-4 .mb-md-0 target="_blank"}
+<a href="https://github.com/fblettner/bip-nomabc" className="button button--primary button--lg" target="_blank" rel="noopener">Download</a>
 **Built with VSCode and JDK 11**
 
 ## 1. Modify xdo.cfg

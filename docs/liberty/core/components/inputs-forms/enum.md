@@ -16,10 +16,10 @@ The `InputEnum` component is an advanced dropdown that retrieves values dynamica
 | `defaultValue` | `string` | `""` | Initial selected value. |
 | `onChange` | `(data: { id: string, value: string }) => void` | - | Callback when selection changes. |
 | `disabled` | `boolean` | `false` | Disables the input. |
-| `variant` | `"standard" | "outlined" | "filled"` | `"standard"` | Input style variant. |
+| `variant` | `"standard" \| "outlined" \| "filled"` | `"standard"` | Input style variant. |
 | `freeSolo` | `boolean` | `false` | Allows custom values to be typed. |
 | `searchByLabel` | `boolean` | `false` | Enables searching by label instead of value. |
-| `data` | `IColumnsFilter | ITransformedObject` | `undefined` | Custom data for options. |
+| `data` | `IColumnsFilter \| ITransformedObject` | `undefined` | Custom data for options. |
 | `dynamic_params` | `string` | `undefined` | Dynamic parameters for filtering results. |
 | `fixed_params` | `string` | `undefined` | Fixed parameters for filtering results. |
 | `sessionMode` | `ESessionMode` | `undefined` | Defines session-based filtering. |

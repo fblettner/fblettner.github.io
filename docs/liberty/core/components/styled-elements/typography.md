@@ -19,7 +19,7 @@ The `Typography` components are predefined styled wrappers based on the `Typogra
 ### **Typo_Loading**
 | Prop           | Type                   | Default  | Description  |
 |---------------|------------------------|----------|--------------|
-| `color`     | `EStandardColor | string` | `inherit` | Custom text color. |
+| `color`     | `EStandardColor \| string` | `inherit` | Custom text color. |
 | `isThemeColor` | `boolean` | `false` | If true, applies the theme's default color. |
 
 ---

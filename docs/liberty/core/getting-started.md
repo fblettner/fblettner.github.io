@@ -1,3 +1,8 @@
+---
+description: "Liberty Core — modular React framework with reusable UI components, context providers and application management tools for building modern apps."
+keywords: [Liberty Core, React, components library, no-code, UI framework, context providers, theming]
+---
+
 # Liberty Core
 
 A modular, extensible framework for building modern applications with reusable UI components and application management tools.
@@ -38,12 +43,12 @@ The documentation is divided into the following categories:
 
 ## Getting Started
 To use Liberty Core, install it via npm:
-\`\`\`sh
+```sh
 npm install @nomana-it/liberty-core
-\`\`\`
+```
 
 Then import the necessary components:
-\`\`\`tsx
+```tsx
 import { AppProvider, Button, Dialog } from "@nomana-it/liberty-core";
 
 export const MyApp = () => (
@@ -51,7 +56,7 @@ export const MyApp = () => (
     <Button>Click Me</Button>
   </AppProvider>
 );
-\`\`\`
+```
 
 ## Useful Links
 🔗 **GitHub Repository (Core):** [Liberty Core](https://github.com/fblettner/liberty-core/)  

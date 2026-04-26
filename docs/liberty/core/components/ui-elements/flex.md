@@ -8,7 +8,7 @@ The `FlexPanels` component is a flexible, resizable layout container that allows
 |--------------|----------------------------|--------------|-------------|
 | `panels`      | `number[]`               | `[1, 1]`     | Initial flex sizes for each panel. |
 | `children`    | `ReactNode[]`            | `-`          | Components to be placed inside the panels. |
-| `direction`   | `"horizontal" | "vertical"` | `"horizontal"` | Defines the layout direction. |
+| `direction`   | `"horizontal" \| "vertical"` | `"horizontal"` | Defines the layout direction. |
 | `dragEnabled` | `boolean`               | `false`      | Enables drag-and-drop reordering. |
 
 ## Example Usage

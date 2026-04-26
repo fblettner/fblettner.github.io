@@ -110,8 +110,9 @@ Generates UBL 2.1 XML and validates it, but **never sends to the PA**.
 java -jar nomaubl.jar -run config.properties vrc_pro output.xml UBL_VALIDATE 1001
 ```
 
-!!! tip "Safe for production"
-    `UBL_VALIDATE` mode is safe to run against production data — it reads JDE XML and writes only validation errors to F564236, but never modifies F564230 or F564231, and never contacts the PA.
+:::tip[Safe for production]
+`UBL_VALIDATE` mode is safe to run against production data — it reads JDE XML and writes only validation errors to F564236, but never modifies F564230 or F564231, and never contacts the PA.
+:::
 
 ---
 

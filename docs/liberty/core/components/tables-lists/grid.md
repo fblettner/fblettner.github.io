@@ -12,15 +12,15 @@ The `GridContainer` and `GridItem` components provide a **flexible grid layout**
 | Prop         | Type                         | Default  | Description |
 |-------------|-----------------------------|---------|-------------|
 | `spacing`  | `number`                   | `2`     | Defines the gap between grid items (in multiples of 8px). |
-| `columns`  | `number | { xs, sm, md, lg }` | `1`     | Number of columns, can be responsive. |
+| `columns`  | `number \| { xs, sm, md, lg }` | `1`     | Number of columns, can be responsive. |
 | `py`       | `number`                   | `0`     | Vertical padding (in multiples of 8px). |
 | `px`       | `number`                   | `0`     | Horizontal padding (in multiples of 8px). |
 
 ### GridItem Props
 | Prop         | Type                         | Default  | Description |
 |-------------|-----------------------------|---------|-------------|
-| `size`     | `number | { xs, sm, md, lg }` | `12`    | Column span of the grid item, can be responsive. |
-| `columnSpan` | `number | { xs, sm, md, lg }` | `-`     | Allows setting span dynamically. |
+| `size`     | `number \| { xs, sm, md, lg }` | `12`    | Column span of the grid item, can be responsive. |
+| `columnSpan` | `number \| { xs, sm, md, lg }` | `-`     | Allows setting span dynamically. |
 
 ## Example Usage
 ```tsx

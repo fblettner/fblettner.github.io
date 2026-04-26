@@ -9,10 +9,10 @@ The `Menu` component is a floating menu that appears next to an anchor element. 
 | Prop                     | Type                                              | Default        | Description |
 |--------------------------|--------------------------------------------------|----------------|-------------|
 | `open`                 | `boolean`                                       | `false`       | Controls the visibility of the menu. |
-| `anchorEl`             | `HTMLElement | null | undefined`               | `undefined`  | The element that the menu is anchored to. |
+| `anchorEl`             | `HTMLElement \| null \| undefined`               | `undefined`  | The element that the menu is anchored to. |
 | `anchorPosition`       | `{ top: number; left: number }`                 | `undefined`  | Manually position the menu. |
 | `onClose`             | `() => void`                                    | `undefined`  | Callback when the menu is closed. |
-| `placement`           | `"bottom-start" | "bottom-end" | "top-start" | "top-end"` | `"bottom-start"` | The position of the menu relative to the anchor. |
+| `placement`           | `"bottom-start" \| "bottom-end" \| "top-start" \| "top-end"` | `"bottom-start"` | The position of the menu relative to the anchor. |
 | `zIndex`              | `number`                                        | `DefaultZIndex.Menus` | Controls the stacking order. |
 | `preventBrowserContextMenu` | `boolean`                                  | `false`      | Prevents the default browser context menu from appearing. |
 
@@ -20,13 +20,13 @@ The `Menu` component is a floating menu that appears next to an anchor element. 
 | Prop       | Type                              | Default   | Description |
 |------------|----------------------------------|-----------|-------------|
 | `onClick` | `() => void`                   | `undefined` | Function triggered when the item is clicked. |
-| `startIcon` | `ReactNode | React.ElementType` | `undefined` | Icon to be displayed before the text. |
+| `startIcon` | `ReactNode \| React.ElementType` | `undefined` | Icon to be displayed before the text. |
 
 ### SubMenu Props
 | Prop       | Type                              | Default   | Description |
 |------------|----------------------------------|-----------|-------------|
 | `label`   | `string`                       | Required  | The text displayed on the submenu item. |
-| `startIcon` | `ReactNode | React.ElementType` | `undefined` | Icon to be displayed before the text. |
+| `startIcon` | `ReactNode \| React.ElementType` | `undefined` | Icon to be displayed before the text. |
 | `children` | `ReactNode`                   | Required  | The submenu content. |
 
 ## Example Usage

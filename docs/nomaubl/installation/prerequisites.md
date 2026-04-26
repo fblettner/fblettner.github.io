@@ -43,8 +43,9 @@ To submit e-invoices, you need access to a **certified French e-invoicing platfo
 | `{paApiImportEndpoint}/{uuid}` | `GET` | Poll import status |
 | `{paApiDirectoryEndpoint}` | `GET` | PPF directory lookup |
 
-!!! tip "Mock mode"
-    NomaUBL includes a built-in **mock PA** for testing without a real platform. Set `paUseMock=true` and `paMockBehavior` in the `e-invoicing` template. See [PA Integration](../features/pa-integration.md) for details.
+:::tip[Mock mode]
+NomaUBL includes a built-in **mock PA** for testing without a real platform. Set `paUseMock=true` and `paMockBehavior` in the `e-invoicing` template. See [PA Integration](../features/pa-integration.md) for details.
+:::
 
 ### Validation assets
 

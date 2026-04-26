@@ -216,8 +216,9 @@ Detailed results of Schematron validation (EN 16931, CIUS-FR).
 
 ---
 
-!!! tip "Reference codes"
-    All reference code lists (VAT categories, invoice types, payment means, scheme IDs, unit codes, profile IDs, etc.) are documented in [Reference Lists](reference-lists.md).
+:::tip[Reference codes]
+All reference code lists (VAT categories, invoice types, payment means, scheme IDs, unit codes, profile IDs, etc.) are documented in [Reference Lists](reference-lists.md).
+:::
 
 ---
 

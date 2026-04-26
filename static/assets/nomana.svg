@@ -1,0 +1,55 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10131A"/>
+      <stop offset="100%" stop-color="#0B0D12"/>
+    </linearGradient>
+    <linearGradient id="bgLight" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f5f5f7"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0A84FF"/>
+      <stop offset="50%" stop-color="#5AC8FA"/>
+      <stop offset="100%" stop-color="#BF5AF2"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#5AC8FA"/>
+      <stop offset="60%" stop-color="#0A84FF"/>
+      <stop offset="100%" stop-color="#0A84FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#BF5AF2"/>
+      <stop offset="60%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+    <style>
+      .bg-rect { fill: url(#bg); }
+      .border-rect { stroke: rgba(255,255,255,0.08); }
+      @media (prefers-color-scheme: light) {
+        .bg-rect { fill: url(#bgLight); }
+        .border-rect { stroke: rgba(0,0,0,0.08); }
+      }
+    </style>
+  </defs>
+  <rect width="512" height="512" rx="112" class="bg-rect"/>
+  <rect x="1.5" y="1.5" width="509" height="509" rx="110.5" fill="none" class="border-rect" stroke-width="3"/>
+  <line x1="168" y1="144" x2="168" y2="368" stroke="url(#line)" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <line x1="168" y1="144" x2="344" y2="368" stroke="url(#line)" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <line x1="344" y1="144" x2="344" y2="368" stroke="url(#line)" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="168" cy="144" r="28" fill="url(#glowA)" filter="url(#glow)" opacity="0.5"/>
+  <circle cx="168" cy="368" r="28" fill="url(#glowA)" filter="url(#glow)" opacity="0.5"/>
+  <circle cx="344" cy="144" r="28" fill="url(#glowB)" filter="url(#glow)" opacity="0.5"/>
+  <circle cx="344" cy="368" r="28" fill="url(#glowB)" filter="url(#glow)" opacity="0.5"/>
+  <circle cx="168" cy="144" r="18" fill="#0A84FF"/>
+  <circle cx="168" cy="144" r="8" fill="#fff" opacity="0.9"/>
+  <circle cx="168" cy="368" r="18" fill="#0A84FF"/>
+  <circle cx="168" cy="368" r="8" fill="#fff" opacity="0.9"/>
+  <circle cx="344" cy="144" r="18" fill="#8B5CF6"/>
+  <circle cx="344" cy="144" r="8" fill="#fff" opacity="0.9"/>
+  <circle cx="344" cy="368" r="18" fill="#8B5CF6"/>
+  <circle cx="344" cy="368" r="8" fill="#fff" opacity="0.9"/>
+</svg>

@@ -18,13 +18,13 @@ The `Table` component provides a structured way to display data in rows and colu
 |------------|--------------------------------------|---------|--------------------------------------------------|
 | `children` | `ReactNode`                        | -       | The table row content (cells).                  |
 | `isSelected` | `boolean`                         | `false` | Determines if the row is selected.               |
-| `status`    | `"removed" | "edited" | "error"` | -       | Sets a special row status (e.g., removed, edited, error). |
+| `status`    | `"removed" \| "edited" \| "error"` | -       | Sets a special row status (e.g., removed, edited, error). |
 
 ## Props - TableCell
 | Prop        | Type              | Default | Description                                      |
 |------------|------------------|---------|--------------------------------------------------|
 | `children` | `ReactNode`      | -       | The cell content.                                |
-| `align`   | `"left" | "center" | "right"` | `"left"` | Alignment of the cell content.                   |
+| `align`   | `"left" \| "center" \| "right"` | `"left"` | Alignment of the cell content.                   |
 | `colSpan` | `number`        | -       | Number of columns the cell should span.         |
 | `rowSpan` | `number`        | -       | Number of rows the cell should span.            |
 
@@ -32,7 +32,7 @@ The `Table` component provides a structured way to display data in rows and colu
 | Prop        | Type                 | Default  | Description                                   |
 |------------|---------------------|----------|-----------------------------------------------|
 | `active`  | `boolean`          | `false` | Determines if sorting is active.             |
-| `direction` | `"asc" | "desc"` | -        | Sorting direction (ascending or descending). |
+| `direction` | `"asc" \| "desc"` | -        | Sorting direction (ascending or descending). |
 | `onClick` | `(event) => void`  | -        | Event triggered when sorting is clicked.     |
 
 ## Example Usage

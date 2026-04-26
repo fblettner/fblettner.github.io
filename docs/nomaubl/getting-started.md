@@ -78,5 +78,6 @@ Then open your browser at `http://localhost:8080`.
 java -jar nomaubl.jar -run config.properties my_template output.xml UBL 1001
 ```
 
-!!! note "Configuration required"
-    Before running, you must configure the `config.properties` file with your Oracle database connection and Platform Agréée credentials. See the [Configuration](configuration/global.md) section.
+:::note[Configuration required]
+Before running, you must configure the `config.properties` file with your Oracle database connection and Platform Agréée credentials. See the [Configuration](configuration/global.md) section.
+:::

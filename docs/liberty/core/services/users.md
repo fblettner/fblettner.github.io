@@ -10,12 +10,12 @@ The `Users Configuration` defines user profiles within the Liberty Framework. Ea
 | `USR_PASSWORD`  | `string` | User’s password (hashed or stored securely). |
 | `USR_NAME`      | `string` | The full name of the user. |
 | `USR_EMAIL`     | `string` | The user’s email address. |
-| `USR_STATUS`    | `"Y" | "N"` | Indicates if the user is active. |
-| `USR_ADMIN`     | `"Y" | "N"` | Defines if the user has admin privileges. |
+| `USR_STATUS`    | `"Y" \| "N"` | Indicates if the user is active. |
+| `USR_ADMIN`     | `"Y" \| "N"` | Defines if the user has admin privileges. |
 | `USR_LANGUAGE`  | `string` | Preferred language of the user. |
-| `USR_MODE`      | `"dark" | "light"` | UI theme preference (dark/light mode). |
-| `USR_READONLY`  | `"Y" | "N"` | Determines if the user has read-only access. |
-| `USR_DASHBOARD` | `number | undefined` | The dashboard assigned to the user. |
+| `USR_MODE`      | `"dark" \| "light"` | UI theme preference (dark/light mode). |
+| `USR_READONLY`  | `"Y" \| "N"` | Determines if the user has read-only access. |
+| `USR_DASHBOARD` | `number \| undefined` | The dashboard assigned to the user. |
 | `USR_THEME`     | `string` | The theme applied to the user’s UI. |
 
 ## Example Usage

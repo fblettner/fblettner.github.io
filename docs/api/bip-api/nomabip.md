@@ -2,7 +2,7 @@
 title: "NOMABIP - Java package with Oracle BI Publisher API" 
 description: "API to integrate easily JDEdwards and BI Publisher regardless of JDEdwards Tools Release"
 ---
-[Download](https://github.com/fblettner/bip-nomabip){: style="float: right;" .btn-primary .btn .fs-5 .mb-4 .mb-md-0 target="_blank"}
+<a href="https://github.com/fblettner/bip-nomabip" className="button button--primary button--lg" target="_blank" rel="noopener">Download</a>
 **Built with VSCode and JDK 1.8**
 
 ## 1. Functionalities

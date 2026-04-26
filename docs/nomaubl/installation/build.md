@@ -13,8 +13,9 @@ NomaUBL uses a single `build.sh` script that compiles the Java backend and the R
 bash build.sh
 ```
 
-!!! warning "Never copy dist files manually"
-    Do **not** manually copy `src/web-react/dist/` to `build/web/`. The `build.sh` script does this automatically. Manual copies will be overwritten or cause inconsistencies.
+:::warning[Never copy dist files manually]
+Do **not** manually copy `src/web-react/dist/` to `build/web/`. The `build.sh` script does this automatically. Manual copies will be overwritten or cause inconsistencies.
+:::
 
 The build script performs these steps in order:
 
@@ -60,8 +61,9 @@ NomaUBL uses a **split JSON configuration**. The main config file is typically n
 | `config-documents.properties` | Document templates (e.g. `vrc_pro`, `isc_facture`) |
 | `config-lists.properties` | Reference lists (currencies, VAT categories, etc.) |
 
-!!! tip "Single-file mode"
-    If the sibling files do not exist, NomaUBL falls back to single-file mode and reads all templates from `config.properties`.
+:::tip[Single-file mode]
+If the sibling files do not exist, NomaUBL falls back to single-file mode and reads all templates from `config.properties`.
+:::
 
 To bootstrap a config file, copy and adapt the templates provided in `src/config/`:
 

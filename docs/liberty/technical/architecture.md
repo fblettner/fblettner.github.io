@@ -1,3 +1,8 @@
+---
+description: "Liberty Framework architecture overview — Node.js, PostgreSQL, pgAdmin, Airflow, OIDC, Gitea services orchestrated with Traefik reverse proxy."
+keywords: [Liberty Framework, architecture, Docker, Traefik, PostgreSQL, Node.js, OIDC, Airflow]
+---
+
 This document provides an overview of the functionality and configuration of the services within the **Liberty Framework**, including **Node.js**, **PostgreSQL**, **pgAdmin**, **Airflow**, **OIDC**, and **Gitea**. These services are integrated with **Traefik** as a reverse proxy, enabling both HTTP and HTTPS access with automated routing. 
 
 ---

@@ -8,14 +8,14 @@ The `Tabs` and `Tab` components allow navigation between different views or sett
 |---------------|--------------------------------------|--------------|--------------------------------------------------|
 | `value`       | `string`                              | -            | The currently selected tab value.               |
 | `onChange`    | `(event, newValue: string) => void`  | -            | Callback function triggered when a tab is clicked. |
-| `variant`     | `"standard" | "scrollable"`           | `"standard"` | Defines if the tabs are standard or scrollable. |
+| `variant`     | `"standard" \| "scrollable"`           | `"standard"` | Defines if the tabs are standard or scrollable. |
 | `scrollButtons` | `boolean`                          | `false`     | Enables scroll buttons for overflow tabs.       |
 
 ## Props - Tab
 | Prop         | Type                  | Default  | Description                                   |
 |-------------|----------------------|----------|-----------------------------------------------|
 | `id`       | `string`             | -        | Unique identifier for the tab.                |
-| `label`    | `string | ReactNode`  | -        | Label displayed inside the tab.               |
+| `label`    | `string \| ReactNode`  | -        | Label displayed inside the tab.               |
 | `value`    | `string`             | -        | The value of the tab, used for selection.     |
 | `isActive` | `boolean`            | `false` | Determines if the tab is currently active.    |
 | `onClick`  | `(event) => void`    | -        | Event triggered when the tab is clicked.      |

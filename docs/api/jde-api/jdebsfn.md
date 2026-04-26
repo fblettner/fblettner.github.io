@@ -3,7 +3,7 @@ title: "JDEBSN - Export source code for BSFN from JD Edwards BLOB field (F98780R
 description: "This class can be used to export blob column for BSFN from JD Edwards Database. This class can be extended to export BLOB for all tables"
 ---
 
-[Download](https://github.com/fblettner/jde-nomajde){: style="float: right;" .btn-primary .btn .fs-5 .mb-4 .mb-md-0 target="_blank"}
+<a href="https://github.com/fblettner/jde-nomajde" className="button button--primary button--lg" target="_blank" rel="noopener">Download</a>
 **Built with VSCode and JDK 1.8**
 
 

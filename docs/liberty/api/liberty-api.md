@@ -1,3 +1,8 @@
+---
+description: "Liberty API — backend for Liberty Framework. JWT/OAuth2 authentication, database operations, modules and framework endpoints reference."
+keywords: [Liberty API, REST API, FastAPI, JWT, OAuth2, authentication, framework backend]
+---
+
 # Liberty API
 
 **Description:** 
@@ -36,51 +41,67 @@ database operations, and framework functionalities in the **Liberty Framework**.
 
 Retrieve user information.
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/auth/user`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/auth/user`**
 
-!!! abstract "Query Parameters"
-    - **`user`** *(in query)*: User ID.
-    - **`pool`** *(in query)*: The database pool alias to retrieve the user. (e.g., `default`, `libnsx1`)
-    - **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
+:::info[Query Parameters]
+- **`user`** *(in query)*: User ID.
+- **`pool`** *(in query)*: The database pool alias to retrieve the user. (e.g., `default`, `libnsx1`)
+- **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Get user information"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Get user information</summary>
 
-        ```json
-        {
-            "items": [
-                {
-                    "ROW_ID": 1,
-                    "USR_ID": "demo",
-                    "USR_PASSWORD": "ENC:...",
-                    "USR_NAME": "Demo User",
-                    "USR_EMAIL": "demo@liberty.fr",
-                    "USR_STATUS": "Y",
-                    "USR_ADMIN": "N",
-                    "USR_LANGUAGE": "fr",
-                    "USR_MODE": "light",
-                    "USR_READONLY": "Y",
-                    "USR_DASHBOARD": 1,
-                    "USR_THEME": "liberty"
-                }
-            ],
-            "status": "success"
-        }
-        ```
-??? warning "Response `422`: Unprocessable Entity"
-    - **Content-Type:** `application/json`
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Query execution failed: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter"
-        }
-        ```
+    ```json
+    {
+        "items": [
+            {
+                "ROW_ID": 1,
+                "USR_ID": "demo",
+                "USR_PASSWORD": "ENC:...",
+                "USR_NAME": "Demo User",
+                "USR_EMAIL": "demo@liberty.fr",
+                "USR_STATUS": "Y",
+                "USR_ADMIN": "N",
+                "USR_LANGUAGE": "fr",
+                "USR_MODE": "light",
+                "USR_READONLY": "Y",
+                "USR_DASHBOARD": 1,
+                "USR_THEME": "liberty"
+            }
+        ],
+        "status": "success"
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `422`: Unprocessable Entity</summary>
+
+- **Content-Type:** `application/json`
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Query execution failed: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -88,93 +109,111 @@ Retrieve user information.
 
 Generate a JWT token for the user.
 
-<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/auth/token`**
+<span style={{background: 'blue', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>POST</span> **`/api/auth/token`**
 
-!!! abstract "Query Parameters"
-    - **`pool`** *(in query)*: The database pool alias to retrieve the user. (e.g., `default`, `libnsx1`)
-    - **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
-    - **`type`** *(in query)*: Authentication type, from database or using OIDC. Valid values: `database`, `oidc`
-!!! abstract "Request Body"
-    - **Content-Type:** `application/json`
-      - **Example:**
+:::info[Query Parameters]
+- **`pool`** *(in query)*: The database pool alias to retrieve the user. (e.g., `default`, `libnsx1`)
+- **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
+- **`type`** *(in query)*: Authentication type, from database or using OIDC. Valid values: `database`, `oidc`
+:::
 
-        ```json
-        {
-            "properties": {
-                "user": {
-                    "type": "string",
-                    "title": "User"
-                },
-                "password": {
-                    "anyOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "title": "Password"
-                }
+:::info[Request Body]
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "properties": {
+            "user": {
+                "type": "string",
+                "title": "User"
             },
-            "type": "object",
-            "required": [
-                "user",
-                "password"
-            ],
-            "title": "LoginRequest"
-        }
-        ```
+            "password": {
+                "anyOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "type": "null"
+                    }
+                ],
+                "title": "Password"
+            }
+        },
+        "type": "object",
+        "required": [
+            "user",
+            "password"
+        ],
+        "title": "LoginRequest"
+    }
+    ```
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Authentication successful, JWT token generated"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Authentication successful, JWT token generated</summary>
 
-        ```json
-        {
-            "access_token": "....",
-            "token_type": "bearer",
-            "status": "success",
-            "message": "Authentication successful"
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "access_token": "....",
+        "token_type": "bearer",
+        "status": "success",
+        "message": "Authentication successful"
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Authentication failed"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Authentication failed"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -184,108 +223,123 @@ Generate a JWT token for the user.
 
 Retrieve Applications.
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/fmw/applications`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/fmw/applications`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Get Applications Available"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Get Applications Available</summary>
 
-        ```json
-        {
-            "status": "success",
-            "pool": "default",
-            "items": [
-                {
-                    "ROW_ID": 1,
-                    "APPS_ID": 1,
-                    "APPS_NAME": "LIBERTY",
-                    "APPS_DESCRIPTION": "Framework Liberty",
-                    "APPS_POOL": "default",
-                    "APPS_OFFSET": 5000,
-                    "APPS_LIMIT": 10000,
-                    "APPS_VERSION": 500,
-                    "APPS_DASHBOARD": 1,
-                    "APPS_THEME": "liberty"
-                },
-                {
-                    "ROW_ID": 2,
-                    "APPS_ID": 2,
-                    "APPS_NAME": "NOMASX1",
-                    "APPS_DESCRIPTION": "Rights, licenses and SOD",
-                    "APPS_POOL": "default",
-                    "APPS_OFFSET": 5000,
-                    "APPS_LIMIT": 10000,
-                    "APPS_VERSION": 500,
-                    "APPS_DASHBOARD": 1,
-                    "APPS_THEME": "modernBluePurple"
-                }
-            ],
-            "rowCount": 2,
-            "meta_data": [
-                {
-                    "name": "ROW_ID",
-                    "type": "int"
-                },
-                {
-                    "name": "MODULE_ID",
-                    "type": "str"
-                },
-                {
-                    "name": "MODULE_DESCRIPTION",
-                    "type": "str"
-                },
-                {
-                    "name": "MODULE_ENABLED",
-                    "type": "str"
-                },
-                {
-                    "name": "MODULE_PARAMS",
-                    "type": "UNKNOWN"
-                }
-            ]
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "status": "success",
+        "pool": "default",
+        "items": [
+            {
+                "ROW_ID": 1,
+                "APPS_ID": 1,
+                "APPS_NAME": "LIBERTY",
+                "APPS_DESCRIPTION": "Framework Liberty",
+                "APPS_POOL": "default",
+                "APPS_OFFSET": 5000,
+                "APPS_LIMIT": 10000,
+                "APPS_VERSION": 500,
+                "APPS_DASHBOARD": 1,
+                "APPS_THEME": "liberty"
+            },
+            {
+                "ROW_ID": 2,
+                "APPS_ID": 2,
+                "APPS_NAME": "NOMASX1",
+                "APPS_DESCRIPTION": "Rights, licenses and SOD",
+                "APPS_POOL": "default",
+                "APPS_OFFSET": 5000,
+                "APPS_LIMIT": 10000,
+                "APPS_VERSION": 500,
+                "APPS_DASHBOARD": 1,
+                "APPS_THEME": "modernBluePurple"
+            }
+        ],
+        "rowCount": 2,
+        "meta_data": [
+            {
+                "name": "ROW_ID",
+                "type": "int"
+            },
+            {
+                "name": "MODULE_ID",
+                "type": "str"
+            },
+            {
+                "name": "MODULE_DESCRIPTION",
+                "type": "str"
+            },
+            {
+                "name": "MODULE_ENABLED",
+                "type": "str"
+            },
+            {
+                "name": "MODULE_PARAMS",
+                "type": "UNKNOWN"
+            }
+        ]
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Query execution failed: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Query execution failed: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -293,126 +347,141 @@ Retrieve Applications.
 
 Retrieve Modules.
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/fmw/modules`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/fmw/modules`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Get Modules Details"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Get Modules Details</summary>
 
-        ```json
-        {
-            "status": "success",
-            "pool": "default",
-            "items": [
-                {
-                    "ROW_ID": 1,
-                    "MODULE_ID": "menus",
-                    "MODULE_DESCRIPTION": "Enable Drawer Menus",
-                    "MODULE_ENABLED": "Y"
-                },
-                {
-                    "ROW_ID": 2,
-                    "MODULE_ID": "grafana",
-                    "MODULE_DESCRIPTION": "Enable Grafana Dashboard",
-                    "MODULE_ENABLED": "N"
-                },
-                {
-                    "ROW_ID": 3,
-                    "MODULE_ID": "dev",
-                    "MODULE_DESCRIPTION": "Enable Development Mode",
-                    "MODULE_ENABLED": "Y"
-                },
-                {
-                    "ROW_ID": 4,
-                    "MODULE_ID": "sentry",
-                    "MODULE_DESCRIPTION": "Enable Sentry",
-                    "MODULE_ENABLED": "N",
-                    "MODULE_PARAMS": {
-                        "url": "https://sentry.io",
-                        "replay": "false",
-                        "clientid": "nomana",
-                        "platform": "dev"
-                    }
-                },
-                {
-                    "ROW_ID": 5,
-                    "MODULE_ID": "debug",
-                    "MODULE_DESCRIPTION": "Enable Debug",
-                    "MODULE_ENABLED": "N"
-                },
-                {
-                    "ROW_ID": 6,
-                    "MODULE_ID": "login",
-                    "MODULE_DESCRIPTION": "Enable Embedded Login",
-                    "MODULE_ENABLED": "Y"
-                }
-            ],
-            "rowCount": 6,
-            "meta_data": [
-                {
-                    "name": "ROW_ID",
-                    "type": "int"
-                },
-                {
-                    "name": "MODULE_ID",
-                    "type": "str"
-                },
-                {
-                    "name": "MODULE_DESCRIPTION",
-                    "type": "str"
-                },
-                {
-                    "name": "MODULE_ENABLED",
-                    "type": "str"
-                },
-                {
-                    "name": "MODULE_PARAMS",
-                    "type": "UNKNOWN"
-                }
-            ]
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
+    ```json
+    {
+        "status": "success",
+        "pool": "default",
+        "items": [
+            {
+                "ROW_ID": 1,
+                "MODULE_ID": "menus",
+                "MODULE_DESCRIPTION": "Enable Drawer Menus",
+                "MODULE_ENABLED": "Y"
+            },
+            {
+                "ROW_ID": 2,
+                "MODULE_ID": "grafana",
+                "MODULE_DESCRIPTION": "Enable Grafana Dashboard",
+                "MODULE_ENABLED": "N"
+            },
+            {
+                "ROW_ID": 3,
+                "MODULE_ID": "dev",
+                "MODULE_DESCRIPTION": "Enable Development Mode",
+                "MODULE_ENABLED": "Y"
+            },
+            {
+                "ROW_ID": 4,
+                "MODULE_ID": "sentry",
+                "MODULE_DESCRIPTION": "Enable Sentry",
+                "MODULE_ENABLED": "N",
+                "MODULE_PARAMS": {
+                    "url": "https://sentry.io",
+                    "replay": "false",
+                    "clientid": "nomana",
+                    "platform": "dev"
                 }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+            },
+            {
+                "ROW_ID": 5,
+                "MODULE_ID": "debug",
+                "MODULE_DESCRIPTION": "Enable Debug",
+                "MODULE_ENABLED": "N"
+            },
+            {
+                "ROW_ID": 6,
+                "MODULE_ID": "login",
+                "MODULE_DESCRIPTION": "Enable Embedded Login",
+                "MODULE_ENABLED": "Y"
+            }
+        ],
+        "rowCount": 6,
+        "meta_data": [
+            {
+                "name": "ROW_ID",
+                "type": "int"
+            },
+            {
+                "name": "MODULE_ID",
+                "type": "str"
+            },
+            {
+                "name": "MODULE_DESCRIPTION",
+                "type": "str"
+            },
+            {
+                "name": "MODULE_ENABLED",
+                "type": "str"
+            },
+            {
+                "name": "MODULE_PARAMS",
+                "type": "UNKNOWN"
+            }
+        ]
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Query execution failed: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Query execution failed: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -420,98 +489,113 @@ Retrieve Modules.
 
 Retrieve Themes Definition.
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/fmw/themes`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/fmw/themes`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Get Themes Details"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Get Themes Details</summary>
 
-        ```json
-        {
-            "status": "success",
-            "pool": "default",
-            "items": [
-                {
-                    "ROW_ID": 1,
-                    "THM_NAME": "modernBluePurple",
-                    "TCL_KEY": "primary",
-                    "TCL_LIGHT": "#3f51b5",
-                    "TCL_DARK": "#673ab7"
-                },
-                {
-                    "ROW_ID": 2,
-                    "THM_NAME": "luxuryDarkGold",
-                    "TCL_KEY": "secondary",
-                    "TCL_LIGHT": "#607d8b",
-                    "TCL_DARK": "rgb(206, 203, 203)"
-                }
-            ],
-            "rowCount": 2,
-            "meta_data": [
-                {
-                    "name": "ROW_ID",
-                    "type": "int"
-                },
-                {
-                    "name": "MODULE_ID",
-                    "type": "str"
-                },
-                {
-                    "name": "MODULE_DESCRIPTION",
-                    "type": "str"
-                },
-                {
-                    "name": "MODULE_ENABLED",
-                    "type": "str"
-                },
-                {
-                    "name": "MODULE_PARAMS",
-                    "type": "UNKNOWN"
-                }
-            ]
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "status": "success",
+        "pool": "default",
+        "items": [
+            {
+                "ROW_ID": 1,
+                "THM_NAME": "modernBluePurple",
+                "TCL_KEY": "primary",
+                "TCL_LIGHT": "#3f51b5",
+                "TCL_DARK": "#673ab7"
+            },
+            {
+                "ROW_ID": 2,
+                "THM_NAME": "luxuryDarkGold",
+                "TCL_KEY": "secondary",
+                "TCL_LIGHT": "#607d8b",
+                "TCL_DARK": "rgb(206, 203, 203)"
+            }
+        ],
+        "rowCount": 2,
+        "meta_data": [
+            {
+                "name": "ROW_ID",
+                "type": "int"
+            },
+            {
+                "name": "MODULE_ID",
+                "type": "str"
+            },
+            {
+                "name": "MODULE_DESCRIPTION",
+                "type": "str"
+            },
+            {
+                "name": "MODULE_ENABLED",
+                "type": "str"
+            },
+            {
+                "name": "MODULE_PARAMS",
+                "type": "UNKNOWN"
+            }
+        ]
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Query execution failed: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Query execution failed: (sqlalchemy.exc.InvalidRequestError) A value is required for bind parameter"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -519,15 +603,20 @@ Retrieve Themes Definition.
 
 Get all current logs and upload to cache
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/logs`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/logs`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Successful Response"
-    - **Content-Type:** `application/json`
+<details>
+<summary>Response `200`: Successful Response</summary>
+
+- **Content-Type:** `application/json`
+
+</details>
 
 ---
 
@@ -535,15 +624,20 @@ Get all current logs and upload to cache
 
 Get details for a log id from the cache
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/logs/details`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/logs/details`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Successful Response"
-    - **Content-Type:** `application/json`
+<details>
+<summary>Response `200`: Successful Response</summary>
+
+- **Content-Type:** `application/json`
+
+</details>
 
 ---
 
@@ -551,57 +645,73 @@ Get details for a log id from the cache
 
 Encrypt the input received
 
-<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/fmw/encrypt`**
+<span style={{background: 'blue', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>POST</span> **`/api/fmw/encrypt`**
 
-!!! abstract "Query Parameters"
-    - **`plain_text`** *(in query)*: Text to be encrypted
+:::info[Query Parameters]
+- **`plain_text`** *(in query)*: Text to be encrypted
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Encryption successful"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Encryption successful</summary>
 
-        ```json
-        {
-            "encrypted": "ENC:wNMyALbXf....."
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "encrypted": "ENC:wNMyALbXf....."
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Failed to encrypt data: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError)"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Failed to encrypt data: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError)"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -609,15 +719,20 @@ Encrypt the input received
 
 Push logs to files in json and plain text format
 
-<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/logs`**
+<span style={{background: 'blue', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>POST</span> **`/api/logs`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Successful Response"
-    - **Content-Type:** `application/json`
+<details>
+<summary>Response `200`: Successful Response</summary>
+
+- **Content-Type:** `application/json`
+
+</details>
 
 ---
 
@@ -627,75 +742,91 @@ Push logs to files in json and plain text format
 
 Performs a basic check to ensure the database connection is functional. Returns the current date if the connection is successful.
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/db/check`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/db/check`**
 
-!!! abstract "Query Parameters"
-    - **`framework_pool`** *(in query)*: Pool alias to retrieve the database definition. (e.g., `default`, `libnsx1`). *(Default: `default`)*
-    - **`target_pool`** *(in query)*: Pool alias of the database to check. (e.g., `nomasx1`, `nomajde`). *(Default: `default`)*
+:::info[Query Parameters]
+- **`framework_pool`** *(in query)*: Pool alias to retrieve the database definition. (e.g., `default`, `libnsx1`). *(Default: `default`)*
+- **`target_pool`** *(in query)*: Pool alias of the database to check. (e.g., `nomasx1`, `nomajde`). *(Default: `default`)*
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Database connection is successful"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Database connection is successful</summary>
 
-        ```json
-        {
-            "status": "success",
-            "rows": [
-                {
-                    "ROW_ID": 1,
-                    "CURRENT_DATE": "2025-01-27T08:14:13.809494+00:00"
-                }
-            ],
-            "rowCount": 1,
-            "meta_data": [
-                {
-                    "name": "ROW_ID",
-                    "type": "int"
-                },
-                {
-                    "name": "CURRENT_DATE",
-                    "type": "datetime"
-                }
-            ]
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "status": "success",
+        "rows": [
+            {
+                "ROW_ID": 1,
+                "CURRENT_DATE": "2025-01-27T08:14:13.809494+00:00"
+            }
+        ],
+        "rowCount": 1,
+        "meta_data": [
+            {
+                "name": "ROW_ID",
+                "type": "int"
+            },
+            {
+                "name": "CURRENT_DATE",
+                "type": "datetime"
+            }
+        ]
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Query execution failed: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError)"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Query execution failed: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError)"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -703,58 +834,74 @@ Performs a basic check to ensure the database connection is functional. Returns 
 
 Close all database connections for the specified pool alias.
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/db/close`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/db/close`**
 
-!!! abstract "Query Parameters"
-    - **`pool`** *(in query)*: Pool alias for the database to close. (e.g., `default`, `libnsx1`). *(Default: `default`)*
+:::info[Query Parameters]
+- **`pool`** *(in query)*: Pool alias for the database to close. (e.g., `default`, `libnsx1`). *(Default: `default`)*
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Pool closed successfully"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Pool closed successfully</summary>
 
-        ```json
-        {
-            "status": "success",
-            "message": "disconnected"
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "status": "success",
+        "message": "disconnected"
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Requested pool `alias` not found"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Requested pool `alias` not found"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -762,59 +909,75 @@ Close all database connections for the specified pool alias.
 
 Open a connection to the database using the specified pool alias.
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/db/open`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/db/open`**
 
-!!! abstract "Query Parameters"
-    - **`framework_pool`** *(in query)*: Pool alias to retrieve the database definition. (e.g., `default`, `libnsx1`). *(Default: `default`)*
-    - **`target_pool`** *(in query)*: Pool alias of the database to open. (e.g., `libnsx1`, `nomasx1`, `nomajde`). *(Default: `default`)*
+:::info[Query Parameters]
+- **`framework_pool`** *(in query)*: Pool alias to retrieve the database definition. (e.g., `default`, `libnsx1`). *(Default: `default`)*
+- **`target_pool`** *(in query)*: Pool alias of the database to open. (e.g., `libnsx1`, `nomasx1`, `nomajde`). *(Default: `default`)*
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Pool opened successfully"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Pool opened successfully</summary>
 
-        ```json
-        {
-            "status": "success",
-            "message": "connected"
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "status": "success",
+        "message": "connected"
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Requested pool `alias` not found"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Requested pool `alias` not found"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -824,119 +987,140 @@ Open a connection to the database using the specified pool alias.
 
 Retrieve data or metadata from the database based on query parameters. Supports filtering, language and pagination.
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/db/query`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/db/query`**
 
-!!! abstract "Query Parameters"
-    - **`source`** *(in query)*: The source to retrieve the query definition. Valid values: `framework`, `query`
-    - **`type`** *(in query)*: The type of query, get data or metadata. Valid values: `table`, `columns`.
-    - **`pool`** *(in query)*: The database pool alias to retrieve the query definition. (e.g., `default`, `libnsx1`)
-    - **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
-    - **`query`** *(in query)*: The query ID to execute. (e.g., `1`, `2`)
-    - **`override_pool`** *(in query)*: Override the default pool set in the query definition. (e.g., `default`, `libnsx1`)
-    - **`q`** *(in query)*: Filters to apply to the query in JSON format (e.g., `[{'APPS_ID':{'=':10}, 'APPS_NAME':{'like':'LIBERTY%'} }]`).
-    - **`language`** *(in query)*: The language for query execution. (e.g., `en`, `fr`). *(Default: `en`)*
-    - **`offset`** *(in query)*: The number of rows to skip before starting to fetch. *(Default: `0`)*
-    - **`limit`** *(in query)*: The maximum number of rows to return. *(Default: `1000`)*
-    - **`params`** *(in query)*: Additional parameters in JSON format to replace variable in a query (e.g., `[{'APPS_ID': 10}]`).
+:::info[Query Parameters]
+- **`source`** *(in query)*: The source to retrieve the query definition. Valid values: `framework`, `query`
+- **`type`** *(in query)*: The type of query, get data or metadata. Valid values: `table`, `columns`.
+- **`pool`** *(in query)*: The database pool alias to retrieve the query definition. (e.g., `default`, `libnsx1`)
+- **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
+- **`query`** *(in query)*: The query ID to execute. (e.g., `1`, `2`)
+- **`override_pool`** *(in query)*: Override the default pool set in the query definition. (e.g., `default`, `libnsx1`)
+- **`q`** *(in query)*: Filters to apply to the query in JSON format (e.g., `[{'APPS_ID':{'=':10}, 'APPS_NAME':{'like':'LIBERTY%'} }]`).
+- **`language`** *(in query)*: The language for query execution. (e.g., `en`, `fr`). *(Default: `en`)*
+- **`offset`** *(in query)*: The number of rows to skip before starting to fetch. *(Default: `0`)*
+- **`limit`** *(in query)*: The maximum number of rows to return. *(Default: `1000`)*
+- **`params`** *(in query)*: Additional parameters in JSON format to replace variable in a query (e.g., `[{'APPS_ID': 10}]`).
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Data retrieved successfully"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Data retrieved successfully</summary>
 
-        ```json
-        {
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "items": [
+            {
+                "ROW_ID": 1,
+                "DD_ID": "ACT_AUDIT_DATE",
+                "DD_LABEL": "Date (Audit)"
+            },
+            {
+                "ROW_ID": 2,
+                "DD_ID": "ACT_ID",
+                "DD_LABEL": "Action ID"
+            }
+        ],
+        "status": "success",
+        "metadata": [
+            {
+                "name": "ROW_ID",
+                "type": "int"
+            },
+            {
+                "name": "DD_ID",
+                "type": "str"
+            },
+            {
+                "name": "DD_LABEL",
+                "type": "str"
+            }
+        ],
+        "hasMore": true,
+        "limit": 100,
+        "offset": 0,
+        "count": 2
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `400`: Bad Request</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Invalid JSON format in request query."
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": {
             "items": [
                 {
-                    "ROW_ID": 1,
-                    "DD_ID": "ACT_AUDIT_DATE",
-                    "DD_LABEL": "Date (Audit)"
-                },
-                {
-                    "ROW_ID": 2,
-                    "DD_ID": "ACT_ID",
-                    "DD_LABEL": "Action ID"
+                    "message": "Error: Example error message"
                 }
             ],
-            "status": "success",
-            "metadata": [
-                {
-                    "name": "ROW_ID",
-                    "type": "int"
-                },
-                {
-                    "name": "DD_ID",
-                    "type": "str"
-                },
-                {
-                    "name": "DD_LABEL",
-                    "type": "str"
-                }
-            ],
-            "hasMore": true,
+            "status": "error",
+            "hasMore": false,
             "limit": 100,
             "offset": 0,
-            "count": 2
+            "count": 0,
+            "query": "SELECT * FROM table_name"
         }
-        ```
-??? warning "Response `400`: Bad Request"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Invalid JSON format in request query."
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "status": "failed",
-            "message": {
-                "items": [
-                    {
-                        "message": "Error: Example error message"
-                    }
-                ],
-                "status": "error",
-                "hasMore": false,
-                "limit": 100,
-                "offset": 0,
-                "count": 0,
-                "query": "SELECT * FROM table_name"
-            }
-        }
-        ```
+</details>
 
 ---
 
@@ -944,82 +1128,103 @@ Retrieve data or metadata from the database based on query parameters. Supports 
 
 Audit user actions on a table.
 
-<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/db/audit/{table}/{user}`**
+<span style={{background: 'blue', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>POST</span> **`/api/db/audit/{table}/{user}`**
 
-!!! abstract "Query Parameters"
-    - **`table`** *(in path)*: No description (**Required**)
-    - **`user`** *(in path)*: No description (**Required**)
+:::info[Query Parameters]
+- **`table`** *(in path)*: No description (**Required**)
+- **`user`** *(in path)*: No description (**Required**)
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Data inserted/updated successfully"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Data inserted/updated successfully</summary>
 
-        ```json
-        {
-            "items": [],
-            "status": "success",
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "items": [],
+        "status": "success",
+        "count": 0
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `400`: Bad Request</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Request body cannot be empty. JSON object with key-value pairs is required."
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": {
+            "items": [
+                {
+                    "message": "Error: Query execution failed: Query execution failed: INSERT INTO...",
+                    "line": {
+                        "field1": "<string>",
+                        "field2": "<string>"
+                    }
+                }
+            ],
+            "status": "error",
             "count": 0
         }
-        ```
-??? warning "Response `400`: Bad Request"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Request body cannot be empty. JSON object with key-value pairs is required."
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "status": "failed",
-            "message": {
-                "items": [
-                    {
-                        "message": "Error: Query execution failed: Query execution failed: INSERT INTO...",
-                        "line": {
-                            "field1": "<string>",
-                            "field2": "<string>"
-                        }
-                    }
-                ],
-                "status": "error",
-                "count": 0
-            }
-        }
-        ```
+</details>
 
 ---
 
@@ -1027,97 +1232,120 @@ Audit user actions on a table.
 
 Insert data into a table.
 
-<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/db/query`**
+<span style={{background: 'blue', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>POST</span> **`/api/db/query`**
 
-!!! abstract "Query Parameters"
-    - **`source`** *(in query)*: The source to retrieve the query definition. Valid values: `framework`, `query`
-    - **`type`** *(in query)*: The type of query, get data or metadata. Valid values: `table`, `columns`.
-    - **`pool`** *(in query)*: The database pool alias to retrieve the query definition. (e.g., `default`, `libnsx1`)
-    - **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
-    - **`query`** *(in query)*: The query ID to execute. (e.g., `1`, `2`)
-    - **`override_pool`** *(in query)*: Override the default pool set in the query definition. (e.g., `default`, `libnsx1`)
-!!! abstract "Request Body"
-    - **Content-Type:** `application/json`
-      - **Example:**
+:::info[Query Parameters]
+- **`source`** *(in query)*: The source to retrieve the query definition. Valid values: `framework`, `query`
+- **`type`** *(in query)*: The type of query, get data or metadata. Valid values: `table`, `columns`.
+- **`pool`** *(in query)*: The database pool alias to retrieve the query definition. (e.g., `default`, `libnsx1`)
+- **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
+- **`query`** *(in query)*: The query ID to execute. (e.g., `1`, `2`)
+- **`override_pool`** *(in query)*: Override the default pool set in the query definition. (e.g., `default`, `libnsx1`)
+:::
 
-        ```json
-        {
-            "type": "object",
-            "description": "JSON object with key-value pairs is required.",
-            "title": "Body"
-        }
-        ```
+:::info[Request Body]
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "type": "object",
+        "description": "JSON object with key-value pairs is required.",
+        "title": "Body"
+    }
+    ```
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Data inserted/updated successfully"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Data inserted/updated successfully</summary>
 
-        ```json
-        {
-            "items": [],
-            "status": "success",
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "items": [],
+        "status": "success",
+        "count": 0
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `400`: Bad Request</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Request body cannot be empty."
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": {
+            "items": [
+                {
+                    "message": "Error: Query execution failed: Query execution failed: INSERT INTO...",
+                    "line": {
+                        "field1": "<string>",
+                        "field2": "<string>"
+                    }
+                }
+            ],
+            "status": "error",
             "count": 0
         }
-        ```
-??? warning "Response `400`: Bad Request"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Request body cannot be empty."
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "status": "failed",
-            "message": {
-                "items": [
-                    {
-                        "message": "Error: Query execution failed: Query execution failed: INSERT INTO...",
-                        "line": {
-                            "field1": "<string>",
-                            "field2": "<string>"
-                        }
-                    }
-                ],
-                "status": "error",
-                "count": 0
-            }
-        }
-        ```
+</details>
 
 ---
 
@@ -1125,97 +1353,120 @@ Insert data into a table.
 
 Update data into a table.
 
-<span style="background:purple; font-size: 16px; padding-left: 10px; padding-right: 10px">PUT</span> **`/api/db/query`**
+<span style={{background: 'purple', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>PUT</span> **`/api/db/query`**
 
-!!! abstract "Query Parameters"
-    - **`source`** *(in query)*: The source to retrieve the query definition. Valid values: `framework`, `query`
-    - **`type`** *(in query)*: The type of query, get data or metadata. Valid values: `table`, `columns`.
-    - **`pool`** *(in query)*: The database pool alias to retrieve the query definition. (e.g., `default`, `libnsx1`)
-    - **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
-    - **`query`** *(in query)*: The query ID to execute. (e.g., `1`, `2`)
-    - **`override_pool`** *(in query)*: Override the default pool set in the query definition. (e.g., `default`, `libnsx1`)
-!!! abstract "Request Body"
-    - **Content-Type:** `application/json`
-      - **Example:**
+:::info[Query Parameters]
+- **`source`** *(in query)*: The source to retrieve the query definition. Valid values: `framework`, `query`
+- **`type`** *(in query)*: The type of query, get data or metadata. Valid values: `table`, `columns`.
+- **`pool`** *(in query)*: The database pool alias to retrieve the query definition. (e.g., `default`, `libnsx1`)
+- **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
+- **`query`** *(in query)*: The query ID to execute. (e.g., `1`, `2`)
+- **`override_pool`** *(in query)*: Override the default pool set in the query definition. (e.g., `default`, `libnsx1`)
+:::
 
-        ```json
-        {
-            "type": "object",
-            "description": "JSON object with key-value pairs is required.",
-            "title": "Body"
-        }
-        ```
+:::info[Request Body]
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "type": "object",
+        "description": "JSON object with key-value pairs is required.",
+        "title": "Body"
+    }
+    ```
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Data inserted/updated successfully"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Data inserted/updated successfully</summary>
 
-        ```json
-        {
-            "items": [],
-            "status": "success",
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "items": [],
+        "status": "success",
+        "count": 0
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `400`: Bad Request</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Request body cannot be empty. JSON object with key-value pairs is required."
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": {
+            "items": [
+                {
+                    "message": "Error: Query execution failed: Query execution failed: INSERT INTO...",
+                    "line": {
+                        "field1": "<string>",
+                        "field2": "<string>"
+                    }
+                }
+            ],
+            "status": "error",
             "count": 0
         }
-        ```
-??? warning "Response `400`: Bad Request"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Request body cannot be empty. JSON object with key-value pairs is required."
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "status": "failed",
-            "message": {
-                "items": [
-                    {
-                        "message": "Error: Query execution failed: Query execution failed: INSERT INTO...",
-                        "line": {
-                            "field1": "<string>",
-                            "field2": "<string>"
-                        }
-                    }
-                ],
-                "status": "error",
-                "count": 0
-            }
-        }
-        ```
+</details>
 
 ---
 
@@ -1223,97 +1474,120 @@ Update data into a table.
 
 Delete data into a table.
 
-<span style="background:red; font-size: 16px; padding-left: 10px; padding-right: 10px">DELETE</span> **`/api/db/query`**
+<span style={{background: 'red', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>DELETE</span> **`/api/db/query`**
 
-!!! abstract "Query Parameters"
-    - **`source`** *(in query)*: The source to retrieve the query definition. Valid values: `framework`, `query`
-    - **`type`** *(in query)*: The type of query, get data or metadata. Valid values: `table`, `columns`.
-    - **`pool`** *(in query)*: The database pool alias to retrieve the query definition. (e.g., `default`, `libnsx1`)
-    - **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
-    - **`query`** *(in query)*: The query ID to execute. (e.g., `1`, `2`)
-    - **`override_pool`** *(in query)*: Override the default pool set in the query definition. (e.g., `default`, `libnsx1`)
-!!! abstract "Request Body"
-    - **Content-Type:** `application/json`
-      - **Example:**
+:::info[Query Parameters]
+- **`source`** *(in query)*: The source to retrieve the query definition. Valid values: `framework`, `query`
+- **`type`** *(in query)*: The type of query, get data or metadata. Valid values: `table`, `columns`.
+- **`pool`** *(in query)*: The database pool alias to retrieve the query definition. (e.g., `default`, `libnsx1`)
+- **`mode`** *(in query)*: The session mode, retrieve data from framework table or pool. Valid values: `framework`, `session`
+- **`query`** *(in query)*: The query ID to execute. (e.g., `1`, `2`)
+- **`override_pool`** *(in query)*: Override the default pool set in the query definition. (e.g., `default`, `libnsx1`)
+:::
 
-        ```json
-        {
-            "type": "object",
-            "description": "JSON object with key-value pairs is required.",
-            "title": "Body"
-        }
-        ```
+:::info[Request Body]
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "type": "object",
+        "description": "JSON object with key-value pairs is required.",
+        "title": "Body"
+    }
+    ```
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Data inserted/updated successfully"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Data inserted/updated successfully</summary>
 
-        ```json
-        {
-            "items": [],
-            "status": "success",
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "items": [],
+        "status": "success",
+        "count": 0
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `400`: Bad Request</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Request body cannot be empty. JSON object with key-value pairs is required."
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": {
+            "items": [
+                {
+                    "message": "Error: Query execution failed: Query execution failed: INSERT INTO...",
+                    "line": {
+                        "field1": "<string>",
+                        "field2": "<string>"
+                    }
+                }
+            ],
+            "status": "error",
             "count": 0
         }
-        ```
-??? warning "Response `400`: Bad Request"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Request body cannot be empty. JSON object with key-value pairs is required."
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
-
-        ```json
-        {
-            "status": "failed",
-            "message": {
-                "items": [
-                    {
-                        "message": "Error: Query execution failed: Query execution failed: INSERT INTO...",
-                        "line": {
-                            "field1": "<string>",
-                            "field2": "<string>"
-                        }
-                    }
-                ],
-                "status": "error",
-                "count": 0
-            }
-        }
-        ```
+</details>
 
 ---
 
@@ -1323,60 +1597,75 @@ Delete data into a table.
 
 Get the current version deployed
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/setup/current`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/setup/current`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Installation successful"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Installation successful</summary>
 
-        ```json
-        {
-            "items": [],
-            "status": "success",
-            "count": 0
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "items": [],
+        "status": "success",
+        "count": 0
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Setup failed"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Setup failed"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -1384,60 +1673,75 @@ Get the current version deployed
 
 Downgrade databases to a specific version
 
-<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/setup/downgrade/{version}`**
+<span style={{background: 'blue', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>POST</span> **`/api/setup/downgrade/{version}`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Installation successful"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Installation successful</summary>
 
-        ```json
-        {
-            "items": [],
-            "status": "success",
-            "count": 0
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "items": [],
+        "status": "success",
+        "count": 0
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Setup failed"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Setup failed"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -1445,99 +1749,116 @@ Downgrade databases to a specific version
 
 Configure the postgres database.
 
-<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/setup/install`**
+<span style={{background: 'blue', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>POST</span> **`/api/setup/install`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
-!!! abstract "Request Body"
-    - **Content-Type:** `application/json`
-      - **Example:**
+:::info[Request Body]
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "properties": {
-                "host": {
-                    "type": "string",
-                    "title": "Host"
-                },
-                "port": {
-                    "type": "integer",
-                    "title": "Port"
-                },
-                "database": {
-                    "type": "string",
-                    "title": "Database"
-                },
-                "user": {
-                    "type": "string",
-                    "title": "User"
-                },
-                "password": {
-                    "type": "string",
-                    "title": "Password"
-                }
+    ```json
+    {
+        "properties": {
+            "host": {
+                "type": "string",
+                "title": "Host"
             },
-            "type": "object",
-            "required": [
-                "host",
-                "port",
-                "database",
-                "user",
-                "password"
-            ],
-            "title": "SetupRequest"
-        }
-        ```
+            "port": {
+                "type": "integer",
+                "title": "Port"
+            },
+            "database": {
+                "type": "string",
+                "title": "Database"
+            },
+            "user": {
+                "type": "string",
+                "title": "User"
+            },
+            "password": {
+                "type": "string",
+                "title": "Password"
+            }
+        },
+        "type": "object",
+        "required": [
+            "host",
+            "port",
+            "database",
+            "user",
+            "password"
+        ],
+        "title": "SetupRequest"
+    }
+    ```
+:::
+
 **📥 Responses:**
 
-??? success "Response `200`: Installation successful"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Installation successful</summary>
 
-        ```json
-        {
-            "items": [],
-            "status": "success",
-            "count": 0
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "items": [],
+        "status": "success",
+        "count": 0
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Setup failed"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Setup failed"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -1545,60 +1866,75 @@ Configure the postgres database.
 
 Create a new revision for the database
 
-<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/setup/revision`**
+<span style={{background: 'blue', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>POST</span> **`/api/setup/revision`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Installation successful"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Installation successful</summary>
 
-        ```json
-        {
-            "items": [],
-            "status": "success",
-            "count": 0
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "items": [],
+        "status": "success",
+        "count": 0
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Setup failed"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Setup failed"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -1606,60 +1942,75 @@ Create a new revision for the database
 
 Upgrade databases to latest version
 
-<span style="background:blue; font-size: 16px; padding-left: 10px; padding-right: 10px">POST</span> **`/api/setup/upgrade`**
+<span style={{background: 'blue', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>POST</span> **`/api/setup/upgrade`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Installation successful"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Installation successful</summary>
 
-        ```json
-        {
-            "items": [],
-            "status": "success",
-            "count": 0
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "items": [],
+        "status": "success",
+        "count": 0
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Setup failed"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Setup failed"
+    }
+    ```
+
+</details>
 
 ---
 
@@ -1669,60 +2020,75 @@ Upgrade databases to latest version
 
 Export all tables models and data.
 
-<span style="background:green; font-size: 16px; padding-left: 10px; padding-right: 10px">GET</span> **`/api/export/repository`**
+<span style={{background: 'green', fontSize: '16px', paddingLeft: '10px', paddingRight: '10px'}}>GET</span> **`/api/export/repository`**
 
-!!! abstract "Query Parameters"
-    - **None**
+:::info[Query Parameters]
+- **None**
+:::
 
 **📥 Responses:**
 
-??? success "Response `200`: Installation successful"
-    - **Content-Type:** `application/json`
-      - **Example:**
+<details>
+<summary>Response `200`: Installation successful</summary>
 
-        ```json
-        {
-            "items": [],
-            "status": "success",
-            "count": 0
-        }
-        ```
-??? warning "Response `422`: Validation Error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+- **Content-Type:** `application/json`
+  - **Example:**
 
-        ```json
-        {
-            "detail": [
-                {
-                    "loc": [
-                        "query",
-                        "name"
-                    ],
-                    "msg": "field required",
-                    "type": "value_error.missing"
-                },
-                {
-                    "loc": [
-                        "query",
-                        "quantity"
-                    ],
-                    "msg": "value is not a valid integer",
-                    "type": "type_error.integer"
-                }
-            ]
-        }
-        ```
-??? danger "Response `500`: Internal server error"
-    - **Content-Type:** `application/json`
-      - **Example:**
+    ```json
+    {
+        "items": [],
+        "status": "success",
+        "count": 0
+    }
+    ```
 
-        ```json
-        {
-            "status": "failed",
-            "message": "Setup failed"
-        }
-        ```
+</details>
+
+<details>
+<summary>Response `422`: Validation Error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "detail": [
+            {
+                "loc": [
+                    "query",
+                    "name"
+                ],
+                "msg": "field required",
+                "type": "value_error.missing"
+            },
+            {
+                "loc": [
+                    "query",
+                    "quantity"
+                ],
+                "msg": "value is not a valid integer",
+                "type": "type_error.integer"
+            }
+        ]
+    }
+    ```
+
+</details>
+
+<details>
+<summary>Response `500`: Internal server error</summary>
+
+- **Content-Type:** `application/json`
+  - **Example:**
+
+    ```json
+    {
+        "status": "failed",
+        "message": "Setup failed"
+    }
+    ```
+
+</details>
 
 ---
 

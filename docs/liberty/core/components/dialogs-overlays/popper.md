@@ -8,8 +8,8 @@ The `Popper` component provides a floating UI container that appears next to an 
 | Prop          | Type                                      | Default        | Description |
 |--------------|------------------------------------------|----------------|-------------|
 | `open`      | `boolean`                              | `false`       | Controls the visibility of the popper. |
-| `anchorEl`  | `HTMLElement | null | undefined`       | `undefined`  | The element that the popper is anchored to. |
-| `placement` | `"top" | "bottom" | "left" | "right" | "bottom-start" | "bottom-end"` | `"bottom-start"` | The position of the popper relative to the anchor. |
+| `anchorEl`  | `HTMLElement \| null \| undefined`       | `undefined`  | The element that the popper is anchored to. |
+| `placement` | `"top" \| "bottom" \| "left" \| "right" \| "bottom-start" \| "bottom-end"` | `"bottom-start"` | The position of the popper relative to the anchor. |
 | `disablePortal` | `boolean`                           | `false`      | If true, the popper will not be rendered inside a portal. |
 | `modal`     | `boolean`                              | `false`      | If true, a backdrop is shown behind the popper, making it act like a modal. |
 | `onClose`   | `() => void`                           | `undefined`  | Callback triggered when the popper is closed. |

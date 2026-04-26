@@ -6,8 +6,8 @@ The `Form` components provide styled wrappers for HTML forms, ensuring consisten
 ## Props
 | Prop             | Type               | Default  | Description                                   |
 |-----------------|-------------------|----------|-----------------------------------------------|
-| `width`  | `string | number` | `100%`  | Defines the form width to ensure proper responsiveness. |
-| `marginTop` | `string | number` | `theme.spacing(1)` | Sets the top margin for spacing and alignment. |
+| `width`  | `string \| number` | `100%`  | Defines the form width to ensure proper responsiveness. |
+| `marginTop` | `string \| number` | `theme.spacing(1)` | Sets the top margin for spacing and alignment. |
 
 ## Example Usage
 

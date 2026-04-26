@@ -6,16 +6,16 @@ The `Typography` component is used for consistent text styling across the applic
 ## Props
 | Prop         | Type                                         | Default   | Description                                      |
 |-------------|--------------------------------------------|-----------|--------------------------------------------------|
-| `variant`  | `"h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "subtitle1" | "subtitle2" | "body1" | "body2" | "caption" | "overline"` | `"body1"` | Defines the text style. |
-| `color`    | `"primary" | "secondary" | "textPrimary" | "textSecondary" | "inherit"` | `"textPrimary"` | Sets the text color. |
-| `align`    | `"left" | "center" | "right" | "justify"` | `"left"` | Controls text alignment. |
+| `variant`  | `"h1" \| "h2" \| "h3" \| "h4" \| "h5" \| "h6" \| "subtitle1" \| "subtitle2" \| "body1" \| "body2" \| "caption" \| "overline"` | `"body1"` | Defines the text style. |
+| `color`    | `"primary" \| "secondary" \| "textPrimary" \| "textSecondary" \| "inherit"` | `"textPrimary"` | Sets the text color. |
+| `align`    | `"left" \| "center" \| "right" \| "justify"` | `"left"` | Controls text alignment. |
 | `gutterBottom` | `boolean` | `false` | Adds margin-bottom spacing. |
 | `noWrap` | `boolean` | `false` | Prevents text wrapping. |
 | `paragraph` | `boolean` | `false` | Determines if the text is treated as a paragraph. |
-| `fontWeight` | `"normal" | "bold" | "light" | number` | `"normal"` | Sets the font weight. |
-| `fontStyle` | `"normal" | "italic" | "oblique"` | `"normal"` | Sets the font style. |
+| `fontWeight` | `"normal" \| "bold" \| "light" \| number` | `"normal"` | Sets the font weight. |
+| `fontStyle` | `"normal" \| "italic" \| "oblique"` | `"normal"` | Sets the font style. |
 | `href` | `string` | `undefined` | Converts text into a hyperlink. |
-| `target` | `"_blank" | "_self" | "_parent" | "_top"` | `undefined` | Defines how links open. |
+| `target` | `"_blank" \| "_self" \| "_parent" \| "_top"` | `undefined` | Defines how links open. |
 | `rel` | `string` | `undefined` | Specifies link relationship attributes. |
 
 ## Example Usage

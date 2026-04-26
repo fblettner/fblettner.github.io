@@ -21,7 +21,7 @@ The `Select` component provides a dropdown for selecting options, with support f
 | `onOpen`        | `() => void`                              | -             | Callback when the dropdown opens. |
 | `onBlur`        | `(event) => void`                         | -             | Callback when the input loses focus. |
 | `onFocus`       | `(event) => void`                         | -             | Callback when the input gains focus. |
-| `variant`       | `"outlined" | "filled" | "standard"`      | `"outlined"` | Defines the visual style of the input. |
+| `variant`       | `"outlined" \| "filled" \| "standard"`      | `"outlined"` | Defines the visual style of the input. |
 | `disablePortal` | `boolean`                                 | `false`      | Renders the dropdown inline instead of inside a portal. |
 | `showClearButton` | `boolean`                               | `true`       | Displays a button to clear the selection. |
 | `selectOnly`    | `boolean`                                 | `false`      | Disables typing and allows selection only. |

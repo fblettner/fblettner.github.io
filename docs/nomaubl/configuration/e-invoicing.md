@@ -28,8 +28,9 @@ The `e-invoicing` template is a **reserved system template** that configures the
 | `ublSchematronPath` | Path to the EN16931 Schematron rules | `%APP_HOME%/validation/schematron/EN16931-UBL-validation-preprocessed.sch` |
 | `ciusFrSchematronPath` | Path to the CIUS-FR Schematron rules | `%APP_HOME%/validation/schematron/BR-FR-Flux2-Schematron-UBL.sch` |
 
-!!! tip "Bundled validation assets"
-    If the paths are not set or not found on disk, NomaUBL falls back to bundled versions inside the JAR at `validation/xsd/` and `validation/schematron/`.
+:::tip[Bundled validation assets]
+If the paths are not set or not found on disk, NomaUBL falls back to bundled versions inside the JAR at `validation/xsd/` and `validation/schematron/`.
+:::
 
 ### Mock mode
 

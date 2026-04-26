@@ -17,8 +17,9 @@ The `global` template is a **reserved system template** that contains the Oracle
 | `schema` | Oracle schema prefix used in all SQL queries | `CRPDTA` |
 | `tableLog` | Main invoice log table | `F564230` |
 
-!!! warning "Password encoding"
-    The `DBPassword` value must be Base64-encoded using `java -jar nomaubl.jar -password <yourpassword>`. The application calls `decodePasswd()` internally. Do **not** store the plain-text password here.
+:::warning[Password encoding]
+The `DBPassword` value must be Base64-encoded using `java -jar nomaubl.jar -password <yourpassword>`. The application calls `decodePasswd()` internally. Do **not** store the plain-text password here.
+:::
 
 ### Path configuration
 
