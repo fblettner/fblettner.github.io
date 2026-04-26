@@ -97,30 +97,10 @@ const config: Config = {
     footer: {
       style: 'dark',
       links: [
-        {
-          title: 'Docs',
-          items: [
-            {label: 'Liberty', to: '/liberty/getting-started/'},
-            {label: 'NomaUBL', to: '/nomaubl/getting-started/'},
-            {label: 'API', to: '/api/getting-started/'},
-            {label: 'Blog', to: '/blog/'},
-          ],
-        },
-        {
-          title: 'Company',
-          items: [
-            {label: 'NOMANA-IT', href: 'https://nomana-it.fr'},
-            {label: 'Liberty Demo', href: 'https://liberty.nomana-it.fr/'},
-          ],
-        },
-        {
-          title: 'Connect',
-          items: [
-            {label: 'GitHub', href: 'https://github.com/fblettner'},
-            {label: 'LinkedIn', href: 'https://www.linkedin.com/in/franck-blettner-72509510/'},
-            {label: 'Sponsor', href: 'https://github.com/sponsors/fblettner'},
-          ],
-        },
+        {label: 'NOMANA-IT', href: 'https://nomana-it.fr'},
+        {label: 'GitHub', href: 'https://github.com/fblettner'},
+        {label: 'LinkedIn', href: 'https://www.linkedin.com/in/franck-blettner-72509510/'},
+        {label: 'Sponsor', href: 'https://github.com/sponsors/fblettner'},
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Nomana-IT. Built with Docusaurus.`,
     },

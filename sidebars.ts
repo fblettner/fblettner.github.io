@@ -6,6 +6,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Installation',
+      link: {type: 'generated-index', description: 'Install and configure the Liberty Framework stack: Docker, Traefik, SSL and Linux services.'},
       items: [
         'liberty/technical/architecture',
         'liberty/technical/installation',
@@ -18,10 +19,12 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Nomasx-1',
+      link: {type: 'generated-index', description: 'Nomasx-1 — administration guides for the Liberty platform.'},
       items: [
         {
           type: 'category',
           label: "Administrator's Guide",
+          link: {type: 'generated-index', description: 'Administrator-level configuration of Nomasx-1.'},
           items: ['liberty/nomasx1/admin/global-settings'],
         },
       ],
@@ -29,12 +32,14 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'React Components',
+      link: {type: 'generated-index', description: 'Liberty Core — modular React components, services, theming and main building blocks.'},
       items: [
         'liberty/core/getting-started',
         'liberty/core/new-project',
         {
           type: 'category',
           label: 'Services',
+          link: {type: 'generated-index', description: 'Liberty Core services: providers, modules, applications, users, authentication, themes, translations.'},
           items: [
             'liberty/core/services/appprovider',
             'liberty/core/services/modules',
@@ -50,10 +55,12 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Core Components',
+          link: {type: 'generated-index', description: 'Reusable component groups: UI elements, inputs, dialogs, tables, charts.'},
           items: [
             {
               type: 'category',
               label: 'UI Elements',
+              link: {type: 'generated-index', description: 'Buttons, alerts, cards, typography and other base UI elements.'},
               items: [
                 'liberty/core/components/ui-elements/alert',
                 'liberty/core/components/ui-elements/alert-message',
@@ -77,6 +84,7 @@ const sidebars: SidebarsConfig = {
             {
               type: 'category',
               label: 'Inputs & Forms',
+              link: {type: 'generated-index', description: 'Form inputs: text, select, date picker, file upload, color picker.'},
               items: [
                 'liberty/core/components/inputs-forms/checkbox',
                 'liberty/core/components/inputs-forms/color-picker',
@@ -90,6 +98,7 @@ const sidebars: SidebarsConfig = {
             {
               type: 'category',
               label: 'Dialogs & Overlays',
+              link: {type: 'generated-index', description: 'Dialogs, confirmations, poppers, exports and tabbed overlays.'},
               items: [
                 'liberty/core/components/dialogs-overlays/dialog',
                 'liberty/core/components/dialogs-overlays/confirmation',
@@ -101,6 +110,7 @@ const sidebars: SidebarsConfig = {
             {
               type: 'category',
               label: 'Tables & Lists',
+              link: {type: 'generated-index', description: 'Data tables, grids, lists, trees and contextual menus.'},
               items: [
                 'liberty/core/components/tables-lists/grid',
                 'liberty/core/components/tables-lists/table',
@@ -112,6 +122,7 @@ const sidebars: SidebarsConfig = {
             {
               type: 'category',
               label: 'Charts',
+              link: {type: 'generated-index', description: 'Bar, line and pie chart components.'},
               items: [
                 'liberty/core/components/charts/bar',
                 'liberty/core/components/charts/line',
@@ -123,6 +134,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Main Components',
+          link: {type: 'generated-index', description: 'High-level layout components: Header, Content, Login, Menus, Users.'},
           items: [
             'liberty/core/components/main-components/header',
             'liberty/core/components/main-components/content',
@@ -134,6 +146,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Forms Components',
+          link: {type: 'generated-index', description: 'Composite form components: Dashboard and Advanced Grid.'},
           items: [
             'liberty/core/components/forms-components/dashboard',
             'liberty/core/components/forms-components/advanced-grid',
@@ -142,6 +155,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Styled Elements',
+          link: {type: 'generated-index', description: 'Theme-aware styled primitives used throughout Liberty Core.'},
           items: [
             'liberty/core/components/styled-elements/button',
             'liberty/core/components/styled-elements/card',
@@ -167,6 +181,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Reference',
+      link: {type: 'generated-index', description: 'API reference, release notes, known issues and incident history.'},
       items: [
         'liberty/api/liberty-api',
         'liberty/release-notes',
@@ -181,6 +196,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Installation',
+      link: {type: 'generated-index', description: 'Prerequisites and build steps for NomaUBL.'},
       items: [
         'nomaubl/installation/prerequisites',
         'nomaubl/installation/build',
@@ -189,6 +205,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Configuration',
+      link: {type: 'generated-index', description: 'Global, e-invoicing, e-directory and document template configuration.'},
       items: [
         'nomaubl/configuration/global',
         'nomaubl/configuration/e-invoicing',
@@ -199,6 +216,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'User Guide',
+      link: {type: 'generated-index', description: 'CLI, web interface and end-to-end invoice workflow.'},
       items: [
         'nomaubl/user-guide/cli',
         'nomaubl/user-guide/web-interface',
@@ -208,6 +226,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Features',
+      link: {type: 'generated-index', description: 'UBL generation, validation, Plateforme Agréée integration and import-status polling.'},
       items: [
         'nomaubl/features/ubl-generation',
         'nomaubl/features/validation',
@@ -218,6 +237,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Reference',
+      link: {type: 'generated-index', description: 'Processing types, status codes, database schema, reference lists and REST API.'},
       items: [
         'nomaubl/reference/processing-types',
         'nomaubl/reference/status-codes',
@@ -234,6 +254,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'JD Edwards API',
+      link: {type: 'generated-index', description: 'Java packages for JD Edwards integration: BLOB exports for BI Publisher and BSFN source code.'},
       items: [
         'api/jde-api/jdebip',
         'api/jde-api/jdebsfn',
@@ -242,6 +263,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'BI Publisher API',
+      link: {type: 'generated-index', description: 'BI Publisher integration utilities: Code 128 barcodes and the NOMABIP wrapper API.'},
       items: [
         'api/bip-api/nomabc',
         'api/bip-api/nomabip',
