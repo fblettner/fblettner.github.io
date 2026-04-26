@@ -1,0 +1,26 @@
+{
+  "title": {
+    "message": "NOMANA-IT",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "NOMANA-IT",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Liberty": {
+    "message": "Liberty",
+    "description": "Navbar item with label Liberty"
+  },
+  "item.label.NomaUBL": {
+    "message": "NomaUBL",
+    "description": "Navbar item with label NomaUBL"
+  },
+  "item.label.API": {
+    "message": "API",
+    "description": "Navbar item with label API"
+  },
+  "item.label.Blog": {
+    "message": "Blog",
+    "description": "Navbar item with label Blog"
+  }
+}

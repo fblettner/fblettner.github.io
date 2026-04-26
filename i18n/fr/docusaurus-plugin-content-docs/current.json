@@ -1,0 +1,241 @@
+{
+  "version.label": {
+    "message": "Actuelle",
+    "description": "The label for version current"
+  },
+
+  "sidebar.libertySidebar.category.Installation": {
+    "message": "Installation",
+    "description": "The label for category 'Installation' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Installation.link.generated-index.description": {
+    "message": "Install and configure the Liberty Framework stack: Docker, Traefik, SSL and Linux services.",
+    "description": "The generated-index page description for category 'Installation' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Nomasx-1": {
+    "message": "Nomasx-1",
+    "description": "The label for category 'Nomasx-1' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Nomasx-1.link.generated-index.description": {
+    "message": "Nomasx-1 — administration guides for the Liberty platform.",
+    "description": "The generated-index page description for category 'Nomasx-1' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Administrator's Guide": {
+    "message": "Administrator's Guide",
+    "description": "The label for category 'Administrator's Guide' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Administrator's Guide.link.generated-index.description": {
+    "message": "Administrator-level configuration of Nomasx-1.",
+    "description": "The generated-index page description for category 'Administrator's Guide' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.React Components": {
+    "message": "React Components",
+    "description": "The label for category 'React Components' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.React Components.link.generated-index.description": {
+    "message": "Liberty Core — modular React components, services, theming and main building blocks.",
+    "description": "The generated-index page description for category 'React Components' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Services": {
+    "message": "Services",
+    "description": "The label for category 'Services' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Services.link.generated-index.description": {
+    "message": "Liberty Core services: providers, modules, applications, users, authentication, themes, translations.",
+    "description": "The generated-index page description for category 'Services' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Core Components": {
+    "message": "Core Components",
+    "description": "The label for category 'Core Components' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Core Components.link.generated-index.description": {
+    "message": "Reusable component groups: UI elements, inputs, dialogs, tables, charts.",
+    "description": "The generated-index page description for category 'Core Components' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.UI Elements": {
+    "message": "UI Elements",
+    "description": "The label for category 'UI Elements' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.UI Elements.link.generated-index.description": {
+    "message": "Buttons, alerts, cards, typography and other base UI elements.",
+    "description": "The generated-index page description for category 'UI Elements' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Inputs & Forms": {
+    "message": "Inputs & Forms",
+    "description": "The label for category 'Inputs & Forms' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Inputs & Forms.link.generated-index.description": {
+    "message": "Form inputs: text, select, date picker, file upload, color picker.",
+    "description": "The generated-index page description for category 'Inputs & Forms' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Dialogs & Overlays": {
+    "message": "Dialogs & Overlays",
+    "description": "The label for category 'Dialogs & Overlays' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Dialogs & Overlays.link.generated-index.description": {
+    "message": "Dialogs, confirmations, poppers, exports and tabbed overlays.",
+    "description": "The generated-index page description for category 'Dialogs & Overlays' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Tables & Lists": {
+    "message": "Tables & Lists",
+    "description": "The label for category 'Tables & Lists' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Tables & Lists.link.generated-index.description": {
+    "message": "Data tables, grids, lists, trees and contextual menus.",
+    "description": "The generated-index page description for category 'Tables & Lists' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Charts": {
+    "message": "Charts",
+    "description": "The label for category 'Charts' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Charts.link.generated-index.description": {
+    "message": "Bar, line and pie chart components.",
+    "description": "The generated-index page description for category 'Charts' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Main Components": {
+    "message": "Main Components",
+    "description": "The label for category 'Main Components' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Main Components.link.generated-index.description": {
+    "message": "High-level layout components: Header, Content, Login, Menus, Users.",
+    "description": "The generated-index page description for category 'Main Components' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Forms Components": {
+    "message": "Forms Components",
+    "description": "The label for category 'Forms Components' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Forms Components.link.generated-index.description": {
+    "message": "Composite form components: Dashboard and Advanced Grid.",
+    "description": "The generated-index page description for category 'Forms Components' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Styled Elements": {
+    "message": "Styled Elements",
+    "description": "The label for category 'Styled Elements' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Styled Elements.link.generated-index.description": {
+    "message": "Theme-aware styled primitives used throughout Liberty Core.",
+    "description": "The generated-index page description for category 'Styled Elements' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Reference": {
+    "message": "Reference",
+    "description": "The label for category 'Reference' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Reference.link.generated-index.description": {
+    "message": "API reference, release notes, known issues and incident history.",
+    "description": "The generated-index page description for category 'Reference' in sidebar 'libertySidebar'"
+  },
+
+  "sidebar.nomaublSidebar.category.Application": {
+    "message": "Application",
+    "description": "The label for category 'Application' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Application.link.generated-index.description": {
+    "message": "Navigation principale : tableau de bord, factures, e-reporting, e-directory et erreurs d'intégration.",
+    "description": "The generated-index page description for category 'Application' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Documentation": {
+    "message": "Documentation",
+    "description": "The label for category 'Documentation' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Documentation.link.generated-index.description": {
+    "message": "Documentation de référence intégrée à l'application : codes statut, codes motif et sémantique UBL.",
+    "description": "The generated-index page description for category 'Documentation' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Sync": {
+    "message": "Synchronisation",
+    "description": "The label for category 'Sync' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Sync.link.generated-index.description": {
+    "message": "Synchronisation entrante / sortante : récupération des entrées, import et récupération des statuts.",
+    "description": "The generated-index page description for category 'Sync' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Processing": {
+    "message": "Traitement",
+    "description": "The label for category 'Processing' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Processing.link.generated-index.description": {
+    "message": "Lancer les traitements XML/UBL et déclencher l'API de traitement.",
+    "description": "The generated-index page description for category 'Processing' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.UBL Tools": {
+    "message": "Outils UBL",
+    "description": "The label for category 'UBL Tools' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.UBL Tools.link.generated-index.description": {
+    "message": "Valider, éditer et inspecter les documents UBL/XML ; gérer les valeurs UBL par défaut.",
+    "description": "The generated-index page description for category 'UBL Tools' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.UBL Defaults": {
+    "message": "Valeurs UBL par défaut",
+    "description": "The label for category 'UBL Defaults' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.UBL Defaults.link.generated-index.description": {
+    "message": "Valeurs par défaut appliquées aux documents UBL générés et règles de surcharge par modèle.",
+    "description": "The generated-index page description for category 'UBL Defaults' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.JD Edwards": {
+    "message": "JD Edwards",
+    "description": "The label for category 'JD Edwards' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.JD Edwards.link.generated-index.description": {
+    "message": "Canaux d'extraction et d'intégration JD Edwards EnterpriseOne.",
+    "description": "The generated-index page description for category 'JD Edwards' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Management": {
+    "message": "Administration",
+    "description": "The label for category 'Management' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Management.link.generated-index.description": {
+    "message": "Gestion opérationnelle : versions de fichiers et historique du cycle de vie.",
+    "description": "The generated-index page description for category 'Management' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Configuration": {
+    "message": "Configuration",
+    "description": "The label for category 'Configuration' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Configuration.link.generated-index.description": {
+    "message": "Paramétrage global de l'application : documents, système, listes de référence, connecteurs et sécurité.",
+    "description": "The generated-index page description for category 'Configuration' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.System": {
+    "message": "Système",
+    "description": "The label for category 'System' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.System.link.generated-index.description": {
+    "message": "Paramètres système : e-directory, e-invoicing, récupération des factures, types de documents et statuts.",
+    "description": "The generated-index page description for category 'System' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Database Connectors": {
+    "message": "Connecteurs base de données",
+    "description": "The label for category 'Database Connectors' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Database Connectors.link.generated-index.description": {
+    "message": "Paramètres de connexion aux bases NomaUBL et JD Edwards.",
+    "description": "The generated-index page description for category 'Database Connectors' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Security": {
+    "message": "Sécurité",
+    "description": "The label for category 'Security' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Security.link.generated-index.description": {
+    "message": "Gestion des utilisateurs et des rôles.",
+    "description": "The generated-index page description for category 'Security' in sidebar 'nomaublSidebar'"
+  },
+
+  "sidebar.apiSidebar.category.JD Edwards API": {
+    "message": "JD Edwards API",
+    "description": "The label for category 'JD Edwards API' in sidebar 'apiSidebar'"
+  },
+  "sidebar.apiSidebar.category.JD Edwards API.link.generated-index.description": {
+    "message": "Java packages for JD Edwards integration: BLOB exports for BI Publisher and BSFN source code.",
+    "description": "The generated-index page description for category 'JD Edwards API' in sidebar 'apiSidebar'"
+  },
+  "sidebar.apiSidebar.category.BI Publisher API": {
+    "message": "BI Publisher API",
+    "description": "The label for category 'BI Publisher API' in sidebar 'apiSidebar'"
+  },
+  "sidebar.apiSidebar.category.BI Publisher API.link.generated-index.description": {
+    "message": "BI Publisher integration utilities: Code 128 barcodes and the NOMABIP wrapper API.",
+    "description": "The generated-index page description for category 'BI Publisher API' in sidebar 'apiSidebar'"
+  }
+}

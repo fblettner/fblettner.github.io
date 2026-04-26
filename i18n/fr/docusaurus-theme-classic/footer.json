@@ -1,0 +1,22 @@
+{
+  "link.item.label.NOMANA-IT": {
+    "message": "NOMANA-IT",
+    "description": "The label of footer link with label=NOMANA-IT linking to https://nomana-it.fr"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/fblettner"
+  },
+  "link.item.label.LinkedIn": {
+    "message": "LinkedIn",
+    "description": "The label of footer link with label=LinkedIn linking to https://www.linkedin.com/in/franck-blettner-72509510/"
+  },
+  "link.item.label.Sponsor": {
+    "message": "Sponsor",
+    "description": "The label of footer link with label=Sponsor linking to https://github.com/sponsors/fblettner"
+  },
+  "copyright": {
+    "message": "Copyright © 2026 Nomana-IT. Propulsé par Docusaurus.",
+    "description": "The footer copyright"
+  }
+}
