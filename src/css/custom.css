@@ -95,6 +95,16 @@
   text-decoration: none !important;
 }
 
+/* ---- Mobile navbar drawer (fullscreen on small viewports) -------------- */
+@media (max-width: 996px) {
+  :root {
+    --ifm-navbar-sidebar-width: 100vw;
+  }
+  .navbar-sidebar__brand {
+    height: var(--ifm-navbar-height);
+  }
+}
+
 /* ---- Sidebar ----------------------------------------------------------- */
 [data-theme='dark'] .menu {
   background-color: #0d1220;
