@@ -21,7 +21,7 @@ A single form drives the extraction.
 
 | Field | Description |
 |---|---|
-| **Template** | Document template (e.g. `vrc_pro`, `isc_facture`). Used only to resolve the `%TEMPLATE%` placeholder of the default output directory inherited from `global.dirInput`. |
+| **Template** | Document template (e.g. `invoices`, `credit_notes`). Used only to resolve the `%TEMPLATE%` placeholder of the default output directory inherited from `global.dirInput`. |
 | **Source** | `XML — JDE Source (F564230)` extracts the original source XML stored at ingestion. `UBL — Generated UBL 2.1 (F564231)` extracts the UBL document NomaUBL produced from it. |
 | **FEDOC** | Document number — primary key of the archived document. |
 | **FEDCT** | Document type (e.g. `RI`, `RN`). |

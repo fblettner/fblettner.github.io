@@ -222,7 +222,7 @@
       "get": {
         "tags": ["Config"],
         "summary": "List all configuration templates",
-        "description": "Returns the list of all templates defined in config.json, including system templates (global, e-invoicing, e-directory) and document templates (e.g. vrc_pro, isc_facture). Each template includes its name, description, type, and all key-value properties. Use this to populate template selectors in the UI.",
+        "description": "Returns the list of all templates defined in config.json, including system templates (global, e-invoicing, e-directory) and document templates (e.g. invoices, credit_notes). Each template includes its name, description, type, and all key-value properties. Use this to populate template selectors in the UI.",
         "responses": {
           "200": {
             "description": "Success",
@@ -237,7 +237,7 @@
         "summary": "Get a template by name",
         "description": "Returns a single template including all its properties. The template name is passed as a query parameter. Returns an error if the template does not exist.",
         "parameters": [
-          { "name": "name", "in": "query", "schema": { "type": "string" }, "description": "Template name (e.g. global, e-invoicing, vrc_pro)", "required": true }
+          { "name": "name", "in": "query", "schema": { "type": "string" }, "description": "Template name (e.g. global, e-invoicing, invoices)", "required": true }
         ],
         "responses": {
           "200": {
@@ -610,12 +610,12 @@
         "description": "Lists all XML files in the input directory. For processType=xml: uses dirInput with %TEMPLATE% resolved (template required). For processType=ubl: uses dirInput/ubl (no template needed).",
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "template": "vrc_pro", "processType": "xml" } } } }
+          "content": { "application/json": { "schema": { "type": "object", "example": { "template": "invoices", "processType": "xml" } } } }
         },
         "responses": {
           "200": {
             "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "directory": "/data/input/vrc_pro", "files": ["invoice_001.xml"] } } } }
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "directory": "/data/input/invoices", "files": ["invoice_001.xml"] } } } }
           }
         }
       }
@@ -1003,7 +1003,7 @@
       "Template": {
         "type": "object",
         "properties": {
-          "name": { "type": "string", "description": "Template identifier (e.g. global, e-invoicing, vrc_pro)" },
+          "name": { "type": "string", "description": "Template identifier (e.g. global, e-invoicing, invoices)" },
           "description": { "type": "string", "description": "Human-readable description of the template's purpose" },
           "type": { "type": "string", "description": "Template type (system or document)" },
           "properties": { "type": "object", "description": "Key-value map of configuration properties specific to this template type" }
@@ -1012,7 +1012,7 @@
       "RunRequest": {
         "type": "object",
         "properties": {
-          "template": { "type": "string", "description": "Document template name (e.g. vrc_pro, isc_facture)" },
+          "template": { "type": "string", "description": "Document template name (e.g. invoices, credit_notes)" },
           "file": { "type": "string", "description": "Input file name (basename without extension) or absolute path" },
           "mode": { "type": "string", "description": "Processing mode: AUTO, SINGLE, BURST, UBL (AUTO resolves per document from document-types)" },
           "replaceMode": { "type": "boolean", "description": "If true, overwrite existing invoices in the database" },

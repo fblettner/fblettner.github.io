@@ -23,7 +23,9 @@ const config: Config = {
     hooks: {
       onBrokenMarkdownLinks: 'warn',
     },
+    mermaid: true,
   },
+  themes: ['@docusaurus/theme-mermaid'],
 
   clientModules: [require.resolve('./src/clientModules/externalSidebarLinks')],
 
@@ -149,6 +151,16 @@ const config: Config = {
         explicitSearchResultPath: true,
       },
     ],
+    // Suppress the harmless webpack warning emitted by `vscode-languageserver-types`,
+    // pulled in transitively by `@docusaurus/theme-mermaid` → mermaid → langium.
+    // The module uses a UMD pattern that webpack cannot statically analyse;
+    // the runtime is unaffected.
+    () => ({
+      name: 'webpack-ignore-warnings',
+      configureWebpack: () => ({
+        ignoreWarnings: [{module: /vscode-languageserver-types/}],
+      }),
+    }),
   ],
 
   headTags: [

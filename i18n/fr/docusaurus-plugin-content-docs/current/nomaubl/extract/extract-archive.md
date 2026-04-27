@@ -21,7 +21,7 @@ Un seul formulaire pilote l'extraction.
 
 | Champ | Description |
 |---|---|
-| **Template** | Template du document (par ex. `vrc_pro`, `isc_facture`). Sert uniquement à résoudre le placeholder `%TEMPLATE%` du répertoire de sortie par défaut hérité de `global.dirInput`. |
+| **Template** | Template du document (par ex. `invoices`, `credit_notes`). Sert uniquement à résoudre le placeholder `%TEMPLATE%` du répertoire de sortie par défaut hérité de `global.dirInput`. |
 | **Source** | `XML — JDE Source (F564230)` extrait le XML reçu à l'ingestion. `UBL — Generated UBL 2.1 (F564231)` extrait le document UBL produit par NomaUBL à partir de ce XML. |
 | **FEDOC** | Numéro du document — clé primaire de l'archive. |
 | **FEDCT** | Type de document (par ex. `RI`, `RN`). |

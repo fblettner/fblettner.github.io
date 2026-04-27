@@ -1,10 +1,104 @@
 ---
 title: Vue d'ensemble
-description: "Vue d'ensemble — documentation en cours de rédaction."
+description: "Fonctionnement des UBL Defaults de NomaUBL — un fichier de valeurs par défaut (ubl-defaults.xsl) et une couche de surcharge optionnelle par template, résolus groupe par groupe à la génération."
+keywords: [NomaUBL, UBL, defaults, surcharge, ubl-defaults, XSL, EN 16931, JD Edwards, SAP, NetSuite, ERP personnalisé, paiement, TVA, scheme IDs, fournisseurs, notes]
 ---
 
-# Vue d'ensemble
+# UBL Defaults — Vue d'ensemble
 
-:::info En cours de rédaction
-Cette page est en cours de rédaction. Revenez bientôt.
-:::
+L'écran **UBL Defaults** est le système *défaut + surcharge* de NomaUBL pour la génération des documents UBL. Il sépare deux niveaux :
+
+- Un **fichier de valeurs par défaut** (`ubl-defaults.xsl`) contient les valeurs appliquées à tout document UBL généré — version UBL, identifiants de schéma, mapping des codes de paiement, catégories TVA, annuaire des fournisseurs, mentions légales françaises, etc.
+- Une **couche de surcharge** optionnelle permet à une transformation donnée (par ex. `invoices.xsl`, `credit_notes.xsl`) de dévier des valeurs par défaut — groupe par groupe — sans dupliquer toute la configuration.
+
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé. Le fichier de defaults appartient au socle XSL partagé de NomaUBL et s'applique à toute transformation produite via l'*Éditeur XSL*.
+
+---
+
+## Résolution des valeurs
+
+```mermaid
+flowchart TD
+    Source["Spool XML source"]
+    Defaults["<b>ubl-defaults.xsl</b><br/><i>valeurs par défaut<br/>(tous les groupes)</i>"]
+    Override["Couche de surcharge par template<br/><i>par ex. invoices.xsl, credit_notes.xsl</i><br/><i>(opt-in par groupe)</i>"]
+    Template["ubl-template.xsl<br/><i>structure UBL</i>"]
+    UBL["Document UBL 2.1"]
+
+    Source --> Template
+    Defaults -.->|hérité| Override
+    Override --> Template
+    Defaults --> Template
+    Template --> UBL
+
+    classDef hl fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
+    class Override hl
+```
+
+Pour chaque groupe (en-tête, codes de paiement, catégories TVA, fournisseurs, notes, etc.) :
+
+- Si la **surcharge est désactivée** sur la transformation, la valeur de `ubl-defaults.xsl` est utilisée.
+- Si la **surcharge est activée**, la valeur de la surcharge est utilisée et la valeur par défaut est ignorée pour ce groupe.
+
+La surcharge est **tout ou rien par groupe** : un onglet est soit entièrement hérité, soit entièrement surchargé. Aucune granularité partielle n'est possible à l'intérieur d'un onglet.
+
+---
+
+## Modes de la page
+
+Un sélecteur de fichier en haut de la page bascule l'éditeur entre deux modes :
+
+| Sélection | Mode | Cible de l'édition |
+|---|---|---|
+| `Defaults file` | **Mode defaults** | `ubl-defaults.xsl` lui-même. Les modifications se propagent à toute transformation qui ne surcharge pas le groupe touché. |
+| Tout autre fichier `.xsl` | **Mode document** | La couche de surcharge du template choisi. Chaque onglet peut être activé ou désactivé indépendamment. |
+
+En mode document, chaque onglet présente une **bannière de surcharge** :
+
+| État de la bannière | Signification | Bouton d'action |
+|---|---|---|
+| `Using defaults` | Le groupe est hérité de `ubl-defaults.xsl` ; le formulaire affiche les valeurs par défaut (contexte en lecture seule). | **Override for this document** — recopie les valeurs par défaut courantes dans le fichier document comme point de départ. |
+| `Using override` | Le groupe possède ses propres valeurs dans le fichier document ; les modifications y sont enregistrées. | **Remove override** — supprime le bloc de surcharge ; le document repasse aux valeurs par défaut. |
+
+La suppression d'une surcharge retire le bloc en totalité — il n'existe pas de mode « désactivée mais conservée ». Le document reprend l'héritage depuis `ubl-defaults.xsl`.
+
+---
+
+## Couverture des onglets
+
+Chaque onglet correspond à un groupe surchargeable de manière indépendante. Les pages suivantes documentent chaque onglet en détail ; le tableau ci-dessous donne le périmètre d'un coup d'œil.
+
+| Onglet | Zone UBL | Contenu configuré |
+|---|---|---|
+| [**Header**](./ubl-header-defaults.md) | En-tête du document | Version UBL, identifiant de personnalisation, pays par défaut, format de date d'entrée. |
+| [**Scheme IDs**](./scheme-ids.md) | Schémas d'identifiants | Identifiants de schéma SIREN / SIRET / GLN / endpoint / livraison. |
+| [**Invoice Type**](./invoice-type.md) | BT-3 | Type de facture par défaut + sélection par règles. |
+| [**Business Process Type**](./business-process-type.md) | BT-23 | Cadre de facturation par défaut (nature biens / services / mixte + cycle de vie) + sélection par règles. |
+| [**Payment Code Mapping**](./payment-code-mapping.md) | BT-81 | Moyen de paiement par défaut + mapping source → code UBL. |
+| [**Unit of Measure Mapping**](./unit-of-measure-mapping.md) | BT-129 | Unité par défaut + mapping source → code UN/ECE Recommendation 20. |
+| [**Currency Code Mapping**](./currency-code-mapping.md) | BT-5 | Devise par défaut + mapping source → code ISO 4217. |
+| [**Document Type / BAR Routing**](./document-type-bar-routing.md) | BG-25 | Mapping des codes de routage B2B. |
+| [**VAT Categories**](./vat-categories.md) | BT-118 / BT-121 | Catégorie TVA par défaut, taux zéro, mappings des codes de catégorie et des codes d'exonération `VATEX-*`. |
+| [**Suppliers / Companies**](./suppliers-companies.md) | BG-4 | Annuaire des sociétés fournisseurs (défaut + alternatives). |
+| [**French Legal Notes**](./french-legal-notes.md) | BT-22 | Modèles de mentions réglementaires françaises (délai de paiement, indemnité de recouvrement, conditions générales…). |
+
+---
+
+## Comportement de l'enregistrement
+
+Un unique bouton **Save** dans l'en-tête de page écrit dans le fichier correspondant au mode courant :
+
+- **Mode defaults** — écrit `ubl-defaults.xsl`.
+- **Mode document** — écrit le `.xsl` du template sélectionné (seule la couche de surcharge est réécrite ; le reste du fichier est laissé intact).
+
+Aucune sauvegarde automatique : les modifications non enregistrées sont perdues au rechargement de la page ou au changement de fichier.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Travailler les defaults d'abord, les surcharges ensuite.** La plupart des installations n'ont besoin que du fichier de defaults. Les surcharges document sont réservées aux cas réellement divergents — un template avec un type de facture par défaut différent, un annuaire de fournisseurs alternatif, etc.
+- **Une surcharge est tout ou rien par onglet.** Activer la surcharge sur un onglet copie l'ensemble du groupe dans le fichier document. À anticiper : si une seule ligne d'un mapping doit changer, l'intégralité du mapping est embarquée.
+- **Les listes de référence alimentent les listes déroulantes.** De nombreux onglets (paiement, unités, pays, devises, identifiants de schéma, types de facture, profils, catégories TVA) lisent leurs options dans les listes définies dans *Configuration → Reference Lists*. Ajouter un code à la liste correspondante si la déroulante en manque.
+- **Le fichier de defaults est partagé par toutes les transformations.** Toute modification y est lue par chaque `.xsl` qui ne surcharge pas le groupe touché — y compris les transformations rédigées à la main hors de l'*Éditeur XSL*.
+- **Les fichiers document sont listés automatiquement.** Tout `.xsl` du répertoire XSL configuré (`e-invoicing.ublXslt`) apparaît dans le sélecteur, à l'exception des trois fichiers partagés (`ubl-defaults.xsl`, `ubl-common.xsl`, `ubl-template.xsl`) — filtrés car ils contiennent la mécanique du socle et ne se modifient pas en surcharge.
