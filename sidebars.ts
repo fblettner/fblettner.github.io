@@ -207,16 +207,6 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Documentation',
-      link: {type: 'generated-index', slug: '/nomaubl/documentation', description: 'Reference docs surfaced inside the app: status codes, reason codes and UBL semantics.'},
-      items: [
-        'nomaubl/documentation/status-reference',
-        'nomaubl/documentation/reason-codes',
-        'nomaubl/documentation/ubl-reference',
-      ],
-    },
-    {
-      type: 'category',
       label: 'Sync',
       link: {type: 'generated-index', slug: '/nomaubl/sync', description: 'Inbound/outbound synchronisation: fetch input, import and retrieve statuses.'},
       items: [
@@ -322,6 +312,21 @@ const sidebars: SidebarsConfig = {
             'nomaubl/configuration/security/users',
             'nomaubl/configuration/security/roles',
           ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'References',
+      link: {type: 'generated-index', slug: '/nomaubl/references', description: 'Reference docs surfaced inside the app: status codes, reason codes, UBL semantics and HTTP API.'},
+      items: [
+        'nomaubl/references/status-reference',
+        'nomaubl/references/reason-codes',
+        'nomaubl/references/ubl-reference',
+        {
+          type: 'link',
+          label: 'API Reference',
+          href: '/nomaubl/api-reference/',
         },
       ],
     },

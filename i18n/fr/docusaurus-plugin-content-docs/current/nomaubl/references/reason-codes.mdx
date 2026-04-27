@@ -1,0 +1,19 @@
+---
+title: Codes motifs
+description: "Codes motifs associés aux statuts du cycle de vie de la facture pour la réforme française de la facturation électronique — refus (B2B), rejets PA et irrégularités issus de l'Annexe A de XP Z12-012."
+keywords: [NomaUBL, codes motifs, refus, rejet, irrégularité, XP Z12-012, Annexe A, PPF, facturation électronique, France, refus B2B, statut 207, statut 210, statut 213, statut 221]
+---
+
+import ReasonCodeReference from '@site/src/components/reference/ReasonCodeReference';
+
+# Codes motifs
+
+L'écran liste l'ensemble des **codes motifs** pouvant être attachés à un statut du cycle de vie de la facture dans le cadre de la réforme française. Trois familles sont distinguées :
+
+- **Refus (B2B)** — codes émis par l'acheteur (ou la plateforme partenaire pour son compte) pour refuser, mettre en litige ou suspendre une facture (statuts 200, 206, 207, 208, 210, 221).
+- **Rejet PA** — codes émis par une plateforme partenaire lorsqu'une facture échoue aux contrôles de plateforme (statut 213).
+- **Irrégularité** — codes utilisés par le PPF lorsque le flux d'entrée échoue à un contrôle d'intégrité avant tout traitement métier (statut 213).
+
+La barre permet de filtrer par famille, de rechercher par code ou libellé, et de consulter la description complète ainsi que les statuts pouvant porter le code. Les codes marqués **Obligatoire dans le corps** doivent être transportés dans le corps du message (et non uniquement dans l'enveloppe).
+
+<ReasonCodeReference />

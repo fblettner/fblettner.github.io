@@ -133,13 +133,13 @@
     "message": "Navigation principale : tableau de bord, factures, e-reporting, e-directory et erreurs d'intégration.",
     "description": "The generated-index page description for category 'Application' in sidebar 'nomaublSidebar'"
   },
-  "sidebar.nomaublSidebar.category.Documentation": {
-    "message": "Documentation",
-    "description": "The label for category 'Documentation' in sidebar 'nomaublSidebar'"
+  "sidebar.nomaublSidebar.category.References": {
+    "message": "Références",
+    "description": "The label for category 'References' in sidebar 'nomaublSidebar'"
   },
-  "sidebar.nomaublSidebar.category.Documentation.link.generated-index.description": {
-    "message": "Documentation de référence intégrée à l'application : codes statut, codes motif et sémantique UBL.",
-    "description": "The generated-index page description for category 'Documentation' in sidebar 'nomaublSidebar'"
+  "sidebar.nomaublSidebar.category.References.link.generated-index.description": {
+    "message": "Documentation de référence intégrée à l'application : codes statut, codes motif, sémantique UBL et API HTTP.",
+    "description": "The generated-index page description for category 'References' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Sync": {
     "message": "Synchronisation",

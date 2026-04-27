@@ -1,0 +1,15 @@
+---
+title: UBL Reference
+description: "UBL field reference for the French e-invoicing reform — every BT field with its XPath, cardinality and example, grouped by section (header, supplier, customer, tax, totals, line, etc.)."
+keywords: [NomaUBL, UBL, EN 16931, Factur-X, BT, BG, XPath, e-invoicing, France, extended-ctc-fr, BT-1, BT-22, BT-110, BT-115, supplier, customer, tax, line, cardinality]
+---
+
+import UBLReference from '@site/src/components/reference/UBLReference';
+
+# UBL Reference
+
+The screen lists every **UBL business term (BT)** carried by the French e-invoicing flow under EN 16931 / extended-ctc-fr / Factur-X. Each row shows the BT identifier, the human-readable label (with description and example where relevant), the canonical XPath inside the UBL document and the cardinality (`1..1`, `0..1`, `0..n`, `1..n`).
+
+Filter by section (header, supplier, customer, payee, tax representative, delivery, payment, allowances & charges, tax, totals, invoice line) or search across BT, XPath, label, description and example. The table is grouped by section and color-coded — the same colour scheme is reused inside the application's invoice editor.
+
+<UBLReference />

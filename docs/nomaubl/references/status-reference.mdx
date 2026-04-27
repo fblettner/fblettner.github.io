@@ -1,0 +1,15 @@
+---
+title: Status Reference
+description: "Invoice life-cycle statuses for the French e-invoicing reform — codes 200 to 501 (XP Z12-012) with actor, phase, mandatory/factoring tags and allowed actions."
+keywords: [NomaUBL, invoice status, life-cycle, XP Z12-012, PPF, PA-E, PA-R, e-invoicing, reform, France, status codes, 200, 501, factoring, transmission]
+---
+
+import StatusReference from '@site/src/components/reference/StatusReference';
+
+# Status Reference
+
+The screen lists every **invoice life-cycle status** defined by the French e-invoicing reform (norm **XP Z12-012**, codes 200–501). NomaUBL surfaces the same reference inside the app to help users interpret the statuses returned by the PPF and the partner platforms (PA-E / PA-R / PA-TR).
+
+Use the **filter bar** to narrow the list by phase (transmission / processing), by mandatory transmission to the PPF, by factoring or by special codes (batch / routing). Click any card to open the full detail: who emits the status, when it applies, allowed actions per actor, and notes.
+
+<StatusReference />

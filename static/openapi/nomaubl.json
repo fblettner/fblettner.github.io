@@ -1,0 +1,1224 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "NomaUBL API",
+    "description": "REST API for the NomaUBL e-invoicing and JD Edwards integration platform. Provides configuration management, UBL invoice generation and validation, PA (Plateforme Agreee) submission and lifecycle tracking, JDE BIP Print Queue extraction, authentication and role-based access control, batch processing, connector integration, and AI-assisted analysis.",
+    "version": "1.0.0",
+    "contact": { "name": "NOMANA-IT", "url": "https://www.nomana-it.fr" }
+  },
+  "servers": [ { "url": "/", "description": "Embedded server" } ],
+  "tags": [
+    { "name": "Auth",         "description": "Authentication, session management, user and role administration. All protected endpoints require a Bearer token in the Authorization header." },
+    { "name": "Config",       "description": "Configuration template management — create, read, update, delete and copy templates (global, e-invoicing, e-directory, document templates)." },
+    { "name": "Processing",   "description": "UBL generation, XSD/Schematron validation, PA submission, import status polling, lifecycle retrieval and PPF directory lookup." },
+    { "name": "Invoices",     "description": "E-invoice lifecycle, status management, line items, VAT breakdown, resend and PDF viewing." },
+    { "name": "Batch",        "description": "Batch invoice processing — list input files, discover BIP jobs, and run batch generation across multiple invoices." },
+    { "name": "JD Edwards",   "description": "JDE BIP Print Queue extraction (XML/PDF), Oracle DB XML extraction, and SFTP file download." },
+    { "name": "Connectors",   "description": "Generic API connector integration — list available endpoints on a connector template and execute calls with parameters." },
+    { "name": "Integration",  "description": "Integration error monitoring — validation errors that have no matching invoice header (UBL transform failures)." },
+    { "name": "Email",        "description": "SMTP email sending with optional invoice PDF attachment fetched from the PA." },
+    { "name": "FileSystem",   "description": "Server-side file browsing, reading, writing, copying, uploading, and XSL framework installation." },
+    { "name": "AI",           "description": "AI assistant with SSE streaming — provides context-aware analysis of invoices and configuration." }
+  ],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Authenticate user",
+        "description": "Authenticates a user with username and password and returns a Bearer token. The token must be included in the Authorization header for all subsequent API calls. Returns the token along with the full user profile (username, role, fullName, email). This is the only endpoint (along with /api/auth/session) that does not require prior authentication.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoginRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoginResponse" } } }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Invalidate session",
+        "description": "Invalidates the current Bearer token, ending the user session. The token is extracted from the Authorization header. After logout, the token can no longer be used for API calls. Returns success even if the token was already expired or invalid.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/auth/session": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Check session validity",
+        "description": "Validates the current Bearer token and returns the authenticated user profile. Also returns whether authentication is enabled on this server instance (authEnabled flag). If the token is missing or invalid, user is null but the call still succeeds — this allows the frontend to detect whether login is required. This endpoint does not require prior authentication.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "authEnabled": true, "user": { "username": "admin", "role": "admin", "fullName": "Administrator", "email": "admin@example.com" } } } } }
+          }
+        }
+      }
+    },
+    "/api/auth/change-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Change own password",
+        "description": "Changes the password for the currently authenticated user. Requires the current (old) password for verification and the new password. The new password must be at least 4 characters long. The user is identified from the session token in the Authorization header.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ChangePasswordRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/auth/users": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "List all users",
+        "description": "Returns the list of all registered users with their profiles (username, role, fullName, email, active status). Passwords are never included in the response. Requires authentication. Typically restricted to admin users in the frontend.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "users": [{ "username": "admin", "role": "admin", "fullName": "Administrator", "email": "", "active": true }] } } } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Create a new user",
+        "description": "Creates a new user account with the specified username, password, role, and optional profile fields. The username must be unique. If no role is specified, defaults to 'viewer'. Requires authentication. The password is stored as a bcrypt hash.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateUserRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/auth/users/{username}": {
+      "put": {
+        "tags": ["Auth"],
+        "summary": "Update a user",
+        "description": "Updates an existing user's role, fullName, email, active status, and optionally resets their password. The username is specified in the URL path. If newPassword is provided, the user's password is changed without requiring the old password (admin reset). Requires authentication.",
+        "parameters": [
+          { "name": "username", "in": "path", "schema": { "type": "string" }, "description": "Username to update", "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateUserRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Auth"],
+        "summary": "Delete a user",
+        "description": "Permanently deletes a user account. The username is specified in the URL path. Active sessions for the deleted user are not automatically invalidated. Requires authentication.",
+        "parameters": [
+          { "name": "username", "in": "path", "schema": { "type": "string" }, "description": "Username to delete", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/auth/roles": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "List all roles",
+        "description": "Returns the list of all defined roles with their permissions. Each role includes a name, description, allowed pages (comma-separated), allowed companies, and a settings flag indicating whether the role can access configuration. Requires authentication.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "roles": [{ "name": "admin", "description": "Full access", "pages": "*", "companies": "*", "settings": true }] } } } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Create a new role",
+        "description": "Creates a new role with the specified permissions. The name must be unique. The pages field is a comma-separated list of allowed page identifiers (or '*' for all pages). The companies field restricts which JDE company codes the role can access. The settings flag controls access to the configuration management UI. Requires authentication.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateRoleRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/auth/roles/{name}": {
+      "put": {
+        "tags": ["Auth"],
+        "summary": "Update a role",
+        "description": "Updates an existing role's description, pages, companies, and settings flag. The role name is specified in the URL path and cannot be changed. Changes take effect on the next page load for users with this role. Requires authentication.",
+        "parameters": [
+          { "name": "name", "in": "path", "schema": { "type": "string" }, "description": "Role name to update", "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateRoleRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Auth"],
+        "summary": "Delete a role",
+        "description": "Permanently deletes a role definition. Users currently assigned to this role will retain their role name but may lose access to restricted pages. The role name is specified in the URL path. Requires authentication.",
+        "parameters": [
+          { "name": "name", "in": "path", "schema": { "type": "string" }, "description": "Role name to delete", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/init-database": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Initialize authentication database",
+        "description": "Creates the authentication tables (users, roles, sessions) if they do not exist, and bootstraps a default admin user (admin/admin) if no users are found. This endpoint is idempotent — calling it multiple times is safe. After initialization, the server reloads the auth configuration. Use this when setting up a new NomaUBL instance or after a database migration.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "authEnabled": true, "log": "Tables created. Admin user bootstrapped." } } } }
+          }
+        }
+      }
+    },
+    "/api/config/templates": {
+      "get": {
+        "tags": ["Config"],
+        "summary": "List all configuration templates",
+        "description": "Returns the list of all templates defined in config.json, including system templates (global, e-invoicing, e-directory) and document templates (e.g. vrc_pro, isc_facture). Each template includes its name, description, type, and all key-value properties. Use this to populate template selectors in the UI.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "templates": { "type": "array", "items": { "$ref": "#/components/schemas/Template" } } } } } }
+          }
+        }
+      }
+    },
+    "/api/config/template": {
+      "get": {
+        "tags": ["Config"],
+        "summary": "Get a template by name",
+        "description": "Returns a single template including all its properties. The template name is passed as a query parameter. Returns an error if the template does not exist.",
+        "parameters": [
+          { "name": "name", "in": "query", "schema": { "type": "string" }, "description": "Template name (e.g. global, e-invoicing, vrc_pro)", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Template" } } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Config"],
+        "summary": "Create a template",
+        "description": "Creates a new configuration template. The template name must be unique. System template names (global, e-invoicing, e-directory) cannot be used for new templates. The template is persisted to config.json immediately.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Template" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Config"],
+        "summary": "Update a template",
+        "description": "Replaces all properties of an existing template with the provided values. The template name is specified as a query parameter. If the template is e-invoicing, the server reloads PA API credentials after saving.",
+        "parameters": [
+          { "name": "name", "in": "query", "schema": { "type": "string" }, "description": "Template name to update", "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Template" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Config"],
+        "summary": "Delete a template",
+        "description": "Permanently deletes a template from config.json. System templates (global, e-invoicing, e-directory) cannot be deleted and will return an error. Document templates can be deleted freely.",
+        "parameters": [
+          { "name": "name", "in": "query", "schema": { "type": "string" }, "description": "Template name to delete", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/config/template/copy": {
+      "post": {
+        "tags": ["Config"],
+        "summary": "Copy a template",
+        "description": "Duplicates an existing template under a new name. Both the source (from) and destination (to) names are required. The destination name must not already exist. All properties from the source template are copied to the new template.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "from": "source_name", "to": "new_name" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/run": {
+      "post": {
+        "tags": ["Processing"],
+        "summary": "Process XML document",
+        "description": "Runs a document processing job (XML source) via the -xml subprocess. Supported modes: SINGLE (report only), BURST (multi-document report), UBL (UBL XML generation + validation + PA send). If the input file is an absolute path, it is copied to the template's dirInput directory first. When replaceMode is true, existing invoices in the database are overwritten. When noSend is true, PA sending is skipped regardless of settings.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RunRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RunResult" } } }
+          }
+        }
+      }
+    },
+    "/api/validate": {
+      "post": {
+        "tags": ["Processing"],
+        "summary": "Validate UBL document",
+        "description": "Validates a UBL XML file against XSD and Schematron rules. For sourceType=xml: generates UBL from JDE XML first (no DB write, no PA send), then validates. For sourceType=ubl: validates the UBL file directly. Returns structured validation results.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ValidateRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RunResult" } } }
+          }
+        }
+      }
+    },
+    "/api/import": {
+      "post": {
+        "tags": ["Processing"],
+        "summary": "Poll PA import statuses",
+        "description": "Queries all invoices currently in status 9906 (pending) and checks their import status on the Plateforme Agreee. For each invoice, calls GET /api/v1/sale/invoices/import/{uuid}. Updates the database accordingly: success -> status 10 (Deposited) with invoiceUuid, failed -> status 9907 with error messages, pending -> no change. This is typically called periodically or on-demand after invoice submission.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RunResult" } } }
+          }
+        }
+      }
+    },
+    "/api/retrieve-statuses": {
+      "post": {
+        "tags": ["Processing"],
+        "summary": "Retrieve PA lifecycle statuses",
+        "description": "Retrieves updated lifecycle statuses from the PA API for all submitted invoices. This fetches the latest status transitions (e.g. received, under processing, approved, rejected) and records them in the lifecycle table (F564235). Use this to keep the local database in sync with the PA's invoice status.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RunResult" } } }
+          }
+        }
+      }
+    },
+    "/api/scheduler": {
+      "get": {
+        "tags": ["Processing"],
+        "summary": "Background scheduler status",
+        "description": "Returns the current background scheduler configuration and status. The scheduler runs periodic tasks in serve mode: import-status polling, PA status retrieval, and batch document processing. Intervals are configured via global template properties: fetchImportInterval, fetchStatusInterval, fetchAllInterval (minutes, 0=disabled). fetchAllParams holds a JSON string with the same fields as BatchRunRequest.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SchedulerStatus" } } }
+          }
+        }
+      }
+    },
+    "/api/check-directory": {
+      "post": {
+        "tags": ["Processing"],
+        "summary": "PPF directory lookup",
+        "description": "Checks whether a given identifier (SIREN, SIRET, or VAT number) is registered and reachable on the PPF (Portail Public de Facturation) platform. Uses credentials from the e-directory configuration template. If platform=true, the recipient is reachable for e-invoicing. If platform=false or not found, invoices may still be sent but delivery is not guaranteed. This check is non-blocking — it never prevents invoice submission.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "properties": { "identifier": { "type": "string" }, "null": { "type": "null" } } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "found": { "type": "boolean" }, "message": { "type": "string" }, "platform": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "List invoices",
+        "description": "Returns a paginated list of invoices from the invoice header table with optional filtering and sorting. Supports full-text search across document number, type, and company code, as well as filters by status code, UBL invoice number, customer reference/name, and issue date range. Results include invoice metadata, amounts, customer info, and current status.",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer" }, "description": "Page number (1-based, default 1)", "required": false },
+          { "name": "pageSize", "in": "query", "schema": { "type": "integer" }, "description": "Items per page (default 50, max 500)", "required": false },
+          { "name": "search", "in": "query", "schema": { "type": "string" }, "description": "Full-text search on DOC, DCT, KCO fields", "required": false },
+          { "name": "status", "in": "query", "schema": { "type": "string" }, "description": "Filter by status code (e.g. 10, 9906)", "required": false },
+          { "name": "ublNumber", "in": "query", "schema": { "type": "string" }, "description": "Filter by UBL invoice number", "required": false },
+          { "name": "customer", "in": "query", "schema": { "type": "string" }, "description": "Filter by customer reference or name", "required": false },
+          { "name": "sortBy", "in": "query", "schema": { "type": "string" }, "description": "Column to sort by (e.g. fedoc, issueDate, statusCode)", "required": false },
+          { "name": "sortDir", "in": "query", "schema": { "type": "string" }, "description": "Sort direction: ASC or DESC (default DESC)", "required": false },
+          { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "Last update date lower bound (yyyy-MM-dd)", "required": false },
+          { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "Last update date upper bound (yyyy-MM-dd)", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "invoices": { "type": "array", "items": { "$ref": "#/components/schemas/Invoice" } }, "total": { "type": "integer" } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/stats": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "Invoice statistics",
+        "description": "Returns aggregated counts of invoices grouped by status code for dashboard display. Each entry includes the status code, human-readable label, and count. Optionally filtered by last update date range. Use this to populate status chips or a summary dashboard.",
+        "parameters": [
+          { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "Last update date lower bound (yyyy-MM-dd)", "required": false },
+          { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "Last update date upper bound (yyyy-MM-dd)", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "stats": { "type": "array", "items": { "$ref": "#/components/schemas/InvoiceStat" } } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/lifecycle": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "Invoice lifecycle events",
+        "description": "Returns all lifecycle events from the lifecycle table (F564235) for the given invoice. Events are ordered by sequence number and include status code, label, message, and timestamp. The id parameter is the concatenation of DOC+DCT+KCO (e.g. '12345RI00070').",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Invoice identifier: DOC+DCT+KCO concatenated (e.g. 12345RI00070)", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "events": { "type": "array", "items": { "$ref": "#/components/schemas/LifecycleEvent" } } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/errors": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "Invoice validation errors",
+        "description": "Returns validation errors from the validation table (F564236) for the given invoice. Errors include severity level (FATAL, ERROR, WARNING, INFO), validation source (XSD or Schematron), rule identifier, and a human-readable error message. Only present for invoices that failed or passed with warnings.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Invoice identifier: DOC+DCT+KCO concatenated", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "errors": { "type": "array", "items": { "$ref": "#/components/schemas/ValidationError" } } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/lines": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "Invoice lines",
+        "description": "Returns the line items extracted from the UBL XML document for the given invoice. Each line includes item description, quantity, unit price, line amount, VAT category and rate. The UBL XML is retrieved from the BLOB column in the invoice header table.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Invoice identifier: DOC+DCT+KCO concatenated", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "lines": { "type": "array", "items": { "$ref": "#/components/schemas/InvoiceLine" } } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/vat": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "Invoice VAT breakdown",
+        "description": "Returns the VAT breakdown rows from the UBL XML document's TaxTotal section. Each row includes the tax category, rate, taxable base amount, VAT amount, currency, and exemption reason (if applicable). Useful for displaying a VAT summary table in the invoice detail view.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Invoice identifier: DOC+DCT+KCO concatenated", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "vat": { "type": "array", "items": { "$ref": "#/components/schemas/VatRow" } } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/notes": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "Invoice notes",
+        "description": "Parses cbc:Note elements from the UBL XML stored in F564231.UHTXFT. Notes with a #PREFIX# marker (e.g. #PMD#text) are split into prefix and text fields. Returns notes as [{prefix, text}, ...] objects.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Invoice identifier: DOC+DCT+KCO concatenated", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "notes": [{ "prefix": "PMD", "text": "Payment terms…" }] } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/create-ubl": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Create invoice from UBL XML",
+        "description": "Creates a new invoice by parsing a UBL 2.1 XML document and inserting header, lines, VAT summary, and lifecycle event into the database using UBLDatabaseHandler. The XML must conform to EN 16931 UBL 2.1 structure with proper namespaces.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateUblRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/resend": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Resend invoice to PA",
+        "description": "Re-submits the invoice's UBL XML to the Plateforme Agreee. The XML is retrieved from the database BLOB and sent via the PA import API. A new UUID is assigned and the invoice status is updated to 9906 (pending). Use this when a previous submission failed or was rejected and the issue has been resolved.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "uuid": "5edf-abcd-1234-..." } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/status": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Set invoice status",
+        "description": "Manually sets the invoice status either via the PA API (target=pa, which calls the PA's status update endpoint) or directly in the local database (target=db, which updates F564231 and inserts a lifecycle event in F564235). Use target=db for corrections or when the PA is unreachable. The status code and name follow the UNTDID 1373 standard or internal 99xx codes.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "target": "pa|db", "name": "Deposited", "code": "10", "reason": "Manual correction", "statusAt": "2025-01-15T10:30:00" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}/validate": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Validate UBL from database",
+        "description": "Validates the UBL XML stored in the database (F564231.UHTXFT) for the given invoice against XSD schema and Schematron business rules. Returns a status field: 'valid' (no issues), 'warning' (warnings only), or 'error' (has errors). The errors array contains detailed validation results with severity, source, rule, and message.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Invoice identifier: DOC+DCT+KCO concatenated", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "status": "warning", "valid": true, "errorCount": 0, "warningCount": 2, "errors": [{"severity":"WARNING","source":"Schematron","rule":"BR-FR-12","message":"..."}] } } } }
+          }
+        }
+      }
+    },
+    "/invoice/view": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "Download merged invoice PDF",
+        "description": "Generates a PDF from the UBL XML stored in the database and appends any embedded PDF attachment. The invoice is identified by the id query parameter (DOC+DCT+KCO). The lang parameter controls the language of labels in the generated PDF (fr or en). Reference list labels (invoice types, payment means) are resolved from configuration. This endpoint is designed to be opened directly in a browser tab or iframe.",
+        "parameters": [
+          { "name": "id", "in": "query", "schema": { "type": "string" }, "description": "Invoice identifier: DOC+DCT+KCO concatenated", "required": true },
+          { "name": "lang", "in": "query", "schema": { "type": "string" }, "description": "Language code for PDF labels: 'fr' or 'en' (default: en)", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": "application/pdf binary stream" } } }
+          }
+        }
+      }
+    },
+    "/api/fetch-invoices/list-files": {
+      "post": {
+        "tags": ["Batch"],
+        "summary": "List input files",
+        "description": "Lists all XML files in the input directory. For processType=xml: uses dirInput with %TEMPLATE% resolved (template required). For processType=ubl: uses dirInput/ubl (no template needed).",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "template": "vrc_pro", "processType": "xml" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "directory": "/data/input/vrc_pro", "files": ["invoice_001.xml"] } } } }
+          }
+        }
+      }
+    },
+    "/api/fetch-invoices/list-bip-jobs": {
+      "post": {
+        "tags": ["Batch"],
+        "summary": "List BIP jobs for batch processing",
+        "description": "Queries the JDE BIP Print Queue for jobs newer than the specified lastJobNumber (or the lastBipJobNumber from the global config if not provided). Only returns jobs matching the report filters defined in the configuration. Each entry includes the job number and base file name. Use this to discover new print jobs that are ready for UBL processing.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "lastJobNumber": "123456" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "lastJobNumber": 123456, "jobs": [{ "jobNumber": 123457, "baseName": "R42565_XJDE0001_123457" }] } } } }
+          }
+        }
+      }
+    },
+    "/api/fetch-invoices/run-batch": {
+      "post": {
+        "tags": ["Batch"],
+        "summary": "Run batch processing",
+        "description": "Processes multiple files in batch mode. Supports both XML and UBL processing. For processType=xml: uses -xml subprocess with template, mode, and optional --no-send. For processType=ubl: uses UBLInvoiceProcessor with validateOnly, replaceMode, sendToPA. Source 'directory' scans dirInput (xml) or dirInput/ubl (ubl). Source 'bip' extracts from BIP Print Queue jobs. Duplicate documents are skipped when replaceMode is false.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BatchRunRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BatchRunResult" } } }
+          }
+        }
+      }
+    },
+    "/api/apply-post-generation": {
+      "post": {
+        "tags": ["Batch"],
+        "summary": "Apply post-generation cleanup",
+        "description": "Applies post-generation processing to a BIP Print Queue job. This typically involves updating the JDE job status and performing cleanup operations after a successful extraction and UBL generation. The jobNumber identifies the BIP job, processingType specifies the pipeline step, and baseName is the extracted file's base name.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "jobNumber": "123456", "processingType": "UBL", "baseName": "R42565_XJDE0001_123456" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "message": { "type": "string" } } } } }
+          }
+        }
+      }
+    },
+    "/api/extract-bip": {
+      "post": {
+        "tags": ["JD Edwards"],
+        "summary": "Extract from BIP Print Queue",
+        "description": "Extracts data from the JDE BIP Print Queue (F9563110 / F95630 / F95631). extractMode: 'input' (XML from dataOutput), 'output' (files from xmlpOutput), 'both'. outputType filters output by XOFRPOUTYP (XML, PDF, EXCEL, etc.). Returns the base file name and outputCount for use in subsequent processing.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ExtractBipRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "message": "...", "baseName": "R42565_XJDE0001_123456", "outputCount": 1 } } } }
+          }
+        }
+      }
+    },
+    "/api/extract-xml": {
+      "post": {
+        "tags": ["JD Edwards"],
+        "summary": "Extract XML from database",
+        "description": "Extracts XML data for an invoice identified by DOC, DCT, and KCO. The `source` parameter controls which table and column to read from: `xml` (default) reads the JDE source XML from F564230.FETXFT, `ubl` reads the generated UBL 2.1 XML from F564231.UHTXFT. The file is written to the specified outputDir.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ExtractXmlRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "message": { "type": "string" } } } } }
+          }
+        }
+      }
+    },
+    "/api/download-xml": {
+      "post": {
+        "tags": ["JD Edwards"],
+        "summary": "Download XML via SFTP",
+        "description": "Downloads an XML file from the JDE server via SFTP using the connection credentials configured in the global template (sftpHost, sftpUser, sftpPassword, sftpPort). The file path is constructed from the report name, version, language, and job number. The downloaded file is saved to the specified output path.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DownloadRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "message": { "type": "string" } } } } }
+          }
+        }
+      }
+    },
+    "/api/connectors": {
+      "get": {
+        "tags": ["Connectors"],
+        "summary": "List connector endpoints",
+        "description": "Returns the list of available endpoints for a given api-connector template. Each endpoint includes its name, HTTP method, URL pattern, and parameter definitions. The connector template must have type=api-connector in its properties. Use this to discover available operations before calling a connector.",
+        "parameters": [
+          { "name": "name", "in": "query", "schema": { "type": "string" }, "description": "Connector template name", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "endpoints": [{ "name": "getStatus", "method": "GET", "url": "/api/status/{id}" }] } } } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Connectors"],
+        "summary": "Call a connector endpoint",
+        "description": "Executes a call to a specific endpoint on an api-connector template. The connector handles authentication, URL construction, and parameter substitution. Parameters are passed as key-value pairs in the request body and substituted into URL placeholders or sent as query/body parameters depending on the endpoint definition. Returns the HTTP status code, response body, and optionally an extracted value.",
+        "parameters": [
+          { "name": "name", "in": "query", "schema": { "type": "string" }, "description": "Connector template name", "required": true },
+          { "name": "endpoint", "in": "query", "schema": { "type": "string" }, "description": "Endpoint name to call", "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "params": { "id": "12345" } } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "statusCode": 200, "requestUrl": "https://api.example.com/status/12345", "body": "...", "extractedValue": "..." } } } }
+          }
+        }
+      }
+    },
+    "/api/integration-errors": {
+      "get": {
+        "tags": ["Integration"],
+        "summary": "List integration errors",
+        "description": "Returns validation errors from the validation table (F564236) that have no matching entry in the invoice header table (F564230). These represent UBL transformation failures where the invoice record could not be created. Supports pagination, full-text search, severity level filtering, and sorting. Use this to monitor and diagnose systemic transformation issues.",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer" }, "description": "Page number (1-based, default 1)", "required": false },
+          { "name": "pageSize", "in": "query", "schema": { "type": "integer" }, "description": "Items per page (default 50)", "required": false },
+          { "name": "search", "in": "query", "schema": { "type": "string" }, "description": "Full-text search on DOC, DCT, KCO fields", "required": false },
+          { "name": "level", "in": "query", "schema": { "type": "string" }, "description": "Filter by severity: FATAL, ERROR, WARNING, or INFO", "required": false },
+          { "name": "sortBy", "in": "query", "schema": { "type": "string" }, "description": "Column to sort by", "required": false },
+          { "name": "sortDir", "in": "query", "schema": { "type": "string" }, "description": "Sort direction: ASC or DESC", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "errors": { "type": "array", "items": { "$ref": "#/components/schemas/IntegrationError" } }, "total": { "type": "integer" } } } } }
+          }
+        }
+      }
+    },
+    "/api/email": {
+      "post": {
+        "tags": ["Email"],
+        "summary": "Send email with optional invoice PDF",
+        "description": "Sends an email via the SMTP server configured in the global template (smtpHost, smtpPort, smtpUser, etc.). PDF attachment is resolved in order of priority: (1) If attachmentBase64 is provided, it is decoded and used directly as the PDF attachment. (2) Otherwise, if invoiceId is provided (DOC+DCT+KCO), the PDF is generated server-side from the UBL XML stored in the database, with optional language parameter for label translation. The email body is sent as plain text. The CC field is optional.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EmailRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/fs/browse": {
+      "get": {
+        "tags": ["FileSystem"],
+        "summary": "Browse server directory",
+        "description": "Lists files and subdirectories at the given server path. Supports %APP_HOME% and %PROCESS_HOME% placeholders in the path. Returns an array of entries with name, type (file/directory), size, and modification date. If path is empty or omitted, lists the root of the configured appHome directory.",
+        "parameters": [
+          { "name": "path", "in": "query", "schema": { "type": "string" }, "description": "Absolute server path or path with placeholders (empty = root)", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BrowseResult" } } }
+          }
+        }
+      }
+    },
+    "/api/fs/read": {
+      "get": {
+        "tags": ["FileSystem"],
+        "summary": "Read a text file",
+        "description": "Returns the UTF-8 content of a server-side text file at the specified path. Supports %APP_HOME% and %PROCESS_HOME% placeholders. Intended for reading configuration files, XSL templates, and XML documents. Binary files will be returned as-is but may not display correctly.",
+        "parameters": [
+          { "name": "path", "in": "query", "schema": { "type": "string" }, "description": "Absolute server path to the file", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "path": "/data/config/template.xsl", "content": "<?xml version=..." } } } }
+          }
+        }
+      }
+    },
+    "/api/fs/write": {
+      "put": {
+        "tags": ["FileSystem"],
+        "summary": "Write a text file",
+        "description": "Writes or overwrites a server-side text file with the supplied UTF-8 content. The parent directory must exist. Supports %APP_HOME% and %PROCESS_HOME% placeholders. Use this for editing XSL templates, configuration files, or XML documents in place.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "path": "/data/config/template.xsl", "content": "<?xml version=..." } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "path": "/data/config/template.xsl" } } } }
+          }
+        }
+      }
+    },
+    "/api/fs/copy": {
+      "post": {
+        "tags": ["FileSystem"],
+        "summary": "Copy a file",
+        "description": "Copies a server-side file from source path to destination path. Both paths support %APP_HOME% and %PROCESS_HOME% placeholders. The destination directory must exist. If the destination file already exists, it is overwritten.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "source": "/data/templates/original.xsl", "dest": "/data/templates/backup.xsl" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "path": "/data/templates/backup.xsl" } } } }
+          }
+        }
+      }
+    },
+    "/api/upload": {
+      "post": {
+        "tags": ["FileSystem"],
+        "summary": "Upload a file",
+        "description": "Uploads a file to the template's input directory (dirInput). The file content is sent as the raw request body (not multipart). The template and filename are specified as query parameters. The dirInput path is resolved from the global template with placeholder substitution. Use this to upload XML files for processing via the /api/run endpoint.",
+        "parameters": [
+          { "name": "template", "in": "query", "schema": { "type": "string" }, "description": "Template name (determines target directory)", "required": true },
+          { "name": "filename", "in": "query", "schema": { "type": "string" }, "description": "Target file name", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "message": { "type": "string" } } } } }
+          }
+        }
+      }
+    },
+    "/api/xsl/install": {
+      "post": {
+        "tags": ["FileSystem"],
+        "summary": "Install XSL framework files",
+        "description": "Extracts and installs the built-in XSL framework files (UBL stylesheets, common templates) from the JAR's xsl/ resources into the specified target directory. This is used during initial setup or when upgrading the XSL framework. Existing files in the target directory with the same names are overwritten.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "targetDir": "%APP_HOME%/xsl" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "installed": ["UBL-2.1-Invoice.xsl", "common-templates.xsl"] } } } }
+          }
+        }
+      }
+    },
+    "/api/insee-search": {
+      "post": {
+        "tags": ["Connectors"],
+        "summary": "Search French company registry (INSEE)",
+        "description": "Searches the French government's entreprise registry API (recherche-entreprises.api.gouv.fr) for companies matching the given query string. The query can be a company name, SIREN, SIRET, or any partial match. Returns up to perPage results (configured in the e-directory template, default 10). This is a free public API and does not require authentication. Use this to look up company identifiers for directory checks or invoice addressing.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "q": "NOMANA" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "results": "[...raw JSON from INSEE API...]" } } } }
+          }
+        }
+      }
+    },
+    "/api/ai/chat": {
+      "post": {
+        "tags": ["AI"],
+        "summary": "AI chat (SSE streaming)",
+        "description": "Streams an AI assistant response as Server-Sent Events (SSE). Each event contains a 'data' field with a text token. The stream ends with 'data: [DONE]'. The messages array follows the standard chat format with role (user/assistant/system) and content. The model parameter selects the AI model. The context parameter provides additional context (e.g. current invoice data, configuration state) for more relevant responses. Content-Type of the response is text/event-stream.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "messages": [{"role":"user","content":"Analyze this invoice"}], "model": "claude-sonnet", "context": "Invoice #12345 status: rejected" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": "text/event-stream: data: token\ndata: [DONE]\n" } } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "JWT-like session token obtained from /api/auth/login. Pass as: Authorization: Bearer {token}"
+      }
+    },
+    "schemas": {
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "description": "User login name" },
+          "password": { "type": "string", "description": "User password (plain text, transmitted over HTTPS)" }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "description": "Whether authentication succeeded" },
+          "token": { "type": "string", "description": "Bearer token to use in Authorization header for subsequent requests" },
+          "user": { "type": "object", "description": "Authenticated user profile containing username, role, fullName, and email" }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "properties": {
+          "oldPassword": { "type": "string", "description": "Current password for verification" },
+          "newPassword": { "type": "string", "description": "New password (minimum 4 characters)" }
+        }
+      },
+      "CreateUserRequest": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "description": "Unique login name for the new user" },
+          "password": { "type": "string", "description": "Initial password for the new user" },
+          "role": { "type": "string", "description": "Role name to assign (defaults to 'viewer' if omitted)" },
+          "fullName": { "type": "string", "description": "Display name (optional)" },
+          "email": { "type": "string", "description": "Email address (optional)" }
+        }
+      },
+      "UpdateUserRequest": {
+        "type": "object",
+        "properties": {
+          "role": { "type": "string", "description": "Role name to assign" },
+          "fullName": { "type": "string", "description": "Display name" },
+          "email": { "type": "string", "description": "Email address" },
+          "active": { "type": "string", "description": "Whether the user account is active ('true' or 'false')" },
+          "newPassword": { "type": "string", "description": "If provided, resets the user's password (admin reset, no old password required)" }
+        }
+      },
+      "CreateRoleRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Unique role identifier" },
+          "description": { "type": "string", "description": "Human-readable description of the role's purpose" },
+          "pages": { "type": "string", "description": "Comma-separated list of allowed page identifiers, or '*' for all pages" },
+          "companies": { "type": "string", "description": "Comma-separated list of allowed JDE company codes, or '*' for all" },
+          "settings": { "type": "string", "description": "Whether this role can access configuration management ('true' or 'false')" }
+        }
+      },
+      "UpdateRoleRequest": {
+        "type": "object",
+        "properties": {
+          "description": { "type": "string", "description": "Human-readable description of the role's purpose" },
+          "pages": { "type": "string", "description": "Comma-separated list of allowed page identifiers, or '*' for all pages" },
+          "companies": { "type": "string", "description": "Comma-separated list of allowed JDE company codes, or '*' for all" },
+          "settings": { "type": "string", "description": "Whether this role can access configuration management ('true' or 'false')" }
+        }
+      },
+      "Template": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Template identifier (e.g. global, e-invoicing, vrc_pro)" },
+          "description": { "type": "string", "description": "Human-readable description of the template's purpose" },
+          "type": { "type": "string", "description": "Template type (system or document)" },
+          "properties": { "type": "object", "description": "Key-value map of configuration properties specific to this template type" }
+        }
+      },
+      "RunRequest": {
+        "type": "object",
+        "properties": {
+          "template": { "type": "string", "description": "Document template name (e.g. vrc_pro, isc_facture)" },
+          "file": { "type": "string", "description": "Input file name (basename without extension) or absolute path" },
+          "mode": { "type": "string", "description": "Processing mode: AUTO, SINGLE, BURST, UBL (AUTO resolves per document from document-types)" },
+          "replaceMode": { "type": "boolean", "description": "If true, overwrite existing invoices in the database" },
+          "noSend": { "type": "boolean", "description": "If true, skip PA sending regardless of settings" }
+        }
+      },
+      "ValidateRequest": {
+        "type": "object",
+        "properties": {
+          "file": { "type": "string", "description": "Path to the XML or UBL file to validate" },
+          "sourceType": { "type": "string", "description": "Input type: 'xml' (raw JDE XML, transformed first) or 'ubl' (already UBL format)" },
+          "template": { "type": "string", "description": "Optional template name providing context for XSL transformation" }
+        }
+      },
+      "RunResult": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "description": "Whether the operation completed successfully" },
+          "error": { "type": "string", "description": "Error message if the operation failed (null on success)" },
+          "logs": { "type": "array", "description": "Array of structured log entries from the processing pipeline" }
+        }
+      },
+      "Invoice": {
+        "type": "object",
+        "properties": {
+          "fedoc": { "type": "string", "description": "JDE document number (FEDOC)" },
+          "fedct": { "type": "string", "description": "JDE document type code (FEDCT, e.g. RI, RN)" },
+          "kco": { "type": "string", "description": "JDE company code (FEKCO, e.g. 00070)" },
+          "ublNumber": { "type": "string", "description": "UBL invoice number as it appears in the XML" },
+          "issueDate": { "type": "string", "description": "Invoice issue date in yyyy-MM-dd format" },
+          "updatedDate": { "type": "string", "description": "Last update date in yyyy-MM-dd format (UHUPMJ)" },
+          "invoiceType": { "type": "string", "description": "UBL invoice type code (380=invoice, 381=credit note, etc.)" },
+          "totalHT": { "type": "number", "description": "Total amount excluding VAT (Hors Taxes)" },
+          "totalTTC": { "type": "number", "description": "Total amount including VAT (Toutes Taxes Comprises)" },
+          "amountDue": { "type": "number", "description": "Amount due for payment" },
+          "customerRef": { "type": "string", "description": "Customer accounting reference (buyer reference)" },
+          "customerName": { "type": "string", "description": "Customer display name from the UBL BuyerParty" },
+          "currency": { "type": "string", "description": "ISO 4217 currency code (e.g. EUR, USD)" },
+          "statusCode": { "type": "integer", "description": "Current status code — UNTDID 1373 (1-51) or internal (9900-9907)" },
+          "statusLabel": { "type": "string", "description": "Human-readable status label (e.g. Deposee, En attente)" },
+          "statusMsg": { "type": "string", "description": "Detailed status message or error description" }
+        }
+      },
+      "InvoiceStat": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "description": "Status code (e.g. 10, 9906, 9905)" },
+          "statusLabel": { "type": "string", "description": "Human-readable status label" },
+          "count": { "type": "integer", "description": "Number of invoices currently in this status" }
+        }
+      },
+      "LifecycleEvent": {
+        "type": "object",
+        "properties": {
+          "sequence": { "type": "integer", "description": "Sequential event number within this invoice's lifecycle" },
+          "statusCode": { "type": "string", "description": "Status code at this lifecycle event" },
+          "statusLabel": { "type": "string", "description": "Human-readable label for the status" },
+          "message": { "type": "string", "description": "Event message or reason for status change" },
+          "createdAt": { "type": "string", "description": "Timestamp when this event was recorded (ISO 8601)" }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "level": { "type": "string", "description": "Severity level: FATAL (blocks submission), ERROR (blocks), WARNING (allows), INFO (informational)" },
+          "source": { "type": "string", "description": "Validation engine that produced this error: XSD (schema) or Schematron (business rules)" },
+          "rule": { "type": "string", "description": "Rule identifier or XPath expression that triggered the error" },
+          "message": { "type": "string", "description": "Human-readable error description" }
+        }
+      },
+      "InvoiceLine": {
+        "type": "object",
+        "properties": {
+          "lineId": { "type": "integer", "description": "UBL line number (InvoiceLine/ID)" },
+          "description": { "type": "string", "description": "Line item description from InvoiceLine/Item/Name" },
+          "itemId": { "type": "string", "description": "Item identifier (InvoiceLine/Item/SellersItemIdentification)" },
+          "quantity": { "type": "number", "description": "Invoiced quantity" },
+          "unit": { "type": "string", "description": "Unit of measure code (UN/ECE Recommendation 20, e.g. C62, KGM)" },
+          "unitPrice": { "type": "number", "description": "Price per unit before tax" },
+          "lineAmount": { "type": "number", "description": "Line extension amount (quantity x unitPrice)" },
+          "taxCategory": { "type": "string", "description": "VAT category code (S=Standard, Z=Zero, E=Exempt, AE=Reverse charge)" },
+          "taxRate": { "type": "number", "description": "VAT rate as a percentage (e.g. 20.0)" },
+          "currency": { "type": "string", "description": "ISO 4217 currency code for this line" }
+        }
+      },
+      "VatRow": {
+        "type": "object",
+        "properties": {
+          "sequence": { "type": "integer", "description": "Row sequence number within the VAT breakdown" },
+          "taxCategory": { "type": "string", "description": "VAT category code (S, Z, E, AE, etc.)" },
+          "taxRate": { "type": "number", "description": "VAT rate as a percentage" },
+          "taxableAmount": { "type": "number", "description": "Taxable base amount for this category/rate" },
+          "taxAmount": { "type": "number", "description": "Calculated VAT amount" },
+          "currency": { "type": "string", "description": "ISO 4217 currency code" },
+          "taxExemption": { "type": "string", "description": "Exemption reason text (only for exempt or zero-rated lines)" }
+        }
+      },
+      "IntegrationError": {
+        "type": "object",
+        "properties": {
+          "doc": { "type": "string", "description": "JDE document number (UVDOC)" },
+          "dct": { "type": "string", "description": "JDE document type (UVDCT)" },
+          "kco": { "type": "string", "description": "JDE company code (UVKCO)" },
+          "seqn": { "type": "integer", "description": "Sequence number in the validation table (F564236)" },
+          "level": { "type": "string", "description": "Severity level: FATAL, ERROR, WARNING, or INFO" },
+          "source": { "type": "string", "description": "Validation source that produced the error" },
+          "rule": { "type": "string", "description": "Rule identifier or XPath" },
+          "message": { "type": "string", "description": "Human-readable error message" }
+        }
+      },
+      "ExtractBipRequest": {
+        "type": "object",
+        "properties": {
+          "jobNumber": { "type": "string", "description": "JDE job number to extract from the BIP Print Queue" },
+          "extractMode": { "type": "string", "description": "Extract mode: 'input' (XML from dataOutput), 'output' (from xmlpOutput), 'both'" },
+          "outputType": { "type": "string", "description": "Filter output by type: XML, PDF, EXCEL, HTML, RTF, PPT, ETEXT (optional)" },
+          "language": { "type": "string", "description": "BIP language code filter (e.g. 'FR', optional)" },
+          "outputDir": { "type": "string", "description": "Output directory path (defaults to global.dirInput if omitted)" }
+        }
+      },
+      "CreateUblRequest": {
+        "type": "object",
+        "properties": {
+          "doc": { "type": "string", "description": "Document number (will become UHDOC primary key)" },
+          "dct": { "type": "string", "description": "Document type (e.g. RI)" },
+          "kco": { "type": "string", "description": "Company code (e.g. 00070)" },
+          "xml": { "type": "string", "description": "Complete UBL 2.1 XML document as a string" }
+        }
+      },
+      "ExtractXmlRequest": {
+        "type": "object",
+        "properties": {
+          "doc": { "type": "string", "description": "JDE document number (FEDOC/UHDOC) to extract" },
+          "dct": { "type": "string", "description": "JDE document type (FEDCT/UHDCT)" },
+          "kco": { "type": "string", "description": "JDE company code (FEKCO/UHKCO)" },
+          "outputDir": { "type": "string", "description": "Target directory where the XML file will be written" },
+          "source": { "type": "string", "description": "Source table: 'xml' (F564230.FETXFT, default) or 'ubl' (F564231.UHTXFT)" }
+        }
+      },
+      "DownloadRequest": {
+        "type": "object",
+        "properties": {
+          "report": { "type": "string", "description": "JDE report name (e.g. R42565)" },
+          "version": { "type": "string", "description": "Report version (e.g. XJDE0001)" },
+          "language": { "type": "string", "description": "Language code (e.g. F for French)" },
+          "job": { "type": "string", "description": "JDE job number" },
+          "output": { "type": "string", "description": "Full output file path on the server" }
+        }
+      },
+      "BatchRunRequest": {
+        "type": "object",
+        "properties": {
+          "processType": { "type": "string", "description": "Processing type: 'xml' (use -xml subprocess) or 'ubl' (use UBLInvoiceProcessor)" },
+          "template": { "type": "string", "description": "Document template name (required for xml, omit for ubl)" },
+          "mode": { "type": "string", "description": "For xml: AUTO, SINGLE, BURST, UBL" },
+          "source": { "type": "string", "description": "Input source: 'directory' or 'bip'" },
+          "replaceMode": { "type": "boolean", "description": "If true, overwrite existing invoices in the database" },
+          "noSend": { "type": "boolean", "description": "For xml: skip PA sending" },
+          "validateOnly": { "type": "boolean", "description": "For ubl: validate only, no DB insert" },
+          "sendToPA": { "type": "string", "description": "For ubl: null=settings, 'Y'=force, 'N'=skip" },
+          "extractMode": { "type": "string", "description": "For BIP source: 'input', 'output', or 'both'" },
+          "language": { "type": "string", "description": "For BIP source: language code filter (optional)" }
+        }
+      },
+      "SchedulerStatus": {
+        "type": "object",
+        "properties": {
+          "importInterval": { "type": "integer", "description": "Import poll interval in minutes (0=disabled)" },
+          "statusInterval": { "type": "integer", "description": "Status retrieval interval in minutes (0=disabled)" },
+          "fetchAllInterval": { "type": "integer", "description": "Batch processing interval in minutes (0=disabled)" },
+          "importActive": { "type": "boolean", "description": "Whether import polling is currently active" },
+          "statusActive": { "type": "boolean", "description": "Whether status retrieval is currently active" },
+          "fetchAllActive": { "type": "boolean", "description": "Whether batch processing is currently active" }
+        }
+      },
+      "BatchRunResult": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "description": "Whether the batch completed without fatal errors" },
+          "processed": { "type": "integer", "description": "Number of files successfully processed" },
+          "failed": { "type": "integer", "description": "Number of files that failed processing" },
+          "logs": { "type": "array", "description": "Array of structured log entries from the batch run" }
+        }
+      },
+      "EmailRequest": {
+        "type": "object",
+        "properties": {
+          "to": { "type": "string", "description": "Recipient email address (required)" },
+          "cc": { "type": "string", "description": "CC email address (optional, can be empty)" },
+          "subject": { "type": "string", "description": "Email subject line" },
+          "body": { "type": "string", "description": "Email body as plain text" },
+          "invoiceId": { "type": "string", "description": "DOC+DCT+KCO — if provided, PDF is generated from UBL XML in database (optional)" },
+          "language": { "type": "string", "description": "Language for PDF labels when generating from invoiceId: 'fr' or 'en' (optional)" },
+          "attachmentBase64": { "type": "string", "description": "Pre-generated PDF as base64 string — takes priority over invoiceId (optional)" },
+          "attachmentFilename": { "type": "string", "description": "Filename for the base64 attachment (optional, defaults to invoice.pdf)" }
+        }
+      },
+      "BrowseResult": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string", "description": "Current directory path (after placeholder resolution)" },
+          "parent": { "type": "string", "description": "Parent directory path (null if at root)" },
+          "items": { "type": "array", "description": "Array of directory entries with name, type (file/directory), size (bytes), and modified date" }
+        }
+      }
+    }
+  }
+}
+

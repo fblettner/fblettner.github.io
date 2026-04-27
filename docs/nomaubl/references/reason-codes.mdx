@@ -1,0 +1,19 @@
+---
+title: Reason Codes
+description: "Reason codes attached to invoice life-cycle statuses for the French e-invoicing reform — refusal (B2B), PA rejection and irregularity codes from XP Z12-012 Annex A."
+keywords: [NomaUBL, reason codes, refusal, rejection, irregularity, XP Z12-012, Annex A, PPF, e-invoicing, France, B2B refusal, status 207, status 210, status 213, status 221]
+---
+
+import ReasonCodeReference from '@site/src/components/reference/ReasonCodeReference';
+
+# Reason Codes
+
+The screen lists every **reason code** that can be attached to an invoice life-cycle status under the French e-invoicing reform. Three families are distinguished:
+
+- **Refusal (B2B)** — codes a buyer (or partner platform on the buyer's behalf) emits to refuse, dispute or suspend an invoice (statuses 200, 206, 207, 208, 210, 221).
+- **PA Rejection** — codes a partner platform emits when an invoice fails the platform-level controls (status 213).
+- **Irregularity** — codes used by the PPF when the inbound flow itself fails an integrity check before any business processing (status 213).
+
+Filter by family, search by code or label, and read the full description plus the statuses that may carry the code. Codes flagged **mandatory in body** must be carried in the message body (not just in the envelope).
+
+<ReasonCodeReference />

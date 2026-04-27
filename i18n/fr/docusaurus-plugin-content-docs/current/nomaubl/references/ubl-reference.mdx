@@ -1,0 +1,15 @@
+---
+title: Référence UBL
+description: "Référence des champs UBL pour la réforme française de la facturation électronique — chaque champ BT avec son XPath, sa cardinalité et un exemple, regroupé par section (en-tête, vendeur, acheteur, TVA, totaux, ligne, etc.)."
+keywords: [NomaUBL, UBL, EN 16931, Factur-X, BT, BG, XPath, facturation électronique, France, extended-ctc-fr, BT-1, BT-22, BT-110, BT-115, vendeur, acheteur, TVA, ligne, cardinalité]
+---
+
+import UBLReference from '@site/src/components/reference/UBLReference';
+
+# Référence UBL
+
+L'écran liste l'ensemble des **termes métier UBL (BT)** transportés par le flux français de facturation électronique (EN 16931 / extended-ctc-fr / Factur-X). Chaque ligne indique l'identifiant BT, le libellé (accompagné, le cas échéant, d'une description et d'un exemple), le XPath canonique dans le document UBL et la cardinalité (`1..1`, `0..1`, `0..n`, `1..n`).
+
+La barre permet de filtrer par section (en-tête, vendeur, acheteur, bénéficiaire, représentant fiscal, livraison, paiement, remises & charges, TVA, totaux, ligne de facture) ou de rechercher dans le BT, le XPath, le libellé, la description et l'exemple. Le tableau est regroupé par section et codé par couleur — le même code couleur est repris dans l'éditeur de facture de l'application.
+
+<UBLReference />

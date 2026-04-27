@@ -1,0 +1,15 @@
+---
+title: Référence des statuts
+description: "Statuts du cycle de vie de la facture pour la réforme française de la facturation électronique — codes 200 à 501 (XP Z12-012) avec acteur, phase, indicateurs obligatoire/affacturage et actions autorisées."
+keywords: [NomaUBL, statut, cycle de vie, XP Z12-012, PPF, PA-E, PA-R, facturation électronique, réforme, France, codes statut, 200, 501, affacturage, transmission]
+---
+
+import StatusReference from '@site/src/components/reference/StatusReference';
+
+# Référence des statuts
+
+L'écran liste l'ensemble des **statuts du cycle de vie de la facture** définis par la réforme française de la facturation électronique (norme **XP Z12-012**, codes 200–501). NomaUBL reprend la même référence dans l'application pour aider à interpréter les statuts renvoyés par le PPF et les plateformes partenaires (PA-E / PA-R / PA-TR).
+
+La **barre de filtres** permet de restreindre la liste par phase (transmission / traitement), aux statuts à transmission obligatoire vers le PPF, à l'affacturage ou aux codes spéciaux (lot / routage). Cliquer sur une carte ouvre le détail complet : émetteur du statut, conditions d'application, actions autorisées par acteur et notes.
+
+<StatusReference />

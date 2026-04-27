@@ -25,6 +25,8 @@ const config: Config = {
     },
   },
 
+  clientModules: [require.resolve('./src/clientModules/externalSidebarLinks')],
+
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'fr'],
