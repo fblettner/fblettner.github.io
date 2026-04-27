@@ -113,7 +113,7 @@ Controls whether the produced UBL is submitted to the Plateforme Agréée.
 | Value | Behaviour |
 |---|---|
 | **Use settings** | Honours the **sendToPA** flag of the *e-invoicing* template. Production behaviour. |
-| **Skip sending** | Runs transformation, validation and database persistence locally without submitting to the PA. The invoice ends up in a local `99XX` status — the exact code depends on the validation outcome (success, warnings or errors). A subsequent **Resend** action from *Application → Invoices* can submit it later. See the [Status Reference](../references/status-reference.mdx) for the meaning of each code. |
+| **Skip sending** | Runs transformation, validation and database persistence locally without submitting to the PA. The invoice ends up in a local `99XX` status — the exact code depends on the validation outcome (success, warnings or errors). A subsequent **Resend** action from *Application → E-Invoicing* can submit it later. See the [Status Reference](../references/status-reference.mdx) for the meaning of each code. |
 
 Skip sending is useful when validating a new template or replaying an already-submitted batch — the local pipeline runs fully without producing a duplicate submission.
 
@@ -142,5 +142,5 @@ A successful run logs at least one row per executed step; failures stop the pipe
 - **Use `AUTO` in production.** Mode resolution is delegated to *Document Types*, which is the supported way to mix invoices and non-invoice documents in a single spool. `SINGLE`, `BURST` and `UBL` are the right choices only when the spool is known to be uniform.
 - **Validate the template before going live.** Run a representative XML with **Send to PA = Skip sending** first, then iterate on the *XSL Editor* until the log table is clean (no `ERROR` / `FATAL` rows).
 - **Use `BURST` when downstream applications consume the index XML.** The XML index lists each split PDF along with its key value — the typical pattern is to pair it with a delivery / archival application that uses the keys to file the PDFs.
-- **Avoid `Overwrite` once an invoice has been submitted.** A submitted invoice carries a PA-side identity; overwriting locally desynchronises the local record from the PA. Use *Application → Invoices → Resend* if a re-submission is genuinely needed.
+- **Avoid `Overwrite` once an invoice has been submitted.** A submitted invoice carries a PA-side identity; overwriting locally desynchronises the local record from the PA. Use *Application → E-Invoicing → Resend* if a re-submission is genuinely needed.
 - **Upload places the file in the template's `dirInput` directory.** That same directory is scanned by *Sync → Fetch Input* in batch mode, so the upload makes the file part of the next batch run by default.

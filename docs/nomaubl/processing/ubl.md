@@ -105,7 +105,7 @@ Overwriting also resets the lifecycle to its initial state — any PA-side histo
 |---|---|
 | **Use settings** | Honours the **sendToPA** flag of the *e-invoicing* template. |
 | **Force send** | Submits to the PA regardless of the e-invoicing template's setting. Useful when the global setting disables submission for the environment but a specific document needs to be pushed. |
-| **Skip sending** | Runs validation and persistence locally without submitting. The invoice ends up in a local `99XX` status — the exact code depends on the validation outcome (success, warnings or errors). A subsequent **Resend** action from *Application → Invoices* can submit it later. See the [Status Reference](../references/status-reference.mdx) for the meaning of each code. |
+| **Skip sending** | Runs validation and persistence locally without submitting. The invoice ends up in a local `99XX` status — the exact code depends on the validation outcome (success, warnings or errors). A subsequent **Resend** action from *Application → E-Invoicing* can submit it later. See the [Status Reference](../references/status-reference.mdx) for the meaning of each code. |
 
 ---
 
@@ -133,5 +133,5 @@ A run with no `ERROR` / `FATAL` row is considered successful even if `WARNING` r
 - **Stick to the `DOC_DCT_KCO.xml` filename convention.** Diverging from it breaks the database key parser; the file is uploaded but cannot be processed.
 - **Use `Validate only` to test a UBL document before committing.** No database write, no PA submission — only the validation engines run. Useful when troubleshooting a Schematron failure on an externally-generated UBL.
 - **`Force send` is the manual override.** When the global setting disables submission (e.g. in a non-production environment) but a specific document needs to reach the PA, `Force send` is the right escape hatch — log the reason in the lifecycle.
-- **Avoid `Overwrite` after a PA submission.** A submitted invoice carries a PA-side identity; overwriting locally desynchronises the local record from the PA. Use *Application → Invoices → Resend* if a re-submission is genuinely needed.
+- **Avoid `Overwrite` after a PA submission.** A submitted invoice carries a PA-side identity; overwriting locally desynchronises the local record from the PA. Use *Application → E-Invoicing → Resend* if a re-submission is genuinely needed.
 - **For batch UBL processing, prefer *Sync → Fetch Input*.** It iterates the same `dirInput/ubl/` directory and applies the same pipeline per file.

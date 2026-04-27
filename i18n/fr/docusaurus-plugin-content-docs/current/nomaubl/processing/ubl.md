@@ -105,7 +105,7 @@ L'écrasement réinitialise également le cycle de vie à son état initial — 
 |---|---|
 | **Use settings** | Respecte le paramètre **sendToPA** du template *e-invoicing*. |
 | **Force send** | Dépose sur la PA, indépendamment du paramètre du template *e-invoicing*. Utile lorsque le paramètre global désactive le dépôt sur l'environnement courant mais qu'un document spécifique doit être transmis. |
-| **Skip sending** | Exécute la validation et la persistance en local, sans dépôt sur la PA. La facture termine dans un statut local `99XX` — le code exact dépend du résultat de validation (succès, avertissements ou erreurs). Un **Resend** ultérieur depuis *Application → Invoices* permet le dépôt par la suite. Voir la [Référence des statuts](../references/status-reference.mdx) pour le détail de chaque code. |
+| **Skip sending** | Exécute la validation et la persistance en local, sans dépôt sur la PA. La facture termine dans un statut local `99XX` — le code exact dépend du résultat de validation (succès, avertissements ou erreurs). Un **Resend** ultérieur depuis *Application → E-Invoicing* permet le dépôt par la suite. Voir la [Référence des statuts](../references/status-reference.mdx) pour le détail de chaque code. |
 
 ---
 
@@ -133,5 +133,5 @@ Une exécution sans ligne `ERROR` ni `FATAL` est considérée comme réussie mê
 - **Respecter le motif `DOC_DCT_KCO.xml` pour les noms de fichiers.** S'en écarter casse l'analyseur de clé documentaire ; le fichier est téléversé mais ne peut pas être traité.
 - **Utiliser `Validate only` pour tester un document UBL avant validation.** Aucune écriture en base, aucun dépôt PA — seuls les moteurs de validation s'exécutent. Pratique pour diagnostiquer un échec Schematron sur un UBL produit hors NomaUBL.
 - **`Force send` est l'échappatoire manuelle.** Lorsque le paramètre global désactive le dépôt (par ex. en hors-production) mais qu'un document spécifique doit atteindre la PA, `Force send` reste l'option correcte — consigner la raison dans le cycle de vie.
-- **Éviter `Overwrite` après un dépôt PA.** Une facture déposée porte une identité côté PA ; l'écrasement local désynchronise le dossier local de la PA. Utiliser *Application → Invoices → Resend* si une nouvelle soumission est réellement nécessaire.
+- **Éviter `Overwrite` après un dépôt PA.** Une facture déposée porte une identité côté PA ; l'écrasement local désynchronise le dossier local de la PA. Utiliser *Application → E-Invoicing → Resend* si une nouvelle soumission est réellement nécessaire.
 - **Pour un traitement UBL en lot, préférer *Sync → Fetch Input*.** Il parcourt le même répertoire `dirInput/ubl/` et applique le même pipeline par fichier.

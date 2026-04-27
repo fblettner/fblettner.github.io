@@ -113,7 +113,7 @@ Détermine si l'UBL produit est déposé sur la Plateforme Agréée.
 | Valeur | Comportement |
 |---|---|
 | **Use settings** | Respecte le paramètre **sendToPA** du template *e-invoicing*. Comportement de production. |
-| **Skip sending** | Exécute la transformation, la validation et la persistance en base en local, sans dépôt sur la PA. La facture termine dans un statut local `99XX` — le code exact dépend du résultat de validation (succès, avertissements ou erreurs). Un **Resend** ultérieur depuis *Application → Invoices* permet le dépôt par la suite. Voir la [Référence des statuts](../references/status-reference.mdx) pour le détail de chaque code. |
+| **Skip sending** | Exécute la transformation, la validation et la persistance en base en local, sans dépôt sur la PA. La facture termine dans un statut local `99XX` — le code exact dépend du résultat de validation (succès, avertissements ou erreurs). Un **Resend** ultérieur depuis *Application → E-Invoicing* permet le dépôt par la suite. Voir la [Référence des statuts](../references/status-reference.mdx) pour le détail de chaque code. |
 
 Le mode sans dépôt est utile lors de la mise au point d'un template ou de la relecture d'un lot déjà soumis — le pipeline local s'exécute intégralement sans produire de doublon de soumission.
 
@@ -142,5 +142,5 @@ Une exécution réussie journalise au moins une ligne par étape effectuée ; un
 - **Utiliser `AUTO` en production.** La résolution du mode est déléguée à *Document Types*, voie supportée pour mêler factures et documents non facture dans un même spool. `SINGLE`, `BURST` et `UBL` ne s'imposent que lorsque la mise en forme du spool est connue comme uniforme.
 - **Valider le template avant mise en production.** Lancer un XML représentatif avec **Send to PA = Skip sending** d'abord, puis itérer dans l'*Éditeur XSL* jusqu'à obtenir une table de logs sans ligne `ERROR` ni `FATAL`.
 - **Utiliser `BURST` lorsque l'index XML est consommé en aval.** Le fichier d'index liste chaque PDF découpé avec sa valeur de clé — schéma classique : un coupling avec une application de distribution / d'archivage qui utilise les clés pour classer les PDF.
-- **Éviter `Overwrite` après un dépôt PA.** Une facture déposée porte une identité côté PA ; l'écrasement local désynchronise le dossier local de la PA. Utiliser *Application → Invoices → Resend* si une nouvelle soumission est réellement nécessaire.
+- **Éviter `Overwrite` après un dépôt PA.** Une facture déposée porte une identité côté PA ; l'écrasement local désynchronise le dossier local de la PA. Utiliser *Application → E-Invoicing → Resend* si une nouvelle soumission est réellement nécessaire.
 - **Le téléversement écrit dans le `dirInput` du template.** Ce répertoire est également balayé par *Sync → Fetch Input* en mode lot — le téléversement fait donc partie du prochain traitement par défaut.
