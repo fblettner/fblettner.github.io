@@ -1,10 +1,146 @@
 ---
 title: XML
-description: "XML — documentation in progress."
+description: "Process a single source XML file — render it as a PDF document (SINGLE / BURST) or transform it into a UBL 2.1 e-invoice with validation, persistence and optional submission to the Plateforme Agréée (UBL)."
+keywords: [NomaUBL, processing, XML, UBL, PDF, transform, XSL, validate, send, PA, AUTO, SINGLE, BURST, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # XML
 
-:::info Work in progress
-This page is being written. Check back soon.
-:::
+The **XML** processing screen runs a single source XML file through NomaUBL's processing pipeline. The selected mode determines the output:
+
+- **PDF document rendering** (modes `SINGLE` / `BURST`) — apply the template's XSL to format the source XML as one or several PDF files. Used primarily for documents that are not invoices (delivery notes, statements, internal documents) that just need a styled PDF output.
+- **UBL 2.1 e-invoice generation** (mode `UBL`) — apply the template's XSL to produce a UBL 2.1 invoice, run XSD + Schematron validation, persist invoice header / lines / VAT / lifecycle in the NomaUBL database and optionally submit to the Plateforme Agréée.
+
+The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The template selected at the top determines which XSL transformation runs and therefore which source layout is supported.
+
+For lighter use cases:
+
+- *UBL Tools → Validate* runs only the transformation and validation (no DB writes, no submission).
+- *UBL Tools → XSL Editor* edits the transformation itself.
+- *Sync → Fetch Input* runs the same pipeline in batch over a directory of files.
+
+---
+
+## Pipeline at a glance
+
+```mermaid
+flowchart TD
+    Source["Source XML file"] --> ModeChoice{"Mode"}
+
+    ModeChoice -->|"AUTO"| AutoResolve["<i>Document Types</i> per-document<br/>resolution → SINGLE / BURST / UBL"]
+    AutoResolve -.-> ModeChoice
+
+    ModeChoice -->|"SINGLE"| PDF1["XSL transform<br/><b>→ Single PDF</b>"]
+    ModeChoice -->|"BURST"| PDFs["XSL transform + split<br/><b>→ PDFs + XML index</b>"]
+    ModeChoice -->|"UBL"| UBLPipe["XSL transform<br/><b>→ UBL 2.1</b>"]
+
+    UBLPipe --> Validate["XSD + Schematron validation"]
+    Validate --> DB["Database persist<br/><i>(Replace: Skip / Overwrite)</i>"]
+    DB --> Submit{"Send to PA"}
+    Submit -->|"Use settings"| PA["Plateforme Agréée"]
+    Submit -->|"Skip sending"| Local["Local 99XX status"]
+
+    classDef hl fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
+    class UBLPipe,Validate,DB hl
+```
+
+`AUTO` does not run a pipeline of its own — it dispatches each document in the source XML to `SINGLE`, `BURST` or `UBL` based on the per-document-type configuration in *Document Types*. Only the `UBL` branch runs validation, persistence and PA submission; `SINGLE` and `BURST` produce PDF output and stop there.
+
+---
+
+## Input Configuration
+
+| Field | Description |
+|---|---|
+| **Template** | Document template (e.g. `invoices`, `credit_notes`, `delivery_notes`). Selects the XSL pipeline applied to the source XML. |
+| **Input File** | Basename (without extension) of the source XML file (e.g. `invoice_001`). Resolved in the template's `dirInput` directory. |
+| **Mode** | Processing mode — `AUTO`, `SINGLE`, `BURST` or `UBL`. See the table below. |
+| **Replace** | `Skip` keeps existing invoices in the database untouched if they already exist; `Overwrite` re-imports them, replacing the previous version. *Only applies when the output is UBL.* |
+| **Send to PA** | `Use settings` honours the global / e-invoicing template's submission settings; `Skip sending` runs the full pipeline locally without submitting. *Only applies when the output is UBL.* |
+
+Two helpers sit next to the **Input File** field:
+
+| Button | Behaviour |
+|---|---|
+| **Browse** (folder icon) | Opens a server-side file browser to pick an existing file. |
+| **Upload** (upload icon) | Uploads a local `.xml` file into the template's `dirInput` directory and selects it as the input. A template must be selected first. |
+
+Click **Generate** to run the pipeline.
+
+---
+
+## Modes
+
+The mode controls **what is produced** from the source XML.
+
+| Mode | Output | Behaviour |
+|---|---|---|
+| **AUTO** | PDF or UBL | Resolves the appropriate mode per document by looking up *Configuration → System → Document Types*. The recommended default in production — typical when a single spool mixes invoices (resolved to `UBL`) and non-invoice documents (resolved to `SINGLE` or `BURST`). |
+| **SINGLE** | PDF | Renders the entire source XML as a **single PDF**. Used essentially for documents that are not invoices — the app also formats source XML into a styled PDF. |
+| **BURST** | PDFs + XML index | Splits the source PDF on a key field (typical of a multi-document spool), produces **one PDF per key value** and an **XML index file** describing the resulting set. The index is consumed by downstream applications that need to dispatch each document independently. |
+| **UBL** | UBL 2.1 | Generates a **UBL 2.1 invoice** from the source XML. Runs the full pipeline: transformation, XSD + Schematron validation, database persistence and optional submission to the Plateforme Agréée. |
+
+Typical use case for `AUTO`: a single spool covering several customers and several document types — the invoices are resolved to `UBL` and submitted, the delivery notes to `SINGLE` and rendered as PDF, all in one run.
+
+---
+
+## UBL pipeline detail
+
+When the output is UBL (mode `UBL`, or `AUTO` resolved to `UBL` for a given document), the pipeline runs four steps in sequence:
+
+1. **Transform** — apply the template's XSL pipeline to produce a UBL 2.1 document.
+2. **Validate** — XSD schema and Schematron business rules.
+3. **Persist** — insert invoice header, lines, VAT subtotals, lifecycle and validation results in the NomaUBL database.
+4. **Submit** — optionally send the UBL to the configured Plateforme Agréée.
+
+The two options below — **Replace** and **Send to PA** — control steps 3 and 4 respectively. They have no effect when the output is PDF.
+
+### Replace
+
+Controls what happens when the database already holds an invoice with the same key (DOC + DCT + KCO).
+
+| Value | Behaviour |
+|---|---|
+| **Skip existing** | The existing invoice is left untouched; the run logs a duplicate-skipped message. The default for production runs. |
+| **Overwrite existing** | The existing invoice header, lines, VAT and lifecycle are deleted and re-imported from the new transformation. Useful for reprocessing after a template fix. |
+
+Overwriting also resets the lifecycle to its initial state — any PA-side history is decoupled from the local record. Reserve `Overwrite` for genuine re-imports, not for incremental updates.
+
+### Send to PA
+
+Controls whether the produced UBL is submitted to the Plateforme Agréée.
+
+| Value | Behaviour |
+|---|---|
+| **Use settings** | Honours the **sendToPA** flag of the *e-invoicing* template. Production behaviour. |
+| **Skip sending** | Runs transformation, validation and database persistence locally without submitting to the PA. The invoice ends up in a local `99XX` status — the exact code depends on the validation outcome (success, warnings or errors). A subsequent **Resend** action from *Application → Invoices* can submit it later. See the [Status Reference](../references/status-reference.mdx) for the meaning of each code. |
+
+Skip sending is useful when validating a new template or replaying an already-submitted batch — the local pipeline runs fully without producing a duplicate submission.
+
+---
+
+## Results
+
+After processing completes, the **Results** section displays:
+
+- A green **Document generated successfully** message — or the error returned by the API on failure.
+- A **structured log table** with one row per pipeline step. Each row carries:
+
+| Column | Description |
+|---|---|
+| **Severity** | `FATAL`, `ERROR`, `WARNING` or `INFO`. `FATAL` and `ERROR` block submission to the PA; `WARNING` and `INFO` are informational. |
+| **Module** | Pipeline component that produced the entry — `XSL`, `XSD`, `Schematron`, `Database`, `PA` or `Pipeline`. |
+| **Submodule** | Specific step or rule identifier (e.g. `BR-FR-12`, `cbc:CustomizationID`, `F564231 INSERT`). |
+| **Message** | Human-readable explanation of the failure, warning or progress event. |
+
+A successful run logs at least one row per executed step; failures stop the pipeline at the offending step.
+
+---
+
+## Tips & best practices
+
+- **Use `AUTO` in production.** Mode resolution is delegated to *Document Types*, which is the supported way to mix invoices and non-invoice documents in a single spool. `SINGLE`, `BURST` and `UBL` are the right choices only when the spool is known to be uniform.
+- **Validate the template before going live.** Run a representative XML with **Send to PA = Skip sending** first, then iterate on the *XSL Editor* until the log table is clean (no `ERROR` / `FATAL` rows).
+- **Use `BURST` when downstream applications consume the index XML.** The XML index lists each split PDF along with its key value — the typical pattern is to pair it with a delivery / archival application that uses the keys to file the PDFs.
+- **Avoid `Overwrite` once an invoice has been submitted.** A submitted invoice carries a PA-side identity; overwriting locally desynchronises the local record from the PA. Use *Application → Invoices → Resend* if a re-submission is genuinely needed.
+- **Upload places the file in the template's `dirInput` directory.** That same directory is scanned by *Sync → Fetch Input* in batch mode, so the upload makes the file part of the next batch run by default.
