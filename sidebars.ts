@@ -268,9 +268,10 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Management',
-      link: {type: 'generated-index', slug: '/nomaubl/management', description: 'Operational management: file versions and lifecycle history.'},
+      link: {type: 'generated-index', slug: '/nomaubl/management', description: 'Operational management: file versions, lifecycle history and the command-line interface.'},
       items: [
         'nomaubl/management/file-versions',
+        'nomaubl/management/command-line',
       ],
     },
     {
