@@ -6,7 +6,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Installation',
-      link: {type: 'generated-index', description: 'Install and configure the Liberty Framework stack: Docker, Traefik, SSL and Linux services.'},
+      link: {type: 'generated-index', slug: '/liberty/installation', description: 'Install and configure the Liberty Framework stack: Docker, Traefik, SSL and Linux services.'},
       items: [
         'liberty/technical/architecture',
         'liberty/technical/installation',
@@ -19,7 +19,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Nomasx-1',
-      link: {type: 'generated-index', description: 'Nomasx-1 — administration guides for the Liberty platform.'},
+      link: {type: 'generated-index', slug: '/liberty/nomasx-1', description: 'Nomasx-1 — administration guides for the Liberty platform.'},
       items: [
         {
           type: 'category',
@@ -32,7 +32,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'React Components',
-      link: {type: 'generated-index', description: 'Liberty Core — modular React components, services, theming and main building blocks.'},
+      link: {type: 'generated-index', slug: '/liberty/react-components', description: 'Liberty Core — modular React components, services, theming and main building blocks.'},
       items: [
         'liberty/core/getting-started',
         'liberty/core/new-project',
@@ -181,7 +181,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Reference',
-      link: {type: 'generated-index', description: 'API reference, release notes, known issues and incident history.'},
+      link: {type: 'generated-index', slug: '/liberty/reference', description: 'API reference, release notes, known issues and incident history.'},
       items: [
         'liberty/api/liberty-api',
         'liberty/release-notes',
@@ -332,7 +332,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'JD Edwards API',
-      link: {type: 'generated-index', description: 'Java packages for JD Edwards integration: BLOB exports for BI Publisher and BSFN source code.'},
+      link: {type: 'generated-index', slug: '/api/jd-edwards-api', description: 'Java packages for JD Edwards integration: BLOB exports for BI Publisher and BSFN source code.'},
       items: [
         'api/jde-api/jdebip',
         'api/jde-api/jdebsfn',
@@ -341,7 +341,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'BI Publisher API',
-      link: {type: 'generated-index', description: 'BI Publisher integration utilities: Code 128 barcodes and the NOMABIP wrapper API.'},
+      link: {type: 'generated-index', slug: '/api/bi-publisher-api', description: 'BI Publisher integration utilities: Code 128 barcodes and the NOMABIP wrapper API.'},
       items: [
         'api/bip-api/nomabc',
         'api/bip-api/nomabip',

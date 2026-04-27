@@ -73,6 +73,12 @@ const config: Config = {
       respectPrefersColorScheme: false,
       disableSwitch: false,
     },
+    docs: {
+      sidebar: {
+        hideable: true,
+        autoCollapseCategories: true,
+      },
+    },
     navbar: {
       title: 'NOMANA-IT',
       logo: {
@@ -81,9 +87,44 @@ const config: Config = {
         srcDark: 'assets/nomana-dark.svg',
       },
       items: [
-        {type: 'docSidebar', sidebarId: 'libertySidebar', position: 'left', label: 'Liberty'},
-        {type: 'docSidebar', sidebarId: 'nomaublSidebar', position: 'left', label: 'NomaUBL'},
-        {type: 'docSidebar', sidebarId: 'apiSidebar', position: 'left', label: 'API'},
+        {
+          type: 'dropdown',
+          label: 'Liberty',
+          position: 'left',
+          items: [
+            {label: 'Getting Started', to: '/liberty/getting-started/'},
+            {label: 'Installation',    to: '/liberty/installation/'},
+            {label: 'Nomasx-1',        to: '/liberty/nomasx-1/'},
+            {label: 'React Components', to: '/liberty/react-components/'},
+            {label: 'Reference',       to: '/liberty/reference/'},
+          ],
+        },
+        {
+          type: 'dropdown',
+          label: 'NomaUBL',
+          position: 'left',
+          items: [
+            {label: 'Getting Started', to: '/nomaubl/getting-started/'},
+            {label: 'Application',     to: '/nomaubl/application/'},
+            {label: 'Documentation',   to: '/nomaubl/documentation/'},
+            {label: 'Sync',            to: '/nomaubl/sync/'},
+            {label: 'Processing',      to: '/nomaubl/processing/'},
+            {label: 'UBL Tools',       to: '/nomaubl/ubl-tools/'},
+            {label: 'JD Edwards',      to: '/nomaubl/jdedwards/'},
+            {label: 'Management',      to: '/nomaubl/management/'},
+            {label: 'Configuration',   to: '/nomaubl/configuration/'},
+          ],
+        },
+        {
+          type: 'dropdown',
+          label: 'API',
+          position: 'left',
+          items: [
+            {label: 'Getting Started',    to: '/api/getting-started/'},
+            {label: 'JD Edwards API',     to: '/api/jd-edwards-api/'},
+            {label: 'BI Publisher API',   to: '/api/bi-publisher-api/'},
+          ],
+        },
         {to: '/blog', label: 'Blog', position: 'left'},
         {type: 'localeDropdown', position: 'right'},
         {
