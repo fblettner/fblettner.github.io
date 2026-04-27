@@ -173,13 +173,13 @@
     "message": "Valeurs par défaut appliquées aux documents UBL générés et règles de surcharge par modèle.",
     "description": "The generated-index page description for category 'UBL Defaults' in sidebar 'nomaublSidebar'"
   },
-  "sidebar.nomaublSidebar.category.JD Edwards": {
-    "message": "JD Edwards",
-    "description": "The label for category 'JD Edwards' in sidebar 'nomaublSidebar'"
+  "sidebar.nomaublSidebar.category.Extract": {
+    "message": "Extraction",
+    "description": "The label for category 'Extract' in sidebar 'nomaublSidebar'"
   },
-  "sidebar.nomaublSidebar.category.JD Edwards.link.generated-index.description": {
-    "message": "Canaux d'extraction et d'intégration JD Edwards EnterpriseOne.",
-    "description": "The generated-index page description for category 'JD Edwards' in sidebar 'nomaublSidebar'"
+  "sidebar.nomaublSidebar.category.Extract.link.generated-index.description": {
+    "message": "Canaux d'extraction de la source : répertoires d'archives, serveurs FTP/SFTP et file BIP JD Edwards.",
+    "description": "The generated-index page description for category 'Extract' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Management": {
     "message": "Administration",

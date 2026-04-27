@@ -48,7 +48,7 @@ A grouped checklist matching the application's left-hand navigation. Tick the pa
 | **Processing** | `fetchinput`, `import`, `retrievestatuses` |
 | **Operations** | `xml`, `ubl`, `extractandprocess`, `processapi` |
 | **UBL** | `validate`, `xsleditor`, `xmlviewer`, `ubldefaults` |
-| **Extract** | `extractbip`, `extract`, `extractftp` *(JD Edwards-specific pages)* |
+| **Extract** | `extractbip` *(JD Edwards-specific)*, `extract`, `extractftp` |
 | **Documentation** | `statusreference`, `reasoncodes`, `ublreference` |
 | **Management** | `fileversions` |
 

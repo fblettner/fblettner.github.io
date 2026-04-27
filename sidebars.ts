@@ -257,12 +257,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'JD Edwards',
-      link: {type: 'generated-index', slug: '/nomaubl/jdedwards', description: 'JD Edwards EnterpriseOne extraction and integration channels.'},
+      label: 'Extract',
+      link: {type: 'generated-index', slug: '/nomaubl/extract', description: 'Source extraction channels: archive directories, FTP/SFTP servers and JD Edwards BIP Print Queue.'},
       items: [
-        'nomaubl/jdedwards/extract',
-        'nomaubl/jdedwards/extract-ftp',
-        'nomaubl/jdedwards/extract-bip',
+        'nomaubl/extract/extract-archive',
+        'nomaubl/extract/extract-ftp',
+        'nomaubl/extract/extract-bip',
       ],
     },
     {

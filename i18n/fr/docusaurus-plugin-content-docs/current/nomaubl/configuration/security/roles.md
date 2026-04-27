@@ -48,7 +48,7 @@ Liste à cocher groupée reflétant la navigation gauche de l'application. Coche
 | **Processing** | `fetchinput`, `import`, `retrievestatuses` |
 | **Operations** | `xml`, `ubl`, `extractandprocess`, `processapi` |
 | **UBL** | `validate`, `xsleditor`, `xmlviewer`, `ubldefaults` |
-| **Extract** | `extractbip`, `extract`, `extractftp` *(pages spécifiques à JD Edwards)* |
+| **Extract** | `extractbip` *(spécifique à JD Edwards)*, `extract`, `extractftp` |
 | **Documentation** | `statusreference`, `reasoncodes`, `ublreference` |
 | **Management** | `fileversions` |
 
