@@ -95,10 +95,21 @@
   text-decoration: none !important;
 }
 
-/* ---- Mobile navbar drawer (fullscreen on small viewports) -------------- */
+/* ---- Mobile navbar drawer (fullscreen on small viewports) --------------
+ * Override the Docusaurus default 83vw drawer width with explicit widths
+ * on every layer of the drawer (outer container + inner panels). Uses
+ * fixed percentage / pixel units instead of `vw` to avoid iOS Safari
+ * quirks with viewport units (URL-bar chrome, scrollbar inclusion). */
 @media (max-width: 996px) {
-  :root {
-    --ifm-navbar-sidebar-width: 100vw;
+  .navbar-sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .navbar-sidebar__items {
+    width: 200% !important;
+  }
+  .navbar-sidebar__item {
+    width: 50% !important;
   }
   .navbar-sidebar__brand {
     height: var(--ifm-navbar-height);
