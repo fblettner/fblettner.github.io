@@ -23,26 +23,57 @@ For lighter use cases:
 
 ## Pipeline at a glance
 
-```mermaid
-flowchart TD
-    Input["UBL 2.1 file<br/><b>DOC_DCT_KCO.xml</b><br/><i>in dirInput/ubl/</i>"] --> Parse["Parse filename<br/>→ DOC + DCT + KCO"]
-    Parse --> ModeChoice{"Mode"}
-
-    ModeChoice -->|"Validate only"| ValOnly["XSD + Schematron validation"]
-    ValOnly --> Done["Results"]
-
-    ModeChoice -->|"Process & Validate"| Val["XSD + Schematron validation"]
-    Val --> DB["Database persist<br/><i>(Replace: Overwrite / Skip)</i>"]
-    DB --> Submit{"Send to PA"}
-    Submit -->|"Use settings"| Settings["Honour <i>e-invoicing</i> template"]
-    Submit -->|"Force send"| Force["Always submit"]
-    Submit -->|"Skip sending"| Local["Local 99XX status"]
-    Settings --> PA["Plateforme Agréée"]
-    Force --> PA
-
-    classDef hl fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
-    class Val,DB hl
-```
+<svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="up-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <linearGradient id="up-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.18"/><stop offset="100%" stopColor="#4a9eff" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="up-g-blue-strong" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.08"/></linearGradient>
+    <linearGradient id="up-g-slate" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#94a3b8" stopOpacity="0.14"/><stop offset="100%" stopColor="#64748b" stopOpacity="0.04"/></linearGradient>
+  </defs>
+  <rect x="380" y="20" width="240" height="74" rx="10" fill="url(#up-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="500" y="44" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📄 UBL 2.1 file</text>
+  <text x="500" y="62" fill="currentColor" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">DOC_DCT_KCO.xml</text>
+  <text x="500" y="80" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.7">in dirInput/ubl/</text>
+  <rect x="400" y="120" width="200" height="50" rx="10" fill="url(#up-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="500" y="142" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🔎 Parse filename</text>
+  <text x="500" y="160" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.7">→ DOC + DCT + KCO</text>
+  <line x1="500" y1="94" x2="500" y2="120" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#up-arrow)"/>
+  <rect x="400" y="200" width="200" height="50" rx="10" fill="url(#up-g-blue)" stroke="#4a9eff" strokeWidth="1.5" strokeDasharray="6 3"/>
+  <text x="500" y="222" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Mode</text>
+  <text x="500" y="240" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">decision</text>
+  <line x1="500" y1="170" x2="500" y2="200" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#up-arrow)"/>
+  <rect x="50" y="290" width="240" height="60" rx="10" fill="url(#up-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="170" y="316" fill="#4a9eff" fontSize="12" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">✅ Validate only</text>
+  <text x="170" y="334" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">XSD + Schematron</text>
+  <rect x="50" y="380" width="240" height="50" rx="10" fill="url(#up-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="170" y="408" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📋 Results</text>
+  <line x1="170" y1="350" x2="170" y2="380" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#up-arrow)"/>
+  <path d="M 400 230 L 170 230 L 170 290" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#up-arrow)"/>
+  <text x="280" y="222" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Validate only</text>
+  <rect x="700" y="290" width="240" height="60" rx="10" fill="url(#up-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="820" y="316" fill="#4a9eff" fontSize="12" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">✅ Validate</text>
+  <text x="820" y="334" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">XSD + Schematron</text>
+  <path d="M 600 230 L 820 230 L 820 290" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#up-arrow)"/>
+  <text x="710" y="222" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Process &amp; Validate</text>
+  <rect x="700" y="380" width="240" height="56" rx="10" fill="url(#up-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="820" y="402" fill="#4a9eff" fontSize="12" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">💾 DB persist</text>
+  <text x="820" y="420" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">Replace: Skip / Overwrite</text>
+  <line x1="820" y1="350" x2="820" y2="380" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#up-arrow)"/>
+  <rect x="700" y="466" width="240" height="50" rx="10" fill="url(#up-g-blue)" stroke="#4a9eff" strokeWidth="1.5" strokeDasharray="6 3"/>
+  <text x="820" y="487" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Send to PA</text>
+  <text x="820" y="503" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">decision</text>
+  <line x1="820" y1="436" x2="820" y2="466" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#up-arrow)"/>
+  <rect x="350" y="560" width="200" height="56" rx="10" fill="url(#up-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
+  <text x="450" y="584" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📡 PA</text>
+  <text x="450" y="602" fill="currentColor" fontSize="9" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Use settings · Force send</text>
+  <rect x="700" y="560" width="240" height="56" rx="10" fill="url(#up-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="820" y="584" fill="currentColor" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🏠 Local 99XX</text>
+  <text x="820" y="602" fill="currentColor" fontSize="9" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">Skip sending</text>
+  <path d="M 760 510 L 510 510 L 510 560" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#up-arrow)"/>
+  <text x="595" y="498" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Use settings · Force send</text>
+  <line x1="820" y1="516" x2="820" y2="560" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#up-arrow)"/>
+  <text x="850" y="540" fontSize="9" fill="#4a9eff" textAnchor="start" fontFamily="ui-monospace, monospace" fontWeight="700">Skip sending</text>
+</svg>
 
 No XSL transformation runs — the file is consumed as-is. Only the validation, persistence and submission steps execute.
 

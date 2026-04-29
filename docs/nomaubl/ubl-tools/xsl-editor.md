@@ -16,17 +16,48 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 A NomaUBL transform is just an XSLT file that derives `TAG_*` variables from the source XML; the rest of the work — namespaces, element ordering, EN 16931 conformance, French extensions — is delegated to a shared `ubl-template.xsl` provided by NomaUBL. Customising a transform therefore boils down to **mapping XML paths to TAG_ variables**, which the editor surfaces as a form.
 
-```mermaid
-flowchart LR
-    Spool["Source XML Spool<br/>(JDE / SAP / NetSuite /<br/>custom ERP output)"] -->|Load XML Source| Editor["XSL Editor<br/><b>Variable Mapping form</b>"]
-    PDF["Sample PDF<br/><i>(optional)</i>"] -.->|AI Auto-Map| Editor
-    Editor -->|Save Mappings| XSL["Custom XSLT file<br/>(TAG_* variables<br/>+ ubl-template.xsl)"]
-    XSL -->|Run via Validate /<br/>Processing / Sync| UBL["UBL 2.1 document<br/>EN 16931 / Factur-X /<br/>extended-ctc-fr"]
-    UBL -->|Submit| PA["Plateforme Agréée"]
-
-    classDef hl fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
-    class Editor hl
-```
+<svg viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="xsl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <marker id="xsl-arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#c084fc"/></marker>
+    <linearGradient id="xsl-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.18"/><stop offset="100%" stopColor="#4a9eff" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="xsl-g-blue-strong" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.08"/></linearGradient>
+    <linearGradient id="xsl-g-slate" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#94a3b8" stopOpacity="0.14"/><stop offset="100%" stopColor="#64748b" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="xsl-g-purple" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c084fc" stopOpacity="0.16"/><stop offset="100%" stopColor="#c084fc" stopOpacity="0.04"/></linearGradient>
+  </defs>
+  <rect x="20" y="100" width="170" height="80" rx="12" fill="url(#xsl-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="105" y="130" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📄 Source XML</text>
+  <text x="105" y="150" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">JDE / SAP / NS</text>
+  <text x="105" y="166" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">custom ERP output</text>
+  <rect x="220" y="20" width="170" height="60" rx="10" fill="url(#xsl-g-purple)" stroke="#c084fc" strokeWidth="1.3" strokeDasharray="4 3"/>
+  <text x="305" y="44" fill="#c084fc" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📑 Sample PDF</text>
+  <text x="305" y="62" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">(optional)</text>
+  <rect x="220" y="100" width="200" height="80" rx="12" fill="url(#xsl-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="320" y="130" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">✏️ XSL Editor</text>
+  <text x="320" y="152" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">Variable Mapping form</text>
+  <rect x="450" y="100" width="200" height="80" rx="12" fill="url(#xsl-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="550" y="130" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">📜 Custom XSLT</text>
+  <text x="550" y="150" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.7">TAG_* variables</text>
+  <text x="550" y="166" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.7">+ ubl-template.xsl</text>
+  <rect x="680" y="100" width="200" height="80" rx="12" fill="url(#xsl-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
+  <text x="780" y="124" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📄 UBL 2.1</text>
+  <text x="780" y="143" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">EN 16931 / Factur-X</text>
+  <text x="780" y="159" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">extended-ctc-fr</text>
+  <rect x="910" y="100" width="80" height="80" rx="12" fill="url(#xsl-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="950" y="134" fill="currentColor" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📡 PA</text>
+  <text x="950" y="152" fill="currentColor" fontSize="9" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">Plateforme</text>
+  <text x="950" y="166" fill="currentColor" fontSize="9" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">Agréée</text>
+  <line x1="190" y1="140" x2="220" y2="140" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#xsl-arrow)"/>
+  <text x="205" y="133" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Load</text>
+  <path d="M 305 80 L 305 100" stroke="#c084fc" strokeWidth="1.3" strokeDasharray="3 3" markerEnd="url(#xsl-arrow-purple)"/>
+  <text x="365" y="92" fontSize="9" fill="#c084fc" textAnchor="start" fontFamily="ui-monospace, monospace" fontWeight="700">AI Auto-Map</text>
+  <line x1="420" y1="140" x2="450" y2="140" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#xsl-arrow)"/>
+  <text x="435" y="133" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Save</text>
+  <line x1="650" y1="140" x2="680" y2="140" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#xsl-arrow)"/>
+  <text x="665" y="133" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Run</text>
+  <line x1="880" y1="140" x2="910" y2="140" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#xsl-arrow)"/>
+  <text x="895" y="133" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Submit</text>
+</svg>
 
 The editor never edits the UBL output directly — that would mean re-implementing EN 16931 every time. Instead, it edits the **mapping** that the UBL template will read; the template stays untouched.
 
@@ -91,22 +122,54 @@ Each variable field shows the human-readable description of the BT, the BT code 
 
 `TAG_ROOT`, `TAG_VAT_LINE` and `TAG_LINE_ITEM` are **scope contexts**: every other variable below them resolves *relative* to the path they define.
 
-```mermaid
-flowchart TD
-    Doc["Document"] --> Root["<b>TAG_ROOT</b><br/><i>e.g. Invoices</i>"]
-    Root --> Header["Header / Seller /<br/>Buyer / Delivery /<br/>Payment / Notes<br/><i>relative to TAG_ROOT</i>"]
-    Root --> VAT["<b>TAG_VAT_LINE</b><br/><i>e.g. Tax_Summary/Tax_Line</i>"]
-    Root --> Lines["<b>TAG_LINE_ITEM</b><br/><i>e.g. Lines_Group/Line_Item</i>"]
-    VAT --> VATFields["TAG_VAT_*<br/><i>relative to VAT line</i>"]
-    Lines --> LineFields["TAG_LINE_*<br/><i>relative to line</i>"]
-    Lines --> ItemProps["Item Properties<br/>(BG-32)"]
-    Lines --> AC["Allowances / Charges<br/>(BG-27 / BG-28)"]
-    Lines --> LineNotes["Line Notes<br/>(BT-127)"]
-    Lines --> DocRefs["Document References<br/>(BT-128)"]
-
-    classDef ctx fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
-    class Root,VAT,Lines ctx
-```
+<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="xsl-sc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="xsl-sc-arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <linearGradient id="xsl-sc-g-slate" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#94a3b8" stopOpacity="0.14"/><stop offset="100%" stopColor="#64748b" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="xsl-sc-g-blue-strong" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.08"/></linearGradient>
+  </defs>
+  <rect x="400" y="20" width="200" height="50" rx="10" fill="url(#xsl-sc-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="500" y="50" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Document</text>
+  <rect x="400" y="100" width="200" height="60" rx="10" fill="url(#xsl-sc-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="500" y="124" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="ui-monospace, monospace">TAG_ROOT</text>
+  <text x="500" y="143" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">e.g. Invoices</text>
+  <line x1="500" y1="70" x2="500" y2="100" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#xsl-sc-arrow-blue)"/>
+  <rect x="40" y="200" width="240" height="80" rx="10" fill="url(#xsl-sc-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="160" y="226" fill="currentColor" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Header / Seller / Buyer</text>
+  <text x="160" y="244" fill="currentColor" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Delivery / Payment / Notes</text>
+  <text x="160" y="266" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.75">relative to TAG_ROOT</text>
+  <rect x="320" y="200" width="240" height="80" rx="10" fill="url(#xsl-sc-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="440" y="228" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="ui-monospace, monospace">TAG_VAT_LINE</text>
+  <text x="440" y="252" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">e.g. Tax_Summary/Tax_Line</text>
+  <rect x="600" y="200" width="240" height="80" rx="10" fill="url(#xsl-sc-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="720" y="228" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="ui-monospace, monospace">TAG_LINE_ITEM</text>
+  <text x="720" y="252" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">e.g. Lines_Group/Line_Item</text>
+  <path d="M 500 160 L 500 180 L 160 180 L 160 200" stroke="#64748b" strokeWidth="1.4" fill="none" markerEnd="url(#xsl-sc-arrow)"/>
+  <path d="M 500 160 L 500 180 L 440 180 L 440 200" stroke="#64748b" strokeWidth="1.4" fill="none" markerEnd="url(#xsl-sc-arrow)"/>
+  <path d="M 500 160 L 500 180 L 720 180 L 720 200" stroke="#64748b" strokeWidth="1.4" fill="none" markerEnd="url(#xsl-sc-arrow)"/>
+  <rect x="320" y="320" width="240" height="50" rx="9" fill="url(#xsl-sc-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="440" y="340" fill="currentColor" fontSize="11" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">TAG_VAT_*</text>
+  <text x="440" y="358" fill="currentColor" fontSize="9" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">relative to VAT line</text>
+  <line x1="440" y1="280" x2="440" y2="320" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#xsl-sc-arrow)"/>
+  <rect x="600" y="320" width="170" height="36" rx="8" fill="url(#xsl-sc-g-slate)" stroke="#94a3b8" strokeWidth="1.2"/>
+  <text x="615" y="335" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">TAG_LINE_*</text>
+  <text x="755" y="335" fill="currentColor" fontSize="9" fontStyle="italic" textAnchor="end" fontFamily="system-ui, sans-serif" opacity="0.7">line scope</text>
+  <text x="615" y="350" fill="currentColor" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif" opacity="0.7">core line fields</text>
+  <rect x="600" y="362" width="170" height="22" rx="6" fill="url(#xsl-sc-g-slate)" stroke="#94a3b8" strokeWidth="1"/>
+  <text x="685" y="377" fill="currentColor" fontSize="10" fontWeight="600" textAnchor="middle" fontFamily="system-ui, sans-serif">Item Properties (BG-32)</text>
+  <rect x="600" y="388" width="170" height="22" rx="6" fill="url(#xsl-sc-g-slate)" stroke="#94a3b8" strokeWidth="1"/>
+  <text x="685" y="403" fill="currentColor" fontSize="10" fontWeight="600" textAnchor="middle" fontFamily="system-ui, sans-serif">Allow. / Charges (BG-27/28)</text>
+  <rect x="780" y="362" width="170" height="22" rx="6" fill="url(#xsl-sc-g-slate)" stroke="#94a3b8" strokeWidth="1"/>
+  <text x="865" y="377" fill="currentColor" fontSize="10" fontWeight="600" textAnchor="middle" fontFamily="system-ui, sans-serif">Line Notes (BT-127)</text>
+  <rect x="780" y="388" width="170" height="22" rx="6" fill="url(#xsl-sc-g-slate)" stroke="#94a3b8" strokeWidth="1"/>
+  <text x="865" y="403" fill="currentColor" fontSize="10" fontWeight="600" textAnchor="middle" fontFamily="system-ui, sans-serif">Doc References (BT-128)</text>
+  <line x1="720" y1="280" x2="720" y2="320" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#xsl-sc-arrow)"/>
+  <line x1="685" y1="356" x2="685" y2="362" stroke="#94a3b8" strokeWidth="1"/>
+  <line x1="685" y1="384" x2="685" y2="388" stroke="#94a3b8" strokeWidth="1"/>
+  <path d="M 720 280 L 865 280 L 865 362" stroke="#64748b" strokeOpacity="0.55" strokeWidth="1.2" fill="none"/>
+  <line x1="865" y1="384" x2="865" y2="388" stroke="#94a3b8" strokeWidth="1"/>
+</svg>
 
 A blue scope hint banner appears below each context variable to remind which prefix is currently active. The XML Browser drawer also filters its entries to that scope so the path picker only shows what is actually addressable from the current context.
 

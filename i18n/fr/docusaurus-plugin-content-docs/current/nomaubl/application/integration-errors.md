@@ -22,18 +22,46 @@ C'est la **vue de surveillance systématique** de ces échecs. La carte compteur
 
 ## Origine de ces erreurs
 
-```mermaid
-flowchart LR
-    Source["📄 XML source"] --> Pipeline["⚙️ Pipeline de traitement<br/><i>XSL · XSD · Schematron · Base</i>"]
-    Pipeline -->|"succès"| Header["📋 En-tête de facture<br/>persisté (F564231)"]
-    Pipeline -->|"échec avant<br/>insertion en-tête"| Orphan["🔴 Ligne de validation<br/>orpheline (F564236)"]
-    Header --> Invoices["✅ <i>Application → E-Invoicing</i>"]
-    Orphan --> ThisPage["⚠️ <b>Cette page</b><br/><i>Liste Integration Errors</i>"]
-    ThisPage -->|"correction source / template,<br/>relance pipeline"| Pipeline
-
-    classDef hl fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
-    class ThisPage hl
-```
+<svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="ie-arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <marker id="ie-arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4ade80"/></marker>
+    <marker id="ie-arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#f87171"/></marker>
+    <marker id="ie-arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#fb923c"/></marker>
+    <linearGradient id="ie-g-slate" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#94a3b8" stopOpacity="0.14"/><stop offset="100%" stopColor="#64748b" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="ie-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.18"/><stop offset="100%" stopColor="#4a9eff" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="ie-g-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4ade80" stopOpacity="0.18"/><stop offset="100%" stopColor="#4ade80" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="ie-g-red" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f87171" stopOpacity="0.16"/><stop offset="100%" stopColor="#f87171" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="ie-g-orange-strong" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fb923c" stopOpacity="0.28"/><stop offset="100%" stopColor="#fb923c" stopOpacity="0.08"/></linearGradient>
+  </defs>
+  <rect x="20" y="120" width="170" height="80" rx="12" fill="url(#ie-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="105" y="150" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📄 XML source</text>
+  <text x="105" y="172" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">JDE / SAP / NS / custom</text>
+  <rect x="220" y="120" width="220" height="80" rx="12" fill="url(#ie-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
+  <text x="330" y="150" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙️ Pipeline de traitement</text>
+  <text x="330" y="172" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.78">XSL · XSD · Schematron · Base</text>
+  <rect x="490" y="40" width="220" height="60" rx="12" fill="url(#ie-g-green)" stroke="#4ade80" strokeWidth="1.5"/>
+  <text x="600" y="64" fill="#4ade80" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📋 En-tête facture</text>
+  <text x="600" y="83" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.78">persisté en F564231</text>
+  <rect x="490" y="220" width="220" height="60" rx="12" fill="url(#ie-g-red)" stroke="#f87171" strokeWidth="1.5"/>
+  <text x="600" y="244" fill="#f87171" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🔴 Validation orpheline</text>
+  <text x="600" y="263" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.78">F564236, sans F564231</text>
+  <rect x="760" y="40" width="220" height="60" rx="12" fill="url(#ie-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
+  <text x="870" y="64" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✅ E-Invoicing</text>
+  <text x="870" y="83" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Application →</text>
+  <rect x="760" y="220" width="220" height="60" rx="12" fill="url(#ie-g-orange-strong)" stroke="#fb923c" strokeWidth="2"/>
+  <text x="870" y="244" fill="#fb923c" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">⚠ Cette page</text>
+  <text x="870" y="263" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">Liste Integration Errors</text>
+  <line x1="190" y1="160" x2="220" y2="160" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#ie-arrow-blue)"/>
+  <path d="M 440 145 L 470 145 L 470 70 L 490 70" stroke="#4ade80" strokeWidth="1.5" fill="none" markerEnd="url(#ie-arrow-green)"/>
+  <text x="455" y="105" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">succès</text>
+  <path d="M 440 175 L 470 175 L 470 250 L 490 250" stroke="#f87171" strokeWidth="1.5" fill="none" markerEnd="url(#ie-arrow-red)"/>
+  <text x="466" y="215" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">échec</text>
+  <line x1="710" y1="70" x2="760" y2="70" stroke="#4ade80" strokeWidth="1.5" markerEnd="url(#ie-arrow-green)"/>
+  <line x1="710" y1="250" x2="760" y2="250" stroke="#fb923c" strokeWidth="1.5" markerEnd="url(#ie-arrow-orange)"/>
+  <path d="M 870 220 L 870 295 L 330 295 L 330 200" stroke="#fb923c" strokeWidth="1.4" strokeDasharray="5 4" fill="none" markerEnd="url(#ie-arrow-orange)"/>
+  <text x="600" y="288" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">correction source / template, relance pipeline</text>
+</svg>
 
 Une exécution réussie place la facture dans la liste *E-Invoicing* habituelle. Un échec survenu avant l'insertion de l'en-tête laisse uniquement une ligne de validation — c'est ce que cette page fait apparaître. Une fois la donnée source ou le template corrigé, la relance du pipeline crée soit l'en-tête (la ligne disparaît de cette vue), soit une nouvelle ligne orpheline (toujours listée).
 

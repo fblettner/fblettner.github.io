@@ -16,18 +16,30 @@ The page exposes that stream in two complementary views — a **grouped** view t
 
 Every NomaUBL processing path writes its trace into `F564237` through the same logger. The key fields are populated at runtime: the **file** being processed, the **mode** (`AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`), the source **template**, the current **step** (`START`, `END`, or a method name such as `TRANSFORM_XSL`, `CONVERT_RTF`, `RUN_TASKS`), the **message** and the **timestamp**. The grouping engine on this page reconstructs jobs from those raw events on the fly.
 
-```mermaid
-flowchart LR
-    Source["📥 <b>Processing entry</b><br/><i>XML · UBL · BIP · FTP</i>"]
-    Pipeline["⚙️ <b>NomaUBL pipeline</b><br/><i>transform · render · validate · send</i>"]
-    Log["📜 <b>F564237</b><br/><i>runtime event stream</i>"]
-    Page["📊 <b>Processing Log</b><br/><i>grouped &amp; flat views</i>"]
-
-    Source --> Pipeline -->|"START · steps · END"| Log --> Page
-
-    classDef hl fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
-    class Page hl
-```
+<svg viewBox="0 0 1000 160" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="plog-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <linearGradient id="plog-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.18"/><stop offset="100%" stopColor="#4a9eff" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="plog-g-blue-strong" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.08"/></linearGradient>
+    <linearGradient id="plog-g-slate" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#94a3b8" stopOpacity="0.14"/><stop offset="100%" stopColor="#64748b" stopOpacity="0.04"/></linearGradient>
+  </defs>
+  <rect x="20" y="40" width="220" height="80" rx="12" fill="url(#plog-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="130" y="70" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📥 Processing entry</text>
+  <text x="130" y="92" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">XML · UBL · BIP · FTP</text>
+  <rect x="275" y="40" width="240" height="80" rx="12" fill="url(#plog-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
+  <text x="395" y="70" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙️ NomaUBL pipeline</text>
+  <text x="395" y="92" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">transform · render · validate · send</text>
+  <rect x="555" y="40" width="200" height="80" rx="12" fill="url(#plog-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="655" y="70" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">📜 F564237</text>
+  <text x="655" y="92" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">runtime event stream</text>
+  <rect x="795" y="40" width="185" height="80" rx="12" fill="url(#plog-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="887" y="70" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📊 Processing Log</text>
+  <text x="887" y="92" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">grouped & flat views</text>
+  <line x1="240" y1="80" x2="275" y2="80" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#plog-arrow)"/>
+  <line x1="515" y1="80" x2="555" y2="80" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#plog-arrow)"/>
+  <text x="535" y="73" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">START · steps · END</text>
+  <line x1="755" y1="80" x2="795" y2="80" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#plog-arrow)"/>
+</svg>
 
 The log is **append-only** — events are written by the pipeline and never modified. The page is read-only.
 

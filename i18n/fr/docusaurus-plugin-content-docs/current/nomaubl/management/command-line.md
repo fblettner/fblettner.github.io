@@ -16,18 +16,39 @@ La CLI fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite
 
 NomaUBL expose deux couches équivalentes — un **wrapper de contrôle de service** (`nomaubl.sh`) et les **modes directs du JAR** (`java -jar nomaubl.jar -…`). Le wrapper résout le fichier de configuration depuis un *nom d'environnement* court et ajoute les opérations `start` / `stop` / `restart` / `status` / `log` au-dessus du JAR.
 
-```mermaid
-flowchart LR
-    Op["👤 Opérateur / cron / CI"]
-    Wrap["🛠 <b>nomaubl.sh</b><br/><i>wrapper basé sur l'environnement</i><br/>start · stop · restart · status · log<br/>+ formes courtes des modes du JAR"]
-    Jar["☕ <b>java -jar nomaubl.jar</b><br/><i>modes directs — arguments complets</i><br/>-install · -serve · -xml · -ubl<br/>-fetch-import · -fetch-status<br/>-fetch-single · -fetch-all · -extract"]
-    Op --> Wrap
-    Wrap -->|"résout &lt;env&gt;/config/config.json"| Jar
-    Op -.->|"direct"| Jar
-
-    classDef hl fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
-    class Wrap hl
-```
+<svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="cli-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <marker id="cli-arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="cli-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.18"/><stop offset="100%" stopColor="#4a9eff" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="cli-g-blue-strong" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.08"/></linearGradient>
+    <linearGradient id="cli-g-slate" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#94a3b8" stopOpacity="0.14"/><stop offset="100%" stopColor="#64748b" stopOpacity="0.04"/></linearGradient>
+  </defs>
+  <rect x="40" y="20" width="200" height="60" rx="10" fill="url(#cli-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="140" y="44" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">👤 Opérateur</text>
+  <text x="140" y="64" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">cron · CI · interactif</text>
+  <rect x="320" y="120" width="280" height="160" rx="14" fill="url(#cli-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="460" y="150" fill="#4a9eff" fontSize="14" fontWeight="800" textAnchor="middle" fontFamily="ui-monospace, monospace">🛠 nomaubl.sh</text>
+  <text x="460" y="172" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">wrapper par environnement</text>
+  <line x1="345" y1="190" x2="575" y2="190" stroke="#4a9eff" strokeOpacity="0.3" strokeWidth="1"/>
+  <text x="460" y="210" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">start · stop · restart</text>
+  <text x="460" y="228" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">status · log</text>
+  <text x="460" y="252" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">+ formes courtes des modes JAR</text>
+  <rect x="680" y="20" width="280" height="280" rx="14" fill="url(#cli-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
+  <text x="820" y="50" fill="#4a9eff" fontSize="14" fontWeight="800" textAnchor="middle" fontFamily="ui-monospace, monospace">☕ java -jar nomaubl.jar</text>
+  <text x="820" y="72" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">modes directs — arguments complets</text>
+  <line x1="705" y1="92" x2="935" y2="92" stroke="#4a9eff" strokeOpacity="0.3" strokeWidth="1"/>
+  <text x="820" y="116" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-install · -serve</text>
+  <text x="820" y="135" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-xml · -ubl</text>
+  <text x="820" y="154" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-fetch-import · -fetch-status</text>
+  <text x="820" y="173" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-fetch-single · -fetch-all</text>
+  <text x="820" y="192" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-extract</text>
+  <path d="M 140 80 L 140 200 L 320 200" stroke="#4a9eff" strokeWidth="1.5" fill="none" markerEnd="url(#cli-arrow)"/>
+  <line x1="600" y1="200" x2="680" y2="200" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#cli-arrow)"/>
+  <text x="640" y="190" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">résout config</text>
+  <path d="M 240 50 L 680 50" stroke="#94a3b8" strokeWidth="1.2" strokeDasharray="5 4" fill="none" markerEnd="url(#cli-arrow-dim)"/>
+  <text x="460" y="42" fill="#94a3b8" fontSize="9" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">direct</text>
+</svg>
 
 | Couche | Quand l'utiliser |
 |---|---|

@@ -16,18 +16,30 @@ La page expose ce flux en deux vues complémentaires — une vue **groupée** qu
 
 Tous les chemins de traitement NomaUBL écrivent leur trace dans `F564237` à travers le même journaliseur. Les champs clés sont alimentés à l'exécution : le **fichier** traité, le **mode** (`AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`), le **template** source, l'**étape** courante (`START`, `END`, ou un nom de méthode tel que `TRANSFORM_XSL`, `CONVERT_RTF`, `RUN_TASKS`), le **message** et l'**horodatage**. Le moteur de groupement de cette page reconstruit les jobs depuis ces événements bruts au moment de l'affichage.
 
-```mermaid
-flowchart LR
-    Source["📥 <b>Entrée du traitement</b><br/><i>XML · UBL · BIP · FTP</i>"]
-    Pipeline["⚙️ <b>Pipeline NomaUBL</b><br/><i>transform · render · validate · send</i>"]
-    Log["📜 <b>F564237</b><br/><i>flux d'événements d'exécution</i>"]
-    Page["📊 <b>Processing Log</b><br/><i>vues groupée &amp; à plat</i>"]
-
-    Source --> Pipeline -->|"START · étapes · END"| Log --> Page
-
-    classDef hl fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
-    class Page hl
-```
+<svg viewBox="0 0 1000 160" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="plog-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <linearGradient id="plog-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.18"/><stop offset="100%" stopColor="#4a9eff" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="plog-g-blue-strong" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.08"/></linearGradient>
+    <linearGradient id="plog-g-slate" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#94a3b8" stopOpacity="0.14"/><stop offset="100%" stopColor="#64748b" stopOpacity="0.04"/></linearGradient>
+  </defs>
+  <rect x="20" y="40" width="220" height="80" rx="12" fill="url(#plog-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="130" y="70" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📥 Entrée du traitement</text>
+  <text x="130" y="92" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">XML · UBL · BIP · FTP</text>
+  <rect x="275" y="40" width="240" height="80" rx="12" fill="url(#plog-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
+  <text x="395" y="70" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙️ Pipeline NomaUBL</text>
+  <text x="395" y="92" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">transform · render · validate · send</text>
+  <rect x="555" y="40" width="200" height="80" rx="12" fill="url(#plog-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="655" y="70" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">📜 F564237</text>
+  <text x="655" y="92" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">flux d'événements</text>
+  <rect x="795" y="40" width="185" height="80" rx="12" fill="url(#plog-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="887" y="70" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📊 Processing Log</text>
+  <text x="887" y="92" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">vues groupée & à plat</text>
+  <line x1="240" y1="80" x2="275" y2="80" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#plog-arrow)"/>
+  <line x1="515" y1="80" x2="555" y2="80" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#plog-arrow)"/>
+  <text x="535" y="73" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">START · étapes · END</text>
+  <line x1="755" y1="80" x2="795" y2="80" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#plog-arrow)"/>
+</svg>
 
 Le journal est en **ajout uniquement** — les événements sont écrits par le pipeline et ne sont jamais modifiés. La page est en lecture seule.
 

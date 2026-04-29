@@ -23,26 +23,66 @@ Pour des cas d'usage plus légers :
 
 ## Vue d'ensemble du pipeline
 
-```mermaid
-flowchart TD
-    Source["Fichier XML source"] --> ModeChoice{"Mode"}
-
-    ModeChoice -->|"AUTO"| AutoResolve["Résolution <i>Document Types</i><br/>par document → SINGLE / BURST / UBL"]
-    AutoResolve -.-> ModeChoice
-
-    ModeChoice -->|"SINGLE"| PDF1["Transformation XSL<br/><b>→ PDF unique</b>"]
-    ModeChoice -->|"BURST"| PDFs["Transformation XSL + découpage<br/><b>→ PDF + index XML</b>"]
-    ModeChoice -->|"UBL"| UBLPipe["Transformation XSL<br/><b>→ UBL 2.1</b>"]
-
-    UBLPipe --> Validate["Validation XSD + Schematron"]
-    Validate --> DB["Persistance en base<br/><i>(Replace : Skip / Overwrite)</i>"]
-    DB --> Submit{"Send to PA"}
-    Submit -->|"Use settings"| PA["Plateforme Agréée"]
-    Submit -->|"Skip sending"| Local["Statut local 99XX"]
-
-    classDef hl fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
-    class UBLPipe,Validate,DB hl
-```
+<svg viewBox="0 0 1000 720" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="xp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <marker id="xp-arrow-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="xp-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.18"/><stop offset="100%" stopColor="#4a9eff" stopOpacity="0.04"/></linearGradient>
+    <linearGradient id="xp-g-blue-strong" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.08"/></linearGradient>
+    <linearGradient id="xp-g-slate" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#94a3b8" stopOpacity="0.14"/><stop offset="100%" stopColor="#64748b" stopOpacity="0.04"/></linearGradient>
+  </defs>
+  <rect x="400" y="20" width="200" height="50" rx="10" fill="url(#xp-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="500" y="40" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📄 Fichier XML source</text>
+  <text x="500" y="58" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">JDE / SAP / NS / custom</text>
+  <rect x="410" y="100" width="180" height="50" rx="10" fill="url(#xp-g-blue)" stroke="#4a9eff" strokeWidth="1.5" strokeDasharray="6 3"/>
+  <text x="500" y="124" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Mode</text>
+  <text x="500" y="140" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">décision</text>
+  <line x1="500" y1="70" x2="500" y2="100" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#xp-arrow)"/>
+  <rect x="20" y="190" width="200" height="60" rx="10" fill="url(#xp-g-slate)" stroke="#94a3b8" strokeWidth="1.3" strokeDasharray="4 3"/>
+  <text x="120" y="214" fill="currentColor" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Résolution AUTO</text>
+  <text x="120" y="232" fill="currentColor" fontSize="9" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">par document Document Types</text>
+  <rect x="240" y="190" width="200" height="60" rx="10" fill="url(#xp-g-blue)" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="340" y="214" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📄 SINGLE</text>
+  <text x="340" y="232" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">XSL → 1 PDF</text>
+  <rect x="460" y="190" width="200" height="60" rx="10" fill="url(#xp-g-blue)" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="560" y="214" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📚 BURST</text>
+  <text x="560" y="232" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">XSL + découpage → PDF</text>
+  <rect x="680" y="190" width="200" height="60" rx="10" fill="url(#xp-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="780" y="214" fill="#4a9eff" fontSize="12" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">📜 UBL</text>
+  <text x="780" y="232" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">XSL → UBL 2.1</text>
+  <path d="M 410 130 L 220 130 L 220 190" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#xp-arrow)"/>
+  <text x="290" y="122" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">AUTO</text>
+  <line x1="410" y1="135" x2="340" y2="190" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#xp-arrow)"/>
+  <text x="365" y="170" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SINGLE</text>
+  <line x1="500" y1="150" x2="540" y2="190" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#xp-arrow)"/>
+  <text x="540" y="178" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">BURST</text>
+  <path d="M 590 130 L 780 130 L 780 190" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#xp-arrow)"/>
+  <text x="710" y="122" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">UBL</text>
+  <path d="M 120 190 L 120 80 L 410 80 L 410 100" stroke="#94a3b8" strokeWidth="1.3" strokeDasharray="4 3" fill="none" markerEnd="url(#xp-arrow-slate)"/>
+  <text x="200" y="74" fontSize="9" fill="#94a3b8" textAnchor="start" fontFamily="ui-monospace, monospace" fontWeight="700">→ SINGLE / BURST / UBL</text>
+  <rect x="680" y="290" width="200" height="56" rx="10" fill="url(#xp-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="780" y="312" fill="#4a9eff" fontSize="12" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">✅ Validation</text>
+  <text x="780" y="328" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">XSD + Schematron</text>
+  <line x1="780" y1="250" x2="780" y2="290" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#xp-arrow)"/>
+  <rect x="680" y="386" width="200" height="56" rx="10" fill="url(#xp-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
+  <text x="780" y="408" fill="#4a9eff" fontSize="12" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">💾 Persistance base</text>
+  <text x="780" y="424" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">Replace : Skip / Overwrite</text>
+  <line x1="780" y1="346" x2="780" y2="386" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#xp-arrow)"/>
+  <rect x="680" y="482" width="200" height="50" rx="10" fill="url(#xp-g-blue)" stroke="#4a9eff" strokeWidth="1.5" strokeDasharray="6 3"/>
+  <text x="780" y="503" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Envoi PA</text>
+  <text x="780" y="519" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">décision</text>
+  <line x1="780" y1="442" x2="780" y2="482" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#xp-arrow)"/>
+  <rect x="540" y="580" width="200" height="60" rx="10" fill="url(#xp-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
+  <text x="640" y="606" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📡 Plateforme Agréée</text>
+  <text x="640" y="624" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">Use settings</text>
+  <rect x="780" y="580" width="200" height="60" rx="10" fill="url(#xp-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="880" y="606" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🏠 Statut local 99XX</text>
+  <text x="880" y="624" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">Skip sending</text>
+  <path d="M 740 510 L 700 510 L 700 580" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#xp-arrow)"/>
+  <text x="640" y="555" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Use settings</text>
+  <path d="M 820 510 L 860 510 L 860 580" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#xp-arrow)"/>
+  <text x="900" y="555" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Skip sending</text>
+</svg>
 
 `AUTO` n'exécute pas de pipeline propre — il aiguille chaque document du XML source vers `SINGLE`, `BURST` ou `UBL` selon la configuration par type de document définie dans *Document Types*. Seule la branche `UBL` enchaîne validation, persistance et dépôt PA ; `SINGLE` et `BURST` produisent une sortie PDF et s'arrêtent là.
 
