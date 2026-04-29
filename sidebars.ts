@@ -320,11 +320,12 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'References',
-      link: {type: 'generated-index', slug: '/nomaubl/references', description: 'Reference docs surfaced inside the app: status codes, reason codes, UBL semantics and HTTP API.'},
+      link: {type: 'generated-index', slug: '/nomaubl/references', description: 'Reference docs surfaced inside the app: status codes, reason codes, UBL semantics, database schema and HTTP API.'},
       items: [
         'nomaubl/references/status-reference',
         'nomaubl/references/reason-codes',
         'nomaubl/references/ubl-reference',
+        'nomaubl/references/database-tables',
         {
           type: 'link',
           label: 'API Reference',
