@@ -332,6 +332,7 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
+    'nomaubl/release-notes',
   ],
 
   apiSidebar: [
