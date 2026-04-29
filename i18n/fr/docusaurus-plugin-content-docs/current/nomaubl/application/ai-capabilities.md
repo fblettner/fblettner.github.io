@@ -1,7 +1,7 @@
 ---
 title: Capacités IA
-description: "Assistant IA intégré à NomaUBL — répond aux questions sur le fonctionnement du produit en s'appuyant sur la documentation publique et aux questions sur les données opérationnelles (factures, statuts, erreurs de validation, dépôts e-reporting) via un jeu réduit d'outils en lecture seule. Réponses en flux, appels d'outils visibles, prise en charge du français et de l'anglais."
-keywords: [NomaUBL, assistant IA, Claude, agentique, tool use, list_invoices, list_ereports, explain_status_code, validation_errors, web_fetch, JD Edwards, SAP, NetSuite, ERP personnalisé]
+description: "Assistant IA intégré à NomaUBL — répond aux questions sur le fonctionnement du produit en s'appuyant sur la documentation publique et aux questions sur les données opérationnelles (factures, historique de cycle de vie, erreurs de validation, dépôts e-reporting) via un jeu réduit d'outils en lecture seule. Réponses en flux, appels d'outils visibles, prise en charge du français et de l'anglais."
+keywords: [NomaUBL, assistant IA, Claude, agentique, tool use, list_docs_pages, list_invoices, list_ereports, explain_status_code, validation_errors, lifecycle_history, web_fetch, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Capacités IA
@@ -125,7 +125,7 @@ Les réponses sont diffusées en flux à mesure de leur génération ; chaque ap
   <line x1="800" y1="580" x2="750" y2="580" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aichat-arrow)"/>
 </svg>
 
-Chaque action menée par l'assistant pour le compte de l'utilisateur apparaît sous forme de pastille 🔍 (consultation de données) ou 📖 (consultation de documentation), avec les filtres réellement utilisés affichés à côté. Aucune étape n'est cachée.
+Chaque action menée par l'assistant pour le compte de l'utilisateur apparaît sous forme de pastille — 🔍 pour une consultation de la base NomaUBL, 📖 pour la demande d'une page de documentation, 📥 pour le résultat reçu en retour — avec les filtres réellement utilisés affichés à côté. Aucune étape n'est cachée.
 
 ---
 
@@ -135,26 +135,32 @@ L'assistant est relié à deux sources d'information, toutes deux en lecture seu
 
 ### Sur le produit
 
-Toute page de la documentation publique (`docs.nomana-it.fr`) peut être consultée pour ancrer la réponse. Cas d'usage :
+Pour répondre à une question de fonctionnement, l'assistant exécute une consultation en deux temps de la documentation publique `docs.nomana-it.fr` :
+
+1. **`list_docs_pages`** — découverte des URL de documentation NomaUBL disponibles via le sitemap du site (rafraîchi toutes les six heures, 200 entrées maximum). La pastille s'affiche sous la forme 🔍 `list_docs_pages · discovering NomaUBL docs URLs`.
+2. **`web_fetch`** — sélection de l'URL la plus pertinente dans la liste obtenue, puis téléchargement de la page. Une pastille 📖 affiche l'URL choisie ; immédiatement après, une pastille 📥 `web_fetch_result · ✓ <url>` confirme la réception (ou 📥 ❌ `<error_code>` en cas d'échec).
+
+Ce schéma en deux temps maintient l'ancrage du modèle dans la documentation officielle — l'URL effectivement consultée provient toujours du sitemap en vigueur, ce qui empêche la production d'un lien inventé ou obsolète.
+
+Cas d'usage :
 
 - doute sur le comportement d'une fonctionnalité (*« À quoi sert Replace = Skip sur Processing → XML ? »*) ;
 - besoin d'une définition rapide pour un collègue (*« Différence entre flux 10.1 et 10.3 ? »*) ;
 - rappel du cycle de vie officiel (*« Comment une facture passe-t-elle du statut 9900 au statut 10 ? »*).
 
-La pastille associée est 📖 `web_fetch · <url>`.
-
 ### Sur les données
 
-Quatre outils en lecture seule couvrent les questions opérationnelles courantes :
+Cinq outils en lecture seule couvrent les questions opérationnelles courantes. L'assistant reçoit également le catalogue de statuts en vigueur (codes facture et e-reporting avec leur tag et libellés FR/EN), ce qui permet la résolution automatique d'expressions comme *« en litige »* ou *« rejected »* vers le bon code, sans approximation.
 
 | Outil | Données retournées | Question typique |
 |---|---|---|
 | **`list_invoices`** | Jusqu'à 50 factures de F564231, avec filtres : code statut, société, routage BAR (B2B / B2BINT / B2C / B2G / OUTOFSCOPE), nom client (sous-chaîne), période d'émission. | *« Lister les factures en attente pour la société 00070 en EUR »*, *« Échecs d'envoi depuis lundi dernier »* |
 | **`explain_status_code`** | Le nom de tag et les libellés FR / EN d'un code statut. Consulte le catalogue facture (1, 8, 10, 37, 9900–9907 …) et le catalogue e-reporting (9950–9957). | *« Que signifie 9906 ? »*, *« Statut 9954 ? »* |
-| **`validation_errors`** | Jusqu'à 100 erreurs de F564236 pour un triplet `DOC + DCT + KCO` (niveau, source, règle, message — mêmes colonnes que la page [Erreurs d'intégration](./integration-errors.md)). | *« Quel est le problème pour la facture 10000 / RI / 00001 ? »* |
+| **`validation_errors`** | Erreurs de validation issues de F564236 pour un triplet `DOC + DCT + KCO` (niveau, source, règle, message — mêmes colonnes et même logique de résolution que la page [Erreurs d'intégration](./integration-errors.md)). | *« Quel est le problème pour la facture 10000 / RI / 00001 ? »* |
+| **`lifecycle_history`** | Toutes les transitions de statut enregistrées dans F564235 pour un triplet `DOC + DCT + KCO` — séquence, code statut, message, date / heure, plus le motif de rejet PA, l'action attendue et la note de statut lorsqu'ils sont présents. | *« Pourquoi la facture 12345/RI/00070 a-t-elle été rejetée par la PA ? »*, *« Afficher l'historique complet de cette facture »* |
 | **`list_ereports`** | Jusqu'à 50 dépôts de F564240 avec filtres : flux (10.1 / 10.3), société, code statut (9950–9957). | *« Les dix derniers dépôts 10.3 pour la société 00070 »*, *« Dépôts e-reporting en attente »* |
 
-Le déclenchement est automatique — aucun appel manuel n'est nécessaire. Une garde de sécurité interrompt la boucle agentique au bout de **5 itérations d'outil par tour**, ce qui prévient toute séquence emballée susceptible d'épuiser le budget API.
+Le déclenchement est automatique — aucun appel manuel n'est nécessaire. Une garde de sécurité interrompt la boucle agentique au bout de **5 itérations d'outil par tour**, ce qui prévient toute séquence emballée susceptible d'épuiser le budget API. En cas d'échec d'un outil, l'assistant restitue le nom de l'outil, les paramètres tentés et le code d'erreur retourné, ce qui facilite l'investigation.
 
 ---
 
@@ -240,31 +246,69 @@ Un triplet (`DOC + DCT + KCO`) suffit pour amorcer le diagnostic. L'assistant en
 
 Le plafond de 50 lignes sur `list_invoices` est intentionnel — pour un dénombrement exhaustif, la page [E-Invoicing](./invoices.md) reste l'outil approprié. L'assistant excelle à *caractériser* un problème (quelle société, quel type de document, quelle période), avant de renvoyer vers l'écran dédié pour la liste complète.
 
-### Exemple 3 — Confirmation du motif
+### Exemple 3 — Lecture de l'historique de rejet PA
 
 > **Utilisateur**
-> *oui*
+> *pourquoi la facture 12345 / RI / 00070 a-t-elle été rejetée par la PA ?*
 >
-> 🔍 **`validation_errors`** · `doc=10001 dct=RI kco=00002`
+> 🔍 **`lifecycle_history`** · `doc=12345 dct=RI kco=00070`
 >
 > **AI Assistant**
 >
-> Intéressant — la facture 10001 / RI / 00002 n'a aucune erreur enregistrée en F564236.
+> Voici l'historique complet de la facture 12345 / RI / 00070 :
 >
-> Cela signifie que :
-> - soit l'erreur a été corrigée après une relance,
-> - soit le statut 9905 vient d'une autre source (par exemple un rejet de la Plateforme Agréée),
-> - soit la table d'erreurs n'a pas conservé la trace.
+> | Date | Statut | Message |
+> |---|---|---|
+> | 2026-04-12 09:14 | 9900 — Créée | — |
+> | 2026-04-12 09:15 | 9901 — Validée | XSD + Schematron OK |
+> | 2026-04-12 09:18 | 9903 — Envoyée à la PA | submission_id=ABC-42 |
+> | 2026-04-12 09:42 | 9904 — Rejet PA | `REJ_ADR` — code adressage destinataire inconnu |
 >
-> *Pouvez-vous me préciser le statut courant de la facture 10001 / RI / 00002 ? Je peux le vérifier.* &nbsp;📋
+> **Motif PA :** `REJ_ADR` — l'identifiant SIREN/SIRET du destinataire n'est pas reconnu sur l'annuaire PPF.
+>
+> **Action attendue :** vérifier le code adressage du client dans JD Edwards puis relancer le pipeline.
+>
+> *Souhaitez-vous que je vérifie l'annuaire PPF pour ce destinataire ?* &nbsp;📋
 
-Lorsqu'un outil ne renvoie rien, l'assistant le signale explicitement et propose la suite plutôt que de spéculer. *« Aucune erreur enregistrée »* sur une facture en 9905 constitue en soi un diagnostic utile.
+Lorsque le rejet provient de la Plateforme Agréée et non de l'étape de validation locale, `validation_errors` renvoie une liste vide — `lifecycle_history` est l'outil approprié, car il restitue le motif PA (`REJ_ADR`, `REJ_FMT`, `REJ_DESTINATAIRE` …) accompagné de l'action attendue.
+
+### Exemple 4 — Consultation du fonctionnement du produit
+
+> **Utilisateur**
+> *qu'est-ce qu'un flux 10.1 ?*
+>
+> 🔍 **`list_docs_pages`** · `discovering NomaUBL docs URLs`
+>
+> 📖 **`web_fetch`** · `https://docs.nomana-it.fr/nomaubl/application/ereporting/`
+>
+> 📥 **`web_fetch_result`** · ✓ `https://docs.nomana-it.fr/nomaubl/application/ereporting/`
+>
+> **AI Assistant**
+>
+> Le **flux 10.1** est le canal e-reporting français pour les transactions **B2BINT** — ventes vers un acheteur dans un autre État membre de l'Union européenne. Pour ce flux :
+>
+> - chaque facture est déclarée individuellement (un envoi par facture, sans agrégation) ;
+> - la PA dépose la déclaration auprès de l'administration fiscale via le PPF ;
+> - le format est XML AFNOR XP Z12-014.
+>
+> À distinguer du **flux 10.3**, qui agrège les transactions B2C et hors-périmètre par période. Source : [docs.nomana-it.fr/nomaubl/application/ereporting](https://docs.nomana-it.fr/nomaubl/application/ereporting/) &nbsp;📋
+
+La consultation en deux temps (`list_docs_pages` puis `web_fetch`) est obligatoire — l'API documentaire n'autorise le téléchargement que d'URL retournées par un précédent appel d'outil, ce qui empêche la fabrication d'un lien documentaire.
 
 ---
 
 ## Lecture des réponses
 
 - **Pastilles d'appel d'outil** — affichent les filtres *réellement* appliqués (`status=9906 dateFrom=2026-01-01 …`). En cas de résultat inattendu, la pastille fournit l'explication.
+- **Sémantique des icônes** — chaque icône correspond à un type d'action :
+
+  | Icône | Pastille | Signification |
+  |---|---|---|
+  | 🔍 | `list_invoices`, `lifecycle_history`, `list_ereports`, `validation_errors`, `explain_status_code`, `list_docs_pages` | Consultation en lecture seule de la base NomaUBL ou du sitemap documentaire. |
+  | 📖 | `web_fetch` | Téléchargement d'une page de documentation en cours — l'URL choisie figure dans la pastille. |
+  | 📥 | `web_fetch_result` | Page reçue. Le préfixe ✓ suivi de l'URL signale un succès ; ❌ suivi d'un code d'erreur signale un échec. |
+  | 🌐 | `web_search` | Une recherche web a été émise (uniquement lorsque la recherche est activée). |
+
 - **Rendu Markdown** — titres, listes à puces, fragments de code et tableaux apparaissent mis en forme dans le panneau, sans dump en texte brut.
 - **Diffusion en flux** — la bulle se remplit à mesure que le modèle répond ; le bouton **■** interrompt proprement la diffusion sans clore la conversation.
 - **📋 Copy** au pied de chaque réponse copie le Markdown brut dans le presse-papiers — pratique pour l'intégrer à un ticket ou à un courriel.
@@ -286,7 +330,9 @@ L'administrateur peut désactiver entièrement les outils de données (l'assista
 ## Conseils & bonnes pratiques
 
 - **Formuler la question, pas l'outil.** *« Lister les factures en attente pour la société 00070 en EUR »* suffit — il n'est pas nécessaire d'instruire explicitement l'appel à `list_invoices`.
-- **Préciser les identifiants.** Pour les questions de validation, fournir le triplet complet (`DOC + DCT + KCO`) ; à défaut, l'assistant doit deviner ou appeler `list_invoices` au préalable.
-- **Lire les pastilles d'outil.** Elles constituent la trace d'audit de la conversation.
+- **Utiliser les noms naturels de statut.** *« En litige »*, *« rejected by the PA »*, *« en attente de dépôt »* sont automatiquement résolus vers le bon code numérique — l'assistant dispose du catalogue de statuts en vigueur.
+- **Préciser les identifiants.** Pour les questions de validation ou de cycle de vie, fournir le triplet complet (`DOC + DCT + KCO`) ; à défaut, l'assistant doit deviner ou appeler `list_invoices` au préalable.
+- **Pour un rejet PA, privilégier `lifecycle_history` plutôt que `validation_errors`.** La validation locale ne consigne dans F564236 que les échecs XSD / Schematron ; les rejets côté PA (`REJ_ADR`, `REJ_FMT`, …) résident dans la table de cycle de vie et seul `lifecycle_history` les restitue.
+- **Lire les pastilles d'outil.** Elles constituent la trace d'audit de la conversation — y compris les marqueurs 📥 `web_fetch_result` qui confirment qu'une page documentaire a bien été téléchargée (ou rapportent le code d'erreur en cas d'échec).
 - **Considérer le panneau comme une API externe.** Tout ce qui y est saisi est transmis au fournisseur de modèle — pas de clés API, pas de numéros de carte complets, pas de données personnelles au-delà de ce que la documentation publique contient déjà.
 - **Pour les audits approfondis, revenir aux pages dédiées.** L'assistant est optimisé pour les recherches rapides et les explications. Pour les flux récurrents, les pages [Tableau de bord](./dashboard.md), [E-Invoicing](./invoices.md), [E-Reporting](./ereporting.md) et [Erreurs d'intégration](./integration-errors.md) restent la source de vérité.
