@@ -10,11 +10,53 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-04-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.04.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-04-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.04.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-04-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.04.3 — 2026-04-29 \{#v2026-04-3\}
+
+### E-Reporting XML — Flux 10 specification compliance
+
+- `EReportingXmlBuilder` rewritten to match the official FNFE-MPE Flux 10 element names (TT-1..TT-99, TG-8..TG-39). Old custom names (`<Identifier>`, `<DocumentType>`, `<Flux>`, `<Period>`, `<Customer>`, `<Totals>`, `<TaxBreakdown>`) replaced with the spec's `<Id>`, `<IssueDateTime><DateTimeString>`, `<TypeCode>`, `<Sender><Id schemeId>+<Name>+<RoleCode>`, `<Issuer><Id schemeId>+<Name>+<RoleCode>`, `<TransactionsReport><ReportPeriod><StartDate>+<EndDate>`. Dates emitted as `yyyymmdd` (period) and `yyyymmddhhmmss` (issue datetime), no separators.
+- B2C / B2BINT routing rule **G6.28** enforced: B2C transactions **never** emit individual `<Invoice>` blocks — only aggregated `<Transactions>` (one per CategoryCode + currency, with nested per-rate `<TaxSubtotal>` carrying TaxPercent / TaxableAmount / TaxTotal). B2BINT keeps emitting one `<Invoice>` per invoice with ID, IssueDate, TypeCode, CurrencyCode, Seller (declarant), Buyer (counterparty), MonetaryTotal, and per-rate `<TaxSubTotal>`.
+- Per **G6.23**, every `TaxAmount` / `TaxTotal` is now expressed in EUR (the `currencyId` attribute is locked to `EUR`) regardless of the source invoice's currency. Taxable amounts retain the source currency.
+- `<TransactionsReport><Transactions><CategoryCode>` (TT-81) restricted to the spec subset `TLB1` (goods VAT-able), `TPS1` (services VAT-able), `TNT1` (non-VAT-able), `TMA1` (margin scheme); falls back to `TLB1` / `TNT1` based on the rate when the source row carries an out-of-list value.
+- New optional configuration on the `e-reporting` template: `senderName`, `senderRoleCode` (default `WK`), `issuerName`, `issuerSchemeId` (default `0002`, with `0223` / `0227` / `0228` / `0229` selectable for international cases), `issuerRoleCode` (`SE` / `BY`), `businessProcessId` and `businessProcessTypeId` (TT-28 / TT-29 emitted on per-invoice `<BusinessProcess>` for B2BINT only), and `flowName` (TT-2). The Settings → System → E-Reporting editor exposes them as three grouped sections: Sender (PA), Issuer (Declarant), Business Process.
+- `<ReportDocument><Id>` defaults to `{siren}-{flux}-{start}-{end}` when no transmission ID is supplied — a stable per-period value the PA can deduplicate against.
+- Dedicated e-reporting status catalogue (codes **9950 – 9957**), independent from the invoice 99xx range. New `EReportingStatusCatalog` loads from the new `ereporting-statuses` system template (FR / EN labels editable in **Settings → System → ereporting-statuses**, alongside the existing `statuses` template). Codes: `9950 EREPORT_CREATED`, `9951 EREPORT_SUBMIT_SKIPPED`, `9952 EREPORT_SENT_TO_PA`, `9953 EREPORT_PENDING`, `9954 EREPORT_ERROR_SENT`, `9955 EREPORT_DEPOSITED`, `9956 EREPORT_FAILED_IMPORT`, `9957 EREPORT_REJECTED`. The catalogue seeds itself with built-in defaults if the template is missing, so existing installs keep working without manual migration. `EReportingHandler` rewired to use these codes (was previously reusing the invoice ones); the PA-submission-skipped case now lands on its own code instead of reusing `STATUS_CREATED`.
+- `EReportingFetcher` now reads VAT subtotals primarily from the UBL XML stored in `F564231.UHTXFT` (parses the document-level `cac:TaxTotal/cac:TaxSubtotal` nodes — line-level subtotals are ignored to avoid double-counting). The previous behaviour (querying `F564234`) is kept as a fallback so deployments that don't materialise the per-tax summary table still produce reports. Fixes the "empty `<Transactions>` block" symptom in B2C reports where `F564234` was not populated even though the invoices and their UBL XML were correctly stored.
+
+### Settings → list editors (focus loss when typing)
+
+- Fixed across **15** list editors (Statuses, Countries, ActionCodes, CurrencyCodes, CustomizationIds, InvoiceTypes, PaymentMeans, NoteTypes, DocumentReferenceCodes, RejectionReasonCodes, SchemeIds, UnitCodes, ProfileIds, VatexCodes, VatCategories): typing into any row would lose focus after every character — and freshly-added rows could never be filled in.
+- Root cause: each editor had a `useEffect(() => setRowsState(...), [props])` that re-derived the local rows from the parent props on every render. Because the editor itself echoes rows back to the parent on every keystroke (and the parent re-renders), this created a round-trip that recreated the rows array → React unmounted / remounted the inputs → caret was kicked out of the field. Worse, `*RowsToProps` filters out rows whose code / key is empty, so any new row vanished entirely from the parent's props on the first keystroke in a non-key column.
+- Fix: removed the props → rows resync. Each editor seeds its local rows from props once on mount and is the sole writer afterwards. React keys stay tied to the array index so existing rows keep their input identity across re-renders.
+- For `StatusesEditor` specifically, the `type` and `description` template fields are now preserved when echoing back to the parent (they were silently dropped before, which would corrupt the `statuses` template on Save).
+
+### E-Reporting schema rework
+
+- F564240, F564241 and F564242 column names overhauled to match the JDE-style structure:
+  - F564240: `RGDOC → RGUKID` (PK = RGUKID alone, no flux / kco component; declared as `NUMBER(15)` on Oracle / `BIGINT` on Postgres in both the static DDL and `AuthManager.initTables`), `RGFLUX → RGY56BAR`, `RGTYPCD → RGDCT`, `RGPSTART → RGEFTJ`, `RGPEND → RGEFDJ`, `RGISSUID → RGY56EPID`, `RGINVCNT → RGNINV`. **Dropped** `RGSENDID` (sender stays in config + XML, not persisted) and `RGUKIDSZ` (PA UUID no longer stored — PA outcome tracked through status + lifecycle only).
+  - F564241: FK column to F564240 keeps the parent's prefix (`RGUKID`); `RHFLUX → RHY56BAR`; `RHKCO` dropped (reach KCO via the parent). PK = `(RGUKID, RHSEQN)`.
+  - F564242: FK column is `RGUKID`; `RIFLUX → RIY56BAR`; report-side `RIKCO` dropped. The invoice triplet drops the `INV` infix: `RIINVDOC / RIINVDCT / RIINVKCO → RIDOC / RIDCT / RIKCO`. PK = `(RGUKID, RIDOC, RIDCT, RIKCO)`.
+- Mirrored across Oracle DDL, Postgres DDL and `AuthManager.initTables` (so the **Initialize Database** action creates the new structure).
+- `EReportingDatabaseHandler`: field rename `rgdoc → rgukid`; `kco` no longer carried at the handler level (only F564240 has it, set at insertReport time). `nextSequence()` now does `MAX(RGUKID) + 1` (globally unique). `insertReport(typeCode, kco, …)` signature: `senderId` parameter removed. `updatePATransactionId()` removed (column gone). All child-table inserts updated to the new column names.
+- `EReportingFetcher` NOT EXISTS check rewritten to the new `RIDOC / RIDCT / RIKCO / RIY56BAR` columns.
+- REST API simplified accordingly: `/api/ereporting/{flux}/{kco}/{rgdoc}` → **`/api/ereporting/{rgukid}`**. `/api/ereporting/{flux}/{kco}/{rgdoc}/resend` → **`/api/ereporting/{rgukid}/resend`**. JSON output: `rgdoc` → `rgukid`; `sender` and `paUuid` fields removed.
+- Frontend types, API client, list page, detail modal, columns and i18n updated to match (resend echoes the PA UUID once in its response so it can still be displayed in the success banner).
+- Detail modal → Invoices tab: dropped the *Number* column. The DOC / DCT / KCO triplet is the canonical identifier; the UBL invoice number was just a display copy of the same data, removed alongside its i18n key, the `invoiceNumber` field on `EReportInvoiceLink`, and the matching `UHK74FLEN` join in the backend SQL.
+
+### Dashboard / About card
+
+- The EXTENDED-CTC-FR schematron is now listed in the *About this release* card (key `frExtendedCtc`, label *EXTENDED-CTC-FR*) — it was shipped with the JAR but missing from `/api/build-info`.
+- `BuildInfo` now picks the FNFE-MPE version stamp (`Schematron yyyymmdd_NAME_VX.Y.Z …`) **before** the generic `Schematron version X.Y.Z` pattern; both Flux 2 and Extended-CTC-FR embed the underlying EN 16931 source version (1.3.15) in their comments which previously misled the parser.
+- Tightened the EN 16931 date capture to ISO `yyyy-mm-dd` so the rendered last-update no longer carries the trailing `--` from the source's `--&gt;` close tag.
 
 ---
 

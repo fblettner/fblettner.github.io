@@ -22,19 +22,84 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 E-reporting is the **declaration-only** track of the French reform — the e-invoicing flow handles the structured B2B invoice, while e-reporting covers everything that does not go through that flow but still needs to be reported for VAT.
 
-```mermaid
-flowchart LR
-    Source["Sale<br/>(any source system)"] --> BAR{"BAR routing"}
-    BAR -->|"B2B / B2G"| EInvoicing["📤 <b>E-Invoicing</b><br/><i>Structured invoice via PA</i>"]
-    BAR -->|"B2C / B2BINT / OUTOFSCOPE"| EReporting["📊 <b>E-Reporting</b><br/><i>Aggregated declaration via PA</i>"]
-    EInvoicing --> Buyer["Buyer receives<br/>UBL via PA"]
-    EReporting --> Tax["Tax authority<br/><i>via the PA</i>"]
+<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '28px 0', display: 'block'}}>
+  <defs>
+    <marker id="er-pos-arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/>
+    </marker>
+    <marker id="er-pos-arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#c084fc"/>
+    </marker>
+    <marker id="er-pos-arrow-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/>
+    </marker>
+    <linearGradient id="er-pos-g-slate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#94a3b8" stopOpacity="0.14"/>
+      <stop offset="100%" stopColor="#64748b" stopOpacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="er-pos-g-blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#4a9eff" stopOpacity="0.18"/>
+      <stop offset="100%" stopColor="#4a9eff" stopOpacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="er-pos-g-purple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#c084fc" stopOpacity="0.22"/>
+      <stop offset="100%" stopColor="#c084fc" stopOpacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="er-pos-g-purple-strong" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#c084fc" stopOpacity="0.32"/>
+      <stop offset="100%" stopColor="#a855f7" stopOpacity="0.12"/>
+    </linearGradient>
+  </defs>
 
-    classDef hl fill:#4a9eff,stroke:#2b8cff,color:#fff,font-weight:600;
-    class EReporting hl
-```
+  <rect x="410" y="130" width="240" height="190" rx="14" fill="#c084fc" fillOpacity="0.04" stroke="#c084fc" strokeOpacity="0.25" strokeWidth="1.3"/>
+  <text x="425" y="152" fill="#c084fc" fontSize="11" fontWeight="800" letterSpacing="1.6" fontFamily="system-ui, sans-serif">📊 E-REPORTING TRACK</text>
 
-The BAR routing rule defined in *UBL Defaults → Document Type / BAR Routing* drives the split — set it correctly upstream and the right transactions land here automatically.
+  <rect x="40" y="160" width="140" height="70" rx="10" fill="url(#er-pos-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
+  <text x="110" y="188" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Sale</text>
+  <text x="110" y="208" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.72">(any source system)</text>
+
+  <rect x="220" y="160" width="140" height="70" rx="10" fill="url(#er-pos-g-slate)" stroke="#94a3b8" strokeWidth="1.3" strokeDasharray="6 3"/>
+  <text x="290" y="188" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">BAR routing</text>
+  <text x="290" y="208" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.72">decision</text>
+
+  <line x1="180" y1="195" x2="220" y2="195" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#er-pos-arrow-slate)"/>
+
+  <rect x="430" y="30" width="200" height="60" rx="10" fill="url(#er-pos-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
+  <text x="530" y="56" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📤 E-Invoicing</text>
+  <text x="530" y="75" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">structured invoice via PA</text>
+
+  <path d="M 360 175 L 395 175 L 395 60 L 430 60" stroke="#4a9eff" strokeWidth="1.5" fill="none" markerEnd="url(#er-pos-arrow-blue)"/>
+  <text x="370" y="130" fill="#4a9eff" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">B2B / B2G</text>
+
+  <rect x="440" y="170" width="200" height="50" rx="8" fill="url(#er-pos-g-purple-strong)" stroke="#c084fc" strokeWidth="1.5"/>
+  <text x="540" y="190" fill="#c084fc" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">Flux 10.1</text>
+  <text x="540" y="207" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">B2BINT detail · per invoice</text>
+
+  <rect x="440" y="240" width="200" height="50" rx="8" fill="url(#er-pos-g-purple-strong)" stroke="#c084fc" strokeWidth="1.5"/>
+  <text x="540" y="260" fill="#c084fc" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">Flux 10.3</text>
+  <text x="540" y="277" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">B2C / OUTOFSCOPE · aggregated</text>
+
+  <line x1="360" y1="195" x2="440" y2="195" stroke="#c084fc" strokeWidth="1.5" markerEnd="url(#er-pos-arrow-purple)"/>
+  <text x="383" y="187" fill="#c084fc" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">B2BINT</text>
+
+  <path d="M 360 215 L 405 215 L 405 265 L 440 265" stroke="#c084fc" strokeWidth="1.5" fill="none" markerEnd="url(#er-pos-arrow-purple)"/>
+  <text x="370" y="234" fill="#c084fc" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">B2C / OUTOFSCOPE</text>
+
+  <rect x="730" y="30" width="220" height="60" rx="10" fill="url(#er-pos-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
+  <text x="840" y="56" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🏢 Buyer's PA</text>
+  <text x="840" y="75" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">structured invoice received</text>
+
+  <line x1="630" y1="60" x2="730" y2="60" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#er-pos-arrow-blue)"/>
+
+  <rect x="730" y="200" width="220" height="60" rx="10" fill="url(#er-pos-g-purple)" stroke="#c084fc" strokeWidth="1.5"/>
+  <text x="840" y="226" fill="#c084fc" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🏛 Tax authority</text>
+  <text x="840" y="245" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">aggregated declaration · via PA</text>
+
+  <path d="M 640 195 L 690 195 L 690 230 L 730 230" stroke="#c084fc" strokeWidth="1.5" fill="none" markerEnd="url(#er-pos-arrow-purple)"/>
+  <path d="M 640 265 L 690 265 L 690 230" stroke="#c084fc" strokeWidth="1.5" fill="none"/>
+</svg>
+
+The BAR routing rule defined in *UBL Defaults → Document Type / BAR Routing* drives the split — set it correctly upstream and the right transactions land in the right flux automatically.
 
 ---
 
@@ -44,8 +109,8 @@ The French e-reporting specification defines **two flux** for outgoing declarati
 
 | Flux | Scope | Content shape |
 |---|---|---|
-| **`10.1`** | **B2C** invoice detail | One `<Invoice>` element per B2C invoice in the period. |
-| **`10.3`** | **B2BINT / OUTOFSCOPE** aggregated | Aggregated `<Transactions>` blocks grouped by *(VAT category, rate, currency)*. |
+| **`10.1`** | **B2BINT** invoice detail | One `<Invoice>` element per international B2B invoice in the period — ID, issue date, type code, currency, Seller (declarer), Buyer (counterparty), monetary totals, and one `<TaxSubTotal>` per VAT rate. B2C invoices are *never* emitted here, in line with the routing rule of the specification. |
+| **`10.3`** | **B2C / OUTOFSCOPE** aggregated | One `<Transactions>` block per *(category code, currency)*, with nested `<TaxSubTotal>` entries per rate carrying the taxable base (in source currency) and the VAT amount (always in EUR). |
 
 | Code | Meaning | Typical use |
 |---|---|---|
@@ -55,6 +120,62 @@ The French e-reporting specification defines **two flux** for outgoing declarati
 | **`MO`** | **Modification** | Adjusts specific lines of a previous report without full replacement. |
 
 Reports follow a configurable **frequency** — `MONTHLY` (calendar month, default), `DECADAL` (1-10, 11-20, 21-end of month) or `WEEKLY` (ISO Monday → Sunday) — defined in the *e-reporting* template of `config.json`.
+
+### Transaction category codes (flux 10.3)
+
+The `<Transactions>` block in flux 10.3 carries a `<CategoryCode>` (TT-81) that classifies the underlying operation against the four codes accepted by the specification:
+
+| Code | Meaning | Typical use |
+|---|---|---|
+| **`TLB1`** | Taxable goods deliveries | Standard sales of goods subject to French VAT. |
+| **`TPS1`** | Taxable services | Service supplies subject to French VAT. |
+| **`TNT1`** | Non-taxable | Operations outside the scope of French VAT — intra-EU distance sales, services covered by Article 259 B CGI, exports. |
+| **`TMA1`** | Margin regime | Operations under the VAT-on-margin regime (Articles 266 e, 268, 297 A CGI). |
+
+NomaUBL derives the category from the underlying invoice line. When a source line carries a value outside the accepted set, the platform falls back automatically to `TLB1` (positive rate) or `TNT1` (zero rate).
+
+:::info[VAT amounts are always in EUR]
+Every `<TaxAmount>` and `<TaxTotal>` element produced by NomaUBL is forced to euros, regardless of the source invoice's currency. The `<TaxableAmount>` keeps the source invoice's original currency so the underlying operation amount stays auditable.
+:::
+
+---
+
+## Lifecycle statuses
+
+E-reporting reports go through a **dedicated lifecycle** distinct from the invoice statuses. NomaUBL writes one of these eight codes on each transition between *generation* and *PA acknowledgement (or rejection)*:
+
+<div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center', margin: '18px 0', padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', fontSize: '11px'}}>
+  <span style={{fontSize: '10px', opacity: 0.7, marginRight: '4px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700}}>Happy path</span>
+  <span style={{padding: '3px 9px', borderRadius: '999px', border: '1.5px solid rgba(148,163,184,0.55)', background: 'rgba(148,163,184,0.12)', color: '#cbd5e1', fontWeight: 600}}>9950 Created</span>
+  <span style={{opacity: 0.5}}>→</span>
+  <span style={{padding: '3px 9px', borderRadius: '999px', border: '1.5px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa', fontWeight: 600}}>9952 Sent to PA</span>
+  <span style={{opacity: 0.5}}>→</span>
+  <span style={{padding: '3px 9px', borderRadius: '999px', border: '1.5px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa', fontWeight: 600}}>9953 Pending</span>
+  <span style={{opacity: 0.5}}>→</span>
+  <span style={{padding: '3px 9px', borderRadius: '999px', border: '1.5px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.12)', color: '#4ade80', fontWeight: 600}}>9955 Deposited ✓</span>
+  <span style={{flex: '1 1 100%', height: '4px'}} />
+  <span style={{fontSize: '10px', opacity: 0.7, marginRight: '4px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700}}>Failure / variants</span>
+  <span style={{padding: '3px 9px', borderRadius: '999px', border: '1.5px solid rgba(148,163,184,0.55)', background: 'rgba(148,163,184,0.12)', color: '#cbd5e1', fontWeight: 600}}>9951 Submit skipped</span>
+  <span style={{opacity: 0.5}}>·</span>
+  <span style={{padding: '3px 9px', borderRadius: '999px', border: '1.5px solid rgba(255,159,10,0.55)', background: 'rgba(255,159,10,0.12)', color: '#fb923c', fontWeight: 600}}>9954 Error sent</span>
+  <span style={{opacity: 0.5}}>·</span>
+  <span style={{padding: '3px 9px', borderRadius: '999px', border: '1.5px solid rgba(255,159,10,0.55)', background: 'rgba(255,159,10,0.12)', color: '#fb923c', fontWeight: 600}}>9956 Failed import</span>
+  <span style={{opacity: 0.5}}>·</span>
+  <span style={{padding: '3px 9px', borderRadius: '999px', border: '1.5px solid rgba(255,69,58,0.55)', background: 'rgba(255,69,58,0.12)', color: '#f87171', fontWeight: 600}}>9957 Rejected ✗</span>
+</div>
+
+| Code | Tag | Meaning |
+|---|---|---|
+| **`9950`** | `EREPORT_CREATED` | Report XML built and persisted; no submission attempt yet. |
+| **`9951`** | `EREPORT_SUBMIT_SKIPPED` | Report generated; submission to the PA disabled (`sendToPA=N` on the *e-reporting* template). The XML is available for download but never reaches the PA. |
+| **`9952`** | `EREPORT_SENT_TO_PA` | Report submitted to the PA over HTTP; awaiting initial acknowledgement. |
+| **`9953`** | `EREPORT_PENDING` | PA has acknowledged receipt and is processing the report. |
+| **`9954`** | `EREPORT_ERROR_SENT` | Submission to the PA failed at the network or HTTP level — typically transient. **Resend** can recover. |
+| **`9955`** | `EREPORT_DEPOSITED` | PA accepted and registered the report — terminal success. |
+| **`9956`** | `EREPORT_FAILED_IMPORT` | PA could not import the report (post-acknowledgement processing error). |
+| **`9957`** | `EREPORT_REJECTED` | PA rejected the report on a validation rule — terminal failure. The next attempt requires a corrected `RE`. |
+
+Codes `9950` – `9954` are *transient* (the report is still moving). `9955` – `9957` are *terminal* (no further automatic transition); a `RE` (replacement) report is the only way to override a `9957` for the same period.
 
 ---
 
@@ -76,7 +197,7 @@ The toolbar above the table combines three free-text filters with two quick acti
 | Field | What it matches |
 |---|---|
 | **Company** | The company code (`Kco`) the report is bound to (e.g. `00070`). |
-| **Flux** | The flux code — `10.1` (B2C) or `10.3` (B2BINT). |
+| **Flux** | The flux code — `10.1` (B2BINT invoice detail) or `10.3` (B2C / OUTOFSCOPE aggregated). |
 | **Status** | Free-text match on the lifecycle status code or label. |
 | **Refresh** | Re-runs the current query without changing filters. |
 | **Generate report** | Opens the *Generate dialog* — described below. Hidden on read-only sessions. |
@@ -95,28 +216,28 @@ The table shows one row per report. Default sort: most recent `RGDOC` first. Cli
   <div style={{display: 'grid', gridTemplateColumns: '60px 60px 80px 60px 1.4fr 70px 1.5fr 1.4fr 110px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
     <div>1042</div><div>10.1</div><div>00070</div><div>IN</div><div>2026-04-01 → 2026-04-30</div>
     <div style={{textAlign: 'right'}}>142</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>200 Submitted</span></div>
+    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>9955 Deposited</span></div>
     <div style={{fontFamily: 'monospace', opacity: 0.6, fontSize: '11px'}}>a1b2c3d4…f9e8</div>
     <div style={{opacity: 0.65}}>2026-05-02 09:30</div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '60px 60px 80px 60px 1.4fr 70px 1.5fr 1.4fr 110px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
     <div>1041</div><div>10.3</div><div>00070</div><div>IN</div><div>2026-04-01 → 2026-04-30</div>
     <div style={{textAlign: 'right'}}>38</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>200 Submitted</span></div>
+    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>9955 Deposited</span></div>
     <div style={{fontFamily: 'monospace', opacity: 0.6, fontSize: '11px'}}>f6a7b8c9…d4e5</div>
     <div style={{opacity: 0.65}}>2026-05-02 09:31</div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '60px 60px 80px 60px 1.4fr 70px 1.5fr 1.4fr 110px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
     <div>1040</div><div>10.1</div><div>00070</div><div>RE</div><div>2026-03-01 → 2026-03-31</div>
     <div style={{textAlign: 'right'}}>12</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa'}}>9906 Pending PA</span></div>
+    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa'}}>9953 Pending</span></div>
     <div style={{opacity: 0.4}}>—</div>
     <div style={{opacity: 0.65}}>2026-04-15 14:22</div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '60px 60px 80px 60px 1.4fr 70px 1.5fr 1.4fr 110px', padding: '10px 14px', alignItems: 'center'}}>
     <div>1039</div><div>10.3</div><div>00080</div><div>IN</div><div>2026-03-01 → 2026-03-31</div>
     <div style={{textAlign: 'right'}}>27</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid rgba(255,69,58,0.55)', background: 'rgba(255,69,58,0.1)', color: '#f87171'}}>213 Rejected</span></div>
+    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid rgba(255,69,58,0.55)', background: 'rgba(255,69,58,0.1)', color: '#f87171'}}>9957 Rejected</span></div>
     <div style={{fontFamily: 'monospace', opacity: 0.6, fontSize: '11px'}}>9d8e7f6a…2b1c</div>
     <div style={{opacity: 0.65}}>2026-04-02 11:15</div>
   </div>
@@ -208,7 +329,7 @@ The **lifecycle** of the report — every status it has been in, append-only, in
 | Column | Description |
 |---|---|
 | **#** | Sequence number — `1` is the initial state at generation, subsequent rows are events from the PA. |
-| **Status** | Status code + label (e.g. `9906 Pending PA import`, `200 Submitted`, `213 Rejected`). |
+| **Status** | Status code + label drawn from the e-reporting catalogue (e.g. `9950 Created`, `9952 Sent to PA`, `9953 Pending`, `9955 Deposited`, `9957 Rejected`). See *Lifecycle statuses* above. |
 | **Message** | Free-text message returned by the PA — typically the rejection reason or acceptance note. |
 | **Date** | Event timestamp. |
 
@@ -285,16 +406,21 @@ Opens from **Generate report** in the toolbar. Builds and submits one or several
 | **Cancel** | Closes the dialog without generating. |
 | **Generate** | Builds the XML for each selected flux, persists the report row, and submits to the PA. The list refreshes on success. |
 
-After a successful run, the new reports appear at the top of the list with a `9906` (Pending PA import) status that progresses to `200 Submitted` once the PA acknowledges receipt.
+When the generator builds a report, it derives the per-invoice **Sender**, **Issuer** and **Business Process** blocks (TT-7 / TT-12 / TT-28 / TT-29) from the *e-reporting* template — those defaults are configured once in *Settings → System → E-Reporting* (Sender / PA matricule + role `WK`, Issuer / SIREN scheme `0002` for French companies, Business Process emitted only on B2BINT invoices). When no transmission ID is provided manually, the report is identified as **`{siren}-{flux}-{start}-{end}`** so it stays stable across regenerations of the same period and lets the PA deduplicate identical retransmissions.
+
+After a successful run, the new reports appear at the top of the list with a `9950` (Created) status that quickly progresses through `9952` (Sent to PA) and `9953` (Pending), then lands on `9955` (Deposited) once the PA acknowledges receipt. When the *Send to PA* flag is off (`sendToPA=N`), the report stays at `9951` (Submit skipped) and the XML can still be downloaded for offline review.
 
 ---
 
 ## Tips & best practices
 
-- **Set the BAR routing first.** The list of invoices that ends up in flux 10.1 / 10.3 is driven by *UBL Defaults → Document Type / BAR Routing*. A misclassified invoice will be missed by *both* tracks — ensure every document type maps to one of `B2B`, `B2G`, `B2C`, `B2BINT`, `OUTOFSCOPE` before the first run.
+- **Set the BAR routing first.** The list of invoices that ends up in flux 10.1 / 10.3 is driven by *UBL Defaults → Document Type / BAR Routing*. `B2BINT` feeds flux 10.1 (per-invoice detail); `B2C` and `OUTOFSCOPE` feed flux 10.3 (aggregated). A misclassified invoice will be missed by *both* tracks — ensure every document type maps to one of `B2B`, `B2G`, `B2C`, `B2BINT`, `OUTOFSCOPE` before the first run.
 - **Use *Compute period* rather than manual dates.** It honours the frequency configured in the *e-reporting* template, so the suggested window matches the regulatory deadline (previous full month for `MONTHLY`, previous decade for `DECADAL`, previous ISO week for `WEEKLY`).
 - **`IN` first, then `RE` for corrections.** A late-arriving invoice or a corrected amount calls for a `RE` report covering the same period — never re-issue an `IN` for a period that has already been declared.
 - **Reserve `CO` for full cancellation.** Use it when an entire period has been declared in error; the `RE` track handles partial corrections.
-- **The PA UUID is the receipt.** It is empty between submission and acceptance (status `9906`), and final once the PA acknowledges (status `200`). Use it as the legal proof of the declaration when responding to an audit.
-- **Resend after a transient PA error, not after a Schematron rejection.** A `213` status with a Schematron error in the *Status message* points at a structural defect — fix the upstream BAR or invoice data and generate a fresh `RE`, do not blindly resend.
+- **The PA UUID is the receipt.** It is empty between submission and acceptance (statuses `9952` and `9953`), and final once the PA acknowledges with `9955` (Deposited). Use it as the legal proof of the declaration when responding to an audit.
+- **Resend after a transient PA error, not after a Schematron rejection.** A `9954` (Error sent) is a network or HTTP failure — *Resend* recovers. A `9957` (Rejected) carries a Schematron or business-rule reason in the *Status message* — fix the upstream BAR or invoice data and generate a fresh `RE`, do not blindly resend. A `9956` (Failed import) sits between the two: read the message before deciding to resend or rebuild.
 - **The Invoices tab is a snapshot.** It records the source invoices as they were at generation time. Edits to those invoices afterwards do not retroactively alter the submitted report — they appear in the next `RE` if material.
+- **VAT data is read from the UBL document first.** When generating a report, NomaUBL parses the document-level `cac:TaxTotal/cac:TaxSubtotal` of each invoice's stored UBL XML — line-level subtotals are skipped to avoid double-counting. The VAT-summary table is consulted only as a fallback. If a B2C report ships with empty `<Transactions>` blocks even though the invoices and their UBL documents are present, the VAT summary is most likely stale relative to the UBL — regenerating from the UBL closes the gap.
+- **Configure the Sender / Issuer / Business Process defaults once.** Settings → System → E-Reporting groups the PA matricule (Sender, default role `WK`), the issuer SIREN (Issuer, default scheme `0002` for French companies; `0223` / `0227` / `0228` / `0229` for international cases) and the per-invoice business process (emitted only in B2BINT). Maintaining them at the template level keeps every generated report consistent and avoids per-report overrides.
+- **Out-of-list category codes are auto-mapped.** A source line carrying a tax category outside `TLB1` / `TPS1` / `TNT1` / `TMA1` is silently coerced to `TLB1` (positive rate) or `TNT1` (zero rate) at generation time. Set the category explicitly on the source line whenever the default is wrong (e.g. a service that should land on `TPS1` rather than `TLB1`).
