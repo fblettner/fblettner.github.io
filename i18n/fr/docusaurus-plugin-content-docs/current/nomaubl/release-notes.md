@@ -10,9 +10,47 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-04-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.04.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.04.2 — 2026-04-29 \{#v2026-04-2\}
+
+### Validation
+
+- Correctif : la re-validation d'une facture existante depuis **InvoiceDetailModal → Historique** (ainsi que le chemin `validateUblDirect`) échouait avec `cvc-elt.1.a: Cannot find the declaration of element 'Invoice'`. La `DocumentBuilderFactory` utilisée pour parser l'UBL n'était pas namespace-aware par défaut, et le validateur XSD ne pouvait donc pas associer `<Invoice>` / `<CreditNote>` au schéma UBL 2.1. `setNamespaceAware(true)` est désormais positionné sur les deux instances de parser.
+
+---
+
+## 2026.04.1 — 2026-04-29 \{#v2026-04-1\}
+
+### Journal des traitements
+
+- Le traitement UBL écrit désormais une paire `START` / `END` dans `F564237` afin que le Journal des traitements couvre ProcessUBL (`/api/process-ubl`), fetch-invoices en mode UBL et le CLI `-ubl` — comme le faisait déjà `-xml`. `FEMODE = PROCESS` pour ces lignes ; `FETMPL` reste vide (aucun template de document ne s'applique au traitement UBL).
+
+### Page Validation UBL
+
+- Correctif : l'upload d'un fichier UBL ne tombe plus dans `<input>/_ubl/` (substitution littérale de la sentinelle `_ubl`). L'upload utilise désormais le dossier conventionnel `<input>/ubl/`, en cohérence avec les endpoints fetch / list-files.
+- Correctif : la validation d'un fichier UBL uploadé n'échoue plus avec `No such file or directory`. Le nom de base présent dans le formulaire est résolu vers `<dirInput>/ubl/` avant parsing ; les chemins absolus issus du navigateur de fichiers continuent de fonctionner.
+
+### Validation
+
+- Nouveau schematron **EXTENDED-CTC-FR** (FNFE-MPE `EXTENDED-CTC-FR-UBL-V1.3.0`) embarqué et câblé dans `UBLValidator`.
+- Le schematron français appliqué est désormais piloté par `cbc:CustomizationID` (BT-24). Lorsque l'URN contient `EXTENDED` / `extension`, la règle EXTENDED-CTC-FR est exécutée **à la place de** EN 16931 + CIUS-FR (sur-ensemble dérivé qui assouplit volontairement certaines règles EN 16931 — `UBL-CR-550` est par exemple commentée pour autoriser `InvoiceLine/Delivery`). Pour toutes les autres valeurs, le comportement précédent est conservé : base EN 16931 + surcouche CIUS-FR (BR-FR Flux 2). CPRO-B2G continue de s'auto-déclencher sur `cbc:Note` `#ADN#B2G` quel que soit le profil.
+
+### Configuration / UBL Defaults
+
+- Nouvelle liste système `customization-ids` (BT-24) pré-remplie avec les URN françaises standard (base EN 16931, FNFE-MPE Basic / Extended CTC, Factur-X Minimum / Basic / Basic WL / Extended, Peppol BIS Billing 3) — pleinement éditable depuis **Settings → Customization IDs**.
+- **UBL Defaults → Header** : BT-24 est désormais une liste déroulante alimentée par la liste `customization-ids` (la saisie libre reste accessible en repli si la liste est vide ou si la valeur n'est pas enregistrée).
+
+### Mode replace
+
+- Le retraitement en mode replace purge désormais `F564235` (cycle de vie) et `F564236` (erreurs de validation) en plus de `F564231` / `F564233` / `F564234`. Auparavant ces deux tables append-only continuaient à croître à chaque rejeu, mêlant un historique de cycle de vie périmé et des erreurs de validation obsolètes aux données du dernier run.
+- Nouvelle méthode `UBLDatabaseHandler.purgeForReplace()` qui efface en une seule fois les cinq tables UBL pour un `(doc, dct, kco)` donné. Appelée par `UBLInvoiceProcessor.process` (chemin UBL) et `CustomUBL` (chemin XML) dès que `replaceMode=true`, de sorte que les deux chemins ont désormais une sémantique replace identique, quelle que soit la présence de la ligne F564230 préexistante.
 
 ---
 
@@ -36,14 +74,26 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 ### Dashboard
 
-- Nouvelle carte **À propos de cette version** en bas du dashboard avec le numéro de version, la version du profil AFNOR et les versions de chaque module Schematron (EN 16931, BR-FR Flux 2, BR-FR CPRO).
-- Les notes de version sont désormais accessibles depuis une page dédiée (Documentation → Notes de version).
+- Nouvelle carte **À propos de cette version** ancrée en bas du dashboard avec le numéro de version, la date de build, la version du profil AFNOR et les versions de chaque module Schematron (EN 16931, BR-FR Flux 2, BR-FR CPRO).
+
+### Documentation
+
+- Nouvelle page **Notes de version** (menu Documentation) qui affiche ce fichier.
+- Maintenue en deux langues — `RELEASE.md` (anglais) et `RELEASE.fr.md` (français) embarqués dans le JAR ; la page sélectionne la bonne en fonction de la langue active de l'IHM.
+- Sommaire en haut de page avec une vignette par version cliquable.
+- Rendu Markdown maison avec prise en charge de la continuation paresseuse des listes (les puces réparties sur plusieurs lignes sont rendues comme un seul élément).
+
+### Settings
+
+- L'éditeur `db-nomaubl` expose les trois nouveaux noms de tables e-reporting (`tableEReporting`, `tableEReportingHist`, `tableEReportingMap`), avec les valeurs par défaut `F564240` / `F564241` / `F564242`.
+- L'action **Initialize Database** crée désormais les trois tables e-reporting en plus des tables UBL / auth existantes.
+- Le sélecteur de pages dans l'écran **Rôles** expose les nouvelles pages `processinglog` et `releasenotes` afin de pouvoir y donner accès aux rôles existants.
 
 ### Backend
 
 - Défauts `DatabaseDialect.writeText` / `readText` — le XML est stocké en `CLOB` (Oracle) / `TEXT` (PostgreSQL) via `setString` / `getString` portables (évite le piège pgjdbc `getClob → OID`).
-- `nodeToBytes` dans `UBLDatabaseHandler` force désormais `OutputKeys.INDENT="no"` afin que le XML écrit dans `F564230.FETXFT` ne soit pas pretty-printé par Saxon en mode fat-jar.
-- `/api/build-info` (public) retourne les métadonnées de version + ce fichier.
+- `nodeToBytes` dans `UBLDatabaseHandler` force désormais `OutputKeys.INDENT="no"` afin que le XML écrit dans `F564230.FETXFT` ne soit pas pretty-printé par Saxon en mode fat-jar (même correctif que celui déjà appliqué à l'UBL).
+- `/api/build-info` (public) retourne les métadonnées de version + les fichiers `RELEASE.md` / `RELEASE.fr.md` embarqués.
 
 ---
 
