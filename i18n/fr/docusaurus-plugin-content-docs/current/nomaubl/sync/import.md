@@ -60,11 +60,11 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   <text x="160" y="346" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⏳ Pas de changement</text>
   <text x="160" y="366" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">nouvelle tentative au passage suivant</text>
   <text x="160" y="384" fill="currentColor" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.7">en attente</text>
-  <path d="M 720 260 L 720 290 L 440 290 L 440 320" stroke="#4ade80" strokeWidth="1.4" fill="none" markerEnd="url(#imp-arrow-green)"/>
+  <path d="M 720 260 L 720 295 L 440 295 L 440 320" stroke="#4ade80" strokeWidth="1.4" fill="none" markerEnd="url(#imp-arrow-green)"/>
   <line x1="750" y1="260" x2="720" y2="320" stroke="#f87171" strokeWidth="1.4" markerEnd="url(#imp-arrow-red)"/>
-  <path d="M 700 260 L 700 290 L 160 290 L 160 320" stroke="#94a3b8" strokeWidth="1.4" fill="none" markerEnd="url(#imp-arrow-slate)"/>
-  <path d="M 160 400 L 160 430 L 150 430 L 150 260" stroke="#94a3b8" strokeWidth="1.3" strokeDasharray="4 3" fill="none" markerEnd="url(#imp-arrow-slate)"/>
-  <text x="80" y="425" fill="#94a3b8" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">itération suivante</text>
+  <path d="M 680 260 L 680 280 L 160 280 L 160 320" stroke="#94a3b8" strokeWidth="1.4" fill="none" markerEnd="url(#imp-arrow-slate)"/>
+  <path d="M 160 400 L 160 440 L 25 440 L 25 230 L 40 230" stroke="#94a3b8" strokeWidth="1.3" strokeDasharray="4 3" fill="none" markerEnd="url(#imp-arrow-slate)"/>
+  <text x="50" y="432" fill="#94a3b8" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">itération suivante</text>
   <rect x="780" y="20" width="180" height="60" rx="10" fill="url(#imp-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
   <text x="870" y="44" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📋 Logs agrégés</text>
   <text x="870" y="62" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">terminé</text>

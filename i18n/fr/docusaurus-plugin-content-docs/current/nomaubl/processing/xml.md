@@ -53,9 +53,7 @@ Pour des cas d'usage plus légers :
   <path d="M 410 130 L 220 130 L 220 190" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#xp-arrow)"/>
   <text x="290" y="122" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">AUTO</text>
   <line x1="410" y1="135" x2="340" y2="190" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#xp-arrow)"/>
-  <text x="365" y="170" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SINGLE</text>
   <line x1="500" y1="150" x2="540" y2="190" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#xp-arrow)"/>
-  <text x="540" y="178" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">BURST</text>
   <path d="M 590 130 L 780 130 L 780 190" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#xp-arrow)"/>
   <text x="710" y="122" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">UBL</text>
   <path d="M 120 190 L 120 80 L 410 80 L 410 100" stroke="#94a3b8" strokeWidth="1.3" strokeDasharray="4 3" fill="none" markerEnd="url(#xp-arrow-slate)"/>
@@ -78,10 +76,10 @@ Pour des cas d'usage plus légers :
   <rect x="780" y="580" width="200" height="60" rx="10" fill="url(#xp-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
   <text x="880" y="606" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🏠 Statut local 99XX</text>
   <text x="880" y="624" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">Skip sending</text>
-  <path d="M 740 510 L 700 510 L 700 580" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#xp-arrow)"/>
-  <text x="640" y="555" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Use settings</text>
-  <path d="M 820 510 L 860 510 L 860 580" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#xp-arrow)"/>
-  <text x="900" y="555" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Skip sending</text>
+  <path d="M 740 532 L 740 555 L 640 555 L 640 580" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#xp-arrow)"/>
+  <text x="690" y="548" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Use settings</text>
+  <path d="M 820 532 L 820 555 L 880 555 L 880 580" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#xp-arrow)"/>
+  <text x="850" y="548" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Skip sending</text>
 </svg>
 
 `AUTO` n'exécute pas de pipeline propre — il aiguille chaque document du XML source vers `SINGLE`, `BURST` ou `UBL` selon la configuration par type de document définie dans *Document Types*. Seule la branche `UBL` enchaîne validation, persistance et dépôt PA ; `SINGLE` et `BURST` produisent une sortie PDF et s'arrêtent là.

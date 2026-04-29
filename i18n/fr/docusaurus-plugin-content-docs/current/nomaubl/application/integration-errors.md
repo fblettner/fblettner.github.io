@@ -54,9 +54,9 @@ C'est la **vue de surveillance systématique** de ces échecs. La carte compteur
   <text x="870" y="263" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">Liste Integration Errors</text>
   <line x1="190" y1="160" x2="220" y2="160" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#ie-arrow-blue)"/>
   <path d="M 440 145 L 470 145 L 470 70 L 490 70" stroke="#4ade80" strokeWidth="1.5" fill="none" markerEnd="url(#ie-arrow-green)"/>
-  <text x="455" y="105" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">succès</text>
+  <text x="465" y="105" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="ui-monospace, monospace">succès</text>
   <path d="M 440 175 L 470 175 L 470 250 L 490 250" stroke="#f87171" strokeWidth="1.5" fill="none" markerEnd="url(#ie-arrow-red)"/>
-  <text x="466" y="215" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">échec</text>
+  <text x="465" y="215" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="ui-monospace, monospace">échec</text>
   <line x1="710" y1="70" x2="760" y2="70" stroke="#4ade80" strokeWidth="1.5" markerEnd="url(#ie-arrow-green)"/>
   <line x1="710" y1="250" x2="760" y2="250" stroke="#fb923c" strokeWidth="1.5" markerEnd="url(#ie-arrow-orange)"/>
   <path d="M 870 220 L 870 295 L 330 295 L 330 200" stroke="#fb923c" strokeWidth="1.4" strokeDasharray="5 4" fill="none" markerEnd="url(#ie-arrow-orange)"/>

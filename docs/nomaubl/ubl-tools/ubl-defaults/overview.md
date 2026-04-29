@@ -37,7 +37,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
   <text x="180" y="286" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">e.g. invoices.xsl, credit_notes.xsl</text>
   <text x="180" y="304" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.75">opt-in per field group</text>
   <path d="M 320 160 L 360 160 L 360 280 L 320 280" stroke="#c084fc" strokeWidth="1.3" strokeDasharray="3 3" fill="none" markerEnd="url(#ubd-arrow-purple)"/>
-  <text x="430" y="222" fill="#c084fc" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">inherited</text>
+  <text x="430" y="210" fill="#c084fc" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">inherited</text>
   <rect x="500" y="120" width="240" height="100" rx="10" fill="url(#ubd-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
   <text x="620" y="148" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">⚙️ ubl-template.xsl</text>
   <text x="620" y="170" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">structural plumbing</text>

@@ -69,8 +69,8 @@ Pour des cas d'usage plus légers :
   <rect x="700" y="560" width="240" height="56" rx="10" fill="url(#up-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
   <text x="820" y="584" fill="currentColor" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🏠 Statut local 99XX</text>
   <text x="820" y="602" fill="currentColor" fontSize="9" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">Skip sending</text>
-  <path d="M 760 510 L 510 510 L 510 560" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#up-arrow)"/>
-  <text x="595" y="498" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Use settings · Force send</text>
+  <path d="M 760 516 L 760 540 L 510 540 L 510 560" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#up-arrow)"/>
+  <text x="630" y="535" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Use settings · Force send</text>
   <line x1="820" y1="516" x2="820" y2="560" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#up-arrow)"/>
   <text x="850" y="540" fontSize="9" fill="#4a9eff" textAnchor="start" fontFamily="ui-monospace, monospace" fontWeight="700">Skip sending</text>
 </svg>

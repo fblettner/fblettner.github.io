@@ -37,7 +37,7 @@ Tous les chemins de traitement NomaUBL écrivent leur trace dans `F564237` à tr
   <text x="887" y="92" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">vues groupée & à plat</text>
   <line x1="240" y1="80" x2="275" y2="80" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#plog-arrow)"/>
   <line x1="515" y1="80" x2="555" y2="80" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#plog-arrow)"/>
-  <text x="535" y="73" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">START · étapes · END</text>
+  <text x="535" y="73" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">events</text>
   <line x1="755" y1="80" x2="795" y2="80" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#plog-arrow)"/>
 </svg>
 
