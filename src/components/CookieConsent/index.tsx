@@ -1,8 +1,11 @@
 import {useEffect, useState, useCallback} from 'react';
+import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './styles.module.css';
 
 const STORAGE_KEY = 'nomana-cookie-consent';
+/** CNIL caps consent validity at 13 months. After that, the user is re-prompted. */
+const CONSENT_TTL_MONTHS = 13;
 
 type Decision = 'granted' | 'denied';
 
@@ -17,6 +20,7 @@ const I18N = {
     title: 'Cookies & analytics',
     body:
       'NOMANA-IT uses Google Analytics 4 to understand how the documentation is used and improve its content. No cookie is set without your consent.',
+    learnMore: 'Learn more',
     refuse: 'Refuse',
     accept: 'Accept',
     pill: 'Cookie preferences',
@@ -25,6 +29,7 @@ const I18N = {
     title: 'Cookies & mesure d’audience',
     body:
       'NOMANA-IT utilise Google Analytics 4 pour comprendre l’utilisation de la documentation et en améliorer le contenu. Aucun cookie n’est déposé sans votre accord.',
+    learnMore: 'En savoir plus',
     refuse: 'Refuser',
     accept: 'Accepter',
     pill: 'Préférences cookies',
@@ -32,6 +37,14 @@ const I18N = {
 } as const;
 
 type LocaleKey = keyof typeof I18N;
+
+function isExpired(record: ConsentRecord): boolean {
+  const stored = new Date(record.ts);
+  if (Number.isNaN(stored.getTime())) return true;
+  const expiresAt = new Date(stored);
+  expiresAt.setMonth(expiresAt.getMonth() + CONSENT_TTL_MONTHS);
+  return Date.now() > expiresAt.getTime();
+}
 
 function readConsent(): ConsentRecord | null {
   try {
@@ -93,10 +106,11 @@ export default function CookieConsent() {
 
   useEffect(() => {
     const stored = readConsent();
-    if (stored) {
+    if (stored && !isExpired(stored)) {
       setDecided(true);
       if (stored.analytics === 'granted' && trackingId) loadGtag(trackingId);
     } else {
+      // Either no record yet, or the 13-month CNIL window elapsed — re-prompt.
       setBannerOpen(true);
     }
   }, [trackingId]);
@@ -122,7 +136,12 @@ export default function CookieConsent() {
         <div className={styles.banner} role="dialog" aria-live="polite" aria-label={t.title}>
           <div className={styles.body}>
             <strong className={styles.title}>{t.title}</strong>
-            <p className={styles.text}>{t.body}</p>
+            <p className={styles.text}>
+              {t.body}{' '}
+              <Link to="/cookies" className={styles.learnMore} onClick={() => setBannerOpen(false)}>
+                {t.learnMore}
+              </Link>
+            </p>
           </div>
           <div className={styles.actions}>
             <button type="button" className={styles.refuse} onClick={handleRefuse}>

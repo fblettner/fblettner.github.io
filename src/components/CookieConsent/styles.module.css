@@ -37,6 +37,16 @@
   color: var(--ifm-color-content-secondary);
 }
 
+.learnMore {
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.learnMore:hover {
+  color: var(--ifm-color-primary-dark);
+}
+
 .actions {
   display: flex;
   gap: 8px;

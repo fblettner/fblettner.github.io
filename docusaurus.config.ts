@@ -111,6 +111,7 @@ const config: Config = {
         {label: 'GitHub', href: 'https://github.com/fblettner'},
         {label: 'LinkedIn', href: 'https://www.linkedin.com/in/franck-blettner-72509510/'},
         {label: 'Sponsor', href: 'https://github.com/sponsors/fblettner'},
+        {label: 'Cookies', to: '/cookies'},
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Nomana-IT. Built with Docusaurus.`,
     },
