@@ -132,6 +132,13 @@ const config: Config = {
 
   plugins: [
     [
+      '@docusaurus/plugin-google-gtag',
+      {
+        trackingID: 'G-9JB6CXWE4K',
+        anonymizeIP: true,
+      },
+    ],
+    [
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [],
