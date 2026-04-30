@@ -130,14 +130,15 @@ const config: Config = {
     ],
   } satisfies Preset.ThemeConfig,
 
+  // Google Analytics 4 (G-9JB6CXWE4K) is loaded by src/components/CookieConsent
+  // ONLY after the user grants explicit consent — required by CNIL. The
+  // canonical @docusaurus/plugin-google-gtag plugin is intentionally NOT used
+  // because it injects gtag.js unconditionally on every page load.
+  customFields: {
+    gaTrackingId: 'G-9JB6CXWE4K',
+  },
+
   plugins: [
-    [
-      '@docusaurus/plugin-google-gtag',
-      {
-        trackingID: 'G-9JB6CXWE4K',
-        anonymizeIP: true,
-      },
-    ],
     [
       '@docusaurus/plugin-client-redirects',
       {
