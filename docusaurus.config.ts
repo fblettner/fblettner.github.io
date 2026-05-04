@@ -143,7 +143,13 @@ const config: Config = {
     [
       '@docusaurus/plugin-client-redirects',
       {
-        redirects: [],
+        redirects: [
+          // 2026.05.0 — Processing pages consolidated into a single Process Document page.
+          {from: '/nomaubl/processing/xml', to: '/nomaubl/processing/document'},
+          {from: '/nomaubl/processing/ubl', to: '/nomaubl/processing/document'},
+          // 2026.05.0 — Documents editor moved from Configuration to Management.
+          {from: '/nomaubl/configuration/documents', to: '/nomaubl/management/documents'},
+        ],
       },
     ],
     [

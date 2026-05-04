@@ -16,8 +16,7 @@ La partie extraction propose les trois sources documentées dans *Extract* :
 
 La partie traitement propose les deux pipelines documentés dans *Processing* :
 
-- [Processing → XML](./xml.md) — transformation d'un XML source vers UBL (ou rendu PDF), puis validation, persistance et dépôt optionnel. Modes `AUTO` / `SINGLE` / `BURST` / `UBL`.
-- [Processing → UBL](./ubl.md) — validation, persistance et dépôt optionnel d'un fichier déjà au format UBL 2.1.
+- [Traitement de document](./document.md) — point d'entrée unique. Le pipeline (transformation XML ou validation UBL directe) est sélectionné par la propriété `source` du modèle de document. Remplace les anciennes pages *Process XML* et *Process UBL*.
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé — à l'exception de la source BIP, spécifique à JD Edwards.
 
@@ -77,10 +76,10 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   <line x1="500" y1="430" x2="500" y2="460" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#ep-arrow)"/>
   <text x="510" y="448" fontSize="9" fill="#4a9eff" textAnchor="start" fontFamily="ui-monospace, monospace" fontWeight="700">Oui</text>
   <rect x="100" y="550" width="280" height="60" rx="10" fill="url(#ep-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
-  <text x="240" y="576" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Processing → XML</text>
+  <text x="240" y="576" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Process Document (XML)</text>
   <text x="240" y="594" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">SINGLE / BURST / UBL / AUTO</text>
   <rect x="620" y="550" width="280" height="60" rx="10" fill="url(#ep-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
-  <text x="760" y="576" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Processing → UBL</text>
+  <text x="760" y="576" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Process Document (UBL)</text>
   <text x="760" y="594" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">Validate / Persist / Submit</text>
   <path d="M 410 510 L 240 510 L 240 550" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#ep-arrow)"/>
   <text x="320" y="502" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">XML</text>
@@ -151,12 +150,12 @@ Sous le sélecteur de source, **Process Type** choisit entre les deux pipelines.
 
 ### Process Type = XML
 
-Équivalent à l'exécution de la page [Processing → XML](./xml.md) sur le fichier qui vient d'être extrait.
+Équivalent à l'exécution de la page [Traitement de document](./document.md) sur le fichier qui vient d'être extrait, lorsque le modèle choisi a `source = XML`.
 
 | Champ | Description |
 |---|---|
 | **Template** | Template du document — obligatoire. Pilote le pipeline XSL et le jeu de règles de validation. |
-| **Mode** | `AUTO`, `SINGLE`, `BURST` ou `UBL`. Voir [Processing → XML — Modes](./xml.md#modes). |
+| **Mode** | `AUTO`, `SINGLE`, `BURST` ou `UBL`. Voir [Traitement de document — Modes (source XML)](./document.md#modes-source-xml). |
 | **Replace** | `Skip` laisse intactes les factures existantes ; `Overwrite` les ré-importe. |
 | **Send to PA** | `Use settings` (défaut) ou `Skip sending`. |
 
@@ -164,7 +163,7 @@ Lorsque la source est **BIP**, un appel **Apply post-generation** supplémentair
 
 ### Process Type = UBL
 
-Équivalent à l'exécution de la page [Processing → UBL](./ubl.md) sur le fichier qui vient d'être extrait. Le fichier extrait doit déjà être au format UBL — cas typiques :
+Équivalent à l'exécution de la page [Traitement de document](./document.md) sur le fichier qui vient d'être extrait, lorsque le modèle choisi a `source = UBL`. Le fichier extrait doit déjà être au format UBL — cas typiques :
 
 - la source **Archive** est positionnée sur la variante UBL ;
 - le système amont émet directement de l'UBL ;
@@ -176,7 +175,7 @@ Lorsque la source est **BIP**, un appel **Apply post-generation** supplémentair
 | **Replace Mode** | `Overwrite existing` (défaut) ou `Skip`. |
 | **Send to PA** | `Use settings`, `Force send` ou `Skip sending`. |
 
-Le fichier UBL doit respecter le motif `DOC_DCT_KCO.xml` ; voir [Processing → UBL](./ubl.md#convention-de-nommage).
+La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via la regex `idPattern` du modèle de document — les fichiers peuvent porter n'importe quel nom. Voir [Documents → Extraction de clé depuis cbc:ID](../management/documents.md#extraction-de-cl%C3%A9-depuis-cbcid-lorsque-source--ubl) pour la mise en place de la regex.
 
 #### Combinaisons non prises en charge
 

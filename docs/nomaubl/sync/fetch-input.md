@@ -70,8 +70,8 @@ The first section configures **how each selected item is processed**. The semant
 
 | Field | Description |
 |---|---|
-| **Process As** | `XML` or `UBL`. Selects which Processing pipeline runs. See [*Processing → XML*](../processing/xml.md) or [*Processing → UBL*](../processing/ubl.md) for the per-item semantics. |
-| **Mode** *(XML only)* | `AUTO`, `SINGLE`, `BURST` or `UBL`. See [*Processing → XML — Modes*](../processing/xml.md#modes). |
+| **Source** *(read-only display)* | `XML` or `UBL`. Inferred from the chosen template's `source` property — set on the [Documents](../management/documents.md) page, not here. Selects which pipeline runs. See [*Process Document*](../processing/document.md) for the per-item semantics. |
+| **Mode** *(XML source only)* | `AUTO`, `SINGLE`, `BURST` or `UBL`. See [*Process Document — Modes (XML source)*](../processing/document.md#modes-xml-source). |
 | **Mode** *(UBL only)* | `Process & Validate` or `Validate only`. |
 | **Replace** | `Skip` keeps existing invoices untouched; `Overwrite` re-imports them. |
 | **Send to PA** | `Use settings` (default), `Skip sending`, or `Force send` (UBL only). |
@@ -137,9 +137,9 @@ After processing, the section displays an aggregated summary plus a per-item res
 
 ### Per-item rows
 
-Each item appears as a row with a green ✓ (success) or red ✗ (failure) marker. **Clicking a row expands** the underlying log table (same columns as on the [*Processing → XML*](../processing/xml.md#results) and [*Processing → UBL*](../processing/ubl.md#results) pages: `Severity / Module / Submodule / Message`).
+Each item appears as a row with a green ✓ (success) or red ✗ (failure) marker. **Clicking a row expands** the underlying log table (same columns as on the [*Process Document*](../processing/document.md) page: `Severity / Module / Submodule / Message`).
 
-When the BIP source is used and processing succeeds, the **Apply post-generation** call runs after each item — exactly as on [*Extract and Process*](../processing/extract-and-process.md#process-type--xml). The global `lastBipJobNumber` is also refreshed to the highest processed job number, so the next Scan returns only newer jobs.
+When the BIP source is used and processing succeeds, the **Apply post-generation** call runs after each item — exactly as on [*Extract and Process*](../processing/extract-and-process.md). The global `lastBipJobNumber` is also refreshed to the highest processed job number, so the next Scan returns only newer jobs.
 
 ---
 

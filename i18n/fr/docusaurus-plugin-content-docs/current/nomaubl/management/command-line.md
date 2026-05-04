@@ -39,7 +39,7 @@ NomaUBL expose deux couches équivalentes — un **wrapper de contrôle de servi
   <text x="820" y="72" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">modes directs — arguments complets</text>
   <line x1="705" y1="92" x2="935" y2="92" stroke="#4a9eff" strokeOpacity="0.3" strokeWidth="1"/>
   <text x="820" y="116" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-install · -serve</text>
-  <text x="820" y="135" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-xml · -ubl</text>
+  <text x="820" y="135" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-process</text>
   <text x="820" y="154" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-fetch-import · -fetch-status</text>
   <text x="820" y="173" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-fetch-single · -fetch-all</text>
   <text x="820" y="192" fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" fontFamily="ui-monospace, monospace">-extract</text>
@@ -90,12 +90,11 @@ Au-delà du contrôle de service, le wrapper expose des **formes courtes** des m
 
 | Commande wrapper | Équivalent JAR |
 |---|---|
-| `nomaubl.sh xml <env> <template> <fichier> [type] [options]` | `java -jar nomaubl.jar -xml <env>/config/config.json <template> <fichier> <type> [options]` |
-| `nomaubl.sh ubl <env> <fichier\|rép> [options]` | `java -jar nomaubl.jar -ubl <env>/config/config.json <fichier\|rép> [options]` |
+| `nomaubl.sh process <env> <template> <fichier\|rép> [type] [options]` | `java -jar nomaubl.jar -process <env>/config/config.json <template> <fichier\|rép> [type] [options]` |
 | `nomaubl.sh fetch-import <env>` | `java -jar nomaubl.jar -fetch-import <env>/config/config.json` |
 | `nomaubl.sh fetch-status <env>` | `java -jar nomaubl.jar -fetch-status <env>/config/config.json` |
-| `nomaubl.sh fetch-single <env> <processType> [template] <source> <args…> [type] [options]` | `java -jar nomaubl.jar -fetch-single …` |
-| `nomaubl.sh fetch-all <env> <processType> [template] <source> [type] [options]` | `java -jar nomaubl.jar -fetch-all …` |
+| `nomaubl.sh fetch-single <env> <template> <source> <args…> [type] [options]` | `java -jar nomaubl.jar -fetch-single …` |
+| `nomaubl.sh fetch-all <env> <template> <source> [type] [options]` | `java -jar nomaubl.jar -fetch-all …` |
 | `nomaubl.sh extract <env> <jobNumber> [options]` | `java -jar nomaubl.jar -extract <env>/config/config.json <jobNumber> [options]` |
 | `nomaubl.sh install <targetDir>` | `java -jar nomaubl.jar -install <targetDir>` |
 
@@ -167,7 +166,7 @@ L'ordonnanceur lit les clés suivantes du template **global** de `config.json` p
 | **`fetchImportInterval`** | Minutes entre deux passes `-fetch-import`. `0` désactive la tâche. |
 | **`fetchStatusInterval`** | Minutes entre deux passes `-fetch-status`. `0` désactive la tâche. |
 | **`fetchAllInterval`** | Minutes entre deux passes `-fetch-all`. `0` désactive la tâche. |
-| **`fetchAllParams`** | Objet JSON portant les paramètres du traitement par lots — même structure que le corps de `POST /api/fetch-invoices/run-batch`. Clés : `processType` (`xml` \| `ubl`), `template`, `mode` (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`), `source` (`directory` \| `bip`), `extractMode` (`input` \| `output` \| `both`), `replaceMode`, `validateOnly`, `sendToPA` (`Y` \| `N`), `noSend`, `language`. |
+| **`fetchAllParams`** | Objet JSON portant les paramètres du traitement par lots — même structure que le corps de `POST /api/fetch-invoices/run-batch`. Clés : `template` (sa propriété `source` infère XML ou UBL), `mode` (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`), `source` (`directory` \| `bip`), `extractMode` (`input` \| `output` \| `both`), `replaceMode`, `validateOnly`, `sendToPA` (`Y` \| `N`), `noSend`, `language`. |
 
 **Exemple**
 
@@ -178,76 +177,51 @@ java -jar nomaubl.jar -serve /opt/nomaubl/demo/config/config.json 8090
 
 ---
 
-## `-xml` — traitement d'une source XML
+## `-process` — point d'entrée unique de traitement
 
-Pipeline qui traite une source XML JDE : transformation XSLT optionnelle, conversion RFT → XSL, génération PDF, génération + validation UBL, persistance base éventuelle et dépôt PA.
+Traite un (ou plusieurs) fichier source contre un modèle de document. Le pipeline est sélectionné par la propriété `source` du modèle (`XML` pour les spools XML nécessitant une transformation XSL, `UBL` pour les factures UBL 2.1 déjà formées). Remplace les anciens drapeaux `-xml` et `-ubl`.
 
 ```text
--xml <configFile> <template> <fileName> <type> [--verbose] [--replace] [--no-send] [--no-db]
+-process <configFile> <template> <fichier|répertoire> [type] [--verbose] [--replace] [--no-send] [--no-db] [--validate] [--send]
 ```
 
 | Argument | Description |
 |---|---|
 | **`configFile`** | Chemin absolu vers `config.json`. |
-| **`template`** | Nom de template défini dans la configuration (par ex. `invoices`, `credit_notes`). |
-| **`fileName`** | Nom du fichier XML d'entrée **sans extension**. Le fichier est attendu sous `<dirInput>/<fileName>.xml`. |
-| **`type`** | Type de traitement — voir ci-dessous. |
+| **`template`** | Nom du modèle de document (par ex. `invoices`, `credit_notes`). La propriété `source` du modèle pilote le pipeline — voir [Documents](./documents.md). |
+| **`fichier \| répertoire`** | Un fichier source ou un répertoire de fichiers source. Pour un modèle XML, le fichier est attendu sous `<dirInput>/<fichier>.xml` lorsque l'extension est omise. Pour un modèle UBL, le chemin peut être absolu ou relatif à `<dirInput>/ubl/`. Sur un répertoire, chaque fichier correspondant est traité par ordre alphabétique. |
+| **`type`** | Modèles XML uniquement — type de traitement (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignoré sur les modèles UBL. |
 
-**Types de traitement**
+**Types de traitement** *(source XML uniquement)*
 
 | Valeur | Effet |
 |---|---|
-| **`AUTO`** | Résolution du type par document depuis la configuration *Document Types*. Choix par défaut pour les spools mêlant plusieurs types de document. |
-| **`SINGLE`** | Un PDF par fichier source — pour les templates monodocument. |
-| **`BURST`** | Découpage de la source en plusieurs sous-documents pilotés par `burstKey`, traités en parallèle (`numProc`). |
-| **`UBL`** | UBL uniquement — pas de PDF, pas de template requis. |
+| **`AUTO`** | Résolution du type par document via la configuration *Document Types*. Défaut pour les spools mêlant plusieurs types de document. |
+| **`SINGLE`** | Un PDF par fichier source — modèles monodocument. |
+| **`BURST`** | Découpage de la source sur `burstKey`, traitement en parallèle (`numProc`). |
+| **`UBL`** | UBL uniquement — produit du UBL 2.1, sans PDF. |
 
 **Options** — sans ordre imposé, peuvent suivre le type :
 
-| Option | Effet |
-|---|---|
-| `--verbose` | Affiche les messages de traitement sur stdout. |
-| `--replace` | Écrase l'enregistrement / la sortie existante, indépendamment du paramètre `replaceDocument` du template. |
-| `--no-send` | N'envoie pas le document à la Plateforme Agréée. |
-| `--no-db` | N'écrit pas en base de données. Implique `--no-send`. |
+| Option | Effet | S'applique à |
+|---|---|---|
+| `--verbose` | Affiche les messages de traitement par fichier sur stdout. | les deux |
+| `--replace` | Purge les cinq tables UBL pour `(doc, dct, kco)` avant ré-import. | les deux |
+| `--no-send` | N'envoie pas à la Plateforme Agréée. | les deux |
+| `--no-db` | N'écrit pas en base (implique `--no-send`). | XML |
+| `--validate` | XSD + Schematron seulement — pas d'insertion BDD, pas de dépôt PA. | UBL |
+| `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. | UBL |
 
-**Exemple**
+**Exemples**
 
 ```bash
-java -jar nomaubl.jar -xml /opt/nomaubl/demo/config/config.json \
+# Modèle XML — spool JDE, routage AUTO
+java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
                       invoices INV-2026-001 AUTO --verbose --replace
-```
 
----
-
-## `-ubl` — traitement d'un document UBL
-
-Valide et persiste les fichiers UBL produits en amont — fichier unique ou répertoire complet. Le nom de fichier doit respecter le format `DOC_DCT_KCO[_ubl].xml` (par ex. `12345_RI_00070.xml`).
-
-```text
--ubl <configFile> <fichier|répertoire> [--verbose] [--replace] [--validate] [--send] [--no-send]
-```
-
-| Argument | Description |
-|---|---|
-| **`configFile`** | Chemin absolu vers `config.json`. |
-| **`fichier \| répertoire`** | Soit un fichier UBL XML, soit un répertoire contenant des `*.xml`. Sur un répertoire, chaque fichier XML est traité par ordre alphabétique ; une ligne de synthèse `N processed: K OK, M failed` est affichée à la fin. |
-
-**Options**
-
-| Option | Effet |
-|---|---|
-| `--verbose` | Affiche les messages de traitement par fichier sur stdout. |
-| `--replace` | Supprime un éventuel enregistrement en-tête / lignes / TVA existant avant insertion. |
-| `--validate` | XSD + Schematron seulement — pas d'insertion DB, pas d'envoi PA (force `--no-send`). |
-| `--send` | Force l'envoi à la PA, en surcharge du paramètre par défaut. |
-| `--no-send` | N'envoie pas à la PA. |
-
-**Exemple**
-
-```bash
-java -jar nomaubl.jar -ubl /opt/nomaubl/demo/config/config.json \
-                      /opt/nomaubl/demo/ubl/ --verbose
+# Modèle UBL — valider chaque fichier d'un répertoire, sans BDD ni PA
+java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
+                      ubl-invoices /opt/nomaubl/demo/ubl/ --validate
 ```
 
 ---
@@ -270,20 +244,19 @@ java -jar nomaubl.jar -fetch-status /opt/nomaubl/demo/config/config.json
 
 ## `-fetch-single` — extraire un document, puis le traiter
 
-Équivalent de la page *Application → Extract and Process*. Extrait un document d'un canal source, dépose le XML résultant dans `dirInput`, puis lance immédiatement le pipeline XML ou UBL dessus.
+Équivalent de la page *Application → Extract and Process*. Extrait un document d'un canal source, dépose le fichier résultant dans `dirInput` (modèle XML) ou `<dirInput>/ubl/` (modèle UBL), puis lance immédiatement le pipeline correspondant. Le choix XML ou UBL est **inféré de la propriété `source` du modèle** — l'argument `processType` disparaît.
 
 ```text
--fetch-single <configFile> <processType> [<template>] <source> <sourceArgs…> [<type>] [options…]
+-fetch-single <configFile> <template> <source> <sourceArgs…> [<type>] [options…]
 ```
 
 | Argument | Description |
 |---|---|
 | **`configFile`** | Chemin absolu vers `config.json`. |
-| **`processType`** | `xml` (lance le pipeline JDE-XML après extraction) ou `ubl` (lance le pipeline UBL). |
-| **`template`** | Requis lorsque `processType=xml` ; **omis** lorsque `processType=ubl`. |
+| **`template`** | Nom du modèle de document. Sa propriété `source` choisit le pipeline (XML ou UBL). |
 | **`source`** | Canal d'extraction — voir le tableau ci-dessous. |
 | **`sourceArgs`** | Arguments propres au canal. |
-| **`type`** | Type de traitement pour `xml` (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Sans objet pour `ubl`. |
+| **`type`** | Type de traitement pour les modèles XML (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignoré sur les modèles UBL. |
 
 **Canaux d'extraction**
 
@@ -297,35 +270,35 @@ java -jar nomaubl.jar -fetch-status /opt/nomaubl/demo/config/config.json
 
 | Option | Effet |
 |---|---|
-| `--verbose` `--replace` `--no-send` | Identiques à `-xml`. |
-| `--validate` `--send` | Applicables uniquement si `processType=ubl`. |
+| `--verbose` `--replace` `--no-send` | Identiques à `-process`. |
+| `--validate` `--send` | Modèles UBL uniquement. |
 | `--input` *(défaut)* `--output` `--both` | Mode d'extraction BIP — XML d'entrée, documents de sortie ou les deux. |
 
 **Exemples**
 
 ```bash
-# Extraction d'un seul XML depuis l'archive, routage AUTO
+# Modèle XML — extraction depuis l'archive, routage AUTO
 java -jar nomaubl.jar -fetch-single /opt/nomaubl/demo/config/config.json \
-                      xml invoices archive 12345 RI 00070 AUTO --verbose
+                      invoices archive 12345 RI 00070 AUTO --verbose
 
-# Extraction d'un job BIP, pipeline UBL, validation seule
+# Modèle UBL — extraction d'un job BIP, validation seule
 java -jar nomaubl.jar -fetch-single /opt/nomaubl/demo/config/config.json \
-                      ubl bip 19 --validate
+                      ubl-invoices bip 19 --validate
 ```
 
 ---
 
 ## `-fetch-all` — extraction et traitement par lots
 
-Équivalent de la page *Application → Fetch Input*. Extrait **tous** les documents éligibles d'une source, puis les traite. Code de retour `1` si au moins un document a échoué.
+Équivalent de la page *Application → Fetch Input*. Extrait **tous** les documents éligibles d'une source, puis les traite. Le choix XML / UBL est inféré du modèle — pas d'argument `processType`. Code de retour `1` si au moins un document a échoué.
 
 ```text
--fetch-all <configFile> <processType> [<template>] <source> [<type>] [options…]
+-fetch-all <configFile> <template> <source> [<type>] [options…]
 ```
 
 | Argument | Description |
 |---|---|
-| **`source`** | `directory` — parcourt `dirInput` (xml) ou `dirInput/ubl` (ubl) à la recherche des fichiers prêts à traiter. <br/>`bip` — récupère tous les nouveaux jobs BIP dont le numéro est supérieur à `lastBipJobNumber` (persisté dans le template *global* après chaque exécution réussie). |
+| **`source`** | `directory` — parcourt `dirInput` (modèle XML) ou `dirInput/ubl` (modèle UBL) à la recherche des fichiers prêts à traiter. <br/>`bip` — récupère tous les nouveaux jobs BIP dont le numéro est supérieur à `lastBipJobNumber` (persisté dans le template *global* après chaque exécution réussie). |
 
 Pour chaque job `bip`, le wrapper résout le **template par job** depuis les filtres BIP s'ils en définissent un ; sinon, retombe sur l'argument `template` de la CLI. Après une exécution réussie, `lastBipJobNumber` dans `config.json` est mis à jour avec le plus grand numéro traité — la passe suivante ne reprend que les jobs nouveaux.
 
@@ -334,11 +307,11 @@ Pour chaque job `bip`, le wrapper résout le **template par job** depuis les fil
 ```bash
 # Traite chaque XML en attente dans le répertoire d'entrée
 java -jar nomaubl.jar -fetch-all /opt/nomaubl/demo/config/config.json \
-                      xml invoices directory AUTO --verbose
+                      invoices directory AUTO --verbose
 
-# Récupère les nouveaux jobs BIP en UBL, valide + envoie
+# Récupère les nouveaux jobs BIP contre un modèle UBL (validation + envoi)
 java -jar nomaubl.jar -fetch-all /opt/nomaubl/demo/config/config.json \
-                      ubl bip --send
+                      ubl-invoices bip --send
 ```
 
 ---

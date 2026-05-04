@@ -219,10 +219,9 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Processing',
-      link: {type: 'generated-index', slug: '/nomaubl/processing', description: 'Run XML/UBL processing jobs and trigger the processing API.'},
+      link: {type: 'generated-index', slug: '/nomaubl/processing', description: 'Single document-processing entry point (XML or UBL, selected by the template), the chained Extract and Process flow, and the API connector tester.'},
       items: [
-        'nomaubl/processing/xml',
-        'nomaubl/processing/ubl',
+        'nomaubl/processing/document',
         'nomaubl/processing/extract-and-process',
         'nomaubl/processing/process-api',
       ],
@@ -269,8 +268,9 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Management',
-      link: {type: 'generated-index', slug: '/nomaubl/management', description: 'Operational management: file versions, processing log, lifecycle history and the command-line interface.'},
+      link: {type: 'generated-index', slug: '/nomaubl/management', description: 'Operational management: document templates, file versions, processing log and the command-line interface.'},
       items: [
+        'nomaubl/management/documents',
         'nomaubl/management/file-versions',
         'nomaubl/management/processing-log',
         'nomaubl/management/command-line',
@@ -279,9 +279,8 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Configuration',
-      link: {type: 'generated-index', slug: '/nomaubl/configuration', description: 'Application-wide configuration: documents, system parameters, reference lists, connectors and security.'},
+      link: {type: 'generated-index', slug: '/nomaubl/configuration', description: 'Application-wide configuration: system parameters, reference lists, connectors and security.'},
       items: [
-        'nomaubl/configuration/documents',
         {
           type: 'category',
           label: 'System',

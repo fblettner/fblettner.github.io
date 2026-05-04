@@ -10,12 +10,163 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-04-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.04.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
+  <a href="#v2026-04-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-04</span></a>
+  <a href="#v2026-04-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-30</span></a>
+  <a href="#v2026-04-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-04-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-04-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-04-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-04-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+  <a href="#v2026-04-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.0 — 2026-05-05 \{#v2026-05-0\}
+
+Refonte importante du pipeline de traitement de documents, du générateur PDF et de la surface REST des factures.
+
+### Traitement piloté par le modèle de document (XML ou UBL)
+
+- Nouvelle propriété `source` (`XML` | `UBL`) sur chaque modèle de document. Choisie dans l'onglet Document de **Gestion → Documents**.
+- `XML` conserve le comportement actuel (XSL → UBL → BDD → envoi PA).
+- `UBL` cible les fichiers déjà au format UBL 2.1. La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via une regex à groupes nommés (`idPattern` + valeurs par défaut `docDefault` / `dctDefault` / `kcoDefault`). Exemples :
+  - `F202600025` → `^(?<dct>[A-Z]+)(?<doc>\d+)$` (`kcoDefault = 00001`)
+  - `38706889RI00001` → `^(?<doc>\d+)(?<dct>[A-Z]+)(?<kco>\d+)$`
+- L'onglet Document inclut un assistant **Exemple cbc:ID + Suggérer + Tester** qui dispense d'écrire la regex à la main : coller un ID réel, *Suggérer* remplit la regex en segmentant sur les transitions lettres / chiffres, *Tester* applique le motif et les valeurs par défaut et affiche en direct le `(doc, dct, kco)` extrait.
+- La convention `DOC_DCT_KCO_ubl.xml` n'est plus exigée — le traitement UBL extrait toujours les clés depuis `cbc:ID`. Le nom de fichier peut être quelconque.
+
+### Point d'entrée unique pour le traitement
+
+- Les pages **Process XML** et **Process UBL** disparaissent. Une seule page **Process Document** les remplace ; le formulaire bascule entre contrôles XML et UBL selon le `source` du modèle choisi.
+- Une seule route backend : `POST /api/process` (remplace `/api/run` et `/api/process-ubl`).
+- Une seule commande CLI : `-process <config> <modèle> <fichierOuDossier> [type] [drapeaux]` (remplace `-xml` et `-ubl`). `nomaubl.sh process …`.
+- `-fetch-single` et `-fetch-all` perdent l'argument `processType` — inféré à partir du modèle. **Fetch Input** et **Paramètres → Planification** perdent également le sélecteur *Type de traitement*.
+
+### Nouvelle page Documents
+
+- **Sidebar → Gestion → Documents** ouvre une page dédiée aux modèles de documents (les entrées de `config-documents.json` référencées par `F564231.UHTMPL`). Elle dispose de ses propres boutons **Ajouter / Importer / Copier / Supprimer** et d'un champ **Description**. Les Paramètres conservent **Ajouter Connecteur / Copier / Supprimer** pour les modèles système et les connecteurs uniquement.
+
+### F564231.UHTMPL — lien facture → modèle
+
+- Nouvelle colonne `UHTMPL VARCHAR2(40)` sur la table d'en-tête. Stockée au moment du traitement (chemins XML et UBL) pour permettre au générateur PDF de retrouver le `pdfTemplate` JSON spécifique au document lors du rendu.
+- DDL ajouté à `sql/oracle/ddl.sql` et `sql/postgres/ddl.sql`.
+
+### Surface REST factures — clé primaire propre
+
+- Toutes les routes `/api/invoices/{…}` utilisent désormais `(doc, dct, kco)` directement (`/api/invoices/{doc}/{dct}/{kco}/lines`, `/lifecycle`, `/errors`, `/vat`, `/notes`, `/xml`, `/resend`, `/validate`, `/status`, ainsi que `PUT` / `DELETE`). L'identifiant composite, le helper `castToVarchar(UHDOC)` et le `||UHDCT||UHKCO` dans les WHERE disparaissent pour toute recherche par clé. Plus rapide (utilise les index) et propre côté Postgres.
+- Nouveau helper `bindDoc()` qui lie le paramètre numérique `UHDOC` via `setInt` ; Postgres ne rejette plus `setString` sur une colonne `INTEGER`.
+
+### `/invoice/view` (PDF) — recherche à double forme
+
+- `GET /invoice/view?id=<numéro de facture UBL>` (comparé à `UHK74FLEN`) **ou** `?doc=&dct=&kco=`. La page peut être liée depuis n'importe où — y compris collée dans le navigateur — sans nécessiter d'identifiant composite.
+
+### Refonte du générateur PDF
+
+- `InvoicePdfGenerator` éclaté (1 027 lignes monolithiques) en un package `custom.ubl.pdf` : `PdfTheme`, `UblXmlHelpers`, `InvoiceData`, `UblParser`, `PdfDrawing`, `PdfContext`, `PdfTemplate` / `PdfTemplateEngine` / `PdfTemplateLoader` / `DefaultPdfTemplate`, registre `PdfSection`, et une classe par section sous `custom.ubl.pdf.sections/` (Header, Parties, Agent, LineTable, DocAllowances, VatBreakdown, TotalsBox, Payment, NoteBlock).
+- Nouveau moteur de template JSON — les sections sont listées et réordonnées dans le modèle, chacune avec sa configuration `config` (visibilité des colonnes, bascules de sous-détails, comportement d'en-tête de groupe, saut de page par livraison, …). Édité dans **Documents → 🖼 PDF Template** : réordonnancement par glisser-déposer, drawer de configuration par section et iframe d'aperçu en direct (`POST /api/pdf-templates/preview`).
+- L'override par document est stocké dans la propriété `pdfTemplate` JSON du modèle (lien via `F564231.UHTMPL`). Si vide, la mise en page par défaut est utilisée.
+
+### Améliorations frontend
+
+- Sidebar — nouvelle entrée **Documents** sous Gestion ; entrée *Process Document* remplaçant *Process XML* / *Process UBL* ; barre de défilement fine adaptée au thème pour atteindre les groupes en débordement (clair et sombre).
+- Les placeholders de chemin (`%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%`) dans la page Process Document sont résolus côté serveur avant le branchement absolu / basename, pour que les fichiers choisis via *Browse* fonctionnent même lorsque `dirInput` contient un placeholder.
+- *XML — sortie spool JDE* renommé en *Spool XML* partout — le pipeline XSL est générique, seul BIP est spécifique à JDE.
+- Diverses petites corrections : binding de la description sur la liste Documents, nettoyage des modales Settings, statut / send-status / email migrés vers `(doc, dct, kco)`, suppression de `augmentPromptWithSitemap` dans AiAssistant.
+
+### Rôles / Permissions
+
+- Nouvelle clé de page `documents` dans l'éditeur de rôles (sous **Gestion**) afin que les installations avec rôles restreints puissent autoriser ou refuser la nouvelle page.
+
+---
+
+## 2026.04.10 — 2026-05-04 \{#v2026-04-10\}
+
+### Paramètres e-invoicing — configuration hybride envoi FTP / statut API
+
+- L'onglet PA Connection masquait précédemment la configuration API (Base URL, Authentification, Récupération de statut, Planification en arrière-plan) lorsque **Send Mode = FTP**, rendant impossible une configuration hybride où les factures partent en SFTP mais où la relève des imports, la récupération des statuts et les actions vendeur passent toujours par l'API. Toutes les sections sont désormais toujours visibles ; le sélecteur de mode est renommé *Send Mode* avec un texte d'aide précisant qu'il ne pilote que le transport sortant. Chaque section non active reçoit une mention grise (*utilisé pour la récupération de statut / l'import / les actions vendeur* ou *utilisé lorsque Send Mode = FTP*) qui rend visible d'un coup d'œil le rapport entre champs et opérations.
+
+### XSL — BT-46 (SIRET acheteur)
+
+- Correction de `XTSE0680: Parameter siren is not declared in the called template` dans `ubl-common.xsl` : l'appel à `ubl:party-siret` passait `<xsl:with-param name="siren">` au lieu de `name="siret"` (copier-coller depuis le bloc adjacent `ubl:company-siren`).
+- Correction de la validation XSD `cvc-complex-type.2.4.a` lors de l'émission de BT-46 : `<cac:PartyIdentification>` est un enfant de `<cac:Party>`, **pas** de `<cac:PartyLegalEntity>`. L'émission du SIRET sort de `ubl:party-legal-entity` (l'appel d'aide intégré était structurellement invalide) et figure désormais directement dans le bloc `cac:Party` du XSL document, avant `cac:PartyTaxScheme` / `cac:PostalAddress`. Les XSL document qui ont besoin de BT-46 doivent suivre le même schéma.
+- `TAG_CUSTOMER_SIRET` (BT-46) ajouté au catalogue de l'éditeur XSL et promu dans la liste principale de la section acheteur, à côté de `TAG_CUSTOMER_SIREN` dans *Variables*.
+
+---
+
+## 2026.04.9 — 2026-04-30 \{#v2026-04-9\}
+
+### Paramètres — correction de l'état d'éditeur obsolète au changement de liste
+
+- Le passage d'un modèle à un autre ouvrait parfois l'éditeur de droite avec les lignes de la liste précédemment consultée. Deux causes : les éditeurs qui amorcent leur état interne depuis les props au montage (les 14 éditeurs de listes, StatusesEditor, DocumentTypesEditor, …) gardaient les lignes du modèle précédent car leur initialiseur `useState` ne s'exécute qu'une fois ; et `selectTemplate()` basculait `selected` immédiatement mais `props` n'était mis à jour qu'au retour du fetch, si bien que des clics rapides pouvaient acheminer un fetch obsolète vers le mauvais modèle.
+- Correction : le rendu de l'éditeur est désormais enveloppé dans un `<div key={selected}>` keyé avec `display: contents`, ce qui force React à démonter l'éditeur précédent et à monter une instance fraîche à chaque sélection. `selectTemplate()` purge de manière synchrone `editData / props / rawProps` et tient un compteur de séquence de fetch, abandonnant toute réponse rendue obsolète par un clic ultérieur.
+
+### Détail facture — bouton Télécharger UBL
+
+- Nouveau bouton *Télécharger UBL* dans l'onglet *History* de la modale de détail facture, à côté de *Validate UBL*. Enregistre le XML UBL brut stocké dans `F564231.UHTXFT` dans un fichier local nommé `{doc}-{dct}-{kco}.xml`. Réutilise l'endpoint `GET /api/invoices/{id}/xml` et le `ublRawXml` déjà chargé dans l'état de la modale, sans appel supplémentaire. Le bouton est désactivé avec une infobulle tant que le XML n'est pas chargé.
+
+### Assistant IA — message d'accueil automatique à la première ouverture
+
+- L'ouverture du panneau de chat sans historique envoie automatiquement un message d'accueil localisé (*Bonjour* / *Hello* selon la langue de l'IHM), pour que l'assistant se présente et liste ses principales capacités sans que l'utilisateur n'ait à saisir une première requête. À usage unique par chargement de page : la fermeture / réouverture du panneau en cours de session ne répète pas le message d'accueil, et les conversations existantes sont préservées.
+
+---
+
+## 2026.04.8 — 2026-04-29 \{#v2026-04-8\}
+
+### Assistant IA — outil d'historique de cycle de vie + délégation REST
+
+- Nouvel outil local `lifecycle_history` : retourne toutes les transitions de statut d'une facture issues de F564235 (séquence, code statut + libellé, message, date / heure, motif de rejet PA + libellé, action attendue + libellé, note de statut) — même charge utile que celle rendue par l'onglet *History* de la modale de détail facture. Permet à l'IA de répondre à *« pourquoi la facture X a-t-elle été rejetée / qu'a dit la PA »* sans recourir à *« je n'ai pas accès à cet historique »*.
+- `validation_errors` et `lifecycle_history` délèguent désormais aux gestionnaires REST existants `WebApiHandler.handleInvoiceErrors` / `handleInvoiceLifecycle` (l'onglet *History* de l'IHM React appelle les mêmes endpoints). Le SQL dupliqué dans les outils IA a été supprimé, ce qui fait bénéficier l'IA des noms de tables configurables `UBLTableConfig`, des requêtes adaptées au dialecte (Oracle vs Postgres) et de la résolution de libellés de statut maintenue côté REST. Une seule source de vérité.
+- Les catalogues complets de statuts factures + e-reporting sont désormais ajoutés au prompt système au moment de la conversation (lus dans `InvoiceStatusCatalog` et `EReportingStatusCatalog`, ce qui propage les personnalisations utilisateur). Le modèle devinait des codes à partir d'expressions comme *litige* (49 au lieu du vrai 207) — il dispose désormais de la table en contexte et utilise le code exact avec `list_invoices` / `list_ereports`.
+- `AIChatPanel` : la zone de saisie reprend le focus dès que l'assistant a fini de diffuser sa réponse, supprimant la nécessité de cliquer à nouveau dans le champ pour poser la question suivante.
+
+---
+
+## 2026.04.7 — 2026-04-29 \{#v2026-04-7\}
+
+### Assistant IA — correction de `url_not_allowed` sur web_fetch
+
+- Le `web_fetch` d'Anthropic ne télécharge que les URL apparues précédemment dans des messages utilisateur ou des résultats d'outils antérieurs. L'injection sitemap de 2026.04.6 plaçait les URL dans le prompt système où elles ne comptent pas, si bien que chaque fetch retournait `url_not_allowed`. Une première tentative d'exposer le catalogue via un outil personnalisé `list_docs_pages` retournant du JSON a aussi échoué — l'extracteur d'URL d'Anthropic scanne le contenu de `tool_result` en texte brut et ne reconnaît pas les URL encadrées par des guillemets JSON.
+- Correction finale : `list_docs_pages` retourne désormais le sitemap en **texte brut**, une URL par ligne. L'extracteur Anthropic les capture, et l'appel `web_fetch` qui suit aboutit. Claude suit un parcours en deux étapes propre : `list_docs_pages` → `web_fetch` → réponse.
+- Les appels d'outils serveur + leurs résultats sont désormais affichés dans le chat sous forme de pastilles en ligne (📖 `web_fetch · <url>`, 📥 `web_fetch_result · ✓ <url>` ou ❌ `<error_code>`), rendant visibles les modes d'échec auparavant absorbés silencieusement — ce qui a précisément permis de déboguer le problème JSON-vs-texte.
+
+---
+
+## 2026.04.6 — 2026-04-29 \{#v2026-04-6\}
+
+### Assistant IA — recherche documentaire pilotée par le sitemap
+
+- Le modèle savait qu'il pouvait récupérer `docs.nomana-it.fr` mais ignorait quelles URL existaient ; il devinait et ratait, ou abandonnait et répondait depuis ses connaissances antérieures. Le backend récupère désormais `sitemap.xml` une fois au démarrage, filtre les entrées au préfixe documentaire (par défaut `https://docs.nomana-it.fr/nomaubl`), et injecte la liste de pages obtenue dans le prompt système — ce qui amène le modèle à choisir une URL réelle plutôt qu'à deviner.
+- Le sitemap est mis en cache pendant 6 heures et plafonné à 200 pages. Les échecs sont silencieux (le snapshot précédent reste en service) et ne bloquent jamais l'appel chat.
+- Deux nouvelles propriétés `global` optionnelles : `aiDocsSitemapUrl` (par défaut `https://docs.nomana-it.fr/sitemap.xml`, vide pour désactiver l'injection sitemap) et `aiDocsPathPrefix` (par défaut `https://docs.nomana-it.fr/nomaubl`).
+
+---
+
+## 2026.04.5 — 2026-04-29 \{#v2026-04-5\}
+
+### Assistant IA — correction de compatibilité ascendante pour web_fetch
+
+- Les configurations existantes antérieures à 2026.04.4 ne disposent pas de la nouvelle propriété `aiDocsDomains` dans leur modèle `global`, si bien que l'assistant démarrait sans outil `web_fetch` et indiquait (à raison) qu'il n'avait pas accès à la documentation.
+- Nouvelle sémantique pour `aiDocsDomains` dans `AiAssistant` : propriété absente → valeur par défaut `docs.nomana-it.fr` (compatibilité ascendante — aucune édition manuelle requise) ; chaîne vide → désactivation explicite ; `"a,b,c"` → utilisation de cette liste. Aucun changement de BDD ni d'API ; uniquement une valeur par défaut côté serveur.
+
+---
+
+## 2026.04.4 — 2026-04-29 \{#v2026-04-4\}
+
+### Assistant IA — utilisation d'outils (recherche documentaire + outils de données en lecture seule)
+
+- Le panneau de chat permet désormais au modèle d'appeler des outils en cours de conversation au lieu de répondre uniquement depuis ses connaissances antérieures. Deux couches : recherche documentaire via l'outil serveur `web_fetch_20250910` d'Anthropic, avec `allowed_domains` verrouillé sur la liste `global.aiDocsDomains` (par défaut `docs.nomana-it.fr`) ; et outils opérationnels en lecture seule exécutés localement contre la même base que l'IHM (`list_invoices`, `explain_status_code`, `validation_errors`, `list_ereports`). Activable via `global.aiToolsEnabled` (par défaut Y).
+- Nouveau `global.anthropicSystemPrompt` qui surcharge le prompt système intégré. Vide = utiliser le défaut intégré qui décrit le produit, indique l'URL documentaire au modèle et liste les plages de codes statut (1373 / 99xx / 9950 – 9957).
+- Backend récrit dans `AiAssistant.java` : boucle agentique avec jusqu'à 5 tours d'outils, diffuse les deltas de texte sous forme `{type:"token"}` et expose les invocations d'outils sous forme `{type:"tool_call",name,summary}` afin que l'IHM affiche une pastille en ligne (📖 web_fetch, 🔍 outil local) au-dessus de la bulle assistant pendant que l'appel est en cours.
+- Paramètres → System → Global → onglet AI : trois nouveaux champs (System Prompt textarea, Allowed Doc Domains liste séparée par virgules, Custom Tools Y/N).
+- Les réponses de l'assistant sont désormais rendues en Markdown via `react-markdown` + `remark-gfm` : titres, gras, listes, tableaux GFM, blocs de code, code en ligne et liens s'affichent correctement. Les liens externes s'ouvrent dans un nouvel onglet.
+
+Voir [Capacités IA](./application/ai-capabilities.md) pour la référence utilisateur complète.
 
 ---
 

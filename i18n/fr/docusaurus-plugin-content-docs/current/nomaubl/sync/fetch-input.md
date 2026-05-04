@@ -70,8 +70,8 @@ La première section configure **comment chaque élément retenu est traité**. 
 
 | Champ | Description |
 |---|---|
-| **Process As** | `XML` ou `UBL`. Sélectionne le pipeline de traitement. Voir [*Processing → XML*](../processing/xml.md) ou [*Processing → UBL*](../processing/ubl.md) pour la sémantique unitaire. |
-| **Mode** *(XML uniquement)* | `AUTO`, `SINGLE`, `BURST` ou `UBL`. Voir [*Processing → XML — Modes*](../processing/xml.md#modes). |
+| **Source** *(affichage en lecture seule)* | `XML` ou `UBL`. Inférée depuis la propriété `source` du modèle choisi — réglée sur la page [Documents](../management/documents.md), pas ici. Sélectionne le pipeline. Voir [*Traitement de document*](../processing/document.md) pour la sémantique unitaire. |
+| **Mode** *(source XML uniquement)* | `AUTO`, `SINGLE`, `BURST` ou `UBL`. Voir [*Traitement de document — Modes (source XML)*](../processing/document.md#modes-source-xml). |
 | **Mode** *(UBL uniquement)* | `Process & Validate` ou `Validate only`. |
 | **Replace** | `Skip` laisse intactes les factures existantes ; `Overwrite` les ré-importe. |
 | **Send to PA** | `Use settings` (défaut), `Skip sending`, ou `Force send` (UBL uniquement). |
@@ -137,9 +137,9 @@ Cliquer sur **Process (N)** pour exécuter la sélection. Le bouton se désactiv
 
 ### Lignes par élément
 
-Chaque élément apparaît sur une ligne avec un marqueur ✓ vert (succès) ou ✗ rouge (échec). **Cliquer sur une ligne déplie** la table de logs sous-jacente (mêmes colonnes que sur les pages [*Processing → XML*](../processing/xml.md#résultats) et [*Processing → UBL*](../processing/ubl.md#résultats) : `Severity / Module / Submodule / Message`).
+Chaque élément apparaît sur une ligne avec un marqueur ✓ vert (succès) ou ✗ rouge (échec). **Cliquer sur une ligne déplie** la table de logs sous-jacente (mêmes colonnes que sur la page [*Traitement de document*](../processing/document.md) : `Severity / Module / Submodule / Message`).
 
-Lorsque la source est BIP et que le traitement réussit, l'appel **Apply post-generation** s'exécute après chaque élément — exactement comme dans [*Extract and Process*](../processing/extract-and-process.md#process-type--xml). Le `lastBipJobNumber` global est également mis à jour avec le plus grand numéro de job traité, de sorte que le prochain Scan ne retourne que les jobs plus récents.
+Lorsque la source est BIP et que le traitement réussit, l'appel **Apply post-generation** s'exécute après chaque élément — exactement comme dans [*Extract and Process*](../processing/extract-and-process.md). Le `lastBipJobNumber` global est également mis à jour avec le plus grand numéro de job traité, de sorte que le prochain Scan ne retourne que les jobs plus récents.
 
 ---
 

@@ -312,14 +312,14 @@ NomaUBL repose sur un **modèle de templates** : chaque source produit du XML, N
     <div style={{fontSize: '24px', marginBottom: '12px'}}>📄</div>
     <div style={{fontSize: '15px', fontWeight: 700, marginBottom: '6px', color: '#4ade80'}}>Générer un UBL conforme</div>
     <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.6', marginBottom: '10px'}}>Les templates projettent les champs source vers UBL 2.1, alimentent l'extension CTC française, appliquent les schemeID, le routage BAR, les codes de processus métier, les remises et le Cadre de facturation. Le mode AUTO résout la voie correcte par type de document.</div>
-    <div style={{fontSize: '11px', opacity: 0.7}}>📌 <Link to="/nomaubl/processing/xml">Traitement XML</Link> · <Link to="/nomaubl/ubl-tools/ubl-defaults/overview">UBL Defaults</Link></div>
+    <div style={{fontSize: '11px', opacity: 0.7}}>📌 <Link to="/nomaubl/processing/document">Traitement de document</Link> · <Link to="/nomaubl/ubl-tools/ubl-defaults/overview">UBL Defaults</Link></div>
   </div>
 
   <div style={{padding: '22px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'linear-gradient(160deg, rgba(192,132,252,0.06), rgba(192,132,252,0.01))'}}>
     <div style={{fontSize: '24px', marginBottom: '12px'}}>✅</div>
     <div style={{fontSize: '15px', fontWeight: 700, marginBottom: '6px', color: '#c084fc'}}>Valider en amont, avant la PA</div>
     <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.6', marginBottom: '10px'}}>XSD + Schematron + le profil CTC français s'exécutent à l'intérieur de NomaUBL. Chaque erreur, avertissement et indication de reprise s'affiche en ligne — la PA ne voit jamais un document sciemment cassé, et les cycles de rejet cessent de coûter des journées.</div>
-    <div style={{fontSize: '11px', opacity: 0.7}}>📌 <Link to="/nomaubl/ubl-tools/validate">Validate</Link> · <Link to="/nomaubl/processing/ubl">Traitement UBL</Link></div>
+    <div style={{fontSize: '11px', opacity: 0.7}}>📌 <Link to="/nomaubl/ubl-tools/validate">Validate</Link> · <Link to="/nomaubl/processing/document">Traitement de document</Link></div>
   </div>
 
   <div style={{padding: '22px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'linear-gradient(160deg, rgba(255,159,10,0.06), rgba(255,159,10,0.01))'}}>
@@ -569,9 +569,9 @@ Différentes équipes utilisent la plateforme pour des raisons différentes. Nom
     <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px'}}>📊 Application →</div>
     <div style={{fontSize: '11px', opacity: 0.7}}>Dashboard, E-Invoicing, E-Reporting, E-Directory, Integration Errors.</div>
   </Link>
-  <Link to="/nomaubl/processing/xml" style={{display: 'block', padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', textDecoration: 'none', color: 'inherit'}}>
+  <Link to="/nomaubl/processing/document" style={{display: 'block', padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', textDecoration: 'none', color: 'inherit'}}>
     <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px'}}>🔄 Processing →</div>
-    <div style={{fontSize: '11px', opacity: 0.7}}>Pipelines XML / UBL, Extract and Process, Process API.</div>
+    <div style={{fontSize: '11px', opacity: 0.7}}>Traitement de document, Extract and Process, Process API.</div>
   </Link>
   <Link to="/nomaubl/ubl-tools/validate" style={{display: 'block', padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', textDecoration: 'none', color: 'inherit'}}>
     <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px'}}>✅ UBL Tools →</div>
