@@ -143,24 +143,17 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 
 ## Tab 4 — 🖼 PDF Template
 
-The fourth tab is the visual editor for the **per-document PDF layout** — the JSON stored on the template's `pdfTemplate` property and read by the PDF generator at render time. When unset, the bundled default layout is used.
+The fourth tab picks the **PDF layout** applied when this document is rendered. Since 2026.05.1, layouts are first-class shareable resources stored in `config-pdf.json` and edited on the dedicated [PDF Templates](./pdf-templates.md) page — this tab simply references one of them **by name** via the template's `pdfTemplate` property.
 
-| Element | Purpose |
+| Field | Description |
 |---|---|
-| **Section list** | Nine reorderable sections covering every part of an invoice PDF: *Header*, *Parties*, *Agent*, *Line Table*, *Document Allowances*, *VAT Breakdown*, *Totals*, *Payment*, *Notes*. Drag-and-drop reorders them; toggle a section off to remove it from the rendered PDF. |
-| **Per-section config drawer** | Click a section to expand its inline config drawer. The drawer exposes per-section toggles — column visibility (`Column · Quantity`), sub-detail toggles (`Sub-detail · Line note`), group-header behaviour (`Group header · Page break per delivery`), …. |
-| **Live preview** | Renders the current configuration against a sample invoice via `POST /api/pdf-templates/preview`, embedded in an iframe. Updates as you change toggles or reorder sections. |
-| **Reset** | Restores the bundled default layout. |
+| **PDF Template** | Dropdown listing every saved layout (the `pdf-template` resources from *PDF Templates*), plus the bundled `built-in`. Leave empty to fall back to the global default (`global.defaultPdfTemplate`); empty + no global default falls back to `built-in`. |
 
-A few of the more useful toggles:
+The resolution chain at render time is therefore: this field → `global.defaultPdfTemplate` → `built-in`. Every persisted invoice carries the document template name in `F564231.UHTMPL`, so the PDF generator re-renders on demand against the layout that was active for that document.
 
-- *Header → Meta · Invoice number / Issue date / Due date* — turn off any of the eight metadata lines on the right side.
-- *Parties → Show Delivery box* — when off, only the Customer box is shown (single column).
-- *Line Table → Group header · Page break per delivery* — each new delivery starts on a fresh page with its own table header.
-- *Line Table → Column · Tax / Sub-detail · Line note (BT-127)* — granular column and sub-detail visibility.
-- *VAT Breakdown* / *Totals* / *Payment* — toggle individual rows / columns to hide them from the rendered PDF.
-
-The result of every processed invoice carries the document template name in `F564231.UHTMPL`, so the PDF generator can resolve the right `pdfTemplate` JSON when re-rendering on demand.
+:::tip[Editing the layout itself]
+The visual editor — section list, per-section drawer, live preview, block sections — lives on [Management → PDF Templates](./pdf-templates.md). Open it once to author or tune a layout, then come back here to point the document at it. A single layout can serve many documents.
+:::
 
 ---
 
@@ -171,4 +164,4 @@ The result of every processed invoice carries the document template name in `F56
 - **Leave Processing Type empty** unless this template needs to override the per-document-type default; this keeps the configuration DRY.
 - For new document types, **start by loading an XML sample**, configure Tab 1 using the picker, then test on a few documents before tuning the XSL chain in Tab 2.
 - The **Burst Key is the most critical XML field** — getting it wrong produces either one giant document or no documents at all.
-- **Iterate in the PDF Template tab with the live preview open** — toggling a section and watching the iframe re-render is the fastest way to dial in a layout.
+- **Edit the PDF layout on its own page.** [PDF Templates](./pdf-templates.md) hosts the visual editor with the live preview; this tab just picks the right one. Sharing one layout across several documents avoids editing N copies when a legal mention or a column set changes.

@@ -143,24 +143,17 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 
 ## Onglet 4 — 🖼 PDF Template
 
-Le quatrième onglet est l'éditeur visuel de la **mise en page PDF par document** — le JSON stocké sur la propriété `pdfTemplate` du modèle et lu par le générateur PDF au moment du rendu. Lorsque la propriété est vide, la mise en page intégrée par défaut est utilisée.
+Le quatrième onglet désigne la **mise en page PDF** appliquée au rendu de ce document. Depuis la version 2026.05.1, les mises en page sont des ressources partageables à part entière, stockées dans `config-pdf.json` et éditées sur la page dédiée [Modèles PDF](./pdf-templates.md) — cet onglet se contente d'en référencer une **par son nom** via la propriété `pdfTemplate` du modèle.
 
-| Élément | Rôle |
+| Champ | Description |
 |---|---|
-| **Liste des sections** | Neuf sections réordonnables couvrant chaque partie d'un PDF facture : *Header*, *Parties*, *Agent*, *Line Table*, *Document Allowances*, *VAT Breakdown*, *Totals*, *Payment*, *Notes*. Le glisser-déposer modifie l'ordre ; désactiver une section la retire du PDF rendu. |
-| **Drawer de configuration par section** | Cliquer sur une section déploie son drawer de configuration en ligne. Le drawer expose des bascules par section : visibilité de colonnes (`Column · Quantity`), sous-détails (`Sub-detail · Line note`), comportement d'en-tête de groupe (`Group header · Page break per delivery`), etc. |
-| **Aperçu en direct** | Rend la configuration courante face à une facture d'exemple via `POST /api/pdf-templates/preview`, intégré dans une iframe. Mise à jour à chaque modification de bascule ou de réordonnancement. |
-| **Reset** | Restaure la mise en page intégrée par défaut. |
+| **PDF Template** | Liste déroulante regroupant toute mise en page enregistrée (les ressources `pdf-template` issues de *Modèles PDF*), ainsi que la `built-in` livrée. Laisser vide pour basculer sur le défaut global (`global.defaultPdfTemplate`) ; champ vide et défaut global vide ramènent à `built-in`. |
 
-Quelques bascules notables :
+La chaîne de résolution au moment du rendu se lit donc : ce champ → `global.defaultPdfTemplate` → `built-in`. Chaque facture persistée porte le nom du modèle de document dans `F564231.UHTMPL`, ce qui permet au générateur PDF de re-rendre à la demande avec la mise en page active pour ce document.
 
-- *Header → Meta · Invoice number / Issue date / Due date* — masquer une des huit lignes de méta du côté droit.
-- *Parties → Show Delivery box* — désactivée, seul le bloc Customer s'affiche (colonne unique).
-- *Line Table → Group header · Page break per delivery* — chaque nouvelle livraison débute sur une nouvelle page avec son propre en-tête de tableau.
-- *Line Table → Column · Tax / Sub-detail · Line note (BT-127)* — visibilité fine des colonnes et des sous-détails.
-- *VAT Breakdown* / *Totals* / *Payment* — bascules individuelles pour masquer des lignes / colonnes du PDF rendu.
-
-Le résultat de chaque facture traitée porte le nom du modèle de document dans `F564231.UHTMPL`, ce qui permet au générateur PDF de retrouver le `pdfTemplate` JSON adéquat lors d'un rendu à la demande.
+:::tip[Édition de la mise en page]
+L'éditeur visuel — liste de sections, tiroir par section, aperçu en direct, sections block — réside sur la page [Gestion → Modèles PDF](./pdf-templates.md). Y rédiger ou affiner une mise en page une seule fois, puis revenir ici pour y rattacher le document. Une même mise en page peut servir plusieurs documents.
+:::
 
 ---
 
@@ -171,4 +164,4 @@ Le résultat de chaque facture traitée porte le nom du modèle de document dans
 - **Laisser Processing Type vide** sauf nécessité de surcharger la valeur par défaut du type de document ; cela évite la duplication de configuration.
 - Pour un nouveau type de document, **commencer par charger un échantillon XML**, configurer l'onglet 1 à l'aide du sélecteur, puis tester sur quelques documents avant d'affiner la chaîne XSL de l'onglet 2.
 - Le **Burst Key est le champ XML le plus critique** — une valeur erronée produit soit un document géant unique, soit aucun document.
-- **Itérer dans l'onglet PDF Template avec l'aperçu en direct ouvert** — basculer une section et observer l'iframe se re-rendre est la voie la plus rapide pour caler une mise en page.
+- **Éditer la mise en page PDF sur sa page dédiée.** [Modèles PDF](./pdf-templates.md) accueille l'éditeur visuel et l'aperçu en direct ; cet onglet se borne à la sélectionner. Le partage d'une même mise en page entre plusieurs documents évite l'édition de N copies dès qu'une mention légale ou un jeu de colonnes évolue.

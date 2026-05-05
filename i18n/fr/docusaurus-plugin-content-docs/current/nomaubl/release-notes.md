@@ -10,7 +10,8 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
+  <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
+  <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
   <a href="#v2026-04-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-04</span></a>
   <a href="#v2026-04-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-30</span></a>
   <a href="#v2026-04-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
@@ -24,6 +25,58 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.1 — 2026-05-05 \{#v2026-05-1\}
+
+Moteur de modèles PDF — Phase 2 : les modèles PDF deviennent des ressources partageables de premier ordre, gagnent une section générique `block` pilotée par XPath, et un éditeur visuel à part entière.
+
+### Modèles PDF en ressources de premier ordre (Phase 2a)
+
+- Nouveau type de ressource `pdf-template`, persisté dans `config-pdf.json` (renommé depuis `config-pdf-templates.json` pour la concision).
+- Nouvelle page **Modèles PDF** (entrée du menu sous Gestion) pour créer, copier, importer, exporter et éditer des mises en page indépendamment de tout modèle de document. Voir [Modèles PDF](./management/pdf-templates.md) pour la référence complète.
+- Les documents référencent une mise en page via la propriété `pdfTemplate` portée par la ressource doc-template. Plusieurs documents peuvent partager un même modèle PDF — édition unique, propagation à l'ensemble.
+- Chaîne de résolution : `pdfTemplate` du doc-template → `defaultPdfTemplate` sur `global` → modèle interne livré. Le nom réservé `built-in` est en lecture seule et toujours disponible comme filet de sécurité.
+- JSON formaté lisiblement sur disque : les objets `template` / `config` imbriqués sont écrits comme de vrais objets JSON indentés (et non comme des chaînes échappées), pour rester lisibles dans n'importe quel éditeur. Aller-retour assuré par `ConfigJson.readPropertyValue`, partagé pour que les loaders restent agnostiques de la forme sur disque.
+
+### Section générique `block` (Phase 2b)
+
+- Nouveau type de section `block` — primitives de mise en page pilotées par XPath qui se composent en n'importe quel contenu, sans classe dédiée :
+  - `text` (littéral), `field` (valeur XPath, avec libellé inline optionnel et formatage `date` / `currency` / `number` / `percent`) ;
+  - `image`, `spacer`, `hr` ;
+  - conteneurs `row` / `column` (alignement + écart) ;
+  - `repeat` (XPath → liste, rend son `child` par occurrence) ;
+  - `if` (XPath → booléen, rend `child` si vrai) ;
+  - `table` — grille `lignes × colonnes` avec bordures de cellules optionnelles et ligne d'en-tête stylée. Définir `xpath` la fait itérer (une ligne par occurrence), les enfants servant de gabarit par ligne.
+- Les XPath des cellules à l'intérieur d'une table itérante sont automatiquement rendus relatifs : un chemin absolu commençant par le XPath de l'itérateur est tronqué au moment du rendu pour que chaque ligne s'évalue dans son propre contexte itéré.
+- `align: end | center` sur un `row` réduit la ligne à ~50 % de largeur et aligne la table entière de ce côté, au lieu d'étirer des cellules à parts égales sur toute la page (les paires « libellé + valeur » restent groupées à droite).
+
+### Éditeur visuel (Phase 2c)
+
+- Nouveau `BlockCanvasEditor` monté dans le tiroir de toute section `block` : trois panneaux empilés (arbre, barre d'outils, inspecteur) plus une issue de secours JSON.
+- Inspecteur : formulaires d'attributs par type avec sous-panneau de style ; le sélecteur **Type** en haut transforme le nœud sélectionné sur place (column → repeat sans suppression / recréation) via le helper `transmuteKind` qui reporte les champs compatibles.
+- Le chargeur d'XML d'exemple est remonté à l'en-tête du modèle — chargement unique, tous les blocks réutilisent les entrées pour l'autocomplétion XPath.
+- Le sélecteur XPath préserve les préfixes de namespace `cbc:` / `cac:` (requis par le moteur namespace-aware côté backend) et émet **`/*/<chemin-complet>`** pour que les sélections soient sans ambiguïté et indépendantes de la racine (Invoice ou CreditNote indifféremment). À l'intérieur d'un ancêtre itérant, le sélecteur supprime en plus le préfixe de l'itérateur pour que les cellules démarrent en chemin relatif (`cbc:TaxAmount` au lieu de `/*/cac:TaxTotal/cac:TaxSubtotal/cbc:TaxAmount`).
+- L'aperçu en direct est remonté en haut du formulaire et s'ouvre dans une modale 960 × 85vh — fini la valse scroll-down / scroll-up pendant l'itération sur une mise en page.
+- Le sélecteur de section est remonté en haut et converti en chips : un clic ajoute une section en haut de la liste, automatiquement ouverte pour rendre l'inspecteur immédiatement visible. `block` peut être ajouté plusieurs fois par modèle ; chaque block porte un `name` utilisateur affiché à côté de la ligne de section.
+
+### Refonte du tiroir des sections prédéfinies
+
+- Les bascules utilisent le composant `Checkbox` partagé (style rond-bleu cohérent au lieu des cases natives en mode sombre).
+- Les bascules sont parsées par préfixe `Catégorie · Nom` et regroupées en colonnes côte à côte qui reflètent la mise en page PDF réelle — *Header* se lit comme **METAS** | **SUPPLIERS**, *Line Table* comme **Group headers** | **Columns** | **Sub-details** au lieu d'une longue liste plate.
+- Bordure du tiroir adoucie : trait fin avec un accent bleu de 2 px à gauche.
+
+### Corrections critiques
+
+- **Scanner JSON top-level :** le parser maison utilisait un naïf `indexOf` pour localiser `"<clé>"`, qui faisait silencieusement correspondre la première occurrence imbriquée. Une table avec `children` listé avant `xpath` se retrouvait avec son `xpath` résolu vers celui du *premier enfant*, l'itérateur retournait 0 nœud, et la table entière disparaissait du PDF rendu. Remplacé par `findTopLevelValueStart` qui respecte la profondeur de crochets et l'état de chaîne, et n'identifie que les clés au niveau 1. Concerne `readString`, `readFloat`, `readBool`, `readStringArray` et les recherches `tree` / `children` / `child` / `style` dans `parseNode`.
+- **Boucle d'écho de l'éditeur :** `parseConfig` perdait le champ `name` du block et `useEffect [value]` de `PdfTemplateForm` re-parsait à chaque écho — combinés, chaque frappe déclenchait `setSelectedPath([])` et démontait l'inspecteur, volant le focus et (sur émissions répétées) figeant la page. Les deux fonctions préservent désormais `name`, et les deux effets de seed sautent quand la valeur entrante correspond à la dernière émise (`lastEmittedRef`).
+- **Tables itérantes :** un NodeList vide retourne désormais `null` proprement pour qu'OpenPDF n'étouffe pas sur une table à 0 ligne, et chaque cellule est rendue dans son propre try/catch — une cellule en erreur devient un placeholder `[ERROR]` inline au lieu de casser la mise en page complète de la ligne.
+
+### Backend / helpers partagés
+
+- `PdfContext` porte désormais le `Document` parsé namespace-aware pour que les sections `block` exécutent du XPath sans re-parser le XML UBL.
+- `ConfigJson` expose `readPropertyValue`, `findStringEnd`, `findMatchingBracket`, `jsonUnescape`, `compactJson` et `tryReIndentJson` pour que d'autres types de ressources puissent opter pour le stockage JSON imbriqué formaté lisiblement.
 
 ---
 

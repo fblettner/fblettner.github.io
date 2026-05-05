@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
+  <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
+  <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
   <a href="#v2026-04-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-04</span></a>
   <a href="#v2026-04-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-30</span></a>
   <a href="#v2026-04-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
@@ -24,6 +25,58 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.1 — 2026-05-05 \{#v2026-05-1\}
+
+PDF template engine — Phase 2: PDF templates become first-class shareable resources, gain a generic XPath-driven `block` section, and a full visual canvas editor.
+
+### PDF templates as first-class resources (Phase 2a)
+
+- New resource type `pdf-template`, persisted in `config-pdf.json` (renamed from the original `config-pdf-templates.json` for brevity).
+- New top-level **PDF Templates** page (sidebar entry under Management) for creating, copying, importing, exporting and editing layouts independently of any document template. See [PDF Templates](./management/pdf-templates.md) for the full reference.
+- Documents reference a layout via the `pdfTemplate` property on the doc-template resource. Many documents can share one PDF template — edit once, propagate everywhere.
+- Resolution chain: doc-template's `pdfTemplate` → `defaultPdfTemplate` on `global` → bundled built-in. The reserved name `built-in` is read-only and always available as a safety fallback.
+- Pretty-printed JSON on disk: nested `template` / `config` objects are emitted as real JSON objects (with proper indentation), not escaped strings, so they remain readable in any editor. Round-tripped via the shared `ConfigJson.readPropertyValue` so loaders stay agnostic of the on-disk shape.
+
+### Generic `block` section (Phase 2b)
+
+- New section type `block` — XPath-driven layout primitives that compose into arbitrary content without needing a bespoke section class:
+  - `text` (literal), `field` (XPath value, with optional inline label and `date` / `currency` / `number` / `percent` formatting);
+  - `image`, `spacer`, `hr`;
+  - `row` / `column` containers (alignment + gap);
+  - `repeat` (XPath → list, renders its `child` per match);
+  - `if` (XPath → boolean, renders `child` when true);
+  - `table` — `rows × cols` grid with optional cell borders and a styled header row. Setting `xpath` makes it iterate (one row per match), with children acting as the per-row template.
+- Table cell XPaths inside an iterating table are auto-relativized: an absolute path that starts with the iterator's xpath is stripped at render time so each row evaluates against its own iterated context node.
+- Row `align: end | center` shrinks the row to ~50% width and aligns the whole table to that side, instead of stretching equal cells across the page (so "label + value" stays grouped on the right).
+
+### Visual canvas editor (Phase 2c)
+
+- New `BlockCanvasEditor` mounted inside any `block` section's drawer: three stacked panes (tree, toolbar, inspector) plus a JSON escape hatch.
+- Inspector: per-kind attribute forms with a style sub-panel; the **Kind** select at the top morphs the selected node in place (column → repeat without a delete-and-re-add) via a `transmuteKind` helper that carries over compatible fields.
+- Sample XML loader lifted to the template-level header — load once, every block reuses the entries for XPath autocomplete.
+- The XPath picker preserves `cbc:` / `cac:` namespace prefixes (required by the namespace-aware backend) and emits **`/*/<full-path>`** so picks are unambiguous and root-agnostic (Invoice and CreditNote alike). Inside an iterating ancestor, the picker further strips the iterator prefix so cells start with relative paths (`cbc:TaxAmount` instead of `/*/cac:TaxTotal/cac:TaxSubtotal/cbc:TaxAmount`).
+- Live preview moved to the top of the form and opens in a 960 × 85vh modal — no more scroll-down / scroll-up loop while iterating on a layout.
+- Section picker moved to the top and converted to chips: one click adds a section at the top of the list, auto-expanded so the inspector is immediately visible. `block` can be added several times per template; each block has a user-friendly `name` shown next to the section row.
+
+### Preset section drawer rewrite
+
+- Toggles use the shared `Checkbox` component (consistent rounded-blue style instead of the native dark-mode checkboxes).
+- Toggles are parsed by their `Category · Name` prefix and grouped into side-by-side columns mirroring the actual PDF layout — *Header* reads as **METAS** | **SUPPLIERS**, *Line Table* as **Group headers** | **Columns** | **Sub-details** instead of one long flat list.
+- Drawer border softened: thin solid border with a 2 px blue accent on the left.
+
+### Critical correctness fixes
+
+- **JSON top-level scanner:** the bespoke parser used naive `indexOf` to locate `"<key>"`, which silently matched the first nested occurrence. A table with `children` listed before `xpath` ended up with the table's `xpath` resolved to the *first child's* xpath, the iterator returned 0 nodes, and the entire table vanished from the rendered PDF. Replaced by `findTopLevelValueStart` that respects bracket / string state and only matches keys at depth 1. Affects `readString`, `readFloat`, `readBool`, `readStringArray`, and the `tree` / `children` / `child` / `style` lookups in `parseNode`.
+- **Editor echo loop:** `parseConfig` was dropping the block's `name` field and `PdfTemplateForm`'s `useEffect [value]` re-parsed on every echo — combined, every keystroke triggered `setSelectedPath([])` and remounted the inspector, stealing focus and (for repeated emits) freezing the page. Both functions now preserve `name`, and both seed effects skip when the incoming value matches the last value emitted (`lastEmittedRef`).
+- **Iterating tables:** an empty NodeList now returns `null` cleanly so OpenPDF doesn't choke on a 0-row table, per-cell renders are wrapped in their own try/catch so a single bad cell becomes an inline `[ERROR]` placeholder instead of breaking the whole row layout.
+
+### Backend / shared helpers
+
+- `PdfContext` now carries the parsed namespace-aware `Document` so block sections can run XPath without re-parsing the UBL XML.
+- `ConfigJson` exposes `readPropertyValue`, `findStringEnd`, `findMatchingBracket`, `jsonUnescape`, `compactJson` and `tryReIndentJson` so other resource types can opt into pretty-printed nested JSON storage.
 
 ---
 
