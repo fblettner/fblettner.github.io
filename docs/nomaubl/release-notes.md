@@ -10,7 +10,9 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
+  <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
+  <a href="#v2026-05-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
+  <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
   <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
   <a href="#v2026-04-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-04</span></a>
   <a href="#v2026-04-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-30</span></a>
@@ -25,6 +27,84 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.3 — 2026-05-06 \{#v2026-05-3\}
+
+Notification system — invoice status changes now reach users through a portal inbox, email (with the rendered invoice PDF attached by default), and external API calls, all governed by user-defined rules.
+
+### Storage + dispatcher
+
+- New `F564253` table (Oracle + Postgres DDL, plus `AuthManager.initTables` so a fresh install creates it automatically). One row per delivered notification, keyed by `NTUKID` alone, with `(NTDOC, NTDCT, NTKCO)` referencing the invoice. Composite indexes on `(NTUSER, NTEV01, NTUPMJ DESC)` for the bell badge / inbox queries and `(NTDOC, NTDCT, NTKCO)` for invoice-level history.
+- New `custom.ubl.notify` package: `NotificationDispatcher` (singleton with a 2-thread asynchronous worker pool), `NotificationDatabaseHandler` (CRUD on `F564253` with insert-time width truncation matching the column sizes), `EmailDispatcher` and the `NotificationRule` POJO.
+- Rules persist as `notification-rule` resources in a dedicated `config-notifications.json` file alongside the main config; `ConfigJson` dispatches to the right file based on the resource type.
+- Daily retention sweep in `BackgroundScheduler` driven by `global.notificationsRetentionDays` (default 90, `0` disables).
+- The dispatcher registers a JVM shutdown hook on first `initialize()` so CLI runs that exit immediately after a status update still drain the worker pool (2-second grace) before the process dies.
+
+### Status-change integration points
+
+- Hook in `InvoiceStatusCatalog.StatusTransition.apply()` after the DB writes — rules are matched and dispatched on every status change. All exceptions are caught: a notification failure never aborts the underlying status update.
+- The just-applied status / reason / action data is passed straight to `NotificationDispatcher.fire(...)` so the dispatcher does not re-read `F564231` from a separate JDBC connection — that read returned a stale snapshot when the calling transaction (e.g. `ImportStatusHandler`) had not committed yet, surfacing the previous status's label in the notification body.
+- The UI-driven `SetStatusModal` (DB target) now also fires notifications — that path bypassed `StatusTransition.apply` and was previously silent.
+- CLI modes (`-process`, `-fetch-import`, `-fetch-status`, `-fetch-single`, `-fetch-all`, legacy `-run`) now call a shared `initRuntimeCatalogs` helper that initialises both `InvoiceStatusCatalog` and the `NotificationDispatcher`. Without this, batch flows updated statuses but skipped notifications because the dispatcher singleton was never initialised.
+
+### Email channel
+
+- Single SMTP transaction per dispatch — every address (the portal user's resolved email plus every entry in `emailRecipients`) goes on the message's `To:` header in one `Transport.sendMessage` call. The previous per-address loop hung whenever an SMTP server mishandled the connection close mid-loop, silently swallowing every send after the first.
+- Explicit `Transport.connect` / `sendMessage` / `close` inside `try/finally` with hard socket timeouts (`connectiontimeout`, `timeout`, `writetimeout` — all 20 s). Close failures are swallowed so a stuck cleanup cannot poison the next dispatch.
+- Auto-rendered invoice PDF attached by default — controlled by the rule's `attachPdf` flag (default `Y`). Rendered once per dispatch and reused across every recipient. PDF render failures are logged but never fail the email itself.
+- Default subject and body when the rule's `emailSubject` / `emailBody` are blank — `Invoice {doc} {dct} {kco} — {statusLabel}` for the email subject, `Status / Reason / Action` lines for the body. The portal `NTMSGP` keeps just the status label since the inbox UI already shows `NTDOC · NTDCT · NTKCO` alongside it.
+
+### Recipient model
+
+- Portal target (user / role) and `emailRecipients` are independent fields — set either or both. The portal target also receives the email channel automatically when their account has a `USEMAIL` on file.
+- `emailRecipients` accepts both `,` and `;` separators.
+- Backward compat: legacy rules with `recipientType=email` are migrated on load — the address moves into `emailRecipients`, the type clears.
+- Recipient resolution is now tolerant: when the `F564250` lookup fails (no `db-nomaubl` connector, missing table, transient outage), a portal-only recipient is still emitted using the literal username instead of dropping the rule with a *No recipients resolved* message.
+
+### Auth-disabled installations
+
+- When `global.authEnabled != "Y"`, the dispatcher writes portal rows under a single broadcast sentinel (`NTUSER='*'`) and the inbox / bell endpoints query the same sentinel when no user is logged in. Notifications work without any `F564250` row.
+- The bell stays visible in the top utility bar regardless of auth state (previously hidden inside the auth-only branch).
+- The recipient editor adapts its labels: when auth is disabled, the empty option reads *Broadcast — all portal users* instead of *None — emails only*.
+
+### Frontend
+
+- New **Notifications** page under the Management group — inbox with All / Unread tabs, mark-all-read, per-row dismiss, status badge with catalog-driven colours, accent stripe for unread rows, and a meta line showing `doc · dct · kco · reason · action · rule`. Clicking a row opens the linked invoice in `InvoiceDetailModal`. See [Notifications](./management/notifications.md).
+- New **Notification Rules** editor — sidebar list + form with sections for trigger, channels, recipient, email content, action call, and a synchronous Test panel that actually fires the rule. Trigger codes use chip multi-selects fed from the `statuses` and `rejection-reason-codes` resources, so the rule trigger and the codes assignable to an invoice cannot drift apart. The action section mirrors *Process API*: connector dropdown, endpoint dropdown populated from `api.connectors.listEndpoints(...)`, and parameter rows pre-populated from the endpoint's defined params. See [Notification Rules](./management/notification-rules.md).
+- New **NotificationBell** in the top utility bar — polls `/api/notifications/unread-count` every 30 s, shows a red badge with the unread count, and drops down the last 6 notifications. Clicking a notification marks it read and opens the invoice modal directly via a `nomaubl:open-notification` window event (so it works even when the user is already on the inbox page and the component does not remount).
+- Role grants for the two new pages plus a new `bell` icon in the central icon set.
+
+---
+
+## 2026.05.2 — 2026-05-06 \{#v2026-05-2\}
+
+French B2B PA submission — qualified PDF attachments (LISIBLE + co-attached documents) and several round-trip-integrity fixes that surfaced while shipping it.
+
+### LISIBLE attachment + qualified additional attachments
+
+- New `lisible` Y/N flag on doc-templates. When `Y`, a PDF is rendered from the freshly-built UBL via the resolved `pdf-template` and embedded back as the human-readable invoice attachment (`cbc:ID = "LISIBLE"`). Independent of the existing `attachment` dropdown — both can fire on the same invoice.
+- New `additionalAttachments` JSON property — list of `{code, path}` entries embedded as `cac:AdditionalDocumentReference` blocks. UI editor in the Document tab with a code dropdown (`RIB`, `BON_LIVRAISON`, `BON_COMMANDE`, `PJA`, `BORDEREAU_SUIVI`, `BORDEREAU_SUIVI_VALIDATION`, `DOCUMENT_ANNEXE`, `ETAT_ACOMPTE`, `FACTURE_PAIEMENT_DIRECT`, `RECAPITULATIF_COTRAITANCE`, `FEUILLE_DE_STYLE`) and a path field. Paths support `%APP_HOME%`, `%ENV%`, `%DOCNAME%`, `%KCO%`, `%DOC%`, `%DCT%` placeholders. Missing files are logged and skipped — they do not fail the surrounding processing.
+- `Tranform.embedPdfInUBL` gains a new String-code overload. The qualifier becomes `cbc:ID` of the inserted `cac:AdditionalDocumentReference`. `cbc:DocumentTypeCode` is **not** emitted (UBL-SR-43 reserves it for invoiced objects 130 / 50) and `cbc:DocumentDescription` is **not** emitted either (the PA returned HTTP 400 when it was present alongside the embedded attachment). The 3-arg signature is unchanged so callers using the legacy `PDF_Invoice` shape are unaffected.
+- `PdfTemplateEngine.render` and `InvoicePdfGenerator.generate` gain a `mergeAttachment` boolean. The LISIBLE flow passes `false` so the rendered PDF does not inherit any already-embedded attachment from the legacy `create` / `attach` flow — otherwise LISIBLE would visibly duplicate the original PDF inside itself.
+
+### XML format fixes for PA acceptance
+
+The Plateforme Agréée parser turned out to be byte-sensitive in ways the legacy code did not honour:
+
+- `embedPdfInUBL` used to round-trip the UBL through JDK's Xalan transformer which emits `<?xml version = '1.0' encoding = 'UTF-8'?>` (spaces around `=`, single quotes). Switched to Saxon (the same engine `convertToUBL` uses) so the output matches `<?xml version="1.0" encoding="UTF-8" standalone="no"?>` byte-for-byte. Explicit `STANDALONE = "no"` output property; `filename` attribute emitted before `mimeCode` to match the legacy ordering.
+- `convertToUBL` also forces `standalone="no"` so flows that bypass `embedPdfInUBL` (no-attachment runs) get the same XML declaration the PA accepts.
+- New `AdditionalDocumentReference` is inserted on its own line — the indent text is copied from the existing whitespace text-node, with extra leading-indent injection when the previous sibling is an Element (consecutive attachments + the trailing `<cac:AccountingSupplierParty>` each keep their `\n   ` separator).
+
+### ConfigJson re-indent guard
+
+`tryReIndentJson` was unwrapping every string that started with `{` or `[` as nested JSON — including template placeholders like `"{content}"`, `"{statusAt}"`, `"{reportName}"` used by other templates. The unwrap "succeeded" because the bracket structure balanced, producing object-of-bare-words garbage that left `config.json` unparseable on the next reload. New `looksLikeJson()` heuristic requires either an empty container or a real JSON value-starter (quoted key after `{`, etc.) before recursing. Existing templates with `{placeholder}` strings now round-trip cleanly.
+
+### Misc
+
+- `parseUblXml` reads `cbc:LineExtensionAmount` (BT-131) directly and `InvoiceDetailModal` displays it as the line amount instead of recomputing `qty × price ± allowances` — the recompute double-counted when the unit price was already net (a 45 × 12,75 line with a 489,15 line allowance was showing 84,60 instead of 573,75 in the modal while the PDF was correct).
+- `ubl-template.xsl`: new `TAG_CUSTOMER_SIRET` slot (BT-46) alongside the existing buyer SIREN.
 
 ---
 

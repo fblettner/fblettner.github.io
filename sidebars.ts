@@ -268,10 +268,12 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Management',
-      link: {type: 'generated-index', slug: '/nomaubl/management', description: 'Operational management: document templates, PDF templates, file versions, processing log and the command-line interface.'},
+      link: {type: 'generated-index', slug: '/nomaubl/management', description: 'Operational management: document templates, PDF templates, notifications and notification rules, file versions, processing log and the command-line interface.'},
       items: [
         'nomaubl/management/documents',
         'nomaubl/management/pdf-templates',
+        'nomaubl/management/notifications',
+        'nomaubl/management/notification-rules',
         'nomaubl/management/file-versions',
         'nomaubl/management/processing-log',
         'nomaubl/management/command-line',

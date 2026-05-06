@@ -10,7 +10,9 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
+  <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
+  <a href="#v2026-05-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
+  <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
   <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
   <a href="#v2026-04-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-04</span></a>
   <a href="#v2026-04-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-30</span></a>
@@ -25,6 +27,84 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.3 — 2026-05-06 \{#v2026-05-3\}
+
+Système de notifications — les changements de statut d'une facture atteignent désormais les utilisateurs via une boîte de réception dans le portail, par e-mail (avec le PDF de la facture joint par défaut) et par appels d'API externes, le tout piloté par des règles définies par l'utilisateur.
+
+### Stockage et orchestrateur
+
+- Nouvelle table `F564253` (DDL Oracle + Postgres, plus ajout dans `AuthManager.initTables` pour qu'une installation neuve la crée automatiquement). Une ligne par notification délivrée, clé `NTUKID` seule, avec `(NTDOC, NTDCT, NTKCO)` référençant la facture. Index composites sur `(NTUSER, NTEV01, NTUPMJ DESC)` pour la pastille de la cloche et l'inbox, et sur `(NTDOC, NTDCT, NTKCO)` pour l'historique au niveau facture.
+- Nouveau package `custom.ubl.notify` : `NotificationDispatcher` (singleton avec un pool de 2 threads pour l'envoi asynchrone), `NotificationDatabaseHandler` (CRUD sur `F564253`, avec troncature à l'insertion alignée sur les largeurs de colonnes pour qu'une valeur source inhabituellement longue ne fasse pas échouer la dispatch), `EmailDispatcher` et le POJO `NotificationRule`.
+- Les règles sont enregistrées comme ressources `notification-rule` dans un fichier dédié `config-notifications.json` à côté de la configuration principale ; `ConfigJson` répartit les ressources vers ce fichier en fonction de leur type.
+- Purge quotidienne dans `BackgroundScheduler` pilotée par `global.notificationsRetentionDays` (défaut 90 jours, `0` désactive).
+- À la première initialisation, le dispatcher enregistre un crochet d'arrêt JVM ; les exécutions CLI qui se terminent juste après une mise à jour de statut peuvent ainsi vider le pool de threads (sursis de 2 secondes) avant l'arrêt du processus.
+
+### Points d'intégration sur les changements de statut
+
+- Branchement dans `InvoiceStatusCatalog.StatusTransition.apply()` après les écritures en base : les règles sont évaluées et déclenchées à chaque transition. Toutes les exceptions sont capturées — un échec de notification n'annule jamais la mise à jour de statut sous-jacente.
+- Les valeurs de statut, motif et action qui viennent d'être appliquées sont passées directement à `NotificationDispatcher.fire(...)`. Le dispatcher n'a donc plus à relire `F564231` depuis une connexion JDBC séparée — cette lecture renvoyait un instantané périmé tant que la transaction appelante (par exemple `ImportStatusHandler`) n'avait pas encore été validée, ce qui faisait apparaître l'ancien libellé dans le corps de la notification.
+- Le `SetStatusModal` côté UI (cible base de données) déclenche aussi les notifications désormais — ce chemin contournait `StatusTransition.apply` et restait silencieux auparavant.
+- Les modes CLI (`-process`, `-fetch-import`, `-fetch-status`, `-fetch-single`, `-fetch-all`, l'ancien `-run`) appellent un utilitaire commun `initRuntimeCatalogs` qui initialise à la fois `InvoiceStatusCatalog` et `NotificationDispatcher`. Sans cela, les traitements en lot mettaient à jour les statuts mais ignoraient les notifications, le singleton du dispatcher n'étant jamais initialisé.
+
+### Canal e-mail
+
+- Une seule transaction SMTP par envoi : toutes les adresses (l'e-mail résolu de la cible portail plus chaque entrée d'`emailRecipients`) sont placées dans l'en-tête `To:` d'un seul message, en un appel à `Transport.sendMessage`. La boucle adresse-par-adresse précédente se bloquait dès qu'un serveur SMTP gérait mal la fermeture de connexion en milieu de boucle, ce qui faisait disparaître silencieusement tous les envois après le premier.
+- Séquence explicite `Transport.connect` / `sendMessage` / `close` dans un `try/finally` avec délais d'expiration stricts sur la socket (`connectiontimeout`, `timeout`, `writetimeout`, tous à 20 s). Les erreurs au moment du `close` sont absorbées, pour qu'un nettoyage bloqué ne contamine pas l'envoi suivant.
+- PDF de la facture rendu et joint par défaut, contrôlé par le drapeau `attachPdf` de la règle (valeur par défaut `Y`). Le PDF est généré une seule fois par envoi et réutilisé pour chaque destinataire ; un échec de rendu est tracé mais ne fait pas échouer l'e-mail.
+- Sujet et corps par défaut quand la règle laisse `emailSubject` ou `emailBody` vides : `Invoice {doc} {dct} {kco} — {statusLabel}` pour le sujet de l'e-mail et un corps avec les lignes `Status / Reason / Action`. Le `NTMSGP` côté portail garde uniquement le libellé du statut, la boîte de réception affichant déjà `NTDOC · NTDCT · NTKCO` à côté.
+
+### Modèle de destinataire
+
+- La cible portail (utilisateur / rôle) et `emailRecipients` sont des champs indépendants : possibilité de renseigner l'un, l'autre ou les deux. La cible portail reçoit aussi automatiquement le canal e-mail si son compte F564250 a un `USEMAIL` renseigné.
+- `emailRecipients` accepte les séparateurs `,` et `;`.
+- Compatibilité ascendante : les règles existantes avec `recipientType=email` sont migrées au chargement — l'adresse passe dans `emailRecipients` et le type est vidé.
+- Résolution des destinataires plus tolérante : si la lecture de F564250 échoue (connecteur `db-nomaubl` absent, table manquante, incident transitoire), un destinataire portail est tout de même émis avec le nom d'utilisateur littéral, au lieu de laisser tomber la règle silencieusement avec un message *No recipients resolved*.
+
+### Installations sans authentification
+
+- Lorsque `global.authEnabled != "Y"`, le dispatcher écrit les lignes portail sous une valeur sentinelle de diffusion (`NTUSER='*'`) ; les routes inbox et cloche interrogent cette même sentinelle quand aucun utilisateur n'est connecté. Les notifications fonctionnent sans qu'aucune ligne F564250 ne soit nécessaire.
+- La cloche reste visible dans la barre d'utilitaires quel que soit l'état d'authentification (auparavant cachée à l'intérieur de la branche réservée aux utilisateurs connectés).
+- L'éditeur de destinataire adapte ses libellés : quand l'authentification est désactivée, l'option vide affiche *Diffusion — tous les utilisateurs* au lieu de *Aucune — emails uniquement*.
+
+### Frontend
+
+- Nouvelle page **Notifications** dans le groupe Gestion — boîte de réception avec onglets Toutes / Non lues, action *tout marquer comme lu*, suppression par ligne, badge de statut coloré selon le catalogue, bande d'accent pour les lignes non lues, et une ligne méta `doc · dct · kco · motif · action · règle`. Cliquer sur une ligne ouvre la facture liée dans `InvoiceDetailModal`. Voir [Notifications](./management/notifications.md).
+- Nouvel éditeur **Règles de notification** — liste latérale et formulaire à sections : déclencheur, canaux, destinataire, contenu e-mail, appel d'action, et un panneau de Test synchrone qui exécute réellement la règle. Les codes de déclenchement utilisent des multi-sélections à puces alimentées par les ressources `statuses` et `rejection-reason-codes` — la règle ne peut donc plus diverger des codes assignables à une facture. La section action reprend la structure de *Process API* : connecteur en liste déroulante, endpoint en liste déroulante alimentée par `api.connectors.listEndpoints(...)`, et lignes de paramètres pré-remplies à partir de la définition de l'endpoint. Voir [Règles de notification](./management/notification-rules.md).
+- Nouveau composant **NotificationBell** dans la barre d'utilitaires — interroge `/api/notifications/unread-count` toutes les 30 s, affiche une pastille rouge avec le compteur et un menu déroulant des 6 dernières notifications. Cliquer sur une notification la marque comme lue puis ouvre directement la modale de la facture via un événement `nomaubl:open-notification` sur `window` (cela fonctionne même quand l'utilisateur est déjà sur la page inbox et que le composant n'est donc pas remonté).
+- Permissions de rôle pour les deux nouvelles pages, plus une nouvelle icône `bell` dans le jeu d'icônes central.
+
+---
+
+## 2026.05.2 — 2026-05-06 \{#v2026-05-2\}
+
+Soumission B2B française à la PA — pièces jointes PDF qualifiées (LISIBLE + documents associés) et plusieurs corrections d'intégrité de l'aller-retour qui ont émergé pendant la mise en œuvre.
+
+### Pièce jointe LISIBLE + pièces jointes additionnelles qualifiées
+
+- Nouveau drapeau `lisible` Y/N sur les modèles de document. Quand `Y`, un PDF est rendu à partir de l'UBL fraîchement généré via le `pdf-template` résolu, puis réinjecté en tant que pièce jointe « facture lisible » (`cbc:ID = "LISIBLE"`). Indépendant du sélecteur `attachment` existant — les deux peuvent s'activer sur la même facture.
+- Nouvelle propriété JSON `additionalAttachments` — liste d'entrées `{code, path}` intégrées comme blocs `cac:AdditionalDocumentReference`. Éditeur UI dans l'onglet Document avec un sélecteur de code (`RIB`, `BON_LIVRAISON`, `BON_COMMANDE`, `PJA`, `BORDEREAU_SUIVI`, `BORDEREAU_SUIVI_VALIDATION`, `DOCUMENT_ANNEXE`, `ETAT_ACOMPTE`, `FACTURE_PAIEMENT_DIRECT`, `RECAPITULATIF_COTRAITANCE`, `FEUILLE_DE_STYLE`) et un champ chemin. Les chemins acceptent les placeholders `%APP_HOME%`, `%ENV%`, `%DOCNAME%`, `%KCO%`, `%DOC%`, `%DCT%`. Les fichiers manquants sont tracés et ignorés — ils ne font pas échouer le traitement.
+- `Tranform.embedPdfInUBL` reçoit une nouvelle surcharge à code String. Le qualifieur devient le `cbc:ID` du `cac:AdditionalDocumentReference` inséré. `cbc:DocumentTypeCode` n'est **pas** émis (UBL-SR-43 le réserve aux objets facturés 130 / 50) et `cbc:DocumentDescription` n'est **pas** émis non plus (la PA retournait HTTP 400 quand il était présent en plus de la pièce jointe). La signature 3-args reste identique : les appelants qui utilisent la forme historique `PDF_Invoice` ne sont pas impactés.
+- `PdfTemplateEngine.render` et `InvoicePdfGenerator.generate` gagnent un booléen `mergeAttachment`. Le flux LISIBLE passe `false` pour que le PDF rendu n'hérite pas d'une pièce jointe déjà intégrée par le flux historique `create` / `attach` — sinon LISIBLE dupliquerait visiblement le PDF original à l'intérieur de lui-même.
+
+### Corrections de format XML pour acceptation PA
+
+Le parser de la Plateforme Agréée s'est avéré sensible à des octets précis que le code historique ne respectait pas :
+
+- `embedPdfInUBL` repassait l'UBL par le transformer Xalan du JDK, qui émet `<?xml version = '1.0' encoding = 'UTF-8'?>` (espaces autour de `=`, apostrophes). Passage à Saxon (déjà utilisé par `convertToUBL`) pour que la sortie corresponde octet pour octet à `<?xml version="1.0" encoding="UTF-8" standalone="no"?>`. Propriété `STANDALONE = "no"` explicite ; attribut `filename` émis avant `mimeCode` pour respecter l'ordre historique.
+- `convertToUBL` force aussi `standalone="no"`, pour que les flux qui contournent `embedPdfInUBL` (exécutions sans pièce jointe) produisent la même déclaration XML acceptée par la PA.
+- Le nouveau `AdditionalDocumentReference` est inséré sur sa propre ligne — l'indentation est recopiée depuis le nœud blanc existant, avec une indentation supplémentaire en tête quand l'élément précédent est lui aussi un nœud Element (les pièces jointes consécutives et le `<cac:AccountingSupplierParty>` qui suit conservent chacun leur séparateur `\n   `).
+
+### Garde-fou de ré-indentation ConfigJson
+
+`tryReIndentJson` désérialisait toute chaîne commençant par `{` ou `[` comme du JSON imbriqué — y compris les variables de gabarit comme `"{content}"`, `"{statusAt}"`, `"{reportName}"` utilisées par d'autres modèles. La désérialisation « réussissait » parce que les crochets s'équilibraient, produisant un objet aux clés non quotées qui rendait `config.json` impossible à relire au rechargement suivant. Nouvelle heuristique `looksLikeJson()` qui exige soit un conteneur vide, soit un vrai démarreur de valeur JSON (clé entre guillemets après `{`, etc.) avant de récurser. Les modèles existants contenant des chaînes `{placeholder}` font désormais l'aller-retour correctement.
+
+### Divers
+
+- `parseUblXml` lit `cbc:LineExtensionAmount` (BT-131) directement et `InvoiceDetailModal` l'affiche tel quel comme montant de ligne au lieu de recalculer `qty × prix ± remises` — le recalcul comptait deux fois quand le prix unitaire était déjà net (une ligne 45 × 12,75 avec une remise ligne de 489,15 affichait 84,60 au lieu de 573,75 dans le modal alors que le PDF était correct).
+- `ubl-template.xsl` : nouveau slot `TAG_CUSTOMER_SIRET` (BT-46) à côté du SIREN acheteur existant.
 
 ---
 
