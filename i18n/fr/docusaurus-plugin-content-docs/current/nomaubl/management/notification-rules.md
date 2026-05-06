@@ -172,8 +172,8 @@ La page se compose d'une **liste de règles** à gauche et d'un **éditeur de r�
 
 | Action | Effet |
 |---|---|
-| **Add** | Ouvre une modale demandant un nom et une description. Crée une règle dans un état désactivé tant qu'elle est vide — pas de déclencheur, canaux par défaut sur `portal`, type de destinataire par défaut sur `user`. |
-| **Copy** | Duplique la règle sélectionnée sous un nouveau nom. Voie commode pour dériver une variante B2C d'une règle B2B, ou une règle par région à partir d'une règle générique. |
+| **Add** | Ouvre une modale demandant un nom et une description. Crée une nouvelle règle vide — aucun déclencheur, canaux préréglés sur `portal`, type de destinataire préréglé sur `user`. |
+| **Copy** | Duplique la règle sélectionnée sous un nouveau nom. Méthode pratique pour dériver une variante B2C d'une règle B2B, ou une règle par région à partir d'une règle générique. |
 | **Remove** | Supprime la règle sélectionnée après confirmation. |
 | **Save** | Réécrit l'état de l'éditeur dans `config-notifications.json` et signale au dispatcher de recharger. Le prochain changement de statut prend en compte la nouvelle règle. |
 
@@ -184,7 +184,7 @@ La page se compose d'une **liste de règles** à gauche et d'un **éditeur de r�
 Chaque règle du catalogue présente deux indices visuels :
 
 - **Description** en italique sous le nom de la règle — même champ que celui demandé par la modale *Add*, texte libre.
-- **Pastille `on` / `off`** à droite de chaque ligne — liée à la propriété `enabled`. Une règle marquée `off` reste dans le catalogue mais n'est pas évaluée à l'envoi. Pratique pour itérer sur une règle sans la perdre.
+- **Pastille `on` / `off`** à droite de chaque ligne — liée à la propriété `enabled`. Une règle marquée `off` reste dans le catalogue mais n'est pas prise en compte par le dispatcher. Pratique pour itérer sur une règle sans la perdre.
 
 Une zone de recherche en haut de la barre latérale filtre la liste par sous-chaîne sur le nom de règle.
 
@@ -203,13 +203,13 @@ Le déclencheur définit **quand** la règle se déclenche. Deux champs se combi
 | **Statut** | Catalogue *statuses* | Liste de codes statut séparés par virgule (par ex. `9904,9907`). La règle se déclenche lorsque le code statut de la nouvelle transition figure dans la liste. Vide = correspondance sur tout statut. |
 | **Motif** | Catalogue *rejection-reason-codes* | Liste de codes motif de rejet séparés par virgule (par ex. `REJ_ADR,REJ_FMT`). La règle se déclenche uniquement lorsque le code motif de la nouvelle transition figure dans la liste. Vide = correspondance sur tout motif. |
 
-Les deux champs sont présentés sous forme de **multi-sélections à puces** — la sélection dans la liste déroulante ajoute une puce ; le × d'une puce la retire. La liste déroulante est alimentée par les ressources `statuses` et `rejection-reason-codes` qui alimentent aussi la modale *Set Status* et l'onglet *History* de la facture. Une règle ne peut donc référencer un code que l'application ne reconnaît pas.
+Les deux champs sont présentés sous forme de **multi-sélections à puces** — choisir une entrée dans la liste déroulante ajoute une puce ; le × d'une puce la retire. La liste déroulante puise dans les ressources `statuses` et `rejection-reason-codes`, exactement les mêmes que celles utilisées par la modale *Set Status* et l'onglet *History* de la facture. Une règle ne peut donc référencer que des codes effectivement reconnus par l'application.
 
 Lorsque les deux champs sont renseignés, les deux conditions doivent correspondre (ET logique) pour que la règle se déclenche.
 
 ### Canaux
 
-Trois cases, dans toute combinaison :
+Trois cases à cocher, combinables librement :
 
 - **`portal`** — écrit une ligne dans `F564253` pour le destinataire. L'utilisateur la voit dans la boîte [Notifications](./notifications.md) et dans la cloche.
 - **`email`** — envoie un message SMTP via le compte mail configuré sur le template `e-invoicing`.
@@ -227,7 +227,7 @@ Le modèle de destinataire comporte deux moitiés indépendantes : une **cible p
 | **Valeur** | Nom d'utilisateur ou nom de rôle sélectionné par *Type*. Texte libre — l'auto-complétion vient de la base connectée lorsqu'elle est disponible. |
 | **CC** | Liste indépendante d'adresses e-mail, séparées par `,` ou `;`. Chaque adresse alimente l'en-tête `To:` de l'e-mail émis. L'`USEMAIL` éventuel de la cible portail (présent sur sa ligne `F564250`) est ajouté automatiquement. |
 
-Lorsque la cible portail porte un `USEMAIL`, le canal *email* envoie à cette adresse et à chaque entrée de **CC** dans une **transaction SMTP unique**. Lorsque la lecture F564250 échoue, le canal portail est tout de même émis (la ligne est clé sur le nom d'utilisateur littéral) — la boîte de réception reste alimentée même pendant un incident transitoire de base.
+Lorsque la cible portail porte un `USEMAIL`, le canal *email* envoie à cette adresse ainsi qu'à chaque entrée de **CC**, dans une **transaction SMTP unique**. Si la lecture de F564250 échoue, le canal portail est néanmoins émis — la ligne est alors stockée avec le nom d'utilisateur littéral comme clé, et la boîte de réception reste alimentée même pendant un incident transitoire de la base.
 
 ### Contenu e-mail
 
@@ -249,15 +249,15 @@ Lorsque le canal **`action`** est activé, trois lignes supplémentaires apparai
 |---|---|
 | **Connecteur** | Liste déroulante des templates de type `api-connector`. Même jeu que sur [Process API](../processing/process-api.md). |
 | **Endpoint** | Liste déroulante alimentée par `api.connectors.listEndpoints(connecteur)` une fois un connecteur choisi. |
-| **Paramètres** | Pré-remplis depuis la liste de paramètres définie sur l'endpoint. Chaque ligne porte une clé (verrouillée) et une valeur (éditable). Les valeurs peuvent contenir les mêmes `{placeholders}` que le sujet et le corps de l'e-mail. |
+| **Paramètres** | Pré-remplis à partir de la liste de paramètres définie sur l'endpoint. Chaque ligne porte une clé (verrouillée) et une valeur (éditable). Les valeurs acceptent les mêmes `{placeholders}` que le sujet et le corps de l'e-mail. |
 
 L'appel d'action est émis dans la même transaction que l'écriture portail et l'envoi e-mail. Ses échecs sont tracés et n'annulent ni la mise à jour de statut sous-jacente ni les autres canaux.
 
 ### Panneau de test
 
-Un déclencheur *Test* synchrone figure au pied du formulaire. Il accepte un triplet `(doc, dct, kco)`, optionnellement un code statut et un message personnalisé, puis **exécute réellement la règle** sur tous les canaux activés — l'écriture portail atterrit dans la boîte, l'e-mail part par SMTP, l'appel d'action est émis. La bannière de résultat indique les compteurs d'envoi (`✓ Émis · 1 portail · 2 e-mails`) ou la première erreur.
+Un panneau *Test* synchrone se trouve au pied du formulaire. Il accepte un triplet `(doc, dct, kco)`, optionnellement un code statut et un message personnalisé, puis **exécute réellement la règle** sur tous les canaux activés — l'écriture portail atterrit dans la boîte, l'e-mail part par SMTP, l'appel d'action est émis. La bannière de résultat indique les compteurs d'envoi (`✓ Émis · 1 portail · 2 e-mails`) ou la première erreur rencontrée.
 
-Le panneau de test n'enregistre pas la règle — il n'envoie que ce qui figure actuellement dans le formulaire. Outil de validation des modifications avant un clic sur *Save*.
+Le panneau de test n'enregistre pas la règle — il déclenche uniquement ce qui figure actuellement dans le formulaire. Outil de validation des modifications avant un clic sur *Save*.
 
 ---
 
@@ -303,10 +303,10 @@ La page lit et écrit via les endpoints de templates standards ; le dispatcher e
 
 ## Conseils & bonnes pratiques
 
-- **Démarrer étroit, élargir ensuite.** Un déclencheur `9904 + REJ_ADR` est plus simple à valider qu'un fourre-tout `''`, et le bruit reste bas pendant que la liste des destinataires et le corps sont en cours de calage.
-- **Utiliser le panneau Test avant l'enregistrement.** Tout particulièrement pour le canal *action* — le dispatcher absorbe les échecs ; un connecteur mal configuré reste donc silencieux en production. L'exécution de test fait remonter la même erreur en ligne.
-- **Une règle par *finalité*, pas par code statut.** Regrouper plusieurs codes statut derrière une seule règle quand le corps est identique (`9904, 9907 → Rejet`) ; scinder en règles distinctes uniquement quand la liste des destinataires ou le corps diffèrent.
-- **Les PDF sont coûteux.** `attachPdf` rend le PDF de la facture à chaque envoi — viable pour des règles à faible volume, onéreux pour des alertes sur l'ensemble du parc. Désactiver ce drapeau sur les règles déclenchées en `9900` (créée) ou `9901` (validée), où le PDF apporte rarement de la valeur.
+- **Démarrer étroit, élargir ensuite.** Un déclencheur `9904 + REJ_ADR` est plus simple à valider qu'un déclencheur fourre-tout, et le bruit reste limité tant que la liste des destinataires et le corps du message ne sont pas finalisés.
+- **Utiliser le panneau Test avant l'enregistrement.** Tout particulièrement pour le canal *action* — le dispatcher capture les échecs ; un connecteur mal configuré reste donc silencieux en production. Le test, lui, fait apparaître l'erreur directement dans la bannière de résultat.
+- **Une règle par *finalité*, pas par code statut.** Regrouper plusieurs codes statut derrière une seule règle lorsque le corps est identique (`9904, 9907 → Rejet`) ; scinder en règles distinctes uniquement lorsque la liste des destinataires ou le corps du message diffèrent.
+- **Les PDF sont coûteux.** `attachPdf` rend le PDF de la facture à chaque envoi — acceptable pour des règles à faible volume, onéreux pour des alertes sur l'ensemble du parc. Désactiver le drapeau sur les règles déclenchées en `9900` (créée) ou `9901` (validée), où le PDF apporte rarement de la valeur.
 - **Privilégier `role` à `user`.** Un destinataire fondé sur un rôle survit aux changements d'effectif ; un destinataire `user` impose une édition à chaque départ. La liste des rôles dans `F564251` est la source de vérité.
-- **Désactiver plutôt que supprimer.** Lors d'itérations, basculer la règle sur `off` au lieu de la retirer — le catalogue conserve l'historique, le dispatcher l'ignore et l'exécution de test reste disponible.
-- **Relire la boîte de réception après une livraison.** Les règles peuvent dériver des codes qu'elles référencent (un statut renommé dans le catalogue, un motif retiré) — la page [Notifications](./notifications.md) constitue le contrôle croisé le plus rapide pour vérifier la cohérence du catalogue de production avec les règles de cette page.
+- **Désactiver plutôt que supprimer.** En cours d'itération, basculer la règle sur `off` au lieu de la retirer — le catalogue conserve l'historique, le dispatcher ignore la règle, et le panneau de test reste disponible.
+- **Vérifier la boîte de réception après une livraison.** Les règles peuvent finir par référencer des codes obsolètes (un statut renommé dans le catalogue, un motif retiré) — la page [Notifications](./notifications.md) constitue le contrôle croisé le plus rapide pour vérifier la cohérence entre le catalogue de production et les règles définies ici.
