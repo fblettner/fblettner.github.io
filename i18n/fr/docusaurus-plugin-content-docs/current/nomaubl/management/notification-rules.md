@@ -15,7 +15,7 @@ L'écran **Règles de notification** est le côté **écriture** du système de 
 
 Les règles sont évaluées par `InvoiceStatusCatalog.StatusTransition.apply()` après l'écriture en base de chaque changement de statut, par le `SetStatusModal` manuel, et par les flux CLI (`-process`, `-fetch-import`, `-fetch-status`, `-fetch-single`, `-fetch-all`). Un échec d'envoi n'annule jamais la mise à jour de statut sous-jacente.
 
-Le côté **lecture** du système — la boîte de réception où les utilisateurs acquittent les notifications et la cloche dans la barre d'utilitaires — est documenté sur la page [Notifications](./notifications.md).
+Le côté **lecture** du système — la boîte de réception où les utilisateurs acquittent les notifications et la cloche dans la barre d'utilitaires — est documenté sur la page [Notifications](../application/notifications.md).
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les déclencheurs référencent les catalogues standards *statuses* et *rejection-reason-codes*, et non des codes propres au système source.
 
@@ -211,7 +211,7 @@ Lorsque les deux champs sont renseignés, les deux conditions doivent correspond
 
 Trois cases à cocher, combinables librement :
 
-- **`portal`** — écrit une ligne dans `F564253` pour le destinataire. L'utilisateur la voit dans la boîte [Notifications](./notifications.md) et dans la cloche.
+- **`portal`** — écrit une ligne dans `F564253` pour le destinataire. L'utilisateur la voit dans la boîte [Notifications](../application/notifications.md) et dans la cloche.
 - **`email`** — envoie un message SMTP via le compte mail configuré sur le template `e-invoicing`.
 - **`action`** — déclenche un appel HTTP sortant vers un endpoint d'*API Connector*.
 
@@ -309,4 +309,4 @@ La page lit et écrit via les endpoints de templates standards ; le dispatcher e
 - **Les PDF sont coûteux.** `attachPdf` rend le PDF de la facture à chaque envoi — acceptable pour des règles à faible volume, onéreux pour des alertes sur l'ensemble du parc. Désactiver le drapeau sur les règles déclenchées en `9900` (créée) ou `9901` (validée), où le PDF apporte rarement de la valeur.
 - **Privilégier `role` à `user`.** Un destinataire fondé sur un rôle survit aux changements d'effectif ; un destinataire `user` impose une édition à chaque départ. La liste des rôles dans `F564251` est la source de vérité.
 - **Désactiver plutôt que supprimer.** En cours d'itération, basculer la règle sur `off` au lieu de la retirer — le catalogue conserve l'historique, le dispatcher ignore la règle, et le panneau de test reste disponible.
-- **Vérifier la boîte de réception après une livraison.** Les règles peuvent finir par référencer des codes obsolètes (un statut renommé dans le catalogue, un motif retiré) — la page [Notifications](./notifications.md) constitue le contrôle croisé le plus rapide pour vérifier la cohérence entre le catalogue de production et les règles définies ici.
+- **Vérifier la boîte de réception après une livraison.** Les règles peuvent finir par référencer des codes obsolètes (un statut renommé dans le catalogue, un motif retiré) — la page [Notifications](../application/notifications.md) constitue le contrôle croisé le plus rapide pour vérifier la cohérence entre le catalogue de production et les règles définies ici.

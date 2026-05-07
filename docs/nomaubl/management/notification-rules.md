@@ -15,7 +15,7 @@ The **Notification Rules** screen is the **write** side of the notification syst
 
 Rules are matched by `InvoiceStatusCatalog.StatusTransition.apply()` after the database write of every status change, by the manual `SetStatusModal`, and by the CLI flows (`-process`, `-fetch-import`, `-fetch-status`, `-fetch-single`, `-fetch-all`). A failure in dispatch never aborts the underlying status update.
 
-The **read** side of the system — the inbox where users acknowledge notifications and the navbar bell — is documented on the [Notifications](./notifications.md) page.
+The **read** side of the system — the inbox where users acknowledge notifications and the navbar bell — is documented on the [Notifications](../application/notifications.md) page.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. Triggers reference the standard *statuses* and *rejection-reason-codes* catalogues, not source-system-specific codes.
 
@@ -211,7 +211,7 @@ When both fields are filled, both must match (logical AND) for the rule to fire.
 
 Three boxes, any combination:
 
-- **`portal`** — writes a row in `F564253` for the recipient. The user sees it in the [Notifications](./notifications.md) inbox and the bell.
+- **`portal`** — writes a row in `F564253` for the recipient. The user sees it in the [Notifications](../application/notifications.md) inbox and the bell.
 - **`email`** — sends an SMTP message via the configured `e-invoicing` mail account.
 - **`action`** — fires an outbound HTTP call against an *API Connector* endpoint.
 
@@ -309,4 +309,4 @@ The page reads and writes via the standard template endpoints; the dispatcher ex
 - **PDFs are heavy.** `attachPdf` renders the invoice once per dispatch — fine for low-volume rules, expensive for fleet-wide alerts. Disable it on rules that fire on `9900` (just-created) or `9901` (validated), where the PDF rarely adds value.
 - **Use `role` over `user` whenever possible.** A role-based recipient survives staff changes; a `user`-based one needs an edit each time the assignee leaves. The role list on `F564251` is the source of truth.
 - **Disable, don't delete.** While iterating, flip the rule `off` instead of removing it — the catalogue keeps the history, the dispatcher skips it, and the test runner remains available.
-- **Read the inbox after a release.** Rules sometimes drift from the codes they reference (a status renamed in the catalogue, a reason retired) — the [Notifications](./notifications.md) page is the fastest cross-check that the production catalogue is still consistent with the rules in this page.
+- **Read the inbox after a release.** Rules sometimes drift from the codes they reference (a status renamed in the catalogue, a reason retired) — the [Notifications](../application/notifications.md) page is the fastest cross-check that the production catalogue is still consistent with the rules in this page.

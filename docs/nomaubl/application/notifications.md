@@ -6,9 +6,9 @@ keywords: [NomaUBL, notifications, inbox, bell, NotificationBell, F564253, NTUKI
 
 # Notifications
 
-The **Notifications** screen is the **portal inbox** that surfaces every notification routed to the current user. Each row is a single delivery — one invoice status change matched by a [Notification Rule](./notification-rules.md), wrapped with the right subject, message and metadata, and persisted in the `F564253` table.
+The **Notifications** screen is the **portal inbox** that surfaces every notification routed to the current user. Each row is a single delivery — one invoice status change matched by a [Notification Rule](../management/notification-rules.md), wrapped with the right subject, message and metadata, and persisted in the `F564253` table.
 
-The page is the *read* side of the notification system. The *write* side — which event triggers what notification, sent to whom, on which channels — lives in the [Notification Rules](./notification-rules.md) editor.
+The page is the *read* side of the notification system. The *write* side — which event triggers what notification, sent to whom, on which channels — lives in the [Notification Rules](../management/notification-rules.md) editor.
 
 A complementary **bell** in the top utility bar polls the unread count every 30 s and previews the last six entries without leaving the current page; clicking a preview opens the linked invoice modal directly.
 
@@ -148,7 +148,7 @@ A notification row carries five visual cues: the **status badge** at the left (c
 | **Relative time** | `NTUPMJ` + `NTTDAY` | *just now*, *2 min ago*, *14:32* (today), *Yesterday*, then the absolute `dd/mm/yyyy hh:mm` for older entries. |
 | **Dismiss button** | per-row | Removes the row from the inbox without marking the rest as read. |
 
-Clicking anywhere in the row body opens the **invoice detail modal** for the linked `(doc, dct, kco)` triplet — same seven tabs as the [E-Invoicing](../application/invoices.md) page (Summary, Parties, Lines, VAT, Notes, History, PDF). The row is marked read on the way through.
+Clicking anywhere in the row body opens the **invoice detail modal** for the linked `(doc, dct, kco)` triplet — same seven tabs as the [E-Invoicing](./invoices.md) page (Summary, Parties, Lines, VAT, Notes, History, PDF). The row is marked read on the way through.
 
 ---
 

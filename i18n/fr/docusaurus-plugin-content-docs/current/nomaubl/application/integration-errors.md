@@ -220,7 +220,7 @@ Tableau plat, une ligne par événement de validation. Le tri par défaut est la
 | **Facture maintenant** | jointure `F564231` | Statut *courant* de la facture, joint à chaud pour vérifier si l'échec a déjà été retraité. Vide en l'absence d'en-tête (erreur orpheline). |
 | **Client** | `F564231.UHALPH` | Nom du client lorsque la facture existe. Utile pour trier par contrepartie. |
 
-Un clic sur une ligne ouvre la **modale de détail** de la page [E-Invoicing](./invoices.md) sur l'onglet *Historique* — la même modale que celle ouverte par un clic sur la ligne d'inbox dans [Notifications](../management/notifications.md), de sorte que le cycle de vie, les erreurs de validation et la charge utile PA restent à un onglet de distance.
+Un clic sur une ligne ouvre la **modale de détail** de la page [E-Invoicing](./invoices.md) sur l'onglet *Historique* — la même modale que celle ouverte par un clic sur la ligne d'inbox dans [Notifications](./notifications.md), de sorte que le cycle de vie, les erreurs de validation et la charge utile PA restent à un onglet de distance.
 
 ### `Sans rattachement uniquement`
 

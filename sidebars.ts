@@ -196,13 +196,14 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Application',
-      link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: dashboard, invoices, e-reporting, e-directory, integration errors and AI capabilities.'},
+      link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: dashboard, invoices, e-reporting, e-directory, integration errors, notifications and AI capabilities.'},
       items: [
         'nomaubl/application/dashboard',
         'nomaubl/application/invoices',
         'nomaubl/application/ereporting',
         'nomaubl/application/edirectory',
         'nomaubl/application/integration-errors',
+        'nomaubl/application/notifications',
         'nomaubl/application/ai-capabilities',
       ],
     },
@@ -268,11 +269,10 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Management',
-      link: {type: 'generated-index', slug: '/nomaubl/management', description: 'Operational management: document templates, PDF templates, notifications and notification rules, file versions, processing log and the command-line interface.'},
+      link: {type: 'generated-index', slug: '/nomaubl/management', description: 'Operational management: document templates, PDF templates, notification rules, file versions, processing log and the command-line interface.'},
       items: [
         'nomaubl/management/documents',
         'nomaubl/management/pdf-templates',
-        'nomaubl/management/notifications',
         'nomaubl/management/notification-rules',
         'nomaubl/management/file-versions',
         'nomaubl/management/processing-log',

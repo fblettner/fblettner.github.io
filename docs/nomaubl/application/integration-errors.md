@@ -220,7 +220,7 @@ A flat table, one row per validation event. The default sort is by document key 
 | **Invoice now** | `F564231` lookup | The invoice's *current* status, joined live so you see whether the failure has been re-processed. Empty when no invoice header exists (orphan error). |
 | **Customer** | `F564231.UHALPH` | Customer name when the invoice exists. Helpful when triaging by counterparty. |
 
-Clicking a row opens the [E-Invoicing](./invoices.md) **detail modal** on the *History* tab — same modal the inbox-row click on [Notifications](../management/notifications.md) uses, so the lifecycle, the validation errors and the PA payload sit one tab away.
+Clicking a row opens the [E-Invoicing](./invoices.md) **detail modal** on the *History* tab — same modal the inbox-row click on [Notifications](./notifications.md) uses, so the lifecycle, the validation errors and the PA payload sit one tab away.
 
 ### `Unmatched only`
 

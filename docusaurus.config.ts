@@ -149,6 +149,8 @@ const config: Config = {
           {from: '/nomaubl/processing/ubl', to: '/nomaubl/processing/document'},
           // 2026.05.0 — Documents editor moved from Configuration to Management.
           {from: '/nomaubl/configuration/documents', to: '/nomaubl/management/documents'},
+          // 2026.05.4 — Notifications inbox promoted from Management to Application (primary nav).
+          {from: '/nomaubl/management/notifications', to: '/nomaubl/application/notifications'},
         ],
       },
     ],

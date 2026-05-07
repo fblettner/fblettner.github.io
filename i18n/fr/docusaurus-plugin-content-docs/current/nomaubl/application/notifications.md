@@ -6,9 +6,9 @@ keywords: [NomaUBL, notifications, boîte de réception, cloche, NotificationBel
 
 # Notifications
 
-L'écran **Notifications** est la **boîte de réception du portail** qui présente toute notification adressée à l'utilisateur courant. Chaque ligne correspond à une livraison — un changement de statut sur une facture, retenu par une [Règle de notification](./notification-rules.md), enrichi du sujet, du message et des métadonnées appropriés, puis persisté dans la table `F564253`.
+L'écran **Notifications** est la **boîte de réception du portail** qui présente toute notification adressée à l'utilisateur courant. Chaque ligne correspond à une livraison — un changement de statut sur une facture, retenu par une [Règle de notification](../management/notification-rules.md), enrichi du sujet, du message et des métadonnées appropriés, puis persisté dans la table `F564253`.
 
-La page constitue le côté **lecture** du système de notifications. Le côté **écriture** — quel événement déclenche quelle notification, à destination de qui, sur quels canaux — relève de l'éditeur des [Règles de notification](./notification-rules.md).
+La page constitue le côté **lecture** du système de notifications. Le côté **écriture** — quel événement déclenche quelle notification, à destination de qui, sur quels canaux — relève de l'éditeur des [Règles de notification](../management/notification-rules.md).
 
 Une **cloche** complémentaire dans la barre d'utilitaires interroge le compteur de non-lues toutes les 30 s et présente les six dernières entrées sans quitter la page courante ; cliquer sur une entrée ouvre directement la modale de la facture liée.
 
@@ -146,7 +146,7 @@ Une ligne de notification porte cinq indices visuels : le **badge de statut** à
 | **Horodatage relatif** | `NTUPMJ` + `NTTDAY` | *à l'instant*, *il y a 2 min*, *14:32* (aujourd'hui), *Hier*, puis l'horodatage absolu `dd/mm/yyyy hh:mm` pour les entrées plus anciennes. |
 | **Bouton de suppression** | par ligne | Retire la ligne de la boîte de réception sans marquer les autres lues. |
 
-Cliquer sur le corps de la ligne ouvre la **modale de détail de facture** pour le triplet `(doc, dct, kco)` lié — mêmes sept onglets que la page [E-Invoicing](../application/invoices.md) (Summary, Parties, Lines, VAT, Notes, History, PDF). La ligne est marquée lue au passage.
+Cliquer sur le corps de la ligne ouvre la **modale de détail de facture** pour le triplet `(doc, dct, kco)` lié — mêmes sept onglets que la page [E-Invoicing](./invoices.md) (Summary, Parties, Lines, VAT, Notes, History, PDF). La ligne est marquée lue au passage.
 
 ---
 
