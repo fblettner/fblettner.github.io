@@ -11,7 +11,7 @@ L'écran **Extraction d'archive** lit une facture archivée depuis la base NomaU
 - **XML source** — le XML reçu lors de l'ingestion de la facture, stocké dans la table `F564230`.
 - **UBL 2.1 généré** — le document UBL EN 16931 produit par NomaUBL à partir du XML source, stocké dans la table `F564231`.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé — car l'archive est interne à NomaUBL. Les clés (`FEDOC` / `FEDCT` / `FEKCO`) reprennent la nomenclature JDE par convention historique ; ce sont fonctionnellement des identifiants applicables à tout document archivé.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — car l'archive est interne à NomaUBL. Les clés (`FEDOC` / `FEDCT` / `FEKCO`) reprennent la nomenclature JDE par convention historique ; ce sont des identifiants utilisables pour tout document archivé.
 
 ---
 
@@ -42,7 +42,7 @@ Le nom du fichier dérive directement des clés et de la source choisie :
 | `XML` (source) | `<FEDOC>_<FEDCT>_<FEKCO>.xml` |
 | `UBL` (généré) | `<FEDOC>_<FEDCT>_<FEKCO>_ubl.xml` |
 
-Le suffixe `_ubl` distingue les deux variantes et permet leur cohabitation dans un même répertoire.
+Le suffixe `_ubl` distingue les deux variantes et permet leur coexistence dans un même répertoire.
 
 ---
 
@@ -59,6 +59,6 @@ Après l'extraction, la section **Extraction Result** affiche :
 
 - **Utiliser Source = UBL pour récupérer le document émis par NomaUBL** — utile pour une comparaison directe avec la réponse de la PA, ou pour revalider un UBL déjà archivé sans le régénérer.
 - **Utiliser Source = XML pour inspecter le XML d'origine reçu à l'ingestion** sans solliciter le système amont.
-- **Le Template ne sert qu'au calcul du chemin de sortie par défaut.** Lorsque le chemin manuel désigne déjà le bon répertoire, le Template peut rester vide.
+- **Le Template ne sert qu'au calcul du chemin de sortie par défaut.** Quand le chemin manuel désigne déjà le bon répertoire, le Template peut rester vide.
 - **Un fichier existant à la même destination est écrasé sans avertissement.** En cas d'extraction en lot via l'API, prévoir un répertoire de sortie dédié.
 - **Le sélecteur de répertoire reconnaît les placeholders `%APP_HOME%` et `%PROCESS_HOME%`.** Un chemin contenant l'un de ces placeholders peut être saisi directement dans le champ ; l'API les résout côté serveur avant écriture.

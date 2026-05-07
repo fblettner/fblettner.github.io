@@ -1,26 +1,26 @@
 ---
 title: Notifications
-description: "Boîte de réception du portail pour les alertes de changement de statut émises par NomaUBL — onglets Toutes / Non lues, action « tout marquer comme lu », suppression par ligne, accès direct à la facture liée. Combinée à la cloche de la barre supérieure, qui interroge le compteur toutes les 30 s et présente les six dernières entrées, la page constitue le côté lecture du système de notifications livré en 2026.05.3."
+description: "Boîte de réception du portail pour les alertes de changement de statut émises par NomaUBL — onglets Toutes / Non lues, action « tout marquer comme lu », suppression par ligne, accès direct à la facture liée. Avec la cloche de la barre supérieure (qui interroge le compteur toutes les 30 s et affiche les six dernières entrées), la page forme le côté lecture du système de notifications introduit en 2026.05.3."
 keywords: [NomaUBL, notifications, boîte de réception, cloche, NotificationBell, F564253, NTUKID, NTUSER, NTEV01, changements de statut, marquer lu, supprimer, facture, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Notifications
 
-L'écran **Notifications** est la **boîte de réception du portail** qui présente toute notification adressée à l'utilisateur courant. Chaque ligne correspond à une livraison — un changement de statut sur une facture, retenu par une [Règle de notification](../management/notification-rules.md), enrichi du sujet, du message et des métadonnées appropriés, puis persisté dans la table `F564253`.
+L'écran **Notifications** est la **boîte de réception du portail**. Il affiche toutes les notifications adressées à l'utilisateur courant. Chaque ligne représente un changement de statut sur une facture, retenu par une [Règle de notification](../management/notification-rules.md), enrichi du sujet, du message et des métadonnées correspondants, puis enregistré dans la table `F564253`.
 
-La page constitue le côté **lecture** du système de notifications. Le côté **écriture** — quel événement déclenche quelle notification, à destination de qui, sur quels canaux — relève de l'éditeur des [Règles de notification](../management/notification-rules.md).
+La page est le côté **lecture** du système de notifications. Le côté **écriture** — quel événement déclenche quelle notification, pour qui, sur quels canaux — se configure dans l'éditeur des [Règles de notification](../management/notification-rules.md).
 
-Une **cloche** complémentaire dans la barre d'utilitaires interroge le compteur de non-lues toutes les 30 s et présente les six dernières entrées sans quitter la page courante ; cliquer sur une entrée ouvre directement la modale de la facture liée.
+Une **cloche** dans la barre d'utilitaires interroge le compteur des non-lues toutes les 30 s et affiche les six dernières entrées sans quitter la page courante. Cliquer sur une entrée ouvre directement la modale de la facture liée.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — la charge utile de la notification étant construite à partir de la facture UBL persistée et non du XML source brut.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. La charge utile de la notification est construite à partir de la facture UBL enregistrée, et non du XML source brut.
 
 ---
 
 ## Accès à la boîte de réception
 
-- Sidebar → **Gestion → Notifications**.
-- Ou clic sur la **🔔 cloche** dans la barre d'utilitaires, puis **Voir toutes** au pied du menu déroulant.
-- La boîte s'ouvre toujours sur l'onglet **Toutes** ; l'onglet **Non lues** filtre sur ce qui n'a pas encore été acquitté.
+- Barre latérale → **Application → Notifications**.
+- Ou cliquer sur la **🔔 cloche** dans la barre d'utilitaires, puis **Voir toutes** en bas du menu déroulant.
+- La boîte s'ouvre toujours sur l'onglet **Toutes**. L'onglet **Non lues** filtre sur les notifications pas encore lues.
 
 ---
 
@@ -120,7 +120,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   <line x1="800" y1="410" x2="760" y2="382" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#notif-arrow)"/>
 </svg>
 
-Une ligne de notification porte cinq indices visuels : le **badge de statut** à gauche (couleur tirée du catalogue *statuses*), le **sujet** (par défaut `Invoice {doc} {dct} {kco} — {statusLabel}`), le **message** (corps de la règle ou défaut du dispatcher), la **ligne méta** avec les identifiants canoniques, et une **colonne de droite** avec l'horodatage relatif et le bouton de suppression.
+Une ligne de notification comporte cinq éléments : le **badge de statut** à gauche (couleur du catalogue *statuses*), le **sujet** (par défaut `Invoice {doc} {dct} {kco} — {statusLabel}`), le **message** (corps de la règle ou message par défaut), la **ligne méta** avec les identifiants canoniques, et une **colonne de droite** avec l'horodatage relatif et le bouton de suppression.
 
 ---
 
@@ -129,8 +129,8 @@ Une ligne de notification porte cinq indices visuels : le **badge de statut** à
 | Action | Effet |
 |---|---|
 | **Actualiser** | Recharge la boîte de réception depuis `/api/notifications`, en respectant l'onglet actif (*Toutes* ou *Non lues*). |
-| **Tout marquer comme lu** | Émet un `POST` sur `/api/notifications/mark-all-read`. Toute ligne non lue est marquée lue ; la pastille de la cloche s'éteint au prochain sondage à 30 s, ou dès la prochaine prise de focus. Bouton désactivé en l'absence de lignes non lues. |
-| **Onglets de filtre** | *Toutes* affiche l'intégralité des lignes non supprimées ; *Non lues* ne conserve que les lignes où `read = false`. L'onglet *Non lues* porte le compteur `( N )` à côté de son libellé. |
+| **Tout marquer comme lu** | Envoie un `POST` sur `/api/notifications/mark-all-read`. Toutes les lignes non lues sont marquées lues. La pastille de la cloche s'éteint au prochain sondage (30 s) ou dès le retour du focus sur la fenêtre. Le bouton est désactivé s'il n'y a pas de ligne non lue. |
+| **Onglets de filtre** | *Toutes* affiche toutes les lignes non supprimées. *Non lues* ne garde que les lignes où `read = false`. L'onglet *Non lues* affiche le compteur `( N )` à côté de son libellé. |
 
 ---
 
@@ -140,52 +140,52 @@ Une ligne de notification porte cinq indices visuels : le **badge de statut** à
 |---|---|---|
 | **Bande d'accent à gauche + fond teinté** | `read = false` | Lignes non lues. La bande disparaît dès que la ligne est marquée lue. |
 | **Badge de statut** | `NTEV01` joint au catalogue *statuses* | Statut qui a déclenché la notification. Le fond, la couleur du texte et la bordure du badge proviennent du catalogue : `9904 / Rejet PA` est rouge, `10 / Déposée` est verte, `9906 / Attente PA` est orange, etc. |
-| **Sujet (ligne du haut)** | `NTSUBJ` (champ `emailSubject` de la règle ou défaut du dispatcher) | Titre court, lisible. La valeur par défaut est `Invoice {doc} {dct} {kco} — {statusLabel}`. |
-| **Message (deuxième ligne)** | `NTMSGE` (champ `emailBody` de la règle ou défaut du dispatcher) | Corps du texte. Tronqué en cas de débordement ; la modale ouverte au clic présente l'historique complet. |
-| **Ligne méta** | `NTDOC · NTDCT · NTKCO · motif · action · règle` | Identifiants canoniques de la facture, plus le motif de rejet PA, l'action attendue et le nom de la règle lorsqu'ils sont présents. Motif et action sont résolus à partir des catalogues *rejection-reason-codes* et *action-codes* — c'est le libellé humain qui s'affiche, et non le code brut. |
+| **Sujet (ligne du haut)** | `NTSUBJ` (champ `emailSubject` de la règle ou message par défaut) | Titre court, lisible. La valeur par défaut est `Invoice {doc} {dct} {kco} — {statusLabel}`. |
+| **Message (deuxième ligne)** | `NTMSGE` (champ `emailBody` de la règle ou message par défaut) | Corps du texte. Tronqué s'il dépasse ; la modale ouverte au clic affiche l'historique complet. |
+| **Ligne méta** | `NTDOC · NTDCT · NTKCO · motif · action · règle` | Identifiants canoniques de la facture, plus le motif de rejet PA, l'action attendue et le nom de la règle s'ils sont présents. Motif et action sont lus dans les catalogues *rejection-reason-codes* et *action-codes* — c'est le libellé lisible qui s'affiche, pas le code brut. |
 | **Horodatage relatif** | `NTUPMJ` + `NTTDAY` | *à l'instant*, *il y a 2 min*, *14:32* (aujourd'hui), *Hier*, puis l'horodatage absolu `dd/mm/yyyy hh:mm` pour les entrées plus anciennes. |
 | **Bouton de suppression** | par ligne | Retire la ligne de la boîte de réception sans marquer les autres lues. |
 
-Cliquer sur le corps de la ligne ouvre la **modale de détail de facture** pour le triplet `(doc, dct, kco)` lié — mêmes sept onglets que la page [E-Invoicing](./invoices.md) (Summary, Parties, Lines, VAT, Notes, History, PDF). La ligne est marquée lue au passage.
+Cliquer sur le corps de la ligne ouvre la **modale de détail de facture** pour le triplet `(doc, dct, kco)` lié — les mêmes sept onglets que sur la page [E-Invoicing](./invoices.md) (Résumé, Parties, Lignes, TVA, Notes, Historique, PDF). La ligne est marquée lue au passage.
 
 ---
 
 ## La 🔔 cloche dans la barre d'utilitaires
 
-Une entrée complémentaire figure dans la barre d'utilitaires de chaque page. Trois rôles :
+Une cloche figure dans la barre d'utilitaires de chaque page. Trois rôles :
 
-1. **Sondage toutes les 30 s** du compteur de non-lues (`GET /api/notifications/unread-count`). Une pastille rouge affiche le compteur dès qu'il est strictement positif.
+1. **Sondage toutes les 30 s** du compteur des non-lues (`GET /api/notifications/unread-count`). Une pastille rouge affiche le compteur dès qu'il est strictement positif.
 2. **Affichage des 6 dernières entrées** au clic — même structure qu'une ligne de la boîte de réception, mais condensée : sujet, message, référence facture, horodatage relatif. Les lignes non lues portent la même pastille bleue que dans la boîte.
-3. **Clic sur une entrée** : la marque comme lue puis ouvre directement la modale de la facture. La cloche traite les deux cas : lorsque l'utilisateur se trouve déjà sur la boîte, elle émet un événement `nomaubl:open-notification` sur `window` pour que la modale s'ouvre sans démontage ; sinon, elle stocke la charge utile dans `sessionStorage` sous la clé `notif-auto-open` puis navigue vers `/notifications`, qui consomme l'entrée au montage à froid.
+3. **Clic sur une entrée** : la marque comme lue puis ouvre directement la modale de la facture. La cloche gère deux cas. Si l'utilisateur est déjà sur la boîte, elle émet un événement `nomaubl:open-notification` sur `window` pour que la modale s'ouvre sans démontage. Sinon, elle stocke la charge utile dans `sessionStorage` sous la clé `notif-auto-open` puis navigue vers `/notifications`, qui traite l'entrée au montage initial.
 
-Un pied de menu *Voir toutes* renvoie vers `/notifications` pour la boîte complète.
+Un lien *Voir toutes* en bas du menu ouvre `/notifications` pour la boîte complète.
 
-La cloche reste visible quel que soit l'état d'authentification : lorsque `global.authEnabled != "Y"`, la boîte présente les notifications de diffusion écrites sous la sentinelle `NTUSER='*'`, et la cloche les compte.
+La cloche reste visible quel que soit l'état d'authentification. Quand `global.authEnabled != "Y"`, la boîte affiche les notifications de diffusion écrites avec la sentinelle `NTUSER='*'`, et la cloche les compte.
 
 ---
 
 ## Stockage et rétention
 
-Toute notification délivrée correspond à une ligne dans **`F564253`** (Oracle + Postgres). Les colonnes que la boîte de réception exploite sont :
+Chaque notification envoyée correspond à une ligne dans **`F564253`** (Oracle + Postgres). Les colonnes utilisées par la boîte de réception sont :
 
 | Colonne | Type | Rôle |
 |---|---|---|
-| `NTUKID` | numérique | Clé primaire. Unique sur l'ensemble de la table — l'adresse de ligne ne porte plus le triplet `(doc, dct, kco)`. |
+| `NTUKID` | numérique | Clé primaire. Unique sur l'ensemble de la table — la clé de ligne n'inclut plus le triplet `(doc, dct, kco)`. |
 | `NTUSER` | chaîne | Nom d'utilisateur résolu, ou `*` lorsque l'authentification est désactivée (diffusion). |
 | `NTEV01` | chaîne | `0` pour non lue, `1` pour lue. La pastille de la cloche compte les lignes où `NTEV01 = 0`. |
 | `NTSUBJ` / `NTMSGE` | chaîne | Sujet et corps. |
 | `NTDOC / NTDCT / NTKCO` | mixte | Triplet de la facture ; nullable pour les alertes système qui ne ciblent pas une facture précise. |
-| `NTUPMJ` / `NTTDAY` | jul / hms | Date et heure d'émission. L'index composite `(NTUSER, NTEV01, NTUPMJ DESC)` garantit la rapidité de la requête de la pastille et du tri de la boîte. |
+| `NTUPMJ` / `NTTDAY` | jul / hms | Date et heure d'émission. L'index composite `(NTUSER, NTEV01, NTUPMJ DESC)` rend rapides la requête de la pastille et le tri de la boîte. |
 
-Une purge quotidienne, exécutée par `BackgroundScheduler`, supprime toute ligne plus ancienne que `global.notificationsRetentionDays` (défaut 90 jours). La valeur `0` désactive la purge — utile pour les installations qui souhaitent conserver les notifications indéfiniment ou qui pilotent leur propre stratégie de rétention.
+Une purge quotidienne exécutée par `BackgroundScheduler` supprime toute ligne plus ancienne que `global.notificationsRetentionDays` (défaut 90 jours). La valeur `0` désactive la purge — utile pour les installations qui veulent garder les notifications indéfiniment ou qui gèrent leur propre stratégie de rétention.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Trier via l'onglet *Non lues*.** Le filtrage par non-lues est plus rapide que le défilement de l'onglet *Toutes* ; *Tout marquer comme lu* nettoie la liste en un clic à la fin du tour de revue.
-- **Lire la ligne méta pour le contexte.** Le fragment `motif · action · règle` indique *pourquoi* la notification a été émise — utile lorsque plusieurs règles couvrent des codes de statut qui se recoupent.
-- **La cloche est un coup d'œil, pas la boîte.** Elle ne présente que les six dernières entrées ; pour le tri exhaustif des lignes non supprimées, ouvrir *Notifications*. Le pied *Voir toutes* du menu déroulant constitue le raccourci à un clic.
-- **Supprimer n'équivaut pas à marquer lu.** *Supprimer* retire la ligne de la boîte de réception ; *Marquer lu* la conserve dans l'onglet *Toutes*, sans la bande d'accent bleue ni le fond teinté qui signalent les non-lues. *Supprimer* convient aux entrées sans valeur d'audit.
-- **Pour un rejet PA, ouvrir la modale.** Une ligne `9904 / Rejet PA` porte le motif dans la ligne méta, mais l'historique de l'onglet *History* de la modale facture porte la charge utile complète et l'action attendue.
-- **Régler la rétention.** Le volume des notifications peut croître rapidement — chaque changement de statut produit une ligne dès qu'une règle correspondante se déclenche. Le défaut de 90 jours convient à la plupart des installations ; relèvement ou abaissement via `global.notificationsRetentionDays`.
+- **Trier via l'onglet *Non lues*.** Filtrer par non lues est plus rapide que dérouler l'onglet *Toutes*. *Tout marquer comme lu* nettoie la liste en un clic à la fin de la revue.
+- **Lire la ligne méta pour le contexte.** Le fragment `motif · action · règle` indique *pourquoi* la notification a été émise — utile quand plusieurs règles couvrent des codes de statut qui se chevauchent.
+- **La cloche est un aperçu rapide, pas la boîte.** Elle n'affiche que les six dernières entrées. Pour parcourir toutes les lignes non supprimées, ouvrir *Notifications*. Le lien *Voir toutes* en bas du menu déroulant est le raccourci à un clic.
+- **Supprimer n'est pas la même chose que marquer lu.** *Supprimer* retire la ligne de la boîte ; *Marquer lu* la garde dans l'onglet *Toutes*, sans la bande bleue ni le fond teinté qui signalent les non-lues. *Supprimer* convient aux entrées sans valeur d'audit.
+- **Pour un rejet PA, ouvrir la modale.** Une ligne `9904 / Rejet PA` donne le motif dans la ligne méta, mais l'onglet *Historique* de la modale facture donne la charge utile complète et l'action attendue.
+- **Régler la rétention.** Le volume des notifications peut grimper rapidement — chaque changement de statut produit une ligne dès qu'une règle correspondante se déclenche. La valeur par défaut (90 jours) convient à la plupart des installations ; à ajuster via `global.notificationsRetentionDays`.

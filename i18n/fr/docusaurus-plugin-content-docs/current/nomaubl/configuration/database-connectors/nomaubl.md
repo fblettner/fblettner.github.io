@@ -8,7 +8,7 @@ keywords: [NomaUBL, base de données, Oracle, PostgreSQL, JDBC, schéma, tables,
 
 Cet écran configure l'accès à la **base de données dans laquelle NomaUBL stocke ses données** : paramètres de connexion JDBC, identifiants, schéma et noms des tables utilisées. **Oracle** et **PostgreSQL** sont supportés.
 
-Les tables stockent les en-têtes de facture, les lignes, le récapitulatif TVA, les événements de cycle de vie, les résultats de validation et les journaux d'exécution. Les noms par défaut suivent la convention JDE (`F564230` et suivants), héritage du déploiement initial aux côtés de JD Edwards, mais restent entièrement configurables — le connecteur fonctionne aussi bien hors contexte JDE.
+Les tables stockent les en-têtes de facture, les lignes, le récapitulatif TVA, les événements de cycle de vie, les résultats de validation et les journaux d'exécution. Les noms par défaut suivent la convention JDE (`F564230` et suivants), hérités du déploiement initial aux côtés de JD Edwards, mais restent entièrement configurables — le connecteur fonctionne aussi bien hors contexte JDE.
 
 L'éditeur comporte **trois onglets** :
 
@@ -46,7 +46,7 @@ L'éditeur comporte **trois onglets** :
 
 ### Table Names
 
-NomaUBL répartit ses données sur sept tables. Les valeurs par défaut suivent la convention JDE `F564xxx`, mais tout autre nom est utilisable dès lors que le compte de base dispose des droits appropriés.
+NomaUBL répartit ses données sur sept tables. Les valeurs par défaut suivent la convention JDE `F564xxx`, mais tout autre nom est utilisable tant que le compte de base dispose des droits appropriés.
 
 | Champ | Défaut | Contenu |
 |---|---|---|
@@ -66,7 +66,7 @@ Contrôle **la persistance des lignes de facture et du récapitulatif TVA**.
 |---|---|---|
 | **Lines & VAT** | `Save to Database` / `Save UBL Only` | `db` = écriture des lignes et de la TVA dans `F564233` / `F564234` (interrogeables en SQL) ; `ubl` = pas d'écriture dans les tables de détail, lignes et TVA extraites à la demande depuis le document UBL stocké. |
 
-`Save to Database` est le choix recommandé lorsque des outils de reporting interrogent directement la base. `Save UBL Only` réduit le volume d'écriture et fait du document UBL la source unique pour les données de niveau ligne.
+`Save to Database` est le choix recommandé quand des outils de reporting interrogent directement la base. `Save UBL Only` réduit le volume d'écriture et fait du document UBL la source unique pour les données de niveau ligne.
 
 ---
 
@@ -79,7 +79,7 @@ Initialisation en un clic d'une base NomaUBL vierge.
 | Bouton **Initialize Database** | Crée toutes les tables NomaUBL absentes et provisionne l'utilisateur admin par défaut ainsi que les rôles. |
 | **Zone de log** | Affiche la sortie de l'exécution (tables créées, utilisateurs provisionnés, erreurs). |
 
-L'opération est **idempotente** : les tables et utilisateurs déjà présents ne sont pas modifiés. Le bouton peut donc être actionné plusieurs fois sans risque — typiquement une fois sur un nouveau déploiement, puis après chaque montée de version NomaUBL introduisant une nouvelle table.
+L'opération peut être lancée plusieurs fois sans risque : les tables et utilisateurs déjà présents ne sont pas modifiés. Typiquement une fois sur un nouveau déploiement, puis après chaque montée de version NomaUBL qui introduit une nouvelle table.
 
 ---
 

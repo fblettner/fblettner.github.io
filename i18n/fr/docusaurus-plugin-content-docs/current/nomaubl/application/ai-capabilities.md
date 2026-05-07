@@ -1,26 +1,26 @@
 ---
 title: Capacités IA
-description: "Assistant IA intégré à NomaUBL — répond aux questions sur le fonctionnement du produit en s'appuyant sur la documentation publique et aux questions sur les données opérationnelles (factures, historique de cycle de vie, erreurs de validation, dépôts e-reporting) via un jeu réduit d'outils en lecture seule. Réponses en flux, appels d'outils visibles, prise en charge du français et de l'anglais."
+description: "Assistant IA intégré à NomaUBL. Répond aux questions sur le fonctionnement du produit (à partir de la documentation publique) et aux questions sur les données opérationnelles : factures, historique de cycle de vie, erreurs de validation, dépôts e-reporting. Quelques outils en lecture seule. Réponses en flux, appels d'outils visibles, FR et EN."
 keywords: [NomaUBL, assistant IA, Claude, agentique, tool use, list_docs_pages, list_invoices, list_ereports, explain_status_code, validation_errors, lifecycle_history, web_fetch, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Capacités IA
 
-L'**assistant IA** est un panneau de discussion intégré à NomaUBL. Deux familles de questions sont prises en charge :
+L'**assistant IA** est un panneau de discussion intégré à NomaUBL. Il répond à deux types de questions :
 
-- *Comment fonctionne le produit ?* — l'assistant consulte la documentation publique sur `docs.nomana-it.fr` et répond avec une synthèse sourcée.
-- *Quel est l'état des données ?* — l'assistant interroge la base NomaUBL en **lecture seule** et restitue les lignes correspondantes : factures, statuts, erreurs de validation, dépôts e-reporting.
+- *Comment fonctionne le produit ?* — l'assistant consulte la documentation publique sur `docs.nomana-it.fr` et renvoie une réponse sourcée.
+- *Quel est l'état des données ?* — l'assistant interroge la base NomaUBL en **lecture seule** et renvoie les lignes correspondantes : factures, statuts, erreurs de validation, dépôts e-reporting.
 
-Les réponses sont diffusées en flux à mesure de leur génération ; chaque appel d'outil apparaît en ligne sous forme de pastille, garantissant la visibilité des actions effectuées. La langue de la réponse suit celle de la question — français ou anglais.
+Les réponses s'affichent en flux pendant la génération. Chaque appel d'outil apparaît sous forme de pastille — toutes les actions sont visibles. La langue de la réponse suit celle de la question (français ou anglais).
 
 ---
 
 ## Ouverture du panneau
 
-- L'entrée **✦ AI Assistant** dans la barre de navigation (en haut à droite, pastille en dégradé violet) ouvre le panneau en tiroir latéral, lequel réduit l'espace de travail.
-- Le sélecteur en haut du panneau permet de choisir un modèle. **Default** convient aux questions courantes ; les modèles plus puissants (Sonnet, Opus) offrent un raisonnement plus long, à un coût API supérieur.
-- Touche **Entrée** pour envoyer, **Maj+Entrée** pour insérer un saut de ligne, **■** pour interrompre une réponse en cours.
-- La fermeture du panneau réinitialise la conversation — l'assistant ne conserve aucun historique entre sessions.
+- L'entrée **✦ Assistant IA** dans la barre de navigation (en haut à droite, pastille en dégradé violet) ouvre un tiroir latéral. L'espace de travail se réduit en conséquence.
+- Le sélecteur en haut du panneau permet de choisir un modèle. **Par défaut** convient aux questions courantes. Les modèles plus puissants (Sonnet, Opus) raisonnent plus longuement, mais coûtent plus cher en API.
+- Touche **Entrée** pour envoyer, **Maj+Entrée** pour insérer un saut de ligne, **■** pour arrêter une réponse en cours.
+- Fermer le panneau réinitialise la conversation. L'assistant ne garde aucun historique entre sessions.
 
 ---
 
@@ -39,9 +39,9 @@ Les réponses sont diffusées en flux à mesure de leur génération ; chaque ap
 
   <line x1="240" y1="68" x2="780" y2="68" stroke="#1f2937" strokeWidth="1"/>
   <text x="262" y="48" fill="#c084fc" fontSize="14" fontWeight="700" fontFamily="system-ui, sans-serif">✦</text>
-  <text x="284" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">AI Assistant</text>
+  <text x="284" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Assistant IA</text>
   <rect x="640" y="32" width="86" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="650" y="47" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Default ▾</text>
+  <text x="650" y="47" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Par défaut ▾</text>
   <rect x="734" y="32" width="28" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="748" y="48" fill="#64748b" fontSize="13" textAnchor="middle" fontFamily="system-ui, sans-serif">×</text>
 
@@ -67,7 +67,7 @@ Les réponses sont diffusées en flux à mesure de leur génération ; chaque ap
   <text x="278" y="332" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">• valider l'ordre face au schéma UBL 2.1</text>
 
   <rect x="262" y="354" width="78" height="20" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="270" y="368" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📋 Copy</text>
+  <text x="270" y="368" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📋 Copier</text>
 
   <rect x="430" y="396" width="76" height="32" rx="9" fill="url(#aichat-g-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
   <text x="468" y="416" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif" textAnchor="middle">oui</text>
@@ -125,22 +125,22 @@ Les réponses sont diffusées en flux à mesure de leur génération ; chaque ap
   <line x1="800" y1="580" x2="750" y2="580" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aichat-arrow)"/>
 </svg>
 
-Chaque action menée par l'assistant pour le compte de l'utilisateur apparaît sous forme de pastille — 🔍 pour une consultation de la base NomaUBL, 📖 pour la demande d'une page de documentation, 📥 pour le résultat reçu en retour — avec les filtres réellement utilisés affichés à côté. Aucune étape n'est cachée.
+Chaque action de l'assistant apparaît sous forme de pastille : 🔍 pour une lecture de la base NomaUBL, 📖 pour une page de documentation demandée, 📥 pour le résultat reçu. Les filtres réellement utilisés sont affichés à côté. Aucune étape n'est cachée.
 
 ---
 
 ## Questions prises en charge
 
-L'assistant est relié à deux sources d'information, toutes deux en lecture seule.
+L'assistant est relié à deux sources d'information, toutes les deux en lecture seule.
 
 ### Sur le produit
 
-Pour répondre à une question de fonctionnement, l'assistant exécute une consultation en deux temps de la documentation publique `docs.nomana-it.fr` :
+Pour répondre à une question sur le produit, l'assistant consulte la documentation publique `docs.nomana-it.fr` en deux étapes :
 
-1. **`list_docs_pages`** — découverte des URL de documentation NomaUBL disponibles via le sitemap du site (rafraîchi toutes les six heures, 200 entrées maximum). La pastille s'affiche sous la forme 🔍 `list_docs_pages · discovering NomaUBL docs URLs`.
-2. **`web_fetch`** — sélection de l'URL la plus pertinente dans la liste obtenue, puis téléchargement de la page. Une pastille 📖 affiche l'URL choisie ; immédiatement après, une pastille 📥 `web_fetch_result · ✓ <url>` confirme la réception (ou 📥 ❌ `<error_code>` en cas d'échec).
+1. **`list_docs_pages`** — récupère les URL de documentation NomaUBL disponibles via le sitemap du site (rafraîchi toutes les six heures, 200 entrées maximum). La pastille s'affiche sous la forme 🔍 `list_docs_pages · discovering NomaUBL docs URLs`.
+2. **`web_fetch`** — choisit l'URL la plus pertinente dans la liste, puis télécharge la page. Une pastille 📖 affiche l'URL choisie. Juste après, une pastille 📥 `web_fetch_result · ✓ <url>` confirme la réception (ou 📥 ❌ `<error_code>` en cas d'échec).
 
-Ce schéma en deux temps maintient l'ancrage du modèle dans la documentation officielle — l'URL effectivement consultée provient toujours du sitemap en vigueur, ce qui empêche la production d'un lien inventé ou obsolète.
+Ce fonctionnement en deux étapes garantit que l'URL consultée provient toujours du sitemap à jour. L'assistant ne peut pas inventer un lien ni en utiliser un périmé.
 
 Cas d'usage :
 
@@ -150,7 +150,7 @@ Cas d'usage :
 
 ### Sur les données
 
-Cinq outils en lecture seule couvrent les questions opérationnelles courantes. L'assistant reçoit également le catalogue de statuts en vigueur (codes facture et e-reporting avec leur tag et libellés FR/EN), ce qui permet la résolution automatique d'expressions comme *« en litige »* ou *« rejected »* vers le bon code, sans approximation.
+Cinq outils en lecture seule couvrent les questions opérationnelles courantes. L'assistant reçoit aussi le catalogue de statuts en vigueur (codes facture et e-reporting, avec tag et libellés FR/EN). Il peut donc traduire automatiquement des expressions comme *« en litige »* ou *« rejected »* vers le bon code, sans approximation.
 
 | Outil | Données retournées | Question typique |
 |---|---|---|
@@ -160,7 +160,7 @@ Cinq outils en lecture seule couvrent les questions opérationnelles courantes. 
 | **`lifecycle_history`** | Toutes les transitions de statut enregistrées dans F564235 pour un triplet `DOC + DCT + KCO` — séquence, code statut, message, date / heure, plus le motif de rejet PA, l'action attendue et la note de statut lorsqu'ils sont présents. | *« Pourquoi la facture 12345/RI/00070 a-t-elle été rejetée par la PA ? »*, *« Afficher l'historique complet de cette facture »* |
 | **`list_ereports`** | Jusqu'à 50 dépôts de F564240 avec filtres : flux (10.1 / 10.3), société, code statut (9950–9957). | *« Les dix derniers dépôts 10.3 pour la société 00070 »*, *« Dépôts e-reporting en attente »* |
 
-Le déclenchement est automatique — aucun appel manuel n'est nécessaire. Une garde de sécurité interrompt la boucle agentique au bout de **5 itérations d'outil par tour**, ce qui prévient toute séquence emballée susceptible d'épuiser le budget API. En cas d'échec d'un outil, l'assistant restitue le nom de l'outil, les paramètres tentés et le code d'erreur retourné, ce qui facilite l'investigation.
+Le déclenchement est automatique : aucun appel manuel à faire. Un garde-fou interrompt l'assistant après **5 appels d'outil par tour**, pour éviter qu'une boucle ne consomme tout le budget API. En cas d'échec d'un outil, l'assistant affiche son nom, les paramètres tentés et le code d'erreur — utile pour le diagnostic.
 
 ---
 
@@ -175,7 +175,7 @@ Les transcriptions ci-dessous proviennent d'une session réelle. Le panneau fonc
 >
 > 🔍 **`validation_errors`** · `doc=10000 dct=RI kco=00001`
 >
-> **AI Assistant**
+> **Assistant IA**
 > *Je vais chercher les erreurs de validation pour cette facture.*
 >
 > La facture 10000 / RI / 00001 a une erreur de validation XSD :
@@ -198,7 +198,7 @@ Les transcriptions ci-dessous proviennent d'une session réelle. Le panneau fonc
 >
 > 🔍 **`list_invoices`** · `kco=00001`
 >
-> **AI Assistant**
+> **Assistant IA**
 >
 > Statut de la facture 10000 / RI / 00001 :
 >
@@ -216,7 +216,7 @@ Les transcriptions ci-dessous proviennent d'une session réelle. Le panneau fonc
 >
 > *Besoin d'aide pour corriger cette facture ?* &nbsp;📋
 
-Un triplet (`DOC + DCT + KCO`) suffit pour amorcer le diagnostic. L'assistant enchaîne ses propres relances — d'abord la table de validation, puis l'en-tête de facture — et propose la prochaine étape utile.
+Un triplet (`DOC + DCT + KCO`) suffit pour démarrer le diagnostic. L'assistant enchaîne lui-même les requêtes — d'abord la table de validation, puis l'en-tête de facture — et propose l'étape suivante.
 
 ### Exemple 2 — Comptage des échecs sur l'ensemble du parc
 
@@ -225,7 +225,7 @@ Un triplet (`DOC + DCT + KCO`) suffit pour amorcer le diagnostic. L'assistant en
 >
 > 🔍 **`list_invoices`** · `status=9905`
 >
-> **AI Assistant**
+> **Assistant IA**
 >
 > **Résultat :** 50 factures en échec de validation (statut 9905).
 >
@@ -244,7 +244,7 @@ Un triplet (`DOC + DCT + KCO`) suffit pour amorcer le diagnostic. L'assistant en
 >
 > *Voulez-vous que je vous montre les erreurs détaillées d'une autre facture pour confirmer si c'est le même problème ?* &nbsp;📋
 
-Le plafond de 50 lignes sur `list_invoices` est intentionnel — pour un dénombrement exhaustif, la page [E-Invoicing](./invoices.md) reste l'outil approprié. L'assistant excelle à *caractériser* un problème (quelle société, quel type de document, quelle période), avant de renvoyer vers l'écran dédié pour la liste complète.
+Le plafond de 50 lignes sur `list_invoices` est volontaire : pour un comptage exhaustif, utiliser la page [E-Invoicing](./invoices.md). L'assistant est utile pour *caractériser* un problème (quelle société, quel type de document, quelle période), puis renvoyer vers l'écran dédié pour la liste complète.
 
 ### Exemple 3 — Lecture de l'historique de rejet PA
 
@@ -253,7 +253,7 @@ Le plafond de 50 lignes sur `list_invoices` est intentionnel — pour un dénomb
 >
 > 🔍 **`lifecycle_history`** · `doc=12345 dct=RI kco=00070`
 >
-> **AI Assistant**
+> **Assistant IA**
 >
 > Voici l'historique complet de la facture 12345 / RI / 00070 :
 >
@@ -270,7 +270,7 @@ Le plafond de 50 lignes sur `list_invoices` est intentionnel — pour un dénomb
 >
 > *Souhaitez-vous que je vérifie l'annuaire PPF pour ce destinataire ?* &nbsp;📋
 
-Lorsque le rejet provient de la Plateforme Agréée et non de l'étape de validation locale, `validation_errors` renvoie une liste vide — `lifecycle_history` est l'outil approprié, car il restitue le motif PA (`REJ_ADR`, `REJ_FMT`, `REJ_DESTINATAIRE` …) accompagné de l'action attendue.
+Quand le rejet vient de la Plateforme Agréée et non de la validation locale, `validation_errors` renvoie une liste vide. Dans ce cas, utiliser `lifecycle_history` : il donne le motif PA (`REJ_ADR`, `REJ_FMT`, `REJ_DESTINATAIRE` …) et l'action attendue.
 
 ### Exemple 4 — Consultation du fonctionnement du produit
 
@@ -283,7 +283,7 @@ Lorsque le rejet provient de la Plateforme Agréée et non de l'étape de valida
 >
 > 📥 **`web_fetch_result`** · ✓ `https://docs.nomana-it.fr/nomaubl/application/ereporting/`
 >
-> **AI Assistant**
+> **Assistant IA**
 >
 > Le **flux 10.1** est le canal e-reporting français pour les transactions **B2BINT** — ventes vers un acheteur dans un autre État membre de l'Union européenne. Pour ce flux :
 >
@@ -293,14 +293,14 @@ Lorsque le rejet provient de la Plateforme Agréée et non de l'étape de valida
 >
 > À distinguer du **flux 10.3**, qui agrège les transactions B2C et hors-périmètre par période. Source : [docs.nomana-it.fr/nomaubl/application/ereporting](https://docs.nomana-it.fr/nomaubl/application/ereporting/) &nbsp;📋
 
-La consultation en deux temps (`list_docs_pages` puis `web_fetch`) est obligatoire — l'API documentaire n'autorise le téléchargement que d'URL retournées par un précédent appel d'outil, ce qui empêche la fabrication d'un lien documentaire.
+Les deux étapes (`list_docs_pages` puis `web_fetch`) sont obligatoires. L'API documentaire n'autorise le téléchargement que d'URL retournées par un appel précédent. L'assistant ne peut donc pas fabriquer de lien.
 
 ---
 
 ## Lecture des réponses
 
-- **Pastilles d'appel d'outil** — affichent les filtres *réellement* appliqués (`status=9906 dateFrom=2026-01-01 …`). En cas de résultat inattendu, la pastille fournit l'explication.
-- **Sémantique des icônes** — chaque icône correspond à un type d'action :
+- **Pastilles d'appel d'outil** — affichent les filtres *réellement* appliqués (`status=9906 dateFrom=2026-01-01 …`). En cas de résultat inattendu, la pastille donne l'explication.
+- **Signification des icônes** — chaque icône correspond à un type d'action :
 
   | Icône | Pastille | Signification |
   |---|---|---|
@@ -309,30 +309,30 @@ La consultation en deux temps (`list_docs_pages` puis `web_fetch`) est obligatoi
   | 📥 | `web_fetch_result` | Page reçue. Le préfixe ✓ suivi de l'URL signale un succès ; ❌ suivi d'un code d'erreur signale un échec. |
   | 🌐 | `web_search` | Une recherche web a été émise (uniquement lorsque la recherche est activée). |
 
-- **Rendu Markdown** — titres, listes à puces, fragments de code et tableaux apparaissent mis en forme dans le panneau, sans dump en texte brut.
-- **Diffusion en flux** — la bulle se remplit à mesure que le modèle répond ; le bouton **■** interrompt proprement la diffusion sans clore la conversation.
-- **📋 Copy** au pied de chaque réponse copie le Markdown brut dans le presse-papiers — pratique pour l'intégrer à un ticket ou à un courriel.
+- **Rendu Markdown** — titres, listes à puces, fragments de code et tableaux sont mis en forme dans le panneau, sans texte brut.
+- **Diffusion en flux** — la bulle se remplit pendant que le modèle répond. Le bouton **■** arrête la réponse sans fermer la conversation.
+- **📋 Copier** au pied de chaque réponse copie le Markdown brut dans le presse-papiers — pratique pour le coller dans un ticket ou un e-mail.
 
 ---
 
 ## Limites de l'assistant
 
-- **Aucune écriture.** Aucun outil ne modifie la base. Les modifications de configuration, les relances de validation et les changements de statut restent hors périmètre.
-- **Pas de navigation web ouverte.** La consultation documentaire est restreinte à la liste blanche définie par l'administrateur (`docs.nomana-it.fr` par défaut).
-- **Pas de pièces jointes.** Le canal est purement textuel. Coller un UBL XML directement dans un message reste possible (dans la limite du contexte modèle), mais l'envoi de fichiers n'est pas pris en charge.
-- **Aucune persistance.** La fermeture du panneau ou le rechargement de la page réinitialise le fil. La même question repartie d'un panneau vierge démarre une nouvelle conversation.
+- **Aucune écriture.** Aucun outil ne modifie la base. Les modifications de configuration, les relances de validation et les changements de statut sont hors périmètre.
+- **Pas de navigation web ouverte.** La consultation documentaire est limitée à la liste blanche définie par l'administrateur (`docs.nomana-it.fr` par défaut).
+- **Pas de pièces jointes.** Le panneau ne gère que du texte. Coller un UBL XML dans un message fonctionne (dans la limite du contexte modèle), mais l'envoi de fichiers n'est pas pris en charge.
+- **Aucune persistance.** Fermer le panneau ou recharger la page réinitialise le fil. Reposer la même question dans un panneau vierge démarre une nouvelle conversation.
 - **Pas de portée multi-instance.** Les outils en lecture seule ciblent la base associée à l'utilisateur authentifié — même périmètre que le reste de l'application.
 
-L'administrateur peut désactiver entièrement les outils de données (l'assistant s'appuie alors uniquement sur la consultation documentaire), restreindre les domaines documentaires, surcharger les modèles par défaut ou modifier le prompt système — l'ensemble depuis le template *global*.
+L'administrateur peut désactiver entièrement les outils de données (l'assistant n'utilise alors que la consultation documentaire), restreindre les domaines documentaires, changer les modèles par défaut ou modifier le prompt système. Tout cela se règle dans le template *global*.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Formuler la question, pas l'outil.** *« Lister les factures en attente pour la société 00070 en EUR »* suffit — il n'est pas nécessaire d'instruire explicitement l'appel à `list_invoices`.
-- **Utiliser les noms naturels de statut.** *« En litige »*, *« rejected by the PA »*, *« en attente de dépôt »* sont automatiquement résolus vers le bon code numérique — l'assistant dispose du catalogue de statuts en vigueur.
-- **Préciser les identifiants.** Pour les questions de validation ou de cycle de vie, fournir le triplet complet (`DOC + DCT + KCO`) ; à défaut, l'assistant doit deviner ou appeler `list_invoices` au préalable.
-- **Pour un rejet PA, privilégier `lifecycle_history` plutôt que `validation_errors`.** La validation locale ne consigne dans F564236 que les échecs XSD / Schematron ; les rejets côté PA (`REJ_ADR`, `REJ_FMT`, …) résident dans la table de cycle de vie et seul `lifecycle_history` les restitue.
-- **Lire les pastilles d'outil.** Elles constituent la trace d'audit de la conversation — y compris les marqueurs 📥 `web_fetch_result` qui confirment qu'une page documentaire a bien été téléchargée (ou rapportent le code d'erreur en cas d'échec).
-- **Considérer le panneau comme une API externe.** Tout ce qui y est saisi est transmis au fournisseur de modèle — pas de clés API, pas de numéros de carte complets, pas de données personnelles au-delà de ce que la documentation publique contient déjà.
-- **Pour les audits approfondis, revenir aux pages dédiées.** L'assistant est optimisé pour les recherches rapides et les explications. Pour les flux récurrents, les pages [Tableau de bord](./dashboard.md), [E-Invoicing](./invoices.md), [E-Reporting](./ereporting.md) et [Erreurs d'intégration](./integration-errors.md) restent la source de vérité.
+- **Formuler la question, pas l'outil.** *« Lister les factures en attente pour la société 00070 en EUR »* suffit ; pas besoin de demander explicitement `list_invoices`.
+- **Utiliser les noms naturels de statut.** *« En litige »*, *« rejected by the PA »*, *« en attente de dépôt »* sont traduits automatiquement vers le bon code — l'assistant connaît le catalogue de statuts en vigueur.
+- **Préciser les identifiants.** Pour les questions de validation ou de cycle de vie, fournir le triplet complet (`DOC + DCT + KCO`). Sinon, l'assistant doit deviner ou passer par `list_invoices` d'abord.
+- **Pour un rejet PA, utiliser `lifecycle_history` plutôt que `validation_errors`.** La validation locale ne consigne dans F564236 que les échecs XSD / Schematron. Les rejets côté PA (`REJ_ADR`, `REJ_FMT`, …) sont stockés dans la table de cycle de vie : seul `lifecycle_history` les renvoie.
+- **Lire les pastilles d'outil.** Elles forment la trace d'audit de la conversation, y compris les marqueurs 📥 `web_fetch_result` qui confirment qu'une page a bien été téléchargée (ou affichent le code d'erreur en cas d'échec).
+- **Traiter le panneau comme une API externe.** Tout ce qui y est saisi est envoyé au fournisseur du modèle : pas de clés API, pas de numéros de carte complets, pas de données personnelles au-delà de ce que la documentation publique contient déjà.
+- **Pour les audits approfondis, revenir aux pages dédiées.** L'assistant est conçu pour des recherches rapides et des explications. Pour les flux récurrents, les pages [Tableau de bord](./dashboard.md), [E-Invoicing](./invoices.md), [E-Reporting](./ereporting.md) et [Erreurs d'intégration](./integration-errors.md) restent la source de vérité.

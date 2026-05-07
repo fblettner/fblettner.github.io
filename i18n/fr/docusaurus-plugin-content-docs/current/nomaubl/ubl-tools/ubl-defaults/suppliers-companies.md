@@ -6,7 +6,7 @@ keywords: [NomaUBL, UBL, defaults, supplier, fournisseur, vendeur, BT-27, BT-29,
 
 # Sociétés fournisseurs
 
-L'onglet **Suppliers** gère un annuaire de **sociétés vendeur (AccountingSupplierParty)** utilisé comme valeurs par défaut lorsque le XML source omet l'identification ou l'adresse côté vendeur. Chaque enregistrement est indexé par un code société interne porté par le XML source (typiquement un code société / KCO depuis JDE, un Bukrs depuis SAP, etc.).
+L'onglet **Suppliers** gère un annuaire de **sociétés vendeur (AccountingSupplierParty)** utilisé comme valeurs par défaut quand le XML source omet l'identification ou l'adresse côté vendeur. Chaque enregistrement est indexé par un code société interne porté par le XML source (typiquement un code société / KCO depuis JDE, un Bukrs depuis SAP, etc.).
 
 Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). La société par défaut et la liste de fournisseurs sont surchargeables indépendamment.
 
@@ -16,9 +16,9 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). 
 
 | Champ | Description |
 |---|---|
-| **Default supplier** | Code société appliqué lorsque le XML source ne porte pas d'identifiant vendeur reconnu. Choisi dans l'annuaire ci-dessous ; une valeur vide signifie « aucun défaut » (le XML source est attendu pour renseigner tous les champs vendeur). |
+| **Default supplier** | Code société appliqué quand le XML source ne porte pas d'identifiant vendeur reconnu. Choisi dans l'annuaire ci-dessous ; une valeur vide signifie « aucun défaut » (le XML source est attendu pour renseigner tous les champs vendeur). |
 
-Lorsque la surcharge est active en mode document, le sélecteur de défaut apparaît en haut de l'onglet ; en mode defaults, il s'intègre à la vue de l'annuaire.
+Quand la surcharge est active en mode document, le sélecteur de défaut apparaît en haut de l'onglet ; en mode defaults, il s'intègre à la vue de l'annuaire.
 
 ---
 
@@ -72,14 +72,14 @@ code société / KCO du XML source
                                        si aucun défaut n'est défini)
 ```
 
-L'annuaire constitue uniquement une couche de **valeurs par défaut** : tout champ porté explicitement par le XML source l'emporte sur la valeur stockée ici.
+L'annuaire est uniquement une couche de **valeurs par défaut** : tout champ porté explicitement par le XML source l'emporte sur la valeur stockée ici.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Une carte par entité juridique.** Même lorsque plusieurs codes société internes partagent un même SIREN, des cartes distinctes facilitent le suivi de l'établissement (SIRET) et de l'adresse rattachés à chaque code.
-- **Le code pays alimente le repli pays.** Lorsque la source omet le pays d'une adresse postale, NomaUBL retombe sur le `country` de cette carte plutôt que sur le défaut global de l'onglet [Header](./ubl-header-defaults.md). Renseigner `FR` pour les vendeurs français ; ne pas laisser vide.
+- **Une carte par entité juridique.** Même quand plusieurs codes société internes partagent un même SIREN, des cartes distinctes facilitent le suivi de l'établissement (SIRET) et de l'adresse rattachés à chaque code.
+- **Le code pays alimente le repli pays.** Quand la source omet le pays d'une adresse postale, NomaUBL retombe sur le `country` de cette carte plutôt que sur le défaut global de l'onglet [Header](./ubl-header-defaults.md). Renseigner `FR` pour les vendeurs français ; ne pas laisser vide.
 - **Le texte du capital apparaît tel quel.** Le champ `Capital` est rendu textuellement dans le document UBL (BT-33), donc inclure la marque de devise et les mentions attendues par l'autorité réglementaire (par ex. `SAS au capital de 50 000 €`).
-- **Surcharger par template uniquement lorsque le template porte un vendeur différent.** Une filiale émettant ses factures sous son propre SIREN constitue un cas légitime de surcharge ; une facture ponctuelle de l'entité principale, non.
-- **Le sélecteur de défaut désigne la société émettrice la plus fréquente.** Lorsque la majorité des factures provient d'une seule entité juridique, la définir comme défaut — seuls les enregistrements exceptionnels nécessitent alors un code de correspondance dans le XML source.
+- **Surcharger par template uniquement quand le template porte un vendeur différent.** Une filiale qui émet ses factures sous son propre SIREN est un cas légitime de surcharge ; une facture ponctuelle de l'entité principale, non.
+- **Le sélecteur de défaut désigne la société émettrice la plus fréquente.** Quand la majorité des factures provient d'une seule entité juridique, la définir comme défaut — seuls les enregistrements exceptionnels demandent alors un code de correspondance dans le XML source.

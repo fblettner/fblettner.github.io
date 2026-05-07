@@ -16,8 +16,8 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). 
 
 | Champ | Description |
 |---|---|
-| **Default category** | Catégorie TVA UBL émise lorsque le code source ne possède pas de ligne de mapping. Texte libre — typiquement une lettre (`S` standard, `Z` taux zéro, `E` exonéré, `K` intracommunautaire, `G` export, `AE` autoliquidation, `O` non soumis à la TVA). |
-| **Zero rate** | Catégorie TVA UBL appliquée lorsque le montant de TVA d'une ligne est nul. Utile pour distinguer une ligne réellement à taux zéro (`Z`) d'une ligne exonérée (`E`) lorsque le XML source ne fournit que le pourcentage. |
+| **Default category** | Catégorie TVA UBL émise quand le code source ne possède pas de ligne de mapping. Texte libre — typiquement une lettre (`S` standard, `Z` taux zéro, `E` exonéré, `K` intracommunautaire, `G` export, `AE` autoliquidation, `O` non soumis à la TVA). |
+| **Zero rate** | Catégorie TVA UBL appliquée quand le montant de TVA d'une ligne est nul. Utile pour distinguer une ligne réellement à taux zéro (`Z`) d'une ligne exonérée (`E`) quand le XML source ne fournit que le pourcentage. |
 
 ---
 
@@ -40,7 +40,7 @@ code TVA source du XML
     └─ pas de ligne de mapping ?    ─► catégorie par défaut
 ```
 
-Le paramètre de taux zéro l'emporte lorsque le montant de TVA calculé sur la ligne est nul — il prime sur le mapping dans ce cas.
+Le paramètre de taux zéro l'emporte quand le montant de TVA calculé sur la ligne est nul — il prime sur le mapping dans ce cas.
 
 ---
 
@@ -53,7 +53,7 @@ La seconde table de mapping couvre le **BT-121** — le code motif d'exonératio
 | **Code de catégorie TVA** | Catégorie UBL nécessitant un code VATEX (typiquement `E`, `K`, `G`, `AE`, `O` — `S` et `Z` sont filtrés car les catégories standard et taux zéro ne portent jamais de motif d'exonération). |
 | **Code VATEX** | Code d'exonération issu de la liste de référence *vatex-codes*. |
 
-Lorsque NomaUBL émet une catégorie nécessitant un motif d'exonération, le code `VATEX-*` correspondant est recherché dans ce mapping. Sans ligne pour une catégorie non standard, la Plateforme Agréée destinataire rejette typiquement le document via un échec de règle Schematron.
+Quand NomaUBL émet une catégorie qui demande un motif d'exonération, le code `VATEX-*` correspondant est recherché dans ce mapping. Sans ligne pour une catégorie non standard, la Plateforme Agréée destinataire rejette typiquement le document via un échec de règle Schematron.
 
 ---
 
@@ -63,5 +63,5 @@ Lorsque NomaUBL émet une catégorie nécessitant un motif d'exonération, le co
 - **`AE` est la catégorie correcte pour la facturation en autoliquidation.** À associer à `VATEX-EU-AE` dans le mapping VATEX. Le montant de taxe et le taux de TVA de la ligne doivent être nuls ; l'acheteur déclare la TVA.
 - **`K` (intracommunautaire) couvre le B2B transfrontalier au sein de l'UE.** À associer à `VATEX-EU-IC`. Les identifiants à la TVA du vendeur (BT-31) et de l'acheteur (BT-48) doivent tous deux figurer dans le document UBL.
 - **`VATEX-FR-FRANCHISE` cible la franchise micro-entrepreneur (article 293 B CGI).** À utiliser sur la catégorie `E` (exonérée) pour les factures sous le seuil de franchise ; la mention « TVA non applicable, art. 293 B du CGI » doit également apparaître dans *French Legal Notes*.
-- **Réserver le paramètre de taux zéro aux cas où la source n'arrive pas à distinguer.** Lorsque le XML amont émet correctement la catégorie, laisser le champ Zero rate vide — s'y appuyer relève du repli, pas du mécanisme principal.
+- **Réserver le paramètre de taux zéro aux cas où la source n'arrive pas à distinguer.** Quand le XML amont émet correctement la catégorie, laisser le champ Zero rate vide — s'y appuyer relève du repli, pas du mécanisme principal.
 - **Ajouter les codes dans les listes de référence, pas ici.** Les codes cibles manquants s'ajoutent dans les listes *vat-categories* ou *vatex-codes* ; les déroulantes les récupèrent au prochain rechargement.

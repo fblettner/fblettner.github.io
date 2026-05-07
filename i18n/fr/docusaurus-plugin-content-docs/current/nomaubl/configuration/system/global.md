@@ -8,7 +8,7 @@ keywords: [NomaUBL, paramètres globaux, répertoires, SMTP, Ghostscript, XSL, A
 
 L'éditeur **Global** rassemble les paramètres qui s'appliquent à **l'ensemble de l'application NomaUBL** — arborescence de fichiers, utilitaires de traitement, serveur SMTP, assistant IA, licence / authentification, ainsi que l'ordonnanceur en arrière-plan qui pilote le polling et les jobs batch.
 
-Ces paramètres sont en grande majorité **agnostiques de la source** et s'appliquent quels que soient les documents : JD Edwards, SAP, NetSuite ou ERP personnalisé. Quelques options spécifiques à BIP sont signalées explicitement.
+Ces paramètres sont en grande majorité **indépendants de la source** et s'appliquent quels que soient les documents : JD Edwards, SAP, NetSuite ou ERP personnalisé. Quelques options spécifiques à BIP sont signalées explicitement.
 
 L'éditeur comporte **six onglets** :
 
@@ -139,7 +139,7 @@ Tâches d'arrière-plan exécutées par NomaUBL en mode serveur. **Les modificat
 
 ### Batch Document Processing
 
-Liste de **jobs batch** récurrents. Chaque job s'exécute indépendamment selon son propre intervalle et détecte les nouveaux documents à traiter. Utilisez **+ Add batch job** pour en créer un, et le bouton **×** pour en supprimer un.
+Liste de **jobs batch** récurrents. Chaque job s'exécute indépendamment selon son propre intervalle et détecte les nouveaux documents à traiter. Utilisez **+ Ajouter un job batch** pour en créer un, et le bouton **×** pour en supprimer un.
 
 #### Champs d'en-tête par job
 
@@ -172,5 +172,5 @@ Les champs suivants définissent la stratégie de récupération et de traitemen
 - **Renseigner Environment.** Le placeholder `%ENV%` dans les modèles de documents permet de propager une même configuration de `demo` à `PD` sans modifier chaque chemin.
 - **Redémarrer le serveur après modification du scheduler.** Tous les intervalles de l'onglet 6 (ainsi que les jobs batch) sont lus une seule fois au démarrage ; les modifier dans l'interface ne fait qu'enregistrer la valeur — un redémarrage est requis pour leur prise en compte.
 - **La licence conditionne l'exécution.** Si les menus *Navigation* / *Synchronisation* / *UBL* deviennent inaccessibles, vérifier en priorité la validité de la clé de licence.
-- **Choisir Source `bip` uniquement lorsque la source est JD Edwards.** Pour les autres ERP (SAP, NetSuite, personnalisé), utiliser `directory` et déposer les sorties XML correspondantes dans l'Input Directory.
-- **Utiliser `validateOnly` pour exécuter un dry-run UBL.** À combiner avec `Skip PA send` (ou son équivalent UBL) lors d'une migration de modèles, afin de valider la chaîne de traitement sans interaction avec la PA.
+- **Choisir Source `bip` uniquement quand la source est JD Edwards.** Pour les autres ERP (SAP, NetSuite, personnalisé), utiliser `directory` et déposer les sorties XML correspondantes dans l'Input Directory.
+- **Utiliser `validateOnly` pour lancer un dry-run UBL.** À combiner avec `Skip PA send` (ou son équivalent UBL) pendant une migration de modèles, pour valider la chaîne de traitement sans interaction avec la PA.

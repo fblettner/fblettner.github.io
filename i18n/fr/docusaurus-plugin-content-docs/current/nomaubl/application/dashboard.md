@@ -6,12 +6,12 @@ keywords: [NomaUBL, tableau de bord, KPI, cartes hero, funnel pipeline, graphiqu
 
 # Tableau de bord
 
-Le **tableau de bord** est la page d'accueil de NomaUBL. Il s'ouvre par défaut après la connexion et restitue l'état opérationnel de la plateforme sur une **grille à 12 colonnes** — quatre cartes KPI hero en tête, puis une succession de widgets appariés couvrant le volume d'ingestion, le pipeline du dispatcher, l'activité récente, les factures bloquées, les règles de validation en échec, la répartition par société, la couverture e-reporting, les durées d'aller-retour PA et la santé du planificateur.
+Le **tableau de bord** est la page d'accueil de NomaUBL. Il s'ouvre par défaut après la connexion et présente l'état opérationnel de la plateforme sur une **grille à 12 colonnes** : quatre cartes KPI hero en tête, puis une série de widgets groupés deux par deux qui couvrent le volume d'ingestion, le pipeline du dispatcher, l'activité récente, les factures bloquées, les règles de validation en échec, la répartition par société, la couverture e-reporting, les durées d'aller-retour PA et la santé du planificateur.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Toutes les valeurs proviennent de la base NomaUBL locale ; le tableau de bord reflète donc ce que NomaUBL a traité et persisté, et non directement ce que conserve le système source ou la Plateforme Agréée.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Toutes les valeurs proviennent de la base NomaUBL locale. Le tableau de bord reflète donc ce que NomaUBL a traité et enregistré, et non directement ce que conserve le système source ou la Plateforme Agréée.
 
 :::info[Refonte en 2026.05.4]
-Le tableau de bord a été reconstruit en grille à 12 colonnes en 2026.05.4. La précédente disposition empilée de cartes-compteurs par statut a été remplacée par quatre KPI hero (Total / En cours / Rejetée — IT / Rejetée — Business) et huit widgets appariés. Les clics depuis les cartes hero appliquent désormais un filtre multi-statuts, *En cours* aboutit donc effectivement sur les factures en cours plutôt que de retomber sur la liste complète.
+Le tableau de bord a été reconstruit en grille à 12 colonnes en 2026.05.4. L'ancienne disposition empilée de cartes-compteurs par statut a été remplacée par quatre KPI hero (Total / En cours / Rejetée — IT / Rejetée — Business) et huit widgets appariés. Les cartes hero appliquent désormais un filtre multi-statuts au clic. *En cours* ouvre donc bien la liste des factures en cours, au lieu de retomber sur la liste complète.
 :::
 
 ---
@@ -191,13 +191,13 @@ Le tableau de bord a été reconstruit en grille à 12 colonnes en 2026.05.4. La
   <line x1="820" y1="664" x2="794" y2="660" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
 </svg>
 
-La grille bascule en colonne unique sous environ 900 px. Les cartes hero conservent leur largeur minimale de 220 px sur tout écran ; les quatre KPI restent ainsi alignés sur une même bande horizontale.
+La grille passe en colonne unique sous environ 900 px. Les cartes hero gardent leur largeur minimale de 220 px sur tout écran : les quatre KPI restent alignés sur une même bande horizontale.
 
 ---
 
 ## Filtre de plage de dates
 
-Un seul filtre figure tout en haut de la page. Il restreint chaque widget dépendant d'une fenêtre temporelle — compteurs hero, funnel pipeline, activité récente, règles en échec, répartition par société.
+Un seul filtre figure tout en haut de la page. Il restreint chaque widget qui dépend d'une fenêtre de temps — compteurs hero, funnel pipeline, activité récente, règles en échec, répartition par société.
 
 | Préréglage | Fenêtre |
 |---|---|
@@ -208,13 +208,13 @@ Un seul filtre figure tout en haut de la page. Il restreint chaque widget dépen
 | **Mois dernier** | Le mois plein précédent. |
 | **Plage personnalisée** | Saisie manuelle des dates **De** et **À**. |
 
-Quelques widgets ignorent intentionnellement le filtre — *Factures bloquées* (toujours sur les 90 derniers jours), *Couverture e-Reporting* (toujours le mois en cours), *Santé du planificateur* (toujours en direct). Chacun affiche sa propre indication de fenêtre, la différence est donc explicite.
+Certains widgets ignorent volontairement le filtre — *Factures bloquées* (toujours les 90 derniers jours), *Couverture e-Reporting* (toujours le mois en cours), *Santé du planificateur* (toujours en direct). Chacun affiche sa propre fenêtre, la différence est donc explicite.
 
 ---
 
 ## Cartes KPI hero
 
-Quatre cartes résument l'état opérationnel en un coup d'œil. Chacune porte un libellé, le compteur, une sparkline du volume quotidien sur 7 jours, une légende d'une ligne précisant le jeu de statuts sous-jacent et — sur les installations en licence complète — un clic d'accès vers la page [E-Invoicing](./invoices.md) avec le bon filtre déjà appliqué.
+Quatre cartes résument l'état opérationnel en un coup d'œil. Chacune comporte un libellé, le compteur, une sparkline du volume quotidien sur 7 jours, et une légende d'une ligne qui précise les statuts couverts. Sur les installations en licence complète, un clic ouvre la page [E-Invoicing](./invoices.md) avec le bon filtre déjà appliqué.
 
 | Carte | Comptabilise | Statuts couverts | Clic d'accès |
 |---|---|---|---|
@@ -223,71 +223,71 @@ Quatre cartes résument l'état opérationnel en un coup d'œil. Chacune porte u
 | **Rejetée — IT** | Échecs techniques, périmètre IT / dev | `9904` `9905` `9907` (échecs internes) et `213` (rejet technique PA) | E-Invoicing avec `status=9904,9905,9907,213` |
 | **Rejetée — Business** | Échecs côté service client | `206` `207` `208` `210` `221` `501` `600` (litiges commerciaux, refus, suspensions, routage, recouvrement, distribution e-mail) | E-Invoicing avec le multi-statut correspondant |
 
-Les cartes **En cours** / **Rejetée — IT** / **Rejetée — Business** perdaient auparavant le filtre de statut au clic — le paramètre `/api/invoices?status=` n'acceptant qu'une seule valeur, une liste était rejetée et la page retombait sur la liste complète. Les cartes hero passent désormais une liste séparée par virgules (`/api/invoices?status=A,B,C`) que le backend transforme en clause `IN (…)` multi-statuts ; le clic aboutit alors sur le sous-ensemble réel.
+Les cartes **En cours** / **Rejetée — IT** / **Rejetée — Business** perdaient auparavant le filtre de statut au clic. Le paramètre `/api/invoices?status=` n'acceptait qu'une seule valeur ; une liste était rejetée et la page retombait sur la liste complète. Les cartes hero passent désormais une liste séparée par virgules (`/api/invoices?status=A,B,C`) que le backend transforme en clause `IN (…)` multi-statuts. Le clic ouvre alors le bon sous-ensemble.
 
-Une bordure rouge et une valeur rouge sur **Rejetée — IT** signalent un compteur strictement positif ; même traitement en orange sur **Rejetée — Business**.
+Une bordure rouge et une valeur rouge sur **Rejetée — IT** signalent un compteur strictement positif. Même traitement en orange sur **Rejetée — Business**.
 
 ---
 
 ## La grille de widgets
 
-Sous la rangée hero, une grille à 12 colonnes accueille huit widgets, appariés pour équilibrer la densité de contenu.
+Sous la rangée hero, une grille à 12 colonnes accueille huit widgets, groupés deux par deux pour équilibrer la densité de contenu.
 
 ### Funnel pipeline *(12 colonnes)*
 
-Cinq étapes horizontales — *Validée / Envoyée PA / Attente / Déposée / Rejetée* — accompagnées de leur compteur. Cliquer sur une étape ouvre E-Invoicing pré-filtré sur le jeu de statuts correspondant. Le funnel se lit de gauche à droite : ce qui stagne en *Attente* alimente le widget *Factures bloquées* en dessous ; ce qui arrive en *Rejetée* relève de la page [Erreurs d'intégration](./integration-errors.md).
+Cinq étapes horizontales — *Validée / Envoyée PA / Attente / Déposée / Rejetée* — accompagnées de leur compteur. Cliquer sur une étape ouvre E-Invoicing pré-filtré sur le jeu de statuts correspondant. Le funnel se lit de gauche à droite : ce qui stagne en *Attente* alimente le widget *Factures bloquées* en dessous ; ce qui arrive en *Rejetée* renvoie vers la page [Erreurs d'intégration](./integration-errors.md).
 
 ### Volume quotidien *(12 colonnes)*
 
-Graphique d'aire sur 30 jours du volume d'ingestion quotidien — la même série qui alimente les sparklines des cartes hero, rendue pleine largeur pour qu'un creux d'un seul jour de la semaine se voie d'un coup d'œil.
+Graphique d'aire sur 30 jours du volume d'ingestion quotidien. Même série que les sparklines des cartes hero, mais affichée pleine largeur pour repérer d'un coup d'œil un creux sur une seule journée.
 
 ### Activité récente *(6 colonnes)* + Bloquées + Règles en échec *(6 colonnes)*
 
-Cette rangée était auparavant en 8/4, ce qui rendait la colonne droite visiblement plus étroite que la gauche. Elle a été rééquilibrée en 6/6 en 2026.05.4 pour que les rangées suivantes s'alignent sur les mêmes limites de colonnes.
+Cette rangée était auparavant en 8/4, avec une colonne droite visiblement plus étroite que la gauche. Elle est rééquilibrée en 6/6 depuis 2026.05.4, pour que les rangées suivantes s'alignent sur les mêmes limites de colonnes.
 
 | Widget | Contenu |
 |---|---|
 | **Activité récente** | Les dernières factures touchées dans la plage de dates, avec leur triplet canonique (`doc · dct · kco`), le libellé de statut et un horodatage relatif. Cliquer sur une ligne ouvre la liste [E-Invoicing](./invoices.md) filtrée sur ce statut. |
-| **Factures bloquées** | Jusqu'à 50 lignes dont le statut n'a pas évolué depuis 7 jours. Chaque ligne porte le triplet, le statut courant et le nombre de jours depuis la dernière mise à jour. |
-| **Règles en échec** | Top 10 des règles de validation en échec sur la plage de dates. Chaque ligne affiche un badge de rang, le code de règle, sa description en ligne secondaire, et le compteur. Une bascule d'en-tête restreint la liste à **TOUT** / **UBL** (Schematron / XSD) / **INTEG** (cycle de vie / erreurs d'exécution). Le lien *Voir tout* ouvre la page [Erreurs d'intégration](./integration-errors.md) sur l'onglet **par règle** ; un clic sur une règle précise aboutit sur l'onglet **par évènement** avec ce code déjà appliqué en chip de filtre. |
+| **Factures bloquées** | Jusqu'à 50 lignes dont le statut n'a pas évolué depuis 7 jours. Chaque ligne affiche le triplet, le statut courant et le nombre de jours depuis la dernière mise à jour. |
+| **Règles en échec** | Top 10 des règles de validation en échec sur la plage de dates. Chaque ligne affiche un badge de rang, le code de règle, sa description en deuxième ligne et le compteur. Un sélecteur en en-tête restreint la liste à **TOUT** / **UBL** (Schematron / XSD) / **INTEG** (cycle de vie / erreurs d'exécution). Le lien *Voir tout* ouvre la page [Erreurs d'intégration](./integration-errors.md) sur l'onglet **par règle** ; un clic sur une règle précise ouvre l'onglet **par évènement** avec ce code déjà appliqué comme chip de filtre. |
 
-Les barres proportionnelles de la version précédente rendaient des compteurs de *160* et *10* presque indiscernables. Les nouvelles lignes classées donnent à chaque règle le même poids visuel, le compteur étant aligné à droite.
+Les barres proportionnelles de la version précédente rendaient des compteurs de *160* et *10* presque identiques visuellement. Les nouvelles lignes ordonnées donnent à chaque règle le même poids visuel, avec le compteur aligné à droite.
 
 ### Par société *(6 colonnes)* + Couverture e-Reporting *(6 colonnes)*
 
 | Widget | Contenu |
 |---|---|
-| **Par société** | Une barre horizontale empilée par `KCO` (`UHKCO` issu de `F564231`), répartie en *OK* (vert) / *Attente* (bleu) / *Erreur* (rouge), libellée avec le compteur et le code société. Utile lorsqu'un pic se concentre sur une seule société. |
-| **Couverture e-Reporting** | Un pourcentage et trois lignes synthétisant l'état des dépôts e-reporting du mois en cours : *Flux 10.1* (détail B2BINT) et *Flux 10.3* (B2C / OUTOFSCOPE agrégé) — *déposés* / *générés*. Le clic sur le widget ouvre la page [E-Reporting](./ereporting.md). |
+| **Par société** | Une barre horizontale empilée par `KCO` (`UHKCO` issu de `F564231`), répartie en *OK* (vert) / *Attente* (bleu) / *Erreur* (rouge), avec le compteur et le code société en libellé. Utile quand un pic se concentre sur une seule société. |
+| **Couverture e-Reporting** | Un pourcentage et trois lignes qui résument l'état des dépôts e-reporting du mois en cours : *Flux 10.1* (détail B2BINT) et *Flux 10.3* (B2C / OUTOFSCOPE agrégé) — *déposés* / *générés*. Le clic sur le widget ouvre la page [E-Reporting](./ereporting.md). |
 
 ### Aller-retour PA *(6 colonnes)* + Santé du planificateur *(6 colonnes)*
 
 | Widget | Contenu |
 |---|---|
-| **Aller-retour PA** | Durée moyenne *Envoi → Dépôt* et *Envoi → Rejet* sur la plage de dates, calculée depuis la table de cycle de vie. Un pic sur l'une de ces moyennes révèle un ralentissement côté PA invisible depuis les seuls comptes quotidiens. |
+| **Aller-retour PA** | Durée moyenne *Envoi → Dépôt* et *Envoi → Rejet* sur la plage de dates, calculée à partir de la table de cycle de vie. Un pic sur l'une de ces moyennes révèle un ralentissement côté PA qu'on ne voit pas dans les seuls compteurs quotidiens. |
 | **Santé du planificateur** | Une ligne par job programmé (`fetchImportInterval`, `fetchStatusInterval`, `fetchAll.N.…`, `ereportingInterval`) avec son intervalle configuré et l'horodatage du *dernier passage*. Pastille verte quand le dernier passage est récent, rouge dès qu'il dépasse 2× l'intervalle. |
 
 ---
 
 ## Actions rapides + À propos
 
-Sous la grille, trois boutons raccourcis subsistent :
+Sous la grille, trois boutons raccourcis sont disponibles :
 
 | Bouton | Effet |
 |---|---|
-| **Créer une facture** | Ouvre la modale *nouvelle facture* directement depuis le tableau de bord. Après enregistrement, la navigation bascule vers la page [E-Invoicing](./invoices.md). |
+| **Créer une facture** | Ouvre la modale *nouvelle facture* directement depuis le tableau de bord. Après enregistrement, redirige vers la page [E-Invoicing](./invoices.md). |
 | **Référence des statuts** | Ouvre *Références → Référence des statuts* — le catalogue de tous les codes de statut du cycle de vie. |
 | **Codes motifs** | Ouvre *Références → Codes motifs* — le catalogue de tous les codes de refus, rejet ou irrégularité. |
 
-La carte *À propos de cette version* figure tout en bas et liste le numéro de version, la date de build, la version du profil AFNOR et les versions des Schematrons embarqués par module (EN 16931, BR-FR Flux 2, BR-FR CPRO, EXTENDED-CTC-FR).
+La carte *À propos de cette version* figure tout en bas. Elle indique le numéro de version, la date de build, la version du profil AFNOR et les versions des Schematrons embarqués par module (EN 16931, BR-FR Flux 2, BR-FR CPRO, EXTENDED-CTC-FR).
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Lire d'abord la rangée hero.** Les quatre KPI répondent en un coup d'œil à la question *« y a-t-il quelque chose de cassé en ce moment ? »* — une bordure rouge non vide sur *Rejetée — IT* prend le pas sur le reste de la page.
+- **Lire d'abord la rangée hero.** Les quatre KPI répondent en un coup d'œil à la question *« y a-t-il quelque chose de cassé en ce moment ? »*. Une bordure rouge non vide sur *Rejetée — IT* est prioritaire sur le reste de la page.
 - **Utiliser les préréglages de date.** *Hier* convient à un tour de surveillance matinal ; *Ce mois-ci* à une vue financière ; *Plage personnalisée* couvre une réconciliation de fin de mois ou une fenêtre d'incident précise.
-- **Recouper le funnel et les compteurs hero.** *En cours* doit correspondre aux étapes *Envoyée PA* + *Attente* du funnel. Une divergence trahit généralement un statut non encore mappé d'un côté ou de l'autre.
-- **Les *Règles en échec* dictent le travail.** Une seule règle avec des centaines de hits désigne souvent un changement amont unique (un champ renommé, un code TVA obsolète) — corriger la règle apaise généralement la majorité des erreurs d'intégration.
-- **Le tableau de bord sert à repérer des tendances, pas à investiguer une ligne.** Pour le détail d'une facture, ouvrir la modale de la page [E-Invoicing](./invoices.md) ; pour une analyse au niveau règle, passer par la page [Erreurs d'intégration](./integration-errors.md).
-- **Mettre la page en favori.** Page d'atterrissage quotidienne naturelle ; les favoris survivent à l'expiration de session, la prochaine connexion atterrit donc sur la même vue.
+- **Recouper le funnel et les compteurs hero.** *En cours* doit correspondre aux étapes *Envoyée PA* + *Attente* du funnel. Un écart révèle en général un statut pas encore mappé d'un côté ou de l'autre.
+- **Les *Règles en échec* dictent le travail.** Une seule règle avec des centaines d'occurrences indique souvent un changement amont unique (un champ renommé, un code TVA obsolète) — corriger la règle calme en général la majorité des erreurs d'intégration.
+- **Le tableau de bord sert à repérer des tendances, pas à examiner une ligne.** Pour le détail d'une facture, ouvrir la modale de la page [E-Invoicing](./invoices.md) ; pour une analyse au niveau règle, passer par la page [Erreurs d'intégration](./integration-errors.md).
+- **Mettre la page en favori.** C'est la page d'accueil quotidienne naturelle. Les favoris persistent après l'expiration de session ; la prochaine connexion ouvre donc la même vue.

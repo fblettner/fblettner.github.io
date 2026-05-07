@@ -16,7 +16,7 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md).
 
 | Champ | Description |
 |---|---|
-| **Default** | Code de type de facture utilisé lorsqu'aucune règle ne s'applique. Choisi dans la liste de référence *invoice-types* (voir *Configuration → Reference Lists*). Défaut B2B le plus courant : `380` (facture commerciale). |
+| **Default** | Code de type de facture utilisé quand aucune règle ne s'applique. Choisi dans la liste de référence *invoice-types* (voir *Configuration → Reference Lists*). Défaut B2B le plus courant : `380` (facture commerciale). |
 
 ### Codes UNTDID 1001 utilisés par la réforme française
 
@@ -48,7 +48,7 @@ Sous la valeur par défaut, un éditeur de règles permet de faire varier le cod
 Chaque **règle** comporte :
 
 - Un **combinateur logique** — `AND` (toutes les conditions doivent être satisfaites) ou `OR` (au moins une).
-- Un **résultat** — le code de type à émettre lorsque la règle se déclenche (choisi dans la même liste *invoice-types*).
+- Un **résultat** — le code de type à émettre quand la règle se déclenche (choisi dans la même liste *invoice-types*).
 - Une ou plusieurs **conditions**, chacune composée de :
   - Un **champ** — un nom de variable `TAG_*` (par ex. `TAG_TOTAL_HT`).
   - Un **opérateur** — voir le tableau ci-dessous.
@@ -71,7 +71,7 @@ Chaque **règle** comporte :
 
 ### Ordre d'évaluation
 
-Les règles sont évaluées **de haut en bas**. La première règle dont la combinaison de conditions est satisfaite l'emporte. La valeur par défaut n'est utilisée que lorsque aucune règle ne s'applique. Pour réordonner, supprimer et recréer — l'éditeur ne propose pas de poignée de glisser-déposer pour le moment.
+Les règles sont évaluées **de haut en bas**. La première règle dont la combinaison de conditions est satisfaite l'emporte. La valeur par défaut n'est utilisée que quand aucune règle ne s'applique. Pour réordonner, supprimer et recréer — l'éditeur ne propose pas de poignée de glisser-déposer pour le moment.
 
 ---
 

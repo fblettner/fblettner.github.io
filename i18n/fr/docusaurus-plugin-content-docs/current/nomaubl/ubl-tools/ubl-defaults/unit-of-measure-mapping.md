@@ -16,7 +16,7 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). 
 
 | Champ | Description |
 |---|---|
-| **Default** | Code d'unité émis lorsque la valeur source est absente ou ne possède pas de ligne de mapping. Choisi dans la liste de référence *unit-codes*. Repli standard : `C62` (un — utilisé lorsque la source ne porte pas d'information d'unité). |
+| **Default** | Code d'unité émis quand la valeur source est absente ou ne possède pas de ligne de mapping. Choisi dans la liste de référence *unit-codes*. Repli standard : `C62` (un — utilisé quand la source ne porte pas d'information d'unité). |
 
 Le sélecteur de défaut reste visible en haut de l'onglet dans les deux modes.
 
@@ -60,13 +60,13 @@ code unité source du XML
     └─ pas de ligne de mapping ?    ─► code unité par défaut
 ```
 
-Lorsque le code source est vide ou absent, la valeur par défaut s'applique directement.
+Quand le code source est vide ou absent, la valeur par défaut s'applique directement.
 
 ---
 
 ## Conseils & bonnes pratiques
 
 - **Mapper les codes effectivement émis par la source.** Une facture B2B utilise typiquement entre 5 et 10 codes d'unités (pièce, heure, kg, mètre, litre, jour, mois). Ajouter plus de lignes que la source n'en produit ne nuit pas, mais reste inutile.
-- **`C62` est le seul repli sûr pour « pas d'unité ».** Lorsque la source omet l'unité, la Plateforme Agréée destinataire attend tout de même une valeur. `C62` (un) constitue le repli canonique sans contraindre le consommateur aval.
+- **`C62` est le seul repli sûr pour « pas d'unité ».** Quand la source omet l'unité, la Plateforme Agréée destinataire attend tout de même une valeur. `C62` (un) est le repli standard, sans contraindre le consommateur aval.
 - **Les factures de services privilégient `HUR` / `DAY` / `MON` à `EA`.** Le code d'unité porte une information sémantique exploitée par les systèmes aval pour le rapprochement avec le bon de commande — préférer l'unité qui reflète réellement la facturation.
-- **Surcharger par template uniquement lorsque le dictionnaire d'unités diffère.** Un template purement marchandises et un template purement services peuvent légitimement embarquer des mappings différents ; une facture ponctuelle doit réutiliser les defaults.
+- **Surcharger par template uniquement quand le dictionnaire d'unités diffère.** Un template purement marchandises et un template purement services peuvent légitimement embarquer des mappings différents ; une facture ponctuelle doit réutiliser les defaults.

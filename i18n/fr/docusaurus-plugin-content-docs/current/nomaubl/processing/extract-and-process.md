@@ -6,19 +6,19 @@ keywords: [NomaUBL, traitement, extraction, enchaîné, archive, FTP, BIP, XML, 
 
 # Extraction et traitement
 
-L'écran **Extraction et traitement** exécute une **extraction** suivie d'un **traitement** en un seul clic. C'est l'équivalent en exécution d'enchaîner l'une des pages *Extract* puis la page *Processing* correspondante, avec les mêmes paramètres regroupés sur un formulaire unique.
+L'écran **Extraction et traitement** exécute une **extraction** suivie d'un **traitement** en un seul clic. C'est équivalent à enchaîner l'une des pages *Extract* puis la page *Processing* correspondante, avec les mêmes paramètres regroupés sur un seul formulaire.
 
 La partie extraction propose les trois sources documentées dans *Extract* :
 
 - [Extraction d'archive](../extract/extract-archive.md) — récupération d'un document archivé en base NomaUBL (XML source `F564230` ou UBL généré `F564231`) par clé documentaire.
-- [Extraction FTP](../extract/extract-ftp.md) — téléchargement d'un fichier depuis un serveur SFTP via la clé rapport / version / langue / job.
-- [Extraction BIP](../extract/extract-bip.md) — extraction d'un job de la file d'impression BI Publisher JD Edwards (XML d'entrée, sortie rendue ou les deux).
+- [Extraction FTP](../extract/extract-ftp.md) — téléchargement d'un fichier depuis un serveur SFTP avec la clé rapport / version / langue / job.
+- [Extraction BIP](../extract/extract-bip.md) — extraction d'un job de la file d'impression BI Publisher JD Edwards (XML d'entrée, sortie générée ou les deux).
 
 La partie traitement propose les deux pipelines documentés dans *Processing* :
 
 - [Traitement de document](./document.md) — point d'entrée unique. Le pipeline (transformation XML ou validation UBL directe) est sélectionné par la propriété `source` du modèle de document. Remplace les anciennes pages *Process XML* et *Process UBL*.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé — à l'exception de la source BIP, spécifique à JD Edwards.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — sauf pour la source BIP, qui est spécifique à JD Edwards.
 
 ---
 
@@ -97,7 +97,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   <line x1="760" y1="610" x2="590" y2="690" stroke="#94a3b8" strokeWidth="1.3" markerEnd="url(#ep-arrow-slate)"/>
 </svg>
 
-L'enchaînement comporte deux étapes. L'extraction écrit un fichier dans `dirInput/<template>/` ; en cas de succès, le pipeline de traitement correspondant le reprend. Tout échec à l'extraction interrompt l'enchaînement — l'étape de traitement est sautée et seul le **Extraction Result** porte un message.
+L'enchaînement comporte deux étapes. L'extraction écrit un fichier dans `dirInput/<template>/` ; en cas de succès, le pipeline de traitement correspondant le reprend. Tout échec à l'extraction interrompt l'enchaînement — l'étape de traitement est sautée et seul le **Résultat d'extraction** contient un message.
 
 ---
 
@@ -150,7 +150,7 @@ Sous le sélecteur de source, **Process Type** choisit entre les deux pipelines.
 
 ### Process Type = XML
 
-Équivalent à l'exécution de la page [Traitement de document](./document.md) sur le fichier qui vient d'être extrait, lorsque le modèle choisi a `source = XML`.
+Équivalent à l'exécution de la page [Traitement de document](./document.md) sur le fichier qui vient d'être extrait, quand le modèle choisi a `source = XML`.
 
 | Champ | Description |
 |---|---|
@@ -159,11 +159,11 @@ Sous le sélecteur de source, **Process Type** choisit entre les deux pipelines.
 | **Replace** | `Skip` laisse intactes les factures existantes ; `Overwrite` les ré-importe. |
 | **Send to PA** | `Use settings` (défaut) ou `Skip sending`. |
 
-Lorsque la source est **BIP**, un appel **Apply post-generation** supplémentaire est réalisé après une exécution réussie — il met à jour le statut du job JDE, généralement pour le marquer comme traité.
+Quand la source est **BIP**, un appel **Apply post-generation** supplémentaire est fait après une exécution réussie — il met à jour le statut du job JDE, généralement pour le marquer comme traité.
 
 ### Process Type = UBL
 
-Équivalent à l'exécution de la page [Traitement de document](./document.md) sur le fichier qui vient d'être extrait, lorsque le modèle choisi a `source = UBL`. Le fichier extrait doit déjà être au format UBL — cas typiques :
+Équivalent à l'exécution de la page [Traitement de document](./document.md) sur le fichier qui vient d'être extrait, quand le modèle choisi a `source = UBL`. Le fichier extrait doit déjà être au format UBL — cas typiques :
 
 - la source **Archive** est positionnée sur la variante UBL ;
 - le système amont émet directement de l'UBL ;
@@ -175,16 +175,16 @@ Lorsque la source est **BIP**, un appel **Apply post-generation** supplémentair
 | **Replace Mode** | `Overwrite existing` (défaut) ou `Skip`. |
 | **Send to PA** | `Use settings`, `Force send` ou `Skip sending`. |
 
-La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via la regex `idPattern` du modèle de document — les fichiers peuvent porter n'importe quel nom. Voir [Documents → Extraction de clé depuis cbc:ID](../management/documents.md#extraction-de-cl%C3%A9-depuis-cbcid-lorsque-source--ubl) pour la mise en place de la regex.
+La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via la regex `idPattern` du modèle de document — les fichiers peuvent avoir n'importe quel nom. Voir [Documents → Extraction de clé depuis cbc:ID](../management/documents.md#extraction-de-cl%C3%A9-depuis-cbcid-lorsque-source--ubl) pour la mise en place de la regex.
 
 #### Combinaisons non prises en charge
 
 | Source | Process Type | Statut |
 |---|---|---|
-| BIP, *Extract Mode = Both* | UBL | Non pris en charge — l'ensemble extrait contient à la fois le XML et la sortie rendue, qui ne peut pas être traitée en UBL. |
+| BIP, *Extract Mode = Both* | UBL | Non pris en charge — l'ensemble extrait contient à la fois le XML et la sortie générée, qui ne peut pas être traitée en UBL. |
 | BIP, *Extract Mode = Both* avec plusieurs lignes de sortie | XML | Rejeté — l'extraction produit plusieurs fichiers, le pipeline XML attend un seul fichier par exécution. |
 
-Un message d'erreur explicite apparaît dans la section **Process Result** lorsque l'une de ces combinaisons est tentée.
+Un message d'erreur explicite apparaît dans la section **Résultat de traitement** quand l'une de ces combinaisons est tentée.
 
 ---
 
@@ -192,8 +192,8 @@ Un message d'erreur explicite apparaît dans la section **Process Result** lorsq
 
 L'écran sépare le résultat en deux sections :
 
-- **Extraction Result** — message renvoyé par l'API d'extraction ; renseigné en premier.
-- **Process Result** — table de logs structurée du traitement (mêmes colonnes que sur les pages *XML* et *UBL* : Severity / Module / Submodule / Message) ; renseignée uniquement lorsque l'extraction a réussi et que le traitement s'est effectivement exécuté.
+- **Résultat d'extraction** — message renvoyé par l'API d'extraction ; renseigné en premier.
+- **Résultat de traitement** — table de logs structurée du traitement (mêmes colonnes que sur les pages *XML* et *UBL* : Sévérité / Module / Sous-module / Message) ; renseigné uniquement quand l'extraction a réussi et que le traitement s'est effectivement exécuté.
 
 Si l'extraction échoue, l'étape de traitement est sautée — l'enchaînement s'interrompt au premier échec.
 
@@ -201,8 +201,8 @@ Si l'extraction échoue, l'étape de traitement est sautée — l'enchaînement 
 
 ## Conseils & bonnes pratiques
 
-- **Utiliser *Extraction et traitement* pour des exécutions ponctuelles.** La page combine deux opérations sur un seul écran : récupérer puis traiter un document tient en un clic. Pour des exécutions répétées et non assistées, préférer *Sync → Fetch Input* — il enchaîne le même pipeline en lot.
-- **Adapter Process Type à la sortie d'extraction.** Le tableau des combinaisons ci-dessus liste les paires non prises en charge ; vérifier la cohérence entre le mode d'extraction BIP et le type de traitement choisi avant de cliquer sur Run.
-- **Pour un workflow piloté par BIP, conserver Process Type sur XML.** Cette voie déclenche `Apply post-generation` en cas de succès, qui met à jour le statut du job JDE — sans cela, le même job sera ré-extrait au tour suivant.
-- **Le résultat d'extraction conserve la sortie brute de l'API.** Lorsqu'une erreur survient côté extraction (job manquant, fichier introuvable, identifiants SFTP), le message renvoyé par l'API d'extraction reste le diagnostic canonique — à lire avant toute relance.
-- **Skip sending lors de la mise au point d'un template.** Les deux pipelines exposent l'option (`No send` / `Skip sending`) — l'utiliser durant le développement d'un template évite de produire des doublons de soumission PA entre les itérations.
+- **Utiliser *Extraction et traitement* pour des exécutions ponctuelles.** La page combine deux opérations sur un seul écran : récupérer puis traiter un document se fait en un clic. Pour des exécutions répétées et automatisées, préférer *Synchronisation → Fetch Input* — il enchaîne le même pipeline en lot.
+- **Adapter Process Type à la sortie d'extraction.** Le tableau des combinaisons ci-dessus liste les paires non prises en charge ; vérifier la cohérence entre le mode d'extraction BIP et le type de traitement choisi avant de cliquer sur Exécuter.
+- **Pour un workflow piloté par BIP, garder Process Type sur XML.** Ce choix déclenche `Apply post-generation` en cas de succès, qui met à jour le statut du job JDE — sans cela, le même job sera ré-extrait au tour suivant.
+- **Le résultat d'extraction garde la sortie brute de l'API.** Quand une erreur survient côté extraction (job manquant, fichier introuvable, identifiants SFTP), le message renvoyé par l'API d'extraction reste le diagnostic de référence — à lire avant toute relance.
+- **Skip sending pendant la mise au point d'un template.** Les deux pipelines proposent l'option (`No send` / `Skip sending`) — l'utiliser pendant le développement d'un template évite de produire des doublons de soumission PA entre les itérations.

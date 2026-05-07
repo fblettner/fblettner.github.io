@@ -46,7 +46,7 @@ La liste complète des préfixes est gérée dans la liste de référence *note-
 | `PMD` | *Tout retard de paiement entraînera des pénalités calculées au taux légal en vigueur, conformément à l'article L. 441-10 du Code de commerce.* | Sur toute facture B2B française. |
 | `PMD` | *Indemnité forfaitaire pour frais de recouvrement de 40 € (article D. 441-5 du Code de commerce).* | Sur toute facture B2B française. |
 | `REG` | *TVA non applicable, art. 293 B du CGI* | Factures de micro-entrepreneur sous le seuil de franchise (à associer à la catégorie TVA `E` et au code `VATEX-FR-FRANCHISE`). |
-| `PMT` | Mention d'escompte lorsque l'invoice en propose un. | Factures proposant un escompte de paiement anticipé. |
+| `PMT` | Mention d'escompte quand la facture en propose un. | Factures qui proposent un escompte de paiement anticipé. |
 
 Ces mentions sont **statutaires** au titre du Code de commerce et du Code général des impôts — elles doivent apparaître sur la facture imprimée comme sur la facture électronique. NomaUBL les émet à l'identique dans le champ BT-22.
 
@@ -54,8 +54,8 @@ Ces mentions sont **statutaires** au titre du Code de commerce et du Code géné
 
 ## Conseils & bonnes pratiques
 
-- **Considérer les valeurs par défaut comme le socle réglementaire.** Les deux notes `PMD` (pénalités + indemnité de recouvrement) sont statutaires pour toute facture B2B française. À configurer une fois dans le fichier de defaults ; les surcharges document ne doivent intervenir que pour des écarts justifiés (par ex. une clause contractuelle client spécifique).
+- **Traiter les valeurs par défaut comme le socle réglementaire.** Les deux notes `PMD` (pénalités + indemnité de recouvrement) sont statutaires pour toute facture B2B française. À configurer une fois dans le fichier de defaults ; les surcharges document ne doivent intervenir que pour des écarts justifiés (par ex. une clause contractuelle client spécifique).
 - **Reproduire les mentions à la lettre.** La rédaction du Code de commerce sert de référence en audit et en contentieux. La paraphrase affaiblit la valeur juridique de la facture. Recopier le texte officiel.
 - **`REG` est le type adapté à la mention de franchise.** À associer à un montage TVA (catégorie `E`, code VATEX `VATEX-FR-FRANCHISE`) dans l'onglet [Catégories de TVA](./vat-categories.md). Sans la mention textuelle, les règles BR-FR rejettent la facture.
-- **Surcharger par template uniquement lorsque la rédaction diverge légitimement.** Un template émettant des factures vers une filiale étrangère peut nécessiter une traduction anglaise ; un template domestique reprend les defaults.
+- **Surcharger par template uniquement quand la rédaction diverge légitimement.** Un template qui émet des factures vers une filiale étrangère peut demander une traduction anglaise ; un template domestique reprend les defaults.
 - **La liste de référence pilote la déroulante.** Les préfixes personnalisés s'ajoutent à *note-types* dans *Configuration → Reference Lists* ; la déroulante les récupère au prochain rechargement.

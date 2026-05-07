@@ -16,7 +16,7 @@ Le mécanisme est utile car **un même spool peut contenir plusieurs types de do
 
 Les sept codes sont fixés par la réglementation ; il n'est pas possible d'en ajouter ni d'en renommer. Ce qui est paramétrable ici est la **politique appliquée à chaque code** lorsqu'il apparaît dans un spool.
 
-Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — dès lors que la source est mappée vers UBL.
+Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — tant que la source est mappée vers UBL.
 
 ---
 
@@ -42,18 +42,18 @@ Chaque ligne de l'éditeur correspond à l'un des sept codes. La colonne **Code*
 |---|---|---|
 | **Code** | figé | L'un des sept codes réglementaires ci-dessus. Lecture seule. Le survol du code affiche l'indication réglementaire associée. |
 | **Description** | texte libre | Libellé affiché dans les modèles de documents et l'interface. Initialisé avec la description réglementaire ci-dessus. |
-| **Default** | case à cocher | Lorsque cochée, ce code est **pré-sélectionné** dans les nouveaux modèles de documents créés. **Une seule ligne peut être marquée par défaut à la fois** — cocher une autre ligne décoche automatiquement la précédente. |
-| **Send to PA** | `Y` / `N` / `F` | Surcharge par type de l'argument d'exécution *envoi vers Plateforme Agréée* : `Y` = envoi ; `N` = pas d'envoi ; `F` = **envoi forcé**, même lorsque l'argument d'exécution demande de l'ignorer. Valeur par défaut : `Y` pour B2B, `N` pour tous les autres codes. |
-| **GS** | case à cocher | Lorsque cochée, exécute un post-traitement **Ghostscript** sur le PDF produit pour ce type (par ex. compression / linéarisation), indépendamment de l'argument d'exécution. Désactivé par défaut. |
+| **Default** | case à cocher | Quand cochée, ce code est **pré-sélectionné** dans les nouveaux modèles de documents créés. **Une seule ligne peut être marquée par défaut à la fois** — cocher une autre ligne décoche automatiquement la précédente. |
+| **Send to PA** | `Y` / `N` / `F` | Surcharge par type de l'argument d'exécution *envoi vers Plateforme Agréée* : `Y` = envoi ; `N` = pas d'envoi ; `F` = **envoi forcé**, même quand l'argument d'exécution demande de l'ignorer. Valeur par défaut : `Y` pour B2B, `N` pour tous les autres codes. |
+| **GS** | case à cocher | Quand cochée, exécute un post-traitement **Ghostscript** sur le PDF produit pour ce type (par ex. compression / linéarisation), indépendamment de l'argument d'exécution. Désactivé par défaut. |
 | **Mode** | *(par défaut)* / `UBL` / `BURST` | Surcharge par type de l'argument d'exécution *Mode* : vide = **aucune surcharge** (le mode passé en argument est conservé) ; `UBL` = forcer une sortie UBL uniquement pour ce type ; `BURST` = forcer une sortie éclatée pour ce type. |
-| **UBL** | case à cocher | Lorsque cochée, conserve le **fichier UBL** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `Y` (conservé). |
-| **PDF** | case à cocher | Lorsque cochée, conserve le **fichier PDF** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `N` (non conservé). |
+| **UBL** | case à cocher | Quand cochée, conserve le **fichier UBL** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `Y` (conservé). |
+| **PDF** | case à cocher | Quand cochée, conserve le **fichier PDF** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `N` (non conservé). |
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Considérer chaque colonne hors Code/Description/Default comme une surcharge d'argument d'exécution.** Lorsqu'aucune surcharge n'est nécessaire, laisser la valeur vide ou décochée — l'argument d'exécution s'applique alors par défaut.
+- **Traiter chaque colonne hors Code/Description/Default comme une surcharge d'argument d'exécution.** Quand aucune surcharge n'est nécessaire, laisser la valeur vide ou décochée — l'argument d'exécution s'applique alors par défaut.
 - **Définir un code Default aligné sur le flux dominant.** La plupart des installations placent `B2B` par défaut — la pré-sélection sur chaque nouveau modèle de document évite des saisies répétées.
 - **Utiliser `F` (Force send) avec parcimonie.** Cette valeur surcharge l'argument d'exécution *Send to PA* et peut provoquer la transmission de factures dans des environnements supposés rester hors-ligne.
 - **`ARCHIVEONLY` ne doit jamais atteindre la PA.** Ce code couvre les avoirs internes liés aux annulations (règle BR-FR-20) ; conserver Send to PA à `N`.

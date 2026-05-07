@@ -26,7 +26,7 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). 
 
 | Champ | Description |
 |---|---|
-| **Default** | Valeur BAR utilisée lorsque la valeur source est absente ou ne possède pas de ligne de mapping. Choisie dans l'énumération ci-dessus. La grande majorité des installations conservent `B2B` par défaut. |
+| **Default** | Valeur BAR utilisée quand la valeur source est absente ou ne possède pas de ligne de mapping. Choisie dans l'énumération ci-dessus. La grande majorité des installations conservent `B2B` par défaut. |
 
 Le sélecteur de défaut reste visible en haut de l'onglet dans les deux modes.
 
@@ -53,7 +53,7 @@ code de routage source du XML
     └─ pas de ligne de mapping ?    ─► valeur BAR par défaut
 ```
 
-Lorsque le code source est vide ou absent, la valeur par défaut s'applique directement.
+Quand le code source est vide ou absent, la valeur par défaut s'applique directement.
 
 ---
 
@@ -62,4 +62,4 @@ Lorsque le code source est vide ou absent, la valeur par défaut s'applique dire
 - **BAR et le [Cadre de facturation](./business-process-type.md) (BT-23) sont orthogonaux — à tenir cohérents sans les confondre.** BAR porte le *canal* (B2B / B2G / B2C) ; le BT-23 porte la *nature de la facture* (biens / services / mixte) et le stade du cycle de vie. Un document `B2G` requiert tout de même un code Cadre (`B1` / `S1` / `M1`, ou `S3` en sous-traitance) ; un Cadre `B1` requiert tout de même un BAR (typiquement `B2B`).
 - **`B2C` n'est pas transmis à la PA.** Il est seulement déclaré dans le flux d'e-reporting. À utiliser pour les factures destinées à un particulier — jamais pour des partenaires B2B non encore soumis à la réforme.
 - **Réserver `ARCHIVEONLY` aux exclusions légitimes.** Archiver sans transmettre court-circuite le canal réglementaire. Cas valides : documents internes, tests, corrections ponctuelles.
-- **Un spool mêlant B2B et B2C** peut être résolu par ce mapping lorsque le XML source porte un classifieur clair. Sinon, *Document Types → runtime args* est l'endroit approprié pour surcharger par type de document — voir la [page Document Types](../../configuration/system/document-types.md).
+- **Un spool qui mélange B2B et B2C** peut être résolu par ce mapping quand le XML source porte un classifieur clair. Sinon, *Document Types → runtime args* est l'endroit approprié pour surcharger par type de document — voir la [page Document Types](../../configuration/system/document-types.md).

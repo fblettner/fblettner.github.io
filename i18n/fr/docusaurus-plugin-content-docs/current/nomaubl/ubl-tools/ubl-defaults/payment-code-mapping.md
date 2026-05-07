@@ -16,7 +16,7 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). 
 
 | Champ | Description |
 |---|---|
-| **Default** | Code de moyen de paiement émis lorsque la valeur source est absente ou ne possède pas de ligne de mapping. Choisi dans la liste de référence *payment-means* (UNCL 4461). Défaut B2B le plus courant : `30` (virement) ou `58` (virement SEPA). |
+| **Default** | Code de moyen de paiement émis quand la valeur source est absente ou ne possède pas de ligne de mapping. Choisi dans la liste de référence *payment-means* (UNCL 4461). Défaut B2B le plus courant : `30` (virement) ou `58` (virement SEPA). |
 
 Le sélecteur de défaut reste visible en haut de l'onglet dans les deux modes (defaults et surcharge document).
 
@@ -61,7 +61,7 @@ code paiement source du XML
     └─ pas de ligne de mapping ?    ─► code paiement par défaut
 ```
 
-Lorsque le code source est vide ou absent, la valeur par défaut s'applique directement, sans passer par le mapping.
+Quand le code source est vide ou absent, la valeur par défaut s'applique directement, sans passer par le mapping.
 
 ---
 
@@ -70,4 +70,4 @@ Lorsque le code source est vide ou absent, la valeur par défaut s'applique dire
 - **Couvrir l'ensemble du dictionnaire des codes paiement de la source.** Chaque valeur potentielle de l'amont doit posséder sa ligne de mapping — le repli sur le défaut masque des problèmes de qualité de données qui ne se révèlent qu'au niveau du destinataire.
 - **`30` (virement) est le défaut français le plus sûr.** Universellement accepté par la Plateforme Agréée et adapté au flux B2B le plus courant. Réserver `58` (SEPA) aux templates où le routage spécifique SEPA fait partie de l'accord contractuel.
 - **Ajouter les codes dans la liste de référence, pas ici.** Si un code UBL est absent de la déroulante, l'ajouter à la liste *payment-means* — la déroulante le récupère au prochain rechargement.
-- **Surcharger par template uniquement lorsque le schéma de paiement diffère.** Un type de document toujours payé par prélèvement (par ex. facturation récurrente) constitue un cas légitime de surcharge par template ; un paiement ponctuel non.
+- **Surcharger par template uniquement quand le schéma de paiement diffère.** Un type de document toujours payé par prélèvement (par ex. facturation récurrente) est un cas légitime de surcharge par template ; un paiement ponctuel non.

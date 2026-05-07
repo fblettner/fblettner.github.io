@@ -15,7 +15,7 @@ Cet écran est **distinct de *Sync → Import*** :
 
 Les deux peuvent s'exécuter sur le même ordonnanceur avec des intervalles différents — voir *Conseils* ci-dessous.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé — la production des événements de cycle de vie relevant de la PA, indépendamment du système amont.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — car la production des événements de cycle de vie est du ressort de la PA, indépendamment du système amont.
 
 ---
 
@@ -84,7 +84,7 @@ Chaque clic enchaîne quatre étapes :
    - L'**en-tête de facture** (`F564231`) est mis à jour pour que le *statut courant* affiché dans la liste des factures corresponde au dernier événement reçu.
 4. **Avance de l'horodatage repère.** La valeur `lastRetrievalDate` du template est mise à jour avec l'horodatage du dernier événement reçu. L'exécution suivante part de cet horodatage.
 
-La table de cycle de vie est **en ajout uniquement** : chaque événement ajoute une ligne, aucune ligne n'est jamais modifiée ni supprimée. Relancer la récupération ne peut pas produire de doublon, l'horodatage repère n'avance que dans un seul sens.
+La table de cycle de vie est **en mode ajout seul** : chaque événement ajoute une ligne, aucune ligne n'est jamais modifiée ni supprimée. Relancer la récupération ne peut pas produire de doublon, l'horodatage repère n'avance que dans un seul sens.
 
 ---
 
@@ -94,7 +94,7 @@ Le cycle de vie couvre les codes **post-soumission** définis par XP Z12-012 —
 
 Sous-ensembles courants :
 
-- **Tous les codes** *(défaut)* — abonnement à l'ensemble de la liste de référence. Adapté à tout déploiement nécessitant une traçabilité complète.
+- **Tous les codes** *(défaut)* — abonnement à toute la liste de référence. Adapté à tout déploiement qui demande une traçabilité complète.
 - **Codes obligatoires uniquement** — récupération limitée aux codes obligatoires PPF (`200`, `201`, `213`, …). Réduit le volume sur les installations à très fort débit où les statuts intermédiaires ne sont pas exploités en aval.
 
 Les codes `9906` / `9907` ne **font pas** partie de cette récupération — il s'agit de statuts locaux NomaUBL liés à la confirmation d'import asynchrone, traités par *Sync → Import*.
@@ -108,7 +108,7 @@ Une seule section, un seul bouton.
 | Élément | Description |
 |---|---|
 | **Retrieve Statuses** | Déclenche la récupération. Désactivé pendant l'exécution. |
-| **Ligne de statut** | Retour en ligne sous le bouton — vert en cas de succès, rouge en cas d'échec. |
+| **Ligne de statut** | Message en ligne sous le bouton — vert en cas de succès, rouge en cas d'échec. |
 
 La page n'a aucun paramètre : tous les événements postérieurs à l'horodatage repère, pour chaque code de la liste configurée, sont récupérés en un seul appel. Aucune sélection par facture.
 
@@ -124,7 +124,7 @@ Contenu typique d'une exécution réussie :
 - Une ligne `INFO` ou `SUCCESS` par événement appliqué — clé de facture + nouveau code de statut.
 - Une ligne `INFO` finale signalant le nouvel horodatage repère.
 
-Lorsqu'un appel à la PA échoue pour des raisons de transport (réseau, expiration, identifiants), une ligne `ERROR` est journalisée et l'horodatage repère reste inchangé — la prochaine exécution repart du même `since`.
+Quand un appel à la PA échoue pour des raisons de transport (réseau, expiration, identifiants), une ligne `ERROR` est journalisée et l'horodatage repère reste inchangé — la prochaine exécution repart du même `since`.
 
 ---
 
@@ -134,4 +134,4 @@ Lorsqu'un appel à la PA échoue pour des raisons de transport (réseau, expirat
 - **Distincte de *Sync → Import*.** *Import* gère la confirmation asynchrone post-soumission (`9906` → `10` / `9907`) ; *Retrieve Statuses* gère les codes de cycle de vie émis par la PA ensuite. Les deux peuvent s'exécuter sur le même ordonnanceur avec des intervalles différents.
 - **L'horodatage repère n'avance que dans un sens.** Relancer la page n'a aucun effet sur les événements déjà appliqués. Pour rejouer une fenêtre (par ex. après restauration d'une sauvegarde de base ancienne), abaisser manuellement `lastRetrievalDate` dans le template *e-invoicing* — l'exécution suivante récupérera tous les événements depuis cette date.
 - **Restreindre les codes configurés en cas de volume.** La liste par défaut couvre tous les codes de la réforme ; les installations à fort débit qui n'exploitent que les codes obligatoires PPF peuvent réduire la liste pour alléger la charge côté PA et côté local.
-- **Le cycle de vie est la trace d'audit.** La table de cycle de vie (`F564235`) est en ajout uniquement et représente l'historique complet ; l'en-tête de facture (`F564231`) ne porte que le statut le plus récent. Pour instruire un litige ou retrouver une mise à jour PA manquante, c'est dans la table de cycle de vie qu'il faut chercher.
+- **Le cycle de vie est la trace d'audit.** La table de cycle de vie (`F564235`) est en mode ajout seul et représente l'historique complet ; l'en-tête de facture (`F564231`) ne contient que le statut le plus récent. Pour instruire un litige ou retrouver une mise à jour PA manquante, c'est dans la table de cycle de vie qu'il faut chercher.

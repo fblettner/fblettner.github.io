@@ -6,7 +6,7 @@ keywords: [NomaUBL, e-directory, INSEE, SIREN, SIRET, PPF, recherche-entreprises
 
 # E-Directory
 
-L'écran **E-Directory** est l'outil de recherche utilisateur pour retrouver une société française dans le **référentiel INSEE** (`recherche-entreprises.api.gouv.fr`) et vérifier si les SIREN / SIRET correspondants sont **joignables sur l'annuaire PPF** pour la réception de factures électroniques.
+L'écran **E-Directory** permet de rechercher une société française dans le **référentiel INSEE** (`recherche-entreprises.api.gouv.fr`) et de vérifier si les SIREN / SIRET correspondants sont **joignables sur l'annuaire PPF** pour la réception de factures électroniques.
 
 Utilisations courantes :
 
@@ -19,9 +19,9 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 Les deux recherches sous-jacentes sont indépendantes et jouent des rôles distincts :
 
 - **Recherche INSEE** — confirme l'existence de la société et fournit raison sociale, adresse, état administratif. API publique gratuite, aucun identifiant requis.
-- **Contrôle annuaire PPF** — vérifie que le SIREN / SIRET est inscrit comme destinataire sur la Plateforme Publique de Facturation. Utilise les identifiants configurés dans *Configuration → System → e-directory*.
+- **Contrôle annuaire PPF** — vérifie que le SIREN / SIRET est inscrit comme destinataire sur la Plateforme Publique de Facturation. Utilise les identifiants configurés dans *Configuration → Système → e-directory*.
 
-Voir la page [Configuration → System → e-directory](../configuration/system/edirectory.md) pour le contexte global — identifiants, rôles de recherche et distinction PPF / INSEE.
+Voir la page [Configuration → Système → e-directory](../configuration/system/edirectory.md) pour le contexte global — identifiants, rôles de recherche et distinction PPF / INSEE.
 
 ---
 
@@ -48,7 +48,7 @@ Voir la page [Configuration → System → e-directory](../configuration/system/
   <text x="750" y="90" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📡 Annuaire PPF</text>
   <text x="750" y="112" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.78">/api/check-directory</text>
   <line x1="190" y1="100" x2="220" y2="100" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#edir-arrow)"/>
-  <text x="205" y="93" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Search</text>
+  <text x="205" y="93" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Rechercher</text>
   <line x1="420" y1="100" x2="450" y2="100" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#edir-arrow)"/>
   <text x="435" y="93" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">corresp.</text>
   <line x1="620" y1="100" x2="650" y2="100" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#edir-arrow)"/>
@@ -67,7 +67,7 @@ Voir la page [Configuration → System → e-directory](../configuration/system/
   <line x1="850" y1="115" x2="870" y2="155" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-arrow-slate)"/>
 </svg>
 
-Les deux interrogations se succèdent : INSEE d'abord pour peupler les lignes, puis le contrôle PPF en parallèle, ligne par ligne. L'utilisateur voit le tableau se compléter en deux passes.
+Les deux requêtes s'enchaînent : INSEE d'abord pour remplir les lignes, puis le contrôle PPF en parallèle, ligne par ligne. L'utilisateur voit le tableau se remplir en deux passes.
 
 ---
 
@@ -77,8 +77,8 @@ Un seul champ et un bouton en haut de la page.
 
 | Élément | Comportement |
 |---|---|
-| **Champ de recherche** | Texte libre : nom de société, nom partiel, SIREN, SIRET ou toute combinaison. Validation par **Entrée** ou par le bouton **Search**. |
-| **Bouton Search** | Déclenche la recherche INSEE. Désactivé pendant l'exécution et lorsque le champ est vide. |
+| **Champ de recherche** | Texte libre : nom de société, nom partiel, SIREN, SIRET ou toute combinaison. Validation par **Entrée** ou par le bouton **Rechercher**. |
+| **Bouton Rechercher** | Déclenche la recherche INSEE. Désactivé pendant l'exécution et quand le champ est vide. |
 
 La requête est envoyée à `recherche-entreprises.api.gouv.fr` côté serveur ; l'API retourne les sociétés correspondantes avec leurs données complètes.
 
@@ -86,40 +86,40 @@ La requête est envoyée à `recherche-entreprises.api.gouv.fr` côté serveur ;
 
 ## Tableau des résultats
 
-Après la recherche, le tableau se peuple à raison d'une ligne par correspondance. Chaque ligne correspond soit à un SIREN (entité juridique), soit à un SIRET (établissement spécifique).
+Après la recherche, le tableau se remplit à raison d'une ligne par correspondance. Chaque ligne correspond soit à un SIREN (entité juridique), soit à un SIRET (établissement spécifique).
 
 | Colonne | Description |
 |---|---|
 | **Type** | Badge coloré — `SIREN` (bleu, entité juridique) ou `SIRET` (gris, établissement). |
-| **Identifier** | SIREN à 9 chiffres ou SIRET à 14 chiffres. |
-| **Name** | Raison sociale (`nom_raison_sociale`). |
-| **Address** | Adresse postale complète de l'établissement. |
-| **State** | `Active` (vert) lorsque l'établissement est administrativement actif ; `C` (rouge) lorsqu'il est cessé. |
-| **Directory** | Résultat du contrôle annuaire PPF — voir ci-dessous. |
+| **Identifiant** | SIREN à 9 chiffres ou SIRET à 14 chiffres. |
+| **Nom** | Raison sociale (`nom_raison_sociale`). |
+| **Adresse** | Adresse postale complète de l'établissement. |
+| **État** | `Actif` (vert) quand l'établissement est administrativement actif ; `C` (rouge) quand il est cessé. |
+| **Annuaire** | Résultat du contrôle annuaire PPF — voir ci-dessous. |
 
 ### États du contrôle annuaire
 
-La colonne Directory se peuple automatiquement dès la fin de la recherche — un appel PPF par ligne. Pendant l'exécution, les lignes affichent un spinner. Chaque ligne se résout à terme sur :
+La colonne Annuaire se remplit automatiquement dès la fin de la recherche — un appel PPF par ligne. Pendant l'exécution, les lignes affichent un spinner. Chaque ligne aboutit ensuite à l'un de ces états :
 
 <div style={{display: 'flex', flexDirection: 'column', gap: '6px', margin: '14px 0'}}>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(50,215,75,0.08)', border: '1px solid rgba(50,215,75,0.3)'}}><span style={{color: '#4ade80', fontWeight: 700, fontSize: '14px'}}>✓</span><span style={{color: '#4ade80', fontWeight: 600, fontSize: '13px'}}>Reachable</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Inscrit sur le PPF, prêt à recevoir des factures électroniques.</span></div>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(255,69,58,0.08)', border: '1px solid rgba(255,69,58,0.3)'}}><span style={{color: '#f87171', fontWeight: 700, fontSize: '14px'}}>✗</span><span style={{color: '#f87171', fontWeight: 600, fontSize: '13px'}}>Not found</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Absent de l'annuaire PPF ; une facture serait retournée avec une erreur de routage (REJ_ADR).</span></div>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(255,159,10,0.08)', border: '1px solid rgba(255,159,10,0.3)'}}><span style={{color: '#fb923c', fontWeight: 700, fontSize: '14px'}}>⚠</span><span style={{color: '#fb923c', fontWeight: 600, fontSize: '13px'}}>Error</span><span style={{opacity: 0.7, fontSize: '12px'}}>— L'appel PPF a échoué (réseau, identifiants). Le message de l'API s'affiche à côté de l'icône.</span></div>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(120,120,120,0.08)', border: '1px solid rgba(255,255,255,0.1)'}}><span style={{opacity: 0.6, fontSize: '14px'}}>⟳</span><span style={{opacity: 0.6, fontWeight: 600, fontSize: '13px'}}>Loading</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Appel PPF en cours ; la ligne se résoudra sur l'un des états ci-dessus.</span></div>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(50,215,75,0.08)', border: '1px solid rgba(50,215,75,0.3)'}}><span style={{color: '#4ade80', fontWeight: 700, fontSize: '14px'}}>✓</span><span style={{color: '#4ade80', fontWeight: 600, fontSize: '13px'}}>Joignable</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Inscrit sur le PPF, prêt à recevoir des factures électroniques.</span></div>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(255,69,58,0.08)', border: '1px solid rgba(255,69,58,0.3)'}}><span style={{color: '#f87171', fontWeight: 700, fontSize: '14px'}}>✗</span><span style={{color: '#f87171', fontWeight: 600, fontSize: '13px'}}>Introuvable</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Absent de l'annuaire PPF ; une facture serait retournée avec une erreur de routage (REJ_ADR).</span></div>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(255,159,10,0.08)', border: '1px solid rgba(255,159,10,0.3)'}}><span style={{color: '#fb923c', fontWeight: 700, fontSize: '14px'}}>⚠</span><span style={{color: '#fb923c', fontWeight: 600, fontSize: '13px'}}>Erreur</span><span style={{opacity: 0.7, fontSize: '12px'}}>— L'appel PPF a échoué (réseau, identifiants). Le message de l'API s'affiche à côté de l'icône.</span></div>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(120,120,120,0.08)', border: '1px solid rgba(255,255,255,0.1)'}}><span style={{opacity: 0.6, fontSize: '14px'}}>⟳</span><span style={{opacity: 0.6, fontWeight: 600, fontSize: '13px'}}>Chargement</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Appel PPF en cours ; la ligne aboutira à l'un des états ci-dessus.</span></div>
 </div>
 
 ---
 
 ## Compteur de résultats
 
-Au-dessus du tableau, un petit libellé indique le nombre de résultats renvoyés par INSEE pour la requête (par ex. `12 results`).
+Au-dessus du tableau, un petit libellé indique le nombre de résultats renvoyés par INSEE pour la requête (par ex. `12 résultats`).
 
 ---
 
 ## Conseils & bonnes pratiques
 
 - **Rechercher d'abord par nom, puis affiner.** INSEE retourne l'entité juridique (SIREN) et ses établissements (SIRET) — sélectionner le bon SIRET évite l'erreur courante « bon SIREN, mauvais établissement » à l'émission d'une facture.
-- **Un Not found rouge n'est pas toujours définitif.** Un acheteur peut ne pas encore être enregistré sur le PPF ; lui demander de s'inscrire avant de retenter. L'état de l'annuaire évolue chaque jour à mesure que les sociétés s'inscrivent sur le PPF.
-- **Vérifier l'état actif.** Un établissement cessé ne peut pas recevoir de facture, même s'il apparaît dans l'annuaire PPF. Toujours contrôler la colonne State avant de se fier à un mapping d'adresse électronique.
+- **Un Introuvable rouge n'est pas toujours définitif.** Un acheteur peut ne pas être encore enregistré sur le PPF ; lui demander de s'inscrire avant de retenter. L'état de l'annuaire évolue chaque jour à mesure que les sociétés s'inscrivent sur le PPF.
+- **Vérifier l'état actif.** Un établissement cessé ne peut pas recevoir de facture, même s'il apparaît dans l'annuaire PPF. Toujours contrôler la colonne État avant de se fier à un mapping d'adresse électronique.
 - **Pour des recherches en lot, préférer l'API.** Cette page traite une requête à la fois. Pour valider un annuaire de clients en une passe, appeler directement `/api/insee-search` et `/api/check-directory` — voir *References → API Reference* pour les schémas.
-- **Une erreur d'annuaire signale souvent un souci d'identifiants.** Des `Error` répétés sur des lignes qui devraient répondre proviennent typiquement d'identifiants PPF mal configurés dans *Configuration → System → e-directory* — corriger là avant de relancer la recherche.
+- **Une erreur d'annuaire indique souvent un problème d'identifiants.** Des `Erreur` répétées sur des lignes qui devraient répondre viennent typiquement d'identifiants PPF mal configurés dans *Configuration → Système → e-directory* — corriger là avant de relancer la recherche.

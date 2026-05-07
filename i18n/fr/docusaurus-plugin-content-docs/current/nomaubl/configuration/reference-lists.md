@@ -10,27 +10,27 @@ La section **Reference Lists** rassemble les **listes de codes standard** requis
 
 La majorité de ces listes proviennent de standards internationaux (ISO, UN/CEFACT, CEN) ; quelques-unes correspondent à des codes côté PA spécifiques à l'infrastructure française (codes action, codes de motif de rejet). NomaUBL est livré avec un contenu par défaut pré-renseigné pour chaque liste ; les éditeurs permettent de personnaliser les libellés (notamment les traductions bilingues FR/EN) et d'ajouter des codes propres à l'activité.
 
-Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — dès lors que la source est mappée vers UBL.
+Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — tant que la source est mappée vers UBL.
 
 ---
 
 ## Mode d'édition commun à toutes les listes
 
-Chaque liste de référence est présentée sous forme de **tableau** comportant les mêmes trois colonnes. Le mode d'interaction est identique pour les douze listes ; seules les valeurs de codes et la référence réglementaire associée diffèrent.
+Chaque liste de référence est présentée sous forme de **tableau** qui contient les mêmes trois colonnes. Le mode d'interaction est identique pour les douze listes ; seules les valeurs de codes et la référence réglementaire associée diffèrent.
 
 | Colonne | Description |
 |---|---|
 | **Code** | Code standard, tel que défini par le référentiel d'origine (par ex. `EUR`, `380`, `S`, `0088`). |
-| **Label FR** | Libellé français affiché lorsque la locale active est le français. |
-| **Label EN** | Libellé anglais affiché lorsque la locale active est l'anglais. |
+| **Label FR** | Libellé français affiché quand la locale active est le français. |
+| **Label EN** | Libellé anglais affiché quand la locale active est l'anglais. |
 
-Utiliser le bouton **+ Add** en bas du tableau pour ajouter une ligne personnalisée, et le bouton **×** d'une ligne pour la supprimer. Les lignes sont triées par code.
+Utiliser le bouton **+ Ajouter** en bas du tableau pour ajouter une ligne personnalisée, et le bouton **×** d'une ligne pour la supprimer. Les lignes sont triées par code.
 
 ---
 
 ## Listes standard fournies par NomaUBL
 
-Les douze listes ci-dessous sont intégrées à NomaUBL et alignées sur la réglementation. Elles couvrent l'ensemble des référentiels nécessaires à la validation de bout en bout des documents UBL dans la chaîne française de facturation électronique.
+Les douze listes ci-dessous sont intégrées à NomaUBL et alignées sur la réglementation. Elles couvrent tous les référentiels nécessaires à la validation de bout en bout des documents UBL dans la chaîne française de facturation électronique.
 
 | Liste | Standard / terme métier | Rôle |
 |---|---|---|
@@ -53,6 +53,6 @@ Les douze listes ci-dessous sont intégrées à NomaUBL et alignées sur la rég
 
 - **S'en tenir aux codes standard.** Ajouter un code hors référentiel rompt la validation en aval — la PA, la PA destinataire et l'annuaire PPF s'attendent tous à des valeurs standard.
 - **Personnaliser les libellés, pas les codes.** Adapter un libellé au vocabulaire métier est sans risque ; renommer le code sous-jacent ne l'est pas.
-- **Les libellés bilingues ne sont pas optionnels.** Renseigner systématiquement Label FR et Label EN — l'interface se replie sur le code brut lorsque le libellé de la locale active est vide.
+- **Les libellés bilingues ne sont pas optionnels.** Renseigner systématiquement Label FR et Label EN — l'interface se replie sur le code brut quand le libellé de la locale active est vide.
 - **Maintenir VATEX cohérent avec les catégories de TVA.** Les codes VATEX n'ont de sens qu'associés à une catégorie de TVA exonérante — l'un sans l'autre produit des factures invalides.
-- **Les codes Action / Rejet sont définis côté PA.** Si la PA renomme ou ajoute des codes dans son catalogue, répliquer la modification ici afin de maintenir l'alignement entre l'interface et les payloads d'API.
+- **Les codes Action / Rejet sont définis côté PA.** Si la PA renomme ou ajoute des codes dans son catalogue, répliquer la modification ici pour maintenir l'alignement entre l'interface et les payloads d'API.

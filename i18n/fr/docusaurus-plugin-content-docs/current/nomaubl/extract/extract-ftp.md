@@ -8,7 +8,7 @@ keywords: [NomaUBL, SFTP, FTP, extraction, navigation, téléchargement, JD Edwa
 
 L'écran **Extraction FTP** permet de naviguer sur un serveur SFTP distant et de télécharger un fichier sélectionné dans un répertoire du serveur NomaUBL local. Les identifiants de connexion sont lus dans *Connecteurs FTP → SFTP Server* ; cette page ne traite que la navigation et le téléchargement.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé — dès lors que les fichiers de la source sont accessibles sur un serveur SFTP.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — tant que les fichiers de la source sont accessibles sur un serveur SFTP.
 
 ---
 

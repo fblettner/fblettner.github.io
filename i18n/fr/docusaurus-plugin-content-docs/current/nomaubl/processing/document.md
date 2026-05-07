@@ -10,11 +10,11 @@ L'écran **Traitement de document** est le point d'entrée unique du traitement 
 
 1. lit la propriété `source` du modèle (`XML` ou `UBL`) ;
 2. aiguille vers le pipeline correspondant — transformation XSL pour les spools XML, validation directe pour les factures déjà au format UBL ;
-3. valide contre XSD + Schematron, persiste en base, et (selon l'option *Send to PA*) dépose sur la Plateforme Agréée ou s'arrête sur un statut local.
+3. valide avec XSD + Schematron, enregistre en base, et (selon l'option *Send to PA*) dépose sur la Plateforme Agréée ou s'arrête sur un statut local.
 
 Les pages **Process XML** et **Process UBL** des versions précédentes disparaissent — le formulaire ci-dessous reconfigure ses contrôles selon le modèle choisi. Une seule page, une seule route REST (`POST /api/process`), une seule commande CLI (`-process`).
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé.
 
 ---
 
@@ -79,7 +79,7 @@ Une fois le modèle sélectionné, le champ **Source** du formulaire affiche la 
   <text x="675" y="402" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">arrêt</text>
 </svg>
 
-`replaceMode = Y` purge les cinq tables UBL (`F564231` / `F564233` / `F564234` / `F564235` / `F564236`) pour le triplet `(doc, dct, kco)` correspondant avant le re-traitement — sémantique identique sur les chemins XML et UBL.
+`replaceMode = Y` purge les cinq tables UBL (`F564231` / `F564233` / `F564234` / `F564235` / `F564236`) pour le triplet `(doc, dct, kco)` correspondant avant le re-traitement — comportement identique sur les chemins XML et UBL.
 
 ---
 
@@ -95,7 +95,7 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 | **Mode** | XML | `AUTO` (défaut), `SINGLE`, `BURST` ou `UBL`. Voir [Modes (source XML)](#modes-source-xml) ci-dessous. |
 | **Send to PA** | XML | `Use settings` (défaut) ou `Skip sending`. |
 | **Mode** | UBL | `Process & Validate` (défaut) ou `Validate only`. |
-| **Send to PA** | UBL | `Use settings`, `Force send` ou `Skip sending`. *Force send* est l'override propre à UBL qui contourne le drapeau `sendToPA` du template e-invoicing. |
+| **Send to PA** | UBL | `Use settings`, `Force send` ou `Skip sending`. *Force send* est la surcharge propre à UBL qui contourne l'option `sendToPA` du template e-invoicing. |
 | **Replace** | les deux | `Skip` laisse intactes les lignes existantes ; `Overwrite` purge les cinq tables UBL pour le même `(doc, dct, kco)` et ré-importe proprement. |
 
 ---
@@ -104,12 +104,12 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 
 | Mode | Sortie | Utilisation typique |
 |---|---|---|
-| **AUTO** | PDF ou UBL | Résout le mode applicable par document via *UBL Defaults → Document Type / BAR Routing*. Défaut recommandé en production — pratique lorsqu'un même spool XML mêle factures (résolues en `UBL`) et documents non-factures (résolus en `SINGLE` / `BURST`). |
-| **SINGLE** | PDF | Rend l'intégralité du spool XML en un **PDF unique**. Utile pour les documents non-factures qui ne nécessitent qu'une mise en forme PDF. |
-| **BURST** | PDF + index XML | Découpe le spool source sur une clé (typique des spools multi-documents), produit **un PDF par valeur de clé** et un **fichier d'index XML** décrivant l'ensemble obtenu. L'index est consommé par les applications tierces qui doivent dispatcher chaque document indépendamment. |
-| **UBL** | UBL 2.1 + PDF | Exécute le XSL document vers UBL 2.1, valide, persiste et (selon *Send to PA*) dépose. Réglage explicite recommandé une fois le routage *AUTO* validé pour un modèle. |
+| **AUTO** | PDF ou UBL | Résout le mode applicable par document via *UBL Defaults → Document Type / BAR Routing*. Défaut recommandé en production — pratique quand un même spool XML mélange factures (résolues en `UBL`) et documents non-factures (résolus en `SINGLE` / `BURST`). |
+| **SINGLE** | PDF | Génère l'intégralité du spool XML en un **PDF unique**. Utile pour les documents non-factures qui n'ont besoin que d'une mise en forme PDF. |
+| **BURST** | PDF + index XML | Découpe le spool source sur une clé (typique des spools multi-documents), produit **un PDF par valeur de clé** et un **fichier d'index XML** qui décrit l'ensemble obtenu. L'index est utilisé par les applications tierces qui doivent dispatcher chaque document séparément. |
+| **UBL** | UBL 2.1 + PDF | Exécute le XSL document vers UBL 2.1, valide, enregistre et (selon *Send to PA*) dépose. Réglage explicite recommandé une fois le routage *AUTO* validé pour un modèle. |
 
-`AUTO` n'est *pas* un pipeline propre — il aiguille chaque document du XML source vers `SINGLE`, `BURST` ou `UBL` selon la configuration *Document Types*. Seule la branche `UBL` enchaîne validation, persistance et dépôt PA ; `SINGLE` / `BURST` produisent une sortie PDF et s'arrêtent là.
+`AUTO` n'est *pas* un pipeline à part — il aiguille chaque document du XML source vers `SINGLE`, `BURST` ou `UBL` selon la configuration *Document Types*. Seule la branche `UBL` enchaîne validation, enregistrement et dépôt PA ; `SINGLE` / `BURST` produisent une sortie PDF et s'arrêtent là.
 
 ---
 
@@ -117,10 +117,10 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 
 | Mode | Ce qui s'exécute |
 |---|---|
-| **Process & Validate** *(défaut)* | Lecture de la facture UBL, extraction de `(doc, dct, kco)` depuis `cbc:ID` (regex du modèle), validation XSD + Schematron, persistance dans `F564231` / `F564233` / `F564234` / `F564235` / `F564236`, écriture de l'événement de cycle de vie. *Send to PA* s'applique. |
-| **Validate only** | Exécute XSD + Schematron uniquement. Aucune écriture en base, aucun dépôt PA. Le tableau de résultats affiche chaque erreur avec sévérité / source / règle / message — mêmes colonnes que la page [Erreurs d'intégration](../application/integration-errors.md). À utiliser comme contrôle rapide avant d'engager le fichier en base. |
+| **Process & Validate** *(défaut)* | Lecture de la facture UBL, extraction de `(doc, dct, kco)` depuis `cbc:ID` (regex du modèle), validation XSD + Schematron, enregistrement dans `F564231` / `F564233` / `F564234` / `F564235` / `F564236`, écriture de l'événement de cycle de vie. *Send to PA* s'applique. |
+| **Validate only** | Exécute XSD + Schematron uniquement. Aucune écriture en base, aucun dépôt PA. Le tableau de résultats affiche chaque erreur avec sévérité / source / règle / message — mêmes colonnes que la page [Erreurs d'intégration](../application/integration-errors.md). À utiliser comme contrôle rapide avant d'enregistrer le fichier en base. |
 
-**Plus de convention de nommage.** Le traitement UBL extrait toujours `(doc, dct, kco)` depuis le `cbc:ID` de la facture via la regex `idPattern` du modèle. La convention `DOC_DCT_KCO_ubl.xml` n'est plus exigée — les fichiers peuvent porter n'importe quel nom.
+**Plus de convention de nommage.** Le traitement UBL extrait toujours `(doc, dct, kco)` depuis le `cbc:ID` de la facture via la regex `idPattern` du modèle. La convention `DOC_DCT_KCO_ubl.xml` n'est plus exigée — les fichiers peuvent avoir n'importe quel nom.
 
 ---
 
@@ -141,7 +141,7 @@ Content-Type: application/json
 }
 ```
 
-La route remplace les anciens `/api/run` (XML) et `/api/process-ubl` (UBL), et la réponse est diffusée comme une suite d'événements de log et un marqueur de fin — même forme des deux côtés, donc une seule intégration cliente couvre les deux pipelines.
+La route remplace les anciens `/api/run` (XML) et `/api/process-ubl` (UBL). La réponse est diffusée sous forme d'une suite d'événements de log avec un marqueur de fin — même format des deux côtés. Une seule intégration côté client couvre donc les deux pipelines.
 
 ---
 
@@ -157,8 +157,8 @@ Remplace les anciens drapeaux `-xml` et `-ubl`. Le CLI lit la propriété `sourc
 
 ## Conseils & bonnes pratiques
 
-- **Choisir la bonne source au niveau du modèle, pas au moment de l'exécution.** `Source` se définit sur le modèle de document — la page *Process Document* la lit simplement. Une définition unique dans [Documents](../management/documents.md) garantit la cohérence de tous les points d'entrée (cette page, *Fetch Input*, le CLI, le planificateur).
-- **Utiliser *Validate only* avant la persistance.** À l'import de fichiers UBL provenant d'un nouveau système amont, lancer *Validate only* d'abord pour faire remonter les échecs XSD / Schematron sans polluer la base.
-- **`AUTO` en production, explicite pour le débogage.** Les modèles de production utilisent généralement `AUTO` afin que la table des types de document pilote l'aiguillage par ligne. Lors du débogage d'un modèle isolé, repasser au mode `UBL` explicite rend la trace sans ambiguïté.
+- **Choisir la bonne source au niveau du modèle, pas au moment de l'exécution.** `Source` se définit sur le modèle de document ; la page *Traitement de document* la lit simplement. Une définition unique dans [Documents](../management/documents.md) garantit la cohérence de tous les points d'entrée (cette page, *Fetch Input*, le CLI, le planificateur).
+- **Utiliser *Validate only* avant l'enregistrement.** À l'import de fichiers UBL provenant d'un nouveau système amont, lancer d'abord *Validate only* pour faire remonter les échecs XSD / Schematron sans polluer la base.
+- **`AUTO` en production, explicite pour le débogage.** Les modèles de production utilisent en général `AUTO` pour que la table des types de document pilote l'aiguillage par ligne. Lors du débogage d'un modèle isolé, repasser au mode `UBL` explicite rend la trace sans ambiguïté.
 - **`Replace = Overwrite` purge cinq tables.** En-tête (`F564231`), lignes (`F564233`), TVA (`F564234`), cycle de vie (`F564235`) et erreurs de validation (`F564236`) — l'historique et les erreurs de l'exécution précédente n'interfèrent pas avec la nouvelle exécution.
-- **Pour les exécutions par lots non assistées, préférer [Sync → Fetch Input](../sync/fetch-input.md).** Cette page convient aux exécutions ad hoc d'un seul document ou spool. *Fetch Input* enchaîne le même pipeline sur plusieurs fichiers d'un coup, avec la configuration par modèle déjà appliquée.
+- **Pour les exécutions par lots automatisées, préférer [Synchronisation → Fetch Input](../sync/fetch-input.md).** Cette page convient aux exécutions ad hoc d'un seul document ou spool. *Fetch Input* enchaîne le même pipeline sur plusieurs fichiers d'un coup, avec la configuration par modèle déjà appliquée.

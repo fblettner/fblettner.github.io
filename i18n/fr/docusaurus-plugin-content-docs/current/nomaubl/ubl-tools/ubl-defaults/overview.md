@@ -78,7 +78,7 @@ En mode document, chaque onglet présente une **bannière de surcharge** :
 | `Using defaults` | Le groupe est hérité de `ubl-defaults.xsl` ; le formulaire affiche les valeurs par défaut (contexte en lecture seule). | **Override for this document** — recopie les valeurs par défaut courantes dans le fichier document comme point de départ. |
 | `Using override` | Le groupe possède ses propres valeurs dans le fichier document ; les modifications y sont enregistrées. | **Remove override** — supprime le bloc de surcharge ; le document repasse aux valeurs par défaut. |
 
-La suppression d'une surcharge retire le bloc en totalité — il n'existe pas de mode « désactivée mais conservée ». Le document reprend l'héritage depuis `ubl-defaults.xsl`.
+La suppression d'une surcharge retire le bloc en totalité — pas de mode « désactivée mais conservée ». Le document reprend l'héritage depuis `ubl-defaults.xsl`.
 
 ---
 
@@ -116,7 +116,7 @@ Aucune sauvegarde automatique : les modifications non enregistrées sont perdues
 ## Conseils & bonnes pratiques
 
 - **Travailler les defaults d'abord, les surcharges ensuite.** La plupart des installations n'ont besoin que du fichier de defaults. Les surcharges document sont réservées aux cas réellement divergents — un template avec un type de facture par défaut différent, un annuaire de fournisseurs alternatif, etc.
-- **Une surcharge est tout ou rien par onglet.** Activer la surcharge sur un onglet copie l'ensemble du groupe dans le fichier document. À anticiper : si une seule ligne d'un mapping doit changer, l'intégralité du mapping est embarquée.
+- **Une surcharge est tout ou rien par onglet.** Activer la surcharge sur un onglet copie tout le groupe dans le fichier document. À anticiper : si une seule ligne d'un mapping doit changer, tout le mapping est embarqué.
 - **Les listes de référence alimentent les listes déroulantes.** De nombreux onglets (paiement, unités, pays, devises, identifiants de schéma, types de facture, profils, catégories TVA) lisent leurs options dans les listes définies dans *Configuration → Reference Lists*. Ajouter un code à la liste correspondante si la déroulante en manque.
 - **Le fichier de defaults est partagé par toutes les transformations.** Toute modification y est lue par chaque `.xsl` qui ne surcharge pas le groupe touché — y compris les transformations rédigées à la main hors de l'*Éditeur XSL*.
-- **Les fichiers document sont listés automatiquement.** Tout `.xsl` du répertoire XSL configuré (`e-invoicing.ublXslt`) apparaît dans le sélecteur, à l'exception des trois fichiers partagés (`ubl-defaults.xsl`, `ubl-common.xsl`, `ubl-template.xsl`) — filtrés car ils contiennent la mécanique du socle et ne se modifient pas en surcharge.
+- **Les fichiers document sont listés automatiquement.** Tout `.xsl` du répertoire XSL configuré (`e-invoicing.ublXslt`) apparaît dans le sélecteur, sauf les trois fichiers partagés (`ubl-defaults.xsl`, `ubl-common.xsl`, `ubl-template.xsl`) — filtrés car ils contiennent la mécanique du socle et ne se modifient pas en surcharge.

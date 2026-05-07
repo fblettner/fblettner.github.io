@@ -22,7 +22,7 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md).
 | **Endpoint** | BT-34 / BT-49 | `0225` | EAS — schéma d'adresse électronique utilisé par le PPF. |
 | **Delivery location** | BT-71 | (variable) | Référentiel du lieu de livraison. |
 
-Chaque champ est alimenté par la liste de référence *scheme-ids* (voir *Configuration → Reference Lists*). Sélectionner la valeur correspondant au référentiel auquel l'identifiant appartient.
+Chaque champ est rempli à partir de la liste de référence *scheme-ids* (voir *Configuration → Reference Lists*). Sélectionner la valeur correspondant au référentiel auquel l'identifiant appartient.
 
 ---
 

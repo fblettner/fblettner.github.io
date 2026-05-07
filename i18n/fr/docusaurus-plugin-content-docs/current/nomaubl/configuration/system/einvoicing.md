@@ -6,9 +6,9 @@ keywords: [NomaUBL, e-invoicing, facturation électronique, Plateforme Agréée,
 
 # E-Invoicing
 
-L'éditeur **E-Invoicing** définit le **mode de dialogue entre NomaUBL et une Plateforme Agréée (PA)** — la plateforme certifiée qui réceptionne, valide et achemine les factures électroniques vers l'infrastructure publique française. Il définit également la validation locale des documents UBL avant envoi, ainsi que le mappage des actions vendeur réglementaires vers les appels API de la PA.
+L'éditeur **E-Invoicing** définit **comment NomaUBL se connecte à une Plateforme Agréée (PA)** — la plateforme certifiée qui réceptionne, valide et achemine les factures électroniques vers l'infrastructure publique française. Il définit aussi la validation locale des documents UBL avant envoi, et le mappage des actions vendeur réglementaires vers les appels API de la PA.
 
-Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — dès lors que la source est mappée vers UBL.
+Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — tant que la source est mappée vers UBL.
 
 L'éditeur comporte **cinq onglets** :
 
@@ -22,7 +22,7 @@ L'éditeur comporte **cinq onglets** :
 
 ## Onglet 1 — UBL Validation
 
-Cet onglet ne configure que le **répertoire des fichiers XSL** utilisés pour **transformer le XML source en UBL**. La validation de conformité de l'UBL est réalisée par les **schématrons standard**, documentés séparément (voir *UBL Tools → Validate*).
+Cet onglet ne configure que le **répertoire des fichiers XSL** utilisés pour **transformer le XML source en UBL**. La validation de conformité de l'UBL est faite par les **schématrons standard**, documentés à part (voir *Outils UBL → Validate*).
 
 ### UBL XSLT Transforms
 
@@ -155,7 +155,7 @@ Après une soumission réussie, la PA renvoie un corps JSON contenant `uuid` et 
 | **Body** | Corps de requête — n'apparaît que pour `POST` / `PUT` / `PATCH`. Les corps JSON peuvent être formatés automatiquement via le bouton **Format JSON**. |
 | **Response Mappings** | Lie des **noms logiques** à des **chemins JSON** dans la réponse. Par exemple, mapper `uuid` → `data.uuid` permet à NomaUBL d'extraire l'UUID assigné par la PA et de le stocker sur la facture. |
 
-Utilisez le bouton **Add endpoint** en bas de la liste pour ajouter une nouvelle entrée ; supprimez un endpoint via l'icône corbeille de sa ligne.
+Utilisez le bouton **Ajouter un endpoint** en bas de la liste pour ajouter une nouvelle entrée ; supprimez un endpoint via l'icône corbeille de sa ligne.
 
 ---
 
@@ -192,14 +192,14 @@ L'endpoint cible peut être **soit la PA, soit une API du système source** — 
 
 ### Configurer une liaison
 
-Pour chaque action à activer, cliquez sur **Add Binding** et renseignez :
+Pour chaque action à activer, cliquez sur **Ajouter une liaison** et renseignez :
 
 | Champ | Description |
 |---|---|
 | **Action** | Action réglementaire à lier. Chaque action ne peut être liée qu'une seule fois. |
-| **Connector** | Modèle de connecteur API fournissant l'endpoint — **connecteur PA ou connecteur système source** (défini sous *Configuration → API Connectors*). |
-| **Endpoint** | Nom de l'endpoint au sein du connecteur sélectionné (la liste déroulante affiche les endpoints qui y sont déclarés). |
-| **Parameters** | Valeurs des paramètres propres à l'endpoint. Les valeurs par défaut définies au niveau de l'endpoint sont pré-remplies au choix de l'endpoint. |
+| **Connector** | Modèle de connecteur API qui fournit l'endpoint — **connecteur PA ou connecteur système source** (défini sous *Configuration → API Connectors*). |
+| **Endpoint** | Nom de l'endpoint dans le connecteur sélectionné (la liste déroulante affiche les endpoints qui y sont déclarés). |
+| **Parameters** | Valeurs des paramètres propres à l'endpoint. Les valeurs par défaut définies au niveau de l'endpoint sont pré-remplies au moment du choix de l'endpoint. |
 
 Les valeurs de paramètres peuvent être **littérales** (par ex. `JDE`) ou des **placeholders** qui injectent des valeurs de la facture courante. Placeholders disponibles :
 
@@ -214,7 +214,7 @@ Si un endpoint ne déclare aucun paramètre, un unique champ libre **Params** es
 
 ### Exemple — Payment Received → comptabilité JDE
 
-Liaison typique lorsque le système source est JD Edwards : sur `Payment Received` (statut `205`), appeler un report AIS JDE pour enregistrer le paiement dans l'ERP source.
+Liaison typique quand le système source est JD Edwards : sur `Payment Received` (statut `205`), appeler un report AIS JDE pour enregistrer le paiement dans l'ERP source.
 
 | Champ | Valeur |
 |---|---|
@@ -230,14 +230,14 @@ Liaison typique lorsque le système source est JD Edwards : sur `Payment Receive
 | **Report Version** | `ZJDE0001` |
 | **Company Code** | `{{fedct}}` |
 
-Les deux premiers paramètres sont littéraux (l'identifiant et la version du report JDE sont constants), tandis que `Company Code` utilise le placeholder `{{fedct}}` pour injecter la société de la facture courante. Remplacer le connecteur / endpoint par l'API exposée par l'ERP source cible — le même mécanisme s'applique aux BAPI SAP, aux RESTlets NetSuite ou à un webhook d'ERP personnalisé.
+Les deux premiers paramètres sont littéraux (l'identifiant et la version du report JDE sont constants), tandis que `Company Code` utilise le placeholder `{{fedct}}` pour injecter la société de la facture courante. Remplacer le connecteur / endpoint par l'API fournie par l'ERP source cible — le même mécanisme s'applique aux BAPI SAP, aux RESTlets NetSuite ou à un webhook d'ERP personnalisé.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Démarrer avec `paMode=` (aucun)** lors du paramétrage d'un nouveau type de document — la chaîne UBL peut être construite de bout en bout avant intégration de la PA.
-- **Tester contre le mock** (onglet 4) avant de cibler la PA réelle. Utiliser `ALTERNATING` afin d'exercer à la fois les chemins « succès » et « erreur » dans le détail facture.
+- **Démarrer avec `paMode=` (aucun)** pendant le paramétrage d'un nouveau type de document — la chaîne UBL peut être construite de bout en bout avant intégration de la PA.
+- **Tester contre le mock** (onglet 4) avant de cibler la PA réelle. Utiliser `ALTERNATING` pour tester à la fois les chemins « succès » et « erreur » dans le détail facture.
 - **Définir les endpoints une seule fois, les réutiliser depuis Actions.** Ne pas dupliquer les URLs entre actions — lier chaque action au nom d'endpoint correspondant.
-- **Intervalles nécessitant un redémarrage** : modifier `Import poll interval` ou `Status retrieval interval` ne prend effet qu'après redémarrage du processus serveur NomaUBL.
-- **Les Response Mappings constituent le contrat avec la PA.** Si la PA modifie un chemin de champ dans sa réponse, mettre à jour le mapping plutôt que d'analyser la réponse dans le code appelant.
+- **Intervalles qui nécessitent un redémarrage** : modifier `Import poll interval` ou `Status retrieval interval` ne prend effet qu'après redémarrage du processus serveur NomaUBL.
+- **Les Response Mappings sont le contrat avec la PA.** Si la PA modifie un chemin de champ dans sa réponse, mettre à jour le mapping plutôt que d'analyser la réponse dans le code appelant.

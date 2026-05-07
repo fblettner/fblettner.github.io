@@ -6,15 +6,15 @@ keywords: [NomaUBL, XSL, XSLT, éditeur, UBL, mapping, BT, BG, EN 16931, IA, aut
 
 # Éditeur XSL
 
-L'**Éditeur XSL** est la pièce maîtresse de NomaUBL pour le mapping source → UBL. Il transforme la rédaction d'une transformation UBL — un travail traditionnellement long et exigeant — en un **mapping par formulaire** entre les champs d'un spool XML source et les termes métier (codes BT) d'une facture UBL 2.1.
+L'**Éditeur XSL** est l'outil central de NomaUBL pour le mapping source → UBL. Il transforme la rédaction d'une transformation UBL — un travail habituellement long — en un **mapping par formulaire** entre les champs d'un spool XML source et les termes métier (codes BT) d'une facture UBL 2.1.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé. Le même éditeur s'applique à tout spool XML bien formé qui transporte des données de facture.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Le même éditeur s'applique à tout spool XML bien formé qui transporte des données de facture.
 
 ---
 
 ## Rôle de l'éditeur
 
-Une transformation NomaUBL est un fichier XSLT qui dérive des variables `TAG_*` à partir du XML source ; tout le reste — espaces de noms, ordre des éléments, conformité EN 16931, extensions françaises — est délégué à un fichier `ubl-template.xsl` partagé fourni par NomaUBL. Personnaliser une transformation revient donc à **mapper des chemins XML vers les variables TAG_**, ce que l'éditeur expose sous forme de formulaire.
+Une transformation NomaUBL est un fichier XSLT qui dérive des variables `TAG_*` à partir du XML source ; tout le reste — espaces de noms, ordre des éléments, conformité EN 16931, extensions françaises — est délégué à un fichier `ubl-template.xsl` partagé fourni par NomaUBL. Personnaliser une transformation revient donc à **mapper des chemins XML vers les variables TAG_**, ce que l'éditeur propose sous forme de formulaire.
 
 <svg viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -78,7 +78,7 @@ L'en-tête de page comporte une barre d'outils fixe :
 
 ## Onglets
 
-L'éditeur expose deux onglets travaillant sur le même fichier XSLT. L'onglet de gauche est le formulaire de mapping visuel ; celui de droite est la source XSLT brute.
+L'éditeur propose deux onglets qui travaillent sur le même fichier XSLT. L'onglet de gauche est le formulaire de mapping visuel ; celui de droite est la source XSLT brute.
 
 ### Variable Mapping (par défaut)
 
@@ -90,7 +90,7 @@ Le formulaire de mapping — l'alternative visuelle à la rédaction XSLT manuel
 |---|---|
 | **Load XML Source** | Charge un échantillon XML (côté navigateur) et en extrait tous les chemins d'éléments. Les chemins alimentent les sélecteurs en regard de chaque champ — les valeurs se renseignent par clic plutôt que par saisie. |
 | **AI Auto-Map** ✦ | Ouvre la modale *AI Auto-Map*. À partir d'un échantillon XML (et d'un PDF optionnel), l'IA renvoie un mapping JSON des variables `TAG_*` vers les chemins XML, correctement scopés. Voir [AI Auto-Map](#ai-auto-map) ci-dessous. |
-| **Save Mappings** | Réécrit dans le fichier XSLT les valeurs courantes de toutes les variables `TAG_*`. Le point indicateur (`●`) apparaît lorsque le mapping a changé sans avoir été enregistré. |
+| **Save Mappings** | Réécrit dans le fichier XSLT les valeurs courantes de toutes les variables `TAG_*`. Le point indicateur (`●`) apparaît quand le mapping a changé sans avoir été enregistré. |
 
 #### Sections
 
@@ -175,24 +175,24 @@ Une bannière de scope bleue apparaît sous chaque variable de contexte pour rap
 
 #### Navigateur XML
 
-Une fois **Load XML Source** activé, cliquer sur le bouton `↓` en regard d'un champ ouvre un **navigateur XML** sur le bord droit de la page. Il liste tous les chemins d'éléments du scope courant ainsi que leur valeur d'échantillon — le bon chemin se choisit par inspection plutôt que par saisie. Sa fermeture laisse l'éditeur dans son état précédent.
+Une fois **Load XML Source** activé, cliquer sur le bouton `↓` en regard d'un champ ouvre un **navigateur XML** sur le bord droit de la page. Il liste tous les chemins d'éléments du scope courant et leur valeur d'échantillon — le bon chemin se choisit par inspection plutôt que par saisie. Sa fermeture laisse l'éditeur dans son état précédent.
 
 ### XSL Editor
 
-L'onglet de droite ouvre le même fichier dans un **éditeur Monaco** complet (le moteur utilisé par VS Code) avec coloration syntaxique XML, numéros de ligne et minimap. Cet onglet sert lorsque le formulaire ne couvre pas un besoin :
+L'onglet de droite ouvre le même fichier dans un **éditeur Monaco** complet (le moteur utilisé par VS Code) avec coloration syntaxique XML, numéros de ligne et minimap. Cet onglet sert quand le formulaire ne couvre pas un besoin :
 
 - Expressions XPath personnalisées en dehors des variables TAG_.
 - Logique conditionnelle via `<xsl:if>` / `<xsl:choose>`.
 - Appel de templates définis dans `ubl-common.xsl`.
 - Inspection de la sérialisation finale du mapping issu du formulaire.
 
-Le bouton de sauvegarde affiche un point `●` lorsque le tampon diverge du fichier sur disque.
+Le bouton de sauvegarde affiche un point `●` quand le tampon diverge du fichier sur disque.
 
 ---
 
 ## AI Auto-Map
 
-La modale AI Auto-Map est un raccourci pour bâtir un mapping à partir de zéro.
+La modale AI Auto-Map est un raccourci pour construire un mapping à partir de zéro.
 
 | Champ | Description |
 |---|---|
@@ -201,7 +201,7 @@ La modale AI Auto-Map est un raccourci pour bâtir un mapping à partir de zéro
 | **Invoice root element** | Élément XML englobant une facture (par ex. `Invoices`). Pré-rempli depuis la racine du XML chargé, modifiable. |
 | **XML content** | Corps du spool XML. Renseigné automatiquement par le téléversement, modifiable manuellement. |
 
-Cliquer sur **Auto-Map** transmet le XML (et le PDF s'il est fourni) à l'IA, accompagné de la liste des variables `TAG_*` et de leur contexte BT/BG. L'IA renvoie un mapping JSON respectant les règles de scoping (chemins relatifs à `TAG_ROOT`, chemins relatifs à la ligne dans `TAG_LINE_ITEM`, etc.). Le mapping est fusionné dans le formulaire ; après revue, cliquer sur **Save Mappings** pour valider.
+Cliquer sur **Auto-Map** transmet le XML (et le PDF s'il est fourni) à l'IA, avec la liste des variables `TAG_*` et de leur contexte BT/BG. L'IA renvoie un mapping JSON qui respecte les règles de scoping (chemins relatifs à `TAG_ROOT`, chemins relatifs à la ligne dans `TAG_LINE_ITEM`, etc.). Le mapping est fusionné dans le formulaire ; après revue, cliquer sur **Save Mappings** pour valider.
 
 L'IA reste prudente — elle omet toute variable dont elle n'est pas certaine plutôt que de proposer une supposition. Une revue manuelle reste nécessaire ; l'éditeur accélère le travail, il ne remplace pas l'expertise.
 
@@ -225,6 +225,6 @@ Après création, le nouveau fichier devient le fichier sélectionné et est cha
 - **Charger systématiquement un échantillon XML avant de mapper.** Avec **Load XML Source** actif, les sélecteurs déroulants réduisent fortement la saisie manuelle et écartent les coquilles.
 - **Renseigner TAG_ROOT, TAG_VAT_LINE et TAG_LINE_ITEM en premier.** Tous les autres champs se résolvent relativement à ces scopes ; les renseigner d'abord garantit que les sélecteurs suivants ouvrent le bon contexte.
 - **Une transformation par layout source.** Différents systèmes sources — ou différents types de documents pour un même système — méritent généralement leur propre `.xsl`. Préférer *New Transform* à un copier-coller dans le système de fichiers.
-- **Ne pas modifier les fichiers partagés.** `ubl-common.xsl`, `ubl-template.xsl` et `ubl-defaults.xsl` sont filtrés du sélecteur pour une raison : toute modification y impacte l'ensemble des transformations et risque de ne pas survivre à une montée de version NomaUBL.
-- **Utiliser l'onglet XSL Editor pour ce que le formulaire ne couvre pas.** Logique conditionnelle, XPath personnalisé, templates nommés — Monaco offre toute la puissance de XSLT 1.0 / 2.0 en complément du mapping du formulaire.
+- **Ne pas modifier les fichiers partagés.** `ubl-common.xsl`, `ubl-template.xsl` et `ubl-defaults.xsl` sont filtrés du sélecteur pour une raison : toute modification y touche toutes les transformations et risque de ne pas survivre à une montée de version NomaUBL.
+- **Utiliser l'onglet XSL Editor pour ce que le formulaire ne couvre pas.** Logique conditionnelle, XPath personnalisé, templates nommés — Monaco donne toute la puissance de XSLT 1.0 / 2.0 en complément du mapping du formulaire.
 - **Valider après chaque modification de mapping.** *UBL Tools → Validate* avec `Source = XML` exécute la transformation et les règles Schematron en une passe ; la table de logs signale tout chemin erroné ou variable manquante.

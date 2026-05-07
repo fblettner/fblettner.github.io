@@ -6,15 +6,15 @@ keywords: [NomaUBL, ligne de commande, CLI, nomaubl.sh, java -jar, install, serv
 
 # Ligne de commande
 
-NomaUBL fournit une **interface en ligne de commande** complète qui reproduit toutes les actions opérationnelles disponibles dans l'interface web — installer un environnement, démarrer le serveur HTTP, lancer un traitement XML ou UBL, interroger la Plateforme Agréée, extraire depuis JD Edwards. La CLI est le mode privilégié pour les **installations système**, les **intégrations cron / ordonnanceur**, les **pipelines CI** et tout **environnement headless** sans accès web.
+NomaUBL fournit une **interface en ligne de commande** complète qui reproduit toutes les actions opérationnelles disponibles dans l'interface web — installer un environnement, démarrer le serveur HTTP, lancer un traitement XML ou UBL, interroger la Plateforme Agréée, extraire depuis JD Edwards. La CLI est le mode recommandé pour les **installations système**, les **intégrations cron / ordonnanceur**, les **pipelines CI** et tout **environnement headless** sans accès web.
 
-La CLI fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé — à l'exception de quelques sous-commandes spécifiques à JD Edwards (`extract`, sources `bip` / `ftp` de `fetch-single` / `fetch-all`).
+La CLI fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — sauf pour quelques sous-commandes spécifiques à JD Edwards (`extract`, sources `bip` / `ftp` de `fetch-single` / `fetch-all`).
 
 ---
 
 ## Deux modes d'invocation
 
-NomaUBL expose deux couches équivalentes — un **wrapper de contrôle de service** (`nomaubl.sh`) et les **modes directs du JAR** (`java -jar nomaubl.jar -…`). Le wrapper résout le fichier de configuration depuis un *nom d'environnement* court et ajoute les opérations `start` / `stop` / `restart` / `status` / `log` au-dessus du JAR.
+NomaUBL propose deux couches équivalentes — un **wrapper de contrôle de service** (`nomaubl.sh`) et les **modes directs du JAR** (`java -jar nomaubl.jar -…`). Le wrapper résout le fichier de configuration depuis un *nom d'environnement* court et ajoute les opérations `start` / `stop` / `restart` / `status` / `log` au-dessus du JAR.
 
 <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -55,7 +55,7 @@ NomaUBL expose deux couches équivalentes — un **wrapper de contrôle de servi
 | **`nomaubl.sh`** *(wrapper)* | Exploitation au quotidien sur un serveur hébergeant un ou plusieurs environnements. Gère un fichier PID par instance, prend le **nom d'environnement** au lieu du chemin de configuration complet, expose `start` / `stop` / `restart` / `status` / `log`. |
 | **`java -jar nomaubl.jar`** *(direct)* | Déploiement de NomaUBL en conteneur, intégration à un pipeline CI, ou tout contexte qui gère déjà le cycle de vie du processus. Prend le **chemin absolu** vers `config.json`. |
 
-Le wrapper résout sa configuration depuis `<script_dir>/<env>/config/config.json` — autrement dit, le JAR se trouve à côté d'un ou plusieurs répertoires d'environnement, chacun portant un `config/config.json`.
+Le wrapper résout sa configuration depuis `<script_dir>/<env>/config/config.json` — autrement dit, le JAR se trouve à côté d'un ou plusieurs répertoires d'environnement, chacun avec un `config/config.json`.
 
 ---
 
@@ -81,12 +81,12 @@ Disposer le JAR et un environnement par instance de service, puis piloter chaque
 | Sous-commande | Effet |
 |---|---|
 | **`start <env> [port]`** | Lance `java -jar nomaubl.jar -serve <env>/config/config.json <port>` en tâche de fond. Port par défaut : `8090`. Le PID est stocké dans `nomaubl-<env>.pid` ; stdout / stderr sont ajoutés à `nomaubl-<env>.log`. Refuse de démarrer si le fichier PID désigne un processus actif. |
-| **`stop <env>`** | Envoie `SIGTERM` au PID enregistré ; attend jusqu'à 10 s, puis `SIGKILL` si le processus tient toujours. Nettoie le fichier PID. |
+| **`stop <env>`** | Envoie `SIGTERM` au PID enregistré ; attend jusqu'à 10 s, puis `SIGKILL` si le processus est encore actif. Nettoie le fichier PID. |
 | **`restart <env> [port]`** | Raccourci : `stop` puis `start`. |
 | **`status [env]`** | Avec un nom d'environnement, indique `running` (avec PID) ou `not running`. Sans argument, parcourt tous les `nomaubl-*.pid` et affiche l'état de chaque instance — et purge les PID obsolètes correspondant à des processus disparus. |
 | **`log <env>`** | Suivi en continu du fichier journal (`tail -f nomaubl-<env>.log`). |
 
-Au-delà du contrôle de service, le wrapper expose des **formes courtes** des modes de traitement et de synchronisation du JAR :
+Au-delà du contrôle de service, le wrapper propose des **formes courtes** des modes de traitement et de synchronisation du JAR :
 
 | Commande wrapper | Équivalent JAR |
 |---|---|
@@ -114,7 +114,7 @@ java -jar nomaubl.jar -help
 
 ## `-install <targetDir>` — installation d'un environnement
 
-Provisionne un **environnement** NomaUBL sous `targetDir` ainsi que les **ressources partagées** (polices, images) un niveau au-dessus. Préserve les fichiers de configuration (`config.json`, `xdo.cfg`, `config-documents.json`, `config-lists.json`) lorsqu'ils existent déjà ; relancer l'installation sur un environnement existant est sans risque — seuls la structure de répertoires et le framework XSL embarqué sont rafraîchis.
+Provisionne un **environnement** NomaUBL sous `targetDir` et les **ressources partagées** (polices, images) un niveau au-dessus. Préserve les fichiers de configuration (`config.json`, `xdo.cfg`, `config-documents.json`, `config-lists.json`) quand ils existent déjà. Relancer l'installation sur un environnement existant est sans risque — seuls la structure de répertoires et le framework XSL embarqué sont rafraîchis.
 
 | Argument | Description |
 |---|---|
@@ -166,7 +166,7 @@ L'ordonnanceur lit les clés suivantes du template **global** de `config.json` p
 | **`fetchImportInterval`** | Minutes entre deux passes `-fetch-import`. `0` désactive la tâche. |
 | **`fetchStatusInterval`** | Minutes entre deux passes `-fetch-status`. `0` désactive la tâche. |
 | **`fetchAllInterval`** | Minutes entre deux passes `-fetch-all`. `0` désactive la tâche. |
-| **`fetchAllParams`** | Objet JSON portant les paramètres du traitement par lots — même structure que le corps de `POST /api/fetch-invoices/run-batch`. Clés : `template` (sa propriété `source` infère XML ou UBL), `mode` (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`), `source` (`directory` \| `bip`), `extractMode` (`input` \| `output` \| `both`), `replaceMode`, `validateOnly`, `sendToPA` (`Y` \| `N`), `noSend`, `language`. |
+| **`fetchAllParams`** | Objet JSON qui contient les paramètres du traitement par lots — même structure que le corps de `POST /api/fetch-invoices/run-batch`. Clés : `template` (sa propriété `source` infère XML ou UBL), `mode` (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`), `source` (`directory` \| `bip`), `extractMode` (`input` \| `output` \| `both`), `replaceMode`, `validateOnly`, `sendToPA` (`Y` \| `N`), `noSend`, `language`. |
 
 **Exemple**
 
@@ -179,7 +179,7 @@ java -jar nomaubl.jar -serve /opt/nomaubl/demo/config/config.json 8090
 
 ## `-process` — point d'entrée unique de traitement
 
-Traite un (ou plusieurs) fichier source contre un modèle de document. Le pipeline est sélectionné par la propriété `source` du modèle (`XML` pour les spools XML nécessitant une transformation XSL, `UBL` pour les factures UBL 2.1 déjà formées). Remplace les anciens drapeaux `-xml` et `-ubl`.
+Traite un (ou plusieurs) fichier source contre un modèle de document. Le pipeline est sélectionné par la propriété `source` du modèle (`XML` pour les spools XML qui nécessitent une transformation XSL, `UBL` pour les factures UBL 2.1 déjà formées). Remplace les anciennes options `-xml` et `-ubl`.
 
 ```text
 -process <configFile> <template> <fichier|répertoire> [type] [--verbose] [--replace] [--no-send] [--no-db] [--validate] [--send]
@@ -189,14 +189,14 @@ Traite un (ou plusieurs) fichier source contre un modèle de document. Le pipeli
 |---|---|
 | **`configFile`** | Chemin absolu vers `config.json`. |
 | **`template`** | Nom du modèle de document (par ex. `invoices`, `credit_notes`). La propriété `source` du modèle pilote le pipeline — voir [Documents](./documents.md). |
-| **`fichier \| répertoire`** | Un fichier source ou un répertoire de fichiers source. Pour un modèle XML, le fichier est attendu sous `<dirInput>/<fichier>.xml` lorsque l'extension est omise. Pour un modèle UBL, le chemin peut être absolu ou relatif à `<dirInput>/ubl/`. Sur un répertoire, chaque fichier correspondant est traité par ordre alphabétique. |
+| **`fichier \| répertoire`** | Un fichier source ou un répertoire de fichiers source. Pour un modèle XML, le fichier est attendu sous `<dirInput>/<fichier>.xml` quand l'extension est omise. Pour un modèle UBL, le chemin peut être absolu ou relatif à `<dirInput>/ubl/`. Sur un répertoire, chaque fichier correspondant est traité par ordre alphabétique. |
 | **`type`** | Modèles XML uniquement — type de traitement (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignoré sur les modèles UBL. |
 
 **Types de traitement** *(source XML uniquement)*
 
 | Valeur | Effet |
 |---|---|
-| **`AUTO`** | Résolution du type par document via la configuration *Document Types*. Défaut pour les spools mêlant plusieurs types de document. |
+| **`AUTO`** | Résolution du type par document via la configuration *Document Types*. Défaut pour les spools qui mélangent plusieurs types de document. |
 | **`SINGLE`** | Un PDF par fichier source — modèles monodocument. |
 | **`BURST`** | Découpage de la source sur `burstKey`, traitement en parallèle (`numProc`). |
 | **`UBL`** | UBL uniquement — produit du UBL 2.1, sans PDF. |
@@ -228,7 +228,7 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
 
 ## `-fetch-import` et `-fetch-status` — passes de synchronisation
 
-Deux passes en lecture seule contre la Plateforme Agréée — typiquement programmées via `fetchImportInterval` / `fetchStatusInterval` plutôt que lancées à la main.
+Deux passes en lecture seule vers la Plateforme Agréée — typiquement programmées via `fetchImportInterval` / `fetchStatusInterval` plutôt que lancées à la main.
 
 | Mode | Effet |
 |---|---|
@@ -244,7 +244,7 @@ java -jar nomaubl.jar -fetch-status /opt/nomaubl/demo/config/config.json
 
 ## `-fetch-single` — extraire un document, puis le traiter
 
-Équivalent de la page *Application → Extract and Process*. Extrait un document d'un canal source, dépose le fichier résultant dans `dirInput` (modèle XML) ou `<dirInput>/ubl/` (modèle UBL), puis lance immédiatement le pipeline correspondant. Le choix XML ou UBL est **inféré de la propriété `source` du modèle** — l'argument `processType` disparaît.
+Équivalent de la page *Processing → Extraction et traitement*. Extrait un document d'un canal source, dépose le fichier résultant dans `dirInput` (modèle XML) ou `<dirInput>/ubl/` (modèle UBL), puis lance immédiatement le pipeline correspondant. Le choix XML ou UBL est **déduit de la propriété `source` du modèle** — l'argument `processType` disparaît.
 
 ```text
 -fetch-single <configFile> <template> <source> <sourceArgs…> [<type>] [options…]
@@ -290,7 +290,7 @@ java -jar nomaubl.jar -fetch-single /opt/nomaubl/demo/config/config.json \
 
 ## `-fetch-all` — extraction et traitement par lots
 
-Équivalent de la page *Application → Fetch Input*. Extrait **tous** les documents éligibles d'une source, puis les traite. Le choix XML / UBL est inféré du modèle — pas d'argument `processType`. Code de retour `1` si au moins un document a échoué.
+Équivalent de la page *Synchronisation → Fetch Input*. Extrait **tous** les documents éligibles d'une source, puis les traite. Le choix XML / UBL est déduit du modèle — pas d'argument `processType`. Code de retour `1` si au moins un document a échoué.
 
 ```text
 -fetch-all <configFile> <template> <source> [<type>] [options…]
@@ -298,9 +298,9 @@ java -jar nomaubl.jar -fetch-single /opt/nomaubl/demo/config/config.json \
 
 | Argument | Description |
 |---|---|
-| **`source`** | `directory` — parcourt `dirInput` (modèle XML) ou `dirInput/ubl` (modèle UBL) à la recherche des fichiers prêts à traiter. <br/>`bip` — récupère tous les nouveaux jobs BIP dont le numéro est supérieur à `lastBipJobNumber` (persisté dans le template *global* après chaque exécution réussie). |
+| **`source`** | `directory` — parcourt `dirInput` (modèle XML) ou `dirInput/ubl` (modèle UBL) pour rechercher les fichiers prêts à traiter. <br/>`bip` — récupère tous les nouveaux jobs BIP dont le numéro est supérieur à `lastBipJobNumber` (enregistré dans le template *global* après chaque exécution réussie). |
 
-Pour chaque job `bip`, le wrapper résout le **template par job** depuis les filtres BIP s'ils en définissent un ; sinon, retombe sur l'argument `template` de la CLI. Après une exécution réussie, `lastBipJobNumber` dans `config.json` est mis à jour avec le plus grand numéro traité — la passe suivante ne reprend que les jobs nouveaux.
+Pour chaque job `bip`, le wrapper résout le **template par job** depuis les filtres BIP s'ils en définissent un ; sinon, utilise l'argument `template` de la CLI. Après une exécution réussie, `lastBipJobNumber` dans `config.json` est mis à jour avec le plus grand numéro traité — la passe suivante ne reprend que les jobs nouveaux.
 
 **Exemples**
 
@@ -318,7 +318,7 @@ java -jar nomaubl.jar -fetch-all /opt/nomaubl/demo/config/config.json \
 
 ## `-extract` — extraction brute JDE BIP
 
-Extraction bas niveau depuis la BIP Print Queue de JD Edwards (`F9563110` en-tête, `F95630` XML d'entrée, `F95631` fichiers de sortie). Même moteur que `fetch-single … bip`, mais **sans** lancer le pipeline de traitement ensuite — utile pour déposer le contenu d'un job dans un répertoire à des fins d'inspection hors ligne.
+Extraction bas niveau depuis la BIP Print Queue de JD Edwards (`F9563110` en-tête, `F95630` XML d'entrée, `F95631` fichiers de sortie). Même moteur que `fetch-single … bip`, mais **sans** lancer le pipeline de traitement ensuite — utile pour déposer le contenu d'un job dans un répertoire pour inspection hors ligne.
 
 ```text
 -extract <configFile> <jobNumber> [--input|--output|--both] [--type <typeSortie>] [--lang <langue>] [outputDir]

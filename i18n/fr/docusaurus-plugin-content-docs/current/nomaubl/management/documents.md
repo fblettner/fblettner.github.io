@@ -6,11 +6,11 @@ keywords: [NomaUBL, documents, XPath, éclatement, bursting, source, idPattern, 
 
 # Documents
 
-L'éditeur **Documents** définit la façon dont NomaUBL transforme un **spool XML source** — ou une **facture UBL déjà formée** — en l'enregistrement persistant sur lequel le reste de la plateforme s'appuie. NomaUBL est **agnostique de la source** : le même modèle de configuration fonctionne que le spool provienne de **JD Edwards**, SAP, NetSuite, d'un ERP personnalisé ou de tout autre système capable de produire du XML ou du UBL. (Seules les fonctions *Extract* et *synchronisation BIP* sont spécifiques à JD Edwards.)
+L'éditeur **Documents** définit comment NomaUBL transforme un **spool XML source** — ou une **facture UBL déjà formée** — en l'enregistrement sur lequel le reste de la plateforme s'appuie. NomaUBL **fonctionne quel que soit la source** : le même modèle de configuration fonctionne que le spool vienne de **JD Edwards**, SAP, NetSuite, d'un ERP personnalisé ou de tout autre système capable de produire du XML ou du UBL. (Seules les fonctions *Extract* et *synchronisation BIP* sont spécifiques à JD Edwards.)
 
 Pour chaque type de document, trois éléments sont à renseigner :
 
-1. **Origine de la donnée** — le nouveau sélecteur `source` choisit entre un spool XML nécessitant une transformation XSL et une facture UBL 2.1 déjà structurée (onglet *Document*).
+1. **Origine de la donnée** — le sélecteur `source` choisit entre un spool XML qui demande une transformation XSL et une facture UBL 2.1 déjà structurée (onglet *Document*).
 2. **Chaîne de transformation** de chaque document en UBL et PDF (onglet *Traitement*).
 3. **Capacité de calcul** allouée à la transformation (onglet *Avancé*).
 
@@ -22,15 +22,15 @@ Les modèles de document figuraient auparavant sous *Configuration → Documents
 
 ## Charger un échantillon XML (optionnel, recommandé)
 
-En haut de l'éditeur, cliquer sur **Charger un échantillon XML** et sélectionner un fichier de spool représentatif issu du système source. Une fois l'échantillon chargé, chaque champ XPath affiche un bouton **⌘** : il ouvre un panneau latéral listant tous les chemins de balises détectés dans l'échantillon, ce qui permet la sélection de la balise sans saisie manuelle. Le panneau permet le filtrage et affiche la valeur de chaque chemin pour faciliter le choix.
+En haut de l'éditeur, cliquer sur **Charger un échantillon XML** et sélectionner un fichier de spool représentatif issu du système source. Une fois l'échantillon chargé, chaque champ XPath affiche un bouton **⌘** : il ouvre un panneau latéral qui liste tous les chemins de balises détectés dans l'échantillon, pour sélectionner la balise sans saisie manuelle. Le panneau permet de filtrer et affiche la valeur de chaque chemin pour faciliter le choix.
 
-La configuration peut être effectuée sans échantillon, mais le sélecteur réduit les risques d'erreur de saisie.
+La configuration se fait aussi sans échantillon, mais le sélecteur réduit les risques d'erreur de saisie.
 
 ---
 
 ## Onglet 1 — 📄 Document
 
-Cet onglet définit pour NomaUBL **l'emplacement de chaque information** sur les documents entrants.
+Cet onglet indique à NomaUBL **où trouver chaque information** sur les documents entrants.
 
 ### Source
 
@@ -42,14 +42,14 @@ Ce choix bascule la suite de l'onglet entre deux ensembles de champs distincts. 
 
 ### Extraction de clé depuis `cbc:ID` *(lorsque Source = UBL)*
 
-Pour les factures UBL, la clé primaire `(doc, dct, kco)` — le triplet qui identifie le document partout ailleurs dans NomaUBL — est extraite du `cbc:ID` de la facture via une regex à **groupes nommés**. Aucune convention de nommage de fichier n'est exigée ; le fichier peut porter n'importe quel nom.
+Pour les factures UBL, la clé primaire `(doc, dct, kco)` — le triplet qui identifie le document partout ailleurs dans NomaUBL — est extraite du `cbc:ID` de la facture via une regex à **groupes nommés**. Aucune convention de nommage de fichier n'est exigée ; le fichier peut avoir n'importe quel nom.
 
 | Champ | Description |
 |---|---|
 | **ID Pattern** | Regex appliquée à `cbc:ID`. Groupes autorisés : `doc`, `dct`, `kco`. Tout sous-ensemble est admis ; les groupes manquants sont remplis par les valeurs par défaut ci-dessous. |
-| **doc default** | Utilisé lorsque la regex ne correspond pas ou que le groupe `doc` est absent. |
-| **dct default** | Utilisé lorsque le groupe `dct` est absent. |
-| **kco default** | Utilisé lorsque le groupe `kco` est absent — courant lorsque le `cbc:ID` n'inclut pas de code société. |
+| **doc default** | Utilisé quand la regex ne correspond pas ou que le groupe `doc` est absent. |
+| **dct default** | Utilisé quand le groupe `dct` est absent. |
+| **kco default** | Utilisé quand le groupe `kco` est absent — courant quand le `cbc:ID` n'inclut pas de code société. |
 
 #### Assistant Sample cbc:ID + Suggérer + Tester
 
@@ -100,7 +100,7 @@ Données fonctionnelles que NomaUBL lit dans le spool pour alimenter la facture 
 | **Office** | Balise XML du spool contenant le code **bureau / unité opérationnelle**. |
 | **Processing Type** | Balise XML portant le code de type de traitement (B2B, B2BINT…). Laisser vide pour utiliser la **valeur par défaut définie dans Types de documents**. |
 
-> 💡 Chaque champ « Données du document » dispose de sa propre **valeur par défaut**. Les valeurs par défaut sont utilisées lorsque la balise XML est absente ou vide — pratique lorsqu'une valeur est constante pour un modèle donné.
+> 💡 Chaque champ « Données du document » dispose de sa propre **valeur par défaut**. Les valeurs par défaut sont utilisées quand la balise XML est absente ou vide — pratique quand une valeur est constante pour un modèle donné.
 
 ---
 
@@ -128,7 +128,7 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 
 | Champ | Description |
 |---|---|
-| **No-Data Key** | Nom d'un élément XML qui **doit exister** dans le spool. Si absent, NomaUBL considère le document comme vide et l'ignore. Utile pour écarter les sections de spool qui ne correspondent pas à des factures effectives. |
+| **No-Data Key** | Nom d'un élément XML qui **doit exister** dans le spool. Si absent, NomaUBL considère le document comme vide et l'ignore. Utile pour écarter les sections de spool qui ne correspondent pas à des factures réelles. |
 | **Set Locale** | Locale utilisée pour rendre le PDF (par ex. `en_US`, `fr_FR`). Affecte uniquement le formatage des dates et nombres dans le PDF. |
 
 ---
@@ -137,22 +137,22 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 
 | Champ | Description |
 |---|---|
-| **Number of CPUs** | Nombre de threads parallèles utilisés par la chaîne de traitement pour ce type de document. Augmenter pour accélérer le traitement des spools volumineux, diminuer si l'hôte est sous tension mémoire. Valeur par défaut : `4`. |
+| **Number of CPUs** | Nombre de threads parallèles utilisés par la chaîne de traitement pour ce type de document. Augmenter pour accélérer le traitement des spools volumineux, diminuer si l'hôte est à court de mémoire. Valeur par défaut : `4`. |
 
 ---
 
 ## Onglet 4 — 🖼 PDF Template
 
-Le quatrième onglet désigne la **mise en page PDF** appliquée au rendu de ce document. Depuis la version 2026.05.1, les mises en page sont des ressources partageables à part entière, stockées dans `config-pdf.json` et éditées sur la page dédiée [Modèles PDF](./pdf-templates.md) — cet onglet se contente d'en référencer une **par son nom** via la propriété `pdfTemplate` du modèle.
+Le quatrième onglet désigne la **mise en page PDF** appliquée au rendu de ce document. Depuis la version 2026.05.1, les mises en page sont des ressources partageables à part entière, stockées dans `config-pdf.json` et éditées sur la page dédiée [Modèles PDF](./pdf-templates.md). Cet onglet en référence une simplement **par son nom**, via la propriété `pdfTemplate` du modèle.
 
 | Champ | Description |
 |---|---|
-| **PDF Template** | Liste déroulante regroupant toute mise en page enregistrée (les ressources `pdf-template` issues de *Modèles PDF*), ainsi que la `built-in` livrée. Laisser vide pour basculer sur le défaut global (`global.defaultPdfTemplate`) ; champ vide et défaut global vide ramènent à `built-in`. |
+| **PDF Template** | Liste déroulante qui regroupe toute mise en page enregistrée (les ressources `pdf-template` issues de *Modèles PDF*) et la `built-in` livrée. Laisser vide pour basculer sur le défaut global (`global.defaultPdfTemplate`). Champ vide et défaut global vide ramènent à `built-in`. |
 
-La chaîne de résolution au moment du rendu se lit donc : ce champ → `global.defaultPdfTemplate` → `built-in`. Chaque facture persistée porte le nom du modèle de document dans `F564231.UHTMPL`, ce qui permet au générateur PDF de re-rendre à la demande avec la mise en page active pour ce document.
+La chaîne de résolution au moment du rendu se lit donc : ce champ → `global.defaultPdfTemplate` → `built-in`. Chaque facture enregistrée contient le nom du modèle de document dans `F564231.UHTMPL`, ce qui permet au générateur PDF de regénérer à la demande avec la mise en page active pour ce document.
 
 :::tip[Édition de la mise en page]
-L'éditeur visuel — liste de sections, tiroir par section, aperçu en direct, sections block — réside sur la page [Gestion → Modèles PDF](./pdf-templates.md). Y rédiger ou affiner une mise en page une seule fois, puis revenir ici pour y rattacher le document. Une même mise en page peut servir plusieurs documents.
+L'éditeur visuel — liste de sections, tiroir par section, aperçu en direct, sections block — se trouve sur la page [Gestion → Modèles PDF](./pdf-templates.md). Y rédiger ou affiner une mise en page une seule fois, puis revenir ici pour y rattacher le document. Une même mise en page peut servir plusieurs documents.
 :::
 
 ---
@@ -160,8 +160,8 @@ L'éditeur visuel — liste de sections, tiroir par section, aperçu en direct, 
 ## Conseils & bonnes pratiques
 
 - **Toujours définir des valeurs par défaut** sur les champs « Identification du document » — elles couvrent les variations de spool où une balise peut être ponctuellement absente.
-- **Pour les sources UBL, utiliser *Suggérer*** afin d'amorcer la regex — l'assistant gère les cas courants (chiffres seuls, lettres + chiffres, chiffres + lettres + chiffres). Ajustement manuel uniquement lorsque le format est inhabituel.
-- **Laisser Processing Type vide** sauf nécessité de surcharger la valeur par défaut du type de document ; cela évite la duplication de configuration.
+- **Pour les sources UBL, utiliser *Suggérer*** pour amorcer la regex — l'assistant gère les cas courants (chiffres seuls, lettres + chiffres, chiffres + lettres + chiffres). Ajustement manuel uniquement quand le format est inhabituel.
+- **Laisser Processing Type vide** sauf besoin de surcharger la valeur par défaut du type de document ; cela évite la duplication de la configuration.
 - Pour un nouveau type de document, **commencer par charger un échantillon XML**, configurer l'onglet 1 à l'aide du sélecteur, puis tester sur quelques documents avant d'affiner la chaîne XSL de l'onglet 2.
 - Le **Burst Key est le champ XML le plus critique** — une valeur erronée produit soit un document géant unique, soit aucun document.
-- **Éditer la mise en page PDF sur sa page dédiée.** [Modèles PDF](./pdf-templates.md) accueille l'éditeur visuel et l'aperçu en direct ; cet onglet se borne à la sélectionner. Le partage d'une même mise en page entre plusieurs documents évite l'édition de N copies dès qu'une mention légale ou un jeu de colonnes évolue.
+- **Éditer la mise en page PDF sur sa page dédiée.** [Modèles PDF](./pdf-templates.md) accueille l'éditeur visuel et l'aperçu en direct ; cet onglet permet uniquement de la sélectionner. Partager une même mise en page entre plusieurs documents évite d'éditer N copies dès qu'une mention légale ou un jeu de colonnes évolue.

@@ -6,15 +6,15 @@ keywords: [NomaUBL, journal de traitement, runtime log, F564237, START, END, cyc
 
 # Journal de traitement
 
-L'écran **Processing Log** est la consultation de la **table de journal d'exécution** de NomaUBL (`F564237`). Chaque traitement qui passe par la plateforme — transformation XML, génération UBL, validation, extraction BIP, téléchargement FTP — émet un flux d'événements : un `START`, des étapes intermédiaires (transformation, conversion, rendu…), puis un `END` portant le résultat final (`SUCCESSFUL` ou un message d'erreur fatale).
+L'écran **Processing Log** permet de consulter la **table de journal d'exécution** de NomaUBL (`F564237`). Chaque traitement qui passe par la plateforme — transformation XML, génération UBL, validation, extraction BIP, téléchargement FTP — émet un flux d'événements : un `START`, des étapes intermédiaires (transformation, conversion, rendu…), puis un `END` qui contient le résultat final (`SUCCESSFUL` ou un message d'erreur fatale).
 
-La page expose ce flux en deux vues complémentaires — une vue **groupée** qui apparie chaque `START` avec son `END` correspondant, donc chaque job apparaît sur une seule ligne avec son statut et sa durée, et une vue **à plat** qui liste chaque événement individuel pour une analyse forensique. La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé.
+La page présente ce flux en deux vues complémentaires : une vue **groupée** qui associe chaque `START` à son `END` correspondant — chaque job apparaît alors sur une seule ligne avec son statut et sa durée — et une vue **à plat** qui liste chaque événement individuel pour une analyse détaillée. La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé.
 
 ---
 
 ## Provenance des événements
 
-Tous les chemins de traitement NomaUBL écrivent leur trace dans `F564237` à travers le même journaliseur. Les champs clés sont alimentés à l'exécution : le **fichier** traité, le **mode** (`AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`), le **template** source, l'**étape** courante (`START`, `END`, ou un nom de méthode tel que `TRANSFORM_XSL`, `CONVERT_RTF`, `RUN_TASKS`), le **message** et l'**horodatage**. Le moteur de groupement de cette page reconstruit les jobs depuis ces événements bruts au moment de l'affichage.
+Tous les chemins de traitement NomaUBL écrivent leur trace dans `F564237` via le même journaliseur. Les champs clés sont remplis à l'exécution : le **fichier** traité, le **mode** (`AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`), le **template** source, l'**étape** courante (`START`, `END`, ou un nom de méthode comme `TRANSFORM_XSL`, `CONVERT_RTF`, `RUN_TASKS`), le **message** et l'**horodatage**. Le moteur de groupement de cette page reconstruit les jobs à partir de ces événements bruts au moment de l'affichage.
 
 <svg viewBox="0 0 1000 160" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -41,7 +41,7 @@ Tous les chemins de traitement NomaUBL écrivent leur trace dans `F564237` à tr
   <line x1="755" y1="80" x2="795" y2="80" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#plog-arrow)"/>
 </svg>
 
-Le journal est en **ajout uniquement** — les événements sont écrits par le pipeline et ne sont jamais modifiés. La page est en lecture seule.
+Le journal est en **mode ajout seul** — les événements sont écrits par le pipeline et ne sont jamais modifiés. La page est en lecture seule.
 
 ---
 
@@ -50,9 +50,9 @@ Le journal est en **ajout uniquement** — les événements sont écrits par le 
 | Vue | Quand l'utiliser |
 |---|---|
 | **Grouped** *(défaut)* | Surveillance au quotidien. Chaque job tient sur une ligne avec son statut (OK / ERROR / PARTIAL), sa durée et son dernier message. L'expansion d'une ligne révèle toutes les étapes intermédiaires. |
-| **Flat** | Analyse forensique lorsque le groupement masquerait un contexte utile — par ex. inspecter l'ordre des événements pendant un job suspendu, ou traquer un `WARNING` isolé entre deux exécutions sans rapport. Une ligne par événement. |
+| **Flat** | Analyse détaillée quand le groupement masquerait un contexte utile — par ex. inspecter l'ordre des événements pendant un job suspendu, ou rechercher un `WARNING` isolé entre deux exécutions sans rapport. Une ligne par événement. |
 
-Le bouton de bascule en tête de la barre d'outils permute les deux ; le choix est persisté dans le navigateur (`processing-log:grouped` dans `localStorage`), donc la prochaine session ouvre la même vue.
+Le bouton de bascule en tête de la barre d'outils permet de basculer entre les deux ; le choix est enregistré dans le navigateur (`processing-log:grouped` dans `localStorage`), donc la prochaine session ouvre la même vue.
 
 ---
 
@@ -66,31 +66,31 @@ La barre d'outils combine la bascule de vue, une recherche libre, deux filtres d
       <span style={{padding: '5px 12px', fontSize: '11px', fontWeight: 700, background: 'rgba(74,158,255,0.15)', color: '#4a9eff'}}>Grouped</span>
       <span style={{padding: '5px 12px', fontSize: '11px', fontWeight: 600, opacity: 0.7}}>Flat</span>
     </div>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic', minWidth: '180px'}}>🔎 Search file name…</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>All templates ▾</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>All modes ▾</span>
-    <span style={{padding: '6px 12px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '12px', fontWeight: 600, color: '#4a9eff'}}>📅 Yesterday → Today</span>
+    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic', minWidth: '180px'}}>🔎 Rechercher un fichier…</span>
+    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>Tous les templates ▾</span>
+    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>Tous les modes ▾</span>
+    <span style={{padding: '6px 12px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '12px', fontWeight: 600, color: '#4a9eff'}}>📅 Hier → Aujourd'hui</span>
     <span style={{flex: 1, minWidth: '8px'}} />
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px'}}>↻ Refresh</span>
+    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px'}}>↻ Rafraîchir</span>
   </div>
 </div>
 
 | Contrôle | Comportement |
 |---|---|
-| **Bascule Grouped / Flat** | Permute la présentation des données. Persistée par navigateur. |
-| **Search file name** | Recherche par sous-chaîne sur la colonne `file` (par ex. `12345_RI_00070`). Vide désactive le filtre. |
-| **Templates** | Liste déroulante alimentée dynamiquement depuis les templates de type `document` déclarés dans `config.json`. *All templates* retire le filtre. |
-| **Modes** | Déroulante des modes de traitement standards — `AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`. *All modes* retire le filtre. |
-| **Plage de dates** | Restreint aux événements dont l'horodatage tombe dans la fenêtre choisie. Préréglage par défaut : *Yesterday → Today*. Les préréglages standards (*Today*, *Yesterday*, *Last 7 days*, *This month*, *Last month*, *Custom range*) s'appliquent. |
-| **Refresh** | Relance la requête courante sans modifier les filtres. |
+| **Bascule Grouped / Flat** | Bascule la présentation des données. Enregistrée par navigateur. |
+| **Rechercher un fichier** | Recherche par sous-chaîne sur la colonne `file` (par ex. `12345_RI_00070`). Vide désactive le filtre. |
+| **Templates** | Liste déroulante alimentée dynamiquement depuis les templates de type `document` déclarés dans `config.json`. *Tous les templates* retire le filtre. |
+| **Modes** | Déroulante des modes de traitement standards — `AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`. *Tous les modes* retire le filtre. |
+| **Plage de dates** | Restreint aux événements dont l'horodatage se situe dans la fenêtre choisie. Préréglage par défaut : *Hier → Aujourd'hui*. Les préréglages standards (*Aujourd'hui*, *Hier*, *7 derniers jours*, *Ce mois*, *Mois dernier*, *Plage personnalisée*) s'appliquent. |
+| **Rafraîchir** | Relance la requête courante sans modifier les filtres. |
 
-En vue groupée, la page sur-extrait (`pageSize × 4`, plafonné à 200) afin que les paires START / END et les étapes intermédiaires se retrouvent sur la même page et que le moteur de groupement dispose du job complet.
+En vue groupée, la page extrait davantage (`pageSize × 4`, plafonné à 200) pour que les paires START / END et les étapes intermédiaires se retrouvent sur la même page et que le moteur de groupement dispose du job complet.
 
 ---
 
 ## Vue groupée — une ligne par job
 
-Chaque ligne représente un **job (file, mode, template)**, reconstruit depuis ses événements bruts. La ligne porte le statut du job, la forme du flux, la durée et le dernier message. Cliquer sur une ligne pour la déplier et voir toutes les étapes intermédiaires.
+Chaque ligne représente un **job (file, mode, template)**, reconstruit à partir de ses événements bruts. La ligne affiche le statut du job, la forme du flux, la durée et le dernier message. Cliquer sur une ligne pour la déplier et voir toutes les étapes intermédiaires.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'grid', gridTemplateColumns: '24px 150px 1.6fr 80px 110px 110px 80px 110px 1.4fr', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 600, fontSize: '10px'}}>
@@ -172,15 +172,15 @@ Chaque ligne représente un **job (file, mode, template)**, reconstruit depuis s
 
 | Colonne | Description |
 |---|---|
-| **▸** | Chevron — affiché lorsque le job dispose d'au moins une étape intermédiaire ou est orphelin. Cliquer sur la ligne pour déplier. |
-| **Date** | Horodatage de tri — heure de l'`END` lorsqu'elle est connue, sinon le `START` ou la première étape intermédiaire. |
+| **▸** | Chevron — affiché quand le job a au moins une étape intermédiaire ou est orphelin. Cliquer sur la ligne pour déplier. |
+| **Date** | Horodatage de tri — heure de l'`END` quand elle est connue, sinon le `START` ou la première étape intermédiaire. |
 | **Fichier** | Le fichier ou la clé de job traitée (typiquement `DOC_DCT_KCO`). En police mono ; valeur complète au survol. |
 | **Mode** | Badge coloré — `SINGLE` (bleu), `BURST` (violet), `UBL` / `UBL_VALIDATE` (vert), `BOTH` (orange), autres modes (neutre). |
 | **Template** | Le template source qui a piloté l'exécution (par ex. `invoices`, `credit_notes`). |
 | **Flux** | Forme de l'appariement START / END — `START → END` pour les jobs complets, `START → ?` quand l'END est absent, `? → END` quand un END apparaît sans START correspondant, ou `—` pour des étapes intermédiaires sans appariement. |
 | **Durée** | Calculée par `END − START`. Format compact : `120ms` / `1.2s` / `1m 23s`. Vide quand l'une des bornes manque. |
 | **Statut** | Issue du job — voir ci-dessous. |
-| **Message** | Message de fin de job, ou message de la dernière étape intermédiaire lorsque l'END est absent. Tronqué ; valeur complète au survol. |
+| **Message** | Message de fin de job, ou message de la dernière étape intermédiaire quand l'END est absent. Tronqué ; valeur complète au survol. |
 
 ### Badges de statut
 
@@ -199,13 +199,13 @@ Cliquer sur une ligne dépliable ouvre une **zone d'étapes** sous celle-ci, qui
 - La ligne `END` reprend l'horodatage de fin et le message final.
 - Pour les jobs **PARTIAL**, une note italique rappelle que le START ou l'END se trouve sur une autre page.
 
-Cette même zone fait de la vue groupée une descente en un clic pour le triage — l'en-tête dit *ce qui* s'est passé, la liste dépliée dit *où* dans le pipeline.
+Cette zone fait de la vue groupée un outil d'analyse en un clic — l'en-tête dit *ce qui* s'est passé, la liste dépliée dit *où* dans le pipeline.
 
 ---
 
 ## Vue à plat — une ligne par événement
 
-Basculer sur **Flat** désactive le groupement et revient au flux d'événements sous-jacent. Tri, pagination et export CSV opèrent sur les événements individuels, ce qui correspond aux requêtes d'archive et aux investigations détaillées.
+Basculer sur **Flat** désactive le groupement et revient au flux d'événements sous-jacent. Tri, pagination et export CSV fonctionnent sur les événements individuels, ce qui correspond aux requêtes d'archive et aux investigations détaillées.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'grid', gridTemplateColumns: '160px 1.6fr 100px 110px 130px 1.6fr', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 600, fontSize: '11px'}}>
@@ -256,7 +256,7 @@ Basculer sur **Flat** désactive le groupement et revient au flux d'événements
 | **Étape** | Libellé de la méthode — badge coloré : `START` (bleu), `END` (vert), tout libellé contenant `ERROR / FAIL` (rouge), `WARN` (orange), autres étapes (neutre). |
 | **Message** | Texte libre attaché à l'événement. Tronqué ; valeur complète au survol. Non triable. |
 
-Le bouton standard `Export` exporte la vue courante (filtres compris, tri respecté) sous le nom `processing-log.csv`.
+Le bouton standard `Exporter` exporte la vue courante (filtres compris, tri respecté) sous le nom `processing-log.csv`.
 
 ---
 
@@ -267,7 +267,7 @@ Le moteur de groupement parcourt les événements en ordre **croissant** dans le
 | Événement | Effet |
 |---|---|
 | `START` sur une clé sans job ouvert | Ouvre un nouveau job. |
-| `START` sur une clé qui a déjà un job ouvert | Vide le job précédent en **PARTIAL** et ouvre un nouveau job. |
+| `START` sur une clé qui a déjà un job ouvert | Termine le job précédent en **PARTIAL** et ouvre un nouveau job. |
 | `END` sur une clé avec un job ouvert | Ferme le job, calcule la durée, affecte le statut (OK ou ERROR selon le message d'END). |
 | `END` sur une clé sans job ouvert | Émet un orphelin **PARTIAL** sans START. |
 | Toute autre méthode sur une clé avec un job ouvert | Rattachée comme étape intermédiaire. Marque `hasError = true` si la méthode ou le message correspond à `ERROR / FAIL / EXCEPTION / FATAL`. |
@@ -281,9 +281,9 @@ L'expression de détection est volontairement large — toute méthode ou messag
 
 ## Conseils & bonnes pratiques
 
-- **Conserver Grouped pour la surveillance quotidienne.** Un coup d'œil à la colonne *Statut* indique tout de suite ce qui a échoué la veille et ce qui s'est terminé proprement. Réserver *Flat* aux requêtes forensiques.
+- **Garder Grouped pour la surveillance quotidienne.** Un coup d'œil à la colonne *Statut* indique tout de suite ce qui a échoué la veille et ce qui s'est terminé proprement. Réserver *Flat* aux requêtes détaillées.
 - **Un PARTIAL après un filtre date est généralement un artefact de pagination.** Un job dont le START est sur le jour 1 et l'END sur le jour 2 paraîtra orphelin sur chacune des vues isolées — élargir la plage de dates avant de conclure à un échec réel.
 - **Filtrer par mode pour cibler une session de triage.** Pendant un incident sur le chemin BIP, restreindre à `BURST` retire le bruit des exécutions `SINGLE` sans rapport et garde toutes les étapes liées sur la même page.
-- **Le libellé d'erreur affiché est le message d'END en majuscules.** C'est exactement la chaîne que l'équipe ERP / PA citera dans un ticket — la copier depuis cette page est le moyen le plus rapide de remonter la cause canonique.
+- **Le libellé d'erreur affiché est le message d'END en majuscules.** C'est exactement la chaîne que l'équipe ERP / PA citera dans un ticket — la copier depuis cette page est le moyen le plus rapide de remonter la cause principale.
 - **Déplier avant de citer un job.** L'en-tête dit *ce qui* a échoué ; les étapes dépliées disent *où* dans le pipeline (transformation vs. conversion vs. validation vs. envoi). Toujours inclure l'étape fautive dans le rapport d'incident.
-- **Le journal est en ajout uniquement.** Aucune ligne ne peut être éditée ou supprimée depuis cette page — passer par *File Versions* ou directement par la base pour tout nettoyage rétroactif.
+- **Le journal est en mode ajout seul.** Aucune ligne ne peut être éditée ou supprimée depuis cette page — passer par *File Versions* ou directement par la base pour tout nettoyage rétroactif.

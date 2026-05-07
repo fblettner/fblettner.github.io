@@ -16,7 +16,7 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). 
 
 | Champ | Description |
 |---|---|
-| **Default** | Code devise émis lorsque la valeur source est absente ou ne possède pas de ligne de mapping. Choisi dans la liste de référence *currency-codes* (ISO 4217). Défaut français standard : `EUR`. |
+| **Default** | Code devise émis quand la valeur source est absente ou ne possède pas de ligne de mapping. Choisi dans la liste de référence *currency-codes* (ISO 4217). Défaut français standard : `EUR`. |
 
 Le sélecteur de défaut reste visible en haut de l'onglet dans les deux modes.
 
@@ -41,7 +41,7 @@ code devise source du XML
     └─ pas de ligne de mapping ?    ─► devise par défaut
 ```
 
-Lorsque le code source est vide ou absent, la valeur par défaut s'applique directement.
+Quand le code source est vide ou absent, la valeur par défaut s'applique directement.
 
 ---
 

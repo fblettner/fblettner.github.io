@@ -8,7 +8,7 @@ keywords: [NomaUBL, sync, fetch input, lot, batch, BIP, répertoire, last job nu
 
 L'écran **Fetch Input** est l'**automatisation en lot** de [*Processing → Extract and Process*](../processing/extract-and-process.md). Il parcourt un répertoire de fichiers ou la file d'impression BIP, identifie les candidats, puis exécute le même pipeline Extract → Process sur chaque élément retenu.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé — à l'exception de la source BIP, spécifique à JD Edwards.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — sauf pour la source BIP, qui est spécifique à JD Edwards.
 
 La sémantique unitaire (résolution du mode, validation, persistance, dépôt PA, post-génération BIP) est documentée dans [*Extract and Process*](../processing/extract-and-process.md). Cette page ne documente que ce qui relève du fonctionnement en lot : l'enchaînement balayage → sélection → traitement, les sources, la récupération incrémentale via **Last Job Number** et les résultats agrégés.
 
@@ -101,8 +101,8 @@ La seconde section choisit la **source** et ses paramètres.
 
 Le balayage retourne tous les fichiers `.xml` présents dans :
 
-- `dirInput/<template>/` lorsque *Process As = XML* ;
-- `dirInput/ubl/` lorsque *Process As = UBL*.
+- `dirInput/<template>/` quand *Process As = XML* ;
+- `dirInput/ubl/` quand *Process As = UBL*.
 
 Aucun paramètre supplémentaire — chaque fichier du répertoire est un candidat.
 
@@ -139,15 +139,15 @@ Cliquer sur **Process (N)** pour exécuter la sélection. Le bouton se désactiv
 
 Chaque élément apparaît sur une ligne avec un marqueur ✓ vert (succès) ou ✗ rouge (échec). **Cliquer sur une ligne déplie** la table de logs sous-jacente (mêmes colonnes que sur la page [*Traitement de document*](../processing/document.md) : `Severity / Module / Submodule / Message`).
 
-Lorsque la source est BIP et que le traitement réussit, l'appel **Apply post-generation** s'exécute après chaque élément — exactement comme dans [*Extract and Process*](../processing/extract-and-process.md). Le `lastBipJobNumber` global est également mis à jour avec le plus grand numéro de job traité, de sorte que le prochain Scan ne retourne que les jobs plus récents.
+Quand la source est BIP et que le traitement réussit, l'appel **Apply post-generation** s'exécute après chaque élément — exactement comme dans [*Extract and Process*](../processing/extract-and-process.md). Le `lastBipJobNumber` global est aussi mis à jour avec le plus grand numéro de job traité, ainsi le prochain Scan ne retourne que les jobs plus récents.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Utiliser Fetch Input pour les exécutions non assistées.** Cette page est l'équivalent en lot de *Extract and Process* ; l'étape de sélection manuelle la rend adaptée aux traitements de fin de journée ou aux exécutions planifiées.
-- **Conserver `Last Job Number` comme repère.** La valeur par défaut correspond au dernier numéro de job traité avec succès — la laisser inchangée est la voie supportée pour la récupération incrémentale. Abaisser la valeur manuellement permet de relancer le traitement de jobs antérieurs.
+- **Utiliser Fetch Input pour les exécutions automatisées.** Cette page est l'équivalent en lot de *Extract and Process* ; l'étape de sélection manuelle la rend adaptée aux traitements de fin de journée ou aux exécutions planifiées.
+- **Garder `Last Job Number` comme repère.** La valeur par défaut correspond au dernier numéro de job traité avec succès — la laisser inchangée est la méthode standard pour la récupération incrémentale. Abaisser la valeur manuellement permet de relancer le traitement de jobs antérieurs.
 - **Balayer d'abord, traiter ensuite.** L'enchaînement en deux étapes existe à dessein : une liste de candidats périmée, un mauvais choix de template ou une source erronée se manifeste dès la liste de candidats — avant tout effet de bord.
-- **`Select All` et `Deselect All` sont des raccourcis en tête de liste.** Lorsque la liste comporte des centaines de lignes, basculer en masse puis affiner est plus rapide qu'un cochage individuel.
+- **`Select All` et `Deselect All` sont des raccourcis en tête de liste.** Quand la liste comporte des centaines de lignes, basculer en masse puis affiner est plus rapide qu'un cochage individuel.
 - **Décocher plutôt que supprimer.** Retirer le fichier sous-jacent ou le job BIP pour l'exclure est destructif ; un décochage sur cette page est réversible — la ligne réapparaît au prochain Scan si la source la conserve.
 - **Pour BIP, `Apply post-generation` met à jour le repère.** Un job traité avec succès met automatiquement à jour `global.lastBipJobNumber` — aucune intervention manuelle n'est nécessaire.

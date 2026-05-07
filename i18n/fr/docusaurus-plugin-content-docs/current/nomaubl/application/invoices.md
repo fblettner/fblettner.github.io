@@ -6,9 +6,9 @@ keywords: [NomaUBL, e-invoicing, factures, liste, filtre, recherche, statut, dé
 
 # E-Invoicing
 
-L'écran **E-Invoicing** est la page opérationnelle centrale de NomaUBL — point d'entrée du workflow officiel de la *Réforme de la Facturation Électronique* (RFE). Il liste toutes les factures traitées par la plateforme, propose des filtres riches, une vue détaillée pilotée par le statut, et les actions du quotidien : éditer, copier, supprimer, mettre à jour manuellement un statut, envoyer le PDF par e-mail au client, redéposer sur la Plateforme Agréée.
+L'écran **E-Invoicing** est la page principale de NomaUBL — le point d'entrée du workflow officiel de la *Réforme de la Facturation Électronique* (RFE). Il liste toutes les factures traitées par la plateforme et propose des filtres complets, une vue détaillée selon le statut, et les actions du quotidien : éditer, copier, supprimer, changer manuellement un statut, envoyer le PDF au client par e-mail, redéposer sur la Plateforme Agréée.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé. Chaque enregistrement visible ici a été persisté dans la base NomaUBL locale après passage dans le pipeline de traitement.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Toutes les factures visibles ici ont été enregistrées dans la base NomaUBL locale après passage dans le pipeline de traitement.
 
 ---
 
@@ -18,22 +18,22 @@ La barre d'outils au-dessus du tableau combine filtre de dates, recherche texte,
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
-    <span style={{padding: '6px 12px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '12px', fontWeight: 600, color: '#4a9eff'}}>📅 Yesterday</span>
+    <span style={{padding: '6px 12px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '12px', fontWeight: 600, color: '#4a9eff'}}>📅 Hier</span>
     <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Doc</span>
     <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Dct</span>
     <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Kco</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Contract</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Customer name</span>
+    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Contrat</span>
+    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Nom du client</span>
     <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>BAR ▾</span>
     <span style={{flex: 1, minWidth: '8px'}} />
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px'}}>↻ Refresh</span>
-    <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '12px', fontWeight: 600, border: '1px solid #4a9eff'}}>+ New invoice</span>
+    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px'}}>↻ Rafraîchir</span>
+    <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '12px', fontWeight: 600, border: '1px solid #4a9eff'}}>+ Nouvelle facture</span>
   </div>
 </div>
 
 ### Plage de dates
 
-Le filtre de dates à gauche s'applique à la **dernière mise à jour** de chaque facture. Préréglage par défaut : *Yesterday*. Autres préréglages : *Today*, *Last 7 days*, *This month*, *Last month* et *Custom range* (saisie manuelle des dates From / To).
+Le filtre de dates à gauche s'applique à la **dernière mise à jour** de chaque facture. Préréglage par défaut : *Hier*. Autres préréglages : *Aujourd'hui*, *7 derniers jours*, *Ce mois*, *Mois dernier* et *Plage personnalisée* (saisie manuelle des dates de début et de fin).
 
 ### Filtres texte
 
@@ -44,8 +44,8 @@ Chaque champ filtre la liste à la saisie — la recherche se déclenche après 
 | **Doc** | Numéro de document interne (par ex. `12345`). |
 | **Dct** | Code du type de document (par ex. `RI`, `RN`). |
 | **Kco** | Code société (par ex. `00070`). |
-| **Contract** | Référence du contrat porté par la facture. |
-| **Customer name** | Nom de la partie acheteur. |
+| **Contrat** | Référence du contrat porté par la facture. |
+| **Nom du client** | Nom de la partie acheteur. |
 
 ### Sélecteur de routage BAR
 
@@ -53,19 +53,19 @@ Une déroulante distincte filtre par code **BAR** (`B2B`, `B2G`, `B2BINT`, `B2C`
 
 ### Puces de statut
 
-À droite, une rangée de **puces de statut** affiche un badge par statut présent dans la plage de dates. Chaque puce indique le libellé du statut, le compteur, et une couleur correspondant à la famille. Cliquer sur une puce active un filtre statut sur la liste — un nouveau clic le retire.
+À droite, une rangée de **puces de statut** affiche un badge par statut présent dans la plage de dates. Chaque puce indique le libellé du statut, son compteur et une couleur de famille. Cliquer sur une puce active un filtre sur la liste ; un nouveau clic le retire.
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', margin: '14px 0 4px'}}>
 <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>Déposée <span style={{opacity: 0.65}}>(982)</span></span>
 <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa'}}>En attente <span style={{opacity: 0.65}}>(184)</span></span>
 <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(255,159,10,0.55)', background: 'rgba(255,159,10,0.1)', color: '#fb923c'}}>En litige <span style={{opacity: 0.65}}>(52)</span></span>
 <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(255,69,58,0.55)', background: 'rgba(255,69,58,0.1)', color: '#f87171'}}>Refusée <span style={{opacity: 0.65}}>(29)</span></span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 500, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', opacity: 0.7}}>✕ Clear filter</span>
+<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 500, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', opacity: 0.7}}>✕ Effacer le filtre</span>
 </div>
 
 ### Effacer les filtres
 
-Lorsqu'au moins un filtre est actif, une puce **✕ Clear filter** apparaît en fin de rangée. Elle efface tous les filtres sauf la plage de dates.
+Quand au moins un filtre est actif, une puce **✕ Effacer le filtre** apparaît en fin de rangée. Elle efface tous les filtres sauf la plage de dates.
 
 ### Rafraîchir et Nouvelle facture
 
@@ -73,8 +73,8 @@ Deux boutons sont placés à droite :
 
 | Bouton | Comportement |
 |---|---|
-| **Refresh** (flèche circulaire) | Relance la requête courante sans modifier les filtres. |
-| **+ New invoice** | Ouvre la *modale de création / d'édition de facture*. Masqué pour les sessions en lecture seule. |
+| **Rafraîchir** (flèche circulaire) | Relance la requête courante sans modifier les filtres. |
+| **+ Nouvelle facture** | Ouvre la *modale de création / d'édition de facture*. Masqué pour les sessions en lecture seule. |
 
 ---
 
@@ -84,8 +84,8 @@ Le tableau affiche une ligne par facture. Tri par défaut : numéro de document 
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'grid', gridTemplateColumns: '70px 50px 70px 1.4fr 90px 1.6fr 100px 100px 60px 130px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 600, fontSize: '11px'}}>
-    <div>Doc</div><div>Dct</div><div>Kco</div><div>UBL number</div><div>Issue date</div><div>Customer</div>
-    <div style={{textAlign: 'right'}}>Total HT</div><div style={{textAlign: 'right'}}>Total TTC</div><div>Cur.</div><div>Status</div>
+    <div>Doc</div><div>Dct</div><div>Kco</div><div>Numéro UBL</div><div>Date d'émission</div><div>Client</div>
+    <div style={{textAlign: 'right'}}>Total HT</div><div style={{textAlign: 'right'}}>Total TTC</div><div>Devise</div><div>Statut</div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '70px 50px 70px 1.4fr 90px 1.6fr 100px 100px 60px 130px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
     <div>12345</div><div>RI</div><div>00070</div><div>FA-2026-001234</div><div>24/04/2026</div><div>Acme Industries SA</div>
@@ -116,29 +116,29 @@ Le tableau affiche une ligne par facture. Tri par défaut : numéro de document 
 | **Doc** | Numéro de document interne. |
 | **Dct** | Type de document. |
 | **Kco** | Code société. |
-| **UBL number** | Numéro de facture tel qu'il apparaît dans le document UBL généré. |
-| **Issue date** | BT-2 issu du document UBL. |
-| **Customer** | Nom de la partie acheteur. |
+| **Numéro UBL** | Numéro de facture tel qu'il apparaît dans le document UBL généré. |
+| **Date d'émission** | BT-2 issu du document UBL. |
+| **Client** | Nom de la partie acheteur. |
 | **Total HT** | Montant total hors taxes. |
 | **Total TTC** | Montant total toutes taxes comprises. |
-| **Currency** | Code ISO 4217. |
-| **Status** | Badge statut — code + libellé, coloré par famille. |
+| **Devise** | Code ISO 4217. |
+| **Statut** | Badge de statut — code + libellé, coloré par famille. |
 
-Un sélecteur de taille de page en bas du tableau vaut 50 par défaut ; des valeurs jusqu'à 500 sont acceptées. Le nombre total de factures correspondant aux filtres figure à côté de la pagination.
+Un sélecteur de taille de page en bas du tableau est réglé sur 50 par défaut ; des valeurs jusqu'à 500 sont acceptées. Le nombre total de factures correspondant aux filtres apparaît à côté de la pagination.
 
 ### Navigation au clic
 
-Cliquer sur une ligne ouvre la **modale de détail** pour cette facture. Toute action de la page est unitaire — pas de sélection multi-lignes.
+Cliquer sur une ligne ouvre la **modale de détail** de la facture. Toutes les actions de la page sont unitaires : pas de sélection multi-lignes.
 
 ### Export
 
-Un bouton **Export** dans la barre d'outils exporte la vue courante (filtres compris) au format CSV sous le nom `invoices.csv`.
+Un bouton **Exporter** dans la barre d'outils exporte la vue courante (filtres compris) au format CSV sous le nom `invoices.csv`.
 
 ---
 
 ## Modale de détail
 
-Cliquer sur une ligne ouvre une modale comportant sept onglets en haut : **Summary**, **Parties**, **Lines**, **VAT**, **Notes**, **History**, **PDF**. Le titre de la modale affiche le triplet `DOC / DCT / KCO`. Un **bouton plein écran** dans l'en-tête bascule entre la vue fenêtrée et la vue plein écran.
+Cliquer sur une ligne ouvre une modale qui contient sept onglets en haut : **Résumé**, **Parties**, **Lignes**, **TVA**, **Notes**, **Historique**, **PDF**. Le titre de la modale affiche le triplet `DOC / DCT / KCO`. Un **bouton plein écran** dans l'en-tête bascule entre vue fenêtrée et vue plein écran.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '0', margin: '20px 0', overflow: 'hidden'}}>
   <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)'}}>
@@ -146,25 +146,25 @@ Cliquer sur une ligne ouvre une modale comportant sept onglets en haut : **Summa
     <div style={{display: 'flex', gap: '6px', fontSize: '12px', opacity: 0.6}}>⛶ ✕</div>
   </div>
   <div style={{display: 'flex', gap: '0', padding: '0 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', overflowX: 'auto'}}>
-    <div style={{padding: '10px 16px', fontWeight: 600, borderBottom: '2px solid #4a9eff', color: '#4a9eff'}}>Summary</div>
+    <div style={{padding: '10px 16px', fontWeight: 600, borderBottom: '2px solid #4a9eff', color: '#4a9eff'}}>Résumé</div>
     <div style={{padding: '10px 16px', opacity: 0.6}}>Parties</div>
-    <div style={{padding: '10px 16px', opacity: 0.6}}>Lines <span style={{opacity: 0.5, fontSize: '11px'}}>(8)</span></div>
-    <div style={{padding: '10px 16px', opacity: 0.6}}>VAT</div>
+    <div style={{padding: '10px 16px', opacity: 0.6}}>Lignes <span style={{opacity: 0.5, fontSize: '11px'}}>(8)</span></div>
+    <div style={{padding: '10px 16px', opacity: 0.6}}>TVA</div>
     <div style={{padding: '10px 16px', opacity: 0.6}}>Notes <span style={{opacity: 0.5, fontSize: '11px'}}>3</span></div>
-    <div style={{padding: '10px 16px', opacity: 0.6}}>History <span style={{opacity: 0.5, fontSize: '11px'}}>(5)</span></div>
+    <div style={{padding: '10px 16px', opacity: 0.6}}>Historique <span style={{opacity: 0.5, fontSize: '11px'}}>(5)</span></div>
     <div style={{padding: '10px 16px', opacity: 0.6}}>PDF</div>
   </div>
   <div style={{padding: '14px 18px', fontSize: '12px', opacity: 0.6, fontStyle: 'italic'}}>Contenu de l'onglet — varie selon l'onglet actif</div>
 </div>
 
-### Onglet Summary *(défaut)*
+### Onglet Résumé *(défaut)*
 
-L'onglet Summary affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Edit UBL, Copy, Delete) à droite.
+L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite.
 
-Sous le statut, lorsque la facture se trouve dans un statut nécessitant une action de suivi côté vendeur (par ex. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), un bandeau bleu **Seller actions** propose les actions recommandées :
+Sous le statut, quand la facture est dans un statut qui demande une action côté vendeur (par ex. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), un bandeau bleu **Actions vendeur** propose les actions recommandées :
 
 <div style={{border: '1px solid rgba(74,158,255,0.4)', background: 'rgba(74,158,255,0.08)', borderRadius: '8px', padding: '12px 14px', margin: '14px 0', display: 'flex', flexDirection: 'column', gap: '10px'}}>
-  <div style={{fontSize: '12px', fontWeight: 700, color: '#4a9eff', textTransform: 'uppercase', letterSpacing: '0.07em'}}>Seller actions</div>
+  <div style={{fontSize: '12px', fontWeight: 700, color: '#4a9eff', textTransform: 'uppercase', letterSpacing: '0.07em'}}>Actions vendeur</div>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px'}}>
     <span style={{padding: '5px 12px', borderRadius: '6px', fontSize: '13px', fontWeight: 500, background: '#4a9eff', color: '#fff', border: '1px solid #4a9eff'}}>Marquer paiement reçu</span>
     <span style={{padding: '5px 12px', borderRadius: '6px', fontSize: '13px', fontWeight: 500, background: 'transparent', color: '#4a9eff', border: '1px solid rgba(74,158,255,0.4)'}}>Émettre un avoir</span>
@@ -184,24 +184,24 @@ Correspondance statut → actions :
 | **213** Rejetée | *Annuler comptable*, *Émettre une nouvelle facture* |
 | **9904** Erreur d'envoi / **9907** Rejet PA | *Redéposer sur PA* |
 
-Chaque action est rattachée à un *endpoint de connecteur API* configuré dans *Configuration → API Connectors* — un clic exécute le connecteur avec les données de la facture. Une action grisée signifie que le connecteur n'est pas configuré sur ce déploiement.
+Chaque action est rattachée à un *endpoint de connecteur API* configuré dans *Configuration → API Connectors*. Un clic exécute le connecteur avec les données de la facture. Une action grisée signifie que le connecteur n'est pas configuré sur ce déploiement.
 
-Le reste de l'onglet Summary se présente sous forme de groupes dépliables :
+Le reste de l'onglet Résumé se présente sous forme de groupes dépliables :
 
 - **Document** — DOC / DCT / KCO, numéro UBL, type de facture, profile ID, références contrat / acheteur / commande / projet, référence comptable.
-- **Dates & Currency** — date d'émission, date d'échéance, devise, période de début / fin.
-- **Amounts** — total HT, total TTC, montant à payer.
-- **Payment** — code de moyen de paiement, IBAN, nom du compte, BIC, identifiant de paiement, conditions de paiement.
-- **Document allowances / charges** — remises ou charges au niveau du document avec type, motif, montant, catégorie de TVA.
+- **Dates et devise** — date d'émission, date d'échéance, devise, période de début / fin.
+- **Montants** — total HT, total TTC, montant à payer.
+- **Paiement** — code de moyen de paiement, IBAN, nom du compte, BIC, identifiant de paiement, conditions de paiement.
+- **Remises / charges au niveau document** — remises ou charges au niveau du document avec type, motif, montant, catégorie de TVA.
 
 ### Onglet Parties
 
-Trois groupes dépliables alimentés depuis le document UBL :
+Trois groupes dépliables remplis à partir du document UBL :
 
-- **Supplier** — nom, SIREN, SIRET, identifiant à la TVA, adresse électronique, adresse postale, contact (nom, téléphone, e-mail).
-- **Customer** — nom, identifiant société, adresse électronique, TVA, adresse, contact.
+- **Fournisseur** — nom, SIREN, SIRET, identifiant à la TVA, adresse électronique, adresse postale, contact (nom, téléphone, e-mail).
+- **Client** — nom, identifiant société, adresse électronique, TVA, adresse, contact.
 - **Agent Party** *(facultatif)* — pour l'extension française — nom, adresse, pays.
-- **Delivery** *(facultatif)* — date, nom de la partie, identifiant de lieu, adresse.
+- **Livraison** *(facultatif)* — date, nom de la partie, identifiant de lieu, adresse.
 
 Un groupe sans donnée n'apparaît pas.
 
@@ -240,9 +240,9 @@ Un groupe sans donnée n'apparaît pas.
   </div>
 </div>
 
-### Onglet Lines
+### Onglet Lignes
 
-Tableau des lignes de facture, une ligne principale par ligne plus des sous-lignes qui exposent les compléments portés par le document UBL.
+Tableau des lignes de facture : une ligne principale par ligne, plus des sous-lignes qui détaillent les compléments présents dans le document UBL.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'grid', gridTemplateColumns: '2.4fr 90px 60px 100px 110px 70px 70px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 600, fontSize: '11px'}}>
@@ -283,11 +283,11 @@ Des sous-lignes apparaissent sous chaque ligne principale pour :
 - Remises / charges au niveau ligne (`BG-27` / `BG-28`)
 - Propriétés additionnelles d'article (`BG-32`)
 
-Lorsque plusieurs lignes partagent la même livraison ou les mêmes références documentaires (`BT-128`), un **en-tête de livraison** ou un **en-tête de référence documentaire** apparaît une seule fois en haut du groupe au lieu d'être répété sur chaque ligne.
+Quand plusieurs lignes partagent la même livraison ou les mêmes références documentaires (`BT-128`), un **en-tête de livraison** ou un **en-tête de référence documentaire** apparaît une seule fois en haut du groupe, au lieu d'être répété sur chaque ligne.
 
-### Onglet VAT
+### Onglet TVA
 
-Un tableau des sous-totaux TVA portés par le document UBL : code de catégorie, taux, base imposable, montant de TVA, devise, code et libellé d'exonération (le cas échéant).
+Tableau des sous-totaux TVA présents dans le document UBL : code de catégorie, taux, base imposable, montant de TVA, devise, code et libellé d'exonération (le cas échéant).
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'grid', gridTemplateColumns: '90px 70px 1fr 1fr 70px 1.6fr', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 600, fontSize: '11px'}}>
@@ -312,7 +312,7 @@ Un tableau des sous-totaux TVA portés par le document UBL : code de catégorie,
 
 ### Onglet Notes
 
-Notes au niveau document (`BT-22`). Chaque note s'affiche sous forme de carte avec un **badge de préfixe** (par ex. `PMD`, `PMT`, `REG`) suivi du texte libre. Le libellé du préfixe est résolu depuis la liste de référence *note-types* ; survoler le badge affiche le libellé.
+Notes au niveau document (`BT-22`). Chaque note s'affiche sous forme de carte avec un **badge de préfixe** (par ex. `PMD`, `PMT`, `REG`) suivi du texte libre. Le libellé du préfixe vient de la liste de référence *note-types* ; survoler le badge l'affiche.
 
 <div style={{display: 'flex', flexDirection: 'column', gap: '10px', margin: '20px 0'}}>
   <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '12px 14px', background: 'rgba(255,255,255,0.02)', display: 'flex', gap: '12px', alignItems: 'flex-start'}}>
@@ -329,7 +329,7 @@ Notes au niveau document (`BT-22`). Chaque note s'affiche sous forme de carte av
   </div>
 </div>
 
-### Onglet History
+### Onglet Historique
 
 Trois sections dans cet onglet :
 
@@ -337,19 +337,19 @@ Trois sections dans cet onglet :
 
 | Bouton | Comportement |
 |---|---|
-| **Validate UBL** | Relance la validation XSD + Schematron sur le document UBL stocké en base. Le résultat (valide / avertissement / erreur) s'affiche en ligne avec le détail le cas échéant. |
-| **Set status** | Ouvre la *modale Set Status* — voir plus bas. |
-| **Resend** | Redépose le document UBL sur la Plateforme Agréée. Une confirmation est demandée avant exécution. |
+| **Valider l'UBL** | Relance la validation XSD + Schematron sur le document UBL stocké en base. Le résultat (valide / avertissement / erreur) s'affiche en ligne, avec le détail si nécessaire. |
+| **Modifier le statut** | Ouvre la *modale de modification de statut* — voir plus bas. |
+| **Renvoyer** | Redépose le document UBL sur la Plateforme Agréée. Une confirmation est demandée avant exécution. |
 
-#### Groupe Lifecycle
+#### Groupe Cycle de vie
 
 Le **cycle de vie** est la trace d'audit de tous les statuts traversés par la facture. Chaque événement affiche :
 
-- Le badge statut (code + couleur de famille).
+- Le badge de statut (code + couleur de famille).
 - Le libellé du statut et le message renvoyé par la plateforme.
-- Détails facultatifs pour les refus : code et libellé du motif de rejet, code et libellé de l'action attendue, note de statut additionnelle.
+- Pour les refus, détails facultatifs : code et libellé du motif de rejet, code et libellé de l'action attendue, note de statut additionnelle.
 
-Le cycle de vie est en ajout uniquement — les événements sont ajoutés par le balayage *Sync → Retrieve Statuses* et ne sont jamais modifiés.
+Le cycle de vie est en mode ajout seul — les événements sont créés par le job *Synchronisation → Récupérer les statuts* et ne sont jamais modifiés.
 
 <div style={{margin: '22px 0', position: 'relative', paddingLeft: '28px'}}>
   <div style={{position: 'absolute', left: '9px', top: '14px', bottom: '18px', width: '2px', background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)'}} />
@@ -406,26 +406,26 @@ Le cycle de vie est en ajout uniquement — les événements sont ajoutés par l
   </div>
 </div>
 
-#### Groupe Validation errors
+#### Groupe Erreurs de validation
 
-Liste les erreurs de validation (XSD / Schematron) enregistrées sur cette facture. Chaque ligne porte la sévérité, l'identifiant de la règle et le message lisible. Vide lorsque la facture passe sans erreur.
+Liste les erreurs de validation (XSD / Schematron) enregistrées sur cette facture. Chaque ligne donne la sévérité, l'identifiant de la règle et le message correspondant. Vide quand la facture passe sans erreur.
 
 ### Onglet PDF
 
-L'onglet PDF affiche un PDF généré de la facture en ligne (vue `<iframe>`). En bas de l'onglet :
+L'onglet PDF affiche un PDF de la facture généré à la volée (vue `<iframe>`). En bas de l'onglet :
 
 | Bouton | Comportement |
 |---|---|
-| **E-mail** | Ouvre la *modale E-mail* avec le PDF affiché déjà rattaché. |
-| **Download** | Télécharge le PDF sur l'ordinateur local. |
+| **E-mail** | Ouvre la *modale d'envoi d'e-mail* avec le PDF déjà attaché. |
+| **Télécharger** | Télécharge le PDF sur l'ordinateur local. |
 
 ---
 
 ## Modales d'action
 
-### Modale Set Status
+### Modale de modification de statut
 
-Ouverte depuis le bouton **Set status** de l'onglet History. Permet de positionner manuellement la facture sur un statut choisi — utile pour des corrections manuelles ou pour déclencher une transition que la plateforme n'a pas relevée.
+Ouverte depuis le bouton **Modifier le statut** de l'onglet Historique. Permet de placer manuellement la facture sur un statut donné — utile pour corriger une erreur ou pour forcer une transition que la plateforme n'a pas remontée.
 
 <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.025)', maxWidth: '560px', boxShadow: '0 8px 24px rgba(0,0,0,0.25)'}}>
   <div style={{padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -470,20 +470,20 @@ Ouverte depuis le bouton **Set status** de l'onglet History. Permet de positionn
 
 | Champ | Description |
 |---|---|
-| **Target** | `PA` (envoie une mise à jour de statut à la Plateforme Agréée) ou `DB` (écrit le nouveau statut directement en base locale, sans notification PA). |
-| **Status** | Liste déroulante de tous les statuts de la liste de référence *statuses*, avec code + libellé. |
-| **Status at** *(PA uniquement)* | Date / heure de l'événement. Défaut : maintenant. |
-| **Reason** | Motif libre. Pré-rempli avec le libellé du statut ; modifiable. |
-| **Rejection reason code + label** *(le cas échéant)* | Code issu de la liste *rejection-reason-codes*, plus sa traduction. |
-| **Action code + label** *(le cas échéant)* | Code issu de la liste *action-codes*, plus sa traduction. |
+| **Cible** | `PA` (envoie une mise à jour de statut à la Plateforme Agréée) ou `DB` (écrit le nouveau statut directement en base locale, sans notification PA). |
+| **Statut** | Liste déroulante de tous les statuts de la liste de référence *statuses*, avec code + libellé. |
+| **Date du statut** *(PA uniquement)* | Date / heure de l'événement. Défaut : maintenant. |
+| **Motif** | Motif libre. Pré-rempli avec le libellé du statut ; modifiable. |
+| **Code et libellé du motif de rejet** *(le cas échéant)* | Code issu de la liste *rejection-reason-codes*, plus sa traduction. |
+| **Code et libellé de l'action** *(le cas échéant)* | Code issu de la liste *action-codes*, plus sa traduction. |
 
-Lorsque **Target = DB** est sélectionné, un encart orange rappelle que la modification est locale uniquement et ne sera pas propagée vers la PA.
+Quand **Cible = DB** est sélectionné, un encart orange rappelle que la modification est locale uniquement et ne sera pas propagée vers la PA.
 
-Cliquer sur **Submit** pour appliquer. Un bandeau vert confirme le succès ; la modale se ferme après un court délai.
+Cliquer sur **Soumettre** pour appliquer. Un bandeau vert confirme le succès et la modale se ferme peu après.
 
-### Modale E-mail
+### Modale d'envoi d'e-mail
 
-Ouverte depuis l'onglet PDF. Permet d'envoyer le PDF de la facture au client via SMTP en utilisant les identifiants configurés dans le template *global*.
+Ouverte depuis l'onglet PDF. Permet d'envoyer le PDF de la facture au client par SMTP, avec les identifiants configurés dans le template *global*.
 
 <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.025)', maxWidth: '620px', boxShadow: '0 8px 24px rgba(0,0,0,0.25)'}}>
   <div style={{padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -521,18 +521,18 @@ Ouverte depuis l'onglet PDF. Permet d'envoyer le PDF de la facture au client via
 
 | Champ | Description |
 |---|---|
-| **To** *(obligatoire)* | Adresse e-mail du destinataire. |
+| **À** *(obligatoire)* | Adresse e-mail du destinataire. |
 | **Cc** | Copie facultative. |
-| **Subject** | Pré-rempli avec `Invoice <ublNumber>` ; modifiable. |
-| **Body** | Pré-rempli avec un modèle français ou anglais selon la langue de l'utilisateur : salutation, ligne principale référençant le numéro de facture et le total, ligne de contact, signature. Entièrement modifiable. |
+| **Objet** | Pré-rempli avec `Invoice <ublNumber>` ; modifiable. |
+| **Corps** | Pré-rempli avec un modèle français ou anglais selon la langue de l'utilisateur : salutation, ligne principale qui référence le numéro de facture et le total, ligne de contact, signature. Entièrement modifiable. |
 
 Le PDF affiché dans l'onglet PDF est attaché automatiquement. Si le PDF n'a pas été pré-chargé, le serveur le récupère depuis la base avant l'envoi.
 
-Pendant l'envoi, un voile recouvre la modale jusqu'à confirmation par le serveur SMTP. Un bandeau vert signale la réussite ; la modale se ferme automatiquement après ~2 s.
+Pendant l'envoi, la modale est désactivée par un voile jusqu'à la confirmation du serveur SMTP. Un bandeau vert confirme l'envoi ; la modale se ferme automatiquement après ~2 s.
 
 ### Modale de création / édition de facture
 
-Ouverte depuis **+ New invoice** dans la barre d'outils, ou depuis les boutons **Edit UBL** / **Copy** de l'onglet Summary. Permet de créer une facture vierge ou d'ajuster une facture existante. La modale se présente comme une facture imprimable — l'utilisateur remplit le formulaire et NomaUBL produit le document UBL correspondant à l'enregistrement.
+Ouverte depuis **+ Nouvelle facture** dans la barre d'outils, ou depuis les boutons **Modifier l'UBL** / **Copier** de l'onglet Résumé. Permet de créer une facture vierge ou de modifier une facture existante. La modale prend l'apparence d'une facture imprimable. L'utilisateur remplit le formulaire ; à l'enregistrement, NomaUBL génère le document UBL correspondant.
 
 <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.025)', boxShadow: '0 12px 32px rgba(0,0,0,0.3)'}}>
   <div style={{padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(74,158,255,0.04)'}}>
@@ -612,33 +612,33 @@ Ouverte depuis **+ New invoice** dans la barre d'outils, ou depuis les boutons *
 La modale est divisée en sections verticales :
 
 - **Document** — numéro, type de facture, profile ID, références contrat / acheteur / commande.
-- **Header** — dates d'émission / échéance, devise, période de début / fin.
-- **Supplier** — alimenté depuis l'annuaire des fournisseurs (*UBL Defaults → Suppliers / Companies*) ; modifiable par facture.
-- **Customer** — saisie manuelle ou recherche via l'annuaire PPF.
-- **Delivery** — groupe livraison facultatif.
-- **Payment** — code de moyen de paiement, IBAN, BIC, mandat, conditions.
-- **Allowances / charges** — remises / charges au niveau document.
+- **En-tête** — dates d'émission / échéance, devise, période de début / fin.
+- **Fournisseur** — alimenté depuis l'annuaire des fournisseurs (*UBL Defaults → Suppliers / Companies*) ; modifiable par facture.
+- **Client** — saisie manuelle ou recherche via l'annuaire PPF.
+- **Livraison** — groupe livraison facultatif.
+- **Paiement** — code de moyen de paiement, IBAN, BIC, mandat, conditions.
+- **Remises / charges** — remises / charges au niveau document.
 - **Notes** — notes libres par préfixe `BT-22`.
-- **Lines** — lignes de facture avec article, quantité, unité, prix, remises, propriétés.
-- **VAT summary** — calculé automatiquement depuis les lignes (lecture seule — les modifications de ligne s'y reflètent).
-- **Totals** — calculé automatiquement (lecture seule).
+- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés.
+- **Récapitulatif TVA** — calculé automatiquement depuis les lignes (lecture seule — les modifications de ligne s'y reflètent).
+- **Totaux** — calculés automatiquement (lecture seule).
 
-Le bouton **Save** en bas valide la saisie, écrit en base, génère le document UBL et le dépose sur la PA conformément aux paramètres du template *e-invoicing*. La modale se ferme après un enregistrement réussi.
+Le bouton **Enregistrer** en bas valide la saisie, écrit en base, génère le document UBL et le dépose sur la PA selon les paramètres du template *e-invoicing*. La modale se ferme après un enregistrement réussi.
 
-Un **bouton plein écran** dans l'en-tête bascule entre fenêtré et plein écran, pratique pour les factures à nombreuses lignes.
+Un **bouton plein écran** dans l'en-tête bascule entre fenêtré et plein écran — pratique pour les factures qui ont beaucoup de lignes.
 
 ### Confirmation de redépôt
 
-Le bouton **Resend** (dans l'onglet History, ou via le bandeau Seller actions sur les statuts `9904` / `9907`) ouvre une confirmation avant de redéposer le document UBL sur la Plateforme Agréée. Après confirmation, la facture est redéposée ; un bandeau en ligne signale le succès ou l'erreur renvoyée par la PA. Le cycle de vie est mis à jour pour refléter le nouveau dépôt.
+Le bouton **Renvoyer** (dans l'onglet Historique, ou via le bandeau Actions vendeur sur les statuts `9904` / `9907`) ouvre une confirmation avant de redéposer le document UBL sur la Plateforme Agréée. Après confirmation, la facture est redéposée. Un bandeau en ligne affiche le succès ou l'erreur renvoyée par la PA. Le cycle de vie est mis à jour pour refléter le nouveau dépôt.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Commencer par la plage de dates.** *Yesterday* (défaut) convient au point matinal ; *Custom range* couvre la clôture mensuelle. Les filtres s'appliquent en plus de la plage de dates.
-- **Les puces de statut sont le filtre le plus rapide.** Une puce rouge à compteur non nul est généralement le bon point de départ pour traiter les exceptions.
-- **Le cycle de vie (onglet History) est la source de vérité.** Il enregistre tous les statuts traversés, avec messages, motifs de rejet et actions attendues — c'est l'endroit pour instruire un litige ou retrouver une décision côté PA.
-- **Utiliser le bandeau Seller actions.** Les actions proposées sur `205` / `206` / `207` / `208` / `210` / `213` / `9904` / `9907` sont les étapes recommandées par la plateforme. Elles ramènent un workflow multi-étapes (retrouver le client, rédiger l'avoir, etc.) à un seul clic lorsque le connecteur est configuré.
-- **N'utiliser Set status qu'en cas de besoin.** Un *Set status → DB* manuel désynchronise le dossier local de la PA. À réserver aux nettoyages après restauration de sauvegarde ou aux statuts non couverts par le balayage du cycle de vie.
-- **Edit UBL puis save** est la voie de correction canonique — l'enregistrement réécrit la facture en base et redépose sur la PA. Éviter d'éditer directement le XML source via *UBL Tools → XML Viewer* sauf lorsque le fichier sur disque est la source de référence.
-- **Utiliser Copy pour la facturation récurrente.** La modale est pré-remplie avec toutes les parties, lignes et TVA ; seuls le numéro, les dates et les éventuels écarts restent à modifier.
+- **Commencer par la plage de dates.** *Hier* (défaut) convient au pointage du matin ; *Plage personnalisée* couvre la clôture mensuelle. Les autres filtres s'appliquent en plus.
+- **Les puces de statut sont le filtre le plus rapide.** Une puce rouge à compteur non nul est en général le bon point de départ pour traiter les exceptions.
+- **Le cycle de vie (onglet Historique) est la source de vérité.** Il enregistre tous les statuts traversés, avec messages, motifs de rejet et actions attendues — c'est l'endroit pour instruire un litige ou retrouver une décision côté PA.
+- **Utiliser le bandeau Actions vendeur.** Les actions proposées sur `205` / `206` / `207` / `208` / `210` / `213` / `9904` / `9907` sont les étapes recommandées par la plateforme. Elles ramènent un workflow multi-étapes (retrouver le client, rédiger l'avoir, etc.) à un seul clic, à condition que le connecteur soit configuré.
+- **N'utiliser Modifier le statut qu'en cas de besoin.** Un *Modifier le statut → DB* manuel désynchronise le dossier local de la PA. À réserver aux nettoyages après restauration de sauvegarde ou aux statuts non couverts par le job de cycle de vie.
+- **Modifier l'UBL puis Enregistrer** est la méthode standard pour corriger une facture — l'enregistrement réécrit la facture en base et la redépose sur la PA. Éviter d'éditer directement le XML source via *Outils UBL → XML Viewer*, sauf si le fichier sur disque est la source de référence.
+- **Utiliser Copier pour la facturation récurrente.** La modale est pré-remplie avec toutes les parties, les lignes et la TVA ; seuls le numéro, les dates et les éventuels écarts restent à modifier.

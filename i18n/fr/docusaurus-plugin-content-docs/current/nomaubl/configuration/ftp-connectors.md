@@ -6,10 +6,10 @@ keywords: [NomaUBL, FTP, SFTP, JD Edwards, JDE, serveur d'entreprise, Enterprise
 
 # Connecteurs FTP
 
-Cet écran configure l'**accès SFTP au serveur d'entreprise JD Edwards** afin que NomaUBL puisse récupérer les **spools directement dans le PrintQueue JDE**. Il s'agit du mode d'extraction par fichier, en alternative — ou en complément — à l'extraction depuis la base BIP définie dans *Database Connectors → JD Edwards*.
+Cet écran configure l'**accès SFTP au serveur d'entreprise JD Edwards** pour que NomaUBL puisse récupérer les **spools directement dans le PrintQueue JDE**. C'est le mode d'extraction par fichier, en alternative — ou en complément — à l'extraction depuis la base BIP définie dans *Database Connectors → JD Edwards*.
 
 :::info[Page spécifique à JD Edwards]
-Cette page fait partie des composants **spécifiques à JDE** de NomaUBL. Les autres pages de Configuration sont agnostiques de la source (JDE, SAP, NetSuite, ERP personnalisé) ; celle-ci ne s'applique que lorsque la source est JD Edwards et que les spools doivent être récupérés dans le répertoire PrintQueue du serveur d'entreprise.
+Cette page fait partie des composants **spécifiques à JDE** de NomaUBL. Les autres pages de Configuration sont indépendantes de la source (JDE, SAP, NetSuite, ERP personnalisé) ; celle-ci ne s'applique que quand la source est JD Edwards et que les spools doivent être récupérés dans le répertoire PrintQueue du serveur d'entreprise.
 :::
 
 ---
@@ -30,5 +30,5 @@ Cette page fait partie des composants **spécifiques à JDE** de NomaUBL. Les au
 
 - **Utiliser un compte SFTP dédié restreint au PrintQueue.** Un compte à privilèges minimaux simplifie l'audit et la révocation, et limite les conséquences en cas de fuite des identifiants.
 - **Valider la connexion SFTP depuis un client autonome** (par ex. `sftp user@host`) avant enregistrement, en particulier le chemin **Directory** — une faute de frappe se traduit silencieusement par « aucun spool trouvé ».
-- **Combiner ce connecteur avec celui de la base BIP lorsque les deux modes de récupération sont utilisés.** Le SFTP récupère le fichier spool ; le connecteur BIP récupère les BLOB de sortie rendus. Les deux sont indépendants et peuvent cohabiter.
+- **Combiner ce connecteur avec celui de la base BIP quand les deux modes de récupération sont utilisés.** Le SFTP récupère le fichier spool ; le connecteur BIP récupère les BLOB de sortie générés. Les deux sont indépendants et peuvent coexister.
 - **Vérifier que le serveur d'entreprise conserve les spools assez longtemps** pour que l'intervalle d'interrogation de NomaUBL puisse les détecter — les jobs de purge JDE peuvent supprimer les spools plus vite que le rythme d'interrogation NomaUBL.

@@ -6,7 +6,7 @@ keywords: [NomaUBL, modèles PDF, pdf-template, mise en page, defaultPdfTemplate
 
 # Modèles PDF
 
-L'écran **Modèles PDF** est la bibliothèque de **mises en page PDF réutilisables** appliquées par NomaUBL au moment du rendu d'une facture. Chaque mise en page est une ressource `pdf-template` enregistrée dans `config-pdf.json` ; les modèles de document désignent une mise en page par **nom** via leur propriété `pdfTemplate` — une même mise en page peut donc être partagée entre plusieurs documents.
+L'écran **Modèles PDF** est la bibliothèque de **mises en page PDF réutilisables** utilisées par NomaUBL au moment du rendu d'une facture. Chaque mise en page est une ressource `pdf-template` enregistrée dans `config-pdf.json` ; les modèles de document désignent une mise en page par **nom** via leur propriété `pdfTemplate` — une même mise en page peut donc être partagée entre plusieurs documents.
 
 La page couvre quatre opérations :
 
@@ -15,17 +15,17 @@ La page couvre quatre opérations :
 - **désigner un défaut** pour les documents qui ne portent pas de mise en page explicite ;
 - **prévisualiser** le résultat sur une facture d'exemple sans quitter la page.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — l'entrée consommée étant l'UBL 2.1 généré, et non le XML source.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. L'entrée utilisée est l'UBL 2.1 généré, et non le XML source.
 
 :::info[Nouveauté en 2026.05.1]
-Les modèles PDF étaient auparavant édités en ligne sur la page Documents (onglet *PDF Template*) et stockés dans les propriétés du modèle de document. Ils sont désormais des ressources partageables à part entière, dotées de leur propre page. L'onglet de la page Documents subsiste, mais il choisit désormais une mise en page **par nom** depuis le catalogue de cette page, au lieu de contenir le JSON en ligne.
+Les modèles PDF étaient auparavant édités en ligne sur la page Documents (onglet *PDF Template*) et stockés dans les propriétés du modèle de document. Ils sont désormais des ressources partageables à part entière, dotées de leur propre page. L'onglet de la page Documents existe toujours, mais il choisit désormais une mise en page **par nom** depuis le catalogue de cette page, au lieu de contenir le JSON en ligne.
 :::
 
 ---
 
 ## Accès à la page
 
-- Sidebar → **Gestion → Modèles PDF**.
+- Barre latérale → **Gestion → Modèles PDF**.
 - La page liste toutes les mises en page du catalogue. L'entrée **`built-in`** est la mise en page par défaut livrée — en lecture seule, toujours présente comme filet de sécurité.
 - La mise en page par défaut courante — c'est-à-dire celle utilisée par tout document sans `pdfTemplate` explicite — est marquée d'une étoile jaune ★ dans la barre latérale.
 
@@ -157,7 +157,7 @@ Les modèles PDF étaient auparavant édités en ligne sur la page Documents (on
   <line x1="800" y1="508" x2="744" y2="508" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdftpl-arrow)"/>
 </svg>
 
-La page se compose d'un **catalogue** à gauche, listant les mises en page enregistrées, et d'un **éditeur** à droite, dédié à la mise en page sélectionnée. L'éditeur est identique à l'onglet *PDF Template* d'un modèle de document — même liste de sections, même tiroir par section, même aperçu en direct — la différence étant que le résultat est enregistré dans le catalogue sous un nom, plutôt que rattaché à un seul document.
+La page comporte un **catalogue** à gauche qui liste les mises en page enregistrées, et un **éditeur** à droite dédié à la mise en page sélectionnée. L'éditeur est identique à l'onglet *PDF Template* d'un modèle de document — même liste de sections, même tiroir par section, même aperçu en direct. La différence : le résultat est enregistré dans le catalogue sous un nom, plutôt que rattaché à un seul document.
 
 ---
 
@@ -165,26 +165,26 @@ La page se compose d'un **catalogue** à gauche, listant les mises en page enreg
 
 Au moment du rendu PDF d'une facture, NomaUBL parcourt une chaîne en trois temps pour choisir la mise en page :
 
-1. Le **modèle de document** de la facture (lu depuis `F564231.UHTMPL`) porte une propriété `pdfTemplate` — si elle est renseignée, c'est ce nom qui s'applique.
-2. À défaut, c'est la propriété `defaultPdfTemplate` du modèle **`global`** qui s'applique — réglée depuis la présente page via le bouton *Définir par défaut*.
+1. Le **modèle de document** de la facture (lu depuis `F564231.UHTMPL`) a une propriété `pdfTemplate` — si elle est renseignée, c'est ce nom qui s'applique.
+2. À défaut, c'est la propriété `defaultPdfTemplate` du modèle **`global`** qui s'applique — réglée sur cette page via le bouton *Définir par défaut*.
 3. À défaut, la mise en page intégrée **`built-in`** s'applique — toujours présente, jamais supprimable.
 
-Cette troisième étape constitue le filet de sécurité : un environnement fraîchement installé produit des PDF cohérents avant même la création d'une mise en page.
+Cette troisième étape est le filet de sécurité : un environnement tout juste installé produit des PDF cohérents avant même qu'une mise en page soit créée.
 
 ---
 
 ## Actions de la barre supérieure
 
-La barre d'actions couvre le cycle de vie du catalogue ainsi que la désignation du défaut.
+La barre d'actions couvre le cycle de vie du catalogue et la désignation du défaut.
 
 | Action | Effet |
 |---|---|
-| **Add** | Ouvre une modale demandant un nom et une description. Crée une ressource `pdf-template` vide — l'ajout des sections se fait ensuite dans l'éditeur. |
-| **Import** | Charge un fichier JSON produit par une autre instance (ou par l'action *Export*). Met à jour le modèle correspondant si le nom existe déjà, sinon le crée. Le nom réservé `built-in` est rejeté. |
-| **Copy** | Duplique la mise en page sélectionnée sous un nouveau nom. Voie la plus rapide pour dériver une variante à partir de `built-in` ou d'un modèle existant spécifique à un client. |
-| **Remove** | Supprime la mise en page sélectionnée après confirmation. Bouton désactivé sur `built-in`. |
-| **Set as default** | Inscrit le nom de la mise en page sélectionnée dans `global.defaultPdfTemplate`. Tout document sans `pdfTemplate` explicite résout alors vers cette mise en page. |
-| **Reset to factory** | Vide `global.defaultPdfTemplate`, ce qui ramène la chaîne sur `built-in`. |
+| **Ajouter** | Ouvre une modale qui demande un nom et une description. Crée une ressource `pdf-template` vide — l'ajout des sections se fait ensuite dans l'éditeur. |
+| **Importer** | Charge un fichier JSON produit par une autre instance (ou par l'action *Exporter*). Met à jour le modèle correspondant si le nom existe déjà, sinon le crée. Le nom réservé `built-in` est rejeté. |
+| **Copier** | Duplique la mise en page sélectionnée sous un nouveau nom. La méthode la plus rapide pour dériver une variante à partir de `built-in` ou d'un modèle existant spécifique à un client. |
+| **Supprimer** | Supprime la mise en page sélectionnée après confirmation. Bouton désactivé sur `built-in`. |
+| **Définir par défaut** | Enregistre le nom de la mise en page sélectionnée dans `global.defaultPdfTemplate`. Tout document sans `pdfTemplate` explicite utilise alors cette mise en page. |
+| **Remettre par défaut** | Vide `global.defaultPdfTemplate`, ce qui ramène la résolution sur `built-in`. |
 
 ---
 
@@ -193,8 +193,8 @@ La barre d'actions couvre le cycle de vie du catalogue ainsi que la désignation
 La barre latérale liste toutes les mises en page enregistrées, plus la `built-in` livrée.
 
 - **`built-in`** — épinglée en haut, en lecture seule, marquée d'un badge `factory`. Sa sélection ouvre l'éditeur en mode lecture seule, signalé par un bandeau. *Copier* est la seule manière d'en dériver une mise en page éditable.
-- **Marqueur ★** — la mise en page utilisée comme défaut pour les documents sans `pdfTemplate` explicite. Une seule mise en page porte l'étoile à un instant donné.
-- **Description** — libellé libre persisté sur la ressource. Apparaît à la fois dans la barre latérale et dans le sélecteur *PDF Template* d'un modèle de document.
+- **Marqueur ★** — la mise en page utilisée comme défaut pour les documents sans `pdfTemplate` explicite. Une seule mise en page a l'étoile à un instant donné.
+- **Description** — libellé libre enregistré sur la ressource. Apparaît à la fois dans la barre latérale et dans le sélecteur *PDF Template* d'un modèle de document.
 
 ---
 
@@ -204,7 +204,7 @@ Une mise en page est une suite de sections. Deux familles cohabitent dans un mê
 
 ### Sections prédéfinies — éléments de mise en page éprouvés
 
-Neuf sections prédéfinies réordonnables couvrent la forme canonique d'un PDF de facture : **Header**, **Parties**, **Agent**, **Line Table**, **Document Allowances**, **VAT Breakdown**, **Totals**, **Payment**, **Notes**. Chacune s'appuie sur une classe Java qui sait rendre la partie correspondante d'une facture EN 16931 ; l'utilisateur en règle la visibilité via les bascules par section dans le tiroir intégré.
+Neuf sections prédéfinies réordonnables couvrent la forme standard d'un PDF de facture : **Header**, **Parties**, **Agent**, **Line Table**, **Document Allowances**, **VAT Breakdown**, **Totals**, **Payment**, **Notes**. Chacune s'appuie sur une classe Java qui rend la partie correspondante d'une facture EN 16931 ; l'utilisateur en règle la visibilité via les bascules par section dans le tiroir intégré.
 
 Le tiroir regroupe les bascules par préfixe **`Catégorie · Nom`** et les présente en colonnes côte à côte qui reflètent la mise en page PDF — *Header* se lit comme **METAS** | **SUPPLIERS**, *Line Table* comme **Group headers** | **Columns** | **Sub-details** — au lieu d'une longue liste plate. Les bascules utilisent le composant `Checkbox` rond-bleu pour une cohérence visuelle en mode sombre.
 
@@ -221,7 +221,7 @@ Liste complète des bascules par section prédéfinie :
 
 ### Sections block — composition libre pilotée par XPath
 
-La nouvelle section **`block`** est une primitive pilotée par XPath qui compose toute mise en page non couverte par les sections prédéfinies. Un block est un arbre de nœuds typés :
+La nouvelle section **`block`** est une primitive pilotée par XPath qui permet de composer toute mise en page non couverte par les sections prédéfinies. Un block est un arbre de nœuds typés :
 
 | Type | Usage |
 |---|---|
@@ -229,24 +229,24 @@ La nouvelle section **`block`** est une primitive pilotée par XPath qui compose
 | `field` | Rend une valeur XPath, avec libellé inline optionnel et sélecteur de format — `date`, `currency`, `number`, `percent`. |
 | `image` | Insère une image (logo, filigrane, signature). |
 | `spacer` / `hr` | Espace vertical ou filet horizontal. |
-| `row` / `column` | Conteneur avec contrôles `align` (`start` / `center` / `end`) et `gap`. `align: end` et `align: center` réduisent la ligne à environ 50 % afin qu'une paire *libellé + valeur* reste groupée plutôt qu'étirée sur toute la page. |
+| `row` / `column` | Conteneur avec contrôles `align` (`start` / `center` / `end`) et `gap`. `align: end` et `align: center` réduisent la ligne à environ 50 % pour qu'une paire *libellé + valeur* reste groupée plutôt qu'étirée sur toute la page. |
 | `repeat` | XPath retournant une NodeList ; le `child` du block est rendu une fois par occurrence. |
 | `if` | XPath retournant un booléen ; le `child` du block est rendu si vrai, masqué sinon. |
 | `table` | Grille `lignes × colonnes` avec bordures de cellules optionnelles et ligne d'en-tête stylée. Définir `xpath` la fait itérer (une ligne par occurrence), les enfants servant de gabarit par ligne. |
 
-Plusieurs blocks peuvent coexister dans un même modèle — par exemple un pour des mentions légales françaises, un pour une table structurée de conditions de paiement, un pour un filigrane image. Chaque block porte un `name` utilisateur affiché à côté de la ligne de section dans l'éditeur ; un modèle qui contient trois blocks se lit ainsi `Block · payment-terms`, `Block · legal-mentions`, `Block · watermark`.
+Plusieurs blocks peuvent coexister dans un même modèle — par exemple un pour des mentions légales françaises, un pour une table structurée de conditions de paiement, un pour un filigrane image. Chaque block a un `name` utilisateur affiché à côté de la ligne de section dans l'éditeur ; un modèle qui contient trois blocks se lit ainsi `Block · payment-terms`, `Block · legal-mentions`, `Block · watermark`.
 
 #### Conventions XPath dans un block
 
-- Le **sélecteur** préserve les préfixes de namespace `cbc:` / `cac:` — requis par le moteur namespace-aware ; un XPath saisi à la main sans préfixe ne correspondra simplement à rien.
-- Les sélections sont émises en **`/*/<chemin-complet>`** afin d'être indépendantes de la racine du document (le même chemin s'applique à `Invoice` comme à `CreditNote`).
-- À l'intérieur d'un ancêtre itérant (un `repeat` ou une `table` munie d'un `xpath`), le sélecteur supprime en plus le chemin de l'itérateur pour que les cellules enfants démarrent en XPath **relatif** (`cbc:TaxAmount` plutôt que `/*/cac:TaxTotal/cac:TaxSubtotal/cbc:TaxAmount`). Les gabarits de ligne restent ainsi portables lorsque l'itérateur change.
+- Le **sélecteur** garde les préfixes de namespace `cbc:` / `cac:` — requis par le moteur namespace-aware ; un XPath saisi à la main sans préfixe ne correspondra à rien.
+- Les sélections sont émises en **`/*/<chemin-complet>`** pour être indépendantes de la racine du document (le même chemin s'applique à `Invoice` comme à `CreditNote`).
+- À l'intérieur d'un ancêtre itérant (un `repeat` ou une `table` munie d'un `xpath`), le sélecteur supprime en plus le chemin de l'itérateur pour que les cellules enfants démarrent en XPath **relatif** (`cbc:TaxAmount` plutôt que `/*/cac:TaxTotal/cac:TaxSubtotal/cbc:TaxAmount`). Les gabarits de ligne restent ainsi portables quand l'itérateur change.
 
 ---
 
 ## Éditeur visuel
 
-Une section `block` s'ouvre dans le **`BlockCanvasEditor`** plutôt que dans une zone JSON brute. L'éditeur se découpe en trois panneaux empilés et une issue de secours JSON.
+Une section `block` s'ouvre dans le **`BlockCanvasEditor`** plutôt que dans une zone JSON brute. L'éditeur comporte trois panneaux empilés et une sortie de secours JSON.
 
 | Panneau | Rôle |
 |---|---|
@@ -254,9 +254,9 @@ Une section `block` s'ouvre dans le **`BlockCanvasEditor`** plutôt que dans une
 | **Barre d'outils** | Ajout d'enfant / encapsulation / dégagement / suppression / déplacement haut-bas — opérations appliquées au nœud sélectionné. Mêmes opérations disponibles via raccourcis clavier. |
 | **Inspecteur** | Formulaire d'attributs par type (XPath, libellé, format, alignement, gap, …) plus un sous-panneau **Style** couvrant police, graisse, taille, couleur, alignement et marges intérieures. |
 
-Détail discret mais important en haut de l'inspecteur : un sélecteur **Type** qui **transforme** le nœud sélectionné sur place — passage de `column` à `repeat` sans suppression / recréation, les attributs compatibles (enfants, style) étant reportés par le helper `transmuteKind`. Même mécanisme pour le cas courant de promotion d'un block statique en block itérant une fois la forme des données identifiée.
+Détail subtil mais important en haut de l'inspecteur : un sélecteur **Type** qui **transforme** le nœud sélectionné sur place — passage de `column` à `repeat` sans suppression / recréation. Les attributs compatibles (enfants, style) sont reportés par le helper `transmuteKind`. Même mécanisme pour le cas fréquent de promotion d'un block statique en block itérant une fois la forme des données identifiée.
 
-Le bouton **Aperçu en direct** en haut du formulaire ouvre une modale 960 × 85vh qui rend la configuration courante face à une facture d'exemple — l'enregistrement (*Save*) pendant que la modale est ouverte met à jour l'iframe à chaud. Le contrôle *Charger un échantillon XML* est remonté à l'en-tête du modèle, de sorte qu'un seul échantillon alimente l'autocomplétion XPath de chaque block du modèle.
+Le bouton **Aperçu en direct** en haut du formulaire ouvre une modale 960 × 85vh qui rend la configuration courante sur une facture d'exemple — l'enregistrement (*Enregistrer*) pendant que la modale est ouverte met à jour l'iframe en direct. Le contrôle *Charger un échantillon XML* est remonté à l'en-tête du modèle ; ainsi un seul échantillon alimente l'autocomplétion XPath de chaque block du modèle.
 
 ---
 
@@ -279,10 +279,10 @@ La page lit et écrit via les endpoints de templates standards — mêmes routes
 
 ## Conseils & bonnes pratiques
 
-- **Partir de `built-in` via Copy.** La mise en page livrée constitue une base solide — préférer la dériver par copie et ajustement de bascules plutôt que de partir d'un modèle vide.
-- **Un seul modèle, plusieurs documents.** Pour chaque variante de facture (standard, avoir, reçu destinataire …), privilégier un modèle partagé plutôt qu'un JSON inline par document. Le bénéfice : un point d'édition unique lorsque les mentions légales ou le jeu de colonnes évoluent.
-- **Désigner un défaut tôt.** Marquer une mise en page comme défaut avant le branchement des modèles de document spécifiques aux clients — chaque nouveau document résout alors implicitement vers ce défaut, et la propriété `pdfTemplate` explicite reste réservée aux variantes véritables.
-- **Utiliser `block` pour ce que les sections prédéfinies ne couvrent pas.** Mentions légales personnalisées, pieds de page spécifiques à un pays, blocs de signature structurés, filigranes — autant de cas mieux traités par un `block` que par une demande adressée à une section prédéfinie.
-- **Itérer dans la modale d'aperçu.** Basculer une section et observer l'iframe se re-rendre dans la modale est la voie la plus rapide pour converger sur une mise en page sans quitter l'éditeur.
+- **Partir de `built-in` via Copier.** La mise en page livrée est une base solide — préférer la dériver par copie et ajustement de bascules plutôt que de partir d'un modèle vide.
+- **Un seul modèle, plusieurs documents.** Pour chaque variante de facture (standard, avoir, reçu destinataire …), privilégier un modèle partagé plutôt qu'un JSON inline par document. Le bénéfice : un point d'édition unique quand les mentions légales ou le jeu de colonnes évoluent.
+- **Désigner un défaut tôt.** Marquer une mise en page comme défaut avant le branchement des modèles de document spécifiques aux clients — chaque nouveau document utilise alors ce défaut implicitement, et la propriété `pdfTemplate` explicite reste réservée aux vraies variantes.
+- **Utiliser `block` pour ce que les sections prédéfinies ne couvrent pas.** Mentions légales personnalisées, pieds de page spécifiques à un pays, blocs de signature structurés, filigranes — autant de cas mieux traités par un `block` que par une section prédéfinie.
+- **Itérer dans la modale d'aperçu.** Basculer une section et observer l'iframe se re-rendre dans la modale est le moyen le plus rapide d'arriver à une mise en page sans quitter l'éditeur.
 - **Réutiliser l'échantillon XML.** Un seul *Charger un échantillon XML* sur l'en-tête du modèle alimente le sélecteur de chaque block — chargement unique par session d'édition, et chaque autocomplétion XPath fonctionne immédiatement.
 - **Ne pas supprimer `built-in`.** Le bouton est désactivé sur cette entrée pour cette raison — c'est le filet de sécurité au bout de la chaîne de résolution.

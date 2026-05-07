@@ -21,7 +21,7 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). 
 
 | Champ | Description |
 |---|---|
-| **Default** | Code Cadre utilisé lorsqu'aucune règle ne s'applique. Choisi dans la liste de référence *profile-ids*. Défaut B2B le plus courant : `B1` (dépôt d'une facture de bien) ou `S1` (dépôt d'une facture de service). |
+| **Default** | Code Cadre utilisé quand aucune règle ne s'applique. Choisi dans la liste de référence *profile-ids*. Défaut B2B le plus courant : `B1` (dépôt d'une facture de bien) ou `S1` (dépôt d'une facture de service). |
 
 ---
 

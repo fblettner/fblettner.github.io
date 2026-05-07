@@ -8,9 +8,9 @@ keywords: [NomaUBL, sync, import, 9906, 9907, 10, Plateforme Agréée, asynchron
 
 L'écran **Import** vérifie que les factures déposées sur la Plateforme Agréée ont effectivement été importées côté PA. Il ne s'agit **pas** du flux de cycle de vie / de récupération des statuts (à voir dans *Sync → Retrieve Statuses*) mais de la **confirmation d'import asynchrone** consécutive à un dépôt PA réussi.
 
-Lorsqu'une PA importe les factures **en mode asynchrone**, un dépôt réussi ne fait que placer la facture en statut local `9906` (en attente) — la PA accuse réception sans avoir encore importé. L'écran Import interroge la PA pour chaque facture en `9906` et met à jour le statut local avec le résultat réel de l'import.
+Quand une PA importe les factures **en mode asynchrone**, un dépôt réussi ne fait que placer la facture en statut local `9906` (en attente) — la PA accuse réception sans avoir encore importé. L'écran Import interroge la PA pour chaque facture en `9906` et met à jour le statut local avec le résultat réel de l'import.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé — le comportement d'import asynchrone de la PA étant indépendant du système amont qui a produit la facture.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — car le comportement d'import asynchrone de la PA est indépendant du système amont qui a produit la facture.
 
 ---
 
@@ -80,7 +80,7 @@ Seules les factures en `9906` sont vérifiées — celles déjà en `10` ou `990
 
 Certaines Plateformes Agréées renvoient un résultat synchrone à la soumission — la facture passe directement de l'état pré-dépôt local à un état terminal côté PA (`10`, `9907`, etc.) au moment du dépôt. Pour ces PA, la page n'a pas d'utilité.
 
-D'autres PA accusent réception immédiatement et importent en mode asynchrone : la facture reste en `9906` (en attente) côté local jusqu'à ce que le worker d'import de la PA l'ait effectivement traitée. **Pour ces PA, cette page est le moyen de confirmer l'import** — sans elle, les factures en `9906` resteraient en attente indéfiniment côté local, même lorsque la PA les a depuis longtemps acceptées ou rejetées.
+D'autres PA accusent réception immédiatement et importent en mode asynchrone : la facture reste en `9906` (en attente) côté local jusqu'à ce que le worker d'import de la PA l'ait effectivement traitée. **Pour ces PA, cette page est le moyen de confirmer l'import** — sans elle, les factures en `9906` resteraient en attente indéfiniment côté local, même quand la PA les a depuis longtemps acceptées ou rejetées.
 
 ---
 
@@ -107,7 +107,7 @@ Une seule section, un seul bouton.
 | Élément | Description |
 |---|---|
 | **Check Import Status** | Déclenche le passage. Désactivé pendant l'exécution. |
-| **Ligne de statut** | Retour en ligne sous le bouton — vert en cas de succès, rouge en cas d'échec. |
+| **Ligne de statut** | Message en ligne sous le bouton — vert en cas de succès, rouge en cas d'échec. |
 
 La page n'a aucun paramètre : toutes les factures en `9906` sont vérifiées dans le même appel. Aucune sélection par facture — pour cibler une facture en particulier, passer par *Application → E-Invoicing* et utiliser les actions par ligne.
 
@@ -120,9 +120,9 @@ La section **Results** affiche la table de logs structurée — une ligne par fa
 Un passage réussi sur une facture en `9906` produit typiquement au moins :
 
 - Une ligne `INFO` indiquant la facture vérifiée.
-- Une ligne `SUCCESS` (passage à `10`), `WARNING` (passage à `9907`) ou `INFO` (toujours en attente) portant la réponse de la PA.
+- Une ligne `SUCCESS` (passage à `10`), `WARNING` (passage à `9907`) ou `INFO` (toujours en attente) qui contient la réponse de la PA.
 
-Lorsqu'un appel à la PA échoue pour des raisons de transport (réseau, expiration, identifiants), une ligne `ERROR` est journalisée et la facture reste en `9906` — un passage ultérieur retentera l'opération.
+Quand un appel à la PA échoue pour des raisons de transport (réseau, expiration, identifiants), une ligne `ERROR` est journalisée et la facture reste en `9906` — un passage ultérieur retentera l'opération.
 
 ---
 
@@ -132,4 +132,4 @@ Lorsqu'un appel à la PA échoue pour des raisons de transport (réseau, expirat
 - **Un passage ne produit pas de dépôt en double.** Il ne fait que lire — la PA renvoie le résultat d'import d'une facture déjà soumise. Lancer manuellement après l'ordonnanceur reste sans risque.
 - **Les factures en `9907` se corrigent ailleurs.** Cette page signale uniquement le rejet ; le traitement correctif (correction des données, puis re-soumission) passe par *Application → E-Invoicing → Resend* ou par *Process → UBL* sur le fichier corrigé.
 - **Cette page est distincte de *Retrieve Statuses*.** *Retrieve Statuses* gère les codes de cycle de vie (200, 201, 206, 207, 210, 213, …) émis par la PA après l'import. *Import* ne gère que l'étape de confirmation asynchrone (9906 → 10 / 9907). Les deux peuvent s'exécuter sur le même ordonnanceur avec des intervalles différents.
-- **Une `9906` qui dure est un signal.** Si une facture reste en `9906` pendant plusieurs heures malgré les passages successifs, la PA a vraisemblablement perdu le dépôt ou l'`uuid` ne résout plus côté PA. Consulter le tableau de bord propre à la PA avant d'incriminer NomaUBL.
+- **Une `9906` qui dure est un signal.** Si une facture reste en `9906` pendant plusieurs heures malgré les passages successifs, la PA a vraisemblablement perdu le dépôt ou l'`uuid` ne résout plus côté PA. Consulter le tableau de bord propre à la PA avant de mettre en cause NomaUBL.

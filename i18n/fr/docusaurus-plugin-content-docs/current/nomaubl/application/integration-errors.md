@@ -1,20 +1,20 @@
 ---
 title: Erreurs d'intégration
-description: "Outil d'analyse des échecs au-dessus de la table de validation — cartes par règle classant les règles les plus défaillantes et tableau plat par événement pour l'instruction ligne à ligne. Chaque code de règle est enrichi de la description humaine extraite des Schematron embarqués. Filtre par catégorie (UBL / Intégration), sévérité, clé documentaire ; la case Sans rattachement uniquement conserve la vue historique des erreurs orphelines à un clic."
+description: "Outil d'analyse des échecs construit sur la table de validation — cartes par règle qui classent les règles les plus en échec, et tableau plat par événement pour l'analyse ligne à ligne. Chaque code de règle est enrichi de sa description lisible tirée des Schematron embarqués. Filtre par catégorie (UBL / Intégration), sévérité, clé documentaire. La case Sans rattachement uniquement rétablit la vue historique des erreurs orphelines en un clic."
 keywords: [NomaUBL, erreurs d'intégration, validation, F564236, par règle, par événement, ValidationRuleCatalog, Schematron, XSD, UVSRCL, FATAL, ERROR, WARNING, INFO, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Erreurs d'intégration
 
-L'écran **Erreurs d'intégration** est l'**outil d'analyse des échecs** posé sur la table de validation (`F564236`). Il fait apparaître chaque entrée enregistrée par le pipeline de validation — des échecs de règles XSD / Schematron jusqu'aux erreurs d'intégration de cycle de vie (PDF, PA, base, …) — et les présente à travers deux vues complémentaires :
+L'écran **Erreurs d'intégration** est l'**outil d'analyse des échecs** construit sur la table de validation (`F564236`). Il affiche chaque entrée enregistrée par le pipeline de validation — des échecs de règles XSD / Schematron jusqu'aux erreurs d'intégration de cycle de vie (PDF, PA, base, …) — au travers de deux vues complémentaires :
 
-- **par règle** — cartes classées et regroupées par `(règle, source)`, chacune indiquant le nombre de factures touchées par la règle ainsi que les pastilles de sévérité associées. La voie la plus rapide pour repérer *quelle règle pèse le plus en ce moment*.
-- **par événement** — tableau plat de chaque événement d'erreur, avec sa sévérité, sa source, sa règle, son message, son triplet documentaire et le statut courant de la facture. L'endroit où instruire une ligne précise.
+- **par règle** — cartes classées et regroupées par `(règle, source)`, qui indiquent chacune le nombre de factures touchées par la règle et les pastilles de sévérité associées. Le moyen le plus rapide pour repérer *la règle qui pose le plus de problèmes en ce moment*.
+- **par événement** — tableau plat de chaque événement d'erreur, avec sa sévérité, sa source, sa règle, son message, son triplet documentaire et le statut courant de la facture. L'endroit pour analyser une ligne précise.
 
-La page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé. Les erreurs proviennent du pipeline de validation, qui opère lui-même sur l'UBL généré : le format source est ainsi transparent ici.
+La page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les erreurs proviennent du pipeline de validation, qui travaille sur l'UBL généré ; le format source est donc transparent à ce stade.
 
 :::info[Refonte en 2026.05.4]
-La page se limitait jusque-là à la vue des erreurs orphelines — un tableau plat des lignes `F564236` sans en-tête de facture rattaché. Elle devient un véritable outil d'analyse des échecs : bascule par règle / par événement, filtre catégorie (UBL contre Intégration / cycle de vie), descriptions humaines extraites des Schematron embarqués, et case `Sans rattachement uniquement` qui conserve l'ancien comportement à un clic. La vue par défaut affiche désormais *toutes les erreurs* — l'orphelin n'est plus le filtre principal.
+La page était limitée jusqu'ici à la vue des erreurs orphelines — un tableau plat des lignes `F564236` sans en-tête de facture rattaché. Elle devient un vrai outil d'analyse des échecs : bascule par règle / par événement, filtre catégorie (UBL vs Intégration / cycle de vie), descriptions lisibles tirées des Schematron embarqués, et case `Sans rattachement uniquement` qui rétablit l'ancien comportement en un clic. La vue par défaut affiche désormais *toutes les erreurs* ; l'orphelin n'est plus le filtre principal.
 :::
 
 ---
@@ -22,7 +22,7 @@ La page se limitait jusque-là à la vue des erreurs orphelines — un tableau p
 ## Ouverture
 
 - Barre latérale → **Application → Erreurs d'intégration**.
-- Depuis le [Tableau de bord](./dashboard.md) : le lien *Tout voir* du widget **Règles en échec** ouvre la page sur l'onglet **par règle** ; un clic sur une règle précise atterrit sur l'onglet **par événement** avec cette règle pré-appliquée comme puce de filtre.
+- Depuis le [Tableau de bord](./dashboard.md) : le lien *Tout voir* du widget **Règles en échec** ouvre la page sur l'onglet **par règle** ; un clic sur une règle précise ouvre l'onglet **par événement** avec cette règle pré-appliquée comme puce de filtre.
 
 ---
 
@@ -158,24 +158,24 @@ La même barre d'outils pilote les deux vues.
 
 | Contrôle | Comportement |
 |---|---|
-| **Bascule de vue** | *Par règle* (vue par défaut après un lien profond depuis le tableau de bord) ou *Par événement*. Les autres filtres sont conservés à la bascule — la recherche, la sévérité et la catégorie restent appliquées. |
-| **Recherche** | Correspondance par sous-chaîne sur `DOC`, `DCT`, `KCO` et le texte du message. Exécutée côté serveur, débouncée. |
+| **Bascule de vue** | *Par règle* (vue par défaut après un lien profond depuis le tableau de bord) ou *Par événement*. Les autres filtres sont conservés au changement de vue — la recherche, la sévérité et la catégorie restent appliquées. |
+| **Recherche** | Correspondance par sous-chaîne sur `DOC`, `DCT`, `KCO` et le texte du message. Exécutée côté serveur, avec un délai (debounce). |
 | **Catégorie** | *Toutes sources* (par défaut), *Validation UBL* (règles Schematron / XSD — `UVSRCL IN ('EN16931', 'CIUSFR', 'FREXTIC', 'CPRO', 'XSD', 'UBL')`), *Intégration / cycle de vie* (le reste — erreurs runtime émises par le dispatcher : PDF, PA, base, …). |
-| **Pastilles de sévérité** | *Toutes* / *FATAL* / *ERROR* / *WARNING* / *INFO*. Une seule sévérité à la fois ; cliquer sur la pastille active retire le filtre. |
-| **`Sans rattachement uniquement`** *(par événement uniquement)* | Restaure le comportement orphelin de la version précédente — ne conserve que les lignes sans en-tête de facture rattaché. Désactivé par défaut, accessible à un clic au besoin. |
-| **Rafraîchir** | Rejoue la requête en cours. |
+| **Pastilles de sévérité** | *Toutes* / *FATAL* / *ERROR* / *WARNING* / *INFO*. Une seule sévérité à la fois ; cliquer à nouveau sur la pastille active retire le filtre. |
+| **`Sans rattachement uniquement`** *(par événement uniquement)* | Rétablit le comportement « orphelin » de la version précédente — ne garde que les lignes sans en-tête de facture rattaché. Désactivé par défaut, accessible en un clic au besoin. |
+| **Rafraîchir** | Relance la requête en cours. |
 
 ---
 
 ## Vue par règle
 
-Chaque carte regroupe l'ensemble des événements d'erreur partageant le même couple `(règle, source)` et expose :
+Chaque carte regroupe tous les événements d'erreur qui partagent le même couple `(règle, source)` et affiche :
 
 | Élément | Source | Signification |
 |---|---|---|
 | **Code de règle** *(en haut à gauche)* | `UVY56RULE` | Identifiant de la règle — par exemple `BR-CL-23`, `BR-FR-12`, `UBL_CREATION`. |
 | **Source** *(sous le code)* | `UVSRCL` | Le moteur de validation — `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, ou l'un des compartiments d'intégration (`INTEG`, `PROCESS`, `XSL`, `PDF`, `PA`, `DB`, …). |
-| **Description** *(ligne secondaire)* | `ValidationRuleCatalog` | Description humaine, dans la langue de l'interface lorsqu'elle est disponible. |
+| **Description** *(ligne secondaire)* | `ValidationRuleCatalog` | Description lisible, dans la langue de l'interface quand disponible. |
 | **Décompte** *(en haut à droite)* | `COUNT(DISTINCT doc, dct, kco)` agrégé | Nombre de factures touchées par la règle pour les filtres actifs. |
 | **Pastilles de sévérité** *(en bas)* | `(level, count)` agrégé | Répartition par sévérité — `FATAL · n`, `ERROR · n`, `WARNING · n`, `INFO · n`. |
 
@@ -183,9 +183,9 @@ Les cartes sont triées par décompte décroissant ; un clic bascule sur la vue 
 
 ### Provenance des descriptions
 
-À partir de la 2026.05.4, la page accompagne chaque code de règle de sa **description humaine** : un code tel que `BR-CL-23` ne réclame plus de croisement avec un fichier Schematron externe.
+Depuis 2026.05.4, la page affiche pour chaque code de règle sa **description lisible** : un code comme `BR-CL-23` n'a plus besoin d'être croisé avec un fichier Schematron externe.
 
-Un nouveau `ValidationRuleCatalog` analyse les `.sch` embarqués au premier appel et extrait une carte `{id de règle → description}` en repérant les lignes `[<id>]<séparateur><description>` à l'intérieur de chaque bloc `<assert>`. Le séparateur est permissif (`-` ou `:`, espaces autour optionnels) et couvre les trois formats des quatre Schematron embarqués :
+Un nouveau `ValidationRuleCatalog` analyse les `.sch` embarqués au premier appel et extrait un dictionnaire `{id de règle → description}` en repérant les lignes `[<id>]<séparateur><description>` dans chaque bloc `<assert>`. Le séparateur est souple (`-` ou `:`, espaces autour optionnels) et couvre les trois formats des quatre Schematron embarqués :
 
 | Schematron | Format | Exemple |
 |---|---|---|
@@ -193,12 +193,12 @@ Un nouveau `ValidationRuleCatalog` analyse les `.sch` embarqués au premier appe
 | FREXT-IC | `[<id>] - <description>` *(avec espaces)* | `[BR-FREXT-IC-08] - SIRET must be present on B2B.` |
 | CIUS-FR | `[<id>] : <description>` *(deux-points, convention FNFE-MPE)* | `[BR-FR-23/BT-49] : Document is missing the order reference.` |
 
-Le catalogue amorce également **douze codes de cycle de vie / intégration** avec une description française : `UBL_CREATION`, `DB_INSERT`, `DB_UPDATE`, `PA_SEND`, `PA_TIMEOUT`, `PDF_RENDER`, `XSL_TRANSFORM`, `EMAIL_SEND`, `NOTIFY_DISPATCH`, `STATUS_TRANSITION`, `EXTRACT_BIP`, `EXTRACT_FTP` — ce sont les codes émis par `ErrorCatalog` lorsqu'une étape runtime échoue.
+Le catalogue ajoute aussi **douze codes de cycle de vie / intégration** avec une description française : `UBL_CREATION`, `DB_INSERT`, `DB_UPDATE`, `PA_SEND`, `PA_TIMEOUT`, `PDF_RENDER`, `XSL_TRANSFORM`, `EMAIL_SEND`, `NOTIFY_DISPATCH`, `STATUS_TRANSITION`, `EXTRACT_BIP`, `EXTRACT_FTP` — ce sont les codes émis par `ErrorCatalog` quand une étape runtime échoue.
 
 Le catalogue fusionné est exposé sur `GET /api/integration-errors/catalog` ; le frontend le met en cache une fois par chargement de page via le hook `useRuleCatalog`.
 
 :::warning[Lacune connue]
-Les 34 `assert` du Schematron `BR-FR-CPRO` ne possèdent pas d'attribut `id` : le validateur enregistre alors un code de règle vide pour ces événements, qui apparaissent dans la vue par événement avec une colonne *Règle* vide et restent absents des cartes par règle. Le Schematron lui-même fonctionne ; seules les étiquettes de règle manquent.
+Les 34 `assert` du Schematron `BR-FR-CPRO` n'ont pas d'attribut `id`. Le validateur enregistre donc un code de règle vide pour ces événements ; ils apparaissent dans la vue par événement avec une colonne *Règle* vide et n'apparaissent pas dans les cartes par règle. Le Schematron lui-même fonctionne ; seules les étiquettes de règle manquent.
 :::
 
 ---
@@ -217,38 +217,38 @@ Tableau plat, une ligne par événement de validation. Le tri par défaut est la
 | **Source** | `UVSRCL` | Moteur de validation — `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, ou un compartiment d'intégration. |
 | **Règle** | `UVY56RULE` | Identifiant de règle. La cellule affiche le code accompagné de sa description en dessous (et en infobulle au survol). |
 | **Message** | `UVK74MSG1` | Description lisible de l'échec — texte émis par le Schematron ou message de l'exception runtime. |
-| **Facture maintenant** | jointure `F564231` | Statut *courant* de la facture, joint à chaud pour vérifier si l'échec a déjà été retraité. Vide en l'absence d'en-tête (erreur orpheline). |
-| **Client** | `F564231.UHALPH` | Nom du client lorsque la facture existe. Utile pour trier par contrepartie. |
+| **Facture maintenant** | jointure `F564231` | Statut *courant* de la facture, récupéré en temps réel pour vérifier si l'échec a déjà été retraité. Vide quand il n'y a pas d'en-tête (erreur orpheline). |
+| **Client** | `F564231.UHALPH` | Nom du client quand la facture existe. Utile pour trier par contrepartie. |
 
-Un clic sur une ligne ouvre la **modale de détail** de la page [E-Invoicing](./invoices.md) sur l'onglet *Historique* — la même modale que celle ouverte par un clic sur la ligne d'inbox dans [Notifications](./notifications.md), de sorte que le cycle de vie, les erreurs de validation et la charge utile PA restent à un onglet de distance.
+Un clic sur une ligne ouvre la **modale de détail** de la page [E-Invoicing](./invoices.md) sur l'onglet *Historique* — la même modale que celle ouverte par un clic sur une ligne de la boîte de réception [Notifications](./notifications.md). Le cycle de vie, les erreurs de validation et la charge utile PA restent ainsi à un seul onglet.
 
 ### `Sans rattachement uniquement`
 
-Une petite case dans la barre d'outils — `Sans rattachement uniquement` — restaure le comportement de la version précédente : seules les lignes dépourvues d'en-tête de facture rattaché. Ce sont les erreurs *orphelines*, typiquement des échecs de transformation qui ont empêché la persistance même de la facture (le XSL a produit un document que le validateur UBL ne peut pas analyser, ou un `FATAL` a interrompu le pipeline avant l'insertion en base).
+Une petite case dans la barre d'outils — `Sans rattachement uniquement` — rétablit le comportement de la version précédente : seules les lignes sans en-tête de facture rattaché. Ce sont les erreurs *orphelines*, typiquement des échecs de transformation qui ont empêché l'enregistrement de la facture (le XSL a produit un document que le validateur UBL ne peut pas analyser, ou un `FATAL` a interrompu le pipeline avant l'insertion en base).
 
-La vue par défaut affiche *toutes* les erreurs, rattachées ou non. Activer la case se fait en un clic ; rien d'autre n'est nécessaire.
+La vue par défaut affiche *toutes* les erreurs, rattachées ou non. Cocher la case se fait en un clic ; rien d'autre n'est nécessaire.
 
 ---
 
 ## Démarche d'instruction
 
-La page est en lecture seule — la correction effective intervient en amont (donnée source, template, XSL, connecteur) et une relance vide la ligne. Démarche typique :
+La page est en lecture seule — la correction se fait en amont (donnée source, template, XSL, connecteur) et un nouveau traitement vide la ligne. Démarche typique :
 
-1. **Ouvrir la vue par règle en premier.** Examiner les trois cartes de tête — une règle frappant des centaines de factures constitue le point de départ évident.
-2. **Cadrer la catégorie.** *Validation UBL* fait apparaître uniquement les événements Schematron / XSD ; *Intégration / cycle de vie* expose seulement les erreurs runtime émises par le dispatcher. Mélanger les deux n'est utile que pour traquer un document précis.
-3. **Cliquer la règle** pour basculer sur *Par événement* avec la puce de filtre pré-appliquée. La liste affiche alors chaque facture impactée par la règle.
-4. **Cliquer une ligne** pour ouvrir l'onglet *Historique* de la facture. Les erreurs de validation, le cycle de vie et la charge utile PA y sont rassemblés.
+1. **Ouvrir la vue par règle en premier.** Examiner les trois cartes de tête — une règle qui frappe des centaines de factures est le point de départ évident.
+2. **Cadrer la catégorie.** *Validation UBL* n'affiche que les événements Schematron / XSD ; *Intégration / cycle de vie* n'affiche que les erreurs runtime émises par le dispatcher. Mélanger les deux n'est utile que pour rechercher un document précis.
+3. **Cliquer sur la règle** pour basculer sur *Par événement* avec la puce de filtre pré-appliquée. La liste affiche alors chaque facture concernée par la règle.
+4. **Cliquer sur une ligne** pour ouvrir l'onglet *Historique* de la facture. Les erreurs de validation, le cycle de vie et la charge utile PA y sont rassemblés.
 5. **Lire le message et la description de la règle.** La description donne le *quoi* ; le message donne le *où* (champ concerné, ligne concernée). Pour les règles Schematron, recouper avec la page [Codes motifs](../references/reason-codes.mdx) au besoin.
-6. **Ouvrir le XML source dans *UBL Tools → XML Viewer*** pour le triplet `(doc, dct, kco)` — le fichier réside dans `dirInput/<template>/`. La lecture de la source confirme si l'échec relève des données (champ manquant) ou du template (bug du XSL).
-7. **Relancer le pipeline une fois la source corrigée.** Utiliser [Process Document](../processing/document.md) sur le fichier rectifié. Une fois la facture persistée avec succès, *Facture maintenant* passe d'une cellule vide au nouveau statut sur cette page, et la ligne cesse d'être orpheline.
+6. **Ouvrir le XML source dans *Outils UBL → XML Viewer*** pour le triplet `(doc, dct, kco)` — le fichier se trouve dans `dirInput/<template>/`. La lecture de la source confirme si l'échec vient des données (champ manquant) ou du template (bug du XSL).
+7. **Relancer le pipeline une fois la source corrigée.** Utiliser [Traitement de document](../processing/document.md) sur le fichier corrigé. Une fois la facture enregistrée avec succès, *Facture maintenant* passe d'une cellule vide au nouveau statut, et la ligne n'est plus orpheline.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Démarrer par la vue par règle.** Une règle unique frappant des centaines de factures pointe vers un seul changement amont (champ renommé, code TVA périmé, liste de contreparties régénérée). Corriger la règle vide alors la majorité des lignes en une seule relance.
-- **Utiliser le filtre catégorie pour trier.** Les échecs de *validation UBL* relèvent en général de bugs template / XSL ; les erreurs *Intégration / cycle de vie* tiennent davantage de l'environnement / connecteur (indisponibilité PA, timeout SMTP, verrou base). Identifier le bon côté divise par deux le temps d'instruction.
-- **Surveiller FATAL en priorité.** Un FATAL non nul signifie que le pipeline s'est interrompu — la facture n'a jamais été persistée et seule la ligne orpheline existe. Les lignes ERROR signifient que la facture a pu aboutir partiellement et que la page *E-Invoicing* régulière en porte aussi la trace.
-- **`Sans rattachement uniquement` est la vue historique.** La version précédente n'affichait que les orphelins. Activer la case rétablit ce comportement à des fins de compatibilité — la vue par règle, le filtre catégorie et les descriptions de règle restent opérantes.
-- **Les erreurs disparaissent automatiquement après un ré-import réussi.** Une fois l'en-tête de facture créé ou mis à jour, la colonne *Facture maintenant* de la ligne reflète le nouveau statut. Les lignes orphelines (sans en-tête du tout) cessent de l'être dès qu'un traitement aboutit. L'entrée sous-jacente reste dans `F564236` pour l'audit, mais quitte l'ensemble *non rattaché*.
-- **Les liens profonds depuis le tableau de bord épargnent une étape.** Le widget *Règles en échec* du [Tableau de bord](./dashboard.md) atterrit ici pré-filtré — un seul clic sépare la constatation « cette règle pèse » de l'examen détaillé des événements.
+- **Commencer par la vue par règle.** Une seule règle qui frappe des centaines de factures indique un seul changement amont (champ renommé, code TVA périmé, liste de contreparties régénérée). Corriger la règle vide alors la majorité des lignes en une seule relance.
+- **Utiliser le filtre catégorie pour trier.** Les échecs de *validation UBL* viennent en général de bugs template / XSL ; les erreurs *Intégration / cycle de vie* viennent plutôt de l'environnement / connecteur (PA indisponible, timeout SMTP, verrou base). Identifier la bonne catégorie divise par deux le temps d'analyse.
+- **Surveiller FATAL en priorité.** Un FATAL non nul signifie que le pipeline s'est interrompu — la facture n'a jamais été enregistrée et seule la ligne orpheline existe. Les lignes ERROR signifient que la facture est passée partiellement et que la page *E-Invoicing* standard en garde aussi la trace.
+- **`Sans rattachement uniquement` est la vue historique.** La version précédente n'affichait que les orphelins. Cocher la case rétablit ce comportement pour la compatibilité — la vue par règle, le filtre catégorie et les descriptions de règle restent actifs.
+- **Les erreurs disparaissent automatiquement après un ré-import réussi.** Une fois l'en-tête de facture créé ou mis à jour, la colonne *Facture maintenant* de la ligne reflète le nouveau statut. Les lignes orphelines (sans en-tête du tout) n'apparaissent plus comme telles dès qu'un traitement aboutit. La ligne sous-jacente reste dans `F564236` pour l'audit, mais sort de l'ensemble *non rattaché*.
+- **Les liens profonds depuis le tableau de bord évitent une étape.** Le widget *Règles en échec* du [Tableau de bord](./dashboard.md) ouvre cette page pré-filtrée — un seul clic entre la constatation « cette règle pose problème » et l'examen détaillé des événements.

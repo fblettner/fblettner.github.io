@@ -13,7 +13,7 @@ L'écran **Extraction BIP** extrait le contenu d'un job de la **file d'impressio
 - `F95631` — XMLP Output Repository (les BLOB de **sortie rendue** — typiquement PDF).
 
 :::info[Page spécifique à JD Edwards]
-Cette page fait partie des composants **spécifiques à JDE** de NomaUBL. Les autres pages d'extraction sont agnostiques de la source ; celle-ci ne s'applique que lorsque la source est JD Edwards et que la file d'impression BIP est le canal d'extraction.
+Cette page fait partie des composants **spécifiques à JDE** de NomaUBL. Les autres pages d'extraction sont indépendantes de la source ; celle-ci ne s'applique que quand la source est JD Edwards et que la file d'impression BIP est le canal d'extraction.
 :::
 
 L'écran se divise en deux sections : **Parameters** et **Output**.
@@ -26,7 +26,7 @@ L'écran se divise en deux sections : **Parameters** et **Output**.
 |---|---|
 | **Template** | Template du document (par ex. `invoices`, `credit_notes`). Sert uniquement à résoudre le placeholder `%TEMPLATE%` du répertoire de sortie par défaut hérité de `global.dirInput`. |
 | **Job Number** | Numéro de job BIP JDE (`RJJOBNBR` dans `F9563110` / `XDJOBNBR` dans `F95630`). Obligatoire. |
-| **Language** | Filtre optionnel sur la langue BIP (par ex. `FR`). Lorsque renseigné, seules les sorties correspondant à cette langue sont extraites. |
+| **Language** | Filtre optionnel sur la langue BIP (par ex. `FR`). Quand renseigné, seules les sorties correspondant à cette langue sont extraites. |
 | **Extract Mode** | Détermine ce qui est extrait du job — `Extract Input (XML)`, `Extract Output` ou `Extract Both`. Voir ci-dessous. |
 
 ### Modes d'extraction
@@ -62,8 +62,8 @@ Après l'extraction, la section **Result** affiche :
 ## Conseils & bonnes pratiques
 
 - **Les paramètres de connexion proviennent de *Database Connectors → JD Edwards*.** Le schéma et les trois noms de tables (`F95630` / `F95631` / `F9563110`) y sont configurés ; aucune surcharge n'est possible depuis cet écran.
-- **Utiliser *Extract Input (XML)* lors de la mise au point d'un XSL.** Le XML de données BIP est exactement le contenu consommé par le moteur de rendu — l'injecter dans une chaîne BIP locale ou NomaUBL reproduit le rapport à l'identique.
-- **Utiliser *Extract Output* lorsque le PDF rendu est le livrable.** C'est le mode courant pour les flux d'archivage ou d'envoi par e-mail qui consomment directement le PDF.
-- **Le filtre Language ne porte que sur la sortie rendue.** Lorsque *Extract Mode* vaut *Extract Input (XML)*, la langue n'a pas d'effet — le XML de données est indépendant de la langue.
+- **Utiliser *Extract Input (XML)* pendant la mise au point d'un XSL.** Le XML de données BIP est exactement le contenu consommé par le moteur de rendu — l'injecter dans une chaîne BIP locale ou NomaUBL reproduit le rapport à l'identique.
+- **Utiliser *Extract Output* quand le PDF généré est le livrable.** C'est le mode courant pour les flux d'archivage ou d'envoi par e-mail qui consomment directement le PDF.
+- **Le filtre Language ne porte que sur la sortie générée.** Quand *Extract Mode* vaut *Extract Input (XML)*, la langue n'a pas d'effet — le XML de données est indépendant de la langue.
 - **Pour une extraction en lot sur plusieurs jobs**, utiliser *Synchronisation → Fetch Input* avec la source BIP, qui découvre les nouveaux jobs et applique les mêmes modes d'extraction par template.
 - **Conserver un répertoire de sortie dédié.** Les fichiers sont écrits sous leur nom dérivé de JDE ; un fichier existant à la même destination est écrasé sans avertissement.

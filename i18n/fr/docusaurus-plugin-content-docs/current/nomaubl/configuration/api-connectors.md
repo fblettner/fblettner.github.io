@@ -14,7 +14,7 @@ Les connecteurs sont consommés par l'onglet **E-Invoicing → Actions** pour li
 - Une API d'action de l'**ERP source** — par exemple **JD Edwards AIS** pour enregistrer un paiement, une **BAPI SAP**, un **RESTlet NetSuite**, un webhook d'ERP personnalisé.
 - Tout service HTTP tiers impliqué dans la chaîne de facturation électronique.
 
-Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — dès lors que la source est mappée vers UBL.
+Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — tant que la source est mappée vers UBL.
 
 L'éditeur comporte **quatre onglets** :
 
@@ -79,15 +79,15 @@ Choix typique pour **JD Edwards AIS** et la plupart des API PA modernes — Noma
 
 | Champ | Description |
 |---|---|
-| **Username** | Identifiant transmis lors de la requête de jeton. |
-| **Password** | Mot de passe transmis lors de la requête de jeton. |
+| **Username** | Identifiant transmis pendant la requête de jeton. |
+| **Password** | Mot de passe transmis pendant la requête de jeton. |
 
 #### Token Endpoint
 
 | Champ | Description |
 |---|---|
 | **Endpoint path** | Chemin de l'endpoint d'obtention du jeton (par ex. `/v7.3/tokenrequest` pour JD Edwards AIS). Combiné à **Base URL**. |
-| **Token field** | Chemin JSON en notation pointée permettant d'extraire le jeton de la réponse (par ex. `userInfo.token` pour JD Edwards AIS). |
+| **Token field** | Chemin JSON en notation pointée qui permet d'extraire le jeton de la réponse (par ex. `userInfo.token` pour JD Edwards AIS). |
 | **Token TTL (minutes)** | Durée de mise en cache du jeton avant nouvelle demande. Valeur par défaut `55` minutes. |
 | **Body template** | Corps JSON personnalisé pour la requête de jeton, avec placeholders `{{username}}` / `{{password}}`. **Laisser vide** pour utiliser le payload par défaut `username` / `password` / `deviceName`. |
 
@@ -99,7 +99,7 @@ Catalogue des endpoints HTTP accessibles via ce connecteur. Chaque entrée est u
 
 Des **placeholders `{{param}}`** peuvent être utilisés dans les URLs, les en-têtes, les paramètres de requête et les corps. Trois placeholders sont disponibles d'emblée :
 
-- `{{token}}` — le jeton OAUTH2 (lorsque l'authentification `OAUTH2` est configurée)
+- `{{token}}` — le jeton OAUTH2 (quand l'authentification `OAUTH2` est configurée)
 - `{{username}}` — l'identifiant configuré
 - `{{password}}` — le mot de passe configuré
 
@@ -110,7 +110,7 @@ Tous les autres placeholders doivent être **déclarés dans la section Paramete
 | Champ | Description |
 |---|---|
 | **Name** | Identifiant logique référencé depuis les autres parties de NomaUBL (par ex. `getOrderLines`, `reportExecute_R0010P`). |
-| **Label** | Libellé lisible affiché dans l'éditeur et dans les listes déroulantes lors du choix d'un endpoint (par ex. `Get Order Lines`). |
+| **Label** | Libellé lisible affiché dans l'éditeur et dans les listes déroulantes pendant le choix d'un endpoint (par ex. `Get Order Lines`). |
 | **Method** | Méthode HTTP (`GET` / `POST` / `PUT` / `DELETE` / `PATCH`). |
 | **URL path** | Chemin de l'endpoint ajouté à la **Base URL** du connecteur (par ex. `/v7.3/orchestrator/{{name}}`). |
 | **Extra headers** | Paires `Key:Value` séparées par des points-virgules, ajoutées aux en-têtes par défaut du connecteur (ou les surchargeant) (par ex. `X-Custom:value;Authorization:Bearer {{token}}`). |
@@ -136,7 +136,7 @@ Déclare les **variables `{{placeholder}}`** attendues par l'endpoint. Les conso
 |---|---|
 | **Name** | Nom du placeholder tel qu'utilisé dans l'URL / les en-têtes / le corps (par ex. `reportName`). |
 | **Label** | Libellé lisible affiché à l'utilisateur qui fournit la valeur (par ex. `Report Name`). |
-| **Default value** | Valeur pré-renseignée appliquée lorsque le consommateur ne la surcharge pas (par ex. `R0010P`). |
+| **Default value** | Valeur pré-renseignée appliquée quand le consommateur ne la surcharge pas (par ex. `R0010P`). |
 
 ### Exemple — exécution d'un report JD Edwards AIS
 
@@ -188,7 +188,7 @@ Le corps est un modèle JSON ; `{{reportName}}`, `{{reportVersion}}` et `{{compa
 | `reportVersion` | Report Version | `ZJDE0001` |
 | `companyCode` | Company Code | `00001` |
 
-`reportName` et `reportVersion` sont constants pour ce report : leurs valeurs par défaut sont fixées ici. `companyCode` est le seul paramètre généralement fourni à l'exécution — typiquement injecté via `{{fedct}}` lorsque cet endpoint est lié à une action réglementaire dans *E-Invoicing → Actions*.
+`reportName` et `reportVersion` sont constants pour ce report : leurs valeurs par défaut sont fixées ici. `companyCode` est le seul paramètre généralement fourni à l'exécution — typiquement injecté via `{{fedct}}` quand cet endpoint est lié à une action réglementaire dans *E-Invoicing → Actions*.
 
 ---
 
@@ -210,10 +210,10 @@ Liste de paires `clé / valeur` qui surchargent ou fournissent les `{{placeholde
 
 | Élément | Description |
 |---|---|
-| Bouton **Run** | Déclenche l'appel HTTP. Désactivé pendant qu'une exécution précédente est en cours. |
-| **Ligne de statut** | Affiche `HTTP <code> ✓ / ✗`, ainsi que la valeur extraite via *Response field* le cas échéant. |
+| Bouton **Exécuter** | Déclenche l'appel HTTP. Désactivé pendant qu'une exécution précédente est en cours. |
+| **Ligne de statut** | Affiche `HTTP <code> ✓ / ✗`, et la valeur extraite via *Response field* le cas échéant. |
 | **Request URL** | URL effectivement émise après résolution (placeholders substitués, chaîne de requête assemblée). |
-| **Response body** | Corps de réponse brut, mis en forme JSON automatiquement lorsque c'est possible. |
+| **Response body** | Corps de réponse brut, mis en forme JSON automatiquement quand c'est possible. |
 
 ### Exemple — test de `reportExecute_R0010P`
 
@@ -224,7 +224,7 @@ Suite de l'endpoint JDE AIS défini à l'onglet 3 — état de l'onglet Test apr
 | **Endpoint** | `reportExecute_R0010P — Execute Report R0010P` |
 | **Parameters** *(pré-remplis depuis les valeurs par défaut déclarées)* | `reportName = R0010P`<br/>`reportVersion = ZJDE0001`<br/>`companyCode = 00001` |
 
-La sélection de l'endpoint **pré-remplit les trois lignes de paramètres** avec les valeurs par défaut déclarées — pas besoin de mémoriser les noms de placeholder. Surcharger une valeur si nécessaire (typiquement `companyCode`), puis cliquer sur **Run**. La section Result affiche l'URL résolue, le statut HTTP, le corps de réponse, et la valeur extraite via *Response field* (`data.items` pour cet endpoint) le cas échéant.
+La sélection de l'endpoint **pré-remplit les trois lignes de paramètres** avec les valeurs par défaut déclarées — pas besoin de mémoriser les noms de placeholder. Surcharger une valeur si nécessaire (typiquement `companyCode`), puis cliquer sur **Exécuter**. La section Result affiche l'URL résolue, le statut HTTP, le corps de réponse, et la valeur extraite via *Response field* (`data.items` pour cet endpoint) le cas échéant.
 
 Plus les valeurs par défaut déclarées à l'onglet 3 sont pertinentes, plus l'onglet Test (et les autres consommateurs de l'endpoint) sont simples à utiliser.
 
@@ -237,4 +237,4 @@ Plus les valeurs par défaut déclarées à l'onglet 3 sont pertinentes, plus l'
 - **Déclarer chaque `{{placeholder}}` référencé.** Les placeholders non déclarés n'apparaissent pas dans le formulaire de l'onglet *Actions* — les consommateurs ne peuvent donc pas les renseigner.
 - **Utiliser `Default value` pour figer les paramètres constants.** Pour une exécution de report JDE où `reportName` et `reportVersion` ne changent jamais, fixer leurs valeurs par défaut — les consommateurs n'ont alors qu'à fournir les valeurs réellement variables.
 - **Tester avant de lier.** Exécuter l'endpoint depuis l'onglet 4 avec des valeurs réalistes avant toute liaison à une action réglementaire ; les problèmes d'authentification, d'URL ou de payload sont ainsi détectés en amont.
-- **Les mappages constituent le contrat avec l'API amont.** Mapper les champs de réponse vers des noms logiques stables isole le code applicatif des changements de chemin JSON côté amont.
+- **Les mappages sont le contrat avec l'API amont.** Mapper les champs de réponse vers des noms logiques stables isole le code applicatif des changements de chemin JSON côté amont.

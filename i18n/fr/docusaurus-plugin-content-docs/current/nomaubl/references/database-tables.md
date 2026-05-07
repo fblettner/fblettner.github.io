@@ -306,7 +306,7 @@ L'**historique en ajout uniquement** de chaque statut traversé par la facture. 
 
 ### F564236 — Erreurs de validation UBL
 
-Erreurs XSD et Schematron enregistrées pour une facture. Une ligne par erreur / avertissement — alimente le groupe *History → Validation errors* de la modale de détail et la page *Integration Errors* lorsqu'aucune ligne `F564231` correspondante n'existe.
+Erreurs XSD et Schematron enregistrées pour une facture. Une ligne par erreur / avertissement — alimente le groupe *History → Validation errors* de la modale de détail et la page *Integration Errors* quand aucune ligne `F564231` correspondante n'existe.
 
 - **Clé primaire** : `UVDOC + UVDCT + UVKCO + UVSEQN`
 - **Notable** : `UVY56LEVEL` vaut `ERROR` / `WARNING` / `INFO`. `UVSRCL` indique le validateur : `XSD`, `SCH` (Schematron) ou `DB`.
@@ -399,7 +399,7 @@ Trace **les factures incluses dans chaque rapport** — la PK composite empêche
 
 ## Domaine authentification
 
-Trois tables pour la gestion intégrée utilisateur / rôle / session — utilisée lorsque `authEnabled = Y` dans le template *global*.
+Trois tables pour la gestion intégrée utilisateur / rôle / session — utilisée quand `authEnabled = Y` dans le template *global*.
 
 ### F564250 — Utilisateurs
 
