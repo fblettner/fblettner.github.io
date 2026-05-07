@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
+  <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
+  <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
   <a href="#v2026-05-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
   <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
   <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
@@ -27,6 +28,47 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.4 — 2026-05-07 \{#v2026-05-4\}
+
+Dashboard rebuilt as a 12-column widget grid + Integration Errors page upgraded into a proper failure-analysis tool, with rule descriptions extracted from the bundled Schematron files so users no longer have to decode a rule code by hand. Light mode is now the default. Two Oracle-dialect bugs that silently emptied dashboard panels on customer installs are fixed.
+
+### Dashboard
+
+- Twelve-column widget grid replaces the previous stacked layout. Hero row (Total / In flight / Rejected — IT / Rejected — Business) drives off the existing per-status counts; below it, a Pipeline funnel, a Volume chart, paired Recent activity / Stale + Top failing rules, Per-company / E-Reporting coverage, and Round-trip / Scheduler health rows.
+- Recent activity / Top failing rules row split 6/6 down the middle to match the rows below — the previous 8/4 split made the Recent activity card visibly wider than its right-hand neighbour.
+- Top failing rules widget gets an `ALL / UBL / INTEG` category toggle in its header and replaces the proportional bars with equal-width ranked rows (rank badge + rule code + secondary description line + count). The old proportional bars made counts of 160 vs 10 visually almost identical.
+- Hero stat cards click through with a multi-status filter (`/api/invoices?status=A,B,C`) so the *In flight* / *Rejected — IT* / *Rejected — Business* cards land on a properly filtered list instead of dropping the status filter.
+
+### Integration Errors page
+
+- View toggle: by-event (existing flat table) and by-rule (ranked cards grouped by rule + source, each card showing invoice count and per-severity chips). Cards stay equal-width via `auto-fill` so a short last row no longer stretches a lone card across the full row.
+- New `Unmatched only` checkbox — keeps the previous behaviour (errors with no joined invoice) one click away while letting the default view show all errors.
+- Category filter (`UBL validation` / `Integration / lifecycle`) on both views, mapped to a `UVSRCL IN (...)` list on the backend so Schematron / XSD rules can be analysed separately from runtime / dispatcher errors (PDF, PA, DB, …).
+- Row click on the by-event view opens the invoice detail modal on its History tab (mirrors Notifications).
+- Deep-links from the dashboard's Top failing rules widget — the *View all* link opens the by-rule tab and clicking a specific rule lands on the by-event view with that rule pre-applied as a filter chip.
+
+### Validation rule catalogue
+
+- New `ValidationRuleCatalog` (Java) parses the bundled `.sch` files at first call and extracts a `{rule id → human description}` map by matching `[<id>]<sep><description>` lines inside each `<assert>` block. The separator is permissive (`-` or `:`, optional surrounding whitespace) so it covers the three formats in the four bundled schematrons:
+  - EN 16931: `[BR-CL-23]-Description` (no spaces)
+  - FREXT-IC: `[BR-FREXT-IC-08] - Description` (spaces)
+  - CIUS-FR: `[BR-FR-23/BT-49] : Description` (colon, plus the FNFE-MPE convention where the assert id uses `_` and the bracket label uses `/` — the lookup retries with `_`→`/` automatically).
+- The opening-tag matcher captures attributes as a single blob so it finds `id="…"` regardless of attribute order — the earlier draft required `id` to be the first attribute and silently skipped every CIUS-FR rule.
+- Twelve lifecycle / integration rules from `ErrorCatalog` (`UBL_CREATION`, `DB_INSERT`, `PA_SEND`, …) are seeded with FR descriptions in the same map.
+- New endpoint `GET /api/integration-errors/catalog` returns the merged catalogue. The frontend caches it once per page load via a small `useRuleCatalog` hook.
+- Where rule codes appear (Top failing rules widget, by-rule cards, by-event Rule column) the description is shown as a tooltip and as a secondary line under the code.
+- Known gap: the `BR-FR-CPRO` schematron's 34 asserts have no `id` attribute, so the validator records empty rule codes — those rows remain unlabelled.
+
+### Oracle dialect fixes
+
+- `loadByCompany` and `loadRoundTripStats` both used `column <> ''` to guard against empty rows. On Oracle, empty strings are stored as `NULL`, and `NULL <> ''` evaluates to `NULL` (treated as false), so the WHERE collapsed and both queries returned zero rows on customer Oracle installs while working fine on the local Postgres. Replaced by `LENGTH(TRIM(column)) > 0` (loadByCompany) and removed entirely from `loadRoundTripStats` where the IN-list already filters NULLs on both dialects.
+
+### Theme
+
+- Light mode is now the default for first-time visitors. The toggle still persists the user's choice in `localStorage`, so anyone who previously selected dark mode keeps it.
 
 ---
 

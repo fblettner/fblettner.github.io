@@ -10,7 +10,8 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
+  <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
+  <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
   <a href="#v2026-05-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
   <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
   <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
@@ -27,6 +28,47 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.4 — 2026-05-07 \{#v2026-05-4\}
+
+Tableau de bord refondu en grille 12 colonnes + page Erreurs d'intégration transformée en véritable outil d'analyse, avec des descriptions de règles extraites des fichiers Schematron embarqués pour ne plus laisser l'utilisateur déchiffrer un code à la main. Le mode clair devient le mode par défaut. Deux bugs de dialecte Oracle qui vidaient silencieusement des panneaux du tableau de bord sur les installations clientes sont corrigés.
+
+### Tableau de bord
+
+- Grille 12 colonnes en remplacement de la disposition empilée. La rangée hero (Total / En cours / Rejetée — IT / Rejetée — Business) s'appuie sur les compteurs par statut existants ; en dessous, un funnel pipeline, un graphique de volume, le couple Activité récente / Bloquées + Règles en échec, Par société / Couverture e-Reporting, puis Aller-retour PA / Santé du planificateur.
+- La rangée Activité récente / Règles en échec est désormais en 6/6 pour s'aligner avec les rangées du dessous — le précédent 8/4 rendait la carte Activité visuellement plus large que sa voisine.
+- Le widget Règles en échec gagne un sélecteur `TOUT / UBL / INTEG` dans son en-tête et remplace les barres proportionnelles par des lignes classées de largeur égale (badge de rang + code de règle + ligne de description secondaire + compteur). Les anciennes barres proportionnelles rendaient des comptes de 160 vs 10 visuellement quasiment identiques.
+- Les cartes hero ouvrent désormais la liste des factures avec un filtre multi-statuts (`/api/invoices?status=A,B,C`) pour que les cartes *En cours* / *Rejetée — IT* / *Rejetée — Business* aboutissent sur une liste correctement filtrée et non sur la liste complète.
+
+### Page Erreurs d'intégration
+
+- Bascule de vue : par évènement (table à plat existante) et par règle (cartes regroupées par règle + source, chaque carte affichant le nombre de factures et des chips par sévérité). Les cartes conservent une largeur égale grâce à `auto-fill` — une dernière rangée courte n'étire plus une carte isolée sur toute la largeur.
+- Nouvelle case `Sans correspondance` — l'ancien comportement (erreurs sans facture jointe) reste à un clic, tout en affichant par défaut toutes les erreurs.
+- Filtre catégorie (`Validation UBL` / `Intégration / cycle de vie`) sur les deux vues, mappé côté backend sur une liste `UVSRCL IN (...)` pour que les règles Schematron / XSD soient analysables séparément des erreurs d'exécution / dispatcher (PDF, PA, BDD, …).
+- Cliquer sur une ligne de la vue par évènement ouvre la modale facture sur l'onglet Historique (alignement avec Notifications).
+- Liens profonds depuis le widget Règles en échec — *Voir toutes les erreurs* ouvre l'onglet par règle, et un clic sur une règle donnée bascule sur la vue par évènement avec la règle déjà appliquée en chip de filtre.
+
+### Catalogue de descriptions de règles
+
+- Nouveau `ValidationRuleCatalog` (Java) qui parse les `.sch` embarqués au premier appel et extrait un dictionnaire `{id de règle → description humaine}` en cherchant les lignes `[<id>]<séparateur><description>` dans chaque bloc `<assert>`. Le séparateur est permissif (`-` ou `:`, espaces optionnels) pour couvrir les trois formats des quatre Schematrons embarqués :
+  - EN 16931 : `[BR-CL-23]-Description` (sans espace)
+  - FREXT-IC : `[BR-FREXT-IC-08] - Description` (avec espaces)
+  - CIUS-FR : `[BR-FR-23/BT-49] : Description` (deux-points, plus la convention FNFE-MPE où l'id de l'assert utilise `_` et le code entre crochets `/` — la recherche retente automatiquement avec `_`→`/`).
+- Le matcher du tag d'ouverture capture les attributs en un seul bloc, ce qui lui permet de retrouver `id="…"` quel que soit l'ordre des attributs — la version précédente exigeait `id` en premier et ignorait silencieusement toutes les règles CIUS-FR.
+- Douze règles de cycle de vie / intégration issues de `ErrorCatalog` (`UBL_CREATION`, `DB_INSERT`, `PA_SEND`, …) sont amorcées avec une description FR dans le même dictionnaire.
+- Nouvel endpoint `GET /api/integration-errors/catalog` qui retourne le catalogue fusionné. Le frontend le met en cache pour la page via un petit hook `useRuleCatalog`.
+- Là où apparaît un code de règle (widget Règles en échec, cartes par règle, colonne Règle de la vue par évènement) la description s'affiche en infobulle et comme ligne secondaire sous le code.
+- Limitation connue : les 34 asserts du Schematron `BR-FR-CPRO` n'ont pas d'attribut `id`, le validateur enregistre donc un code de règle vide — ces lignes restent sans libellé.
+
+### Correctifs de dialecte Oracle
+
+- `loadByCompany` et `loadRoundTripStats` utilisaient tous deux `colonne <> ''` pour filtrer les lignes vides. Sur Oracle, la chaîne vide est stockée comme `NULL` et `NULL <> ''` vaut `NULL` (traité comme faux), si bien que la clause WHERE s'effondrait et que les deux requêtes renvoyaient zéro ligne sur les installations Oracle des clients tout en fonctionnant parfaitement en Postgres local. Remplacé par `LENGTH(TRIM(colonne)) > 0` (loadByCompany) et purement supprimé dans `loadRoundTripStats` où la clause IN filtre déjà les NULL des deux côtés.
+
+### Thème
+
+- Le mode clair devient le mode par défaut pour une première visite. La bascule continue de mémoriser le choix de l'utilisateur dans `localStorage` ; les utilisateurs qui avaient précédemment opté pour le mode sombre le conservent.
 
 ---
 

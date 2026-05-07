@@ -1,155 +1,254 @@
 ---
 title: Erreurs d'intégration
-description: "Liste des erreurs de validation ayant empêché la création d'une facture — échecs de transformation UBL stockés dans F564236 sans en-tête de facture correspondant. Filtre par sévérité, recherche par clé documentaire, accès au détail."
-keywords: [NomaUBL, erreurs d'intégration, validation, F564236, échec de transformation, FATAL, ERROR, WARNING, INFO, JD Edwards, SAP, NetSuite, ERP personnalisé]
+description: "Outil d'analyse des échecs au-dessus de la table de validation — cartes par règle classant les règles les plus défaillantes et tableau plat par événement pour l'instruction ligne à ligne. Chaque code de règle est enrichi de la description humaine extraite des Schematron embarqués. Filtre par catégorie (UBL / Intégration), sévérité, clé documentaire ; la case Sans rattachement uniquement conserve la vue historique des erreurs orphelines à un clic."
+keywords: [NomaUBL, erreurs d'intégration, validation, F564236, par règle, par événement, ValidationRuleCatalog, Schematron, XSD, UVSRCL, FATAL, ERROR, WARNING, INFO, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Erreurs d'intégration
 
-L'écran **Integration Errors** liste toutes les erreurs de validation ayant **empêché la création d'une facture**. Il s'agit d'entrées stockées dans la table de validation (`F564236`) **sans ligne correspondante dans la table d'en-tête** (`F564231`) — la transformation a échoué avant que l'en-tête puisse être persisté, le document n'est donc jamais entré dans la liste E-Invoicing.
+L'écran **Erreurs d'intégration** est l'**outil d'analyse des échecs** posé sur la table de validation (`F564236`). Il fait apparaître chaque entrée enregistrée par le pipeline de validation — des échecs de règles XSD / Schematron jusqu'aux erreurs d'intégration de cycle de vie (PDF, PA, base, …) — et les présente à travers deux vues complémentaires :
 
-Causes typiques d'une erreur d'intégration :
+- **par règle** — cartes classées et regroupées par `(règle, source)`, chacune indiquant le nombre de factures touchées par la règle ainsi que les pastilles de sévérité associées. La voie la plus rapide pour repérer *quelle règle pèse le plus en ce moment*.
+- **par événement** — tableau plat de chaque événement d'erreur, avec sa sévérité, sa source, sa règle, son message, son triplet documentaire et le statut courant de la facture. L'endroit où instruire une ligne précise.
 
-- Un XML source mal formé que la transformation XSL n'a pas pu consommer.
-- Un champ UBL obligatoire absent ou illisible dans les données source.
-- Un échec XSD ou Schematron suffisamment grave (`FATAL`) pour interrompre le pipeline avant l'insertion en base.
+La page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé. Les erreurs proviennent du pipeline de validation, qui opère lui-même sur l'UBL généré : le format source est ainsi transparent ici.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé.
-
-C'est la **vue de surveillance systématique** de ces échecs. La carte compteur *Erreurs de validation non rattachées* du tableau de bord donne le coup d'œil rapide ; cette page est l'endroit où chaque ligne est instruite.
+:::info[Refonte en 2026.05.4]
+La page se limitait jusque-là à la vue des erreurs orphelines — un tableau plat des lignes `F564236` sans en-tête de facture rattaché. Elle devient un véritable outil d'analyse des échecs : bascule par règle / par événement, filtre catégorie (UBL contre Intégration / cycle de vie), descriptions humaines extraites des Schematron embarqués, et case `Sans rattachement uniquement` qui conserve l'ancien comportement à un clic. La vue par défaut affiche désormais *toutes les erreurs* — l'orphelin n'est plus le filtre principal.
+:::
 
 ---
 
-## Origine de ces erreurs
+## Ouverture
 
-<svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+- Barre latérale → **Application → Erreurs d'intégration**.
+- Depuis le [Tableau de bord](./dashboard.md) : le lien *Tout voir* du widget **Règles en échec** ouvre la page sur l'onglet **par règle** ; un clic sur une règle précise atterrit sur l'onglet **par événement** avec cette règle pré-appliquée comme puce de filtre.
+
+---
+
+## Vue d'ensemble
+
+<svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="ie-arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
-    <marker id="ie-arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4ade80"/></marker>
-    <marker id="ie-arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#f87171"/></marker>
-    <marker id="ie-arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#fb923c"/></marker>
-    <linearGradient id="ie-g-slate" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#94a3b8" stopOpacity="0.14"/><stop offset="100%" stopColor="#64748b" stopOpacity="0.04"/></linearGradient>
-    <linearGradient id="ie-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.18"/><stop offset="100%" stopColor="#4a9eff" stopOpacity="0.04"/></linearGradient>
-    <linearGradient id="ie-g-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4ade80" stopOpacity="0.18"/><stop offset="100%" stopColor="#4ade80" stopOpacity="0.04"/></linearGradient>
-    <linearGradient id="ie-g-red" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f87171" stopOpacity="0.16"/><stop offset="100%" stopColor="#f87171" stopOpacity="0.04"/></linearGradient>
-    <linearGradient id="ie-g-orange-strong" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fb923c" stopOpacity="0.28"/><stop offset="100%" stopColor="#fb923c" stopOpacity="0.08"/></linearGradient>
+    <marker id="ie2-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="ie2-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="ie2-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
   </defs>
-  <rect x="20" y="120" width="170" height="80" rx="12" fill="url(#ie-g-slate)" stroke="#94a3b8" strokeWidth="1.3"/>
-  <text x="105" y="150" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📄 XML source</text>
-  <text x="105" y="172" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">JDE / SAP / NS / custom</text>
-  <rect x="220" y="120" width="220" height="80" rx="12" fill="url(#ie-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
-  <text x="330" y="150" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙️ Pipeline de traitement</text>
-  <text x="330" y="172" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.78">XSL · XSD · Schematron · Base</text>
-  <rect x="490" y="40" width="220" height="60" rx="12" fill="url(#ie-g-green)" stroke="#4ade80" strokeWidth="1.5"/>
-  <text x="600" y="64" fill="#4ade80" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">📋 En-tête facture</text>
-  <text x="600" y="83" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.78">persisté en F564231</text>
-  <rect x="490" y="220" width="220" height="60" rx="12" fill="url(#ie-g-red)" stroke="#f87171" strokeWidth="1.5"/>
-  <text x="600" y="244" fill="#f87171" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🔴 Validation orpheline</text>
-  <text x="600" y="263" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.78">F564236, sans F564231</text>
-  <rect x="760" y="40" width="220" height="60" rx="12" fill="url(#ie-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
-  <text x="870" y="64" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">✅ E-Invoicing</text>
-  <text x="870" y="83" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Application →</text>
-  <rect x="760" y="220" width="220" height="60" rx="12" fill="url(#ie-g-orange-strong)" stroke="#fb923c" strokeWidth="2"/>
-  <text x="870" y="244" fill="#fb923c" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">⚠ Cette page</text>
-  <text x="870" y="263" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">Liste Integration Errors</text>
-  <line x1="190" y1="160" x2="220" y2="160" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#ie-arrow-blue)"/>
-  <path d="M 440 145 L 470 145 L 470 70 L 490 70" stroke="#4ade80" strokeWidth="1.5" fill="none" markerEnd="url(#ie-arrow-green)"/>
-  <text x="465" y="105" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="ui-monospace, monospace">succès</text>
-  <path d="M 440 175 L 470 175 L 470 250 L 490 250" stroke="#f87171" strokeWidth="1.5" fill="none" markerEnd="url(#ie-arrow-red)"/>
-  <text x="465" y="215" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="ui-monospace, monospace">échec</text>
-  <line x1="710" y1="70" x2="760" y2="70" stroke="#4ade80" strokeWidth="1.5" markerEnd="url(#ie-arrow-green)"/>
-  <line x1="710" y1="250" x2="760" y2="250" stroke="#fb923c" strokeWidth="1.5" markerEnd="url(#ie-arrow-orange)"/>
-  <path d="M 870 220 L 870 295 L 330 295 L 330 200" stroke="#fb923c" strokeWidth="1.4" strokeDasharray="5 4" fill="none" markerEnd="url(#ie-arrow-orange)"/>
-  <text x="600" y="288" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">correction source / template, relance pipeline</text>
+
+  <rect x="220" y="20" width="580" height="570" rx="14" fill="url(#ie2-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Erreurs d'intégration</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="240" y="84" width="180" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="84" width="90" height="28" rx="6" fill="url(#ie2-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="285" y="102" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Par règle</text>
+  <text x="375" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Par événement</text>
+
+  <rect x="436" y="84" width="146" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="444" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Toutes sources ▾</text>
+
+  <rect x="588" y="84" width="120" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="596" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">☐ Sans rattachement</text>
+
+  <rect x="720" y="84" width="60" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="750" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻</text>
+
+  <rect x="240" y="124" width="58" height="22" rx="11" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="269" y="139" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Toutes</text>
+  <rect x="304" y="124" width="60" height="22" rx="11" fill="#3d0a0a" stroke="#7f1d1d" strokeWidth="1.5"/>
+  <text x="334" y="139" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">FATAL</text>
+  <rect x="370" y="124" width="64" height="22" rx="11" fill="rgba(248,113,113,0.10)" stroke="#f87171" strokeWidth="1"/>
+  <text x="402" y="139" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">ERROR</text>
+  <rect x="440" y="124" width="80" height="22" rx="11" fill="rgba(251,146,60,0.10)" stroke="#fb923c" strokeWidth="1"/>
+  <text x="480" y="139" fill="#fb923c" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">WARNING</text>
+  <rect x="526" y="124" width="56" height="22" rx="11" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="554" y="139" fill="#60a5fa" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">INFO</text>
+
+  <rect x="240" y="160" width="266" height="138" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="180" fill="#cbd5e1" fontSize="13" fontFamily="ui-monospace, monospace" fontWeight="700">BR-CL-23</text>
+  <text x="252" y="194" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">EN16931</text>
+  <text x="490" y="180" fill="#e2e8f0" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="end">52</text>
+  <text x="252" y="218" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Le code devise doit suivre la liste</text>
+  <text x="252" y="232" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">à trois caractères ISO 4217.</text>
+  <rect x="252" y="254" width="62" height="22" rx="11" fill="rgba(248,113,113,0.10)" stroke="#f87171" strokeWidth="1"/>
+  <text x="283" y="269" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">ERROR · 50</text>
+  <rect x="320" y="254" width="80" height="22" rx="11" fill="rgba(251,146,60,0.10)" stroke="#fb923c" strokeWidth="1"/>
+  <text x="360" y="269" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">WARNING · 2</text>
+
+  <rect x="522" y="160" width="266" height="138" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="534" y="180" fill="#cbd5e1" fontSize="13" fontFamily="ui-monospace, monospace" fontWeight="700">BR-FR-12</text>
+  <text x="534" y="194" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">CIUSFR</text>
+  <text x="772" y="180" fill="#e2e8f0" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="end">38</text>
+  <text x="534" y="218" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Le SIRET BT-46 doit figurer sur</text>
+  <text x="534" y="232" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">une facture B2B française.</text>
+  <rect x="534" y="254" width="62" height="22" rx="11" fill="rgba(248,113,113,0.10)" stroke="#f87171" strokeWidth="1"/>
+  <text x="565" y="269" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">ERROR · 38</text>
+
+  <rect x="240" y="316" width="266" height="138" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="336" fill="#cbd5e1" fontSize="13" fontFamily="ui-monospace, monospace" fontWeight="700">PA_SEND</text>
+  <text x="252" y="350" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">INTEG</text>
+  <text x="490" y="336" fill="#e2e8f0" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="end">14</text>
+  <text x="252" y="374" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Soumission PA rejetée au niveau</text>
+  <text x="252" y="388" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">HTTP (timeout / 4xx / 5xx).</text>
+  <rect x="252" y="410" width="62" height="22" rx="11" fill="rgba(248,113,113,0.10)" stroke="#f87171" strokeWidth="1"/>
+  <text x="283" y="425" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">ERROR · 14</text>
+
+  <rect x="522" y="316" width="266" height="138" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="534" y="336" fill="#cbd5e1" fontSize="13" fontFamily="ui-monospace, monospace" fontWeight="700">UBL_CREATION</text>
+  <text x="534" y="350" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">INTEG</text>
+  <text x="772" y="336" fill="#e2e8f0" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="end">9</text>
+  <text x="534" y="374" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">La transformation XSL n'a pas</text>
+  <text x="534" y="388" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">produit un UBL exploitable.</text>
+  <rect x="534" y="410" width="62" height="22" rx="11" fill="#3d0a0a" stroke="#7f1d1d" strokeWidth="1.5"/>
+  <text x="565" y="425" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">FATAL · 9</text>
+
+  <text x="240" y="490" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Vue par événement (aperçu)</text>
+  <line x1="240" y1="498" x2="788" y2="498" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="514" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">SEV  · DOC   · DCT · KCO   · SEQN · SOURCE   · RULE       · MESSAGE</text>
+  <line x1="240" y1="520" x2="788" y2="520" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="536" fill="#f87171" fontSize="9" fontFamily="ui-monospace, monospace">ERROR · 12345 · RI  · 00070 · 7    · CIUSFR   · BR-FR-12   · SIRET manquant</text>
+  <text x="240" y="550" fill="#f87171" fontSize="9" fontFamily="ui-monospace, monospace">ERROR · 12345 · RI  · 00070 · 12   · EN16931  · BR-CL-23   · Code devise invalide</text>
+  <text x="240" y="564" fill="#f87171" fontSize="9" fontFamily="ui-monospace, monospace">FATAL · 12399 · RI  · 00070 · 1    · INTEG    · UBL_CREATION · XSL en exception</text>
+  <text x="240" y="578" fill="#fb923c" fontSize="9" fontFamily="ui-monospace, monospace">WARNING · 12345 · RI · 00070 · 18   · CIUSFR   · BR-FR-09 · BT-49 absent sur avo…</text>
+
+  <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bascule de vue</text>
+  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Par règle / Par événement</text>
+  <line x1="200" y1="100" x2="240" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
+
+  <rect x="820" y="84" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtre catégorie</text>
+  <text x="830" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">UBL contre Intégration</text>
+  <line x1="820" y1="100" x2="708" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
+
+  <rect x="20" y="138" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="153" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pastilles de sévérité</text>
+  <text x="30" y="166" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">FATAL / ERROR / WARN / INFO</text>
+  <line x1="200" y1="154" x2="240" y2="135" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
+
+  <rect x="20" y="218" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="233" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Carte de règle</text>
+  <text x="30" y="246" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">code · source · décompte · sévérité</text>
+  <line x1="200" y1="234" x2="240" y2="220" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
+
+  <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Description de règle</text>
+  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">extraite des fichiers .sch</text>
+  <line x1="820" y1="216" x2="788" y2="220" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
+
+  <rect x="820" y="320" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="335" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Codes cycle de vie</text>
+  <text x="830" y="348" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">PA_SEND, UBL_CREATION, …</text>
+  <line x1="820" y1="336" x2="788" y2="336" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
+
+  <rect x="20" y="528" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="543" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clic → modale facture</text>
+  <text x="30" y="556" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ouverte sur l'onglet Historique</text>
+  <line x1="200" y1="544" x2="240" y2="544" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
 </svg>
 
-Une exécution réussie place la facture dans la liste *E-Invoicing* habituelle. Un échec survenu avant l'insertion de l'en-tête laisse uniquement une ligne de validation — c'est ce que cette page fait apparaître. Une fois la donnée source ou le template corrigé, la relance du pipeline crée soit l'en-tête (la ligne disparaît de cette vue), soit une nouvelle ligne orpheline (toujours listée).
+Les cartes de règles sont dimensionnées en CSS via `auto-fill` plutôt que `auto-fit` : une dernière rangée incomplète n'étire donc plus une carte unique sur toute la largeur.
 
 ---
 
 ## Barre d'outils
 
-La barre d'outils en haut du tableau combine recherche texte et filtres de sévérité.
+La même barre d'outils pilote les deux vues.
 
-### Recherche
-
-Un champ unique recherche dans les clés documentaires :
-
-| Champ recherché |
-|---|
-| `DOC` (numéro de document) |
-| `DCT` (type de document) |
-| `KCO` (code société) |
-
-La recherche est exécutée côté serveur et met la liste à jour à mesure que l'utilisateur saisit.
-
-### Puces de sévérité
-
-Une rangée de puces permet de filtrer par sévérité :
-
-<div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', margin: '14px 0 8px'}}>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid rgba(255,255,255,0.25)', background: 'transparent', opacity: 0.75}}>All</span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid #f87171', background: '#3d0a0a', color: '#f87171'}}>FATAL</span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(255,69,58,0.55)', background: 'rgba(255,69,58,0.1)', color: '#f87171'}}>ERROR</span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(255,159,10,0.55)', background: 'rgba(255,159,10,0.1)', color: '#fb923c'}}>WARNING</span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 12px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa'}}>INFO</span>
-</div>
-
-| Puce | Signification |
+| Contrôle | Comportement |
 |---|---|
-| **All** | Pas de filtre — toutes les sévérités sont affichées. |
-| **FATAL** | Erreur arrêtant le pipeline — la facture n'a pas pu être traitée du tout. |
-| **ERROR** | Erreur bloquante — la facture aurait été rejetée par la PA. |
-| **WARNING** | Anomalie non bloquante — informative ; la facture aurait pu être traitée avec réserves. |
-| **INFO** | Événements informatifs. |
-
-Cliquer sur une puce applique le filtre correspondant ; un nouveau clic le retire. Une seule sévérité peut être sélectionnée à la fois.
-
-### Rafraîchir
-
-Un bouton à flèche circulaire à droite relance la requête courante sans modifier les filtres.
+| **Bascule de vue** | *Par règle* (vue par défaut après un lien profond depuis le tableau de bord) ou *Par événement*. Les autres filtres sont conservés à la bascule — la recherche, la sévérité et la catégorie restent appliquées. |
+| **Recherche** | Correspondance par sous-chaîne sur `DOC`, `DCT`, `KCO` et le texte du message. Exécutée côté serveur, débouncée. |
+| **Catégorie** | *Toutes sources* (par défaut), *Validation UBL* (règles Schematron / XSD — `UVSRCL IN ('EN16931', 'CIUSFR', 'FREXTIC', 'CPRO', 'XSD', 'UBL')`), *Intégration / cycle de vie* (le reste — erreurs runtime émises par le dispatcher : PDF, PA, base, …). |
+| **Pastilles de sévérité** | *Toutes* / *FATAL* / *ERROR* / *WARNING* / *INFO*. Une seule sévérité à la fois ; cliquer sur la pastille active retire le filtre. |
+| **`Sans rattachement uniquement`** *(par événement uniquement)* | Restaure le comportement orphelin de la version précédente — ne conserve que les lignes sans en-tête de facture rattaché. Désactivé par défaut, accessible à un clic au besoin. |
+| **Rafraîchir** | Rejoue la requête en cours. |
 
 ---
 
-## Liste d'erreurs
+## Vue par règle
 
-Le tableau affiche une ligne par erreur de validation. Tri par défaut : clé documentaire ascendante.
+Chaque carte regroupe l'ensemble des événements d'erreur partageant le même couple `(règle, source)` et expose :
 
-| Colonne | Description |
-|---|---|
-| **Doc** | Numéro de document de la source. |
-| **Dct** | Type de document. |
-| **Kco** | Code société. |
-| **Seq** | Numéro de séquence — ordre dans lequel les règles de validation se sont déclenchées au cours du traitement défaillant. |
-| **Severity** | Badge coloré — FATAL / ERROR / WARNING / INFO. |
-| **Source** | Moteur de validation à l'origine de l'entrée — typiquement `XSD`, `Schematron`, ou un composant pipeline NomaUBL (`PROCESS`, `XSL`). |
-| **Rule** | Identifiant de règle ou XPath ayant déclenché l'entrée (par ex. `BR-FR-12`, `cbc:CustomizationID`). |
-| **Message** | Description lisible de l'échec. |
+| Élément | Source | Signification |
+|---|---|---|
+| **Code de règle** *(en haut à gauche)* | `UVY56RULE` | Identifiant de la règle — par exemple `BR-CL-23`, `BR-FR-12`, `UBL_CREATION`. |
+| **Source** *(sous le code)* | `UVSRCL` | Le moteur de validation — `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, ou l'un des compartiments d'intégration (`INTEG`, `PROCESS`, `XSL`, `PDF`, `PA`, `DB`, …). |
+| **Description** *(ligne secondaire)* | `ValidationRuleCatalog` | Description humaine, dans la langue de l'interface lorsqu'elle est disponible. |
+| **Décompte** *(en haut à droite)* | `COUNT(DISTINCT doc, dct, kco)` agrégé | Nombre de factures touchées par la règle pour les filtres actifs. |
+| **Pastilles de sévérité** *(en bas)* | `(level, count)` agrégé | Répartition par sévérité — `FATAL · n`, `ERROR · n`, `WARNING · n`, `INFO · n`. |
 
-La pagination affiche 50 lignes par page par défaut ; le nombre total d'entrées correspondant aux filtres figure à côté de la pagination.
+Les cartes sont triées par décompte décroissant ; un clic bascule sur la vue **par événement** avec la règle pré-appliquée comme puce de filtre.
 
-### Export
+### Provenance des descriptions
 
-Un bouton **Export** dans la barre d'outils exporte la vue courante (filtres compris) au format CSV sous le nom `integration-errors.csv`.
+À partir de la 2026.05.4, la page accompagne chaque code de règle de sa **description humaine** : un code tel que `BR-CL-23` ne réclame plus de croisement avec un fichier Schematron externe.
+
+Un nouveau `ValidationRuleCatalog` analyse les `.sch` embarqués au premier appel et extrait une carte `{id de règle → description}` en repérant les lignes `[<id>]<séparateur><description>` à l'intérieur de chaque bloc `<assert>`. Le séparateur est permissif (`-` ou `:`, espaces autour optionnels) et couvre les trois formats des quatre Schematron embarqués :
+
+| Schematron | Format | Exemple |
+|---|---|---|
+| EN 16931 | `[<id>]-<description>` *(sans espaces)* | `[BR-CL-23]-Currency code must follow ISO 4217.` |
+| FREXT-IC | `[<id>] - <description>` *(avec espaces)* | `[BR-FREXT-IC-08] - SIRET must be present on B2B.` |
+| CIUS-FR | `[<id>] : <description>` *(deux-points, convention FNFE-MPE)* | `[BR-FR-23/BT-49] : Document is missing the order reference.` |
+
+Le catalogue amorce également **douze codes de cycle de vie / intégration** avec une description française : `UBL_CREATION`, `DB_INSERT`, `DB_UPDATE`, `PA_SEND`, `PA_TIMEOUT`, `PDF_RENDER`, `XSL_TRANSFORM`, `EMAIL_SEND`, `NOTIFY_DISPATCH`, `STATUS_TRANSITION`, `EXTRACT_BIP`, `EXTRACT_FTP` — ce sont les codes émis par `ErrorCatalog` lorsqu'une étape runtime échoue.
+
+Le catalogue fusionné est exposé sur `GET /api/integration-errors/catalog` ; le frontend le met en cache une fois par chargement de page via le hook `useRuleCatalog`.
+
+:::warning[Lacune connue]
+Les 34 `assert` du Schematron `BR-FR-CPRO` ne possèdent pas d'attribut `id` : le validateur enregistre alors un code de règle vide pour ces événements, qui apparaissent dans la vue par événement avec une colonne *Règle* vide et restent absents des cartes par règle. Le Schematron lui-même fonctionne ; seules les étiquettes de règle manquent.
+:::
 
 ---
 
-## Comment instruire
+## Vue par événement
 
-La page est en lecture seule — l'instruction se fait en croisant les informations affichées avec le pipeline amont :
+Tableau plat, une ligne par événement de validation. Le tri par défaut est la clé documentaire ascendante (les lignes d'une même facture restent ainsi groupées) et la pagination affiche 50 lignes par page par défaut.
 
-1. **Filtrer sur FATAL ou ERROR.** Ces lignes ont effectivement bloqué la facture. Les lignes WARNING / INFO sont surtout du bruit pour l'opérateur qui doit agir.
-2. **Lire la règle et le message.** Une règle Schematron telle que `BR-FR-12` renvoie à une règle de l'extension française précise ; le message cite généralement l'élément en échec. Croiser avec la page [Codes motifs](../references/reason-codes.mdx).
-3. **Ouvrir le XML source dans *UBL Tools → XML Viewer*** pour le triplet `DOC + DCT + KCO` — le fichier réside dans `dirInput/<template>/`. La lecture de la source confirme si l'échec relève des données (champ manquant) ou du template (bug du XSL).
-4. **Relancer le pipeline une fois la source corrigée.** Utiliser *Processing → XML* avec `Mode = SINGLE` (ou `AUTO`) et le fichier corrigé. Une fois la facture persistée, elle quitte cette page pour rejoindre la liste *E-Invoicing* — et l'erreur d'intégration disparaît automatiquement de cette vue (la règle qui masque les erreurs disposant d'un en-tête correspondant s'en charge).
+| Colonne | Source | Description |
+|---|---|---|
+| **Sévérité** | `UVY56LEVEL` | Badge coloré — *FATAL* / *ERROR* / *WARNING* / *INFO*. |
+| **Doc** | `UVDOC` | Numéro de document issu des données source. |
+| **Dct** | `UVDCT` | Type de document. |
+| **Kco** | `UVKCO` | Code société. |
+| **Seq** | `UVSEQN` | Numéro de séquence — ordre dans lequel les règles de validation se sont déclenchées au cours du traitement défaillant. |
+| **Source** | `UVSRCL` | Moteur de validation — `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, ou un compartiment d'intégration. |
+| **Règle** | `UVY56RULE` | Identifiant de règle. La cellule affiche le code accompagné de sa description en dessous (et en infobulle au survol). |
+| **Message** | `UVK74MSG1` | Description lisible de l'échec — texte émis par le Schematron ou message de l'exception runtime. |
+| **Facture maintenant** | jointure `F564231` | Statut *courant* de la facture, joint à chaud pour vérifier si l'échec a déjà été retraité. Vide en l'absence d'en-tête (erreur orpheline). |
+| **Client** | `F564231.UHALPH` | Nom du client lorsque la facture existe. Utile pour trier par contrepartie. |
+
+Un clic sur une ligne ouvre la **modale de détail** de la page [E-Invoicing](./invoices.md) sur l'onglet *Historique* — la même modale que celle ouverte par un clic sur la ligne d'inbox dans [Notifications](../management/notifications.md), de sorte que le cycle de vie, les erreurs de validation et la charge utile PA restent à un onglet de distance.
+
+### `Sans rattachement uniquement`
+
+Une petite case dans la barre d'outils — `Sans rattachement uniquement` — restaure le comportement de la version précédente : seules les lignes dépourvues d'en-tête de facture rattaché. Ce sont les erreurs *orphelines*, typiquement des échecs de transformation qui ont empêché la persistance même de la facture (le XSL a produit un document que le validateur UBL ne peut pas analyser, ou un `FATAL` a interrompu le pipeline avant l'insertion en base).
+
+La vue par défaut affiche *toutes* les erreurs, rattachées ou non. Activer la case se fait en un clic ; rien d'autre n'est nécessaire.
+
+---
+
+## Démarche d'instruction
+
+La page est en lecture seule — la correction effective intervient en amont (donnée source, template, XSL, connecteur) et une relance vide la ligne. Démarche typique :
+
+1. **Ouvrir la vue par règle en premier.** Examiner les trois cartes de tête — une règle frappant des centaines de factures constitue le point de départ évident.
+2. **Cadrer la catégorie.** *Validation UBL* fait apparaître uniquement les événements Schematron / XSD ; *Intégration / cycle de vie* expose seulement les erreurs runtime émises par le dispatcher. Mélanger les deux n'est utile que pour traquer un document précis.
+3. **Cliquer la règle** pour basculer sur *Par événement* avec la puce de filtre pré-appliquée. La liste affiche alors chaque facture impactée par la règle.
+4. **Cliquer une ligne** pour ouvrir l'onglet *Historique* de la facture. Les erreurs de validation, le cycle de vie et la charge utile PA y sont rassemblés.
+5. **Lire le message et la description de la règle.** La description donne le *quoi* ; le message donne le *où* (champ concerné, ligne concernée). Pour les règles Schematron, recouper avec la page [Codes motifs](../references/reason-codes.mdx) au besoin.
+6. **Ouvrir le XML source dans *UBL Tools → XML Viewer*** pour le triplet `(doc, dct, kco)` — le fichier réside dans `dirInput/<template>/`. La lecture de la source confirme si l'échec relève des données (champ manquant) ou du template (bug du XSL).
+7. **Relancer le pipeline une fois la source corrigée.** Utiliser [Process Document](../processing/document.md) sur le fichier rectifié. Une fois la facture persistée avec succès, *Facture maintenant* passe d'une cellule vide au nouveau statut sur cette page, et la ligne cesse d'être orpheline.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Surveiller la puce FATAL en priorité.** Un compteur FATAL non nul signifie que le pipeline s'est interrompu — aucune facture n'a été créée. Les lignes ERROR signifient que la facture a été rejetée à la validation mais peut avoir laissé un dossier partiel.
-- **Un compteur Erreurs d'intégration vert sur le tableau de bord est le signe d'un ingestion propre.** À vérifier dans le routine matinale ; une valeur non nulle avant le traitement des lots du jour est le signal canonique « à instruire en priorité ».
-- **Utiliser la recherche pour cadrer par société.** Lorsqu'un pic est concentré sur un client ou un code société, rechercher par `KCO` réduit rapidement la liste. Souvent un seul changement côté source génère plusieurs lignes.
-- **La colonne Severity dicte l'ordre d'instruction.** FATAL d'abord (ces lignes bloquent tout), puis ERROR (elles bloquent la facture concernée), enfin WARNING / INFO si l'opérateur souhaite nettoyer les entrées informatives.
-- **Les erreurs disparaissent automatiquement après un ré-import réussi.** Relancer le fichier corrigé via *Processing → XML* ; dès que l'en-tête de facture est créé, la ligne disparaît de cette vue (l'entrée d'origine reste dans `F564236` pour l'audit, mais elle n'est plus « non rattachée »).
-- **Pour des schémas systématiques, corriger le template, pas les données.** Des erreurs identiques répétées sur de nombreuses factures pointent généralement vers un bug de template / XSL. Ouvrir *UBL Tools → XSL Editor* et ajuster le mapping plutôt que de corriger chaque XML source à la main.
+- **Démarrer par la vue par règle.** Une règle unique frappant des centaines de factures pointe vers un seul changement amont (champ renommé, code TVA périmé, liste de contreparties régénérée). Corriger la règle vide alors la majorité des lignes en une seule relance.
+- **Utiliser le filtre catégorie pour trier.** Les échecs de *validation UBL* relèvent en général de bugs template / XSL ; les erreurs *Intégration / cycle de vie* tiennent davantage de l'environnement / connecteur (indisponibilité PA, timeout SMTP, verrou base). Identifier le bon côté divise par deux le temps d'instruction.
+- **Surveiller FATAL en priorité.** Un FATAL non nul signifie que le pipeline s'est interrompu — la facture n'a jamais été persistée et seule la ligne orpheline existe. Les lignes ERROR signifient que la facture a pu aboutir partiellement et que la page *E-Invoicing* régulière en porte aussi la trace.
+- **`Sans rattachement uniquement` est la vue historique.** La version précédente n'affichait que les orphelins. Activer la case rétablit ce comportement à des fins de compatibilité — la vue par règle, le filtre catégorie et les descriptions de règle restent opérantes.
+- **Les erreurs disparaissent automatiquement après un ré-import réussi.** Une fois l'en-tête de facture créé ou mis à jour, la colonne *Facture maintenant* de la ligne reflète le nouveau statut. Les lignes orphelines (sans en-tête du tout) cessent de l'être dès qu'un traitement aboutit. L'entrée sous-jacente reste dans `F564236` pour l'audit, mais quitte l'ensemble *non rattaché*.
+- **Les liens profonds depuis le tableau de bord épargnent une étape.** Le widget *Règles en échec* du [Tableau de bord](./dashboard.md) atterrit ici pré-filtré — un seul clic sépare la constatation « cette règle pèse » de l'examen détaillé des événements.
