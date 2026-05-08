@@ -1,14 +1,18 @@
 ---
 title: Tableau de bord
-description: "Page d'accueil de NomaUBL — grille à 12 colonnes avec quatre cartes KPI hero (Total / En cours / Rejetée — IT / Rejetée — Business), funnel pipeline, graphique de volume, activité récente, factures bloquées, règles en échec, répartition par société, couverture e-reporting, aller-retour PA et santé du planificateur — l'ensemble piloté par un seul filtre de plage de dates."
-keywords: [NomaUBL, tableau de bord, KPI, cartes hero, funnel pipeline, graphique de volume, activité récente, factures bloquées, règles en échec, couverture e-reporting, aller-retour, santé planificateur, plage de dates, JD Edwards, SAP, NetSuite, ERP personnalisé]
+description: "Page d'accueil de NomaUBL — grille à 12 colonnes avec quatre cartes KPI hero (Total / En cours / Rejetée — IT / Rejetée — Business), funnel pipeline, graphique de volume, activité récente, factures bloquées, règles en échec, répartition par société, couverture e-reporting et aller-retour PA — pilotés par un seul filtre de plage de dates. Le suivi du planificateur a migré vers le Tableau de bord IT en 2026.05.6."
+keywords: [NomaUBL, tableau de bord, KPI, cartes hero, funnel pipeline, graphique de volume, activité récente, factures bloquées, règles en échec, couverture e-reporting, aller-retour, plage de dates, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Tableau de bord
 
-Le **tableau de bord** est la page d'accueil de NomaUBL. Il s'ouvre par défaut après la connexion et présente l'état opérationnel de la plateforme sur une **grille à 12 colonnes** : quatre cartes KPI hero en tête, puis une série de widgets groupés deux par deux qui couvrent le volume d'ingestion, le pipeline du dispatcher, l'activité récente, les factures bloquées, les règles de validation en échec, la répartition par société, la couverture e-reporting, les durées d'aller-retour PA et la santé du planificateur.
+Le **tableau de bord** est la page d'accueil de NomaUBL. Il s'ouvre par défaut après la connexion et présente l'état opérationnel de la plateforme sur une **grille à 12 colonnes** : quatre cartes KPI hero en tête, puis une série de widgets groupés deux par deux qui couvrent le volume d'ingestion, le pipeline du dispatcher, l'activité récente, les factures bloquées, les règles de validation en échec, la répartition par société, la couverture e-reporting et les durées d'aller-retour PA.
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Toutes les valeurs proviennent de la base NomaUBL locale. Le tableau de bord reflète donc ce que NomaUBL a traité et enregistré, et non directement ce que conserve le système source ou la Plateforme Agréée.
+
+:::info[Réalignement en 2026.05.6]
+La rangée du bas passe de `6 + 6` sur deux rangées à une seule rangée `4 + 4 + 4` — Par société, Couverture e-Reporting et Aller-retour PA partagent maintenant une rangée équilibrée plutôt que de laisser une demi-cellule vide. Le widget Santé du planificateur a migré vers le nouveau [Tableau de bord IT](./tech-dashboard.md), où il côtoie les widgets JVM, base et système de fichiers de l'équipe technique. La grille passe également en `align-items: stretch` pour que les panneaux d'une même rangée alignent leur bord bas.
+:::
 
 :::info[Refonte en 2026.05.4]
 Le tableau de bord a été reconstruit en grille à 12 colonnes en 2026.05.4. L'ancienne disposition empilée de cartes-compteurs par statut a été remplacée par quatre KPI hero (Total / En cours / Rejetée — IT / Rejetée — Business) et huit widgets appariés. Les cartes hero appliquent désormais un filtre multi-statuts au clic. *En cours* ouvre donc bien la liste des factures en cours, au lieu de retomber sur la liste complète.
@@ -18,7 +22,7 @@ Le tableau de bord a été reconstruit en grille à 12 colonnes en 2026.05.4. L'
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 720" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 670" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="dash-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="dash-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -28,7 +32,7 @@ Le tableau de bord a été reconstruit en grille à 12 colonnes en 2026.05.4. L'
     <linearGradient id="dash-g-orange" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fb923c" stopOpacity="0.32"/><stop offset="100%" stopColor="#ea580c" stopOpacity="0.10"/></linearGradient>
   </defs>
 
-  <rect x="220" y="20" width="580" height="690" rx="14" fill="url(#dash-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="580" height="640" rx="14" fill="url(#dash-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tableau de bord</text>
   <rect x="640" y="30" width="146" height="22" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
@@ -115,35 +119,32 @@ Le tableau de bord a été reconstruit en grille à 12 colonnes en 2026.05.4. L'
   <text x="556" y="514" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">BR-FR-12</text>
   <text x="780" y="514" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="end">38</text>
 
-  <rect x="240" y="536" width="270" height="76" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="536" width="178" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
   <text x="254" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Par société</text>
-  <rect x="254" y="566" width="184" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
-  <rect x="254" y="566" width="138" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
-  <rect x="392" y="566" width="34" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
-  <rect x="426" y="566" width="12" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
-  <text x="446" y="577" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00070</text>
-  <rect x="254" y="586" width="172" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
-  <rect x="254" y="586" width="120" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
-  <rect x="374" y="586" width="40" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
-  <rect x="414" y="586" width="12" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
-  <text x="446" y="597" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00001</text>
+  <rect x="254" y="566" width="148" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
+  <rect x="254" y="566" width="112" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
+  <rect x="366" y="566" width="26" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
+  <rect x="392" y="566" width="10" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
+  <text x="254" y="592" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00070 · 132 ok / 22 att. / 6 err.</text>
+  <rect x="254" y="600" width="148" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
+  <rect x="254" y="600" width="98" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
+  <rect x="352" y="600" width="32" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
+  <rect x="384" y="600" width="10" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
+  <text x="254" y="626" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00001 · 86 ok / 14 att. / 4 err.</text>
 
-  <rect x="522" y="536" width="270" height="76" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="536" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Couverture e-Reporting</text>
-  <text x="536" y="572" fill="#4ade80" fontSize="14" fontWeight="700" fontFamily="ui-monospace, monospace">98 %</text>
-  <text x="572" y="572" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">B2C déclaré ce mois-ci</text>
-  <text x="536" y="592" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.1 · 28 / 28 déposés</text>
-  <text x="536" y="606" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.3 · 4 / 4 déposés</text>
+  <rect x="426" y="536" width="180" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="440" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Couverture e-Reporting</text>
+  <text x="440" y="578" fill="#4ade80" fontSize="14" fontWeight="700" fontFamily="ui-monospace, monospace">98 %</text>
+  <text x="478" y="578" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">B2C ce mois-ci</text>
+  <text x="440" y="600" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.1 · 28 / 28 déposés</text>
+  <text x="440" y="614" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.3 · 4 / 4 déposés</text>
+  <text x="440" y="628" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">toujours le mois en cours</text>
 
-  <rect x="240" y="628" width="270" height="64" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="646" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Aller-retour PA</text>
-  <text x="254" y="664" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Envoi → Dépôt · moy. 3,2 h</text>
-  <text x="254" y="680" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Envoi → Rejet · moy. 1,4 h</text>
-
-  <rect x="522" y="628" width="270" height="64" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="536" y="646" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Santé du planificateur</text>
-  <text x="536" y="664" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">● fetchImportInterval · il y a 2 min</text>
-  <text x="536" y="680" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">● fetchStatusInterval · il y a 2 min</text>
+  <rect x="614" y="536" width="178" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="628" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Aller-retour PA</text>
+  <text x="628" y="578" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Envoi → Dépôt · moy. 3,2 h</text>
+  <text x="628" y="594" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Envoi → Rejet · moy. 1,4 h</text>
+  <text x="628" y="614" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">selon la plage de dates</text>
 
   <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cartes KPI hero</text>
@@ -170,25 +171,25 @@ Le tableau de bord a été reconstruit en grille à 12 colonnes en 2026.05.4. L'
   <text x="830" y="488" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">bascule TOUT / UBL / INTEG</text>
   <line x1="820" y1="476" x2="794" y2="472" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
 
-  <rect x="20" y="556" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="571" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Empilage par société</text>
-  <text x="30" y="584" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">OK / attente / erreur</text>
-  <line x1="200" y1="572" x2="240" y2="568" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
+  <rect x="20" y="560" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Empilage par société</text>
+  <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">OK / attente / erreur</text>
+  <line x1="200" y1="576" x2="240" y2="572" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
+
+  <rect x="20" y="610" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois widgets · 4+4+4</text>
+  <text x="30" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">étirés pour aligner les bas</text>
+  <line x1="200" y1="626" x2="240" y2="616" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
 
   <rect x="820" y="556" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="830" y="571" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Couverture e-Reporting</text>
   <text x="830" y="584" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">% B2C / B2BINT déclarés</text>
-  <line x1="820" y1="572" x2="794" y2="568" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
+  <line x1="820" y1="572" x2="606" y2="572" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
 
-  <rect x="20" y="648" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="663" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Aller-retour PA</text>
-  <text x="30" y="676" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">moy. envoi → dépôt / rejet</text>
-  <line x1="200" y1="664" x2="240" y2="660" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="820" y="648" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="663" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Santé planificateur</text>
-  <text x="830" y="676" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dernier passage + intervalle</text>
-  <line x1="820" y1="664" x2="794" y2="660" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
+  <rect x="820" y="610" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Aller-retour PA</text>
+  <text x="830" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">moy. envoi → dépôt / rejet</text>
+  <line x1="820" y1="626" x2="794" y2="612" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
 </svg>
 
 La grille passe en colonne unique sous environ 900 px. Les cartes hero gardent leur largeur minimale de 220 px sur tout écran : les quatre KPI restent alignés sur une même bande horizontale.
@@ -208,7 +209,7 @@ Un seul filtre figure tout en haut de la page. Il restreint chaque widget qui d�
 | **Mois dernier** | Le mois plein précédent. |
 | **Plage personnalisée** | Saisie manuelle des dates **De** et **À**. |
 
-Certains widgets ignorent volontairement le filtre — *Factures bloquées* (toujours les 90 derniers jours), *Couverture e-Reporting* (toujours le mois en cours), *Santé du planificateur* (toujours en direct). Chacun affiche sa propre fenêtre, la différence est donc explicite.
+Certains widgets ignorent volontairement le filtre — *Factures bloquées* (toujours les 90 derniers jours) et *Couverture e-Reporting* (toujours le mois en cours). Chacun affiche sa propre fenêtre, la différence est donc explicite.
 
 ---
 
@@ -253,19 +254,21 @@ Cette rangée était auparavant en 8/4, avec une colonne droite visiblement plus
 
 Les barres proportionnelles de la version précédente rendaient des compteurs de *160* et *10* presque identiques visuellement. Les nouvelles lignes ordonnées donnent à chaque règle le même poids visuel, avec le compteur aligné à droite.
 
-### Par société *(6 colonnes)* + Couverture e-Reporting *(6 colonnes)*
+### Par société *(4 colonnes)* + Couverture e-Reporting *(4 colonnes)* + Aller-retour PA *(4 colonnes)*
+
+Les trois widgets courts partagent une seule rangée équilibrée depuis 2026.05.6 — l'ancienne disposition `6 + 6` sur deux rangées laissait une demi-cellule vide après la migration de la Santé du planificateur vers le [Tableau de bord IT](./tech-dashboard.md).
 
 | Widget | Contenu |
 |---|---|
 | **Par société** | Une barre horizontale empilée par `KCO` (`UHKCO` issu de `F564231`), répartie en *OK* (vert) / *Attente* (bleu) / *Erreur* (rouge), avec le compteur et le code société en libellé. Utile quand un pic se concentre sur une seule société. |
 | **Couverture e-Reporting** | Un pourcentage et trois lignes qui résument l'état des dépôts e-reporting du mois en cours : *Flux 10.1* (détail B2BINT) et *Flux 10.3* (B2C / OUTOFSCOPE agrégé) — *déposés* / *générés*. Le clic sur le widget ouvre la page [E-Reporting](./ereporting.md). |
-
-### Aller-retour PA *(6 colonnes)* + Santé du planificateur *(6 colonnes)*
-
-| Widget | Contenu |
-|---|---|
 | **Aller-retour PA** | Durée moyenne *Envoi → Dépôt* et *Envoi → Rejet* sur la plage de dates, calculée à partir de la table de cycle de vie. Un pic sur l'une de ces moyennes révèle un ralentissement côté PA qu'on ne voit pas dans les seuls compteurs quotidiens. |
-| **Santé du planificateur** | Une ligne par job programmé (`fetchImportInterval`, `fetchStatusInterval`, `fetchAll.N.…`, `ereportingInterval`) avec son intervalle configuré et l'horodatage du *dernier passage*. Pastille verte quand le dernier passage est récent, rouge dès qu'il dépasse 2× l'intervalle. |
+
+La grille utilise `align-items: stretch` et chaque carte grandit avec `flex: 1` à l'intérieur de son span de colonnes — les trois cartes de cette rangée alignent leur bord bas, même quand l'une porte plus de contenu que les autres.
+
+:::tip[La santé du planificateur a migré]
+Le widget Santé du planificateur n'est plus sur cette page. Il se trouve sur le [Tableau de bord IT](./tech-dashboard.md), aux côtés des widgets JVM, base, système de fichiers et journal d'erreurs en direct. L'équipe IT obtient une page dédiée à ses préoccupations opérationnelles ; le public métier ne voit ici que les indicateurs sur lesquels il agit.
+:::
 
 ---
 

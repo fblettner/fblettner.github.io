@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
+  <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
   <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
   <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
   <a href="#v2026-05-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
@@ -29,6 +30,39 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.6 — 2026-05-09 \{#v2026-05-6\}
+
+New IT-team **Tech Dashboard** with 14 widgets covering JVM / DB / disk / throughput / errors / scheduler — separate page from the existing business dashboard so the operations and ops audiences each get a view sized to what they care about. Business dashboard rebalanced for alignment, configuration check rewritten against the connector-style schema, and an in-memory IP tracker fills in for *Active sessions* when auth is disabled.
+
+### Tech Dashboard (new page)
+
+- New **Documentation → Tech Dashboard** route bundling everything an IT operator needs at a glance: System Health (JVM heap / GC / threads / uptime), DB ping, build info, Filesystem widget (free/total + file count for `appHome` / `processHome` / `dirInput` / `singleOutput` / `burstOutput` / `dirArchive` / `dirError`), Throughput chart, Error trend sparkline, Retry rate, Template processing time, Active sessions, Live error tail, Configuration check, Database tables, Recent errors, Scheduler. See [Tech Dashboard](./application/tech-dashboard.md).
+- New backend endpoints under `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — bundled payloads keep the page on a single round-trip per refresh.
+- Filesystem widget walks each path recursively (capped at 5000 files for cheap calls) and handles runtime placeholders (`%TEMPLATE%`, `%FILE_NAME%`) by truncating at the first one and reporting on the deepest existing-by-shape directory above it. `dirOutput` removed from the list — it's covered by `processHome`.
+- Template processing time card pulls flat START/END events from `F564237` and pairs them in Java keyed on `(FEWDS1|FEUPMJ)` with `hhmmssToSeconds()` for proper duration arithmetic — replaces a broken self-join SQL that had ambiguous `FETMPL` and incorrect `e.FEUPMT - s.FEUPMT` math.
+
+### Business Dashboard cleanup
+
+- Scheduler widget removed (it lives on the Tech Dashboard now — the business audience does not need it).
+- Bottom row reorganised from `(Per-company 6 | E-Reporting 6)` + `(Round-trip 6 | Scheduler 6)` to a single `Per-company 4 | E-Reporting 4 | Round-trip 4` row so three short widgets share one balanced row instead of leaving a half-empty cell.
+- Grid switched to `align-items: stretch`, panels grow with `flex: 1` inside their Span — Recent Activity now reaches the same bottom edge as the stacked Needs Attention + Top Failing Rules column next to it. Same fix lines up the new ops row.
+
+### Active sessions when auth is disabled
+
+- New in-memory `ActivityTracker` (per-IP `lastSeen` map) updated on every request from `WebServer.handle()`. When `authEnabled=N` there are no `F564252` rows to count, so the dashboard's *Active sessions* card now falls back to *Active clients · 15m* populated from this tracker — the IT team finally sees whether anyone is hitting the app and from where, without enabling auth first.
+
+### Configuration Check rewrite
+
+- `/api/dashboard/config-check` was validating obsolete property names (`paApiBaseUrl` / `paApiLoginEndpoint` / `paApiImportEndpoint` / `paApiUsername` / `paApiPassword` / `paApiDirectoryEndpoint` / `paApiEReportingEndpoint` / `ublXsdPath` / `ublSchematronPath`) — none of which exist on the connector-style schema in use today. Card was showing 8 false errors on a perfectly-good config.
+- Now validates: `baseUrl`, `authType`, credentials per auth type (OAUTH2 / BASIC / BEARER), and the existence of an endpoint named `import` (and warns if `import-status` is missing). E-directory validates `baseUrl` + `directory-check` endpoint when `checkDirectory=Y`. E-reporting validates `issuerSiren` / `frequency` / `flux` when `sendToPA=Y`. Obsolete UBL XSD/Schematron path checks removed — validation assets are bundled in the JAR.
+
+### Other
+
+- Sidebar *Documentation* group now contains the Tech Dashboard link.
+- ProcessingLog grouped view tiebreaker uses `FEUKID` so two events with the same `UPMJ`+`UPMT` keep stable order across refreshes.
 
 ---
 

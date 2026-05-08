@@ -1,14 +1,18 @@
 ---
 title: Dashboard
-description: "The NomaUBL home page — a 12-column widget grid with hero KPI cards (Total / In flight / Rejected — IT / Rejected — Business), pipeline funnel, volume chart, recent activity, stale invoices, top failing rules, per-company breakdown, e-reporting coverage, PA round-trip and scheduler health — all governed by a single date-range filter."
-keywords: [NomaUBL, dashboard, KPI, hero cards, pipeline funnel, volume chart, recent activity, stale invoices, top failing rules, e-reporting coverage, round-trip, scheduler health, date range, JD Edwards, SAP, NetSuite, custom ERP]
+description: "The NomaUBL home page — a 12-column widget grid with hero KPI cards (Total / In flight / Rejected — IT / Rejected — Business), pipeline funnel, volume chart, recent activity, stale invoices, top failing rules, per-company breakdown, e-reporting coverage and PA round-trip — all governed by a single date-range filter. Scheduler-health monitoring lives on the dedicated Tech Dashboard since 2026.05.6."
+keywords: [NomaUBL, dashboard, KPI, hero cards, pipeline funnel, volume chart, recent activity, stale invoices, top failing rules, e-reporting coverage, round-trip, date range, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Dashboard
 
-The **Dashboard** is the NomaUBL home page. It opens by default after sign-in and surfaces the operational state of the platform on a **12-column widget grid** — four hero KPI cards at the top, then a sequence of paired widgets that cover ingestion volume, dispatcher pipeline, recent + stale invoices, top failing validation rules, per-company breakdown, e-reporting coverage, PA round-trip times and scheduler health.
+The **Dashboard** is the NomaUBL home page. It opens by default after sign-in and surfaces the operational state of the platform on a **12-column widget grid** — four hero KPI cards at the top, then a sequence of paired widgets that cover ingestion volume, dispatcher pipeline, recent + stale invoices, top failing validation rules, per-company breakdown, e-reporting coverage and PA round-trip times.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. Every number is read from the local NomaUBL database, so the dashboard reflects what NomaUBL has processed and persisted, not directly what the source system or the Plateforme Agréée holds.
+
+:::info[Rebalanced in 2026.05.6]
+The bottom row went from `6 + 6` over two rows to a single `4 + 4 + 4` row — Per-company, E-Reporting coverage and PA round-trip share one balanced row instead of leaving a half-empty cell. The Scheduler-health widget moved to the new [Tech Dashboard](./tech-dashboard.md) where it sits next to the JVM, database and filesystem widgets the IT team relies on. The grid also switched to `align-items: stretch` so panels in the same row align bottoms.
+:::
 
 :::info[Refreshed in 2026.05.4]
 The dashboard was rebuilt as a 12-column widget grid in 2026.05.4. The previous stacked layout of status counter cards was replaced by four hero KPIs (Total / In flight / Rejected — IT / Rejected — Business) plus eight paired widgets. Click-throughs from the hero cards now use a multi-status filter, so *In flight* lands on the actual in-flight invoices instead of dropping the status filter.
@@ -18,7 +22,7 @@ The dashboard was rebuilt as a 12-column widget grid in 2026.05.4. The previous 
 
 ## At a glance
 
-<svg viewBox="0 0 1000 720" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 670" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="dash-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="dash-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -28,7 +32,7 @@ The dashboard was rebuilt as a 12-column widget grid in 2026.05.4. The previous 
     <linearGradient id="dash-g-orange" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fb923c" stopOpacity="0.32"/><stop offset="100%" stopColor="#ea580c" stopOpacity="0.10"/></linearGradient>
   </defs>
 
-  <rect x="220" y="20" width="580" height="690" rx="14" fill="url(#dash-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="220" y="20" width="580" height="640" rx="14" fill="url(#dash-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Dashboard</text>
   <rect x="640" y="30" width="146" height="22" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
@@ -115,35 +119,32 @@ The dashboard was rebuilt as a 12-column widget grid in 2026.05.4. The previous 
   <text x="556" y="514" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">BR-FR-12</text>
   <text x="780" y="514" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="end">38</text>
 
-  <rect x="240" y="536" width="270" height="76" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="536" width="178" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
   <text x="254" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Per company</text>
-  <rect x="254" y="566" width="184" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
-  <rect x="254" y="566" width="138" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
-  <rect x="392" y="566" width="34" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
-  <rect x="426" y="566" width="12" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
-  <text x="446" y="577" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00070</text>
-  <rect x="254" y="586" width="172" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
-  <rect x="254" y="586" width="120" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
-  <rect x="374" y="586" width="40" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
-  <rect x="414" y="586" width="12" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
-  <text x="446" y="597" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00001</text>
+  <rect x="254" y="566" width="148" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
+  <rect x="254" y="566" width="112" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
+  <rect x="366" y="566" width="26" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
+  <rect x="392" y="566" width="10" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
+  <text x="254" y="592" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00070 · 132 ok / 22 pend / 6 err</text>
+  <rect x="254" y="600" width="148" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
+  <rect x="254" y="600" width="98" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
+  <rect x="352" y="600" width="32" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
+  <rect x="384" y="600" width="10" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
+  <text x="254" y="626" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00001 · 86 ok / 14 pend / 4 err</text>
 
-  <rect x="522" y="536" width="270" height="76" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="536" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">E-Reporting coverage</text>
-  <text x="536" y="572" fill="#4ade80" fontSize="14" fontWeight="700" fontFamily="ui-monospace, monospace">98 %</text>
-  <text x="572" y="572" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">B2C declared this month</text>
-  <text x="536" y="592" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.1 · 28 / 28 deposited</text>
-  <text x="536" y="606" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.3 · 4 / 4 deposited</text>
+  <rect x="426" y="536" width="180" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="440" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">E-Reporting coverage</text>
+  <text x="440" y="578" fill="#4ade80" fontSize="14" fontWeight="700" fontFamily="ui-monospace, monospace">98 %</text>
+  <text x="478" y="578" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">B2C this month</text>
+  <text x="440" y="600" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.1 · 28 / 28 deposited</text>
+  <text x="440" y="614" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.3 · 4 / 4 deposited</text>
+  <text x="440" y="628" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">always current month</text>
 
-  <rect x="240" y="628" width="270" height="64" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="646" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">PA round-trip</text>
-  <text x="254" y="664" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Send → Deposit · avg 3.2 h</text>
-  <text x="254" y="680" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Send → Reject · avg 1.4 h</text>
-
-  <rect x="522" y="628" width="270" height="64" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="536" y="646" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Scheduler health</text>
-  <text x="536" y="664" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">● fetchImportInterval · last run 2 min ago</text>
-  <text x="536" y="680" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">● fetchStatusInterval · last run 2 min ago</text>
+  <rect x="614" y="536" width="178" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="628" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">PA round-trip</text>
+  <text x="628" y="578" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Send → Deposit · avg 3.2 h</text>
+  <text x="628" y="594" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Send → Reject · avg 1.4 h</text>
+  <text x="628" y="614" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">over the date-range filter</text>
 
   <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Hero KPI cards</text>
@@ -170,25 +171,25 @@ The dashboard was rebuilt as a 12-column widget grid in 2026.05.4. The previous 
   <text x="830" y="488" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ALL / UBL / INTEG toggle</text>
   <line x1="820" y1="476" x2="794" y2="472" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
 
-  <rect x="20" y="556" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="571" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Per-company stack</text>
-  <text x="30" y="584" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">OK / pending / error</text>
-  <line x1="200" y1="572" x2="240" y2="568" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
+  <rect x="20" y="560" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Per-company stack</text>
+  <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">OK / pending / error</text>
+  <line x1="200" y1="576" x2="240" y2="572" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
+
+  <rect x="20" y="610" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three short widgets · 4+4+4</text>
+  <text x="30" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">stretched to align bottoms</text>
+  <line x1="200" y1="626" x2="240" y2="616" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
 
   <rect x="820" y="556" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="830" y="571" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">E-Reporting coverage</text>
   <text x="830" y="584" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">% B2C / B2BINT declared</text>
-  <line x1="820" y1="572" x2="794" y2="568" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
+  <line x1="820" y1="572" x2="606" y2="572" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
 
-  <rect x="20" y="648" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="663" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PA round-trip</text>
-  <text x="30" y="676" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">avg send → deposit / reject</text>
-  <line x1="200" y1="664" x2="240" y2="660" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="820" y="648" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="663" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Scheduler health</text>
-  <text x="830" y="676" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">last-run + interval per job</text>
-  <line x1="820" y1="664" x2="794" y2="660" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
+  <rect x="820" y="610" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PA round-trip</text>
+  <text x="830" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">avg send → deposit / reject</text>
+  <line x1="820" y1="626" x2="794" y2="612" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
 </svg>
 
 The grid collapses to a single column below ~900 px. Hero cards keep their 220 px minimum on every screen, so the four KPIs always sit on the same horizontal band.
@@ -208,7 +209,7 @@ A single filter sits at the very top of the page. It restricts every widget that
 | **Last month** | The previous full month. |
 | **Custom range** | Pick the **From** and **To** dates manually. |
 
-A small set of widgets ignore the date filter on purpose — *Stale invoices* (always counts the last 90 days), *E-Reporting coverage* (always the current month), *Scheduler health* (always live). Each carries its own time-window indicator so the difference is obvious.
+A small set of widgets ignore the date filter on purpose — *Stale invoices* (always counts the last 90 days) and *E-Reporting coverage* (always the current month). Each carries its own time-window indicator so the difference is obvious.
 
 ---
 
@@ -253,19 +254,21 @@ This row used to be 8/4, which made the right column visibly thinner than the le
 
 The proportional bars of the previous version made counts of *160* and *10* almost indistinguishable. The new ranked rows give every rule the same visual weight, with the count on the right.
 
-### Per company *(6 cols)* + E-Reporting coverage *(6 cols)*
+### Per company *(4 cols)* + E-Reporting coverage *(4 cols)* + PA round-trip *(4 cols)*
+
+The three short widgets share a single balanced row in 2026.05.6 — the previous `6 + 6` over two rows left a half-empty cell once Scheduler-health moved to the [Tech Dashboard](./tech-dashboard.md).
 
 | Widget | What it shows |
 |---|---|
 | **Per company** | One stacked horizontal bar per `KCO` (`UHKCO` from `F564231`) split into *OK* (green) / *Pending* (blue) / *Error* (red), labelled with the count and the company code. Useful when a spike is concentrated on a single company. |
 | **E-Reporting coverage** | A percentage and three rows summarising the current month's e-reporting submission state: *Flux 10.1* (B2BINT detail) and *Flux 10.3* (B2C / OUTOFSCOPE aggregated) — *deposited* / *generated*. Clicking the widget opens the [E-Reporting](./ereporting.md) page. |
-
-### PA round-trip *(6 cols)* + Scheduler health *(6 cols)*
-
-| Widget | What it shows |
-|---|---|
 | **PA round-trip** | Average duration *Send → Deposit* and *Send → Reject* over the date range, computed from the lifecycle table. A spike on one of these reveals a slowdown on the PA side that is otherwise invisible from the daily counts alone. |
-| **Scheduler health** | One row per scheduled job (`fetchImportInterval`, `fetchStatusInterval`, `fetchAll.N.…`, `ereportingInterval`) with the configured interval and the *last run* timestamp. A green dot when the last run is recent, a red dot if it is older than 2× the interval. |
+
+The grid uses `align-items: stretch` and each card grows with `flex: 1` inside its column span — so all three cards in this row align bottoms even when one carries more content than the others.
+
+:::tip[Scheduler health moved]
+The Scheduler-health widget is no longer on this page. It lives on the [Tech Dashboard](./tech-dashboard.md) alongside the JVM, database, filesystem and live error tail widgets. The IT team gets a single page sized to operational concerns; the business audience here sees only the metrics they act on.
+:::
 
 ---
 

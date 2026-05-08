@@ -10,7 +10,8 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
+  <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
   <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
   <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
   <a href="#v2026-05-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
@@ -29,6 +30,39 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.6 — 2026-05-09 \{#v2026-05-6\}
+
+Nouveau **Tableau de bord IT** dédié aux équipes techniques avec 14 widgets couvrant JVM / BD / disque / débit / erreurs / planificateur — page distincte du tableau de bord métier existant pour que chaque public dispose d'une vue dimensionnée à ses besoins. Tableau de bord métier réaligné, vérification de configuration réécrite contre le schéma actuel orienté connecteur, et nouveau suivi d'IP en mémoire qui alimente la carte *Sessions actives* quand l'authentification est désactivée.
+
+### Tableau de bord IT (nouvelle page)
+
+- Nouvelle entrée **Documentation → Tableau de bord IT** qui regroupe tout ce dont un opérateur IT a besoin en un coup d'œil : Santé système (heap JVM / GC / threads / uptime), ping BD, informations de build, widget Système de fichiers (espace libre / total + nombre de fichiers pour `appHome` / `processHome` / `dirInput` / `singleOutput` / `burstOutput` / `dirArchive` / `dirError`), graphique de débit, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, journal en direct, vérification de configuration, tables de base, erreurs récentes, planificateur. Voir [Tableau de bord IT](./application/tech-dashboard.md).
+- Nouveaux endpoints back-end `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — payloads groupés pour que la page se mette à jour en un seul aller-retour.
+- Le widget Système de fichiers parcourt chaque chemin de façon récursive (plafonné à 5000 fichiers pour rester rapide) et gère les jokers d'exécution (`%TEMPLATE%`, `%FILE_NAME%`) en tronquant au premier rencontré pour rapporter sur le répertoire existant le plus profond au-dessus. `dirOutput` retiré de la liste — déjà couvert par `processHome`.
+- Le widget *Temps de traitement par modèle* charge les événements START/END de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` avec un helper `hhmmssToSeconds()` pour un calcul de durée correct — remplace une auto-jointure SQL cassée (`FETMPL` ambigu et arithmétique `e.FEUPMT - s.FEUPMT` incorrecte).
+
+### Tableau de bord métier — réalignement
+
+- Widget Planificateur retiré (présent désormais sur le tableau de bord IT — le public métier n'en a pas besoin).
+- Dernière rangée réorganisée de `(Par société 6 | E-Reporting 6)` + `(Round-trip 6 | Planificateur 6)` à une seule rangée `Par société 4 | E-Reporting 4 | Round-trip 4` pour que trois widgets courts se partagent une rangée équilibrée plutôt que de laisser une demi-cellule vide.
+- Grille passée en `align-items: stretch`, les panneaux remplissent leur Span via `flex: 1` — Activité récente atteint maintenant le même bord bas que la colonne empilée Points d'attention + Règles d'erreur les plus fréquentes à côté. Même correction pour la nouvelle rangée du bas.
+
+### Sessions actives sans authentification
+
+- Nouveau `ActivityTracker` en mémoire (map IP → `lastSeen`) mis à jour à chaque requête depuis `WebServer.handle()`. Quand `authEnabled=N`, il n'y a aucune ligne `F564252` à compter — la carte *Sessions actives* du tableau bascule donc sur *Clients actifs · 15 min* alimentée par ce tracker. L'équipe IT voit enfin qui utilise l'application et depuis où, sans avoir à activer l'authentification.
+
+### Vérification de configuration — réécriture
+
+- `/api/dashboard/config-check` validait des propriétés obsolètes (`paApiBaseUrl` / `paApiLoginEndpoint` / `paApiImportEndpoint` / `paApiUsername` / `paApiPassword` / `paApiDirectoryEndpoint` / `paApiEReportingEndpoint` / `ublXsdPath` / `ublSchematronPath`) — aucune n'existe dans le schéma actuel orienté connecteur. La carte remontait 8 fausses erreurs sur une configuration parfaitement valide.
+- Valide désormais : `baseUrl`, `authType`, identifiants selon le type d'authentification (OAUTH2 / BASIC / BEARER) et la présence d'un endpoint nommé `import` (avertissement si `import-status` manque). E-directory contrôle `baseUrl` + endpoint `directory-check` quand `checkDirectory=Y`. E-reporting contrôle `issuerSiren` / `frequency` / `flux` quand `sendToPA=Y`. Vérifications obsolètes des chemins XSD / Schematron retirées — les ressources de validation sont embarquées dans le JAR.
+
+### Divers
+
+- Le groupe *Documentation* de la barre latérale contient désormais l'entrée Tableau de bord IT.
+- Vue groupée de ProcessingLog : `FEUKID` utilisé comme départage pour que deux événements partageant le même `UPMJ`+`UPMT` gardent un ordre stable d'un rafraîchissement à l'autre.
 
 ---
 

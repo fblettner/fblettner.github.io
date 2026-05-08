@@ -196,9 +196,10 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Application',
-      link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: dashboard, invoices, e-reporting, e-directory, integration errors, notifications and AI capabilities.'},
+      link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: dashboard, tech dashboard, invoices, e-reporting, e-directory, integration errors, notifications and AI capabilities.'},
       items: [
         'nomaubl/application/dashboard',
+        'nomaubl/application/tech-dashboard',
         'nomaubl/application/invoices',
         'nomaubl/application/ereporting',
         'nomaubl/application/edirectory',
