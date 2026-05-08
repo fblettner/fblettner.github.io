@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
+  <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
+  <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
   <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
   <a href="#v2026-05-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
   <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
@@ -28,6 +29,61 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.5 — 2026-05-08 \{#v2026-05-5\}
+
+Architectural pass driven by the column-name refactor: every SQL site in the backend now goes through `UBLColumnConfig` (no more hardcoded `UHKCO` / `FETXFT` literals) and through `UBLTableConfig` (auth + notification tables join the rest as configurable). Role permissions become rows (`F564254`) instead of CSV columns, so adding a new permission dimension is an INSERT rather than a DDL change. Status-code grouping, runtime log, and e-reporting BLOBs all got reshaped to be JDE-compatible and dialect-aware. Two long-standing Oracle bugs around NCHAR padding and quoted comments are fixed.
+
+### Column / table configuration refactor
+
+- All Java sub-handlers (`InvoiceApi`, `EReportingApi`, `IntegrationApi`, `DashboardApi`, `AiAssistant`, `WebApiHandler`, `UBLDatabaseHandler`, `RuntimeLogHandler`, `UBLInvoiceProcessor`, …) now resolve column names exclusively through `cols.<accessor>`. The `db-nomaubl-columns` template overrides them all consistently — no more silent drift on customer-renamed columns.
+- Auth tables (`F564250` users, `F564251` roles, `F564252` sessions, new `F564254` permissions) and the notifications table (`F564253`) are now first-class entries in `UBLTableConfig` and the *Settings → db-nomaubl → Tables* tab, on the same footing as invoice / e-reporting tables. They participate in DDL substitution if renamed.
+- `WebServer.java` is JDBC-free: `resolveKeysByUblNumber`, `readTemplateName`, the auth-validate middleware, and the UBL blob read all moved to the `api/*` sub-handlers; `WebServer` only routes now.
+- New build-time **Cross-Reference** page (Documentation → Cross-Ref) shows every Java call site that reads `tables.<X>` or `cols.<X>`, with an "unused accessors" toggle to surface dead code. Generated by `XrefScanner` on every `bash build.sh`, no manual upkeep.
+
+### Role permissions — row-based grants (F564254)
+
+- New `F564254` table (`PMROLE`, `PMCRAPPID`, `PMCRAPPVAL`, `PMENABL`) replaces the four CSV columns `RLPAGES` / `RLCOMPANIES` / `RLSETTINGS` / `RLREADONLY` on `F564251`. Each grant is a row keyed by type (`page` / `company` / `feature`); adding a new permission dimension is now an INSERT, not a DDL change.
+- Idempotent bootstrap: dropping `F564254` and re-running *Init Database* re-seeds admin/viewer grants without touching existing role rows. Reports the count of newly-inserted grants.
+- Roles editor (*Settings → users-roles → Roles*) redesigned: card list with copy / delete actions, expanded edit panel with per-feature checkbox + helper text, companies as an add-row table (no more comma-separated text), *Allowed Pages* with friendly labels (i18n `nav.*` keys reused from the Sidebar) plus the page id beside it in muted monospace. *Tag* column is read-only — it's referenced by Java factory methods so renaming would silently break callers.
+- `F564252` (sessions) renamed to JDE conventions: `SSLSID` (UUID token) / `SSUSER` / `SSSTDTIM` (start) / `SSETDTIM` (end). `F564251` / `F564254` carry the JDE audit fields (`USER` / `PID` / `JOBN` / `UPMJ` / `TDAY`).
+
+### Status-code groups + Dashboard cleanup
+
+- *Statuses* template gains a 6th pipe-field for groups: top-level (`inflight` / `errorTech` / `errorBusiness` / `terminal`) and funnel stages (`created` / `sent` / `pending` / `transmission` / `approved` / `rejected`). New `/api/status-codes/groups` endpoint serves them.
+- Backend `DashboardApi` SQL counters and frontend dashboard cards (`PipelineFunnel`, `EReportingCoverage`, `StaleInvoices`, `RecentActivity`, `invoiceHelpers.statusColors`) now read from this single source instead of inlining literal `IN ('9904','9905',…)` lists. Adding a new PA status code is one line in `config-template-lists.json`.
+- React `statusGroupsStore` loaded once at app boot triggers a one-shot global re-render when the cache hydrates; status colours show correctly on first paint after login (no more "navigate away and back" workaround).
+- *Statuses* editor: each status row now expands into a 4-column form with chip + dropdown groups picker and search across code / tag / labels / PA code / group labels. Tag is read-only.
+
+### Runtime processing log (F564237)
+
+- Added `FEUKID` PK (sequence-based, computed via `COALESCE(MAX(FEUKID),0)+1` at insert time, dialect-neutral).
+- Renamed columns to JDE convention: `FEMODE` → `FERMK`, `FEMETHOD` → `FERMK2`, `FEMESSAGE` → `FEK74MSG1` (1024). `FETMPL` width brought down to 40.
+- Insert truncations match the new widths exactly. Process-log REST payload now includes `id`, used as a stable React key and as a third-level sort tiebreaker so two events with the same `UPMJ`+`UPMT` no longer flip order between page loads.
+- Grouped-jobs view: same `FEUKID` tiebreaker fixed the `START` / `END` ordering bug where the badge claimed both as orphans even though they paired up. FATAL error rows now show a compact `FATAL ERROR` / `ERROR` / `FAILED` badge + the full path in the message column (was overflowing the row before).
+
+### E-Reporting binary XML (F564260.RGTXFT)
+
+- Schema column changed from `TEXT` / `CLOB` to `BYTEA` / `BLOB`. Backend writes XML as UTF-8 bytes via `dialect.writeBlob` / reads via `dialect.readBlob` (was using `writeText` / `readText` which break on the new binary type).
+- Note: the e-reporting tables are renumbered — `F564240` / `F564241` / `F564242` become `F564260` / `F564261` / `F564262`. Child-table FK columns shift from `RGUKID` to `RHUKID` (lifecycle) and `RIUKID` (mapping). See [Database Tables](./references/database-tables.md).
+
+### Dialect-aware TRIM (Oracle NCHAR padding)
+
+- New `DatabaseDialect.trimChar(col)` helper — wraps with `TRIM(col)` on Oracle (handles JDE `NCHAR`'s blank-padding silently breaking equality binds), returns the column verbatim on PostgreSQL `VARCHAR` (no padding, no wasted function call → indexes stay usable).
+- Fixed the customer-platform notification bell that was permanently empty: with NCHAR-padded `*` and a JDBC string bind, the WHERE clause was evaluating `'*         '` (10 chars) vs `'*'` and silently not matching. Same root cause was hiding behind the dispatcher's broadcast inbox semantic too — both addressed.
+- Sweep through 9 files / 47 occurrences: `InvoiceApi`, `DashboardApi`, `IntegrationApi`, `EReportingApi`, `EReportingFetcher`, `AiAssistant`, `JDEBipExtractor`, `InvoiceStatusesHandler`, `ApiCommons.categoryFilter`. All now route through `dialect.trimChar`.
+
+### DDL runner
+
+- Statement splitter is now quote- and line-comment-aware. Previously any `;` inside a `'…'` literal (e.g. inside a `COMMENT ON COLUMN IS '…; …'` body) cut the statement in half, producing `Unterminated string literal` errors at init time.
+
+### UI / settings
+
+- *Settings → db-nomaubl → Tables* exposes *Auth · Users / Roles / Sessions / Permissions* and the *Notifications* table alongside the existing invoice + e-reporting tables.
+- *Validation Errors* panel of the Invoice detail modal lays each row on two lines now (level + rule + date on top, message wrapped below) so long localized rule text stops competing with the rule code for horizontal space.
+- `db-nomaubl` *Initialize* tab log area fills the available height instead of capping at 200 px with empty room beneath.
 
 ---
 

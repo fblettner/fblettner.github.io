@@ -1,7 +1,7 @@
 ---
 title: Tables de base de données
-description: "Référence du schéma de base de données NomaUBL — toutes les tables qui supportent l'application : archive de factures, en-tête / lignes / TVA UBL, événements de cycle de vie, erreurs de validation, journal de traitement, e-reporting et authentification. Descriptions fonctionnelles, clés primaires et référentiel des champs pour Oracle et PostgreSQL."
-keywords: [NomaUBL, base de données, schéma, tables, F564230, F564231, F564233, F564234, F564235, F564236, F564237, F564240, F564241, F564242, F564250, F564251, F564252, JDE Julian, BLOB, BT-, Oracle, PostgreSQL]
+description: "Référence du schéma de base de données NomaUBL — toutes les tables qui supportent l'application : archive de factures, en-tête / lignes / TVA UBL, événements de cycle de vie, erreurs de validation, journal de traitement, e-reporting, notifications et authentification. Descriptions fonctionnelles, clés primaires et référentiel des champs pour Oracle et PostgreSQL."
+keywords: [NomaUBL, base de données, schéma, tables, F564230, F564231, F564233, F564234, F564235, F564236, F564237, F564250, F564251, F564252, F564253, F564254, F564260, F564261, F564262, JDE Julian, BLOB, BT-, Oracle, PostgreSQL]
 ---
 
 # Tables de base de données
@@ -10,7 +10,15 @@ NomaUBL persiste chaque artefact du pipeline e-invoicing — la source ERP origi
 
 Le schéma est **identique sur Oracle et PostgreSQL** — la DDL s'adapte au dialecte (`BLOB` ↔ `BYTEA`, `NUMBER` ↔ `INTEGER`, `VARCHAR2` ↔ `VARCHAR`) mais les noms de colonnes, les clés primaires et la sémantique restent les mêmes. Chaque nom de table est configurable dans le template système `db-nomaubl` et créé par l'action **Initialize Database** de l'écran *Settings → Database Connectors*.
 
-Le schéma fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé. Les tables suivent la convention de nommage JDE `F564XXX` car la plateforme a d'abord été construite autour de JDE ; les conventions sont fonctionnelles, pas spécifiques à la source.
+Le schéma fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les tables suivent la convention de nommage JDE `F564XXX` car la plateforme a d'abord été construite autour de JDE ; les conventions sont fonctionnelles, pas spécifiques à la source.
+
+:::info[Évolutions de schéma — 2026.05.5]
+La version **2026.05.5** apporte plusieurs évolutions structurelles :
+- **Tables e-reporting renumérotées** : `F564240` / `F564241` / `F564242` deviennent `F564260` / `F564261` / `F564262`. Le type de `RGTXFT` passe de `CLOB` / `TEXT` à `BLOB` / `BYTEA`. Les colonnes FK des tables filles passent de `RGUKID` à `RHUKID` (cycle de vie) et `RIUKID` (mapping).
+- **Journal d'exécution `F564237`** : nouvelle PK `FEUKID`, colonnes renommées (`FEMODE` → `FERMK`, `FEMETHOD` → `FERMK2`, `FEMESSAGE` → `FEK74MSG1`).
+- **Authentification refondue** : `F564252` (sessions) renommée en `SSLSID` / `SSSTDTIM` / `SSETDTIM`. `F564251` (rôles) ne contient plus que l'identité — les droits passent dans la nouvelle table `F564254` (`PMROLE` / `PMCRAPPID` / `PMCRAPPVAL`). Les colonnes utilisateur (`F564250`) suivent désormais les conventions JDE (`USLDAPPSWD`, `USENABL`, `USSECF3`, audit `USUPMJ` / `USTDAY`).
+- **Notifications `F564253`** (introduite en 2026.05.3) figure désormais dans cette page de référence.
+:::
 
 ---
 
@@ -23,7 +31,7 @@ Le schéma fonctionne quel que soit le système source — JD Edwards, SAP, NetS
 | **Dates** | Julian JDE — entier au format `CYYDDD` où `C = 1` pour 2000–2099, `YY` correspond aux deux derniers chiffres de l'année et `DDD` au jour de l'année. Exemple : `125108` → 2025-04-18. Conversion à la volée pour l'IHM. |
 | **Heures** | Entier au format `HHMMSS`. Exemple : `143052` → 14:30:52. |
 | **Numériques mis à l'échelle** | Certains montants et taux sont stockés en entiers multipliés par un facteur fixe — diviser à la lecture : `ATXA × 100` (2 décimales), `QNTY × 10000` (4 décimales), `UPRC × 10000` (4 décimales), `TXR1 × 1000` (3 décimales). |
-| **Charges utiles XML** | Stockées en `BLOB` (Oracle) / `BYTEA` (Postgres) pour le XML source ERP et l'UBL généré ; en `CLOB` (Oracle) / `TEXT` (Postgres) pour le XML d'e-reporting. UTF-8 partout. |
+| **Charges utiles XML** | Stockées en `BLOB` (Oracle) / `BYTEA` (Postgres) pour le XML source ERP, l'UBL généré **et le XML d'e-reporting** (depuis 2026.05.5). UTF-8 partout. |
 | **Séquences auto-incrémentées** | Les colonnes `SEQN` utilisent `COALESCE(MAX(SEQN), 0) + 1` à l'insertion — pas besoin de séquence Oracle ni de serial Postgres. |
 
 ---
@@ -118,15 +126,15 @@ Le schéma fonctionne quel que soit le système source — JD Edwards, SAP, NetS
   <text x="40" y="338" fill="#c084fc" fontSize="12" fontWeight="800" letterSpacing="1.8" fontFamily="system-ui, sans-serif">📊 DOMAINE E-REPORTING</text>
 
   <rect x="50" y="362" width="180" height="56" rx="10" fill="url(#dt-g-purple)" stroke="#c084fc" strokeWidth="1.5"/>
-  <text x="140" y="384" fill="#c084fc" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">F564240</text>
+  <text x="140" y="384" fill="#c084fc" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">F564260</text>
   <text x="140" y="403" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">Journal des rapports</text>
 
   <rect x="290" y="344" width="180" height="36" rx="8" fill="url(#dt-g-purple)" stroke="#c084fc" strokeWidth="1" strokeOpacity="0.55"/>
-  <text x="305" y="367" fill="#c084fc" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564241</text>
+  <text x="305" y="367" fill="#c084fc" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564261</text>
   <text x="460" y="367" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="end" fontFamily="system-ui, sans-serif" opacity="0.75">Cycle de vie rapport</text>
 
   <rect x="290" y="400" width="180" height="36" rx="8" fill="url(#dt-g-purple)" stroke="#c084fc" strokeWidth="1" strokeOpacity="0.55"/>
-  <text x="305" y="423" fill="#c084fc" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564242</text>
+  <text x="305" y="423" fill="#c084fc" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564262</text>
   <text x="455" y="423" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="end" fontFamily="system-ui, sans-serif" opacity="0.75">Mapping factures</text>
   <line x1="470" y1="418" x2="496" y2="418" stroke="#c084fc" strokeWidth="1.2" strokeDasharray="3 3" strokeOpacity="0.7"/>
   <text x="500" y="421" fill="#c084fc" fontSize="10" fontFamily="ui-monospace, monospace" opacity="0.85">⇢ F564231 (FK inter-domaine)</text>
@@ -135,29 +143,40 @@ Le schéma fonctionne quel que soit le système source — JD Edwards, SAP, NetS
   <path d="M 260 362 L 260 418" stroke="#c084fc" strokeWidth="1.4" fill="none"/>
   <line x1="260" y1="362" x2="290" y2="362" stroke="#c084fc" strokeWidth="1.4" markerEnd="url(#dt-arrow-purple)"/>
   <line x1="260" y1="418" x2="290" y2="418" stroke="#c084fc" strokeWidth="1.4" markerEnd="url(#dt-arrow-purple)"/>
-  <text x="260" y="455" fill="#c084fc" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">RGUKID</text>
+  <text x="240" y="358" fill="#c084fc" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">RHUKID</text>
+  <text x="240" y="431" fill="#c084fc" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">RIUKID</text>
 
   <rect x="20" y="500" width="960" height="180" rx="14" fill="#4ade80" fillOpacity="0.03" stroke="#4ade80" strokeOpacity="0.2" strokeWidth="1"/>
-  <text x="40" y="528" fill="#4ade80" fontSize="12" fontWeight="800" letterSpacing="1.8" fontFamily="system-ui, sans-serif">🔐 DOMAINE AUTHENTIFICATION</text>
+  <text x="40" y="528" fill="#4ade80" fontSize="12" fontWeight="800" letterSpacing="1.8" fontFamily="system-ui, sans-serif">🔐 DOMAINE AUTHENTIFICATION + NOTIFICATIONS</text>
 
   <rect x="50" y="552" width="180" height="56" rx="10" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1.5"/>
   <text x="140" y="574" fill="#4ade80" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace">F564250</text>
   <text x="140" y="593" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.85">Utilisateurs</text>
 
-  <rect x="290" y="534" width="180" height="36" rx="8" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1" strokeOpacity="0.55"/>
-  <text x="305" y="557" fill="#4ade80" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564251</text>
-  <text x="460" y="557" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="end" fontFamily="system-ui, sans-serif" opacity="0.75">Rôles</text>
+  <rect x="290" y="534" width="180" height="32" rx="8" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1" strokeOpacity="0.55"/>
+  <text x="305" y="555" fill="#4ade80" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564251</text>
+  <text x="460" y="555" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="end" fontFamily="system-ui, sans-serif" opacity="0.75">Rôles</text>
 
-  <rect x="290" y="590" width="180" height="36" rx="8" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1" strokeOpacity="0.55"/>
-  <text x="305" y="613" fill="#4ade80" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564252</text>
-  <text x="460" y="613" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="end" fontFamily="system-ui, sans-serif" opacity="0.75">Sessions</text>
+  <rect x="290" y="572" width="180" height="32" rx="8" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1" strokeOpacity="0.55"/>
+  <text x="305" y="593" fill="#4ade80" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564254</text>
+  <text x="460" y="593" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="end" fontFamily="system-ui, sans-serif" opacity="0.75">Permissions (lignes)</text>
+
+  <rect x="290" y="610" width="180" height="32" rx="8" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1" strokeOpacity="0.55"/>
+  <text x="305" y="631" fill="#4ade80" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564252</text>
+  <text x="460" y="631" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="end" fontFamily="system-ui, sans-serif" opacity="0.75">Sessions</text>
+
+  <rect x="540" y="552" width="180" height="56" rx="10" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1.2" strokeDasharray="4 3" strokeOpacity="0.7"/>
+  <text x="630" y="574" fill="#4ade80" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.92">F564253</text>
+  <text x="630" y="593" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Notifications</text>
 
   <path d="M 230 580 L 260 580" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" fill="none"/>
-  <path d="M 260 552 L 260 608" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" fill="none"/>
-  <line x1="260" y1="552" x2="290" y2="552" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
-  <line x1="260" y1="608" x2="290" y2="608" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
-  <text x="265" y="547" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">USROLE</text>
-  <text x="265" y="630" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">SSUSER</text>
+  <path d="M 260 550 L 260 626" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" fill="none"/>
+  <line x1="260" y1="550" x2="290" y2="550" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
+  <line x1="260" y1="588" x2="290" y2="588" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
+  <line x1="260" y1="626" x2="290" y2="626" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
+  <line x1="470" y1="588" x2="540" y2="580" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
+  <text x="265" y="545" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">USROLE</text>
+  <text x="265" y="660" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">SSUSER + PMROLE + NTUSER</text>
 </svg>
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '16px', margin: '0 0 24px', padding: '10px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', fontSize: '11px', opacity: 0.78}}>
@@ -325,129 +344,177 @@ Erreurs XSD et Schematron enregistrées pour une facture. Une ligne par erreur /
 
 Chaque événement écrit par `RuntimeLogHandler` durant le traitement XML / UBL / BIP / FTP — `START`, `END` et toute méthode intermédiaire. Alimente la page *Processing Log* (menu Management).
 
-- **Clé primaire** : aucune — plusieurs événements par fichier sont attendus.
-- **Notable** : `FEMODE` est le type de traitement (`SINGLE`, `BURST`, `UBL`, `BOTH`, `UBL_VALIDATE`, `PROCESS`) ; `FETMPL` est le nom du template (vide pour le traitement UBL) ; `FEMETHOD` est `START` / `END` ou le nom de la méthode fautive en cas d'erreur.
+- **Clé primaire** : `FEUKID` (séquence calculée à l'insert via `COALESCE(MAX(FEUKID),0)+1` — départage les événements partageant le même horodatage).
+- **Notable** : `FERMK` est le type de traitement (`SINGLE`, `BURST`, `UBL`, `BOTH`, `UBL_VALIDATE`, `PROCESS`, `AUTO`) ; `FETMPL` est le nom du template (vide pour le traitement UBL) ; `FERMK2` est `START` / `END` ou le nom de la méthode fautive en cas d'erreur.
 
 | Champ | Type | Description |
 |---|---|---|
-| `FEWDS1` | Texte(80) | Nom du fichier source — fait le lien avec `F564230.FEWDS1`. |
+| `FEUKID` | Entier (BIGINT) | Identifiant de séquence (PK · ordre stable d'insertion). |
+| `FEWDS1` | Texte(60) | Nom du fichier source — fait le lien avec `F564230.FEWDS1`. |
 | `FEUPMJ` | Date (Julian) | Date de l'événement. |
 | `FEUPMT` | Heure (HHMMSS) | Heure de l'événement. |
-| `FEMODE` | Texte(20) | Type de traitement. |
-| `FETMPL` | Texte(50) | Nom du template. |
-| `FEMETHOD` | Texte(100) | Opération — `START` / `END` / nom de la méthode fautive. |
-| `FEMESSAGE` | Texte(500) | Message de statut ou détail d'erreur. |
+| `FERMK` | Texte(30) | Type de traitement (anciennement `FEMODE`). |
+| `FETMPL` | Texte(40) | Nom du template. |
+| `FERMK2` | Texte(30) | Opération — `START` / `END` / nom de la méthode fautive (anciennement `FEMETHOD`). |
+| `FEK74MSG1` | Texte(1024) | Message de statut ou détail d'erreur (anciennement `FEMESSAGE`). |
 
 ---
 
 ## Domaine e-reporting
 
-Trois tables qui consignent les déclarations *(période, flux, société)* déposées sur la Plateforme Agréée — flux **10.1** (détail B2C) et **10.3** (B2BINT agrégé).
+Trois tables qui consignent les déclarations *(période, flux, société)* déposées sur la Plateforme Agréée — flux **10.1** (détail B2BINT) et **10.3** (B2C / OUTOFSCOPE agrégé).
 
-### F564240 — Journal des rapports
+### F564260 — Journal des rapports
 
 Une ligne par rapport généré. Stocke le XML `<ReportDocument>` et le dernier statut connu.
 
 - **Clé primaire** : `RGUKID` (séquence globalement unique — pas de composante flux / société).
-- **Notable** : `RGY56BAR` vaut `10.1` ou `10.3` ; `RGDCT` est le type de document (`IN` initial, `RE` remplacement, `CO` annulation, `MO` modification) ; `RGTXFT` porte le XML généré.
+- **Notable** : `RGY56BAR` vaut `10.1` ou `10.3` ; `RGDCT` est le type de document (`IN` initial, `RE` remplacement, `CO` annulation, `MO` modification) ; `RGTXFT` porte le XML généré en **octets UTF-8** (BLOB / BYTEA depuis 2026.05.5).
 
 | Champ | Type | Description |
 |---|---|---|
-| `RGUKID` | Entier | Identifiant de séquence du rapport (PK). |
+| `RGUKID` | Entier (BIGINT) | Identifiant de séquence du rapport (PK). |
 | `RGY56BAR` | Texte(10) | Code de flux — `10.1` / `10.3`. |
 | `RGKCO` | Texte(5) | Code société émettrice. |
 | `RGDCT` | Texte(2) | Type de document — `IN` / `RE` / `CO` / `MO`. |
 | `RGEFTJ` | Date (Julian) | Début de période. |
 | `RGEFDJ` | Date (Julian) | Fin de période. |
-| `RGY56EPID` | Texte(60) | SIREN émetteur (schéma `0002`). |
-| `RGK74RSCD` | Texte(4) | Code de statut courant. |
-| `RGK74MSG1` | Texte(2000) | Dernier message de statut. |
+| `RGY56EPID` | Texte(125) | SIREN émetteur (schéma `0002`). |
+| `RGK74RSCD` | Texte(10) | Code de statut courant. |
+| `RGK74MSG1` | Texte(1024) | Dernier message de statut. |
 | `RGNINV` | Entier | Nombre de factures incluses. |
-| `RGTXFT` | CLOB / TEXT | XML `<ReportDocument>` généré. |
+| `RGTXFT` | BLOB | XML `<ReportDocument>` généré (octets UTF-8). |
 | `RGUSER` / `RGPID` / `RGJOBN` / `RGUPMJ` / `RGTDAY` | — | Colonnes d'audit. |
 
-### F564241 — Cycle de vie des rapports
+### F564261 — Cycle de vie des rapports
 
-L'historique en ajout uniquement des statuts d'un rapport — même structure que F564235 pour les factures.
+L'historique en mode ajout seul des statuts d'un rapport — même structure que F564235 pour les factures.
 
-- **Clé primaire** : `RGUKID + RHSEQN`
-- **Notable** : `RHSEQN` est auto-incrémenté. La colonne `RGUKID` (préfixée `RG`) est la FK vers le rapport parent (conservée telle quelle, sans alias `RH`).
+- **Clé primaire** : `RHUKID + RHSEQN`
+- **Notable** : `RHSEQN` est auto-incrémenté. La colonne `RHUKID` est la FK vers le rapport parent (`F564260.RGUKID`).
 
 | Champ | Type | Description |
 |---|---|---|
-| `RGUKID` | Entier | Identifiant de rapport (PK · FK → F564240). |
+| `RHUKID` | Entier (BIGINT) | Identifiant de rapport (PK · FK → F564260.RGUKID). |
 | `RHY56BAR` | Texte(10) | Code de flux (dénormalisé pour faciliter les requêtes). |
 | `RHSEQN` | Entier | Numéro de séquence d'événement (PK). |
-| `RHK74RSCD` | Texte(4) | Code de statut à cet événement. |
-| `RHK74MSG1` | Texte(500) | Message de statut. |
+| `RHK74RSCD` | Texte(10) | Code de statut à cet événement. |
+| `RHK74MSG1` | Texte(1024) | Message de statut. |
 | `RHUSER` / `RHPID` / `RHJOBN` / `RHUPMJ` / `RHTDAY` | — | Colonnes d'audit. |
 
-### F564242 — Mapping rapport / facture
+### F564262 — Mapping rapport / facture
 
 Trace **les factures incluses dans chaque rapport** — la PK composite empêche d'inclure deux fois une facture déjà déclarée.
 
-- **Clé primaire** : `RGUKID + RIDOC + RIDCT + RIKCO`
+- **Clé primaire** : `RIUKID + RIDOC + RIDCT + RIKCO`
 - **Notable** : Un index secondaire sur `(RIDOC, RIDCT, RIKCO, RIY56BAR)` répond efficacement à « dans quel rapport cette facture a-t-elle été déclarée ? ».
 
 | Champ | Type | Description |
 |---|---|---|
-| `RGUKID` | Entier | Identifiant de rapport (PK · FK → F564240). |
+| `RIUKID` | Entier (BIGINT) | Identifiant de rapport (PK · FK → F564260.RGUKID). |
 | `RIY56BAR` | Texte(10) | Code de flux. |
 | `RIDOC` / `RIDCT` / `RIKCO` | — | Triplet facture (PK · FK → F564231). |
+| `RIUSER` / `RIPID` / `RIJOBN` / `RIUPMJ` / `RITDAY` | — | Colonnes d'audit. |
 
 ---
 
-## Domaine authentification
+## Domaine authentification + notifications
 
-Trois tables pour la gestion intégrée utilisateur / rôle / session — utilisée quand `authEnabled = Y` dans le template *global*.
+Cinq tables pour la gestion intégrée utilisateur / rôle / session / permissions ainsi que la boîte de réception des notifications. Le bloc d'authentification est actif quand `authEnabled = Y` dans le template *global*.
 
 ### F564250 — Utilisateurs
 
 Une ligne par utilisateur. Les mots de passe sont stockés sous forme de hashs **PBKDF2-HMAC-SHA256** — jamais en clair.
 
 - **Clé primaire** : `USUSER`
-- **Notable** : Le format de `USPASSWD` est `iterations:base64(salt):base64(hash)`. `USFORCEPASSWD = 'Y'` force un changement de mot de passe à la prochaine connexion (par défaut sur les nouveaux comptes).
+- **Notable** : Le format de `USLDAPPSWD` est `iterations:base64(salt):base64(hash)` (octets). `USSECF3 = 'Y'` force un changement de mot de passe à la prochaine connexion (par défaut sur les nouveaux comptes).
 
 | Champ | Type | Description |
 |---|---|---|
-| `USUSER` | Texte(50) | Identifiant utilisateur (PK). |
-| `USPASSWD` | Texte(200) | Hash PBKDF2-HMAC-SHA256 — `iterations:salt:hash`. |
-| `USROLE` | Texte(50) | Nom de rôle (FK → F564251.RLNAME). |
-| `USFULLNAME` | Texte(100) | Nom affiché. |
-| `USEMAIL` | Texte(200) | Adresse e-mail. |
-| `USACTIVE` | Texte(1) | `Y` = actif, `N` = désactivé. |
-| `USFORCEPASSWD` | Texte(1) | `Y` = doit changer son mot de passe à la prochaine connexion. |
-| `USCREATED` | Timestamp | Date de création du compte. |
+| `USUSER` | Texte(10) | Identifiant utilisateur (PK). |
+| `USLDAPPSWD` | BLOB | Hash PBKDF2-HMAC-SHA256 — `iterations:salt:hash` (anciennement `USPASSWD`). |
+| `USROLE` | Texte(36) | Nom de rôle (FK → F564251.RLROLE). |
+| `USFULLNAME` | Texte(50) | Nom affiché. |
+| `USEMAIL` | Texte(75) | Adresse e-mail. |
+| `USENABL` | Texte(1) | `Y` = actif, `N` = désactivé (anciennement `USACTIVE`). |
+| `USSECF3` | Texte(30) | `Y` = doit changer son mot de passe à la prochaine connexion (anciennement `USFORCEPASSWD`). |
+| `USUPMJ` | Date (Julian) | Date de création / dernière mise à jour du compte. |
+| `USTDAY` | Heure (HHMMSS) | Heure correspondante. |
 
-### F564251 — Rôles
+### F564251 — Rôles (identité seule)
 
-Une ligne par rôle. Définit la liste blanche de pages, le filtre société, et les options lecture seule / accès paramètres.
+Une ligne par rôle. Depuis la 2026.05.5, la table ne contient plus que **l'identité du rôle** — les droits (pages, sociétés, lecture seule, accès paramètres) sont déportés dans `F564254` ligne par ligne.
 
-- **Clé primaire** : `RLNAME`
-- **Notable** : `RLPAGES` et `RLCOMPANIES` sont des listes séparées par des virgules ; une valeur **vide** signifie *non restreint* (toutes les pages / toutes les sociétés). `RLSETTINGS = 'Y'` autorise l'accès au gestionnaire de configuration *Settings*.
+- **Clé primaire** : `RLROLE`
+- **Notable** : Aucun changement de schéma pour ajouter une nouvelle dimension de permission — il suffit d'insérer des lignes avec un nouveau `PMCRAPPID` dans `F564254`.
 
 | Champ | Type | Description |
 |---|---|---|
-| `RLNAME` | Texte(50) | Identifiant de rôle (PK). |
-| `RLDESC` | Texte(200) | Description lisible. |
-| `RLPAGES` | Texte(2000) | Identifiants de pages autorisés — séparés par des virgules (vide = toutes). |
-| `RLCOMPANIES` | Texte(500) | Codes société autorisés — séparés par des virgules (vide = toutes). |
-| `RLSETTINGS` | Texte(1) | `Y` = le rôle accorde l'accès au gestionnaire de configuration. |
-| `RLREADONLY` | Texte(1) | `Y` = lecture seule, pas d'édition / suppression / redépôt. |
+| `RLROLE` | Texte(36) | Identifiant de rôle (PK). |
+| `RLROLEDESC` | Texte(255) | Description lisible. |
+| `RLUSER` / `RLPID` / `RLJOBN` / `RLUPMJ` / `RLTDAY` | — | Colonnes d'audit. |
 
 ### F564252 — Sessions
 
 Une ligne par session active. Les sessions sont validées à chaque appel API ; les lignes expirées sont purgées par le handler d'authentification.
 
-- **Clé primaire** : `SSTOKEN` (UUID)
-- **Notable** : Le token est envoyé en `Authorization: Bearer <SSTOKEN>` à chaque appel API. Deux index sur `SSUSER` et `SSEXPIRES` maintiennent les recherches et la purge efficaces.
+- **Clé primaire** : `SSLSID` (UUID, anciennement `SSTOKEN`)
+- **Notable** : Le token est envoyé en `Authorization: Bearer <SSLSID>` à chaque appel API. Deux index sur `SSUSER` et `SSETDTIM` maintiennent les recherches et la purge efficaces.
 
 | Champ | Type | Description |
 |---|---|---|
-| `SSTOKEN` | Texte(100) | Token / UUID de session (PK). |
-| `SSUSER` | Texte(50) | Identifiant utilisateur (FK → F564250.USUSER). |
-| `SSCREATED` | Timestamp | Date de création de la session. |
-| `SSEXPIRES` | Timestamp | Date d'expiration de la session. |
+| `SSLSID` | Texte(100) | Token / UUID de session (PK). |
+| `SSUSER` | Texte(10) | Identifiant utilisateur (FK → F564250.USUSER). |
+| `SSSTDTIM` | Timestamp | Date de création de la session (anciennement `SSCREATED`). |
+| `SSETDTIM` | Timestamp | Date d'expiration de la session (anciennement `SSEXPIRES`). |
+
+### F564253 — Notifications
+
+Une ligne par notification délivrée. Alimente la **boîte de réception** du portail et la **cloche** de la barre d'utilitaires (voir [Notifications](../application/notifications.md)).
+
+- **Clé primaire** : `NTUKID` (séquence globalement unique).
+- **Notable** : `(NTDOC, NTDCT, NTKCO)` est la FK vers `F564231` quand la notification se rapporte à une facture (nullable pour les alertes système). `NTUSER` est le nom d'utilisateur destinataire ou `*` pour une diffusion (mode authentification désactivée). `NTEV01` est l'indicateur de lecture (`Y` = lue, `N` = non lue) — pilote la pastille de la cloche.
+
+| Champ | Type | Description |
+|---|---|---|
+| `NTUKID` | Entier (BIGINT) | Identifiant de séquence (PK). |
+| `NTUSER` | Texte(10) | Nom d'utilisateur destinataire (`*` = diffusion). |
+| `NTY56RULE` | Texte(20) | Nom de la règle qui a déclenché l'envoi. |
+| `NTMSGP` | Texte(40) | Sujet court / titre. |
+| `NTK74MSG2` | Texte(1024) | Corps complet du message. |
+| `NTDOC` / `NTDCT` / `NTKCO` | mixte | Triplet facture (FK → F564231 quand renseigné). |
+| `NTK74RSCD` | Texte(10) | Code de statut qui a déclenché. |
+| `NTK74MSG1` | Texte(1024) | Message de statut. |
+| `NTY56RSRC` / `NTY56RSRCL` | Texte(50) / Texte(250) | Code et libellé du motif de rejet PA. |
+| `NTY56ACTN` / `NTY56ACTNL` | Texte(10) / Texte(250) | Code et libellé de l'action attendue. |
+| `NTEV01` | Texte(1) | Indicateur de lecture (`Y` / `N`). |
+| `NTUPMJ` / `NTTDAY` | Date / Heure | Horodatage de création. |
+
+Une purge quotidienne pilotée par `global.notificationsRetentionDays` (défaut 90 jours, `0` = désactivée) supprime les lignes plus anciennes que la rétention.
+
+### F564254 — Droits par rôle (RBAC ligne par ligne)
+
+Nouvelle table introduite en **2026.05.5**. Remplace les colonnes CSV `RLPAGES` / `RLCOMPANIES` / `RLSETTINGS` / `RLREADONLY` de l'ancien `F564251` par des lignes typées. Une ligne par triplet `(rôle, type de permission, valeur)`.
+
+- **Clé primaire** : `(PMROLE, PMCRAPPID, PMCRAPPVAL)`
+- **Notable** : Une absence de ligne pour un couple `(rôle, type)` signifie *non restreint* sur cette dimension. Ajouter une nouvelle dimension de permission est un INSERT — pas un changement DDL. Drop + Init Database réinjecte les droits par défaut sans toucher aux rôles existants.
+
+| Champ | Type | Description |
+|---|---|---|
+| `PMROLE` | Texte(36) | Identifiant de rôle (PK · FK → F564251.RLROLE). |
+| `PMCRAPPID` | Texte(30) | Type de permission — `page` / `company` / `feature`. |
+| `PMCRAPPVAL` | Texte(175) | Valeur dans le type — id de page, code société, ou nom de fonctionnalité (`settings`, `readonly`, …). |
+| `PMENABL` | Texte(1) | `Y` = droit accordé, `N` = refus explicite. |
+| `PMUSER` / `PMPID` / `PMJOBN` / `PMUPMJ` / `PMTDAY` | — | Colonnes d'audit. |
+
+Valeurs de `PMCRAPPID` actuellement utilisées :
+
+| Type | `PMCRAPPVAL` | Effet |
+|---|---|---|
+| `page` | identifiant de page (par ex. `dashboard`, `invoices`) | Page autorisée pour le rôle. |
+| `company` | code société (`KCO`) | Société autorisée pour le rôle. |
+| `feature` | `settings` | Le rôle accède aux menus *Configuration*. |
+| `feature` | `readonly` | Le rôle est limité à la lecture (pas d'édition / suppression / redépôt). |
 
 ---
 
@@ -461,10 +528,12 @@ La DDL embarque un petit ensemble d'index que tout déploiement en production a 
 | `F564231_DATE_IX` | F564231 | `UHK74LDDJ` | Recherches par plage de dates sur la liste des factures. |
 | `F564231_CUST_IX` | F564231 | `UHAN8` | Vues client. |
 | `F564230_UUID_IX` | F564230 | `FEUKIDSZ` | Recherche d'UUID PA après import. |
-| `F564240_PERIOD_IX` | F564240 | `RGKCO`, `RGY56BAR`, `RGEFDJ` | Filtres de la liste E-Reporting. |
-| `F564242_INV_IX` | F564242 | `RIDOC`, `RIDCT`, `RIKCO`, `RIY56BAR` | Recherche « dans quel rapport cette facture a-t-elle été déclarée ? ». |
+| `F564260_PERIOD_IX` | F564260 | `RGKCO`, `RGY56BAR`, `RGEFDJ` | Filtres de la liste E-Reporting. |
+| `F564262_INV_IX` | F564262 | `RIDOC`, `RIDCT`, `RIKCO`, `RIY56BAR` | Recherche « dans quel rapport cette facture a-t-elle été déclarée ? ». |
 | `F564250_ROLE_IX` | F564250 | `USROLE` | Jointure utilisateur → rôle. |
 | `F564252_USER_IX` | F564252 | `SSUSER` | Déconnexion / liste de sessions par utilisateur. |
-| `F564252_EXP_IX` | F564252 | `SSEXPIRES` | Purge des sessions expirées. |
+| `F564252_EXP_IX` | F564252 | `SSETDTIM` | Purge des sessions expirées. |
+| `F564253_USR_IX` | F564253 | `NTUSER`, `NTEV01`, `NTUPMJ DESC` | Pastille de la cloche + tri de la boîte de réception. |
+| `F564254_ROLE_IX` | F564254 | `PMROLE`, `PMCRAPPID` | Résolution rapide des droits par rôle. |
 
 La DDL complète — incluant les variantes adaptées au dialecte pour Oracle et PostgreSQL — est embarquée dans le JAR sous `sql/oracle/ddl.sql` et `sql/postgres/ddl.sql`, et matérialisée sur disque par **Initialize Database**.

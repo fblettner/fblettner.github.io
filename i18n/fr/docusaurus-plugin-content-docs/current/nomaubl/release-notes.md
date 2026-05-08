@@ -10,7 +10,8 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
+  <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
+  <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
   <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
   <a href="#v2026-05-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
   <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
@@ -28,6 +29,61 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.5 — 2026-05-08 \{#v2026-05-5\}
+
+Passe d'architecture pilotée par le refactoring des noms de colonnes : chaque requête SQL du backend passe désormais par `UBLColumnConfig` (plus de littéraux `UHKCO` / `FETXFT` codés en dur) et par `UBLTableConfig` (les tables d'auth et de notifications rejoignent les autres comme tables configurables). Les droits de rôles deviennent des lignes (`F564254`) au lieu de listes CSV, permettant d'ajouter une dimension de permission sans changer le DDL. Groupes de codes de statut, journal d'exécution et BLOB d'e-reporting sont reformatés pour être conformes JDE et indépendants du dialecte. Deux bugs Oracle historiques (espaces de remplissage NCHAR, commentaires SQL avec guillemets) sont corrigés.
+
+### Refactoring configuration colonnes / tables
+
+- Tous les sous-handlers Java (`InvoiceApi`, `EReportingApi`, `IntegrationApi`, `DashboardApi`, `AiAssistant`, `WebApiHandler`, `UBLDatabaseHandler`, `RuntimeLogHandler`, `UBLInvoiceProcessor`, …) résolvent désormais les noms de colonnes exclusivement via `cols.<accesseur>`. Le template `db-nomaubl-columns` les écrase tous de manière cohérente — fini la dérive silencieuse quand un client renomme une colonne.
+- Les tables d'auth (`F564250` users, `F564251` roles, `F564252` sessions, nouvelle `F564254` permissions) et la table de notifications (`F564253`) sont maintenant des entrées à part entière dans `UBLTableConfig` et l'onglet *Settings → db-nomaubl → Tables*, au même niveau que les tables factures / e-reporting. Elles participent à la substitution DDL si renommées.
+- `WebServer.java` ne contient plus de JDBC : `resolveKeysByUblNumber`, `readTemplateName`, le middleware d'auth-validation et la lecture du blob UBL ont migré vers les sous-handlers `api/*` ; `WebServer` ne fait plus que router.
+- Nouvelle page **Références croisées** (Documentation → Références croisées) générée à la compilation. Pour chaque accesseur `tables.<X>` / `cols.<X>`, elle liste tous les sites d'appel Java qui le lisent, avec une case « afficher accesseurs inutilisés » pour repérer le code mort. Régénérée par `XrefScanner` à chaque `bash build.sh`, sans maintenance manuelle.
+
+### Permissions par rôle — droits ligne par ligne (F564254)
+
+- Nouvelle table `F564254` (`PMROLE`, `PMCRAPPID`, `PMCRAPPVAL`, `PMENABL`) qui remplace les quatre colonnes CSV `RLPAGES` / `RLCOMPANIES` / `RLSETTINGS` / `RLREADONLY` de `F564251`. Chaque droit est une ligne typée (`page` / `company` / `feature`) ; ajouter une nouvelle dimension de permission est désormais un INSERT, pas un changement de DDL.
+- Réinitialisation sûre : supprimer `F564254` puis rejouer *Init Database* réinjecte les droits admin/viewer sans toucher aux lignes de rôles existantes. Sur une base déjà peuplée, l'opération ne fait rien. Le log indique combien de droits ont été insérés.
+- Éditeur Rôles (*Settings → users-roles → Roles*) refondu : liste de cartes avec actions copier / supprimer, panneau d'édition avec case à cocher par fonctionnalité + texte d'aide, sociétés en table avec bouton *Add row* (plus de séparateurs virgule), section *Allowed Pages* avec libellés lisibles (clés i18n `nav.*` réutilisées de la barre latérale) + l'identifiant de page en gris monospace à côté. La colonne *Tag* est en lecture seule — référencée par les méthodes factory Java, la renommer casserait silencieusement les appels.
+- `F564252` (sessions) renommée selon les conventions JDE : `SSLSID` (token UUID) / `SSUSER` / `SSSTDTIM` (début) / `SSETDTIM` (fin). `F564251` / `F564254` reçoivent les champs d'audit JDE classiques (`USER` / `PID` / `JOBN` / `UPMJ` / `TDAY`).
+
+### Groupes de codes de statut + nettoyage tableau de bord
+
+- Le template *statuses* gagne un 6ᵉ champ pipe pour les groupes : niveau supérieur (`inflight` / `errorTech` / `errorBusiness` / `terminal`) et étapes du funnel (`created` / `sent` / `pending` / `transmission` / `approved` / `rejected`). Nouvel endpoint `/api/status-codes/groups`.
+- Les compteurs SQL de `DashboardApi` et les cartes du dashboard (`PipelineFunnel`, `EReportingCoverage`, `StaleInvoices`, `RecentActivity`, `invoiceHelpers.statusColors`) lisent depuis cette source unique au lieu d'intégrer leurs propres listes `IN ('9904','9905',…)`. Ajouter un nouveau code de statut PA est une ligne dans `config-template-lists.json`.
+- Le store React `statusGroupsStore` est chargé une fois au démarrage de l'application et déclenche un re-render global ponctuel à l'hydratation du cache ; les couleurs de statut s'affichent correctement dès le premier rendu après connexion (plus besoin de « naviguer ailleurs et revenir »).
+- Éditeur *Statuses* : chaque ligne s'étend désormais en formulaire 4 colonnes avec sélecteur de groupes par puces + dropdown et recherche sur code / tag / libellés / code PA / libellés de groupes. Tag en lecture seule.
+
+### Journal d'exécution (F564237)
+
+- Ajout de la PK `FEUKID` (séquence calculée à l'insert via `COALESCE(MAX(FEUKID),0)+1`, indépendante du dialecte).
+- Renommage des colonnes selon les conventions JDE : `FEMODE` → `FERMK`, `FEMETHOD` → `FERMK2`, `FEMESSAGE` → `FEK74MSG1` (1024). Largeur de `FETMPL` ramenée à 40.
+- Les troncatures à l'insertion correspondent aux nouvelles largeurs. La réponse REST du processing-log inclut maintenant `id`, utilisé comme clé React stable et comme 3ᵉ critère de départage pour que deux événements partageant `UPMJ`+`UPMT` ne s'inversent plus entre deux rechargements de page.
+- Vue groupée par job : le même critère de départage `FEUKID` corrige le bug d'ordre `START` / `END` qui faisait apparaître les deux comme orphelins alors qu'ils étaient appariés. Les erreurs FATAL affichent maintenant un badge compact `FATAL ERROR` / `ERROR` / `FAILED` + le chemin complet dans la colonne message (qui débordait avant).
+
+### XML binaire e-reporting (F564260.RGTXFT)
+
+- Type changé de `TEXT` / `CLOB` vers `BYTEA` / `BLOB`. Le backend écrit le XML en octets UTF-8 via `dialect.writeBlob` / lit via `dialect.readBlob` (utilisait `writeText` / `readText`, incompatibles avec le nouveau type binaire).
+- À noter : les tables e-reporting sont renumérotées — `F564240` / `F564241` / `F564242` deviennent `F564260` / `F564261` / `F564262`. Les colonnes FK des tables filles passent de `RGUKID` à `RHUKID` (cycle de vie) et `RIUKID` (mapping). Voir [Tables de base de données](./references/database-tables.md).
+
+### TRIM piloté par le dialecte (NCHAR Oracle)
+
+- Nouveau helper `DatabaseDialect.trimChar(col)` — enveloppe avec `TRIM(col)` côté Oracle (gère le remplissage par espaces des `NCHAR` JDE qui faisait silencieusement échouer les comparaisons d'égalité), retourne la colonne brute côté PostgreSQL `VARCHAR` (pas de remplissage, pas d'appel de fonction inutile → les index restent utilisables).
+- Correction du compteur de notifications resté vide chez un client : avec un `*` stocké en `NCHAR(10)` (donc `*` + 9 espaces) et un bind JDBC string, la clause WHERE comparait `'*         '` à `'*'` sans jamais correspondre. Même cause racine derrière la sémantique de diffusion du dispatcher — les deux corrigées.
+- Passe sur 9 fichiers / 47 occurrences : `InvoiceApi`, `DashboardApi`, `IntegrationApi`, `EReportingApi`, `EReportingFetcher`, `AiAssistant`, `JDEBipExtractor`, `InvoiceStatusesHandler`, `ApiCommons.categoryFilter`. Tout passe par `dialect.trimChar`.
+
+### DDL runner
+
+- Le découpage des instructions respecte maintenant les guillemets et les commentaires de ligne. Avant, tout `;` à l'intérieur d'un littéral `'…'` (par exemple dans un `COMMENT ON COLUMN IS '…; …'`) coupait l'instruction en deux, produisant des erreurs `Unterminated string literal` à l'initialisation.
+
+### Interface / paramètres
+
+- *Settings → db-nomaubl → Tables* donne accès à *Auth · Users / Roles / Sessions / Permissions* et à la table *Notifications*, au même titre que les tables factures et e-reporting.
+- Le panneau *Validation Errors* du modal détail de facture affiche maintenant chaque ligne sur deux niveaux (niveau + règle + date en haut, message en dessous) pour que les longs textes de règles localisées ne se battent plus avec le code de règle.
+- L'onglet *Initialize* de *db-nomaubl* voit sa zone de log s'étendre à toute la hauteur disponible au lieu de plafonner à 200 px avec du vide au-dessous.
 
 ---
 
