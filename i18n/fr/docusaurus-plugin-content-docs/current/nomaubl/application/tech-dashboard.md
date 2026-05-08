@@ -1,12 +1,12 @@
 ---
 title: Tableau de bord IT
-description: "Page de santé opérationnelle pour les équipes IT : 14 widgets qui couvrent heap JVM, GC, threads et uptime, ping base, informations de build, espace disque et nombre de fichiers, débit de traitement, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, journal d'erreurs en direct, vérification de configuration, tables de base, erreurs récentes et planificateur en arrière-plan. Un seul aller-retour par rafraîchissement, aucune authentification requise pour le bloc système."
-keywords: [NomaUBL, tableau de bord IT, opérations, santé système, JVM, heap, GC, ping base, système de fichiers, débit, courbe d'erreurs, taux de relance, temps de traitement, sessions actives, journal en direct, vérification de configuration, planificateur, F564237]
+description: "Page de santé opérationnelle pour les équipes IT : 14 widgets qui couvrent heap JVM, GC, threads et uptime, ping base, informations de build, espace disque et nombre de fichiers, débit de traitement, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, événements de traitement en direct (paires START / END des jobs en cours, plus erreurs inline), vérification de configuration, tables de base, erreurs récentes et planificateur en arrière-plan. Un seul aller-retour par rafraîchissement, aucune authentification requise pour le bloc système."
+keywords: [NomaUBL, tableau de bord IT, opérations, santé système, JVM, heap, GC, ping base, système de fichiers, débit, courbe d'erreurs, taux de relance, temps de traitement, sessions actives, événements de traitement, suivi planificateur, vérification de configuration, planificateur, F564237]
 ---
 
 # Tableau de bord IT
 
-Le **Tableau de bord IT** est la vue opérationnelle de NomaUBL destinée aux équipes techniques — une page unique qui regroupe 14 widgets couvrant la JVM, la base de données, le système de fichiers, le pipeline de traitement, le planificateur et le flux d'erreurs en direct. Il complète le [tableau de bord métier](./dashboard.md) : le public métier voit les volumes de factures et les délais d'aller-retour PA, l'équipe IT voit la pression heap, les journaux et l'usage disque.
+Le **Tableau de bord IT** est la vue opérationnelle de NomaUBL destinée aux équipes techniques — une page unique qui regroupe 14 widgets couvrant la JVM, la base de données, le système de fichiers, le pipeline de traitement, le planificateur et un flux en direct des traitements en cours. Il complète le [tableau de bord métier](./dashboard.md) : le public métier voit les volumes de factures et les délais d'aller-retour PA, l'équipe IT voit la pression heap, les événements START / END pilotés par le planificateur et l'usage disque.
 
 Chaque rafraîchissement appelle quatre endpoints back-end en parallèle — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — pour que la page se charge en un seul aller-retour et reste légère pour la base.
 
@@ -134,11 +134,16 @@ Le Tableau de bord IT est une nouvelle page. Le widget Planificateur, qui se tro
   <text x="624" y="508" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">e-reporting · 5,1 s</text>
 
   <rect x="240" y="532" width="540" height="80" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="552" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">JOURNAL D'ERREURS EN DIRECT</text>
-  <text x="668" y="552" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">50 dernières · auto</text>
-  <text x="252" y="572" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:34:01 ERROR PA_SEND  doc=12345 dct=RI kco=00070  HTTP 502 — relance</text>
-  <text x="252" y="586" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:34:09 INFO  PA_SEND  doc=12345 dct=RI kco=00070  relance #1 OK</text>
-  <text x="252" y="600" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:35:14 ERROR UBL_CREATION doc=12399 dct=RI kco=00070  XSL en exception</text>
+  <text x="252" y="552" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TRAITEMENTS EN COURS · DIRECT</text>
+  <circle cx="402" cy="549" r="3.5" fill="rgb(50,215,75)"/>
+  <text x="412" y="552" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace">traitement en cours · sondage 5 s</text>
+  <text x="668" y="552" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">START / END · erreurs en rouge</text>
+  <text x="252" y="572" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace" fontWeight="700">START</text>
+  <text x="290" y="572" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:34:08  fetch-all · invoices · planificateur · 84 docs à traiter</text>
+  <text x="252" y="586" fill="rgb(0,122,255)" fontSize="9" fontFamily="ui-monospace, monospace" fontWeight="700">END</text>
+  <text x="290" y="586" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:34:42  fetch-all · invoices · 84 / 84 OK · 34 s</text>
+  <text x="252" y="600" fill="rgb(255,69,58)" fontSize="9" fontFamily="ui-monospace, monospace" fontWeight="700">ERROR</text>
+  <text x="290" y="600" fill="rgb(255,69,58)" fontSize="9" fontFamily="ui-monospace, monospace">12:35:14  retrieve-statuses · 12399 · UBL_CREATION FAILED</text>
 
   <rect x="240" y="624" width="540" height="80" rx="8" fill="url(#tech-g-green)" stroke="rgba(50,215,75,0.40)" strokeWidth="1.2"/>
   <text x="252" y="644" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">VÉRIFICATION DE CONFIGURATION</text>
@@ -207,8 +212,8 @@ Le Tableau de bord IT est une nouvelle page. Le widget Planificateur, qui se tro
   <line x1="200" y1="476" x2="240" y2="480" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
 
   <rect x="20" y="560" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Journal en direct</text>
-  <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">50 dernières lignes, auto</text>
+  <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Traitements en direct</text>
+  <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">START / END · sondage 5 s · pause</text>
   <line x1="200" y1="576" x2="240" y2="566" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
 
   <rect x="820" y="650" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -236,7 +241,7 @@ La grille à 12 colonnes est organisée en sept rangées :
 | 2 | `4 + 4 + 4` | **Planificateur** · **Courbe d'erreurs · 14j** · **Taux de relance · 14j** |
 | 3 | `4 + 4 + 4` | **JVM · threads + GC** · **Débit · 14j** · **Sessions / Clients actifs** |
 | 4 | `8 + 4` | **Système de fichiers** · **Temps de traitement par modèle · 14j** |
-| 5 | `12` | **Journal d'erreurs en direct** |
+| 5 | `12` | **Traitements en cours · direct** |
 | 6 | `12` | **Vérification de configuration** |
 | 7 | `5 + 7` | **Tables de base** · **Erreurs récentes** |
 
@@ -319,9 +324,22 @@ Les valeurs de chemin contenant des jokers d'exécution (`%TEMPLATE%`, `%FILE_NA
 
 Temps moyen de traitement de bout en bout par modèle, en secondes, sur les 14 derniers jours. La carte charge les événements `START` / `END` de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` — la précédente version utilisait une auto-jointure SQL avec un `FETMPL` ambigu et une arithmétique `e.FEUPMT - s.FEUPMT` incorrecte ; ce point est corrigé.
 
-### Journal d'erreurs en direct (rangée 5, span 12)
+### Traitements en cours · direct (rangée 5, span 12)
 
-Tail défilant des 50 derniers événements `ERROR` / `FATAL` de `F564237`. Rafraîchissement automatique sur un intervalle court ; les lignes sont colorées par niveau (rouge FATAL / ERROR, orange WARN). Chaque ligne affiche l'horodatage, le niveau, le code de cycle de vie (par exemple `PA_SEND`, `UBL_CREATION`), le triplet documentaire et le message.
+Flux en direct des jobs qui démarrent et se terminent — la plupart sont lancés par le planificateur en arrière-plan. Le widget interroge `F564237` toutes les **5 secondes** avec un curseur incrémental `since=` ; chaque ligne porte un **badge de méthode** coloré :
+
+| Badge | Signification |
+|---|---|
+| **START** *(vert)* | Un job vient de démarrer — `fetch-all`, `retrieve-statuses`, un traitement entrant, etc. |
+| **END** *(bleu)* | Le `END` correspondant à un `START` précédent, avec la durée écoulée quand elle est disponible. |
+| **ERROR** *(rouge)* | Une erreur émise pendant le job — les mots-clés `ERROR`, `FATAL`, `FAILED` reclassent toute ligne en rouge, même quand sa méthode était `START` ou `END`. |
+| **INFO** *(atténué)* | Toute autre ligne écrite par le journal d'exécution pendant le job. |
+
+Chaque ligne affiche le badge, le **modèle** + le **mode** + le **fichier source** quand ils sont présents, le message et l'horodatage. Une **pastille verte pulsante** apparaît à côté du titre quand un événement a été observé dans les 30 dernières secondes (un traitement est en cours) ; elle bascule en gris quand le flux est inactif depuis plus longtemps.
+
+Le flux est **dédupliqué sur `FEUKID`** — la même ligne ne peut donc pas apparaître deux fois entre deux sondages, même en cas de décalage d'horloge. Un bouton **Pause / Reprendre** à droite du titre fige le sondage : utile pour lire une ligne longue sans la voir défiler.
+
+La liste défilante est plafonnée aux 100 derniers événements ; les lignes plus anciennes sortent par le bas à mesure que de nouvelles arrivent. Pour une analyse approfondie, utiliser la page [Journal de traitement](../management/processing-log.md), qui conserve l'historique complet avec les vues groupées par job.
 
 ### Vérification de configuration (rangée 6, span 12)
 
@@ -355,7 +373,7 @@ Le bouton Rafraîchir (ou le montage de la page) appelle quatre endpoints en par
 |---|---|
 | `GET /api/system` | Santé système, JVM · threads + GC, Système de fichiers |
 | `GET /api/dashboard/tech` | Débit, Courbe d'erreurs, Taux de relance, Temps par modèle, Sessions actives, Tables de base, Erreurs récentes |
-| `GET /api/dashboard/log-tail` | Journal d'erreurs en direct |
+| `GET /api/dashboard/log-tail` | Traitements en cours · direct (incrémental, sondage 5 s avec `since=`) |
 | `GET /api/dashboard/config-check` | Vérification de configuration |
 
 La carte Planificateur consomme l'endpoint existant `GET /api/scheduler/status`, ce qui permet de partager les données déjà chargées par le tableau de bord métier lors d'une navigation dans la même session. Chaque appel échoue indépendamment — une base mal configurée renvoie *Non configurée* sur la carte de données sans casser Santé système ou le journal en direct.
@@ -365,7 +383,7 @@ La carte Planificateur consomme l'endpoint existant `GET /api/scheduler/status`,
 ## Conseils & bonnes pratiques
 
 - **Surveiller Heap, ping base et espace disque.** Trois signaux d'alerte précoce — la dérive du heap avant un OOM, la latence base avant un blocage, le volume archive avant la saturation disque.
-- **Le journal en direct vaut mieux que `tail -f`.** Coloré, filtré sur les erreurs, et résistant à une déconnexion SSH. À garder ouvert pendant une mise en production — la plupart des régressions y apparaissent en quelques secondes.
+- **Le flux Traitements en cours vaut mieux que `tail -f`.** Il montre les jobs du planificateur qui démarrent et se terminent en direct, les erreurs ressortent en rouge, et le flux résiste à une déconnexion SSH. À garder ouvert pendant une mise en production ou un import en lot — la plupart des régressions y apparaissent en quelques secondes, et la pastille verte pulsante indique si quelque chose tourne réellement à cet instant.
 - **La vérification de configuration doit toujours être verte.** Un nombre d'anomalies non nul après un déploiement est le chemin le plus rapide vers « qu'est-ce qui a changé ? ». À lancer sur chaque environnement après chaque édition de configuration.
 - **Erreurs récentes plutôt que Tables de base.** En triage d'incident, le flux des erreurs récentes est plus dense au pixel ; la carte des tables sert au suivi de tendance sur plusieurs jours.
 - **Une liste *Clients actifs* vide ne signifie pas que personne n'utilise l'application.** Avec l'auth activée, les sessions de plus d'une heure tombent de la liste — la base les conserve dans le cycle de vie. La carte montre *qui est là maintenant*, pas *qui était là ce matin*.

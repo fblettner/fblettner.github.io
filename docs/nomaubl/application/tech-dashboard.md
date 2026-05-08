@@ -1,12 +1,12 @@
 ---
 title: Tech Dashboard
-description: "Operational health page for the IT team: 14 widgets covering JVM heap, GC, threads and uptime, database ping, build info, filesystem free space and file counts, processing throughput, error trend, retry rate, template processing time, active sessions, live error tail, configuration check, database tables, recent errors, and the background scheduler. One round-trip per refresh, no auth required to render the system block."
-keywords: [NomaUBL, tech dashboard, IT, operations, system health, JVM, heap, GC, database ping, filesystem, throughput, error trend, retry rate, template processing time, active sessions, live tail, configuration check, scheduler, F564237]
+description: "Operational health page for the IT team: 14 widgets covering JVM heap, GC, threads and uptime, database ping, build info, filesystem free space and file counts, processing throughput, error trend, retry rate, template processing time, active sessions, live process events (START / END pairs from running jobs, plus inline errors), configuration check, database tables, recent errors, and the background scheduler. One round-trip per refresh, no auth required to render the system block."
+keywords: [NomaUBL, tech dashboard, IT, operations, system health, JVM, heap, GC, database ping, filesystem, throughput, error trend, retry rate, template processing time, active sessions, live process events, scheduler events, configuration check, scheduler, F564237]
 ---
 
 # Tech Dashboard
 
-The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 14 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and the live error stream. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, log tails and disk usage.
+The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 14 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and a live feed of running jobs. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, scheduler-driven START / END events and disk usage.
 
 Every refresh hits four backend endpoints in parallel — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — so the page lands in one round-trip and stays light on the database.
 
@@ -134,11 +134,16 @@ The Tech Dashboard is brand new. The Scheduler widget that used to sit on the bu
   <text x="624" y="508" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">e-reporting · 5.1s</text>
 
   <rect x="240" y="532" width="540" height="80" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="552" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIVE ERROR TAIL</text>
-  <text x="668" y="552" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">last 50 lines · auto-refresh</text>
-  <text x="252" y="572" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:34:01 ERROR PA_SEND  doc=12345 dct=RI kco=00070  HTTP 502 — retrying</text>
-  <text x="252" y="586" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:34:09 INFO  PA_SEND  doc=12345 dct=RI kco=00070  retry #1 succeeded</text>
-  <text x="252" y="600" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:35:14 ERROR UBL_CREATION doc=12399 dct=RI kco=00070  XSL transform threw</text>
+  <text x="252" y="552" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIVE PROCESS EVENTS</text>
+  <circle cx="358" cy="549" r="3.5" fill="rgb(50,215,75)"/>
+  <text x="368" y="552" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace">process running · 5s poll</text>
+  <text x="668" y="552" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">START / END · errors in red</text>
+  <text x="252" y="572" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace" fontWeight="700">START</text>
+  <text x="290" y="572" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:34:08  fetch-all · invoices · scheduler · 84 docs to process</text>
+  <text x="252" y="586" fill="rgb(0,122,255)" fontSize="9" fontFamily="ui-monospace, monospace" fontWeight="700">END</text>
+  <text x="290" y="586" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:34:42  fetch-all · invoices · 84 / 84 OK · 34 s</text>
+  <text x="252" y="600" fill="rgb(255,69,58)" fontSize="9" fontFamily="ui-monospace, monospace" fontWeight="700">ERROR</text>
+  <text x="290" y="600" fill="rgb(255,69,58)" fontSize="9" fontFamily="ui-monospace, monospace">12:35:14  retrieve-statuses · 12399 · UBL_CREATION FAILED</text>
 
   <rect x="240" y="624" width="540" height="80" rx="8" fill="url(#tech-g-green)" stroke="rgba(50,215,75,0.40)" strokeWidth="1.2"/>
   <text x="252" y="644" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONFIGURATION CHECK</text>
@@ -207,8 +212,8 @@ The Tech Dashboard is brand new. The Scheduler widget that used to sit on the bu
   <line x1="200" y1="476" x2="240" y2="480" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
 
   <rect x="20" y="560" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Live error tail</text>
-  <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">last 50 lines, auto-refresh</text>
+  <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Live process events</text>
+  <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">START / END · 5 s poll · pause</text>
   <line x1="200" y1="576" x2="240" y2="566" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
 
   <rect x="820" y="650" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -236,7 +241,7 @@ The 12-column grid is laid out as seven rows:
 | 2 | `4 + 4 + 4` | **Scheduler** · **Error trend · 14d** · **Retry rate · 14d** |
 | 3 | `4 + 4 + 4` | **JVM · threads + GC** · **Throughput · 14d** · **Active sessions / clients** |
 | 4 | `8 + 4` | **Filesystem** · **Template processing time · 14d** |
-| 5 | `12` | **Live error tail** |
+| 5 | `12` | **Live process events** |
 | 6 | `12` | **Configuration check** |
 | 7 | `5 + 7` | **Database tables** · **Recent errors** |
 
@@ -319,9 +324,22 @@ Path values that contain runtime placeholders (`%TEMPLATE%`, `%FILE_NAME%`) are 
 
 Average end-to-end processing time per template, in seconds, over the last 14 days. The card pulls flat `START` / `END` events from `F564237` and pairs them in Java keyed on `(FEWDS1|FEUPMJ)` — the prior implementation used a self-join SQL with ambiguous `FETMPL` and incorrect `e.FEUPMT - s.FEUPMT` math, which is now fixed.
 
-### Live error tail (row 5, span 12)
+### Live process events (row 5, span 12)
 
-A scrolling tail of the last 50 `ERROR` / `FATAL` events from `F564237`. Auto-refreshes on a short interval; lines are colour-coded by level (red FATAL / ERROR, orange WARN). Each line shows the timestamp, the level, the lifecycle code (e.g. `PA_SEND`, `UBL_CREATION`), the document triplet, and the message.
+A live feed of jobs starting and finishing in real time — most of them launched by the background scheduler. Polls `F564237` every **5 seconds** with an incremental `since=` cursor; each row carries a coloured **method badge**:
+
+| Badge | Meaning |
+|---|---|
+| **START** *(green)* | A job has just started — `fetch-all`, `retrieve-statuses`, an inbound process, etc. |
+| **END** *(blue)* | The matching `END` event for a previously-started job, with the elapsed time when available. |
+| **ERROR** *(red)* | An inline error emitted while the job ran — `ERROR`, `FATAL`, `FAILED` keywords promote any row to this kind, even when its method was `START` or `END`. |
+| **INFO** *(muted)* | Anything else the runtime logger wrote during the job. |
+
+Each row shows the badge, the **template** + **mode** + **source file** when present, the message, and the timestamp. A **pulsing green dot** appears next to the title when an event has been observed in the last 30 seconds (a job is running right now); it switches to grey when the feed has been idle longer.
+
+The feed is **deduplicated on `FEUKID`** so the same row never appears twice across polls, even when the clock jitters. A **Pause / Resume** button on the right of the title freezes polling — useful when reading a long line without it scrolling away.
+
+The scrollable list is capped at the latest 100 events; older rows fall off the bottom as new ones come in. For deeper investigation use the [Processing Log](../management/processing-log.md) page, which keeps the full history with grouped-job views.
 
 ### Configuration check (row 6, span 12)
 
@@ -355,7 +373,7 @@ The Refresh button (or page mount) calls four endpoints in parallel:
 |---|---|
 | `GET /api/system` | System Health, JVM extras, Filesystem |
 | `GET /api/dashboard/tech` | Throughput, Error trend, Retry rate, Template stats, Active sessions, Database tables, Recent errors |
-| `GET /api/dashboard/log-tail` | Live error tail |
+| `GET /api/dashboard/log-tail` | Live process events (incremental, polled every 5 s with `since=`) |
 | `GET /api/dashboard/config-check` | Configuration check |
 
 The Scheduler card consumes the existing `GET /api/scheduler/status` so it shares the data already loaded by the business Dashboard during a same-session navigation. Each call fails independently — a misconfigured database returns *Not configured* on the data card without breaking System Health or the live tail.
@@ -365,7 +383,7 @@ The Scheduler card consumes the existing `GET /api/scheduler/status` so it share
 ## Tips & best practices
 
 - **Watch Heap, Database ping and Filesystem free space.** The three early-warning signals — heap drift before an OOM, database latency before a stall, archive volume before disk fills.
-- **Live error tail beats `tail -f`.** It is colour-coded, filtered to errors, and survives an SSH disconnect. Keep it open during a release window — most regressions surface here within seconds.
+- **Live process events beats `tail -f`.** It shows scheduler jobs starting and ending in real time, errors stand out in red, and the feed survives an SSH disconnect. Keep it open during a release window or a batch import — most regressions surface here within seconds, and the green pulsing dot tells you whether anything is actually running right now.
 - **Configuration check should always read green.** A non-zero issue count after a deploy is the fastest path to "what changed". Run it on every environment after every config edit.
 - **Recent errors over Database tables.** When triaging an incident the recent-errors feed is denser per pixel; the table stats card is for trend-watching across days.
 - **Empty Active clients does not mean nobody is using the app.** With auth enabled, sessions older than an hour drop off the list — the database lifecycle still records them. The card shows *who is on right now*, not *who was on this morning*.
