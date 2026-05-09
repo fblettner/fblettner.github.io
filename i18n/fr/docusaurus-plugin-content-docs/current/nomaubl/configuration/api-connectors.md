@@ -8,7 +8,7 @@ keywords: [NomaUBL, connecteurs API, REST, OAuth2, OAUTH2, Bearer, API key, Basi
 
 L'éditeur **API Connectors** sert à déclarer les intégrations REST API. Un connecteur regroupe la **configuration nécessaire pour dialoguer avec un système distant** — URL racine, authentification et liste d'endpoints — et se référence ensuite par son nom dans le reste de NomaUBL.
 
-Les connecteurs sont consommés par l'onglet **E-Invoicing → Actions** pour lier une action vendeur réglementaire à un appel API distant, ou par toute fonctionnalité NomaUBL appelant un endpoint HTTP. Cibles typiques :
+Les connecteurs sont consommés par la page [Liaisons d'actions](../management/actions.md) pour câbler une action vendeur réglementaire à un appel API distant, par les [Règles de notification](../management/notification-rules.md), et par toute fonctionnalité NomaUBL qui appelle un endpoint HTTP. Cibles typiques :
 
 - L'API REST d'une **Plateforme Agréée** (PA).
 - Une API d'action de l'**ERP source** — par exemple **JD Edwards AIS** pour enregistrer un paiement, une **BAPI SAP**, un **RESTlet NetSuite**, un webhook d'ERP personnalisé.

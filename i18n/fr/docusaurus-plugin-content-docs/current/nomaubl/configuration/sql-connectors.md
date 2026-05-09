@@ -6,7 +6,7 @@ keywords: [NomaUBL, connecteurs SQL, requêtes SQL, requêtes nommées, JDBC, Or
 
 # Connecteurs SQL
 
-L'éditeur **Connecteurs SQL** est l'endroit où sont déclarées des requêtes SQL nommées. Un connecteur SQL est une définition réutilisable *« qui parle à une base »* — une connexion JDBC plus une liste de requêtes nommées — que le reste de NomaUBL référence par son nom. Il calque la structure des [Connecteurs API](./api-connectors.md) : le même sélecteur pilote les [Liaisons d'actions](../management/notification-rules.md#onglet-actions) et les [Règles de notification](../management/notification-rules.md), avec un suffixe `· SQL` dans le menu déroulant pour que le type soit visible.
+L'éditeur **Connecteurs SQL** est l'endroit où sont déclarées des requêtes SQL nommées. Un connecteur SQL est une définition réutilisable *« qui parle à une base »* — une connexion JDBC plus une liste de requêtes nommées — que le reste de NomaUBL référence par son nom. Il calque la structure des [Connecteurs API](./api-connectors.md) : le même sélecteur pilote les [Liaisons d'actions](../management/actions.md) et les [Règles de notification](../management/notification-rules.md), avec un suffixe `· SQL` dans le menu déroulant pour que le type soit visible.
 
 Cibles typiques :
 
@@ -239,7 +239,7 @@ L'onglet Test appelle la base réelle — *Enregistrer* le connecteur d'abord ap
 
 Les connecteurs SQL se branchent aux mêmes points d'appel que les connecteurs API :
 
-- **[Liaisons d'actions](../management/notification-rules.md#onglet-actions)** — les boutons réglementaires du modal de détail facture peuvent appeler n'importe quelle requête SQL, seule ou en chaîne, via la liste d'appels multiples livrée en 2026.05.7.
+- **[Liaisons d'actions](../management/actions.md)** — les boutons réglementaires du modal de détail facture peuvent appeler n'importe quelle requête SQL, seule ou en chaîne, via la liste d'appels multiples livrée en 2026.05.7.
 - **[Règles de notification](../management/notification-rules.md#onglet-actions)** — la même liste d'appels, déclenchée automatiquement quand la règle correspond à un changement de statut.
 
 Dans les deux cas, la liste déroulante des connecteurs liste les connecteurs API et les connecteurs SQL fusionnés avec les suffixes `· API` / `· SQL` ; la liste déroulante des cibles charge les endpoints ou les requêtes selon le type du connecteur choisi.

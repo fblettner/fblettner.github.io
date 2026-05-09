@@ -6,7 +6,7 @@ keywords: [NomaUBL, SQL connectors, SQL queries, named queries, JDBC, Oracle, Po
 
 # SQL Connectors
 
-The **SQL Connectors** editor is where named SQL queries are declared. A SQL connector is a reusable *"talks to one database"* definition — a JDBC connection plus a list of named queries — that the rest of NomaUBL references by name. It mirrors the structure of [API Connectors](./api-connectors.md): the same picker drives [Action Bindings](../management/notification-rules.md#actions-tab) and [Notification Rules](../management/notification-rules.md), with a `· SQL` suffix in the dropdown so the kind is visible.
+The **SQL Connectors** editor is where named SQL queries are declared. A SQL connector is a reusable *"talks to one database"* definition — a JDBC connection plus a list of named queries — that the rest of NomaUBL references by name. It mirrors the structure of [API Connectors](./api-connectors.md): the same picker drives [Action Bindings](../management/actions.md) and [Notification Rules](../management/notification-rules.md), with a `· SQL` suffix in the dropdown so the kind is visible.
 
 Typical targets are:
 
@@ -239,7 +239,7 @@ The Test tab calls the live database — *Save* the connector first if you have 
 
 SQL connectors plug into the same call sites as API connectors:
 
-- **[Action Bindings](../management/notification-rules.md#actions-tab)** — the regulatory buttons in the invoice detail modal can call any SQL query, alone or in a chain, via the multi-call list shipped in 2026.05.7.
+- **[Action Bindings](../management/actions.md)** — the regulatory buttons in the invoice detail modal can call any SQL query, alone or in a chain, via the multi-call list shipped in 2026.05.7.
 - **[Notification Rules](../management/notification-rules.md#actions-tab)** — same multi-call list, fires automatically whenever the rule matches a status change.
 
 In both cases, the connector dropdown lists API connectors and SQL connectors merged with `· API` / `· SQL` suffixes; the target dropdown loads endpoints or queries depending on the picked connector kind.
