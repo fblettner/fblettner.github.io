@@ -143,10 +143,26 @@ Une ligne de notification comporte cinq éléments : le **badge de statut** à g
 | **Sujet (ligne du haut)** | `NTSUBJ` (champ `emailSubject` de la règle ou message par défaut) | Titre court, lisible. La valeur par défaut est `Invoice {doc} {dct} {kco} — {statusLabel}`. |
 | **Message (deuxième ligne)** | `NTMSGE` (champ `emailBody` de la règle ou message par défaut) | Corps du texte. Tronqué s'il dépasse ; la modale ouverte au clic affiche l'historique complet. |
 | **Ligne méta** | `NTDOC · NTDCT · NTKCO · motif · action · règle` | Identifiants canoniques de la facture, plus le motif de rejet PA, l'action attendue et le nom de la règle s'ils sont présents. Motif et action sont lus dans les catalogues *rejection-reason-codes* et *action-codes* — c'est le libellé lisible qui s'affiche, pas le code brut. |
+| **Pastilles d'audit d'actions** *(2026.05.7)* | pied d'audit `NTK74MSG2` | Une pastille colorée par appel de connecteur déclenché par la règle. Voir [Pastilles d'audit d'actions](#pastilles-daudit-dactions) ci-dessous. |
 | **Horodatage relatif** | `NTUPMJ` + `NTTDAY` | *à l'instant*, *il y a 2 min*, *14:32* (aujourd'hui), *Hier*, puis l'horodatage absolu `dd/mm/yyyy hh:mm` pour les entrées plus anciennes. |
 | **Bouton de suppression** | par ligne | Retire la ligne de la boîte de réception sans marquer les autres lues. |
 
 Cliquer sur le corps de la ligne ouvre la **modale de détail de facture** pour le triplet `(doc, dct, kco)` lié — les mêmes sept onglets que sur la page [E-Invoicing](./invoices.md) (Résumé, Parties, Lignes, TVA, Notes, Historique, PDF). La ligne est marquée lue au passage.
+
+---
+
+## Pastilles d'audit d'actions
+
+Depuis 2026.05.7, chaque notification émise par une [Règle de notification](../management/notification-rules.md) qui définit un ou plusieurs appels d'action porte une **trace d'audit** permanente, enregistrée dans la colonne `NTK74MSG2`. La boîte de réception affiche cette trace sous forme d'une rangée de pastilles colorées sous le message, une pastille par appel :
+
+| Pastille | Couleur | Signification |
+|---|---|---|
+| **`OK`** | vert | L'appel s'est exécuté sans erreur. Pour un appel api : statut HTTP &lt; 400. Pour un appel sql : l'instruction est passée sans exception. |
+| **`FAIL`** | rouge | L'appel a renvoyé une erreur. Le texte de la pastille porte la cause — statut HTTP + corps pour un appel api, exception JDBC pour un appel sql. |
+| **`STOP`** | orange | L'appel est un marqueur `STOP · N appel(s) restant(s) ignoré(s)`. Posé par un précédent `FAIL` sur un appel dont le drapeau *Arrêt sur échec* était activé. |
+| **`SKIP`** | gris | Un appel sauté parce qu'un appel antérieur de la chaîne a déclenché un `STOP`. |
+
+L'audit étant rangé dans `NTK74MSG2` et non dans le corps, il survit à la troncature line-clamp du corps et reste lisible d'un coup d'œil — une ligne dont le message se termine par `OK · OK · FAIL` se trie plus vite qu'une ligne où l'audit était noyé dans le texte. Le pied d'audit est plafonné à la largeur de colonne moins une marge de sécurité ; les longs messages d'erreur sont tronqués, mais les champs *statut* et *compteur* tiennent toujours.
 
 ---
 
@@ -155,7 +171,7 @@ Cliquer sur le corps de la ligne ouvre la **modale de détail de facture** pour 
 Une cloche figure dans la barre d'utilitaires de chaque page. Trois rôles :
 
 1. **Sondage toutes les 30 s** du compteur des non-lues (`GET /api/notifications/unread-count`). Une pastille rouge affiche le compteur dès qu'il est strictement positif.
-2. **Affichage des 6 dernières entrées** au clic — même structure qu'une ligne de la boîte de réception, mais condensée : sujet, message, référence facture, horodatage relatif. Les lignes non lues portent la même pastille bleue que dans la boîte.
+2. **Affichage des 6 dernières entrées** au clic — même structure qu'une ligne de la boîte de réception, mais condensée : sujet, message, référence facture, horodatage relatif. Les lignes non lues portent la même pastille bleue que dans la boîte. Quand la règle a déclenché un ou plusieurs appels d'action, l'aperçu de la cloche retire le pied d'audit `NTK74MSG2` et affiche à la place une ligne récapitulative compacte : *2 action(s) exécutée(s)* (gris) quand chaque appel a renvoyé `OK`, *1 action(s) en échec sur 2* (rouge) dès qu'au moins une pastille est `FAIL`. Un coup d'œil à la cloche suffit ainsi à savoir s'il faut ouvrir la boîte de réception.
 3. **Clic sur une entrée** : la marque comme lue puis ouvre directement la modale de la facture. La cloche gère deux cas. Si l'utilisateur est déjà sur la boîte, elle émet un événement `nomaubl:open-notification` sur `window` pour que la modale s'ouvre sans démontage. Sinon, elle stocke la charge utile dans `sessionStorage` sous la clé `notif-auto-open` puis navigue vers `/notifications`, qui traite l'entrée au montage initial.
 
 Un lien *Voir toutes* en bas du menu ouvre `/notifications` pour la boîte complète.
@@ -174,6 +190,7 @@ Chaque notification envoyée correspond à une ligne dans **`F564253`** (Oracle 
 | `NTUSER` | chaîne | Nom d'utilisateur résolu, ou `*` lorsque l'authentification est désactivée (diffusion). |
 | `NTEV01` | chaîne | `0` pour non lue, `1` pour lue. La pastille de la cloche compte les lignes où `NTEV01 = 0`. |
 | `NTSUBJ` / `NTMSGE` | chaîne | Sujet et corps. |
+| `NTK74MSG2` | chaîne | Pied d'audit des actions écrit par le dispatcher (`OK / FAIL / STOP / SKIP` par appel) — alimente les pastilles. Nouveau en 2026.05.7. |
 | `NTDOC / NTDCT / NTKCO` | mixte | Triplet de la facture ; nullable pour les alertes système qui ne ciblent pas une facture précise. |
 | `NTUPMJ` / `NTTDAY` | jul / hms | Date et heure d'émission. L'index composite `(NTUSER, NTEV01, NTUPMJ DESC)` rend rapides la requête de la pastille et le tri de la boîte. |
 

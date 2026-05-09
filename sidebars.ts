@@ -300,6 +300,7 @@ const sidebars: SidebarsConfig = {
         },
         'nomaubl/configuration/reference-lists',
         'nomaubl/configuration/api-connectors',
+        'nomaubl/configuration/sql-connectors',
         {
           type: 'category',
           label: 'Database Connectors',

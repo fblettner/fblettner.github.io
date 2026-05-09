@@ -19,6 +19,16 @@ The **read** side of the system — the inbox where users acknowledge notificati
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. Triggers reference the standard *statuses* and *rejection-reason-codes* catalogues, not source-system-specific codes.
 
+:::info[Refreshed in 2026.05.7]
+Three changes shipped in 2026.05.7:
+
+- **Six-tab editor** — the long single form is split into **General · Trigger · Channels · Email · Actions · Test**. Each tab fits a screen and the action list has room to grow.
+- **Multi-call action list** — the *Actions* tab now holds a list of connector calls instead of a single call. Each call carries a free-form *Description*, an optional *Stop on failure* flag, and the API or SQL connector + target dropdown. Calls fire in declaration order, with response chaining via `{call.N.fieldName}` placeholders.
+- **SQL connector support** — the connector dropdown lists API and [SQL Connectors](../configuration/sql-connectors.md) merged with `· API` / `· SQL` suffixes. The target dropdown loads endpoints or queries depending on the picked connector kind.
+
+Three dispatcher bugs were also fixed at the same time: the action channel no longer needs the legacy *action* checkbox to fire, an empty recipient list no longer suppresses action-only rules, and a hung SMTP `transport.close()` can no longer block the chain. See the [2026.05.7 release notes](../release-notes.md#v2026-05-7) for the full list.
+:::
+
 ---
 
 ## Opening the editor
@@ -192,70 +202,102 @@ A search box at the top of the sidebar filters the list by substring on the rule
 
 ## The rule editor
 
-The editor is structured as four section groups plus a synchronous test panel.
+In 2026.05.7 the editor was reorganised into **six tabs** — each tab fits a screen and the action list has room to grow. The tab resets to *General* when you switch rules.
 
-### Trigger
+### General tab
+
+| Field | Description |
+|---|---|
+| **Description** | Free-form sentence shown under the rule name in the rule list. The first place to read what the rule does. |
+| **Enabled** | Single checkbox. When off, the rule stays in the catalogue but is skipped at dispatch time. The same value drives the `on` / `off` pill on the rule list. |
+
+### Trigger tab
 
 The trigger decides **when** the rule fires. Two fields combine, both optional:
 
 | Field | Source | Behaviour |
 |---|---|---|
-| **Status** | *statuses* catalogue | Comma-separated list of status codes (e.g. `9904,9907`). The rule fires when the status code of the new transition is in this list. Empty = match every status. |
-| **Reason** | *rejection-reason-codes* catalogue | Comma-separated list of rejection-reason codes (e.g. `REJ_ADR,REJ_FMT`). The rule fires only when the reason code of the new transition is in this list. Empty = match every reason. |
+| **Status codes** | *statuses* catalogue | Chip multi-select. The rule fires when the status code of the new transition is in this list. Empty = match every status. |
+| **Reason codes** | *rejection-reason-codes* catalogue | Chip multi-select. The rule fires only when the reason code of the new transition is in this list. Empty = match every reason. |
 
 Both fields are surfaced as **chip multi-selects** — picking from a dropdown adds a chip; the × on a chip removes it. The dropdown is populated from the same `statuses` and `rejection-reason-codes` resources used by the *Set Status* modal and the invoice *History* tab, so a rule cannot reference a code that the application does not recognise.
 
 When both fields are filled, both must match (logical AND) for the rule to fire.
 
-### Channels
+### Channels tab
 
-Three boxes, any combination:
+Two delivery channels, plus the recipient settings:
 
 - **`portal`** — writes a row in `F564253` for the recipient. The user sees it in the [Notifications](../application/notifications.md) inbox and the bell.
 - **`email`** — sends an SMTP message via the configured `e-invoicing` mail account.
-- **`action`** — fires an outbound HTTP call against an *API Connector* endpoint.
 
-A rule that emits zero channels is useless and rejected at save time.
+The legacy *action* checkbox is gone since 2026.05.7 — action calls fire automatically when the rule has at least one entry in the *Actions* tab. To suppress action calls, disable the rule on the General tab.
 
-### Recipient
-
-The recipient model has two independent halves: a **portal target** and an **email list**.
+The recipient model has two independent halves: a **portal target** (user / role) and an **email list**.
 
 | Field | Description |
 |---|---|
-| **Type** | Picks the portal target — `user` (a single F564250 username), `role` (every user that carries this role on their `URROLE` value), or empty. When auth is disabled, the empty option reads *Broadcast — all portal users* and writes a single `F564253` row under the `*` sentinel. |
-| **Value** | The username or role name selected by *Type*. Free text — auto-completion comes from the connected database when available. |
-| **CC** | Independent list of e-mail addresses, separated by `,` or `;`. Each address goes on the `To:` header of the dispatched email. The portal target's `USEMAIL`, when present on its `F564250` row, is added automatically. |
+| **Portal target** | Picks the portal target — `User (by username)`, `Role`, or empty. When auth is disabled, the empty option reads *Broadcast — all portal users* and writes a single `F564253` row under the `*` sentinel. |
+| **Username / Role name** | The username or role name selected by *Portal target*. Free text — auto-completion comes from the connected database when available. |
+| **Email list** | Independent list of e-mail addresses, separated by `,` or `;`. Each address gets its own email (no shared `To:` header). Independent of the portal target above. |
 
-When the portal target carries a `USEMAIL`, the *email* channel sends to both that address and every entry in **CC** in a **single SMTP transaction**. When the F564250 lookup fails, the portal channel still emits (the row is keyed by the literal username), so the inbox stays populated even during a transient database outage.
+When auth is enabled, a portal target with an email on its `F564250` row also receives the email channel automatically.
 
-### Email content
+### Email tab
+
+The email tab shows its content unconditionally — no checkbox gates it any more. Whether the rule actually sends an email depends on the *Channels* tab's `email` checkbox.
 
 | Field | Default | Description |
 |---|---|---|
 | **Subject** | `Invoice {doc} {dct} {kco} — {statusLabel}` | Subject line. Placeholders are resolved at dispatch time. |
-| **Body** | `Status: {statusLabel}` `\n` `Reason: {reasonLabel}` `\n` `Action: {actionLabel}` | Plain-text body. Multi-line input. |
+| **Body** | `Status: {statusLabel}\nReason: {reasonLabel}\nAction: {actionLabel}\n{message}` | Plain-text body. Multi-line input. |
 | **Attach PDF** | `Y` | Render the invoice PDF (via the resolved `pdf-template`) and attach it to the e-mail. The PDF is rendered once per dispatch and reused across every recipient; a render failure is logged but never fails the e-mail. |
 
-Available placeholders in subject / body: `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}`.
+Available placeholders in subject / body: `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}` plus `{call.N.fieldName}` for outputs of earlier action calls in this rule (see *Actions tab* below).
 
 The portal `NTSUBJ` uses the same subject; the portal `NTMSGE` defaults to just `{statusLabel}` because the inbox UI already shows the doc reference inline — duplicating it in the body would be noise.
 
-### Action call
+### Actions tab
 
-When the **`action`** channel is enabled, three additional rows appear:
+The Actions tab holds a **list** of connector calls instead of a single call. Each call is rendered as a collapsible card. The card header shows the call index (`#1`, `#2`, …) and either the *Description* field or `connector · target` when no description is set; clicking it expands the editor.
 
 | Field | Description |
 |---|---|
-| **Connector** | Dropdown listing every `api-connector` template. Same set as on [Process API](../processing/process-api.md). |
-| **Endpoint** | Dropdown populated by `api.connectors.listEndpoints(connector)` once a connector is picked. |
-| **Parameters** | Pre-populated from the endpoint's defined parameter list. Each row carries a key (locked) and a value (editable). Values may contain the same `{placeholders}` as the e-mail subject / body. |
+| **Description** | Free-form short label for the call (e.g. *Update CRM customer status*). Rendered as the collapsed-card header so a binding with several calls reads as a punch-list at a glance. Persisted only as UI metadata. |
+| **Connector** | Dropdown listing every `api-connector` and `sql-connector`, merged with `· API` / `· SQL` suffixes so the kind is visible. |
+| **Target** | Dropdown loaded from `api.connectors.listEndpoints(connector)` for an API connector, or `api.sqlConnectors.listQueries(connector)` for a SQL connector. Disabled until a connector is picked. |
+| **Parameters** | One row per parameter declared by the target, plus an *Add parameter* button for ad-hoc keys. Values may contain `{placeholders}` — see below. |
+| **On failure** | Single checkbox. When ticked, a failure on this call halts the chain and skips every remaining call (`STOP · N remaining call(s) skipped` in the audit trail). Default off — the chain continues by default, mirroring the email channel's continue-on-error semantics. |
 
-The action call is fired in the same dispatch transaction as the portal write and the e-mail send. Failures are logged and do not abort the underlying status update or the other channels.
+**+ Add Call** at the bottom of the list appends a new call. New calls auto-expand; loading a rule collapses everything.
 
-### Test panel
+#### Placeholders
 
-A synchronous *Test* runner sits at the bottom of the form. It accepts a `(doc, dct, kco)` triplet, optionally a status code and a custom message, and **actually fires the rule** through every enabled channel — the portal write lands in the inbox, the e-mail goes out via SMTP, the action call is made. The resulting banner reports the dispatch counts (`✓ Dispatched · 1 portal · 2 email`) or the first error.
+Parameter values support the same `{placeholders}` as the email subject / body — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{message}` — plus the new `{call.N.fieldName}` form that references the output of an earlier call in the same rule.
+
+#### Response chaining
+
+Every call's outputs are folded back into the dispatch context under `call.N.*` keys, where `N` is the 1-based index of the call within the rule. Subsequent calls reference them as `{call.N.fieldName}` in their parameter values.
+
+| Field | Source — API connector call | Source — SQL connector call |
+|---|---|---|
+| `call.N.success` | `true` when HTTP status &lt; 400. | `true` when the statement ran without error. |
+| `call.N.statusCode` | HTTP status code returned by the endpoint. | — |
+| `call.N.statementType` | — | `SELECT` / `INSERT` / `UPDATE` / `DELETE` / `MERGE`. |
+| `call.N.rowCount` | — | For `SELECT` — number of rows returned. |
+| `call.N.updateCount` | — | For non-`SELECT` — number of rows affected. |
+| `call.N.error` | Error message when `success` is `false`. | Same. |
+| `call.N.<name>` | Every `endpoint.N.response.<name>` mapping the connector defines. | Every column of the **first row** of the result, by name. |
+
+Example: a rule that first reads the customer's email via a SQL query, then sends a follow-up HTTP webhook, would set the webhook payload's `to` parameter to `{call.1.EMAIL}` (the `EMAIL` column of the first row of call #1).
+
+#### Action calls fire before email
+
+Action calls now run **before** the email channel, so a hung SMTP `transport.close()` can never block them. The portal write still goes first; emails follow once the action chain has run.
+
+### Test tab
+
+A synchronous *Test* runner. It accepts a `(doc, dct, kco)` triplet, optionally a status code and a custom message, and **actually fires the rule** through every enabled channel — the portal write lands in the inbox, the action chain executes, the e-mail goes out via SMTP. The resulting banner reports the dispatch counts (`✓ Dispatched · 1 portal · 2 email · 3 action(s) ran`) or the first error.
 
 The test panel does not save the rule — only fires whatever is currently in the form. Use it to validate edits before clicking *Save*.
 
@@ -274,14 +316,22 @@ NotificationDispatcher.fire(doc, dct, kco, status, reason, action, message)
    ↓     AND  match trigger.reason (CSV) ∋ reason   (or trigger.reason = '')
    ↓ → resolve recipient (portal target + email list)
    ↓ → render the invoice PDF once if attachPdf = Y
-   ↓ — for each enabled channel:
-   ↓     • portal → INSERT into F564253
-   ↓     • email  → SMTP one message with everyone on To:
-   ↓     • action → HTTP call to connector.endpoint with resolved params
+   ↓ → run the action chain (before email, so a hung SMTP can't block it)
+   ↓     for each call N in declaration order:
+   ↓        api-action  → HTTP call to connector.endpoint with resolved params
+   ↓        sql-action  → JDBC call to connector.query with bound :params
+   ↓        outputs folded into context under call.N.*
+   ↓        if call failed AND stopOnFailure → STOP · skip remaining
+   ↓        else continue (continue-on-error default)
+   ↓     append per-call audit footer to NTK74MSG2
+   ↓ → portal → INSERT into F564253 (with audit footer)
+   ↓ → email  → SMTP one message per recipient (transport.close bounded 5s)
    ↓ all exceptions caught — failures never abort the status update
 ```
 
 The dispatcher uses a singleton with a 2-thread asynchronous worker pool, so the calling code returns immediately. A JVM shutdown hook drains the pool with a 2-second grace before the process dies, so CLI flows that exit right after a status update still deliver their notifications.
+
+Every dispatch emits structured `INFO` lines on stdout: `dispatch rule=X status=Y channels=… actions=N`, then `dispatching N action call(s)`, then `call #N → connector/endpoint`, then `api-action … HTTP 200` / `sql-action … ok (N row(s))`. `WARN` lines mark stop-on-failure hits and slow SMTP closes; `ERROR` lines carry the failure reason. The same audit lines feed the colour-coded chips on the [Notifications](../application/notifications.md) inbox.
 
 ---
 

@@ -145,10 +145,26 @@ A notification row carries five visual cues: the **status badge** at the left (c
 | **Subject (top line)** | `NTSUBJ` (rule's `emailSubject`, or the dispatcher default) | Short, human-readable headline. The default is `Invoice {doc} {dct} {kco} — {statusLabel}`. |
 | **Message (second line)** | `NTMSGE` (rule's `emailBody`, or the dispatcher default) | The fuller body text. Truncated on overflow; the modal that opens on click carries the full lifecycle. |
 | **Meta line** | `NTDOC · NTDCT · NTKCO · reason · action · rule` | Canonical invoice identifiers, plus the PA rejection reason / expected action / rule name when present. The reason and action are resolved against the *rejection-reason-codes* and *action-codes* catalogues, so the user reads the human label, not the bare code. |
+| **Action audit chips** *(2026.05.7)* | `NTK74MSG2` audit footer | One coloured chip per connector call the dispatcher fired for the rule. See [Action audit chips](#action-audit-chips) below. |
 | **Relative time** | `NTUPMJ` + `NTTDAY` | *just now*, *2 min ago*, *14:32* (today), *Yesterday*, then the absolute `dd/mm/yyyy hh:mm` for older entries. |
 | **Dismiss button** | per-row | Removes the row from the inbox without marking the rest as read. |
 
 Clicking anywhere in the row body opens the **invoice detail modal** for the linked `(doc, dct, kco)` triplet — same seven tabs as the [E-Invoicing](./invoices.md) page (Summary, Parties, Lines, VAT, Notes, History, PDF). The row is marked read on the way through.
+
+---
+
+## Action audit chips
+
+Since 2026.05.7, every notification dispatched by a [Notification Rule](../management/notification-rules.md) that defines one or more action calls carries a permanent **audit trail** stored in the `NTK74MSG2` column. The inbox renders the trail as a row of colour-coded chips below the message, one chip per call:
+
+| Chip | Colour | Meaning |
+|---|---|---|
+| **`OK`** | green | The call ran without error. For an api-action: HTTP &lt; 400. For a sql-action: the statement returned without an exception. |
+| **`FAIL`** | red | The call returned an error. The message text on the chip carries the failure reason — HTTP status + body for an api-action, JDBC exception for a sql-action. |
+| **`STOP`** | orange | The call was a `STOP · N remaining call(s) skipped` marker. Set by a previous `FAIL` on a call whose *On failure* flag was `Stop the chain on failure`. |
+| **`SKIP`** | muted | A call that was skipped because an earlier call in the chain hit a `STOP`. |
+
+Because the audit lives in `NTK74MSG2` rather than the body, it survives the body's line-clamp truncation and remains readable at a glance — a row whose message ends with `OK · OK · FAIL` is easier to triage than one where the audit was buried in the body text. The audit footer is capped at the column width minus a safety margin; long error messages are truncated, but the *Status* and *count* fields always fit.
 
 ---
 
@@ -157,7 +173,7 @@ Clicking anywhere in the row body opens the **invoice detail modal** for the lin
 A complementary entry sits in the top utility bar of every page. Three things it does:
 
 1. **Polls every 30 s** the unread count (`GET /api/notifications/unread-count`). A red badge shows the count when greater than zero.
-2. **Drops down the last 6 entries** on click — same shape as an inbox row, but condensed: subject, message, doc reference, relative time. Unread rows carry the same blue dot used in the inbox.
+2. **Drops down the last 6 entries** on click — same shape as an inbox row, but condensed: subject, message, doc reference, relative time. Unread rows carry the same blue dot used in the inbox. When the rule fired one or more action calls, the bell preview strips the `NTK74MSG2` audit footer and shows a compact summary line in its place: *2 action(s) ran* (muted) when every call returned `OK`, *1 of 2 action(s) failed* (red) when at least one chip is `FAIL`. A glance at the bell is enough to know whether to drill into the inbox.
 3. **Clicking a preview** marks the entry read and opens the invoice modal directly. The bell uses a small dance to handle both cases: when the user is already on the inbox, it dispatches a `nomaubl:open-notification` window event so the modal opens without a remount; otherwise it stores the payload in `sessionStorage` under `notif-auto-open` and navigates to `/notifications`, which drains the entry on cold mount.
 
 A *View all* footer at the bottom of the dropdown links to `/notifications` for the full inbox.
@@ -176,6 +192,7 @@ Every delivered notification is one row in **`F564253`** (Oracle + Postgres). Th
 | `NTUSER` | string | Resolved username, or `*` when running with auth disabled (broadcast). |
 | `NTEV01` | string | `0` for unread, `1` for read. The bell badge counts rows where `NTEV01 = 0`. |
 | `NTSUBJ` / `NTMSGE` | string | Subject / message body. |
+| `NTK74MSG2` | string | Action audit footer written by the dispatcher (`OK / FAIL / STOP / SKIP` per call) — drives the chips section. New in 2026.05.7. |
 | `NTDOC / NTDCT / NTKCO` | mixed | The invoice triplet; nullable for system-level alerts that don't link to a specific invoice. |
 | `NTUPMJ` / `NTTDAY` | jul / hms | Issue date and time. The composite index on `(NTUSER, NTEV01, NTUPMJ DESC)` keeps the bell badge query and the inbox sort fast. |
 

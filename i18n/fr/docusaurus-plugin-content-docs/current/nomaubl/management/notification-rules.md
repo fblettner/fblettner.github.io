@@ -19,6 +19,16 @@ Le côté **lecture** du système — la boîte de réception où les utilisateu
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les déclencheurs référencent les catalogues standards *statuses* et *rejection-reason-codes*, et non des codes propres au système source.
 
+:::info[Refonte en 2026.05.7]
+Trois évolutions livrées en 2026.05.7 :
+
+- **Éditeur en six onglets** — le formulaire long et unique passe en **Général · Déclencheur · Canaux · Email · Actions · Test**. Chaque onglet tient sur un écran et la liste d'actions a la place de grandir.
+- **Liste d'actions multi-appels** — l'onglet *Actions* porte désormais une liste d'appels de connecteur au lieu d'un seul. Chaque appel a un champ libre *Description*, un drapeau facultatif *Arrêt sur échec*, et la liste déroulante connecteur API ou SQL + cible. Les appels partent dans l'ordre de déclaration, avec chaînage des réponses via les placeholders `{call.N.fieldName}`.
+- **Connecteurs SQL pris en charge** — la liste déroulante des connecteurs liste les connecteurs API et les [Connecteurs SQL](../configuration/sql-connectors.md) fusionnés avec les suffixes `· API` / `· SQL`. La liste des cibles charge les endpoints ou les requêtes selon le type du connecteur choisi.
+
+Trois bugs du dispatcher sont également corrigés : le canal d'action n'a plus besoin de l'ancienne case « action » pour partir, une liste de destinataires vide ne supprime plus les règles purement actionnelles, et un `transport.close()` SMTP bloqué ne peut plus stopper la chaîne. Voir les [notes de version 2026.05.7](../release-notes.md#v2026-05-7) pour la liste complète.
+:::
+
 ---
 
 ## Accès à l'éditeur
@@ -192,72 +202,104 @@ Une zone de recherche en haut de la barre latérale filtre la liste par sous-cha
 
 ## L'éditeur de règle
 
-L'éditeur comporte quatre groupes de sections plus un panneau de test synchrone.
+En 2026.05.7, l'éditeur passe à **six onglets** — chaque onglet tient sur un écran et la liste d'actions a la place de grandir. L'onglet revient à *Général* au changement de règle.
 
-### Déclencheur
+### Onglet Général
+
+| Champ | Description |
+|---|---|
+| **Description** | Phrase libre affichée sous le nom de la règle dans la liste. Premier endroit où lire ce que fait la règle. |
+| **Activée** | Case unique. Décochée, la règle reste dans le catalogue mais est ignorée à l'envoi. La même valeur pilote la pastille `on` / `off` de la liste. |
+
+### Onglet Déclencheur
 
 Le déclencheur définit **quand** la règle se déclenche. Deux champs se combinent, tous les deux optionnels :
 
 | Champ | Source | Comportement |
 |---|---|---|
-| **Statut** | Catalogue *statuses* | Liste de codes statut séparés par virgule (par ex. `9904,9907`). La règle se déclenche quand le code statut de la nouvelle transition figure dans la liste. Vide = correspondance sur tout statut. |
-| **Motif** | Catalogue *rejection-reason-codes* | Liste de codes motif de rejet séparés par virgule (par ex. `REJ_ADR,REJ_FMT`). La règle se déclenche uniquement quand le code motif de la nouvelle transition figure dans la liste. Vide = correspondance sur tout motif. |
+| **Codes de statut** | Catalogue *statuses* | Multi-sélection à puces. La règle se déclenche quand le code statut de la nouvelle transition figure dans la liste. Vide = correspondance sur tout statut. |
+| **Codes de motif** | Catalogue *rejection-reason-codes* | Multi-sélection à puces. La règle se déclenche uniquement quand le code motif de la nouvelle transition figure dans la liste. Vide = correspondance sur tout motif. |
 
-Les deux champs sont présentés sous forme de **multi-sélections à puces** — choisir une entrée dans la liste déroulante ajoute une puce ; le × d'une puce la retire. La liste déroulante lit les ressources `statuses` et `rejection-reason-codes`, les mêmes que celles utilisées par la modale *Modifier le statut* et l'onglet *Historique* de la facture. Une règle ne peut donc référencer que des codes effectivement reconnus par l'application.
+Les deux champs sont des **multi-sélections à puces** — choisir une entrée dans la liste déroulante ajoute une puce ; le × d'une puce la retire. La liste déroulante lit les ressources `statuses` et `rejection-reason-codes`, les mêmes que celles utilisées par la modale *Modifier le statut* et l'onglet *Historique* de la facture. Une règle ne peut donc référencer que des codes effectivement reconnus par l'application.
 
 Quand les deux champs sont renseignés, les deux conditions doivent correspondre (ET logique) pour que la règle se déclenche.
 
-### Canaux
+### Onglet Canaux
 
-Trois cases à cocher, combinables librement :
+Deux canaux de livraison, plus le bloc destinataire :
 
 - **`portal`** — écrit une ligne dans `F564253` pour le destinataire. L'utilisateur la voit dans la boîte [Notifications](../application/notifications.md) et dans la cloche.
 - **`email`** — envoie un message SMTP via le compte mail configuré sur le template `e-invoicing`.
-- **`action`** — déclenche un appel HTTP sortant vers un endpoint d'*API Connector*.
 
-Une règle qui ne coche aucun canal est sans effet et rejetée à l'enregistrement.
+L'ancienne case *action* a disparu en 2026.05.7 — les appels d'action partent automatiquement quand la règle a au moins une entrée dans l'onglet *Actions*. Pour bloquer les appels d'action, désactiver la règle depuis l'onglet Général.
 
-### Destinataire
-
-Le modèle de destinataire comporte deux parties indépendantes : une **cible portail** et une **liste d'e-mails**.
+Le modèle de destinataire comporte deux parties indépendantes : une **cible portail** (utilisateur / rôle) et une **liste d'e-mails**.
 
 | Champ | Description |
 |---|---|
-| **Type** | Choisit la cible portail — `user` (un nom d'utilisateur F564250 unique), `role` (tout utilisateur dont `URROLE` correspond à ce rôle), ou vide. Quand l'authentification est désactivée, l'option vide affiche *Diffusion — tous les utilisateurs* et écrit une seule ligne `F564253` sous la sentinelle `*`. |
-| **Valeur** | Nom d'utilisateur ou nom de rôle sélectionné par *Type*. Texte libre — l'auto-complétion vient de la base connectée quand elle est disponible. |
-| **CC** | Liste indépendante d'adresses e-mail, séparées par `,` ou `;`. Chaque adresse alimente l'en-tête `To:` de l'e-mail émis. L'`USEMAIL` éventuel de la cible portail (présent sur sa ligne `F564250`) est ajouté automatiquement. |
+| **Cible portail** | Choisit la cible portail — `Utilisateur (par identifiant)`, `Rôle`, ou vide. Quand l'authentification est désactivée, l'option vide affiche *Diffusion — tous les utilisateurs* et écrit une seule ligne `F564253` sous la sentinelle `*`. |
+| **Identifiant / Nom de rôle** | Identifiant ou nom de rôle sélectionné par *Cible portail*. Texte libre — l'auto-complétion vient de la base connectée quand elle est disponible. |
+| **Liste d'e-mails** | Liste indépendante d'adresses e-mail, séparées par `,` ou `;`. Chaque adresse reçoit son propre e-mail (pas d'en-tête `To:` partagé). Indépendante de la cible portail ci-dessus. |
 
-Quand la cible portail a un `USEMAIL`, le canal *email* envoie à cette adresse et à chaque entrée de **CC**, dans une **transaction SMTP unique**. Si la lecture de F564250 échoue, le canal portail est tout de même émis — la ligne est alors stockée avec le nom d'utilisateur littéral comme clé, et la boîte de réception reste alimentée même pendant un incident transitoire de la base.
+Quand l'authentification est activée, une cible portail dont la ligne `F564250` porte un e-mail reçoit aussi le canal e-mail automatiquement.
 
-### Contenu e-mail
+### Onglet Email
+
+L'onglet Email affiche son contenu sans condition — aucune case ne le verrouille plus. L'envoi effectif d'un e-mail dépend de la case `email` de l'onglet *Canaux*.
 
 | Champ | Valeur par défaut | Description |
 |---|---|---|
 | **Sujet** | `Invoice {doc} {dct} {kco} — {statusLabel}` | Ligne de sujet. Les placeholders sont résolus au moment de l'envoi. |
-| **Corps** | `Status: {statusLabel}` `\n` `Reason: {reasonLabel}` `\n` `Action: {actionLabel}` | Corps en texte brut. Saisie multi-lignes. |
+| **Corps** | `Status: {statusLabel}\nReason: {reasonLabel}\nAction: {actionLabel}\n{message}` | Corps en texte brut. Saisie multi-lignes. |
 | **Attach PDF** | `Y` | Génère le PDF de la facture (via le `pdf-template` résolu) et l'attache à l'e-mail. Le PDF est généré une seule fois par envoi et réutilisé pour chaque destinataire ; un échec de génération est tracé mais ne fait pas échouer l'e-mail. |
 
-Placeholders disponibles dans le sujet et le corps : `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}`.
+Placeholders disponibles dans le sujet et le corps : `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}`, plus `{call.N.fieldName}` pour les sorties d'appels d'action antérieurs dans la même règle (voir *Onglet Actions* ci-dessous).
 
 Le `NTSUBJ` côté portail reprend le même sujet ; le `NTMSGE` côté portail prend par défaut juste `{statusLabel}` — la boîte de réception affiche déjà la référence du document en ligne, donc la dupliquer dans le corps serait redondant.
 
-### Appel d'action
+### Onglet Actions
 
-Quand le canal **`action`** est activé, trois lignes supplémentaires apparaissent :
+L'onglet Actions porte une **liste** d'appels de connecteur au lieu d'un seul. Chaque appel est rendu sous forme de carte repliable. L'en-tête de la carte affiche l'index de l'appel (`#1`, `#2`, …) et soit le champ *Description*, soit `connecteur · cible` quand aucune description n'est saisie ; cliquer dessus déplie l'éditeur.
 
 | Champ | Description |
 |---|---|
-| **Connecteur** | Liste déroulante des templates de type `api-connector`. Même jeu que sur [Process API](../processing/process-api.md). |
-| **Endpoint** | Liste déroulante alimentée par `api.connectors.listEndpoints(connecteur)` une fois un connecteur choisi. |
-| **Paramètres** | Pré-remplis à partir de la liste de paramètres définie sur l'endpoint. Chaque ligne contient une clé (verrouillée) et une valeur (éditable). Les valeurs acceptent les mêmes `{placeholders}` que le sujet et le corps de l'e-mail. |
+| **Description** | Libellé court libre pour l'appel (par exemple *Mettre à jour le statut client CRM*). Affiché en en-tête de carte repliée — une liaison à plusieurs appels se lit comme une liste à cocher d'un coup d'œil. Stocké uniquement comme métadonnée d'interface. |
+| **Connecteur** | Liste déroulante de tous les `api-connector` et `sql-connector`, fusionnés avec les suffixes `· API` / `· SQL` pour que le type soit visible. |
+| **Cible** | Liste déroulante alimentée par `api.connectors.listEndpoints(connecteur)` pour un connecteur API ou par `api.sqlConnectors.listQueries(connecteur)` pour un connecteur SQL. Désactivée tant qu'aucun connecteur n'est choisi. |
+| **Paramètres** | Une ligne par paramètre déclaré sur la cible, plus un bouton *Ajouter un paramètre* pour les clés ad hoc. Les valeurs acceptent les `{placeholders}` — voir ci-dessous. |
+| **Arrêt sur échec** | Case unique. Cochée, un échec sur cet appel interrompt la chaîne et saute tous les appels restants (`STOP · N appel(s) restant(s) ignoré(s)` dans le journal d'audit). Décochée par défaut — la chaîne continue par défaut, à l'image de la sémantique « continue-on-error » du canal e-mail. |
 
-L'appel d'action est émis dans la même transaction que l'écriture portail et l'envoi e-mail. Ses échecs sont tracés et n'annulent ni la mise à jour de statut sous-jacente ni les autres canaux.
+**+ Add Call** au pied de la liste ajoute un appel. Les nouveaux appels s'ouvrent automatiquement ; le chargement d'une règle replie tout.
 
-### Panneau de test
+#### Placeholders
 
-Un panneau *Test* synchrone se trouve au pied du formulaire. Il accepte un triplet `(doc, dct, kco)`, optionnellement un code statut et un message personnalisé, puis **exécute réellement la règle** sur tous les canaux activés — l'écriture portail arrive dans la boîte, l'e-mail part par SMTP, l'appel d'action est émis. La bannière de résultat indique les compteurs d'envoi (`✓ Émis · 1 portail · 2 e-mails`) ou la première erreur rencontrée.
+Les valeurs de paramètres acceptent les mêmes `{placeholders}` que le sujet et le corps de l'e-mail — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{message}` — plus la nouvelle forme `{call.N.fieldName}` qui référence la sortie d'un appel antérieur dans la même règle.
 
-Le panneau de test n'enregistre pas la règle — il déclenche uniquement ce qui figure actuellement dans le formulaire. Utile pour valider les modifications avant un clic sur *Enregistrer*.
+#### Chaînage des réponses
+
+Les sorties de chaque appel sont versées dans le contexte de dispatch sous des clés `call.N.*`, où `N` est l'index 1-basé de l'appel dans la règle. Les appels suivants y accèdent via `{call.N.fieldName}` dans leurs valeurs de paramètres.
+
+| Champ | Source — appel API | Source — appel SQL |
+|---|---|---|
+| `call.N.success` | `true` quand le statut HTTP est inférieur à 400. | `true` quand l'instruction s'est exécutée sans erreur. |
+| `call.N.statusCode` | Code de statut HTTP renvoyé par l'endpoint. | — |
+| `call.N.statementType` | — | `SELECT` / `INSERT` / `UPDATE` / `DELETE` / `MERGE`. |
+| `call.N.rowCount` | — | Pour `SELECT` — nombre de lignes renvoyées. |
+| `call.N.updateCount` | — | Pour les non-`SELECT` — nombre de lignes affectées. |
+| `call.N.error` | Message d'erreur quand `success` vaut `false`. | Idem. |
+| `call.N.<nom>` | Tout mapping `endpoint.N.response.<nom>` que le connecteur définit. | Chaque colonne de la **première ligne** du résultat, par son nom. |
+
+Exemple : une règle qui commence par lire l'e-mail du client via une requête SQL puis envoie un webhook HTTP de suivi peut définir le paramètre `to` du webhook à `{call.1.EMAIL}` (la colonne `EMAIL` de la première ligne de l'appel #1).
+
+#### Les appels d'action partent avant l'e-mail
+
+Les appels d'action sont désormais exécutés **avant** le canal e-mail — un `transport.close()` SMTP bloqué ne peut donc plus les empêcher. L'écriture portail est toujours la première ; les e-mails partent une fois la chaîne d'actions terminée.
+
+### Onglet Test
+
+Un runner *Test* synchrone. Il accepte un triplet `(doc, dct, kco)`, optionnellement un code statut et un message personnalisé, puis **exécute réellement la règle** sur tous les canaux activés — l'écriture portail arrive dans la boîte, la chaîne d'actions s'exécute, l'e-mail part par SMTP. La bannière de résultat indique les compteurs d'envoi (`✓ Émis · 1 portail · 2 e-mails · 3 action(s) exécutée(s)`) ou la première erreur.
+
+Le panneau de test n'enregistre pas la règle — il exécute uniquement ce qui figure actuellement dans le formulaire. Utile pour valider les modifications avant un clic sur *Enregistrer*.
 
 ---
 
@@ -274,14 +316,22 @@ NotificationDispatcher.fire(doc, dct, kco, status, reason, action, message)
    ↓     ET  correspondance trigger.reason (CSV) ∋ reason   (ou trigger.reason = '')
    ↓ → résolution du destinataire (cible portail + liste e-mails)
    ↓ → rendu du PDF de la facture une seule fois si attachPdf = Y
-   ↓ — pour chaque canal activé :
-   ↓     • portal → INSERT dans F564253
-   ↓     • email  → un message SMTP avec toutes les adresses sur To:
-   ↓     • action → appel HTTP vers connecteur.endpoint avec paramètres résolus
+   ↓ → exécution de la chaîne d'actions (avant l'e-mail, pour qu'un SMTP bloqué ne la stoppe pas)
+   ↓     pour chaque appel N dans l'ordre de déclaration :
+   ↓        api-action  → appel HTTP vers connecteur.endpoint avec paramètres résolus
+   ↓        sql-action  → appel JDBC vers connecteur.requête avec :params liés
+   ↓        sorties versées dans le contexte sous call.N.*
+   ↓        si l'appel a échoué ET stopOnFailure → STOP · saute le reste
+   ↓        sinon continue (continue-on-error par défaut)
+   ↓     ajout du pied d'audit par appel à NTK74MSG2
+   ↓ → portal → INSERT dans F564253 (avec pied d'audit)
+   ↓ → email  → un message SMTP par destinataire (transport.close borné à 5 s)
    ↓ toutes les exceptions sont capturées — un échec n'annule jamais la mise à jour
 ```
 
 Le dispatcher utilise un singleton avec un pool asynchrone de 2 threads ; le code appelant retourne immédiatement. Un hook d'arrêt JVM vide le pool avec un délai de 2 secondes avant l'arrêt du processus, pour que les flux CLI qui se terminent juste après une mise à jour de statut envoient quand même leurs notifications.
+
+Chaque dispatch émet des lignes `INFO` structurées sur stdout : `dispatch rule=X status=Y channels=… actions=N`, puis `dispatching N action call(s)`, puis `call #N → connecteur/endpoint`, puis `api-action … HTTP 200` / `sql-action … ok (N row(s))`. Les lignes `WARN` marquent les arrêts sur échec et les fermetures SMTP lentes ; les lignes `ERROR` portent le motif d'échec. Les mêmes lignes d'audit alimentent les pastilles colorées dans la boîte [Notifications](../application/notifications.md).
 
 ---
 

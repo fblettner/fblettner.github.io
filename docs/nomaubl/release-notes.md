@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
   <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
   <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
@@ -30,6 +31,66 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.7 — 2026-05-09 \{#v2026-05-7\}
+
+Big release on the connector + notification side. New **SQL connector** template type lets you define named SQL queries the way the api-connector defines HTTP endpoints, with a parameter editor and a test panel. Both connector kinds can now be wired into **action bindings** and **notification rules**, which themselves grew a multi-call list with stop-on-failure and response chaining (`{call.N.fieldName}` placeholders). The notification-rule editor was reorganised into six tabs, action calls collapse behind a description header, and the inbox renders the action audit as colour-coded chips. Several long-standing dispatcher and editor bugs are also fixed.
+
+### SQL connectors *(new)*
+
+- New `sql-connector` template type — connection settings (Oracle / PostgreSQL / URL / DBUser / DBPassword / schema / timeout / maxRows) plus a list of named queries. Each query carries a name, label, free-form description, parameter spec (`name|label|default;…`), the SQL itself with `:param` placeholders, and a `Writable` flag. See [SQL Connectors](./configuration/sql-connectors.md).
+- Parameter binding goes through `PreparedStatement` — `:name` tokens are rewritten to positional `?` and bound positionally, so values are never string-substituted into SQL. The parser respects single-quote string literals, double-quoted identifiers, line + block comments, and the PostgreSQL `::type` cast operator.
+- Statement-type allow-list: `SELECT` / `INSERT` / `UPDATE` / `DELETE` / `MERGE`. `DROP` / `TRUNCATE` / `ALTER` / `GRANT` etc. are rejected before the connection opens. Non-`SELECT` statements additionally require `Writable=Yes` on the specific query — typos in a notification rule cannot accidentally fire `DELETE FROM …`.
+- New backend route `/api/sql-connectors` (list + execute), parallel to `/api/connectors`. New `SqlConnectorEditor` in *Settings* with three tabs: **Connection** / **Queries** (collapsible per-query cards) / **Test** (runs the query against the live DB, shows columns + rows or affected count).
+- **+ Add SQL** button on the Settings header next to **+ Add API**; SQL connectors get their own sidebar group with an `sql` badge.
+
+### Multi-call action bindings + notification rules
+
+- Action bindings (the regulatory buttons in the invoice modal) and notification rules now hold a **list of connector calls** instead of a single call. Calls fire in declaration order; the default is *continue on error*, mirroring the email channel's semantics.
+- Per-call **Stop on failure** flag halts the chain on the first failure, reported in the audit trail as `STOP · N remaining call(s) skipped`.
+- Per-call **Description** field shown as the collapsed-card header so a binding with several calls reads as a punch-list at a glance. New calls auto-expand; loading a rule collapses everything.
+- **Response chaining**: each call's outputs are folded back into the context under `call.N.*` keys, and subsequent calls reference them with `{call.N.fieldName}` in their payload.
+  - api-connector calls expose every `endpoint.N.response.*` mapping the connector defines, plus `success` / `statusCode` / `error`.
+  - sql-connector calls expose the first row's columns by name, plus `success` / `rowCount` / `updateCount` / `statementType` / `error`.
+- Backward-compat shim: existing single-action rules and bindings keep working — the legacy flat keys are read into a one-entry call list on load and rewritten into the canonical `action.N.call.M.*` shape on the next save.
+- The frontend `executeConnectorAction` helper routes by the connector's template type (api/sql) and returns a uniform envelope, so the invoice-modal action runner does not care about kind.
+
+### Notification rule editor refactor
+
+- The single long form is replaced by **six tabs**: General · Trigger · Channels · Email · Actions · Test. The tab resets to *General* when you switch rules.
+- Recipient settings sit under *Channels* with the deliver-via checkboxes. *Email* and *Actions* tabs show their content unconditionally; the action-channel checkbox is retired (action calls fire automatically when the rule has at least one — disable the rule itself to suppress them).
+- Connector dropdown lists api-connectors and sql-connectors merged with `· API` / `· SQL` suffixes; the target dropdown loads endpoints or queries depending on the picked connector kind.
+
+### Notification audit trail in the inbox
+
+- The dispatcher now appends a per-call audit footer to the rendered body (stored in `NTK74MSG2`) so the portal record carries a permanent trail of *what fired with this alert*. Capped at the column width minus a safety margin.
+- The inbox renders the audit as colour-coded chips below the message — `OK` green, `FAIL` red, `STOP` orange, `SKIP` muted — instead of leaking the audit lines inside the line-clamped body.
+- The bell preview strips the audit footer and surfaces a one-line summary in its place: *2 action(s) ran* (muted) or *1 of 2 action(s) failed* (red), so a glance at the bell is enough to know whether to drill into the inbox.
+
+### Notification dispatcher fixes
+
+- **Actions never fired from notifications.** Three causes, all gone:
+  - The dispatch loop required the legacy *action* channel checkbox; the gate is removed — a non-empty action list is now sufficient.
+  - The dispatcher early-returned when `recipients.isEmpty()`, suppressing action-only rules and rules whose recipient lookup failed; the early return is gone (portal/email loops naturally no-op on an empty list).
+  - Most importantly, `EmailDispatcher.send()` could hang on `transport.close()` against picky SMTP servers (Gmail's `QUIT`). The worker thread stayed blocked forever, silently suppressing every subsequent step. Fixed by (a) running actions **before** email so a hung SMTP teardown can never block them, and (b) bounding `transport.close()` on a daemon thread with a 5-second budget — the message has already been delivered by `sendMessage`, so abandoning the close is safe.
+- Diagnostics: per-dispatch and per-call structured `INFO` lines on stdout (`dispatch rule=X status=Y channels=… actions=N`, `dispatching N action call(s)`, `call #N → connector/endpoint`, `api-action … HTTP 200` / `sql-action … ok (N row(s))`), with `WARN` on stop-on-failure and slow SMTP close, and `ERROR` lines carrying the failure reason.
+
+### Editor bug fixes
+
+- **`ConfigApi.updateTemplate` now full-replaces** the resource's properties instead of merging the new map over the old set. Without this, editors that renumber indexed lists (action calls, endpoints, queries, status codes) leaked stale entries — a deleted call #2 would resurrect on the next load because `action.2.*` was never removed. The fix applies to every editor that round-trips a structured props map.
+- **api-connector *Add mapping* button works** — the local-state effect in `ResponseMappingsEditor` now uses a JSON-stringified dependency so empty rows survive the parent re-render. Previously the new row vanished the moment you clicked because the parent's empty Record was a fresh object reference each time.
+- New `Resource.removeProperty(name)` and `Resource.clearProperties()` helpers used by the full-replace save path.
+
+### Live process events tail (Tech Dashboard)
+
+- `/api/dashboard/log-tail` rebuilt around `F564237` (runtime processing log) instead of `F564236` (validation errors). The Tech Dashboard widget now shows scheduler-driven jobs starting and finishing in real time with method badges (`START` green, `END` blue, errors red).
+- Query bounded to today (`FEUPMJ = today AND FEUPMT > since`) with a cross-midnight fallback that drops the time floor when the widget was paused across the date boundary — the predicate stays on the index regardless of historical depth.
+
+### Filesystem widget — group by partition
+
+- `File.getFreeSpace()` reports partition-level numbers, so every path on the same mount used to render an identical disk-usage bar. The backend now emits an `fsId` per path; the widget groups paths by `fsId` and shows the disk usage once per filesystem with the path rows underneath.
 
 ---
 

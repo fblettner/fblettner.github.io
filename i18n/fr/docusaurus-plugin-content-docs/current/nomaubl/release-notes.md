@@ -10,7 +10,8 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
   <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
   <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
@@ -30,6 +31,66 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.7 — 2026-05-09 \{#v2026-05-7\}
+
+Grosse version côté connecteurs et notifications. Nouveau type de modèle **connecteur SQL** qui permet de définir des requêtes nommées de la même façon que les api-connecteurs définissent leurs endpoints, avec un éditeur de paramètres et un panneau de test. Les deux types de connecteurs peuvent désormais être câblés depuis les **liaisons d'actions** et les **règles de notification**, qui ont elles-mêmes gagné une liste d'appels multiples avec arrêt sur échec et chaînage des réponses (placeholders `{call.N.fieldName}`). L'éditeur de règles de notification est réorganisé en six onglets, les appels d'action se replient derrière un en-tête de description, et la boîte de réception affiche le journal des actions sous forme de pastilles colorées. Plusieurs anciens bugs du dispatcher et des éditeurs sont aussi corrigés.
+
+### Connecteurs SQL *(nouveau)*
+
+- Nouveau type de modèle `sql-connector` — paramètres de connexion (Oracle / PostgreSQL / URL / DBUser / DBPassword / schéma / timeout / maxRows) plus une liste de requêtes nommées. Chaque requête porte un nom, un libellé, une description libre, une spécification de paramètres (`name|label|default;…`), le SQL avec des placeholders `:param`, et un drapeau `Writable`. Voir [Connecteurs SQL](./configuration/sql-connectors.md).
+- Le binding des paramètres passe par `PreparedStatement` — les jetons `:name` sont réécrits en `?` positionnels et liés positionnellement, les valeurs ne sont jamais substituées par concaténation. Le parseur respecte les chaînes entre apostrophes, les identifiants entre guillemets, les commentaires de ligne et de bloc, et l'opérateur de cast PostgreSQL `::type`.
+- Liste blanche des types d'instructions : `SELECT` / `INSERT` / `UPDATE` / `DELETE` / `MERGE`. `DROP` / `TRUNCATE` / `ALTER` / `GRANT` etc. sont rejetés avant même l'ouverture de la connexion. Les instructions non-`SELECT` exigent en plus `Writable=Oui` sur la requête concernée — une faute de frappe dans une règle de notification ne peut pas accidentellement déclencher `DELETE FROM …`.
+- Nouvelle route back-end `/api/sql-connectors` (liste + exécution), parallèle à `/api/connectors`. Nouveau `SqlConnectorEditor` dans *Paramètres* avec trois onglets : **Connection** / **Queries** (cartes repliables par requête) / **Test** (exécute la requête sur la base cible, affiche les colonnes + lignes ou le nombre de lignes affectées).
+- Bouton **+ Add SQL** dans l'en-tête Settings à côté de **+ Add API** ; les connecteurs SQL ont leur propre groupe latéral avec un badge `sql`.
+
+### Liaisons d'actions et règles de notification multi-appels
+
+- Les liaisons d'actions (boutons réglementaires du modal facture) et les règles de notification portent désormais une **liste d'appels** au lieu d'un seul. Les appels partent dans l'ordre de déclaration ; le comportement par défaut est *poursuivre en cas d'échec*, à l'image du canal e-mail.
+- Drapeau **Arrêt sur échec** par appel — interrompt la chaîne au premier échec, tracé dans le journal sous la forme `STOP · N appel(s) restant(s) ignoré(s)`.
+- Champ **Description** par appel affiché en en-tête de carte repliée, pour qu'une liaison à plusieurs appels se lise comme une liste à cocher en un coup d'œil. Les nouveaux appels s'ouvrent automatiquement ; le chargement d'une règle replie tout.
+- **Chaînage des réponses** : la sortie de chaque appel est versée dans un contexte sous des clés `call.N.*`. Les appels suivants y accèdent via `{call.N.fieldName}` dans leur payload.
+  - Les appels api-connecteur exposent tous les mappings `endpoint.N.response.*` que le connecteur définit, plus `success` / `statusCode` / `error`.
+  - Les appels sql-connecteur exposent les colonnes de la première ligne par leur nom, plus `success` / `rowCount` / `updateCount` / `statementType` / `error`.
+- Compatibilité ascendante : les anciennes règles et liaisons mono-action continuent de fonctionner — les anciennes clés à plat sont lues comme une liste à un élément au chargement et réécrites au format canonique `action.N.call.M.*` à la prochaine sauvegarde.
+- Le helper front-end `executeConnectorAction` route selon le type de modèle (api/sql) et retourne une enveloppe uniforme — le runner d'actions du modal facture n'a donc pas à connaître le type.
+
+### Refonte de l'éditeur de règles de notification
+
+- Le formulaire long et unique passe à **six onglets** : Général · Déclencheur · Canaux · Email · Actions · Test. L'onglet revient à *Général* au changement de règle.
+- Les paramètres de destinataire sont sous *Canaux* à côté des cases de livraison. Les onglets *Email* et *Actions* affichent leur contenu sans condition ; la case « action » a été retirée — les appels partent automatiquement quand la règle a au moins un appel (désactiver la règle pour les supprimer).
+- Le menu déroulant des connecteurs liste les api-connecteurs et les sql-connecteurs fusionnés avec les suffixes `· API` / `· SQL` ; le menu cible charge les endpoints ou les requêtes selon le type du connecteur choisi.
+
+### Trace des actions dans la boîte de réception
+
+- Le dispatcher ajoute désormais un pied d'audit par appel au corps rendu (enregistré dans `NTK74MSG2`) — l'enregistrement portail garde une trace permanente de *ce qui a été déclenché avec cette alerte*. Plafonné à la largeur de colonne moins une marge de sécurité.
+- La boîte de réception affiche l'audit sous forme de pastilles colorées sous le message — `OK` vert, `FAIL` rouge, `STOP` orange, `SKIP` gris — au lieu de mélanger les lignes d'audit dans le corps tronqué.
+- L'aperçu de la cloche retire le pied d'audit et affiche à la place une ligne récapitulative : *2 action(s) exécutée(s)* (gris) ou *1 action(s) en échec sur 2* (rouge), pour qu'un coup d'œil suffise à savoir s'il faut ouvrir la boîte de réception.
+
+### Corrections du dispatcher de notifications
+
+- **Les actions ne partaient jamais depuis les notifications.** Trois causes, toutes traitées :
+  - La boucle de dispatch exigeait l'ancienne case « action » dans les canaux ; le verrou est retiré — une liste d'actions non vide suffit.
+  - Le dispatcher s'arrêtait prématurément quand `recipients.isEmpty()`, supprimant les règles purement actionnelles et celles dont la résolution de destinataire échouait ; l'arrêt prématuré est retiré (les boucles portail/email no-op naturellement sur une liste vide).
+  - Surtout, `EmailDispatcher.send()` pouvait bloquer sur `transport.close()` face à des serveurs SMTP capricieux (le `QUIT` de Gmail). Le thread worker restait bloqué, supprimant silencieusement chaque étape suivante. Corrigé en (a) exécutant les actions **avant** l'email pour qu'un teardown SMTP bloqué ne puisse jamais les empêcher, et (b) bornant `transport.close()` sur un thread daemon avec un budget de 5 secondes — le message a déjà été livré par `sendMessage`, abandonner la fermeture est sans risque.
+- Diagnostics : lignes `INFO` structurées par dispatch et par appel sur stdout (`dispatch rule=X status=Y channels=… actions=N`, `dispatching N action call(s)`, `call #N → connector/endpoint`, `api-action … HTTP 200` / `sql-action … ok (N row(s))`), avec `WARN` sur l'arrêt sur échec et la fermeture SMTP lente, et lignes `ERROR` qui portent le motif d'échec.
+
+### Corrections d'éditeur
+
+- **`ConfigApi.updateTemplate` remplace désormais entièrement** les propriétés de la ressource au lieu de fusionner la nouvelle map par-dessus l'ancienne. Sans cela, les éditeurs qui renumérotent des listes indexées (appels d'action, endpoints, requêtes, codes de statut) laissaient traîner d'anciennes entrées — un appel #2 supprimé ressuscitait au chargement suivant car `action.2.*` n'était jamais retiré. Le correctif s'applique à tous les éditeurs qui font un aller-retour sur une map de propriétés structurée.
+- **Le bouton *Add mapping* d'api-connecteur fonctionne** — l'effet d'état local de `ResponseMappingsEditor` utilise maintenant une dépendance JSON-stringifiée pour que les lignes vides survivent au re-render parent. Auparavant la nouvelle ligne disparaissait dès le clic parce que le `Record` vide du parent était une nouvelle référence d'objet à chaque rendu.
+- Nouveaux helpers `Resource.removeProperty(name)` et `Resource.clearProperties()` utilisés par le chemin de sauvegarde en remplacement complet.
+
+### Flux des traitements en cours (Tableau de bord IT)
+
+- `/api/dashboard/log-tail` reconstruit autour de `F564237` (journal d'exécution) au lieu de `F564236` (erreurs de validation). Le widget du Tableau de bord IT affiche maintenant les jobs lancés par le planificateur qui démarrent et se terminent en direct, avec des badges de méthode (`START` vert, `END` bleu, erreurs en rouge).
+- Requête bornée à la journée (`FEUPMJ = today AND FEUPMT > since`) avec un repli en cas de passage de minuit qui supprime le plancher horaire si le widget était en pause au moment du changement de date — le prédicat reste sur l'index, peu importe la profondeur d'historique.
+
+### Widget Système de fichiers — regroupement par partition
+
+- `File.getFreeSpace()` renvoie des chiffres au niveau de la partition : tous les chemins du même point de montage affichaient donc la même barre d'usage disque. Le back-end émet désormais un `fsId` par chemin ; le widget regroupe les chemins par `fsId` et affiche l'usage disque une fois par système de fichiers, avec les lignes de chemin en dessous.
 
 ---
 
