@@ -86,10 +86,12 @@ This is the typical choice for **JD Edwards AIS** and most modern PA APIs — No
 
 | Field | Description |
 |---|---|
-| **Endpoint path** | Path to the token endpoint (e.g. `/v7.3/tokenrequest` for JD Edwards AIS). Combined with **Base URL**. |
-| **Token field** | Dot-notation JSON path used to extract the token from the response (e.g. `userInfo.token` for JD Edwards AIS). |
+| **Endpoint path** | Path to the token endpoint (e.g. `/v7.3/tokenrequest` for JD Edwards AIS, `/oauth2/token` for an OAuth2 client_credentials flow). Combined with **Base URL**. |
+| **Token field** | Dot-notation JSON path used to extract the token from the response (e.g. `userInfo.token` for JD Edwards AIS). **Leave empty** to auto-detect — the runtime tries `access_token` first then `token`, which covers the standard OAuth2 client_credentials response shape without configuration. |
 | **Token TTL (minutes)** | How long the token is cached before a new one is requested. Default `55` minutes. |
-| **Body template** | Custom JSON body for the token request, with `{{username}}` / `{{password}}` placeholders. **Leave empty** to use the default `username` / `password` / `deviceName` payload. |
+| **Body Content-Type** *(2026.05.8)* | `application/json` *(default)* or `application/x-www-form-urlencoded`. The form variant emits the token request body as URL-encoded pairs, which is what the standard OAuth2 `client_credentials` flow expects. |
+| **Body template** | Custom request body, with `{{username}}` / `{{password}}` placeholders. **Leave empty** to use sensible defaults: JSON mode emits the JD Edwards AIS payload (`{ username, password, deviceName }`); form mode emits `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`. |
+| **Token request headers** *(2026.05.8)* | Optional. Semicolon-separated `Key:Value` pairs sent **only on the token request** — for PAs that require a tenant-id header on the auth call itself. Example: `customer-id:CUST123;X-Tenant:acme`. |
 
 ---
 

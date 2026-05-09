@@ -293,6 +293,7 @@ const sidebars: SidebarsConfig = {
           items: [
             'nomaubl/configuration/system/edirectory',
             'nomaubl/configuration/system/einvoicing',
+            'nomaubl/configuration/system/ereporting',
             'nomaubl/configuration/system/fetch-invoices',
             'nomaubl/configuration/system/global',
             'nomaubl/configuration/system/document-types',

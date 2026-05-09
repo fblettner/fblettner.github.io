@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
   <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
@@ -31,6 +32,45 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.8 — 2026-05-09 \{#v2026-05-8\}
+
+Connector hardening release. The PA configuration story is now consistent across **e-invoicing**, **e-directory** and **e-reporting** — every system template references a reusable api-connector instead of carrying inline auth and endpoints, and the legacy inline shape is gone (no fallback). The mock infrastructure (`MockPlatformApiClient`, `MockTokenManager`, `paUseMock`/`paMockBehavior`) was retired. OAuth2 token requests gained form-encoded body support (`authTokenContentType` / `grant_type=client_credentials`) and per-request custom headers (`authTokenHeaders`) so PAs that need a tenant header on the auth call itself are now reachable. **E-Reporting** is fully decoupled from e-invoicing: it picks its own api-connector, its own endpoint, its own `paMode`, and can submit reports over **SFTP** as well as REST. The three system-template editors were reorganised into consistent multi-tab layouts.
+
+### PA submission — E-Reporting decoupled from E-Invoicing
+
+- E-reporting's submission backend used to share the e-invoicing template's connector, `paMode` and credentials. It now reads its own `connector` / `endpoint.report-import` / `paMode` from the [`e-reporting` template](./configuration/system/ereporting.md) (and per-company `e-reporting-{kco}` overrides), so reporting can target a different platform — or use different credentials on the same platform — than invoice import.
+- New **SFTP transport** for report submission. Reuses the existing `PlatformFtpClient` (the class is resource-agnostic — it just needs `paFtp*` properties on whichever resource is passed in), so no new transport class. Branching happens in `EReportingHandler`: `paMode=API` goes through the api-connector, `paMode=FTP` spools the XML to a temp file and uploads via SFTP, empty `paMode` skips submission.
+- The legacy `sendToPA` Y/N flag on `e-reporting` was replaced by `paMode` (API / FTP / empty). Same semantics, single field, consistent with e-invoicing.
+- Configuration check now flags `paMode=API` without a `connector` and `paMode=FTP` without `paFtpHost` as errors, replacing the old `sendToPA=Y` / `issuerSiren` check.
+
+### OAuth2 token — form-encoded + custom headers
+
+- `ApiConnectorClient.fetchAndCacheOauth2Token` now reads `authTokenContentType` (`application/json` default, `application/x-www-form-urlencoded` to switch to form mode) and `authTokenHeaders` (semicolon-separated `Key:Value` pairs sent only on the token request — for PAs that need a tenant-id header on the auth call itself).
+- New defaults when the body template is empty: form mode emits `grant_type=client_credentials&client_id={user}&client_secret={pass}` (URL-encoded); JSON mode keeps the JD Edwards AIS payload. Empty `authTokenField` now auto-tries `access_token` then `token`, so the standard OAuth2 client_credentials flow works without extra config.
+- The [API Connectors](./configuration/api-connectors.md) Auth tab gained the matching **Body Content-Type** selector and **Token request headers** textarea.
+
+### System-template editors reorganised
+
+- All three system templates now follow the same multi-tab pattern.
+  - **[E-Invoicing](./configuration/system/einvoicing.md)** (4 tabs): UBL Validation · PA Connection (connector + Timeout / SSL Verify) · FTP/SFTP (Send Mode + SFTP server, with the SFTP card dimmed when Send Mode ≠ FTP) · Status (Status Retrieval; polling intervals point users to *global → Scheduling*).
+  - **[E-Directory](./configuration/system/edirectory.md)** (2 tabs): Directory (Enable Check + INSEE Search) · Connector (api-connector + per-task endpoint overrides). The legacy inline *API Connection* + *Credentials* groups were dropped — they were dead code since `PaConnectorResolver` was made strict.
+  - **[E-Reporting](./configuration/system/ereporting.md)** (4 tabs, new shape): Identity · Reporting · PA Connection · FTP/SFTP — mirrors e-invoicing.
+- **Send Mode** moved out of e-invoicing's PA Connection tab and into the FTP/SFTP tab where it logically belongs (default `API`; the toggle is only relevant when configuring FTP).
+- **Background Scheduling** group removed from e-invoicing — it was writing to `fetchImportInterval` / `fetchStatusInterval` on the e-invoicing template, but `BackgroundScheduler` only reads them from `global`. The dead-write footgun is gone; users get a one-liner pointer to the right place.
+
+### Mock infrastructure retired
+
+- Deleted `MockPlatformApiClient`, `MockTokenManager`, and the `paUseMock` / `paMockBehavior` plumbing across `CustomUBL` / `UBLInvoiceProcessor` / `LogCatalog`. PA mock mode was only useful before the api-connector refactor — operators wanting offline tests now point an api-connector at a Postman mock or a local stub.
+- The `EInvoicingEditor` lost the *Mock / Testing* tab (the editor is down to 4 tabs from 5). The Tech Dashboard no longer surfaces a PA mode / mock indicator. Configuration files and the `/api/system` payload no longer carry the dead `paUseMock` flag.
+
+### Smaller cleanups
+
+- ConfigApi check rewritten to walk the new connector reference shape end-to-end (per-template connector ref → resolves to api-connector → validates baseUrl + auth fields + per-task endpoint name resolution).
+- `DirectoryApiClient` enforces the connector-reference shape via `PaConnectorResolver` (no fallback to inline). Same strict pattern as e-invoicing and e-reporting.
+- Tombstone comments and dead `// retired in 2026.05` markers removed from `CustomUBL`, `UBLInvoiceProcessor`, `LogCatalog`, `IPlatformApiClient`, and `EInvoicingEditor`.
 
 ---
 

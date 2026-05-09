@@ -10,7 +10,8 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
   <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
@@ -31,6 +32,45 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.8 — 2026-05-09 \{#v2026-05-8\}
+
+Version de consolidation côté connecteurs. La configuration PA est désormais homogène entre **e-invoicing**, **e-directory** et **e-reporting** — chaque modèle système référence un api-connecteur réutilisable au lieu de porter ses propres champs d'authentification et endpoints, et la forme inline historique est supprimée (sans repli). L'infrastructure mock (`MockPlatformApiClient`, `MockTokenManager`, `paUseMock`/`paMockBehavior`) est retirée. Les requêtes de jeton OAuth2 acceptent maintenant un corps form-urlencoded (`authTokenContentType` / `grant_type=client_credentials`) ainsi que des en-têtes personnalisés sur la requête de jeton (`authTokenHeaders`), ce qui rend accessibles les PA qui exigent un en-tête tenant sur l'appel d'authentification lui-même. **L'E-Reporting** est entièrement désolidarisé de l'e-invoicing : il choisit son propre api-connecteur, son propre endpoint, son propre `paMode`, et peut soumettre les rapports en **SFTP** comme en REST. Les trois éditeurs de modèles système ont été réorganisés selon une mise en onglets cohérente.
+
+### Soumission PA — E-Reporting indépendant de l'e-invoicing
+
+- Auparavant, la soumission e-reporting partageait le connecteur, le `paMode` et les identifiants du modèle e-invoicing. Elle lit désormais ses propres `connector` / `endpoint.report-import` / `paMode` depuis le [modèle `e-reporting`](./configuration/system/ereporting.md) (et les surcharges par société `e-reporting-{kco}`), ce qui permet de cibler une plateforme différente — ou des identifiants différents sur la même plateforme — pour les rapports.
+- Nouveau **transport SFTP** pour la soumission des rapports. Réutilise le `PlatformFtpClient` existant (la classe est agnostique à la ressource — il lui faut juste les propriétés `paFtp*` sur la ressource passée en argument), donc aucune nouvelle classe de transport. Le branchement se fait dans `EReportingHandler` : `paMode=API` passe par l'api-connecteur, `paMode=FTP` écrit le XML dans un fichier temporaire et l'envoie en SFTP, `paMode` vide ignore la soumission.
+- L'ancien drapeau `sendToPA` Y/N sur `e-reporting` est remplacé par `paMode` (API / FTP / vide). Mêmes sémantiques, un seul champ, cohérent avec e-invoicing.
+- La vérification de configuration signale désormais `paMode=API` sans `connector` et `paMode=FTP` sans `paFtpHost` comme erreurs, en remplacement de l'ancien contrôle `sendToPA=Y` / `issuerSiren`.
+
+### Jeton OAuth2 — form-urlencoded + en-têtes personnalisés
+
+- `ApiConnectorClient.fetchAndCacheOauth2Token` lit désormais `authTokenContentType` (`application/json` par défaut, `application/x-www-form-urlencoded` pour passer en mode formulaire) et `authTokenHeaders` (paires `Key:Value` séparées par point-virgule envoyées uniquement sur la requête de jeton — pour les PA qui exigent un en-tête tenant-id sur l'appel d'auth lui-même).
+- Nouveaux corps par défaut quand le template est vide : le mode formulaire émet `grant_type=client_credentials&client_id={user}&client_secret={pass}` (URL-encodé) ; le mode JSON conserve la charge JD Edwards AIS. Un `authTokenField` vide essaie automatiquement `access_token` puis `token`, donc le flux OAuth2 client_credentials standard fonctionne sans configuration supplémentaire.
+- L'onglet Auth de la page [Connecteurs API](./configuration/api-connectors.md) a gagné le sélecteur **Body Content-Type** et la zone de texte **Token request headers**.
+
+### Réorganisation des éditeurs de modèles système
+
+- Les trois modèles système suivent désormais le même schéma à plusieurs onglets.
+  - **[E-Invoicing](./configuration/system/einvoicing.md)** (4 onglets) : UBL Validation · PA Connection (connecteur + Timeout / SSL Verify) · FTP/SFTP (Send Mode + serveur SFTP, atténué quand Send Mode ≠ FTP) · Status (Status Retrieval ; les intervalles de polling renvoient l'utilisateur vers *global → Scheduling*).
+  - **[E-Directory](./configuration/system/edirectory.md)** (2 onglets) : Directory (Enable Check + INSEE Search) · Connector (api-connecteur + surcharges d'endpoint par tâche). Les anciens groupes inline *API Connection* + *Credentials* sont supprimés — ils étaient devenus du code mort depuis que `PaConnectorResolver` est devenu strict.
+  - **[E-Reporting](./configuration/system/ereporting.md)** (4 onglets, nouvelle forme) : Identity · Reporting · PA Connection · FTP/SFTP — calqué sur e-invoicing.
+- **Send Mode** quitte l'onglet PA Connection d'e-invoicing pour rejoindre l'onglet FTP/SFTP où il appartient logiquement (par défaut `API` ; le sélecteur n'est utile que pour configurer FTP).
+- Le groupe **Background Scheduling** est retiré d'e-invoicing — il écrivait dans `fetchImportInterval` / `fetchStatusInterval` sur le modèle e-invoicing alors que `BackgroundScheduler` ne lit ces propriétés que depuis `global`. Le piège du « champ écrit mais jamais lu » disparaît ; l'utilisateur a une ligne d'aide qui pointe vers le bon endroit.
+
+### Infrastructure mock retirée
+
+- Suppression de `MockPlatformApiClient`, `MockTokenManager` et de la plomberie `paUseMock` / `paMockBehavior` dans `CustomUBL` / `UBLInvoiceProcessor` / `LogCatalog`. Le mode mock PA n'avait plus de raison d'être depuis le refactor api-connecteur — pour des tests hors-ligne, il suffit de pointer un api-connecteur vers un mock Postman ou un stub local.
+- L'éditeur `EInvoicingEditor` perd l'onglet *Mock / Testing* (l'éditeur passe de 5 à 4 onglets). Le Tableau de bord IT n'affiche plus l'indicateur PA mode / mock. Les fichiers de configuration et la charge utile `/api/system` ne portent plus le drapeau mort `paUseMock`.
+
+### Petits nettoyages
+
+- La vérification ConfigApi a été réécrite pour parcourir de bout en bout la nouvelle forme par référence de connecteur (référence connector par modèle → résout vers l'api-connecteur → valide baseUrl + champs d'authentification + résolution des noms d'endpoint par tâche).
+- `DirectoryApiClient` impose la forme par référence de connecteur via `PaConnectorResolver` (pas de repli vers l'inline). Même schéma strict que e-invoicing et e-reporting.
+- Commentaires « tombstone » et marqueurs `// retired in 2026.05` retirés de `CustomUBL`, `UBLInvoiceProcessor`, `LogCatalog`, `IPlatformApiClient` et `EInvoicingEditor`.
 
 ---
 
