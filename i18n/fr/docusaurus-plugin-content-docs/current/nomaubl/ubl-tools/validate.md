@@ -25,6 +25,87 @@ La **vérification d'annuaire** s'exécute également au moment de la validation
 
 ---
 
+## Vue d'ensemble
+
+<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="vlui-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="vlui-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="vlui-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="360" rx="14" fill="url(#vlui-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Validation</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="92" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Source</text>
+  <rect x="320" y="82" width="180" height="24" rx="5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1.5"/>
+  <text x="410" y="98" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">XML → UBL</text>
+  <rect x="504" y="82" width="180" height="24" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="594" y="98" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">UBL (direct)</text>
+
+  <text x="240" y="130" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TEMPLATE</text>
+  <rect x="340" y="120" width="200" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="350" y="136" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">invoices ▾</text>
+
+  <text x="240" y="162" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FICHIER D'ENTRÉE</text>
+  <rect x="340" y="152" width="290" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="350" y="168" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">invoice_2026_0143</text>
+  <rect x="634" y="152" width="40" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="654" y="168" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">📁</text>
+  <rect x="678" y="152" width="40" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="698" y="168" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⬆</text>
+
+  <rect x="240" y="186" width="200" height="28" rx="6" fill="url(#vlui-g-blue)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <text x="340" y="204" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">✅ Valider l'UBL</text>
+
+  <line x1="240" y1="228" x2="780" y2="228" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="250" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Résultats de validation</text>
+  <text x="400" y="250" fill="#4ade80" fontSize="10" fontFamily="ui-monospace, monospace">✓ Validation terminée · 0 fatale · 2 avertissements</text>
+
+  <rect x="240" y="262" width="540" height="22" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="277" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEVERITY · MODULE · SUBMODULE · MESSAGE</text>
+
+  <rect x="240" y="288" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="292" width="56" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
+  <text x="276" y="302" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SUCCESS</text>
+  <text x="312" y="302" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">XSD · UBL 2.1 · structure OK</text>
+
+  <rect x="240" y="314" width="540" height="22" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="318" width="56" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
+  <text x="276" y="328" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SUCCESS</text>
+  <text x="312" y="328" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Schematron · EN 16931 + BR-FR-Flux-2 · toutes règles OK</text>
+
+  <rect x="240" y="340" width="540" height="22" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="344" width="56" height="14" rx="3" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="276" y="354" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">WARNING</text>
+  <text x="312" y="354" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">Schematron · BR-NOMAUBL-rules · BT-46 optionnel mais recommandé</text>
+
+  <rect x="20" y="82" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="97" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bascule de source</text>
+  <text x="30" y="110" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">XML→UBL · UBL direct</text>
+  <line x1="220" y1="98" x2="320" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vlui-arrow)"/>
+
+  <rect x="20" y="152" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="167" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Parcourir + Téléverser</text>
+  <text x="30" y="180" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">choix serveur ou local</text>
+  <line x1="220" y1="168" x2="340" y2="164" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vlui-arrow)"/>
+
+  <rect x="20" y="186" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="201" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Contrôle en lecture</text>
+  <text x="30" y="214" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">aucune écriture · aucun envoi</text>
+  <line x1="220" y1="202" x2="240" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vlui-arrow)"/>
+
+  <rect x="820" y="288" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="303" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Packs empilés</text>
+  <text x="830" y="316" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">XSD · EN16931 · BR-FR · …</text>
+  <line x1="820" y1="304" x2="780" y2="300" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vlui-arrow)"/>
+</svg>
+
+---
+
 ## Input Configuration
 
 | Champ | Description |

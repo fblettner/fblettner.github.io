@@ -12,6 +12,113 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="xeui-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="xeui-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="xeui-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <linearGradient id="xeui-g-purple" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c084fc" stopOpacity="0.28"/><stop offset="100%" stopColor="#a855f7" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="420" rx="14" fill="url(#xeui-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">XSL Editor</text>
+  <rect x="690" y="30" width="90" height="22" rx="5" fill="url(#xeui-g-purple)" stroke="#c084fc" strokeWidth="1"/>
+  <text x="735" y="45" fill="#e9d5ff" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">✦ AI Auto-Map</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="92" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">XSL FILE</text>
+  <rect x="320" y="82" width="200" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="330" y="98" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">invoices.xsl ▾</text>
+  <rect x="540" y="82" width="60" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="570" y="98" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Load</text>
+  <rect x="606" y="82" width="120" height="24" rx="5" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="666" y="98" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">+ New transform</text>
+
+  <text x="240" y="124" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">/app/xsl/invoices/</text>
+
+  <rect x="240" y="138" width="170" height="26" rx="5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1.5"/>
+  <text x="325" y="155" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Variable Mapping</text>
+  <rect x="414" y="138" width="120" height="26" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="155" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">XSL Editor</text>
+
+  <rect x="240" y="172" width="540" height="28" rx="5" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
+  <rect x="252" y="178" width="60" height="16" rx="3" fill="rgba(74,158,255,0.20)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="282" y="189" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">TAG_ROOT</text>
+  <text x="324" y="189" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">scope: //Invoices/Invoice</text>
+  <text x="752" y="189" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">context</text>
+
+  <rect x="240" y="206" width="540" height="22" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="221" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BT · DESCRIPTION · MAPPING</text>
+
+  <rect x="240" y="230" width="540" height="26" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="236" width="40" height="14" rx="3" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="268" y="246" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">BT-1</text>
+  <text x="294" y="246" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Invoice number</text>
+  <rect x="430" y="234" width="320" height="18" rx="3" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="438" y="246" fill="#86efac" fontSize="9" fontFamily="ui-monospace, monospace">Header/DocNumber</text>
+  <text x="760" y="246" fill="#94a3b8" fontSize="11" textAnchor="middle">↓</text>
+
+  <rect x="240" y="260" width="540" height="26" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="266" width="40" height="14" rx="3" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="268" y="276" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">BT-2</text>
+  <text x="294" y="276" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Issue date</text>
+  <rect x="430" y="264" width="320" height="18" rx="3" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="438" y="276" fill="#86efac" fontSize="9" fontFamily="ui-monospace, monospace">Header/IssueDate</text>
+  <text x="760" y="276" fill="#94a3b8" fontSize="11" textAnchor="middle">↓</text>
+
+  <rect x="240" y="290" width="540" height="26" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="296" width="40" height="14" rx="3" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="268" y="306" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">BT-13</text>
+  <text x="294" y="306" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Purchase order</text>
+  <rect x="430" y="294" width="320" height="18" rx="3" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="438" y="306" fill="#86efac" fontSize="9" fontFamily="ui-monospace, monospace">Header/PoNumber</text>
+  <text x="760" y="306" fill="#94a3b8" fontSize="11" textAnchor="middle">↓</text>
+
+  <rect x="240" y="324" width="540" height="28" rx="5" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
+  <rect x="252" y="330" width="92" height="16" rx="3" fill="rgba(74,158,255,0.20)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="298" y="341" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">TAG_LINE_ITEM</text>
+  <text x="356" y="341" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">scope: Lines/Line</text>
+  <text x="752" y="341" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">context</text>
+
+  <rect x="240" y="358" width="540" height="26" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="364" width="48" height="14" rx="3" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="272" y="374" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">BT-129</text>
+  <text x="302" y="374" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Quantity</text>
+  <rect x="430" y="362" width="320" height="18" rx="3" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="438" y="374" fill="#86efac" fontSize="9" fontFamily="ui-monospace, monospace">Quantity</text>
+  <text x="760" y="374" fill="#94a3b8" fontSize="11" textAnchor="middle">↓</text>
+
+  <rect x="240" y="402" width="160" height="28" rx="6" fill="url(#xeui-g-blue)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <text x="320" y="420" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">💾 Save mappings ●</text>
+  <rect x="416" y="402" width="160" height="28" rx="6" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="496" y="420" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⬆ Load XML source</text>
+
+  <rect x="20" y="82" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="97" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">File selector</text>
+  <text x="30" y="110" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">core files hidden</text>
+  <line x1="220" y1="98" x2="320" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xeui-arrow)"/>
+
+  <rect x="820" y="30" width="160" height="34" rx="8" fill="rgba(192,132,252,0.06)" stroke="rgba(192,132,252,0.40)" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="45" fill="#c084fc" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">AI assistance</text>
+  <text x="830" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">XML + PDF → JSON map</text>
+  <line x1="820" y1="46" x2="780" y2="42" stroke="#c084fc" strokeWidth="1.2" markerEnd="url(#xeui-arrow)"/>
+
+  <rect x="20" y="172" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="187" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Scope contexts</text>
+  <text x="30" y="200" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">paths resolve relative</text>
+  <line x1="220" y1="188" x2="240" y2="186" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xeui-arrow)"/>
+
+  <rect x="820" y="262" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="277" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">BT-coded rows</text>
+  <text x="830" y="290" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">↓ opens XML browser</text>
+  <line x1="820" y1="278" x2="780" y2="276" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#xeui-arrow)"/>
+</svg>
+
+---
+
 ## What the editor does
 
 A NomaUBL transform is just an XSLT file that derives `TAG_*` variables from the source XML; the rest of the work — namespaces, element ordering, EN 16931 conformance, French extensions — is delegated to a shared `ubl-template.xsl` provided by NomaUBL. Customising a transform therefore boils down to **mapping XML paths to TAG_ variables**, which the editor surfaces as a form.
