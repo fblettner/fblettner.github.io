@@ -22,6 +22,108 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ---
 
+## Vue d'ensemble
+
+<svg viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="epui-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="epui-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="epui-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="480" rx="14" fill="url(#epui-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Extraction et traitement</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="92" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Source</text>
+  <rect x="320" y="82" width="100" height="24" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="370" y="98" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Archive</text>
+  <rect x="424" y="82" width="100" height="24" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="98" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">FTP</text>
+  <rect x="528" y="82" width="100" height="24" rx="5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1.5"/>
+  <text x="578" y="98" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">BIP (JDE)</text>
+
+  <text x="240" y="130" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">N° JOB</text>
+  <rect x="340" y="120" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="400" y="135" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">42803</text>
+  <text x="476" y="135" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LANG</text>
+  <rect x="514" y="120" width="60" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="544" y="135" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">FR</text>
+  <text x="588" y="135" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EXTRACT MODE</text>
+  <rect x="676" y="120" width="100" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="726" y="135" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">Input (XML) ▾</text>
+
+  <line x1="240" y1="158" x2="780" y2="158" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="182" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Type de traitement</text>
+  <rect x="380" y="172" width="80" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1.5"/>
+  <text x="420" y="187" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">XML</text>
+  <rect x="464" y="172" width="80" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="504" y="187" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">UBL</text>
+
+  <text x="240" y="220" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MODÈLE</text>
+  <rect x="340" y="210" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="350" y="225" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">invoices ▾</text>
+  <text x="560" y="225" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MODE</text>
+  <rect x="600" y="210" width="100" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="650" y="225" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">AUTO</text>
+
+  <text x="240" y="258" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Dépôt PA</text>
+  <rect x="340" y="248" width="120" height="22" rx="5" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="400" y="263" fill="#4ade80" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Use settings</text>
+
+  <rect x="240" y="288" width="220" height="28" rx="6" fill="url(#epui-g-blue)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <text x="350" y="306" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">▶ Extraire + traiter</text>
+
+  <line x1="240" y1="328" x2="780" y2="328" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="352" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Résultat de l'extraction</text>
+  <rect x="240" y="362" width="540" height="22" rx="5" fill="#0d1220" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
+  <text x="252" y="377" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">✓ Job BIP 42803 extrait → dirInput/invoices/R42565_FBL00001_42803.xml</text>
+
+  <text x="240" y="408" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Résultat du traitement</text>
+  <rect x="240" y="418" width="540" height="22" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="433" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEVERITY · MODULE · SUBMODULE · MESSAGE</text>
+
+  <rect x="240" y="444" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="448" width="56" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
+  <text x="276" y="458" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SUCCESS</text>
+  <text x="312" y="458" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">XSL · transform · 1 document → UBL 2.1</text>
+
+  <rect x="240" y="470" width="540" height="22" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="474" width="56" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
+  <text x="276" y="484" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SUCCESS</text>
+  <text x="312" y="484" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PA · submit · 200 Déposée · post-gen appliquée au BIP 42803</text>
+
+  <rect x="20" y="82" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="97" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sélecteur de source</text>
+  <text x="30" y="110" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Archive · FTP · BIP</text>
+  <line x1="220" y1="98" x2="320" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epui-arrow)"/>
+
+  <rect x="820" y="120" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Champs par source</text>
+  <text x="830" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">se reconfigurent</text>
+  <line x1="820" y1="136" x2="780" y2="132" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epui-arrow)"/>
+
+  <rect x="20" y="172" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="187" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Type de traitement</text>
+  <text x="30" y="200" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">enchaîne XML ou UBL</text>
+  <line x1="220" y1="188" x2="380" y2="184" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epui-arrow)"/>
+
+  <rect x="20" y="288" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="303" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bouton unique</text>
+  <text x="30" y="316" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">enchaîne les deux étapes</text>
+  <line x1="220" y1="304" x2="240" y2="302" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epui-arrow)"/>
+
+  <rect x="820" y="362" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="377" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Deux panneaux</text>
+  <text x="830" y="390" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">extraction → traitement</text>
+  <line x1="820" y1="378" x2="780" y2="376" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#epui-arrow)"/>
+</svg>
+
+---
+
 ## Vue d'ensemble du pipeline
 
 <svg viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
