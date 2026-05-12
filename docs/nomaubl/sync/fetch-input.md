@@ -14,6 +14,105 @@ The per-item semantics (mode resolution, validation, persistence, PA submission,
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="fip-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="fip-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="fip-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="460" rx="14" fill="url(#fip-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Fetch Input</text>
+  <rect x="700" y="30" width="80" height="22" rx="5" fill="url(#fip-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="740" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">🔎 Scan</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="92" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Processing options</text>
+  <text x="240" y="114" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCESS TYPE</text>
+  <rect x="340" y="104" width="200" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="350" y="120" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">invoices ▾</text>
+  <text x="556" y="120" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEND TO PA</text>
+  <rect x="630" y="104" width="100" height="24" rx="5" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="680" y="120" fill="#4ade80" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Use settings</text>
+
+  <line x1="240" y1="146" x2="780" y2="146" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="170" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Source</text>
+  <rect x="320" y="160" width="100" height="24" rx="5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1.5"/>
+  <text x="370" y="176" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Directory</text>
+  <rect x="424" y="160" width="100" height="24" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="474" y="176" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">BIP (JDE)</text>
+  <text x="540" y="176" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">decides whether to walk dirInput/ or query F95630</text>
+
+  <text x="240" y="208" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LAST JOB NUMBER  <text fill="#64748b" fontStyle="italic">(BIP only)</text></text>
+  <rect x="400" y="198" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="460" y="213" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">42801</text>
+  <text x="528" y="213" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">incremental — only jobs above this id are returned</text>
+
+  <line x1="240" y1="238" x2="780" y2="238" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="262" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Candidates</text>
+  <text x="338" y="262" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">5 found · 3 selected</text>
+  <rect x="700" y="252" width="78" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="739" y="267" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Select all</text>
+
+  <rect x="240" y="282" width="540" height="28" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="252" y="290" width="14" height="14" rx="3" fill="#4a9eff" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="259" y="301" fill="white" fontSize="10" textAnchor="middle">✓</text>
+  <text x="280" y="301" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">INV-2026-0142.xml · invoices · 18 KB · today 12:34</text>
+
+  <rect x="240" y="316" width="540" height="28" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="252" y="324" width="14" height="14" rx="3" fill="#4a9eff" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="259" y="335" fill="white" fontSize="10" textAnchor="middle">✓</text>
+  <text x="280" y="335" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">INV-2026-0143.xml · invoices · 18 KB · today 12:35</text>
+
+  <rect x="240" y="350" width="540" height="28" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="252" y="358" width="14" height="14" rx="3" fill="#4a9eff" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="259" y="369" fill="white" fontSize="10" textAnchor="middle">✓</text>
+  <text x="280" y="369" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">CR-2026-0021.xml · credit_notes · 14 KB · today 12:38</text>
+
+  <rect x="240" y="384" width="540" height="28" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="252" y="392" width="14" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="280" y="403" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">INV-2026-0144.xml · invoices · 19 KB · today 12:42</text>
+
+  <rect x="240" y="418" width="540" height="28" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="252" y="426" width="14" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="280" y="437" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">DR-2026-0007.xml · debit_notes · 12 KB · today 12:50</text>
+
+  <rect x="240" y="456" width="170" height="24" rx="5" fill="url(#fip-g-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="325" y="472" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">▶ Process selected (3)</text>
+
+  <rect x="20" y="100" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Process type + PA policy</text>
+  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">drives template + send-to-PA</text>
+  <line x1="220" y1="116" x2="340" y2="116" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fip-arrow)"/>
+
+  <rect x="20" y="160" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Source toggle</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Directory or BIP (JDE)</text>
+  <line x1="220" y1="176" x2="320" y2="172" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fip-arrow)"/>
+
+  <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Last Job Number</text>
+  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cursor for incremental BIP</text>
+  <line x1="820" y1="216" x2="520" y2="210" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fip-arrow)"/>
+
+  <rect x="20" y="316" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="331" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Checkbox list</text>
+  <text x="30" y="344" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">scan → select what to process</text>
+  <line x1="220" y1="332" x2="252" y2="332" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fip-arrow)"/>
+
+  <rect x="820" y="448" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="463" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Process selected</text>
+  <text x="830" y="476" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">runs the per-item pipeline</text>
+  <line x1="820" y1="464" x2="410" y2="468" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fip-arrow)"/>
+</svg>
+
+---
+
 ## Pipeline at a glance
 
 <svg viewBox="0 0 1000 540" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>

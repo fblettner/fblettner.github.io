@@ -14,6 +14,69 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ---
 
+## Vue d'ensemble
+
+<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="impui-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="impui-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="impui-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="320" rx="14" fill="url(#impui-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Import</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="92" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Exécution</text>
+  <text x="240" y="108" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Interroge la PA pour chaque facture en 9906 (en attente) et fait basculer vers 10 ou 9907.</text>
+
+  <rect x="240" y="124" width="220" height="30" rx="6" fill="url(#impui-g-blue)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <text x="350" y="143" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">🔁 Vérifier l'import</text>
+
+  <rect x="480" y="124" width="300" height="30" rx="6" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="495" y="143" fill="#4ade80" fontSize="10" fontFamily="ui-monospace, monospace">✓ 12 vérifiées · 8 → 10 · 1 → 9907 · 3 toujours 9906</text>
+
+  <line x1="240" y1="174" x2="780" y2="174" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="198" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Résultats</text>
+
+  <rect x="240" y="212" width="540" height="22" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="227" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEVERITY · MODULE · FACTURE · MESSAGE</text>
+
+  <rect x="240" y="238" width="540" height="24" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="244" width="56" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
+  <text x="276" y="254" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SUCCESS</text>
+  <text x="312" y="254" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PA · INV-2026-0142 · 9906 → 10 (UUID b3f1…)</text>
+
+  <rect x="240" y="266" width="540" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="272" width="56" height="14" rx="3" fill="rgba(248,113,113,0.18)" stroke="rgba(248,113,113,0.40)" strokeWidth="1"/>
+  <text x="276" y="282" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">WARNING</text>
+  <text x="312" y="282" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PA · INV-2026-0089 · 9906 → 9907 (destinataire invalide)</text>
+
+  <rect x="240" y="294" width="540" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="300" width="56" height="14" rx="3" fill="rgba(148,163,184,0.18)" stroke="rgba(148,163,184,0.40)" strokeWidth="1"/>
+  <text x="276" y="310" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">INFO</text>
+  <text x="312" y="310" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">PA · INV-2026-0143 · en attente — nouvelle tentative au prochain balayage</text>
+
+  <rect x="20" y="124" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="139" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bouton unique</text>
+  <text x="30" y="152" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">aucune sélection par facture</text>
+  <line x1="220" y1="140" x2="240" y2="140" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#impui-arrow)"/>
+
+  <rect x="820" y="124" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="139" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Statut en ligne</text>
+  <text x="830" y="152" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">compteurs agrégés</text>
+  <line x1="820" y1="140" x2="780" y2="140" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#impui-arrow)"/>
+
+  <rect x="820" y="248" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="263" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Journal par facture</text>
+  <text x="830" y="276" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">SUCCESS · WARNING · INFO</text>
+  <line x1="820" y1="264" x2="780" y2="278" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#impui-arrow)"/>
+</svg>
+
+---
+
 ## Vue d'ensemble du pipeline
 
 <svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>

@@ -19,6 +19,73 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ---
 
+## Vue d'ensemble
+
+<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="rsui-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="rsui-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="rsui-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="360" rx="14" fill="url(#rsui-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Retrieve Statuses</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="92" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Exécution</text>
+  <text x="240" y="108" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Récupère les événements postérieurs au repère ; le repère avance après chaque exécution réussie.</text>
+
+  <text x="240" y="132" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">REPÈRE</text>
+  <rect x="340" y="122" width="220" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="450" y="137" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">2026-05-07T14:32:18Z</text>
+  <text x="568" y="137" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">lastRetrievalDate — avance à chaque exécution réussie</text>
+
+  <rect x="240" y="158" width="220" height="30" rx="6" fill="url(#rsui-g-blue)" stroke="#4a9eff" strokeWidth="1.3"/>
+  <text x="350" y="177" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">📥 Récupérer les statuts</text>
+  <rect x="480" y="158" width="300" height="30" rx="6" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="495" y="177" fill="#4ade80" fontSize="10" fontFamily="ui-monospace, monospace">✓ 24 événements · 18 appliqués · 6 doublons ignorés</text>
+
+  <line x1="240" y1="208" x2="780" y2="208" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="232" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Résultats</text>
+
+  <rect x="240" y="246" width="540" height="22" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="261" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SEVERITY · MODULE · FACTURE · MESSAGE</text>
+
+  <rect x="240" y="272" width="540" height="24" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="278" width="56" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
+  <text x="276" y="288" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SUCCESS</text>
+  <text x="312" y="288" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PA · INV-2026-0142 · 201 Mise à disposition → cycle + en-tête mis à jour</text>
+
+  <rect x="240" y="300" width="540" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="306" width="56" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
+  <text x="276" y="316" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">SUCCESS</text>
+  <text x="312" y="316" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PA · INV-2026-0124 · 207 En litige (motif : écart de montant)</text>
+
+  <rect x="240" y="328" width="540" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="334" width="56" height="14" rx="3" fill="rgba(148,163,184,0.18)" stroke="rgba(148,163,184,0.40)" strokeWidth="1"/>
+  <text x="276" y="344" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">INFO</text>
+  <text x="312" y="344" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Repère avancé à 2026-05-07T18:04:55Z</text>
+
+  <rect x="20" y="120" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Repère temporel</text>
+  <text x="30" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">en lecture — n'avance que</text>
+  <line x1="220" y1="135" x2="340" y2="135" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rsui-arrow)"/>
+
+  <rect x="820" y="158" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="173" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Résumé de l'exécution</text>
+  <text x="830" y="186" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">appliqués / ignorés</text>
+  <line x1="820" y1="174" x2="780" y2="174" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rsui-arrow)"/>
+
+  <rect x="820" y="288" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="303" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Journal par événement</text>
+  <text x="830" y="316" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cycle de vie + en-tête</text>
+  <line x1="820" y1="304" x2="780" y2="310" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rsui-arrow)"/>
+</svg>
+
+---
+
 ## Vue d'ensemble du pipeline
 
 <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
