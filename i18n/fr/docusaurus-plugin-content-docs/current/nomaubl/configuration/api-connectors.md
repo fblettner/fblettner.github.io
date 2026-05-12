@@ -35,6 +35,94 @@ L'éditeur comporte **cinq onglets** :
 
 ---
 
+## Vue d'ensemble
+
+<svg viewBox="0 0 1000 540" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="api-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="api-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="api-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="500" rx="14" fill="url(#api-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <rect x="220" y="20" width="580" height="40" fill="rgba(255,255,255,0.02)"/>
+  <rect x="240" y="28" width="90" height="24" rx="4" fill="transparent"/>
+  <text x="285" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Connection</text>
+  <rect x="336" y="28" width="110" height="24" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="391" y="44" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Authentication</text>
+  <rect x="452" y="28" width="84" height="24" rx="4" fill="transparent"/>
+  <text x="494" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Endpoints</text>
+  <rect x="542" y="28" width="86" height="24" rx="4" fill="transparent"/>
+  <text x="585" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Webhooks</text>
+  <rect x="634" y="28" width="50" height="24" rx="4" fill="transparent"/>
+  <text x="659" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Test</text>
+  <line x1="220" y1="60" x2="800" y2="60" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="86" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Authentification</text>
+  <text x="240" y="108" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MÉTHODE</text>
+  <rect x="320" y="98" width="220" height="26" rx="5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1.2"/>
+  <text x="330" y="115" fill="#4a9eff" fontSize="11" fontFamily="ui-monospace, monospace" fontWeight="700">OAUTH2 ▾</text>
+  <text x="552" y="115" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">None / Basic / Bearer / API_KEY / OAUTH2</text>
+
+  <text x="240" y="148" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Identifiants</text>
+  <text x="240" y="170" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">IDENTIFIANT</text>
+  <rect x="320" y="160" width="220" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="330" y="177" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">acme-tenant</text>
+
+  <text x="240" y="200" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MOT DE PASSE</text>
+  <rect x="320" y="190" width="220" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="330" y="207" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">••••••••••••</text>
+
+  <line x1="240" y1="234" x2="780" y2="234" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="256" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Endpoint de jeton</text>
+  <text x="240" y="276" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ENDPOINT PATH</text>
+  <rect x="380" y="266" width="400" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="390" y="282" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">/oauth2/token</text>
+
+  <text x="240" y="304" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CHAMP DU JETON</text>
+  <rect x="380" y="294" width="220" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="390" y="310" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">access_token (auto)</text>
+
+  <text x="240" y="332" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BODY CONTENT-TYPE</text>
+  <rect x="380" y="322" width="300" height="24" rx="5" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
+  <text x="390" y="338" fill="#4a9eff" fontSize="10" fontFamily="ui-monospace, monospace">application/x-www-form-urlencoded ▾</text>
+
+  <text x="240" y="360" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">MODÈLE DU CORPS</text>
+  <rect x="240" y="368" width="540" height="58" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="386" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">grant_type=client_credentials</text>
+  <text x="250" y="402" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">&amp;client_id={'{{username}}'}</text>
+  <text x="250" y="418" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">&amp;client_secret={'{{password}}'}</text>
+
+  <text x="240" y="446" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EN-TÊTES DE LA REQUÊTE DE JETON  <text fill="#64748b" fontSize="8" fontStyle="italic">(2026.05.8)</text></text>
+  <rect x="240" y="454" width="540" height="40" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="471" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">customer-id:CUST123;X-Tenant:acme</text>
+  <text x="250" y="487" fill="#64748b" fontSize="8" fontStyle="italic" fontFamily="system-ui, sans-serif">envoyés uniquement sur la requête de jeton — pour les PA qui exigent un en-tête tenant-id sur l'auth</text>
+
+  <rect x="20" y="98" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="113" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cinq schémas d'auth</text>
+  <text x="30" y="126" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">champs conditionnels par méthode</text>
+  <line x1="220" y1="114" x2="320" y2="111" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#api-arrow)"/>
+
+  <rect x="820" y="320" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="335" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Corps form / JSON</text>
+  <text x="830" y="348" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">défaut OAuth2 client_credentials</text>
+  <line x1="820" y1="336" x2="680" y2="336" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#api-arrow)"/>
+
+  <rect x="20" y="368" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="383" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Modèle de corps</text>
+  <text x="30" y="396" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">vide → défaut appliqué</text>
+  <line x1="220" y1="384" x2="240" y2="396" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#api-arrow)"/>
+
+  <rect x="820" y="450" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="465" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">En-têtes auth personnalisés</text>
+  <text x="830" y="478" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">envoyés uniquement sur le jeton</text>
+  <line x1="820" y1="466" x2="780" y2="466" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#api-arrow)"/>
+</svg>
+
+---
+
 ## Onglet 1 — Connection
 
 ### Connection
