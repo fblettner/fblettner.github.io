@@ -12,6 +12,99 @@ La page présente ce flux en deux vues complémentaires : une vue **groupée** q
 
 ---
 
+## Vue d'ensemble
+
+<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="pl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="pl-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="pl-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="440" rx="14" fill="url(#pl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Journal de traitement</text>
+  <rect x="696" y="30" width="84" height="22" rx="5" fill="url(#pl-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="738" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">↻ Rafraîchir</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="240" y="84" width="180" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="84" width="90" height="28" rx="6" fill="url(#pl-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="285" y="102" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Groupée</text>
+  <text x="375" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">À plat</text>
+
+  <rect x="430" y="84" width="180" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="442" y="102" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">🔍 Filtrer fichier / modèle…</text>
+  <rect x="622" y="84" width="158" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="634" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Tous les modes ▾</text>
+
+  <rect x="240" y="124" width="540" height="34" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="145" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DÉBUT · FIN · MODÈLE · MODE · FICHIER · RÉSULTAT · DURÉE</text>
+
+  <rect x="240" y="162" width="540" height="30" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12:34:08 · 12:34:42 · invoices · AUTO · INV-0142.xml</text>
+  <rect x="588" y="170" width="92" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="634" y="181" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">SUCCESSFUL</text>
+  <text x="690" y="181" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">34 s</text>
+
+  <rect x="240" y="196" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="215" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12:34:46 · 12:35:08 · invoices · AUTO · INV-0143.xml</text>
+  <rect x="588" y="204" width="92" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="634" y="215" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">SUCCESSFUL</text>
+  <text x="690" y="215" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">22 s</text>
+
+  <rect x="240" y="230" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="249" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12:35:14 · 12:35:18 · invoices · AUTO · INV-0144.xml</text>
+  <rect x="588" y="238" width="92" height="16" rx="8" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="634" y="249" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">FATAL ERROR</text>
+  <text x="690" y="249" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">4 s</text>
+
+  <rect x="240" y="264" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="283" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12:35:30 · 12:36:01 · credit_notes · SINGLE · CR-0021.xml</text>
+  <rect x="588" y="272" width="92" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="634" y="283" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">SUCCESSFUL</text>
+  <text x="690" y="283" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">31 s</text>
+
+  <rect x="240" y="298" width="540" height="30" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="252" y="317" fill="#4a9eff" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="600">⤓ Clic sur une ligne → déplie le détail des événements (FATAL en évidence)</text>
+
+  <rect x="240" y="338" width="540" height="106" rx="8" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="252" y="358" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DÉPLIÉ — INV-0144.xml</text>
+
+  <rect x="252" y="366" width="50" height="16" rx="3" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="277" y="377" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">DÉBUT</text>
+  <text x="310" y="377" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:35:14 · invoices · AUTO</text>
+
+  <rect x="252" y="386" width="100" height="16" rx="3" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="302" y="397" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">TRANSFORM_XSL</text>
+  <text x="360" y="397" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:35:15 · ok</text>
+
+  <rect x="252" y="406" width="44" height="16" rx="3" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="274" y="417" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">FATAL</text>
+  <text x="304" y="417" fill="#f87171" fontSize="9" fontFamily="ui-monospace, monospace">12:35:18 · UBL_CREATION · XSL en exception</text>
+
+  <rect x="252" y="424" width="34" height="16" rx="3" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="269" y="435" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">FIN</text>
+  <text x="294" y="435" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:35:18 · FAILED</text>
+
+  <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Deux vues</text>
+  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Groupée (1 ligne / job) · À plat</text>
+  <line x1="200" y1="100" x2="240" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pl-arrow)"/>
+
+  <rect x="820" y="172" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="187" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Badge de résultat</text>
+  <text x="830" y="200" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">SUCCESSFUL / FATAL / FAILED</text>
+  <line x1="820" y1="188" x2="680" y2="182" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pl-arrow)"/>
+
+  <rect x="20" y="380" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Détail des étapes</text>
+  <text x="30" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">DÉBUT / FIN · FATAL en évidence</text>
+  <line x1="200" y1="396" x2="252" y2="402" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pl-arrow)"/>
+</svg>
+
+---
+
 ## Provenance des événements
 
 Tous les chemins de traitement NomaUBL écrivent leur trace dans `F564237` via le même journaliseur. Les champs clés sont remplis à l'exécution : le **fichier** traité, le **mode** (`AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`), le **template** source, l'**étape** courante (`START`, `END`, ou un nom de méthode comme `TRANSFORM_XSL`, `CONVERT_RTF`, `RUN_TASKS`), le **message** et l'**horodatage**. Le moteur de groupement de cette page reconstruit les jobs à partir de ces événements bruts au moment de l'affichage.

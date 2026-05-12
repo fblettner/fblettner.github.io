@@ -20,6 +20,113 @@ Un quatrième onglet — **PDF Template** — est dédié à la mise en page PDF
 Les modèles de document figuraient auparavant sous *Configuration → Documents*. Ils sont désormais accessibles via **Gestion → Documents**, afin que le nouvel éditeur à quatre onglets — et tout particulièrement l'onglet visuel *PDF Template* — dispose d'une page à part entière. Le schéma et les routes restent inchangés : tout modèle existant continue de fonctionner sans étape de migration.
 :::
 
+---
+
+## Vue d'ensemble
+
+<svg viewBox="0 0 1000 540" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="doc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="doc-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="doc-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="500" rx="14" fill="url(#doc-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Documents</text>
+  <rect x="610" y="30" width="90" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="655" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">+ Nouveau</text>
+  <rect x="704" y="30" width="76" height="22" rx="5" fill="url(#doc-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="742" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">💾 Enreg.</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="240" y="84" width="156" height="430" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="92" width="140" height="24" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="108" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">🔍 Rechercher…</text>
+
+  <rect x="248" y="124" width="140" height="36" rx="6" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="258" y="142" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">invoices</text>
+  <text x="258" y="155" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Source · XML</text>
+
+  <rect x="248" y="168" width="140" height="36" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="186" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif">credit_notes</text>
+  <text x="258" y="199" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Source · XML</text>
+
+  <rect x="248" y="212" width="140" height="36" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="230" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif">invoices-ubl</text>
+  <text x="258" y="243" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Source · UBL</text>
+
+  <rect x="248" y="256" width="140" height="36" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="274" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif">debit_notes</text>
+  <text x="258" y="287" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Source · XML</text>
+
+  <rect x="408" y="84" width="372" height="430" rx="8" fill="rgba(74,158,255,0.04)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <rect x="416" y="92" width="120" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="476" y="107" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">📄 Document</text>
+  <rect x="540" y="92" width="96" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="588" y="107" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">🔧 Traitement</text>
+  <rect x="640" y="92" width="68" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="674" y="107" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙️ Avancé</text>
+  <rect x="712" y="92" width="64" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="744" y="107" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">🖼 PDF</text>
+
+  <text x="420" y="138" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Source</text>
+  <rect x="420" y="146" width="84" height="24" rx="5" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="462" y="162" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">XML</text>
+  <rect x="510" y="146" width="84" height="24" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="552" y="162" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">UBL</text>
+
+  <text x="420" y="194" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Données du document (XPath)</text>
+  <text x="420" y="216" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NUMÉRO CLIENT</text>
+  <rect x="420" y="222" width="350" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="238" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">//customer/code</text>
+  <text x="420" y="262" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATE DU DOCUMENT</text>
+  <rect x="420" y="268" width="350" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="284" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">//header/issueDate</text>
+  <text x="420" y="308" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CODE DE ROUTAGE</text>
+  <rect x="420" y="314" width="350" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="330" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">//header/routing</text>
+
+  <text x="420" y="362" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Format de date <text fill="#64748b" fontSize="9" fontWeight="400">(2026.05.9)</text></text>
+  <rect x="420" y="370" width="200" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="386" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">dd/MM/yyyy</text>
+  <text x="628" y="386" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">SimpleDateFormat</text>
+
+  <rect x="420" y="408" width="350" height="98" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="430" y="426" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">PANNEAU ÉCHANTILLON XML</text>
+  <text x="430" y="444" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">⌘ clic sur un champ XPath → panneau des balises</text>
+  <text x="430" y="460" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">/invoice/header/issueDate     2026-05-09</text>
+  <text x="430" y="474" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">/invoice/customer/code        00001</text>
+  <text x="430" y="488" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">/invoice/header/routing       B2B</text>
+
+  <rect x="20" y="116" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="131" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Barre des modèles</text>
+  <text x="30" y="144" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">recherche · carte par modèle</text>
+  <line x1="200" y1="132" x2="248" y2="142" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#doc-arrow)"/>
+
+  <rect x="820" y="92" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="107" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Éditeur à 4 onglets</text>
+  <text x="830" y="120" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Document · Traitement · Avancé · PDF</text>
+  <line x1="820" y1="108" x2="780" y2="104" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#doc-arrow)"/>
+
+  <rect x="20" y="218" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="233" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Données XPath</text>
+  <text x="30" y="246" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">extraites quand Source = XML</text>
+  <line x1="200" y1="234" x2="420" y2="234" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#doc-arrow)"/>
+
+  <rect x="820" y="368" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="383" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">dateInputFormat</text>
+  <text x="830" y="396" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dd/MM/yyyy · ISO · etc.</text>
+  <line x1="820" y1="384" x2="624" y2="384" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#doc-arrow)"/>
+
+  <rect x="20" y="436" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="451" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Charger un échantillon</text>
+  <text x="30" y="464" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">⌘ → panneau des chemins</text>
+  <line x1="200" y1="452" x2="420" y2="452" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#doc-arrow)"/>
+</svg>
+
+---
+
 ## Charger un échantillon XML (optionnel, recommandé)
 
 En haut de l'éditeur, cliquer sur **Charger un échantillon XML** et sélectionner un fichier de spool représentatif issu du système source. Une fois l'échantillon chargé, chaque champ XPath affiche un bouton **⌘** : il ouvre un panneau latéral qui liste tous les chemins de balises détectés dans l'échantillon, pour sélectionner la balise sans saisie manuelle. Le panneau permet de filtrer et affiche la valeur de chaque chemin pour faciliter le choix.
