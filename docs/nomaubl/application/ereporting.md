@@ -179,6 +179,112 @@ Codes `9950` – `9954` are *transient* (the report is still moving). `9955` –
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1000 580" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="er-pg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="er-pg-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="er-pg-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="540" rx="14" fill="url(#er-pg-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">E-Reporting</text>
+  <rect x="612" y="30" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="652" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Refresh</text>
+  <rect x="696" y="30" width="84" height="22" rx="5" fill="url(#er-pg-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="738" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">+ Generate</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="240" y="84" width="170" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="252" y="102" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">🔍 Company (KCO)…</text>
+  <rect x="418" y="84" width="170" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="102" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Period (YYYY-MM)…</text>
+  <rect x="596" y="84" width="140" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="608" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">All flux ▾</text>
+
+  <rect x="240" y="124" width="540" height="34" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="145" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DATE · KCO · PERIOD · FLUX · TYPE · STATUS · SUBMITTED ID</text>
+
+  <rect x="240" y="162" width="540" height="30" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">2026-05-01 · 00070 · 2026-04 · 10.1 · IN</text>
+  <rect x="556" y="170" width="100" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="606" y="181" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9955 · Accepted</text>
+  <text x="668" y="181" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">ERS-2026-0042</text>
+
+  <rect x="240" y="196" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="215" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">2026-05-01 · 00070 · 2026-04 · 10.3 · IN</text>
+  <rect x="556" y="204" width="100" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="606" y="215" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9955 · Accepted</text>
+  <text x="668" y="215" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">ERS-2026-0043</text>
+
+  <rect x="240" y="230" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="249" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">2026-04-01 · 00070 · 2026-03 · 10.1 · IN</text>
+  <rect x="556" y="238" width="100" height="16" rx="8" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="606" y="249" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9957 · Rejected</text>
+  <text x="668" y="249" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">ERS-2026-0021</text>
+
+  <rect x="240" y="264" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="283" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">2026-04-02 · 00070 · 2026-03 · 10.1 · RE</text>
+  <rect x="556" y="272" width="100" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="606" y="283" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9955 · Accepted</text>
+  <text x="668" y="283" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">ERS-2026-0022</text>
+
+  <rect x="240" y="298" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="317" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">2026-05-01 · 00001 · 2026-04 · 10.3 · IN</text>
+  <rect x="556" y="306" width="100" height="16" rx="8" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="606" y="317" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9952 · Sent</text>
+  <text x="668" y="317" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">ERS-2026-0044</text>
+
+  <rect x="240" y="332" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="351" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">2026-05-01 · 00001 · 2026-04 · 10.1 · IN</text>
+  <rect x="556" y="340" width="100" height="16" rx="8" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="606" y="351" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9951 · Pending</text>
+  <text x="668" y="351" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">ERS-2026-0045</text>
+
+  <line x1="240" y1="378" x2="780" y2="378" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="398" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">1 — 50 of 386</text>
+  <text x="780" y="398" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="end">Page 1 ▾ · 50 ▾  ‹  ›</text>
+
+  <rect x="240" y="420" width="540" height="120" rx="10" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="252" y="442" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">GENERATE DIALOG</text>
+  <text x="252" y="462" fill="#64748b" fontSize="10" fontFamily="system-ui, sans-serif">Company · Period · Type — pick a single row to submit a new report.</text>
+
+  <rect x="252" y="476" width="120" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="262" y="493" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">00070 ▾</text>
+  <rect x="380" y="476" width="120" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="390" y="493" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">2026-04</text>
+  <rect x="508" y="476" width="120" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="518" y="493" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">IN — Initial ▾</text>
+  <rect x="636" y="476" width="138" height="26" rx="5" fill="url(#er-pg-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="705" y="493" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Generate &amp; submit</text>
+
+  <text x="252" y="520" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">Produces Flux 10.1 (B2BINT detail) + Flux 10.3 (B2C / OUTOFSCOPE aggregated) in one call.</text>
+
+  <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filters</text>
+  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">company · period · flux</text>
+  <line x1="200" y1="100" x2="240" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#er-pg-arrow)"/>
+
+  <rect x="820" y="206" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="221" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Status badge</text>
+  <text x="830" y="234" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">9951 / 9952 / 9955 / 9957</text>
+  <line x1="820" y1="222" x2="660" y2="222" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#er-pg-arrow)"/>
+
+  <rect x="20" y="266" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="281" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Replacement (RE)</text>
+  <text x="30" y="294" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">overrides a 9957 rejection</text>
+  <line x1="200" y1="282" x2="240" y2="282" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#er-pg-arrow)"/>
+
+  <rect x="820" y="476" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="491" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Generate dialog</text>
+  <text x="830" y="504" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one click → 10.1 + 10.3</text>
+  <line x1="820" y1="492" x2="774" y2="492" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#er-pg-arrow)"/>
+</svg>
+
+---
+
 ## Toolbar
 
 The toolbar above the table combines three free-text filters with two quick actions.

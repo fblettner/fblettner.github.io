@@ -25,6 +25,76 @@ See the [Configuration → System → e-directory](../configuration/system/edire
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="edir-pg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="edir-pg-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="edir-pg-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="440" rx="14" fill="url(#edir-pg-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">E-Directory</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="240" y="92" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Search company</text>
+  <rect x="240" y="102" width="436" height="32" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="252" y="122" fill="#475569" fontSize="11" fontFamily="system-ui, sans-serif">Company name, SIREN (9 digits) or SIRET (14 digits)…</text>
+  <rect x="686" y="102" width="94" height="32" rx="6" fill="url(#edir-pg-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="733" y="122" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">🔍 Search</text>
+
+  <rect x="240" y="156" width="540" height="34" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="177" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NAME · SIREN · SIRET · ADDRESS · STATE · PPF DIRECTORY</text>
+
+  <rect x="240" y="194" width="540" height="48" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="213" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="600">ACME Manufacturing</text>
+  <text x="252" y="231" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">123 456 789 · 12345678900012 · 12 rue de Rivoli, 75001 Paris</text>
+  <rect x="612" y="200" width="80" height="18" rx="9" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="652" y="213" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Active</text>
+  <rect x="700" y="200" width="74" height="18" rx="9" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="737" y="213" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">✓ Reachable</text>
+
+  <rect x="240" y="246" width="540" height="48" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="265" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="600">ACME Logistics</text>
+  <text x="252" y="283" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">123 456 789 · 12345678900037 · 8 av. du Général Leclerc, 92100 Boulogne</text>
+  <rect x="612" y="252" width="80" height="18" rx="9" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="652" y="265" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Active</text>
+  <rect x="700" y="252" width="74" height="18" rx="9" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="737" y="265" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Not reach.</text>
+
+  <rect x="240" y="298" width="540" height="48" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="317" fill="#cbd5e1" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="600">ACME Old SARL</text>
+  <text x="252" y="335" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">123 456 789 · 12345678900029 · 4 rue Lafayette, 75009 Paris</text>
+  <rect x="608" y="304" width="84" height="18" rx="9" fill="rgba(255,69,58,0.10)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="650" y="317" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Closed</text>
+  <rect x="700" y="304" width="74" height="18" rx="9" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="737" y="317" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">— skipped</text>
+
+  <line x1="240" y1="364" x2="780" y2="364" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="384" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">3 results · INSEE registry</text>
+
+  <text x="240" y="416" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">INSEE registry is queried first (free public API). The PPF directory check runs on each match using the credentials configured under Configuration → System → e-directory.</text>
+
+  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One search field</text>
+  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">name · SIREN · SIRET — auto-detected</text>
+  <line x1="200" y1="115" x2="240" y2="118" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
+
+  <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PPF reachable badge</text>
+  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Reachable / Not / Closed</text>
+  <line x1="820" y1="216" x2="780" y2="212" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
+
+  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">INSEE administrative state</text>
+  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Active / Closed — skip closed</text>
+  <line x1="200" y1="316" x2="240" y2="316" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
+</svg>
+
+---
+
 ## How a search runs
 
 <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>

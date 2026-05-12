@@ -12,6 +12,149 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ---
 
+## Vue d'ensemble
+
+<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="inv-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="inv-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="inv-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="580" height="580" rx="14" fill="url(#inv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">E-Invoicing</text>
+  <rect x="608" y="30" width="82" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="649" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Rafraîchir</text>
+  <rect x="694" y="30" width="92" height="22" rx="5" fill="url(#inv-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="740" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">+ Nouvelle facture</text>
+  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="240" y="84" width="156" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="252" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">📅 7 derniers jours ▾</text>
+  <rect x="404" y="84" width="200" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="416" y="102" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">🔍 Doc · Dct · Kco · Numéro UBL</text>
+  <rect x="612" y="84" width="170" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="624" y="102" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Nom du client…</text>
+
+  <rect x="240" y="120" width="76" height="22" rx="11" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="278" y="135" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Toutes</text>
+  <rect x="324" y="120" width="76" height="22" rx="11" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1.5"/>
+  <text x="362" y="135" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">En cours</text>
+  <rect x="408" y="120" width="98" height="22" rx="11" fill="rgba(255,69,58,0.10)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="457" y="135" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Rejetée · IT</text>
+  <rect x="512" y="120" width="120" height="22" rx="11" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="572" y="135" fill="#fb923c" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Rejetée · Métier</text>
+  <rect x="640" y="120" width="74" height="22" rx="11" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="677" y="135" fill="#4ade80" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Terminal</text>
+
+  <rect x="240" y="160" width="540" height="34" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="181" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DOC · DCT · KCO · UBL · ÉMISE · CLIENT · TOTAL · STATUT · REVUE</text>
+
+  <rect x="240" y="198" width="540" height="30" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="217" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12345 · RI · 00070 · INV-2026-0142 · 2026-05-09 · ACME · 1 200,00</text>
+  <rect x="666" y="206" width="78" height="16" rx="8" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="705" y="217" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9903 · Envoyée</text>
+  <rect x="748" y="206" width="24" height="16" rx="3" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="760" y="217" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">⚑</text>
+
+  <rect x="240" y="232" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="251" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12346 · RI · 00070 · INV-2026-0143 · 2026-05-09 · Beta SARL · 540,00</text>
+  <rect x="666" y="240" width="78" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="705" y="251" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">200 · Déposée</text>
+
+  <rect x="240" y="266" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="285" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12347 · RI · 00001 · INV-2026-0144 · 2026-05-09 · Gamma SAS · 2 980,00</text>
+  <rect x="666" y="274" width="78" height="16" rx="8" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="705" y="285" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9904 · Rejetée</text>
+
+  <rect x="240" y="300" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="319" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12348 · RI · 00001 · INV-2026-0145 · 2026-05-09 · Delta &amp; Co · 815,00</text>
+  <rect x="666" y="308" width="78" height="16" rx="8" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="705" y="319" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9906 · Attente</text>
+
+  <rect x="240" y="334" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="353" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12349 · RI · 00001 · INV-2026-0146 · 2026-05-09 · Epsilon · 460,00</text>
+  <rect x="666" y="342" width="78" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="705" y="353" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">200 · Déposée</text>
+
+  <line x1="240" y1="380" x2="780" y2="380" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="400" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">1 — 50 sur 1 248</text>
+  <text x="780" y="400" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="end">Page 1 ▾ · 50 ▾  ‹  ›</text>
+
+  <rect x="240" y="424" width="540" height="156" rx="10" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.4"/>
+  <text x="252" y="446" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">MODALE DE DÉTAIL — 7 onglets</text>
+  <rect x="252" y="456" width="68" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="286" y="471" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Résumé</text>
+  <rect x="326" y="456" width="60" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="356" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Parties</text>
+  <rect x="392" y="456" width="58" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="421" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Lignes</text>
+  <rect x="456" y="456" width="42" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="477" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">TVA</text>
+  <rect x="504" y="456" width="56" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="532" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Notes</text>
+  <rect x="566" y="456" width="78" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="605" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Historique</text>
+  <rect x="650" y="456" width="48" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="674" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">PDF</text>
+
+  <rect x="252" y="494" width="142" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="262" y="510" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CLIENT</text>
+  <text x="262" y="526" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">ACME</text>
+
+  <rect x="404" y="494" width="142" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
+  <text x="414" y="510" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOTAL TTC</text>
+  <text x="414" y="526" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">1 200,00 EUR</text>
+
+  <rect x="556" y="494" width="218" height="40" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="566" y="510" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUT</text>
+  <text x="566" y="526" fill="#4a9eff" fontSize="11" fontFamily="ui-monospace, monospace" fontWeight="700">9903 · Envoyée à la PA</text>
+
+  <rect x="252" y="544" width="96" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="300" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Modifier UBL</text>
+  <rect x="354" y="544" width="64" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="386" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">E-mail</text>
+  <rect x="424" y="544" width="74" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="461" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Renvoyer</text>
+  <rect x="504" y="544" width="116" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="562" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Modifier statut</text>
+  <rect x="626" y="544" width="74" height="24" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="663" y="560" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
+
+  <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtres date + recherche</text>
+  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">requête débouncée côté serveur</text>
+  <line x1="200" y1="100" x2="240" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+
+  <rect x="20" y="124" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="139" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pastilles de statut</text>
+  <text x="30" y="152" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">partition multi-codes · 1 clic</text>
+  <line x1="200" y1="140" x2="324" y2="131" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+
+  <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Badge Revue</text>
+  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">UHALRTPSD · nouveau 2026.05.9</text>
+  <line x1="820" y1="216" x2="772" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+
+  <rect x="820" y="284" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="299" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clic → modale détail</text>
+  <text x="830" y="312" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">7 onglets · ouvre Résumé</text>
+  <line x1="820" y1="300" x2="780" y2="304" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+
+  <rect x="20" y="448" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="463" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Onglets de la modale</text>
+  <text x="30" y="476" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Résumé · Parties · Lignes · TVA</text>
+  <line x1="200" y1="464" x2="252" y2="464" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+
+  <rect x="20" y="548" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="563" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Boutons d'action</text>
+  <text x="30" y="576" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Modifier · E-mail · Renvoyer · Statut</text>
+  <line x1="200" y1="564" x2="252" y2="558" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+</svg>
+
+---
+
 ## Barre d'outils
 
 La barre d'outils au-dessus du tableau combine filtre de dates, recherche texte, puces de statut et raccourcis.
