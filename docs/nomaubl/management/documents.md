@@ -102,6 +102,24 @@ Functional data NomaUBL reads from the spool to populate the UBL invoice and to 
 
 > 💡 Each Document Data field has its own **default value**. Defaults are used when the XML tag is missing or empty, which is useful when a value is constant for a given template.
 
+### Date format *(when Source = XML, 2026.05.9)*
+
+| Field | Default | Description |
+|---|---|---|
+| **`dateInputFormat`** | `yyyy-MM-dd` *(ISO)* | Java `SimpleDateFormat` pattern used to parse **document and due dates** extracted from the source XML before they are written to `F564230` / `F564231`. The previous version hardcoded ISO; that worked on UBL sources (the XSL emits ISO) but silently failed on XML sources where the spool format is locale-dependent (`dd/MM/yyyy` for many French ERPs, `MM/dd/yyyy` for North-American spools, etc.). |
+
+Pick the pattern that matches the source dates literally. Common values:
+
+| Source date sample | Pattern |
+|---|---|
+| `2026-05-12` | `yyyy-MM-dd` *(default — ISO)* |
+| `12/05/2026` | `dd/MM/yyyy` |
+| `12.05.2026` | `dd.MM.yyyy` |
+| `05/12/2026` | `MM/dd/yyyy` |
+| `20260512` | `yyyyMMdd` |
+
+The pattern applies only when the document's *Source* is `XML`. UBL sources keep emitting ISO through the XSL, so the field is ignored there. The default keeps existing UBL flows back-compat without any edit.
+
 ---
 
 ## Tab 2 — 🔧 Processing

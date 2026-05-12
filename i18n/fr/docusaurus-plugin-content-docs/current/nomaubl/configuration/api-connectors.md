@@ -16,12 +16,22 @@ Les connecteurs sont consommés par la page [Liaisons d'actions](../management/a
 
 Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — tant que la source est mappée vers UBL.
 
-L'éditeur comporte **quatre onglets** :
+:::info[Refonte en 2026.05.9]
+Deux ajouts sur cette page :
+
+- **Nouvel onglet Webhooks** — configure la façon dont la PA pousse les mises à jour de statut vers NomaUBL. Les requêtes sont signées HMAC avec un secret partagé et POSTées sur `/api/webhook/{connector}/status` ; le vérificateur déduplique les ré-essais « at-least-once » sur l'event id du payload et applique le statut résolu à la facture correspondante. L'onglet expose aussi les surcharges de chemins JSON pour les champs invoice id, status et event id, ainsi qu'une table de correspondance qui traduit le vocabulaire de la PA vers l'ensemble logique `success` / `pending` / `failed`.
+- **Content-Type par endpoint** — chaque endpoint peut désormais déclarer `application/json` *(défaut)* ou `multipart/form-data`. Le builder multipart transforme le corps en liste de parts (`name=value`, `file=@{{filePath}};filename=…;contentType=…`), ce qui permet aux endpoints api-connecteur de piloter des PA qui attendent un upload `multipart/form-data` (par exemple IOPOLE).
+
+`ImportStatusHandler` a aussi été relaxé — tout statut non `failed` / non `pending` est traité comme un succès, ce qui couvre les vocabulaires comme `EMITTED` / `RECEIVED` de IOPOLE sans configuration par PA.
+:::
+
+L'éditeur comporte **cinq onglets** :
 
 1. **Connection** — URL racine, timeout, TLS, en-têtes par défaut.
 2. **Authentication** — None / Basic / Bearer / API Key / OAuth2 (champs conditionnels selon le schéma).
-3. **Endpoints** — catalogue des endpoints HTTP exposés par le connecteur.
-4. **Test** — exécuteur intégré permettant d'appeler un endpoint avec des paramètres personnalisés et d'inspecter la réponse.
+3. **Endpoints** — catalogue des endpoints HTTP exposés par le connecteur, avec Content-Type par endpoint.
+4. **Webhooks** — URL du webhook entrant, secret partagé, surcharges de chemins JSON et table de statuts pour les mises à jour poussées par la PA.
+5. **Test** — exécuteur intégré permettant d'appeler un endpoint avec des paramètres personnalisés et d'inspecter la réponse.
 
 ---
 
@@ -115,11 +125,23 @@ Tous les autres placeholders doivent être **déclarés dans la section Paramete
 | **Label** | Libellé lisible affiché dans l'éditeur et dans les listes déroulantes pendant le choix d'un endpoint (par ex. `Get Order Lines`). |
 | **Method** | Méthode HTTP (`GET` / `POST` / `PUT` / `DELETE` / `PATCH`). |
 | **URL path** | Chemin de l'endpoint ajouté à la **Base URL** du connecteur (par ex. `/v7.3/orchestrator/{{name}}`). |
+| **Content-Type** *(2026.05.9)* | `application/json` *(défaut)* ou `multipart/form-data`. La variante multipart transforme le corps en liste de parts — voir *Corps multipart* ci-dessous. |
 | **Extra headers** | Paires `Key:Value` séparées par des points-virgules, ajoutées aux en-têtes par défaut du connecteur (ou les surchargeant) (par ex. `X-Custom:value;Authorization:Bearer {{token}}`). |
-| **Body** | Corps de requête — modèle JSON avec placeholders `{{param}}`. Le bouton **Format JSON** met en forme la valeur. |
+| **Body** | Corps de requête — modèle JSON avec placeholders `{{param}}`. Le bouton **Format JSON** met en forme la valeur. Pour `multipart/form-data`, le corps est lu comme une part par ligne (`name=value` ou `file=@{{filePath}};filename=…;contentType=…`). |
 | **Query params** | Modèle de chaîne de requête avec placeholders `{{param}}` (par ex. `pageSize={{pageSize}}&page={{page}}`). |
 | **Response field** | Chemin optionnel en notation pointée (par ex. `data.items`) qui extrait un sous-arbre de la réponse — utile pour ne récupérer qu'un fragment du payload. |
 | **Description** | Description en texte libre affichée dans les listes déroulantes et dans l'en-tête de l'éditeur. |
+
+#### Corps multipart
+
+Quand **Content-Type** est positionné sur `multipart/form-data`, le corps n'est plus un document JSON unique — il est lu comme une **liste de parts**, une par ligne non vide. Chaque part est soit une valeur littérale, soit une référence de fichier :
+
+| Forme | Exemple | Sens |
+|---|---|---|
+| `name=value` | `comment=facture {{fedoc}}` | Ajoute un champ texte nommé `comment` avec la valeur résolue. |
+| `file=@{{filePath}};filename=invoice.xml;contentType=application/xml` | *(idem)* | Attache une part fichier nommée `file`. `{{filePath}}` se résout vers le chemin sur disque ; `filename` et `contentType` sont les en-têtes envoyés sur cette part. |
+
+Cas d'usage typique : une PA qui prend la facture UBL en upload `multipart/form-data` avec le XML dans une part `file` (l'endpoint d'import facture IOPOLE suit ce schéma).
 
 ### Response Mappings
 
@@ -194,7 +216,61 @@ Le corps est un modèle JSON ; `{{reportName}}`, `{{reportVersion}}` et `{{compa
 
 ---
 
-## Onglet 4 — Test
+## Onglet 4 — Webhooks
+
+Configure la façon dont la PA pousse les **mises à jour de statut entrantes** vers NomaUBL. L'onglet suppose la forme de requête que NomaUBL implémente : `POST` HTTP avec un corps JSON, une signature HMAC-SHA256 sur un canonical `timestamp\nMÉTHODE\nchemin\nchecksumBody`, et un event id qui permet au vérificateur de dédupliquer les ré-essais « at-least-once ».
+
+### Webhook entrant
+
+| Champ | Description |
+|---|---|
+| **URL** *(lecture seule)* | L'endpoint sur lequel la PA doit poster : `https://<host>/api/webhook/{connector}/status`. À coller tel quel dans les réglages webhook de la PA. La route passe outre l'auth de session — la signature HMAC est la seule authentification. |
+
+### Signature HMAC
+
+| Champ | Description |
+|---|---|
+| **Shared secret** | Le même secret que celui collé côté PA. Stocké **chiffré au repos** (la propriété `webhook.secret` utilise la convention du suffixe `*Secret`). Utilisé pour vérifier l'en-tête `X-Signature` — `HmacSHA256` sur `timestamp + méthode + chemin + checksum du corps`. |
+
+Une requête dont la signature ne correspond pas est rejetée avec un HTTP `401` (bruyant), pour qu'un secret incorrect d'un côté ou de l'autre remonte immédiatement dans le tableau de livraison webhook de la PA. Un nom de connecteur inconnu renvoie `404`.
+
+### Chemins JSON du payload
+
+Surcharges de chemins JSON qui indiquent au vérificateur où lire l'identifiant facture, la chaîne de statut et l'event id à l'intérieur du payload de la PA. Notation pointée — même syntaxe que les response mappings (`data.0.invoiceId`).
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **Invoice id field** | `invoiceId` | Chemin vers l'identifiant facture de la PA — le même UUID que nous avons enregistré au moment de l'envoi dans `F564230.FEUKIDSZ`. |
+| **Status field** | `status.code` | Chemin vers la chaîne de statut de la PA. |
+| **Event id field** | `eventId` | Utilisé pour dédupliquer les ré-essais « at-least-once ». Retombe sur `méthode+timestamp+body-hash` quand le champ est absent ou vide. |
+
+### Table de correspondance des statuts
+
+Liste de paires `paStatus:logical` séparées par point-virgule qui traduit le vocabulaire de la PA vers l'ensemble logique de statuts NomaUBL.
+
+| Logique | Signification |
+|---|---|
+| `success` | Résout vers le statut cycle de vie *Déposée*. |
+| `pending` | Enregistre un événement *En attente PA* sans modifier le statut courant. |
+| `failed` | Résout vers un statut *Rejetée* avec le message extrait du payload. |
+
+Exemple : `RECEIVED:pending;DELIVERED:success;REJECTED:failed`. Les statuts non mappés sont enregistrés comme un événement cycle de vie générique *Reçu* sans modifier le statut courant — l'entrée est tracée mais ne change pas l'état de la facture.
+
+### Comportement de la route
+
+| Situation | Réponse HTTP | Effet |
+|---|---|---|
+| Signature valide, event id connu (replay) | `200 OK` | Le replay est acquitté ; rien d'autre ne se passe — le cache de dédup l'absorbe. |
+| Signature valide, event id nouveau | `200 OK` | La transition résolue est appliquée sur la ligne `F564230`. |
+| Signature invalide | `401 Unauthorized` | Le monitoring de l'émetteur s'allume. |
+| Connecteur inconnu | `404 Not Found` | — |
+| Erreur interne (BD coupée, etc.) | `2xx` | NomaUBL renvoie 2xx pour stopper les ré-essais sans fin de l'émetteur ; l'erreur est tracée de ce côté. |
+
+Un redémarrage JVM vide le cache mémoire de dédup (10 000 entrées × TTL 1 h) — rejouer le même événement après redémarrage ré-applique la transition, ce qui est décrit en clair : rejouer la même transition cycle de vie une seconde fois ne produit aucun changement observable. Le cache existe pour réduire le bruit, pas pour la correction.
+
+---
+
+## Onglet 5 — Test
 
 Exécuteur HTTP intégré : appeler un endpoint du connecteur avec des paramètres personnalisés et inspecter la réponse. Pratique pour valider une intégration avant de la lier à une action réglementaire ou à un job planifié.
 

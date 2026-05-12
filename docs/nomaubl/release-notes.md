@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+  <a href="#v2026-05-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-12</span></a>
+  <a href="#v2026-05-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
@@ -32,6 +33,70 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.9 — 2026-05-12 \{#v2026-05-9\}
+
+Validation pipeline + inbound webhooks release. The Schematron stack is now driven by **precompiled XSLT** loaded from the JAR — the ISO compile-on-startup pipeline is gone, and locally-authored rules are precompiled at build time. **Flux 2** runs on every profile (a missing Step 3 from the AFNOR XP Z12-012 sequence was silently skipped on Extended-CTC-FR invoices). A new **NomaUBL house-rules pack** captures AIFE-side rules the public Schematron packs do not ship yet (first rule: credit-note codes 261/381/396/502/503 require a preceding-invoice reference). On the operator side, **inbound webhooks** are now first class: HMAC-verified POSTs to `/api/webhook/{connector}/{event}` look the invoice up by PA UUID, apply the lifecycle status and dedupe at-least-once retries — generic enough to plug any PA in via the api-connector template. The [Integration Errors](./application/integration-errors.md) list dropped its unreadable Message column in favour of a dedicated detail modal that splits the Schematron debug context from the French explanation.
+
+### Inbound webhooks (generic framework)
+
+- New `/api/webhook/{connector}/{event}` route — public (bypasses session auth), verifies the request via **HMAC-SHA256** over a canonical `timestamp\nMETHOD\npath\nbodyChecksum`, dedupes on the payload's event id (in-memory LRU+TTL cache, 10k entries × 1 h), and dispatches to a per-event handler. Status events apply the resolved `InvoiceStatusCatalog.StatusTransition` against the matching `F564230` row (looked up via `FEUKIDSZ`).
+- Configuration lives on the [api-connector](./configuration/api-connectors.md) template (new **Webhooks** tab in `ApiConnectorEditor`): shared secret (encrypted at rest via the `*Secret` suffix), JSON path overrides for `idField` / `statusField` / `eventIdField`, and a `paStatus:logical` map (`success` / `pending` / `failed`) reused from `ImportStatusHandler`. The tab shows the read-only URL hint operators paste into the PA's webhook settings.
+- Returns 2xx on internal errors so the sender stops retrying; 401 on signature failure (loud) and 404 on unknown connector name. JVM restart drops the dedup cache safely — status applications are described in clear: replaying the same event a second time has no observable effect.
+
+### Schematron pipeline — precompiled only
+
+- Runtime no longer compiles `.sch` files. `UBLValidator` loads precompiled `.xsl` straight from the classpath, failing fast at startup if any expected file is missing. AFNOR's three packs are shipped as published; the two locally-authored rules (`BR-FR-CPRO-Schematron-UBL` + `BR-NOMAUBL-rules`) are precompiled at build time by `build.sh` via Saxon CLI + `xmlresolver` so the same pipeline applies to everything.
+- The ISO skeleton XSLs (`iso_dsdl_include.xsl`, `iso_abstract_expand.xsl`, `iso_svrl_for_xslt2.xsl`) and the `compileSchematron` helper are gone from runtime. Cold-start drops a noticeable beat — three XSLT compiles × five packs no longer happen per JVM.
+- Dashboard footer keeps showing per-pack versions: `BuildInfo` still reads the `.sch` source for the version stamp (priority to the `yyyymmdd_VX.Y.Z` filename pattern; falls back to the header comment), so nothing breaks even though the runtime payload is now `.xsl`. See the [UBL Validate](./ubl-tools/validate.md) page.
+
+### Validation profile fix — Flux 2 always runs
+
+- AFNOR XP Z12-012 V1.3.1 splits validation into 4 steps: Step 2 picks EN 16931 *or* Extended-CTC-FR (depending on `CustomizationID`), Step 3 runs **BR-FR-Flux 2 unconditionally** on top. The previous code treated Extended-CTC-FR as a superset and skipped Flux 2 — missing the reform-specific `BR-FR-*` / `EXT-FR-FE-*` rules the PA still enforces server-side. The Extended profile now runs both steps.
+
+### NomaUBL house rules
+
+- New `BR-NOMAUBL-rules.sch` for AIFE-side rules missing from the public Schematron packs. First rule (`BR-NOMAUBL-01`, fatal): if BT-3 ∈ `{261, 381, 396, 502, 503}`, at least one `cac:BillingReference/cac:InvoiceDocumentReference` with both `cbc:ID` (BT-25) and `cbc:IssueDate` (BT-26) must be present. PAs reject these credit notes today with the `precedingInvoices` model-validation error; surface it locally so failures land in `F564236` instead of after a round-trip.
+- Wired through `BuildInfo` (`schematron.nomaubl` version in `/api/build-info`) and runs as the final layer after CPRO-B2G.
+
+### Validation message rendering
+
+- The CTC-FR `BR-FREXT-*` rules emit a single string mixing a comma-separated debug context (`Num Fact: …, Code: S, rate: 20, …`) and a French explanation prefixed by another `[RULE-ID] -` marker. Both `InvoiceDetailModal` (Validate button + persisted `F564236` errors) and the new `ErrorDetailModal` (see below) now split the blob on the last `, [RULE-ID] -` marker: the French explanation becomes the main line, the debug fields render as a small monospace grid in a faint card underneath. The rule-id pattern accepts the FNFE-MPE `ini` / `rev` suffixes (regex flag fix — the warning variants were rendering as raw text).
+- `ConfigJson.jsonUnescape` now covers the full RFC 8259 backslash set including `\uXXXX`, `\b`, `\f`, `\/`. PA error messages with accented French characters (`é` → `é`) and embedded newlines no longer surface as literal escape sequences in the lifecycle message. `PAImportStatusClient.parseJsonErrors` calls it on every extracted error token.
+
+### Integration Errors — readable detail view
+
+- Removed the Message column from the table — Schematron / XPath messages are too long for a grid cell. The column was eating ~720 px and still cut off context. Row click opens the detail view instead.
+- Matched rows (with a real invoice in `F564231`) keep opening the full `InvoiceDetailModal` on the History tab.
+- Unmatched / orphan rows now open a new **`ErrorDetailModal`** — level badge, rule + description (from `useRuleCatalog`), source, date, doc / dct / kco (with a *no matching invoice in F564231* hint), customer, and the full message rendered through the same `splitValidationMessage` helper. Every row in the page is now click-actionable.
+- New **Date column** mirrors the time context of the Tech Dashboard's recent-errors card without opening a row.
+
+### Per-document date input format
+
+- `UBLDatabaseHandler.insertDocumentLog` / `updateDocumentLog` were hardcoded to parse source dates as `yyyy-MM-dd`. That worked for UBL-source flows (the XSL emits ISO) but silently failed on XML-source documents where the source dates are `dd/MM/yyyy` etc. New **`dateInputFormat`** property on the doc-template (set in [Document Editor](./management/documents.md) → Document tab → *Date format* section) drives the parser, with ISO as the back-compat default. `CustomUBL` reads it from the doc-template resource and threads it through to the database handler.
+
+### TAG_INVOICE_TYPE_CODE — BT-3 separated from DCT
+
+- `TAG_DOCUMENT_TYPE` was misleadingly commented as BT-3 but is actually the Type / DCT Code used for `cbc:ID` concatenation. New separate `TAG_INVOICE_TYPE_CODE` (BT-3, UNTDID 1001 — 380, 381, 384, …) in `ubl-template.xsl`: when set and the source XML carries a value, that value wins over UBLDefault rules / `$invoiceType_default`. Emitted inline via `ubl:type-code-qname` so the resolved code actually reaches the wire instead of being shadowed by a second `ubl:resolve-invoice-type` call inside the legacy template.
+- XSL Editor metadata fixed (`TAG_DOCUMENT_TYPE` no longer claims BT-3) and the new variable surfaces in the Header section's two-column layout as soon as the template declares it.
+
+### api-connector — multipart, status check
+
+- New `endpoint.N.contentType` property + multipart body builder so api-connector endpoints can submit `multipart/form-data` (the IOPOLE invoice-import endpoint expects a `file=@{{filePath}};contentType=text/xml` part). UI: **Content-Type** selector in the [API Connectors](./configuration/api-connectors.md) endpoint panel.
+- `ImportStatusHandler` decision tree relaxed — non-`failed` / non-`pending` statuses are treated as success (covers the IOPOLE `EMITTED` / `RECEIVED` vocabulary without per-PA config).
+
+### Per-step debug profiling
+
+- New optional **`debugProfile`** toggle on [global](./configuration/system/global.md) writes per-step timing rows to `F564237` (header, lines, validation, UBL emit, PA send). Surfaces in the [Tech Dashboard](./application/tech-dashboard.md) for spotting the slow stage in a batch run without ad-hoc logging.
+
+### Smaller cleanups
+
+- `UHALRTPSD` review flag surfaces on the [E-Invoicing list](./application/invoices.md) (column + coloured badge) so operators can spot rows flagged for retrospective review.
+- Directory check now runs at validation time (not just at send time) so an unknown counterparty surfaces in `F564236` before the document is even queued. Reachability check is mapping-aware (LIKE search cast through the dialect helper so Oracle's `NCHAR` padding does not break partial matches).
+- Pre-transform improvements in `isc-normalize.xsl`: `clientFacturation` / `clientConsommation` templates now pass through non-`adresse` children (so `consIdentite` and similar per-line tags resolve), and zero `prixUnitairekWh` values on credit / charge lines fall back to the sibling `montantHT` made unsigned (BT-146 must be ≥ 0 in UBL).
+- New `e2e/` folder with a Playwright suite exercising the major pages (Dashboard, Invoices, Integration Errors, Settings → all editors, Notifications). Not yet wired into CI — run with `npx playwright test` on demand.
 
 ---
 

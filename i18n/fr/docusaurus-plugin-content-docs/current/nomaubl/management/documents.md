@@ -102,6 +102,24 @@ Données fonctionnelles que NomaUBL lit dans le spool pour alimenter la facture 
 
 > 💡 Chaque champ « Données du document » dispose de sa propre **valeur par défaut**. Les valeurs par défaut sont utilisées quand la balise XML est absente ou vide — pratique quand une valeur est constante pour un modèle donné.
 
+### Format de date *(quand Source = XML, 2026.05.9)*
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **`dateInputFormat`** | `yyyy-MM-dd` *(ISO)* | Modèle Java `SimpleDateFormat` utilisé pour parser les **dates de document et d'échéance** extraites du XML source avant écriture dans `F564230` / `F564231`. La version précédente codait ISO en dur ; ça fonctionnait sur les sources UBL (le XSL émet de l'ISO) mais échouait silencieusement sur les sources XML dont le format du spool dépend de la locale (`dd/MM/yyyy` pour beaucoup d'ERP français, `MM/dd/yyyy` pour les spools nord-américains, etc.). |
+
+Choisir le modèle qui correspond littéralement aux dates source. Valeurs courantes :
+
+| Exemple de date source | Modèle |
+|---|---|
+| `2026-05-12` | `yyyy-MM-dd` *(défaut — ISO)* |
+| `12/05/2026` | `dd/MM/yyyy` |
+| `12.05.2026` | `dd.MM.yyyy` |
+| `05/12/2026` | `MM/dd/yyyy` |
+| `20260512` | `yyyyMMdd` |
+
+Le modèle ne s'applique que quand la *Source* du document est `XML`. Les sources UBL continuent d'émettre de l'ISO via le XSL, le champ est donc ignoré dans ce cas. La valeur par défaut conserve la compatibilité ascendante des flux UBL existants sans aucune modification.
+
 ---
 
 ## Onglet 2 — 🔧 Traitement

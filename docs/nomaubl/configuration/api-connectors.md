@@ -16,12 +16,22 @@ Connectors are used by the [Action Bindings](../management/actions.md) page to w
 
 This page applies to documents from any source system — JD Edwards, SAP, NetSuite, custom ERP — once the source is mapped to UBL.
 
-The editor has **four tabs**:
+:::info[Refreshed in 2026.05.9]
+Two additions on this page:
+
+- **New Webhooks tab** — configure how the PA pushes status updates back to NomaUBL. Requests are HMAC-signed with a shared secret and POSTed to `/api/webhook/{connector}/status`; the verifier dedupes at-least-once retries on the payload's event id and applies the resolved status to the matching invoice. The tab also exposes JSON path overrides for the invoice id, status and event id fields, plus a status map from the PA's vocabulary to the logical `success` / `pending` / `failed` set.
+- **Per-endpoint Content-Type** — endpoints can now declare `application/json` *(default)* or `multipart/form-data`. The multipart builder turns the body into a list of parts (`name=value`, `file=@{{filePath}};filename=…;contentType=…`), so api-connector endpoints can drive PAs that expect a `multipart/form-data` invoice upload (e.g. IOPOLE).
+
+`ImportStatusHandler` was also relaxed — non-`failed` / non-`pending` statuses are treated as success, so vocabularies like IOPOLE's `EMITTED` / `RECEIVED` work without per-PA config.
+:::
+
+The editor has **five tabs**:
 
 1. **Connection** — base URL, timeout, TLS, default headers.
 2. **Authentication** — None / Basic / Bearer / API Key / OAuth2 (with conditional fields per scheme).
-3. **Endpoints** — catalogue of HTTP endpoints exposed by the connector.
-4. **Test** — built-in runner to call an endpoint with custom parameters and inspect the response.
+3. **Endpoints** — catalogue of HTTP endpoints exposed by the connector, with per-endpoint Content-Type.
+4. **Webhooks** — inbound webhook URL, shared secret, JSON path overrides and status map for PA-pushed status updates.
+5. **Test** — built-in runner to call an endpoint with custom parameters and inspect the response.
 
 ---
 
@@ -115,11 +125,23 @@ All other placeholders must be **declared in the endpoint's Parameters section**
 | **Label** | Human-readable label shown in the editor and in dropdowns when a user picks an endpoint (e.g. `Get Order Lines`). |
 | **Method** | HTTP method (`GET` / `POST` / `PUT` / `DELETE` / `PATCH`). |
 | **URL path** | Endpoint path appended to the connector's **Base URL** (e.g. `/v7.3/orchestrator/{{name}}`). |
+| **Content-Type** *(2026.05.9)* | `application/json` *(default)* or `multipart/form-data`. The multipart variant turns the body into a list of parts — see *Multipart bodies* below. |
 | **Extra headers** | Semicolon-separated `Key:Value` pairs added to (or overriding) the connector's default headers (e.g. `X-Custom:value;Authorization:Bearer {{token}}`). |
-| **Body** | Request body — a JSON template with `{{param}}` placeholders. The **Format JSON** button pretty-prints the value. |
+| **Body** | Request body — a JSON template with `{{param}}` placeholders. The **Format JSON** button pretty-prints the value. For `multipart/form-data`, the body is parsed as one part per line (`name=value` or `file=@{{filePath}};filename=…;contentType=…`). |
 | **Query params** | Query string template with `{{param}}` placeholders (e.g. `pageSize={{pageSize}}&page={{page}}`). |
 | **Response field** | Optional dot-notation path (e.g. `data.items`) extracting a sub-tree of the response — useful when the caller is only interested in part of the payload. |
 | **Description** | Free-text description shown in dropdowns and in the editor header. |
+
+#### Multipart bodies
+
+When **Content-Type** is set to `multipart/form-data`, the body is no longer a single JSON document — it is parsed as a **list of parts**, one per non-empty line. Each part is either a literal value or a file reference:
+
+| Form | Example | Meaning |
+|---|---|---|
+| `name=value` | `comment=invoice {{fedoc}}` | Adds a text field named `comment` with the resolved value. |
+| `file=@{{filePath}};filename=invoice.xml;contentType=application/xml` | *(same)* | Attaches a file part named `file`. `{{filePath}}` resolves to the path on disk; `filename` and `contentType` are the headers shipped on that part. |
+
+Typical use case: a PA that takes the UBL invoice as a `multipart/form-data` upload with the XML in a `file` part (IOPOLE's invoice-import endpoint follows this pattern).
 
 ### Response Mappings
 
@@ -194,7 +216,61 @@ The body is a JSON template; `{{reportName}}`, `{{reportVersion}}` and `{{compan
 
 ---
 
-## Tab 4 — Test
+## Tab 4 — Webhooks
+
+Configure how the PA pushes **inbound status updates** back to NomaUBL. The tab assumes the request shape NomaUBL implements: HTTP `POST` with a JSON body, an HMAC-SHA256 signature on a canonical `timestamp\nMETHOD\npath\nbodyChecksum`, and a per-event id that lets the verifier dedupe at-least-once retries.
+
+### Inbound Webhook
+
+| Field | Description |
+|---|---|
+| **URL** *(read-only)* | The endpoint the PA must POST to: `https://<host>/api/webhook/{connector}/status`. Copy it into the PA's webhook settings as-is. The route bypasses session auth — the HMAC signature is the only authentication. |
+
+### HMAC Signature
+
+| Field | Description |
+|---|---|
+| **Shared secret** | The same secret you paste on the PA side. Stored **encrypted at rest** (the `webhook.secret` property uses the `*Secret` suffix convention). Used to verify the `X-Signature` header — `HmacSHA256` over `timestamp + method + path + body checksum`. |
+
+A request whose signature does not match the expected value is rejected with HTTP `401` (loud), so a wrong secret on either side surfaces immediately in the PA's webhook delivery dashboard. An unknown connector name returns `404`.
+
+### Payload Field Paths
+
+JSON-path overrides that tell the verifier where to read the invoice id, the status string and the event id inside the PA's payload. Dot notation — same syntax as endpoint response mappings (`data.0.invoiceId`).
+
+| Field | Default | Description |
+|---|---|---|
+| **Invoice id field** | `invoiceId` | Path to the PA's invoice identifier — the UUID stored at send time in `F564230.FEUKIDSZ`. |
+| **Status field** | `status.code` | Path to the PA's status string. |
+| **Event id field** | `eventId` | Used to dedupe at-least-once retries. Falls back to `method+timestamp+body-hash` when the field is missing or empty. |
+
+### Status Map
+
+A semicolon-separated list of `paStatus:logical` pairs that translates the PA's vocabulary into NomaUBL's logical status set.
+
+| Logical | Meaning |
+|---|---|
+| `success` | Resolves to the *Deposited* lifecycle status. |
+| `pending` | Records a *Pending PA* event without overwriting the current status. |
+| `failed` | Resolves to a *Rejected* status with the message extracted from the payload. |
+
+Example: `RECEIVED:pending;DELIVERED:success;REJECTED:failed`. Unmapped statuses are recorded as a generic *Received* lifecycle event without overwriting the current status — the inbound is logged but does not alter the invoice's state.
+
+### How the route behaves
+
+| Situation | HTTP response | Effect |
+|---|---|---|
+| Valid signature, known event id (replay) | `200 OK` | The replay is acknowledged; nothing else happens — the dedup cache absorbs it. |
+| Valid signature, new event id | `200 OK` | The resolved transition is applied to the `F564230` row. |
+| Bad signature | `401 Unauthorized` | The sender's monitoring lights up. |
+| Unknown connector | `404 Not Found` | — |
+| Internal error (DB down, etc.) | `2xx` | NomaUBL returns 2xx to stop the sender from retrying indefinitely; the error is logged on this side. |
+
+A JVM restart drops the in-memory dedup cache (10 000 entries × 1 h TTL) — replaying the same event after a restart re-applies the transition, which is described in clear: applying the same lifecycle transition a second time produces no observable change. The cache exists only to cut chatter, not for correctness.
+
+---
+
+## Tab 5 — Test
 
 Built-in HTTP runner to call any endpoint of the connector with custom parameter values and inspect the result. Useful for validating an integration before binding it to a regulatory action or a scheduled job.
 

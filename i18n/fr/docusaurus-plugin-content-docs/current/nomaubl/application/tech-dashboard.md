@@ -324,6 +324,12 @@ Les valeurs de chemin contenant des jokers d'exécution (`%TEMPLATE%`, `%FILE_NA
 
 Temps moyen de traitement de bout en bout par modèle, en secondes, sur les 14 derniers jours. La carte charge les événements `START` / `END` de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` — la précédente version utilisait une auto-jointure SQL avec un `FETMPL` ambigu et une arithmétique `e.FEUPMT - s.FEUPMT` incorrecte ; ce point est corrigé.
 
+#### Décomposition par étape quand `debugProfile` est actif *(2026.05.9)*
+
+Quand le commutateur [`debugProfile`](../configuration/system/global.md) sur le modèle `global` est à `Y`, chaque exécution écrit une ligne par étape du pipeline dans `F564237` — **parsing d'en-tête**, **parsing des lignes**, **validation**, **émission UBL**, **envoi PA**. La carte Temps de traitement par modèle les fait remonter sous forme de décomposition empilée sous les totaux par modèle — une étape lente se repère d'un coup d'œil sans plonger dans le journal d'exécution.
+
+Le flux Traitements en cours en dessous balise aussi les lignes avec le nom de l'étape, ce qui permet de trier un lot lent en direct. Laisser `debugProfile` à `N` en production ; passer à `Y` le temps d'un lot pour analyser un pipeline lent — les lignes additionnelles gonflent vite `F564237` sous charge.
+
 ### Traitements en cours · direct (rangée 5, span 12)
 
 Flux en direct des jobs qui démarrent et se terminent — la plupart sont lancés par le planificateur en arrière-plan. Le widget interroge `F564237` toutes les **5 secondes** avec un curseur incrémental `since=` ; chaque ligne porte un **badge de méthode** coloré :

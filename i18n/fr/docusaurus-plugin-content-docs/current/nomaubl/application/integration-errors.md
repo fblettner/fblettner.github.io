@@ -210,17 +210,26 @@ Tableau plat, une ligne par événement de validation. Le tri par défaut est la
 | Colonne | Source | Description |
 |---|---|---|
 | **Sévérité** | `UVY56LEVEL` | Badge coloré — *FATAL* / *ERROR* / *WARNING* / *INFO*. |
+| **Date** *(2026.05.9)* | `UVUPMJ` + `UVUPMT` | Date et heure d'enregistrement de l'événement. Même contexte temporel que la carte « erreurs récentes » du Tableau de bord IT — le triage n'a plus besoin d'ouvrir une ligne au préalable. |
 | **Doc** | `UVDOC` | Numéro de document issu des données source. |
 | **Dct** | `UVDCT` | Type de document. |
 | **Kco** | `UVKCO` | Code société. |
 | **Seq** | `UVSEQN` | Numéro de séquence — ordre dans lequel les règles de validation se sont déclenchées au cours du traitement défaillant. |
 | **Source** | `UVSRCL` | Moteur de validation — `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, ou un compartiment d'intégration. |
 | **Règle** | `UVY56RULE` | Identifiant de règle. La cellule affiche le code accompagné de sa description en dessous (et en infobulle au survol). |
-| **Message** | `UVK74MSG1` | Description lisible de l'échec — texte émis par le Schematron ou message de l'exception runtime. |
 | **Facture maintenant** | jointure `F564231` | Statut *courant* de la facture, récupéré en temps réel pour vérifier si l'échec a déjà été retraité. Vide quand il n'y a pas d'en-tête (erreur orpheline). |
 | **Client** | `F564231.UHALPH` | Nom du client quand la facture existe. Utile pour trier par contrepartie. |
 
-Un clic sur une ligne ouvre la **modale de détail** de la page [E-Invoicing](./invoices.md) sur l'onglet *Historique* — la même modale que celle ouverte par un clic sur une ligne de la boîte de réception [Notifications](./notifications.md). Le cycle de vie, les erreurs de validation et la charge utile PA restent ainsi à un seul onglet.
+:::info[Colonne Message retirée — 2026.05.9]
+La colonne Message est retirée en 2026.05.9. Les messages Schematron / XPath étaient trop longs pour une cellule de grille (la colonne consommait ~720 px et continuait de tronquer le contexte), le message complet vit donc désormais dans une **modale de détail** ouverte par un clic sur la ligne. La modale sépare aussi le contexte de debug CTC-FR (`Num Fact : …, Code : S, rate : 20, …`) de l'explication française — l'explication devient la ligne principale, les champs de debug s'affichent dans une petite grille monospace en dessous.
+:::
+
+### Clic sur une ligne
+
+Le clic sur une ligne est **toujours cliquable** depuis 2026.05.9 — les lignes appariées et les lignes orphelines ouvrent toutes les deux une modale :
+
+- **Lignes appariées** (quand la facture existe dans `F564231`) ouvrent la modale de détail complète [E-Invoicing](./invoices.md) sur l'onglet **Historique** — la même modale que celle ouverte par un clic sur une ligne de la boîte [Notifications](./notifications.md). Le cycle de vie, les erreurs de validation et la charge utile PA restent à un seul onglet.
+- **Lignes orphelines** ouvrent la nouvelle **`ErrorDetailModal`** — une vue ciblée dimensionnée pour un seul événement de validation sans facture autour. Elle affiche : le badge de niveau, l'identifiant de règle + sa description (résolue via `useRuleCatalog`), la source, la date, le triplet `doc / dct / kco` (avec la mention *aucune facture correspondante dans F564231*), le client quand il est connu, et le message complet rendu via le même helper `splitValidationMessage` que la modale des lignes appariées.
 
 ### `Sans rattachement uniquement`
 

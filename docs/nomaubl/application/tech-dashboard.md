@@ -324,6 +324,12 @@ Path values that contain runtime placeholders (`%TEMPLATE%`, `%FILE_NAME%`) are 
 
 Average end-to-end processing time per template, in seconds, over the last 14 days. The card pulls flat `START` / `END` events from `F564237` and pairs them in Java keyed on `(FEWDS1|FEUPMJ)` — the prior implementation used a self-join SQL with ambiguous `FETMPL` and incorrect `e.FEUPMT - s.FEUPMT` math, which is now fixed.
 
+#### Per-step breakdown when `debugProfile` is on *(2026.05.9)*
+
+When the [`debugProfile`](../configuration/system/global.md) toggle on the `global` template is set to `Y`, every processing run writes one row per pipeline stage to `F564237` — **header parsing**, **lines parsing**, **validation**, **UBL emit**, **PA send**. The Template processing time card surfaces them as a stacked breakdown under the per-template totals, so a slow stage is visible at a glance without digging into the runtime log.
+
+The Live process events tail below also tags the rows with the step name so a slow batch can be triaged in real time. Leave `debugProfile` at `N` in production; flip it to `Y` for the duration of a batch run when triaging a slow pipeline — the extra rows inflate `F564237` quickly under load.
+
 ### Live process events (row 5, span 12)
 
 A live feed of jobs starting and finishing in real time — most of them launched by the background scheduler. Polls `F564237` every **5 seconds** with an incremental `since=` cursor; each row carries a coloured **method badge**:

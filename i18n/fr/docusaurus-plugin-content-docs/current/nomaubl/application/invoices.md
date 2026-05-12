@@ -123,6 +123,7 @@ Le tableau affiche une ligne par facture. Tri par défaut : numéro de document 
 | **Total TTC** | Montant total toutes taxes comprises. |
 | **Devise** | Code ISO 4217. |
 | **Statut** | Badge de statut — code + libellé, coloré par famille. |
+| **Revue** *(2026.05.9)* | **Badge de drapeau de revue** coloré, alimenté par `UHALRTPSD`. Allumé quand la ligne demande une attention opérateur — typiquement un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Vide quand le drapeau est libre. La colonne se balaie d'un coup d'œil : quelques badges jaunes dans une page sinon verte indiquent précisément par où commencer. |
 
 Un sélecteur de taille de page en bas du tableau est réglé sur 50 par défaut ; des valeurs jusqu'à 500 sont acceptées. Le nombre total de factures correspondant aux filtres apparaît à côté de la pagination.
 

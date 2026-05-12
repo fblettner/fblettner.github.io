@@ -210,17 +210,26 @@ A flat table, one row per validation event. The default sort is by document key 
 | Column | Source | Description |
 |---|---|---|
 | **Severity** | `UVY56LEVEL` | Coloured badge — *FATAL* / *ERROR* / *WARNING* / *INFO*. |
+| **Date** *(2026.05.9)* | `UVUPMJ` + `UVUPMT` | Date and time the event was recorded. Same time context as the Tech Dashboard's recent-errors card, so triage no longer requires opening a row first. |
 | **Doc** | `UVDOC` | Document number from the source data. |
 | **Dct** | `UVDCT` | Document type. |
 | **Kco** | `UVKCO` | Company code. |
 | **Seq** | `UVSEQN` | Sequence number — the order in which validation rules fired during the failed run. |
 | **Source** | `UVSRCL` | Validation engine — `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, or an integration bucket. |
 | **Rule** | `UVY56RULE` | Rule identifier. The cell shows the code + the description below it (and as a tooltip on hover). |
-| **Message** | `UVK74MSG1` | Human-readable description of the specific failure — the schematron's emitted text or the runtime exception message. |
 | **Invoice now** | `F564231` lookup | The invoice's *current* status, joined live so you see whether the failure has been re-processed. Empty when no invoice header exists (orphan error). |
 | **Customer** | `F564231.UHALPH` | Customer name when the invoice exists. Helpful when triaging by counterparty. |
 
-Clicking a row opens the [E-Invoicing](./invoices.md) **detail modal** on the *History* tab — same modal the inbox-row click on [Notifications](./notifications.md) uses, so the lifecycle, the validation errors and the PA payload sit one tab away.
+:::info[Message column dropped — 2026.05.9]
+The Message column was removed in 2026.05.9. Schematron / XPath messages were too long for a grid cell (the column was eating ~720 px and still cut off context), so the full message now lives in a **detail modal** opened by clicking the row. The modal also splits the CTC-FR debug context (`Num Fact: …, Code: S, rate: 20, …`) from the French explanation — the explanation becomes the main line, the debug fields render as a small monospace grid underneath.
+:::
+
+### Clicking a row
+
+The row click is **always actionable** since 2026.05.9 — both matched and orphan rows open a modal:
+
+- **Matched rows** (where the invoice exists in `F564231`) open the full [E-Invoicing](./invoices.md) detail modal on the **History tab** — same modal the inbox row click on [Notifications](./notifications.md) uses. The lifecycle, the validation errors and the PA payload sit one tab away.
+- **Unmatched / orphan rows** open the new **`ErrorDetailModal`** — a focused view sized to a single validation event with no surrounding invoice. It shows: the level badge, the rule identifier + description (resolved through `useRuleCatalog`), the source, the date, the `doc / dct / kco` triplet (with a *no matching invoice in F564231* hint), the customer when known, and the full message rendered through the same `splitValidationMessage` helper as the matched-row modal.
 
 ### `Unmatched only`
 

@@ -123,6 +123,7 @@ The table shows one row per invoice. Default sort: most recent document number f
 | **Total TTC** | Total amount including VAT. |
 | **Currency** | ISO 4217 code. |
 | **Status** | Status badge — code + label, coloured by family. |
+| **Review** *(2026.05.9)* | Coloured **review-flag badge** sourced from `UHALRTPSD`. Lit up when the row needs operator attention — typically a status the dispatcher could not auto-resolve, a manual edit flagged on save, or a downstream system marking the row for re-check. Empty when the flag is clear. The column is a quick scan target: a few yellow badges in an otherwise green page tell you exactly where to start. |
 
 A page-size selector at the bottom defaults to 50 rows per page; values up to 500 are accepted. The total count of matching invoices is shown next to the pagination controls.
 
