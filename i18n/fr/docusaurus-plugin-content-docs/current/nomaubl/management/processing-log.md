@@ -145,7 +145,7 @@ Le journal est en **mode ajout seul** — les événements sont écrits par le p
 | **Grouped** *(défaut)* | Surveillance au quotidien. Chaque job tient sur une ligne avec son statut (OK / ERROR / PARTIAL), sa durée et son dernier message. L'expansion d'une ligne révèle toutes les étapes intermédiaires. |
 | **Flat** | Analyse détaillée quand le groupement masquerait un contexte utile — par ex. inspecter l'ordre des événements pendant un job suspendu, ou rechercher un `WARNING` isolé entre deux exécutions sans rapport. Une ligne par événement. |
 
-Le bouton de bascule en tête de la barre d'outils permet de basculer entre les deux ; le choix est enregistré dans le navigateur (`processing-log:grouped` dans `localStorage`), donc la prochaine session ouvre la même vue.
+Le bouton de bascule en tête de la barre d'outils permet de basculer entre les deux ; le choix est enregistré dans le navigateur (`processing-log:grouped` dans `localStorage`), donc la prochaine session ouvre la même vue. L'**onglet par défaut** est **Grouped** — restauré en 2026.05.10 après une version précédente qui était passée à *Flat* au premier affichage ; l'opérateur récupère le mode de lecture quotidien sans avoir à manipuler la bascule.
 
 ---
 
@@ -178,6 +178,14 @@ La barre d'outils combine la bascule de vue, une recherche libre, deux filtres d
 | **Rafraîchir** | Relance la requête courante sans modifier les filtres. |
 
 En vue groupée, la page extrait davantage (`pageSize × 4`, plafonné à 200) pour que les paires START / END et les étapes intermédiaires se retrouvent sur la même page et que le moteur de groupement dispose du job complet.
+
+### Filtres avancés *(2026.05.10)*
+
+Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.processing-log`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
+
+Le drill-through depuis les barres de débit du Tech Dashboard vers cette page amorce maintenant le `DateRangeFilter` V2 via `initialRange` — la période cliquée sur la barre reste appliquée ici.
+
+Depuis 2026.05.10, la vue à plat passe par **DataTableV2** en mode piloté par spec : la forme des colonnes vient de la spec `view.processing-log` sur `db-nomaubl` et le défaut embarqué livre toutes les colonnes décrites plus bas. Ajouter des colonnes depuis le catalogue ou retirer une colonne de la liste blanche de filtres se fait depuis l'éditeur [Vues de liste](../configuration/list-views.md). La vue groupée conserve sa mise en page dédiée — le groupement ne fait pas partie de DataTableV2.
 
 ---
 

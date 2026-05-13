@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-12</span></a>
+  <a href="#v2026-05-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
+  <a href="#v2026-05-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-12</span></a>
   <a href="#v2026-05-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
@@ -33,6 +34,53 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.10 — 2026-05-13 \{#v2026-05-10\}
+
+Spec-driven list views release. Every list page — [Integration Errors](./application/integration-errors.md), [Processing Log](./management/processing-log.md), [E-Reporting](./application/ereporting.md), [Invoices](./application/invoices.md) — now renders through **DataTableV2** with column shape, labels, formats, alignment, width and the filter-row allow-list driven from a JSON spec stored on `db-nomaubl` (with a bundled default in the JAR). The legacy V1 layout has been removed from those four pages — V2 is the only mode. A new **column catalog** per view exposes every column the underlying tables can `SELECT` or filter on, and the new [List Views editor](./configuration/list-views.md) lets operators **+ Add column** without writing code as long as the column lives in the catalog. The Invoices view picks up `F564230` via a `LEFT JOIN`, so 16 archive/log columns (source file, business unit, JDE user/job, due date, PA UUID…) are now available from the picker. Plus a fix for the dashboard *Recent errors* drill-through (filters were not being passed) and a CustomizationID round-trip bug in the Invoice Modal.
+
+### Spec-driven list views (Phase A + Phase B)
+
+- New `ListViewSpec` schema stored under `db-nomaubl.view.<name>` (e.g. `view.invoices`), with a bundled default in `config/list-views/view.<name>.json` for each of the four migrated pages. Drives column visibility, English / French labels, type, format (`date` / `datetime` / `amount` / `percent`), alignment, width and the `filter: true` allow-list.
+- New endpoint `GET /api/list-views/<name>` resolves the spec (stored property wins, bundled default otherwise); the editor reads / writes it via the same path.
+- Built-in column catalog per view (`ColumnCatalog` + `ColumnCatalogs`) exposes every column the Java handler can `SELECT`: SQL expression, type (`STRING` / `NUMBER` / `DATE` / `JDE_DATE` / `JDE_DATETIME`), filter behaviour (`exact` / `LIKE` / `inList` / `between`), and projection flags (`cents → /100`, `asInt → parseInt`, `trimForFilter`). Available via `GET /api/list-views/<name>/catalog`.
+- **Phase B** wiring: the Java handlers for `/api/invoices`, `/api/integration-errors`, `/api/processing-log` and `/api/ereporting` now build the SELECT projection and the WHERE clauses from the spec + catalog. The shared `SpecQueryHelper` resolves filter operators in exactly one place. Adding a column to the spec via the editor surfaces it in the grid (and as a filter in the [Advanced Filters](#advanced-filters-panel) panel when `filter: true`) with no code change required.
+- New **List Views** editor with one collapsible card per view, drag-and-drop column reordering via a `GripVertical` handle, English + French label fields, type / format / alignment / width inputs, a `Visible / Filter` toggle pair and a `+ Add column` picker populated from the catalog. The bundled-default vs stored state shows as an `override` / `default` badge per card. See the new [List Views](./configuration/list-views.md) configuration page.
+
+### Invoices — F564231 LEFT JOIN F564230
+
+- The Invoices spec-driven SQL now joins `F564231` (UH) and `F564230` (FE) on doc / dct / kco, so 16 archive / log columns are reachable from the editor's `+ Add column` picker: `logSourceFile`, `logActivityCode`, `logSubType`, `logAlphaKey`, `logAmount`, `logInvoiceDate`, `logDueDate`, `logCreated` (UPMJ+UPMT), `logUser`, `logJobn`, `logPid`, `logVersion`, `logBusinessUnit`, `logRouting`, `logSendToPaFlag`, `logPaUuid`. The `LEFT JOIN` keeps invoice rows when no log entry exists.
+
+### Advanced Filters panel
+
+- New `ServerFilterPanel` component: collapsible **Advanced Filters** panel keyed by spec column name with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). The panel emits a draft state; an explicit **Run** button commits it as `appliedFilters` — typing in the panel does not spam the back-end.
+- Operator vocabulary is translated end-to-end: column labels pick the French variant (`labelFr`) when the active locale starts with `fr`, falling back to `label`.
+
+### DataTableV2 polish
+
+- Tables now use `width: 100% + table-layout: fixed` and feed explicit per-column widths to a `<colgroup>` — columns without a width share whatever space the table has left. Single scrollbar inside the table body (no more nested page + table scroll).
+- Page area uses `PageLayout fill` for V2 pages so the table body fills the leftover vertical space; sticky header works correctly inside the inner scroller.
+
+### Dashboard drill-through fixes
+
+- The Tech Dashboard's **Recent errors** card now passes `{ doc, dct, kco }` when drilling into Integration Errors, and the target page seeds its filter bag from those props. A visible chip shows the active drill-through and offers a one-click `×` clear (the slim V2 toolbar and collapsed *Advanced Filters* panel made the filter invisible before).
+- Business Dashboard's status cards (`Déposée`, `Validation réussie`, *In flight* multi-bucket…) now filter Invoices via `filters.statusCode` end-to-end; the catalog's `inList()` flag splits comma-separated buckets into an `IN (?,?,?,?,?)` clause.
+- Tech Dashboard throughput-bar drill-through into Processing Log now seeds the V2 `DateRangeFilter` via `initialRange` so the scoped date stays applied.
+
+### Invoice Modal — CustomizationID round-trip
+
+- Editing an existing invoice no longer silently flips its `cbc:CustomizationID` back to the EN16931 default. The form now carries `customizationId` (defaulting to `urn:cen.eu:en16931:2017` for new invoices); `parseUblXml` reads the source UBL's value, `buildUblXml` writes it back verbatim.
+
+### Smaller cleanups
+
+- **Status chips overflow** — the Invoices status filter caps at 5 inline chips, the rest fold into a `+N more` dropdown with a coloured dot per code. Multi-status drill-throughs (e.g. *In flight* = 5 codes) hoist the active value back into the inline group when applicable.
+- **List Views editor UX** — drag-and-drop reorder via a single `GripVertical` handle (no more arrow-pair), per-row remove button, dedicated English / French label columns, width input, bundled vs override badge per card.
+- **List Views catalog** — the `+ Add column` picker lists every catalog entry the current spec does not contain (name / English label / type). Adding seeds a new spec column with the catalog's labels; the operator can tweak afterwards.
+- **Processing Log default tab** — restored to **Grouped** (the day-to-day reading mode); the operator's Grouped / Flat choice persists in localStorage as before.
+- **Status badge alignment** — Invoices `statusCode` now uses `type: "string"` so the badge sits left-aligned in its cell (was right-aligned because of the previous `number` type).
+- **Phase B SQL by example** — the Invoices view now runs a joined query of the form `SELECT <spec cols> FROM F564231 UH LEFT JOIN F564230 FE ON FE.FEDOC=UH.UHDOC AND FE.FEDCT=UH.UHDCT AND FE.FEKCO=UH.UHKCO WHERE … ORDER BY <spec defaultSort> OFFSET ? ROWS FETCH NEXT ? ROWS ONLY` — add a column to the spec via the catalog and it surfaces in the grid without a code change.
 
 ---
 

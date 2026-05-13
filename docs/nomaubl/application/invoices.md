@@ -210,6 +210,16 @@ To the right, a row of **status chips** appears: one per status currently presen
 
 When at least one filter is active, an **✕ Clear filter** chip appears at the end of the chip row. It clears every active filter except the date range.
 
+### Status chip overflow *(2026.05.10)*
+
+The Status chip row caps at **5 inline chips**; the rest fold into a `+N more` dropdown with a coloured dot per code. Multi-status drill-throughs from the dashboards (e.g. *In flight* = 5 codes) hoist the active value back into the inline group when it falls past the cap, so the active filter stays visible.
+
+### Advanced Filters *(2026.05.10)*
+
+A collapsible **Advanced Filters** panel sits below the chip row. It exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec — with a per-column operator picker (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay as a draft until **Run** commits them, so typing in the panel does not spam the back-end.
+
+The set of columns that can be filtered is defined in the spec's `filter: true` allow-list — operators decide which columns they actually query and trim the rest from the panel without losing them from the grid. See [List Views](../configuration/list-views.md) for the editor.
+
 ### Refresh and New invoice
 
 Two buttons sit at the right:
@@ -224,6 +234,8 @@ Two buttons sit at the right:
 ## Invoice list
 
 The table shows one row per invoice. Default sort: most recent document number first. Click any column header to sort by that column.
+
+Since 2026.05.10 the grid renders through **DataTableV2** in spec-driven mode: column shape, labels, format, alignment, width and the filter-row allow-list come from the `view.invoices` spec stored on `db-nomaubl` (with a bundled default in the JAR). Adding or removing columns is done from the [List Views](../configuration/list-views.md) editor — no code change required when the column already lives in the catalog.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'grid', gridTemplateColumns: '70px 50px 70px 1.4fr 90px 1.6fr 100px 100px 60px 130px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 600, fontSize: '11px'}}>
@@ -269,6 +281,24 @@ The table shows one row per invoice. Default sort: most recent document number f
 | **Review** *(2026.05.9)* | Coloured **review-flag badge** sourced from `UHALRTPSD`. Lit up when the row needs operator attention — typically a status the dispatcher could not auto-resolve, a manual edit flagged on save, or a downstream system marking the row for re-check. Empty when the flag is clear. The column is a quick scan target: a few yellow badges in an otherwise green page tell you exactly where to start. |
 
 A page-size selector at the bottom defaults to 50 rows per page; values up to 500 are accepted. The total count of matching invoices is shown next to the pagination controls.
+
+### Catalog columns *(2026.05.10)*
+
+The Invoices view's SQL now joins `F564231` (UH) and `F564230` (FE) on doc / dct / kco via a `LEFT JOIN`, so the column catalog exposes 16 additional archive / log columns. Any of them can be added to the spec via the [List Views](../configuration/list-views.md) editor's `+ Add column` picker — the `LEFT JOIN` keeps invoice rows when no log entry exists.
+
+| Catalog column | What it carries |
+|---|---|
+| `logSourceFile` | Name of the source file that produced the invoice. |
+| `logActivityCode` / `logSubType` | Activity code and sub-type recorded at ingestion. |
+| `logAlphaKey` | Alpha-key alias used by some upstream systems. |
+| `logAmount` | Amount carried by the log row (raw, no currency rebase). |
+| `logInvoiceDate` / `logDueDate` | Invoice date and due date recorded at ingestion. |
+| `logCreated` | Creation timestamp (`UPMJ + UPMT` composite). |
+| `logUser` / `logJobn` / `logPid` / `logVersion` | JDE user, job, PID and version stamps. |
+| `logBusinessUnit` | Business unit recorded at ingestion. |
+| `logRouting` | BAR routing recorded at ingestion. |
+| `logSendToPaFlag` | Flag captured at ingestion telling whether the row was eligible for PA submission. |
+| `logPaUuid` | PA-side UUID assigned to the invoice at submission time. |
 
 ### Click-through
 
@@ -677,6 +707,8 @@ While the e-mail is sending, an overlay covers the modal until the SMTP server c
 ### Create / Edit invoice modal
 
 Opens from **+ New invoice** in the toolbar, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
+
+Since 2026.05.10, editing an existing invoice no longer flips its `cbc:CustomizationID` back to the EN16931 default. The form now carries the `customizationId` value from the source UBL and writes it back verbatim — new invoices still default to `urn:cen.eu:en16931:2017`.
 
 <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.025)', boxShadow: '0 12px 32px rgba(0,0,0,0.3)'}}>
   <div style={{padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(74,158,255,0.04)'}}>

@@ -143,9 +143,9 @@ The log is **append-only** — events are written by the pipeline and never modi
 | View | When to use |
 |---|---|
 | **Grouped** *(default)* | Day-to-day monitoring. Each job is one row with its status (OK / ERROR / PARTIAL), duration and the last message. Expanding a row reveals every intermediate step. |
-| **Flat** | Forensic analysis when grouping would hide useful context — e.g. inspecting the order of events during a hung job, or chasing a stray `WARNING` between two unrelated runs. One row per event. |
+| **Flat** | Detailed analysis when grouping would hide useful context — e.g. inspecting the order of events during a hung job, or chasing a stray `WARNING` between two unrelated runs. One row per event. |
 
-The toggle at the top of the toolbar switches between the two; the choice is persisted in the browser (`processing-log:grouped` in `localStorage`) so the next session opens on the same view.
+The toggle at the top of the toolbar switches between the two; the choice is persisted in the browser (`processing-log:grouped` in `localStorage`) so the next session opens on the same view. The **default tab** is **Grouped** — restored in 2026.05.10 after a previous build had drifted to *Flat* on first paint; operators get the day-to-day reading mode without having to flip the toggle.
 
 ---
 
@@ -178,6 +178,14 @@ The toolbar above the table combines a view toggle, a free-text search, two drop
 | **Refresh** | Re-runs the current query without changing filters. |
 
 When grouped, the page over-fetches (`pageSize × 4`, capped at 200) so START / END pairs and intermediate steps land on the same page and the grouping engine has the full job in hand.
+
+### Advanced Filters *(2026.05.10)*
+
+A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.processing-log`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
+
+The Tech Dashboard's throughput-bar drill-through into this page now seeds the V2 `DateRangeFilter` via `initialRange`, so the period clicked on the bar stays applied here.
+
+Since 2026.05.10 the Flat view renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.processing-log` spec on `db-nomaubl` and the bundled default ships every column described below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../configuration/list-views.md) editor. The Grouped view keeps its dedicated layout — grouping is not a DataTableV2 feature.
 
 ---
 

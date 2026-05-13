@@ -10,7 +10,8 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-12</span></a>
+  <a href="#v2026-05-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
+  <a href="#v2026-05-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-12</span></a>
   <a href="#v2026-05-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
@@ -33,6 +34,53 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.10 — 2026-05-13 \{#v2026-05-10\}
+
+Version « vues de liste pilotées par spécification ». Toutes les pages de liste — [Erreurs d'intégration](./application/integration-errors.md), [Journal de traitement](./management/processing-log.md), [E-Reporting](./application/ereporting.md), [Factures](./application/invoices.md) — passent par **DataTableV2** dont la forme des colonnes (libellés, formats, alignement, largeur, filtres côté serveur) est pilotée par une spécification JSON stockée sur `db-nomaubl` (avec un défaut embarqué dans le JAR). La mise en page V1 historique a été retirée de ces quatre pages — V2 est le seul mode. Un nouveau **catalogue de colonnes** par vue indique toutes les colonnes que les tables sous-jacentes peuvent projeter ou filtrer, et le nouvel éditeur [Vues de liste](./configuration/list-views.md) permet aux opérateurs d'**Ajouter une colonne** sans écrire de code tant qu'elle vit dans le catalogue. La vue **Factures** fait maintenant une jointure gauche avec `F564230` — 16 colonnes de journal/archive (fichier source, BU, utilisateur/job JDE, échéance, UUID PA…) sont disponibles depuis le picker. Plus la correction du drill-through *Erreurs récentes* du tableau de bord (les filtres n'étaient pas transmis) et d'un bug d'aller-retour CustomizationID dans la fenêtre Facture.
+
+### Vues de liste pilotées par spécification (Phase A + Phase B)
+
+- Nouveau schéma `ListViewSpec` stocké sous `db-nomaubl.view.<nom>` (par ex. `view.invoices`), avec un défaut embarqué dans `config/list-views/view.<nom>.json` pour chacune des quatre pages migrées. Pilote la visibilité des colonnes, les libellés FR/EN, le type, le format (`date` / `datetime` / `amount` / `percent`), l'alignement, la largeur et la liste blanche `filter: true`.
+- Nouveau point d'entrée `GET /api/list-views/<nom>` qui résout la spécification (propriété stockée prioritaire, défaut embarqué sinon). L'éditeur lit et écrit via le même chemin.
+- Catalogue de colonnes intégré par vue (`ColumnCatalog` + `ColumnCatalogs`) — indique toutes les colonnes que le handler Java peut `SELECT` : expression SQL, type (`STRING` / `NUMBER` / `DATE` / `JDE_DATE` / `JDE_DATETIME`), comportement de filtre (`exact` / `LIKE` / `inList` / `between`), flags de projection (`cents → /100`, `asInt → parseInt`, `trimForFilter`). Disponible via `GET /api/list-views/<nom>/catalog`.
+- Câblage **Phase B** : les handlers Java de `/api/invoices`, `/api/integration-errors`, `/api/processing-log` et `/api/ereporting` construisent maintenant la projection `SELECT` et les clauses `WHERE` depuis la spec + le catalogue. Le helper partagé `SpecQueryHelper` résout les opérateurs de filtre en un seul endroit. Ajouter une colonne via l'éditeur la fait apparaître dans la grille (et dans le panneau [Filtres avancés](#panneau-de-filtres-avances) si `filter: true`) sans modification de code.
+- Nouvel éditeur **Vues de liste** avec une carte pliable par vue, réorganisation drag-and-drop des colonnes via une poignée `GripVertical`, champs de libellé FR/EN, inputs type/format/alignement/largeur, toggle `Visible / Filtre` et picker `+ Ajouter une colonne` alimenté depuis le catalogue. Le badge `override` / `default` par carte indique si l'opérateur a touché à la spec ou non. Voir la nouvelle page [Vues de liste](./configuration/list-views.md) dans la Configuration.
+
+### Factures — F564231 LEFT JOIN F564230
+
+- La requête SQL pilotée par spec des factures joint maintenant `F564231` (UH) et `F564230` (FE) sur doc / dct / kco, donc 16 colonnes journal/archive sont accessibles depuis le picker `+ Ajouter une colonne` de l'éditeur : `logSourceFile`, `logActivityCode`, `logSubType`, `logAlphaKey`, `logAmount`, `logInvoiceDate`, `logDueDate`, `logCreated` (UPMJ+UPMT), `logUser`, `logJobn`, `logPid`, `logVersion`, `logBusinessUnit`, `logRouting`, `logSendToPaFlag`, `logPaUuid`. La jointure gauche préserve les lignes factures sans entrée de journal.
+
+### Panneau de filtres avancés \{#panneau-de-filtres-avances\}
+
+- Nouveau composant `ServerFilterPanel` : panneau pliable **Filtres avancés** indexé par nom de colonne, avec un sélecteur d'opérateur par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Le panneau émet un état brouillon ; un bouton **Exécuter** explicite le valide en `appliedFilters` — taper dans le panneau ne sature pas le back-end.
+- Vocabulaire des opérateurs traduit de bout en bout : les libellés de colonne prennent la variante française (`labelFr`) quand la locale active commence par `fr`, avec retour à `label` sinon.
+
+### Polish DataTableV2
+
+- Les tables utilisent maintenant `width: 100% + table-layout: fixed` et reçoivent les largeurs par colonne via un `<colgroup>` — les colonnes sans largeur explicite se partagent l'espace restant. Une seule barre de défilement dans le corps du tableau (plus de double-scroll page + table).
+- La zone de page passe `PageLayout fill` pour les pages V2, donc le corps du tableau remplit l'espace vertical restant ; l'en-tête sticky fonctionne correctement à l'intérieur du scroller.
+
+### Correction du drill-through tableau de bord
+
+- La carte **Erreurs récentes** du Tech Dashboard transmet maintenant `{ doc, dct, kco }` quand on ouvre une ligne sur Erreurs d'intégration ; la page cible amorce son bag de filtres depuis ces props. Une pastille visible montre le drill actif et propose un `×` pour le retirer (avant, le filtre était invisible avec la barre slim et le panneau replié).
+- Les cartes de statut du Business Dashboard (`Déposée`, `Validation réussie`, multi-statut « En vol »…) filtrent maintenant les factures via `filters.statusCode` de bout en bout ; le flag `inList()` du catalogue éclate les buckets séparés par virgule en clause `IN (?,?,?,?,?)`.
+- Le drill-through depuis les barres de débit du Tech Dashboard vers le Journal de traitement amorce maintenant le `DateRangeFilter` V2 via `initialRange` pour que la période cliquée s'applique.
+
+### Fenêtre Facture — aller-retour CustomizationID
+
+- Modifier une facture existante ne réinitialise plus son `cbc:CustomizationID` au défaut EN16931. Le formulaire porte maintenant `customizationId` (défaut `urn:cen.eu:en16931:2017` pour les nouvelles factures) ; `parseUblXml` lit la valeur du UBL source, `buildUblXml` l'écrit verbatim.
+
+### Petits nettoyages
+
+- **Débordement des pastilles de statut** — sur la page Factures, 5 pastilles inline maximum, le reste se replie dans un menu `+N more` avec un point coloré par code. Les drill-throughs multi-statuts (par ex. *En vol* = 5 codes) remontent la valeur active dans le groupe inline quand applicable.
+- **UX éditeur Vues de liste** — réorganisation drag-and-drop via une poignée `GripVertical` unique (plus de doubles flèches), bouton de suppression par ligne, colonnes de libellé FR/EN dédiées, champ largeur, badge bundled vs override par carte.
+- **Catalogue Vues de liste** — le picker `+ Ajouter une colonne` liste toutes les entrées du catalogue absentes de la spec courante (nom / libellé anglais / type). L'ajout amorce une nouvelle colonne de spec avec les libellés du catalogue ; l'opérateur peut les ajuster ensuite.
+- **Onglet par défaut du Journal de traitement** — restauré à **Groupé** (mode de lecture quotidien) ; le choix Groupé / Plat de l'opérateur reste persisté en localStorage comme avant.
+- **Alignement du badge de statut** — `statusCode` des factures utilise maintenant `type: "string"` donc la pastille est alignée à gauche dans sa cellule (était à droite à cause du type `number` précédent).
+- **SQL Phase B par l'exemple** — la vue Factures exécute une requête jointe de la forme `SELECT <colonnes spec> FROM F564231 UH LEFT JOIN F564230 FE ON FE.FEDOC=UH.UHDOC AND FE.FEDCT=UH.UHDCT AND FE.FEKCO=UH.UHKCO WHERE … ORDER BY <defaultSort spec> OFFSET ? ROWS FETCH NEXT ? ROWS ONLY` — ajouter une colonne à la spec via le catalogue la fait remonter dans la grille sans modification de code.
 
 ---
 

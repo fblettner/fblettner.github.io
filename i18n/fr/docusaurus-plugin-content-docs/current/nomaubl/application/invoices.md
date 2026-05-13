@@ -210,6 +210,16 @@ Une déroulante distincte filtre par code **BAR** (`B2B`, `B2G`, `B2BINT`, `B2C`
 
 Quand au moins un filtre est actif, une puce **✕ Effacer le filtre** apparaît en fin de rangée. Elle efface tous les filtres sauf la plage de dates.
 
+### Débordement des pastilles de statut *(2026.05.10)*
+
+La ligne de pastilles de statut est plafonnée à **5 pastilles inline** ; le reste se replie dans un menu `+N more` avec un point coloré par code. Les drill-throughs multi-statuts depuis les tableaux de bord (par ex. *En vol* = 5 codes) remontent la valeur active dans le groupe inline quand elle tombe au-delà du plafond, donc le filtre actif reste visible.
+
+### Filtres avancés *(2026.05.10)*
+
+Un panneau **Filtres avancés** pliable se trouve sous la rangée de pastilles. Il propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active — avec un sélecteur d'opérateur par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas, donc taper dans le panneau ne sature pas le back-end.
+
+L'ensemble des colonnes filtrables est défini par la liste blanche `filter: true` de la spec — les opérateurs choisissent quelles colonnes ils interrogent réellement et retirent les autres du panneau sans les perdre dans la grille. Voir [Vues de liste](../configuration/list-views.md) pour l'éditeur.
+
 ### Rafraîchir et Nouvelle facture
 
 Deux boutons sont placés à droite :
@@ -224,6 +234,8 @@ Deux boutons sont placés à droite :
 ## Liste des factures
 
 Le tableau affiche une ligne par facture. Tri par défaut : numéro de document décroissant. Cliquer sur un en-tête de colonne pour trier.
+
+Depuis 2026.05.10, la grille passe par **DataTableV2** en mode piloté par spec : la forme des colonnes — libellés, format, alignement, largeur et la liste blanche de filtres — vient de la spec `view.invoices` stockée sur `db-nomaubl` (avec un défaut embarqué dans le JAR). Ajouter ou retirer des colonnes se fait depuis l'éditeur [Vues de liste](../configuration/list-views.md) — aucune modification de code n'est nécessaire quand la colonne vit déjà dans le catalogue.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'grid', gridTemplateColumns: '70px 50px 70px 1.4fr 90px 1.6fr 100px 100px 60px 130px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 600, fontSize: '11px'}}>
@@ -269,6 +281,24 @@ Le tableau affiche une ligne par facture. Tri par défaut : numéro de document 
 | **Revue** *(2026.05.9)* | **Badge de drapeau de revue** coloré, alimenté par `UHALRTPSD`. Allumé quand la ligne demande une attention opérateur — typiquement un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Vide quand le drapeau est libre. La colonne se balaie d'un coup d'œil : quelques badges jaunes dans une page sinon verte indiquent précisément par où commencer. |
 
 Un sélecteur de taille de page en bas du tableau est réglé sur 50 par défaut ; des valeurs jusqu'à 500 sont acceptées. Le nombre total de factures correspondant aux filtres apparaît à côté de la pagination.
+
+### Colonnes du catalogue *(2026.05.10)*
+
+La requête SQL de la vue Factures joint maintenant `F564231` (UH) et `F564230` (FE) sur doc / dct / kco via un `LEFT JOIN`, donc le catalogue de colonnes expose 16 colonnes archive / journal supplémentaires. Toutes peuvent être ajoutées à la spec depuis le picker `+ Ajouter une colonne` de l'éditeur [Vues de liste](../configuration/list-views.md) — la jointure gauche préserve les lignes factures sans entrée de journal.
+
+| Colonne catalogue | Contenu |
+|---|---|
+| `logSourceFile` | Nom du fichier source qui a produit la facture. |
+| `logActivityCode` / `logSubType` | Code d'activité et sous-type enregistrés à l'ingestion. |
+| `logAlphaKey` | Alias alpha-key utilisé par certains systèmes amont. |
+| `logAmount` | Montant porté par la ligne de journal (brut, sans rebase de devise). |
+| `logInvoiceDate` / `logDueDate` | Date de facture et date d'échéance enregistrées à l'ingestion. |
+| `logCreated` | Horodatage de création (composite `UPMJ + UPMT`). |
+| `logUser` / `logJobn` / `logPid` / `logVersion` | Tampons utilisateur, job, PID et version JDE. |
+| `logBusinessUnit` | Unité d'activité enregistrée à l'ingestion. |
+| `logRouting` | Routage BAR enregistré à l'ingestion. |
+| `logSendToPaFlag` | Flag capturé à l'ingestion qui indique l'éligibilité de la ligne au dépôt PA. |
+| `logPaUuid` | UUID côté PA assigné à la facture au moment du dépôt. |
 
 ### Navigation au clic
 
@@ -677,6 +707,8 @@ Pendant l'envoi, la modale est désactivée par un voile jusqu'à la confirmatio
 ### Modale de création / édition de facture
 
 Ouverte depuis **+ Nouvelle facture** dans la barre d'outils, ou depuis les boutons **Modifier l'UBL** / **Copier** de l'onglet Résumé. Permet de créer une facture vierge ou de modifier une facture existante. La modale prend l'apparence d'une facture imprimable. L'utilisateur remplit le formulaire ; à l'enregistrement, NomaUBL génère le document UBL correspondant.
+
+Depuis 2026.05.10, modifier une facture existante ne réinitialise plus son `cbc:CustomizationID` au défaut EN16931. Le formulaire porte maintenant la valeur `customizationId` du UBL source et l'écrit verbatim — les nouvelles factures restent par défaut à `urn:cen.eu:en16931:2017`.
 
 <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.025)', boxShadow: '0 12px 32px rgba(0,0,0,0.3)'}}>
   <div style={{padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(74,158,255,0.04)'}}>

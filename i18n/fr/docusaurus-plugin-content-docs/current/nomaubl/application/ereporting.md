@@ -308,11 +308,17 @@ La barre d'outils au-dessus du tableau combine trois filtres texte avec deux rac
 | **Rafraîchir** | Relance la requête courante sans modifier les filtres. |
 | **Générer un rapport** | Ouvre la *modale de génération* — décrite plus bas. Masquée pour les sessions en lecture seule. |
 
+### Filtres avancés *(2026.05.10)*
+
+Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.ereporting`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
+
 ---
 
 ## Liste des rapports
 
 Le tableau affiche une ligne par rapport. Tri par défaut : `RGDOC` décroissant. Cliquer sur un en-tête de colonne pour trier ; cliquer sur une ligne ouvre la **modale de détail**.
+
+Depuis 2026.05.10, la table passe par **DataTableV2** en mode piloté par spec : la forme des colonnes vient de la spec `view.ereporting` sur `db-nomaubl` et le défaut embarqué livre toutes les colonnes listées ci-dessous. Ajouter des colonnes depuis le catalogue ou retirer une colonne de la liste blanche de filtres se fait depuis l'éditeur [Vues de liste](../configuration/list-views.md).
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'grid', gridTemplateColumns: '60px 60px 80px 60px 1.4fr 70px 1.5fr 1.4fr 110px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 600, fontSize: '11px'}}>

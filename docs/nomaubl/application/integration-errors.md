@@ -165,6 +165,12 @@ The same toolbar drives both views.
 | **`Unmatched only`** *(by-event only)* | Restores the orphan-only behaviour of the previous version — keeps just the rows that have no joined invoice header. Off by default; one click away when needed. |
 | **Refresh** | Re-runs the current query. |
 
+### Advanced Filters *(2026.05.10)*
+
+A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.integration-errors`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
+
+The Tech Dashboard's *Recent errors* drill-through also surfaces here: when the dashboard passes `{ doc, dct, kco }`, a chip shows the active drill-through filter and offers a one-click `×` clear. Useful when the panel is collapsed and the filter would otherwise stay invisible.
+
 ---
 
 ## By-rule view
@@ -206,6 +212,8 @@ The `BR-FR-CPRO` schematron's 34 asserts have no `id` attribute, so the validato
 ## By-event view
 
 A flat table, one row per validation event. The default sort is by document key ascending (so the same invoice's rows stay grouped) and pagination defaults to 50 rows per page.
+
+Since 2026.05.10 the table renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.integration-errors` spec on `db-nomaubl` and the bundled default ships every column listed below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../configuration/list-views.md) editor.
 
 | Column | Source | Description |
 |---|---|---|

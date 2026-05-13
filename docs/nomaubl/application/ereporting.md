@@ -308,11 +308,17 @@ The toolbar above the table combines three free-text filters with two quick acti
 | **Refresh** | Re-runs the current query without changing filters. |
 | **Generate report** | Opens the *Generate dialog* — described below. Hidden on read-only sessions. |
 
+### Advanced Filters *(2026.05.10)*
+
+A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.ereporting`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
+
 ---
 
 ## Reports list
 
 The table shows one row per report. Default sort: most recent `RGDOC` first. Click any column header to sort by that column; click any row to open the **Detail modal**.
+
+Since 2026.05.10 the table renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.ereporting` spec on `db-nomaubl` and the bundled default ships every column listed below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../configuration/list-views.md) editor.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'grid', gridTemplateColumns: '60px 60px 80px 60px 1.4fr 70px 1.5fr 1.4fr 110px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 600, fontSize: '11px'}}>

@@ -165,6 +165,12 @@ La même barre d'outils pilote les deux vues.
 | **`Sans rattachement uniquement`** *(par événement uniquement)* | Rétablit le comportement « orphelin » de la version précédente — ne garde que les lignes sans en-tête de facture rattaché. Désactivé par défaut, accessible en un clic au besoin. |
 | **Rafraîchir** | Relance la requête en cours. |
 
+### Filtres avancés *(2026.05.10)*
+
+Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.integration-errors`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
+
+Le drill-through *Erreurs récentes* du Tech Dashboard remonte aussi ici : quand le tableau de bord transmet `{ doc, dct, kco }`, une pastille indique le filtre actif et propose un `×` pour le retirer. Utile quand le panneau est replié et que le filtre serait sinon invisible.
+
 ---
 
 ## Vue par règle
@@ -206,6 +212,8 @@ Les 34 `assert` du Schematron `BR-FR-CPRO` n'ont pas d'attribut `id`. Le validat
 ## Vue par événement
 
 Tableau plat, une ligne par événement de validation. Le tri par défaut est la clé documentaire ascendante (les lignes d'une même facture restent ainsi groupées) et la pagination affiche 50 lignes par page par défaut.
+
+Depuis 2026.05.10, la table passe par **DataTableV2** en mode piloté par spec : la forme des colonnes vient de la spec `view.integration-errors` sur `db-nomaubl` et le défaut embarqué livre toutes les colonnes listées ci-dessous. Ajouter des colonnes depuis le catalogue ou retirer une colonne de la liste blanche de filtres se fait depuis l'éditeur [Vues de liste](../configuration/list-views.md).
 
 | Colonne | Source | Description |
 |---|---|---|
