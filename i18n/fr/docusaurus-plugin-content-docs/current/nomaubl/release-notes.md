@@ -10,7 +10,12 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
+  <a href="#v2026-05-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-11" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.11 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
+  <a href="#v2026-05-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
   <a href="#v2026-05-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-12</span></a>
   <a href="#v2026-05-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
@@ -34,6 +39,139 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.15 — 2026-05-14 \{#v2026-05-15\}
+
+Deux améliorations qui permettent aux opérateurs de câbler des systèmes aval sans code dédié : **actions facture personnalisées** (boutons toujours visibles dans la modale de détail qui déclenchent une chaîne configurable d'appels connecteur) et **synchronisation depuis connecteur pour les listes personnalisées** (récupération des entrées d'une liste depuis un endpoint api-connector ou une requête sql-connector, avec paramètres enregistrés pour qu'une même requête alimente plusieurs listes). Plus la syntaxe unifiée `{field}` / `{{field}}` qui permet d'utiliser le même picker de variables dans les paramètres d'action.
+
+### Actions facture personnalisées
+
+- Nouveau type `CustomInvoiceAction` dans `services/invoiceHelpers` plus `parseCustomActions` / `customActionsToProps` qui enregistrent et sérialisent `customAction.N.id`, `.label` et le même bloc `.call.M.*` sur le modèle e-invoicing (les surcharges par kco via `e-invoicing-{kco}` continuent de fonctionner).
+- La page [Actions](./management/actions.md) a une section *Actions personnalisées* sous la liste des actions vendeur prédéfinies. Chaque ligne porte un `id` libre + un `label` (texte du bouton) + le même éditeur de call-card — connecteur, endpoint / requête, paramètres, `stopOnFailure` optionnel.
+- `InvoiceDetailModal` rend les actions personnalisées dans leur propre groupe (le `ActionsSection` *Actions personnalisées*) sous les actions vendeur prédéfinies, avec la logique de chaîne existante (variables résolues, chaînage de réponses via `{call.N.fieldName}`). Le bandeau de résultat est rattaché au groupe dont le bouton a déclenché la chaîne via un champ `actionResult.source` ; le résultat est aussi effacé quand la modale se ferme ou passe à une autre facture afin que les bandeaux périmés ne restent pas.
+- `InvoiceList` et `IntegrationList` chargent les actions personnalisées en plus des actions réglementaires et les transmettent à la modale.
+
+### Syntaxe unifiée des variables dans les paramètres d'action
+
+- `resolveActionParams` accepte maintenant `{field}` (syntaxe insérée par le picker de notifications) et l'ancienne `{{field}}`. Les jetons inconnus passent inchangés afin qu'une faute de frappe soit visible à l'exécution.
+- Chaque paramètre d'appel sur la page [Actions](./management/actions.md) (paramètres par endpoint ET le fallback paramètres bruts) reçoit un bouton picker `{ }` alimenté par le même hook `usePlaceholderOptions` que l'[éditeur de notifications](./management/notification-rules.md).
+
+### Synchronisation depuis connecteur pour les listes personnalisées
+
+- `CustomListEditor` reçoit un groupe *Sync source (optionnel)* sous le tableau des lignes. Choisir un api-connector ou un sql-connector, puis un endpoint / une requête, puis mapper les champs de la réponse :
+  - `Code field` — nom de colonne (SQL) ou clé JSON (API) qui sert de code à chaque ligne.
+  - `Label FR field` / `Label EN field` — libellés FR (requis) et EN (optionnel).
+  - `List path` (API seulement) — chemin pointé vers le tableau dans le corps JSON, supporte `data.items` et `items[0]` ; vide quand le corps est déjà un tableau.
+  - `Parameters` — valeurs fixes (pas de substitution de variables) envoyées au connecteur. La même requête peut alimenter plusieurs listes en enregistrant des valeurs différentes par liste ; les valeurs par défaut de la définition d'endpoint s'appliquent quand un champ est laissé vide.
+- Le bouton `Sync now` appelle le connecteur, parcourt la réponse, construit l'ensemble de lignes et remplace les lignes de l'éditeur avec un message succès/erreur traduit (`N ligne(s) synchronisée(s) depuis connector · endpoint` ou l'erreur sous-jacente).
+- La configuration sync vit dans le même modèle de liste sous `sync.connector / sync.endpoint / sync.codeField / sync.labelFrField / sync.labelEnField / sync.listPath / sync.params`. `parseRefOptions` filtre ces clés afin que les consommateurs de liste (renderer de cellule refList, dropdown *Filtres avancés*) ne les voient jamais comme des entrées. Voir la page [Listes de référence](./configuration/reference-lists.md).
+
+### Backend — liaison de paramètres SQL plus tolérante
+
+- `SqlConnectorClient.executeQuery` retire maintenant une paire de guillemets simples ou doubles entourant chaque paramètre chaîne avant le `setString` JDBC. Les opérateurs qui tapent `'01'` dans une valeur par défaut de requête ou dans le panneau de test — la façon d'écrire un littéral SQL — obtenaient silencieusement 0 ligne car JDBC liait la chaîne de 4 caractères telle quelle. Le strip permet aux deux conventions de fonctionner. **Note :** comparer à une colonne JDE `CHAR(n)` demande toujours `WHERE TRIM(col) = :p` dans la requête — c'est la règle Oracle de comparaison non-blank-padded quand un côté est lié en `VARCHAR2`, pas un choix du framework. Voir la page [Connecteurs SQL](./configuration/sql-connectors.md).
+
+### Correction de race sur le dropdown endpoint dans l'éditeur de liste personnalisée
+
+- Le chargeur d'endpoints attend maintenant que le catalogue `connectors` soit arrivé avant de tirer, et abandonne quand le connecteur choisi n'y est pas encore. Le code précédent basculait le kind par défaut sur `api` quand `connectors` était vide, tirait le mauvais endpoint de liste, mettait en cache le résultat vide et court-circuitait les ré-exécutions suivantes — le dropdown restait vide au rechargement de l'éditeur. Corrigé : l'endpoint enregistré se résout correctement au rechargement.
+
+---
+
+## 2026.05.14 — 2026-05-14 \{#v2026-05-14\}
+
+Les [règles de notification](./management/notification-rules.md) peuvent maintenant utiliser n'importe quelle colonne de la facture comme variable, plus seulement les 10 champs canoniques d'origine. Sujet, corps et valeurs de paramètres d'appel d'action ont tous un nouveau bouton `{ }` qui ouvre un picker recherchable — choisir une variable et elle s'insère dans le champ au curseur. Le jeu de variables fusionne les champs canoniques de notification (`doc` / `dct` / `kco` / `status` / `statusLabel` / `message` / `reason` / `reasonLabel` / `action` / `actionLabel`) avec toutes les colonnes du catalogue de la spec [Factures](./application/invoices.md) (`{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, …) — un appel d'action pour mettre à jour un client ou pousser vers un système aval n'a plus besoin de câblage sur mesure.
+
+### Backend — contexte facture complet dans les variables
+
+- `NotificationDispatcher.readInvoiceContext` projette maintenant toutes les colonnes de `ColumnCatalogs.invoices()` via un seul SELECT `F564231 LEFT JOIN F564230` et stocke la projection en chaîne consciente du type (montants à 2 décimales, date / datetime ISO depuis JDE Julian, parsing `asInt`, trim CHAR) dans une nouvelle map `ctx.extras` clée par nom de colonne de spec.
+- `buildPlaceholders` fusionne `ctx.extras` d'abord, puis superpose les 10 variables canoniques par-dessus — donc les `{doc}` / `{status}` / etc. existants gardent leur sens familier si une colonne du catalogue partage le même nom.
+- Un seul aller-retour SQL par envoi (au lieu du SELECT précédent sur 5 colonnes) — même forme, juste plus large.
+
+### Frontend — popover `PlaceholderPicker`
+
+- Nouveau `common/PlaceholderPicker.tsx` — popover thémé avec un déclencheur stylé en bouton `{ }`. Cliquer ouvre une liste recherchable (nom de variable en `mono` + libellé orienté opérateur) ; choisir une variable et le snippet `{nom}` s'insère dans l'input lié au curseur (ou s'ajoute à la fin avec un espace de tête quand l'input n'est pas focalisé). Escape / clic à l'extérieur ferme.
+- Le hook `usePlaceholderOptions` charge la liste fusionnée une fois par page (10 canoniques + colonnes de `/api/list-views/invoices/catalog`) et la met en cache en scope module pour que chaque picker partage le même fetch.
+- L'éditeur de règle câble trois pickers : à côté de l'input Sujet, à côté du textarea Corps et par ligne valeur de paramètre dans chaque appel d'action. L'indice de variable en ligne verbeux est remplacé par un pointeur court vers le bouton `{ }` + quelques exemples représentatifs.
+
+---
+
+## 2026.05.13 — 2026-05-14 \{#v2026-05-13\}
+
+Filtres refList multi-sélection partout. La ligne de filtre par colonne TanStack et le panneau [Filtres avancés](./application/invoices.md) permettent maintenant aux opérateurs de choisir **un nombre quelconque de codes** pour une colonne refList (statuts, statuts e-reporting, listes personnalisées, …), avec un raccourci d'effacement en un clic sur le déclencheur — pas besoin de désélectionner chaque entrée. Le filtrage serveur `IN (?,?,?)` est activé sur les colonnes catalogue concernées — choisir trois statuts dans *Filtres avancés → Exécuter* renvoie l'union.
+
+### `SearchSelectMulti` — picker multi-sélection thémé
+
+- Nouveau composant frère dans `common/SearchSelect.tsx`. Même apparence et même recherche que `SearchSelect`, mais chaque ligne bascule dans une `value: string[]`, une coche est affichée à côté de chaque entrée active et le déclencheur affiche les codes joints par virgule quand c'est court ou `N sélectionné(s)` quand la liste déborde.
+- Un petit bouton **✕** à droite du déclencheur apparaît quand au moins une option est sélectionnée — cliquer dessus réinitialise le tableau en un seul clic sans ouvrir le popover (`stopPropagation` pour que le déclencheur ne bascule pas). La ligne de pied **Effacer** reste comme chemin secondaire.
+
+### Ligne de filtre par colonne (TanStack)
+
+- Une colonne de spec avec un `refList` rend maintenant le picker multi-sélection dans la ligne de filtre par colonne de DataTableV2. Le renderer de cellule conserve son affichage `code — libellé`, donc le picker et la cellule restent alignés.
+- La fonction de filtre accepte soit une chaîne unique (legacy) soit un `string[]` (multi) : pour un tableau, la ligne correspond quand sa valeur (trimée, en minuscules) apparaît dans l'ensemble choisi. Un tableau vide retire automatiquement le filtre.
+- Le flag `FilterMeta.filter.multi` sur les colonnes de kind enum pilote la sélection du picker ; les colonnes booléennes et les énumérés non-refList restent en mono-sélection.
+
+### Panneau Filtres avancés
+
+- Les lignes refList dans `ServerFilterPanel` utilisent aussi le picker multi-sélection. La sélection est encodée en chaîne jointe par virgule dans `OpFilter.a` (par ex. `200,210,9907`) — le contrat existant de `flattenServerFilters` la transmet telle quelle au backend.
+- Cliquer sur **✕** sur le déclencheur pour réinitialiser ; sinon les choix s'accumulent jusqu'à *Exécuter*.
+
+### Backend — `IN (?,?,?)` pour les colonnes refList
+
+- `SpecQueryHelper.appendSpecFilterClauses` séparait déjà les valeurs jointes par virgule en clause `IN` quand la colonne catalogue déclarait `filterInList` ; cette version active ce flag sur les deux colonnes catalogue refList restantes :
+  - `invoiceStatus` sur la vue [Erreurs d'intégration](./application/integration-errors.md)
+  - `status` sur la vue [E-Reporting](./application/ereporting.md)
+- `statusCode` des Factures l'avait déjà depuis le travail de deep-link.
+
+### Élargissement de colonne pour l'opérateur `between`
+
+- Choisir `between` sur un filtre par colonne date / nombre / texte élargit maintenant la colonne pour faire entrer les deux champs opérandes (plancher `BETWEEN_COL_WIDTH = 340px` dans DataTableV2). L'élargissement est calculé depuis l'état `columnFilters` et appliqué de façon cohérente au `<col>`, au min-width de Th et de Td afin que `table-layout: fixed` l'honore. Repasser à un opérateur à opérande unique et la colonne reprend sa largeur de spec au rendu suivant.
+
+---
+
+## 2026.05.12 — 2026-05-14 \{#v2026-05-12\}
+
+Mode hybride client pour les vues de liste pilotées par spécification et un dropdown recherchable refList dans la ligne de filtre par colonne. Chaque *Exécuter* charge maintenant une seule tranche capée depuis le serveur ; TanStack pilote filter / sort / group / paginate sur cette tranche dans le navigateur — pas d'aller-retour quand on tape dans la ligne de filtre, pas de latence en changement de page, les filtres survivent à la pagination. Identique au modèle Liberty v2 tout en restant sûr sur des tables énormes grâce à un cap `maxRows` par vue (5000 par défaut).
+
+### Flux de données hybride client-side
+
+- Chacune des quatre vues pilotées par spec (Factures, Erreurs d'intégration, Journal de traitement, E-Reporting) émet maintenant **une** seule requête serveur par *Exécuter*, dimensionnée à `spec.maxRows ?? 5000` lignes.
+- `DataTableV2` ne reçoit plus `total / page / pageSize / onPageChange / onPageSizeChange` sur ces pages — TanStack pagine la tranche chargée en interne avec `initialPageSize = spec.defaultPageSize ?? 50`.
+- La plage de dates / les puces de barre d'outils / *Filtres avancés → Exécuter* déclenchent toujours un nouveau fetch. Un changement de tri ré-émet aussi le fetch pour que la tranche reflète toujours les `maxRows` lignes les plus pertinentes quand le cap est atteint.
+- Quand le cap est atteint, la barre d'outils affiche un message traduit `X / Y lignes` à côté de *Exécuter* avec une infobulle qui indique d'affiner les *Filtres avancés* / la plage de dates.
+
+### Champ `maxRows` dans la spec + éditeur
+
+- Nouveau champ optionnel `maxRows` sur `ListViewSpec` (5000 par défaut, pas de surcharge par page nécessaire). Le parser le préserve.
+- [Vues de liste](./configuration/list-views.md) → ligne *Défauts* a un champ *Max rows* à côté de *Taille de page*, avec une infobulle qui explique chacun. La propriété persiste par vue via le chemin de surcharge standard `db-nomaubl.view.<nom>`.
+
+### Dropdown refList dans la ligne de filtre par colonne
+
+- Une colonne de spec avec un `refList` rend maintenant un dropdown recherchable de type énuméré dans la ligne de filtre par colonne de DataTableV2 — peuplé depuis la liste de référence chargée avec des entrées `code — libellé` — au lieu de retomber sur un champ texte. Le renderer de cellule conserve son affichage `code — libellé`, donc le picker et la cellule restent alignés.
+- Une `FilterFn` d'égalité tolérante (coerce en chaîne, trim, insensible à la casse) remplace le `equals` strict de TanStack — les codes numériques (par ex. un code statut stocké en nombre) correspondent à la valeur de l'option du picker, et le padding CHAR d'Oracle ne casse pas l'égalité.
+- Le filtre par colonne reste client-side (filtre uniquement la tranche chargée) — la même nuance que l'opérateur connaît déjà avec le modèle hybride.
+
+### Internes de DataTableV2
+
+- L'état de tri est maintenant contrôlable indépendamment du mode de pagination serveur : une page client-side peut toujours fournir les props `sorting + onSortingChange` et TanStack les honore tout en paginant localement. Sans cela, les quatre pages converties perdraient leur tri par défaut au premier rendu.
+
+---
+
+## 2026.05.11 — 2026-05-13 \{#v2026-05-11\}
+
+Version « cohérence UI ». Toutes les listes déroulantes du front React passent maintenant par le même composant recherchable (`SearchSelect`) — les filtres, les éditeurs de paramètres, les modaux et les éditeurs XSL / UBL partagent la même apparence, la même navigation clavier et un champ de recherche intégré pour les longues listes (pays, modes de paiement, devises, catégories TVA, statuts, scheme IDs…). Les listes déroulantes des listes de référence sont aussi conscientes du type : le format à 6 champs du modèle `statuses` (`tag|labelFr|labelEn|paCode|collect|groups`) est correctement parsé — ce sont les libellés (pas le tag) qui s'affichent dans le picker.
+
+### SearchSelect — composant global de liste déroulante
+
+- Nouveau `src/common/SearchSelect.tsx` porté et adapté du design Liberty v2 : popover en portail, filtrage à la frappe, colonne `mono` optionnelle pour les codes, ligne d'en-tête via `anyLabel`, mode combobox `allowCustom`, tailles `size: 'sm' | 'md'`, fermeture sur clic extérieur / `Échap`.
+- Sites migrés (non exhaustif) : chaque ligne de filtre dans `ServerFilterPanel` et le filtre par colonne de DataTableV2, chaque cellule de l'éditeur [Vues de liste](./configuration/list-views.md), la barre d'outils [Journal de traitement](./management/processing-log.md), les barres d'outils [Factures](./application/invoices.md) et [Erreurs d'intégration](./application/integration-errors.md), toutes les listes déroulantes du modal Facture (picker fournisseur, pickers pays, modes de paiement, exonération TVA, types de notes, références doc, type d'allowance, codes d'unité, catégories fiscales), les éditeurs des paramètres ([Connecteur API](./configuration/api-connectors.md), [Connecteur SQL](./configuration/sql-connectors.md), [Types de documents](./configuration/system/document-types.md), [scope E-Invoicing](./configuration/system/einvoicing.md), [modèle Document](./management/documents.md), [Fetch Invoices](./configuration/system/fetch-invoices.md), Block Canvas), la page [Fetch Input](./sync/fetch-input.md), [Process Document](./processing/document.md), le modal *Set Status*, la page [Actions](./management/actions.md), la page [Règles de notification](./management/notification-rules.md), le picker de modèle AI Chat, les onglets UBL Defaults (devise, paiement, type de document, TVA, en-tête, fournisseur, préfixe de note, scheme IDs, profile ID, unités, type de facture, éditeur de règles, éditeur de mappings — ~27 dropdowns), le picker de fichier de l'[éditeur XSL](./ubl-tools/xsl-editor.md), les éditeurs préfixe note et doc-ref, les formulaires [Extract BIP](./extract/extract-bip.md) / [Extract FTP](./extract/extract-ftp.md) / [Extract & Process](./processing/extract-and-process.md), la section connecteur de [Process API](./processing/process-api.md).
+- Les composants legacy `Select` (dans `common/Input.tsx`), `FieldSelect` / `MethodSelect` (dans `Settings/settingsStyled.ts`), `FileSelect` (dans `XslEditor/xslEditorStyled.ts`) et l'ancien `MappingSelect` `<select>` stylé (dans `UblDefaults/ublDefaultsStyled.ts`) sont retirés — `MappingSelect` est maintenant un fin wrapper autour de `SearchSelect` qui conserve l'API legacy avec enfants `<option>`, donc tous les onglets UBL Defaults récupèrent la nouvelle apparence automatiquement.
+- Le picker de taille de page dans le `DataTable` legacy et dans `DataTableV2` utilise `SearchSelect` pour la cohérence.
+
+### Correction des libellés des listes de référence
+
+- `parseRefOptions` est maintenant consciente du type : pour les modèles `statuses` et `ereporting-statuses`, elle parse le format à 6 champs `code → "tag|labelFr|labelEn|paCode|collect|groups"` et affiche les libellés FR / EN (pas le tag) dans les dropdowns. Les autres listes de référence gardent le format standard à 2 champs `labelFr|labelEn`. Voir la page [Statuts](./configuration/system/statuses.md).
+- `loadRefLists` transmet `template.type` au parser pour que le bon format soit choisi par liste.
 
 ---
 

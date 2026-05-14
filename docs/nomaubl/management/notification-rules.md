@@ -253,7 +253,11 @@ The email tab shows its content unconditionally — no checkbox gates it any mor
 | **Body** | `Status: {statusLabel}\nReason: {reasonLabel}\nAction: {actionLabel}\n{message}` | Plain-text body. Multi-line input. |
 | **Attach PDF** | `Y` | Render the invoice PDF (via the resolved `pdf-template`) and attach it to the e-mail. The PDF is rendered once per dispatch and reused across every recipient; a render failure is logged but never fails the e-mail. |
 
-Available placeholders in subject / body: `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}` plus `{call.N.fieldName}` for outputs of earlier action calls in this rule (see *Actions tab* below).
+Available placeholders in subject / body: the 10 canonical notification fields — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}` — plus `{call.N.fieldName}` for outputs of earlier action calls in this rule (see *Actions tab* below).
+
+Since 2026.05.14 the placeholder set also merges every column from the [Invoices](../application/invoices.md) view's catalog — `{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, … — pulled in a single `F564231 LEFT JOIN F564230` SELECT alongside the canonical fields. Amounts are surfaced with two decimals, JDE Julian dates as ISO, CHAR columns trimmed. Canonical fields take precedence when a catalog column happens to share a name, so `{doc}` / `{status}` keep their familiar meaning.
+
+A `{ }` button sits next to the Subject input and the Body textarea. Click it to open a searchable picker of every available placeholder; pick one and the `{name}` snippet splices into the field at the caret (or appends with a leading space when the input is not focused). Escape / outside-click closes.
 
 The portal `NTSUBJ` uses the same subject; the portal `NTMSGE` defaults to just `{statusLabel}` because the inbox UI already shows the doc reference inline — duplicating it in the body would be noise.
 
@@ -273,7 +277,7 @@ The Actions tab holds a **list** of connector calls instead of a single call. Ea
 
 #### Placeholders
 
-Parameter values support the same `{placeholders}` as the email subject / body — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{message}` — plus the new `{call.N.fieldName}` form that references the output of an earlier call in the same rule.
+Parameter values support the same `{placeholders}` as the email subject / body — the 10 canonical fields, every Invoices catalog column merged in 2026.05.14, and the `{call.N.fieldName}` form that references the output of an earlier call in the same rule. Each parameter row carries its own `{ }` picker.
 
 #### Response chaining
 

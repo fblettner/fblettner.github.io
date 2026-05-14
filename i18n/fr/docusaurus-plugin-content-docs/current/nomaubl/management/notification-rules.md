@@ -253,7 +253,11 @@ L'onglet Email affiche son contenu sans condition — aucune case ne le verrouil
 | **Corps** | `Status: {statusLabel}\nReason: {reasonLabel}\nAction: {actionLabel}\n{message}` | Corps en texte brut. Saisie multi-lignes. |
 | **Attach PDF** | `Y` | Génère le PDF de la facture (via le `pdf-template` résolu) et l'attache à l'e-mail. Le PDF est généré une seule fois par envoi et réutilisé pour chaque destinataire ; un échec de génération est tracé mais ne fait pas échouer l'e-mail. |
 
-Placeholders disponibles dans le sujet et le corps : `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}`, plus `{call.N.fieldName}` pour les sorties d'appels d'action antérieurs dans la même règle (voir *Onglet Actions* ci-dessous).
+Placeholders disponibles dans le sujet et le corps : les 10 champs canoniques — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}` — plus `{call.N.fieldName}` pour les sorties d'appels d'action antérieurs dans la même règle (voir *Onglet Actions* ci-dessous).
+
+Depuis 2026.05.14, le jeu de placeholders fusionne aussi toutes les colonnes du catalogue de la vue [Factures](../application/invoices.md) — `{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, … — tirées par un seul SELECT `F564231 LEFT JOIN F564230` à côté des champs canoniques. Les montants sont rendus à 2 décimales, les dates JDE Julian en ISO, les colonnes CHAR sont trimées. Les champs canoniques priment quand une colonne du catalogue partage un nom — `{doc}` / `{status}` gardent leur sens familier.
+
+Un bouton `{ }` se trouve à côté de l'input Sujet et du textarea Corps. Cliquer dessus ouvre un picker recherchable de toutes les variables disponibles ; choisir une variable et le snippet `{nom}` s'insère dans le champ au curseur (ou s'ajoute à la fin avec un espace de tête quand l'input n'est pas focalisé). Escape / clic à l'extérieur ferme.
 
 Le `NTSUBJ` côté portail reprend le même sujet ; le `NTMSGE` côté portail prend par défaut juste `{statusLabel}` — la boîte de réception affiche déjà la référence du document en ligne, donc la dupliquer dans le corps serait redondant.
 
@@ -273,7 +277,7 @@ L'onglet Actions porte une **liste** d'appels de connecteur au lieu d'un seul. C
 
 #### Placeholders
 
-Les valeurs de paramètres acceptent les mêmes `{placeholders}` que le sujet et le corps de l'e-mail — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{message}` — plus la nouvelle forme `{call.N.fieldName}` qui référence la sortie d'un appel antérieur dans la même règle.
+Les valeurs de paramètres acceptent les mêmes `{placeholders}` que le sujet et le corps de l'e-mail — les 10 champs canoniques, toutes les colonnes du catalogue Factures fusionnées en 2026.05.14, et la forme `{call.N.fieldName}` qui référence la sortie d'un appel antérieur dans la même règle. Chaque ligne de paramètre porte son propre picker `{ }`.
 
 #### Chaînage des réponses
 

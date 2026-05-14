@@ -203,6 +203,14 @@ Tokens inside any of those constructs are passed through unchanged.
 
 The parameter spec drives the *Test* tab and the call-site editor: each declared `:name` becomes a labelled input pre-filled with its `default` value. Spec rows are semicolon-separated; each row has up to three pipe-delimited fields. Empty fields are accepted (a parameter with no default just renders an empty input).
 
+#### Surrounding quotes stripped on string params *(2026.05.15)*
+
+The runtime strips one matching pair of surrounding single or double quotes from each bound string param before the JDBC `setString`. Typing `'01'` in a default or in the test panel — the way a SQL literal is written — used to silently return 0 rows because JDBC bound the 4-character string verbatim; stripping the quotes lets either convention work.
+
+:::warning[JDE CHAR comparison]
+Stripping the quotes is **not** a substitute for the standard Oracle non-blank-padded comparison rule. Comparing against a JDE `CHAR(n)` column still needs `WHERE TRIM(col) = :p` in the query when one side of the comparison is bound as `VARCHAR2`. That is an Oracle rule, not a framework choice.
+:::
+
 ### Writable flag
 
 `Writable=No` is the safe default. Setting it to `Yes` is required for any non-`SELECT` statement and is what the runtime checks at call time:

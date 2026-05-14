@@ -10,7 +10,12 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
+  <a href="#v2026-05-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-11" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.11 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
+  <a href="#v2026-05-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
   <a href="#v2026-05-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-12</span></a>
   <a href="#v2026-05-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
   <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
@@ -34,6 +39,139 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.15 — 2026-05-14 \{#v2026-05-15\}
+
+Two complementary improvements that let operators wire downstream systems without bespoke code: **custom invoice actions** (always-visible buttons in the invoice detail modal that fire a configurable chain of connector calls) and **connector-driven sync for custom lists** (pull list entries from an api-connector endpoint or a sql-connector query, with persisted params so the same query can drive several lists). Plus the unified `{field}` / `{{field}}` placeholder syntax that lets the same notification-placeholder picker work in action payloads.
+
+### Custom invoice actions
+
+- New `CustomInvoiceAction` type in `services/invoiceHelpers` plus `parseCustomActions` / `customActionsToProps` that store / serialize `customAction.N.id`, `.label` and the same `.call.M.*` block on the e-invoicing template (per-kco overrides via `e-invoicing-{kco}` keep working).
+- The [Actions](./management/actions.md) page exposes a *Custom Actions* section below the preset seller-action list. Each row carries a free-form `id` + a `label` (button text) + the same call-card editor — connector, endpoint / query, params, optional `stopOnFailure`.
+- `InvoiceDetailModal` renders custom actions in their own group (the *Custom actions* `ActionsSection`) beneath the preset seller actions, using the existing run-chain logic (resolved placeholders, `{call.N.fieldName}` response chaining). The result banner is anchored to the group whose button fired the chain via an `actionResult.source` field; the result is also cleared when the modal closes or switches to a different invoice so stale banners do not carry over.
+- `InvoiceList` and `IntegrationList` both load custom actions alongside the regulatory ones and forward them to the modal.
+
+### Unified placeholder syntax in action params
+
+- `resolveActionParams` now accepts both `{field}` (the syntax inserted by the notification placeholder picker) and the legacy `{{field}}`. Unknown tokens pass through unchanged so a typo is visible at runtime rather than silently emptied.
+- Each call parameter on the [Actions](./management/actions.md) page (per-endpoint params AND the raw-params fallback) gets a `{ }` picker driven by the same `usePlaceholderOptions` hook used by the [notification editor](./management/notification-rules.md).
+
+### Connector sync for custom lists
+
+- `CustomListEditor` grows a *Sync source (optional)* group below the row table. Pick an api-connector or sql-connector, then an endpoint / query, then map the response fields:
+  - `Code field` — column name (SQL) or JSON key (API) used as each row's code.
+  - `Label FR field` / `Label EN field` — the FR (required) and EN (optional) labels.
+  - `List path` (API only) — dotted path to the array inside the JSON body, supports `data.items` and `items[0]` segments; empty when the body is already an array.
+  - `Parameters` — fixed values (no placeholder substitution) sent to the connector. The same query can power multiple lists by saving different values per list; defaults from the endpoint definition apply when a field is left blank.
+- `Sync now` button calls the connector, walks the response, builds the row set, and replaces the editor's rows with a translated success / error message (`Synced N row(s) from connector · endpoint` or the underlying error).
+- Sync config lives in the same list template under `sync.connector / sync.endpoint / sync.codeField / sync.labelFrField / sync.labelEnField / sync.listPath / sync.params`. `parseRefOptions` filters those keys out so list consumers (refList cell renderer, *Advanced Filters* dropdown) never see them as entries. See the [Reference Lists](./configuration/reference-lists.md) page.
+
+### Backend — friendlier SQL param binding
+
+- `SqlConnectorClient.executeQuery` now strips one matching pair of surrounding single or double quotes from each bound string param before the JDBC `setString`. Operators who type `'01'` in a query default or in the test panel — the way a SQL literal is written — used to silently get 0 rows because JDBC bound the 4-char string verbatim. Stripping the quotes lets either convention work. **Note:** comparing against a JDE `CHAR(n)` column still needs `WHERE TRIM(col) = :p` in the query — that is the standard Oracle non-blank-padded comparison rule when one side is bound as `VARCHAR2`, not a framework choice. See the [SQL Connectors](./configuration/sql-connectors.md) page.
+
+### Endpoint dropdown race fix in the custom-list editor
+
+- The endpoint loader now waits for the `connectors` catalog to land before firing, and aborts when the picked connector is not in the catalog yet. The earlier code defaulted the kind to `api` when `connectors` was empty, fired the wrong list endpoint, cached the empty result and short-circuited subsequent re-runs — the dropdown stayed empty when reopening the editor. Fixed: the saved endpoint resolves correctly on reload.
+
+---
+
+## 2026.05.14 — 2026-05-14 \{#v2026-05-14\}
+
+[Notification rules](./management/notification-rules.md) can now use any invoice column as a placeholder, not just the original 10 canonical fields. Subject, body and action-call parameter values all get a new `{ }` button that opens a searchable picker — pick a placeholder and it splices into the field at the caret. The placeholder set merges the canonical notification fields (`doc` / `dct` / `kco` / `status` / `statusLabel` / `message` / `reason` / `reasonLabel` / `action` / `actionLabel`) with every column from the [Invoices](./application/invoices.md) spec catalog (`{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, …) so an action call to update a customer or push to a downstream system no longer needs bespoke wiring.
+
+### Backend — full invoice context in placeholders
+
+- `NotificationDispatcher.readInvoiceContext` now projects every column from `ColumnCatalogs.invoices()` via a single `F564231 LEFT JOIN F564230` SELECT and stores the type-aware string projection (cents-scaled amounts, JDE Julian → ISO date / datetime, `projectAsInt` parsing, CHAR trim) in a new `ctx.extras` map keyed by spec column name.
+- `buildPlaceholders` merges `ctx.extras` first, then layers the 10 canonical placeholders on top — so the existing `{doc}` / `{status}` / etc. keep their familiar meaning if a catalog column happens to share a name.
+- One SQL round-trip per dispatch (vs. the previous SELECT of 5 columns) — same shape as the existing read, just wider.
+
+### Frontend — `PlaceholderPicker` popover
+
+- New `common/PlaceholderPicker.tsx` — themed popover with the trigger styled as a `{ }` button. Click opens a searchable list (`mono` placeholder name + operator-facing label); pick one and the snippet `{name}` splices into the linked input at the caret (or appends with a leading space when the input is not focused). Escape / outside-click closes.
+- `usePlaceholderOptions` hook loads the merged list once per page (10 canonical + `/api/list-views/invoices/catalog` columns) and caches in module scope so every picker on the page hits the same fetch.
+- The rule editor wires three pickers: next to the Subject input, next to the Body textarea, and per parameter-value row in each action call. The verbose inline placeholder hint is replaced with a short pointer to the `{ }` button + a few representative examples.
+
+---
+
+## 2026.05.13 — 2026-05-14 \{#v2026-05-13\}
+
+Multi-select refList filters everywhere. The per-column TanStack filter row and the [Advanced Filters](./application/invoices.md) panel both let operators pick **any number of codes** for a refList column (statuses, e-reporting statuses, custom lists, …), with a one-click clear shortcut on the trigger so resets do not require deselecting each entry. Server-side `IN (?,?,?)` narrowing is enabled on the matching catalog columns so picking three statuses in *Advanced Filters → Run* actually returns the union.
+
+### `SearchSelectMulti` — themed multi-select picker
+
+- New sibling component in `common/SearchSelect.tsx`. Same look and search behaviour as `SearchSelect`, but each row toggles in a `value: string[]`, a checkmark sits beside every active entry and the trigger shows comma-joined codes when short or `N selected` once the list overflows.
+- A small **✕** button on the right of the trigger appears whenever at least one option is selected — clicking it resets the array in one click without opening the popover (`stopPropagation` so the trigger does not toggle). The in-panel **Clear** footer row stays as a secondary path.
+
+### Per-column filter row (TanStack)
+
+- A spec column with a `refList` now renders the multi-select picker in the DataTableV2 per-column filter row. The cell renderer keeps its `code — label` display so the picker and the cell stay visually aligned.
+- The filter function accepts either a single string (legacy) or a `string[]` (multi): for an array, the row matches when its trimmed-lowercase value appears in the picked set. Empty array auto-removes the filter.
+- `FilterMeta.filter.multi` flag on enum-kind columns drives the picker selection; boolean columns and non-refList enums stay single-select.
+
+### Advanced Filters panel
+
+- refList rows in `ServerFilterPanel` also use the multi-select picker. Selection is encoded as comma-joined in `OpFilter.a` (e.g. `200,210,9907`) so the existing `flattenServerFilters` contract passes it straight through to the backend.
+- Click **✕** on the trigger to reset; otherwise picks accumulate until Run.
+
+### Backend — `IN (?,?,?)` for refList columns
+
+- `SpecQueryHelper.appendSpecFilterClauses` already split comma-separated values into an `IN` clause when the catalog column declared `filterInList`; this release enables that flag on the two remaining refList catalog columns:
+  - `invoiceStatus` on the [Integration Errors](./application/integration-errors.md) view
+  - `status` on the [E-Reporting](./application/ereporting.md) view
+- Invoices `statusCode` already had it from the deep-link work.
+
+### Column widens for the `between` operator
+
+- Picking `between` on a date / number / text per-column filter now widens the column to fit both operand inputs (the `BETWEEN_COL_WIDTH = 340px` floor in DataTableV2). The bump is computed from `columnFilters` state and applied consistently to the `<col>`, Th min-width and Td min-width so `table-layout: fixed` honours it. Flip the operator back to a single-operand op and the column snaps to its spec width on the next render.
+
+---
+
+## 2026.05.12 — 2026-05-14 \{#v2026-05-12\}
+
+Hybrid client-side mode for the spec-driven list views and a searchable refList dropdown in the per-column filter row. Each Run now loads a single capped slice from the server; TanStack owns filter / sort / group / paginate over that slice in the browser — no roundtrips while typing in the column row, no page-flip latency, filters survive pagination naturally. Matches the Liberty v2 model while staying safe on huge tables thanks to a per-view `maxRows` cap (default 5000).
+
+### Hybrid client-side data flow
+
+- Each of the four spec-driven views (Invoices, Integration Errors, Processing Log, E-Reporting) now issues **one** server query per Run, sized at `spec.maxRows ?? 5000` rows.
+- `DataTableV2` no longer receives `total / page / pageSize / onPageChange / onPageSizeChange` on those pages — TanStack paginates the loaded slice internally with `initialPageSize = spec.defaultPageSize ?? 50`.
+- Date range / toolbar chips / *Advanced Filters → Run* still refetch from the server. Sort changes also re-issue the fetch so the slice always reflects the most relevant `maxRows` rows when the cap is hit.
+- When the cap is hit, the toolbar shows a translated `X / Y rows` notice next to *Run* with a tooltip telling the operator to narrow the *Advanced Filters* / date range.
+
+### `maxRows` spec field + editor
+
+- New optional `maxRows` field on `ListViewSpec` (default 5000, no per-page override needed). The parser preserves it.
+- [List Views](./configuration/list-views.md) → *Defaults* row exposes a *Max rows* input next to *Page size*, with a tooltip explaining what each does. The property persists per view via the standard `db-nomaubl.view.<name>` override path.
+
+### refList filter dropdown in the column row
+
+- A spec column with a `refList` now renders an enum-style searchable dropdown in the DataTableV2 per-column filter row — populated from the loaded reference list with `code — label` entries — instead of falling back to a plain text input. The cell renderer keeps its existing `code — label` display, so the picker and the cell stay visually aligned.
+- A tolerant equality `FilterFn` (string-coerced, trimmed, case-insensitive) replaces TanStack's strict `equals` so numeric codes (e.g. a status code stored as a number) match the picker's string option value, and Oracle CHAR padding does not break equality.
+- Per-column filter remains client-side (filters only the loaded slice) — the same caveat the operator already understands with the hybrid model.
+
+### DataTableV2 internals
+
+- Sort state is now controllable independent of server-pagination mode: a client-side page can still supply `sorting + onSortingChange` props and TanStack will both honour them and paginate locally. Without that the four converted pages would lose their default sort on first render.
+
+---
+
+## 2026.05.11 — 2026-05-13 \{#v2026-05-11\}
+
+UI consistency release. Every dropdown across the React frontend now renders through the same searchable component (`SearchSelect`), giving filters, settings editors, modals and the XSL / UBL editors the same look, the same keyboard navigation, and an inline search box for long option lists (countries, payment means, currencies, VAT categories, statuses, scheme IDs…). Reference-list dropdowns are also type-aware now: the `statuses` template's 6-field wire format (`tag|labelFr|labelEn|paCode|collect|groups`) is parsed correctly so the labels (not the tag) show in the picker.
+
+### SearchSelect — global dropdown component
+
+- New `src/common/SearchSelect.tsx` ported and adapted from the Liberty v2 design: portal-rendered popover, type-to-filter, optional `mono` column for codes, `anyLabel` for placeholder rows, `allowCustom` combobox mode, `size: 'sm' | 'md'`, and outside-click / `Escape` dismissal.
+- Migrated call-sites (non-exhaustive): every filter row in `ServerFilterPanel` and the per-column DataTableV2 filter, every cell in the [List Views](./configuration/list-views.md) editor, the [Processing Log](./management/processing-log.md) toolbar, the [Invoices](./application/invoices.md) and [Integration Errors](./application/integration-errors.md) toolbars, every dropdown in the Invoice Modal (supplier picker, country pickers, payment means, VAT exemption, note types, doc refs, allowance type, unit codes, tax categories), the Settings field editors ([Api Connector](./configuration/api-connectors.md), [SQL Connector](./configuration/sql-connectors.md), [Document Types](./configuration/system/document-types.md), [E-Invoicing scope](./configuration/system/einvoicing.md), [Document template](./management/documents.md), [Fetch Invoices](./configuration/system/fetch-invoices.md), Block Canvas), the [Fetch Input](./sync/fetch-input.md) page, [Process Document](./processing/document.md), the *Set Status* modal, the [Actions](./management/actions.md) page, the [Notification Rules](./management/notification-rules.md) page, the AI Chat model picker, the UBL Defaults tabs (currency, payment, document type, VAT, header, supplier, note prefix, scheme IDs, profile ID, units, invoice type, rule editor, mapping editor — ~27 dropdowns), the [XSL Editor](./ubl-tools/xsl-editor.md) file picker, note-prefix and doc-ref editors, the [Extract BIP](./extract/extract-bip.md) / [Extract FTP](./extract/extract-ftp.md) / [Extract & Process](./processing/extract-and-process.md) forms, the [Process API](./processing/process-api.md) connector section.
+- Legacy `Select` (in `common/Input.tsx`), `FieldSelect` / `MethodSelect` (in `Settings/settingsStyled.ts`), `FileSelect` (in `XslEditor/xslEditorStyled.ts`), and the old `MappingSelect` styled `<select>` (in `UblDefaults/ublDefaultsStyled.ts`) are gone — `MappingSelect` is now a thin wrapper around `SearchSelect` that preserves the legacy `<option>`-children API so all UBL Defaults tabs pick up the new look automatically.
+- The pagination size picker in both the legacy `DataTable` and `DataTableV2` uses `SearchSelect` for consistency.
+
+### Reference-list label fix
+
+- `parseRefOptions` is now type-aware: for the `statuses` and `ereporting-statuses` templates it parses the 6-field wire format `code → "tag|labelFr|labelEn|paCode|collect|groups"` and surfaces the FR / EN labels (not the tag) in dropdowns. Other reference lists keep the standard 2-field `labelFr|labelEn` format. See the [Statuses](./configuration/system/statuses.md) page.
+- `loadRefLists` forwards `template.type` to the parser so the right format is picked per list.
 
 ---
 

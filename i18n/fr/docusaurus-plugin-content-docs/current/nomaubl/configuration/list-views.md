@@ -196,6 +196,19 @@ Le catalogue lui-même est côté serveur et n'est pas modifiable depuis l'IHM. 
 
 ---
 
+## Ligne Défauts \{#ligne-defauts\}
+
+Au-dessus des lignes de colonne, chaque carte de vue a une ligne *Défauts* avec les réglages par vue qui s'appliquent en dehors de la forme des colonnes.
+
+| Champ | Description |
+|---|---|
+| **Page size** | Taille de page initiale du paginateur TanStack en grille. Persiste sous `spec.defaultPageSize`. Défaut : `50`. |
+| **Max rows** *(2026.05.12)* | Cap dur sur la tranche chargée par un seul *Exécuter*. Les quatre vues pilotées par spec fonctionnent maintenant en **mode hybride client-side** : chaque *Exécuter* charge une tranche capée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — pas d'aller-retour quand on tape dans la ligne de filtre par colonne. Persiste sous `spec.maxRows`. Défaut : `5000`. |
+
+Quand le cap de la tranche est atteint pendant un *Exécuter*, la barre d'outils de la page affiche un message traduit `X / Y lignes` à côté du bouton *Exécuter* — indication que l'opérateur devrait affiner la plage de dates ou les *Filtres avancés* pour obtenir la tranche la plus pertinente. Le message est informatif ; la page continue de fonctionner.
+
+---
+
 ## Panneau Filtres avancés \{#panneau-filtres-avances\}
 
 La liste blanche `filter: true` de la spec alimente une seconde IHM sur la page destination : le panneau **Filtres avancés** — pliable, indexé par nom de colonne de spec, avec un sélecteur d'opérateur par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Le panneau émet un état brouillon ; un bouton **Exécuter** explicite le valide en `appliedFilters` — taper ne sature pas le back-end.
@@ -210,6 +223,14 @@ La liste d'opérateurs proposée par colonne dépend du comportement de filtre d
 | `between` | `<`, `≤`, `>`, `≥`, `between`. S'applique aux colonnes numériques et de date. |
 
 Marquer une colonne **Filtre** = désactivé dans la spec la laisse visible dans la grille mais retire sa pastille du panneau — utile pour les champs en lecture seule que l'opérateur n'a pas besoin d'interroger.
+
+### Colonnes refList — picker multi-sélection *(2026.05.13)*
+
+Quand le catalogue déclare une colonne comme liste de référence (`refList: …`) — le picker *statuses* sur Factures, *eReporting statuses* sur E-Reporting, les listes personnalisées — le panneau Filtres avancés et la ligne de filtre par colonne rendent tous les deux un **picker multi-sélection** au lieu d'un dropdown simple. Chaque ligne du picker est une bascule (`code — libellé`), le déclencheur affiche `N sélectionné(s)` au-delà du plafond inline, et un bouton `✕` à droite réinitialise la sélection en un clic sans ouvrir le popover.
+
+La sélection multi-sélection est encodée en chaîne jointe par virgule dans `OpFilter.a` (par ex. `200,210,9907`) ; côté serveur, le flag `filterInList` du catalogue la décompose en clause `IN (?,?,?,?,?)` — choisir trois statuts renvoie bien l'union, pas un `LIKE` sur la chaîne jointe.
+
+L'opérateur `between` sur une colonne date / nombre / texte élargit la colonne pour accueillir les deux champs opérandes (`BETWEEN_COL_WIDTH = 340px`) afin que les deux inputs s'affichent côte à côte sans être tronqués. Revenir à un opérateur à opérande unique remet la colonne à sa largeur de spec au rendu suivant.
 
 ---
 

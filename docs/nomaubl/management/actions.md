@@ -194,7 +194,9 @@ Below the Action ID, the binding holds a **list of connector calls** rendered as
 
 ### Placeholders — invoice values
 
-Parameter values support `{{fieldName}}` placeholders that are resolved at click time from the row the user is acting on. Available fields:
+Parameter values support placeholders that are resolved at click time from the row the user is acting on. Both `{field}` (single-brace, the syntax inserted by the `{ }` picker) and the legacy `{{field}}` work — unknown tokens pass through verbatim so a typo surfaces at runtime rather than being silently emptied.
+
+Since 2026.05.15 each parameter row gets a `{ }` picker next to its value input. Click it to open a searchable list of every available placeholder; pick one and the snippet splices into the field at the caret. The list merges the 10 canonical fields below with every column of the [Invoices](../application/invoices.md) view's catalog (`{customerName}`, `{contractRef}`, `{logBusinessUnit}`, `{logPaUuid}`, …) so a call to a downstream system does not need bespoke wiring.
 
 | Placeholder | Source |
 |---|---|
@@ -212,7 +214,7 @@ Parameter values support `{{fieldName}}` placeholders that are resolved at click
 | `{{orderRef}}` | Customer purchase-order reference. |
 | `{{contractRef}}` | Customer contract reference. |
 
-Free text and placeholders can mix — `Y;reason={{statusCode}}` is a valid value.
+Free text and placeholders can mix — `Y;reason={statusCode}` is a valid value.
 
 ### Response chaining
 
@@ -229,6 +231,24 @@ When the binding holds two or more calls, every call's outputs are folded back i
 | `call.N.<name>` | Every `endpoint.N.response.<name>` mapping the connector defines. | Every column of the **first row** of the result, by name. |
 
 Example: a *Resend to PA* binding that first re-submits the invoice to the PA via an API call, then writes an audit row in the source ERP via a SQL call, sets the SQL parameter `submission_uuid` to `{call.1.uuid}` (the `uuid` field of the API connector's response mapping). If the API call fails and *Stop on failure* is ticked, the SQL call never runs and the audit trail records `STOP · 1 remaining call(s) skipped`.
+
+---
+
+## Custom actions \{#custom-actions\}
+
+Since 2026.05.15, a **Custom Actions** section sits below the regulatory bindings. Each entry is a free-form button that appears in the invoice detail modal under a *Custom actions* group — independent of the invoice's status. Use it for operator workflows that do not map to a regulatory transition: push the invoice to a CRM, notify a Slack channel, post to a finance API, …
+
+Each custom action carries:
+
+| Field | Description |
+|---|---|
+| **ID** | Free-form identifier (e.g. `pushToCrm`). Stored as `customAction.N.id`. The picker prevents duplicates within a scope. |
+| **Label** | Button text shown in the modal (e.g. *Push to CRM*). Stored as `customAction.N.label`. |
+| **Calls list** | Same call-card editor as regulatory bindings — connector, endpoint / query, parameters, optional *Stop on failure*. The same `{call.N.fieldName}` response-chaining contract applies. |
+
+**+ Add custom action** at the bottom of the section appends a new entry. Remove with the per-row 🗑 button.
+
+In the invoice detail modal, custom actions render in their own `ActionsSection` beneath the preset seller actions. Always visible — there is no status-driven enable / disable for this group; the user picks the action they need. The result banner is anchored to the group whose button fired the chain (`actionResult.source` field), and is cleared automatically when the modal closes or switches invoice — stale banners do not carry over.
 
 ---
 

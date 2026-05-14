@@ -312,6 +312,8 @@ La barre d'outils au-dessus du tableau combine trois filtres texte avec deux rac
 
 Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.ereporting`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
 
+Depuis 2026.05.12, la page fonctionne en **mode hybride client-side** — une tranche serveur capée par *Exécuter* (`spec.maxRows`, 5000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. Depuis 2026.05.13, la colonne refList `status` reçoit un **picker multi-sélection** qui émet une clause `IN (?,?,?)` côté serveur — choisir plusieurs codes de statut renvoie l'union.
+
 ---
 
 ## Liste des rapports

@@ -196,6 +196,19 @@ The catalog itself is server-side and is not editable from the UI. Adding a trul
 
 ---
 
+## Defaults row \{#defaults-row\}
+
+Above the column rows, each view card carries a *Defaults* row with the per-view settings that apply outside the column shape.
+
+| Field | Description |
+|---|---|
+| **Page size** | Initial page size for the in-grid TanStack paginator. Persists as `spec.defaultPageSize`. Default: `50`. |
+| **Max rows** *(2026.05.12)* | Hard cap on the slice loaded by a single Run. The four spec-driven views now operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Default: `5000`. |
+
+When the slice cap is hit during a Run, the page toolbar shows a translated `X / Y rows` notice next to the Run button — a hint that the operator should narrow the date range or the *Advanced Filters* to get the most relevant slice. The notice is informational; the page keeps working.
+
+---
+
 ## Advanced Filters panel \{#advanced-filters-panel\}
 
 The spec's `filter: true` allow-list seeds a second UI on the destination page: the **Advanced Filters** panel — a collapsible panel keyed by spec column name with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). The panel emits a draft state; an explicit **Run** button commits it as `appliedFilters` so typing does not spam the back-end.
@@ -210,6 +223,14 @@ The list of operators offered per column depends on the catalog entry's filter b
 | `between` | `<`, `≤`, `>`, `≥`, `between`. Applies to numeric and date columns. |
 
 Marking a column **Filter** = off in the spec keeps it visible in the grid but removes its chip from the panel; useful for read-only fields the operator does not need to query.
+
+### refList columns — multi-select picker *(2026.05.13)*
+
+When the catalog declares a column as a reference list (`refList: …`) — the *statuses* picker on Invoices, the *eReporting statuses* on E-Reporting, custom lists — the Advanced Filters panel and the per-column filter row both render a **multi-select picker** instead of a single dropdown. Each row in the picker is a toggle (`code — label`), the trigger shows `N selected` past the inline cap, and a `✕` button on the right resets the selection in one click without opening the popover.
+
+The multi-select selection is encoded as comma-joined in `OpFilter.a` (e.g. `200,210,9907`); on the server side, the catalog's `filterInList` flag splits it into an `IN (?,?,?,?,?)` clause, so picking three statuses really does return the union — not a `LIKE` over the joined string.
+
+The `between` operator on a date / number / text column widens the column to fit both operand inputs (`BETWEEN_COL_WIDTH = 340px`) so the two fields render side by side rather than truncating. Switching back to a single-operand operator snaps the column to its spec width on the next render.
 
 ---
 

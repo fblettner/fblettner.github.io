@@ -220,6 +220,10 @@ Un panneau **Filtres avancés** pliable se trouve sous la rangée de pastilles. 
 
 L'ensemble des colonnes filtrables est défini par la liste blanche `filter: true` de la spec — les opérateurs choisissent quelles colonnes ils interrogent réellement et retirent les autres du panneau sans les perdre dans la grille. Voir [Vues de liste](../configuration/list-views.md) pour l'éditeur.
 
+Depuis 2026.05.12, la page fonctionne en **mode hybride client-side** : chaque *Exécuter* charge une tranche capée depuis le serveur (`spec.maxRows`, 5000 par défaut) et TanStack gère filter / sort / paginate / group dans cette tranche — pas d'aller-retour quand on tape dans la ligne de filtre par colonne, les filtres survivent à la pagination. Quand le cap de la tranche est atteint, un message `X / Y lignes` à côté de *Exécuter* indique d'affiner la plage de dates ou les *Filtres avancés*.
+
+Depuis 2026.05.13, les colonnes refList (Statut, statut e-reporting, listes personnalisées) reçoivent un **picker multi-sélection** dans le panneau Filtres avancés et dans la ligne de filtre par colonne — choisir un nombre quelconque de codes, le déclencheur affiche `N sélectionné(s)` au-delà du plafond inline, et un `✕` à droite réinitialise la sélection en un clic. Le serveur applique une clause `IN (?,?,?)` — choisir trois statuts renvoie l'union.
+
 ### Rafraîchir et Nouvelle facture
 
 Deux boutons sont placés à droite :
@@ -359,6 +363,8 @@ Correspondance statut → actions :
 | **9904** Erreur d'envoi / **9907** Rejet PA | *Redéposer sur PA* |
 
 Chaque action est rattachée à un *endpoint de connecteur API* configuré dans *Configuration → API Connectors*. Un clic exécute le connecteur avec les données de la facture. Une action grisée signifie que le connecteur n'est pas configuré sur ce déploiement.
+
+Depuis 2026.05.15 un second groupe se trouve sous le groupe réglementaire — **Actions personnalisées**. Boutons toujours visibles configurés sur la page [Actions](../management/actions.md#actions-personnalisees) ; chacun déclenche sa propre chaîne d'appels connecteur et reste indépendant du statut courant de la facture. Le bandeau de résultat est rattaché au groupe dont le bouton a déclenché la chaîne — un échec d'action personnalisée n'écrase pas le bandeau d'une action réglementaire affichée en même temps, et les bandeaux périmés sont effacés automatiquement quand la modale se ferme ou change de facture.
 
 Le reste de l'onglet Résumé se présente sous forme de groupes dépliables :
 

@@ -220,6 +220,10 @@ A collapsible **Advanced Filters** panel sits below the chip row. It exposes one
 
 The set of columns that can be filtered is defined in the spec's `filter: true` allow-list — operators decide which columns they actually query and trim the rest from the panel without losing them from the grid. See [List Views](../configuration/list-views.md) for the editor.
 
+Since 2026.05.12 the page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, default 5000) and TanStack handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the date range or the *Advanced Filters*.
+
+Since 2026.05.13, refList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union.
+
 ### Refresh and New invoice
 
 Two buttons sit at the right:
@@ -359,6 +363,8 @@ Status-by-status mapping:
 | **9904** Send error / **9907** PA rejected | *Resend to PA* |
 
 Each action is bound to an *API connector endpoint* configured in *Configuration → API Connectors* — clicking the button executes the connector with the invoice's data. Greyed-out actions (faded) indicate the connector is not configured for this deployment.
+
+Since 2026.05.15 a second group sits below the regulatory one — **Custom actions**. Always-visible buttons configured on the [Actions](../management/actions.md#custom-actions) page; each fires its own chain of connector calls and is independent of the invoice's current status. The result banner is anchored to the group whose button fired — a custom-action failure does not stomp on a regulatory-action banner shown at the same time, and stale banners are cleared automatically when the modal closes or switches invoice.
 
 The rest of the Summary tab presents collapsible groups:
 

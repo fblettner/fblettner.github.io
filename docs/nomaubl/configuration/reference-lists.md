@@ -116,6 +116,27 @@ Use the **+ Add** button at the bottom of the table to add a custom row, and the
 
 ---
 
+## Connector sync for custom lists \{#connector-sync\}
+
+Since 2026.05.15, a custom list can be **synced from a connector** instead of being edited row by row. A *Sync source (optional)* group sits below the row table — pick an [API connector](./api-connectors.md) or a [SQL connector](./sql-connectors.md), then an endpoint / query, then map the response fields to the list's three columns.
+
+| Field | Description |
+|---|---|
+| **Connector** | Dropdown of every `api-connector` and `sql-connector` template defined in the platform. Picking one limits the *Endpoint* dropdown to that connector's targets. |
+| **Endpoint / Query** | Dropdown of the connector's endpoints (API) or queries (SQL). Disabled until a connector is picked. |
+| **Code field** | Column name (SQL) or JSON key (API) used as each row's code. Required. |
+| **Label FR field** | Column / key for the French label. Required. |
+| **Label EN field** | Column / key for the English label. Optional. |
+| **List path** *(API only)* | Dotted path to the array inside the JSON body. Supports `data.items` and `items[0]` segments. Empty when the body is already a JSON array. |
+| **Parameters** | Per-row key / value pairs sent to the connector as fixed values (no placeholder substitution). The same query can power multiple lists by saving different values per list; defaults from the endpoint definition apply when a field is left blank. |
+| **Sync now** | Calls the connector, walks the response, builds the row set, and replaces the editor's rows in place. A translated banner reports `Synced N row(s) from connector · endpoint` on success, the underlying error on failure. |
+
+The sync config lives on the same list template under `sync.connector`, `sync.endpoint`, `sync.codeField`, `sync.labelFrField`, `sync.labelEnField`, `sync.listPath` and `sync.params`. List consumers (refList cell renderer, *Advanced Filters* dropdown) never see those keys as entries — they are filtered out of `parseRefOptions`.
+
+The standard twelve lists below ship without a sync source — they map to regulated catalogs, so the canonical codes are the editor's source of truth. Custom lists added on top can either be edited by hand or hooked to a connector, depending on whether the source of truth lives in NomaUBL or in an external system.
+
+---
+
 ## Standard lists shipped with NomaUBL
 
 The twelve reference lists below are built into NomaUBL and aligned with the regulation. They cover everything the French e-invoicing pipeline needs to validate UBL documents end-to-end.

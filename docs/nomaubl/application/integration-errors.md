@@ -171,6 +171,8 @@ A collapsible **Advanced Filters** panel below the toolbar exposes one row per f
 
 The Tech Dashboard's *Recent errors* drill-through also surfaces here: when the dashboard passes `{ doc, dct, kco }`, a chip shows the active drill-through filter and offers a one-click `×` clear. Useful when the panel is collapsed and the filter would otherwise stay invisible.
 
+Since 2026.05.12 the page runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, default 5000), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. Since 2026.05.13, the `invoiceStatus` refList column gets a **multi-select picker** that issues an `IN (?,?,?)` clause on the server so picking several statuses returns the union.
+
 ---
 
 ## By-rule view

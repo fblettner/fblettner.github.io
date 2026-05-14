@@ -194,7 +194,9 @@ Sous l'ID d'action, la liaison porte une **liste d'appels** rendus sous forme de
 
 ### Placeholders — valeurs de la facture
 
-Les valeurs de paramètres acceptent des placeholders `{{fieldName}}` résolus au clic à partir de la ligne sur laquelle l'utilisateur agit. Champs disponibles :
+Les valeurs de paramètres acceptent des placeholders résolus au clic à partir de la ligne sur laquelle l'utilisateur agit. La syntaxe `{field}` (accolade simple, syntaxe insérée par le picker `{ }`) et l'ancienne `{{field}}` fonctionnent toutes les deux — les jetons inconnus passent inchangés afin qu'une faute de frappe soit visible à l'exécution.
+
+Depuis 2026.05.15, chaque ligne de paramètre reçoit un picker `{ }` à côté de son input. Cliquer dessus ouvre une liste recherchable de toutes les variables disponibles ; choisir une variable et le snippet s'insère dans le champ au curseur. La liste fusionne les 10 champs canoniques ci-dessous avec toutes les colonnes du catalogue de la vue [Factures](../application/invoices.md) (`{customerName}`, `{contractRef}`, `{logBusinessUnit}`, `{logPaUuid}`, …) — un appel vers un système aval n'a plus besoin de câblage sur mesure.
 
 | Placeholder | Source |
 |---|---|
@@ -212,7 +214,7 @@ Les valeurs de paramètres acceptent des placeholders `{{fieldName}}` résolus a
 | `{{orderRef}}` | Référence du bon de commande client. |
 | `{{contractRef}}` | Référence du contrat client. |
 
-Texte libre et placeholders peuvent se mélanger — `Y;reason={{statusCode}}` est une valeur valide.
+Texte libre et placeholders peuvent se mélanger — `Y;reason={statusCode}` est une valeur valide.
 
 ### Chaînage des réponses
 
@@ -229,6 +231,24 @@ Quand la liaison porte deux appels ou plus, les sorties de chaque appel sont ver
 | `call.N.<nom>` | Tout mapping `endpoint.N.response.<nom>` que le connecteur définit. | Chaque colonne de la **première ligne** du résultat, par son nom. |
 
 Exemple : une liaison *Renvoyer à la PA* qui re-soumet d'abord la facture à la PA via un appel API, puis enregistre une ligne d'audit dans l'ERP source via un appel SQL, donne au paramètre SQL `submission_uuid` la valeur `{call.1.uuid}` (le champ `uuid` du mapping de réponse du connecteur API). Si l'appel API échoue et que *Arrêt sur échec* est coché, l'appel SQL ne part pas et la trace d'audit indique `STOP · 1 appel(s) restant(s) ignoré(s)`.
+
+---
+
+## Actions personnalisées \{#actions-personnalisees\}
+
+Depuis 2026.05.15, une section **Actions personnalisées** se trouve sous les liaisons réglementaires. Chaque entrée est un bouton libre qui apparaît dans la modale de détail facture dans un groupe *Actions personnalisées* — indépendant du statut de la facture. À utiliser pour les workflows d'opérateur qui ne correspondent pas à une transition réglementaire : pousser la facture vers un CRM, notifier un canal Slack, poster vers une API finance, …
+
+Chaque action personnalisée porte :
+
+| Champ | Description |
+|---|---|
+| **ID** | Identifiant libre (par ex. `pushToCrm`). Enregistré sous `customAction.N.id`. Le picker évite les doublons dans une portée. |
+| **Label** | Texte du bouton dans la modale (par ex. *Pousser vers CRM*). Enregistré sous `customAction.N.label`. |
+| **Liste d'appels** | Même éditeur de call-card que les liaisons réglementaires — connecteur, endpoint / requête, paramètres, *Arrêt sur échec* optionnel. Le même contrat de chaînage `{call.N.fieldName}` s'applique. |
+
+**+ Ajouter une action personnalisée** au pied de la section ajoute une nouvelle entrée. Retirer avec le bouton 🗑 par ligne.
+
+Dans la modale de détail facture, les actions personnalisées sont rendues dans leur propre `ActionsSection` sous les actions vendeur prédéfinies. Toujours visibles — il n'y a pas d'activation pilotée par le statut pour ce groupe ; l'utilisateur choisit l'action qu'il veut. Le bandeau de résultat est rattaché au groupe dont le bouton a déclenché la chaîne (champ `actionResult.source`) et est effacé automatiquement quand la modale se ferme ou change de facture — les bandeaux périmés ne restent pas.
 
 ---
 

@@ -187,6 +187,8 @@ Le drill-through depuis les barres de débit du Tech Dashboard vers cette page a
 
 Depuis 2026.05.10, la vue à plat passe par **DataTableV2** en mode piloté par spec : la forme des colonnes vient de la spec `view.processing-log` sur `db-nomaubl` et le défaut embarqué livre toutes les colonnes décrites plus bas. Ajouter des colonnes depuis le catalogue ou retirer une colonne de la liste blanche de filtres se fait depuis l'éditeur [Vues de liste](../configuration/list-views.md). La vue groupée conserve sa mise en page dédiée — le groupement ne fait pas partie de DataTableV2.
 
+Depuis 2026.05.12, la vue à plat fonctionne en **mode hybride client-side** — une tranche serveur capée par *Exécuter* (`spec.maxRows`, 5000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. Les colonnes refList reçoivent le **picker multi-sélection** introduit en 2026.05.13 quand c'est pertinent.
+
 ---
 
 ## Vue groupée — une ligne par job

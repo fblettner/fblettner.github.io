@@ -171,6 +171,8 @@ Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne
 
 Le drill-through *Erreurs récentes* du Tech Dashboard remonte aussi ici : quand le tableau de bord transmet `{ doc, dct, kco }`, une pastille indique le filtre actif et propose un `×` pour le retirer. Utile quand le panneau est replié et que le filtre serait sinon invisible.
 
+Depuis 2026.05.12, la page fonctionne en **mode hybride client-side** — une tranche serveur capée par *Exécuter* (`spec.maxRows`, 5000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. Depuis 2026.05.13, la colonne refList `invoiceStatus` reçoit un **picker multi-sélection** qui émet une clause `IN (?,?,?)` côté serveur — choisir plusieurs statuts renvoie l'union.
+
 ---
 
 ## Vue par règle
