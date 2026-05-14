@@ -66,7 +66,7 @@ Two complementary improvements that let operators wire downstream systems withou
   - `List path` (API only) — dotted path to the array inside the JSON body, supports `data.items` and `items[0]` segments; empty when the body is already an array.
   - `Parameters` — fixed values (no placeholder substitution) sent to the connector. The same query can power multiple lists by saving different values per list; defaults from the endpoint definition apply when a field is left blank.
 - `Sync now` button calls the connector, walks the response, builds the row set, and replaces the editor's rows with a translated success / error message (`Synced N row(s) from connector · endpoint` or the underlying error).
-- Sync config lives in the same list template under `sync.connector / sync.endpoint / sync.codeField / sync.labelFrField / sync.labelEnField / sync.listPath / sync.params`. `parseRefOptions` filters those keys out so list consumers (refList cell renderer, *Advanced Filters* dropdown) never see them as entries. See the [Reference Lists](./configuration/reference-lists.md) page.
+- Sync config lives in the same list template under `sync.connector / sync.endpoint / sync.codeField / sync.labelFrField / sync.labelEnField / sync.listPath / sync.params`. `parseRefOptions` filters those keys out so list consumers (refList cell renderer, *Advanced Filters* dropdown) never see them as entries. See the [Custom Lists](./configuration/custom-lists.md) page.
 
 ### Backend — friendlier SQL param binding
 

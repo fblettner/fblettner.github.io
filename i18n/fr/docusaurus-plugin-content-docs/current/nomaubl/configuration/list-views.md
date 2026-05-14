@@ -226,7 +226,9 @@ Marquer une colonne **Filtre** = désactivé dans la spec la laisse visible dans
 
 ### Colonnes refList — picker multi-sélection *(2026.05.13)*
 
-Quand le catalogue déclare une colonne comme liste de référence (`refList: …`) — le picker *statuses* sur Factures, *eReporting statuses* sur E-Reporting, les listes personnalisées — le panneau Filtres avancés et la ligne de filtre par colonne rendent tous les deux un **picker multi-sélection** au lieu d'un dropdown simple. Chaque ligne du picker est une bascule (`code — libellé`), le déclencheur affiche `N sélectionné(s)` au-delà du plafond inline, et un bouton `✕` à droite réinitialise la sélection en un clic sans ouvrir le popover.
+Une colonne peut être rattachée à une liste de référence — soit un catalogue réglementaire de [Listes de référence](./reference-lists.md) (statuts, devises, codes pays, …), soit une liste définie par l'opérateur dans [Listes personnalisées](./custom-lists.md). Renseigner `refList: <nom-de-liste>` sur la spec de colonne suffit : renderer de cellule, dropdown de filtre par colonne et picker multi-sélection des *Filtres avancés* s'activent automatiquement.
+
+Quand le catalogue ou la spec déclare une colonne comme liste de référence (`refList: …`) — le picker *statuses* sur Factures, *eReporting statuses* sur E-Reporting, n'importe quelle liste personnalisée — le panneau Filtres avancés et la ligne de filtre par colonne rendent tous les deux un **picker multi-sélection** au lieu d'un dropdown simple. Chaque ligne du picker est une bascule (`code — libellé`), le déclencheur affiche `N sélectionné(s)` au-delà du plafond inline, et un bouton `✕` à droite réinitialise la sélection en un clic sans ouvrir le popover.
 
 La sélection multi-sélection est encodée en chaîne jointe par virgule dans `OpFilter.a` (par ex. `200,210,9907`) ; côté serveur, le flag `filterInList` du catalogue la décompose en clause `IN (?,?,?,?,?)` — choisir trois statuts renvoie bien l'union, pas un `LIKE` sur la chaîne jointe.
 

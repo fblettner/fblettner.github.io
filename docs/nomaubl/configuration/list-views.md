@@ -226,7 +226,9 @@ Marking a column **Filter** = off in the spec keeps it visible in the grid but r
 
 ### refList columns — multi-select picker *(2026.05.13)*
 
-When the catalog declares a column as a reference list (`refList: …`) — the *statuses* picker on Invoices, the *eReporting statuses* on E-Reporting, custom lists — the Advanced Filters panel and the per-column filter row both render a **multi-select picker** instead of a single dropdown. Each row in the picker is a toggle (`code — label`), the trigger shows `N selected` past the inline cap, and a `✕` button on the right resets the selection in one click without opening the popover.
+A column can be bound to a reference list — either a regulated one from [Reference Lists](./reference-lists.md) (statuses, currencies, country codes, …) or an operator-defined one from [Custom Lists](./custom-lists.md). Setting `refList: <list-name>` on the column spec is all that is needed: cell renderer, per-column filter dropdown and *Advanced Filters* multi-select picker switch on automatically.
+
+When the catalog or the spec declares a column as a reference list (`refList: …`) — the *statuses* picker on Invoices, the *eReporting statuses* on E-Reporting, any custom list — the Advanced Filters panel and the per-column filter row both render a **multi-select picker** instead of a single dropdown. Each row in the picker is a toggle (`code — label`), the trigger shows `N selected` past the inline cap, and a `✕` button on the right resets the selection in one click without opening the popover.
 
 The multi-select selection is encoded as comma-joined in `OpFilter.a` (e.g. `200,210,9907`); on the server side, the catalog's `filterInList` flag splits it into an `IN (?,?,?,?,?)` clause, so picking three statuses really does return the union — not a `LIKE` over the joined string.
 

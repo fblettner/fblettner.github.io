@@ -114,26 +114,9 @@ Chaque liste de référence est présentée sous forme de **tableau** qui contie
 
 Utiliser le bouton **+ Ajouter** en bas du tableau pour ajouter une ligne personnalisée, et le bouton **×** d'une ligne pour la supprimer. Les lignes sont triées par code.
 
----
-
-## Synchronisation depuis un connecteur \{#sync-depuis-connecteur\}
-
-Depuis 2026.05.15, une liste personnalisée peut être **synchronisée depuis un connecteur** au lieu d'être saisie ligne par ligne. Un groupe *Sync source (optionnel)* se trouve sous le tableau des lignes — choisir un [connecteur API](./api-connectors.md) ou un [connecteur SQL](./sql-connectors.md), puis un endpoint / une requête, puis mapper les champs de la réponse vers les trois colonnes de la liste.
-
-| Champ | Description |
-|---|---|
-| **Connecteur** | Liste déroulante de tous les modèles `api-connector` et `sql-connector` définis. Le choix restreint la liste *Endpoint* aux cibles de ce connecteur. |
-| **Endpoint / Requête** | Liste déroulante des endpoints (API) ou des requêtes (SQL) du connecteur. Désactivée tant qu'aucun connecteur n'est choisi. |
-| **Code field** | Nom de colonne (SQL) ou clé JSON (API) qui sert de code à chaque ligne. Obligatoire. |
-| **Label FR field** | Colonne / clé du libellé français. Obligatoire. |
-| **Label EN field** | Colonne / clé du libellé anglais. Optionnel. |
-| **List path** *(API seulement)* | Chemin pointé vers le tableau dans le corps JSON. Supporte `data.items` et `items[0]`. Vide quand le corps est déjà un tableau JSON. |
-| **Paramètres** | Couples clé / valeur envoyés au connecteur comme valeurs fixes (pas de substitution de variables). La même requête peut alimenter plusieurs listes en enregistrant des valeurs différentes par liste ; les valeurs par défaut de la définition d'endpoint s'appliquent quand un champ est laissé vide. |
-| **Sync now** | Appelle le connecteur, parcourt la réponse, construit l'ensemble de lignes et remplace les lignes de l'éditeur en place. Un bandeau traduit indique `N ligne(s) synchronisée(s) depuis connecteur · endpoint` en cas de succès ou l'erreur sous-jacente en cas d'échec. |
-
-La configuration sync vit sur le même modèle de liste sous `sync.connector`, `sync.endpoint`, `sync.codeField`, `sync.labelFrField`, `sync.labelEnField`, `sync.listPath` et `sync.params`. Les consommateurs de liste (renderer de cellule refList, dropdown *Filtres avancés*) ne voient jamais ces clés comme des entrées — elles sont filtrées par `parseRefOptions`.
-
-Les douze listes standard ci-dessous sont livrées sans source de synchronisation — elles correspondent à des catalogues réglementaires, donc les codes canoniques restent la source de vérité de l'éditeur. Les listes personnalisées ajoutées par-dessus peuvent au choix être saisies à la main ou rattachées à un connecteur, selon que la source de vérité vit dans NomaUBL ou dans un système externe.
+:::info[Listes personnalisées (non standard)]
+Les douze listes ci-dessous sont les catalogues réglementaires livrés avec NomaUBL. Les listes définies par les opérateurs — qui pilotent les dropdowns et les filtres d'une grille depuis des données externes — vivent sur une page dédiée : [Listes personnalisées](./custom-lists.md). Elles peuvent aussi être synchronisées depuis un connecteur API ou SQL au lieu d'être saisies ligne par ligne.
+:::
 
 ---
 

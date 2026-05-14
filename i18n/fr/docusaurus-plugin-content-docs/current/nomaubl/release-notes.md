@@ -66,7 +66,7 @@ Deux améliorations qui permettent aux opérateurs de câbler des systèmes aval
   - `List path` (API seulement) — chemin pointé vers le tableau dans le corps JSON, supporte `data.items` et `items[0]` ; vide quand le corps est déjà un tableau.
   - `Parameters` — valeurs fixes (pas de substitution de variables) envoyées au connecteur. La même requête peut alimenter plusieurs listes en enregistrant des valeurs différentes par liste ; les valeurs par défaut de la définition d'endpoint s'appliquent quand un champ est laissé vide.
 - Le bouton `Sync now` appelle le connecteur, parcourt la réponse, construit l'ensemble de lignes et remplace les lignes de l'éditeur avec un message succès/erreur traduit (`N ligne(s) synchronisée(s) depuis connector · endpoint` ou l'erreur sous-jacente).
-- La configuration sync vit dans le même modèle de liste sous `sync.connector / sync.endpoint / sync.codeField / sync.labelFrField / sync.labelEnField / sync.listPath / sync.params`. `parseRefOptions` filtre ces clés afin que les consommateurs de liste (renderer de cellule refList, dropdown *Filtres avancés*) ne les voient jamais comme des entrées. Voir la page [Listes de référence](./configuration/reference-lists.md).
+- La configuration sync vit dans le même modèle de liste sous `sync.connector / sync.endpoint / sync.codeField / sync.labelFrField / sync.labelEnField / sync.listPath / sync.params`. `parseRefOptions` filtre ces clés afin que les consommateurs de liste (renderer de cellule refList, dropdown *Filtres avancés*) ne les voient jamais comme des entrées. Voir la page [Listes personnalisées](./configuration/custom-lists.md).
 
 ### Backend — liaison de paramètres SQL plus tolérante
 

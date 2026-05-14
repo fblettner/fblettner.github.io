@@ -301,6 +301,7 @@ const sidebars: SidebarsConfig = {
           ],
         },
         'nomaubl/configuration/reference-lists',
+        'nomaubl/configuration/custom-lists',
         'nomaubl/configuration/list-views',
         'nomaubl/configuration/api-connectors',
         'nomaubl/configuration/sql-connectors',
