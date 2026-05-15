@@ -1,14 +1,14 @@
 ---
 title: Oracle
-description: "Oracle licence overview — product, version, CPU and named-users data, restricted to applications running on an Oracle database."
-keywords: [Nomasx-1, licenses, Oracle, NUP, CPU, Oracle audit, named users plus]
+description: "Per-database list of the Oracle licence options detected by the Nomasx-1 audit scripts — the inventory used to declare the licences required to the LMS auditor."
+keywords: [Nomasx-1, licenses, Oracle, NUP, CPU, Oracle audit, named users plus, required licences, LMS]
 ---
 
 # Oracle
 
-The **Oracle** licence screen replicates the *Database → Oracle* inventory, restricted to applications whose database is Oracle (`APPS_DBTYPE = 'ORACLE'`) and enriched with the application name. One line per `(Application, Product / Instance)`.
+The **Oracle** licence screen lists, for each Oracle database connected to Nomasx-1, the data points that drive the licence calculation: edition and packs detected, CPU count, named-user counters and storage footprint. One line per `(Application, Product / Pack)`.
 
-It is the same data as the database properties page but framed as a *licence deliverable*: the data set Oracle's LMS auditor will ask for during the annual review.
+Where *Database → Oracle* details the **database properties** (options, features, partitions — the technical inventory), this screen reframes the same source for the **licence audit**: each row is a candidate licence option found on the instance by the collection scripts, with the metrics the LMS auditor will ask for. Drill into **Display Required Licenses** on a row to see the licence components actually declared as required for that database — the official deliverable for the audit.
 
 ---
 
@@ -75,11 +75,11 @@ It is the same data as the database properties page but framed as a *licence del
 
 ## Goal of the view
 
-Same role as *Database → Oracle*, framed for the licensing review:
+For each Oracle database, the licence-side view of what is installed:
 
-- **Per-application slice.** The connector only returns rows for applications whose database is Oracle — the licence team rarely needs the others.
-- **NUP-ready figures.** Active, Total, Technical users — the three counts that drive the named-user plus calculation.
-- **Audit pack starting point.** Sort by *Hostname* to discuss server by server with the LMS auditor.
+- **Per-application slice.** Only the applications that run on Oracle appear — the licence team is not interested in the other databases.
+- **NUP-ready figures.** *Active*, *Total* and *Technical* user counts are the three numbers that drive the Named User Plus calculation. *Technical* users are the accounts flagged as technical in *Users properties* — they are excluded from the NUP perimeter when negotiating with Oracle.
+- **The licences required.** Right-click a row → *Display Required Licenses* to see the licence components the audit scripts flagged as required on the selected database — the list to bring to the LMS auditor.
 
 ---
 

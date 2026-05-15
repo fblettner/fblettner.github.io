@@ -69,8 +69,8 @@ C'est le tableau à apporter à l'audit licence — et celui qui pilote le *Rapp
 
 Pour chaque `(Application, Composant)` :
 
-- **Où en sommes-nous ?** *Conformité = Acquis − Utilisateurs constatés* (ou utilisateurs actifs lorsque la valeur est disponible). Une valeur positive est un *sous-usage* — opportunité de calibrage. Une valeur négative est une *sur-consommation* — un véritable écart de conformité.
-- **Rendre l'échange d'audit factuel.** Les chiffres viennent directement du jeu OUT joint à l'agrégation contractuelle `LICENSE_CSI_COMPONENTS` par application.
+- **Où en sommes-nous ?** *Conformité = Acquis − Utilisateurs constatés* (ou utilisateurs actifs quand la valeur est disponible). Une valeur positive signale un *sous-usage* — opportunité de calibrage. Une valeur négative signale une *sur-consommation* — un véritable écart de conformité.
+- **Un échange d'audit factuel.** *Utilisateurs* et *Utilisateurs actifs* sont les comptes réellement observés par l'Object Usage Tracking ; *Acquis* est la quantité contractuelle déclarée dans les CSI rattachés à l'application. Les deux chiffres viennent du même produit — aucun tableur à réconcilier.
 - **Repérer rapidement les écarts coûteux.** Trier *Conformité* en ordre croissant — chaque ligne négative est un sujet pour la discussion de renouvellement.
 
 ---
@@ -83,7 +83,7 @@ Pour chaque `(Application, Composant)` :
 | **Composant** | `CPT_ID` — composant de licence. | Cumul de licence. |
 | **Utilisateurs** | `USERS_COUNT` — utilisateurs distincts observés sur le composant. | Cohorte totale observée. |
 | **Utilisateurs actifs** | `ACTIVE_USERS_COUNT` — comptage restreint aux utilisateurs actifs. | Cohorte resserrée utilisée dans la formule de conformité quand disponible. |
-| **Acquis** | `SUBSCRIBED` — droit agrégé depuis `LICENSE_CSI_COMPONENTS`. | Quantité contractuelle pour application × composant. |
+| **Acquis** | `SUBSCRIBED` — droit agrégé sur les CSI rattachés à l'application. | Quantité contractuelle pour application × composant. |
 | **Conformité** | `COMPLIANCE` — écart signé. | Positif = dans le droit, négatif = sur-consommation. |
 
 Formule : `CONFORMITÉ = ACQUIS − (UTILISATEURS_ACTIFS ou UTILISATEURS si aucun comptage actif disponible)`.

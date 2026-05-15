@@ -67,7 +67,7 @@ Pour chaque `(Application, Composant)` non conforme :
 - **Deux composantes dans le total.** L'achat **licence** supplémentaire (conformité × prix unitaire) et le **support** correspondant sur 3 ans (conformité × support unitaire × 3). L'horizon de 3 ans correspond au cycle standard Oracle.
 - **Aide à la décision.** Connaître le coût de mise en conformité permet d'arbitrer entre *re-souscription* et *remédiation* (révocation d'utilisateurs, refonte des rôles).
 
-L'écran ne remonte que les lignes `COMPLIANCE < 0` — les lignes conformes n'ont pas d'impact financier et sont filtrées au niveau SQL.
+Seules les lignes en sur-consommation apparaissent ici — les lignes conformes n'ont pas d'impact financier et sont filtrées avant l'affichage.
 
 ---
 

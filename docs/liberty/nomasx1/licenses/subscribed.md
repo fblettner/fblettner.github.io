@@ -64,7 +64,7 @@ It is the *what we are entitled to* half of the licence equation. The *Usage rep
 
 For each CSI, summarise *what we bought*:
 
-- **One line per (Component, Metric).** Quantities are summed across the CSI's `LICENSE_CSI_COMPONENTS` rows so the screen reads at the contractual granularity.
+- **One line per (Component, Metric).** Quantities are summed at the contractual granularity — duplicates that may exist on a CSI are collapsed into a single subscribed quantity per component and metric.
 - **Price-list view.** The *Price list* dimension lets you reconcile each line with the corresponding Oracle price book.
 - **Metric mapping.** *Application User*, *Named User Plus*, *Processor*, *Employee*… The metric drives how *Usage report* compares the entitlement to the actual usage.
 

@@ -69,8 +69,8 @@ It is the chart you take to the licensing audit — and the one that drives the 
 
 For each `(Application, Component)`:
 
-- **Where do we stand?** *Compliance = Subscribed − Users used* (or active users when known). A positive value is *underutilisation* — possible right-sizing opportunity. A negative value is *over-consumption* — a true compliance gap.
-- **Make the audit conversation factual.** The numbers come straight from the OUT data set joined to the contractual `LICENSE_CSI_COMPONENTS` aggregation per application.
+- **Where do we stand?** *Compliance = Subscribed − Users used* (or active users when known). A positive value means *under-used* — possible down-sizing opportunity. A negative value means *over-used* — a real compliance gap.
+- **A factual audit conversation.** *Users count* and *Active users count* are what Object Usage Tracking actually observed; *Subscribed* is the contractual quantity declared in the CSI contracts attached to the application. Both numbers come from the same product — no spreadsheet to reconcile.
 - **Spot the costly gaps fast.** Sort *Compliance* ascending — every negative row is a topic for the renewal discussion.
 
 ---
@@ -83,7 +83,7 @@ For each `(Application, Component)`:
 | **Component** | `CPT_ID` — licence component. | The licence bucket. |
 | **Users count** | `USERS_COUNT` — distinct users observed on the component. | Total observed cohort. |
 | **Active users count** | `ACTIVE_USERS_COUNT` — count restricted to currently active users. | Tighter cohort used in the compliance formula when available. |
-| **Subscribed** | `SUBSCRIBED` — entitlement aggregated from `LICENSE_CSI_COMPONENTS`. | Contractual quantity for the application × component. |
+| **Subscribed** | `SUBSCRIBED` — entitlement aggregated from the CSI contracts attached to the application. | Contractual quantity for the application × component. |
 | **Compliance** | `COMPLIANCE` — signed delta. | Positive = within entitlement, negative = over-consumption. |
 
 The formula: `COMPLIANCE = SUBSCRIBED − (ACTIVE_USERS_COUNT or USERS_COUNT when no active count is available)`.

@@ -1,14 +1,14 @@
 ---
 title: Oracle
-description: "Synthèse licence Oracle — produit, version, CPU et données comptes nommés, restreintes aux applications hébergées sur Oracle."
-keywords: [Nomasx-1, licences, Oracle, NUP, CPU, audit Oracle, named users plus]
+description: "Liste, par base de données, des options de licence Oracle détectées par les scripts de collecte Nomasx-1 — l'inventaire qui sert à déclarer les licences requises à l'auditeur LMS."
+keywords: [Nomasx-1, licences, Oracle, NUP, CPU, audit Oracle, named users plus, licences requises, LMS]
 ---
 
 # Oracle
 
-L'écran **Oracle** côté licence reprend l'inventaire *Base de données → Oracle*, restreint aux applications dont la base est Oracle (`APPS_DBTYPE = 'ORACLE'`) et enrichi du nom d'application. Une ligne par `(Application, Produit / Instance)`.
+L'écran **Oracle** côté licence liste, pour chaque base de données Oracle connectée à Nomasx-1, les points de données qui pilotent le calcul de licence : édition et packs détectés, nombre de CPU, comptes nommés et empreinte de stockage. Une ligne par `(Application, Produit / Pack)`.
 
-Il s'agit du même jeu de données que la page de propriétés base, mais cadré comme *livrable licence* : ce qu'un auditeur Oracle LMS demandera lors de la revue annuelle.
+Là où *Base de données → Oracle* détaille les **propriétés de la base** (options, fonctionnalités, partitions — l'inventaire technique), cet écran reprend la même source dans la **perspective audit de licence** : chaque ligne est une option de licence détectée sur l'instance par les scripts de collecte, avec les métriques que l'auditeur LMS demandera. Le clic droit *Afficher les licences requises* d'une ligne donne la liste des composants de licence effectivement déclarés comme requis sur cette base — le livrable officiel de l'audit.
 
 ---
 
@@ -75,11 +75,11 @@ Il s'agit du même jeu de données que la page de propriétés base, mais cadré
 
 ## Objectif de l'écran
 
-Même rôle que *Base de données → Oracle*, cadré pour la revue licence :
+Pour chaque base Oracle, la vue côté licence de ce qui est installé :
 
-- **Coupe par application.** Le connecteur ne remonte que les applications dont la base est Oracle — l'équipe licence n'a généralement pas besoin des autres.
-- **Chiffres prêts pour le NUP.** Actifs, Totaux, Techniques — les trois compteurs qui pilotent le calcul named-user plus.
-- **Point de départ du dossier d'audit.** Trier sur *Hôte* pour discuter serveur par serveur avec l'auditeur LMS.
+- **Coupe par application.** Seules les applications qui tournent sur Oracle apparaissent — l'équipe licence ne s'intéresse pas aux autres bases.
+- **Chiffres prêts pour le NUP.** *Actifs*, *Totaux* et *Techniques* sont les trois compteurs qui pilotent le calcul Named User Plus. Les utilisateurs *Techniques* sont les comptes marqués comme techniques dans *Propriétés utilisateurs* — ils sont exclus du périmètre NUP lors de la négociation avec Oracle.
+- **Les licences requises.** Clic droit sur une ligne → *Afficher les licences requises* pour voir les composants de licence que les scripts de collecte ont identifiés comme requis sur la base sélectionnée — la liste à présenter à l'auditeur LMS.
 
 ---
 

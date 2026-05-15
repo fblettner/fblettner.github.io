@@ -67,7 +67,7 @@ For each non-compliant `(Application, Component)`:
 - **Two components in the total.** The additional **licence** purchase (compliance × unit price) and the corresponding **support** over 3 years (compliance × unit support × 3). The 3-year horizon matches the standard Oracle support commitment.
 - **Decision input.** Knowing the cost of compliance lets you compare *resubscription* against *remediation* (revoke users, reorganise roles).
 
-The screen only returns rows where `COMPLIANCE < 0` — compliant rows have no financial impact and are filtered out at the SQL level.
+Only rows in over-consumption appear here — compliant rows have no financial impact and are filtered out before the screen loads.
 
 ---
 

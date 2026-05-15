@@ -64,7 +64,7 @@ C'est la moitié *ce à quoi nous avons droit* de l'équation licence. *Rapport 
 
 Pour chaque CSI, synthétiser *ce que nous avons acheté* :
 
-- **Une ligne par (Composant, Métrique).** Les quantités sont sommées sur les lignes `LICENSE_CSI_COMPONENTS` du CSI pour lire à la granularité contractuelle.
+- **Une ligne par (Composant, Métrique).** Les quantités sont sommées à la granularité contractuelle — les éventuels doublons sur un CSI sont regroupés en une quantité acquise par composant et métrique.
 - **Vue par liste de prix.** L'axe *Liste de prix* permet de rapprocher chaque ligne du catalogue Oracle correspondant.
 - **Mappage de métrique.** *Application User*, *Named User Plus*, *Processor*, *Employee*… La métrique guide la façon dont *Rapport d'utilisation* compare l'acquis à l'usage.
 
