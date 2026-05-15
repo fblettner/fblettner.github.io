@@ -74,6 +74,49 @@ La justesse de ce mappage est ce qui rend l'analyse de conformité licence créd
 
 ---
 
+## Boîte de dialogue
+
+La grille est en lecture seule sur la ligne. Double-cliquer une ligne pour ouvrir l'éditeur et ajuster la description, le module ou le composant de licence.
+
+<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sjsy-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="140" rx="14" fill="url(#sjsy-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier le code système JDE</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">SY</text>
+  <rect x="60" y="116" width="80" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">04</text>
+
+  <text x="160" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Description</text>
+  <rect x="160" y="116" width="260" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="172" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Comptes fournisseurs</text>
+
+  <text x="440" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Module</text>
+  <rect x="440" y="116" width="160" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="452" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Financials</text>
+
+  <text x="620" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Component E1</text>
+  <rect x="620" y="116" width="140" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="632" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">CFIN</text>
+
+  <text x="780" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Composant</text>
+  <rect x="780" y="116" width="140" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="792" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Financials ▾</text>
+</svg>
+
+| Champ | À renseigner |
+|---|---|
+| **SY** | Lecture seule. Code System JDE à deux caractères. |
+| **Description** | Description lisible du module affichée partout dans l'application. |
+| **Module** | Domaine fonctionnel de haut niveau (Financials, Distribution…). |
+| **Component E1** | Code de composant tel qu'exposé par Oracle dans JDE EnterpriseOne. |
+| **Composant** | Liste déroulante des composants Nomasx-1 issus de *Pricing → Composants*. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Aligner le mappage sur le catalogue contractuel**, et non sur les valeurs par défaut Oracle. Une renégociation introduit souvent de nouveaux noms de composants — les mettre à jour ici.

@@ -67,6 +67,39 @@ C'est la table à maintenir dès qu'Oracle introduit un nouveau composant ou en 
 
 ---
 
+## Boîte de dialogue
+
+Double-cliquer une ligne pour modifier un composant de licence.
+
+<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="spcpt-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="140" rx="14" fill="url(#spcpt-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier le composant de licence</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Liste de prix</text>
+  <rect x="60" y="116" width="240" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE Foundation ▾</text>
+
+  <text x="320" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Catégorie</text>
+  <rect x="320" y="116" width="240" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="332" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Applications ▾</text>
+
+  <text x="580" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Composant</text>
+  <rect x="580" y="116" width="340" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="592" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Financials</text>
+</svg>
+
+| Champ | À renseigner |
+|---|---|
+| **Liste de prix** | Libellé du price book Oracle sous lequel le composant est commercialisé. |
+| **Catégorie** | Classification large (`Applications`, `Database`, `Middleware`…). |
+| **Composant** | Nom lisible du composant tel qu'affiché dans le reste de l'application. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Ajouter un composant une seule fois et le référencer partout.** Éviter les doublons par application — le modèle est global.

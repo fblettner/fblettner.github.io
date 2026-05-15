@@ -57,6 +57,34 @@ Il est volontairement simple — uniquement les deux colonnes texte. La liaison 
 
 ---
 
+## Boîte de dialogue
+
+Cliquer sur **Ajouter** pour déclarer un couple, ou double-cliquer une ligne pour la modifier. Formulaire à un seul onglet, deux champs.
+
+<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sdept-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="140" rx="14" fill="url(#sdept-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier le département</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Groupe</text>
+  <rect x="60" y="116" width="420" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">FINANCE</text>
+
+  <text x="500" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Département AD</text>
+  <rect x="500" y="116" width="420" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="512" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">FIN-AP</text>
+</svg>
+
+| Champ | À renseigner |
+|---|---|
+| **Groupe** | Texte libre. Pôle fonctionnel qui regroupe les départements. |
+| **Département AD** | Texte libre. Doit correspondre à l'attribut `department` d'une entrée LDAP, à la lettre près. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Modifier cette liste avant d'ajouter des lignes dans *Sécurité → LDAP → Paramètres*** — la page Paramètres y puise ses valeurs.

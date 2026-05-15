@@ -59,6 +59,39 @@ L'écran **Fonctionnalités** catalogue les fonctionnalités Oracle suivies par 
 
 ---
 
+## Boîte de dialogue
+
+Double-cliquer une ligne pour rattacher une fonctionnalité à un composant Nomasx-1.
+
+<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sofea-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="140" rx="14" fill="url(#sofea-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier la fonctionnalité Oracle</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Composant</text>
+  <rect x="60" y="116" width="220" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Diagnostic Pack ▾</text>
+
+  <text x="300" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Fonctionnalité</text>
+  <rect x="300" y="116" width="280" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="312" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">AWR Report</text>
+
+  <text x="600" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Description</text>
+  <rect x="600" y="116" width="320" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="612" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Automatic Workload Repository</text>
+</svg>
+
+| Champ | À renseigner |
+|---|---|
+| **Composant** | Liste déroulante des composants Nomasx-1. La fonctionnalité compte sur ce composant. |
+| **Fonctionnalité** | Nom de la fonctionnalité exactement tel que renvoyé par `DBA_FEATURE_USAGE_STATISTICS`. |
+| **Description** | Libellé en langage clair pour des lecteurs non DBA. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Réimporter le dictionnaire de fonctionnalités après chaque release majeure** — de nouvelles fonctionnalités apparaissent à chaque version.

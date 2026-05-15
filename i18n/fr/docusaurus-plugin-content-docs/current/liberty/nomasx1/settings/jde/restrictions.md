@@ -57,6 +57,39 @@ C'est le pendant symétrique de *Pré-requis* : là où les pré-requis ajoutent
 
 ---
 
+## Boîte de dialogue
+
+Double-cliquer une ligne pour modifier la règle de restriction.
+
+<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sjrtc-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="140" rx="14" fill="url(#sjrtc-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier la restriction</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Produit</text>
+  <rect x="60" y="116" width="260" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE EnterpriseOne</text>
+
+  <text x="340" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Composant</text>
+  <rect x="340" y="116" width="280" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="352" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Foundation Restricted</text>
+
+  <text x="640" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Restriction</text>
+  <rect x="640" y="116" width="280" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="652" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Financials</text>
+</svg>
+
+| Champ | À renseigner |
+|---|---|
+| **Produit** | Famille de produits Oracle à laquelle la règle appartient. |
+| **Composant** | Composant licencié porteur de la restriction. |
+| **Restriction** | Composant interdit — ne peut pas coexister avec le composant licencié. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Les droits *Restricted* / lecture seule** sont la principale source de restrictions — Oracle vend *Foundation Restricted* avec des exclusions explicites de modules complets.

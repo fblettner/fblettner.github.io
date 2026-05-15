@@ -58,6 +58,34 @@ Adding a new version here is the prerequisite to scanning a newly installed Orac
 
 ---
 
+## Edit dialog
+
+Double-click a row to edit the (Component, Version) pair.
+
+<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sover-dlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="140" rx="14" fill="url(#sover-dlg)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Edit Oracle version</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Component</text>
+  <rect x="60" y="116" width="500" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Database EE ▾</text>
+
+  <text x="580" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Version</text>
+  <rect x="580" y="116" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="592" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">19c</text>
+</svg>
+
+| Field | What to enter |
+|---|---|
+| **Component** | Drop-down of the Nomasx-1 components. The version is bound to this component. |
+| **Version** | Oracle major version string as returned by the database dictionary (`19c`, `21c`, `23ai`, …). |
+
+---
+
 ## Tips & best practices
 
 - **Add new versions early.** A database upgrade reads a new value from the Oracle dictionary — the scan fails to classify unless the version is declared here.

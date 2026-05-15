@@ -80,6 +80,49 @@ It is the table the *Financial Report* multiplies by the compliance gap to produ
 
 ---
 
+## Edit dialog
+
+Double-click a row to edit the price book entry.
+
+<svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="spprc-dlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="160" rx="14" fill="url(#spprc-dlg)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Edit pricing row</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Component</text>
+  <rect x="60" y="116" width="300" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Database EE ▾</text>
+
+  <text x="380" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Metric</text>
+  <rect x="380" y="116" width="200" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="392" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Named User Plus ▾</text>
+
+  <text x="60" y="170" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Price</text>
+  <rect x="60" y="176" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">950</text>
+
+  <text x="260" y="170" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Minimum</text>
+  <rect x="260" y="176" width="160" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="272" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">25</text>
+
+  <text x="440" y="170" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Support</text>
+  <rect x="440" y="176" width="160" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="452" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">209</text>
+</svg>
+
+| Field | What to enter |
+|---|---|
+| **Component** | Drop-down of Nomasx-1 components. |
+| **Metric** | Drop-down of metrics declared on *Pricing → Metrics*. |
+| **Price** | Unit list price in the contract currency. |
+| **Minimum** | Minimum quantity Oracle imposes for this metric (e.g. 25 NUP per processor on Database EE). |
+| **Support** | Annual unit support fee. Multiplied by 3 in the *Financial Report*. |
+
+---
+
 ## Tips & best practices
 
 - **Update the price book at renewal time** — Oracle ships a new technical price list every year. Keeping the numbers current is what makes the financial impact view trustworthy.

@@ -57,6 +57,39 @@ C'est le catalogue de dépendances appliqué par Nomasx-1 lors du calcul de la c
 
 ---
 
+## Boîte de dialogue
+
+Double-cliquer une ligne pour modifier le mappage du pré-requis.
+
+<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sjprq-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="140" rx="14" fill="url(#sjprq-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier le pré-requis</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Produit</text>
+  <rect x="60" y="116" width="260" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE EnterpriseOne</text>
+
+  <text x="340" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Composant</text>
+  <rect x="340" y="116" width="280" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="352" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Distribution</text>
+
+  <text x="640" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Pré-requis</text>
+  <rect x="640" y="116" width="280" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="652" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Financials</text>
+</svg>
+
+| Champ | À renseigner |
+|---|---|
+| **Produit** | Famille de produits Oracle à laquelle la règle appartient. |
+| **Composant** | Composant dépendant — celui qui requiert le pré-requis. |
+| **Pré-requis** | Composant à licencier également quand le dépendant l'est. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Garder les règles alignées avec le price book Oracle et les conditions complémentaires** — les deux peuvent introduire de nouveaux pré-requis au renouvellement.

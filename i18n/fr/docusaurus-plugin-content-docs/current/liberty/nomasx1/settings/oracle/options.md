@@ -57,6 +57,34 @@ La donnée alimente les écrans *Base de données → Oracle* et *Licences → O
 
 ---
 
+## Boîte de dialogue
+
+Double-cliquer une ligne pour rattacher une option Oracle à un composant Nomasx-1.
+
+<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="soop-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="140" rx="14" fill="url(#soop-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier l'option Oracle</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Composant</text>
+  <rect x="60" y="116" width="400" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Advanced Compression ▾</text>
+
+  <text x="480" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Option</text>
+  <rect x="480" y="116" width="440" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="492" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Advanced Compression</text>
+</svg>
+
+| Champ | À renseigner |
+|---|---|
+| **Composant** | Liste déroulante des composants Nomasx-1. L'option compte sur ce composant quand elle est détectée. |
+| **Option** | Libellé Oracle exactement tel que la base le rapporte. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Maintenir la liste alignée avec le price book technique Oracle** — Oracle renomme parfois des options entre releases.

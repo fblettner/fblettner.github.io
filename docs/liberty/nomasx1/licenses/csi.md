@@ -82,6 +82,79 @@ Audit columns (`CSI_AUDIT_USER`, `CSI_AUDIT_DATE`) are hidden but tracked on the
 
 ---
 
+## Edit dialog
+
+Click **Add** to register a new CSI, or double-click a row to edit. The dialog has three tabs. The *Applications* and *Components* tabs are hidden on **Add** — they appear only once the CSI exists.
+
+<svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="csi-dlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="240" rx="14" fill="url(#csi-dlg)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Edit CSI — 12345678</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="60" y="100" width="160" height="28" rx="6" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="140" y="118" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">Contract Support</text>
+  <rect x="230" y="100" width="120" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Applications</text>
+  <rect x="360" y="100" width="120" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="420" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Components</text>
+
+  <text x="60" y="160" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">CSI ID</text>
+  <rect x="60" y="166" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="183" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12345678</text>
+
+  <text x="260" y="160" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Description</text>
+  <rect x="260" y="166" width="660" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="272" y="183" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JD Edwards EnterpriseOne — corporate</text>
+
+  <text x="60" y="220" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">From</text>
+  <rect x="60" y="226" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="243" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">2018-01-01</text>
+
+  <text x="260" y="220" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">To</text>
+  <rect x="260" y="226" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="272" y="243" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">2026-12-31</text>
+
+  <text x="460" y="220" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Status</text>
+  <rect x="460" y="226" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="472" y="243" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Active ▾</text>
+</svg>
+
+### Tab 1 — Contract Support
+
+The contract identity. All fields are mandatory.
+
+| Field | What to enter |
+|---|---|
+| **CSI ID** | Numeric Oracle contract identifier. |
+| **Description** | Friendly label for the contract. |
+| **From date** | Start of the support coverage. |
+| **To date** | End of the current support window. |
+| **Status** | `Active` while the contract is in force, `Closed` once it ends. |
+
+### Tab 2 — Applications
+
+Nested table linking the CSI to the applications it covers. Add one row per application: an entry here is what makes the contract count for that application in *Subscribed Licenses* and the compliance reports. Hidden on **Add**.
+
+### Tab 3 — Components
+
+Nested table listing the licensed components per CSI, with their quantities and metric. Aggregates feed the *Subscribed Licenses* page. Hidden on **Add**.
+
+---
+
+## Context menu
+
+Right-click a row to open the row menu.
+
+| Action | Where it lands |
+|---|---|
+| **Display Applications** | List of applications attached to the CSI. |
+| **Display Components** | List of components subscribed under the CSI with their quantities. |
+
+---
+
 ## Tips & best practices
 
 - **Sort by *To date* ascending** to surface the next renewals — the budget-planning view.

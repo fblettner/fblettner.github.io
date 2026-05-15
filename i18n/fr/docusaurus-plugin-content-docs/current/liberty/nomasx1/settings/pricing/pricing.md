@@ -80,6 +80,49 @@ C'est la table que le *Rapport financier* multiplie par l'écart de conformité 
 
 ---
 
+## Boîte de dialogue
+
+Double-cliquer une ligne pour modifier la ligne du price book.
+
+<svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="spprc-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="160" rx="14" fill="url(#spprc-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier la ligne de pricing</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Composant</text>
+  <rect x="60" y="116" width="300" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Database EE ▾</text>
+
+  <text x="380" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Métrique</text>
+  <rect x="380" y="116" width="200" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="392" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Named User Plus ▾</text>
+
+  <text x="60" y="170" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Prix</text>
+  <rect x="60" y="176" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">950</text>
+
+  <text x="260" y="170" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Minimum</text>
+  <rect x="260" y="176" width="160" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="272" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">25</text>
+
+  <text x="440" y="170" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Support</text>
+  <rect x="440" y="176" width="160" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="452" y="191" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">209</text>
+</svg>
+
+| Champ | À renseigner |
+|---|---|
+| **Composant** | Liste déroulante des composants Nomasx-1. |
+| **Métrique** | Liste déroulante des métriques déclarées dans *Pricing → Métriques*. |
+| **Prix** | Prix unitaire de liste dans la devise du contrat. |
+| **Minimum** | Quantité minimum imposée par Oracle pour cette métrique (par exemple 25 NUP par processeur sur Database EE). |
+| **Support** | Coût unitaire annuel de support. Multiplié par 3 dans le *Rapport financier*. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Mettre à jour le price book au renouvellement** — Oracle publie un nouveau technical price list chaque année. La fraîcheur des valeurs fait la crédibilité de la vue d'impact financier.

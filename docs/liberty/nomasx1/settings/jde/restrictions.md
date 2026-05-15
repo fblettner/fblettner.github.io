@@ -57,6 +57,39 @@ This is the symmetric counterpart of *Prerequisite*: where prerequisites add req
 
 ---
 
+## Edit dialog
+
+Double-click a row to edit the restriction rule.
+
+<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sjrtc-dlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="140" rx="14" fill="url(#sjrtc-dlg)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Edit restriction</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Product</text>
+  <rect x="60" y="116" width="260" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE EnterpriseOne</text>
+
+  <text x="340" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Component</text>
+  <rect x="340" y="116" width="280" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="352" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Foundation Restricted</text>
+
+  <text x="640" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Restriction</text>
+  <rect x="640" y="116" width="280" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="652" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Financials</text>
+</svg>
+
+| Field | What to enter |
+|---|---|
+| **Product** | Oracle product family the rule belongs to. |
+| **Component** | The licensed component that carries the restriction. |
+| **Restriction** | The forbidden component — cannot co-exist with the licensed one. |
+
+---
+
 ## Tips & best practices
 
 - **Read-only / restricted entitlements** are the most common source of restrictions — Oracle sells *Foundation Restricted* with explicit exclusions of full modules.
