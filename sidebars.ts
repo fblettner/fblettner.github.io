@@ -28,6 +28,13 @@ const sidebars: SidebarsConfig = {
           link: {type: 'generated-index', slug: '/liberty/nomasx-1/security', description: 'Security catalog: users, roles, assignments, gaps and duplicates.'},
           items: [
             'liberty/nomasx1/security/users',
+            'liberty/nomasx1/security/roles',
+            'liberty/nomasx1/security/assignments',
+            'liberty/nomasx1/security/roles-not-used',
+            'liberty/nomasx1/security/users-without-roles',
+            'liberty/nomasx1/security/roles-matrix',
+            'liberty/nomasx1/security/duplicate-users',
+            'liberty/nomasx1/security/users-audit',
           ],
         },
       ],
