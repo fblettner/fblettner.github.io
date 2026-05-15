@@ -22,6 +22,14 @@ const sidebars: SidebarsConfig = {
       link: {type: 'generated-index', slug: '/liberty/nomasx-1', description: 'Nomasx-1 — segregation-of-duties application built on Liberty Next.'},
       items: [
         'liberty/nomasx1/overview',
+        {
+          type: 'category',
+          label: 'Security',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/security', description: 'Security catalog: users, roles, assignments, gaps and duplicates.'},
+          items: [
+            'liberty/nomasx1/security/users',
+          ],
+        },
       ],
     },
     {
