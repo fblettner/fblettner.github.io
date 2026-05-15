@@ -221,6 +221,74 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Settings',
+      link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings', description: 'Configuration screens: applications, SoD framework, security flags, JDE classification, Oracle catalog and pricing.'},
+      items: [
+        {
+          type: 'category',
+          label: 'Global',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings/global', description: 'Global registry: applications and per-application custom SQL.'},
+          items: [
+            'liberty/nomasx1/settings/global/applications',
+            'liberty/nomasx1/settings/global/custom-queries',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Segregation of Duties',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings/sod', description: 'SoD framework: processes, activities, risks, matrix, objects.'},
+          items: [
+            'liberty/nomasx1/settings/sod/process',
+            'liberty/nomasx1/settings/sod/activities',
+            'liberty/nomasx1/settings/sod/risks',
+            'liberty/nomasx1/settings/sod/matrix',
+            'liberty/nomasx1/settings/sod/objects',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'User & AD flags',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings/user-flags', description: 'Per-user flags and AD department catalog.'},
+          items: [
+            'liberty/nomasx1/settings/security/users-properties',
+            'liberty/nomasx1/settings/security/department',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'JD Edwards',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings/jde', description: 'JDE-specific licensing catalog: system codes, reclassification, prerequisites, restrictions.'},
+          items: [
+            'liberty/nomasx1/settings/jde/system-code',
+            'liberty/nomasx1/settings/jde/reclassification',
+            'liberty/nomasx1/settings/jde/prerequisite',
+            'liberty/nomasx1/settings/jde/restrictions',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Oracle',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings/oracle', description: 'Oracle catalog: versions, options, features.'},
+          items: [
+            'liberty/nomasx1/settings/oracle/versions',
+            'liberty/nomasx1/settings/oracle/options',
+            'liberty/nomasx1/settings/oracle/features',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Pricing',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings/pricing', description: 'Component catalog, licensing metrics and price book.'},
+          items: [
+            'liberty/nomasx1/settings/pricing/components',
+            'liberty/nomasx1/settings/pricing/metrics',
+            'liberty/nomasx1/settings/pricing/pricing',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'Database',
       link: {type: 'generated-index', slug: '/liberty/nomasx-1/database', description: 'Database-level properties and audit trail.'},
       items: [
