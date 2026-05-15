@@ -114,10 +114,10 @@ Clic droit sur une ligne pour ouvrir le menu.
 
 | Action | Vers où |
 |---|---|
-| **Afficher les utilisateurs** | Liste des comptes base sur l'instance sélectionnée. |
-| **Afficher les options** | Liste détaillée des options Oracle installées sur l'instance. |
-| **Afficher les fonctionnalités** | Fonctionnalités détectées via `DBA_FEATURE_USAGE_STATISTICS` sur l'instance. |
-| **Afficher les partitions** | Tables et index qui utilisent l'option Partitioning. |
+| **Afficher les utilisateurs** | Les comptes déclarés sur l'application rattachée à cette instance. |
+| **Afficher les options** | Options Oracle activées sur l'instance, avec le composant de licence auquel chaque option est rattachée. |
+| **Afficher les fonctionnalités** | Fonctionnalités Oracle utilisées sur l'instance, avec première et dernière date d'usage et le composant de licence associé. |
+| **Afficher les partitions** | Tables et index qui utilisent l'option Partitioning, avec leur propriétaire et la date de création. |
 
 ---
 

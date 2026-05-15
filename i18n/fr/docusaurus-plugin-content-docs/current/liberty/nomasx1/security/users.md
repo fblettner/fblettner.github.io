@@ -91,7 +91,7 @@ La liste est alimentée automatiquement à chaque scan, depuis les tables de sé
 
   <rect x="60" y="340" width="880" height="48" rx="8" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
   <text x="72" y="360" fill="#fb923c" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">POINTS CLÉS</text>
-  <text x="72" y="378" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Repérer les comptes dormants (dernière connexion &gt; 6 mois), les comptes récents, les comptes sans activité. Chaque ligne ouvre l'écran Audit Utilisateurs avec l'historique complet.</text>
+  <text x="72" y="378" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Repérer les comptes dormants (dernière connexion &gt; 6 mois), les comptes récents, les comptes sans activité. Le clic ouvre l'éditeur de propriétés ; le clic droit donne accès aux rôles, droits et détails du système source.</text>
 </svg>
 
 ---
@@ -116,17 +116,17 @@ L'écran est le point d'entrée de la revue d'**hygiène des comptes** que les a
 | **Application ID** | `USR_APPS_ID` — identifiant numérique de l'application source. | Application concernée par la ligne. Plusieurs lignes pour le même utilisateur signifient qu'il existe sur plusieurs applications. |
 | **Utilisateur ID** | `USR_ID` — identifiant technique de connexion. Lié au catalogue des utilisateurs. | Login technique de l'utilisateur tel que connu du système source. |
 | **Nom** | `USR_NAME` — nom d'affichage. | Nom lisible de l'utilisateur. |
-| **Statut** | `USR_STATUS` — règle booléenne, `01` signifie *Actif*. | État du compte dans le système source. Pastille verte *Actif* quand la valeur est `01`, pastille rouge *Inactif* sinon. |
+| **Statut** | État du compte dans le système source. | Pastille verte *Actif* sur un compte activé, pastille rouge *Inactif* sinon. |
 | **Date de création** | `USR_DT_CREATION` — format date. | Date de création du compte dans le système source. |
 | **Date de connexion** | `USR_DT_LOGIN` — format date. | Dernière authentification enregistrée par la source. |
 | **Dernière utilisation** | `LAST_USAGE` — format date calculé par le connecteur. | Dernière fois où l'utilisateur a réellement utilisé une fonctionnalité — distinct d'une simple connexion. |
 | **Date MAJ** | `USR_DT_UPDATE` — format date. | Date du dernier rafraîchissement de la ligne dans la source. |
 
 :::info[Spécifique JDE]
-Sur JD Edwards EnterpriseOne, la *Dernière utilisation* est calculée à partir des enregistrements **Object Usage Tracking** lus par le connecteur `LICENSE_JDE_OUT`. Les autres systèmes sources peuvent alimenter la même colonne via une requête équivalente — par exemple une table de journalisation d'usage dans un ERP métier, ou les événements d'audit de session côté SAP / NetSuite. L'écran est strictement identique, seule la requête sous-jacente change.
+Sur JD Edwards EnterpriseOne, la *Dernière utilisation* vient de l'historique **Object Usage Tracking** collecté par Nomasx-1. Sur les autres systèmes sources (SAP, NetSuite, ERP métier), la même colonne est alimentée par l'historique d'usage équivalent du système — l'écran reste identique, seule la source change.
 :::
 
-Colonnes masquées portées par la ligne pour les écrans en aval : `USRP_TECHNICAL`, `USRP_GENERIC`, `USRP_ID_LINKED`, `USR_REGISTRATION`, `USR_DT_REFRESH`, `USR_UKID`. Elles apparaissent sur les écrans *Audit Utilisateurs* et *Utilisateurs en doublon*.
+La ligne porte aussi les indicateurs technique, générique et lié. Ils ne sont pas affichés ici mais alimentent l'éditeur *Propriétés utilisateurs* et l'écran *Utilisateurs en doublon*.
 
 Les deux filtres en haut de la grille (**Application ID** et **Utilisateur ID**) acceptent les opérateurs *contains* / *equals* / *notEquals* / *startsWith* / *endsWith* — c'est le format de filtre côté serveur utilisé partout dans Nomasx-1.
 
@@ -140,7 +140,7 @@ Cliquer sur une ligne ouvre l'éditeur **Propriétés utilisateurs** pour le com
 |---|---|
 | **Afficher les rôles** | *Affectations* filtré sur le couple `(Application, Utilisateur)` sélectionné. |
 | **Afficher les droits** | *Droits — Utilisateurs* filtré sur l'utilisateur sélectionné. |
-| **Afficher les détails** | *Audit Utilisateurs* restreint à l'utilisateur sélectionné — historique complet des rôles, pays, centre de coût, dernière utilisation par module. |
+| **Afficher les détails** | *Détails utilisateur* — les attributs maîtres portés par le système source pour l'utilisateur : nom et référence dans l'Address Book, pays, société, business unit, langue, courriel et codes catégorie. Sur les applications JDE, les valeurs viennent de l'Address Book et des préférences utilisateur. |
 
 ---
 
@@ -150,4 +150,4 @@ Cliquer sur une ligne ouvre l'éditeur **Propriétés utilisateurs** pour le com
 - **Comparer *Date de connexion* et *Dernière utilisation*.** Un compte qui se connecte régulièrement sans avoir lancé une seule transaction depuis des mois est soit un compte technique à étiqueter comme tel, soit un utilisateur réel dont l'accès n'est plus utile.
 - **La *Date de création* sert au rapprochement avec l'arrivée des collaborateurs.** Filtrer sur le dernier trimestre et confronter à la feuille des arrivées RH — chaque arrivée doit apparaître, et chaque apparition doit correspondre à une arrivée.
 - **Un même utilisateur sur plusieurs applications est normal, plusieurs utilisateurs sous le même nom ne l'est pas.** Dans ce second cas, passer par l'écran *Utilisateurs en doublon* qui l'explicite.
-- **Cliquer sur une ligne** ouvre l'écran *Audit Utilisateurs* restreint à cet utilisateur — historique complet des rôles, pays, centre de coût, dernière utilisation par module.
+- **Cliquer sur une ligne** ouvre l'éditeur *Propriétés utilisateurs* — l'écran où se maintiennent les indicateurs technique, générique et privilégié. Pour consulter les attributs maîtres du système source (pays, société, business unit, …), passer par le clic droit *Afficher les détails*.

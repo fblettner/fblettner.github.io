@@ -114,10 +114,10 @@ Right-click a row to open the row menu.
 
 | Action | Where it lands |
 |---|---|
-| **Display Users** | List of database users on the selected instance. |
-| **Display Options** | Detailed list of Oracle options installed on the instance. |
-| **Display Features** | Features detected through `DBA_FEATURE_USAGE_STATISTICS` on the instance. |
-| **Display Partitions** | Tables and indexes using the Partitioning option. |
+| **Display Users** | The accounts declared on the application that runs on this instance. |
+| **Display Options** | Oracle options enabled on the instance, with the licence component each option belongs to. |
+| **Display Features** | Oracle features used on the instance, with first and last usage date and the matching licence component. |
+| **Display Partitions** | Tables and indexes that use the Partitioning option, with their owner and creation date. |
 
 ---
 

@@ -160,22 +160,28 @@ Where the source database lives and how Nomasx-1 reaches it.
 
 ### Tab 3 — JD Edwards
 
-JDE-specific configuration. Only relevant when *Type* on the **Application** tab is `JDE`. The first six fields name the JDE OCM datasources Nomasx-1 reads to extract security; the rest control behaviour.
+Settings used only when the application is a JDE one. Fill in the schemas that locate the JDE security and master tables, then turn on the data sources to collect and set the retention for the Object Usage Tracking purge.
 
 | Field | What to enter |
 |---|---|
-| **JDE SY** | Name of the JDE *System* datasource (security tables, OCM). |
-| **JDE DTA** | *Business Data* datasource. |
-| **JDE CTL** | *Control Tables* datasource. |
-| **JDE SVM** | *Server Map* datasource. |
-| **JDE CO** | *Central Objects* datasource. |
-| **JDE OL** | *Object Librarian* datasource. |
-| **F00950** | Schema or table where the JDE Security Workbench is stored. |
-| **Standard Menu** | `Y` if the application uses the JDE standard menu; `N` for a customised menu. |
-| **E1 Pages** | `Y` to extract E1 Pages from the source. |
-| **E1 Composite** | `Y` to extract Composite Applications. |
-| **Purge OUT** | `Y` to let Nomasx-1 purge old Object Usage Tracking rows automatically. |
-| **OUT Retention Days** | Number of days of OUT history to retain when the purge runs. |
+| **JDE SY** | Schema that holds the JDE *System* tables. |
+| **JDE DTA** | Schema that holds the *Business Data* tables. |
+| **JDE CTL** | Schema that holds the *Control* tables. |
+| **JDE SVM** | Schema that holds the *Server Map* tables. |
+| **JDE CO** | Schema that holds the *Common* tables. |
+| **JDE OL** | Schema that holds the *Object Librarian* tables. |
+| **F00950** | Schema where the security workbench table is stored. |
+| **Standard Menu** | Turn on to read the standard JDE menus during the scan. |
+| **E1 Pages** | Turn on to collect E1 Pages. |
+| **E1 Composite** | Turn on to collect composite pages. |
+| **Purge OUT** | Turn on to let Nomasx-1 clean up old Object Usage Tracking rows automatically. |
+| **OUT Retention Days** | Days of usage history to keep when the purge runs. |
+
+:::tip
+Activating Object Usage Tracking records several thousand rows per day. After the data is aggregated by Nomasx-1, an automatic purge keeps the table healthy — turn on **Purge OUT** and pick a retention window that suits the audit needs.
+:::
+
+The schema values come from the customer JDE installation — the JDE administrator is the right person to ask.
 
 ### Tab 4 — LDAP
 

@@ -51,7 +51,7 @@ C'est le tableau de bord que l'équipe licences JDE d'Oracle attend : combien d'
 
 Pour chaque application JDE :
 
-- **Compteur d'actifs.** *Utilisateurs actifs* est le nombre de comptes distincts avec `USR_STATUS = '01'` et au moins une affectation de rôle — la base de calcul côté JDE.
+- **Compteur d'actifs.** *Utilisateurs actifs* compte les comptes JDE encore activés qui détiennent au moins un rôle — la base de calcul côté JDE.
 - **Usage réel.** *Transactionnels* compte combien de ces actifs ont effectivement écrit quelque chose sur les 90 derniers jours. C'est le chiffre à présenter lors d'une renégociation de licence.
 - **Repérer les transactions orphelines.** *Transact. sans utilisateur* compte les transactions sur la fenêtre dont l'utilisateur JDE a été supprimé de la table de sécurité — fort indice de manque de nettoyage.
 
@@ -77,14 +77,14 @@ Clic droit sur une ligne pour ouvrir le menu. Chaque raccourci ouvre la cohorte 
 
 | Action | Vers où |
 |---|---|
-| **Afficher les utilisateurs activés** | Tous les comptes actifs sur l'application. |
-| **Afficher les utilisateurs transactionnels** | Utilisateurs actifs ayant transacté sur les 90 derniers jours. |
-| **Afficher les utilisateurs sans transaction** | Utilisateurs actifs sans aucune transaction sur la fenêtre — premiers candidats à la révocation. |
-| **Afficher les utilisateurs non déclarés** | Transactions du système source sans compte de sécurité correspondant. |
-| **Afficher les modules avec transactions** | Modules effectivement utilisés sur l'application. |
-| **Afficher les modules autorisés** | Modules auxquels le modèle de sécurité donne accès, indépendamment de l'usage. |
-| **Afficher les détails des transactions** | Drill vers les entrées du journal d'activité sous-jacent. |
-| **Afficher les objets autorisés** | Objets atteignables via les droits accordés. |
+| **Afficher les utilisateurs activés** | Les comptes actifs de l'application qui détiennent au moins un rôle. |
+| **Afficher les utilisateurs transactionnels** | Même liste, restreinte aux comptes qui ont exécuté une transaction sur les 90 derniers jours. |
+| **Afficher les utilisateurs sans transaction** | Comptes actifs qui n'ont jamais exécuté de transaction — premiers candidats à la révocation. |
+| **Afficher les utilisateurs non déclarés** | Cas miroir : comptes qui ont exécuté des transactions mais qui ne sont pas enregistrés comme utilisateurs dans Nomasx-1. |
+| **Afficher les modules avec transactions** | Pour chaque module de licence, combien d'utilisateurs s'en sont servis sur les 90 derniers jours. |
+| **Afficher les modules autorisés** | Pour chaque module de licence, l'utilisation comparée au droit souscrit — l'écart de conformité par module. |
+| **Afficher les détails des transactions** | L'activité détaillée derrière les compteurs par module — utilisateur, objet touché, date de la dernière utilisation. |
+| **Afficher les objets autorisés** | Pour chaque utilisateur, les objets accessibles via le paramétrage de sécurité JDE, qu'ils aient été utilisés ou non. |
 
 ---
 

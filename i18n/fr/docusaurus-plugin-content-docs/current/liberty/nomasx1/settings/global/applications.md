@@ -160,22 +160,28 @@ Où se trouve la base source et comment Nomasx-1 s'y connecte.
 
 ### Onglet 3 — JD Edwards
 
-Configuration spécifique à JDE. Pertinent uniquement quand *Type* est `JDE` sur l'onglet **Application**. Les six premiers champs nomment les datasources OCM JDE lus par Nomasx-1 pour extraire la sécurité ; les suivants pilotent le comportement.
+Paramètres réservés aux applications JDE. Renseigner les schémas qui localisent les tables de sécurité et les tables maîtres JDE, puis activer les sources de données à collecter et fixer la rétention pour la purge Object Usage Tracking.
 
 | Champ | À renseigner |
 |---|---|
-| **JDE SY** | Nom du datasource JDE *System* (tables de sécurité, OCM). |
-| **JDE DTA** | Datasource *Business Data*. |
-| **JDE CTL** | Datasource *Control Tables*. |
-| **JDE SVM** | Datasource *Server Map*. |
-| **JDE CO** | Datasource *Central Objects*. |
-| **JDE OL** | Datasource *Object Librarian*. |
-| **F00950** | Schéma ou table où est stocké le Security Workbench JDE. |
-| **Menu standard** | `Y` quand l'application utilise le menu standard JDE ; `N` pour un menu personnalisé. |
-| **E1 Pages** | `Y` pour extraire les E1 Pages de la source. |
-| **E1 Composite** | `Y` pour extraire les Composite Applications. |
-| **Purge OUT** | `Y` pour que Nomasx-1 purge automatiquement les anciennes lignes Object Usage Tracking. |
-| **Rétention OUT (jours)** | Nombre de jours d'historique OUT à conserver lors de la purge. |
+| **JDE SY** | Schéma qui contient les tables JDE *System*. |
+| **JDE DTA** | Schéma qui contient les tables *Business Data*. |
+| **JDE CTL** | Schéma qui contient les tables *Control*. |
+| **JDE SVM** | Schéma qui contient les tables *Server Map*. |
+| **JDE CO** | Schéma qui contient les tables *Common*. |
+| **JDE OL** | Schéma qui contient les tables *Object Librarian*. |
+| **F00950** | Schéma qui héberge la table du security workbench. |
+| **Menu standard** | Activer pour lire les menus JDE standard lors du scan. |
+| **E1 Pages** | Activer pour collecter les E1 Pages. |
+| **E1 Composite** | Activer pour collecter les pages composites. |
+| **Purge OUT** | Activer pour que Nomasx-1 nettoie automatiquement les anciennes lignes Object Usage Tracking. |
+| **Rétention OUT (jours)** | Nombre de jours d'historique à conserver lors de la purge. |
+
+:::tip
+L'activation d'Object Usage Tracking enregistre plusieurs milliers de lignes par jour. Une fois les données agrégées par Nomasx-1, une purge automatique maintient la table saine — activer **Purge OUT** et choisir une rétention adaptée au besoin d'audit.
+:::
+
+Les valeurs des schémas viennent de l'installation JDE du client — l'administrateur JDE est l'interlocuteur.
 
 ### Onglet 4 — LDAP
 

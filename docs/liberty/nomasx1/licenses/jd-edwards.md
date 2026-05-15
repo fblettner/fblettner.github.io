@@ -51,7 +51,7 @@ This is the dashboard Oracle's JDE licence team asks for: how many distinct huma
 
 For each JDE application:
 
-- **Headline active count.** *Active users* is the number of distinct accounts with `USR_STATUS = '01'` and at least one role assignment — the JDE side of the headcount.
+- **Headline active count.** *Active users* counts the JDE accounts that are still enabled and hold at least one role — the JDE side of the headcount.
 - **Real usage.** *Transactional* counts how many of those active users actually wrote something in the last 90 days. This is the figure to bring to an Oracle licence renegotiation.
 - **Detect orphan transactions.** *Transactional · No user* counts source-system transactions whose JDE user has been deleted from the security table — a strong indicator of clean-up gaps.
 
@@ -77,14 +77,14 @@ Right-click a row to open the row menu. Each shortcut drills into the *Active*, 
 
 | Action | Where it lands |
 |---|---|
-| **Display Enabled Users** | All active accounts on the application. |
-| **Display Users with Transaction** | Active users that transacted in the last 90 days. |
-| **Display Users without Transactions** | Active users with no transaction in the window — first candidates for revocation. |
-| **Display Users not declared** | Source-system transactions without a matching security user. |
-| **Display Modules with Transactions** | Modules actually used on the application. |
-| **Display Modules allowed** | Modules the security model grants access to, regardless of usage. |
-| **Display Transactions details** | Drill into the underlying activity log entries. |
-| **Display Objects allowed** | Objects reachable through the granted rights. |
+| **Display Enabled Users** | The active accounts on the application that hold at least one role. |
+| **Display Users with Transaction** | Same list, restricted to accounts that ran a transaction in the last 90 days. |
+| **Display Users without Transactions** | Active accounts that have never run a transaction — first candidates for revocation. |
+| **Display Users not declared** | The mirror case: accounts that ran transactions but are not registered as users in Nomasx-1. |
+| **Display Modules with Transactions** | For each licence module, how many users actually used it in the last 90 days. |
+| **Display Modules allowed** | For each licence module, what is used versus what is subscribed — the compliance gap per module. |
+| **Display Transactions details** | The detailed activity behind the module counts — user, object touched, last date of use. |
+| **Display Objects allowed** | For each user, the objects accessible via the JDE security setup, regardless of whether they were used. |
 
 ---
 

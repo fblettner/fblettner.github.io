@@ -91,7 +91,7 @@ The list is fed automatically from each source system at scan time (security tab
 
   <rect x="60" y="340" width="880" height="48" rx="8" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
   <text x="72" y="360" fill="#fb923c" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">KEY POINTS</text>
-  <text x="72" y="378" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Spot dormant accounts (last login &gt; 6 months), recent additions, accounts with no usage. Each row links to the User Audit screen for the full per-user history.</text>
+  <text x="72" y="378" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Spot dormant accounts (last login &gt; 6 months), recent additions, accounts with no usage. Click a row to edit the user properties, right-click to drill into roles, rights or source-system details.</text>
 </svg>
 
 ---
@@ -116,17 +116,17 @@ The screen is the entry point for the **account-hygiene** review that auditors e
 | **Application ID** | `USR_APPS_ID` — Application identifier from the source system (numeric reference). | Which application the row applies to. Several rows for the same user means the user exists on several applications. |
 | **User ID** | `USR_ID` — User identifier (technical login). Linked to the user lookup catalog. | The user's technical login as known to the source system. |
 | **User Name** | `USR_NAME` — Display name. | Human-readable name of the user. |
-| **Status** | `USR_STATUS` — Boolean rule, `01` means *Active*. | Account state in the source system. Green chip *Active* when the value is `01`, red chip *Inactive* otherwise. |
+| **Status** | Account state in the source system. | Green chip *Active* on an enabled account, red chip *Inactive* otherwise. |
 | **Creation Date** | `USR_DT_CREATION` — date. | When the account was created in the source system. |
 | **Login Date** | `USR_DT_LOGIN` — date. | Last authentication captured by the source system. |
 | **Last Usage** | `LAST_USAGE` — date computed by the connector. | Last time the user actually used something — distinct from a simple login. |
 | **Last Update** | `USR_DT_UPDATE` — date. | Date of the last refresh on the source row. |
 
 :::info[JDE-specific]
-On JD Edwards EnterpriseOne, the *Last Usage* date is computed from the **Object Usage Tracking** records read through the `LICENSE_JDE_OUT` connector. Other source systems can feed the same column by exposing an equivalent query — for example a usage log table in a custom ERP, or session-audit events in SAP / NetSuite. The screen itself is identical; only the underlying query changes.
+On JD Edwards EnterpriseOne, the *Last Usage* date is taken from the **Object Usage Tracking** history that Nomasx-1 collects. On other source systems (SAP, NetSuite, custom ERPs) the same column is fed by the equivalent usage history of the source — the screen is identical, only the underlying source changes.
 :::
 
-Hidden columns kept on the row for downstream screens: `USRP_TECHNICAL`, `USRP_GENERIC`, `USRP_ID_LINKED`, `USR_REGISTRATION`, `USR_DT_REFRESH`, `USR_UKID`. They surface on the *User Audit* and *Duplicate Users* screens.
+The row also carries the technical, generic and linked flags. They are not shown here but feed the *Users properties* editor and the *Duplicate Users* screen.
 
 The two filter inputs above the grid (**Application ID** and **User ID**) accept *contains* / *equals* / *not equals* / *starts with* / *ends with* operators — the standard server-side filter shape used across Nomasx-1.
 
@@ -140,7 +140,7 @@ Clicking a row opens the **Users properties** editor for that account (see *Sett
 |---|---|
 | **Display Roles** | *Assignments* filtered on the selected `(Application, User)` pair. |
 | **Display Rights** | *Rights — Users* filtered on the selected user. |
-| **Display Details** | *Users Audit* scoped to the selected user — full role history, country, business unit, last usage by module. |
+| **Display Details** | *Users details* — the master attributes carried by the source system for the user: name and address book reference, country, company, business unit, language, email and category codes. On JDE applications the values come from the Address Book and the user preferences. |
 
 ---
 
@@ -150,4 +150,4 @@ Clicking a row opens the **Users properties** editor for that account (see *Sett
 - **Compare *Last Login* with *Last Usage*.** An account that logs in regularly but has not used a single transaction in months is either a technical account that should be tagged as such, or a real user whose access is no longer needed.
 - **The *Creation Date* drives onboarding reconciliation.** Filter the last quarter and compare with the HR onboarding sheet — every new hire must appear, and every appearance must match a hire.
 - **A user across several applications is normal, several users with the same alpha name is not.** When the latter happens, jump to the *Duplicate users* screen which highlights it explicitly.
-- **Click the row** to open the *Users Audit* screen scoped to that user — full role history, country, business unit, last usage by module.
+- **Click the row** to open the *Users properties* editor — the screen where the technical, generic and privileged flags are maintained. Right-click *Display Details* to see the source-system master attributes (country, company, business unit, …).
