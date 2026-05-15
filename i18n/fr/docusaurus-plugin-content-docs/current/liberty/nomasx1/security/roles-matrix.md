@@ -82,6 +82,16 @@ Le tri est appliqué sur *Nb utilisateurs* en ordre décroissant — les combina
 
 ---
 
+## Menu contextuel
+
+Clic droit sur une ligne pour ouvrir le menu.
+
+| Action | Vers où |
+|---|---|
+| **Afficher les utilisateurs** | Liste de tous les utilisateurs portant exactement la combinaison de rôles sélectionnée sur l'application. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Changer d'angle de vue** — plutôt que de discuter de milliers d'affectations individuelles, se concentrer sur la douzaine de combinaisons les plus fréquentes. Chacune est un profil-type *de fait* utilisé dans l'entreprise.

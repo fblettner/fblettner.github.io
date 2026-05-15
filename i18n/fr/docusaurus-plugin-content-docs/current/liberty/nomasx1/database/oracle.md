@@ -108,6 +108,19 @@ Pour chaque base Oracle supportant une application connectée :
 
 ---
 
+## Menu contextuel
+
+Clic droit sur une ligne pour ouvrir le menu.
+
+| Action | Vers où |
+|---|---|
+| **Afficher les utilisateurs** | Liste des comptes base sur l'instance sélectionnée. |
+| **Afficher les options** | Liste détaillée des options Oracle installées sur l'instance. |
+| **Afficher les fonctionnalités** | Fonctionnalités détectées via `DBA_FEATURE_USAGE_STATISTICS` sur l'instance. |
+| **Afficher les partitions** | Tables et index qui utilisent l'option Partitioning. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Filtrer sur *Produit* contenant « Pack »** pour extraire les packs d'administration en usage — le sujet d'audit le plus sensible.

@@ -189,11 +189,30 @@ LDAP / Active Directory scope for the application. The values control which AD e
 
 ### Tab 5 — Activity Log
 
-Read-only view of the recent database-level transactions captured on this application. Same dataset as the *Database → Audit Trail* screen, filtered on the current application. Hidden on **Add** — appears only after the row exists.
+Configures **which database objects Nomasx-1 should monitor** to feed the *Applications → Activity log* screen. Embedded grid of monitoring rules; one row per rule. Add a row to extend the surface, remove a row to narrow it. Hidden on **Add** — appears only after the application exists.
+
+| Field | What to enter |
+|---|---|
+| **Type** | Kind of object the rule targets (e.g. `TABLE`, `SCHEMA`, `OWNER`). |
+| **Apps Type** | Sub-class within the type — used by the connector to know how to query the rule's target. |
+| **Name** | Name of the table, schema or owner the rule applies to. |
+| **Rule** | Collection rule itself (column filter, include / exclude expression, retention…). |
+
+Each row opens in its own dialog with the four fields above.
 
 ### Tab 6 — Audit Trail
 
-Read-only view of the column-level audit trail for this application. Same dataset as *Database → Audit Lookup*, filtered on the current application. Hidden on **Add**.
+Configures the **connection Nomasx-1 uses to read the Oracle archive logs** for this application. Single form, one row per application. The values are read by the connector that pulls the audit data and feeds the *Database → Audit Trail* / *Audit Lookup* screens. Hidden on **Add** — appears only after the application exists.
+
+| Field | What to enter |
+|---|---|
+| **User** | Database account that can read the archive log views. |
+| **Password** | Password for that account. Stored encrypted. |
+| **Host** | Hostname or IP of the database holding the archive logs. |
+| **Port** | Database port (`1521` on a standard Oracle install). |
+| **Database** | Service name / SID of the database. |
+| **SCN** | Starting *System Change Number* — where the next extraction resumes from. |
+| **Last** | Read-only timestamp of the last successful extract. |
 
 ---
 

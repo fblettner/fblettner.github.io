@@ -71,6 +71,23 @@ La colonne masquée *Sans transaction* est l'inverse — utilisateurs actifs san
 
 ---
 
+## Menu contextuel
+
+Clic droit sur une ligne pour ouvrir le menu. Chaque raccourci ouvre la cohorte *Actifs*, *Transactionnels* ou *Sans transaction* derrière les chiffres clés.
+
+| Action | Vers où |
+|---|---|
+| **Afficher les utilisateurs activés** | Tous les comptes actifs sur l'application. |
+| **Afficher les utilisateurs transactionnels** | Utilisateurs actifs ayant transacté sur les 90 derniers jours. |
+| **Afficher les utilisateurs sans transaction** | Utilisateurs actifs sans aucune transaction sur la fenêtre — premiers candidats à la révocation. |
+| **Afficher les utilisateurs non déclarés** | Transactions du système source sans compte de sécurité correspondant. |
+| **Afficher les modules avec transactions** | Modules effectivement utilisés sur l'application. |
+| **Afficher les modules autorisés** | Modules auxquels le modèle de sécurité donne accès, indépendamment de l'usage. |
+| **Afficher les détails des transactions** | Drill vers les entrées du journal d'activité sous-jacent. |
+| **Afficher les objets autorisés** | Objets atteignables via les droits accordés. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Le ratio Transactionnels × composant** est le levier de négociation le plus utile — si le nombre de *Transactionnels* est bien inférieur aux *Actifs*, la licence est surdimensionnée.

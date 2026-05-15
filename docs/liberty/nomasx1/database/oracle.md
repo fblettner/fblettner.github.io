@@ -108,6 +108,19 @@ For each Oracle database backing a connected application:
 
 ---
 
+## Context menu
+
+Right-click a row to open the row menu.
+
+| Action | Where it lands |
+|---|---|
+| **Display Users** | List of database users on the selected instance. |
+| **Display Options** | Detailed list of Oracle options installed on the instance. |
+| **Display Features** | Features detected through `DBA_FEATURE_USAGE_STATISTICS` on the instance. |
+| **Display Partitions** | Tables and indexes using the Partitioning option. |
+
+---
+
 ## Tips & best practices
 
 - **Filter on *Product* containing "Pack"** to extract the management packs in use — the heaviest audit topic.

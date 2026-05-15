@@ -189,11 +189,30 @@ Périmètre LDAP / Active Directory de l'application. Les valeurs déterminent l
 
 ### Onglet 5 — Suivi d'activité
 
-Vue en lecture seule des transactions récentes captées au niveau base sur cette application. Même jeu que l'écran *Base de données → Audit Trail*, filtré sur l'application en cours. Masqué à l'ajout — apparaît une fois la ligne créée.
+Configure **les objets de base que Nomasx-1 doit surveiller** pour alimenter l'écran *Applications → Transactions*. Grille imbriquée de règles de collecte ; une ligne par règle. Ajouter une ligne pour élargir le périmètre, retirer une ligne pour le restreindre. Masqué à l'ajout — apparaît une fois l'application créée.
+
+| Champ | À renseigner |
+|---|---|
+| **Type** | Type d'objet visé par la règle (par exemple `TABLE`, `SCHEMA`, `OWNER`). |
+| **Sous-type** | Sous-classe à l'intérieur du type — indique au connecteur comment interroger la cible. |
+| **Nom** | Nom de la table, du schéma ou du propriétaire concerné. |
+| **Règle** | Règle de collecte (filtre de colonne, expression d'inclusion / exclusion, rétention…). |
+
+Chaque ligne s'ouvre dans sa propre boîte de dialogue avec ces quatre champs.
 
 ### Onglet 6 — Audit Trail
 
-Vue en lecture seule de la piste d'audit colonne par colonne pour cette application. Même jeu que *Base de données → Audit Lookup*, filtré sur l'application en cours. Masqué à l'ajout.
+Configure **la connexion utilisée par Nomasx-1 pour lire les archive logs Oracle** de cette application. Formulaire unique, une ligne par application. Les valeurs sont lues par le connecteur qui rapatrie les données d'audit et alimente les écrans *Base de données → Audit Trail* / *Audit Lookup*. Masqué à l'ajout — apparaît une fois l'application créée.
+
+| Champ | À renseigner |
+|---|---|
+| **Utilisateur** | Compte base autorisé à lire les vues d'archive logs. |
+| **Mot de passe** | Mot de passe du compte. Stocké chiffré. |
+| **Hôte** | Nom DNS ou adresse IP de la base hébergeant les archive logs. |
+| **Port** | Port base (`1521` sur une installation Oracle standard). |
+| **Base** | Service name / SID de la base. |
+| **SCN** | *System Change Number* de départ — point de reprise de la prochaine extraction. |
+| **Dernier** | Horodatage en lecture seule de la dernière extraction réussie. |
 
 ---
 

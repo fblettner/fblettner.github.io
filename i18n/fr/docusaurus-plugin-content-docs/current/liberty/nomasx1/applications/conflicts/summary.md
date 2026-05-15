@@ -84,6 +84,19 @@ Le jeu de données est synthétisé — seules les lignes `CFS_COUNT > 0` appara
 
 ---
 
+## Menu contextuel
+
+Clic droit sur une ligne pour ouvrir le menu.
+
+| Action | Vers où |
+|---|---|
+| **Afficher les utilisateurs** | Liste des utilisateurs en conflit pour le couple `(Processus, Risque)` sélectionné. |
+| **Afficher les rôles** | Paires de rôles incompatibles pour le couple `(Processus, Risque)` sélectionné. |
+| **Afficher les objets** | Objets source qui supportent le conflit. |
+| **Afficher les détails** | Jeu *Conflits → Détails* filtré sur le `(Processus, Risque)` sélectionné. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Trier sur *Nb utilisateurs* décroissant** pour tomber sur le risque à plus fort impact — la ligne à présenter au comité de pilotage.

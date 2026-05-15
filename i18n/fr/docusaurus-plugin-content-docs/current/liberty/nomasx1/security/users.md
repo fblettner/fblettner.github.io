@@ -132,6 +132,18 @@ Les deux filtres en haut de la grille (**Application ID** et **Utilisateur ID**)
 
 ---
 
+## Clic sur la ligne et menu contextuel
+
+Cliquer sur une ligne ouvre l'éditeur **Propriétés utilisateurs** pour le compte (voir *Paramètres → User & AD flags → Propriétés utilisateurs*). Clic droit ouvre le menu de ligne avec trois raccourcis pré-filtrés sur l'utilisateur sélectionné.
+
+| Action | Vers où |
+|---|---|
+| **Afficher les rôles** | *Affectations* filtré sur le couple `(Application, Utilisateur)` sélectionné. |
+| **Afficher les droits** | *Droits — Utilisateurs* filtré sur l'utilisateur sélectionné. |
+| **Afficher les détails** | *Audit Utilisateurs* restreint à l'utilisateur sélectionné — historique complet des rôles, pays, centre de coût, dernière utilisation par module. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Trier sur *Date de connexion* croissante** pour faire remonter les comptes dormants en haut de la liste. Combiner avec un filtre sur le statut *Inactif* pour obtenir la liste courte des candidats à la suppression.

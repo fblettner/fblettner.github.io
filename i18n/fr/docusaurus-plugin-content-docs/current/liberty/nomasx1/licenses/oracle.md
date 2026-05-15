@@ -103,6 +103,16 @@ Même rôle que *Base de données → Oracle*, cadré pour la revue licence :
 
 ---
 
+## Menu contextuel
+
+Clic droit sur une ligne pour ouvrir le menu.
+
+| Action | Vers où |
+|---|---|
+| **Afficher les licences requises** | Exigence de licence calculée pour l'instance sélectionnée — alimente la comparaison de conformité. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Exporter la grille comme la *fiche Oracle LMS*** — les colonnes ci-dessus correspondent au formulaire de collecte standard des auditeurs.

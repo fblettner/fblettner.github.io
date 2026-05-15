@@ -71,6 +71,23 @@ The hidden *No-transaction users* column is the inverse — active users with ze
 
 ---
 
+## Context menu
+
+Right-click a row to open the row menu. Each shortcut drills into the *Active*, *Transactional* or *Non-transactional* cohort behind the headline counts.
+
+| Action | Where it lands |
+|---|---|
+| **Display Enabled Users** | All active accounts on the application. |
+| **Display Users with Transaction** | Active users that transacted in the last 90 days. |
+| **Display Users without Transactions** | Active users with no transaction in the window — first candidates for revocation. |
+| **Display Users not declared** | Source-system transactions without a matching security user. |
+| **Display Modules with Transactions** | Modules actually used on the application. |
+| **Display Modules allowed** | Modules the security model grants access to, regardless of usage. |
+| **Display Transactions details** | Drill into the underlying activity log entries. |
+| **Display Objects allowed** | Objects reachable through the granted rights. |
+
+---
+
 ## Tips & best practices
 
 - **Transactional × component rate** is the most useful negotiation lever — if the *Transactional* count is well below the *Active* count, the licence is over-sized.

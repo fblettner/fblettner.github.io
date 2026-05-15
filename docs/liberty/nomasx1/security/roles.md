@@ -88,6 +88,17 @@ On JD Edwards EnterpriseOne, `*ALL` is the **default sign-on role** — when a u
 
 ---
 
+## Context menu
+
+Right-click a row to open the row menu.
+
+| Action | Where it lands |
+|---|---|
+| **Display Users** | *Assignments* filtered on the selected `(Application, Role)` pair — every user holding the role. |
+| **Display Rights** | *Rights — Roles* filtered on the selected role — the object-level permissions the role grants. |
+
+---
+
 ## Tips & best practices
 
 - **Compare the catalog with the *Roles not used* screen** to spot roles that exist but were never assigned. These are typically the leftover of past reorganisations.

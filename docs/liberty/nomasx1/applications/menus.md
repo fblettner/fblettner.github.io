@@ -95,6 +95,17 @@ On JD Edwards EnterpriseOne, the menu tree is read directly from the JDE Solutio
 
 ---
 
+## Context menu
+
+Right-click a row to open the row menu.
+
+| Action | Where it lands |
+|---|---|
+| **Display Users** | List of users that can reach the selected menu leaf. |
+| **Display Roles** | List of roles that grant access to the selected menu leaf. |
+
+---
+
 ## Tips & best practices
 
 - **Filter by *Level 1*** to focus on a single business area (Accounts Payable, Sales Order Mgmt, etc.) before tackling its security review.

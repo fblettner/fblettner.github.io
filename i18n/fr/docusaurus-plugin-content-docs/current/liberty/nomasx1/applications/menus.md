@@ -95,6 +95,17 @@ Sur JD Edwards EnterpriseOne, l'arborescence est lue directement dans les tables
 
 ---
 
+## Menu contextuel
+
+Clic droit sur une ligne pour ouvrir le menu.
+
+| Action | Vers où |
+|---|---|
+| **Afficher les utilisateurs** | Liste des utilisateurs qui peuvent atteindre la feuille de menu sélectionnée. |
+| **Afficher les rôles** | Liste des rôles qui donnent accès à la feuille de menu sélectionnée. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Filtrer par *Niveau 1*** pour se concentrer sur un domaine métier (Comptes Fournisseurs, Gestion des ventes, etc.) avant d'attaquer sa revue de sécurité.

@@ -103,6 +103,16 @@ Same role as *Database → Oracle*, framed for the licensing review:
 
 ---
 
+## Context menu
+
+Right-click a row to open the row menu.
+
+| Action | Where it lands |
+|---|---|
+| **Display Required Licenses** | Computed licence requirement for the selected instance — feeds the compliance comparison. |
+
+---
+
 ## Tips & best practices
 
 - **Export the grid as the *Oracle LMS data sheet*** — the columns above match the standard collection form auditors use.

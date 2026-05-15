@@ -80,6 +80,18 @@ La dimension composant vient du mappage System Code JDE → Composant de licence
 
 ---
 
+## Menu contextuel
+
+Clic droit sur une ligne pour ouvrir le menu. Chaque raccourci ouvre le jeu OUT filtré sur le couple `(Application, Composant)` sélectionné.
+
+| Action | Vers où |
+|---|---|
+| **OUT — Utilisateurs** | Liste des utilisateurs qui ont invoqué un objet du composant. |
+| **OUT — Détails** | Lignes OUT brutes pour le composant. |
+| **OUT — Objets** | Liste des objets du composant effectivement invoqués. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Trier sur *Nb utilisateurs* décroissant** pour le calibrage de licence — les composants à fort volume remontent en haut.

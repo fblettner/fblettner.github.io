@@ -132,6 +132,18 @@ The two filter inputs above the grid (**Application ID** and **User ID**) accept
 
 ---
 
+## Row click and context menu
+
+Clicking a row opens the **Users properties** editor for that account (see *Settings → User & AD flags → Users properties*). Right-clicking opens the row menu with three shortcuts pre-filtered on the selected user.
+
+| Action | Where it lands |
+|---|---|
+| **Display Roles** | *Assignments* filtered on the selected `(Application, User)` pair. |
+| **Display Rights** | *Rights — Users* filtered on the selected user. |
+| **Display Details** | *Users Audit* scoped to the selected user — full role history, country, business unit, last usage by module. |
+
+---
+
 ## Tips & best practices
 
 - **Sort by *Last Login* ascending** to bring dormant accounts to the top of the list. Combine with the *Inactive* status filter to short-list the candidates for removal.

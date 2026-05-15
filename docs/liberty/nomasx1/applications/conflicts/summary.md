@@ -84,6 +84,19 @@ The dataset is summarised — only rows with `CFS_COUNT > 0` surface, sorted by 
 
 ---
 
+## Context menu
+
+Right-click a row to open the row menu.
+
+| Action | Where it lands |
+|---|---|
+| **Display Users** | List of users in conflict for the selected `(Process, Risk)` pair. |
+| **Display Roles** | Pairs of incompatible roles for the selected `(Process, Risk)` pair. |
+| **Display Objects** | Source-system objects backing the conflict. |
+| **Display Details** | Full *Conflicts → Details* set filtered on the selected `(Process, Risk)`. |
+
+---
+
 ## Tips & best practices
 
 - **Sort by *Users count* descending** to land on the highest-impact risk first. That is the row you discuss at the steering committee.

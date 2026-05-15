@@ -82,6 +82,16 @@ Rows are sorted by *Users count* descending — the most common combinations app
 
 ---
 
+## Context menu
+
+Right-click a row to open the row menu.
+
+| Action | Where it lands |
+|---|---|
+| **Display Users** | List of every user holding the exact role combination on the selected application. |
+
+---
+
 ## Tips & best practices
 
 - **Pivot the discussion** — instead of arguing about thousands of individual assignments, focus on the dozen most common combinations. Each combination is a *de facto* role template the company actually uses.

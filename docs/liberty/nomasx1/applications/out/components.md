@@ -80,6 +80,18 @@ The component dimension comes from the JDE System Code → Licence Component map
 
 ---
 
+## Context menu
+
+Right-click a row to open the row menu. Each shortcut drills into the OUT dataset filtered on the selected `(Application, Component)`.
+
+| Action | Where it lands |
+|---|---|
+| **OUT — Users** | List of users that invoked any object of the component. |
+| **OUT — Details** | Raw OUT rows for the component. |
+| **OUT — Objects** | List of objects of the component actually invoked. |
+
+---
+
 ## Tips & best practices
 
 - **Sort by *Users count* descending** for licence right-sizing — the components carrying real volume sit at the top.
