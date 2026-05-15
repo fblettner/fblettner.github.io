@@ -359,6 +359,25 @@ const sidebars: SidebarsConfig = {
 
   nomajdeSidebar: [
     'liberty/nomajde/overview',
+    {
+      type: 'category',
+      label: 'Master Data',
+      items: [
+        'liberty/nomajde/master-data/udc-types',
+        'liberty/nomajde/master-data/udc-codes',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Security Maintenance',
+      items: [
+        'liberty/nomajde/security-maintenance/user-management',
+        'liberty/nomajde/security-maintenance/role-management',
+        'liberty/nomajde/security-maintenance/role-relationships',
+        'liberty/nomajde/security-maintenance/environments',
+        'liberty/nomajde/security-maintenance/security-workbench',
+      ],
+    },
   ],
 
   nomaublSidebar: [

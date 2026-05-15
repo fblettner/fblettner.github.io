@@ -1,184 +1,244 @@
 ---
-title: Nomajde — Présentation
-description: "Nomajde est une application compagnon JD Edwards — écrans live sur les données JDE, atelier de maintenance sécurité, planification et archivage des rapports BIP, supervision live des transactions et des jobs."
-keywords: [Nomajde, JD Edwards, JDE, données maîtres, security workbench, BIP, reporting, supervision]
+title: Nomajde — L'application compagnon de JD Edwards
+description: "Nomajde s'installe à côté de JD Edwards EnterpriseOne et regroupe le travail quotidien — données maîtres, sécurité, reporting, supervision — sur une série de grilles avec édition en ligne. SQL et AIS API combinés, pas de navigation fat-client, pas d'export manuel."
+keywords: [Nomajde, JD Edwards, JDE, EnterpriseOne, security workbench, gestion des utilisateurs, gestion des rôles, UDC, BIP, supervision, AIS, compagnon JDE]
+hide_table_of_contents: false
 ---
 
-# Nomajde — Présentation
+import Link from '@docusaurus/Link';
 
-**Nomajde** est une application **compagnon JD Edwards**. Elle se place à côté de JDE EnterpriseOne et regroupe en un petit nombre d'écrans simplifiés ce que JDE répartit habituellement sur de nombreux formulaires distincts, avec **édition en grille** pour les mises à jour de masse. Le travail quotidien — qui demanderait cinq écrans JDE et des dizaines de clics — tient sur une seule page Nomajde :
+# Nomajde
 
-- consulter et modifier les données maîtres (annuaire, clients, fournisseurs, articles, comptes GL),
-- maintenir la sécurité JDE — utilisateurs, rôles, relations entre rôles, environnements, security workbench,
-- analyser les transactions sur plusieurs sociétés et environnements sans naviguer ligne par ligne,
-- planifier des rapports BIP, archiver leurs sorties et les renvoyer,
-- surveiller JDE en production — transactions, jobs, performances — en temps réel.
-
-Chaque écran lit les données JDE en temps réel. Pas d'extraction nocturne, pas de copie intermédiaire — ce que l'écran affiche est ce que JDE affiche au même moment.
-
----
-
-## Vue d'ensemble
-
-<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
-  <defs>
-    <linearGradient id="nje-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="nje-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-  </defs>
-
-  <rect x="40" y="40" width="920" height="380" rx="14" fill="url(#nje-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">🟧 NOMAJDE · Barre latérale</text>
-  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="60" y="100" width="200" height="300" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="76" y="120" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📊 Tableau de bord</text>
-
-  <text x="76" y="144" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Données maîtres</text>
-  <text x="86" y="162" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Annuaire</text>
-  <text x="86" y="176" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Clients · Fournisseurs</text>
-  <text x="86" y="190" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Articles · Comptes GL</text>
-
-  <text x="76" y="214" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Maintenance sécurité</text>
-  <rect x="84" y="222" width="172" height="20" rx="4" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="92" y="236" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">Gestion utilisateurs</text>
-  <text x="86" y="256" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Gestion des rôles</text>
-  <text x="86" y="270" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Relations entre rôles</text>
-  <text x="86" y="284" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Environnements</text>
-  <text x="86" y="298" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Security Workbench</text>
-
-  <text x="76" y="322" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Transactions</text>
-  <text x="86" y="340" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">AP · AR · GL</text>
-
-  <text x="76" y="362" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Reporting</text>
-  <text x="76" y="386" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Supervision</text>
-
-  <rect x="280" y="100" width="320" height="300" rx="10" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
-  <text x="300" y="124" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">👥 GESTION UTILISATEURS</text>
-
-  <text x="300" y="154" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Rechercher un utilisateur,</text>
-  <text x="300" y="170" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">voir chacun de ses rôles,</text>
-  <text x="300" y="186" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">environnements et droits.</text>
-
-  <text x="300" y="218" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Ajouter / modifier / désactiver</text>
-  <text x="300" y="234" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">sans quitter la page.</text>
-
-  <text x="300" y="266" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Les modifications sont</text>
-  <text x="300" y="282" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">poussées immédiatement à JDE,</text>
-  <text x="300" y="298" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">y compris en édition grille.</text>
-
-  <text x="300" y="330" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Piste d'audit : qui a modifié</text>
-  <text x="300" y="346" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">quoi, quand, depuis quel écran.</text>
-
-  <text x="300" y="378" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">Même forme sur Gestion des rôles,</text>
-  <text x="300" y="394" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">Environnements, Security Workbench.</text>
-
-  <rect x="620" y="100" width="320" height="140" rx="10" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="640" y="124" fill="#fb923c" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">📊 REPORTING</text>
-  <text x="640" y="150" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Planifier un job JDE depuis un</text>
-  <text x="640" y="166" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">formulaire. La sortie est archivée</text>
-  <text x="640" y="182" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">à côté de l'exécution — télécharger,</text>
-  <text x="640" y="198" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">renvoyer, envoyer par e-mail en</text>
-  <text x="640" y="214" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">un clic. Journal de chaque run.</text>
-
-  <rect x="620" y="260" width="320" height="140" rx="10" fill="rgba(50,215,75,0.08)" stroke="rgba(50,215,75,0.30)" strokeWidth="1"/>
-  <text x="640" y="284" fill="#4ade80" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">📈 SUPERVISION</text>
-  <text x="640" y="310" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Compteurs live des transactions</text>
-  <text x="640" y="326" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">AP / AR / GL. La file job-control</text>
-  <text x="640" y="342" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">sous forme de grille. Indicateurs</text>
-  <text x="640" y="358" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">de performance (latence base,</text>
-  <text x="640" y="374" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">temps de réponse AIS, débit de</text>
-  <text x="640" y="390" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">transactions).</text>
-</svg>
+<div style={{padding: '36px 32px', borderRadius: '18px', margin: '8px 0 36px', background: 'linear-gradient(135deg, rgba(74,158,255,0.18) 0%, rgba(251,146,60,0.14) 100%)', border: '1px solid rgba(74,158,255,0.35)', position: 'relative', overflow: 'hidden'}}>
+  <div style={{display: 'inline-block', padding: '4px 12px', borderRadius: '999px', background: 'rgba(74,158,255,0.2)', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '11px', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: '14px'}}>JD Edwards EnterpriseOne · Application compagnon</div>
+  <h2 style={{fontSize: '34px', lineHeight: '1.15', fontWeight: 800, margin: '0 0 14px', letterSpacing: '-0.02em'}}>Le travail JD Edwards,<br/><span style={{background: 'linear-gradient(135deg, #4a9eff, #fb923c)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>sur une grille filtrable.</span></h2>
+  <p style={{fontSize: '16px', lineHeight: '1.6', maxWidth: '780px', margin: '0 0 24px', opacity: 0.92}}>Nomajde est le compagnon quotidien de JD Edwards EnterpriseOne. Il regroupe sur un ensemble réduit de grilles modifiables en ligne ce que JDE répartit habituellement sur plusieurs formulaires — master utilisateur, description des rôles, security workbench, environnements, tables UDC, transactions, planification BIP. Chaque modification est écrite dans JDE en direct : <b>SQL</b> sur les tables de sécurité et les tables maîtres pour la majorité des actions, <b>appels REST AIS</b> pour celles que JDE n'accepte que par cette voie (réinitialisation de mot de passe, provisionnement du compte de sécurité). Aucune copie intermédiaire, aucun traitement nocturne à attendre.</p>
+  <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '24px'}}>
+    <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(74,158,255,0.16)', border: '1px solid rgba(74,158,255,0.45)', fontSize: '12px', fontWeight: 700, color: '#4a9eff'}}>Données JDE en direct · SQL + API AIS</span>
+    <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(251,146,60,0.14)', border: '1px solid rgba(251,146,60,0.42)', fontSize: '12px', fontWeight: 700, color: '#fb923c'}}>Édition sur grille · upload Excel en masse</span>
+    <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', fontSize: '12px', fontWeight: 600}}>UDC · Address Book · Articles · Comptes GL</span>
+    <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', fontSize: '12px', fontWeight: 600}}>P00950 · P95921 · P0093 · P0092</span>
+    <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', fontSize: '12px', fontWeight: 600}}>On-premise · mono-tenant</span>
+  </div>
+  <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
+    <Link to="/liberty/nomajde/security-maintenance/user-management" style={{padding: '11px 22px', borderRadius: '8px', background: 'linear-gradient(135deg, #4a9eff, #2b8cff)', color: '#fff', fontSize: '13px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 16px rgba(74,158,255,0.3)'}}>Ouvrir Maintenance sécurité →</Link>
+    <Link to="/liberty/nomajde/master-data/udc-types" style={{padding: '11px 22px', borderRadius: '8px', background: 'transparent', color: 'inherit', border: '1px solid rgba(255,255,255,0.18)', fontSize: '13px', fontWeight: 600, textDecoration: 'none'}}>Explorer les données maîtres</Link>
+  </div>
+</div>
 
 ---
 
-## Ce que couvre l'application
+## Le problème que Nomajde résout
 
-### Données maîtres
+JD Edwards est un produit profond. La plupart des tâches quotidiennes — ajouter un utilisateur, rattacher un rôle, modifier une valeur UDC, planifier un état BIP — demandent de naviguer entre cinq ou six formulaires, parfois entre le fat client et le web client. Les opérateurs finissent le travail ; ils y passent deux fois le temps nécessaire.
 
-Le travail quotidien sur les données maîtres, sous une forme unifiée par objet métier.
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', margin: '24px 0'}}>
+  <div style={{padding: '18px', borderRadius: '12px', border: '1px solid rgba(248,113,113,0.3)', background: 'rgba(248,113,113,0.04)'}}>
+    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#f87171', fontWeight: 700, marginBottom: '8px'}}>Ping-pong d'écrans</div>
+    <div style={{fontSize: '14px', fontWeight: 600, marginBottom: '6px'}}>Cinq écrans pour onboarder un utilisateur</div>
+    <div style={{fontSize: '12px', opacity: 0.78, lineHeight: '1.55'}}>Créer l'utilisateur dans P0092, fixer le mot de passe dans le security workbench, rattacher les rôles dans P95921, choisir les environnements dans P0093, copier la sécurité depuis un utilisateur de référence — chaque écran isolé, avec son propre contrôle de données.</div>
+  </div>
+  <div style={{padding: '18px', borderRadius: '12px', border: '1px solid rgba(251,146,60,0.3)', background: 'rgba(251,146,60,0.04)'}}>
+    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#fb923c', fontWeight: 700, marginBottom: '8px'}}>Édition en masse douloureuse</div>
+    <div style={{fontSize: '14px', fontWeight: 600, marginBottom: '6px'}}>Impossible de modifier 200 valeurs UDC d'un coup</div>
+    <div style={{fontSize: '12px', opacity: 0.78, lineHeight: '1.55'}}>Les formulaires JDE éditent une ligne à la fois. Quand l'intégrateur livre un nouveau module avec 200 valeurs UDC, l'opérateur les saisit à la main — ou bricole un script SQL en espérant que rien ne casse.</div>
+  </div>
+  <div style={{padding: '18px', borderRadius: '12px', border: '1px solid rgba(34,197,94,0.3)', background: 'rgba(34,197,94,0.04)'}}>
+    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#22c55e', fontWeight: 700, marginBottom: '8px'}}>Reporting en marge</div>
+    <div style={{fontSize: '14px', fontWeight: 600, marginBottom: '6px'}}>Les runs BIP ne laissent aucune trace</div>
+    <div style={{fontSize: '12px', opacity: 0.78, lineHeight: '1.55'}}>Planifier un état BIP passe par le planificateur JDE, la sortie atterrit là où la file d'impression l'a déposée, et l'audit du « qui a lancé quoi, quand » repose sur la mémoire de l'opérateur.</div>
+  </div>
+</div>
 
-- **Annuaire** — recherche d'une adresse, vue qui / quoi / où sur une seule ligne. Modifier un nom, un téléphone, une adresse postale sans ouvrir trois écrans.
-- **Clients et fournisseurs** — fiche complète, par société. Modifier les conditions de paiement, le compte bancaire, les instructions de règlement.
-- **Articles** — fiche article, avec article par site et par dépôt sur la même page.
-- **Comptes GL** — plan comptable par unité d'activité et par société.
+Nomajde remplace le ping-pong d'écrans par une page par sujet, l'édition ligne à ligne par l'édition sur grille et l'upload Excel, et la trace inexistante par un historique de chaque run et de chaque modification.
 
-Chaque grille permet de filtrer sur n'importe quelle colonne, de trier, d'exporter en Excel, et de cliquer sur une ligne pour ouvrir le formulaire d'édition.
+---
 
-### Maintenance sécurité
+## Ce qu'est Nomajde
 
-Le même travail de sécurité JDE, condensé sur cinq écrans qui regroupent chacun ce que JDE répartit sur de nombreux formulaires. Chaque grille supporte l'édition en ligne — modifier une valeur sur une ligne, la mise à jour est écrite sans quitter la page.
+Une application web installée à côté de JD Edwards qui lit ses données en direct — en SQL sur les tables de sécurité et les tables maîtres, et via l'API REST AIS de JDE pour les opérations qui exigent un workflow JDE (réinitialisation de mot de passe, provisionnement d'utilisateur, surcharges d'options de traitement). Chaque écran écrit dans JDE — aucune copie intermédiaire, aucun rejeu différé.
 
-| Écran | Ce qu'on y fait |
-|---|---|
-| **Gestion utilisateurs** | Rechercher un utilisateur ; voir sur une seule page chacun de ses rôles, environnements et droits. Ajouter, modifier ou désactiver un utilisateur ; affecter ou retirer un rôle directement dans la grille. La modification est poussée à JDE immédiatement. |
-| **Gestion des rôles** | Catalogue des rôles, avec les applications attachées à chacun. Ajouter un rôle, attacher une application, paramétrer la sécurité d'options de traitement — sans naviguer entre plusieurs formulaires JDE distincts. |
-| **Relations entre rôles** | Héritage des rôles et fenêtres de validité dans une seule grille. Promouvoir un rôle junior pour qu'il hérite d'un rôle senior, avec une date de début et de fin, en une seule édition. |
-| **Environnements** | Liste des environnements (`PD`, `PY`, `DV`, `CRP`, …) et affectation des rôles par environnement, côte à côte. |
-| **Security Workbench** | Le catalogue complet de sécurité — sécurité application, d'action, de ligne, de colonne, d'options de traitement — sur une seule grille recherchable avec édition en ligne, au lieu d'un écran JDE distinct par type de sécurité. |
+<div style={{margin: '32px 0', padding: '24px', borderRadius: '18px', border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(165deg, rgba(74,158,255,0.04), rgba(251,146,60,0.025))', display: 'grid', gridTemplateColumns: 'minmax(170px, 1fr) minmax(220px, 1.35fr) minmax(180px, 1fr)', gap: '22px', alignItems: 'center'}}>
 
-Les modifications sont écrites directement dans JDE — pas d'extraction, pas de rejeu. La piste d'audit enregistre chaque changement avec son auteur, son horodatage et la page d'origine.
+  <div>
+    <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 800, opacity: 0.65, marginBottom: '12px'}}>Derrière les écrans</div>
+    <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
+      <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(74,158,255,0.35)', background: 'rgba(74,158,255,0.06)'}}>
+        <div style={{fontSize: '12px', fontWeight: 700, color: '#4a9eff'}}>SQL — tables sécurité & maîtres</div>
+        <div style={{fontSize: '10px', opacity: 0.7, marginTop: '2px'}}>F0092 · F00926 · F95921 · F0093 · F00950 · F0004 · F0005</div>
+      </div>
+      <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(251,146,60,0.35)', background: 'rgba(251,146,60,0.06)'}}>
+        <div style={{fontSize: '12px', fontWeight: 700, color: '#fb923c'}}>API REST AIS</div>
+        <div style={{fontSize: '10px', opacity: 0.7, marginTop: '2px'}}>token · provisionnement · mot de passe</div>
+      </div>
+      <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.06)'}}>
+        <div style={{fontSize: '12px', fontWeight: 700, color: '#22c55e'}}>Planificateur BIP</div>
+        <div style={{fontSize: '10px', opacity: 0.7, marginTop: '2px'}}>planifier · archiver · renvoyer</div>
+      </div>
+      <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(192,132,252,0.35)', background: 'rgba(192,132,252,0.06)'}}>
+        <div style={{fontSize: '12px', fontWeight: 700, color: '#c084fc'}}>JDE Object Librarian</div>
+        <div style={{fontSize: '10px', opacity: 0.7, marginTop: '2px'}}>menus · objets · versions</div>
+      </div>
+    </div>
+  </div>
 
-### Transactions
+  <div style={{position: 'relative', padding: '26px 22px', borderRadius: '18px', border: '1px solid rgba(74,158,255,0.5)', background: 'linear-gradient(160deg, rgba(74,158,255,0.22), rgba(251,146,60,0.18))', boxShadow: '0 12px 40px rgba(74,158,255,0.18), inset 0 1px 0 rgba(255,255,255,0.08)', textAlign: 'center'}}>
+    <div style={{position: 'absolute', left: '-14px', top: '50%', transform: 'translateY(-50%)', fontSize: '22px', color: '#4a9eff', fontWeight: 800, lineHeight: 1, textShadow: '0 0 8px rgba(74,158,255,0.5)'}}>→</div>
+    <div style={{position: 'absolute', right: '-14px', top: '50%', transform: 'translateY(-50%)', fontSize: '22px', color: '#4a9eff', fontWeight: 800, lineHeight: 1, textShadow: '0 0 8px rgba(74,158,255,0.5)'}}>→</div>
+    <div style={{fontSize: '22px', fontWeight: 800, marginBottom: '4px', letterSpacing: '-0.01em', background: 'linear-gradient(135deg, #4a9eff, #fb923c)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>Nomajde</div>
+    <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.12em', opacity: 0.72, marginBottom: '16px', fontWeight: 600}}>Le compagnon JD Edwards</div>
+    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', fontSize: '11px'}}>
+      <div style={{padding: '10px 6px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center'}}>
+        <div style={{fontSize: '11px', fontWeight: 700}}>Données maîtres</div>
+        <div style={{fontSize: '9px', opacity: 0.7, marginTop: '2px'}}>UDC · Address Book</div>
+      </div>
+      <div style={{padding: '10px 6px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center'}}>
+        <div style={{fontSize: '11px', fontWeight: 700}}>Sécurité</div>
+        <div style={{fontSize: '9px', opacity: 0.7, marginTop: '2px'}}>utilisateurs · rôles · workbench</div>
+      </div>
+      <div style={{padding: '10px 6px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center'}}>
+        <div style={{fontSize: '11px', fontWeight: 700}}>Transactions</div>
+        <div style={{fontSize: '9px', opacity: 0.7, marginTop: '2px'}}>AP · AR · GL</div>
+      </div>
+      <div style={{padding: '10px 6px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center'}}>
+        <div style={{fontSize: '11px', fontWeight: 700}}>Reporting</div>
+        <div style={{fontSize: '9px', opacity: 0.7, marginTop: '2px'}}>BIP · archive</div>
+      </div>
+    </div>
+  </div>
 
-Grilles sur les transactions AP, AR et GL. Filtrer sur n'importe quelle colonne — société, unité d'activité, fournisseur, numéro de document, fourchette de montant, fourchette de dates — et cliquer sur une ligne pour ouvrir le détail. Pratique pour repérer une facture ouverte, un lot non comptabilisé ou un journal qui ne s'équilibre pas.
+  <div>
+    <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 800, opacity: 0.65, marginBottom: '12px'}}>Travail quotidien</div>
+    <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
+      <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(34,197,94,0.45)', background: 'rgba(34,197,94,0.07)'}}>
+        <div style={{fontSize: '12px', fontWeight: 700, color: '#22c55e'}}>Édition sur grille</div>
+        <div style={{fontSize: '10px', opacity: 0.78, marginTop: '2px'}}>en ligne · mise à jour en masse</div>
+      </div>
+      <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.07)'}}>
+        <div style={{fontSize: '12px', fontWeight: 700, color: '#4a9eff'}}>Upload Excel</div>
+        <div style={{fontSize: '10px', opacity: 0.78, marginTop: '2px'}}>lots intégrateur · déploiements</div>
+      </div>
+      <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(192,132,252,0.45)', background: 'rgba(192,132,252,0.07)'}}>
+        <div style={{fontSize: '12px', fontWeight: 700, color: '#c084fc'}}>Grilles drill-down</div>
+        <div style={{fontSize: '10px', opacity: 0.78, marginTop: '2px'}}>filtre sur chaque colonne</div>
+      </div>
+      <div style={{padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(251,146,60,0.45)', background: 'rgba(251,146,60,0.07)'}}>
+        <div style={{fontSize: '12px', fontWeight: 700, color: '#fb923c'}}>Piste d'audit</div>
+        <div style={{fontSize: '10px', opacity: 0.78, marginTop: '2px'}}>qui a changé quoi, quand</div>
+      </div>
+    </div>
+  </div>
 
-### Reporting
+</div>
 
-Planifier et archiver les rapports BIP JDE.
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '12px', margin: '20px 0 8px'}}>
+  <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(74,158,255,0.35)', background: 'rgba(74,158,255,0.05)'}}>
+    <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#4a9eff'}}>Direct vers JDE</div>
+    <div style={{fontSize: '11px', opacity: 0.78, lineHeight: '1.5'}}>Chaque écriture frappe les tables JDE et l'API AIS comme le ferait le fat client — le changement est visible au prochain rafraîchissement JDE.</div>
+  </div>
+  <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.05)'}}>
+    <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#22c55e'}}>Édition en masse</div>
+    <div style={{fontSize: '11px', opacity: 0.78, lineHeight: '1.5'}}>Upload Excel sur chaque écran modifiable — UDC, security workbench, relations de rôles, environnements. Charger un déploiement en quelques minutes.</div>
+  </div>
+  <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(192,132,252,0.35)', background: 'rgba(192,132,252,0.05)'}}>
+    <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#c084fc'}}>Audit tracé</div>
+    <div style={{fontSize: '11px', opacity: 0.78, lineHeight: '1.5'}}>Chaque modification porte l'utilisateur Nomajde, l'horodatage et l'écran d'origine — JDE le voit, et l'Audit Trail aussi.</div>
+  </div>
+  <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(251,146,60,0.35)', background: 'rgba(251,146,60,0.05)'}}>
+    <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#fb923c'}}>On-premise</div>
+    <div style={{fontSize: '11px', opacity: 0.78, lineHeight: '1.5'}}>Déploiement mono-tenant, à côté des serveurs JDE. Pas de SaaS. Les identifiants et les données maîtres ne sortent jamais du périmètre.</div>
+  </div>
+</div>
 
-- Choisir le programme et la version, remplir la sélection de données, planifier l'exécution. Le job part dans JDE depuis un seul formulaire — pas de chaîne d'écrans de planification séparés.
-- La sortie générée (PDF ou XML) est archivée à côté de l'exécution. Téléchargement ultérieur, envoi par e-mail à une liste de destinataires, renvoi via le même connecteur.
-- Chaque exécution est journalisée — qui a planifié, à quelle heure, quelle sortie a été produite.
+---
 
-### Supervision
+## Les quatre piliers
 
-Vue live de JDE en production.
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', margin: '24px 0'}}>
 
-- Compteurs des transactions AP / AR / GL avec drill-through vers l'écran sous-jacent.
-- File job-control JDE sous forme de grille — statut, propriétaire, durée d'exécution, sortie.
-- Indicateurs de performance : latence base, temps de réponse AIS, débit de transactions.
+  <div style={{padding: '20px', borderRadius: '14px', border: '1px solid rgba(74,158,255,0.35)', background: 'linear-gradient(165deg, rgba(74,158,255,0.10), rgba(74,158,255,0.02))'}}>
+    <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#4a9eff', fontWeight: 800, marginBottom: '8px'}}>01 · Données maîtres</div>
+    <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>UDC, Address Book, GL — éditables en masse</div>
+    <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
+      <li>Types UDC et valeurs UDC — une grille par sujet, avec upload Excel pour les chargements de déploiement.</li>
+      <li>Address Book, clients, fournisseurs, articles, comptes GL — même forme, même édition sur grille.</li>
+      <li>Les contrôles de champs obligatoires que JDE applique à la sauvegarde sont appliqués ici aussi — aucune ligne incomplète n'atteint JDE.</li>
+    </ul>
+  </div>
 
-Adapté pour un ingénieur d'exploitation qui surveille la charge du jour.
+  <div style={{padding: '20px', borderRadius: '14px', border: '1px solid rgba(251,146,60,0.35)', background: 'linear-gradient(165deg, rgba(251,146,60,0.10), rgba(251,146,60,0.02))'}}>
+    <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#fb923c', fontWeight: 800, marginBottom: '8px'}}>02 · Maintenance sécurité</div>
+    <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>Utilisateurs · Rôles · Workbench</div>
+    <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
+      <li>Ajouter et modifier des utilisateurs JDE — SQL écrit le master utilisateur et les préférences d'affichage, l'API REST AIS provisionne le compte de sécurité et le mot de passe.</li>
+      <li>Réinitialiser le mot de passe — un clic ; Nomajde appelle directement l'endpoint AIS JDE et le nouveau mot de passe est actif immédiatement.</li>
+      <li>Importer la sécurité et Fusionner les rôles — copier ou fusionner le paramétrage de sécurité complet (application, action, ligne, colonne, options de traitement, onglet, sortie, image, UDO, menu filtering) depuis un utilisateur / rôle source vers une cible, dans un workflow guidé.</li>
+      <li>Security Workbench — chaque type de sécurité JDE sur une grille, avec une boîte de dialogue qui s'adapte au type et upload Excel pour les lots intégrateur.</li>
+    </ul>
+  </div>
+
+  <div style={{padding: '20px', borderRadius: '14px', border: '1px solid rgba(34,197,94,0.35)', background: 'linear-gradient(165deg, rgba(34,197,94,0.10), rgba(34,197,94,0.02))'}}>
+    <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#22c55e', fontWeight: 800, marginBottom: '8px'}}>03 · Transactions & Reporting</div>
+    <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>AP, AR, GL — et l'archive BIP</div>
+    <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
+      <li>Grilles AP, AR, GL — filtrer sur chaque colonne (société, fournisseur, document, montant, date), drill vers le détail.</li>
+      <li>Planifier des états BIP depuis un formulaire unique — choisir le programme, la version, la sélection de données, l'heure de run.</li>
+      <li>La sortie générée (PDF ou XML) est archivée à côté du run. Télécharger, envoyer par courriel, renvoyer en un clic.</li>
+      <li>Chaque run BIP est tracé — qui l'a planifié, quand il a tourné, ce qu'il a produit.</li>
+    </ul>
+  </div>
+
+  <div style={{padding: '20px', borderRadius: '14px', border: '1px solid rgba(192,132,252,0.35)', background: 'linear-gradient(165deg, rgba(192,132,252,0.10), rgba(192,132,252,0.02))'}}>
+    <div style={{fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#c084fc', fontWeight: 800, marginBottom: '8px'}}>04 · Supervision</div>
+    <div style={{fontSize: '17px', fontWeight: 700, marginBottom: '10px'}}>JDE en production, en direct</div>
+    <ul style={{margin: 0, paddingLeft: '18px', fontSize: '12px', lineHeight: '1.65', opacity: 0.86}}>
+      <li>Compteurs en direct des transactions AP / AR / GL, drill vers l'écran sous-jacent.</li>
+      <li>La file de job-control JDE sous forme de grille — statut, propriétaire, durée, sortie.</li>
+      <li>Indicateurs de performance : latence base, temps de réponse AIS, débit transactionnel.</li>
+    </ul>
+  </div>
+
+</div>
 
 ---
 
 ## La carte de l'application
 
-| Section | Contenu |
+La barre latérale découpe le travail quotidien en cinq sections.
+
+| Section | Ce qu'elle couvre |
 |---|---|
-| **Tableau de bord** | Synthèse de l'activité du jour : transactions ouvertes, jobs en cours, utilisateurs récents, dernières alertes. |
-| **Données maîtres** | Annuaire, clients, fournisseurs, articles, comptes GL. |
-| **Maintenance sécurité** | Gestion utilisateurs, Gestion des rôles, Relations entre rôles, Environnements, Security Workbench. |
-| **Transactions** | Grilles AP, AR, GL avec filtres et formulaires d'édition. |
-| **Reporting** | Planification d'un job BIP, archive des exécutions passées, distribution. |
-| **Supervision** | Compteurs live des transactions, file job-control, indicateurs de performance. |
-| **Paramètres** | Définitions d'environnement, serveur e-mail, rétention de l'archive. |
+| **Tableau de bord** | Résumé d'activité du jour — transactions ouvertes, jobs en cours, utilisateurs récents, dernières alertes. |
+| **Données maîtres** | Types UDC et valeurs UDC, Address Book, clients, fournisseurs, articles, comptes GL. Chaque grille gère filtre, tri, édition en ligne et upload Excel. |
+| **Maintenance sécurité** | Gestion des utilisateurs, Gestion des rôles, Relations de rôles, Environnements, Security Workbench. Le catalogue complet de sécurité JDE, condensé en cinq écrans avec édition sur grille et workflow Importer / Fusionner guidé. |
+| **Transactions** | Grilles AP, AR, GL avec filtres et drill vers le détail. |
+| **Reporting** | Planifier des jobs BIP depuis un formulaire, archive des runs passés, distribution par courriel. |
+| **Supervision** | Compteurs de transactions en direct, file de job-control JDE sous forme de grille, indicateurs de performance (latence base, temps de réponse AIS, débit). |
+| **Paramètres** | Définitions d'environnements, endpoint AIS, serveur de courriel, rétention de l'archive. |
 
 ---
 
-## Qui utilise l'application
+## Qui s'en sert
 
-| Profil | Pourquoi il ouvre Nomajde |
+| Rôle | Pourquoi on ouvre Nomajde |
 |---|---|
-| **Opérateur AP / AR** | La grille des transactions — toutes les factures ouvertes, sociétés et environnements confondus, sur une seule page, avec filtres en masse et édition en ligne. |
-| **Gestionnaire de données maîtres** | Maintenance annuaire, clients et fournisseurs, avec validation des champs obligatoires dans le formulaire et édition en grille pour les mises à jour de masse. |
-| **Administrateur sécurité JDE** | Les cinq écrans de maintenance sécurité — cinq écrans qui regroupent ce que JDE répartit sur de nombreux formulaires distincts, tous avec édition en ligne. |
-| **Analyste reporting** | La section Reporting — un seul formulaire pour planifier, archiver et distribuer un job BIP, là où JDE enchaîne plusieurs écrans séparés. |
-| **Ingénieur d'exploitation** | La section Supervision — compteurs live des transactions, file des jobs, performances, sur un seul tableau de bord. |
+| **Administrateur sécurité JDE** | Les cinq écrans de Maintenance sécurité — ajouter un utilisateur, rattacher un rôle, exécuter Importer la sécurité sur un clone, parcourir la grille security workbench. |
+| **Opérateur AP / AR** | La grille de transactions — factures ouvertes inter-sociétés et inter-environnements sur une page, avec filtres en masse et drill. |
+| **Référent données maîtres** | Maintenance Address Book, clients, fournisseurs avec contrôles de champs obligatoires ; types et valeurs UDC pour le catalogue. |
+| **Analyste reporting** | Un formulaire unique pour planifier BIP, l'archive des runs passés, la distribution par courriel. |
+| **Ingénieur ops** | La section Supervision — compteurs en direct, file de jobs, indicateurs de performance. |
 
 ---
 
-## Rôles dans Nomajde
+## Les rôles dans Nomajde
 
-L'application livre quatre rôles.
+L'application embarque quatre rôles.
 
-| Rôle | Droits |
+| Rôle | Ce qu'il accorde |
 |---|---|
-| **Consultation** | Lire tous les écrans, lancer les rapports, aucune modification. |
-| **Opérateur** | Tout ce qui précède, plus : édition AP / AR / données maîtres et planification de rapports. |
-| **Sécurité** | La section Maintenance sécurité — Gestion utilisateurs, Rôles, Relations, Environnements, Security Workbench. |
-| **Administrateur** | Tout ce qui précède, plus : configuration des environnements et rétention de l'archive. |
+| **Viewer** | Lit chaque écran, exécute les rapports, aucune modification. |
+| **Operator** | Tout ce que fait un Viewer, plus les modifications AP / AR / données maîtres et la planification de rapports. |
+| **Security** | Tout ce que fait un Operator, plus la section Maintenance sécurité (Utilisateurs, Rôles, Relations de rôles, Environnements, Security Workbench). |
+| **Administrator** | Tout ce qui précède, plus la configuration des environnements, l'endpoint AIS et la rétention de l'archive. |
 
-Un déploiement type sépare **Opérateur** de **Sécurité** — la personne qui traite les transactions n'est pas la même que celle qui gère les droits d'accès.
+Un déploiement typique sépare **Operator** de **Security** — la personne qui traite les transactions n'est pas celle qui gère les droits d'accès.
