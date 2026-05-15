@@ -219,6 +219,51 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'Applications',
+      link: {type: 'generated-index', slug: '/liberty/nomasx-1/applications', description: 'Per-application views: menus, rights, conflicts, activity log and Object Usage Tracking.'},
+      items: [
+        'liberty/nomasx1/applications/menus',
+        {
+          type: 'category',
+          label: 'Rights',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/applications/rights', description: 'Effective rights: by user, by role, by role + menu, by user + role + OUT.'},
+          items: [
+            'liberty/nomasx1/applications/rights/users',
+            'liberty/nomasx1/applications/rights/roles',
+            'liberty/nomasx1/applications/rights/users-roles',
+            'liberty/nomasx1/applications/rights/users-menus',
+            'liberty/nomasx1/applications/rights/roles-menus',
+            'liberty/nomasx1/applications/rights/users-roles-out',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Conflicts',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/applications/conflicts', description: 'Segregation-of-duties analysis: summary, details, proven, by user and by role pair.'},
+          items: [
+            'liberty/nomasx1/applications/conflicts/summary',
+            'liberty/nomasx1/applications/conflicts/details',
+            'liberty/nomasx1/applications/conflicts/proven',
+            'liberty/nomasx1/applications/conflicts/users',
+            'liberty/nomasx1/applications/conflicts/roles',
+          ],
+        },
+        'liberty/nomasx1/applications/activity-log',
+        {
+          type: 'category',
+          label: 'Object Usage Tracking',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/applications/out', description: 'Object Usage Tracking: components, details, users / roles and objects.'},
+          items: [
+            'liberty/nomasx1/applications/out/components',
+            'liberty/nomasx1/applications/out/details',
+            'liberty/nomasx1/applications/out/users-roles',
+            'liberty/nomasx1/applications/out/objects',
+          ],
+        },
+      ],
+    },
   ],
 
   nomajdeSidebar: [
