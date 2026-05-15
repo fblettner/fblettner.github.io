@@ -1,248 +1,184 @@
 ---
 title: Nomajde — Overview
-description: "Nomajde is a JD Edwards integration application built on Liberty Next. Full JDE connectivity, custom screens against live data, security & access management, automated reporting and live monitoring — modern responsive UI on top of OneWorld."
-keywords: [Nomajde, JD Edwards, JDE, integration, custom screens, security workbench, AIS, BIP, automated reporting, live monitoring, responsive UI]
+description: "Nomajde is a JD Edwards companion application — live screens on the JDE data, security maintenance workbench, automated BIP reporting and live monitoring of transactions and jobs."
+keywords: [Nomajde, JD Edwards, JDE, master data, security workbench, BIP, reporting, monitoring]
 ---
 
 # Nomajde — Overview
 
-**Nomajde** is a **JD Edwards integration** application built on [Liberty Next](../framework/overview.md). Full JDE connectivity to interact with live JDE data, **custom screens** that extend OneWorld with a modern responsive UI, **security and access management** for users / roles / applications, **automated reporting** (schedule and archive BIP outputs) and **live monitoring** of JDE transactions and performance.
+**Nomajde** is a **JD Edwards companion** application. It sits next to JDE EnterpriseOne and consolidates what JDE typically spreads across many separate screens into a smaller set of simplified ones, with **grid editing** for bulk updates. The day-to-day work — what would take five JDE screens and dozens of clicks — collapses into one Nomajde page:
 
-Nomajde is **not** a replacement for the JDE fat client. It is a faster, web-native path for the operations that benefit from a clean UI — typically the ones operators run dozens of times a day — plus the administrative workbenches a security or reporting team needs.
+- consult and edit master data (address book, customers, suppliers, items, GL accounts),
+- maintain JDE security — users, roles, role relationships, environments, security workbench,
+- inspect transactions across companies and environments without navigating row by row,
+- schedule BIP reports, archive their outputs and resend them,
+- watch JDE in production — transactions, jobs, performance — live.
 
-Nomajde is a **licensed application**: bundled with [Nomasx-1](../nomasx1/overview.md) under a single RS256 license key.
-
-:::info[Work in progress]
-This overview is the entry point. Per-screen pages (Master Data, Security Maintenance, Environments, AIS orchestrations, reports) will arrive in follow-up commits.
-:::
+Every screen reads JDE data in real time. There is no nightly extract, no staged copy — what the screen shows is what JDE is showing right now.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="nje-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="nje-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="nje-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <linearGradient id="nje-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
   </defs>
 
-  <rect x="40" y="40" width="220" height="420" rx="14" fill="url(#nje-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="68" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">🗄 JD EDWARDS</text>
+  <rect x="40" y="40" width="920" height="380" rx="14" fill="url(#nje-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <rect x="56" y="84" width="188" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="104" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Master data tables</text>
-  <text x="68" y="120" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">address book, customer, supplier</text>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">🟧 NOMAJDE · Sidebar</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="56" y="136" width="188" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="156" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Security workbench</text>
-  <text x="68" y="172" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">users, roles, role relationships</text>
+  <rect x="60" y="100" width="200" height="300" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="76" y="120" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📊 Dashboard</text>
 
-  <rect x="56" y="188" width="188" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="208" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Transactions</text>
-  <text x="68" y="224" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">F0411, F03B11, F0911</text>
+  <text x="76" y="144" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Master Data</text>
+  <text x="86" y="162" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Address book</text>
+  <text x="86" y="176" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Customers · Suppliers</text>
+  <text x="86" y="190" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Items · GL accounts</text>
 
-  <rect x="56" y="240" width="188" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="260" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Environments</text>
-  <text x="68" y="276" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">PD / PY / DV / CRP</text>
+  <text x="76" y="214" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Security Maintenance</text>
+  <rect x="84" y="222" width="172" height="20" rx="4" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="92" y="236" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">User Management</text>
+  <text x="86" y="256" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Role Management</text>
+  <text x="86" y="270" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Role Relationships</text>
+  <text x="86" y="284" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Environments</text>
+  <text x="86" y="298" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Security Workbench</text>
 
-  <rect x="56" y="292" width="188" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="312" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">UDC tables · F0005</text>
-  <text x="68" y="328" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">codes + descriptions</text>
+  <text x="76" y="322" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Transactions</text>
+  <text x="86" y="340" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">AP · AR · GL</text>
 
-  <rect x="56" y="344" width="188" height="44" rx="8" fill="rgba(255,159,10,0.06)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="68" y="364" fill="#fb923c" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">AIS connector</text>
-  <text x="68" y="380" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">forms, orchestrations, batch</text>
+  <text x="76" y="362" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Reporting</text>
+  <text x="76" y="386" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Monitoring</text>
 
-  <rect x="56" y="396" width="188" height="44" rx="8" fill="rgba(255,159,10,0.06)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="68" y="416" fill="#fb923c" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">BIP outputs</text>
-  <text x="68" y="432" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">job control, generated PDF</text>
+  <rect x="280" y="100" width="320" height="300" rx="10" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
+  <text x="300" y="124" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">👥 USER MANAGEMENT</text>
 
-  <line x1="260" y1="240" x2="380" y2="240" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#nje-arrow)"/>
+  <text x="300" y="154" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Search a user, see every role,</text>
+  <text x="300" y="170" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">every environment, every security</text>
+  <text x="300" y="186" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">entry that applies to them.</text>
 
-  <rect x="380" y="40" width="260" height="420" rx="14" fill="url(#nje-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
-  <text x="400" y="68" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">⚙ NOMAJDE CAPABILITIES</text>
+  <text x="300" y="218" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Add / update / disable a user</text>
+  <text x="300" y="234" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">without leaving the page.</text>
 
-  <rect x="396" y="84" width="228" height="56" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="408" y="104" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">🔌 Full JDE connectivity</text>
-  <text x="408" y="120" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">live data · no exports</text>
-  <text x="408" y="134" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">read + write through AIS</text>
+  <text x="300" y="266" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Edits go straight to JDE — the</text>
+  <text x="300" y="282" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">change is live on the fat-client</text>
+  <text x="300" y="298" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">on the next refresh.</text>
 
-  <rect x="396" y="148" width="228" height="56" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="408" y="168" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">📋 Custom JDE applications</text>
-  <text x="408" y="184" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">real-time data screens</text>
-  <text x="408" y="198" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">defined in TOML, no codegen</text>
+  <text x="300" y="330" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Audit trail: who changed what,</text>
+  <text x="300" y="346" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">when, from which page.</text>
 
-  <rect x="396" y="212" width="228" height="56" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="408" y="232" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">👥 Security & access</text>
-  <text x="408" y="248" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">users · roles · applications</text>
-  <text x="408" y="262" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">role relationships · environments</text>
+  <text x="300" y="378" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">Same shape on Role Management,</text>
+  <text x="300" y="394" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">Environments and Security Workbench.</text>
 
-  <rect x="396" y="276" width="228" height="56" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="408" y="296" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">📱 Modern responsive UI</text>
-  <text x="408" y="312" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">desktop · tablet · mobile</text>
-  <text x="408" y="326" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">API automation</text>
+  <rect x="620" y="100" width="320" height="140" rx="10" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
+  <text x="640" y="124" fill="#fb923c" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">📊 REPORTING</text>
+  <text x="640" y="150" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Schedule a JDE batch job from</text>
+  <text x="640" y="166" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">a form. Output is archived next</text>
+  <text x="640" y="182" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">to the run — download, resend,</text>
+  <text x="640" y="198" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">e-mail in one click. Audit log</text>
+  <text x="640" y="214" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">of every run.</text>
 
-  <rect x="396" y="340" width="228" height="56" rx="8" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.35)" strokeWidth="1"/>
-  <text x="408" y="360" fill="#fb923c" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">📊 Automated reporting</text>
-  <text x="408" y="376" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">schedule + archive BIP outputs</text>
-  <text x="408" y="390" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">resend / e-mail / download</text>
-
-  <rect x="396" y="404" width="228" height="50" rx="8" fill="rgba(50,215,75,0.08)" stroke="rgba(50,215,75,0.35)" strokeWidth="1"/>
-  <text x="408" y="424" fill="#4ade80" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">📈 Live monitoring</text>
-  <text x="408" y="440" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">transactions · jobs · performance</text>
-
-  <line x1="640" y1="240" x2="740" y2="240" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#nje-arrow)"/>
-
-  <rect x="740" y="40" width="220" height="420" rx="14" fill="url(#nje-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="760" y="68" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">⚛️ NOMAJDE UI</text>
-
-  <text x="760" y="92" fill="#cbd5e1" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">📊 Dashboard</text>
-
-  <text x="760" y="116" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Master Data</text>
-  <text x="772" y="134" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Address book</text>
-  <text x="772" y="150" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Customer · Supplier</text>
-  <text x="772" y="166" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Items · GL accounts</text>
-
-  <text x="760" y="190" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Security Maintenance</text>
-  <rect x="768" y="198" width="180" height="20" rx="4" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="776" y="212" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">User Management</text>
-  <text x="772" y="232" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Role Management</text>
-  <text x="772" y="248" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Role Relationships</text>
-  <text x="772" y="264" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Environments</text>
-  <text x="772" y="280" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Security Workbench</text>
-
-  <text x="760" y="304" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Transactions</text>
-  <text x="772" y="322" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">AP · AR · GL</text>
-
-  <text x="760" y="346" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Reporting</text>
-  <text x="772" y="364" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Schedule a report</text>
-  <text x="772" y="380" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Archive · BIP outputs</text>
-
-  <text x="760" y="404" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Monitoring</text>
-  <text x="772" y="422" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Transactions · Jobs</text>
-  <text x="772" y="438" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Performance</text>
+  <rect x="620" y="260" width="320" height="140" rx="10" fill="rgba(50,215,75,0.08)" stroke="rgba(50,215,75,0.30)" strokeWidth="1"/>
+  <text x="640" y="284" fill="#4ade80" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">📈 MONITORING</text>
+  <text x="640" y="310" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Live counters of AP / AR / GL</text>
+  <text x="640" y="326" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">transactions. The job-control</text>
+  <text x="640" y="342" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">queue as a grid. Performance</text>
+  <text x="640" y="358" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">indicators (DB latency, AIS</text>
+  <text x="640" y="374" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">response time, transaction</text>
+  <text x="640" y="390" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">throughput).</text>
 </svg>
 
 ---
 
-## What it does
+## What it covers
 
-### Full JD Edwards connectivity
+### Master data
 
-Nomajde reads and writes JDE data **live** — no nightly extracts, no staged copies, no shadow tables.
+The day-to-day master-data work, in one shape per business object.
 
-| Capability | What it gives you |
+- **Address book** — search any address, see who / what / where on a single row. Edit a name, a phone, a postal address without opening three screens.
+- **Customers and suppliers** — the full master, per company. Edit the credit terms, the bank account, the payment instructions.
+- **Items** — item master, with item branch / plant on the same page.
+- **GL accounts** — chart of accounts per business unit and per company.
+
+Every grid lets you filter by any column, sort, export to Excel, and click a row to open the edit form.
+
+### Security Maintenance
+
+The same JDE security work, condensed into five screens that each consolidate what JDE spreads across many forms. Every grid supports inline editing — change a value on a row, the update is written back without leaving the page.
+
+| Screen | What you do here |
 |---|---|
-| **Live SQL** | SQL connectors on every JDE environment (`PD`, `PY`, `DV`, `CRP`, …). Each screen reads what JDE itself reads. |
-| **AIS integration** | API connector against the JDE AIS Server: form-service calls, orchestrations, scheduled jobs. Write paths go through AIS so the same business logic applies. |
-| **Cross-environment** | Switch the environment from a dropdown — same screens, same dialogs, different pool. |
+| **User Management** | Search a user; see every role, environment and security entry that applies on a single page. Add, update or disable a user; assign or revoke a role inline in the grid. The change goes to JDE immediately. |
+| **Role Management** | The catalogue of roles, with the applications attached to each. Add a role, attach an application, set processing-option security — without navigating between separate JDE forms. |
+| **Role Relationships** | Role inheritance and effective-date windows in one grid. Promote a junior role to inherit a senior one, with a start and an end date, in a single edit. |
+| **Environments** | The list of environments (`PD`, `PY`, `DV`, `CRP`, …) and the role assignments per environment, side by side. |
+| **Security Workbench** | The whole security catalogue — application security, action security, row security, column security, processing-option security — on one searchable grid with inline edits, instead of a separate JDE screen per security type. |
 
-### Custom JDE applications
+Edits are written straight to JDE — no extract, no replay. The audit trail records every change with the user, the timestamp and the page it came from.
 
-A Nomajde screen is one TOML entry under [`screens.toml`](../framework/screens.md): the query that drives the grid, the dialog that opens on a row click, the per-field conditions, the audit tab. **No code generation.** Add a new screen and the React UI picks it up after a `POST /admin/reload`.
+### Transactions
 
-Right for:
+Grids over AP, AR and GL. Filter on any column — company, business unit, supplier, document number, amount range, date range — and click a row to drill into the details. Right for spotting an open invoice, an unposted batch, or a journal that did not balance.
 
-- exposing a clean web form for a OneWorld application that operators run dozens of times a day,
-- packaging several JDE forms into one screen (e.g. address book + customer + supplier on one row),
-- giving non-licensed users a curated view without a full JDE seat.
+### Reporting
 
-### Security & access management
+Schedule and archive JDE BIP reports.
 
-Nomajde ships the JDE security maintenance workbench as native Liberty Next screens:
+- Pick the program and the version, fill the data selection, choose when it runs. The job goes to JDE through a single form — no chain of separate scheduling screens.
+- The generated output (PDF or XML) is archived next to the run. Download it later, e-mail it to a recipient list, resend it through the same connector.
+- Every run is logged — who scheduled it, when it ran, what was produced.
 
-| Sub-section | What it covers |
-|---|---|
-| **User Management** | JDE users — creation, role assignments, environments allowed, account state. |
-| **Role Management** | Role catalog, applications attached to a role, processing options. |
-| **Role Relationships** | Role inheritance and effective-date windows. |
-| **Environments** | `PD` / `PY` / `DV` / `CRP` definitions and the per-environment role assignment. |
-| **Security Workbench** | The full `F00950` view — application security, action security, row security, column security, processing-option security — searchable and filtered. |
+### Monitoring
 
-The data the workbench surfaces is also what [Nomasx-1](../nomasx1/overview.md) reads for SoD analysis. The two applications share the same connector definitions.
+A live view of JDE in production.
 
-### Modern responsive UI
+- AP / AR / GL transaction counters with drill-through to the underlying screen.
+- The JDE job-control queue as a grid — status, owner, runtime, output.
+- Performance indicators: database latency, AIS response time, transaction throughput.
 
-The same React frontend as Liberty Next — dark default with light theme, DM Sans, lucide icons, `@tanstack/react-table` for the grids, modal `ScreenDialog` for the forms. Responsive: a Nomajde screen renders cleanly on a tablet (auditor in a warehouse, field service stopping at a customer). `react-i18next` EN / FR — labels come from the dictionary, JDE UDC translations included.
-
-### Automated reporting
-
-| Feature | What it gives you |
-|---|---|
-| **Schedule a report** | Form-based scheduling of a JDE batch job (R-program) — choose the version, the data selection, the recurrence. |
-| **Archive BIP outputs** | The generated BIP output (PDF / XML) is captured and stored next to the job. Searchable, downloadable, re-sendable. |
-| **Distribution** | E-mail a generated output to an operator-defined recipient list with one click. |
-| **History** | Every run is logged: who scheduled it, when it ran, the output stored. The audit trail an internal auditor expects. |
-
-### Live monitoring
-
-| Feature | What it gives you |
-|---|---|
-| **Transaction monitoring** | Live counters of AP / AR / GL transactions per environment, with drill-through to the underlying screen. |
-| **Job monitoring** | The JDE job-control queue exposed as a Nomajde grid — status, owner, run time, output. |
-| **Performance** | DB latency, transaction throughput, AIS response time. Right for an ops engineer keeping a watch on the production environment. |
+Right for an ops engineer keeping a watch on the day's load.
 
 ---
 
-## Application structure
+## The application map
 
-The Nomajde sidebar groups the capabilities into folders:
-
-| Section | Sub-sections |
+| Section | What you find here |
 |---|---|
-| **Dashboard** | KPI roll-up, latest activity, drill-through. |
-| **Master Data** | Address book, customer master, supplier master, item master, GL accounts. |
+| **Dashboard** | Daily activity summary: open transactions, jobs running, recent users, latest alerts. |
+| **Master Data** | Address book, customers, suppliers, items, GL accounts. |
 | **Security Maintenance** | User Management, Role Management, Role Relationships, Environments, Security Workbench. |
-| **Transactions** | AP / AR / GL grids with filtering and modal dialogs. |
-| **Reporting** | Schedule a report, archive, BIP outputs. |
-| **Monitoring** | Transactions, jobs, performance. |
-| **Settings** | Source pools, AIS connector, environment definitions, role mapping. |
+| **Transactions** | AP, AR, GL grids with filters and edit forms. |
+| **Reporting** | Schedule a BIP job, archive of past runs, distribution. |
+| **Monitoring** | Live transaction counters, job-control queue, performance indicators. |
+| **Settings** | Environment definitions, e-mail server, archive retention. |
 
 ---
 
-## Who is it for
+## Who uses it
 
-| Persona | Why a Nomajde screen beats the JDE fat client |
+| Role | What they typically open Nomajde for |
 |---|---|
-| **AP / AR operator** | One web tab, multi-filter grid over `F0411` / `F03B11` — no row-by-row navigation. |
-| **Master-data steward** | Address book + customer + supplier in one shape, with per-field conditions and required validations. |
-| **JDE security administrator** | The five security maintenance screens are the day-to-day workbench — instant filtering across users / roles / objects, no fat-client wait. |
-| **Reporting analyst** | Schedule a BIP job, archive the output, e-mail it — without a OneWorld licence per analyst. |
-| **Ops engineer** | Live monitoring view of jobs + transactions + performance; alerting through Liberty Next's notification rules. |
+| **AP / AR operator** | The transaction grid — every open invoice across companies and environments on one page, with bulk filters and inline edits. |
+| **Master-data steward** | Address book, customer and supplier maintenance, with required-field validation in the form and grid edits for mass updates. |
+| **JDE security administrator** | The five Security Maintenance pages — five screens that consolidate what JDE spreads across many separate forms, all with inline editing. |
+| **Reporting analyst** | The Reporting section — one form to schedule, archive and distribute a BIP job, where JDE walks through several separate screens. |
+| **Ops engineer** | The Monitoring section — live transaction counters, job queue, performance, on one dashboard. |
 
 ---
 
-## Users, roles and permissions inside Nomajde
+## Roles inside Nomajde
 
-The authentication of Nomajde (the application — not the JDE source it reads) goes through Liberty Next's [auth backend](../framework/overview.md#auth). Typical roles:
+The application itself ships four roles.
 
-| Liberty role | What it grants |
+| Role | What it grants |
 |---|---|
-| `nomajde.viewer` | Read every screen, run dashboards, no edits. |
-| `nomajde.operator` | All of the above + AP / AR / master edits + AIS orchestration calls + report scheduling. |
-| `nomajde.security` | Security Maintenance — User / Role / Role Relationships / Environments / Security Workbench. |
-| `nomajde.admin` | All of the above + source connector / pool management + AIS configuration. |
+| **Viewer** | Read every screen, run reports, no edits. |
+| **Operator** | Everything a Viewer does, plus AP / AR / master-data edits and scheduling reports. |
+| **Security** | The Security Maintenance section — User, Role, Role Relationships, Environments, Security Workbench. |
+| **Administrator** | Everything above, plus environment configuration and archive retention. |
 
-A typical deployment splits **operator** from **security** — Nomasx-1 itself would flag the combination as a SoD conflict.
-
----
-
-## How it pairs with Nomasx-1
-
-Nomajde and Nomasx-1 are sold together. They complement each other:
-
-- **Nomajde** lets users *do things* in JDE — clean entry points for the day-to-day work, plus a security maintenance workbench.
-- **Nomasx-1** monitors *what they can do* — the rights, the conflicts, the licence usage.
-
-The pair runs on the same Liberty Next instance, on the same license key. A typical install configures Nomajde first (operators need it daily), Nomasx-1 second (auditors need it on a cadence).
-
----
-
-## Next steps
-
-| Where to go | Why |
-|---|---|
-| [Liberty Next → Overview](../framework/overview.md) | The framework Nomajde sits on. |
-| Per-screen documentation *(coming soon)* | Master Data · Security Maintenance · Transactions · Reporting · Monitoring. |
-| [Nomasx-1 overview](../nomasx1/overview.md) | Companion application — segregation-of-duties analysis. |
+A typical deployment keeps **Operator** separate from **Security** — the person processing transactions is not the same one managing access rights.

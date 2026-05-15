@@ -10,8 +10,8 @@ keywords: [Liberty, Liberty Next, low-code, framework, connecteur, TOML, SQL, AP
 
 Deux applications payantes s'exécutent sur Liberty Next :
 
-- **[Nomasx-1](/liberty/nomasx1/overview)** — sécurité et conformité d'entreprise : gestion centralisée des utilisateurs et des rôles, conformité des licences Oracle et JD Edwards, analyse automatisée de la séparation des tâches. Visibilité, maîtrise du risque, conformité réglementaire.
-- **[Nomajde](/liberty/nomajde/overview)** — intégration JD Edwards : connectivité JDE complète sur les données live, écrans personnalisés, maintenance sécurité & accès, reporting BIP automatisé et supervision live des transactions et performances.
+- **[Nomasx-1](/liberty/nomasx1/overview)** — sécurité et conformité d'entreprise. Vue centralisée des utilisateurs et des rôles, conformité des licences Oracle et JD Edwards, analyse automatisée de la séparation des tâches. Pour les auditeurs, responsables sécurité et gestionnaires de licences.
+- **[Nomajde](/liberty/nomajde/overview)** — application compagnon JD Edwards. Écrans live sur les données JDE : données maîtres, atelier de maintenance sécurité, transactions, reporting BIP planifié, supervision live. Pour les opérateurs JDE, administrateurs sécurité et ingénieurs d'exploitation.
 
 Le framework lui-même (sans les connecteurs sous licence) est gratuit.
 
@@ -137,4 +137,4 @@ Les fichiers de config acceptent les références `${NOM}` et `${NOM:-defaut}`.
 | [Framework → Connecteurs](/liberty/framework/connectors) | Définir un connecteur SQL ou API en TOML — schéma, paramètres, verrou en écriture. |
 | [Framework → Écrans](/liberty/framework/screens) | Envelopper une requête connecteur dans un Screen — grille, filtres, formulaire modal, audit. |
 | [Nomasx-1 — Présentation](/liberty/nomasx1/overview) | Sécurité et conformité d'entreprise — utilisateurs, rôles, conformité Oracle / JDE, séparation des tâches. |
-| [Nomajde — Présentation](/liberty/nomajde/overview) | Intégration JD Edwards — données live, écrans personnalisés, maintenance sécurité, reporting, supervision. |
+| [Nomajde — Présentation](/liberty/nomajde/overview) | Compagnon JD Edwards — données maîtres, maintenance sécurité, transactions, reporting, supervision. |

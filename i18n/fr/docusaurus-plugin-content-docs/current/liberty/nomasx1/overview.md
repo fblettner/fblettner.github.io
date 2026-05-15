@@ -1,18 +1,19 @@
 ---
 title: Nomasx-1 — Présentation
-description: "Nomasx-1 est une application de sécurité et de conformité d'entreprise bâtie sur Liberty Next. Gestion centralisée des utilisateurs et des rôles, conformité des licences JD Edwards et Oracle, analyse automatisée de la séparation des tâches — visibilité complète, maîtrise des risques, conformité réglementaire."
+description: "Nomasx-1 est une application de sécurité et de conformité d'entreprise — vue centralisée des utilisateurs et des rôles, conformité des licences Oracle et JD Edwards, analyse automatisée de la séparation des tâches."
 keywords: [Nomasx-1, nomasx1, sécurité entreprise, conformité, séparation des tâches, SoD, JD Edwards, JDE, Oracle, licence, CSI, LDAP, audit]
 ---
 
 # Nomasx-1 — Présentation
 
-**Nomasx-1** est une application de **sécurité et de conformité d'entreprise** bâtie sur [Liberty Next](/liberty/framework/overview). Elle centralise la **gestion des utilisateurs et des rôles**, surveille l'**utilisation des licences JD Edwards et Oracle** par rapport aux droits réellement acquis, et exécute une **analyse automatisée de la séparation des tâches (SoD)** — trois piliers sous une seule UI, avec intégration native JD Edwards.
+**Nomasx-1** est une application de **sécurité et de conformité d'entreprise**. Sur un seul écran, elle répond aux questions qu'un auditeur, un responsable sécurité ou un gestionnaire de licences pose à chaque trimestre :
 
-Nomasx-1 est une **application sous licence** : un ensemble de connecteurs, d'écrans et de tableaux de bord verrouillé par une clé RS256. Le framework lui-même est gratuit ; Nomasx-1 et [Nomajde](/liberty/nomajde/overview) sont vendus ensemble sous une seule clé.
+- Qui a accès à quoi, sur quel environnement ?
+- Un rôle a-t-il été accordé alors qu'il aurait dû expirer ?
+- Combien des licences Oracle et JD Edwards que nous payons sont réellement utilisées ?
+- Existe-t-il des utilisateurs qui peuvent comptabiliser une écriture et l'approuver en même temps ?
 
-:::info[En cours de rédaction]
-Cette présentation est le point d'entrée. Les pages par écran (Sécurité, Applications, Base de données, Licences, matrices SoD, rapports) arriveront dans des itérations suivantes.
-:::
+L'application lit directement ses données source — security workbench JDE, vues DBA Oracle, LDAP — et les présente sur un nombre limité de grilles, de tableaux de bord et de rapports. Aucun export à préparer, aucun tableur à maintenir.
 
 ---
 
@@ -20,188 +21,172 @@ Cette présentation est le point d'entrée. Les pages par écran (Sécurité, Ap
 
 <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="nx1-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="nx1-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="nx1-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <linearGradient id="nx1-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
   </defs>
 
-  <rect x="40" y="40" width="220" height="380" rx="14" fill="url(#nx1-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="68" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">🗄 SYSTÈMES SOURCES</text>
+  <rect x="40" y="40" width="920" height="380" rx="14" fill="url(#nx1-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <rect x="56" y="84" width="188" height="48" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="104" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">JD Edwards</text>
-  <text x="68" y="120" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">security workbench, rôles, env.</text>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">🛡 NOMASX-1 · Barre latérale</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="56" y="140" width="188" height="48" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="160" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Base Oracle</text>
-  <text x="68" y="176" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">version, options, vues DBA</text>
+  <rect x="60" y="100" width="200" height="280" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="68" y="110" width="184" height="22" rx="4" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="80" y="124" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="700">📊 Tableau de bord</text>
 
-  <rect x="56" y="196" width="188" height="48" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="216" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">LDAP / Active Directory</text>
-  <text x="68" y="232" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">vérification des comptes</text>
+  <text x="76" y="148" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Sécurité</text>
+  <text x="86" y="166" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Utilisateurs · Rôles</text>
+  <text x="86" y="180" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Conflits SoD · Exceptions</text>
 
-  <rect x="56" y="252" width="188" height="48" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="272" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">CSI / droits de licence</text>
-  <text x="68" y="288" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Oracle Support Customer ID</text>
+  <text x="76" y="204" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Applications</text>
+  <text x="86" y="222" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Applications JDE · formulaires</text>
 
-  <rect x="56" y="308" width="188" height="48" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="328" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Matrices SoD</text>
-  <text x="68" y="344" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">prédéfinies + personnalisables</text>
+  <text x="76" y="246" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Base de données</text>
+  <text x="86" y="264" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Version · options · comptes</text>
 
-  <rect x="56" y="360" width="188" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="380" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Attributs personnalisés</text>
-  <text x="68" y="394" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">comptes techniques / fonctionnels</text>
+  <text x="76" y="288" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">📁 Licences</text>
+  <text x="86" y="306" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">CSI · JDE · Oracle</text>
+  <text x="86" y="320" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Licences souscrites</text>
+  <text x="86" y="334" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Rapport d'usage</text>
+  <text x="86" y="348" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Rapport financier</text>
 
-  <line x1="260" y1="220" x2="380" y2="220" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#nx1-arrow)"/>
+  <text x="76" y="372" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">⚙ Paramètres</text>
 
-  <rect x="380" y="40" width="240" height="380" rx="14" fill="url(#nx1-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
-  <text x="400" y="68" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">⚙ PILIERS NOMASX-1</text>
+  <rect x="280" y="100" width="220" height="280" rx="10" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
+  <text x="300" y="124" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">👥 SÉCURITÉ & UTILISATEURS</text>
 
-  <rect x="396" y="84" width="208" height="100" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="408" y="104" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">👥 Sécurité & utilisateurs</text>
-  <text x="408" y="122" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• utilisateurs, rôles, dernière connex.</text>
-  <text x="408" y="136" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• dates d'expiration des rôles</text>
-  <text x="408" y="150" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• comptes orphelins / doublons</text>
-  <text x="408" y="164" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• vérification LDAP / AD</text>
-  <text x="408" y="178" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• traçabilité · sans audit JDE</text>
+  <text x="300" y="150" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Utilisateurs — création,</text>
+  <text x="300" y="166" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">dernière connexion, doublons.</text>
 
-  <rect x="396" y="192" width="208" height="100" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.35)" strokeWidth="1"/>
-  <text x="408" y="212" fill="#fb923c" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">📊 Conformité Oracle / JDE</text>
-  <text x="408" y="230" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• CSI + licences acquises</text>
-  <text x="408" y="244" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• actifs vs déclarés</text>
-  <text x="408" y="258" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• modules & usage de transactions</text>
-  <text x="408" y="272" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• versions & options BDD</text>
-  <text x="408" y="286" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• rapports de risque financier</text>
+  <text x="300" y="190" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Rôles — affectations avec</text>
+  <text x="300" y="206" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">dates de validité.</text>
 
-  <rect x="396" y="300" width="208" height="100" rx="8" fill="rgba(248,113,113,0.10)" stroke="rgba(248,113,113,0.35)" strokeWidth="1"/>
-  <text x="408" y="320" fill="#f87171" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">⚖ Séparation des tâches</text>
-  <text x="408" y="338" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• détection automatisée</text>
-  <text x="408" y="352" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• matrices prédéfinies + sur mesure</text>
-  <text x="408" y="366" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• conflits par processus / activité</text>
-  <text x="408" y="380" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• extraction auto des droits</text>
-  <text x="408" y="394" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">• rapports de risques & conflits</text>
+  <text x="300" y="230" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Vérification LDAP / AD —</text>
+  <text x="300" y="246" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">le compte existe-t-il encore ?</text>
 
-  <line x1="620" y1="220" x2="720" y2="220" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#nx1-arrow)"/>
+  <text x="300" y="270" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Traçabilité d'activité —</text>
+  <text x="300" y="286" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">sans activer l'audit JDE.</text>
 
-  <rect x="720" y="40" width="240" height="380" rx="14" fill="url(#nx1-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="740" y="68" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">📊 SORTIE</text>
+  <text x="300" y="310" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Attributs personnalisés —</text>
+  <text x="300" y="326" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">comptes techniques vs</text>
+  <text x="300" y="342" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">fonctionnels.</text>
 
-  <rect x="736" y="84" width="208" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="748" y="104" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Tableau de bord conformité</text>
-  <text x="748" y="118" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">dernier rafraîchissement · KPI</text>
+  <rect x="520" y="100" width="220" height="280" rx="10" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
+  <text x="540" y="124" fill="#fb923c" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">📊 CONFORMITÉ LICENCES</text>
 
-  <rect x="736" y="136" width="208" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="748" y="156" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Audit par utilisateur</text>
-  <text x="748" y="170" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">droits effectifs, historique</text>
+  <text x="540" y="150" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">CSI — Customer Support</text>
+  <text x="540" y="166" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Identifier + licences acquises.</text>
 
-  <rect x="736" y="188" width="208" height="44" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="748" y="208" fill="#fb923c" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Rapport d'usage</text>
-  <text x="748" y="222" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">usage vs droits</text>
+  <text x="540" y="190" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Actifs vs déclarés — JDE</text>
+  <text x="540" y="206" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">compte vs contrat.</text>
 
-  <rect x="736" y="240" width="208" height="44" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="748" y="260" fill="#fb923c" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Rapport financier</text>
-  <text x="748" y="274" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">montant de risque · remédiation</text>
+  <text x="540" y="230" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Usage des modules — qui</text>
+  <text x="540" y="246" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">utilise vraiment Financials.</text>
 
-  <rect x="736" y="292" width="208" height="44" rx="8" fill="rgba(248,113,113,0.10)" stroke="rgba(248,113,113,0.30)" strokeWidth="1"/>
-  <text x="748" y="312" fill="#f87171" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Rapport SoD</text>
-  <text x="748" y="326" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">conflits par utilisateur / société</text>
+  <text x="540" y="270" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Base de données — version</text>
+  <text x="540" y="286" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Oracle, options activées.</text>
 
-  <rect x="736" y="344" width="208" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="748" y="364" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">Export · CSV / Excel</text>
-  <text x="748" y="378" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">grilles filtrées</text>
+  <text x="540" y="310" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Risque financier — montant</text>
+  <text x="540" y="326" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">de l'écart + remédiation</text>
+  <text x="540" y="342" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">suggérée.</text>
+
+  <rect x="760" y="100" width="180" height="280" rx="10" fill="rgba(248,113,113,0.08)" stroke="rgba(248,113,113,0.30)" strokeWidth="1"/>
+  <text x="780" y="124" fill="#f87171" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">⚖ SoD</text>
+
+  <text x="780" y="150" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Détection automatisée</text>
+  <text x="780" y="166" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">des conflits.</text>
+
+  <text x="780" y="190" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Matrices livrées et</text>
+  <text x="780" y="206" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">personnalisables.</text>
+
+  <text x="780" y="230" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Conflits par</text>
+  <text x="780" y="246" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">processus / activité</text>
+  <text x="780" y="262" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">/ risque.</text>
+
+  <text x="780" y="286" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Extraction</text>
+  <text x="780" y="302" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">automatique.</text>
+
+  <text x="780" y="326" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Rapports —</text>
+  <text x="780" y="342" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">CSV / Excel,</text>
+  <text x="780" y="358" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">piste d'audit.</text>
 </svg>
 
 ---
 
-## Ce que fait l'application
+## Ce que couvre l'application
 
-### Sécurité & gestion des utilisateurs
+Nomasx-1 réunit trois domaines sous une même application :
 
-Vue centralisée des utilisateurs, des rôles et des affectations — sur JDE, AD et tout autre connecteur base de données ou API que Nomasx-1 vient lire.
+### Sécurité et utilisateurs
 
-| Fonctionnalité | Apport |
-|---|---|
-| **Catalogue d'utilisateurs** | Date de création et dernière connexion par utilisateur. Détection des comptes dormants, des ajouts récents, des fenêtres d'activité anormales. |
-| **Rôles & affectations** | Dates effectives et d'expiration par affectation de rôle. Les rôles expirés mais non retirés apparaissent en rouge. |
-| **Détection de risques** | Rôles non affectés, doublons d'utilisateurs, comptes techniques mêlés aux comptes fonctionnels — signalés automatiquement. |
-| **Intégration LDAP / AD** | Chaque utilisateur est vérifié contre l'annuaire : le compte existe-t-il encore ? Est-il actif ? |
-| **Enrichissement** | Attributs personnalisés par utilisateur / rôle : responsable métier, département, indicateur « compte technique », … Alimente les rapports. |
-| **Traçabilité d'activité** | Trace l'activité utilisateur **sans** activer l'audit JD Edwards — pas d'impact opérationnel sur le système source. |
-| **Intégration native JDE** | Lit directement le security workbench JDE (pas d'exports, pas d'extractions planifiées) — l'écran reflète l'état courant. |
+La vue quotidienne sur les droits effectifs.
 
-### Conformité Oracle & JD Edwards
+- **Utilisateurs** : chaque utilisateur connu des systèmes source, avec sa date de création et sa dernière connexion. Les comptes dormants apparaissent immédiatement ; les ajouts récents sont signalés.
+- **Rôles et affectations** : chaque affectation porte des dates de validité. Les rôles qui auraient dû expirer mais n'ont jamais été retirés apparaissent en rouge.
+- **Détection de risques** : rôles non affectés, doublons d'utilisateurs, comptes techniques mêlés aux comptes fonctionnels — tout est signalé automatiquement, sans revue manuelle.
+- **Vérification annuaire** : chaque utilisateur est confronté à LDAP ou à Active Directory — le compte existe-t-il encore ? Est-il actif ?
+- **Attributs personnalisés** : chaque utilisateur et chaque rôle peut porter vos propres métadonnées — responsable métier, département, indicateur compte technique vs fonctionnel — et les rapports les utilisent.
+- **Traçabilité d'activité** : suit l'activité utilisateur **sans** activer l'audit JDE — aucun impact opérationnel sur le système source.
 
-Nomasx-1 sert aussi d'**atelier de conformité de licences** : ce qui a été acheté, ce qui est réellement utilisé, où se trouve l'écart.
+### Conformité des licences Oracle et JD Edwards
 
-| Fonctionnalité | Apport |
-|---|---|
-| **CSI & licences acquises** | Suivi du Customer Support Identifier Oracle et des licences réellement rattachées. |
-| **Utilisateurs actifs vs déclarés** | Ce que JDE compte réellement face à ce que le contrat autorise. L'écart est plus fréquent qu'on ne le pense. |
-| **Modules & usage de transactions** | Traçabilité d'accès par module — *qui touche réellement Financials / Distribution / Manufacturing*. Permet la discussion « ce module est-il encore nécessaire ? ». |
-| **Version et options BDD** | Version Oracle, édition, options activées. Indispensable quand l'auditeur demande si *Advanced Compression* est utilisée. |
-| **Usage vs droits** | Côte à côte : ce qui est utilisé, ce qui est acheté, le delta. |
-| **Rapports de risque financier** | Chiffrage de l'écart, avec suggestions de remédiation. La sortie qu'un comité d'audit lira. |
+Vue côte à côte de ce qui a été acheté et de ce qui est réellement utilisé.
+
+- **CSI et licences acquises** : import du Customer Support Identifier Oracle et des licences qui y sont rattachées.
+- **Actifs vs déclarés** : ce que JDE compte comme utilisateur face à ce que le contrat autorise. L'écart est plus fréquent qu'on ne le pense.
+- **Accès et usage des modules** : traçabilité d'accès par module — qui utilise vraiment Financials, Distribution, Manufacturing. Permet la discussion « ce module est-il encore nécessaire ? ».
+- **Panorama base de données** : version Oracle, édition, options activées. La page qu'un auditeur demande quand il veut savoir si *Advanced Compression* ou *Partitioning* sont utilisés.
+- **Usage vs droits** : un seul écran avec ce qui est utilisé, ce qui est acheté, et l'écart.
+- **Rapport de risque financier** : l'écart chiffré en montant, avec des suggestions de remédiation. La sortie qu'un comité d'audit lira.
 
 ### Séparation des tâches
 
-Analyse automatisée de SoD — le cœur d'une revue type SoX.
+Analyse SoD automatisée — le cœur d'une revue type SoX.
 
-| Fonctionnalité | Apport |
-|---|---|
-| **Détection automatisée** | Produit cartésien des droits effectifs de chaque utilisateur avec la matrice SoD — conflits remontés par utilisateur × société. |
-| **Matrices prédéfinies + personnalisables** | Matrices livrées prêtes à l'emploi pour les risques ERP classiques (comptabiliser + approuver, fournisseur + paiement, …). Matrices sur mesure ajoutées par-dessus. |
-| **Modèle processus · activité · risque** | Les conflits se définissent au niveau du processus et de l'activité, classés par risque. Plus lisible que des paires brutes rôle vs rôle. |
-| **Extraction automatique** | Les données de sécurité sont extraites de JDE / Oracle sur une planification — pas de préparation manuelle avant un scan. |
-| **Rapports** | Rapports par utilisateur, par société et par risque, exportables CSV / Excel, avec la piste d'audit qui-a-validé-quoi. |
+- **Détection automatisée** : les droits effectifs de chaque utilisateur sont croisés avec la matrice SoD ; les conflits remontent par utilisateur × société, classés par risque.
+- **Matrices livrées et personnalisables** : matrices prêtes à l'emploi pour les risques ERP classiques (comptabiliser et approuver, fournisseur et paiement, …). Vous pouvez ajouter vos propres matrices par-dessus.
+- **Modèle processus · activité · risque** : les conflits sont décrits au niveau du processus et de l'activité — plus lisible que des paires brutes rôle contre rôle.
+- **Extraction automatique** : les données de sécurité sont extraites de JDE et d'Oracle sur une planification — aucune préparation manuelle avant un scan.
+- **Rapports** : rapports par utilisateur, par société et par risque, exportables en CSV ou Excel, avec la piste d'audit qui a validé quoi et quand.
 
 ---
 
-## Structure de l'application
+## La carte de l'application
 
-La barre latérale de Nomasx-1 reprend les trois piliers ci-dessus plus un groupe Paramètres :
+La barre latérale de Nomasx-1 suit les trois domaines ci-dessus plus une section Paramètres.
 
-| Section | Sous-sections |
+| Section | Contenu |
 |---|---|
-| **Tableau de bord** | Vue conformité, statut du dernier rafraîchissement, drill-through vers les écrans sous-jacents. |
-| **Sécurité** | Gestion des utilisateurs, gestion des rôles, relations entre rôles, environnements, security workbench JDE. |
-| **Applications** | Catalogue des applications JDE, versions, options de traitement. |
-| **Base de données** | Version Oracle, options activées, inventaire DBA. |
-| **Licences** | CSI · JD Edwards · Oracle · Licences souscrites · Rapport d'usage · Rapport financier. |
-| **Paramètres** | Connecteurs source, planification, matrices SoD, règles de notification. |
+| **Tableau de bord** | Vue d'ensemble conformité : nombre d'utilisateurs, expirations de rôles, conflits SoD ouverts, écart de licence, statut du dernier rafraîchissement. Chaque carte est un drill-through vers l'écran correspondant. |
+| **Sécurité** | Catalogue des utilisateurs, rôles, affectations, sessions, conflits SoD et registre des exceptions. |
+| **Applications** | Catalogue des applications JDE (programmes et formulaires) avec les droits portés par chacune. |
+| **Base de données** | Panorama de la base Oracle — version, édition, options activées, utilisateurs déclarés. |
+| **Licences** | CSI, licences JD Edwards, licences Oracle, licences souscrites, rapport d'usage et rapport de risque financier. |
+| **Paramètres** | Systèmes sources, planification des scans, matrices SoD, règles de notification. |
 
 ---
 
-## À qui s'adresse l'application
+## Qui utilise l'application
 
-| Profil | Questions du quotidien |
+| Profil | Pourquoi il ouvre Nomasx-1 |
 |---|---|
-| **Auditeur interne** | Y a-t-il des utilisateurs avec des droits en conflit sur la société de production ? Qui a été ajouté à un rôle sensible le trimestre dernier ? |
-| **Responsable sécurité** | Qui a effectivement accès à *Comptabiliser une écriture* ? Quelles exceptions sont ouvertes et validées, par qui ? |
-| **Administrateur JDE** | Quels rôles détient cet utilisateur sur les différents environnements ? Quels formulaires peut-il atteindre ? |
-| **Responsable licences** | Combien des modules achetés sont réellement utilisés ? Où est l'écart financier et qui pilote la remédiation ? |
-| **CISO / Risque** | Comment évolue notre posture SoD — toujours les mêmes conflits chaque trimestre, ou de nouveaux ? |
+| **Auditeur interne** | La revue SoD trimestrielle — *quels conflits sont ouverts, qui a signé les exceptions, quelle tendance dans le temps ?* |
+| **Responsable sécurité** | *Qui a effectivement accès à X aujourd'hui ?* Le simulateur « et si ? » avant d'accorder un nouveau rôle. |
+| **Administrateur sécurité JDE** | Le catalogue complet utilisateurs et rôles sur tous les environnements — plus rapide que de naviguer dans le security workbench du client lourd. |
+| **Gestionnaire de licences** | *Payons-nous des modules que personne n'utilise ?* Le rapport d'usage et le rapport de risque financier se lisent ensemble. |
+| **CISO / Risque** | Le tableau de bord conformité — tendance SoD, écart de licence, KPI d'hygiène des comptes. |
 
 ---
 
-## Utilisateurs, rôles et séparation des tâches — dans Nomasx-1 elle-même
+## Rôles dans Nomasx-1
 
-L'authentification de Nomasx-1 (l'application qui gère l'analyse — pas la source JDE qu'elle lit) passe par le [backend d'auth](/liberty/framework/overview) de Liberty Next. Rôles types :
+L'application livre quatre rôles. Ils définissent ce que chaque utilisateur voit et peut modifier.
 
-| Rôle Liberty | Ce que le rôle permet |
+| Rôle | Droits |
 |---|---|
-| `nomasx1.viewer` | Lire tous les écrans, lancer les tableaux de bord, aucune édition. |
-| `nomasx1.editor` | Créer / modifier les matrices SoD, planifier les scans, gérer les règles de notification. |
-| `nomasx1.auditor` | Lecture + validation des exceptions (seul rôle habilité à clore un conflit signalé). |
-| `nomasx1.admin` | Tout ce qui précède + gestion des connecteurs source et du mapping AD / LDAP. |
+| **Consultation** | Lire tous les écrans, lancer les rapports, aucune modification. |
+| **Édition** | Tout ce qui précède, plus : modifier les matrices SoD, planifier les scans, gérer les règles de notification. |
+| **Audit** | Tout ce qui précède, plus : valider les exceptions. Seul rôle habilité à clore un conflit signalé. |
+| **Administrateur** | Tout ce qui précède, plus : gérer la configuration des systèmes sources (pools JDE, comptes DBA Oracle, mapping LDAP / AD). |
 
-Un déploiement type sépare **auditor** de **admin** — c'est la règle SoD qui protège l'outil SoD lui-même.
-
----
-
-## Pour aller plus loin
-
-| Où aller | Pourquoi |
-|---|---|
-| [Liberty Next → Présentation](/liberty/framework/overview) | Le framework sur lequel Nomasx-1 s'appuie. |
-| Documentation par écran *(à venir)* | Sécurité · Applications · Base de données · Licences · Rapports SoD. |
-| [Nomajde — Présentation](/liberty/nomajde/overview) | Application sœur — écrans JD Edwards, données temps réel, UI moderne. |
+Un déploiement type sépare **Audit** de **Administrateur** — le même principe SoD que Nomasx-1 applique : la personne qui configure l'analyse n'est pas celle qui valide ses résultats.

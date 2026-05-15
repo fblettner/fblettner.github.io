@@ -10,8 +10,8 @@ keywords: [Liberty, Liberty Next, low-code, framework, connector, TOML, SQL, API
 
 Two paid applications ship on Liberty Next:
 
-- **[Nomasx-1](/liberty/nomasx1/overview)** — enterprise security & compliance: centralised user / role management, Oracle and JD Edwards licence compliance, and automated Segregation of Duties analysis. Visibility, risk mitigation, regulatory compliance.
-- **[Nomajde](/liberty/nomajde/overview)** — JD Edwards integration: full JDE connectivity to live data, custom screens, security & access maintenance, automated BIP reporting and live transaction / performance monitoring.
+- **[Nomasx-1](/liberty/nomasx1/overview)** — enterprise security and compliance. Centralised view of users and roles, Oracle and JD Edwards licence compliance, automated Segregation of Duties analysis. For auditors, security officers and licence managers.
+- **[Nomajde](/liberty/nomajde/overview)** — JD Edwards companion. Live screens on the JDE data: master data, security maintenance workbench, transactions, scheduled BIP reporting, live monitoring. For JDE operators, security administrators and ops engineers.
 
 The framework itself (without the licensed connectors) is free.
 
@@ -136,5 +136,5 @@ Config files support `${NAME}` and `${NAME:-default}` references.
 | [Framework → Overview](./framework/overview.md) | Layered model: pools, connectors, dictionary, screens, dashboards, menus. |
 | [Framework → Connectors](./framework/connectors.md) | Define a SQL or API connector in TOML — schema, params, writable gate. |
 | [Framework → Screens](./framework/screens.md) | Wrap a connector query in a Screen — grid, filters, modal form, audit. |
-| [Nomasx-1 overview](/liberty/nomasx1/overview) | Enterprise security & compliance — users, roles, Oracle / JDE licence compliance, SoD. |
-| [Nomajde overview](/liberty/nomajde/overview) | JD Edwards integration — live data, custom screens, security maintenance, reporting, monitoring. |
+| [Nomasx-1 overview](/liberty/nomasx1/overview) | Enterprise security and compliance — users, roles, Oracle / JDE licence compliance, Segregation of Duties. |
+| [Nomajde overview](/liberty/nomajde/overview) | JD Edwards companion — master data, security maintenance, transactions, reporting, monitoring. |
