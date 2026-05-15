@@ -5,6 +5,35 @@ const sidebars: SidebarsConfig = {
     'liberty/getting-started',
     {
       type: 'category',
+      label: 'Framework',
+      link: {type: 'generated-index', slug: '/liberty/framework', description: 'Liberty Next — connector-driven low-code framework: connectors, dictionary, screens, dashboards, menus, auth and licensing.'},
+      items: [
+        'liberty/framework/overview',
+        'liberty/framework/connectors',
+        'liberty/framework/dictionary',
+        'liberty/framework/menus',
+        'liberty/framework/screens',
+        'liberty/framework/dashboards',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Nomasx-1',
+      link: {type: 'generated-index', slug: '/liberty/nomasx-1', description: 'Nomasx-1 — segregation-of-duties application built on Liberty Next.'},
+      items: [
+        'liberty/nomasx1/overview',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Nomajde',
+      link: {type: 'generated-index', slug: '/liberty/nomajde', description: 'Nomajde — JD Edwards companion application built on Liberty Next.'},
+      items: [
+        'liberty/nomajde/overview',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Installation',
       link: {type: 'generated-index', slug: '/liberty/installation', description: 'Install and configure the Liberty Framework stack: Docker, Traefik, SSL and Linux services.'},
       items: [
@@ -18,20 +47,7 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Nomasx-1',
-      link: {type: 'generated-index', slug: '/liberty/nomasx-1', description: 'Nomasx-1 — administration guides for the Liberty platform.'},
-      items: [
-        {
-          type: 'category',
-          label: "Administrator's Guide",
-          link: {type: 'generated-index', description: 'Administrator-level configuration of Nomasx-1.'},
-          items: ['liberty/nomasx1/admin/global-settings'],
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'React Components',
+      label: 'Legacy — v1 React Components',
       link: {type: 'generated-index', slug: '/liberty/react-components', description: 'Liberty Core — modular React components, services, theming and main building blocks.'},
       items: [
         'liberty/core/getting-started',
