@@ -1,14 +1,14 @@
 ---
 title: Users by applications
-description: "Cross-tab of LDAP departments mapped to applications — who, by AD department, is expected to hold access on which application."
-keywords: [Nomasx-1, security, LDAP, Active Directory, department mapping, application access, expected vs actual]
+description: "Cross-tab of LDAP departments and applications, with each user's source-system account and roles — the source view for the per-department Excel export."
+keywords: [Nomasx-1, security, LDAP, AD department, application access, Excel export, audit deliverable]
 ---
 
 # Users by applications
 
-The **Users by applications** screen is the *expected access* matrix: for each (AD group, application, AD department) combination, it shows every LDAP user that should hold access on that application, side-by-side with the actual source-system account and roles they carry.
+The **Users by applications** screen is the cross-tab that joins the corporate **LDAP / Active Directory** catalog to each connected application, for the AD departments declared in *Settings*. One line per *(Group, Application, AD department, LDAP user)*.
 
-It is the cleanest answer to the *"who is expected to be on which application"* question — the chart that comes out of HR and IT, not the chart that the source system actually shows.
+It is the source of the per-department Excel export auditors expect — one file per department, one sheet per application, plus a sheet listing all LDAP entries. Open the grid, apply any filter, hit the export button.
 
 ---
 
@@ -20,6 +20,8 @@ It is the cleanest answer to the *"who is expected to be on which application"* 
   </defs>
   <rect x="40" y="40" width="920" height="280" rx="14" fill="url(#lba-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomasx-1 · Security · LDAP · Users by applications</text>
+  <rect x="820" y="50" width="120" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="880" y="65" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">Export Excel</text>
   <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
   <rect x="60" y="100" width="880" height="26" rx="5" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
@@ -56,8 +58,8 @@ It is the cleanest answer to the *"who is expected to be on which application"* 
   <text x="160" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE Prod</text>
   <text x="320" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Pierre Durand</text>
   <text x="460" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">FIN-AP</text>
-  <text x="590" y="213" fill="#f87171" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">—</text>
-  <text x="700" y="213" fill="#f87171" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">No account</text>
+  <text x="590" y="213" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">—</text>
+  <text x="700" y="213" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">—</text>
   <text x="800" y="213" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">—</text>
 
   <rect x="60" y="228" width="880" height="26" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
@@ -70,21 +72,22 @@ It is the cleanest answer to the *"who is expected to be on which application"* 
   <text x="725" y="244" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Active</text>
   <text x="800" y="245" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">SC_PLANNER</text>
 
-  <rect x="60" y="264" width="880" height="48" rx="8" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="72" y="282" fill="#fb923c" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EXPECTED VS ACTUAL</text>
-  <text x="72" y="298" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Empty "User ID" on an AD-mapped row = expected access never provisioned. Account present but no roles = provisioned without grants. Both are gaps to close with the security administrator.</text>
+  <rect x="60" y="264" width="880" height="48" rx="8" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
+  <text x="72" y="282" fill="#4a9eff" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EXCEL EXPORT</text>
+  <text x="72" y="298" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">One file per department, one sheet per application inside, plus one sheet with every LDAP entry as appendix. Filter the grid first, then export — only matching rows ship to the file.</text>
 </svg>
 
 ---
 
 ## Goal of the view
 
-For every combination of *AD group / Application / AD department*:
+For each combination of *(Group, Application, AD department)* defined in *Settings*:
 
-- **Who is supposed to have access?** The LDAP-side columns (Name, Department, Description, Expiration) describe the expected user.
-- **Are they actually provisioned?** The source-system columns (User ID, Status, Login, Creation, Roles) describe the actual account. Empty source-system columns on an LDAP row mean: *expected access never provisioned*.
-- **Does the role wallet match the department?** A user in the FINANCE department holding nothing but a sales role is a misconfiguration.
-- **What about extra accounts?** The screen surfaces both gaps (LDAP without source account) and matched pairs. Combined with *Users without AD*, you cover the full expected/actual delta.
+- **List every AD user in the department**, with their corporate identity (name, description, expiration, company, title).
+- **Pair each AD user with their source-system account**, when one exists — user ID, status, creation, last login, registration and the comma-separated list of roles they carry.
+- **Slice the result for export.** The grid feeds the Excel export auditors usually request: one file per department, one sheet per application inside, plus an appendix sheet with the full LDAP catalog.
+
+If an AD user has no matched account on the application, the source-system columns stay empty on the row — the row still ships in the export, so the auditor can see that the person is *in scope* for the department but does not actually hold an account.
 
 ---
 
@@ -92,27 +95,27 @@ For every combination of *AD group / Application / AD department*:
 
 | Column | Source | What it tells you |
 |---|---|---|
-| **Group** | `LDAPD_GROUP` — text. | High-level grouping (Finance, Supply, HR, IT, etc.). Defined in *Settings* below. |
-| **Application** | `APPS_NAME` — text. | The application the group maps to. |
+| **Group** | `LDAPD_GROUP` — text. | High-level grouping (Finance, Supply, HR, IT, …) declared in *Settings*. |
+| **Application** | `APPS_NAME` — text. | The application the row covers. |
 | **AD Name** | `LDAP_NAME` — text. | Display name of the LDAP user. |
-| **AD Department** | `LDAPD_DEPARTEMENT` — text. | The AD department that drives the access expectation. |
-| **AD Description** | `LDAP_DESCRIPTION` — text. | HR matricule / free text — the join key against the source-system user. |
+| **AD Department** | `LDAPD_DEPARTEMENT` — text. | The AD department declared in *Settings* and matched to the user's `department` attribute. |
+| **AD Description** | `LDAP_DESCRIPTION` — text. | HR registration / free text used to join the AD user to the source-system account. |
 | **AD Expires** | `LDAP_EXPIRES` — date. | When the AD account is scheduled to expire. |
 | **AD Company** | `LDAP_COMPANY` — text. | Legal entity from AD. |
 | **AD Title** | `LDAP_TITLE` — text. | Job title from AD. |
-| **User ID** | `USR_ID` — source-system user identifier. | The matched source-system account. Empty = expected access never provisioned. |
-| **User Name** | `USR_NAME` — source-system display name. | Display name on the source-system side. |
-| **Registration** | `USR_REGISTRATION` — HR matricule on the source side. | The value that was used to perform the join. |
+| **User ID** | `USR_ID` — source-system user identifier. | The matched source-system account. Empty if the AD user has no account on this application. |
+| **User Name** | `USR_NAME` — source-system display name. | Display name on the source side. |
+| **Registration** | `USR_REGISTRATION` — HR matricule on the source side. | The value that was used for the join. |
 | **Status** | `USR_STATUS` — `01` means *Active*. | Source-system status. |
 | **Login Date** | `USR_DT_LOGIN` — date. | Last authentication on the source system. |
 | **Creation Date** | `USR_DT_CREATION` — date. | When the source-system account was created. |
-| **Roles** | `RLU_ROLE_ID` — comma-separated list. | The actual role wallet on the source side, sorted alphabetically. Empty = account present but no role granted. |
+| **Roles** | `RLU_ROLE_ID` — comma-separated list. | Effective role wallet on the source side, alphabetically sorted. Empty if the account holds no role. |
 
 ---
 
 ## Tips & best practices
 
-- **Sort by *Group* + *Department*** to focus on one functional area at a time. Run the access review department-by-department; it scales much better than user-by-user.
-- **Look for empty *User ID* lines first** — they are the expected accesses that were never provisioned. A new hire who hasn't been given a JDE account yet, a contract renewal whose AD entry exists but who lost their source-system account on the previous off-boarding.
-- **Look for non-empty *User ID* with empty *Roles* second** — the account exists but holds nothing. Usually a provisioning step that stopped mid-way.
-- **The grouping mechanism is configured in *Settings*** (next page). Adding a new department mapping changes how rows are grouped from the next scan onward.
+- **Filter before exporting.** Limiting the grid to one *Group* gives a leaner export — useful when the audit covers a single business area.
+- **Sort by *Group* + *Department*** to read the grid the same way the export file lays it out — easier to verify a row before sending.
+- **A row without User ID is not a gap by itself** — it simply means the AD user has no account on that application. Whether that is expected is a business judgement, but the row stays in the export so the auditor can confirm it.
+- **An AD department missing from the grid** means it was not added to *Settings*. Open the Settings page, add the row, re-run the LDAP scan.

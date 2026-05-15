@@ -1,14 +1,14 @@
 ---
 title: Paramètres LDAP
-description: "Table de correspondance entre les départements LDAP / Active Directory et les applications connectées, regroupés en pôles fonctionnels."
-keywords: [Nomasx-1, sécurité, LDAP, paramètres, mapping département, groupe, règle d'accès application]
+description: "Regroupe les départements AD et pilote l'export Excel par département de la vue Utilisateurs par applications."
+keywords: [Nomasx-1, sécurité, LDAP, paramètres, regroupement département AD, export Excel, livrable d'audit]
 ---
 
 # Paramètres LDAP
 
-L'écran **Paramètres LDAP** est la table de correspondance qui alimente la matrice *Utilisateurs par applications*. Chaque ligne déclare : *« les utilisateurs dont le département AD est X sont censés avoir accès à l'application Y, sous le groupe Z »*.
+L'écran **Paramètres LDAP** est la table de regroupement qui alimente la vue *Utilisateurs par applications*. Chaque ligne associe un **département AD** à une **application** et un libellé de **groupe** libre.
 
-C'est l'écran à maintenir lors d'une réorganisation de l'entreprise, à la création d'un nouveau département, à la mise en production d'une nouvelle application, ou lorsque les règles d'accès sont revues à la revue trimestrielle.
+La même configuration pilote l'export Excel — un fichier par département, contenant une feuille par application, plus une feuille listant l'ensemble des entrées LDAP. C'est le livrable que les auditeurs demandent généralement pour confirmer *« qui appartient à quel département AD, sur quelle application, avec quels rôles »*.
 
 ---
 
@@ -20,6 +20,8 @@ C'est l'écran à maintenir lors d'une réorganisation de l'entreprise, à la cr
   </defs>
   <rect x="40" y="40" width="920" height="260" rx="14" fill="url(#lds-card-fr)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomasx-1 · Sécurité · LDAP · Paramètres</text>
+  <rect x="820" y="50" width="120" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="880" y="65" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">Export Excel</text>
   <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
   <rect x="60" y="100" width="880" height="26" rx="5" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
@@ -52,20 +54,17 @@ C'est l'écran à maintenir lors d'une réorganisation de l'entreprise, à la cr
   <text x="460" y="245" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">RH</text>
   <text x="660" y="245" fill="#fb923c" fontSize="10" fontFamily="ui-monospace, monospace">RH-PAIE</text>
 
-  <text x="60" y="282" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">12 règles sur 2 applications · dernier département ajouté le 2026-04-22</text>
+  <text x="60" y="282" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">12 lignes · l'export produit un .xlsx par département · une feuille par application à l'intérieur</text>
 </svg>
 
 ---
 
 ## Objectif de l'écran
 
-Les lignes de cet écran sont les *règles* qui indiquent quels départements AD ont vocation à accéder à quelle application.
+Deux finalités complémentaires :
 
-- **Une ligne, une règle.** Chaque ligne est une brique de la matrice des *accès attendus*.
-- **Le groupe est l'étiquette humaine.** *Groupe* est un libellé libre qui rassemble plusieurs départements sous un même pôle fonctionnel (par exemple *FINANCE* couvre `FIN-AP`, `FIN-AR`, `FIN-CONTROL`).
-- **Pas de ligne, pas d'attendu.** Un département qui n'apparaît pas ici n'est jamais attendu sur une application — la matrice *Utilisateurs par applications* ne l'inclut tout simplement pas.
-
-L'écran est court, déclaratif et au cœur de la boucle de revue LDAP : bien tenu, la matrice est juste ; négligé, la matrice dérive.
+- **Regrouper les départements AD.** La colonne *Groupe* est un libellé humain qui rassemble plusieurs départements AD dans un même pôle fonctionnel (FINANCE couvre `FIN-AP`, `FIN-AR`, `FIN-CONTROL`, …). Elle pilote la manière dont la vue *Utilisateurs par applications* agrège ses lignes.
+- **Piloter l'export Excel.** Depuis la vue *Utilisateurs par applications*, un bouton d'export produit **un fichier Excel par département**, **une feuille par application** à l'intérieur de chaque fichier, et une feuille listant **l'ensemble des entrées LDAP** en annexe. Les lignes de cet écran sont ce que l'export parcourt.
 
 ---
 
@@ -73,18 +72,18 @@ L'écran est court, déclaratif et au cœur de la boucle de revue LDAP : bien te
 
 | Colonne | Source | Ce qu'on y lit |
 |---|---|---|
-| **Application ID** | `APPS_ID` — identifiant numérique de l'application source. | Application accordée par la règle. |
+| **Application ID** | `APPS_ID` — identifiant numérique de l'application source. | Application à laquelle le département est rattaché. |
 | **Nom de l'application** | `APPS_NAME` — nom issu de `SETTINGS_APPLICATIONS`. | Libellé lisible de l'application. |
-| **Groupe** | `LDAPD_GROUP` — texte libre. | Étiquette humaine regroupant plusieurs départements sous un même pôle fonctionnel. |
-| **Département AD** | `LDAP_DEPARTMENT` — doit correspondre à l'attribut `department` d'une entrée LDAP. | Département AD couvert par la règle. |
+| **Groupe** | `LDAPD_GROUP` — texte libre. | Libellé humain qui rassemble plusieurs départements AD. Sert d'axe de tri / de regroupement sur la grille *Utilisateurs par applications*. |
+| **Département AD** | `LDAP_DEPARTMENT` — doit correspondre à l'attribut `department` d'une entrée LDAP. | Département AD inclus dans l'export pour l'application. |
 
-L'écran est en lecture seule. Les correspondances se maintiennent via la table de configuration sous-jacente (`SECURITY_LDAP_DPT`) ; l'écran restitue le paramétrage en l'état.
+L'écran est en lecture seule. Les lignes se maintiennent via la table de configuration `SECURITY_LDAP_DPT` ; l'écran restitue le paramétrage en l'état.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Garder les libellés de *Groupe* stables** — chaque changement se répercute sur la matrice *Utilisateurs par applications* et brise la comparaison avec la revue précédente.
-- **Ajouter un mapping de département** à la création d'une nouvelle entité ou lors d'une réorganisation AD — sinon les nouveaux utilisateurs apparaîtront tous comme attendus-sans-accès sur la matrice.
-- **Supprimer un mapping** à la mise hors service d'une application. Les lignes d'accès existantes côté source ne sont pas supprimées automatiquement ; ce travail relève de *Paramètres → Gestion des utilisateurs* ou de l'administrateur du système source.
-- **Relancer le scan LDAP** après chaque modification de mapping pour que la matrice *Utilisateurs par applications* reflète les nouvelles règles dès le rendu suivant.
+- **Une ligne par paire (Application × Département)** — les doublons sont inutiles. Si un département couvre plusieurs applications, ajouter une ligne par application.
+- **Garder les libellés de *Groupe* stables** — les modifier change la structure de l'export et complique la comparaison avec le livrable du trimestre précédent.
+- **Un département non listé ici n'est pas exporté** — même si des utilisateurs AD portant ce département apparaissent dans l'écran *Utilisateurs LDAP*, ils ne figureront pas dans le fichier Excel correspondant à leur département. Ajouter une ligne lorsqu'un nouveau département commence à émettre des demandes d'accès.
+- **La feuille « toutes les entrées LDAP »** dans le fichier exporté est le catalogue brut non filtré — utile pour l'annexe d'audit et pour vérifier qu'une ligne manquante d'une feuille par application ne provient pas d'une absence côté AD.

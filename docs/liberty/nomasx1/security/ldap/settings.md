@@ -1,14 +1,14 @@
 ---
 title: LDAP Settings
-description: "Mapping of LDAP / Active Directory departments to connected applications, grouped into functional buckets."
-keywords: [Nomasx-1, security, LDAP, settings, department mapping, group, application access rule]
+description: "Groups AD departments and drives the per-department Excel export of the Users by applications view."
+keywords: [Nomasx-1, security, LDAP, settings, AD department grouping, Excel export, audit deliverable]
 ---
 
 # LDAP Settings
 
-The **LDAP Settings** screen is the mapping table that drives the *Users by applications* matrix. Each row declares: *"users whose AD department is X are expected to have access to application Y, under group bucket Z"*.
+The **LDAP Settings** screen is the grouping table behind the *Users by applications* view. Each row associates an **AD department** with an **application** and a free-form **group** label.
 
-This is the screen to maintain when the company reorganises, when a new department is created, when a new application comes online, or when the access rules are revisited at the quarterly review.
+The same configuration drives the Excel export — one file per department, with one sheet per application inside, plus a sheet listing all LDAP entries. It is the deliverable auditors usually request to confirm *"who is in which AD department, on which application, with which roles"*.
 
 ---
 
@@ -20,6 +20,8 @@ This is the screen to maintain when the company reorganises, when a new departme
   </defs>
   <rect x="40" y="40" width="920" height="260" rx="14" fill="url(#lds-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomasx-1 · Security · LDAP · Settings</text>
+  <rect x="820" y="50" width="120" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="880" y="65" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">Export Excel</text>
   <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
   <rect x="60" y="100" width="880" height="26" rx="5" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
@@ -52,20 +54,17 @@ This is the screen to maintain when the company reorganises, when a new departme
   <text x="460" y="245" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">HR</text>
   <text x="660" y="245" fill="#fb923c" fontSize="10" fontFamily="ui-monospace, monospace">HR-PAYROLL</text>
 
-  <text x="60" y="282" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">12 rules across 2 applications · last department added 2026-04-22</text>
+  <text x="60" y="282" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">12 rows · export builds one .xlsx per department · one sheet per application inside</text>
 </svg>
 
 ---
 
 ## Goal of the view
 
-The rows of this screen are the *rules* that say which AD departments are expected to gain access to which application.
+Two complementary purposes:
 
-- **One row, one rule.** Each row is the building block of the *expected access* matrix.
-- **Group is the human label.** *Group* is a free label used to gather several departments into a single bucket (e.g. *FINANCE* covers `FIN-AP`, `FIN-AR`, `FIN-CONTROL`).
-- **No row, no expectation.** A department that does not appear here is never expected to access any application — the *Users by applications* matrix simply doesn't include it.
-
-The screen is short, declarative and lives at the centre of the LDAP review loop: maintain it, the matrix is correct; ignore it, the matrix drifts.
+- **Group AD departments.** The *Group* column is a human label that rolls several AD departments into one functional bucket (FINANCE covers `FIN-AP`, `FIN-AR`, `FIN-CONTROL`, …). It controls how the *Users by applications* view groups its rows.
+- **Drive the Excel export.** From the *Users by applications* view, an export button generates **one Excel file per department**, **one sheet per application** inside each file, and a sheet listing **all LDAP entries** as appendix. The mapping rows here are what the export iterates over.
 
 ---
 
@@ -73,18 +72,18 @@ The screen is short, declarative and lives at the centre of the LDAP review loop
 
 | Column | Source | What it tells you |
 |---|---|---|
-| **Application ID** | `APPS_ID` — application identifier from the source system. | The application granted by the rule. |
+| **Application ID** | `APPS_ID` — application identifier from the source system. | The application the row attaches the department to. |
 | **Application Name** | `APPS_NAME` — name from `SETTINGS_APPLICATIONS`. | Friendly label of the application. |
-| **Group** | `LDAPD_GROUP` — free text. | Human label grouping several departments into one functional bucket. |
-| **AD Department** | `LDAP_DEPARTMENT` — must match the `department` attribute of an LDAP entry. | The AD department covered by the rule. |
+| **Group** | `LDAPD_GROUP` — free text. | Human label rolling several AD departments together. Used as a sort / breakdown axis on the *Users by applications* grid. |
+| **AD Department** | `LDAP_DEPARTMENT` — must match the `department` attribute of an LDAP entry. | The AD department to include in the export for the application. |
 
-The grid is read-only here. Mappings are maintained through the underlying configuration table (`SECURITY_LDAP_DPT`); for now the screen surfaces what is configured.
+The grid is read-only here. Rows are maintained through the configuration table `SECURITY_LDAP_DPT`; the screen surfaces what is configured.
 
 ---
 
 ## Tips & best practices
 
-- **Keep the *Group* labels stable** — every change ripples through the *Users by applications* matrix and breaks the comparison with the previous review.
-- **Add a new department mapping** when a new business unit is created or an AD reorganisation moves people around — otherwise the new users will all surface as expected-without-access on the matrix.
-- **Remove a department mapping** when an application is decommissioned. Existing access rows in the source system are not deleted automatically; that is the job of *Settings → Users management* or the source-system administrator.
-- **Re-run the LDAP scan** after every mapping change so the next *Users by applications* render reflects the new rules.
+- **One row per (Application × Department) pair** — duplicate rows are not needed. If a department covers several applications, add one row per application.
+- **Keep the *Group* labels stable** — changing them changes the breakdown of the export and complicates the comparison with the previous quarter's deliverable.
+- **A department not listed here is not exported** — even if AD users with that department exist in the *LDAP Users* screen, they will not appear on the per-department Excel file. Add a row when a new department starts producing access requests.
+- **The "all LDAP entries" sheet** in the exported file is the unfiltered raw catalog — useful for the audit appendix and as a cross-check when a row seems missing from one of the per-application sheets.
