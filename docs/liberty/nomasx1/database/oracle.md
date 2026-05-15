@@ -8,7 +8,7 @@ keywords: [Nomasx-1, database, Oracle, properties, NUP, CPU, options, Data Guard
 
 The **Oracle** screen lists the properties of every Oracle database used by a connected application. One line per `(Application, Product / Instance)`. The data is collected by the Nomasx-1 connector through standard `V$` views.
 
-It is the inventory required for the Oracle licence audit — and the input for the *Licenses → Oracle* compliance report.
+It is the technical inventory of each Oracle instance — the source of truth for the licence-side analysis carried out on *Licenses → Oracle*.
 
 ---
 
@@ -81,7 +81,7 @@ It is the inventory required for the Oracle licence audit — and the input for 
 
 For each Oracle database backing a connected application:
 
-- **Inventory of installed products.** Database edition, packs, options — exactly what an Oracle LMS audit asks for.
+- **Inventory of installed products.** Database edition, packs, options — what is actually deployed on the server.
 - **Sizing data.** CPU count + active vs total users + technical users + storage size — the inputs of the Oracle licence calculation, whether NUP (named-user plus) or processor-based.
 - **Data Guard footprint.** The `DG` flag tells whether the instance participates in a Data Guard configuration — relevant for failover sizing and licence dual-counting questions.
 
@@ -110,14 +110,14 @@ For each Oracle database backing a connected application:
 
 ## Context menu
 
-Right-click a row to open the row menu.
+Right-click a row to open the row menu. Each shortcut opens the dedicated screen pre-filtered on the selected database — the four drill-downs that complete the Oracle technical picture.
 
-| Action | Where it lands |
+| Action | What it shows |
 |---|---|
-| **Display Users** | The accounts declared on the application that runs on this instance. |
-| **Display Options** | Oracle options enabled on the instance, with the licence component each option belongs to. |
-| **Display Features** | Oracle features used on the instance, with first and last usage date and the matching licence component. |
-| **Display Partitions** | Tables and indexes that use the Partitioning option, with their owner and creation date. |
+| **Display Users** | The list of accounts declared on the application — for an Oracle-only application those are the database users. Columns: user ID, status, creation date, last login, last usage, plus the technical / generic / linked flags. |
+| **Display Options** | The Oracle options collected from the instance. One row per `(component, parameter, value)` — the parameters that switch a licensable option on or off, mapped to the licence component each belongs to. |
+| **Display Features** | The Oracle features observed on the instance from the feature-usage history. One row per feature with the licence component, first and last usage date. The first / last dates tell whether a feature was ever used, and whether it is still used today. |
+| **Display Partitions** | The tables and indexes that use the Partitioning option. One row per `(owner, segment type, segment name)` with the creation date and the date of the last DDL. The owner is flagged when it is a technical account, so a partitioned object held by a vendor schema can be told apart from one created by the business. |
 
 ---
 

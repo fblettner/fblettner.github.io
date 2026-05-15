@@ -8,7 +8,7 @@ keywords: [Nomasx-1, base de données, Oracle, propriétés, NUP, CPU, options, 
 
 L'écran **Oracle** liste les propriétés de chaque base Oracle utilisée par une application connectée. Une ligne par `(Application, Produit / Instance)`. Les données sont collectées par le connecteur Nomasx-1 via les vues `V$` standard.
 
-C'est l'inventaire requis par un audit de licence Oracle — et l'entrée du rapport de conformité *Licences → Oracle*.
+C'est l'inventaire technique de chaque instance Oracle — la source de vérité pour l'analyse côté licence menée sur *Licences → Oracle*.
 
 ---
 
@@ -81,7 +81,7 @@ C'est l'inventaire requis par un audit de licence Oracle — et l'entrée du rap
 
 Pour chaque base Oracle supportant une application connectée :
 
-- **Inventaire des produits installés.** Édition, packs, options — exactement ce qu'un audit LMS Oracle réclame.
+- **Inventaire des produits installés.** Édition, packs, options — ce qui est effectivement déployé sur le serveur.
 - **Données de dimensionnement.** Nombre de CPU + utilisateurs actifs vs total + comptes techniques + taille de stockage — les entrées du calcul de licence, qu'il soit NUP (named-user plus) ou par processeur.
 - **Périmètre Data Guard.** L'indicateur `DG` précise si l'instance participe à une configuration Data Guard — utile pour le dimensionnement de bascule et la question du double comptage.
 
@@ -110,14 +110,14 @@ Pour chaque base Oracle supportant une application connectée :
 
 ## Menu contextuel
 
-Clic droit sur une ligne pour ouvrir le menu.
+Clic droit sur une ligne pour ouvrir le menu. Chaque raccourci ouvre l'écran dédié pré-filtré sur la base sélectionnée — les quatre détails qui complètent la photographie technique de l'instance Oracle.
 
-| Action | Vers où |
+| Action | Ce qui s'affiche |
 |---|---|
-| **Afficher les utilisateurs** | Les comptes déclarés sur l'application rattachée à cette instance. |
-| **Afficher les options** | Options Oracle activées sur l'instance, avec le composant de licence auquel chaque option est rattachée. |
-| **Afficher les fonctionnalités** | Fonctionnalités Oracle utilisées sur l'instance, avec première et dernière date d'usage et le composant de licence associé. |
-| **Afficher les partitions** | Tables et index qui utilisent l'option Partitioning, avec leur propriétaire et la date de création. |
+| **Afficher les utilisateurs** | La liste des comptes déclarés sur l'application — pour une application purement Oracle, ce sont les utilisateurs de la base. Colonnes : identifiant, statut, date de création, dernière connexion, dernière utilisation, plus les indicateurs technique, générique et lié. |
+| **Afficher les options** | Les options Oracle collectées sur l'instance. Une ligne par `(composant, paramètre, valeur)` — les paramètres qui activent ou désactivent une option licenciable, rattachés au composant de licence correspondant. |
+| **Afficher les fonctionnalités** | Les fonctionnalités Oracle observées sur l'instance via l'historique d'usage. Une ligne par fonctionnalité avec le composant de licence, la première et la dernière date d'usage. Les dates indiquent si une fonctionnalité a déjà été utilisée et si elle l'est encore aujourd'hui. |
+| **Afficher les partitions** | Les tables et index qui utilisent l'option Partitioning. Une ligne par `(propriétaire, type de segment, nom de segment)` avec la date de création et la date du dernier DDL. Le propriétaire est marqué quand c'est un compte technique, ce qui distingue un objet partitionné porté par un schéma applicatif éditeur d'un objet créé par le métier. |
 
 ---
 

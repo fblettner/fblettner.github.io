@@ -1,85 +1,97 @@
 ---
 title: Oracle
-description: "Liste, par base de données, des options de licence Oracle détectées par les scripts de collecte Nomasx-1 — l'inventaire qui sert à déclarer les licences requises à l'auditeur LMS."
-keywords: [Nomasx-1, licences, Oracle, NUP, CPU, audit Oracle, named users plus, licences requises, LMS]
+description: "Liste, par base de données, des options de licence Oracle avec un indicateur requis / non requis — l'inventaire à comparer avec les licences réellement souscrites."
+keywords: [Nomasx-1, licences, Oracle, licences requises, conformité, Diagnostic Pack, Tuning Pack, Enterprise Edition Options]
 ---
 
 # Oracle
 
-L'écran **Oracle** côté licence liste, pour chaque base de données Oracle connectée à Nomasx-1, les points de données qui pilotent le calcul de licence : édition et packs détectés, nombre de CPU, comptes nommés et empreinte de stockage. Une ligne par `(Application, Produit / Pack)`.
+L'écran **Oracle** côté licence liste, pour chaque base de données Oracle connectée, chaque composant de licence Oracle vérifié par les scripts de collecte Nomasx-1, avec un indicateur vert / rouge qui dit si le composant est **requis** sur l'instance — c'est-à-dire si l'usage collecté correspond à ce qu'Oracle considère comme une fonctionnalité licenciable.
 
-Là où *Base de données → Oracle* détaille les **propriétés de la base** (options, fonctionnalités, partitions — l'inventaire technique), cet écran reprend la même source dans la **perspective audit de licence** : chaque ligne est une option de licence détectée sur l'instance par les scripts de collecte, avec les métriques que l'auditeur LMS demandera. Le clic droit *Afficher les licences requises* d'une ligne donne la liste des composants de licence effectivement déclarés comme requis sur cette base — le livrable officiel de l'audit.
+L'objectif de l'écran est d'identifier les licences dont la base a *besoin*, pour pouvoir les comparer à celles réellement souscrites dans *Licences acquises* et combler l'écart d'un côté ou de l'autre — abandonner une licence que personne n'utilise, ou souscrire une licence utilisée sans couverture.
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <linearGradient id="loracle-card-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
   </defs>
-  <rect x="40" y="40" width="920" height="180" rx="14" fill="url(#loracle-card-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="40" y="40" width="920" height="320" rx="14" fill="url(#loracle-card-fr)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Nomasx-1 · Licences · Oracle</text>
   <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
   <rect x="60" y="100" width="880" height="26" rx="5" fill="rgba(255,255,255,0.04)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">APP</text>
-  <text x="130" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">PRODUIT</text>
-  <text x="290" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">VERSION</text>
-  <text x="380" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">HÔTE</text>
-  <text x="510" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">INSTANCE</text>
-  <text x="600" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CPU</text>
-  <text x="660" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">ACTIFS</text>
-  <text x="740" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">TOTAL</text>
-  <text x="800" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">TECH.</text>
-  <text x="870" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">TAILLE GB</text>
+  <text x="72" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CATÉGORIE</text>
+  <text x="360" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">COMPOSANT</text>
+  <text x="700" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">REQUIS</text>
+  <text x="820" y="117" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">APP.</text>
 
-  <rect x="60" y="132" width="880" height="26" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12</text>
-  <text x="130" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Enterprise Edition</text>
-  <text x="290" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">19.21.0</text>
-  <text x="380" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">db-prd-jde-01</text>
-  <text x="510" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">PRDJDE</text>
-  <text x="600" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">16</text>
-  <text x="660" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">142</text>
-  <text x="740" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">218</text>
-  <text x="800" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">14</text>
-  <text x="870" y="149" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">1 240</text>
+  <rect x="60" y="132" width="880" height="22" rx="4" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="147" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Database Enterprise Management</text>
+  <text x="360" y="147" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Diagnostics Pack</text>
+  <circle cx="720" cy="143" r="5" fill="#22c55e"/>
+  <text x="820" y="147" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
 
-  <rect x="60" y="164" width="880" height="26" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12</text>
-  <text x="130" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Diagnostic Pack</text>
-  <text x="290" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">19.21.0</text>
-  <text x="380" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">db-prd-jde-01</text>
-  <text x="510" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">PRDJDE</text>
-  <text x="600" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">16</text>
-  <text x="660" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">142</text>
-  <text x="740" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">218</text>
-  <text x="800" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">14</text>
-  <text x="870" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">1 240</text>
+  <rect x="60" y="156" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="171" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Database Enterprise Management</text>
+  <text x="360" y="171" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Tuning Pack</text>
+  <circle cx="720" cy="167" r="5" fill="#22c55e"/>
+  <text x="820" y="171" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
 
-  <rect x="60" y="196" width="880" height="26" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="72" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12</text>
-  <text x="130" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Advanced Compression</text>
-  <text x="290" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">19.21.0</text>
-  <text x="380" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">db-prd-jde-01</text>
-  <text x="510" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">PRDJDE</text>
-  <text x="600" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">16</text>
-  <text x="660" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">142</text>
-  <text x="740" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">218</text>
-  <text x="800" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">14</text>
-  <text x="870" y="213" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">1 240</text>
+  <rect x="60" y="180" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="195" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Database</text>
+  <text x="360" y="195" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition</text>
+  <circle cx="720" cy="191" r="5" fill="#22c55e"/>
+  <text x="820" y="195" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
+
+  <rect x="60" y="204" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="219" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition Options</text>
+  <text x="360" y="219" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Active Data Guard</text>
+  <circle cx="720" cy="215" r="5" fill="#ef4444"/>
+  <text x="820" y="219" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
+
+  <rect x="60" y="228" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="243" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition Options</text>
+  <text x="360" y="243" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Advanced Compression</text>
+  <circle cx="720" cy="239" r="5" fill="#22c55e"/>
+  <text x="820" y="243" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
+
+  <rect x="60" y="252" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="267" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition Options</text>
+  <text x="360" y="267" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Database Vault</text>
+  <circle cx="720" cy="263" r="5" fill="#ef4444"/>
+  <text x="820" y="267" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
+
+  <rect x="60" y="276" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="291" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition Options</text>
+  <text x="360" y="291" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Partitioning</text>
+  <circle cx="720" cy="287" r="5" fill="#22c55e"/>
+  <text x="820" y="291" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
+
+  <rect x="60" y="300" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="315" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Enterprise Edition Options</text>
+  <text x="360" y="315" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Real Application Clusters</text>
+  <circle cx="720" cy="311" r="5" fill="#ef4444"/>
+  <text x="820" y="315" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
+
+  <rect x="60" y="328" width="880" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="343" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Oracle Others Products</text>
+  <text x="360" y="343" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Audit Vault and Database Firewall</text>
+  <circle cx="720" cy="339" r="5" fill="#ef4444"/>
+  <text x="820" y="343" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE_PROD</text>
 </svg>
 
 ---
 
 ## Objectif de l'écran
 
-Pour chaque base Oracle, la vue côté licence de ce qui est installé :
+Pour chaque base Oracle :
 
-- **Coupe par application.** Seules les applications qui tournent sur Oracle apparaissent — l'équipe licence ne s'intéresse pas aux autres bases.
-- **Chiffres prêts pour le NUP.** *Actifs*, *Totaux* et *Techniques* sont les trois compteurs qui pilotent le calcul Named User Plus. Les utilisateurs *Techniques* sont les comptes marqués comme techniques dans *Propriétés utilisateurs* — ils sont exclus du périmètre NUP lors de la négociation avec Oracle.
-- **Les licences requises.** Clic droit sur une ligne → *Afficher les licences requises* pour voir les composants de licence que les scripts de collecte ont identifiés comme requis sur la base sélectionnée — la liste à présenter à l'auditeur LMS.
+- **Ce qui demande une licence, et ce qui n'en demande pas.** Chaque ligne est un composant de licence Oracle connu. Une pastille verte dans *Requis* signale un usage détecté par les scripts de collecte sur l'instance — une licence est nécessaire. Une pastille rouge signale un composant installé mais non utilisé, ou non installé du tout — aucune licence à déclarer.
+- **Couvrir le catalogue complet.** La liste embarque Enterprise Edition, les packs Database Enterprise Management (Diagnostics, Tuning), les options Enterprise Edition (Active Data Guard, Partitioning, Advanced Compression, Database In-Memory, RAC…) et les autres produits Oracle (Audit Vault, Spatial…). Rien n'est écarté silencieusement.
+- **Une source unique pour la conformité.** Les mêmes données alimentent la discussion de renouvellement avec Oracle et la réconciliation procurement — pas de tableur parallèle à entretenir.
 
 ---
 
@@ -87,35 +99,16 @@ Pour chaque base Oracle, la vue côté licence de ce qui est installé :
 
 | Colonne | Source | Ce qu'on y lit |
 |---|---|---|
-| **Application ID** | `APPS_ID` — identifiant de l'application. | Application Oracle connectée. |
-| **Produit** | `ORAP_PRODUCT` — nom du produit / pack. | Ce qui est sous licence (Enterprise Edition, packs, options). |
-| **Version complète** | `ORAP_FULL_VERSION` — version complète. | Niveau de patch. |
-| **Version** | `ORAP_VERSION` — version majeure. | Version majeure Oracle. |
-| **Hôte** | `ORAP_HOSTNAME` — serveur. | Serveur. |
-| **Instance** | `ORAP_NAME` — instance. | Instance Oracle / SID. |
-| **Nb instances** | `ORAP_COUNT_INST` — nombre d'instances. | RAC vs mono-instance. |
-| **CPU** | `ORAP_CPU` — nombre de cœurs. | Entrée du licensing par processeur. |
-| **Utilisateurs actifs** | `ORAP_ACTIVE_USERS` — nombre. | Comptes nommés actifs. |
-| **Utilisateurs totaux** | `ORAP_TOTAL_USERS` — nombre. | Tous les comptes nommés. |
-| **Utilisateurs techniques** | `ORAP_TECHNICAL_USERS` — nombre. | Comptes marqués techniques dans Nomasx-1. |
-| **Pack** | `ORAP_PACK` — code pack. Masqué. | Interne — alimente le calcul de conformité. |
-| **Taille GB** | `ORAP_SIZE_GB` — taille totale. | Empreinte de stockage. |
-
----
-
-## Menu contextuel
-
-Clic droit sur une ligne pour ouvrir le menu.
-
-| Action | Vers où |
-|---|---|
-| **Afficher les licences requises** | Exigence de licence calculée pour l'instance sélectionnée — alimente la comparaison de conformité. |
+| **Catégorie** | `CPT_CATEGORY` — famille de licence. | La famille du catalogue Oracle à laquelle le composant appartient (Database, Enterprise Edition Options, Database Enterprise Management, Other Products…). |
+| **Composant** | `CPT_COMPONENT` — nom du composant. | L'option de licence elle-même — *Enterprise Edition*, *Partitioning*, *Diagnostics Pack*, *Advanced Security*… |
+| **Requis** | `ORAL_USED` — `Y` / `N`. Affiché en pastille verte / rouge. | Vert : usage détecté, la licence est nécessaire sur cette base. Rouge : aucun usage détecté, pas de licence à déclarer. |
+| **Application** | `APPS_NAME` — nom de l'application. | L'application qui s'appuie sur la base. |
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Exporter la grille comme la *fiche Oracle LMS*** — les colonnes ci-dessus correspondent au formulaire de collecte standard des auditeurs.
-- **Filtrer sur *Produit* contenant « Pack »** pour faire ressortir les packs lourds en premier. Les lignes les plus simples à challenger pendant l'audit.
-- **Une même ligne n'est *pas* dupliquée par les instances Data Guard standby** — Nomasx-1 ne lit qu'une fois. Si l'audit veut compter les standbys, construire le décompte manuellement.
-- **Recouper avec *Licences acquises*** pour savoir si un produit apparaissant ici est effectivement souscrit.
+- **Trier sur *Requis* décroissant** pour faire remonter les lignes vertes en haut — la liste des composants à souscrire.
+- **Grouper par *Catégorie*** dans le contrôle Group pour lire les composants requis par famille du catalogue Oracle — la structure du price book Oracle.
+- **Filtrer sur `Composant` contenant « Pack »** pour cibler les packs d'administration (Diagnostics, Tuning) — les lignes les plus lourdes d'une facture Oracle typique.
+- **Recouper avec *Licences acquises*** pour vérifier que chaque composant vert est couvert par un CSI actif. Une pastille verte sans souscription est l'écart à combler.
