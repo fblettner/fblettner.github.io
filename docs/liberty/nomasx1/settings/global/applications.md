@@ -83,6 +83,132 @@ Audit columns `APPS_AUDIT_USER`, `APPS_AUDIT_DATE` are kept on the row.
 
 ---
 
+## Edit dialog
+
+Click **Add** in the toolbar to create a new application, or double-click an existing row to edit. The dialog opens on the **Application** tab. The two read-only tabs *Activity Log* and *Audit Trail* are hidden on **Add** — they appear only when editing an existing row.
+
+<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sapp-dlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="300" rx="14" fill="url(#sapp-dlg)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Edit application — JDE Production</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="60" y="100" width="100" height="28" rx="6" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="110" y="118" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">Application</text>
+  <rect x="170" y="100" width="100" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="220" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Connection</text>
+  <rect x="280" y="100" width="100" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="330" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">JD Edwards</text>
+  <rect x="390" y="100" width="100" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="440" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">LDAP</text>
+  <rect x="500" y="100" width="100" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="550" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Activity Log</text>
+  <rect x="610" y="100" width="100" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="660" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Audit Trail</text>
+
+  <text x="60" y="160" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">ID</text>
+  <rect x="60" y="166" width="120" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="183" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12</text>
+
+  <text x="200" y="160" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Name</text>
+  <rect x="200" y="166" width="320" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="212" y="183" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE Production</text>
+
+  <text x="540" y="160" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Type</text>
+  <rect x="540" y="166" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="552" y="183" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">JDE ▾</text>
+
+  <text x="740" y="160" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Database type</text>
+  <rect x="740" y="166" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="752" y="183" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">ORACLE ▾</text>
+
+  <rect x="60" y="216" width="860" height="64" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="236" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">REQUIRED ON ADD</text>
+  <text x="72" y="254" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">ID is read-only on edit and required on add. Name, Type and Database type are required on both.</text>
+  <text x="72" y="270" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Activity Log and Audit Trail tabs only appear after the row exists.</text>
+
+  <rect x="780" y="296" width="60" height="28" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="810" y="314" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Cancel</text>
+  <rect x="848" y="296" width="60" height="28" rx="5" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="878" y="314" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">Save</text>
+</svg>
+
+### Tab 1 — Application
+
+Identity of the application. ID is read-only when editing and required when adding. All four fields are mandatory.
+
+| Field | What to enter |
+|---|---|
+| **ID** | Numeric identifier. Stays stable across the product — do not renumber after the application is in use. |
+| **Name** | Friendly label that surfaces on every export. |
+| **Type** | Source-system type: `JDE`, `SAP`, custom. Drives which connector reads the source. |
+| **Database type** | Backend technology: `ORACLE`, `HANA`, `MSSQL`, `POSTGRES`, … |
+
+### Tab 2 — Connection
+
+Where the source database lives and how Nomasx-1 reaches it.
+
+| Field | What to enter |
+|---|---|
+| **Host** | Hostname or IP of the database server. |
+| **Port** | Database port (`1521` for Oracle, `1433` for MSSQL, …). |
+| **Database** | Schema / SID / service name. |
+| **User** | Read-only account Nomasx-1 uses to scan the source. |
+| **Password** | Password for the account. Stored encrypted by Nomasx-1. |
+
+### Tab 3 — JD Edwards
+
+JDE-specific configuration. Only relevant when *Type* on the **Application** tab is `JDE`. The first six fields name the JDE OCM datasources Nomasx-1 reads to extract security; the rest control behaviour.
+
+| Field | What to enter |
+|---|---|
+| **JDE SY** | Name of the JDE *System* datasource (security tables, OCM). |
+| **JDE DTA** | *Business Data* datasource. |
+| **JDE CTL** | *Control Tables* datasource. |
+| **JDE SVM** | *Server Map* datasource. |
+| **JDE CO** | *Central Objects* datasource. |
+| **JDE OL** | *Object Librarian* datasource. |
+| **F00950** | Schema or table where the JDE Security Workbench is stored. |
+| **Standard Menu** | `Y` if the application uses the JDE standard menu; `N` for a customised menu. |
+| **E1 Pages** | `Y` to extract E1 Pages from the source. |
+| **E1 Composite** | `Y` to extract Composite Applications. |
+| **Purge OUT** | `Y` to let Nomasx-1 purge old Object Usage Tracking rows automatically. |
+| **OUT Retention Days** | Number of days of OUT history to retain when the purge runs. |
+
+### Tab 4 — LDAP
+
+LDAP / Active Directory scope for the application. The values control which AD entries are pulled when the LDAP scan runs.
+
+| Field | What to enter |
+|---|---|
+| **LDAP Context** | Base DN to start the search from (e.g. `OU=Users,DC=corp,DC=local`). |
+| **LDAP Filter** | LDAP search filter restricting the entries pulled. |
+| **LDAP Exclude** | Comma-separated list of entries to exclude from the scan. |
+
+### Tab 5 — Activity Log
+
+Read-only view of the recent database-level transactions captured on this application. Same dataset as the *Database → Audit Trail* screen, filtered on the current application. Hidden on **Add** — appears only after the row exists.
+
+### Tab 6 — Audit Trail
+
+Read-only view of the column-level audit trail for this application. Same dataset as *Database → Audit Lookup*, filtered on the current application. Hidden on **Add**.
+
+---
+
+## Context menu
+
+Right-click a row to open the row menu. The shortcuts jump to the dedicated screens pre-filtered on the selected application.
+
+| Action | Where it lands |
+|---|---|
+| **JD Edwards** | JDE-specific settings screen for the application. |
+| **LDAP** | LDAP scope screen for the application. |
+| **Activity Log** | *Database → Activity Log* filtered on the current application. |
+
+---
+
 ## Tips & best practices
 
 - **Application IDs should be stable.** Once an application is referenced across roles, conflicts, licences and audit trail, renumbering the ID breaks the history.
