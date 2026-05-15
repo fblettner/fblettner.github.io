@@ -78,6 +78,59 @@ This is the bridge between the abstract SoD model and the concrete programs the 
 
 ---
 
+## Edit dialog
+
+Click **Add** or double-click a row to open the form.
+
+<svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sodo-dlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="160" rx="14" fill="url(#sodo-dlg)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Edit SoD object</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="60" y="116" width="160" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12 — JDE Prod ▾</text>
+
+  <text x="240" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Process</text>
+  <rect x="240" y="116" width="80" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="252" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">P2P ▾</text>
+
+  <text x="340" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Activity</text>
+  <rect x="340" y="116" width="140" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="352" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">VEND-CR ▾</text>
+
+  <text x="500" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Row</text>
+  <rect x="500" y="116" width="60" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="512" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">1</text>
+
+  <text x="580" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Object ID</text>
+  <rect x="580" y="116" width="140" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="592" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">P0401</text>
+
+  <text x="740" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Name</text>
+  <rect x="740" y="116" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="752" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Vendor Master</text>
+
+  <rect x="780" y="156" width="60" height="28" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="810" y="174" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Cancel</text>
+  <rect x="848" y="156" width="60" height="28" rx="5" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="878" y="174" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">Save</text>
+</svg>
+
+| Field | What to enter |
+|---|---|
+| **Application** | Drop-down of declared applications. |
+| **Process** | Drop-down filtered to the chosen application's processes. |
+| **Activity** | Drop-down filtered to the activities of the chosen process. |
+| **Row** | Sequence number within the activity's object list. Auto-incremented; edit to reorder. |
+| **Object ID** | Source-system program code (e.g. JDE `P0401`). |
+| **Name** | Friendly name of the program. |
+
+---
+
 ## Tips & best practices
 
 - **Map every program that touches the activity** — the *Proven* view depends on a complete mapping. Missing rows produce false negatives on the conflict analysis.

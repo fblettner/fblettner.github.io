@@ -63,6 +63,67 @@ C'est le point d'extension. Quand un système source range ses tables de sécuri
 
 ---
 
+## Boîte de dialogue
+
+Cliquer sur **Ajouter** dans la barre d'outils pour déclarer une surcharge, ou double-cliquer une ligne pour la modifier. La boîte a trois onglets.
+
+<svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="scq-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="240" rx="14" fill="url(#scq-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier la surcharge — SAP Prod · get_users</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="60" y="100" width="120" height="28" rx="6" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="120" y="118" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">Propriétés</text>
+  <rect x="190" y="100" width="140" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="260" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Base de données</text>
+  <rect x="340" y="100" width="120" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="400" y="118" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Requête</text>
+
+  <text x="60" y="160" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="60" y="166" width="300" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="183" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">21 — SAP Prod ▾</text>
+
+  <text x="380" y="160" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Méthode</text>
+  <rect x="380" y="166" width="300" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="392" y="183" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">get_users</text>
+
+  <rect x="60" y="216" width="860" height="48" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="72" y="234" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">ONGLETS</text>
+  <text x="72" y="252" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Propriétés : couple (Application, Méthode) ciblé. Base de données : URL JDBC + identifiants dédiés optionnels. Requête : le SQL de remplacement.</text>
+</svg>
+
+### Onglet 1 — Propriétés
+
+Couple qui identifie la surcharge. Les deux champs sont obligatoires.
+
+| Champ | À renseigner |
+|---|---|
+| **Application** | Liste déroulante des applications déclarées. La surcharge s'applique uniquement à celle-ci. |
+| **Méthode** | Nom du hook connecteur (`get_users`, `get_assignments`, `get_object_usage`, …) à surcharger. |
+
+### Onglet 2 — Base de données
+
+Connexion dédiée optionnelle. Laisser les trois champs vides fait tourner la surcharge sur la connexion principale de l'application.
+
+| Champ | À renseigner |
+|---|---|
+| **Utilisateur** | Compte en lecture utilisé pour exécuter le SQL surchargé. |
+| **Mot de passe** | Mot de passe du compte. Stocké chiffré. |
+| **JDBC** | URL JDBC quand la surcharge vise un schéma différent de celui de l'application. |
+
+### Onglet 3 — Requête
+
+Le SQL de remplacement. Obligatoire.
+
+| Champ | À renseigner |
+|---|---|
+| **SQL Blob** | Texte multi-ligne. Coller le SQL que Nomasx-1 doit exécuter à la place du défaut pour la méthode déclarée dans *Propriétés*. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Tester le SQL hors Nomasx-1** d'abord — une surcharge syntaxiquement cassée se traduit par une grille vide sur l'écran consommateur.

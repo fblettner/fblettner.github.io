@@ -78,6 +78,59 @@ C'est le paramètre SoD le plus opérationnellement critique : modifier une lign
 
 ---
 
+## Boîte de dialogue
+
+Cliquer sur **Ajouter** ou double-cliquer une ligne pour ouvrir le formulaire.
+
+<svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sodm-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="160" rx="14" fill="url(#sodm-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier la ligne matrice SoD</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="60" y="116" width="160" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12 — JDE Prod ▾</text>
+
+  <text x="240" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Process</text>
+  <rect x="240" y="116" width="80" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="252" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">P2P ▾</text>
+
+  <text x="340" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Activité 1</text>
+  <rect x="340" y="116" width="120" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="352" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">VEND-CR ▾</text>
+
+  <text x="480" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Activité 2</text>
+  <rect x="480" y="116" width="120" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="492" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">PAY-APV ▾</text>
+
+  <text x="620" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Risque</text>
+  <rect x="620" y="116" width="200" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="632" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">R-P2P-01 ▾</text>
+
+  <text x="840" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Niveau</text>
+  <rect x="840" y="116" width="80" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="852" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Élevé ▾</text>
+
+  <rect x="780" y="156" width="60" height="28" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="810" y="174" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Annuler</text>
+  <rect x="848" y="156" width="78" height="28" rx="5" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="887" y="174" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">Enregistrer</text>
+</svg>
+
+| Champ | À renseigner |
+|---|---|
+| **Application** | Liste déroulante des applications déclarées. |
+| **Process** | Liste déroulante filtrée sur les processus de l'application choisie. |
+| **Activité 1** | Liste déroulante filtrée sur les activités du processus choisi. Première activité incompatible. |
+| **Activité 2** | Liste déroulante filtrée sur les mêmes activités. Seconde activité incompatible. |
+| **Risque** | Liste déroulante filtrée sur les risques déclarés sur le processus choisi. Risque nommé que la paire instancie. |
+| **Niveau** | `Élevé` / `Moyen` / `Faible` (ou échelle numérique). Surcharge le niveau par défaut du risque pour cette paire si besoin. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Ajouter une ligne** génère de nouveaux conflits au prochain rafraîchissement — se coordonner avec l'administrateur sécurité et la RH.

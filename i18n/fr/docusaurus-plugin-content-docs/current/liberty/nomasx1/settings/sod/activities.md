@@ -68,6 +68,49 @@ La *Matrice* combine des paires d'activités pour exprimer les incompatibilités
 
 ---
 
+## Boîte de dialogue
+
+Cliquer sur **Ajouter** pour déclarer une activité, ou double-cliquer une ligne pour la modifier. La boîte tient sur un seul formulaire.
+
+<svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="soda-dlg-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="160" rx="14" fill="url(#soda-dlg-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Modifier l'activité SoD</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="60" y="116" width="220" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12 — JDE Prod ▾</text>
+
+  <text x="300" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Process</text>
+  <rect x="300" y="116" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="312" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">P2P ▾</text>
+
+  <text x="500" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Activité ID</text>
+  <rect x="500" y="116" width="160" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="512" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">VEND-CR</text>
+
+  <text x="680" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Nom</text>
+  <rect x="680" y="116" width="240" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="692" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Créer fournisseur</text>
+
+  <rect x="780" y="156" width="60" height="28" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="810" y="174" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Annuler</text>
+  <rect x="848" y="156" width="78" height="28" rx="5" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="887" y="174" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">Enregistrer</text>
+</svg>
+
+| Champ | À renseigner |
+|---|---|
+| **Application** | Liste déroulante des applications déclarées. |
+| **Process** | Liste déroulante filtrée sur les processus de l'application choisie. |
+| **Activité ID** | Identifiant court (par exemple `VEND-CR`, `PAY-APV`). Référencé par *Matrice* et *Objets*. |
+| **Nom** | Libellé convivial. Apparaît sur les écrans *Détails* et *Avérés*. |
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Nommer côté métier.** Utiliser des verbes (*Créer*, *Modifier*, *Approuver*, *Comptabiliser*) — plus simple à discuter avec les responsables métier que des libellés techniques.

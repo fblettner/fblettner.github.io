@@ -60,6 +60,44 @@ Audit columns (`PROCESS_AUDIT_USER`, `PROCESS_AUDIT_DATE`) are kept on the row.
 
 ---
 
+## Edit dialog
+
+Click **Add** to declare a new process, or double-click a row to edit. The dialog is a single form.
+
+<svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="sodp-dlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="160" rx="14" fill="url(#sodp-dlg)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Edit SoD process</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="60" y="116" width="280" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12 — JDE Production ▾</text>
+
+  <text x="360" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Process ID</text>
+  <rect x="360" y="116" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="372" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">P2P</text>
+
+  <text x="560" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Name</text>
+  <rect x="560" y="116" width="360" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="572" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Procure to Pay</text>
+
+  <rect x="780" y="156" width="60" height="28" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="810" y="174" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Cancel</text>
+  <rect x="848" y="156" width="60" height="28" rx="5" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="878" y="174" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">Save</text>
+</svg>
+
+| Field | What to enter |
+|---|---|
+| **Application** | Drop-down of declared applications. The process belongs to this application. |
+| **Process ID** | Short identifier (e.g. `P2P`, `O2C`, `R2R`). Referenced by *Activities*, *Risks*, *Matrix* and *Objects*. |
+| **Name** | Friendly label for the process. Surfaces on every SoD report. |
+
+---
+
 ## Tips & best practices
 
 - **Per-application catalog.** If two applications carry the same SoD perimeter, declare the process in each — Nomasx-1 does not share rows across applications.

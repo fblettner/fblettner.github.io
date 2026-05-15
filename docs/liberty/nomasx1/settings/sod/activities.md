@@ -68,6 +68,49 @@ The *Matrix* combines pairs of activities to express incompatibilities. The *Obj
 
 ---
 
+## Edit dialog
+
+Click **Add** to declare an activity, or double-click a row to edit. The dialog is a single form.
+
+<svg viewBox="0 0 1000 220" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="soda-dlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="160" rx="14" fill="url(#soda-dlg)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Edit SoD activity</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <text x="60" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Application</text>
+  <rect x="60" y="116" width="220" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="72" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12 — JDE Prod ▾</text>
+
+  <text x="300" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Process</text>
+  <rect x="300" y="116" width="180" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="312" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">P2P ▾</text>
+
+  <text x="500" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Activity ID</text>
+  <rect x="500" y="116" width="160" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="512" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">VEND-CR</text>
+
+  <text x="680" y="110" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Name</text>
+  <rect x="680" y="116" width="240" height="26" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="692" y="133" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Create vendor</text>
+
+  <rect x="780" y="156" width="60" height="28" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="810" y="174" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif" textAnchor="middle">Cancel</text>
+  <rect x="848" y="156" width="60" height="28" rx="5" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="878" y="174" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700" textAnchor="middle">Save</text>
+</svg>
+
+| Field | What to enter |
+|---|---|
+| **Application** | Drop-down of declared applications. |
+| **Process** | Drop-down filtered to the processes of the chosen application. |
+| **Activity ID** | Short identifier (e.g. `VEND-CR`, `PAY-APV`). Referenced by *Matrix* and *Objects*. |
+| **Name** | Friendly label. Surfaces on the *Details* and *Proven* conflict screens. |
+
+---
+
 ## Tips & best practices
 
 - **Name from the business angle.** Use verbs (*Create*, *Modify*, *Approve*, *Post*) — easier to discuss with the business owners than technical names.
