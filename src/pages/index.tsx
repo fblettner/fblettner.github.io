@@ -21,6 +21,12 @@ function Hero() {
           <Link className="button button--primary button--lg" to="/liberty/getting-started/">
             Liberty
           </Link>
+          <Link className="button button--secondary button--lg" to="/liberty/nomasx1/overview/">
+            Nomasx-1
+          </Link>
+          <Link className="button button--secondary button--lg" to="/liberty/nomajde/overview/">
+            Nomajde
+          </Link>
           <Link className="button button--secondary button--lg" to="/nomaubl/getting-started/">
             NomaUBL
           </Link>
@@ -62,8 +68,29 @@ const features: FeatureProps[] = [
         Build robust applications with zero coding skills required.
       </>
     ),
-    cta: {label: 'Online Demo →', to: 'https://liberty.nomana-it.fr/'},
-    external: true,
+    cta: {label: 'Get started →', to: '/liberty/getting-started/'},
+  },
+  {
+    title: 'Nomasx-1',
+    description: (
+      <>
+        Centralized security &amp; compliance application. Reconciles users,
+        roles, assignments and segregation-of-duties risks across every
+        connected ERP — JD&nbsp;Edwards, SAP, NetSuite and beyond.
+      </>
+    ),
+    cta: {label: 'Get started →', to: '/liberty/nomasx1/overview/'},
+  },
+  {
+    title: 'Nomajde',
+    description: (
+      <>
+        JD&nbsp;Edwards EnterpriseOne companion. Consolidates dozens of native
+        JDE screens into simplified workflows with grid editing for master
+        data and security maintenance.
+      </>
+    ),
+    cta: {label: 'Get started →', to: '/liberty/nomajde/overview/'},
   },
   {
     title: 'NomaUBL',

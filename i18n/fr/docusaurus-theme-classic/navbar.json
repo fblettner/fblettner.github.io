@@ -11,6 +11,14 @@
     "message": "Liberty",
     "description": "Navbar item with label Liberty"
   },
+  "item.label.Nomasx-1": {
+    "message": "Nomasx-1",
+    "description": "Navbar item with label Nomasx-1"
+  },
+  "item.label.Nomajde": {
+    "message": "Nomajde",
+    "description": "Navbar item with label Nomajde"
+  },
   "item.label.NomaUBL": {
     "message": "NomaUBL",
     "description": "Navbar item with label NomaUBL"

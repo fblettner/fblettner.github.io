@@ -18,37 +18,6 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Nomasx-1',
-      link: {type: 'generated-index', slug: '/liberty/nomasx-1', description: 'Nomasx-1 — segregation-of-duties application built on Liberty Next.'},
-      items: [
-        'liberty/nomasx1/overview',
-        {
-          type: 'category',
-          label: 'Security',
-          link: {type: 'generated-index', slug: '/liberty/nomasx-1/security', description: 'Security catalog: users, roles, assignments, gaps and duplicates.'},
-          items: [
-            'liberty/nomasx1/security/users',
-            'liberty/nomasx1/security/roles',
-            'liberty/nomasx1/security/assignments',
-            'liberty/nomasx1/security/roles-not-used',
-            'liberty/nomasx1/security/users-without-roles',
-            'liberty/nomasx1/security/roles-matrix',
-            'liberty/nomasx1/security/duplicate-users',
-            'liberty/nomasx1/security/users-audit',
-          ],
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Nomajde',
-      link: {type: 'generated-index', slug: '/liberty/nomajde', description: 'Nomajde — JD Edwards companion application built on Liberty Next.'},
-      items: [
-        'liberty/nomajde/overview',
-      ],
-    },
-    {
-      type: 'category',
       label: 'Archive — v1 Installation (Docker stack)',
       link: {type: 'generated-index', slug: '/liberty/archive/installation', description: 'Legacy installation pages for the v1 Docker stack. Retained while the v1 → Liberty Next migration is in progress; new Liberty Next installation docs will replace this section once Docker support for Liberty Next ships.'},
       items: [
@@ -220,6 +189,40 @@ const sidebars: SidebarsConfig = {
         'liberty/incidents',
       ],
     },
+  ],
+
+  nomasx1Sidebar: [
+    'liberty/nomasx1/overview',
+    {
+      type: 'category',
+      label: 'Security',
+      link: {type: 'generated-index', slug: '/liberty/nomasx-1/security', description: 'Security catalog: users, roles, assignments, gaps and duplicates.'},
+      items: [
+        'liberty/nomasx1/security/users',
+        'liberty/nomasx1/security/roles',
+        'liberty/nomasx1/security/assignments',
+        'liberty/nomasx1/security/roles-not-used',
+        'liberty/nomasx1/security/users-without-roles',
+        'liberty/nomasx1/security/roles-matrix',
+        'liberty/nomasx1/security/duplicate-users',
+        'liberty/nomasx1/security/users-audit',
+        {
+          type: 'category',
+          label: 'LDAP',
+          link: {type: 'generated-index', slug: '/liberty/nomasx-1/security/ldap', description: 'Reconciliation with the corporate LDAP / Active Directory identity provider.'},
+          items: [
+            'liberty/nomasx1/security/ldap/users',
+            'liberty/nomasx1/security/ldap/users-without-ad',
+            'liberty/nomasx1/security/ldap/users-by-applications',
+            'liberty/nomasx1/security/ldap/settings',
+          ],
+        },
+      ],
+    },
+  ],
+
+  nomajdeSidebar: [
+    'liberty/nomajde/overview',
   ],
 
   nomaublSidebar: [

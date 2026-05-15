@@ -92,6 +92,8 @@ const config: Config = {
       },
       items: [
         {type: 'docSidebar', sidebarId: 'libertySidebar', position: 'left', label: 'Liberty'},
+        {type: 'docSidebar', sidebarId: 'nomasx1Sidebar', position: 'left', label: 'Nomasx-1'},
+        {type: 'docSidebar', sidebarId: 'nomajdeSidebar', position: 'left', label: 'Nomajde'},
         {type: 'docSidebar', sidebarId: 'nomaublSidebar', position: 'left', label: 'NomaUBL'},
         {type: 'docSidebar', sidebarId: 'apiSidebar', position: 'left', label: 'API'},
         {to: '/blog', label: 'Blog', position: 'left'},
