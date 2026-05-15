@@ -221,6 +221,29 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Database',
+      link: {type: 'generated-index', slug: '/liberty/nomasx-1/database', description: 'Database-level properties and audit trail.'},
+      items: [
+        'liberty/nomasx1/database/oracle',
+        'liberty/nomasx1/database/audit-trail',
+        'liberty/nomasx1/database/audit-lookup',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Licenses',
+      link: {type: 'generated-index', slug: '/liberty/nomasx-1/licenses', description: 'Licence management: CSI inventory, JD Edwards and Oracle reporting, subscribed quantities, usage and financial impact.'},
+      items: [
+        'liberty/nomasx1/licenses/csi',
+        'liberty/nomasx1/licenses/jd-edwards',
+        'liberty/nomasx1/licenses/oracle',
+        'liberty/nomasx1/licenses/subscribed',
+        'liberty/nomasx1/licenses/usage-report',
+        'liberty/nomasx1/licenses/financial-report',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Applications',
       link: {type: 'generated-index', slug: '/liberty/nomasx-1/applications', description: 'Per-application views: menus, rights, conflicts, activity log and Object Usage Tracking.'},
       items: [
