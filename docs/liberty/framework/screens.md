@@ -1,12 +1,12 @@
 ---
 title: Screens
-description: "A Screen is one business object — read / update / insert / delete queries plus an inline dialog. Liberty Next collapses v1's ly_tables → ly_dialogs → ly_dlg_frm → ly_dlg_tab → ly_dlg_col chain into a single TOML entry per screen."
+description: "A Screen is the definition of one business object — its read query, optional write queries, and an inline dialog with tabs and fields. Everything the UI needs to render the grid, the modal form and the actions is in one TOML entry."
 keywords: [Liberty Next, screen, dialog, tab, field, business object, ScreenDialog, audit, action, row menu, param bind, condition]
 ---
 
 # Screens
 
-A **Screen** wraps a SQL connector query with everything the UI needs to render a business object: the grid (the `read_query`), the optional CRUD queries, the modal form definition, the audit flag and the row menu. One Screen per business object — what v1 spread across `ly_tables`, `ly_dialogs`, `ly_dlg_frm`, `ly_dlg_tab`, `ly_dlg_col`, `ly_dlg_filters` is collapsed into a single TOML entry.
+A **Screen** wraps a SQL connector query with everything the UI needs to render a business object: the grid (the `read_query`), the optional CRUD queries, the modal form definition, the audit flag and the row menu. One Screen per business object — grid, tabs, fields and actions all live in a single TOML entry.
 
 Screens live in `config/screens.toml`, organised under `[screens.<app>.<id>]`. They are hot-reloadable with the rest of the config.
 
@@ -223,7 +223,7 @@ The static flags (`visible: false`, `required: false`, `disabled: false`) act as
 
 ## Audit
 
-Setting `audit = true` enables the auto-generated **Audit** tab on the dialog — same shape as v1's `AUD` tab. It surfaces:
+Setting `audit = true` enables the auto-generated **Audit** tab on the dialog. It exposes:
 
 - `AUD_CREATED_BY` / `AUD_CREATED_AT`
 - `AUD_UPDATED_BY` / `AUD_UPDATED_AT`
@@ -259,6 +259,6 @@ The set is **permission-pruned**: a screen whose `read_query` the caller cannot 
 
 - **One screen per business object.** Resist the temptation to bundle several reads into the same screen. The grid is fast; another screen with its own dialog is cleaner than a dialog with twelve tabs.
 - **Mark every dialog field with a real `required`.** It saves a round-trip — the dialog refuses to save until the required fields are filled, instead of letting the backend reject the row.
-- **Per-field conditions beat the legacy `cdn_*` columns.** v1's condition columns lived on the column table; v2's `visible_when` / `required_when` / `disabled_when` live on the field itself, AND-ed and inspected against the live form state. Easier to reason about.
+- **Per-field conditions are evaluated live.** `visible_when` / `required_when` / `disabled_when` are attached to the field itself, AND-ed together, and re-evaluated each time the form changes. Easy to keep predictable: each rule references another field on the same dialog.
 - **Audit auto-resolves user + timestamp.** Do not bind `AUD_CREATED_BY` / `AUD_UPDATED_AT` manually from the form — they are filled server-side from the principal and `SYSDATE` at save time.
 - **Cross-connector saves are legitimate.** A screen reading from `myapp` and writing to an audit connector is supported. Pick the connector on the query, not on the screen.

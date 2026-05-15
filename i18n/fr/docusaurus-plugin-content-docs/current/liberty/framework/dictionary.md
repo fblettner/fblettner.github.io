@@ -1,22 +1,22 @@
 ---
-title: Dictionary
-description: "The dictionary pins labels, formats and BOOLEAN / ENUM / LOOKUP rules on a column once. Every query that returns that column inherits them — typed grid, localized labels, dropdowns wired automatically."
-keywords: [Liberty Next, dictionary, entries, enums, lookups, label, format, rule, BOOLEAN, ENUM, LOOKUP, i18n, EN, FR]
+title: Dictionnaire
+description: "Le dictionnaire regroupe les métadonnées d'affichage par colonne : libellés, formats et règles BOOLEAN / ENUM / LOOKUP. Une fois une colonne décrite, tous les écrans qui la retournent en héritent — grille typée, libellés localisés, listes déroulantes câblées automatiquement."
+keywords: [Liberty Next, dictionnaire, entrées, enums, lookups, libellé, format, règle, BOOLEAN, ENUM, LOOKUP, i18n, EN, FR]
 ---
 
-# Dictionary
+# Dictionnaire
 
-The dictionary is the v2 form of v1's `ly_dictionary` + `ly_dictionary_l` + `ly_enum` + `ly_enum_val` + `ly_lookup`. One file (`config/dictionary.toml`) defines:
+Le dictionnaire est le **catalogue partagé des métadonnées par colonne**. Un seul fichier (`config/dictionary.toml`) en contient trois types :
 
-- **Entries** — per-column metadata: label, format, rule, per-language label translations.
-- **Enums** — named enumerations with translatable labels.
-- **Lookups** — references to a query that resolves a `code → label`.
+- les **entrées** — métadonnées par colonne : libellé, format, règle, traductions par langue ;
+- les **enums** — énumérations nommées avec libellés traduisibles ;
+- les **lookups** — pointeurs vers une requête qui résout un `code → libellé`.
 
-A query's `columns` hint references an entry; the SQL connector resolves the label / format / rule at result time in the request's language. The React grid then renders the localized label, ✓ / ✗ for booleans, the enum label, or — via `services/lookups.useLookupBatch` — the lookup label after a one-shot per-session fetch.
+Quand une requête déclare une colonne avec une indication `dd`, le connecteur SQL résout son libellé, son format et sa règle au moment où il renvoie le résultat, dans la langue de la requête. La grille React affiche directement le libellé localisé, ✓ / ✗ pour les booléens, le libellé de l'énumération, ou — via `services/lookups.useLookupBatch` — le libellé du lookup après un seul fetch par session.
 
 ---
 
-## At a glance
+## Vue d'ensemble
 
 <svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -59,25 +59,25 @@ A query's `columns` hint references an entry; the SQL connector resolves the lab
   <rect x="436" y="84" width="248" height="60" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
   <text x="448" y="104" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">BOOLEAN</text>
   <text x="448" y="120" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">{`{ kind: "boolean", true_value: "Y" }`}</text>
-  <text x="448" y="136" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">cell renders ✓ / ✗</text>
+  <text x="448" y="136" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">la cellule affiche ✓ ou ✗</text>
 
   <rect x="436" y="152" width="248" height="60" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
   <text x="448" y="172" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">ENUM</text>
   <text x="448" y="188" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">{`{ kind: "enum", values: [...] }`}</text>
-  <text x="448" y="204" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">cell renders the localized label</text>
+  <text x="448" y="204" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">la cellule affiche le libellé localisé</text>
 
   <rect x="436" y="220" width="248" height="80" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
   <text x="448" y="240" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">LOOKUP</text>
   <text x="448" y="256" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">{`{ kind: "lookup", connector,`}</text>
   <text x="448" y="270" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">{` query, value, label }`}</text>
-  <text x="448" y="286" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">grid pre-fetches once per session</text>
+  <text x="448" y="286" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">la grille pré-charge une fois par session</text>
 
   <rect x="436" y="308" width="248" height="100" rx="8" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="448" y="328" fill="#fb923c" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">form-layer rules</text>
+  <text x="448" y="328" fill="#fb923c" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">règles côté formulaire</text>
   <text x="448" y="344" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">SEQUENCE</text>
   <text x="448" y="358" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">SYSDATE / CURRENT_DATE</text>
   <text x="448" y="372" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">LOGIN · PASSWORD</text>
-  <text x="448" y="392" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">applied by the form, not the grid</text>
+  <text x="448" y="392" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">appliquées par le formulaire à l'ouverture</text>
 
   <line x1="700" y1="220" x2="800" y2="220" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#dc-arrow)"/>
 
@@ -85,41 +85,41 @@ A query's `columns` hint references an entry; the SQL connector resolves the lab
   <text x="820" y="68" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">REACT</text>
 
   <rect x="816" y="84" width="128" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="824" y="102" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Grid cell</text>
-  <text x="824" y="118" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">code — label</text>
+  <text x="824" y="102" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Cellule de grille</text>
+  <text x="824" y="118" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">code — libellé</text>
 
   <rect x="816" y="142" width="128" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="824" y="160" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Column filter</text>
-  <text x="824" y="176" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">multi-select</text>
+  <text x="824" y="160" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Filtre de colonne</text>
+  <text x="824" y="176" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">multi-sélection</text>
 
   <rect x="816" y="200" width="128" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="824" y="218" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Form widget</text>
+  <text x="824" y="218" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Widget de formulaire</text>
   <text x="824" y="234" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">SearchSelect</text>
 
   <rect x="816" y="258" width="128" height="50" rx="8" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
   <text x="824" y="276" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">i18n</text>
   <text x="824" y="292" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">X-Liberty-Lang</text>
 
-  <text x="824" y="332" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">Every request</text>
-  <text x="824" y="348" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">carries the active</text>
-  <text x="824" y="364" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">i18n language —</text>
-  <text x="824" y="380" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">labels come back</text>
-  <text x="824" y="396" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">already localized.</text>
+  <text x="824" y="332" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">Chaque requête</text>
+  <text x="824" y="348" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">transporte la langue</text>
+  <text x="824" y="364" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">i18n active —</text>
+  <text x="824" y="380" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">les libellés reviennent</text>
+  <text x="824" y="396" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">déjà localisés.</text>
 </svg>
 
 ---
 
-## Entries
+## Entrées
 
-Per-column metadata. Each entry pins:
+Métadonnées par colonne. Chaque entrée fixe :
 
-| Field | Description |
+| Champ | Description |
 |---|---|
-| `label` | Default English label. |
-| `l` | Per-language labels (`{ fr = "...", de = "..." }`). |
-| `format` | UI-interpreted format: `date`, `datetime`, `amount`, `percent`, `string`, `number`, `boolean`, …. |
-| `rules` | Display rule — `BOOLEAN` / `ENUM` / `LOOKUP` (or one of the form-layer rules — see below). |
-| `rules_values` / `default` | Optional rule-specific configuration (e.g. boolean `true_value`, default value on form `add`). |
+| `label` | Libellé anglais par défaut. |
+| `l` | Libellés par langue (`{ fr = "...", de = "..." }`). |
+| `format` | Format interprété par l'interface : `date`, `datetime`, `amount`, `percent`, `string`, `number`, `boolean`, …. |
+| `rules` | Règle d'affichage : `BOOLEAN`, `ENUM`, `LOOKUP` — ou une règle côté formulaire (voir plus bas). |
+| `rules_values` / `default` | Configuration optionnelle propre à la règle (par exemple `true_value` pour un booléen, valeur par défaut sur la création d'une ligne). |
 
 ```toml
 [entries.USER_STATUS]
@@ -132,15 +132,15 @@ fr = "Statut"
 de = "Status"
 ```
 
-An entry may live at the top level (shared across connectors) or under `[connectors.<conn>.entries.<key>]` (per-connector, since v1 dictionaries were per-app). Lookup goes per-connector first, then shared top-level.
+Une entrée peut être déclarée au niveau global (partagée par tous les connecteurs) ou sous `[connectors.<conn>.entries.<clé>]` (spécifique à un connecteur — utile quand le même nom de colonne porte un sens différent selon la source). La résolution teste d'abord la version par connecteur, puis se rabat sur la version globale.
 
-A column hint `dd = "USER_STATUS"` lifts the entry onto the query column. `dd = ""` opts out — the column is left untranslated. A `label` on the column itself overrides the dictionary's.
+Une indication `dd = "USER_STATUS"` sur la colonne de la requête applique l'entrée à cette colonne. `dd = ""` désactive — la colonne reste sans libellé localisé. Un `label` indiqué directement sur la colonne surcharge celui du dictionnaire.
 
 ---
 
 ## Enums
 
-A static `code → label` table with translations.
+Une table statique `code → libellé` avec traductions.
 
 ```toml
 [enums.USER_STATUS]
@@ -151,52 +151,52 @@ values = [
 ]
 ```
 
-Resolved at result time. The cell renders the active language's label; the per-column filter offers the multi-select picker over the same values; the form widget is a `SearchSelect`.
+Résolus au moment du résultat. La cellule affiche le libellé de la langue active, le filtre de colonne propose un sélecteur multi-valeurs alimenté par la même liste, et le widget de formulaire est un `SearchSelect`.
 
 ---
 
 ## Lookups
 
-A reference to a query whose `value` / `label` columns resolve the cell.
+Une référence vers une requête dont les colonnes `value` / `label` résolvent la cellule.
 
 ```toml
 [lookups.CITY]
 description = "Cities"
-connector   = "myapp"            # falls back to the calling connector when omitted
+connector   = "myapp"            # retombe sur le connecteur appelant si non précisé
 query       = "cities_get"
 value       = "ID"
 label       = "NAME"
-group       = "REGION"           # optional secondary grouping
+group       = "REGION"           # regroupement secondaire optionnel
 ```
 
-A column with `rules = "LOOKUP"` pointing at a lookup id is resolved by:
+Une colonne marquée `rules = "LOOKUP"` qui pointe sur un id de lookup est résolue :
 
-- the grid: one shared `useLookupBatch` fetch per session — cell renders `code — label`;
-- the form widget: a `SearchSelect` with `useLookupTables`, narrowed at call time by `lookup_param_binds` if any.
+- côté grille : un seul fetch partagé par session via `useLookupBatch` — la cellule affiche `code — libellé` ;
+- côté formulaire : un `SearchSelect` alimenté par `useLookupTables`, restreint à l'appel selon les `lookup_param_binds` éventuels.
 
 ---
 
-## Display rules vs form-layer rules
+## Règles d'affichage et règles côté formulaire
 
-| Rule | Owner | Effect |
+| Règle | Champ d'application | Effet |
 |---|---|---|
-| `BOOLEAN` | Display | Cell renders ✓ / ✗. `rules_values.true_value` declares which raw value counts as true (default `"Y"`). |
-| `ENUM` | Display | Cell renders the localized label. Column filter and form widget pull the value list from `[enums.<id>]`. |
-| `LOOKUP` | Display | Cell renders `code — label` from `[lookups.<id>]`. Form widget narrows by `lookup_param_binds`. |
-| `SEQUENCE` | Form | Pulls the next sequence value on `add`. |
-| `SYSDATE` / `CURRENT_DATE` | Form | Seeds today on `add`. |
-| `LOGIN` | Form | Seeds the caller's username on `add`. |
-| `PASSWORD` | Form | Marks the input as a password and triggers crypto handling on save. |
+| `BOOLEAN` | Affichage | La cellule affiche ✓ ou ✗. `rules_values.true_value` précise quelle valeur brute compte comme vrai (défaut `"Y"`). |
+| `ENUM` | Affichage | La cellule affiche le libellé localisé. Le filtre de colonne et le widget de formulaire lisent les valeurs depuis `[enums.<id>]`. |
+| `LOOKUP` | Affichage | La cellule affiche `code — libellé` depuis `[lookups.<id>]`. Le widget de formulaire est restreint par `lookup_param_binds`. |
+| `SEQUENCE` | Formulaire | Renvoie la valeur suivante d'une séquence à la création. |
+| `SYSDATE` / `CURRENT_DATE` | Formulaire | Initialise le champ avec la date du jour à la création. |
+| `LOGIN` | Formulaire | Initialise le champ avec le nom d'utilisateur de l'appelant à la création. |
+| `PASSWORD` | Formulaire | Marque l'entrée comme mot de passe et active le chiffrement à l'enregistrement. |
 
-Display rules ship on `Column.rule` so the grid can render without a second round-trip. Form-layer rules are applied by `ScreenDialog` when the modal form opens — they wait for [Screens](./screens.md).
+Les règles d'affichage voyagent sur l'objet `Column.rule` pour que la grille puisse rendre sans aller-retour supplémentaire. Les règles côté formulaire sont appliquées par `ScreenDialog` à l'ouverture du formulaire modal — détaillées dans la page [Écrans](/liberty/framework/screens).
 
 ---
 
 ## i18n
 
-Every API request carries `X-Liberty-Lang` (the current `react-i18next` language). The SQL connector resolves the label and the rule in that language; the React grid renders labels already localized. A missing translation falls back to the `label` (English).
+Chaque requête HTTP transporte l'en-tête `X-Liberty-Lang` (la langue active de `react-i18next`). Le connecteur SQL résout les libellés et les règles dans cette langue ; la grille React affiche directement les libellés traduits. Si une traduction manque, la valeur de `label` (anglais) est utilisée par défaut.
 
-The dictionary itself declares its default language:
+Le dictionnaire indique sa langue par défaut :
 
 ```toml
 default_language = "en"
@@ -204,9 +204,9 @@ default_language = "en"
 
 ---
 
-## Tips & best practices
+## Conseils & bonnes pratiques
 
-- **Define entries shared across connectors at the top level.** A `USER_STATUS` that means the same thing everywhere belongs under `[entries.USER_STATUS]` once. Reach for the per-connector override only when the meaning differs.
-- **Keep `label` short.** It is what the grid header shows. Long titles belong in `description` on the query, which surfaces as the TableView's panel title.
-- **`rules = "ENUM"` should not be a `LOOKUP` in disguise.** When the value list is small and known at config time, use `ENUM`. When the list comes from a table that changes at runtime, use `LOOKUP`. The cell renders the same — the input editor changes (static vs. live).
-- **A column with no `dd` still works.** The grid renders the raw cursor type. Use `dd` when there is a real reason: a localized label, a boolean / enum / lookup rule, a non-default format.
+- **Déclarer les entrées partagées au niveau global.** Une colonne `USER_STATUS` qui a le même sens partout doit vivre sous `[entries.USER_STATUS]` une seule fois. La surcharge par connecteur est réservée aux cas où le sens diffère.
+- **Garder `label` court.** C'est ce qu'affiche l'en-tête de grille. Les titres longs vont dans le champ `description` de la requête, qui devient le titre du panneau.
+- **`rules = "ENUM"` ne doit pas servir de `LOOKUP` déguisé.** Pour une liste de valeurs courte et connue à la configuration, utiliser `ENUM`. Pour une liste qui vit dans une table et change à l'exécution, utiliser `LOOKUP`. Le rendu de la cellule est identique ; l'éditeur du formulaire diffère (statique pour ENUM, dynamique pour LOOKUP).
+- **Une colonne sans `dd` fonctionne aussi.** La grille affiche alors le type brut renvoyé par le curseur. Ajouter `dd` uniquement quand il y a une vraie raison : libellé localisé, règle booléen / enum / lookup, format non standard.

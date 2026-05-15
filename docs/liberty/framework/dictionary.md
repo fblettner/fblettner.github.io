@@ -6,7 +6,7 @@ keywords: [Liberty Next, dictionary, entries, enums, lookups, label, format, rul
 
 # Dictionary
 
-The dictionary is the v2 form of v1's `ly_dictionary` + `ly_dictionary_l` + `ly_enum` + `ly_enum_val` + `ly_lookup`. One file (`config/dictionary.toml`) defines:
+The dictionary is the **shared catalog of per-column metadata**. One file (`config/dictionary.toml`) defines:
 
 - **Entries** — per-column metadata: label, format, rule, per-language label translations.
 - **Enums** — named enumerations with translatable labels.
@@ -132,7 +132,7 @@ fr = "Statut"
 de = "Status"
 ```
 
-An entry may live at the top level (shared across connectors) or under `[connectors.<conn>.entries.<key>]` (per-connector, since v1 dictionaries were per-app). Lookup goes per-connector first, then shared top-level.
+An entry may sit at the top level (shared across every connector) or under `[connectors.<conn>.entries.<key>]` (specific to one connector — useful when the same column name carries a different meaning in different sources). Resolution checks the per-connector entry first, then falls back to the shared top-level one.
 
 A column hint `dd = "USER_STATUS"` lifts the entry onto the query column. `dd = ""` opts out — the column is left untranslated. A `label` on the column itself overrides the dictionary's.
 

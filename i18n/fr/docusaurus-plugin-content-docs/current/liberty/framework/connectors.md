@@ -1,21 +1,21 @@
 ---
-title: Connectors
-description: "Define SQL and API connectors in TOML. A SQL connector is a list of named queries against a pool; an API connector is a list of named endpoints against an HTTP client. Schema is discovered at query time — no metadata tables."
-keywords: [Liberty Next, connector, SQL, API, TOML, pool, query, endpoint, writable, dialect, schema discovery, param bind]
+title: Connecteurs
+description: "Déclarer des connecteurs SQL et API en TOML. Un connecteur SQL regroupe des requêtes nommées exécutées sur un pool de base de données ; un connecteur API regroupe des endpoints HTTP nommés. Le schéma des résultats est obtenu à l'exécution depuis le curseur de la requête."
+keywords: [Liberty Next, connecteur, SQL, API, TOML, pool, requête, endpoint, écriture, dialecte, découverte de schéma, liaison de paramètres]
 ---
 
-# Connectors
+# Connecteurs
 
-A **connector** is the named target the rest of Liberty Next talks to. Two kinds:
+Un **connecteur** définit comment Liberty Next accède à une source de données. Deux types coexistent :
 
-- **SQL connector** — a list of named queries against a pool. The schema of a result is discovered from `cursor.description`; display hints sit on the query, label and rule sit on the [dictionary](./dictionary.md).
-- **API connector** — a list of named endpoints against an `httpx.AsyncClient`. Auth, base URL and placeholder substitution live on the connector.
+- Le **connecteur SQL** regroupe un ensemble de requêtes nommées exécutées sur un pool de base de données. Le schéma de chaque résultat est obtenu à l'exécution depuis le curseur de la requête ; les libellés et les règles d'affichage sont définis dans le [dictionnaire](/liberty/framework/dictionary), les options d'affichage côté requête (filtres, visibilité, format) sont portées par la définition de la requête elle-même.
+- Le **connecteur API** regroupe un ensemble d'endpoints HTTP nommés. L'authentification, l'URL de base et la substitution de variables sont configurées sur le connecteur.
 
-Connectors are defined in `config/connectors.toml`. The file is hot-reloadable — `POST /admin/reload` rebuilds the registry while in-flight requests keep the version they started with.
+Les connecteurs sont déclarés dans `config/connectors.toml`. Le fichier est rechargeable à chaud : `POST /admin/reload` reconstruit le registre, et les requêtes en cours continuent de tourner sur la version qu'elles utilisent.
 
 ---
 
-## At a glance
+## Vue d'ensemble
 
 <svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -51,28 +51,28 @@ Connectors are defined in `config/connectors.toml`. The file is hot-reloadable �
   <line x1="320" y1="220" x2="420" y2="220" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#cn-arrow)"/>
 
   <rect x="420" y="40" width="280" height="340" rx="14" fill="url(#cn-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
-  <text x="440" y="68" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">⚙ SQLConnector</text>
+  <text x="440" y="68" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">⚙ Connecteur SQL</text>
 
   <rect x="436" y="84" width="248" height="60" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="448" y="104" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">execute(name, params, lang)</text>
-  <text x="448" y="120" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">→ rows + Column[]</text>
-  <text x="448" y="134" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">label / format / rule resolved</text>
+  <text x="448" y="104" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">execute(nom, params, langue)</text>
+  <text x="448" y="120" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">retourne les lignes + le schéma typé</text>
+  <text x="448" y="134" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">libellés et règles résolus à la volée</text>
 
   <rect x="436" y="152" width="248" height="42" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="448" y="170" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">writable gate</text>
-  <text x="448" y="186" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">UPDATE / INSERT / DELETE → writable=true</text>
+  <text x="448" y="170" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">contrôle d'écriture</text>
+  <text x="448" y="186" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">UPDATE / INSERT / DELETE → writable=true requis</text>
 
   <rect x="436" y="202" width="248" height="42" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="448" y="220" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">:name → ? bind</text>
-  <text x="448" y="236" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">never string-substituted into SQL</text>
+  <text x="448" y="220" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">liaison `:name` → `?`</text>
+  <text x="448" y="236" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">paramètres jamais inlinés dans le SQL</text>
 
   <rect x="436" y="252" width="248" height="42" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="448" y="270" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">#SCHEMA.X# resolution</text>
-  <text x="448" y="286" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">from pool's `schemas` map</text>
+  <text x="448" y="270" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">résolution `#SCHEMA.X#`</text>
+  <text x="448" y="286" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">depuis la table `schemas` du pool</text>
 
   <rect x="436" y="302" width="248" height="42" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="448" y="320" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">per-dialect SQL</text>
-  <text x="448" y="336" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">sql = {`{ default, oracle, postgresql }`}</text>
+  <text x="448" y="320" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">SQL par dialecte</text>
+  <text x="448" y="336" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">sql = default / oracle / postgresql</text>
 
   <line x1="700" y1="220" x2="780" y2="220" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#cn-arrow)"/>
 
@@ -97,57 +97,57 @@ Connectors are defined in `config/connectors.toml`. The file is hot-reloadable �
   <text x="804" y="276" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">api:&#123;c&#125;:&#123;e&#125;</text>
 
   <rect x="796" y="296" width="148" height="78" rx="8" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
-  <text x="804" y="314" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Consumers</text>
-  <text x="804" y="328" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">TableView grid</text>
-  <text x="804" y="342" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Dashboard panels</text>
-  <text x="804" y="356" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">AI assistant tools</text>
-  <text x="804" y="370" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Lookup picker</text>
+  <text x="804" y="314" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Utilisateurs</text>
+  <text x="804" y="328" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Grilles de table</text>
+  <text x="804" y="342" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Panneaux de dashboard</text>
+  <text x="804" y="356" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Outils de l'assistant IA</text>
+  <text x="804" y="370" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sélecteurs de lookup</text>
 </svg>
 
 ---
 
-## SQL connector
+## Connecteur SQL
 
 ### Pool
 
-A SQL connector points at a **pool** — one SQLAlchemy async engine.
+Un connecteur SQL s'appuie sur un **pool** : un moteur SQLAlchemy asynchrone.
 
 ```toml
 [pools.myapp]
 url       = "postgresql+asyncpg://myapp@db:5432/myapp"
-password  = "ENC:…"              # decrypted via [crypto] master_key — or a ${ENV} ref / plaintext
+password  = "ENC:…"              # déchiffré via [crypto] master_key — ou ${ENV} / texte clair
 pool_size = 10
-max_rows  = 5000                  # default SELECT row cap for this pool
-dialect   = "postgresql"          # optional override; otherwise derived from the URL
+max_rows  = 5000                  # plafond SELECT par défaut sur ce pool
+dialect   = "postgresql"          # surcharge optionnelle ; sinon déduit de l'URL
 
 [pools.myapp.schemas]
-PROD = "myapp_prod"               # `#SCHEMA.PROD#` in a query → `myapp_prod` at execute time
+PROD = "myapp_prod"               # `#SCHEMA.PROD#` dans une requête → `myapp_prod` à l'exécution
 ```
 
-The pool's password may be carried separately from the URL (cleaner, keeps it out of logs) or embedded as `ENC:…` inside the URL. Either way the engine is built with URL-safe escaping. A wrong / missing master key when the password is `ENC:` keeps the value as-is and logs a warning.
+Le mot de passe peut être indiqué séparément de l'URL (plus propre, hors des logs) ou intégré dans l'URL sous la forme `ENC:…`. Dans les deux cas, le moteur est construit avec un échappement correct des caractères spéciaux. Si la clé maîtresse est absente ou incorrecte pour une valeur `ENC:`, celle-ci est conservée telle quelle et un avertissement est journalisé.
 
-Engines are created lazily — an unreachable DB never blocks startup; tests inject their own engine.
+Les moteurs sont créés à la demande : une base inaccessible ne bloque jamais le démarrage, et les tests peuvent injecter leur propre moteur.
 
-### Connector
+### Connecteur
 
 ```toml
 [connectors.myapp]
 type     = "sql"
 pool     = "myapp"
-licensed = false                   # set true to gate behind the license key
-max_rows = 5000                    # overrides the pool default
+licensed = false                   # mettre à true pour gérer derrière la clé de licence
+max_rows = 5000                    # surcharge le défaut du pool
 ```
 
-### Queries
+### Requêtes
 
-A connector carries an ordered list of named queries.
+Un connecteur porte une liste ordonnée de requêtes nommées.
 
 ```toml
 [[connectors.myapp.queries]]
 name        = "users_get"
-label       = "Users"               # tab title in the React UI
+label       = "Users"               # titre du panneau dans l'interface React
 description = "Application users"
-auto_load   = true                  # run a SELECT on screen open
+auto_load   = true                  # exécute un SELECT à l'ouverture de l'écran
 sql         = "SELECT id, name, status FROM users ORDER BY name"
 columns = [
   { name = "id",     filter = true },
@@ -156,21 +156,21 @@ columns = [
 ]
 ```
 
-| Field | Description |
+| Champ | Description |
 |---|---|
-| `name` | The connector-scoped name. Permissions reference it as `sql:<connector>:<name>`. |
-| `label` / `description` | Display names. The React UI titles the TableView with `description`, else `label`, else the menu label. |
-| `sql` | The SQL text — string, or a per-dialect map: `sql = { default = "…", oracle = "…" }` keyed by the SQLAlchemy backend name. A `default` is required. |
-| `writable` | `true` for non-`SELECT` statements. Combined with the caller's `sql:<c>:<name>` permission. |
-| `auto_load` | Runs the SELECT immediately on screen open instead of waiting for a *Run* click. |
-| `max_rows` | Per-query SELECT row cap. Overrides connector → pool → global default (1000). |
-| `key_columns` | Result columns that identify a row. Surfaced in `describe()` for the TableView's Excel-import update-vs-insert match. |
-| `columns` | Optional display hints — see *Column hints* below. |
-| `params` | Optional list of `ParamDef` — declares each `:name` the query expects, with a default, a `dd` for the input widget and a `label`. |
+| `name` | Nom de la requête au sein du connecteur. Les permissions y font référence sous la forme `sql:<connecteur>:<name>`. |
+| `label` / `description` | Textes affichés. L'interface utilise `description` comme titre du panneau, sinon `label`, sinon le libellé du menu. |
+| `sql` | Le texte SQL — soit une chaîne, soit une table par dialecte : `sql = { default = "…", oracle = "…" }` indexée par nom de backend SQLAlchemy. La clé `default` est obligatoire. |
+| `writable` | `true` pour toute instruction non-`SELECT`. Combiné à la permission `sql:<c>:<name>` de l'appelant. |
+| `auto_load` | Exécute le SELECT à l'ouverture de l'écran, sans attendre un clic *Exécuter*. |
+| `max_rows` | Plafond SELECT propre à la requête. Surcharge le défaut du connecteur, puis du pool, puis le défaut global (1000 lignes). |
+| `key_columns` | Colonnes du résultat qui identifient une ligne. Exposées dans `describe()` pour la correspondance import-Excel de la grille. |
+| `columns` | Options d'affichage optionnelles — voir *Options de colonne* ci-dessous. |
+| `params` | Liste optionnelle de `ParamDef` — déclare chaque paramètre `:name` attendu par la requête, avec valeur par défaut, `dd` pour le widget d'entrée et `label`. |
 
-#### Column hints
+#### Options de colonne
 
-A `columns` entry **augments** the discovered schema; it does not replace it. Anything omitted comes from `cursor.description`.
+Une entrée `columns` **complète** le schéma découvert : elle ne le remplace pas. Tout ce qui n'est pas indiqué provient directement du curseur de la requête.
 
 ```toml
 columns = [
@@ -181,52 +181,52 @@ columns = [
 ]
 ```
 
-| Hint | Effect |
+| Option | Effet |
 |---|---|
-| `dd` | Dictionary entry key — pulls `label`, `format` and the BOOLEAN / ENUM / LOOKUP rule. `dd = ""` opts out. |
-| `label`, `format` | Per-column override when the dictionary entry is not enough. |
-| `hidden` | Drops the column from the grid (stays available for filters and forms). |
-| `filter` | Adds the column to the per-column filter row (v1's `col_filter`). |
-| `filter_from` | List of `{ source, column }` — cascading-filter deps. When `source` has a value, this column's LOOKUP options narrow to the lookup rows whose `column` matches it. |
-| `visible_when` | A `{ field, value }` rule (or a list, all AND-ed). The column is dropped entirely when a rule does not pass. |
-| `width`, `align` | Grid layout hints. |
+| `dd` | Clé d'entrée du dictionnaire — récupère `label`, `format` et la règle d'affichage (BOOLEAN / ENUM / LOOKUP). `dd = ""` désactive l'entrée. |
+| `label`, `format` | Surcharge ponctuelle quand l'entrée du dictionnaire ne suffit pas. |
+| `hidden` | Masque la colonne dans la grille (reste disponible pour les filtres et le formulaire). |
+| `filter` | Ajoute la colonne à la ligne de filtre au-dessus de la grille. |
+| `filter_from` | Liste de `{ source, column }` — dépendances de filtre en cascade. Quand `source` a une valeur, les options LOOKUP de cette colonne sont restreintes aux lignes du lookup dont `column` correspond. |
+| `visible_when` | Une règle `{ field, value }` (ou une liste de règles, toutes en ET logique). La colonne disparaît si une règle n'est pas vérifiée. |
+| `width`, `align` | Options de mise en page de la grille. |
 
-### Statement gates
+### Filtres d'instruction
 
-Every statement is parsed and classified before binding:
+Chaque instruction est analysée puis classée avant la liaison :
 
-- **Allowed**: `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `MERGE`. A `WITH … SELECT` resolves to `SELECT`; a `WITH … DELETE` resolves to `DELETE`. An unparseable `WITH` → rejected.
-- **Writable gate**: `INSERT` / `UPDATE` / `DELETE` / `MERGE` require `writable = true` *and* the caller's `sql:<c>:<name>` permission. Either side missing → `403`.
+- **Instructions autorisées** : `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `MERGE`. Un `WITH … SELECT` est traité comme un `SELECT` ; un `WITH … DELETE` comme un `DELETE`. Un `WITH` non analysable est rejeté.
+- **Contrôle d'écriture** : `INSERT` / `UPDATE` / `DELETE` / `MERGE` nécessitent `writable = true` *et* la permission `sql:<c>:<name>` de l'appelant. L'absence de l'un ou l'autre déclenche un `403`.
 
-### `:name` → `?` binding
+### Liaison `:name` → `?`
 
-Every `:name` token in the SQL is rewritten to a positional `?` and bound via `PreparedStatement`. Values are **never** string-substituted. The parser respects:
+Chaque jeton `:name` dans le SQL est réécrit en `?` positionnel puis lié via `PreparedStatement`. Les valeurs ne sont **jamais** inlinées dans le SQL. L'analyseur respecte :
 
-- single-quote string literals (`'O''Brien'`),
-- double-quoted identifiers (`"customer.name"`),
-- line and block comments (`-- …` / `/* … */`),
-- the PostgreSQL `::type` cast operator (`'foo'::text`).
+- les littéraux entre guillemets simples (`'O''Brien'`),
+- les identifiants entre guillemets doubles (`"customer.name"`),
+- les commentaires de ligne et de bloc (`-- …` / `/* … */`),
+- l'opérateur de cast PostgreSQL `::type` (`'foo'::text`).
 
-A `:name` the caller omits binds to SQL `NULL` — keeps the same query usable in *create* and *update* paths.
+Un paramètre `:name` non fourni est lié à `NULL` SQL — la même requête reste donc utilisable pour les chemins *create* et *update*.
 
-### `#SCHEMA.X#` placeholders
+### Placeholders `#SCHEMA.X#`
 
-A query may reference `#SCHEMA.PROD#` (or any other key) in its SQL. At execute time the placeholder is replaced from the pool's `schemas` map — `PROD = "myapp_prod"` → `myapp_prod`. A `#SCHEMA.X#` with no mapping (or a mapping that is not a plain identifier) raises `ConnectorError`. Right for dev / prod schema swaps and for several schemas under one DB user.
+Une requête peut référencer `#SCHEMA.PROD#` (ou toute autre clé) dans son SQL. À l'exécution, le placeholder est remplacé par la valeur correspondante de la table `schemas` du pool — `PROD = "myapp_prod"` devient `myapp_prod`. Un `#SCHEMA.X#` sans correspondance, ou avec une valeur qui n'est pas un identifiant simple, lève une erreur `ConnectorError`. Adapté aux bascules dev / prod et aux configurations multi-schémas sous un même utilisateur.
 
-### `params` and `lookup_param_binds`
+### `params` et `lookup_param_binds`
 
-Declared on the query so the React form layer knows what to ask for. A `params` entry can carry a `dd` so the widget is dictionary-driven (BOOLEAN → checkbox, ENUM → searchable dropdown, LOOKUP → searchable dropdown). LOOKUP-type entries can also reference earlier form values via `lookup_param_binds` — a `value` literal or a `source` reading the live form state — so a UDC-style WHERE narrows correctly.
+Déclarés sur la requête pour que le formulaire React sache quoi demander. Une entrée `params` peut porter un `dd` afin que son widget soit piloté par le dictionnaire (BOOLEAN → case à cocher, ENUM → liste déroulante recherchable, LOOKUP → liste déroulante recherchable). Les entrées de type LOOKUP peuvent en plus référencer des valeurs antérieures du formulaire via `lookup_param_binds` — soit une valeur littérale `value`, soit un `source` qui lit l'état courant du formulaire. Cela permet à un `WHERE` de type UDC de se restreindre correctement.
 
 ---
 
-## API connector
+## Connecteur API
 
 ```toml
 [connectors.myservice]
 type       = "api"
 base_url   = "https://api.example.com"
 auth       = "bearer"               # none / basic / bearer / api_key / oauth2
-auth_token = "ENC:…"                # decrypted at runtime; ${ENV} ref also accepted
+auth_token = "ENC:…"                # déchiffré à l'exécution ; ${ENV} accepté
 
 [[connectors.myservice.endpoints]]
 name   = "ping"
@@ -239,31 +239,31 @@ method = "GET"
 path   = "/users/{{user_id}}"
 ```
 
-| Field | Description |
+| Champ | Description |
 |---|---|
 | `auth` | `none` / `basic` (`auth_user` + `auth_pass`) / `bearer` (`auth_token`) / `api_key` / `oauth2`. |
-| OAuth2 | Token-endpoint POST + dot-path extraction + TTL cache + one refresh on `401`. Body is form-encoded or JSON depending on `auth_token_content_type`. |
-| `{{placeholder}}` | Substituted in the path, query string and body from the call's parameters. |
-| `endpoint.response` | Dot-path map for the response — surfaces named values to action chains via `{call.N.fieldName}`. |
-| `writable` | An endpoint emitting `POST` / `PUT` / `DELETE` needs `writable = true`. |
+| OAuth2 | POST sur l'endpoint de jeton + extraction par chemin pointé + cache TTL + un rafraîchissement après un `401`. Le corps est `form-urlencoded` ou JSON selon `auth_token_content_type`. |
+| `{{placeholder}}` | Remplacé dans le chemin, la query-string et le corps depuis les paramètres de l'appel. |
+| `endpoint.response` | Table de chemins pointés sur la réponse — expose des valeurs nommées aux chaînes d'actions via `{call.N.fieldName}`. |
+| `writable` | Un endpoint qui émet du `POST` / `PUT` / `DELETE` nécessite `writable = true`. |
 
-Endpoints emit `POST /api/http/{connector}/{endpoint}` and are gated by `api:<connector>:<endpoint>`.
-
----
-
-## Hot reload
-
-Edit `connectors.toml`, then call **`POST /admin/reload`** (superuser only). The framework rebuilds `ConnectorRegistry`, re-reads the dictionary and the menus, swaps them on `app.state` and disposes the previous registry. In-flight requests keep the version they started with — no race on a query mid-execute. The AI assistant's connector tools refresh on JVM restart, not on reload.
-
-The same admin route surfaces in the React `Settings` tab — every config builder writes through `PUT /admin/config/<pools|connectors|dictionary|menus|screens>` and then prompts a Reload.
+Les endpoints exposent `POST /api/http/{connecteur}/{endpoint}` et sont contrôlés par la permission `api:<connecteur>:<endpoint>`.
 
 ---
 
-## Tips & best practices
+## Rechargement à chaud
 
-- **Discover, do not declare.** Let `cursor.description` drive the schema. Use `columns` hints only for what the cursor cannot tell you (label, format, visibility, cascading filter).
-- **Dictionary entries belong on the dictionary, not on every query.** Define `USER_STATUS` once under `[entries.USER_STATUS]`; reference it with `dd = "USER_STATUS"` from any query that returns it.
-- **Per-dialect SQL only when needed.** A query that works on every backend stays a single string. Use the map form only for Oracle-specific syntax or a function that differs across backends.
-- **Keep the pool password out of the URL.** A `password = "ENC:…"` (or `${ENV}` ref) lives next to the URL — easier to rotate, never logged as part of the connection string.
-- **Always set `writable = true` on mutating queries.** A typo in the connector permission is still caught by the gate at execute time, but the TOML flag is the right place to declare intent.
-- **`max_rows` floors deep**: per-request override → query → connector → pool → global default (1000). Set a sensible per-query value when an operator commonly wants the whole table.
+Modifier `connectors.toml` puis appeler **`POST /admin/reload`** (route réservée aux super-utilisateurs). Le framework reconstruit le registre de connecteurs, relit le dictionnaire et les menus, les remplace sur `app.state` et libère l'ancien registre. Les requêtes en cours conservent la version qu'elles utilisent — aucune course possible sur une requête en cours d'exécution. Les outils du connecteur de l'assistant IA, eux, ne sont rafraîchis qu'au redémarrage de la JVM, pas au rechargement.
+
+La même route est exposée dans l'onglet `Paramètres` de React : chaque éditeur écrit via `PUT /admin/config/<pools|connectors|dictionary|menus|screens>` puis propose un *Reload*.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Découvrir, pas redéclarer.** Laisser le curseur de la requête piloter le schéma. N'utiliser les options `columns` que pour ce que le curseur ne peut pas exprimer (libellé, format, visibilité, filtre en cascade).
+- **Les entrées du dictionnaire vivent dans le dictionnaire, pas sur chaque requête.** Déclarer `USER_STATUS` une seule fois sous `[entries.USER_STATUS]` ; toutes les requêtes qui retournent cette colonne y font référence via `dd = "USER_STATUS"`.
+- **SQL par dialecte uniquement si nécessaire.** Une requête qui fonctionne sur tous les backends reste une chaîne unique. La forme en table n'a de sens que pour de la syntaxe spécifique Oracle ou une fonction dont l'écriture diffère selon le backend.
+- **Garder le mot de passe du pool hors de l'URL.** Un `password = "ENC:…"` (ou `${ENV}`) à côté de l'URL est plus simple à faire tourner et ne ressort jamais dans la chaîne de connexion journalisée.
+- **Toujours marquer `writable = true` sur les requêtes qui modifient des données.** Le contrôle s'effectue aussi à l'exécution, mais le flag TOML est l'endroit naturel pour exprimer l'intention.
+- **`max_rows` se cascade en profondeur** : surcharge par appel → requête → connecteur → pool → défaut global (1000). Définir une valeur raisonnable par requête quand l'utilisateur veut souvent consulter l'ensemble de la table.

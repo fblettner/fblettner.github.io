@@ -6,7 +6,7 @@ keywords: [Liberty, Liberty Next, low-code, framework, connector, TOML, SQL, API
 
 # Liberty Next
 
-**Liberty Next** is a connector-driven low-code framework — the successor of Liberty v1. The shift in one sentence: **configuration drives discovery, not code drives configuration**. A SQL connector is a few lines of TOML pointing at a database pool and a list of queries; the React UI then builds a typed grid, a filter row, a modal form and lookups from what the cursor describes at query time — no metadata tables, no per-screen code.
+**Liberty Next** is a connector-driven low-code framework. The principle is simple: **configuration describes the data sources, the framework discovers the rest at runtime.** A SQL connector is a few lines of TOML pointing at a database pool and a list of queries; the React UI then builds a typed grid, a filter row, a modal form and lookups from the columns the query actually returns — no schema duplication, no per-screen code.
 
 Two paid applications ship on Liberty Next:
 
@@ -83,19 +83,17 @@ Liberty Next is in active development. This documentation is being written along
 
 ---
 
-## What changed from v1
+## What it brings
 
-| Concern | v1 (Liberty) | v2 (Liberty Next) |
-|---|---|---|
-| **Schema source** | ~50 `ly_*` metadata tables: queries, columns, forms, menus all stored as rows. | Discovered at query time from the cursor (`cursor.description`); display hints live in [`config/connectors.toml`](./framework/connectors.md). |
-| **Layout** | Form / dialog / column tables (`ly_dialogs`, `ly_dlg_frm`, `ly_dlg_tab`, `ly_dlg_col`) chained for every screen. | A single [`Screen`](./framework/screens.md) per business object, with inline `dialog`, `actions`, `row_menu`. |
-| **Lookups / enums** | `ly_lookup` / `ly_enum` rows. | [Dictionary](./framework/dictionary.md) entries — `BOOLEAN` / `ENUM` / `LOOKUP` rules pinned per field. |
-| **Auth** | DB-only. | TOML *or* DB backend, JWT, OIDC against any provider. |
-| **AI assistant** | Hardcoded OpenAI. | Anthropic SDK, tool-use over the connectors / screens / dashboards. |
-| **Frontend** | Mixed React + jQuery + per-screen code. | React 19 + Vite + TypeScript, single-page, dark-default with light theme. |
-| **Migration** | — | `liberty-migrate all / dictionary / menu / screen` reads v1 read-only and emits TOML fragments. |
-
-The full design plan lives at `docs/PLAN.md` in the repository.
+| Area | What Liberty Next provides |
+|---|---|
+| **Data sources** | SQL pools (PostgreSQL, Oracle, SQLite) and HTTP API endpoints, declared in TOML under `config/`. |
+| **Schema discovery** | Columns are read from the query's cursor at runtime; the dictionary adds labels, formats and display rules per column. |
+| **Screens** | One [`Screen`](./framework/screens.md) entry per business object: grid, modal form, per-field conditions, audit tab. |
+| **Dashboards** | [Charts and KPIs](./framework/dashboards.md) over the same named queries — bar, line, pie, stat panels. |
+| **Auth** | TOML or database backend, JWT tokens, OIDC against any provider. |
+| **AI assistant** | Anthropic-powered tool-use over the connectors, screens and dashboards configured on the instance. |
+| **Frontend** | React 19 + Vite + TypeScript, single-page, dark default with light theme, EN / FR. |
 
 ---
 
@@ -121,7 +119,7 @@ Environment knobs:
 |---|---|
 | `LIBERTY_DB_URL` | Framework pool (auth tables when `[auth] backend = "db"`). Defaults to a local SQLite file. |
 | `LIBERTY_JWT_SECRET` | Token signing key — ephemeral when unset. |
-| `LIBERTY_MASTER_KEY` | Crypto master key for `ENC:` values (matches v1's `MASTER_KEY`). |
+| `LIBERTY_MASTER_KEY` | Crypto master key used to decrypt `ENC:` values in configuration. |
 | `LIBERTY_LICENSE_KEY` | RS256-signed JWT that unlocks licensed connectors (nomasx1 / nomajde). |
 | `ANTHROPIC_API_KEY` | Enables the in-app AI assistant. |
 

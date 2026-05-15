@@ -1,18 +1,18 @@
 ---
-title: Dashboards
-description: "A dashboard lays out KPIs and charts over named connector queries. Bar, line, pie and stat panels are configured in TOML — the React DashboardView renders the layout, the API streams the rows."
-keywords: [Liberty Next, dashboard, chart, bar, line, pie, KPI, panel, dashboards.toml, layout]
+title: Tableaux de bord
+description: "Un tableau de bord agence des indicateurs et des graphiques au-dessus de requêtes connecteur nommées. Les panneaux barre, ligne, camembert et numérique sont déclarés en TOML — le DashboardView React rend la mise en page, l'API renvoie les lignes."
+keywords: [Liberty Next, tableau de bord, dashboard, graphique, barre, ligne, camembert, indicateur, panneau, dashboards.toml, mise en page]
 ---
 
-# Dashboards
+# Tableaux de bord
 
-A **Dashboard** is a layout of charts and KPI cards over the same connector queries the [Screens](./screens.md) use. One file (`config/dashboards.toml`) declares every dashboard the app ships. The React `DashboardView` reads the layout, fans out one query per panel, and renders the grid.
+Un **tableau de bord** est un agencement de graphiques et de cartes d'indicateurs au-dessus des mêmes requêtes nommées que celles utilisées par les [Écrans](/liberty/framework/screens). Un seul fichier (`config/dashboards.toml`) déclare tous les tableaux livrés par l'application. Le `DashboardView` React lit la mise en page, lance une requête par panneau puis rend la grille.
 
-Dashboards are hot-reloadable along with the rest of the config.
+Les tableaux de bord sont rechargeables à chaud avec le reste de la configuration.
 
 ---
 
-## At a glance
+## Vue d'ensemble
 
 <svg viewBox="0 0 1000 440" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -23,50 +23,50 @@ Dashboards are hot-reloadable along with the rest of the config.
 
   <rect x="40" y="40" width="920" height="380" rx="14" fill="url(#db-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">📊 Users overview · Dashboard</text>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">📊 Vue d'ensemble Utilisateurs · Tableau de bord</text>
   <rect x="860" y="50" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="900" y="65" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Refresh</text>
+  <text x="900" y="65" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Rafraîchir</text>
   <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
   <rect x="60" y="100" width="200" height="80" rx="10" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.35)" strokeWidth="1.2"/>
-  <text x="76" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">USERS · TOTAL</text>
+  <text x="76" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">UTILISATEURS · TOTAL</text>
   <text x="76" y="152" fill="#4a9eff" fontSize="28" fontWeight="800" fontFamily="system-ui, sans-serif">1 248</text>
-  <text x="76" y="170" fill="#4ade80" fontSize="10" fontFamily="ui-monospace, monospace">+12 this month</text>
+  <text x="76" y="170" fill="#4ade80" fontSize="10" fontFamily="ui-monospace, monospace">+12 ce mois</text>
 
   <rect x="280" y="100" width="200" height="80" rx="10" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.35)" strokeWidth="1.2"/>
-  <text x="296" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">ACTIVE</text>
+  <text x="296" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">ACTIFS</text>
   <text x="296" y="152" fill="#4ade80" fontSize="28" fontWeight="800" fontFamily="system-ui, sans-serif">1 102</text>
-  <text x="296" y="170" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">88 % of total</text>
+  <text x="296" y="170" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">88 % du total</text>
 
   <rect x="500" y="100" width="200" height="80" rx="10" fill="rgba(248,113,113,0.10)" stroke="rgba(248,113,113,0.35)" strokeWidth="1.2"/>
-  <text x="516" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">INACTIVE</text>
+  <text x="516" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">INACTIFS</text>
   <text x="516" y="152" fill="#f87171" fontSize="28" fontWeight="800" fontFamily="system-ui, sans-serif">146</text>
-  <text x="516" y="170" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">12 % of total</text>
+  <text x="516" y="170" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">12 % du total</text>
 
   <rect x="720" y="100" width="200" height="80" rx="10" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.35)" strokeWidth="1.2"/>
   <text x="736" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">ADMINS</text>
   <text x="736" y="152" fill="#c084fc" fontSize="28" fontWeight="800" fontFamily="system-ui, sans-serif">18</text>
-  <text x="736" y="170" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">3 added · 1 removed</text>
+  <text x="736" y="170" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">3 ajoutés · 1 retiré</text>
 
   <rect x="60" y="200" width="440" height="200" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="76" y="222" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">USERS PER STATUS · BAR</text>
+  <text x="76" y="222" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">UTILISATEURS PAR STATUT · BARRE</text>
   <line x1="80" y1="380" x2="480" y2="380" stroke="#334155" strokeWidth="1"/>
 
   <rect x="100" y="270" width="40" height="110" fill="rgba(74,158,255,0.45)"/>
-  <text x="120" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Active</text>
+  <text x="120" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Actif</text>
   <rect x="160" y="320" width="40" height="60" fill="rgba(255,159,10,0.45)"/>
-  <text x="180" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Pending</text>
+  <text x="180" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">En attente</text>
   <rect x="220" y="350" width="40" height="30" fill="rgba(248,113,113,0.45)"/>
-  <text x="240" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Disabled</text>
+  <text x="240" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Désactivé</text>
   <rect x="280" y="305" width="40" height="75" fill="rgba(192,132,252,0.45)"/>
   <text x="300" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Admin</text>
   <rect x="340" y="290" width="40" height="90" fill="rgba(50,215,75,0.45)"/>
-  <text x="360" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Read-only</text>
+  <text x="360" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Lecture seule</text>
   <rect x="400" y="345" width="40" height="35" fill="rgba(148,163,184,0.45)"/>
-  <text x="420" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Other</text>
+  <text x="420" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Autre</text>
 
   <rect x="520" y="200" width="400" height="200" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="536" y="222" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CREATED PER MONTH · LINE</text>
+  <text x="536" y="222" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CRÉATIONS PAR MOIS · LIGNE</text>
   <line x1="540" y1="380" x2="900" y2="380" stroke="#334155" strokeWidth="1"/>
 
   <polyline points="560,360 620,330 680,300 740,310 800,260 860,240 900,250" fill="none" stroke="#4a9eff" strokeWidth="2"/>
@@ -79,37 +79,37 @@ Dashboards are hot-reloadable along with the rest of the config.
   <circle cx="900" cy="250" r="3" fill="#4a9eff"/>
 
   <text x="560" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Jan</text>
-  <text x="620" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Feb</text>
+  <text x="620" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Fév</text>
   <text x="680" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Mar</text>
-  <text x="740" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Apr</text>
-  <text x="800" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">May</text>
-  <text x="860" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Jun</text>
-  <text x="900" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Jul</text>
+  <text x="740" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Avr</text>
+  <text x="800" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Mai</text>
+  <text x="860" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Juin</text>
+  <text x="900" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Juil</text>
 </svg>
 
 ---
 
-## Defining a dashboard
+## Déclarer un tableau de bord
 
 ```toml
 [dashboards.myapp.overview]
-label       = "Users overview"
-description = "Snapshot of accounts, statuses and recent growth."
+label       = "Vue d'ensemble utilisateurs"
+description = "Instantané des comptes, des statuts et de la croissance récente."
 auto_load   = true
 
-# One panel per KPI / chart
+# Un panneau par indicateur ou graphique
 [[dashboards.myapp.overview.panels]]
 id          = "users_total"
 type        = "stat"
-label       = "Users · total"
-query       = "users_count"          # any SELECT — first row, first column wins
-columns     = 3                       # CSS-grid width inside the dashboard
-delta_field = "delta_month"           # optional secondary number
+label       = "Utilisateurs · total"
+query       = "users_count"          # toute requête SELECT — la première colonne de la première ligne est lue
+columns     = 3                       # largeur dans la grille du tableau (sur 12)
+delta_field = "delta_month"           # nombre secondaire optionnel
 
 [[dashboards.myapp.overview.panels]]
 id      = "users_per_status"
 type    = "bar"
-label   = "Users per status"
+label   = "Utilisateurs par statut"
 query   = "users_by_status"           # SELECT status, count(*) FROM users GROUP BY status
 columns = 6
 x       = "status"
@@ -118,7 +118,7 @@ y       = "count"
 [[dashboards.myapp.overview.panels]]
 id      = "created_per_month"
 type    = "line"
-label   = "Created per month"
+label   = "Créations par mois"
 query   = "users_created_per_month"
 columns = 6
 x       = "month"
@@ -127,62 +127,62 @@ y       = "count"
 [[dashboards.myapp.overview.panels]]
 id      = "users_by_role"
 type    = "pie"
-label   = "Users by role"
+label   = "Utilisateurs par rôle"
 query   = "users_by_role"
 columns = 4
 slice   = "role"
 value   = "count"
 ```
 
-The CSS-grid width is **12 columns**. A panel with `columns = 6` takes half a row; two `columns = 3` plus one `columns = 6` share a row.
+La grille du tableau de bord est divisée en **12 colonnes**. Un panneau avec `columns = 6` occupe une demi-ligne ; deux panneaux `columns = 3` plus un panneau `columns = 6` partagent une ligne.
 
 ---
 
-## Panel types
+## Types de panneau
 
-| `type` | What it renders | Required fields |
+| `type` | Ce qui est rendu | Champs requis |
 |---|---|---|
-| `stat` | A single big number with an optional delta below. | `query`. Reads the first row's first column. `delta_field` optional. |
-| `bar` | Vertical bars per category. | `x` (category), `y` (numeric). |
-| `line` | A line over a time / ordered axis. | `x`, `y`. Sorted by `x` as returned. |
-| `pie` | Pie chart per slice. | `slice` (category), `value` (numeric). |
-| `grid` *(planned)* | A small DataTable inline. | `query`, optional `columns` hints. |
+| `stat` | Un grand nombre, accompagné d'un delta optionnel. | `query` (lit la première colonne de la première ligne). `delta_field` optionnel. |
+| `bar` | Des barres verticales, une par catégorie. | `x` (catégorie), `y` (valeur numérique). |
+| `line` | Une courbe sur un axe temporel ou ordonné. | `x`, `y`. Les points sont rendus dans l'ordre renvoyé par la requête. |
+| `pie` | Un camembert, une part par tranche. | `slice` (catégorie), `value` (valeur numérique). |
+| `grid` *(prévu)* | Une mini-table directement dans le tableau de bord. | `query`, options `columns` optionnelles. |
 
-Each panel binds to **one** named query on the screen's connector — or another connector when the panel sets `connector = "other"`. Permission is `sql:<connector>:<query>` — a panel the caller cannot run is dropped, the grid collapses around it.
+Chaque panneau s'appuie sur **une** requête nommée du connecteur du tableau — ou d'un autre connecteur si le panneau précise `connector = "autre"`. La permission requise est `sql:<connecteur>:<requête>` ; un panneau auquel l'utilisateur n'a pas accès disparaît, et la mise en page se réajuste automatiquement.
 
 ---
 
-## Layout
+## Mise en page
 
-A dashboard's panels render in declaration order, flowing left-to-right inside a 12-column grid. A panel with no `columns` defaults to `4` (three side-by-side).
+Les panneaux sont rendus dans l'ordre de déclaration, de gauche à droite, dans une grille de 12 colonnes. Un panneau qui n'indique pas `columns` prend la valeur `4` par défaut (trois panneaux côte à côte).
 
-Optional layout knobs:
+Options de mise en page :
 
-| Field | Effect |
+| Champ | Effet |
 |---|---|
-| `columns` | Panel width (1 – 12). Wraps to the next row when overflowing. |
-| `rows` | Optional vertical span. Default `1`. |
-| `group` | Tag panels with a group label — the React UI prints a section header above the first panel of each group. |
-| `auto_load` | Run the panel's query on dashboard open. Defaults to the dashboard-level `auto_load`. |
+| `columns` | Largeur du panneau (entre 1 et 12). Le panneau passe à la ligne suivante en cas de débordement. |
+| `rows` | Hauteur optionnelle en nombre de lignes. Valeur par défaut : `1`. |
+| `group` | Étiquette de groupe ; l'interface affiche un en-tête de section au-dessus du premier panneau de chaque groupe. |
+| `auto_load` | Exécute la requête du panneau à l'ouverture du tableau. Hérite par défaut du `auto_load` du tableau de bord. |
 
 ---
 
-## REST endpoints
+## Endpoints REST
 
-| Method | Path | Purpose |
+| Méthode | Chemin | Rôle |
 |---|---|---|
-| `GET` | `/api/dashboards` | Every accessible dashboard per app. |
-| `GET` | `/api/dashboards/{app}` | One app's dashboards. |
-| `GET` | `/api/dashboards/{app}/{id}` | The dashboard's full layout. |
-| `POST` | `/api/dashboards/{app}/{id}/refresh` | Re-fetch every panel server-side (proxied to the underlying `/api/query/…`). |
+| `GET` | `/api/dashboards` | Tous les tableaux de bord accessibles, regroupés par app. |
+| `GET` | `/api/dashboards/{app}` | Les tableaux de bord d'une app. |
+| `GET` | `/api/dashboards/{app}/{id}` | La mise en page complète du tableau. |
+| `POST` | `/api/dashboards/{app}/{id}/refresh` | Relance chaque panneau côté serveur (passe par les routes `/api/query/…` sous-jacentes). |
 
-The `DashboardView` calls `/api/query/{connector}/{name}` directly per panel — the same gate as a TableView. A panel without the required permission is silently dropped.
+Le `DashboardView` appelle directement `/api/query/{connecteur}/{nom}` pour chaque panneau — mêmes contrôles que pour une grille de table. Un panneau dont la requête n'est pas autorisée est masqué silencieusement.
 
 ---
 
-## Tips & best practices
+## Conseils & bonnes pratiques
 
-- **Reuse the screen's queries.** A dashboard rarely needs new SQL — a `users_by_status` `GROUP BY` is one extra query alongside `users_get`, in the same connector. Keeps the dictionary one and the same.
-- **Stat panels are cheap; pie panels are not.** A pie over thousands of slices reads poorly. When the cardinality grows past 8, switch to a bar with a `LIMIT N` plus an *Other* bucket.
-- **Pick a default `columns` per panel type.** Stats look right at 3 (four-up); bar / line at 6 (two-up); pie at 4. The grid then accommodates the mix without arithmetic.
-- **A dashboard is permission-pruned.** Panels whose query the caller cannot run are dropped. The layout collapses cleanly — design with that in mind: do not chain panels that depend on each other.
+- **Réutiliser les requêtes de l'écran.** Un tableau de bord a rarement besoin de SQL nouveau : un `users_by_status` avec `GROUP BY` se déclare à côté de `users_get`, dans le même connecteur. Le dictionnaire reste unique.
+- **Les panneaux numériques sont peu coûteux ; les camemberts moins.** Un camembert sur des milliers de tranches devient illisible. Au-delà de huit tranches, basculer sur un panneau barre avec un `LIMIT N` et un agrégat *Autres*.
+- **Choisir une largeur cohérente par type.** Les indicateurs numériques rendent bien à `columns = 3` (quatre côte à côte) ; les graphiques barre et ligne à `columns = 6` (deux côte à côte) ; les camemberts à `columns = 4`. La grille s'ajuste alors naturellement.
+- **Un tableau de bord est filtré par les permissions.** Les panneaux que l'utilisateur ne peut pas exécuter disparaissent. La mise en page s'adapte d'elle-même — il faut éviter de concevoir des panneaux qui dépendent les uns des autres.

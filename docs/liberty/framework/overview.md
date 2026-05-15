@@ -1,6 +1,6 @@
 ---
 title: Framework Overview
-description: "Liberty Next is layered around pools, connectors, the dictionary, screens, dashboards and menus. Each layer is a single TOML file under config/. The schema of a query result is discovered at runtime — no metadata tables, no codegen."
+description: "Liberty Next is layered around pools, connectors, the dictionary, screens, dashboards and menus. Each layer is a single TOML file under config/. The schema of a query result is discovered at runtime — no schema duplication, no codegen."
 keywords: [Liberty Next, framework, architecture, pool, connector, dictionary, screen, dashboard, menu, TOML, hot-reload]
 ---
 
@@ -150,7 +150,7 @@ See [Connectors](./connectors.md) for the full reference.
 
 ### Dictionary
 
-The **dictionary** is the v2 form of v1's `ly_dictionary` + `ly_enum` + `ly_lookup`. Each entry pins a column's label, format and rule once; every screen that surfaces that column inherits them:
+The **dictionary** defines per-column metadata: labels (with per-language translations), formats and display rules. Each entry pins a column's identity once; every screen that returns that column inherits them automatically:
 
 ```toml
 [entries.USER_STATUS]
@@ -169,7 +169,7 @@ A `column.dd = "USER_STATUS"` on the query lifts the label and the `ENUM` rule o
 
 ### Screens
 
-A **screen** is one business object — what v1 called a `ly_table` + its `ly_dialog`. Defined under `[screens.<app>.<id>]` in `screens.toml`:
+A **screen** is the definition of one business object: the read query that drives the grid, the optional write queries, and the inline modal form. Defined under `[screens.<app>.<id>]` in `screens.toml`:
 
 ```toml
 [screens.myapp.users]

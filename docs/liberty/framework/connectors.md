@@ -1,15 +1,15 @@
 ---
 title: Connectors
-description: "Define SQL and API connectors in TOML. A SQL connector is a list of named queries against a pool; an API connector is a list of named endpoints against an HTTP client. Schema is discovered at query time — no metadata tables."
+description: "Define SQL and API connectors in TOML. A SQL connector groups named queries that run against a database pool; an API connector groups named HTTP endpoints. Result schemas are discovered at runtime from the query cursor."
 keywords: [Liberty Next, connector, SQL, API, TOML, pool, query, endpoint, writable, dialect, schema discovery, param bind]
 ---
 
 # Connectors
 
-A **connector** is the named target the rest of Liberty Next talks to. Two kinds:
+A **connector** defines how Liberty Next reaches a data source. Two kinds:
 
-- **SQL connector** — a list of named queries against a pool. The schema of a result is discovered from `cursor.description`; display hints sit on the query, label and rule sit on the [dictionary](./dictionary.md).
-- **API connector** — a list of named endpoints against an `httpx.AsyncClient`. Auth, base URL and placeholder substitution live on the connector.
+- **SQL connector** — a set of named SQL queries that run against a database pool. The schema of each result is discovered at runtime from the query cursor; display details (labels, formats, display rules) come from the [dictionary](./dictionary.md).
+- **API connector** — a set of named HTTP endpoints. Authentication, base URL and placeholder substitution are configured on the connector.
 
 Connectors are defined in `config/connectors.toml`. The file is hot-reloadable — `POST /admin/reload` rebuilds the registry while in-flight requests keep the version they started with.
 
@@ -186,7 +186,7 @@ columns = [
 | `dd` | Dictionary entry key — pulls `label`, `format` and the BOOLEAN / ENUM / LOOKUP rule. `dd = ""` opts out. |
 | `label`, `format` | Per-column override when the dictionary entry is not enough. |
 | `hidden` | Drops the column from the grid (stays available for filters and forms). |
-| `filter` | Adds the column to the per-column filter row (v1's `col_filter`). |
+| `filter` | Adds the column to the per-column filter row above the grid. |
 | `filter_from` | List of `{ source, column }` — cascading-filter deps. When `source` has a value, this column's LOOKUP options narrow to the lookup rows whose `column` matches it. |
 | `visible_when` | A `{ field, value }` rule (or a list, all AND-ed). The column is dropped entirely when a rule does not pass. |
 | `width`, `align` | Grid layout hints. |
