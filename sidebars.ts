@@ -34,8 +34,8 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Installation',
-      link: {type: 'generated-index', slug: '/liberty/installation', description: 'Install and configure the Liberty Framework stack: Docker, Traefik, SSL and Linux services.'},
+      label: 'Archive — v1 Installation (Docker stack)',
+      link: {type: 'generated-index', slug: '/liberty/archive/installation', description: 'Legacy installation pages for the v1 Docker stack. Retained while the v1 → Liberty Next migration is in progress; new Liberty Next installation docs will replace this section once Docker support for Liberty Next ships.'},
       items: [
         'liberty/technical/architecture',
         'liberty/technical/installation',
@@ -47,8 +47,8 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Legacy — v1 React Components',
-      link: {type: 'generated-index', slug: '/liberty/react-components', description: 'Liberty Core — modular React components, services, theming and main building blocks.'},
+      label: 'Archive — v1 React Components',
+      link: {type: 'generated-index', slug: '/liberty/archive/react-components', description: 'Legacy reference for the v1 React component library (Liberty Core). Retained while the v1 → Liberty Next migration is in progress and will be retired at the end of the migration.'},
       items: [
         'liberty/core/getting-started',
         'liberty/core/new-project',
