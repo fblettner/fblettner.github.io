@@ -196,6 +196,7 @@ This is the form-based mapping editor — the visual replacement for hand-writte
 | Button | Behaviour |
 |---|---|
 | **Load XML Source** | Loads a sample XML file (browser-side) and extracts every element path. Paths populate the picker dropdowns next to each variable field, so values can be filled by clicking rather than typing. |
+| **Load connector sample** *(2026.05.16)* | When the active document template has `source = Connector`, this button calls the configured SQL query or REST endpoint once and feeds the response into the same path picker. The XPath dropdowns then autocomplete against actual data — same UX as a real XML spool, no file needed. The button is hidden for `XML` and `UBL` templates. |
 | **AI Auto-Map** ✦ | Opens the *AI Auto-Map* modal. Provide a sample XML (and optionally a rendered PDF) — the AI returns a JSON mapping of `TAG_*` variables to XML paths, scoped correctly. See [AI Auto-Map](#ai-auto-map) below. |
 | **Save Mappings** | Writes the current values of all `TAG_*` variables back into the XSLT file. The dot indicator (`●`) appears when mappings have changed but are not saved. |
 

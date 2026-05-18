@@ -179,18 +179,18 @@ java -jar nomaubl.jar -serve /opt/nomaubl/demo/config/config.json 8090
 
 ## `-process` — point d'entrée unique de traitement
 
-Traite un (ou plusieurs) fichier source contre un modèle de document. Le pipeline est sélectionné par la propriété `source` du modèle (`XML` pour les spools XML qui nécessitent une transformation XSL, `UBL` pour les factures UBL 2.1 déjà formées). Remplace les anciennes options `-xml` et `-ubl`.
+Traite un (ou plusieurs) fichier source contre un modèle de document — ou appelle un connecteur SQL / REST quand le `source` du modèle vaut `Connecteur` (2026.05.16). Le pipeline est sélectionné par la propriété `source` du modèle (`XML` pour les spools XML qui nécessitent une transformation XSL, `UBL` pour les factures UBL 2.1 déjà formées, `Connecteur` pour les appels en direct à une requête SQL ou un endpoint REST). Remplace les anciennes options `-xml` et `-ubl`.
 
 ```text
--process <configFile> <template> <fichier|répertoire> [type] [--verbose] [--replace] [--no-send] [--no-db] [--validate] [--send]
+-process <configFile> <template> <fichier|répertoire|---> [type] [--param clé=valeur …] [--verbose] [--replace] [--no-send] [--no-db] [--validate] [--send] [--no-debug]
 ```
 
 | Argument | Description |
 |---|---|
 | **`configFile`** | Chemin absolu vers `config.json`. |
 | **`template`** | Nom du modèle de document (par ex. `invoices`, `credit_notes`). La propriété `source` du modèle pilote le pipeline — voir [Documents](./documents.md). |
-| **`fichier \| répertoire`** | Un fichier source ou un répertoire de fichiers source. Pour un modèle XML, le fichier est attendu sous `<dirInput>/<fichier>.xml` quand l'extension est omise. Pour un modèle UBL, le chemin peut être absolu ou relatif à `<dirInput>/ubl/`. Sur un répertoire, chaque fichier correspondant est traité par ordre alphabétique. |
-| **`type`** | Modèles XML uniquement — type de traitement (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignoré sur les modèles UBL. |
+| **`fichier \| répertoire \| ---`** | Un fichier source ou un répertoire de fichiers source. Pour un modèle **XML**, le fichier est attendu sous `<dirInput>/<fichier>.xml` quand l'extension est omise. Pour un modèle **UBL**, le chemin peut être absolu ou relatif à `<dirInput>/ubl/`. Sur un répertoire, chaque fichier correspondant est traité par ordre alphabétique. Pour un modèle **Connecteur**, passer `---` (trois tirets) à la place du chemin — la source est le connecteur, pas un fichier. |
+| **`type`** | Modèles XML uniquement — type de traitement (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignoré sur les modèles UBL et Connecteur. |
 
 **Types de traitement** *(source XML uniquement)*
 
@@ -205,12 +205,18 @@ Traite un (ou plusieurs) fichier source contre un modèle de document. Le pipeli
 
 | Option | Effet | S'applique à |
 |---|---|---|
-| `--verbose` | Affiche les messages de traitement par fichier sur stdout. | les deux |
-| `--replace` | Purge les cinq tables UBL pour `(doc, dct, kco)` avant ré-import. | les deux |
-| `--no-send` | N'envoie pas à la Plateforme Agréée. | les deux |
+| `--param clé=valeur` | Transmet une valeur aux paramètres du connecteur. Répétable — une fois par paramètre déclaré. Mêmes noms que les champs du formulaire affiché sur *Traitement → Traiter un document* quand le modèle utilise un connecteur. | Connecteur |
+| `--verbose` | Affiche les messages de traitement par fichier sur stdout. | tous |
+| `--replace` | Purge les cinq tables UBL pour `(doc, dct, kco)` avant ré-import. | tous |
+| `--no-send` | N'envoie pas à la Plateforme Agréée. | tous |
 | `--no-db` | N'écrit pas en base (implique `--no-send`). | XML |
 | `--validate` | XSD + Schematron seulement — pas d'insertion BDD, pas de dépôt PA. | UBL |
 | `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. | UBL |
+| `--no-debug` | Ignore les durées par étape (parse, validation, insertion en base, envoi PA) que 2026.05.16 active par défaut. À utiliser sur les batchs nocturnes volumineux quand la surcharge par étape n'apporte rien dans les logs. | tous |
+
+:::info[Timings de debug par défaut — 2026.05.16]
+Les durées par étape (parse, validation, insertion en base, envoi à la PA…) sont désormais loggées à chaque exécution, dans l'interface comme en ligne de commande. La surcharge est négligeable et c'est le moyen le plus rapide de diagnostiquer une exécution lente. À n'utiliser `--no-debug` que sur les gros batchs de nuit, quand les lignes par étape encombrent le log sans apporter de valeur.
+:::
 
 **Exemples**
 
@@ -222,6 +228,12 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
 # Modèle UBL — valider chaque fichier d'un répertoire, sans BDD ni PA
 java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
                       ubl-invoices /opt/nomaubl/demo/ubl/ --validate
+
+# Modèle Connecteur — récupérer en-tête + lignes via une requête SQL, sans timings de debug
+java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
+                      invoices-sql --- \
+                      --param customer=00001234 --param docNumber=2026000125 \
+                      --no-debug
 ```
 
 ---

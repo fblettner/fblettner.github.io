@@ -179,18 +179,18 @@ java -jar nomaubl.jar -serve /opt/nomaubl/demo/config/config.json 8090
 
 ## `-process` — single document-processing entry point
 
-Process one (or many) source files against one document template. The pipeline is selected by the template's `source` property (`XML` for XML spools requiring an XSL transform, `UBL` for already-formed UBL 2.1 invoices). Replaces the legacy `-xml` and `-ubl` flags.
+Process one (or many) source files against one document template — or call a SQL / REST connector when the template's `source` is `Connector` (2026.05.16). The pipeline is selected by the template's `source` property (`XML` for XML spools requiring an XSL transform, `UBL` for already-formed UBL 2.1 invoices, `Connector` for live calls to a SQL query or REST endpoint). Replaces the legacy `-xml` and `-ubl` flags.
 
 ```text
--process <configFile> <template> <file|dir> [type] [--verbose] [--replace] [--no-send] [--no-db] [--validate] [--send]
+-process <configFile> <template> <file|dir|---> [type] [--param key=value …] [--verbose] [--replace] [--no-send] [--no-db] [--validate] [--send] [--no-debug]
 ```
 
 | Argument | Description |
 |---|---|
 | **`configFile`** | Absolute path to `config.json`. |
 | **`template`** | Document template name (e.g. `invoices`, `credit_notes`). The template's `source` property drives the pipeline — see [Documents](./documents.md). |
-| **`file \| dir`** | One source file or a directory of source files. For an XML template, the file is expected at `<dirInput>/<file>.xml` if no extension is given. For a UBL template, the path may be absolute or relative to `<dirInput>/ubl/`. When a directory is given, every matching file is processed in alphabetical order. |
-| **`type`** | XML templates only — processing type (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignored on UBL templates. |
+| **`file \| dir \| ---`** | One source file or a directory of source files. For an **XML** template, the file is expected at `<dirInput>/<file>.xml` if no extension is given. For a **UBL** template, the path may be absolute or relative to `<dirInput>/ubl/`. When a directory is given, every matching file is processed in alphabetical order. For a **Connector** template, pass `---` (three dashes) in place of the file path — the source is the connector, not a file. |
+| **`type`** | XML templates only — processing type (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignored on UBL and Connector templates. |
 
 **Processing types** *(XML source only)*
 
@@ -205,12 +205,18 @@ Process one (or many) source files against one document template. The pipeline i
 
 | Flag | Effect | Applies to |
 |---|---|---|
-| `--verbose` | Print per-file processing messages on stdout. | both |
-| `--replace` | Purge the five UBL tables for `(doc, dct, kco)` before re-insert. | both |
-| `--no-send` | Skip submission to the Plateforme Agréée. | both |
+| `--param key=value` | Pass a value to the connector's parameters. Repeatable — once per declared parameter. Same names as the form fields shown on *Processing → Process Document* when the template uses a connector. | Connector |
+| `--verbose` | Print per-file processing messages on stdout. | all |
+| `--replace` | Purge the five UBL tables for `(doc, dct, kco)` before re-insert. | all |
+| `--no-send` | Skip submission to the Plateforme Agréée. | all |
 | `--no-db` | Skip the database write step (implies `--no-send`). | XML |
 | `--validate` | XSD + Schematron only — no DB insert, no PA send. | UBL |
 | `--send` | Force submission to the PA, overriding the configured default. | UBL |
+| `--no-debug` | Skip the per-step timings that 2026.05.16 enables by default (parse, validation, DB insert, send to PA). Recommended on heavy nightly batches where the per-step overhead is not worth the extra log volume. | all |
+
+:::info[Debug timings on by default — 2026.05.16]
+Per-step timings (parse, validation, DB insert, send to PA…) are now logged in every run, both in the UI and on the CLI. The overhead is negligible and the timings are the fastest way to diagnose a slow run. Use `--no-debug` on the CLI (or untick the toggle in the UI) only when running large overnight batches where the per-step lines clutter the log without bringing value.
+:::
 
 **Examples**
 
@@ -222,6 +228,12 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
 # UBL template — validate every file in a directory, no DB / no PA
 java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
                       ubl-invoices /opt/nomaubl/demo/ubl/ --validate
+
+# Connector template — pull header + lines from a SQL query, suppress debug timings
+java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
+                      invoices-sql --- \
+                      --param customer=00001234 --param docNumber=2026000125 \
+                      --no-debug
 ```
 
 ---

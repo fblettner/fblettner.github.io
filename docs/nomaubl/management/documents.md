@@ -1,7 +1,7 @@
 ---
 title: Documents
-description: "Configure how each document type is parsed from a source XML spool (JD Edwards, SAP, NetSuite, custom ERP…) or read directly from a UBL invoice, transformed for processing and rendered as PDF."
-keywords: [NomaUBL, documents, XPath, bursting, source, idPattern, cbc:ID, UHTMPL, UBL, XSL, PDF template, ERP, JD Edwards, SAP, NetSuite, custom ERP]
+description: "Configure how each document type is parsed from a source XML spool, read from a UBL invoice, or pulled live from a SQL query / REST API, then transformed for processing and rendered as PDF."
+keywords: [NomaUBL, documents, XPath, bursting, source, idPattern, cbc:ID, UHTMPL, UBL, XSL, PDF template, ERP, JD Edwards, SAP, NetSuite, custom ERP, SQL connector, API connector]
 ---
 
 # Documents
@@ -10,7 +10,7 @@ The **Documents** editor defines how NomaUBL turns a raw **source XML spool** �
 
 For every document type you tell NomaUBL three things:
 
-1. **Where the data comes from** — the new `source` selector picks between an XML spool that needs an XSL transform and a UBL 2.1 invoice that's already structured (*Document* tab).
+1. **Where the data comes from** — the `source` selector picks between an XML spool that needs an XSL transform, a UBL 2.1 invoice that's already structured, and (since 2026.05.16) a **SQL or REST connector** that returns the data live without any file (*Document* tab).
 2. **How to transform** each document into UBL and PDF (*Processing* tab).
 3. **How fast to run** the transformation (*Advanced* tab).
 
@@ -143,9 +143,9 @@ This tab tells NomaUBL **where to find each piece of data** on every incoming do
 
 | Field | Values | Description |
 |---|---|---|
-| **Source** | `XML` (default) / `UBL` | Picks the input pipeline. **`XML`** keeps the original behaviour — an XML spool from any source system, transformed to UBL 2.1 by the XSL pipeline. **`UBL`** is for files that are already UBL 2.1 invoices (your ERP emits UBL natively, or the file came from an upstream system in UBL form); no XSL transform runs. |
+| **Source** | `XML` (default) / `UBL` / `Connector` | Picks the input pipeline. **`XML`** keeps the original behaviour — an XML spool from any source system, transformed to UBL 2.1 by the XSL pipeline. **`UBL`** is for files that are already UBL 2.1 invoices (your ERP emits UBL natively, or the file came from an upstream system in UBL form); no XSL transform runs. **`Connector`** (2026.05.16) skips the file altogether — NomaUBL calls a SQL query or a REST endpoint that returns the document, then runs the same XSL pipeline against the result. |
 
-The choice flips the rest of this tab between two distinct sets of fields. The remaining sections of the page — *Processing*, *Advanced*, *PDF Template* — apply identically to both sources.
+The choice flips the rest of this tab between three distinct sets of fields. The remaining sections of the page — *Processing*, *Advanced*, *PDF Template* — apply identically to all three sources.
 
 ### Key extraction from `cbc:ID` *(when Source = UBL)*
 
@@ -174,6 +174,36 @@ Worked examples:
 |---|---|---|---|
 | `F202600025` | `^(?<dct>[A-Z]+)(?<doc>\d+)$` | `kcoDefault = 00001` | `doc=202600025`, `dct=F`, `kco=00001` |
 | `38706889RI00001` | `^(?<doc>\d+)(?<dct>[A-Z]+)(?<kco>\d+)$` | (none) | `doc=38706889`, `dct=RI`, `kco=00001` |
+
+### Connector source *(when Source = Connector, 2026.05.16)*
+
+When *Source* is `Connector`, NomaUBL fetches the document data live from a [SQL connector](../configuration/sql-connectors.md) or an [API connector](../configuration/api-connectors.md) instead of reading a file. The same XSLT pipeline then turns the result into UBL — no spool, no file watcher, no transient directory.
+
+Two patterns are supported:
+
+| Mode | When to use it |
+|---|---|
+| **Single call** | One query / endpoint returns the header **and** the nested line array in one shot. Best when the source can join the header with its lines server-side (typical for a SQL view or a REST endpoint built for invoicing). |
+| **Two calls** | One call returns the header, a second one returns the lines. Useful when the line endpoint accepts the header keys as parameters (`{customer}`, `{docNumber}`…) — line parameters can reuse any value returned by the header call via `{header.field}` placeholders. |
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', margin: '20px 0'}}>
+  <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(74,158,255,0.35)', background: 'rgba(74,158,255,0.05)'}}>
+    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#4a9eff', fontWeight: 700, marginBottom: '6px'}}>Header source</div>
+    <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.55'}}>Pick a SQL or API connector, then its query or endpoint. Optional parameters become the form fields shown on <em>Process Document</em>.</div>
+  </div>
+  <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.05)'}}>
+    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#22c55e', fontWeight: 700, marginBottom: '6px'}}>Lines source <em>(optional)</em></div>
+    <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.55'}}>Leave empty for single-call mode. Otherwise pick a second connector — its parameters can read every value the header call returned, including the keys themselves.</div>
+  </div>
+  <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(192,132,252,0.35)', background: 'rgba(192,132,252,0.05)'}}>
+    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#c084fc', fontWeight: 700, marginBottom: '6px'}}>Output shape</div>
+    <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.55'}}>The connector response is materialised as an XML document with the same shape an XML spool would have, so the existing XSLT chain runs without change. Every XPath you already use still applies.</div>
+  </div>
+</div>
+
+Once a connector is wired, the rest of *Tab 1* (Burst Key, Document Identification, Document Data, Date format) reads exactly like *Source = XML* — the XPath fields point at the XML shape produced by the connector response, not at a file on disk. Use **Load connector sample** in the [XSL Editor](../ubl-tools/xsl-editor.md) to pull a real response so the XPath picker autocompletes against actual data.
+
+Running a connector-sourced document is described on [Processing → Process Document](../processing/document.md): the page replaces the file picker with the parameter form derived from the header connector. The same parameters are passed from the CLI via repeatable `--param key=value` arguments (see [Command Line](./command-line.md)).
 
 ### Bursting (Document Root) *(when Source = XML)*
 

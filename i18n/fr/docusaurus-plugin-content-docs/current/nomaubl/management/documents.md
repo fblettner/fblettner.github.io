@@ -10,7 +10,7 @@ L'éditeur **Documents** définit comment NomaUBL transforme un **spool XML sour
 
 Pour chaque type de document, trois éléments sont à renseigner :
 
-1. **Origine de la donnée** — le sélecteur `source` choisit entre un spool XML qui demande une transformation XSL et une facture UBL 2.1 déjà structurée (onglet *Document*).
+1. **Origine de la donnée** — le sélecteur `source` choisit entre un spool XML qui demande une transformation XSL, une facture UBL 2.1 déjà structurée, et (depuis 2026.05.16) un **connecteur SQL ou REST** qui renvoie la donnée en direct sans aucun fichier (onglet *Document*).
 2. **Chaîne de transformation** de chaque document en UBL et PDF (onglet *Traitement*).
 3. **Capacité de calcul** allouée à la transformation (onglet *Avancé*).
 
@@ -143,9 +143,9 @@ Cet onglet indique à NomaUBL **où trouver chaque information** sur les documen
 
 | Champ | Valeurs | Description |
 |---|---|---|
-| **Source** | `XML` (défaut) / `UBL` | Sélectionne le pipeline d'entrée. **`XML`** conserve le comportement initial — un spool XML provenant de tout système source, transformé en UBL 2.1 par la chaîne XSL. **`UBL`** s'adresse aux fichiers déjà au format UBL 2.1 (l'ERP émet du UBL nativement, ou le fichier vient d'un système amont en UBL) ; aucune transformation XSL ne s'exécute. |
+| **Source** | `XML` (défaut) / `UBL` / `Connecteur` | Sélectionne le pipeline d'entrée. **`XML`** conserve le comportement initial — un spool XML provenant de tout système source, transformé en UBL 2.1 par la chaîne XSL. **`UBL`** s'adresse aux fichiers déjà au format UBL 2.1 (l'ERP émet du UBL nativement, ou le fichier vient d'un système amont en UBL) ; aucune transformation XSL ne s'exécute. **`Connecteur`** (2026.05.16) supprime totalement le fichier — NomaUBL appelle une requête SQL ou un endpoint REST qui renvoie le document, puis applique la même chaîne XSL au résultat. |
 
-Ce choix bascule la suite de l'onglet entre deux ensembles de champs distincts. Les autres sections de la page — *Traitement*, *Avancé*, *PDF Template* — s'appliquent à l'identique aux deux sources.
+Ce choix bascule la suite de l'onglet entre trois ensembles de champs distincts. Les autres sections de la page — *Traitement*, *Avancé*, *PDF Template* — s'appliquent à l'identique aux trois sources.
 
 ### Extraction de clé depuis `cbc:ID` *(lorsque Source = UBL)*
 
@@ -174,6 +174,36 @@ Exemples concrets :
 |---|---|---|---|
 | `F202600025` | `^(?<dct>[A-Z]+)(?<doc>\d+)$` | `kcoDefault = 00001` | `doc=202600025`, `dct=F`, `kco=00001` |
 | `38706889RI00001` | `^(?<doc>\d+)(?<dct>[A-Z]+)(?<kco>\d+)$` | (aucune) | `doc=38706889`, `dct=RI`, `kco=00001` |
+
+### Source Connecteur *(quand Source = Connecteur, 2026.05.16)*
+
+Quand *Source* vaut `Connecteur`, NomaUBL récupère les données du document en direct depuis un [connecteur SQL](../configuration/sql-connectors.md) ou un [connecteur API](../configuration/api-connectors.md) au lieu de lire un fichier. La même chaîne XSLT transforme ensuite le résultat en UBL — pas de spool, pas de surveillance de répertoire, pas de fichier temporaire.
+
+Deux schémas sont gérés :
+
+| Mode | Quand l'utiliser |
+|---|---|
+| **Un appel** | Une requête / un endpoint renvoie l'en-tête **et** le tableau de lignes imbriqué d'un coup. Idéal quand la source sait joindre l'en-tête à ses lignes côté serveur (typique d'une vue SQL ou d'un endpoint REST conçu pour la facturation). |
+| **Deux appels** | Un appel renvoie l'en-tête, un second renvoie les lignes. Pratique quand l'endpoint de lignes accepte les clés de l'en-tête comme paramètres (`{customer}`, `{docNumber}`…) — les paramètres de lignes peuvent reprendre toute valeur renvoyée par l'appel d'en-tête via des placeholders `{header.champ}`. |
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', margin: '20px 0'}}>
+  <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(74,158,255,0.35)', background: 'rgba(74,158,255,0.05)'}}>
+    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#4a9eff', fontWeight: 700, marginBottom: '6px'}}>Source d'en-tête</div>
+    <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.55'}}>Choisir un connecteur SQL ou API, puis sa requête ou son endpoint. Les paramètres optionnels deviennent les champs du formulaire affiché dans <em>Traiter un document</em>.</div>
+  </div>
+  <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.05)'}}>
+    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#22c55e', fontWeight: 700, marginBottom: '6px'}}>Source de lignes <em>(optionnelle)</em></div>
+    <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.55'}}>Laisser vide pour le mode un appel. Sinon, choisir un second connecteur — ses paramètres peuvent lire chaque valeur renvoyée par l'appel d'en-tête, y compris les clés.</div>
+  </div>
+  <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(192,132,252,0.35)', background: 'rgba(192,132,252,0.05)'}}>
+    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', color: '#c084fc', fontWeight: 700, marginBottom: '6px'}}>Forme de sortie</div>
+    <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.55'}}>La réponse du connecteur est matérialisée en document XML, de la même forme qu'aurait un spool XML, pour que la chaîne XSLT existante s'exécute sans modification. Chaque XPath déjà en place fonctionne tel quel.</div>
+  </div>
+</div>
+
+Une fois le connecteur câblé, le reste de l'*Onglet 1* (Burst Key, Identification du document, Données du document, Format de date) se lit exactement comme pour *Source = XML* — les champs XPath pointent vers la forme XML produite par la réponse du connecteur, et non vers un fichier sur disque. Utiliser **Charger un échantillon connecteur** dans l'[Éditeur XSL](../ubl-tools/xsl-editor.md) pour rapatrier une vraie réponse, le sélecteur XPath autocomplète alors sur des données réelles.
+
+L'exécution d'un document à source connecteur est décrite sur [Traitement → Traiter un document](../processing/document.md) : la page remplace le sélecteur de fichier par le formulaire de paramètres dérivé du connecteur d'en-tête. Les mêmes paramètres sont transmis en ligne de commande via des arguments `--param clé=valeur` répétables (voir [Ligne de commande](./command-line.md)).
 
 ### Éclatement (Document Root) *(lorsque Source = XML)*
 
