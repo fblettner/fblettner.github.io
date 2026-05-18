@@ -144,8 +144,13 @@ Cet onglet indique à NomaUBL **où trouver chaque information** sur les documen
 | Champ | Valeurs | Description |
 |---|---|---|
 | **Source** | `XML` (défaut) / `UBL` / `Connecteur` | Sélectionne le pipeline d'entrée. **`XML`** conserve le comportement initial — un spool XML provenant de tout système source, transformé en UBL 2.1 par la chaîne XSL. **`UBL`** s'adresse aux fichiers déjà au format UBL 2.1 (l'ERP émet du UBL nativement, ou le fichier vient d'un système amont en UBL) ; aucune transformation XSL ne s'exécute. **`Connecteur`** (2026.05.16) supprime totalement le fichier — NomaUBL appelle une requête SQL ou un endpoint REST qui renvoie le document, puis applique la même chaîne XSL au résultat. |
+| **Direction** *(2026.05.17)* | `Émise` (défaut) / `Reçue` | Côté de la transaction traité par ce modèle. **`Émise`** — factures envoyées par l'opérateur à un client ; valeur par défaut et comportement rétro-compatible. **`Reçue`** — factures reçues d'un fournisseur ; la contrepartie de la ligne est la partie fournisseur, les actions vendeur (Renvoyer à la PA, Marquer envoyée, Avoir…) sont masquées dans la modale de détail, et la liste Factures classe la ligne sous le chip *Reçues*. Positionné par défaut sur le modèle livré `received-ubl`. |
 
-Ce choix bascule la suite de l'onglet entre trois ensembles de champs distincts. Les autres sections de la page — *Traitement*, *Avancé*, *PDF Template* — s'appliquent à l'identique aux trois sources.
+Le choix de la Source bascule la suite de l'onglet entre trois ensembles de champs distincts. Les autres sections de la page — *Traitement*, *Avancé*, *PDF Template* — s'appliquent à l'identique aux trois sources. Le champ Direction est orthogonal : toute combinaison Source × Direction est valide, même si *Reçue* va le plus souvent de pair avec *UBL* (factures fournisseur poussées par la PA).
+
+:::info[La direction est stockée sur la ligne — 2026.05.19]
+Une nouvelle colonne `UHDRIN` sur F564231 (`'1'` = reçue, `'2'` = émise) est écrite une fois à l'insertion de la facture, à partir de la Direction du modèle à ce moment-là. Changer la *Direction* du modèle plus tard ne re-classe pas les lignes historiques — le filtre de la liste Factures, les règles de notification et les enveloppes e-Reporting lisent ce drapeau figé, pas le réglage courant du modèle. Les lignes existantes héritent de `'2'` (sortant) via la valeur par défaut de la colonne ; aucun rattrapage manuel n'est nécessaire.
+:::
 
 ### Extraction de clé depuis `cbc:ID` *(lorsque Source = UBL)*
 
@@ -174,6 +179,23 @@ Exemples concrets :
 |---|---|---|---|
 | `F202600025` | `^(?<dct>[A-Z]+)(?<doc>\d+)$` | `kcoDefault = 00001` | `doc=202600025`, `dct=F`, `kco=00001` |
 | `38706889RI00001` | `^(?<doc>\d+)(?<dct>[A-Z]+)(?<kco>\d+)$` | (aucune) | `doc=38706889`, `dct=RI`, `kco=00001` |
+
+### Recherche du numéro de document *(quand Source = UBL, 2026.05.17)*
+
+Sur un modèle **Reçu**, le `cbc:ID` du UBL est le numéro de facture du *fournisseur* — pas la clé interne de l'opérateur. Le parcours par défaut *Suggérer + Tester* sur regex appliquée à `cbc:ID` n'a alors plus de sens : l'opérateur doit retrouver le triplet interne `(doc, dct, kco)` à partir de champs côté fournisseur (numéro UBL, nom du fournisseur, TVA du fournisseur, etc.).
+
+Un nouveau groupe **Recherche du numéro de document** sur l'onglet *Document* (visible uniquement quand *Source* = UBL) câble la recherche contre un [connecteur SQL](../configuration/sql-connectors.md) ou un [connecteur API](../configuration/api-connectors.md).
+
+| Champ | Description |
+|---|---|
+| **Connecteur** | Le connecteur SQL ou API qui porte la requête / l'endpoint de recherche. |
+| **Cible** | La requête nommée (SQL) ou l'endpoint (API) du connecteur choisi. Les paramètres déclarés par la cible deviennent l'ensemble de placeholders disponibles. |
+| **Valeurs des paramètres** | Texte libre + placeholders mappés par paramètre. Placeholders côté fournisseur fournis en standard : `{ublNumber}`, `{supplierName}`, `{supplierVat}`, `{supplierAddress}`, `{issueDate}`, `{totalTtc}`, `{currency}`. |
+| **Mapping** | Quels champs de la réponse portent les valeurs résolues de `doc`, `dct` et `kco`. Par défaut, les colonnes de la première ligne portant ces noms côté SQL ; côté API, choisir les clés JSON via le même sélecteur que partout ailleurs. |
+
+Quand le groupe est rempli, la recherche s'exécute **avant** la regex sur `cbc:ID` et son résultat l'emporte. Laisser le groupe vide pour conserver le comportement existant — l'assistant de regex et les valeurs par défaut `(doc, dct, kco)` ci-dessous continuent de s'appliquer sans changement.
+
+Le modèle livré `received-ubl` arrive avec ce groupe **présent mais vide** : choisir le connecteur et la cible dans *Paramètres → Modèles de document*, renseigner les paramètres, et le flux côté réception est câblé de bout en bout.
 
 ### Source Connecteur *(quand Source = Connecteur, 2026.05.16)*
 

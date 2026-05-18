@@ -10,7 +10,10 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-18" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.18 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
+  <a href="#v2026-05-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
+  <a href="#v2026-05-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
   <a href="#v2026-05-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
   <a href="#v2026-05-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
   <a href="#v2026-05-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
@@ -40,6 +43,56 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.19 — 2026-05-19 \{#v2026-05-19\}
+
+E-Reporting (Flux 10) rewritten against the DGFiP spec: one envelope per (company, period, direction) instead of one file per sub-flux, and direction is now persisted on every invoice so it can never drift if a template is re-classified later.
+
+### What's new
+
+- **Direction persisted on every invoice** — new `UHDRIN` column on F564231 (`'1'` = received from supplier, `'2'` = issued by operator). Set once at insert from the source document template, then frozen. Changing a template's *Direction* in Settings afterwards no longer re-classifies historical rows, the Invoices list filter, notification rules, or e-Reporting envelopes. The list filter and detail-modal gating now read this flag directly.
+- **E-Reporting Flux 10 — one envelope, both sub-blocks**. 10.1 (B2B-international detailed) and 10.3 (B2C aggregated) now live as parallel children of the same `<TransactionsReport>` per DGFiP rule G6.29 — instead of two separate files. At most two XML files per (company, period): one outbound (Issuer `RoleCode=SE`) and one inbound (Issuer `RoleCode=BY`).
+- **Credit-note sign in 10.3 aggregates** — credit notes (UNTDID 1001 codes `261, 381, 396, 502, 503` per G1.01) now subtract from the period aggregate instead of adding to it. G1.14 explicitly allows negative amounts on TT-82 / TT-83 / TT-87 / TT-88, so a period dominated by credits comes through with the correct net figure.
+- **E-Reporting tables renamed for consistency**: `RGY56BAR` → `RGDRIN`, `RHY56BAR` → `RHDRIN`, `RIY56BAR` → `RIDRIN` (with matching indexes). All three e-Reporting tables now use the same `DRIN` naming as F564231.
+
+### Migration note
+
+E-Reporting only goes live in September 2026, so no production deployments are running it yet — the schema is changed without a back-compat shim. Drop and re-create the three e-Reporting tables (F564260 / F564261 / F564262) before the next run. Existing F564231 rows pick up `UHDRIN = '2'` (outbound) via the column default.
+
+---
+
+## 2026.05.18 — 2026-05-18 \{#v2026-05-18\}
+
+Direction-aware notifications and custom actions — operators can wire separate dispatch flows for the invoices they emit and the ones they receive without mixing them. Plus a fix for the Invoices list direction filter.
+
+### What's new
+
+- **Notification rules gain a Direction trigger**: *Any (default)*, *Issued only (sales)* or *Received only (purchases)*. Rules with a direction set never fire for invoices of the opposite direction, so the same status code (e.g. *Disputed*) can call one API for sales rejections and a different API for purchase rejections without any conditional logic in the rule body.
+- **Custom invoice actions** (the operator-defined buttons in the invoice detail modal) gain the same Direction field. Empty = visible on both sides (legacy default). When set, the button is hidden on invoices of the other direction, so an emit-side *Sync to CRM* and a receive-side *Mark as paid* can live on the same template and the modal only surfaces what makes sense for the current invoice.
+
+### Fixes
+
+- Invoices list — the *Direction* filter chip now applies even when the stored list view spec is older than this release. The filter is resolved against the document-template direction map at query time, independent of what's in the stored spec.
+
+---
+
+## 2026.05.17 — 2026-05-18 \{#v2026-05-17\}
+
+Supplier-received invoices land alongside the customer-issued ones — same Invoices list, same status workflow, same detail modal.
+
+### What's new
+
+- **Pull received invoices from the PA**: new CLI mode `-fetch-received`, new REST endpoint `POST /api/fetch-received/run`, and a "PA inbound (supplier invoices)" mode on the Fetch Input page. The handler walks two new api-connector tasks (`fetch-received-list`, `fetch-received`), deduplicates by PA UUID, and feeds each downloaded UBL into the existing UBL processing path. Can also run on a schedule — new `fetchReceivedInterval` global property (minutes between sweeps, 0 = disabled).
+- **Document templates gain a Direction property** — *Issued* (default, back-compat) or *Received*. Drives a new filter chip on the Invoices list (All / Issued / Received), and gates the emit-only action buttons (Resend to PA, Send completed, Credit note, etc.) which are hidden on received-direction invoices.
+- **Document number lookup connector**: a received UBL's `cbc:ID` is the *supplier's* invoice number, not ours. A new "Document number lookup" group on the document template (visible when source = UBL) lets you wire a SQL query or REST endpoint that returns our internal `(doc, dct, kco)` from supplier-side fields (`{ublNumber}`, `{supplierName}`, `{supplierVat}`, etc.). When configured, it replaces the regex-on-cbc:ID path; otherwise the legacy `idPattern` continues to work unchanged.
+- **Counterparty name** stored in the row (used by list / search) is now read from `AccountingSupplierParty` for received-direction rows, so the column shows the supplier instead of the operator's own name.
+- New bundled `received-ubl` document template — pre-wired with `source=UBL`, `direction=R`, `dctDefault=RI`. Edit the lookup connector in Settings → Document Templates and you're good.
+
+### No schema change
+
+- F564231 is unchanged. Direction is resolved at read time from the template name already stored on the row (`UHTMPL`), so existing rows keep working without any migration.
 
 ---
 

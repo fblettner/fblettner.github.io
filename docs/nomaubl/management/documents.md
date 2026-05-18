@@ -144,8 +144,13 @@ This tab tells NomaUBL **where to find each piece of data** on every incoming do
 | Field | Values | Description |
 |---|---|---|
 | **Source** | `XML` (default) / `UBL` / `Connector` | Picks the input pipeline. **`XML`** keeps the original behaviour — an XML spool from any source system, transformed to UBL 2.1 by the XSL pipeline. **`UBL`** is for files that are already UBL 2.1 invoices (your ERP emits UBL natively, or the file came from an upstream system in UBL form); no XSL transform runs. **`Connector`** (2026.05.16) skips the file altogether — NomaUBL calls a SQL query or a REST endpoint that returns the document, then runs the same XSL pipeline against the result. |
+| **Direction** *(2026.05.17)* | `Issued` (default) / `Received` | What side of the transaction this template handles. **`Issued`** — invoices the operator emits to a customer; the default and back-compat behaviour. **`Received`** — invoices the operator gets from a supplier; the row's counterparty is the supplier party, the emit-only seller actions (Resend to PA, Send completed, Credit note…) are hidden in the detail modal, and the Invoices list shows the row under the *Received* filter chip. Set on the `received-ubl` bundled template by default. |
 
-The choice flips the rest of this tab between three distinct sets of fields. The remaining sections of the page — *Processing*, *Advanced*, *PDF Template* — apply identically to all three sources.
+The Source choice flips the rest of this tab between three distinct sets of fields. The remaining sections of the page — *Processing*, *Advanced*, *PDF Template* — apply identically to all three sources. The Direction field is orthogonal: any combination of Source × Direction is valid, although *Received* is most often paired with *UBL* (PA-pushed supplier invoices).
+
+:::info[Direction is stored on the row — 2026.05.19]
+A new `UHDRIN` column on F564231 (`'1'` = received, `'2'` = issued) is written once when the invoice is inserted, from the template's Direction at that moment. Changing the template's *Direction* later does not re-classify historical rows — the Invoices list filter, notification rules and e-Reporting envelopes read this frozen flag, not the live template setting. Existing rows pick up `'2'` (outbound) via the column default; no manual backfill needed.
+:::
 
 ### Key extraction from `cbc:ID` *(when Source = UBL)*
 
@@ -174,6 +179,23 @@ Worked examples:
 |---|---|---|---|
 | `F202600025` | `^(?<dct>[A-Z]+)(?<doc>\d+)$` | `kcoDefault = 00001` | `doc=202600025`, `dct=F`, `kco=00001` |
 | `38706889RI00001` | `^(?<doc>\d+)(?<dct>[A-Z]+)(?<kco>\d+)$` | (none) | `doc=38706889`, `dct=RI`, `kco=00001` |
+
+### Document number lookup *(when Source = UBL, 2026.05.17)*
+
+On a **Received** template, the UBL's `cbc:ID` is the *supplier's* invoice number — not the operator's internal key. The default *Suggest + Test* regex-on-`cbc:ID` path then no longer makes sense: the operator needs to look the internal `(doc, dct, kco)` triplet up from supplier-side fields (UBL number, supplier name, supplier VAT, etc.).
+
+A new **Document number lookup** group on the *Document* tab (visible only when *Source* = UBL) wires the lookup against a [SQL connector](../configuration/sql-connectors.md) or an [API connector](../configuration/api-connectors.md).
+
+| Field | Description |
+|---|---|
+| **Connector** | The SQL or API connector that holds the lookup query / endpoint. |
+| **Target** | The named query (SQL) or endpoint (API) on the selected connector. Parameters declared by the target become the placeholder set the lookup can supply. |
+| **Parameter values** | Free text + placeholders mapped per target parameter. Supplier-side placeholders available out of the box: `{ublNumber}`, `{supplierName}`, `{supplierVat}`, `{supplierAddress}`, `{issueDate}`, `{totalTtc}`, `{currency}`. |
+| **Mapping** | Which response fields hold the resolved `doc`, `dct` and `kco`. Defaults to the first row's columns of those names on a SQL connector; on an API connector pick the JSON keys with the same picker used elsewhere. |
+
+When the group is filled in, the lookup runs **before** the regex-on-`cbc:ID` path and its result wins. Leave the group empty to keep the legacy behaviour — the regex assistant and the `(doc, dct, kco)` defaults below continue to apply unchanged.
+
+The bundled `received-ubl` template ships with this group **present but empty**: pick the connector and the target in *Settings → Document Templates*, fill in the parameters, and the receive-side flow is wired end-to-end.
 
 ### Connector source *(when Source = Connector, 2026.05.16)*
 

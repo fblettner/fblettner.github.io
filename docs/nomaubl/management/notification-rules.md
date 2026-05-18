@@ -213,16 +213,17 @@ In 2026.05.7 the editor was reorganised into **six tabs** — each tab fits a sc
 
 ### Trigger tab
 
-The trigger decides **when** the rule fires. Two fields combine, both optional:
+The trigger decides **when** the rule fires. Three fields combine, all optional:
 
 | Field | Source | Behaviour |
 |---|---|---|
 | **Status codes** | *statuses* catalogue | Chip multi-select. The rule fires when the status code of the new transition is in this list. Empty = match every status. |
 | **Reason codes** | *rejection-reason-codes* catalogue | Chip multi-select. The rule fires only when the reason code of the new transition is in this list. Empty = match every reason. |
+| **Direction** *(2026.05.18)* | `Any` *(default)* / `Issued only (sales)` / `Received only (purchases)` | Picks which side of the workflow the rule applies to. `Any` keeps the rule visible to both directions (back-compat default). `Issued only` skips the rule for supplier-received invoices; `Received only` skips it for customer-issued ones. The filter is matched against the `UHDRIN` flag persisted on the row (see [Invoices → Direction chip](../application/invoices.md#direction-chip-20260517)). |
 
 Both fields are surfaced as **chip multi-selects** — picking from a dropdown adds a chip; the × on a chip removes it. The dropdown is populated from the same `statuses` and `rejection-reason-codes` resources used by the *Set Status* modal and the invoice *History* tab, so a rule cannot reference a code that the application does not recognise.
 
-When both fields are filled, both must match (logical AND) for the rule to fire.
+When several fields are filled, they all must match (logical AND) for the rule to fire — so a `Status = 207`, `Direction = Received only` rule wires the supplier-side rejection notification without colliding with the customer-side `Status = 207` rule that already exists on the same template.
 
 ### Channels tab
 

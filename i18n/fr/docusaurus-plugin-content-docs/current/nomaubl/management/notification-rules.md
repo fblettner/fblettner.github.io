@@ -213,16 +213,17 @@ En 2026.05.7, l'éditeur passe à **six onglets** — chaque onglet tient sur un
 
 ### Onglet Déclencheur
 
-Le déclencheur définit **quand** la règle se déclenche. Deux champs se combinent, tous les deux optionnels :
+Le déclencheur définit **quand** la règle se déclenche. Trois champs se combinent, tous optionnels :
 
 | Champ | Source | Comportement |
 |---|---|---|
 | **Codes de statut** | Catalogue *statuses* | Multi-sélection à puces. La règle se déclenche quand le code statut de la nouvelle transition figure dans la liste. Vide = correspondance sur tout statut. |
 | **Codes de motif** | Catalogue *rejection-reason-codes* | Multi-sélection à puces. La règle se déclenche uniquement quand le code motif de la nouvelle transition figure dans la liste. Vide = correspondance sur tout motif. |
+| **Direction** *(2026.05.18)* | `Toutes` *(défaut)* / `Émises uniquement (ventes)` / `Reçues uniquement (achats)` | Choisit le côté du workflow concerné par la règle. `Toutes` garde la règle visible des deux côtés (valeur par défaut héritée). `Émises uniquement` saute la règle pour les factures reçues du fournisseur ; `Reçues uniquement` la saute pour les factures émises au client. Le filtre s'évalue contre l'indicateur `UHDRIN` enregistré sur la ligne (voir [Factures → Chip Direction](../application/invoices.md#chip-direction-20260517)). |
 
-Les deux champs sont des **multi-sélections à puces** — choisir une entrée dans la liste déroulante ajoute une puce ; le × d'une puce la retire. La liste déroulante lit les ressources `statuses` et `rejection-reason-codes`, les mêmes que celles utilisées par la modale *Modifier le statut* et l'onglet *Historique* de la facture. Une règle ne peut donc référencer que des codes effectivement reconnus par l'application.
+Les deux premiers champs sont des **multi-sélections à puces** — choisir une entrée dans la liste déroulante ajoute une puce ; le × d'une puce la retire. La liste déroulante lit les ressources `statuses` et `rejection-reason-codes`, les mêmes que celles utilisées par la modale *Modifier le statut* et l'onglet *Historique* de la facture. Une règle ne peut donc référencer que des codes effectivement reconnus par l'application.
 
-Quand les deux champs sont renseignés, les deux conditions doivent correspondre (ET logique) pour que la règle se déclenche.
+Quand plusieurs champs sont renseignés, tous doivent correspondre (ET logique) pour que la règle se déclenche — une règle `Statut = 207`, `Direction = Reçues uniquement` câble ainsi la notification de rejet côté fournisseur sans entrer en collision avec la règle `Statut = 207` côté client qui existe déjà sur le même modèle.
 
 ### Onglet Canaux
 

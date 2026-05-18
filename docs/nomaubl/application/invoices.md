@@ -224,6 +224,20 @@ Since 2026.05.12 the page runs in **hybrid client-side mode**: each *Run* loads 
 
 Since 2026.05.13, refList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union.
 
+### Direction chip *(2026.05.17)*
+
+A new chip row sits next to the Status chips: **All** / **Issued** / **Received**.
+
+| Chip | Effect |
+|---|---|
+| **All** *(default)* | No direction filter — both customer-issued (`UHDRIN = '2'`) and supplier-received (`UHDRIN = '1'`) rows are listed. |
+| **Issued** | Only the invoices the operator sends to customers. Same set the previous list always showed before 2026.05.17. |
+| **Received** | Only the supplier invoices pulled from the PA (see [Sync → Fetch Input → PA inbound](../sync/fetch-input.md) and the bundled `received-ubl` document template). |
+
+The chip resolves against the `UHDRIN` flag persisted on every row since 2026.05.19 — a template's *Direction* change does not re-classify historical rows, so the list result is stable over time. On older deployments without `UHDRIN`, the filter falls back to the document-template direction map and works the same way (2026.05.18 fix).
+
+On a *Received* row the **Counterparty** column reads from `AccountingSupplierParty` (the supplier), not from `AccountingCustomerParty` — so the column shows the supplier name on inbound invoices and the customer name on outbound ones. The status workflow, the detail modal and the column catalog are otherwise identical; only the emit-only seller actions (Resend to PA, Send completed, Credit note…) are hidden on received-direction rows.
+
 ### Refresh and New invoice
 
 Two buttons sit at the right:

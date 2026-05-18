@@ -186,7 +186,7 @@ La seconde section choisit la **source** et ses paramètres.
 | Champ | Description |
 |---|---|
 | **Template** | Obligatoire si *Process As = XML*. Sélectionne le pipeline XSL appliqué à chaque élément. Masqué en mode UBL (les fichiers UBL sont repris directement depuis `dirInput/ubl/`). |
-| **Source** | `BIP Queue` (spécifique à JD Edwards) ou `Input Directory`. |
+| **Source** | `BIP Queue` (spécifique à JD Edwards), `Input Directory`, ou `PA entrante (factures fournisseur)` *(2026.05.17)*. |
 
 ### Source = BIP Queue
 
@@ -204,6 +204,20 @@ Le balayage retourne tous les fichiers `.xml` présents dans :
 - `dirInput/ubl/` quand *Process As = UBL*.
 
 Aucun paramètre supplémentaire — chaque fichier du répertoire est un candidat.
+
+### Source = PA entrante (factures fournisseur) *(2026.05.17)*
+
+Demander à la Plateforme Agréée la liste des factures adressées à l'opérateur depuis la dernière passe, puis choisir lesquelles télécharger et traiter.
+
+| Champ | Description |
+|---|---|
+| **Modèle de document** | Le modèle `received-ubl` (ou tout modèle dont `direction = R`) — pré-filtré pour qu'un balayage *PA entrante* n'atterrisse jamais sur un modèle côté émission par erreur. |
+| **Émise après** | Date d'émission la plus ancienne à considérer. Par défaut, le curseur enregistré dans le modèle *global* (`lastFetchReceivedAt`). Modifiable pour rattraper — le curseur est replacé sur la date d'émission la plus récente effectivement traitée à la fin de la passe. |
+| **Inclure déjà importées** | Désactivé par défaut. La PA peut renvoyer deux fois le même UUID ; avec la case décochée, la déduplication contre `F564231` les écarte avant l'affichage des résultats. Cocher pour examiner chaque référence retournée par la PA, par exemple pour re-télécharger un UBL dont l'import précédent a échoué en plein traitement. |
+
+Le balayage appelle la tâche `fetch-received-list` du connecteur API PA. Chaque ligne candidate porte l'UUID PA, le nom du fournisseur, le numéro de TVA du fournisseur, la date d'émission et le total. Cocher les lignes à traiter ; **Process (N)** appelle alors `fetch-received` sur chaque ligne cochée, télécharge l'UBL et exécute le pipeline UBL standard sur le modèle choisi.
+
+Pour exécuter le même flux sans sélection manuelle, le planifier via `global.fetchReceivedInterval` (minutes entre passes, voir [Paramètres globaux](../configuration/system/global.md)) ou l'appeler en ligne de commande avec `-fetch-received` (voir [Ligne de commande](../management/command-line.md)).
 
 ---
 

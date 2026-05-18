@@ -244,6 +244,7 @@ Each custom action carries:
 |---|---|
 | **ID** | Free-form identifier (e.g. `pushToCrm`). Stored as `customAction.N.id`. The picker prevents duplicates within a scope. |
 | **Label** | Button text shown in the modal (e.g. *Push to CRM*). Stored as `customAction.N.label`. |
+| **Direction** *(2026.05.18)* | `Any` *(default)* / `Issued only (sales)` / `Received only (purchases)`. Empty = the button is visible on both sides (back-compat behaviour). When set, the button is hidden on invoices of the other direction — so an emit-side *Sync to CRM* and a receive-side *Mark as paid* can live on the same template and the detail modal only surfaces what makes sense for the current invoice. Evaluated against the `UHDRIN` flag persisted on the row. |
 | **Calls list** | Same call-card editor as regulatory bindings — connector, endpoint / query, parameters, optional *Stop on failure*. The same `{call.N.fieldName}` response-chaining contract applies. |
 
 **+ Add custom action** at the bottom of the section appends a new entry. Remove with the per-row 🗑 button.

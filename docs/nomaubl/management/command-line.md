@@ -254,6 +254,42 @@ java -jar nomaubl.jar -fetch-status /opt/nomaubl/demo/config/config.json
 
 ---
 
+## `-fetch-received` — pull supplier invoices from the PA *(2026.05.17)*
+
+Receive-side sweep: ask the PA for the list of invoices addressed to the operator since the last successful run, download each UBL the operator has not seen yet, and feed it into the existing UBL processing pipeline. Equivalent of the *Sync → Fetch Input → PA inbound (supplier invoices)* page.
+
+```text
+-fetch-received <configFile> [--since YYYY-MM-DD] [--verbose]
+```
+
+| Argument / flag | Description |
+|---|---|
+| **`configFile`** | Absolute path to `config.json`. |
+| **`--since YYYY-MM-DD`** | Earliest issue date to consider. Defaults to the timestamp of the last successful run persisted in the *global* template (`lastFetchReceivedAt`). |
+| **`--verbose`** | Print per-document messages on stdout — useful on a first run when the operator wants to see how many UBLs were downloaded and what dedup decisions were made. |
+
+The handler walks two api-connector tasks on the configured PA template:
+
+| Task | Purpose |
+|---|---|
+| **`fetch-received-list`** | Returns the list of received invoice references (PA UUID + supplier metadata) since the cursor. |
+| **`fetch-received`** | Downloads one UBL by PA UUID. |
+
+Deduplication is by PA UUID against the existing F564231 rows, so re-running the sweep is safe — already-imported invoices are skipped silently. The processing pipeline runs against the document template whose `direction = R` matches the inbound flow (the bundled `received-ubl` template by default).
+
+To schedule it automatically, set **`fetchReceivedInterval`** in the *global* template (minutes between sweeps, `0` = disabled) — same `-serve` background scheduler that drives `fetchImportInterval` / `fetchStatusInterval`.
+
+```bash
+# Manual run — pick up everything since the last cursor
+java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json --verbose
+
+# Manual run — backfill from a given date
+java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json \
+                      --since 2026-04-01
+```
+
+---
+
 ## `-fetch-single` — extract one document, then process it
 
 Equivalent of the *Application → Extract and Process* page. Extracts a single document from a source channel, drops the resulting file into `dirInput` (XML template) or `<dirInput>/ubl/` (UBL template), then immediately runs the matching pipeline. The XML-vs-UBL choice is **inferred from the template's `source` property** — no separate `processType` argument anymore.

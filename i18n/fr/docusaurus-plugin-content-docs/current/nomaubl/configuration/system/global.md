@@ -231,6 +231,7 @@ Tâches d'arrière-plan exécutées par NomaUBL en mode serveur. **Les modificat
 |---|---|
 | **Import poll interval (min)** | Minutes entre deux interrogations automatiques du statut d'import pour les factures en attente (statut `9906`). `0` = désactivé. |
 | **Status retrieval interval (min)** | Minutes entre deux récupérations automatiques des statuts de cycle de vie depuis la PA. `0` = désactivé. |
+| **Received fetch interval (min)** *(2026.05.17)* | Minutes entre deux passes *PA entrante* automatiques — même flux que le mode *Sync → Fetch Input → PA entrante (factures fournisseur)* et la commande CLI `-fetch-received`. `0` = désactivé. Le curseur de la date d'émission la plus récente traitée est enregistré dans `lastFetchReceivedAt`, chaque passe ne récupérant ainsi que les factures arrivées depuis la précédente. |
 
 ### Batch Document Processing
 

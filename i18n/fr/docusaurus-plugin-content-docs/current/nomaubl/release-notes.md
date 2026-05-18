@@ -10,7 +10,10 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-18" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.18 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
+  <a href="#v2026-05-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
+  <a href="#v2026-05-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
   <a href="#v2026-05-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
   <a href="#v2026-05-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
   <a href="#v2026-05-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
@@ -40,6 +43,56 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.19 — 2026-05-19 \{#v2026-05-19\}
+
+E-Reporting (Flux 10) ré-écrit contre la spécification DGFiP : une enveloppe par (société, période, direction) au lieu d'un fichier par sous-flux, et la direction est désormais stockée sur chaque facture pour qu'elle ne puisse plus dériver si un modèle est re-classé plus tard.
+
+### Nouveautés
+
+- **Direction persistée sur chaque facture** — nouvelle colonne `UHDRIN` sur F564231 (`'1'` = reçue d'un fournisseur, `'2'` = émise par l'opérateur). Fixée à l'insertion depuis le modèle de document source puis figée. Changer la *Direction* d'un modèle dans Settings ne re-classe plus les lignes historiques, le filtre de la liste Factures, les règles de notification, ni les enveloppes e-Reporting. Le filtre et le verrouillage des actions de la modale de détail lisent maintenant directement ce drapeau.
+- **E-Reporting Flux 10 — une enveloppe, les deux sous-blocs**. 10.1 (B2B international détaillé) et 10.3 (B2C agrégé) cohabitent désormais comme enfants parallèles du même `<TransactionsReport>` conformément à la règle G6.29 — au lieu de deux fichiers séparés. Au plus deux fichiers XML par (société, période) : un sortant (Issuer `RoleCode=SE`) et un entrant (Issuer `RoleCode=BY`).
+- **Signe des avoirs dans les agrégats 10.3** — les avoirs (codes UNTDID 1001 `261, 381, 396, 502, 503` selon G1.01) viennent désormais en soustraction de l'agrégat de période au lieu d'y être ajoutés. G1.14 autorise explicitement les montants négatifs sur TT-82 / TT-83 / TT-87 / TT-88, donc une période dominée par les avoirs ressort avec le bon net.
+- **Tables e-Reporting renommées pour cohérence** : `RGY56BAR` → `RGDRIN`, `RHY56BAR` → `RHDRIN`, `RIY56BAR` → `RIDRIN` (avec index alignés). Les trois tables e-Reporting partagent désormais la même nomenclature `DRIN` que F564231.
+
+### Note de migration
+
+L'e-Reporting n'entre en vigueur qu'en septembre 2026, aucune installation en production ne l'utilise encore — le schéma est modifié sans transition de compatibilité. Supprimer et recréer les trois tables e-Reporting (F564260 / F564261 / F564262) avant le prochain run. Les lignes F564231 existantes héritent de `UHDRIN = '2'` (sortant) via la valeur par défaut de la colonne.
+
+---
+
+## 2026.05.18 — 2026-05-18 \{#v2026-05-18\}
+
+Notifications et actions personnalisées orientées direction — les opérateurs peuvent câbler des flux distincts pour les factures émises et reçues sans les mélanger. Plus une correction pour le filtre Direction de la liste Factures.
+
+### Nouveautés
+
+- **Les règles de notification gagnent un déclencheur Direction** : *Toutes (par défaut)*, *Émises uniquement (ventes)* ou *Reçues uniquement (achats)*. Une règle avec une direction ne se déclenche jamais pour les factures de la direction opposée — le même code statut (par exemple *En litige*) peut donc appeler une API pour les rejets de ventes et une autre pour les rejets d'achats sans aucune logique conditionnelle dans la règle.
+- **Les actions personnalisées sur les factures** (les boutons configurés par l'opérateur dans la modale de détail) gagnent le même champ Direction. Vide = visible des deux côtés (valeur par défaut héritée). Une fois fixée, le bouton est masqué pour les factures de l'autre direction — un *Sync CRM* côté émission et un *Marquer payée* côté réception peuvent ainsi coexister sur le même modèle, la modale n'affichant que ce qui a du sens pour la facture courante.
+
+### Corrections
+
+- Liste Factures — le chip *Direction* applique désormais le filtre même quand la vue stockée est antérieure à cette version. Le filtre est résolu à partir de la carte direction → modèle de document au moment de la requête, indépendamment du contenu de la vue stockée.
+
+---
+
+## 2026.05.17 — 2026-05-18 \{#v2026-05-17\}
+
+Les factures reçues des fournisseurs sont gérées dans NomaUBL — même liste Factures, même cycle de vie, même modale de détail.
+
+### Nouveautés
+
+- **Récupérer les factures reçues depuis la PA** : nouvelle commande CLI `-fetch-received`, nouveau point d'entrée REST `POST /api/fetch-received/run`, et un mode « PA entrante (factures fournisseur) » sur la page Fetch Input. Le handler appelle deux nouvelles tâches du connecteur API (`fetch-received-list`, `fetch-received`), déduplique par UUID PA et fait passer chaque UBL téléchargée par le pipeline UBL existant. Peut aussi tourner sur planificateur — nouvelle propriété globale `fetchReceivedInterval` (minutes entre passes, 0 = désactivé).
+- **Les modèles de document ont une nouvelle propriété Direction** — *Émise* (défaut, rétro-compatibilité) ou *Reçue*. Pilote un nouveau filtre sur la liste Factures (Toutes / Émises / Reçues) et masque les actions réservées aux émetteurs (Renvoyer à la PA, Marquer envoyée, Avoir, etc.) sur les factures reçues.
+- **Connecteur de recherche du numéro de document** : le `cbc:ID` d'une facture UBL reçue est le numéro du fournisseur, pas le nôtre. Un nouveau groupe « Recherche du numéro de document » sur le modèle (visible quand source = UBL) permet de câbler une requête SQL ou un endpoint REST qui retourne notre `(doc, dct, kco)` interne à partir des champs fournisseur (`{ublNumber}`, `{supplierName}`, `{supplierVat}`, etc.). Quand il est configuré, il remplace la regex sur cbc:ID ; sinon le chemin `idPattern` existant fonctionne toujours.
+- **Le nom de la contrepartie** stocké sur la ligne (utilisé par la liste / recherche) est désormais lu depuis `AccountingSupplierParty` pour les lignes en direction Reçue, donc la colonne affiche le fournisseur au lieu de notre propre nom.
+- Nouveau modèle de document `received-ubl` livré pré-câblé avec `source=UBL`, `direction=R`, `dctDefault=RI`. Configurer le connecteur de recherche dans Paramètres → Modèles de document et c'est prêt.
+
+### Aucun changement de schéma
+
+- F564231 n'est pas modifiée. La direction est résolue à la lecture à partir du nom de modèle déjà stocké sur la ligne (`UHTMPL`), donc les lignes existantes continuent de fonctionner sans aucune migration.
 
 ---
 

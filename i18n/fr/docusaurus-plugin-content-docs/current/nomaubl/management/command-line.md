@@ -254,6 +254,42 @@ java -jar nomaubl.jar -fetch-status /opt/nomaubl/demo/config/config.json
 
 ---
 
+## `-fetch-received` — récupérer les factures fournisseur depuis la PA *(2026.05.17)*
+
+Passe côté réception : demander à la PA la liste des factures adressées à l'opérateur depuis la dernière exécution, télécharger chaque UBL non encore vu et la faire passer par le pipeline UBL existant. Équivalent de la page *Sync → Fetch Input → PA entrante (factures fournisseur)*.
+
+```text
+-fetch-received <configFile> [--since YYYY-MM-DD] [--verbose]
+```
+
+| Argument / option | Description |
+|---|---|
+| **`configFile`** | Chemin absolu vers `config.json`. |
+| **`--since YYYY-MM-DD`** | Date d'émission la plus ancienne à considérer. Par défaut, l'horodatage de la dernière exécution réussie enregistré dans le modèle *global* (`lastFetchReceivedAt`). |
+| **`--verbose`** | Affiche les messages par document sur stdout — pratique au premier lancement pour voir combien d'UBL ont été téléchargés et quelles décisions de déduplication ont été prises. |
+
+Le handler appelle deux tâches du connecteur API sur le modèle PA configuré :
+
+| Tâche | Rôle |
+|---|---|
+| **`fetch-received-list`** | Renvoie la liste des références de factures reçues (UUID PA + métadonnées fournisseur) depuis le curseur. |
+| **`fetch-received`** | Télécharge un UBL par UUID PA. |
+
+La déduplication est faite par UUID PA contre les lignes F564231 existantes, donc relancer la passe est sans risque — les factures déjà importées sont ignorées en silence. Le pipeline de traitement s'appuie sur le modèle de document dont la `direction = R` correspond au flux entrant (le modèle livré `received-ubl` par défaut).
+
+Pour l'exécuter automatiquement, renseigner **`fetchReceivedInterval`** dans le modèle *global* (minutes entre passes, `0` = désactivé) — même ordonnanceur d'arrière-plan `-serve` que `fetchImportInterval` / `fetchStatusInterval`.
+
+```bash
+# Exécution manuelle — tout récupérer depuis le dernier curseur
+java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json --verbose
+
+# Exécution manuelle — rattrapage depuis une date donnée
+java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json \
+                      --since 2026-04-01
+```
+
+---
+
 ## `-fetch-single` — extraire un document, puis le traiter
 
 Équivalent de la page *Processing → Extraction et traitement*. Extrait un document d'un canal source, dépose le fichier résultant dans `dirInput` (modèle XML) ou `<dirInput>/ubl/` (modèle UBL), puis lance immédiatement le pipeline correspondant. Le choix XML ou UBL est **déduit de la propriété `source` du modèle** — l'argument `processType` disparaît.

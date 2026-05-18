@@ -231,6 +231,7 @@ Background tasks executed by NomaUBL when running in serve mode. **Changes on th
 |---|---|
 | **Import poll interval (min)** | Minutes between automatic import-status polls for pending invoices (status `9906`). `0` = disabled. |
 | **Status retrieval interval (min)** | Minutes between automatic lifecycle-status retrievals from the PA. `0` = disabled. |
+| **Received fetch interval (min)** *(2026.05.17)* | Minutes between automatic *PA inbound* sweeps — the same flow as the *Sync → Fetch Input → PA inbound (supplier invoices)* mode and the `-fetch-received` CLI. `0` = disabled. Persists the cursor of the highest issue date processed in `lastFetchReceivedAt` so each sweep only pulls invoices that arrived since the previous one. |
 
 ### Batch Document Processing
 

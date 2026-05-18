@@ -244,6 +244,7 @@ Chaque action personnalisée porte :
 |---|---|
 | **ID** | Identifiant libre (par ex. `pushToCrm`). Enregistré sous `customAction.N.id`. Le picker évite les doublons dans une portée. |
 | **Label** | Texte du bouton dans la modale (par ex. *Pousser vers CRM*). Enregistré sous `customAction.N.label`. |
+| **Direction** *(2026.05.18)* | `Toutes` *(défaut)* / `Émises uniquement (ventes)` / `Reçues uniquement (achats)`. Vide = bouton visible des deux côtés (comportement rétro-compatible). Une fois fixée, le bouton est masqué sur les factures de la direction opposée — un *Sync CRM* côté émission et un *Marquer payée* côté réception peuvent coexister sur le même modèle, la modale n'affichant que ce qui a du sens pour la facture courante. Évalué contre l'indicateur `UHDRIN` enregistré sur la ligne. |
 | **Liste d'appels** | Même éditeur de call-card que les liaisons réglementaires — connecteur, endpoint / requête, paramètres, *Arrêt sur échec* optionnel. Le même contrat de chaînage `{call.N.fieldName}` s'applique. |
 
 **+ Ajouter une action personnalisée** au pied de la section ajoute une nouvelle entrée. Retirer avec le bouton 🗑 par ligne.

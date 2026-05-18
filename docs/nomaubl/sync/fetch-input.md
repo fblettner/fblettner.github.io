@@ -186,7 +186,7 @@ The second section picks the **source** and any source-specific parameters.
 | Field | Description |
 |---|---|
 | **Template** | Required when *Process As = XML*. Selects the XSL pipeline applied to each item. Hidden in UBL mode (UBL files are picked up directly from `dirInput/ubl/`). |
-| **Source** | `BIP Queue` (JD Edwards-specific) or `Input Directory`. |
+| **Source** | `BIP Queue` (JD Edwards-specific), `Input Directory`, or `PA inbound (supplier invoices)` *(2026.05.17)*. |
 
 ### Source = BIP Queue
 
@@ -204,6 +204,20 @@ The Scan lists every `.xml` file present in:
 - `dirInput/ubl/` for *Process As = UBL*.
 
 No additional parameters — every file in the directory is a candidate.
+
+### Source = PA inbound (supplier invoices) *(2026.05.17)*
+
+Ask the Plateforme Agréée for the list of invoices addressed to the operator since the last successful sweep, then pick which ones to download and process.
+
+| Field | Description |
+|---|---|
+| **Document template** | The `received-ubl` template (or any template with `direction = R`) — pre-filtered so a *PA inbound* scan never lands on an emit-side template by accident. |
+| **Issued after** | Earliest issue date to consider. Defaults to the cursor saved in the *global* template (`lastFetchReceivedAt`). Edit to backfill — the cursor is reset to the highest issue date actually processed at the end of the run. |
+| **Include already imported** | Off by default. The PA may return the same UUID twice; with the toggle off the deduplication against `F564231` filters them out before the scan results are shown. Tick to inspect every reference the PA returned, e.g. to re-pull a UBL whose previous import failed mid-pipeline. |
+
+The Scan calls the `fetch-received-list` task on the PA's api-connector template. Each candidate row carries the PA UUID, the supplier name, the supplier VAT number, the issue date and the total. Tick the rows to process; **Process (N)** then calls `fetch-received` for each ticked row, downloads the UBL, and runs the standard UBL pipeline against the chosen template.
+
+To run the same flow without picking by hand, either schedule it via `global.fetchReceivedInterval` (minutes between sweeps, see [Global settings](../configuration/system/global.md)) or invoke it from the CLI with `-fetch-received` (see [Command Line](../management/command-line.md)).
 
 ---
 
