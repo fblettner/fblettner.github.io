@@ -103,22 +103,16 @@ The BAR routing rule defined in *UBL Defaults → Document Type / BAR Routing* d
 
 ---
 
-## Two flux, four document types
+## The envelope, two sub-blocks, four document types
 
-The French e-reporting specification defines **two flux** for outgoing declarations and **four document types** that describe whether a report is an initial submission or a correction.
+Each report is a single `<TransactionsReport>` envelope per `(company, period, direction)` — at most two XML files per `(company, period)`: one **outbound** envelope that aggregates every issued invoice (Issuer `RoleCode=SE`), and one **inbound** envelope that aggregates every received supplier invoice when the operator subscribes to the inbound flow (Issuer `RoleCode=BY`). The direction the envelope speaks for is taken from the `UHDRIN` flag stored on each F564231 row.
 
-| Flux | Scope | Content shape |
+Inside an envelope, the French e-reporting specification defines **two sub-blocks** (the *flux* 10.1 and 10.3) and **four document types** that describe whether the envelope is an initial submission or a correction.
+
+| Sub-block | Scope | Content shape |
 |---|---|---|
-| **`10.1`** | **B2BINT** invoice detail | One `<Invoice>` element per international B2B invoice in the period — ID, issue date, type code, currency, Seller (declarer), Buyer (counterparty), monetary totals, and one `<TaxSubTotal>` per VAT rate. B2C invoices are *never* emitted here, in line with the routing rule of the specification. |
-| **`10.3`** | **B2C / OUTOFSCOPE** aggregated | One `<Transactions>` block per *(category code, currency)*, with nested `<TaxSubTotal>` entries per rate carrying the taxable base (in source currency) and the VAT amount (always in EUR). |
-
-:::info[One envelope per (company, period, direction) — 2026.05.19]
-Since 2026.05.19 the two flux are emitted as **parallel children of the same `<TransactionsReport>` envelope** per DGFiP rule G6.29 — not as two separate files. At most two XML files per (company, period) are produced: one **outbound** envelope (Issuer `RoleCode=SE`, containing every issued invoice) and one **inbound** envelope (Issuer `RoleCode=BY`, containing every received supplier invoice, when the operator subscribes to the inbound flow). Each envelope holds the 10.1 and 10.3 sub-blocks together. The direction the envelope speaks for is read from the `UHDRIN` flag persisted on every F564231 row (`'1'` = received, `'2'` = issued).
-:::
-
-:::info[Credit notes subtract from the 10.3 aggregate — 2026.05.19]
-Credit notes — UNTDID 1001 codes `261`, `381`, `396`, `502`, `503` per G1.01 — now **subtract** from the period's aggregate instead of being added to it. The G1.14 rule explicitly allows negative amounts on `TT-82`, `TT-83`, `TT-87`, `TT-88`, so a period where credits dominate the activity comes through with the correct net taxable base and VAT. The 10.1 detail block keeps emitting credit notes as positive-signed rows with their own type code; the aggregation logic is only applied to 10.3.
-:::
+| **`10.1`** | **B2BINT** invoice detail | One `<Invoice>` element per international B2B invoice in the period — ID, issue date, type code, currency, Seller (declarer), Buyer (counterparty), monetary totals, and one `<TaxSubTotal>` per VAT rate. B2C invoices are *never* emitted here, in line with the routing rule of the specification. Credit notes are emitted as positive-signed rows with their own type code. |
+| **`10.3`** | **B2C / OUTOFSCOPE** aggregated | One `<Transactions>` block per *(category code, currency)*, with nested `<TaxSubTotal>` entries per rate carrying the taxable base (in source currency) and the VAT amount (always in EUR). Credit notes — UNTDID 1001 codes `261`, `381`, `396`, `502`, `503` per G1.01 — **subtract** from the aggregate, in line with G1.14 which allows negative amounts on `TT-82`, `TT-83`, `TT-87`, `TT-88`. A period dominated by credits comes through with the correct net taxable base and VAT. |
 
 | Code | Meaning | Typical use |
 |---|---|---|

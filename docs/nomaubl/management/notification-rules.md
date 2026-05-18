@@ -219,7 +219,7 @@ The trigger decides **when** the rule fires. Three fields combine, all optional:
 |---|---|---|
 | **Status codes** | *statuses* catalogue | Chip multi-select. The rule fires when the status code of the new transition is in this list. Empty = match every status. |
 | **Reason codes** | *rejection-reason-codes* catalogue | Chip multi-select. The rule fires only when the reason code of the new transition is in this list. Empty = match every reason. |
-| **Direction** *(2026.05.18)* | `Any` *(default)* / `Issued only (sales)` / `Received only (purchases)` | Picks which side of the workflow the rule applies to. `Any` keeps the rule visible to both directions (back-compat default). `Issued only` skips the rule for supplier-received invoices; `Received only` skips it for customer-issued ones. The filter is matched against the `UHDRIN` flag persisted on the row (see [Invoices → Direction chip](../application/invoices.md#direction-chip-20260517)). |
+| **Direction** | `Any` *(default)* / `Issued only (sales)` / `Received only (purchases)` | Picks which side of the workflow the rule applies to. `Any` keeps the rule active on both directions. `Issued only` skips the rule on supplier-received invoices; `Received only` skips it on customer-issued ones. Evaluated against the `UHDRIN` flag stored on the row (see [Invoices → Direction chip](../application/invoices.md#direction-chip)). |
 
 Both fields are surfaced as **chip multi-selects** — picking from a dropdown adds a chip; the × on a chip removes it. The dropdown is populated from the same `statuses` and `rejection-reason-codes` resources used by the *Set Status* modal and the invoice *History* tab, so a rule cannot reference a code that the application does not recognise.
 

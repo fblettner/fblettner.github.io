@@ -103,22 +103,16 @@ La règle de routage BAR définie dans *UBL Defaults → Document Type / BAR Rou
 
 ---
 
-## Deux flux, quatre types de document
+## L'enveloppe, deux sous-blocs, quatre types de document
 
-La spécification française d'e-reporting définit **deux flux** sortants et **quatre types de document** qui précisent si le rapport est une soumission initiale ou une correction.
+Chaque rapport est une enveloppe `<TransactionsReport>` unique par `(société, période, direction)` — au plus deux fichiers XML par `(société, période)` : une enveloppe **sortante** qui agrège les factures émises (Issuer `RoleCode=SE`), et une enveloppe **entrante** qui agrège les factures fournisseur reçues quand l'opérateur est abonné au flux entrant (Issuer `RoleCode=BY`). La direction couverte par l'enveloppe vient de l'indicateur `UHDRIN` stocké sur chaque ligne F564231.
 
-| Flux | Périmètre | Forme du contenu |
+À l'intérieur d'une enveloppe, la spécification française d'e-reporting définit **deux sous-blocs** (les *flux* 10.1 et 10.3) et **quatre types de document** qui précisent si l'enveloppe est une soumission initiale ou une correction.
+
+| Sous-bloc | Périmètre | Forme du contenu |
 |---|---|---|
-| **`10.1`** | Détail **B2BINT** | Un élément `<Invoice>` par facture B2B internationale de la période — ID, date d'émission, code de type, devise, Vendeur (déclarant), Acheteur (contrepartie), totaux monétaires et un `<TaxSubTotal>` par taux de TVA. Les factures B2C ne sont *jamais* émises ici, conformément à la règle de routage de la spécification. |
-| **`10.3`** | **B2C / OUTOFSCOPE** agrégé | Un bloc `<Transactions>` par *(code catégorie, devise)*, avec des `<TaxSubTotal>` imbriqués par taux portant la base imposable (en devise source) et le montant de TVA (toujours en EUR). |
-
-:::info[Une enveloppe par (société, période, direction) — 2026.05.19]
-Depuis 2026.05.19, les deux flux sont émis comme **enfants parallèles d'une même enveloppe `<TransactionsReport>`** conformément à la règle DGFiP G6.29 — et non plus dans deux fichiers séparés. Au plus deux fichiers XML par (société, période) : une enveloppe **sortante** (Issuer `RoleCode=SE`, qui regroupe les factures émises) et une enveloppe **entrante** (Issuer `RoleCode=BY`, qui regroupe les factures fournisseur reçues, quand l'opérateur est abonné au flux entrant). Chaque enveloppe porte ensemble les sous-blocs 10.1 et 10.3. La direction couverte par l'enveloppe se lit dans l'indicateur `UHDRIN` enregistré sur chaque ligne F564231 (`'1'` = reçue, `'2'` = émise).
-:::
-
-:::info[Les avoirs viennent en soustraction de l'agrégat 10.3 — 2026.05.19]
-Les avoirs — codes UNTDID 1001 `261`, `381`, `396`, `502`, `503` selon G1.01 — viennent désormais en **soustraction** de l'agrégat de période au lieu d'y être ajoutés. La règle G1.14 autorise explicitement les montants négatifs sur `TT-82`, `TT-83`, `TT-87`, `TT-88`, donc une période dominée par les avoirs ressort avec la bonne base imposable nette et la bonne TVA. Le bloc détail 10.1 continue d'émettre les avoirs en lignes positives avec leur propre code de type ; la logique d'agrégation n'est appliquée qu'au 10.3.
-:::
+| **`10.1`** | Détail **B2BINT** | Un élément `<Invoice>` par facture B2B internationale de la période — ID, date d'émission, code de type, devise, Vendeur (déclarant), Acheteur (contrepartie), totaux monétaires et un `<TaxSubTotal>` par taux de TVA. Les factures B2C ne sont *jamais* émises ici, conformément à la règle de routage de la spécification. Les avoirs sont émis en lignes positives avec leur propre code de type. |
+| **`10.3`** | **B2C / OUTOFSCOPE** agrégé | Un bloc `<Transactions>` par *(code catégorie, devise)*, avec des `<TaxSubTotal>` imbriqués par taux portant la base imposable (en devise source) et le montant de TVA (toujours en EUR). Les avoirs — codes UNTDID 1001 `261`, `381`, `396`, `502`, `503` selon G1.01 — **viennent en soustraction** de l'agrégat, conformément à G1.14 qui autorise les montants négatifs sur `TT-82`, `TT-83`, `TT-87`, `TT-88`. Une période dominée par les avoirs ressort donc avec la bonne base imposable nette et la bonne TVA. |
 
 | Code | Signification | Cas d'usage type |
 |---|---|---|

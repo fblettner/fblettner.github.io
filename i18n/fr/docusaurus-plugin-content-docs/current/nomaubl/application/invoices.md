@@ -224,7 +224,7 @@ Depuis 2026.05.12, la page fonctionne en **mode hybride client-side** : chaque *
 
 Depuis 2026.05.13, les colonnes refList (Statut, statut e-reporting, listes personnalisées) reçoivent un **picker multi-sélection** dans le panneau Filtres avancés et dans la ligne de filtre par colonne — choisir un nombre quelconque de codes, le déclencheur affiche `N sélectionné(s)` au-delà du plafond inline, et un `✕` à droite réinitialise la sélection en un clic. Le serveur applique une clause `IN (?,?,?)` — choisir trois statuts renvoie l'union.
 
-### Chip Direction *(2026.05.17)*
+### Chip Direction
 
 Une nouvelle rangée de chips s'installe à côté des chips Statut : **Toutes** / **Émises** / **Reçues**.
 
@@ -234,7 +234,7 @@ Une nouvelle rangée de chips s'installe à côté des chips Statut : **Toutes**
 | **Émises** | Seules les factures envoyées par l'opérateur aux clients. Même périmètre que la liste avant 2026.05.17. |
 | **Reçues** | Seules les factures fournisseur récupérées depuis la PA (voir [Synchronisation → Fetch Input → PA entrante](../sync/fetch-input.md) et le modèle de document livré `received-ubl`). |
 
-Le chip s'appuie sur l'indicateur `UHDRIN` enregistré sur chaque ligne depuis 2026.05.19 — un changement de *Direction* sur un modèle ne re-classe pas les lignes historiques, le résultat de la liste reste donc stable dans le temps. Sur les installations antérieures où `UHDRIN` n'existe pas encore, le filtre retombe sur la carte direction → modèle et fonctionne de la même manière (correction 2026.05.18).
+Le chip s'appuie sur l'indicateur `UHDRIN` enregistré sur chaque ligne — un changement de *Direction* sur un modèle ne re-classe pas les lignes historiques, le résultat reste donc stable dans le temps.
 
 Sur une ligne *Reçue*, la colonne **Contrepartie** lit depuis `AccountingSupplierParty` (le fournisseur), pas depuis `AccountingCustomerParty` — la colonne affiche donc le nom du fournisseur sur les factures entrantes et le nom du client sur les sortantes. Le cycle de vie, la modale de détail et le catalogue de colonnes sont par ailleurs identiques ; seules les actions vendeur (Renvoyer à la PA, Marquer envoyée, Avoir…) sont masquées sur les lignes Reçues.
 

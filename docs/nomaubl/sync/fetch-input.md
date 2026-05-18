@@ -186,7 +186,7 @@ The second section picks the **source** and any source-specific parameters.
 | Field | Description |
 |---|---|
 | **Template** | Required when *Process As = XML*. Selects the XSL pipeline applied to each item. Hidden in UBL mode (UBL files are picked up directly from `dirInput/ubl/`). |
-| **Source** | `BIP Queue` (JD Edwards-specific), `Input Directory`, or `PA inbound (supplier invoices)` *(2026.05.17)*. |
+| **Source** | `BIP Queue` (JD Edwards-specific), `Input Directory`, or `PA inbound (supplier invoices)`. |
 
 ### Source = BIP Queue
 
@@ -205,7 +205,7 @@ The Scan lists every `.xml` file present in:
 
 No additional parameters — every file in the directory is a candidate.
 
-### Source = PA inbound (supplier invoices) *(2026.05.17)*
+### Source = PA inbound (supplier invoices)
 
 Ask the Plateforme Agréée for the list of invoices addressed to the operator since the last successful sweep, then pick which ones to download and process.
 

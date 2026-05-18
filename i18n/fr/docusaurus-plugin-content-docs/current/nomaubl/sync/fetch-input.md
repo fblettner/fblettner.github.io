@@ -186,7 +186,7 @@ La seconde section choisit la **source** et ses paramètres.
 | Champ | Description |
 |---|---|
 | **Template** | Obligatoire si *Process As = XML*. Sélectionne le pipeline XSL appliqué à chaque élément. Masqué en mode UBL (les fichiers UBL sont repris directement depuis `dirInput/ubl/`). |
-| **Source** | `BIP Queue` (spécifique à JD Edwards), `Input Directory`, ou `PA entrante (factures fournisseur)` *(2026.05.17)*. |
+| **Source** | `BIP Queue` (spécifique à JD Edwards), `Input Directory`, ou `PA entrante (factures fournisseur)`. |
 
 ### Source = BIP Queue
 
@@ -205,7 +205,7 @@ Le balayage retourne tous les fichiers `.xml` présents dans :
 
 Aucun paramètre supplémentaire — chaque fichier du répertoire est un candidat.
 
-### Source = PA entrante (factures fournisseur) *(2026.05.17)*
+### Source = PA entrante (factures fournisseur)
 
 Demander à la Plateforme Agréée la liste des factures adressées à l'opérateur depuis la dernière passe, puis choisir lesquelles télécharger et traiter.
 

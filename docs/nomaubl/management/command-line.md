@@ -179,7 +179,7 @@ java -jar nomaubl.jar -serve /opt/nomaubl/demo/config/config.json 8090
 
 ## `-process` — single document-processing entry point
 
-Process one (or many) source files against one document template — or call a SQL / REST connector when the template's `source` is `Connector` (2026.05.16). The pipeline is selected by the template's `source` property (`XML` for XML spools requiring an XSL transform, `UBL` for already-formed UBL 2.1 invoices, `Connector` for live calls to a SQL query or REST endpoint). Replaces the legacy `-xml` and `-ubl` flags.
+Process one (or many) source files against one document template — or call a SQL / REST connector when the template's `source` is `Connector`. The pipeline is selected by the template's `source` property (`XML` for XML spools requiring an XSL transform, `UBL` for already-formed UBL 2.1 invoices, `Connector` for live calls to a SQL query or REST endpoint).
 
 ```text
 -process <configFile> <template> <file|dir|---> [type] [--param key=value …] [--verbose] [--replace] [--no-send] [--no-db] [--validate] [--send] [--no-debug]
@@ -212,11 +212,7 @@ Process one (or many) source files against one document template — or call a S
 | `--no-db` | Skip the database write step (implies `--no-send`). | XML |
 | `--validate` | XSD + Schematron only — no DB insert, no PA send. | UBL |
 | `--send` | Force submission to the PA, overriding the configured default. | UBL |
-| `--no-debug` | Skip the per-step timings that 2026.05.16 enables by default (parse, validation, DB insert, send to PA). Recommended on heavy nightly batches where the per-step overhead is not worth the extra log volume. | all |
-
-:::info[Debug timings on by default — 2026.05.16]
-Per-step timings (parse, validation, DB insert, send to PA…) are now logged in every run, both in the UI and on the CLI. The overhead is negligible and the timings are the fastest way to diagnose a slow run. Use `--no-debug` on the CLI (or untick the toggle in the UI) only when running large overnight batches where the per-step lines clutter the log without bringing value.
-:::
+| `--no-debug` | Skip the per-step timings (parse, validation, DB insert, send to PA) that are logged by default in every run. Recommended on heavy nightly batches where the per-step overhead is not worth the extra log volume. | all |
 
 **Examples**
 
@@ -254,7 +250,7 @@ java -jar nomaubl.jar -fetch-status /opt/nomaubl/demo/config/config.json
 
 ---
 
-## `-fetch-received` — pull supplier invoices from the PA *(2026.05.17)*
+## `-fetch-received` — pull supplier invoices from the PA
 
 Receive-side sweep: ask the PA for the list of invoices addressed to the operator since the last successful run, download each UBL the operator has not seen yet, and feed it into the existing UBL processing pipeline. Equivalent of the *Sync → Fetch Input → PA inbound (supplier invoices)* page.
 
