@@ -1,16 +1,17 @@
 ---
 title: Notes de version
-description: "Notes de version NomaUBL — toutes les évolutions visibles par l'utilisateur livrées dans la plateforme, version par version, en ordre chronologique inverse. Reflète la page Notes de version intégrée à l'application."
+description: "Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré dans la plateforme, version par version, dans l'ordre antéchronologique. Reflète la page Notes de version disponible dans l'application."
 keywords: [NomaUBL, notes de version, changelog, version, e-reporting, journal de traitement, dashboard, AFNOR XP Z12-014, Schematron, RFE, Réforme de la Facturation Électronique]
 ---
 
 # Notes de version
 
-Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API REST, CLI, comportement — sont consignées ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* intégrés à l'application.
+Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+  <a href="#v2026-05-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
   <a href="#v2026-05-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
   <a href="#v2026-05-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
   <a href="#v2026-05-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
@@ -42,878 +43,468 @@ Toutes les évolutions visibles par les utilisateurs de NomaUBL — IHM, API RES
 
 ---
 
+## 2026.05.16 — 2026-05-14 \{#v2026-05-16\}
+
+Génération de factures UBL directement depuis une requête SQL ou une API REST — sans passer par un spool JDE. Le profilage de performance est désormais activé par défaut. Plus une correction d'un vieux bug d'affichage dans le journal de traitement.
+
+### Factures depuis une source SQL ou REST
+
+- Les modèles de document ont une nouvelle source **Connecteur** (en plus de XML et UBL). Choisissez un connecteur SQL ou API pour l'en-tête, éventuellement un autre pour les lignes, et le pipeline XSLT existant prend le relais pour produire l'UBL.
+- Deux modes : **un appel** (une requête / endpoint renvoie l'en-tête avec le tableau de lignes imbriqué) ou **deux appels** (en-tête d'abord, puis lignes — les paramètres des lignes peuvent réutiliser les valeurs de l'en-tête).
+- Dans l'Éditeur XSL, un nouveau bouton **Charger un échantillon connecteur** récupère un vrai exemple pour mapper les XPath sur des données réelles, exactement comme avec un spool XML.
+- La page Traiter un document remplace le sélecteur de fichier par un formulaire de paramètres quand le modèle utilise un connecteur. En ligne de commande, utilisez `--param clé=valeur` (répétable) à la place du chemin de fichier.
+
+### Timings de debug activés par défaut
+
+- Les durées par étape (parse, validation, insertion en base, envoi à la PA…) sont désormais loggées par défaut à chaque exécution, dans l'interface comme en ligne de commande. La surcharge est négligeable et c'est le moyen le plus rapide de diagnostiquer une exécution lente.
+- Utilisez le nouveau drapeau `--no-debug` (ou décochez la case dans l'interface) pour les ignorer sur les batchs de nuit volumineux.
+
+### Correction
+
+- **Journal de traitement** : quand plusieurs étapes d'un même job partageaient la même seconde, elles étaient éclatées sur plusieurs lignes étiquetées PARTIAL. Les événements restent maintenant regroupés sous leur job d'origine.
+
+---
+
 ## 2026.05.15 — 2026-05-14 \{#v2026-05-15\}
 
-Deux améliorations qui permettent aux opérateurs de câbler des systèmes aval sans code dédié : **actions facture personnalisées** (boutons toujours visibles dans la modale de détail qui déclenchent une chaîne configurable d'appels connecteur) et **synchronisation depuis connecteur pour les listes personnalisées** (récupération des entrées d'une liste depuis un endpoint api-connector ou une requête sql-connector, avec paramètres enregistrés pour qu'une même requête alimente plusieurs listes). Plus la syntaxe unifiée `{field}` / `{{field}}` qui permet d'utiliser le même picker de variables dans les paramètres d'action.
+Connecter des systèmes externes sans écrire de code : les factures ont des boutons d'action personnalisables, et les listes de référence peuvent se rafraîchir depuis une requête SQL ou une API REST.
 
-### Actions facture personnalisées
+### Nouveau : boutons d'action personnalisés sur les factures
 
-- Nouveau type `CustomInvoiceAction` dans `services/invoiceHelpers` plus `parseCustomActions` / `customActionsToProps` qui enregistrent et sérialisent `customAction.N.id`, `.label` et le même bloc `.call.M.*` sur le modèle e-invoicing (les surcharges par kco via `e-invoicing-{kco}` continuent de fonctionner).
-- La page [Actions](./management/actions.md) a une section *Actions personnalisées* sous la liste des actions vendeur prédéfinies. Chaque ligne porte un `id` libre + un `label` (texte du bouton) + le même éditeur de call-card — connecteur, endpoint / requête, paramètres, `stopOnFailure` optionnel.
-- `InvoiceDetailModal` rend les actions personnalisées dans leur propre groupe (le `ActionsSection` *Actions personnalisées*) sous les actions vendeur prédéfinies, avec la logique de chaîne existante (variables résolues, chaînage de réponses via `{call.N.fieldName}`). Le bandeau de résultat est rattaché au groupe dont le bouton a déclenché la chaîne via un champ `actionResult.source` ; le résultat est aussi effacé quand la modale se ferme ou passe à une autre facture afin que les bandeaux périmés ne restent pas.
-- `InvoiceList` et `IntegrationList` chargent les actions personnalisées en plus des actions réglementaires et les transmettent à la modale.
+- Ajoutez vos propres boutons dans le panneau de détail d'une facture (à côté des actions vendeur existantes). Chaque bouton peut déclencher une chaîne d'appels vers un connecteur — idéal pour mettre à jour une fiche client, pousser vers un ERP aval, appeler un webhook…
+- Configurés dans Paramètres → Actions, avec le même éditeur que les actions intégrées : connecteur, endpoint, paramètres, option « arrêter en cas d'échec ».
 
-### Syntaxe unifiée des variables dans les paramètres d'action
+### Listes de référence : synchronisation depuis un connecteur
 
-- `resolveActionParams` accepte maintenant `{field}` (syntaxe insérée par le picker de notifications) et l'ancienne `{{field}}`. Les jetons inconnus passent inchangés afin qu'une faute de frappe soit visible à l'exécution.
-- Chaque paramètre d'appel sur la page [Actions](./management/actions.md) (paramètres par endpoint ET le fallback paramètres bruts) reçoit un bouton picker `{ }` alimenté par le même hook `usePlaceholderOptions` que l'[éditeur de notifications](./management/notification-rules.md).
+- Une liste personnalisée (Paramètres → Listes de référence) peut maintenant être rafraîchie depuis une requête SQL ou une API REST. Choisissez le connecteur, l'endpoint, indiquez quel champ est le code et quels champs sont les libellés — cliquez sur **Synchroniser maintenant** et la liste se reconstruit toute seule.
+- Les paramètres sont sauvegardés par liste, donc la même requête peut alimenter plusieurs listes avec des entrées différentes.
 
-### Synchronisation depuis connecteur pour les listes personnalisées
+### Améliorations
 
-- `CustomListEditor` reçoit un groupe *Sync source (optionnel)* sous le tableau des lignes. Choisir un api-connector ou un sql-connector, puis un endpoint / une requête, puis mapper les champs de la réponse :
-  - `Code field` — nom de colonne (SQL) ou clé JSON (API) qui sert de code à chaque ligne.
-  - `Label FR field` / `Label EN field` — libellés FR (requis) et EN (optionnel).
-  - `List path` (API seulement) — chemin pointé vers le tableau dans le corps JSON, supporte `data.items` et `items[0]` ; vide quand le corps est déjà un tableau.
-  - `Parameters` — valeurs fixes (pas de substitution de variables) envoyées au connecteur. La même requête peut alimenter plusieurs listes en enregistrant des valeurs différentes par liste ; les valeurs par défaut de la définition d'endpoint s'appliquent quand un champ est laissé vide.
-- Le bouton `Sync now` appelle le connecteur, parcourt la réponse, construit l'ensemble de lignes et remplace les lignes de l'éditeur avec un message succès/erreur traduit (`N ligne(s) synchronisée(s) depuis connector · endpoint` ou l'erreur sous-jacente).
-- La configuration sync vit dans le même modèle de liste sous `sync.connector / sync.endpoint / sync.codeField / sync.labelFrField / sync.labelEnField / sync.listPath / sync.params`. `parseRefOptions` filtre ces clés afin que les consommateurs de liste (renderer de cellule refList, dropdown *Filtres avancés*) ne les voient jamais comme des entrées. Voir la page [Listes personnalisées](./configuration/custom-lists.md).
+- Tous les paramètres d'action acceptent maintenant un sélecteur `{}` qui liste toutes les variables disponibles (colonnes de la facture, champs de réponse des appels précédents). Les deux syntaxes `{champ}` et `{{champ}}` fonctionnent.
+- Paramètres SQL : taper `'01'` (avec les guillemets) renvoyait silencieusement 0 ligne. Les guillemets sont maintenant retirés automatiquement.
 
-### Backend — liaison de paramètres SQL plus tolérante
+### Corrections
 
-- `SqlConnectorClient.executeQuery` retire maintenant une paire de guillemets simples ou doubles entourant chaque paramètre chaîne avant le `setString` JDBC. Les opérateurs qui tapent `'01'` dans une valeur par défaut de requête ou dans le panneau de test — la façon d'écrire un littéral SQL — obtenaient silencieusement 0 ligne car JDBC liait la chaîne de 4 caractères telle quelle. Le strip permet aux deux conventions de fonctionner. **Note :** comparer à une colonne JDE `CHAR(n)` demande toujours `WHERE TRIM(col) = :p` dans la requête — c'est la règle Oracle de comparaison non-blank-padded quand un côté est lié en `VARCHAR2`, pas un choix du framework. Voir la page [Connecteurs SQL](./configuration/sql-connectors.md).
-
-### Correction de race sur le dropdown endpoint dans l'éditeur de liste personnalisée
-
-- Le chargeur d'endpoints attend maintenant que le catalogue `connectors` soit arrivé avant de tirer, et abandonne quand le connecteur choisi n'y est pas encore. Le code précédent basculait le kind par défaut sur `api` quand `connectors` était vide, tirait le mauvais endpoint de liste, mettait en cache le résultat vide et court-circuitait les ré-exécutions suivantes — le dropdown restait vide au rechargement de l'éditeur. Corrigé : l'endpoint enregistré se résout correctement au rechargement.
+- **Éditeur de liste personnalisée** : l'endpoint sauvegardé manquait parfois dans le menu déroulant à la réouverture de l'éditeur. Corrigé.
 
 ---
 
 ## 2026.05.14 — 2026-05-14 \{#v2026-05-14\}
 
-Les [règles de notification](./management/notification-rules.md) peuvent maintenant utiliser n'importe quelle colonne de la facture comme variable, plus seulement les 10 champs canoniques d'origine. Sujet, corps et valeurs de paramètres d'appel d'action ont tous un nouveau bouton `{ }` qui ouvre un picker recherchable — choisir une variable et elle s'insère dans le champ au curseur. Le jeu de variables fusionne les champs canoniques de notification (`doc` / `dct` / `kco` / `status` / `statusLabel` / `message` / `reason` / `reasonLabel` / `action` / `actionLabel`) avec toutes les colonnes du catalogue de la spec [Factures](./application/invoices.md) (`{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, …) — un appel d'action pour mettre à jour un client ou pousser vers un système aval n'a plus besoin de câblage sur mesure.
+Les règles de notification et les actions peuvent désormais utiliser **n'importe quelle colonne** de la facture comme variable — plus seulement les dix d'origine. Un nouveau sélecteur `{}` les rend faciles à parcourir et à insérer.
 
-### Backend — contexte facture complet dans les variables
+### Nouveautés
 
-- `NotificationDispatcher.readInvoiceContext` projette maintenant toutes les colonnes de `ColumnCatalogs.invoices()` via un seul SELECT `F564231 LEFT JOIN F564230` et stocke la projection en chaîne consciente du type (montants à 2 décimales, date / datetime ISO depuis JDE Julian, parsing `asInt`, trim CHAR) dans une nouvelle map `ctx.extras` clée par nom de colonne de spec.
-- `buildPlaceholders` fusionne `ctx.extras` d'abord, puis superpose les 10 variables canoniques par-dessus — donc les `{doc}` / `{status}` / etc. existants gardent leur sens familier si une colonne du catalogue partage le même nom.
-- Un seul aller-retour SQL par envoi (au lieu du SELECT précédent sur 5 colonnes) — même forme, juste plus large.
-
-### Frontend — popover `PlaceholderPicker`
-
-- Nouveau `common/PlaceholderPicker.tsx` — popover thémé avec un déclencheur stylé en bouton `{ }`. Cliquer ouvre une liste recherchable (nom de variable en `mono` + libellé orienté opérateur) ; choisir une variable et le snippet `{nom}` s'insère dans l'input lié au curseur (ou s'ajoute à la fin avec un espace de tête quand l'input n'est pas focalisé). Escape / clic à l'extérieur ferme.
-- Le hook `usePlaceholderOptions` charge la liste fusionnée une fois par page (10 canoniques + colonnes de `/api/list-views/invoices/catalog`) et la met en cache en scope module pour que chaque picker partage le même fetch.
-- L'éditeur de règle câble trois pickers : à côté de l'input Sujet, à côté du textarea Corps et par ligne valeur de paramètre dans chaque appel d'action. L'indice de variable en ligne verbeux est remplacé par un pointeur court vers le bouton `{ }` + quelques exemples représentatifs.
+- L'éditeur de notification (Sujet, Corps, paramètres d'action) a maintenant un bouton `{}`. Cliquez dessus pour parcourir une liste recherchable de toutes les variables disponibles (10 champs standards de notification + toutes les colonnes de la vue Factures : nom du client, référence du contrat, total, devise, business unit, UUID PA…).
+- Choisissez une variable, elle s'insère au curseur — fini la saisie manuelle de noms de variables ou les devinettes sur ce qui est disponible.
+- Le même sélecteur est réutilisé dans les actions personnalisées, donc toute colonne qui alimente une notification peut aussi alimenter un appel d'API vers un système aval.
 
 ---
 
 ## 2026.05.13 — 2026-05-14 \{#v2026-05-13\}
 
-Filtres refList multi-sélection partout. La ligne de filtre par colonne TanStack et le panneau [Filtres avancés](./application/invoices.md) permettent maintenant aux opérateurs de choisir **un nombre quelconque de codes** pour une colonne refList (statuts, statuts e-reporting, listes personnalisées, …), avec un raccourci d'effacement en un clic sur le déclencheur — pas besoin de désélectionner chaque entrée. Le filtrage serveur `IN (?,?,?)` est activé sur les colonnes catalogue concernées — choisir trois statuts dans *Filtres avancés → Exécuter* renvoie l'union.
+Filtres multi-sélection sur les colonnes de listes de référence (statuts, statuts e-Reporting, listes personnalisées, etc.), avec réinitialisation en un clic. Choisir trois statuts dans Filtres avancés → Exécuter renvoie maintenant vraiment l'union.
 
-### `SearchSelectMulti` — picker multi-sélection thémé
+### Nouveautés
 
-- Nouveau composant frère dans `common/SearchSelect.tsx`. Même apparence et même recherche que `SearchSelect`, mais chaque ligne bascule dans une `value: string[]`, une coche est affichée à côté de chaque entrée active et le déclencheur affiche les codes joints par virgule quand c'est court ou `N sélectionné(s)` quand la liste déborde.
-- Un petit bouton **✕** à droite du déclencheur apparaît quand au moins une option est sélectionnée — cliquer dessus réinitialise le tableau en un seul clic sans ouvrir le popover (`stopPropagation` pour que le déclencheur ne bascule pas). La ligne de pied **Effacer** reste comme chemin secondaire.
+- Les filtres de listes de référence (ligne de filtre par colonne et panneau Filtres avancés) acceptent **n'importe quel nombre de valeurs** au lieu d'une seule.
+- Un bouton **✕** à côté du filtre efface tous les choix en un clic.
+- Le serveur filtre maintenant correctement avec `IN (...)` : choisir trois statuts renvoie les lignes correspondant à l'un d'eux (avant, seul le premier était pris en compte).
 
-### Ligne de filtre par colonne (TanStack)
+### Améliorations
 
-- Une colonne de spec avec un `refList` rend maintenant le picker multi-sélection dans la ligne de filtre par colonne de DataTableV2. Le renderer de cellule conserve son affichage `code — libellé`, donc le picker et la cellule restent alignés.
-- La fonction de filtre accepte soit une chaîne unique (legacy) soit un `string[]` (multi) : pour un tableau, la ligne correspond quand sa valeur (trimée, en minuscules) apparaît dans l'ensemble choisi. Un tableau vide retire automatiquement le filtre.
-- Le flag `FilterMeta.filter.multi` sur les colonnes de kind enum pilote la sélection du picker ; les colonnes booléennes et les énumérés non-refList restent en mono-sélection.
-
-### Panneau Filtres avancés
-
-- Les lignes refList dans `ServerFilterPanel` utilisent aussi le picker multi-sélection. La sélection est encodée en chaîne jointe par virgule dans `OpFilter.a` (par ex. `200,210,9907`) — le contrat existant de `flattenServerFilters` la transmet telle quelle au backend.
-- Cliquer sur **✕** sur le déclencheur pour réinitialiser ; sinon les choix s'accumulent jusqu'à *Exécuter*.
-
-### Backend — `IN (?,?,?)` pour les colonnes refList
-
-- `SpecQueryHelper.appendSpecFilterClauses` séparait déjà les valeurs jointes par virgule en clause `IN` quand la colonne catalogue déclarait `filterInList` ; cette version active ce flag sur les deux colonnes catalogue refList restantes :
-  - `invoiceStatus` sur la vue [Erreurs d'intégration](./application/integration-errors.md)
-  - `status` sur la vue [E-Reporting](./application/ereporting.md)
-- `statusCode` des Factures l'avait déjà depuis le travail de deep-link.
-
-### Élargissement de colonne pour l'opérateur `between`
-
-- Choisir `between` sur un filtre par colonne date / nombre / texte élargit maintenant la colonne pour faire entrer les deux champs opérandes (plancher `BETWEEN_COL_WIDTH = 340px` dans DataTableV2). L'élargissement est calculé depuis l'état `columnFilters` et appliqué de façon cohérente au `<col>`, au min-width de Th et de Td afin que `table-layout: fixed` l'honore. Repasser à un opérateur à opérande unique et la colonne reprend sa largeur de spec au rendu suivant.
+- Choisir l'opérateur **between** sur un filtre de colonne date / nombre / texte élargit automatiquement la colonne pour que les deux champs opérandes tiennent côte à côte. Repasser à un opérateur simple restore la largeur d'origine.
 
 ---
 
 ## 2026.05.12 — 2026-05-14 \{#v2026-05-12\}
 
-Mode hybride client pour les vues de liste pilotées par spécification et un dropdown recherchable refList dans la ligne de filtre par colonne. Chaque *Exécuter* charge maintenant une seule tranche capée depuis le serveur ; TanStack pilote filter / sort / group / paginate sur cette tranche dans le navigateur — pas d'aller-retour quand on tape dans la ligne de filtre, pas de latence en changement de page, les filtres survivent à la pagination. Identique au modèle Liberty v2 tout en restant sûr sur des tables énormes grâce à un cap `maxRows` par vue (5000 par défaut).
+Les pages de liste (Factures, Erreurs d'intégration, Journal de traitement, E-Reporting) sont beaucoup plus réactives. Chaque Exécution charge jusqu'à 5000 lignes en une fois, puis les filtres / tri / pagination se font instantanément dans le navigateur — plus de délai quand on tape dans un filtre de colonne ou qu'on change de page.
 
-### Flux de données hybride client-side
+### Nouveautés
 
-- Chacune des quatre vues pilotées par spec (Factures, Erreurs d'intégration, Journal de traitement, E-Reporting) émet maintenant **une** seule requête serveur par *Exécuter*, dimensionnée à `spec.maxRows ?? 5000` lignes.
-- `DataTableV2` ne reçoit plus `total / page / pageSize / onPageChange / onPageSizeChange` sur ces pages — TanStack pagine la tranche chargée en interne avec `initialPageSize = spec.defaultPageSize ?? 50`.
-- La plage de dates / les puces de barre d'outils / *Filtres avancés → Exécuter* déclenchent toujours un nouveau fetch. Un changement de tri ré-émet aussi le fetch pour que la tranche reflète toujours les `maxRows` lignes les plus pertinentes quand le cap est atteint.
-- Quand le cap est atteint, la barre d'outils affiche un message traduit `X / Y lignes` à côté de *Exécuter* avec une infobulle qui indique d'affiner les *Filtres avancés* / la plage de dates.
-
-### Champ `maxRows` dans la spec + éditeur
-
-- Nouveau champ optionnel `maxRows` sur `ListViewSpec` (5000 par défaut, pas de surcharge par page nécessaire). Le parser le préserve.
-- [Vues de liste](./configuration/list-views.md) → ligne *Défauts* a un champ *Max rows* à côté de *Taille de page*, avec une infobulle qui explique chacun. La propriété persiste par vue via le chemin de surcharge standard `db-nomaubl.view.<nom>`.
-
-### Dropdown refList dans la ligne de filtre par colonne
-
-- Une colonne de spec avec un `refList` rend maintenant un dropdown recherchable de type énuméré dans la ligne de filtre par colonne de DataTableV2 — peuplé depuis la liste de référence chargée avec des entrées `code — libellé` — au lieu de retomber sur un champ texte. Le renderer de cellule conserve son affichage `code — libellé`, donc le picker et la cellule restent alignés.
-- Une `FilterFn` d'égalité tolérante (coerce en chaîne, trim, insensible à la casse) remplace le `equals` strict de TanStack — les codes numériques (par ex. un code statut stocké en nombre) correspondent à la valeur de l'option du picker, et le padding CHAR d'Oracle ne casse pas l'égalité.
-- Le filtre par colonne reste client-side (filtre uniquement la tranche chargée) — la même nuance que l'opérateur connaît déjà avec le modèle hybride.
-
-### Internes de DataTableV2
-
-- L'état de tri est maintenant contrôlable indépendamment du mode de pagination serveur : une page client-side peut toujours fournir les props `sorting + onSortingChange` et TanStack les honore tout en paginant localement. Sans cela, les quatre pages converties perdraient leur tri par défaut au premier rendu.
+- Les filtres et la pagination sur les quatre listes principales sont désormais instantanés. La page ne retourne au serveur que si vous changez la plage de dates, appliquez des Filtres avancés ou changez le tri.
+- Quand plus de 5000 lignes correspondent, la barre d'outils affiche **X / Y lignes** à côté du bouton Exécuter et vous demande d'affiner les filtres. Le plafond est configurable par vue dans Paramètres → Vues de liste.
+- Les filtres de colonnes sur les colonnes de listes de référence proposent maintenant une liste déroulante recherchable avec les codes et libellés, au lieu d'un champ texte. Les codes numériques et les valeurs paddées par Oracle sont correctement reconnus.
 
 ---
 
 ## 2026.05.11 — 2026-05-13 \{#v2026-05-11\}
 
-Version « cohérence UI ». Toutes les listes déroulantes du front React passent maintenant par le même composant recherchable (`SearchSelect`) — les filtres, les éditeurs de paramètres, les modaux et les éditeurs XSL / UBL partagent la même apparence, la même navigation clavier et un champ de recherche intégré pour les longues listes (pays, modes de paiement, devises, catégories TVA, statuts, scheme IDs…). Les listes déroulantes des listes de référence sont aussi conscientes du type : le format à 6 champs du modèle `statuses` (`tag|labelFr|labelEn|paCode|collect|groups`) est correctement parsé — ce sont les libellés (pas le tag) qui s'affichent dans le picker.
+Cohérence d'interface. Toutes les listes déroulantes de l'application utilisent maintenant le même sélecteur recherchable — même apparence, même navigation au clavier, et un champ de recherche intégré pour les longues listes (pays, devises, modes de paiement, catégories TVA, statuts…).
 
-### SearchSelect — composant global de liste déroulante
+### Améliorations
 
-- Nouveau `src/common/SearchSelect.tsx` porté et adapté du design Liberty v2 : popover en portail, filtrage à la frappe, colonne `mono` optionnelle pour les codes, ligne d'en-tête via `anyLabel`, mode combobox `allowCustom`, tailles `size: 'sm' | 'md'`, fermeture sur clic extérieur / `Échap`.
-- Sites migrés (non exhaustif) : chaque ligne de filtre dans `ServerFilterPanel` et le filtre par colonne de DataTableV2, chaque cellule de l'éditeur [Vues de liste](./configuration/list-views.md), la barre d'outils [Journal de traitement](./management/processing-log.md), les barres d'outils [Factures](./application/invoices.md) et [Erreurs d'intégration](./application/integration-errors.md), toutes les listes déroulantes du modal Facture (picker fournisseur, pickers pays, modes de paiement, exonération TVA, types de notes, références doc, type d'allowance, codes d'unité, catégories fiscales), les éditeurs des paramètres ([Connecteur API](./configuration/api-connectors.md), [Connecteur SQL](./configuration/sql-connectors.md), [Types de documents](./configuration/system/document-types.md), [scope E-Invoicing](./configuration/system/einvoicing.md), [modèle Document](./management/documents.md), [Fetch Invoices](./configuration/system/fetch-invoices.md), Block Canvas), la page [Fetch Input](./sync/fetch-input.md), [Process Document](./processing/document.md), le modal *Set Status*, la page [Actions](./management/actions.md), la page [Règles de notification](./management/notification-rules.md), le picker de modèle AI Chat, les onglets UBL Defaults (devise, paiement, type de document, TVA, en-tête, fournisseur, préfixe de note, scheme IDs, profile ID, unités, type de facture, éditeur de règles, éditeur de mappings — ~27 dropdowns), le picker de fichier de l'[éditeur XSL](./ubl-tools/xsl-editor.md), les éditeurs préfixe note et doc-ref, les formulaires [Extract BIP](./extract/extract-bip.md) / [Extract FTP](./extract/extract-ftp.md) / [Extract & Process](./processing/extract-and-process.md), la section connecteur de [Process API](./processing/process-api.md).
-- Les composants legacy `Select` (dans `common/Input.tsx`), `FieldSelect` / `MethodSelect` (dans `Settings/settingsStyled.ts`), `FileSelect` (dans `XslEditor/xslEditorStyled.ts`) et l'ancien `MappingSelect` `<select>` stylé (dans `UblDefaults/ublDefaultsStyled.ts`) sont retirés — `MappingSelect` est maintenant un fin wrapper autour de `SearchSelect` qui conserve l'API legacy avec enfants `<option>`, donc tous les onglets UBL Defaults récupèrent la nouvelle apparence automatiquement.
-- Le picker de taille de page dans le `DataTable` legacy et dans `DataTableV2` utilise `SearchSelect` pour la cohérence.
+- Filtres, éditeurs de paramètres, modales, Éditeur XSL, onglets UBL Defaults — toutes les listes déroulantes ont la même apparence et le même comportement. Tapez pour filtrer, naviguez au clavier, fermez avec Échap.
+- Les sélecteurs de taille de page utilisent le même composant pour la cohérence.
 
-### Correction des libellés des listes de référence
+### Correction
 
-- `parseRefOptions` est maintenant consciente du type : pour les modèles `statuses` et `ereporting-statuses`, elle parse le format à 6 champs `code → "tag|labelFr|labelEn|paCode|collect|groups"` et affiche les libellés FR / EN (pas le tag) dans les dropdowns. Les autres listes de référence gardent le format standard à 2 champs `labelFr|labelEn`. Voir la page [Statuts](./configuration/system/statuses.md).
-- `loadRefLists` transmet `template.type` au parser pour que le bon format soit choisi par liste.
+- **Listes déroulantes de statuts** : la liste affichait l'étiquette interne (par ex. `IN_PROGRESS`) au lieu du libellé français / anglais. Corrigé — les sélecteurs de statut affichent maintenant le libellé lisible.
 
 ---
 
 ## 2026.05.10 — 2026-05-13 \{#v2026-05-10\}
 
-Version « vues de liste pilotées par spécification ». Toutes les pages de liste — [Erreurs d'intégration](./application/integration-errors.md), [Journal de traitement](./management/processing-log.md), [E-Reporting](./application/ereporting.md), [Factures](./application/invoices.md) — passent par **DataTableV2** dont la forme des colonnes (libellés, formats, alignement, largeur, filtres côté serveur) est pilotée par une spécification JSON stockée sur `db-nomaubl` (avec un défaut embarqué dans le JAR). La mise en page V1 historique a été retirée de ces quatre pages — V2 est le seul mode. Un nouveau **catalogue de colonnes** par vue indique toutes les colonnes que les tables sous-jacentes peuvent projeter ou filtrer, et le nouvel éditeur [Vues de liste](./configuration/list-views.md) permet aux opérateurs d'**Ajouter une colonne** sans écrire de code tant qu'elle vit dans le catalogue. La vue **Factures** fait maintenant une jointure gauche avec `F564230` — 16 colonnes de journal/archive (fichier source, BU, utilisateur/job JDE, échéance, UUID PA…) sont disponibles depuis le picker. Plus la correction du drill-through *Erreurs récentes* du tableau de bord (les filtres n'étaient pas transmis) et d'un bug d'aller-retour CustomizationID dans la fenêtre Facture.
+Version importante sur la personnalisation : les quatre pages de liste principales (Factures, Erreurs d'intégration, Journal de traitement, E-Reporting) peuvent désormais être adaptées à vos besoins — choisir les colonnes affichées, leurs libellés, leurs formats, leurs filtres — sans écrire de code.
 
-### Vues de liste pilotées par spécification (Phase A + Phase B)
+### Nouveautés
 
-- Nouveau schéma `ListViewSpec` stocké sous `db-nomaubl.view.<nom>` (par ex. `view.invoices`), avec un défaut embarqué dans `config/list-views/view.<nom>.json` pour chacune des quatre pages migrées. Pilote la visibilité des colonnes, les libellés FR/EN, le type, le format (`date` / `datetime` / `amount` / `percent`), l'alignement, la largeur et la liste blanche `filter: true`.
-- Nouveau point d'entrée `GET /api/list-views/<nom>` qui résout la spécification (propriété stockée prioritaire, défaut embarqué sinon). L'éditeur lit et écrit via le même chemin.
-- Catalogue de colonnes intégré par vue (`ColumnCatalog` + `ColumnCatalogs`) — indique toutes les colonnes que le handler Java peut `SELECT` : expression SQL, type (`STRING` / `NUMBER` / `DATE` / `JDE_DATE` / `JDE_DATETIME`), comportement de filtre (`exact` / `LIKE` / `inList` / `between`), flags de projection (`cents → /100`, `asInt → parseInt`, `trimForFilter`). Disponible via `GET /api/list-views/<nom>/catalog`.
-- Câblage **Phase B** : les handlers Java de `/api/invoices`, `/api/integration-errors`, `/api/processing-log` et `/api/ereporting` construisent maintenant la projection `SELECT` et les clauses `WHERE` depuis la spec + le catalogue. Le helper partagé `SpecQueryHelper` résout les opérateurs de filtre en un seul endroit. Ajouter une colonne via l'éditeur la fait apparaître dans la grille (et dans le panneau [Filtres avancés](#panneau-de-filtres-avances) si `filter: true`) sans modification de code.
-- Nouvel éditeur **Vues de liste** avec une carte pliable par vue, réorganisation drag-and-drop des colonnes via une poignée `GripVertical`, champs de libellé FR/EN, inputs type/format/alignement/largeur, toggle `Visible / Filtre` et picker `+ Ajouter une colonne` alimenté depuis le catalogue. Le badge `override` / `default` par carte indique si l'opérateur a touché à la spec ou non. Voir la nouvelle page [Vues de liste](./configuration/list-views.md) dans la Configuration.
+- Nouvel éditeur **Paramètres → Vues de liste** : une carte par page de liste avec réorganisation drag-and-drop des colonnes, libellés français et anglais, format (date, datetime, montant, pourcentage), alignement, largeur, visibilité et filtres.
+- Cliquez sur **+ Ajouter une colonne** pour choisir parmi un catalogue de toutes les colonnes que la page peut afficher. Pour la page Factures, cela inclut maintenant 16 champs supplémentaires issus de l'archive facture : fichier source, business unit, utilisateur / job JDE, date d'échéance, UUID PA, etc.
+- Nouveau panneau **Filtres avancés** sur chaque page : choisissez une colonne, un opérateur (contient, égal, between, vide…), puis cliquez sur Exécuter. Les opérateurs sont entièrement traduits.
 
-### Factures — F564231 LEFT JOIN F564230
+### Corrections
 
-- La requête SQL pilotée par spec des factures joint maintenant `F564231` (UH) et `F564230` (FE) sur doc / dct / kco, donc 16 colonnes journal/archive sont accessibles depuis le picker `+ Ajouter une colonne` de l'éditeur : `logSourceFile`, `logActivityCode`, `logSubType`, `logAlphaKey`, `logAmount`, `logInvoiceDate`, `logDueDate`, `logCreated` (UPMJ+UPMT), `logUser`, `logJobn`, `logPid`, `logVersion`, `logBusinessUnit`, `logRouting`, `logSendToPaFlag`, `logPaUuid`. La jointure gauche préserve les lignes factures sans entrée de journal.
-
-### Panneau de filtres avancés \{#panneau-de-filtres-avances\}
-
-- Nouveau composant `ServerFilterPanel` : panneau pliable **Filtres avancés** indexé par nom de colonne, avec un sélecteur d'opérateur par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Le panneau émet un état brouillon ; un bouton **Exécuter** explicite le valide en `appliedFilters` — taper dans le panneau ne sature pas le back-end.
-- Vocabulaire des opérateurs traduit de bout en bout : les libellés de colonne prennent la variante française (`labelFr`) quand la locale active commence par `fr`, avec retour à `label` sinon.
-
-### Polish DataTableV2
-
-- Les tables utilisent maintenant `width: 100% + table-layout: fixed` et reçoivent les largeurs par colonne via un `<colgroup>` — les colonnes sans largeur explicite se partagent l'espace restant. Une seule barre de défilement dans le corps du tableau (plus de double-scroll page + table).
-- La zone de page passe `PageLayout fill` pour les pages V2, donc le corps du tableau remplit l'espace vertical restant ; l'en-tête sticky fonctionne correctement à l'intérieur du scroller.
-
-### Correction du drill-through tableau de bord
-
-- La carte **Erreurs récentes** du Tech Dashboard transmet maintenant `{ doc, dct, kco }` quand on ouvre une ligne sur Erreurs d'intégration ; la page cible amorce son bag de filtres depuis ces props. Une pastille visible montre le drill actif et propose un `×` pour le retirer (avant, le filtre était invisible avec la barre slim et le panneau replié).
-- Les cartes de statut du Business Dashboard (`Déposée`, `Validation réussie`, multi-statut « En vol »…) filtrent maintenant les factures via `filters.statusCode` de bout en bout ; le flag `inList()` du catalogue éclate les buckets séparés par virgule en clause `IN (?,?,?,?,?)`.
-- Le drill-through depuis les barres de débit du Tech Dashboard vers le Journal de traitement amorce maintenant le `DateRangeFilter` V2 via `initialRange` pour que la période cliquée s'applique.
-
-### Fenêtre Facture — aller-retour CustomizationID
-
-- Modifier une facture existante ne réinitialise plus son `cbc:CustomizationID` au défaut EN16931. Le formulaire porte maintenant `customizationId` (défaut `urn:cen.eu:en16931:2017` pour les nouvelles factures) ; `parseUblXml` lit la valeur du UBL source, `buildUblXml` l'écrit verbatim.
-
-### Petits nettoyages
-
-- **Débordement des pastilles de statut** — sur la page Factures, 5 pastilles inline maximum, le reste se replie dans un menu `+N more` avec un point coloré par code. Les drill-throughs multi-statuts (par ex. *En vol* = 5 codes) remontent la valeur active dans le groupe inline quand applicable.
-- **UX éditeur Vues de liste** — réorganisation drag-and-drop via une poignée `GripVertical` unique (plus de doubles flèches), bouton de suppression par ligne, colonnes de libellé FR/EN dédiées, champ largeur, badge bundled vs override par carte.
-- **Catalogue Vues de liste** — le picker `+ Ajouter une colonne` liste toutes les entrées du catalogue absentes de la spec courante (nom / libellé anglais / type). L'ajout amorce une nouvelle colonne de spec avec les libellés du catalogue ; l'opérateur peut les ajuster ensuite.
-- **Onglet par défaut du Journal de traitement** — restauré à **Groupé** (mode de lecture quotidien) ; le choix Groupé / Plat de l'opérateur reste persisté en localStorage comme avant.
-- **Alignement du badge de statut** — `statusCode` des factures utilise maintenant `type: "string"` donc la pastille est alignée à gauche dans sa cellule (était à droite à cause du type `number` précédent).
-- **SQL Phase B par l'exemple** — la vue Factures exécute une requête jointe de la forme `SELECT <colonnes spec> FROM F564231 UH LEFT JOIN F564230 FE ON FE.FEDOC=UH.UHDOC AND FE.FEDCT=UH.UHDCT AND FE.FEKCO=UH.UHKCO WHERE … ORDER BY <defaultSort spec> OFFSET ? ROWS FETCH NEXT ? ROWS ONLY` — ajouter une colonne à la spec via le catalogue la fait remonter dans la grille sans modification de code.
+- **Drill-through depuis le tableau de bord** : cliquer sur « Erreurs récentes » dans le Tech Dashboard, ou sur une carte de statut dans le Business Dashboard, ne transmettait pas toujours le filtre à la page cible. Corrigé — le filtre est désormais toujours appliqué, avec une pastille visible montrant ce qui est actif et un ✕ pour l'effacer en un clic.
+- **Modale facture** : modifier une facture non française réinitialisait silencieusement son `CustomizationID` à la valeur EN16931 par défaut. La valeur d'origine est maintenant préservée.
+- **Débordement des filtres de statut** : la liste de pastilles du filtre statut sur Factures débordait quand beaucoup de codes étaient actifs. Limite à 5 pastilles en ligne maintenant, le reste se replie dans un menu « +N de plus ».
 
 ---
 
 ## 2026.05.9 — 2026-05-12 \{#v2026-05-9\}
 
-Version pipeline de validation + webhooks entrants. La pile Schematron s'appuie désormais sur des **XSLT précompilés** chargés depuis le JAR — le pipeline ISO de compilation au démarrage a disparu, et les règles locales sont précompilées au build. **Flux 2** s'exécute sur tous les profils (l'étape 3 de la séquence AFNOR XP Z12-012 était sautée silencieusement sur les factures Extended-CTC-FR). Un nouveau **pack de règles maison NomaUBL** capture les contrôles côté AIFE absents des packs Schematron publics (première règle : les codes d'avoir 261/381/396/502/503 demandent une référence à une facture antérieure). Côté exploitation, les **webhooks entrants** deviennent une fonctionnalité de premier plan : des POST signés HMAC vers `/api/webhook/{connector}/{event}` retrouvent la facture par son UUID PA, appliquent le statut cycle de vie et dédupliquent les ré-essais « at-least-once » — assez générique pour brancher n'importe quelle PA via le modèle api-connecteur. La liste [Erreurs d'intégration](./application/integration-errors.md) abandonne sa colonne Message illisible au profit d'une fenêtre de détail dédiée qui sépare le contexte de debug Schematron de l'explication française.
+Version majeure sur le pipeline de validation et sur la réception des mises à jour de statut depuis la PA. Plus une page Erreurs d'intégration plus lisible et plusieurs améliorations de confort.
 
-### Webhooks entrants (framework générique)
+### Nouveautés
 
-- Nouvelle route `/api/webhook/{connector}/{event}` — publique (passe outre l'auth de session), vérifie la requête via **HMAC-SHA256** sur un canonical `timestamp\nMÉTHODE\nchemin\nchecksumBody`, déduplique sur l'event id du payload (cache mémoire LRU+TTL, 10 000 entrées × 1 h), puis dispatche vers un handler par événement. Les événements de type statut appliquent la `InvoiceStatusCatalog.StatusTransition` résolue contre la ligne `F564230` correspondante (recherchée par `FEUKIDSZ`).
-- La configuration vit sur le modèle [api-connecteur](./configuration/api-connectors.md) (nouvel onglet **Webhooks** dans `ApiConnectorEditor`) : secret partagé (chiffré au repos via le suffixe `*Secret`), surcharges de chemins JSON pour `idField` / `statusField` / `eventIdField`, et table de correspondance `paStatus:logical` (`success` / `pending` / `failed`) réutilisée depuis `ImportStatusHandler`. L'onglet affiche l'URL en lecture seule à coller dans les réglages webhook de la PA.
-- Renvoie 2xx sur erreur interne pour stopper les ré-essais ; 401 sur signature invalide (bruyant) et 404 sur connecteur inconnu. Un redémarrage JVM purge le cache de dédup sans risque — rejouer le même événement une seconde fois n'a aucun effet observable.
+- **Webhooks entrants** : les PA peuvent désormais pousser les mises à jour de statut vers NomaUBL en temps réel au lieu d'attendre la prochaine interrogation. Chaque modèle api-connecteur a un nouvel onglet **Webhooks** : entrez un secret partagé, collez l'URL obtenue dans les paramètres webhook de la PA, et les changements de statut s'appliquent automatiquement. Signature HMAC vérifiée, événements doublons dédupliqués.
+- **Règles maison NomaUBL** : un nouveau pack Schematron attrape les erreurs que la PA rejetterait de toute façon — à commencer par les codes d'avoir (261/381/396/502/503) qui exigent une référence à la facture d'origine. Les échecs apparaissent localement dans Erreurs d'intégration avant l'aller-retour.
+- **Page Erreurs d'intégration** : la colonne Message illisible disparaît. Cliquez sur une ligne pour ouvrir une vue détail propre qui sépare l'explication française du contexte technique de debug. L'ancienne modale détail ne fonctionnait que pour les factures appariées ; les erreurs orphelines ont maintenant leur propre vue.
+- **Format de date par document** : nouvelle liste déroulante dans l'onglet Document du modèle pour choisir le format de date utilisé dans le XML source (`yyyy-MM-dd`, `dd/MM/yyyy`, etc.). Avant codé en dur en ISO, ce qui échouait silencieusement sur les documents avec un format de date européen.
 
-### Pipeline Schematron — précompilation uniquement
+### Améliorations
 
-- Le runtime ne compile plus les fichiers `.sch`. `UBLValidator` charge directement les `.xsl` précompilés depuis le classpath et échoue immédiatement au démarrage si un fichier attendu manque. Les trois packs AFNOR sont livrés tels que publiés ; les deux règles locales (`BR-FR-CPRO-Schematron-UBL` + `BR-NOMAUBL-rules`) sont précompilées au build par `build.sh` via le CLI Saxon + `xmlresolver` — le même pipeline s'applique partout.
-- Les XSL squelette ISO (`iso_dsdl_include.xsl`, `iso_abstract_expand.xsl`, `iso_svrl_for_xslt2.xsl`) et le helper `compileSchematron` ne tournent plus en runtime. Le démarrage à froid gagne un battement perceptible — trois compilations XSLT × cinq packs ne se rejouent plus à chaque JVM.
-- Le pied de page du tableau de bord continue d'afficher les versions par pack : `BuildInfo` lit toujours la source `.sch` pour la version (priorité au pattern `yyyymmdd_VX.Y.Z`, sinon repli sur le commentaire d'en-tête), donc rien ne casse même si la charge runtime est désormais en `.xsl`. Voir la page [UBL Validate](./ubl-tools/validate.md).
+- Le pipeline de validation Schematron est plus rapide au démarrage : les règles sont précompilées au build au lieu d'être compilées au lancement de la JVM.
+- Les connecteurs API supportent maintenant les endpoints `multipart/form-data` (certaines PA en ont besoin pour l'import), et les requêtes de jeton OAuth2 peuvent porter des en-têtes personnalisés.
+- La vérification annuaire (PPF) tourne désormais au moment de la validation, pas seulement à l'envoi, pour qu'un partenaire inconnu apparaisse dans Erreurs d'intégration avant la mise en file.
+- Nouvelle bascule **Debug profile** dans les paramètres globaux qui log les chronométrages par étape (parse, validation, émission UBL, envoi PA) dans F564237 — utile pour diagnostiquer les batchs lents.
+- La liste Factures montre une colonne de revue pour les lignes marquées pour revue rétrospective.
+- Erreurs d'intégration gagne une colonne Date pour voir le contexte temporel sans ouvrir une ligne.
 
-### Correctif profil de validation — Flux 2 systématique
+### Corrections
 
-- AFNOR XP Z12-012 V1.3.1 découpe la validation en 4 étapes : l'étape 2 choisit EN 16931 *ou* Extended-CTC-FR (selon `CustomizationID`), l'étape 3 exécute **BR-FR-Flux 2 inconditionnellement** par-dessus. Le code précédent considérait Extended-CTC-FR comme un sur-ensemble et sautait Flux 2 — manquant les règles `BR-FR-*` / `EXT-FR-FE-*` spécifiques à la réforme que la PA continue d'imposer côté serveur. Le profil Extended exécute désormais les deux étapes.
-
-### Règles maison NomaUBL
-
-- Nouveau `BR-NOMAUBL-rules.sch` pour les règles côté AIFE absentes des packs Schematron publics. Première règle (`BR-NOMAUBL-01`, fatale) : si BT-3 ∈ `{261, 381, 396, 502, 503}`, au moins une `cac:BillingReference/cac:InvoiceDocumentReference` qui porte `cbc:ID` (BT-25) et `cbc:IssueDate` (BT-26) doit être présente. Les PA rejettent aujourd'hui ces avoirs avec l'erreur de validation modèle `precedingInvoices` ; faire remonter l'échec localement pour qu'il arrive dans `F564236` au lieu d'après un aller-retour.
-- Câblé via `BuildInfo` (version `schematron.nomaubl` dans `/api/build-info`) et exécuté en dernière couche après CPRO-B2G.
-
-### Rendu des messages de validation
-
-- Les règles `BR-FREXT-*` du CTC-FR émettent une chaîne unique mélangeant un contexte de debug séparé par virgules (`Num Fact : …, Code : S, rate : 20, …`) et une explication française préfixée par un autre marqueur `[RULE-ID] -`. Tant `InvoiceDetailModal` (bouton Validate + erreurs `F564236` enregistrées) que la nouvelle `ErrorDetailModal` découpent le bloc sur le dernier marqueur `, [RULE-ID] -` : l'explication française devient la ligne principale, les champs de debug se rendent dans une petite grille monospace en carte atténuée en dessous. Le pattern d'id de règle accepte les suffixes FNFE-MPE `ini` / `rev` (correction de flag regex — les variantes warning ressortaient en texte brut).
-- `ConfigJson.jsonUnescape` couvre désormais l'ensemble RFC 8259 des séquences d'échappement, dont `\uXXXX`, `\b`, `\f`, `\/`. Les messages d'erreur PA contenant des caractères français accentués (`é` → `é`) et des sauts de ligne ne ressortent plus comme des séquences littérales dans le message de cycle de vie. `PAImportStatusClient.parseJsonErrors` l'appelle sur chaque token d'erreur extrait.
-
-### Erreurs d'intégration — vue détail lisible
-
-- Colonne Message retirée du tableau — les messages Schematron / XPath sont trop longs pour une cellule de grille. La colonne consommait ~720 px et continuait de tronquer le contexte. Un clic sur la ligne ouvre désormais la vue détail à la place.
-- Les lignes appariées (avec une vraie facture dans `F564231`) ouvrent toujours `InvoiceDetailModal` sur l'onglet Historique.
-- Les lignes orphelines ouvrent désormais une nouvelle **`ErrorDetailModal`** — badge de niveau, règle + description (via `useRuleCatalog`), source, date, doc / dct / kco (avec une mention *aucune facture correspondante dans F564231*), client, et le message complet rendu via le même helper `splitValidationMessage`. Toutes les lignes de la page sont désormais cliquables.
-- Nouvelle **colonne Date** : le même contexte temporel que la carte « erreurs récentes » du Tableau de bord IT est visible sans ouvrir une ligne.
-
-### Format de date d'entrée par modèle de document
-
-- `UBLDatabaseHandler.insertDocumentLog` / `updateDocumentLog` était codé en dur pour parser les dates source en `yyyy-MM-dd`. Ça marchait pour les flux source UBL (le XSL émet de l'ISO) mais échouait silencieusement sur les documents source XML dont les dates sont `dd/MM/yyyy` etc. Nouvelle propriété **`dateInputFormat`** sur le modèle de document (réglée dans l'[Éditeur de documents](./management/documents.md) → onglet Document → section *Format de date*) qui pilote le parseur, avec ISO en défaut rétro-compatible. `CustomUBL` la lit depuis la ressource modèle et la transmet au handler de base.
-
-### TAG_INVOICE_TYPE_CODE — BT-3 séparé du DCT
-
-- `TAG_DOCUMENT_TYPE` était commenté à tort comme BT-3 alors qu'il s'agit en réalité du code Type / DCT utilisé dans la concaténation `cbc:ID`. Nouvelle variable distincte `TAG_INVOICE_TYPE_CODE` (BT-3, UNTDID 1001 — 380, 381, 384, …) dans `ubl-template.xsl` : quand elle est renseignée et que la source XML porte une valeur, cette valeur l'emporte sur les règles UBLDefault / `$invoiceType_default`. Émise en ligne via `ubl:type-code-qname` pour que le code résolu atteigne réellement le fil au lieu d'être masqué par un second appel à `ubl:resolve-invoice-type` dans le template historique.
-- Métadonnées de l'éditeur XSL corrigées (`TAG_DOCUMENT_TYPE` ne revendique plus BT-3) et la nouvelle variable apparaît dans la grille à deux colonnes de la section Header dès que le template la déclare.
-
-### api-connecteur — multipart, vérif statut
-
-- Nouvelle propriété `endpoint.N.contentType` + builder de corps multipart pour que les endpoints api-connecteur puissent soumettre du `multipart/form-data` (l'import facture IOPOLE attend une part `file=@{{filePath}};contentType=text/xml`). UI : sélecteur **Content-Type** dans le panneau endpoint de la page [Connecteurs API](./configuration/api-connectors.md).
-- Arbre de décision relaxé dans `ImportStatusHandler` — tout statut non `failed` / non `pending` est traité comme un succès (couvre le vocabulaire IOPOLE `EMITTED` / `RECEIVED` sans configuration spécifique).
-
-### Profilage de debug par étape
-
-- Nouveau commutateur optionnel **`debugProfile`** sur [global](./configuration/system/global.md) qui écrit des lignes de chronométrage par étape dans `F564237` (en-tête, lignes, validation, émission UBL, envoi PA). Visualisé dans le [Tableau de bord IT](./application/tech-dashboard.md) pour repérer l'étape lente d'un lot sans journalisation ad-hoc.
-
-### Petits nettoyages
-
-- Le drapeau `UHALRTPSD` de revue apparaît dans la liste [E-Invoicing](./application/invoices.md) (colonne + badge coloré) pour repérer rapidement les lignes à revoir.
-- La vérification de l'annuaire tourne désormais au moment de la validation (pas seulement à l'envoi) afin qu'un contre-parti inconnu remonte dans `F564236` avant même la mise en file du document. Le contrôle de joignabilité est sensible au mapping (recherche LIKE castée via le helper de dialecte pour que le padding `NCHAR` d'Oracle ne casse pas les correspondances partielles).
-- Améliorations de pré-transformation dans `isc-normalize.xsl` : les templates `clientFacturation` / `clientConsommation` laissent passer les enfants hors `adresse` (les balises par ligne comme `consIdentite` se résolvent) ; les valeurs `prixUnitairekWh` à zéro sur les lignes d'avoir / remise sont remplacées par la valeur `montantHT` du frère, rendue sans signe (BT-146 doit être ≥ 0 en UBL).
-- Nouveau dossier `e2e/` avec une suite Playwright qui exerce les pages majeures (Tableau de bord, Factures, Erreurs d'intégration, Paramètres → tous les éditeurs, Notifications). Pas encore branché à la CI — à lancer avec `npx playwright test` à la demande.
+- **Profil de validation** : le pack BR-FR-Flux 2 était sauté sur les factures Extended-CTC-FR. Il s'exécute désormais sur tous les profils, comme exigé par l'AFNOR XP Z12-012.
+- **Messages de statut** : les messages d'erreur PA contenant des caractères français accentués (`é` apparaissait comme `é`) et des sauts de ligne s'affichent maintenant correctement dans le cycle de vie de la facture.
 
 ---
 
 ## 2026.05.8 — 2026-05-09 \{#v2026-05-8\}
 
-Version de consolidation côté connecteurs. La configuration PA est désormais homogène entre **e-invoicing**, **e-directory** et **e-reporting** — chaque modèle système référence un api-connecteur réutilisable au lieu de porter ses propres champs d'authentification et endpoints, et la forme inline historique est supprimée (sans repli). L'infrastructure mock (`MockPlatformApiClient`, `MockTokenManager`, `paUseMock`/`paMockBehavior`) est retirée. Les requêtes de jeton OAuth2 acceptent maintenant un corps form-urlencoded (`authTokenContentType` / `grant_type=client_credentials`) ainsi que des en-têtes personnalisés sur la requête de jeton (`authTokenHeaders`), ce qui rend accessibles les PA qui exigent un en-tête tenant sur l'appel d'authentification lui-même. **L'E-Reporting** est entièrement désolidarisé de l'e-invoicing : il choisit son propre api-connecteur, son propre endpoint, son propre `paMode`, et peut soumettre les rapports en **SFTP** comme en REST. Les trois éditeurs de modèles système ont été réorganisés selon une mise en onglets cohérente.
+La configuration PA est désormais cohérente entre **e-invoicing**, **e-directory** et **e-reporting** — chacun pointe vers un connecteur API réutilisable au lieu de porter ses propres identifiants et endpoints. L'E-Reporting peut envoyer par SFTP en plus de REST, et les trois modèles système ont une mise en page à onglets cohérente.
 
-### Soumission PA — E-Reporting indépendant de l'e-invoicing
+### Nouveautés
 
-- Auparavant, la soumission e-reporting partageait le connecteur, le `paMode` et les identifiants du modèle e-invoicing. Elle lit désormais ses propres `connector` / `endpoint.report-import` / `paMode` depuis le [modèle `e-reporting`](./configuration/system/ereporting.md) (et les surcharges par société `e-reporting-{kco}`), ce qui permet de cibler une plateforme différente — ou des identifiants différents sur la même plateforme — pour les rapports.
-- Nouveau **transport SFTP** pour la soumission des rapports. Réutilise le `PlatformFtpClient` existant (la classe est agnostique à la ressource — il lui faut juste les propriétés `paFtp*` sur la ressource passée en argument), donc aucune nouvelle classe de transport. Le branchement se fait dans `EReportingHandler` : `paMode=API` passe par l'api-connecteur, `paMode=FTP` écrit le XML dans un fichier temporaire et l'envoie en SFTP, `paMode` vide ignore la soumission.
-- L'ancien drapeau `sendToPA` Y/N sur `e-reporting` est remplacé par `paMode` (API / FTP / vide). Mêmes sémantiques, un seul champ, cohérent avec e-invoicing.
-- La vérification de configuration signale désormais `paMode=API` sans `connector` et `paMode=FTP` sans `paFtpHost` comme erreurs, en remplacement de l'ancien contrôle `sendToPA=Y` / `issuerSiren`.
+- **E-Reporting découplé de E-Invoicing** : il a maintenant son propre connecteur, son propre endpoint et son propre mode d'envoi — la déclaration peut donc cibler une plateforme différente de celle de la soumission de factures. Les rapports peuvent être envoyés en SFTP en plus de REST.
+- **Requêtes de jeton OAuth2** acceptent maintenant des corps form-urlencoded (`grant_type=client_credentials`) et des en-têtes personnalisés (pour les PA qui exigent un identifiant de locataire dans l'appel d'authentification lui-même).
+- **Éditeurs des modèles système** (E-Invoicing, E-Directory, E-Reporting) réorganisés en mise en page à onglets cohérente. Le toggle Send Mode a déménagé dans l'onglet SFTP, où il est à sa place.
 
-### Jeton OAuth2 — form-urlencoded + en-têtes personnalisés
+### Suppressions
 
-- `ApiConnectorClient.fetchAndCacheOauth2Token` lit désormais `authTokenContentType` (`application/json` par défaut, `application/x-www-form-urlencoded` pour passer en mode formulaire) et `authTokenHeaders` (paires `Key:Value` séparées par point-virgule envoyées uniquement sur la requête de jeton — pour les PA qui exigent un en-tête tenant-id sur l'appel d'auth lui-même).
-- Nouveaux corps par défaut quand le template est vide : le mode formulaire émet `grant_type=client_credentials&client_id={user}&client_secret={pass}` (URL-encodé) ; le mode JSON conserve la charge JD Edwards AIS. Un `authTokenField` vide essaie automatiquement `access_token` puis `token`, donc le flux OAuth2 client_credentials standard fonctionne sans configuration supplémentaire.
-- L'onglet Auth de la page [Connecteurs API](./configuration/api-connectors.md) a gagné le sélecteur **Body Content-Type** et la zone de texte **Token request headers**.
-
-### Réorganisation des éditeurs de modèles système
-
-- Les trois modèles système suivent désormais le même schéma à plusieurs onglets.
-  - **[E-Invoicing](./configuration/system/einvoicing.md)** (4 onglets) : UBL Validation · PA Connection (connecteur + Timeout / SSL Verify) · FTP/SFTP (Send Mode + serveur SFTP, atténué quand Send Mode ≠ FTP) · Status (Status Retrieval ; les intervalles de polling renvoient l'utilisateur vers *global → Scheduling*).
-  - **[E-Directory](./configuration/system/edirectory.md)** (2 onglets) : Directory (Enable Check + INSEE Search) · Connector (api-connecteur + surcharges d'endpoint par tâche). Les anciens groupes inline *API Connection* + *Credentials* sont supprimés — ils étaient devenus du code mort depuis que `PaConnectorResolver` est devenu strict.
-  - **[E-Reporting](./configuration/system/ereporting.md)** (4 onglets, nouvelle forme) : Identity · Reporting · PA Connection · FTP/SFTP — calqué sur e-invoicing.
-- **Send Mode** quitte l'onglet PA Connection d'e-invoicing pour rejoindre l'onglet FTP/SFTP où il appartient logiquement (par défaut `API` ; le sélecteur n'est utile que pour configurer FTP).
-- Le groupe **Background Scheduling** est retiré d'e-invoicing — il écrivait dans `fetchImportInterval` / `fetchStatusInterval` sur le modèle e-invoicing alors que `BackgroundScheduler` ne lit ces propriétés que depuis `global`. Le piège du « champ écrit mais jamais lu » disparaît ; l'utilisateur a une ligne d'aide qui pointe vers le bon endroit.
-
-### Infrastructure mock retirée
-
-- Suppression de `MockPlatformApiClient`, `MockTokenManager` et de la plomberie `paUseMock` / `paMockBehavior` dans `CustomUBL` / `UBLInvoiceProcessor` / `LogCatalog`. Le mode mock PA n'avait plus de raison d'être depuis le refactor api-connecteur — pour des tests hors-ligne, il suffit de pointer un api-connecteur vers un mock Postman ou un stub local.
-- L'éditeur `EInvoicingEditor` perd l'onglet *Mock / Testing* (l'éditeur passe de 5 à 4 onglets). Le Tableau de bord IT n'affiche plus l'indicateur PA mode / mock. Les fichiers de configuration et la charge utile `/api/system` ne portent plus le drapeau mort `paUseMock`.
-
-### Petits nettoyages
-
-- La vérification ConfigApi a été réécrite pour parcourir de bout en bout la nouvelle forme par référence de connecteur (référence connector par modèle → résout vers l'api-connecteur → valide baseUrl + champs d'authentification + résolution des noms d'endpoint par tâche).
-- `DirectoryApiClient` impose la forme par référence de connecteur via `PaConnectorResolver` (pas de repli vers l'inline). Même schéma strict que e-invoicing et e-reporting.
-- Commentaires « tombstone » et marqueurs `// retired in 2026.05` retirés de `CustomUBL`, `UBLInvoiceProcessor`, `LogCatalog`, `IPlatformApiClient` et `EInvoicingEditor`.
+- Le **mode mock PA** (et son onglet dédié) disparaît. Pour des tests hors-ligne, utilisez un connecteur API pointant vers un mock Postman ou un stub local.
+- Le groupe **Background Scheduling** dans l'onglet E-Invoicing écrivait silencieusement dans le mauvais modèle — supprimé, avec un pointeur vers le bon endroit (`global` → Scheduling).
 
 ---
 
 ## 2026.05.7 — 2026-05-09 \{#v2026-05-7\}
 
-Grosse version côté connecteurs et notifications. Nouveau type de modèle **connecteur SQL** qui permet de définir des requêtes nommées de la même façon que les api-connecteurs définissent leurs endpoints, avec un éditeur de paramètres et un panneau de test. Les deux types de connecteurs peuvent désormais être câblés depuis les **liaisons d'actions** et les **règles de notification**, qui ont elles-mêmes gagné une liste d'appels multiples avec arrêt sur échec et chaînage des réponses (placeholders `{call.N.fieldName}`). L'éditeur de règles de notification est réorganisé en six onglets, les appels d'action se replient derrière un en-tête de description, et la boîte de réception affiche le journal des actions sous forme de pastilles colorées. Plusieurs anciens bugs du dispatcher et des éditeurs sont aussi corrigés.
+Version majeure sur les connecteurs et les notifications. Les connecteurs SQL rejoignent les connecteurs API comme brique de base, et les deux peuvent maintenant alimenter des chaînes d'actions multi-étapes depuis les règles de notification et depuis la modale de détail facture.
 
-### Connecteurs SQL *(nouveau)*
+### Nouveautés
 
-- Nouveau type de modèle `sql-connector` — paramètres de connexion (Oracle / PostgreSQL / URL / DBUser / DBPassword / schéma / timeout / maxRows) plus une liste de requêtes nommées. Chaque requête porte un nom, un libellé, une description libre, une spécification de paramètres (`name|label|default;…`), le SQL avec des placeholders `:param`, et un drapeau `Writable`. Voir [Connecteurs SQL](./configuration/sql-connectors.md).
-- Le binding des paramètres passe par `PreparedStatement` — les jetons `:name` sont réécrits en `?` positionnels et liés positionnellement, les valeurs ne sont jamais substituées par concaténation. Le parseur respecte les chaînes entre apostrophes, les identifiants entre guillemets, les commentaires de ligne et de bloc, et l'opérateur de cast PostgreSQL `::type`.
-- Liste blanche des types d'instructions : `SELECT` / `INSERT` / `UPDATE` / `DELETE` / `MERGE`. `DROP` / `TRUNCATE` / `ALTER` / `GRANT` etc. sont rejetés avant même l'ouverture de la connexion. Les instructions non-`SELECT` exigent en plus `Writable=Oui` sur la requête concernée — une faute de frappe dans une règle de notification ne peut pas accidentellement déclencher `DELETE FROM …`.
-- Nouvelle route back-end `/api/sql-connectors` (liste + exécution), parallèle à `/api/connectors`. Nouveau `SqlConnectorEditor` dans *Paramètres* avec trois onglets : **Connection** / **Queries** (cartes repliables par requête) / **Test** (exécute la requête sur la base cible, affiche les colonnes + lignes ou le nombre de lignes affectées).
-- Bouton **+ Add SQL** dans l'en-tête Settings à côté de **+ Add API** ; les connecteurs SQL ont leur propre groupe latéral avec un badge `sql`.
+- **Connecteurs SQL** : un nouveau type de modèle permet de définir des requêtes SQL nommées avec paramètres, de la même façon que les connecteurs API définissent des endpoints HTTP. Les instructions sont restreintes (pas de DROP / TRUNCATE / ALTER) et les instructions en écriture exigent un drapeau « writable » explicite par requête.
+- **Actions multi-étapes** : les liaisons d'actions (boutons dans la modale facture) et les règles de notification peuvent maintenant enchaîner plusieurs appels de connecteur. Chaque appel peut réutiliser les sorties des précédents via les placeholders `{call.N.fieldName}`. Marquez un appel **Arrêt sur échec** pour interrompre la chaîne.
+- **Éditeur de règles de notification** réorganisé en 6 onglets (Général, Déclencheur, Canaux, Email, Actions, Test) — bien plus facile à parcourir.
+- **Trace d'actions dans les notifications** : chaque notification affiche quelles actions se sont exécutées sous forme de pastilles colorées (OK / FAIL / STOP / SKIP). L'aperçu de la cloche résume en une ligne (« 2 actions exécutées » ou « 1 en échec sur 2 »).
 
-### Liaisons d'actions et règles de notification multi-appels
+### Corrections
 
-- Les liaisons d'actions (boutons réglementaires du modal facture) et les règles de notification portent désormais une **liste d'appels** au lieu d'un seul. Les appels partent dans l'ordre de déclaration ; le comportement par défaut est *poursuivre en cas d'échec*, à l'image du canal e-mail.
-- Drapeau **Arrêt sur échec** par appel — interrompt la chaîne au premier échec, tracé dans le journal sous la forme `STOP · N appel(s) restant(s) ignoré(s)`.
-- Champ **Description** par appel affiché en en-tête de carte repliée, pour qu'une liaison à plusieurs appels se lise comme une liste à cocher en un coup d'œil. Les nouveaux appels s'ouvrent automatiquement ; le chargement d'une règle replie tout.
-- **Chaînage des réponses** : la sortie de chaque appel est versée dans un contexte sous des clés `call.N.*`. Les appels suivants y accèdent via `{call.N.fieldName}` dans leur payload.
-  - Les appels api-connecteur exposent tous les mappings `endpoint.N.response.*` que le connecteur définit, plus `success` / `statusCode` / `error`.
-  - Les appels sql-connecteur exposent les colonnes de la première ligne par leur nom, plus `success` / `rowCount` / `updateCount` / `statementType` / `error`.
-- Compatibilité ascendante : les anciennes règles et liaisons mono-action continuent de fonctionner — les anciennes clés à plat sont lues comme une liste à un élément au chargement et réécrites au format canonique `action.N.call.M.*` à la prochaine sauvegarde.
-- Le helper front-end `executeConnectorAction` route selon le type de modèle (api/sql) et retourne une enveloppe uniforme — le runner d'actions du modal facture n'a donc pas à connaître le type.
+- **Les actions ne partaient jamais depuis les notifications**. Plusieurs causes, toutes corrigées : le dispatcher était bloqué quand aucun destinataire email n'était défini, et une fermeture de connexion SMTP suspendue supprimait silencieusement chaque action.
+- **Entrées fantômes dans les éditeurs** : supprimer un appel / endpoint / requête et sauvegarder laissait des données fantômes qui revenaient au prochain chargement. Les sauvegardes remplacent désormais entièrement le contenu du modèle.
+- Le bouton **« Ajouter mapping »** sur les connecteurs API ne fonctionnait pas — cliquer dessus supprimait immédiatement la ligne. Corrigé.
 
-### Refonte de l'éditeur de règles de notification
+### Autres
 
-- Le formulaire long et unique passe à **six onglets** : Général · Déclencheur · Canaux · Email · Actions · Test. L'onglet revient à *Général* au changement de règle.
-- Les paramètres de destinataire sont sous *Canaux* à côté des cases de livraison. Les onglets *Email* et *Actions* affichent leur contenu sans condition ; la case « action » a été retirée — les appels partent automatiquement quand la règle a au moins un appel (désactiver la règle pour les supprimer).
-- Le menu déroulant des connecteurs liste les api-connecteurs et les sql-connecteurs fusionnés avec les suffixes `· API` / `· SQL` ; le menu cible charge les endpoints ou les requêtes selon le type du connecteur choisi.
-
-### Trace des actions dans la boîte de réception
-
-- Le dispatcher ajoute désormais un pied d'audit par appel au corps rendu (enregistré dans `NTK74MSG2`) — l'enregistrement portail garde une trace permanente de *ce qui a été déclenché avec cette alerte*. Plafonné à la largeur de colonne moins une marge de sécurité.
-- La boîte de réception affiche l'audit sous forme de pastilles colorées sous le message — `OK` vert, `FAIL` rouge, `STOP` orange, `SKIP` gris — au lieu de mélanger les lignes d'audit dans le corps tronqué.
-- L'aperçu de la cloche retire le pied d'audit et affiche à la place une ligne récapitulative : *2 action(s) exécutée(s)* (gris) ou *1 action(s) en échec sur 2* (rouge), pour qu'un coup d'œil suffise à savoir s'il faut ouvrir la boîte de réception.
-
-### Corrections du dispatcher de notifications
-
-- **Les actions ne partaient jamais depuis les notifications.** Trois causes, toutes traitées :
-  - La boucle de dispatch exigeait l'ancienne case « action » dans les canaux ; le verrou est retiré — une liste d'actions non vide suffit.
-  - Le dispatcher s'arrêtait prématurément quand `recipients.isEmpty()`, supprimant les règles purement actionnelles et celles dont la résolution de destinataire échouait ; l'arrêt prématuré est retiré (les boucles portail/email no-op naturellement sur une liste vide).
-  - Surtout, `EmailDispatcher.send()` pouvait bloquer sur `transport.close()` face à des serveurs SMTP capricieux (le `QUIT` de Gmail). Le thread worker restait bloqué, supprimant silencieusement chaque étape suivante. Corrigé en (a) exécutant les actions **avant** l'email pour qu'un teardown SMTP bloqué ne puisse jamais les empêcher, et (b) bornant `transport.close()` sur un thread daemon avec un budget de 5 secondes — le message a déjà été livré par `sendMessage`, abandonner la fermeture est sans risque.
-- Diagnostics : lignes `INFO` structurées par dispatch et par appel sur stdout (`dispatch rule=X status=Y channels=… actions=N`, `dispatching N action call(s)`, `call #N → connector/endpoint`, `api-action … HTTP 200` / `sql-action … ok (N row(s))`), avec `WARN` sur l'arrêt sur échec et la fermeture SMTP lente, et lignes `ERROR` qui portent le motif d'échec.
-
-### Corrections d'éditeur
-
-- **`ConfigApi.updateTemplate` remplace désormais entièrement** les propriétés de la ressource au lieu de fusionner la nouvelle map par-dessus l'ancienne. Sans cela, les éditeurs qui renumérotent des listes indexées (appels d'action, endpoints, requêtes, codes de statut) laissaient traîner d'anciennes entrées — un appel #2 supprimé ressuscitait au chargement suivant car `action.2.*` n'était jamais retiré. Le correctif s'applique à tous les éditeurs qui font un aller-retour sur une map de propriétés structurée.
-- **Le bouton *Add mapping* d'api-connecteur fonctionne** — l'effet d'état local de `ResponseMappingsEditor` utilise maintenant une dépendance JSON-stringifiée pour que les lignes vides survivent au re-render parent. Auparavant la nouvelle ligne disparaissait dès le clic parce que le `Record` vide du parent était une nouvelle référence d'objet à chaque rendu.
-- Nouveaux helpers `Resource.removeProperty(name)` et `Resource.clearProperties()` utilisés par le chemin de sauvegarde en remplacement complet.
-
-### Flux des traitements en cours (Tableau de bord IT)
-
-- `/api/dashboard/log-tail` reconstruit autour de `F564237` (journal d'exécution) au lieu de `F564236` (erreurs de validation). Le widget du Tableau de bord IT affiche maintenant les jobs lancés par le planificateur qui démarrent et se terminent en direct, avec des badges de méthode (`START` vert, `END` bleu, erreurs en rouge).
-- Requête bornée à la journée (`FEUPMJ = today AND FEUPMT > since`) avec un repli en cas de passage de minuit qui supprime le plancher horaire si le widget était en pause au moment du changement de date — le prédicat reste sur l'index, peu importe la profondeur d'historique.
-
-### Widget Système de fichiers — regroupement par partition
-
-- `File.getFreeSpace()` renvoie des chiffres au niveau de la partition : tous les chemins du même point de montage affichaient donc la même barre d'usage disque. Le back-end émet désormais un `fsId` par chemin ; le widget regroupe les chemins par `fsId` et affiche l'usage disque une fois par système de fichiers, avec les lignes de chemin en dessous.
+- Vérification de configuration réécrite contre le schéma actuel des connecteurs (elle validait encore des noms de propriétés qui n'existaient plus depuis des mois).
+- Le flux d'événements live du Tech Dashboard lit maintenant depuis le journal d'exécution au lieu des erreurs de validation, et reste borné à la journée.
+- Le widget Système de fichiers regroupe les chemins par partition pour que la même barre d'utilisation disque ne se répète plus pour chaque répertoire sur le même montage.
 
 ---
 
 ## 2026.05.6 — 2026-05-09 \{#v2026-05-6\}
 
-Nouveau **Tableau de bord IT** dédié aux équipes techniques avec 14 widgets couvrant JVM / BD / disque / débit / erreurs / planificateur — page distincte du tableau de bord métier existant pour que chaque public dispose d'une vue dimensionnée à ses besoins. Tableau de bord métier réaligné, vérification de configuration réécrite contre le schéma actuel orienté connecteur, et nouveau suivi d'IP en mémoire qui alimente la carte *Sessions actives* quand l'authentification est désactivée.
+Nouveau **Tableau de bord technique** pour l'équipe IT — distinct du tableau de bord métier, avec tout le nécessaire pour surveiller la plateforme d'un coup d'œil : santé JVM, connectivité base, espace disque, débit, erreurs, planificateur, etc.
 
-### Tableau de bord IT (nouvelle page)
+### Nouveautés
 
-- Nouvelle entrée **Documentation → Tableau de bord IT** qui regroupe tout ce dont un opérateur IT a besoin en un coup d'œil : Santé système (heap JVM / GC / threads / uptime), ping BD, informations de build, widget Système de fichiers (espace libre / total + nombre de fichiers pour `appHome` / `processHome` / `dirInput` / `singleOutput` / `burstOutput` / `dirArchive` / `dirError`), graphique de débit, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, traitements en cours en direct (paires START / END des jobs, erreurs en rouge), vérification de configuration, tables de base, erreurs récentes, planificateur. Voir [Tableau de bord IT](./application/tech-dashboard.md).
-- Nouveaux endpoints back-end `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — payloads groupés pour que la page se mette à jour en un seul aller-retour.
-- Le widget Système de fichiers parcourt chaque chemin de façon récursive (plafonné à 5000 fichiers pour rester rapide) et gère les jokers d'exécution (`%TEMPLATE%`, `%FILE_NAME%`) en tronquant au premier rencontré pour rapporter sur le répertoire existant le plus profond au-dessus. `dirOutput` retiré de la liste — déjà couvert par `processHome`.
-- Le widget *Temps de traitement par modèle* charge les événements START/END de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` avec un helper `hhmmssToSeconds()` pour un calcul de durée correct — remplace une auto-jointure SQL cassée (`FETMPL` ambigu et arithmétique `e.FEUPMT - s.FEUPMT` incorrecte).
+- Nouvelle page **Documentation → Tableau de bord technique** avec 14 widgets : Santé système, ping BD, infos de build, Système de fichiers (libre / total par partition), Débit, Tendance erreurs, Taux de retry, Temps de traitement par modèle, Sessions actives, Journal en direct, Vérification de configuration, Tables BD, Erreurs récentes, Planificateur.
+- La carte **Sessions actives** fonctionne désormais même quand l'authentification est désactivée — elle bascule sur un compteur d'IP en mémoire pour que l'équipe IT voie qui utilise l'application.
 
-### Tableau de bord métier — réalignement
+### Améliorations
 
-- Widget Planificateur retiré (présent désormais sur le tableau de bord IT — le public métier n'en a pas besoin).
-- Dernière rangée réorganisée de `(Par société 6 | E-Reporting 6)` + `(Round-trip 6 | Planificateur 6)` à une seule rangée `Par société 4 | E-Reporting 4 | Round-trip 4` pour que trois widgets courts se partagent une rangée équilibrée plutôt que de laisser une demi-cellule vide.
-- Grille passée en `align-items: stretch`, les panneaux remplissent leur Span via `flex: 1` — Activité récente atteint maintenant le même bord bas que la colonne empilée Points d'attention + Règles d'erreur les plus fréquentes à côté. Même correction pour la nouvelle rangée du bas.
-
-### Sessions actives sans authentification
-
-- Nouveau `ActivityTracker` en mémoire (map IP → `lastSeen`) mis à jour à chaque requête depuis `WebServer.handle()`. Quand `authEnabled=N`, il n'y a aucune ligne `F564252` à compter — la carte *Sessions actives* du tableau bascule donc sur *Clients actifs · 15 min* alimentée par ce tracker. L'équipe IT voit enfin qui utilise l'application et depuis où, sans avoir à activer l'authentification.
-
-### Vérification de configuration — réécriture
-
-- `/api/dashboard/config-check` validait des propriétés obsolètes (`paApiBaseUrl` / `paApiLoginEndpoint` / `paApiImportEndpoint` / `paApiUsername` / `paApiPassword` / `paApiDirectoryEndpoint` / `paApiEReportingEndpoint` / `ublXsdPath` / `ublSchematronPath`) — aucune n'existe dans le schéma actuel orienté connecteur. La carte remontait 8 fausses erreurs sur une configuration parfaitement valide.
-- Valide désormais : `baseUrl`, `authType`, identifiants selon le type d'authentification (OAUTH2 / BASIC / BEARER) et la présence d'un endpoint nommé `import` (avertissement si `import-status` manque). E-directory contrôle `baseUrl` + endpoint `directory-check` quand `checkDirectory=Y`. E-reporting contrôle `issuerSiren` / `frequency` / `flux` quand `sendToPA=Y`. Vérifications obsolètes des chemins XSD / Schematron retirées — les ressources de validation sont embarquées dans le JAR.
-
-### Divers
-
-- Le groupe *Documentation* de la barre latérale contient désormais l'entrée Tableau de bord IT.
-- Vue groupée de ProcessingLog : `FEUKID` utilisé comme départage pour que deux événements partageant le même `UPMJ`+`UPMT` gardent un ordre stable d'un rafraîchissement à l'autre.
+- Le tableau de bord métier est réaligné visuellement — les panneaux d'une même rangée s'alignent maintenant à la même hauteur.
+- Vérification de configuration réécrite — elle remontait 8 fausses erreurs sur des configurations parfaitement valides parce qu'elle validait des noms de propriétés qui n'existent plus depuis des mois.
 
 ---
 
 ## 2026.05.5 — 2026-05-08 \{#v2026-05-5\}
 
-Passe d'architecture pilotée par le refactoring des noms de colonnes : chaque requête SQL du backend passe désormais par `UBLColumnConfig` (plus de littéraux `UHKCO` / `FETXFT` codés en dur) et par `UBLTableConfig` (les tables d'auth et de notifications rejoignent les autres comme tables configurables). Les droits de rôles deviennent des lignes (`F564254`) au lieu de listes CSV, permettant d'ajouter une dimension de permission sans changer le DDL. Groupes de codes de statut, journal d'exécution et BLOB d'e-reporting sont reformatés pour être conformes JDE et indépendants du dialecte. Deux bugs Oracle historiques (espaces de remplissage NCHAR, commentaires SQL avec guillemets) sont corrigés.
+Passe d'architecture interne pour rendre NomaUBL plus souple sur les installations clients : noms de colonnes et de tables désormais entièrement configurables, droits par rôle réorganisés en lignes (plus faciles à étendre), et plusieurs problèmes Oracle de longue date corrigés.
 
-### Refactoring configuration colonnes / tables
+### Nouveautés
 
-- Tous les sous-handlers Java (`InvoiceApi`, `EReportingApi`, `IntegrationApi`, `DashboardApi`, `AiAssistant`, `WebApiHandler`, `UBLDatabaseHandler`, `RuntimeLogHandler`, `UBLInvoiceProcessor`, …) résolvent désormais les noms de colonnes exclusivement via `cols.<accesseur>`. Le template `db-nomaubl-columns` les écrase tous de manière cohérente — fini la dérive silencieuse quand un client renomme une colonne.
-- Les tables d'auth (`F564250` users, `F564251` roles, `F564252` sessions, nouvelle `F564254` permissions) et la table de notifications (`F564253`) sont maintenant des entrées à part entière dans `UBLTableConfig` et l'onglet *Settings → db-nomaubl → Tables*, au même niveau que les tables factures / e-reporting. Elles participent à la substitution DDL si renommées.
-- `WebServer.java` ne contient plus de JDBC : `resolveKeysByUblNumber`, `readTemplateName`, le middleware d'auth-validation et la lecture du blob UBL ont migré vers les sous-handlers `api/*` ; `WebServer` ne fait plus que router.
-- Nouvelle page **Références croisées** (Documentation → Références croisées) générée à la compilation. Pour chaque accesseur `tables.<X>` / `cols.<X>`, elle liste tous les sites d'appel Java qui le lisent, avec une case « afficher accesseurs inutilisés » pour repérer le code mort. Régénérée par `XrefScanner` à chaque `bash build.sh`, sans maintenance manuelle.
+- **Groupes de codes de statut** : les statuts peuvent être groupés (inflight, terminal, erreur, etc.) et par étapes (créée, envoyée, en attente, approuvée, rejetée). Les widgets du tableau de bord lisent maintenant depuis cette source unique au lieu de listes de codes en dur — ajouter un nouveau code de statut PA est une seule ligne dans la configuration.
+- **Droits par rôle** refondus en une ligne par droit au lieu de listes séparées par des virgules. L'éditeur Rôles dans Paramètres est redessiné avec des cases par fonctionnalité, une gestion des sociétés plus conviviale, et une liste recherchable des pages autorisées.
+- Tous les noms de colonnes et de tables sont maintenant configurables par installation client via les modèles **db-nomaubl-columns** et **db-nomaubl** — fini la dérive silencieuse si un client renomme une colonne JDE.
 
-### Permissions par rôle — droits ligne par ligne (F564254)
+### Corrections
 
-- Nouvelle table `F564254` (`PMROLE`, `PMCRAPPID`, `PMCRAPPVAL`, `PMENABL`) qui remplace les quatre colonnes CSV `RLPAGES` / `RLCOMPANIES` / `RLSETTINGS` / `RLREADONLY` de `F564251`. Chaque droit est une ligne typée (`page` / `company` / `feature`) ; ajouter une nouvelle dimension de permission est désormais un INSERT, pas un changement de DDL.
-- Réinitialisation sûre : supprimer `F564254` puis rejouer *Init Database* réinjecte les droits admin/viewer sans toucher aux lignes de rôles existantes. Sur une base déjà peuplée, l'opération ne fait rien. Le log indique combien de droits ont été insérés.
-- Éditeur Rôles (*Settings → users-roles → Roles*) refondu : liste de cartes avec actions copier / supprimer, panneau d'édition avec case à cocher par fonctionnalité + texte d'aide, sociétés en table avec bouton *Add row* (plus de séparateurs virgule), section *Allowed Pages* avec libellés lisibles (clés i18n `nav.*` réutilisées de la barre latérale) + l'identifiant de page en gris monospace à côté. La colonne *Tag* est en lecture seule — référencée par les méthodes factory Java, la renommer casserait silencieusement les appels.
-- `F564252` (sessions) renommée selon les conventions JDE : `SSLSID` (token UUID) / `SSUSER` / `SSSTDTIM` (début) / `SSETDTIM` (fin). `F564251` / `F564254` reçoivent les champs d'audit JDE classiques (`USER` / `PID` / `JOBN` / `UPMJ` / `TDAY`).
+- **Cloche de notifications vide sur Oracle** : sur les installations JDE où statut / kco / etc. sont stockés en colonnes CHAR à largeur fixe, les règles de remplissage par espaces d'Oracle cassaient silencieusement les comparaisons d'égalité avec les binds JDBC string. Les notifications et beaucoup d'autres requêtes ne renvoyaient pas de lignes. Corrigé sur l'ensemble du backend (47 endroits).
+- **Initialisation de la base** : les commentaires SQL contenant des points-virgules étaient coupés en deux par le séparateur d'instructions, produisant des erreurs « Unterminated string literal » au premier init.
+- **Ordre des lignes du Journal de traitement** : deux événements d'un même job partageant la même seconde s'inversaient parfois entre deux rafraîchissements. Utilise désormais un départage explicite par ID de ligne, donc l'ordre est stable.
 
-### Groupes de codes de statut + nettoyage tableau de bord
+### Autre
 
-- Le template *statuses* gagne un 6ᵉ champ pipe pour les groupes : niveau supérieur (`inflight` / `errorTech` / `errorBusiness` / `terminal`) et étapes du funnel (`created` / `sent` / `pending` / `transmission` / `approved` / `rejected`). Nouvel endpoint `/api/status-codes/groups`.
-- Les compteurs SQL de `DashboardApi` et les cartes du dashboard (`PipelineFunnel`, `EReportingCoverage`, `StaleInvoices`, `RecentActivity`, `invoiceHelpers.statusColors`) lisent depuis cette source unique au lieu d'intégrer leurs propres listes `IN ('9904','9905',…)`. Ajouter un nouveau code de statut PA est une ligne dans `config-template-lists.json`.
-- Le store React `statusGroupsStore` est chargé une fois au démarrage de l'application et déclenche un re-render global ponctuel à l'hydratation du cache ; les couleurs de statut s'affichent correctement dès le premier rendu après connexion (plus besoin de « naviguer ailleurs et revenir »).
-- Éditeur *Statuses* : chaque ligne s'étend désormais en formulaire 4 colonnes avec sélecteur de groupes par puces + dropdown et recherche sur code / tag / libellés / code PA / libellés de groupes. Tag en lecture seule.
-
-### Journal d'exécution (F564237)
-
-- Ajout de la PK `FEUKID` (séquence calculée à l'insert via `COALESCE(MAX(FEUKID),0)+1`, indépendante du dialecte).
-- Renommage des colonnes selon les conventions JDE : `FEMODE` → `FERMK`, `FEMETHOD` → `FERMK2`, `FEMESSAGE` → `FEK74MSG1` (1024). Largeur de `FETMPL` ramenée à 40.
-- Les troncatures à l'insertion correspondent aux nouvelles largeurs. La réponse REST du processing-log inclut maintenant `id`, utilisé comme clé React stable et comme 3ᵉ critère de départage pour que deux événements partageant `UPMJ`+`UPMT` ne s'inversent plus entre deux rechargements de page.
-- Vue groupée par job : le même critère de départage `FEUKID` corrige le bug d'ordre `START` / `END` qui faisait apparaître les deux comme orphelins alors qu'ils étaient appariés. Les erreurs FATAL affichent maintenant un badge compact `FATAL ERROR` / `ERROR` / `FAILED` + le chemin complet dans la colonne message (qui débordait avant).
-
-### XML binaire e-reporting (F564260.RGTXFT)
-
-- Type changé de `TEXT` / `CLOB` vers `BYTEA` / `BLOB`. Le backend écrit le XML en octets UTF-8 via `dialect.writeBlob` / lit via `dialect.readBlob` (utilisait `writeText` / `readText`, incompatibles avec le nouveau type binaire).
-- À noter : les tables e-reporting sont renumérotées — `F564240` / `F564241` / `F564242` deviennent `F564260` / `F564261` / `F564262`. Les colonnes FK des tables filles passent de `RGUKID` à `RHUKID` (cycle de vie) et `RIUKID` (mapping). Voir [Tables de base de données](./references/database-tables.md).
-
-### TRIM piloté par le dialecte (NCHAR Oracle)
-
-- Nouveau helper `DatabaseDialect.trimChar(col)` — enveloppe avec `TRIM(col)` côté Oracle (gère le remplissage par espaces des `NCHAR` JDE qui faisait silencieusement échouer les comparaisons d'égalité), retourne la colonne brute côté PostgreSQL `VARCHAR` (pas de remplissage, pas d'appel de fonction inutile → les index restent utilisables).
-- Correction du compteur de notifications resté vide chez un client : avec un `*` stocké en `NCHAR(10)` (donc `*` + 9 espaces) et un bind JDBC string, la clause WHERE comparait `'*         '` à `'*'` sans jamais correspondre. Même cause racine derrière la sémantique de diffusion du dispatcher — les deux corrigées.
-- Passe sur 9 fichiers / 47 occurrences : `InvoiceApi`, `DashboardApi`, `IntegrationApi`, `EReportingApi`, `EReportingFetcher`, `AiAssistant`, `JDEBipExtractor`, `InvoiceStatusesHandler`, `ApiCommons.categoryFilter`. Tout passe par `dialect.trimChar`.
-
-### DDL runner
-
-- Le découpage des instructions respecte maintenant les guillemets et les commentaires de ligne. Avant, tout `;` à l'intérieur d'un littéral `'…'` (par exemple dans un `COMMENT ON COLUMN IS '…; …'`) coupait l'instruction en deux, produisant des erreurs `Unterminated string literal` à l'initialisation.
-
-### Interface / paramètres
-
-- *Settings → db-nomaubl → Tables* donne accès à *Auth · Users / Roles / Sessions / Permissions* et à la table *Notifications*, au même titre que les tables factures et e-reporting.
-- Le panneau *Validation Errors* du modal détail de facture affiche maintenant chaque ligne sur deux niveaux (niveau + règle + date en haut, message en dessous) pour que les longs textes de règles localisées ne se battent plus avec le code de règle.
-- L'onglet *Initialize* de *db-nomaubl* voit sa zone de log s'étendre à toute la hauteur disponible au lieu de plafonner à 200 px avec du vide au-dessous.
+- Le panneau Erreurs de validation de la modale facture affiche maintenant chaque erreur sur deux lignes (en-tête en haut, message en dessous) pour que le texte long des règles ne se batte plus pour l'espace horizontal.
 
 ---
 
 ## 2026.05.4 — 2026-05-07 \{#v2026-05-4\}
 
-Tableau de bord refondu en grille 12 colonnes + page Erreurs d'intégration transformée en véritable outil d'analyse, avec des descriptions de règles extraites des fichiers Schematron embarqués pour ne plus laisser l'utilisateur déchiffrer un code à la main. Le mode clair devient le mode par défaut. Deux bugs de dialecte Oracle qui vidaient silencieusement des panneaux du tableau de bord sur les installations clientes sont corrigés.
+Tableau de bord refondu pour une mise en page plus claire, et la page Erreurs d'intégration devient un véritable outil d'analyse — les codes de règles s'accompagnent maintenant d'une description lisible, extraite des fichiers Schematron eux-mêmes.
 
-### Tableau de bord
+### Nouveautés
 
-- Grille 12 colonnes en remplacement de la disposition empilée. La rangée hero (Total / En cours / Rejetée — IT / Rejetée — Business) s'appuie sur les compteurs par statut existants ; en dessous, un funnel pipeline, un graphique de volume, le couple Activité récente / Bloquées + Règles en échec, Par société / Couverture e-Reporting, puis Aller-retour PA / Santé du planificateur.
-- La rangée Activité récente / Règles en échec est désormais en 6/6 pour s'aligner avec les rangées du dessous — le précédent 8/4 rendait la carte Activité visuellement plus large que sa voisine.
-- Le widget Règles en échec gagne un sélecteur `TOUT / UBL / INTEG` dans son en-tête et remplace les barres proportionnelles par des lignes classées de largeur égale (badge de rang + code de règle + ligne de description secondaire + compteur). Les anciennes barres proportionnelles rendaient des comptes de 160 vs 10 visuellement quasiment identiques.
-- Les cartes hero ouvrent désormais la liste des factures avec un filtre multi-statuts (`/api/invoices?status=A,B,C`) pour que les cartes *En cours* / *Rejetée — IT* / *Rejetée — Business* aboutissent sur une liste correctement filtrée et non sur la liste complète.
+- **Tableau de bord** : grille de widgets 12 colonnes en remplacement de la disposition empilée précédente. Cartes hero (Total / En vol / Rejetée — IT / Rejetée — Business), funnel pipeline, graphique de volume, activité récente, règles les plus en échec, répartition par société, couverture e-Reporting et santé aller-retour s'alignent proprement.
+- Les cartes hero ouvrent maintenant une liste Factures correctement filtrée (avant le filtre était perdu).
+- Le widget **Règles les plus en échec** a une bascule de catégorie (Tout / UBL / Intégration) et des lignes classées au lieu de barres proportionnelles — des comptes de 160 vs 10 sont maintenant visuellement distinguables.
+- **Page Erreurs d'intégration** : nouvelle bascule de vue entre **par événement** (table à plat) et **par règle** (cartes groupées par règle, avec nombre de factures et pastilles par sévérité). Filtre catégorie pour séparer les erreurs de validation UBL des erreurs de cycle de vie / intégration.
+- **Descriptions de règles partout** : les codes de règles comme `BR-CL-23` ou `BR-FR-23` montrent maintenant leur description humaine en tooltip et en ligne secondaire, tant sur le tableau de bord que dans Erreurs d'intégration.
+- Le **mode clair** est désormais le mode par défaut pour une première visite. Quiconque avait explicitement choisi le mode sombre le conserve.
 
-### Page Erreurs d'intégration
+### Corrections
 
-- Bascule de vue : par évènement (table à plat existante) et par règle (cartes regroupées par règle + source, chaque carte affichant le nombre de factures et des chips par sévérité). Les cartes conservent une largeur égale grâce à `auto-fill` — une dernière rangée courte n'étire plus une carte isolée sur toute la largeur.
-- Nouvelle case `Sans correspondance` — l'ancien comportement (erreurs sans facture jointe) reste à un clic, tout en affichant par défaut toutes les erreurs.
-- Filtre catégorie (`Validation UBL` / `Intégration / cycle de vie`) sur les deux vues, mappé côté backend sur une liste `UVSRCL IN (...)` pour que les règles Schematron / XSD soient analysables séparément des erreurs d'exécution / dispatcher (PDF, PA, BDD, …).
-- Cliquer sur une ligne de la vue par évènement ouvre la modale facture sur l'onglet Historique (alignement avec Notifications).
-- Liens profonds depuis le widget Règles en échec — *Voir toutes les erreurs* ouvre l'onglet par règle, et un clic sur une règle donnée bascule sur la vue par évènement avec la règle déjà appliquée en chip de filtre.
-
-### Catalogue de descriptions de règles
-
-- Nouveau `ValidationRuleCatalog` (Java) qui parse les `.sch` embarqués au premier appel et extrait un dictionnaire `{id de règle → description humaine}` en cherchant les lignes `[<id>]<séparateur><description>` dans chaque bloc `<assert>`. Le séparateur est permissif (`-` ou `:`, espaces optionnels) pour couvrir les trois formats des quatre Schematrons embarqués :
-  - EN 16931 : `[BR-CL-23]-Description` (sans espace)
-  - FREXT-IC : `[BR-FREXT-IC-08] - Description` (avec espaces)
-  - CIUS-FR : `[BR-FR-23/BT-49] : Description` (deux-points, plus la convention FNFE-MPE où l'id de l'assert utilise `_` et le code entre crochets `/` — la recherche retente automatiquement avec `_`→`/`).
-- Le matcher du tag d'ouverture capture les attributs en un seul bloc, ce qui lui permet de retrouver `id="…"` quel que soit l'ordre des attributs — la version précédente exigeait `id` en premier et ignorait silencieusement toutes les règles CIUS-FR.
-- Douze règles de cycle de vie / intégration issues de `ErrorCatalog` (`UBL_CREATION`, `DB_INSERT`, `PA_SEND`, …) sont amorcées avec une description FR dans le même dictionnaire.
-- Nouvel endpoint `GET /api/integration-errors/catalog` qui retourne le catalogue fusionné. Le frontend le met en cache pour la page via un petit hook `useRuleCatalog`.
-- Là où apparaît un code de règle (widget Règles en échec, cartes par règle, colonne Règle de la vue par évènement) la description s'affiche en infobulle et comme ligne secondaire sous le code.
-- Limitation connue : les 34 asserts du Schematron `BR-FR-CPRO` n'ont pas d'attribut `id`, le validateur enregistre donc un code de règle vide — ces lignes restent sans libellé.
-
-### Correctifs de dialecte Oracle
-
-- `loadByCompany` et `loadRoundTripStats` utilisaient tous deux `colonne <> ''` pour filtrer les lignes vides. Sur Oracle, la chaîne vide est stockée comme `NULL` et `NULL <> ''` vaut `NULL` (traité comme faux), si bien que la clause WHERE s'effondrait et que les deux requêtes renvoyaient zéro ligne sur les installations Oracle des clients tout en fonctionnant parfaitement en Postgres local. Remplacé par `LENGTH(TRIM(colonne)) > 0` (loadByCompany) et purement supprimé dans `loadRoundTripStats` où la clause IN filtre déjà les NULL des deux côtés.
-
-### Thème
-
-- Le mode clair devient le mode par défaut pour une première visite. La bascule continue de mémoriser le choix de l'utilisateur dans `localStorage` ; les utilisateurs qui avaient précédemment opté pour le mode sombre le conservent.
+- **Panneaux du tableau de bord vides sur Oracle** : deux requêtes utilisaient `colonne <> ''` pour filtrer les lignes vides, mais sur Oracle les chaînes vides sont stockées comme NULL et `NULL <> ''` est traité comme faux — la clause WHERE s'effondrait et les deux requêtes renvoyaient zéro ligne. Corrigé.
 
 ---
 
 ## 2026.05.3 — 2026-05-06 \{#v2026-05-3\}
 
-Système de notifications — les changements de statut d'une facture atteignent désormais les utilisateurs via une boîte de réception dans le portail, par e-mail (avec le PDF de la facture joint par défaut) et par appels d'API externes, le tout piloté par des règles définies par l'utilisateur.
+Notifications : les changements de statut d'une facture peuvent maintenant atteindre les utilisateurs via une boîte de réception dans le portail, par e-mail (avec le PDF de la facture joint par défaut) et via des appels d'API — le tout piloté par des règles que vous définissez dans l'interface.
 
-### Stockage et orchestrateur
+### Nouveautés
 
-- Nouvelle table `F564253` (DDL Oracle + Postgres, plus ajout dans `AuthManager.initTables` pour qu'une installation neuve la crée automatiquement). Une ligne par notification délivrée, clé `NTUKID` seule, avec `(NTDOC, NTDCT, NTKCO)` référençant la facture. Index composites sur `(NTUSER, NTEV01, NTUPMJ DESC)` pour la pastille de la cloche et l'inbox, et sur `(NTDOC, NTDCT, NTKCO)` pour l'historique au niveau facture.
-- Nouveau package `custom.ubl.notify` : `NotificationDispatcher` (singleton avec un pool de 2 threads pour l'envoi asynchrone), `NotificationDatabaseHandler` (CRUD sur `F564253`, avec troncature à l'insertion alignée sur les largeurs de colonnes pour qu'une valeur source inhabituellement longue ne fasse pas échouer l'envoi), `EmailDispatcher` et le POJO `NotificationRule`.
-- Les règles sont enregistrées comme ressources `notification-rule` dans un fichier dédié `config-notifications.json` à côté de la configuration principale ; `ConfigJson` répartit les ressources vers ce fichier en fonction de leur type.
-- Purge quotidienne dans `BackgroundScheduler` pilotée par `global.notificationsRetentionDays` (défaut 90 jours, `0` désactive).
-- À la première initialisation, le dispatcher enregistre un crochet d'arrêt JVM ; les exécutions CLI qui se terminent juste après une mise à jour de statut peuvent ainsi vider le pool de threads (sursis de 2 secondes) avant l'arrêt du processus.
-
-### Points d'intégration sur les changements de statut
-
-- Branchement dans `InvoiceStatusCatalog.StatusTransition.apply()` après les écritures en base : les règles sont évaluées et déclenchées à chaque transition. Toutes les exceptions sont capturées — un échec de notification n'annule jamais la mise à jour de statut sous-jacente.
-- Les valeurs de statut, motif et action qui viennent d'être appliquées sont passées directement à `NotificationDispatcher.fire(...)`. Le dispatcher n'a donc plus à relire `F564231` depuis une connexion JDBC séparée — cette lecture renvoyait un instantané périmé tant que la transaction appelante (par exemple `ImportStatusHandler`) n'avait pas encore été validée, ce qui faisait apparaître l'ancien libellé dans le corps de la notification.
-- Le `SetStatusModal` côté UI (cible base de données) déclenche désormais aussi les notifications — ce chemin contournait `StatusTransition.apply` et restait silencieux auparavant.
-- Les modes CLI (`-process`, `-fetch-import`, `-fetch-status`, `-fetch-single`, `-fetch-all`, l'ancien `-run`) appellent un utilitaire commun `initRuntimeCatalogs` qui initialise à la fois `InvoiceStatusCatalog` et `NotificationDispatcher`. Sans cela, les traitements en lot mettaient à jour les statuts mais ignoraient les notifications, le singleton du dispatcher n'étant jamais initialisé.
-
-### Canal e-mail
-
-- Une seule transaction SMTP par envoi : toutes les adresses (l'e-mail résolu de la cible portail plus chaque entrée d'`emailRecipients`) sont placées dans l'en-tête `To:` d'un seul message, en un appel à `Transport.sendMessage`. La boucle adresse-par-adresse précédente se bloquait dès qu'un serveur SMTP gérait mal la fermeture de connexion en milieu de boucle, ce qui faisait disparaître silencieusement tous les envois après le premier.
-- Séquence explicite `Transport.connect` / `sendMessage` / `close` dans un `try/finally` avec délais d'expiration stricts sur la socket (`connectiontimeout`, `timeout`, `writetimeout`, tous à 20 s). Les erreurs au moment du `close` sont absorbées, pour qu'un nettoyage bloqué ne contamine pas l'envoi suivant.
-- PDF de la facture rendu et joint par défaut, contrôlé par le drapeau `attachPdf` de la règle (valeur par défaut `Y`). Le PDF est généré une seule fois par envoi et réutilisé pour chaque destinataire ; un échec de rendu est tracé mais ne fait pas échouer l'e-mail.
-- Sujet et corps par défaut quand la règle laisse `emailSubject` ou `emailBody` vides : `Invoice {doc} {dct} {kco} — {statusLabel}` pour le sujet de l'e-mail et un corps avec les lignes `Status / Reason / Action`. Le `NTMSGP` côté portail garde uniquement le libellé du statut, la boîte de réception affichant déjà `NTDOC · NTDCT · NTKCO` à côté.
-
-### Modèle de destinataire
-
-- La cible portail (utilisateur / rôle) et `emailRecipients` sont des champs indépendants : possibilité de renseigner l'un, l'autre ou les deux. La cible portail reçoit aussi automatiquement le canal e-mail si son compte F564250 a un `USEMAIL` renseigné.
-- `emailRecipients` accepte les séparateurs `,` et `;`.
-- Compatibilité ascendante : les règles existantes avec `recipientType=email` sont migrées au chargement — l'adresse passe dans `emailRecipients` et le type est vidé.
-- Résolution des destinataires plus tolérante : si la lecture de F564250 échoue (connecteur `db-nomaubl` absent, table manquante, incident transitoire), un destinataire portail est tout de même émis avec le nom d'utilisateur littéral, au lieu d'abandonner la règle silencieusement avec un message *No recipients resolved*.
-
-### Installations sans authentification
-
-- Lorsque `global.authEnabled != "Y"`, le dispatcher écrit les lignes portail sous une valeur sentinelle de diffusion (`NTUSER='*'`) ; les routes inbox et cloche interrogent cette même sentinelle quand aucun utilisateur n'est connecté. Les notifications fonctionnent sans qu'aucune ligne F564250 ne soit nécessaire.
-- La cloche reste visible dans la barre d'utilitaires quel que soit l'état d'authentification (auparavant cachée à l'intérieur de la branche réservée aux utilisateurs connectés).
-- L'éditeur de destinataire adapte ses libellés : quand l'authentification est désactivée, l'option vide affiche *Diffusion — tous les utilisateurs* au lieu de *Aucune — emails uniquement*.
-
-### Frontend
-
-- Nouvelle page **Notifications** (promue de Gestion vers Application en 2026.05.4) — boîte de réception avec onglets Toutes / Non lues, action *tout marquer comme lu*, suppression par ligne, badge de statut coloré selon le catalogue, bande d'accent pour les lignes non lues, et une ligne méta `doc · dct · kco · motif · action · règle`. Cliquer sur une ligne ouvre la facture liée dans `InvoiceDetailModal`. Voir [Notifications](./application/notifications.md).
-- Nouvel éditeur **Règles de notification** — liste latérale et formulaire à sections : déclencheur, canaux, destinataire, contenu e-mail, appel d'action, et un panneau de Test synchrone qui exécute réellement la règle. Les codes de déclenchement utilisent des multi-sélections à puces alimentées par les ressources `statuses` et `rejection-reason-codes` — la règle ne peut donc plus diverger des codes assignables à une facture. La section action reprend la structure de *Process API* : connecteur en liste déroulante, endpoint en liste déroulante alimentée par `api.connectors.listEndpoints(...)`, et lignes de paramètres pré-remplies à partir de la définition de l'endpoint. Voir [Règles de notification](./management/notification-rules.md).
-- Nouveau composant **NotificationBell** dans la barre d'utilitaires — interroge `/api/notifications/unread-count` toutes les 30 s, affiche une pastille rouge avec le compteur et un menu déroulant des 6 dernières notifications. Cliquer sur une notification la marque comme lue puis ouvre directement la modale de la facture via un événement `nomaubl:open-notification` sur `window` (cela fonctionne même quand l'utilisateur se trouve déjà sur la page de la boîte de réception et que le composant n'est donc pas remonté).
-- Permissions de rôle pour les deux nouvelles pages, plus une nouvelle icône `bell` dans le jeu d'icônes central.
+- **Page Notifications** (dans Gestion) — boîte de réception portail avec filtre Toutes / Non lues, action « tout marquer comme lu », suppression par ligne, badges de statut colorés. Cliquez sur une ligne pour ouvrir la facture liée.
+- **Icône cloche** dans la barre du haut avec un compteur de non-lus et une liste rapide des 6 dernières notifications. Sondage toutes les 30 secondes.
+- **Éditeur de règles de notification** : définissez une règle par code de statut, choisissez les canaux (portail, email, appel API), le destinataire, le modèle d'email et une action API optionnelle. Inclut un panneau de Test qui exécute réellement la règle sur une vraie facture.
+- **Canal e-mail** : le PDF de la facture est joint par défaut. Sujet et corps ont des valeurs par défaut sensées si vous les laissez vides. Les destinataires peuvent être un utilisateur du portail, un rôle, ou une liste d'adresses email (ou n'importe quelle combinaison).
+- **Installations sans authentification** : les notifications fonctionnent même sans authentification — les lignes portail sont envoyées dans une boîte « diffusion » visible par tous.
+- **Rétention** : les notifications plus anciennes que `notificationsRetentionDays` dans les paramètres globaux (90 jours par défaut) sont purgées quotidiennement.
 
 ---
 
 ## 2026.05.2 — 2026-05-06 \{#v2026-05-2\}
 
-Soumission B2B française à la PA — pièces jointes PDF qualifiées (LISIBLE + documents associés) et plusieurs corrections d'intégrité de l'aller-retour qui ont émergé pendant la mise en œuvre.
+Soumission B2B française à la PA : pièces jointes PDF qualifiées (LISIBLE + documents métier) plus plusieurs corrections d'intégrité sur l'aller-retour.
 
-### Pièce jointe LISIBLE + pièces jointes additionnelles qualifiées
+### Nouveautés
 
-- Nouveau drapeau `lisible` Y/N sur les modèles de document. Quand `Y`, un PDF est rendu à partir de l'UBL fraîchement généré via le `pdf-template` résolu, puis réinjecté en tant que pièce jointe « facture lisible » (`cbc:ID = "LISIBLE"`). Indépendant du sélecteur `attachment` existant — les deux peuvent s'activer sur la même facture.
-- Nouvelle propriété JSON `additionalAttachments` — liste d'entrées `{code, path}` intégrées comme blocs `cac:AdditionalDocumentReference`. Éditeur UI dans l'onglet Document avec un sélecteur de code (`RIB`, `BON_LIVRAISON`, `BON_COMMANDE`, `PJA`, `BORDEREAU_SUIVI`, `BORDEREAU_SUIVI_VALIDATION`, `DOCUMENT_ANNEXE`, `ETAT_ACOMPTE`, `FACTURE_PAIEMENT_DIRECT`, `RECAPITULATIF_COTRAITANCE`, `FEUILLE_DE_STYLE`) et un champ chemin. Les chemins acceptent les placeholders `%APP_HOME%`, `%ENV%`, `%DOCNAME%`, `%KCO%`, `%DOC%`, `%DCT%`. Les fichiers manquants sont tracés et ignorés — ils ne font pas échouer le traitement.
-- `Tranform.embedPdfInUBL` reçoit une nouvelle surcharge à code String. Le qualifieur devient le `cbc:ID` du `cac:AdditionalDocumentReference` inséré. `cbc:DocumentTypeCode` n'est **pas** émis (UBL-SR-43 le réserve aux objets facturés 130 / 50) et `cbc:DocumentDescription` n'est **pas** émis non plus (la PA retournait HTTP 400 quand il était présent en plus de la pièce jointe). La signature 3-args reste identique : les appelants qui utilisent la forme historique `PDF_Invoice` ne sont pas impactés.
-- `PdfTemplateEngine.render` et `InvoicePdfGenerator.generate` gagnent un booléen `mergeAttachment`. Le flux LISIBLE passe `false` pour que le PDF rendu n'hérite pas d'une pièce jointe déjà intégrée par le flux historique `create` / `attach` — sinon LISIBLE dupliquerait visiblement le PDF original à l'intérieur de lui-même.
+- **Pièce jointe LISIBLE** : nouveau drapeau Y/N sur les modèles de document. Quand ON, un PDF humainement lisible est généré depuis l'UBL lui-même et réinjecté en tant que pièce jointe « LISIBLE ». Indépendant du sélecteur Attachment existant — les deux peuvent être actifs sur la même facture.
+- **Pièces jointes additionnelles** : liste de documents métier qualifiés (`RIB`, `BON_LIVRAISON`, `BON_COMMANDE`, `PJA`, `BORDEREAU_SUIVI`, `DOCUMENT_ANNEXE`, etc.) à embarquer avec la facture. Éditable dans l'onglet Document ; les chemins acceptent des placeholders comme `%APP_HOME%`, `%DOC%`, `%DCT%`, `%KCO%`. Les fichiers manquants sont loggés et ignorés — ils ne font jamais échouer le traitement.
+- **TAG_CUSTOMER_SIRET** (BT-46) : nouvelle variable XSL pour le SIRET de l'acheteur, à côté du SIREN acheteur existant.
 
-### Corrections de format XML pour acceptation PA
+### Corrections
 
-Le parser de la Plateforme Agréée s'est avéré sensible à des octets précis que le code historique ne respectait pas :
-
-- `embedPdfInUBL` repassait l'UBL par le transformer Xalan du JDK, qui émet `<?xml version = '1.0' encoding = 'UTF-8'?>` (espaces autour de `=`, apostrophes). Passage à Saxon (déjà utilisé par `convertToUBL`) pour que la sortie corresponde octet pour octet à `<?xml version="1.0" encoding="UTF-8" standalone="no"?>`. Propriété `STANDALONE = "no"` explicite ; attribut `filename` émis avant `mimeCode` pour respecter l'ordre historique.
-- `convertToUBL` force aussi `standalone="no"`, pour que les flux qui contournent `embedPdfInUBL` (exécutions sans pièce jointe) produisent la même déclaration XML acceptée par la PA.
-- Le nouveau `AdditionalDocumentReference` est inséré sur sa propre ligne — l'indentation est recopiée depuis le nœud blanc existant, avec une indentation supplémentaire en tête quand l'élément précédent est lui aussi un nœud Element (les pièces jointes consécutives et le `<cac:AccountingSupplierParty>` qui suit conservent chacun leur séparateur `\n   `).
-
-### Garde-fou de ré-indentation ConfigJson
-
-`tryReIndentJson` désérialisait toute chaîne commençant par `{` ou `[` comme du JSON imbriqué — y compris les variables de gabarit comme `"{content}"`, `"{statusAt}"`, `"{reportName}"` utilisées par d'autres modèles. La désérialisation « réussissait » parce que les crochets s'équilibraient, produisant un objet aux clés non quotées qui rendait `config.json` impossible à relire au rechargement suivant. Nouvelle heuristique `looksLikeJson()` qui exige soit un conteneur vide, soit un vrai démarreur de valeur JSON (clé entre guillemets après `{`, etc.) avant de récurser. Les modèles existants contenant des chaînes `{placeholder}` font désormais l'aller-retour correctement.
-
-### Divers
-
-- `parseUblXml` lit `cbc:LineExtensionAmount` (BT-131) directement et `InvoiceDetailModal` l'affiche tel quel comme montant de ligne au lieu de recalculer `qty × prix ± remises` — le recalcul comptait deux fois quand le prix unitaire était déjà net (une ligne 45 × 12,75 avec une remise ligne de 489,15 affichait 84,60 au lieu de 573,75 dans le modal alors que le PDF était correct).
-- `ubl-template.xsl` : nouveau slot `TAG_CUSTOMER_SIRET` (BT-46) à côté du SIREN acheteur existant.
+- **Sortie XML acceptable par la PA** : la déclaration XML de l'UBL doit correspondre exactement à `<?xml version="1.0" encoding="UTF-8" standalone="no"?>` — le code précédent émettait des variantes que la PA rejetait. Corrigé.
+- **Affichage du montant ligne** dans la modale facture : les montants comportant une remise de ligne étaient recalculés et affichés faux (par ex. une ligne 45 × 12,75 avec une remise de 489,15 s'affichait 84,60 au lieu de 573,75 — le PDF était correct, seule la modale était fausse). Le montant est désormais lu directement dans l'UBL.
+- **Corruption du fichier de configuration** : une passe de ré-indentation désérialisait toute chaîne commençant par `{` comme du JSON imbriqué — y compris des placeholders comme `{content}` ou `{statusAt}` — laissant `config.json` impossible à recharger. Corrigé.
 
 ---
 
 ## 2026.05.1 — 2026-05-05 \{#v2026-05-1\}
 
-Moteur de modèles PDF — Phase 2 : les modèles PDF deviennent des ressources partageables de premier ordre, gagnent une section générique `block` pilotée par XPath, et un éditeur visuel à part entière.
+Les modèles PDF deviennent des ressources réutilisables et partageables, avec un éditeur visuel complet — concevez une fois, réutilisez sur plusieurs documents.
 
-### Modèles PDF en ressources de premier ordre (Phase 2a)
+### Nouveautés
 
-- Nouveau type de ressource `pdf-template`, persisté dans `config-pdf.json` (renommé depuis `config-pdf-templates.json` pour la concision).
-- Nouvelle page **Modèles PDF** (entrée du menu sous Gestion) pour créer, copier, importer, exporter et éditer des mises en page indépendamment de tout modèle de document. Voir [Modèles PDF](./management/pdf-templates.md) pour la référence complète.
-- Les documents référencent une mise en page via la propriété `pdfTemplate` portée par la ressource doc-template. Plusieurs documents peuvent partager un même modèle PDF — édition unique, propagation à l'ensemble.
-- Chaîne de résolution : `pdfTemplate` du doc-template → `defaultPdfTemplate` sur `global` → modèle interne livré. Le nom réservé `built-in` est en lecture seule et toujours disponible comme filet de sécurité.
-- JSON formaté lisiblement sur disque : les objets `template` / `config` imbriqués sont écrits comme de vrais objets JSON indentés (et non comme des chaînes échappées), pour rester lisibles dans n'importe quel éditeur. Aller-retour assuré par `ConfigJson.readPropertyValue`, partagé pour que les loaders restent agnostiques de la forme sur disque.
+- Nouvelle page **Modèles PDF** (dans Gestion) pour créer, copier, importer, exporter et éditer les mises en page indépendamment de tout document. Plusieurs documents peuvent partager le même modèle PDF — éditez une fois, propagez partout.
+- Nouveau type de section **Block** pour des mises en page entièrement personnalisées pilotées par XPath : texte, champs avec formatage (date / devise / nombre / pourcentage), images, lignes / colonnes, rendu conditionnel, blocs répétés, et tableaux qui itèrent sur les lignes de facture ou d'autres collections.
+- Nouveau **éditeur visuel sur canvas** pour les sections Block : vue arborescente, barre d'outils pour ajouter des éléments, inspecteur de propriétés. Chargez un XML d'exemple une fois et le sélecteur XPath autocomplète les chemins depuis des données réelles.
+- L'**aperçu en direct** s'ouvre dans une grande modale en haut du formulaire — fini les allers-retours scroll-up / scroll-down pour itérer sur une mise en page.
 
-### Section générique `block` (Phase 2b)
+### Corrections
 
-- Nouveau type de section `block` — primitives de mise en page pilotées par XPath qui se composent en n'importe quel contenu, sans classe dédiée :
-  - `text` (littéral), `field` (valeur XPath, avec libellé inline optionnel et formatage `date` / `currency` / `number` / `percent`) ;
-  - `image`, `spacer`, `hr` ;
-  - conteneurs `row` / `column` (alignement + écart) ;
-  - `repeat` (XPath → liste, rend son `child` par occurrence) ;
-  - `if` (XPath → booléen, rend `child` si vrai) ;
-  - `table` — grille `lignes × colonnes` avec bordures de cellules optionnelles et ligne d'en-tête stylée. Définir `xpath` la fait itérer (une ligne par occurrence), les enfants servant de gabarit par ligne.
-- Les XPath des cellules à l'intérieur d'une table itérante sont automatiquement rendus relatifs : un chemin absolu commençant par le XPath de l'itérateur est tronqué au moment du rendu pour que chaque ligne s'évalue dans son propre contexte itéré.
-- `align: end | center` sur un `row` réduit la ligne à ~50 % de largeur et aligne la table entière de ce côté, au lieu d'étirer des cellules à parts égales sur toute la page (les paires « libellé + valeur » restent groupées à droite).
-
-### Éditeur visuel (Phase 2c)
-
-- Nouveau `BlockCanvasEditor` monté dans le tiroir de toute section `block` : trois panneaux empilés (arbre, barre d'outils, inspecteur) plus une issue de secours JSON.
-- Inspecteur : formulaires d'attributs par type avec sous-panneau de style ; le sélecteur **Type** en haut transforme le nœud sélectionné sur place (column → repeat sans suppression / recréation) via le helper `transmuteKind` qui reporte les champs compatibles.
-- Le chargeur d'XML d'exemple est remonté à l'en-tête du modèle — chargement unique, tous les blocks réutilisent les entrées pour l'autocomplétion XPath.
-- Le sélecteur XPath préserve les préfixes de namespace `cbc:` / `cac:` (requis par le moteur namespace-aware côté backend) et émet **`/*/<chemin-complet>`** pour que les sélections soient sans ambiguïté et indépendantes de la racine (Invoice ou CreditNote indifféremment). À l'intérieur d'un ancêtre itérant, le sélecteur supprime en plus le préfixe de l'itérateur pour que les cellules démarrent en chemin relatif (`cbc:TaxAmount` au lieu de `/*/cac:TaxTotal/cac:TaxSubtotal/cbc:TaxAmount`).
-- L'aperçu en direct est remonté en haut du formulaire et s'ouvre dans une modale 960 × 85vh — fini la valse scroll-down / scroll-up pendant l'itération sur une mise en page.
-- Le sélecteur de section est remonté en haut et converti en chips : un clic ajoute une section en haut de la liste, automatiquement ouverte pour rendre l'inspecteur immédiatement visible. `block` peut être ajouté plusieurs fois par modèle ; chaque block porte un `name` utilisateur affiché à côté de la ligne de section.
-
-### Refonte du tiroir des sections prédéfinies
-
-- Les bascules utilisent le composant `Checkbox` partagé (style rond-bleu cohérent au lieu des cases natives en mode sombre).
-- Les bascules sont parsées par préfixe `Catégorie · Nom` et regroupées en colonnes côte à côte qui reflètent la mise en page PDF réelle — *Header* se lit comme **METAS** | **SUPPLIERS**, *Line Table* comme **Group headers** | **Columns** | **Sub-details** au lieu d'une longue liste plate.
-- Bordure du tiroir adoucie : trait fin avec un accent bleu de 2 px à gauche.
-
-### Corrections critiques
-
-- **Scanner JSON top-level :** le parser maison utilisait un naïf `indexOf` pour localiser `"<clé>"`, qui faisait silencieusement correspondre la première occurrence imbriquée. Une table avec `children` listé avant `xpath` se retrouvait avec son `xpath` résolu vers celui du *premier enfant*, l'itérateur retournait 0 nœud, et la table entière disparaissait du PDF rendu. Remplacé par `findTopLevelValueStart` qui respecte la profondeur de crochets et l'état de chaîne, et n'identifie que les clés au niveau 1. Concerne `readString`, `readFloat`, `readBool`, `readStringArray` et les recherches `tree` / `children` / `child` / `style` dans `parseNode`.
-- **Boucle d'écho de l'éditeur :** `parseConfig` perdait le champ `name` du block et `useEffect [value]` de `PdfTemplateForm` re-parsait à chaque écho — combinés, chaque frappe déclenchait `setSelectedPath([])` et démontait l'inspecteur, volant le focus et (sur émissions répétées) figeant la page. Les deux fonctions préservent désormais `name`, et les deux effets de seed sautent quand la valeur entrante correspond à la dernière émise (`lastEmittedRef`).
-- **Tables itérantes :** un NodeList vide retourne désormais `null` proprement pour qu'OpenPDF n'étouffe pas sur une table à 0 ligne, et chaque cellule est rendue dans son propre try/catch — une cellule en erreur devient un placeholder `[ERROR]` inline au lieu de casser la mise en page complète de la ligne.
-
-### Backend / helpers partagés
-
-- `PdfContext` porte désormais le `Document` parsé namespace-aware pour que les sections `block` exécutent du XPath sans re-parser le XML UBL.
-- `ConfigJson` expose `readPropertyValue`, `findStringEnd`, `findMatchingBracket`, `jsonUnescape`, `compactJson` et `tryReIndentJson` pour que d'autres types de ressources puissent opter pour le stockage JSON imbriqué formaté lisiblement.
+- **Tableaux qui disparaissent des PDF** : un tableau dont `children` était listé avant son `xpath` perdait son itérateur et retournait 0 ligne. Corrigé.
+- **Blocage de l'éditeur** sur édition rapide : l'éditeur sur canvas se rafraîchissait à chaque frappe et volait le focus. Corrigé.
 
 ---
 
 ## 2026.05.0 — 2026-05-05 \{#v2026-05-0\}
 
-Refonte importante du pipeline de traitement de documents, du générateur PDF et de la surface REST des factures.
+Version importante qui unifie le traitement des documents : les entrées XML et UBL passent par le même point d'entrée unique, c'est le modèle de document lui-même qui décide quel pipeline exécuter.
 
-### Traitement piloté par le modèle de document (XML ou UBL)
+### Nouveautés
 
-- Nouvelle propriété `source` (`XML` | `UBL`) sur chaque modèle de document. Choisie dans l'onglet Document de **Gestion → Documents**.
-- `XML` conserve le comportement actuel (XSL → UBL → BDD → envoi PA).
-- `UBL` cible les fichiers déjà au format UBL 2.1. La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via une regex à groupes nommés (`idPattern` + valeurs par défaut `docDefault` / `dctDefault` / `kcoDefault`). Exemples :
-  - `F202600025` → `^(?<dct>[A-Z]+)(?<doc>\d+)$` (`kcoDefault = 00001`)
-  - `38706889RI00001` → `^(?<doc>\d+)(?<dct>[A-Z]+)(?<kco>\d+)$`
-- L'onglet Document inclut un assistant **Exemple cbc:ID + Suggérer + Tester** qui dispense d'écrire la regex à la main : coller un ID réel, *Suggérer* remplit la regex en segmentant sur les transitions lettres / chiffres, *Tester* applique le motif et les valeurs par défaut et affiche en direct le `(doc, dct, kco)` extrait.
-- La convention `DOC_DCT_KCO_ubl.xml` n'est plus exigée — le traitement UBL extrait toujours les clés depuis `cbc:ID`. Le nom de fichier peut être quelconque.
+- **Une seule page Traiter un document** remplace les anciennes pages Process XML et Process UBL. La page adapte ses contrôles selon la source du modèle (spool XML, ou facture UBL déjà formée).
+- **Propriété Source** sur chaque modèle de document (XML ou UBL). Pour les entrées UBL, la clé primaire (doc, dct, kco) est extraite du `cbc:ID` de la facture via une expression régulière. Un assistant intégré **Suggérer + Tester** dans l'onglet Document permet de coller un vrai ID et de générer la regex automatiquement.
+- **Une seule commande CLI** : `-process` remplace `-xml` et `-ubl`. La CLI déduit le pipeline depuis la source du modèle.
+- Nouvelle **page Documents** sous Gestion (séparée de Paramètres) pour gérer les modèles de document : ajouter, copier, importer, exporter, supprimer, description.
+- **Générateur PDF réécrit** : le générateur monolithique est découpé en sections composables (En-tête, Parties, Tableau de lignes, TVA, Totaux, Paiement, Notes…). Chaque section peut être réordonnée ou configurée par modèle de document via l'éditeur de modèles PDF.
+- **Modèles PDF par document** : le PDF de chaque facture est rendu depuis le modèle attribué à son document. Une nouvelle colonne `F564231.UHTMPL` trace quel modèle a été utilisé pour que l'aperçu PDF utilise toujours la bonne mise en page.
 
-### Point d'entrée unique pour le traitement
+### Améliorations
 
-- Les pages **Process XML** et **Process UBL** disparaissent. Une seule page **Process Document** les remplace ; le formulaire bascule entre contrôles XML et UBL selon le `source` du modèle choisi.
-- Une seule route backend : `POST /api/process` (remplace `/api/run` et `/api/process-ubl`).
-- Une seule commande CLI : `-process <config> <modèle> <fichierOuDossier> [type] [drapeaux]` (remplace `-xml` et `-ubl`). `nomaubl.sh process …`.
-- `-fetch-single` et `-fetch-all` perdent l'argument `processType` — inféré à partir du modèle. **Fetch Input** et **Paramètres → Planification** perdent également le sélecteur *Type de traitement*.
-
-### Nouvelle page Documents
-
-- **Sidebar → Gestion → Documents** ouvre une page dédiée aux modèles de documents (les entrées de `config-documents.json` référencées par `F564231.UHTMPL`). Elle dispose de ses propres boutons **Ajouter / Importer / Copier / Supprimer** et d'un champ **Description**. Les Paramètres conservent **Ajouter Connecteur / Copier / Supprimer** pour les modèles système et les connecteurs uniquement.
-
-### F564231.UHTMPL — lien facture → modèle
-
-- Nouvelle colonne `UHTMPL VARCHAR2(40)` sur la table d'en-tête. Stockée au moment du traitement (chemins XML et UBL) pour permettre au générateur PDF de retrouver le `pdfTemplate` JSON spécifique au document lors du rendu.
-- DDL ajouté à `sql/oracle/ddl.sql` et `sql/postgres/ddl.sql`.
-
-### Surface REST factures — clé primaire propre
-
-- Toutes les routes `/api/invoices/{…}` utilisent désormais `(doc, dct, kco)` directement (`/api/invoices/{doc}/{dct}/{kco}/lines`, `/lifecycle`, `/errors`, `/vat`, `/notes`, `/xml`, `/resend`, `/validate`, `/status`, ainsi que `PUT` / `DELETE`). L'identifiant composite, le helper `castToVarchar(UHDOC)` et le `||UHDCT||UHKCO` dans les WHERE disparaissent pour toute recherche par clé. Plus rapide (utilise les index) et propre côté Postgres.
-- Nouveau helper `bindDoc()` qui lie le paramètre numérique `UHDOC` via `setInt` ; Postgres ne rejette plus `setString` sur une colonne `INTEGER`.
-
-### `/invoice/view` (PDF) — recherche à double forme
-
-- `GET /invoice/view?id=<numéro de facture UBL>` (comparé à `UHK74FLEN`) **ou** `?doc=&dct=&kco=`. La page peut être liée depuis n'importe où — y compris collée dans le navigateur — sans nécessiter d'identifiant composite.
-
-### Refonte du générateur PDF
-
-- `InvoicePdfGenerator` éclaté (1 027 lignes monolithiques) en un package `custom.ubl.pdf` : `PdfTheme`, `UblXmlHelpers`, `InvoiceData`, `UblParser`, `PdfDrawing`, `PdfContext`, `PdfTemplate` / `PdfTemplateEngine` / `PdfTemplateLoader` / `DefaultPdfTemplate`, registre `PdfSection`, et une classe par section sous `custom.ubl.pdf.sections/` (Header, Parties, Agent, LineTable, DocAllowances, VatBreakdown, TotalsBox, Payment, NoteBlock).
-- Nouveau moteur de template JSON — les sections sont listées et réordonnées dans le modèle, chacune avec sa configuration `config` (visibilité des colonnes, bascules de sous-détails, comportement d'en-tête de groupe, saut de page par livraison, …). Édité dans **Documents → 🖼 PDF Template** : réordonnancement par glisser-déposer, drawer de configuration par section et iframe d'aperçu en direct (`POST /api/pdf-templates/preview`).
-- L'override par document est stocké dans la propriété `pdfTemplate` JSON du modèle (lien via `F564231.UHTMPL`). Si vide, la mise en page par défaut est utilisée.
-
-### Améliorations frontend
-
-- Sidebar — nouvelle entrée **Documents** sous Gestion ; entrée *Process Document* remplaçant *Process XML* / *Process UBL* ; barre de défilement fine adaptée au thème pour atteindre les groupes en débordement (clair et sombre).
-- Les placeholders de chemin (`%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%`) dans la page Process Document sont résolus côté serveur avant le branchement absolu / basename, pour que les fichiers choisis via *Browse* fonctionnent même lorsque `dirInput` contient un placeholder.
-- *XML — sortie spool JDE* renommé en *Spool XML* partout — le pipeline XSL est générique, seul BIP est spécifique à JDE.
-- Diverses petites corrections : binding de la description sur la liste Documents, nettoyage des modales Settings, statut / send-status / email migrés vers `(doc, dct, kco)`, suppression de `augmentPromptWithSitemap` dans AiAssistant.
-
-### Rôles / Permissions
-
-- Nouvelle clé de page `documents` dans l'éditeur de rôles (sous **Gestion**) afin que les installations avec rôles restreints puissent autoriser ou refuser la nouvelle page.
+- L'extraction des clés par nom de fichier (`DOC_DCT_KCO_ubl.xml`) n'est plus obligatoire. Les noms de fichiers UBL peuvent être n'importe quoi.
+- Toutes les routes `/api/invoices/...` utilisent maintenant `(doc, dct, kco)` directement dans l'URL — plus rapide, plus propre et compatible PostgreSQL.
+- L'aperçu PDF `/invoice/view` accepte soit le numéro de facture UBL (`?id=...`) soit la clé composée (`?doc=&dct=&kco=`).
 
 ---
 
 ## 2026.04.10 — 2026-05-04 \{#v2026-04-10\}
 
-### Paramètres e-invoicing — configuration hybride envoi FTP / statut API
+### Améliorations
 
-- L'onglet PA Connection masquait précédemment la configuration API (Base URL, Authentification, Récupération de statut, Planification en arrière-plan) lorsque **Send Mode = FTP**, rendant impossible une configuration hybride où les factures partent en SFTP mais où la relève des imports, la récupération des statuts et les actions vendeur passent toujours par l'API. Toutes les sections sont désormais toujours visibles ; le sélecteur de mode est renommé *Send Mode* avec un texte d'aide précisant qu'il ne pilote que le transport sortant. Chaque section non active reçoit une mention grise (*utilisé pour la récupération de statut / l'import / les actions vendeur* ou *utilisé lorsque Send Mode = FTP*) qui rend visible d'un coup d'œil le rapport entre champs et opérations.
+- **Paramètres e-Invoicing** : il est désormais possible de configurer un mode hybride où les factures partent en SFTP mais où l'interrogation des statuts, la récupération du cycle de vie et les actions vendeur passent par l'API. Avant, la section API était masquée dès que le mode d'envoi passait à FTP.
 
-### XSL — BT-46 (SIRET acheteur)
+### Corrections
 
-- Correction de `XTSE0680: Parameter siren is not declared in the called template` dans `ubl-common.xsl` : l'appel à `ubl:party-siret` passait `<xsl:with-param name="siren">` au lieu de `name="siret"` (copier-coller depuis le bloc adjacent `ubl:company-siren`).
-- Correction de la validation XSD `cvc-complex-type.2.4.a` lors de l'émission de BT-46 : `<cac:PartyIdentification>` est un enfant de `<cac:Party>`, **pas** de `<cac:PartyLegalEntity>`. L'émission du SIRET sort de `ubl:party-legal-entity` (l'appel d'aide intégré était structurellement invalide) et figure désormais directement dans le bloc `cac:Party` du XSL document, avant `cac:PartyTaxScheme` / `cac:PostalAddress`. Les XSL document qui ont besoin de BT-46 doivent suivre le même schéma.
-- `TAG_CUSTOMER_SIRET` (BT-46) ajouté au catalogue de l'éditeur XSL et promu dans la liste principale de la section acheteur, à côté de `TAG_CUSTOMER_SIREN` dans *Variables*.
+- **BT-46 (SIRET acheteur)** en XSL : deux problèmes empêchaient l'émission correcte du SIRET acheteur. Corrigé — `TAG_CUSTOMER_SIRET` est désormais disponible dans le catalogue de l'Éditeur XSL et est correctement émis dans l'UBL.
 
 ---
 
 ## 2026.04.9 — 2026-04-30 \{#v2026-04-9\}
 
-### Paramètres — correction de l'état d'éditeur obsolète au changement de liste
+### Nouveautés
 
-- Le passage d'un modèle à un autre ouvrait parfois l'éditeur de droite avec les lignes de la liste précédemment consultée. Deux causes : les éditeurs qui amorcent leur état interne depuis les props au montage (les 14 éditeurs de listes, StatusesEditor, DocumentTypesEditor, …) gardaient les lignes du modèle précédent car leur initialiseur `useState` ne s'exécute qu'une fois ; et `selectTemplate()` basculait `selected` immédiatement mais `props` n'était mis à jour qu'au retour du fetch, si bien que des clics rapides pouvaient acheminer un fetch obsolète vers le mauvais modèle.
-- Correction : le rendu de l'éditeur est désormais enveloppé dans un `<div key={selected}>` keyé avec `display: contents`, ce qui force React à démonter l'éditeur précédent et à monter une instance fraîche à chaque sélection. `selectTemplate()` purge de manière synchrone `editData / props / rawProps` et tient un compteur de séquence de fetch, abandonnant toute réponse rendue obsolète par un clic ultérieur.
+- Bouton **Télécharger UBL** dans l'onglet Historique de la modale de détail facture, à côté de Valider UBL. Sauvegarde le XML UBL brut sous le nom `{doc}-{dct}-{kco}.xml`.
+- **Accueil automatique de l'assistant IA** : ouvrir le panneau chat pour la première fois d'une session envoie un message d'accueil localisé, l'assistant se présente et liste ses capacités principales sans qu'il faille saisir un prompt.
 
-### Détail facture — bouton Télécharger UBL
+### Corrections
 
-- Nouveau bouton *Télécharger UBL* dans l'onglet *History* de la modale de détail facture, à côté de *Validate UBL*. Enregistre le XML UBL brut stocké dans `F564231.UHTXFT` dans un fichier local nommé `{doc}-{dct}-{kco}.xml`. Réutilise l'endpoint `GET /api/invoices/{id}/xml` et le `ublRawXml` déjà chargé dans l'état de la modale, sans appel supplémentaire. Le bouton est désactivé avec une infobulle tant que le XML n'est pas chargé.
-
-### Assistant IA — message d'accueil automatique à la première ouverture
-
-- L'ouverture du panneau de chat sans historique envoie automatiquement un message d'accueil localisé (*Bonjour* / *Hello* selon la langue de l'IHM), pour que l'assistant se présente et liste ses principales capacités sans que l'utilisateur n'ait à saisir une première requête. À usage unique par chargement de page : la fermeture / réouverture du panneau en cours de session ne répète pas le message d'accueil, et les conversations existantes sont préservées.
+- **Éditeurs des paramètres affichant des données périmées** : passer d'une liste de référence à une autre pouvait ouvrir l'éditeur avec les lignes de la liste précédente. Corrigé.
 
 ---
 
 ## 2026.04.8 — 2026-04-29 \{#v2026-04-8\}
 
-### Assistant IA — outil d'historique de cycle de vie + délégation REST
+### Améliorations de l'assistant IA
 
-- Nouvel outil local `lifecycle_history` : retourne toutes les transitions de statut d'une facture issues de F564235 (séquence, code statut + libellé, message, date / heure, motif de rejet PA + libellé, action attendue + libellé, note de statut) — même charge utile que celle rendue par l'onglet *History* de la modale de détail facture. Permet à l'IA de répondre à *« pourquoi la facture X a-t-elle été rejetée / qu'a dit la PA »* sans recourir à *« je n'ai pas accès à cet historique »*.
-- `validation_errors` et `lifecycle_history` délèguent désormais aux gestionnaires REST existants `WebApiHandler.handleInvoiceErrors` / `handleInvoiceLifecycle` (l'onglet *History* de l'IHM React appelle les mêmes endpoints). Le SQL dupliqué dans les outils IA a été supprimé, ce qui fait bénéficier l'IA des noms de tables configurables `UBLTableConfig`, des requêtes adaptées au dialecte (Oracle vs Postgres) et de la résolution de libellés de statut maintenue côté REST. Une seule source de vérité.
-- Les catalogues complets de statuts factures + e-reporting sont désormais ajoutés au prompt système au moment de la conversation (lus dans `InvoiceStatusCatalog` et `EReportingStatusCatalog`, ce qui propage les personnalisations utilisateur). Le modèle devinait des codes à partir d'expressions comme *litige* (49 au lieu du vrai 207) — il dispose désormais de la table en contexte et utilise le code exact avec `list_invoices` / `list_ereports`.
-- `AIChatPanel` : la zone de saisie reprend le focus dès que l'assistant a fini de diffuser sa réponse, supprimant la nécessité de cliquer à nouveau dans le champ pour poser la question suivante.
+- L'assistant peut désormais répondre à des questions comme **« pourquoi la facture X a-t-elle été rejetée »** ou **« qu'a dit la PA »** — il a accès à l'historique de cycle de vie de la facture (les mêmes données affichées dans l'onglet Historique).
+- L'assistant connaît maintenant votre **catalogue de codes de statut** (y compris vos personnalisations) — il ne devine plus les codes à partir de mots comme « litige » et utilise le bon code.
+- La zone de saisie du chat reprend automatiquement le focus dès qu'une réponse termine de streamer — fini le clic dans l'input avant chaque question de suivi.
 
 ---
 
 ## 2026.04.7 — 2026-04-29 \{#v2026-04-7\}
 
-### Assistant IA — correction de `url_not_allowed` sur web_fetch
+### Corrections
 
-- Le `web_fetch` d'Anthropic ne télécharge que les URL apparues précédemment dans des messages utilisateur ou des résultats d'outils antérieurs. L'injection sitemap de 2026.04.6 plaçait les URL dans le prompt système où elles ne comptent pas, si bien que chaque fetch retournait `url_not_allowed`. Une première tentative d'exposer le catalogue via un outil personnalisé `list_docs_pages` retournant du JSON a aussi échoué — l'extracteur d'URL d'Anthropic scanne le contenu de `tool_result` en texte brut et ne reconnaît pas les URL encadrées par des guillemets JSON.
-- Correction finale : `list_docs_pages` retourne désormais le sitemap en **texte brut**, une URL par ligne. L'extracteur Anthropic les capture, et l'appel `web_fetch` qui suit aboutit. Claude suit un parcours en deux étapes propre : `list_docs_pages` → `web_fetch` → réponse.
-- Les appels d'outils serveur + leurs résultats sont désormais affichés dans le chat sous forme de pastilles en ligne (📖 `web_fetch · <url>`, 📥 `web_fetch_result · ✓ <url>` ou ❌ `<error_code>`), rendant visibles les modes d'échec auparavant absorbés silencieusement — ce qui a précisément permis de déboguer le problème JSON-vs-texte.
+- **Assistant IA — accès documentation** : l'assistant échouait systématiquement à lire la documentation en ligne (erreurs `url_not_allowed`). Corrigé — l'assistant interroge correctement `docs.nomana-it.fr` pour répondre aux questions produit.
+- **Chat de l'assistant IA** : les appels d'outils et leurs résultats sont désormais affichés sous forme de pastilles visibles dans le chat, donc tout échec est visible au lieu d'être silencieusement absorbé.
 
 ---
 
 ## 2026.04.6 — 2026-04-29 \{#v2026-04-6\}
 
-### Assistant IA — recherche documentaire pilotée par le sitemap
+### Améliorations
 
-- Le modèle savait qu'il pouvait récupérer `docs.nomana-it.fr` mais ignorait quelles URL existaient ; il devinait et ratait, ou abandonnait et répondait depuis ses connaissances antérieures. Le backend récupère désormais `sitemap.xml` une fois au démarrage, filtre les entrées au préfixe documentaire (par défaut `https://docs.nomana-it.fr/nomaubl`), et injecte la liste de pages obtenue dans le prompt système — ce qui amène le modèle à choisir une URL réelle plutôt qu'à deviner.
-- Le sitemap est mis en cache pendant 6 heures et plafonné à 200 pages. Les échecs sont silencieux (le snapshot précédent reste en service) et ne bloquent jamais l'appel chat.
-- Deux nouvelles propriétés `global` optionnelles : `aiDocsSitemapUrl` (par défaut `https://docs.nomana-it.fr/sitemap.xml`, vide pour désactiver l'injection sitemap) et `aiDocsPathPrefix` (par défaut `https://docs.nomana-it.fr/nomaubl`).
+- **Assistant IA — recherche dans la documentation** : l'assistant choisit maintenant la bonne page de documentation au lieu de deviner ou d'abandonner. Il lit le sitemap de `docs.nomana-it.fr` au démarrage pour connaître les pages qui existent réellement.
+- Deux nouveaux paramètres optionnels dans **Paramètres → Système → Global → IA** pour pointer l'assistant vers un site de documentation personnalisé ou en restreindre la portée.
 
 ---
 
 ## 2026.04.5 — 2026-04-29 \{#v2026-04-5\}
 
-### Assistant IA — correction de compatibilité ascendante pour web_fetch
+### Correction
 
-- Les configurations existantes antérieures à 2026.04.4 ne disposent pas de la nouvelle propriété `aiDocsDomains` dans leur modèle `global`, si bien que l'assistant démarrait sans outil `web_fetch` et indiquait (à raison) qu'il n'avait pas accès à la documentation.
-- Nouvelle sémantique pour `aiDocsDomains` dans `AiAssistant` : propriété absente → valeur par défaut `docs.nomana-it.fr` (compatibilité ascendante — aucune édition manuelle requise) ; chaîne vide → désactivation explicite ; `"a,b,c"` → utilisation de cette liste. Aucun changement de BDD ni d'API ; uniquement une valeur par défaut côté serveur.
+- **Assistant IA — accès à la documentation** : sur les installations mises à jour depuis une version antérieure à 2026.04.4, l'assistant répondait qu'il n'avait pas accès à la documentation car le nouveau paramètre était manquant. Il utilise désormais `docs.nomana-it.fr` par défaut, sans intervention manuelle.
 
 ---
 
 ## 2026.04.4 — 2026-04-29 \{#v2026-04-4\}
 
-### Assistant IA — utilisation d'outils (recherche documentaire + outils de données en lecture seule)
+### Nouveautés
 
-- Le panneau de chat permet désormais au modèle d'appeler des outils en cours de conversation au lieu de répondre uniquement depuis ses connaissances antérieures. Deux couches : recherche documentaire via l'outil serveur `web_fetch_20250910` d'Anthropic, avec `allowed_domains` verrouillé sur la liste `global.aiDocsDomains` (par défaut `docs.nomana-it.fr`) ; et outils opérationnels en lecture seule exécutés localement contre la même base que l'IHM (`list_invoices`, `explain_status_code`, `validation_errors`, `list_ereports`). Activable via `global.aiToolsEnabled` (par défaut Y).
-- Nouveau `global.anthropicSystemPrompt` qui surcharge le prompt système intégré. Vide = utiliser le défaut intégré qui décrit le produit, indique l'URL documentaire au modèle et liste les plages de codes statut (1373 / 99xx / 9950 – 9957).
-- Backend récrit dans `AiAssistant.java` : boucle d'appels d'outils (jusqu'à 5 tours), diffuse les deltas de texte sous forme `{type:"token"}` et expose les invocations d'outils sous forme `{type:"tool_call",name,summary}` afin que l'IHM affiche une pastille en ligne (📖 web_fetch, 🔍 outil local) au-dessus de la bulle assistant pendant que l'appel est en cours.
-- Paramètres → System → Global → onglet AI : trois nouveaux champs (System Prompt textarea, Allowed Doc Domains liste séparée par virgules, Custom Tools Y/N).
-- Les réponses de l'assistant sont désormais rendues en Markdown via `react-markdown` + `remark-gfm` : titres, gras, listes, tableaux GFM, blocs de code, code en ligne et liens s'affichent correctement. Les liens externes s'ouvrent dans un nouvel onglet.
-
-Voir [Capacités IA](./application/ai-capabilities.md) pour la référence utilisateur complète.
+- **Assistant IA — utilisation d'outils** : l'assistant peut désormais appeler des outils en cours de conversation pour répondre à votre question au lieu de deviner à partir de ses connaissances. Il peut consulter la documentation, lister des factures, expliquer un code de statut, récupérer les erreurs de validation d'une facture, et lister des rapports e-Reporting.
+- Nouveaux paramètres IA (**Paramètres → Système → Global → IA**) : personnaliser le prompt système, restreindre la consultation de documentation à certains domaines, activer ou désactiver les outils de données.
+- Les réponses de l'assistant sont désormais rendues en Markdown — titres, gras, listes, tableaux, blocs de code et liens s'affichent correctement au lieu de `###` / `**` bruts.
 
 ---
 
 ## 2026.04.3 — 2026-04-29 \{#v2026-04-3\}
 
-### XML E-Reporting — conformité à la spécification Flux 10
+E-Reporting passe en conformité totale avec la spécification officielle FNFE-MPE Flux 10, et plusieurs corrections autour du modèle de données e-Reporting et des éditeurs de paramètres.
 
-- `EReportingXmlBuilder` réécrit pour respecter la nomenclature officielle FNFE-MPE Flux 10 (TT-1..TT-99, TG-8..TG-39). Les anciens noms personnalisés (`<Identifier>`, `<DocumentType>`, `<Flux>`, `<Period>`, `<Customer>`, `<Totals>`, `<TaxBreakdown>`) sont remplacés par ceux de la spec : `<Id>`, `<IssueDateTime><DateTimeString>`, `<TypeCode>`, `<Sender><Id schemeId>+<Name>+<RoleCode>`, `<Issuer><Id schemeId>+<Name>+<RoleCode>`, `<TransactionsReport><ReportPeriod><StartDate>+<EndDate>`. Les dates sont émises au format `yyyymmdd` (période) et `yyyymmddhhmmss` (date d'émission), sans séparateur.
-- Application stricte de la règle **G6.28** de routage B2C / B2BINT : les transactions B2C n'émettent **jamais** de bloc `<Invoice>` individuel — seuls des blocs `<Transactions>` agrégés sont produits (un par CategoryCode + devise, avec des `<TaxSubtotal>` imbriqués portant TaxPercent / TaxableAmount / TaxTotal). Le B2BINT continue d'émettre un `<Invoice>` par facture avec ID, IssueDate, TypeCode, CurrencyCode, Seller (déclarant), Buyer (contrepartie), MonetaryTotal, et `<TaxSubTotal>` par taux.
-- Conformément à **G6.23**, tout `TaxAmount` / `TaxTotal` est désormais exprimé en EUR (l'attribut `currencyId` est verrouillé sur `EUR`) quelle que soit la devise de la facture source. Les montants taxables conservent la devise d'origine.
-- `<Transactions><CategoryCode>` (TT-81) restreint au sous-ensemble de la spec : `TLB1` (livraisons de biens taxables), `TPS1` (prestations de services taxables), `TNT1` (non taxable), `TMA1` (régime de la marge) ; bascule automatiquement sur `TLB1` / `TNT1` selon le taux quand la ligne source contient une valeur hors-liste.
-- Nouvelles propriétés optionnelles du template `e-reporting` : `senderName`, `senderRoleCode` (par défaut `WK`), `issuerName`, `issuerSchemeId` (par défaut `0002`, avec `0223` / `0227` / `0228` / `0229` pour les cas internationaux), `issuerRoleCode` (`SE` / `BY`), `businessProcessId` et `businessProcessTypeId` (TT-28 / TT-29 émis sur le `<BusinessProcess>` par facture en B2BINT uniquement), et `flowName` (TT-2). L'éditeur Settings → Système → E-Reporting expose ces champs en trois sections groupées : Sender (PA), Issuer (Déclarant), Business Process.
-- `<ReportDocument><Id>` est désormais initialisé par défaut à `{siren}-{flux}-{début}-{fin}` quand aucun identifiant de transmission n'est fourni — une valeur stable par période contre laquelle la PA peut dédupliquer.
-- Catalogue de statuts dédié à l'e-reporting (codes **9950 – 9957**), indépendant de la plage invoice 99xx. Le nouveau `EReportingStatusCatalog` charge le nouveau template système `ereporting-statuses` (libellés FR / EN éditables dans **Settings → Système → ereporting-statuses**, en parallèle du template `statuses` existant). Codes : `9950 EREPORT_CREATED`, `9951 EREPORT_SUBMIT_SKIPPED`, `9952 EREPORT_SENT_TO_PA`, `9953 EREPORT_PENDING`, `9954 EREPORT_ERROR_SENT`, `9955 EREPORT_DEPOSITED`, `9956 EREPORT_FAILED_IMPORT`, `9957 EREPORT_REJECTED`. Le catalogue se réamorce automatiquement avec des valeurs par défaut intégrées si le template est absent, donc les installations existantes continuent de fonctionner sans migration manuelle. `EReportingHandler` réécrit pour utiliser ces codes (auparavant il réutilisait ceux des factures) ; le cas « envoi PA désactivé » pose désormais son propre code au lieu de réutiliser `STATUS_CREATED`.
-- `EReportingFetcher` lit désormais les sous-totaux de TVA principalement depuis le XML UBL stocké dans `F564231.UHTXFT` (parse les nœuds `cac:TaxTotal/cac:TaxSubtotal` au niveau document — les sous-totaux par ligne sont ignorés pour éviter le double comptage). Le comportement précédent (lecture de `F564234`) est conservé en repli, pour que les déploiements qui ne matérialisent pas la table de récapitulatif TVA puissent malgré tout produire des reports. Corrige le symptôme « bloc `<Transactions>` vide » sur les reports B2C quand `F564234` n'était pas remplie alors que les factures et leur XML UBL étaient bien stockés.
+### E-Reporting — conformité à la spécification Flux 10
 
-### Settings → éditeurs de listes (perte de focus à la saisie)
+- Le XML émis pour les Flux 10.1 / 10.3 respecte désormais la spécification officielle FNFE-MPE à l'élément près (balises et formats de dates corrects, EUR forcé sur chaque montant de taxe, jeu restreint de codes de catégorie).
+- Les **transactions B2C** sont maintenant correctement agrégées comme exigé par la spec (règle G6.28) — plus jamais émises comme blocs de facture individuels. Le B2BINT conserve l'émission par facture.
+- Nouveaux champs optionnels Déclarant / Émetteur / Destinataire / Processus métier sur le modèle **e-Reporting**, avec un éditeur dédié (sections Sender, Issuer, Business Process).
+- **Codes de statut dédiés à l'e-Reporting** (9950–9957) au lieu de réutiliser les codes de statut des factures. Éditables dans **Paramètres → Système → ereporting-statuses**.
+- **Les rapports B2C pouvaient être vides** : le rapport lisait les sous-totaux de TVA depuis une table qui n'était pas toujours alimentée, produisant un bloc `<Transactions>` vide. Lit maintenant prioritairement depuis le XML UBL, avec l'ancienne méthode en repli.
 
-- Correctif appliqué à **15** éditeurs de listes (Statuses, Countries, ActionCodes, CurrencyCodes, CustomizationIds, InvoiceTypes, PaymentMeans, NoteTypes, DocumentReferenceCodes, RejectionReasonCodes, SchemeIds, UnitCodes, ProfileIds, VatexCodes, VatCategories) : la saisie dans n'importe quelle ligne perdait le focus après chaque caractère — et toute nouvelle ligne ne pouvait pas être remplie.
-- Cause : chaque éditeur disposait d'un `useEffect(() => setRowsState(...), [props])` qui reconstruisait l'état local des lignes à partir des props du parent à chaque render. Comme l'éditeur lui-même renvoie les lignes au parent à chaque frappe (et le parent re-render), un aller-retour était créé qui recomposait le tableau de lignes → React démontait / remontait les inputs → le curseur était éjecté. Pire, `*RowsToProps` filtre les lignes dont la clé / code est vide : toute nouvelle ligne disparaissait des props du parent dès la première frappe hors de la colonne clé.
-- Correctif : suppression de la synchronisation props → rows. Chaque éditeur ensemence ses lignes à partir des props une seule fois au montage et reste l'unique écrivain ensuite. Les clés React restent liées à l'index du tableau, ce qui préserve l'identité des inputs des lignes existantes entre les renders.
-- Pour `StatusesEditor` spécifiquement, les champs `type` et `description` du template sont désormais préservés lors de l'écho vers le parent (ils étaient silencieusement supprimés, ce qui corrompait le template `statuses` à la sauvegarde).
+### Corrections
 
-### Refonte du schéma E-Reporting
-
-- Renommage des colonnes des tables F564240 / F564241 / F564242 selon la structure JDE fournie :
-  - F564240 : `RGDOC → RGUKID` (PK = RGUKID seul, sans composante flux / kco ; déclarée en `NUMBER(15)` sur Oracle / `BIGINT` sur Postgres dans le DDL statique et dans `AuthManager.initTables`), `RGFLUX → RGY56BAR`, `RGTYPCD → RGDCT`, `RGPSTART → RGEFTJ`, `RGPEND → RGEFDJ`, `RGISSUID → RGY56EPID`, `RGINVCNT → RGNINV`. **Suppression** de `RGSENDID` (l'émetteur reste dans la config + l'XML, non persisté) et `RGUKIDSZ` (l'UUID PA n'est plus stocké — la submission est tracée via le statut + le cycle de vie uniquement).
-  - F564241 : la colonne FK vers F564240 conserve le préfixe parent (`RGUKID`) ; `RHFLUX → RHY56BAR` ; suppression de `RHKCO` (la KCO se récupère via la table parente). PK = `(RGUKID, RHSEQN)`.
-  - F564242 : la FK est `RGUKID` ; `RIFLUX → RIY56BAR` ; suppression de la colonne report-`RIKCO`. Le triplet facture perd l'infix `INV` : `RIINVDOC / RIINVDCT / RIINVKCO → RIDOC / RIDCT / RIKCO`. PK = `(RGUKID, RIDOC, RIDCT, RIKCO)`.
-- Mêmes changements dans le DDL Oracle, le DDL Postgres et `AuthManager.initTables` (le bouton **Initialize Database** crée donc la nouvelle structure).
-- `EReportingDatabaseHandler` : renommage du champ `rgdoc → rgukid` ; `kco` n'est plus porté par le handler (seul F564240 le contient, fixé au moment de l'insertReport). `nextSequence()` fait désormais `MAX(RGUKID) + 1` (globalement unique). Signature `insertReport(typeCode, kco, …)` : paramètre `senderId` supprimé. `updatePATransactionId()` supprimé (colonne disparue). Tous les INSERT enfants mis à jour avec les nouveaux noms de colonnes.
-- La sous-requête NOT EXISTS de `EReportingFetcher` réécrite avec les nouvelles colonnes `RIDOC / RIDCT / RIKCO / RIY56BAR`.
-- API REST simplifiée : `/api/ereporting/{flux}/{kco}/{rgdoc}` → **`/api/ereporting/{rgukid}`**. `/api/ereporting/{flux}/{kco}/{rgdoc}/resend` → **`/api/ereporting/{rgukid}/resend`**. JSON renvoyé : `rgdoc` → `rgukid` ; champs `sender` et `paUuid` supprimés.
-- Types frontend, client API, page liste, modale de détail, colonnes et i18n mis à jour en conséquence (le resend renvoie une fois l'UUID PA dans sa réponse, conservé pour l'afficher dans le bandeau de succès).
-- Modale de détail → onglet Factures : suppression de la colonne *Numéro*. Le triplet DOC / DCT / KCO est l'identifiant canonique ; le numéro UBL n'était qu'une copie d'affichage de la même donnée, retirée avec sa clé i18n, le champ `invoiceNumber` de `EReportInvoiceLink` et la jointure `UHK74FLEN` côté backend.
-
-### Dashboard / Carte « À propos »
-
-- Le schematron EXTENDED-CTC-FR est désormais listé dans la carte *À propos de cette version* (clé `frExtendedCtc`, libellé *EXTENDED-CTC-FR*) — il était livré dans le JAR mais absent de `/api/build-info`.
-- `BuildInfo` extrait désormais en priorité l'estampille FNFE-MPE (`Schematron yyyymmdd_NAME_VX.Y.Z …`) **avant** le motif générique `Schematron version X.Y.Z` ; Flux 2 et Extended-CTC-FR intègrent tous deux la version source EN 16931 (1.3.15) dans leurs commentaires, ce qui induisait précédemment le parseur en erreur.
-- Restriction de la date EN 16931 à un format ISO `yyyy-mm-dd` strict, supprimant le `--` parasite hérité du `--&gt;` de fermeture du commentaire.
+- **Éditeurs de listes — perte de focus à la saisie** : sur les 15 éditeurs de listes de référence (Statuts, Pays, Codes Action, Codes Devise, etc.) le curseur était éjecté du champ à chaque frappe, et les nouvelles lignes ne pouvaient jamais être remplies. Corrigé.
+- L'éditeur **Statuts** perdait silencieusement les champs `type` et `description` du modèle à la sauvegarde, corrompant le modèle des statuts. Corrigé.
+- **Tableau de bord / Carte À propos** : le Schematron EXTENDED-CTC-FR figure désormais à côté des autres, et les numéros de version affichés ne retombent plus sur la version source EN 16931 embarquée.
 
 ---
 
 ## 2026.04.2 — 2026-04-29 \{#v2026-04-2\}
 
-### Validation
+### Correction
 
-- Correctif : la re-validation d'une facture existante depuis **InvoiceDetailModal → Historique** (ainsi que le chemin `validateUblDirect`) échouait avec `cvc-elt.1.a: Cannot find the declaration of element 'Invoice'`. La `DocumentBuilderFactory` utilisée pour parser l'UBL n'était pas namespace-aware par défaut, et le validateur XSD ne pouvait donc pas associer `<Invoice>` / `<CreditNote>` au schéma UBL 2.1. `setNamespaceAware(true)` est désormais positionné sur les deux instances de parser.
+- **Re-validation d'une facture en échec** : cliquer sur *Valider UBL* sur une facture existante depuis l'onglet Historique (et le chemin de validation autonome) échouait avec une erreur de schéma. Corrigé.
 
 ---
 
 ## 2026.04.1 — 2026-04-29 \{#v2026-04-1\}
 
-### Journal des traitements
+### Nouveautés
 
-- Le traitement UBL écrit désormais une paire `START` / `END` dans `F564237` afin que le Journal des traitements couvre ProcessUBL (`/api/process-ubl`), fetch-invoices en mode UBL et le CLI `-ubl` — comme le faisait déjà `-xml`. `FEMODE = PROCESS` pour ces lignes ; `FETMPL` reste vide (aucun template de document ne s'applique au traitement UBL).
+- **Profil de validation EXTENDED-CTC-FR** ajouté au validateur. Le profil Schematron actif est désormais choisi automatiquement selon le `CustomizationID` (BT-24) de la facture — EN 16931 + CIUS-FR pour les factures standard, EXTENDED-CTC-FR pour le profil Extended.
+- Les **Customization IDs** sont désormais une liste de référence dédiée dans **Paramètres**, pré-remplie avec les URN standards français (EN 16931, FNFE Basic / Extended CTC, niveaux Factur-X, Peppol BIS Billing 3). L'éditeur UBL Defaults les propose dans une liste déroulante.
+- Le **Journal de traitement** couvre désormais le traitement UBL (avant XML uniquement) — chaque exécution UBL apparaît dans le journal comme une exécution XML.
 
-### Page Validation UBL
+### Améliorations
 
-- Correctif : l'upload d'un fichier UBL ne tombe plus dans `<input>/_ubl/` (substitution littérale de la sentinelle `_ubl`). L'upload utilise désormais le dossier conventionnel `<input>/ubl/`, en cohérence avec les endpoints fetch / list-files.
-- Correctif : la validation d'un fichier UBL uploadé n'échoue plus avec `No such file or directory`. Le nom de base présent dans le formulaire est résolu vers `<dirInput>/ubl/` avant parsing ; les chemins absolus issus du navigateur de fichiers continuent de fonctionner.
+- Le **mode Replace** purge désormais aussi l'historique de cycle de vie et les erreurs de validation au retraitement, donc les rejeux ne mélangent plus d'entrées périmées avec la nouvelle exécution.
 
-### Validation
+### Corrections
 
-- Nouveau schematron **EXTENDED-CTC-FR** (FNFE-MPE `EXTENDED-CTC-FR-UBL-V1.3.0`) embarqué et câblé dans `UBLValidator`.
-- Le schematron français appliqué est désormais piloté par `cbc:CustomizationID` (BT-24). Lorsque l'URN contient `EXTENDED` / `extension`, la règle EXTENDED-CTC-FR est exécutée **à la place de** EN 16931 + CIUS-FR (sur-ensemble dérivé qui assouplit volontairement certaines règles EN 16931 — `UBL-CR-550` est par exemple commentée pour autoriser `InvoiceLine/Delivery`). Pour toutes les autres valeurs, le comportement précédent est conservé : base EN 16931 + surcouche CIUS-FR (BR-FR Flux 2). CPRO-B2G continue de s'auto-déclencher sur `cbc:Note` `#ADN#B2G` quel que soit le profil.
-
-### Configuration / UBL Defaults
-
-- Nouvelle liste système `customization-ids` (BT-24) pré-remplie avec les URN françaises standard (base EN 16931, FNFE-MPE Basic / Extended CTC, Factur-X Minimum / Basic / Basic WL / Extended, Peppol BIS Billing 3) — pleinement éditable depuis **Settings → Customization IDs**.
-- **UBL Defaults → Header** : BT-24 est désormais une liste déroulante alimentée par la liste `customization-ids` (la saisie libre reste accessible en repli si la liste est vide ou si la valeur n'est pas enregistrée).
-
-### Mode replace
-
-- Le retraitement en mode replace purge désormais `F564235` (cycle de vie) et `F564236` (erreurs de validation) en plus de `F564231` / `F564233` / `F564234`. Auparavant ces deux tables append-only continuaient à croître à chaque rejeu, mêlant un historique de cycle de vie périmé et des erreurs de validation obsolètes aux données du dernier run.
-- Nouvelle méthode `UBLDatabaseHandler.purgeForReplace()` qui efface en une seule fois les cinq tables UBL pour un `(doc, dct, kco)` donné. Appelée par `UBLInvoiceProcessor.process` (chemin UBL) et `CustomUBL` (chemin XML) dès que `replaceMode=true`, de sorte que les deux chemins ont désormais une sémantique replace identique, quelle que soit la présence de la ligne F564230 préexistante.
+- **Répertoire d'upload UBL** : un fichier UBL uploadé atterrissait dans un mauvais chemin (`<input>/_ubl/`) et la validation échouait ensuite avec « No such file or directory ». Les deux sont corrigés — les uploads vont dans `<input>/ubl/` et la validation résout correctement le chemin.
 
 ---
 
 ## 2026.04.0 — 2026-04-29 \{#v2026-04-0\}
 
-### E-Reporting (Flux 10.1 / 10.3)
+Version majeure : l'e-Reporting (Flux 10.1 / 10.3) devient une fonctionnalité de premier plan, accompagnée d'un nouveau Journal de traitement et d'une nouvelle page Notes de version.
 
-- Nouvelle page **E-Reporting** au premier niveau : liste, modale de détail, dialogue de génération.
-- Nouvelles tables `F564240`, `F564241`, `F564242` (configurables dans le paramétrage `db-nomaubl` ; créées par **Initialize Database**).
-- Nouveau template système `e-reporting` + surcharges par société `e-reporting-{kco}` ; la soumission réutilise le token PA de `e-invoicing[-{kco}]` via le nouvel endpoint `report-import`.
-- CLI : `-ereporting <config> [start=AAAAMMJJ] [end=AAAAMMJJ] [kco=...] [flux=10.1,10.3] [type=IN]`.
-- Ordonnanceur d'arrière-plan : nouvelle tâche `ereportingInterval` dans `global`.
-- Modale de détail : l'onglet Factures utilise un `DataTable` avec export CSV / Excel.
-- Modale de détail : bouton de téléchargement du XML généré (remplace l'onglet XML inline).
+### Nouveautés
 
-### Journal des traitements
+- **E-Reporting** : nouvelle page de premier niveau pour générer, lister et inspecter les rapports Flux 10.1 (B2C) et 10.3 (B2BINT). Inclut une fenêtre de génération avec sélecteur de période, une modale de détail avec les factures incluses et un export CSV / Excel, plus une action « Télécharger XML ».
+- **Ligne de commande** : nouveau mode `-ereporting` avec filtres par plage de dates, société et flux.
+- **Planificateur d'arrière-plan** : nouvelle tâche `ereportingInterval` pour générer automatiquement les rapports selon un calendrier.
+- **Journal de traitement** : nouvelle page sous Gestion pour inspecter chaque exécution, avec une vue groupée (une ligne par job START → END avec badge de statut, durée et liste d'étapes dépliable) et une vue à plat. Filtres par mode, modèle, période (par défaut 7 derniers jours) et nom de fichier.
+- **Page Notes de version** (sous Documentation) qui affiche ce fichier dans l'interface, en français ou en anglais selon la langue active, avec un sommaire.
+- **Tableau de bord** : nouvelle carte « À propos de cette version » indiquant le numéro de version, la date de build et les versions des Schematron embarqués.
 
-- Nouvelle entrée **Processing Log** sous le menu *Management*, basée sur `F564237`.
-- Vue groupée (par défaut) : chaque traitement est replié sur une seule ligne `START → END` avec badge de statut, durée et liste dépliable des étapes intermédiaires ; la vue à plat est conservée pour les utilisateurs avancés.
-- Barre d'outils : listes déroulantes pour **Mode** et **Modèle**, sélecteur de période (défaut : 7 derniers jours), recherche par nom de fichier.
+### Autre
 
-### Dashboard
-
-- Nouvelle carte **À propos de cette version** ancrée en bas du dashboard avec le numéro de version, la date de build, la version du profil AFNOR et les versions de chaque module Schematron (EN 16931, BR-FR Flux 2, BR-FR CPRO).
-
-### Documentation
-
-- Nouvelle page **Notes de version** (menu Documentation) qui affiche ce fichier.
-- Maintenue en deux langues — `RELEASE.md` (anglais) et `RELEASE.fr.md` (français) embarqués dans le JAR ; la page sélectionne la bonne en fonction de la langue active de l'IHM.
-- Sommaire en haut de page avec une vignette par version cliquable.
-- Rendu Markdown maison avec prise en charge de la continuation paresseuse des listes (les puces réparties sur plusieurs lignes sont rendues comme un seul élément).
-
-### Settings
-
-- L'éditeur `db-nomaubl` expose les trois nouveaux noms de tables e-reporting (`tableEReporting`, `tableEReportingHist`, `tableEReportingMap`), avec les valeurs par défaut `F564240` / `F564241` / `F564242`.
-- L'action **Initialize Database** crée désormais les trois tables e-reporting en plus des tables UBL / auth existantes.
-- Le sélecteur de pages dans l'écran **Rôles** expose les nouvelles pages `processinglog` et `releasenotes` afin de pouvoir y donner accès aux rôles existants.
-
-### Backend
-
-- Défauts `DatabaseDialect.writeText` / `readText` — le XML est stocké en `CLOB` (Oracle) / `TEXT` (PostgreSQL) via `setString` / `getString` portables (évite le piège pgjdbc `getClob → OID`).
-- `nodeToBytes` dans `UBLDatabaseHandler` force désormais `OutputKeys.INDENT="no"` afin que le XML écrit dans `F564230.FETXFT` ne soit pas pretty-printé par Saxon en mode fat-jar (même correctif que celui déjà appliqué à l'UBL).
-- `/api/build-info` (public) retourne les métadonnées de version + les fichiers `RELEASE.md` / `RELEASE.fr.md` embarqués.
+- **Initialiser la base de données** crée maintenant les trois nouvelles tables e-Reporting (F564240 / F564241 / F564242) en plus des tables existantes. Les noms de tables sont configurables dans **Paramètres → db-nomaubl**.
+- L'éditeur **Rôles** expose les deux nouvelles pages (Journal de traitement, Notes de version) pour pouvoir y donner accès aux rôles existants.
 
 ---
 
 ## 1.0.0 — Version initiale \{#v1-0-0\}
 
-NomaUBL est une plateforme e-invoicing Java 17 + React qui transforme les sorties ERP (JD Edwards, SAP, NetSuite, ERP personnalisé) en documents **UBL 2.1** conformes, les valide, les soumet à une **Plateforme Agréée (PA)** française et trace l'intégralité du cycle de vie des factures.
+NomaUBL est une plateforme e-invoicing Java 17 + React qui transforme les sorties JD Edwards en documents **UBL 2.1** conformes, les valide, les soumet à une **Plateforme Agréée (PA)** française et trace l'intégralité du cycle de vie des factures.
 
-### Pipeline principal (ERP source → UBL → PA)
+### Pipeline principal (JDE → UBL → PA)
 
-- **Extraction du XML JDE** depuis la file d'attente BIP (`F95630` / `F95631` / `F9563110`), l'archive JDE, en SFTP ou depuis le système de fichiers local ; routage par template de type de document (`invoices`, `credit_notes`, …).
+- **Extraction du XML JDE** depuis la file d'attente BIP (`F95630`/`F95631`/`F9563110`), l'archive JDE, en SFTP ou depuis le système de fichiers local ; routage par template de type de document (`invoices`, `credit_notes`, …).
 - **Transformation XSLT 2.0** via Saxon-HE — produit des factures et avoirs UBL 2.1 à partir d'un framework XSL configurable (`ubl-common.xsl` + `ubl-template.xsl`).
 - **Validation** : XSD (UBL 2.1) + Schematron — **EN 16931**, **BR-FR Flux 2** (CIUS-FR / FNFE-MPE) et **BR-FR CPRO** (Chorus Pro pour le B2G), avec gestion des sévérités (`fatal`, `error`, `warning`, `info`).
 - **Soumission PA** en HTTP (Java 11 `HttpClient`), token OAuth2 mis en cache et auto-rafraîchi sur 401, plus un canal SFTP de secours.
@@ -935,17 +526,17 @@ Schéma Oracle / PostgreSQL (configurable dans `db-nomaubl`) :
 | `F564235` | Événements de cycle de vie (historique) |
 | `F564236` | Erreurs de validation XSD / Schematron |
 | `F564237` | Journal de traitement runtime (un événement START / END / erreur par ligne) |
-| `F564250` / `F564251` / `F564252` | Utilisateurs / Rôles / Sessions |
+| `F564250`/`F564251`/`F564252` | Utilisateurs / Rôles / Sessions |
 
 - **DDL adaptée au dialecte** via `DatabaseDialect` — Oracle (`BLOB`, `NUMBER`, `VARCHAR2`) et PostgreSQL (`BYTEA`, `INTEGER`, `VARCHAR`).
-- L'action **Initialize Database** dans *Settings* crée tout le schéma et provisionne les rôles `admin` / `viewer` par défaut.
+- L'action **Initialize Database** dans Settings crée tout le schéma et provisionne les rôles `admin` / `viewer` par défaut.
 - **Dates JDE Julian** stockées en entiers (`CYYDDD - 1900000`) et converties à la volée pour l'IHM.
 
 ### Catalogue de statuts factures
 
 - 30+ codes couvrant le cycle de vie complet **AFNOR XP Z12-014 V1.3** : `STATUS_CREATED → STATUS_VALIDATED → STATUS_SENT_TO_PA → STATUS_PENDING → STATUS_DEPOSITED → …` plus les états litige, factoring et erreurs de routage.
-- Codes workflow internes (`9900` – `9907`) et codes UNTDID 1373 mappés à la PA (`1`, `8`, `10`, `37`, `43`, `45` – `51`).
-- Tous les codes / libellés / mappings PA sont **pilotés par les données** depuis le template système `statuses` — éditables dans *Settings*.
+- Codes workflow internes (`9900`–`9907`) et codes UNTDID 1373 mappés à la PA (`1`, `8`, `10`, `37`, `43`, `45`–`51`).
+- Tous les codes / libellés / mappings PA sont **pilotés par les données** depuis le template système `statuses` — éditables dans Settings.
 - `StatusTransition.apply()` met à jour `F564231` et insère un événement `F564235` en un seul appel.
 
 ### CLI
@@ -960,7 +551,7 @@ Modes interactifs et batch — tous pilotés par un unique `config.json` :
 | `-fetch-single`, `-fetch-all` | Récupère depuis BIP / archive / répertoire + traitement |
 | `-fetch-import` | Interroge la PA sur le statut des factures en attente (9906) |
 | `-fetch-status` | Récupère les événements de cycle de vie depuis la PA et met à jour la base |
-| `-extract` | Extrait les fichiers d'entrée / sortie d'un job BIP JDE |
+| `-extract` | Extrait les fichiers d'entrée/sortie d'un job BIP JDE |
 | `-serve` | Serveur HTTP embarqué + ordonnanceur d'arrière-plan |
 | `-install` | Provisionne l'arborescence d'un environnement |
 | `-password` | Encode un mot de passe pour stockage |
@@ -992,7 +583,7 @@ Modes interactifs et batch — tous pilotés par un unique `config.json` :
 
 ### Authentification & RBAC
 
-- Tables intégrées utilisateur / rôle / session (`F564250` – `F564252`).
+- Tables intégrées utilisateur / rôle / session (`F564250–F564252`).
 - Hashs **PBKDF2-HMAC-SHA256**, changement de mot de passe forcé à la première connexion, liste blanche de pages par rôle et filtre par société par rôle.
 - Activable via `authEnabled` dans `global` (off → pas de login).
 - Rôles `admin` (complet) et `viewer` (lecture seule restreinte) provisionnés par défaut au **Initialize Database**.
