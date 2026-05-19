@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-20" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.20 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-18" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.18 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
   <a href="#v2026-05-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
   <a href="#v2026-05-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
@@ -43,6 +44,39 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.20 — 2026-05-19 \{#v2026-05-20\}
+
+One command to move any installation forward to the current release. No more manual schema ALTERs, no risk of losing customer config or XSL customisations between versions.
+
+### What's new
+
+- **`./nomaubl.sh upgrade <env>`** — one command that stops the service, snapshots the env (config + template + ubl + jar — last 5 kept), brings the database schema forward, merges in any new reference data, refreshes the framework XSL and validation rules, rewrites each per-document XSL to pick up new TAG entries and framework updates, writes a full report, and restarts the service.
+- **Customer mappings always preserved.** When a per-document XSL is rewritten, the `TAG_*` values you set and the `NOMAUBL_OVERRIDES_START`…`END` block at the bottom of the file are kept verbatim. New TAGs from the latest reference template are added with their default so you can fill them in. TAGs removed from the reference are kept on your side, flagged with a comment so they don't go unnoticed.
+- **Customer config always preserved.** New system resources and new reference-list entries (status codes, document-types, etc.) are added; anything already on your side stays as you set it.
+- **Settings → Upgrade History.** New page listing every install, upgrade and migration that ran on this environment, with the full report on the right when you click a row.
+
+### How to upgrade
+
+Drop the new `nomaubl.jar` in place, then:
+
+```
+./nomaubl.sh upgrade prod
+```
+
+Done. The report is saved under `${appHome}/upgrade-reports/`.
+
+### What this release ships under the hood
+
+Every installation currently running NomaUBL is at **2026.05.16** — the upgrade tool recognises this automatically the first time it runs and applies the schema deltas that landed in 2026.05.17, 2026.05.18 and 2026.05.19 (new `UHDRIN` direction column, e-Reporting envelope-table column rename) in one pass.
+
+### Better diagnostics when something goes wrong
+
+- The upgrade report header now shows the resolved env directory and the JDBC URL, so wrong-host or wrong-path mistakes are visible at a glance.
+- Failures unwrap the full cause chain — a vague "connection attempt failed" now tells you whether it's `NoRouteToHost`, `Connection refused`, an authentication issue, etc.
+- Startup logs the path of the master key file used to decrypt sensitive config values. When the license page reports "restricted" because the key file changed, the error now points directly at the master key resolution instead of saying "Invalid license key format".
 
 ---
 

@@ -85,6 +85,7 @@ Lay out the JAR and one environment per service instance, then drive each one by
 | **`restart <env> [port]`** | Convenience: `stop` then `start`. |
 | **`status [env]`** | With an env name, reports `running` (with PID) or `not running`. With no argument, lists every `nomaubl-*.pid` and prints the state of each instance — and prunes stale PID files for processes that are no longer alive. |
 | **`log <env>`** | Tail the log file (`tail -f nomaubl-<env>.log`). |
+| **`upgrade <env>`** | End-to-end upgrade of an existing environment to the JAR currently in place. See [`upgrade`](#upgrade) below. |
 
 Beyond service control, the wrapper exposes **short forms** of the JAR's processing and synchronisation modes:
 
@@ -99,6 +100,85 @@ Beyond service control, the wrapper exposes **short forms** of the JAR's process
 | `nomaubl.sh install <targetDir>` | `java -jar nomaubl.jar -install <targetDir>` |
 
 The remainder of the page describes each direct JAR mode in detail.
+
+---
+
+## `upgrade <env>` — move an existing environment forward \{#upgrade\}
+
+End-to-end upgrade of an existing environment to the JAR currently in place. Replace `nomaubl.jar` next to the wrapper, run `./nomaubl.sh upgrade <env>`, and the wrapper takes care of every step — service lifecycle, schema, reference data, framework XSL, per-document XSL — and writes a complete report under `${appHome}/upgrade-reports/`. Customer mappings and customer config are kept verbatim throughout.
+
+```bash
+./nomaubl.sh upgrade prod
+```
+
+<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="upg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <linearGradient id="upg-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="320" rx="14" fill="url(#upg-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">./nomaubl.sh upgrade prod — the steps in order</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="60" y="100" width="200" height="60" rx="10" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="160" y="124" fill="#fb923c" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">1 · STOP & SNAPSHOT</text>
+  <text x="160" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">SIGTERM, wait 10 s</text>
+  <text x="160" y="154" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">snapshot — last 5 kept</text>
+
+  <rect x="280" y="100" width="200" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="380" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">2 · DATABASE</text>
+  <text x="380" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">apply schema deltas</text>
+  <text x="380" y="154" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">from current version</text>
+
+  <rect x="500" y="100" width="200" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="600" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 · REFERENCE DATA</text>
+  <text x="600" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">merge new entries</text>
+  <text x="600" y="154" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">keep customer overrides</text>
+
+  <rect x="720" y="100" width="220" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="830" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">4 · FRAMEWORK XSL</text>
+  <text x="830" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">refresh ubl-common + rules</text>
+  <text x="830" y="154" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Schematron, XSD</text>
+
+  <line x1="160" y1="170" x2="160" y2="200" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
+  <line x1="380" y1="170" x2="380" y2="200" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
+  <line x1="600" y1="170" x2="600" y2="200" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
+  <line x1="830" y1="170" x2="830" y2="200" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
+
+  <rect x="60" y="210" width="420" height="60" rx="10" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
+  <text x="270" y="234" fill="#c084fc" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">5 · PER-DOCUMENT XSL — REWRITE WITH MERGE</text>
+  <text x="270" y="250" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">customer TAG_* values kept · NOMAUBL_OVERRIDES block kept</text>
+  <text x="270" y="264" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">new TAGs added with defaults · removed TAGs kept and flagged</text>
+
+  <rect x="500" y="210" width="440" height="60" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
+  <text x="720" y="234" fill="#22c55e" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">6 · REPORT & RESTART</text>
+  <text x="720" y="250" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">${`{appHome}`}/upgrade-reports/upgrade-YYYYMMDD-HHmmss.md</text>
+  <text x="720" y="264" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">re-start service · status visible on Upgrade History</text>
+
+  <line x1="270" y1="280" x2="270" y2="310" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upg-arrow)"/>
+  <text x="290" y="298" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">stops here on first error — service stays down, snapshot still on disk</text>
+</svg>
+
+### What the wrapper does, step by step
+
+| # | Step | What it does | What stays untouched |
+|---|---|---|---|
+| 1 | **Stop & snapshot** | Stops the service via `SIGTERM` (10 s grace), copies `config/` + `template/` + `ubl/` + `nomaubl.jar` into `snapshots/<timestamp>/`. The last 5 snapshots are kept; older ones are pruned. | — |
+| 2 | **Database** | Reads the current installed version from the upgrade-history table, applies the schema deltas of every release in between (idempotent — running the upgrade twice does nothing the second time). | Operational tables (`F564231`, lifecycle rows…) — only column / index / table additions and renames run. |
+| 3 | **Reference data** | Merges new entries shipped with the JAR into the system templates (statuses, document-types, currency codes, action codes, etc.). | Every entry already on your side, including the rows you renamed or extended. |
+| 4 | **Framework XSL** | Refreshes `ubl-common.xsl`, the Schematron rule packs and the XSD set with the version embedded in the JAR. These framework files are not customer-editable. | The `framework/` folder is fully replaced — nothing customer-side here. |
+| 5 | **Per-document XSL** | For each `template/<name>/<name>.xsl`, the wrapper writes a fresh file from the latest reference template, then re-injects every `TAG_*` value the customer had filled in and the `NOMAUBL_OVERRIDES_START`…`NOMAUBL_OVERRIDES_END` block at the bottom. **New TAGs** introduced by the upgrade come in with their reference default — fill them in afterwards if needed. **TAGs removed** from the reference are kept on the customer side, flagged with a `<!-- removed in <version> -->` comment so they don't go unnoticed. | Customer TAG values · customer overrides block · per-document RTF / image / sample-xml resources. |
+| 6 | **Report & restart** | Writes `${appHome}/upgrade-reports/upgrade-<timestamp>.md` with every step's outcome (added / kept / flagged TAGs per template, schema changes applied, reference-data deltas) and re-starts the service via the wrapper's `start` flow. | — |
+
+If any step fails, the upgrade stops there. The snapshot remains on disk so a manual rollback is `cp -r snapshots/<timestamp>/* env/` then `./nomaubl.sh start <env>`. The next attempt picks up from the failed step — successful steps are not re-applied.
+
+### Settings → Upgrade History
+
+Every install, upgrade and migration that ran on the environment is listed under **Settings → Upgrade History**. Click a row to see the full report on the right pane — same content as the file under `${appHome}/upgrade-reports/`. The list is read-only; nothing can be re-run from this page.
+
+### Diagnostics
+
+When something goes wrong, the report header carries the **resolved env directory** and the **JDBC URL** so a wrong-host or wrong-path mistake is visible at a glance. Connection failures unwrap the full cause chain — `NoRouteToHost`, `Connection refused`, authentication failures, etc., instead of a vague *connection attempt failed*. At startup, the path of the master key file used to decrypt sensitive config values is logged; if the license page reports *restricted* because the key file changed, the error message points directly at the master-key resolution.
 
 ---
 

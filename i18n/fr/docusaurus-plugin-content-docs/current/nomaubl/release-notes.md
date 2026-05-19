@@ -10,7 +10,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-20" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.20 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-18" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.18 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
   <a href="#v2026-05-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
   <a href="#v2026-05-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
@@ -43,6 +44,39 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.20 — 2026-05-19 \{#v2026-05-20\}
+
+Une seule commande pour faire passer n'importe quelle installation à la dernière version. Plus d'ALTER manuel sur la base, plus de risque de perdre la configuration ou les personnalisations XSL entre les versions.
+
+### Nouveautés
+
+- **`./nomaubl.sh upgrade <env>`** — une commande qui arrête le service, sauvegarde l'environnement (config + template + ubl + jar — les 5 derniers conservés), met à jour le schéma de la base, fusionne les nouvelles données de référence, rafraîchit les XSL framework et règles de validation, réécrit chaque XSL par-document pour intégrer les nouveaux TAGs et les mises à jour framework, écrit un rapport complet, puis redémarre le service.
+- **Mappings client toujours préservés.** Quand un XSL par-document est réécrit, les valeurs `TAG_*` que vous avez fixées et le bloc `NOMAUBL_OVERRIDES_START`…`END` à la fin du fichier sont conservés à l'identique. Les nouveaux TAGs du dernier template de référence sont ajoutés avec leur valeur par défaut pour que vous les remplissiez. Les TAGs retirés du template de référence sont conservés côté client, marqués d'un commentaire pour qu'ils ne passent pas inaperçus.
+- **Configuration client toujours préservée.** Les nouvelles ressources système et entrées de listes de référence (codes statut, document-types, etc.) sont ajoutées ; tout ce qui existe déjà côté client reste tel que vous l'avez fixé.
+- **Paramètres → Historique des mises à jour.** Nouvelle page listant chaque installation, mise à jour et migration appliquées sur cet environnement, avec le rapport complet à droite quand vous cliquez une ligne.
+
+### Comment mettre à jour
+
+Remplacer `nomaubl.jar` en place, puis :
+
+```
+./nomaubl.sh upgrade prod
+```
+
+C'est tout. Le rapport est enregistré sous `${appHome}/upgrade-reports/`.
+
+### Ce que cette version embarque sous le capot
+
+Toutes les installations actuellement en production sont en **2026.05.16** — l'outil de mise à jour le détecte automatiquement à la première exécution et applique les évolutions de schéma de 2026.05.17, 2026.05.18 et 2026.05.19 (nouvelle colonne `UHDRIN` de direction, renommage des colonnes des tables enveloppe e-Reporting) en une passe.
+
+### Meilleurs diagnostics en cas d'erreur
+
+- L'en-tête du rapport de mise à jour affiche désormais le répertoire d'environnement résolu et l'URL JDBC, donc une mauvaise machine ou un mauvais chemin saute aux yeux.
+- Les échecs déroulent toute la chaîne de causes — un vague « connection attempt failed » indique maintenant s'il s'agit de `NoRouteToHost`, `Connection refused`, un problème d'authentification, etc.
+- Le démarrage trace le chemin du fichier de clé maître utilisé pour déchiffrer les propriétés sensibles de la configuration. Quand la page de licence repasse en mode « restreint » parce que la clé a changé, l'erreur pointe désormais directement vers la résolution de la clé maître au lieu d'afficher « Invalid license key format ».
 
 ---
 

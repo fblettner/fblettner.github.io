@@ -85,6 +85,7 @@ Disposer le JAR et un environnement par instance de service, puis piloter chaque
 | **`restart <env> [port]`** | Raccourci : `stop` puis `start`. |
 | **`status [env]`** | Avec un nom d'environnement, indique `running` (avec PID) ou `not running`. Sans argument, parcourt tous les `nomaubl-*.pid` et affiche l'état de chaque instance — et purge les PID obsolètes correspondant à des processus disparus. |
 | **`log <env>`** | Suivi en continu du fichier journal (`tail -f nomaubl-<env>.log`). |
+| **`upgrade <env>`** | Mise à jour de bout en bout d'un environnement existant vers le JAR en place. Voir [`upgrade`](#upgrade) plus bas. |
 
 Au-delà du contrôle de service, le wrapper propose des **formes courtes** des modes de traitement et de synchronisation du JAR :
 
@@ -99,6 +100,85 @@ Au-delà du contrôle de service, le wrapper propose des **formes courtes** des 
 | `nomaubl.sh install <targetDir>` | `java -jar nomaubl.jar -install <targetDir>` |
 
 Le reste de la page détaille chacun des modes directs du JAR.
+
+---
+
+## `upgrade <env>` — faire évoluer un environnement existant \{#upgrade\}
+
+Mise à jour de bout en bout d'un environnement existant vers le JAR en place. Remplacer `nomaubl.jar` à côté du wrapper, lancer `./nomaubl.sh upgrade <env>`, et le wrapper enchaîne toutes les étapes — cycle de vie du service, schéma de base, données de référence, XSL framework, XSL par document — puis dépose un rapport complet sous `${appHome}/upgrade-reports/`. Les mappings client et la configuration client sont conservés à l'identique tout au long du processus.
+
+```bash
+./nomaubl.sh upgrade prod
+```
+
+<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="upg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
+    <linearGradient id="upg-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+  </defs>
+  <rect x="40" y="40" width="920" height="320" rx="14" fill="url(#upg-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">./nomaubl.sh upgrade prod — les étapes dans l'ordre</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="60" y="100" width="200" height="60" rx="10" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="160" y="124" fill="#fb923c" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">1 · ARRÊT &amp; SAUVEGARDE</text>
+  <text x="160" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">SIGTERM, 10 s de délai</text>
+  <text x="160" y="154" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">snapshot — 5 dernières conservées</text>
+
+  <rect x="280" y="100" width="200" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="380" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">2 · BASE DE DONNÉES</text>
+  <text x="380" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">application des deltas</text>
+  <text x="380" y="154" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">depuis la version installée</text>
+
+  <rect x="500" y="100" width="200" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="600" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 · DONNÉES DE RÉFÉRENCE</text>
+  <text x="600" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">fusion des nouvelles entrées</text>
+  <text x="600" y="154" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">conservation des surcharges client</text>
+
+  <rect x="720" y="100" width="220" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="830" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">4 · XSL FRAMEWORK</text>
+  <text x="830" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">rafraîchissement ubl-common</text>
+  <text x="830" y="154" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Schematron, XSD</text>
+
+  <line x1="160" y1="170" x2="160" y2="200" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
+  <line x1="380" y1="170" x2="380" y2="200" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
+  <line x1="600" y1="170" x2="600" y2="200" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
+  <line x1="830" y1="170" x2="830" y2="200" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
+
+  <rect x="60" y="210" width="420" height="60" rx="10" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
+  <text x="270" y="234" fill="#c084fc" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">5 · XSL PAR DOCUMENT — RÉÉCRITURE AVEC FUSION</text>
+  <text x="270" y="250" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">valeurs TAG_* conservées · bloc NOMAUBL_OVERRIDES conservé</text>
+  <text x="270" y="264" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">nouveaux TAGs ajoutés par défaut · TAGs supprimés conservés et signalés</text>
+
+  <rect x="500" y="210" width="440" height="60" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
+  <text x="720" y="234" fill="#22c55e" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">6 · RAPPORT &amp; REDÉMARRAGE</text>
+  <text x="720" y="250" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">${`{appHome}`}/upgrade-reports/upgrade-AAAAMMJJ-HHmmss.md</text>
+  <text x="720" y="264" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">redémarrage du service · état visible dans Historique des mises à jour</text>
+
+  <line x1="270" y1="280" x2="270" y2="310" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#upg-arrow)"/>
+  <text x="290" y="298" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">arrêt à la première erreur — service à l'arrêt, snapshot toujours sur disque</text>
+</svg>
+
+### Le détail étape par étape
+
+| # | Étape | Action | Ce qui reste intact |
+|---|---|---|---|
+| 1 | **Arrêt & sauvegarde** | Arrêt du service via `SIGTERM` (10 s de délai), copie de `config/` + `template/` + `ubl/` + `nomaubl.jar` dans `snapshots/<timestamp>/`. Les 5 dernières sauvegardes sont conservées, les plus anciennes sont supprimées. | — |
+| 2 | **Base de données** | Lecture de la version installée depuis la table d'historique des mises à jour, application des deltas de schéma de toutes les versions intermédiaires (idempotent — relancer la mise à jour deux fois ne refait rien la seconde). | Les tables d'exploitation (`F564231`, lignes de cycle de vie…) — seuls les ajouts et renommages de colonnes / index / tables s'appliquent. |
+| 3 | **Données de référence** | Fusion des nouvelles entrées livrées avec le JAR dans les templates système (statuts, types de document, codes devises, codes d'action, etc.). | Toutes les entrées déjà présentes côté client, y compris celles renommées ou enrichies. |
+| 4 | **XSL framework** | Rafraîchissement de `ubl-common.xsl`, des packs de règles Schematron et du jeu de XSD à la version embarquée dans le JAR. Ces fichiers ne sont pas modifiables côté client. | Le dossier `framework/` est intégralement remplacé — rien de spécifique client à cet endroit. |
+| 5 | **XSL par document** | Pour chaque `template/<nom>/<nom>.xsl`, le wrapper réécrit un fichier neuf à partir du template de référence, puis ré-injecte toutes les valeurs `TAG_*` saisies par le client ainsi que le bloc `NOMAUBL_OVERRIDES_START`…`NOMAUBL_OVERRIDES_END` en fin de fichier. Les **nouveaux TAGs** introduits par la mise à jour arrivent avec leur valeur par défaut de référence — à compléter ensuite si besoin. Les **TAGs supprimés** de la référence sont conservés côté client, marqués d'un commentaire `<!-- removed in <version> -->` pour qu'ils ne passent pas inaperçus. | Valeurs `TAG_*` client · bloc de surcharges client · ressources RTF / images / xml d'exemple par document. |
+| 6 | **Rapport & redémarrage** | Écriture du rapport `${appHome}/upgrade-reports/upgrade-<timestamp>.md` avec le résultat de chaque étape (TAGs ajoutés / conservés / signalés par document, changements de schéma appliqués, deltas de données de référence) et redémarrage du service via la commande `start` du wrapper. | — |
+
+Si une étape échoue, la mise à jour s'arrête là. La sauvegarde reste sur disque : un retour arrière manuel se fait par `cp -r snapshots/<timestamp>/* env/` puis `./nomaubl.sh start <env>`. La tentative suivante reprend à l'étape échouée — les étapes déjà réussies ne sont pas rejouées.
+
+### Paramètres → Historique des mises à jour
+
+Chaque installation, mise à jour et migration effectuée sur l'environnement est listée sous **Paramètres → Historique des mises à jour**. Cliquer une ligne ouvre le rapport complet dans le panneau de droite — même contenu que le fichier déposé sous `${appHome}/upgrade-reports/`. La liste est en lecture seule, rien n'y est rejouable.
+
+### Diagnostics
+
+En cas d'incident, l'en-tête du rapport indique le **répertoire d'environnement résolu** et l'**URL JDBC** : une erreur d'hôte ou de chemin se repère immédiatement. Les échecs de connexion remontent l'intégralité de la chaîne de causes — `NoRouteToHost`, `Connection refused`, échec d'authentification, etc., au lieu d'un *connection attempt failed* peu parlant. Au démarrage, le chemin du fichier de clé maître utilisé pour déchiffrer les valeurs sensibles est tracé ; si la page de licence signale *restricted* parce que le fichier de clé a changé, le message d'erreur pointe directement sur la résolution de la clé maître.
 
 ---
 
