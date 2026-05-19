@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-20" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.20 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-20" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.20 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-18" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.18 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
   <a href="#v2026-05-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
@@ -44,6 +45,28 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.21 — 2026-05-19 \{#v2026-05-21\}
+
+CA3-style VAT declaration page. Aggregates every invoice for a period into the standard French VAT-form rows — sales / purchases × domestic / intra-EU / outside-EU × VAT rate × invoice type — with collapsible drill-down all the way down to the individual invoices behind each figure.
+
+### What's new
+
+- **VAT declaration** page (new sidebar entry, after E-Directory). Pick a month or a quarter, optionally filter by company. The page opens as a tight CA3 matrix; click a rate row to break it down by invoice type (B2B / B2C / B2BINT / B2G / unclassified), then click a type row to see the individual invoices behind it (document number, type, company, taxable base, VAT). Any amount also remains clickable to jump straight to the Invoices list pre-filtered to the same set.
+- **Excel export.** One click produces a workbook with two sheets: a Summary mirroring the on-screen matrix with subtotals per country group and direction, and a Details sheet listing every invoice's contribution. Numeric cells are real numbers so totals and pivots work in Excel.
+- **PDF export — CA3 form layout.** The PDF is now styled like the official Cerfa 3310-CA3: section A (operations realised — lines 01, 03, 04, 06, 7B), section B (TVA brute per rate with lines 08, 9B, 09, 10, 14 and total 16; TVA déductible with line 20 and total 23), and a Solde block with line 28 (TVA à payer) or 32 (crédit). One-page printable synthesis you can hand to accounting.
+- **Counterparty country on every invoice.** New column captured at insert from the UBL XML — buyer country on sales, supplier country on purchases. Drives the intra-EU / outside-EU classification on the VAT page. The Invoices list also accepts a country filter (passed automatically by the VAT drill-down).
+- **Period filter on booking date.** The VAT page reads the same date column as the Invoices list, so an invoice posted in May for an April issue date is declared in May — matching the standard rule for late-booked invoices, and keeping drill-down counts consistent with what you see on the Invoices page.
+
+### How to use
+
+Default opens on the previous full month — what you'd file. Switch the period selector to *Quarter* if you declare quarterly. The matrix opens collapsed; click the chevrons to expand. When a bucket holds more than 200 invoices the inline view caps there — use the Excel export to get the full list.
+
+### Note on existing data
+
+Invoices created before this release have no country on file and show up as *Domestic* by default until they're re-processed. Any new invoice from now on lands with the right country.
 
 ---
 

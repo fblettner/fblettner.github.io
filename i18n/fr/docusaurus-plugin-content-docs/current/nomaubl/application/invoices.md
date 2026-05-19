@@ -189,6 +189,7 @@ Chaque champ filtre la liste à la saisie — la recherche se déclenche après 
 | **Kco** | Code société (par ex. `00070`). |
 | **Contrat** | Référence du contrat porté par la facture. |
 | **Nom du client** | Nom de la partie acheteur. |
+| **Pays** | Code pays ISO 3166 à deux lettres de la contrepartie (par ex. `FR`, `DE`). Pré-rempli automatiquement quand la page est ouverte depuis un drill-down de la [Déclaration de TVA](./vat-declaration.md). |
 
 ### Sélecteur de routage BAR
 
@@ -292,6 +293,7 @@ Depuis 2026.05.10, la grille passe par **DataTableV2** en mode piloté par spec 
 | **Numéro UBL** | Numéro de facture tel qu'il apparaît dans le document UBL généré. |
 | **Date d'émission** | BT-2 issu du document UBL. |
 | **Client** | Nom de la partie acheteur. |
+| **Pays** | Code pays ISO 3166 à deux lettres de la contrepartie (`FR`, `DE`, `BE`, `US`…). Capturé à l'insertion depuis le UBL — pays de l'acheteur pour les ventes, du fournisseur pour les achats. Pilote la classification par zone utilisée par la page [Déclaration de TVA](./vat-declaration.md). |
 | **Total HT** | Montant total hors taxes. |
 | **Total TTC** | Montant total toutes taxes comprises. |
 | **Devise** | Code ISO 4217. |

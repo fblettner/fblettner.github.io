@@ -10,7 +10,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-20" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.20 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-20" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.20 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-18" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.18 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
   <a href="#v2026-05-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
@@ -44,6 +45,28 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.21 — 2026-05-19 \{#v2026-05-21\}
+
+Page de déclaration de TVA façon CA3. Agrège chaque facture d'une période sur les lignes du formulaire CA3 — ventes / achats × France / intra-UE / hors UE × taux de TVA × type de facture — avec un dépliement par paliers jusqu'aux factures individuelles derrière chaque montant.
+
+### Nouveautés
+
+- Nouvelle page **Déclaration de TVA** (dans la sidebar, après E-Directory). Choisissez un mois ou un trimestre, filtrez optionnellement par société. La page s'ouvre comme une matrice CA3 compacte ; cliquez sur une ligne de taux pour la décomposer par type de facture (B2B / B2C / B2BINT / B2G / non classé), puis sur une ligne de type pour voir les factures individuelles qui la composent (numéro, type, société, base imposable, TVA). Chaque montant reste cliquable pour ouvrir directement la liste Factures pré-filtrée sur le même ensemble.
+- **Export Excel.** Un seul clic produit un classeur à deux feuilles : Synthèse reprenant la matrice à l'écran avec sous-totaux par zone et par sens, et Détails listant la contribution de chaque facture. Les cellules de montant sont des nombres réels — totaux et tableaux croisés fonctionnent dans Excel.
+- **Export PDF — mise en page CA3.** Le PDF reprend l'allure du formulaire officiel Cerfa 3310-CA3 : section A (opérations réalisées — lignes 01, 03, 04, 06, 7B), section B (TVA brute par taux avec lignes 08, 9B, 09, 10, 14 et total 16 ; TVA déductible avec ligne 20 et total 23), et un bloc Solde avec la ligne 28 (TVA à payer) ou 32 (crédit). Synthèse imprimable d'une page, prête à être transmise à la comptabilité.
+- **Pays de la contrepartie sur chaque facture.** Nouvelle colonne capturée à l'insertion depuis le XML UBL — pays de l'acheteur pour les ventes, du fournisseur pour les achats. Pilote la classification intra-UE / hors UE sur la page TVA. La liste Factures accepte également un filtre par pays (passé automatiquement par le drill-down depuis la déclaration de TVA).
+- **Filtre de période sur la date de comptabilisation.** La page TVA utilise la même colonne de date que la liste Factures — une facture saisie en mai pour une date d'émission d'avril est déclarée en mai, conformément à la règle classique pour les factures saisies tardivement, et les compteurs lors du drill-down restent cohérents avec ce qu'affiche la page Factures.
+
+### Comment l'utiliser
+
+La page s'ouvre par défaut sur le mois complet précédent — celui que vous déclarez. Basculez le sélecteur de période sur *Trimestre* pour une déclaration trimestrielle. La matrice s'ouvre repliée ; cliquez sur les chevrons pour développer. Si un groupe contient plus de 200 factures, la vue en ligne est tronquée à 200 — utilisez l'export Excel pour récupérer la liste complète.
+
+### Note sur les données existantes
+
+Les factures créées avant cette version n'ont pas de pays renseigné et apparaissent par défaut en *France* jusqu'à leur retraitement. Toute nouvelle facture est désormais enregistrée avec le bon pays.
 
 ---
 

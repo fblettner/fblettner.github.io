@@ -189,6 +189,7 @@ Each input narrows the list as you type — the search updates after a brief pau
 | **Kco** | The company code (e.g. `00070`). |
 | **Contract** | The contract reference carried by the invoice. |
 | **Customer name** | The buyer party name. |
+| **Country** | ISO 3166 two-letter code of the counterparty (e.g. `FR`, `DE`). Pre-filled automatically when the page is opened from a [VAT Declaration](./vat-declaration.md) drill-down. |
 
 ### BAR routing dropdown
 
@@ -292,6 +293,7 @@ Since 2026.05.10 the grid renders through **DataTableV2** in spec-driven mode: c
 | **UBL number** | The invoice number as it appears in the generated UBL document. |
 | **Issue date** | BT-2 from the UBL. |
 | **Customer** | Buyer party name. |
+| **Country** | ISO 3166 two-letter code of the counterparty (`FR`, `DE`, `BE`, `US`…). Captured at insert from the UBL — buyer country on sales, supplier country on purchases. Drives the country-group classification used by the [VAT Declaration](./vat-declaration.md) page. |
 | **Total HT** | Total amount excluding VAT. |
 | **Total TTC** | Total amount including VAT. |
 | **Currency** | ISO 4217 code. |
