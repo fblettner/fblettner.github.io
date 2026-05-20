@@ -193,8 +193,8 @@ NomaUBL distributes its data across **15 tables** grouped by purpose. The defaul
 | **Log / Archive** | `F564230` | Persistent log / archive of every processing run. |
 | **Runtime Log** | `F564237` | Live runtime log used by the in-app *Processing Log* viewer. New `FEUKID` PK, columns `FERMK` / `FERMK2` / `FEK74MSG1` (renamed in 2026.05.5). |
 | **Invoice Header** | `F564231` | One row per invoice with its identification, totals, status, addressing data. |
-| **Invoice Lines** | `F564233` | Invoice line items (when *Detail Storage* is set to `db`). |
-| **VAT Summary** | `F564234` | Per-invoice VAT summary by category (when *Detail Storage* is set to `db`). |
+| **Invoice Lines** | `F564233` | Invoice line items (when *Store line subtotals* is on). |
+| **VAT Summary** | `F564234` | Per-invoice VAT summary by category (when *Store VAT details* is on). |
 | **Lifecycle** | `F564235` | Status-change history of each invoice (transitions between regulatory codes). |
 | **Validation** | `F564236` | Schematron / business-rule validation results per invoice. |
 
@@ -237,13 +237,26 @@ The check is **read-only** — it never alters the schema. A clean run prints `�
 
 ### Detail Storage
 
-Controls **how invoice line items and VAT summary are persisted**.
+Controls **what gets saved on each invoice** beyond the header. Two independent switches sit under *Tables* — one for invoice line subtotals, one for VAT details — so each level of detail can be turned on or off on its own.
 
-| Field | Values | Description |
+| Switch | Effect when on | Used by |
 |---|---|---|
-| **Lines & VAT** | `Save to Database` / `Save UBL Only` | `db` = write lines & VAT into `F564233` / `F564234` (queryable from SQL); `ubl` = skip the detail tables and parse lines & VAT from the stored UBL document on demand. |
+| **Store line subtotals** | Writes every line of every invoice into `F564233` at insert. | SQL-based reporting that needs line-level totals; the *Lines* tab of the invoice detail modal reads from the UBL either way. |
+| **Store VAT details** | Writes the per-rate VAT breakdown of every invoice into `F564234` at insert. | The [VAT Declaration](../../application/vat-declaration.md) page — keeping this switch on is what lets the page open in seconds even on a 200 000-invoice month. |
 
-`Save to Database` is the safest choice when downstream reporting tools query the database directly. `Save UBL Only` reduces write volume and keeps the UBL as the single source of truth for line-level data.
+Either switch turned off keeps the corresponding detail in the stored UBL document only — the application still parses it on demand when the *Lines* or *VAT* tab of the invoice detail modal is opened.
+
+The two switches default to whatever was previously configured. Existing installations keep their current behaviour after the upgrade — no file edit required.
+
+#### Backfilling VAT details for past periods
+
+When *Store VAT details* is turned on for the first time, only new invoices land with the details in `F564234`. To fill `F564234` for invoices that existed before the switch was turned on — the historical periods you want to see on the VAT page — use the [`backfill-vat`](../../management/command-line.md#backfill-vat) command:
+
+```bash
+./nomaubl.sh backfill-vat prod 2026-04-01 2026-04-30
+```
+
+The command parses the UBL document already kept on each invoice header and re-inserts the per-rate breakdown — safe to re-run on the same period without creating duplicates.
 
 ---
 
@@ -281,6 +294,7 @@ The operation is **safe to re-run** — existing tables and users are not modifi
 - **Keep the default `F564xxx` table names when sitting next to JDE.** This makes joining NomaUBL tables to JDE tables in reporting tools straightforward.
 - **Use the Columns tab when migrating an existing schema.** A customer install that pre-dates a column rename can stay on its existing names — record the override here and the application code keeps working.
 - **Run *Validate schema* after every upgrade.** It catches missing columns introduced by the upgrade and type mismatches that would otherwise produce silent runtime errors. The check is read-only — safe to run anywhere.
-- **Leave *Detail Storage* at `db` unless you have a reason not to.** It enables SQL-based reporting on lines and VAT without parsing the UBL on every query.
+- **Leave *Store VAT details* on when the VAT declaration page is in use.** Without it the page falls back to parsing every UBL on each load — fine on a quiet month, painful on a busy quarter.
+- **Turn *Store line subtotals* off only on volume-constrained installations.** The *Lines* tab of the invoice detail modal still works from the UBL; only third-party SQL reporting on line items goes away.
 - **Re-run *Initialize* after every upgrade.** New NomaUBL versions occasionally add tables (notifications in 2026.05.3, permissions in 2026.05.5); the safe-to-re-run script picks them up without touching existing data.
 - **The init log is colour-coded.** Scan for red lines first — those are real failures that need fixing. Muted `EXISTS:` lines on a re-run are expected.

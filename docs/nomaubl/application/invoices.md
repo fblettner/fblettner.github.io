@@ -176,7 +176,20 @@ The toolbar above the table combines date filtering, free-text search, status ch
 
 ### Date range
 
-The date filter on the left applies to the **last update** date of each invoice. The default preset is *Yesterday*; other presets are *Today*, *Last 7 days*, *This month*, *Last month* and *Custom range* (manual From / To dates).
+The date filter on the left scopes the list to one window of dates. The default preset is *Yesterday*; other presets are *Today*, *Last 7 days*, *This month*, *Last month* and *Custom range* (manual From / To dates).
+
+The column that the date range is read against is picked by the **Date basis** selector — see below.
+
+### Date basis \{#date-basis\}
+
+A selector sits next to the date range and controls **which date column the period is read against**.
+
+| Value | Date column | When to use |
+|---|---|---|
+| **Update date** *(default)* | The last time the invoice was modified in NomaUBL. | Day-to-day operations — same behaviour as the list has always had. |
+| **Issue date** | The date printed on the invoice itself (BT-2 from the UBL). | Reconciling against the [VAT Declaration](./vat-declaration.md) page or any external system that keys off the issue date. |
+
+The choice is **remembered for the current session** — closing the modal of an invoice and reopening the list keeps the selector where it was. The toggle is also **pre-selected automatically** when the Invoices list is opened from a VAT page drill-down, so the count on Invoices matches the count you came from.
 
 ### Free-text filters
 

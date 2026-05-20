@@ -10,7 +10,10 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
+  <a href="#v2026-05-23" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.23 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
+  <a href="#v2026-05-22" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.22 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-20" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.20 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-18" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.18 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
@@ -45,6 +48,76 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.24 — 2026-05-20 \{#v2026-05-24\}
+
+Period filtering now lets you pick which date the Invoices page looks at, and drill-down from the VAT declaration always lands on the right set of invoices.
+
+### Improvements
+
+- **VAT declaration period filters on the invoice's issue date.** The page now uses the date printed on the invoice itself, so the period is stable even if the data is rebuilt later.
+- **Drill-down from VAT to Invoices now reconciles.** Clicking an amount on the VAT page opens Invoices with the same date basis pre-selected, so the count you see matches the count you came from.
+
+### New features
+
+- **Date basis toggle on the Invoices page.** A new selector next to the date range lets you choose what the period filter compares against:
+  - **Update date** *(default)* — the last time the invoice was modified in NomaUBL. Matches the historical behaviour.
+  - **Issue date** — the date printed on the invoice. Use this to align with the VAT declaration page.
+
+  The toggle is remembered for the current session.
+
+---
+
+## 2026.05.23 — 2026-05-20 \{#v2026-05-23\}
+
+The VAT declaration page is now built to handle very large volumes — it opens just as fast on a month with 200 000 invoices as on one with 2 000.
+
+### Improvements
+
+- **Much faster VAT declaration page.** Opening the page no longer re-processes every invoice from scratch on each load. Whatever the size of the period — a small month or a busy quarter — the page opens in a couple of seconds.
+- **Clearer message when data is missing.** If the database doesn't yet hold the VAT details for the selected period, the page now shows the exact command line to run, with the dates already filled in, instead of displaying an empty matrix.
+
+### New features
+
+- **Choose what gets saved on each invoice.** The NomaUBL database settings now offer two independent switches: one for invoice line subtotals, one for VAT details. The VAT details switch is what the VAT declaration page needs to stay fast. Turn it on, and future invoices land with everything in place.
+- **Rebuild VAT details for past periods.** A new command fills in the VAT details for an existing date window from the UBL document already kept for each invoice — useful right after turning the switch on, or any time a clean rebuild is needed:
+
+  ```
+  ./nomaubl.sh backfill-vat <env> <fromDate> <toDate>
+  ```
+
+  Safe to re-run on the same period without creating duplicates.
+
+### How to upgrade an existing install
+
+1. In **Settings → Connectors → db-nomaubl → Tables**, turn **Store VAT details** on. Save.
+2. For each historical period you want to see on the VAT page, run the rebuild command once:
+
+   ```
+   ./nomaubl.sh backfill-vat prod 2026-04-01 2026-04-30
+   ```
+3. Reopen the VAT declaration page — everything is there.
+
+### Compatibility
+
+Existing installations keep their current behaviour after the upgrade. The new switches default to whatever was previously configured. No file edits required.
+
+---
+
+## 2026.05.22 — 2026-05-19 \{#v2026-05-22\}
+
+Compare any two versions of a file side-by-side, directly in the browser — the same kind of view VS Code shows, useful when reviewing what a template or configuration file picked up over time.
+
+### New features
+
+- **Compare mode** on the File Versions page. Turn it on for any text file (XSL, XML, JSON, SQL, properties, …) and pick two versions in the history — the current file included — to open a full-screen comparison: older on the left, newer on the right, with the lines that changed highlighted, syntax colouring by file type, and synchronised scrolling.
+- **One-click "compare with previous version".** A small icon on every row of the history lets you compare a single version against the one just before it in a single click — the common case when you only want to see what that snapshot introduced.
+
+### How to use
+
+Open the **File Versions** page, pick a text file in the tree, then either click the compare icon on a row to confront it with the previous version, or turn on **Compare** in the toolbar and pick two rows yourself. Close the comparison with **Escape** or the **Close** button to return to the history.
 
 ---
 

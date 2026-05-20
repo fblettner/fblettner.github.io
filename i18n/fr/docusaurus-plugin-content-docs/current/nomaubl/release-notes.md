@@ -10,7 +10,10 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
+  <a href="#v2026-05-23" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.23 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
+  <a href="#v2026-05-22" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.22 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+  <a href="#v2026-05-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-20" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.20 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-18" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.18 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
@@ -45,6 +48,76 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.24 — 2026-05-20 \{#v2026-05-24\}
+
+Le filtre de période permet désormais de choisir sur quelle date la page Factures s'applique, et la descente depuis la Déclaration de TVA tombe à chaque fois sur le bon ensemble de factures.
+
+### Améliorations
+
+- **La déclaration de TVA filtre sur la date d'émission de la facture.** La page utilise désormais la date imprimée sur la facture elle-même : la période reste stable même si les données sont reconstruites plus tard.
+- **Descente cohérente de la page TVA vers les Factures.** Un clic sur un montant de la page TVA ouvre la page Factures avec la même base de date pré-sélectionnée — le nombre affiché correspond à celui d'où l'on vient.
+
+### Nouveautés
+
+- **Sélecteur de base de date sur la page Factures.** Un nouveau sélecteur, à côté du filtre de période, permet de choisir sur quelle date la période s'applique :
+  - **Date de mise à jour** *(par défaut)* — dernière modification de la facture dans NomaUBL. Comportement historique.
+  - **Date d'émission** — celle imprimée sur la facture. À utiliser pour s'aligner avec la page Déclaration de TVA.
+
+  Le choix est conservé pendant la session en cours.
+
+---
+
+## 2026.05.23 — 2026-05-20 \{#v2026-05-23\}
+
+La page de Déclaration de TVA est désormais conçue pour gérer de très gros volumes — elle s'ouvre aussi rapidement sur un mois de 200 000 factures que sur un mois de 2 000.
+
+### Améliorations
+
+- **Page Déclaration de TVA nettement plus rapide.** L'ouverture de la page ne retraite plus chaque facture à chaque chargement. Quel que soit le volume de la période — un petit mois ou un trimestre chargé — la page s'ouvre en quelques secondes.
+- **Message plus clair quand les données manquent.** Si la base ne contient pas encore les détails TVA de la période sélectionnée, la page affiche désormais la commande exacte à exécuter, avec les dates déjà pré-remplies, au lieu de présenter une matrice vide.
+
+### Nouveautés
+
+- **Choix de ce qui est enregistré pour chaque facture.** Les paramètres de la base de données NomaUBL proposent maintenant deux interrupteurs indépendants : un pour les sous-totaux par ligne, l'autre pour les détails TVA. C'est ce dernier qu'il faut activer pour que la page Déclaration de TVA reste rapide. Une fois activé, les nouvelles factures s'enregistrent avec tout ce qu'il faut.
+- **Reconstruction des détails TVA pour une période passée.** Une nouvelle commande remplit les détails TVA d'une période existante à partir du document UBL déjà conservé pour chaque facture — utile juste après avoir activé l'interrupteur, ou à chaque fois qu'une reconstruction propre est nécessaire :
+
+  ```
+  ./nomaubl.sh backfill-vat <env> <dateDebut> <dateFin>
+  ```
+
+  La commande peut être relancée sur la même période sans créer de doublons.
+
+### Mise à jour d'une installation existante
+
+1. Dans **Paramètres → Connecteurs → db-nomaubl → Tables**, activez **Enregistrer les détails TVA**. Enregistrez.
+2. Pour chaque période passée que vous souhaitez voir dans la page TVA, exécutez la commande de reconstruction une fois :
+
+   ```
+   ./nomaubl.sh backfill-vat prod 2026-04-01 2026-04-30
+   ```
+3. Rouvrez la page Déclaration de TVA — tout est là.
+
+### Compatibilité
+
+Les installations existantes conservent leur comportement après la mise à jour. Les nouveaux interrupteurs prennent par défaut la valeur correspondant à l'ancienne configuration. Aucune modification manuelle n'est requise.
+
+---
+
+## 2026.05.22 — 2026-05-19 \{#v2026-05-22\}
+
+Comparez deux versions d'un même fichier côte à côte, directement dans le navigateur — la même vue que celle de VS Code, utile pour revoir l'évolution d'un modèle ou d'un fichier de configuration au fil du temps.
+
+### Nouveautés
+
+- **Mode Comparer** sur la page Versions des fichiers. Activez-le pour n'importe quel fichier texte (XSL, XML, JSON, SQL, properties, …) et choisissez deux versions dans l'historique — le fichier courant inclus — pour ouvrir une comparaison en plein écran : la plus ancienne à gauche, la plus récente à droite, avec les lignes modifiées en surbrillance, la coloration syntaxique selon le type de fichier et le défilement synchronisé.
+- **Comparaison en un clic avec la version précédente.** Une petite icône, sur chaque ligne de l'historique, permet de comparer une version donnée à celle qui la précède immédiatement, en un seul clic — le cas le plus courant quand vous voulez juste voir ce qu'a apporté une version.
+
+### Comment l'utiliser
+
+Ouvrez la page **Versions des fichiers**, sélectionnez un fichier texte dans l'arborescence, puis cliquez sur l'icône d'une ligne pour la comparer à la version précédente, ou activez **Comparer** dans la barre d'outils et choisissez deux lignes vous-même. Fermez la comparaison avec **Échap** ou le bouton **Fermer** pour revenir à l'historique.
 
 ---
 

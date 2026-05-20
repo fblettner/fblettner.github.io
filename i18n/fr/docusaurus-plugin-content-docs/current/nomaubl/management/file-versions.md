@@ -165,6 +165,7 @@ La barre d'outils indique le chemin du fichier et propose le bouton **Télévers
 |---|---|---|
 | 👁 **Voir** | Ligne live, fichiers **PDF** | Ouvre le PDF en ligne dans le panneau principal via un `<iframe>`. |
 | ✏️ **Modifier** | Ligne live, fichiers **texte** | Ouvre le fichier dans l'éditeur Monaco intégré. |
+| ⇄ **Comparer à la précédente** | Toutes les lignes sauf la plus ancienne, fichiers **texte** | Ouvre la comparaison côte à côte de cette version et de celle qui la précède immédiatement — voir [Mode Comparer](#mode-comparer) ci-dessous. |
 | ⬇ **Télécharger** | Toutes les lignes | Télécharge le fichier (live ou historique). Les versions historiques sont nommées `<fichier>.v<n>`. |
 | 🔄 **Restaurer** | Lignes historiques uniquement | Restaure la version historique comme fichier courant. Une confirmation s'affiche au préalable ; le fichier courant précédent est archivé en nouvelle version `restore`. |
 
@@ -181,6 +182,61 @@ Cliquer sur l'icône **Modifier** de la ligne live d'un fichier texte ouvre l'**
 | **Enregistrer** | Téléverse le contenu en nouvelle version avec le commentaire `Edited in browser`. Le fichier courant précédent est archivé automatiquement. |
 | **Annuler** | Ferme l'éditeur sans enregistrer. |
 | **Options éditeur** | Police monospace, minimap activée, `wordWrap: off`, tabulation 2, formatage au collage activé, thème sombre. |
+
+---
+
+## Mode Comparer \{#mode-comparer\}
+
+Pour n'importe quel fichier **texte** (XSL, XML, JSON, SQL, properties, MD, CSS, JS, HTML, TXT, CSV, CFG, LOG…), deux versions peuvent s'ouvrir côte à côte — la même vue de différences que VS Code, utile pour revoir l'évolution d'un modèle ou d'un fichier de configuration au fil du temps. Le fichier courant figure aussi dans le sélecteur, donc une version historique peut être confrontée à l'état actuel.
+
+### Ouvrir la comparaison
+
+Deux façons d'entrer dans la comparaison :
+
+- **En un clic — comparer à la précédente.** Cliquer sur l'icône **⇄** d'une ligne de l'historique. La version sélectionnée s'ouvre à droite, celle qui la précède à gauche. C'est le cas le plus courant quand vous voulez juste voir ce qu'a apporté une version donnée.
+- **Comparer deux versions au choix.** Activer **Comparer** dans la barre d'outils, puis cliquer sur deux lignes du tableau d'historique — l'ordre de sélection détermine de quel côté chaque version se positionne. Le bandeau affiche la paire sélectionnée et propose un bouton **Confirmer** pour ouvrir la comparaison.
+
+### La vue côte à côte
+
+<div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
+  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)'}}>
+    <div style={{fontWeight: 700, fontSize: '13px'}}>invoices/invoices.xsl — v3 ↔ v4</div>
+    <div style={{display: 'flex', gap: '12px', alignItems: 'center', fontSize: '12px'}}>
+      <span style={{padding: '3px 9px', borderRadius: '999px', background: 'rgba(255,159,10,0.10)', border: '1px solid rgba(255,159,10,0.40)', color: '#fb923c', fontWeight: 600}}>3 modifications</span>
+      <span style={{opacity: 0.6}}>✕ Fermer</span>
+    </div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1px solid rgba(255,255,255,0.08)'}}>
+    <div style={{padding: '8px 14px', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderRight: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>v3 — 12/04/2026</div>
+    <div style={{padding: '8px 14px', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, background: 'rgba(255,255,255,0.03)'}}>v4 — 02/05/2026 <span style={{marginLeft: 8, opacity: 0.55, fontStyle: 'italic', textTransform: 'none', letterSpacing: 0}}>live</span></div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', fontFamily: 'ui-monospace, monospace', fontSize: '11px', lineHeight: '1.7'}}>
+    <div style={{padding: '10px 14px', borderRight: '1px solid rgba(255,255,255,0.08)'}}>
+      <div><span style={{opacity: 0.4, marginRight: 10}}>17</span>&lt;xsl:variable name="<span style={{color: '#60a5fa'}}>currency</span>"&gt;</div>
+      <div style={{background: 'rgba(255,69,58,0.10)'}}><span style={{opacity: 0.4, marginRight: 10}}>18</span>  <span style={{color: '#f87171'}}>EUR</span></div>
+      <div><span style={{opacity: 0.4, marginRight: 10}}>19</span>&lt;/xsl:variable&gt;</div>
+      <div style={{opacity: 0.5}}>…</div>
+      <div style={{background: 'rgba(255,69,58,0.10)'}}><span style={{opacity: 0.4, marginRight: 10}}>42</span>&lt;xsl:value-of select="<span style={{color: '#f87171'}}>$amount</span>"/&gt;</div>
+    </div>
+    <div style={{padding: '10px 14px'}}>
+      <div><span style={{opacity: 0.4, marginRight: 10}}>17</span>&lt;xsl:variable name="<span style={{color: '#60a5fa'}}>currency</span>"&gt;</div>
+      <div style={{background: 'rgba(50,215,75,0.10)'}}><span style={{opacity: 0.4, marginRight: 10}}>18</span>  <span style={{color: '#4ade80'}}>$header/cbc:DocumentCurrencyCode</span></div>
+      <div><span style={{opacity: 0.4, marginRight: 10}}>19</span>&lt;/xsl:variable&gt;</div>
+      <div style={{opacity: 0.5}}>…</div>
+      <div style={{background: 'rgba(50,215,75,0.10)'}}><span style={{opacity: 0.4, marginRight: 10}}>42</span>&lt;xsl:value-of select="<span style={{color: '#4ade80'}}>format-number($amount, '0.00')</span>"/&gt;</div>
+    </div>
+  </div>
+</div>
+
+| Aspect | Comportement |
+|---|---|
+| **Disposition** | Plein écran, version la plus ancienne à gauche, la plus récente à droite. Le bandeau du haut affiche le chemin du fichier, les deux libellés de version et le compteur des lignes modifiées. |
+| **Mise en évidence** | Chaque ligne colorée selon le changement — vert pour les ajouts, rouge pour les suppressions, les deux teintes pour les modifications. Les zones inchangées sont repliables. |
+| **Coloration syntaxique** | Le même moteur Monaco que celui du [Mode édition](#mode-édition-fichiers-texte) — langage détecté automatiquement depuis l'extension du fichier. |
+| **Défilement** | Synchronisé entre les deux volets — faire défiler un côté entraîne l'autre dans le même mouvement. |
+| **Fermer** | **Échap** ou le bouton **Fermer** du bandeau revient au tableau d'historique. |
+
+Les fichiers binaires (PDF, ZIP, images…) n'apparaissent pas dans le sélecteur — la comparaison est réservée aux extensions texte listées dans le [Mode édition](#mode-édition-fichiers-texte).
 
 ---
 

@@ -86,6 +86,7 @@ Disposer le JAR et un environnement par instance de service, puis piloter chaque
 | **`status [env]`** | Avec un nom d'environnement, indique `running` (avec PID) ou `not running`. Sans argument, parcourt tous les `nomaubl-*.pid` et affiche l'état de chaque instance — et purge les PID obsolètes correspondant à des processus disparus. |
 | **`log <env>`** | Suivi en continu du fichier journal (`tail -f nomaubl-<env>.log`). |
 | **`upgrade <env>`** | Mise à jour de bout en bout d'un environnement existant vers le JAR en place. Voir [`upgrade`](#upgrade) plus bas. |
+| **`backfill-vat <env> <dateDebut> <dateFin>`** | Reconstruit la table des détails TVA (`F564234`) pour chaque facture émise entre `dateDebut` et `dateFin` à partir du document UBL déjà conservé sur chaque en-tête. Voir [`backfill-vat`](#backfill-vat) plus bas. |
 
 Au-delà du contrôle de service, le wrapper propose des **formes courtes** des modes de traitement et de synchronisation du JAR :
 
@@ -179,6 +180,46 @@ Chaque installation, mise à jour et migration effectuée sur l'environnement es
 ### Diagnostics
 
 En cas d'incident, l'en-tête du rapport indique le **répertoire d'environnement résolu** et l'**URL JDBC** : une erreur d'hôte ou de chemin se repère immédiatement. Les échecs de connexion remontent l'intégralité de la chaîne de causes — `NoRouteToHost`, `Connection refused`, échec d'authentification, etc., au lieu d'un *connection attempt failed* peu parlant. Au démarrage, le chemin du fichier de clé maître utilisé pour déchiffrer les valeurs sensibles est tracé ; si la page de licence signale *restricted* parce que le fichier de clé a changé, le message d'erreur pointe directement sur la résolution de la clé maître.
+
+---
+
+## `backfill-vat <env> <dateDebut> <dateFin>` — reconstruire les détails TVA d'une période passée \{#backfill-vat\}
+
+Reconstruit la **table des détails TVA** (`F564234`) pour chaque facture émise entre `dateDebut` et `dateFin`, à partir du document UBL déjà conservé sur l'en-tête de chaque facture. Deux cas d'usage :
+
+- **Juste après avoir activé *Enregistrer les détails TVA*** sous *Paramètres → Connecteurs → db-nomaubl → Tables*. Seules les factures insérées à partir de ce moment-là enregistrent leurs détails dans `F564234`. La commande met à jour les périodes passées pour que la page [Déclaration de TVA](../application/vat-declaration.md) puisse les servir.
+- **À chaque fois qu'une reconstruction propre est nécessaire**, par exemple après une corruption détectée sur les détails d'une période.
+
+```bash
+./nomaubl.sh backfill-vat prod 2026-04-01 2026-04-30
+```
+
+| Argument | Description |
+|---|---|
+| **`env`** | Nom d'environnement — le même que celui utilisé par `start`, `stop`, etc. Le wrapper résout la configuration depuis `<env>/config/config.json`. |
+| **`dateDebut`** | **Date d'émission** la plus ancienne à reconstruire, au format `AAAA-MM-JJ`. Bornes incluses. |
+| **`dateFin`** | **Date d'émission** la plus récente à reconstruire, au format `AAAA-MM-JJ`. Bornes incluses. |
+
+### Ce que fait la commande
+
+Pour chaque en-tête de facture dans la fenêtre, le wrapper relit le document UBL conservé à côté de l'en-tête et réinsère les lignes de TVA par taux dans `F564234`. La fenêtre est appliquée à la **date d'émission** de la facture — les dates passées en argument correspondent donc à celles du filtre de période de la page Déclaration de TVA.
+
+La commande peut être **relancée sans risque sur la même période**, sans créer de doublons — les lignes de détail existantes d'une facture sont supprimées avant la reconstruction, ce qui empêche toute collision avec des données obsolètes. Les en-têtes sans document UBL sont signalés dans le récapitulatif et ignorés.
+
+### Sortie
+
+Un récapitulatif s'affiche sur stdout à la fin de la commande :
+
+```text
+backfill-vat — date d'émission 2026-04-01 → 2026-04-30
+  factures parcourues    12 481
+  reconstruites (UBL)    12 476
+  ignorées (sans UBL)         5
+  lignes insérées dans F564234  41 902
+  durée                    18.4 s
+```
+
+L'interrupteur *Enregistrer les détails TVA* n'a **pas** besoin d'être activé pour que `backfill-vat` fonctionne — la commande écrit toujours dans `F564234`. L'interrupteur ne gouverne que ce qui se passe à l'insertion des nouvelles factures.
 
 ---
 

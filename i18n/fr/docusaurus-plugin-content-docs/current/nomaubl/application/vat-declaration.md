@@ -14,7 +14,9 @@ Utilisez cette page quand :
 - vous devez rapprocher une ligne CA3 des factures qui la composent — quels clients, quels numéros, quels montants ;
 - vous voulez une synthèse imprimable de la période à joindre au dossier comptable.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — et utilise la même colonne de date de comptabilisation que la liste Factures : ce que vous voyez sur la page TVA correspond à ce que vous voyez quand vous filtrez la liste Factures sur la même période.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Le filtre de période s'applique à la **date d'émission de la facture** — celle imprimée sur la facture elle-même — donc la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures expose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) : un clic sur un montant de la matrice TVA ouvre la liste Factures avec le bon ensemble.
+
+La matrice est servie depuis les lignes de détail TVA enregistrées (`F564234`), sans relecture de chaque UBL à chaque chargement — la page s'ouvre donc en **quelques secondes que la période contienne 2 000 ou 200 000 factures**. Pour conserver ce comportement, laissez *Enregistrer les détails TVA* activé sous *Paramètres → Connecteurs → db-nomaubl → Tables* — voir [Stockage des détails](../configuration/database-connectors/nomaubl.md#stockage-des-détails).
 
 ---
 
@@ -133,7 +135,7 @@ La barre d'outils au-dessus de la matrice fixe la **période**, un **filtre soci
 
 | Contrôle | Effet |
 |---|---|
-| **Sélecteur de période** | Choisit la période couverte par la matrice. Par défaut, le **mois complet précédent** — celui que vous déclarez. Basculez sur **Trimestre** pour une déclaration trimestrielle. Le filtre s'applique à la **date de comptabilisation** (même colonne que celle utilisée par la liste Factures) : une facture saisie en mai pour une date d'émission en avril est déclarée en mai, conformément à la règle classique pour les factures saisies tardivement, et les compteurs restent cohérents avec ceux affichés quand vous filtrez la liste Factures sur la même période. |
+| **Sélecteur de période** | Choisit la période couverte par la matrice. Par défaut, le **mois complet précédent** — celui que vous déclarez. Basculez sur **Trimestre** pour une déclaration trimestrielle. Le filtre s'applique à la **date d'émission de la facture** (celle imprimée sur la facture elle-même) : la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures expose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) — un clic sur un montant ouvre la liste Factures avec ce sélecteur déjà positionné, donc le nombre affiché correspond à celui d'où l'on vient. |
 | **Boutons Mois / Trimestre** | Basculent entre un pas mensuel et un pas trimestriel. Le libellé du sélecteur de période s'adapte (par ex. *T2 2026*). |
 | **Société** | Optionnel. Restreint la période aux factures d'un code société (KCO). Par défaut : *Toutes les sociétés*. |
 | **▣ Excel** | Télécharge le classeur décrit dans [Export Excel](#export-excel). |
@@ -169,6 +171,21 @@ Les taux roulés sous *Ventes intra-UE* et *Ventes hors UE* apparaissent en exon
 
 ---
 
+## Quand la matrice est vide
+
+Si la base ne contient encore aucune ligne de détail TVA (`F564234`) pour la période sélectionnée — typiquement juste après l'activation de *Enregistrer les détails TVA*, avant qu'une reconstruction historique n'ait eu lieu — la page n'affiche plus de matrice vide trompeuse. Elle affiche la commande exacte à exécuter, avec les dates de la période sélectionnée déjà pré-remplies :
+
+<div style={{border: '1px solid rgba(255,159,10,0.40)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,159,10,0.04)', padding: '20px 24px'}}>
+  <div style={{fontSize: '13px', fontWeight: 700, color: '#fb923c', marginBottom: '6px'}}>⚠ Pas de détails TVA pour Avril 2026</div>
+  <div style={{fontSize: '12px', opacity: 0.85, marginBottom: '14px', lineHeight: 1.55}}>La base ne contient aucune ligne de détail TVA pour cette période. Lancez la commande de reconstruction une fois, puis rouvrez la page :</div>
+  <div style={{fontFamily: 'ui-monospace, monospace', fontSize: '12px', padding: '12px 14px', background: 'rgba(0,0,0,0.35)', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.08)'}}>./nomaubl.sh backfill-vat prod 2026-04-01 2026-04-30</div>
+  <div style={{fontSize: '11px', opacity: 0.65, marginTop: '10px', fontStyle: 'italic'}}>Relançable sans risque sur la même période, sans créer de doublons.</div>
+</div>
+
+La commande est documentée sous [Ligne de commande → `backfill-vat`](../management/command-line.md#backfill-vat). Une fois la reconstruction faite, rouvrez la page TVA — la matrice se remplit comme attendu.
+
+---
+
 ## Export Excel
 
 Le bouton **▣ Excel** télécharge un classeur à deux feuilles :
@@ -176,7 +193,7 @@ Le bouton **▣ Excel** télécharge un classeur à deux feuilles :
 | Feuille | Contenu |
 |---|---|
 | **Synthèse** | Reprend la matrice à l'écran — ventes / achats × zone × taux × type — avec sous-totaux par zone et par sens. |
-| **Détails** | Une ligne par facture qui contribue à la période : numéro, type, société, nom de la contrepartie, pays de la contrepartie, routage BAR, base imposable, montant de TVA, devise, date de comptabilisation, date d'émission. |
+| **Détails** | Une ligne par facture qui contribue à la période : numéro, type, société, nom de la contrepartie, pays de la contrepartie, routage BAR, base imposable, montant de TVA, devise, date d'émission. |
 
 Les cellules de montant sont des nombres réels, pas du texte — totaux, tableaux croisés et formules Excel en aval fonctionnent sans retraitement.
 

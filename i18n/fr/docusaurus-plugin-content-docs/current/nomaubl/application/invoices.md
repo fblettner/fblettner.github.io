@@ -176,7 +176,20 @@ La barre d'outils au-dessus du tableau combine filtre de dates, recherche texte,
 
 ### Plage de dates
 
-Le filtre de dates à gauche s'applique à la **dernière mise à jour** de chaque facture. Préréglage par défaut : *Hier*. Autres préréglages : *Aujourd'hui*, *7 derniers jours*, *Ce mois*, *Mois dernier* et *Plage personnalisée* (saisie manuelle des dates de début et de fin).
+Le filtre de dates à gauche restreint la liste à une fenêtre de dates. Préréglage par défaut : *Hier*. Autres préréglages : *Aujourd'hui*, *7 derniers jours*, *Ce mois*, *Mois dernier* et *Plage personnalisée* (saisie manuelle des dates de début et de fin).
+
+La colonne sur laquelle la plage de dates est lue est choisie par le sélecteur **Base de date** — voir ci-dessous.
+
+### Base de date \{#base-de-date\}
+
+Un sélecteur, à côté du filtre de période, choisit **sur quelle colonne de date la période s'applique**.
+
+| Valeur | Colonne de date | Quand l'utiliser |
+|---|---|---|
+| **Date de mise à jour** *(par défaut)* | Dernière modification de la facture dans NomaUBL. | Exploitation au quotidien — comportement historique de la liste. |
+| **Date d'émission** | Celle imprimée sur la facture (BT-2 du document UBL). | Rapprochement avec la page [Déclaration de TVA](./vat-declaration.md) ou avec un système externe indexé sur la date d'émission. |
+
+Le choix est **conservé pendant la session en cours** — fermer la modale d'une facture et rouvrir la liste maintient la position du sélecteur. Le sélecteur est aussi **positionné automatiquement** quand la liste Factures est ouverte depuis un drill-down de la page TVA, donc le nombre affiché correspond à celui d'où l'on vient.
 
 ### Filtres texte
 

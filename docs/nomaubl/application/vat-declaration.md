@@ -14,7 +14,9 @@ Use this page when:
 - you need to reconcile a CA3 line with the underlying invoices — which buyers, which document numbers, which amounts;
 - you want a printable synthesis of the period to attach to the accounting file.
 
-The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — and uses the same booking date column as the Invoices list, so what you see on the VAT page matches what you see when you filter the Invoices list to the same period.
+The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The period filter is read on the **invoice's issue date** — the date printed on the invoice itself — so the period stays stable even if the underlying data is rebuilt later. The Invoices list exposes the same date basis via its [Date basis toggle](./invoices.md#date-basis), so drilling into a VAT amount lands on the matching set on the Invoices side.
+
+The matrix is served from the persisted VAT detail rows (`F564234`), not by re-parsing every UBL on each load — so the page opens in **a couple of seconds whether the period has 2 000 invoices or 200 000**. To keep it that way, leave *Store VAT details* on under *Settings → Connectors → db-nomaubl → Tables* — see [Detail Storage](../configuration/database-connectors/nomaubl.md#detail-storage).
 
 ---
 
@@ -133,7 +135,7 @@ The toolbar above the matrix sets the **period**, an optional **company filter**
 
 | Control | Effect |
 |---|---|
-| **Period selector** | Picks the period the matrix covers. Defaults to the **previous full month** — what you'd file. Switch to **Quarter** when you declare quarterly. The period filter is applied against the **booking date** column (same one the Invoices list uses), so an invoice posted in May for an April issue date is declared in May — matching the standard rule for late-booked invoices, and keeping the count consistent with what you see when you filter the Invoices list to the same period. |
+| **Period selector** | Picks the period the matrix covers. Defaults to the **previous full month** — what you'd file. Switch to **Quarter** when you declare quarterly. The filter is applied against the **invoice's issue date** (the date printed on the invoice itself), so the period stays stable even if the underlying data is rebuilt later. The Invoices list exposes the same date basis via its [Date basis toggle](./invoices.md#date-basis) — drilling into a VAT amount opens the Invoices list with that toggle pre-selected, so the count matches the one you came from. |
 | **Month / Quarter chips** | Toggle between monthly and quarterly granularity. The label of the period selector adapts (e.g. *Q2 2026*). |
 | **Company** | Optional. Restricts the period to invoices of one company code (KCO). Defaults to *All companies*. |
 | **▣ Excel** | Downloads the workbook described under [Excel export](#excel-export). |
@@ -169,6 +171,21 @@ VAT rates rolled up under *Intra-EU* sales and *Outside-EU* sales appear as exem
 
 ---
 
+## When the matrix is empty
+
+If the database does not yet hold any VAT detail row (`F564234`) for the selected period — typically right after *Store VAT details* was turned on but before any historical data was rebuilt — the page no longer shows a misleading empty matrix. It surfaces the exact command line to run, with the dates of the selected period already filled in:
+
+<div style={{border: '1px solid rgba(255,159,10,0.40)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,159,10,0.04)', padding: '20px 24px'}}>
+  <div style={{fontSize: '13px', fontWeight: 700, color: '#fb923c', marginBottom: '6px'}}>⚠ No VAT details for April 2026</div>
+  <div style={{fontSize: '12px', opacity: 0.85, marginBottom: '14px', lineHeight: 1.55}}>The database does not hold any VAT detail row for this period. Run the rebuild command once, then reopen the page:</div>
+  <div style={{fontFamily: 'ui-monospace, monospace', fontSize: '12px', padding: '12px 14px', background: 'rgba(0,0,0,0.35)', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.08)'}}>./nomaubl.sh backfill-vat prod 2026-04-01 2026-04-30</div>
+  <div style={{fontSize: '11px', opacity: 0.65, marginTop: '10px', fontStyle: 'italic'}}>Safe to re-run on the same period without creating duplicates.</div>
+</div>
+
+The command is documented under [Command Line → `backfill-vat`](../management/command-line.md#backfill-vat). Once the rebuild has run, reopen the VAT page and the matrix is populated as expected.
+
+---
+
 ## Excel export
 
 The **▣ Excel** button downloads a workbook with two sheets:
@@ -176,7 +193,7 @@ The **▣ Excel** button downloads a workbook with two sheets:
 | Sheet | Content |
 |---|---|
 | **Summary** | Mirrors the on-screen matrix — sales / purchases × country group × rate × type — with subtotals per country group and per direction. |
-| **Details** | One row per invoice contributing to the period: document number, document type, company, counterparty name, counterparty country, BAR routing, taxable base, VAT amount, currency, booking date, issue date. |
+| **Details** | One row per invoice contributing to the period: document number, document type, company, counterparty name, counterparty country, BAR routing, taxable base, VAT amount, currency, issue date. |
 
 Numeric cells are written as real numbers, not as text. Totals, pivot tables and downstream Excel formulas work without any clean-up.
 

@@ -86,6 +86,7 @@ Lay out the JAR and one environment per service instance, then drive each one by
 | **`status [env]`** | With an env name, reports `running` (with PID) or `not running`. With no argument, lists every `nomaubl-*.pid` and prints the state of each instance — and prunes stale PID files for processes that are no longer alive. |
 | **`log <env>`** | Tail the log file (`tail -f nomaubl-<env>.log`). |
 | **`upgrade <env>`** | End-to-end upgrade of an existing environment to the JAR currently in place. See [`upgrade`](#upgrade) below. |
+| **`backfill-vat <env> <fromDate> <toDate>`** | Rebuild the VAT detail table (`F564234`) for every invoice issued in `[fromDate, toDate]` from the UBL document already kept on each invoice. See [`backfill-vat`](#backfill-vat) below. |
 
 Beyond service control, the wrapper exposes **short forms** of the JAR's processing and synchronisation modes:
 
@@ -179,6 +180,46 @@ Every install, upgrade and migration that ran on the environment is listed under
 ### Diagnostics
 
 When something goes wrong, the report header carries the **resolved env directory** and the **JDBC URL** so a wrong-host or wrong-path mistake is visible at a glance. Connection failures unwrap the full cause chain — `NoRouteToHost`, `Connection refused`, authentication failures, etc., instead of a vague *connection attempt failed*. At startup, the path of the master key file used to decrypt sensitive config values is logged; if the license page reports *restricted* because the key file changed, the error message points directly at the master-key resolution.
+
+---
+
+## `backfill-vat <env> <fromDate> <toDate>` — rebuild VAT details for past periods \{#backfill-vat\}
+
+Rebuilds the **VAT detail table** (`F564234`) for every invoice issued in `[fromDate, toDate]` from the UBL document already kept on each invoice's header. Two situations call for it:
+
+- **Right after turning *Store VAT details* on** under *Settings → Connectors → db-nomaubl → Tables*. Only invoices inserted from then on get their detail rows in `F564234`. The backfill brings the historical periods up to date so the [VAT Declaration](../application/vat-declaration.md) page can serve them.
+- **Any time a clean rebuild is needed**, for instance after a corruption was detected on the detail rows of a period.
+
+```bash
+./nomaubl.sh backfill-vat prod 2026-04-01 2026-04-30
+```
+
+| Argument | Description |
+|---|---|
+| **`env`** | Environment name — same one used by `start`, `stop`, etc. The wrapper resolves the config from `<env>/config/config.json`. |
+| **`fromDate`** | Earliest invoice **issue date** to backfill, `YYYY-MM-DD`. Inclusive. |
+| **`toDate`** | Latest invoice **issue date** to backfill, `YYYY-MM-DD`. Inclusive. |
+
+### What the command does
+
+For every invoice header in the window, the wrapper re-parses the UBL document that lives next to the header and re-inserts the per-rate VAT rows into `F564234`. The window is read against the **invoice issue date** so the dates passed match the period filter on the VAT Declaration page.
+
+The command is **safe to re-run on the same period** without creating duplicates — the existing detail rows of an invoice are removed before the rebuild, so a fresh insert can never collide with stale data. Headers that have no UBL on file are reported in the summary and skipped.
+
+### Output
+
+A summary is printed on stdout when the command finishes:
+
+```text
+backfill-vat — issue date 2026-04-01 → 2026-04-30
+  invoices scanned       12 481
+  rebuilt (UBL present)  12 476
+  skipped (no UBL)            5
+  rows inserted into F564234  41 902
+  elapsed                  18.4 s
+```
+
+`Store VAT details` does **not** need to be on while `backfill-vat` runs — the command writes to `F564234` unconditionally. The switch only governs what happens on subsequent insertions of new invoices.
 
 ---
 

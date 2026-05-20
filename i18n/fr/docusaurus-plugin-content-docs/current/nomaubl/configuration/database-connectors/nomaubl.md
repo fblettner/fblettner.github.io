@@ -193,8 +193,8 @@ NomaUBL répartit ses données sur **15 tables** regroupées par usage. Les vale
 | **Journal / Archive** | `F564230` | Archive persistante des exécutions de traitement. |
 | **Journal d'exécution** | `F564237` | Journal d'exécution courant utilisé par la page *Journal de traitement*. Nouvelle PK `FEUKID`, colonnes `FERMK` / `FERMK2` / `FEK74MSG1` (renommées en 2026.05.5). |
 | **En-tête facture** | `F564231` | Une ligne par facture avec ses identifiants, totaux, statut, données d'adressage. |
-| **Lignes de facture** | `F564233` | Lignes de facture (quand *Stockage des détails* est positionné à `db`). |
-| **Récapitulatif TVA** | `F564234` | Récapitulatif TVA par catégorie (quand *Stockage des détails* est positionné à `db`). |
+| **Lignes de facture** | `F564233` | Lignes de facture (quand *Enregistrer les sous-totaux de ligne* est activé). |
+| **Récapitulatif TVA** | `F564234` | Récapitulatif TVA par catégorie (quand *Enregistrer les détails TVA* est activé). |
 | **Cycle de vie** | `F564235` | Historique des changements de statut de chaque facture (transitions entre codes réglementaires). |
 | **Validation** | `F564236` | Résultats de validation Schematron / règles métier par facture. |
 
@@ -237,13 +237,26 @@ La vérification est en **lecture seule** — elle n'altère jamais le schéma. 
 
 ### Stockage des détails
 
-Détermine **la persistance des lignes de facture et du récapitulatif TVA**.
+Détermine **ce qui est enregistré sur chaque facture** au-delà de l'en-tête. Deux interrupteurs indépendants se trouvent sous *Tables* — un pour les sous-totaux par ligne, un pour les détails TVA — chaque niveau de détail s'active ou se désactive séparément.
 
-| Champ | Valeurs | Description |
+| Interrupteur | Effet quand activé | Utilisé par |
 |---|---|---|
-| **Lignes & TVA** | `Save to Database` / `Save UBL Only` | `db` = écriture des lignes et de la TVA dans `F564233` / `F564234` (interrogeables en SQL) ; `ubl` = pas d'écriture dans les tables de détail, lignes et TVA extraites à la demande depuis le document UBL stocké. |
+| **Enregistrer les sous-totaux de ligne** | Écrit chaque ligne de chaque facture dans `F564233` à l'insertion. | Reporting SQL qui a besoin des totaux par ligne ; l'onglet *Lignes* de la modale de détail facture lit dans le document UBL dans tous les cas. |
+| **Enregistrer les détails TVA** | Écrit le détail de TVA par taux de chaque facture dans `F564234` à l'insertion. | La page [Déclaration de TVA](../../application/vat-declaration.md) — c'est cet interrupteur, laissé activé, qui permet à la page de s'ouvrir en quelques secondes même sur un mois de 200 000 factures. |
 
-`Save to Database` est le choix recommandé quand les outils de reporting interrogent directement la base. `Save UBL Only` réduit le volume d'écriture et fait du document UBL la source unique pour les données de niveau ligne.
+Un interrupteur désactivé laisse le détail correspondant uniquement dans le document UBL enregistré — l'application l'extrait à la demande quand l'onglet *Lignes* ou *TVA* de la modale de détail facture est ouvert.
+
+Les deux interrupteurs prennent par défaut la valeur correspondant à l'ancienne configuration. Les installations existantes conservent leur comportement après la mise à jour — aucune modification manuelle n'est requise.
+
+#### Reconstruire les détails TVA d'une période passée
+
+Quand *Enregistrer les détails TVA* est activé pour la première fois, seules les nouvelles factures s'enregistrent avec les détails dans `F564234`. Pour remplir `F564234` sur les factures qui existaient avant l'activation — les périodes passées que vous voulez voir dans la page TVA — utilisez la commande [`backfill-vat`](../../management/command-line.md#backfill-vat) :
+
+```bash
+./nomaubl.sh backfill-vat prod 2026-04-01 2026-04-30
+```
+
+La commande analyse le document UBL déjà conservé sur l'en-tête de chaque facture et réinsère le détail par taux — relançable sans risque sur la même période, sans créer de doublons.
 
 ---
 
@@ -281,6 +294,7 @@ L'opération **peut être relancée sans risque** — les tables et utilisateurs
 - **Conserver les noms par défaut `F564xxx` en cohabitation avec JDE.** Les jointures avec les tables JDE dans les outils de reporting restent ainsi directes.
 - **Utiliser l'onglet Colonnes pour migrer un schéma existant.** Une installation client antérieure à un renommage de colonne peut conserver les anciens noms — l'enregistrement ici suffit pour que le code applicatif continue de fonctionner.
 - **Lancer *Valider le schéma* après chaque montée de version.** La vérification capture les colonnes manquantes ajoutées par la mise à jour et les écarts de type qui produiraient sinon des erreurs silencieuses à l'exécution. Lecture seule — sans risque.
-- **Conserver *Stockage des détails* à `db` par défaut.** Cela permet le reporting SQL direct sur les lignes et la TVA, sans avoir à analyser le document UBL à chaque requête.
+- **Laisser *Enregistrer les détails TVA* activé quand la page Déclaration de TVA est utilisée.** Sans cet interrupteur, la page retombe sur une analyse du document UBL à chaque chargement — supportable sur un mois calme, pénible sur un trimestre chargé.
+- **Désactiver *Enregistrer les sous-totaux de ligne* uniquement sur installations contraintes en volume.** L'onglet *Lignes* de la modale de détail facture fonctionne encore depuis le document UBL ; seul le reporting SQL tiers sur les lignes disparaît.
 - **Relancer *Initialiser* après chaque montée de version.** Les nouvelles versions ajoutent occasionnellement des tables (notifications en 2026.05.3, autorisations en 2026.05.5) ; le script peut être relancé sans risque, il les prend en compte sans toucher aux données existantes.
 - **Le journal d'init est en couleur.** Repérer les lignes rouges en premier — ce sont des échecs réels à corriger. Les lignes `EXISTS:` atténuées en relance sont attendues.

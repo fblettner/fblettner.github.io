@@ -165,6 +165,7 @@ The toolbar shows the file path and a primary **Upload new version** action (fil
 |---|---|---|
 | 👁 **View** | Live row, **PDF** files | Opens the PDF inline in the main panel via an `<iframe>`. |
 | ✏️ **Edit** | Live row, **text** files | Opens the file in the built-in Monaco editor. |
+| ⇄ **Compare with previous** | Every row except the oldest, **text** files | Opens the side-by-side comparison of this version against the one just before it — see [Compare mode](#compare-mode) below. |
 | ⬇ **Download** | Every row | Downloads the file (live or historic). Historic downloads are named `<filename>.v<n>`. |
 | 🔄 **Restore** | Historic rows only | Promotes the historic version to the new live file. A confirmation dialog appears first; the previous live file is snapshotted as a new `restore` version. |
 
@@ -181,6 +182,61 @@ Clicking the **Edit** icon on the live row of a text file opens the **Monaco edi
 | **Save** | Uploads the buffer as a new version with the comment `Edited in browser`. The previous live file is snapshotted automatically. |
 | **Cancel** | Closes the editor without saving. |
 | **Editor options** | Monospace font, minimap on, `wordWrap: off`, tab size 2, paste-formatting on, dark theme. |
+
+---
+
+## Compare mode \{#compare-mode\}
+
+For any **text** file (XSL, XML, JSON, SQL, properties, MD, CSS, JS, HTML, TXT, CSV, CFG, LOG…), two versions can be opened side-by-side — the same diff view VS Code shows, useful when reviewing what a template or configuration file picked up over time. The current live file is included in the picker, so you can also compare any historic snapshot against today's state.
+
+### Opening the comparison
+
+Two ways to enter the comparison:
+
+- **One-click — compare with previous.** Click the **⇄** icon on any row of the history. The selected version opens on the right, the version just before it on the left. This is the common case when you only want to see what that snapshot introduced.
+- **Compare two arbitrary versions.** Turn on **Compare** in the toolbar, then click two rows in the history table — the order picked sets which side each version lands on. The toolbar caption shows the selected pair and offers a **Confirm** button to open the comparison.
+
+### The side-by-side view
+
+<div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
+  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)'}}>
+    <div style={{fontWeight: 700, fontSize: '13px'}}>invoices/invoices.xsl — v3 ↔ v4</div>
+    <div style={{display: 'flex', gap: '12px', alignItems: 'center', fontSize: '12px'}}>
+      <span style={{padding: '3px 9px', borderRadius: '999px', background: 'rgba(255,159,10,0.10)', border: '1px solid rgba(255,159,10,0.40)', color: '#fb923c', fontWeight: 600}}>3 changes</span>
+      <span style={{opacity: 0.6}}>✕ Close</span>
+    </div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1px solid rgba(255,255,255,0.08)'}}>
+    <div style={{padding: '8px 14px', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderRight: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>v3 — 2026-04-12</div>
+    <div style={{padding: '8px 14px', fontWeight: 600, fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, background: 'rgba(255,255,255,0.03)'}}>v4 — 2026-05-02 <span style={{marginLeft: 8, opacity: 0.55, fontStyle: 'italic', textTransform: 'none', letterSpacing: 0}}>live</span></div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', fontFamily: 'ui-monospace, monospace', fontSize: '11px', lineHeight: '1.7'}}>
+    <div style={{padding: '10px 14px', borderRight: '1px solid rgba(255,255,255,0.08)'}}>
+      <div><span style={{opacity: 0.4, marginRight: 10}}>17</span>&lt;xsl:variable name="<span style={{color: '#60a5fa'}}>currency</span>"&gt;</div>
+      <div style={{background: 'rgba(255,69,58,0.10)'}}><span style={{opacity: 0.4, marginRight: 10}}>18</span>  <span style={{color: '#f87171'}}>EUR</span></div>
+      <div><span style={{opacity: 0.4, marginRight: 10}}>19</span>&lt;/xsl:variable&gt;</div>
+      <div style={{opacity: 0.5}}>…</div>
+      <div style={{background: 'rgba(255,69,58,0.10)'}}><span style={{opacity: 0.4, marginRight: 10}}>42</span>&lt;xsl:value-of select="<span style={{color: '#f87171'}}>$amount</span>"/&gt;</div>
+    </div>
+    <div style={{padding: '10px 14px'}}>
+      <div><span style={{opacity: 0.4, marginRight: 10}}>17</span>&lt;xsl:variable name="<span style={{color: '#60a5fa'}}>currency</span>"&gt;</div>
+      <div style={{background: 'rgba(50,215,75,0.10)'}}><span style={{opacity: 0.4, marginRight: 10}}>18</span>  <span style={{color: '#4ade80'}}>$header/cbc:DocumentCurrencyCode</span></div>
+      <div><span style={{opacity: 0.4, marginRight: 10}}>19</span>&lt;/xsl:variable&gt;</div>
+      <div style={{opacity: 0.5}}>…</div>
+      <div style={{background: 'rgba(50,215,75,0.10)'}}><span style={{opacity: 0.4, marginRight: 10}}>42</span>&lt;xsl:value-of select="<span style={{color: '#4ade80'}}>format-number($amount, '0.00')</span>"/&gt;</div>
+    </div>
+  </div>
+</div>
+
+| Aspect | Behaviour |
+|---|---|
+| **Layout** | Full-screen, older version on the left, newer on the right. The header bar shows the file path, the two version labels and the running count of changed lines. |
+| **Highlighting** | Each row coloured by change — green for added, red for removed, both shades for modified. Unchanged regions can be folded. |
+| **Syntax colouring** | The same Monaco-based engine used in [Edit mode](#edit-mode-text-files) — language auto-detected from the file extension. |
+| **Scroll** | Synchronised between both panes — scrolling either side moves the other in lockstep. |
+| **Close** | **Escape** or the **Close** button in the header returns to the history table. |
+
+Binary files (PDF, ZIP, images…) do not appear in the picker — comparison is only available on the text extensions listed under [Edit mode](#edit-mode-text-files).
 
 ---
 
