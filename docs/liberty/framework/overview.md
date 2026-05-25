@@ -1,12 +1,16 @@
 ---
 title: Framework Overview
-description: "Liberty Next is layered around pools, connectors, the dictionary, screens, dashboards and menus. Each layer is a single TOML file under config/. The schema of a query result is discovered at runtime — no schema duplication, no codegen."
-keywords: [Liberty Next, framework, architecture, pool, connector, dictionary, screen, dashboard, menu, TOML, hot-reload]
+description: "The Liberty Framework is layered around pools, connectors, the dictionary, screens, dashboards, menus, charts and jobs — each layer is a TOML file. The schema of a query result is discovered at runtime, no schema duplication. Everything is hot-reloadable, every config tab in the Settings UI maps to one file."
+keywords: [Liberty Framework, architecture, pool, connector, dictionary, screen, dashboard, menu, chart, job, TOML, hot-reload, settings UI]
 ---
 
 # Framework Overview
 
-Liberty Next sits on six configuration files under `config/`. Each file defines one layer of the platform; together they describe a fully working application.
+The Liberty Framework is a connector-driven low-code platform: a FastAPI backend + React 19 frontend, configured entirely through TOML files. The platform sits on a small number of well-defined concepts that combine into apps; an app can be assembled, edited and shipped without writing Python or React.
+
+This page is the map — every concept has its own page linked from here. New to the framework? Start with [Getting Started → Installation](./getting-started/installation.md) to set up your first install, then walk through [Getting Started → First app](./getting-started/first-app.md) for an end-to-end "pool → connector → screen → menu" loop in five minutes.
+
+The platform sits on a handful of configuration files under `config/` (in `liberty-apps`) and one framework-wide file under `liberty-next/config/`. Each file defines one layer; together they describe a fully working application.
 
 | Layer | File | What it carries |
 |---|---|---|
@@ -228,3 +232,29 @@ This is what gates **nomasx1** and **nomajde** — both bundled under a single k
 ## Frontend in one paragraph
 
 React 19 + Vite + TypeScript, built once into `frontend/dist` and served as static by the backend. Dark default with a light theme swap, `react-i18next` EN / FR, `lucide-react` icons, DM Sans, `@tanstack/react-table` for the grid, `react-markdown` + `remark-gfm` for the assistant, `@monaco-editor/react` for the raw TOML escape hatch. Visual model is the same "liquid-glass" look used by NomaUBL — `@emotion/styled` themed components.
+
+---
+
+## Where to go from here
+
+| You want to… | Read |
+|---|---|
+| Install the framework on your machine | [Getting Started → Installation](./getting-started/installation.md) |
+| Build your first app | [Getting Started → First app](./getting-started/first-app.md) |
+| Understand the file layout of `liberty-apps` | [Getting Started → Project layout](./getting-started/project-layout.md) |
+| Edit configuration in the browser | [Configuration → Settings UI](./configuration/settings-ui.md) |
+| Reference every key of `app.toml` | [Configuration → `app.toml`](./configuration/app-toml.md) |
+| Set environment variables for production | [Configuration → Environment variables](./configuration/environment-variables.md) |
+| Encrypt connector passwords | [Configuration → Encryption & secrets](./configuration/encryption-secrets.md) |
+| Wire authentication / OIDC | [Authentication](./auth/authentication.md) |
+| Define roles and permissions | [Authentication → Roles & permissions](./auth/roles-permissions.md) |
+| Install a license key | [Authentication → License key](./auth/license-key.md) |
+| Organise multiple apps | [Apps & Plugins → Apps](./apps/overview.md) |
+| Write a custom Python step | [Apps & Plugins → Plugins](./apps/plugins.md) |
+| Add a language | [Apps & Plugins → i18n](./apps/i18n.md) |
+| Schedule recurring jobs | [Jobs → Overview](./jobs/overview.md) |
+| Talk to the AI assistant | [AI Assistant](./ai-assistant.md) |
+| Use the CLIs | [CLI reference](./cli-reference.md) |
+| Build a REST integration | [REST API reference](./rest-api.md) |
+| Deploy to production | [Deployment → Running in production](./deployment/running-production.md) |
+| Move across versions | [Deployment → Upgrading](./deployment/upgrading.md) |

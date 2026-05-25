@@ -1,12 +1,16 @@
 ---
 title: Présentation du framework
-description: "Liberty Next s'organise en six couches : pools, connecteurs, dictionnaire, écrans, tableaux de bord, menus. Chaque couche tient dans un fichier TOML sous config/. Le schéma d'un résultat de requête est obtenu à l'exécution — pas de duplication de schéma, pas de génération de code."
-keywords: [Liberty Next, framework, architecture, pool, connecteur, dictionnaire, écran, tableau de bord, menu, TOML, rechargement à chaud]
+description: "Liberty Framework s'organise autour de couches : pools, connecteurs, dictionnaire, écrans, tableaux de bord, menus, graphiques et jobs — chaque couche tient dans un fichier TOML. Le schéma d'un résultat de requête est obtenu à l'exécution, pas de duplication. Tout est rechargeable à chaud, chaque onglet de l'interface Paramètres correspond à un fichier."
+keywords: [Liberty Framework, architecture, pool, connecteur, dictionnaire, écran, tableau de bord, menu, graphique, job, TOML, rechargement à chaud, interface paramètres]
 ---
 
 # Présentation du framework
 
-Liberty Next repose sur six fichiers de configuration placés sous `config/`. Chacun décrit une couche de la plateforme ; ensemble, ils définissent une application complète.
+Liberty Framework est une plateforme low-code pilotée par les connecteurs : un backend FastAPI + un frontend React 19, configurés entièrement par fichiers TOML. La plateforme repose sur un petit nombre de concepts bien définis qui se combinent en apps ; une app s'assemble, se modifie et se déploie sans écrire de Python ou de React.
+
+Cette page est la carte — chaque concept a sa propre page liée depuis ici. Nouveau sur le framework ? Commencez par [Démarrage → Installation](./getting-started/installation.md) pour préparer votre première installation, puis suivez [Démarrage → Première app](./getting-started/first-app.md) pour la boucle complète « pool → connecteur → écran → menu » en cinq minutes.
+
+La plateforme s'appuie sur quelques fichiers de configuration sous `config/` (dans `liberty-apps`) et un fichier framework-wide sous `liberty-next/config/`. Chacun décrit une couche ; ensemble, ils définissent une application complète.
 
 | Couche | Fichier | Contenu |
 |---|---|---|
@@ -228,3 +232,29 @@ C'est ce mécanisme qui active **Nomasx-1** et **Nomajde**, regroupés sous une 
 ## Frontend en une phrase
 
 React 19 + Vite + TypeScript, buildé une seule fois dans `frontend/dist` puis servi en statique par le backend. Thème sombre par défaut avec bascule en mode clair, internationalisation EN / FR via `react-i18next`, icônes `lucide-react`, police DM Sans, `@tanstack/react-table` pour la grille, `react-markdown` + `remark-gfm` pour les réponses de l'assistant, `@monaco-editor/react` pour l'éditeur TOML brut. Apparence « liquid-glass » identique à NomaUBL via les composants `@emotion/styled` thématisés.
+
+---
+
+## Pour aller plus loin
+
+| Vous voulez… | Lire |
+|---|---|
+| Installer le framework sur votre machine | [Démarrage → Installation](./getting-started/installation.md) |
+| Créer votre première app | [Démarrage → Première app](./getting-started/first-app.md) |
+| Comprendre l'arborescence de `liberty-apps` | [Démarrage → Structure du projet](./getting-started/project-layout.md) |
+| Modifier la configuration dans le navigateur | [Configuration → Interface Paramètres](./configuration/settings-ui.md) |
+| Référence complète d'`app.toml` | [Configuration → `app.toml`](./configuration/app-toml.md) |
+| Régler les variables d'environnement de production | [Configuration → Variables d'environnement](./configuration/environment-variables.md) |
+| Chiffrer les mots de passe des connecteurs | [Configuration → Chiffrement et secrets](./configuration/encryption-secrets.md) |
+| Brancher l'authentification / OIDC | [Authentification](./auth/authentication.md) |
+| Définir rôles et permissions | [Authentification → Rôles et permissions](./auth/roles-permissions.md) |
+| Installer une clé de licence | [Authentification → Clé de licence](./auth/license-key.md) |
+| Organiser plusieurs apps | [Apps et Plugins → Apps](./apps/overview.md) |
+| Écrire une étape Python personnalisée | [Apps et Plugins → Plugins](./apps/plugins.md) |
+| Ajouter une langue | [Apps et Plugins → i18n](./apps/i18n.md) |
+| Planifier des jobs récurrents | [Jobs → Présentation](./jobs/overview.md) |
+| Dialoguer avec l'assistant IA | [Assistant IA](./ai-assistant.md) |
+| Utiliser les outils en ligne de commande | [Référence CLI](./cli-reference.md) |
+| Construire une intégration REST | [Référence API REST](./rest-api.md) |
+| Déployer en production | [Déploiement → Mise en production](./deployment/running-production.md) |
+| Passer d'une version à une autre | [Déploiement → Mise à jour](./deployment/upgrading.md) |
