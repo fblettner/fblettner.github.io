@@ -1,264 +1,254 @@
 ---
 title: Screens
-description: "A Screen is the definition of one business object — its read query, optional write queries, and an inline dialog with tabs and fields. Everything the UI needs to render the grid, the modal form and the actions is in one TOML entry."
-keywords: [Liberty Next, screen, dialog, tab, field, business object, ScreenDialog, audit, action, row menu, param bind, condition]
+description: "A screen is the framework's main business-object surface — a filterable grid backed by a connector, an inline edit dialog with tabs and fields, optional row actions and audit columns. Built end-to-end from Settings → Screens with a visual layout designer."
+keywords: [Liberty Framework, screen, grid, dialog, tab, field, business object, audit, actions, row menu, settings]
 ---
 
 # Screens
 
-A **Screen** wraps a SQL connector query with everything the UI needs to render a business object: the grid (the `read_query`), the optional CRUD queries, the modal form definition, the audit flag and the row menu. One Screen per business object — grid, tabs, fields and actions all live in a single TOML entry.
+A **screen** is the framework's main business-object surface: a filterable, sortable **grid** of rows backed by a connector query, with an inline **edit dialog** that opens on row click. Everything the operator sees — the grid columns, the filter toolbar, the dialog tabs, the form fields, the row actions, the toolbar buttons — is defined in **Settings → Screens** through the visual screen builder.
 
-Screens live in `config/screens.toml`, organised under `[screens.<app>.<id>]`. They are hot-reloadable with the rest of the config.
+The screen is where most users spend most of their time; the builder is correspondingly comprehensive.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="sc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="sc-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="sc-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <linearGradient id="sc-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="sc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
   </defs>
+  <rect x="40" y="40" width="920" height="300" rx="14" fill="url(#sc-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">A screen at runtime</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="220" y="20" width="580" height="440" rx="14" fill="url(#sc-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="60" y="100" width="520" height="220" rx="10" fill="rgba(0,0,0,0.20)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="76" y="124" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRID</text>
+  <rect x="76" y="136" width="488" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="86" y="154" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📅 Yesterday   Doc   Dct   Customer   Status ▾   ↻ Refresh   + Add</text>
+  <rect x="76" y="172" width="488" height="22" rx="4" fill="rgba(255,255,255,0.03)"/>
+  <text x="86" y="187" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.04em" fontFamily="ui-monospace, monospace">DOC · DCT · KCO · CUSTOMER · TOTAL · STATUS</text>
+  <rect x="76" y="200" width="488" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="86" y="215" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12345 · RI · 00070 · Acme SA · 1 500,00 ·</text>
+  <rect x="510" y="204" width="50" height="14" rx="7" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)"/>
+  <text x="535" y="215" fill="#4ade80" fontSize="9" textAnchor="middle" fontWeight="700">Approved</text>
+  <rect x="76" y="228" width="488" height="22" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="86" y="243" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12346 · RI · 00070 · Globex · 1 020,00 ·</text>
+  <rect x="510" y="232" width="50" height="14" rx="7" fill="rgba(0,122,255,0.10)" stroke="rgba(0,122,255,0.40)"/>
+  <text x="535" y="243" fill="#60a5fa" fontSize="9" textAnchor="middle" fontWeight="700">Pending</text>
+  <text x="86" y="278" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">Click a row → edit dialog</text>
 
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">📋 Users · TableView</text>
-  <rect x="690" y="30" width="90" height="22" rx="5" fill="url(#sc-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="735" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">▶ Run</text>
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="240" y="82" width="540" height="24" rx="5" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="98" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ID · NAME · EMAIL · STATUS · CITY · ⋮</text>
-
-  <rect x="240" y="110" width="540" height="22" rx="5" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="124" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">42  ·  Anna Lefèvre  ·  anna@…  ·</text>
-  <rect x="468" y="113" width="46" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
-  <text x="491" y="123" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Active</text>
-  <text x="528" y="124" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Paris</text>
-  <text x="764" y="124" fill="#64748b" fontSize="10">⋮</text>
-
-  <rect x="240" y="134" width="540" height="22" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="148" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">43  ·  Marc Dupont   ·  marc@…  ·</text>
-  <rect x="468" y="137" width="46" height="14" rx="3" fill="rgba(248,113,113,0.18)" stroke="rgba(248,113,113,0.40)" strokeWidth="1"/>
-  <text x="491" y="147" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Inactive</text>
-  <text x="528" y="148" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Lyon</text>
-
-  <rect x="240" y="158" width="540" height="22" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="172" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">44  ·  Léa Martin    ·  lea@…   ·</text>
-  <rect x="468" y="161" width="46" height="14" rx="3" fill="rgba(74,222,128,0.18)" stroke="rgba(74,222,128,0.40)" strokeWidth="1"/>
-  <text x="491" y="171" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Active</text>
-  <text x="528" y="172" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">Marseille</text>
-
-  <line x1="240" y1="196" x2="780" y2="196" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="240" y="208" width="540" height="240" rx="10" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.4"/>
-  <text x="252" y="232" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DIALOG · User #42</text>
-  <text x="752" y="232" fill="#64748b" fontSize="10" textAnchor="end">⛶ ✕</text>
-
-  <rect x="252" y="244" width="74" height="22" rx="5" fill="rgba(74,158,255,0.20)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="289" y="259" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">General</text>
-  <rect x="330" y="244" width="80" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="370" y="259" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Address</text>
-  <rect x="414" y="244" width="74" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="451" y="259" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit</text>
-
-  <text x="252" y="290" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NAME *</text>
-  <rect x="320" y="280" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="330" y="295" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">Anna Lefèvre</text>
-  <text x="514" y="290" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUS *</text>
-  <rect x="586" y="280" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="594" y="295" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">Active ▾</text>
-
-  <text x="252" y="322" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EMAIL</text>
-  <rect x="320" y="312" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="330" y="327" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">anna@example.com</text>
-  <text x="514" y="322" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CITY</text>
-  <rect x="586" y="312" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="594" y="327" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">PAR — Paris ▾</text>
-
-  <text x="252" y="354" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ADMIN <text fill="#64748b" fontStyle="italic">(visible_when: STATUS = Active)</text></text>
-  <rect x="320" y="344" width="20" height="14" rx="3" fill="#4a9eff" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="330" y="354" fill="white" fontSize="10" textAnchor="middle">✓</text>
-
-  <text x="252" y="384" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PASSWORD <text fill="#64748b" fontStyle="italic">(rule: PASSWORD)</text></text>
-  <rect x="320" y="374" width="180" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="330" y="389" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">••••••••••</text>
-
-  <rect x="240" y="412" width="120" height="28" rx="6" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="300" y="430" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Cancel</text>
-  <rect x="660" y="412" width="120" height="28" rx="6" fill="url(#sc-g-blue)" stroke="#4a9eff" strokeWidth="1.3"/>
-  <text x="720" y="430" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">💾 Save</text>
-
-  <rect x="20" y="110" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="125" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Grid · read_query</text>
-  <text x="30" y="138" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cursor.description → columns</text>
-  <line x1="220" y1="126" x2="240" y2="122" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sc-arrow)"/>
-
-  <rect x="20" y="208" width="200" height="48" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="223" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dialog · tabs</text>
-  <text x="30" y="236" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cols, hide_on_add / edit</text>
-  <text x="30" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">audit auto-tab</text>
-  <line x1="220" y1="232" x2="240" y2="228" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sc-arrow)"/>
-
-  <rect x="820" y="280" width="160" height="48" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="295" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Field widget</text>
-  <text x="830" y="308" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">picked from column rule</text>
-  <text x="830" y="320" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">BOOLEAN · ENUM · LOOKUP</text>
-  <line x1="820" y1="298" x2="766" y2="294" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sc-arrow)"/>
-
-  <rect x="820" y="344" width="160" height="48" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="359" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Per-field condition</text>
-  <text x="830" y="372" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">visible_when / required_when</text>
-  <text x="830" y="384" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">reads the live form state</text>
-  <line x1="820" y1="358" x2="500" y2="354" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sc-arrow)"/>
+  <rect x="600" y="100" width="340" height="220" rx="10" fill="rgba(74,158,255,0.04)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="616" y="124" fill="#4a9eff" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EDIT DIALOG</text>
+  <rect x="616" y="136" width="308" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="626" y="154" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Summary · Parties · Lines · VAT · History</text>
+  <text x="626" y="184" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Invoice 12345</text>
+  <text x="626" y="204" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Document number  ·  12345</text>
+  <text x="626" y="220" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Customer  ·  Acme SA</text>
+  <text x="626" y="236" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Status     ·  Approved</text>
+  <rect x="616" y="276" width="80" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="656" y="294" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Cancel</text>
+  <rect x="708" y="276" width="80" height="26" rx="6" fill="#4a9eff" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="748" y="294" fill="#fff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Save</text>
 </svg>
 
 ---
 
-## Defining a screen
+## Settings → Screens
 
-```toml
-[screens.myapp.users]
-label        = "Users"
-description  = "Application users"
-read_query   = "users_get"            # required
-update_query = "users_put"
-insert_query = "users_post"
-delete_query = "users_delete"
-auto_load    = true
-audit        = true                   # adds the AUD audit tab to the dialog
-editable     = true                   # row click → modal open
-uploadable   = true                   # enables the Excel-import path
+The catalogue lists every screen on the install — one row per screen, grouped by app.
 
-[[screens.myapp.users.dialog.tabs]]
-id    = "general"
-label = "General"
-cols  = 2
-fields = [
-  { column = "ID",       hidden = true },
-  { column = "NAME",     required = true, colspan = 2 },
-  { column = "EMAIL" },
-  { column = "STATUS" },
-  { column = "CITY" },
-  { column = "ADMIN",    visible_when = [{ field = "STATUS", value = "Y" }] },
-  { column = "PASSWORD", hide_on_edit = true },
-]
-```
+<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
+  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
+    <div style={{fontWeight: 700}}>Settings → Screens</div>
+    <div style={{display: 'flex', gap: '6px'}}>
+      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>App ▾</span>
+      <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>+ New screen</span>
+    </div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1.2fr 70px 60px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', fontSize: '11px', fontWeight: 600}}>
+    <div>Id</div><div>Title</div><div>Connector / query</div><div>Edit</div><div></div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1.2fr 70px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>billing/invoices</div><div>Invoices</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '11px', opacity: 0.85}}>billing · invoices-list</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(50,215,75,0.10)', border: '1px solid rgba(50,215,75,0.40)', color: '#4ade80', fontSize: '10px', fontWeight: 600}}>writable</span></div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1.2fr 70px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>billing/credit_notes</div><div>Credit notes</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '11px', opacity: 0.85}}>billing · credit-notes-list</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(50,215,75,0.10)', border: '1px solid rgba(50,215,75,0.40)', color: '#4ade80', fontSize: '10px', fontWeight: 600}}>writable</span></div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1.2fr 70px 60px', padding: '10px 14px', alignItems: 'center'}}>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>crm/customers</div><div>Customers</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '11px', opacity: 0.85}}>crm · customers-list</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.20)', fontSize: '10px', fontWeight: 600, opacity: 0.7}}>read-only</span></div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+  </div>
+</div>
 
-`connector` is optional — defaults to the connector that owns the `read_query`. Cross-connector screens (one connector to read, another to write) are allowed.
+Click *+ New screen* or any row to open the screen builder.
 
 ---
 
-## Queries
+## The screen builder
 
-A Screen binds up to four queries:
+The builder is a multi-tab editor — **General**, **Read connector**, **Grid**, **Dialog**, **Actions**, **Permissions**. Each tab covers one facet of the screen.
 
-| Field | Purpose | Permission |
-|---|---|---|
-| `read_query` | The SELECT that drives the grid. Required. | `sql:<conn>:<read_query>` |
-| `update_query` | The UPDATE called on *Save* in edit mode. Optional. | `sql:<conn>:<update_query>` + the query's own `writable = true` |
-| `insert_query` | The INSERT called on *Save* in add mode. Optional. | `sql:<conn>:<insert_query>` + `writable = true` |
-| `delete_query` | The DELETE called on *Delete* from the row menu. Optional. | `sql:<conn>:<delete_query>` + `writable = true` |
-
-The set the caller can actually run is reported back on `GET /api/screens/{app}/{id}` — the React UI hides the *Save* / *Add* / *Delete* buttons accordingly.
-
----
-
-## Dialog
-
-A `dialog` describes the modal form. It is **inline** on the screen — no second table to look up.
-
-### Tabs
-
-```toml
-[[screens.myapp.users.dialog.tabs]]
-id           = "general"
-label        = "General"
-cols         = 2                # grid width (2 = two-column layout)
-hide_on_add  = false
-hide_on_edit = false
-```
-
-| Field | Description |
-|---|---|
-| `id` | The tab identifier — used in the URL when the user clicks a tab. |
-| `label` / `l` | Tab title; `l = { fr = "..." }` translates per language. |
-| `cols` | CSS-grid width. Each field's `colspan` widens within this. |
-| `hide_on_add` / `hide_on_edit` | Drops the tab entirely in `add` / `edit` mode. |
-| `fields` | Ordered list of `ScreenField`. |
-
-### Fields
-
-```toml
-fields = [
-  { column = "NAME",     required = true },
-  { column = "STATUS",   required = true, default = "Y" },
-  { column = "PASSWORD", hide_on_edit = true, hidden_in_view = true },
-  { column = "ADMIN",    visible_when  = [{ field = "STATUS", value = "Y" }],
-                         required_when = [{ field = "ROLE",   value = ["admin", "owner"] }] },
-]
-```
-
-Per field:
+### General tab
 
 | Field | Effect |
 |---|---|
-| `column` | The result column from `read_query`. The widget is picked from that column's rule (BOOLEAN → checkbox, ENUM → `SearchSelect`, LOOKUP → `SearchSelect`, plus date / number / text from `format`/`type`). |
-| `hidden` | Drops the field. |
-| `disabled` | Renders a read-only echo. |
-| `required` | Flags the label with a `*`. |
-| `colspan` | Widens within the tab's `cols` grid. |
-| `default` | Seeds on `add`. |
-| `hide_on_add` / `hide_on_edit` | Mode-specific visibility. |
-| `visible_when` / `required_when` / `disabled_when` | Per-field conditions (see below). |
+| **Id** | Screen identifier of the form `app/name` (e.g. `billing/invoices`). Surfaces in the URL (`/screens/billing/invoices`), the permission code (`screen:billing:invoices`) and the menu picker. |
+| **Title** | Shown at the top of the page and on the menu entry that opens it. Localised through the dictionary. |
+| **App** | Dropdown of apps registered on the install. Pre-filled from the *Id* prefix. |
+| **Description** | Free text — appears on the catalogue list and in the AI assistant tool description when the screen is exposed. |
+| **Key columns** | Multi-select of columns from the read query that uniquely identify a row. Used by the edit dialog to know which row to update / delete. |
+| **Default page size** | Rows per page on the grid. Default 50. |
+| **Editable** | When *on*, the *Add* / *Edit* / *Delete* actions appear in the toolbar and the row click opens an editable dialog. When *off*, the dialog opens in read-only mode. |
 
-### Per-field conditions
+### Read connector tab
 
-Each `*_when` rule references **another field on the same dialog** (not a server filter). The predicate holds when that field's current form value equals `value` (or is in `value` when a list). Rules are AND-ed; a non-empty list whose predicates all pass fires the rule.
-
-The static flags (`visible: false`, `required: false`, `disabled: false`) act as the fallback when the corresponding `*_when` list is empty.
-
----
-
-## Audit
-
-Setting `audit = true` enables the auto-generated **Audit** tab on the dialog. It exposes:
-
-- `AUD_CREATED_BY` / `AUD_CREATED_AT`
-- `AUD_UPDATED_BY` / `AUD_UPDATED_AT`
-
-Resolved server-side at save time from `principal.username` and `SYSDATE`. The tab is read-only.
-
----
-
-## Actions and row menu
-
-| Field | Purpose |
+| Field | Effect |
 |---|---|
-| `actions` | Top-of-dialog action buttons that fire connector calls. Same shape as the [Actions](../../nomaubl/management/actions.md) bindings of NomaUBL. *Slice 4 — wired runtime pending.* |
-| `row_menu` | Per-row `⋮` menu in the grid. *Slice 6 — wired runtime pending.* |
+| **Connector** | Dropdown of SQL connectors. The chosen connector exposes its read queries. |
+| **Query** | Dropdown of named read queries on the picked connector. |
+| **Parameters** | Sub-form filled in by the screen's toolbar — see [Parameter binding](./query-params-binding.md). |
+| **Default sort** | Optional. A column + direction applied on first load. |
+| **Catalog columns** | Read-only — list of every column the framework discovered from the *Test* run of the query. Used by the *Grid* tab's picker. |
 
-These appear under the `Screen` schema today; the runtime is ahead in NomaUBL and is being ported. See the `docs/PLAN.md` of the framework repository for the order of slices.
+The **▶ Preview** button at the top of the tab runs the query against the live pool and shows the first 50 rows.
+
+### Grid tab
+
+This is the visual layout designer. The discovered columns appear in a left palette; the operator drags them into the grid layout on the right.
+
+<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1fr', gap: '14px'}}>
+    <div>
+      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, color: '#4a9eff', marginBottom: '10px'}}>Catalog</div>
+      <div style={{fontSize: '11px', lineHeight: '1.9'}}>
+        <div style={{opacity: 0.55, fontStyle: 'italic'}}>Drag to grid →</div>
+        <div style={{fontFamily: 'ui-monospace, monospace'}}>doc</div>
+        <div style={{fontFamily: 'ui-monospace, monospace'}}>dct</div>
+        <div style={{fontFamily: 'ui-monospace, monospace'}}>kco</div>
+        <div style={{fontFamily: 'ui-monospace, monospace'}}>customer</div>
+        <div style={{fontFamily: 'ui-monospace, monospace'}}>total_ht</div>
+        <div style={{fontFamily: 'ui-monospace, monospace'}}>total_ttc</div>
+        <div style={{fontFamily: 'ui-monospace, monospace'}}>currency</div>
+        <div style={{fontFamily: 'ui-monospace, monospace'}}>status</div>
+        <div style={{fontFamily: 'ui-monospace, monospace', opacity: 0.5}}>review</div>
+      </div>
+    </div>
+    <div>
+      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, color: '#4a9eff', marginBottom: '10px'}}>Grid layout</div>
+      <div style={{display: 'grid', gridTemplateColumns: '60px 50px 70px 1.2fr 90px 90px 60px 90px', padding: '6px 8px', textTransform: 'uppercase', letterSpacing: '0.04em', opacity: 0.7, fontSize: '10px', fontWeight: 600, borderBottom: '1px solid rgba(255,255,255,0.08)'}}>
+        <div>Doc</div><div>Dct</div><div>Kco</div><div>Customer</div><div>Total HT</div><div>Total TTC</div><div>Cur.</div><div>Status</div>
+      </div>
+      <div style={{display: 'grid', gridTemplateColumns: '60px 50px 70px 1.2fr 90px 90px 60px 90px', padding: '6px 8px', fontSize: '11px', alignItems: 'center'}}>
+        <div>12345</div><div>RI</div><div>00070</div><div>Acme Industries SA</div><div style={{textAlign: 'right'}}>1 250,00</div><div style={{textAlign: 'right'}}>1 500,00</div><div>EUR</div><div><span style={{padding: '2px 8px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(50,215,75,0.40)', background: 'rgba(50,215,75,0.10)', color: '#4ade80'}}>Approved</span></div>
+      </div>
+      <div style={{marginTop: '8px', display: 'flex', gap: '8px', fontSize: '11px'}}>
+        <span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.15)', border: '1px solid rgba(74,158,255,0.40)', color: '#4a9eff', fontWeight: 700}}>+ Add column</span>
+        <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)'}}>Configure pagination</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+| Per-column control | Effect |
+|---|---|
+| **Drag handle** | Re-orders columns. |
+| **Width** | Drag the column edge to resize; the size is saved. |
+| **Header label** | Defaults to the dictionary label of the column. Overridable per screen. |
+| **Format override** | Optional per-screen format that wins over the dictionary's default. |
+| **Sortable / Filterable** | Toggles. When *Filterable* is on, the column gets a per-column filter input in the toolbar. |
+| **Visible by default** | When *off*, the column exists in the *Add column* picker (the operator can show it on demand) but isn't shown out of the box. |
+
+The toolbar of the screen (above the grid at runtime) is composed automatically from the visible filterable columns, plus the *Refresh* and *Add* / *Export* buttons.
+
+### Dialog tab
+
+The dialog is the modal that opens on row click. It supports multiple **tabs** — *Summary*, *Lines*, *VAT*, *Notes*, *History*, *PDF* are common — each with its own set of fields.
+
+The dialog editor exposes:
+
+| Section | Effect |
+|---|---|
+| **Tabs** | Sortable list. Each tab has a *Label* + *Visible when* expression — see [Form conditions](./form-conditions.md). |
+| **Fields** | Per-tab list of fields. Each field has a *Column* (dropdown of read-query columns + write-query columns), a *Widget* (auto from the dictionary type, overridable), and the four condition slots (*Visible when*, *Required when*, *Disabled when*, *Default*). |
+| **Sub-grids** | A tab can host a **child grid** instead of fields — useful for "Lines" of an invoice. The sub-grid points at its own read connector and write actions. |
+
+The *Preview* button at the top opens the dialog populated with the first row of the read query — quick way to verify the layout.
+
+### Actions tab
+
+Buttons that appear on the dialog's footer or on individual rows.
+
+| Action type | Effect |
+|---|---|
+| **Save / Cancel** | Always present on writable screens. The framework wires them automatically. |
+| **Custom button** | Calls a connector write query with the row's key + dialog payload. Appears on the dialog footer. |
+| **Row action** | Same idea but on each grid row — handy for one-off operations (e.g. *Resend to PA*). |
+| **Bulk action** | Visible when the operator multi-selects rows in the grid. Calls the connector once per selected row. |
+
+Each custom action exposes:
+
+- *Label* + *Icon* + *Variant* (primary / secondary / destructive).
+- *Connector* + *Write query*.
+- *Confirmation* — optional dialog before the action runs.
+- *Visible when* expression — same syntax as the field conditions.
+
+### Permissions tab
+
+Read-only summary of the permission codes this screen generates: `screen:<app>:<id>` plus the underlying `sql:<connector>:<query>` of the read query and every write action.
 
 ---
 
-## REST endpoints
+## Audit columns
 
-| Method | Path | Purpose |
-|---|---|---|
-| `GET` | `/api/screens` | Every accessible screen per app (list view — no dialog body, no actions). |
-| `GET` | `/api/screens/{app}` | All accessible screens for one app. `404` when nothing survives. |
-| `GET` | `/api/screens/{app}/{id}` | The full screen, including `dialog`, `actions`, `row_menu`. |
+A common pattern: track who created / last updated each row. The recommended path:
 
-The set is **permission-pruned**: a screen whose `read_query` the caller cannot run is dropped from `GET /api/screens` and surfaces `403` on the per-id route.
+1. In the read query, return `created_by`, `created_at`, `updated_by`, `updated_at`.
+2. In the dictionary, mark those columns *Rule = LOOKUP* against the users table (so the chips show display names, not raw user ids).
+3. On the write query for *Insert*, set the *Form-layer defaults* on those columns to `LOGIN` + `SYSDATE`.
+4. On the write query for *Update*, set defaults on `updated_by` + `updated_at`.
+5. Hide the audit columns from the dialog (or render them read-only) so users can't tamper with them.
+
+The framework runs `LOGIN` and `SYSDATE` **on the server** at save time — see [Dictionary → form-layer defaults](./dictionary.md#form-layer-defaults).
+
+---
+
+## Locking
+
+The framework supports **record locking** to prevent two operators editing the same row simultaneously. When *Editable* is on, the dialog acquires a lock on the row's key when it opens; another operator opening the same row sees a banner ("locked by Alice since 09:42") and the dialog opens in read-only mode.
+
+Locks expire on dialog close, on session timeout, or after the *Lock TTL* configured on the screen. The *Technical* tab of Settings surfaces every active lock — handy when a stale lock blocks an edit.
+
+---
+
+## Permissions
+
+The screen itself is gated by `screen:<app>:<id>`. The underlying read query inherits `sql:<connector>:<query>` and every write action inherits `sql:<connector>:<query>:write`. A user without the read permission gets a 403 on direct navigation; a user with read but not write sees the screen in read-only mode (Save / Add / Delete buttons hidden).
+
+The Screens builder tab is gated by `settings:screens`.
 
 ---
 
 ## Tips & best practices
 
-- **One screen per business object.** Resist the temptation to bundle several reads into the same screen. The grid is fast; another screen with its own dialog is cleaner than a dialog with twelve tabs.
-- **Mark every dialog field with a real `required`.** It saves a round-trip — the dialog refuses to save until the required fields are filled, instead of letting the backend reject the row.
-- **Per-field conditions are evaluated live.** `visible_when` / `required_when` / `disabled_when` are attached to the field itself, AND-ed together, and re-evaluated each time the form changes. Easy to keep predictable: each rule references another field on the same dialog.
-- **Audit auto-resolves user + timestamp.** Do not bind `AUD_CREATED_BY` / `AUD_UPDATED_AT` manually from the form — they are filled server-side from the principal and `SYSDATE` at save time.
-- **Cross-connector saves are legitimate.** A screen reading from `myapp` and writing to an audit connector is supported. Pick the connector on the query, not on the screen.
+- **Start with the read connector.** Define the query, run *Test* to discover the schema, **then** wire the screen. Iterating in this order is much faster than retrofitting columns.
+- **Use the dictionary aggressively.** A column with a good dictionary entry needs almost no per-screen overrides; a column without one needs labelling, formatting and widget tweaks on every screen that uses it.
+- **Keep the dialog focused.** Three to five tabs per dialog covers most cases. A dialog with twelve tabs is a sign the entity is too big — consider splitting into multiple screens.
+- **Make audit columns read-only on every screen.** Combined with `LOGIN` / `SYSDATE` form-layer defaults, you get a tamper-proof audit trail.
+- **Use *Bulk action* for repetitive operations.** A *Resend to PA* button that processes a multi-selection saves minutes per day for power users.
+
+---
+
+## Under the hood
+
+Screen definitions are stored in `liberty-apps/config/screens.toml`. Operators **do not edit this file by hand** in normal operation; the screen builder is the canonical interface. The *Raw TOML* tab is the escape hatch for the rare case where the builder doesn't cover a field.
+
+---
+
+## What's next
+
+- [Connectors](./connectors.md) — the read + write queries the screen consumes.
+- [Dictionary](./dictionary.md) — column metadata that shapes the grid + dialog.
+- [Form conditions](./form-conditions.md) — Visible when / Required when / Disabled when on each field.
+- [Parameter binding](./query-params-binding.md) — how the toolbar inputs flow into the query.
+- [Menus](./menus.md) — wire the screen into the sidebar.

@@ -1,188 +1,254 @@
 ---
 title: Tableaux de bord
-description: "Un tableau de bord agence des indicateurs et des graphiques au-dessus de requêtes connecteur nommées. Les panneaux barre, ligne, camembert et numérique sont déclarés en TOML — le DashboardView React rend la mise en page, l'API renvoie les lignes."
-keywords: [Liberty Next, tableau de bord, dashboard, graphique, barre, ligne, camembert, indicateur, panneau, dashboards.toml, mise en page]
+description: "Un tableau de bord agence des KPI, graphiques et tables au-dessus de requêtes de connecteur dans une grille responsive. Construit et modifié depuis Paramètres → Tableaux de bord avec des panneaux en glisser-déposer ; chaque panneau choisit une source de données, une visualisation et un drill-down optionnel."
+keywords: [Liberty Framework, tableau de bord, dashboard, KPI, indicateur, graphique, table, panneau, drill-down, paramètres, mise en page]
 ---
 
 # Tableaux de bord
 
-Un **tableau de bord** est un agencement de graphiques et de cartes d'indicateurs au-dessus des mêmes requêtes nommées que celles utilisées par les [Écrans](/liberty/framework/screens). Un seul fichier (`config/dashboards.toml`) déclare tous les tableaux livrés par l'application. Le `DashboardView` React lit la mise en page, lance une requête par panneau puis rend la grille.
+Un **tableau de bord** est une page unique qui regroupe KPI, graphiques et tables autour d'un contexte commun — typiquement *la période courante* + *un périmètre choisi* (une société, une région, une équipe). Défini depuis **Paramètres → Tableaux de bord** avec une **grille de mise en page** en glisser-déposer ; chaque panneau choisit une source de données (une requête de connecteur ou un graphique enregistré), un **type** de panneau (indicateur / graphique / table) et s'affiche en conséquence.
 
-Les tableaux de bord sont rechargeables à chaud avec le reste de la configuration.
+Le tableau de bord est la surface naturelle pour les vues de direction ("comment se porte-t-on aujourd'hui ?") et pour les vues opérationnelles ("quels jobs tournent, quels écrans ont le plus de refus"). Chaque panneau peut descendre vers un écran pré-filtré sur les lignes sous-jacentes.
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 440" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="db-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="db-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="db-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <linearGradient id="db-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
   </defs>
-
-  <rect x="40" y="40" width="920" height="380" rx="14" fill="url(#db-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">📊 Vue d'ensemble Utilisateurs · Tableau de bord</text>
-  <rect x="860" y="50" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="900" y="65" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Rafraîchir</text>
+  <rect x="40" y="40" width="920" height="280" rx="14" fill="url(#db-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Un tableau de bord à l'exécution</text>
   <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="60" y="100" width="200" height="80" rx="10" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.35)" strokeWidth="1.2"/>
-  <text x="76" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">UTILISATEURS · TOTAL</text>
-  <text x="76" y="152" fill="#4a9eff" fontSize="28" fontWeight="800" fontFamily="system-ui, sans-serif">1 248</text>
-  <text x="76" y="170" fill="#4ade80" fontSize="10" fontFamily="ui-monospace, monospace">+12 ce mois</text>
+  <rect x="60" y="100" width="880" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="78" y="120" fill="#cbd5e1" fontSize="11" fontFamily="system-ui, sans-serif">📅 Mai 2026 ▾   Société : Toutes ▾   Statut ▾   ↻ Rafraîchir   ⬇ Exporter PDF</text>
 
-  <rect x="280" y="100" width="200" height="80" rx="10" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.35)" strokeWidth="1.2"/>
-  <text x="296" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">ACTIFS</text>
-  <text x="296" y="152" fill="#4ade80" fontSize="28" fontWeight="800" fontFamily="system-ui, sans-serif">1 102</text>
-  <text x="296" y="170" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">88 % du total</text>
+  <rect x="60" y="148" width="200" height="80" rx="10" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="160" y="170" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Factures émises</text>
+  <text x="160" y="200" fill="#4a9eff" fontSize="22" textAnchor="middle" fontWeight="700" fontFamily="system-ui, sans-serif">12 481</text>
+  <text x="160" y="220" fill="#4ade80" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▲ +12% vs mois préc.</text>
 
-  <rect x="500" y="100" width="200" height="80" rx="10" fill="rgba(248,113,113,0.10)" stroke="rgba(248,113,113,0.35)" strokeWidth="1.2"/>
-  <text x="516" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">INACTIFS</text>
-  <text x="516" y="152" fill="#f87171" fontSize="28" fontWeight="800" fontFamily="system-ui, sans-serif">146</text>
-  <text x="516" y="170" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">12 % du total</text>
+  <rect x="280" y="148" width="200" height="80" rx="10" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="380" y="170" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">TVA collectée</text>
+  <text x="380" y="200" fill="#4a9eff" fontSize="22" textAnchor="middle" fontWeight="700" fontFamily="system-ui, sans-serif">2 350 K€</text>
+  <text x="380" y="220" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">déclarée mensuelle</text>
 
-  <rect x="720" y="100" width="200" height="80" rx="10" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.35)" strokeWidth="1.2"/>
-  <text x="736" y="120" fill="#64748b" fontSize="9" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">ADMINS</text>
-  <text x="736" y="152" fill="#c084fc" fontSize="28" fontWeight="800" fontFamily="system-ui, sans-serif">18</text>
-  <text x="736" y="170" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">3 ajoutés · 1 retiré</text>
+  <rect x="500" y="148" width="200" height="80" rx="10" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="600" y="170" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Rejetées à la PA</text>
+  <text x="600" y="200" fill="#f87171" fontSize="22" textAnchor="middle" fontWeight="700" fontFamily="system-ui, sans-serif">29</text>
+  <text x="600" y="220" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▼ -8% vs mois préc.</text>
 
-  <rect x="60" y="200" width="440" height="200" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="76" y="222" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">UTILISATEURS PAR STATUT · BARRE</text>
-  <line x1="80" y1="380" x2="480" y2="380" stroke="#334155" strokeWidth="1"/>
+  <rect x="720" y="148" width="220" height="80" rx="10" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="830" y="170" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Temps moyen de traitement</text>
+  <text x="830" y="200" fill="#4a9eff" fontSize="22" textAnchor="middle" fontWeight="700" fontFamily="system-ui, sans-serif">4,2 s</text>
+  <text x="830" y="220" fill="#4ade80" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">▲ stable</text>
 
-  <rect x="100" y="270" width="40" height="110" fill="rgba(74,158,255,0.45)"/>
-  <text x="120" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Actif</text>
-  <rect x="160" y="320" width="40" height="60" fill="rgba(255,159,10,0.45)"/>
-  <text x="180" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">En attente</text>
-  <rect x="220" y="350" width="40" height="30" fill="rgba(248,113,113,0.45)"/>
-  <text x="240" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Désactivé</text>
-  <rect x="280" y="305" width="40" height="75" fill="rgba(192,132,252,0.45)"/>
-  <text x="300" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Admin</text>
-  <rect x="340" y="290" width="40" height="90" fill="rgba(50,215,75,0.45)"/>
-  <text x="360" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Lecture seule</text>
-  <rect x="400" y="345" width="40" height="35" fill="rgba(148,163,184,0.45)"/>
-  <text x="420" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Autre</text>
+  <rect x="60" y="244" width="540" height="60" rx="10" fill="rgba(192,132,252,0.06)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
+  <text x="76" y="262" fill="#c084fc" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">GRAPHIQUE · Factures émises par mois</text>
+  <text x="76" y="290" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">barres — 12 derniers mois</text>
 
-  <rect x="520" y="200" width="400" height="200" rx="10" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="536" y="222" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.05em" fontFamily="system-ui, sans-serif">CRÉATIONS PAR MOIS · LIGNE</text>
-  <line x1="540" y1="380" x2="900" y2="380" stroke="#334155" strokeWidth="1"/>
-
-  <polyline points="560,360 620,330 680,300 740,310 800,260 860,240 900,250" fill="none" stroke="#4a9eff" strokeWidth="2"/>
-  <circle cx="560" cy="360" r="3" fill="#4a9eff"/>
-  <circle cx="620" cy="330" r="3" fill="#4a9eff"/>
-  <circle cx="680" cy="300" r="3" fill="#4a9eff"/>
-  <circle cx="740" cy="310" r="3" fill="#4a9eff"/>
-  <circle cx="800" cy="260" r="3" fill="#4a9eff"/>
-  <circle cx="860" cy="240" r="3" fill="#4a9eff"/>
-  <circle cx="900" cy="250" r="3" fill="#4a9eff"/>
-
-  <text x="560" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Jan</text>
-  <text x="620" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Fév</text>
-  <text x="680" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Mar</text>
-  <text x="740" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Avr</text>
-  <text x="800" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Mai</text>
-  <text x="860" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Juin</text>
-  <text x="900" y="396" fill="#94a3b8" fontSize="9" textAnchor="middle">Juil</text>
+  <rect x="620" y="244" width="320" height="60" rx="10" fill="rgba(34,197,94,0.06)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
+  <text x="636" y="262" fill="#22c55e" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TABLE · Refus récents</text>
+  <text x="636" y="290" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">10 lignes — clic pour descendre dans Factures</text>
 </svg>
+
+La maquette montre la vue à l'exécution ; l'éditeur derrière est décrit ci-dessous.
 
 ---
 
-## Déclarer un tableau de bord
+## Paramètres → Tableaux de bord
 
-```toml
-[dashboards.myapp.overview]
-label       = "Vue d'ensemble utilisateurs"
-description = "Instantané des comptes, des statuts et de la croissance récente."
-auto_load   = true
+Le catalogue liste chaque tableau de bord de l'installation.
 
-# Un panneau par indicateur ou graphique
-[[dashboards.myapp.overview.panels]]
-id          = "users_total"
-type        = "stat"
-label       = "Utilisateurs · total"
-query       = "users_count"          # toute requête SELECT — la première colonne de la première ligne est lue
-columns     = 3                       # largeur dans la grille du tableau (sur 12)
-delta_field = "delta_month"           # nombre secondaire optionnel
+<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
+  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
+    <div style={{fontWeight: 700}}>Paramètres → Tableaux de bord</div>
+    <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>+ Nouveau tableau de bord</span>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1fr 80px 60px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', fontSize: '11px', fontWeight: 600}}>
+    <div>Id</div><div>Titre</div><div>App</div><div>Panneaux</div><div></div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1fr 80px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>billing-overview</div><div>Vue d'ensemble facturation</div><div>billing</div><div>8</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1fr 80px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>sales-pipeline</div><div>Pipeline commercial</div><div>crm</div><div>6</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1fr 80px 60px', padding: '10px 14px', alignItems: 'center'}}>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>tech-dashboard</div><div>Tableau de bord technique</div><div>_default</div><div>10</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+  </div>
+</div>
 
-[[dashboards.myapp.overview.panels]]
-id      = "users_per_status"
-type    = "bar"
-label   = "Utilisateurs par statut"
-query   = "users_by_status"           # SELECT status, count(*) FROM users GROUP BY status
-columns = 6
-x       = "status"
-y       = "count"
+Cliquer sur *+ Nouveau tableau de bord* ou sur n'importe quelle ligne pour ouvrir l'éditeur de tableau de bord.
 
-[[dashboards.myapp.overview.panels]]
-id      = "created_per_month"
-type    = "line"
-label   = "Créations par mois"
-query   = "users_created_per_month"
-columns = 6
-x       = "month"
-y       = "count"
+---
 
-[[dashboards.myapp.overview.panels]]
-id      = "users_by_role"
-type    = "pie"
-label   = "Utilisateurs par rôle"
-query   = "users_by_role"
-columns = 4
-slice   = "role"
-value   = "count"
-```
+## L'éditeur de tableau de bord
 
-La grille du tableau de bord est divisée en **12 colonnes**. Un panneau avec `columns = 6` occupe une demi-ligne ; deux panneaux `columns = 3` plus un panneau `columns = 6` partagent une ligne.
+Un éditeur à deux panneaux : **grille de mise en page** à gauche (glisser-déposer), **éditeur de panneau** à droite (configure le panneau sélectionné).
+
+### Champs généraux (haut de l'éditeur)
+
+| Champ | Effet |
+|---|---|
+| **Id** | Identifiant — apparaît dans l'URL (`/dashboards/<id>`), le sélecteur de menu et le code de permission (`dashboard:<id>`). |
+| **Titre** | Titre d'affichage localisé. |
+| **App** | Espace de noms d'app. Détermine l'espace de travail où le tableau de bord apparaît. |
+| **Description** | Texte libre. Apparaît dans le sélecteur de menu. |
+| **Barre de filtres partagée** | Liste optionnelle de paramètres exposés en haut du tableau de bord à l'exécution. Chaque panneau qui référence le même paramètre hérite de la valeur. |
+| **Page par défaut** | Optionnel — la page d'accueil du tableau de bord dans la même app. Pose une icône "accueil" sur l'entrée de menu. |
+
+### Grille de mise en page
+
+Une grille responsive à 12 colonnes. Chaque cellule est un **panneau** qui peut occuper de 1 à 12 colonnes de large et de 1 à 6 lignes de haut. L'opérateur glisse depuis une palette de types de panneau vers la grille :
+
+<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
+  <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', gap: '14px'}}>
+    <div>
+      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, color: '#4a9eff', marginBottom: '10px'}}>Palette</div>
+      <div style={{display: 'grid', gap: '6px'}}>
+        <span style={{padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>📊 Indicateur (KPI)</span>
+        <span style={{padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>📈 Graphique</span>
+        <span style={{padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>📋 Table</span>
+        <span style={{padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>📝 Markdown</span>
+        <span style={{padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', opacity: 0.6}}>🗂 Grille (prévu)</span>
+      </div>
+    </div>
+    <div>
+      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, color: '#4a9eff', marginBottom: '10px'}}>Mise en page · grille 12 colonnes</div>
+      <div style={{display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '4px'}}>
+        <div style={{gridColumn: 'span 3', height: '40px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: '#60a5fa'}}>📊 indicateur</div>
+        <div style={{gridColumn: 'span 3', height: '40px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: '#60a5fa'}}>📊 indicateur</div>
+        <div style={{gridColumn: 'span 3', height: '40px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: '#60a5fa'}}>📊 indicateur</div>
+        <div style={{gridColumn: 'span 3', height: '40px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: '#60a5fa'}}>📊 indicateur</div>
+        <div style={{gridColumn: 'span 7', height: '80px', background: 'rgba(192,132,252,0.10)', border: '1px solid rgba(192,132,252,0.40)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: '#c084fc'}}>📈 graphique (barres)</div>
+        <div style={{gridColumn: 'span 5', height: '80px', background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.40)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 600, color: '#22c55e'}}>📋 table</div>
+      </div>
+      <div style={{marginTop: '10px', display: 'flex', gap: '6px'}}>
+        <span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.15)', border: '1px solid rgba(74,158,255,0.40)', color: '#4a9eff', fontSize: '11px', fontWeight: 700}}>+ Ajouter ligne</span>
+        <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Aperçu</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+| Contrôle | Effet |
+|---|---|
+| **Glisser depuis la palette** | Ajoute un nouveau panneau à la fin de la grille. |
+| **Poignées de redimensionnement** | Glisser le bord d'un panneau pour redimensionner. S'aligne sur les colonnes. |
+| **Libellé de section** | Optionnel. Ajoute un en-tête de section avant une rangée de panneaux — par exemple *Vue commerciale*, *Santé opérationnelle*. |
+| **Clic sur un panneau** | Ouvre l'**éditeur de panneau** à droite. |
+| **✕ sur un panneau** | Le retire de la mise en page. |
+| **Aperçu** | Rend le tableau de bord complet avec des données live — utile avant d'enregistrer. |
 
 ---
 
 ## Types de panneau
 
-| `type` | Ce qui est rendu | Champs requis |
-|---|---|---|
-| `stat` | Un grand nombre, accompagné d'un delta optionnel. | `query` (lit la première colonne de la première ligne). `delta_field` optionnel. |
-| `bar` | Des barres verticales, une par catégorie. | `x` (catégorie), `y` (valeur numérique). |
-| `line` | Une courbe sur un axe temporel ou ordonné. | `x`, `y`. Les points sont rendus dans l'ordre renvoyé par la requête. |
-| `pie` | Un camembert, une part par tranche. | `slice` (catégorie), `value` (valeur numérique). |
-| `grid` *(prévu)* | Une mini-table directement dans le tableau de bord. | `query`, options `columns` optionnelles. |
+### Indicateur (KPI)
 
-Chaque panneau s'appuie sur **une** requête nommée du connecteur du tableau — ou d'un autre connecteur si le panneau précise `connector = "autre"`. La permission requise est `sql:<connecteur>:<requête>` ; un panneau auquel l'utilisateur n'a pas accès disparaît, et la mise en page se réajuste automatiquement.
-
----
-
-## Mise en page
-
-Les panneaux sont rendus dans l'ordre de déclaration, de gauche à droite, dans une grille de 12 colonnes. Un panneau qui n'indique pas `columns` prend la valeur `4` par défaut (trois panneaux côte à côte).
-
-Options de mise en page :
+Un nombre unique avec un delta optionnel par rapport à une période précédente.
 
 | Champ | Effet |
 |---|---|
-| `columns` | Largeur du panneau (entre 1 et 12). Le panneau passe à la ligne suivante en cas de débordement. |
-| `rows` | Hauteur optionnelle en nombre de lignes. Valeur par défaut : `1`. |
-| `group` | Étiquette de groupe ; l'interface affiche un en-tête de section au-dessus du premier panneau de chaque groupe. |
-| `auto_load` | Exécute la requête du panneau à l'ouverture du tableau. Hérite par défaut du `auto_load` du tableau de bord. |
+| **Titre** | Affiché au-dessus du nombre. |
+| **Connecteur** / **Requête** | La source. La requête doit retourner au moins une ligne avec une colonne numérique. |
+| **Colonne valeur** | Colonne dont la valeur de la première ligne est rendue comme nombre principal. |
+| **Format** | Format numérique ("`1 234`", "`1,2 K`", "`€ 12 345,00`"). |
+| **Colonne delta** | Optionnel. Un nombre signé rendu sous la valeur sous forme de chip coloré ▲ / ▼. |
+| **Sens du delta** | `Plus élevé est mieux` / `Plus bas est mieux` — pilote la couleur. |
+| **Sparkline de tendance** | Optionnel. Pointe sur une requête qui retourne une petite série temporelle ; rendu sous forme de sparkline à 10 points. |
+
+### Graphique
+
+Emballe une définition de [graphique](./charts.md).
+
+| Champ | Effet |
+|---|---|
+| **Graphique** | Liste déroulante des graphiques définis sous *Paramètres → Graphiques*. |
+| **Surcharger les paramètres** | Surcharges optionnelles par panneau des valeurs fixes du graphique. |
+| **Écran de drill-down** | Optionnel. Cliquer sur un point de données ouvre l'écran désigné pré-filtré. |
+
+### Table
+
+Une petite grille en lecture seule (typiquement 5 à 20 lignes). Utile pour les listes "top N" / "récents".
+
+| Champ | Effet |
+|---|---|
+| **Connecteur** / **Requête** | La source. |
+| **Colonnes** | Liste réordonnable de colonnes à afficher, avec largeurs et formats par colonne. |
+| **Limite de lignes** | Par défaut 20. |
+| **Action au clic** | `Ouvrir le dialogue` (utilise le dialogue de l'écran lié) / `Ouvrir l'écran filtré` / `Aucune`. |
+
+### Markdown
+
+Bloc de texte statique, utile pour des annotations ou des explications contextuelles entre panneaux.
+
+| Champ | Effet |
+|---|---|
+| **Contenu** | Source Markdown. |
+| **Fond** | Aucun / Discret (par défaut) / Accentué. |
+
+### Grille (prévu)
+
+Grille de style écran avec la barre d'outils de filtres complète. Sur la feuille de route.
 
 ---
 
-## Endpoints REST
+## La barre de filtres partagée
 
-| Méthode | Chemin | Rôle |
-|---|---|---|
-| `GET` | `/api/dashboards` | Tous les tableaux de bord accessibles, regroupés par app. |
-| `GET` | `/api/dashboards/{app}` | Les tableaux de bord d'une app. |
-| `GET` | `/api/dashboards/{app}/{id}` | La mise en page complète du tableau. |
-| `POST` | `/api/dashboards/{app}/{id}/refresh` | Relance chaque panneau côté serveur (passe par les routes `/api/query/…` sous-jacentes). |
+Le haut d'un tableau de bord montre une rangée de saisies dérivées de la **Barre de filtres partagée** déclarée en haut de l'éditeur. Chaque entrée :
 
-Le `DashboardView` appelle directement `/api/query/{connecteur}/{nom}` pour chaque panneau — mêmes contrôles que pour une grille de table. Un panneau dont la requête n'est pas autorisée est masqué silencieusement.
+| Champ | Effet |
+|---|---|
+| **Nom** | Nom interne du paramètre — les panneaux le référencent via `${dashboard.<nom>}` dans leurs surcharges de paramètres. |
+| **Libellé** | Affiché au-dessus de la saisie. |
+| **Type** | `string` / `date` / `daterange` / `lookup` / `enum`. Pilote le widget. |
+| **Valeur par défaut** | Valeur initiale. Les jetons de date (`${today}`, `${month.first}`) sont acceptés. |
+| **Lookup** | Quand *Type* vaut `lookup`, pointe sur un lookup du dictionnaire. |
+
+Les opérateurs règlent le filtre une fois en haut du tableau de bord ; chaque panneau qui hérite du paramètre se ré-exécute avec la nouvelle valeur. C'est ce qui rend les tableaux de bord cohérents — une saisie, plusieurs panneaux mis à jour.
 
 ---
 
-## Conseils & bonnes pratiques
+## Drill-down
 
-- **Réutiliser les requêtes de l'écran.** Un tableau de bord a rarement besoin de SQL nouveau : un `users_by_status` avec `GROUP BY` se déclare à côté de `users_get`, dans le même connecteur. Le dictionnaire reste unique.
-- **Les panneaux numériques sont peu coûteux ; les camemberts moins.** Un camembert sur des milliers de tranches devient illisible. Au-delà de huit tranches, basculer sur un panneau barre avec un `LIMIT N` et un agrégat *Autres*.
-- **Choisir une largeur cohérente par type.** Les indicateurs numériques rendent bien à `columns = 3` (quatre côte à côte) ; les graphiques barre et ligne à `columns = 6` (deux côte à côte) ; les camemberts à `columns = 4`. La grille s'ajuste alors naturellement.
-- **Un tableau de bord est filtré par les permissions.** Les panneaux que l'utilisateur ne peut pas exécuter disparaissent. La mise en page s'adapte d'elle-même — il faut éviter de concevoir des panneaux qui dépendent les uns des autres.
+Chaque panneau peut déclarer un **écran de drill-down** — cliquer sur le panneau (ou sur un point de données précis sur les graphiques / tables) ouvre l'écran désigné pré-filtré sur les lignes sous-jacentes. Le framework gère le passage de paramètres automatiquement : le panneau sait ce qu'il a interrogé, l'écran accepte les mêmes noms de paramètres.
+
+Pour un contrôle plus fin, le champ de drill-down accepte un *Patron d'URL* avec des placeholders `:nom` que le framework remplit depuis le contexte du clic.
+
+---
+
+## Permissions
+
+Un tableau de bord est verrouillé par `dashboard:<id>`. Chaque panneau hérite de la permission de la requête de connecteur sous-jacente — un utilisateur sans `sql:billing:monthly-invoice-counts` ne voit pas le panneau de graphique qui la référence. Le framework **élague le panneau silencieusement** plutôt que d'afficher un placeholder d'erreur, afin que les tableaux de bord restent cohérents même quand l'appelant n'a pas toutes les permissions.
+
+L'onglet d'éditeur de tableaux de bord est verrouillé par `settings:dashboards`.
+
+---
+
+## Conseils et bonnes pratiques
+
+- **Commencer par les indicateurs.** La première rangée d'un tableau de bord doit comporter 3 à 4 panneaux d'indicateur — l'œil de l'opérateur s'y pose en premier.
+- **Regrouper avec des en-têtes de section.** Deux rangées visuelles séparées par un *Libellé de section* se lisent bien mieux que six panneaux en mur.
+- **Garder moins de 12 panneaux par tableau de bord.** Au-delà, la page défile et la valeur "tout en un coup d'œil" s'évapore. Découper en plusieurs tableaux de bord.
+- **User la barre de filtres partagée pour le temps.** La plupart des tableaux de bord tournent autour d'une période ; exposer la plage de dates ici une fois et chaque panneau en hérite.
+- **Câbler les drill-downs.** Un indicateur isolé vaut la moitié d'un indicateur qui ouvre l'écran pertinent.
+- **User le bouton Aperçu.** Attrape "ce panneau n'a pas de données sur une installation fraîche" avant l'enregistrement.
+
+---
+
+## Sous le capot
+
+Les définitions de tableau de bord sont enregistrées dans `liberty-apps/config/dashboards.toml` et les graphiques sous-jacents dans `charts.toml`. Les opérateurs **ne modifient pas ces fichiers à la main** en exploitation normale ; l'éditeur de tableaux de bord est l'interface canonique, avec l'onglet *TOML brut* comme échappatoire pour les rares modifications qu'un manque de l'éditeur bloque.
+
+---
+
+## Pour aller plus loin
+
+- [Graphiques](./charts.md) — les définitions de graphique qu'un panneau Graphique référence.
+- [Écrans](./screens.md) — les écrans qu'un drill-down ouvre.
+- [Liaison des paramètres](./query-params-binding.md) — comment la barre de filtres partagée alimente chaque panneau.
+- [Menus](./menus.md) — câbler le tableau de bord dans la barre latérale.

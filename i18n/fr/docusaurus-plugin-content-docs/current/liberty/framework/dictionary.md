@@ -1,212 +1,257 @@
 ---
 title: Dictionnaire
-description: "Le dictionnaire regroupe les métadonnées d'affichage par colonne : libellés, formats et règles BOOLEAN / ENUM / LOOKUP. Une fois une colonne décrite, tous les écrans qui la retournent en héritent — grille typée, libellés localisés, listes déroulantes câblées automatiquement."
-keywords: [Liberty Next, dictionnaire, entrées, enums, lookups, libellé, format, règle, BOOLEAN, ENUM, LOOKUP, i18n, EN, FR]
+description: "Le dictionnaire regroupe les métadonnées qui transforment des colonnes brutes de base de données en interface lisible — libellés localisés, formats numériques, règles BOOLEAN / ENUM / LOOKUP, valeurs par défaut côté formulaire. Édité depuis Paramètres → Dictionnaire ; réutilisé partout où une colonne de connecteur est affichée."
+keywords: [Liberty Framework, dictionnaire, colonnes, énumérations, lookups, libellés, formats, paramètres, BOOLEAN, ENUM, LOOKUP, i18n]
 ---
 
 # Dictionnaire
 
-Le dictionnaire est le **catalogue partagé des métadonnées par colonne**. Un seul fichier (`config/dictionary.toml`) en contient trois types :
+Le **dictionnaire** est la couche de métadonnées partagée qui transforme un nom de colonne brut en interface lisible. Une requête de connecteur retourne des colonnes que la base connaît sous leur identifiant (`customer_status`, `due_date`, `invoice_amount`) ; le dictionnaire y attache :
 
-- les **entrées** — métadonnées par colonne : libellé, format, règle, traductions par langue ;
-- les **enums** — énumérations nommées avec libellés traduisibles ;
-- les **lookups** — pointeurs vers une requête qui résout un `code → libellé`.
+- Un **libellé localisé** ("Statut client", "Date d'échéance", "Montant facture").
+- Une **règle d'affichage** (bascule `BOOLEAN`, chip `ENUM`, `LOOKUP` contre un autre connecteur).
+- Un **format de nombre / date** ("€ 1 234,56", "dd/MM/yyyy").
+- Des **valeurs par défaut côté formulaire** pour les écrans d'écriture (remplissage automatique avec l'utilisateur courant, la date courante, une séquence générée, un mot de passe haché).
 
-Quand une requête déclare une colonne avec une indication `dd`, le connecteur SQL résout son libellé, son format et sa règle au moment où il renvoie le résultat, dans la langue de la requête. La grille React affiche directement le libellé localisé, ✓ / ✗ pour les booléens, le libellé de l'énumération, ou — via `services/lookups.useLookupBatch` — le libellé du lookup après un seul fetch par session.
+Défini une seule fois dans **Paramètres → Dictionnaire**, référencé par chaque écran, graphique et tableau de bord qui consomme la colonne correspondante. Changer le libellé ici et chaque consommateur le répercute au prochain rendu.
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="dc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="dc-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="dc-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <linearGradient id="dc-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <marker id="dc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
   </defs>
+  <rect x="40" y="40" width="920" height="280" rx="14" fill="url(#dc-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Comment une colonne arrive sur un écran</text>
+  <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="40" y="40" width="280" height="380" rx="14" fill="url(#dc-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="68" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">📄 dictionary.toml</text>
+  <rect x="60" y="100" width="200" height="200" rx="10" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="160" y="124" fill="#cbd5e1" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">1 · COLONNE</text>
+  <text x="160" y="148" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="ui-monospace, monospace">customer_status</text>
+  <text x="160" y="170" fill="#94a3b8" fontSize="10" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">découverte depuis</text>
+  <text x="160" y="186" fill="#94a3b8" fontSize="10" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">le curseur SQL</text>
+  <text x="160" y="220" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="ui-monospace, monospace">due_date</text>
+  <text x="160" y="252" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="ui-monospace, monospace">invoice_amount</text>
 
-  <rect x="56" y="84" width="248" height="80" rx="8" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="68" y="104" fill="#4a9eff" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">[entries.USER_STATUS]</text>
-  <text x="68" y="120" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">label = "Status"</text>
-  <text x="68" y="134" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">format = "string"</text>
-  <text x="68" y="150" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">rules = "ENUM"</text>
+  <rect x="300" y="100" width="320" height="200" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="460" y="124" fill="#4a9eff" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">2 · ENTRÉE DICTIONNAIRE</text>
+  <text x="460" y="152" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Libellé · Customer status / Statut client</text>
+  <text x="460" y="172" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Type · string · Règle · LOOKUP</text>
+  <text x="460" y="200" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Type · date · Format · dd/MM/yyyy</text>
+  <text x="460" y="228" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Type · decimal · Format · 1 234,56 €</text>
+  <text x="460" y="270" fill="#94a3b8" fontSize="10" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">défini une fois, réutilisé partout</text>
 
-  <rect x="56" y="172" width="248" height="110" rx="8" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.35)" strokeWidth="1"/>
-  <text x="68" y="192" fill="#c084fc" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">[enums.USER_STATUS]</text>
-  <text x="68" y="208" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">values = [</text>
-  <text x="80" y="224" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">{`{ value = "Y", label = "Active",`}</text>
-  <text x="92" y="238" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">{`  l = { fr = "Actif" } },`}</text>
-  <text x="80" y="252" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">{`{ value = "N", label = "Inactive",`}</text>
-  <text x="92" y="266" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">{`  l = { fr = "Inactif" } },`}</text>
-  <text x="68" y="278" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">]</text>
+  <rect x="660" y="100" width="280" height="200" rx="10" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="800" y="124" fill="#22c55e" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 · AFFICHÉ</text>
+  <text x="800" y="156" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">cellule de grille — chip coloré depuis</text>
+  <text x="800" y="172" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">la table LOOKUP</text>
+  <text x="800" y="200" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">dialogue d'édition — sélecteur de date /</text>
+  <text x="800" y="216" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">saisie numérique avec format</text>
+  <text x="800" y="244" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">chip de filtre — multi-sélection</text>
+  <text x="800" y="260" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">des valeurs du lookup</text>
 
-  <rect x="56" y="290" width="248" height="120" rx="8" fill="rgba(50,215,75,0.06)" stroke="rgba(50,215,75,0.30)" strokeWidth="1"/>
-  <text x="68" y="310" fill="#4ade80" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">[lookups.CITY]</text>
-  <text x="68" y="326" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">connector = "myapp"</text>
-  <text x="68" y="340" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">query = "cities_get"</text>
-  <text x="68" y="354" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">value = "ID"</text>
-  <text x="68" y="368" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">label = "NAME"</text>
-  <text x="68" y="382" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">group = "REGION"</text>
-
-  <line x1="320" y1="220" x2="420" y2="220" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#dc-arrow)"/>
-
-  <rect x="420" y="40" width="280" height="380" rx="14" fill="url(#dc-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
-  <text x="440" y="68" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">⚙ resolve_rule()</text>
-
-  <rect x="436" y="84" width="248" height="60" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="448" y="104" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">BOOLEAN</text>
-  <text x="448" y="120" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">{`{ kind: "boolean", true_value: "Y" }`}</text>
-  <text x="448" y="136" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">la cellule affiche ✓ ou ✗</text>
-
-  <rect x="436" y="152" width="248" height="60" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="448" y="172" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">ENUM</text>
-  <text x="448" y="188" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">{`{ kind: "enum", values: [...] }`}</text>
-  <text x="448" y="204" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">la cellule affiche le libellé localisé</text>
-
-  <rect x="436" y="220" width="248" height="80" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="448" y="240" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">LOOKUP</text>
-  <text x="448" y="256" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">{`{ kind: "lookup", connector,`}</text>
-  <text x="448" y="270" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">{` query, value, label }`}</text>
-  <text x="448" y="286" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">la grille pré-charge une fois par session</text>
-
-  <rect x="436" y="308" width="248" height="100" rx="8" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="448" y="328" fill="#fb923c" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">règles côté formulaire</text>
-  <text x="448" y="344" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">SEQUENCE</text>
-  <text x="448" y="358" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">SYSDATE / CURRENT_DATE</text>
-  <text x="448" y="372" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">LOGIN · PASSWORD</text>
-  <text x="448" y="392" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">appliquées par le formulaire à l'ouverture</text>
-
-  <line x1="700" y1="220" x2="800" y2="220" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#dc-arrow)"/>
-
-  <rect x="800" y="40" width="160" height="380" rx="14" fill="url(#dc-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="820" y="68" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">REACT</text>
-
-  <rect x="816" y="84" width="128" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="824" y="102" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Cellule de grille</text>
-  <text x="824" y="118" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">code — libellé</text>
-
-  <rect x="816" y="142" width="128" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="824" y="160" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Filtre de colonne</text>
-  <text x="824" y="176" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">multi-sélection</text>
-
-  <rect x="816" y="200" width="128" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="824" y="218" fill="#cbd5e1" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Widget de formulaire</text>
-  <text x="824" y="234" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">SearchSelect</text>
-
-  <rect x="816" y="258" width="128" height="50" rx="8" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
-  <text x="824" y="276" fill="#4a9eff" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">i18n</text>
-  <text x="824" y="292" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">X-Liberty-Lang</text>
-
-  <text x="824" y="332" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">Chaque requête</text>
-  <text x="824" y="348" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">transporte la langue</text>
-  <text x="824" y="364" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">i18n active —</text>
-  <text x="824" y="380" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">les libellés reviennent</text>
-  <text x="824" y="396" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">déjà localisés.</text>
+  <line x1="260" y1="200" x2="300" y2="200" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#dc-arrow)"/>
+  <line x1="620" y1="200" x2="660" y2="200" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#dc-arrow)"/>
 </svg>
 
 ---
 
-## Entrées
+## Paramètres → Dictionnaire
 
-Métadonnées par colonne. Chaque entrée fixe :
+La page comporte deux onglets : **Colonnes** (une entrée par colonne logique) et **Lookups** (jeux de valeurs nommés que les colonnes référencent).
 
-| Champ | Description |
+### Onglet Colonnes
+
+<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
+  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
+    <div style={{fontWeight: 700}}>Paramètres → Dictionnaire · Colonnes</div>
+    <div style={{display: 'flex', gap: '6px'}}>
+      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Rechercher colonne…</span>
+      <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>+ Nouvelle colonne</span>
+    </div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 80px 90px 90px 60px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', fontSize: '11px', fontWeight: 600}}>
+    <div>Nom</div><div>Libellé (fr)</div><div>Type</div><div>Règle</div><div>Format</div><div></div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 80px 90px 90px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>customer_status</div><div>Statut client</div><div>string</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(192,132,252,0.10)', border: '1px solid rgba(192,132,252,0.40)', color: '#c084fc', fontSize: '10px', fontWeight: 600}}>LOOKUP</span></div><div style={{opacity: 0.6}}>—</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 80px 90px 90px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>due_date</div><div>Date d'échéance</div><div>date</div><div style={{opacity: 0.6}}>—</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '10px'}}>dd/MM/yyyy</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 80px 90px 90px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>invoice_amount</div><div>Montant facture</div><div>decimal</div><div style={{opacity: 0.6}}>—</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '10px'}}>1 234,56 €</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 80px 90px 90px 60px', padding: '10px 14px', alignItems: 'center'}}>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>is_active</div><div>Actif</div><div>bool</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', color: '#60a5fa', fontSize: '10px', fontWeight: 600}}>BOOLEAN</span></div><div style={{opacity: 0.6}}>—</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+  </div>
+</div>
+
+Cliquer sur *+ Nouvelle colonne* ou sur n'importe quelle ligne pour ouvrir l'éditeur de colonne.
+
+---
+
+## L'éditeur de colonne
+
+| Champ | Effet |
 |---|---|
-| `label` | Libellé anglais par défaut. |
-| `l` | Libellés par langue (`{ fr = "...", de = "..." }`). |
-| `format` | Format interprété par l'interface : `date`, `datetime`, `amount`, `percent`, `string`, `number`, `boolean`, …. |
-| `rules` | Règle d'affichage : `BOOLEAN`, `ENUM`, `LOOKUP` — ou une règle côté formulaire (voir plus bas). |
-| `rules_values` / `default` | Configuration optionnelle propre à la règle (par exemple `true_value` pour un booléen, valeur par défaut sur la création d'une ligne). |
+| **Nom** | La clé du dictionnaire — court, snake_case (`customer_status`). Les indices de colonnes des connecteurs référencent ce nom pour récupérer les métadonnées. |
+| **Libellé** | Une table par langue des libellés d'affichage. L'éditeur affiche une saisie par langue chargée. Retombe sur le *Nom* si une langue manque. |
+| **Description** | Optionnel. Apparaît comme infobulle sur les saisies de formulaire et les en-têtes de colonne. |
+| **Type** | `string` / `int` / `float` / `decimal` / `bool` / `date` / `datetime` / `time`. Détermine le widget par défaut sur les écrans (saisie texte vs sélecteur de date vs case à cocher). |
+| **Format** | Pour les nombres et les dates — une chaîne de format (`1 234,56 €`, `dd/MM/yyyy`). La cellule de grille et la saisie de formulaire s'affichent avec ce format. |
+| **Règle** | `—` (pas de rendu particulier) / `BOOLEAN` / `ENUM` / `LOOKUP` / `PASSWORD`. Voir [Règles d'affichage](#display-rules). |
+| **Lookup** | Visible uniquement quand *Règle* vaut `LOOKUP`. Liste déroulante des lookups définis sur l'onglet *Lookups*. |
+| **Valeurs Enum** | Visibles uniquement quand *Règle* vaut `ENUM`. Une liste réordonnable de lignes `{ valeur, libellé(s), couleur }`. |
+| **Valeurs par défaut côté formulaire** | Optionnel. Voir [Valeurs par défaut côté formulaire](#form-layer-defaults). |
+| **Obligatoire** | Marque le champ comme obligatoire par défaut sur chaque formulaire. Les surcharges par écran peuvent toujours relâcher cette contrainte. |
+| **Lecture seule** | Marque le champ comme en lecture seule par défaut sur chaque formulaire. |
 
-```toml
-[entries.USER_STATUS]
-label   = "Status"
-format  = "string"
-rules   = "ENUM"
-
-[entries.USER_STATUS.l]
-fr = "Statut"
-de = "Status"
-```
-
-Une entrée peut être déclarée au niveau global (partagée par tous les connecteurs) ou sous `[connectors.<conn>.entries.<clé>]` (spécifique à un connecteur — utile quand le même nom de colonne porte un sens différent selon la source). La résolution teste d'abord la version par connecteur, puis se rabat sur la version globale.
-
-Une indication `dd = "USER_STATUS"` sur la colonne de la requête applique l'entrée à cette colonne. `dd = ""` désactive — la colonne reste sans libellé localisé. Un `label` indiqué directement sur la colonne surcharge celui du dictionnaire.
+Un *Enregistrer* reconstruit le registre du dictionnaire ; les consommateurs (écrans, graphiques) se re-rendent avec les nouvelles métadonnées à leur prochain rafraîchissement.
 
 ---
 
-## Enums
+## Règles d'affichage \{#display-rules\}
 
-Une table statique `code → libellé` avec traductions.
+Le champ **Règle** change la façon dont une colonne est rendue dans une cellule de grille, dans une saisie de formulaire et dans un chip de filtre.
 
-```toml
-[enums.USER_STATUS]
-label = "User status"
-values = [
-  { value = "Y", label = "Active",   l = { fr = "Actif" } },
-  { value = "N", label = "Inactive", l = { fr = "Inactif" } },
-]
-```
+### `BOOLEAN`
 
-Résolus au moment du résultat. La cellule affiche le libellé de la langue active, le filtre de colonne propose un sélecteur multi-valeurs alimenté par la même liste, et le widget de formulaire est un `SearchSelect`.
+Une colonne `bool` s'affiche en chip / bascule. La saisie de formulaire est un interrupteur. Le filtre est une pastille à trois états (`Tous` / `Oui` / `Non`).
+
+L'éditeur expose :
+
+| Champ | Effet |
+|---|---|
+| **Libellé Vrai** | Par défaut "Oui" — table par langue. |
+| **Libellé Faux** | Par défaut "Non". |
+| **Couleur Vrai** / **Couleur Faux** | Fond des pastilles dans la grille. |
+
+### `ENUM`
+
+Un petit jeu de valeurs **statique** déclaré sur la colonne elle-même. À utiliser quand les valeurs sont connues à la conception et ne changent jamais à l'exécution (par exemple `low` / `medium` / `high`).
+
+| Champ par valeur | Effet |
+|---|---|
+| **Valeur** | La valeur littérale enregistrée en base. |
+| **Libellé** | Libellé d'affichage par langue. |
+| **Couleur** | Fond de la pastille. |
+| **Ordre** | Poignée de glissement pour réordonner. |
+
+S'affiche en chip coloré dans les grilles, en liste déroulante sur les formulaires, en multi-sélection dans les filtres.
+
+### `LOOKUP`
+
+Un jeu de valeurs **dynamique** récupéré depuis une autre requête de connecteur. À utiliser quand les valeurs vivent dans une table et peuvent évoluer dans le temps (statuts gérés par un opérateur, listes de pays, etc.).
+
+La colonne pointe sur une entrée *Lookup* ; le lookup lui-même est défini sur l'onglet *Lookups* — voir ci-dessous.
+
+### `PASSWORD`
+
+Masque la valeur dans les grilles (`••••••••`) et affiche une saisie de type mot de passe sur les formulaires. Combiné à la valeur par défaut côté formulaire `PASSWORD`, met en place un chemin d'écriture haché en Argon2 sûr par construction.
 
 ---
 
-## Lookups
+## Onglet Lookups
 
-Une référence vers une requête dont les colonnes `value` / `label` résolvent la cellule.
+Un lookup est une **requête nommée qui retourne des lignes `{ valeur, libellé }`**. Les colonnes en *Règle = LOOKUP* + pointant sur un lookup rendent leurs valeurs sous forme de chips étiquetés.
 
-```toml
-[lookups.CITY]
-description = "Cities"
-connector   = "myapp"            # retombe sur le connecteur appelant si non précisé
-query       = "cities_get"
-value       = "ID"
-label       = "NAME"
-group       = "REGION"           # regroupement secondaire optionnel
-```
+<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
+  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
+    <div style={{fontWeight: 700}}>Paramètres → Dictionnaire · Lookups</div>
+    <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>+ Nouveau lookup</span>
+  </div>
+  <div style={{padding: '14px 16px', display: 'grid', gridTemplateColumns: '160px 1fr', rowGap: '8px', columnGap: '12px', alignItems: 'center'}}>
+    <div style={{opacity: 0.75}}>Nom</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>customer-statuses</span></div>
+    <div style={{opacity: 0.75}}>Connecteur</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>billing ▾</span></div>
+    <div style={{opacity: 0.75}}>Requête</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>statuses-list ▾</span></div>
+    <div style={{opacity: 0.75}}>Colonne valeur</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>code ▾</span></div>
+    <div style={{opacity: 0.75}}>Colonne libellé</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>label ▾</span></div>
+    <div style={{opacity: 0.75}}>Colonne couleur</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>colour ▾</span></div>
+    <div style={{opacity: 0.75}}>Cache</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Par session ▾</span></div>
+  </div>
+</div>
 
-Une colonne marquée `rules = "LOOKUP"` qui pointe sur un id de lookup est résolue :
+| Champ | Effet |
+|---|---|
+| **Nom** | Identifiant référencé par les entrées de colonne (`customer-statuses`). |
+| **Connecteur** / **Requête** | Le connecteur SQL et la requête de lecture nommée qui retournent les valeurs. |
+| **Colonne valeur** | Colonne du résultat qui porte la valeur enregistrée (ce que la base stocke sur chaque ligne). |
+| **Colonne libellé** | Colonne du résultat qui porte le libellé d'affichage. Localisée par le dictionnaire quand la requête joint une table de traductions. |
+| **Colonne couleur** | Optionnel. Pilote la couleur de fond du chip dans les grilles. |
+| **Filtrer depuis** | Dépendances optionnelles — voir [filtres en cascade](./query-params-binding.md#cascading-filters). |
+| **Cache** | `Aucun` / `Par session` / `Par requête`. Pilote l'agressivité de la mise en cache du lookup. Par défaut *Par session*. |
 
-- côté grille : un seul fetch partagé par session via `useLookupBatch` — la cellule affiche `code — libellé` ;
-- côté formulaire : un `SearchSelect` alimenté par `useLookupTables`, restreint à l'appel selon les `lookup_param_binds` éventuels.
+Un bouton *Tester* en haut exécute la requête sous-jacente et affiche les paires `{ valeur, libellé }` résolues — utile pour confirmer que les colonnes sont bien alignées.
 
 ---
 
-## Règles d'affichage et règles côté formulaire
+## Valeurs par défaut côté formulaire \{#form-layer-defaults\}
 
-| Règle | Champ d'application | Effet |
+Le champ **Valeurs par défaut côté formulaire** de l'éditeur de colonne permet à une colonne de se remplir automatiquement à l'insertion / mise à jour sans que l'utilisateur saisisse la valeur. Quatre jetons spéciaux sont reconnus :
+
+| Jeton | Effet au moment de l'enregistrement |
+|---|---|
+| **SEQUENCE** | Récupère la valeur suivante d'une séquence en base — utile pour les identifiants générés quand la base n'auto-incrémente pas. |
+| **SYSDATE** | Fixe la valeur au timestamp courant du serveur. |
+| **LOGIN** | Fixe la valeur à l'identifiant de l'utilisateur appelant (le `sub` du JWT). |
+| **PASSWORD** | Hache la valeur en clair du champ avec Argon2 avant l'enregistrement. Combiné à `Règle = PASSWORD`, produit un chemin d'écriture sûr par construction. |
+
+Les valeurs par défaut côté formulaire s'exécutent **côté serveur** au moment de l'enregistrement — le client ne les voit jamais. Une colonne d'audit auto-remplie avec `LOGIN` ne peut pas être altérée depuis le navigateur.
+
+---
+
+## Règles d'affichage vs règles côté formulaire
+
+Les deux concepts se confondent facilement. Le tableau :
+
+| Aspect | Règle d'affichage | Règle côté formulaire |
 |---|---|---|
-| `BOOLEAN` | Affichage | La cellule affiche ✓ ou ✗. `rules_values.true_value` précise quelle valeur brute compte comme vrai (défaut `"Y"`). |
-| `ENUM` | Affichage | La cellule affiche le libellé localisé. Le filtre de colonne et le widget de formulaire lisent les valeurs depuis `[enums.<id>]`. |
-| `LOOKUP` | Affichage | La cellule affiche `code — libellé` depuis `[lookups.<id>]`. Le widget de formulaire est restreint par `lookup_param_binds`. |
-| `SEQUENCE` | Formulaire | Renvoie la valeur suivante d'une séquence à la création. |
-| `SYSDATE` / `CURRENT_DATE` | Formulaire | Initialise le champ avec la date du jour à la création. |
-| `LOGIN` | Formulaire | Initialise le champ avec le nom d'utilisateur de l'appelant à la création. |
-| `PASSWORD` | Formulaire | Marque l'entrée comme mot de passe et active le chiffrement à l'enregistrement. |
+| **Où elle s'exécute** | Côté client (rendu). | Côté serveur (gestionnaire d'enregistrement). |
+| **Ce qu'elle change** | L'apparence de la valeur. | La valeur elle-même. |
+| **Exemples** | `BOOLEAN` → chip ; `ENUM` → pastille colorée ; `LOOKUP` → chip étiqueté depuis une table. | `LOGIN` → nom de l'appelant ; `SYSDATE` → now() ; `PASSWORD` → hachage Argon2. |
+| **Visible par l'utilisateur ?** | Oui. | Non — la valeur est calculée à l'enregistrement. |
 
-Les règles d'affichage voyagent sur l'objet `Column.rule` pour que la grille puisse rendre sans aller-retour supplémentaire. Les règles côté formulaire sont appliquées par `ScreenDialog` à l'ouverture du formulaire modal — détaillées dans la page [Écrans](/liberty/framework/screens).
+Les deux peuvent s'appliquer à la même colonne. Une colonne d'audit typique *Créé par* a `Règle = LOOKUP` (contre une table d'utilisateurs, pour afficher le nom d'affichage) **et** `Valeur par défaut côté formulaire = LOGIN` (pour que la valeur soit fixée automatiquement à l'insertion).
 
 ---
 
-## i18n
+## Localisation
 
-Chaque requête HTTP transporte l'en-tête `X-Liberty-Lang` (la langue active de `react-i18next`). Le connecteur SQL résout les libellés et les règles dans cette langue ; la grille React affiche directement les libellés traduits. Si une traduction manque, la valeur de `label` (anglais) est utilisée par défaut.
+Chaque champ texte de l'éditeur de colonne — *Libellé*, *Description*, *Libellé Vrai* / *Libellé Faux*, *Libellé Enum* — est une **table par langue**. L'éditeur affiche une saisie par langue chargée ; les langues manquantes retombent sur la chaîne de résolution décrite sous [i18n](./apps/i18n.md).
 
-Le dictionnaire indique sa langue par défaut :
-
-```toml
-default_language = "en"
-```
+Les opérateurs ajoutent des langues depuis *Paramètres → Langues* ; les nouvelles langues apparaissent alors comme colonnes supplémentaires dans l'éditeur de dictionnaire.
 
 ---
 
-## Conseils & bonnes pratiques
+## Permissions
 
-- **Déclarer les entrées partagées au niveau global.** Une colonne `USER_STATUS` qui a le même sens partout doit vivre sous `[entries.USER_STATUS]` une seule fois. La surcharge par connecteur est réservée aux cas où le sens diffère.
-- **Garder `label` court.** C'est ce qu'affiche l'en-tête de grille. Les titres longs vont dans le champ `description` de la requête, qui devient le titre du panneau.
-- **`rules = "ENUM"` ne doit pas servir de `LOOKUP` déguisé.** Pour une liste de valeurs courte et connue à la configuration, utiliser `ENUM`. Pour une liste qui vit dans une table et change à l'exécution, utiliser `LOOKUP`. Le rendu de la cellule est identique ; l'éditeur du formulaire diffère (statique pour ENUM, dynamique pour LOOKUP).
-- **Une colonne sans `dd` fonctionne aussi.** La grille affiche alors le type brut renvoyé par le curseur. Ajouter `dd` uniquement quand il y a une vraie raison : libellé localisé, règle booléen / enum / lookup, format non standard.
+L'onglet Dictionnaire est verrouillé par `settings:dictionary`. Les lookups héritent de la permission de leur requête SQL sous-jacente — un appelant qui ne peut pas exécuter `sql:billing:statuses-list` ne voit pas les valeurs du lookup ; la liste déroulante apparaît vide.
+
+---
+
+## Conseils et bonnes pratiques
+
+- **Définir une entrée de dictionnaire par colonne logique, pas par colonne de base.** Si `customer_status` et `supplier_status` partagent le même lookup, une seule entrée de dictionnaire couvre les deux — faire pointer les deux indices de connecteur dessus.
+- **Garder les libellés courts.** Les libellés longs se tronquent dans les en-têtes de grille. Le champ *Description* est le bon endroit pour les explications.
+- **Utiliser `ENUM` quand les valeurs sont connues à la conception, `LOOKUP` quand elles ne le sont pas.** Une énumération `priority` (`low` / `medium` / `high`) tient en ligne ; une liste de pays a sa place dans un lookup.
+- **Mettre en cache les lookups *Par session*.** Le cache par requête ajoute une requête à chaque ouverture d'écran ; *Aucun* est rarement nécessaire.
+- **Colonnes d'audit : `LOOKUP` + `LOGIN` / `SYSDATE`.** Le motif le plus propre — lisible à l'affichage, auto-rempli à l'enregistrement.
+
+---
+
+## Sous le capot
+
+Les définitions du dictionnaire sont enregistrées dans `liberty-apps/config/dictionary.toml`. Les opérateurs **ne modifient pas ce fichier à la main** en exploitation normale ; l'éditeur de dictionnaire est l'interface canonique. L'onglet *TOML brut* de [Paramètres → Dictionnaire](./configuration/settings-ui.md) est l'échappatoire quand un manque de l'éditeur bloque une modification avancée.
+
+---
+
+## Pour aller plus loin
+
+- [Connecteurs](./connectors.md) — où les indices de colonnes lient une colonne SQL découverte à une entrée de dictionnaire.
+- [Écrans](./screens.md) — comment les métadonnées de colonne façonnent la grille et le dialogue d'édition.
+- [Conditions de formulaire](./form-conditions.md) — règles de visibilité / obligatoire / désactivé conditionnelles par-dessus les règles du dictionnaire.
+- [Apps et Plugins → i18n](./apps/i18n.md) — ajouter des langues.
