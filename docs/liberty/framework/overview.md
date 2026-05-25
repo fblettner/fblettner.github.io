@@ -1,260 +1,147 @@
 ---
-title: Framework Overview
-description: "The Liberty Framework is layered around pools, connectors, the dictionary, screens, dashboards, menus, charts and jobs — each layer is a TOML file. The schema of a query result is discovered at runtime, no schema duplication. Everything is hot-reloadable, every config tab in the Settings UI maps to one file."
-keywords: [Liberty Framework, architecture, pool, connector, dictionary, screen, dashboard, menu, chart, job, TOML, hot-reload, settings UI]
+title: Why Liberty Framework
+description: "Liberty Framework is a low-code platform for building internal applications — admin tools, BI dashboards, integration glue, customer portals — without writing a frontend. Define data sources and screens in the Settings UI; the framework renders the grid, the edit dialog, the dashboard, the assistant."
+keywords: [Liberty Framework, low-code, internal apps, admin tools, BI dashboards, why, getting started, overview]
 ---
 
-# Framework Overview
+# Why Liberty Framework
 
-The Liberty Framework is a connector-driven low-code platform: a FastAPI backend + React 19 frontend, configured entirely through TOML files. The platform sits on a small number of well-defined concepts that combine into apps; an app can be assembled, edited and shipped without writing Python or React.
+You have a database. Or a JD Edwards instance. Or a SaaS API your team needs to talk to. And what you want is a **clean, fast internal interface** to look at that data, edit it, drill into it, schedule things against it — without spending three months writing a React app for each one.
 
-This page is the map — every concept has its own page linked from here. New to the framework? Start with [Getting Started → Installation](./getting-started/installation.md) to set up your first install, then walk through [Getting Started → First app](./getting-started/first-app.md) for an end-to-end "pool → connector → screen → menu" loop in five minutes.
+That's what Liberty Framework is for.
 
-The platform sits on a handful of configuration files under `config/` (in `liberty-apps`) and one framework-wide file under `liberty-next/config/`. Each file defines one layer; together they describe a fully working application.
+You install it once, point it at your data source, and define **what people should see** through a Settings UI: which queries feed which screens, which screens belong to which menu, which dashboards aggregate what. The framework handles everything else — rendering the grid, the edit dialog, the filters, the authentication, the role pruning, the export buttons, the audit columns, the assistant, the scheduled jobs.
 
-| Layer | File | What it carries |
+A handful of concepts (a *pool*, a *connector*, a *screen*, a *dashboard*, a *menu*) compose to cover the surface most internal applications need: CRUD over databases, KPIs and charts, role-gated access, ETL pipelines, an AI assistant that can run your queries on demand.
+
+---
+
+## What problem it solves
+
+Most teams end up writing the same kind of application over and over:
+
+- **A grid that lists rows from a table**, with filters and pagination.
+- **An edit dialog** that opens when you click a row, with the form fields the database carries.
+- **A dashboard** with a few KPIs and charts on top of the same data.
+- **A menu** that ties everything together.
+- **Authentication** so only the right people see the right things.
+
+Writing this in React (or Angular, or Vue) is a week of work per screen. Multiply by 20 screens per app, and 5 apps per team, and the math is brutal — most of the engineering hours go into wiring forms to APIs and APIs to databases, with very little of it surfacing as actual business logic.
+
+The framework takes the opposite stance: the **schema** of every query is discovered at runtime from the database itself, the **layout** is described in a few clicks in the Settings UI, and the **rendering** — grid, dialog, dashboard, AI tool, REST surface — is the framework's job, not yours. You write SQL. You get a UI.
+
+When something the framework doesn't cover comes up (a custom widget, a one-off page, a hand-tuned UX) the platform stays out of the way — you can wire in a React route, a custom Python step, or a raw HTTP endpoint.
+
+---
+
+## Who it's for
+
+| Audience | Why they pick the framework |
+|---|---|
+| **Internal-tools teams** building admin apps over existing databases. | The CRUD-screen path is six clicks away; no time spent re-inventing it. |
+| **JD Edwards / SAP / NetSuite operators** who need to administer their ERP from a modern UI without waiting on the vendor. | Connect to the ERP's pool, expose the right queries, drop a screen on top. |
+| **BI / analytics teams** consolidating reports across systems. | Dashboards over named SQL queries, charts that reuse the data, no separate BI tool needed. |
+| **Integration teams** that need a UI on top of ETL pipelines, scheduled jobs and webhook receivers. | Nomaflow runs the jobs, the framework gives them a UI; the AI assistant calls the same queries on demand. |
+| **Software vendors** packaging customer-facing apps on top of a database product. | The framework is the chassis; you ship per-customer configuration as a portable zip. |
+
+It's **less interesting** for:
+
+- Public-facing consumer apps (the framework's UX is operator-oriented).
+- Mobile apps (the SPA works on mobile but isn't built mobile-first).
+- One-off marketing sites or content management — there are simpler tools.
+
+---
+
+## What makes it different
+
+| Most low-code tools | Liberty Framework |
+|---|---|
+| Drag-and-drop form designer that generates a custom UI per page. | One coherent UI grammar — a grid + a dialog — applied across every screen. Faster to learn for users, faster to build for developers. |
+| Proprietary backend that owns your data. | Your own database. Your own pool. The framework only reaches it through declared queries; export and migration are trivial. |
+| You're tied to the vendor's hosting. | Self-hosted. systemd, Docker, Kubernetes — your call. |
+| Schema declared by hand in the tool. | Schema discovered at runtime from the live query. Change the SQL, the UI follows. |
+| Closed plugin model. | Open Python plugins, custom React routes, REST API, and a tool-use AI assistant that runs the same queries as the UI. |
+| You pick a stack and learn it. | You already know SQL; the rest is checkboxes and dropdowns. |
+
+The most important difference is the **schema-discovered** model: nothing about your data is duplicated in framework configuration. The connector knows the query; the database knows the columns. When a column changes, the UI reflects it on the next reload.
+
+---
+
+## Five concepts, one mental model
+
+Everything the framework does is composed from five concepts:
+
+| Concept | What it is | What it solves |
 |---|---|---|
-| **Pools** | `connectors.toml` (`[pools.*]`) | Database connections — URL, dialect, optional `password` / `schemas` / `max_rows`. |
-| **Connectors** | `connectors.toml` (`[connectors.*]`) | SQL connectors (named queries) and API connectors (named endpoints). |
-| **Dictionary** | `dictionary.toml` | Per-column metadata: labels, formats, `BOOLEAN` / `ENUM` / `LOOKUP` rules. |
-| **Screens** | `screens.toml` | One screen per business object: which query to read, edit, insert, delete; the dialog tabs and fields. |
-| **Dashboards** | `dashboards.toml` | Charts, KPIs and grouped layouts over the same named queries. |
-| **Menus** | `menus.toml` | The sidebar tree — folders, items, permissions. |
+| **[Pool](./getting-started/installation.md)** | A connection to a database (a SQLAlchemy URL + credentials). | "How do I reach this data?" |
+| **[Connector](./connectors.md)** | A named set of queries / endpoints on top of a pool. | "What questions do I want to ask this data source?" |
+| **[Screen](./screens.md)** | A grid + edit dialog over a connector's queries. | "How do I let a person look at this and edit it?" |
+| **[Dashboard](./dashboards.md)** | A layout of KPIs and charts over the same queries. | "How do I summarise this for someone who just wants the headline?" |
+| **[Menu](./menus.md)** | The sidebar tree that organises screens and dashboards into an app. | "How do I make this navigable?" |
 
-Everything is **hot-reloadable**. `POST /admin/reload` rebuilds the registry; in-flight requests keep the version they started with.
+Around those five sit the supporting layers: the [dictionary](./dictionary.md) for labels and formats, [authentication & roles](./auth/authentication.md) for who-sees-what, [jobs](./jobs/overview.md) for scheduled work, [AI assistant](./ai-assistant.md) for natural-language access, [plugins](./apps/plugins.md) for custom Python.
 
----
-
-## At a glance
-
-<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
-  <defs>
-    <marker id="fov-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="fov-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="fov-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.28"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
-  </defs>
-
-  <rect x="40" y="40" width="240" height="380" rx="14" fill="url(#fov-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="68" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">CONFIG · TOML</text>
-
-  <rect x="56" y="84" width="208" height="44" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="102" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">connectors.toml</text>
-  <text x="68" y="118" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">pools + connectors</text>
-
-  <rect x="56" y="136" width="208" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="158" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">dictionary.toml</text>
-
-  <rect x="56" y="180" width="208" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="202" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">screens.toml</text>
-
-  <rect x="56" y="224" width="208" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="246" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">dashboards.toml</text>
-
-  <rect x="56" y="268" width="208" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="290" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">menus.toml</text>
-
-  <rect x="56" y="312" width="208" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="68" y="334" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">auth.toml · app.toml</text>
-
-  <rect x="56" y="358" width="208" height="46" rx="8" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="68" y="378" fill="#4a9eff" fontSize="10" fontFamily="system-ui, sans-serif" fontWeight="700">POST /admin/reload</text>
-  <text x="68" y="394" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">hot-reload</text>
-
-  <line x1="280" y1="230" x2="380" y2="230" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#fov-arrow)"/>
-
-  <rect x="380" y="40" width="260" height="380" rx="14" fill="url(#fov-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
-  <text x="400" y="68" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">⚙ LIBERTY NEXT CORE</text>
-
-  <rect x="396" y="84" width="228" height="44" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="408" y="102" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">PoolRegistry</text>
-  <text x="408" y="118" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">async engines · ENC: decrypt</text>
-
-  <rect x="396" y="136" width="228" height="60" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="408" y="154" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">ConnectorRegistry</text>
-  <text x="408" y="170" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">SQL connector · API connector</text>
-  <text x="408" y="186" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">writable gate · param bind</text>
-
-  <rect x="396" y="204" width="228" height="44" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="408" y="222" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">DictionaryFile</text>
-  <text x="408" y="238" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">labels · format · rules · i18n</text>
-
-  <rect x="396" y="256" width="228" height="44" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="408" y="274" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">ScreensFile</text>
-  <text x="408" y="290" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">read · update · insert · delete</text>
-
-  <rect x="396" y="308" width="228" height="44" rx="8" fill="rgba(0,0,0,0.20)" stroke="rgba(74,158,255,0.35)" strokeWidth="1"/>
-  <text x="408" y="326" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">DashboardsFile · MenusFile</text>
-  <text x="408" y="342" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">charts · KPIs · sidebar tree</text>
-
-  <rect x="396" y="360" width="228" height="44" rx="8" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.35)" strokeWidth="1"/>
-  <text x="408" y="378" fill="#4ade80" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">AuthBackend</text>
-  <text x="408" y="394" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">TOML or DB · JWT · OIDC</text>
-
-  <line x1="640" y1="230" x2="740" y2="230" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#fov-arrow)"/>
-
-  <rect x="740" y="40" width="220" height="380" rx="14" fill="url(#fov-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="760" y="68" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">⚛️ REACT UI</text>
-
-  <rect x="756" y="84" width="188" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="768" y="106" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">📋 TableView</text>
-
-  <rect x="756" y="128" width="188" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="768" y="150" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">📊 DashboardView</text>
-
-  <rect x="756" y="172" width="188" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="768" y="194" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">⚙ Settings (Builders)</text>
-
-  <rect x="756" y="216" width="188" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="768" y="238" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">🌐 HttpRunner</text>
-
-  <rect x="756" y="260" width="188" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="768" y="282" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">💬 AI Chat</text>
-
-  <rect x="756" y="304" width="188" height="36" rx="8" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="768" y="326" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">🗂 Workspace · Sidebar</text>
-
-  <rect x="756" y="348" width="188" height="56" rx="8" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="768" y="368" fill="#fb923c" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">i18n EN / FR</text>
-  <text x="768" y="384" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">labels from the dictionary</text>
-  <text x="768" y="398" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">localized per request</text>
-
-  <rect x="40" y="440" width="920" height="30" rx="6" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.30)" strokeWidth="1"/>
-  <text x="60" y="460" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">License key gates `licensed = true` connectors (nomasx1 · nomajde). The framework runs without one — just without those apps.</text>
-</svg>
+Every concept page on this site opens with **what it is, why it exists, when you create one, how it fits with the others**. Once you've read those five, the framework's surface is essentially mapped.
 
 ---
 
-## Layers
+## How to learn it
 
-### Pools
+Three paths into the framework — pick whichever suits how you read.
 
-A **pool** is one SQLAlchemy async engine — `postgresql+asyncpg://…`, `oracle+oracledb://…`, `sqlite+aiosqlite://…`. Defined under `[pools.<name>]` in `connectors.toml`:
+### 1. Hands-on tutorials *(recommended)*
 
-```toml
-[pools.myapp]
-url = "postgresql+asyncpg://myapp@db:5432/myapp"
-password = "ENC:…"       # ENC: blob, ${ENV} ref, or plaintext
-pool_size = 10
-max_rows = 5000          # default SELECT row cap for this pool
+The **[Build a CRM tutorial](./tutorial-crm/01-setup.md)** is a six-step walkthrough that produces a working customer-relationship-management application — customers, deals, activities, a sales-pipeline dashboard, OIDC sign-in, role-based access, the AI assistant and a scheduled job. The domain is generic; no prior knowledge needed beyond SQL.
 
-[pools.myapp.schemas]
-PROD = "myapp_prod"      # `#SCHEMA.PROD#` in a query becomes `myapp_prod` at execute time
-```
+For a real-world ERP admin built on the framework, the packaged **[Nomajde](https://docs.nomana-it.fr/nomajde/)** app covers JD Edwards end-to-end out of the box — users, roles, security workbench, BIP queue, master data. Install it, point it at your JDE database, get a working admin without building anything yourself.
 
-The `default` pool is special — it is the framework pool and the home of the `ly2_*` auth tables when `[auth] backend = "db"`. A fresh checkout points it at a local SQLite file so the app boots without a database.
+### 2. Use-case-driven
 
-### Connectors
+If you'd rather start from *what you want to build*, the **[What you can build](./what-you-can-build.md)** page lists every common use case (internal CRUD, admin tools, BI dashboards, integration glue, customer portals, workflow orchestration, ETL) with a one-paragraph "how the framework does it" plus a link to the relevant tutorial / cookbook recipe.
 
-A **connector** is the named target a screen, a dashboard or the assistant talks to. Two types:
+### 3. Reference-first
 
-- **SQL connector** — list of named queries against a pool. Schema is discovered from `cursor.description`; the dictionary supplies labels and rules per column.
-- **API connector** — list of named endpoints against an `httpx.AsyncClient`. Auth: `none` / `basic` / `bearer` / `api_key` / `oauth2` (token-endpoint POST + dot-path extraction + TTL cache + one refresh on 401).
-
-See [Connectors](./connectors.md) for the full reference.
-
-### Dictionary
-
-The **dictionary** defines per-column metadata: labels (with per-language translations), formats and display rules. Each entry pins a column's identity once; every screen that returns that column inherits them automatically:
-
-```toml
-[entries.USER_STATUS]
-label = "Status"
-[entries.USER_STATUS.l]
-fr = "Statut"
-
-[enums.USER_STATUS]
-values = [
-  { value = "Y", label = "Active", l = { fr = "Actif" } },
-  { value = "N", label = "Inactive", l = { fr = "Inactif" } },
-]
-```
-
-A `column.dd = "USER_STATUS"` on the query lifts the label and the `ENUM` rule onto the grid — the cell renders the localized label, the per-column filter offers the multi-select picker, no further code. See [Dictionary](./dictionary.md).
-
-### Screens
-
-A **screen** is the definition of one business object: the read query that drives the grid, the optional write queries, and the inline modal form. Defined under `[screens.<app>.<id>]` in `screens.toml`:
-
-```toml
-[screens.myapp.users]
-label  = "Users"
-read_query   = "users_get"
-update_query = "users_put"
-audit  = true
-auto_load = true
-
-[[screens.myapp.users.dialog.tabs]]
-id    = "main"
-label = "General"
-cols  = 2
-fields = [
-  { column = "ID",     hidden = true },
-  { column = "NAME",   required = true },
-  { column = "STATUS", colspan = 2 },
-]
-```
-
-Clicking a row in the grid opens a typed modal form built from this. The widget per field is picked from the read query's column rule (BOOLEAN → checkbox, ENUM → searchable dropdown, LOOKUP → searchable dropdown narrowed by `lookup_param_binds`, plus date / number / text from `format` / `type`). See [Screens](./screens.md).
-
-### Dashboards
-
-A **dashboard** is a grid of KPIs and charts over the same named queries. Each panel binds to a query, picks an aggregation, and lays out under one of the standard chart types. See [Dashboards](./dashboards.md).
-
-### Menus
-
-The **sidebar tree**. Folders nest; leaves bind to a query (`TableView`), a dashboard (`DashboardView`), an endpoint (`HttpRunner`) or a static slug. The tree is **pruned to what the caller may run** — a leaf without the corresponding `sql:{conn}:{name}` / `api:{conn}:{name}` permission is dropped, and a folder left empty collapses away. See [Menus](./menus.md).
+If you're the type who reads documentation top-to-bottom, the **[Getting Started](./getting-started/installation.md)** section walks you through installation, the file layout, the Settings UI; then the **Concepts** section explains each primitive in depth.
 
 ---
 
-## Auth
+## What's in the rest of these docs
 
-Two backends, picked in `[auth]`:
-
-| Backend | Where users live | Why |
-|---|---|---|
-| `toml` *(default)* | `config/auth.toml` | No database needed at startup. Hot-reloaded on every call. Right for small deployments and tests. |
-| `db` | The `ly2_*` tables on the framework pool | Operator-managed users via the React Settings → Users editor. `argon2` password hashes. |
-
-Tokens are JWTs signed with `LIBERTY_JWT_SECRET` (or an ephemeral key when unset). OIDC against any provider is wired via `authlib`.
-
-The `permissions` list on a role gates what the caller may run: `sql:<connector>:<query>`, `api:<connector>:<endpoint>`, `admin:*`. The same gate applies on the menu tree, so the operator never sees a leaf they cannot click.
-
----
-
-## License
-
-The framework is free. Licensed connectors (`licensed = true` in `connectors.toml`) are unlocked by `LIBERTY_LICENSE_KEY` — an RS256-signed JWT generated by the vendor. The same JWT shape and key-pair as NomaUBL's license. A configured-but-broken key (expired or bad signature) surfaces a banner in the React UI; no key at all simply hides the licensed connectors.
-
-This is what gates **nomasx1** and **nomajde** — both bundled under a single key.
+| Section | What it covers |
+|---|---|
+| [Getting Started](./getting-started/installation.md) | Install the framework, create your first app, understand the file layout. |
+| [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) | End-to-end CRM walkthrough. |
+| [Configuration](./configuration/settings-ui.md) | Settings UI, framework settings, environment variables, hot-reload, encrypted secrets. |
+| [Concepts](./connectors.md) | The five framework primitives + parameter binding and form conditions, each with a "What / Why / When" intro. |
+| [Authentication](./auth/authentication.md) | Local users, OIDC, JWT, roles, permissions, license keys. |
+| [Apps & Plugins](./apps/overview.md) | Multi-app organisation, custom Python plugins, internationalisation. |
+| [Jobs — Nomaflow](./jobs/overview.md) | Scheduled work, ETL pipelines, step types, run history. |
+| [AI Assistant](./ai-assistant.md) | The tool-use assistant, how it surfaces connector queries. |
+| [Cookbook](./cookbook/crud-existing-table.md) | Short recipes for common patterns — Excel export, file upload, OIDC, audit trail, etc. |
+| [CLI reference](./cli-reference.md) | `liberty-admin`, `liberty-connectors`, `liberty-crypto`, `liberty-license`. |
+| [REST API reference](./rest-api.md) | Every endpoint, grouped by domain. |
+| [Deployment](./deployment/running-production.md) | systemd, container, Kubernetes — running the framework in production. |
 
 ---
 
 ## Frontend in one paragraph
 
-React 19 + Vite + TypeScript, built once into `frontend/dist` and served as static by the backend. Dark default with a light theme swap, `react-i18next` EN / FR, `lucide-react` icons, DM Sans, `@tanstack/react-table` for the grid, `react-markdown` + `remark-gfm` for the assistant, `@monaco-editor/react` for the raw TOML escape hatch. Visual model is the same "liquid-glass" look used by NomaUBL — `@emotion/styled` themed components.
+React 19 + Vite + TypeScript, built once into `frontend/dist` and served as static by the FastAPI backend on the same port. Dark default with a light theme swap, `react-i18next` EN / FR, `lucide-react` icons, DM Sans, `@tanstack/react-table` for the grid, `react-markdown` + `remark-gfm` for the assistant, `@monaco-editor/react` for the in-app code editing. You don't write any of it — the framework renders everything off the configuration.
 
 ---
 
-## Where to go from here
+## Backend in one paragraph
 
-| You want to… | Read |
+Python 3.12, FastAPI, SQLAlchemy 2.0 async with asyncpg (PostgreSQL) + oracledb (Oracle, thin), Anthropic SDK for the AI assistant, authlib for OIDC, Argon2 for password hashing, cryptography for AES-256-GCM field encryption, APScheduler for cron jobs, Socket.IO for live updates. One process, one port, no companion daemons. You don't write Python unless you want a custom job step or an extension hook.
+
+---
+
+## Ready?
+
+| If you want to… | Go to |
 |---|---|
-| Install the framework on your machine | [Getting Started → Installation](./getting-started/installation.md) |
-| Build your first app | [Getting Started → First app](./getting-started/first-app.md) |
-| Understand the file layout of `liberty-apps` | [Getting Started → Project layout](./getting-started/project-layout.md) |
-| Edit configuration in the browser | [Configuration → Settings UI](./configuration/settings-ui.md) |
-| Reference every key of `app.toml` | [Configuration → `app.toml`](./configuration/app-toml.md) |
-| Set environment variables for production | [Configuration → Environment variables](./configuration/environment-variables.md) |
-| Encrypt connector passwords | [Configuration → Encryption & secrets](./configuration/encryption-secrets.md) |
-| Wire authentication / OIDC | [Authentication](./auth/authentication.md) |
-| Define roles and permissions | [Authentication → Roles & permissions](./auth/roles-permissions.md) |
-| Install a license key | [Authentication → License key](./auth/license-key.md) |
-| Organise multiple apps | [Apps & Plugins → Apps](./apps/overview.md) |
-| Write a custom Python step | [Apps & Plugins → Plugins](./apps/plugins.md) |
-| Add a language | [Apps & Plugins → i18n](./apps/i18n.md) |
-| Schedule recurring jobs | [Jobs → Overview](./jobs/overview.md) |
-| Talk to the AI assistant | [AI Assistant](./ai-assistant.md) |
-| Use the CLIs | [CLI reference](./cli-reference.md) |
-| Build a REST integration | [REST API reference](./rest-api.md) |
-| Deploy to production | [Deployment → Running in production](./deployment/running-production.md) |
-| Move across versions | [Deployment → Upgrading](./deployment/upgrading.md) |
+| **Build something now** | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md). |
+| **See what's possible first** | [What you can build](./what-you-can-build.md). |
+| **Install the framework** | [Getting Started → Installation](./getting-started/installation.md). |
+| **Understand the concepts first** | [Concepts → Connectors](./connectors.md) is the natural entry point. |
+| **Look up a specific field** | [Settings UI](./configuration/settings-ui.md) lists every builder; each Concepts page references the relevant editor. |

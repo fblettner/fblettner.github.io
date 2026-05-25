@@ -6,9 +6,10 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Framework',
-      link: {type: 'generated-index', slug: '/liberty/framework', description: 'Liberty Framework — connector-driven low-code platform: TOML-defined connectors, dictionary, screens, dashboards, menus, auth, jobs and AI assistant. From first run to production deployment.'},
+      link: {type: 'generated-index', slug: '/liberty/framework', description: 'Liberty Framework — a connector-driven low-code platform for internal apps, admin tools and BI dashboards. Read the overview, then walk through one of the tutorials to build a real app end-to-end.'},
       items: [
         'liberty/framework/overview',
+        'liberty/framework/what-you-can-build',
         {
           type: 'category',
           label: 'Getting Started',
@@ -17,6 +18,19 @@ const sidebars: SidebarsConfig = {
             'liberty/framework/getting-started/installation',
             'liberty/framework/getting-started/first-app',
             'liberty/framework/getting-started/project-layout',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Tutorial — Build a CRM',
+          link: {type: 'generated-index', slug: '/liberty/framework/tutorial-crm', description: 'A six-step walkthrough that builds a working CRM end-to-end: customers, deals and activities, with a pipeline dashboard, OIDC sign-in, the AI assistant and a scheduled job.'},
+          items: [
+            'liberty/framework/tutorial-crm/setup',
+            'liberty/framework/tutorial-crm/customers',
+            'liberty/framework/tutorial-crm/deals',
+            'liberty/framework/tutorial-crm/dashboard',
+            'liberty/framework/tutorial-crm/auth',
+            'liberty/framework/tutorial-crm/ai-and-jobs',
           ],
         },
         {
@@ -78,6 +92,23 @@ const sidebars: SidebarsConfig = {
           ],
         },
         'liberty/framework/ai-assistant',
+        {
+          type: 'category',
+          label: 'Cookbook',
+          link: {type: 'generated-index', slug: '/liberty/framework/cookbook', description: 'Short recipes for common patterns — Excel export, file upload, OIDC sign-in, audit trail, bulk import, scheduled report, row-level access, AI exposure.'},
+          items: [
+            'liberty/framework/cookbook/crud-existing-table',
+            'liberty/framework/cookbook/excel-export',
+            'liberty/framework/cookbook/file-upload',
+            'liberty/framework/cookbook/audit-trail',
+            'liberty/framework/cookbook/bulk-import',
+            'liberty/framework/cookbook/multi-step-form',
+            'liberty/framework/cookbook/oidc-sso',
+            'liberty/framework/cookbook/scheduled-report-email',
+            'liberty/framework/cookbook/expose-to-ai',
+            'liberty/framework/cookbook/row-level-access',
+          ],
+        },
         'liberty/framework/cli-reference',
         'liberty/framework/rest-api',
         {
