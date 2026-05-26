@@ -10,7 +10,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
+  <a href="#v2026-05-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-26</span></a>
+  <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
   <a href="#v2026-05-23" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.23 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
   <a href="#v2026-05-22" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.22 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
@@ -48,6 +49,32 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.05.26 — 2026-05-26 \{#v2026-05-26\}
+
+Un vrai éditeur visuel pour le PDF de facture — palette à gauche, aperçu en direct au centre, inspecteur à droite — avec l'éditeur de blocs intégré au même endroit. Ajout également d'une série de corrections pour les installations Oracle et Windows.
+
+### Améliorations
+
+- **L'aperçu en direct est toujours visible pendant la modification d'un modèle.** L'ancien flux — ouvrir une fenêtre, saisir des références de document, cliquer sur Aperçu, attendre — disparaît. L'aperçu reflète désormais chaque option cochée et chaque modification de bloc au fil de l'eau.
+
+### Nouveautés
+
+- **Éditeur visuel pour les modèles PDF.** Un nouveau bouton **Ouvrir l'éditeur visuel** sur la page Modèles PDF ouvre un éditeur plein écran en trois volets :
+  - **À gauche** — le catalogue des sections disponibles (En-tête, Client + Livraison, Tableau des lignes, Règlement, Notes, bloc personnalisé, …) et la liste ordonnée des sections du modèle. Un clic pour ajouter, un clic pour sélectionner, un glisser-déposer pour réordonner.
+  - **Au centre** — un aperçu en direct qui se regénère à partir d'une facture d'exemple intégrée (ou de votre propre XML chargé) à chaque modification. Un clic sur un bloc dans l'aperçu et l'inspecteur saute dessus.
+  - **À droite** — un inspecteur qui présente les options du bloc sélectionné, regroupées par catégorie (Fournisseur, Bloc facture, Colonnes, …). Pour un bloc personnalisé, l'éditeur arborescent complet — texte, champ, ligne / colonne, répétition, condition — s'ouvre directement dans l'inspecteur, avec auto-complétion XPath et choix de la police / couleur / alignement par nœud.
+- **Chargement d'un XML d'exemple depuis l'éditeur.** Déposez une vraie facture depuis le haut de l'éditeur — l'aperçu et le sélecteur XPath basculent immédiatement sur vos données, sans avoir à quitter l'éditeur.
+- **Enregistrement dans l'éditeur, avec avertissement de modifications non sauvegardées.** Le bouton *Enregistrer* enregistre directement depuis l'éditeur ; fermer avec des modifications en cours affiche un message *Abandonner / Annuler*, rien n'est perdu par accident.
+
+### Corrections
+
+- **La connexion sur Oracle fonctionne à nouveau.** L'authentification sur Oracle refusait silencieusement toutes les connexions — y compris `admin / admin` par défaut — à cause de la façon dont Oracle stocke le nom d'utilisateur. Connexion, changement de mot de passe, attribution de rôles et changement de mot de passe par l'utilisateur fonctionnent désormais correctement.
+- **Chemins Windows dans les paramètres.** L'enregistrement d'un chemin Windows (par exemple `c:\nomaubl`) dans les paramètres corrompait la valeur à la sauvegarde. Les chemins sont désormais conservés à l'identique.
+- **`nomaubl.cmd start` rend la main et le serveur reste actif à la fermeture de la console.** L'arrêt du serveur le coupe maintenant proprement, sans la pause de 10 secondes précédente.
+- **Adresse de l'acheteur dans le XML UBL dans le bon ordre.** L'adresse postale de l'acheteur était placée après l'identifiant TVA, ce que les validateurs de schéma stricts refusent. L'ordre est corrigé.
 
 ---
 

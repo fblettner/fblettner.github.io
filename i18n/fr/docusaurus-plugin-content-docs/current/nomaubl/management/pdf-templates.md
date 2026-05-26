@@ -1,7 +1,7 @@
 ---
 title: Modèles PDF
-description: "Bibliothèque de mises en page PDF réutilisables, désormais traitées comme des ressources à part entière. Chaque modèle est une ressource pdf-template référencée par son nom depuis les modèles de document. Édition unique, propagation à l'ensemble ; mélange de sections prédéfinies (en-tête, parties, table de lignes…) avec les nouvelles primitives block pilotées par XPath (text, field, repeat, table, if), assemblées dans un éditeur visuel."
-keywords: [NomaUBL, modèles PDF, pdf-template, mise en page, defaultPdfTemplate, built-in, section block, field, repeat, table, XPath, éditeur visuel, JD Edwards, SAP, NetSuite, ERP personnalisé]
+description: "Bibliothèque de mises en page PDF réutilisables. Chaque modèle est une ressource pdf-template référencée par son nom depuis les modèles de document. Édition unique, propagation à l'ensemble via un éditeur visuel plein écran — palette de sections à gauche, aperçu en direct au centre, inspecteur avec options + éditeur arborescent des blocs personnalisés à droite."
+keywords: [NomaUBL, modèles PDF, pdf-template, mise en page, defaultPdfTemplate, built-in, éditeur visuel, section block, field, repeat, table, XPath, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Modèles PDF
@@ -11,9 +11,9 @@ L'écran **Modèles PDF** est la bibliothèque de **mises en page PDF réutilisa
 La page couvre quatre opérations :
 
 - **gérer** le catalogue (Ajouter / Importer / Copier / Supprimer) ;
-- **éditer** une mise en page — liste de sections, bascules par section pour les sections prédéfinies, composition libre pour les sections `block` ;
+- **éditer** une mise en page via l'**éditeur visuel** — un éditeur plein écran avec le catalogue des sections à gauche, un aperçu en direct au centre et un inspecteur à droite ;
 - **désigner un défaut** pour les documents qui ne portent pas de mise en page explicite ;
-- **prévisualiser** le résultat sur une facture d'exemple sans quitter la page.
+- **charger un XML de facture réel** dans l'éditeur pour que l'aperçu et l'auto-complétion XPath s'alignent sur vos données.
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. L'entrée utilisée est l'UBL 2.1 généré, et non le XML source.
 
@@ -157,7 +157,7 @@ Les modèles PDF étaient auparavant édités en ligne sur la page Documents (on
   <line x1="800" y1="508" x2="744" y2="508" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdftpl-arrow)"/>
 </svg>
 
-La page comporte un **catalogue** à gauche qui liste les mises en page enregistrées, et un **éditeur** à droite dédié à la mise en page sélectionnée. L'éditeur est identique à l'onglet *PDF Template* d'un modèle de document — même liste de sections, même tiroir par section, même aperçu en direct. La différence : le résultat est enregistré dans le catalogue sous un nom, plutôt que rattaché à un seul document.
+La page comporte un **catalogue** à gauche qui liste les mises en page enregistrées, et un panneau de synthèse à droite pour la mise en page sélectionnée. L'édition d'une mise en page ouvre l'**éditeur visuel** — un éditeur plein écran à trois volets documenté dans [Éditeur visuel](#visual-builder) plus bas — et la mise en page est enregistrée dans le catalogue sous un nom.
 
 ---
 
@@ -179,7 +179,8 @@ La barre d'actions couvre le cycle de vie du catalogue et la désignation du dé
 
 | Action | Effet |
 |---|---|
-| **Ajouter** | Ouvre une modale qui demande un nom et une description. Crée une ressource `pdf-template` vide — l'ajout des sections se fait ensuite dans l'éditeur. |
+| **Ouvrir l'éditeur visuel** | Ouvre la mise en page sélectionnée dans l'[éditeur visuel](#visual-builder) plein écran — palette à gauche, aperçu en direct au centre, inspecteur à droite. Surface d'édition principale. |
+| **Ajouter** | Ouvre une modale qui demande un nom et une description. Crée une ressource `pdf-template` vide — l'ajout des sections se fait ensuite dans l'éditeur visuel. |
 | **Importer** | Charge un fichier JSON produit par une autre instance (ou par l'action *Exporter*). Met à jour le modèle correspondant si le nom existe déjà, sinon le crée. Le nom réservé `built-in` est rejeté. |
 | **Copier** | Duplique la mise en page sélectionnée sous un nouveau nom. La méthode la plus rapide pour dériver une variante à partir de `built-in` ou d'un modèle existant spécifique à un client. |
 | **Supprimer** | Supprime la mise en page sélectionnée après confirmation. Bouton désactivé sur `built-in`. |
@@ -195,6 +196,134 @@ La barre latérale liste toutes les mises en page enregistrées, plus la `built-
 - **`built-in`** — épinglée en haut, en lecture seule, marquée d'un badge `factory`. Sa sélection ouvre l'éditeur en mode lecture seule, signalé par un bandeau. *Copier* est la seule manière d'en dériver une mise en page éditable.
 - **Marqueur ★** — la mise en page utilisée comme défaut pour les documents sans `pdfTemplate` explicite. Une seule mise en page a l'étoile à un instant donné.
 - **Description** — libellé libre enregistré sur la ressource. Apparaît à la fois dans la barre latérale et dans le sélecteur *PDF Template* d'un modèle de document.
+
+---
+
+## Éditeur visuel \{#visual-builder\}
+
+Le bouton **Ouvrir l'éditeur visuel** ouvre la mise en page dans un éditeur plein écran à trois volets côte à côte — c'est la manière de référence pour éditer un `pdf-template`. L'ancien parcours (liste de sections + tiroirs par section, clic sur un bouton Aperçu qui ouvre une modale) disparaît ; l'éditeur regroupe tout sur un seul écran, aperçu toujours visible.
+
+<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="pdfvb-card-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="pdfvb-blue-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.30"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <linearGradient id="pdfvb-purple-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c084fc" stopOpacity="0.28"/><stop offset="100%" stopColor="#a855f7" stopOpacity="0.10"/></linearGradient>
+  </defs>
+
+  <rect x="20" y="20" width="960" height="440" rx="14" fill="url(#pdfvb-card-fr)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Éditeur visuel — invoice-fr</text>
+  <rect x="540" y="30" width="120" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="600" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↑ Charger XML</text>
+  <rect x="668" y="30" width="56" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="696" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">Abandonner</text>
+  <rect x="730" y="30" width="60" height="22" rx="5" fill="url(#pdfvb-blue-fr)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="760" y="45" fill="#fff" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">Enregistrer</text>
+  <rect x="798" y="30" width="180" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="888" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">✕ Fermer (garde non-enregistré)</text>
+
+  <line x1="20" y1="68" x2="980" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="36" y="84" width="220" height="360" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="48" y="106" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">PALETTE</text>
+  <rect x="48" y="118" width="196" height="22" rx="5" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="133" fill="#4a9eff" fontSize="10" fontFamily="ui-monospace, monospace">+ En-tête</text>
+  <rect x="48" y="146" width="196" height="22" rx="5" fill="rgba(74,158,255,0.06)" stroke="#334155" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="161" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">+ Parties (Client + Livraison)</text>
+  <rect x="48" y="174" width="196" height="22" rx="5" fill="rgba(74,158,255,0.06)" stroke="#334155" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="189" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">+ Tableau des lignes</text>
+  <rect x="48" y="202" width="196" height="22" rx="5" fill="rgba(74,158,255,0.06)" stroke="#334155" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="217" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">+ Règlement</text>
+  <rect x="48" y="230" width="196" height="22" rx="5" fill="rgba(74,158,255,0.06)" stroke="#334155" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="245" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">+ Notes</text>
+  <rect x="48" y="258" width="196" height="22" rx="5" fill="url(#pdfvb-purple-fr)" stroke="#c084fc" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="273" fill="#c084fc" fontSize="10" fontFamily="ui-monospace, monospace">+ Bloc personnalisé (XPath)</text>
+
+  <line x1="48" y1="292" x2="244" y2="292" stroke="#1f2937" strokeWidth="1"/>
+  <text x="48" y="312" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">SECTIONS DU MODÈLE</text>
+  <rect x="48" y="320" width="196" height="22" rx="5" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="58" y="335" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">⋮⋮ En-tête</text>
+  <rect x="48" y="346" width="196" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="58" y="361" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">⋮⋮ Parties</text>
+  <rect x="48" y="372" width="196" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="58" y="387" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">⋮⋮ Tableau des lignes</text>
+  <rect x="48" y="398" width="196" height="22" rx="5" fill="rgba(192,132,252,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="58" y="413" fill="#c084fc" fontSize="10" fontFamily="ui-monospace, monospace">⋮⋮ Bloc · règlement</text>
+  <rect x="48" y="424" width="196" height="14" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="58" y="434" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">⋮⋮ Récap. TVA</text>
+
+  <rect x="270" y="84" width="430" height="360" rx="8" fill="#ffffff" fillOpacity="0.95" stroke="#1f2937" strokeWidth="1"/>
+  <text x="290" y="106" fill="#1e293b" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">APERÇU EN DIRECT · invoice-sample.xml</text>
+  <line x1="270" y1="116" x2="700" y2="116" stroke="#cbd5e1" strokeWidth="1"/>
+  <text x="290" y="138" fill="#1e293b" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">ACME Industries SA · Facture FA-2026-001234</text>
+  <text x="290" y="156" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Date d'émission · 24/05/2026   Échéance · 23/06/2026</text>
+  <rect x="290" y="172" width="200" height="50" rx="4" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="1"/>
+  <text x="298" y="188" fill="#1e293b" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Client</text>
+  <text x="298" y="202" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Globex Logistics</text>
+  <text x="298" y="214" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">12 rue de Rivoli, 75001 Paris</text>
+  <rect x="498" y="172" width="190" height="50" rx="4" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="1"/>
+  <text x="506" y="188" fill="#1e293b" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Livraison</text>
+  <text x="506" y="202" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Entrepôt Globex · Bonn DE</text>
+
+  <rect x="290" y="234" width="398" height="20" rx="2" fill="#e2e8f0"/>
+  <text x="298" y="248" fill="#1e293b" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">#  Description     Qté  Unité  P.U.    Montant   TVA</text>
+  <line x1="290" y1="254" x2="688" y2="254" stroke="#cbd5e1" strokeWidth="1"/>
+  <text x="298" y="270" fill="#475569" fontSize="9" fontFamily="ui-monospace, monospace">1  Caisses cargo   20   pc    50,00 €  1 000,00 €  200,00</text>
+  <text x="298" y="286" fill="#475569" fontSize="9" fontFamily="ui-monospace, monospace">2  Livraison expr. 1    job   250,00 €   250,00 €   50,00</text>
+
+  <rect x="490" y="306" width="198" height="64" rx="4" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="1"/>
+  <text x="498" y="322" fill="#1e293b" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Totaux</text>
+  <text x="498" y="338" fill="#475569" fontSize="9" fontFamily="ui-monospace, monospace">Total HT    1 250,00 €</text>
+  <text x="498" y="352" fill="#475569" fontSize="9" fontFamily="ui-monospace, monospace">TVA 20%       250,00 €</text>
+  <text x="498" y="366" fill="#1e293b" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">Total TTC   1 500,00 €</text>
+
+  <text x="290" y="400" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif" fontStyle="italic">page 1 / 1 · regénéré à chaque modification</text>
+
+  <rect x="716" y="84" width="248" height="360" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="728" y="106" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">INSPECTEUR — EN-TÊTE</text>
+  <line x1="728" y1="114" x2="952" y2="114" stroke="#1f2937" strokeWidth="1"/>
+  <text x="728" y="134" fill="#cbd5e1" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">FOURNISSEUR</text>
+  <text x="728" y="152" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ Adresse</text>
+  <text x="728" y="168" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ SIREN</text>
+  <text x="728" y="184" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ N° TVA</text>
+  <text x="728" y="200" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☐ Téléphone</text>
+  <text x="728" y="216" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☐ E-mail</text>
+
+  <line x1="728" y1="232" x2="952" y2="232" stroke="#1f2937" strokeWidth="1"/>
+  <text x="728" y="252" fill="#cbd5e1" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">MÉTADONNÉES FACTURE</text>
+  <text x="728" y="270" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ N° facture</text>
+  <text x="728" y="286" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ Date d'émission</text>
+  <text x="728" y="302" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ Date d'échéance</text>
+  <text x="728" y="318" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☐ Réf. acheteur</text>
+  <text x="728" y="334" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☐ Réf. contrat</text>
+
+  <line x1="728" y1="354" x2="952" y2="354" stroke="#1f2937" strokeWidth="1"/>
+  <text x="728" y="376" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">Bloc personnalisé sélectionné →</text>
+  <text x="728" y="390" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">l'éditeur arborescent du bloc</text>
+  <text x="728" y="404" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">prend la place du panneau</text>
+  <text x="728" y="418" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">(XPath, police, alignement).</text>
+</svg>
+
+Les trois volets :
+
+| Volet | Contenu |
+|---|---|
+| **Gauche — palette + liste des sections** | Moitié haute : le catalogue des sections disponibles (En-tête, Parties, Tableau des lignes, Règlement, Notes, Bloc personnalisé, …). Un clic pour ajouter au modèle. Moitié basse : la liste ordonnée des sections du modèle. Un clic pour sélectionner ; glisser-déposer la poignée `⋮⋮` pour réordonner. |
+| **Centre — aperçu en direct** | Rendu du modèle courant sur une facture d'exemple intégrée (ou sur le XML chargé par l'opérateur), **regénéré à chaque modification** — cocher une case, ajouter une section, modifier un nœud de bloc personnalisé : tout se reflète dans l'aperçu en quelques millisecondes. Un clic sur un bloc dans l'aperçu le sélectionne ; l'inspecteur à droite saute sur les options correspondantes. |
+| **Droite — inspecteur** | Affiche les options de la section sélectionnée, regroupées par catégorie (Fournisseur, Métadonnées facture, Colonnes, …). Pour un *Bloc personnalisé*, c'est l'**éditeur arborescent** complet — texte, champ, ligne / colonne, répétition, condition — qui s'ouvre directement dans ce volet, avec auto-complétion XPath et choix de police / couleur / alignement par nœud. |
+
+### Charger une vraie facture
+
+Le bouton **↑ Charger XML** en haut de l'éditeur accepte une vraie facture UBL (glisser-déposer ou sélecteur de fichier). Une fois chargée :
+
+- L'aperçu en direct bascule immédiatement sur vos données.
+- L'auto-complétion XPath de l'éditeur de bloc personnalisé utilise votre XML — les suggestions correspondent aux éléments réellement présents dans votre facture.
+
+L'échantillon est conservé pour la session, pas avec le modèle. Rouvrir l'éditeur revient à la facture d'exemple intégrée.
+
+### Enregistrer et abandonner
+
+Le bouton **Enregistrer** en haut à droite persiste le modèle directement depuis l'éditeur. Le bouton **Fermer** (`✕`) affiche un message de confirmation *Abandonner / Annuler* tant qu'il reste des modifications non enregistrées — impossible de fermer sans choisir. *Abandonner* écarte chaque modification depuis le dernier enregistrement ; *Annuler* maintient dans l'éditeur.
 
 ---
 
@@ -244,19 +373,20 @@ Plusieurs blocks peuvent coexister dans un même modèle — par exemple un pour
 
 ---
 
-## Éditeur visuel
+## Éditeur arborescent des blocs personnalisés
 
-Une section `block` s'ouvre dans le **`BlockCanvasEditor`** plutôt que dans une zone JSON brute. L'éditeur comporte trois panneaux empilés et une sortie de secours JSON.
+Quand une section *Bloc personnalisé* est sélectionnée dans l'[éditeur visuel](#visual-builder), le volet de droite bascule du mode "cases à cocher" à un **éditeur arborescent** complet. Il regroupe tout ce dont un bloc a besoin au même endroit :
 
-| Panneau | Rôle |
+| Zone du volet inspecteur | Rôle |
 |---|---|
-| **Arbre** | Vue indentée de tous les nœuds du block, avec une étiquette de type (`text`, `field`, `repeat`, `table`, …). Cliquer un nœud le sélectionne ; la sélection pilote à la fois la barre d'outils et l'inspecteur. |
-| **Barre d'outils** | Ajout d'enfant / encapsulation / dégagement / suppression / déplacement haut-bas — opérations appliquées au nœud sélectionné. Mêmes opérations disponibles via raccourcis clavier. |
-| **Inspecteur** | Formulaire d'attributs par type (XPath, libellé, format, alignement, gap, …) plus un sous-panneau **Style** couvrant police, graisse, taille, couleur, alignement et marges intérieures. |
+| **Arbre** | Vue indentée de tous les nœuds du bloc, avec une étiquette de type (`text`, `field`, `repeat`, `table`, …). Cliquer un nœud le sélectionne ; l'aperçu en direct au centre met en évidence la zone correspondante. |
+| **Barre d'outils de nœud** | Ajout d'enfant / encapsulation / dégagement / suppression / déplacement haut-bas — opérations appliquées au nœud sélectionné. Mêmes opérations disponibles via raccourcis clavier. |
+| **Formulaire d'attributs** | Formulaire d'attributs par type (XPath, libellé, format, alignement, gap, …) plus un sous-panneau **Style** couvrant police, graisse, taille, couleur, alignement et marges intérieures. |
+| **Sortie de secours JSON** | Vue JSON brute du nœud courant — en lecture seule par défaut, *Modifier JSON* bascule en édition pour les cas avancés que le formulaire ne couvre pas. |
 
-Détail subtil mais important en haut de l'inspecteur : un sélecteur **Type** qui **transforme** le nœud sélectionné sur place — passage de `column` à `repeat` sans suppression / recréation. Les attributs compatibles (enfants, style) sont reportés par le helper `transmuteKind`. Même mécanisme pour le cas fréquent de promotion d'un block statique en block itérant une fois la forme des données identifiée.
+Détail subtil mais important en haut du formulaire d'attributs : un sélecteur **Type** qui **transforme** le nœud sélectionné sur place — passage de `column` à `repeat` sans suppression / recréation. Les attributs compatibles (enfants, style) sont reportés par le helper `transmuteKind`. Même mécanisme pour le cas fréquent de promotion d'un bloc statique en bloc itérant une fois la forme des données identifiée.
 
-Le bouton **Aperçu en direct** en haut du formulaire ouvre une modale 960 × 85vh qui rend la configuration courante sur une facture d'exemple — l'enregistrement (*Enregistrer*) pendant que la modale est ouverte met à jour l'iframe en direct. Le contrôle *Charger un échantillon XML* est remonté à l'en-tête du modèle ; ainsi un seul échantillon alimente l'autocomplétion XPath de chaque block du modèle.
+L'aperçu au centre se regénère à chaque frappe — l'iframe reste montée et se met à jour sur place, l'opérateur voit le résultat sans clignotement quand il modifie un XPath ou une option de style. Le bouton **↑ Charger XML** en haut de l'éditeur fournit un seul échantillon qui alimente l'auto-complétion XPath de chaque bloc du modèle.
 
 ---
 
@@ -283,6 +413,6 @@ La page lit et écrit via les endpoints de templates standards — mêmes routes
 - **Un seul modèle, plusieurs documents.** Pour chaque variante de facture (standard, avoir, reçu destinataire …), privilégier un modèle partagé plutôt qu'un JSON inline par document. Le bénéfice : un point d'édition unique quand les mentions légales ou le jeu de colonnes évoluent.
 - **Désigner un défaut tôt.** Marquer une mise en page comme défaut avant le branchement des modèles de document spécifiques aux clients — chaque nouveau document utilise alors ce défaut implicitement, et la propriété `pdfTemplate` explicite reste réservée aux vraies variantes.
 - **Utiliser `block` pour ce que les sections prédéfinies ne couvrent pas.** Mentions légales personnalisées, pieds de page spécifiques à un pays, blocs de signature structurés, filigranes — autant de cas mieux traités par un `block` que par une section prédéfinie.
-- **Itérer dans la modale d'aperçu.** Basculer une section et observer l'iframe se re-rendre dans la modale est le moyen le plus rapide d'arriver à une mise en page sans quitter l'éditeur.
-- **Réutiliser l'échantillon XML.** Un seul *Charger un échantillon XML* sur l'en-tête du modèle alimente le sélecteur de chaque block — chargement unique par session d'édition, et chaque autocomplétion XPath fonctionne immédiatement.
+- **Itérer dans l'éditeur visuel.** Basculer une section et observer l'aperçu au centre se regénérer est le moyen le plus rapide d'arriver à une mise en page — l'aperçu en direct est toujours visible, pas de modale à ouvrir.
+- **Charger une vraie facture une fois par session.** Le bouton **↑ Charger XML** en haut de l'éditeur alimente le sélecteur de chaque bloc — chargement unique, et chaque auto-complétion XPath utilise vos données.
 - **Ne pas supprimer `built-in`.** Le bouton est désactivé sur cette entrée pour cette raison — c'est le filet de sécurité au bout de la chaîne de résolution.

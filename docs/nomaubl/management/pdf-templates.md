@@ -1,7 +1,7 @@
 ---
 title: PDF Templates
-description: "First-class library of reusable PDF layouts. Each template is a pdf-template resource referenced by document templates by name. Edit once, propagate everywhere; mix preset sections (header, parties, line table…) with the new XPath-driven block primitives (text, field, repeat, table, if) and use the visual canvas editor to compose them."
-keywords: [NomaUBL, PDF templates, pdf-template, layout, defaultPdfTemplate, built-in, block section, field, repeat, table, XPath, visual canvas editor, JD Edwards, SAP, NetSuite, custom ERP]
+description: "First-class library of reusable PDF layouts. Each template is a pdf-template resource referenced by document templates by name. Edit once, propagate everywhere via a full-screen visual builder — palette of sections on the left, live preview in the centre, inspector with options + custom-block tree editor on the right."
+keywords: [NomaUBL, PDF templates, pdf-template, layout, defaultPdfTemplate, built-in, visual builder, block section, field, repeat, table, XPath, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # PDF Templates
@@ -11,9 +11,9 @@ The **PDF Templates** screen is the library of **reusable PDF layouts** that Nom
 The page covers four operations:
 
 - **manage** the catalogue (Add / Import / Copy / Remove);
-- **edit** a layout — section list, per-section toggles for preset sections, free-form composition for `block` sections;
+- **edit** a layout via the **visual builder** — a full-screen editor with the section catalogue on the left, a live preview in the centre and an inspector on the right;
 - **mark a default** for documents that don't pick an explicit layout;
-- **preview** the result against a sample invoice without leaving the page.
+- **load a real invoice XML** into the builder so the preview and the XPath autocomplete switch to your data.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — since the input it consumes is the generated UBL 2.1, not the source XML.
 
@@ -157,7 +157,7 @@ PDF templates were previously edited inline on the Documents page (the *PDF Temp
   <line x1="800" y1="508" x2="744" y2="508" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pdftpl-arrow)"/>
 </svg>
 
-The page splits into a left **catalogue** of saved layouts and a right **editor** for the selected layout. The editor is identical to the *PDF Template* tab on a document template — same section list, same per-section drawer, same live preview — except the result is saved to the catalogue under a name, not to a single document.
+The page splits into a left **catalogue** of saved layouts and a right summary panel for the selected layout. Editing a layout opens the **visual builder** — a full-screen, three-pane editor documented under [Visual builder](#visual-builder) below — and the layout is saved to the catalogue under a name.
 
 ---
 
@@ -179,7 +179,8 @@ The toolbar at the top of the page covers the catalogue lifecycle plus the defau
 
 | Action | Effect |
 |---|---|
-| **Add** | Opens a modal asking for a name and a description. Creates an empty `pdf-template` resource — start by adding sections in the editor. |
+| **Open visual builder** | Opens the selected layout in the full-screen [visual builder](#visual-builder) — palette on the left, live preview in the centre, inspector on the right. The primary editing surface. |
+| **Add** | Opens a modal asking for a name and a description. Creates an empty `pdf-template` resource — start by adding sections in the builder. |
 | **Import** | Loads a JSON file produced by another instance (or the *Export* action). Updates the matching template if the name already exists, otherwise creates it. The reserved name `built-in` is rejected. |
 | **Copy** | Duplicates the selected layout under a new name. The fastest way to derive a variant from `built-in` or from an existing customer-specific template. |
 | **Remove** | Deletes the selected layout after a confirmation. Disabled on `built-in`. |
@@ -195,6 +196,133 @@ The sidebar list contains every saved layout plus the bundled `built-in`.
 - **`built-in`** — pinned to the top, read-only, marked with a `factory` badge. Selecting it opens the editor in a banner-tagged read-only mode. *Copy* is the only way to derive an editable layout from it.
 - **★ marker** — the layout currently used as the default for documents with no explicit `pdfTemplate`. Exactly one layout carries the star at any time.
 - **Description** — free-text label persisted on the resource. Surfaced both in the sidebar and in the *PDF Template* selector on a document template.
+
+---
+
+## Visual builder \{#visual-builder\}
+
+The **Open visual builder** button opens the layout in a full-screen editor with three panes side-by-side — the canonical way to edit a `pdf-template`. The old single-page flow (section list + per-section drawers, click a Preview button to open a modal) is gone; the builder unifies everything in one screen with the preview always visible.
+
+<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <linearGradient id="pdfvb-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="pdfvb-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.30"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
+    <linearGradient id="pdfvb-purple" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c084fc" stopOpacity="0.28"/><stop offset="100%" stopColor="#a855f7" stopOpacity="0.10"/></linearGradient>
+  </defs>
+
+  <rect x="20" y="20" width="960" height="440" rx="14" fill="url(#pdfvb-card)" stroke="#1f2937" strokeWidth="1.4"/>
+
+  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Visual builder — invoice-fr</text>
+  <rect x="540" y="30" width="120" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="600" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↑ Load XML sample</text>
+  <rect x="668" y="30" width="56" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="696" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">Discard</text>
+  <rect x="730" y="30" width="60" height="22" rx="5" fill="url(#pdfvb-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="760" y="45" fill="#fff" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">Save</text>
+  <rect x="798" y="30" width="180" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="888" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">✕ Close (unsaved-changes guard)</text>
+
+  <line x1="20" y1="68" x2="980" y2="68" stroke="#1f2937" strokeWidth="1"/>
+
+  <rect x="36" y="84" width="220" height="360" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="48" y="106" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">PALETTE</text>
+  <rect x="48" y="118" width="196" height="22" rx="5" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="133" fill="#4a9eff" fontSize="10" fontFamily="ui-monospace, monospace">+ Header</text>
+  <rect x="48" y="146" width="196" height="22" rx="5" fill="rgba(74,158,255,0.06)" stroke="#334155" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="161" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">+ Parties (Customer + Delivery)</text>
+  <rect x="48" y="174" width="196" height="22" rx="5" fill="rgba(74,158,255,0.06)" stroke="#334155" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="189" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">+ Line Table</text>
+  <rect x="48" y="202" width="196" height="22" rx="5" fill="rgba(74,158,255,0.06)" stroke="#334155" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="217" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">+ Payment</text>
+  <rect x="48" y="230" width="196" height="22" rx="5" fill="rgba(74,158,255,0.06)" stroke="#334155" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="245" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">+ Notes</text>
+  <rect x="48" y="258" width="196" height="22" rx="5" fill="url(#pdfvb-purple)" stroke="#c084fc" strokeWidth="1" strokeDasharray="2 2"/>
+  <text x="58" y="273" fill="#c084fc" fontSize="10" fontFamily="ui-monospace, monospace">+ Custom block (XPath)</text>
+
+  <line x1="48" y1="292" x2="244" y2="292" stroke="#1f2937" strokeWidth="1"/>
+  <text x="48" y="312" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">SECTIONS IN THIS TEMPLATE</text>
+  <rect x="48" y="320" width="196" height="22" rx="5" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="58" y="335" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">⋮⋮ Header</text>
+  <rect x="48" y="346" width="196" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="58" y="361" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">⋮⋮ Parties</text>
+  <rect x="48" y="372" width="196" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="58" y="387" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">⋮⋮ Line Table</text>
+  <rect x="48" y="398" width="196" height="22" rx="5" fill="rgba(192,132,252,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="58" y="413" fill="#c084fc" fontSize="10" fontFamily="ui-monospace, monospace">⋮⋮ Block · payment-terms</text>
+  <rect x="48" y="424" width="196" height="14" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="58" y="434" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">⋮⋮ VAT Breakdown</text>
+
+  <rect x="270" y="84" width="430" height="360" rx="8" fill="#ffffff" fillOpacity="0.95" stroke="#1f2937" strokeWidth="1"/>
+  <text x="290" y="106" fill="#1e293b" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">LIVE PREVIEW · invoice-sample.xml</text>
+  <line x1="270" y1="116" x2="700" y2="116" stroke="#cbd5e1" strokeWidth="1"/>
+  <text x="290" y="138" fill="#1e293b" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">ACME Industries SA · Invoice FA-2026-001234</text>
+  <text x="290" y="156" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">Issue date · 24/05/2026   Due date · 23/06/2026</text>
+  <rect x="290" y="172" width="200" height="50" rx="4" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="1"/>
+  <text x="298" y="188" fill="#1e293b" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Customer</text>
+  <text x="298" y="202" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Globex Logistics</text>
+  <text x="298" y="214" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">12 rue de Rivoli, 75001 Paris</text>
+  <rect x="498" y="172" width="190" height="50" rx="4" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="1"/>
+  <text x="506" y="188" fill="#1e293b" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Delivery</text>
+  <text x="506" y="202" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif">Globex Warehouse · Bonn DE</text>
+
+  <rect x="290" y="234" width="398" height="20" rx="2" fill="#e2e8f0"/>
+  <text x="298" y="248" fill="#1e293b" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">#  Description     Qty  Unit  Unit price  Amount  VAT</text>
+  <line x1="290" y1="254" x2="688" y2="254" stroke="#cbd5e1" strokeWidth="1"/>
+  <text x="298" y="270" fill="#475569" fontSize="9" fontFamily="ui-monospace, monospace">1  Cargo crates    20   pc    50,00 €    1 000,00 €  200,00</text>
+  <text x="298" y="286" fill="#475569" fontSize="9" fontFamily="ui-monospace, monospace">2  Express ship   1    job   250,00 €     250,00 €   50,00</text>
+
+  <rect x="490" y="306" width="198" height="64" rx="4" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="1"/>
+  <text x="498" y="322" fill="#1e293b" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Totals</text>
+  <text x="498" y="338" fill="#475569" fontSize="9" fontFamily="ui-monospace, monospace">Total HT    1 250,00 €</text>
+  <text x="498" y="352" fill="#475569" fontSize="9" fontFamily="ui-monospace, monospace">VAT 20%       250,00 €</text>
+  <text x="498" y="366" fill="#1e293b" fontSize="9" fontWeight="700" fontFamily="ui-monospace, monospace">Total TTC   1 500,00 €</text>
+
+  <text x="290" y="400" fill="#475569" fontSize="8" fontFamily="system-ui, sans-serif" fontStyle="italic">page 1 / 1 · re-renders on every change</text>
+
+  <rect x="716" y="84" width="248" height="360" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="728" y="106" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">INSPECTOR — HEADER</text>
+  <line x1="728" y1="114" x2="952" y2="114" stroke="#1f2937" strokeWidth="1"/>
+  <text x="728" y="134" fill="#cbd5e1" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">SUPPLIER</text>
+  <text x="728" y="152" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ Address</text>
+  <text x="728" y="168" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ SIREN</text>
+  <text x="728" y="184" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ VAT number</text>
+  <text x="728" y="200" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☐ Phone</text>
+  <text x="728" y="216" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☐ Email</text>
+
+  <line x1="728" y1="232" x2="952" y2="232" stroke="#1f2937" strokeWidth="1"/>
+  <text x="728" y="252" fill="#cbd5e1" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">INVOICE METADATA</text>
+  <text x="728" y="270" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ Invoice number</text>
+  <text x="728" y="286" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ Issue date</text>
+  <text x="728" y="302" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☑ Due date</text>
+  <text x="728" y="318" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☐ Buyer reference</text>
+  <text x="728" y="334" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">☐ Contract reference</text>
+
+  <line x1="728" y1="354" x2="952" y2="354" stroke="#1f2937" strokeWidth="1"/>
+  <text x="728" y="376" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">Custom block selected → the block</text>
+  <text x="728" y="390" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">tree editor takes over this pane</text>
+  <text x="728" y="404" fill="#94a3b8" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">with XPath autocomplete + style.</text>
+</svg>
+
+The three panes:
+
+| Pane | What it carries |
+|---|---|
+| **Left — palette + section list** | Top half: the catalogue of available sections (Header, Parties, Line Table, Payment, Notes, Custom block, …). Click to add to the template. Bottom half: the ordered list of sections in this template. Click to select; drag the `⋮⋮` handle to reorder. |
+| **Centre — live preview** | Renders the current template against a bundled sample invoice (or the operator's loaded XML) and **re-renders on every change** — toggling a checkbox, adding a section, editing a custom-block node all reflect in the preview in milliseconds. Clicking any block in the preview selects it; the inspector on the right jumps to the matching options. |
+| **Right — inspector** | Shows the selected section's options grouped by category (Supplier, Invoice metadata, Columns, …). For a *Custom block*, the full **block tree editor** — text, field, row / column, repeat, conditional — opens directly in this pane with XPath autocomplete and per-node font / colour / alignment. |
+
+### Loading a real invoice
+
+The **↑ Load XML sample** button at the top of the builder accepts a real UBL invoice (drag-and-drop or file picker). Once loaded:
+
+- The live preview switches to your data immediately.
+- The XPath autocomplete inside the custom-block editor uses your XML — the dropdown suggestions match the elements your invoice actually carries.
+
+The sample is per-session, not persisted with the template. Reopening the builder reverts to the bundled sample.
+
+### Save and discard
+
+The top-right **Save** button persists the template directly from the builder. **Close** (the `✕` button) shows a *Discard / Cancel* confirmation when there are unsaved changes — closing without confirming is not possible. The *Discard* path drops every edit since the last save; *Cancel* keeps you in the builder.
 
 ---
 
@@ -244,19 +372,20 @@ Several blocks can live in the same template — e.g. one for a French legal men
 
 ---
 
-## Visual canvas editor
+## Custom-block tree editor
 
-A `block` section opens in the **`BlockCanvasEditor`** rather than a flat JSON textarea. The editor is split into three stacked panes plus a JSON escape hatch.
+When a *Custom block* section is selected inside the [visual builder](#visual-builder), the right pane switches from "checkbox toggles" to a full **tree editor**. It hosts everything the block needs in one place:
 
-| Pane | Purpose |
+| Region of the inspector pane | Purpose |
 |---|---|
-| **Tree** | Indented view of every node in the block, with kind tags (`text`, `field`, `repeat`, `table`, …). Click a node to select it; the selection drives both the toolbar and the inspector. |
-| **Toolbar** | Add child / wrap / unwrap / delete / move up / move down — operations applied to the currently selected node. The same operations are available via keyboard shortcuts. |
-| **Inspector** | Per-kind attribute form (XPath, label, format, alignment, gap, …) plus a **Style** sub-panel covering font, weight, size, colour, alignment and padding. |
+| **Tree** | Indented view of every node in the block, with kind tags (`text`, `field`, `repeat`, `table`, …). Click a node to select it; the live preview in the centre highlights the matching region. |
+| **Node toolbar** | Add child / wrap / unwrap / delete / move up / move down — operations applied to the currently selected node. The same operations are available via keyboard shortcuts. |
+| **Attributes form** | Per-kind attribute form (XPath, label, format, alignment, gap, …) plus a **Style** sub-panel covering font, weight, size, colour, alignment and padding. |
+| **JSON escape hatch** | A raw-JSON view of the current node — read-only by default, *Edit JSON* toggles in-place editing for advanced cases the form doesn't cover. |
 
-A small but important detail at the top of the inspector: a **Kind** select that **morphs** the selected node in place — turn a `column` into a `repeat` without deleting and re-adding it, the compatible attributes (children, style) are carried over by the `transmuteKind` helper. The same trick handles the common case of promoting a static layout block to an iterating one once the data shape is understood.
+A small but important detail at the top of the attributes form: a **Kind** select that **morphs** the selected node in place — turn a `column` into a `repeat` without deleting and re-adding it, the compatible attributes (children, style) are carried over by the `transmuteKind` helper. The same trick handles the common case of promoting a static layout block to an iterating one once the data shape is understood.
 
-The **Live preview** button at the top of the form opens a 960 × 85vh modal that renders the current configuration against a sample invoice — clicking *Save* on the editor while the preview is open updates the iframe in place. The *Load XML sample* control sits one level up, on the template-level header, so a single sample feeds the XPath autocompletion of every block in the template.
+The centre preview re-renders every keystroke — the iframe stays mounted and updates in place, so the operator sees the result without flicker as they edit XPaths or toggle styles. The **↑ Load XML sample** button at the top of the builder feeds a single sample to the XPath autocomplete of every block in the template.
 
 ---
 
@@ -283,6 +412,6 @@ The page reads and writes via the standard template endpoints — same routes us
 - **One layout, many documents.** For each invoice variant (standard, credit note, recipient receipt …) prefer one shared layout over per-document inline JSON. The benefit is a single edit point when the legal mentions or the column set changes.
 - **Set a default early.** Mark a layout as default before connecting customer-specific document templates — every new document then resolves to it implicitly, and the explicit `pdfTemplate` property on a doc template stays reserved for genuine variants.
 - **Use `block` for what presets don't cover.** Custom legal mentions, country-specific footers, structured signature blocks, watermarks — all best modelled as a `block` rather than asked of an existing preset.
-- **Iterate inside the live preview modal.** Toggling a section, then watching the iframe re-render in the modal is the fastest way to converge on a layout without leaving the editor.
-- **Reuse the XML sample.** A single *Load XML sample* on the template header feeds the picker for every block — load it once per editing session and every XPath autocompletion just works.
+- **Iterate inside the visual builder.** Toggling a section, then watching the centre preview re-render is the fastest way to converge on a layout — the live preview is always visible, no modal to open.
+- **Load a real XML once per session.** The **↑ Load XML sample** button at the top of the builder feeds the picker for every block — load it once and every XPath autocompletion uses your data.
 - **Don't delete `built-in`.** The button stays disabled on it for that reason — it is the safety fallback at the end of the resolution chain.

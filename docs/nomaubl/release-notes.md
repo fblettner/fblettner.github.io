@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
+  <a href="#v2026-05-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-26</span></a>
+  <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
   <a href="#v2026-05-23" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.23 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
   <a href="#v2026-05-22" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.22 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
   <a href="#v2026-05-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
@@ -48,6 +49,32 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.05.26 — 2026-05-26 \{#v2026-05-26\}
+
+A real visual builder for the invoice PDF — palette on the left, live preview in the centre, inspector on the right — with the block tree editor integrated in place. Plus a round of fixes for Oracle and Windows installs.
+
+### Improvements
+
+- **Live preview is always visible while editing a template.** The old flow — open a modal, type document references, click Preview, wait — is gone. The preview now reflects every toggle and every block edit as you make them.
+
+### New features
+
+- **Visual builder for PDF templates.** A new **Open visual builder** button on the PDF Templates page opens a full-screen editor with three panes:
+  - **Left** — the catalogue of available sections (Header, Customer + Delivery, Invoice line table, Payment, Notes, custom block, …) and the ordered list of sections in this template. Click to add, click to select, drag to reorder.
+  - **Centre** — a live preview that re-renders against a bundled sample invoice (or your own loaded XML) on every change. Click any block in the preview and the inspector jumps to it.
+  - **Right** — an inspector showing the selected block's options grouped by category (Supplier, Invoice block, Columns, …). For a custom block, the full tree editor — text, field, row / column, repeat, conditional — opens in the inspector with XPath autocomplete and font / colour / alignment per node.
+- **Load a sample XML from inside the builder.** Drop a real invoice in from the top of the builder — both the live preview and the XPath picker switch to your data immediately, no need to leave the builder.
+- **Save inside the builder, with an unsaved-changes warning.** Save persists from the builder; closing with unsaved changes shows a Discard / Cancel prompt so no work is lost by accident.
+
+### Bug fixes
+
+- **Login on Oracle now works.** Authentication on Oracle was silently rejecting every login — including the default `admin / admin` — because the username comparison didn't account for how Oracle stores the value. Login, password changes, role assignments and the user-self password change all work now.
+- **Windows paths in the settings.** Saving a Windows path (e.g. `c:\nomaubl`) in the settings used to corrupt the value on save. Paths now round-trip cleanly.
+- **`nomaubl.cmd start` returns to the prompt; the server stays alive when the console closes.** Stopping the server now terminates it cleanly without the previous 10-second wait.
+- **Buyer address in the UBL XML emitted in the right order.** The buyer's postal address was placed after the VAT identifier, which strict schema validators reject. Order fixed.
 
 ---
 
