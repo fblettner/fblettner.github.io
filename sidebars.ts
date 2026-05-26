@@ -297,6 +297,52 @@ const sidebars: SidebarsConfig = {
     },
   ],
 
+  nomaflowSidebar: [
+    'liberty/nomaflow/overview',
+    'liberty/nomaflow/getting-started',
+    'liberty/nomaflow/concepts',
+    {
+      type: 'category',
+      label: 'Jobs',
+      link: {type: 'generated-index', slug: '/liberty/nomaflow/jobs', description: 'The Jobs page — browse the catalogue, create or edit a workflow, schedule it.'},
+      items: [
+        'liberty/nomaflow/jobs/catalog',
+        'liberty/nomaflow/jobs/create',
+        'liberty/nomaflow/jobs/schedules',
+      ],
+    },
+    'liberty/nomaflow/steps',
+    {
+      type: 'category',
+      label: 'Runs',
+      link: {type: 'generated-index', slug: '/liberty/nomaflow/runs', description: 'Run history, live monitoring, troubleshooting.'},
+      items: [
+        'liberty/nomaflow/runs/history',
+        'liberty/nomaflow/runs/troubleshoot',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Workflow recipes',
+      link: {type: 'generated-index', slug: '/liberty/nomaflow/workflows', description: 'Ready-to-adapt patterns — scheduled DB sync, API pull, conditional cleanup.'},
+      items: [
+        'liberty/nomaflow/workflows/scheduled-sync',
+        'liberty/nomaflow/workflows/api-pull',
+        'liberty/nomaflow/workflows/conditional-cleanup',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Customisation',
+      link: {type: 'generated-index', slug: '/liberty/nomaflow/customisation', description: 'Extension points — custom Python steps and outbound notifications.'},
+      items: [
+        'liberty/nomaflow/custom-python',
+        'liberty/nomaflow/notifications',
+      ],
+    },
+    'liberty/nomaflow/administration',
+  ],
+
   nomasx1Sidebar: [
     'liberty/nomasx1/overview',
     {
