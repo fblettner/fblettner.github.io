@@ -71,7 +71,7 @@ The master key is a **32-byte AES-256-GCM key** that the framework loads from th
 | **Master key** | Name of the environment variable holding the key. Default `${LIBERTY_MASTER_KEY}`. |
 | **Legacy keys** | List of older keys, used for **decryption only** during a rotation. New encryptions always use *Master key*. Click *+ Add legacy key* to add an entry — each entry is an env var name. |
 
-Generate a fresh key with the [`liberty-crypto`](../cli-reference.md#liberty-crypto) CLI:
+Generate a fresh key with the [`liberty-crypto`](../../references/cli.md#liberty-crypto) CLI:
 
 ```bash
 .venv/bin/liberty-crypto genkey
@@ -172,5 +172,5 @@ The `liberty-crypto` CLI is the only scripted path for advanced operations (rewr
 
 - [Environment variables](./environment-variables.md) — including the master key env var.
 - [Framework settings](./app-toml.md) — the *Encryption* sub-section.
-- [CLI reference → liberty-crypto](../cli-reference.md#liberty-crypto) — every subcommand.
+- [CLI reference → liberty-crypto](../../references/cli.md#liberty-crypto) — every subcommand.
 - [Authentication](../build/secure/sign-in.md) — where the OIDC client secret lives.

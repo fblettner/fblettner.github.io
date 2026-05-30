@@ -166,7 +166,7 @@ A typical CI/CD flow:
 1. **Build the apps repo** — copy `config/` + `plugins/` into a release tarball / Docker image.
 2. **Deploy** — push to the framework's hosts, set `LIBERTY_APPS_DIR` to the unpacked `config/`.
 3. **Restart** — `systemctl restart liberty` or roll the pod.
-4. **Verify** — `curl http://localhost:8000/healthz` and check `grep "liberty.plugins importable" app.log`.
+4. **Verify** — `curl http://localhost:8000/health` and check `grep "liberty.plugins importable" app.log`.
 5. **Smoke test** — open the Settings → Nomaflow page, run a small known-good job, check the Run detail.
 
 The plugin's Python dependencies (`httpx`, `openpyxl`, `ldap3`, whatever the plugin imports) need to be installed in the framework's virtual environment. Either bake them into the image / venv build, or maintain a `requirements.txt` alongside the plugin that gets installed before the framework starts.

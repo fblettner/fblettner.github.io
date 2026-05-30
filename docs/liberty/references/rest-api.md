@@ -1,7 +1,7 @@
 ---
 title: REST API reference
 description: "Every REST endpoint the framework exposes — grouped by domain: auth, connectors, screens, dashboards, menus, jobs, ai, admin config, healthcheck. URL, method, required permission, request body and response shape."
-keywords: [Liberty Framework, REST API, /api, /admin, /auth, OpenAPI, endpoints, JWT, /healthz, /docs]
+keywords: [Liberty Framework, REST API, /api, /admin, /auth, OpenAPI, endpoints, JWT, /health, /docs]
 ---
 
 # REST API reference
@@ -15,10 +15,10 @@ This page is a domain-by-domain map of the endpoints, with the required permissi
 ## Conventions
 
 - **Base path** — the framework serves the API at the **root of the bound origin**: `https://liberty.example.com/api/...` and `https://liberty.example.com/admin/...`.
-- **Authentication** — every endpoint requires a `Bearer` token in the `Authorization` header, except `POST /auth/login`, `POST /auth/refresh`, the OIDC pair and `GET /api/healthz`.
+- **Authentication** — every endpoint requires a `Bearer` token in the `Authorization` header, except `POST /auth/login`, `POST /auth/refresh`, the OIDC pair and `GET /api/health`.
 - **Content type** — JSON in / JSON out unless stated. Errors carry a `{ "detail": "..." }` body with a non-2xx status.
 - **Language** — `X-Liberty-Lang: fr` overrides the response's labels for endpoints that include them (screens, dictionary, menus, errors).
-- **Permission codes** are the same ones documented under [Roles & permissions](./build/secure/roles-and-permissions.md). `*` is wildcard; `sql:billing:*` matches any query of the `billing` connector.
+- **Permission codes** are the same ones documented under [Roles & permissions](../framework/build/secure/roles-and-permissions.md). `*` is wildcard; `sql:billing:*` matches any query of the `billing` connector.
 
 ---
 
@@ -26,7 +26,7 @@ This page is a domain-by-domain map of the endpoints, with the required permissi
 
 | Method | Path | Permission | Response |
 |---|---|---|---|
-| `GET` | `/api/healthz` | none (public) | `{ "ok": true, "version": "0.42.0" }` |
+| `GET` | `/api/health` | none (public) | `{ "ok": true, "version": "0.42.0" }` |
 
 Useful for liveness probes. Doesn't touch the database.
 
@@ -43,7 +43,7 @@ Useful for liveness probes. Doesn't touch the database.
 | `GET` | `/auth/oidc/login` | public | — | 302 to the IdP. |
 | `GET` | `/auth/oidc/callback` | public | query | 302 to `/`. Sets the local session. |
 
-See [Authentication](./build/secure/sign-in.md) for the OIDC flow.
+See [Authentication](../framework/build/secure/sign-in.md) for the OIDC flow.
 
 ---
 
@@ -239,5 +239,5 @@ Every endpoint is documented there with the exact request / response shape gener
 ## What's next
 
 - The live API at `http://${HOST}:${PORT}/docs`.
-- [Configuration → Settings UI](./configuration/settings-ui.md) — the in-browser editor that consumes the `/admin/config/*` family.
-- [Authentication → Roles & permissions](./build/secure/roles-and-permissions.md) — the permission codes every endpoint checks.
+- [Configuration → Settings UI](../framework/configuration/settings-ui.md) — the in-browser editor that consumes the `/admin/config/*` family.
+- [Authentication → Roles & permissions](../framework/build/secure/roles-and-permissions.md) — the permission codes every endpoint checks.

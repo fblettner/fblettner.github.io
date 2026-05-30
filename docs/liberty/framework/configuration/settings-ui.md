@@ -152,7 +152,7 @@ The page is restricted to users carrying `settings:technical` and is meant for d
 
 ## Backed by a REST surface
 
-Every builder talks to a small set of `/admin/config/*` endpoints. They are documented under [REST API reference → Admin config](../rest-api.md#admin-config) and are usable from `curl` for scripting:
+Every builder talks to a small set of `/admin/config/*` endpoints. They are documented under [REST API reference → Admin config](../../references/rest-api.md#admin-config) and are usable from `curl` for scripting:
 
 | Endpoint | Purpose |
 |---|---|

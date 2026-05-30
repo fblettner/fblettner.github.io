@@ -22,7 +22,7 @@ Vérifiez que vous disposez de :
 | Vous avez un connecteur cible utilisable. | Ouvrez *Paramètres → Connecteurs* — au moins un connecteur doit être listé. Le pool `default` du framework convient toujours. |
 | Votre rôle dispose de la permission `job:*` (ou de `superuser`). | Si le lien *Nomaflow* est visible dans le menu, vous êtes prêt. |
 
-Si l'un de ces points manque, le [guide de démarrage du framework](../framework/getting-started/installation.md) couvre le chemin d'installation et [Authentification → Rôles et permissions](../framework/build/secure/roles-and-permissions.md) couvre le câblage des rôles.
+Si l'un de ces points manque, le [guide de démarrage du framework](../installation/python-server.md) couvre le chemin d'installation et [Authentification → Rôles et permissions](../framework/build/secure/roles-and-permissions.md) couvre le câblage des rôles.
 
 ---
 

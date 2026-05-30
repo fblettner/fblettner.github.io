@@ -11,7 +11,7 @@ Liberty Framework est livré sous forme de **deux dépôts sources** qui coexist
 - **`liberty-next`** — le binaire ouvert du framework : backend FastAPI + frontend React 19, servis sur un seul port.
 - **`liberty-apps`** — le dépôt de configuration spécifique à l'installation : pools, connecteurs, dictionnaire, écrans, menus, tableaux de bord, graphiques, jobs.
 
-Le framework lit sa configuration depuis le dépôt `liberty-apps` via la variable d'environnement `LIBERTY_APPS_DIR`. Deux dépôts, un serveur, un port. Aucun Docker requis pour le développement ; le déploiement en production est documenté dans [Déploiement → Exécution en production](../deployment/running-production.md).
+Le framework lit sa configuration depuis le dépôt `liberty-apps` via la variable d'environnement `LIBERTY_APPS_DIR`. Deux dépôts, un serveur, un port. Aucun Docker requis pour le développement ; le déploiement en production est documenté dans [Déploiement → Exécution en production](./production.md).
 
 ---
 
@@ -96,7 +96,7 @@ export LIBERTY_APPS_DIR="$HOME/work/liberty-apps/config"
 
 Avec `LIBERTY_APPS_DIR` défini, `init-config` ne fait rien — les TOML par section sont lus depuis le dépôt apps, pas depuis les modèles locaux. Les fichiers `config/auth.toml` et `config/app.toml` restent spécifiques à l'installation dans les deux cas.
 
-Voir [Structure du projet](./project-layout.md) pour la carte complète des répertoires.
+Voir [Structure du projet](../framework/getting-started/project-layout.md) pour la carte complète des répertoires.
 
 ---
 
@@ -115,7 +115,7 @@ La commande choisit son backend depuis `[auth] backend` dans `config/app.toml` :
 | `toml` *(défaut)* | Crée `config/auth.toml` avec un mot de passe `admin` fraîchement haché en Argon2 (affiché une seule fois). | Installation de dev sur un seul hôte — pas de base externe nécessaire. |
 | `db` | Crée les tables `ly2_users` / `ly2_roles` / `ly2_permissions` sur le pool configuré et insère le même `admin`. | Installation en production — survit aux reconstructions de conteneurs et partage la base d'utilisateurs entre réplicas. |
 
-Le mot de passe affiché n'est montré **qu'une seule fois** sur stdout. Notez-le, ou réinitialisez-le ensuite avec `liberty-admin set-password admin <nouveau>`. Voir [Authentification](../build/secure/sign-in.md) pour la matrice complète des backends.
+Le mot de passe affiché n'est montré **qu'une seule fois** sur stdout. Notez-le, ou réinitialisez-le ensuite avec `liberty-admin set-password admin <nouveau>`. Voir [Authentification](../framework/build/secure/sign-in.md) pour la matrice complète des backends.
 
 ---
 
@@ -155,11 +155,11 @@ Ouvrez `http://127.0.0.1:8000`, connectez-vous comme `admin` avec le mot de pass
 | `LIBERTY_APPS_DIR` | Les TOML par section se trouvent dans ce répertoire au lieu de `liberty-next/config/`. |
 | `LIBERTY_DB_URL` | URL du pool par défaut — par défaut SQLite (`sqlite+aiosqlite:///liberty.db`). |
 | `LIBERTY_JWT_SECRET` | Clé de signature JWT. Non définie = clé éphémère (les tokens meurent au redémarrage). |
-| `LIBERTY_MASTER_KEY` | Clé AES-256-GCM utilisée pour déchiffrer les blocs `ENC:` dans les TOML — voir [Chiffrement et secrets](../configuration/encryption-secrets.md). |
-| `LIBERTY_LICENSE_KEY` | JWT RS256 qui déverrouille les produits éditeur packagés (Nomasx-1, Nomajde, NomaUBL …) — voir [Clé de licence](../build/secure/license-key.md). |
-| `ANTHROPIC_API_KEY` | Active l'[assistant IA](../ai-assistant.md). |
+| `LIBERTY_MASTER_KEY` | Clé AES-256-GCM utilisée pour déchiffrer les blocs `ENC:` dans les TOML — voir [Chiffrement et secrets](../framework/configuration/encryption-secrets.md). |
+| `LIBERTY_LICENSE_KEY` | JWT RS256 qui déverrouille les produits éditeur packagés (Nomasx-1, Nomajde, NomaUBL …) — voir [Clé de licence](../framework/build/secure/license-key.md). |
+| `ANTHROPIC_API_KEY` | Active l'[assistant IA](../framework/ai-assistant.md). |
 
-Toutes les variables sont documentées une à une dans [Variables d'environnement](../configuration/environment-variables.md).
+Toutes les variables sont documentées une à une dans [Variables d'environnement](../framework/configuration/environment-variables.md).
 
 ---
 
@@ -167,7 +167,7 @@ Toutes les variables sont documentées une à une dans [Variables d'environnemen
 
 | Contrôle | Comment |
 |---|---|
-| Serveur en marche | `curl -s http://127.0.0.1:8000/api/healthz` retourne `{"ok":true}`. |
+| Serveur en marche | `curl -s http://127.0.0.1:8000/api/health` retourne `{"ok":true}`. |
 | OpenAPI charge | Ouvrir `http://127.0.0.1:8000/docs` — la surface REST complète est navigable. |
 | Connecteurs chargés | Ouvrir le catalogue des connecteurs sur `/` — au moins le pool SQLite par défaut est listé. |
 | L'admin peut se connecter | Se connecter avec les identifiants de l'étape 4 — le lien Paramètres apparaît dans l'en-tête. |
@@ -177,6 +177,6 @@ Toutes les variables sont documentées une à une dans [Variables d'environnemen
 
 ## Pour aller plus loin
 
-- Parcourez votre première app avec [Démarrage → Première app](./first-app.md) — un pool, une requête, un écran et une entrée de menu, de bout en bout.
-- Lisez [Structure du projet](./project-layout.md) pour la cartographie des fichiers de `liberty-apps`.
-- Passez à [Configuration → UI des Paramètres](../configuration/settings-ui.md) une fois que tout fonctionne depuis les éditeurs in-app.
+- Parcourez votre première app avec [Démarrage → Première app](../framework/getting-started/first-app.md) — un pool, une requête, un écran et une entrée de menu, de bout en bout.
+- Lisez [Structure du projet](../framework/getting-started/project-layout.md) pour la cartographie des fichiers de `liberty-apps`.
+- Passez à [Configuration → UI des Paramètres](../framework/configuration/settings-ui.md) une fois que tout fonctionne depuis les éditeurs in-app.

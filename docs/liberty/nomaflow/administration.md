@@ -198,7 +198,7 @@ Two health probes are exposed:
 
 | Endpoint | What it returns |
 |---|---|
-| **`GET /healthz`** | Liveness — the process is up. Used by Kubernetes / Docker / load balancer to decide whether to route traffic. |
+| **`GET /health`** | Liveness — the process is up. Used by Kubernetes / Docker / load balancer to decide whether to route traffic. |
 | **`GET /admin/jobs/health`** | Readiness — the scheduler has the lock, the cron registry parsed, no internal alarms. Used by monitoring to alert on "the scheduler is down". |
 
 For a multi-replica install, the second endpoint differs between the primary and secondaries — the primary reports `scheduler: active`, the secondaries report `scheduler: standby`. Both are healthy states; alerting should require `scheduler: error` to fire.

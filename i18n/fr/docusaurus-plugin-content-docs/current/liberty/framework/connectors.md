@@ -296,7 +296,7 @@ Un *Enregistrer et recharger* sur l'éditeur de connecteur reconstruit le regist
 
 Les définitions de connecteurs sont enregistrées dans `liberty-apps/config/connectors.toml` (ou `liberty-next/config/connectors.toml` quand `LIBERTY_APPS_DIR` n'est pas défini). Les opérateurs **ne modifient pas ce fichier à la main** en exploitation normale ; l'éditeur de connecteurs est l'interface de référence. L'onglet *TOML brut* de [Paramètres → Connecteurs](./configuration/settings-ui.md) est l'échappatoire pour les rares cas où l'éditeur ne couvre pas un champ.
 
-Pour les scripts CI et les orchestrateurs externes, la même surface est joignable via REST sur `/admin/config/connectors/*` — voir [Référence API REST](./rest-api.md#admin-config).
+Pour les scripts CI et les orchestrateurs externes, la même surface est joignable via REST sur `/admin/config/connectors/*` — voir [Référence API REST](../references/rest-api.md#admin-config).
 
 ---
 

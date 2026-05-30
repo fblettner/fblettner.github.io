@@ -33,7 +33,7 @@ Le domaine CRM est volontairement générique — trois entités, des relations 
 
 | Ce qu'il vous faut | Pourquoi |
 |---|---|
-| **Liberty Framework installé en local** | Suivez [Démarrage → Installation](../getting-started/installation.md) jusqu'à « Vérifier l'installation ». Le framework doit être joignable sur `http://127.0.0.1:8000` avec l'utilisateur `admin` connecté. |
+| **Liberty Framework installé en local** | Suivez [Démarrage → Installation](../../installation/python-server.md) jusqu'à « Vérifier l'installation ». Le framework doit être joignable sur `http://127.0.0.1:8000` avec l'utilisateur `admin` connecté. |
 | **PostgreSQL ou le SQLite intégré** | Le tutoriel utilise du SQL générique ; les deux conviennent. SQLite démarre plus vite (déjà câblé). |
 | **Un client SQL** | `psql` pour PostgreSQL ou `sqlite3` pour SQLite. Tout outil qui permet d'exécuter un `CREATE TABLE`. |
 

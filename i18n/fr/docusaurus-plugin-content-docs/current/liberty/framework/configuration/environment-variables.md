@@ -162,4 +162,4 @@ Le framework s'intéresse à trois catégories : **où se trouve la configuratio
 
 - [Référence `app.toml`](./app-toml.md) — chaque clé expliquée.
 - [Chiffrement et secrets](./encryption-secrets.md) — comment `LIBERTY_MASTER_KEY` est utilisée.
-- [Déploiement → Exécution en production](../deployment/running-production.md) — les variantes systemd / Docker / Kubernetes en détail.
+- [Déploiement → Exécution en production](../../installation/production.md) — les variantes systemd / Docker / Kubernetes en détail.

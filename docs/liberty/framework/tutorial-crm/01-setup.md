@@ -33,7 +33,7 @@ The CRM domain is generic on purpose — three entities, recognisable relationsh
 
 | You need | Why |
 |---|---|
-| **Liberty Framework installed locally** | Follow [Getting Started → Installation](../getting-started/installation.md) up to "Verify the install". The framework should be reachable at `http://127.0.0.1:8000` with the `admin` user signed in. |
+| **Liberty Framework installed locally** | Follow [Getting Started → Installation](../../installation/python-server.md) up to "Verify the install". The framework should be reachable at `http://127.0.0.1:8000` with the `admin` user signed in. |
 | **PostgreSQL or the built-in SQLite** | The tutorial uses generic SQL; either works. SQLite is faster to start (already wired). |
 | **A SQL client** | `psql` for PostgreSQL or `sqlite3` for SQLite. Anything that lets you run a `CREATE TABLE`. |
 

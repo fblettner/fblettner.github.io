@@ -198,7 +198,7 @@ Deux sondes de santé sont mises à disposition :
 
 | Endpoint | Ce qu'il renvoie |
 |---|---|
-| **`GET /healthz`** | Vivacité — le processus est en marche. Utilisé par Kubernetes / Docker / le répartiteur de charge pour décider du routage du trafic. |
+| **`GET /health`** | Vivacité — le processus est en marche. Utilisé par Kubernetes / Docker / le répartiteur de charge pour décider du routage du trafic. |
 | **`GET /admin/jobs/health`** | Disponibilité — l'ordonnanceur détient le verrou, le registre cron est parsé, aucune alarme interne. Utilisé par le monitoring pour alerter sur « l'ordonnanceur est en panne ». |
 
 Pour une installation multi-réplique, le second endpoint diffère entre primaire et secondaires — la primaire rapporte `scheduler: active`, les secondaires rapportent `scheduler: standby`. Les deux représentent des états sains ; l'alerte doit se déclencher sur `scheduler: error`.

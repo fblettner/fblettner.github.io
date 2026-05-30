@@ -283,6 +283,6 @@ Le framework est le bon outil quand **la plupart de vos écrans sont liste-et-é
 | **Nouveau sur le framework et vous voulez un tutoriel propre** | [Tutoriel — Construire un CRM](./tutorial-crm/01-setup.md) — six étapes, domaine générique. |
 | **En train de planifier une admin JDE** | Installez l'app packagée [Nomajde](https://docs.nomana-it.fr/nomajde/) — spécifique JDE, rien à construire. |
 | **En train de planifier une admin SAP / NetSuite / autre ERP** | Suivez le [Tutoriel — Construire un CRM](./tutorial-crm/01-setup.md) ; le modèle se transpose. |
-| **Juste en train de l'installer pour la première fois** | [Démarrage → Installation](./getting-started/installation.md). |
+| **Juste en train de l'installer pour la première fois** | [Démarrage → Installation](../installation/python-server.md). |
 | **À la recherche d'une marche à suivre précise** | [Cookbook](./cookbook/crud-existing-table.md) — recettes courtes. |
 | **Du genre à lire la grammaire du framework d'abord** | [Connecteurs](./connectors.md) est l'entrée naturelle. |

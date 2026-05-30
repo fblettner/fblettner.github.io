@@ -152,7 +152,7 @@ La page est restreinte aux utilisateurs portant `settings:technical` et est dest
 
 ## Adossé à une surface REST
 
-Chaque éditeur dialogue avec un petit ensemble d'endpoints `/admin/config/*`. Ils sont documentés dans [Référence API REST → Admin config](../rest-api.md#admin-config) et sont utilisables depuis `curl` pour le scripting :
+Chaque éditeur dialogue avec un petit ensemble d'endpoints `/admin/config/*`. Ils sont documentés dans [Référence API REST → Admin config](../../references/rest-api.md#admin-config) et sont utilisables depuis `curl` pour le scripting :
 
 | Endpoint | Objectif |
 |---|---|

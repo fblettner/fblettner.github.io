@@ -96,7 +96,7 @@ sudo -u liberty .venv/bin/liberty-admin migrate-db
 sudo -u liberty .venv/bin/liberty-admin verify-config
 sudo systemctl start liberty-next
 sudo systemctl status liberty-next
-curl -s http://127.0.0.1:8000/api/healthz
+curl -s http://127.0.0.1:8000/api/health
 ```
 
 `migrate-db` est relançable sans risque — l'exécuter deux fois ne fait rien la seconde fois. La commande affiche une ligne par delta appliqué :
@@ -107,7 +107,7 @@ applied: 0043_add_lock_metadata_columns.sql
 2 migrations applied, schema is now at version 0043
 ```
 
-La vérification finale (`curl /api/healthz`) est le feu vert pour considérer la mise à jour terminée ; le test de fumée ci-dessous couvre les contrôles plus poussés.
+La vérification finale (`curl /api/health`) est le feu vert pour considérer la mise à jour terminée ; le test de fumée ci-dessous couvre les contrôles plus poussés.
 
 ---
 
@@ -136,7 +136,7 @@ podman run -d --name liberty \
   liberty-next:0.43.0
 ```
 
-Pour un déploiement sans coupure, lancer deux conteneurs derrière un proxy et les vider à tour de rôle — couvert dans [Mise en production](./running-production.md).
+Pour un déploiement sans coupure, lancer deux conteneurs derrière un proxy et les vider à tour de rôle — couvert dans [Mise en production](./production.md).
 
 ---
 
@@ -154,9 +154,9 @@ kubectl set image deployment/liberty-next liberty=registry.example.com/liberty-n
 kubectl rollout status deployment/liberty-next
 ```
 
-Le Job de migration exécute `liberty-admin migrate-db` puis sort — le rolling update du Deployment ne démarre qu'une fois ce Job terminé. Les pods sont remplacés un à un ; les readiness probes sur `/api/healthz` garantissent que chaque nouveau pod est prêt avant que l'ancien suivant ne soit terminé.
+Le Job de migration exécute `liberty-admin migrate-db` puis sort — le rolling update du Deployment ne démarre qu'une fois ce Job terminé. Les pods sont remplacés un à un ; les readiness probes sur `/api/health` garantissent que chaque nouveau pod est prêt avant que l'ancien suivant ne soit terminé.
 
-Pour l'épinglage du scheduler (voir [Mise en production](./running-production.md#multi-replica-considerations)), s'assurer que l'ancien pod du replica scheduler est terminé avant que le scheduler du nouveau pod ne démarre — généralement en marquant le pod avec `scheduler=true` et en redéployant ce seul replica en dernier.
+Pour l'épinglage du scheduler (voir [Mise en production](./production.md#multi-replica-considerations)), s'assurer que l'ancien pod du replica scheduler est terminé avant que le scheduler du nouveau pod ne démarre — généralement en marquant le pod avec `scheduler=true` et en redéployant ce seul replica en dernier.
 
 ---
 
@@ -166,7 +166,7 @@ Pour l'épinglage du scheduler (voir [Mise en production](./running-production.m
 
 | Contrôle | Comment | À confirmer |
 |---|---|---|
-| **Santé** | `curl http://${HOST}:${PORT}/api/healthz` | `{"ok": true, "version": "<nouvelle>"}` — la version correspond au tag. |
+| **Santé** | `curl http://${HOST}:${PORT}/api/health` | `{"ok": true, "version": "<nouvelle>"}` — la version correspond au tag. |
 | **Authentification** | Se connecter avec l'utilisateur administrateur. | La connexion locale fonctionne toujours. |
 | **OIDC** *(si activé)* | Se connecter via SSO. | L'aller-retour avec l'IdP et le retour fonctionnent. |
 | **Chargement de l'interface Paramètres** | Ouvrir `/settings`. | Chaque onglet s'affiche, aucune erreur de validation Pydantic dans le log. |
@@ -243,6 +243,6 @@ Une mise à jour d'app éditeur devient alors :
 
 ## Pour aller plus loin
 
-- [Mise en production](./running-production.md) — la forme de déploiement dans laquelle les mises à jour atterrissent.
-- [Configuration → Rechargement à chaud](../configuration/hot-reload.md) — ce qui se recharge et ce qui demande un redémarrage (pertinent quand on modifie `app.toml` en cours de mise à jour).
-- [Applications et plugins → Applications](../apps/overview.md) — packager les personnalisations pour survivre aux mises à jour éditeur.
+- [Mise en production](./production.md) — la forme de déploiement dans laquelle les mises à jour atterrissent.
+- [Configuration → Rechargement à chaud](../framework/configuration/hot-reload.md) — ce qui se recharge et ce qui demande un redémarrage (pertinent quand on modifie `app.toml` en cours de mise à jour).
+- [Applications et plugins → Applications](../framework/apps/overview.md) — packager les personnalisations pour survivre aux mises à jour éditeur.

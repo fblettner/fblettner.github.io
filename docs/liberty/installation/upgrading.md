@@ -96,7 +96,7 @@ sudo -u liberty .venv/bin/liberty-admin migrate-db
 sudo -u liberty .venv/bin/liberty-admin verify-config
 sudo systemctl start liberty-next
 sudo systemctl status liberty-next
-curl -s http://127.0.0.1:8000/api/healthz
+curl -s http://127.0.0.1:8000/api/health
 ```
 
 `migrate-db` is idempotent — running it twice does nothing the second time. The command prints one line per applied delta:
@@ -107,7 +107,7 @@ applied: 0043_add_lock_metadata_columns.sql
 2 migrations applied, schema is now at version 0043
 ```
 
-The check at the end (`curl /api/healthz`) is the green light to consider the upgrade done; the smoke test below covers the deeper sanity checks.
+The check at the end (`curl /api/health`) is the green light to consider the upgrade done; the smoke test below covers the deeper sanity checks.
 
 ---
 
@@ -136,7 +136,7 @@ podman run -d --name liberty \
   liberty-next:0.43.0
 ```
 
-For zero-downtime, run two containers behind a proxy and drain in turn — covered under [running in production](./running-production.md).
+For zero-downtime, run two containers behind a proxy and drain in turn — covered under [running in production](./production.md).
 
 ---
 
@@ -154,9 +154,9 @@ kubectl set image deployment/liberty-next liberty=registry.example.com/liberty-n
 kubectl rollout status deployment/liberty-next
 ```
 
-The migration Job runs `liberty-admin migrate-db` and exits — the Deployment's rolling update starts only after it's done. Pods are replaced one at a time; readiness probes on `/api/healthz` make sure each new pod is up before the next old one is terminated.
+The migration Job runs `liberty-admin migrate-db` and exits — the Deployment's rolling update starts only after it's done. Pods are replaced one at a time; readiness probes on `/api/health` make sure each new pod is up before the next old one is terminated.
 
-For the scheduler pin (see [running in production](./running-production.md#multi-replica-considerations)), make sure the scheduler-enabled replica's old pod is terminated before the new one's scheduler starts — usually by labelling the pod with `scheduler=true` and rolling that single replica last.
+For the scheduler pin (see [running in production](./production.md#multi-replica-considerations)), make sure the scheduler-enabled replica's old pod is terminated before the new one's scheduler starts — usually by labelling the pod with `scheduler=true` and rolling that single replica last.
 
 ---
 
@@ -166,7 +166,7 @@ Run after every upgrade — five minutes well spent before declaring done.
 
 | Check | How | What to confirm |
 |---|---|---|
-| **Health** | `curl http://${HOST}:${PORT}/api/healthz` | `{"ok": true, "version": "<new>"}` — version matches the tag. |
+| **Health** | `curl http://${HOST}:${PORT}/api/health` | `{"ok": true, "version": "<new>"}` — version matches the tag. |
 | **Auth** | Sign in as the admin user. | Local sign-in still works. |
 | **OIDC** *(if enabled)* | Sign in via SSO. | Round-trip to the IdP and back works. |
 | **Settings UI loads** | Open `/settings`. | Every tab renders, no Pydantic validation errors in the log. |
@@ -243,6 +243,6 @@ A vendor app upgrade then becomes:
 
 ## What's next
 
-- [Running in production](./running-production.md) — the deployment shape upgrades land into.
-- [Configuration → Hot-reload](../configuration/hot-reload.md) — what reloads and what requires a restart (relevant when changing `app.toml` mid-upgrade).
-- [Apps & Plugins → Apps](../apps/overview.md) — packaging customisations to survive vendor upgrades.
+- [Running in production](./production.md) — the deployment shape upgrades land into.
+- [Configuration → Hot-reload](../framework/configuration/hot-reload.md) — what reloads and what requires a restart (relevant when changing `app.toml` mid-upgrade).
+- [Apps & Plugins → Apps](../framework/apps/overview.md) — packaging customisations to survive vendor upgrades.

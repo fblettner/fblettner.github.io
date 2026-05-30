@@ -206,7 +206,7 @@ Reads `LIBERTY_MASTER_KEY` from the environment. The encrypt produces a fresh no
 
 ### `rewrap`
 
-Re-encrypt every `ENC:` value in a set of files with the current master key. Used during rotation — see [Encryption & secrets → key rotation](./configuration/encryption-secrets.md#key-rotation).
+Re-encrypt every `ENC:` value in a set of files with the current master key. Used during rotation — see [Encryption & secrets → key rotation](../framework/configuration/encryption-secrets.md#key-rotation).
 
 ```bash
 .venv/bin/liberty-crypto rewrap --files config/connectors.toml,config/app.toml
@@ -285,6 +285,6 @@ Every CLI follows the same convention:
 
 ## What's next
 
-- [Configuration → Settings UI](./configuration/settings-ui.md) — the in-app equivalent of most CLI operations.
+- [Configuration → Settings UI](../framework/configuration/settings-ui.md) — the in-app equivalent of most CLI operations.
 - [REST API reference](./rest-api.md) — every endpoint the CLIs call.
-- [Encryption & secrets](./configuration/encryption-secrets.md) — the `liberty-crypto` workflows.
+- [Encryption & secrets](../framework/configuration/encryption-secrets.md) — the `liberty-crypto` workflows.

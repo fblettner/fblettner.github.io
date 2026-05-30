@@ -225,7 +225,7 @@ Temps total sur les six étapes : environ **90 minutes** pour un premier passage
 | Vous voulez… | Lisez |
 |---|---|
 | **Appliquer le même motif à SAP / NetSuite / autre ERP** | Même recette, pointez le pool sur la base ERP. Pour JD Edwards spécifiquement, l'app packagée [Nomajde](https://docs.nomana-it.fr/nomajde/) livre déjà tous les écrans. |
-| **Déployer ce CRM en production** | [Déploiement → Mise en production](../deployment/running-production.md). |
+| **Déployer ce CRM en production** | [Déploiement → Mise en production](../../installation/production.md). |
 | **Trouver une recette précise** | [Cookbook](../cookbook/crud-existing-table.md). |
 | **Approfondir un concept** | Les pages [Concepts](../connectors.md) ont désormais une intro « Quoi / Pourquoi / Quand ». |
 | **Voir d'autres cas d'usage** | [Ce que vous pouvez construire](../what-you-can-build.md). |

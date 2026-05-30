@@ -162,4 +162,4 @@ The framework cares about three categories: **where the configuration is** (`LIB
 
 - [`app.toml` reference](./app-toml.md) — every key explained.
 - [Encryption & secrets](./encryption-secrets.md) — how `LIBERTY_MASTER_KEY` is used.
-- [Deployment → Running in production](../deployment/running-production.md) — the systemd / Docker / Kubernetes variants in detail.
+- [Deployment → Running in production](../../installation/production.md) — the systemd / Docker / Kubernetes variants in detail.

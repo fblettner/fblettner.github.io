@@ -23,7 +23,7 @@ Le framework est un unique processus Python qui sert une SPA React sur un seul p
   </div>
   <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', background: 'rgba(255,255,255,0.02)'}}>
     <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>FRONT</div>
-    <div style={{fontSize: '12px'}}>nginx / Traefik pour TLS et upgrade websocket. Sonde de santé sur <code>/api/healthz</code>.</div>
+    <div style={{fontSize: '12px'}}>nginx / Traefik pour TLS et upgrade websocket. Sonde de santé sur <code>/api/health</code>.</div>
   </div>
   <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', background: 'rgba(255,255,255,0.02)'}}>
     <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>MISE À L'ÉCHELLE</div>
@@ -194,11 +194,11 @@ spec:
               mountPath: /apps
               readOnly: true
           readinessProbe:
-            httpGet: { path: /api/healthz, port: http }
+            httpGet: { path: /api/health, port: http }
             initialDelaySeconds: 5
             periodSeconds: 5
           livenessProbe:
-            httpGet: { path: /api/healthz, port: http }
+            httpGet: { path: /api/health, port: http }
             initialDelaySeconds: 30
             periodSeconds: 30
       volumes:
@@ -325,7 +325,7 @@ Une règle d'alerte typique : `liberty.jobs.*` au niveau `ERROR` → réveiller 
 - **Épingler le scheduler.** Un déploiement multi-replica sans label explicite `scheduler_enabled` est un piège, même avec le verrou consultatif.
 - **Ne pas lancer le serveur de dev de la SPA en production.** `./start.sh frontend` (Vite sur 5173) est un outil de développement ; la production sert le `frontend/dist/` construit directement via FastAPI.
 - **Monter `liberty-apps` en lecture seule.** Les modifications via l'interface Paramètres l'écrivent à travers le processus framework ; un montage en écriture ailleurs casse l'audit et risque un split-brain entre replicas.
-- **Configurer `/api/healthz` comme sonde.** Volontairement légère (pas d'appel base). Pour une sonde plus poussée, `GET /api/license` exerce le chemin d'authentification et la vérification de la licence.
+- **Configurer `/api/health` comme sonde.** Volontairement légère (pas d'appel base). Pour une sonde plus poussée, `GET /api/license` exerce le chemin d'authentification et la vérification de la licence.
 - **Écrire les journaux sur disque avant de les transmettre.** Un transmetteur instable ne doit pas faire perdre d'événements framework — écrire sur stdout, laisser le runtime du conteneur dupliquer vers le disque, puis transmettre.
 - **Étager les changements de configuration.** `liberty-admin verify-config` et `liberty-connectors test` sont des verrous CI rapides sur le dépôt `liberty-apps`.
 
@@ -334,6 +334,6 @@ Une règle d'alerte typique : `liberty.jobs.*` au niveau `ERROR` → réveiller 
 ## Pour aller plus loin
 
 - [Mise à jour](./upgrading.md) — passer d'une version du framework à la suivante.
-- [Configuration → Variables d'environnement](../configuration/environment-variables.md) — le contrat complet d'environnement référencé par chaque forme de déploiement ci-dessus.
-- [Authentification → Clé de licence](../build/secure/license-key.md) — `LIBERTY_LICENSE_KEY` dans l'environnement de production.
-- [Jobs → Vue d'ensemble](../../nomaflow/overview.md) — topologie du scheduler, verrou consultatif.
+- [Configuration → Variables d'environnement](../framework/configuration/environment-variables.md) — le contrat complet d'environnement référencé par chaque forme de déploiement ci-dessus.
+- [Authentification → Clé de licence](../framework/build/secure/license-key.md) — `LIBERTY_LICENSE_KEY` dans l'environnement de production.
+- [Jobs → Vue d'ensemble](../nomaflow/overview.md) — topologie du scheduler, verrou consultatif.

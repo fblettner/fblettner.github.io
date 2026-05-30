@@ -152,7 +152,7 @@ For installations under version control, the easier path is a **git patch** on `
 
 Some apps ship pre-built from Nomana-IT — **NomaUBL** (e-invoicing), **NomaSX-1** (security maintenance), **NomaJDE** (JD Edwards admin). They follow the same convention: an app identifier, a menu tree, screens, dashboards. Installing one is a **license-gated *Import app*** — the license key's `features.apps` list controls which can be imported.
 
-A packaged app is opaque to the customer in the sense that the content is delivered as-is and meant to be used as-is, but every entity is still **visible and editable** from the Settings UI. Customer-side modifications survive vendor upgrades when they sit in a **separate customer namespace** (`billing-customer` next to vendor's `billing`) — see [Deployment → Upgrading](../deployment/upgrading.md) for the recommended layout.
+A packaged app is opaque to the customer in the sense that the content is delivered as-is and meant to be used as-is, but every entity is still **visible and editable** from the Settings UI. Customer-side modifications survive vendor upgrades when they sit in a **separate customer namespace** (`billing-customer` next to vendor's `billing`) — see [Deployment → Upgrading](../../installation/upgrading.md) for the recommended layout.
 
 ---
 
@@ -189,4 +189,4 @@ Each entity's *App* field is stored on the entity itself in the per-section TOML
 
 - [Plugins](./plugins.md) — custom Python callables packaged with apps.
 - [i18n](./i18n.md) — adding languages and per-app label packs.
-- [Deployment → Upgrading](../deployment/upgrading.md) — moving customer customisations across framework and vendor-app upgrades.
+- [Deployment → Upgrading](../../installation/upgrading.md) — moving customer customisations across framework and vendor-app upgrades.

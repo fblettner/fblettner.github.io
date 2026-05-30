@@ -23,7 +23,7 @@ The framework is a single Python process serving a React SPA on one port — pro
   </div>
   <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', background: 'rgba(255,255,255,0.02)'}}>
     <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>FRONT</div>
-    <div style={{fontSize: '12px'}}>nginx / Traefik for TLS + websocket. Health probe on <code>/api/healthz</code>.</div>
+    <div style={{fontSize: '12px'}}>nginx / Traefik for TLS + websocket. Health probe on <code>/api/health</code>.</div>
   </div>
   <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', background: 'rgba(255,255,255,0.02)'}}>
     <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>SCALE</div>
@@ -194,11 +194,11 @@ spec:
               mountPath: /apps
               readOnly: true
           readinessProbe:
-            httpGet: { path: /api/healthz, port: http }
+            httpGet: { path: /api/health, port: http }
             initialDelaySeconds: 5
             periodSeconds: 5
           livenessProbe:
-            httpGet: { path: /api/healthz, port: http }
+            httpGet: { path: /api/health, port: http }
             initialDelaySeconds: 30
             periodSeconds: 30
       volumes:
@@ -325,7 +325,7 @@ A typical alerting rule: `liberty.jobs.*` at level `ERROR` → page the on-call.
 - **Pin the scheduler.** A multi-replica deployment without an explicit `scheduler_enabled` label is a foot-gun even with the advisory lock.
 - **Don't run the SPA dev server in production.** `./start.sh frontend` (Vite on 5173) is a development tool; production serves the built `frontend/dist/` directly through FastAPI.
 - **Mount `liberty-apps` read-only.** Settings UI edits write to it through the framework process; mounting writable from elsewhere defeats audit and risks split-brain across replicas.
-- **Set up `/api/healthz` as the probe.** It's intentionally lightweight (no DB call). For a deeper probe, `GET /api/license` exercises the auth path and the license verification.
+- **Set up `/api/health` as the probe.** It's intentionally lightweight (no DB call). For a deeper probe, `GET /api/license` exercises the auth path and the license verification.
 - **Capture logs to disk before forwarding.** A flaky log forwarder shouldn't lose framework events — write to stdout, let the container runtime tee to disk, then forward.
 - **Stage configuration changes.** `liberty-admin verify-config` and `liberty-connectors test` are quick CI gates against the `liberty-apps` repo.
 
@@ -334,6 +334,6 @@ A typical alerting rule: `liberty.jobs.*` at level `ERROR` → page the on-call.
 ## What's next
 
 - [Upgrading](./upgrading.md) — moving across framework versions.
-- [Configuration → Environment variables](../configuration/environment-variables.md) — the full env contract referenced by every shape here.
-- [Authentication → License key](../build/secure/license-key.md) — `LIBERTY_LICENSE_KEY` in the production env.
-- [Jobs → Overview](../../nomaflow/overview.md) — scheduler topology, advisory lock.
+- [Configuration → Environment variables](../framework/configuration/environment-variables.md) — the full env contract referenced by every shape here.
+- [Authentication → License key](../framework/build/secure/license-key.md) — `LIBERTY_LICENSE_KEY` in the production env.
+- [Jobs → Overview](../nomaflow/overview.md) — scheduler topology, advisory lock.

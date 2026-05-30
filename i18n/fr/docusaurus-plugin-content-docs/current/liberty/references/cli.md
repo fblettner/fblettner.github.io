@@ -206,7 +206,7 @@ Lit `LIBERTY_MASTER_KEY` dans l'environnement. La fonction de chiffrement génè
 
 ### `rewrap`
 
-Rechiffre toutes les valeurs `ENC:` d'un ensemble de fichiers avec la clé maître courante. Utilisé pendant la rotation — voir [Chiffrement et secrets → rotation de clé](./configuration/encryption-secrets.md#key-rotation).
+Rechiffre toutes les valeurs `ENC:` d'un ensemble de fichiers avec la clé maître courante. Utilisé pendant la rotation — voir [Chiffrement et secrets → rotation de clé](../framework/configuration/encryption-secrets.md#key-rotation).
 
 ```bash
 .venv/bin/liberty-crypto rewrap --files config/connectors.toml,config/app.toml
@@ -285,6 +285,6 @@ Toutes les CLI suivent la même convention :
 
 ## Pour aller plus loin
 
-- [Configuration → Interface Paramètres](./configuration/settings-ui.md) — l'équivalent in-app de la plupart des opérations CLI.
+- [Configuration → Interface Paramètres](../framework/configuration/settings-ui.md) — l'équivalent in-app de la plupart des opérations CLI.
 - [Référence API REST](./rest-api.md) — chaque endpoint appelé par les CLI.
-- [Chiffrement et secrets](./configuration/encryption-secrets.md) — les flux de travail `liberty-crypto`.
+- [Chiffrement et secrets](../framework/configuration/encryption-secrets.md) — les flux de travail `liberty-crypto`.

@@ -173,7 +173,7 @@ L'onglet *Framework* est filtré par `settings:framework`. La lecture sans écri
 
 Le stockage du formulaire est `liberty-next/config/app.toml`. Les opérateurs **ne modifient pas ce fichier à la main** en fonctionnement normal ; l'interface Paramètres est l'interface de référence, avec l'onglet *Raw TOML* comme issue de secours. Le fichier est analysé une fois au démarrage et à chaque *Enregistrer et recharger* de l'onglet Framework.
 
-Pour les scripts d'ops et les pipelines CI qui doivent piloter le framework sans l'interface, la même surface est accessible via les endpoints REST sous `/admin/config/framework/*` — voir [REST API reference](../rest-api.md#admin-config).
+Pour les scripts d'ops et les pipelines CI qui doivent piloter le framework sans l'interface, la même surface est accessible via les endpoints REST sous `/admin/config/framework/*` — voir [REST API reference](../../references/rest-api.md#admin-config).
 
 ---
 

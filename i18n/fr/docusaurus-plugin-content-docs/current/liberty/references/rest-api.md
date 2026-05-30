@@ -1,7 +1,7 @@
 ---
 title: Référence API REST
 description: "Tous les endpoints REST proposés par le framework — groupés par domaine : auth, connecteurs, écrans, tableaux de bord, menus, tâches, IA, configuration admin, sonde de santé. URL, méthode, permission requise, corps de requête et forme de réponse."
-keywords: [Liberty Framework, REST API, /api, /admin, /auth, OpenAPI, endpoints, JWT, /healthz, /docs]
+keywords: [Liberty Framework, REST API, /api, /admin, /auth, OpenAPI, endpoints, JWT, /health, /docs]
 ---
 
 # Référence API REST
@@ -15,10 +15,10 @@ Cette page est une cartographie domaine par domaine des endpoints, avec la permi
 ## Conventions
 
 - **Chemin de base** — le framework sert l'API à la **racine de l'origine liée** : `https://liberty.example.com/api/...` et `https://liberty.example.com/admin/...`.
-- **Authentification** — chaque endpoint demande un token `Bearer` dans l'en-tête `Authorization`, sauf `POST /auth/login`, `POST /auth/refresh`, la paire OIDC et `GET /api/healthz`.
+- **Authentification** — chaque endpoint demande un token `Bearer` dans l'en-tête `Authorization`, sauf `POST /auth/login`, `POST /auth/refresh`, la paire OIDC et `GET /api/health`.
 - **Type de contenu** — JSON en entrée / JSON en sortie, sauf mention contraire. Les erreurs portent un corps `{ "detail": "..." }` avec un statut non 2xx.
 - **Langue** — `X-Liberty-Lang: fr` modifie les libellés de la réponse pour les endpoints qui en contiennent (écrans, dictionnaire, menus, erreurs).
-- **Codes de permission** identiques à ceux documentés sous [Rôles et permissions](./build/secure/roles-and-permissions.md). `*` est un caractère générique ; `sql:invoices:*` correspond à toute requête du connecteur `invoices`.
+- **Codes de permission** identiques à ceux documentés sous [Rôles et permissions](../framework/build/secure/roles-and-permissions.md). `*` est un caractère générique ; `sql:invoices:*` correspond à toute requête du connecteur `invoices`.
 
 ---
 
@@ -26,7 +26,7 @@ Cette page est une cartographie domaine par domaine des endpoints, avec la permi
 
 | Méthode | Chemin | Permission | Réponse |
 |---|---|---|---|
-| `GET` | `/api/healthz` | aucune (public) | `{ "ok": true, "version": "0.42.0" }` |
+| `GET` | `/api/health` | aucune (public) | `{ "ok": true, "version": "0.42.0" }` |
 
 Utile pour les sondes de vivacité. Ne touche pas la base de données.
 
@@ -43,7 +43,7 @@ Utile pour les sondes de vivacité. Ne touche pas la base de données.
 | `GET` | `/auth/oidc/login` | public | — | 302 vers l'IdP. |
 | `GET` | `/auth/oidc/callback` | public | query | 302 vers `/`. Pose la session locale. |
 
-Voir [Authentification](./build/secure/sign-in.md) pour le flux OIDC.
+Voir [Authentification](../framework/build/secure/sign-in.md) pour le flux OIDC.
 
 ---
 
@@ -239,5 +239,5 @@ Chaque endpoint y est documenté avec la forme exacte de requête / réponse gé
 ## Pour aller plus loin
 
 - L'API en direct sur `http://${HOST}:${PORT}/docs`.
-- [Configuration → Interface Paramètres](./configuration/settings-ui.md) — l'éditeur dans le navigateur qui consomme la famille `/admin/config/*`.
-- [Authentification → Rôles et permissions](./build/secure/roles-and-permissions.md) — les codes de permission vérifiés par chaque endpoint.
+- [Configuration → Interface Paramètres](../framework/configuration/settings-ui.md) — l'éditeur dans le navigateur qui consomme la famille `/admin/config/*`.
+- [Authentification → Rôles et permissions](../framework/build/secure/roles-and-permissions.md) — les codes de permission vérifiés par chaque endpoint.

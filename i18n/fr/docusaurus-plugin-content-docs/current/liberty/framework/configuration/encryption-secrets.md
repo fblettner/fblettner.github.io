@@ -71,7 +71,7 @@ La clé maîtresse est une **clé AES-256-GCM de 32 octets** que le framework ch
 | **Clé maîtresse** | Nom de la variable d'environnement qui porte la clé. Défaut `${LIBERTY_MASTER_KEY}`. |
 | **Clés héritées** | Liste de clés anciennes, utilisées **uniquement pour le déchiffrement** pendant une rotation. Les nouveaux chiffrements utilisent toujours *Clé maîtresse*. Cliquer sur *+ Ajouter clé héritée* pour ajouter une entrée — chaque entrée est un nom de variable d'environnement. |
 
-Générer une clé fraîche avec la CLI [`liberty-crypto`](../cli-reference.md#liberty-crypto) :
+Générer une clé fraîche avec la CLI [`liberty-crypto`](../../references/cli.md#liberty-crypto) :
 
 ```bash
 .venv/bin/liberty-crypto genkey
@@ -172,5 +172,5 @@ La CLI `liberty-crypto` est le seul chemin scripté pour les opérations avancé
 
 - [Variables d'environnement](./environment-variables.md) — y compris la variable d'environnement de la clé maîtresse.
 - [Paramètres du framework](./app-toml.md) — la sous-section *Chiffrement*.
-- [Référence CLI → liberty-crypto](../cli-reference.md#liberty-crypto) — chaque sous-commande.
+- [Référence CLI → liberty-crypto](../../references/cli.md#liberty-crypto) — chaque sous-commande.
 - [Authentification](../build/secure/sign-in.md) — l'emplacement du client secret OIDC.

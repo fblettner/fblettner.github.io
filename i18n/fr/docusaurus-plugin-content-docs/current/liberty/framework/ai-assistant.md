@@ -189,7 +189,7 @@ La réponse est **diffusée en flux** au format `text/event-stream` (SSE) — un
 
 ## Pour aller plus loin
 
-- [Référence API REST → `/ai/*`](./rest-api.md#ai) — le contrat de l'endpoint de chat.
+- [Référence API REST → `/ai/*`](../references/rest-api.md#ai) — le contrat de l'endpoint de chat.
 - [Concepts → Connecteurs](./connectors.md) — les champs `description` et `expose_to_ai`.
 - [Authentification → Rôles et permissions](./build/secure/roles-and-permissions.md) — la famille de permissions `ai:*`.
 - [Configuration → `app.toml`](./configuration/app-toml.md) — la référence du bloc `[ai]`.

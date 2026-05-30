@@ -152,7 +152,7 @@ Pour les installations sous contrôle de version, le chemin plus simple est un *
 
 Certaines applications sont livrées pré-construites par Nomana-IT — **NomaUBL** (facturation électronique), **NomaSX-1** (maintenance de sécurité), **NomaJDE** (administration JD Edwards). Elles suivent la même convention : un identifiant d'application, un arbre de menus, des écrans, des tableaux de bord. Installer l'une d'elles est un ***Importer une application*** **gouverné par licence** — la liste `features.apps` de la clé de licence contrôle ce qui peut être importé.
 
-Une application livrée est opaque pour le client au sens où le contenu est livré tel quel et est destiné à être utilisé tel quel, mais chaque entité reste **visible et modifiable** depuis l'interface Paramètres. Les modifications côté client survivent aux mises à jour fournisseur quand elles se trouvent dans un **espace de noms client séparé** (`billing-customer` à côté du `billing` du fournisseur) — voir [Déploiement → Mise à jour](../deployment/upgrading.md) pour la disposition recommandée.
+Une application livrée est opaque pour le client au sens où le contenu est livré tel quel et est destiné à être utilisé tel quel, mais chaque entité reste **visible et modifiable** depuis l'interface Paramètres. Les modifications côté client survivent aux mises à jour fournisseur quand elles se trouvent dans un **espace de noms client séparé** (`billing-customer` à côté du `billing` du fournisseur) — voir [Déploiement → Mise à jour](../../installation/upgrading.md) pour la disposition recommandée.
 
 ---
 
@@ -189,4 +189,4 @@ Le champ *Application* de chaque entité est enregistré sur l'entité elle-mêm
 
 - [Plugins](./plugins.md) — callables Python personnalisés empaquetés avec les applications.
 - [i18n](./i18n.md) — ajout de langues et packs de libellés par application.
-- [Déploiement → Mise à jour](../deployment/upgrading.md) — déplacer les personnalisations client à travers les mises à jour de framework et d'applications fournisseur.
+- [Déploiement → Mise à jour](../../installation/upgrading.md) — déplacer les personnalisations client à travers les mises à jour de framework et d'applications fournisseur.

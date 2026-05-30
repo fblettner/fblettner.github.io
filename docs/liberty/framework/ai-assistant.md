@@ -189,7 +189,7 @@ Response is **streamed** as `text/event-stream` (SSE) — one event per token ch
 
 ## What's next
 
-- [REST API → `/ai/*`](./rest-api.md#ai) — the chat endpoint contract.
+- [REST API → `/ai/*`](../references/rest-api.md#ai) — the chat endpoint contract.
 - [Concepts → Connectors](./connectors.md) — `description` and `expose_to_ai` fields.
 - [Authentication → Roles & permissions](./build/secure/roles-and-permissions.md) — the `ai:*` permission family.
 - [Configuration → `app.toml`](./configuration/app-toml.md) — the `[ai]` block reference.

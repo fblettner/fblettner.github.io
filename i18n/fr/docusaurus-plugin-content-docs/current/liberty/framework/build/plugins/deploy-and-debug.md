@@ -166,7 +166,7 @@ Un flux CI/CD typique :
 1. **Construire le dépôt des applications** — copier `config/` + `plugins/` dans un tarball / une image Docker de release.
 2. **Déployer** — pousser sur les hôtes du framework, définir `LIBERTY_APPS_DIR` sur le `config/` déployé.
 3. **Redémarrer** — `systemctl restart liberty` ou rouler le pod.
-4. **Vérifier** — `curl http://localhost:8000/healthz` et vérifier `grep "liberty.plugins importable" app.log`.
+4. **Vérifier** — `curl http://localhost:8000/health` et vérifier `grep "liberty.plugins importable" app.log`.
 5. **Test rapide** — ouvrir la page Paramètres → Nomaflow, exécuter un petit job connu pour fonctionner, consulter le détail de l'exécution.
 
 Les dépendances Python du plugin (`httpx`, `openpyxl`, `ldap3`, tout ce que le plugin importe) doivent être installées dans l'environnement virtuel du framework. Soit les intégrer à la construction de l'image / du venv, soit maintenir un `requirements.txt` à côté du plugin, installé avant le démarrage du framework.

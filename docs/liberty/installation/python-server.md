@@ -11,7 +11,7 @@ The Liberty Framework ships as **two source repositories** that live side-by-sid
 - **`liberty-next`** — the open framework binary: FastAPI backend + React 19 frontend, served on one port.
 - **`liberty-apps`** — the per-installation configuration repo: pools, connectors, dictionary, screens, menus, dashboards, charts, jobs.
 
-The framework reads its configuration from the `liberty-apps` repo via the `LIBERTY_APPS_DIR` environment variable. Two repos, one server, one port. No Docker required for development; production deployment is documented under [Deployment → Running in production](../deployment/running-production.md).
+The framework reads its configuration from the `liberty-apps` repo via the `LIBERTY_APPS_DIR` environment variable. Two repos, one server, one port. No Docker required for development; production deployment is documented under [Deployment → Running in production](./production.md).
 
 ---
 
@@ -96,7 +96,7 @@ export LIBERTY_APPS_DIR="$HOME/work/liberty-apps/config"
 
 With `LIBERTY_APPS_DIR` set, `init-config` does nothing — the per-section TOML is read from the apps repo, not from local templates. The local `config/auth.toml` and `config/app.toml` stay per-installation either way.
 
-See [Project layout](./project-layout.md) for the full directory map.
+See [Project layout](../framework/getting-started/project-layout.md) for the full directory map.
 
 ---
 
@@ -115,7 +115,7 @@ The command picks its backend from `[auth] backend` in `config/app.toml`:
 | `toml` *(default)* | Creates `config/auth.toml` with a fresh Argon2-hashed `admin` password (printed once). | Single-host dev install — no external DB needed. |
 | `db` | Creates the `ly2_users` / `ly2_roles` / `ly2_permissions` tables on the configured pool and seeds the same `admin`. | Production install — survives container rebuilds and shares the user base across replicas. |
 
-The printed password is shown **once** in stdout. Capture it, or reset it later with `liberty-admin set-password admin <new>`. See [Authentication](../build/secure/sign-in.md) for the full backend matrix.
+The printed password is shown **once** in stdout. Capture it, or reset it later with `liberty-admin set-password admin <new>`. See [Authentication](../framework/build/secure/sign-in.md) for the full backend matrix.
 
 ---
 
@@ -155,11 +155,11 @@ Open `http://127.0.0.1:8000`, sign in as `admin` with the password from Step 4 �
 | `LIBERTY_APPS_DIR` | Per-section TOML lives in this directory instead of `liberty-next/config/`. |
 | `LIBERTY_DB_URL` | Default pool URL — defaults to SQLite (`sqlite+aiosqlite:///liberty.db`). |
 | `LIBERTY_JWT_SECRET` | JWT signing key. Unset = ephemeral key (tokens die on restart). |
-| `LIBERTY_MASTER_KEY` | AES-256-GCM key used to decrypt `ENC:` blobs in TOML — see [Encryption & secrets](../configuration/encryption-secrets.md). |
-| `LIBERTY_LICENSE_KEY` | RS256 JWT unlocking the bundled vendor products (Nomasx-1, Nomajde, NomaUBL …) — see [License key](../build/secure/license-key.md). |
-| `ANTHROPIC_API_KEY` | Enables the [AI assistant](../ai-assistant.md). |
+| `LIBERTY_MASTER_KEY` | AES-256-GCM key used to decrypt `ENC:` blobs in TOML — see [Encryption & secrets](../framework/configuration/encryption-secrets.md). |
+| `LIBERTY_LICENSE_KEY` | RS256 JWT unlocking the bundled vendor products (Nomasx-1, Nomajde, NomaUBL …) — see [License key](../framework/build/secure/license-key.md). |
+| `ANTHROPIC_API_KEY` | Enables the [AI assistant](../framework/ai-assistant.md). |
 
-All variables are documented one-by-one under [Environment variables](../configuration/environment-variables.md).
+All variables are documented one-by-one under [Environment variables](../framework/configuration/environment-variables.md).
 
 ---
 
@@ -167,7 +167,7 @@ All variables are documented one-by-one under [Environment variables](../configu
 
 | Check | How |
 |---|---|
-| Server is up | `curl -s http://127.0.0.1:8000/api/healthz` returns `{"ok":true}`. |
+| Server is up | `curl -s http://127.0.0.1:8000/api/health` returns `{"ok":true}`. |
 | OpenAPI loads | Open `http://127.0.0.1:8000/docs` — the full REST surface is browsable. |
 | Connectors are loaded | Open the Connectors catalogue at `/` — at least the default SQLite pool is listed. |
 | Admin can sign in | Sign in with the credentials from Step 4 — the Settings link appears in the header. |
@@ -177,6 +177,6 @@ All variables are documented one-by-one under [Environment variables](../configu
 
 ## What's next
 
-- Walk through your first app with [Getting Started → First app](./first-app.md) — a pool, a query, a screen and a menu entry, end-to-end.
-- Read [Project layout](./project-layout.md) for the file map of `liberty-apps`.
-- Move on to [Configuration → Settings UI](../configuration/settings-ui.md) once everything works from the in-browser builders.
+- Walk through your first app with [Getting Started → First app](../framework/getting-started/first-app.md) — a pool, a query, a screen and a menu entry, end-to-end.
+- Read [Project layout](../framework/getting-started/project-layout.md) for the file map of `liberty-apps`.
+- Move on to [Configuration → Settings UI](../framework/configuration/settings-ui.md) once everything works from the in-browser builders.

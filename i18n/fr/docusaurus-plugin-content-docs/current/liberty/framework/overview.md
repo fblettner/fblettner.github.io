@@ -73,7 +73,7 @@ Tout ce que fait le framework se compose à partir de cinq concepts :
 
 | Concept | Ce que c'est | Ce qu'il résout |
 |---|---|---|
-| **[Pool](./getting-started/installation.md)** | Une connexion à une base de données (une URL SQLAlchemy + des identifiants). | « Comment j'atteins ces données ? » |
+| **[Pool](../installation/python-server.md)** | Une connexion à une base de données (une URL SQLAlchemy + des identifiants). | « Comment j'atteins ces données ? » |
 | **[Connecteur](./connectors.md)** | Un ensemble nommé de requêtes / endpoints au-dessus d'un pool. | « Quelles questions je veux poser à cette source ? » |
 | **[Écran](./build/screens/overview.md)** | Une grille + un dialogue d'édition au-dessus des requêtes d'un connecteur. | « Comment je laisse une personne consulter et modifier ça ? » |
 | **[Tableau de bord](./dashboards.md)** | Une mise en page de KPI et de graphiques sur les mêmes requêtes. | « Comment je résume ça pour quelqu'un qui veut juste l'essentiel ? » |
@@ -101,7 +101,7 @@ Si vous préférez partir de *ce que vous voulez construire*, la page **[Ce que 
 
 ### 3. Approche référence
 
-Si vous êtes du genre à lire la documentation de bout en bout, la section **[Démarrage](./getting-started/installation.md)** vous guide à travers l'installation, la structure des fichiers, l'interface Paramètres ; ensuite la section **Concepts** explique chaque primitive en profondeur.
+Si vous êtes du genre à lire la documentation de bout en bout, la section **[Démarrage](../installation/python-server.md)** vous guide à travers l'installation, la structure des fichiers, l'interface Paramètres ; ensuite la section **Concepts** explique chaque primitive en profondeur.
 
 ---
 
@@ -109,7 +109,7 @@ Si vous êtes du genre à lire la documentation de bout en bout, la section **[D
 
 | Section | Ce qu'elle couvre |
 |---|---|
-| [Démarrage](./getting-started/installation.md) | Installer le framework, créer votre première app, comprendre la structure des fichiers. |
+| [Démarrage](../installation/python-server.md) | Installer le framework, créer votre première app, comprendre la structure des fichiers. |
 | [Tutoriel — Construire un CRM](./tutorial-crm/01-setup.md) | Parcours CRM complet, de bout en bout. |
 | [Configuration](./configuration/settings-ui.md) | Interface Paramètres, réglages du framework, variables d'environnement, rechargement à chaud, secrets chiffrés au repos. |
 | [Concepts](./connectors.md) | Les cinq primitives du framework + liaison des paramètres et conditions de formulaire, chacune avec une intro « Quoi / Pourquoi / Quand ». |
@@ -118,9 +118,9 @@ Si vous êtes du genre à lire la documentation de bout en bout, la section **[D
 | [Jobs — Nomaflow](../nomaflow/overview.md) | Travail planifié, pipelines ETL, types d'étape, historique d'exécution. |
 | [Assistant IA](./ai-assistant.md) | L'assistant en tool-use, comment il met à disposition les requêtes des connecteurs. |
 | [Cookbook](./cookbook/crud-existing-table.md) | Recettes courtes pour les patrons habituels — export Excel, upload de fichier, OIDC, journal d'audit, etc. |
-| [Référence CLI](./cli-reference.md) | `liberty-admin`, `liberty-connectors`, `liberty-crypto`, `liberty-license`. |
-| [Référence API REST](./rest-api.md) | Chaque endpoint, groupé par domaine. |
-| [Déploiement](./deployment/running-production.md) | systemd, conteneur, Kubernetes — exécuter le framework en production. |
+| [Référence CLI](../references/cli.md) | `liberty-admin`, `liberty-connectors`, `liberty-crypto`, `liberty-license`. |
+| [Référence API REST](../references/rest-api.md) | Chaque endpoint, groupé par domaine. |
+| [Déploiement](../installation/production.md) | systemd, conteneur, Kubernetes — exécuter le framework en production. |
 
 ---
 
@@ -142,6 +142,6 @@ Python 3.12, FastAPI, SQLAlchemy 2.0 async avec asyncpg (PostgreSQL) + oracledb 
 |---|---|
 | **Construire quelque chose tout de suite** | [Tutoriel — Construire un CRM](./tutorial-crm/01-setup.md). |
 | **Voir d'abord ce qui est possible** | [Ce que vous pouvez construire](./what-you-can-build.md). |
-| **Installer le framework** | [Démarrage → Installation](./getting-started/installation.md). |
+| **Installer le framework** | [Démarrage → Installation](../installation/python-server.md). |
 | **Comprendre les concepts d'abord** | [Concepts → Connecteurs](./connectors.md) est l'entrée naturelle. |
 | **Chercher un champ précis** | [Interface Paramètres](./configuration/settings-ui.md) liste chaque éditeur ; chaque page de Concepts renvoie vers l'éditeur pertinent. |

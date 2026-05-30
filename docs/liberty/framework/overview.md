@@ -73,7 +73,7 @@ Everything the framework does is composed from five concepts:
 
 | Concept | What it is | What it solves |
 |---|---|---|
-| **[Pool](./getting-started/installation.md)** | A connection to a database (a SQLAlchemy URL + credentials). | "How do I reach this data?" |
+| **[Pool](../installation/python-server.md)** | A connection to a database (a SQLAlchemy URL + credentials). | "How do I reach this data?" |
 | **[Connector](./connectors.md)** | A named set of queries / endpoints on top of a pool. | "What questions do I want to ask this data source?" |
 | **[Screen](./build/screens/overview.md)** | A grid + edit dialog over a connector's queries. | "How do I let a person look at this and edit it?" |
 | **[Dashboard](./dashboards.md)** | A layout of KPIs and charts over the same queries. | "How do I summarise this for someone who just wants the headline?" |
@@ -101,7 +101,7 @@ If you'd rather start from *what you want to build*, the **[What you can build](
 
 ### 3. Reference-first
 
-If you're the type who reads documentation top-to-bottom, the **[Getting Started](./getting-started/installation.md)** section walks you through installation, the file layout, the Settings UI; then the **Concepts** section explains each primitive in depth.
+If you're the type who reads documentation top-to-bottom, the **[Getting Started](../installation/python-server.md)** section walks you through installation, the file layout, the Settings UI; then the **Concepts** section explains each primitive in depth.
 
 ---
 
@@ -109,7 +109,7 @@ If you're the type who reads documentation top-to-bottom, the **[Getting Started
 
 | Section | What it covers |
 |---|---|
-| [Getting Started](./getting-started/installation.md) | Install the framework, create your first app, understand the file layout. |
+| [Getting Started](../installation/python-server.md) | Install the framework, create your first app, understand the file layout. |
 | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) | End-to-end CRM walkthrough. |
 | [Configuration](./configuration/settings-ui.md) | Settings UI, framework settings, environment variables, hot-reload, encrypted secrets. |
 | [Concepts](./connectors.md) | The five framework primitives + parameter binding and form conditions, each with a "What / Why / When" intro. |
@@ -118,9 +118,9 @@ If you're the type who reads documentation top-to-bottom, the **[Getting Started
 | [Jobs — Nomaflow](../nomaflow/overview.md) | Scheduled work, ETL pipelines, step types, run history. |
 | [AI Assistant](./ai-assistant.md) | The tool-use assistant, how it surfaces connector queries. |
 | [Cookbook](./cookbook/crud-existing-table.md) | Short recipes for common patterns — Excel export, file upload, OIDC, audit trail, etc. |
-| [CLI reference](./cli-reference.md) | `liberty-admin`, `liberty-connectors`, `liberty-crypto`, `liberty-license`. |
-| [REST API reference](./rest-api.md) | Every endpoint, grouped by domain. |
-| [Deployment](./deployment/running-production.md) | systemd, container, Kubernetes — running the framework in production. |
+| [CLI reference](../references/cli.md) | `liberty-admin`, `liberty-connectors`, `liberty-crypto`, `liberty-license`. |
+| [REST API reference](../references/rest-api.md) | Every endpoint, grouped by domain. |
+| [Deployment](../installation/production.md) | systemd, container, Kubernetes — running the framework in production. |
 
 ---
 
@@ -142,6 +142,6 @@ Python 3.12, FastAPI, SQLAlchemy 2.0 async with asyncpg (PostgreSQL) + oracledb 
 |---|---|
 | **Build something now** | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md). |
 | **See what's possible first** | [What you can build](./what-you-can-build.md). |
-| **Install the framework** | [Getting Started → Installation](./getting-started/installation.md). |
+| **Install the framework** | [Getting Started → Installation](../installation/python-server.md). |
 | **Understand the concepts first** | [Concepts → Connectors](./connectors.md) is the natural entry point. |
 | **Look up a specific field** | [Settings UI](./configuration/settings-ui.md) lists every builder; each Concepts page references the relevant editor. |
