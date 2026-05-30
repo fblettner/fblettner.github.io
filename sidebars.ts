@@ -432,6 +432,28 @@ const sidebars: SidebarsConfig = {
     'nomaubl/getting-started',
     {
       type: 'category',
+      label: 'Installation',
+      link: {type: 'generated-index', slug: '/nomaubl/installation', description: 'Stand up a NomaUBL server — JDK 17 + Oracle or PostgreSQL, run -install, configure every connector from the Settings UI, start the service via nomaubl.sh (Linux/macOS) or nomaubl.cmd (Windows), optionally wire to systemd + a reverse proxy, and upgrade in place when a new release ships.'},
+      items: [
+        'nomaubl/installation/overview',
+        'nomaubl/installation/requirements',
+        'nomaubl/installation/install-and-layout',
+        'nomaubl/installation/configure',
+        'nomaubl/installation/service-and-systemd',
+        'nomaubl/installation/upgrade',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Monitoring',
+      link: {type: 'generated-index', slug: '/nomaubl/monitoring', description: 'Where to look when running NomaUBL — Tech Dashboard, Processing Log, the service log file, /api/build-info and /api/license. Plus patterns for external alerting and log forwarding.'},
+      items: [
+        'nomaubl/monitoring/overview',
+        'nomaubl/monitoring/service-and-logs',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Application',
       link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: dashboard, tech dashboard, invoices, e-reporting, e-directory, VAT declaration, integration errors, notifications and AI capabilities.'},
       items: [
