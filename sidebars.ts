@@ -64,6 +64,20 @@ const sidebars: SidebarsConfig = {
                 'liberty/framework/build/queries/per-dialect-sql',
               ],
             },
+            {
+              type: 'category',
+              label: 'Screens',
+              link: {type: 'generated-index', slug: '/liberty/framework/build/screens', description: 'Everything you do in the Screen Designer — wire a screen to a query, configure columns, build the dialog visually, add conditional fields, wire actions and lifecycle hooks, embed nested tabs.'},
+              items: [
+                'liberty/framework/build/screens/overview',
+                'liberty/framework/build/screens/create-from-query',
+                'liberty/framework/build/screens/columns',
+                'liberty/framework/build/screens/dialog-builder',
+                'liberty/framework/build/screens/conditional-fields',
+                'liberty/framework/build/screens/actions-and-lifecycle',
+                'liberty/framework/build/screens/nested-tabs',
+              ],
+            },
           ],
         },
         {
