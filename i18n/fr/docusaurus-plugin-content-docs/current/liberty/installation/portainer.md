@@ -1,204 +1,240 @@
 ---
-title: Portainer (optionnel)
-description: "Piloter la pile Docker Liberty visuellement — voir l'état des conteneurs, suivre les journaux, redémarrer les services et éditer la pile compose depuis un navigateur. Mise en place, import de la pile Liberty, tâches d'exploitation courantes."
-keywords: [Liberty Framework, Portainer, Docker, gestion de conteneurs, interface web, stack, journaux, redémarrage]
+title: Outils visuels intégrés
+description: "Utiliser les instances Portainer et pgAdmin livrées avec la disposition Docker Full de Liberty — premier démarrage, tâches d'exploitation courantes, arbitrages de sécurité autour de la socket Docker, spécificités Swarm."
+keywords: [Liberty Framework, Portainer, pgAdmin, intégré, socket Docker, disposition full, Swarm, Traefik, exploitation visuelle, opérateur]
 ---
 
-# Portainer (optionnel)
+# Outils visuels intégrés — Portainer & pgAdmin
 
-[Portainer](https://www.portainer.io) est une interface web pour Docker. Si votre équipe n'est pas à l'aise avec la ligne de commande `docker compose`, Portainer lui offre une vue navigateur de la pile Liberty — état des conteneurs, journaux en direct, boutons de redémarrage, édition du fichier compose.
+La [disposition Docker Full](./docker.md#full) et la [disposition Swarm](./docker.md#swarm) livrent deux outils visuels d'exploitation pré-câblés derrière Traefik :
 
-C'est strictement optionnel — la pile Docker fonctionne de la même manière avec ou sans. Portainer est une couche de confort pour l'exploitation.
+| Outil | Chemin | À quoi il sert |
+|---|---|---|
+| [Portainer CE](https://www.portainer.io) | `/portainer` | UI au niveau conteneur — voir chaque service, suivre les journaux, redémarrer, ouvrir un shell, parcourir les volumes. |
+| [pgAdmin](https://www.pgadmin.org) | `/pgadmin` | GUI Postgres — parcourir les schémas, exécuter du SQL, inspecter les plans de requête, gérer les rôles. |
 
-Cette page déroule l'installation de l'édition communautaire (gratuite, auto-hébergée) et les tâches d'opérateur typiques sur la pile Liberty.
+Aucune installation séparée, aucun fichier compose supplémentaire. Démarrer la pile Full ou Swarm et les deux outils sont disponibles sur le même nom d'hôte que Liberty lui-même.
 
----
-
-## Quand installer Portainer
-
-| Choisir Portainer si… | S'en passer si… |
-|---|---|
-| Votre équipe d'exploitation gère Docker sans flux CLI. | Tout le monde qui touche à l'hôte est à l'aise avec `docker compose`. |
-| Vous voulez un tableau de statut d'un coup d'œil sur chaque conteneur de l'hôte. | L'hôte n'exécute que Liberty — `docker compose ps` suffit déjà. |
-| Vous voulez suivre les journaux dans le navigateur, sans SSH. | SSH + `docker compose logs -f` vous convient. |
-| Vous montez plusieurs installations Liberty sur plusieurs hôtes et vous voulez une seule console. | Hôte unique, pile unique. |
-
-Portainer ajoute **un conteneur de plus** à la pile. Si la RAM est contrainte (moins de 1 Go libre), le compromis peut ne pas en valoir la peine.
+:::info[Absents de la disposition Light]
+La disposition Light est un conteneur unique avec une base SQLite — pas de Postgres, pas de Traefik. Portainer et pgAdmin ne sont livrés qu'avec les dispositions Full et Swarm. Pour passer de Light à ces outils, basculer sur [Full](./docker.md#full).
+:::
 
 ---
 
-## Étape 1 — Ajouter Portainer à la pile
+## Ce qui est disponible d'emblée
 
-Compléter votre `/opt/liberty/docker-compose.yml` existant :
+Ouvrir l'hôte dans un navigateur : Traefik route les trois chemins :
 
-```yaml
-services:
+| Chemin | Service derrière | État au premier démarrage |
+|---|---|---|
+| `/` *(catchall)* | liberty-next | Se connecter avec `admin` + `LIBERTY_ADMIN_PASSWORD` du `.env`. |
+| `/portainer` | Portainer CE | Vide — la première visite navigateur déclenche l'assistant de configuration admin. |
+| `/pgadmin` | pgAdmin 4 | Se connecter avec `admin@example.com` + `PGADMIN_PASSWORD` du `.env`. |
 
-  # ... (postgres + liberty as before) ...
+`install.sh full` génère des secrets aléatoires pour les deux mots de passe au premier démarrage et les stocke dans `.env` en mode `0600`. Les relire une fois avec `grep -E '^(PGADMIN_PASSWORD|LIBERTY_ADMIN_PASSWORD)=' .env`.
 
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: portainer
-    restart: unless-stopped
-    ports:
-      - "9443:9443"        # HTTPS UI (self-signed cert)
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer-data:/data
+---
 
-volumes:
-  postgres-data:
-  liberty-logs:
-  portainer-data:          # add this
+## Portainer — premier démarrage
+
+1. Ouvrir `http://<host>/portainer` (ou `https://` une fois [le TLS câblé](./traefik.md)).
+2. La page est **l'assistant de configuration admin initial** — Portainer considère le premier visiteur comme l'opérateur d'amorçage. Créer le compte admin : nom d'utilisateur (souvent `admin`) + mot de passe d'au moins 12 caractères.
+3. L'endpoint Docker local est détecté automatiquement (le compose monte la socket — voir plus bas). Inutile d'ajouter un environnement.
+4. Passer l'invite de licence — l'Édition Communautaire est gratuite pour un usage auto-hébergé.
+
+Une fois l'assistant terminé, le tableau de bord liste chaque conteneur s'exécutant sur l'hôte. La pile Liberty apparaît comme le projet Compose `liberty` (ou la pile Swarm `liberty`).
+
+:::warning[La première visite EST la configuration admin]
+Si l'URL reste exposée avant qu'une personne de confiance ne s'y connecte, le premier inconnu à l'atteindre s'approprie le compte admin. Ouvrir l'URL soi-même juste après la fin de `install.sh full`, ou bloquer l'accès public au pare-feu tant que l'assistant n'est pas terminé.
+:::
+
+---
+
+## Le montage de la socket Docker — ce qui fait fonctionner Portainer
+
+Portainer doit dialoguer avec le démon Docker pour inspecter et gérer les conteneurs. Le service intégré le fait par un bind-mount de la socket hôte :
+
+```yaml title="docker-compose.full.yml (service portainer)"
+portainer:
+  image: portainer/portainer-ce:latest
+  restart: unless-stopped
+  command: -H unix:///var/run/docker.sock
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock   # surface privilégiée
+    - portainer-data:/data
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.portainer.rule=PathPrefix(`/portainer`)"
+    - "traefik.http.routers.portainer.priority=100"
+    - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+    - "traefik.http.middlewares.portainer-strip.stripprefix.prefixes=/portainer"
+    - "traefik.http.routers.portainer.middlewares=portainer-strip"
 ```
 
-Démarrer :
-
-```bash
-docker compose up -d portainer
-```
-
-Le montage `/var/run/docker.sock` est ce qui permet à Portainer de gérer Docker sur l'hôte — il dialogue avec le démon Docker à travers la même socket que le CLI `docker`. C'est un **accès privilégié** — quiconque dispose des droits admin sur Portainer peut faire tout ce que Docker peut faire, y compris lire la clé maîtresse depuis les variables d'environnement des conteneurs.
+La socket Docker est une **surface privilégiée** : tout ce qui peut la lire dispose d'un contrôle équivalent à root sur chaque conteneur de l'hôte, y compris la capacité de lire les variables d'environnement (clé maîtresse, secret JWT, mot de passe Postgres) depuis un conteneur Liberty en cours d'exécution.
 
 | Implication | Mesure de protection |
 |---|---|
-| Admin Portainer = accès Docker complet sur l'hôte. | Mot de passe admin fort ; restreindre le port 9443 de Portainer à une plage d'IP de confiance via le pare-feu hôte. |
-| La socket Docker est la surface d'attaque. | Ne la monter que dans Portainer (de confiance). Jamais dans Liberty lui-même. |
+| Un admin Portainer = root sur chaque conteneur de l'hôte. | Choisir un mot de passe admin fort pendant l'assistant ; le faire tourner via *My account → Change password*. |
+| Quiconque peut atteindre `/portainer` sur le réseau peut tenter de s'approprier le compte. | Restreindre le chemin en bordure (pare-feu, [middleware basic-auth Traefik](./traefik.md), liste blanche d'IP) tant que TLS et un véritable admin ne sont pas en place. |
+| Cette surface peut ne pas être souhaitée dans la pile. | Supprimer le bloc de service `portainer:` et le volume `portainer-data:` de `docker-compose.full.yml` puis `docker compose up -d`. Le reste de la pile n'est pas affecté. |
+
+Le volume nommé `portainer-data` contient la base propre à Portainer — compte admin, paramètres, définitions d'endpoints. `backup.sh` en prend un instantané.
 
 ---
 
-## Étape 2 — Configuration admin au premier démarrage
+## Ce qui est possible depuis le Portainer intégré
 
-Ouvrir `https://<host>:9443/` dans un navigateur. Portainer présente un assistant de configuration initiale :
+Cliquer sur **Containers** dans la navigation de gauche. La disposition Full affiche cinq services :
 
-1. **Créer l'utilisateur admin** — nom d'utilisateur + mot de passe (12 caractères ou plus).
-2. **Se connecter au Docker local** — choisir *« Docker Standalone »* → *« Connect »* (Portainer détecte automatiquement la socket montée).
-3. **Passer l'invite de licence** — l'édition communautaire est gratuite pour un usage auto-hébergé.
-
-Une fois la configuration faite, le *Tableau de bord* montre chaque conteneur de l'hôte. La pile Liberty apparaît comme le projet Compose `liberty`.
-
----
-
-## Étape 3 — Parcourir la pile Liberty
-
-Cliquer sur **Conteneurs** dans la navigation de gauche. On voit :
-
-| Conteneur | Ce qu'on peut faire depuis Portainer |
+| Service | En un coup d'œil |
 |---|---|
-| `liberty` | Voir les journaux en direct, ouvrir un shell, redémarrer, voir les variables (lecture seule), voir les ports. |
-| `liberty-postgres` | Pareil — plus la taille du volume. |
+| `liberty-next` | Statut, ports, compteur de redémarrages, étiquette d'image. |
+| `pg` | Santé Postgres, taille du volume, port. |
+| `pgadmin` | Statut — et oui, pgAdmin se gère depuis Portainer (ou l'inverse). |
 | `portainer` | Lui-même — méta-gestion. |
+| `traefik` | Statut du routeur de bordure + lien vers le tableau de bord en direct. |
 
-Quelques tâches utiles en un coup d'œil :
+Opérations courantes :
 
-| Tâche | Emplacement dans Portainer |
-|---|---|
-| **Suivre les journaux Liberty** | Conteneurs → `liberty` → *Journaux*. Rafraîchissement auto + filtre par niveau. |
-| **Redémarrer Liberty** | Conteneurs → `liberty` → bouton *Redémarrer*. (Équivalent à `docker compose restart liberty`.) |
-| **Ouvrir un shell dans Liberty** | Conteneurs → `liberty` → *Console* → *Connect*. Atterrit dans `/app` avec bash. |
-| **Inspecter les variables** | Conteneurs → `liberty` → onglet *Inspect*. Lecture seule — pour les modifier, éditer `.env` et recréer le conteneur. |
-| **Mettre à jour Liberty vers la dernière image** | Conteneurs → `liberty` → bouton *Recreate* → case *Pull latest image* → *Recreate*. |
-
----
-
-## Étape 4 — Piloter la pile compose
-
-Portainer fait également apparaître le projet Compose lui-même :
-
-**Stacks → liberty** affiche :
-
-- Le fichier compose (lecture + édition).
-- L'état de chaque service.
-- Arrêter / démarrer / redémarrer toute la pile.
-- Ajouter de nouveaux services sans quitter l'UI.
-
-| Opération | Portainer | Équivalent CLI |
+| Tâche | Emplacement dans Portainer | Équivalent CLI |
 |---|---|---|
-| Tout redémarrer | Stack → *Stop* → *Start* | `docker compose restart` |
-| Éditer le fichier compose | Stack → *Éditeur* → enregistrer | `nano docker-compose.yml` + `docker compose up -d` |
-| Ajouter un service | Stack → *Éditeur* → ajouter du YAML → *Deploy stack* | Pareil — éditer le fichier + `docker compose up -d` |
-| Supprimer la pile (et les données) | Stack → *Delete this stack* | `docker compose down -v` |
+| Suivre les journaux d'un service | Containers → *service* → *Logs* (rafraîchissement auto, filtre par niveau) | `docker compose -f docker-compose.full.yml logs -f <service>` |
+| Redémarrer un service | Containers → *service* → *Restart* | `docker compose -f docker-compose.full.yml restart <service>` |
+| Recréer un service (en récupérant une nouvelle image) | Containers → *service* → *Recreate* → cocher *Pull latest image* | `docker compose -f docker-compose.full.yml pull <service> && docker compose -f docker-compose.full.yml up -d <service>` |
+| Ouvrir un shell dans un conteneur | Containers → *service* → *Console* → *Connect* | `docker compose exec <service> bash` |
+| Inspecter les variables d'environnement (lecture seule) | Containers → *service* → onglet *Inspect* → `Config.Env` | `docker inspect <container>` |
+| Vérifier l'usage des ressources (CPU / RAM) | Containers → *service* → *Stats* | `docker stats` |
+| Parcourir / inspecter un volume | Volumes → *volume* → *Browse* | `docker run --rm -it -v <vol>:/data alpine sh` |
 
-Le CLI reste la source de vérité — Portainer réécrit `docker-compose.yml` sur disque. Tout ce qui est édité dans l'éditeur Portainer finit dans le fichier cloné depuis votre dépôt d'apps.
-
----
-
-## Tâches d'opérateur courantes via Portainer
-
-### Sortir d'une boucle de plantage Liberty
-
-1. Conteneurs → `liberty` → *Journaux* → identifier l'erreur.
-2. Conteneurs → `liberty` → *Console* → *Connect* → corriger ce qui peut l'être (relancer `liberty-admin init-db` si le magasin d'utilisateurs est vide, etc.).
-3. Redémarrer.
-
-### Mettre à niveau Liberty vers une nouvelle image
-
-1. Stacks → `liberty` → *Éditeur*.
-2. Changer `image: ghcr.io/fblettner/liberty-next:latest` pour une étiquette épinglée (par exemple `ghcr.io/fblettner/liberty-next:2026.06.1`).
-3. *Update the stack* → cocher *Re-pull image* → *Update*.
-
-Portainer récupère la nouvelle image, échange le conteneur, laisse Postgres intact. ~30 secondes d'indisponibilité.
-
-### Redémarrer uniquement Liberty (pas Postgres)
-
-Conteneurs → `liberty` → *Redémarrer*. Postgres reste intact.
-
-### Vérifier l'utilisation disque
-
-**Volumes** dans la navigation de gauche montre la taille de chaque volume. Surveiller :
-
-- `liberty_postgres-data` — grossit avec l'historique d'audit, les journaux d'exécution.
-- `liberty-logs` — grossit avec les fichiers de journaux du framework.
-
-Pour les stratégies de purge, voir [Production](./production.md).
+Les variables d'environnement affichées dans Portainer sont **en lecture seule** — leur modification passe par une édition de `.env` suivie d'un recreate. Les valeurs affichées incluent des secrets (clé maîtresse, secret JWT) ; traiter le compte admin Portainer en conséquence.
 
 ---
 
-## Limites du flux Portainer seul
+## pgAdmin — premier démarrage
 
-Certaines choses restent plus simples en CLI :
+Même logique d'URL unique : ouvrir `http://<host>/pgadmin` et se connecter avec :
 
-| Tâche | Pourquoi le CLI est meilleur |
+| Champ | Valeur |
 |---|---|
-| Éditer `.env`. | Portainer ne fait pas apparaître les fichiers `.env` — les variables sont lues au démarrage du conteneur. Éditer le fichier avec `nano` et recréer le conteneur. |
-| `liberty-admin <command>`. | Les commandes intégrées sont plus simples à lancer depuis un shell que via la Console Portainer (qui reste un shell, mais avec plus de clics pour y arriver). |
-| Sauvegardes en lot (`pg_dump`, snapshots de volumes). | Cron + scripts shell. |
-| `git pull` sur le dépôt des apps. | Le dépôt des apps se trouve hors de Docker ; Portainer ne le pilote pas. |
+| Email | `admin@example.com` (l'utilisateur par défaut provisionné par le compose) |
+| Mot de passe | `PGADMIN_PASSWORD` du `.env` |
 
-Portainer couvre les cas *« qu'est-ce qui tourne, pourquoi ça ne tourne pas, redémarre-le »*. Le CLI couvre la gestion des données et l'intégration Git.
+Le compose pré-câble deux éléments qui font fonctionner le montage avec préfixe de chemin :
 
----
-
-## Sécuriser Portainer
-
-Une installation brute de Portainer sur le port 9443 avec un certificat auto-signé **convient sur un LAN privé**, **pas sur l'Internet public**. Trois choses à ajouter pour toute installation exposée :
-
-| Durcissement | Comment |
-|---|---|
-| Placer Portainer derrière Traefik avec un vrai certificat TLS. | Ajouter un label Traefik au service Portainer (même schéma que Liberty — voir [Traefik](./traefik.md)). |
-| Restreindre l'IP source. | Règle de pare-feu hôte (`ufw allow from <ip-range> to any port 9443`). |
-| Utiliser le RBAC de Portainer. | Créer un utilisateur non admin pour les exploitants qui n'ont besoin que du redémarrage et de l'accès aux journaux ; garder `admin` pour l'édition de la pile. |
-
-Une compromission de Portainer = compromission de chaque conteneur de l'hôte (à cause du montage de la socket Docker). À traiter en conséquence.
-
----
-
-## Désinstallation
-
-Si Portainer s'avère superflu :
-
-```bash
-cd /opt/liberty
-docker compose rm -s -v portainer
-docker volume rm liberty_portainer-data
+```yaml title="docker-compose.full.yml (extrait du service pgadmin)"
+pgadmin:
+  image: dpage/pgadmin4:latest
+  environment:
+    PGADMIN_DEFAULT_EMAIL: admin@example.com
+    PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_PASSWORD:?PGADMIN_PASSWORD is required}"
+    SCRIPT_NAME: /pgadmin            # indique à pgAdmin que ses liens se trouvent sous /pgadmin
+  volumes:
+    - pgadmin-data:/var/lib/pgadmin
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.pgadmin.rule=PathPrefix(`/pgadmin`)"
+    - "traefik.http.routers.pgadmin.priority=100"
+    - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
 ```
 
-Retirer le bloc de service `portainer:` et le volume `portainer-data:` de `docker-compose.yml`. La pile Liberty continue sans changement.
+`SCRIPT_NAME=/pgadmin` empêche pgAdmin de générer des liens absolus vers `/login`, `/static/...` (qui renverraient 404 puisque Traefik route `/pgadmin/*` ici, pas `/`). Ne pas le modifier sans mettre à jour également la règle du routeur Traefik.
+
+Le volume `pgadmin-data` contient les enregistrements de serveurs sauvegardés, l'historique des requêtes et les préférences. `backup.sh` en prend un instantané.
+
+### Enregistrer le Postgres intégré
+
+La première connexion ouvre un tableau de bord vide. Clic droit sur **Servers → Register → Server…** :
+
+| Champ | Valeur |
+|---|---|
+| Name (onglet General) | `liberty` (au choix) |
+| Host (onglet Connection) | `pg` (le nom de service du compose — les deux conteneurs partagent le réseau par défaut) |
+| Port | `5432` |
+| Username | `postgres` (ou la valeur de `POSTGRES_USER` dans `.env`) |
+| Password | `POSTGRES_PASSWORD` du `.env` (cocher *Save password*) |
+
+Le schéma Liberty se trouve dans la base `liberty` par défaut. À partir de là, l'arborescence pgAdmin habituelle : schémas → tables → query tool.
+
+---
+
+## Tâches d'exploitation courantes via les outils intégrés
+
+| Besoin… | Outil | Chemin |
+|---|---|---|
+| Suivre les journaux liberty-next en reproduisant un bug | Portainer | Containers → `liberty-next` → *Logs* → *Auto-refresh* |
+| Redémarrer Liberty après édition de `.env` | Portainer | Containers → `liberty-next` → *Recreate* (pour que le nouvel environnement soit lu) |
+| Recréer Liberty en récupérant la dernière image | Portainer | Containers → `liberty-next` → *Recreate* → cocher *Pull latest image* |
+| Voir la croissance du volume Postgres | Portainer | Volumes → `pg-data` → colonne taille |
+| Exécuter un `SELECT` ad hoc sur la base Liberty | pgAdmin | Servers → liberty → Databases → liberty → *Query Tool* |
+| Vérifier qu'une migration a bien créé sa table | pgAdmin | Servers → liberty → Databases → liberty → Schemas → public → Tables |
+| Observer les sessions Postgres en direct | pgAdmin | Servers → liberty → *Dashboard* → Server activity |
+
+Pour tout le reste (réinitialisation de mot de passe admin, inspection de licence, commandes `liberty-admin`), le tableau de [Docker → Opérations courantes](./docker.md#common-operations) reste valable — ce sont des workflows CLI.
+
+---
+
+## Spécificités Swarm
+
+Dans la [disposition Swarm](./docker.md#swarm), Portainer et pgAdmin sont déployés de la même manière, avec deux contraintes supplémentaires :
+
+| Contrainte | Pourquoi |
+|---|---|
+| Portainer épinglé à `node.role == manager` | Il a besoin de `/var/run/docker.sock`, que seuls les managers mettent à disposition. Le compose le règle automatiquement. |
+| pgAdmin épinglé à un manager (ou là où `pg` s'exécute) | Le volume `pgadmin-data` doit se rattacher sur place — même logique que `pg`. |
+
+```yaml title="docker-compose.swarm.yml (bloc deploy de portainer)"
+portainer:
+  image: portainer/portainer-ce:latest
+  command: -H unix:///var/run/docker.sock
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - portainer-data:/data
+  deploy:
+    replicas: 1
+    placement:
+      constraints:
+        - node.role == manager
+```
+
+Ne pas tenter de monter Portainer au-delà de `replicas: 1` — il stocke sa base admin sur `portainer-data` et ne dispose d'aucun clustering intégré. Même règle pour pgAdmin.
+
+---
+
+## Pièges courants
+
+| Piège | Ce qui se passe réellement | À éviter par |
+|---|---|---|
+| **Recréer `liberty-next` pour recharger une édition TOML.** | Le *Recreate* de Portainer tue puis redémarre le conteneur — or les modifications de TOML poussées via l'UI Settings sont déjà actives. Redémarrage inutile, ~10 s d'indisponibilité. | Les TOML se rechargent à l'enregistrement. Le bouton global est `POST /admin/reload` (ou *Settings → Reload*). Ne recréer que pour appliquer une nouvelle étiquette d'image ou une modification de `.env`. |
+| **Redémarrer `pg` sans arrêter `liberty-next` au préalable.** | Le pool de Liberty voit la moitié de ses connexions tomber en plein milieu d'une requête ; les requêtes suivantes échouent jusqu'à reconstitution du pool. | Arrêter `liberty-next` d'abord (Portainer → *Stop*), redémarrer `pg`, démarrer `liberty-next`. Ou redémarrer toute la pile dans l'ordre. |
+| **Éditer les variables d'environnement dans Portainer.** | L'onglet env de Portainer est en lecture seule — pas de bouton *Save*. Certains opérateurs les copient, les éditent, les recollent, et rien ne se passe. | Éditer `.env` sur l'hôte, puis *Recreate* le conteneur pour que les nouvelles valeurs soient lues au démarrage. |
+| **Exposer `/portainer` à l'Internet public avant d'avoir terminé l'assistant.** | Le premier inconnu à charger la page s'approprie le compte admin. | Lancer l'assistant immédiatement après `install.sh full`. Sinon, filtrer le chemin au pare-feu jusqu'à l'avoir fait. |
+| **Considérer la socket Docker comme inoffensive.** | Elle ne l'est pas — Portainer + socket = root sur chaque conteneur, y compris l'environnement Liberty (clé maîtresse, secret JWT, mot de passe DB). | Mot de passe admin Portainer fort ; envisager de supprimer le service entièrement si personne n'en a besoin. |
+
+---
+
+## Quand retirer les outils intégrés
+
+Les services intégrés sont pratiques, pas obligatoires. Les retirer si :
+
+- **La conformité interdit la socket Docker dans la pile applicative.** Supprimer le bloc `portainer:` + le volume `portainer-data:` ; gérer Docker depuis un hôte séparé et verrouillé.
+- **Un pgAdmin / DBeaver / DataGrip central existe déjà.** Supprimer le bloc `pgadmin:` + le volume `pgadmin-data:` ; connecter l'outil central au port `5432` exposé par l'hôte (ou via un tunnel SSH).
+- **La RAM est serrée (≤ 2 Go).** Chaque outil ajoute ~50–150 Mo résidents — peu, mais pas zéro.
+
+Après suppression de l'un ou l'autre service :
+
+```bash
+docker compose -f docker-compose.full.yml up -d        # réconcilie la pile en cours
+docker volume rm <removed-volume>                       # uniquement en cas de certitude
+```
+
+Le reste de la pile Liberty (liberty-next, pg, traefik) n'est pas affecté.
 
 ---
 
 ## La suite
 
-- [Traefik](./traefik.md) — ajouter le TLS à la fois à Liberty et à Portainer.
-- [Production](./production.md) — durcissement du reste de la pile.
-- [Supervision](../monitoring/overview.md) — la vue runtime intégrée, distincte de Portainer.
+- [Docker → Full](./docker.md#full) — vue d'ensemble de la disposition Full, avec le tableau des volumes.
+- [Docker → Swarm](./docker.md#swarm) — placement et notes de déploiement spécifiques à Swarm.
+- [Traefik](./traefik.md) — ajouter le TLS devant `/portainer` et `/pgadmin` (même règle `Host` que liberty-next).
+- [Production](./production.md) — checklist de durcissement (rotation du mot de passe admin, listes blanches d'IP source, supervision hors hôte).

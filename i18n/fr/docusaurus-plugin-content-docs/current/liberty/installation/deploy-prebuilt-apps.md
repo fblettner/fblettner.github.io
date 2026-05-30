@@ -49,24 +49,32 @@ Le wheel `liberty-apps` embarque tout ce dont Liberty a besoin pour exploiter le
 
 | Élément | Raison |
 |---|---|
-| **Liberty Next est installé et en cours d'exécution** | Le wheel se matérialise par-dessus le framework ; il n'installe pas le framework lui-même. Voir [Installation → Serveur Python](./python-server.md) ou [Docker](./docker.md). |
+| **Liberty Next est installé et en cours d'exécution** | Le wheel se matérialise par-dessus le framework ; il n'installe pas le framework lui-même. La disposition Docker Full — `./install.sh full` — constitue la cible canonique des bundles licenciés (ils requièrent Postgres). Voir [Docker → Full](./docker.md#full). Les dispositions Light et pipx ne conviennent qu'au framework open — elles ne peuvent pas héberger les plugins Nomasx-1 / Nomajde, qui exigent des pools Postgres. |
 | **`pip` est disponible dans le venv du framework** | Le wheel s'installe via pip. Dans les installations Docker, le wheel est généralement intégré à l'image à la construction. |
 | **`LIBERTY_APPS_DIR` est défini** | Pointe vers le répertoire `config/` du framework. L'installeur du wheel matérialise le payload dans ce répertoire et dans son frère `../plugins/`. |
 | **Un serveur PostgreSQL accessible depuis le pool `default` du framework** | Le job de déploiement crée les bases applicatives (`nomasx1`, `nomajde`) sur ce serveur. Requiert les droits `CREATE DATABASE` / `CREATE ROLE` — typiquement le superutilisateur `postgres` ou un équivalent. |
 
 ### Installer le wheel
 
-Réceptionner le wheel auprès de NOMANA-IT (par exemple `liberty_apps-0.2.0-py3-none-any.whl`) et l'installer dans l'environnement du framework.
+Réceptionner le wheel auprès de NOMANA-IT (par exemple `liberty_apps-0.2.0-py3-none-any.whl`) et l'installer dans l'environnement du framework. La commande diffère selon la disposition d'installation, mais `liberty-apps install` se comporte de manière identique sur toutes.
 
-```bash title="Installation source Python"
-# dans le venv du framework
-pip install /path/to/liberty_apps-0.2.0-py3-none-any.whl
+```dockerfile title="Docker Full — intégration dans une image dérivée"
+FROM ghcr.io/fblettner/liberty-next:0.2.0
+COPY liberty_apps-0.2.0-py3-none-any.whl /tmp/
+RUN pip install /tmp/liberty_apps-0.2.0-py3-none-any.whl && rm /tmp/*.whl
+RUN liberty-apps install --target $LIBERTY_APPS_DIR
 ```
 
-```bash title="Installation Docker — intégration à l'image"
-# À ajouter au Dockerfile du framework (ou à une image dérivée) :
-COPY liberty_apps-0.2.0-py3-none-any.whl /tmp/
-RUN pip install /tmp/liberty_apps-0.2.0-py3-none-any.whl && rm /tmp/liberty_apps-0.2.0-py3-none-any.whl
+Construire, taguer et pousser cette image, puis la référencer via `LIBERTY_IMAGE_TAG` dans `.env` pour que `docker compose up -d` récupère l'image enrichie du wheel plutôt que l'image du framework standard.
+
+```bash title="Installation pipx — injection dans le venv du framework"
+# pipx maintient liberty-next dans son propre venv ; `inject` ajoute le wheel à ce même venv.
+pipx inject liberty-next /path/to/liberty_apps-0.2.0-py3-none-any.whl
+```
+
+```bash title="Installation venv Python"
+# dans le venv du framework
+pip install /path/to/liberty_apps-0.2.0-py3-none-any.whl
 ```
 
 Vérifier l'installation :
@@ -84,6 +92,8 @@ Le wheel embarque chaque TOML de configuration et les plugins Python dans un ré
 # La cible est le répertoire config du framework — les plugins arrivent dans son frère.
 liberty-apps install --target $LIBERTY_APPS_DIR
 ```
+
+Dans un conteneur Docker, ce chemin correspond à `/app/config` — l'emplacement même que `docker-compose.full.yml` monte comme volume nommé `liberty-config`. Le Dockerfile dérivé ci-dessus exécute déjà `liberty-apps install` contre `$LIBERTY_APPS_DIR` à la construction : le payload est donc inscrit dans la couche d'image et apparaît sous `/app/config` (et son frère `/app/plugins`) à l'exécution.
 
 La sortie liste chaque fichier :
 
@@ -121,9 +131,15 @@ Le code des plugins est **toujours rafraîchi** — aucun `--force` n'est requis
 
 Après la matérialisation, Liberty dispose des nouveaux TOML sur disque et des nouveaux paquets Python dans son répertoire de plugins, mais le processus en cours conserve l'ancienne configuration en mémoire. Recharger :
 
-```bash
+```bash title="Appel externe"
 curl -X POST -H "Authorization: Bearer <superuser-token>" \
      https://<liberty-host>/admin/reload
+```
+
+```bash title="Disposition Docker Full — depuis l'hôte"
+docker compose exec liberty-next \
+  curl -X POST -H "Authorization: Bearer <superuser-token>" \
+       http://localhost:8000/admin/reload
 ```
 
 Ou depuis l'interface : bouton *Settings → Reload*.
@@ -193,7 +209,7 @@ Quand NOMANA-IT livre un nouveau wheel `liberty-apps` :
 | Étape | Description |
 |---|---|
 | **1. Sauvegarder la configuration** | `cp -r $LIBERTY_APPS_DIR $LIBERTY_APPS_DIR.bak.$(date +%Y%m%d)`. L'installeur du wheel préserve vos modifications par défaut, mais une sauvegarde reste une assurance peu coûteuse. |
-| **2. `pip install --upgrade <nouveau wheel>`** | Même commande, pointant vers le nouveau fichier. |
+| **2. Installer le nouveau wheel** | **Docker Full :** reconstruire l'image dérivée avec le nouveau wheel, incrémenter `LIBERTY_IMAGE_TAG` dans `.env`, puis `docker compose pull && docker compose up -d`. **pipx :** `pipx inject liberty-next --force /path/to/new-wheel.whl`, puis redémarrer l'unité systemd. **venv Python :** `pip install --upgrade /path/to/new-wheel.whl`. |
 | **3. `liberty-apps install --target $LIBERTY_APPS_DIR`** | L'installeur copie le code des plugins sans condition et **préserve les fichiers de configuration existants** (vos modifications survivent). Les nouveaux fichiers de configuration du bundle (par exemple un nouveau dashboard) SONT copiés. |
 | **4. N'utiliser `--force-config` que pour reprendre les valeurs par défaut éditeur** | Cela écrase vos modifications. La bonne manière de récupérer sélectivement les mises à jour éditeur est d'exporter vos modifications via [Settings → Package](../framework/build/packages.md) avant, puis de réappliquer ensuite éditeur + votre package. |
 | **5. Recharger** | `POST /admin/reload`. Les nouveaux écrans, dashboards et jobs sont actifs. |
@@ -234,6 +250,7 @@ Les deux canaux sont conçus pour coexister — le wheel préserve par défaut l
 
 | Erreur | Symptôme | Correctif |
 |---|---|---|
+| `./install.sh light` lancé puis tentative d'installation du wheel. | Les plugins s'importent mais le job de déploiement échoue : aucun Postgres joignable. | Light repose sur SQLite — les plugins Nomasx-1 / Nomajde requièrent des pools Postgres. Utiliser `./install.sh full` pour les bundles licenciés. |
 | `liberty-apps install` lancé sans que `LIBERTY_APPS_DIR` soit défini. | `error: no target — pass --target DIR or set LIBERTY_APPS_DIR`. | Définir la variable d'environnement dans le fichier d'environnement du framework / l'unité systemd / l'environnement Docker. |
 | L'installation du wheel a réussi mais Liberty ne voit pas les nouveaux écrans. | Le framework n'a pas été rechargé — l'ancienne configuration est toujours en mémoire. | `POST /admin/reload` ou cliquer sur *Settings → Reload*. |
 | Le job `deploy-databases` échoue avec `permission denied for database`. | Le pool `default` du framework ne peut pas créer de bases ni de rôles. | Pointer `default` vers un superutilisateur Postgres pour l'exécution du déploiement, puis revenir en arrière. |
@@ -248,4 +265,4 @@ Les deux canaux sont conçus pour coexister — le wheel préserve par défaut l
 
 - [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md) — chaque job présent dans `liberty-apps/plugins/nomaflow/jobs.toml`, son rôle, quand l'exécuter.
 - [Packages](../framework/build/packages.md) — le canal de déploiement par tranche pour les écrans, éléments de menu et dashboards.
-- [Installation → Mise à niveau](./upgrading.md) — mise à niveau du framework Liberty lui-même (en dessous des applications).
+- [Installation → Mise à niveau](./upgrading.md) — mise à niveau du framework Liberty lui-même (en dessous des applications), y compris le modèle d'épinglage de tag d'image (`LIBERTY_IMAGE_TAG` dans `.env`) sur lequel repose la disposition Docker Full.

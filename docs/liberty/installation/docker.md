@@ -1,14 +1,14 @@
 ---
 title: Docker
-description: "Stand up Liberty Framework as a Docker Compose stack — Liberty, PostgreSQL, optional Traefik. Concrete compose file, env vars, mount points and the first-run bootstrap."
-keywords: [Liberty Framework, Docker, docker-compose, container, PostgreSQL, mount, bootstrap, init-db]
+description: "Stand up Liberty Next as a Docker Compose stack — three ready-made layouts (light SQLite, full 5-service production, Docker Swarm) shipped in the release/ directory of the repo. install.sh drives Compose, deploy-swarm.sh drives Swarm, backup.sh snapshots every named volume."
+keywords: [Liberty Framework, Docker, Docker Compose, Docker Swarm, install.sh, deploy-swarm.sh, backup.sh, light, full, swarm, Traefik, Postgres, pgAdmin, Portainer, ghcr.io, healthcheck]
 ---
 
 # Docker
 
-The Docker path runs the framework as a container against a separate PostgreSQL container, with the `liberty-apps` repo mounted as a volume. Add Traefik in the same compose for TLS + a friendly hostname (covered separately on [Traefik](./traefik.md)); manage the stack visually with [Portainer](./portainer.md).
+The repository's [`release/`](https://github.com/fblettner/liberty-next/tree/main/release) directory carries everything you need: three compose files (`docker-compose.light.yml`, `docker-compose.full.yml`, `docker-compose.swarm.yml`), three helper scripts (`install.sh`, `deploy-swarm.sh`, `backup.sh`) and a `.env.example` documenting every variable. The image lives at `ghcr.io/fblettner/liberty-next` (public).
 
-This page walks the minimum self-contained stack — Liberty + PostgreSQL — without TLS. Production-grade additions are layered on top.
+This page walks each layout end-to-end. For the conceptual overview + the four-shape comparison, read [Overview](./overview.md) first.
 
 ---
 
@@ -17,256 +17,401 @@ This page walks the minimum self-contained stack — Liberty + PostgreSQL — wi
 | Tool | Version |
 |---|---|
 | Docker Engine | ≥ 24 |
-| Docker Compose | v2 (the `docker compose` plugin, not the deprecated `docker-compose` binary) |
-| Host disk | ~2 GB for the framework image + your DB volume |
-| Host RAM | ≥ 1 GB free for the framework container + Postgres |
+| Docker Compose | v2 (the `docker compose` plugin) — `install.sh` checks for it |
+| Host disk | ~2 GB image + your DB volume (light: ~50 MB; full: a few GB once Postgres has data) |
+| Host RAM | ≥ 1 GB free (light); ≥ 4 GB free (full — Postgres `shared_buffers=2GB` by default) |
 
 A Linux host (Ubuntu / Debian / Rocky / Alpine) is the typical target. Docker Desktop on macOS / Windows works for local testing.
 
 ---
 
-## Step 1 — Clone the apps repo
+## Layout 1 — Light (`docker-compose.light.yml`) \{#light\}
 
-The framework reads its configuration from `liberty-apps`:
+One container, SQLite framework DB, no Postgres, no Traefik, no TLS. Use for a local trial, single-user demo or any install that doesn't need the licensed connectors (Nomasx-1 / Nomajde / NomaUBL all need Postgres — use [Full](#full) for those).
+
+### Install
 
 ```bash
-git clone https://github.com/<your-org>/liberty-apps.git /opt/liberty/apps
+git clone https://github.com/fblettner/liberty-next.git
+cd liberty-next/release
+
+./install.sh light
 ```
 
-The directory layout after clone:
+What happens:
 
-```
-/opt/liberty/apps/
-├── config/        ← the TOML files (LIBERTY_APPS_DIR points here)
-│   ├── app.toml
-│   ├── connectors.toml
-│   ├── dictionary.toml
-│   ├── screens.toml
-│   ├── menus.toml
-│   ├── dashboards.toml
-│   ├── charts.toml
-│   └── jobs.toml
-└── plugins/       ← your Python plugins (importable at startup)
-    └── <your-plugin>/
-```
+| Step | What |
+|---|---|
+| 1. Generates `.env` with random secrets (no `$` chars). | Skipped if `.env` already exists. |
+| 2. `docker compose -f docker-compose.light.yml pull` | Fetches `ghcr.io/fblettner/liberty-next:latest`. |
+| 3. `docker compose -f docker-compose.light.yml up -d` | Starts the `liberty-next` container. |
+| 4. Waits up to 120 s for the container healthcheck (`GET /info`). | Reports `healthy` once ready. |
+| 5. Prints the SPA URL + the generated `admin` password. | Read once; also in `.env` mode `0600`. |
 
-For a fresh install with no apps repo yet, start with the [empty template repo](https://github.com/fblettner/liberty-apps-template) — clone, rename, push to your own Git.
+The compose file:
 
----
-
-## Step 2 — Write `docker-compose.yml`
-
-A minimal stack with Liberty + PostgreSQL:
-
-```yaml
-# /opt/liberty/docker-compose.yml
+```yaml title="docker-compose.light.yml (excerpt)"
 services:
-
-  postgres:
-    image: postgres:16
-    container_name: liberty-postgres
+  liberty-next:
+    image: ghcr.io/fblettner/liberty-next:${LIBERTY_IMAGE_TAG:-latest}
+    container_name: liberty-next
     restart: unless-stopped
-    environment:
-      POSTGRES_DB: liberty
-      POSTGRES_USER: liberty
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U liberty -d liberty"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  liberty:
-    image: ghcr.io/fblettner/liberty-next:latest
-    container_name: liberty
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      LIBERTY_APPS_DIR: /apps/config
-      LIBERTY_MASTER_KEY: ${LIBERTY_MASTER_KEY}
-      LIBERTY_LICENSE_KEY: ${LIBERTY_LICENSE_KEY:-}
-      LIBERTY_JWT_SECRET: ${LIBERTY_JWT_SECRET}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET:-}
-      # Database URL — uses the postgres service above
-      DATABASE_URL: postgresql+asyncpg://liberty:${POSTGRES_PASSWORD}@postgres:5432/liberty
-    volumes:
-      - /opt/liberty/apps:/apps:ro      # the apps repo, read-only
-      - liberty-logs:/var/log/liberty
     ports:
-      - "8000:8000"
-
-volumes:
-  postgres-data:
-  liberty-logs:
+      - "${LIBERTY_PORT:-8000}:8000"
+    environment:
+      LIBERTY_JWT_SECRET: "${LIBERTY_JWT_SECRET:?LIBERTY_JWT_SECRET is required}"
+      LIBERTY_MASTER_KEY: "${LIBERTY_MASTER_KEY:?LIBERTY_MASTER_KEY is required}"
+      LIBERTY_DB_URL: "${LIBERTY_DB_URL:-sqlite+aiosqlite:////data/liberty.db}"
+      LIBERTY_ADMIN_PASSWORD: "${LIBERTY_ADMIN_PASSWORD:-}"
+      LIBERTY_LICENSE_KEY: "${LIBERTY_LICENSE_KEY:-}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+    volumes:
+      - liberty-data:/data              # SQLite DB + auth.toml
+      - liberty-config:/app/config      # operator-edited TOMLs
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/info"]
+      interval: 30s
+      timeout: 5s
+      start_period: 40s
+      retries: 3
 ```
 
-Three things to notice:
+### What you get
 
-| Detail | Why |
+On port `8000`:
+
+| Path | What |
 |---|---|
-| `:ro` on the apps mount. | Liberty doesn't write to the apps repo — make it read-only so a runaway process can't corrupt the config. |
-| `depends_on` with `service_healthy`. | Liberty waits for PostgreSQL to accept connections before starting; otherwise the first connect race fails. |
-| Secrets via `${...}` env vars. | Never inline a secret in `docker-compose.yml`. Use the `.env` file below. |
+| `/` | React SPA — sign in with `admin` + the password `install.sh` printed. |
+| `/docs` | Swagger UI. |
+| `/redoc` | ReDoc API reference. |
+| `/openapi.json` | OpenAPI 3 spec. |
+| `/info` | Public liveness + counts (the healthcheck hits this). |
 
----
+Two named volumes:
 
-## Step 3 — Write `.env`
-
-Sibling of `docker-compose.yml`:
-
-```bash
-# /opt/liberty/.env
-POSTGRES_PASSWORD=replace-with-a-real-password
-LIBERTY_MASTER_KEY=$(openssl rand -hex 32)
-LIBERTY_JWT_SECRET=$(openssl rand -hex 32)
-LIBERTY_LICENSE_KEY=
-ANTHROPIC_API_KEY=
-OIDC_CLIENT_SECRET=
-```
-
-Generate the two random values once and **back them up** — losing the master key means losing every `ENC:` value on disk; losing the JWT secret invalidates every signed token (not catastrophic but every user has to sign in again).
-
-| File permission | Owner | Mode |
+| Volume | What | Backup strategy |
 |---|---|---|
-| `.env` | root (or the Docker user) | `0600` |
+| `liberty-data` | SQLite DB + `auth.toml` (Argon2 password hashes). | `backup.sh` snapshots it. |
+| `liberty-config` | Every TOML the operator edits via *Settings → …*. | Same. |
+
+### Upgrade
 
 ```bash
-chmod 600 /opt/liberty/.env
+./backup.sh                                       # snapshot first (always)
+docker compose -f docker-compose.light.yml pull
+docker compose -f docker-compose.light.yml up -d
 ```
+
+The entrypoint runs `liberty-admin init-db` on every boot — idempotent, adds any new framework tables a newer release brings, leaves existing rows alone. To pin a specific version, set `LIBERTY_IMAGE_TAG=0.2.0` in `.env`.
 
 ---
 
-## Step 4 — Bring the stack up
+## Layout 2 — Full (`docker-compose.full.yml`) \{#full\}
+
+Five services behind Traefik on a single host. The production / staging layout — and the layout licensed bundles (Nomasx-1, Nomajde, NomaUBL) deploy against.
+
+### Install
 
 ```bash
-cd /opt/liberty
-docker compose up -d
+git clone https://github.com/fblettner/liberty-next.git
+cd liberty-next/release
+
+./install.sh full
 ```
 
-This pulls the images, starts PostgreSQL, waits for it to become healthy, then starts Liberty. After 10-30 seconds:
+`install.sh` generates `.env` with random secrets for **every** value the full stack needs — `LIBERTY_JWT_SECRET`, `LIBERTY_MASTER_KEY`, `POSTGRES_PASSWORD`, `PGADMIN_PASSWORD`, `LIBERTY_ADMIN_PASSWORD` — then pulls every image and brings the stack up. Total install time on a warm cache: ~30 s.
 
-```bash
-docker compose ps
-# NAME              STATUS              PORTS
-# liberty-postgres  Up 30s (healthy)    5432/tcp
-# liberty           Up 20s              0.0.0.0:8000->8000/tcp
+### What you get
 
-curl http://localhost:8000/health
-# {"status":"ok"}
+Routing on port `80` (or `443` once TLS is wired):
+
+| Path | Service | What |
+|---|---|---|
+| `/` *(catchall, priority 1)* | liberty-next | SPA + REST API + admin + docs. |
+| `/pgadmin` *(priority 100)* | pgAdmin | Postgres GUI — sign in with `admin@example.com` + `PGADMIN_PASSWORD` from `.env`. |
+| `/portainer` *(priority 100)* | Portainer | Docker UI. |
+| `/traefik` *(priority 1000)* | Traefik dashboard | Basic-auth gated — default `admin/admin`, **change it** in `traefik/dynamic/dynamic.yml`. |
+
+The full layout's six named volumes:
+
+| Volume | What | In `backup.sh`? |
+|---|---|---|
+| `liberty-config` | Operator-edited TOMLs. | Yes. |
+| `pg-data` | Postgres database files. | Yes. |
+| `pg-logs` | Rotated Postgres log files. | No (regenerates on boot). |
+| `pgadmin-data` | pgAdmin server registrations + preferences. | Yes. |
+| `portainer-data` | Portainer state. | Yes. |
+| `traefik-acme` | Let's Encrypt certificate storage (when TLS is wired). | No (re-acquirable). |
+
+### Postgres tuning
+
+The bundled Postgres ships with pgtune-style defaults for a ~8 GB host:
+
+```yaml title="docker-compose.full.yml (Postgres command)"
+command:
+  - postgres
+  - -c
+  - shared_buffers=2GB
+  - -c
+  - work_mem=256MB
+  - -c
+  - maintenance_work_mem=128MB
+  - -c
+  - max_wal_size=8GB
+  - -c
+  - wal_level=minimal            # disables replication/PITR — single-instance + nightly backups
+  - -c
+  - max_wal_senders=0
+  - -c
+  - synchronous_commit=off       # ~1 s of writes can be lost on a hard crash — fine for ETL
+  - -c
+  - checkpoint_timeout=20min
+  - -c
+  - logging_collector=on
 ```
 
----
-
-## Step 5 — Bootstrap the first user
-
-The framework starts with no users — log in is impossible. Bootstrap a superuser:
-
-```bash
-docker compose exec liberty liberty-admin init-db --superuser admin
-# Prompts for a password (8+ chars).
-```
-
-Now `http://<host>:8000/` shows the login screen — sign in as `admin`.
-
----
-
-## Step 6 — Confirm the install
-
-A quick smoke test:
-
-| Check | How |
+| Host size | Adjustment |
 |---|---|
-| Liberty responds. | `curl http://<host>:8000/health` → `{"status":"ok"}`. |
-| The plugins folder was found. | `docker compose logs liberty | grep "liberty.plugins"` → `liberty.plugins importable from /apps/../plugins`. *(Or no line if you have no `plugins/` dir, which is fine.)* |
-| The Postgres connection works. | `docker compose logs liberty | grep "ConnectorRegistry"` → shows the connectors loaded. |
-| The login page renders. | Open `http://<host>:8000/` in a browser. |
-| You can sign in. | Use the `admin` user from Step 5. |
+| ≤ 4 GB RAM | Halve `shared_buffers` and `work_mem`. |
+| ~8 GB RAM | Defaults. |
+| ≥ 16 GB RAM | Bump `shared_buffers` to ~25% of RAM, `work_mem` to 512 MB. |
 
-If any of those fail, jump to [Troubleshooting](#troubleshooting) below.
+Two settings trade durability for throughput — review before strict-durability workloads:
 
----
+| Setting | Tradeoff |
+|---|---|
+| `wal_level=minimal` + `max_wal_senders=0` | Disables physical replication / PITR / logical decoding. Fine for single-instance + nightly backups; switch to `wal_level=replica` for a hot standby. |
+| `synchronous_commit=off` | A hard crash can lose the last few committed transactions (< 1 s of writes). Flip to `on` for financial workloads. |
 
-## Volumes — what to back up
+The Postgres port (`5432`) is exposed on the host by default — useful for DBeaver from your laptop. Comment the `ports:` block to keep Postgres internal-only.
 
-The stack has two volumes:
+### Wire TLS (Let's Encrypt)
 
-| Volume | What it carries | Backup strategy |
-|---|---|---|
-| `postgres-data` | Liberty's metadata (auth, jobs, locks, run history) and your operational data **if you point operational pools at the same Postgres**. | `pg_dump` on a schedule. Restore by replaying the dump into a fresh Postgres. |
-| `liberty-logs` | Application logs. | Tail with `docker compose logs liberty`. Long-term retention: route to your logging backend (Loki, ELK, Datadog). |
+1. Point your domain at the server.
+2. In `.env`, set:
+   ```
+   LIBERTY_DOMAIN=liberty.example.com
+   ACME_EMAIL=ops@example.com
+   ```
+3. In `docker-compose.full.yml`, uncomment the `websecure` entrypoint + the `certificatesresolvers.le.*` flags + the `:443` port mapping.
+4. Add `traefik.http.routers.<name>.tls.certresolver: "le"` to each router label.
+5. `docker compose -f docker-compose.full.yml up -d`. Traefik requests certificates on first hit.
 
-The `liberty-apps` repo on the host is a git checkout — back it up with git, not Docker.
+Full TLS walk-through: [Traefik](./traefik.md).
 
-The `.env` file with the master key + JWT secret is your **most critical backup**. Lose it and you can't restore secrets from a postgres-data backup.
+### Change the Traefik dashboard password
 
----
-
-## Updates
-
-To pull a newer framework image:
+The default `admin/admin` works for the first 30 seconds you spend looking at the dashboard. Then change it:
 
 ```bash
-cd /opt/liberty
-docker compose pull liberty
-docker compose up -d liberty
+docker run --rm httpd:alpine htpasswd -nbB admin "<your-password>"
+# admin:$2y$05$abc...
 ```
 
-`pull` fetches the new image without restarting. `up -d liberty` swaps the container (5-10 second downtime). Postgres is untouched.
+Paste the one line of output into `release/traefik/dynamic/dynamic.yml` under `http.middlewares.traefik-auth.basicAuth.users`. `file.watch=true` reloads the dynamic config in seconds — no container restart needed.
 
-For the upgrade procedure including DB migrations and rollback, see [Upgrading](./upgrading.md).
+### Upgrade
+
+```bash
+./backup.sh                                  # snapshot first
+docker compose -f docker-compose.full.yml pull
+docker compose -f docker-compose.full.yml up -d
+```
+
+Same idempotent `init-db` runs on liberty-next boot. Pin via `LIBERTY_IMAGE_TAG=0.2.0` in `.env`.
+
+---
+
+## Layout 3 — Docker Swarm (`docker-compose.swarm.yml`) \{#swarm\}
+
+Same five services as Full, adapted for Swarm. Works for single-node swarms (one VM, staging) and multi-node swarms (one manager + N workers).
+
+### Why a separate compose file
+
+`docker stack deploy` ignores several Compose-only constructs (`container_name`, `depends_on: condition: service_healthy`, `restart: unless-stopped`) and needs others Compose doesn't (`deploy.*` keys, `--providers.swarm`, overlay networks). The swarm compose is the full layout, ported to Swarm grammar.
+
+### Install
+
+One-time on the manager:
+
+```bash
+docker swarm init                                    # single-node
+docker swarm init --advertise-addr <manager-ip>      # multi-node
+```
+
+Then:
+
+```bash
+cd liberty-next/release
+
+./install.sh prepare              # generate .env only (random secrets, no $ chars)
+./deploy-swarm.sh                 # deploy the stack — defaults to 'liberty'
+```
+
+What `deploy-swarm.sh` does:
+
+| Step | What |
+|---|---|
+| **1. `set -a; . .env; set +a`** | Sources `.env` into the shell — `docker stack deploy` has no `--env-file` flag and reads env from the shell. |
+| **2. Sanity-check the required vars** | `LIBERTY_JWT_SECRET`, `LIBERTY_MASTER_KEY`, `POSTGRES_PASSWORD`, `PGADMIN_PASSWORD` must be non-empty. |
+| **3. `docker stack deploy --with-registry-auth --prune --resolve-image always`** | Deploys the stack. `--with-registry-auth` forwards the manager's auth tokens so workers can pull private images; `--prune` removes services no longer in the compose file. |
+| **4. Waits up to 180 s for service convergence** | All services report `1/1` replicas. |
+| **5. Prints the stack table + URLs** | Including the swarm-specific reset command and rollback command. |
+
+Other helper invocations:
+
+```bash
+./deploy-swarm.sh --stack mystack       # custom stack name
+./deploy-swarm.sh --status              # show current service state, no deploy
+./deploy-swarm.sh --rm                  # tear the stack down (volumes survive)
+```
+
+### The env var question
+
+Sourcing `.env` into the shell, then `docker stack deploy` substitutes the `${VAR}`s into the service spec. Once substituted, the values are **baked into the swarm raft store** — changing `.env` after deploy has no effect. Re-run `./deploy-swarm.sh` to push new values.
+
+For long-term secrets, Docker Secrets is the swarm-native alternative — they're encrypted at rest in the raft store and mounted as files (not env vars) in target containers. See the comment block at the bottom of `docker-compose.swarm.yml` for the upgrade-to-secrets recipe.
+
+### Update one service to a new image tag
+
+`docker stack deploy` reconciles the spec against what's running — re-running it IS the update mechanism. To bump just one service without touching the others:
+
+```bash
+docker service update --image ghcr.io/fblettner/liberty-next:0.2.0 liberty_liberty-next
+docker service rollback liberty_liberty-next       # if something looks wrong
+```
+
+### Placement constraints
+
+The swarm compose pins **every service to a manager** by default — fine for single-node swarms and small clusters. For larger setups:
+
+| Service | Where to pin | Why |
+|---|---|---|
+| `pg` | A specific node — `node.hostname == <your-pg-node>` | The volume must reattach in place. Multiple managers without this constraint = Postgres reschedules onto a node with an empty volume. |
+| `liberty-next` | Optionally `node.role == worker` | Move to dedicated app-tier nodes if you have them. |
+| `traefik` | Stays on a manager | `--providers.swarm` reads the Docker socket, which only managers expose. |
+
+### Multi-replica notes
+
+`replicas: 1` is the default for every service. Stateful services (`pg`, `pgadmin`, `portainer`) should stay there — none have built-in replication. `liberty-next` keeps Socket.IO state in-process, so bumping its replicas without a shared backplane (Redis adapter) gives clients an inconsistent view of live dashboards / chat streams. The Traefik sticky cookie helps but isn't a substitute. **Scale once Redis is wired in.**
+
+### Backups + restores
+
+`backup.sh` works the same — volume names (`liberty-config`, `pg-data`, …) are identical across Compose and Swarm. Run it from the manager.
+
+---
+
+## Backups — `backup.sh` \{#backups\}
+
+Tar-snapshots every Liberty named volume into a timestamped directory. Works for Compose AND Swarm — volumes are named the same way. Safe to run while the stack is up (Docker handles read consistency); for a cold-perfect snapshot, stop the stack first.
+
+```bash
+./backup.sh                              # → ./backups/YYYY-MM-DD_HHMMSS/
+./backup.sh /mnt/nas/liberty             # → /mnt/nas/liberty/YYYY-MM-DD_HHMMSS/
+./backup.sh --layout light               # back up only the light layout's volumes
+./backup.sh --layout full                # back up only the full layout's volumes
+./backup.sh --keep 30                    # delete backups older than 30 days from the destination
+```
+
+Each run produces one directory:
+
+| File | Layout |
+|---|---|
+| `liberty-config.tar.gz` | Both. |
+| `liberty-data.tar.gz` | Light only (SQLite + auth.toml). |
+| `pg-data.tar.gz`, `pgadmin-data.tar.gz`, `portainer-data.tar.gz` | Full only. |
+| `.env.snapshot` | Both (mode `0600` — strip before off-site sync if you don't want secrets in the backup). |
+| `docker-compose.*.yml` | The compose file(s) in this directory at backup time. |
+
+### Run weekly from cron
+
+```cron
+0 3 * * 0  cd /opt/liberty-next/release && ./backup.sh /mnt/nas/liberty --keep 60
+```
+
+### Restore one volume
+
+`backup.sh` prints the exact command on success. The general shape:
+
+```bash
+docker compose -f docker-compose.full.yml down     # MUST be down — never restore on a live volume
+docker volume rm pg-data                            # wipe (skip if you want to overlay)
+docker run --rm -v pg-data:/data -v "$PWD/backups/<dir>:/backup" alpine \
+    sh -c 'rm -rf /data/* /data/.[!.]* && tar xzf /backup/pg-data.tar.gz -C /data'
+docker compose -f docker-compose.full.yml up -d
+```
+
+For Swarm: tear the stack down first (`./deploy-swarm.sh --rm`), restore, then re-deploy.
+
+---
+
+## Common operations \{#common-operations\}
+
+| Need | Compose | Swarm |
+|---|---|---|
+| Reset the admin password | `docker compose exec liberty-next liberty-admin set-password admin <new>` | `docker exec $(docker ps -qf name=liberty_liberty-next) liberty-admin set-password admin <new>` |
+| Add another superuser | `docker compose exec liberty-next liberty-admin create-user <name> --superuser` | `docker exec $(docker ps -qf name=liberty_liberty-next) liberty-admin create-user <name> --superuser` |
+| Inspect the license key | `docker compose exec liberty-next liberty-license verify` | `docker exec $(docker ps -qf name=liberty_liberty-next) liberty-license verify` |
+| Tail logs | `docker compose -f docker-compose.full.yml logs -f liberty-next` | `docker service logs -f liberty_liberty-next` |
+| Open a shell | `docker compose exec liberty-next bash` | `docker exec -it $(docker ps -qf name=liberty_liberty-next) bash` |
+| List services | `docker compose ps` | `docker stack services liberty` |
+| Reload config (TOML change) | `POST /admin/reload` (Settings UI button does this) | Same. |
+
+See `liberty-admin --help` / `liberty-license --help` for the full CLI.
 
 ---
 
 ## Troubleshooting
 
-### Liberty container exits immediately
+### Container exits immediately
 
 ```bash
-docker compose logs liberty
+docker compose -f docker-compose.<layout>.yml logs liberty-next
 ```
-
-Common causes:
 
 | Log line | Cause | Fix |
 |---|---|---|
-| `LIBERTY_APPS_DIR not set` | The env var didn't propagate. | Verify the `environment:` block in `docker-compose.yml`. |
-| `Could not connect to database` | Postgres isn't healthy yet, or `DATABASE_URL` is wrong. | Check `docker compose ps`; verify the password matches between Postgres and the env var. |
-| `Plugins directory not found` | The apps mount is missing or empty. | Verify `/opt/liberty/apps/plugins/` exists; check the mount path in compose. |
-| `Master key not set` and you have `ENC:` values | The master key env var is empty. | Set `LIBERTY_MASTER_KEY` in `.env`. |
+| `LIBERTY_JWT_SECRET is required` | The required env var didn't propagate. | `install.sh` should have generated it — check `.env`. |
+| `Could not connect to database` *(full layout)* | Postgres isn't healthy yet. | Wait 10 s — the `depends_on: condition: service_healthy` should normally cover it; check `docker compose ps pg`. |
+| Healthcheck never goes healthy | The container is up but `/info` doesn't respond. | Tail the logs — most often a config TOML on the `liberty-config` volume has a syntax error. |
 
-### Login page renders, but sign-in fails
+### Login page renders, sign-in fails
 
-The framework's user store is empty until you ran `liberty-admin init-db`. Re-run it.
+The bootstrap admin's password is in `.env` as `LIBERTY_ADMIN_PASSWORD`. Reset:
+
+```bash
+docker compose exec liberty-next liberty-admin set-password admin <new>
+```
 
 ### Apps repo changes don't show up
 
-The framework picks up `.toml` edits via *Settings → Reload* in the UI (or `POST /admin/reload`). For Python plugin changes, restart:
+TOML edits via *Settings → …* hot-reload automatically. For Python plugin changes (if you mounted `plugins/` from the host), restart the container:
 
 ```bash
-docker compose restart liberty
+docker compose restart liberty-next
 ```
 
-### Port 8000 is taken
+### Port 8000 / 80 is taken
 
-Change the host-side port in `docker-compose.yml`:
+Light: `LIBERTY_PORT=8001` in `.env`. Full: `TRAEFIK_HTTP_PORT=8080` in `.env`. Then `docker compose up -d`.
 
-```yaml
-ports:
-  - "8001:8000"   # external:internal
+### Swarm: services stay in `0/1`
+
+```bash
+docker stack ps liberty --no-trunc                 # shows the placement decision + error
+docker service logs liberty_<service-name>         # tail the service's logs
 ```
 
-The container still listens on 8000 internally; only the host port changes.
+Most common: a placement constraint can't be satisfied (Postgres pinned to a node that's not in the swarm), or the manager can't pull the image (network / registry auth).
 
 ---
 
 ## What's next
 
-- [Traefik](./traefik.md) — add TLS and a friendly hostname.
-- [Portainer](./portainer.md) — visual management for the stack.
-- [Production](./production.md) — multi-replica, log routing, hardening.
-- [Upgrading](./upgrading.md) — the upgrade procedure.
+- [Python server](./python-server.md) — the no-Docker alternative (pipx).
+- [Traefik](./traefik.md) — wire TLS + the friendly hostname.
+- [Portainer](./portainer.md) — what the bundled Portainer is good for.
+- [Production](./production.md) — hardening, OIDC, scheduler pin.
+- [Upgrading](./upgrading.md) — the upgrade procedure (it's `pull && up -d`).
+- [Deploy prebuilt apps](./deploy-prebuilt-apps.md) — NomaUBL / Nomasx-1 / Nomajde on top of this stack.

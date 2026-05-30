@@ -1,269 +1,275 @@
 ---
-title: Traefik (optional)
-description: "Front Liberty Framework with Traefik — reverse proxy, friendly hostname, automatic Let's Encrypt TLS via DNS challenge or HTTP challenge. Full Docker Compose snippet for the Liberty stack."
-keywords: [Liberty Framework, Traefik, reverse proxy, TLS, HTTPS, Let's Encrypt, ACME, Docker, hostname]
+title: Traefik
+description: "The Traefik reverse proxy is pre-wired into the Full Docker and Swarm layouts — basic-auth-gated dashboard at /traefik, security-headers middleware, sticky cookies for Socket.IO. Wire Let's Encrypt by uncommenting four lines + setting two env vars. The dynamic config file reloads in seconds without a restart."
+keywords: [Liberty Framework, Traefik, reverse proxy, TLS, Let's Encrypt, dashboard, basic-auth, dynamic config, security headers, sticky cookie, Socket.IO, --providers.swarm]
 ---
 
-# Traefik (optional)
+# Traefik
 
-[Traefik](https://traefik.io) is a reverse proxy that fits Docker stacks naturally — it discovers backends from container labels, terminates TLS for them, and renews Let's Encrypt certificates automatically. For a Liberty install behind a friendly hostname (`liberty.example.com`) with HTTPS, Traefik is the path of least friction.
+Traefik is **bundled** in the Full Docker layout (`docker-compose.full.yml`) and the Swarm layout (`docker-compose.swarm.yml`). It runs as the `traefik` service, terminates HTTP on `:80`, routes by path prefix and exposes a dashboard at `/traefik`. There's nothing to install separately — `./install.sh full` or `./deploy-swarm.sh` bring it up alongside the other services.
 
-This page walks the canonical Docker Compose setup — Traefik + Liberty + PostgreSQL on one host with automatic TLS. nginx and Caddy are valid alternatives; the pattern's the same, only the config syntax differs.
+This page covers what's pre-wired, how to change the dashboard password, how to add TLS (Let's Encrypt) and how Swarm differs from Compose.
+
+For the layout walk-through, read [Docker → Full](./docker.md#full) and [Docker → Swarm](./docker.md#swarm) first.
 
 ---
 
-## What Traefik adds
+## What's pre-wired
 
-| Feature | Why it matters |
+### Routing priorities
+
+The full layout uses path-prefix routing on a single Traefik HTTP entrypoint (`:80`). Higher priority wins; the catchall liberty-next router runs last:
+
+| Router | Rule | Priority | Service |
+|---|---|---|---|
+| `traefik-dashboard` | `` PathPrefix(`/traefik`) `` + a strict allow-list of `/api/*` GETs | **1000** | Traefik's internal `api@internal` service. |
+| `pgadmin` | `` PathPrefix(`/pgadmin`) `` | **100** | pgAdmin container on `:80`. |
+| `portainer` | `` PathPrefix(`/portainer`) `` (stripped to `/`) | **100** | Portainer container on `:9000`. |
+| `liberty-next` | `` PathPrefix(`/`) `` *(catchall)* | **1** | liberty-next container on `:8000`. |
+
+Liberty-next stays the catchall — every request that doesn't match a more specific prefix lands there. Adding a new app behind the same Traefik just means a new router at priority `> 1`.
+
+### Sticky cookies for Socket.IO
+
+Liberty-next keeps Socket.IO state in-process. When you scale it to more than one replica, the sticky cookie pins each client to the replica it first hit:
+
+```yaml title="docker-compose.full.yml (excerpt)"
+traefik.http.services.liberty-next.loadbalancer.sticky.cookie.name: "liberty_sticky"
+```
+
+The cookie is already on by default — harmless at `replicas: 1`, essential at `> 1`. Note: stickiness keeps a given client pinned, but it does NOT share Socket.IO state across replicas. Live dashboards / chat streams emitted by one replica won't reach clients pinned to another. For real multi-replica, a Redis adapter is needed — not yet built in.
+
+### The dynamic config
+
+Traefik reads two kinds of configuration:
+
+| Source | What |
 |---|---|
-| **Reverse proxy** | The framework is hidden behind a single public hostname (`liberty.example.com`) instead of `host:8000`. |
-| **TLS termination** | HTTPS for browsers; the framework itself stays on HTTP behind Traefik. One cert to manage instead of one per service. |
-| **Let's Encrypt automation** | Traefik registers + renews certs without operator intervention. |
-| **Multi-host routing** | One Traefik handles multiple apps on the same Docker host — `liberty.example.com` for the framework, `portainer.example.com` for Portainer, etc. |
-| **Auto-discovery** | New containers with the right labels are picked up immediately — no restart needed when you add Portainer or a second Liberty replica. |
+| **Container labels** | Per-service routes and middlewares, declared inline in the compose file. |
+| **`traefik/dynamic/*.yml`** | Shared middlewares whose values contain `$` (basic-auth bcrypt hashes — Compose substitution would eat them) and middlewares meant to be reusable across routers. |
 
-If you're behind a corporate reverse proxy already (nginx, F5, AWS ALB), you don't need Traefik — that upstream device terminates TLS and routes. Traefik is for self-managed installs.
+Two flags wire it up:
 
----
-
-## Prerequisites
-
-| What | Why |
-|---|---|
-| A **public DNS A record** pointing `liberty.example.com` at your Docker host's public IP. | Let's Encrypt's HTTP-01 challenge needs to reach your host on port 80. |
-| **Port 80 + port 443 open** on the host firewall + the cloud provider's security group. | Same. |
-| An **email address** for Let's Encrypt notifications (cert expiry warnings). | Required by the ACME protocol. |
-
-For private installs without a public DNS record, use the **DNS-01 challenge** (Traefik supports many providers — Cloudflare, AWS Route 53, Gandi, etc.) instead of HTTP-01. The compose snippet below uses HTTP-01 — swap the resolver config for the DNS-01 equivalent of your DNS provider.
-
----
-
-## Step 1 — Add Traefik to `docker-compose.yml`
-
-Starting from the Liberty Docker stack:
-
-```yaml
-# /opt/liberty/docker-compose.yml
-services:
-
-  traefik:
-    image: traefik:v3
-    container_name: traefik
-    restart: unless-stopped
-    command:
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      # redirect HTTP → HTTPS at the entrypoint
-      - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      - --entrypoints.web.http.redirections.entryPoint.permanent=true
-      # Let's Encrypt — HTTP-01 challenge
-      - --certificatesresolvers.le.acme.email=${ACME_EMAIL}
-      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
-      - --certificatesresolvers.le.acme.httpchallenge=true
-      - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
-      # Dashboard (disable in prod or protect with auth)
-      # - --api.dashboard=true
-      # - --api.insecure=true
-    ports:
-      - "80:80"
-      - "443:443"
-      # - "8080:8080"   # the Traefik dashboard, only if --api.insecure=true above
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - traefik-letsencrypt:/letsencrypt
-
-  liberty:
-    image: ghcr.io/fblettner/liberty-next:latest
-    container_name: liberty
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      LIBERTY_APPS_DIR: /apps/config
-      LIBERTY_MASTER_KEY: ${LIBERTY_MASTER_KEY}
-      LIBERTY_JWT_SECRET: ${LIBERTY_JWT_SECRET}
-      LIBERTY_LICENSE_KEY: ${LIBERTY_LICENSE_KEY:-}
-      DATABASE_URL: postgresql+asyncpg://liberty:${POSTGRES_PASSWORD}@postgres:5432/liberty
-    volumes:
-      - /opt/liberty/apps:/apps:ro
-      - liberty-logs:/var/log/liberty
-    # No more host-side port mapping — Traefik fronts it
-    # ports:
-    #   - "8000:8000"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.liberty.rule=Host(`liberty.example.com`)"
-      - "traefik.http.routers.liberty.entrypoints=websecure"
-      - "traefik.http.routers.liberty.tls.certresolver=le"
-      - "traefik.http.services.liberty.loadbalancer.server.port=8000"
-
-  postgres:
-    image: postgres:16
-    container_name: liberty-postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: liberty
-      POSTGRES_USER: liberty
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U liberty -d liberty"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  postgres-data:
-  liberty-logs:
-  traefik-letsencrypt:
+```yaml title="docker-compose.full.yml (Traefik command)"
+- --providers.file.directory=/etc/traefik/dynamic
+- --providers.file.watch=true
 ```
 
-Notice four things:
+`file.watch=true` means **edits reload in seconds, no container restart needed**. Drop a new middleware into `traefik/dynamic/dynamic.yml` and it's live.
 
-| Change | Why |
-|---|---|
-| **`ports: 8000:8000` removed** on the `liberty` service. | Traefik routes traffic to the container's internal port 8000 over the Docker network — the host port doesn't need to be exposed. |
-| **`labels:`** on the `liberty` service. | Traefik reads these labels to wire the route — the hostname rule, the entrypoint (`websecure` = port 443), the TLS resolver, the target port inside the container. |
-| **HTTP → HTTPS redirect** in the Traefik `command`. | Requests to `http://liberty.example.com` redirect to `https://liberty.example.com` automatically. |
-| **`/var/run/docker.sock:ro`** mounted into Traefik. | Read-only — Traefik only inspects container labels, never controls Docker. |
+The bundled dynamic file ships three middlewares:
 
----
-
-## Step 2 — Add the Traefik vars to `.env`
-
-```bash
-# /opt/liberty/.env
-ACME_EMAIL=ops@example.com         # for Let's Encrypt cert expiry notices
-POSTGRES_PASSWORD=...              # (unchanged from the basic Docker setup)
-LIBERTY_MASTER_KEY=...
-LIBERTY_JWT_SECRET=...
-LIBERTY_LICENSE_KEY=
-```
-
----
-
-## Step 3 — Bring it up
-
-```bash
-cd /opt/liberty
-docker compose up -d
-```
-
-What happens, in order:
-
-1. Postgres + Liberty containers start as before.
-2. Traefik starts and reads the Docker socket → finds the `liberty` container with the routing labels.
-3. Traefik attempts the HTTP-01 challenge for `liberty.example.com`:
-   - Let's Encrypt sends a request to `http://liberty.example.com/.well-known/acme-challenge/<token>`.
-   - Traefik intercepts that path and responds with the expected token.
-   - Let's Encrypt issues the cert.
-4. The cert is stored in `traefik-letsencrypt:/letsencrypt/acme.json`.
-5. `https://liberty.example.com` now serves the Liberty UI behind a valid TLS cert.
-
-Verify:
-
-```bash
-curl -I https://liberty.example.com
-# HTTP/2 200
-# ... server: liberty ...
-```
-
-If Let's Encrypt issuance fails:
-
-```bash
-docker compose logs traefik | grep -E "(acme|error)"
-```
-
-Common causes are below.
-
----
-
-## Common Traefik issues
-
-| Symptom | Cause | Fix |
+| Middleware | What it does | Use |
 |---|---|---|
-| Cert issuance hangs / fails. | DNS A record doesn't point at the host. | Verify with `dig liberty.example.com +short`. |
-| `connection refused` from Let's Encrypt. | Port 80 is closed (firewall / cloud security group). | Open inbound 80/tcp + 443/tcp. |
-| `too many failed authorizations`. | You're hitting the Let's Encrypt rate limit while debugging. | Switch to the **staging** endpoint until working: add `--certificatesresolvers.le.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory` to the Traefik command. |
-| `404 not found` from `https://liberty.example.com`. | Liberty container's labels are missing or the hostname doesn't match. | `docker inspect liberty | grep traefik` to verify labels are present. |
-| Browser shows the cert but with a warning. | The cert is from Let's Encrypt **staging** (not trusted). | Remove the `caServer=...staging...` line and re-issue. |
+| `traefik-auth` | Basic-auth gate (default `admin / admin` — bcrypt hash). | Attached to the dashboard router via `traefik-auth@file`. |
+| `security-headers` | `frameDeny`, `contentTypeNosniff`, `browserXssFilter`, `referrerPolicy: no-referrer-when-downgrade`. STS lines commented out (uncomment when serving HTTPS). | Attach to any router with `<router>.middlewares: "security-headers@file"`. |
+| `redirect-to-https` | 301 redirect HTTP → HTTPS. | Attach to every HTTP-entrypoint router once the websecure entrypoint is enabled. |
 
 ---
 
-## DNS-01 challenge (private installs)
+## Change the dashboard password
 
-For installs where port 80 isn't reachable from the public internet (corporate networks, air-gapped hosts), use **DNS-01** instead. Liberty's hostname can still be on a public DNS zone you control; Traefik proves ownership by creating a TXT record at the DNS provider.
+The default `admin / admin` works for the first 30 seconds. Then change it.
 
-Replace the `httpchallenge` lines with:
-
-```yaml
-- --certificatesresolvers.le.acme.dnschallenge=true
-- --certificatesresolvers.le.acme.dnschallenge.provider=cloudflare
+```bash
+docker run --rm httpd:alpine htpasswd -nbB admin "<your-password>"
+# admin:$2y$05$abc...
 ```
 
-And add the provider credentials as env vars (provider-specific — Cloudflare uses `CF_API_EMAIL` + `CF_API_KEY`, Route 53 uses AWS creds, etc.). Traefik supports **dozens** of DNS providers — see the [Traefik ACME providers list](https://doc.traefik.io/traefik/https/acme/#providers).
+Paste the one line of output into `release/traefik/dynamic/dynamic.yml` under `http.middlewares.traefik-auth.basicAuth.users`:
 
-The DNS challenge also unlocks **wildcard certs** (`*.example.com`) when you have multiple apps to host. HTTP-01 doesn't support wildcards.
-
----
-
-## Multi-app routing
-
-To host Portainer (or any other service) on the same Docker host behind Traefik, add labels to that service:
-
-```yaml
-portainer:
-  image: portainer/portainer-ce:latest
-  # ... (same as before, but remove the host-side port mapping)
-  # ports:
-  #   - "9443:9443"
-  labels:
-    - "traefik.enable=true"
-    - "traefik.http.routers.portainer.rule=Host(`portainer.example.com`)"
-    - "traefik.http.routers.portainer.entrypoints=websecure"
-    - "traefik.http.routers.portainer.tls.certresolver=le"
-    # Portainer's HTTPS port — we route HTTP from Traefik over the internal network
-    - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-    # ... (note: port 9000 is the HTTP UI; 9443 is the self-signed HTTPS we now bypass)
+```yaml title="release/traefik/dynamic/dynamic.yml"
+http:
+  middlewares:
+    traefik-auth:
+      basicAuth:
+        users:
+          - "admin:$2y$05$<your-new-hash>"
+          # Multiple users? Add one per line:
+          # - "ops:$2y$05$..."
 ```
 
-Add a second DNS A record for `portainer.example.com`. On the next compose up, Traefik issues a second cert for that hostname and routes accordingly.
+`file.watch=true` picks it up within seconds — no container restart. Refresh the dashboard, sign in with the new credentials.
+
+:::info[bcrypt vs apr1]
+`htpasswd -nbB` produces a bcrypt hash (`$2y$`). Traefik also accepts `apr1` (`$apr1$`) but bcrypt is the recommended modern choice — works in any env without escaping issues.
+:::
 
 ---
 
-## The Traefik dashboard (advanced)
+## Wire TLS (Let's Encrypt)
 
-The dashboard at `:8080/dashboard/` shows every router, service and certificate. **Don't enable `--api.insecure=true` in production** — anyone reaching the port sees your routing config. Two safe options:
+The compose file ships with TLS **commented out** so the install is one-step. Adding TLS is five edits.
 
-| Option | How |
-|---|---|
-| **Disable the dashboard entirely** | Default; no extra flags. |
-| **Expose the dashboard behind Traefik itself, password-protected** | Use the `api@internal` service + a BasicAuth middleware. Walk-through in the Traefik docs. |
+### 1. Point your domain at the server
 
-Most installs don't need the dashboard — Portainer surfaces what you'd inspect there (running services, restart status), and the Traefik logs cover the diagnostic cases.
+DNS `A` (and / or `AAAA`) record from `liberty.example.com` to the server's public IP. Let's Encrypt's HTTP-01 / TLS-01 challenge can't issue a cert otherwise.
+
+### 2. Set the two env vars
+
+In `.env`:
+
+```
+LIBERTY_DOMAIN=liberty.example.com
+ACME_EMAIL=ops@example.com
+```
+
+`ACME_EMAIL` receives Let's Encrypt's expiry-notice mail — use a real address you read.
+
+### 3. Uncomment the websecure entrypoint + ACME resolver
+
+In `docker-compose.full.yml`, under the `traefik` service's `command:`:
+
+```yaml title="docker-compose.full.yml (Traefik command — UNCOMMENTED)"
+command:
+  - --api.dashboard=true
+  - --providers.docker=true
+  - --providers.docker.exposedbydefault=false
+  - --providers.docker.network=liberty-network
+  - --providers.file.directory=/etc/traefik/dynamic
+  - --providers.file.watch=true
+  - --entrypoints.web.address=:80
+  - --entrypoints.websecure.address=:443                                # ← uncomment
+  - --certificatesresolvers.le.acme.email=${ACME_EMAIL:?ACME_EMAIL required for TLS}  # ← uncomment
+  - --certificatesresolvers.le.acme.storage=/etc/traefik/acme/acme.json # ← uncomment
+  - --certificatesresolvers.le.acme.tlschallenge=true                    # ← uncomment
+ports:
+  - "${TRAEFIK_HTTP_PORT:-80}:80"
+  - "443:443"                                                            # ← uncomment
+```
+
+### 4. Add `tls.certresolver` to each router
+
+For every router that should serve HTTPS (liberty-next, pgadmin, portainer, traefik-dashboard), add three labels:
+
+```yaml
+traefik.http.routers.<name>.entrypoints: "websecure"
+traefik.http.routers.<name>.tls.certresolver: "le"
+traefik.http.routers.<name>.rule: "Host(`${LIBERTY_DOMAIN}`) && PathPrefix(`/<path>`)"
+```
+
+The `Host()` matcher in the rule is what tells Traefik which cert to serve (otherwise it has no idea which domain a request is for). Bind your routes to `LIBERTY_DOMAIN` once and the cert resolver does the rest.
+
+### 5. Apply
+
+```bash
+docker compose -f docker-compose.full.yml up -d
+```
+
+On the first request to `https://liberty.example.com/`, Traefik runs the TLS-01 challenge and stores the cert in the `traefik-acme` named volume. Auto-renewal happens every 60 days, transparently.
+
+### Force HTTP → HTTPS
+
+Add the `redirect-to-https@file` middleware (already defined in `dynamic.yml`) to every router on the `web` entrypoint:
+
+```yaml
+traefik.http.routers.<name>.middlewares: "redirect-to-https@file"
+traefik.http.routers.<name>.entrypoints: "web"
+```
+
+Browsers hitting `http://liberty.example.com/` get a `301` to `https://`.
 
 ---
 
-## When NOT to use Traefik
+## Compose vs Swarm
 
-| Pattern | Better path |
+The two compose files differ in how Traefik discovers services:
+
+| | Compose (`docker-compose.full.yml`) | Swarm (`docker-compose.swarm.yml`) |
+|---|---|---|
+| **Provider flag** | `--providers.docker=true` | `--providers.swarm=true` |
+| **Network filter** | `--providers.docker.network=liberty-network` | `--providers.swarm.network=liberty-network` |
+| **Endpoint** | implicit (docker.sock) | `--providers.swarm.endpoint=unix:///var/run/docker.sock` |
+| **Labels location** | Top-level `labels:` block per service | `deploy.labels:` block per service (Swarm reads labels from there) |
+| **Middleware suffix** | `@docker` (e.g. `traefik-strip@docker`) | `@swarm` (e.g. `traefik-strip@swarm`) |
+| **File-provider middlewares** | `@file` (same on both) | `@file` (same on both) |
+
+Both layouts:
+- Mount the Docker socket read-only.
+- Mount `./traefik:/etc/traefik:ro` for the dynamic config + ACME.
+- Use the `traefik-acme` named volume for cert storage (survives stack tear-downs).
+
+### Swarm caveat — Traefik must run on a manager
+
+The Swarm provider reads the Docker API on the socket — only manager nodes expose it. The bundled compose pins Traefik via:
+
+```yaml title="docker-compose.swarm.yml (Traefik deploy block)"
+deploy:
+  placement:
+    constraints:
+      - node.role == manager
+```
+
+Don't change this constraint unless you've also enabled the Docker API on workers (rare and not recommended).
+
+---
+
+## The published-port mode (Swarm)
+
+Swarm has two port-publishing modes:
+
+| Mode | Behaviour |
 |---|---|
-| Already running nginx or Caddy as the entry point. | Add a Liberty location block to your existing config; no need to introduce Traefik. |
-| Behind a cloud LB (AWS ALB, GCP LB) that terminates TLS. | The cloud LB handles the same job. Use Traefik only if you need its label-driven config. |
-| Single-host install with no need for TLS (intranet). | Skip the reverse proxy entirely — `host:8000` works. |
-| Multiple Liberty replicas behind a hardware LB. | The LB handles routing; Liberty stays internal. |
+| **`mode: ingress`** *(default)* | Swarm's routing mesh balances traffic across every node, dropping the real client IP along the way. |
+| **`mode: host`** *(bundled compose uses this)* | Each Traefik container binds the host port directly. Keeps the real client IP — essential for IP-based access logs / rate limiting. |
 
-Traefik shines on **self-managed Docker hosts with multiple services and Let's Encrypt**. For other shapes, simpler is better.
+The trade-off: `host` mode means you can only have one Traefik container per node (port binding). With Swarm's manager-pinned Traefik at `replicas: 1`, that's fine. If you ever scale Traefik > 1, switch to `ingress` and accept the IP-rewrite.
+
+---
+
+## Common operations
+
+### Reload the dynamic config
+
+`file.watch=true` is on — just edit `traefik/dynamic/dynamic.yml` and save. Traefik picks it up in ~5 s and emits a log line. No restart.
+
+### Reload after a static-config change
+
+Anything in the `command:` block of the Traefik service is **static** config — needs a container restart:
+
+```bash
+docker compose -f docker-compose.full.yml up -d traefik
+```
+
+Or, in Swarm:
+
+```bash
+docker service update --force liberty_traefik
+```
+
+### View live routers and services
+
+The dashboard at `/traefik` shows every router with its rule, entrypoint, middleware chain and the backing service. Useful when debugging "why isn't this route matching" — Traefik shows you what it sees.
+
+### Tail Traefik logs
+
+```bash
+docker compose -f docker-compose.full.yml logs -f traefik
+# or in Swarm:
+docker service logs -f liberty_traefik
+```
+
+ACME issuance / renewal lands here. So do routing errors (`no available server`) when a backend service is down.
+
+---
+
+## Common pitfalls
+
+| Mistake | Symptom | Fix |
+|---|---|---|
+| Forgot to add `` Host(`${LIBERTY_DOMAIN}`) `` to the rule after enabling TLS. | Traefik serves the default certificate (`TRAEFIK DEFAULT CERT`) and the browser shows a warning. | Bind every router's rule to the domain you got the cert for. |
+| Domain doesn't resolve to the server when Traefik tries to issue. | Logs show `acme: error 400 — DNS problem` or `unauthorized`. | Verify `dig <domain>` returns the server's IP from a public resolver. |
+| Port 80 / 443 not exposed (firewall, cloud LB ahead). | TLS-01 challenge fails. | Open `:80` (and `:443` once issued) at the host firewall + the cloud LB. ACME needs `:80` open even when you only serve HTTPS — challenge uses it. |
+| Edit to `dynamic.yml` doesn't reload. | Old basic-auth password still works. | Confirm `--providers.file.watch=true` is set in the static command block. Check Traefik logs for parse errors in the YAML. |
+| Swarm Traefik fails to start with `cannot connect to Docker socket`. | `traefik_1` reports `Cannot connect to the Docker daemon`. | Traefik is on a worker — Swarm rescheduled it. Pin to manager: `deploy.placement.constraints: [node.role == manager]`. |
+| Catchall liberty-next router intercepts /pgadmin / /portainer. | Pgadmin / Portainer URLs return Liberty's SPA. | Check the router priorities — liberty-next must be priority `1`; pgadmin / portainer at `100`. Priorities live on the router labels. |
+| Sticky cookie present but live dashboard events don't reach a second client. | Two browsers see different live data. | Stickiness pins a client to one replica; it doesn't share state. Either run `replicas: 1` (the default) or wire a Redis adapter for Socket.IO. |
 
 ---
 
 ## What's next
 
-- [Portainer](./portainer.md) — pair Traefik with Portainer for a fully UI-managed Docker setup.
-- [Production](./production.md) — multi-replica patterns, backup strategy, log routing.
-- [Docker](./docker.md) — the underlying stack Traefik fronts.
+- [Docker → Full](./docker.md#full) — the full layout walkthrough.
+- [Docker → Swarm](./docker.md#swarm) — the Swarm layout walkthrough.
+- [Portainer](./portainer.md) — what the bundled Portainer + pgAdmin are for.
+- [Production](./production.md) — the rest of the hardening checklist.

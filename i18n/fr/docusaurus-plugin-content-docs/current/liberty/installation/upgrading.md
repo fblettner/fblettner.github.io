@@ -1,14 +1,14 @@
 ---
 title: Mise à jour
-description: "Comment passer une installation Liberty d'une version du framework à la suivante : arrêter le service, récupérer le nouveau code, rafraîchir les dépendances Python, construire le frontend, appliquer les migrations de base, faire le test de fumée puis redémarrer. Attentes de compatibilité entre liberty-next et liberty-apps."
-keywords: [Liberty Framework, mise à jour, version, migration, schéma de base, pip install, build, test de fumée, rollback, compatibilité]
+description: "Mettre à jour une installation Liberty — sauvegarde, récupération de la nouvelle image, up -d. Épinglage du tag d'image, rolling updates Swarm, rollback."
+keywords: [Liberty Framework, mise à jour, version, pull, tag d'image, LIBERTY_IMAGE_TAG, rollback, backup.sh, docker compose pull, docker service update, deploy-swarm.sh, pipx upgrade, test de fumée]
 ---
 
 # Mise à jour
 
-Une mise à jour du framework consiste à remplacer le checkout `liberty-next` par un tag plus récent puis à relancer le bootstrap. La configuration dans `liberty-apps` reste intacte — le contrat est que **le framework s'adapte au dépôt apps, jamais l'inverse**. Les nouveaux champs arrivent avec des valeurs par défaut ; les champs obsolètes continuent de fonctionner pendant une version mineure avec un avertissement dans les journaux.
+Une mise à jour Liberty est un simple changement de tag. Chaque mode de déploiement — Light / Full Compose, Docker Swarm, pipx — se résume aux trois mêmes gestes : **prendre un instantané des volumes, récupérer la nouvelle image (ou le wheel), laisser la pile se réconcilier**. Les migrations de schéma sont embarquées dans la nouvelle image ; l'entrypoint les applique au démarrage. Plus de `migrate-db` manuel, plus de checkout du code source, plus de reconstruction.
 
-Cette page couvre la procédure de mise à jour, le contrat de compatibilité, la liste de vérification du test de fumée et le chemin de rollback.
+Cette page couvre le contrat de versionnage, la procédure de mise à jour par mode de déploiement, le test de fumée post-mise à jour et le chemin de rollback.
 
 ---
 
@@ -20,163 +20,187 @@ Cette page couvre la procédure de mise à jour, le contrat de compatibilité, l
     <marker id="upg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#4a9eff"/></marker>
   </defs>
   <rect x="40" y="40" width="920" height="180" rx="14" fill="url(#upg-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Séquence de mise à jour — identique pour tous les modes (systemd, conteneur, k8s)</text>
+  <text x="60" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Séquence de mise à jour — identique pour tous les modes de déploiement</text>
   <line x1="40" y1="84" x2="960" y2="84" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="60" y="100" width="160" height="60" rx="10" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="140" y="124" fill="#fb923c" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">1 · ARRÊT</text>
-  <text x="140" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">vider les jobs en cours</text>
+  <rect x="60" y="100" width="200" height="60" rx="10" fill="rgba(255,159,10,0.08)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="160" y="124" fill="#fb923c" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">1 · SAUVEGARDE</text>
+  <text x="160" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">./backup.sh — assurance en 5 s</text>
 
-  <rect x="240" y="100" width="160" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="320" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">2 · RÉCUPÉRATION DU CODE</text>
-  <text x="320" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">git fetch + checkout tag</text>
+  <rect x="290" y="100" width="200" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="390" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">2 · PIN + PULL</text>
+  <text x="390" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">LIBERTY_IMAGE_TAG + pull</text>
 
-  <rect x="420" y="100" width="160" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="500" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 · DÉPENDANCES + BUILD</text>
-  <text x="500" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">pip + npm</text>
+  <rect x="520" y="100" width="200" height="60" rx="10" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
+  <text x="620" y="124" fill="#c084fc" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 · UP -d</text>
+  <text x="620" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">l'entrypoint exécute init-db</text>
 
-  <rect x="600" y="100" width="160" height="60" rx="10" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
-  <text x="680" y="124" fill="#c084fc" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">4 · MIGRATION</text>
-  <text x="680" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">deltas du schéma BD</text>
+  <rect x="750" y="100" width="200" height="60" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
+  <text x="850" y="124" fill="#22c55e" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">4 · TEST DE FUMÉE</text>
+  <text x="850" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">/info + connexion + pools</text>
 
-  <rect x="780" y="100" width="160" height="60" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
-  <text x="860" y="124" fill="#22c55e" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">5 · DÉMARRAGE + FUMÉE</text>
-  <text x="860" y="140" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">verify-config + connexion</text>
+  <line x1="260" y1="130" x2="290" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
+  <line x1="490" y1="130" x2="520" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
+  <line x1="720" y1="130" x2="750" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
 
-  <line x1="220" y1="130" x2="240" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
-  <line x1="400" y1="130" x2="420" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
-  <line x1="580" y1="130" x2="600" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
-  <line x1="760" y1="130" x2="780" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#upg-arrow)"/>
-
-  <text x="500" y="200" fill="#94a3b8" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif">Une mise à jour propre sur une installation mono-hôte prend ~3 minutes.</text>
+  <text x="500" y="200" fill="#94a3b8" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif">Une mise à jour Compose propre représente ~30 s d'indisponibilité. En Swarm rolling = zéro indisponibilité dès que les replicas &gt; 1.</text>
 </svg>
 
 ---
 
 ## Contrat de versionnage
 
-Le framework suit un schéma **proche du semver** :
+Liberty suit un schéma **proche du semver** :
 
-| Incrément | Compatibilité |
+| Incrément | À quoi s'attendre |
 |---|---|
-| **Patch** (`0.42.0` → `0.42.1`) | Corrections de bug uniquement. Pas de changement de configuration. Pas de migration de base. |
-| **Mineur** (`0.42.x` → `0.43.0`) | Nouvelles fonctionnalités. Configuration rétrocompatible. Peut inclure des migrations additives (nouvelles tables / colonnes). Les champs obsolètes loggent un avertissement mais continuent de fonctionner. |
-| **Majeur** (`0.x` → `1.0`) | Possibles ruptures. Les notes de version les détaillent une par une ; un guide de migration est publié en parallèle. |
+| **Patch** (`0.42.0` → `0.42.1`) | Corrections de bug uniquement. Aucun changement de configuration. Aucune migration de base. |
+| **Mineur** (`0.42.x` → `0.43.0`) | Nouvelles fonctionnalités. Configuration rétrocompatible. Migrations de base additives uniquement — nouvelles tables / colonnes du framework ; les lignes existantes restent intactes. Les champs obsolètes émettent un avertissement pendant une mineure. |
+| **Majeur** (`0.x` → `1.0`) | Ruptures possibles. Détaillées une par une dans les notes de version ; un guide de migration est publié en parallèle. |
 
-Le dépôt `liberty-apps` est **versionné indépendamment**. La plupart des installations figent les deux — `liberty-next@0.42.1` + `liberty-apps@2026.05.20` — et les mettent à jour à leur propre rythme.
+Les notes de version de chaque version se trouvent aux côtés du tag d'image — à lire avant tout passage d'une mineure ou d'une majeure.
 
-| Sens de compatibilité | Garantie |
+---
+
+## Fonctionnement des migrations de base
+
+L'entrypoint du conteneur (et l'unité systemd pipx, si elle est câblée) exécute `liberty-admin init-db` à **chaque démarrage**. Cette commande est :
+
+- **Idempotente.** L'exécuter deux fois ne fait rien la seconde fois.
+- **Additive.** Elle crée les nouvelles tables framework apportées par une version plus récente, ajoute les colonnes manquantes et laisse les lignes existantes intactes.
+- **Embarquée.** Les deltas de schéma sont livrés à l'intérieur de l'image / du wheel — aucune étape `migrate-db` séparée à lancer, aucun fichier SQL à appliquer, aucun job de migration à planifier.
+
+Récupérer une image plus récente, redémarrer la pile — le schéma suit.
+
+:::info[Aucune étape de migration manuelle]
+L'ancienne commande `liberty-admin migrate-db` a disparu. Tout ce qu'elle faisait est désormais intégré au `init-db` exécuté au démarrage.
+:::
+
+---
+
+## Épingler le tag d'image en production
+
+Les fichiers compose livrés utilisent par défaut `:latest` pour qu'une installation neuve démarre sur la dernière version. La production doit épingler un tag spécifique dans `.env` afin qu'un `pull` inattendu ne fasse pas avancer la pile vers une nouvelle mineure sans prévenir :
+
+```bash title=".env"
+LIBERTY_IMAGE_TAG=0.2.0
+```
+
+Avancer en modifiant la valeur puis en relançant `pull && up -d`. Revenir en arrière en repositionnant le tag précédent et en faisant la même chose.
+
+| Tag dans `.env` | Comportement |
 |---|---|
-| **Nouveau framework, ancienne configuration apps** | Toujours opérationnel. Les clés de configuration obsolètes sont tolérées jusqu'à la prochaine mineure ; le log avertit. |
-| **Ancien framework, nouvelle configuration apps** | Pas garanti. Un nouveau champ ajouté à un modèle TOML fait échouer la validation Pydantic sur un ancien framework. |
-
-La règle : **mettre à jour le framework en premier**, puis mettre à jour la configuration apps.
+| `latest` | Chaque `pull` peut basculer vers l'image publiée la plus récente — pratique en pré-production, risqué en production. |
+| `0.2.0` (épinglé) | `pull` est sans effet dès que le cache local possède le tag. Les mises à jour ne surviennent que sur édition de `.env`. |
 
 ---
 
-## Procédure de mise à jour — systemd
+## Toujours sauvegarder en premier
+
+`backup.sh` produit un instantané tar de chaque volume nommé Liberty dans un répertoire horodaté. L'opération prend quelques secondes et fait la différence entre une mise à jour ratée et une mise à jour ratée réversible.
 
 ```bash
-# 1 — arrêter le service (laisser le scheduler vider les jobs en cours)
-sudo systemctl stop liberty-next
-
-# 2 — récupérer le nouveau code
-cd /opt/liberty-next
-sudo -u liberty git fetch --tags
-sudo -u liberty git checkout v0.43.0
-
-# 3 — rafraîchir les dépendances Python et reconstruire le frontend
-sudo -u liberty .venv/bin/pip install -e ".[dev]"
-sudo -u liberty bash -c "cd frontend && npm ci && npm run build"
-
-# 4 — appliquer les migrations de base
-sudo -u liberty .venv/bin/liberty-admin migrate-db
-
-# 5 — vérifier et démarrer
-sudo -u liberty .venv/bin/liberty-admin verify-config
-sudo systemctl start liberty-next
-sudo systemctl status liberty-next
-curl -s http://127.0.0.1:8000/api/health
+cd /opt/liberty-next/release
+./backup.sh                              # → ./backups/YYYY-MM-DD_HHMMSS/
+./backup.sh /mnt/nas/liberty             # vers un emplacement hors hôte
+./backup.sh --layout full                # uniquement les volumes du déploiement Full
 ```
 
-`migrate-db` est relançable sans risque — l'exécuter deux fois ne fait rien la seconde fois. La commande affiche une ligne par delta appliqué :
-
-```text
-applied: 0042_add_ly2_ai_conversations.sql
-applied: 0043_add_lock_metadata_columns.sql
-2 migrations applied, schema is now at version 0043
-```
-
-La vérification finale (`curl /api/health`) est le feu vert pour considérer la mise à jour terminée ; le test de fumée ci-dessous couvre les contrôles plus poussés.
+Détails complets sur le format de sauvegarde, les commandes de restauration et une entrée cron hebdomadaire : [Docker → Backups](./docker.md#backups).
 
 ---
 
-## Procédure de mise à jour — conteneur
+## Procédure de mise à jour — Light / Full (Compose)
+
+Identique pour les deux modes ; seul le nom du fichier compose change.
 
 ```bash
-# Construire la nouvelle image
-podman build -t liberty-next:0.43.0 -f Containerfile .
+cd /opt/liberty-next/release
 
-# Migrer la BD dans un conteneur ponctuel (le conteneur en service continue de répondre)
-podman run --rm \
-  --env-file /etc/liberty/secrets.env \
-  -e LIBERTY_APPS_DIR=/apps/config \
-  -v /opt/liberty-apps:/apps:ro,Z \
-  liberty-next:0.43.0 \
-  liberty-admin migrate-db
+./backup.sh                                          # 1 — instantané
+docker compose -f docker-compose.full.yml pull       # 2 — récupération de la nouvelle image (utiliser light.yml pour Light)
+docker compose -f docker-compose.full.yml up -d      # 3 — recréation des conteneurs ; l'entrypoint exécute init-db
 
-# Basculer le conteneur en service
-podman stop liberty
-podman rm liberty
-podman run -d --name liberty \
-  -p 8000:8000 \
-  -v /opt/liberty-apps:/apps:ro,Z \
-  --env-file /etc/liberty/secrets.env \
-  -e LIBERTY_APPS_DIR=/apps/config \
-  liberty-next:0.43.0
+# 4 — test de fumée
+curl -s http://127.0.0.1:8000/info
 ```
 
-Pour un déploiement sans coupure, lancer deux conteneurs derrière un proxy et les vider à tour de rôle — couvert dans [Mise en production](./production.md).
+Ce que fait `up -d` : Compose détecte que le digest de l'image a changé, recrée le conteneur `liberty-next` sur place, remonte les mêmes volumes nommés, redémarre. Le nouvel entrypoint exécute `liberty-admin init-db`, puis se met à servir. Indisponibilité totale : ~30 s sur un hôte tiède.
+
+Les autres services de la pile (Postgres, pgAdmin, Portainer, Traefik) ne sont pas recréés tant que leur propre tag d'image n'a pas bougé — `pull` agit par service et `up -d` ne recrée que ceux dont la spécification a changé.
 
 ---
 
-## Procédure de mise à jour — Kubernetes
+## Procédure de mise à jour — Docker Swarm
 
-Le flux standard `kubectl set image` :
+Deux approches. À choisir.
+
+### Option A — rolling update sur le seul service liberty-next
 
 ```bash
-# 1 — appliquer la migration comme un Job ponctuel
-kubectl apply -f manifests/migrate-job-0.43.0.yaml
-kubectl wait --for=condition=complete --timeout=300s job/liberty-migrate-0.43.0
-
-# 2 — rolling update du Deployment
-kubectl set image deployment/liberty-next liberty=registry.example.com/liberty-next:0.43.0
-kubectl rollout status deployment/liberty-next
+./backup.sh
+docker service update --image ghcr.io/fblettner/liberty-next:0.2.0 liberty_liberty-next
 ```
 
-Le Job de migration exécute `liberty-admin migrate-db` puis sort — le rolling update du Deployment ne démarre qu'une fois ce Job terminé. Les pods sont remplacés un à un ; les readiness probes sur `/api/health` garantissent que chaque nouveau pod est prêt avant que l'ancien suivant ne soit terminé.
+Swarm fait rouler le service selon son `update_config` (`order: start-first`, `parallelism: 1`). La nouvelle tâche démarre, passe les health checks, puis l'ancienne tâche est arrêtée :
 
-Pour l'épinglage du scheduler (voir [Mise en production](./production.md#multi-replica-considerations)), s'assurer que l'ancien pod du replica scheduler est terminé avant que le scheduler du nouveau pod ne démarre — généralement en marquant le pod avec `scheduler=true` et en redéployant ce seul replica en dernier.
+| Replicas `liberty-next` | Indisponibilité |
+|---|---|
+| `> 1` | **Aucune.** Swarm démarre une nouvelle tâche, attend qu'elle soit saine, puis draine l'ancienne. |
+| `1` (par défaut) | Brève fenêtre (~10 s) le temps que la nouvelle tâche chauffe — `start-first` la minimise sans pouvoir l'éliminer. |
+
+Les autres services de la pile (`pg`, `pgadmin`, `portainer`, `traefik`) ne sont pas touchés.
+
+### Option B — bumper `.env` + relancer le script de déploiement
+
+```bash
+./backup.sh
+# éditer .env : LIBERTY_IMAGE_TAG=0.2.0
+./deploy-swarm.sh
+```
+
+`docker stack deploy` réconcilie la spécification complète — chaque service dont l'image ou l'environnement a changé est roulé. Relancer `./deploy-swarm.sh` EST le mécanisme de mise à jour en Swarm ; c'est le même script qui a servi à installer.
+
+Utiliser l'option B quand plusieurs tags de services sont bumpés en même temps ou quand l'environnement d'un autre service a été modifié.
+
+### Rollback en Swarm
+
+Swarm conserve la spécification précédente de chaque service :
+
+```bash
+docker service rollback liberty_liberty-next
+```
+
+Le rollback inverse le dernier `service update` (ou l'effet du dernier `stack deploy` sur ce service). Si la nouvelle image a appliqué un delta de schéma et que des écritures y ont eu lieu, restaurer depuis l'instantané `backup.sh` **avant** de revenir en arrière — voir [Rollback](#rollback) ci-dessous.
+
+---
+
+## Procédure de mise à jour — pipx
+
+```bash
+./backup.sh                              # si un script de sauvegarde est conservé à côté (recommandé)
+pipx upgrade liberty-next
+sudo systemctl restart liberty-next      # si exécuté sous systemd
+```
+
+`pipx upgrade` remplace le wheel dans le venv isolé. Le service redémarré exécute `liberty-admin init-db` au démarrage — même synchronisation idempotente du schéma que le chemin conteneur.
+
+Pour la définition de l'unité systemd, l'`EnvironmentFile` et la vérification post-installation : [Python server → Run under systemd](./python-server.md).
 
 ---
 
 ## Liste de vérification du test de fumée
 
-À exécuter après chaque mise à jour — cinq minutes bien dépensées avant de déclarer terminé.
+Cinq minutes, à chaque mise à jour.
 
 | Contrôle | Comment | À confirmer |
 |---|---|---|
-| **Santé** | `curl http://${HOST}:${PORT}/api/health` | `{"ok": true, "version": "<nouvelle>"}` — la version correspond au tag. |
-| **Authentification** | Se connecter avec l'utilisateur administrateur. | La connexion locale fonctionne toujours. |
-| **OIDC** *(si activé)* | Se connecter via SSO. | L'aller-retour avec l'IdP et le retour fonctionnent. |
-| **Chargement de l'interface Paramètres** | Ouvrir `/settings`. | Chaque onglet s'affiche, aucune erreur de validation Pydantic dans le log. |
-| **Connecteurs connectés** | *Paramètres → Pools* affiche chaque pool comme *connected*. | Connectivité BD intacte. |
-| **Lecture témoin** | Ouvrir un écran d'une app critique. | La grille se remplit sans 500. |
-| **Écriture témoin** | Modifier et enregistrer une ligne sur un écran sans impact production. | L'aller-retour d'enregistrement réussit. |
-| **Catalogue des jobs** | *Paramètres → Jobs* liste tous les jobs. | Aucune entrée « échec de chargement ». |
-| **Dernière exécution cron** | L'exécution la plus récente d'un job planifié est *succeeded*. | Le scheduler a repris après le redémarrage. |
-| **Licence** | *Paramètres → Licence* affiche *accepted* avec le bon nom de client. | JWT de licence vérifié par le nouveau framework. |
-| **Assistant IA** *(si activé)* | Ouvrir `/chat`, envoyer une requête triviale. | La clé d'API se résout, le modèle répond. |
+| **Bascule de version** | `curl http://<host>/info` | `"version"` correspond au tag qui vient d'être tiré. |
+| **Connexion** | Se connecter en tant qu'`admin`. | L'authentification locale fonctionne toujours. |
+| **Chargement d'écran** | Ouvrir au moins un écran d'app. | La grille se remplit, pas de 500. |
+| **Pools connectés** | *Settings → Pools* | Chaque pool s'affiche comme *connected*. |
+| **Scheduler à jour** | *Settings → Jobs* — choisir un job planifié. | Sa dernière exécution est `succeeded` (ou pending — pas `failed`). |
+| **Licence acceptée** *(quand `LIBERTY_LICENSE_KEY` est défini)* | *Settings → License* | Affiche *accepted* avec le bon nom de client. |
 
 Un contrôle en échec doit stopper le déploiement et déclencher la procédure de rollback.
 
@@ -184,65 +208,52 @@ Un contrôle en échec doit stopper le déploiement et déclencher la procédure
 
 ## Rollback
 
-Le rollback du framework est l'inverse de la mise à jour : checkout du tag précédent, réinstallation des dépendances, redémarrage. La subtilité se trouve dans la base : les migrations appliquées ne sont pas annulées automatiquement. Deux options :
+La même simplicité s'applique à l'envers : repointer sur le tag précédent, redémarrer. La nuance se trouve dans la base — les deltas de schéma additifs ne sont pas annulés automatiquement. En pratique :
 
-| Option | Quand l'utiliser |
+| Nouveau schéma… | Marche à suivre |
 |---|---|
-| **Rétrograder le framework et laisser le schéma en avant** | Quand le nouveau schéma est purement additif (nouvelles colonnes / tables). L'ancien framework ignore les extras et continue de fonctionner. C'est le cas le plus courant. |
-| **Rétrograder le framework et annuler la migration** | Quand une migration a changé un comportement ou supprimé quelque chose. Chaque migration livre une commande sœur `--rollback` — `liberty-admin migrate-db rollback 0043` l'annule. |
+| **Purement additif** (nouvelles tables / colonnes — le cas courant) | Revenir à l'ancienne image. L'ancien framework ignore les colonnes supplémentaires et continue de fonctionner. Aucune restauration BD nécessaire. |
+| **Non additif** (renommage de colonne, contrainte ajoutée, valeur migrée) | Restaurer le volume depuis l'instantané `backup.sh` **avant** de revenir à l'ancienne image. Les notes de version signalent chaque migration non additive. |
 
-Les notes de version signalent explicitement les migrations non additives.
+### Light / Full (Compose)
 
 ```bash
-# Rollback rapide — cas d'un schéma additif
-sudo systemctl stop liberty-next
-cd /opt/liberty-next
-sudo -u liberty git checkout v0.42.1     # tag précédent
-sudo -u liberty .venv/bin/pip install -e ".[dev]"
-sudo -u liberty bash -c "cd frontend && npm ci && npm run build"
-sudo systemctl start liberty-next
+# éditer .env : LIBERTY_IMAGE_TAG=0.1.0    (le tag précédent)
+docker compose -f docker-compose.full.yml pull
+docker compose -f docker-compose.full.yml up -d
 ```
 
-Pour les installations conteneur / Kubernetes, `podman run` ou `kubectl set image` avec le tag précédent fait la même chose. Garder une image épinglée à la version précédente dans le registre rend le rollback aussi simple qu'une ligne de commande.
+Si le schéma a avancé et que les données doivent aussi revenir en arrière, restaurer d'abord le volume concerné depuis `./backups/<timestamp>/` — voir [Docker → Backups](./docker.md#backups) pour la commande de restauration par volume.
+
+### Swarm
+
+```bash
+docker service rollback liberty_liberty-next
+```
+
+Même mise en garde : si le schéma a divergé, restaurer le volume `pg-data` (après `./deploy-swarm.sh --rm`) avant de revenir en arrière sur le service, puis redéployer.
+
+### pipx
+
+```bash
+pipx install liberty-next==0.1.0 --force
+sudo systemctl restart liberty-next
+```
 
 ---
 
-## Personnalisations client et mises à jour
+## Conseils
 
-Quand l'installation exécute des apps fournies par l'éditeur (NomaUBL, NomaSX-1, NomaJDE…), le dépôt apps porte les TOML de l'éditeur aux côtés des personnalisations propres au client. La disposition recommandée pour survivre aux mises à jour éditeur :
-
-```text
-liberty-apps/config/
-├── connectors.toml            ← géré par l'éditeur, remplacé à chaque mise à jour
-├── connectors-customer.toml   ← ajouts / surcharges client — jamais touchés par les mises à jour
-├── screens.toml               ← géré par l'éditeur
-├── screens-customer.toml      ← surcharges client
-├── ...
-```
-
-Le framework charge `<name>.toml` d'abord, puis fusionne chaque `<name>-*.toml` par-dessus. Les surcharges prennent le dessus en cas de collision de clés ; la configuration éditeur fournit tout le reste.
-
-Une mise à jour d'app éditeur devient alors :
-
-1. Réimporter le zip d'app exporté par l'éditeur via *Paramètres → Applications → Importer*.
-2. Le framework remplace les fichiers éditeur ; les `*-customer.toml` restent intacts.
-3. Lancer le test de fumée — la personnalisation doit continuer de s'appliquer.
-
----
-
-## Conseils et bonnes pratiques
-
-- **Étager la mise à jour.** Exécuter le nouveau framework sur une copie de production pendant une journée ; le coût de prolonger un déploiement défectueux est bien supérieur à celui d'un redémarrage supplémentaire.
-- **Surveiller les journaux après le redémarrage.** Une ligne `WARN` sur un champ obsolète annonce que la prochaine mineure cassera — corriger tout de suite, pas plus tard.
-- **Lire les notes de version.** La plupart des mises à jour passent inaperçues ; les rares exceptions sont signalées. Deux minutes de lecture évitent une heure de débogage.
-- **Sauvegarder avant `migrate-db`.** Même une migration additive comporte un risque ; un `pg_dump` avant le changement de schéma est une assurance de cinq secondes.
-- **Éviter de sauter plusieurs mineures d'un coup quand c'est possible.** Passer `0.40 → 0.43` peut faire disparaître un champ obsolète retiré en `0.42` ; aller version par version garde les avertissements gérables.
-- **Procéder au redémarrage progressif un replica à la fois.** Même avec des replicas sans état, deux redémarrages simultanés créent une brève fenêtre sans endpoint Socket.IO — le tableau de bord en direct se casse pour les utilisateurs.
+- **Étager la mise à jour.** Exécuter le nouveau tag sur une copie de production pendant une journée avant de basculer en prod. Le coût de prolonger un déploiement défectueux est largement supérieur à celui d'un redémarrage supplémentaire.
+- **Lire les notes de version.** La plupart des mises à jour passent inaperçues — `pull && up -d` puis le test de fumée valide. Les rares exceptions sont signalées explicitement. Deux minutes de lecture évitent une heure de débogage.
+- **Éviter de sauter plusieurs mineures d'un coup quand c'est possible.** Passer `0.40 → 0.43` peut enchaîner des dépréciations disparues en chemin. Aller version par version garde les avertissements gérables.
+- **Épingler en production.** `:latest` convient pour la pré-production ; la production doit épingler `LIBERTY_IMAGE_TAG` afin qu'un `pull` de routine ne surprenne pas avec une nouvelle mineure.
+- **Surveiller les journaux après redémarrage.** Une ligne `WARN` sur un champ obsolète annonce que la prochaine mineure cassera — corriger tout de suite, pas plus tard.
 
 ---
 
 ## Pour aller plus loin
 
-- [Mise en production](./production.md) — la forme de déploiement dans laquelle les mises à jour atterrissent.
-- [Configuration → Rechargement à chaud](../framework/configuration/hot-reload.md) — ce qui se recharge et ce qui demande un redémarrage (pertinent quand on modifie `app.toml` en cours de mise à jour).
-- [Applications et plugins → Applications](../framework/apps/overview.md) — packager les personnalisations pour survivre aux mises à jour éditeur.
+- [Docker → Backups](./docker.md#backups) — le format d'instantané, les commandes de restauration et l'entrée cron hebdomadaire référencés ci-dessus.
+- [Python server](./python-server.md) — la recette pipx + systemd sur laquelle la mise à jour atterrit.
+- [Production](./production.md) — durcissement, OIDC, épinglage du scheduler — la forme de déploiement dans laquelle les mises à jour atterrissent.

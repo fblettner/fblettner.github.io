@@ -1,17 +1,16 @@
 ---
-title: Installation
-description: "Installer Liberty Framework depuis les sources : cloner liberty-next + liberty-apps, créer l'environnement virtuel Python, construire le frontend React, initialiser le magasin d'authentification et démarrer le serveur sur le port 8000."
-keywords: [Liberty Framework, installation, mise en place, FastAPI, React, Vite, Python 3.12, virtualenv, start.sh, init-db, init-config, LIBERTY_APPS_DIR, low-code, PostgreSQL, Oracle]
+title: Serveur Python
+description: "Installation de Liberty Next sur un hôte Linux via pipx — un wheel PyPI pré-compilé (bundle frontend inclus), quatre CLI ajoutés au PATH, SQLite par défaut, Postgres en option. Sans Docker, sans git clone, sans build npm."
+keywords: [Liberty Framework, Liberty Next, installation, pipx, PyPI, wheel, liberty-next, liberty-admin, liberty-license, liberty-crypto, LIBERTY_JWT_SECRET, LIBERTY_MASTER_KEY, LIBERTY_DB_URL, LIBERTY_APPS_DIR, LIBERTY_ADMIN_PASSWORD, systemd, SQLite, PostgreSQL, OIDC]
 ---
 
-# Installation
+# Serveur Python
 
-Liberty Framework est livré sous forme de **deux dépôts sources** qui coexistent côte à côte :
+Liberty Next est distribué sous la forme d'un wheel autonome publié sur PyPI — le bundle frontend React y est déjà intégré. Une seule commande `pipx install` ajoute le serveur et trois CLI compagnons au PATH. Aucun clone, aucun `npm`, aucun virtualenv à gérer à la main.
 
-- **`liberty-next`** — le binaire ouvert du framework : backend FastAPI + frontend React 19, servis sur un seul port.
-- **`liberty-apps`** — le dépôt de configuration spécifique à l'installation : pools, connecteurs, dictionnaire, écrans, menus, tableaux de bord, graphiques, jobs.
-
-Le framework lit sa configuration depuis le dépôt `liberty-apps` via la variable d'environnement `LIBERTY_APPS_DIR`. Deux dépôts, un serveur, un port. Aucun Docker requis pour le développement ; le déploiement en production est documenté dans [Déploiement → Exécution en production](./production.md).
+:::info[Choisir d'abord le bon format]
+Cette page décrit l'installation **mono-hôte sans Docker** — un essai sur poste portable, une machine de développement, une petite VM où Docker serait disproportionné. Pour les environnements de production ou multi-utilisateurs, préférer la [disposition Docker Full](./docker.md#full) : elle regroupe Postgres, Traefik, pgAdmin et Portainer derrière un seul fichier Compose, et sert de cible aux bundles sous licence (Nomasx-1, Nomajde, NomaUBL).
+:::
 
 ---
 
@@ -21,145 +20,217 @@ Le framework lit sa configuration depuis le dépôt `liberty-apps` via la variab
   <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '18px', fontSize: '13px'}}>
     <div>
       <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>Prérequis</div>
-      <div>Python 3.12 · Node.js ≥ 20 · npm · git</div>
+      <div>Python 3.12 · pipx</div>
     </div>
     <div>
       <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>Base de données par défaut</div>
-      <div>SQLite (<code>liberty.db</code>) — bascule vers PostgreSQL ou Oracle via env</div>
+      <div>SQLite (<code>./liberty.db</code>) — bascule vers Postgres via <code>LIBERTY_DB_URL</code></div>
     </div>
     <div>
       <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>Port par défaut</div>
-      <div>http://127.0.0.1:8000 (frontend + API)</div>
+      <div>http://localhost:8000 (SPA + API REST)</div>
     </div>
     <div>
       <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>Durée du premier lancement</div>
-      <div>~3 minutes du clone à une connexion admin opérationnelle</div>
+      <div>~1 minute entre <code>pipx install</code> et la connexion admin</div>
     </div>
   </div>
 </div>
 
 ---
 
-## Étape 1 — Cloner les deux dépôts
+## Prérequis
 
-```bash
-mkdir -p ~/work && cd ~/work
-git clone <liberty-next-url> liberty-next
-git clone <liberty-apps-url> liberty-apps
-```
-
-La disposition côte à côte est la convention recommandée — chaque exemple de la documentation l'utilise :
-
-```text
-~/work/
-├── liberty-next/    ← binaire du framework (open)
-└── liberty-apps/    ← votre configuration (spécifique à l'installation)
-```
-
-Le framework fonctionne aussi sans dépôt `liberty-apps` distinct — les fichiers TOML par section sont alors lus depuis `liberty-next/config/`. La plupart des installations en production les conservent séparés afin que le framework puisse être mis à jour indépendamment de la configuration.
-
----
-
-## Étape 2 — Environnement virtuel Python
-
-Le backend est Python 3.12 + FastAPI. Créez un environnement virtuel sous `liberty-next/.venv` :
-
-```bash
-cd liberty-next
-python3.12 -m venv .venv
-.venv/bin/pip install -e ".[dev]"
-```
-
-`.[dev]` installe le framework en mode éditable, plus les extras de test et d'outillage. La suite de tests complète (≥ 335 tests) s'exécute avec :
-
-```bash
-.venv/bin/pytest -v
-```
-
----
-
-## Étape 3 — Fichiers de configuration
-
-Initialisez les fichiers TOML par section à partir des modèles fournis :
-
-```bash
-./start.sh init-config
-```
-
-Cette commande copie chaque `config/<name>.toml.example` vers `config/<name>.toml` quand le fichier réel est absent — pour `connectors`, `dictionary`, `menus`, `screens`, `charts`, `dashboards`. Les modèles sont versionnés ; les fichiers réels ne le sont pas (contenu spécifique à l'installation ou sous licence).
-
-Pour pointer le framework vers votre dépôt `liberty-apps` au lieu du `config/` local, exportez :
-
-```bash
-export LIBERTY_APPS_DIR="$HOME/work/liberty-apps/config"
-```
-
-Avec `LIBERTY_APPS_DIR` défini, `init-config` ne fait rien — les TOML par section sont lus depuis le dépôt apps, pas depuis les modèles locaux. Les fichiers `config/auth.toml` et `config/app.toml` restent spécifiques à l'installation dans les deux cas.
-
-Voir [Structure du projet](../framework/getting-started/project-layout.md) pour la carte complète des répertoires.
-
----
-
-## Étape 4 — Initialiser le magasin d'authentification
-
-À exécuter **une seule fois** sur une installation neuve pour créer le magasin d'authentification et un utilisateur `admin` :
-
-```bash
-./start.sh init-db
-```
-
-La commande choisit son backend depuis `[auth] backend` dans `config/app.toml` :
-
-| Backend | Effet | Quand l'utiliser |
+| Outil | Version | Notes |
 |---|---|---|
-| `toml` *(défaut)* | Crée `config/auth.toml` avec un mot de passe `admin` fraîchement haché en Argon2 (affiché une seule fois). | Installation de dev sur un seul hôte — pas de base externe nécessaire. |
-| `db` | Crée les tables `ly2_users` / `ly2_roles` / `ly2_permissions` sur le pool configuré et insère le même `admin`. | Installation en production — survit aux reconstructions de conteneurs et partage la base d'utilisateurs entre réplicas. |
+| Python | 3.12 | Le wheel impose `python_requires>=3.12`. |
+| pipx | la plus récente | `python3 -m pip install --user pipx && python3 -m pipx ensurepath`. |
+| Postgres *(optionnel)* | 14+ | Uniquement pour remplacer SQLite par une base externe. L'installation légère fonctionne très bien sans. |
 
-Le mot de passe affiché n'est montré **qu'une seule fois** sur stdout. Notez-le, ou réinitialisez-le ensuite avec `liberty-admin set-password admin <nouveau>`. Voir [Authentification](../framework/build/secure/sign-in.md) pour la matrice complète des backends.
+---
+
+## Étape 1 — Installer le wheel
+
+```bash
+pipx install liberty-next
+```
+
+pipx crée un virtualenv isolé sous `~/.local/pipx/venvs/liberty-next` et publie quatre points d'entrée sur le PATH :
+
+| Commande | Rôle |
+|---|---|
+| `liberty-next` | Le serveur — backend FastAPI + la SPA React embarquée sur le même port. |
+| `liberty-admin` | Gestion des utilisateurs, des rôles et de la base (`init-db`, `create-user`, `set-password`, …). |
+| `liberty-license` | Inspection de la clé de licence (`verify`, expiration, produits inclus). |
+| `liberty-crypto` | Outils de clé de chiffrement — chiffre les secrets pour un usage inline dans les TOML (blocs `ENC:`). |
+
+Vérifier la présence sur le PATH :
+
+```bash
+liberty-next --version
+liberty-admin --help
+```
+
+---
+
+## Étape 2 — Générer les secrets requis
+
+Deux variables d'environnement sont obligatoires — le serveur refuse de démarrer sans elles.
+
+```bash
+export LIBERTY_JWT_SECRET="$(python -c 'import secrets;print(secrets.token_urlsafe(48))')"
+export LIBERTY_MASTER_KEY="$(python -c 'import secrets;print(secrets.token_urlsafe(32))')"
+```
+
+| Variable | Rôle |
+|---|---|
+| `LIBERTY_JWT_SECRET` | Signe les cookies JWT émis à la connexion. Toute absence ou rotation invalide les sessions actives. |
+| `LIBERTY_MASTER_KEY` | Clé AES-256-GCM qui déchiffre les blocs `ENC:…` à l'intérieur des fichiers TOML (mots de passe de pool, secrets clients OIDC, …). Voir [Chiffrement et secrets](../framework/configuration/encryption-secrets.md). |
+
+Pour une installation pilotée par systemd, placer les deux dans un `EnvironmentFile` (voir [Étape 6](#étape-6--exécution-sous-systemd)) plutôt que dans le shell.
+
+---
+
+## Étape 3 — Initialiser le mot de passe admin
+
+Définir `LIBERTY_ADMIN_PASSWORD` **avant** le premier démarrage. Le point d'entrée exécute automatiquement `liberty-admin init-db` à chaque boot — de façon idempotente : il crée le magasin d'authentification sur une installation neuve et ajoute les nouvelles tables du framework apportées par une version plus récente sans toucher aux lignes existantes.
+
+```bash
+export LIBERTY_ADMIN_PASSWORD="ChangeMe-OnFirstLogin"
+```
+
+Serveur déjà en cours d'exécution et besoin de réinitialiser le mot de passe ? Utiliser la CLI :
+
+```bash
+liberty-admin set-password admin <nouveau-mot-de-passe>
+```
+
+---
+
+## Étape 4 — Choisir un répertoire de travail (optionnel mais recommandé)
+
+Par défaut, Liberty lit sa configuration depuis `./config/<name>.toml` et stocke la base SQLite dans `./liberty.db` — les deux relatifs au **répertoire de travail courant**. Pointer vers un emplacement stable pour pouvoir lancer `liberty-next` depuis n'importe où :
+
+```bash
+sudo mkdir -p /etc/liberty-next /var/lib/liberty-next
+sudo chown $USER /etc/liberty-next /var/lib/liberty-next
+
+export LIBERTY_APPS_DIR=/etc/liberty-next/
+```
+
+| Variable | Effet |
+|---|---|
+| `LIBERTY_APPS_DIR` | Emplacement des TOML par section (`connectors.toml`, `dictionary.toml`, `screens.toml`, `menus.toml`, `dashboards.toml`, `charts.toml`). Par défaut `./config/`. |
+
+Le framework crée les TOML manquants au premier démarrage à partir de ses modèles embarqués — aucune étape `init-config` séparée n'est nécessaire.
 
 ---
 
 ## Étape 5 — Démarrer le serveur
 
 ```bash
-./start.sh
+liberty-next
 ```
 
-Le wrapper :
+Le serveur écoute sur `http://localhost:8000` (à modifier via `LIBERTY_PORT`) et sert à la fois la SPA sur `/` et l'API REST sous `/api/*` et `/admin/*`. Se connecter comme `admin` avec le mot de passe de l'[Étape 3](#étape-3--initialiser-le-mot-de-passe-admin) — le catalogue des connecteurs est la page d'accueil.
 
-1. Construit le frontend React dans `frontend/dist/` si le build est obsolète (ou manquant).
-2. Lit `config/app.toml` et démarre FastAPI sur `127.0.0.1:8000`.
-3. Monte la SPA sur `/` et l'API REST sous `/api/*` et `/admin/*` sur le même port.
+### Choisir une base de données
 
-Ouvrez `http://127.0.0.1:8000`, connectez-vous comme `admin` avec le mot de passe de l'étape 4 — le catalogue des connecteurs s'affiche comme page d'accueil.
+Le backend par défaut est SQLite — aucune mise en place, un simple fichier `liberty.db` dans le répertoire de travail. Pour pointer vers un Postgres existant :
 
-### Autres modes de lancement
+```bash
+export LIBERTY_DB_URL="postgresql+asyncpg://liberty:secret@db.example.com:5432/liberty"
+```
 
-| Commande | Objectif |
+| Backend | Forme de l'URL |
 |---|---|
-| `./start.sh dev` | Identique à `./start.sh` mais avec rechargement automatique du backend — idéal lors de l'itération sur du code Python. |
-| `./start.sh api` | Backend seul, sans build frontend. À coupler avec `./start.sh frontend` pour travailler en HMR. |
-| `./start.sh api dev` | Backend seul, rechargement automatique. |
-| `./start.sh frontend` | Serveur de dev Vite sur `:5173` (HMR), proxifie `/api/*` et `/admin/*` vers `:8000`. |
-| `./start.sh build` | Build frontend uniquement — pas de serveur. |
-| `./start.sh init-config` | Ré-initialise les fichiers TOML par section manquants. |
-| `./start.sh init-db` | Ré-initialise le magasin d'authentification (relançable sans risque — les utilisateurs existants sont conservés). |
-| `./start.sh help` | Liste complète des commandes. |
+| SQLite *(défaut)* | `sqlite+aiosqlite:///./liberty.db` |
+| PostgreSQL | `postgresql+asyncpg://<user>:<password>@<host>:<port>/<database>` |
+| Oracle | `oracle+oracledb_async://<user>:<password>@<host>:<port>/?service_name=<name>` |
 
-### Surcharges via l'environnement
+Changer de backend après création des données relève d'une migration, pas d'une bascule — exporter d'un côté et réimporter de l'autre, ou repartir d'une base vierge.
+
+---
+
+## Étape 6 — Exécution sous systemd
+
+Pour un serveur sans surveillance, prévoir un utilisateur système, un `EnvironmentFile` pour les secrets et `Restart=on-failure` pour que l'unité se rétablisse après une erreur transitoire.
+
+Créer un utilisateur dédié et le fichier de secrets :
+
+```bash
+sudo useradd --system --create-home --shell /usr/sbin/nologin liberty
+sudo install -d -m 0750 -o liberty -g liberty /etc/liberty
+sudo install -d -m 0750 -o liberty -g liberty /etc/liberty-next
+sudo install -d -m 0750 -o liberty -g liberty /var/lib/liberty-next
+```
+
+```bash title="/etc/liberty/secrets.env (mode 0640, root:liberty)"
+LIBERTY_JWT_SECRET=<coller ici la sortie de token_urlsafe(48)>
+LIBERTY_MASTER_KEY=<coller ici la sortie de token_urlsafe(32)>
+LIBERTY_ADMIN_PASSWORD=ChangeMe-OnFirstLogin
+LIBERTY_APPS_DIR=/etc/liberty-next/
+LIBERTY_DB_URL=postgresql+asyncpg://liberty:secret@db.example.com:5432/liberty
+LIBERTY_PORT=8000
+# LIBERTY_LICENSE_KEY=eyJhbGciOi...
+# ANTHROPIC_API_KEY=sk-ant-...
+```
+
+Installer le wheel pour tout le système (un seul virtualenv, les CLI disponibles pour tous les utilisateurs) puis écrire le fichier d'unité :
+
+```bash
+sudo PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install liberty-next
+```
+
+```ini title="/etc/systemd/system/liberty-next.service"
+[Unit]
+Description=Liberty Next
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=liberty
+Group=liberty
+WorkingDirectory=/var/lib/liberty-next
+EnvironmentFile=/etc/liberty/secrets.env
+ExecStart=/usr/local/bin/liberty-next
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/liberty-next /etc/liberty-next
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Activer et démarrer :
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now liberty-next
+sudo journalctl -u liberty-next -f
+```
+
+---
+
+## Variables d'environnement optionnelles
+
+Tout ce qui suit est optionnel — Liberty démarre sans.
 
 | Variable | Effet |
 |---|---|
-| `HOST` / `PORT` | Adresse d'écoute et port (défauts `127.0.0.1` / `8000`). |
-| `VENV` | Chemin du virtualenv (défaut `.venv`). |
-| `LIBERTY_APPS_DIR` | Les TOML par section se trouvent dans ce répertoire au lieu de `liberty-next/config/`. |
-| `LIBERTY_DB_URL` | URL du pool par défaut — par défaut SQLite (`sqlite+aiosqlite:///liberty.db`). |
-| `LIBERTY_JWT_SECRET` | Clé de signature JWT. Non définie = clé éphémère (les tokens meurent au redémarrage). |
-| `LIBERTY_MASTER_KEY` | Clé AES-256-GCM utilisée pour déchiffrer les blocs `ENC:` dans les TOML — voir [Chiffrement et secrets](../framework/configuration/encryption-secrets.md). |
-| `LIBERTY_LICENSE_KEY` | JWT RS256 qui déverrouille les produits éditeur packagés (Nomasx-1, Nomajde, NomaUBL …) — voir [Clé de licence](../framework/build/secure/license-key.md). |
-| `ANTHROPIC_API_KEY` | Active l'[assistant IA](../framework/ai-assistant.md). |
+| `LIBERTY_PORT` | Port TCP d'écoute du serveur (défaut `8000`). |
+| `LIBERTY_LICENSE_KEY` | JWT RS256 qui déverrouille les produits éditeur packagés (Nomasx-1, Nomajde, NomaUBL). Voir [Clé de licence](../framework/build/secure/license-key.md). |
+| `ANTHROPIC_API_KEY` | Active l'[assistant IA](../framework/ai-assistant.md) intégré. |
+| `LIBERTY_OIDC_ENABLED` | Mettre à `true` pour déléguer la connexion à un fournisseur OIDC externe (Keycloak, Auth0, Azure AD, …). |
+| `LIBERTY_OIDC_PROVIDER_URL` | URL de l'émetteur du fournisseur OIDC, par exemple `https://auth.example.com/realms/liberty`. |
+| `LIBERTY_OIDC_CLIENT_ID` | Identifiant client enregistré auprès du fournisseur OIDC. |
+| `LIBERTY_OIDC_CLIENT_SECRET` | Secret client enregistré auprès du fournisseur OIDC. |
 
-Toutes les variables sont documentées une à une dans [Variables d'environnement](../framework/configuration/environment-variables.md).
+Référence complète : [Variables d'environnement](../framework/configuration/environment-variables.md).
 
 ---
 
@@ -167,16 +238,47 @@ Toutes les variables sont documentées une à une dans [Variables d'environnemen
 
 | Contrôle | Comment |
 |---|---|
-| Serveur en marche | `curl -s http://127.0.0.1:8000/api/health` retourne `{"ok":true}`. |
-| OpenAPI charge | Ouvrir `http://127.0.0.1:8000/docs` — la surface REST complète est navigable. |
-| Connecteurs chargés | Ouvrir le catalogue des connecteurs sur `/` — au moins le pool SQLite par défaut est listé. |
-| L'admin peut se connecter | Se connecter avec les identifiants de l'étape 4 — le lien Paramètres apparaît dans l'en-tête. |
+| Serveur en marche | `curl -fsS http://localhost:8000/info` retourne une charge utile JSON avec la version du framework. |
+| OpenAPI charge | Ouvrir `http://localhost:8000/docs` — la surface REST complète est navigable. |
+| La SPA s'affiche | Ouvrir `http://localhost:8000/` — l'écran de connexion apparaît. |
+| L'admin peut se connecter | Se connecter comme `admin` avec `LIBERTY_ADMIN_PASSWORD` — le catalogue des connecteurs est la page d'accueil. |
 | Assistant IA *(optionnel)* | Avec `ANTHROPIC_API_KEY` défini, ouvrir `/chat` — le champ de saisie est activé. |
+| Licence *(optionnel)* | `liberty-license verify` affiche les produits inclus et la date d'expiration. |
+
+---
+
+## Mise à jour
+
+```bash
+pipx upgrade liberty-next
+sudo systemctl restart liberty-next      # si exécuté sous systemd
+```
+
+Le point d'entrée relance `liberty-admin init-db` à chaque boot — de façon idempotente : les nouvelles tables apportées par une version plus récente sont créées en place, les lignes existantes sont conservées. Aucune étape de migration manuelle.
+
+Pour figer une version précise :
+
+```bash
+pipx install --force liberty-next==<version>
+```
+
+---
+
+## Résolution des problèmes
+
+| Symptôme | Cause | Correctif |
+|---|---|---|
+| `LIBERTY_JWT_SECRET is required` au démarrage | La variable d'environnement n'a pas été propagée. | La ré-`export`er dans le même shell, ou l'ajouter à `EnvironmentFile`. |
+| `Address already in use` sur le port 8000 | Un autre processus occupe le port. | Définir `LIBERTY_PORT=8001` (ou tout port libre). |
+| La connexion indique "invalid credentials" | Le mot de passe initial n'a pas été défini au premier boot, ou a été modifié. | `liberty-admin set-password admin <nouveau>`. |
+| Les modifications des TOML de configuration ne sont pas prises en compte | Mauvais `LIBERTY_APPS_DIR`. | `liberty-next` journalise le chemin résolu au démarrage — chercher `apps_dir=`. |
+| `liberty-next` introuvable après installation | Le répertoire bin de pipx n'est pas dans le PATH. | Lancer `pipx ensurepath` puis rouvrir le shell, ou appeler directement `~/.local/bin/liberty-next`. |
 
 ---
 
 ## Pour aller plus loin
 
-- Parcourez votre première app avec [Démarrage → Première app](../framework/getting-started/first-app.md) — un pool, une requête, un écran et une entrée de menu, de bout en bout.
-- Lisez [Structure du projet](../framework/getting-started/project-layout.md) pour la cartographie des fichiers de `liberty-apps`.
-- Passez à [Configuration → UI des Paramètres](../framework/configuration/settings-ui.md) une fois que tout fonctionne depuis les éditeurs in-app.
+- [Docker](./docker.md) — l'alternative basée sur Compose. Choisir la [disposition Full](./docker.md#full) pour les installations de production ou multi-utilisateurs.
+- [Traefik](./traefik.md) — placer TLS et un nom d'hôte propre devant le serveur Python (la même recette Traefik fonctionne pour une installation pipx, il suffit de pointer vers `http://127.0.0.1:8000`).
+- [Production](./production.md) — checklist de durcissement, OIDC, épinglage du planificateur, fréquence des sauvegardes.
+- [Mise à jour](./upgrading.md) — la vision plus large des mises à jour (CLI et Docker côte à côte).

@@ -49,24 +49,32 @@ The `liberty-apps` wheel carries everything Liberty needs to operate the three i
 
 | What | Why |
 |---|---|
-| **Liberty Next is installed and running** | The wheel materialises on top of the framework; it doesn't install the framework. See [Installation → Python server](./python-server.md) or [Docker](./docker.md). |
+| **Liberty Next is installed and running** | The wheel materialises on top of the framework; it doesn't install the framework. The Full Docker layout — `./install.sh full` — is the canonical target for licensed bundles (they need Postgres). See [Docker → Full](./docker.md#full). Light + pipx layouts work for the open framework only — they can't host the Nomasx-1 / Nomajde plugins because those need Postgres pools. |
 | **`pip` is available in the framework's venv** | The wheel installs via pip. On Docker installs, the wheel is typically baked into the image at build time. |
 | **`LIBERTY_APPS_DIR` is set** | Points at the framework's `config/` dir. The wheel installer materialises the payload into this directory + its sibling `../plugins/`. |
 | **A PostgreSQL server reachable from the framework's `default` pool** | The deploy job creates the per-app databases (`nomasx1`, `nomajde`) on this server. Requires `CREATE DATABASE` / `CREATE ROLE` rights — typically `postgres` superuser or an equivalent. |
 
 ### Install the wheel
 
-Receive the wheel from NOMANA-IT (e.g. `liberty_apps-0.2.0-py3-none-any.whl`) and install it inside the framework's environment.
+Receive the wheel from NOMANA-IT (e.g. `liberty_apps-0.2.0-py3-none-any.whl`) and install it inside the framework's environment. The command differs by install layout, but `liberty-apps install` works the same on all of them.
 
-```bash title="Python source install"
-# in the framework's venv
-pip install /path/to/liberty_apps-0.2.0-py3-none-any.whl
+```dockerfile title="Docker Full layout — bake into a child image"
+FROM ghcr.io/fblettner/liberty-next:0.2.0
+COPY liberty_apps-0.2.0-py3-none-any.whl /tmp/
+RUN pip install /tmp/liberty_apps-0.2.0-py3-none-any.whl && rm /tmp/*.whl
+RUN liberty-apps install --target $LIBERTY_APPS_DIR
 ```
 
-```bash title="Docker install — bake into the image"
-# Add to the framework's Dockerfile (or a child image):
-COPY liberty_apps-0.2.0-py3-none-any.whl /tmp/
-RUN pip install /tmp/liberty_apps-0.2.0-py3-none-any.whl && rm /tmp/liberty_apps-0.2.0-py3-none-any.whl
+Build, tag and push that image, then reference it as `LIBERTY_IMAGE_TAG` in `.env` so `docker compose up -d` pulls the wheel-enriched image instead of the vanilla framework one.
+
+```bash title="pipx install — inject into the framework's venv"
+# pipx keeps liberty-next in its own venv; `inject` adds the wheel to that same venv.
+pipx inject liberty-next /path/to/liberty_apps-0.2.0-py3-none-any.whl
+```
+
+```bash title="Python venv install"
+# in the framework's venv
+pip install /path/to/liberty_apps-0.2.0-py3-none-any.whl
 ```
 
 Verify the install:
@@ -84,6 +92,8 @@ The wheel ships every config TOML + the Python plugins inside a private `_payloa
 # Target is the framework's config dir — plugins land in its sibling.
 liberty-apps install --target $LIBERTY_APPS_DIR
 ```
+
+Inside a Docker container the path is `/app/config` — the same location `docker-compose.full.yml` mounts as the `liberty-config` named volume. The child-image Dockerfile above already runs `liberty-apps install` against `$LIBERTY_APPS_DIR` at build time, so the payload is baked into the image layer and surfaces under `/app/config` (and its sibling `/app/plugins`) at runtime.
 
 The output lists every file:
 
@@ -121,9 +131,15 @@ Plugin code is **always refreshed** — no `--force` needed. The installer assum
 
 After the materialisation, Liberty has the new TOMLs on disk and the new Python packages in its plugins folder, but the running process still holds the old config in memory. Reload:
 
-```bash
+```bash title="External call"
 curl -X POST -H "Authorization: Bearer <superuser-token>" \
      https://<liberty-host>/admin/reload
+```
+
+```bash title="Docker Full layout — from the host"
+docker compose exec liberty-next \
+  curl -X POST -H "Authorization: Bearer <superuser-token>" \
+       http://localhost:8000/admin/reload
 ```
 
 Or from the UI: *Settings → Reload* button.
@@ -193,7 +209,7 @@ When NOMANA-IT delivers a new `liberty-apps` wheel:
 | Step | What |
 |---|---|
 | **1. Take a config backup** | `cp -r $LIBERTY_APPS_DIR $LIBERTY_APPS_DIR.bak.$(date +%Y%m%d)`. The wheel installer preserves your edits by default but a backup is cheap insurance. |
-| **2. `pip install --upgrade <new wheel>`** | Same command, points at the new file. |
+| **2. Install the new wheel** | **Docker Full:** rebuild the child image with the new wheel, bump `LIBERTY_IMAGE_TAG` in `.env`, then `docker compose pull && docker compose up -d`. **pipx:** `pipx inject liberty-next --force /path/to/new-wheel.whl`, then restart the systemd unit. **Python venv:** `pip install --upgrade /path/to/new-wheel.whl`. |
 | **3. `liberty-apps install --target $LIBERTY_APPS_DIR`** | The installer copies plugin code unconditionally and **preserves existing config files** (your edits survive). New config files in the bundle (e.g. a new dashboard) ARE copied. |
 | **4. Use `--force-config` only when you want vendor defaults** | This overwrites your edits. The right way to take selective vendor updates is to export your edits via [Settings → Package](../framework/build/packages.md) before, then apply vendor + your package back. |
 | **5. Reload** | `POST /admin/reload`. New screens / dashboards / jobs are live. |
@@ -234,6 +250,7 @@ The two channels are designed to coexist — the wheel preserves operator edits 
 
 | Mistake | Symptom | Fix |
 |---|---|---|
+| Ran `./install.sh light` and tried to install the wheel. | The plugins import but the deploy job fails: no Postgres reachable. | Light uses SQLite — Nomasx-1 / Nomajde plugins need Postgres pools. Use `./install.sh full` for licensed bundles. |
 | Ran `liberty-apps install` without `LIBERTY_APPS_DIR` set. | `error: no target — pass --target DIR or set LIBERTY_APPS_DIR`. | Set the env var in the framework's environment file / systemd unit / Docker env. |
 | Wheel install succeeded but Liberty doesn't see the new screens. | The framework wasn't reloaded — old config still in memory. | `POST /admin/reload` or click *Settings → Reload*. |
 | `deploy-databases` job fails with `permission denied for database`. | The framework's `default` pool can't create DBs / roles. | Point `default` at a Postgres superuser for the deploy run; revert afterwards. |
@@ -248,4 +265,4 @@ The two channels are designed to coexist — the wheel preserves operator edits 
 
 - [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md) — every job in `liberty-apps/plugins/nomaflow/jobs.toml`, what it does, when to run it.
 - [Packages](../framework/build/packages.md) — the per-slice deployment channel for screens / menu items / dashboards.
-- [Installation → Upgrading](./upgrading.md) — upgrading the Liberty framework itself (underneath the apps).
+- [Installation → Upgrading](./upgrading.md) — upgrading the Liberty framework itself (underneath the apps), including the image-tag-pinning model (`LIBERTY_IMAGE_TAG` in `.env`) the Full Docker layout relies on.
