@@ -6,6 +6,10 @@ keywords: [Liberty Framework, tableau de bord, dashboard, KPI, indicateur, graph
 
 # Tableaux de bord
 
+:::info[Référence détaillée]
+Cette page documente l'architecture des tableaux de bord, les types de panneaux et la barre de filtres partagée. Le groupe Construire ne porte pas encore de sous-section dédiée aux tableaux de bord — cette page est le point d'entrée canonique pour le sujet.
+:::
+
 Un **tableau de bord** est une page unique qui regroupe KPI, graphiques et tables autour d'un contexte commun — typiquement *la période courante* + *un périmètre choisi* (une société, une région, une équipe). Défini depuis **Paramètres → Tableaux de bord** avec une **grille de mise en page** en glisser-déposer ; chaque panneau choisit une source de données (une requête de connecteur ou un graphique enregistré), un **type** de panneau (indicateur / graphique / table) et s'affiche en conséquence.
 
 Le tableau de bord est la surface naturelle pour les vues de direction ("comment se porte-t-on aujourd'hui ?") et pour les vues opérationnelles ("quels jobs s'exécutent, quels écrans ont le plus de refus"). Chaque panneau peut descendre vers un écran pré-filtré sur les lignes sous-jacentes.

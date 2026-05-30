@@ -6,6 +6,10 @@ keywords: [Liberty Framework, dictionnaire, colonnes, énumérations, recherches
 
 # Dictionnaire
 
+:::info[Référence détaillée]
+Cette page documente la couche de métadonnées du dictionnaire — libellés, formats, règles BOOLEAN / ENUM / LOOKUP et valeurs par défaut côté formulaire (`LOGIN`, `SYSDATE`, `SEQUENCE`, `PASSWORD`). Pour des parcours orientés tâche — configurer les colonnes d'un écran, échafauder une séquence ou une recherche — voir [Construire → Écrans → Colonnes](./build/screens/columns.md) et [Construire → Requêtes → Séquences et recherches](./build/queries/sequences-and-lookups.md).
+:::
+
 Le **dictionnaire** est la couche de métadonnées partagée qui transforme un nom de colonne brut en interface lisible. Une requête de connecteur retourne des colonnes que la base connaît sous leur identifiant (`customer_status`, `due_date`, `invoice_amount`) ; le dictionnaire y attache :
 
 - Un **libellé localisé** ("Statut client", "Date d'échéance", "Montant facture").

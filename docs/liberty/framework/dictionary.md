@@ -6,6 +6,10 @@ keywords: [Liberty Framework, dictionary, columns, enums, lookups, labels, forma
 
 # Dictionary
 
+:::info[Deep reference]
+This page documents the dictionary metadata layer — labels, formats, BOOLEAN / ENUM / LOOKUP rules and form-layer defaults (`LOGIN`, `SYSDATE`, `SEQUENCE`, `PASSWORD`). For task-oriented use — configure columns on a screen, scaffold a sequence or a lookup — see [Build → Screens → Columns](./build/screens/columns.md) and [Build → Queries → Sequences and lookups](./build/queries/sequences-and-lookups.md).
+:::
+
 The **dictionary** is the shared metadata layer that turns a raw column name into a readable interface. A connector query returns columns the database knows by their identifier (`customer_status`, `due_date`, `invoice_amount`); the dictionary attaches:
 
 - A **localised label** ("Statut client", "Date d'échéance", "Montant facture").

@@ -6,6 +6,10 @@ keywords: [Liberty Framework, app, workspace, multi-tenant, app export, app impo
 
 # Applications
 
+:::info[Référence détaillée]
+Cette page documente le modèle d'application de Liberty — comportement du sélecteur d'applications, export / import d'application packagée et motifs de permissions par application. Pour la mise en place orientée tâche — rendre un connecteur visible comme application dans le sélecteur — voir [Construire → Menus → Transformer un connecteur en application](../build/menus/make-connector-an-app.md).
+:::
+
 Une **application** Liberty est un **espace de noms** — un regroupement logique de connecteurs, écrans, menus, tableaux de bord, graphiques et jobs qui appartiennent à un domaine métier (CRM, facturation, administration JD Edwards, RH interne…). Le framework collecte le champ *Application* de chaque entité au chargement et affiche la liste obtenue dans le **sélecteur d'espace de travail** de l'en-tête — changer d'espace de travail change la barre latérale vers l'arbre de menus de cette application.
 
 Les applications ne sont pas un concept séparé à câbler — chaque constructeur Paramètres propose une liste déroulante *Application* sur chaque entité. Cette page couvre le fonctionnement du sélecteur d'espace de travail, la manière d'empaqueter une application pour le transfert entre environnements et le motif de permission par application.

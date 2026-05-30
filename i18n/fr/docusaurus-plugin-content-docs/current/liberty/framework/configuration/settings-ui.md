@@ -6,6 +6,10 @@ keywords: [Liberty Framework, UI Paramètres, builders, pools, connecteurs, dict
 
 # UI des Paramètres
 
+:::info[Référence détaillée]
+Cette page documente l'architecture de l'interface Paramètres elle-même — le motif de constructeur piloté par schéma, le contrat de validation, l'éditeur Monaco brut comme issue de secours, le tableau de bord technique. Pour des parcours orientés tâche sur chaque constructeur, voir la section [Construire une application](../build/queries/overview.md).
+:::
+
 La page **Paramètres** (icône engrenage dans l'en-tête, visible des utilisateurs disposant de la permission `settings:read`) est l'éditeur in-app pour chaque fichier TOML par section. Chaque type de configuration dispose d'un **éditeur dédié** — un formulaire piloté par schéma généré à partir des modèles Pydantic que le backend utilise pour charger le fichier. Un éditeur Monaco brut figure sur chaque onglet comme échappatoire quand le formulaire d'un éditeur ne présente pas le champ qui manque.
 
 Chaque enregistrement écrit le TOML sur disque, puis déclenche un rechargement côté serveur — le changement est actif dans le même onglet du navigateur sans redémarrage.

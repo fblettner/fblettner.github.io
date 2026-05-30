@@ -6,6 +6,10 @@ keywords: [Liberty Framework, paramètres, framework settings, app, default pool
 
 # Paramètres du framework
 
+:::info[Référence détaillée]
+Cette page liste chaque paramètre du framework sur l'onglet *Framework*. Pour la mise en place orientée tâche du volet sécurité (câbler OIDC, installer une clé de licence, chiffrer des secrets), voir [Construire → Sécurité](../build/secure/overview.md).
+:::
+
 Les paramètres **transverses au framework** — ceux qui ne sont rattachés ni à un connecteur, ni à un écran, ni à un menu — se modifient depuis **Paramètres → Framework**. La page est un formulaire piloté par schéma, avec une section par sujet : identité de l'application, pool de base de données par défaut, authentification, fournisseur IA, chiffrement et licence. L'enregistrement recharge le sous-système concerné.
 
 Cette page liste chaque champ de l'onglet *Framework*, son effet et l'endroit où il s'applique dans le reste de l'application.

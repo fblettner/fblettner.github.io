@@ -6,6 +6,10 @@ keywords: [Liberty Framework, form conditions, visible when, required when, disa
 
 # Conditions de formulaire
 
+:::info[Référence détaillée]
+Cette page documente le langage d'expression derrière `visible_when` / `required_when` / `disabled_when` — opérateurs, ordre d'évaluation, contexte de session, application côté serveur. Pour l'utilisation orientée tâche — marquer un champ comme conditionnellement visible / obligatoire / désactivé dans le constructeur de dialogues — voir [Construire → Écrans → Champs conditionnels](./build/screens/conditional-fields.md).
+:::
+
 La boîte de dialogue d'édition d'un écran est une liste à plat de champs. Certains champs n'ont de sens que quand d'autres ont une valeur spécifique — un *SLA personnalisé* qui n'apparaît que sur le plan *Enterprise*, un *Email du responsable* qui n'est obligatoire qu'au-delà de 20 % de remise. Le framework permet d'exprimer cela directement dans l'**éditeur d'écrans**, sur chaque champ, via trois emplacements :
 
 | Emplacement | Effet |

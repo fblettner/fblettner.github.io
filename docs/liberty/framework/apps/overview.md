@@ -6,6 +6,10 @@ keywords: [Liberty Framework, app, workspace, multi-tenant, app export, app impo
 
 # Apps
 
+:::info[Deep reference]
+This page documents Liberty's app model — workspace selector behaviour, packaged app export / import and per-app permission patterns. For task-oriented setup — make a connector visible as an app in the top switcher — see [Build → Menus → Make a connector an app](../build/menus/make-connector-an-app.md).
+:::
+
 A Liberty **app** is a **namespace** — a logical grouping of connectors, screens, menus, dashboards, charts and jobs that belong to one business domain (CRM, billing, JD Edwards admin, internal HR…). The framework collects every entity's *App* field at load time and exposes the resulting list as the **workspace selector** in the header — switching workspaces changes the sidebar to that app's menu tree.
 
 Apps aren't a separate concept to wire — every Settings builder exposes an *App* dropdown on each entity. This page covers how the workspace selector works, how to package an app for transfer between environments, and the per-app permission pattern.

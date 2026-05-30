@@ -6,6 +6,10 @@ keywords: [Liberty Framework, charts, Recharts, line, bar, column, area, pie, do
 
 # Charts
 
+:::info[Deep reference]
+This page documents the Charts builder, every chart type (line / bar / column / area / pie / donut / scatter) and the per-type field options. The Build group doesn't currently carry a dedicated Charts subsection — this page is the canonical entry point.
+:::
+
 A **chart** wraps a connector's named query into a visualisation. Defined in **Settings → Charts**, picked by type — line, bar, column, area, pie, donut, scatter — and reused as a panel in any number of dashboards.
 
 This page covers the Charts builder, every field on the editor and the type-specific options each chart type unlocks.

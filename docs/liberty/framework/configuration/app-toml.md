@@ -6,6 +6,10 @@ keywords: [Liberty Framework, settings, framework settings, app, default pool, a
 
 # Framework settings
 
+:::info[Deep reference]
+This page lists every framework-wide setting on the *Framework* tab. For task-oriented setup of the security side (wire OIDC, install a license key, encrypt secrets), see [Build → Secure](../build/secure/overview.md).
+:::
+
 The **framework-wide** settings — those that aren't tied to a single connector, screen or menu — are edited from **Settings → Framework**. The page is a schema-driven form with one section per concern: application identity, default database pool, authentication, AI provider, encryption and license. Saving reloads the affected subsystem.
 
 This page lists every field on the *Framework* tab, what it does and where the effect shows up in the rest of the application.

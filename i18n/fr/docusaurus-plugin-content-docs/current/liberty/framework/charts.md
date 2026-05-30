@@ -6,6 +6,10 @@ keywords: [Liberty Framework, charts, Recharts, line, bar, column, area, pie, do
 
 # Graphiques
 
+:::info[Référence détaillée]
+Cette page documente le constructeur de graphiques, chaque type de graphique (ligne / barre / colonne / aire / camembert / donut / nuage de points) et les options de champs propres à chaque type. Le groupe Construire ne porte pas encore de sous-section dédiée aux graphiques — cette page est le point d'entrée canonique.
+:::
+
 Un **graphique** enveloppe la requête nommée d'un connecteur dans une visualisation. Défini dans **Paramètres → Graphiques**, choisi par type — line, bar, column, area, pie, donut, scatter — et réutilisé comme panneau dans n'importe quel nombre de tableaux de bord.
 
 Cette page couvre le constructeur de graphiques, chaque champ de l'éditeur et les options propres à chaque type de graphique.

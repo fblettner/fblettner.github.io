@@ -6,6 +6,10 @@ keywords: [Liberty Framework, connecteur, SQL, HTTP, API, paramètres, pool, req
 
 # Connecteurs
 
+:::info[Référence détaillée]
+Cette page documente la façon dont le moteur de connecteurs découvre le schéma à l'exécution, gère le registre des connecteurs et applique les permissions. Pour des parcours orientés tâche — créer une requête, dupliquer un connecteur, échafauder une séquence ou une recherche — voir [Construire → Requêtes](./build/queries/overview.md) et [Construire → Menus → Transformer un connecteur en application](./build/menus/make-connector-an-app.md).
+:::
+
 Un **connecteur** est le pont entre le framework et une source de données — une base de données, une API HTTP ou un service tiers. Les connecteurs sont créés et modifiés depuis **Paramètres → Connecteurs**, une entrée par source. Chaque écran, tableau de bord, graphique, étape de job et outil IA qui a besoin de données désigne un connecteur à utiliser.
 
 Le framework prend en charge trois types de connecteurs :

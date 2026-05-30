@@ -6,6 +6,10 @@ keywords: [Liberty Framework, connector, SQL, HTTP, API, settings, pool, named q
 
 # Connectors
 
+:::info[Deep reference]
+This page documents how the connector engine discovers schema at runtime, manages the connector registry and gates permissions. For task-oriented walkthroughs — create a query, clone a connector, scaffold a sequence or a lookup — see [Build → Queries](./build/queries/overview.md) and [Build → Menus → Make a connector an app](./build/menus/make-connector-an-app.md).
+:::
+
 A **connector** is the bridge between the framework and a data source — a database, an HTTP API, or a third-party service. Connectors are created and edited from **Settings → Connectors**, one entry per source. Every screen, dashboard, chart, job step and AI tool that needs data names a connector to use.
 
 The framework supports three connector types:

@@ -6,6 +6,10 @@ keywords: [Liberty Framework, plugins, custom Python, callable, jobs, hooks, pas
 
 # Plugins
 
+:::info[Référence détaillée]
+Cette page documente le runtime des plugins — chaque point d'extension, le dictionnaire de contexte complet du callable et les motifs avancés. Pour des parcours orientés tâche — écrire un callable, utiliser les primitives ETL, déployer et déboguer un plugin — voir [Construire → Plugins](../build/plugins/overview.md).
+:::
+
 Le moteur d'étape de job, le validateur de mot de passe et quelques autres points d'extension du framework acceptent des **références d'appel** de la forme `"module.path:function"`. La fonction est du Python ordinaire ; le framework l'importe paresseusement à la première utilisation et l'appelle avec le contexte d'exécution sous forme d'arguments nommés.
 
 C'est le **seul** endroit où une installation client exécute du code personnalisé — le reste de la configuration est purement déclaratif. Utiliser les plugins pour ce que le TOML ne peut pas exprimer : transformations sur mesure, particularités spécifiques à un ERP, intégrations avec des systèmes externes.

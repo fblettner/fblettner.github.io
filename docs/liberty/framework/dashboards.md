@@ -6,6 +6,10 @@ keywords: [Liberty Framework, dashboard, KPI, stat, chart, table, panel, drill-d
 
 # Dashboards
 
+:::info[Deep reference]
+This page documents dashboard architecture, panel types and the shared filter bar. The Build group doesn't currently carry a dedicated Dashboards subsection — this page is the canonical entry point for the topic.
+:::
+
 A **dashboard** is a single page that groups KPIs, charts and tables over a common context — typically *the current period* + *a chosen scope* (a company, a region, a team). Defined from **Settings → Dashboards** with a drag-and-drop **layout grid**; each panel picks a data source (a connector query or a saved chart), a panel **type** (stat / chart / table) and renders accordingly.
 
 The dashboard is the natural surface for executive views ("how are we doing today?") and for operational overviews ("which jobs are running, which screens have the most rejections"). Each panel can drill down to a screen pre-filtered to the underlying rows.

@@ -6,6 +6,10 @@ keywords: [Liberty Framework, Settings UI, builders, pools, connectors, dictiona
 
 # Settings UI
 
+:::info[Deep reference]
+This page documents the Settings UI architecture itself — the schema-driven builder pattern, validation contract, raw Monaco escape hatch, technical dashboard. For task-oriented walkthroughs of each builder, see the [Build an application](../build/queries/overview.md) section.
+:::
+
 The **Settings** page (gear icon in the header, visible to users with the `settings:read` permission) is the in-app editor for every per-section TOML file. Each config type has a dedicated **builder** — a schema-driven form generated from the Pydantic models that the backend uses to load the file. A raw Monaco editor sits on every tab as an escape hatch when a builder's form doesn't expose the field you need.
 
 Every save writes the TOML on disk, then triggers a server-side reload — the change is live in the same browser tab without a restart.
