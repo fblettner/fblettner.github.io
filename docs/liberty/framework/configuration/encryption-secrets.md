@@ -6,6 +6,10 @@ keywords: [Liberty Framework, encryption, secrets, AES-256-GCM, master key, sett
 
 # Encryption & secrets
 
+:::info[Deep reference]
+This page documents the encryption system as a whole — environment vs disk separation, master-key sources, rotation procedure, conventions for what to encrypt. For the task-oriented UI walkthrough — flip the 🔒 toggle on a Pool password, an OIDC client secret, an API connector token — see [Build → Secure → Encrypted secrets](../build/secure/encrypted-secrets.md).
+:::
+
 Several settings carry sensitive values — pool passwords, API connector auth tokens, the OIDC client secret. The framework offers a simple primitive to keep them safe: any secret field in the Settings UI has a **🔒 toggle** that switches the input between **plain text** and **encrypted**. Encrypted values are stored as opaque blobs that can only be decrypted by the running process; the **master key** that does the decryption sits in the environment of the host, never on disk.
 
 This page covers the toggle in the UI, the master key, how to rotate keys and the convention for what to encrypt vs what to keep in the environment.

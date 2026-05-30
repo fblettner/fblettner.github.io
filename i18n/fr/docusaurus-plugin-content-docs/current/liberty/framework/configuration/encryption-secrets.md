@@ -6,6 +6,10 @@ keywords: [Liberty Framework, chiffrement, secrets, AES-256-GCM, master key, set
 
 # Chiffrement et secrets
 
+:::info[Référence détaillée]
+Cette page documente le système de chiffrement dans son ensemble — séparation environnement / disque, sources de la clé maîtresse, procédure de rotation, conventions sur ce qu'il faut chiffrer. Pour le parcours orienté tâche dans l'interface — basculer l'interrupteur 🔒 sur un mot de passe de pool, un client secret OIDC, un jeton de connecteur API — voir [Construire → Sécurité → Secrets chiffrés](../build/secure/encrypted-secrets.md).
+:::
+
 Plusieurs paramètres portent des valeurs sensibles — mots de passe de pool, jetons d'authentification de connecteurs API, secret client OIDC. Le framework propose une primitive simple pour les protéger : tout champ secret de l'interface Paramètres dispose d'un **interrupteur de cadenas** qui bascule la saisie entre **texte clair** et **chiffré au repos**. Les valeurs chiffrées sont enregistrées sous forme de blocs opaques que seul le processus en cours d'exécution peut déchiffrer ; la **clé maîtresse** qui réalise le déchiffrement reste dans l'environnement de l'hôte, jamais sur disque.
 
 Cette page couvre l'interrupteur dans l'interface, la clé maîtresse, la procédure de rotation des clés et la convention sur ce qui doit être chiffré et ce qui doit rester dans l'environnement.
