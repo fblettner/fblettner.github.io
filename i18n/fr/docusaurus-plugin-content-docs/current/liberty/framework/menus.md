@@ -6,7 +6,7 @@ keywords: [Liberty Framework, menu, barre latérale, navigation, permission, dos
 
 # Menus
 
-Le **menu** est l'arborescence de la barre latérale que l'utilisateur voit sur la gauche de chaque page — dossiers, feuilles, icônes, badges. Le framework traite les menus par app : le menu de chaque app définit son espace de travail, et le sélecteur d'espace de travail en haut de l'en-tête permet de passer de l'un à l'autre.
+Le **menu** est l'arborescence de la barre latérale que l'utilisateur voit sur la gauche de chaque page — dossiers, feuilles, icônes, badges. Le framework traite les menus par application : le menu de chaque application définit son espace de travail, et le sélecteur d'espace de travail en haut de l'en-tête permet de passer de l'un à l'autre.
 
 Les menus sont construits et modifiés dans **Paramètres → Menus** avec un éditeur d'arbre par glisser-déposer. Chaque feuille pointe sur l'une de cinq cibles — un écran, un tableau de bord, un endpoint de connecteur, une page personnalisée ou un lien externe — et est **élaguée par appelant** afin que les utilisateurs ne voient que les entrées que leurs permissions ouvrent réellement.
 
@@ -56,7 +56,7 @@ Les menus sont construits et modifiés dans **Paramètres → Menus** avec un é
 
 ## Paramètres → Menus
 
-La page liste chaque menu de l'installation — un par app (`billing`, `crm`, `nomajde`…), plus le menu spécial `_default` pour les entrées transverses au framework. Cliquer sur une ligne ouvre l'**éditeur d'arbre** à droite.
+La page liste chaque menu de l'installation — un par application (`billing`, `crm`, `nomajde`…), plus le menu spécial `_default` pour les entrées transverses au framework. Cliquer sur une ligne ouvre l'**éditeur d'arbre** à droite.
 
 <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
@@ -113,7 +113,7 @@ La liste **Aperçu en tant que ▾** de la barre d'outils re-rend l'arbre tel qu
 
 ## Éditeur de feuille \{#leaf-editor}
 
-Le panneau de droite expose les champs de la feuille sélectionnée :
+Le panneau de droite présente les champs de la feuille sélectionnée :
 
 | Champ | Effet |
 |---|---|
@@ -124,7 +124,7 @@ Le panneau de droite expose les champs de la feuille sélectionnée :
 | **Rôles** | Optionnel. Restreint la visibilité à une liste de rôles — barrière douce (UX). La **vérification de permission** sur l'écran / endpoint sous-jacent est la barrière dure. |
 | **Description** | Texte libre — apparaît comme infobulle de la feuille au survol. |
 
-Sous les champs communs, le sous-formulaire spécifique au *Type* apparaît.
+Sous les champs communs, le sous-formulaire propre au *Type* apparaît.
 
 ---
 
@@ -136,7 +136,7 @@ Cinq types sont pris en charge.
 
 | Champ | Effet |
 |---|---|
-| **Écran** | Liste déroulante des écrans définis sous [Paramètres → Écrans](./screens.md). Filtrée sur l'app à laquelle appartient le menu. |
+| **Écran** | Liste déroulante des écrans définis sous [Paramètres → Écrans](./screens.md). Filtrée sur l'application à laquelle appartient le menu. |
 
 La feuille ouvre la grille + le dialogue d'édition de l'écran. Code de permission dérivé : `screen:<app>:<screen_id>`.
 
@@ -172,7 +172,7 @@ La feuille ouvre une **page d'exécution d'endpoint** qui affiche la forme de la
 |---|---|
 | **URL** | URL externe. Ouvre dans un nouvel onglet du navigateur. |
 
-Utile pour croiser les références entre apps connexes, documentation, portails de support. Pas de verrouillage de permission — visible par quiconque voit le dossier parent.
+Utile pour croiser les références entre applications connexes, documentation, portails de support. Pas de verrouillage de permission — visible par quiconque voit le dossier parent.
 
 ---
 
@@ -192,7 +192,7 @@ L'élagage est **silencieux** — pas de message "vous n'avez pas accès". La ra
 Deux couches s'empilent :
 
 1. **Champ `Rôles` sur la feuille** — barrière douce. Utile quand deux feuilles pointent sur le même écran mais qu'on veut un libellé différent par rôle ; le champ *Rôles* masque chaque feuille aux appelants non concernés, mais une URL saisie à la main fonctionne quand même (c'est la barrière de permission en aval qui l'arrête).
-2. **Code de permission dérivé de la cible** — barrière dure. Le framework refuse l'appel sous-jacent à un appelant sans le bon code, peu importe comment il y est arrivé.
+2. **Code de permission dérivé de la cible** — barrière dure. Le framework refuse l'appel sous-jacent à un appelant sans le bon code, peu importe le chemin emprunté.
 
 Pour la plupart des cas d'usage, le code de permission suffit — laisser *Rôles* vide.
 
@@ -200,9 +200,9 @@ Pour la plupart des cas d'usage, le code de permission suffit — laisser *Rôle
 
 ## Sélecteur d'espace de travail
 
-Chaque menu est par app. Le sélecteur d'espace de travail de l'en-tête liste chaque app dans laquelle l'appelant a au moins une feuille visible, trié par le champ *Ordre* des [métadonnées d'app](./apps/overview.md). Changer d'espace de travail bascule la barre latérale sur le menu de cette app.
+Chaque menu est par application. Le sélecteur d'espace de travail de l'en-tête liste chaque application dans laquelle l'appelant a au moins une feuille visible, trié par le champ *Ordre* des [métadonnées d'application](./apps/overview.md). Changer d'espace de travail bascule la barre latérale sur le menu de cette application.
 
-Un utilisateur qui n'a accès qu'à une seule app ne voit pas de sélecteur — le framework va directement à cet espace de travail par défaut.
+Un utilisateur qui n'a accès qu'à une seule application ne voit pas de sélecteur — le framework va directement à cet espace de travail par défaut.
 
 ---
 
@@ -217,16 +217,16 @@ La liste **Aperçu en tant que ▾** de l'interface Paramètres est un contrôle
 ## Conseils et bonnes pratiques
 
 - **Regrouper les feuilles par entité, pas par fréquence.** Un dossier *Facturation* avec tout ce qui touche à la facturation se parcourt plus facilement qu'un dossier "Quotidien" qui mélange des entités.
-- **User les icônes avec parcimonie.** Les icônes sont des repères visuels pour la mémoire de l'**opérateur** — quelques icônes bien choisies battent une icône par feuille.
-- **Ne pas se reposer sur le champ *Rôles*.** C'est un confort UX ; c'est le code de permission de la cible qui assure la sécurité. Garder la logique de barrière de rôle dans *Paramètres → Rôles* à la place, pour que tout soit au même endroit.
-- **User les badges pour les compteurs dynamiques.** Un badge *Validations en attente* qui affiche le compteur live depuis une requête de connecteur pousse l'opérateur à agir — bien meilleur qu'un libellé statique.
-- **Prévisualiser avec le rôle le plus restreint avant d'enregistrer.** Le moyen le plus rapide d'attraper une feuille d'administration accidentellement publique.
+- **Utiliser les icônes avec parcimonie.** Les icônes sont des repères visuels pour la mémoire de l'**opérateur** — quelques icônes bien choisies battent une icône par feuille.
+- **Ne pas se reposer sur le champ *Rôles*.** C'est un confort UX ; c'est le code de permission de la cible qui assure la sécurité. Garder la logique de barrière de rôle dans *Paramètres → Rôles*, pour que tout reste au même endroit.
+- **Utiliser les badges pour les compteurs dynamiques.** Un badge *Validations en attente* qui affiche le compteur live depuis une requête de connecteur pousse l'opérateur à agir — bien meilleur qu'un libellé statique.
+- **Prévisualiser avec le rôle le plus restreint avant d'enregistrer.** Le moyen le plus rapide de détecter une feuille d'administration accidentellement publique.
 
 ---
 
 ## Sous le capot
 
-Les définitions de menu sont enregistrées dans `liberty-apps/config/menus.toml`. Les opérateurs **ne modifient pas ce fichier à la main** en exploitation normale ; l'éditeur d'arbre est l'interface canonique. L'onglet *TOML brut* est l'échappatoire pour les modifications avancées que l'éditeur ne couvre pas.
+Les définitions de menu sont enregistrées dans `liberty-apps/config/menus.toml`. Les opérateurs **ne modifient pas ce fichier à la main** en exploitation normale ; l'éditeur d'arbre est l'interface de référence. L'onglet *TOML brut* est l'échappatoire pour les modifications avancées que l'éditeur ne couvre pas.
 
 ---
 
@@ -234,5 +234,5 @@ Les définitions de menu sont enregistrées dans `liberty-apps/config/menus.toml
 
 - [Écrans](./screens.md) — la cible du type de feuille *Écran*.
 - [Tableaux de bord](./dashboards.md) — la cible du type de feuille *Tableau de bord*.
-- [Rôles et permissions](./auth/roles-permissions.md) — les codes contre lesquels l'élagage vérifie.
-- [Apps](./apps/overview.md) — le sélecteur d'espace de travail qui bascule entre les menus.
+- [Rôles et permissions](./auth/roles-permissions.md) — les codes contrôlés par l'élagage.
+- [Applications](./apps/overview.md) — le sélecteur d'espace de travail qui bascule entre les menus.

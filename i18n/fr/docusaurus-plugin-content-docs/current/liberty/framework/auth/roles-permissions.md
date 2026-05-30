@@ -1,6 +1,6 @@
 ---
 title: Rôles et permissions
-description: "Le contrôle d'accès est partagé entre les rôles (groupes nommés de permissions) et les permissions (codes atomiques qui gouvernent une surface). Les rôles sont édités depuis Paramètres → Rôles, attribués depuis Paramètres → Utilisateurs, et le framework élague chaque surface contre l'ensemble effectif des permissions de l'appelant."
+description: "Le contrôle d'accès est partagé entre les rôles (groupes nommés de permissions) et les permissions (codes atomiques qui gouvernent une surface). Les rôles sont édités depuis Paramètres → Rôles, attribués depuis Paramètres → Utilisateurs, et le framework élague chaque surface selon l'ensemble effectif des permissions de l'appelant."
 keywords: [Liberty Framework, roles, permissions, RBAC, access control, permission codes, settings, roles editor, pruning]
 ---
 
@@ -68,13 +68,13 @@ Ouvrir **Paramètres → Rôles**. La page liste chaque rôle avec son nombre de
 | **Permissions accordées** | La liste des codes de permission que ce rôle porte. Chaque ligne a un `✕` pour retirer. *+ Ajouter permission* ouvre le **Sélecteur de permission**. |
 | **Membres** *(lecture seule)* | Nombre d'utilisateurs qui portent ce rôle — lié à l'onglet Utilisateurs filtré sur eux. |
 
-L'éditeur de rôle expose les **permissions effectives** en bas — l'union des *Permissions accordées* + l'ensemble effectif de chaque rôle hérité. Utile pour confirmer qu'une chaîne d'`hérite de` produit le total attendu.
+L'éditeur de rôle affiche les **permissions effectives** en bas — l'union des *Permissions accordées* + l'ensemble effectif de chaque rôle hérité. Utile pour confirmer qu'une chaîne d'`hérite de` produit le total attendu.
 
 ### Sélecteur de permission
 
 *+ Ajouter permission* ouvre une boîte de dialogue avec les codes de permission canoniques du framework regroupés par catégorie — *SQL*, *API*, *Écrans*, *Menus*, *Tableaux de bord*, *Graphiques*, *Jobs*, *IA*, *Paramètres*, *Utilisateurs / Rôles*, *Licence*. Chaque ligne propose d'abord la forme générique (`sql:billing:*`, `screen:billing:*`) puis les lignes par entité en dessous.
 
-Saisir dans la barre de recherche réduit la liste — chercher `billing` retrouve chaque code de l'app / connecteur *billing* à travers les catégories.
+Saisir dans la barre de recherche réduit la liste — rechercher `billing` retrouve chaque code de l'application / connecteur *billing* à travers les catégories.
 
 ---
 
@@ -99,7 +99,7 @@ Chaque surface gouvernée a un **code de permission canonique** généré par le
 | **Licence** | `license:read` | consulter le contenu de la licence |
 | **Assistant IA** | `ai:chat`, `ai:tool:<name>` | utiliser le chat, autoriser un outil spécifique |
 
-Les jokers sont pris en charge sur l'axe connecteur / app : `sql:billing:*` accorde chaque requête du connecteur `billing` ; `screen:billing:*` accorde chaque écran de l'app `billing` ; `*` seul est réservé au rôle intégré `admin`.
+Les jokers sont pris en charge sur l'axe connecteur / application : `sql:billing:*` accorde chaque requête du connecteur `billing` ; `screen:billing:*` accorde chaque écran de l'application `billing` ; `*` seul est réservé au rôle intégré `admin`.
 
 ---
 
@@ -118,7 +118,7 @@ Un `./start.sh init-db` neuf amorce un utilisateur `admin` avec le rôle `admin`
 
 ## Attribuer des rôles aux utilisateurs — Paramètres → Utilisateurs
 
-Dans l'onglet **Utilisateurs**, chaque ligne d'utilisateur expose une sélection multiple de rôles. Ajouter un rôle est un seul clic. Le framework recalcule l'ensemble effectif des permissions de l'utilisateur à l'enregistrement ; l'appel API suivant de cet utilisateur utilise le nouvel ensemble.
+Dans l'onglet **Utilisateurs**, chaque ligne d'utilisateur propose une sélection multiple de rôles. Ajouter un rôle se fait en un seul clic. Le framework recalcule l'ensemble effectif des permissions de l'utilisateur à l'enregistrement ; l'appel API suivant de cet utilisateur utilise le nouvel ensemble.
 
 Quand OIDC est la source de vérité (voir [Authentification → OIDC](./authentication.md#oidc)), le claim des groupes de l'IdP est mappé 1:1 aux noms de rôles Liberty. L'onglet Rôles définit ce que chaque rôle peut faire — l'IdP décide juste qui le porte.
 
@@ -126,7 +126,7 @@ Quand OIDC est la source de vérité (voir [Authentification → OIDC](./authent
 
 ## Comment fonctionne l'élagage
 
-L'élagage s'exécute **par requête**, contre l'ensemble de permissions du JWT. Chaque surface suit la même recette :
+L'élagage s'exécute **par requête**, selon l'ensemble de permissions du JWT. Chaque surface suit la même recette :
 
 | Surface | Règle d'élagage |
 |---|---|
@@ -135,7 +135,7 @@ L'élagage s'exécute **par requête**, contre l'ensemble de permissions du JWT.
 | **Outils de l'assistant IA** | La liste d'outils passée au LLM ne contient que les requêtes que l'appelant peut exécuter. |
 | **Page Paramètres** | Le lien Paramètres disparaît de l'en-tête sans `settings:read`. Chaque onglet de constructeur est masqué sans sa propre permission. |
 | **Tableaux de bord** | Un panneau qui référence une requête que l'appelant ne peut pas exécuter est retiré silencieusement. Le tableau de bord se rend sans le panneau. |
-| **Écrans** | Un utilisateur sans `screen:<app>:<id>` reçoit un 403 à la navigation directe (l'URL est joignable). L'interface Paramètres n'expose jamais l'écran dans les sélecteurs quand cette permission manque. |
+| **Écrans** | Un utilisateur sans `screen:<app>:<id>` reçoit un 403 à la navigation directe (l'URL est joignable). L'interface Paramètres n'affiche jamais l'écran dans les sélecteurs quand cette permission manque. |
 
 Le 403 à la navigation directe vers un écran est le **seul endroit** où le framework retourne un échec dur — toute autre surface est élaguée silencieusement. La raison : les URLs d'écran peuvent avoir été mises en favori ou copiées-collées, et ne rien afficher donnerait l'impression d'une page cassée.
 
@@ -143,7 +143,7 @@ Le 403 à la navigation directe vers un écran est le **seul endroit** où le fr
 
 ## Application côté serveur
 
-L'élagage est une optimisation UX ; le **verrou est sur le serveur**. Pour chaque appel REST :
+L'élagage est une optimisation UX ; le **verrou se trouve sur le serveur**. Pour chaque appel REST :
 
 1. Le framework analyse le JWT et extrait l'ensemble de permissions de l'utilisateur.
 2. Le gestionnaire de route calcule la permission requise à partir de l'URL (`POST /api/sql/billing/customer-create` → `sql:billing:customer-create:write`).
@@ -172,7 +172,7 @@ L'éditeur Raw TOML est gouverné séparément par `settings:raw` ; cela permet 
 
 ## Recettes de rôles courantes
 
-Le bouton *Modèles* de l'éditeur de Rôles propose quelques points de départ — choisir un, puis affiner.
+Le bouton *Modèles* de l'éditeur de Rôles propose quelques points de départ — en choisir un, puis affiner.
 
 | Modèle | Permissions effectives |
 |---|---|
@@ -217,4 +217,4 @@ Les rôles sont enregistrés à côté des utilisateurs — dans `config/auth.to
 
 - [Authentification](./authentication.md) — backend local, OIDC, cycle de vie JWT.
 - [Clé de licence](./license-key.md) — verrous de fonctionnalités au-dessus des permissions.
-- [Configuration → Interface Paramètres](../configuration/settings-ui.md) — quel constructeur vit derrière quelle permission.
+- [Configuration → Interface Paramètres](../configuration/settings-ui.md) — quel constructeur se trouve derrière quelle permission.

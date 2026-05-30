@@ -14,7 +14,7 @@ Les utilisateurs se connectent avec le fournisseur d'identité de l'entreprise, 
 
 Deux moitiés :
 
-1. **Sur le fournisseur d'identité** — enregistrer le framework comme client OAuth2/OIDC, exposer un claim `groups`, enregistrer l'URI de redirection.
+1. **Sur le fournisseur d'identité** — enregistrer le framework comme client OAuth2/OIDC, fournir un claim `groups`, enregistrer l'URI de redirection.
 2. **Sur le framework** — activer *OIDC enabled* sous *Paramètres → Framework → Authentification*, remplir les quatre valeurs standard, cliquer sur *Tester la connexion*.
 
 ## La recette
@@ -29,7 +29,7 @@ La procédure dépend du fournisseur d'identité mais la forme est identique.
 2. *Redirect URIs* : `https://liberty.example.com/auth/oidc/callback`.
 3. *Property mappings* : ajouter l'ensemble par défaut `openid email groups`.
 4. Noter le **Client ID** + le **Client secret**.
-5. *Applications → Applications* → *Create* → lier au provider ; choisir les groupes à exposer.
+5. *Applications → Applications* → *Create* → lier au provider ; choisir les groupes à transmettre.
 
 #### Keycloak
 
@@ -61,7 +61,7 @@ La procédure dépend du fournisseur d'identité mais la forme est identique.
 | **OIDC enabled** | ✓ |
 | **Issuer URL** | L'issuer du fournisseur d'identité. Exemples : `https://auth.example.com/application/o/liberty/` *(Authentik, le slash final compte)* — `https://kc.example.com/realms/<realm>` *(Keycloak)* — `https://login.microsoftonline.com/<tenant>/v2.0` *(Azure)* — `https://<domain>.okta.com/oauth2/default` *(Okta)*. |
 | **Client ID** | Depuis le fournisseur d'identité. |
-| **Client secret** | 🔒 Depuis le fournisseur d'identité — coller en mode chiffré. |
+| **Client secret** | Depuis le fournisseur d'identité — chiffré au repos. |
 | **Redirect URI** | `https://liberty.example.com/auth/oidc/callback` *(doit correspondre à ce qui est enregistré sur le fournisseur d'identité)*. |
 | **Email claim** | `email` *(défaut)*. |
 | **Groups claim** | `groups` *(défaut)*. |
@@ -100,7 +100,7 @@ Pour la propagation de fin de session vers le fournisseur d'identité, définiss
 | **Restreindre à un domaine d'email spécifique** | Le framework refuse la connexion si `email_claim` ne se termine pas par la valeur de `[auth.oidc] allowed_domains` (défini dans le sous-formulaire). Plusieurs domaines supportés en liste séparée par virgules. |
 | **Empêcher l'auto-provisionnement** | Désactivez *Auto-provision*. Les utilisateurs doivent exister dans *Paramètres → Utilisateurs* avant de pouvoir se connecter. Le fournisseur d'identité fournit l'authentification ; vous contrôlez l'autorisation. |
 | **Plusieurs fournisseurs d'identité** | Pas supporté dans un seul formulaire ; l'alternative typique est d'utiliser le fournisseur-de-fournisseurs (Authentik / Keycloak fédérant Azure + Google + …) et de pointer Liberty sur le broker. |
-| **Un claim personnalisé au lieu d'`email`** | Définissez *Email claim* sur ce que le fournisseur d'identité expose (`preferred_username`, `upn`, etc.). |
+| **Un claim personnalisé au lieu d'`email`** | Définissez *Email claim* sur ce que le fournisseur d'identité renvoie (`preferred_username`, `upn`, etc.). |
 
 ## Pour aller plus loin
 

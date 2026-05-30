@@ -1,6 +1,6 @@
 ---
 title: Conditions de formulaire
-description: "Afficher, masquer, rendre obligatoire ou désactiver un champ en fonction des valeurs en direct des autres champs du même dialogue. L'éditeur d'écrans expose trois emplacements de condition par champ — Visible quand, Obligatoire quand, Désactivé quand — avec un éditeur d'expression qui suggère les noms de champs et donne un aperçu de l'évaluation."
+description: "Afficher, masquer, rendre obligatoire ou désactiver un champ en fonction des valeurs en direct des autres champs du même dialogue. L'éditeur d'écrans propose trois emplacements de condition par champ — Visible quand, Obligatoire quand, Désactivé quand — avec un éditeur d'expression qui suggère les noms de champs et donne un aperçu de l'évaluation."
 keywords: [Liberty Framework, form conditions, visible when, required when, disabled when, conditional fields, screens, dialog, settings]
 ---
 
@@ -50,7 +50,7 @@ Les trois emplacements sont indépendants — un champ peut être visible-et-obl
 
 ## Modifier une condition
 
-Dans **Paramètres → Écrans**, ouvrir l'écran et cliquer sur le champ dans l'onglet *Champs*. L'éditeur de champ à droite expose les trois emplacements de condition, chacun avec un **éditeur d'expression** :
+Dans **Paramètres → Écrans**, ouvrir l'écran et cliquer sur le champ dans l'onglet *Champs*. L'éditeur de champ à droite présente les trois emplacements de condition, chacun avec un **éditeur d'expression** :
 
 <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{padding: '8px 0 10px', fontWeight: 700}}>Éditeur de champ — SLA personnalisé</div>
@@ -98,7 +98,7 @@ Le langage **n'a pas d'appels de fonction au-delà des prédicats listés** ni d
 
 Les conditions sont ré-évaluées **à chaque changement de champ** dans le dialogue. Le framework exécute les trois emplacements pour chaque champ en parallèle ; le résultat est lu une fois chaque référence résolue. Ce que cela veut dire :
 
-- **L'ordre dans lequel les champs sont listés n'a pas d'importance.** Un *Visible quand* sur le champ A peut référencer le champ B qui lui-même dépend du champ C — le résolveur exécute la passe complète une fois par changement.
+- **L'ordre dans lequel les champs sont listés n'a pas d'importance.** Un *Visible quand* sur le champ A peut référencer le champ B qui dépend lui-même du champ C — le résolveur exécute la passe complète une fois par changement.
 - **Les cycles sont refusés à l'enregistrement** — l'éditeur nomme le cycle et pointe les champs en cause.
 - **Les champs désactivés gardent leur valeur**, même si un *Visible quand* les masque ensuite. Basculer la visibilité off puis on ne remet pas la valeur à zéro.
 - **Les champs masqués perdent leur valeur à l'enregistrement.** Le payload envoyé au connecteur ne contient que les champs visibles. Cela compte quand l'INSERT/UPDATE d'un connecteur attend `NULL` pour un champ absent plutôt que la valeur tapée précédemment.
@@ -134,7 +134,7 @@ Les conditions sont donc des **règles métier**, pas seulement des indices UX. 
 
 Le bouton **Tester** de l'éditeur de champ ouvre un petit volet d'aperçu : le dialogue rempli avec les valeurs de fixture issues du `_test_row` du connecteur (ou vide quand aucun n'est configuré) ; modifier les champs dont dépendent les conditions montre le comportement en direct.
 
-Pour la logique non triviale, l'éditeur d'écran expose aussi un onglet **Cas de test**. Chaque cas de test est une paire `{ inputs, expected }` que le bouton *Exécuter les tests* rejoue :
+Pour la logique non triviale, l'éditeur d'écran propose aussi un onglet **Cas de test**. Chaque cas de test est une paire `{ inputs, expected }` que le bouton *Exécuter les tests* rejoue :
 
 | Cas de test | Entrées | Attendu |
 |---|---|---|
@@ -159,12 +159,12 @@ L'application côté serveur rend cela sûr — un utilisateur régulier qui mod
 
 ## Sous le capot
 
-Les conditions sont enregistrées comme chaînes d'expression sur chaque champ de l'entrée d'écran. Les opérateurs **n'éditent pas le TOML sous-jacent à la main** ; l'éditeur de champ est l'interface canonique et valide chaque expression avant l'enregistrement.
+Les conditions sont enregistrées comme chaînes d'expression sur chaque champ de l'entrée d'écran. Les opérateurs **ne modifient pas le TOML sous-jacent à la main** ; l'éditeur de champ est l'interface de référence et valide chaque expression avant l'enregistrement.
 
 ---
 
 ## Pour aller plus loin
 
-- [Concepts → Écrans](./screens.md) — où vit l'éditeur de champ, et les autres propriétés de champ.
+- [Concepts → Écrans](./screens.md) — l'emplacement de l'éditeur de champ, et les autres propriétés de champ.
 - [Concepts → Dictionnaire](./dictionary.md) — règles de validation partagées qui se combinent avec ces conditions.
 - [Liaison des paramètres](./query-params-binding.md) — comment les valeurs du dialogue circulent vers le connecteur à l'enregistrement.

@@ -57,13 +57,13 @@ L'écran est l'endroit où la plupart des utilisateurs passent le plus de temps 
 
 ## Paramètres → Écrans
 
-Le catalogue liste chaque écran de l'installation — une ligne par écran, groupée par app.
+Le catalogue liste chaque écran de l'installation — une ligne par écran, groupée par application.
 
 <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
     <div style={{fontWeight: 700}}>Paramètres → Écrans</div>
     <div style={{display: 'flex', gap: '6px'}}>
-      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>App ▾</span>
+      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Application ▾</span>
       <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>+ Nouvel écran</span>
     </div>
   </div>
@@ -71,13 +71,13 @@ Le catalogue liste chaque écran de l'installation — une ligne par écran, gro
     <div>Id</div><div>Titre</div><div>Connecteur / requête</div><div>Édition</div><div></div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1.2fr 70px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div style={{fontFamily: 'ui-monospace, monospace'}}>billing/invoices</div><div>Factures</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '11px', opacity: 0.85}}>billing · invoices-list</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(50,215,75,0.10)', border: '1px solid rgba(50,215,75,0.40)', color: '#4ade80', fontSize: '10px', fontWeight: 600}}>modifiable</span></div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>billing/invoices</div><div>Factures</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '11px', opacity: 0.85}}>billing · invoices-list</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(50,215,75,0.10)', border: '1px solid rgba(50,215,75,0.40)', color: '#4ade80', fontSize: '10px', fontWeight: 600}}>modifiable</span></div><div style={{textAlign: 'right', opacity: 0.55}}>Modifier</div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1.2fr 70px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div style={{fontFamily: 'ui-monospace, monospace'}}>billing/credit_notes</div><div>Avoirs</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '11px', opacity: 0.85}}>billing · credit-notes-list</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(50,215,75,0.10)', border: '1px solid rgba(50,215,75,0.40)', color: '#4ade80', fontSize: '10px', fontWeight: 600}}>modifiable</span></div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>billing/credit_notes</div><div>Avoirs</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '11px', opacity: 0.85}}>billing · credit-notes-list</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(50,215,75,0.10)', border: '1px solid rgba(50,215,75,0.40)', color: '#4ade80', fontSize: '10px', fontWeight: 600}}>modifiable</span></div><div style={{textAlign: 'right', opacity: 0.55}}>Modifier</div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1.2fr 70px 60px', padding: '10px 14px', alignItems: 'center'}}>
-    <div style={{fontFamily: 'ui-monospace, monospace'}}>crm/customers</div><div>Clients</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '11px', opacity: 0.85}}>crm · customers-list</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.20)', fontSize: '10px', fontWeight: 600, opacity: 0.7}}>lecture seule</span></div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>crm/customers</div><div>Clients</div><div style={{fontFamily: 'ui-monospace, monospace', fontSize: '11px', opacity: 0.85}}>crm · customers-list</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.20)', fontSize: '10px', fontWeight: 600, opacity: 0.7}}>lecture seule</span></div><div style={{textAlign: 'right', opacity: 0.55}}>Modifier</div>
   </div>
 </div>
 
@@ -95,8 +95,8 @@ L'éditeur est un éditeur multi-onglets — **Général**, **Connecteur de lect
 |---|---|
 | **Id** | Identifiant d'écran sous la forme `app/nom` (par exemple `billing/invoices`). Apparaît dans l'URL (`/screens/billing/invoices`), le code de permission (`screen:billing:invoices`) et le sélecteur de menu. |
 | **Titre** | Affiché en haut de la page et sur l'entrée de menu qui l'ouvre. Localisé via le dictionnaire. |
-| **App** | Liste déroulante des apps déclarées dans l'installation. Pré-remplie à partir du préfixe d'*Id*. |
-| **Description** | Texte libre — apparaît dans le catalogue et dans la description de l'outil pour l'assistant IA quand l'écran est exposé. |
+| **Application** | Liste déroulante des applications déclarées dans l'installation. Pré-remplie à partir du préfixe d'*Id*. |
+| **Description** | Texte libre — apparaît dans le catalogue et dans la description de l'outil pour l'assistant IA quand l'écran est proposé à l'IA. |
 | **Colonnes clés** | Multi-sélection de colonnes de la requête de lecture qui identifient de manière unique une ligne. Utilisées par le dialogue d'édition pour savoir quelle ligne mettre à jour / supprimer. |
 | **Taille de page par défaut** | Lignes par page sur la grille. Par défaut 50. |
 | **Modifiable** | Quand *activé*, les actions *Ajouter* / *Modifier* / *Supprimer* apparaissent dans la barre d'outils et le clic sur une ligne ouvre un dialogue modifiable. Quand *désactivé*, le dialogue s'ouvre en lecture seule. |
@@ -105,13 +105,13 @@ L'éditeur est un éditeur multi-onglets — **Général**, **Connecteur de lect
 
 | Champ | Effet |
 |---|---|
-| **Connecteur** | Liste déroulante des connecteurs SQL. Le connecteur choisi expose ses requêtes de lecture. |
+| **Connecteur** | Liste déroulante des connecteurs SQL. Le connecteur choisi présente ses requêtes de lecture. |
 | **Requête** | Liste déroulante des requêtes de lecture nommées sur le connecteur choisi. |
 | **Paramètres** | Sous-formulaire alimenté par la barre d'outils de l'écran — voir [Liaison des paramètres](./query-params-binding.md). |
 | **Tri par défaut** | Optionnel. Une colonne + une direction appliquées au premier chargement. |
 | **Colonnes du catalogue** | Lecture seule — liste de chaque colonne que le framework a découverte lors de l'exécution *Tester* de la requête. Utilisée par le sélecteur de l'onglet *Grille*. |
 
-Le bouton **▶ Aperçu** en haut de l'onglet exécute la requête contre le pool live et affiche les 50 premières lignes.
+Le bouton **▶ Aperçu** en haut de l'onglet exécute la requête sur le pool live et affiche les 50 premières lignes.
 
 ### Onglet Grille
 
@@ -165,7 +165,7 @@ La barre d'outils de l'écran (au-dessus de la grille à l'exécution) se compos
 
 Le dialogue est la modale qui s'ouvre au clic sur une ligne. Il prend en charge plusieurs **onglets** — *Synthèse*, *Lignes*, *TVA*, *Notes*, *Historique*, *PDF* sont fréquents — chacun avec son propre jeu de champs.
 
-L'éditeur de dialogue expose :
+L'éditeur de dialogue présente :
 
 | Section | Effet |
 |---|---|
@@ -186,7 +186,7 @@ Boutons qui apparaissent en pied du dialogue ou sur les lignes individuelles.
 | **Action par ligne** | Même idée mais sur chaque ligne de la grille — pratique pour des opérations ponctuelles (par exemple *Renvoyer à la PA*). |
 | **Action en masse** | Visible quand l'opérateur multi-sélectionne des lignes dans la grille. Appelle le connecteur une fois par ligne sélectionnée. |
 
-Chaque action personnalisée expose :
+Chaque action personnalisée propose :
 
 - *Libellé* + *Icône* + *Variante* (principale / secondaire / destructive).
 - *Connecteur* + *Requête d'écriture*.
@@ -204,7 +204,7 @@ Synthèse en lecture seule des codes de permission générés par cet écran : `
 Un motif fréquent : suivre qui a créé / dernière mise à jour de chaque ligne. La voie recommandée :
 
 1. Dans la requête de lecture, retourner `created_by`, `created_at`, `updated_by`, `updated_at`.
-2. Dans le dictionnaire, marquer ces colonnes avec *Règle = LOOKUP* contre la table des utilisateurs (afin que les chips affichent des noms d'affichage, pas des identifiants d'utilisateur bruts).
+2. Dans le dictionnaire, marquer ces colonnes avec *Règle = LOOKUP* sur la table des utilisateurs (afin que les chips affichent des noms d'affichage, pas des identifiants d'utilisateur bruts).
 3. Sur la requête d'écriture d'*Insertion*, fixer les *Valeurs par défaut côté formulaire* de ces colonnes à `LOGIN` + `SYSDATE`.
 4. Sur la requête d'écriture de *Mise à jour*, fixer les valeurs par défaut sur `updated_by` + `updated_at`.
 5. Masquer les colonnes d'audit du dialogue (ou les rendre en lecture seule) pour que les utilisateurs ne puissent pas les altérer.
@@ -232,16 +232,16 @@ L'onglet d'éditeur d'écrans est verrouillé par `settings:screens`.
 ## Conseils et bonnes pratiques
 
 - **Commencer par le connecteur de lecture.** Définir la requête, exécuter *Tester* pour découvrir le schéma, **puis** câbler l'écran. Itérer dans cet ordre est bien plus rapide que de rétroporter les colonnes.
-- **User le dictionnaire à fond.** Une colonne avec une bonne entrée de dictionnaire n'a presque pas besoin de surcharges par écran ; une colonne sans entrée demande libellé, format et réglage de widget sur chaque écran qui l'utilise.
+- **Tirer parti du dictionnaire à fond.** Une colonne avec une bonne entrée de dictionnaire n'a presque pas besoin de surcharges par écran ; une colonne sans entrée demande libellé, format et réglage de widget sur chaque écran qui l'utilise.
 - **Garder le dialogue concentré.** Trois à cinq onglets par dialogue couvrent la plupart des cas. Un dialogue à douze onglets est le signe que l'entité est trop grosse — envisager de la découper en plusieurs écrans.
 - **Rendre les colonnes d'audit en lecture seule sur chaque écran.** Combiné aux valeurs par défaut côté formulaire `LOGIN` / `SYSDATE`, cela donne une piste d'audit infalsifiable.
-- **User *Action en masse* pour les opérations répétitives.** Un bouton *Renvoyer à la PA* qui traite une multi-sélection fait gagner des minutes par jour aux utilisateurs avancés.
+- **Utiliser *Action en masse* pour les opérations répétitives.** Un bouton *Renvoyer à la PA* qui traite une multi-sélection fait gagner des minutes par jour aux utilisateurs avancés.
 
 ---
 
 ## Sous le capot
 
-Les définitions d'écran sont enregistrées dans `liberty-apps/config/screens.toml`. Les opérateurs **ne modifient pas ce fichier à la main** en exploitation normale ; l'éditeur d'écran est l'interface canonique. L'onglet *TOML brut* est l'échappatoire pour les rares cas où l'éditeur ne couvre pas un champ.
+Les définitions d'écran sont enregistrées dans `liberty-apps/config/screens.toml`. Les opérateurs **ne modifient pas ce fichier à la main** en exploitation normale ; l'éditeur d'écran est l'interface de référence. L'onglet *TOML brut* est l'échappatoire pour les rares cas où l'éditeur ne couvre pas un champ.
 
 ---
 

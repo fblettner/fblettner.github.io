@@ -8,7 +8,7 @@ keywords: [Liberty Framework, assistant IA, chat, Anthropic, tool use, claude, c
 
 Le framework embarque un **assistant conversationnel** intégré, accessible sur `/chat`. L'assistant repose sur un modèle Claude d'Anthropic avec **usage d'outils** activé : chaque requête SQL et chaque endpoint HTTP des connecteurs accessibles à l'appelant est présenté au modèle sous forme d'outil. L'utilisateur pose sa question en langage naturel ; le modèle choisit le bon outil, l'exécute, lit le résultat puis répond.
 
-L'intégration est optionnelle (aucun appel à l'IA n'a lieu sans clé API) et respecte le modèle de permissions du framework : l'assistant ne voit et n'exécute que ce que l'utilisateur appelant peut voir et exécuter.
+L'intégration est optionnelle (aucun appel à l'IA n'a lieu sans clé API) et respecte le modèle de permissions du framework : l'assistant ne voit et n'exécute que ce que l'utilisateur appelant peut lui-même voir et exécuter.
 
 ---
 
@@ -72,7 +72,7 @@ tool_concurrency = 4
 | Champ | Description |
 |---|---|
 | `provider` | `anthropic`. Seul fournisseur pris en charge aujourd'hui. |
-| `api_key` | Clé d'API. Toujours référencer une variable d'environnement, jamais en clair. |
+| `api_key` | Clé d'API. Toujours référencer une variable d'environnement. |
 | `model` | Identifiant du modèle Anthropic. Valeur par défaut `claude-sonnet-4-6`. Passer à `claude-opus-4-7` pour un raisonnement plus poussé, à `claude-haiku-4-5` pour des tours plus rapides et moins coûteux. |
 | `max_tokens` | Plafond par réponse de l'assistant. Valeur par défaut 4096. |
 | `tool_concurrency` | Nombre maximal d'appels d'outils en parallèle par tour. Valeur par défaut 4. |
@@ -87,13 +87,13 @@ Le framework construit la liste d'outils transmise au modèle à partir du catal
 
 | Champ | Source |
 |---|---|
-| `name` | Identifiant nettoyé du connecteur et de la requête / endpoint (`billing__invoices_for_period`, `crm__get_customer`). Snake_case minuscule, pour respecter les règles de nommage d'outils Anthropic. |
+| `name` | Identifiant nettoyé du connecteur et de la requête / endpoint (`invoices__invoices_for_period`, `crm__get_customer`). Snake_case minuscule, pour respecter les règles de nommage d'outils Anthropic. |
 | `description` | La `description` du connecteur, complétée par la `description` de la requête / endpoint dans `connectors.toml`. Les libellés localisés du dictionnaire y sont intégrés. |
 | `input_schema` | Un schéma JSON dérivé de la déclaration `params` de la requête : nom, type, description (depuis `label`), drapeau requis, énumération (depuis `lookup`). |
 
-Chaque appel d'outil est **limité au périmètre de l'utilisateur appelant** : le framework vérifie sa permission sur le connecteur sous-jacent avant l'exécution, exactement comme pour un appel REST direct. Un utilisateur sans `sql:billing:invoices-for-period` ne voit jamais l'outil correspondant dans sa session de discussion.
+Chaque appel d'outil est **restreint au périmètre de l'utilisateur appelant** : le framework vérifie sa permission sur le connecteur sous-jacent avant l'exécution, exactement comme pour un appel REST direct. Un utilisateur sans `sql:invoices:invoices-for-period` ne voit jamais l'outil correspondant dans sa session de discussion.
 
-### Ce qui est rendu disponible
+### Ce qui est mis à disposition
 
 Par défaut, chaque requête en lecture seule accessible à l'utilisateur devient un outil. Les requêtes en écriture sont **exclues**, sauf si l'entrée de connecteur définit `expose_to_ai = true`. Deux raisons :
 
@@ -111,7 +111,7 @@ Une mise en page sur deux colonnes :
 | Colonne | Contenu |
 |---|---|
 | **Gauche — conversation** | Fil des messages. Les messages utilisateur à droite (bleu), ceux de l'assistant à gauche (gris). Les appels d'outils sont repliés sous des accordéons indiquant le nom de l'outil, les paramètres d'entrée et le nombre de résultats. |
-| **Droite — contexte** | Les métadonnées de la conversation active : nombre de tours, total de tokens consommés, liste des outils que le modèle peut choisir (filtrée par permission). Une bascule pour effacer la conversation. |
+| **Droite — contexte** | Les métadonnées de la conversation active : nombre de tours, total de tokens consommés, liste des outils que le modèle peut choisir (restreinte par permission). Une bascule pour effacer la conversation. |
 
 La zone de saisie en bas accepte le texte brut, `↵` pour envoyer et `⇧↵` pour un saut de ligne.
 
@@ -146,7 +146,7 @@ Les limites sont affichées dans la colonne droite de la page de discussion : un
 | Code | Effet |
 |---|---|
 | `ai:chat` | Utiliser la page `/chat`. Requis pour chaque tour interactif. |
-| `ai:tool:<name>` | Utiliser un outil spécifique. Caractères génériques : `ai:tool:billing__*` autorise tous les outils de facturation. Par défaut, **la permission de l'outil suit celle du connecteur sous-jacent** : un `ai:tool:*` explicite n'est nécessaire que quand le connecteur est exposé à l'IA mais qu'un sous-ensemble doit être restreint. |
+| `ai:tool:<name>` | Utiliser un outil spécifique. Caractères génériques : `ai:tool:invoices__*` autorise tous les outils de facturation. Par défaut, **la permission de l'outil suit celle du connecteur sous-jacent** : un `ai:tool:*` explicite n'est nécessaire que quand le connecteur est ouvert à l'IA mais qu'un sous-ensemble doit être restreint. |
 | `ai:share` | Utiliser l'action *Partager* pour produire un lien en lecture seule. |
 | `ai:read-shared` | Ouvrir une conversation partagée. |
 | `ai:write` | Utiliser les outils que le framework considère en écriture (`expose_to_ai = true` sur une requête en écriture). |
@@ -178,11 +178,11 @@ La réponse est **diffusée en flux** au format `text/event-stream` (SSE) — un
 
 ## Conseils et bonnes pratiques
 
-- **Rédiger une bonne `description` sur chaque connecteur et chaque requête.** Le modèle choisit les outils à partir de la description ; des descriptions vagues (« récupérer des données ») le perdent. Deux phrases dans la langue de l'utilisateur, nommant l'entité et le cas d'usage typique, donnent les meilleurs résultats.
+- **Rédiger une bonne `description` sur chaque connecteur et chaque requête.** Le modèle choisit les outils à partir de la description ; des descriptions vagues (« récupérer des données ») le perdent. Deux phrases dans la langue de l'utilisateur, nommant l'entité et le cas d'usage type, donnent les meilleurs résultats.
 - **Définir des `enum` explicites sur les paramètres.** Un paramètre `status` avec `lookup = "invoice-statuses"` permet au modèle de choisir dans l'ensemble connu plutôt que d'inventer une valeur.
 - **Garder `tool_concurrency` bas en développement.** Les appels d'outils parallèles génèrent une charge concurrente sur la base qui peut masquer des problèmes apparaissant en production en mode séquentiel.
 - **Utiliser `claude-haiku-*` pour les installations sensibles au coût.** Haiku est nettement moins cher que Sonnet pour la même surface de discussion ; le compromis se trouve dans la qualité du raisonnement sur les questions à étapes multiples.
-- **Ne pas exposer les requêtes en écriture par défaut.** Commencer en lecture seule ; activer `expose_to_ai = true` requête par requête, au fur et à mesure que l'équipe prend confiance dans le comportement de l'assistant.
+- **Ne pas ouvrir les requêtes en écriture par défaut.** Commencer en lecture seule ; activer `expose_to_ai = true` requête par requête, au fur et à mesure que l'équipe prend confiance dans le comportement de l'assistant.
 - **Auditer la surface IA.** `GET /ai/tools` pour un rôle arbitraire est la vérification la plus rapide avant d'accorder `ai:chat`.
 
 ---

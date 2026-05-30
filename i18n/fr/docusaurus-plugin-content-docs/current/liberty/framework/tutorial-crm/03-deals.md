@@ -6,7 +6,7 @@ keywords: [Liberty Framework, tutoriel, CRM, affaires, lookups, dictionnaire, cl
 
 # Étape 3 — Affaires et relations
 
-L'écran Clients fonctionne mais reste brut. Dans cette étape, nous ajoutons la deuxième entité — **Affaires** — avec une référence clé étrangère vers Clients, polissons le rendu visuel via le **dictionnaire**, et ajoutons une **sous-grille Activités** à l'intérieur du dialogue de l'affaire pour que les utilisateurs puissent journaliser appels et réunions contre une affaire.
+L'écran Clients fonctionne mais reste brut. Dans cette étape, nous ajoutons la deuxième entité — **Affaires** — avec une référence clé étrangère vers Clients, polissons le rendu visuel via le **dictionnaire**, et ajoutons une **sous-grille Activités** à l'intérieur du dialogue de l'affaire pour que les utilisateurs puissent journaliser appels et réunions sur une affaire.
 
 À la fin de cette étape, le CRM compte deux écrans liés avec des chips, des listes déroulantes et une relation parent-enfant en bonne et due forme. Temps estimé : **20 minutes**.
 
@@ -14,11 +14,11 @@ L'écran Clients fonctionne mais reste brut. Dans cette étape, nous ajoutons la
 
 ## Ce que nous faisons et pourquoi
 
-Jusqu'à présent, les valeurs brutes des colonnes coulaient telles quelles vers l'UI — un statut n'était que du texte, un pays seulement deux lettres. Les vraies applications veulent **des chips libellés, des listes déroulantes alimentées par une table, des entités liées en ligne**.
+Jusqu'à présent, les valeurs brutes des colonnes remontaient telles quelles vers l'UI — un statut n'était que du texte, un pays seulement deux lettres. Les vraies applications attendent **des chips libellés, des listes déroulantes alimentées par une table, des entités liées en ligne**.
 
-Le framework règle ça via trois primitives empilées au-dessus du couple connecteur + écran que nous avons déjà construit :
+Le framework règle cela via trois primitives empilées au-dessus du couple connecteur + écran que nous avons déjà construit :
 
-| Primitive | Ce qu'elle nous donne | Où elle vit |
+| Primitive | Ce qu'elle apporte | Où elle se trouve |
 |---|---|---|
 | **Entrée de dictionnaire** | Une déclaration par colonne du libellé, du format et de la *règle d'affichage* (BOOLEAN / ENUM / LOOKUP / PASSWORD). | *Paramètres → Dictionnaire → Colonnes*. |
 | **Lookup** | Une requête nommée qui retourne des paires `{ value, label }` — alimente les listes déroulantes. | *Paramètres → Dictionnaire → Lookups*. |
@@ -39,7 +39,7 @@ Ouvrez **Paramètres → Dictionnaire → Colonnes → + Nouvelle colonne** :
 | Champ | Valeur |
 |---|---|
 | **Nom** | `customer_status` |
-| **Libellé** | `Status` *(carte par langue ; anglais `Status`, français `Statut`)* |
+| **Libellé** | `Statut` *(carte par langue ; anglais `Status`, français `Statut`)* |
 | **Type** | `string` |
 | **Règle** | `ENUM` |
 | **Valeurs enum** | Les quatre lignes ci-dessous |
@@ -65,7 +65,7 @@ Rouvrez l'écran Clients. La colonne *Statut* affiche maintenant un chip coloré
 
 La colonne pays est actuellement un code à deux lettres en texte libre. Un lookup la transforme en liste déroulante avec autocomplétion.
 
-D'abord la requête source — il nous faut un connecteur qui liste les pays. Nous allons profiter du connecteur **customers** en ajoutant une petite requête de référence, puisque nous n'avons pas de table pays distincte :
+D'abord la requête source — il faut un connecteur qui liste les pays. Nous allons profiter du connecteur **customers** en ajoutant une petite requête de référence, puisque nous n'avons pas de table pays distincte :
 
 Ouvrez **Paramètres → Connecteurs → customers → + Ajouter une requête** :
 
@@ -107,7 +107,7 @@ Retour dans **Paramètres → Dictionnaire → Colonnes → + Nouvelle colonne**
 | Champ | Valeur |
 |---|---|
 | **Nom** | `country_code` |
-| **Libellé** | `Country` / `Pays` |
+| **Libellé** | `Pays` *(anglais `Country`, français `Pays`)* |
 | **Type** | `string` |
 | **Règle** | `LOOKUP` |
 | **Lookup** | `countries` ▾ |
@@ -163,7 +163,7 @@ WHERE  (:customer_id IS NULL OR d.customer_id = :customer_id)
 ORDER BY d.close_date;
 ```
 
-Notez les deux paramètres optionnels — `customer_id` et `stage`. Déclarez-les dans la sous-table *Paramètres* :
+À noter les deux paramètres optionnels — `customer_id` et `stage`. Déclarez-les dans la sous-table *Paramètres* :
 
 | Nom | Type | Obligatoire | Libellé | Lookup |
 |---|---|---|---|---|
@@ -176,7 +176,7 @@ Cliquez sur **▶ Tester**. Quatre lignes.
 
 ### Lookup pour les clients (FK)
 
-Avant les requêtes d'écriture, définissez un lookup qui permet au formulaire de l'affaire de choisir un client par nom.
+Avant les requêtes d'écriture, définissez un lookup qui permet au formulaire de l'affaire de sélectionner un client par nom.
 
 **Paramètres → Dictionnaire → Lookups → + Nouveau lookup** :
 
@@ -199,7 +199,7 @@ SELECT code, label, colour FROM deal_stages ORDER BY ord;
 
 Nommez-la `stages-list`. Puis un lookup de dictionnaire qui pointe dessus (`stages`, valeur = `code`, libellé = `label`, colonne couleur = `colour` — donne aux chips leur couleur).
 
-Deux colonnes de dictionnaire référencent maintenant ces lookups :
+Deux colonnes de dictionnaire référencent désormais ces lookups :
 
 | Entrée de colonne | Règle | Lookup | Description |
 |---|---|---|---|
@@ -289,13 +289,13 @@ Ajouter → `deals/create`, Enregistrer → `deals/update`, Supprimer → `deals
 
 Ajoutez la feuille au menu **crm** (Paramètres → Menus → crm → + Ajouter une feuille), qui pointe vers `crm/deals` avec l'icône `briefcase`. **Enregistrer et recharger**.
 
-L'écran Affaires s'allume dans la barre latérale.
+L'écran Affaires apparaît dans la barre latérale.
 
 ---
 
 ## Ajouter une sous-grille Activités
 
-La table activities stocke des notes contre les affaires. Plutôt qu'un écran de premier niveau distinct, nous allons intégrer les activités **à l'intérieur** du dialogue d'affaire pour que l'utilisateur voie l'historique d'une affaire à l'endroit même où il la modifie.
+La table activities stocke des notes liées aux affaires. Plutôt qu'un écran de premier niveau distinct, nous allons intégrer les activités **à l'intérieur** du dialogue d'affaire pour que l'utilisateur voie l'historique d'une affaire à l'endroit même où il la modifie.
 
 ### Connecteur activities
 
@@ -347,9 +347,9 @@ La sous-grille met automatiquement en forme sa grille à partir de la requête `
 
 Ouvrez **CRM → Affaires**, cliquez sur l'affaire *Globex Logistics*. Le dialogue s'ouvre avec deux onglets — *Détails* (les champs que nous avons câblés) et *Activités* (vide pour les données initiales).
 
-Basculez sur l'onglet *Activités*, cliquez sur **+ Ajouter**, journalisez une note de `meeting` rapide. Enregistrez. L'activité apparaît dans la sous-grille ; la colonne *Enregistré par* est `admin` (rempli par la valeur par défaut `LOGIN` de la couche formulaire).
+Basculez sur l'onglet *Activités*, cliquez sur **+ Ajouter**, saisissez une note `meeting` rapide. Enregistrez. L'activité apparaît dans la sous-grille ; la colonne *Enregistré par* est `admin` (rempli par la valeur par défaut `LOGIN` de la couche formulaire).
 
-Essayez la colonne nom du client sur la grille Affaires — cliquer sur la valeur style chip devrait vous amener à l'écran Clients pré-filtré sur ce client. (On l'obtient gratuitement parce que la colonne `customer_id` est un `LOOKUP` contre la liste des clients.)
+Essayez la colonne nom du client dans la grille Affaires — un clic sur la valeur style chip ouvre l'écran Clients pré-filtré sur ce client. (Comportement obtenu gratuitement parce que la colonne `customer_id` est un `LOOKUP` sur la liste des clients.)
 
 ---
 
@@ -361,6 +361,6 @@ Ce qui manque encore :
 
 - Une **vue d'ensemble** — KPI et un graphique qui résument le pipeline. À venir à l'[Étape 4](./04-dashboard.md).
 - De **vrais rôles** — aujourd'hui tout est réservé à l'admin. À venir à l'[Étape 5](./05-auth.md).
-- L'**IA** et les **jobs planifiés** — à venir à l'[Étape 6](./06-ai-and-jobs.md).
+- L'**IA** et les **tâches planifiées** — à venir à l'[Étape 6](./06-ai-and-jobs.md).
 
 → **[Étape 4 — Tableau de bord du pipeline commercial](./04-dashboard.md)** — KPI, graphique, drill-down.

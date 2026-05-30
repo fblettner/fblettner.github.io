@@ -6,7 +6,7 @@ keywords: [Liberty Framework, structure du projet, liberty-next, liberty-apps, a
 
 # Structure du projet
 
-Liberty Framework est réparti entre **deux dépôts** qui collaborent à l'exécution : le binaire du framework (`liberty-next`) lit sa configuration par section depuis le dépôt apps (`liberty-apps`). Cette page est la cartographie des fichiers — où vit chaque élément, ce qui est versionné, ce qui est spécifique à l'installation.
+Liberty Framework est réparti entre **deux dépôts** qui coopèrent à l'exécution : le binaire du framework (`liberty-next`) lit sa configuration par section depuis le dépôt apps (`liberty-apps`). Cette page est la cartographie des fichiers — où se trouve chaque élément, ce qui est versionné, ce qui est spécifique à l'installation.
 
 ---
 
@@ -108,7 +108,7 @@ liberty-apps/
 | `config/dashboards.toml` | UI Paramètres → *Tableaux de bord* | Panneaux stat / bar / line / pie. |
 | `config/charts.toml` | UI Paramètres → *Graphiques* | Définitions de graphiques référencées par les tableaux de bord. |
 | `plugins/*/jobs.toml` | UI Paramètres → *Jobs* | Catalogue Nomaflow — un fichier par package d'app. |
-| `plugins/*/*.py` | Développeur | Callables d'étapes personnalisés — exposés au framework via `sys.path`. |
+| `plugins/*/*.py` | Développeur | Callables d'étapes personnalisés — chargés par le framework via `sys.path`. |
 
 Chaque fichier est du TOML simple que vous pouvez lire avec `cat`, comparer avec `git`, éditer dans `vim`. L'UI des Paramètres utilise le même format sur disque — ce que vous enregistrez dans le navigateur est ce que `git status` rapporte.
 
@@ -149,7 +149,7 @@ Le contrat complet des variables d'environnement est documenté dans [Configurat
 ## Conventions de gestion de versions
 
 - `liberty-next` se met à niveau en **basculant les tags git** — le binaire du framework est traité comme une dépendance externe, non modifiée sur place. Le dépôt `liberty-apps` reste intact lors des montées de version du framework.
-- `liberty-apps` est versionné normalement — chaque édition TOML faite dans l'UI des Paramètres se traduit par un diff dans le dépôt. Les commits faits par l'opérateur sont relisables comme n'importe quel autre changement de code.
+- `liberty-apps` est versionné normalement — chaque édition TOML faite dans l'UI des Paramètres produit un diff dans le dépôt. Les commits faits par l'opérateur sont relisables comme n'importe quel autre changement de code.
 - Les secrets — clé de signature JWT, clé maître, clé de licence, clé IA — se trouvent dans l'**environnement**, jamais dans l'un ou l'autre dépôt. Voir [Chiffrement et secrets](../configuration/encryption-secrets.md).
 
 ---

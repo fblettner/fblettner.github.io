@@ -12,7 +12,7 @@ C'est exactement à ça que sert Liberty Framework.
 
 Vous l'installez une fois, vous le pointez vers votre source de données, et vous définissez **ce que les utilisateurs doivent voir** dans une interface Paramètres : quelles requêtes alimentent quels écrans, quels écrans appartiennent à quel menu, quels tableaux de bord agrègent quoi. Le framework s'occupe du reste — la grille, le dialogue d'édition, les filtres, l'authentification, l'élagage par rôle, les boutons d'export, les colonnes d'audit, l'assistant, les jobs planifiés.
 
-Une poignée de concepts (un *pool*, un *connecteur*, un *écran*, un *tableau de bord*, un *menu*) se combinent pour couvrir la surface dont la plupart des applications internes ont besoin : CRUD sur des bases de données, KPI et graphiques, accès contrôlé par rôle, pipelines ETL, un assistant IA qui sait exécuter vos requêtes à la demande.
+Une poignée de concepts (un *pool*, un *connecteur*, un *écran*, un *tableau de bord*, un *menu*) se combinent pour couvrir la surface dont la plupart des applications internes ont besoin : CRUD sur des bases de données, KPI et graphiques, accès contrôlé par rôle, pipelines ETL, un assistant IA capable d'exécuter vos requêtes à la demande.
 
 ---
 
@@ -30,7 +30,7 @@ La plupart des équipes finissent par écrire le même type d'application encore
 
 Le framework prend l'approche inverse : le **schéma** de chaque requête est découvert à l'exécution depuis la base de données elle-même, la **mise en page** est décrite en quelques clics dans l'interface Paramètres, et le **rendu** — grille, dialogue, tableau de bord, outil IA, surface REST — est le travail du framework, pas le vôtre. Vous écrivez du SQL. Vous obtenez une UI.
 
-Quand quelque chose que le framework ne couvre pas apparaît (un widget sur mesure, une page unique, une UX peaufinée à la main), la plateforme se met en retrait — vous pouvez brancher une route React, une étape Python personnalisée ou un endpoint HTTP brut.
+Quand un besoin que le framework ne couvre pas apparaît (un widget sur mesure, une page unique, une UX peaufinée à la main), la plateforme se met en retrait — vous pouvez brancher une route React, une étape Python personnalisée ou un endpoint HTTP brut.
 
 ---
 
@@ -111,7 +111,7 @@ Si vous êtes du genre à lire la documentation de bout en bout, la section **[D
 |---|---|
 | [Démarrage](./getting-started/installation.md) | Installer le framework, créer votre première app, comprendre la structure des fichiers. |
 | [Tutoriel — Construire un CRM](./tutorial-crm/01-setup.md) | Parcours CRM complet, de bout en bout. |
-| [Configuration](./configuration/settings-ui.md) | Interface Paramètres, réglages du framework, variables d'environnement, rechargement à chaud, secrets chiffrés. |
+| [Configuration](./configuration/settings-ui.md) | Interface Paramètres, réglages du framework, variables d'environnement, rechargement à chaud, secrets chiffrés au repos. |
 | [Concepts](./connectors.md) | Les cinq primitives du framework + liaison des paramètres et conditions de formulaire, chacune avec une intro « Quoi / Pourquoi / Quand ». |
 | [Authentification](./auth/authentication.md) | Utilisateurs locaux, OIDC, JWT, rôles, permissions, clés de licence. |
 | [Apps et Plugins](./apps/overview.md) | Organisation multi-apps, plugins Python personnalisés, internationalisation. |

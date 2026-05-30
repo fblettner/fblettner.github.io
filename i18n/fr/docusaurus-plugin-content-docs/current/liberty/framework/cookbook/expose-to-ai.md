@@ -1,14 +1,14 @@
 ---
-title: Exposer des données à l'assistant IA
+title: Donner accès aux données à l'assistant IA
 description: "Recette — choisir les connecteurs que l'assistant IA peut lire, restreindre les écritures, rédiger une bonne description d'outil pour que le modèle choisisse la bonne requête. La différence entre un assistant utile et un assistant qui hallucine."
-keywords: [Liberty Framework, cookbook, AI, assistant, IA, exposer, tool description, scoping, périmètre]
+keywords: [Liberty Framework, cookbook, AI, assistant, IA, accès, tool description, scoping, périmètre]
 ---
 
-# Exposer des données à l'assistant IA
+# Donner accès aux données à l'assistant IA
 
 ## Le problème
 
-L'assistant IA du framework exécute les mêmes requêtes de connecteur que l'interface — mais il ne peut choisir le bon outil que si vous lui indiquez ce que fait chacun d'eux. Un connecteur exposé à l'assistant avec une description floue (« get data ») sera choisi au hasard ; un connecteur avec une description claire de deux phrases sera choisi correctement.
+L'assistant IA du framework exécute les mêmes requêtes de connecteur que l'interface — mais il ne peut choisir le bon outil que si vous lui indiquez ce que fait chacun d'eux. Un connecteur rendu visible à l'assistant avec une description floue (« get data ») sera choisi au hasard ; un connecteur avec une description claire de deux phrases sera choisi correctement.
 
 Cette recette couvre le **cadrage** — quels connecteurs l'assistant voit, quels chemins d'écriture il peut emprunter, comment rédiger les descriptions que le modèle utilise.
 
@@ -18,9 +18,9 @@ Trois couches de cadrage, chacune indépendante :
 
 | Couche | Emplacement | Effet |
 |---|---|---|
-| **Par connecteur — Expose to AI** | Paramètres → Connectors → \<connector\> → sous-formulaire Connection. | Désactivé → aucune des requêtes du connecteur n'apparaît dans la liste d'outils. |
-| **Par requête — Operation type** | Paramètres → Connectors → \<connector\> → \<query\> → Operation. | Les requêtes `Read` sont exposées par défaut (quand l'interrupteur du connecteur est activé) ; les requêtes `Write` demandent une activation supplémentaire. |
-| **Par rôle — `ai:chat` + `ai:tool:<name>`** | Paramètres → Roles. | Même une requête exposée est masquée à un appelant sans `ai:chat`. La permission fine `ai:tool:<name>` permet d'autoriser les outils rôle par rôle. |
+| **Par connecteur — Expose to AI** | Paramètres → Connecteurs → \<connecteur\> → sous-formulaire Connection. | Désactivé → aucune des requêtes du connecteur n'apparaît dans la liste d'outils. |
+| **Par requête — Operation type** | Paramètres → Connecteurs → \<connecteur\> → \<requête\> → Operation. | Les requêtes `Read` sont visibles par défaut (quand l'interrupteur du connecteur est activé) ; les requêtes `Write` demandent une activation supplémentaire. |
+| **Par rôle — `ai:chat` + `ai:tool:<name>`** | Paramètres → Rôles. | Même une requête visible est masquée à un appelant sans `ai:chat`. La permission fine `ai:tool:<name>` permet d'autoriser les outils rôle par rôle. |
 
 Combinées, ces couches font que l'assistant voit exactement ce que chaque utilisateur est censé voir — ni plus, ni moins.
 
@@ -55,7 +55,7 @@ Les deux dans la langue de l'utilisateur (l'assistant s'aligne sur la langue de 
 
 ### 3. Activer explicitement les requêtes d'écriture
 
-Les requêtes d'écriture sont **exclues par défaut** même quand le connecteur est exposé — le framework ne veut pas que l'assistant déclenche des écritures non voulues.
+Les requêtes d'écriture sont **exclues par défaut** même quand le connecteur est visible par l'assistant — le framework ne veut pas que l'assistant déclenche des écritures non voulues.
 
 Pour activer une requête d'écriture :
 
@@ -93,8 +93,8 @@ La liste doit correspondre aux permissions de lecture de l'utilisateur. Si un ou
 
 | Erreur | Symptôme |
 |---|---|
-| **Connecteur exposé mais description vide** | Le modèle choisit des outils au hasard, hallucine des noms de paramètres. |
-| **Requête d'écriture exposée sans `ai:write` sur aucun rôle** | La requête apparaît dans `GET /ai/tools` mais l'assistant refuse de l'appeler (« you don't have permission to write »). |
+| **Connecteur visible mais description vide** | Le modèle choisit des outils au hasard, hallucine des noms de paramètres. |
+| **Requête d'écriture visible sans `ai:write` sur aucun rôle** | La requête apparaît dans `GET /ai/tools` mais l'assistant refuse de l'appeler (« you don't have permission to write »). |
 | **Plusieurs requêtes avec des descriptions similaires** | Le modèle prend la première par ordre lexicographique et ignore les autres. Différenciez les descriptions. |
 | **Description dans une langue, requête dans une autre** | Le modèle se trouble. Alignez la langue de la description du connecteur sur la `session.lang` de l'utilisateur. |
 
@@ -105,7 +105,7 @@ La liste doit correspondre aux permissions de lecture de l'utilisateur. Si un ou
 | **Limiter l'IA à une seule application** | Ne donnez pas `ai:chat` aux utilisateurs des autres applications. Ou n'accordez que `ai:tool:crm__*`. |
 | **Un plafond journalier d'appels IA par utilisateur** | Réglez `[ai] max_messages_per_day` dans les paramètres du framework ; le framework refuse au-delà du plafond. |
 | **Que le modèle ne voie jamais de vraies données personnelles** | Marquez la colonne `Rule = PASSWORD` dans l'entrée du dictionnaire — l'IA reçoit `••••` dans le résultat de l'outil, et non la valeur sous-jacente. |
-| **Un connecteur précis exposé uniquement aux admins** | Réglez la permission de la requête sous-jacente sur `sql:financial:*` et ne l'accordez qu'à `admin` ; `Expose to AI` peut rester activé — le framework filtre. |
+| **Un connecteur précis visible uniquement par les admins** | Réglez la permission de la requête sous-jacente sur `sql:financial:*` et ne l'accordez qu'à `admin` ; `Expose to AI` peut rester activé — le framework filtre. |
 
 ## Pour aller plus loin
 

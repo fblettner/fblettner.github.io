@@ -59,8 +59,8 @@ Pour Oracle / SQLite, remplacez `ON CONFLICT` par l'équivalent (`MERGE` sur Ora
 | Champ | Valeur |
 |---|---|
 | **Nom** | `customers-bulk-import` |
-| **App** | `&lt;app&gt;` |
-| **Schedule** | vide *(déclenchement manuel uniquement)* |
+| **Application** | `&lt;app&gt;` |
+| **Planification** | vide *(déclenchement manuel uniquement)* |
 | **Instance unique** | ✓ |
 
 Deux étapes :
@@ -95,7 +95,7 @@ Le helper :
 - Appelle la requête upsert par ligne, capture succès et échecs.
 - Renvoie `{ "ok": 487, "failed": 13, "failures": [...] }`.
 
-Les paramètres du job exposent `file_url` — déclaré sur l'onglet *Paramètres*.
+Les paramètres du job déclarent `file_url` — défini sur l'onglet *Paramètres*.
 
 ### 4. Ajouter l'action d'écran
 
@@ -103,9 +103,9 @@ Les paramètres du job exposent `file_url` — déclaré sur l'onglet *Paramètr
 
 | Champ | Valeur |
 |---|---|
-| **Label** | `↑ Importer` |
-| **Icon** | `upload` |
-| **Variant** | `Secondary` |
+| **Libellé** | `↑ Importer` |
+| **Icône** | `upload` |
+| **Variante** | `Secondary` |
 | **Action** | `Exécuter le job` |
 | **Job** | `customers-bulk-import` |
 | **Dialogue de paramètres** | ✓ *(affiche le sélecteur de fichier avant exécution)* |

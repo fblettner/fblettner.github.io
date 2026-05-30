@@ -8,7 +8,7 @@ keywords: [Liberty Framework, cookbook, téléversement, pièce jointe, blob, S3
 
 ## Le problème
 
-Une ligne a un fichier associé — un PDF de contrat sur le client, un reçu scanné sur la note de frais, une photo sur l'ordre de maintenance. Les opérateurs doivent pouvoir le téléverser, le voir, le remplacer, le télécharger.
+Une ligne a un fichier associé — un PDF de contrat sur le client, un reçu numérisé sur la note de frais, une photo sur l'ordre de maintenance. Les opérateurs doivent pouvoir le téléverser, le voir, le remplacer, le télécharger.
 
 ## Le modèle
 
@@ -81,7 +81,7 @@ ALTER TABLE customers
 | **Fournisseur** | `S3` / `Azure Blob` / `GCS` / `Local filesystem` (développement uniquement) |
 | **Endpoint** | L'endpoint du bucket (URL compatible S3). |
 | **Bucket** | Le nom du bucket. |
-| **Identifiants** | 🔒 clé d'accès + secret. |
+| **Identifiants** | Clé d'accès + secret (chiffrés au repos). |
 
 ### Widget dictionnaire
 
@@ -118,7 +118,7 @@ Les deux modèles fonctionnent pour un-fichier-par-ligne. Pour le multi-fichier 
 | Vous voulez… | Faites ceci |
 |---|---|
 | **Seulement PDF / image / etc** | Définissez le champ `accept` sur le widget dictionnaire — `application/pdf`, `image/*`. |
-| **Scan antivirus avant enregistrement** | Ajoutez une étape Nomaflow `python` sur l'événement de téléversement qui appelle votre scanner antivirus. Rejeter si positif. |
+| **Analyse antivirus avant enregistrement** | Ajoutez une étape Nomaflow `python` sur l'événement de téléversement qui appelle votre service antivirus. Rejeter si positif. |
 | **Glisser-déposer multi-fichiers** | Utilisez le modèle de sous-grille ci-dessus ; le widget du framework gère le téléversement en masse vers la même cible. |
 | **Un aperçu en miniature** | Ajoutez une requête `&lt;connector&gt;.thumbnail` qui renvoie un aperçu base64 ; affichez-le dans la grille via une règle `Image`. |
 

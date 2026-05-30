@@ -1,14 +1,14 @@
 ---
 title: Référence API REST
-description: "Tous les endpoints REST proposés par le framework — groupés par domaine : auth, connecteurs, écrans, tableaux de bord, menus, jobs, IA, configuration admin, sonde de santé. URL, méthode, permission requise, corps de requête et forme de réponse."
+description: "Tous les endpoints REST proposés par le framework — groupés par domaine : auth, connecteurs, écrans, tableaux de bord, menus, tâches, IA, configuration admin, sonde de santé. URL, méthode, permission requise, corps de requête et forme de réponse."
 keywords: [Liberty Framework, REST API, /api, /admin, /auth, OpenAPI, endpoints, JWT, /healthz, /docs]
 ---
 
 # Référence API REST
 
-Chaque concept du framework — se connecter, lancer une requête, charger un écran, déclencher un job, dialoguer avec l'assistant — est accessible via la surface REST. Le frontend utilise les mêmes endpoints que les intégrations externes, et le document OpenAPI sur `/docs` (en direct, généré depuis les signatures de routes FastAPI) est parcourable comme référence développeur.
+Chaque concept du framework — se connecter, lancer une requête, charger un écran, déclencher une tâche, dialoguer avec l'assistant — est accessible via la surface REST. Le frontend utilise les mêmes endpoints que les intégrations externes, et le document OpenAPI sur `/docs` (en direct, généré depuis les signatures de routes FastAPI) est parcourable comme référence développeur.
 
-Cette page est une cartographie domaine par domaine des endpoints, avec la permission requise, la forme de la requête et la forme de la réponse pour chacun. La variante interactive est sur `http://${HOST}:${PORT}/docs` — le Swagger UI embarqué par le framework est la référence canonique pour les schémas requête / réponse.
+Cette page est une cartographie domaine par domaine des endpoints, avec la permission requise, la forme de la requête et la forme de la réponse pour chacun. La variante interactive se trouve sur `http://${HOST}:${PORT}/docs` — le Swagger UI embarqué par le framework est la référence pour les schémas requête / réponse.
 
 ---
 
@@ -18,7 +18,7 @@ Cette page est une cartographie domaine par domaine des endpoints, avec la permi
 - **Authentification** — chaque endpoint demande un token `Bearer` dans l'en-tête `Authorization`, sauf `POST /auth/login`, `POST /auth/refresh`, la paire OIDC et `GET /api/healthz`.
 - **Type de contenu** — JSON en entrée / JSON en sortie, sauf mention contraire. Les erreurs portent un corps `{ "detail": "..." }` avec un statut non 2xx.
 - **Langue** — `X-Liberty-Lang: fr` modifie les libellés de la réponse pour les endpoints qui en contiennent (écrans, dictionnaire, menus, erreurs).
-- **Codes de permission** identiques à ceux documentés sous [Rôles et permissions](./auth/roles-permissions.md). `*` est un caractère générique ; `sql:billing:*` correspond à toute requête du connecteur `billing`.
+- **Codes de permission** identiques à ceux documentés sous [Rôles et permissions](./auth/roles-permissions.md). `*` est un caractère générique ; `sql:invoices:*` correspond à toute requête du connecteur `invoices`.
 
 ---
 
@@ -125,17 +125,17 @@ Voir [Authentification](./auth/authentication.md) pour le flux OIDC.
 
 ---
 
-## Jobs (Nomaflow) \{#jobs\}
+## Tâches (Nomaflow) \{#jobs\}
 
 | Méthode | Chemin | Permission | Description |
 |---|---|---|---|
-| `GET` | `/admin/jobs` | `jobs:read` | Catalogue des jobs et statut de la dernière exécution par job. |
-| `GET` | `/admin/jobs/{name}` | `job:{name}` | Définition d'un job et 50 dernières exécutions. |
+| `GET` | `/admin/jobs` | `jobs:read` | Catalogue des tâches et statut de la dernière exécution par tâche. |
+| `GET` | `/admin/jobs/{name}` | `job:{name}` | Définition d'une tâche et 50 dernières exécutions. |
 | `POST` | `/admin/jobs/{name}/run` | `job:{name}` | Déclenche une exécution manuelle. Le corps accepte des surcharges de `params`. Renvoie `{ "run_id" }`. |
-| `GET` | `/admin/jobs/runs` | `jobs:read` | Liste les exécutions sur tous les jobs — filtrable par `job`, `status`, `from`, `to`. |
+| `GET` | `/admin/jobs/runs` | `jobs:read` | Liste les exécutions sur toutes les tâches — filtrable par `job`, `status`, `from`, `to`. |
 | `GET` | `/admin/jobs/runs/{run_id}` | `job:{name}` | Détail complet de l'exécution avec étapes et les 1000 dernières lignes de log. |
 | `POST` | `/admin/jobs/runs/{run_id}/abort` | `job:{name}` | Abandonne une exécution en cours. |
-| `POST` | `/admin/jobs/runs/{run_id}/replay` | `job:{name}` | Relance avec les mêmes paramètres. |
+| `POST` | `/admin/jobs/runs/{run_id}/replay` | `job:{name}` | Rejoue avec les mêmes paramètres. |
 | `GET` | `/admin/jobs/runs/{run_id}/logs` | `job:{name}` | Diffuse la fin du journal. `?follow=true` bascule sur Socket.IO. |
 | `GET` | `/admin/jobs/cron-preview?expression=...` | `jobs:read` | Analyse une expression cron et retourne les 5 prochains déclenchements. |
 
@@ -165,7 +165,7 @@ Chaque TOML par section suit la même forme — `<section>` vaut l'une de : `poo
 | `GET` | `/admin/config/{section}/raw` | `settings:raw` | Le texte TOML brut. |
 | `POST` | `/admin/config/{section}/raw` | `settings:raw` | Remplace le texte TOML brut. |
 | `POST` | `/admin/config/connectors/{name}/test-sql` | `settings:connectors` | Exécute une requête SQL — le corps contient `{ "query", "params" }`. |
-| `POST` | `/admin/config/api/test` | `settings:connectors` | Exécute un endpoint HTTP. |
+| `POST` | `/admin/config/api/test` | `settings:connectors` | Appelle un endpoint HTTP. |
 | `POST` | `/admin/config/rename` | `settings:write` | Renomme une entité dans tous les fichiers. Corps : `{ "scope", "from", "to" }`. |
 | `POST` | `/admin/reload` | `settings:reload` | Recharge les registres en mémoire. `?scope=<section>` pour restreindre ; valeur par défaut `all`. |
 
@@ -205,12 +205,12 @@ Le framework propose aussi un endpoint **Socket.IO** sur `/socket.io` pour les m
 |---|---|---|
 | `config.reloaded` | serveur → client | Diffusé après un rechargement à chaud — les clients rechargent le catalogue concerné. |
 | `lock.acquired` / `lock.released` | serveur → client | Verrous d'enregistrement sur les écrans (visibles sur le tableau de bord Technique). |
-| `job.run.transitioned` | serveur → client | Une exécution de job a changé de statut (`running` → `succeeded` / `failed` / `aborted`). |
+| `job.run.transitioned` | serveur → client | Une exécution de tâche a changé de statut (`running` → `succeeded` / `failed` / `aborted`). |
 | `job.run.log` | serveur → client | Une ligne de log issue d'une exécution en cours. Filtrée par `run_id`. |
 | `pool.stats` | serveur → client | Instantané périodique du pool pour le tableau de bord Technique. |
 | `ai.chat.delta` | serveur → client | Un bloc de tokens pendant un tour de discussion IA. |
 
-L'authentification est le même token Bearer qu'en REST, passé dans la charge utile `auth` du handshake Socket.IO.
+L'authentification se fait avec le même token Bearer qu'en REST, passé dans la charge utile `auth` du handshake Socket.IO.
 
 ---
 
@@ -230,7 +230,7 @@ Chaque endpoint y est documenté avec la forme exacte de requête / réponse gé
 
 - **Utiliser `/openapi.json` pour générer des clients.** Des outils comme `openapi-typescript` ou `openapi-python-client` produisent un SDK typé en une commande.
 - **Toujours passer `X-Liberty-Lang`** quand la réponse est affichée à un utilisateur. La valeur par défaut est `en` ; les libellés dans la langue cible demandent l'en-tête.
-- **Préférer l'endpoint REST nommé au SQL brut**. `GET /api/sql/billing/invoices-for-period` est auditable et contrôlé en permission ; construire du SQL côté client et le POSTer ne l'est pas (le framework le refuse de toute façon — il n'existe pas d'endpoint « exécuter du SQL arbitraire »).
+- **Préférer l'endpoint REST nommé au SQL brut**. `GET /api/sql/invoices/invoices-for-period` est auditable et contrôlé en permission ; construire du SQL côté client et le POSTer ne l'est pas (le framework le refuse de toute façon — il n'existe pas d'endpoint « exécuter du SQL arbitraire »).
 - **Épingler l'en-tête `Authorization` sur chaque appel.** Le frontend a un repli sur cookie pour le refresh token, mais la surface API requiert l'en-tête explicite — plus simple à déboguer.
 - **`POST /admin/reload`** depuis la CI après un déploiement de configuration. Un `git pull` sur `liberty-apps` ne touche pas le framework en cours d'exécution tant que le registre n'a pas été reconstruit.
 

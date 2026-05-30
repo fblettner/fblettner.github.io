@@ -221,8 +221,8 @@ spec:
 
 | Sujet | Mitigation |
 |---|---|
-| **Le scheduler doit tourner sur un seul replica.** | Définir `LIBERTY_JOBS_SCHEDULER_ENABLED=true` sur exactement un pod (via un label et l'API descendante) et `false` sur les autres. Le verrou consultatif empêche un double déclenchement si une erreur de déploiement laisse la variable sur deux pods. |
-| **Socket.IO demande un routage sticky ou un adaptateur Redis.** | Le framework suppose aujourd'hui un état Socket.IO sur une seule instance. Soit garder la SPA chargée contre un seul replica via affinité de session sur le Service, soit utiliser Socket.IO avec un adaptateur Redis (pas encore prêt à l'emploi — voir la feuille de route). |
+| **Le scheduler ne doit s'exécuter que sur un seul replica.** | Définir `LIBERTY_JOBS_SCHEDULER_ENABLED=true` sur exactement un pod (via un label et l'API descendante) et `false` sur les autres. Le verrou consultatif empêche un double déclenchement si une erreur de déploiement laisse la variable sur deux pods. |
+| **Socket.IO demande un routage sticky ou un adaptateur Redis.** | Le framework suppose aujourd'hui un état Socket.IO sur une seule instance. Soit garder la SPA rattachée à un seul replica via affinité de session sur le Service, soit utiliser Socket.IO avec un adaptateur Redis (pas encore prêt à l'emploi — voir la feuille de route). |
 | **La configuration `liberty-apps` doit être identique sur tous les pods.** | Monter le même PVC ReadWriteMany, ou faire un `git pull` sur le même commit pour tous les replicas au démarrage. |
 | **Le secret JWT doit correspondre entre les pods.** | Même `LIBERTY_JWT_SECRET` — sinon un token émis sur le pod A est rejeté par le pod B. |
 

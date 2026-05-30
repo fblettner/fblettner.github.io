@@ -47,8 +47,29 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
+          label: 'Build an application',
+          link: {type: 'generated-index', slug: '/liberty/framework/build', description: 'Task-oriented "how do I…" pages — create queries, screens, menus, applications and secure them. Pair with the Concepts section for the deep reference behind each task.'},
+          items: [
+            {
+              type: 'category',
+              label: 'Queries',
+              link: {type: 'generated-index', slug: '/liberty/framework/build/queries', description: 'Everything you do on the Connectors page — add a query from a real table, write a custom one, clone, scaffold sequences and lookups, bind parameters, ship per-dialect variants.'},
+              items: [
+                'liberty/framework/build/queries/overview',
+                'liberty/framework/build/queries/create-from-database',
+                'liberty/framework/build/queries/create-custom',
+                'liberty/framework/build/queries/clone',
+                'liberty/framework/build/queries/sequences-and-lookups',
+                'liberty/framework/build/queries/parameter-binding',
+                'liberty/framework/build/queries/per-dialect-sql',
+              ],
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Concepts',
-          link: {type: 'generated-index', slug: '/liberty/framework/concepts', description: 'The framework primitives: connectors, dictionary, menus, screens, dashboards, charts, parameter binding and form conditions.'},
+          link: {type: 'generated-index', slug: '/liberty/framework/concepts', description: 'The framework primitives: connectors, dictionary, menus, screens, dashboards, charts and form conditions. Deep reference behind the Build pages.'},
           items: [
             'liberty/framework/connectors',
             'liberty/framework/dictionary',
@@ -56,7 +77,6 @@ const sidebars: SidebarsConfig = {
             'liberty/framework/screens',
             'liberty/framework/dashboards',
             'liberty/framework/charts',
-            'liberty/framework/query-params-binding',
             'liberty/framework/form-conditions',
           ],
         },
@@ -78,17 +98,6 @@ const sidebars: SidebarsConfig = {
             'liberty/framework/apps/overview',
             'liberty/framework/apps/plugins',
             'liberty/framework/apps/i18n',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Jobs — Nomaflow',
-          link: {type: 'generated-index', slug: '/liberty/framework/jobs', description: 'Nomaflow — the in-process job scheduler: jobs.toml catalogue, step types, runs and monitoring.'},
-          items: [
-            'liberty/framework/jobs/overview',
-            'liberty/framework/jobs/jobs-toml',
-            'liberty/framework/jobs/step-types',
-            'liberty/framework/jobs/runs-monitoring',
           ],
         },
         'liberty/framework/ai-assistant',

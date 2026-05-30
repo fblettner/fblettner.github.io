@@ -6,7 +6,7 @@ keywords: [Liberty Framework, tutoriel, CRM, tableau de bord, KPI, graphique, dr
 
 # Étape 4 — Tableau de bord du pipeline commercial
 
-Deux écrans couvrent la vue opérationnelle. Nous posons maintenant un **tableau de bord** par-dessus — la vue à vol d'oiseau que veulent les managers quand ils ouvrent le CRM le matin. Quatre KPI, un graphique, une table « activités récentes », tous partageant un filtre de période qui se propage à chaque panneau.
+Deux écrans couvrent la vue opérationnelle. Nous posons maintenant un **tableau de bord** par-dessus — la vue à vol d'oiseau attendue par les managers quand ils ouvrent le CRM le matin. Quatre KPI, un graphique, une table « activités récentes », tous partageant un filtre de période qui se propage à chaque panneau.
 
 À la fin de cette étape, le CRM compte une page `Vue d'ensemble du pipeline` qui visualise les mêmes données de trois façons. Temps estimé : **15 minutes**.
 
@@ -14,11 +14,11 @@ Deux écrans couvrent la vue opérationnelle. Nous posons maintenant un **tablea
 
 ## Ce que nous faisons et pourquoi
 
-Un écran répond à « montre-moi les lignes » ; un tableau de bord répond à « **résume** les lignes ». Les deux s'alimentent des mêmes données — les requêtes du connecteur que nous avons déjà, plus quelques requêtes d'agrégation que nous allons ajouter.
+Un écran répond à « montre-moi les lignes » ; un tableau de bord répond à « **résume** les lignes ». Les deux s'alimentent des mêmes données — les requêtes du connecteur que nous avons déjà, plus quelques requêtes d'agrégation à ajouter.
 
 Les [tableaux de bord](../dashboards.md) du framework sont une grille responsive 12 colonnes ; les [graphiques](../charts.md) enveloppent une requête SQL en une visualisation. Une **barre de filtres partagée** en haut du tableau de bord pousse une valeur (une période, une région, une étape) dans chaque panneau qui déclare le même paramètre. Le drill-down ouvre l'écran correspondant pré-filtré.
 
-Nous construirons :
+Nous allons construire :
 
 | Panneau | Type | Source |
 |---|---|---|
@@ -91,7 +91,7 @@ GROUP BY stage
 ORDER BY stage;
 ```
 
-Testez chacune — elles doivent toutes retourner des nombres compte tenu des données initiales. **Enregistrer et recharger**.
+Testez chacune — elles retournent toutes des nombres compte tenu des données initiales. **Enregistrer et recharger**.
 
 ---
 
@@ -106,7 +106,7 @@ Le **graphique** du framework est une définition réutilisable posée entre une
 | **Type** | `Barre` |
 | **Connecteur** | `deals` |
 | **Requête** | `by-stage` |
-| **Axe X** | `stage` (libellé `Étape`) — réglez le lookup sur `stages` pour que le graphique affiche les libellés conviviaux avec leurs couleurs. |
+| **Axe X** | `stage` (libellé `Étape`) — réglez le lookup sur `stages` pour que le graphique affiche les libellés lisibles avec leurs couleurs. |
 | **Série** | Une série : champ `count`, libellé `Affaires`, couleur depuis la colonne couleur de l'étape. |
 | **Group by** *(optionnel)* | Laisser vide. |
 
@@ -136,7 +136,7 @@ En haut de l'éditeur, ajoutez deux entrées de filtre dont chaque panneau héri
 | `close_from` | date | `${month.first}` | De |
 | `close_to` | date | `${month.last}` | À |
 
-Les jetons `${month.first}` et `${month.last}` se résolvent en premier / dernier jour du mois courant côté serveur — réévalués à chaque appel, pour que le tableau de bord « suive le calendrier ».
+Les jetons `${month.first}` et `${month.last}` se résolvent en premier / dernier jour du mois courant côté serveur — réévalués à chaque appel, pour que le tableau de bord suive le calendrier.
 
 ### Panneaux
 
@@ -160,7 +160,7 @@ Les surcharges de paramètres de chaque panneau stat héritent de la barre de fi
 | **Pipeline par étape** | Graphique | Le graphique `crm-pipeline-by-stage` que nous avons construit. | Écran de drill-down : `crm/deals` *(cliquer sur une barre ouvre l'écran Affaires pré-filtré sur cette étape)*. |
 | **Activités récentes** | Table | Connecteur `activities`, requête `recent` à créer, qui retourne les 10 dernières lignes triées par `happened_at DESC`. | Action au clic : ouvrir `crm/deals` filtré sur le `deal_id` de l'activité. |
 
-Pour la table *Activités récentes*, vous devrez ajouter une requête `activities.recent` :
+Pour la table *Activités récentes*, ajoutez une requête `activities.recent` :
 
 ```sql
 SELECT a.kind, a.notes, a.happened_at, d.name AS deal_name, c.name AS customer_name
@@ -175,7 +175,7 @@ LIMIT 10;
 
 **Enregistrer** le tableau de bord.
 
-Puis **Paramètres → Menus → crm** → **+ Ajouter une feuille** en haut de l'arborescence (pour que ce soit la première entrée vue par les utilisateurs) :
+Puis **Paramètres → Menus → crm** → **+ Ajouter une feuille** en haut de l'arborescence (pour en faire la première entrée vue par les utilisateurs) :
 
 | Champ | Valeur |
 |---|---|
@@ -190,7 +190,7 @@ Puis **Paramètres → Menus → crm** → **+ Ajouter une feuille** en haut de 
 
 ## Voir le résultat
 
-Cliquez sur **Vue d'ensemble du pipeline** dans la barre latérale. Vous devriez voir :
+Cliquez sur **Vue d'ensemble du pipeline** dans la barre latérale. L'affichage attendu :
 
 <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', marginBottom: '12px'}}>
@@ -232,17 +232,17 @@ Essayez :
 
 - **Cliquez sur une barre** → l'écran Affaires s'ouvre pré-filtré sur cette étape.
 - **Cliquez sur une ligne dans Activités récentes** → le dialogue de l'affaire correspondante s'ouvre.
-- **Changez les dates De / À** → chaque panneau se re-rend.
+- **Modifiez les dates De / À** → chaque panneau se réaffiche.
 
 ---
 
 ## Ce que vous avez maintenant
 
-Le CRM compte trois entrées navigables — vue d'ensemble, clients, affaires — qui couvrent la boucle complète « regarder les données / regarder les lignes ».
+Le CRM compte trois entrées navigables — vue d'ensemble, clients, affaires — qui couvrent le parcours complet « regarder les données / regarder les lignes ».
 
 Deux choses manquent encore :
 
 - Tout est réservé à l'admin. Les vraies applications ont besoin de **rôles** et idéalement d'une **connexion OIDC**. Étape 5.
-- L'**assistant IA** du framework peut déjà répondre à des questions sur les données affaires (parce que *Exposer à l'IA* était activé par défaut) ; nous vérifierons et polirons. Le CRM bénéficie aussi d'un **job nocturne** qui signale les affaires stagnantes. Étape 6.
+- L'**assistant IA** du framework peut déjà répondre à des questions sur les données affaires (parce que *Exposer à l'IA* était activé par défaut) ; nous vérifierons et polirons. Le CRM bénéficie aussi d'une **tâche nocturne** qui signale les affaires stagnantes. Étape 6.
 
 → **[Étape 5 — Rôles et SSO](./05-auth.md)** — séparez les utilisateurs en rôles, câblez OIDC.

@@ -8,7 +8,7 @@ keywords: [Liberty Framework, charts, Recharts, line, bar, column, area, pie, do
 
 Un **graphique** enveloppe la requête nommée d'un connecteur dans une visualisation. Défini dans **Paramètres → Graphiques**, choisi par type — line, bar, column, area, pie, donut, scatter — et réutilisé comme panneau dans n'importe quel nombre de tableaux de bord.
 
-Cette page couvre le constructeur de graphiques, chaque champ de l'éditeur et les options spécifiques à chaque type de graphique.
+Cette page couvre le constructeur de graphiques, chaque champ de l'éditeur et les options propres à chaque type de graphique.
 
 ---
 
@@ -96,7 +96,7 @@ Dans **Paramètres → Graphiques → ➕ Nouveau graphique**, l'éditeur s'ouvr
 
 ### Séries
 
-Les séries forment une liste triable. Chaque ligne expose :
+Les séries forment une liste triable. Chaque ligne présente :
 
 | Champ | Effet |
 |---|---|
@@ -120,9 +120,9 @@ Les séries forment une liste triable. Chaque ligne expose :
 | **Pie** / **Donut** | Une part par ligne ; le champ X étiquette chaque part, les séries les dimensionnent. | Part d'un total sur un petit ensemble de catégories. |
 | **Scatter** | Deux axes numériques ; un point par ligne. Un *Champ de taille* facultatif en fait un graphique à bulles. | Corrélation entre deux mesures. |
 
-Chaque bascule / champ spécifique au type apparaît dans l'éditeur uniquement quand ce type est sélectionné.
+Chaque bascule / champ propre au type apparaît dans l'éditeur uniquement quand ce type est sélectionné.
 
-### Options spécifiques au type
+### Options propres au type
 
 | Type | Champs supplémentaires |
 |---|---|

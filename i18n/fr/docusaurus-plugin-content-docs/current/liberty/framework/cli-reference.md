@@ -10,7 +10,7 @@ Le framework livre **quatre CLI** comme points d'entrée d'un même paquet Pytho
 
 | CLI | Rôle |
 |---|---|
-| [`liberty-admin`](#liberty-admin) | Gestion des utilisateurs, rôles et jobs, rechargement à chaud, initialisation du schéma. |
+| [`liberty-admin`](#liberty-admin) | Gestion des utilisateurs, rôles et tâches, rechargement à chaud, initialisation du schéma. |
 | [`liberty-connectors`](#liberty-connectors) | Inspecter et tester les connecteurs sans démarrer la couche web. |
 | [`liberty-crypto`](#liberty-crypto) | Chiffrer, déchiffrer, générer des clés maîtres. |
 | [`liberty-license`](#liberty-license) | Vérifier et inspecter un JWT de licence. |
@@ -33,7 +33,7 @@ Relançable sans risque. Les utilisateurs et les tables existants sont conservé
 
 ### `verify-config`
 
-Valide tous les fichiers TOML sous `liberty-apps/config/` contre les modèles Pydantic. Rapporte les erreurs d'analyse, les erreurs de validation et les erreurs de référence croisée (un écran pointant vers un connecteur absent, un menu pointant vers un écran absent).
+Valide tous les fichiers TOML sous `liberty-apps/config/` au regard des modèles Pydantic. Rapporte les erreurs d'analyse, les erreurs de validation et les erreurs de référence croisée (un écran pointant vers un connecteur absent, un menu pointant vers un écran absent).
 
 ```bash
 .venv/bin/liberty-admin verify-config
@@ -77,11 +77,11 @@ Appelle `POST /admin/reload` sur `http://${HOST}:${PORT}` — le serveur doit ê
 .venv/bin/liberty-admin delete-role manager                   # refusé tant qu'il reste des membres
 ```
 
-### Jobs
+### Tâches
 
 ```bash
-.venv/bin/liberty-admin job list                              # tous les jobs + dernier statut
-.venv/bin/liberty-admin job run billing-nightly-rebuild       # exécution ponctuelle, déclenchée système
+.venv/bin/liberty-admin job list                              # toutes les tâches + dernier statut
+.venv/bin/liberty-admin job run invoices-nightly-rebuild      # exécution ponctuelle, déclenchée système
 .venv/bin/liberty-admin job run <name> --param period=2026-05 --param dry_run=true
 .venv/bin/liberty-admin job logs --follow <run-id>            # diffuse le journal d'exécution
 .venv/bin/liberty-admin job abort <run-id>
@@ -115,7 +115,7 @@ Opère sur le catalogue de connecteurs sans la couche web — utile en script, e
 ```bash
 .venv/bin/liberty-connectors list
 # default     sql    pool=default     connected
-# billing     sql    pool=default     connected
+# invoices    sql    pool=default     connected
 # crm         sql    pool=crm         connected
 # jdedwards   sql    pool=jde         offline
 # slack       http   base=https://hooks.slack.com
@@ -124,16 +124,16 @@ Opère sur le catalogue de connecteurs sans la couche web — utile en script, e
 ### `describe`
 
 ```bash
-.venv/bin/liberty-connectors describe billing
-# billing — sql — pool: default
+.venv/bin/liberty-connectors describe invoices
+# invoices — sql — pool: default
 # queries:
 #   - monthly-invoice-counts   (read)   params: month
 #   - invoices-for-period      (read)   params: from_date, to_date, status
 #   - refresh-totals:write     (write)  params: period
 # Permission codes:
-#   - sql:billing:monthly-invoice-counts
-#   - sql:billing:invoices-for-period
-#   - sql:billing:refresh-totals:write
+#   - sql:invoices:monthly-invoice-counts
+#   - sql:invoices:invoices-for-period
+#   - sql:invoices:refresh-totals:write
 ```
 
 ### `run`
@@ -141,7 +141,7 @@ Opère sur le catalogue de connecteurs sans la couche web — utile en script, e
 Exécute une requête directement sur le pool. Contourne l'authentification — réservé aux diagnostics locaux, pas aux exécutions de production.
 
 ```bash
-.venv/bin/liberty-connectors run billing invoices-for-period \
+.venv/bin/liberty-connectors run invoices invoices-for-period \
   --param from_date=2026-04-01 --param to_date=2026-04-30 \
   --param status=issued \
   --limit 50
@@ -166,7 +166,7 @@ Sort avec un code non nul dès qu'un connecteur échoue.
 Découvre et affiche les colonnes renvoyées par une requête :
 
 ```bash
-.venv/bin/liberty-connectors schema billing invoices-for-period
+.venv/bin/liberty-connectors schema invoices invoices-for-period
 # id            INTEGER  NOT NULL
 # number        VARCHAR(64)
 # issue_date    DATE
@@ -217,7 +217,7 @@ Relançable sans risque. Les fichiers sont réécrits sur place ; il faut commit
 
 ### `fingerprint`
 
-Affiche l'empreinte SHA-256 de la clé maître courante — utile pour vérifier que deux installations partagent la même clé sans exposer la clé elle-même.
+Affiche l'empreinte SHA-256 de la clé maître courante — utile pour vérifier que deux installations partagent la même clé sans révéler la clé elle-même.
 
 ```bash
 .venv/bin/liberty-crypto fingerprint
@@ -279,7 +279,7 @@ Toutes les CLI suivent la même convention :
 - **Ne pas contourner le serveur pour les écritures.** `liberty-connectors run` convient au diagnostic ; les écritures en production doivent passer par l'API REST pour respecter l'authentification et l'audit.
 - **Utiliser `--json` pour les scripts.** Chaque sortie lisible se sérialise aussi en JSON — à passer dans `jq` pour l'orchestration.
 - **Définir `LIBERTY_APPS_DIR` dans le profil shell.** Les CLI en ont besoin de la même manière que le serveur ; l'exporter une fois évite de répéter `--config` partout.
-- **Garder les CLI disponibles en production.** Un conteneur durci qui les retire complique la réponse à incident plus qu'il n'apporte de bénéfice en sécurité.
+- **Garder les CLI disponibles en production.** Un conteneur durci qui les retire complique la réponse à incident plus qu'il n'apporte d'avantage en sécurité.
 
 ---
 

@@ -8,7 +8,7 @@ keywords: [Liberty Framework, paramètres, named params, filter_from, cascading 
 
 Chaque requête SQL et chaque endpoint HTTP reçoit ses valeurs via un **modèle de paramètres cohérent** : l'éditeur de connecteur déclare les paramètres ; la page qui consomme le connecteur (un écran, un graphique, un tableau de bord) **les affiche comme saisies de formulaire** ; le framework résout chaque saisie via une petite chaîne de fall-backs avant d'exécuter la requête.
 
-Cette page couvre comment les paramètres apparaissent dans l'interface sur chaque surface, d'où viennent les valeurs par défaut, comment les filtres en cascade rétrécissent une liste déroulante en fonction d'une autre, et le contexte spécial `session` que chaque requête obtient gratuitement.
+Cette page couvre la manière dont les paramètres apparaissent dans l'interface sur chaque surface, l'origine des valeurs par défaut, le fonctionnement des filtres en cascade qui rétrécissent une liste déroulante en fonction d'une autre, et le contexte spécial `session` que chaque requête obtient gratuitement.
 
 ---
 
@@ -45,7 +45,7 @@ Cette page couvre comment les paramètres apparaissent dans l'interface sur chaq
 
   <rect x="780" y="100" width="160" height="160" rx="10" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
   <text x="860" y="124" fill="#cbd5e1" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">4 · REQUÊTE</text>
-  <text x="860" y="200" fill="#94a3b8" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif">exécutée contre la map</text>
+  <text x="860" y="200" fill="#94a3b8" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif">exécutée sur la map</text>
   <text x="860" y="218" fill="#94a3b8" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif">de paramètres résolue</text>
 
   <line x1="280" y1="180" x2="300" y2="180" stroke="#94a3b8" strokeWidth="1.3" markerEnd="url(#qp-arrow)"/>
@@ -62,16 +62,16 @@ Dans **Paramètres → Connecteurs**, ouvrir un connecteur et passer sur l'ongle
 <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 700}}>tasks → Paramètres</div>
   <div style={{display: 'grid', gridTemplateColumns: '130px 90px 80px 1.5fr 90px 60px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', fontSize: '11px', fontWeight: 600}}>
-    <div>Nom</div><div>Type</div><div>Obligatoire</div><div>Défaut</div><div>Lookup</div><div></div>
+    <div>Nom</div><div>Type</div><div>Obligatoire</div><div>Défaut</div><div>Recherche</div><div></div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '130px 90px 80px 1.5fr 90px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div>status</div><div>string</div><div>—</div><div>open</div><div>statuses</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+    <div>status</div><div>string</div><div>—</div><div>open</div><div>statuses</div><div style={{textAlign: 'right', opacity: 0.55}}>Modifier</div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '130px 90px 80px 1.5fr 90px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div>from_date</div><div>date</div><div>—</div><div style={{fontFamily: 'ui-monospace, monospace'}}>{"${month.first}"}</div><div>—</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+    <div>from_date</div><div>date</div><div>—</div><div style={{fontFamily: 'ui-monospace, monospace'}}>{"${month.first}"}</div><div>—</div><div style={{textAlign: 'right', opacity: 0.55}}>Modifier</div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '130px 90px 80px 1.5fr 90px 60px', padding: '10px 14px', alignItems: 'center'}}>
-    <div>to_date</div><div>date</div><div>—</div><div style={{fontFamily: 'ui-monospace, monospace'}}>{"${month.last}"}</div><div>—</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+    <div>to_date</div><div>date</div><div>—</div><div style={{fontFamily: 'ui-monospace, monospace'}}>{"${month.last}"}</div><div>—</div><div style={{textAlign: 'right', opacity: 0.55}}>Modifier</div>
   </div>
 </div>
 
@@ -82,7 +82,7 @@ Dans **Paramètres → Connecteurs**, ouvrir un connecteur et passer sur l'ongle
 | **Libellé** | Libellé affiché de la saisie sur la page consommatrice. Se rabat sur *Nom* quand vide. Localisé via le [dictionnaire](./dictionary.md). |
 | **Obligatoire** | Quand activé, la page consommatrice **doit** fournir une valeur sinon la requête échoue avec `400 Bad Request`. Quand *Obligatoire* est désactivé, *Défaut* prend le relais à l'omission. |
 | **Défaut** | Valeur appliquée quand l'appelant omet le paramètre. Voir [Valeurs par défaut](#defaults). |
-| **Lookup** | Liste déroulante de lookups du dictionnaire. Quand défini, la saisie de formulaire devient une liste déroulante de paires `{ value, label }` issues du lookup. |
+| **Lookup** | Liste déroulante de recherches du dictionnaire. Quand défini, la saisie de formulaire devient une liste déroulante de paires `{ value, label }` issues de la recherche. |
 | **Multiple** | Quand activé, la saisie accepte une liste ; la requête reçoit une clause `IN (...)`. |
 | **Filter from** | Multi-sélection d'autres paramètres dont celui-ci dépend en cascade — voir [Filtres en cascade](#cascading-filters). |
 
@@ -106,18 +106,18 @@ La barre d'outils d'un écran affiche une saisie par paramètre déclaré. Le wi
 | `int` / `float` / `decimal` | Saisie numérique |
 | `bool` | Case à cocher |
 | `date` / `datetime` | Sélecteur date / datetime |
-| Tout type avec *Lookup* défini | Liste déroulante alimentée par le lookup |
+| Tout type avec *Lookup* défini | Liste déroulante alimentée par la recherche |
 | `string` + *Multiple* activé | Multi-sélection |
 
 Le bouton *Appliquer* / *Exécuter* de la barre relance la requête de lecture avec les valeurs courantes. Le framework applique un debounce sur les saisies texte (~300 ms) pour que la frappe ne sollicite pas la base à chaque caractère.
 
 ### Graphiques
 
-Chaque entrée de graphique dispose d'un panneau **Paramètres fixes** dans son éditeur. Les opérateurs règlent la valeur une fois ; le graphique tourne toujours contre ces valeurs. Utile pour des graphiques « Q1 uniquement » ou « app billing uniquement ». Les jetons de style `${month.first}` sont acceptés ici pour que le graphique suive le calendrier.
+Chaque entrée de graphique dispose d'un panneau **Paramètres fixes** dans son éditeur. Les opérateurs règlent la valeur une fois ; le graphique s'exécute toujours sur ces valeurs. Utile pour des graphiques « Q1 uniquement » ou « application billing uniquement ». Les jetons de style `${month.first}` sont acceptés ici pour que le graphique suive le calendrier.
 
 ### Tableaux de bord
 
-Les tableaux de bord ajoutent une étape : la **Barre de filtres partagée** du tableau de bord (en haut de la disposition) peut exposer un paramètre une fois, et chaque graphique qui référence le même nom de paramètre hérite de la valeur. Les opérateurs voient un seul filtre en haut du tableau de bord, pas un par panneau.
+Les tableaux de bord ajoutent une étape : la **Barre de filtres partagée** du tableau de bord (en haut de la disposition) peut présenter un paramètre une fois, et chaque graphique qui référence le même nom de paramètre hérite de la valeur. Les opérateurs voient un seul filtre en haut du tableau de bord, pas un par panneau.
 
 ### Jobs
 
@@ -165,13 +165,13 @@ Motif courant : un écran a une liste déroulante *Société* et une liste déro
 
 | Mise en place |
 |---|
-| Les deux paramètres définissent *Lookup* — le lookup `company` tire les sociétés, le lookup `contract` tire les contrats. |
+| Les deux paramètres définissent *Lookup* — la recherche `company` tire les sociétés, la recherche `contract` tire les contrats. |
 | *Contrat* met *Filter from* = `[company]`. |
-| La requête de lookup pour *Contrat* référence `:company` dans sa clause `WHERE` (typiquement avec `IS NULL OR` pour gérer le cas « aucune société choisie »). |
+| La requête de recherche pour *Contrat* référence `:company` dans sa clause `WHERE` (typiquement avec `IS NULL OR` pour gérer le cas « aucune société choisie »). |
 
 Quand l'opérateur choisit une société, le framework **vide** la sélection *Contrat* et re-récupère la liste déroulante avec la nouvelle société. Plusieurs dépendances sont prises en charge — `Filter from = [company, region]`.
 
-La cascade se configure entièrement depuis le [dictionnaire](./dictionary.md) (définitions de lookups) et l'éditeur de connecteur ; aucun SQL n'est écrit depuis l'écran consommateur.
+La cascade se configure entièrement depuis le [dictionnaire](./dictionary.md) (définitions de recherches) et l'éditeur de connecteur ; aucun SQL n'est écrit depuis l'écran consommateur.
 
 ---
 
@@ -208,12 +208,12 @@ Une requête hérite du code de permission du connecteur (`sql:<connector>:<quer
 
 ## Sous le capot
 
-Les déclarations de paramètres vivent sur l'entrée du connecteur à l'intérieur de `connectors.toml`. Les opérateurs **n'éditent pas ce fichier à la main** ; l'éditeur de connecteur est l'interface canonique. Les opérateurs avancés peuvent utiliser l'onglet *Raw TOML* comme issue de secours quand une limite de l'éditeur les bloque.
+Les déclarations de paramètres se trouvent sur l'entrée du connecteur à l'intérieur de `connectors.toml`. Les opérateurs **ne modifient pas ce fichier à la main** ; l'éditeur de connecteur est l'interface de référence. Les opérateurs avancés peuvent utiliser l'onglet *Raw TOML* comme issue de secours quand une limite de l'éditeur les bloque.
 
 ---
 
 ## Pour aller plus loin
 
 - [Concepts → Connecteurs](./connectors.md) — la définition de connecteur qui porte les requêtes.
-- [Concepts → Dictionnaire](./dictionary.md) — les définitions de lookups référencées par le champ *Lookup*.
+- [Concepts → Dictionnaire](./dictionary.md) — les définitions de recherches référencées par le champ *Lookup*.
 - [Concepts → Conditions de formulaire](./form-conditions.md) — règles conditionnelles `visible_when` / `required_when` sur les écrans.

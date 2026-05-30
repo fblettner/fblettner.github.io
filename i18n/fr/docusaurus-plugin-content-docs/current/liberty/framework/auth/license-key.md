@@ -1,6 +1,6 @@
 ---
 title: Clé de licence
-description: "Le framework fonctionne sans licence sur son ensemble de fonctionnalités ouvertes. Les connecteurs sous licence, les apps livrées et les fonctionnalités premium sont déverrouillés par une clé signée RS256 définie dans Paramètres → Framework → Licence — consultée et vérifiée en direct depuis Paramètres → Licence."
+description: "Le framework fonctionne sans licence sur son ensemble de fonctionnalités ouvertes. Les connecteurs sous licence, les applications livrées et les fonctionnalités premium sont déverrouillés par une clé signée RS256 définie dans Paramètres → Framework → Licence — consultée et vérifiée en direct depuis Paramètres → Licence."
 keywords: [Liberty Framework, license key, RS256, JWT, feature gate, licensed connector, license verification, settings]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Framework, license key, RS256, JWT, feature gate, licensed co
 
 Le framework est **pleinement utilisable sans licence**. Chaque concept de la documentation — connecteurs, dictionnaire, écrans, menus, tableaux de bord, graphiques, jobs, authentification — fonctionne sur l'ensemble de fonctionnalités ouvertes sur une installation neuve.
 
-Une **clé de licence** déverrouille un ensemble organisé d'intégrations supplémentaires : quelques connecteurs de qualité production (bases de données propriétaires, API personnalisées), des apps client livrées et des fonctionnalités avancées. La clé est définie dans **Paramètres → Framework → Licence** et son statut en direct est exposé sur la page dédiée **Paramètres → Licence**.
+Une **clé de licence** déverrouille un ensemble organisé d'intégrations supplémentaires : quelques connecteurs de qualité production (bases de données propriétaires, API personnalisées), des applications client livrées et des fonctionnalités avancées. La clé est définie dans **Paramètres → Framework → Licence** et son statut en direct est affiché sur la page dédiée **Paramètres → Licence**.
 
 ---
 
@@ -29,7 +29,7 @@ Une **clé de licence** déverrouille un ensemble organisé d'intégrations supp
   </div>
   <div style={{border: '1px solid rgba(74,158,255,0.40)', borderRadius: '10px', padding: '16px', background: 'rgba(74,158,255,0.04)'}}>
     <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '8px'}}>PORTÉE</div>
-    <div style={{fontSize: '12px'}}>Connecteurs marqués <em>Sous licence</em>, apps client livrées, fonctionnalités IA premium.</div>
+    <div style={{fontSize: '12px'}}>Connecteurs marqués <em>Sous licence</em>, applications client livrées, fonctionnalités IA premium.</div>
   </div>
 </div>
 
@@ -37,7 +37,7 @@ Une **clé de licence** déverrouille un ensemble organisé d'intégrations supp
 
 ## Paramètres → Licence
 
-L'onglet dédié **Licence** est en lecture seule et expose l'état actuel.
+L'onglet dédié **Licence** est en lecture seule et présente l'état actuel.
 
 <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
@@ -50,7 +50,7 @@ L'onglet dédié **Licence** est en lecture seule et expose l'état actuel.
     <div style={{opacity: 0.75}}>Instance</div><div style={{fontFamily: 'ui-monospace, monospace'}}>prod-eu-west</div>
     <div style={{opacity: 0.75}}>Expire</div><div>2026-05-19 <span style={{marginLeft: '8px', padding: '2px 8px', borderRadius: '999px', background: 'rgba(255,159,10,0.10)', border: '1px solid rgba(255,159,10,0.40)', color: '#fb923c', fontSize: '10px', fontWeight: 600}}>dans 30 jours</span></div>
     <div style={{opacity: 0.75, alignSelf: 'start', paddingTop: '4px'}}>Connecteurs sous licence</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', color: '#60a5fa', fontSize: '10px', fontWeight: 600, marginRight: '4px'}}>jdedwards</span><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', color: '#60a5fa', fontSize: '10px', fontWeight: 600, marginRight: '4px'}}>sap</span><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(74,158,255,0.10)', border: '1px solid rgba(74,158,255,0.40)', color: '#60a5fa', fontSize: '10px', fontWeight: 600}}>snowflake</span></div>
-    <div style={{opacity: 0.75, alignSelf: 'start', paddingTop: '4px'}}>Apps sous licence</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(192,132,252,0.10)', border: '1px solid rgba(192,132,252,0.40)', color: '#c084fc', fontSize: '10px', fontWeight: 600, marginRight: '4px'}}>nomajde</span><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(192,132,252,0.10)', border: '1px solid rgba(192,132,252,0.40)', color: '#c084fc', fontSize: '10px', fontWeight: 600}}>nomasx-1</span></div>
+    <div style={{opacity: 0.75, alignSelf: 'start', paddingTop: '4px'}}>Applications sous licence</div><div><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(192,132,252,0.10)', border: '1px solid rgba(192,132,252,0.40)', color: '#c084fc', fontSize: '10px', fontWeight: 600, marginRight: '4px'}}>nomajde</span><span style={{padding: '2px 8px', borderRadius: '999px', background: 'rgba(192,132,252,0.10)', border: '1px solid rgba(192,132,252,0.40)', color: '#c084fc', fontSize: '10px', fontWeight: 600}}>nomasx-1</span></div>
     <div style={{opacity: 0.75}}>Plafond utilisateurs</div><div>72 / 250 <span style={{marginLeft: '8px', opacity: 0.6}}>(29%)</span></div>
     <div style={{opacity: 0.75}}>Fournisseur IA</div><div>Anthropic · 2 110 / 5 000 messages aujourd'hui</div>
   </div>
@@ -66,7 +66,7 @@ L'onglet dédié **Licence** est en lecture seule et expose l'état actuel.
 | **Édition** | Le claim `edition`. |
 | **Expire** | Le claim `exp`. Une puce d'avertissement apparaît 30 jours avant l'expiration. |
 | **Connecteurs sous licence** | Liste issue de `features.connectors` de la clé. Un point rouge apparaît à côté des entrées qui ne sont pas réellement définies dans l'installation. |
-| **Apps sous licence** | Même forme pour `features.apps`. |
+| **Applications sous licence** | Même forme pour `features.apps`. |
 | **Plafond utilisateurs** | Compte d'utilisateurs courant + plafond, avec une échelle de couleur 90% / 95% / 100%. |
 | **Droits IA** | Fournisseurs autorisés + plafond quotidien de messages + usage courant. |
 | **↻ Revérifier** | Relit la clé depuis l'environnement et revérifie la signature sans redémarrage. |
@@ -105,7 +105,7 @@ WARN  liberty.licensing  running in restricted mode — licensed features disabl
 En mode restreint :
 
 - Chaque connecteur marqué *Sous licence* est masqué — il n'apparaît pas dans le catalogue, dans la liste des outils IA ni dans un menu.
-- Les apps livrées dans le `features.apps` de la clé n'enregistrent pas leur contenu.
+- Les applications livrées dans le `features.apps` de la clé n'enregistrent pas leur contenu.
 - L'onglet *Licence* affiche la raison du rejet et une bannière apparaît à travers l'en-tête.
 - Chaque autre concept (connecteurs ouverts, écrans, menus, tableaux de bord, jobs, authentification) continue de fonctionner.
 
@@ -117,7 +117,7 @@ Le mode restreint est le **mode par défaut** sur une installation neuve sans cl
 
 Dans **Paramètres → Connecteurs**, chaque entrée a une bascule **Sous licence**. Quand elle est active, le connecteur ne charge que si son identifiant est présent dans le `features.connectors` de la clé. En mode restreint, la page Connecteurs liste le connecteur comme *Verrouillé — requiert la licence `<id>`* avec le reste de sa définition grisé.
 
-C'est ce qui gouverne les connecteurs fournisseur livrés (JD Edwards, SAP, Snowflake, …). Le mécanisme est ouvert — les clients peuvent marquer leurs propres connecteurs *Sous licence* et livrer des clés à leurs propres clients s'ils distribuent des apps personnalisées.
+C'est ce qui gouverne les connecteurs fournisseur livrés (JD Edwards, SAP, Snowflake, …). Le mécanisme est ouvert — les clients peuvent marquer leurs propres connecteurs *Sous licence* et livrer des clés à leurs propres clients s'ils distribuent des applications personnalisées.
 
 ---
 
@@ -157,7 +157,7 @@ Pour les installations à haute disponibilité :
 
 ## Modes d'échec
 
-L'onglet Paramètres → Licence expose directement le diagnostic. Rejets courants :
+L'onglet Paramètres → Licence affiche directement le diagnostic. Rejets courants :
 
 | Texte de statut | Cause | Résolution |
 |---|---|---|
@@ -181,7 +181,7 @@ L'onglet *Licence* est gouverné par `license:read` (consultation) et `license:w
 - **Définir *Chemin de clé publique* uniquement quand c'est nécessaire.** Le défaut fonctionne pour les clés émises par Nomana-IT — la surcharge concerne uniquement les déploiements partenaires / OEM.
 - **Surveiller la puce d'expiration à 30 jours.** Renouveler tard signifie une courte fenêtre où les connecteurs sous licence disparaissent de l'interface.
 - **Ne jamais éditer une clé à la main.** Un seul changement de caractère invalide la signature ; demander une nouvelle clé au fournisseur à la place.
-- **Garder l'ensemble de fonctionnalités ouvertes auto-suffisant.** Une installation bien conçue devrait rester utile en mode restreint — utiliser les connecteurs sous licence pour la différenciation, pas pour le flux principal.
+- **Garder l'ensemble de fonctionnalités ouvertes auto-suffisant.** Une installation bien conçue doit rester utile en mode restreint — utiliser les connecteurs sous licence pour la différenciation, pas pour le flux principal.
 
 ---
 

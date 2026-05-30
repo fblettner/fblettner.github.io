@@ -1,6 +1,6 @@
 ---
 title: Paramètres du framework
-description: "Tous les paramètres transverses du framework — nom de l'application, pool de base par défaut, backend d'authentification, OIDC, fournisseur IA, clé maîtresse de chiffrement, licence — se modifient depuis Paramètres → Framework. Le formulaire est piloté par un schéma ; cette page liste chaque champ, son rôle et l'endroit où il se manifeste."
+description: "Tous les paramètres transverses du framework — nom de l'application, pool de base par défaut, backend d'authentification, OIDC, fournisseur IA, clé maîtresse de chiffrement, licence — se modifient depuis Paramètres → Framework. Le formulaire est piloté par un schéma ; cette page liste chaque champ, son rôle et l'endroit où il s'applique."
 keywords: [Liberty Framework, paramètres, framework settings, app, default pool, authentication, OIDC, AI, master key, license, CORS, static directory]
 ---
 
@@ -8,7 +8,7 @@ keywords: [Liberty Framework, paramètres, framework settings, app, default pool
 
 Les paramètres **transverses au framework** — ceux qui ne sont rattachés ni à un connecteur, ni à un écran, ni à un menu — se modifient depuis **Paramètres → Framework**. La page est un formulaire piloté par schéma, avec une section par sujet : identité de l'application, pool de base de données par défaut, authentification, fournisseur IA, chiffrement et licence. L'enregistrement recharge le sous-système concerné.
 
-Cette page liste chaque champ de l'onglet *Framework*, son effet et l'endroit où il se manifeste dans le reste de l'application.
+Cette page liste chaque champ de l'onglet *Framework*, son effet et l'endroit où il s'applique dans le reste de l'application.
 
 ---
 
@@ -74,10 +74,10 @@ Le **pool par défaut** porte la base de données utilisée par le framework lui
 | Champ | Effet |
 |---|---|
 | **URL** | URL async SQLAlchemy. SQLite pointe par défaut vers un fichier local `liberty.db`. PostgreSQL : `postgresql+asyncpg://user:pass@host/db`. Oracle mode thin : `oracle+oracledb://user:pass@host:1521/?service_name=PDB1`. Tester la connectivité avec le bouton *Tester la connexion*. |
-| **Dialecte** | `sqlite` / `postgresql` / `oracle`. Pilote le SQL de repli spécifique à chaque dialecte dans le moteur de connecteurs. |
+| **Dialecte** | `sqlite` / `postgresql` / `oracle`. Pilote le SQL de repli propre à chaque dialecte dans le moteur de connecteurs. |
 | **Taille du pool** | Nombre maximum de connexions simultanées. Défaut 5. |
 | **Recyclage du pool** | Délai en secondes avant qu'une connexion obsolète soit recyclée. Défaut 1800. |
-| **Mot de passe** | Optionnel. Cliquer sur l'icône 🔒 pour passer le champ en mode *Chiffré* — voir [Chiffrement et secrets](./encryption-secrets.md). |
+| **Mot de passe** | Optionnel. Cliquer sur l'icône du cadenas pour passer le champ en mode *Chiffré* — voir [Chiffrement et secrets](./encryption-secrets.md). |
 
 ---
 
@@ -85,7 +85,7 @@ Le **pool par défaut** porte la base de données utilisée par le framework lui
 
 | Champ | Effet |
 |---|---|
-| **Backend** | `Local — TOML` *(défaut)* / `Local — Database`. Détermine où vivent les comptes utilisateurs. L'option `Local — TOML` utilise `config/auth.toml` sur l'hôte (aucune infrastructure). `Local — Database` crée et utilise les tables `ly2_users` / `ly2_roles` / `ly2_permissions` sur le pool par défaut. |
+| **Backend** | `Local — TOML` *(défaut)* / `Local — Database`. Détermine l'emplacement des comptes utilisateurs. L'option `Local — TOML` utilise `config/auth.toml` sur l'hôte (aucune infrastructure). `Local — Database` crée et utilise les tables `ly2_users` / `ly2_roles` / `ly2_permissions` sur le pool par défaut. |
 | **Clé de signature JWT** | Référence à la variable d'environnement qui contient le secret de signature HS256. Défaut `${LIBERTY_JWT_SECRET}`. Quand la variable n'est pas définie, le framework génère une clé éphémère par processus — chaque redémarrage invalide chaque jeton. |
 | **Durée de vie du jeton d'accès** | Durée de vie d'un jeton d'accès. Défaut 15 minutes. |
 | **Durée de vie du jeton de rafraîchissement** | Durée de vie d'un jeton de rafraîchissement. Défaut 7 jours. |
@@ -99,13 +99,13 @@ Un interrupteur en haut de la sous-section active le SSO OIDC ; le formulaire en
 |---|---|
 | **URL de l'émetteur** | URL de l'émetteur de l'IdP. Le framework récupère `${issuer}/.well-known/openid-configuration` au démarrage. |
 | **Client ID** | ID client OAuth2 enregistré auprès de l'IdP. |
-| **Client secret** | Secret client OAuth2. Toujours **chiffré** — l'icône 🔒 est verrouillée. |
+| **Client secret** | Secret client OAuth2. Toujours **chiffré au repos** — l'icône du cadenas est verrouillée. |
 | **URI de redirection** | URL de callback du framework, par exemple `https://liberty.example.com/auth/oidc/callback`. Doit être enregistrée côté IdP. |
 | **Claim email** | Claim JWT utilisé comme identifiant utilisateur local. Défaut `email`. |
 | **Claim groupes** | Claim JWT utilisé pour faire correspondre les groupes IdP aux rôles Liberty. Défaut `groups`. |
 | **Auto-provisionnement** | Quand activé, un utilisateur Liberty est créé à la première connexion OIDC. Sinon, l'utilisateur doit déjà exister. |
 
-[Authentification](../auth/authentication.md) parcourt le flux OIDC complet avec des notes spécifiques à chaque IdP (Authentik, Keycloak, Azure AD, Okta, Google).
+[Authentification](../auth/authentication.md) parcourt le flux OIDC complet avec des notes propres à chaque IdP (Authentik, Keycloak, Azure AD, Okta, Google).
 
 ---
 
@@ -139,7 +139,7 @@ Voir [Chiffrement et secrets](./encryption-secrets.md) pour la procédure de rot
 | Champ | Effet |
 |---|---|
 | **Clé de licence** | Référence à la variable d'environnement qui contient le JWT de licence signé en RS256. Défaut `${LIBERTY_LICENSE_KEY}`. Pilote les verrous de fonctionnalités sur les connecteurs marqués *Licensed*. |
-| **Chemin de la clé publique** | Remplacement optionnel pour la clé publique embarquée. Utile quand l'installation tourne avec une autorité de signature privée. |
+| **Chemin de la clé publique** | Remplacement optionnel pour la clé publique embarquée. Utile quand l'installation s'exécute avec une autorité de signature privée. |
 
 La page [Paramètres → Licence](../auth/license-key.md) affiche l'état courant (acceptée / refusée / non configurée), le nom du client, la date d'expiration et la liste des fonctionnalités déverrouillées.
 
@@ -147,11 +147,11 @@ La page [Paramètres → Licence](../auth/license-key.md) affiche l'état couran
 
 ## Enregistrer et recharger
 
-Chaque enregistrement valide le formulaire contre les modèles Pydantic du framework. Les valeurs invalides surlignent le champ en rouge et désactivent le bouton *Enregistrer et recharger*.
+Chaque enregistrement valide le formulaire par rapport aux modèles Pydantic du framework. Les valeurs invalides surlignent le champ en rouge et désactivent le bouton *Enregistrer et recharger*.
 
 Un enregistrement réussi :
 
-1. **Persiste le changement** sur disque (détail du système de fichiers, jamais édité à la main).
+1. **Enregistre le changement** sur disque (détail du système de fichiers, jamais édité à la main).
 2. **Réapplique le sous-système concerné** — un changement de *Langue par défaut* déclenche un rechargement des packs de langues ; un changement de *Durée de vie du jeton d'accès* prend effet à la prochaine connexion ; un changement d'*OIDC activé* relance la découverte OIDC à la prochaine connexion.
 3. **Affiche un toast** qui confirme le rechargement de la section.
 
@@ -167,7 +167,7 @@ L'onglet *Framework* est filtré par `settings:framework`. La lecture sans écri
 
 ## Sous le capot
 
-Le stockage du formulaire est `liberty-next/config/app.toml`. Les opérateurs **n'éditent pas ce fichier à la main** en fonctionnement normal ; l'interface Paramètres est l'interface canonique, avec l'onglet *Raw TOML* comme issue de secours. Le fichier est analysé une fois au démarrage et à chaque *Enregistrer et recharger* de l'onglet Framework.
+Le stockage du formulaire est `liberty-next/config/app.toml`. Les opérateurs **ne modifient pas ce fichier à la main** en fonctionnement normal ; l'interface Paramètres est l'interface de référence, avec l'onglet *Raw TOML* comme issue de secours. Le fichier est analysé une fois au démarrage et à chaque *Enregistrer et recharger* de l'onglet Framework.
 
 Pour les scripts d'ops et les pipelines CI qui doivent piloter le framework sans l'interface, la même surface est accessible via les endpoints REST sous `/admin/config/framework/*` — voir [REST API reference](../rest-api.md#admin-config).
 
@@ -176,6 +176,6 @@ Pour les scripts d'ops et les pipelines CI qui doivent piloter le framework sans
 ## Pour aller plus loin
 
 - [Variables d'environnement](./environment-variables.md) — chaque référence `${LIBERTY_*}` résolue au démarrage.
-- [Chiffrement et secrets](./encryption-secrets.md) — l'interrupteur 🔒 et la procédure de rotation.
+- [Chiffrement et secrets](./encryption-secrets.md) — l'interrupteur du cadenas et la procédure de rotation.
 - [Authentification](../auth/authentication.md) — ce que chaque backend change.
 - [Rechargement à chaud](./hot-reload.md) — ce qui se recharge à chaud et ce qui demande un redémarrage.

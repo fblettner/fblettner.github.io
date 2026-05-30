@@ -6,7 +6,7 @@ keywords: [Liberty Framework, UI Paramètres, builders, pools, connecteurs, dict
 
 # UI des Paramètres
 
-La page **Paramètres** (icône engrenage dans l'en-tête, visible des utilisateurs disposant de la permission `settings:read`) est l'éditeur in-app pour chaque fichier TOML par section. Chaque type de configuration dispose d'un **éditeur dédié** — un formulaire piloté par schéma généré à partir des modèles Pydantic que le backend utilise pour charger le fichier. Un éditeur Monaco brut figure sur chaque onglet comme échappatoire quand le formulaire d'un éditeur ne présente pas le champ dont vous avez besoin.
+La page **Paramètres** (icône engrenage dans l'en-tête, visible des utilisateurs disposant de la permission `settings:read`) est l'éditeur in-app pour chaque fichier TOML par section. Chaque type de configuration dispose d'un **éditeur dédié** — un formulaire piloté par schéma généré à partir des modèles Pydantic que le backend utilise pour charger le fichier. Un éditeur Monaco brut figure sur chaque onglet comme échappatoire quand le formulaire d'un éditeur ne présente pas le champ qui manque.
 
 Chaque enregistrement écrit le TOML sur disque, puis déclenche un rechargement côté serveur — le changement est actif dans le même onglet du navigateur sans redémarrage.
 
@@ -78,16 +78,16 @@ La page Paramètres présente **neuf éditeurs** plus le tableau de bord techniq
 |---|---|---|
 | **Pools** | `connectors.toml` → blocs `[pools.*]` — URLs JDBC, dialectes, tailles de pool, identifiants. | `settings:pools` |
 | **Connecteurs** | `connectors.toml` → blocs `[connectors.*]` — requêtes SQL, endpoints HTTP, auth API. | `settings:connectors` |
-| **Dictionnaire** | `dictionary.toml` — métadonnées de colonne : libellés, formats, énumérations, lookups, validation. | `settings:dictionary` |
-| **Menus** | `menus.toml` — arborescences du menu latéral par app, dossiers, feuilles et gardes de permission. | `settings:menus` |
+| **Dictionnaire** | `dictionary.toml` — métadonnées de colonne : libellés, formats, énumérations, recherches, validation. | `settings:dictionary` |
+| **Menus** | `menus.toml` — arborescences du menu latéral par application, dossiers, feuilles et gardes de permission. | `settings:menus` |
 | **Écrans** | `screens.toml` — grilles, dialogues, onglets, conditions par champ, colonnes d'audit. | `settings:screens` |
 | **Tableaux de bord** | `dashboards.toml` — mises en page stat / bar / line / pie / grid. | `settings:dashboards` |
 | **Graphiques** | `charts.toml` — config wrapper Recharts référencée par les tableaux de bord. | `settings:charts` |
-| **Jobs** | `plugins/*/jobs.toml` — catalogue de jobs Nomaflow par app. | `settings:jobs` |
+| **Jobs** | `plugins/*/jobs.toml` — catalogue de jobs Nomaflow par application. | `settings:jobs` |
 | **Technique** | Lecture seule — stats de pool en direct, verrous d'enregistrement, exécutions de jobs en cours, événements socket récents. | `settings:technical` |
 | **TOML brut** | Un éditeur Monaco par fichier. Charge le fichier tel quel, l'enregistre tel quel. Chemin de dernier recours quand un éditeur manque d'un champ. | `settings:raw` |
 
-Les codes de permission sont les chaînes canoniques utilisées par le moteur de rôles — voir [Authentification → Rôles et permissions](../auth/roles-permissions.md) pour savoir comment les accorder.
+Les codes de permission sont les chaînes utilisées par le moteur de rôles — voir [Authentification → Rôles et permissions](../auth/roles-permissions.md) pour la procédure d'attribution.
 
 ---
 
@@ -96,9 +96,9 @@ Les codes de permission sont les chaînes canoniques utilisées par le moteur de
 Chaque éditeur suit la même forme :
 
 1. **Vue liste** — chaque entrée de la section TOML sous-jacente en tant que ligne.
-2. **Panneau de détail** — l'entrée sous forme de formulaire piloté par schéma (un champ par attribut Pydantic) plus des onglets secondaires quand le modèle possède des objets imbriqués.
-3. **Validation** — chaque entrée est contrôlée contre le modèle Pydantic ; une valeur invalide met le champ en rouge et désactive le bouton *Enregistrer*.
-4. **Tester** *(SQL / HTTP / API uniquement)* — exécute la requête ou l'endpoint contre le pool actif et affiche les 50 premières lignes.
+2. **Panneau de détail** — l'entrée sous forme de formulaire piloté par schéma (un champ par attribut Pydantic) plus des onglets secondaires quand le modèle contient des objets imbriqués.
+3. **Validation** — chaque entrée est contrôlée par rapport au modèle Pydantic ; une valeur invalide met le champ en rouge et désactive le bouton *Enregistrer*.
+4. **Tester** *(SQL / HTTP / API uniquement)* — exécute la requête ou l'endpoint sur le pool actif et affiche les 50 premières lignes.
 5. **Enregistrer et recharger** — écrit le TOML sur disque et déclenche un rechargement côté serveur. Le toast de succès porte le chemin du fichier affecté.
 
 ### Aperçu en direct des champs imbriqués
@@ -107,15 +107,15 @@ Pour les configurations à lignes imbriquées (les colonnes d'un écran, les feu
 
 ### Références inline
 
-Le champ *Pool* d'un connecteur est une liste déroulante des pools actuellement définis. Le champ *Connecteur* d'un écran liste chaque connecteur. Le champ *Écran* d'une feuille de menu liste chaque écran de l'app sélectionnée. La suppression d'une entrée référencée est **refusée** — l'éditeur indique quelles configurations pointent toujours dessus, avec un lien vers chacune.
+Le champ *Pool* d'un connecteur est une liste déroulante des pools actuellement définis. Le champ *Connecteur* d'un écran liste chaque connecteur. Le champ *Écran* d'une feuille de menu liste chaque écran de l'application sélectionnée. La suppression d'une entrée référencée est **refusée** — l'éditeur indique quelles configurations pointent toujours dessus, avec un lien vers chacune.
 
 ---
 
 ## Éditeur TOML brut
 
-L'onglet **TOML brut** ouvre un éditeur Monaco sur le fichier sous-jacent. Les erreurs de syntaxe sont surlignées à la volée ; le bouton *Enregistrer* reste désactivé tant que le fichier ne parse pas. L'éditeur est volontairement minimal — pas d'aide au renommage, pas de validation contre les modèles Pydantic — car son rôle est de **débloquer un opérateur** quand un éditeur manque d'un champ précis.
+L'onglet **TOML brut** ouvre un éditeur Monaco sur le fichier sous-jacent. Les erreurs de syntaxe sont surlignées à la volée ; le bouton *Enregistrer* reste désactivé tant que le fichier ne parse pas. L'éditeur est volontairement minimal — pas d'aide au renommage, pas de validation par rapport aux modèles Pydantic — car son rôle est de **débloquer un opérateur** quand un éditeur manque d'un champ précis.
 
-Une boîte de dialogue de confirmation apparaît à l'enregistrement de TOML brut si une édition via éditeur a été faite dans la même session : l'enregistrement brut écraserait le diff de l'éditeur. Choisissez *Garder les modifications de l'éditeur* pour annuler l'enregistrement brut, ou *Utiliser le contenu brut* pour rejeter les éditions de l'éditeur et persister le texte brut.
+Une boîte de dialogue de confirmation apparaît à l'enregistrement de TOML brut si une édition via éditeur a été faite dans la même session : l'enregistrement brut écraserait le diff de l'éditeur. Choisir *Garder les modifications de l'éditeur* pour annuler l'enregistrement brut, ou *Utiliser le contenu brut* pour rejeter les éditions de l'éditeur et enregistrer le texte brut.
 
 ---
 
@@ -142,7 +142,7 @@ L'onglet **Technique** est en lecture seule et fait remonter ce que fait le fram
 | **Exécutions de jobs** | Les 50 dernières exécutions Nomaflow avec leur état et leur durée écoulée. |
 | **Événements socket** | Fin de file des événements récents poussés par le serveur (verrou acquis/libéré, configuration rechargée, étape de job transitionnée). |
 
-La page est restreinte aux utilisateurs portant `settings:technical` et est destinée au diagnostic — aucune action n'est exposée.
+La page est restreinte aux utilisateurs portant `settings:technical` et est destinée au diagnostic — aucune action n'est proposée.
 
 ---
 
@@ -164,8 +164,8 @@ Chaque éditeur dialogue avec un petit ensemble d'endpoints `/admin/config/*`. I
 
 ## Conseils et bonnes pratiques
 
-- **Éditez une section à la fois.** Un *Enregistrer et recharger* ne remplace que le registre affecté — un changement multi-sections peut laisser le système dans un état transitoire où une configuration est à jour et une autre non.
-- **Utilisez l'échappatoire TOML brut avec parcimonie.** Si vous y recourez souvent, ouvrez un ticket — un manque dans un éditeur mérite d'être corrigé côté framework.
-- **Lancez *Tester* avant *Enregistrer* sur un connecteur SQL ou HTTP.** Le framework rejette l'*Enregistrer* si le parseur de chaîne de connexion échoue, mais il laisse passer une requête que la base refuse à l'exécution. Le bouton *Tester* attrape cela plus tôt.
-- **Restreignez étroitement la permission *TOML brut*.** Les opérateurs qui n'ont besoin que d'éditer un connecteur n'ont pas besoin de pouvoir écraser tout le fichier.
-- **Gardez `git status` propre.** Chaque enregistrement dans Paramètres atterrit comme un diff dans `liberty-apps` ; committez avec un message clair pour que le chemin de retour arrière soit évident.
+- **Éditer une section à la fois.** Un *Enregistrer et recharger* ne remplace que le registre affecté — un changement multi-sections peut laisser le système dans un état transitoire où une configuration est à jour et une autre non.
+- **Utiliser l'échappatoire TOML brut avec parcimonie.** En cas de recours fréquent, ouvrir un ticket — un manque dans un éditeur mérite d'être corrigé côté framework.
+- **Lancer *Tester* avant *Enregistrer* sur un connecteur SQL ou HTTP.** Le framework rejette l'*Enregistrer* si le parseur de chaîne de connexion échoue, mais il laisse passer une requête que la base refuse à l'exécution. Le bouton *Tester* détecte cela plus tôt.
+- **Restreindre étroitement la permission *TOML brut*.** Les opérateurs qui n'ont besoin que de modifier un connecteur n'ont pas besoin de pouvoir écraser tout le fichier.
+- **Garder `git status` propre.** Chaque enregistrement dans Paramètres atterrit comme un diff dans `liberty-apps` ; committer avec un message clair pour que le chemin de retour arrière reste évident.

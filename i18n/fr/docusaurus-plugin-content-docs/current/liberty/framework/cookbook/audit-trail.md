@@ -113,7 +113,7 @@ Le dialogue affiche maintenant les quatre colonnes d'audit comme champs en lectu
 |---|---|
 | **Une colonne `version`** | Ajoutez une colonne `version`, incrémentez-la dans la requête `update` (`SET version = version + 1`). Combinée avec les verrous d'enregistrement du framework, vous obtenez un contrôle de concurrence optimiste. |
 | **Un journal d'audit immuable** (chaque modification, pas seulement la dernière) | Ajoutez une table enfant `audit_log` ; écrivez une ligne depuis une étape Python à chaque enregistrement. Voir [Plugins](../apps/plugins.md). |
-| **Tracer qui a *consulté* une ligne** | Problème différent. Le framework enregistre chaque appel API dans le journal des requêtes ; pour l'audit de lecture au niveau ligne, écrivez un `hook` Python sur `screen.before_read`. |
+| **Suivre qui a *consulté* une ligne** | Problème différent. Le framework enregistre chaque appel API dans le journal des requêtes ; pour l'audit de lecture au niveau ligne, écrivez un `hook` Python sur `screen.before_read`. |
 
 ## Pour aller plus loin
 

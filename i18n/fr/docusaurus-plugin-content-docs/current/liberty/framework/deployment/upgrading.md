@@ -156,7 +156,7 @@ kubectl rollout status deployment/liberty-next
 
 Le Job de migration exécute `liberty-admin migrate-db` puis sort — le rolling update du Deployment ne démarre qu'une fois ce Job terminé. Les pods sont remplacés un à un ; les readiness probes sur `/api/healthz` garantissent que chaque nouveau pod est prêt avant que l'ancien suivant ne soit terminé.
 
-Pour l'épinglage du scheduler (voir [Mise en production](./running-production.md#multi-replica-considerations)), s'assurer que l'ancien pod du replica scheduler est terminé avant que le scheduler du nouveau pod ne démarre — généralement en marquant le pod avec `scheduler=true` et en faisant tourner ce seul replica en dernier.
+Pour l'épinglage du scheduler (voir [Mise en production](./running-production.md#multi-replica-considerations)), s'assurer que l'ancien pod du replica scheduler est terminé avant que le scheduler du nouveau pod ne démarre — généralement en marquant le pod avec `scheduler=true` et en redéployant ce seul replica en dernier.
 
 ---
 
@@ -224,7 +224,7 @@ Le framework charge `<name>.toml` d'abord, puis fusionne chaque `<name>-*.toml` 
 
 Une mise à jour d'app éditeur devient alors :
 
-1. Réimporter le zip d'app exporté par l'éditeur via *Paramètres → Apps → Importer*.
+1. Réimporter le zip d'app exporté par l'éditeur via *Paramètres → Applications → Importer*.
 2. Le framework remplace les fichiers éditeur ; les `*-customer.toml` restent intacts.
 3. Lancer le test de fumée — la personnalisation doit continuer de s'appliquer.
 
@@ -232,12 +232,12 @@ Une mise à jour d'app éditeur devient alors :
 
 ## Conseils et bonnes pratiques
 
-- **Étager la mise à jour.** Faire tourner le nouveau framework contre une copie de production pendant une journée ; le coût de prolonger un déploiement défectueux est bien supérieur à celui d'un redémarrage supplémentaire.
+- **Étager la mise à jour.** Exécuter le nouveau framework sur une copie de production pendant une journée ; le coût de prolonger un déploiement défectueux est bien supérieur à celui d'un redémarrage supplémentaire.
 - **Surveiller les journaux après le redémarrage.** Une ligne `WARN` sur un champ obsolète annonce que la prochaine mineure cassera — corriger tout de suite, pas plus tard.
 - **Lire les notes de version.** La plupart des mises à jour passent inaperçues ; les rares exceptions sont signalées. Deux minutes de lecture évitent une heure de débogage.
 - **Sauvegarder avant `migrate-db`.** Même une migration additive comporte un risque ; un `pg_dump` avant le changement de schéma est une assurance de cinq secondes.
 - **Éviter de sauter plusieurs mineures d'un coup quand c'est possible.** Passer `0.40 → 0.43` peut faire disparaître un champ obsolète retiré en `0.42` ; aller version par version garde les avertissements gérables.
-- **Faire le rolling-update un replica à la fois.** Même avec des replicas sans état, deux redémarrages simultanés créent une brève fenêtre sans endpoint Socket.IO — le tableau de bord en direct se casse pour les utilisateurs.
+- **Procéder au redémarrage progressif un replica à la fois.** Même avec des replicas sans état, deux redémarrages simultanés créent une brève fenêtre sans endpoint Socket.IO — le tableau de bord en direct se casse pour les utilisateurs.
 
 ---
 
@@ -245,4 +245,4 @@ Une mise à jour d'app éditeur devient alors :
 
 - [Mise en production](./running-production.md) — la forme de déploiement dans laquelle les mises à jour atterrissent.
 - [Configuration → Rechargement à chaud](../configuration/hot-reload.md) — ce qui se recharge et ce qui demande un redémarrage (pertinent quand on modifie `app.toml` en cours de mise à jour).
-- [Apps et plugins → Apps](../apps/overview.md) — packager les personnalisations pour survivre aux mises à jour éditeur.
+- [Applications et plugins → Applications](../apps/overview.md) — packager les personnalisations pour survivre aux mises à jour éditeur.

@@ -6,7 +6,7 @@ keywords: [Liberty Framework, tutoriel, CRM, clients, connecteur, écran, menu, 
 
 # Étape 2 — L'écran Clients
 
-Il est temps de construire le premier écran. Nous allons câbler la table `customers` en une interface opérationnelle : vue liste avec filtres, dialogue d'édition, enregistrement / ajout / suppression. Trois onglets de Paramètres touchés — *Connecteurs*, *Écrans*, *Menus* — environ 10 minutes de clics.
+Place au premier écran. Nous allons câbler la table `customers` en une interface opérationnelle : vue liste avec filtres, dialogue d'édition, enregistrement / ajout / suppression. Trois onglets de Paramètres concernés — *Connecteurs*, *Écrans*, *Menus* — environ 10 minutes de clics.
 
 À la fin de cette étape, l'entrée *Clients* apparaît dans la barre latérale et cliquer sur une ligne ouvre un dialogue modifiable. Temps estimé : **15 minutes**.
 
@@ -18,11 +18,11 @@ Le modèle mental du framework : **un connecteur sait dialoguer avec une source 
 
 Pourquoi cet ordre compte :
 
-1. Le **connecteur** porte le SQL — à la fois la requête de lecture qui alimente la grille et les requêtes d'écriture qui gèrent enregistrement / ajout / suppression. Il est défini en premier parce que tout en aval le référence.
+1. Le **connecteur** porte le SQL — à la fois la requête de lecture qui alimente la grille et les requêtes d'écriture qui gèrent enregistrement / ajout / suppression. Il se définit en premier parce que tout en aval le référence.
 2. L'**écran** enveloppe le connecteur en UI. Il a besoin que le connecteur existe déjà (l'écran le choisit dans une liste déroulante).
 3. L'entrée de **menu** a besoin que l'écran existe déjà (même raison).
 
-Si vous sautez entre les onglets, ce n'est pas grave — mais le flux naturel va de gauche à droite.
+Sauter d'un onglet à l'autre n'est pas un problème — mais le flux naturel va de gauche à droite.
 
 ---
 
@@ -43,7 +43,7 @@ Ouvrez **Paramètres → Connecteurs → + Nouveau connecteur**.
   </div>
 </div>
 
-La *Description* compte plus qu'il n'y paraît : elle apparaît dans le catalogue, dans la liste d'outils de l'assistant IA (Étape 6) et comme infobulle quand d'autres opérateurs référencent ce connecteur. Deux phrases dans la langue de l'utilisateur.
+La *Description* compte plus qu'il n'y paraît : elle apparaît dans le catalogue, dans la liste d'outils de l'assistant IA (Étape 6) et comme infobulle quand d'autres opérateurs référencent ce connecteur. Deux phrases, dans la langue de l'utilisateur.
 
 ### Sous-formulaire Requêtes
 
@@ -74,7 +74,7 @@ FROM   customers
 ORDER BY name;
 ```
 
-Cliquez sur **▶ Tester**. Le framework exécute la requête, affiche les trois lignes initiales et découvre le schéma. Huit chips de colonnes apparaissent en bas — `id`, `name`, `industry`, `country`, `status`, `primary_email`, `created_at`, `updated_at`. Notez-les ; nous les utiliserons dans l'écran.
+Cliquez sur **▶ Tester**. Le framework exécute la requête, affiche les trois lignes initiales et découvre le schéma. Huit chips de colonnes apparaissent en bas — `id`, `name`, `industry`, `country`, `status`, `primary_email`, `created_at`, `updated_at`. À retenir ; nous les utiliserons dans l'écran.
 
 #### Requête d'écriture — `create`
 
@@ -92,9 +92,9 @@ VALUES (:name, :industry, :country, :status, :primary_email, :session_user, CURR
 RETURNING id;
 ```
 
-Notez `:session_user` — c'est le placeholder magique que le framework lie à la claim `sub` du JWT (l'identifiant de l'utilisateur appelant). C'est ainsi que les colonnes d'audit se remplissent sans faire confiance au client.
+À noter, `:session_user` — le placeholder que le framework lie à la claim `sub` du JWT (l'identifiant de l'utilisateur appelant). C'est ainsi que les colonnes d'audit se remplissent sans faire confiance au client.
 
-Dans la sous-table **Paramètres**, déclarez `name`, `industry`, `country`, `status`, `primary_email` — tous en `string`, aucun obligatoire (on laisse le formulaire décider).
+Dans la sous-table **Paramètres**, déclarez `name`, `industry`, `country`, `status`, `primary_email` — tous en `string`, aucun obligatoire (le formulaire décidera).
 
 #### Requête d'écriture — `update`
 
@@ -126,7 +126,7 @@ Cliquez sur **Enregistrer et recharger** en haut à droite. Le catalogue affiche
 
 ### Ce qui vient de se passer
 
-Vous avez créé la **première surface** du CRM : une définition réutilisable de comment lire et écrire les données client. Tout ce qui aura besoin des données client à partir de maintenant — écrans, tableaux de bord, graphiques, jobs, l'assistant IA — référencera ce connecteur plutôt que de réécrire le SQL.
+Vous avez créé la **première surface** du CRM : une définition réutilisable pour lire et écrire les données client. Tout ce qui aura besoin des données client à partir de maintenant — écrans, tableaux de bord, graphiques, tâches, l'assistant IA — référencera ce connecteur plutôt que de réécrire le SQL.
 
 Les quatre requêtes ont aussi généré quatre **codes de permission** automatiquement :
 
@@ -161,11 +161,11 @@ Ouvrez **Paramètres → Écrans → + Nouvel écran**.
 | **Requête** | `list` ▾ |
 | **Tri par défaut** | `name`, ascendant |
 
-Un bouton *Aperçu* en haut exécute la requête et affiche les colonnes découvertes. Nous en choisissons à la suite.
+Un bouton *Aperçu* en haut exécute la requête et affiche les colonnes découvertes. Nous en choisirons certaines juste après.
 
 ### Sous-formulaire Grille
 
-Le framework propose les colonnes découvertes dans une palette à gauche ; glissez celles que nous voulons dans la mise en page à droite.
+Le framework propose les colonnes découvertes dans une palette à gauche ; glissez celles à conserver dans la mise en page à droite.
 
 Pour une vue par défaut propre, incluez :
 
@@ -182,21 +182,21 @@ Laissez `id`, `created_at`, `created_by`, `updated_by` dans le catalogue (l'opé
 
 ### Sous-formulaire Dialogue
 
-L'onglet *Dialogue* définit ce qui se passe quand l'opérateur clique sur une ligne. Nous ajouterons **un onglet** (`Détails`) avec cinq champs.
+L'onglet *Dialogue* définit ce qui se passe quand l'opérateur clique sur une ligne. Nous ajoutons **un onglet** (`Détails`) avec cinq champs.
 
 | Champ | Colonne source | Widget | Notes |
 |---|---|---|---|
 | **Nom** | `name` | Texte | Obligatoire. |
 | **Secteur** | `industry` | Texte | |
-| **Pays** | `country` | Texte | Nous le câblerons à un lookup Pays à l'Étape 3 — pour l'instant, un simple champ texte. |
+| **Pays** | `country` | Texte | Câblé à un lookup Pays à l'Étape 3 — pour l'instant, un simple champ texte. |
 | **Statut** | `status` | Texte | Idem — deviendra une liste déroulante à l'Étape 3. |
 | **E-mail principal** | `primary_email` | Texte | |
 
-Le framework dérive le widget du type de colonne découvert (`string` → champ texte, `date` → sélecteur de date, etc.) ; pour l'instant on garde les valeurs par défaut.
+Le framework dérive le widget du type de colonne découvert (`string` → champ texte, `date` → sélecteur de date, etc.) ; pour l'instant, on garde les valeurs par défaut.
 
 ### Sous-formulaire Actions
 
-Les boutons de la barre d'outils Ajouter / Modifier / Supprimer sont câblés automatiquement parce que *Modifiable* est activé. Il faut juste les pointer vers les bonnes requêtes d'écriture :
+Les boutons de la barre d'outils Ajouter / Modifier / Supprimer sont câblés automatiquement parce que *Modifiable* est activé. Il suffit de les pointer vers les bonnes requêtes d'écriture :
 
 | Action | Connecteur / Requête |
 |---|---|
@@ -206,7 +206,7 @@ Les boutons de la barre d'outils Ajouter / Modifier / Supprimer sont câblés au
 
 ### Enregistrer l'écran
 
-**Enregistrer et recharger**. L'écran apparaît dans le catalogue. Pour le voir, il faut le câbler dans la barre latérale.
+**Enregistrer et recharger**. L'écran apparaît dans le catalogue. Pour le voir, il faut encore le câbler dans la barre latérale.
 
 ---
 
@@ -214,9 +214,9 @@ Les boutons de la barre d'outils Ajouter / Modifier / Supprimer sont câblés au
 
 Ouvrez **Paramètres → Menus**. Vous devriez voir une ou deux lignes — `_default` et peut-être un placeholder. Cliquez sur **+ Nouveau menu** s'il n'y a pas encore de menu `crm`.
 
-Mettez le champ *App* du menu à `crm`. Le framework le reconnaît comme « le menu de l'espace de travail CRM » — une fois enregistré, le sélecteur d'espace de travail en haut de l'en-tête affichera **CRM** comme espace de travail.
+Mettez le champ *App* du menu à `crm`. Le framework le reconnaît comme « le menu de l'espace de travail CRM » — une fois enregistré, le sélecteur d'espace de travail en haut de l'en-tête affiche **CRM** comme espace de travail.
 
-Puis sur l'éditeur d'arborescence du menu, **+ Ajouter une feuille** :
+Puis, dans l'éditeur d'arborescence du menu, **+ Ajouter une feuille** :
 
 | Champ | Valeur |
 |---|---|
@@ -225,13 +225,13 @@ Puis sur l'éditeur d'arborescence du menu, **+ Ajouter une feuille** :
 | **Écran** | `crm/customers` ▾ |
 | **Icône** | `users` *(n'importe quelle [icône Lucide](https://lucide.dev/icons))* |
 
-**Enregistrer et recharger**. La barre latérale se met à jour immédiatement via Socket.IO. Le sélecteur d'espace de travail affiche maintenant **CRM** ; cliquer dessus bascule la barre latérale vers une liste contenant **Clients**.
+**Enregistrer et recharger**. La barre latérale se met à jour immédiatement via Socket.IO. Le sélecteur d'espace de travail affiche maintenant **CRM** ; un clic dessus bascule la barre latérale vers une liste contenant **Clients**.
 
 ---
 
 ## Voir le résultat
 
-Cliquez sur l'entrée **Clients** dans la barre latérale. Vous devriez voir une grille avec trois lignes — Acme, Globex, Initech.
+Cliquez sur l'entrée **Clients** dans la barre latérale. Une grille s'affiche avec trois lignes — Acme, Globex, Initech.
 
 <div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
   <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)'}}>
@@ -258,17 +258,17 @@ Cliquez sur l'entrée **Clients** dans la barre latérale. Vous devriez voir une
 Essayez :
 
 - **Cliquez sur une ligne** → le dialogue d'édition s'ouvre avec les cinq champs remplis.
-- **Changez un champ, cliquez sur Enregistrer** → la ligne se met à jour, la colonne *Dernière modification* reflète le changement.
+- **Modifiez un champ, cliquez sur Enregistrer** → la ligne se met à jour, la colonne *Dernière modification* reflète le changement.
 - **Cliquez sur + Ajouter** → le dialogue s'ouvre vide pour un nouveau client.
-- **Cliquez sur ✕ Supprimer sur le dialogue** → la ligne disparaît après confirmation.
+- **Cliquez sur ✕ Supprimer dans le dialogue** → la ligne disparaît après confirmation.
 
 ---
 
 ## Ce que vous avez maintenant
 
-Un écran Clients pleinement fonctionnel — lister, modifier, ajouter, supprimer — sans écrire la moindre ligne de code frontend. L'ensemble tient à un connecteur + un écran + une entrée de menu, le tout défini dans l'interface Paramètres.
+Un écran Clients pleinement fonctionnel — lister, modifier, ajouter, supprimer — sans écrire la moindre ligne de code frontend. L'ensemble tient sur un connecteur + un écran + une entrée de menu, le tout défini dans l'interface Paramètres.
 
-L'écran a encore des aspérités que nous polirons dans les étapes suivantes :
+L'écran a encore des aspérités à polir dans les étapes suivantes :
 
 - La colonne `status` est une chaîne libre. L'**Étape 3** la transforme en chip coloré via le dictionnaire.
 - La colonne `country` est un code à deux lettres en texte libre. L'**Étape 3** la câble à une table de lookup pour que les utilisateurs choisissent dans une liste déroulante.

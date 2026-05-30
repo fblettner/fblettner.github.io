@@ -8,7 +8,7 @@ keywords: [Liberty Framework, tableau de bord, dashboard, KPI, indicateur, graph
 
 Un **tableau de bord** est une page unique qui regroupe KPI, graphiques et tables autour d'un contexte commun — typiquement *la période courante* + *un périmètre choisi* (une société, une région, une équipe). Défini depuis **Paramètres → Tableaux de bord** avec une **grille de mise en page** en glisser-déposer ; chaque panneau choisit une source de données (une requête de connecteur ou un graphique enregistré), un **type** de panneau (indicateur / graphique / table) et s'affiche en conséquence.
 
-Le tableau de bord est la surface naturelle pour les vues de direction ("comment se porte-t-on aujourd'hui ?") et pour les vues opérationnelles ("quels jobs tournent, quels écrans ont le plus de refus"). Chaque panneau peut descendre vers un écran pré-filtré sur les lignes sous-jacentes.
+Le tableau de bord est la surface naturelle pour les vues de direction ("comment se porte-t-on aujourd'hui ?") et pour les vues opérationnelles ("quels jobs s'exécutent, quels écrans ont le plus de refus"). Chaque panneau peut descendre vers un écran pré-filtré sur les lignes sous-jacentes.
 
 ---
 
@@ -68,16 +68,16 @@ Le catalogue liste chaque tableau de bord de l'installation.
     <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>+ Nouveau tableau de bord</span>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1fr 80px 60px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', fontSize: '11px', fontWeight: 600}}>
-    <div>Id</div><div>Titre</div><div>App</div><div>Panneaux</div><div></div>
+    <div>Id</div><div>Titre</div><div>Application</div><div>Panneaux</div><div></div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1fr 80px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div style={{fontFamily: 'ui-monospace, monospace'}}>billing-overview</div><div>Vue d'ensemble facturation</div><div>billing</div><div>8</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>billing-overview</div><div>Vue d'ensemble facturation</div><div>billing</div><div>8</div><div style={{textAlign: 'right', opacity: 0.55}}>Modifier</div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1fr 80px 60px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div style={{fontFamily: 'ui-monospace, monospace'}}>sales-pipeline</div><div>Pipeline commercial</div><div>crm</div><div>6</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>sales-pipeline</div><div>Pipeline commercial</div><div>crm</div><div>6</div><div style={{textAlign: 'right', opacity: 0.55}}>Modifier</div>
   </div>
   <div style={{display: 'grid', gridTemplateColumns: '180px 1.4fr 1fr 80px 60px', padding: '10px 14px', alignItems: 'center'}}>
-    <div style={{fontFamily: 'ui-monospace, monospace'}}>tech-dashboard</div><div>Tableau de bord technique</div><div>_default</div><div>10</div><div style={{textAlign: 'right', opacity: 0.55}}>✏️</div>
+    <div style={{fontFamily: 'ui-monospace, monospace'}}>tech-dashboard</div><div>Tableau de bord technique</div><div>_default</div><div>10</div><div style={{textAlign: 'right', opacity: 0.55}}>Modifier</div>
   </div>
 </div>
 
@@ -95,10 +95,10 @@ Un éditeur à deux panneaux : **grille de mise en page** à gauche (glisser-dé
 |---|---|
 | **Id** | Identifiant — apparaît dans l'URL (`/dashboards/<id>`), le sélecteur de menu et le code de permission (`dashboard:<id>`). |
 | **Titre** | Titre d'affichage localisé. |
-| **App** | Espace de noms d'app. Détermine l'espace de travail où le tableau de bord apparaît. |
+| **Application** | Espace de noms d'application. Détermine l'espace de travail où le tableau de bord apparaît. |
 | **Description** | Texte libre. Apparaît dans le sélecteur de menu. |
-| **Barre de filtres partagée** | Liste optionnelle de paramètres exposés en haut du tableau de bord à l'exécution. Chaque panneau qui référence le même paramètre hérite de la valeur. |
-| **Page par défaut** | Optionnel — la page d'accueil du tableau de bord dans la même app. Pose une icône "accueil" sur l'entrée de menu. |
+| **Barre de filtres partagée** | Liste optionnelle de paramètres présentés en haut du tableau de bord à l'exécution. Chaque panneau qui référence le même paramètre hérite de la valeur. |
+| **Page par défaut** | Optionnel — la page d'accueil du tableau de bord dans la même application. Pose une icône "accueil" sur l'entrée de menu. |
 
 ### Grille de mise en page
 
@@ -207,7 +207,7 @@ Le haut d'un tableau de bord montre une rangée de saisies dérivées de la **Ba
 | **Libellé** | Affiché au-dessus de la saisie. |
 | **Type** | `string` / `date` / `daterange` / `lookup` / `enum`. Pilote le widget. |
 | **Valeur par défaut** | Valeur initiale. Les jetons de date (`${today}`, `${month.first}`) sont acceptés. |
-| **Lookup** | Quand *Type* vaut `lookup`, pointe sur un lookup du dictionnaire. |
+| **Lookup** | Quand *Type* vaut `lookup`, pointe sur une recherche du dictionnaire. |
 
 Les opérateurs règlent le filtre une fois en haut du tableau de bord ; chaque panneau qui hérite du paramètre se ré-exécute avec la nouvelle valeur. C'est ce qui rend les tableaux de bord cohérents — une saisie, plusieurs panneaux mis à jour.
 
@@ -234,15 +234,15 @@ L'onglet d'éditeur de tableaux de bord est verrouillé par `settings:dashboards
 - **Commencer par les indicateurs.** La première rangée d'un tableau de bord doit comporter 3 à 4 panneaux d'indicateur — l'œil de l'opérateur s'y pose en premier.
 - **Regrouper avec des en-têtes de section.** Deux rangées visuelles séparées par un *Libellé de section* se lisent bien mieux que six panneaux en mur.
 - **Garder moins de 12 panneaux par tableau de bord.** Au-delà, la page défile et la valeur "tout en un coup d'œil" s'évapore. Découper en plusieurs tableaux de bord.
-- **User la barre de filtres partagée pour le temps.** La plupart des tableaux de bord tournent autour d'une période ; exposer la plage de dates ici une fois et chaque panneau en hérite.
+- **Utiliser la barre de filtres partagée pour le temps.** La plupart des tableaux de bord tournent autour d'une période ; présenter la plage de dates ici une fois et chaque panneau en hérite.
 - **Câbler les drill-downs.** Un indicateur isolé vaut la moitié d'un indicateur qui ouvre l'écran pertinent.
-- **User le bouton Aperçu.** Attrape "ce panneau n'a pas de données sur une installation fraîche" avant l'enregistrement.
+- **Utiliser le bouton Aperçu.** Détecte "ce panneau n'a pas de données sur une installation fraîche" avant l'enregistrement.
 
 ---
 
 ## Sous le capot
 
-Les définitions de tableau de bord sont enregistrées dans `liberty-apps/config/dashboards.toml` et les graphiques sous-jacents dans `charts.toml`. Les opérateurs **ne modifient pas ces fichiers à la main** en exploitation normale ; l'éditeur de tableaux de bord est l'interface canonique, avec l'onglet *TOML brut* comme échappatoire pour les rares modifications qu'un manque de l'éditeur bloque.
+Les définitions de tableau de bord sont enregistrées dans `liberty-apps/config/dashboards.toml` et les graphiques sous-jacents dans `charts.toml`. Les opérateurs **ne modifient pas ces fichiers à la main** en exploitation normale ; l'éditeur de tableaux de bord est l'interface de référence, avec l'onglet *TOML brut* comme échappatoire pour les rares modifications qu'un manque de l'éditeur bloque.
 
 ---
 

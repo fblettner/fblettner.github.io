@@ -14,7 +14,7 @@ Les opérateurs veulent un XLSX de la vue filtrée courante (ou d'un agrégat fi
 
 Le framework offre **trois niveaux** d'export Excel, par ordre croissant d'effort :
 
-| Niveau | Ce que vous faites | Ce qui est livré |
+| Niveau | Ce que vous faites | Ce qui est produit |
 |---|---|---|
 | **1. Gratuit** | Rien. | Chaque écran a un bouton *⬇ Exporter* qui télécharge la vue filtrée courante en `<screen>.xlsx`. |
 | **2. Personnalisé** | Choisir les colonnes qui apparaissent dans l'export. | Même bouton, mais avec les colonnes que vous voulez — y compris les colonnes *masquées par défaut* dans la grille. |
@@ -54,8 +54,8 @@ Pour un rapport récurrent — par ex. « chaque lundi à 08:00, envoyer les ven
 | Champ | Valeur |
 |---|---|
 | **Nom** | `weekly-sales-export` |
-| **Schedule** | `0 8 * * 1` *(Lundis à 08:00)* |
-| **Timezone** | `Europe/Paris` |
+| **Planification** | `0 8 * * 1` *(Lundis à 08:00)* |
+| **Fuseau horaire** | `Europe/Paris` |
 
 ### Étape 1 — rendre le XLSX
 
@@ -76,8 +76,8 @@ Type : `HTTP`. Variante : `Raw URL`.
 | Champ | Valeur |
 |---|---|
 | **Méthode** | `POST` |
-| **URL** | Votre wrapper HTTP de relais SMTP, ou utilisez la configuration Paramètres → Framework → Notifications → SMTP |
-| **Body** | `{ "to": "ops@example.com", "subject": "Ventes hebdomadaires", "attachment": "${previous_step.body}" }` |
+| **URL** | Votre passerelle HTTP de relais SMTP, ou utilisez la configuration Paramètres → Framework → Notifications → SMTP |
+| **Corps** | `{ "to": "ops@example.com", "subject": "Ventes hebdomadaires", "attachment": "${previous_step.body}" }` |
 
 ### Enregistrer et tester
 
@@ -90,7 +90,7 @@ Cliquez sur **▶ Exécuter maintenant** dans le constructeur de job pour vérif
 | **Un export agrégé, pas un dump ligne à ligne** | Écrivez une vue SQL (`vw_weekly_sales`) qui fait l'agrégation, construisez un connecteur + un écran au-dessus de la vue, désactivez *Editable* sur l'écran, exportez les lignes de la vue. |
 | **Un PDF au lieu d'un XLSX** | Les écrans n'exportent pas nativement en PDF ; la [feuille de style d'impression](../configuration/settings-ui.md) du framework gère du HTML imprimable. Pour un vrai PDF, le tableau de bord `crm-pipeline-overview` a un bouton *⬇ Exporter PDF* par défaut. |
 | **Un CSV au lieu d'un XLSX** | L'endpoint accepte `?format=csv` — même job, paramètre différent. |
-| **Que le destinataire télécharge depuis un lien plutôt qu'une pièce jointe** | L'étape 1 reste la même. L'étape 2 devient une étape qui upload le blob vers S3 / Azure / Google Drive et envoie le lien par email. Étape Python personnalisée. |
+| **Que le destinataire télécharge depuis un lien plutôt qu'une pièce jointe** | L'étape 1 reste la même. L'étape 2 devient une étape qui téléverse le blob vers S3 / Azure / Google Drive et envoie le lien par email. Étape Python personnalisée. |
 
 ## Pour aller plus loin
 

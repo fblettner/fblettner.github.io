@@ -54,7 +54,7 @@ L'onglet **Utilisateurs** est l'éditeur de référence pour le backend local (l
   <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
     <div style={{fontWeight: 700}}>Paramètres → Utilisateurs</div>
     <div style={{display: 'flex', gap: '6px'}}>
-      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>↻ Rafraîchir</span>
+      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>↻ Recharger</span>
       <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>+ Nouvel utilisateur</span>
     </div>
   </div>
@@ -92,7 +92,7 @@ Un validateur enfichable rejette les mots de passe faibles. Le validateur livré
 - Au moins un chiffre, une majuscule, une minuscule.
 - Différent de l'identifiant.
 
-Pour le remplacer, définir *Validateur de mot de passe* dans *Paramètres → Framework → Authentification* sur un callable de votre dépôt d'apps (par ex. `myapp.security:validate`). Voir [Apps et Plugins → Plugins](../apps/plugins.md) pour la signature de la fonction.
+Pour le remplacer, définir *Validateur de mot de passe* dans *Paramètres → Framework → Authentification* sur un callable de votre dépôt d'apps (par ex. `myapp.security:validate`). Voir [Applications et Plugins → Plugins](../apps/plugins.md) pour la signature de la fonction.
 
 ---
 
@@ -106,7 +106,7 @@ Dans **Paramètres → Framework → Authentification**, activer la bascule **OI
     <div style={{opacity: 0.75}}>Activé</div><div><span style={{padding: '4px 12px', borderRadius: '999px', background: 'rgba(50,215,75,0.12)', border: '1px solid rgba(50,215,75,0.4)', color: '#4ade80', fontSize: '11px', fontWeight: 600}}>● Actif</span></div>
     <div style={{opacity: 0.75}}>URL de l'émetteur</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>https://auth.example.com/application/o/liberty/</span></div>
     <div style={{opacity: 0.75}}>Client ID</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>liberty</span></div>
-    <div style={{opacity: 0.75}}>Secret du client</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>🔒 ENC:…   <span style={{marginLeft: '8px', opacity: 0.6, fontStyle: 'italic'}}>Révéler</span></span></div>
+    <div style={{opacity: 0.75}}>Secret du client</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>🔒 ENC:…   <span style={{marginLeft: '8px', opacity: 0.6, fontStyle: 'italic'}}>Voir</span></span></div>
     <div style={{opacity: 0.75}}>URI de redirection</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>https://liberty.example.com/auth/oidc/callback</span></div>
     <div style={{opacity: 0.75}}>Claim email</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>email</span></div>
     <div style={{opacity: 0.75}}>Claim groupes</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>groups</span></div>
@@ -117,7 +117,7 @@ Dans **Paramètres → Framework → Authentification**, activer la bascule **OI
 | Champ | Description |
 |---|---|
 | **URL de l'émetteur** | URL du fournisseur OIDC. Le framework va chercher `${issuer}/.well-known/openid-configuration` au démarrage pour découvrir les endpoints. |
-| **Client ID** / **Secret du client** | Identifiants OAuth2 du client enregistrés auprès de l'IdP. Le secret est toujours chiffré en stockage — l'icône 🔒 est verrouillée. |
+| **Client ID** / **Secret du client** | Identifiants OAuth2 du client enregistrés auprès de l'IdP. Le secret est chiffré au repos. |
 | **URI de redirection** | URL de rappel du framework. Doit être enregistrée côté IdP. |
 | **Claim email** | Claim JWT utilisé comme identifiant local. Par défaut `email`. |
 | **Claim groupes** | Claim JWT mappé vers les rôles Liberty 1:1. Par défaut `groups`. Un groupe nommé `editor` côté IdP attribue le rôle Liberty `editor`. |
@@ -161,7 +161,7 @@ Le client API du frontend rafraîchit le jeton d'accès de manière transparente
 | L'opérateur marque l'utilisateur *Inactif* | Les rafraîchissements de jeton suivants échouent. |
 | Redémarrage du framework avec une nouvelle clé de signature JWT | Chaque jeton d'accès actif devient immédiatement invalide. Les jetons de rafraîchissement échouent aussi — chaque utilisateur doit se reconnecter. |
 
-La clé de signature JWT est référencée par nom de variable d'environnement dans le formulaire Authentification (par défaut `${LIBERTY_JWT_SECRET}`). Faire tourner la clé est une action **qui demande un redémarrage**.
+La clé de signature JWT est référencée par nom de variable d'environnement dans le formulaire Authentification (par défaut `${LIBERTY_JWT_SECRET}`). La rotation de la clé est une action **qui demande un redémarrage**.
 
 ---
 
@@ -177,7 +177,7 @@ L'onglet Utilisateurs est gouverné par `users:read` (consultation) / `users:wri
 - **Utiliser le backend base de données au-delà d'une poignée d'utilisateurs.** TOML se dégrade sous les éditions concurrentes ; le backend BDD gère cela proprement.
 - **Conserver au moins un administrateur local même sur les installations OIDC.** L'accès de secours quand l'IdP est indisponible est inestimable.
 - **Refléter les groupes de l'IdP vers les rôles Liberty 1:1.** Contrat le plus propre — nommer les rôles Liberty pour qu'ils correspondent aux noms de groupes de l'IdP.
-- **Faire tourner la clé de signature JWT selon un calendrier.** Une cadence annuelle est raisonnable ; la perturbation est d'une reconnexion par utilisateur.
+- **Faire la rotation de la clé de signature JWT selon un calendrier.** Une cadence annuelle est raisonnable ; la perturbation se limite à une reconnexion par utilisateur.
 - **Utiliser *Tester la connexion* sur le formulaire OIDC** avant d'enregistrer. Permet de détecter tôt les mauvaises URL d'émetteur / URI de redirection non enregistrées.
 
 ---
@@ -192,4 +192,4 @@ Les paramètres d'authentification sont enregistrés dans `config/app.toml` sous
 
 - [Rôles et permissions](./roles-permissions.md) — ce qu'un rôle peut faire, les codes de permission, la matrice d'attribution.
 - [Clé de licence](./license-key.md) — verrous de fonctionnalités signés RS256.
-- [Apps et Plugins → Plugins](../apps/plugins.md) — validateur de mot de passe personnalisé et autres crochets d'authentification.
+- [Applications et Plugins → Plugins](../apps/plugins.md) — validateur de mot de passe personnalisé et autres crochets d'authentification.

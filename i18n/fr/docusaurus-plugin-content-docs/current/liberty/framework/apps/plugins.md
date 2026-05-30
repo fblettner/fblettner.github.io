@@ -8,7 +8,7 @@ keywords: [Liberty Framework, plugins, custom Python, callable, jobs, hooks, pas
 
 Le moteur d'étape de job, le validateur de mot de passe et quelques autres points d'extension du framework acceptent des **références d'appel** de la forme `"module.path:function"`. La fonction est du Python ordinaire ; le framework l'importe paresseusement à la première utilisation et l'appelle avec le contexte d'exécution sous forme d'arguments nommés.
 
-C'est le **seul** endroit où une installation client exécute du code personnalisé — le reste de la configuration est purement déclaratif. Utilisez les plugins pour ce que le TOML ne peut pas exprimer : transformations sur mesure, particularités spécifiques à un ERP, intégrations avec des systèmes externes.
+C'est le **seul** endroit où une installation client exécute du code personnalisé — le reste de la configuration est purement déclaratif. Utiliser les plugins pour ce que le TOML ne peut pas exprimer : transformations sur mesure, particularités spécifiques à un ERP, intégrations avec des systèmes externes.
 
 ---
 
@@ -240,7 +240,7 @@ La référence TOML est la même — `callable = "liberty_billing.invoicing:run"
 
 | Avantage | Inconvénient |
 |---|---|
-| Le code du plugin vit dans son propre dépôt avec ses propres tests / CI. | Deux pipelines de livraison à gérer. |
+| Le code du plugin est isolé dans son propre dépôt avec ses propres tests / CI. | Deux pipelines de livraison à gérer. |
 | Plusieurs installations peuvent partager une version unique du plugin. | Le rechargement à chaud ne capte pas une mise à jour pip — un redémarrage est nécessaire. |
 
 Choisir le schéma 1 pour les petits plugins (quelques centaines de lignes, spécifiques à une installation) ; choisir le schéma 2 pour les plugins partagés entre de nombreuses installations ou maintenus par une équipe distincte.
@@ -294,6 +294,6 @@ Exécuter avec `cd liberty-next && PYTHONPATH=../liberty-apps/plugins .venv/bin/
 
 ## Pour aller plus loin
 
-- [Apps](./overview.md) — où le dossier plugin s'inscrit dans la structure d'une app.
-- [i18n](./i18n.md) — ajout de packs de langue (vivent aussi sous `plugins/`).
+- [Applications](./overview.md) — où le dossier plugin s'inscrit dans la structure d'une application.
+- [i18n](./i18n.md) — ajout de packs de langue (également placés sous `plugins/`).
 - [Jobs → Types d'étape](../jobs/step-types.md) — l'étape `python` qui appelle les plugins.

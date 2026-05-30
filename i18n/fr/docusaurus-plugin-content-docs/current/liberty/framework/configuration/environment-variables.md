@@ -1,6 +1,6 @@
 ---
 title: Variables d'environnement
-description: "Chaque variable d'environnement LIBERTY_* documentée — URL de base de données, clé de signature JWT, clé maître de chiffrement, clé de licence, clé IA, répertoire d'apps, paramètres OIDC — avec le fichier qu'elle surcharge et la valeur par défaut appliquée quand elle n'est pas définie."
+description: "Chaque variable d'environnement LIBERTY_* documentée — URL de base de données, clé de signature JWT, clé maître de chiffrement, clé de licence, clé IA, répertoire d'applications, paramètres OIDC — avec le fichier qu'elle surcharge et la valeur par défaut appliquée quand elle n'est pas définie."
 keywords: [Liberty Framework, variables d'environnement, LIBERTY_DB_URL, LIBERTY_JWT_SECRET, LIBERTY_MASTER_KEY, LIBERTY_LICENSE_KEY, LIBERTY_APPS_DIR, ANTHROPIC_API_KEY, OIDC, configuration]
 ---
 
@@ -48,7 +48,7 @@ Le pool `default` est utilisé par le backend d'auth (quand `[auth] backend = "d
 | Défaut | non défini → une clé **éphémère** est générée par processus. Chaque redémarrage invalide tous les tokens. |
 | Longueur | Au moins 32 octets aléatoires. Générer avec `openssl rand -hex 32`. |
 
-Les installations en production **doivent** définir cette variable. Deux réplicas partageant le même secret peuvent émettre et vérifier les tokens l'un de l'autre ; des réplicas avec des secrets différents ne le peuvent pas.
+Les installations en production **doivent** définir cette variable. Deux réplicas qui partagent le même secret peuvent émettre et vérifier les tokens l'un de l'autre ; des réplicas avec des secrets différents ne le peuvent pas.
 
 ### `LIBERTY_MASTER_KEY`
 
@@ -70,7 +70,7 @@ Voir [Chiffrement et secrets](./encryption-secrets.md) pour le format de chiffre
 
 | Effet | Clé API utilisée par l'assistant IA. Chargée dans `[ai] api_key`. |
 | --- | --- |
-| Défaut | non défini → la page `/chat` affiche un message « configurez une clé API pour activer l'assistant ». |
+| Défaut | non défini → la page `/chat` affiche un message « configurer une clé API pour activer l'assistant ». |
 | Où en obtenir une | https://console.anthropic.com → *API keys*. |
 
 ### `LIBERTY_OIDC_ISSUER` / `LIBERTY_OIDC_CLIENT_ID` / `LIBERTY_OIDC_CLIENT_SECRET` / `LIBERTY_OIDC_REDIRECT`
@@ -124,9 +124,9 @@ Voir [Authentification → OIDC](../auth/authentication.md#oidc) pour la mise en
 | Quand la variable est lue | Variables |
 |---|---|
 | **Une seule fois au démarrage** | Toutes. L'interpolation de `${NAME}` se produit quand `app.toml` est chargé. |
-| **Re-lue sur `POST /admin/reload`** | Aucune — un rechargement de configuration re-parse les TOML par section mais ne **relit pas** l'environnement. Pour récupérer une nouvelle valeur, redémarrez le processus. |
+| **Re-lue sur `POST /admin/reload`** | Aucune — un rechargement de configuration re-parse les TOML par section mais ne **relit pas** l'environnement. Pour récupérer une nouvelle valeur, redémarrer le processus. |
 
-C'est la raison pour laquelle les secrets qui font l'objet d'une rotation (clé de signature JWT, clé maître, clé de licence) demandent un redémarrage roulant, pas un rechargement à chaud.
+C'est la raison pour laquelle les secrets soumis à rotation (clé de signature JWT, clé maître, clé de licence) demandent un redémarrage roulant, pas un rechargement à chaud.
 
 ---
 

@@ -6,7 +6,7 @@ keywords: [Liberty Framework, use cases, cas d'usage, internal apps, application
 
 # Ce que vous pouvez construire
 
-Le framework est volontairement petit — une poignée de concepts qui se combinent pour couvrir une large surface. Cette page est le catalogue de ce que les équipes construisent réellement avec lui, avec le **chemin** pour chacun : combien relève de la configuration, combien de code sur mesure, comment les tutoriels et recettes de cookbook existants s'y branchent.
+Le framework est volontairement petit — une poignée de concepts qui se combinent pour couvrir une large surface. Cette page est le catalogue de ce que les équipes construisent réellement avec lui, avec le **chemin** pour chacun : quelle part se fait en configuration, quelle part demande du code sur mesure, comment les tutoriels et recettes de cookbook existants s'y branchent.
 
 Si vous ne savez pas si le framework convient à votre problème, cette page est le bon endroit où vérifier.
 
@@ -29,7 +29,7 @@ Si vous ne savez pas si le framework convient à votre problème, cette page est
   </div>
   <div style={{border: '1px solid rgba(255,159,10,0.40)', borderRadius: '12px', padding: '18px', background: 'rgba(255,159,10,0.04)'}}>
     <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#fb923c', marginBottom: '6px'}}>🔌 Intégrations</div>
-    <div style={{fontSize: '12px', lineHeight: '1.55'}}>UI au-dessus de récepteurs de webhooks, synchronisations planifiées, pipelines ETL. Nomaflow exécute les jobs ; le framework restitue les exécutions.</div>
+    <div style={{fontSize: '12px', lineHeight: '1.55'}}>UI au-dessus de récepteurs de webhooks, synchronisations planifiées, pipelines ETL. Nomaflow exécute les jobs ; le framework affiche les exécutions.</div>
   </div>
   <div style={{border: '1px solid rgba(74,158,255,0.40)', borderRadius: '12px', padding: '18px', background: 'rgba(74,158,255,0.04)'}}>
     <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>🤝 Portails clients</div>
@@ -41,7 +41,7 @@ Si vous ne savez pas si le framework convient à votre problème, cette page est
   </div>
 </div>
 
-Le motif est le même pour chaque cas d'usage : **définissez les sources de données, pointez les écrans dessus, organisez le menu, posez les permissions**. Les différences sont dans les fonctionnalités qui passent au premier plan.
+Le motif est le même pour chaque cas d'usage : **définissez les sources de données, pointez les écrans dessus, organisez le menu, posez les permissions**. Les différences se trouvent dans les fonctionnalités qui passent au premier plan.
 
 ---
 
@@ -196,7 +196,7 @@ Un portail client est juste **une app d'administration interne cadrée sur les d
 
 | Tâche | Temps |
 |---|---|
-| Câbler OIDC contre votre IdP (ou celui du client). | 10 minutes par IdP. |
+| Câbler OIDC sur votre IdP (ou celui du client). | 10 minutes par IdP. |
 | Ajouter `WHERE owner = :session_user` à chaque requête côté client. | Une ligne par requête. |
 | Donner au client un seul rôle avec les bonnes permissions. | 2 minutes. |
 
