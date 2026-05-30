@@ -104,6 +104,17 @@ const sidebars: SidebarsConfig = {
                 'liberty/framework/build/secure/license-key',
               ],
             },
+            {
+              type: 'category',
+              label: 'Plugins',
+              link: {type: 'generated-index', slug: '/liberty/framework/build/plugins', description: 'Custom Python that lives in the apps repo and is imported by the framework at startup. The escape hatch when declarative steps don\'t fit — function contract, ETL primitives toolkit, deploy and debug.'},
+              items: [
+                'liberty/framework/build/plugins/overview',
+                'liberty/framework/build/plugins/write-a-callable',
+                'liberty/framework/build/plugins/etl-primitives',
+                'liberty/framework/build/plugins/deploy-and-debug',
+              ],
+            },
           ],
         },
         {
