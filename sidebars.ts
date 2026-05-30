@@ -78,6 +78,19 @@ const sidebars: SidebarsConfig = {
                 'liberty/framework/build/screens/nested-tabs',
               ],
             },
+            {
+              type: 'category',
+              label: 'Menus',
+              link: {type: 'generated-index', slug: '/liberty/framework/build/menus', description: 'The Menus page — register a connector as an app in the top switcher, build the navigation tree (folders + leaves), pick the right leaf type (query / endpoint / dashboard / page), gate by roles, translate labels and pick icons.'},
+              items: [
+                'liberty/framework/build/menus/overview',
+                'liberty/framework/build/menus/make-connector-an-app',
+                'liberty/framework/build/menus/build-the-tree',
+                'liberty/framework/build/menus/item-types',
+                'liberty/framework/build/menus/permissions-and-roles',
+                'liberty/framework/build/menus/translations-and-icons',
+              ],
+            },
           ],
         },
         {

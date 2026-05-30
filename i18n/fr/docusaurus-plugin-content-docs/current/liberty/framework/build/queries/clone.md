@@ -69,7 +69,7 @@ La duplication est une copie ponctuelle — les éditions futures de l'original 
 
 ---
 
-## Dupliquer l'application — l'application entière
+## Dupliquer l'application — l'application entière \{#clone-app--the-whole-application\}
 
 La plus grosse des trois. Accessible depuis :
 
