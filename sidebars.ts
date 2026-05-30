@@ -91,6 +91,19 @@ const sidebars: SidebarsConfig = {
                 'liberty/framework/build/menus/translations-and-icons',
               ],
             },
+            {
+              type: 'category',
+              label: 'Secure',
+              link: {type: 'generated-index', slug: '/liberty/framework/build/secure', description: 'Identity + authorization + at-rest secret protection. The two identity backends (local TOML / DB), OIDC layered on top, role/permission composition with allow/deny grammar, the AccessBuilder page, encrypted secrets, license key.'},
+              items: [
+                'liberty/framework/build/secure/overview',
+                'liberty/framework/build/secure/sign-in',
+                'liberty/framework/build/secure/roles-and-permissions',
+                'liberty/framework/build/secure/users',
+                'liberty/framework/build/secure/encrypted-secrets',
+                'liberty/framework/build/secure/license-key',
+              ],
+            },
           ],
         },
         {
