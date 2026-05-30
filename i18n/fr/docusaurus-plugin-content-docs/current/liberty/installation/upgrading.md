@@ -112,18 +112,22 @@ Détails complets sur le format de sauvegarde, les commandes de restauration et 
 
 ## Procédure de mise à jour — Light / Full (Compose)
 
-Identique pour les deux modes ; seul le nom du fichier compose change.
+Identique pour les deux modes — `COMPOSE_FILE` dans `.env` (positionné par `install.sh`) pilote `docker compose` :
 
 ```bash
 cd /opt/liberty-next/release
 
-./backup.sh                                          # 1 — instantané
-docker compose -f docker-compose.full.yml pull       # 2 — récupération de la nouvelle image (utiliser light.yml pour Light)
-docker compose -f docker-compose.full.yml up -d      # 3 — recréation des conteneurs ; l'entrypoint exécute init-db
+./backup.sh             # 1 — instantané
+docker compose pull     # 2 — récupération de la nouvelle image (COMPOSE_FILE sélectionne les bons fichiers)
+docker compose up -d    # 3 — recréation des conteneurs ; l'entrypoint exécute init-db
 
 # 4 — test de fumée
 curl -s http://127.0.0.1:8000/info
 ```
+
+:::info[Jamais de `-f` après l'installation]
+`COMPOSE_FILE` dans `.env` porte la chaîne complète (`docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml` après `install.sh --ssl letsencrypt --apps ...`). Passer manuellement `-f docker-compose.full.yml` surcharge cette chaîne et écarte silencieusement les overlays TLS + apps — le prochain `up -d` les supprime. S'en tenir aux commandes nues `docker compose pull` / `up -d`. Voir [Docker → Discipline COMPOSE_FILE](./docker.md#compose-file-discipline).
+:::
 
 Ce que fait `up -d` : Compose détecte que le digest de l'image a changé, recrée le conteneur `liberty-next` sur place, remonte les mêmes volumes nommés, redémarre. Le nouvel entrypoint exécute `liberty-admin init-db`, puis se met à servir. Indisponibilité totale : ~30 s sur un hôte tiède.
 
@@ -219,8 +223,8 @@ La même simplicité s'applique à l'envers : repointer sur le tag précédent, 
 
 ```bash
 # éditer .env : LIBERTY_IMAGE_TAG=0.1.0    (le tag précédent)
-docker compose -f docker-compose.full.yml pull
-docker compose -f docker-compose.full.yml up -d
+docker compose pull                       # COMPOSE_FILE sélectionne les bons fichiers
+docker compose up -d
 ```
 
 Si le schéma a avancé et que les données doivent aussi revenir en arrière, restaurer d'abord le volume concerné depuis `./backups/<timestamp>/` — voir [Docker → Backups](./docker.md#backups) pour la commande de restauration par volume.

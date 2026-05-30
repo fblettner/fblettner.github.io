@@ -99,9 +99,9 @@ Common operations:
 
 | Task | Where in Portainer | CLI equivalent |
 |---|---|---|
-| Tail logs from any service | Containers → *service* → *Logs* (auto-refresh, filter by level) | `docker compose -f docker-compose.full.yml logs -f <service>` |
-| Restart a service | Containers → *service* → *Restart* | `docker compose -f docker-compose.full.yml restart <service>` |
-| Recreate a service (pull new image first) | Containers → *service* → *Recreate* → tick *Pull latest image* | `docker compose -f docker-compose.full.yml pull <service> && docker compose -f docker-compose.full.yml up -d <service>` |
+| Tail logs from any service | Containers → *service* → *Logs* (auto-refresh, filter by level) | `docker compose logs -f <service>` |
+| Restart a service | Containers → *service* → *Restart* | `docker compose restart <service>` |
+| Recreate a service (pull new image first) | Containers → *service* → *Recreate* → tick *Pull latest image* | `docker compose pull <service> && docker compose up -d <service>` |
 | Open a shell inside a container | Containers → *service* → *Console* → *Connect* | `docker compose exec <service> bash` |
 | Inspect environment variables (read-only) | Containers → *service* → *Inspect* tab → `Config.Env` | `docker inspect <container>` |
 | Check resource usage (CPU / RAM) | Containers → *service* → *Stats* | `docker stats` |
@@ -224,7 +224,7 @@ The bundled services are convenient, not mandatory. Remove them if:
 After removing either service:
 
 ```bash
-docker compose -f docker-compose.full.yml up -d        # reconciles the running stack
+docker compose up -d                                   # COMPOSE_FILE picks the right files; reconciles the stack
 docker volume rm <removed-volume>                       # only if you're sure
 ```
 

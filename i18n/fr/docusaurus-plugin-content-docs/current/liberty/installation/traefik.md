@@ -1,16 +1,22 @@
 ---
 title: Traefik
-description: "Le reverse proxy Traefik est pré-câblé dans les layouts Full Docker et Swarm — tableau de bord protégé par basic-auth sur /traefik, middleware security-headers, cookies sticky pour Socket.IO. Le câblage Let's Encrypt se fait en décommentant quatre lignes et en renseignant deux variables d'environnement. Le fichier de configuration dynamique se recharge en quelques secondes sans redémarrage."
-keywords: [Liberty Framework, Traefik, reverse proxy, TLS, Let's Encrypt, tableau de bord, basic-auth, configuration dynamique, en-têtes de sécurité, cookie sticky, Socket.IO, --providers.swarm]
+description: "Le reverse proxy Traefik est livré d'origine dans les layouts Full Docker et Swarm. Deux modes TLS sont fournis sous forme de surcharges compose additives — docker-compose.tls-letsencrypt.yml (challenge ACME TLS-ALPN) et docker-compose.tls-provided.yml (certificats fournis par l'opérateur). Les deux sont câblés par install.sh --ssl <mode>, sans aucune édition manuelle de compose."
+keywords: [Liberty Framework, Traefik, reverse proxy, TLS, ACME, Let's Encrypt, certificats opérateur, install.sh --ssl, --domain, --email, --cert-dir, --cert-file, --key-file, docker-compose.tls-letsencrypt.yml, docker-compose.tls-provided.yml, COMPOSE_FILE, tableau de bord, basic-auth]
 ---
 
 # Traefik
 
-Traefik est **fourni d'origine** dans le layout Full Docker (`docker-compose.full.yml`) et dans le layout Swarm (`docker-compose.swarm.yml`). Il s'exécute comme service `traefik`, termine HTTP sur `:80`, route par préfixe de chemin et met à disposition un tableau de bord sur `/traefik`. Aucune installation séparée — `./install.sh full` ou `./deploy-swarm.sh` le démarrent avec les autres services.
+Traefik est **livré d'origine** dans le layout Full Docker (`docker-compose.full.yml`) et dans le layout Swarm (`docker-compose.swarm.yml`). Il s'exécute comme service `traefik`, termine HTTP sur `:80`, route par préfixe de chemin et met à disposition un tableau de bord sur `/traefik`. Aucune installation séparée.
 
-Cette page décrit ce qui est pré-câblé, comment changer le mot de passe du tableau de bord, comment activer TLS (Let's Encrypt) et en quoi Swarm diffère de Compose.
+TLS s'obtient via deux **surcharges compose** additives câblées par `install.sh --ssl` :
 
-Pour la visite guidée des layouts, lire d'abord [Docker → Full](./docker.md#full) et [Docker → Swarm](./docker.md#swarm).
+| Mode | Surcharge | Quand |
+|---|---|---|
+| **`letsencrypt`** | `docker-compose.tls-letsencrypt.yml` | Hôtes accessibles depuis Internet. Challenge ACME TLS-ALPN — requiert `:80` et `:443` ouverts depuis Internet. Émission et renouvellement gérés automatiquement par Traefik. |
+| **`provided`** | `docker-compose.tls-provided.yml` | Autorité de certification interne, PKI d'entreprise, installation air-gapped. L'opérateur fournit le `.crt` et la `.key` ; Traefik les sert via le provider fichier. |
+| **`none`** *(défaut)* | (aucune surcharge) | HTTP seul sur `:80`. Adapté au développement local ou derrière un autre reverse proxy qui termine TLS en amont. |
+
+Pour la carte conceptuelle des fichiers compose + scripts, lire d'abord [Docker](./docker.md). Pour la règle `COMPOSE_FILE` transversale, voir [Docker → Discipline COMPOSE_FILE](./docker.md#compose-file-discipline).
 
 ---
 
@@ -46,7 +52,7 @@ Traefik lit deux types de configuration :
 | Source | Quoi |
 |---|---|
 | **Labels de conteneur** | Routes et middlewares par service, déclarés en ligne dans le fichier compose. |
-| **`traefik/dynamic/*.yml`** | Middlewares partagés dont les valeurs contiennent `$` (les hash bcrypt de basic-auth — la substitution Compose les mangerait) et middlewares destinés à être réutilisés entre routeurs. |
+| **`traefik/dynamic/*.yml`** | Middlewares partagés dont les valeurs contiennent `$` (les hash bcrypt de basic-auth — la substitution Compose les mangerait) et références de certificats TLS pour le mode `provided` (`tls.yml`, généré par `install.sh`). |
 
 Deux flags assurent le câblage :
 
@@ -55,7 +61,7 @@ Deux flags assurent le câblage :
 - --providers.file.watch=true
 ```
 
-`file.watch=true` signifie que **les modifications se rechargent en quelques secondes, sans redémarrer le conteneur**. Déposer un nouveau middleware dans `traefik/dynamic/dynamic.yml` suffit pour qu'il soit actif.
+`file.watch=true` signifie que **les modifications se rechargent en quelques secondes, sans redémarrer le conteneur**.
 
 Le fichier dynamique livré embarque trois middlewares :
 
@@ -64,6 +70,8 @@ Le fichier dynamique livré embarque trois middlewares :
 | `traefik-auth` | Garde basic-auth (par défaut `admin / admin` — hash bcrypt). | Rattaché au routeur du tableau de bord via `traefik-auth@file`. |
 | `security-headers` | `frameDeny`, `contentTypeNosniff`, `browserXssFilter`, `referrerPolicy: no-referrer-when-downgrade`. Lignes STS commentées (à décommenter quand HTTPS est servi). | À attacher à n'importe quel routeur avec `<router>.middlewares: "security-headers@file"`. |
 | `redirect-to-https` | Redirection 301 HTTP → HTTPS. | À attacher à chaque routeur de l'entrypoint HTTP une fois l'entrypoint websecure activé. |
+
+Quand `--ssl provided` est câblé, `install.sh` génère également `traefik/dynamic/tls.yml` (gitignored) référençant les noms de fichiers cert + key à l'intérieur de `/etc/certs`. L'opérateur peut l'éditer à la main pour des configurations plus fines (multi-domaine, intermédiaires séparés, règles SNI) — Traefik prend les modifications en compte via `file.watch`.
 
 ---
 
@@ -97,97 +105,219 @@ http:
 
 ---
 
-## Activer TLS (Let's Encrypt)
+## Mode 1 — Let's Encrypt
 
-Le fichier compose est livré avec TLS **commenté** pour garder l'installation en une étape. Activer TLS demande cinq modifications.
+Pour les hôtes accessibles depuis Internet. Traefik récupère le certificat via le challenge ACME TLS-ALPN, le persiste dans le volume nommé `traefik-acme` (monté sur `/acme` à l'intérieur de Traefik) et renouvelle automatiquement.
 
-### 1. Faire pointer le domaine sur le serveur
-
-Enregistrement DNS `A` (et / ou `AAAA`) de `liberty.example.com` vers l'IP publique du serveur. Sans cela, le challenge HTTP-01 / TLS-01 de Let's Encrypt ne peut pas émettre de certificat.
-
-### 2. Renseigner les deux variables d'environnement
-
-Dans `.env` :
-
-```
-LIBERTY_DOMAIN=liberty.example.com
-ACME_EMAIL=ops@example.com
-```
-
-`ACME_EMAIL` reçoit les avis d'expiration envoyés par Let's Encrypt — utiliser une adresse réelle et consultée.
-
-### 3. Décommenter l'entrypoint websecure et le résolveur ACME
-
-Dans `docker-compose.full.yml`, sous le `command:` du service `traefik` :
-
-```yaml title="docker-compose.full.yml (commande Traefik — DÉCOMMENTÉE)"
-command:
-  - --api.dashboard=true
-  - --providers.docker=true
-  - --providers.docker.exposedbydefault=false
-  - --providers.docker.network=liberty-network
-  - --providers.file.directory=/etc/traefik/dynamic
-  - --providers.file.watch=true
-  - --entrypoints.web.address=:80
-  - --entrypoints.websecure.address=:443                                # ← décommenter
-  - --certificatesresolvers.le.acme.email=${ACME_EMAIL:?ACME_EMAIL required for TLS}  # ← décommenter
-  - --certificatesresolvers.le.acme.storage=/etc/traefik/acme/acme.json # ← décommenter
-  - --certificatesresolvers.le.acme.tlschallenge=true                    # ← décommenter
-ports:
-  - "${TRAEFIK_HTTP_PORT:-80}:80"
-  - "443:443"                                                            # ← décommenter
-```
-
-### 4. Ajouter `tls.certresolver` à chaque routeur
-
-Pour chaque routeur appelé à servir HTTPS (liberty-next, pgadmin, portainer, traefik-dashboard), ajouter trois labels :
-
-```yaml
-traefik.http.routers.<name>.entrypoints: "websecure"
-traefik.http.routers.<name>.tls.certresolver: "le"
-traefik.http.routers.<name>.rule: "Host(`${LIBERTY_DOMAIN}`) && PathPrefix(`/<path>`)"
-```
-
-Le matcher `Host()` dans la règle indique à Traefik quel certificat servir (sinon il n'a aucun moyen de savoir à quel domaine se rapporte une requête). Lier les routes à `LIBERTY_DOMAIN` une fois pour toutes et le résolveur de certificats fait le reste.
-
-### 5. Appliquer
+### Installation
 
 ```bash
-docker compose -f docker-compose.full.yml up -d
+./install.sh full --ssl letsencrypt \
+    --domain liberty.example.com \
+    --email ops@example.com
 ```
 
-À la première requête vers `https://liberty.example.com/`, Traefik exécute le challenge TLS-01 et stocke le certificat dans le volume nommé `traefik-acme`. Le renouvellement automatique a lieu tous les 60 jours, de manière transparente.
+Prérequis :
+
+| Prérequis | Pourquoi |
+|---|---|
+| Le nom d'hôte résout vers ce serveur (enregistrement DNS A et / ou AAAA). | Sans DNS, ACME ne peut pas émettre de certificat. |
+| `:80` ET `:443` accessibles depuis Internet. | Le challenge TLS-ALPN s'exécute sur `:443` mais Traefik a aussi besoin de `:80` ouvert pour les redirections HTTP vers HTTPS. |
+| Accès lecture-écriture au volume nommé `traefik-acme`. | Emplacement de stockage du certificat émis. |
+| Une adresse email réelle et surveillée pour `ACME_EMAIL`. | Let's Encrypt y envoie les avis d'expiration. |
+
+Ce que fait `install.sh` :
+
+1. Ajoute `docker-compose.tls-letsencrypt.yml` à `COMPOSE_FILE` dans `.env`.
+2. Définit `LIBERTY_DOMAIN=<nom-hôte>` et `ACME_EMAIL=<adresse>` dans `.env`.
+3. Retire un éventuel `traefik/dynamic/tls.yml` résiduel d'une précédente installation `provided`.
+4. Exécute `docker compose up -d` — Traefik démarre sur `:80` + `:443` et demande le certificat à la première requête HTTPS.
+
+La surcharge (compacte) :
+
+```yaml title="docker-compose.tls-letsencrypt.yml"
+services:
+  traefik:
+    environment:
+      TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS: ":443"
+      TRAEFIK_CERTIFICATESRESOLVERS_LE_ACME_EMAIL: "${ACME_EMAIL:?ACME_EMAIL required for letsencrypt mode}"
+      TRAEFIK_CERTIFICATESRESOLVERS_LE_ACME_STORAGE: "/acme/acme.json"
+      TRAEFIK_CERTIFICATESRESOLVERS_LE_ACME_TLSCHALLENGE: "true"
+    ports:
+      - "${TRAEFIK_HTTPS_PORT:-443}:443"
+    labels:
+      traefik.http.routers.traefik-dashboard.entrypoints: "web,websecure"
+      traefik.http.routers.traefik-dashboard.tls: "true"
+      traefik.http.routers.traefik-dashboard.tls.certresolver: "le"
+
+  liberty-next:
+    labels:
+      traefik.http.routers.liberty-next.entrypoints: "web,websecure"
+      traefik.http.routers.liberty-next.tls: "true"
+      traefik.http.routers.liberty-next.tls.certresolver: "le"
+
+  pgadmin:
+    labels:
+      traefik.http.routers.pgadmin.entrypoints: "web,websecure"
+      traefik.http.routers.pgadmin.tls: "true"
+      traefik.http.routers.pgadmin.tls.certresolver: "le"
+
+  portainer:
+    labels:
+      traefik.http.routers.portainer.entrypoints: "web,websecure"
+      traefik.http.routers.portainer.tls: "true"
+      traefik.http.routers.portainer.tls.certresolver: "le"
+```
+
+Trois points à remarquer :
+
+| Détail | Pourquoi |
+|---|---|
+| Les réglages passent par l'interface de variables d'environnement `TRAEFIK_<UPPER_DOT_TO_UNDER>=value` de Traefik. | Le merge des surcharges compose est REPLACE-par-clé pour les valeurs tableau (`command:`) et ADD-par-clé pour les variables d'environnement. Passer par les env-vars évite de perdre les flags CLI du compose de base au moment du merge. |
+| Stockage ACME sur `/acme/acme.json`. | Le compose de base monte `traefik-acme` sur `/acme` (PAS `/etc/traefik/acme/` — ce chemin correspond au bind mount `/etc/traefik` en lecture seule, donc un second sous-répertoire monté en dessous n'est pas possible). |
+| Chaque routeur souscrit aux deux entrypoints (`web,websecure`). | Permet d'atteindre l'instance via `http://` ou `https://` tant qu'aucune redirection n'a été câblée — voir ci-dessous. |
 
 ### Forcer HTTP → HTTPS
 
-Ajouter le middleware `redirect-to-https@file` (déjà défini dans `dynamic.yml`) à chaque routeur de l'entrypoint `web` :
+Ajouter le middleware `redirect-to-https@file` (déjà défini dans `dynamic.yml`) à chaque routeur, **uniquement sur l'entrypoint `web`** :
 
-```yaml
-traefik.http.routers.<name>.middlewares: "redirect-to-https@file"
-traefik.http.routers.<name>.entrypoints: "web"
+```yaml title="<votre-override.yml> — à ajouter à COMPOSE_FILE"
+services:
+  liberty-next:
+    labels:
+      traefik.http.routers.liberty-next.middlewares: "redirect-to-https@file"
 ```
 
-Les navigateurs atteignant `http://liberty.example.com/` reçoivent un `301` vers `https://`.
+Ou modifier directement les labels du compose de base.
+
+---
+
+## Mode 2 — Certificats fournis par l'opérateur
+
+Pour les autorités de certification d'entreprise, PKI internes ou installations air-gapped qui ne peuvent pas joindre Let's Encrypt.
+
+### Installation
+
+```bash
+./install.sh full --ssl provided \
+    --domain liberty.internal.example.com \
+    --cert-dir  /etc/pki/tls \
+    --cert-file liberty.crt \
+    --key-file  liberty.key
+```
+
+Prérequis :
+
+| Prérequis | Pourquoi |
+|---|---|
+| Un répertoire sur l'hôte contenant le `.crt` (ou `.pem`) ET le fichier de clé privée. | Les deux sont bind-mountés dans le conteneur sur `/etc/certs:ro`. |
+| Le fichier de certificat correspond à `--cert-file` et le fichier de clé à `--key-file` dans ce répertoire. | `install.sh` valide la présence des deux avant de continuer. |
+| Le certificat est valide pour le `--domain` passé. | Les navigateurs rejettent les non-correspondances de nom d'hôte. |
+
+Ce que fait `install.sh` :
+
+1. Ajoute `docker-compose.tls-provided.yml` à `COMPOSE_FILE`.
+2. Définit `CERT_HOST_PATH=<chemin-absolu-vers-le-répertoire>` dans `.env` — Traefik bind-monte ce répertoire sur `/etc/certs:ro`.
+3. Définit `LIBERTY_DOMAIN=<nom-hôte>` dans `.env` (ou `localhost` si `--domain` a été omis).
+4. **Génère `traefik/dynamic/tls.yml`** (gitignored — toute ré-exécution de `--ssl provided` l'écrase) référençant les noms de fichiers cert + key à l'intérieur de `/etc/certs`.
+5. Exécute `docker compose up -d` — Traefik démarre sur `:80` + `:443` en servant le certificat fourni.
+
+La surcharge :
+
+```yaml title="docker-compose.tls-provided.yml"
+services:
+  traefik:
+    environment:
+      TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS: ":443"
+    ports:
+      - "${TRAEFIK_HTTPS_PORT:-443}:443"
+    volumes:
+      - "${CERT_HOST_PATH:?CERT_HOST_PATH required for provided mode}:/etc/certs:ro"
+    labels:
+      traefik.http.routers.traefik-dashboard.entrypoints: "web,websecure"
+      traefik.http.routers.traefik-dashboard.tls: "true"
+
+  liberty-next:
+    labels:
+      traefik.http.routers.liberty-next.entrypoints: "web,websecure"
+      traefik.http.routers.liberty-next.tls: "true"
+
+  pgadmin: { labels: { traefik.http.routers.pgadmin.entrypoints: "web,websecure", traefik.http.routers.pgadmin.tls: "true" } }
+  portainer: { labels: { traefik.http.routers.portainer.entrypoints: "web,websecure", traefik.http.routers.portainer.tls: "true" } }
+```
+
+Et le `tls.yml` généré :
+
+```yaml title="traefik/dynamic/tls.yml (généré par install.sh --ssl provided)"
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /etc/certs/liberty.crt
+        keyFile: /etc/certs/liberty.key
+  certificates:
+    - certFile: /etc/certs/liberty.crt
+      keyFile: /etc/certs/liberty.key
+```
+
+À remarquer : les routeurs NE portent PAS de `certresolver` — le certificat arrive via le store par défaut du provider fichier. Traefik le prend automatiquement.
+
+### Éditer `tls.yml` pour davantage de règles cert / SNI
+
+`tls.yml` est gitignored et surveillé pour rechargement. Pour des configurations multi-domaines, remplacer le fichier à la main :
+
+```yaml title="traefik/dynamic/tls.yml — exemple multi-cert"
+tls:
+  certificates:
+    - certFile: /etc/certs/liberty.crt
+      keyFile: /etc/certs/liberty.key
+    - certFile: /etc/certs/api.crt
+      keyFile: /etc/certs/api.key
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /etc/certs/liberty.crt
+        keyFile: /etc/certs/liberty.key
+```
+
+Traefik surveille le fichier et le relit en quelques secondes.
+
+:::info[Ré-exécuter `install.sh --ssl provided` écrase tls.yml]
+Une ré-exécution de `./install.sh full --ssl provided` avec de nouvelles valeurs `--cert-file` / `--key-file` REMPLACE `tls.yml` à partir du template. Les éditions multi-cert personnalisées sont perdues. Conserver une copie de la version éditée, ou la versionner en dehors du checkout `release/`.
+:::
+
+---
+
+## Changer de mode ultérieurement
+
+Ré-exécuter `./install.sh full --ssl <nouveau-mode> ...` avec les mêmes secrets en place. `install.sh` :
+
+- Échange le chemin de surcharge dans `COMPOSE_FILE`.
+- Réécrit `tls.yml` (pour `provided`) ou le supprime (pour `letsencrypt`).
+- Exécute `docker compose up -d`, qui prend en compte la nouvelle surcharge.
+
+L'état géré par l'opérateur (le volume `traefik-acme`, le répertoire hôte des certificats) est préservé entre les bascules de mode.
 
 ---
 
 ## Compose vs Swarm
 
-Les deux fichiers compose diffèrent par la façon dont Traefik découvre les services :
+Le service Traefik du layout full utilise `--providers.docker` pour découvrir les backends à partir des labels de conteneur. Swarm utilise `--providers.swarm` (lit dans `deploy.labels` au lieu des `labels` racine). Les deux fichiers compose diffèrent en conséquence :
 
 | | Compose (`docker-compose.full.yml`) | Swarm (`docker-compose.swarm.yml`) |
 |---|---|---|
 | **Flag de provider** | `--providers.docker=true` | `--providers.swarm=true` |
 | **Filtre réseau** | `--providers.docker.network=liberty-network` | `--providers.swarm.network=liberty-network` |
 | **Endpoint** | implicite (docker.sock) | `--providers.swarm.endpoint=unix:///var/run/docker.sock` |
-| **Emplacement des labels** | Bloc `labels:` racine par service | Bloc `deploy.labels:` par service (Swarm lit les labels à cet endroit) |
+| **Emplacement des labels** | Bloc `labels:` racine par service | Bloc `deploy.labels:` par service |
 | **Suffixe de middleware** | `@docker` (ex. `traefik-strip@docker`) | `@swarm` (ex. `traefik-strip@swarm`) |
 | **Middlewares du provider fichier** | `@file` (identique des deux côtés) | `@file` (identique des deux côtés) |
 
 Les deux layouts :
+
 - Montent la socket Docker en lecture seule.
-- Montent `./traefik:/etc/traefik:ro` pour la configuration dynamique et ACME.
-- Utilisent le volume nommé `traefik-acme` pour le stockage des certificats (survit aux destructions de stack).
+- Montent `./traefik:/etc/traefik:ro` pour la configuration dynamique.
+- Utilisent le volume nommé `traefik-acme` monté sur `/acme` (pour le stockage des certificats en mode LE).
 
 ### Particularité Swarm — Traefik doit s'exécuter sur un manager
 
@@ -200,20 +330,18 @@ deploy:
       - node.role == manager
 ```
 
-Ne pas modifier cette contrainte tant que l'API Docker n'a pas été activée sur les workers (rare et déconseillé).
+### Particularité Swarm pour `--ssl`
 
----
+`install.sh --ssl` est **réservé à Compose** — les opérateurs Swarm appliquent la surcharge TLS manuellement en passant `-c` à plusieurs reprises :
 
-## Le mode de publication des ports (Swarm)
+```bash
+docker stack deploy \
+  -c docker-compose.swarm.yml \
+  -c docker-compose.tls-letsencrypt.yml \
+  liberty
+```
 
-Swarm propose deux modes de publication de port :
-
-| Mode | Comportement |
-|---|---|
-| **`mode: ingress`** *(défaut)* | Le routing mesh de Swarm équilibre le trafic sur tous les nœuds, perdant au passage l'IP cliente réelle. |
-| **`mode: host`** *(utilisé par le compose livré)* | Chaque conteneur Traefik se lie directement au port de l'hôte. Conserve l'IP cliente réelle — essentiel pour les logs d'accès / rate limiting basés sur l'IP. |
-
-Le compromis : `host` impose un seul conteneur Traefik par nœud (à cause du binding de port). Avec Traefik en `replicas: 1` épinglé sur le manager, cela convient. Au-delà de 1, passer en `ingress` et accepter la réécriture d'IP.
+(Avec `LIBERTY_DOMAIN`, `ACME_EMAIL` préalablement exportés dans le shell — `deploy-swarm.sh` s'en charge.)
 
 ---
 
@@ -221,14 +349,14 @@ Le compromis : `host` impose un seul conteneur Traefik par nœud (à cause du bi
 
 ### Recharger la configuration dynamique
 
-`file.watch=true` est actif — il suffit d'éditer `traefik/dynamic/dynamic.yml` et d'enregistrer. Traefik prend la modification en compte en ~5 s et émet une ligne de log. Aucun redémarrage.
+`file.watch=true` est actif — il suffit d'éditer `traefik/dynamic/dynamic.yml` (ou `tls.yml`) et d'enregistrer. Traefik prend la modification en compte en ~5 s et émet une ligne de log. Aucun redémarrage.
 
 ### Recharger après une modification de la configuration statique
 
-Tout ce qui est dans le bloc `command:` du service Traefik est de la configuration **statique** — un redémarrage du conteneur est nécessaire :
+Tout ce qui figure dans le bloc `command:` du service Traefik est de la configuration **statique** — un redémarrage du conteneur est nécessaire :
 
 ```bash
-docker compose -f docker-compose.full.yml up -d traefik
+docker compose up -d traefik          # COMPOSE_FILE sélectionne les bons fichiers
 ```
 
 Ou, en Swarm :
@@ -244,7 +372,7 @@ Le tableau de bord sur `/traefik` affiche chaque routeur avec sa règle, son ent
 ### Suivre les logs Traefik
 
 ```bash
-docker compose -f docker-compose.full.yml logs -f traefik
+docker compose logs -f traefik
 # ou en Swarm :
 docker service logs -f liberty_traefik
 ```
@@ -257,13 +385,14 @@ L'émission / le renouvellement ACME apparaissent ici. Ainsi que les erreurs de 
 
 | Erreur | Symptôme | Correction |
 |---|---|---|
-| Oubli d'ajouter `` Host(`${LIBERTY_DOMAIN}`) `` à la règle après activation de TLS. | Traefik sert le certificat par défaut (`TRAEFIK DEFAULT CERT`) et le navigateur affiche un avertissement. | Lier la règle de chaque routeur au domaine pour lequel le certificat a été obtenu. |
-| Le domaine ne résout pas vers le serveur au moment où Traefik tente d'émettre. | Les logs affichent `acme: error 400 — DNS problem` ou `unauthorized`. | Vérifier que `dig <domain>` renvoie l'IP du serveur depuis un résolveur public. |
-| Ports 80 / 443 non exposés (pare-feu, LB cloud en amont). | Le challenge TLS-01 échoue. | Ouvrir `:80` (et `:443` une fois le certificat émis) sur le pare-feu hôte et le LB cloud. ACME a besoin de `:80` ouvert même quand seul HTTPS est servi — le challenge l'utilise. |
-| Modification de `dynamic.yml` non rechargée. | L'ancien mot de passe basic-auth fonctionne encore. | Vérifier que `--providers.file.watch=true` figure dans le bloc command statique. Consulter les logs Traefik pour des erreurs de parsing YAML. |
-| Traefik Swarm ne démarre pas avec `cannot connect to Docker socket`. | `traefik_1` rapporte `Cannot connect to the Docker daemon`. | Traefik est sur un worker — Swarm l'y a replanifié. L'épingler au manager : `deploy.placement.constraints: [node.role == manager]`. |
-| Le routeur catchall liberty-next intercepte /pgadmin / /portainer. | Les URL pgAdmin / Portainer renvoient le SPA Liberty. | Vérifier les priorités des routeurs — liberty-next doit être à la priorité `1` ; pgadmin / portainer à `100`. Les priorités se trouvent dans les labels des routeurs. |
-| Cookie sticky présent mais les événements temps réel n'atteignent pas un second client. | Deux navigateurs voient des données temps réel différentes. | La stickiness épingle un client à un réplica ; elle ne partage pas l'état. Soit s'en tenir à `replicas: 1` (le défaut), soit câbler un adaptateur Redis pour Socket.IO. |
+| Le domaine ne résout pas au moment où Traefik exécute le challenge ACME. | Les logs affichent `acme: error 400 — DNS problem` ou `unauthorized`. | Vérifier que `dig <domain>` renvoie l'IP du serveur depuis un résolveur public. |
+| `:80` ou `:443` bloqués au pare-feu / LB cloud. | Le challenge TLS-ALPN échoue. | Ouvrir les deux sur le pare-feu hôte et le LB cloud. ACME a besoin de `:80` ouvert également. |
+| Ré-exécution de `--ssl provided` — les éditions manuelles de `tls.yml` ont disparu. | La configuration multi-cert personnalisée a disparu. | Conserver une copie en dehors de `release/`. Ou versionner son propre `tls.yml`. |
+| Passage de `-f docker-compose.full.yml` après l'installation. | Les surcharges TLS + applications sont silencieusement perdues au prochain `up -d`. | NE JAMAIS utiliser `-f` après l'installation — `COMPOSE_FILE` est la source de vérité. Voir [Docker → Discipline COMPOSE_FILE](./docker.md#compose-file-discipline). |
+| Modification de `dynamic.yml` non rechargée. | L'ancien mot de passe basic-auth fonctionne encore. | Confirmer que `--providers.file.watch=true` figure dans le bloc command statique ; consulter les logs Traefik pour des erreurs de parsing. |
+| Traefik Swarm ne démarre pas avec `cannot connect to Docker socket`. | Traefik rapporte `Cannot connect to the Docker daemon`. | Traefik est sur un worker — Swarm l'y a replanifié. L'épingler au manager. |
+| Le routeur catchall liberty-next intercepte /pgadmin / /portainer. | Les URL pgAdmin / Portainer renvoient le SPA Liberty. | Vérifier les priorités des routeurs — liberty-next doit être à la priorité `1` ; pgAdmin / Portainer à `100`. |
+| Certificat ACME stocké dans `/etc/traefik/acme/` au lieu de `/acme/`. | Erreurs de chemin de certificat. | Le compose de base monte `/etc/traefik:ro` (lecture seule) ; le stockage ACME se trouve sur `/acme`. La surcharge livrée utilise déjà `/acme`. |
 
 ---
 
@@ -271,5 +400,5 @@ L'émission / le renouvellement ACME apparaissent ici. Ainsi que les erreurs de 
 
 - [Docker → Full](./docker.md#full) — la visite guidée du layout full.
 - [Docker → Swarm](./docker.md#swarm) — la visite guidée du layout Swarm.
-- [Portainer](./portainer.md) — à quoi servent Portainer et pgAdmin livrés d'origine.
+- [Portainer + pgAdmin](./portainer.md) — à quoi servent les autres outils visuels livrés d'origine.
 - [Production](./production.md) — la suite de la checklist de durcissement.

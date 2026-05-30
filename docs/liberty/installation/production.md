@@ -6,9 +6,13 @@ keywords: [Liberty Framework, production, hardening, TLS, OIDC, JWT secret, mast
 
 # Running in production
 
-This page is a hardening overlay on top of the [Full Docker layout](./docker.md#full) or the [Swarm layout](./docker.md#swarm). Both layouts ship from the repository's `release/` directory and are driven by `install.sh` / `deploy-swarm.sh` / `backup.sh`. The job of this page is to walk every knob you should turn before the install is allowed to face users — TLS, default passwords, OIDC, the long-lived secrets, backups, Postgres durability, scaling caveats.
+This page is a hardening overlay on top of the [Full Docker layout](./docker.md#full) or the [Swarm layout](./docker.md#swarm). Both layouts ship from the repository's `release/` directory and are driven by `install.sh` / `install-apps.sh` / `deploy-swarm.sh` / `backup.sh`. The job of this page is to walk every knob you should turn before the install is allowed to face users — TLS, default passwords, OIDC, the long-lived secrets, backups, Postgres durability, scaling caveats.
 
 It does **not** repeat the install steps — read [Docker](./docker.md) first.
+
+:::info[COMPOSE_FILE discipline]
+After `install.sh` (and optionally `install-apps.sh`) runs, `.env` carries a `COMPOSE_FILE=docker-compose.full.yml[:overlays...]` line. Every `docker compose <cmd>` (with NO `-f` flag) auto-merges every overlay listed. The commands on this page follow that convention — never type `-f` after install. See [Docker → COMPOSE_FILE discipline](./docker.md#compose-file-discipline).
+:::
 
 ---
 
@@ -57,8 +61,16 @@ If sign-in or DB connection fails right after a manual `.env` edit, suspect this
 
 `install.sh` defaults to `:latest`. Acceptable for the first install (you want the freshest image), unacceptable for production: a `docker compose pull` six months later picks up a major version you didn't sign off on.
 
+Pin at install time:
+
+```bash
+./install.sh full --tag 7.0.2
+```
+
+Or, on an existing install, edit `.env`:
+
 ```env title=".env"
-LIBERTY_IMAGE_TAG=0.2.0
+LIBERTY_IMAGE_TAG=7.0.2
 ```
 
 Roll forward on your cadence:
@@ -68,8 +80,8 @@ Roll forward on your cadence:
 cd /opt/liberty-next/release
 ./backup.sh                              # always snapshot first
 # bump LIBERTY_IMAGE_TAG in .env, then:
-docker compose -f docker-compose.full.yml pull
-docker compose -f docker-compose.full.yml up -d
+docker compose pull                       # COMPOSE_FILE merges overlays automatically
+docker compose up -d
 
 # Swarm
 ./backup.sh
@@ -83,19 +95,54 @@ Never run `latest` in prod. Full upgrade procedure: [Upgrading](./upgrading.md).
 
 ## 4 — Wire TLS
 
-The Full / Swarm layouts both ship Traefik fronting every service. TLS is wired in five steps; the deep walk-through (DNS-01, multi-app routing, dashboard exposure) lives at [Traefik](./traefik.md).
+The Full layout ships Traefik fronting every service. TLS is wired by `install.sh --ssl <mode>` — two modes, **no manual compose edits**. The deep walk-through (Compose vs Swarm, mode switching, multi-cert SNI) lives at [Traefik](./traefik.md).
 
-1. Point your domain at the host (DNS A record for `liberty.example.com`).
-2. Open inbound `80/tcp` + `443/tcp` on the host firewall and the cloud security group.
-3. In `release/.env`:
-   ```env
-   LIBERTY_DOMAIN=liberty.example.com
-   ACME_EMAIL=ops@example.com
-   ```
-4. In `release/docker-compose.full.yml`, uncomment the `websecure` entrypoint, the `certificatesresolvers.le.*` flags, and the `:443` port mapping. Add `traefik.http.routers.<name>.tls.certresolver: "le"` to each router label.
-5. `docker compose -f docker-compose.full.yml up -d` (or `./deploy-swarm.sh`). Traefik requests certificates on first hit.
+### Mode A — Let's Encrypt (public-internet hosts)
 
-For installs without a public DNS record, switch the challenge type to DNS-01 in Traefik's `command:` (`--certificatesresolvers.le.acme.dnschallenge.provider=<your-DNS-provider>`) and supply the provider credentials as env vars — see Traefik's [Let's Encrypt docs](https://doc.traefik.io/traefik/https/acme/) for the provider matrix.
+```bash
+./install.sh full --ssl letsencrypt \
+    --domain liberty.example.com \
+    --email ops@example.com
+```
+
+Requirements:
+
+1. The domain resolves to this host (DNS A / AAAA record).
+2. `:80` and `:443` are reachable from the public internet — the TLS-ALPN challenge needs both open.
+3. `ACME_EMAIL` is a real address you read (Let's Encrypt sends expiry warnings).
+
+What it does: appends `docker-compose.tls-letsencrypt.yml` to `COMPOSE_FILE` in `.env`, sets the two env vars, brings the stack up. Traefik fetches the cert on the first HTTPS request and persists it in the `traefik-acme` volume.
+
+### Mode B — Operator-provided certs (corporate / air-gapped)
+
+```bash
+./install.sh full --ssl provided \
+    --domain liberty.internal.example.com \
+    --cert-dir  /etc/pki/tls \
+    --cert-file liberty.crt \
+    --key-file  liberty.key
+```
+
+Requirements: a directory on the host with the `.crt` (or `.pem`) + the private key; the cert is valid for `--domain`. `install.sh` validates both files exist before continuing.
+
+What it does: appends `docker-compose.tls-provided.yml`, sets `CERT_HOST_PATH`, generates `traefik/dynamic/tls.yml` referencing the cert + key filenames (gitignored — edit it for multi-cert / SNI), brings the stack up.
+
+### Switching modes
+
+Re-run `./install.sh full --ssl <new-mode> ...`. The script swaps the overlay in `COMPOSE_FILE`, rewrites or removes `tls.yml`, and `docker compose up -d` picks the new config. State (cert volume, host cert dir) is preserved.
+
+### Swarm
+
+`install.sh --ssl` is **Compose-only**. Swarm operators apply the TLS overlay manually:
+
+```bash
+docker stack deploy \
+  -c docker-compose.swarm.yml \
+  -c docker-compose.tls-letsencrypt.yml \
+  liberty
+```
+
+(With `LIBERTY_DOMAIN` + `ACME_EMAIL` exported into the shell first — `deploy-swarm.sh` sources `.env` automatically.)
 
 ---
 
@@ -127,7 +174,7 @@ PGADMIN_PASSWORD=<new-strong-password>
 
 ```bash
 # Compose
-docker compose -f docker-compose.full.yml up -d pgadmin
+docker compose up -d pgadmin                                      # COMPOSE_FILE picks the right files
 
 # Swarm
 ./deploy-swarm.sh
@@ -163,7 +210,7 @@ Then restart liberty-next:
 
 ```bash
 # Compose
-docker compose -f docker-compose.full.yml restart liberty-next
+docker compose restart liberty-next                               # COMPOSE_FILE picks the right files
 
 # Swarm
 ./deploy-swarm.sh
@@ -235,7 +282,7 @@ The bundled Postgres in `docker-compose.full.yml` ships with two settings that t
 | `synchronous_commit` | `off` | A hard crash can lose up to ~1 s of committed writes. | `on` for financial / audit workloads. |
 | `max_wal_senders` | `0` | No replication slots. | `≥ 1` if you switch `wal_level=replica`. |
 
-Tuning lives in the `postgres` service `command:` block in `docker-compose.full.yml` — inline comments call out each setting. Edit there, then `docker compose -f docker-compose.full.yml up -d pg` (or `./deploy-swarm.sh`).
+Tuning lives in the `postgres` service `command:` block in `docker-compose.full.yml` — inline comments call out each setting. Edit there, then `docker compose up -d pg` (or `./deploy-swarm.sh`).
 
 RAM-based sizing for `shared_buffers` / `work_mem`: see [Docker → Postgres tuning](./docker.md#full).
 
@@ -259,7 +306,7 @@ pg:
   #   - "5432:5432"
 ```
 
-`docker compose -f docker-compose.full.yml up -d pg` (or `./deploy-swarm.sh`) drops the host port. pgAdmin still reaches Postgres over the internal `liberty-net` network — nothing user-facing changes.
+`docker compose up -d pg` (or `./deploy-swarm.sh`) drops the host port. pgAdmin still reaches Postgres over the internal `liberty-network` network — nothing user-facing changes.
 
 ---
 
@@ -300,7 +347,7 @@ For Swarm, Traefik uses the swarm provider (`--providers.swarm`) which only mana
 | Source | Where | How to ship |
 |---|---|---|
 | **liberty-next** | stdout. | `docker compose logs -f liberty-next` / `docker service logs -f liberty_liberty-next` / journald (via the runtime's log driver). |
-| **Postgres** | `pg-logs` volume (rotated). | Mount-export, or switch the `pg` service to a logging driver that ships to your aggregator. |
+| **Postgres** | stderr → Docker `json-file` driver (rotated, 100 MB × 3 by default in the bundle). | `docker compose logs -f pg`, or switch the daemon / per-service logging driver to ship to your aggregator. |
 | **Traefik** | stdout. | Same as liberty-next. |
 | **pgAdmin / Portainer** | stdout. | Same. |
 

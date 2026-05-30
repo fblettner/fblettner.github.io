@@ -1,14 +1,31 @@
 ---
 title: Docker
-description: "Déployer Liberty Next sous forme de pile Docker Compose — trois agencements prêts à l'emploi (light SQLite, full de production à 5 services, Docker Swarm) livrés dans le répertoire release/ du dépôt. install.sh pilote Compose, deploy-swarm.sh pilote Swarm, backup.sh prend un instantané de chaque volume nommé."
-keywords: [Liberty Framework, Docker, Docker Compose, Docker Swarm, install.sh, deploy-swarm.sh, backup.sh, light, full, swarm, Traefik, Postgres, pgAdmin, Portainer, ghcr.io, healthcheck]
+description: "Déployer Liberty Next sous forme de pile Docker Compose — trois agencements (light SQLite, full de production à 5 services, Swarm) + deux overlays TLS + un overlay apps, le tout câblé par ./install.sh et la chaîne COMPOSE_FILE dans .env. ./install-apps.sh ajoute les apps sous licence. ./deploy-swarm.sh pilote Swarm. ./backup.sh prend un instantané de chaque volume nommé et du bind mount apps."
+keywords: [Liberty Framework, Docker, Docker Compose, Docker Swarm, install.sh, install-apps.sh, deploy-swarm.sh, backup.sh, light, full, swarm, COMPOSE_FILE, --tag, --reset, --apps, --ssl, --license-key, Traefik, Postgres, pgAdmin, Portainer, ghcr.io]
 ---
 
 # Docker
 
-Le répertoire [`release/`](https://github.com/fblettner/liberty-next/tree/main/release) du dépôt fournit tout le nécessaire : trois fichiers compose (`docker-compose.light.yml`, `docker-compose.full.yml`, `docker-compose.swarm.yml`), trois scripts d'assistance (`install.sh`, `deploy-swarm.sh`, `backup.sh`) et un `.env.example` qui documente chaque variable. L'image se trouve à `ghcr.io/fblettner/liberty-next` (publique).
+Le répertoire [`release/`](https://github.com/fblettner/liberty-next/tree/main/release) du dépôt fournit tout le nécessaire :
 
-Cette page parcourt chaque agencement de bout en bout. Pour la vue d'ensemble conceptuelle et la comparaison des quatre formats, lire d'abord la [Vue d'ensemble](./overview.md).
+| Fichiers | Rôle |
+|---|---|
+| `docker-compose.light.yml` | Conteneur unique + SQLite (agencement d'évaluation). |
+| `docker-compose.full.yml` | 5 services derrière Traefik (agencement de production). |
+| `docker-compose.swarm.yml` | L'agencement full, porté vers la grammaire Swarm. |
+| `docker-compose.tls-letsencrypt.yml` | Overlay TLS — Let's Encrypt via challenge TLS-ALPN. |
+| `docker-compose.tls-provided.yml` | Overlay TLS — certificats fournis par l'opérateur (CA d'entreprise, PKI interne). |
+| `docker-compose.apps.yml` | Overlay des apps sous licence — bind-mount de `./apps` vers `/apps:ro` + positionne `LIBERTY_APPS_DIR`. |
+| `install.sh` | Génère `.env`, récupère les images, démarre la pile, affiche les identifiants. |
+| `install-apps.sh` | Matérialise la wheel des apps sous licence dans `./apps/` + câble l'overlay. |
+| `deploy-swarm.sh` | Charge `.env` dans le shell + `docker stack deploy`. |
+| `backup.sh` | Archive en tar chaque volume nommé Liberty + le bind mount apps dans un répertoire horodaté. |
+| `.env.example` | Fichier d'environnement de référence documentant chaque variable prise en charge. |
+| `traefik/dynamic/dynamic.yml` | Middlewares basic-auth + en-têtes de sécurité + redirection vers HTTPS. |
+
+L'image se trouve à `ghcr.io/fblettner/liberty-next` (publique).
+
+Cette page parcourt chaque agencement de bout en bout et détaille la **discipline COMPOSE_FILE** — la règle qui maintient chaque overlay actif sur toutes les commandes `docker compose`. Pour la vue d'ensemble conceptuelle et la comparaison des quatre formats, lire d'abord la [Vue d'ensemble](./overview.md).
 
 ---
 
@@ -25,9 +42,32 @@ Un hôte Linux (Ubuntu / Debian / Rocky / Alpine) est la cible classique. Docker
 
 ---
 
+## La discipline COMPOSE_FILE \{#compose-file-discipline\}
+
+`install.sh` inscrit une ligne de ce type dans `.env` :
+
+```env title=".env (extrait)"
+COMPOSE_FILE=docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml
+```
+
+Docker Compose lit cette variable d'environnement à chaque commande et **fusionne automatiquement chaque fichier listé**. Les opérateurs ne saisissent jamais `-f`.
+
+| Commande (correcte) | Commande (incorrecte) |
+|---|---|
+| `docker compose pull` *(fusionne chaque overlay)* | `docker compose -f docker-compose.full.yml pull` *(abandonne les overlays TLS + apps)* |
+| `docker compose up -d` | `docker compose -f docker-compose.full.yml up -d` |
+| `docker compose logs -f liberty-next` | `docker compose -f docker-compose.full.yml logs -f liberty-next` |
+| `docker compose down` | `docker compose -f docker-compose.full.yml down` |
+
+**Règle** : après `./install.sh` (ou `./install-apps.sh`), une fois `COMPOSE_FILE` câblé, NE JAMAIS passer `-f` à la main. Passer `-f` écrase `COMPOSE_FILE` et abandonne silencieusement chaque overlay — le prochain `up -d` retirerait le montage apps et les routes TLS.
+
+Pour une exécution ponctuelle qui cible réellement un fichier compose précis (debug, smoke test), employer `COMPOSE_FILE=docker-compose.full.yml docker compose <cmd>` afin de restreindre la surcharge à cette seule invocation.
+
+---
+
 ## Agencement 1 — Light (`docker-compose.light.yml`) \{#light\}
 
-Un seul conteneur, BDD framework en SQLite, pas de Postgres, pas de Traefik, pas de TLS. À utiliser pour un essai local, une démo mono-utilisateur ou toute installation qui n'a pas besoin des connecteurs sous licence (Nomasx-1 / Nomajde / NomaUBL exigent tous Postgres — passer à [Full](#full) dans ce cas).
+Un seul conteneur, BDD framework en SQLite, pas de Postgres, pas de Traefik, pas de TLS. À utiliser pour un essai local, une démo mono-utilisateur ou toute installation qui n'a pas besoin d'un Postgres multi-utilisateurs.
 
 ### Installation
 
@@ -35,18 +75,21 @@ Un seul conteneur, BDD framework en SQLite, pas de Postgres, pas de Traefik, pas
 git clone https://github.com/fblettner/liberty-next.git
 cd liberty-next/release
 
-./install.sh light
+./install.sh light                              # dernier tag
+./install.sh light --tag 7.0.2                  # épingler une version précise
 ```
 
 Déroulement :
 
 | Étape | Description |
 |---|---|
-| 1. Génère `.env` avec des secrets aléatoires (sans caractère `$`). | Ignorée si `.env` existe déjà. |
-| 2. `docker compose -f docker-compose.light.yml pull` | Récupère `ghcr.io/fblettner/liberty-next:latest`. |
-| 3. `docker compose -f docker-compose.light.yml up -d` | Démarre le conteneur `liberty-next`. |
-| 4. Attend jusqu'à 120 s le healthcheck du conteneur (`GET /info`). | Affiche `healthy` une fois prêt. |
-| 5. Affiche l'URL du SPA et le mot de passe `admin` généré. | À lire une seule fois ; également présent dans `.env` en mode `0600`. |
+| 1. Vérification de volumes obsolètes. | Si `pg-data` / `pgadmin-data` / `liberty-data` proviennent d'une installation antérieure mais que `.env` est absent, le script refuse de continuer — l'init Postgres ne s'exécute que sur un volume neuf, donc réemployer d'anciens volumes avec de nouveaux secrets aboutirait à un échec d'authentification permanent. Relancer avec `--reset` pour purger et repartir à neuf, ou restaurer le `.env` précédent. |
+| 2. Génère `.env` avec des secrets aléatoires (sans caractère `$`). | Premier lancement uniquement. |
+| 3. Inscrit `COMPOSE_FILE=docker-compose.light.yml` dans `.env`. | Toute commande `docker compose` ultérieure s'en sert. |
+| 4. `docker compose pull` | Récupère `ghcr.io/fblettner/liberty-next:<tag>`. |
+| 5. `docker compose up -d` | Démarre le conteneur `liberty-next`. |
+| 6. Attend jusqu'à 120 s le healthcheck du conteneur (`GET /info`). | Affiche `healthy` une fois prêt. |
+| 7. Affiche l'URL du SPA et le mot de passe `admin` généré. | À lire une seule fois ; également présent dans `.env` en mode `0600`. |
 
 Le fichier compose :
 
@@ -98,26 +141,28 @@ Deux volumes nommés :
 ### Mise à niveau
 
 ```bash
-./backup.sh                                       # toujours commencer par un instantané
-docker compose -f docker-compose.light.yml pull
-docker compose -f docker-compose.light.yml up -d
+./backup.sh                       # toujours commencer par un instantané
+docker compose pull               # COMPOSE_FILE sélectionne les bons fichiers
+docker compose up -d
 ```
 
-L'entrypoint lance `liberty-admin init-db` à chaque démarrage — idempotent, ajoute les nouvelles tables framework apportées par une version récente, laisse les lignes existantes intactes. Pour épingler une version précise, définir `LIBERTY_IMAGE_TAG=0.2.0` dans `.env`.
+L'entrypoint lance `liberty-admin init-db` à chaque démarrage — idempotent, ajoute les nouvelles tables framework apportées par une version récente, laisse les lignes existantes intactes. Pour épingler une version précise, définir `LIBERTY_IMAGE_TAG=7.0.2` dans `.env` (ou passer `--tag 7.0.2` à la première installation).
 
 ---
 
 ## Agencement 2 — Full (`docker-compose.full.yml`) \{#full\}
 
-Cinq services derrière Traefik sur un seul hôte. L'agencement production / staging — et celui visé par les bundles sous licence (Nomasx-1, Nomajde, NomaUBL).
+Cinq services derrière Traefik sur un seul hôte. L'agencement production / staging — et la cible canonique des bundles sous licence (Nomasx-1, Nomajde) puisqu'ils nécessitent un Postgres multi-utilisateurs.
 
 ### Installation
 
 ```bash
-git clone https://github.com/fblettner/liberty-next.git
-cd liberty-next/release
-
-./install.sh full
+./install.sh full                                    # dernier tag, sans TLS
+./install.sh full --tag 7.0.2                        # tag épinglé
+./install.sh full --ssl letsencrypt \                # + Let's Encrypt
+    --domain liberty.example.com --email ops@example.com
+./install.sh full --apps ./liberty_apps-7.0.1.whl \  # + apps sous licence en une seule commande
+    --license-key <jwt>
 ```
 
 `install.sh` génère `.env` avec des secrets aléatoires pour **chaque** valeur exigée par la pile full — `LIBERTY_JWT_SECRET`, `LIBERTY_MASTER_KEY`, `POSTGRES_PASSWORD`, `PGADMIN_PASSWORD`, `LIBERTY_ADMIN_PASSWORD` — puis récupère toutes les images et démarre la pile. Durée totale d'installation sur cache chaud : ~30 s.
@@ -131,18 +176,19 @@ Routage sur le port `80` (ou `443` une fois le TLS câblé) :
 | `/` *(catchall, priorité 1)* | liberty-next | SPA + API REST + admin + docs. |
 | `/pgadmin` *(priorité 100)* | pgAdmin | Interface Postgres — se connecter avec `admin@example.com` et `PGADMIN_PASSWORD` issu de `.env`. |
 | `/portainer` *(priorité 100)* | Portainer | Interface Docker. |
-| `/traefik` *(priorité 1000)* | Tableau de bord Traefik | Protégé par basic-auth — par défaut `admin/admin`, **à changer** dans `traefik/dynamic/dynamic.yml`. |
+| `/traefik` *(priorité 1000)* | Tableau de bord Traefik | Protégé par basic-auth — par défaut `admin/admin`, **à changer dans `traefik/dynamic/dynamic.yml`**. |
 
-Les six volumes nommés de l'agencement full :
+Les cinq volumes nommés de l'agencement full :
 
 | Volume | Description | Inclus dans `backup.sh` ? |
 |---|---|---|
 | `liberty-config` | TOML édités par l'opérateur. | Oui. |
 | `pg-data` | Fichiers de la base Postgres. | Oui. |
-| `pg-logs` | Fichiers de journaux Postgres avec rotation. | Non (régénérés au démarrage). |
 | `pgadmin-data` | Enregistrements de serveurs pgAdmin et préférences. | Oui. |
 | `portainer-data` | État de Portainer. | Oui. |
-| `traefik-acme` | Stockage des certificats Let's Encrypt (quand le TLS est câblé). | Non (récupérables). |
+| `traefik-acme` | Stockage des certificats Let's Encrypt (monté sur `/acme` dans Traefik). | Non (récupérables à la demande). |
+
+Quand l'overlay apps est actif, `./apps/` (un répertoire hôte, pas un volume Docker) est **également** sauvegardé par `backup.sh` — celui-ci lit `APPS_HOST_PATH` depuis `.env`.
 
 ### Réglages Postgres
 
@@ -168,7 +214,7 @@ command:
   - -c
   - checkpoint_timeout=20min
   - -c
-  - logging_collector=on
+  - log_destination=stderr       # journaux vers stderr (visibles via docker compose logs pg)
 ```
 
 | Taille de l'hôte | Ajustement |
@@ -184,21 +230,81 @@ Deux réglages échangent durabilité contre débit — à revoir avant des char
 | `wal_level=minimal` + `max_wal_senders=0` | Désactive la réplication physique / le PITR / le decoding logique. Acceptable pour un mono-instance avec sauvegardes nocturnes ; passer à `wal_level=replica` pour un hot standby. |
 | `synchronous_commit=off` | Un crash brutal peut perdre les dernières transactions validées (< 1 s d'écritures). Basculer sur `on` pour des charges financières. |
 
-Le port Postgres (`5432`) est publié sur l'hôte par défaut — utile pour DBeaver depuis votre poste. Commenter le bloc `ports:` pour garder Postgres en interne uniquement.
+### Journalisation Postgres
 
-### Câbler le TLS (Let's Encrypt)
+Postgres écrit ses journaux sur **stderr** — consultables via `docker compose logs -f pg`. Le compose fourni rattache un driver de logs Docker `json-file` avec rotation (`max-size: 100m`, `max-file: 3`) afin que le fichier hôte `/var/lib/docker/containers/<id>/<id>-json.log` ne croisse pas indéfiniment.
 
-1. Pointer votre domaine vers le serveur.
-2. Dans `.env`, définir :
-   ```
-   LIBERTY_DOMAIN=liberty.example.com
-   ACME_EMAIL=ops@example.com
-   ```
-3. Dans `docker-compose.full.yml`, décommenter l'entrypoint `websecure`, les flags `certificatesresolvers.le.*` et le mappage de port `:443`.
-4. Ajouter `traefik.http.routers.<name>.tls.certresolver: "le"` à chaque label de routeur.
-5. `docker compose -f docker-compose.full.yml up -d`. Traefik demande les certificats au premier accès.
+Le fichier compose n'active PAS `logging_collector=on` + un volume nommé `pg-logs` — l'image postgres s'exécute sous l'UID 70 et un volume nommé fraîchement créé est monté en `root:root`, donc logging_collector planterait avec "Permission denied" dès la première écriture. Pour des journaux sur fichier, configurer un driver de logs côté hôte (`json-file`, `syslog`, `fluentd`) au niveau du démon Docker ou de chaque service.
+
+### Exposition du port Postgres
+
+`5432:5432` est mappé vers l'hôte par défaut — utile pour DBeaver depuis votre poste. Commenter le bloc `ports:` (ou positionner `POSTGRES_PORT=""` dans `.env`) pour garder Postgres en interne uniquement.
+
+### Câbler le TLS
+
+Deux modes, tous deux câblés par `install.sh --ssl`. À choisir à l'installation, ou à reconfigurer plus tard (la réexécution conserve les secrets de `.env` mais met à jour la configuration SSL et `COMPOSE_FILE`).
+
+#### Let's Encrypt (hôtes de démonstration / accessibles depuis Internet)
+
+```bash
+./install.sh full --ssl letsencrypt \
+    --domain liberty.example.com \
+    --email ops@example.com
+```
+
+Prérequis :
+- Le nom d'hôte résout vers cet hôte (enregistrement DNS A/AAAA).
+- Les ports `:80` et `:443` sont joignables depuis Internet (le challenge TLS-ALPN en a besoin).
+
+Ce que cela fait :
+- Ajoute `docker-compose.tls-letsencrypt.yml` à `COMPOSE_FILE` dans `.env`.
+- Positionne `LIBERTY_DOMAIN` et `ACME_EMAIL` dans `.env`.
+- Traefik gère la demande et le renouvellement des certificats via le résolveur ACME. Les certificats persistent dans le volume nommé `traefik-acme` (monté sur `/acme` à l'intérieur de Traefik).
+
+#### Certificats fournis par l'opérateur (hôtes d'entreprise / coupés du réseau)
+
+```bash
+./install.sh full --ssl provided \
+    --domain liberty.internal.example.com \
+    --cert-dir  /etc/pki/tls \
+    --cert-file liberty.crt \
+    --key-file  liberty.key
+```
+
+Prérequis :
+- Un répertoire sur l'hôte contenant le certificat (`.crt` / `.pem`) et la clé privée. `install.sh` vérifie leur existence avant de continuer.
+
+Ce que cela fait :
+- Ajoute `docker-compose.tls-provided.yml` à `COMPOSE_FILE`.
+- Positionne `CERT_HOST_PATH=<cert-dir>` dans `.env` — Traefik bind-mount ce répertoire sur `/etc/certs:ro`.
+- Génère `traefik/dynamic/tls.yml` (gitignored) avec les noms de fichiers certificat + clé déjà inscrits. Traefik surveille ce fichier via `file.watch=true` — l'éditer pour ajouter d'autres certificats / règles SNI sans redémarrer.
+
+#### Changer de mode plus tard
+
+Réexécuter `./install.sh full --ssl <nouveau-mode> …` avec les mêmes secrets en place. Le script remplace l'overlay dans `COMPOSE_FILE`, réécrit `tls.yml` (ou le supprime pour le mode LE), et `docker compose up -d` prend en compte la nouvelle configuration.
+
+#### Sans SSL (par défaut)
+
+`./install.sh full` sans `--ssl` fonctionne en HTTP seul sur `:80`. Acceptable pour du dev local ou derrière un autre reverse proxy qui termine le TLS en amont.
 
 Parcours TLS complet : [Traefik](./traefik.md).
+
+### Ajouter les apps sous licence
+
+Une seule commande à l'installation :
+
+```bash
+./install.sh full --apps ./liberty_apps-7.0.1.whl --license-key <jwt>
+```
+
+Ou en deux temps (base d'abord, apps ensuite) :
+
+```bash
+./install.sh full
+./install-apps.sh ./liberty_apps-7.0.1.whl --license-key <jwt>
+```
+
+La wheel est matérialisée dans `./apps/` via un conteneur jetable `python:3.12-slim` — l'hôte n'a besoin ni de Python ni de pip. Procédure complète + flags : [Déployer des apps préfabriquées](./deploy-prebuilt-apps.md).
 
 ### Changer le mot de passe du tableau de bord Traefik
 
@@ -209,17 +315,17 @@ docker run --rm httpd:alpine htpasswd -nbB admin "<votre-mot-de-passe>"
 # admin:$2y$05$abc...
 ```
 
-Coller la ligne produite dans `release/traefik/dynamic/dynamic.yml` sous `http.middlewares.traefik-auth.basicAuth.users`. `file.watch=true` recharge la configuration dynamique en quelques secondes — aucun redémarrage de conteneur nécessaire.
+Coller la ligne produite dans `release/traefik/dynamic/dynamic.yml` sous `http.middlewares.traefik-auth.basicAuth.users`. `file.watch=true` recharge la configuration dynamique en quelques secondes — aucun redémarrage de conteneur n'est nécessaire.
 
 ### Mise à niveau
 
 ```bash
-./backup.sh                                  # toujours commencer par un instantané
-docker compose -f docker-compose.full.yml pull
-docker compose -f docker-compose.full.yml up -d
+./backup.sh                       # toujours commencer par un instantané
+docker compose pull               # COMPOSE_FILE fusionne chaque overlay
+docker compose up -d
 ```
 
-Le même `init-db` idempotent s'exécute au démarrage de liberty-next. Épingler la version via `LIBERTY_IMAGE_TAG=0.2.0` dans `.env`.
+Le même `init-db` idempotent s'exécute au démarrage de `liberty-next`. Épingler la version via `LIBERTY_IMAGE_TAG=7.0.2` dans `.env`.
 
 ---
 
@@ -249,7 +355,7 @@ cd liberty-next/release
 ./deploy-swarm.sh                 # déploie la pile — nom par défaut 'liberty'
 ```
 
-Ce que fait `deploy-swarm.sh` :
+`./install.sh prepare` écrit `.env` sans démarrer la moindre pile Compose (Swarm ne s'appuie pas sur le runtime Compose). `./deploy-swarm.sh` fait le reste :
 
 | Étape | Description |
 |---|---|
@@ -257,7 +363,7 @@ Ce que fait `deploy-swarm.sh` :
 | **2. Vérification des variables requises** | `LIBERTY_JWT_SECRET`, `LIBERTY_MASTER_KEY`, `POSTGRES_PASSWORD`, `PGADMIN_PASSWORD` doivent être non vides. |
 | **3. `docker stack deploy --with-registry-auth --prune --resolve-image always`** | Déploie la pile. `--with-registry-auth` transmet les jetons d'auth du manager pour que les workers puissent récupérer les images privées ; `--prune` supprime les services absents du fichier compose. |
 | **4. Attend jusqu'à 180 s la convergence des services** | Tous les services rapportent `1/1` répliques. |
-| **5. Affiche le tableau de la pile et les URL** | Y compris la commande de reset propre au swarm et la commande de rollback. |
+| **5. Affiche le tableau de la pile et les URL** | Y compris les commandes de reset et de rollback propres au swarm. |
 
 Autres invocations utiles :
 
@@ -273,14 +379,17 @@ Une fois `.env` chargé dans le shell, `docker stack deploy` substitue les `${VA
 
 Pour les secrets de longue durée, Docker Secrets est l'alternative native au swarm — chiffrés au repos dans le raft store et montés sous forme de fichiers (pas de variables d'environnement) dans les conteneurs cibles. Voir le bloc de commentaires en bas de `docker-compose.swarm.yml` pour la recette de migration vers les secrets.
 
-### Mettre à jour un seul service vers un nouveau tag d'image
+### Flags `install.sh` vs Swarm
 
-`docker stack deploy` réconcilie la spécification avec l'état courant — sa réexécution EST le mécanisme de mise à jour. Pour ne mettre à jour qu'un seul service sans toucher aux autres :
+Les flags de `install.sh` réservés à Compose — `--apps`, `--ssl letsencrypt|provided` — ne sont PAS transposables à Swarm. Pour les opérateurs Swarm :
 
-```bash
-docker service update --image ghcr.io/fblettner/liberty-next:0.2.0 liberty_liberty-next
-docker service rollback liberty_liberty-next       # si quelque chose cloche
-```
+| Objectif | Méthode |
+|---|---|
+| Épingler le tag d'image | Positionner `LIBERTY_IMAGE_TAG=7.0.2` dans `.env` avant `./deploy-swarm.sh`. |
+| Appliquer le TLS | Fusionner manuellement l'overlay TLS : `docker stack deploy -c docker-compose.swarm.yml -c docker-compose.tls-letsencrypt.yml liberty` (Swarm accepte `-c` répété). |
+| Appliquer l'overlay apps | Idem : `-c docker-compose.swarm.yml -c docker-compose.apps.yml`, avec `APPS_HOST_PATH` défini dans l'environnement du shell. Matérialiser d'abord la wheel via `./install-apps.sh ./liberty_apps-*.whl --target ./apps` depuis un manager (le script saute le redémarrage Compose sur Swarm — le volume est déjà en place). |
+| Mettre à jour un seul service | `docker service update --image ghcr.io/fblettner/liberty-next:0.2.0 liberty_liberty-next`. |
+| Rollback | `docker service rollback liberty_liberty-next`. |
 
 ### Contraintes de placement
 
@@ -304,7 +413,7 @@ Le compose swarm épingle **chaque service à un manager** par défaut — convi
 
 ## Sauvegardes — `backup.sh` \{#backups\}
 
-Prend un instantané tar de chaque volume nommé Liberty dans un répertoire horodaté. Fonctionne pour Compose ET Swarm — les volumes portent les mêmes noms. Lancement possible pile en marche (Docker assure la cohérence en lecture) ; pour un instantané à froid parfait, arrêter la pile au préalable.
+Prend un instantané tar de chaque volume nommé Liberty + du bind mount apps (quand il est défini) dans un répertoire horodaté. Fonctionne pour Compose ET Swarm. Lancement possible pile en marche (Docker assure la cohérence en lecture) ; pour un instantané à froid parfait, arrêter la pile au préalable.
 
 ```bash
 ./backup.sh                              # → ./backups/AAAA-MM-JJ_HHMMSS/
@@ -316,13 +425,14 @@ Prend un instantané tar de chaque volume nommé Liberty dans un répertoire hor
 
 Chaque exécution produit un répertoire :
 
-| Fichier | Agencement |
+| Fichier | Quand il est présent |
 |---|---|
-| `liberty-config.tar.gz` | Les deux. |
-| `liberty-data.tar.gz` | Light uniquement (SQLite + auth.toml). |
-| `pg-data.tar.gz`, `pgadmin-data.tar.gz`, `portainer-data.tar.gz` | Full uniquement. |
-| `.env.snapshot` | Les deux (mode `0600` — à retirer avant synchronisation hors site si les secrets ne doivent pas figurer dans la sauvegarde). |
-| `docker-compose.*.yml` | Le(s) fichier(s) compose présent(s) dans ce répertoire au moment de la sauvegarde. |
+| `liberty-config.tar.gz` | Toujours. |
+| `liberty-data.tar.gz` | Agencement light (SQLite + auth.toml). |
+| `pg-data.tar.gz`, `pgadmin-data.tar.gz`, `portainer-data.tar.gz` | Agencement full. |
+| `liberty-apps.tar.gz` | Quand `APPS_HOST_PATH` est défini dans `.env` (overlay apps actif). |
+| `.env.snapshot` | Toujours (mode `0600` — à retirer avant synchronisation hors site si les secrets ne doivent pas figurer dans la sauvegarde). |
+| `docker-compose.*.yml` | Le(s) fichier(s) compose présent(s) dans le répertoire au moment de la sauvegarde. |
 
 ### Exécution hebdomadaire via cron
 
@@ -335,14 +445,40 @@ Chaque exécution produit un répertoire :
 `backup.sh` affiche la commande exacte en cas de succès. La forme générale :
 
 ```bash
-docker compose -f docker-compose.full.yml down     # DOIT être à l'arrêt — ne jamais restaurer sur un volume actif
+docker compose down                                 # DOIT être à l'arrêt — COMPOSE_FILE sélectionne les bons fichiers
 docker volume rm pg-data                            # purge (sauter cette étape pour superposer)
 docker run --rm -v pg-data:/data -v "$PWD/backups/<dir>:/backup" alpine \
     sh -c 'rm -rf /data/* /data/.[!.]* && tar xzf /backup/pg-data.tar.gz -C /data'
-docker compose -f docker-compose.full.yml up -d
+docker compose up -d
 ```
 
 Pour Swarm : démonter d'abord la pile (`./deploy-swarm.sh --rm`), restaurer, puis redéployer.
+
+### Restaurer le bind mount apps
+
+Le répertoire apps est un dossier hôte, pas un volume Docker :
+
+```bash
+docker compose down                                 # pour que liberty-next ne retienne pas le montage
+rm -rf ./apps                                       # ou le sauvegarder avant purge
+tar xzf backups/<dir>/liberty-apps.tar.gz -C ./apps
+docker compose up -d
+```
+
+---
+
+## Récupération — flag `--reset` \{#reset\}
+
+Quand une installation précédente a laissé des volumes obsolètes (`pg-data` initialisé avec un ancien mot de passe, puis `.env` perdu), le prochain `install.sh` générerait des secrets neufs qui ne correspondent plus — l'auth Postgres échoue à jamais, l'init Postgres ne s'exécutant que sur un volume neuf.
+
+`install.sh` détecte ce cas et refuse de démarrer. Deux issues :
+
+| Option | Description |
+|---|---|
+| **`./install.sh <agencement> --reset`** | `docker compose down -v` (purge chaque volume nommé) + suppression de `.env`, puis enchaîne sur une installation propre. À utiliser quand les anciennes données ne sont plus utiles. |
+| **Restaurer le `.env` précédent** | Replacer l'ancien fichier `.env` dans `release/`, puis relancer `./install.sh`. Le script détecte le `.env` existant et se contente de démarrer la pile — les secrets correspondent aux volumes. |
+
+Le `.env.snapshot` produit par `backup.sh` est le « `.env` précédent » canonique — à conserver à côté des instantanés de volumes.
 
 ---
 
@@ -353,7 +489,7 @@ Pour Swarm : démonter d'abord la pile (`./deploy-swarm.sh --rm`), restaurer, pu
 | Réinitialiser le mot de passe admin | `docker compose exec liberty-next liberty-admin set-password admin <new>` | `docker exec $(docker ps -qf name=liberty_liberty-next) liberty-admin set-password admin <new>` |
 | Ajouter un autre superutilisateur | `docker compose exec liberty-next liberty-admin create-user <name> --superuser` | `docker exec $(docker ps -qf name=liberty_liberty-next) liberty-admin create-user <name> --superuser` |
 | Inspecter la clé de licence | `docker compose exec liberty-next liberty-license verify` | `docker exec $(docker ps -qf name=liberty_liberty-next) liberty-license verify` |
-| Suivre les journaux | `docker compose -f docker-compose.full.yml logs -f liberty-next` | `docker service logs -f liberty_liberty-next` |
+| Suivre les journaux | `docker compose logs -f liberty-next` | `docker service logs -f liberty_liberty-next` |
 | Ouvrir un shell | `docker compose exec liberty-next bash` | `docker exec -it $(docker ps -qf name=liberty_liberty-next) bash` |
 | Lister les services | `docker compose ps` | `docker stack services liberty` |
 | Recharger la configuration (changement TOML) | `POST /admin/reload` (le bouton de l'UI Settings le déclenche) | Idem. |
@@ -367,13 +503,14 @@ Voir `liberty-admin --help` / `liberty-license --help` pour la CLI complète.
 ### Le conteneur sort immédiatement
 
 ```bash
-docker compose -f docker-compose.<layout>.yml logs liberty-next
+docker compose logs liberty-next             # pas besoin de -f — COMPOSE_FILE sélectionne les bons fichiers
 ```
 
 | Ligne de journal | Cause | Correction |
 |---|---|---|
 | `LIBERTY_JWT_SECRET is required` | La variable d'environnement requise n'a pas été propagée. | `install.sh` aurait dû la générer — vérifier `.env`. |
 | `Could not connect to database` *(agencement full)* | Postgres n'est pas encore en bonne santé. | Attendre 10 s — la clause `depends_on: condition: service_healthy` couvre normalement le cas ; vérifier `docker compose ps pg`. |
+| `password authentication failed for user "liberty"` | Volume `pg-data` obsolète issu d'une installation antérieure ; `.env` contient désormais de nouveaux secrets. | `./install.sh full --reset` (purge + redémarre) ou restaurer l'ancien `.env`. |
 | Le healthcheck ne passe jamais à healthy | Le conteneur est démarré mais `/info` ne répond pas. | Suivre les journaux — le plus souvent, un TOML de configuration sur le volume `liberty-config` comporte une erreur de syntaxe. |
 
 ### La page de connexion s'affiche, mais la connexion échoue
@@ -384,13 +521,9 @@ Le mot de passe de l'admin amorcé se trouve dans `.env` sous `LIBERTY_ADMIN_PAS
 docker compose exec liberty-next liberty-admin set-password admin <new>
 ```
 
-### Les modifications du dépôt des apps n'apparaissent pas
+### L'overlay apps a été ajouté mais les TOML ne sont pas chargés
 
-Les éditions de TOML via *Settings → …* sont rechargées à chaud automatiquement. Pour les changements de plugins Python (si `plugins/` est monté depuis l'hôte), redémarrer le conteneur :
-
-```bash
-docker compose restart liberty-next
-```
+Vérifier `COMPOSE_FILE` dans `.env` — il doit se terminer par `:docker-compose.apps.yml`. Relancer `./install-apps.sh <wheel>` si nécessaire. Une fois la variable positionnée, `docker compose up -d` prend en compte la modification.
 
 ### Le port 8000 / 80 est occupé
 
@@ -410,8 +543,8 @@ Le plus fréquent : une contrainte de placement insatisfaite (Postgres épinglé
 ## La suite
 
 - [Serveur Python](./python-server.md) — l'alternative sans Docker (pipx).
-- [Traefik](./traefik.md) — câbler le TLS et un nom d'hôte lisible.
-- [Portainer](./portainer.md) — à quoi sert le Portainer fourni.
+- [Traefik](./traefik.md) — câbler le TLS via le flag `--ssl`.
+- [Portainer + pgAdmin](./portainer.md) — à quoi servent les outils visuels fournis.
 - [Production](./production.md) — durcissement, OIDC, épinglage du scheduler.
 - [Mise à niveau](./upgrading.md) — la procédure de mise à niveau (c'est `pull && up -d`).
-- [Déployer des apps préfabriquées](./deploy-prebuilt-apps.md) — NomaUBL / Nomasx-1 / Nomajde par-dessus cette pile.
+- [Déployer des apps préfabriquées](./deploy-prebuilt-apps.md) — Nomasx-1 / Nomajde / Nomaflow par-dessus cette pile.

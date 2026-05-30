@@ -112,18 +112,22 @@ Full details on the backup format, the restore commands and a weekly cron entry:
 
 ## Upgrade procedure — Light / Full (Compose)
 
-Identical for both layouts; only the compose filename differs.
+Identical for both layouts — `COMPOSE_FILE` in `.env` (set by `install.sh`) drives `docker compose`:
 
 ```bash
 cd /opt/liberty-next/release
 
-./backup.sh                                          # 1 — snapshot
-docker compose -f docker-compose.full.yml pull       # 2 — fetch the new image (use light.yml for Light)
-docker compose -f docker-compose.full.yml up -d      # 3 — recreate containers; entrypoint runs init-db
+./backup.sh             # 1 — snapshot
+docker compose pull     # 2 — fetch the new image (COMPOSE_FILE picks the right files)
+docker compose up -d    # 3 — recreate containers; entrypoint runs init-db
 
 # 4 — smoke test
 curl -s http://127.0.0.1:8000/info
 ```
+
+:::info[Never pass `-f` after install]
+`COMPOSE_FILE` in `.env` carries the full chain (`docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml` after `install.sh --ssl letsencrypt --apps ...`). Passing `-f docker-compose.full.yml` manually overrides that chain and silently drops the TLS + apps overlays — the next `up -d` removes them. Stick to bare `docker compose pull` / `up -d`. See [Docker → COMPOSE_FILE discipline](./docker.md#compose-file-discipline).
+:::
 
 What `up -d` does: Compose sees the image digest changed, recreates the `liberty-next` container in place, mounts the same named volumes, restarts it. The new entrypoint runs `liberty-admin init-db`, then starts serving. Total downtime: ~30 s on a warm host.
 
@@ -219,8 +223,8 @@ The same simplicity applies in reverse: point back at the previous tag, restart.
 
 ```bash
 # edit .env: LIBERTY_IMAGE_TAG=0.1.0    (the previous tag)
-docker compose -f docker-compose.full.yml pull
-docker compose -f docker-compose.full.yml up -d
+docker compose pull                       # COMPOSE_FILE picks the right files
+docker compose up -d
 ```
 
 If the schema moved forward and you need to roll back the data too, restore the relevant volume from `./backups/<timestamp>/` first — see [Docker → Backups](./docker.md#backups) for the per-volume restore command.

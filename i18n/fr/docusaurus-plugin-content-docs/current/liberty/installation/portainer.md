@@ -75,7 +75,7 @@ La socket Docker est une **surface privilégiée** : tout ce qui peut la lire di
 
 | Implication | Mesure de protection |
 |---|---|
-| Un admin Portainer = root sur chaque conteneur de l'hôte. | Choisir un mot de passe admin fort pendant l'assistant ; le faire tourner via *My account → Change password*. |
+| Un admin Portainer = root sur chaque conteneur de l'hôte. | Choisir un mot de passe admin fort pendant l'assistant ; le renouveler via *My account → Change password*. |
 | Quiconque peut atteindre `/portainer` sur le réseau peut tenter de s'approprier le compte. | Restreindre le chemin en bordure (pare-feu, [middleware basic-auth Traefik](./traefik.md), liste blanche d'IP) tant que TLS et un véritable admin ne sont pas en place. |
 | Cette surface peut ne pas être souhaitée dans la pile. | Supprimer le bloc de service `portainer:` et le volume `portainer-data:` de `docker-compose.full.yml` puis `docker compose up -d`. Le reste de la pile n'est pas affecté. |
 
@@ -99,9 +99,9 @@ Opérations courantes :
 
 | Tâche | Emplacement dans Portainer | Équivalent CLI |
 |---|---|---|
-| Suivre les journaux d'un service | Containers → *service* → *Logs* (rafraîchissement auto, filtre par niveau) | `docker compose -f docker-compose.full.yml logs -f <service>` |
-| Redémarrer un service | Containers → *service* → *Restart* | `docker compose -f docker-compose.full.yml restart <service>` |
-| Recréer un service (en récupérant une nouvelle image) | Containers → *service* → *Recreate* → cocher *Pull latest image* | `docker compose -f docker-compose.full.yml pull <service> && docker compose -f docker-compose.full.yml up -d <service>` |
+| Suivre les journaux d'un service | Containers → *service* → *Logs* (rafraîchissement auto, filtre par niveau) | `docker compose logs -f <service>` |
+| Redémarrer un service | Containers → *service* → *Restart* | `docker compose restart <service>` |
+| Recréer un service (en récupérant une nouvelle image) | Containers → *service* → *Recreate* → cocher *Pull latest image* | `docker compose pull <service> && docker compose up -d <service>` |
 | Ouvrir un shell dans un conteneur | Containers → *service* → *Console* → *Connect* | `docker compose exec <service> bash` |
 | Inspecter les variables d'environnement (lecture seule) | Containers → *service* → onglet *Inspect* → `Config.Env` | `docker inspect <container>` |
 | Vérifier l'usage des ressources (CPU / RAM) | Containers → *service* → *Stats* | `docker stats` |
@@ -224,7 +224,7 @@ Les services intégrés sont pratiques, pas obligatoires. Les retirer si :
 Après suppression de l'un ou l'autre service :
 
 ```bash
-docker compose -f docker-compose.full.yml up -d        # réconcilie la pile en cours
+docker compose up -d                                   # COMPOSE_FILE choisit les bons fichiers ; réconcilie la pile
 docker volume rm <removed-volume>                       # uniquement en cas de certitude
 ```
 

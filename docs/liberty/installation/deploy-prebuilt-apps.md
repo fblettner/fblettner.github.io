@@ -1,7 +1,7 @@
 ---
 title: Deploy prebuilt apps
-description: "Stand up the three NOMANA-IT product apps on a Liberty install — NomaUBL (separate Java service), Nomasx-1 / Nomajde (liberty-apps wheel installer), Nomaflow (delivered alongside Nomasx-1). Covers what each one is, where it lives on disk, the one-line install command and the first-deploy job that provisions the databases."
-keywords: [Liberty Framework, prebuilt apps, deploy, install, NomaUBL, Nomasx-1, Nomajde, Nomaflow, liberty-apps, wheel, payload, plugins, deploy-databases, init-schema, preload]
+description: "Stand up the NOMANA-IT product apps on a Liberty install — NomaUBL (separate Java service), Nomasx-1 / Nomajde / Nomaflow bundled jobs (delivered as one liberty-apps wheel). The wheel is materialised by install-apps.sh via a throwaway python:3.12-slim container — no host Python or pip needed — then bind-mounted into liberty-next via the docker-compose.apps.yml overlay."
+keywords: [Liberty Framework, prebuilt apps, deploy, install, NomaUBL, Nomasx-1, Nomajde, Nomaflow, liberty-apps, wheel, install-apps.sh, --apps, --license-key, APPS_HOST_PATH, docker-compose.apps.yml, COMPOSE_FILE, throwaway container, deploy-databases, init-schema, nomasx1-import-reference]
 ---
 
 # Deploy prebuilt apps
@@ -10,172 +10,181 @@ Three NOMANA-IT applications are designed to be **deployed on top of a Liberty i
 
 | App | Shape | How it reaches the install |
 |---|---|---|
-| **NomaUBL** | Standalone Java service (its own JAR + wrapper + database). | Not a Liberty plugin — its own install procedure. Liberty optionally links to it for unified navigation. |
-| **Nomasx-1** + **Nomajde** | Liberty plugins (Python code under `plugins/nomasx1`) + a full TOML config (`screens.toml`, `menus.toml`, `dashboards.toml`, `dictionary.toml`, etc.). | Delivered as a single **`liberty-apps` wheel**. `pip install` it on the framework host, then run `liberty-apps install`. |
-| **Nomaflow** | Built into Liberty Next (the framework's scheduler + workflow engine). The **bundled jobs** that drive Nomasx-1 install and refresh ship inside the **`liberty-apps`** wheel's `plugins/nomaflow/jobs.toml`. | Comes with the same wheel — no separate install. |
+| **NomaUBL** | Standalone Java service (its own JAR + wrapper + database). | Not a Liberty plugin — its own install procedure. Liberty optionally links to it via a menu item. |
+| **Nomasx-1** + **Nomajde** | Liberty plugins (Python under `plugins/nomasx1`) + a full TOML config (`screens.toml`, `menus.toml`, `dashboards.toml`, `dictionary.toml`, etc.). | Delivered as a single **`liberty-apps` wheel**. `install-apps.sh` materialises it into `./apps/` and wires the `docker-compose.apps.yml` overlay. |
+| **Nomaflow** | Built into Liberty Next (the framework's scheduler + workflow engine). The **bundled jobs** that drive Nomasx-1 install + refresh ship inside the same wheel's `plugins/nomaflow/jobs.toml`. | Comes with the wheel — no separate install. |
 
-This page walks each deployment path. The order to read in is: NomaUBL first (if you need it), then the Nomasx-1 / Nomajde wheel install, then run the bundled jobs to materialise the databases.
+This page walks each deployment path. The order: NomaUBL first (if you need it), then the wheel install, then run the bundled jobs to materialise the application databases.
 
 ---
 
 ## NomaUBL — separate Java service
 
-NomaUBL is **not a Liberty plugin**. It runs as its own JVM process, with its own database (Oracle or PostgreSQL), its own web UI on a separate port, its own `nomaubl.sh` / `nomaubl.cmd` wrapper. The integration with Liberty is at the **menu** level only: a Liberty operator can add a menu item that opens the NomaUBL UI in a new tab.
-
-Install procedure: see the dedicated NomaUBL docs.
+NomaUBL is **not a Liberty plugin**. It runs as its own JVM process, with its own database (Oracle or PostgreSQL), its own web UI on a separate port, its own `nomaubl.sh` / `nomaubl.cmd` wrapper. The integration with Liberty is at the **menu** level only — a Liberty operator can add a menu item that opens the NomaUBL UI in a new tab.
 
 | Page | What |
 |---|---|
-| [NomaUBL → Installation → Overview](../../nomaubl/installation/overview.md) | The 5-step install — prerequisites, JAR install, configuration via Settings UI, service supervision, upgrade. |
+| [NomaUBL → Installation → Overview](../../nomaubl/installation/overview.md) | The 5-step install — prerequisites, JAR install, Settings UI configuration, service supervision, upgrade. |
 | [NomaUBL → Installation → Requirements](../../nomaubl/installation/requirements.md) | JDK 17, Oracle or PostgreSQL, ports, optional reverse proxy. |
 | [NomaUBL → Installation → Upgrade](../../nomaubl/installation/upgrade.md) | One-command upgrade with rollback. |
 
-The rest of this page focuses on **Liberty plugins** — Nomasx-1, Nomajde and the Nomaflow jobs bundle.
+The rest of this page focuses on the **Liberty plugins** — Nomasx-1, Nomajde and the bundled Nomaflow jobs.
 
 ---
 
-## Nomasx-1 / Nomajde / Nomaflow — the `liberty-apps` wheel
+## The wheel — what it carries
 
-The `liberty-apps` wheel carries everything Liberty needs to operate the three integrated apps:
+`liberty_apps-<version>-py3-none-any.whl` is a Python wheel published by NOMANA-IT. It bundles a small CLI (`liberty-apps install --target DIR`) and an internal `_payload/` directory:
 
-| Carried | What it is | Where it lands on the target |
+| Carried inside the wheel | What it is | Where it lands |
 |---|---|---|
-| **`config/*.toml`** | The full app config — `screens.toml`, `menus.toml`, `dashboards.toml`, `dictionary.toml`, `charts.toml`, `connectors.toml`, `theme.toml`. | `${LIBERTY_APPS_DIR}/*.toml` — the directory the framework already reads. |
-| **`plugins/nomasx1/`** | Python package — the security collector, license collector, SOD detector, audit-trail reader, materialised-view refresher, schema bootstrap. Callables referenced from `jobs.toml`. | `${LIBERTY_APPS_DIR}/../plugins/nomasx1/` — the framework's plugins folder (sibling of `config/`). |
-| **`plugins/nomaflow/jobs.toml`** | The bundled Nomaflow job catalogue — install jobs, daily syncs, weekly refreshes, ad-hoc reset jobs. | `${LIBERTY_APPS_DIR}/../plugins/nomaflow/jobs.toml` — picked up by Nomaflow at next reload. |
-| **`config/nomasx1-reference.tar.gz`** | Curated reference rows (SoD baseline, custom lists). Loaded by the `nomasx1-import-reference` job. | Same place — read by the import job. |
-
-### Prerequisites on the target host
-
-| What | Why |
-|---|---|
-| **Liberty Next is installed and running** | The wheel materialises on top of the framework; it doesn't install the framework. The Full Docker layout — `./install.sh full` — is the canonical target for licensed bundles (they need Postgres). See [Docker → Full](./docker.md#full). Light + pipx layouts work for the open framework only — they can't host the Nomasx-1 / Nomajde plugins because those need Postgres pools. |
-| **`pip` is available in the framework's venv** | The wheel installs via pip. On Docker installs, the wheel is typically baked into the image at build time. |
-| **`LIBERTY_APPS_DIR` is set** | Points at the framework's `config/` dir. The wheel installer materialises the payload into this directory + its sibling `../plugins/`. |
-| **A PostgreSQL server reachable from the framework's `default` pool** | The deploy job creates the per-app databases (`nomasx1`, `nomajde`) on this server. Requires `CREATE DATABASE` / `CREATE ROLE` rights — typically `postgres` superuser or an equivalent. |
-
-### Install the wheel
-
-Receive the wheel from NOMANA-IT (e.g. `liberty_apps-0.2.0-py3-none-any.whl`) and install it inside the framework's environment. The command differs by install layout, but `liberty-apps install` works the same on all of them.
-
-```dockerfile title="Docker Full layout — bake into a child image"
-FROM ghcr.io/fblettner/liberty-next:0.2.0
-COPY liberty_apps-0.2.0-py3-none-any.whl /tmp/
-RUN pip install /tmp/liberty_apps-0.2.0-py3-none-any.whl && rm /tmp/*.whl
-RUN liberty-apps install --target $LIBERTY_APPS_DIR
-```
-
-Build, tag and push that image, then reference it as `LIBERTY_IMAGE_TAG` in `.env` so `docker compose up -d` pulls the wheel-enriched image instead of the vanilla framework one.
-
-```bash title="pipx install — inject into the framework's venv"
-# pipx keeps liberty-next in its own venv; `inject` adds the wheel to that same venv.
-pipx inject liberty-next /path/to/liberty_apps-0.2.0-py3-none-any.whl
-```
-
-```bash title="Python venv install"
-# in the framework's venv
-pip install /path/to/liberty_apps-0.2.0-py3-none-any.whl
-```
-
-Verify the install:
-
-```bash
-liberty-apps --version
-# liberty-apps 0.2.0
-```
-
-### Materialise the payload
-
-The wheel ships every config TOML + the Python plugins inside a private `_payload/` folder. The `liberty-apps install` command **copies** those files into the target install's `LIBERTY_APPS_DIR` and its sibling `../plugins/` directory.
-
-```bash
-# Target is the framework's config dir — plugins land in its sibling.
-liberty-apps install --target $LIBERTY_APPS_DIR
-```
-
-Inside a Docker container the path is `/app/config` — the same location `docker-compose.full.yml` mounts as the `liberty-config` named volume. The child-image Dockerfile above already runs `liberty-apps install` against `$LIBERTY_APPS_DIR` at build time, so the payload is baked into the image layer and surfaces under `/app/config` (and its sibling `/app/plugins`) at runtime.
-
-The output lists every file:
-
-```text
-liberty-apps 0.2.0: materializing payload
-  config  → /opt/liberty-apps/config
-  plugins → /opt/liberty-apps/plugins
-  copy      connectors.toml → /opt/liberty-apps/config/connectors.toml
-  copy      dictionary.toml → /opt/liberty-apps/config/dictionary.toml
-  copy      menus.toml      → /opt/liberty-apps/config/menus.toml
-  copy      screens.toml    → /opt/liberty-apps/config/screens.toml
-  copy      charts.toml     → /opt/liberty-apps/config/charts.toml
-  copy      dashboards.toml → /opt/liberty-apps/config/dashboards.toml
-  copy      theme.toml      → /opt/liberty-apps/config/theme.toml
-  copy      nomasx1-reference.tar.gz → /opt/liberty-apps/config/nomasx1-reference.tar.gz
-  refresh   plugin nomaflow → /opt/liberty-apps/plugins/nomaflow
-  refresh   plugin nomasx1  → /opt/liberty-apps/plugins/nomasx1
-done: 8 config file(s) copied, 0 preserved, 2 plugin package(s) refreshed.
-
-next: point liberty-next at this config dir
-  export LIBERTY_APPS_DIR=/opt/liberty-apps/config
-then create + initialize the app databases (deploy job / liberty-apps initdb).
-```
-
-Two install flags worth knowing:
-
-| Flag | Effect |
-|---|---|
-| **`--dry-run`** | Print what would change without writing. Run this first on an existing install. |
-| **`--force-config`** | Overwrite existing `*.toml` files. By default the installer **preserves** them so an operator's UI-saved edits survive a wheel upgrade. Use with care — typically only on a fresh install or after exporting your edits via [Settings → Package](../framework/build/packages.md). |
-
-Plugin code is **always refreshed** — no `--force` needed. The installer assumes plugin code is vendor-owned and replaces the directory wholesale.
-
-### Reload the framework
-
-After the materialisation, Liberty has the new TOMLs on disk and the new Python packages in its plugins folder, but the running process still holds the old config in memory. Reload:
-
-```bash title="External call"
-curl -X POST -H "Authorization: Bearer <superuser-token>" \
-     https://<liberty-host>/admin/reload
-```
-
-```bash title="Docker Full layout — from the host"
-docker compose exec liberty-next \
-  curl -X POST -H "Authorization: Bearer <superuser-token>" \
-       http://localhost:8000/admin/reload
-```
-
-Or from the UI: *Settings → Reload* button.
-
-Once reloaded, the framework boot logs show the loaded apps:
-
-```text
-INFO  liberty.config menus loaded for apps: nomasx1, nomajde
-INFO  liberty.config screens loaded for apps: nomasx1, nomajde
-INFO  liberty.plugins importable from /opt/liberty-apps/plugins
-```
-
-The app switcher in the top bar now lists *Nomasx-1* and *Nomajde*.
+| **`_payload/config/*.toml`** | Full app config — `screens.toml`, `menus.toml`, `dashboards.toml`, `dictionary.toml`, `charts.toml`, `connectors.toml`, `theme.toml`. | `./apps/config/<file>.toml` on the host → `/apps/config/<file>.toml` in the liberty-next container. |
+| **`_payload/plugins/nomasx1/`** | Python package — security collector, license collector, SoD detector, audit-trail reader, materialised-view refresher, schema bootstrap. Callables referenced from `jobs.toml`. | `./apps/plugins/nomasx1/` on the host → `/apps/plugins/nomasx1/` in the container. |
+| **`_payload/plugins/nomaflow/jobs.toml`** | The bundled Nomaflow job catalogue — install jobs, daily syncs, weekly refreshes, ad-hoc reset jobs. | `./apps/plugins/nomaflow/jobs.toml` → `/apps/plugins/nomaflow/jobs.toml`. |
+| **`_payload/config/nomasx1-reference.tar.gz`** | Curated reference rows (SoD baseline, custom lists). Loaded by the `nomasx1-import-reference` job. | Same place — read by the import job. |
 
 ---
 
-## Provision the databases — the `deploy-databases` job
+## Single-command install (fresh host)
 
-The wheel install dropped the config and the plugin code in place. The next step is to **create the application databases** Nomasx-1 and Nomajde write to — `nomasx1` (security, license, SOD, audit data) and `nomajde` (replicated JDE control + dictionary tables).
+```bash
+./install.sh full \
+    --apps ./liberty_apps-7.0.1-py3-none-any.whl \
+    --license-key <your-rs256-jwt>
+```
+
+That's everything — base stack + licensed apps + license key in one go.
+
+`install.sh` brings the base layout up first (so the credentials banner stays visible even if the apps step fails), then chains to `install-apps.sh` with the wheel + license key.
+
+---
+
+## Split install — base first, apps later
+
+```bash
+./install.sh full                                                            # base stack
+./install-apps.sh ./liberty_apps-7.0.1-py3-none-any.whl --license-key <jwt>  # apps overlay
+```
+
+This is the path most installs end up using — apps land after the operator has already verified the base stack works.
+
+### What `install-apps.sh` does
+
+| Step | What |
+|---|---|
+| **1. Fetch the wheel** (when given a URL) | `curl -fsSL <url>` into a temp dir; a local path is used directly. |
+| **2. Materialise the wheel into `./apps/`** | Runs a throwaway `python:3.12-slim` container that mounts the wheel read-only + the destination read-write, `pip install`s the wheel into a tmp prefix, then invokes the wheel's `liberty-apps install --target /dest/config` CLI which copies `config/` + `plugins/` into the destination. Nothing python-related stays on the host. |
+| **3. Update `.env`** | Sets `APPS_HOST_PATH=<absolute path to ./apps>`, appends `docker-compose.apps.yml` to `COMPOSE_FILE` (colon-separated), sets `LIBERTY_LICENSE_KEY=<jwt>` if passed. |
+| **4. Restart the stack** | `docker compose up -d` (no `-f` — `COMPOSE_FILE` picks every overlay). Liberty-next picks up the new bind mount. |
+| **5. Wait for the healthcheck + print summary** | Path, license-key status, verification URLs. |
+
+The throwaway-container approach means **your host needs no Python, no pip, no virtualenv** — only Docker. This is intentional: the framework host should not need a Python toolchain to install the apps.
+
+### `install-apps.sh` flags
+
+| Flag | Purpose |
+|---|---|
+| `<wheel-path-or-URL>` *(positional)* | Local `.whl` or an `http://` / `https://` URL. Required. |
+| `--license-key <jwt>` | Set `LIBERTY_LICENSE_KEY` in `.env`. Without it the framework runs in **restricted mode** — the licensed connectors flagged `licensed = true` in the apps' `connectors.toml` don't load. |
+| `--target <DIR>` | Destination on the host. Default: `./apps`. The directory is created if missing. |
+| `--layout <full\|light>` | Which base layout's compose to use when wiring `COMPOSE_FILE`. Default: `full`. The apps overlay works on both. |
+| `--force-config` | Overwrite operator-edited TOMLs in `./apps/config/` with the wheel's vendor versions. Default behaviour preserves operator edits across re-installs. |
+
+### The `docker-compose.apps.yml` overlay
+
+It's ~10 lines:
+
+```yaml title="docker-compose.apps.yml"
+services:
+  liberty-next:
+    volumes:
+      - ${APPS_HOST_PATH:?APPS_HOST_PATH not set — see install-apps.sh}:/apps:ro
+    environment:
+      LIBERTY_APPS_DIR: /apps/config
+```
+
+That's the whole contract: bind-mount `./apps` to `/apps:ro`, redirect TOML reads to `/apps/config`.
+
+You can run it directly without `install-apps.sh` if you've already set `APPS_HOST_PATH` in `.env` yourself and materialised the wheel another way:
+
+```bash
+docker compose -f docker-compose.full.yml -f docker-compose.apps.yml up -d
+```
+
+After that one-off, set `COMPOSE_FILE=docker-compose.full.yml:docker-compose.apps.yml` in `.env` so subsequent `docker compose` commands (no `-f`) keep the overlay live.
+
+### Layout produced
+
+After `install-apps.sh`:
+
+```text
+release/
+├── .env                                  ← APPS_HOST_PATH + COMPOSE_FILE updated
+├── apps/                                  ← bind-mount target
+│   ├── config/
+│   │   ├── connectors.toml
+│   │   ├── dictionary.toml
+│   │   ├── menus.toml
+│   │   ├── screens.toml
+│   │   ├── charts.toml
+│   │   ├── dashboards.toml
+│   │   ├── theme.toml
+│   │   └── nomasx1-reference.tar.gz
+│   └── plugins/
+│       ├── nomasx1/                       ← Python package
+│       └── nomaflow/
+│           └── jobs.toml                  ← bundled job catalogue
+├── docker-compose.full.yml
+├── docker-compose.apps.yml
+└── ...
+```
+
+Inside the liberty-next container: `./apps/` lands at `/apps:ro`. `LIBERTY_APPS_DIR=/apps/config` redirects every per-section TOML read there.
+
+### Without a license key
+
+The framework still starts — it just runs in **restricted mode** (connectors flagged `licensed = true` aren't loaded). Useful for testing the apps' open parts. Add the key later:
+
+```bash
+./install-apps.sh ./liberty_apps-7.0.1.whl --license-key <jwt>
+```
+
+Idempotent — only touches the `.env` line, doesn't re-materialise the wheel.
+
+---
+
+## Verify the install
+
+| Check | How |
+|---|---|
+| `liberty-next` is healthy | `docker compose ps liberty-next` shows `healthy`. |
+| Apps are loaded | `curl http://localhost/info` shows `screens.apps` includes `nomasx1` / `nomajde`. |
+| License is active | Same response: `license.mode` is `full` (not `restricted`). |
+| SPA shows the apps | Open `http://localhost/` — the app switcher lists *Nomasx-1* and *Nomajde*. |
+| Bundled jobs are in the catalogue | Open *Nomaflow → Catalogue* — `deploy-databases`, `nomasx1-init-db`, `nomasx1-security-1`, etc. appear (all `enabled = false` until you toggle them). |
+
+---
+
+## Provision the application databases — the `deploy-databases` job
+
+The wheel install dropped the config + the plugin code in place. The next step is to **create the application databases** Nomasx-1 and Nomajde write to — `nomasx1` (security, license, SoD, audit) and `nomajde` (replicated JDE control + dictionary tables).
 
 The bundled `deploy-databases` job in `jobs.toml` does this in one run:
 
 | Step | What it does |
 |---|---|
-| **1. `create-roles-and-databases`** | Creates the application login roles and the per-target databases on the `default` pool's PostgreSQL server (the framework's own DB host). Idempotent — skips roles / databases already present. |
-| **2. `init-schema-nomasx1`** | Runs the Nomasx-1 schema bootstrap on the freshly-created `nomasx1` database — every table + materialised view from `models.py`. Idempotent. |
+| **1. `create-roles-and-databases`** | Creates the application login roles + per-target Postgres databases on the framework's `default` pool (the bundled Postgres). Idempotent — skips what already exists. |
+| **2. `init-schema-nomasx1`** | Runs the Nomasx-1 schema bootstrap on the freshly-created `nomasx1` database. Idempotent. |
 
-Run it from *Nomaflow → Catalogue → `deploy-databases` → ▶ Run now*. The job is `enabled = false` by default in the bundle — don't enable the schedule (it has none), just run it once.
+Run it once from *Nomaflow → Catalogue → `deploy-databases` → ▶ Run now*. The job is `enabled = false` by default in the bundle — don't enable the schedule (it has none), just run it once.
 
 | Detail | What |
 |---|---|
 | **First-deploy job** | Run **once** after the wheel install. Re-running on an existing install is safe (idempotent) but pointless. |
-| **DB rights** | The framework's `default` pool must reach a Postgres server with `CREATE DATABASE` + `CREATE ROLE` rights. The recommended pattern is to point `default` at a Postgres `postgres` superuser for the deploy run, then later point it at a less-privileged user. |
-| **Output** | The Run detail page lists every role and database created, plus the schema bootstrap log per table. |
+| **DB rights** | The `default` pool must reach a Postgres server with `CREATE DATABASE` + `CREATE ROLE` rights. In the bundled Full layout, the `default` pool points at the bundled Postgres and runs as `liberty` (which is a superuser via the bundled `POSTGRES_USER`). |
+| **Output** | The Run detail page lists every role + database created, plus the schema-bootstrap log per table. |
 
-For full details of the job (parameters, alternative invocations, recovery), see [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md#deploy-databases).
+For full job reference (parameters, alternative invocations, recovery), see [Nomaflow → Bundled jobs → deploy-databases](../nomaflow/bundled-jobs.md#deploy-databases).
 
 ### Connect Nomasx-1 to a JD Edwards source
 
@@ -191,58 +200,82 @@ Once `jdedwards` is reachable, run the collection jobs (`nomasx1-security-1`, `n
 
 ### Load the reference bundle
 
-Nomasx-1 ships with a curated set of **reference rows** — SoD baseline, settings, custom lists. These are not part of the schema bootstrap; they're loaded by a dedicated job:
+Nomasx-1 ships with a curated set of **reference rows** — SoD baseline, settings, custom lists. These are loaded by a dedicated job:
 
 ```text title="Nomaflow → Catalogue → nomasx1-import-reference → ▶ Run now"
 ```
 
-The job reads `${LIBERTY_APPS_DIR}/nomasx1-reference.tar.gz` and inserts the rows into the matching tables. Safe to re-run — set `replace = true` in *Run with parameters* for a destructive TRUNCATE + INSERT cycle.
+The job reads `${LIBERTY_APPS_DIR}/nomasx1-reference.tar.gz` (which lives at `/apps/config/nomasx1-reference.tar.gz` inside the container) and inserts the rows into the matching tables. Safe to re-run — set `replace = true` in *Run with parameters* for a destructive TRUNCATE + INSERT cycle.
 
 See [Bundled jobs → nomasx1-import-reference](../nomaflow/bundled-jobs.md#nomasx1-import-reference) for the parameter reference.
 
 ---
 
-## Upgrade an existing install
+## Persistence + restart + backup — what's safe?
 
-When NOMANA-IT delivers a new `liberty-apps` wheel:
+| Event | `./apps/` content | DB / pgadmin / portainer data |
+|---|---|---|
+| `docker compose restart` | safe — bind mount re-attaches | safe — named volumes intact |
+| Host reboot | safe — `restart: unless-stopped` brings everything back, mount re-attaches | safe |
+| `docker compose down` (no `-v`) | safe — bind mount isn't a Docker volume, `-v` doesn't touch it | safe |
+| `docker compose down -v` | safe — `-v` only wipes named volumes | **WIPED** |
+| `./install.sh full --reset` | safe — only named volumes are dropped | **WIPED** |
+| `./backup.sh` | **included** — `backup.sh` reads `APPS_HOST_PATH` from `.env` and tars `./apps/` alongside the named volumes | included (`pg-data.tar.gz` etc.) |
 
-| Step | What |
-|---|---|
-| **1. Take a config backup** | `cp -r $LIBERTY_APPS_DIR $LIBERTY_APPS_DIR.bak.$(date +%Y%m%d)`. The wheel installer preserves your edits by default but a backup is cheap insurance. |
-| **2. Install the new wheel** | **Docker Full:** rebuild the child image with the new wheel, bump `LIBERTY_IMAGE_TAG` in `.env`, then `docker compose pull && docker compose up -d`. **pipx:** `pipx inject liberty-next --force /path/to/new-wheel.whl`, then restart the systemd unit. **Python venv:** `pip install --upgrade /path/to/new-wheel.whl`. |
-| **3. `liberty-apps install --target $LIBERTY_APPS_DIR`** | The installer copies plugin code unconditionally and **preserves existing config files** (your edits survive). New config files in the bundle (e.g. a new dashboard) ARE copied. |
-| **4. Use `--force-config` only when you want vendor defaults** | This overwrites your edits. The right way to take selective vendor updates is to export your edits via [Settings → Package](../framework/build/packages.md) before, then apply vendor + your package back. |
-| **5. Reload** | `POST /admin/reload`. New screens / dashboards / jobs are live. |
-| **6. Schema upgrade (only if release notes mention DB changes)** | Run *Nomaflow → Catalogue → `nomasx1-upgrade-schema-1`*. Alembic-driven, idempotent. |
+A backup directory after `./backup.sh` contains:
 
-The wheel installer never touches the application databases — only the framework's config and plugin directories. Schema changes are always operator-triggered via the `*-upgrade-schema-*` jobs in the bundle.
+```text
+backups/2026-05-30_170000/
+  liberty-config.tar.gz       — framework config (seeded TOMLs the operator edited via UI)
+  liberty-apps.tar.gz         — your apps bind mount (when APPS_HOST_PATH is set)
+  pg-data.tar.gz              — Postgres data files
+  pgadmin-data.tar.gz         — pgAdmin state
+  portainer-data.tar.gz       — Portainer state
+  .env.snapshot               — env vars + secrets (mode 0600)
+  docker-compose.*.yml        — compose files in use
+```
+
+---
+
+## Updating the apps later
+
+Drop a new wheel and re-run:
+
+```bash
+./install-apps.sh ./liberty_apps-7.0.2-py3-none-any.whl
+docker compose restart liberty-next       # picks up the new TOMLs
+```
+
+Operator-edited TOMLs in `./apps/config/` are **preserved by default** — the wheel's `liberty-apps install` CLI only overwrites when `--force-config` is passed. If `hot_reload = true` in `app.toml`, you don't even need the restart — file edits are picked up live.
+
+For schema updates (release notes mention new tables), run *Nomaflow → Catalogue → `nomasx1-upgrade-schema-1`* after the restart. Idempotent.
 
 ---
 
 ## A second Nomasx-1 deployment side by side
 
-For multi-customer hosting — running two independent Nomasx-1 instances against two different JDE sources on the same Liberty server — the bundled `nomasx1-init-db` job clones the `nomasx1` app config under a new name (e.g. `nomasx1b`) and provisions a parallel database.
+For multi-customer hosting — two independent Nomasx-1 instances against two different JDE sources on the same Liberty server — the bundled `nomasx1-init-db` job clones the `nomasx1` app config under a new name (e.g. `nomasx1b`) and provisions a parallel database.
 
 | Step | What |
 |---|---|
-| **1. Run `nomasx1-init-db`** | Clones the `nomasx1` app config → `nomasx1b`, creates the `nomasx1b` pool + database, runs the schema bootstrap on it. The job refuses if `nomasx1b` already exists. |
+| **1. Run `nomasx1-init-db`** | Clones the `nomasx1` app config → `nomasx1b`, creates the `nomasx1b` pool + database, runs the schema bootstrap. Refuses if `nomasx1b` already exists. |
 | **2. Wire the second JDE source** | Add a `jdedwards2` connector / pool pointing at the second JDE instance. |
-| **3. Run the collection jobs** | The collection jobs accept a `target_connector` parameter. Run them once per Nomasx-1 instance (`nomasx1` and `nomasx1b`). |
+| **3. Run the collection jobs per Nomasx-1 instance** | The collection jobs accept a `target_connector` parameter. Run them once per instance (`nomasx1` and `nomasx1b`). |
 
-See [Nomaflow → Bundled jobs → nomasx1-init-db](../nomaflow/bundled-jobs.md#nomasx1-init-db) for the parameter shape and the clone semantics.
+See [Nomaflow → Bundled jobs → nomasx1-init-db](../nomaflow/bundled-jobs.md#nomasx1-init-db) for parameters + clone semantics.
 
 ---
 
-## What goes through this channel vs. the Package screen
+## Vendor wheel vs Packages UI
 
 | Channel | What it carries | Cadence |
 |---|---|---|
-| **`liberty-apps` wheel installer** *(this page)* | The **full** licensed bundle — every TOML, every plugin, the reference tarball. Vendor-owned. | Per release (a few per year). |
-| **Settings → Package screen** *(see [Packages](../framework/build/packages.md))* | A **slice** of config — selected screens / menu items / dashboards + their dependency closure. Operator-owned. | Per change (daily, on demand). |
+| **`install-apps.sh` + the wheel** *(this page)* | The **full** licensed bundle — every TOML + every plugin + the reference tarball. Vendor-owned. | Per release. |
+| **Settings → Package screen** *(see [Packages](../framework/build/packages.md))* | A **slice** of config — selected screens / menu items / dashboards + their dependency closure. Operator-owned. | Per change. |
 
-Use the wheel for **vendor delivery**. Use the Package screen for **per-customer slices**, **staging → prod promotions**, and **screen-level upgrades** of a curated set without touching anything else.
+Use the wheel for vendor delivery. Use the Package screen for per-customer slices, staging → prod promotions and screen-level upgrades.
 
-The two channels are designed to coexist — the wheel preserves operator edits on config files by default, so wheel upgrades and Package-screen edits don't fight each other.
+The two channels coexist — `install-apps.sh` preserves operator-edited TOMLs by default, so wheel upgrades and Package-screen edits don't fight each other.
 
 ---
 
@@ -250,19 +283,21 @@ The two channels are designed to coexist — the wheel preserves operator edits 
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Ran `./install.sh light` and tried to install the wheel. | The plugins import but the deploy job fails: no Postgres reachable. | Light uses SQLite — Nomasx-1 / Nomajde plugins need Postgres pools. Use `./install.sh full` for licensed bundles. |
-| Ran `liberty-apps install` without `LIBERTY_APPS_DIR` set. | `error: no target — pass --target DIR or set LIBERTY_APPS_DIR`. | Set the env var in the framework's environment file / systemd unit / Docker env. |
-| Wheel install succeeded but Liberty doesn't see the new screens. | The framework wasn't reloaded — old config still in memory. | `POST /admin/reload` or click *Settings → Reload*. |
-| `deploy-databases` job fails with `permission denied for database`. | The framework's `default` pool can't create DBs / roles. | Point `default` at a Postgres superuser for the deploy run; revert afterwards. |
-| Connection refused from a Nomasx-1 collection job. | The `jdedwards` connector isn't configured or the credentials are wrong. | *Settings → Connectors → jdedwards* → fix the JDBC URL / credentials → test from the UI before retrying the job. |
+| Ran `install-apps.sh` before `install.sh` brought the base stack up. | Script aborts with `.env not found`. | Run `./install.sh light` or `./install.sh full` first. |
+| Passed `-f docker-compose.full.yml` after `install-apps.sh`. | TOMLs disappear on next `up -d` — the apps overlay was dropped. | Always run `docker compose <cmd>` without `-f` after install. `COMPOSE_FILE` in `.env` is the source of truth. |
+| Wheel install succeeded but Liberty doesn't see the new screens. | `curl /info` shows `screens.apps: []`. | The framework wasn't reloaded — `docker compose restart liberty-next` or click *Settings → Reload*. |
+| `deploy-databases` job fails with `permission denied for database`. | The `default` pool can't create DBs / roles. | The bundled Postgres's `liberty` user is created as superuser — check `docker compose exec pg psql -U liberty -c '\du'`. If you swapped to a non-superuser, temporarily grant `SUPERUSER`. |
+| Connection refused from a Nomasx-1 collection job. | The `jdedwards` connector isn't configured or credentials are wrong. | *Settings → Connectors → jdedwards* → fix the JDBC URL + credentials → test from the UI before retrying the job. |
 | `nomasx1-import-reference` errors with *"target application not found"*. | The target app (default `nomasx1`) isn't created in *Settings → Applications*. | Add the application from the UI first (the precheck refuses to start otherwise). |
-| Upgraded the wheel but jobs don't show the new schedules. | Nomaflow's job registry caches `jobs.toml`. | Reload the framework; the bundled `jobs.toml` is re-read at reload time. |
-| Tried to ship Nomasx-1 to a brand-new install via the Settings → Package screen instead of the wheel. | Plugin code is missing — every Python-step job fails with `No module named 'nomasx1'`. | Use the wheel for full deliveries; the Package screen is for config slices only. |
+| Upgraded the wheel but jobs don't show the new schedules. | Nomaflow caches `jobs.toml`. | `docker compose restart liberty-next` (or click *Settings → Reload*). |
+| `./apps/config/connectors.toml` overwritten on wheel upgrade. | Customer edits gone. | Pass `--force-config` ONLY when you want vendor defaults. The default behaviour preserves operator edits. |
+| `--apps URL` install fails with download error. | The wheel URL is auth-gated. | Pre-download the wheel and pass the local path: `./install-apps.sh ./liberty_apps-X.Y.Z.whl`. |
 
 ---
 
 ## What's next
 
-- [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md) — every job in `liberty-apps/plugins/nomaflow/jobs.toml`, what it does, when to run it.
+- [Nomaflow → Bundled jobs](../nomaflow/bundled-jobs.md) — every job in `liberty-apps/plugins/nomaflow/jobs.toml`, when to run, parameters.
 - [Packages](../framework/build/packages.md) — the per-slice deployment channel for screens / menu items / dashboards.
-- [Installation → Upgrading](./upgrading.md) — upgrading the Liberty framework itself (underneath the apps), including the image-tag-pinning model (`LIBERTY_IMAGE_TAG` in `.env`) the Full Docker layout relies on.
+- [Installation → Upgrading](./upgrading.md) — upgrading the Liberty framework itself (underneath the apps).
+- [Installation → Production](./production.md) — TLS + hardening on top of the install.

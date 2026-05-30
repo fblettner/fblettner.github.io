@@ -1,46 +1,82 @@
 ---
 title: Installation — overview
-description: "Stand up Liberty Next from a curated release/ directory — three Docker layouts (light SQLite trial, full 5-service production stack, Docker Swarm) all driven by ./install.sh and ./deploy-swarm.sh helpers, plus a pipx alternative for Docker-averse hosts. Image lives at ghcr.io/fblettner/liberty-next."
-keywords: [Liberty Framework, installation, deploy, server, Docker, Docker Compose, Docker Swarm, install.sh, deploy-swarm.sh, backup.sh, pipx, light, full, swarm, Traefik, Postgres, pgAdmin, Portainer, ghcr.io]
+description: "Stand up Liberty Next from the release/ directory — three Docker layouts (light SQLite, full 5-service stack, Docker Swarm), TLS overlays (Let's Encrypt or operator-provided certs), licensed-apps overlay — all driven by ./install.sh, ./install-apps.sh, ./deploy-swarm.sh and ./backup.sh. Plus a pipx alternative for hosts that don't run Docker. Image lives at ghcr.io/fblettner/liberty-next."
+keywords: [Liberty Framework, installation, deploy, install.sh, install-apps.sh, deploy-swarm.sh, backup.sh, Docker, Compose, Swarm, light, full, pipx, --tag, --reset, --apps, --ssl, letsencrypt, provided, COMPOSE_FILE, ghcr.io, Traefik, Postgres, pgAdmin, Portainer]
 ---
 
 # Installation — overview
 
-Liberty Next ships as a public OCI image (`ghcr.io/fblettner/liberty-next`) plus a [`release/`](https://github.com/fblettner/liberty-next/tree/main/release) directory in the repository that carries **three ready-to-run layouts** and **three helper scripts**. Pick a layout, run one command, you're in.
+Liberty Next ships as a public OCI image (`ghcr.io/fblettner/liberty-next`) plus a [`release/`](https://github.com/fblettner/liberty-next/tree/main/release) directory carrying **three compose files** + **two TLS overlays** + **an apps overlay** + **four helper scripts** that wire them together. Pick a layout, run one command, you're in.
 
 | Layout | Runtime | Services | Use case |
 |---|---|---|---|
-| **Light** | Docker Compose | liberty-next + SQLite (in a volume) | Local trial, single-user demo, quick eval. |
+| **Light** | Docker Compose | liberty-next + SQLite (on a volume) | Local trial, single-user demo, quick eval. |
 | **Full** | Docker Compose | liberty-next + PostgreSQL 16 + Traefik + pgAdmin + Portainer | Production / staging on a single host. |
 | **Swarm** | Docker Swarm | same five services, with `deploy.*` constraints + overlay networking | Single or multi-node swarm. |
 | **pipx** | Plain Python | liberty-next only (default SQLite, point at any DB) | Docker-averse hosts, Python-only environments. |
 
-The four are **not exclusive** — pick the one that matches your operations.
+Both **Light** and **Full** can be layered with TLS (Let's Encrypt or operator-provided certs) and with the licensed-apps overlay (Nomasx-1 / Nomajde / Nomaflow plugins). All four overlays are wired automatically by `./install.sh` flags; you never juggle `-f` flags by hand.
 
 ---
 
-## The 90-second install
+## The 60-second install
 
 ```bash
 git clone https://github.com/fblettner/liberty-next.git
 cd liberty-next/release
 
-./install.sh            # interactive — asks light vs full
-# OR
-./install.sh light      # single container, SQLite
-./install.sh full       # 5-service production stack
+./install.sh                                  # interactive — asks light vs full
+# OR — non-interactive
+./install.sh light                            # single container, SQLite
+./install.sh full                             # 5-service production stack (latest tag)
+./install.sh full --tag 7.0.2                 # full stack, pinned to a specific release
 ```
 
-What `install.sh` does:
+What `install.sh` does on the first run:
 
 | Step | What |
 |---|---|
-| Generates `.env` with cryptographically-random secrets (none contain `$` so Docker Compose substitution never eats them). | First run only — re-runs preserve an existing `.env`. |
-| Pulls the image(s) and runs `docker compose up -d` against the chosen layout. | Idempotent — re-running `install.sh` against an up stack just re-applies the compose file. |
-| Waits up to 120 s for liberty-next's container healthcheck (`GET /info`) to report healthy. | If it doesn't, prints how to read the logs. |
-| Prints the generated `admin` password + the URLs to reach the SPA / pgAdmin / Portainer / Traefik dashboard. | Read once — the password is also in `.env` (mode 0600) for later reference. |
+| 1. Detects stale Docker volumes from a previous install. | If `pg-data` / `pgadmin-data` / `liberty-data` exist but `.env` is missing, the script REFUSES to start and tells the operator to re-run with `--reset` (wipe + start fresh) or restore the previous `.env` (the secrets baked into the volumes must match). |
+| 2. Generates `.env` with cryptographically-random secrets (no `$` chars — Compose substitution can't eat them). | First run only — re-runs preserve an existing `.env`. |
+| 3. Writes `COMPOSE_FILE=docker-compose.<layout>.yml[:overlays...]` to `.env`. | Every subsequent `docker compose <cmd>` (without `-f`) auto-merges the right files. **Critical** — operators must NOT pass `-f` manually after install. |
+| 4. Pulls images via `docker compose pull` and runs `docker compose up -d`. | Idempotent — re-running against an up stack just re-applies the compose file. |
+| 5. Waits up to 120 s for the container healthcheck (`GET /info`). | Reports `healthy` once the SPA + API are ready. |
+| 6. Prints the SPA URL + the generated `admin` password + the pgAdmin / Portainer / Traefik dashboard URLs. | The password is also in `.env` (mode `0600`). |
 
-For Docker Swarm, the equivalent helper is `./deploy-swarm.sh` (covered in [Docker](./docker.md#swarm)).
+For Docker Swarm, the equivalent helper is `./deploy-swarm.sh` (covered in [Docker → Swarm](./docker.md#swarm)).
+
+---
+
+## The four install.sh flags worth knowing
+
+| Flag | Purpose |
+|---|---|
+| **`--tag <version>`** | Pin `LIBERTY_IMAGE_TAG` at install time (e.g. `--tag 7.0.2`). Default `latest` (every merge to main → new release; `latest` always reflects current main). Ignored when `.env` already exists — edit the var directly there. |
+| **`--reset`** | `docker compose down -v` + delete `.env` first. Use when a previous install left stale `pg-data` with the old password (postgres init only runs on a brand-new volume — fresh secrets + stale volume = auth-fails-forever). |
+| **`--apps <wheel-or-URL>`** | After bringing up the base stack, chain to `install-apps.sh` with the given wheel — licensed apps (Nomasx-1 / Nomajde / Nomaflow) deploy in the same command. Combine with `--license-key <jwt>`. |
+| **`--ssl letsencrypt --domain --email`** *(full only)* | Wire Let's Encrypt automatically. Requires the host be reachable from the public internet on `:80`/`:443` for the TLS-ALPN challenge. |
+| **`--ssl provided --cert-dir --cert-file --key-file`** *(full only)* | Wire operator-provided certs (corporate CA, internal PKI, air-gapped install). `install.sh` validates the files exist, bind-mounts the cert directory, generates `traefik/dynamic/tls.yml`. |
+
+All five compose together — `./install.sh full --tag 7.0.2 --ssl letsencrypt --domain liberty.example.com --email ops@example.com --apps ./liberty_apps-7.0.1-py3-none-any.whl --license-key <jwt>` is a single-command production install with TLS + the licensed bundle.
+
+---
+
+## The COMPOSE_FILE mental model
+
+After `./install.sh full --ssl letsencrypt --apps <wheel>`, `.env` carries:
+
+```env title=".env (excerpt)"
+COMPOSE_FILE=docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml
+```
+
+Docker Compose reads `COMPOSE_FILE` for every command — `docker compose ps` / `pull` / `up -d` / `down` / `logs` / `restart` automatically merge **every overlay listed**. The operator never types `-f`.
+
+| Do | Don't |
+|---|---|
+| `docker compose pull && docker compose up -d` *(picks up every overlay)* | `docker compose -f docker-compose.full.yml up -d` *(drops the apps + TLS overlays)* |
+| `docker compose logs -f liberty-next` *(merged context)* | `docker compose -f docker-compose.full.yml logs -f` *(no overlays)* |
+
+`install-apps.sh` and the `--ssl` flag both **append** to `COMPOSE_FILE` — re-running `install.sh` with a new `--ssl` mode (or chaining `install-apps.sh`) updates the value cleanly. Manual edits to `.env` are also fine; the chain is colon-separated, order matters (overlays apply right-to-left).
 
 ---
 
@@ -53,30 +89,26 @@ What you get:
 - One container (`liberty-next`) on port `8000`.
 - SQLite framework DB (auth + Nomaflow run history) persisted on a Docker volume.
 - Operator-edited TOML files persisted on a second volume — saved through *Settings → …* in the SPA; no host bind-mount needed.
-- **No** Postgres, **no** Traefik, **no** TLS — just the framework exposed directly on `:8000`.
+- **No** Postgres, **no** Traefik, **no** TLS — the framework is exposed directly on `:8000`.
 
-Use for:
-
-- Trying the framework locally / on a single VPS.
-- Demo + evaluation environments.
-- A connector-only install (the licensed apps — Nomasx-1 / Nomajde — need Postgres, so use full for those).
+Use for trials, demos, evaluation, single-user installs. The licensed apps (Nomasx-1 / Nomajde) work on Light too if you don't need a multi-user Postgres — `./install.sh light --apps <wheel>` is supported.
 
 Volumes:
 
 | Volume | Carries |
 |---|---|
 | `liberty-data` | SQLite DB + `auth.toml` (Argon2 password hashes). |
-| `liberty-config` | Every TOML file the operator edits (connectors / dictionary / menus / screens / charts / dashboards). |
+| `liberty-config` | Every TOML the operator edits (connectors / dictionary / menus / screens / charts / dashboards). |
 
 ### Full — production stack behind Traefik
 
-Five services, all on the host's port `80` (or `443` with TLS):
+Five services on the host's port `80` (or `443` once TLS is wired):
 
 | Service | Path | What |
 |---|---|---|
-| **Traefik** | `/traefik` | Reverse proxy + dashboard. Basic-auth (default `admin/admin` — **change it** in `traefik/dynamic/dynamic.yml`). |
+| **Traefik** | `/traefik` | Reverse proxy + dashboard. Basic-auth (default `admin/admin` — **change in `traefik/dynamic/dynamic.yml`**). |
 | **liberty-next** | `/` (catchall) | SPA + API + admin. Connects to the bundled Postgres for the framework DB. |
-| **Postgres 16** | (internal) | Framework DB (auth, Nomaflow run history) + a place to host customer pools (Nomasx-1 / Nomajde data, etc.). |
+| **Postgres 16** | (internal `:5432`, exposed by default) | Framework DB (auth, Nomaflow run history) + a place to host customer pools (Nomasx-1 / Nomajde data). |
 | **pgAdmin** | `/pgadmin` | Postgres GUI. |
 | **Portainer** | `/portainer` | Docker UI. |
 
@@ -86,24 +118,48 @@ Volumes:
 |---|---|
 | `liberty-config` | Operator-edited TOMLs. |
 | `pg-data` | Postgres database files. |
-| `pg-logs` | Rotated Postgres log files. |
 | `pgadmin-data` | pgAdmin registrations + preferences. |
 | `portainer-data` | Portainer state. |
-| `traefik-acme` | Let's Encrypt certificate storage (when TLS is wired). |
+| `traefik-acme` | Let's Encrypt certificate storage (when TLS Let's Encrypt is on). |
 
-This is the layout licensed bundles (Nomasx-1, Nomajde, NomaUBL) deploy against — the bundled Postgres is what their `default` pool uses. See [Deploy prebuilt apps](./deploy-prebuilt-apps.md).
+This is the layout the licensed bundles (Nomasx-1, Nomajde) deploy against — the bundled Postgres hosts their default pool. See [Deploy prebuilt apps](./deploy-prebuilt-apps.md).
 
 ### Swarm — Docker Swarm, single or multi-node
 
-Same five services, but adapted for Swarm's runtime model:
+Same five services, but with `deploy.*` keys, overlay networking, Traefik's `--providers.swarm` and stateful services pinned to a single manager. Deploy / update / status with `./deploy-swarm.sh` — `docker stack deploy` has no `--env-file` flag, so the helper sources `.env` into the shell first.
 
-- `deploy.*` keys instead of `restart: unless-stopped`.
-- Overlay networking (single- AND multi-node ready).
-- Traefik uses `--providers.swarm` (the swarm-aware variant).
-- Stateful services pinned to a single manager via placement constraints.
-- liberty-next defaults to `replicas: 1` — bump only after wiring a shared Socket.IO backplane (Redis adapter).
+Note: the `--apps` and `--ssl` flags on `install.sh` are **Compose-only** — Swarm operators apply overlays by editing the stack file or by chaining a separate `docker stack deploy` with the overlay merged in.
 
-Deploy / update / status with `./deploy-swarm.sh` — `docker stack deploy` has no `--env-file` flag, so the helper sources `.env` into the shell first then runs the stack deploy.
+---
+
+## The licensed-apps overlay
+
+Nomasx-1, Nomajde and the bundled Nomaflow jobs ship as a single **`liberty_apps-<version>-py3-none-any.whl`** wheel. Two install paths:
+
+### Single-command (fresh host)
+
+```bash
+./install.sh full \
+    --apps ./liberty_apps-7.0.1-py3-none-any.whl \
+    --license-key <your-rs256-jwt>
+```
+
+That's everything — base stack + licensed apps + license key in one go.
+
+### Or split it: base first, apps later
+
+```bash
+./install.sh full                                                            # base stack
+./install-apps.sh ./liberty_apps-7.0.1-py3-none-any.whl --license-key <jwt>  # add the apps
+```
+
+What `install-apps.sh` does:
+
+1. **Materializes the wheel** into `./apps/` via a throwaway `python:3.12-slim` container — your host needs **no** local pip or Python install. The wheel ships with a `liberty-apps install --target DIR` CLI that copies `config/` + `plugins/` into the destination, preserving operator-edited TOMLs.
+2. **Updates `.env`** — appends `docker-compose.apps.yml` to `COMPOSE_FILE`, sets `APPS_HOST_PATH=<absolute path>` and `LIBERTY_LICENSE_KEY=<jwt>` (if passed).
+3. **Restarts the stack** — `docker compose up -d` picks up the apps overlay automatically via `COMPOSE_FILE` (no `-f` juggling).
+
+Full detail: [Deploy prebuilt apps](./deploy-prebuilt-apps.md).
 
 ---
 
@@ -124,12 +180,12 @@ You'll point `LIBERTY_DB_URL` at an existing Postgres (or stick with the default
 
 ## At a glance
 
-<svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <linearGradient id="io-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
   </defs>
-  <rect x="20" y="20" width="960" height="340" rx="14" fill="url(#io-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Liberty Next — four deployment shapes</text>
+  <rect x="20" y="20" width="960" height="360" rx="14" fill="url(#io-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="40" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Liberty Next — install.sh composes everything via COMPOSE_FILE</text>
   <line x1="20" y1="62" x2="980" y2="62" stroke="#1f2937" strokeWidth="1"/>
 
   <rect x="40" y="84" width="220" height="240" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
@@ -171,34 +227,37 @@ You'll point `LIBERTY_DB_URL` at an existing Postgres (or stick with the default
   <text x="848" y="202" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">liberty-admin / -license</text>
   <text x="848" y="232" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Docker-averse hosts</text>
   <text x="848" y="246" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Python-only environments</text>
+
+  <rect x="40" y="338" width="920" height="32" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937"/>
+  <text x="500" y="358" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">install.sh --ssl letsencrypt|provided  +  --apps &lt;wheel&gt; --license-key &lt;jwt&gt;  →  composes overlays into COMPOSE_FILE</text>
 </svg>
 
 ---
 
 ## Required environment variables
 
-Two values are **required** regardless of layout — the rest have sensible defaults.
+Two values are **required** regardless of layout — `install.sh` generates both with `openssl rand`. When using pipx or rolling your own compose, generate them yourself.
 
 | Variable | Why | How to generate |
 |---|---|---|
 | **`LIBERTY_JWT_SECRET`** | Signs every access + refresh token. Must be stable across restarts — a rotated key invalidates every outstanding token (forces every user to re-sign-in). | `python -c "import secrets;print(secrets.token_urlsafe(48))"` |
-| **`LIBERTY_MASTER_KEY`** | Field-level encryption key — encrypts secrets (pool passwords, API tokens) at rest in the TOMLs. Must be the same value across restarts or `ENC:` values become unreadable. | `python -c "import secrets;print(secrets.token_urlsafe(32))"` |
+| **`LIBERTY_MASTER_KEY`** | Field-level encryption key — encrypts secrets (pool passwords, API tokens) at rest in the TOMLs. Must stay constant or `ENC:` values become unreadable. | `python -c "import secrets;print(secrets.token_urlsafe(32))"` |
 
-`install.sh` generates both with `openssl rand` (no `$` chars, no compose-substitution footguns). When using pipx or rolling your own compose, generate them yourself.
-
-Common optional vars:
+Common optional vars (the full list is in `release/.env.example`):
 
 | Variable | Default | What |
 |---|---|---|
-| `LIBERTY_IMAGE_TAG` | `latest` | Pin to a specific release tag for stability (`0.2.0`, `edge`, etc.). |
+| `LIBERTY_IMAGE_TAG` | `latest` | Pin to a specific release tag for stability (`7.0.1`, `7.0.2`, etc.). Use `./install.sh --tag <ver>` to set it at install time. |
 | `LIBERTY_ADMIN_PASSWORD` | (generated + printed once) | Bootstrap password for the first-run `admin` user. |
-| `LIBERTY_LICENSE_KEY` | (none — `restricted` mode) | RS256 JWT unlocking the licensed connectors (Nomasx-1 / Nomajde / Nomaflow premium). |
+| `LIBERTY_LICENSE_KEY` | (none — `restricted` mode) | RS256 JWT unlocking the licensed connectors. |
 | `ANTHROPIC_API_KEY` | (none — AI assistant disabled) | Enables the in-app AI assistant chat. |
 | `LIBERTY_OIDC_ENABLED` | `false` | Set to `true` + fill OIDC provider details for SSO. |
 | `POSTGRES_PASSWORD` | (generated) | Full layout only — bundled Postgres password. |
 | `PGADMIN_PASSWORD` | (generated) | Full layout only — pgAdmin admin password. |
-
-Full reference: `release/.env.example`.
+| `APPS_HOST_PATH` | (set by `install-apps.sh`) | Absolute path to the materialized `./apps/` directory. The apps overlay bind-mounts this at `/apps:ro`. |
+| `COMPOSE_FILE` | (set by `install.sh` + `install-apps.sh`) | Colon-separated chain of compose files Docker Compose auto-merges. |
+| `LIBERTY_DOMAIN`, `ACME_EMAIL` | (set by `--ssl letsencrypt`) | TLS hostname + ACME contact. |
+| `CERT_HOST_PATH` | (set by `--ssl provided`) | Host directory bind-mounted at `/etc/certs:ro` for operator certs. |
 
 :::info[A note on `$` in passwords]
 Docker Compose performs `${VAR}` substitution on every value in `.env` too — a literal `$` in a password gets eaten (e.g. `POSTGRES_PASSWORD=foo$bar` becomes `foo` because Compose tries to expand `$bar`). Either generate passwords without `$` (recommended — `install.sh` does this), or escape every `$` as `$$`.
@@ -212,9 +271,9 @@ Docker Compose performs `${VAR}` substitution on every value in `.env` too — a
 |---|---|
 | **0** | This overview. |
 | **1** | Pick a path: [Docker](./docker.md) (covers all three Docker layouts) or [Python server](./python-server.md) (pipx). |
-| **2** | Wire TLS + the friendly hostname: [Traefik](./traefik.md). |
-| **3** | Use the bundled visual tools: [Portainer](./portainer.md). |
-| **4** | Production hardening — OIDC, JWT rotation, scheduler pin: [Production](./production.md). |
+| **2** | Wire TLS — [Traefik](./traefik.md) walks the two `--ssl` modes (Let's Encrypt and operator-provided). |
+| **3** | Use the bundled visual tools — [Portainer + pgAdmin](./portainer.md). |
+| **4** | Production hardening — OIDC, JWT rotation, backups, multi-replica caveats: [Production](./production.md). |
 | **5** | Deploy NomaUBL / Nomasx-1 / Nomajde on top: [Deploy prebuilt apps](./deploy-prebuilt-apps.md). |
 | **6** | When a new release ships: [Upgrading](./upgrading.md). |
 
@@ -235,6 +294,6 @@ If any of those don't hold, jump to the path's troubleshooting section.
 
 ## What's next
 
-- [Docker](./docker.md) — the three Docker layouts in detail, with the helper-script walk-throughs.
+- [Docker](./docker.md) — the three Docker layouts in detail, with the helper-script walk-throughs and the COMPOSE_FILE discipline.
 - [Python server](./python-server.md) — pipx-based install for Docker-averse hosts.
 - [Production](./production.md) — TLS, backups, hardening.
