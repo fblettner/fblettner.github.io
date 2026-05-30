@@ -335,5 +335,5 @@ Une règle d'alerte typique : `liberty.jobs.*` au niveau `ERROR` → réveiller 
 
 - [Mise à jour](./upgrading.md) — passer d'une version du framework à la suivante.
 - [Configuration → Variables d'environnement](../configuration/environment-variables.md) — le contrat complet d'environnement référencé par chaque forme de déploiement ci-dessus.
-- [Authentification → Clé de licence](../auth/license-key.md) — `LIBERTY_LICENSE_KEY` dans l'environnement de production.
-- [Jobs → Vue d'ensemble](../jobs/overview.md) — topologie du scheduler, verrou consultatif.
+- [Authentification → Clé de licence](../build/secure/license-key.md) — `LIBERTY_LICENSE_KEY` dans l'environnement de production.
+- [Jobs → Vue d'ensemble](../../nomaflow/overview.md) — topologie du scheduler, verrou consultatif.

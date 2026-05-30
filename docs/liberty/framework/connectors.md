@@ -112,7 +112,7 @@ Toolbar filters narrow the list by *App* and *Type*. **+ New connector** opens t
 |---|---|
 | **connected** | The live probe to the pool / base URL succeeded within the last 30 seconds. |
 | **offline** | The probe failed. The connector still appears, but every query against it will fail until the source comes back. |
-| **licensed** *(badge)* | Marked with `Licensed = true`. Only loads when the [license key](./auth/license-key.md) carries it. |
+| **licensed** *(badge)* | Marked with `Licensed = true`. Only loads when the [license key](./build/secure/license-key.md) carries it. |
 
 ---
 
@@ -172,7 +172,7 @@ Clicking a row opens a three-tab editor on the right. The tabs are the same for 
 | **Type** | `SQL` here. Changing the type re-shapes the form. |
 | **Pool** | Dropdown of pools defined under *Settings → Pools*. The connector inherits the pool's URL, credentials and dialect. |
 | **Description** | Free text. Shown on the catalogue, as the tooltip on screens that pick this connector, and — crucially — in the **AI assistant tool description**. A two-sentence summary in the user's language goes a long way. |
-| **Licensed** | When *on*, the connector loads only when the [license key](./auth/license-key.md) lists its identifier. Used by Nomana-IT to gate vendor connectors; customer connectors leave it off. |
+| **Licensed** | When *on*, the connector loads only when the [license key](./build/secure/license-key.md) lists its identifier. Used by Nomana-IT to gate vendor connectors; customer connectors leave it off. |
 | **Expose to AI assistant** | When *on*, the connector's read queries become tools the AI assistant can pick. Write queries are excluded by default. See [AI assistant](./ai-assistant.md). |
 
 The **Test connection** button (top right) hits the pool with a `SELECT 1` and reports success / failure inline — useful to confirm the pool is reachable before adding queries.
@@ -189,7 +189,7 @@ Clicking *+ Add query* or an existing row opens the query editor:
 | **SQL** | The query body. A Monaco editor with SQL syntax highlighting, schema-aware autocomplete (column names from the pool), and parameter highlighting (`:name` placeholders). |
 | **Dialect overrides** | Optional per-dialect variants (`oracle`, `postgresql`, `sqlite`) for cases where the canonical `SELECT` doesn't translate. The framework picks the right one based on the pool's dialect. |
 | **Description** | Two-sentence summary. Shown on the screen builder pickers and in the AI assistant tool description. |
-| **Parameters** | Sub-table — see [Parameter binding](./query-params-binding.md) for every field. |
+| **Parameters** | Sub-table — see [Parameter binding](./build/queries/parameter-binding.md) for every field. |
 | **Column hints** | Optional sub-table. Each row binds a result column to a dictionary entry: *Column* (dropdown of columns the *Test* button discovered) + *Dictionary* (dropdown of dictionary entries). Drives labels, formats, enums, lookups. Columns without a hint fall back to the column name as the label. |
 
 The **▶ Test** button at the top of the editor runs the query against the live pool with placeholder values for the parameters and shows the first 50 rows. The first successful test populates the *Column hints* dropdown with the discovered columns; subsequent tests refresh it.
@@ -223,7 +223,7 @@ The endpoints sub-table replaces the SQL queries:
 | **Method** | `GET` / `POST` / `PUT` / `PATCH` / `DELETE`. |
 | **Path** | Path appended to the base URL. Supports `:name` placeholders bound from parameters. |
 | **Body template** | For non-`GET` methods, a JSON template. Supports `${name}` substitution from parameters. |
-| **Parameters** | Same shape as for SQL — see [Parameter binding](./query-params-binding.md). |
+| **Parameters** | Same shape as for SQL — see [Parameter binding](./build/queries/parameter-binding.md). |
 | **Response shape** | Auto-detected when the *Test* button is used; the operator can refine the discovered shape (rename keys, group nested fields) to align it with what consumers expect. |
 
 The **▶ Test** button issues the call live with the configured authentication and parameter defaults; the response body is shown formatted, with the discovered shape surfaced as chips below.
@@ -265,7 +265,7 @@ Every connector generates a **permission code per query / endpoint**:
 | `sql:<connector>:<query>:write` | Run the write query. |
 | `api:<connector>:<endpoint>` | Call the HTTP endpoint. |
 
-The codes appear on the *Permissions* tab of the connector editor and in the **Permission picker** of [Settings → Roles](./auth/roles-permissions.md). Wildcards `sql:billing:*` and `api:crm:*` are supported.
+The codes appear on the *Permissions* tab of the connector editor and in the **Permission picker** of [Settings → Roles](./build/secure/roles-and-permissions.md). Wildcards `sql:billing:*` and `api:crm:*` are supported.
 
 The connector itself isn't gated — what's gated is each call. A user with no permissions sees no queries; a user with `sql:billing:*` sees every read + write of the billing connector.
 
@@ -299,7 +299,7 @@ For CI scripts and external orchestrators, the same surface is reachable via RES
 ## What's next
 
 - [Dictionary](./dictionary.md) — per-column metadata: labels, formats, enums, lookups.
-- [Parameter binding](./query-params-binding.md) — declared parameters, defaults, cascading filters.
-- [Screens](./screens.md) — turn a connector into a grid + edit dialog.
+- [Parameter binding](./build/queries/parameter-binding.md) — declared parameters, defaults, cascading filters.
+- [Screens](./build/screens/overview.md) — turn a connector into a grid + edit dialog.
 - [Charts](./charts.md) — wrap a query into a visualisation.
 - [Encryption & secrets](./configuration/encryption-secrets.md) — the 🔒 toggle on passwords / tokens.

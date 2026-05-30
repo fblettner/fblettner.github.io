@@ -169,4 +169,4 @@ The `liberty-crypto` CLI is the only scripted path for advanced operations (rewr
 - [Environment variables](./environment-variables.md) — including the master key env var.
 - [Framework settings](./app-toml.md) — the *Encryption* sub-section.
 - [CLI reference → liberty-crypto](../cli-reference.md#liberty-crypto) — every subcommand.
-- [Authentication](../auth/authentication.md) — where the OIDC client secret lives.
+- [Authentication](../build/secure/sign-in.md) — where the OIDC client secret lives.

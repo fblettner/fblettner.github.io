@@ -202,4 +202,4 @@ A user sees only the parts of the menu they can actually use — no greyed-out i
 ## What's next
 
 - [Make a connector an app](./make-connector-an-app.md) — wire `show_in_switcher`, `home` and the menu.
-- [Concepts → Menus](../../menus.md) — the deep reference.
+- [Concepts → Menus](./overview.md) — the deep reference.

@@ -79,7 +79,7 @@ La commande demande un mot de passe et crée un superutilisateur. Se connecter u
 
 ---
 
-## Étape 2 — Configurer l'OIDC (optionnel)
+## Étape 2 — Configurer l'OIDC (optionnel) \{#oidc\}
 
 L'OIDC se superpose au backend choisi. N'importe quel fournisseur conforme OIDC fonctionne — Liberty découvre les endpoints, les JWKS et les scopes pris en charge depuis le `.well-known/openid-configuration` du fournisseur.
 
@@ -226,4 +226,4 @@ Pour les installations OIDC qui souhaitent une **déconnexion côté fournisseur
 
 - [Utilisateurs](./users.md) — ajouter des utilisateurs locaux, gérer les utilisateurs OIDC après la première connexion, attribuer des rôles.
 - [Rôles et permissions](./roles-and-permissions.md) — ce qu'il faut attribuer une fois l'utilisateur connecté.
-- [Concepts → Authentification](../../auth/authentication.md) — la référence détaillée.
+- [Concepts → Authentification](./sign-in.md) — la référence détaillée.

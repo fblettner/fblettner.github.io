@@ -259,4 +259,4 @@ L'onglet Actions modifie les listes `actions` / `row_menu` / `on_*` de l'écran 
 
 - [Onglets imbriqués](./nested-tabs.md) — intégrer un formulaire d'enregistrement enfant ou une grille de lignes liées.
 - [Liaison de paramètres](../queries/parameter-binding.md) — la référence complète des ParamBind.
-- [Concepts → Écrans](../../screens.md) — référence approfondie pour les types d'action et le cycle de vie.
+- [Concepts → Écrans](./overview.md) — référence approfondie pour les types d'action et le cycle de vie.

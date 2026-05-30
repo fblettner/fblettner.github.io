@@ -88,7 +88,7 @@ The expression language is small and safe — comparable to a SQL `WHERE` clause
 | **Null check** | `discount_pct == null` / `discount_pct != null`. |
 | **String predicates** | `name.startsWith('FR-')`, `name.endsWith('.pdf')`, `name.includes('test')`. |
 | **Length** | `tags.length > 0` (for *Multiple* fields). |
-| **Session context** | `session.user`, `session.lang`, `session.roles` — the same triple available to queries (see [Parameter binding → Session context](./query-params-binding.md#session-context)). `session.roles` is an array — `'admin' in session.roles`. |
+| **Session context** | `session.user`, `session.lang`, `session.roles` — the same triple available to queries (see [Parameter binding → Session context](./build/queries/parameter-binding.md)). `session.roles` is an array — `'admin' in session.roles`. |
 
 The language has **no function calls beyond the listed predicates** and no arithmetic operators other than comparison. The intent is "boolean expression over form state", not a scripting language.
 
@@ -165,6 +165,6 @@ Conditions are stored as expression strings on each field of the screen entry. O
 
 ## What's next
 
-- [Concepts → Screens](./screens.md) — where the field editor lives, and the other field properties.
+- [Concepts → Screens](./build/screens/overview.md) — where the field editor lives, and the other field properties.
 - [Concepts → Dictionary](./dictionary.md) — shared validation rules that combine with these conditions.
-- [Parameter binding](./query-params-binding.md) — how the dialog values flow into the connector on save.
+- [Parameter binding](./build/queries/parameter-binding.md) — how the dialog values flow into the connector on save.

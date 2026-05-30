@@ -148,7 +148,7 @@ The Nomana-IT vendor app [Nomasx-1](https://docs.nomana-it.fr/liberty/nomasx-1/o
 
 ## 4. Integration glue
 
-The framework's [Jobs / Nomaflow](./jobs/overview.md) engine + HTTP connectors + scheduled triggers cover the "integration platform" need without a separate tool.
+The framework's [Jobs / Nomaflow](../nomaflow/overview.md) engine + HTTP connectors + scheduled triggers cover the "integration platform" need without a separate tool.
 
 ### What the framework does for you
 
@@ -208,7 +208,7 @@ The roles + OIDC parts are in [Tutorial — CRM → Step 5 "Roles and SSO"](./tu
 
 ## 6. Workflow orchestration
 
-The combination of [screens](./screens.md) + [form conditions](./form-conditions.md) + [jobs](./jobs/overview.md) covers most state-machine workflows — approve / reject, escalate, route to the right team.
+The combination of [screens](./build/screens/overview.md) + [form conditions](./form-conditions.md) + [jobs](../nomaflow/overview.md) covers most state-machine workflows — approve / reject, escalate, route to the right team.
 
 ### What the framework does for you
 
@@ -258,7 +258,7 @@ For teams that ingest data from multiple sources into a warehouse, Nomaflow + th
 
 ### Walkthrough
 
-[Cookbook → Bulk import](./cookbook/bulk-import.md) covers the inbound side; the [Jobs documentation](./jobs/overview.md) covers the orchestration.
+[Cookbook → Bulk import](./cookbook/bulk-import.md) covers the inbound side; the [Jobs documentation](../nomaflow/overview.md) covers the orchestration.
 
 ---
 

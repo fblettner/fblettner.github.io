@@ -75,11 +75,11 @@ Everything the framework does is composed from five concepts:
 |---|---|---|
 | **[Pool](./getting-started/installation.md)** | A connection to a database (a SQLAlchemy URL + credentials). | "How do I reach this data?" |
 | **[Connector](./connectors.md)** | A named set of queries / endpoints on top of a pool. | "What questions do I want to ask this data source?" |
-| **[Screen](./screens.md)** | A grid + edit dialog over a connector's queries. | "How do I let a person look at this and edit it?" |
+| **[Screen](./build/screens/overview.md)** | A grid + edit dialog over a connector's queries. | "How do I let a person look at this and edit it?" |
 | **[Dashboard](./dashboards.md)** | A layout of KPIs and charts over the same queries. | "How do I summarise this for someone who just wants the headline?" |
-| **[Menu](./menus.md)** | The sidebar tree that organises screens and dashboards into an app. | "How do I make this navigable?" |
+| **[Menu](./build/menus/overview.md)** | The sidebar tree that organises screens and dashboards into an app. | "How do I make this navigable?" |
 
-Around those five sit the supporting layers: the [dictionary](./dictionary.md) for labels and formats, [authentication & roles](./auth/authentication.md) for who-sees-what, [jobs](./jobs/overview.md) for scheduled work, [AI assistant](./ai-assistant.md) for natural-language access, [plugins](./apps/plugins.md) for custom Python.
+Around those five sit the supporting layers: the [dictionary](./dictionary.md) for labels and formats, [authentication & roles](./build/secure/sign-in.md) for who-sees-what, [jobs](../nomaflow/overview.md) for scheduled work, [AI assistant](./ai-assistant.md) for natural-language access, [plugins](./apps/plugins.md) for custom Python.
 
 Every concept page on this site opens with **what it is, why it exists, when you create one, how it fits with the others**. Once you've read those five, the framework's surface is essentially mapped.
 
@@ -113,9 +113,9 @@ If you're the type who reads documentation top-to-bottom, the **[Getting Started
 | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) | End-to-end CRM walkthrough. |
 | [Configuration](./configuration/settings-ui.md) | Settings UI, framework settings, environment variables, hot-reload, encrypted secrets. |
 | [Concepts](./connectors.md) | The five framework primitives + parameter binding and form conditions, each with a "What / Why / When" intro. |
-| [Authentication](./auth/authentication.md) | Local users, OIDC, JWT, roles, permissions, license keys. |
+| [Authentication](./build/secure/sign-in.md) | Local users, OIDC, JWT, roles, permissions, license keys. |
 | [Apps & Plugins](./apps/overview.md) | Multi-app organisation, custom Python plugins, internationalisation. |
-| [Jobs — Nomaflow](./jobs/overview.md) | Scheduled work, ETL pipelines, step types, run history. |
+| [Jobs — Nomaflow](../nomaflow/overview.md) | Scheduled work, ETL pipelines, step types, run history. |
 | [AI Assistant](./ai-assistant.md) | The tool-use assistant, how it surfaces connector queries. |
 | [Cookbook](./cookbook/crud-existing-table.md) | Short recipes for common patterns — Excel export, file upload, OIDC, audit trail, etc. |
 | [CLI reference](./cli-reference.md) | `liberty-admin`, `liberty-connectors`, `liberty-crypto`, `liberty-license`. |

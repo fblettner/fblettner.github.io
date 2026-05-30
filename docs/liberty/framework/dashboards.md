@@ -249,6 +249,6 @@ Dashboard definitions are stored in `liberty-apps/config/dashboards.toml` and th
 ## What's next
 
 - [Charts](./charts.md) — the chart definitions a Chart panel references.
-- [Screens](./screens.md) — the screens a drill-down opens.
-- [Parameter binding](./query-params-binding.md) — how the shared filter bar feeds every panel.
-- [Menus](./menus.md) — wire the dashboard into the sidebar.
+- [Screens](./build/screens/overview.md) — the screens a drill-down opens.
+- [Parameter binding](./build/queries/parameter-binding.md) — how the shared filter bar feeds every panel.
+- [Menus](./build/menus/overview.md) — wire the dashboard into the sidebar.

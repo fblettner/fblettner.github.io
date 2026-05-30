@@ -94,6 +94,6 @@ Cliquez sur **▶ Exécuter maintenant** dans le constructeur de job pour vérif
 
 ## Pour aller plus loin
 
-- [Jobs — Nomaflow → Vue d'ensemble](../jobs/overview.md) pour le modèle de planification.
+- [Jobs — Nomaflow → Vue d'ensemble](../../nomaflow/overview.md) pour le modèle de planification.
 - [Référence API REST → screens export](../rest-api.md) pour le contrat de l'endpoint.
 - [Cookbook → Rapport planifié par email](./scheduled-report-email.md) pour la variante job récurrent.

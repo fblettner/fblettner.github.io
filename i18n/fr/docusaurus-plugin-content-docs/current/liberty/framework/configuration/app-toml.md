@@ -105,7 +105,7 @@ Un interrupteur en haut de la sous-section active le SSO OIDC ; le formulaire en
 | **Claim groupes** | Claim JWT utilisé pour faire correspondre les groupes IdP aux rôles Liberty. Défaut `groups`. |
 | **Auto-provisionnement** | Quand activé, un utilisateur Liberty est créé à la première connexion OIDC. Sinon, l'utilisateur doit déjà exister. |
 
-[Authentification](../auth/authentication.md) parcourt le flux OIDC complet avec des notes propres à chaque IdP (Authentik, Keycloak, Azure AD, Okta, Google).
+[Authentification](../build/secure/sign-in.md) parcourt le flux OIDC complet avec des notes propres à chaque IdP (Authentik, Keycloak, Azure AD, Okta, Google).
 
 ---
 
@@ -141,7 +141,7 @@ Voir [Chiffrement et secrets](./encryption-secrets.md) pour la procédure de rot
 | **Clé de licence** | Référence à la variable d'environnement qui contient le JWT de licence signé en RS256. Défaut `${LIBERTY_LICENSE_KEY}`. Pilote les verrous de fonctionnalités sur les connecteurs marqués *Licensed*. |
 | **Chemin de la clé publique** | Remplacement optionnel pour la clé publique embarquée. Utile quand l'installation s'exécute avec une autorité de signature privée. |
 
-La page [Paramètres → Licence](../auth/license-key.md) affiche l'état courant (acceptée / refusée / non configurée), le nom du client, la date d'expiration et la liste des fonctionnalités déverrouillées.
+La page [Paramètres → Licence](../build/secure/license-key.md) affiche l'état courant (acceptée / refusée / non configurée), le nom du client, la date d'expiration et la liste des fonctionnalités déverrouillées.
 
 ---
 
@@ -177,5 +177,5 @@ Pour les scripts d'ops et les pipelines CI qui doivent piloter le framework sans
 
 - [Variables d'environnement](./environment-variables.md) — chaque référence `${LIBERTY_*}` résolue au démarrage.
 - [Chiffrement et secrets](./encryption-secrets.md) — l'interrupteur du cadenas et la procédure de rotation.
-- [Authentification](../auth/authentication.md) — ce que chaque backend change.
+- [Authentification](../build/secure/sign-in.md) — ce que chaque backend change.
 - [Rechargement à chaud](./hot-reload.md) — ce qui se recharge à chaud et ce qui demande un redémarrage.

@@ -182,7 +182,7 @@ Une recherche est une **requête nommée qui retourne des lignes `{ valeur, libe
 | **Colonne valeur** | Colonne du résultat qui porte la valeur enregistrée (ce que la base stocke sur chaque ligne). |
 | **Colonne libellé** | Colonne du résultat qui porte le libellé d'affichage. Localisée par le dictionnaire quand la requête joint une table de traductions. |
 | **Colonne couleur** | Optionnel. Pilote la couleur de fond du chip dans les grilles. |
-| **Filtrer depuis** | Dépendances optionnelles — voir [filtres en cascade](./query-params-binding.md#cascading-filters). |
+| **Filtrer depuis** | Dépendances optionnelles — voir [filtres en cascade](./build/queries/parameter-binding.md). |
 | **Cache** | `Aucun` / `Par session` / `Par requête`. Pilote l'agressivité de la mise en cache de la recherche. Par défaut *Par session*. |
 
 Un bouton *Tester* en haut exécute la requête sous-jacente et affiche les paires `{ valeur, libellé }` résolues — utile pour confirmer que les colonnes sont bien alignées.
@@ -252,6 +252,6 @@ Les définitions du dictionnaire sont enregistrées dans `liberty-apps/config/di
 ## Pour aller plus loin
 
 - [Connecteurs](./connectors.md) — où les indices de colonnes lient une colonne SQL découverte à une entrée de dictionnaire.
-- [Écrans](./screens.md) — comment les métadonnées de colonne façonnent la grille et le dialogue d'édition.
+- [Écrans](./build/screens/overview.md) — comment les métadonnées de colonne façonnent la grille et le dialogue d'édition.
 - [Conditions de formulaire](./form-conditions.md) — règles de visibilité / obligatoire / désactivé conditionnelles par-dessus les règles du dictionnaire.
 - [Applications et Plugins → i18n](./apps/i18n.md) — ajouter des langues.

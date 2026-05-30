@@ -110,5 +110,5 @@ La liste doit correspondre aux permissions de lecture de l'utilisateur. Si un ou
 ## Pour aller plus loin
 
 - [Assistant IA](../ai-assistant.md) pour la surface complète du chat.
-- [Rôles et permissions](../auth/roles-permissions.md) pour la famille de permissions `ai:*`.
+- [Rôles et permissions](../build/secure/roles-and-permissions.md) pour la famille de permissions `ai:*`.
 - [Tutoriel CRM → Étape 6](../tutorial-crm/06-ai-and-jobs.md) pour un cas de bout en bout.

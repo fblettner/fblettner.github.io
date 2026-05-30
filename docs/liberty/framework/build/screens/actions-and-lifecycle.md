@@ -259,4 +259,4 @@ The Actions tab edits the screen's `actions` / `row_menu` / `on_*` lists; the Sc
 
 - [Nested tabs](./nested-tabs.md) — embed a child-record form or a related-rows grid.
 - [Parameter binding](../queries/parameter-binding.md) — the full ParamBind reference.
-- [Concepts → Screens](../../screens.md) — deep reference for action types and lifecycle.
+- [Concepts → Screens](./overview.md) — deep reference for action types and lifecycle.

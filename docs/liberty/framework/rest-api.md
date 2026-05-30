@@ -18,7 +18,7 @@ This page is a domain-by-domain map of the endpoints, with the required permissi
 - **Authentication** — every endpoint requires a `Bearer` token in the `Authorization` header, except `POST /auth/login`, `POST /auth/refresh`, the OIDC pair and `GET /api/healthz`.
 - **Content type** — JSON in / JSON out unless stated. Errors carry a `{ "detail": "..." }` body with a non-2xx status.
 - **Language** — `X-Liberty-Lang: fr` overrides the response's labels for endpoints that include them (screens, dictionary, menus, errors).
-- **Permission codes** are the same ones documented under [Roles & permissions](./auth/roles-permissions.md). `*` is wildcard; `sql:billing:*` matches any query of the `billing` connector.
+- **Permission codes** are the same ones documented under [Roles & permissions](./build/secure/roles-and-permissions.md). `*` is wildcard; `sql:billing:*` matches any query of the `billing` connector.
 
 ---
 
@@ -43,7 +43,7 @@ Useful for liveness probes. Doesn't touch the database.
 | `GET` | `/auth/oidc/login` | public | — | 302 to the IdP. |
 | `GET` | `/auth/oidc/callback` | public | query | 302 to `/`. Sets the local session. |
 
-See [Authentication](./auth/authentication.md) for the OIDC flow.
+See [Authentication](./build/secure/sign-in.md) for the OIDC flow.
 
 ---
 
@@ -240,4 +240,4 @@ Every endpoint is documented there with the exact request / response shape gener
 
 - The live API at `http://${HOST}:${PORT}/docs`.
 - [Configuration → Settings UI](./configuration/settings-ui.md) — the in-browser editor that consumes the `/admin/config/*` family.
-- [Authentication → Roles & permissions](./auth/roles-permissions.md) — the permission codes every endpoint checks.
+- [Authentication → Roles & permissions](./build/secure/roles-and-permissions.md) — the permission codes every endpoint checks.

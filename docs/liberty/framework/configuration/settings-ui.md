@@ -87,7 +87,7 @@ The Settings page exposes **nine builders** plus the technical dashboard and the
 | **Technical** | Read-only — live pool stats, record locks, in-flight job runs, recent socket events. | `settings:technical` |
 | **Raw TOML** | A Monaco editor per file. Loads the file as-is, saves it back. Last-resort path when a builder lacks a field. | `settings:raw` |
 
-The permission codes are the canonical strings used by the role engine — see [Authentication → Roles & permissions](../auth/roles-permissions.md) for how to grant them.
+The permission codes are the canonical strings used by the role engine — see [Authentication → Roles & permissions](../build/secure/roles-and-permissions.md) for how to grant them.
 
 ---
 

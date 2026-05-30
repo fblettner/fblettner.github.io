@@ -335,5 +335,5 @@ A typical alerting rule: `liberty.jobs.*` at level `ERROR` → page the on-call.
 
 - [Upgrading](./upgrading.md) — moving across framework versions.
 - [Configuration → Environment variables](../configuration/environment-variables.md) — the full env contract referenced by every shape here.
-- [Authentication → License key](../auth/license-key.md) — `LIBERTY_LICENSE_KEY` in the production env.
-- [Jobs → Overview](../jobs/overview.md) — scheduler topology, advisory lock.
+- [Authentication → License key](../build/secure/license-key.md) — `LIBERTY_LICENSE_KEY` in the production env.
+- [Jobs → Overview](../../nomaflow/overview.md) — scheduler topology, advisory lock.

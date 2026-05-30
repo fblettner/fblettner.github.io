@@ -149,7 +149,7 @@ Click **Save**, then open the URL `http://127.0.0.1:8000/screens/tutorial/tasks`
 
 Click any row — the edit dialog opens with the four fields, **Save** triggers the update query, **Delete** triggers the delete query, **+ Add** opens an empty form bound to the insert query.
 
-[Screens](../screens.md) covers tabs, per-field conditions, cross-connector reads/writes and the full set of dialog options.
+[Screens](../build/screens/overview.md) covers tabs, per-field conditions, cross-connector reads/writes and the full set of dialog options.
 
 ---
 
@@ -188,5 +188,5 @@ Four TOML blocks behind the scenes — the four files were updated in place unde
 - [Project layout](./project-layout.md) — the file map of `liberty-apps`.
 - [Concepts → Connectors](../connectors.md) — HTTP, API, parameterised queries, schema hints.
 - [Concepts → Dictionary](../dictionary.md) — labels, enums, lookups, format rules.
-- [Authentication → Roles & permissions](../auth/roles-permissions.md) — restrict the new screen to a specific role.
+- [Authentication → Roles & permissions](../build/secure/roles-and-permissions.md) — restrict the new screen to a specific role.
 - [Settings UI](../configuration/settings-ui.md) — every builder in detail.

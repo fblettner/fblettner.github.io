@@ -137,10 +137,10 @@ Nomaflow job, daily at 09:00, posts to `#expenses-managers` Slack channel.
 | **A free-form approver chain** (variable list of approvers) | Add an `approval_steps` child table; status becomes `awaiting:<step_n>`. Approve queries advance the step counter. More complex but the same primitives. |
 | **A history log of every transition** | Add an `expense_audit` table; each transition query inserts a row from a Python step. |
 | **Reopen rejected** | Add a `reopen` action visible when `status == 'rejected'`, flips back to `draft`. |
-| **Email the requester on every transition** | Notifications block on each write query — see [Jobs → Notifications](../jobs/jobs-toml.md). |
+| **Email the requester on every transition** | Notifications block on each write query — see [Jobs → Notifications](../../nomaflow/concepts.md). |
 
 ## What's next
 
 - [Form conditions](../form-conditions.md) for the per-field expression syntax.
-- [Roles & permissions](../auth/roles-permissions.md) for gating actions per role.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) for gating actions per role.
 - [Cookbook → Audit trail](./audit-trail.md) for the `submitted_at` / `approved_at` columns.

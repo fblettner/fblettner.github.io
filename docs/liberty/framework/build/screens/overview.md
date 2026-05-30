@@ -194,4 +194,4 @@ The hot reload means **no process restart** — a new screen is callable immedia
 ## What's next
 
 - [Create a screen from a query](./create-from-query.md) — start with a `_get`, see the grid.
-- [Concepts → Screens](../../screens.md) — the deep reference behind this page.
+- [Concepts → Screens](./overview.md) — the deep reference behind this page.

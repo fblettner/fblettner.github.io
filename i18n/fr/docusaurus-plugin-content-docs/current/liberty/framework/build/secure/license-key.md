@@ -186,5 +186,5 @@ Les lignes de journal du framework sont la **source de vérité** — elles incl
 ## Suite
 
 - [Secrets chiffrés](./encrypted-secrets.md) — protéger le JWT lui-même au repos si on doit l'inliner.
-- [Concepts → Authentification → Clé de licence](../../auth/license-key.md) — la référence détaillée.
+- [Concepts → Authentification → Clé de licence](./license-key.md) — la référence détaillée.
 - [Vue d'ensemble](./overview.md) — le reste de la section Sécurité.

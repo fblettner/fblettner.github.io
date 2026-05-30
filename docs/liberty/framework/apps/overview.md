@@ -161,7 +161,7 @@ The role engine integrates with apps via the `<surface>:<app>:*` wildcard patter
 | **billing-user** | `sql:billing-*:*`, `screen:billing:*`, `menu:billing:*`, `dashboard:billing-*` |
 | **crm-user** | `sql:crm-*:*`, `screen:crm:*`, `menu:crm:*`, `dashboard:crm-*` |
 
-A user carrying both roles sees both workspaces. A user carrying only `billing-user` sees the *Billing* workspace and isn't aware of the *CRM* one. See [Roles & permissions](../auth/roles-permissions.md).
+A user carrying both roles sees both workspaces. A user carrying only `billing-user` sees the *Billing* workspace and isn't aware of the *CRM* one. See [Roles & permissions](../build/secure/roles-and-permissions.md).
 
 ---
 

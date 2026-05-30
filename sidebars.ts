@@ -120,25 +120,13 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Concepts',
-          link: {type: 'generated-index', slug: '/liberty/framework/concepts', description: 'The framework primitives: connectors, dictionary, menus, screens, dashboards, charts and form conditions. Deep reference behind the Build pages.'},
+          link: {type: 'generated-index', slug: '/liberty/framework/concepts', description: 'Deep reference behind the Build pages — connectors, dictionary, dashboards, charts and form-condition expressions.'},
           items: [
             'liberty/framework/connectors',
             'liberty/framework/dictionary',
-            'liberty/framework/menus',
-            'liberty/framework/screens',
             'liberty/framework/dashboards',
             'liberty/framework/charts',
             'liberty/framework/form-conditions',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Authentication',
-          link: {type: 'generated-index', slug: '/liberty/framework/auth', description: 'Local users, OIDC, JWT, roles, permissions and license keys.'},
-          items: [
-            'liberty/framework/auth/authentication',
-            'liberty/framework/auth/roles-permissions',
-            'liberty/framework/auth/license-key',
           ],
         },
         {

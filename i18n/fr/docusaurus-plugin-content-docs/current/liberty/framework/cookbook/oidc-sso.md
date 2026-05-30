@@ -104,6 +104,6 @@ Pour la propagation de fin de session vers le fournisseur d'identité, définiss
 
 ## Pour aller plus loin
 
-- [Authentification → OIDC](../auth/authentication.md#oidc) pour la référence complète des champs.
-- [Rôles et permissions](../auth/roles-permissions.md) pour le mapping groupes-vers-rôles.
+- [Authentification → OIDC](../build/secure/sign-in.md#oidc) pour la référence complète des champs.
+- [Rôles et permissions](../build/secure/roles-and-permissions.md) pour le mapping groupes-vers-rôles.
 - [Tutoriel CRM → Étape 5](../tutorial-crm/05-auth.md) pour un exemple détaillé.

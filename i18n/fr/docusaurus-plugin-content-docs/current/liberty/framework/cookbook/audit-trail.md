@@ -119,4 +119,4 @@ Le dialogue affiche maintenant les quatre colonnes d'audit comme champs en lectu
 
 - [Dictionnaire → Valeurs par défaut couche formulaire](../dictionary.md#form-layer-defaults).
 - [Cookbook → CRUD sur une table existante](./crud-existing-table.md).
-- [Concepts → Écrans](../screens.md) pour l'onglet de dialogue où les colonnes d'audit se trouvent.
+- [Concepts → Écrans](../build/screens/overview.md) pour l'onglet de dialogue où les colonnes d'audit se trouvent.

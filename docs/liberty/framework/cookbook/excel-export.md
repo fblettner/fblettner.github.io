@@ -94,6 +94,6 @@ Click **▶ Run now** in the job builder to verify without waiting for Monday. T
 
 ## What's next
 
-- [Jobs — Nomaflow → Overview](../jobs/overview.md) for the scheduling model.
+- [Jobs — Nomaflow → Overview](../../nomaflow/overview.md) for the scheduling model.
 - [REST API reference → screens export](../rest-api.md) for the endpoint contract.
 - [Cookbook → Scheduled report email](./scheduled-report-email.md) for the recurring-job variant.

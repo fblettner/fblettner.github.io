@@ -89,7 +89,7 @@ Liberty Next est en cours de développement actif. Cette documentation est rédi
 |---|---|
 | **Sources de données** | Pools SQL (PostgreSQL, Oracle, SQLite) et endpoints HTTP, déclarés en TOML sous `config/`. |
 | **Découverte de schéma** | Les colonnes sont lues à l'exécution depuis le curseur de la requête ; le dictionnaire ajoute libellés, formats et règles d'affichage par colonne. |
-| **Écrans** | Une entrée [`Screen`](/liberty/framework/screens) par objet métier : grille, formulaire modal, conditions par champ, onglet d'audit. |
+| **Écrans** | Une entrée [`Screen`](/liberty/framework/build/screens/overview/) par objet métier : grille, formulaire modal, conditions par champ, onglet d'audit. |
 | **Tableaux de bord** | [Graphiques et indicateurs](/liberty/framework/dashboards) au-dessus des mêmes requêtes nommées — barres, lignes, camemberts, panneaux numériques. |
 | **Authentification** | Backend TOML ou base de données, jetons JWT, OIDC avec n'importe quel fournisseur. |
 | **Assistant IA** | Tool-use Anthropic au-dessus des connecteurs, écrans et tableaux de bord configurés sur l'instance. |
@@ -133,6 +133,6 @@ Les fichiers de configuration acceptent les références `${NOM}` et `${NOM:-def
 |---|---|
 | [Framework → Présentation](/liberty/framework/overview) | Vue d'ensemble des couches : pools, connecteurs, dictionnaire, écrans, tableaux de bord, menus. |
 | [Framework → Connecteurs](/liberty/framework/connectors) | Déclarer un connecteur SQL ou API en TOML — schéma, paramètres, contrôle d'écriture. |
-| [Framework → Écrans](/liberty/framework/screens) | Construire un écran à partir d'une requête connecteur — grille, filtres, formulaire modal, audit. |
+| [Framework → Écrans](/liberty/framework/build/screens/overview/) | Construire un écran à partir d'une requête connecteur — grille, filtres, formulaire modal, audit. |
 | [Nomasx-1 — Présentation](/liberty/nomasx1/overview) | Sécurité et conformité d'entreprise — utilisateurs, rôles, conformité des licences Oracle / JDE, séparation des tâches. |
 | [Nomajde — Présentation](/liberty/nomajde/overview) | Compagnon JD Edwards — données maîtres, maintenance sécurité, transactions, reporting, supervision. |

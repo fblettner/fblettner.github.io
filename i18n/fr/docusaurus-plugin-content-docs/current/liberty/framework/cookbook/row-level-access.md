@@ -140,6 +140,6 @@ La claim `tenant_id` est définie par l'IdP / la couche SSO ; le framework la li
 
 ## Pour aller plus loin
 
-- [Authentification](../auth/authentication.md) pour la liaison de `:session_user`.
-- [Rôles et permissions](../auth/roles-permissions.md) pour la valeur `:session_roles` et les codes de permission par requête.
+- [Authentification](../build/secure/sign-in.md) pour la liaison de `:session_user`.
+- [Rôles et permissions](../build/secure/roles-and-permissions.md) pour la valeur `:session_roles` et les codes de permission par requête.
 - [Cookbook → Piste d'audit](./audit-trail.md) pour le modèle complémentaire `created_by`.

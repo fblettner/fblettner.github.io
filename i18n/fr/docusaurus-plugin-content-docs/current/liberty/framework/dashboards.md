@@ -249,6 +249,6 @@ Les définitions de tableau de bord sont enregistrées dans `liberty-apps/config
 ## Pour aller plus loin
 
 - [Graphiques](./charts.md) — les définitions de graphique qu'un panneau Graphique référence.
-- [Écrans](./screens.md) — les écrans qu'un drill-down ouvre.
-- [Liaison des paramètres](./query-params-binding.md) — comment la barre de filtres partagée alimente chaque panneau.
-- [Menus](./menus.md) — câbler le tableau de bord dans la barre latérale.
+- [Écrans](./build/screens/overview.md) — les écrans qu'un drill-down ouvre.
+- [Liaison des paramètres](./build/queries/parameter-binding.md) — comment la barre de filtres partagée alimente chaque panneau.
+- [Menus](./build/menus/overview.md) — câbler le tableau de bord dans la barre latérale.

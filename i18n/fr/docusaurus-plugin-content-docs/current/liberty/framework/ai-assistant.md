@@ -151,7 +151,7 @@ Les limites sont affichées dans la colonne droite de la page de discussion : un
 | `ai:read-shared` | Ouvrir une conversation partagée. |
 | `ai:write` | Utiliser les outils que le framework considère en écriture (`expose_to_ai = true` sur une requête en écriture). |
 
-Voir [Rôles et permissions](./auth/roles-permissions.md) pour le processus d'affectation des rôles.
+Voir [Rôles et permissions](./build/secure/roles-and-permissions.md) pour le processus d'affectation des rôles.
 
 ---
 
@@ -191,5 +191,5 @@ La réponse est **diffusée en flux** au format `text/event-stream` (SSE) — un
 
 - [Référence API REST → `/ai/*`](./rest-api.md#ai) — le contrat de l'endpoint de chat.
 - [Concepts → Connecteurs](./connectors.md) — les champs `description` et `expose_to_ai`.
-- [Authentification → Rôles et permissions](./auth/roles-permissions.md) — la famille de permissions `ai:*`.
+- [Authentification → Rôles et permissions](./build/secure/roles-and-permissions.md) — la famille de permissions `ai:*`.
 - [Configuration → `app.toml`](./configuration/app-toml.md) — la référence du bloc `[ai]`.

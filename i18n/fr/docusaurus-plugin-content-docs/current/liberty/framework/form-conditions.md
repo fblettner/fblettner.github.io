@@ -88,7 +88,7 @@ Le langage d'expression est petit et sûr — comparable à une clause SQL `WHER
 | **Test de null** | `discount_pct == null` / `discount_pct != null`. |
 | **Prédicats de chaîne** | `name.startsWith('FR-')`, `name.endsWith('.pdf')`, `name.includes('test')`. |
 | **Longueur** | `tags.length > 0` (pour les champs *Multiple*). |
-| **Contexte de session** | `session.user`, `session.lang`, `session.roles` — le même triplet disponible aux requêtes (voir [Liaison des paramètres → Contexte de session](./query-params-binding.md#session-context)). `session.roles` est un tableau — `'admin' in session.roles`. |
+| **Contexte de session** | `session.user`, `session.lang`, `session.roles` — le même triplet disponible aux requêtes (voir [Liaison des paramètres → Contexte de session](./build/queries/parameter-binding.md)). `session.roles` est un tableau — `'admin' in session.roles`. |
 
 Le langage **n'a pas d'appels de fonction au-delà des prédicats listés** ni d'opérateurs arithmétiques autres que la comparaison. L'intention est « expression booléenne sur l'état du formulaire », pas un langage de script.
 
@@ -165,6 +165,6 @@ Les conditions sont enregistrées comme chaînes d'expression sur chaque champ d
 
 ## Pour aller plus loin
 
-- [Concepts → Écrans](./screens.md) — l'emplacement de l'éditeur de champ, et les autres propriétés de champ.
+- [Concepts → Écrans](./build/screens/overview.md) — l'emplacement de l'éditeur de champ, et les autres propriétés de champ.
 - [Concepts → Dictionnaire](./dictionary.md) — règles de validation partagées qui se combinent avec ces conditions.
-- [Liaison des paramètres](./query-params-binding.md) — comment les valeurs du dialogue circulent vers le connecteur à l'enregistrement.
+- [Liaison des paramètres](./build/queries/parameter-binding.md) — comment les valeurs du dialogue circulent vers le connecteur à l'enregistrement.

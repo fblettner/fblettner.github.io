@@ -238,4 +238,4 @@ Le bon schéma pour les deux : **toujours définir `roles`** sur les feuilles de
 
 - [Traductions et icônes](./translations-and-icons.md) — libellés par langue et icônes Lucide.
 - [Construire l'arbre](./build-the-tree.md) — la surface de l'éditeur.
-- [Concepts → Authentification → Rôles et permissions](../../auth/roles-permissions.md) — la référence approfondie derrière les chaînes de permission.
+- [Concepts → Authentification → Rôles et permissions](../secure/roles-and-permissions.md) — la référence approfondie derrière les chaînes de permission.

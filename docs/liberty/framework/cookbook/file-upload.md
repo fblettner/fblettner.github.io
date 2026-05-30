@@ -124,6 +124,6 @@ Both patterns work for one-file-per-row. For multi-file (a customer can have N c
 
 ## What's next
 
-- [Concepts → Screens](../screens.md) for the dialog field model.
+- [Concepts → Screens](../build/screens/overview.md) for the dialog field model.
 - [Settings UI → Framework](../configuration/app-toml.md) for the *Storage* sub-form.
 - [Cookbook → CRUD over an existing table](./crud-existing-table.md) — the surrounding screen pattern.

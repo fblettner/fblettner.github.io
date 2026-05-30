@@ -124,6 +124,6 @@ Les deux modèles fonctionnent pour un-fichier-par-ligne. Pour le multi-fichier 
 
 ## Pour aller plus loin
 
-- [Concepts → Écrans](../screens.md) pour le modèle de champ du dialogue.
+- [Concepts → Écrans](../build/screens/overview.md) pour le modèle de champ du dialogue.
 - [Interface Paramètres → Framework](../configuration/app-toml.md) pour le sous-formulaire *Stockage*.
 - [Cookbook → CRUD sur une table existante](./crud-existing-table.md) — le modèle d'écran environnant.

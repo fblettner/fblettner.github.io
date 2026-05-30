@@ -112,7 +112,7 @@ Les filtres de la barre d'outils restreignent la liste par *Application* et par 
 |---|---|
 | **connecté** | La sonde live vers le pool / l'URL de base a réussi dans les 30 dernières secondes. |
 | **hors ligne** | La sonde a échoué. Le connecteur reste affiché, mais toute requête sur lui échouera tant que la source ne sera pas revenue. |
-| **sous licence** *(badge)* | Marqué avec `Licensed = true`. Ne se charge que si la [clé de licence](./auth/license-key.md) le contient. |
+| **sous licence** *(badge)* | Marqué avec `Licensed = true`. Ne se charge que si la [clé de licence](./build/secure/license-key.md) le contient. |
 
 ---
 
@@ -172,7 +172,7 @@ Cliquer sur une ligne ouvre un éditeur à trois onglets à droite. Les onglets 
 | **Type** | `SQL` ici. Changer le type remodèle le formulaire. |
 | **Pool** | Liste déroulante des pools définis sous *Paramètres → Pools*. Le connecteur hérite de l'URL, des identifiants et du dialecte du pool. |
 | **Description** | Texte libre. Affichée dans le catalogue, comme infobulle sur les écrans qui choisissent ce connecteur et — c'est crucial — dans la **description de l'outil pour l'assistant IA**. Un résumé en deux phrases dans la langue de l'utilisateur fait une vraie différence. |
-| **Sous licence** | Quand *activé*, le connecteur ne se charge que si la [clé de licence](./auth/license-key.md) liste son identifiant. Utilisé par Nomana-IT pour verrouiller les connecteurs éditeur ; les connecteurs client le laissent désactivé. |
+| **Sous licence** | Quand *activé*, le connecteur ne se charge que si la [clé de licence](./build/secure/license-key.md) liste son identifiant. Utilisé par Nomana-IT pour verrouiller les connecteurs éditeur ; les connecteurs client le laissent désactivé. |
 | **Exposer à l'assistant IA** | Quand *activé*, les requêtes de lecture du connecteur deviennent des outils que l'assistant IA peut choisir. Les requêtes d'écriture sont exclues par défaut. Voir [Assistant IA](./ai-assistant.md). |
 
 Le bouton **Tester la connexion** (en haut à droite) interroge le pool avec un `SELECT 1` et indique succès / échec en ligne — utile pour confirmer que le pool est joignable avant d'ajouter des requêtes.
@@ -189,7 +189,7 @@ Cliquer sur *+ Ajouter requête* ou sur une ligne existante ouvre l'éditeur de 
 | **SQL** | Corps de la requête. Éditeur Monaco avec coloration SQL, autocomplétion sensible au schéma (noms de colonnes depuis le pool) et mise en évidence des paramètres (placeholders `:nom`). |
 | **Surcharges de dialecte** | Variantes optionnelles par dialecte (`oracle`, `postgresql`, `sqlite`) pour les cas où le `SELECT` canonique ne se traduit pas. Le framework choisit la bonne en fonction du dialecte du pool. |
 | **Description** | Résumé en deux phrases. Affiché dans les sélecteurs de l'éditeur d'écrans et dans la description de l'outil pour l'assistant IA. |
-| **Paramètres** | Sous-table — voir [Liaison des paramètres](./query-params-binding.md) pour chaque champ. |
+| **Paramètres** | Sous-table — voir [Liaison des paramètres](./build/queries/parameter-binding.md) pour chaque champ. |
 | **Indices de colonnes** | Sous-table optionnelle. Chaque ligne lie une colonne du résultat à une entrée du dictionnaire : *Colonne* (liste déroulante des colonnes découvertes par le bouton *Tester*) + *Dictionnaire* (liste déroulante des entrées du dictionnaire). Détermine libellés, formats, énumérations, recherches. Les colonnes sans indice retombent sur le nom de la colonne comme libellé. |
 
 Le bouton **▶ Tester** en haut de l'éditeur exécute la requête sur le pool live avec des valeurs de remplissage pour les paramètres et affiche les 50 premières lignes. Le premier test réussi remplit la liste déroulante *Indices de colonnes* avec les colonnes découvertes ; les tests suivants la rafraîchissent.
@@ -223,7 +223,7 @@ La sous-table des endpoints remplace les requêtes SQL :
 | **Méthode** | `GET` / `POST` / `PUT` / `PATCH` / `DELETE`. |
 | **Chemin** | Chemin concaténé à l'URL de base. Accepte des placeholders `:nom` liés aux paramètres. |
 | **Modèle de corps** | Pour les méthodes non `GET`, un modèle JSON. Accepte une substitution `${nom}` depuis les paramètres. |
-| **Paramètres** | Même structure que pour SQL — voir [Liaison des paramètres](./query-params-binding.md). |
+| **Paramètres** | Même structure que pour SQL — voir [Liaison des paramètres](./build/queries/parameter-binding.md). |
 | **Forme de réponse** | Auto-détectée quand le bouton *Tester* est utilisé ; l'opérateur peut affiner la forme découverte (renommer des clés, regrouper des champs imbriqués) pour l'aligner sur ce qu'attendent les consommateurs. |
 
 Le bouton **▶ Tester** lance l'appel en live avec l'authentification configurée et les valeurs par défaut des paramètres ; le corps de la réponse s'affiche formaté, avec la forme découverte présentée en chips en dessous.
@@ -265,7 +265,7 @@ Chaque connecteur génère un **code de permission par requête / endpoint** :
 | `sql:<connecteur>:<requête>:write` | Exécuter la requête d'écriture. |
 | `api:<connecteur>:<endpoint>` | Appeler l'endpoint HTTP. |
 
-Les codes apparaissent sur l'onglet *Permissions* de l'éditeur de connecteur et dans le **sélecteur de permissions** de [Paramètres → Rôles](./auth/roles-permissions.md). Les wildcards `sql:billing:*` et `api:crm:*` sont pris en charge.
+Les codes apparaissent sur l'onglet *Permissions* de l'éditeur de connecteur et dans le **sélecteur de permissions** de [Paramètres → Rôles](./build/secure/roles-and-permissions.md). Les wildcards `sql:billing:*` et `api:crm:*` sont pris en charge.
 
 Le connecteur lui-même n'est pas verrouillé — ce qui est verrouillé, c'est chaque appel. Un utilisateur sans permission ne voit aucune requête ; un utilisateur avec `sql:billing:*` voit chaque lecture et écriture du connecteur billing.
 
@@ -299,7 +299,7 @@ Pour les scripts CI et les orchestrateurs externes, la même surface est joignab
 ## Pour aller plus loin
 
 - [Dictionnaire](./dictionary.md) — métadonnées par colonne : libellés, formats, énumérations, recherches.
-- [Liaison des paramètres](./query-params-binding.md) — paramètres déclarés, valeurs par défaut, filtres en cascade.
-- [Écrans](./screens.md) — transformer un connecteur en grille + dialogue d'édition.
+- [Liaison des paramètres](./build/queries/parameter-binding.md) — paramètres déclarés, valeurs par défaut, filtres en cascade.
+- [Écrans](./build/screens/overview.md) — transformer un connecteur en grille + dialogue d'édition.
 - [Graphiques](./charts.md) — emballer une requête en visualisation.
 - [Chiffrement et secrets](./configuration/encryption-secrets.md) — la bascule du cadenas sur les mots de passe / jetons.

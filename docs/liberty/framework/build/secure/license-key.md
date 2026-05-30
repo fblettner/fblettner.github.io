@@ -186,5 +186,5 @@ The framework log lines are the **source of truth** — they include the exact r
 ## What's next
 
 - [Encrypted secrets](./encrypted-secrets.md) — protect the JWT itself at rest if you must inline it.
-- [Concepts → Authentication → License key](../../auth/license-key.md) — the deep reference.
+- [Concepts → Authentication → License key](./license-key.md) — the deep reference.
 - [Overview](./overview.md) — the rest of the Secure section.

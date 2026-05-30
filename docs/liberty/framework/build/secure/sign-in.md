@@ -79,7 +79,7 @@ The command prompts for a password and creates a superuser. Sign in once, then u
 
 ---
 
-## Step 2 — Configure OIDC (optional)
+## Step 2 — Configure OIDC (optional) \{#oidc\}
 
 OIDC is layered on top of the chosen backend. Any OIDC-compliant provider works — Liberty discovers endpoints, JWKS and supported scopes from the provider's `.well-known/openid-configuration`.
 
@@ -226,4 +226,4 @@ For OIDC installs that want **provider sign-out** (terminate the IdP session too
 
 - [Users](./users.md) — add local users, manage OIDC users post-first-sign-in, assign roles.
 - [Roles and permissions](./roles-and-permissions.md) — what to assign once a user has signed in.
-- [Concepts → Authentication](../../auth/authentication.md) — the deep reference.
+- [Concepts → Authentication](./sign-in.md) — the deep reference.

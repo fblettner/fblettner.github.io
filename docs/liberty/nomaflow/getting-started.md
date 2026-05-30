@@ -22,7 +22,7 @@ Make sure you have:
 | You have a connector to use as a target. | Open *Settings → Connectors* — at least one connector should be listed. The framework's `default` pool always counts. |
 | Your role has the `job:*` permission (or `superuser`). | If the *Nomaflow* link is visible in the menu, you're set. |
 
-If any of those are missing, the [framework getting-started guide](../framework/getting-started/installation.md) covers the install path and [Authentication → Roles and permissions](../framework/auth/roles-permissions.md) covers the role wiring.
+If any of those are missing, the [framework getting-started guide](../framework/getting-started/installation.md) covers the install path and [Authentication → Roles and permissions](../framework/build/secure/roles-and-permissions.md) covers the role wiring.
 
 ---
 

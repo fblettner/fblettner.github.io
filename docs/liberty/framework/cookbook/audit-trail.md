@@ -119,4 +119,4 @@ The dialog now shows the four audit columns as read-only fields on the *History*
 
 - [Dictionary → Form-layer defaults](../dictionary.md#form-layer-defaults).
 - [Cookbook → CRUD over an existing table](./crud-existing-table.md).
-- [Concepts → Screens](../screens.md) for the dialog tab where audit columns sit.
+- [Concepts → Screens](../build/screens/overview.md) for the dialog tab where audit columns sit.

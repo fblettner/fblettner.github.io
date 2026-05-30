@@ -105,7 +105,7 @@ A toggle at the top of the sub-section enables OIDC SSO; the form below appears 
 | **Groups claim** | JWT claim used to map IdP groups to Liberty roles. Default `groups`. |
 | **Auto-provision** | When on, a Liberty user is created on first OIDC sign-in. When off, the user has to exist already. |
 
-[Authentication](../auth/authentication.md) walks through the complete OIDC flow with IdP-specific notes (Authentik, Keycloak, Azure AD, Okta, Google).
+[Authentication](../build/secure/sign-in.md) walks through the complete OIDC flow with IdP-specific notes (Authentik, Keycloak, Azure AD, Okta, Google).
 
 ---
 
@@ -141,7 +141,7 @@ See [Encryption & secrets](./encryption-secrets.md) for the rotation procedure a
 | **License key** | Reference to the env var holding the RS256-signed license JWT. Default `${LIBERTY_LICENSE_KEY}`. Drives the feature gates on connectors marked *Licensed*. |
 | **Public key path** | Optional override for the bundled public key. Useful when running with a private signing authority. |
 
-The [Settings → License](../auth/license-key.md) page surfaces the current status (accepted / rejected / not configured), the customer name, the expiry date and the unlocked feature list.
+The [Settings → License](../build/secure/license-key.md) page surfaces the current status (accepted / rejected / not configured), the customer name, the expiry date and the unlocked feature list.
 
 ---
 
@@ -177,5 +177,5 @@ For ops scripts and CI pipelines that need to drive the framework without the UI
 
 - [Environment variables](./environment-variables.md) — every `${LIBERTY_*}` reference resolved at startup.
 - [Encryption & secrets](./encryption-secrets.md) — the 🔒 toggle and the rotation procedure.
-- [Authentication](../auth/authentication.md) — what each backend changes.
+- [Authentication](../build/secure/sign-in.md) — what each backend changes.
 - [Hot-reload](./hot-reload.md) — what reloads vs what requires a restart.

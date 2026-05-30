@@ -87,7 +87,7 @@ The framework's row-level access patterns (`WHERE owner = :session_user`) propag
 
 ## Add the stale-deal job
 
-A common pipeline-hygiene practice: flag deals that haven't moved in two weeks. The framework's [Jobs / Nomaflow](../jobs/overview.md) engine runs scheduled work in-process; we'll add a job that fires nightly.
+A common pipeline-hygiene practice: flag deals that haven't moved in two weeks. The framework's [Jobs / Nomaflow](../../nomaflow/overview.md) engine runs scheduled work in-process; we'll add a job that fires nightly.
 
 ### Add the detection query
 

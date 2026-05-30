@@ -129,5 +129,5 @@ Ouvrez l'écran *Customers*, cliquez sur **↑ Importer**. Le framework affiche 
 
 ## Pour aller plus loin
 
-- [Jobs → Types d'étape → python](../jobs/step-types.md) pour la signature du helper.
+- [Jobs → Types d'étape → python](../../nomaflow/steps.md) pour la signature du helper.
 - [Cookbook → Téléversement de fichier](./file-upload.md) pour la couche de stockage de fichier que l'import utilise.

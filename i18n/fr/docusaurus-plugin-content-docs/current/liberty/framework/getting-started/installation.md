@@ -115,7 +115,7 @@ La commande choisit son backend depuis `[auth] backend` dans `config/app.toml` :
 | `toml` *(défaut)* | Crée `config/auth.toml` avec un mot de passe `admin` fraîchement haché en Argon2 (affiché une seule fois). | Installation de dev sur un seul hôte — pas de base externe nécessaire. |
 | `db` | Crée les tables `ly2_users` / `ly2_roles` / `ly2_permissions` sur le pool configuré et insère le même `admin`. | Installation en production — survit aux reconstructions de conteneurs et partage la base d'utilisateurs entre réplicas. |
 
-Le mot de passe affiché n'est montré **qu'une seule fois** sur stdout. Notez-le, ou réinitialisez-le ensuite avec `liberty-admin set-password admin <nouveau>`. Voir [Authentification](../auth/authentication.md) pour la matrice complète des backends.
+Le mot de passe affiché n'est montré **qu'une seule fois** sur stdout. Notez-le, ou réinitialisez-le ensuite avec `liberty-admin set-password admin <nouveau>`. Voir [Authentification](../build/secure/sign-in.md) pour la matrice complète des backends.
 
 ---
 
@@ -156,7 +156,7 @@ Ouvrez `http://127.0.0.1:8000`, connectez-vous comme `admin` avec le mot de pass
 | `LIBERTY_DB_URL` | URL du pool par défaut — par défaut SQLite (`sqlite+aiosqlite:///liberty.db`). |
 | `LIBERTY_JWT_SECRET` | Clé de signature JWT. Non définie = clé éphémère (les tokens meurent au redémarrage). |
 | `LIBERTY_MASTER_KEY` | Clé AES-256-GCM utilisée pour déchiffrer les blocs `ENC:` dans les TOML — voir [Chiffrement et secrets](../configuration/encryption-secrets.md). |
-| `LIBERTY_LICENSE_KEY` | JWT RS256 qui déverrouille les produits éditeur packagés (Nomasx-1, Nomajde, NomaUBL …) — voir [Clé de licence](../auth/license-key.md). |
+| `LIBERTY_LICENSE_KEY` | JWT RS256 qui déverrouille les produits éditeur packagés (Nomasx-1, Nomajde, NomaUBL …) — voir [Clé de licence](../build/secure/license-key.md). |
 | `ANTHROPIC_API_KEY` | Active l'[assistant IA](../ai-assistant.md). |
 
 Toutes les variables sont documentées une à une dans [Variables d'environnement](../configuration/environment-variables.md).

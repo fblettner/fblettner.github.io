@@ -194,4 +194,4 @@ Le rechargement à chaud signifie **aucun redémarrage de processus** — un nou
 ## Étapes suivantes
 
 - [Créer un écran à partir d'une requête](./create-from-query.md) — démarrer avec un `_get`, voir la grille.
-- [Concepts → Écrans](../../screens.md) — la référence approfondie derrière cette page.
+- [Concepts → Écrans](./overview.md) — la référence approfondie derrière cette page.

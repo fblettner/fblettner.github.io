@@ -169,4 +169,4 @@ La CLI `liberty-crypto` est le seul chemin scripté pour les opérations avancé
 - [Variables d'environnement](./environment-variables.md) — y compris la variable d'environnement de la clé maîtresse.
 - [Paramètres du framework](./app-toml.md) — la sous-section *Chiffrement*.
 - [Référence CLI → liberty-crypto](../cli-reference.md#liberty-crypto) — chaque sous-commande.
-- [Authentification](../auth/authentication.md) — l'emplacement du client secret OIDC.
+- [Authentification](../build/secure/sign-in.md) — l'emplacement du client secret OIDC.

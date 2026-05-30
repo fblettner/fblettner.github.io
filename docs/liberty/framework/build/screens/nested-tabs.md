@@ -257,6 +257,6 @@ This means you can build dialogs that progressively reveal data based on the use
 
 ## What's next
 
-- [Concepts → Screens](../../screens.md) — the deep reference (full schema, lifecycle, validators).
+- [Concepts → Screens](./overview.md) — the deep reference (full schema, lifecycle, validators).
 - [Actions and lifecycle](./actions-and-lifecycle.md) — wire the parent's `on_save` to fire writes on the nested data.
 - [Parameter binding](../queries/parameter-binding.md) — the full ParamBind reference, including `#LOGIN_USER#` / `#SYSDATE#`.

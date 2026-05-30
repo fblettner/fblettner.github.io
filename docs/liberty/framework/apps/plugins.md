@@ -152,7 +152,7 @@ Every callable receives a base context of keys the framework provides. The exact
 | `logger` | `logging.Logger` | Pre-configured logger that routes to the run-log stream. |
 | `session_user` | `str` | `"system"` when the job was scheduled, or the user identifier when triggered manually. |
 
-Plus every key declared in the step's `kwargs` block (TOML — see [Step types](../jobs/step-types.md)).
+Plus every key declared in the step's `kwargs` block (TOML — see [Step types](../../nomaflow/steps.md)).
 
 ### Password validator
 
@@ -294,6 +294,6 @@ Run with `cd liberty-next && PYTHONPATH=../liberty-apps/plugins .venv/bin/pytest
 
 ## What's next
 
-- [Apps](./apps.md) — where the plugin folder fits in the app structure.
+- [Apps](./overview.md) — where the plugin folder fits in the app structure.
 - [i18n](./i18n.md) — adding language packs (also lives under `plugins/`).
-- [Jobs → Step types](../jobs/step-types.md) — the `python` step that calls plugins.
+- [Jobs → Step types](../../nomaflow/steps.md) — the `python` step that calls plugins.

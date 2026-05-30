@@ -161,7 +161,7 @@ Le moteur de rôles s'intègre aux applications via le motif générique `<surfa
 | **billing-user** | `sql:billing-*:*`, `screen:billing:*`, `menu:billing:*`, `dashboard:billing-*` |
 | **crm-user** | `sql:crm-*:*`, `screen:crm:*`, `menu:crm:*`, `dashboard:crm-*` |
 
-Un utilisateur qui porte les deux rôles voit les deux espaces de travail. Un utilisateur qui ne porte que `billing-user` voit l'espace de travail *Billing* et n'a pas connaissance de celui de *CRM*. Voir [Rôles et permissions](../auth/roles-permissions.md).
+Un utilisateur qui porte les deux rôles voit les deux espaces de travail. Un utilisateur qui ne porte que `billing-user` voit l'espace de travail *Billing* et n'a pas connaissance de celui de *CRM*. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
 
 ---
 

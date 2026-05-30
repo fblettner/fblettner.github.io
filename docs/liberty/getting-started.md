@@ -89,7 +89,7 @@ Liberty Next is in active development. This documentation is being written along
 |---|---|
 | **Data sources** | SQL pools (PostgreSQL, Oracle, SQLite) and HTTP API endpoints, declared in TOML under `config/`. |
 | **Schema discovery** | Columns are read from the query's cursor at runtime; the dictionary adds labels, formats and display rules per column. |
-| **Screens** | One [`Screen`](./framework/screens.md) entry per business object: grid, modal form, per-field conditions, audit tab. |
+| **Screens** | One [`Screen`](./framework/build/screens/overview.md) entry per business object: grid, modal form, per-field conditions, audit tab. |
 | **Dashboards** | [Charts and KPIs](./framework/dashboards.md) over the same named queries — bar, line, pie, stat panels. |
 | **Auth** | TOML or database backend, JWT tokens, OIDC against any provider. |
 | **AI assistant** | Anthropic-powered tool-use over the connectors, screens and dashboards configured on the instance. |
@@ -133,6 +133,6 @@ Config files support `${NAME}` and `${NAME:-default}` references.
 |---|---|
 | [Framework → Overview](./framework/overview.md) | Layered model: pools, connectors, dictionary, screens, dashboards, menus. |
 | [Framework → Connectors](./framework/connectors.md) | Define a SQL or API connector in TOML — schema, params, writable gate. |
-| [Framework → Screens](./framework/screens.md) | Wrap a connector query in a Screen — grid, filters, modal form, audit. |
+| [Framework → Screens](./framework/build/screens/overview.md) | Wrap a connector query in a Screen — grid, filters, modal form, audit. |
 | [Nomasx-1 overview](/liberty/nomasx1/overview) | Enterprise security and compliance — users, roles, Oracle / JDE licence compliance, Segregation of Duties. |
 | [Nomajde overview](/liberty/nomajde/overview) | JD Edwards companion — master data, security maintenance, transactions, reporting, monitoring. |

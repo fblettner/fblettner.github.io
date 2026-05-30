@@ -110,5 +110,5 @@ The list should match the user's read permissions. If a tool you expected is mis
 ## What's next
 
 - [AI Assistant](../ai-assistant.md) for the full chat surface.
-- [Roles & permissions](../auth/roles-permissions.md) for the `ai:*` permission family.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) for the `ai:*` permission family.
 - [CRM tutorial → Step 6](../tutorial-crm/06-ai-and-jobs.md) for a worked end-to-end setup.

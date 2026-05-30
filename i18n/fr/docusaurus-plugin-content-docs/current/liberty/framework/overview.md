@@ -75,11 +75,11 @@ Tout ce que fait le framework se compose à partir de cinq concepts :
 |---|---|---|
 | **[Pool](./getting-started/installation.md)** | Une connexion à une base de données (une URL SQLAlchemy + des identifiants). | « Comment j'atteins ces données ? » |
 | **[Connecteur](./connectors.md)** | Un ensemble nommé de requêtes / endpoints au-dessus d'un pool. | « Quelles questions je veux poser à cette source ? » |
-| **[Écran](./screens.md)** | Une grille + un dialogue d'édition au-dessus des requêtes d'un connecteur. | « Comment je laisse une personne consulter et modifier ça ? » |
+| **[Écran](./build/screens/overview.md)** | Une grille + un dialogue d'édition au-dessus des requêtes d'un connecteur. | « Comment je laisse une personne consulter et modifier ça ? » |
 | **[Tableau de bord](./dashboards.md)** | Une mise en page de KPI et de graphiques sur les mêmes requêtes. | « Comment je résume ça pour quelqu'un qui veut juste l'essentiel ? » |
-| **[Menu](./menus.md)** | L'arborescence latérale qui organise écrans et tableaux de bord en une application. | « Comment je rends ça navigable ? » |
+| **[Menu](./build/menus/overview.md)** | L'arborescence latérale qui organise écrans et tableaux de bord en une application. | « Comment je rends ça navigable ? » |
 
-Autour de ces cinq concepts, les couches de support : le [dictionnaire](./dictionary.md) pour les libellés et les formats, l'[authentification et les rôles](./auth/authentication.md) pour qui-voit-quoi, les [jobs](./jobs/overview.md) pour le travail planifié, l'[assistant IA](./ai-assistant.md) pour l'accès en langage naturel, les [plugins](./apps/plugins.md) pour du Python personnalisé.
+Autour de ces cinq concepts, les couches de support : le [dictionnaire](./dictionary.md) pour les libellés et les formats, l'[authentification et les rôles](./build/secure/sign-in.md) pour qui-voit-quoi, les [jobs](../nomaflow/overview.md) pour le travail planifié, l'[assistant IA](./ai-assistant.md) pour l'accès en langage naturel, les [plugins](./apps/plugins.md) pour du Python personnalisé.
 
 Chaque page de concept de ce site s'ouvre par **ce que c'est, pourquoi il existe, quand on en crée un, comment il s'imbrique avec les autres**. Une fois ces cinq pages lues, la surface du framework est pour l'essentiel cartographiée.
 
@@ -113,9 +113,9 @@ Si vous êtes du genre à lire la documentation de bout en bout, la section **[D
 | [Tutoriel — Construire un CRM](./tutorial-crm/01-setup.md) | Parcours CRM complet, de bout en bout. |
 | [Configuration](./configuration/settings-ui.md) | Interface Paramètres, réglages du framework, variables d'environnement, rechargement à chaud, secrets chiffrés au repos. |
 | [Concepts](./connectors.md) | Les cinq primitives du framework + liaison des paramètres et conditions de formulaire, chacune avec une intro « Quoi / Pourquoi / Quand ». |
-| [Authentification](./auth/authentication.md) | Utilisateurs locaux, OIDC, JWT, rôles, permissions, clés de licence. |
+| [Authentification](./build/secure/sign-in.md) | Utilisateurs locaux, OIDC, JWT, rôles, permissions, clés de licence. |
 | [Apps et Plugins](./apps/overview.md) | Organisation multi-apps, plugins Python personnalisés, internationalisation. |
-| [Jobs — Nomaflow](./jobs/overview.md) | Travail planifié, pipelines ETL, types d'étape, historique d'exécution. |
+| [Jobs — Nomaflow](../nomaflow/overview.md) | Travail planifié, pipelines ETL, types d'étape, historique d'exécution. |
 | [Assistant IA](./ai-assistant.md) | L'assistant en tool-use, comment il met à disposition les requêtes des connecteurs. |
 | [Cookbook](./cookbook/crud-existing-table.md) | Recettes courtes pour les patrons habituels — export Excel, upload de fichier, OIDC, journal d'audit, etc. |
 | [Référence CLI](./cli-reference.md) | `liberty-admin`, `liberty-connectors`, `liberty-crypto`, `liberty-license`. |

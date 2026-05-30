@@ -137,10 +137,10 @@ Job Nomaflow, quotidien à 09:00, poste sur le canal Slack `#expenses-managers`.
 | **Une chaîne d'approbateurs libre** (liste variable d'approbateurs) | Ajoutez une table enfant `approval_steps` ; le statut devient `awaiting:<step_n>`. Les requêtes d'approbation incrémentent le compteur d'étape. Plus complexe mais avec les mêmes primitives. |
 | **Un journal d'historique de chaque transition** | Ajoutez une table `expense_audit` ; chaque requête de transition insère une ligne depuis une étape Python. |
 | **Réouvrir les rejetés** | Ajoutez une action `reopen` visible quand `status == 'rejected'`, qui rebascule en `draft`. |
-| **Notifier le demandeur à chaque transition** | Bloc de notifications sur chaque requête d'écriture — voir [Jobs → Notifications](../jobs/jobs-toml.md). |
+| **Notifier le demandeur à chaque transition** | Bloc de notifications sur chaque requête d'écriture — voir [Jobs → Notifications](../../nomaflow/concepts.md). |
 
 ## Pour aller plus loin
 
 - [Conditions de formulaire](../form-conditions.md) pour la syntaxe d'expression par champ.
-- [Rôles et permissions](../auth/roles-permissions.md) pour filtrer les actions par rôle.
+- [Rôles et permissions](../build/secure/roles-and-permissions.md) pour filtrer les actions par rôle.
 - [Cookbook → Piste d'audit](./audit-trail.md) pour les colonnes `submitted_at` / `approved_at`.

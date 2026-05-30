@@ -104,6 +104,6 @@ For end-session propagation back to the IdP, set **End-session endpoint** in the
 
 ## What's next
 
-- [Authentication → OIDC](../auth/authentication.md#oidc) for the full field reference.
-- [Roles & permissions](../auth/roles-permissions.md) for the IdP-group-to-role mapping.
+- [Authentication → OIDC](../build/secure/sign-in.md#oidc) for the full field reference.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) for the IdP-group-to-role mapping.
 - [CRM tutorial → Step 5](../tutorial-crm/05-auth.md) for a worked example.

@@ -182,7 +182,7 @@ A lookup is a **named query that returns `{ value, label }` rows**. Columns set 
 | **Value column** | Column in the query result that holds the stored value (what the database carries on each row). |
 | **Label column** | Column in the query result that holds the display label. Localised through the dictionary when the query joins a translations table. |
 | **Colour column** | Optional. Drives the chip background colour in grids. |
-| **Filter from** | Optional dependencies — see [cascading filters](./query-params-binding.md#cascading-filters). |
+| **Filter from** | Optional dependencies — see [cascading filters](./build/queries/parameter-binding.md). |
 | **Cache** | `None` / `Per session` / `Per request`. Drives how aggressively the framework caches the lookup. Default *Per session*. |
 
 A *Test* button at the top runs the underlying query and shows the resolved `{ value, label }` pairs — useful to confirm the columns line up.
@@ -252,6 +252,6 @@ Dictionary definitions are stored in `liberty-apps/config/dictionary.toml`. Oper
 ## What's next
 
 - [Connectors](./connectors.md) — where column hints bind a discovered SQL column to a dictionary entry.
-- [Screens](./screens.md) — how column metadata shapes the grid + edit dialog.
+- [Screens](./build/screens/overview.md) — how column metadata shapes the grid + edit dialog.
 - [Form conditions](./form-conditions.md) — conditional visibility / required / disabled rules on top of dictionary rules.
 - [Apps & Plugins → i18n](./apps/i18n.md) — adding languages.

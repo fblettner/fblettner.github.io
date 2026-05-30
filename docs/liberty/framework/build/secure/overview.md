@@ -169,4 +169,4 @@ Most of these can be handled by an upstream OIDC provider (MFA, rate limiting, a
 ## What's next
 
 - [Sign-in](./sign-in.md) — local backend, OIDC, the sign-in screen.
-- [Concepts → Authentication](../../auth/authentication.md) — deep reference.
+- [Concepts → Authentication](./sign-in.md) — deep reference.

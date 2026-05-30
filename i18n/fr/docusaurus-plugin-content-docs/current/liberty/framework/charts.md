@@ -78,7 +78,7 @@ Dans **Paramètres → Graphiques → ➕ Nouveau graphique**, l'éditeur s'ouvr
 | **Type** | Le type de graphique — voir [Types](#types) ci-dessous. Changer le type adapte le reste du formulaire. |
 | **Titre** / **Sous-titre** | Affichés au-dessus du graphique. Le sous-titre est facultatif. |
 | **Connecteur** / **Requête** | La source de données. Listes déroulantes des connecteurs et de leurs requêtes de lecture nommées. |
-| **Paramètres** | Tableau de valeurs fixes pour les paramètres de la requête — même forme qu'ailleurs. Prend en charge les tokens `${week.monday}` / `${month.last}` documentés dans [Liaison des paramètres](./query-params-binding.md). |
+| **Paramètres** | Tableau de valeurs fixes pour les paramètres de la requête — même forme qu'ailleurs. Prend en charge les tokens `${week.monday}` / `${month.last}` documentés dans [Liaison des paramètres](./build/queries/parameter-binding.md). |
 | **Hauteur** | Hauteur CSS du graphique rendu. Par défaut `320px`. |
 | **Légende** | Bascule + position (`bottom` / `right` / `top`). Par défaut *active, en bas*. |
 | **Info-bulle** | Bascule. Par défaut *active*. |
@@ -176,5 +176,5 @@ Les définitions des graphiques sont enregistrées dans `charts.toml`. Les opér
 ## Pour aller plus loin
 
 - [Tableaux de bord](./dashboards.md) — comment un graphique se pose sur un panneau de tableau de bord.
-- [Liaison des paramètres](./query-params-binding.md) — valeurs fixes, tokens, cascades.
+- [Liaison des paramètres](./build/queries/parameter-binding.md) — valeurs fixes, tokens, cascades.
 - [Concepts → Connecteurs](./connectors.md) — le connecteur qui alimente les données du graphique.

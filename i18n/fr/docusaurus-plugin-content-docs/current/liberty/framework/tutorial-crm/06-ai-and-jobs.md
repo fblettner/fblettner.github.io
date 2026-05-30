@@ -87,7 +87,7 @@ Les motifs d'accès au niveau ligne du framework (`WHERE owner = :session_user`)
 
 ## Ajouter la tâche des affaires stagnantes
 
-Une pratique courante d'hygiène de pipeline : signaler les affaires qui n'ont pas bougé depuis deux semaines. Le moteur [Tâches / Nomaflow](../jobs/overview.md) du framework exécute le travail planifié in-process ; nous ajoutons une tâche qui se déclenche chaque nuit.
+Une pratique courante d'hygiène de pipeline : signaler les affaires qui n'ont pas bougé depuis deux semaines. Le moteur [Tâches / Nomaflow](../../nomaflow/overview.md) du framework exécute le travail planifié in-process ; nous ajoutons une tâche qui se déclenche chaque nuit.
 
 ### Ajouter la requête de détection
 

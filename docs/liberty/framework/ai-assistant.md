@@ -151,7 +151,7 @@ The limits are surfaced in the right column of the chat page — a token gauge a
 | `ai:read-shared` | Open a shared conversation. |
 | `ai:write` | Use tools that the framework considers write-side (`expose_to_ai = true` on a write query). |
 
-See [Roles & permissions](./auth/roles-permissions.md) for the role-assignment workflow.
+See [Roles & permissions](./build/secure/roles-and-permissions.md) for the role-assignment workflow.
 
 ---
 
@@ -191,5 +191,5 @@ Response is **streamed** as `text/event-stream` (SSE) — one event per token ch
 
 - [REST API → `/ai/*`](./rest-api.md#ai) — the chat endpoint contract.
 - [Concepts → Connectors](./connectors.md) — `description` and `expose_to_ai` fields.
-- [Authentication → Roles & permissions](./auth/roles-permissions.md) — the `ai:*` permission family.
+- [Authentication → Roles & permissions](./build/secure/roles-and-permissions.md) — the `ai:*` permission family.
 - [Configuration → `app.toml`](./configuration/app-toml.md) — the `[ai]` block reference.

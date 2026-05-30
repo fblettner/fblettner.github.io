@@ -64,7 +64,7 @@ Voir [Chiffrement et secrets](./encryption-secrets.md) pour le format de chiffre
 | Effet | JWT signé en RS256 qui déverrouille les produits éditeur packagés (Nomasx-1, Nomajde, NomaUBL …). Chargé dans `[license] key` au démarrage. |
 | --- | --- |
 | Défaut | non défini → seul le sous-ensemble open source des connecteurs est disponible. L'UI des Paramètres affiche le reste comme *Sous licence*. |
-| Format | Un long JWT — voir [Clé de licence](../auth/license-key.md) pour la liste des claims. |
+| Format | Un long JWT — voir [Clé de licence](../build/secure/license-key.md) pour la liste des claims. |
 
 ### `ANTHROPIC_API_KEY`
 
@@ -79,7 +79,7 @@ Voir [Chiffrement et secrets](./encryption-secrets.md) pour le format de chiffre
 | --- | --- |
 | Défaut | non défini → `[auth.oidc] enabled = false` et le bouton *Se connecter avec SSO* est caché. |
 
-Voir [Authentification → OIDC](../auth/authentication.md#oidc) pour la mise en place complète avec Authentik, Keycloak et Azure AD.
+Voir [Authentification → OIDC](../build/secure/sign-in.md#oidc) pour la mise en place complète avec Authentik, Keycloak et Azure AD.
 
 ### `HOST`
 

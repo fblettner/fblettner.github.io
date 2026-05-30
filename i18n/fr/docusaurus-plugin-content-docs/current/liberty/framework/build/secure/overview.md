@@ -169,4 +169,4 @@ La plupart de ces points peuvent être traités par un fournisseur OIDC en amont
 ## Suite
 
 - [Se connecter](./sign-in.md) — backend local, OIDC, écran de connexion.
-- [Concepts → Authentification](../../auth/authentication.md) — référence détaillée.
+- [Concepts → Authentification](./sign-in.md) — référence détaillée.

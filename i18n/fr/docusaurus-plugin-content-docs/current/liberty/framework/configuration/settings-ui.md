@@ -87,7 +87,7 @@ La page Paramètres présente **neuf éditeurs** plus le tableau de bord techniq
 | **Technique** | Lecture seule — stats de pool en direct, verrous d'enregistrement, exécutions de jobs en cours, événements socket récents. | `settings:technical` |
 | **TOML brut** | Un éditeur Monaco par fichier. Charge le fichier tel quel, l'enregistre tel quel. Chemin de dernier recours quand un éditeur manque d'un champ. | `settings:raw` |
 
-Les codes de permission sont les chaînes utilisées par le moteur de rôles — voir [Authentification → Rôles et permissions](../auth/roles-permissions.md) pour la procédure d'attribution.
+Les codes de permission sont les chaînes utilisées par le moteur de rôles — voir [Authentification → Rôles et permissions](../build/secure/roles-and-permissions.md) pour la procédure d'attribution.
 
 ---
 

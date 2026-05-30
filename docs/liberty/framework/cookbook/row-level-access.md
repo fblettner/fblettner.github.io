@@ -140,6 +140,6 @@ The `tenant_id` claim is set by the IdP / SSO layer; the framework binds it like
 
 ## What's next
 
-- [Authentication](../auth/authentication.md) for the `:session_user` binding.
-- [Roles & permissions](../auth/roles-permissions.md) for the `:session_roles` value and the per-query permission codes.
+- [Authentication](../build/secure/sign-in.md) for the `:session_user` binding.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) for the `:session_roles` value and the per-query permission codes.
 - [Cookbook → Audit trail](./audit-trail.md) for the `created_by` companion pattern.

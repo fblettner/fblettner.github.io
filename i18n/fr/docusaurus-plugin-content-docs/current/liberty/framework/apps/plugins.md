@@ -152,7 +152,7 @@ Chaque appel reçoit un contexte de base composé de clés que le framework four
 | `logger` | `logging.Logger` | Logger préconfiguré qui route vers le flux de log d'exécution. |
 | `session_user` | `str` | `"system"` quand le job a été planifié, ou l'identifiant de l'utilisateur en cas de déclenchement manuel. |
 
-Plus chaque clé déclarée dans le bloc `kwargs` de l'étape (TOML — voir [Types d'étape](../jobs/step-types.md)).
+Plus chaque clé déclarée dans le bloc `kwargs` de l'étape (TOML — voir [Types d'étape](../../nomaflow/steps.md)).
 
 ### Validateur de mot de passe
 
@@ -296,4 +296,4 @@ Exécuter avec `cd liberty-next && PYTHONPATH=../liberty-apps/plugins .venv/bin/
 
 - [Applications](./overview.md) — où le dossier plugin s'inscrit dans la structure d'une application.
 - [i18n](./i18n.md) — ajout de packs de langue (également placés sous `plugins/`).
-- [Jobs → Types d'étape](../jobs/step-types.md) — l'étape `python` qui appelle les plugins.
+- [Jobs → Types d'étape](../../nomaflow/steps.md) — l'étape `python` qui appelle les plugins.

@@ -118,7 +118,7 @@ The designer opens on **General**. This tab is where you wire identity, the conn
 | **max_rows** | Cap on the read query's result. Blank uses the connector's / pool's default (typically 1000). |
 | **key_columns** | Columns that uniquely identify a row — drives the Excel-import update-vs-insert match and the dialog's edit-mode lock. Leave blank to derive from columns whose `key` flag is on (the recommended path — see [Columns](./columns.md)). |
 | **initial_group_by** | One or more column names — the grid groups by these on first open. The user can ungroup / regroup from the *Group* control. |
-| **treeview** | Set when the rows form a parent/child hierarchy — e.g. menu trees, organisation charts. Adds a *Tree* view toggle alongside *Table* / *Chart*. See [Concepts → Screens](../../screens.md) for the full reference. |
+| **treeview** | Set when the rows form a parent/child hierarchy — e.g. menu trees, organisation charts. Adds a *Tree* view toggle alongside *Table* / *Chart*. See [Concepts → Screens](./overview.md) for the full reference. |
 | **chart_id** | A saved chart id (from `[charts.*]`) — pre-fills the *Chart* view toggle. Blank uses a session-local default. |
 
 ### When a row is clicked

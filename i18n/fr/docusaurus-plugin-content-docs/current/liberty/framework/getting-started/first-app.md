@@ -149,7 +149,7 @@ Cliquez sur **Enregistrer**, puis ouvrez l'URL `http://127.0.0.1:8000/screens/tu
 
 Cliquez sur n'importe quelle ligne — le dialogue d'édition s'ouvre avec les quatre champs, **Enregistrer** déclenche la requête de mise à jour, **Supprimer** déclenche la requête de suppression, **+ Ajouter** ouvre un formulaire vide lié à la requête d'insertion.
 
-[Écrans](../screens.md) couvre les onglets, les conditions par champ, les lectures/écritures inter-connecteurs et l'ensemble complet des options du dialogue.
+[Écrans](../build/screens/overview.md) couvre les onglets, les conditions par champ, les lectures/écritures inter-connecteurs et l'ensemble complet des options du dialogue.
 
 ---
 
@@ -188,5 +188,5 @@ Quatre blocs TOML en coulisses — les quatre fichiers ont été mis à jour sur
 - [Structure du projet](./project-layout.md) — la cartographie des fichiers de `liberty-apps`.
 - [Concepts → Connecteurs](../connectors.md) — HTTP, API, requêtes paramétrées, indications de schéma.
 - [Concepts → Dictionnaire](../dictionary.md) — libellés, énumérations, lookups, règles de format.
-- [Authentification → Rôles et permissions](../auth/roles-permissions.md) — restreindre le nouvel écran à un rôle spécifique.
+- [Authentification → Rôles et permissions](../build/secure/roles-and-permissions.md) — restreindre le nouvel écran à un rôle spécifique.
 - [UI des Paramètres](../configuration/settings-ui.md) — chaque éditeur en détail.

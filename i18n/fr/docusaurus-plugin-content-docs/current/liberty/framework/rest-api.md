@@ -18,7 +18,7 @@ Cette page est une cartographie domaine par domaine des endpoints, avec la permi
 - **Authentification** — chaque endpoint demande un token `Bearer` dans l'en-tête `Authorization`, sauf `POST /auth/login`, `POST /auth/refresh`, la paire OIDC et `GET /api/healthz`.
 - **Type de contenu** — JSON en entrée / JSON en sortie, sauf mention contraire. Les erreurs portent un corps `{ "detail": "..." }` avec un statut non 2xx.
 - **Langue** — `X-Liberty-Lang: fr` modifie les libellés de la réponse pour les endpoints qui en contiennent (écrans, dictionnaire, menus, erreurs).
-- **Codes de permission** identiques à ceux documentés sous [Rôles et permissions](./auth/roles-permissions.md). `*` est un caractère générique ; `sql:invoices:*` correspond à toute requête du connecteur `invoices`.
+- **Codes de permission** identiques à ceux documentés sous [Rôles et permissions](./build/secure/roles-and-permissions.md). `*` est un caractère générique ; `sql:invoices:*` correspond à toute requête du connecteur `invoices`.
 
 ---
 
@@ -43,7 +43,7 @@ Utile pour les sondes de vivacité. Ne touche pas la base de données.
 | `GET` | `/auth/oidc/login` | public | — | 302 vers l'IdP. |
 | `GET` | `/auth/oidc/callback` | public | query | 302 vers `/`. Pose la session locale. |
 
-Voir [Authentification](./auth/authentication.md) pour le flux OIDC.
+Voir [Authentification](./build/secure/sign-in.md) pour le flux OIDC.
 
 ---
 
@@ -240,4 +240,4 @@ Chaque endpoint y est documenté avec la forme exacte de requête / réponse gé
 
 - L'API en direct sur `http://${HOST}:${PORT}/docs`.
 - [Configuration → Interface Paramètres](./configuration/settings-ui.md) — l'éditeur dans le navigateur qui consomme la famille `/admin/config/*`.
-- [Authentification → Rôles et permissions](./auth/roles-permissions.md) — les codes de permission vérifiés par chaque endpoint.
+- [Authentification → Rôles et permissions](./build/secure/roles-and-permissions.md) — les codes de permission vérifiés par chaque endpoint.

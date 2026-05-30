@@ -118,7 +118,7 @@ Le concepteur s'ouvre sur **Général**. Cet onglet est l'endroit où l'on câbl
 | **max_rows** | Plafond sur le résultat de la requête de lecture. Vide utilise la valeur par défaut du connecteur / pool (typiquement 1000). |
 | **key_columns** | Colonnes qui identifient une ligne de façon unique — pilote la correspondance mise à jour-ou-insertion de l'import Excel et le verrouillage du mode édition du dialogue. Laisser vide pour dériver des colonnes dont l'indicateur `key` est activé (le chemin recommandé — voir [Colonnes](./columns.md)). |
 | **initial_group_by** | Un ou plusieurs noms de colonnes — la grille regroupe par celles-ci à la première ouverture. L'utilisateur peut dégrouper / regrouper depuis le contrôle *Grouper*. |
-| **treeview** | À renseigner quand les lignes forment une hiérarchie parent/enfant — ex. arbres de menus, organigrammes. Ajoute une bascule *Arborescence* aux côtés de *Tableau* / *Graphique*. Voir [Concepts → Écrans](../../screens.md) pour la référence complète. |
+| **treeview** | À renseigner quand les lignes forment une hiérarchie parent/enfant — ex. arbres de menus, organigrammes. Ajoute une bascule *Arborescence* aux côtés de *Tableau* / *Graphique*. Voir [Concepts → Écrans](./overview.md) pour la référence complète. |
 | **chart_id** | Un identifiant de graphique enregistré (depuis `[charts.*]`) — pré-remplit la bascule *Graphique*. Vide utilise un défaut local à la session. |
 
 ### Quand une ligne est cliquée

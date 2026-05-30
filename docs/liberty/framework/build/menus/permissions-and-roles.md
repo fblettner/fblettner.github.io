@@ -231,4 +231,4 @@ The right pattern for both: **always set `roles`** on dashboard and page leaves 
 
 - [Translations and icons](./translations-and-icons.md) — per-language labels and Lucide icons.
 - [Build the tree](./build-the-tree.md) — the editor surface.
-- [Concepts → Authentication → Roles and permissions](../../auth/roles-permissions.md) — the deeper reference behind the permission strings.
+- [Concepts → Authentication → Roles and permissions](../secure/roles-and-permissions.md) — the deeper reference behind the permission strings.

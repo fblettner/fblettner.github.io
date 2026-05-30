@@ -148,7 +148,7 @@ Les apps éditeur Nomana-IT [Nomasx-1](https://docs.nomana-it.fr/liberty/nomasx-
 
 ## 4. Intégrations
 
-Le moteur [Jobs / Nomaflow](./jobs/overview.md) du framework + les connecteurs HTTP + les déclencheurs planifiés couvrent le besoin « plateforme d'intégration » sans outil distinct.
+Le moteur [Jobs / Nomaflow](../nomaflow/overview.md) du framework + les connecteurs HTTP + les déclencheurs planifiés couvrent le besoin « plateforme d'intégration » sans outil distinct.
 
 ### Ce que le framework fait pour vous
 
@@ -208,7 +208,7 @@ Les parties rôles + OIDC sont dans [Tutoriel — CRM → Étape 5 « Rôles et 
 
 ## 6. Orchestration de workflows
 
-La combinaison [écrans](./screens.md) + [conditions de formulaire](./form-conditions.md) + [jobs](./jobs/overview.md) couvre la plupart des workflows à machine d'états — approuver / refuser, escalader, router vers la bonne équipe.
+La combinaison [écrans](./build/screens/overview.md) + [conditions de formulaire](./form-conditions.md) + [jobs](../nomaflow/overview.md) couvre la plupart des workflows à machine d'états — approuver / refuser, escalader, router vers la bonne équipe.
 
 ### Ce que le framework fait pour vous
 
@@ -258,7 +258,7 @@ Pour les équipes qui ingèrent des données depuis plusieurs sources dans un en
 
 ### Parcours guidé
 
-[Cookbook → Import en masse](./cookbook/bulk-import.md) couvre le côté entrant ; la [documentation des jobs](./jobs/overview.md) couvre l'orchestration.
+[Cookbook → Import en masse](./cookbook/bulk-import.md) couvre le côté entrant ; la [documentation des jobs](../nomaflow/overview.md) couvre l'orchestration.
 
 ---
 

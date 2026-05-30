@@ -125,6 +125,6 @@ The job's *Next 5 fires* preview confirms it'll fire tomorrow at 08:00.
 
 ## What's next
 
-- [Jobs — Nomaflow → Overview](../jobs/overview.md) for the scheduling model.
+- [Jobs — Nomaflow → Overview](../../nomaflow/overview.md) for the scheduling model.
 - [Cookbook → Excel export](./excel-export.md) for the export endpoint.
 - [CRM tutorial → Step 6](../tutorial-crm/06-ai-and-jobs.md) for a similar nightly-job pattern (stale deals).
