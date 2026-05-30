@@ -20,7 +20,14 @@ Cette page détaille le câblage des deux côtés : l'indicateur sur le connecte
 | **`[menus.<connector>]`** | Le fichier de menus (Paramètres → Menus). | Oui — sans menu, le connecteur est traité comme une *source de données*, pas une application. |
 | **`home`** | Sur le connecteur (Paramètres → Connecteurs → onglet Paramètres). | Optionnel — définit l'élément d'accueil quand l'utilisateur choisit cette application dans le sélecteur. |
 
-Quand `show_in_switcher = true` et qu'un menu existent ensemble, la pastille du connecteur passe du groupe *Sources de données* de la page Connecteurs au groupe *Applications*, et une tuile pour ce connecteur apparaît dans le sélecteur en haut.
+Deux effets distincts, déclenchés par des indicateurs différents :
+
+| Effet | Déclenché par |
+|---|---|
+| La pastille du connecteur passe de *Sources de données* à *Applications* sur la page Connecteurs. | L'existence du menu seule — `[menus.<connector>]` est configuré. |
+| Une tuile pour l'application apparaît dans le sélecteur en haut (le sélecteur d'applications côté utilisateur). | L'existence du menu **et** `show_in_switcher = true`. |
+
+Configurer le menu d'abord ; activer `show_in_switcher` ensuite. Manquer la seconde étape laisse le connecteur classé comme « application » sur la page Connecteurs sans pour autant le faire apparaître dans le sélecteur côté utilisateur.
 
 ---
 

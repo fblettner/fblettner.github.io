@@ -20,7 +20,14 @@ This page walks the wiring from both sides: the connector flag + the menu key.
 | **`[menus.<connector>]`** | The menu file (Settings → Menus). | Yes — without a menu, the connector is treated as a *data source*, not an app. |
 | **`home`** | On the connector (Settings → Connectors → Settings tab). | Optional — sets the landing menu item when the user picks this app in the switcher. |
 
-Once both `show_in_switcher = true` and a menu exist, the connector chip moves from the Connectors page's *Data sources* group to the *Apps* group, and a tile for it appears in the top switcher.
+Two separate effects, decided by different flags:
+
+| Effect | Triggered by |
+|---|---|
+| The connector chip moves from *Data sources* to *Apps* on the Connectors page. | Menu existence alone — `[menus.<connector>]` is set up. |
+| A tile for the app appears in the top switcher (the user-facing app picker). | Both menu existence **and** `show_in_switcher = true`. |
+
+Set up the menu first; flip `show_in_switcher` on second. Miss the second step and the connector still classifies as an "app" on the Connectors page but doesn't show up for end users in the switcher.
 
 ---
 

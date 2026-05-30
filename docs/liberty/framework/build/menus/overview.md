@@ -12,7 +12,7 @@ Three things are worth knowing up front:
 
 | Fact | Implication |
 |---|---|
-| There is **no separate "app" object** in Liberty. | A *connector with a menu attached* is what shows up as an app in the top switcher. The menu **is** what makes a connector visible as an app. |
+| There is **no separate "app" object** in Liberty. | An "app" is just a **connector that has a menu attached** *and* whose `show_in_switcher` flag is on. Both conditions are required for the top app switcher to show its tile. |
 | Menus are stored as a **flat list of items** linked by `parent`. | The tree is assembled by the backend — easier to hand-edit, round-trips cleanly through TOML, drag operations only ever mutate one list. |
 | Every menu key is a connector name (`[menus.<connector>]`). | The connector named `crm` carries the menu under `[menus.crm]`; the screen `customers` on `crm` is reached from a leaf with `target = "customers_get"`. |
 
@@ -161,12 +161,14 @@ Cross-menu duplicates are fine — `[menus.crm.security]` and `[menus.nomasx1.se
 
 ## How a connector becomes an app
 
-The hidden link the docs above hint at: **a connector becomes visible as an app in the top switcher when it has both:**
+**A connector becomes visible in the top app switcher only when both conditions are true:**
 
-1. A menu attached — `[menus.<connector>]` exists.
-2. `show_in_switcher = true` on the connector — the default.
+1. A menu exists — `[menus.<connector>]` is set up in *Settings → Menus*.
+2. `show_in_switcher = true` on the connector — set in *Settings → Connectors → \<connector> → Settings*.
 
-The Connectors page reflects this — connectors with a menu show under the *Apps* group; connectors without a menu show under *Data sources*. Same connectors, different role.
+Miss either one and the connector exists but doesn't appear in the switcher. Setting up the menu first and **then** ticking `show_in_switcher` is the usual order.
+
+Note: the Connectors page's own *Apps* / *Data sources* grouping is based on menu existence alone — connectors with a menu but `show_in_switcher = false` still show under *Apps* there. That grouping is an internal Settings-UI affordance; the user-facing top switcher is what `show_in_switcher` gates.
 
 The next page covers the wiring from both sides.
 

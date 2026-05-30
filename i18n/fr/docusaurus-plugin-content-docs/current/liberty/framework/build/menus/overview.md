@@ -12,7 +12,7 @@ Trois points à connaître d'emblée :
 
 | Fait | Conséquence |
 |---|---|
-| Il n'y a **aucun objet « application » séparé** dans Liberty. | Un *connecteur auquel on a attaché un menu* apparaît comme une application dans le sélecteur d'applications en haut. Le menu **est** ce qui rend un connecteur visible comme application. |
+| Il n'y a **aucun objet « application » séparé** dans Liberty. | Une « application » est simplement un **connecteur qui a un menu attaché** *et* dont l'indicateur `show_in_switcher` est actif. Les deux conditions sont requises pour que sa tuile apparaisse dans le sélecteur d'applications en haut. |
 | Les menus sont stockés sous forme de **liste plate d'éléments** reliés par `parent`. | L'arbre est assemblé par le backend — plus facile à éditer à la main, conversion propre vers TOML et retour, les opérations de glisser-déposer ne modifient qu'une seule liste. |
 | Chaque clé de menu est un nom de connecteur (`[menus.<connector>]`). | Le connecteur nommé `crm` porte le menu sous `[menus.crm]` ; l'écran `customers` sur `crm` est atteint depuis une feuille avec `target = "customers_get"`. |
 
@@ -161,12 +161,14 @@ Les doublons entre menus différents sont autorisés — `[menus.crm.security]` 
 
 ## Comment un connecteur devient une application
 
-Le lien implicite que suggèrent les sections ci-dessus : **un connecteur devient visible comme application dans le sélecteur en haut quand il a les deux :**
+**Un connecteur n'apparaît dans le sélecteur d'applications en haut que lorsque les deux conditions sont réunies :**
 
-1. Un menu attaché — `[menus.<connector>]` existe.
-2. `show_in_switcher = true` sur le connecteur — la valeur par défaut.
+1. Un menu existe — `[menus.<connector>]` est configuré dans *Paramètres → Menus*.
+2. `show_in_switcher = true` sur le connecteur — à activer dans *Paramètres → Connecteurs → \<connecteur> → Paramètres*.
 
-La page Connecteurs reflète cela — les connecteurs avec un menu apparaissent sous le groupe *Applications* ; les connecteurs sans menu apparaissent sous *Sources de données*. Mêmes connecteurs, rôle différent.
+Si l'une des deux manque, le connecteur existe mais ne s'affiche pas dans le sélecteur. L'ordre habituel : configurer le menu d'abord, **puis** cocher `show_in_switcher`.
+
+À noter : le regroupement *Applications* / *Sources de données* sur la page Connecteurs se base uniquement sur l'existence d'un menu — un connecteur avec un menu mais `show_in_switcher = false` reste classé sous *Applications* à cet endroit. Ce regroupement est un confort interne à l'interface Paramètres ; le sélecteur d'applications côté utilisateur est ce que `show_in_switcher` gouverne.
 
 La page suivante détaille le câblage des deux côtés.
 
