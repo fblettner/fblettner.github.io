@@ -114,6 +114,7 @@ const sidebars: SidebarsConfig = {
                 'liberty/framework/build/plugins/deploy-and-debug',
               ],
             },
+            'liberty/framework/build/packages',
           ],
         },
         {
@@ -169,6 +170,7 @@ const sidebars: SidebarsConfig = {
         'liberty/installation/portainer',
         'liberty/installation/traefik',
         'liberty/installation/production',
+        'liberty/installation/deploy-prebuilt-apps',
         'liberty/installation/upgrading',
       ],
     },
@@ -227,6 +229,7 @@ const sidebars: SidebarsConfig = {
         'liberty/nomaflow/workflows/conditional-cleanup',
       ],
     },
+    'liberty/nomaflow/bundled-jobs',
     {
       type: 'category',
       label: 'Customisation',
