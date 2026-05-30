@@ -18,7 +18,7 @@ Plus two cross-cutting concerns:
 | Concern | What it does | Where |
 |---|---|---|
 | **Encrypted secrets** | Pool passwords, OIDC client secret, API tokens are stored as `ENC:<base64>` on disk (AES-256-GCM). | The 🔒 toggle on the corresponding field in any Settings page. |
-| **License key** | Gates connectors marked `licensed = true` (Nomasx-1, Nomajde, NomaUBL …). | `app.toml` `[license] key` or the `LIBERTY_LICENSE_KEY` env var. |
+| **License key** | Gates the bundled vendor products — Nomasx-1, Nomajde, NomaUBL …. | `app.toml` `[license] key` or the `LIBERTY_LICENSE_KEY` env var. |
 
 This page is the map; each task gets its own page.
 
@@ -126,7 +126,7 @@ Full coverage: [Encrypted secrets](./encrypted-secrets.md).
 
 ## License — gating licensed connectors
 
-Some connectors ship with a `licensed = true` flag — they're loaded only when the framework has a valid license key. Examples: Nomasx-1, Nomajde, NomaUBL.
+Some bundled vendor products — Nomasx-1, Nomajde, NomaUBL and similar — are loaded only when the framework has a valid license key.
 
 The license is an RS256 JWT signed by the vendor; configure it via `[license] key` in `app.toml` or the `LIBERTY_LICENSE_KEY` env var. With a missing or expired license, the licensed connectors don't load — their routes return 404 — but the rest of the framework still works.
 

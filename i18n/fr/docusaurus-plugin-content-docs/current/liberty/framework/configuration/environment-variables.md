@@ -61,7 +61,7 @@ Voir [Chiffrement et secrets](./encryption-secrets.md) pour le format de chiffre
 
 ### `LIBERTY_LICENSE_KEY`
 
-| Effet | JWT signé en RS256 qui déverrouille les connecteurs marqués `licensed = true`. Chargé dans `[license] key` au démarrage. |
+| Effet | JWT signé en RS256 qui déverrouille les produits éditeur packagés (Nomasx-1, Nomajde, NomaUBL …). Chargé dans `[license] key` au démarrage. |
 | --- | --- |
 | Défaut | non défini → seul le sous-ensemble open source des connecteurs est disponible. L'UI des Paramètres affiche le reste comme *Sous licence*. |
 | Format | Un long JWT — voir [Clé de licence](../auth/license-key.md) pour la liste des claims. |

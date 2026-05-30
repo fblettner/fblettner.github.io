@@ -1,12 +1,12 @@
 ---
 title: Clé de licence
-description: "Ce que la licence conditionne (connecteurs marqués licensed = true), où la renseigner (app.toml ou variable d'environnement LIBERTY_LICENSE_KEY) et ce qui se passe quand elle est absente ou expirée."
+description: "Ce que la licence conditionne (les produits éditeur packagés — Nomasx-1, Nomajde, NomaUBL …), où la renseigner (app.toml ou variable d'environnement LIBERTY_LICENSE_KEY) et ce qui se passe quand elle est absente ou expirée."
 keywords: [Liberty Framework, clé de licence, connecteur sous licence, RS256, JWT de licence, Nomasx-1, Nomajde, NomaUBL]
 ---
 
 # Clé de licence
 
-Le framework ouvert de Liberty — connecteurs, écrans, menus, assistant IA, Nomaflow — est pleinement utilisable sans licence. Les **connecteurs sous licence** forment un volet distinct : des produits packagés tels que Nomasx-1, Nomajde et NomaUBL livrés avec `licensed = true` et chargés uniquement quand le framework présente une licence valide à l'éditeur.
+Le framework ouvert de Liberty — connecteurs, écrans, menus, assistant IA, Nomaflow — est pleinement utilisable sans licence. Les **connecteurs sous licence** forment un volet distinct : des produits éditeur packagés tels que Nomasx-1, Nomajde et NomaUBL chargés uniquement quand une licence valide est présente.
 
 Cette page couvre ce que la licence conditionne, où la placer et ce qui reste visible quand elle est absente.
 
@@ -14,14 +14,7 @@ Cette page couvre ce que la licence conditionne, où la placer et ce qui reste v
 
 ## Ce qui est conditionné
 
-Un connecteur devient « sous licence » quand sa définition porte `licensed = true` :
-
-```toml
-[connectors.nomasx1]
-type = "sql"
-pool = "nomasx1"
-licensed = true     # ← ce drapeau
-```
+Un connecteur est **sous licence** quand l'éditeur du framework (Nomana-IT) le classe ainsi au moment de la compilation. Les connecteurs sous licence actuels sont **Nomasx-1**, **Nomajde** et **NomaUBL** — et la liste s'étend à mesure que de nouveaux produits packagés arrivent. Les primitives ouvertes de Liberty Next (vos propres connecteurs SQL, écrans, menus, tableaux de bord, tâches Nomaflow, l'assistant IA) ne sont **jamais** sous licence et ne demandent aucune clé.
 
 Au démarrage du framework :
 

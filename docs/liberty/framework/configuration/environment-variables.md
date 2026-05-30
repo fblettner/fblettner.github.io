@@ -61,7 +61,7 @@ See [Encryption & secrets](./encryption-secrets.md) for the encryption format an
 
 ### `LIBERTY_LICENSE_KEY`
 
-| Effect | RS256-signed JWT that unlocks connectors marked `licensed = true`. Loaded into `[license] key` at startup. |
+| Effect | RS256-signed JWT that unlocks the bundled vendor products (Nomasx-1, Nomajde, NomaUBL …). Loaded into `[license] key` at startup. |
 | --- | --- |
 | Default | unset → only the open-source connector subset is available. The Settings UI shows the rest as *Licensed*. |
 | Format | A long JWT — see [License key](../auth/license-key.md) for the claim list. |

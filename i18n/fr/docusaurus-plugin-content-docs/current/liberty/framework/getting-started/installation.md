@@ -156,7 +156,7 @@ Ouvrez `http://127.0.0.1:8000`, connectez-vous comme `admin` avec le mot de pass
 | `LIBERTY_DB_URL` | URL du pool par défaut — par défaut SQLite (`sqlite+aiosqlite:///liberty.db`). |
 | `LIBERTY_JWT_SECRET` | Clé de signature JWT. Non définie = clé éphémère (les tokens meurent au redémarrage). |
 | `LIBERTY_MASTER_KEY` | Clé AES-256-GCM utilisée pour déchiffrer les blocs `ENC:` dans les TOML — voir [Chiffrement et secrets](../configuration/encryption-secrets.md). |
-| `LIBERTY_LICENSE_KEY` | JWT RS256 qui déverrouille les connecteurs `licensed = true` — voir [Clé de licence](../auth/license-key.md). |
+| `LIBERTY_LICENSE_KEY` | JWT RS256 qui déverrouille les produits éditeur packagés (Nomasx-1, Nomajde, NomaUBL …) — voir [Clé de licence](../auth/license-key.md). |
 | `ANTHROPIC_API_KEY` | Active l'[assistant IA](../ai-assistant.md). |
 
 Toutes les variables sont documentées une à une dans [Variables d'environnement](../configuration/environment-variables.md).

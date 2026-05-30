@@ -78,7 +78,7 @@ Liberty Next est en cours de développement actif. Cette documentation est rédi
   <text x="60" y="346" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">DICTIONNAIRE · ÉCRANS · TABLEAUX DE BORD · MENUS</text>
   <text x="60" y="368" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Le dictionnaire attache les libellés et les règles d'affichage (BOOLEAN / ENUM / LOOKUP) aux colonnes des requêtes. Les écrans transforment un clic sur une ligne en formulaire modal typé, avec onglets, conditions par champ et audit. Les tableaux de bord disposent les graphiques et les indicateurs au-dessus des mêmes requêtes nommées. Les menus définissent l'arborescence latérale, élaguée selon les droits de l'utilisateur connecté.</text>
   <text x="60" y="392" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Chaque fichier de configuration est rechargeable à chaud. `POST /admin/reload` reconstruit le registre ; les requêtes en cours conservent la version qu'elles utilisent.</text>
-  <text x="60" y="412" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">Une clé de licence (JWT signé RS256) déverrouille les connecteurs marqués `licensed = true` — c'est ainsi que Nomasx-1 et Nomajde sont activés.</text>
+  <text x="60" y="412" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">Une clé de licence (JWT signé RS256) déverrouille les produits éditeur packagés — c'est ainsi que Nomasx-1, Nomajde et NomaUBL sont activés.</text>
 </svg>
 
 ---

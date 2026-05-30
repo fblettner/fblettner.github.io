@@ -1,12 +1,12 @@
 ---
 title: License key
-description: "What the license gates (connectors marked licensed = true), where to set it (app.toml or LIBERTY_LICENSE_KEY env var), and what happens when it's missing or expired."
+description: "What the license gates (the bundled vendor products — Nomasx-1, Nomajde, NomaUBL …), where to set it (app.toml or LIBERTY_LICENSE_KEY env var), and what happens when it's missing or expired."
 keywords: [Liberty Framework, license key, licensed connector, RS256, JWT license, Nomasx-1, Nomajde, NomaUBL]
 ---
 
 # License key
 
-Liberty's open framework — connectors, screens, menus, the AI assistant, Nomaflow — is fully usable without a license. **Licensed connectors** are a separate piece: bundled products like Nomasx-1, Nomajde and NomaUBL that ship marked `licensed = true` and load only when the framework presents a valid license to the vendor.
+Liberty's open framework — connectors, screens, menus, the AI assistant, Nomaflow — is fully usable without a license. **Licensed connectors** are a separate piece: bundled vendor products like Nomasx-1, Nomajde and NomaUBL that the framework loads only when a valid license is present.
 
 This page covers what the license gates, where to put it, and what's visible when it isn't there.
 
@@ -14,14 +14,7 @@ This page covers what the license gates, where to put it, and what's visible whe
 
 ## What's gated
 
-A connector becomes "licensed" when its definition carries `licensed = true`:
-
-```toml
-[connectors.nomasx1]
-type = "sql"
-pool = "nomasx1"
-licensed = true     # ← this flag
-```
+A connector is **licensed** when the framework's vendor (Nomana-IT) classifies it that way at build time. The current licensed connectors are **Nomasx-1**, **Nomajde** and **NomaUBL** — and the list grows when new bundled products ship. Liberty Next's open primitives (your own SQL connectors, screens, menus, dashboards, Nomaflow jobs, the AI assistant) are **never** licensed and don't need a key.
 
 At framework startup:
 

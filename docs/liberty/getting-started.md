@@ -78,7 +78,7 @@ Liberty Next is in active development. This documentation is being written along
   <text x="60" y="346" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif" letterSpacing="0.05em">DICTIONARY · SCREENS · DASHBOARDS · MENUS</text>
   <text x="60" y="368" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Dictionary entries pin labels and BOOLEAN / ENUM / LOOKUP rules to a query column. Screens turn a row click into a typed modal form (tabs · per-field conditions · audit). Dashboards lay out charts and KPIs over named queries. Menus define what the operator sees in the sidebar, pruned to their permissions.</text>
   <text x="60" y="392" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Every config file is hot-reloadable. `POST /admin/reload` rebuilds the registry; in-flight requests keep the version they started with.</text>
-  <text x="60" y="412" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">License key (RS256-signed JWT) unlocks the `licensed = true` connectors — that is what gates nomasx1 and nomajde.</text>
+  <text x="60" y="412" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">License key (RS256-signed JWT) unlocks the bundled vendor products — that is what gates Nomasx-1, Nomajde and NomaUBL.</text>
 </svg>
 
 ---
