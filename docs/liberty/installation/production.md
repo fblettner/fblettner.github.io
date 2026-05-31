@@ -36,13 +36,13 @@ Every secret lives in `release/.env`. `install.sh` generates it with random valu
 |---|---|---|
 | `LIBERTY_IMAGE_TAG` | Pin the image version. | See [section 3](#3--pin-the-image-tag). |
 | `LIBERTY_JWT_SECRET` | Signs every access token. | Rotating it invalidates all outstanding tokens — see [section 7](#7--jwt-secret-rotation). |
-| `LIBERTY_MASTER_KEY` | Decrypts `ENC:` values in TOML. | MUST stay constant — see [section 8](#8--master-key-handling). |
-| `LIBERTY_ADMIN_PASSWORD` | Bootstrap password for the local `admin` user. | Change after first sign-in via `liberty-admin set-password` — see [section 5](#5--change-every-default-password). |
+| `LIBERTY_MASTER_KEY` | Decrypts `ENC:` values in TOML — including the license key, AI key and OIDC client secret stored in `app.toml`. | MUST stay constant — see [section 8](#8--master-key-handling). |
+| `LIBERTY_ADMIN_PASSWORD` | Bootstrap password for the local `admin` user. | `install.sh` generates one + prints it once during the first boot — not stored in `.env`. Reset later via `docker exec liberty-next liberty-admin reset-admin-password` or `liberty-admin set-password admin <new>` — see [section 5](#5--change-every-default-password). |
 | `POSTGRES_PASSWORD` | Postgres superuser password. | Full / Swarm only. |
-| `PGADMIN_EMAIL` / `PGADMIN_PASSWORD` | pgAdmin sign-in. | Default email is `admin@example.com` — change both. |
-| `LIBERTY_LICENSE_KEY` | License JWT (licensed bundles only). | Optional for the framework alone. |
-| `LIBERTY_OIDC_ENABLED` / `LIBERTY_OIDC_*` | SSO wiring. | See [section 6](#6--oidc-for-sso). |
+| `PGADMIN_EMAIL` / `PGADMIN_PASSWORD` | pgAdmin sign-in. | Default email is `admin@liberty.fr` — change both. |
 | `LIBERTY_DOMAIN` / `ACME_EMAIL` | TLS hostname + Let's Encrypt contact. | See [section 4](#4--wire-tls). |
+
+The **license key, Anthropic API key and OIDC client secret** are no longer env vars in the recommended setup. They live in `app.toml` encrypted at rest with `LIBERTY_MASTER_KEY` — edit them via *Settings → App* in the SPA (see [section 6](#6--licensekeyaiandoidcvia-settings-app)). The env-var path (`LIBERTY_LICENSE_KEY` / `ANTHROPIC_API_KEY` / `LIBERTY_OIDC_CLIENT_SECRET` referenced from `app.toml` as `${VAR}`) still works as a fallback for installs that prefer secret-manager storage.
 
 ### The `$` substitution caveat
 
@@ -153,8 +153,8 @@ docker stack deploy \
 | Where | Default | Change |
 |---|---|---|
 | **Traefik dashboard** | `admin/admin` | Bcrypt-hash a new password, paste into `release/traefik/dynamic/dynamic.yml`. `file.watch=true` reloads in seconds — no restart needed. |
-| **pgAdmin** | `admin@example.com / PGADMIN_PASSWORD` from `.env` | Set `PGADMIN_EMAIL` to a real address and rotate `PGADMIN_PASSWORD`. Restart the `pgadmin` service. |
-| **liberty-next admin** | `LIBERTY_ADMIN_PASSWORD` from `.env` | Run `liberty-admin set-password` after first sign-in (see below). |
+| **pgAdmin** | `admin@liberty.fr / PGADMIN_PASSWORD` from `.env` | Set `PGADMIN_EMAIL` to a real address and rotate `PGADMIN_PASSWORD`. Restart the `pgadmin` service. |
+| **liberty-next admin** | random value printed once by `install.sh` (not stored in `.env`) | Run `liberty-admin set-password` (or `reset-admin-password` for a fresh random value). |
 
 ### Traefik dashboard
 
@@ -183,7 +183,10 @@ docker compose up -d pgadmin                                      # COMPOSE_FILE
 ### liberty-next admin
 
 ```bash
-# Compose
+# Compose — reset to a fresh random password (printed once)
+docker exec liberty-next liberty-admin reset-admin-password
+
+# Compose — set a specific password
 docker compose exec liberty-next liberty-admin set-password admin <new>
 
 # Swarm
@@ -191,32 +194,51 @@ docker exec $(docker ps -qf name=liberty_liberty-next) \
     liberty-admin set-password admin <new>
 ```
 
-Once changed, the value in `.env` is no longer authoritative — the Argon2 hash lives in `auth.toml` on the `liberty-config` volume.
+Once changed, the Argon2 hash lives in `auth.toml` on the `liberty-config` volume. `LIBERTY_ADMIN_PASSWORD` is a first-boot-only seed — `install.sh` exports it to the shell for the boot, then drops it.
 
 ---
 
-## 6 — OIDC for SSO
+## 6 — License key, AI and OIDC via Settings → App \{#6--licensekeyaiandoidcvia-settings-app\}
 
-Wire your IdP (Keycloak, Auth0, Azure AD, Okta, …) once the install is reachable over TLS.
+Three production-grade secrets live in `app.toml` now, encrypted at rest with `LIBERTY_MASTER_KEY` (AES-256-GCM, `ENC:` prefix). They're edited via the SPA's **Settings → App** screen — **no `.env` edits, no service restart**. Full editor walkthrough: [App settings](../framework/build/settings-app.md).
 
-```env title=".env"
-LIBERTY_OIDC_ENABLED=true
-LIBERTY_OIDC_PROVIDER_URL=https://login.example.com/realms/liberty
-LIBERTY_OIDC_CLIENT_ID=liberty-next
-LIBERTY_OIDC_CLIENT_SECRET=<from-the-IdP>
+| Section | What lives there | What happens on save |
+|---|---|---|
+| **License** | Vendor-signed RS256 JWT that unlocks the licensed connectors (Nomasx-1, Nomajde, NomaUBL). | Connector registry rebuilt in place. Licensed connectors that were filtered out at startup reappear; ones the new key no longer covers are dropped. No restart. |
+| **AI Assistant → Anthropic API key** | `sk-ant-…` for Anthropic. Plus every AI knob (model, tool exposure, system prompt, web-fetch allowlist, per-call limits). | Assistant rebuilt; next chat turn uses the new config. |
+| **OpenID Connect (SSO)** | discovery_url, client_id, client_secret, scopes, claim mappings, optional proxy redirect overrides. | OIDC handler rebuilt; next sign-in uses the new config. Active sessions (signed by `LIBERTY_JWT_SECRET`) are unaffected. |
+
+Sensitive fields use the **reveal-to-edit** pattern: while masked, they show dots + a *Replace* button; the wire payload sends `""` so an inadvertent save preserves the on-disk encrypted value. Click *Replace* to enter a new value. See [App settings → Masked secrets](../framework/build/settings-app.md#masked-secrets--the-reveal-to-edit-pattern).
+
+### Why this matters in production
+
+| Before | Now |
+|---|---|
+| License rotation required a `.env` edit + container restart. | UI rotation, no restart, no outage. |
+| Anthropic key rotation required a restart. | UI rotation, next chat turn uses the new key. |
+| OIDC client-secret rotation required a `.env` edit + restart. | UI rotation, no active-session impact. |
+| Secrets sat in `.env` (mode 0600 — still on disk plaintext). | Encrypted at rest in `app.toml` with the install master key. |
+
+### Env-var fallback
+
+For installs that prefer the secret in a secret manager (Kubernetes Secrets, Docker Secrets, Vault), the env-var path still works:
+
+```toml title="app.toml — env-var references resolved at startup"
+[license]
+key = "${LIBERTY_LICENSE_KEY}"
+
+[ai]
+api_key = "${ANTHROPIC_API_KEY}"
+
+[oidc]
+client_secret = "${LIBERTY_OIDC_CLIENT_SECRET}"
 ```
 
-Then restart liberty-next:
+Set the env vars in the container's environment, restart. The UI's *License* / *AI api_key* / *OIDC client_secret* fields then show as *configured* but **read-only** (the framework doesn't write back to env-var-resolved values). Clear the `${VAR}` references first if you want UI management.
 
-```bash
-# Compose
-docker compose restart liberty-next                               # COMPOSE_FILE picks the right files
+### Local sign-in stays as the fallback
 
-# Swarm
-./deploy-swarm.sh
-```
-
-Local sign-in stays available as the fallback path — the `admin` user keeps working when OIDC is down (provider outage, misconfigured client). Don't disable it.
+Don't disable local sign-in once OIDC is configured — the `admin` user keeps working when OIDC is down (provider outage, misconfigured client, expired client_secret). The two paths coexist; the SPA shows both on the sign-in screen when OIDC is enabled.
 
 ---
 

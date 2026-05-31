@@ -93,28 +93,32 @@ L'OIDC se superpose au backend choisi. N'importe quel fournisseur conforme OIDC 
 
 ### Configuration
 
-Dans `app.toml` :
+L'emplacement canonique pour configurer l'OIDC est **Paramètres → App → OpenID Connect (SSO)** — chaque champ ci-dessous dispose d'un contrôle d'interface correspondant. Le client secret est chiffré au repos avec la clé maîtresse d'installation (préfixe `ENC:` dans `app.toml`) ; le motif de secret masqué à révéler-pour-modifier garantit que le chiffré stocké n'est jamais exposé dans l'interface. L'enregistrement reconstruit le gestionnaire OIDC en place — **aucun redémarrage** requis ; la prochaine tentative de connexion utilise la nouvelle configuration. Voir [Paramètres App → OpenID Connect](../settings-app.md#section-4--openid-connect-sso) pour la visite guidée de l'éditeur.
+
+L'`app.toml` résultant après un enregistrement depuis l'interface :
 
 ```toml
 [oidc]
 enabled         = true
 discovery_url   = "https://keycloak.corp.local/realms/liberty/.well-known/openid-configuration"
 client_id       = "liberty-app"
-client_secret   = "${OIDC_CLIENT_SECRET}"   # variable d'environnement — jamais de secret en clair
+client_secret   = "ENC:Mq6vNg…2z=="          # AES-256-GCM, déchiffré au démarrage
 scopes          = "openid email profile"
-username_claim  = "preferred_username"      # quel claim devient le nom d'utilisateur Liberty
+username_claim  = "preferred_username"
 email_claim     = "email"
 name_claim      = "name"
-redirect_url    = ""                        # vide = auto-déduit https://<host>/auth/oidc/callback
-frontend_redirect = ""                      # vide = flux standard côté serveur
+redirect_url    = ""                          # vide = auto-déduit https://<host>/auth/oidc/callback
+frontend_redirect = ""                        # vide = flux standard côté serveur
 ```
+
+Pour les installations qui préfèrent le stockage dans un gestionnaire de secrets, `client_secret = "${LIBERTY_OIDC_CLIENT_SECRET}"` fonctionne toujours — la variable d'environnement est résolue au démarrage et le champ de l'interface s'affiche comme configuré-mais-en-lecture-seule. Effacer la référence `${VAR}` pour que l'interface reprenne la main sur la valeur.
 
 | Champ | Requis | Notes |
 |---|---|---|
 | `enabled` | oui | Active / désactive l'OIDC. Désactivé, le bouton OIDC disparaît de l'écran de connexion. |
 | `discovery_url` | oui | L'URL `.well-known` du fournisseur. Liberty la récupère une fois au démarrage et met le résultat en cache. |
 | `client_id` | oui | L'identifiant client OAuth2 enregistré auprès du fournisseur. |
-| `client_secret` | oui | Lu depuis une variable d'environnement (`${OIDC_CLIENT_SECRET}`). Jamais en clair. |
+| `client_secret` | oui | Renseigné via *Paramètres → App → OIDC → Client secret* ; chiffré au repos. Repli par variable d'environnement (`${LIBERTY_OIDC_CLIENT_SECRET}`) également pris en charge. |
 | `scopes` | oui | Au minimum `openid` ; ajouter `email` / `profile` pour récupérer ces claims. |
 | `username_claim` | non (défaut `preferred_username`) | Quel claim devient le nom d'utilisateur Liberty. Repli sur `email`, puis sur `sub` en cas d'absence. |
 | `email_claim` | non | Quel claim devient l'adresse de courriel. |

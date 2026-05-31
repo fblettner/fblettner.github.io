@@ -53,11 +53,17 @@ For Docker Swarm, the equivalent helper is `./deploy-swarm.sh` (covered in [Dock
 |---|---|
 | **`--tag <version>`** | Pin `LIBERTY_IMAGE_TAG` at install time (e.g. `--tag 7.0.2`). Default `latest` (every merge to main → new release; `latest` always reflects current main). Ignored when `.env` already exists — edit the var directly there. |
 | **`--reset`** | `docker compose down -v` + delete `.env` first. Use when a previous install left stale `pg-data` with the old password (postgres init only runs on a brand-new volume — fresh secrets + stale volume = auth-fails-forever). |
-| **`--apps <wheel-or-URL>`** | After bringing up the base stack, chain to `install-apps.sh` with the given wheel — licensed apps (Nomasx-1 / Nomajde / Nomaflow) deploy in the same command. Combine with `--license-key <jwt>`. |
+| **`--apps <wheel-or-URL>`** | After bringing up the base stack, chain to `install-apps.sh` with the given wheel — licensed apps (Nomasx-1 / Nomajde / Nomaflow) deploy in the same command. The license key is set **afterwards** via *Settings → App → License* in the UI (encrypted at rest in `app.toml`). |
 | **`--ssl letsencrypt --domain --email`** *(full only)* | Wire Let's Encrypt automatically. Requires the host be reachable from the public internet on `:80`/`:443` for the TLS-ALPN challenge. |
 | **`--ssl provided --cert-dir --cert-file --key-file`** *(full only)* | Wire operator-provided certs (corporate CA, internal PKI, air-gapped install). `install.sh` validates the files exist, bind-mounts the cert directory, generates `traefik/dynamic/tls.yml`. |
 
-All five compose together — `./install.sh full --tag 7.0.2 --ssl letsencrypt --domain liberty.example.com --email ops@example.com --apps ./liberty_apps-7.0.1-py3-none-any.whl --license-key <jwt>` is a single-command production install with TLS + the licensed bundle.
+The four flags compose together — `./install.sh full --tag 7.0.2 --ssl letsencrypt --domain liberty.example.com --email ops@example.com --apps ./liberty_apps-7.0.1-py3-none-any.whl` is a single-command production install with TLS + the licensed bundle. After the UI is up, paste the license key into *Settings → App → License*. (`--license-key` was removed from `install.sh` — the key now lives in `app.toml` encrypted at rest, not in `.env`.)
+
+A wipe-and-exit flag is also worth knowing:
+
+| Flag | Purpose |
+|---|---|
+| **`--reset`** | `docker compose down` + `docker volume rm` of every Liberty data volume (`pg-data`, `pgadmin-data`, `portainer-data`, `liberty-data`, `liberty-config`) + deletes `.env`, then **exits**. The `traefik-acme` volume is intentionally preserved (Let's Encrypt rate-limits at 5 certs / 7 days / domain set — wiping it on every reset cycle would burn through that immediately). Combining `--reset` with `--apps` / `--ssl` errors out — re-run `install.sh` with your flags after the reset finishes. Use when a previous install left stale volumes whose credentials no longer match a freshly-generated `.env`. |
 
 ---
 
@@ -139,24 +145,22 @@ Nomasx-1, Nomajde and the bundled Nomaflow jobs ship as a single **`liberty_apps
 ### Single-command (fresh host)
 
 ```bash
-./install.sh full \
-    --apps ./liberty_apps-7.0.1-py3-none-any.whl \
-    --license-key <your-rs256-jwt>
+./install.sh full --apps ./liberty_apps-7.0.1-py3-none-any.whl
 ```
 
-That's everything — base stack + licensed apps + license key in one go.
+That's everything — base stack + licensed apps in one go. Once the SPA is up, paste the vendor-signed license JWT into *Settings → App → License* (encrypted at rest with the install master key, live on save — connectors rebuild without restart). See [App settings](../framework/build/settings-app.md).
 
 ### Or split it: base first, apps later
 
 ```bash
-./install.sh full                                                            # base stack
-./install-apps.sh ./liberty_apps-7.0.1-py3-none-any.whl --license-key <jwt>  # add the apps
+./install.sh full                                              # base stack
+./install-apps.sh ./liberty_apps-7.0.1-py3-none-any.whl        # add the apps
 ```
 
 What `install-apps.sh` does:
 
 1. **Materializes the wheel** into `./apps/` via a throwaway `python:3.12-slim` container — your host needs **no** local pip or Python install. The wheel ships with a `liberty-apps install --target DIR` CLI that copies `config/` + `plugins/` into the destination, preserving operator-edited TOMLs.
-2. **Updates `.env`** — appends `docker-compose.apps.yml` to `COMPOSE_FILE`, sets `APPS_HOST_PATH=<absolute path>` and `LIBERTY_LICENSE_KEY=<jwt>` (if passed).
+2. **Updates `.env`** — appends `docker-compose.apps.yml` to `COMPOSE_FILE` and sets `APPS_HOST_PATH=<absolute path>`. The license key is **not** written to `.env` — set it via the UI after the apps are visible.
 3. **Restarts the stack** — `docker compose up -d` picks up the apps overlay automatically via `COMPOSE_FILE` (no `-f` juggling).
 
 Full detail: [Deploy prebuilt apps](./deploy-prebuilt-apps.md).
@@ -229,7 +233,7 @@ You'll point `LIBERTY_DB_URL` at an existing Postgres (or stick with the default
   <text x="848" y="246" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Python-only environments</text>
 
   <rect x="40" y="338" width="920" height="32" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937"/>
-  <text x="500" y="358" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">install.sh --ssl letsencrypt|provided  +  --apps &lt;wheel&gt; --license-key &lt;jwt&gt;  →  composes overlays into COMPOSE_FILE</text>
+  <text x="500" y="358" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">install.sh --ssl letsencrypt|provided  +  --apps &lt;wheel&gt;  →  composes overlays into COMPOSE_FILE · license set via Settings → App after install</text>
 </svg>
 
 ---
@@ -248,16 +252,15 @@ Common optional vars (the full list is in `release/.env.example`):
 | Variable | Default | What |
 |---|---|---|
 | `LIBERTY_IMAGE_TAG` | `latest` | Pin to a specific release tag for stability (`7.0.1`, `7.0.2`, etc.). Use `./install.sh --tag <ver>` to set it at install time. |
-| `LIBERTY_ADMIN_PASSWORD` | (generated + printed once) | Bootstrap password for the first-run `admin` user. |
-| `LIBERTY_LICENSE_KEY` | (none — `restricted` mode) | RS256 JWT unlocking the licensed connectors. |
-| `ANTHROPIC_API_KEY` | (none — AI assistant disabled) | Enables the in-app AI assistant chat. |
-| `LIBERTY_OIDC_ENABLED` | `false` | Set to `true` + fill OIDC provider details for SSO. |
+| `LIBERTY_ADMIN_PASSWORD` | (generated, **shown once** in the install summary) | Bootstrap password for the first-run `admin` user. `install.sh` generates a random value, exports it to the shell for the boot, then drops it — **not** written to `.env`. On re-runs the existing admin keeps its prior password; reset with `docker exec liberty-next liberty-admin reset-admin-password`. |
 | `POSTGRES_PASSWORD` | (generated) | Full layout only — bundled Postgres password. |
-| `PGADMIN_PASSWORD` | (generated) | Full layout only — pgAdmin admin password. |
+| `PGADMIN_PASSWORD` | (generated) | Full layout only — pgAdmin admin password. The default email is `admin@liberty.fr` (override with `PGADMIN_EMAIL`). |
 | `APPS_HOST_PATH` | (set by `install-apps.sh`) | Absolute path to the materialized `./apps/` directory. The apps overlay bind-mounts this at `/apps:ro`. |
 | `COMPOSE_FILE` | (set by `install.sh` + `install-apps.sh`) | Colon-separated chain of compose files Docker Compose auto-merges. |
 | `LIBERTY_DOMAIN`, `ACME_EMAIL` | (set by `--ssl letsencrypt`) | TLS hostname + ACME contact. |
 | `CERT_HOST_PATH` | (set by `--ssl provided`) | Host directory bind-mounted at `/etc/certs:ro` for operator certs. |
+
+The **license key, Anthropic API key and OIDC client secret** used to live as env vars (`LIBERTY_LICENSE_KEY`, `ANTHROPIC_API_KEY`, `LIBERTY_OIDC_CLIENT_SECRET`). They now live in `app.toml` encrypted at rest with the install master key — **edit them via *Settings → App* in the SPA** after the stack is up. The env-var path still works as a fallback (set the var + reference it from `app.toml` as `${VAR}`). See [App settings](../framework/build/settings-app.md).
 
 :::info[A note on `$` in passwords]
 Docker Compose performs `${VAR}` substitution on every value in `.env` too — a literal `$` in a password gets eaten (e.g. `POSTGRES_PASSWORD=foo$bar` becomes `foo` because Compose tries to expand `$bar`). Either generate passwords without `$` (recommended — `install.sh` does this), or escape every `$` as `$$`.
@@ -285,7 +288,7 @@ After the chosen path:
 
 - `curl http://<host>:<port>/info` returns a JSON payload with `version`, `frontend_built`, counts of loaded screens / menus / connectors.
 - The SPA renders at `http://<host>:<port>/`.
-- Sign in as `admin` with the password printed by `install.sh` (or from `LIBERTY_ADMIN_PASSWORD` in `.env`).
+- Sign in as `admin` with the password printed by `install.sh` (shown once during the install; not stored in `.env`).
 - The container `liberty-next` reports healthy in `docker ps` (the bundled healthcheck hits `/info` every 30 s).
 
 If any of those don't hold, jump to the path's troubleshooting section.

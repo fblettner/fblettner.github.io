@@ -115,6 +115,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
             'liberty/framework/build/packages',
+            'liberty/framework/build/settings-app',
           ],
         },
         {

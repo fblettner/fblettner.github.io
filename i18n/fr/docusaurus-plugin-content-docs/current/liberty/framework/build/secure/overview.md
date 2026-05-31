@@ -18,7 +18,7 @@ Plus deux préoccupations transverses :
 | Préoccupation | Ce qu'elle fait | Où |
 |---|---|---|
 | **Secrets chiffrés** | Les mots de passe des pools, le client secret OIDC et les jetons d'API sont enregistrés sous forme `ENC:<base64>` sur disque (AES-256-GCM). | L'interrupteur 🔒 sur le champ correspondant dans n'importe quelle page Paramètres. |
-| **Clé de licence** | Conditionne les produits éditeur packagés — Nomasx-1, Nomajde, NomaUBL …. | `app.toml` `[license] key` ou la variable d'environnement `LIBERTY_LICENSE_KEY`. |
+| **Clé de licence** | Conditionne les produits éditeur packagés — Nomasx-1, Nomajde, NomaUBL …. | *Paramètres → App → Licence* (chiffrée au repos, prise en compte immédiate à l'enregistrement). La variable d'environnement `LIBERTY_LICENSE_KEY` reste un repli hérité. |
 
 Cette page est la carte ; chaque tâche dispose de sa propre page.
 
@@ -128,7 +128,7 @@ Couverture complète : [Secrets chiffrés](./encrypted-secrets.md).
 
 Certains produits éditeur packagés — Nomasx-1, Nomajde, NomaUBL et autres — ne se chargent que si le framework dispose d'une clé de licence valide.
 
-La licence est un JWT RS256 signé par l'éditeur ; il se configure via `[license] key` dans `app.toml` ou via la variable d'environnement `LIBERTY_LICENSE_KEY`. Si la licence est absente ou expirée, les connecteurs sous licence ne se chargent pas — leurs routes renvoient 404 — mais le reste du framework continue de fonctionner.
+La licence est un JWT RS256 signé par l'éditeur ; l'emplacement canonique pour la renseigner est *Paramètres → App → Licence* (chiffrée au repos avec la clé maîtresse d'installation, prise en compte immédiate à l'enregistrement — aucun redémarrage). La variable d'environnement `LIBERTY_LICENSE_KEY` fonctionne toujours en repli pour les installations qui préfèrent conserver le secret dans le coffre d'un orchestrateur. Si la licence est absente ou expirée, les connecteurs sous licence ne se chargent pas — leurs routes renvoient 404 — mais le reste du framework continue de fonctionner.
 
 Couverture complète : [Clé de licence](./license-key.md).
 

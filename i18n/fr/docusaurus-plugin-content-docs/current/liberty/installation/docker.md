@@ -1,7 +1,7 @@
 ---
 title: Docker
 description: "Déployer Liberty Next sous forme de pile Docker Compose — trois agencements (light SQLite, full de production à 5 services, Swarm) + deux overlays TLS + un overlay apps, le tout câblé par ./install.sh et la chaîne COMPOSE_FILE dans .env. ./install-apps.sh ajoute les apps sous licence. ./deploy-swarm.sh pilote Swarm. ./backup.sh prend un instantané de chaque volume nommé et du bind mount apps."
-keywords: [Liberty Framework, Docker, Docker Compose, Docker Swarm, install.sh, install-apps.sh, deploy-swarm.sh, backup.sh, light, full, swarm, COMPOSE_FILE, --tag, --reset, --apps, --ssl, --license-key, Traefik, Postgres, pgAdmin, Portainer, ghcr.io]
+keywords: [Liberty Framework, Docker, Docker Compose, Docker Swarm, install.sh, install-apps.sh, deploy-swarm.sh, backup.sh, light, full, swarm, COMPOSE_FILE, --tag, --reset, --apps, --ssl, Traefik, Postgres, pgAdmin, Portainer, Settings App, ghcr.io]
 ---
 
 # Docker
@@ -63,6 +63,10 @@ Docker Compose lit cette variable d'environnement à chaque commande et **fusion
 
 Pour une exécution ponctuelle qui cible réellement un fichier compose précis (debug, smoke test), employer `COMPOSE_FILE=docker-compose.full.yml docker compose <cmd>` afin de restreindre la surcharge à cette seule invocation.
 
+:::info[`install.sh` répare les fichiers `.env` plus anciens]
+Sur les installations antérieures à la discipline `COMPOSE_FILE`, la réexécution de `install.sh` détecte la ligne manquante et **l'ajoute automatiquement** (`COMPOSE_FILE=docker-compose.<agencement>.yml`). Sans ce correctif, la découverte de projet de Compose remonte l'arborescence à la recherche d'un `compose.yaml` et peut sélectionner le mauvais fichier. La réparation est tracée : `Existing .env lacks COMPOSE_FILE — adding 'COMPOSE_FILE=...'`.
+:::
+
 ---
 
 ## Agencement 1 — Light (`docker-compose.light.yml`) \{#light\}
@@ -105,9 +109,11 @@ services:
       LIBERTY_JWT_SECRET: "${LIBERTY_JWT_SECRET:?LIBERTY_JWT_SECRET is required}"
       LIBERTY_MASTER_KEY: "${LIBERTY_MASTER_KEY:?LIBERTY_MASTER_KEY is required}"
       LIBERTY_DB_URL: "${LIBERTY_DB_URL:-sqlite+aiosqlite:////data/liberty.db}"
-      LIBERTY_ADMIN_PASSWORD: "${LIBERTY_ADMIN_PASSWORD:-}"
-      LIBERTY_LICENSE_KEY: "${LIBERTY_LICENSE_KEY:-}"
-      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      LIBERTY_ADMIN_PASSWORD: "${LIBERTY_ADMIN_PASSWORD:-}"     # premier démarrage uniquement — install.sh l'exporte ; non stocké dans .env
+      # La clé de licence, la clé d'API Anthropic et le client_secret OIDC ne se trouvent plus ici —
+      # les modifier via Settings → App dans le SPA (chiffrement au repos dans app.toml).
+      LIBERTY_LICENSE_KEY: "${LIBERTY_LICENSE_KEY:-}"             # repli historique par variable d'environnement — laisser vide pour la gestion via l'UI
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"                 # repli historique par variable d'environnement
     volumes:
       - liberty-data:/data              # BDD SQLite + auth.toml
       - liberty-config:/app/config      # TOML édités par l'opérateur
@@ -161,11 +167,12 @@ Cinq services derrière Traefik sur un seul hôte. L'agencement production / sta
 ./install.sh full --tag 7.0.2                        # tag épinglé
 ./install.sh full --ssl letsencrypt \                # + Let's Encrypt
     --domain liberty.example.com --email ops@example.com
-./install.sh full --apps ./liberty_apps-7.0.1.whl \  # + apps sous licence en une seule commande
-    --license-key <jwt>
+./install.sh full --apps ./liberty_apps-7.0.1.whl    # + apps sous licence en une seule commande
 ```
 
-`install.sh` génère `.env` avec des secrets aléatoires pour **chaque** valeur exigée par la pile full — `LIBERTY_JWT_SECRET`, `LIBERTY_MASTER_KEY`, `POSTGRES_PASSWORD`, `PGADMIN_PASSWORD`, `LIBERTY_ADMIN_PASSWORD` — puis récupère toutes les images et démarre la pile. Durée totale d'installation sur cache chaud : ~30 s.
+`install.sh` génère `.env` avec des secrets aléatoires pour les valeurs exigées par la pile full — `LIBERTY_JWT_SECRET`, `LIBERTY_MASTER_KEY`, `POSTGRES_PASSWORD`, `PGADMIN_PASSWORD` — puis récupère toutes les images et démarre la pile. Le `LIBERTY_ADMIN_PASSWORD` du premier démarrage est généré, exporté vers le shell pour que le boot le récupère, **puis affiché une seule fois dans le récapitulatif d'installation** et non écrit dans `.env` (lors d'une réexécution, l'utilisateur admin existant conserve son mot de passe précédent). Durée totale d'installation sur cache chaud : ~30 s.
+
+La **clé de licence** se renseigne après installation via *Settings → App → License* dans le SPA — chiffrée au repos dans `app.toml` avec la master key d'installation, appliquée à chaud à l'enregistrement (aucun redémarrage). Voir [App settings](../framework/build/settings-app.md). Le flag `--license-key` a été retiré de `install.sh`.
 
 ### Ce que vous obtenez
 
@@ -174,7 +181,7 @@ Routage sur le port `80` (ou `443` une fois le TLS câblé) :
 | Chemin | Service | Description |
 |---|---|---|
 | `/` *(catchall, priorité 1)* | liberty-next | SPA + API REST + admin + docs. |
-| `/pgadmin` *(priorité 100)* | pgAdmin | Interface Postgres — se connecter avec `admin@example.com` et `PGADMIN_PASSWORD` issu de `.env`. |
+| `/pgadmin` *(priorité 100)* | pgAdmin | Interface Postgres — se connecter avec `admin@liberty.fr` (surchargeable via `PGADMIN_EMAIL` dans `.env`) et `PGADMIN_PASSWORD` issu de `.env`. |
 | `/portainer` *(priorité 100)* | Portainer | Interface Docker. |
 | `/traefik` *(priorité 1000)* | Tableau de bord Traefik | Protégé par basic-auth — par défaut `admin/admin`, **à changer dans `traefik/dynamic/dynamic.yml`**. |
 
@@ -294,15 +301,17 @@ Parcours TLS complet : [Traefik](./traefik.md).
 Une seule commande à l'installation :
 
 ```bash
-./install.sh full --apps ./liberty_apps-7.0.1.whl --license-key <jwt>
+./install.sh full --apps ./liberty_apps-7.0.1.whl
 ```
 
 Ou en deux temps (base d'abord, apps ensuite) :
 
 ```bash
 ./install.sh full
-./install-apps.sh ./liberty_apps-7.0.1.whl --license-key <jwt>
+./install-apps.sh ./liberty_apps-7.0.1.whl
 ```
+
+Dans les deux cas, renseigner ensuite le JWT de licence éditeur via *Settings → App → License* — les connecteurs sont reconstruits à l'enregistrement sans redémarrage.
 
 La wheel est matérialisée dans `./apps/` via un conteneur jetable `python:3.12-slim` — l'hôte n'a besoin ni de Python ni de pip. Procédure complète + flags : [Déployer des apps préfabriquées](./deploy-prebuilt-apps.md).
 
@@ -475,10 +484,18 @@ Quand une installation précédente a laissé des volumes obsolètes (`pg-data` 
 
 | Option | Description |
 |---|---|
-| **`./install.sh <agencement> --reset`** | `docker compose down -v` (purge chaque volume nommé) + suppression de `.env`, puis enchaîne sur une installation propre. À utiliser quand les anciennes données ne sont plus utiles. |
+| **`./install.sh <agencement> --reset`** | `docker compose down` + `docker volume rm` de chaque volume **de données** Liberty (`pg-data`, `pgadmin-data`, `portainer-data`, `liberty-data`, `liberty-config`) + suppression de `.env`, puis **sortie**. Relancer ensuite `./install.sh` avec les flags d'installation souhaités. Le volume `traefik-acme` est volontairement préservé — Let's Encrypt applique une limite de 5 certificats / 7 jours / ensemble de domaines ; le purger à chaque reset épuiserait le quota. Pour forcer un nouveau certificat (changement de domaine, compromission de clé), le supprimer manuellement : `docker volume rm traefik-acme`. |
 | **Restaurer le `.env` précédent** | Replacer l'ancien fichier `.env` dans `release/`, puis relancer `./install.sh`. Le script détecte le `.env` existant et se contente de démarrer la pile — les secrets correspondent aux volumes. |
 
 Le `.env.snapshot` produit par `backup.sh` est le « `.env` précédent » canonique — à conserver à côté des instantanés de volumes.
+
+:::info[`--reset` est destructif et s'arrête — pas de réinstallation automatique]
+Combiner `--reset` avec `--apps`, `--ssl` ou tout autre flag d'installation provoque une erreur — le comportement antérieur ignorait silencieusement les flags d'installation. Le message d'erreur indique la séquence de deux commandes probablement attendue :
+```bash
+./install.sh full --reset                                      # 1) purge
+./install.sh full --ssl letsencrypt --domain ... --apps ./...  # 2) installation avec les flags souhaités
+```
+:::
 
 ---
 
@@ -510,14 +527,16 @@ docker compose logs liberty-next             # pas besoin de -f — COMPOSE_FILE
 |---|---|---|
 | `LIBERTY_JWT_SECRET is required` | La variable d'environnement requise n'a pas été propagée. | `install.sh` aurait dû la générer — vérifier `.env`. |
 | `Could not connect to database` *(agencement full)* | Postgres n'est pas encore en bonne santé. | Attendre 10 s — la clause `depends_on: condition: service_healthy` couvre normalement le cas ; vérifier `docker compose ps pg`. |
-| `password authentication failed for user "liberty"` | Volume `pg-data` obsolète issu d'une installation antérieure ; `.env` contient désormais de nouveaux secrets. | `./install.sh full --reset` (purge + redémarre) ou restaurer l'ancien `.env`. |
+| `password authentication failed for user "liberty"` | Volume `pg-data` obsolète issu d'une installation antérieure ; `.env` contient désormais de nouveaux secrets. | `./install.sh full --reset` (purge + sortie — relancer ensuite `install.sh` avec les flags souhaités) ou restaurer l'ancien `.env`. |
 | Le healthcheck ne passe jamais à healthy | Le conteneur est démarré mais `/info` ne répond pas. | Suivre les journaux — le plus souvent, un TOML de configuration sur le volume `liberty-config` comporte une erreur de syntaxe. |
 
 ### La page de connexion s'affiche, mais la connexion échoue
 
-Le mot de passe de l'admin amorcé se trouve dans `.env` sous `LIBERTY_ADMIN_PASSWORD`. Réinitialisation :
+Le mot de passe de l'admin amorcé est affiché une seule fois par `install.sh` et n'est pas stocké dans `.env`. Pour le réinitialiser à la demande :
 
 ```bash
+docker exec liberty-next liberty-admin reset-admin-password    # génère et affiche un nouveau mot de passe
+# ou :
 docker compose exec liberty-next liberty-admin set-password admin <new>
 ```
 

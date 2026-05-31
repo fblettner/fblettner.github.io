@@ -1,7 +1,7 @@
 ---
 title: Docker
 description: "Stand up Liberty Next as a Docker Compose stack — three layouts (light SQLite, full 5-service production, Swarm) + two TLS overlays + an apps overlay, all wired by ./install.sh and the COMPOSE_FILE chain in .env. ./install-apps.sh adds the licensed apps. ./deploy-swarm.sh drives Swarm. ./backup.sh snapshots every named volume + the apps bind mount."
-keywords: [Liberty Framework, Docker, Docker Compose, Docker Swarm, install.sh, install-apps.sh, deploy-swarm.sh, backup.sh, light, full, swarm, COMPOSE_FILE, --tag, --reset, --apps, --ssl, --license-key, Traefik, Postgres, pgAdmin, Portainer, ghcr.io]
+keywords: [Liberty Framework, Docker, Docker Compose, Docker Swarm, install.sh, install-apps.sh, deploy-swarm.sh, backup.sh, light, full, swarm, COMPOSE_FILE, --tag, --reset, --apps, --ssl, Traefik, Postgres, pgAdmin, Portainer, Settings App, ghcr.io]
 ---
 
 # Docker
@@ -63,6 +63,10 @@ Docker Compose reads this env var on every command and **automatically merges ev
 
 When you genuinely need a one-off run with a specific compose file (debug, smoke test), use `COMPOSE_FILE=docker-compose.full.yml docker compose <cmd>` to scope the override to that invocation.
 
+:::info[`install.sh` repairs older `.env` files]
+On installs that pre-date the `COMPOSE_FILE` discipline, re-running `install.sh` detects the missing line and **adds it automatically** (`COMPOSE_FILE=docker-compose.<layout>.yml`). Without that fix, Compose's project discovery walks up the tree looking for a `compose.yaml` and can pick the wrong file. The repair is logged: `Existing .env lacks COMPOSE_FILE — adding 'COMPOSE_FILE=...'`.
+:::
+
 ---
 
 ## Layout 1 — Light (`docker-compose.light.yml`) \{#light\}
@@ -105,9 +109,11 @@ services:
       LIBERTY_JWT_SECRET: "${LIBERTY_JWT_SECRET:?LIBERTY_JWT_SECRET is required}"
       LIBERTY_MASTER_KEY: "${LIBERTY_MASTER_KEY:?LIBERTY_MASTER_KEY is required}"
       LIBERTY_DB_URL: "${LIBERTY_DB_URL:-sqlite+aiosqlite:////data/liberty.db}"
-      LIBERTY_ADMIN_PASSWORD: "${LIBERTY_ADMIN_PASSWORD:-}"
-      LIBERTY_LICENSE_KEY: "${LIBERTY_LICENSE_KEY:-}"
-      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      LIBERTY_ADMIN_PASSWORD: "${LIBERTY_ADMIN_PASSWORD:-}"     # first-boot only — install.sh exports it; not stored in .env
+      # License key, Anthropic API key, OIDC client_secret no longer live here —
+      # edit them via Settings → App in the SPA (encrypted at rest in app.toml).
+      LIBERTY_LICENSE_KEY: "${LIBERTY_LICENSE_KEY:-}"             # legacy env-var fallback — leave empty for UI-managed
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"                 # legacy env-var fallback
     volumes:
       - liberty-data:/data              # SQLite DB + auth.toml
       - liberty-config:/app/config      # operator-edited TOMLs
@@ -157,15 +163,16 @@ Five services behind Traefik on a single host. The production / staging layout �
 ### Install
 
 ```bash
-./install.sh full                                    # latest tag, no TLS
-./install.sh full --tag 7.0.2                        # pinned tag
-./install.sh full --ssl letsencrypt \                # + Let's Encrypt
+./install.sh full                                       # latest tag, no TLS
+./install.sh full --tag 7.0.2                           # pinned tag
+./install.sh full --ssl letsencrypt \                   # + Let's Encrypt
     --domain liberty.example.com --email ops@example.com
-./install.sh full --apps ./liberty_apps-7.0.1.whl \  # + licensed apps in one command
-    --license-key <jwt>
+./install.sh full --apps ./liberty_apps-7.0.1.whl       # + licensed apps in one command
 ```
 
-`install.sh` generates `.env` with random secrets for **every** value the full stack needs — `LIBERTY_JWT_SECRET`, `LIBERTY_MASTER_KEY`, `POSTGRES_PASSWORD`, `PGADMIN_PASSWORD`, `LIBERTY_ADMIN_PASSWORD` — then pulls every image and brings the stack up. Total install time on a warm cache: ~30 s.
+`install.sh` generates `.env` with random secrets for the values the full stack needs — `LIBERTY_JWT_SECRET`, `LIBERTY_MASTER_KEY`, `POSTGRES_PASSWORD`, `PGADMIN_PASSWORD` — then pulls every image and brings the stack up. The first-boot `LIBERTY_ADMIN_PASSWORD` is generated, exported to the shell so the boot picks it up, **then printed once in the install summary** and not written to `.env` (on re-runs the existing admin user keeps its prior password). Total install time on a warm cache: ~30 s.
+
+The **license key** is set after install via *Settings → App → License* in the SPA — encrypted at rest in `app.toml` with the install master key, applied live on save (no restart). See [App settings](../framework/build/settings-app.md). The `--license-key` flag was removed from `install.sh`.
 
 ### What you get
 
@@ -174,7 +181,7 @@ Routing on port `80` (or `443` once TLS is wired):
 | Path | Service | What |
 |---|---|---|
 | `/` *(catchall, priority 1)* | liberty-next | SPA + REST API + admin + docs. |
-| `/pgadmin` *(priority 100)* | pgAdmin | Postgres GUI — sign in with `admin@example.com` + `PGADMIN_PASSWORD` from `.env`. |
+| `/pgadmin` *(priority 100)* | pgAdmin | Postgres GUI — sign in with `admin@liberty.fr` (override with `PGADMIN_EMAIL` in `.env`) + `PGADMIN_PASSWORD` from `.env`. |
 | `/portainer` *(priority 100)* | Portainer | Docker UI. |
 | `/traefik` *(priority 1000)* | Traefik dashboard | Basic-auth gated — default `admin/admin`, **change in `traefik/dynamic/dynamic.yml`**. |
 
@@ -294,15 +301,17 @@ Full TLS reference: [Traefik](./traefik.md).
 Single command at install time:
 
 ```bash
-./install.sh full --apps ./liberty_apps-7.0.1.whl --license-key <jwt>
+./install.sh full --apps ./liberty_apps-7.0.1.whl
 ```
 
 Or split (base first, apps later):
 
 ```bash
 ./install.sh full
-./install-apps.sh ./liberty_apps-7.0.1.whl --license-key <jwt>
+./install-apps.sh ./liberty_apps-7.0.1.whl
 ```
+
+After either form, set the vendor license JWT via *Settings → App → License* — connectors rebuild on save without a restart.
 
 The wheel is materialised into `./apps/` via a throwaway `python:3.12-slim` container — your host needs no Python or pip. Full procedure + flags: [Deploy prebuilt apps](./deploy-prebuilt-apps.md).
 
@@ -475,10 +484,18 @@ When a previous install left stale volumes (the `pg-data` was initialised with a
 
 | Option | What |
 |---|---|
-| **`./install.sh <layout> --reset`** | `docker compose down -v` (wipes every named volume) + deletes `.env`, then proceeds with a clean install. Use when you don't need the old data. |
+| **`./install.sh <layout> --reset`** | `docker compose down` + `docker volume rm` of every Liberty **data** volume (`pg-data`, `pgadmin-data`, `portainer-data`, `liberty-data`, `liberty-config`) + deletes `.env`, then **exits**. Re-run `./install.sh` with your install flags afterwards. The `traefik-acme` volume is intentionally preserved — Let's Encrypt rate-limits at 5 certs / 7 days / domain set; wiping it on every reset would burn through the quota. To force a fresh cert (domain change, key compromise), drop it manually: `docker volume rm traefik-acme`. |
 | **Restore the previous `.env`** | Drop the old `.env` file back in `release/`, then re-run `./install.sh`. It detects the existing `.env` and just brings the stack up — the secrets match the volumes. |
 
 The `.env.snapshot` produced by `backup.sh` is the canonical "previous `.env`" — keep it alongside your volume snapshots.
+
+:::info[`--reset` is wipe-and-exit, not auto-reinstall]
+Combining `--reset` with `--apps`, `--ssl` or any other install flag errors out — earlier behaviour silently dropped the install flags into the void. The error message gives the two-command sequence you probably meant:
+```bash
+./install.sh full --reset                                      # 1) wipe
+./install.sh full --ssl letsencrypt --domain ... --apps ./...  # 2) install with your flags
+```
+:::
 
 ---
 
@@ -510,14 +527,16 @@ docker compose logs liberty-next             # no -f needed — COMPOSE_FILE pic
 |---|---|---|
 | `LIBERTY_JWT_SECRET is required` | The required env var didn't propagate. | `install.sh` should have generated it — check `.env`. |
 | `Could not connect to database` *(full layout)* | Postgres isn't healthy yet. | Wait 10 s — the `depends_on: condition: service_healthy` should normally cover it; check `docker compose ps pg`. |
-| `password authentication failed for user "liberty"` | Stale `pg-data` volume from a previous install; `.env` now has fresh secrets. | `./install.sh full --reset` (wipes + restarts) or restore the old `.env`. |
+| `password authentication failed for user "liberty"` | Stale `pg-data` volume from a previous install; `.env` now has fresh secrets. | `./install.sh full --reset` (wipes + exits — then re-run `install.sh` with your flags) or restore the old `.env`. |
 | Healthcheck never goes healthy | Container up but `/info` doesn't respond. | Tail the logs — most often a config TOML on the `liberty-config` volume has a syntax error. |
 
 ### Login page renders, sign-in fails
 
-The bootstrap admin's password is in `.env` as `LIBERTY_ADMIN_PASSWORD`. Reset:
+The bootstrap admin's password is printed once by `install.sh` and not stored in `.env`. To reset it on demand:
 
 ```bash
+docker exec liberty-next liberty-admin reset-admin-password    # generates + prints a new one
+# or:
 docker compose exec liberty-next liberty-admin set-password admin <new>
 ```
 

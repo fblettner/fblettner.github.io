@@ -53,11 +53,17 @@ Pour Docker Swarm, l'équivalent est `./deploy-swarm.sh` (détaillé dans [Docke
 |---|---|
 | **`--tag <version>`** | Épingle `LIBERTY_IMAGE_TAG` au moment de l'installation (par exemple `--tag 7.0.2`). Valeur par défaut `latest` (chaque merge sur main → nouvelle release ; `latest` reflète toujours l'état courant de main). Ignorée si `.env` existe déjà — modifier la variable directement à cet endroit. |
 | **`--reset`** | `docker compose down -v` + suppression de `.env` au préalable. À utiliser quand une installation précédente a laissé un `pg-data` résiduel avec l'ancien mot de passe (l'initialisation Postgres ne s'exécute que sur un volume vierge — secrets neufs + volume résiduel = échec d'authentification permanent). |
-| **`--apps <wheel-ou-URL>`** | Après avoir monté la pile de base, enchaîne avec `install-apps.sh` sur le wheel indiqué — les applications sous licence (Nomasx-1 / Nomajde / Nomaflow) sont déployées dans la même commande. À combiner avec `--license-key <jwt>`. |
+| **`--apps <wheel-ou-URL>`** | Après avoir monté la pile de base, enchaîne avec `install-apps.sh` sur le wheel indiqué — les applications sous licence (Nomasx-1 / Nomajde / Nomaflow) sont déployées dans la même commande. La clé de licence se définit **ensuite** via *Settings → App → License* dans l'interface (chiffrée au repos dans `app.toml`). |
 | **`--ssl letsencrypt --domain --email`** *(variante complète uniquement)* | Branche Let's Encrypt automatiquement. L'hôte doit être joignable depuis l'Internet public sur `:80`/`:443` pour le challenge TLS-ALPN. |
 | **`--ssl provided --cert-dir --cert-file --key-file`** *(variante complète uniquement)* | Branche des certificats fournis par l'opérateur (CA d'entreprise, PKI interne, installation en air-gap). `install.sh` vérifie l'existence des fichiers, monte le répertoire de certificats en bind, génère `traefik/dynamic/tls.yml`. |
 
-Les cinq options se combinent — `./install.sh full --tag 7.0.2 --ssl letsencrypt --domain liberty.example.com --email ops@example.com --apps ./liberty_apps-7.0.1-py3-none-any.whl --license-key <jwt>` réalise en une seule commande une installation de production avec TLS et le bundle sous licence.
+Les quatre options se combinent — `./install.sh full --tag 7.0.2 --ssl letsencrypt --domain liberty.example.com --email ops@example.com --apps ./liberty_apps-7.0.1-py3-none-any.whl` réalise en une seule commande une installation de production avec TLS et le bundle sous licence. Une fois l'interface en service, coller la clé de licence dans *Settings → App → License*. (`--license-key` a été retiré de `install.sh` — la clé se trouve désormais dans `app.toml`, chiffrée au repos, et non plus dans `.env`.)
+
+Une option de purge complète mérite également d'être connue :
+
+| Option | Rôle |
+|---|---|
+| **`--reset`** | `docker compose down` + `docker volume rm` de chaque volume de données Liberty (`pg-data`, `pgadmin-data`, `portainer-data`, `liberty-data`, `liberty-config`) + suppression de `.env`, puis **sortie immédiate**. Le volume `traefik-acme` est délibérément préservé (Let's Encrypt limite à 5 certificats par 7 jours et par ensemble de domaines — le purger à chaque cycle de réinitialisation épuiserait ce quota presque immédiatement). Combiner `--reset` avec `--apps` ou `--ssl` provoque une erreur — relancer `install.sh` avec les options souhaitées une fois la réinitialisation terminée. À utiliser quand une installation précédente a laissé des volumes résiduels dont les identifiants ne correspondent plus à un `.env` régénéré. |
 
 ---
 
@@ -139,24 +145,22 @@ Nomasx-1, Nomajde et les jobs Nomaflow embarqués sont livrés sous la forme d'u
 ### En une seule commande (hôte vierge)
 
 ```bash
-./install.sh full \
-    --apps ./liberty_apps-7.0.1-py3-none-any.whl \
-    --license-key <votre-jwt-rs256>
+./install.sh full --apps ./liberty_apps-7.0.1-py3-none-any.whl
 ```
 
-Tout est fait en une fois — pile de base + applications sous licence + clé de licence.
+L'ensemble est traité en une fois — pile de base + applications sous licence. Une fois la SPA en service, coller le JWT de licence signé par l'éditeur dans *Settings → App → License* (chiffré au repos avec la clé maître d'installation, prise en compte à la sauvegarde — les connecteurs sont reconstruits sans redémarrage). Voir [Paramètres de l'application](../framework/build/settings-app.md).
 
 ### Ou en deux temps : base d'abord, applications ensuite
 
 ```bash
-./install.sh full                                                            # pile de base
-./install-apps.sh ./liberty_apps-7.0.1-py3-none-any.whl --license-key <jwt>  # ajout des applications
+./install.sh full                                              # pile de base
+./install-apps.sh ./liberty_apps-7.0.1-py3-none-any.whl        # ajout des applications
 ```
 
 Ce que fait `install-apps.sh` :
 
 1. **Matérialise le wheel** dans `./apps/` via un conteneur `python:3.12-slim` jetable — l'hôte n'a besoin d'**aucune** installation locale de pip ou de Python. Le wheel embarque une CLI `liberty-apps install --target DIR` qui copie `config/` et `plugins/` vers la destination, en préservant les TOML édités par l'opérateur.
-2. **Met à jour `.env`** — ajoute `docker-compose.apps.yml` à `COMPOSE_FILE`, définit `APPS_HOST_PATH=<chemin absolu>` et `LIBERTY_LICENSE_KEY=<jwt>` (si fourni).
+2. **Met à jour `.env`** — ajoute `docker-compose.apps.yml` à `COMPOSE_FILE` et définit `APPS_HOST_PATH=<chemin absolu>`. La clé de licence n'est **pas** écrite dans `.env` — la définir via l'interface une fois les applications visibles.
 3. **Redémarre la pile** — `docker compose up -d` prend en compte la surcouche d'applications automatiquement via `COMPOSE_FILE` (sans manipulation de `-f`).
 
 Détail complet : [Déployer les applications préassemblées](./deploy-prebuilt-apps.md).
@@ -229,7 +233,7 @@ Il convient de faire pointer `LIBERTY_DB_URL` vers un Postgres existant (ou de r
   <text x="848" y="246" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Environnements purement Python</text>
 
   <rect x="40" y="338" width="920" height="32" rx="6" fill="rgba(255,255,255,0.04)" stroke="#1f2937"/>
-  <text x="500" y="358" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">install.sh --ssl letsencrypt|provided  +  --apps &lt;wheel&gt; --license-key &lt;jwt&gt;  →  articule les surcouches dans COMPOSE_FILE</text>
+  <text x="500" y="358" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">install.sh --ssl letsencrypt|provided  +  --apps &lt;wheel&gt;  →  articule les surcouches dans COMPOSE_FILE · licence définie via Settings → App après installation</text>
 </svg>
 
 ---
@@ -248,16 +252,15 @@ Variables optionnelles courantes (la liste complète se trouve dans `release/.en
 | Variable | Valeur par défaut | Détail |
 |---|---|---|
 | `LIBERTY_IMAGE_TAG` | `latest` | Épingler à un tag de version précis pour la stabilité (`7.0.1`, `7.0.2`, etc.). Utiliser `./install.sh --tag <ver>` pour la définir à l'installation. |
-| `LIBERTY_ADMIN_PASSWORD` | (généré + affiché une fois) | Mot de passe d'amorçage pour l'utilisateur `admin` au premier démarrage. |
-| `LIBERTY_LICENSE_KEY` | (aucune — mode `restricted`) | JWT RS256 qui déverrouille les connecteurs sous licence. |
-| `ANTHROPIC_API_KEY` | (aucune — assistant IA désactivé) | Active le chat de l'assistant IA dans l'application. |
-| `LIBERTY_OIDC_ENABLED` | `false` | Passer à `true` et renseigner les détails du fournisseur OIDC pour activer le SSO. |
+| `LIBERTY_ADMIN_PASSWORD` | (généré, **affiché une seule fois** dans le récapitulatif d'installation) | Mot de passe d'amorçage pour l'utilisateur `admin` au premier démarrage. `install.sh` génère une valeur aléatoire, l'exporte dans le shell pour le boot, puis l'abandonne — **non** écrite dans `.env`. Aux exécutions suivantes, l'administrateur existant conserve son mot de passe ; réinitialisation via `docker exec liberty-next liberty-admin reset-admin-password`. |
 | `POSTGRES_PASSWORD` | (généré) | Variante complète uniquement — mot de passe du Postgres embarqué. |
-| `PGADMIN_PASSWORD` | (généré) | Variante complète uniquement — mot de passe administrateur pgAdmin. |
+| `PGADMIN_PASSWORD` | (généré) | Variante complète uniquement — mot de passe administrateur pgAdmin. L'adresse e-mail par défaut est `admin@liberty.fr` (à remplacer via `PGADMIN_EMAIL`). |
 | `APPS_HOST_PATH` | (défini par `install-apps.sh`) | Chemin absolu vers le répertoire `./apps/` matérialisé. La surcouche d'applications le monte en bind à `/apps:ro`. |
 | `COMPOSE_FILE` | (défini par `install.sh` + `install-apps.sh`) | Chaîne de fichiers compose, séparés par des deux-points, que Docker Compose fusionne automatiquement. |
 | `LIBERTY_DOMAIN`, `ACME_EMAIL` | (définis par `--ssl letsencrypt`) | Nom d'hôte TLS et contact ACME. |
 | `CERT_HOST_PATH` | (défini par `--ssl provided`) | Répertoire hôte monté en bind à `/etc/certs:ro` pour les certificats de l'opérateur. |
+
+La **clé de licence, la clé d'API Anthropic et le secret client OIDC** étaient auparavant des variables d'environnement (`LIBERTY_LICENSE_KEY`, `ANTHROPIC_API_KEY`, `LIBERTY_OIDC_CLIENT_SECRET`). Ces valeurs se trouvent désormais dans `app.toml`, chiffrées au repos avec la clé maître d'installation — **à modifier via *Settings → App* dans la SPA** une fois la pile en service. La voie par variable d'environnement reste disponible en repli (définir la variable et la référencer depuis `app.toml` sous la forme `${VAR}`). Voir [Paramètres de l'application](../framework/build/settings-app.md).
 
 :::info[À propos du `$` dans les mots de passe]
 Docker Compose applique aussi la substitution `${VAR}` à chaque valeur de `.env` — un `$` littéral dans un mot de passe est absorbé (par exemple `POSTGRES_PASSWORD=foo$bar` devient `foo`, Compose cherchant à étendre `$bar`). Il est recommandé de générer des mots de passe sans `$` (ce que fait `install.sh`), ou bien d'échapper chaque `$` en `$$`.
@@ -285,7 +288,7 @@ Après le chemin retenu :
 
 - `curl http://<host>:<port>/info` renvoie une charge JSON avec `version`, `frontend_built` et le décompte des écrans / menus / connecteurs chargés.
 - La SPA s'affiche sur `http://<host>:<port>/`.
-- Connexion en tant qu'`admin` avec le mot de passe affiché par `install.sh` (ou depuis `LIBERTY_ADMIN_PASSWORD` dans `.env`).
+- Connexion en tant qu'`admin` avec le mot de passe affiché par `install.sh` (montré une seule fois pendant l'installation ; non conservé dans `.env`).
 - Le conteneur `liberty-next` apparaît sain dans `docker ps` (le healthcheck embarqué interroge `/info` toutes les 30 s).
 
 Si l'une de ces vérifications échoue, se rendre à la section de dépannage du chemin choisi.

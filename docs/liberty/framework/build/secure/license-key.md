@@ -1,7 +1,7 @@
 ---
 title: License key
-description: "What the license gates (the bundled vendor products — Nomasx-1, Nomajde, NomaUBL …), where to set it (app.toml or LIBERTY_LICENSE_KEY env var), and what happens when it's missing or expired."
-keywords: [Liberty Framework, license key, licensed connector, RS256, JWT license, Nomasx-1, Nomajde, NomaUBL]
+description: "What the license gates (the bundled vendor products — Nomasx-1, Nomajde, NomaUBL …), where to set it (Settings → App is the canonical path; LIBERTY_LICENSE_KEY env var still works as a fallback), and what happens when it's missing or expired."
+keywords: [Liberty Framework, license key, licensed connector, RS256, JWT license, Nomasx-1, Nomajde, NomaUBL, Settings App, AppBuilder, encrypted at rest]
 ---
 
 # License key
@@ -29,19 +29,24 @@ The framework's own infrastructure — auth, pools, the open-source connector to
 
 ## Where the license lives
 
-Two sources, env var wins:
+Three paths — the UI is the canonical one:
 
-| Source | Priority | Format |
+| Path | When | How |
 |---|---|---|
-| **`LIBERTY_LICENSE_KEY` env var** | Highest | The raw RS256 JWT string. |
-| **`[license] key` in `app.toml`** | Fallback | Same format, but on disk. |
+| **Settings → App → License** *(canonical)* | Default for every new install. The operator pastes the JWT once; the framework encrypts it at rest with the install master key. Live — connectors rebuild on save, no restart. | Open the SPA → *Settings → App* → expand *License* → click *Set* / *Replace* → paste the JWT → save. See [App settings](../settings-app.md). |
+| **`LIBERTY_LICENSE_KEY` env var** *(legacy / power-user)* | Existing installs that already wired the env var; deployments where the operator wants the key to live in a secret manager (Kubernetes Secrets, Docker Secrets, Vault…). Read at startup. | Set in the environment; reference from `app.toml` as `key = "${LIBERTY_LICENSE_KEY}"`. The UI's License field then shows the resolved value as configured but read-only — clear the `${VAR}` reference first if you want to edit from the UI. |
+| **Plain text in `app.toml`** *(discouraged)* | Demo / scratch — same risks as inlining any secret in a committed file. | `[license] key = "eyJhbGciOiJSUzI1NiI…"`. |
 
-```toml
+On disk after a UI save:
+
+```toml title="config/app.toml"
 [license]
-key = "${LIBERTY_LICENSE_KEY}"     # the recommended path — env var substitution
+key = "ENC:eYWBcD…7q=="          # AES-256-GCM with the install master key
 ```
 
-Inlining the JWT directly into `app.toml` is supported but discouraged for the same reason as any other secret — it lands in version control if the file is committed.
+The `ENC:` prefix is the framework's sentinel — the loader recognises it, decrypts with `LIBERTY_MASTER_KEY`, hands the plaintext to the verifier. Plaintext values are read as-is; env-var references are resolved at startup as before.
+
+`install.sh` (release/ folder) no longer writes `LIBERTY_LICENSE_KEY` to `.env` — the canonical path is the UI. For the env-var path on a Docker install, edit `.env` by hand and add an `environment:` entry for `liberty-next` in the compose file (or use Docker Secrets in Swarm).
 
 ---
 
@@ -99,26 +104,32 @@ The pragmatic operational pattern: **rotate the license well before expiry** —
 
 The standard flow when you receive a new license JWT from the vendor:
 
-### Option A — env var (recommended)
+### Option A — Settings → App (recommended)
 
-1. Put the JWT into your secret manager / orchestrator config.
-2. Set the `LIBERTY_LICENSE_KEY` env var in the framework's environment.
-3. Restart the framework.
-4. Open `/api/license` to verify (`valid: true`, expected `subject`, expected `expires_at`).
+1. Sign in to the SPA as a superuser.
+2. Open *Settings → App* → expand the *License* section.
+3. Click *Set* (first install) or *Replace* (rotation) — the field becomes editable.
+4. Paste the full JWT, click *Save*.
+5. The connector registry rebuilds in place — **no restart**. Licensed connectors that were filtered out at startup reappear immediately.
+6. Open `/api/license` to verify (`valid: true`, expected `subject`, expected `expires_at`), or just check the *License* section's header badge — it shows *configured*.
 
-### Option B — `app.toml`
+The JWT is encrypted at rest with the install master key (`ENC:` prefix in `app.toml`). The masked-secret reveal-to-edit pattern means the existing value is never exposed in the UI — clicking *Set* / *Replace* opens an empty input; the stored ciphertext is only decrypted by the framework at startup. See [App settings](../settings-app.md) for the full editor walkthrough.
 
-1. Open `config/app.toml`.
-2. Update the `[license] key` field — paste the full JWT string.
-3. Save the file.
-4. Restart (or trigger a reload if your install supports hot config reload).
+### Option B — env var
+
+For installs that prefer the secret to live in a secret manager / orchestrator config (Kubernetes Secrets, Docker Secrets, Vault):
+
+1. Put the JWT into your secret manager.
+2. Set `LIBERTY_LICENSE_KEY` in the framework's environment (the `liberty-next` container's `environment:` block, or the systemd unit's `EnvironmentFile`).
+3. Reference it from `config/app.toml`: `[license] key = "${LIBERTY_LICENSE_KEY}"`.
+4. Restart the framework.
 5. Open `/api/license` to verify.
 
-The env var path is preferred because:
+The env-var path means the UI's *License* field shows the resolved value as configured but **read-only** — clear the `${VAR}` reference from `app.toml` first if you want to manage the value from the UI.
 
-- The JWT isn't in version control.
-- Rotating doesn't require editing the file.
-- Separate license per environment is trivial — just set a different env var per deploy.
+### Option C — plain text in `app.toml` (discouraged)
+
+Inlining the JWT directly into the file works (it's the same RS256 string), but lands the secret in version control if the file is committed. Use only for scratch / demo installs.
 
 ---
 
@@ -138,7 +149,7 @@ For deployments using the env var pattern, each environment's secret manager hol
 | **Grace period after expiry** | Not implemented. `exp` is a hard limit. |
 | **Per-instance license counting** | The license is one-per-deployment; the framework doesn't enforce per-tenant limits. Vendor-side policy. |
 | **License revocation** | Not supported. Once issued, a license is valid until `exp`. Don't expose the JWT publicly. |
-| **License hot-reload via the UI** | Not implemented. Use the env var + restart, or edit `app.toml` + restart. |
+| **License hot-reload via the UI** | Yes — *Settings → App → License* rebuilds the connector registry on save. No restart required. The env-var path still needs a restart. |
 
 For grace-period behaviour, run a calendar reminder workflow yourself — most installs add the license expiry to their general expiry tracker (TLS certs, third-party API keys).
 

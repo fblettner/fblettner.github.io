@@ -93,28 +93,32 @@ OIDC is layered on top of the chosen backend. Any OIDC-compliant provider works 
 
 ### Configuration
 
-In `app.toml`:
+The canonical place to configure OIDC is **Settings → App → OpenID Connect (SSO)** — every field below has a matching UI control. The client secret is encrypted at rest with the install master key (`ENC:` prefix in `app.toml`); the masked-secret reveal-to-edit pattern means the stored ciphertext is never exposed in the UI. Saving rebuilds the OIDC handler in-place — **no restart** needed; the next sign-in attempt uses the new config. See [App settings → OpenID Connect](../settings-app.md#section-4--openid-connect-sso) for the editor walkthrough.
+
+The resulting `app.toml` after a UI save:
 
 ```toml
 [oidc]
 enabled         = true
 discovery_url   = "https://keycloak.corp.local/realms/liberty/.well-known/openid-configuration"
 client_id       = "liberty-app"
-client_secret   = "${OIDC_CLIENT_SECRET}"   # env var — never inline a secret
+client_secret   = "ENC:Mq6vNg…2z=="          # AES-256-GCM, decrypted at startup
 scopes          = "openid email profile"
-username_claim  = "preferred_username"      # which claim becomes the Liberty username
+username_claim  = "preferred_username"
 email_claim     = "email"
 name_claim      = "name"
-redirect_url    = ""                        # blank = auto-derived as https://<host>/auth/oidc/callback
-frontend_redirect = ""                      # blank = standard server-side flow
+redirect_url    = ""                          # blank = auto-derived as https://<host>/auth/oidc/callback
+frontend_redirect = ""                        # blank = standard server-side flow
 ```
+
+For installs that prefer secret-manager storage, `client_secret = "${LIBERTY_OIDC_CLIENT_SECRET}"` still works — the env var is resolved at startup, and the UI field shows as configured-but-read-only. Clear the `${VAR}` reference if you want the UI to manage the value.
 
 | Field | Required | Notes |
 |---|---|---|
 | `enabled` | yes | Turn OIDC on / off. When off, the OIDC button hides from the sign-in screen. |
-| `discovery_url` | yes | The provider's `.well-known` URL. Liberty fetches once at startup, caches the result. |
+| `discovery_url` | yes | The provider's `.well-known` URL. Liberty fetches once on rebuild, caches the result. |
 | `client_id` | yes | The OAuth2 client id registered with the provider. |
-| `client_secret` | yes | Read from env var (`${OIDC_CLIENT_SECRET}`). Never inline. |
+| `client_secret` | yes | Set via *Settings → App → OIDC → Client secret*; encrypted at rest. Env-var fallback (`${LIBERTY_OIDC_CLIENT_SECRET}`) also supported. |
 | `scopes` | yes | At minimum `openid`; add `email` / `profile` to pull those claims. |
 | `username_claim` | no (defaults to `preferred_username`) | Which claim becomes the Liberty username. Falls back to `email`, then `sub` if missing. |
 | `email_claim` | no | Which claim becomes the user's email. |

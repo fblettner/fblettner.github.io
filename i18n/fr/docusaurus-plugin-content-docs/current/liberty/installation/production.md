@@ -36,13 +36,13 @@ Tous les secrets se trouvent dans `release/.env`. `install.sh` le génère avec 
 |---|---|---|
 | `LIBERTY_IMAGE_TAG` | Épingler la version d'image. | Voir la [section 3](#3--épingler-le-tag-dimage). |
 | `LIBERTY_JWT_SECRET` | Signe chaque token d'accès. | Sa rotation invalide tous les tokens en circulation — voir la [section 7](#7--rotation-du-secret-jwt). |
-| `LIBERTY_MASTER_KEY` | Déchiffre les valeurs `ENC:` des TOML. | DOIT rester constante — voir la [section 8](#8--gestion-de-la-clé-maître). |
-| `LIBERTY_ADMIN_PASSWORD` | Mot de passe d'amorçage de l'utilisateur local `admin`. | À changer après la première connexion via `liberty-admin set-password` — voir la [section 5](#5--changer-tous-les-mots-de-passe-par-défaut). |
+| `LIBERTY_MASTER_KEY` | Déchiffre les valeurs `ENC:` des TOML — y compris la clé de licence, la clé IA et le secret client OIDC stockés dans `app.toml`. | DOIT rester constante — voir la [section 8](#8--gestion-de-la-clé-maître). |
+| `LIBERTY_ADMIN_PASSWORD` | Mot de passe d'amorçage de l'utilisateur local `admin`. | `install.sh` en génère un et l'affiche une seule fois lors du premier démarrage — non stocké dans `.env`. Réinitialisation ultérieure via `docker exec liberty-next liberty-admin reset-admin-password` ou `liberty-admin set-password admin <nouveau>` — voir la [section 5](#5--changer-tous-les-mots-de-passe-par-défaut). |
 | `POSTGRES_PASSWORD` | Mot de passe superutilisateur Postgres. | Full / Swarm uniquement. |
-| `PGADMIN_EMAIL` / `PGADMIN_PASSWORD` | Connexion à pgAdmin. | L'email par défaut est `admin@example.com` — changer les deux. |
-| `LIBERTY_LICENSE_KEY` | JWT de licence (bundles licenciés uniquement). | Optionnel pour le framework seul. |
-| `LIBERTY_OIDC_ENABLED` / `LIBERTY_OIDC_*` | Câblage SSO. | Voir la [section 6](#6--oidc-pour-le-sso). |
+| `PGADMIN_EMAIL` / `PGADMIN_PASSWORD` | Connexion à pgAdmin. | L'email par défaut est `admin@liberty.fr` — changer les deux. |
 | `LIBERTY_DOMAIN` / `ACME_EMAIL` | Nom de domaine TLS + contact Let's Encrypt. | Voir la [section 4](#4--câbler-tls). |
+
+La **clé de licence, la clé API Anthropic et le secret client OIDC** ne sont plus des variables d'environnement dans la configuration recommandée. Elles se trouvent dans `app.toml`, chiffrées au repos avec `LIBERTY_MASTER_KEY` — édition via *Settings → App* dans la SPA (voir la [section 6](#6--licensekeyaiandoidcvia-settings-app)). Le chemin par variable d'environnement (`LIBERTY_LICENSE_KEY` / `ANTHROPIC_API_KEY` / `LIBERTY_OIDC_CLIENT_SECRET` référencés depuis `app.toml` sous la forme `${VAR}`) reste fonctionnel comme repli pour les installations qui privilégient le stockage en gestionnaire de secrets.
 
 ### Le piège de substitution `$`
 
@@ -153,8 +153,8 @@ docker stack deploy \
 | Où | Valeur par défaut | Changement |
 |---|---|---|
 | **Dashboard Traefik** | `admin/admin` | Hacher un nouveau mot de passe en bcrypt, le coller dans `release/traefik/dynamic/dynamic.yml`. `file.watch=true` recharge en quelques secondes — aucun redémarrage nécessaire. |
-| **pgAdmin** | `admin@example.com / PGADMIN_PASSWORD` depuis `.env` | Renseigner `PGADMIN_EMAIL` avec une adresse réelle et changer `PGADMIN_PASSWORD`. Redémarrer le service `pgadmin`. |
-| **admin liberty-next** | `LIBERTY_ADMIN_PASSWORD` depuis `.env` | Lancer `liberty-admin set-password` après la première connexion (voir ci-dessous). |
+| **pgAdmin** | `admin@liberty.fr / PGADMIN_PASSWORD` depuis `.env` | Renseigner `PGADMIN_EMAIL` avec une adresse réelle et changer `PGADMIN_PASSWORD`. Redémarrer le service `pgadmin`. |
+| **admin liberty-next** | valeur aléatoire affichée une seule fois par `install.sh` (non stockée dans `.env`) | Lancer `liberty-admin set-password` (ou `reset-admin-password` pour une nouvelle valeur aléatoire). |
 
 ### Dashboard Traefik
 
@@ -183,7 +183,10 @@ docker compose up -d pgadmin                                      # COMPOSE_FILE
 ### admin liberty-next
 
 ```bash
-# Compose
+# Compose — réinitialiser à une nouvelle valeur aléatoire (affichée une seule fois)
+docker exec liberty-next liberty-admin reset-admin-password
+
+# Compose — définir un mot de passe précis
 docker compose exec liberty-next liberty-admin set-password admin <nouveau>
 
 # Swarm
@@ -191,32 +194,51 @@ docker exec $(docker ps -qf name=liberty_liberty-next) \
     liberty-admin set-password admin <nouveau>
 ```
 
-Une fois changée, la valeur du `.env` ne fait plus autorité — le hash Argon2 se trouve dans `auth.toml` sur le volume `liberty-config`.
+Une fois changée, le hash Argon2 se trouve dans `auth.toml` sur le volume `liberty-config`. `LIBERTY_ADMIN_PASSWORD` est une graine valable uniquement au premier démarrage — `install.sh` l'exporte dans le shell le temps du boot, puis l'abandonne.
 
 ---
 
-## 6 — OIDC pour le SSO
+## 6 — Clé de licence, IA et OIDC via Settings → App \{#6--licensekeyaiandoidcvia-settings-app\}
 
-Câbler l'IdP (Keycloak, Auth0, Azure AD, Okta, …) une fois l'installation joignable via TLS.
+Trois secrets de production se trouvent désormais dans `app.toml`, chiffrés au repos avec `LIBERTY_MASTER_KEY` (AES-256-GCM, préfixe `ENC:`). L'édition s'effectue depuis l'écran **Settings → App** de la SPA — **aucune édition de `.env`, aucun redémarrage de service**. Déroulé complet de l'éditeur : [App settings](../framework/build/settings-app.md).
 
-```env title=".env"
-LIBERTY_OIDC_ENABLED=true
-LIBERTY_OIDC_PROVIDER_URL=https://login.example.com/realms/liberty
-LIBERTY_OIDC_CLIENT_ID=liberty-next
-LIBERTY_OIDC_CLIENT_SECRET=<depuis-lIdP>
+| Section | Contenu | Effet à l'enregistrement |
+|---|---|---|
+| **License** | JWT RS256 signé par l'éditeur qui débloque les connecteurs licenciés (Nomasx-1, Nomajde, NomaUBL). | Registre des connecteurs reconstruit en place. Les connecteurs licenciés écartés au démarrage réapparaissent ; ceux qui ne sont plus couverts par la nouvelle clé sont retirés. Aucun redémarrage. |
+| **AI Assistant → Anthropic API key** | `sk-ant-…` pour Anthropic. Plus tous les réglages IA (modèle, exposition des outils, system prompt, allowlist web-fetch, limites par appel). | Assistant reconstruit ; le prochain tour de chat utilise la nouvelle configuration. |
+| **OpenID Connect (SSO)** | discovery_url, client_id, client_secret, scopes, mappings de claims, surcharges de redirection proxy optionnelles. | Handler OIDC reconstruit ; la prochaine connexion utilise la nouvelle configuration. Les sessions actives (signées par `LIBERTY_JWT_SECRET`) ne sont pas affectées. |
+
+Les champs sensibles suivent le motif **révéler-pour-éditer** : tant qu'ils sont masqués, ils affichent des points et un bouton *Replace* ; la charge utile envoyée vaut `""` afin qu'un enregistrement accidentel préserve la valeur chiffrée sur disque. Cliquer sur *Replace* pour saisir une nouvelle valeur. Voir [App settings → Masked secrets](../framework/build/settings-app.md#masked-secrets--the-reveal-to-edit-pattern).
+
+### Pourquoi cela compte en production
+
+| Avant | Maintenant |
+|---|---|
+| Rotation de licence : édition de `.env` + redémarrage du conteneur. | Rotation via l'UI, aucun redémarrage, aucune coupure. |
+| Rotation de la clé Anthropic : redémarrage requis. | Rotation via l'UI, le prochain tour de chat utilise la nouvelle clé. |
+| Rotation du client_secret OIDC : édition de `.env` + redémarrage. | Rotation via l'UI, aucun impact sur les sessions actives. |
+| Secrets posés dans `.env` (mode 0600 — en clair sur disque malgré tout). | Chiffrés au repos dans `app.toml` avec la clé maître de l'installation. |
+
+### Repli par variable d'environnement
+
+Pour les installations qui préfèrent placer le secret dans un gestionnaire (Kubernetes Secrets, Docker Secrets, Vault), le chemin par variable d'environnement reste fonctionnel :
+
+```toml title="app.toml — références de variables résolues au démarrage"
+[license]
+key = "${LIBERTY_LICENSE_KEY}"
+
+[ai]
+api_key = "${ANTHROPIC_API_KEY}"
+
+[oidc]
+client_secret = "${LIBERTY_OIDC_CLIENT_SECRET}"
 ```
 
-Puis redémarrer liberty-next :
+Positionner les variables dans l'environnement du conteneur, puis redémarrer. Les champs *License* / *AI api_key* / *OIDC client_secret* de l'UI s'affichent alors comme *configurés* mais **en lecture seule** (le framework ne réécrit pas dans les valeurs résolues depuis une variable d'environnement). Retirer d'abord les références `${VAR}` pour reprendre la gestion via l'UI.
 
-```bash
-# Compose
-docker compose restart liberty-next                               # COMPOSE_FILE sélectionne les bons fichiers
+### La connexion locale reste le repli
 
-# Swarm
-./deploy-swarm.sh
-```
-
-La connexion locale reste disponible comme chemin de repli — l'utilisateur `admin` continue de fonctionner quand OIDC est indisponible (panne du fournisseur, client mal configuré). Ne pas la désactiver.
+Ne pas désactiver la connexion locale une fois OIDC configuré — l'utilisateur `admin` continue de fonctionner quand OIDC est indisponible (panne du fournisseur, client mal configuré, client_secret expiré). Les deux chemins coexistent ; la SPA affiche les deux sur l'écran de connexion quand OIDC est activé.
 
 ---
 

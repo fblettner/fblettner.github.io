@@ -1,7 +1,7 @@
 ---
 title: Deploy prebuilt apps
 description: "Stand up the NOMANA-IT product apps on a Liberty install — NomaUBL (separate Java service), Nomasx-1 / Nomajde / Nomaflow bundled jobs (delivered as one liberty-apps wheel). The wheel is materialised by install-apps.sh via a throwaway python:3.12-slim container — no host Python or pip needed — then bind-mounted into liberty-next via the docker-compose.apps.yml overlay."
-keywords: [Liberty Framework, prebuilt apps, deploy, install, NomaUBL, Nomasx-1, Nomajde, Nomaflow, liberty-apps, wheel, install-apps.sh, --apps, --license-key, APPS_HOST_PATH, docker-compose.apps.yml, COMPOSE_FILE, throwaway container, deploy-databases, init-schema, nomasx1-import-reference]
+keywords: [Liberty Framework, prebuilt apps, deploy, install, NomaUBL, Nomasx-1, Nomajde, Nomaflow, liberty-apps, wheel, install-apps.sh, --apps, APPS_HOST_PATH, docker-compose.apps.yml, COMPOSE_FILE, throwaway container, Settings App, license key, deploy-databases, init-schema, nomasx1-import-reference]
 ---
 
 # Deploy prebuilt apps
@@ -48,22 +48,25 @@ The rest of this page focuses on the **Liberty plugins** — Nomasx-1, Nomajde a
 ## Single-command install (fresh host)
 
 ```bash
-./install.sh full \
-    --apps ./liberty_apps-7.0.1-py3-none-any.whl \
-    --license-key <your-rs256-jwt>
+./install.sh full --apps ./liberty_apps-7.0.1-py3-none-any.whl
 ```
 
-That's everything — base stack + licensed apps + license key in one go.
+That's the stack + the licensed apps in one go. The license key is set **afterwards** via the UI — see [Set the license key](#set-the-license-key) below.
 
-`install.sh` brings the base layout up first (so the credentials banner stays visible even if the apps step fails), then chains to `install-apps.sh` with the wheel + license key.
+`install.sh` brings the base layout up first (so the credentials banner stays visible even if the apps step fails), then chains to `install-apps.sh` with the wheel.
+
+:::info[`--license-key` flag was removed from `install.sh`]
+Earlier versions accepted `--license-key <jwt>` and wrote it to `.env` as `LIBERTY_LICENSE_KEY`. The flag is gone — the license now lives in `app.toml` encrypted at rest with the install master key (AES-256-GCM, `ENC:` prefix). It's set via *Settings → App → License* after install — connector registry rebuilds on save, no restart. See [App settings → License](../framework/build/settings-app.md#section-2--license).
+:::
 
 ---
 
 ## Split install — base first, apps later
 
 ```bash
-./install.sh full                                                            # base stack
-./install-apps.sh ./liberty_apps-7.0.1-py3-none-any.whl --license-key <jwt>  # apps overlay
+./install.sh full                                          # base stack
+./install-apps.sh ./liberty_apps-7.0.1-py3-none-any.whl    # apps overlay
+# Then: Settings → App → License → paste the JWT
 ```
 
 This is the path most installs end up using — apps land after the operator has already verified the base stack works.
@@ -74,9 +77,9 @@ This is the path most installs end up using — apps land after the operator has
 |---|---|
 | **1. Fetch the wheel** (when given a URL) | `curl -fsSL <url>` into a temp dir; a local path is used directly. |
 | **2. Materialise the wheel into `./apps/`** | Runs a throwaway `python:3.12-slim` container that mounts the wheel read-only + the destination read-write, `pip install`s the wheel into a tmp prefix, then invokes the wheel's `liberty-apps install --target /dest/config` CLI which copies `config/` + `plugins/` into the destination. Nothing python-related stays on the host. |
-| **3. Update `.env`** | Sets `APPS_HOST_PATH=<absolute path to ./apps>`, appends `docker-compose.apps.yml` to `COMPOSE_FILE` (colon-separated), sets `LIBERTY_LICENSE_KEY=<jwt>` if passed. |
+| **3. Update `.env`** | Sets `APPS_HOST_PATH=<absolute path to ./apps>` and appends `docker-compose.apps.yml` to `COMPOSE_FILE` (colon-separated). The license key is NOT written to `.env` — set it via *Settings → App → License* after the apps are visible. |
 | **4. Restart the stack** | `docker compose up -d` (no `-f` — `COMPOSE_FILE` picks every overlay). Liberty-next picks up the new bind mount. |
-| **5. Wait for the healthcheck + print summary** | Path, license-key status, verification URLs. |
+| **5. Wait for the healthcheck + print summary** | Path, the apps mount + next-step pointer to *Settings → App → License*. |
 
 The throwaway-container approach means **your host needs no Python, no pip, no virtualenv** — only Docker. This is intentional: the framework host should not need a Python toolchain to install the apps.
 
@@ -85,7 +88,7 @@ The throwaway-container approach means **your host needs no Python, no pip, no v
 | Flag | Purpose |
 |---|---|
 | `<wheel-path-or-URL>` *(positional)* | Local `.whl` or an `http://` / `https://` URL. Required. |
-| `--license-key <jwt>` | Set `LIBERTY_LICENSE_KEY` in `.env`. Without it the framework runs in **restricted mode** — the licensed connectors flagged `licensed = true` in the apps' `connectors.toml` don't load. |
+| ~~`--license-key <jwt>`~~ | **Removed.** Set the license via *Settings → App → License* after install (encrypted at rest in `app.toml`, applied live without restart). |
 | `--target <DIR>` | Destination on the host. Default: `./apps`. The directory is created if missing. |
 | `--layout <full\|light>` | Which base layout's compose to use when wiring `COMPOSE_FILE`. Default: `full`. The apps overlay works on both. |
 | `--force-config` | Overwrite operator-edited TOMLs in `./apps/config/` with the wheel's vendor versions. Default behaviour preserves operator edits across re-installs. |
@@ -143,13 +146,28 @@ Inside the liberty-next container: `./apps/` lands at `/apps:ro`. `LIBERTY_APPS_
 
 ### Without a license key
 
-The framework still starts — it just runs in **restricted mode** (connectors flagged `licensed = true` aren't loaded). Useful for testing the apps' open parts. Add the key later:
+`install.sh --apps` and `install-apps.sh` deliberately do NOT set a license — the framework starts in **restricted mode** (connectors flagged `licensed = true` in the wheel's `connectors.toml` aren't loaded). Useful for testing the apps' open parts. Set the key whenever you have it — see below.
 
-```bash
-./install-apps.sh ./liberty_apps-7.0.1.whl --license-key <jwt>
-```
+---
 
-Idempotent — only touches the `.env` line, doesn't re-materialise the wheel.
+## Set the license key \{#set-the-license-key\}
+
+The license JWT is set via the SPA, encrypted at rest in `app.toml` with the install master key. **No restart** — the connector registry rebuilds on save, licensed connectors that were previously filtered out reappear immediately.
+
+| Step | What |
+|---|---|
+| 1. Sign in to the SPA as `admin` (the password printed by `install.sh`). | The default at `http://<host>/` (or your TLS hostname). |
+| 2. Open **Settings → App**. | Master settings editor — see [App settings](../framework/build/settings-app.md). |
+| 3. Expand the **License** section. | The header badge shows *not set — restricted mode*. |
+| 4. Click **Set** (first time) or **Replace** (rotation). | The input opens; the masked-secret pattern keeps the stored ciphertext hidden. |
+| 5. Paste the vendor-signed JWT and click **Save**. | The framework encrypts the value with the install master key (`ENC:` on disk), re-verifies the license, rebuilds the connector registry. |
+| 6. Refresh the SPA. | The licensed apps (Nomasx-1 / Nomajde) appear in the app switcher; their menus + screens load. |
+
+To verify from the CLI: `curl http://<host>/info | jq '.license.mode'` returns `"full"` (was `"restricted"`).
+
+For a **rotation** later (license expired, customer change, etc.), repeat with **Replace**. The masked-secret pattern means the old value is preserved if you accidentally save with the field empty — `clear` requires explicitly clicking *Replace* then leaving the input blank.
+
+The env-var path (`LIBERTY_LICENSE_KEY` referenced from `app.toml`) still works as a fallback — see [License key](../framework/build/secure/license-key.md) for the full matrix.
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Clé de licence
-description: "Ce que la licence conditionne (les produits éditeur packagés — Nomasx-1, Nomajde, NomaUBL …), où la renseigner (app.toml ou variable d'environnement LIBERTY_LICENSE_KEY) et ce qui se passe quand elle est absente ou expirée."
-keywords: [Liberty Framework, clé de licence, connecteur sous licence, RS256, JWT de licence, Nomasx-1, Nomajde, NomaUBL]
+description: "Ce que la licence conditionne (les produits éditeur packagés — Nomasx-1, Nomajde, NomaUBL …), où la renseigner (Paramètres → Application est le chemin canonique ; la variable d'environnement LIBERTY_LICENSE_KEY reste disponible en repli) et ce qui se passe quand elle est absente ou expirée."
+keywords: [Liberty Framework, clé de licence, connecteur sous licence, RS256, JWT de licence, Nomasx-1, Nomajde, NomaUBL, Paramètres Application, AppBuilder, chiffré au repos]
 ---
 
 # Clé de licence
@@ -29,19 +29,24 @@ L'infrastructure propre au framework — authentification, pools, l'outillage op
 
 ## Où réside la licence
 
-Deux sources, la variable d'environnement l'emporte :
+Trois chemins — l'interface est le chemin canonique :
 
-| Source | Priorité | Format |
+| Chemin | Quand | Comment |
 |---|---|---|
-| **Variable d'environnement `LIBERTY_LICENSE_KEY`** | La plus haute | La chaîne JWT RS256 brute. |
-| **`[license] key` dans `app.toml`** | Repli | Même format, mais sur disque. |
+| **Paramètres → Application → Licence** *(canonique)* | Par défaut pour toute nouvelle installation. L'opérateur colle le JWT une fois ; le framework le chiffre au repos avec la clé maître d'installation. À chaud — les connecteurs sont reconstruits à l'enregistrement, sans redémarrage. | Ouvrir le SPA → *Paramètres → Application* → déplier *Licence* → cliquer sur *Définir* / *Remplacer* → coller le JWT → enregistrer. Voir [Paramètres Application](../settings-app.md). |
+| **Variable d'environnement `LIBERTY_LICENSE_KEY`** *(historique / utilisateur avancé)* | Installations existantes qui ont déjà câblé la variable d'environnement ; déploiements où l'opérateur souhaite que la clé se trouve dans un gestionnaire de secrets (Kubernetes Secrets, Docker Secrets, Vault…). Lue au démarrage. | Définir dans l'environnement ; référencer depuis `app.toml` par `key = "${LIBERTY_LICENSE_KEY}"`. Le champ *Licence* de l'interface affiche alors la valeur résolue comme configurée mais en lecture seule — supprimer d'abord la référence `${VAR}` pour pouvoir éditer depuis l'interface. |
+| **Texte brut dans `app.toml`** *(déconseillé)* | Démo / brouillon — mêmes risques que pour tout secret inliné dans un fichier committé. | `[license] key = "eyJhbGciOiJSUzI1NiI…"`. |
 
-```toml
+Sur disque après un enregistrement depuis l'interface :
+
+```toml title="config/app.toml"
 [license]
-key = "${LIBERTY_LICENSE_KEY}"     # le chemin recommandé — substitution de variable d'environnement
+key = "ENC:eYWBcD…7q=="          # AES-256-GCM avec la clé maître d'installation
 ```
 
-Inliner le JWT directement dans `app.toml` est pris en charge mais déconseillé pour la même raison que tout autre secret — il finit dans le contrôle de version si le fichier est committé.
+Le préfixe `ENC:` est la sentinelle du framework — le loader le reconnaît, déchiffre avec `LIBERTY_MASTER_KEY`, puis transmet le clair au vérificateur. Les valeurs en clair sont lues telles quelles ; les références à des variables d'environnement sont résolues au démarrage comme auparavant.
+
+`install.sh` (dossier release/) n'écrit plus `LIBERTY_LICENSE_KEY` dans `.env` — le chemin canonique est l'interface. Pour le chemin par variable d'environnement sur une installation Docker, éditer `.env` à la main et ajouter une entrée `environment:` pour `liberty-next` dans le fichier compose (ou utiliser Docker Secrets en Swarm).
 
 ---
 
@@ -99,26 +104,32 @@ Le motif opérationnel pragmatique : **renouveler la licence bien avant l'expira
 
 Le flux standard à la réception d'un nouveau JWT de licence depuis l'éditeur :
 
-### Option A — variable d'environnement (recommandée)
+### Option A — Paramètres → Application (recommandée)
 
-1. Placer le JWT dans le gestionnaire de secrets / la configuration de l'orchestrateur.
-2. Définir la variable d'environnement `LIBERTY_LICENSE_KEY` dans l'environnement du framework.
-3. Redémarrer le framework.
-4. Ouvrir `/api/license` pour vérifier (`valid: true`, `subject` attendu, `expires_at` attendu).
+1. Se connecter au SPA en tant que superutilisateur.
+2. Ouvrir *Paramètres → Application* → déplier la section *Licence*.
+3. Cliquer sur *Définir* (première installation) ou *Remplacer* (rotation) — le champ devient éditable.
+4. Coller le JWT complet, cliquer sur *Enregistrer*.
+5. Le registre des connecteurs est reconstruit sur place — **aucun redémarrage**. Les connecteurs sous licence filtrés au démarrage réapparaissent immédiatement.
+6. Ouvrir `/api/license` pour vérifier (`valid: true`, `subject` attendu, `expires_at` attendu), ou consulter le badge d'en-tête de la section *Licence* — il indique *configuré*.
 
-### Option B — `app.toml`
+Le JWT est chiffré au repos avec la clé maître d'installation (préfixe `ENC:` dans `app.toml`). Le motif de révélation à l'édition des secrets masqués garantit que la valeur existante n'est jamais exposée dans l'interface — cliquer sur *Définir* / *Remplacer* ouvre un champ vide ; le texte chiffré stocké n'est déchiffré par le framework qu'au démarrage. Voir [Paramètres Application](../settings-app.md) pour la procédure complète de l'éditeur.
 
-1. Ouvrir `config/app.toml`.
-2. Mettre à jour le champ `[license] key` — coller la chaîne JWT complète.
-3. Enregistrer le fichier.
-4. Redémarrer (ou déclencher un rechargement si l'installation prend en charge le rechargement à chaud de la configuration).
+### Option B — variable d'environnement
+
+Pour les installations qui préfèrent que le secret se trouve dans un gestionnaire de secrets / la configuration de l'orchestrateur (Kubernetes Secrets, Docker Secrets, Vault) :
+
+1. Placer le JWT dans le gestionnaire de secrets.
+2. Définir `LIBERTY_LICENSE_KEY` dans l'environnement du framework (bloc `environment:` du conteneur `liberty-next` ou `EnvironmentFile` de l'unité systemd).
+3. Référencer depuis `config/app.toml` : `[license] key = "${LIBERTY_LICENSE_KEY}"`.
+4. Redémarrer le framework.
 5. Ouvrir `/api/license` pour vérifier.
 
-Le chemin par variable d'environnement est préféré parce que :
+Le chemin par variable d'environnement implique que le champ *Licence* de l'interface affiche la valeur résolue comme configurée mais **en lecture seule** — supprimer d'abord la référence `${VAR}` de `app.toml` pour pouvoir gérer la valeur depuis l'interface.
 
-- Le JWT n'est pas dans le contrôle de version.
-- La rotation ne demande pas de modifier le fichier.
-- Avoir une licence séparée par environnement est trivial — il suffit de définir une variable différente par déploiement.
+### Option C — texte brut dans `app.toml` (déconseillé)
+
+Inliner le JWT directement dans le fichier fonctionne (c'est la même chaîne RS256), mais le secret atterrit dans le contrôle de version si le fichier est committé. À réserver aux installations de brouillon / démo.
 
 ---
 
@@ -138,7 +149,7 @@ Pour les déploiements utilisant le motif de variable d'environnement, le gestio
 | **Période de grâce après expiration** | Non implémentée. `exp` est une limite stricte. |
 | **Comptage de licences par instance** | La licence est unique par déploiement ; le framework n'applique pas de limites par tenant. Politique côté éditeur. |
 | **Révocation de licence** | Non prise en charge. Une fois émise, une licence est valide jusqu'à `exp`. Ne pas exposer le JWT publiquement. |
-| **Rechargement à chaud de la licence via l'interface** | Non implémenté. Utiliser la variable d'environnement + redémarrage, ou modifier `app.toml` + redémarrage. |
+| **Rechargement à chaud de la licence via l'interface** | Oui — *Paramètres → Application → Licence* reconstruit le registre des connecteurs à l'enregistrement. Aucun redémarrage requis. Le chemin par variable d'environnement nécessite toujours un redémarrage. |
 
 Pour un comportement de période de grâce, mettre en place un flux de rappel calendaire en interne — la plupart des installations ajoutent l'expiration de la licence à leur suivi général des expirations (certificats TLS, clés d'API tierces).
 
