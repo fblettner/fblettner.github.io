@@ -158,7 +158,7 @@ function DemoCard() {
         </div>
         <pre className={styles.demoCreds}>
           <code>{`Login    = demo
-Password = demo`}</code>
+Password = demo2026`}</code>
         </pre>
         <Link
           className="button button--primary button--lg"
