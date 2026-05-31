@@ -255,7 +255,7 @@ backups/2026-05-30_170000/
 
 ---
 
-## Updating the apps later
+## Updating the apps later \{#updating-the-apps-later\}
 
 Drop a new wheel and re-run:
 

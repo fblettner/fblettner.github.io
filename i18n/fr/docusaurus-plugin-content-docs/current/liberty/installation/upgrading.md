@@ -112,7 +112,29 @@ Détails complets sur le format de sauvegarde, les commandes de restauration et 
 
 ## Procédure de mise à jour — Light / Full (Compose)
 
-Identique pour les deux modes — `COMPOSE_FILE` dans `.env` (positionné par `install.sh`) pilote `docker compose` :
+Identique pour les deux modes. Deux commandes équivalentes ; au choix.
+
+### Option A — relancer `./install.sh <layout>` (recommandé)
+
+```bash
+cd /opt/liberty-next/release
+
+./backup.sh             # 1 — instantané (systématique)
+./install.sh full       # 2 — détecte le .env existant, ignore la génération de secrets,
+                        #     récupère les nouvelles images, lance `docker compose up -d`,
+                        #     attend l'état healthy, affiche le résumé
+```
+
+`install.sh` est **idempotent à la relance**. Quand `.env` existe déjà, il :
+
+- Journalise `.env already exists — keeping it` et **ignore la génération des secrets** (aucun risque de régénérer `LIBERTY_MASTER_KEY` et de perdre les valeurs chiffrées).
+- Lance `docker compose pull` puis `docker compose up -d` sur la chaîne `COMPOSE_FILE` définie dans `.env`.
+- Attend que le healthcheck de `liberty-next` (`/info`) passe à healthy.
+- Affiche le résumé — la ligne *Sign in to Liberty as* indique désormais *password unchanged from the original install* (le mot de passe admin du premier démarrage était à usage unique — l'identifiant existant continue de fonctionner). Le mot de passe pgAdmin est réimprimé depuis `.env` à titre de rappel.
+
+Conserver le même mode de déploiement que celui utilisé à l'installation — en passer un autre (`./install.sh light` sur une installation full ou l'inverse) démarre le mauvais fichier compose.
+
+### Option B — `docker compose` nu (effet identique)
 
 ```bash
 cd /opt/liberty-next/release
@@ -125,13 +147,53 @@ docker compose up -d    # 3 — recréation des conteneurs ; l'entrypoint exécu
 curl -s http://127.0.0.1:8000/info
 ```
 
+Effet identique, sortie plus discrète, pas d'impression de résumé. À privilégier en CI ou dès que les commodités interactives d'`install.sh` deviennent gênantes.
+
 :::info[Jamais de `-f` après l'installation]
-`COMPOSE_FILE` dans `.env` porte la chaîne complète (`docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml` après `install.sh --ssl letsencrypt --apps ...`). Passer manuellement `-f docker-compose.full.yml` surcharge cette chaîne et écarte silencieusement les overlays TLS + apps — le prochain `up -d` les supprime. S'en tenir aux commandes nues `docker compose pull` / `up -d`. Voir [Docker → Discipline COMPOSE_FILE](./docker.md#compose-file-discipline).
+`COMPOSE_FILE` dans `.env` porte la chaîne complète (`docker-compose.full.yml:docker-compose.tls-letsencrypt.yml:docker-compose.apps.yml` après `install.sh --ssl letsencrypt --apps ...`). Passer manuellement `-f docker-compose.full.yml` surcharge cette chaîne et écarte silencieusement les overlays TLS + apps — le prochain `up -d` les supprime. S'en tenir aux commandes nues `docker compose pull` / `up -d`, ou utiliser `./install.sh`. Voir [Docker → Discipline COMPOSE_FILE](./docker.md#compose-file-discipline).
 :::
 
 Ce que fait `up -d` : Compose détecte que le digest de l'image a changé, recrée le conteneur `liberty-next` sur place, remonte les mêmes volumes nommés, redémarre. Le nouvel entrypoint exécute `liberty-admin init-db`, puis se met à servir. Indisponibilité totale : ~30 s sur un hôte tiède.
 
 Les autres services de la pile (Postgres, pgAdmin, Portainer, Traefik) ne sont pas recréés tant que leur propre tag d'image n'a pas bougé — `pull` agit par service et `up -d` ne recrée que ceux dont la spécification a changé.
+
+### Ce qui survit à la mise à niveau
+
+Tout ce que l'opérateur a touché. Compose recrée le conteneur `liberty-next` ; les volumes (et le bind mount des apps quand l'overlay apps est actif) se rattachent intacts au nouveau conteneur.
+
+| État | Se trouve dans | Préservé ? |
+|---|---|---|
+| `.env` (master key, secret JWT, mots de passe Postgres / pgAdmin) | `release/.env` sur l'hôte | Intact. |
+| Base framework (authentification, historique d'exécutions Nomaflow, données des apps sous licence) | Volume `pg-data` | Postgres n'est pas recréé tant que son tag d'image n'a pas bougé. |
+| TOMLs édités par l'opérateur (`app.toml` + `connectors.toml` + `screens.toml` + `menus.toml` + dashboards / charts / dictionary) | Volume `liberty-config` | Monté sur `/app/config` dans le nouveau conteneur. |
+| Clé de licence, clé d'API Anthropic, secret client OIDC | `app.toml` (valeurs chiffrées `ENC:` avec la master key d'installation) | Se trouve dans `liberty-config`. Le nouveau conteneur déchiffre avec la `LIBERTY_MASTER_KEY` inchangée du `.env`. |
+| Certificat Let's Encrypt + état ACME | Volume `traefik-acme` | Pas de nouveau cycle ACME ; les rate limits LE ne sont pas consommés. |
+| Enregistrements de serveurs pgAdmin + préférences | Volume `pgadmin-data` | Préservé. |
+| État Portainer | Volume `portainer-data` | Préservé. |
+| Bundle d'apps sous licence (TOMLs Nomasx-1 / Nomajde + code des plugins) | Bind mount `./apps/` sur l'hôte (défini par `APPS_HOST_PATH` dans `.env`) | Le mount se rattache au nouveau conteneur sur `/apps:ro`. |
+| `LIBERTY_ADMIN_PASSWORD` du premier démarrage | Affiché une seule fois à l'installation initiale, jamais écrit dans `.env` | L'utilisateur admin existant conserve son mot de passe. Perdu ? `docker exec liberty-next liberty-admin reset-admin-password`. |
+
+### `:latest` vs tag épinglé
+
+| Ligne `.env` | Ce que `pull` récupère |
+|---|---|
+| `# LIBERTY_IMAGE_TAG=latest` *(commenté — défaut)* | Compose utilise `:latest` par défaut. Chaque `pull` peut basculer vers l'image publiée la plus récente — acceptable en pré-production, risqué en production. |
+| `LIBERTY_IMAGE_TAG=7.0.21` *(épinglé)* | `pull` est sans effet dès que le cache local possède le tag. Les mises à jour ne surviennent que sur incrément de la valeur + `pull && up -d`. |
+
+Pour épingler : décommenter la ligne dans `.env`, fixer la version, lancer `./install.sh full` (ou `docker compose pull && up -d`).
+
+### Quand la wheel d'apps sous licence change aussi
+
+`./install.sh full` (ou `docker compose pull`) ne rafraîchit que l'image `liberty-next` — pas le bundle d'apps présent sur le bind mount `./apps/`. Pour une **mise à jour de la wheel liberty-apps** (nouvelle version Nomasx-1 / Nomajde), passer par l'installeur dédié :
+
+```bash
+./install-apps.sh /path/to/new-liberty_apps-X.Y.Z.whl
+docker compose restart liberty-next       # prend en compte les TOMLs rafraîchis
+```
+
+L'installeur de wheel est idempotent — les TOMLs édités par l'opérateur dans `./apps/config/` sont préservés sauf passage de `--force-config`. Voir [Deploy prebuilt apps → Updating the apps later](./deploy-prebuilt-apps.md#updating-the-apps-later).
+
+La plupart des mises à jour framework ne concernent que `liberty-next` — aucune wheel d'apps à rafraîchir.
 
 ---
 

@@ -255,7 +255,7 @@ backups/2026-05-30_170000/
 
 ---
 
-## Mettre à jour les applications par la suite
+## Mettre à jour les applications par la suite \{#updating-the-apps-later\}
 
 Déposer un nouveau wheel et relancer :
 
