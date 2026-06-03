@@ -10,7 +10,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-06-02" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.02 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-02</span></a>
+  <a href="#v2026-06-03" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.03 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-03</span></a>
+  <a href="#v2026-06-02" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.02 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-02</span></a>
   <a href="#v2026-05-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-26</span></a>
   <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
   <a href="#v2026-05-23" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.23 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
@@ -50,6 +51,19 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.06.03 — 2026-06-03 \{#v2026-06-03\}
+
+Un **renvoi en masse** très attendu pour les factures bloquées en *Échec d'envoi* — une seule carte sur le Tableau de bord technique affiche le nombre concerné et un bouton les renvoie toutes à la PA d'un seul clic. Une nouvelle page **Reprise auto** dans Paramètres planifie ce même renvoi chaque nuit, pour qu'un lot tombé pendant la nuit soit repris automatiquement le lendemain matin.
+
+### Nouveautés
+
+- **Carte Échec d'envoi sur le Tableau de bord technique.** Une nouvelle carte affiche le nombre de factures actuellement en *Échec d'envoi* (statut 9904) et expose un bouton **Tout renvoyer** d'un seul clic. La fenêtre de progression montre les compteurs en direct (traitées / réussies / échecs) ; vous pouvez la fermer et laisser l'opération continuer en arrière-plan, ou l'arrêter proprement entre deux factures. Le renvoi est cadencé à 100 ms par appel pour ménager la PA. Voir [Tableau de bord technique → Échec d'envoi](./application/tech-dashboard.md#send-failed-row-2-span-4-20260603).
+- **Reprise nocturne automatique dans Paramètres.** Une nouvelle page [Configuration → Système → Reprise auto](./configuration/system/auto-retry.md) permet de programmer une passe quotidienne qui renvoie toutes les factures dans un statut choisi — par défaut 3 h du matin, statut 9904. Utile pour le lot de nuit : tout ce qui est bloqué côté PA est repris avant le matin suivant. Plusieurs planifications coexistent, chacune avec sa propre heure, sa liste de statuts, une fenêtre d'analyse optionnelle et son cadencement.
+- **Sélecteur multi-statuts pour la reprise.** Choisissez un ou plusieurs statuts dans une liste limitée aux codes étiquetés *Erreur – technique* (9904, 9905, 9907, …). Une seule planification peut couvrir d'un coup tous les seaux d'erreurs techniques.
+- **Fenêtre de progression pour les tâches en arrière-plan.** Les opérations longues partagent désormais une fenêtre commune — une barre, des compteurs en direct, un bouton *Annuler* et un bouton *Continuer en arrière-plan* qui masque la fenêtre sans arrêter la tâche. Voir [Tableau de bord technique → Fenêtre de progression partagée](./application/tech-dashboard.md#shared-progress-window).
 
 ---
 

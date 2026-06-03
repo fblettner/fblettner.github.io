@@ -233,19 +233,22 @@ The grid uses `align-items: stretch` and each card grows with `flex: 1` inside i
 
 ## Layout
 
-The 12-column grid is laid out as seven rows:
+The 12-column grid is laid out as eight rows:
 
 | Row | Layout | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **System Health** · **Quick links** |
-| 2 | `4 + 4 + 4` | **Scheduler** · **Error trend · 14d** · **Retry rate · 14d** |
-| 3 | `4 + 4 + 4` | **JVM · threads + GC** · **Throughput · 14d** · **Active sessions / clients** |
-| 4 | `8 + 4` | **Filesystem** · **Template processing time · 14d** |
-| 5 | `12` | **Live process events** |
-| 6 | `12` | **Configuration check** |
-| 7 | `5 + 7` | **Database tables** · **Recent errors** |
+| 2 | `4 + 4 + 4` | **Send Failed** · **Error trend · 14d** · **Retry rate · 14d** |
+| 3 | `4 + 4 + 4` | **Scheduler** · **Throughput · 14d** · **Active sessions / clients** |
+| 4 | `4 + 8` | **JVM · threads + GC** · **Filesystem** |
+| 5 | `8 + 4` | *(reserved)* · **Template processing time · 14d** |
+| 6 | `12` | **Live process events** |
+| 7 | `12` | **Configuration check** |
+| 8 | `5 + 7` | **Database tables** · **Recent errors** |
 
 A **Refresh** button in the page header re-runs all four endpoints in parallel.
+
+The **Send Failed** card landed in 2026.06.03 alongside the [Auto-Retry](../configuration/system/auto-retry.md) page in Settings — the manual one-click retry on the dashboard and the scheduled overnight sweep both call the same underlying replay path.
 
 ---
 
@@ -272,12 +275,26 @@ The card subtitle on the right shows the **build version + build date** baked in
 
 Static shortcut list — the IT operator's most-used pages. Each link uses the same `onNavigate` mechanism as the sidebar so it lands on the target page directly. Default targets: **Settings**, **Processing Log**, **File Versions**, **Cross-Reference**.
 
-### Scheduler (row 2, span 4)
+### Send Failed (row 2, span 4) *(2026.06.03)*
+
+A single big-number card showing how many invoices are currently in *Send failed* (status `9904`). When the count is non-zero, a **Resend all N** button below the number replays every matching invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md). Clicking it opens the [shared progress window](#shared-progress-window) — live counters, a *Cancel* button and a *Run in background* button that hides the window while the work keeps going server-side. The resend is throttled at **100 ms per call** so the PA stays inside its rate budget.
+
+| Element | Behaviour |
+|---|---|
+| Count | Live total — refreshed by the page's *Refresh* button and at every dashboard mount. Coloured red when non-zero. |
+| **Resend all N** button | Disabled when the count is zero. Click to replay every status-`9904` invoice; opens the progress window. |
+| Progress window | Live counters (*processed* / *succeeded* / *failed*), a *Cancel* button and a *Run in background* button — same component as every long-running operation on the platform. |
+| Throttle | 100 ms between calls — fixed in code; not operator-tunable here. The [Auto-Retry](../configuration/system/auto-retry.md) schedule exposes its own throttle for the scheduled equivalent. |
+
+Use the manual button for a one-shot replay during business hours (a brief PA outage that cleared, a small batch you want resent now). For unattended overnight retries, schedule a row on the [Auto-Retry](../configuration/system/auto-retry.md) page — same code path, no operator action required.
+
+### Scheduler (row 3, span 4)
 
 Lists every active scheduler job:
 
 - **Built-ins** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — driven by `BackgroundScheduler` polling intervals.
 - **Per-template `fetch-all`** — one row per template that has a scheduled extract / sync.
+- **Per-row Auto-Retry sweeps** *(2026.06.03)* — one row per saved entry on the [Auto-Retry](../configuration/system/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
 
 Each row shows the job name, the cadence, and a status pill (green active, blue scheduled-soon, orange paused). The card subtitle reports the active count.
 
@@ -368,6 +385,24 @@ Per-table row count for every NomaUBL table — invoices (`F564231`), lifecycle 
 ### Recent errors (row 7, span 7)
 
 Last 8 events from `F564237` filtered on `level IN ('ERROR', 'FATAL')`. Each row shows the level badge, the lifecycle code and triplet, the message, and a relative timestamp (*2m ago*, *1h ago*). Clicking a row opens the corresponding entry in *Processing Log*, where the full stack and replay options live.
+
+---
+
+## Shared progress window \{#shared-progress-window\}
+
+*Added 2026.06.03.* Every long-running operation in the platform — Resend All from this page, the [Auto-Retry](../configuration/system/auto-retry.md) sweep, the *Detailed view* export on [Integration Errors](./integration-errors.md), the upcoming bulk re-imports — opens the **same modal**. One component, one set of habits.
+
+The window stays open by default while the operation runs; closing it is a deliberate action.
+
+| Element | What it does |
+|---|---|
+| **Progress bar** | Visual counter of processed-vs-total. Updates every ~250 ms as the server pushes increments. |
+| **Live counters** | Three numbers: *Processed* (total touched so far), *Succeeded*, *Failed*. Each is clickable when non-zero and opens a small drawer with the per-invoice triplets, so a failure on invoice `12345 / RI / 00070` is one click away from its log entry. |
+| **Cancel** | Stops the operation cleanly between two invoices. Already-processed invoices keep their new state; the rest are left untouched. The button is replaced by *Cancelled* (greyed) once the signal lands. |
+| **Run in background** | Hides the modal without stopping the operation. The work continues server-side; a small persistent banner at the top of the page surfaces the count + a *Show progress* link. Click the link to reopen the modal at any time. |
+| **Done** | Replaces *Cancel* / *Run in background* when the operation finishes. A summary line shows total / succeeded / failed and the elapsed time. |
+
+Multiple operations can run side by side — each gets its own banner when sent to the background. Closing the browser tab does **not** cancel the work; the server-side run keeps going. Reopening the page surfaces the banner again until the run completes.
 
 ---
 

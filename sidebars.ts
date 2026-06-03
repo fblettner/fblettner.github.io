@@ -563,6 +563,7 @@ const sidebars: SidebarsConfig = {
             'nomaubl/configuration/system/document-types',
             'nomaubl/configuration/system/statuses',
             'nomaubl/configuration/system/daily-digest',
+            'nomaubl/configuration/system/auto-retry',
           ],
         },
         'nomaubl/configuration/reference-lists',

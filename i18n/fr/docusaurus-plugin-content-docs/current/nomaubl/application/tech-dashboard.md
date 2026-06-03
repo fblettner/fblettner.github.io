@@ -233,19 +233,22 @@ La grille utilise `align-items: stretch` et chaque carte grandit avec `flex: 1` 
 
 ## Disposition
 
-La grille à 12 colonnes est organisée en sept rangées :
+La grille à 12 colonnes est organisée en huit rangées :
 
 | Rangée | Disposition | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **Santé système** · **Raccourcis** |
-| 2 | `4 + 4 + 4` | **Planificateur** · **Courbe d'erreurs · 14j** · **Taux de relance · 14j** |
-| 3 | `4 + 4 + 4` | **JVM · threads + GC** · **Débit · 14j** · **Sessions / Clients actifs** |
-| 4 | `8 + 4` | **Système de fichiers** · **Temps de traitement par modèle · 14j** |
-| 5 | `12` | **Traitements en cours · direct** |
-| 6 | `12` | **Vérification de configuration** |
-| 7 | `5 + 7` | **Tables de base** · **Erreurs récentes** |
+| 2 | `4 + 4 + 4` | **Échec d'envoi** · **Courbe d'erreurs · 14j** · **Taux de relance · 14j** |
+| 3 | `4 + 4 + 4` | **Planificateur** · **Débit · 14j** · **Sessions / Clients actifs** |
+| 4 | `4 + 8` | **JVM · threads + GC** · **Système de fichiers** |
+| 5 | `8 + 4` | *(réservé)* · **Temps de traitement par modèle · 14j** |
+| 6 | `12` | **Traitements en cours · direct** |
+| 7 | `12` | **Vérification de configuration** |
+| 8 | `5 + 7` | **Tables de base** · **Erreurs récentes** |
 
 Un bouton **Rafraîchir** dans l'en-tête de la page relance les quatre endpoints en parallèle.
+
+La carte **Échec d'envoi** est arrivée en 2026.06.03, en même temps que la page [Reprise auto](../configuration/system/auto-retry.md) dans les Paramètres — la relance manuelle en un clic sur le tableau de bord et le passage planifié de nuit utilisent le même chemin de relance sous-jacent.
 
 ---
 
@@ -272,12 +275,26 @@ Le sous-titre de la carte affiche, à droite, la **version du build et la date d
 
 Liste statique de raccourcis — les pages les plus utilisées par l'opérateur IT. Chaque lien utilise le même mécanisme `onNavigate` que la barre latérale et ouvre directement la page cible. Cibles par défaut : **Paramètres**, **Journal de traitement**, **Versions de fichiers**, **Références croisées**.
 
-### Planificateur (rangée 2, span 4)
+### Échec d'envoi (ligne 2, largeur 4) *(2026.06.03)* \{#send-failed-row-2-span-4-20260603\}
+
+Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi est limité à **100 ms par appel** pour que la PA reste dans son enveloppe de débit.
+
+| Élément | Comportement |
+|---|---|
+| Compteur | Total en direct — rafraîchi par le bouton *Rafraîchir* de la page et à chaque montage du tableau de bord. Affiché en rouge quand il n'est pas à zéro. |
+| Bouton **Tout renvoyer (N)** | Désactivé quand le compteur est à zéro. Un clic rejoue chaque facture au statut `9904` ; la fenêtre de progression s'ouvre. |
+| Fenêtre de progression | Compteurs en direct (*traitées* / *réussies* / *échecs*), bouton *Annuler* et bouton *Continuer en arrière-plan* — même composant que pour chaque traitement long de la plateforme. |
+| Limitation de débit | 100 ms entre deux appels — fixé dans le code, non paramétrable ici par l'opérateur. La planification [Reprise auto](../configuration/system/auto-retry.md) propose sa propre limite pour l'équivalent planifié. |
+
+Le bouton manuel sert à un renvoi ponctuel en pleine journée (une coupure PA passagère qui s'est résolue, un petit lot à relancer tout de suite). Pour des relances de nuit sans supervision, planifier une ligne sur la page [Reprise auto](../configuration/system/auto-retry.md) — même chemin de code, sans intervention d'un opérateur.
+
+### Planificateur (rangée 3, span 4)
 
 Liste tous les jobs actifs du planificateur :
 
 - **Jobs intégrés** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — pilotés par les intervalles de polling de `BackgroundScheduler`.
 - **`fetch-all` par modèle** — une ligne par modèle avec un job d'extraction / synchronisation programmé.
+- **Passages Reprise auto par ligne** *(2026.06.03)* — une ligne par entrée enregistrée sur la page [Reprise auto](../configuration/system/auto-retry.md), avec l'heure planifiée et la liste des statuts ciblés en guise de cadence.
 
 Chaque ligne affiche le nom du job, la cadence, et une pastille de statut (vert actif, bleu prévu sous peu, orange en pause). Le sous-titre indique le décompte des jobs actifs.
 
@@ -368,6 +385,24 @@ Nombre de lignes par table NomaUBL — factures (`F564231`), cycle de vie (`F564
 ### Erreurs récentes (rangée 7, span 7)
 
 Les 8 derniers événements de `F564237` filtrés sur `level IN ('ERROR', 'FATAL')`. Chaque ligne affiche le badge de niveau, le code de cycle de vie et le triplet, le message et un horodatage relatif (*il y a 2 min*, *il y a 1 h*). Cliquer sur une ligne ouvre l'entrée correspondante dans *Journal de traitement*, où se trouvent la stack complète et les options de relance.
+
+---
+
+## Fenêtre de progression partagée \{#shared-progress-window\}
+
+*Ajoutée en 2026.06.03.* Chaque traitement long de la plateforme — Tout renvoyer depuis cette page, le passage [Reprise auto](../configuration/system/auto-retry.md), l'export *Vue détaillée* sur [Erreurs d'intégration](./integration-errors.md), les futurs ré-imports en masse — ouvre la **même fenêtre modale**. Un seul composant, un seul jeu d'habitudes.
+
+La fenêtre reste ouverte par défaut tant que le traitement tourne ; la fermer est une action volontaire.
+
+| Élément | Rôle |
+|---|---|
+| **Barre de progression** | Compteur visuel traitées-sur-total. Mise à jour environ toutes les 250 ms à mesure que le serveur pousse des incréments. |
+| **Compteurs en direct** | Trois nombres : *Traitées* (total touché jusqu'ici), *Réussies*, *Échecs*. Chaque compteur est cliquable quand il n'est pas à zéro et ouvre un petit panneau avec les triplets de factures concernés — un échec sur la facture `12345 / RI / 00070` se trouve donc à un clic de son entrée de journal. |
+| **Annuler** | Arrête proprement le traitement entre deux factures. Les factures déjà traitées conservent leur nouvel état ; les autres ne sont pas touchées. Le bouton est remplacé par *Annulé* (grisé) quand le signal est pris en compte. |
+| **Continuer en arrière-plan** | Masque la fenêtre sans arrêter le traitement. Le travail se poursuit côté serveur ; une petite bannière persistante en haut de la page affiche le compteur et un lien *Voir la progression*. Cliquer sur le lien rouvre la fenêtre à tout moment. |
+| **Terminé** | Remplace *Annuler* / *Continuer en arrière-plan* à la fin du traitement. Une ligne de résumé affiche total / réussies / échecs et la durée écoulée. |
+
+Plusieurs traitements peuvent coexister — chacun obtient sa bannière une fois envoyé en arrière-plan. Fermer l'onglet du navigateur n'**annule pas** le travail ; l'exécution côté serveur continue. Rouvrir la page fait réapparaître la bannière jusqu'à la fin du traitement.
 
 ---
 
