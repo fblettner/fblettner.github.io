@@ -102,6 +102,39 @@ Beyond service control, the wrapper exposes **short forms** of the JAR's process
 
 The remainder of the page describes each direct JAR mode in detail.
 
+### `JAVA_OPTS` — passing JVM flags through the wrapper *(2026.06.02)*
+
+Both wrappers (`nomaubl.sh`, `nomaubl.cmd`) expose a **`JAVA_OPTS`** variable near the top of the file. Anything in it is forwarded to every `java -jar` invocation the wrapper makes — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Use it for site-wide JVM flags without editing the wrapper's command lines.
+
+```bash title="nomaubl.sh (top of file)"
+# JVM flags forwarded to every java invocation. Default: empty.
+JAVA_OPTS=""
+```
+
+```cmd title="nomaubl.cmd (top of file)"
+:: JVM flags forwarded to every java invocation. Default: empty.
+set "JAVA_OPTS="
+```
+
+The single most common use is pinning the **master encryption key** at a fixed path outside the user profile — typically the same path across every environment on a host:
+
+```bash
+JAVA_OPTS="-Dnomaubl.master.key.file=/etc/nomaubl/master.key"
+```
+
+This survives a user reboot, a service-user change and `~/.nomaubl-*` clean-up; the system file is the canonical store regardless of which OS account runs the JVM. The same flag works under systemd (set it inside the unit's `Environment=` line) and under Windows NSSM (set it via `nssm set NomaUBL-<env> AppEnvironmentExtra`).
+
+Other common cases:
+
+| Flag | Use |
+|---|---|
+| `-Xmx8g` | Raise the JVM heap above the default for large batches. |
+| `-Dnomaubl.debug.timing=true` | Print per-step timings even when `--no-debug` would otherwise hide them. |
+| `-Dfile.encoding=UTF-8` | Force UTF-8 on platforms where the JVM default is something else (rare, but seen on Windows Server). |
+| `-Djava.io.tmpdir=/var/tmp/nomaubl` | Steer the temp directory off `/tmp` when memory pressure mounts. |
+
+`JAVA_OPTS` is not visible in the `--help` banner — it's an operator concern, not a CLI flag.
+
 ---
 
 ## `upgrade <env>` — move an existing environment forward \{#upgrade\}
@@ -109,8 +142,26 @@ The remainder of the page describes each direct JAR mode in detail.
 End-to-end upgrade of an existing environment to the JAR currently in place. Replace `nomaubl.jar` next to the wrapper, run `./nomaubl.sh upgrade <env>`, and the wrapper takes care of every step — service lifecycle, schema, reference data, framework XSL, per-document XSL — and writes a complete report under `${appHome}/upgrade-reports/`. Customer mappings and customer config are kept verbatim throughout.
 
 ```bash
-./nomaubl.sh upgrade prod
+./nomaubl.sh upgrade prod                              # auto-detect the current version
+./nomaubl.sh upgrade prod --from-version 2026.05.20    # force the baseline manually
 ```
+
+### `--from-version` — manual baseline *(2026.06.02)*
+
+By default, the upgrade reads the current installed version from the upgrade-history table and applies every migration whose target version is **strictly newer** than what's there. That works for any environment that has been upgraded through `nomaubl.sh upgrade` since the table was added.
+
+For environments that were **hand-patched** ahead of schedule — typically because a hotfix was applied directly to a customer site between official releases — the auto-detected baseline can underestimate what's actually on disk, and the upgrade would re-run migrations the customer has already absorbed. The `--from-version <X.Y.Z>` flag overrides the detection: only migrations whose target version is strictly newer than `<X.Y.Z>` are applied.
+
+```bash
+./nomaubl.sh upgrade prod --from-version 2026.05.20    # skip everything up to and including 2026.05.20
+```
+
+| Detail | What |
+|---|---|
+| **Format** | `YYYY.MM.PP` (e.g. `2026.05.20`) — the version string of the release the install is currently on. |
+| **Comparison** | Strict `>` — `--from-version 2026.05.20` runs every migration whose target is `2026.05.21` or later. |
+| **Scope** | Database schema, reference data and framework XSL are filtered by the baseline. Per-document XSL is always re-merged (the merge is idempotent at the customer-tag level). |
+| **Report** | The upgrade report records the supplied baseline in its header so audits can see which version was treated as the start point. |
 
 <svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>

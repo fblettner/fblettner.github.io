@@ -10,7 +10,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-26</span></a>
+  <a href="#v2026-06-02" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.02 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-02</span></a>
+  <a href="#v2026-05-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-26</span></a>
   <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
   <a href="#v2026-05-23" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.23 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
   <a href="#v2026-05-22" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.22 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
@@ -49,6 +50,32 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.06.02 — 2026-06-02 \{#v2026-06-02\}
+
+Un nouveau **rapport quotidien des erreurs** envoyé par courriel à qui de droit — avec la liste complète des évènements jointe en Excel — ainsi qu'une **vue Détaillée** très attendue sur la page Intégration / erreurs qui regroupe toutes les erreurs par facture et permet d'exporter le tout d'un clic. L'outil de mise à jour côté client gagne un réglage manuel pour les installations patchées en avance, et les scripts de lancement Windows / Linux exposent désormais un point d'extension pour les options JVM (emplacement de la clé maîtresse, mémoire, …).
+
+### Nouveautés
+
+- **Rapport quotidien des erreurs par courriel.** Une nouvelle page [Configuration → Système → Rapport quotidien](./configuration/system/daily-digest.md) permet de programmer un envoi quotidien qui regroupe toutes les erreurs d'intégration sur une fenêtre glissante (par défaut : hier et aujourd'hui) avec, en pièce jointe, un fichier Excel contenant la liste complète des évènements — les mêmes données que l'export de la vue Détaillée. Plusieurs rapports peuvent coexister : un par sous-ensemble de destinataires, avec son propre horaire d'envoi, sa fenêtre d'analyse et son filtre de sévérité.
+- **Routage par colonne sur le rapport.** Chaque rapport porte une liste de filtres d'égalité (Société, Code activité, Source, Règle, Centre, …) pour que chaque équipe reçoive son périmètre. Par exemple, un rapport pour activité = ISC envoyé à une adresse, un autre pour VRAC envoyé à une autre adresse.
+- **Vue Détaillée sur Intégration / erreurs.** Un troisième onglet à côté de *Par évènement* et *Par règle*. Une ligne par facture par défaut — l'évènement le plus récent de cette facture — avec un chevron et une pastille `+N` qui indique combien d'autres évènements sont masqués. On déplie pour voir tous les évènements de la facture, on replie pour garder la page lisible. Les factures sont triées par évènement le plus récent : la facture la plus chaude remonte en haut, avec tous ses évènements précédents regroupés en dessous. Voir [Intégration / erreurs → Vue détaillée](./application/integration-errors.md#detailed-view).
+- **Le filtre de période s'élargit à la facture en vue Détaillée.** Quand un filtre comme *30 derniers jours* sélectionne une facture, la vue Détaillée fait remonter *tous* les évènements de cette facture — y compris les plus anciens hors période — pour que la chronologie soit complète au même endroit.
+- **L'export Excel reprend toutes les lignes, même celles repliées.** En cliquant sur *Exporter* en vue Détaillée, le fichier contient tous les évènements de toutes les factures du périmètre, indépendamment de ce qui est replié à l'écran.
+- **Réglage manuel pour la mise à jour client.** Une nouvelle option [`--from-version`](./management/command-line.md#upgrade) sur `nomaubl.sh upgrade` et `nomaubl.cmd upgrade` indique exactement la version actuelle du client à l'outil au lieu de la deviner. Utile quand l'installation a été patchée à la main en avance — seules les migrations strictement postérieures à la version indiquée seront appliquées.
+- **Point d'extension JVM dans les lanceurs.** Une variable `JAVA_OPTS` en haut de `nomaubl.sh` et `nomaubl.cmd` est reprise par chaque appel Java (démarrage, traitement, mise à jour, récupération, …). Cas d'usage le plus courant : pointer la clé maîtresse de chiffrement vers un emplacement fixe hors du profil utilisateur, par exemple `JAVA_OPTS="-Dnomaubl.master.key.file=/etc/nomaubl/master.key"`. Voir [Command Line → JAVA_OPTS](./management/command-line.md).
+
+### Améliorations
+
+- **Le message Schematron long est entièrement visible.** En vue Détaillée, la colonne *Message* se renvoie à la ligne et le texte complet s'affiche sans troncature.
+- **La colonne *Statut actuel* utilise toute la largeur disponible.** Sur la page Intégration / erreurs, élargir la colonne révèle davantage du libellé du statut au lieu d'être bloqué à la largeur figée précédente.
+- **Les erreurs se regroupent naturellement par facture.** Même sur l'onglet *Par évènement*, l'ordre privilégie la facture quand c'est pertinent pour que l'œil n'ait plus à chasser les évènements d'une même facture entre les pages.
+
+### Corrections
+
+- **Les valeurs sauvegardées du rapport quotidien s'affichent correctement après enregistrement.** Le formulaire repassait aux valeurs par défaut après Enregistrer ; il reflète à nouveau l'état réellement enregistré.
 
 ---
 

@@ -102,6 +102,39 @@ Au-delà du contrôle de service, le wrapper propose des **formes courtes** des 
 
 Le reste de la page détaille chacun des modes directs du JAR.
 
+### `JAVA_OPTS` — passer des options JVM via le wrapper *(2026.06.02)*
+
+Les deux wrappers (`nomaubl.sh`, `nomaubl.cmd`) déclarent une variable **`JAVA_OPTS`** en haut du fichier. Tout ce qu'elle contient est transmis à chaque invocation `java -jar` du wrapper — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Cela permet d'appliquer des options JVM communes au site sans toucher aux lignes de commande du wrapper.
+
+```bash title="nomaubl.sh (en-tête du fichier)"
+# Options JVM transmises à chaque invocation java. Défaut : vide.
+JAVA_OPTS=""
+```
+
+```cmd title="nomaubl.cmd (en-tête du fichier)"
+:: Options JVM transmises à chaque invocation java. Défaut : vide.
+set "JAVA_OPTS="
+```
+
+L'usage le plus fréquent est de fixer la **clé maîtresse de chiffrement** à un emplacement fixe hors du profil utilisateur — généralement le même chemin sur tous les environnements d'un hôte :
+
+```bash
+JAVA_OPTS="-Dnomaubl.master.key.file=/etc/nomaubl/master.key"
+```
+
+Ce réglage résiste à un redémarrage utilisateur, à un changement de compte de service et à un nettoyage des `~/.nomaubl-*` ; le fichier système devient le point de référence unique quel que soit le compte OS qui exécute la JVM. La même option fonctionne sous systemd (à placer dans la ligne `Environment=` du fichier d'unité) et sous Windows NSSM (via `nssm set NomaUBL-<env> AppEnvironmentExtra`).
+
+Autres cas courants :
+
+| Option | Usage |
+|---|---|
+| `-Xmx8g` | Augmenter le tas JVM au-delà de la valeur par défaut pour les gros batchs. |
+| `-Dnomaubl.debug.timing=true` | Afficher les durées par étape même quand `--no-debug` les masquerait. |
+| `-Dfile.encoding=UTF-8` | Forcer UTF-8 sur les plates-formes où la valeur JVM par défaut diffère (rare, mais observé sous Windows Server). |
+| `-Djava.io.tmpdir=/var/tmp/nomaubl` | Déplacer le répertoire temporaire hors de `/tmp` en cas de pression mémoire. |
+
+`JAVA_OPTS` n'apparaît pas dans la bannière `--help` — c'est un réglage exploitation, pas une option de ligne de commande.
+
 ---
 
 ## `upgrade <env>` — faire évoluer un environnement existant \{#upgrade\}
@@ -109,8 +142,26 @@ Le reste de la page détaille chacun des modes directs du JAR.
 Mise à jour de bout en bout d'un environnement existant vers le JAR en place. Remplacer `nomaubl.jar` à côté du wrapper, lancer `./nomaubl.sh upgrade <env>`, et le wrapper enchaîne toutes les étapes — cycle de vie du service, schéma de base, données de référence, XSL framework, XSL par document — puis dépose un rapport complet sous `${appHome}/upgrade-reports/`. Les mappings client et la configuration client sont conservés à l'identique tout au long du processus.
 
 ```bash
-./nomaubl.sh upgrade prod
+./nomaubl.sh upgrade prod                              # détection automatique de la version actuelle
+./nomaubl.sh upgrade prod --from-version 2026.05.20    # forcer la version de départ manuellement
 ```
+
+### `--from-version` — version de départ manuelle *(2026.06.02)*
+
+Par défaut, la mise à jour lit la version installée dans la table d'historique des mises à jour et applique toutes les migrations dont la version cible est **strictement supérieure** à celle qui s'y trouve. Cela couvre tous les environnements passés par `nomaubl.sh upgrade` depuis l'ajout de cette table.
+
+Pour les environnements **patchés à la main** par anticipation — typiquement quand un correctif a été appliqué directement chez un client entre deux livraisons officielles —, la détection automatique peut sous-estimer ce qui est réellement en place sur disque, et la mise à jour rejouerait des migrations déjà absorbées par le client. L'option `--from-version <X.Y.Z>` court-circuite la détection : seules les migrations dont la version cible est strictement supérieure à `<X.Y.Z>` sont appliquées.
+
+```bash
+./nomaubl.sh upgrade prod --from-version 2026.05.20    # ignorer tout jusqu'à 2026.05.20 inclus
+```
+
+| Détail | Contenu |
+|---|---|
+| **Format** | `AAAA.MM.PP` (par ex. `2026.05.20`) — la chaîne de version de la livraison sur laquelle se trouve l'installation. |
+| **Comparaison** | Stricte `>` — `--from-version 2026.05.20` applique toutes les migrations dont la cible est `2026.05.21` ou ultérieure. |
+| **Périmètre** | Schéma de base, données de référence et XSL framework sont filtrés par la version de départ. La XSL par document est toujours refusionnée (la fusion est ré-exécutable sans effet sur les balises client déjà appliquées). |
+| **Rapport** | Le rapport de mise à jour consigne la version de départ fournie dans son en-tête, afin que les audits voient quelle version a servi de point de départ. |
 
 <svg viewBox="0 0 1000 380" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>

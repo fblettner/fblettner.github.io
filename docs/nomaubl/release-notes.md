@@ -10,7 +10,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-05-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.05.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-26</span></a>
+  <a href="#v2026-06-02" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.02 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-02</span></a>
+  <a href="#v2026-05-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-26</span></a>
   <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
   <a href="#v2026-05-23" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.23 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
   <a href="#v2026-05-22" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.22 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
@@ -49,6 +50,32 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.06.02 — 2026-06-02 \{#v2026-06-02\}
+
+A new **Daily error digest** that emails every integration error of the day to whoever needs it — with the full event list as an Excel attachment — plus a long-asked **Detailed view** on the Integration Errors page that groups every error per invoice and exports the lot in one click. The customer-upgrade tool gains a manual baseline override for installs that were hand-patched ahead of schedule, and the Windows / Linux launchers now expose a JVM-options hook for the master key location.
+
+### New features
+
+- **Daily error digest by email.** A new [Configuration → System → Daily Digest](./configuration/system/daily-digest.md) page lets you schedule a daily message that bundles every integration error over a sliding window (default: yesterday and today) and attaches an Excel file with the full event list — the same data the Detailed view exports. Multiple digests are supported: configure one per recipient subset, with its own send time, lookback window, and severity filter.
+- **Per-column routing on the digest.** Each digest carries a list of equality filters (Company, Activity code, Source, Rule, Business unit, …) so different teams can receive different cuts of the same data. For example, one digest for activity = ISC sent to one address and another for VRAC to another.
+- **Detailed view on Integration Errors.** A third tab next to *By event* and *By rule*. One row per invoice by default — the invoice's most recent event — with a chevron and a `+N` pill showing how many other events are hidden. Expand to reveal all the events for that invoice; collapse to keep the page tidy. Invoices are sorted by their most recent event so the freshest issue floats to the top, with all of that invoice's earlier events listed beneath it. See [Integration Errors → Detailed view](./application/integration-errors.md#detailed-view).
+- **Period filter expands to whole invoices in the Detailed view.** When a filter like *Last 30 days* selects an invoice, the Detailed view brings back *all* of that invoice's events — including older ones outside the period — so the timeline for each invoice is complete in one place.
+- **Export to Excel carries every row, even collapsed ones.** Clicking *Export* in the Detailed view drops a file that contains every event for every invoice in scope, regardless of which groups are expanded on screen.
+- **Manual baseline for the customer-upgrade tool.** A new [`--from-version`](./management/command-line.md#upgrade) option on `nomaubl.sh upgrade` and `nomaubl.cmd upgrade` tells the tool exactly which release the customer is currently at, instead of guessing. Useful when an install was hand-patched ahead of the default baseline — only the migrations strictly newer than the supplied release will run.
+- **JVM options hook in the launchers.** A `JAVA_OPTS` variable at the top of `nomaubl.sh` and `nomaubl.cmd` is forwarded to every Java invocation (start, process, upgrade, fetch-…). The most common use is pinning the master encryption key at a fixed path outside the user profile, e.g. `JAVA_OPTS="-Dnomaubl.master.key.file=/etc/nomaubl/master.key"`. See [Command Line → JAVA_OPTS](./management/command-line.md).
+
+### Improvements
+
+- **Word-wrap on the long Schematron message column.** The message column in the Detailed view now wraps so the full text is visible in the row, no truncation.
+- **Wider Current status column reveals the full label.** Resizing the column on the Integration Errors page now shows more of the status message instead of capping the text at the previous fixed width.
+- **Integration errors now group naturally by invoice.** Even in the *By event* tab, the order is invoice-first when relevant so the eye doesn't have to chase events of the same invoice across pages.
+
+### Bug fixes
+
+- **Saved digest settings are correctly displayed after save.** The form used to fall back to defaults after Save; values now refresh from the freshly-saved record.
 
 ---
 

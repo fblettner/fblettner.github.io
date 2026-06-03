@@ -1,20 +1,25 @@
 ---
 title: Integration Errors
-description: "Failure-analysis tool over the validation table — by-rule cards ranking the top failing rules and a by-event flat table for row-level investigation. Each rule code is decorated with the human description extracted from the bundled Schematron files. Filter by category (UBL / Integration), severity, document key; the Unmatched only checkbox keeps the original orphan-error view one click away."
-keywords: [NomaUBL, integration errors, validation, F564236, by-rule, by-event, ValidationRuleCatalog, Schematron, XSD, UVSRCL, FATAL, ERROR, WARNING, INFO, JD Edwards, SAP, NetSuite, custom ERP]
+description: "Failure-analysis tool over the validation table — by-rule cards ranking the top failing rules, a by-event flat table for row-level investigation, and a detailed view that groups events by invoice. Each rule code is decorated with the human description extracted from the bundled Schematron files. Filter by category (UBL / Integration), severity, document key; the Unmatched only checkbox keeps the original orphan-error view one click away. The detailed view exports every event in scope, even collapsed ones."
+keywords: [NomaUBL, integration errors, validation, F564236, by-rule, by-event, detailed view, group by invoice, ValidationRuleCatalog, Schematron, XSD, UVSRCL, FATAL, ERROR, WARNING, INFO, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Integration Errors
 
-The **Integration Errors** screen is the **failure-analysis tool** over the validation table (`F564236`). It surfaces every entry recorded by the validation pipeline — from XSD / Schematron rule failures to lifecycle-level integration errors (PDF, PA, DB, …) — and presents them through two complementary views:
+The **Integration Errors** screen is the **failure-analysis tool** over the validation table (`F564236`). It surfaces every entry recorded by the validation pipeline — from XSD / Schematron rule failures to lifecycle-level integration errors (PDF, PA, DB, …) — and presents them through three complementary views:
 
 - **by-rule** — ranked cards grouped by `(rule, source)`, each card showing how many invoices the rule has touched plus per-severity chips. The fastest way to spot *which rule is biting hardest right now*.
 - **by-event** — flat table of every individual error event, with severity, source, rule, message, document triplet and the invoice's current status. The right place to investigate one specific row.
+- **detailed** — one row per invoice with the most recent event surfaced and a `+N` pill counting the older ones, expand to reveal the full timeline per invoice. The right place to read every error for a given invoice at a glance.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The errors come from the validation pipeline, which itself works on the generated UBL, so the source format is transparent here.
 
 :::info[Refreshed in 2026.05.4]
 Previously the page was the orphan-error view only — a flat table of `F564236` rows that had no matching invoice header. It is now a proper failure-analysis tool: by-rule + by-event toggle, a category filter (UBL vs Integration / lifecycle), human descriptions extracted from the bundled Schematron files, and an `Unmatched only` checkbox that keeps the orphan-error behaviour one click away. Default view is *all errors* — orphans are no longer the main filter.
+:::
+
+:::info[Refreshed in 2026.06.02]
+A third **Detailed** tab joins *By rule* and *By event*. One row per invoice by default with the freshest event surfaced and a `+N` pill counting the rest — expand to read the full per-invoice timeline. The period filter (e.g. *Last 30 days*) selects invoices first then brings back every event for them, so a single invoice's timeline is always complete in one place. The Excel export drops every row in scope, even those hidden inside collapsed groups. Schematron messages wrap inside the cell instead of being truncated; the *Current status* column accepts manual resize and reveals the full label.
 :::
 
 ---
@@ -40,19 +45,20 @@ Previously the page was the orphan-error view only — a flat table of `F564236`
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Integration Errors</text>
   <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="240" y="84" width="160" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <rect x="240" y="84" width="80" height="28" rx="6" fill="url(#ie2-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="280" y="102" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">By rule</text>
-  <text x="360" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">By event</text>
+  <rect x="240" y="84" width="220" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="84" width="73" height="28" rx="6" fill="url(#ie2-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="277" y="102" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">By rule</text>
+  <text x="350" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">By event</text>
+  <text x="423" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Detailed</text>
 
-  <rect x="416" y="84" width="146" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="424" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">All sources ▾</text>
+  <rect x="468" y="84" width="100" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="476" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">All sources ▾</text>
 
-  <rect x="568" y="84" width="120" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="576" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">☐ Unmatched only</text>
+  <rect x="576" y="84" width="120" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="584" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">☐ Unmatched only</text>
 
-  <rect x="700" y="84" width="80" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="740" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Refresh</text>
+  <rect x="704" y="84" width="78" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="743" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Refresh</text>
 
   <rect x="240" y="124" width="48" height="22" rx="11" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
   <text x="264" y="139" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">All</text>
@@ -114,7 +120,7 @@ Previously the page was the orphan-error view only — a flat table of `F564236`
 
   <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">View toggle</text>
-  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">By rule / By event</text>
+  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">By rule / By event / Detailed</text>
   <line x1="200" y1="100" x2="240" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
 
   <rect x="820" y="84" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -158,12 +164,13 @@ The same toolbar drives both views.
 
 | Control | Behaviour |
 |---|---|
-| **View toggle** | *By rule* (default after a deep-link from the dashboard) or *By event*. Other filters carry across — switching tabs keeps the search, severity and category filters intact. |
+| **View toggle** | *By rule* (default after a deep-link from the dashboard), *By event*, or *Detailed* *(2026.06.02)*. Other filters carry across — switching tabs keeps the search, severity and category filters intact. |
 | **Search** | Substring match against `DOC`, `DCT`, `KCO` and the message text. Server-side, debounced. |
 | **Category** | *All sources* (default), *UBL validation* (Schematron / XSD rules — `UVSRCL IN ('EN16931', 'CIUSFR', 'FREXTIC', 'CPRO', 'XSD', 'UBL')`), *Integration / lifecycle* (everything else — runtime errors emitted by the dispatcher: PDF, PA, DB, …). |
 | **Severity chips** | *All* / *FATAL* / *ERROR* / *WARNING* / *INFO*. One severity at a time; clicking the active chip resets to *All*. |
 | **`Unmatched only`** *(by-event only)* | Restores the orphan-only behaviour of the previous version — keeps just the rows that have no joined invoice header. Off by default; one click away when needed. |
 | **Refresh** | Re-runs the current query. |
+| **Export** *(detailed only)* | Drops every event in scope to an Excel file. Every group's events are written — even those hidden inside a collapsed row on screen. The same data the [Daily Digest](../configuration/system/daily-digest.md) emails as an attachment. |
 
 ### Advanced Filters *(2026.05.10)*
 
@@ -246,6 +253,43 @@ The row click is **always actionable** since 2026.05.9 — both matched and orph
 A small checkbox in the toolbar — `Unmatched only` — restores the previous version's behaviour: only the rows that have no joined invoice header. These are *orphan* errors, typically transformation failures that prevented the invoice from ever being persisted (the XSL produced something the UBL validator could not parse, or a `FATAL` aborted the pipeline before the database insert).
 
 The default view shows *every* error, matched or not. Switching the checkbox on is one click; nothing else is needed.
+
+---
+
+## Detailed view \{#detailed-view\}
+
+*Added 2026.06.02.*
+
+The detailed view turns the flat by-event table into a **per-invoice timeline**. One row per invoice by default — the freshest event the active filters select, with a chevron and a `+N` pill counting the older events behind it. Click the chevron to reveal every event of that invoice; click again to collapse.
+
+| Element | Behaviour |
+|---|---|
+| **Default row** | The most recent event of the invoice (max date). Same columns as the by-event view — severity, date, doc / dct / kco / seq, source, rule + description, *Current status*, customer. |
+| **`+N` pill** | Number of additional events the invoice has within the loaded scope. `+0` rows render without the pill so a single-event invoice looks clean. |
+| **Chevron expand** | Reveals every event of the invoice, oldest first. Indented underneath the default row, with the same column shape. |
+| **Sort** | Invoices are sorted by their most recent event descending — the freshest issue floats to the top, with all of that invoice's earlier events listed beneath it. The order is stable across refreshes. |
+| **Word-wrap on the message column** | The Schematron / XPath message wraps inside the cell so the full text is visible without opening the detail modal. Useful for at-a-glance triage when the explanation is short. |
+| **Wider *Current status* column** | The column accepts manual resize and renders the full status label instead of capping at a fixed width. |
+
+### Period filter expands to whole invoices
+
+When a date filter (`Last 30 days`, `Yesterday`, a custom range) selects an invoice, the detailed view brings back **every event** of that invoice — including events older than the period. The reasoning: when an operator opens a per-invoice timeline, the relevant history is *all the errors that invoice ever logged*, not just the slice that happens to fall inside the period filter.
+
+This is intentional and applies to detailed-view only. The by-event and by-rule tabs continue to filter strictly by the selected period.
+
+### Export to Excel
+
+The toolbar's *Export* button drops the full data set in scope to an Excel file — every event of every invoice in scope, regardless of which groups are currently collapsed on screen. The columns match the table; one row per event. The file is the same data the [Daily Digest](../configuration/system/daily-digest.md) attaches to its scheduled emails — typically the convenient artefact to share when triaging by another team.
+
+### When to use which view
+
+| Goal | View |
+|---|---|
+| *Which rule is biting hardest right now?* | By rule. |
+| *Show me every event of severity X today.* | By event. |
+| *Read every error of this one invoice in order.* | Detailed (or click a row in by-event — both lead to the per-invoice history modal). |
+| *Triage a recent integration incident across a handful of invoices.* | Detailed, sorted by most recent event. |
+| *Send the day's errors to another team.* | Detailed → *Export*, or wire a [Daily Digest](../configuration/system/daily-digest.md) so the email goes out without manual action. |
 
 ---
 

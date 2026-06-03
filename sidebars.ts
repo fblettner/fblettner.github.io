@@ -553,7 +553,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'System',
-          link: {type: 'generated-index', slug: '/nomaubl/configuration/system', description: 'System-level parameters: e-directory, e-invoicing, fetch invoices, document types and statuses.'},
+          link: {type: 'generated-index', slug: '/nomaubl/configuration/system', description: 'System-level parameters: e-directory, e-invoicing, fetch invoices, document types, statuses and the daily digest.'},
           items: [
             'nomaubl/configuration/system/edirectory',
             'nomaubl/configuration/system/einvoicing',
@@ -562,6 +562,7 @@ const sidebars: SidebarsConfig = {
             'nomaubl/configuration/system/global',
             'nomaubl/configuration/system/document-types',
             'nomaubl/configuration/system/statuses',
+            'nomaubl/configuration/system/daily-digest',
           ],
         },
         'nomaubl/configuration/reference-lists',

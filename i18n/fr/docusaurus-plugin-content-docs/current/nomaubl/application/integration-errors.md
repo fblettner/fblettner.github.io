@@ -1,20 +1,25 @@
 ---
 title: Erreurs d'intégration
-description: "Outil d'analyse des échecs construit sur la table de validation — cartes par règle qui classent les règles les plus en échec, et tableau plat par événement pour l'analyse ligne à ligne. Chaque code de règle est enrichi de sa description lisible tirée des Schematron embarqués. Filtre par catégorie (UBL / Intégration), sévérité, clé documentaire. La case Sans rattachement uniquement rétablit la vue historique des erreurs orphelines en un clic."
-keywords: [NomaUBL, erreurs d'intégration, validation, F564236, par règle, par événement, ValidationRuleCatalog, Schematron, XSD, UVSRCL, FATAL, ERROR, WARNING, INFO, JD Edwards, SAP, NetSuite, ERP personnalisé]
+description: "Outil d'analyse des échecs construit sur la table de validation — cartes par règle qui classent les règles les plus en échec, tableau plat par événement pour l'analyse ligne à ligne, et vue détaillée qui regroupe les événements par facture. Chaque code de règle est enrichi de sa description lisible tirée des Schematron embarqués. Filtre par catégorie (UBL / Intégration), sévérité, clé documentaire. La case Sans rattachement uniquement rétablit la vue historique des erreurs orphelines en un clic. La vue détaillée exporte tous les événements du périmètre, y compris ceux repliés."
+keywords: [NomaUBL, erreurs d'intégration, validation, F564236, par règle, par événement, vue détaillée, regroupement par facture, ValidationRuleCatalog, Schematron, XSD, UVSRCL, FATAL, ERROR, WARNING, INFO, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Erreurs d'intégration
 
-L'écran **Erreurs d'intégration** est l'**outil d'analyse des échecs** construit sur la table de validation (`F564236`). Il affiche chaque entrée enregistrée par le pipeline de validation — des échecs de règles XSD / Schematron jusqu'aux erreurs d'intégration de cycle de vie (PDF, PA, base, …) — au travers de deux vues complémentaires :
+L'écran **Erreurs d'intégration** est l'**outil d'analyse des échecs** construit sur la table de validation (`F564236`). Il affiche chaque entrée enregistrée par le pipeline de validation — des échecs de règles XSD / Schematron jusqu'aux erreurs d'intégration de cycle de vie (PDF, PA, base, …) — au travers de trois vues complémentaires :
 
 - **par règle** — cartes classées et regroupées par `(règle, source)`, qui indiquent chacune le nombre de factures touchées par la règle et les pastilles de sévérité associées. Le moyen le plus rapide pour repérer *la règle qui pose le plus de problèmes en ce moment*.
 - **par événement** — tableau plat de chaque événement d'erreur, avec sa sévérité, sa source, sa règle, son message, son triplet documentaire et le statut courant de la facture. L'endroit pour analyser une ligne précise.
+- **détaillée** — une ligne par facture avec l'évènement le plus récent et une pastille `+N` qui compte les évènements plus anciens ; déplier pour lire toute la chronologie de la facture. L'endroit pour lire toutes les erreurs d'une facture d'un coup d'œil.
 
 La page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les erreurs proviennent du pipeline de validation, qui travaille sur l'UBL généré ; le format source est donc transparent à ce stade.
 
 :::info[Refonte en 2026.05.4]
 La page était limitée jusqu'ici à la vue des erreurs orphelines — un tableau plat des lignes `F564236` sans en-tête de facture rattaché. Elle devient un vrai outil d'analyse des échecs : bascule par règle / par événement, filtre catégorie (UBL vs Intégration / cycle de vie), descriptions lisibles tirées des Schematron embarqués, et case `Sans rattachement uniquement` qui rétablit l'ancien comportement en un clic. La vue par défaut affiche désormais *toutes les erreurs* ; l'orphelin n'est plus le filtre principal.
+:::
+
+:::info[Mise à jour 2026.06.02]
+Un troisième onglet **Détaillée** rejoint *Par règle* et *Par événement*. Une ligne par facture par défaut, avec l'évènement le plus récent et une pastille `+N` qui compte les autres — déplier pour lire toute la chronologie de la facture. Le filtre de période (par exemple *30 derniers jours*) sélectionne d'abord les factures puis ramène tous leurs évènements, de sorte que la chronologie d'une facture est toujours complète en un seul endroit. L'export Excel écrit toutes les lignes du périmètre, y compris celles cachées dans un groupe replié. Les messages Schematron passent à la ligne dans la cellule au lieu d'être tronqués ; la colonne *Statut actuel* accepte un redimensionnement manuel et affiche le libellé complet.
 :::
 
 ---
@@ -40,19 +45,20 @@ La page était limitée jusqu'ici à la vue des erreurs orphelines — un tablea
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Erreurs d'intégration</text>
   <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
 
-  <rect x="240" y="84" width="180" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <rect x="240" y="84" width="90" height="28" rx="6" fill="url(#ie2-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="285" y="102" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Par règle</text>
-  <text x="375" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Par événement</text>
+  <rect x="240" y="84" width="220" height="28" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <rect x="240" y="84" width="73" height="28" rx="6" fill="url(#ie2-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="277" y="102" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Par règle</text>
+  <text x="350" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Par évènement</text>
+  <text x="423" y="102" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Détaillée</text>
 
-  <rect x="436" y="84" width="146" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="444" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Toutes sources ▾</text>
+  <rect x="468" y="84" width="100" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="476" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Toutes sources ▾</text>
 
-  <rect x="588" y="84" width="120" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="596" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">☐ Sans rattachement</text>
+  <rect x="576" y="84" width="120" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="584" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">☐ Sans rattachement</text>
 
-  <rect x="720" y="84" width="60" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="750" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻</text>
+  <rect x="704" y="84" width="78" height="28" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
+  <text x="743" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Rafraîchir</text>
 
   <rect x="240" y="124" width="58" height="22" rx="11" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
   <text x="269" y="139" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Toutes</text>
@@ -114,13 +120,13 @@ La page était limitée jusqu'ici à la vue des erreurs orphelines — un tablea
 
   <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bascule de vue</text>
-  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Par règle / Par événement</text>
+  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Par règle / Par évènement / Détaillée</text>
   <line x1="200" y1="100" x2="240" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
 
   <rect x="820" y="84" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="830" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtre catégorie</text>
   <text x="830" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">UBL contre Intégration</text>
-  <line x1="820" y1="100" x2="708" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
+  <line x1="820" y1="100" x2="688" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ie2-arrow)"/>
 
   <rect x="20" y="138" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="153" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pastilles de sévérité</text>
@@ -158,12 +164,13 @@ La même barre d'outils pilote les deux vues.
 
 | Contrôle | Comportement |
 |---|---|
-| **Bascule de vue** | *Par règle* (vue par défaut après un lien profond depuis le tableau de bord) ou *Par événement*. Les autres filtres sont conservés au changement de vue — la recherche, la sévérité et la catégorie restent appliquées. |
+| **Bascule de vue** | *Par règle* (vue par défaut après un lien profond depuis le tableau de bord), *Par évènement* ou *Détaillée* *(2026.06.02)*. Les autres filtres sont conservés au changement de vue — la recherche, la sévérité et la catégorie restent appliquées. |
 | **Recherche** | Correspondance par sous-chaîne sur `DOC`, `DCT`, `KCO` et le texte du message. Exécutée côté serveur, avec un délai (debounce). |
 | **Catégorie** | *Toutes sources* (par défaut), *Validation UBL* (règles Schematron / XSD — `UVSRCL IN ('EN16931', 'CIUSFR', 'FREXTIC', 'CPRO', 'XSD', 'UBL')`), *Intégration / cycle de vie* (le reste — erreurs runtime émises par le dispatcher : PDF, PA, base, …). |
 | **Pastilles de sévérité** | *Toutes* / *FATAL* / *ERROR* / *WARNING* / *INFO*. Une seule sévérité à la fois ; cliquer à nouveau sur la pastille active retire le filtre. |
-| **`Sans rattachement uniquement`** *(par événement uniquement)* | Rétablit le comportement « orphelin » de la version précédente — ne garde que les lignes sans en-tête de facture rattaché. Désactivé par défaut, accessible en un clic au besoin. |
+| **`Sans rattachement uniquement`** *(par évènement uniquement)* | Rétablit le comportement « orphelin » de la version précédente — ne garde que les lignes sans en-tête de facture rattaché. Désactivé par défaut, accessible en un clic au besoin. |
 | **Rafraîchir** | Relance la requête en cours. |
+| **Exporter** *(vue détaillée uniquement)* | Génère un fichier Excel avec tous les évènements du périmètre. Les évènements de chaque groupe sont écrits — y compris ceux cachés dans un groupe replié à l'écran. Mêmes données que celles envoyées par le [Rapport quotidien](../configuration/system/daily-digest.md) en pièce jointe. |
 
 ### Filtres avancés *(2026.05.10)*
 
@@ -246,6 +253,43 @@ Le clic sur une ligne est **toujours cliquable** depuis 2026.05.9 — les lignes
 Une petite case dans la barre d'outils — `Sans rattachement uniquement` — rétablit le comportement de la version précédente : seules les lignes sans en-tête de facture rattaché. Ce sont les erreurs *orphelines*, typiquement des échecs de transformation qui ont empêché l'enregistrement de la facture (le XSL a produit un document que le validateur UBL ne peut pas analyser, ou un `FATAL` a interrompu le pipeline avant l'insertion en base).
 
 La vue par défaut affiche *toutes* les erreurs, rattachées ou non. Cocher la case se fait en un clic ; rien d'autre n'est nécessaire.
+
+---
+
+## Vue détaillée \{#detailed-view\}
+
+*Ajoutée en 2026.06.02.*
+
+La vue détaillée transforme le tableau plat par évènement en **chronologie par facture**. Une ligne par facture par défaut — l'évènement le plus récent que les filtres actifs sélectionnent, accompagné d'un chevron et d'une pastille `+N` qui compte les évènements antérieurs. Cliquer sur le chevron déplie tous les évènements de la facture ; un nouveau clic les replie.
+
+| Élément | Comportement |
+|---|---|
+| **Ligne par défaut** | L'évènement le plus récent de la facture (date maximale). Mêmes colonnes que la vue par évènement — sévérité, date, doc / dct / kco / seq, source, règle + description, *Statut actuel*, client. |
+| **Pastille `+N`** | Nombre d'évènements supplémentaires de la facture dans le périmètre chargé. Les lignes `+0` s'affichent sans pastille pour qu'une facture à évènement unique reste lisible. |
+| **Chevron de dépliage** | Affiche tous les évènements de la facture, du plus ancien au plus récent. Indenté sous la ligne par défaut, avec la même structure de colonnes. |
+| **Tri** | Les factures sont triées par évènement le plus récent décroissant — l'incident le plus frais remonte en tête, suivi des évènements antérieurs de la même facture. L'ordre est stable d'un rafraîchissement à l'autre. |
+| **Renvoi à la ligne sur la colonne message** | Le message Schematron / XPath passe à la ligne dans la cellule, le texte complet est visible sans ouvrir la modale de détail. Utile pour un triage d'un coup d'œil quand l'explication est courte. |
+| **Colonne *Statut actuel* élargie** | La colonne accepte un redimensionnement manuel et affiche le libellé de statut en entier au lieu d'être bornée à une largeur fixe. |
+
+### Le filtre de période s'élargit à toute la facture
+
+Quand un filtre de date (`30 derniers jours`, `Hier`, une plage personnalisée) sélectionne une facture, la vue détaillée ramène **tous les évènements** de cette facture — y compris ceux antérieurs à la période. La logique : quand un opérateur ouvre la chronologie d'une facture, l'historique pertinent est *toutes les erreurs jamais enregistrées pour cette facture*, pas seulement la tranche qui tombe dans la période.
+
+C'est volontaire et ne s'applique qu'à la vue détaillée. Les onglets par évènement et par règle continuent de filtrer strictement sur la période sélectionnée.
+
+### Export Excel
+
+Le bouton *Exporter* de la barre d'outils génère un fichier Excel avec le jeu de données complet du périmètre — tous les évènements de toutes les factures, sans tenir compte des groupes actuellement repliés à l'écran. Les colonnes correspondent à celles du tableau ; une ligne par évènement. Le fichier est le même que celui que le [Rapport quotidien](../configuration/system/daily-digest.md) joint à ses envois programmés — c'est le format pratique à partager quand le triage passe à une autre équipe.
+
+### Quelle vue choisir
+
+| Objectif | Vue |
+|---|---|
+| *Quelle règle frappe le plus fort en ce moment ?* | Par règle. |
+| *Voir tous les évènements de sévérité X aujourd'hui.* | Par évènement. |
+| *Lire toutes les erreurs d'une facture dans l'ordre.* | Détaillée (ou cliquer sur une ligne en par évènement — les deux mènent à la modale d'historique par facture). |
+| *Trier un incident d'intégration récent sur quelques factures.* | Détaillée, triée par évènement le plus récent. |
+| *Envoyer les erreurs du jour à une autre équipe.* | Détaillée → *Exporter*, ou configurer un [Rapport quotidien](../configuration/system/daily-digest.md) pour que l'email parte sans action manuelle. |
 
 ---
 
