@@ -71,6 +71,36 @@ Le jeu complet des commandes de cycle de vie (identique sur les deux wrappers, r
 
 Pour le quotidien opérationnel, le wrapper suffit. La couche de supervision au niveau du système d'exploitation ci-dessous ajoute le démarrage **automatique** au boot et le redémarrage sur crash.
 
+### Réglage JVM — `JAVA_OPTS` *(2026.06.02)* \{#java-opts\}
+
+Les deux wrappers exposent une variable **`JAVA_OPTS`** en tête de fichier. Son contenu est transmis à chaque appel `java -jar` — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Modifier le fichier une fois ; chaque appel ultérieur du wrapper la reprend.
+
+```bash title="nomaubl.sh — en-tête du fichier"
+# Options JVM transmises à chaque appel java. Défaut : vide.
+JAVA_OPTS=""
+```
+
+```cmd title="nomaubl.cmd — en-tête du fichier"
+:: Options JVM transmises à chaque appel java. Défaut : vide.
+set "JAVA_OPTS="
+```
+
+L'usage le plus courant est d'épingler la **clé maîtresse de chiffrement** à un emplacement fixe en dehors du profil utilisateur — le même chemin sur chaque hôte pour que les valeurs de configuration chiffrées restent lisibles quel que soit le compte de service qui exécute la JVM :
+
+```bash
+JAVA_OPTS="-Dnomaubl.master.key.file=/etc/nomaubl/master.key"
+```
+
+Autres cas fréquents :
+
+| Option | Usage |
+|---|---|
+| `-Xmx8g` | Augmenter le tas JVM au-delà du défaut pour les gros batchs. |
+| `-Djava.io.tmpdir=/var/tmp/nomaubl` | Déporter le répertoire temporaire hors de `/tmp` quand la pression mémoire augmente. |
+| `-Dfile.encoding=UTF-8` | Forcer UTF-8 sur les plateformes où le défaut JVM est autre. |
+
+Référence complète + intégration systemd / NSSM : [Command Line → `JAVA_OPTS`](../management/command-line.md).
+
 ---
 
 ## Couche 2 — Unité systemd (Linux)
@@ -106,6 +136,12 @@ RestartSec=10
 
 # Bigger limits for batch processing
 LimitNOFILE=65536
+
+# Options JVM — reprises par le wrapper via JAVA_OPTS et transmises à chaque
+# appel java (start, process, upgrade, fetch-*, …). L'usage le plus courant
+# est d'épingler la clé maîtresse de chiffrement à un emplacement fixe.
+# Voir « Réglage JVM — JAVA_OPTS » ci-dessus pour la liste complète.
+Environment="JAVA_OPTS=-Dnomaubl.master.key.file=/etc/nomaubl/master.key"
 
 # Read the master key from a protected env file if you prefer env-var to file
 EnvironmentFile=-/etc/nomaubl/master.env

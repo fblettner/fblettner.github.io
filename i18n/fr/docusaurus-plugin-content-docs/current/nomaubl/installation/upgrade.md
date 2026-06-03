@@ -34,8 +34,13 @@ nomaubl.cmd upgrade prod C:\downloads\nomaubl-2026.06.0.jar
 |---|---|
 | **`env`** | Nom de l'environnement — le même que celui utilisé par `start`, `stop`, etc. Le wrapper résout la configuration depuis `<env>/config/config.json`. |
 | **`new_jar`** *(facultatif)* | Chemin vers le JAR cible. Le wrapper le copie par-dessus le `nomaubl.jar` existant (Linux) ou `nomaubl-fat.jar` (Windows) avant d'exécuter la mise à niveau. À omettre si le JAR a déjà été remplacé à la main. |
+| **`--from-version <X.Y.Z>`** *(facultatif, 2026.06.02)* | Forcer la version de départ et ignorer la détection automatique. Par défaut, l'utilitaire de mise à niveau lit la version installée dans la table d'historique des mises à niveau et applique toutes les migrations strictement postérieures. Pour les environnements **corrigés à la main** en avance de phase, la version détectée automatiquement peut être erronée ; `--from-version` impose le point de départ, de sorte que seules les migrations strictement postérieures à la version fournie sont appliquées. Référence complète : [Ligne de commande → `--from-version`](../management/command-line.md#upgrade). |
 
-Les deux formes produisent le même état final. La seconde est utile quand une seule commande doit tout faire ; la première convient quand le pipeline de livraison dépose déjà le nouveau JAR en place.
+Les deux formes produisent le même état final. La seconde est utile quand une seule commande doit tout faire ; la première convient quand le pipeline de livraison dépose déjà le nouveau JAR en place. À combiner avec `--from-version` quand il faut forcer la version de départ et ignorer la détection automatique :
+
+```bash title="Forcer la version de départ manuellement"
+./nomaubl.sh upgrade prod --from-version 2026.05.20    # seules les migrations postérieures à 2026.05.20 sont appliquées
+```
 
 ---
 

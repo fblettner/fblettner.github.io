@@ -71,6 +71,36 @@ The full set of lifecycle commands (same on both wrappers, replace `./nomaubl.sh
 
 For the day-to-day operational pattern, the wrapper is enough. The OS-level supervision layer below adds **automatic** start at boot and restart on crash.
 
+### JVM tuning — `JAVA_OPTS` *(2026.06.02)* \{#java-opts\}
+
+Both wrappers expose a **`JAVA_OPTS`** variable near the top of the file. Anything in it is forwarded to every `java -jar` invocation — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Edit the file once; every subsequent wrapper call picks it up.
+
+```bash title="nomaubl.sh — top of file"
+# JVM flags forwarded to every java invocation. Default: empty.
+JAVA_OPTS=""
+```
+
+```cmd title="nomaubl.cmd — top of file"
+:: JVM flags forwarded to every java invocation. Default: empty.
+set "JAVA_OPTS="
+```
+
+The most common use is pinning the **master encryption key** at a fixed path outside the user profile — the same path on every host so the encrypted config values stay readable regardless of which service account runs the JVM:
+
+```bash
+JAVA_OPTS="-Dnomaubl.master.key.file=/etc/nomaubl/master.key"
+```
+
+Other common cases:
+
+| Flag | Use |
+|---|---|
+| `-Xmx8g` | Raise the JVM heap above the default for large batches. |
+| `-Djava.io.tmpdir=/var/tmp/nomaubl` | Steer the temp directory off `/tmp` when memory pressure mounts. |
+| `-Dfile.encoding=UTF-8` | Force UTF-8 on platforms where the JVM default is something else. |
+
+Full reference + integration with systemd / NSSM: [Command Line → `JAVA_OPTS`](../management/command-line.md).
+
 ---
 
 ## Layer 2 — systemd unit (Linux)
@@ -106,6 +136,12 @@ RestartSec=10
 
 # Bigger limits for batch processing
 LimitNOFILE=65536
+
+# JVM flags — picked up by the wrapper via JAVA_OPTS and forwarded to every
+# java invocation (start, process, upgrade, fetch-*, …). The most common
+# use is pinning the master encryption key at a fixed path. See
+# "JVM tuning — JAVA_OPTS" above for the full list.
+Environment="JAVA_OPTS=-Dnomaubl.master.key.file=/etc/nomaubl/master.key"
 
 # Read the master key from a protected env file if you prefer env-var to file
 EnvironmentFile=-/etc/nomaubl/master.env

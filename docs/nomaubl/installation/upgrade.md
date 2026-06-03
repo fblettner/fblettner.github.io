@@ -34,8 +34,13 @@ nomaubl.cmd upgrade prod C:\downloads\nomaubl-2026.06.0.jar
 |---|---|
 | **`env`** | Environment name — same one used by `start`, `stop`, etc. The wrapper resolves the config from `<env>/config/config.json`. |
 | **`new_jar`** *(optional)* | Path to the JAR to upgrade to. The wrapper copies it over the existing `nomaubl.jar` (Linux) or `nomaubl-fat.jar` (Windows) before running the upgrade. Omit if you already replaced the JAR by hand. |
+| **`--from-version <X.Y.Z>`** *(optional, 2026.06.02)* | Override the auto-detected baseline. By default the upgrader reads the current installed version from the upgrade-history table and applies every migration strictly newer than that. For environments that were **hand-patched** ahead of schedule, the auto-detected baseline can be wrong; `--from-version` forces the start point, so only migrations strictly newer than the supplied version run. Full reference: [Command Line → `--from-version`](../management/command-line.md#upgrade). |
 
-Both forms produce the same end state. Use the second when you want a single command to do everything; use the first when your release pipeline already drops the new JAR in place.
+Both forms produce the same end state. Use the second when you want a single command to do everything; use the first when your release pipeline already drops the new JAR in place. Combine with `--from-version` when you need to override the auto-detected baseline:
+
+```bash title="Manual baseline override"
+./nomaubl.sh upgrade prod --from-version 2026.05.20    # only migrations newer than 2026.05.20 run
+```
 
 ---
 
