@@ -241,6 +241,53 @@ Chaque étape utilise `type_coercion = "jde"` et `decimal_mode = "truncate"` —
 
 ---
 
+### `nomajde-remerge-security` \{#nomajde-remerge-security\}
+
+*Ajouté en 2026.06.09.*
+
+**Re-fusion de la sécurité JDE (F00950 / F00950W / F9006) de chaque rôle parent affecté par une modification capturée dans le paquet de modifications brouillon actif.** Pilotée par le plugin `nomajde.security:j_remerge_security` avec `scope = "package"`.
+
+Cette tâche — et son équivalent `-all` — résout le problème propre à JDE : la sécurité d'un rôle est **dérivée** d'un arbre d'affectations rôle parent → rôle enfant. Modifier les permissions d'un rôle enfant n'a d'effet en production qu'une fois que chaque parent qui l'inclut a été re-fusionné. Faire cela à la main sur une modification de grande ampleur est fastidieux et source d'erreurs ; la tâche parcourt le paquet de modifications, déduit les parents impactés à partir des écritures capturées et relance la fusion pour chacun.
+
+| Étape | Appelable |
+|---|---|
+| `REMERGE_SECURITY` | `nomajde.security:j_remerge_security` — lit le paquet brouillon actif, déduit l'ensemble des parents impactés via les requêtes `F00926` ancrées par rôle, re-fusionne F00950 / F00950W / F9006 pour chaque parent. |
+
+**Paramètres** *(2026.06.09)*
+
+| Clé | Défaut | Description |
+|---|---|---|
+| `apps_id` | `10` | Identifiant de l'application Nomajde. |
+| `source_connector` | `nomajde` | Emplacement des tables de sécurité fusionnées (le miroir Nomajde qui héberge les tables F564*). |
+| `target_connector` | `jdedwards` | Base JDE de production où les lignes re-fusionnées sont réécrites. |
+| `scope` | `package` | `package` → uniquement les parents impactés par le brouillon actif. `all` → chaque parent (utiliser plutôt `nomajde-remerge-security-all`). |
+
+**Quand l'exécuter** — comme **étape post-application** sur un paquet de modifications qui touche aux rôles ou aux affectations rôle-à-rôle. Enregistrer l'identifiant de la tâche (`nomajde-remerge-security`) sur le `Screen.post_apply` de l'écran contributeur ; le framework la lance alors une fois sur la cible après le dépôt des lignes du bundle. Un déclenchement manuel ▶ Exécuter fonctionne aussi ; dans ce cas, le brouillon actif sur l'application configurée est utilisé.
+
+Les diagnostics de la tâche apparaissent dans le journal d'exécution sous l'espace de nom de logger `nomajde.*` (enregistré par le plugin) — utile quand la fusion a sauté un parent parce que sa ligne `F00926` était manquante.
+
+**Ré-exécutable sans danger** — relancer sur le même paquet brouillon re-fusionne les mêmes parents et produit les mêmes lignes. Sûre à relancer après un échec partiel.
+
+Voir aussi : [Paquets de modifications](./change-packages.md).
+
+---
+
+### `nomajde-remerge-security-all` \{#nomajde-remerge-security-all\}
+
+*Ajouté en 2026.06.09.*
+
+**Re-fusion de la sécurité JDE de chaque rôle parent du système, indépendamment des modifications récentes.** Même plugin que ci-dessus (`nomajde.security:j_remerge_security`) mais avec `scope = "all"`.
+
+| Étape | Appelable |
+|---|---|
+| `REMERGE_SECURITY_ALL` | `nomajde.security:j_remerge_security` avec `scope = "all"`. |
+
+**Quand l'exécuter** — une fois après un import propre des tables de sécurité JDE (`F00950` / `F00926` issus d'une extraction neuve), ou comme étape de récupération après une fusion défectueuse identifiée. Non planifiée par défaut ; pas trivialement ré-exécutable sans danger — relancer sur un système stable n'a pas d'effet sur les données mais réécrit les mêmes lignes, ce qui peut prendre plusieurs minutes sur une installation JDE volumineuse.
+
+Pour une re-fusion partielle — uniquement les parents affectés par *cette* modification — utiliser `nomajde-remerge-security` (`scope = "package"`).
+
+---
+
 ## Tâches de collecte sécurité \{#security\}
 
 Lecture des données de sécurité JD Edwards vers le schéma Nomasx-1. La structure prend la forme d'une longue chaîne d'étapes mono-appelable — une fonction Python par entité JDE ou par table dérivée Nomasx-1.

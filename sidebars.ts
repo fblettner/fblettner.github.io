@@ -231,6 +231,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
     'liberty/nomaflow/bundled-jobs',
+    'liberty/nomaflow/change-packages',
     {
       type: 'category',
       label: 'Customisation',

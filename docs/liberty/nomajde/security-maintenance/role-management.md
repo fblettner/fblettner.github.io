@@ -273,6 +273,18 @@ Saving a new user / role chains four JDE inserts in one go:
 
 The four steps run as a single save — there is no half-created record to clean up if any step fails.
 
+### Server-side security re-merge *(2026.06.09)*
+
+Every save on a child role (a role that's *included by* other parent roles) triggers a server-side merge step that re-derives the parents' F00950 / F00950W / F9006 rows from the new child state. Without this, a permission change on a child would only surface in production after every parent that includes it was opened + re-saved by hand.
+
+The re-merge runs through a `call_plugin` action (`nomajde.security:j_remerge_security` with `scope = "child_role"`) wired onto every role-edit screen. It's transparent in normal use — the operator just saves; the merge runs as part of the same write transaction.
+
+When the role-edit screen is **change-tracked** (the standard configuration for promotion-target environments), the same merge also lands as a `CALL_PLUGIN` entry in the [active change package](../../nomaflow/change-packages.md) with `change_replay = true`, so the re-merge re-runs on the target environment after the package's row writes land.
+
+For batch re-merge across every change captured in the draft package (typical when several child roles were touched together), the bundled [`nomajde-remerge-security`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security) Nomaflow job runs the same plugin with `scope = "package"`. Wire it as a post-apply step on the contributing screens so it runs once on the target after every captured row lands.
+
+For a full system re-merge — recovery after a security-table re-import, or a known-bad merge — the [`nomajde-remerge-security-all`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security-all) job runs the same plugin with `scope = "all"`. Use sparingly; the full pass writes every parent's rows again.
+
 ---
 
 ## Tips & best practices

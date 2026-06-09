@@ -241,6 +241,51 @@ Each step uses `type_coercion = "jde"` + `decimal_mode = "truncate"` — JDE col
 
 ---
 
+### `nomajde-remerge-security` \{#nomajde-remerge-security\}
+
+*Added 2026.06.09.*
+
+**Re-merge the JDE security (F00950 / F00950W / F9006) of every parent role affected by a change captured in the active draft package.** Driven by the `nomajde.security:j_remerge_security` plugin with `scope = "package"`.
+
+This job — and its `-all` sibling — solves the JDE-specific problem that role security is **derived** from a tree of parent → child role assignments. Changing a child role's permissions only affects production once every parent that includes it has been re-merged. Doing that by hand on a wide change is tedious and error-prone; the job walks the change package, derives the impacted parents from the captured writes, and re-runs the merge for each.
+
+| Step | Callable |
+|---|---|
+| `REMERGE_SECURITY` | `nomajde.security:j_remerge_security` — reads the active draft package, derives the impacted parent set via the anchored `F00926` role queries, re-merges F00950 / F00950W / F9006 per parent. |
+
+**Parameters** *(2026.06.09)*
+
+| Key | Default | What |
+|---|---|---|
+| `apps_id` | `10` | Nomajde application id. |
+| `source_connector` | `nomajde` | Where the merged security tables live (the Nomajde mirror that holds the F564* tables). |
+| `target_connector` | `jdedwards` | The live JDE database the re-merged rows write back to. |
+| `scope` | `package` | `package` → only the parents impacted by the active draft. `all` → every parent (use `nomajde-remerge-security-all` instead). |
+
+**When to run** — as a **post-apply step** on a change package that touches roles or role-to-role assignments. Register the job's id (`nomajde-remerge-security`) on the contributing screen's `Screen.post_apply`; the framework then runs it once on the target after the bundle's rows land. Manual ▶ Run now works too, in which case the active draft on the configured application is used.
+
+The job's diagnostics land in the run log under the `nomajde.*` logger namespace (registered by the plugin) — useful when the merge skipped a parent because its `F00926` row was missing.
+
+**Idempotent** — re-running on the same draft package re-merges the same parents and produces the same rows. Safe to retry after a partial failure.
+
+---
+
+### `nomajde-remerge-security-all` \{#nomajde-remerge-security-all\}
+
+*Added 2026.06.09.*
+
+**Re-merge the JDE security of every parent role in the system, regardless of recent changes.** Same plugin as above (`nomajde.security:j_remerge_security`) but with `scope = "all"`.
+
+| Step | Callable |
+|---|---|
+| `REMERGE_SECURITY_ALL` | `nomajde.security:j_remerge_security` with `scope = "all"`. |
+
+**When to run** — once after a clean import of the JDE security tables (`F00950` / `F00926` from a fresh extract), or as a recovery step after a known-bad merge. Not scheduled by default; not idempotent in the trivial sense (re-running on a stable system is a no-op data-wise but writes the same rows again, which can take minutes on a large JDE install).
+
+For a partial re-merge — only the parents affected by *this* change — use `nomajde-remerge-security` (`scope = "package"`).
+
+---
+
 ## Security collection jobs \{#security\}
 
 Read JD Edwards security data into the Nomasx-1 schema. The shape is a long chain of single-callable steps — one Python function per JDE entity / Nomasx-1 derived table.

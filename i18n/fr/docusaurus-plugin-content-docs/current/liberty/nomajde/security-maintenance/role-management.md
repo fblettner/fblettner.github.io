@@ -273,6 +273,18 @@ L'enregistrement d'un nouvel utilisateur / rôle enchaîne quatre insertions JDE
 
 Les quatre étapes s'exécutent en un seul enregistrement — si l'une d'elles échoue, aucun enregistrement partiel n'est laissé en l'état.
 
+### Re-fusion côté serveur de la sécurité *(2026.06.09)*
+
+Chaque enregistrement sur un rôle enfant (un rôle *inclus par* d'autres rôles parents) déclenche une étape de fusion côté serveur qui re-dérive les lignes F00950 / F00950W / F9006 des parents à partir du nouvel état de l'enfant. Sans cela, un changement de permission sur un enfant n'apparaîtrait en production qu'après que chaque parent qui l'inclut ait été ouvert puis ré-enregistré à la main.
+
+La re-fusion passe par une action `call_plugin` (`nomajde.security:j_remerge_security` avec `scope = "child_role"`) câblée sur chaque écran d'édition de rôle. Transparente à l'usage — l'opérateur enregistre simplement ; la fusion s'exécute dans la même transaction d'écriture.
+
+Quand l'écran d'édition de rôle a le **suivi des modifications activé** (la configuration standard pour les environnements cibles de promotion), la même fusion est aussi inscrite comme entrée `CALL_PLUGIN` dans le [paquet de changements actif](../../nomaflow/change-packages.md) avec `change_replay = true`, de sorte que la re-fusion s'exécute à nouveau sur l'environnement cible après l'application des écritures de lignes du paquet.
+
+Pour une re-fusion par lot sur l'ensemble des changements capturés dans le paquet brouillon (typique quand plusieurs rôles enfants ont été touchés ensemble), le job Nomaflow embarqué [`nomajde-remerge-security`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security) exécute le même plugin avec `scope = "package"`. Le câbler comme étape post-application sur les écrans contributeurs afin qu'il s'exécute une fois sur la cible une fois toutes les lignes capturées appliquées.
+
+Pour une re-fusion système complète — récupération après une ré-importation des tables de sécurité, ou après une fusion identifiée comme défectueuse — le job [`nomajde-remerge-security-all`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security-all) exécute le même plugin avec `scope = "all"`. À utiliser avec parcimonie ; la passe complète ré-écrit les lignes de chaque parent.
+
 ---
 
 ## Conseils & bonnes pratiques
