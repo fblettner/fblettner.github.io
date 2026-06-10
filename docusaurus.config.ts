@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'NOMANA-IT',
   tagline: 'Documentation, Blog and Resources',
-  favicon: 'assets/nomana-dark.svg',
+  favicon: 'assets/nomana-hires.svg',
 
   future: {
     v4: true,
@@ -71,7 +71,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'assets/nomana-dark.svg',
+    image: 'assets/nomana-banner.png',
     colorMode: {
       defaultMode: 'dark',
       respectPrefersColorScheme: false,
@@ -84,11 +84,10 @@ const config: Config = {
       },
     },
     navbar: {
-      title: 'NOMANA-IT',
+      title: 'Nomana-IT',
       logo: {
-        alt: 'NOMANA-IT',
-        src: 'assets/nomana-light.svg',
-        srcDark: 'assets/nomana-dark.svg',
+        alt: 'Nomana-IT',
+        src: 'assets/nomana-icon.svg',
       },
       items: [
         {type: 'docSidebar', sidebarId: 'libertySidebar', position: 'left', label: 'Liberty'},
@@ -203,7 +202,7 @@ const config: Config = {
         '@type': 'Organization',
         name: 'NOMANA-IT',
         url: 'https://docs.nomana-it.fr',
-        logo: 'https://docs.nomana-it.fr/assets/nomana-dark.svg',
+        logo: 'https://docs.nomana-it.fr/assets/nomana-icon-512.png',
         sameAs: [
           'https://nomana-it.fr',
           'https://github.com/fblettner',
