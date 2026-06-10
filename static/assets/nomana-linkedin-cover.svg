@@ -1,0 +1,90 @@
+<svg viewBox="0 0 1128 191" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nomana-IT — Innovative Development &amp; Expert Consulting">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#161B24"/>
+      <stop offset="55%" stop-color="#0F131A"/>
+      <stop offset="100%" stop-color="#080A0E"/>
+    </linearGradient>
+    <radialGradient id="atmoBlue" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#0A84FF" stop-opacity="0.40"/>
+      <stop offset="60%" stop-color="#0A84FF" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#0A84FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="atmoPurple" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#BF5AF2" stop-opacity="0.40"/>
+      <stop offset="60%" stop-color="#BF5AF2" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#BF5AF2" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vignette" cx="0.5" cy="0.5" r="0.9">
+      <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.45"/>
+    </radialGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.05"/>
+      <stop offset="42%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="net" gradientUnits="userSpaceOnUse" x1="80" y1="150" x2="470" y2="40">
+      <stop offset="0%" stop-color="#0A84FF"/>
+      <stop offset="55%" stop-color="#5AC8FA"/>
+      <stop offset="100%" stop-color="#BF5AF2"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5AC8FA"/>
+      <stop offset="100%" stop-color="#BF5AF2"/>
+    </linearGradient>
+    <linearGradient id="headline" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#D7DCE6"/>
+    </linearGradient>
+    <radialGradient id="nBlue" cx="0.35" cy="0.3" r="0.85">
+      <stop offset="0%" stop-color="#9FD5FF"/>
+      <stop offset="40%" stop-color="#0A84FF"/>
+      <stop offset="100%" stop-color="#003F8C"/>
+    </radialGradient>
+    <radialGradient id="nPurple" cx="0.35" cy="0.3" r="0.85">
+      <stop offset="0%" stop-color="#ECC2FF"/>
+      <stop offset="40%" stop-color="#BF5AF2"/>
+      <stop offset="100%" stop-color="#6E2EAE"/>
+    </radialGradient>
+    <filter id="atmoBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="55"/>
+    </filter>
+  </defs>
+
+  <rect width="1128" height="191" fill="url(#bg)"/>
+
+  <g filter="url(#atmoBlur)">
+    <circle cx="250" cy="30" r="150" fill="url(#atmoBlue)"/>
+    <circle cx="980" cy="180" r="170" fill="url(#atmoPurple)"/>
+    <circle cx="720" cy="10" r="110" fill="url(#atmoBlue)" opacity="0.6"/>
+  </g>
+
+  <!-- network motif: echoes the logo's nodes + links, kept to the left where the page logo overlaps -->
+  <g opacity="0.9">
+    <g stroke="url(#net)" stroke-width="1.6" opacity="0.5" stroke-linecap="round">
+      <line x1="96" y1="58" x2="172" y2="120"/>
+      <line x1="172" y1="120" x2="262" y2="78"/>
+      <line x1="262" y1="78" x2="392" y2="96"/>
+      <line x1="300" y1="44" x2="392" y2="96"/>
+      <line x1="172" y1="120" x2="150" y2="156"/>
+      <line x1="392" y1="96" x2="330" y2="150"/>
+    </g>
+    <g>
+      <circle cx="96" cy="58" r="6" fill="url(#nBlue)"/>
+      <circle cx="172" cy="120" r="5" fill="url(#nPurple)"/>
+      <circle cx="262" cy="78" r="6.5" fill="url(#nBlue)"/>
+      <circle cx="300" cy="44" r="4.5" fill="url(#nBlue)"/>
+      <circle cx="392" cy="96" r="7" fill="url(#nPurple)"/>
+      <circle cx="150" cy="156" r="4.5" fill="url(#nBlue)"/>
+      <circle cx="330" cy="150" r="5" fill="url(#nPurple)"/>
+    </g>
+  </g>
+
+  <rect width="1128" height="191" fill="url(#sheen)"/>
+  <rect width="1128" height="191" fill="url(#vignette)" opacity="0.45"/>
+
+  <!-- message block, kept right of the logo-overlay zone -->
+  <text x="470" y="84" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700" font-size="40" letter-spacing="-1" fill="url(#headline)">Innovative Development</text>
+  <text x="470" y="132" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700" font-size="40" letter-spacing="-1" fill="url(#accent)">&amp; Expert Consulting</text>
+  <text x="472" y="166" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="500" font-size="15" letter-spacing="1.5" fill="#8C95A8">Oracle&#160; &#183;&#160; JD Edwards&#160; &#183;&#160; Node.js&#160; &#183;&#160; React&#160; &#183;&#160; FastAPI&#160; &#183;&#160; Open-Source</text>
+</svg>
