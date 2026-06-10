@@ -68,10 +68,28 @@
   border-bottom-color: #1f2937;
 }
 .navbar__title {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  line-height: 1.05;
   font-weight: 600;
   font-size: 1.25rem;
   letter-spacing: -0.02em;
-  margin-left: 0.1rem;
+  margin-left: 0.2rem;
+  overflow: visible;
+}
+.navbar__title::after {
+  content: 'Innovative Development';
+  align-self: stretch;
+  margin-top: 4px;
+  padding-top: 3px;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+  font-size: 0.46rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-600);
 }
 .navbar__brand:hover {
   text-decoration: none;

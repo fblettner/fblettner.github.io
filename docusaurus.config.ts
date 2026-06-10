@@ -87,7 +87,7 @@ const config: Config = {
       title: 'Nomana-IT',
       logo: {
         alt: 'Nomana-IT',
-        src: 'assets/nomana-icon.svg',
+        src: 'assets/nomana-badge.svg',
       },
       items: [
         {type: 'docSidebar', sidebarId: 'libertySidebar', position: 'left', label: 'Liberty'},
