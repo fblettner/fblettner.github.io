@@ -93,6 +93,14 @@ The triple `(TO Role, FROM Role, Effective Date)` is the unique key — JDE uses
 
 ---
 
+## Change tracking
+
+Assignments edited here are **captured into the active [change package](../../nomaflow/change-packages.md)** under the `assignments` entity. Each link added or removed becomes a reviewable entry, so an assignment change promotes from development to production as a reviewed bundle.
+
+A parent role's effective security derives from these assignments, so wire the [`nomajde-remerge-security`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security) job as a post-apply step on this screen — the impacted parents are then re-merged on the target after the assignment writes land.
+
+---
+
 ## Tips & best practices
 
 - **Always set an Expiration Date** unless the relationship is genuinely permanent. Time-boxed inheritances surface on the dashboard before they expire — a much safer pattern than open-ended grants.

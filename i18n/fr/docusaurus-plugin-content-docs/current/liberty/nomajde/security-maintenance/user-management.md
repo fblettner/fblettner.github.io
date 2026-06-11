@@ -241,6 +241,14 @@ Le bouton **Réinitialiser le mot de passe** de la boîte de dialogue appelle di
 
 ---
 
+## Suivi des modifications
+
+Les modifications faites sur cet écran sont **captées dans le [paquet de modifications](../../nomaflow/change-packages.md) actif**, sous l'entité `Users`. Chaque création, mise à jour ou suppression devient une entrée vérifiable : un changement d'utilisateur réalisé en environnement de développement se relit, s'approuve et se promeut en production sous forme de lot — sans avoir à le ressaisir sur la cible.
+
+La captation est automatique tant qu'un paquet brouillon est ouvert pour l'application ; rien ne change dans votre manière d'éditer. Voir [Paquets de modifications](../../nomaflow/change-packages.md) pour le flux de relecture et de promotion.
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Créer un utilisateur via *Ajouter*, pas en SQL.** Une insertion directe dans le master utilisateur saute l'étape de provisionnement AIS — l'utilisateur apparaît dans la table mais ne peut pas se connecter. La chaîne en cinq étapes est ce qui rend le compte utilisable.

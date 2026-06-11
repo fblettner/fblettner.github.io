@@ -93,6 +93,14 @@ Le triplet `(Rôle TO, Rôle FROM, Date d'effet)` est la clé unique — JDE l'u
 
 ---
 
+## Suivi des modifications
+
+Les affectations modifiées ici sont **captées dans le [paquet de modifications](../../nomaflow/change-packages.md) actif**, sous l'entité `assignments`. Chaque lien ajouté ou retiré devient une entrée vérifiable : un changement d'affectation se promeut du développement vers la production sous forme de lot relu.
+
+La sécurité effective d'un rôle parent dérive de ces affectations ; branchez donc le job [`nomajde-remerge-security`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security) en étape post-application sur cet écran — les parents impactés sont alors re-fusionnés sur la cible une fois les écritures d'affectation appliquées.
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Toujours fixer une date d'expiration** sauf si la relation est vraiment permanente. Les héritages bornés dans le temps remontent sur le tableau de bord avant leur expiration — pratique bien plus sûre que des octrois sans terme.

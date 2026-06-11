@@ -199,6 +199,14 @@ Column visibility can also be overridden manually from the *Columns* button on t
 
 ---
 
+## Change tracking
+
+Security changes on this screen are **captured into the active [change package](../../nomaflow/change-packages.md)** under the `security` entity. Every grant, revoke or bulk edit becomes a reviewable entry, so a workbench change can be promoted from development to production as a reviewed bundle instead of being re-applied by hand.
+
+This is what makes a JDE security promotion repeatable: pair it with the [`nomajde-remerge-security`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security) job, wired as a post-apply step, so the impacted parent roles are re-derived on the target once the bundle's rows land.
+
+---
+
 ## Tips & best practices
 
 - **Filter on *Type*** first — the screen carries every JDE security type, and the right filter (e.g. *Type = 1* for application security) collapses both the rows and the visible columns to a focused view.

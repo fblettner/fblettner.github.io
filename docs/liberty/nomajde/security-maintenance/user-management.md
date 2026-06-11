@@ -241,6 +241,14 @@ The **Reset Password** button on the dialog calls the JDE AIS *change password* 
 
 ---
 
+## Change tracking
+
+Edits on this screen are **captured into the active [change package](../../nomaflow/change-packages.md)** under the `Users` entity. Each create, update or delete becomes a reviewable entry, so a user change made in a development environment can be reviewed, approved and promoted to production as a bundle — without re-keying it on the target.
+
+Capture is automatic whenever a draft package is open for the application; nothing changes in how you edit. See [Change packages](../../nomaflow/change-packages.md) for the review-and-promote workflow.
+
+---
+
 ## Tips & best practices
 
 - **Onboard via *Add*, not via SQL.** A direct SQL insert into the user master skips the AIS security record provisioning — the user appears in the table but cannot sign on. The five-step save chain is what makes the new user usable.

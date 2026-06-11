@@ -342,6 +342,14 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Reports',
+      link: {type: 'generated-index', slug: '/liberty/nomasx-1/reports', description: 'Generated audit deliverables — compliance and optimisation reports rendered as PDF or Markdown.'},
+      items: [
+        'liberty/nomasx1/reports/audit-licences',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Settings',
       link: {type: 'generated-index', slug: '/liberty/nomasx-1/settings', description: 'Configuration screens: applications, SoD framework, security flags, JDE classification, Oracle catalog and pricing.'},
       items: [

@@ -199,6 +199,14 @@ La visibilité des colonnes peut aussi être forcée manuellement via le bouton 
 
 ---
 
+## Suivi des modifications
+
+Les changements de sécurité faits sur cet écran sont **captés dans le [paquet de modifications](../../nomaflow/change-packages.md) actif**, sous l'entité `security`. Chaque octroi, retrait ou édition en masse devient une entrée vérifiable : un changement du workbench se promeut du développement vers la production sous forme de lot relu, au lieu d'être réappliqué à la main.
+
+C'est ce qui rend une promotion de sécurité JDE reproductible : associez-y le job [`nomajde-remerge-security`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security), branché en étape post-application, pour que les rôles parents impactés soient re-dérivés sur la cible une fois les lignes du lot écrites.
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Filtrer sur *Type* d'abord** — l'écran porte chaque type de sécurité JDE, et le bon filtre (par exemple *Type = 1* pour la sécurité application) restreint à la fois les lignes et les colonnes visibles à une vue ciblée.
