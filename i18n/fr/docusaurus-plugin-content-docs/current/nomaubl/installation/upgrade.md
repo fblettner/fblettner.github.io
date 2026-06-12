@@ -96,6 +96,16 @@ Les deux formes produisent le même état final. La seconde est utile quand une 
 
 La référence détaillée par étape (ce que `-upgrade` fait en interne, ce qui est préservé, ce qui est rafraîchi) se trouve sur la page [Ligne de commande → upgrade](../management/command-line.md#upgrade).
 
+### Le `ubl-defaults.xsl` modifié par le client est préservé
+
+Le rafraîchissement des XSL du socle (étape 4) **n'écrase plus `ubl-defaults.xsl`**. Ce fichier porte en général des personnalisations du client — SIREN / TVA / adresse du vendeur par code société, mappings de catégorie TVA, codes de paiement, format de date — qu'un remplacement intégral effaçait en silence. Il passe désormais en *refresh souple* :
+
+- une **installation neuve** reçoit les valeurs livrées ;
+- une **mise à niveau garde le fichier du client** intact ;
+- quand la version livrée diffère de celle du client, la livrée est écrite à côté sous **`ubl-defaults.xsl.upstream`** pour relecture manuelle.
+
+Le rapport de mise à niveau liste chaque fichier conservé dans une section **Actifs préservés**. Le miroir `${env}/ubl/` bénéficie de la même protection : la mise à niveau le rafraîchit aussi, pour que les XSL par document n'importent jamais une version périmée du socle.
+
 ---
 
 ## Avant la mise à niveau

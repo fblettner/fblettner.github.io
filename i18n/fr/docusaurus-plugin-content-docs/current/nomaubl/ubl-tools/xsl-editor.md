@@ -218,13 +218,20 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Invoice Lines** | BT-126 à BT-161 | Lignes de facture — voir [scoping](#scoping) ci-dessous. |
 | **Item Properties** *(BG-32)* | BG-32 | Attributs produit attachés à une ligne. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Remise ou charge par ligne. |
-| **Line Document References** *(BT-128)* | BT-128 | Références de document par ligne (avec schéma UNTDID 1153). |
+| **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Références de document par ligne — pièces justificatives (BT-128, schéma UNTDID 1153) et la ligne de bon de commande référencée via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, groupe EXT-FR-FE-BG-09, placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1). |
 | **Line Delivery** *(EXT-FR-FE-BG-10)* | Extension française | Groupe livraison par ligne. |
 | **Line Notes** *(BT-127)* | BT-127 | Notes libres attachées à une ligne. |
 | **Invoice Notes** *(BT-22)* | BT-22 | Notes libres au niveau document. |
 | **Loop Notes** | BT-22 | Groupes de notes répétés au niveau document. |
 
 Chaque champ affiche le libellé du BT, son code BT en badge coloré, la valeur courante (chemin XML ou expression) et un sélecteur `↓` qui ouvre le [navigateur XML](#navigateur-xml) sur la droite.
+
+#### Combiner et filtrer les valeurs source
+
+Un select `TAG_*` ne se limite pas à un seul chemin XML :
+
+- **Concaténation (`+`).** Assemblez plusieurs tags source en une seule valeur UBL avec l'opérateur ` + ` — `'FirstName + LastName'` les joint par une espace, `'First + ", " + Last'` choisit le séparateur, et les chaînes entre guillemets sont rendues telles quelles. Plus besoin d'une étape de pré-traitement XSL quand un champ UBL agrège plusieurs colonnes source.
+- **Liste de valeurs conditionnelle.** Le paramètre `cond_value` des helpers `ubl:emit-item-prop` / `ubl:emit-note` accepte une valeur unique (comme avant) ou une liste séparée par des virgules — `'KWH,M3,LTR'` correspond quand la source vaut l'un des trois. Les espaces autour de chaque élément sont supprimés.
 
 #### Scoping
 

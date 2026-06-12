@@ -477,7 +477,7 @@ Tableau des lignes de facture : une ligne principale par ligne, plus des sous-li
 | **Item** | Identifiant article (code, SKU). |
 | **Quantité** | Quantité facturée. |
 | **Unité** | Code unité de mesure (par ex. `EA` pièce, `H87` unité, `DAY` jour, `KGM` kilogramme). |
-| **Prix unitaire** | Prix unitaire hors taxes. |
+| **Prix unitaire** | Prix unitaire hors taxes. Affiché à sa précision réelle — jusqu'à **6 décimales** (BT-146), au plus près de la source. La norme EN 16931 autorise une précision plus fine sur le prix que sur les totaux monétaires, qui restent à 2 décimales. |
 | **Montant ligne** | Quantité × prix unitaire (hors taxes). |
 | **Catégorie de taxe** | Code de catégorie TVA UBL (`S` standard, `AE` autoliquidation, `E` exonéré, `Z` taux zéro, `O` hors champ, `K` intra-UE, `G` export, `L` Canaries, `M` Ceuta/Melilla). |
 | **Taux de taxe** | Taux de TVA applicable, en pourcentage. |
@@ -830,7 +830,7 @@ La modale est divisée en sections verticales :
 - **Paiement** — code de moyen de paiement, IBAN, BIC, mandat, conditions.
 - **Remises / charges** — remises / charges au niveau document.
 - **Notes** — notes libres par préfixe `BT-22`.
-- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés.
+- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés. Le champ Prix unitaire accepte une précision fine (jusqu'à 6 décimales), pour les prix qui en portent plus de 2 à la source.
 - **Récapitulatif TVA** — calculé automatiquement depuis les lignes (lecture seule — les modifications de ligne s'y reflètent).
 - **Totaux** — calculés automatiquement (lecture seule).
 

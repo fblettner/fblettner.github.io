@@ -58,9 +58,41 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ## 2026.06.12 — 2026-06-12 \{#v2026-06-12\}
 
-Upgrade-tool fix. The framework XSL files (`ubl-common.xsl`, `ubl-defaults.xsl`, `ubl-template.xsl`) are now also refreshed in the per-environment `ubl/` directory, alongside the existing copy in `xsl/`. Without this, an upgrade left the customer's per-document XSLs importing a stale framework copy, which raised XSLT errors such as *"Parameter subentity is not declared in the called template"* after upgrading to 2026.06.10.
+A large PDF-builder release: a company logo, a per-template accent colour and date format, the full delivery address, a *Note (by code)* block, and custom block slots inside the Header, Parties and Totals sections. Plus a BT-132 purchase-order line reference, unit prices kept to 6 decimals end-to-end, and an upgrade that now preserves a customer-edited `ubl-defaults.xsl`.
 
-If you already upgraded and hit that error, copy the three files from `${env}/xsl/` to `${env}/ubl/` and re-run the processing — or apply 2026.06.12 and re-run the [upgrade](./installation/upgrade.md).
+### New features — PDF builder
+
+- **Logo on PDF invoices.** A new *Show logo* toggle in the [PDF template builder](./management/pdf-templates.md), paired with a *Logo path* field in [Settings → Global → Processing → PDF](./configuration/system/global.md). When it's on, the image is drawn at the top of the supplier block on page 1, and the invoice-number / dates column keeps its place. The path accepts the usual tokens (`%APP_HOME%`, `%ENV%`, `%KCO%`, `{{kco}}`, …) so each company can point to its own logo; a *Logo offset X (pt)* setting shifts it horizontally to absorb whitespace baked into the source image. PNG, JPG and GIF are supported.
+- **Accent colour per template.** A new *Accent* picker in the builder toolbar replaces the default blue on the section titles (CUSTOMER / DELIVERY), the highlighted total, the line-table header underline and the row-highlight background. Enter a 6-digit hex with or without `#`; the row-highlight tint is derived automatically. Empty keeps the default blue.
+- **Date format per template.** A new *Date* dropdown in the builder toolbar — `yyyy-MM-dd` (default), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. It applies to the issue, due, period and per-line delivery dates.
+- **Full delivery address in the PDF.** The DELIVERY box now shows the delivery party name (falling back to `ID: …` when only the location ID is set), the full street, postal code + city and country code — matching the customer box.
+- **Note (by code) block.** A new *Note (by code)* choice in the custom-block picker. The inspector offers a dropdown sourced from the `note-types` reference list; the renderer finds the `cbc:Note` carrying the matching `#CODE#` marker and prints its body in place — so you can disable the global Notes section and drop each note exactly where it belongs.
+- **Custom slots in the Header section.** The Header exposes two named slots — *Left footer* (under the supplier block) and *Right footer* (under Profile ID) — each accepting a full block tree edited in place, for a TVA intra-UE line or a payment-terms caption without inserting a standalone Block section.
+- **Drilldown editing for block trees.** Block-typed fields (the top-level `block` section and the new Header slots) now show as a compact summary card with an *Edit* pill; clicking it hands the whole inspector to the block builder with a *← Back · Section · Slot* bar, and selecting another section exits automatically. The block-kind dropdown is now sorted alphabetically.
+- **Custom slots in the Parties and Totals box sections.** The same slot pattern reaches the rest of the canvas — Parties gets *Customer footer* + *Delivery footer* (inside each party box), and the Totals box gets *Before totals* + *After totals*.
+
+### UBL coverage
+
+- **BT-132 — referenced purchase-order line.** A new `TAG_LINE_ORDER_LINE_REF` slot at the line level. When set, the framework emits `cac:InvoiceLine/cac:OrderLineReference/cbc:LineID` (group EXT-FR-FE-BG-09), placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence. Pick the source path in the [XSL Editor](./ubl-tools/xsl-editor.md) under *Line document references*.
+
+### XSL mapping
+
+- **Concat operator in TAG paths.** Any `TAG_*` select can now glue several source tags with a ` + ` operator — `'FirstName + LastName'` joins with a single space, `'First + ", " + Last'` sets a custom joiner; quoted literals are emitted as-is. No more XSL preprocessing step when a UBL field combines several source columns.
+- **Conditional value list (`cond_value`).** The `cond_value` slot in `ubl:emit-item-prop` / `ubl:emit-note` now accepts a comma-separated whitelist — `'KWH,M3,LTR'` matches when the source value is any of the three (whitespace trimmed).
+
+### Precision fixes
+
+- **Unit prices kept to 6 decimals.** PriceAmount (BT-146), the line price discount (BT-147) and the gross price (BT-148) were silently truncated to 2 decimals everywhere — in the UBL, the PDF and the [Invoice Detail modal](./application/invoices.md) — even when the source carried 6. EN 16931 allows higher precision on `cac:Price` children than on monetary totals, so NomaUBL now keeps up to 6 decimals on those three fields end-to-end; monetary totals (BT-106/109/112/115) stay at 2. The Create / Edit Invoice unit-price input accepts fine precision too (`step=any`).
+
+### Polish
+
+- French line-table headers are now *Prix unitaire HT* and *Montant HT* (was *Prix unitaire* / *Montant*).
+- **No more `**INVALID_TAX_RATE**` marker in the UBL.** The `ubl:tax-subtotal` framework template no longer writes a text marker into `cbc:Percent` when the line tax rate is missing or invalid — the element is omitted and Schematron flags it instead. Per-document XSLs that passed an explicit marker are cleaned up automatically on the next upgrade.
+
+### Bug fixes
+
+- **Upgrade preserves a customer-edited `ubl-defaults.xsl`.** The asset refresher used to overwrite every framework XSL, silently wiping any customisations in `ubl-defaults.xsl` (seller SIREN / VAT / address per company code, VAT category mappings, payment-code lookups, date format). It is now soft-refreshed: a fresh install gets the bundled defaults, an upgrade keeps the customer's file, and when the shipped version differs it is written alongside as `ubl-defaults.xsl.upstream` for manual review. The upgrade report lists every kept file under a new *Assets preserved* section; the `${env}/ubl/` mirror gets the same protection. See [Upgrade](./installation/upgrade.md).
+- **Framework XSL also refreshed in `${env}/ubl/`.** The framework XSL files (`ubl-common.xsl`, `ubl-defaults.xsl`, `ubl-template.xsl`) are now refreshed in the per-environment `ubl/` directory too, not only in `xsl/`. Without this, an upgrade left per-document XSLs importing a stale framework copy, raising XSLT errors such as *"Parameter subentity is not declared in the called template"* after upgrading to 2026.06.10. If you already hit it, copy the three files from `${env}/xsl/` to `${env}/ubl/` and re-run the processing — or apply 2026.06.12 and re-run the upgrade.
 
 ---
 

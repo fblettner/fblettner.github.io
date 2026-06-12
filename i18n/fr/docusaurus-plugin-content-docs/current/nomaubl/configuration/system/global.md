@@ -165,6 +165,13 @@ L'éditeur comporte **six onglets** :
 | **Update DB** | `Y` / `N` | À `Y`, les exécutions de traitement enregistrent leurs résultats en base de données. À positionner à `N` uniquement pour des exécutions à blanc (dry-run) ou des phases de débogage. |
 | **`debugProfile`** *(2026.05.9)* | `Y` / `N` | À `Y`, chaque exécution écrit des **lignes de chronométrage par étape** dans `F564237` pour chaque phase du pipeline : parsing d'en-tête, parsing des lignes, validation, émission UBL, envoi PA. Les lignes apparaissent sur le [Tableau de bord IT](../../application/tech-dashboard.md) — le flux *Traitements en cours · direct* les marque avec le nom de l'étape, et le widget *Temps par modèle* décompose la moyenne par étape. À laisser à `N` en production ; à passer à `Y` le temps d'un lot pour analyser un pipeline lent. À désactiver dès que l'étape lente est identifiée — les lignes additionnelles gonflent rapidement `F564237` sous charge. |
 
+### PDF
+
+| Champ | Description |
+|---|---|
+| **Logo path** | Chemin du logo de la société, dessiné en haut du bloc fournisseur quand un modèle PDF a *Afficher le logo* activé (voir [Modèles PDF](../../management/pdf-templates.md)). Accepte les variables de chemin `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%`, `%KCO%`, `%DOC%`, `%DCT%` et tout jeton `{{…}}` du catalogue de facture — par ex. `%APP_HOME%/logos/{{kco}}.png`, pour que chaque société pointe vers son propre logo. Un bouton `{ }` ouvre une liste de jetons filtrable. PNG, JPG et GIF sont pris en charge. |
+| **Logo offset X (pt)** | Décalage horizontal du logo, en points, pour absorber une marge interne au fichier source. Défaut `0`. |
+
 ---
 
 ## Onglet 3 — Email / SMTP

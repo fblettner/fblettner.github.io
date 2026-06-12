@@ -165,6 +165,13 @@ The editor has **six tabs**:
 | **Update DB** | `Y` / `N` | When `Y`, processing runs persist their results to the database. Set to `N` only for dry runs / debugging. |
 | **`debugProfile`** *(2026.05.9)* | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [Tech Dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
 
+### PDF
+
+| Field | Description |
+|---|---|
+| **Logo path** | Path to the company logo drawn at the top of the supplier block when a PDF template has *Show logo* on (see [PDF Templates](../../management/pdf-templates.md)). Accepts the path variables `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%`, `%KCO%`, `%DOC%`, `%DCT%` and any `{{token}}` from the invoice catalogue — e.g. `%APP_HOME%/logos/{{kco}}.png`, so each company resolves to its own logo. A `{ }` button opens a searchable token list. PNG, JPG and GIF are supported. |
+| **Logo offset X (pt)** | Horizontal shift of the logo, in points, to absorb whitespace baked into the source image. Default `0`. |
+
 ---
 
 ## Tab 3 — Email / SMTP

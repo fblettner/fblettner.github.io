@@ -218,13 +218,20 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Invoice Lines** | BT-126 to BT-161 | Line item details — see [scoping](#scoping) below. |
 | **Item Properties** *(BG-32)* | BG-32 | Repeating product attributes attached to a line. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Per-line discount or charge. |
-| **Line Document References** *(BT-128)* | BT-128 | Per-line document references (with UNTDID 1153 scheme). |
+| **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Per-line document references — supporting documents (BT-128, UNTDID 1153 scheme) and the referenced purchase-order line via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, group EXT-FR-FE-BG-09, placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence). |
 | **Line Delivery** *(EXT-FR-FE-BG-10)* | French extension | Per-line delivery group. |
 | **Line Notes** *(BT-127)* | BT-127 | Free-text notes attached to a line. |
 | **Invoice Notes** *(BT-22)* | BT-22 | Document-level free-text notes. |
 | **Loop Notes** | BT-22 | Repeating note groups at document level. |
 
 Each variable field shows the human-readable description of the BT, the BT code as a coloured badge, the current value (an XML path or expression), and a `↓` picker that opens the [XML Browser drawer](#xml-browser-drawer) on the right.
+
+#### Combining and matching source values
+
+A `TAG_*` select isn't limited to a single XML path:
+
+- **Concatenation (`+`).** Glue several source tags into one UBL value with a ` + ` operator — `'FirstName + LastName'` joins them with a single space, `'First + ", " + Last'` sets a custom joiner, and quoted literals are emitted verbatim. No more XSL preprocessing step when a UBL field combines several source columns.
+- **Conditional value list.** The `cond_value` argument of the `ubl:emit-item-prop` / `ubl:emit-note` helpers accepts a single value (as before) or a comma-separated whitelist — `'KWH,M3,LTR'` matches when the source value is any of the three. Whitespace around each item is trimmed.
 
 #### Scoping
 

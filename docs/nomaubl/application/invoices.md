@@ -477,7 +477,7 @@ A table of the invoice line items, one main row per line plus sub-rows that surf
 | **Item** | Item identifier (article code, SKU). |
 | **Quantity** | Quantity invoiced. |
 | **Unit** | Unit-of-measure code (e.g. `EA` piece, `H87` unit, `DAY` day, `KGM` kilogram). |
-| **Unit price** | Unit price excluding VAT. |
+| **Unit price** | Unit price excluding VAT. Shown to its full precision — up to **6 decimals** (BT-146), matching the source. EN 16931 allows finer precision on the price than on the monetary totals, which stay at 2 decimals. |
 | **Line amount** | Quantity × unit price (excluding VAT). |
 | **Tax category** | UBL VAT category code (`S` standard, `AE` reverse charge, `E` exempt, `Z` zero rate, `O` out of scope, `K` intra-EU, `G` export, `L` Canary Islands, `M` Ceuta/Melilla). |
 | **Tax rate** | Applicable VAT rate as a percentage. |
@@ -830,7 +830,7 @@ The modal is split into vertical sections:
 - **Payment** — payment means code, IBAN, BIC, mandate, terms.
 - **Allowances / charges** — document-level discounts / charges.
 - **Notes** — free-text notes per `BT-22` prefix.
-- **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties.
+- **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties. The unit-price input accepts fine precision (up to 6 decimals), to match prices that carry more than 2 decimals at source.
 - **VAT summary** — auto-computed from the lines (read-only — line edits are reflected here).
 - **Totals** — auto-computed (read-only).
 

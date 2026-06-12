@@ -339,7 +339,7 @@ The drawer groups toggles by **`Category · Name`** prefix and arranges them in 
 The full list of toggles per preset section:
 
 - **Header** — eight `META · …` toggles (invoice number, issue date, due date, contract / order / buyer references, invoice type, profile ID) plus six `Supplier · …` toggles (address, SIREN, legal form, VAT, phone, email).
-- **Parties** — Customer and Delivery boxes, with separate toggles for SIREN, VAT, address, location ID and a *Show Delivery box* master switch (when off, the layout renders a single-column Customer block).
+- **Parties** — Customer and Delivery boxes, with separate toggles for SIREN, VAT, address, location ID and a *Show Delivery box* master switch (when off, the layout renders a single-column Customer block). The Delivery box shows the delivery party name (falling back to `ID: …` when only the location ID is set), the full street, postal code + city and country code — matching the Customer box.
 - **Line Table** — three group-header toggles (*Delivery group*, *Page break per delivery*, *Document Reference group*), seven column toggles (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Amount`, `Tax`) and seven sub-detail toggles for line metadata (BT-127, BT-134/135, BT-156, BT-157, BT-158, allowances / charges, additional item properties).
 - **Document Allowances** — column toggles for type, reason, amount, tax.
 - **VAT Breakdown** — column toggles for category, rate, taxable, tax amount (an exemption column auto-appears when present).
@@ -361,6 +361,7 @@ The new **`block`** section is an XPath-driven primitive that composes any layou
 | `repeat` | XPath returning a NodeList; the block's `child` is rendered once per match. |
 | `if` | XPath returning a boolean; the block's `child` is rendered when true, hidden otherwise. |
 | `table` | A `rows × cols` grid with optional cell borders and a styled header row. Setting `xpath` makes it iterate (one row per match), with the children acting as the per-row cell template. |
+| `note` | A **Note (by code)** block — pick a code from the `note-types` reference list; the renderer finds the `cbc:Note` carrying the matching `#CODE#` marker and prints its body in place. Lets you turn off the global Notes section and drop each note exactly where it belongs (header, between parties, near the totals, in a column). |
 
 Several blocks can live in the same template — e.g. one for a French legal mention block, one for a structured payment-terms table, one for a watermark image. Each block carries a user-friendly `name` shown next to the section row in the editor, so a layout with three blocks reads as `Block · payment-terms`, `Block · legal-mentions`, `Block · watermark`.
 
@@ -383,9 +384,35 @@ When a *Custom block* section is selected inside the [visual builder](#visual-bu
 | **Attributes form** | Per-kind attribute form (XPath, label, format, alignment, gap, …) plus a **Style** sub-panel covering font, weight, size, colour, alignment and padding. |
 | **JSON escape hatch** | A raw-JSON view of the current node — read-only by default, *Edit JSON* toggles in-place editing for advanced cases the form doesn't cover. |
 
-A small but important detail at the top of the attributes form: a **Kind** select that **morphs** the selected node in place — turn a `column` into a `repeat` without deleting and re-adding it, the compatible attributes (children, style) are carried over by the `transmuteKind` helper. The same trick handles the common case of promoting a static layout block to an iterating one once the data shape is understood.
+A small but important detail at the top of the attributes form: a **Kind** select that **morphs** the selected node in place — turn a `column` into a `repeat` without deleting and re-adding it, the compatible attributes (children, style) are carried over by the `transmuteKind` helper. The same trick handles the common case of promoting a static layout block to an iterating one once the data shape is understood. The block-kind dropdown is sorted alphabetically.
 
 The centre preview re-renders every keystroke — the iframe stays mounted and updates in place, so the operator sees the result without flicker as they edit XPaths or toggle styles. The **↑ Load XML sample** button at the top of the builder feeds a single sample to the XPath autocomplete of every block in the template.
+
+---
+
+## Template settings — builder toolbar
+
+The builder toolbar carries a few settings applied to the whole layout:
+
+| Setting | What it does |
+|---|---|
+| **Accent** | The accent colour for the section titles (CUSTOMER / DELIVERY), the highlighted total, the line-table header underline and the row-highlight background. Enter a 6-digit hex with or without `#`; the soft row-highlight tint is derived automatically. Empty keeps the default blue. |
+| **Date** | The date pattern applied across the PDF — issue, due, period and per-line delivery dates. Choices: `yyyy-MM-dd` (default), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. |
+| **Show logo** | Draws the company logo at the top of the supplier block on page 1. The file comes from *Logo path* in [Settings → Global → Processing → PDF](../configuration/system/global.md), where a *Logo offset X (pt)* also shifts it horizontally. PNG, JPG and GIF are supported. |
+
+---
+
+## Section slots
+
+Beyond the preset toggles, three preset sections expose **named slots**, each holding a full custom-block tree (text, field, row, column, table, repeat, if, note, …) edited in place with the same block builder. A slot drops a block exactly where you'd otherwise have no anchor, without inserting a standalone *Block* section between two built-ins:
+
+| Section | Slots |
+|---|---|
+| **Header** | *Left footer* (under the supplier block) and *Right footer* (under Profile ID) — e.g. a TVA intra-UE line under the supplier address, or a payment-terms caption under Profile ID. |
+| **Parties** | *Customer footer* and *Delivery footer*, embedded inside each party box (sharing its cell width and font). |
+| **Totals box** | *Before totals* (above the totals table) and *After totals* (below). |
+
+Slots, like the top-level `block` section, show in the inspector as a compact summary card with an **Edit** pill: clicking it hands the whole inspector pane to the block builder, with a *← Back · Section · Slot* bar on top; selecting another section exits automatically.
 
 ---
 

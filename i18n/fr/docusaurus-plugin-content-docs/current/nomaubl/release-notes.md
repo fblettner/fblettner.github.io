@@ -58,9 +58,41 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ## 2026.06.12 — 2026-06-12 \{#v2026-06-12\}
 
-Correctif de l'outil de mise à niveau. Les fichiers XSL du socle (`ubl-common.xsl`, `ubl-defaults.xsl`, `ubl-template.xsl`) sont maintenant rafraîchis aussi dans le répertoire `ubl/` de l'environnement, et plus seulement dans `xsl/`. Sans ce correctif, après une mise à niveau, les XSL propres à chaque document continuaient d'importer une version périmée du socle, d'où des erreurs XSLT du type *« Parameter subentity is not declared in the called template »* après le passage en 2026.06.10.
+Une grosse mise à jour du constructeur PDF : un logo de société, une couleur d'accent et un format de date par modèle, l'adresse de livraison complète, un bloc *Note (par code)*, et des slots de blocs personnalisés dans les sections En-tête, Parties et Boîte des totaux. Plus une référence de ligne de bon de commande BT-132, des prix unitaires conservés à 6 décimales de bout en bout, et une mise à niveau qui préserve désormais un `ubl-defaults.xsl` modifié par le client.
 
-Si vous avez déjà migré et que cette erreur apparaît, copiez les trois fichiers de `${env}/xsl/` vers `${env}/ubl/` puis relancez le traitement — ou installez 2026.06.12 et rejouez la [mise à niveau](./installation/upgrade.md).
+### Nouveautés — Constructeur PDF
+
+- **Logo sur les factures PDF.** Un nouveau bouton *Afficher le logo* dans le [constructeur de modèle PDF](./management/pdf-templates.md), associé à un champ *Chemin du logo* dans [Paramètres → Global → Traitement → PDF](./configuration/system/global.md). Quand il est activé, l'image est dessinée en haut du bloc fournisseur de la page 1, et la colonne numéro de facture / dates garde sa place. Le chemin accepte les jetons habituels (`%APP_HOME%`, `%ENV%`, `%KCO%`, `{{kco}}`, …) pour qu'une société pointe vers son propre logo ; un réglage *Décalage X du logo (pt)* décale l'image horizontalement pour absorber une marge interne au fichier source. PNG, JPG et GIF sont pris en charge.
+- **Couleur d'accent par modèle.** Un nouveau sélecteur *Accent* dans la barre du constructeur remplace le bleu par défaut sur les titres de section (CLIENT / LIVRAISON), le total mis en évidence, le soulignement de l'en-tête du tableau de lignes et le fond des lignes surlignées. Saisissez un hexa à 6 chiffres avec ou sans `#` ; la teinte de fond est dérivée automatiquement. Vide = bleu par défaut.
+- **Format de date par modèle.** Un nouveau menu *Date* dans la barre du constructeur — `yyyy-MM-dd` (défaut), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. Il s'applique aux dates d'émission, d'échéance, de période et de livraison par ligne.
+- **Adresse de livraison complète dans le PDF.** Le bloc LIVRAISON affiche maintenant le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme le bloc client.
+- **Bloc Note (par code).** Un nouveau choix *Note (par code)* dans le sélecteur de bloc personnalisé. L'inspecteur propose une liste déroulante alimentée par la liste de référence `note-types` ; le rendu repère le `cbc:Note` qui porte le marqueur `#CODE#` correspondant et affiche son corps sur place — désactivez la section Notes globale et posez chaque note exactement où elle doit aller.
+- **Slots personnalisés dans la section En-tête.** L'en-tête expose deux slots — *Pied gauche* (sous le bloc fournisseur) et *Pied droit* (sous Profile ID) — chacun acceptant un arbre de blocs complet édité sur place, pour une ligne TVA intra-UE ou une mention de conditions de paiement sans intercaler une section Bloc autonome.
+- **Édition en zoom des arbres de blocs.** Les champs de type bloc (la section `block` racine et les nouveaux slots de l'en-tête) s'affichent en carte récapitulative compacte avec une pastille *Éditer* ; un clic confie tout l'inspecteur au constructeur de blocs, avec une barre *← Retour · Section · Slot*, et changer de section sort automatiquement. La liste du type de bloc est triée par ordre alphabétique.
+- **Slots personnalisés dans Parties et Boîte des totaux.** Le même mécanisme s'étend au reste du canvas — Parties reçoit *Pied client* + *Pied livraison* (dans chaque encart), la Boîte des totaux reçoit *Avant totaux* + *Après totaux*.
+
+### Couverture UBL
+
+- **BT-132 — référence de ligne de bon de commande.** Un nouveau slot `TAG_LINE_ORDER_LINE_REF` au niveau ligne. Quand il est renseigné, le socle émet `cac:InvoiceLine/cac:OrderLineReference/cbc:LineID` (groupe EXT-FR-FE-BG-09), placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1. Choisissez le chemin source dans l'[Éditeur XSL](./ubl-tools/xsl-editor.md) sous *Références de ligne*.
+
+### Mappage XSL
+
+- **Opérateur de concaténation dans les chemins TAG.** Tout select `TAG_*` peut maintenant assembler plusieurs tags source avec l'opérateur ` + ` — `'FirstName + LastName'` joint avec un espace, `'First + ", " + Last'` choisit le séparateur ; les chaînes entre guillemets sont rendues telles quelles. Fini l'étape de pré-traitement XSL quand un champ UBL agrège plusieurs colonnes source.
+- **Liste de valeurs conditionnelle (`cond_value`).** Le paramètre `cond_value` de `ubl:emit-item-prop` / `ubl:emit-note` accepte désormais une liste séparée par des virgules — `'KWH,M3,LTR'` correspond quand la source vaut l'un des trois (espaces supprimés).
+
+### Correctifs (précision)
+
+- **Prix unitaires conservés à 6 décimales.** Le PriceAmount (BT-146), la remise de ligne (BT-147) et le prix brut (BT-148) étaient tronqués à 2 décimales partout — dans le UBL, le PDF et la [modale Détail facture](./application/invoices.md) — même quand la source en portait 6. La norme EN 16931 autorise une précision supérieure sur les enfants de `cac:Price` que sur les totaux monétaires ; NomaUBL conserve donc jusqu'à 6 décimales sur ces trois champs de bout en bout, et les totaux monétaires (BT-106/109/112/115) restent à 2. Le champ Prix unitaire des modales Création/Édition accepte aussi la précision fine (`step=any`).
+
+### Détails
+
+- En-têtes du tableau de lignes en français : *Prix unitaire HT* et *Montant HT* (au lieu de *Prix unitaire* / *Montant*).
+- **Plus de marqueur `**INVALID_TAX_RATE**` dans le UBL.** Le template du socle `ubl:tax-subtotal` n'écrit plus de marqueur texte dans `cbc:Percent` quand le taux de taxe de ligne est manquant ou invalide — l'élément est omis et Schematron remonte l'erreur. Les XSL par document qui passaient un marqueur explicite sont nettoyés automatiquement à la prochaine mise à niveau.
+
+### Correctifs
+
+- **La mise à niveau préserve un `ubl-defaults.xsl` modifié par le client.** L'outil de rafraîchissement des actifs remplaçait chaque fichier XSL du socle, ce qui écrasait en silence les personnalisations dans `ubl-defaults.xsl` (SIREN / TVA / adresse du vendeur par code société, mappings de catégorie TVA, codes de paiement, format de date). Le fichier passe en « refresh souple » : une installation neuve reçoit les valeurs livrées, une mise à niveau garde le fichier du client, et quand la version livrée diffère, elle est écrite à côté sous `ubl-defaults.xsl.upstream` pour relecture manuelle. Le rapport de mise à niveau liste chaque fichier conservé dans une nouvelle section *Actifs préservés* ; le miroir `${env}/ubl/` bénéficie de la même protection. Voir [Mise à niveau](./installation/upgrade.md).
+- **Les XSL du socle aussi rafraîchis dans `${env}/ubl/`.** Les fichiers XSL du socle (`ubl-common.xsl`, `ubl-defaults.xsl`, `ubl-template.xsl`) sont maintenant rafraîchis aussi dans le répertoire `ubl/` de l'environnement, et plus seulement dans `xsl/`. Sans ce correctif, après une mise à niveau, les XSL par document importaient une version périmée du socle, d'où des erreurs XSLT du type *« Parameter subentity is not declared in the called template »* après le passage en 2026.06.10. Si l'erreur apparaît, copiez les trois fichiers de `${env}/xsl/` vers `${env}/ubl/` puis relancez le traitement — ou installez 2026.06.12 et rejouez la mise à niveau.
 
 ---
 

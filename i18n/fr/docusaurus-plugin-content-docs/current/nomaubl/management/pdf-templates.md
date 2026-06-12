@@ -340,7 +340,7 @@ Le tiroir regroupe les bascules par préfixe **`Catégorie · Nom`** et les pré
 Liste complète des bascules par section prédéfinie :
 
 - **Header** — huit bascules `META · …` (numéro de facture, date d'émission, date d'échéance, références contrat / commande / acheteur, type de facture, profil ID), plus six bascules `Supplier · …` (adresse, SIREN, forme légale, TVA, téléphone, e-mail).
-- **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un interrupteur principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique).
+- **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un interrupteur principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client.
 - **Line Table** — trois bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group*), sept bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Amount`, `Tax`) et sept bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, BT-156, BT-157, BT-158, remises / charges, propriétés additionnelles d'article).
 - **Document Allowances** — bascules de colonnes pour type, motif, montant, taxe.
 - **VAT Breakdown** — bascules de colonnes pour catégorie, taux, base imposable, montant de TVA (une colonne d'exemption apparaît automatiquement lorsqu'elle est présente).
@@ -362,6 +362,7 @@ La nouvelle section **`block`** est une primitive pilotée par XPath qui permet 
 | `repeat` | XPath retournant une NodeList ; le `child` du block est rendu une fois par occurrence. |
 | `if` | XPath retournant un booléen ; le `child` du block est rendu si vrai, masqué sinon. |
 | `table` | Grille `lignes × colonnes` avec bordures de cellules optionnelles et ligne d'en-tête stylée. Définir `xpath` la fait itérer (une ligne par occurrence), les enfants servant de gabarit par ligne. |
+| `note` | Un bloc **Note (par code)** — choisissez un code dans la liste de référence `note-types` ; le rendu repère le `cbc:Note` qui porte le marqueur `#CODE#` correspondant et affiche son corps sur place. Permet de désactiver la section Notes globale et de poser chaque note exactement où elle doit aller (en-tête, entre les parties, près des totaux, dans une colonne). |
 
 Plusieurs blocks peuvent coexister dans un même modèle — par exemple un pour des mentions légales françaises, un pour une table structurée de conditions de paiement, un pour un filigrane image. Chaque block a un `name` utilisateur affiché à côté de la ligne de section dans l'éditeur ; un modèle qui contient trois blocks se lit ainsi `Block · payment-terms`, `Block · legal-mentions`, `Block · watermark`.
 
@@ -384,9 +385,35 @@ Quand une section *Bloc personnalisé* est sélectionnée dans l'[éditeur visue
 | **Formulaire d'attributs** | Formulaire d'attributs par type (XPath, libellé, format, alignement, gap, …) plus un sous-panneau **Style** couvrant police, graisse, taille, couleur, alignement et marges intérieures. |
 | **Sortie de secours JSON** | Vue JSON brute du nœud courant — en lecture seule par défaut, *Modifier JSON* bascule en édition pour les cas avancés que le formulaire ne couvre pas. |
 
-Détail subtil mais important en haut du formulaire d'attributs : un sélecteur **Type** qui **transforme** le nœud sélectionné sur place — passage de `column` à `repeat` sans suppression / recréation. Les attributs compatibles (enfants, style) sont reportés par le helper `transmuteKind`. Même mécanisme pour le cas fréquent de promotion d'un bloc statique en bloc itérant une fois la forme des données identifiée.
+Détail subtil mais important en haut du formulaire d'attributs : un sélecteur **Type** qui **transforme** le nœud sélectionné sur place — passage de `column` à `repeat` sans suppression / recréation. Les attributs compatibles (enfants, style) sont reportés par le helper `transmuteKind`. Même mécanisme pour le cas fréquent de promotion d'un bloc statique en bloc itérant une fois la forme des données identifiée. La liste déroulante du type de bloc est triée par ordre alphabétique.
 
 L'aperçu au centre se regénère à chaque frappe — l'iframe reste montée et se met à jour sur place, l'opérateur voit le résultat sans clignotement quand il modifie un XPath ou une option de style. Le bouton **↑ Charger XML** en haut de l'éditeur fournit un seul échantillon qui alimente l'auto-complétion XPath de chaque bloc du modèle.
+
+---
+
+## Réglages du modèle — barre du constructeur
+
+La barre du constructeur porte quelques réglages appliqués à toute la mise en page :
+
+| Réglage | Effet |
+|---|---|
+| **Accent** | La couleur d'accent des titres de section (CLIENT / LIVRAISON), du total mis en évidence, du soulignement de l'en-tête du tableau de lignes et du fond des lignes surlignées. Saisissez un hexa à 6 chiffres avec ou sans `#` ; la teinte de fond est dérivée automatiquement. Vide = bleu par défaut. |
+| **Date** | Le format de date appliqué dans tout le PDF — dates d'émission, d'échéance, de période et de livraison par ligne. Valeurs : `yyyy-MM-dd` (défaut), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. |
+| **Afficher le logo** | Dessine le logo de la société en haut du bloc fournisseur de la page 1. L'image vient du champ *Chemin du logo* dans [Paramètres → Global → Traitement → PDF](../configuration/system/global.md), où un *Décalage X du logo (pt)* la décale aussi horizontalement. PNG, JPG et GIF sont pris en charge. |
+
+---
+
+## Slots de section
+
+Au-delà des bascules de préréglage, trois sections exposent des **slots nommés**, chacun contenant un arbre de blocs complet (texte, champ, ligne, colonne, tableau, répéter, si, note, …) édité sur place avec le même constructeur. Un slot place un bloc là où, sinon, aucun point d'ancrage n'existe, sans intercaler une section *Bloc* autonome entre deux sections natives :
+
+| Section | Slots |
+|---|---|
+| **En-tête** | *Pied gauche* (sous le bloc fournisseur) et *Pied droit* (sous Profile ID) — par ex. une ligne TVA intra-UE sous l'adresse fournisseur, une mention de conditions de paiement sous Profile ID. |
+| **Parties** | *Pied client* et *Pied livraison*, placés à l'intérieur de chaque encart (qui partagent sa largeur de cellule et sa police). |
+| **Boîte des totaux** | *Avant totaux* (au-dessus du tableau des totaux) et *Après totaux* (en dessous). |
+
+Comme la section `block` racine, un slot s'affiche dans l'inspecteur sous forme d'une carte récapitulative compacte avec une pastille **Éditer** : un clic confie tout le volet inspecteur au constructeur de blocs, avec une barre *← Retour · Section · Slot* en haut ; changer de section sort automatiquement.
 
 ---
 

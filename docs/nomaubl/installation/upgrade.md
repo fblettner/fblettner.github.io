@@ -96,6 +96,16 @@ Both forms produce the same end state. Use the second when you want a single com
 
 The per-step reference (what `-upgrade` does internally, what's preserved, what's refreshed) lives on the [Command Line → upgrade](../management/command-line.md#upgrade) page.
 
+### Customer-edited `ubl-defaults.xsl` is preserved
+
+The framework-XSL refresh (step 4) **no longer overwrites `ubl-defaults.xsl`**. This file usually carries customer customisations — seller SIREN / VAT / address per company code, VAT category mappings, payment-code lookups, the date format — that an earlier wholesale replace used to wipe silently. It is now *soft-refreshed*:
+
+- a **fresh install** receives the bundled defaults;
+- an **upgrade keeps the customer's file** untouched;
+- when the shipped version differs from the customer's, the shipped one is written alongside as **`ubl-defaults.xsl.upstream`** for manual review.
+
+The upgrade report lists every kept file under an **Assets preserved** section. The same protection covers the `${env}/ubl/` mirror, which the upgrade also refreshes so per-document XSLs never import a stale framework copy.
+
 ---
 
 ## Before you upgrade
