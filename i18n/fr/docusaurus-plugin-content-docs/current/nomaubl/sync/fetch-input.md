@@ -195,6 +195,7 @@ La seconde section choisit la **source** et ses paramètres.
 | **Language** | Filtre optionnel sur la langue BIP (par ex. `FR`). |
 | **Extract Mode** | `Extract Input (XML)`, `Extract Output` ou `Extract Both`. Voir [*Extract BIP*](../extract/extract-bip.md) pour la sémantique. |
 | **Last Job Number** | Pré-rempli depuis `global.lastBipJobNumber`. L'appel Scan ne retourne que les jobs dont `jobNumber > Last Job Number`. Le champ est modifiable pour rebalayer une autre plage, mais la configuration globale est mise à jour avec le plus grand numéro de job traité après chaque lot — la récupération incrémentale est le mode par défaut. |
+| **Fenêtre (jours)** | Limite l'analyse dans le temps. À `0`, aucune limite : tous les jobs postérieurs au dernier numéro traité. À `N > 0`, seuls ceux modifiés au cours des N derniers jours — utile à la première installation ou après une longue interruption, pour ne pas parcourir des années d'historique. Reprend la valeur de *Paramètres → Global → Traitement par lot → Fenêtre BIP (jours)* ; modifiable le temps d'une analyse ponctuelle. |
 
 ### Source = Input Directory
 

@@ -303,7 +303,7 @@ Depuis 2026.05.10, la grille passe par **DataTableV2** en mode piloté par spec 
 | **Doc** | Numéro de document interne. |
 | **Dct** | Type de document. |
 | **Kco** | Code société. |
-| **Numéro UBL** | Numéro de facture tel qu'il apparaît dans le document UBL généré. |
+| **Numéro UBL** | Numéro de facture tel qu'il apparaît dans le document UBL généré. Filtrable depuis le panneau **Filtres avancés** et via le paramètre d'URL `?ublNumber=`, en plus de la zone de recherche texte. |
 | **Date d'émission** | BT-2 issu du document UBL. |
 | **Client** | Nom de la partie acheteur. |
 | **Pays** | Code pays ISO 3166 à deux lettres de la contrepartie (`FR`, `DE`, `BE`, `US`…). Capturé à l'insertion depuis le UBL — pays de l'acheteur pour les ventes, du fournisseur pour les achats. Pilote la classification par zone utilisée par la page [Déclaration de TVA](./vat-declaration.md). |

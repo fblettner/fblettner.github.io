@@ -1,7 +1,7 @@
 ---
 title: Connecteurs SQL
 description: "Définition de connecteurs SQL utilisés par NomaUBL pour lire ou écrire dans n'importe quelle base accessible — Oracle ou PostgreSQL — au travers de requêtes nommées et paramétrées. Chaque requête porte un nom, un libellé, une description, une spécification de paramètres, le SQL avec des placeholders :param, et un drapeau Writable. L'éditeur a trois onglets Connection / Queries / Test, et le runtime lie les paramètres via PreparedStatement, sans concaténation dans le SQL."
-keywords: [NomaUBL, connecteurs SQL, requêtes SQL, requêtes nommées, JDBC, Oracle, PostgreSQL, PreparedStatement, binding paramètres, writable, liaisons d'actions, règles de notification, JD Edwards, SAP, NetSuite, ERP personnalisé]
+keywords: [NomaUBL, connecteurs SQL, requêtes SQL, requêtes nommées, JDBC, Oracle, PostgreSQL, Microsoft SQL Server, Custom JDBC, DB2, MariaDB, Snowflake, PreparedStatement, binding paramètres, writable, liaisons d'actions, règles de notification, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Connecteurs SQL
@@ -151,8 +151,9 @@ L'éditeur a **trois onglets** :
 
 | Champ | Valeurs | Description |
 |---|---|---|
-| **Database Type** | `Oracle` / `PostgreSQL` | Type de moteur. Pilote le placeholder de l'URL JDBC et le parsing dépendant du dialecte côté runtime. |
-| **JDBC URL** | texte | Chaîne de connexion JDBC complète. `jdbc:oracle:thin:@host:1521/service_name` pour Oracle, `jdbc:postgresql://host:5432/database_name` pour PostgreSQL. |
+| **Database Type** | `Oracle` / `PostgreSQL` / `Microsoft SQL Server` / `Custom JDBC (driver class below)` | Type de moteur. Détermine le format d'URL JDBC proposé et la manière dont le moteur interprète le dialecte à l'exécution. **Microsoft SQL Server** demande le pilote `mssql-jdbc` dans `lib/`. **JDBC personnalisé** vise n'importe quelle autre base (DB2, MariaDB, Snowflake, …) en indiquant sa classe de pilote — sans attendre une nouvelle version de NomaUBL pour en ajouter une. |
+| **Driver class** | texte *(JDBC personnalisé uniquement)* | Nom complet de la classe du pilote JDBC, par ex. `com.example.jdbc.MyDriver`. Visible seulement quand *Database Type* vaut *Custom JDBC* ; déposez le pilote correspondant dans `lib/`. |
+| **JDBC URL** | texte | Chaîne de connexion JDBC complète — `jdbc:oracle:thin:@host:1521/service_name` (Oracle), `jdbc:postgresql://host:5432/database_name` (PostgreSQL), `jdbc:sqlserver://host:port;databaseName=name` (SQL Server), ou le format attendu par le pilote personnalisé. |
 | **Schema** | texte *(facultatif)* | Schéma par défaut. Utilisé par le SQL — aucune préfixation automatique à l'exécution, la valeur est informative et permet d'écrire des noms de tables non qualifiés quand le compte JDBC dispose déjà du bon `current_schema`. |
 
 ### Identifiants

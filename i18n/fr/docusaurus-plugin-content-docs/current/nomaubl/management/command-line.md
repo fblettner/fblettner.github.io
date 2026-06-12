@@ -516,7 +516,9 @@ java -jar nomaubl.jar -fetch-single /opt/nomaubl/demo/config/config.json \
 |---|---|
 | **`source`** | `directory` — parcourt `dirInput` (modèle XML) ou `dirInput/ubl` (modèle UBL) pour rechercher les fichiers prêts à traiter. <br/>`bip` — récupère tous les nouveaux jobs BIP dont le numéro est supérieur à `lastBipJobNumber` (enregistré dans le template *global* après chaque exécution réussie). |
 
-Pour chaque job `bip`, le wrapper résout le **template par job** depuis les filtres BIP s'ils en définissent un ; sinon, utilise l'argument `template` de la CLI. Après une exécution réussie, `lastBipJobNumber` dans `config.json` est mis à jour avec le plus grand numéro traité — la passe suivante ne reprend que les jobs nouveaux.
+Pour chaque job `bip`, le wrapper résout le **template par job** depuis les filtres BIP s'ils en définissent un ; sinon, utilise l'argument `template` de la CLI. Après une exécution réussie, `lastBipJobNumber` dans `config.json` prend le plus grand numéro traité — au passage suivant, seuls les nouveaux jobs sont repris.
+
+En mode `bip`, `-fetch-all` tient aussi compte du champ **Fenêtre BIP (jours)** (*Paramètres → Global → Traitement par lot*). Quand vous y indiquez un nombre de jours, seuls les jobs modifiés sur cette période sont repris, en plus du suivi par `lastBipJobNumber` ; c'est utile à la première installation ou après une longue interruption, pour ne pas reparcourir tout l'historique.
 
 **Exemples**
 

@@ -195,6 +195,7 @@ The second section picks the **source** and any source-specific parameters.
 | **Language** | Optional BIP language filter (e.g. `FR`). |
 | **Extract Mode** | `Extract Input (XML)`, `Extract Output` or `Extract Both`. See [*Extract BIP*](../extract/extract-bip.md) for the semantics. |
 | **Last Job Number** | Pre-filled from `global.lastBipJobNumber`. The Scan call returns only jobs with `jobNumber > Last Job Number`. The field can be edited to re-scan a different range, but the global config is updated to the highest processed job number after each batch — incremental retrieval is the default. |
+| **Lookback (days)** | Date floor on the scan. `0` = no floor (every job after the watermark). `N > 0` = only jobs updated in the last N days — useful on a first install or after a long gap, to skip years of history. Pre-filled from *Settings → Global → Batch Processing → BIP Lookback (days)*; editable for a one-off scan. |
 
 ### Source = Input Directory
 

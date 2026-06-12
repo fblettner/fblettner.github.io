@@ -518,6 +518,8 @@ Equivalent of the *Application → Fetch Input* page. Extract **every** matching
 
 For each `bip` job the wrapper resolves the **per-job template** from the BIP report filters when one is defined; otherwise it falls back to the `template` CLI argument. After a successful run, `lastBipJobNumber` in `config.json` is updated to the highest job number processed, so the next sweep only picks up new jobs.
 
+The `bip` sweep also honours the **BIP Lookback (days)** floor from *Settings → Global → Batch Processing*: with a non-zero value, only jobs updated in the last N days are eligible, on top of the `lastBipJobNumber` watermark — handy on a first install or after a long gap to avoid walking years of history.
+
 **Examples**
 
 ```bash

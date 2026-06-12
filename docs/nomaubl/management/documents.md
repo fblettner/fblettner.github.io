@@ -301,6 +301,17 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | **UBL XSLT** | path | XSL transform from the source XML to **UBL 2.1**. The placeholder `%APP_HOME%` is expanded to the NomaUBL install root. |
 | **Attachment** | `— None` / `create` / `attach` | How to associate the human-readable PDF with the UBL: `create` = generate the PDF and embed it in the UBL file; `attach` = use a PDF already present in the input directory; empty = no PDF embedded. |
 
+### Additional Attachments
+
+Beyond the main human-readable PDF, a document type can embed **extra files into the UBL** — a delivery note, a purchase order, bank details, an annex. Add one row per file:
+
+| Field | Description |
+|---|---|
+| **Code** | The attachment's business code, picked from a dropdown (delivery note, purchase order, RIB, annex…). It tags the embedded file inside the UBL so the recipient knows what each attachment is. |
+| **Path** | Where to read the file from. Supports the path placeholders `%APP_HOME%`, `%ENV%`, `%DOCNAME%`, `%KCO%`, `%DOC%`, `%DCT%` and any `{{token}}` from the invoice catalogue, so the path resolves per invoice — e.g. `%APP_HOME%/cgv/CGV_{{kco}}.pdf`. |
+
+The **`{ }`** button next to the path field opens a searchable token list and inserts the chosen token at the cursor — the invoice catalogue tokens (`{{kco}}`, `{{fedoc}}`, …) and the path constants `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%` — so you don't have to remember the exact spelling. **Add attachment** adds another row.
+
 ### Output
 
 | Field | Description |

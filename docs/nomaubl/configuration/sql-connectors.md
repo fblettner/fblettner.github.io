@@ -1,7 +1,7 @@
 ---
 title: SQL Connectors
 description: "Define generic SQL connectors used by NomaUBL to read or write rows on any reachable database — Oracle or PostgreSQL — through named parameterised queries. Each query carries a name, label, description, parameter spec, the SQL itself with :param placeholders, and a Writable flag. The editor has Connection / Queries / Test tabs and the runtime binds parameters through PreparedStatement so values are never string-substituted into SQL."
-keywords: [NomaUBL, SQL connectors, SQL queries, named queries, JDBC, Oracle, PostgreSQL, PreparedStatement, parameter binding, writable, action bindings, notification rules, JD Edwards, SAP, NetSuite, custom ERP]
+keywords: [NomaUBL, SQL connectors, SQL queries, named queries, JDBC, Oracle, PostgreSQL, Microsoft SQL Server, Custom JDBC, DB2, MariaDB, Snowflake, PreparedStatement, parameter binding, writable, action bindings, notification rules, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # SQL Connectors
@@ -151,8 +151,9 @@ The editor has **three tabs**:
 
 | Field | Values | Description |
 |---|---|---|
-| **Database Type** | `Oracle` / `PostgreSQL` | Backend type. Drives the JDBC URL placeholder and the dialect-specific parsing in the runtime. |
-| **JDBC URL** | text | Full JDBC connection string. `jdbc:oracle:thin:@host:1521/service_name` for Oracle, `jdbc:postgresql://host:5432/database_name` for PostgreSQL. |
+| **Database Type** | `Oracle` / `PostgreSQL` / `Microsoft SQL Server` / `Custom JDBC (driver class below)` | Backend type. Drives the JDBC URL placeholder and the dialect-specific parsing in the runtime. **Microsoft SQL Server** needs the `mssql-jdbc` jar in `lib/`. **Custom JDBC** points at any other database (DB2, MariaDB, Snowflake, …) by naming its driver class — no new NomaUBL release is required to add one. |
+| **Driver class** | text *(Custom JDBC only)* | Fully-qualified JDBC driver class name, e.g. `com.example.jdbc.MyDriver`. Shown only when *Database Type* is *Custom JDBC*; drop the matching driver jar in `lib/`. |
+| **JDBC URL** | text | Full JDBC connection string — `jdbc:oracle:thin:@host:1521/service_name` (Oracle), `jdbc:postgresql://host:5432/database_name` (PostgreSQL), `jdbc:sqlserver://host:port;databaseName=name` (SQL Server), or the format your custom driver expects. |
 | **Schema** | text *(optional)* | Default schema. Used by the SQL — no automatic prefixing happens at runtime, the value is informational and lets you write unqualified table names when the JDBC user already has the right `current_schema`. |
 
 ### Credentials

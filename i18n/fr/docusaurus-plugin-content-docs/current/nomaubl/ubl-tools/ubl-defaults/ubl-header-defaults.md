@@ -1,7 +1,7 @@
 ---
 title: Valeurs par défaut de l'en-tête UBL
 description: "UBL Defaults — onglet Header. Version UBL, identifiant de personnalisation (BT-24), pays par défaut (BT-40 / BT-55) et format de date d'entrée par template."
-keywords: [NomaUBL, UBL, defaults, en-tête, BT-24, BT-40, BT-55, customizationID, ublVersion, pays, format de date, EN 16931, extended-ctc-fr]
+keywords: [NomaUBL, UBL, defaults, en-tête, BT-24, BT-40, BT-55, BT-54, BT-79, CountrySubentity, région, customizationID, ublVersion, pays, format de date, EN 16931, extended-ctc-fr]
 ---
 
 # Valeurs par défaut de l'en-tête UBL
@@ -19,6 +19,12 @@ L'onglet **Header** configure les identifiants documentaires placés en tête de
 | **Default Country** | BT-40 / BT-55 | Code pays appliqué aux adresses postales du vendeur (`BT-40`) et de l'acheteur (`BT-55`) quand la source ne le renseigne pas. Choisi dans la liste de référence *countries*. |
 
 Ces trois champs sont soumis au mécanisme de surcharge en mode document — ils apparaissent sous la bannière de surcharge.
+
+---
+
+## Région acheteur et livraison (`cbc:CountrySubentity`)
+
+La **subdivision** du pays — la région de l'acheteur (BT-54) et celle du lieu de livraison (BT-79) — ne se règle pas sur cet onglet. NomaUBL ajoute `cbc:CountrySubentity` aux adresses de l'acheteur et de livraison quand le XSL du document renseigne les variables `TAG_CUSTOMER_REGION` et `TAG_DELIVERY_REGION` à partir des données source. Renseignez-les dans le XSL UBL du document (voir [Éditeur XSL](../xsl-editor.md)) ; sans elles, aucun `cbc:CountrySubentity` n'est produit : la région est simplement absente, jamais devinée.
 
 ---
 

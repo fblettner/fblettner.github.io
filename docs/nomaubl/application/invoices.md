@@ -303,7 +303,7 @@ Since 2026.05.10 the grid renders through **DataTableV2** in spec-driven mode: c
 | **Doc** | Internal document number. |
 | **Dct** | Document type. |
 | **Kco** | Company code. |
-| **UBL number** | The invoice number as it appears in the generated UBL document. |
+| **UBL number** | The invoice number as it appears in the generated UBL document. Filterable from the **Advanced Filters** panel and via the `?ublNumber=` query parameter, on top of the free-text search box. |
 | **Issue date** | BT-2 from the UBL. |
 | **Customer** | Buyer party name. |
 | **Country** | ISO 3166 two-letter code of the counterparty (`FR`, `DE`, `BE`, `US`…). Captured at insert from the UBL — buyer country on sales, supplier country on purchases. Drives the country-group classification used by the [VAT Declaration](./vat-declaration.md) page. |

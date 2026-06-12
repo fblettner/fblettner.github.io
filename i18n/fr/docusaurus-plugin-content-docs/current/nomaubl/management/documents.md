@@ -301,6 +301,17 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | **UBL XSLT** | chemin | Transformation XSL du XML source vers l'**UBL 2.1**. Le placeholder `%APP_HOME%` est remplacé par la racine d'installation de NomaUBL. |
 | **Attachment** | `— Aucun` / `create` / `attach` | Comment associer le PDF lisible à l'UBL : `create` = générer le PDF et l'incorporer dans le fichier UBL ; `attach` = utiliser un PDF déjà présent dans le répertoire d'entrée ; vide = aucun PDF incorporé. |
 
+### Pièces jointes complémentaires
+
+En plus du PDF lisible principal, un type de document peut joindre **d'autres fichiers à l'UBL** — un bon de livraison, un bon de commande, un RIB, une annexe. Ajoutez une ligne par fichier :
+
+| Champ | Description |
+|---|---|
+| **Code** | Code métier de la pièce jointe, choisi dans une liste déroulante (bon de livraison, bon de commande, RIB, annexe…). Il identifie le fichier dans l'UBL, pour que le destinataire sache à quoi correspond chaque pièce jointe. |
+| **Chemin** | Où lire le fichier. Accepte les variables de chemin `%APP_HOME%`, `%ENV%`, `%DOCNAME%`, `%KCO%`, `%DOC%`, `%DCT%` ainsi que tout jeton `{{…}}` du catalogue de facture : le chemin est alors calculé pour chaque facture — par ex. `%APP_HOME%/cgv/CGV_{{kco}}.pdf`. |
+
+Le bouton **`{ }`** placé à côté du champ chemin ouvre une liste filtrable et insère le jeton choisi à l'endroit du curseur — aussi bien les jetons du catalogue de facture (`{{kco}}`, `{{fedoc}}`, …) que les variables de chemin `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%` —, ce qui évite d'avoir à retenir leur écriture exacte. **Ajouter une pièce jointe** crée une nouvelle ligne.
+
 ### Sortie
 
 | Champ | Description |

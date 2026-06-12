@@ -10,7 +10,9 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-06-03" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.03 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-03</span></a>
+  <a href="#v2026-06-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-12</span></a>
+  <a href="#v2026-06-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-10</span></a>
+  <a href="#v2026-06-03" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.03 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-03</span></a>
   <a href="#v2026-06-02" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.02 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-02</span></a>
   <a href="#v2026-05-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-26</span></a>
   <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
@@ -51,6 +53,38 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.06.12 — 2026-06-12 \{#v2026-06-12\}
+
+Correctif de l'outil de mise à niveau. Les fichiers XSL du socle (`ubl-common.xsl`, `ubl-defaults.xsl`, `ubl-template.xsl`) sont maintenant rafraîchis aussi dans le répertoire `ubl/` de l'environnement, et plus seulement dans `xsl/`. Sans ce correctif, après une mise à niveau, les XSL propres à chaque document continuaient d'importer une version périmée du socle, d'où des erreurs XSLT du type *« Parameter subentity is not declared in the called template »* après le passage en 2026.06.10.
+
+Si vous avez déjà migré et que cette erreur apparaît, copiez les trois fichiers de `${env}/xsl/` vers `${env}/ubl/` puis relancez le traitement — ou installez 2026.06.12 et rejouez la [mise à niveau](./installation/upgrade.md).
+
+---
+
+## 2026.06.10 — 2026-06-10 \{#v2026-06-10\}
+
+Des opérateurs de filtre appliqués côté serveur, deux bases de plus pour le connecteur SQL, un sélecteur de jetons pour les chemins de pièces jointes, ainsi que quelques correctifs UBL et de robustesse.
+
+### Nouveautés
+
+- **Microsoft SQL Server dans le connecteur SQL.** Une nouvelle valeur dans le choix du type de base. Déposez le pilote `mssql-jdbc` dans `lib/` et renseignez l'URL JDBC. Voir [Connecteurs SQL](./configuration/sql-connectors.md).
+- **Connecteur JDBC personnalisé.** Un autre choix dans la même liste : indiquez le nom de la classe du pilote (DB2, MariaDB, Snowflake, …) pour vous connecter à n'importe quelle base, sans attendre une nouvelle version de NomaUBL. Voir [Connecteurs SQL](./configuration/sql-connectors.md).
+- **Fenêtre BIP (jours).** Un nouveau champ dans [Paramètres → Global → Traitement par lot](./configuration/system/global.md), repris aussi sur la page [Récupération entrée](./sync/fetch-input.md). Il restreint l'analyse BIP aux jobs modifiés sur les N derniers jours (`0` = pas de limite) ; l'analyse lancée à la main, le lot planifié et la commande `nomaubl -fetch-all` en tiennent compte.
+- **Sélecteur de jetons sur les Pièces jointes complémentaires.** Un bouton `{ }` apparaît à côté du champ chemin : un clic ouvre une liste filtrable et insère le jeton choisi à l'endroit du curseur — aussi bien les jetons du catalogue facture (`{{fedoc}}`, `{{kco}}`, …) que les constantes de chemin `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%`. Voir [Documents → Pièces jointes complémentaires](./management/documents.md).
+
+### Améliorations
+
+- **Les opérateurs du filtre avancé passent côté serveur.** *Différent de*, *inférieur à / supérieur à*, *est vide*, *non vide* et l'*égal* explicite sont maintenant traduits en clause WHERE par le serveur, sur Factures, Erreurs d'intégration, Journal de traitement et e-Reporting. Voir [Vues de liste → Filtres avancés](./configuration/list-views.md#panneau-filtres-avances).
+- **Filtre par numéro UBL sur la page Factures.** La colonne existait déjà mais n'était pas déclarée filtrable ; `?ublNumber=…` et la ligne du panneau Filtres avancés restreignent maintenant la liste. Voir [Factures](./application/invoices.md).
+- **BT-54 / BT-79 — région de l'acheteur et de la livraison dans l'UBL.** NomaUBL ajoute `cbc:CountrySubentity` aux adresses quand le XSL du document renseigne les nouvelles variables `TAG_CUSTOMER_REGION` et `TAG_DELIVERY_REGION`. Voir [Valeurs par défaut de l'en-tête UBL](./ubl-tools/ubl-defaults/ubl-header-defaults.md).
+- **Les messages de statut longs ne bloquent plus Oracle.** Au-delà de 1024 caractères, le message est tronqué à la largeur de la colonne avant l'insertion — fini les `ORA-12899` sur les longs messages Schematron ou PA.
+
+### Corrections
+
+- **Un onglet de navigateur resté ouvert ne provoque plus d'erreur après un déploiement.** Les chemins d'assets devenus absents renvoient un vrai 404 au lieu de renvoyer `index.html` en `text/html` ; il suffit de rafraîchir la page.
 
 ---
 
