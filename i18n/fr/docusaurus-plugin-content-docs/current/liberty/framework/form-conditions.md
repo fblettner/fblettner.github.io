@@ -151,7 +151,7 @@ Le lanceur de tests affiche une coche verte par réussite, un diff rouge par éc
 
 ## Permissions
 
-`session.roles` est l'interrupteur au niveau ligne. Un champ que seuls les superutilisateurs doivent modifier devient :
+`session.roles` est le switch au niveau ligne. Un champ que seuls les superutilisateurs doivent modifier devient :
 
 ```text
 Désactivé quand :  'admin' not in session.roles

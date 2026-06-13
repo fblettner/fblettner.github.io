@@ -42,6 +42,7 @@ const sidebars: SidebarsConfig = {
             'liberty/framework/configuration/environment-variables',
             'liberty/framework/configuration/hot-reload',
             'liberty/framework/configuration/encryption-secrets',
+            'liberty/framework/configuration/config-history',
           ],
         },
         {
@@ -49,6 +50,7 @@ const sidebars: SidebarsConfig = {
           label: 'Build an application',
           link: {type: 'generated-index', slug: '/liberty/framework/build', description: 'Task-oriented "how do I…" pages — create queries, screens, menus, applications and secure them. Pair with the Concepts section for the deep reference behind each task.'},
           items: [
+            'liberty/framework/build/screen-assistant',
             {
               type: 'category',
               label: 'Queries',
@@ -128,6 +130,7 @@ const sidebars: SidebarsConfig = {
             'liberty/framework/dashboards',
             'liberty/framework/charts',
             'liberty/framework/form-conditions',
+            'liberty/framework/saved-views',
           ],
         },
         {
@@ -346,6 +349,7 @@ const sidebars: SidebarsConfig = {
       link: {type: 'generated-index', slug: '/liberty/nomasx-1/reports', description: 'Generated audit deliverables — compliance and optimisation reports rendered as PDF or Markdown.'},
       items: [
         'liberty/nomasx1/reports/audit-licences',
+        'liberty/nomasx1/reports/security-sox',
       ],
     },
     {

@@ -139,6 +139,12 @@ The schema's top-level fields, grouped by purpose:
 
 ---
 
+## Read-only mode
+
+Set **Read-only** on a screen (a checkbox on the *General* tab) to make the whole view non-editable. It hides the dialog's *Save*, *Delete* and *Duplicate*, the grid's *Add* and *Delete selected*, inline cell editing, paste and Excel import — in the nested-table editors too. It is stronger than *Disable add* (which only blocks inserts) and is the right setting for a reference or audit screen that should never be changed from the UI. Server-side permissions still apply on top, independently.
+
+---
+
 ## Screen kinds — by what's set
 
 There's no `kind` discriminator; you get different screen shapes by which fields you fill in:

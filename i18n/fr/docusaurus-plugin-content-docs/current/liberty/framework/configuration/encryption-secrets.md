@@ -1,18 +1,18 @@
 ---
 title: Chiffrement et secrets
-description: "Les mots de passe de connecteurs, les jetons d'API et les secrets OIDC sont enregistrés chiffrés en AES-256-GCM. Chaque champ secret de l'interface Paramètres dispose d'un interrupteur de cadenas pour basculer entre clair et chiffré ; la clé maîtresse reste dans l'environnement, jamais sur disque. La rotation se fait en ligne via les clés héritées."
+description: "Les mots de passe de connecteurs, les jetons d'API et les secrets OIDC sont enregistrés chiffrés en AES-256-GCM. Chaque champ secret de l'interface Paramètres dispose d'un switch de cadenas pour basculer entre clair et chiffré ; la clé maîtresse reste dans l'environnement, jamais sur disque. La rotation se fait en ligne via les clés héritées."
 keywords: [Liberty Framework, chiffrement, secrets, AES-256-GCM, master key, settings, password, api_token, OIDC client secret, key rotation]
 ---
 
 # Chiffrement et secrets
 
 :::info[Référence détaillée]
-Cette page documente le système de chiffrement dans son ensemble — séparation environnement / disque, sources de la clé maîtresse, procédure de rotation, conventions sur ce qu'il faut chiffrer. Pour le parcours orienté tâche dans l'interface — basculer l'interrupteur 🔒 sur un mot de passe de pool, un client secret OIDC, un jeton de connecteur API — voir [Construire → Sécurité → Secrets chiffrés](../build/secure/encrypted-secrets.md).
+Cette page documente le système de chiffrement dans son ensemble — séparation environnement / disque, sources de la clé maîtresse, procédure de rotation, conventions sur ce qu'il faut chiffrer. Pour le parcours orienté tâche dans l'interface — basculer le switch 🔒 sur un mot de passe de pool, un client secret OIDC, un jeton de connecteur API — voir [Construire → Sécurité → Secrets chiffrés](../build/secure/encrypted-secrets.md).
 :::
 
-Plusieurs paramètres portent des valeurs sensibles — mots de passe de pool, jetons d'authentification de connecteurs API, secret client OIDC. Le framework propose une primitive simple pour les protéger : tout champ secret de l'interface Paramètres dispose d'un **interrupteur de cadenas** qui bascule la saisie entre **texte clair** et **chiffré au repos**. Les valeurs chiffrées sont enregistrées sous forme de blocs opaques que seul le processus en cours d'exécution peut déchiffrer ; la **clé maîtresse** qui réalise le déchiffrement reste dans l'environnement de l'hôte, jamais sur disque.
+Plusieurs paramètres portent des valeurs sensibles — mots de passe de pool, jetons d'authentification de connecteurs API, secret client OIDC. Le framework propose une primitive simple pour les protéger : tout champ secret de l'interface Paramètres dispose d'un **switch de cadenas** qui bascule la saisie entre **texte clair** et **chiffré au repos**. Les valeurs chiffrées sont enregistrées sous forme de blocs opaques que seul le processus en cours d'exécution peut déchiffrer ; la **clé maîtresse** qui réalise le déchiffrement reste dans l'environnement de l'hôte, jamais sur disque.
 
-Cette page couvre l'interrupteur dans l'interface, la clé maîtresse, la procédure de rotation des clés et la convention sur ce qui doit être chiffré et ce qui doit rester dans l'environnement.
+Cette page couvre le switch dans l'interface, la clé maîtresse, la procédure de rotation des clés et la convention sur ce qui doit être chiffré et ce qui doit rester dans l'environnement.
 
 ---
 
@@ -37,7 +37,7 @@ La clé maîtresse n'arrive jamais sur disque ; le bloc chiffré n'arrive jamais
 
 ---
 
-## L'interrupteur de cadenas dans l'interface Paramètres
+## Le switch de cadenas dans l'interface Paramètres
 
 Tout champ marqué comme secret — *Mot de passe* d'un pool, *Jeton d'authentification* d'un connecteur, *Client secret* OIDC, *URL webhook* Slack, etc. — affiche une icône de cadenas à côté de la saisie. Cliquer dessus bascule le champ entre mode **clair** et **chiffré au repos**.
 
@@ -58,7 +58,7 @@ Tout champ marqué comme secret — *Mot de passe* d'un pool, *Jeton d'authentif
 
 Un champ déjà en mode chiffré affiche un bouton **Révéler** (visible uniquement par les opérateurs qui ont `settings:reveal-secrets`). Cliquer dessus demande l'empreinte de la clé maîtresse en confirmation, puis affiche le texte clair déchiffré pendant 10 secondes. L'action *Révéler* est journalisée à l'audit.
 
-Quelques champs — le *Client secret* OIDC, l'*URL webhook* Slack — ont l'interrupteur de cadenas **verrouillé sur On**. Le mode clair n'est pas proposé car la valeur est manifestement sensible.
+Quelques champs — le *Client secret* OIDC, l'*URL webhook* Slack — ont le switch de cadenas **verrouillé sur On**. Le mode clair n'est pas proposé car la valeur est manifestement sensible.
 
 ---
 
@@ -78,7 +78,7 @@ Générer une clé fraîche avec la CLI [`liberty-crypto`](../../references/cli.
 # 7c4f1c2d8e3a6b9f0c1d4e5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c
 ```
 
-L'exporter sous le nom de variable d'environnement configuré ci-dessus, redémarrer le framework, et chaque nouvel enregistrement qui passe par l'interrupteur de cadenas utilise la nouvelle clé.
+L'exporter sous le nom de variable d'environnement configuré ci-dessus, redémarrer le framework, et chaque nouvel enregistrement qui passe par le switch de cadenas utilise la nouvelle clé.
 
 Une empreinte de la clé maîtresse (SHA-256 de la clé) est affichée dans la section Paramètres → Framework → Chiffrement — utile pour confirmer que deux répliques partagent la même clé sans dévoiler la clé elle-même.
 
@@ -116,7 +116,7 @@ La séparation est délibérée et mérite d'être suivie :
 |---|---|---|
 | **Mot de passe de pool** | Chiffré au repos dans la définition du pool. | Réside à côté du pool — un seul changement de stockage met à jour les deux. |
 | **Jeton d'auth de connecteur API** | Chiffré au repos sur le connecteur. | Même raison. |
-| **Client secret OIDC** | Chiffré au repos sur le sous-formulaire OIDC. | Toujours chiffré (interrupteur verrouillé). |
+| **Client secret OIDC** | Chiffré au repos sur le sous-formulaire OIDC. | Toujours chiffré (switch verrouillé). |
 | **Webhook Slack** | Chiffré au repos sur le sous-formulaire Notifications. | Idem. |
 | **Clé d'API par application pour un connecteur HTTP** | Chiffré au repos sur le connecteur. | Idem qu'OIDC. |
 | **Clé maîtresse** | Environnement uniquement. | Tout le mécanisme dépend du fait qu'elle ne touche jamais le disque. |
@@ -124,7 +124,7 @@ La séparation est délibérée et mérite d'être suivie :
 | **Clé de licence** | Environnement uniquement. | JWT signé en RS256, vérifiable avec une clé publique ; non sensible à divulguer, mais gardée dans l'environnement pour être remplaçable sans enregistrement. |
 | **Clé d'API du fournisseur IA** | Environnement uniquement. | Convention dans l'écosystème Anthropic. |
 
-Une règle simple : **tout ce qui a une portée liée à un seul connecteur / paramètre** passe par l'interrupteur de cadenas ; tout ce qui est global au framework va dans l'environnement.
+Une règle simple : **tout ce qui a une portée liée à un seul connecteur / paramètre** passe par le switch de cadenas ; tout ce qui est global au framework va dans l'environnement.
 
 ---
 
@@ -155,14 +155,14 @@ L'affichage de l'*empreinte de la clé maîtresse* est visible par toute personn
 - **Générer la clé maîtresse avec `liberty-crypto genkey`.** Les clés artisanales sont un piège — 32 octets aléatoires depuis le PRNG du framework, c'est le chemin le plus simple et correct.
 - **Utiliser le même nom de variable d'environnement sur les répliques.** Paramètres → Framework → Chiffrement enregistre le nom, pas la valeur — le même formulaire fonctionne sur chaque réplique tant que la variable d'environnement résout vers la même clé.
 - **Exécuter `liberty-crypto rewrap` après chaque rotation.** Sinon les anciens blocs restent sur les clés héritées et la rotation n'est pas vraiment terminée.
-- **Ne pas désactiver l'interrupteur de cadenas sur une valeur déjà chiffrée.** Repasser en clair dévoile la valeur sur disque ; l'opérateur doit confirmer et l'action est journalisée à l'audit.
+- **Ne pas désactiver le switch de cadenas sur une valeur déjà chiffrée.** Repasser en clair dévoile la valeur sur disque ; l'opérateur doit confirmer et l'action est journalisée à l'audit.
 - **Garder les clés héritées seulement aussi longtemps que nécessaire.** Passé un cycle de rotation, chaque bloc encore pertinent a été ré-emballé — l'entrée héritée peut être retirée.
 
 ---
 
 ## Sous le capot
 
-Les valeurs chiffrées sont enregistrées comme blocs opaques préfixés `ENC:` à l'intérieur des fichiers TOML par section. Les opérateurs **ne modifient pas ces blocs à la main** ; l'interrupteur de cadenas est le seul chemin sûr. L'empreinte de la clé maîtresse est également enregistrée sur disque pour que le framework détecte une clé incompatible sur le mauvais hôte sans dévoiler la clé elle-même.
+Les valeurs chiffrées sont enregistrées comme blocs opaques préfixés `ENC:` à l'intérieur des fichiers TOML par section. Les opérateurs **ne modifient pas ces blocs à la main** ; le switch de cadenas est le seul chemin sûr. L'empreinte de la clé maîtresse est également enregistrée sur disque pour que le framework détecte une clé incompatible sur le mauvais hôte sans dévoiler la clé elle-même.
 
 La CLI `liberty-crypto` est le seul chemin scripté pour les opérations avancées (rewrap, inspection d'empreinte, chiffrement manuel pour une mise en place pilotée par script).
 

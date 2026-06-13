@@ -19,16 +19,16 @@ Trois couches de cadrage, chacune indépendante :
 | Couche | Emplacement | Effet |
 |---|---|---|
 | **Par connecteur — Expose to AI** | Paramètres → Connecteurs → \<connecteur\> → sous-formulaire Connection. | Désactivé → aucune des requêtes du connecteur n'apparaît dans la liste d'outils. |
-| **Par requête — Operation type** | Paramètres → Connecteurs → \<connecteur\> → \<requête\> → Operation. | Les requêtes `Read` sont visibles par défaut (quand l'interrupteur du connecteur est activé) ; les requêtes `Write` demandent une activation supplémentaire. |
+| **Par requête — Operation type** | Paramètres → Connecteurs → \<connecteur\> → \<requête\> → Operation. | Les requêtes `Read` sont visibles par défaut (quand le switch du connecteur est activé) ; les requêtes `Write` demandent une activation supplémentaire. |
 | **Par rôle — `ai:chat` + `ai:tool:<name>`** | Paramètres → Rôles. | Même une requête visible est masquée à un appelant sans `ai:chat`. La permission fine `ai:tool:<name>` permet d'autoriser les outils rôle par rôle. |
 
 Combinées, ces couches font que l'assistant voit exactement ce que chaque utilisateur est censé voir — ni plus, ni moins.
 
 ## La recette
 
-### 1. Régler l'interrupteur Expose to AI du connecteur
+### 1. Régler le switch Expose to AI du connecteur
 
-Ouvrez le connecteur. Le sous-formulaire *Connection* contient un interrupteur **Expose to AI assistant** vers le bas. Activé par défaut quand vous créez un nouveau connecteur.
+Ouvrez le connecteur. Le sous-formulaire *Connection* contient un switch **Expose to AI assistant** vers le bas. Activé par défaut quand vous créez un nouveau connecteur.
 
 Désactivez-le pour les connecteurs qui contiennent :
 
@@ -61,7 +61,7 @@ Pour activer une requête d'écriture :
 
 | Paramètre | Effet |
 |---|---|
-| Sur la requête → interrupteur **Expose to AI assistant** | Quand il est activé, la requête apparaît dans la liste d'outils avec le suffixe `:write`. |
+| Sur la requête → switch **Expose to AI assistant** | Quand il est activé, la requête apparaît dans la liste d'outils avec le suffixe `:write`. |
 | Sur les rôles autorisés à déclencher des écritures IA | Ajoutez la permission `ai:write`. |
 
 Réservez cela aux écritures **relançables sans risque, à faible impact** (une relecture d'une API externe, le basculement d'un drapeau, le déclenchement d'une synchronisation). Jamais pour des `DELETE`.
@@ -87,7 +87,7 @@ curl -H "Authorization: Bearer $(get_token alice)" \
      http://127.0.0.1:8000/ai/tools | jq '.[].name'
 ```
 
-La liste doit correspondre aux permissions de lecture de l'utilisateur. Si un outil attendu manque, vérifiez l'interrupteur *Expose to AI* du connecteur et la permission de l'utilisateur sur la requête sous-jacente.
+La liste doit correspondre aux permissions de lecture de l'utilisateur. Si un outil attendu manque, vérifiez le switch *Expose to AI* du connecteur et la permission de l'utilisateur sur la requête sous-jacente.
 
 ## Erreurs courantes
 

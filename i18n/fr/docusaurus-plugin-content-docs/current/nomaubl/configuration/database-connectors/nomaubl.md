@@ -237,16 +237,16 @@ La vérification est en **lecture seule** — elle n'altère jamais le schéma. 
 
 ### Stockage des détails
 
-Détermine **ce qui est enregistré sur chaque facture** au-delà de l'en-tête. Deux interrupteurs indépendants se trouvent sous *Tables* — un pour les sous-totaux par ligne, un pour les détails TVA — chaque niveau de détail s'active ou se désactive séparément.
+Détermine **ce qui est enregistré sur chaque facture** au-delà de l'en-tête. Deux switchs indépendants se trouvent sous *Tables* — un pour les sous-totaux par ligne, un pour les détails TVA — chaque niveau de détail s'active ou se désactive séparément.
 
-| Interrupteur | Effet quand activé | Utilisé par |
+| Switch | Effet quand activé | Utilisé par |
 |---|---|---|
 | **Enregistrer les sous-totaux de ligne** | Écrit chaque ligne de chaque facture dans `F564233` à l'insertion. | Reporting SQL qui a besoin des totaux par ligne ; l'onglet *Lignes* de la modale de détail facture lit dans le document UBL dans tous les cas. |
-| **Enregistrer les détails TVA** | Écrit le détail de TVA par taux de chaque facture dans `F564234` à l'insertion. | La page [Déclaration de TVA](../../application/vat-declaration.md) — c'est cet interrupteur, laissé activé, qui permet à la page de s'ouvrir en quelques secondes même sur un mois de 200 000 factures. |
+| **Enregistrer les détails TVA** | Écrit le détail de TVA par taux de chaque facture dans `F564234` à l'insertion. | La page [Déclaration de TVA](../../application/vat-declaration.md) — c'est cet switch, laissé activé, qui permet à la page de s'ouvrir en quelques secondes même sur un mois de 200 000 factures. |
 
-Un interrupteur désactivé laisse le détail correspondant uniquement dans le document UBL enregistré — l'application l'extrait à la demande quand l'onglet *Lignes* ou *TVA* de la modale de détail facture est ouvert.
+Un switch désactivé laisse le détail correspondant uniquement dans le document UBL enregistré — l'application l'extrait à la demande quand l'onglet *Lignes* ou *TVA* de la modale de détail facture est ouvert.
 
-Les deux interrupteurs prennent par défaut la valeur correspondant à l'ancienne configuration. Les installations existantes conservent leur comportement après la mise à jour — aucune modification manuelle n'est requise.
+Les deux switchs prennent par défaut la valeur correspondant à l'ancienne configuration. Les installations existantes conservent leur comportement après la mise à jour — aucune modification manuelle n'est requise.
 
 #### Reconstruire les détails TVA d'une période passée
 
@@ -294,7 +294,7 @@ L'opération **peut être relancée sans risque** — les tables et utilisateurs
 - **Conserver les noms par défaut `F564xxx` en cohabitation avec JDE.** Les jointures avec les tables JDE dans les outils de reporting restent ainsi directes.
 - **Utiliser l'onglet Colonnes pour migrer un schéma existant.** Une installation client antérieure à un renommage de colonne peut conserver les anciens noms — l'enregistrement ici suffit pour que le code applicatif continue de fonctionner.
 - **Lancer *Valider le schéma* après chaque montée de version.** La vérification capture les colonnes manquantes ajoutées par la mise à jour et les écarts de type qui produiraient sinon des erreurs silencieuses à l'exécution. Lecture seule — sans risque.
-- **Laisser *Enregistrer les détails TVA* activé quand la page Déclaration de TVA est utilisée.** Sans cet interrupteur, la page retombe sur une analyse du document UBL à chaque chargement — supportable sur un mois calme, pénible sur un trimestre chargé.
+- **Laisser *Enregistrer les détails TVA* activé quand la page Déclaration de TVA est utilisée.** Sans cet switch, la page retombe sur une analyse du document UBL à chaque chargement — supportable sur un mois calme, pénible sur un trimestre chargé.
 - **Désactiver *Enregistrer les sous-totaux de ligne* uniquement sur installations contraintes en volume.** L'onglet *Lignes* de la modale de détail facture fonctionne encore depuis le document UBL ; seul le reporting SQL tiers sur les lignes disparaît.
 - **Relancer *Initialiser* après chaque montée de version.** Les nouvelles versions ajoutent occasionnellement des tables (notifications en 2026.05.3, autorisations en 2026.05.5) ; le script peut être relancé sans risque, il les prend en compte sans toucher aux données existantes.
 - **Le journal d'init est en couleur.** Repérer les lignes rouges en premier — ce sont des échecs réels à corriger. Les lignes `EXISTS:` atténuées en relance sont attendues.

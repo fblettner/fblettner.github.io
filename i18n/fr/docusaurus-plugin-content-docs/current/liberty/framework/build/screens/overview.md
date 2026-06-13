@@ -139,6 +139,12 @@ Les champs de premier niveau du schéma, regroupés par finalité :
 
 ---
 
+## Mode lecture seule
+
+Activez **Lecture seule** sur un écran (une case à cocher dans l'onglet *Général*) pour rendre toute la vue non modifiable. Cela masque les boutons *Enregistrer*, *Supprimer* et *Dupliquer* du dialogue, les boutons *Ajouter* et *Supprimer la sélection* de la grille, l'édition de cellule en ligne, le collage et l'import Excel — dans les éditeurs de tables imbriquées aussi. C'est plus fort que *Désactiver l'ajout* (qui ne bloque que les insertions) : c'est le bon réglage pour un écran de référence ou d'audit qui ne doit jamais être modifié depuis l'interface. Les permissions côté serveur s'appliquent en plus, indépendamment.
+
+---
+
 ## Types d'écrans — selon les champs renseignés
 
 Il n'y a pas de discriminant `kind` ; les différentes formes d'écran proviennent des champs que l'on remplit :

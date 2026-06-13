@@ -118,13 +118,41 @@ Un *Enregistrer* reconstruit le registre du dictionnaire ; les consommateurs (é
 
 ---
 
+## Analyser une table \{#scan-a-table\}
+
+Plutôt que d'ajouter les entrées une à une, le bouton **Analyser une table** (barre d'outils de l'onglet Colonnes) les génère à partir d'une table réelle. Il ouvre le dialogue *Générer des entrées de dictionnaire* : choisissez l'**application** de rattachement, la **table à analyser**, et activez **Connecteur JD Edwards** quand les colonnes portent un préfixe de table de 2 caractères à retirer.
+
+L'analyse lit les colonnes de la table et **propose une entrée par colonne**, en montrant à la fois l'existant et le manquant :
+
+- Les entrées déjà présentes dans le dictionnaire sont listées mais **grisées** et marquées *(exists)* — elles ne sont jamais écrasées.
+- Seules les entrées **manquantes** sont cochées d'avance pour création.
+
+Chaque ligne proposée est modifiable sur place avant que vous ne l'acceptiez :
+
+| Champ | Ce qu'il définit |
+|---|---|
+| **Libellé** | Le libellé d'affichage (sur JDE, prérempli depuis le dictionnaire de données). |
+| **Format** | Le type de donnée, déduit du type de colonne SQL — modifiable depuis la liste. |
+| **Règle** | Une [règle d'affichage](#display-rules) optionnelle (Booléen, Recherche, Énumération, …). |
+| **Valeur de règle** | L'argument de la règle — actif dès qu'une règle est posée. |
+| **Paramètres de lookup** | Pour une règle `LOOKUP`, le filtre de recherche (ex. `SY=01,RT=ST`). |
+| **Défaut** | Une valeur par défaut. |
+
+Cochez les entrées à garder et confirmez ; les entrées choisies sont écrites dans le dictionnaire sous l'application sélectionnée. Sur un connecteur JDE, l'analyse retire le préfixe de table jusqu'au data item partagé et reprend le libellé, le format, la règle et la valeur par défaut depuis le dictionnaire de données JD Edwards ; sur tout autre connecteur, le libellé reste vide et le format est déduit du type de colonne.
+
+:::note[La même analyse dans l'assistant]
+C'est exactement l'analyse que l'[Assistant de création d'écran](build/screen-assistant.md) lance à son étape *Dictionnaire* — un écran construit via l'assistant arrive donc avec son dictionnaire déjà proposé.
+:::
+
+---
+
 ## Règles d'affichage \{#display-rules\}
 
 Le champ **Règle** change la façon dont une colonne est rendue dans une cellule de grille, dans une saisie de formulaire et dans un chip de filtre.
 
 ### `BOOLEAN`
 
-Une colonne `bool` s'affiche en chip / bascule. La saisie de formulaire est un interrupteur. Le filtre est une pastille à trois états (`Tous` / `Oui` / `Non`).
+Une colonne `bool` s'affiche en chip / bascule. La saisie de formulaire est un switch. Le filtre est une pastille à trois états (`Tous` / `Oui` / `Non`).
 
 L'éditeur propose :
 

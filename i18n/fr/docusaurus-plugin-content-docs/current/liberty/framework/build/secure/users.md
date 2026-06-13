@@ -258,4 +258,4 @@ La désactivation est **réversible en un clic**. La suppression est définitive
 
 - [Rôles et permissions](./roles-and-permissions.md) — ce qu'il faut attribuer une fois l'utilisateur créé.
 - [Se connecter](./sign-in.md) — comment les utilisateurs s'authentifient réellement.
-- [Secrets chiffrés](./encrypted-secrets.md) — l'interrupteur 🔒 pour les identifiants ailleurs dans le framework.
+- [Secrets chiffrés](./encrypted-secrets.md) — le switch 🔒 pour les identifiants ailleurs dans le framework.

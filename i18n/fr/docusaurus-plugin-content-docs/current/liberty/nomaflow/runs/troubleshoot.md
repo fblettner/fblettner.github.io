@@ -109,7 +109,7 @@ Liste de vérification :
 
 | Vérifier | Comment |
 |---|---|
-| **La tâche est-elle activée ?** | L'interrupteur de la carte du catalogue doit être vert. |
+| **La tâche est-elle activée ?** | Le switch de la carte du catalogue doit être vert. |
 | **Le cron est-il valide ?** | L'aperçu en direct de l'éditeur de tâche doit afficher trois déclenchements à venir. |
 | **Le fuseau horaire est-il bien celui attendu ?** | Un cron en `UTC` se déclenche à 02 h 00 UTC, pas à 02 h 00 heure de Paris. |
 | **Le framework a-t-il redémarré pile pendant le moment de déclenchement ?** | Un déclenchement planifié qui aurait dû avoir lieu pendant l'arrêt n'est **pas** rattrapé — il est perdu. Le prochain déclenchement intervient à la prochaine correspondance du cron. |

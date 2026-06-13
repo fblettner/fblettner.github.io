@@ -97,7 +97,7 @@ Le **pool par défaut** porte la base de données utilisée par le framework lui
 
 ### Sous-section OIDC
 
-Un interrupteur en haut de la sous-section active le SSO OIDC ; le formulaire en dessous n'apparaît que quand *OIDC activé* est sur On.
+Un switch en haut de la sous-section active le SSO OIDC ; le formulaire en dessous n'apparaît que quand *OIDC activé* est sur On.
 
 | Champ | Effet |
 |---|---|
@@ -180,6 +180,6 @@ Pour les scripts d'ops et les pipelines CI qui doivent piloter le framework sans
 ## Pour aller plus loin
 
 - [Variables d'environnement](./environment-variables.md) — chaque référence `${LIBERTY_*}` résolue au démarrage.
-- [Chiffrement et secrets](./encryption-secrets.md) — l'interrupteur du cadenas et la procédure de rotation.
+- [Chiffrement et secrets](./encryption-secrets.md) — le switch du cadenas et la procédure de rotation.
 - [Authentification](../build/secure/sign-in.md) — ce que chaque backend change.
 - [Rechargement à chaud](./hot-reload.md) — ce qui se recharge à chaud et ce qui demande un redémarrage.

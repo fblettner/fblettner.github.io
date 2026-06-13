@@ -30,7 +30,7 @@ Ces quatre champs s'appliquent quel que soit le type — ils figurent en haut de
 |---|---|---|
 | **`name`** | — | Libellé affiché dans l'historique d'exécution. Doit être unique au sein de la tâche. Utilisez un couple verbe-nom : `refresh-totals`, `fetch-clients`, `sync-users`. |
 | **`type`** | — | L'une des cinq valeurs ci-dessous. Verrouillé après création — pour changer de type, supprimer puis recréer. |
-| **`enabled`** | `true` | Quand `false`, l'exécuteur enregistre l'étape comme `CANCELED` avec la raison `skipped: disabled` et passe à la suivante. Utile comme interrupteur d'arrêt. |
+| **`enabled`** | `true` | Quand `false`, l'exécuteur enregistre l'étape comme `CANCELED` avec la raison `skipped: disabled` et passe à la suivante. Utile comme switch d'arrêt. |
 | **`timeout_seconds`** | `3600` (1 h) | Limite stricte — l'étape est annulée en cas de dépassement. À augmenter pour les longs ETL, à baisser pour les sondes HTTP. |
 
 ---

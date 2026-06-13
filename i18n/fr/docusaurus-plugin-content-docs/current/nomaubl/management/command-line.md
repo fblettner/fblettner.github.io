@@ -270,7 +270,7 @@ backfill-vat — date d'émission 2026-04-01 → 2026-04-30
   durée                    18.4 s
 ```
 
-L'interrupteur *Enregistrer les détails TVA* n'a **pas** besoin d'être activé pour que `backfill-vat` fonctionne — la commande écrit toujours dans `F564234`. L'interrupteur ne gouverne que ce qui se passe à l'insertion des nouvelles factures.
+Le switch *Enregistrer les détails TVA* n'a **pas** besoin d'être activé pour que `backfill-vat` fonctionne — la commande écrit toujours dans `F564234`. Le switch ne gouverne que ce qui se passe à l'insertion des nouvelles factures.
 
 ---
 

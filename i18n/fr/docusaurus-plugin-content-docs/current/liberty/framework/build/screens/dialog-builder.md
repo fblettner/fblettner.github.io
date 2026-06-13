@@ -160,7 +160,7 @@ Deux indicateurs sur chaque onglet contrôlent la visibilité par mode :
 
 ### Étape 5 — Réorganiser les champs
 
-Glisser une carte de champ dans le même onglet pour la réorganiser. Glisser vers un onglet différent pour la déplacer entre onglets. Le glisser est natif HTML5 — la cible de dépôt se met en évidence au survol.
+Glisser une carte de champ dans le même onglet pour la réorganiser. Glisser vers un onglet différent pour la déplacer entre onglets. Le glisser est natif HTML5 — la cible de dépôt se met en évidence au survol. Quand le glisser est malaisé, sélectionnez le champ et utilisez le sélecteur **Onglet** de l'Inspecteur pour le déplacer vers un autre onglet de formulaire — le champ se pose à la fin de l'onglet cible et reste sélectionné.
 
 ### Étape 6 — Masquer un champ
 

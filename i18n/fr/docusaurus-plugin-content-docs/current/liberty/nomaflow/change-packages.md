@@ -210,7 +210,7 @@ La page a deux onglets : **Modifications** (le catalogue de paquets) et **Appliq
 | Entrées groupées par entité | Groupes par défaut : `RÔLES`, `UTILISATEURS`, `RELATIONS`, `SÉCURITÉ`, `MENUS`, `REJEUX D'ACTION` (les entrées CALL_API / CALL_PLUGIN) — l'étiquette de groupe vient du `change_entity` de chaque entrée. Cliquer sur l'en-tête du groupe pour plier / déplier. |
 | En-tête de groupe | L'étiquette + le nombre d'entrées + un court échantillon des clés naturelles (par ex. `PRJM_NEW · UDC_ADM · BUYER_R2`). |
 | Ligne d'entrée | Badge d'opération + clé naturelle + étiquette de l'action déclenchante. Cliquer sur le chevron pour développer le diff `ancien → nouveau`. |
-| Vue diff | Tableau à deux colonnes `champ` / `valeur` avec trois tons : barré rouge = ancien, vert = nouveau, secondaire = inchangé. Un petit interrupteur *Voir les inchangés* dévoile le bruit des colonnes intactes quand on relit une entrée renommée mais non modifiée. |
+| Vue diff | Tableau à deux colonnes `champ` / `valeur` avec trois tons : barré rouge = ancien, vert = nouveau, secondaire = inchangé. Un petit switch *Voir les inchangés* dévoile le bruit des colonnes intactes quand on relit une entrée renommée mais non modifiée. |
 | Boutons par entrée | *Exclure* (uniquement sur les paquets `DRAFT` / `PENDING`) bascule l'entrée en `EXCLUDED` et la grise. Cliquer à nouveau pour réinclure. |
 
 ### Ids d'étapes post-application en en-tête

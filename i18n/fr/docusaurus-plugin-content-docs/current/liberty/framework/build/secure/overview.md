@@ -17,7 +17,7 @@ Plus deux préoccupations transverses :
 
 | Préoccupation | Ce qu'elle fait | Où |
 |---|---|---|
-| **Secrets chiffrés** | Les mots de passe des pools, le client secret OIDC et les jetons d'API sont enregistrés sous forme `ENC:<base64>` sur disque (AES-256-GCM). | L'interrupteur 🔒 sur le champ correspondant dans n'importe quelle page Paramètres. |
+| **Secrets chiffrés** | Les mots de passe des pools, le client secret OIDC et les jetons d'API sont enregistrés sous forme `ENC:<base64>` sur disque (AES-256-GCM). | Le switch 🔒 sur le champ correspondant dans n'importe quelle page Paramètres. |
 | **Clé de licence** | Conditionne les produits éditeur packagés — Nomasx-1, Nomajde, NomaUBL …. | *Paramètres → App → Licence* (chiffrée au repos, prise en compte immédiate à l'enregistrement). La variable d'environnement `LIBERTY_LICENSE_KEY` reste un repli hérité. |
 
 Cette page est la carte ; chaque tâche dispose de sa propre page.
@@ -116,7 +116,7 @@ Pour les révocations vraiment urgentes, le motif opérationnel est : désactive
 
 ## Secrets chiffrés — protection au repos
 
-Tout champ secret du framework — mots de passe des pools, client secret OIDC, jetons des connecteurs API, identifiants des connecteurs personnalisés — est chiffré au repos avec la **clé maîtresse** du framework. L'interface affiche un interrupteur 🔒 sur chacun de ces champs ; la valeur arrive sur disque sous la forme `ENC:<base64>`.
+Tout champ secret du framework — mots de passe des pools, client secret OIDC, jetons des connecteurs API, identifiants des connecteurs personnalisés — est chiffré au repos avec la **clé maîtresse** du framework. L'interface affiche un switch 🔒 sur chacun de ces champs ; la valeur arrive sur disque sous la forme `ENC:<base64>`.
 
 Le chiffrement est AES-256-GCM avec dérivation de clé PBKDF2-HMAC-SHA512 ; la clé maîtresse provient de `[crypto] master_key` dans `app.toml` (ou de la variable d'environnement `LIBERTY_MASTER_KEY`). Sans la clé maîtresse, les valeurs chiffrées ne peuvent pas être déchiffrées — il faut la sauvegarder aux côtés de la configuration.
 

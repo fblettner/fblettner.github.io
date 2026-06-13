@@ -160,7 +160,7 @@ Two flags on each tab control visibility per mode:
 
 ### Step 5 — Reorder fields
 
-Drag a field card within the same tab to reorder. Drag across to a different tab to move it between tabs. The drag is HTML5 native — the drop target highlights while you hover.
+Drag a field card within the same tab to reorder. Drag across to a different tab to move it between tabs. The drag is HTML5 native — the drop target highlights while you hover. When dragging is awkward, select the field and use the **Tab** picker in the Inspector to move it to another form tab — the field lands at the end of the target tab and stays selected.
 
 ### Step 6 — Hide a field
 

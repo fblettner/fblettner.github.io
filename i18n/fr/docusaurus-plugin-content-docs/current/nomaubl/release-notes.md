@@ -215,8 +215,8 @@ La page de Déclaration de TVA est désormais conçue pour gérer de très gros 
 
 ### Nouveautés
 
-- **Choix de ce qui est enregistré pour chaque facture.** Les paramètres de la base de données NomaUBL proposent maintenant deux interrupteurs indépendants : un pour les sous-totaux par ligne, l'autre pour les détails TVA. C'est ce dernier qu'il faut activer pour que la page Déclaration de TVA reste rapide. Une fois activé, les nouvelles factures s'enregistrent avec tout ce qu'il faut.
-- **Reconstruction des détails TVA pour une période passée.** Une nouvelle commande remplit les détails TVA d'une période existante à partir du document UBL déjà conservé pour chaque facture — utile juste après avoir activé l'interrupteur, ou à chaque fois qu'une reconstruction propre est nécessaire :
+- **Choix de ce qui est enregistré pour chaque facture.** Les paramètres de la base de données NomaUBL proposent maintenant deux switchs indépendants : un pour les sous-totaux par ligne, l'autre pour les détails TVA. C'est ce dernier qu'il faut activer pour que la page Déclaration de TVA reste rapide. Une fois activé, les nouvelles factures s'enregistrent avec tout ce qu'il faut.
+- **Reconstruction des détails TVA pour une période passée.** Une nouvelle commande remplit les détails TVA d'une période existante à partir du document UBL déjà conservé pour chaque facture — utile juste après avoir activé le switch, ou à chaque fois qu'une reconstruction propre est nécessaire :
 
   ```
   ./nomaubl.sh backfill-vat <env> <dateDebut> <dateFin>
@@ -236,7 +236,7 @@ La page de Déclaration de TVA est désormais conçue pour gérer de très gros 
 
 ### Compatibilité
 
-Les installations existantes conservent leur comportement après la mise à jour. Les nouveaux interrupteurs prennent par défaut la valeur correspondant à l'ancienne configuration. Aucune modification manuelle n'est requise.
+Les installations existantes conservent leur comportement après la mise à jour. Les nouveaux switchs prennent par défaut la valeur correspondant à l'ancienne configuration. Aucune modification manuelle n'est requise.
 
 ---
 

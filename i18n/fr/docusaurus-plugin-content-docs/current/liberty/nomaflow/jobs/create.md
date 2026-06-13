@@ -149,7 +149,7 @@ Chaque ligne d'étape comporte une bascule **activée**. Quand elle est désacti
 
 - Les étapes qui ne doivent s'exécuter **que certains jours** — désactiver dans la configuration enregistrée, activer par déclenchement dans la fenêtre.
 - Les étapes **temporairement cassées** — désactiver le temps de corriger l'amont, garder le reste opérationnel.
-- Les étapes **à désactivation d'urgence** — laisser la bascule dans l'éditeur comme « interrupteur d'arrêt ».
+- Les étapes **à désactivation d'urgence** — laisser la bascule dans l'éditeur comme « switch d'arrêt ».
 
 ### Délai d'expiration par étape
 

@@ -118,6 +118,34 @@ A *Save* rebuilds the dictionary registry; consumers (screens, charts) re-render
 
 ---
 
+## Scan a table \{#scan-a-table\}
+
+Rather than add entries one by one, the **Scan a table** button (Columns tab toolbar) generates them from a real table. It opens the *Generate dictionary items* dialog: pick the **app** to store under, the **table to scan**, and toggle **JD Edwards connector** when the columns carry a 2-character table prefix to strip.
+
+The scan reads the table's columns and **proposes one entry per column**, showing both what already exists and what is missing:
+
+- Entries already in the dictionary are listed but **greyed out** and tagged *(exists)* — they are never overwritten.
+- Only the **missing** entries are pre-ticked to be created.
+
+Each proposed row is editable in place before you accept it:
+
+| Field | What it sets |
+|---|---|
+| **Label** | The display label (on JDE, pre-filled from the data dictionary). |
+| **Format** | The data type, inferred from the SQL column type — overridable from the list. |
+| **Rule** | An optional [display rule](#display-rules) (Boolean, Lookup, Enumeration, …). |
+| **Rule value** | The rule's argument — enabled once a Rule is set. |
+| **Lookup params** | For a `LOOKUP` rule, the lookup filter (e.g. `SY=01,RT=ST`). |
+| **Default** | A default value. |
+
+Tick the entries to keep and confirm; the chosen ones are written into the dictionary under the selected app. On a JDE connector the scan strips the table prefix to the shared data item and pulls the label, format, rule and default from the JD Edwards data dictionary; on any other connector the label is left blank and the format is inferred from the column type.
+
+:::note[Same scan in the assistant]
+This is the exact scan the [Screen Creation Assistant](build/screen-assistant.md) runs in its *Dictionary* step — so a screen built through the assistant arrives with its dictionary already proposed.
+:::
+
+---
+
 ## Display rules
 
 The **Rule** field changes how a column is rendered in a grid cell, in a form input and in a filter chip.

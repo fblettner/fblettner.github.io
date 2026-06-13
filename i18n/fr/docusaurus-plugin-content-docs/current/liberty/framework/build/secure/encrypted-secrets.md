@@ -1,18 +1,18 @@
 ---
 title: Secrets chiffrés
-description: "L'interrupteur 🔒 qui chiffre les champs secrets au repos — ce qui est chiffré, comment AES-256-GCM est câblé, où réside la clé maîtresse, le préfixe ENC: et le scénario de rotation."
+description: "Le switch 🔒 qui chiffre les champs secrets au repos — ce qui est chiffré, comment AES-256-GCM est câblé, où réside la clé maîtresse, le préfixe ENC: et le scénario de rotation."
 keywords: [Liberty Framework, secrets chiffrés, ENC, AES-256-GCM, clé maîtresse, mot de passe, secret OIDC, chiffrement, rotation]
 ---
 
 # Secrets chiffrés
 
-Chaque champ de Liberty qui contient un secret — mots de passe des pools, client secret OIDC, jetons des connecteurs API, identifiants personnalisés — prend en charge le **chiffrement au repos**. L'interface affiche un interrupteur 🔒 à côté du champ ; l'activer stocke la valeur sous la forme `ENC:<base64>` sur disque plutôt qu'en clair. C'est le chemin normal pour un déploiement.
+Chaque champ de Liberty qui contient un secret — mots de passe des pools, client secret OIDC, jetons des connecteurs API, identifiants personnalisés — prend en charge le **chiffrement au repos**. L'interface affiche un switch 🔒 à côté du champ ; l'activer stocke la valeur sous la forme `ENC:<base64>` sur disque plutôt qu'en clair. C'est le chemin normal pour un déploiement.
 
 Le chiffrement est **AES-256-GCM** avec une clé dérivée de la clé maîtresse du framework via **PBKDF2-HMAC-SHA512**. La clé maîtresse est le seul secret à protéger en dehors du framework — la sauvegarder avec la configuration.
 
 ---
 
-## L'interrupteur 🔒
+## Le switch 🔒
 
 Chaque champ secret est accompagné d'une petite icône cadenas :
 
@@ -38,18 +38,18 @@ Chaque champ secret est accompagné d'une petite icône cadenas :
   <text x="40" y="172" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">Enregistré sur disque sous :  ENC:eyJzYWx0IjoiLi4uIiwiaXYiOiIuLi4iLCJ0YWciOiIuLi4ifQ==</text>
 </svg>
 
-| État de l'interrupteur | Stockage sur disque |
+| État du switch | Stockage sur disque |
 |---|---|
 | **🔒 activé** (vert) | `password = "ENC:<base64>"` — le champ est chiffré avant d'être écrit dans le fichier de configuration. C'est le chemin recommandé. |
 | **🔒 désactivé** | `password = "plaintext"` — option dev uniquement, utile quand la clé maîtresse n'est pas définie. |
 
-L'interrupteur est **par champ**, pas par fichier — un pool peut avoir un mot de passe chiffré et un hôte en clair (puisque l'hôte n'est pas un secret).
+Le switch est **par champ**, pas par fichier — un pool peut avoir un mot de passe chiffré et un hôte en clair (puisque l'hôte n'est pas un secret).
 
 ---
 
 ## Ce qui est chiffré
 
-Les champs secrets du framework prennent tous en charge l'interrupteur. Les plus courants :
+Les champs secrets du framework prennent tous en charge le switch. Les plus courants :
 
 | Champ | Où | Pourquoi |
 |---|---|---|
@@ -60,7 +60,7 @@ Les champs secrets du framework prennent tous en charge l'interrupteur. Les plus
 | **Secret de signature JWT** | `app.toml` `[auth] jwt_secret` (via variable d'environnement) | La clé qui signe chaque jeton d'accès. Critique — jamais en clair. |
 | **Clé de licence** | `app.toml` `[license] key` (via variable d'environnement) | Pas à proprement parler un identifiant, mais traitée pareillement par sécurité. |
 
-Pour les champs de l'interface, l'interrupteur est l'interaction standard. Pour les entrées de `app.toml` non exposées dans l'interface, la convention est la syntaxe `${ENV_VAR}` — le framework substitue depuis l'environnement au démarrage et ne réécrit jamais la valeur résolue.
+Pour les champs de l'interface, le switch est l'interaction standard. Pour les entrées de `app.toml` non exposées dans l'interface, la convention est la syntaxe `${ENV_VAR}` — le framework substitue depuis l'environnement au démarrage et ne réécrit jamais la valeur résolue.
 
 ---
 
@@ -110,7 +110,7 @@ Le préfixe littéral `ENC:` est ce qui permet au framework de distinguer les va
 | `password = "secret123"` | En clair — utilisée telle quelle. |
 | `password = "${DB_PASSWORD}"` | Substitution de variable d'environnement — la valeur résolue est utilisée telle quelle (qu'elle soit `ENC:...` ou en clair). |
 
-Le framework **ne chiffre jamais à nouveau** de sa propre initiative — si l'on écrit une valeur en clair, elle reste en clair. C'est l'activation de l'interrupteur 🔒 dans l'interface qui déclenche le passage au chiffrement.
+Le framework **ne chiffre jamais à nouveau** de sa propre initiative — si l'on écrit une valeur en clair, elle reste en clair. C'est l'activation du switch 🔒 dans l'interface qui déclenche le passage au chiffrement.
 
 Pour un chiffrement par lot d'une configuration existante (par exemple migrer une installation déployée en clair vers le chiffrement au repos), la CLI fournit :
 
@@ -198,8 +198,8 @@ La compromission de la clé maîtresse est le **seul** chemin qui demande de tou
 |---|---|---|
 | Clé maîtresse dans `app.toml` versionné dans git. | Le secret fuit. | Utiliser la variable d'environnement `LIBERTY_MASTER_KEY` issue d'un gestionnaire de secrets. |
 | Clés maîtresses différentes entre environnements sans coordination. | Les valeurs `ENC:` de prod échouent à déchiffrer en staging. | Déchiffrer + re-chiffrer lors de la promotion entre environnements, ou utiliser la même clé maîtresse (avec un contrôle d'accès approprié). |
-| Modifier une valeur `ENC:` directement dans `app.toml`. | Le framework déchiffre le texte saisi, qui n'est pas un texte chiffré valide, et échoue. | Utiliser l'interrupteur 🔒 de l'interface (qui ressaisit la valeur puis la chiffre à l'enregistrement) ou `liberty-crypto encrypt`. |
-| Désactiver 🔒 et enregistrer. | La valeur arrive sur disque en clair. | Vérifier que l'interrupteur reste activé avant d'enregistrer, ou utiliser `liberty-crypto encrypt` depuis la CLI. |
+| Modifier une valeur `ENC:` directement dans `app.toml`. | Le framework déchiffre le texte saisi, qui n'est pas un texte chiffré valide, et échoue. | Utiliser le switch 🔒 de l'interface (qui ressaisit la valeur puis la chiffre à l'enregistrement) ou `liberty-crypto encrypt`. |
+| Désactiver 🔒 et enregistrer. | La valeur arrive sur disque en clair. | Vérifier que le switch reste activé avant d'enregistrer, ou utiliser `liberty-crypto encrypt` depuis la CLI. |
 | Sauvegarder la configuration chiffrée sans la clé maîtresse. | La restauration ultérieure produit des textes chiffrés inutilisables. | Les sauvegarder ensemble (dans des emplacements sécurisés séparés, mais sans oublier la clé). |
 | Supposer que la substitution `${ENV_VAR}` équivaut à un « chiffrement ». | Non — la substitution de variable d'environnement masque simplement la valeur dans le fichier. Si la variable contient du clair, la valeur à l'exécution est en clair. | Coupler la substitution avec `ENC:` (`${OIDC_CLIENT_SECRET}` où la variable contient `ENC:...`) pour un chiffrement au repos de la valeur résolue elle aussi. |
 

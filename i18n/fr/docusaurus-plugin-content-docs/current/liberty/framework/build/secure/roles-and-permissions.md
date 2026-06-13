@@ -124,7 +124,7 @@ Deux boutons, mutuellement exclusifs :
 | **Aucun accès** | démarre vide | Rien n'est autorisé en dehors de ce qui est ajouté via des règles *Autoriser*. Le bon défaut pour les rôles **moindre privilège**. |
 | **Accès complet** | démarre avec `["*"]` | Tout est autorisé en dehors de ce qui est retiré via des règles *Refuser*. Le bon défaut pour les rôles **proches du superutilisateur**. |
 
-L'indication sous l'interrupteur lit soit *« rien, plus les autorisations ci-dessous »* soit *« tout, moins les refus ci-dessous »* selon le choix.
+L'indication sous le switch lit soit *« rien, plus les autorisations ci-dessous »* soit *« tout, moins les refus ci-dessous »* selon le choix.
 
 ### La liste de règles
 
@@ -143,7 +143,7 @@ Trois contrôles sous les pastilles :
 
 | Contrôle | Ce qu'il fait |
 |---|---|
-| **Effet** (Autoriser / Refuser) | Interrupteur deux boutons. *Autoriser* ajoute la pastille sans préfixe `!` ; *Refuser* l'ajoute avec `!`. |
+| **Effet** (Autoriser / Refuser) | Switch deux boutons. *Autoriser* ajoute la pastille sans préfixe `!` ; *Refuser* l'ajoute avec `!`. |
 | **Type** | Liste déroulante — *Menu* / *Tableau de bord* / *Connecteur (toutes les requêtes)* / *Requête* / *Endpoint API* / *Assistant IA*. Pilote les éléments disponibles dans la liste suivante. |
 | **Élément** | Une recherche-sélection alimentée selon le Type. Pour *Menu* il liste chaque élément de menu de chaque application ; pour *Connecteur* il liste les connecteurs SQL ; pour *Requête* il liste chaque requête nommée ; pour *Tableau de bord* il liste chaque identifiant de tableau de bord ; pour *Endpoint API* il liste les endpoints de chaque connecteur API ; pour *Assistant IA* il y a une entrée unique. |
 | **＋ Ajouter** | Résout l'élément choisi en un ou plusieurs motifs de permissions, préfixe `!` si Refuser, ajoute à la liste de règles. |
