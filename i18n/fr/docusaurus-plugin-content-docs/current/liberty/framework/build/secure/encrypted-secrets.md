@@ -85,7 +85,7 @@ La clé maîtresse est le seul secret à gérer en dehors du framework. La confi
 | Source | Notes |
 |---|---|
 | **`[crypto] master_key` dans `app.toml`** | Lue au démarrage. Garder les permissions du fichier strictes (`chmod 600`). |
-| **Variable d'environnement `LIBERTY_MASTER_KEY`** | L'emporte sur la valeur du fichier. Le chemin recommandé — le secret réside dans le gestionnaire de secrets, pas sur disque. |
+| **Variable d'environnement `LIBERTY_MASTER_KEY`** | L'emporte sur la valeur du fichier. Le chemin recommandé — le secret se trouve dans le gestionnaire de secrets, pas sur disque. |
 | (aucune) | Si ni l'une ni l'autre n'est définie, le framework refuse de déchiffrer les valeurs `ENC:` — les champs retombent en clair ou échouent. |
 
 La clé est **opaque** — toute chaîne que le framework peut hacher convient. En générer une avec :

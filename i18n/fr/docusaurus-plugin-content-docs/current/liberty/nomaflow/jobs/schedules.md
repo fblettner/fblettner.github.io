@@ -114,7 +114,7 @@ Quand l'aperçu indique autre chose que ce qui était attendu, vous avez détect
 
 ## La vue calendrier
 
-La page **Tâches** comporte un bouton **📅 Vue calendrier** dans la barre d'outils. Il ouvre un calendrier de tous les prochains déclenchements de toutes les tâches activées — utile lorsque vous avez dix tâches cron et souhaitez repérer les collisions.
+La page **Tâches** comporte un bouton **📅 Vue calendrier** dans la barre d'outils. Il ouvre un calendrier de tous les prochains déclenchements de toutes les tâches activées — utile quand vous avez dix tâches cron et souhaitez repérer les collisions.
 
 <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -182,7 +182,7 @@ Chaque pastille représente un déclenchement — un clic dessus mène à la fic
 | **Synchronisations horaires** | `15 * * * *` | Éviter `0 * * * *` — tous les autres logiciels du bâtiment se déclenchent à l'heure pile. |
 | **Audits hebdomadaires** | `0 6 * * 1` | Le lundi matin pour que le rapport soit prêt à l'arrivée des humains. |
 | **Rapports mensuels** | `0 7 1 * *` | Tôt le 1ᵉʳ, avant l'affluence matinale. |
-| **Sondage continu** | `*/5 * * * *` | 5 minutes représente le plancher de l'état stable — des cadences plus fines sollicitent excessivement le framework. |
+| **Sondage continu** | `*/5 * * * *` | 5 minutes est le minimum en régime stable — des cadences plus fines sollicitent excessivement le framework. |
 | **Tests rapides** | `* * * * *` | À n'activer que temporairement — laisse beaucoup de lignes d'exécution en 24 heures. |
 
 ---

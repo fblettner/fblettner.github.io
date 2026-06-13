@@ -75,7 +75,7 @@ La vérification utilise une **clé publique RSA embarquée dans le build du fra
 | **URL directe** (par exemple `/screen/nomasx1/security_users`) | Ouvre. | Renvoie 404. |
 | **Journal du framework au démarrage** | Une ligne par connecteur sous licence : `Loaded licensed connector nomasx1`. | Une ligne par connecteur sauté : `Skipping licensed connector nomasx1 — no valid license`. |
 
-Pour une vérification rapide depuis l'interface, le framework expose un endpoint de statut de licence :
+Pour une vérification rapide depuis l'interface, le framework propose un endpoint de statut de licence :
 
 ```
 GET /api/license

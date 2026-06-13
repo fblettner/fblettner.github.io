@@ -202,7 +202,7 @@ La fenêtre *Exécuter avec paramètres* est un élément puissant de l'interfac
 | Vous pouvez relancer depuis l'interface. | **▶ Lancer maintenant** passe par le même moteur d'étapes que le déclenchement cron. |
 | Les logs sont diffusés en direct. | Le runner publie sur un canal Socket.IO auquel s'abonne la page *Détail d'exécution*. |
 
-Vous n'avez écrit aucun TOML, ouvert aucun terminal ni redémarré aucun service. La boucle complète — définir, planifier, exécuter, observer — réside dans l'interface Paramètres.
+Vous n'avez écrit aucun TOML, ouvert aucun terminal ni redémarré aucun service. La boucle complète — définir, planifier, exécuter, observer — se trouve dans l'interface Paramètres.
 
 ---
 

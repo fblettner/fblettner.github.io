@@ -242,7 +242,7 @@ L'action examine **chaque relation de rôle active** sur la cible (les *Relation
 | Deux des rôles sources vont être retirés et l'on souhaite garder l'accès combiné uniquement sur la cible. | Les mêmes droits effectifs, exprimés sur la cible. Après la fusion, retirer l'héritage dans *Relations de rôles*. |
 | Le security workbench dépasse ce qu'une connexion JDE résout confortablement à la volée. | Aplatir la hiérarchie une fois, gagner sur le temps de connexion et obtenir un jeu plus facile à auditer. |
 
-Les deux actions sont idempotentes — les lancer deux fois ne duplique pas le résultat. Toutes deux conservent les colonnes d'audit sur les lignes insérées (utilisateur Nomajde, ID programme JDE, horodatage), de sorte que l'*Audit Trail* les voit passer.
+Les deux actions se relancent sans risque — les lancer deux fois ne duplique pas le résultat. Toutes deux conservent les colonnes d'audit sur les lignes insérées (utilisateur Nomajde, ID programme JDE, horodatage), de sorte que l'*Audit Trail* les voit passer.
 
 :::caution[Destructif sur la cible]
 *Importer la sécurité* et *Fusionner les rôles* **suppriment d'abord les lignes existantes de la cible**. Toujours les exécuter sur un utilisateur / rôle fraîchement créé, ou après avoir confirmé que la sécurité courante de la cible n'est plus nécessaire.
@@ -264,7 +264,7 @@ Table imbriquée listant les environnements déclarés pour l'utilisateur (`PD`,
 
 ## À l'enregistrement — ce qui s'exécute en arrière-plan
 
-L'enregistrement d'un nouvel utilisateur / rôle enchaîne quatre insertions JDE en une seule passe :
+L'enregistrement d'un nouvel utilisateur / rôle enchaîne quatre insertions JDE en une seule fois :
 
 1. **Insérer un nouveau rôle** — écrit la ligne d'identification utilisateur / rôle.
 2. **Récupérer les environnements par défaut** — lit la liste depuis la configuration JDE.
@@ -283,7 +283,7 @@ Quand l'écran d'édition de rôle a le **suivi des modifications activé** (la 
 
 Pour une re-fusion par lot sur l'ensemble des changements capturés dans le paquet brouillon (typique quand plusieurs rôles enfants ont été touchés ensemble), le job Nomaflow embarqué [`nomajde-remerge-security`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security) exécute le même plugin avec `scope = "package"`. Le câbler comme étape post-application sur les écrans contributeurs afin qu'il s'exécute une fois sur la cible une fois toutes les lignes capturées appliquées.
 
-Pour une re-fusion système complète — récupération après une ré-importation des tables de sécurité, ou après une fusion identifiée comme défectueuse — le job [`nomajde-remerge-security-all`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security-all) exécute le même plugin avec `scope = "all"`. À utiliser avec parcimonie ; la passe complète ré-écrit les lignes de chaque parent.
+Pour une re-fusion système complète — récupération après une ré-importation des tables de sécurité, ou après une fusion identifiée comme défectueuse — le job [`nomajde-remerge-security-all`](../../nomaflow/bundled-jobs.md#nomajde-remerge-security-all) exécute le même plugin avec `scope = "all"`. À utiliser avec parcimonie ; le traitement complet ré-écrit les lignes de chaque parent.
 
 ---
 
@@ -291,5 +291,5 @@ Pour une re-fusion système complète — récupération après une ré-importat
 
 - **Utiliser *Importer la sécurité* pour onboarder un nouvel utilisateur** en clonant une référence — bien plus rapide que reconstruire le workbench à la main.
 - **La colonne *Séquence* compte** quand un utilisateur détient plusieurs rôles — JDE résout les droits effectifs selon l'ordre de séquence. Garder le rôle le plus restrictif au numéro de séquence le plus bas.
-- **Maintenir utilisateurs et rôles au même endroit.** JDE les stocke tous deux dans *F00926* ; l'écran expose les deux. Appliquer sa propre convention de nommage (par exemple `*_USER` pour les utilisateurs, `*_ROLE` pour les rôles) pour les séparer visuellement.
+- **Maintenir utilisateurs et rôles au même endroit.** JDE les stocke tous deux dans *F00926* ; l'écran affiche les deux. Appliquer sa propre convention de nommage (par exemple `*_USER` pour les utilisateurs, `*_ROLE` pour les rôles) pour les séparer visuellement.
 - **Contrôler *Nomasx-1 → Conflits → Synthèse par utilisateur*** après l'onboarding d'un utilisateur, pour vérifier que les rôles rattachés ne créent pas de conflit SoD.

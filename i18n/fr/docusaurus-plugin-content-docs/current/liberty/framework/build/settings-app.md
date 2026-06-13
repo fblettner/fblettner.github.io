@@ -208,7 +208,7 @@ client_secret = "ENC:Aa9KrH…2z=="
 | Algorithme | AES-256-GCM avec un nonce aléatoire par valeur. |
 | Source de la clé | La clé maître d'installation (variable d'environnement `LIBERTY_MASTER_KEY` ou `[crypto] master_key` dans `app.toml`). |
 | Préfixe | `ENC:` est la sentinelle du framework — le chemin de déchiffrement la reconnaît ; les valeurs en clair sont lues telles quelles. |
-| Idempotent | Rechiffrer une valeur déjà chiffrée est sans effet ; enregistrer le formulaire quand rien n'a changé laisse le fichier identique octet pour octet. |
+| Sans effet en double | Rechiffrer une valeur déjà chiffrée est sans effet ; enregistrer le formulaire quand rien n'a changé laisse le fichier identique octet pour octet. |
 
 Le même mécanisme `ENC:` chiffre les mots de passe des pools, les secrets des connecteurs API et tout autre champ sensible déclaré — détaillé dans [Secrets chiffrés](./secure/encrypted-secrets.md).
 
@@ -219,7 +219,7 @@ Pour chacun des trois champs, le framework résout toujours une référence `${V
 Deux implications pratiques :
 
 1. Si votre `app.toml` porte `key = "${LIBERTY_LICENSE_KEY}"` issu d'une installation plus ancienne, la nouvelle interface est **en lecture seule** pour ce champ. Soit supprimer la référence (l'interface écrit alors la valeur), soit continuer à éditer via la variable d'environnement.
-2. Les nouvelles installations via `install.sh` n'écrivent plus aucune de ces variables d'environnement dans `.env` — la voie canonique est l'éditeur d'interface.
+2. Les nouvelles installations via `install.sh` n'écrivent plus aucune de ces variables d'environnement dans `.env` — la méthode standard est l'éditeur d'interface.
 
 ---
 

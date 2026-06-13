@@ -84,7 +84,7 @@ liberty-apps --version          # uniquement après `pipx inject`
 
 ## Étape 2 — Variables d'environnement persistantes
 
-Deux secrets sont obligatoires ; le reste relève de la convention. Ajouter le bloc ci-dessous au profil shell (`~/.bashrc`, `~/.zshrc`) pour que chaque shell voie les mêmes valeurs — **la clé maître DOIT rester constante entre les redémarrages, sinon toute valeur chiffrée sur disque devient illisible**.
+Deux secrets sont obligatoires ; le reste est affaire de convention. Ajouter le bloc ci-dessous au profil shell (`~/.bashrc`, `~/.zshrc`) pour que chaque shell voie les mêmes valeurs — **la clé maître DOIT rester constante entre les redémarrages, sinon toute valeur chiffrée sur disque devient illisible**.
 
 ```bash title="~/.bashrc (ou ~/.zshrc)"
 # ── Obligatoire — générer UNE FOIS, ne pas faire tourner sans plan ─────────
@@ -156,7 +156,7 @@ Ce que fait `init-db` :
 |---|---|
 | Résoudre `[pools.default]` depuis l'environnement `POSTGRES_*`. | L'auxiliaire `_seed_default_pool` lit `POSTGRES_PASSWORD` / `_USER` / `_HOST` / `_PORT` / `_DB` et écrit un bloc `[pools.default]` dans `connectors.toml` avec le mot de passe chiffré via `LIBERTY_MASTER_KEY`. |
 | Se connecter via `[pools.default]`. | Le framework ouvre la connexion qu'il vient de configurer. |
-| Exécuter les migrations de schéma. | Additives — crée les tables d'authentification, les tables d'historique d'exécution Nomaflow et les métadonnées de cycle de vie sur le pool configuré. Idempotent : les lignes existantes sont préservées. |
+| Exécuter les migrations de schéma. | Additives — crée les tables d'authentification, les tables d'historique d'exécution Nomaflow et les métadonnées de cycle de vie sur le pool configuré. Sans effet en double : les lignes existantes sont préservées. |
 | Générer l'utilisateur admin. | Crée le superutilisateur `admin` avec un mot de passe aléatoire fraîchement généré. **Affiche le mot de passe UNE SEULE FOIS sur stdout** — il convient de le capturer ; il n'est stocké nulle part de manière récupérable. |
 
 ```text title="sortie liberty-admin init-db (extrait)"
@@ -218,7 +218,7 @@ Cette commande parcourt chaque job marqué `install_step` dans `${LIBERTY_APPS_D
 | `init-schema` | Exécute les migrations alembic sur le schéma `nomasx1`. Idempotent. |
 | `import-reference` | Charge le bundle de référence curaté (`nomasx1-reference.tar.gz`) dans les tables SoD / settings. Idempotent — relancé avec `replace = false`, il n'insère que les lignes manquantes. |
 
-La commande est **idempotente de bout en bout** — relancer en cas d'échec partiel ; elle saute les jobs dont la précédente exécution s'est terminée en `SUCCEEDED`.
+La commande **se relance sans risque de bout en bout** — relancez en cas d'échec partiel ; elle saute les jobs dont la précédente exécution s'est terminée en `SUCCEEDED`.
 
 Référence complète des jobs (paramètres, conditions de réexécution, cas limites) : [Nomaflow → Jobs intégrés](../nomaflow/bundled-jobs.md).
 
@@ -371,7 +371,7 @@ pipx upgrade liberty-next
 sudo systemctl restart liberty-next      # si exécuté sous systemd
 ```
 
-`pipx upgrade` remplace le wheel dans le venv isolé. Le nouveau framework rejoue `init-db` au premier démarrage — idempotent, additif seulement.
+`pipx upgrade` remplace le wheel dans le venv isolé. Le nouveau framework rejoue `init-db` au premier démarrage — sans risque, en ajout seul.
 
 Pour figer une version précise :
 
@@ -402,7 +402,7 @@ Pour la vision complète des mises à jour (Docker + pipx + Swarm + rollback) : 
 | `Address already in use` sur le port 8000 | Un autre processus occupe le port. | Définir `LIBERTY_PORT=8001` (ou tout port libre). |
 | `init-db` échoue avec `permission denied for database` | Le rôle Postgres `liberty` n'est pas superutilisateur / n'a pas `CREATEDB`. | `ALTER ROLE liberty SUPERUSER` (ou `CREATEROLE CREATEDB`). |
 | La connexion indique "invalid credentials" | Mot de passe admin d'initialisation perdu. | `liberty-admin reset-admin-password` — affiche une nouvelle valeur aléatoire une seule fois. |
-| `liberty-apps: command not found` après `pipx inject` | `pipx inject` n'expose pas automatiquement les points d'entrée CLI du wheel sauf si celui-ci les déclare. | Le wheel livré déclare bien `liberty-apps` — relancer `pipx ensurepath` et rouvrir le shell. S'il manque encore, appeler directement `~/.local/pipx/venvs/liberty-next/bin/liberty-apps`. |
+| `liberty-apps: command not found` après `pipx inject` | `pipx inject` n'ajoute pas automatiquement les points d'entrée CLI du wheel sauf si celui-ci les déclare. | Le wheel livré déclare bien `liberty-apps` — relancer `pipx ensurepath` et rouvrir le shell. S'il manque encore, appeler directement `~/.local/pipx/venvs/liberty-next/bin/liberty-apps`. |
 | `run-install-jobs` échoue avec `target_connector nomasx1 not configured` | L'étape `liberty-apps install` a été sautée, ou `LIBERTY_APPS_DIR` est mal défini. | Exécuter `liberty-apps install --target "$LIBERTY_APPS_DIR"` puis relancer `run-install-jobs`. |
 | Les modifications des TOML de configuration ne sont pas prises en compte | `LIBERTY_APPS_DIR` du shell courant diffère de celui utilisé au démarrage. | `liberty-next` journalise le chemin résolu au démarrage — chercher `apps_dir=`. |
 | `liberty-next` introuvable après installation | Le répertoire bin de pipx n'est pas dans le PATH. | Lancer `pipx ensurepath` puis rouvrir le shell, ou appeler directement `~/.local/bin/liberty-next`. |

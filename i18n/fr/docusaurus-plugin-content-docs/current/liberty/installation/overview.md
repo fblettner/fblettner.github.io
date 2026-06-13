@@ -39,7 +39,7 @@ Ce que fait `install.sh` au premier lancement :
 | 1. Détecte les volumes Docker résiduels d'une installation précédente. | Si `pg-data` / `pgadmin-data` / `liberty-data` existent mais que `.env` est absent, le script REFUSE de démarrer et invite l'opérateur à relancer avec `--reset` (purge + redémarrage à neuf) ou à restaurer le `.env` précédent (les secrets gravés dans les volumes doivent correspondre). |
 | 2. Génère un `.env` avec des secrets cryptographiquement aléatoires (aucun caractère `$` — la substitution Compose ne peut pas les absorber). | Au premier lancement uniquement — les exécutions suivantes préservent un `.env` existant. |
 | 3. Écrit `COMPOSE_FILE=docker-compose.<variante>.yml[:surcouches...]` dans `.env`. | Chaque `docker compose <cmd>` ultérieur (sans `-f`) fusionne automatiquement les bons fichiers. **Critique** — l'opérateur ne doit PAS passer `-f` à la main après l'installation. |
-| 4. Récupère les images via `docker compose pull` et lance `docker compose up -d`. | Idempotent — relancer sur une pile déjà active ne fait que ré-appliquer le fichier compose. |
+| 4. Récupère les images via `docker compose pull` et lance `docker compose up -d`. | Ré-exécutable sans risque — relancer sur une pile déjà active ne fait que ré-appliquer le fichier compose. |
 | 5. Attend jusqu'à 120 s que le healthcheck du conteneur passe (`GET /info`). | Annonce `healthy` quand la SPA et l'API sont prêtes. |
 | 6. Affiche l'URL de la SPA, le mot de passe `admin` généré et les URL des tableaux de bord pgAdmin / Portainer / Traefik. | Le mot de passe est également conservé dans `.env` (mode `0600`). |
 
@@ -93,8 +93,8 @@ Docker Compose lit `COMPOSE_FILE` à chaque commande — `docker compose ps` / `
 Contenu :
 
 - Un conteneur (`liberty-next`) sur le port `8000`.
-- Base SQLite du framework (authentification + historique d'exécution Nomaflow) persistée sur un volume Docker.
-- Fichiers TOML édités par l'opérateur persistés sur un second volume — sauvegardés depuis *Settings → …* dans la SPA ; aucun bind-mount hôte n'est nécessaire.
+- Base SQLite du framework (authentification + historique d'exécution Nomaflow) enregistrée sur un volume Docker.
+- Fichiers TOML édités par l'opérateur enregistrés sur un second volume — sauvegardés depuis *Settings → …* dans la SPA ; aucun bind-mount hôte n'est nécessaire.
 - **Pas** de Postgres, **pas** de Traefik, **pas** de TLS — le framework est mis à disposition directement sur `:8000`.
 
 À retenir pour les essais, les démos, l'évaluation, les installations mono-utilisateur. Les applications sous licence (Nomasx-1 / Nomajde) fonctionnent aussi sur la variante Légère quand un Postgres multi-utilisateur n'est pas requis — `./install.sh light --apps <wheel>` est pris en charge.

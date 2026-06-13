@@ -192,7 +192,7 @@ Liberty propose un unique endpoint `/health` qui sert à la fois la vivacité et
 
 ## Supervision externe \{#external-monitoring\}
 
-Pour des métriques complètes, Liberty n'expose pas en standard un endpoint Prometheus `/metrics`. Les schémas d'intégration :
+Pour des métriques complètes, Liberty ne fournit pas en standard un endpoint Prometheus `/metrics`. Les schémas d'intégration :
 
 ### Schéma A — Métriques au niveau du processus via un sidecar
 

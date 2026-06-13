@@ -17,7 +17,7 @@ name     = "refresh-users"
 callable = "myapp.security:refresh_users"
 ```
 
-`callable` suit la forme `<module.path>:<function>`. Le module réside dans le plugin ; le framework l'importe et appelle la fonction.
+`callable` suit la forme `<module.path>:<function>`. Le module se trouve dans le plugin ; le framework l'importe et appelle la fonction.
 
 ---
 
@@ -28,7 +28,7 @@ Le modèle des plugins est ce qui rend Liberty extensible sans fork. Trois propr
 | Propriété | Ce qu'elle apporte |
 |---|---|
 | **Sur disque, sur `sys.path`** | Chemin d'import Python standard. Pas d'appel d'enregistrement, pas de décorateur, pas de fichier de métadonnées. Déposer un `.py` dans le bon dossier, le référencer par son nom. |
-| **Réside dans un dépôt séparé** | Le framework est livré open-source ; un plugin peut être propriétaire, spécifique à un client, plein de gabarits SQL internes. Les deux dépôts évoluent indépendamment. |
+| **Se trouve dans un dépôt séparé** | Le framework est livré open-source ; un plugin peut être propriétaire, spécifique à un client, plein de gabarits SQL internes. Les deux dépôts évoluent indépendamment. |
 | **Importable depuis n'importe quel sous-système** | Les étapes `python` de Nomaflow sont aujourd'hui le principal consommateur, mais tout point du framework qui prend une chaîne de callable peut résoudre vers un plugin — futures actions d'écrans personnalisées, règles de dictionnaire personnalisées, etc. |
 
 La séparation est volontaire : **le framework ouvert apporte les primitives ; le plugin porte la logique métier**.
@@ -146,7 +146,7 @@ Signature de fonction, forme de retour, gestion des erreurs et auto-injections d
 | La charge demande une bibliothèque Python (httpx, openpyxl, ldap3, un SDK interne). | La même chose peut s'écrire avec `sql_query`, `sql_copy`, `http`, `ldap_sync`. |
 | Le flux a une logique de branchement qui dépend de valeurs intermédiaires. | Le flux est une séquence fixe d'étapes typées. |
 | Il faut intégrer un service pour lequel Liberty n'a pas d'étape native. | L'intégration est HTTP ou LDAP — utiliser ces types d'étapes. |
-| On transforme des données autrement qu'en SQL (parsing XML, génération de PDF, traitement d'images). | La transformation est purement SQL. |
+| On transforme des données autrement qu'en SQL (analyse XML, génération de PDF, traitement d'images). | La transformation est purement SQL. |
 | Il faut appeler une procédure stockée avec de la logique entre les appels. | Une seule étape `sql_query` suffit. |
 | On construit de l'outillage autour du framework (jobs batch CLI, scripts ad-hoc). | L'interface Paramètres offre déjà toutes les options nécessaires. |
 

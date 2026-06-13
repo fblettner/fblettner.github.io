@@ -75,7 +75,7 @@ Une **tâche** est l'unité que vous définissez et exploitez. Une tâche possè
 | **Paramètres** | Kwargs partagés optionnels (décrits plus bas). |
 | **Niveau de log** | `INFO` (par défaut) ou `DEBUG`. Surchargeable par déclenchement dans la fenêtre Exécuter avec paramètres. |
 
-Une tâche est **définie une seule fois** et s'exécute plusieurs fois. Chaque déclenchement constitue une nouvelle **exécution**.
+Une tâche est **définie une seule fois** et s'exécute plusieurs fois. Chaque déclenchement donne lieu à une nouvelle **exécution**.
 
 ---
 
@@ -208,7 +208,7 @@ Une politique de nouvelle tentative s'applique aux **étapes**, pas à la tâche
 | **`backoff`** | `fixed` (attente constante) ou `exponential` (attente doublée à chaque fois). |
 | **`base_seconds`** | Attente avant la première nouvelle tentative. Avec `exponential`, la deuxième attente est doublée, la troisième quadruplée. |
 
-Si l'étape 1 a attempts = 3 et échoue trois fois, l'**exécution** passe à `FAILED` — les étapes restantes ne s'exécutent pas. Si l'étape 1 réussit et que l'étape 2 échoue trois fois, l'effet de l'étape 1 reste validé (Nomaflow ne propose pas de rollback à l'échelle de l'exécution — concevez des étapes idempotentes).
+Si l'étape 1 a attempts = 3 et échoue trois fois, l'**exécution** passe à `FAILED` — les étapes restantes ne s'exécutent pas. Si l'étape 1 réussit et que l'étape 2 échoue trois fois, l'effet de l'étape 1 reste validé (Nomaflow ne propose pas de rollback à l'échelle de l'exécution — concevez des étapes ré-exécutables sans risque).
 
 La valeur par défaut est **aucune nouvelle tentative** (`attempts = 1`). Pour les étapes qui touchent au réseau (HTTP, LDAP), `attempts = 3` avec un backoff `exponential` est le réglage le plus courant.
 
@@ -260,7 +260,7 @@ JOB nightly-reporting-refresh
 
 Chaque nuit à 02 h 00 heure de Paris, le planificateur crée une nouvelle **exécution** de `nightly-reporting-refresh`. L'exécution déroule l'étape 1 — si la requête SQL échoue, le runner attend 60 secondes et réessaie une fois avant de déclarer l'étape FAILED. En cas de succès, l'étape 2 démarre. Puis l'étape 3.
 
-Lorsque l'étape 3 s'exécute, la fonction Python reçoit `target_connector="reporting"` depuis les `params` de la tâche, ainsi que tout ce qui figure dans ses propres `op_kwargs`. La fonction émet `log.info("summary email sent")` — cette ligne arrive dans le flux de logs de l'exécution.
+Quand l'étape 3 s'exécute, la fonction Python reçoit `target_connector="reporting"` depuis les `params` de la tâche, ainsi que tout ce qui figure dans ses propres `op_kwargs`. La fonction émet `log.info("summary email sent")` — cette ligne arrive dans le flux de logs de l'exécution.
 
 L'opérateur ouvre la page **Exécutions** le lendemain matin, voit l'exécution avec un badge vert SUCCEEDED, clique dessus, voit trois coches vertes et le journal. Tout ce qu'on voudrait savoir sur le rafraîchissement de la nuit précédente tient sur un seul écran.
 

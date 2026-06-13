@@ -77,7 +77,7 @@ Cause : l'annulation est une **demande**, pas un kill. L'étape la reçoit à so
 
 | Type d'étape | Point de contrôle d'annulation |
 |---|---|
-| `sql_query` / `sql_copy` | Entre les lots (`sql_copy`) ou lorsque le pilote sous-jacent vérifie. Généralement en quelques secondes. |
+| `sql_query` / `sql_copy` | Entre les lots (`sql_copy`) ou quand le pilote sous-jacent vérifie. Généralement en quelques secondes. |
 | `http` | À la prochaine lecture réseau. Les connexions figées honorent la demande via le timeout. |
 | `python` | À chaque `await`. Une boucle sans `await` ne rend jamais la main. |
 
@@ -127,7 +127,7 @@ Cause la plus courante : le **rechargement du planificateur** n'a pas atteint ce
 
 Si la tâche reste invisible :
 
-- Inspectez les journaux du framework à la recherche d'une erreur de parsing au moment de l'enregistrement — une étape malformée ou un type d'étape inconnu empêche le catalogue entier de se charger.
+- Inspectez les journaux du framework à la recherche d'une erreur de analyse au moment de l'enregistrement — une étape malformée ou un type d'étape inconnu empêche le catalogue entier de se charger.
 - Vérifiez que votre rôle possède la permission `job:*` — l'API filtre les tâches que votre rôle n'a pas le droit de voir.
 
 ---

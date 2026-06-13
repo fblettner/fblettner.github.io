@@ -127,7 +127,7 @@ Les deux fonctionnent. L'exécuteur décide via `inspect.iscoroutinefunction` :
 | `async def foo(...)` | Attendu directement. La boucle d'événements du framework l'exécute. |
 | `def foo(...)` | Exécutée dans `asyncio.to_thread(...)` — un thread worker. La boucle d'événements reste libre. |
 
-Pour le travail lié à la base de données, préférer **asynchrone** — les moteurs asynchrones SQLAlchemy s'intègrent naturellement. Pour le travail lié au CPU (génération de PDF, traitement d'images, parsing), synchrone-dans-un-thread convient.
+Pour le travail lié à la base de données, préférer **asynchrone** — les moteurs asynchrones SQLAlchemy s'intègrent naturellement. Pour le travail lié au CPU (génération de PDF, traitement d'images, analyse), synchrone-dans-un-thread convient.
 
 Le mélange convient aussi : une fonction asynchrone peut faire `await asyncio.to_thread(blocking_func, ...)` pour un appel coûteux ponctuel sans bloquer la boucle.
 

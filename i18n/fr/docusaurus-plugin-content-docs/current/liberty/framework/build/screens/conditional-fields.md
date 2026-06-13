@@ -43,7 +43,7 @@ Deux couches portent les mêmes indicateurs :
 
 | Couche | Quand |
 |---|---|
-| **Indication de colonne** *(onglet Colonnes)* | La règle s'applique à **chaque** dialogue qui expose cette colonne. Le bon défaut — la plupart des champs se comportent pareil entre dialogues. |
+| **Indication de colonne** *(onglet Colonnes)* | La règle s'applique à **chaque** dialogue qui présente cette colonne. Le bon défaut — la plupart des champs se comportent pareil entre dialogues. |
 | **Champ par dialogue** *(Inspecteur → Règles conditionnelles)* | La règle s'applique uniquement à **ce** dialogue précis. À utiliser quand un dialogue a besoin d'un comportement différent du défaut au niveau colonne. |
 
 Le runtime évalue d'abord la surcharge par champ ; si vide, il retombe sur le paramètre de l'indication de colonne.

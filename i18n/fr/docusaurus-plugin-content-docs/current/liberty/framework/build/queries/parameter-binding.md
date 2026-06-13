@@ -26,7 +26,7 @@ Dans le bloc **`params`** de l'éditeur de requête (onglets Non classées / Sé
 | Champ | Rôle |
 |---|---|
 | **`name`** | Le nom du `:placeholder` dans le SQL (sans les deux-points). Mis en correspondance sans tenir compte de la casse. |
-| **`label`** | Libellé de formulaire affiché au-dessus du champ quand une interface expose ce paramètre. Vaut `name` par défaut. |
+| **`label`** | Libellé de formulaire affiché au-dessus du champ quand une interface présente ce paramètre. Vaut `name` par défaut. |
 | **`default`** | Valeur pré-remplie quand l'appelant n'en lie pas. Vide = le moteur lie un `NULL` SQL. |
 
 Un exemple simple :
@@ -138,7 +138,7 @@ Pour un pré-remplissage au niveau colonne (un champ d'écran qui affiche l'util
 | **Lecture de formulaire/onglet imbriqué** | La liste `params` de l'onglet imbriqué. |
 | **Combo de recherche avec filtre en cascade** | Le `filter_from` de la colonne (qui se traduit en un `ParamBind` sous le capot). |
 
-Dans chaque cas, l'éditeur expose une liste déroulante *Paramètre* qui liste les paramètres déclarés sur la requête de destination, une bascule de mode (littéral / source) et des entrées value / source. La liste déroulante est peuplée depuis le registre vivant des connecteurs — changer la requête de destination rafraîchit la liste.
+Dans chaque cas, l'éditeur propose une liste déroulante *Paramètre* qui liste les paramètres déclarés sur la requête de destination, une bascule de mode (littéral / source) et des entrées value / source. La liste déroulante est peuplée depuis le registre vivant des connecteurs — changer la requête de destination rafraîchit la liste.
 
 ---
 

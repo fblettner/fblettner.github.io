@@ -70,7 +70,7 @@ Un dossier **sans enfant visible** disparaît du menu rendu. Cela signifie :
 
 Cela se produit à chaque niveau — une structure de dossiers imbriqués s'élague des feuilles vers le haut. L'utilisateur voit un arbre minimal et utile.
 
-Le runtime parcourt l'arbre une seule fois par requête, en appliquant les filtres et en repliant les dossiers vides en une seule passe.
+Le runtime parcourt l'arbre une seule fois par requête, en appliquant les filtres et en repliant les dossiers vides en une seule fois.
 
 ---
 

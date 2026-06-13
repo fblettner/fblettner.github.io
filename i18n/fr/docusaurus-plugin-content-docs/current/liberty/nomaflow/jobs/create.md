@@ -74,7 +74,7 @@ Le bloc qui nomme la tâche et la rend opérable.
 | **Id** | Lettres, chiffres, `-`, `_`. Obligatoire, unique. | Utilisé dans les URL (`/nomaflow/jobs/<id>`) et comme clé étrangère de chaque exécution. Immuable en pratique — pour renommer : exporter, modifier, recréer. |
 | **Description** | Texte libre, facultatif. | Apparaît sur la fiche du catalogue. À utiliser pour consigner le *pourquoi* de la tâche. |
 | **Étiquettes** | Liste de libellés libres. | Affichés en pastilles. Pratiques pour regrouper (`etl`, `nightly`, `team-data`). |
-| **Activée** | Booléen, `true` par défaut. | Lorsqu'elle est désactivée, la planification est ignorée mais ▶ Lancer maintenant fonctionne toujours. |
+| **Activée** | Booléen, `true` par défaut. | Quand elle est désactivée, la planification est ignorée mais ▶ Lancer maintenant fonctionne toujours. |
 
 :::tip[Modèle de nommage]
 La plupart des installations adoptent `<domaine>-<objectif>` ou `<domaine>-<objectif>-<portée>` :
@@ -145,7 +145,7 @@ Liste ordonnée des unités de travail. Cliquez sur **＋ Ajouter une étape** p
 
 ### Désactivation par étape
 
-Chaque ligne d'étape comporte une bascule **activée**. Lorsqu'elle est désactivée, l'exécuteur enregistre l'étape comme `CANCELED` avec la raison `skipped: disabled` et passe à la suivante. Utile pour :
+Chaque ligne d'étape comporte une bascule **activée**. Quand elle est désactivée, l'exécuteur enregistre l'étape comme `CANCELED` avec la raison `skipped: disabled` et passe à la suivante. Utile pour :
 
 - Les étapes qui ne doivent s'exécuter **que certains jours** — désactiver dans la configuration enregistrée, activer par déclenchement dans la fenêtre.
 - Les étapes **temporairement cassées** — désactiver le temps de corriger l'amont, garder le reste opérationnel.
@@ -153,7 +153,7 @@ Chaque ligne d'étape comporte une bascule **activée**. Lorsqu'elle est désact
 
 ### Délai d'expiration par étape
 
-Le `timeout_seconds` d'une étape (3600 par défaut = 1 heure) borne sa durée d'exécution. En cas de dépassement, l'étape est annulée et l'exécution échoue (sous réserve de la politique de nouvelles tentatives). À augmenter pour les longs ETL, à baisser pour de rapides sondes HTTP.
+Le `timeout_seconds` d'une étape (3600 par défaut = 1 heure) limite sa durée d'exécution. En cas de dépassement, l'étape est annulée et l'exécution échoue (sous réserve de la politique de nouvelles tentatives). À augmenter pour les longs ETL, à baisser pour de rapides sondes HTTP.
 
 ### Réordonnancement
 
@@ -191,7 +191,7 @@ Là où Nomaflow route les signaux d'échec (et d'exécution longue).
 
 | Champ | Signification |
 |---|---|
-| **`on_failure`** | Quand `true`, une exécution `FAILED` émet un événement d'alerte. `true` par défaut dès lors que le bloc d'alertes existe. |
+| **`on_failure`** | Quand `true`, une exécution `FAILED` émet un événement d'alerte. `true` par défaut quand le bloc d'alertes existe. |
 | **`on_long_run_minutes`** | Émet une alerte si l'exécution est toujours en cours après N minutes. L'exécution continue — il s'agit d'un signal préventif. |
 | **`recipients`** | Identifiants spécifiques au canal (salon Slack, adresse e-mail, identifiant de webhook). Vide = utiliser les valeurs par défaut du framework. |
 

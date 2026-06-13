@@ -1,6 +1,6 @@
 ---
 title: Récupération horaire d'API
-description: "Recette — interroger une API REST tierce toutes les heures, transformer la charge utile JSON dans une étape Python, écrire les lignes dans une cible SQL avec nouvelle tentative et upsert idempotent."
+description: "Recette — interroger une API REST tierce toutes les heures, transformer la charge utile JSON dans une étape Python, écrire les lignes dans une cible SQL avec nouvelle tentative et upsert sans doublon."
 keywords: [Nomaflow, recette, récupération API, REST, étape http, étape python, transformation, horaire, Liberty Framework]
 ---
 
@@ -18,7 +18,7 @@ Cette recette combine les étapes **http**, **python** et **sql_query** — et m
 |---|---|
 | **Déclencheur** | Cron — toutes les heures à la minute :15. |
 | **Source** | Une API REST tierce qui renvoie du JSON. |
-| **Cible** | Une table SQL avec une clé d'upsert (rejouer une heure devient idempotent). |
+| **Cible** | Une table SQL avec une clé d'upsert (rejouer une heure ne crée pas de doublon). |
 | **Étapes** | 1 × `http` (récupération) + 1 × `python` (transformation + upsert) + 1 × `sql_query` (marquage de l'horodatage de synchronisation). |
 | **Nouvelles tentatives** | 3 essais sur l'étape HTTP, backoff exponentiel (limitations de débit + 5xx transitoires). |
 | **Alertes** | Slack en cas d'échec ; avertissement au bout de 10 minutes. |
@@ -144,7 +144,7 @@ Cliquez sur **＋ Ajouter une étape** → **Python**.
 | Op kwargs | vide (tout vient des paramètres partagés + de la sortie de l'étape précédente) |
 | Timeout | `300` |
 
-La fonction Python réside dans `plugins/releases/sync.py` :
+La fonction Python se trouve dans `plugins/releases/sync.py` :
 
 ```python
 from datetime import datetime, timezone
@@ -205,7 +205,7 @@ Trois points méritent attention :
 | Motif | Pourquoi |
 |---|---|
 | `ctx.previous_step("fetch-releases").output` | Lecture de la sortie enregistrée de l'étape HTTP. Les étapes d'une même exécution partagent ainsi leur contexte. |
-| `ON CONFLICT (id) DO UPDATE` | Upsert idempotent. Rejouer l'heure ne crée pas de doublons. |
+| `ON CONFLICT (id) DO UPDATE` | Upsert sans doublon : rejouer l'heure ne crée pas de doublons. |
 | La valeur de retour | Atterrit dans la sortie de l'étape dans l'historique d'exécution. Les opérateurs qui lisent la chronologie voient « fetched: 30, inserted: 2, updated: 28 » au lieu de « succeeded ». |
 
 ---

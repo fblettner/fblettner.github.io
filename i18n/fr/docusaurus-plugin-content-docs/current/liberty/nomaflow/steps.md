@@ -168,7 +168,7 @@ La valeur de retour de la fonction est stockée dans le champ `output` de l'éta
 | Parcourir un répertoire, transformer chaque fichier. | Le parcours de système de fichiers s'exprime mal en SQL. |
 | Décompresser un blob XML et en extraire des champs. | L'analyse XML appartient à Python. |
 | Appeler un SDK tiers (AWS S3, Stripe, …). | Idem. |
-| Enchaîner plusieurs instructions SQL nécessitant une transaction commune. | La fonction peut ouvrir une connexion et les exécuter toutes. |
+| Enchaîner plusieurs instructions SQL qui demandent une transaction commune. | La fonction peut ouvrir une connexion et les exécuter toutes. |
 | Logique conditionnelle (« supprimer uniquement si nombre > 1000 »). | Une étape `python` peut brancher ; le SQL ne le permet pas sans code procédural. |
 
 ### À ne pas faire dans une étape Python

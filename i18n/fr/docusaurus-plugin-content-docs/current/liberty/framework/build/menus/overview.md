@@ -161,7 +161,7 @@ Les doublons entre menus différents sont autorisés — `[menus.crm.security]` 
 
 ## Comment un connecteur devient une application
 
-**Un connecteur n'apparaît dans le sélecteur d'applications en haut que lorsque les deux conditions sont réunies :**
+**Un connecteur n'apparaît dans le sélecteur d'applications en haut que quand les deux conditions sont réunies :**
 
 1. Un menu existe — `[menus.<connector>]` est configuré dans *Paramètres → Menus*.
 2. `show_in_switcher = true` sur le connecteur — à activer dans *Paramètres → Connecteurs → \<connecteur> → Paramètres*.

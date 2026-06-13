@@ -152,7 +152,7 @@ docker compose pull               # COMPOSE_FILE sélectionne les bons fichiers
 docker compose up -d
 ```
 
-L'entrypoint lance `liberty-admin init-db` à chaque démarrage — idempotent, ajoute les nouvelles tables framework apportées par une version récente, laisse les lignes existantes intactes. Pour épingler une version précise, définir `LIBERTY_IMAGE_TAG=7.0.2` dans `.env` (ou passer `--tag 7.0.2` à la première installation).
+L'entrypoint lance `liberty-admin init-db` à chaque démarrage — sans risque en double : il ajoute les nouvelles tables framework d'une version récente et laisse les lignes existantes intactes. Pour épingler une version précise, définir `LIBERTY_IMAGE_TAG=7.0.2` dans `.env` (ou passer `--tag 7.0.2` à la première installation).
 
 ---
 
@@ -334,7 +334,7 @@ docker compose pull               # COMPOSE_FILE fusionne chaque overlay
 docker compose up -d
 ```
 
-Le même `init-db` idempotent s'exécute au démarrage de `liberty-next`. Épingler la version via `LIBERTY_IMAGE_TAG=7.0.2` dans `.env`.
+Le même `init-db`, ré-exécutable sans risque, s'exécute au démarrage de `liberty-next`. Épingler la version via `LIBERTY_IMAGE_TAG=7.0.2` dans `.env`.
 
 ---
 

@@ -191,7 +191,7 @@ Pendant qu'une exécution est en cours :
 
 ### Après la fin de l'exécution
 
-Le journal est **persisté** dans l'historique d'exécution et reconstruit depuis la base lors d'un rechargement de page. La diffusion en direct s'arrête ; le même contenu reste lisible. La rétention est de **90 jours** par défaut (paramétrable dans [Administration](../administration.md)).
+Le journal est **enregistré** dans l'historique d'exécution et reconstruit depuis la base lors d'un rechargement de page. La diffusion en direct s'arrête ; le même contenu reste lisible. La rétention est de **90 jours** par défaut (paramétrable dans [Administration](../administration.md)).
 
 ### Filtrage et recherche
 

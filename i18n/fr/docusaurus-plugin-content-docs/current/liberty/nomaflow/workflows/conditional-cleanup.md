@@ -208,7 +208,7 @@ Trois points méritent attention :
 | Motif | Pourquoi |
 |---|---|
 | Lecture de la décision de l'étape précédente. | Les deux étapes partagent un contexte — l'étape de décision rassemble les faits, l'étape d'action les exploite. |
-| Court-circuit `dry_run`. | Un filet de sécurité — les opérateurs basculent le kwarg et voient ce qui *se passerait* sans changement. |
+| Court-circuit `dry_run`. | Un garde-fou — les opérateurs basculent le kwarg et voient ce qui *se passerait* sans changement. |
 | Suppression par lots avec vérification d'annulation. | Les suppressions longues peuvent être interrompues proprement. La forme `LIMIT … batch` maintient chaque transaction de petite taille. |
 
 ---

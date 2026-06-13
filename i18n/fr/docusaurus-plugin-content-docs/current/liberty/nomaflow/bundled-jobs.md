@@ -63,7 +63,7 @@ Surcharges à l'exécution : ouvrir *Exécuter avec paramètres* sur la fiche de
 
 ## Tâches d'installation \{#install\}
 
-Provisionnement unique. À lancer **une seule fois** au démarrage chez le client ; relançable sans risque (idempotent) mais inutile.
+Provisionnement unique. À lancer **une seule fois** au démarrage chez le client ; relançable sans risque mais inutile.
 
 ### `deploy-databases` \{#deploy-databases\}
 
@@ -129,7 +129,7 @@ Provisionnement unique. À lancer **une seule fois** au démarrage chez le clien
 
 ### `nomasx1-upgrade-schema-1` \{#nomasx1-upgrade-schema-1\}
 
-**Application des migrations alembic en attente sur `target_connector`.** Exécute `alembic upgrade head` sur le schéma Nomasx-1. Idempotent — sans effet si déjà à jour.
+**Application des migrations alembic en attente sur `target_connector`.** Exécute `alembic upgrade head` sur le schéma Nomasx-1. Sans effet en double — rien ne change si déjà à jour.
 
 | Étape | Appelable |
 |---|---|

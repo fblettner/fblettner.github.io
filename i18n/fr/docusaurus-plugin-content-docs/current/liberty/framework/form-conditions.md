@@ -102,7 +102,7 @@ Le langage **n'a pas d'appels de fonction au-delà des prédicats listés** ni d
 
 Les conditions sont ré-évaluées **à chaque changement de champ** dans le dialogue. Le framework exécute les trois emplacements pour chaque champ en parallèle ; le résultat est lu une fois chaque référence résolue. Ce que cela veut dire :
 
-- **L'ordre dans lequel les champs sont listés n'a pas d'importance.** Un *Visible quand* sur le champ A peut référencer le champ B qui dépend lui-même du champ C — le résolveur exécute la passe complète une fois par changement.
+- **L'ordre dans lequel les champs sont listés n'a pas d'importance.** Un *Visible quand* sur le champ A peut référencer le champ B qui dépend lui-même du champ C — le résolveur réévalue l'ensemble une fois par changement.
 - **Les cycles sont refusés à l'enregistrement** — l'éditeur nomme le cycle et pointe les champs en cause.
 - **Les champs désactivés gardent leur valeur**, même si un *Visible quand* les masque ensuite. Basculer la visibilité off puis on ne remet pas la valeur à zéro.
 - **Les champs masqués perdent leur valeur à l'enregistrement.** Le payload envoyé au connecteur ne contient que les champs visibles. Cela compte quand l'INSERT/UPDATE d'un connecteur attend `NULL` pour un champ absent plutôt que la valeur tapée précédemment.

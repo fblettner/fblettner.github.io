@@ -64,7 +64,7 @@ Pour une investigation plus poussée (temps de réponse par écran, journaux de 
 
 La page Supervision intégrée vit **en mémoire** — un redémarrage du processus efface la carte des verrous, la liste des utilisateurs connectés et le fil de journaux. C'est une *vue d'exploitation en direct*, pas un enregistrement historique.
 
-Pour les métriques historiques et les alertes, il faut un système externe. Liberty expose les briques :
+Pour les métriques historiques et les alertes, il faut un système externe. Liberty fournit les briques :
 
 - **`/health`** — sonde de vivacité (le processus est démarré).
 - **`/health`** — sonde de disponibilité (le framework a fini d'amorcer et la base de données est joignable).

@@ -194,7 +194,7 @@ Quand une exécution échoue :
 | **E-mail** | Sujet : `[Nomaflow] FAILED reporting-nightly-sync`. Corps : même message d'une ligne plus la trace complète en bloc de code, plus un lien. |
 | **Webhook** | POST JSON tel que décrit ci-dessus. |
 
-4. L'appel HTTP / SMTP relève de l'**envoi sans suivi**. Si l'amont est inaccessible, la notification échoue — mais l'échec de l'exécution est déjà enregistré. Nomaflow ne réessaie pas la livraison de notification (un chemin de notification instable ne doit pas faire échouer une tâche).
+4. L'appel HTTP / SMTP se fait en **envoi sans suivi**. Si l'amont est inaccessible, la notification échoue — mais l'échec de l'exécution est déjà enregistré. Nomaflow ne réessaie pas la livraison de notification (un chemin de notification instable ne doit pas faire échouer une tâche).
 
 Le journal du framework consigne chaque tentative de notification avec son issue — chercher ici quand un destinataire signale « je n'ai pas reçu l'alerte ».
 

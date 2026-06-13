@@ -201,7 +201,7 @@ Remplacez l'étape `notify-slack` par :
 
 | Destination | Type d'étape | Notes |
 |---|---|---|
-| E-mail | `http` vers une passerelle SMTP, ou une étape `python` utilisant le canal de notification du framework. | La voie `python` représente la voie canonique — voir [Notifications](../notifications.md). |
+| E-mail | `http` vers une passerelle SMTP, ou une étape `python` utilisant le canal de notification du framework. | La voie `python` est la méthode recommandée — voir [Notifications](../notifications.md). |
 | Microsoft Teams | `http` vers un webhook entrant Teams. | La forme du corps diffère de celle de Slack. |
 | Webhook générique | `http` vers votre endpoint. | Charge utile auto-descriptive. |
 

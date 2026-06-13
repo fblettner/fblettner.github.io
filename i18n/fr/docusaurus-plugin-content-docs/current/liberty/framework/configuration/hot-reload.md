@@ -37,7 +37,7 @@ Un rechargement est **étendu à une section**. Enregistrer dans l'onglet *Conne
 
 La reconstruction suit toujours les trois mêmes phases :
 
-1. **Re-parser le TOML** depuis le disque. Une erreur de parsing stoppe le rechargement avant qu'aucun registre ne soit remplacé ; le registre en mémoire reste utilisable et l'appelant est informé de la ligne en faute.
+1. **Re-parser le TOML** depuis le disque. Une erreur de analyse stoppe le rechargement avant qu'aucun registre ne soit remplacé ; le registre en mémoire reste utilisable et l'appelant est informé de la ligne en faute.
 2. **Construire le nouveau registre à côté.** Chaque entrée est validée par rapport à son modèle Pydantic ; une entrée invalide est rapportée avec son nom et son message. Une seconde passe vérifie les références (un écran qui pointe sur un connecteur inexistant, une feuille de menu qui pointe sur un écran inexistant) et refuse le rechargement quand quelque chose est cassé.
 3. **Permuter le registre de manière atomique.** Le nouveau registre remplace l'ancien à l'intérieur d'un même verrou. Les requêtes qui ont déjà démarré sur l'ancien registre **se terminent dessus** ; les nouvelles requêtes prennent le nouveau. Il n'y a aucun état intermédiaire où une partie de la requête voit l'ancienne configuration et une autre partie voit la nouvelle.
 
@@ -115,7 +115,7 @@ Ces éléments gardent le framework simple au démarrage ; les recharger en plei
 
 | Symptôme | Cause | Ce que fait le framework |
 |---|---|---|
-| **Erreur de parsing TOML** | Une virgule finale, un crochet déséquilibré. | Le rechargement avorte en phase 1 ; le registre en mémoire est intact. L'UI Paramètres fait remonter la ligne fautive. |
+| **Erreur de analyse TOML** | Une virgule finale, un crochet déséquilibré. | Le rechargement avorte en phase 1 ; le registre en mémoire est intact. L'UI Paramètres fait remonter la ligne fautive. |
 | **Référence manquante** | Une feuille de menu pointe sur un écran qui vient d'être renommé ou supprimé. | Le rechargement avorte en phase 2 ; le diagnostic nomme la feuille de menu et l'écran manquant. Utiliser *Renommer* dans les éditeurs Connecteurs / Écrans / Dictionnaire plutôt que de modifier les identifiants à la main — la commande propage le changement à travers chaque fichier référent. |
 | **Erreur de validation** | Un nouveau champ avec un type invalide (`port = "abc"`). | Le rechargement avorte en phase 2 ; le message Pydantic est affiché tel quel. |
 | **Base de données inaccessible** | Une nouvelle URL de pool pointe sur un hôte hors service. | Le pool est créé paresseusement, donc le rechargement lui-même réussit ; le premier appel SQL sur le nouveau pool échoue avec l'erreur de connexion. Le bouton *Tester* de l'UI Paramètres détecte cela plus tôt. |

@@ -66,7 +66,7 @@ Les notes de version de chaque version se trouvent aux côtés du tag d'image �
 
 L'entrypoint du conteneur (et l'unité systemd pipx, si elle est câblée) exécute `liberty-admin init-db` à **chaque démarrage**. Cette commande est :
 
-- **Idempotente.** L'exécuter deux fois ne fait rien la seconde fois.
+- **Sans effet en double.** L'exécuter deux fois ne fait rien la seconde fois.
 - **Additive.** Elle crée les nouvelles tables framework apportées par une version plus récente, ajoute les colonnes manquantes et laisse les lignes existantes intactes.
 - **Embarquée.** Les deltas de schéma sont livrés à l'intérieur de l'image / du wheel — aucune étape `migrate-db` séparée à lancer, aucun fichier SQL à appliquer, aucun job de migration à planifier.
 
@@ -125,7 +125,7 @@ cd /opt/liberty-next/release
                         #     attend l'état healthy, affiche le résumé
 ```
 
-`install.sh` est **idempotent à la relance**. Quand `.env` existe déjà, il :
+`install.sh` **se relance sans risque**. Quand `.env` existe déjà, il :
 
 - Journalise `.env already exists — keeping it` et **ignore la génération des secrets** (aucun risque de régénérer `LIBERTY_MASTER_KEY` et de perdre les valeurs chiffrées).
 - Lance `docker compose pull` puis `docker compose up -d` sur la chaîne `COMPOSE_FILE` définie dans `.env`.
@@ -191,7 +191,7 @@ Pour épingler : décommenter la ligne dans `.env`, fixer la version, lancer `./
 docker compose restart liberty-next       # prend en compte les TOMLs rafraîchis
 ```
 
-L'installeur de wheel est idempotent — les TOMLs édités par l'opérateur dans `./apps/config/` sont préservés sauf passage de `--force-config`. Voir [Deploy prebuilt apps → Updating the apps later](./deploy-prebuilt-apps.md#updating-the-apps-later).
+L'installeur de wheel se relance sans risque — les TOML édités par l'opérateur dans `./apps/config/` sont préservés sauf passage de `--force-config`. Voir [Deploy prebuilt apps → Updating the apps later](./deploy-prebuilt-apps.md#updating-the-apps-later).
 
 La plupart des mises à jour framework ne concernent que `liberty-next` — aucune wheel d'apps à rafraîchir.
 
@@ -249,7 +249,7 @@ pipx upgrade liberty-next
 sudo systemctl restart liberty-next      # si exécuté sous systemd
 ```
 
-`pipx upgrade` remplace le wheel dans le venv isolé. Le service redémarré exécute `liberty-admin init-db` au démarrage — même synchronisation idempotente du schéma que le chemin conteneur.
+`pipx upgrade` remplace le wheel dans le venv isolé. Le service redémarré exécute `liberty-admin init-db` au démarrage — la même synchronisation de schéma sans risque que le chemin conteneur.
 
 Pour la définition de l'unité systemd, l'`EnvironmentFile` et la vérification post-installation : [Python server → Run under systemd](./python-server.md).
 

@@ -80,7 +80,7 @@ La page demande un nom, crée une requête `custom` vide et ouvre son éditeur.
 
 ### `name`
 
-En lecture seule dans l'éditeur. Le nom est fixé au clic sur *＋ Ajouter une requête* et constitue la clé de permission de la requête — `sql:<connector>:<name>`. Renommez via le bouton **Renommer** en haut (multi-fichiers — chaque référence d'écran/menu/dictionnaire est mise à jour en une seule passe ; refuse de s'exécuter sur des modifications locales non enregistrées).
+En lecture seule dans l'éditeur. Le nom est fixé au clic sur *＋ Ajouter une requête* et est la clé de permission de la requête — `sql:<connector>:<name>`. Renommez via le bouton **Renommer** en haut (multi-fichiers — chaque référence d'écran/menu/dictionnaire est mise à jour en une seule fois ; refuse de s'exécuter sur des modifications locales non enregistrées).
 
 Règles de nommage :
 

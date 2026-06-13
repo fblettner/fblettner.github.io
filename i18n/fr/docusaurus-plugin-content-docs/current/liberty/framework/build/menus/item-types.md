@@ -277,7 +277,7 @@ En cas de doute, commencer par `query` — la plupart des écrans destinés aux 
 | Erreur | Symptôme | Correction |
 |---|---|---|
 | Feuille `query` avec un `target` qui n'est pas un nom de requête. | Cliquer la feuille ouvre un TableView par défaut sans colonnes. | Choisir une vraie requête dans la liste déroulante. |
-| Feuille `endpoint` sur un connecteur SQL. | La validation à l'enregistrement peut passer, mais à l'exécution le connecteur n'expose pas d'endpoints. | Pointer vers un connecteur API. |
+| Feuille `endpoint` sur un connecteur SQL. | La validation à l'enregistrement peut passer, mais à l'exécution le connecteur ne propose pas d'endpoints. | Pointer vers un connecteur API. |
 | `dashboard` avec `connector`. | La validation à l'enregistrement échoue. | Retirer le champ `connector`. |
 | `page` avec `connector`. | La validation à l'enregistrement échoue. | Retirer le champ `connector`. |
 | `params` qui référence un placeholder absent de la requête cible. | La liaison est silencieusement ignorée. | Ouvrir la requête cible, déclarer le paramètre. |

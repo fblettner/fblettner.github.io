@@ -115,7 +115,7 @@ La claim `tenant_id` est définie par l'IdP / la couche SSO ; le framework la li
 
 | Préoccupation | Atténuation |
 |---|---|
-| **Indexer la colonne `owner`** | Critique. Chaque requête de lecture filtre dessus ; un index fait passer d'un balayage complet à une recherche sur une seule ligne. |
+| **Indexer la colonne `owner`** | Critique. Chaque requête de lecture filtre dessus ; un index fait passer d'un analyse complet à une recherche sur une seule ligne. |
 | **Anti-pattern N+1** | Ne bouclez pas ligne par ligne dans l'application ; laissez une seule requête avec `WHERE owner = :session_user` renvoyer le bon ensemble. Le framework le fait naturellement. |
 | **Vues matérialisées par tenant** | Pour des tenants volumineux, une vue par tenant (`vw_invoices_tenant_42`) peut être plus performante qu'un prédicat `WHERE` générique. Changez la cible de la requête du connecteur en conséquence. |
 

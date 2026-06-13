@@ -99,7 +99,7 @@ Les briques sont volontairement petites (une étape fait une seule chose). Les p
 | Les charges restent à l'échelle d'une installation et ne traversent pas plusieurs systèmes. | Les charges couvrent une douzaine de services et nécessitent une vue DAG globale. |
 | Le pipeline complet se termine en quelques secondes à quelques minutes. | Une seule étape dure plusieurs heures et requiert de l'autoscaling. |
 | Cron + étapes linéaires + nouvelle tentative suffisent. | Vous avez besoin d'expansion dynamique de tâches, de DAG fan-out / fan-in, de calcul distribué. |
-| Vous voulez un seul outil, une seule interface, un seul flux de logs. | Vous exploitez déjà Airflow / Dagster / Prefect pour le reste, et un second outil constitue un surcoût. |
+| Vous voulez un seul outil, une seule interface, un seul flux de logs. | Vous exploitez déjà Airflow / Dagster / Prefect pour le reste, et un second outil est un surcoût. |
 | L'alternative serait d'écrire à la main un script Python + un timer systemd. | L'alternative serait d'écrire à la main un CronJob Kubernetes avec sidecars. |
 
 Le point de conception du framework, c'est « la colle opérationnelle dont la plupart des applications internes ont besoin » — pas « tous les cas d'orchestration ». Pour le cas des 80 %, il évite une bonne partie de la plomberie.

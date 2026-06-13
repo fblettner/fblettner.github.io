@@ -41,7 +41,7 @@ INFO  scheduler: acquired lock · this replica is the scheduler primary
 INFO  scheduler: failed to acquire lock · running scheduler-disabled
 ```
 
-Il s'agit d'un **filet de sécurité**, pas du mécanisme primaire. Le paramètre explicite représente la source de vérité ; le verrou rattrape les erreurs de configuration.
+C'est un **garde-fou**, pas le mécanisme principal. Le paramètre explicite représente la source de vérité ; le verrou rattrape les erreurs de configuration.
 
 ### ▶ Exécution manuelle sur une secondaire
 
@@ -122,7 +122,7 @@ Trois formes de permission encadrent Nomaflow :
 
 Un utilisateur sans aucune permission Nomaflow **ne voit pas du tout l'entrée de menu Nomaflow** — le framework masque les liens que l'utilisateur ne peut atteindre.
 
-La forme granulaire `job:<name>` s'avère utile quand une équipe métier doit posséder une tâche spécifique (par exemple le rafraîchissement quotidien du reporting) sans voir la flotte d'ETL de l'équipe data-platform. La plupart des installations se contentent de `job:*` pour le rôle data-platform et n'utilisent pas les permissions granulaires ; la simplicité opérationnelle prime sur le verrouillage de la visibilité des tâches.
+La forme granulaire `job:<name>` est utile quand une équipe métier doit posséder une tâche spécifique (par exemple le rafraîchissement quotidien du reporting) sans voir la flotte d'ETL de l'équipe data-platform. La plupart des installations se contentent de `job:*` pour le rôle data-platform et n'utilisent pas les permissions granulaires ; la simplicité opérationnelle prime sur le verrouillage de la visibilité des tâches.
 
 Modifier ou créer des tâches est encadré par **`settings:jobs`** — une permission distincte et plus restreinte. Le flux :
 

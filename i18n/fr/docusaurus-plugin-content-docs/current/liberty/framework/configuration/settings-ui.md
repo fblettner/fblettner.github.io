@@ -170,6 +170,6 @@ Chaque éditeur dialogue avec un petit ensemble d'endpoints `/admin/config/*`. I
 
 - **Éditer une section à la fois.** Un *Enregistrer et recharger* ne remplace que le registre affecté — un changement multi-sections peut laisser le système dans un état transitoire où une configuration est à jour et une autre non.
 - **Utiliser l'échappatoire TOML brut avec parcimonie.** En cas de recours fréquent, ouvrir un ticket — un manque dans un éditeur mérite d'être corrigé côté framework.
-- **Lancer *Tester* avant *Enregistrer* sur un connecteur SQL ou HTTP.** Le framework rejette l'*Enregistrer* si le parseur de chaîne de connexion échoue, mais il laisse passer une requête que la base refuse à l'exécution. Le bouton *Tester* détecte cela plus tôt.
+- **Lancer *Tester* avant *Enregistrer* sur un connecteur SQL ou HTTP.** Le framework rejette l'*Enregistrer* si le analyseur de chaîne de connexion échoue, mais il laisse passer une requête que la base refuse à l'exécution. Le bouton *Tester* détecte cela plus tôt.
 - **Restreindre étroitement la permission *TOML brut*.** Les opérateurs qui n'ont besoin que de modifier un connecteur n'ont pas besoin de pouvoir écraser tout le fichier.
 - **Garder `git status` propre.** Chaque enregistrement dans Paramètres atterrit comme un diff dans `liberty-apps` ; committer avec un message clair pour que le chemin de retour arrière reste évident.

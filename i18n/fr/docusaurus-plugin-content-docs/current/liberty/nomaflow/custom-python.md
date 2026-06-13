@@ -100,7 +100,7 @@ ctx.log.error(f"upstream returned 500 — retry policy will decide")
 |---|---|
 | Utiliser `▶` pour marquer les jalons de progression. | Lecture claire dans le journal d'exécution. |
 | Un `log.info` par *jalon*, pas par ligne. | Un million de lignes de log par exécution est illisible et lent à afficher. |
-| Journaliser les compteurs de lignes : `"upserted 4321 rows"`. | Le nombre constitue la réponse d'audit. |
+| Journaliser les compteurs de lignes : `"upserted 4321 rows"`. | Le nombre est la réponse d'audit. |
 | `log.warning` pour les données ignorées ; `log.error` uniquement en cas de re-levée. | Le niveau sert de filtre de recherche sur la page Exécutions. |
 
 ### Lecture d'un connecteur
@@ -217,7 +217,7 @@ Types d'exceptions courants et ce qu'ils signalent :
 
 | Exception | Signal |
 |---|---|
-| `RuntimeError` | Échec générique ; le message constitue le diagnostic. |
+| `RuntimeError` | Échec générique ; le message est le diagnostic. |
 | `ValueError` | Une entrée était incorrecte (un kwarg, un champ parsé). |
 | `LookupError` / `KeyError` | Un champ supposé exister est absent. |
 | Exceptions spécifiques au connecteur (`OperationalError`, `IntegrityError`) | À laisser remonter naturellement — sans enveloppe. |

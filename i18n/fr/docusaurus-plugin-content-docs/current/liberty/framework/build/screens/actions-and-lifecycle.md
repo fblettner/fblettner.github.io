@@ -154,7 +154,7 @@ Si l'utilisateur clique sur Annuler dans la confirmation, la chaîne s'arrête ;
 
 ### Estampiller les colonnes d'audit à l'insertion
 
-L'écran a une colonne `CREATED_BY` que vous voulez remplir automatiquement avec l'utilisateur courant — mais le dialogue ne l'expose pas (c'est une colonne d'audit masquée). Utiliser `on_insert` :
+L'écran a une colonne `CREATED_BY` que vous voulez remplir automatiquement avec l'utilisateur courant — mais le dialogue ne l'affiche pas (c'est une colonne d'audit masquée). Utiliser `on_insert` :
 
 ```toml
 [[screens.crm.customers.on_insert]]
