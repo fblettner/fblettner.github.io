@@ -15,8 +15,8 @@ Deux applications payantes s'appuient sur Liberty Next :
 
 Le framework seul (sans les connecteurs sous licence) est gratuit.
 
-:::info[En cours de rédaction]
-Liberty Next est en cours de développement actif. Cette documentation est rédigée au fil du projet — certaines pages restent succinctes, des captures peuvent précéder le build déployé, des sections sont des marque-pages. La section [Framework](/liberty/framework/overview) est le point d'entrée recommandé.
+:::info[Développement actif]
+Liberty Next est en développement actif — de nouvelles fonctionnalités sortent régulièrement, et cette documentation suit le framework au fil de son évolution. La section [Framework](/liberty/framework/overview) est le point d'entrée recommandé.
 :::
 
 ---

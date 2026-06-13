@@ -15,8 +15,8 @@ Two paid applications ship on Liberty Next:
 
 The framework itself (without the licensed connectors) is free.
 
-:::info[Work in progress]
-Liberty Next is in active development. This documentation is being written alongside the framework — pages may still be sparse, screenshots may be ahead of the deployed build, and some sections are placeholders. The [Framework](./framework/overview.md) section is the recommended entry point.
+:::info[Active development]
+Liberty Next is under active development — new capabilities ship regularly, and this documentation tracks the framework as it evolves. The [Framework](./framework/overview.md) section is the recommended entry point.
 :::
 
 ---
