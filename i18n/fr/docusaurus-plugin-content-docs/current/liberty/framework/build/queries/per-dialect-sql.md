@@ -183,7 +183,7 @@ Au moment de l'exécution, le moteur lit le **dialecte du pool** (déclaré dans
 
 1. Cherche la clé de dialecte dans la map `sql`.
 2. Retombe sur `default` quand aucune variante spécifique ne correspond.
-3. Échoue au analyse quand `default` est manquant ou vide.
+3. Échoue à l'analyse quand `default` est manquant ou vide.
 
 Un connecteur dirigé vers un autre pool — via le flux Dupliquer l'application ou en changeant la valeur `pool` du connecteur — sélectionne automatiquement la variante correspondante. Aucune modification de code nécessaire.
 
@@ -193,7 +193,7 @@ Un connecteur dirigé vers un autre pool — via le flux Dupliquer l'application
 
 | Erreur | Symptôme | Correction |
 |---|---|---|
-| Clé `default` manquante. | Le connecteur échoue au analyse à l'enregistrement / au rechargement. L'erreur mentionne « a per-dialect sql map must include a 'default' key ». | Ajoutez une variante `default`. |
+| Clé `default` manquante. | Le connecteur échoue à l'analyse à l'enregistrement / au rechargement. L'erreur mentionne « a per-dialect sql map must include a 'default' key ». | Ajoutez une variante `default`. |
 | `default` vide. | Même erreur de analyse — « the 'default' sql variant must not be empty ». | Remplissez-la — même un placeholder comme `SELECT 1` suffit à passer la validation pendant que vous finissez les autres. |
 | Utiliser des noms de `:placeholder` différents selon les variantes. | Certains appels lient une valeur qui n'apparaît pas dans la variante exécutée — le moteur les ignore silencieusement. | Gardez le jeu de placeholders identique sur chaque variante. Si un paramètre n'a véritablement pas de sens sur un dialecte, repensez la conception — découpez en deux requêtes nommées. |
 | Oublier `ORDER BY` sur une requête paginée. | Chaque backend a son propre ordre de lignes quand l'ordre n'est pas spécifié — la pagination produit des résultats différents sur Postgres vs Oracle. | Mettez toujours `ORDER BY` quand vous utilisez LIMIT / FETCH / TOP. |

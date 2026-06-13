@@ -212,7 +212,7 @@ Demander à la Plateforme Agréée la liste des factures adressées à l'opérat
 
 | Champ | Description |
 |---|---|
-| **Modèle de document** | Le modèle `received-ubl` (ou tout modèle dont `direction = R`) — pré-filtré pour qu'un analyse *PA entrante* n'atterrisse jamais sur un modèle côté émission par erreur. |
+| **Modèle de document** | Le modèle `received-ubl` (ou tout modèle dont `direction = R`) — pré-filtré pour qu'une analyse *PA entrante* n'atterrisse jamais sur un modèle côté émission par erreur. |
 | **Émise après** | Date d'émission la plus ancienne à considérer. Par défaut, le curseur enregistré dans le modèle *global* (`lastFetchReceivedAt`). Modifiable pour rattraper — le curseur est replacé sur la date d'émission la plus récente effectivement traitée à la fin de l'analyse. |
 | **Inclure déjà importées** | Désactivé par défaut. La PA peut renvoyer deux fois le même UUID ; avec la case décochée, la déduplication contre `F564231` les écarte avant l'affichage des résultats. Cocher pour examiner chaque référence retournée par la PA, par exemple pour re-télécharger un UBL dont l'import précédent a échoué en plein traitement. |
 
