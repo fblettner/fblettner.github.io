@@ -138,11 +138,11 @@ Les ERP livrent des UI natives fonctionnelles mais lentes, datées et lourdes. L
 
 ### Parcours guidé
 
-Pour JD Edwards en particulier : l'application packagée **[Nomajde](https://docs.nomana-it.fr/nomajde/)** est une app Nomana-IT bâtie sur le framework et qui livre une admin JDE complète — utilisateurs F0092, security workbench, file BIP, données de référence. Installez-la, pointez-la sur votre base JDE, c'est fini. Aucun tutoriel n'est nécessaire.
+Pour JD Edwards en particulier : l'application packagée **[Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview)** est une app Nomana-IT bâtie sur le framework et qui livre une admin JDE complète — utilisateurs F0092, security workbench, file BIP, données de référence. Installez-la, pointez-la sur votre base JDE, c'est fini. Aucun tutoriel n'est nécessaire.
 
 La même approche fonctionne pour SAP (schéma `SAPSR3`), NetSuite (API suite-analytics), Microsoft Dynamics (le backend SQL on-premise).
 
-Les apps éditeur Nomana-IT [Nomasx-1](https://docs.nomana-it.fr/liberty/nomasx-1/overview) et [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview) sont des versions productionnées de ce motif — empaquetez toute une app d'administration, mettez-la sous licence, livrez-la aux clients.
+Les apps éditeur Nomana-IT [Nomasx-1](https://docs.nomana-it.fr/liberty/nomasx1/overview) et [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview) sont des versions productionnées de ce motif — empaquetez toute une app d'administration, mettez-la sous licence, livrez-la aux clients.
 
 ---
 
@@ -281,7 +281,7 @@ Le framework est le bon outil quand **la plupart de vos écrans sont liste-et-é
 | Vous êtes… | Commencez par |
 |---|---|
 | **Nouveau sur le framework et vous voulez un tutoriel propre** | [Tutoriel — Construire un CRM](./tutorial-crm/01-setup.md) — six étapes, domaine générique. |
-| **En train de planifier une admin JDE** | Installez l'app packagée [Nomajde](https://docs.nomana-it.fr/nomajde/) — spécifique JDE, rien à construire. |
+| **En train de planifier une admin JDE** | Installez l'app packagée [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview) — spécifique JDE, rien à construire. |
 | **En train de planifier une admin SAP / NetSuite / autre ERP** | Suivez le [Tutoriel — Construire un CRM](./tutorial-crm/01-setup.md) ; le modèle se transpose. |
 | **Juste en train de l'installer pour la première fois** | [Démarrage → Installation](../installation/python-server.md). |
 | **À la recherche d'une marche à suivre précise** | [Cookbook](./cookbook/crud-existing-table.md) — recettes courtes. |

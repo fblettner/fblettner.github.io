@@ -106,5 +106,5 @@ Une interface CRUD fonctionnelle sur votre table existante, avec :
 
 ## Pour aller plus loin
 
-- Pour une admin JD Edwards spécifiquement, l'app packagée [Nomajde](https://docs.nomana-it.fr/nomajde/) livre tous les écrans que vous bâtiriez ici — pré-construits, sous licence.
+- Pour une admin JD Edwards spécifiquement, l'app packagée [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview) livre tous les écrans que vous bâtiriez ici — pré-construits, sous licence.
 - Le modèle mental complet : [Concepts → Connecteurs](../connectors.md).
