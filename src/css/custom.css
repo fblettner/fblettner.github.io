@@ -192,3 +192,47 @@ table {
     padding: 0 !important;
   }
 }
+
+/* ──────────────────────────────────────────────────────────────
+   Algolia DocSearch modal — aligned to the NOMANA-IT palette.
+   (The modal is the DocSearch UI; only these CSS vars style it —
+   Algolia controls data + relevance, not appearance.)
+   ────────────────────────────────────────────────────────────── */
+:root {
+  --docsearch-primary-color: #2b8cff;
+  --docsearch-highlight-color: #2b8cff;
+  --docsearch-logo-color: #2b8cff;
+  --docsearch-modal-shadow: 0 24px 70px rgba(43, 140, 255, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme='dark'] {
+  --docsearch-text-color: #e2e8f0;
+  --docsearch-muted-color: #64748b;
+  --docsearch-primary-color: #4a9eff;
+  --docsearch-highlight-color: #4a9eff;
+  --docsearch-logo-color: #4a9eff;
+  --docsearch-container-background: rgba(5, 8, 15, 0.72);
+  --docsearch-modal-background: #0d1220;
+  --docsearch-modal-shadow: 0 24px 70px rgba(74, 158, 255, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --docsearch-searchbox-background: #0a0e1a;
+  --docsearch-searchbox-focus-background: #0a0e1a;
+  --docsearch-searchbox-shadow: inset 0 0 0 1px rgba(74, 158, 255, 0.65);
+  --docsearch-hit-background: #0a0e1a;
+  --docsearch-hit-color: #cbd5e1;
+  --docsearch-hit-active-color: #ffffff;
+  --docsearch-hit-shadow: none;
+  --docsearch-footer-background: #0d1220;
+  --docsearch-footer-shadow: 0 -1px 0 rgba(255, 255, 255, 0.06);
+  --docsearch-key-gradient: linear-gradient(-225deg, #1e293b, #0f172a);
+  --docsearch-key-shadow: inset 0 -2px 0 0 #0b0f1a, inset 0 0 1px 1px #1e293b;
+}
+
+/* Rounder shell + a brand-tinted active row with a left accent bar,
+   instead of the default solid-blue selection. */
+.DocSearch-Modal { border-radius: 14px; overflow: hidden; }
+.DocSearch-Hit a { border-radius: 8px; }
+[data-theme='dark'] .DocSearch-Hit[aria-selected='true'] a {
+  background: rgba(74, 158, 255, 0.12);
+  box-shadow: inset 2px 0 0 var(--docsearch-primary-color);
+}
+[data-theme='dark'] .DocSearch-Hit[aria-selected='true'] mark { color: var(--docsearch-primary-color); }
