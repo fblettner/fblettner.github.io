@@ -187,7 +187,7 @@ Chaque notification envoyée correspond à une ligne dans **`F564253`** (Oracle 
 | Colonne | Type | Rôle |
 |---|---|---|
 | `NTUKID` | numérique | Clé primaire. Unique sur l'ensemble de la table — la clé de ligne n'inclut plus le triplet `(doc, dct, kco)`. |
-| `NTUSER` | chaîne | Nom d'utilisateur résolu, ou `*` lorsque l'authentification est désactivée (diffusion). |
+| `NTUSER` | chaîne | Nom d'utilisateur résolu, ou `*` quand l'authentification est désactivée (diffusion). |
 | `NTEV01` | chaîne | `0` pour non lue, `1` pour lue. La pastille de la cloche compte les lignes où `NTEV01 = 0`. |
 | `NTSUBJ` / `NTMSGE` | chaîne | Sujet et corps. |
 | `NTK74MSG2` | chaîne | Pied d'audit des actions écrit par le dispatcher (`OK / FAIL / STOP / SKIP` par appel) — alimente les pastilles. Nouveau en 2026.05.7. |

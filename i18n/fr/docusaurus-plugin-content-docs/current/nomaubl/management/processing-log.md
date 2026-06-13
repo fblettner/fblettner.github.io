@@ -1,6 +1,6 @@
 ---
 title: Journal de traitement
-description: "Consulter le journal d'exécution NomaUBL — chaque événement START / END / intermédiaire enregistré pendant les traitements XML, UBL, BIP et FTP. Vue groupée par job pour le statut et la durée d'un coup d'œil, ou flux d'événements à plat pour l'analyse forensique."
+description: "Consulter le journal d'exécution NomaUBL — chaque événement START / END / intermédiaire enregistré pendant les traitements XML, UBL, BIP et FTP. Vue groupée par job pour le statut et la durée d'un coup d'œil, ou flux d'événements à plat pour l'analyse détaillée."
 keywords: [NomaUBL, journal de traitement, runtime log, F564237, START, END, cycle de vie, AUTO, SINGLE, BURST, UBL, trace de traitement, jobs orphelins, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 

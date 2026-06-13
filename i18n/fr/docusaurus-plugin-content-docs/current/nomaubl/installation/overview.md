@@ -6,7 +6,7 @@ keywords: [NomaUBL, installation, déploiement, serveur, JDK, Oracle, PostgreSQL
 
 # Installation — vue d'ensemble
 
-NomaUBL se livre comme une application Java unique et autonome — le JAR (`nomaubl.jar` sous Linux / macOS, `nomaubl-fat.jar` sous Windows) accompagné de deux scripts de pilotage équivalents : **`nomaubl.sh`** (Bash) et **`nomaubl.cmd`** (batch Windows). Les deux exposent les mêmes sous-commandes (`start` / `stop` / `restart` / `status` / `log` / `install` / `upgrade` / modes de traitement) et appellent le JAR avec les mêmes arguments — choisir celui qui correspond à l'hôte. Il n'existe pas d'image Docker ; le JAR s'exécute sur un processus JDK 17 et enregistre ses données de cycle de vie dans une base Oracle ou PostgreSQL. L'interface web, l'API REST et l'ordonnanceur d'arrière-plan résident tous dans ce processus unique.
+NomaUBL se livre comme une application Java unique et autonome — le JAR (`nomaubl.jar` sous Linux / macOS, `nomaubl-fat.jar` sous Windows) accompagné de deux scripts de pilotage équivalents : **`nomaubl.sh`** (Bash) et **`nomaubl.cmd`** (batch Windows). Les deux proposent les mêmes sous-commandes (`start` / `stop` / `restart` / `status` / `log` / `install` / `upgrade` / modes de traitement) et appellent le JAR avec les mêmes arguments — choisir celui qui correspond à l'hôte. Il n'existe pas d'image Docker ; le JAR s'exécute sur un processus JDK 17 et enregistre ses données de cycle de vie dans une base Oracle ou PostgreSQL. L'interface web, l'API REST et l'ordonnanceur d'arrière-plan résident tous dans ce processus unique.
 
 Cette section déroule chaque étape, d'un serveur Linux vierge jusqu'à un environnement opérationnel.
 

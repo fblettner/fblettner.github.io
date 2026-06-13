@@ -16,7 +16,7 @@ import Link from '@docusaurus/Link';
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '24px'}}>
     <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', fontSize: '12px', fontWeight: 600}}>📦 JD Edwards · SAP · NetSuite · ERP personnalisé</span>
     <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', fontSize: '12px', fontWeight: 600}}>✅ EN 16931 + extended-ctc-fr</span>
-    <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', fontSize: '12px', fontWeight: 600}}>🔌 Plateforme Agréée pluggable</span>
+    <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', fontSize: '12px', fontWeight: 600}}>🔌 Plateforme Agréée enfichable</span>
     <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', fontSize: '12px', fontWeight: 600}}>🛠 Opérations en libre-service</span>
   </div>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
@@ -232,7 +232,7 @@ Un déploiement NomaUBL couvre chaque étape, de la sortie ERP brute à la factu
 | **Transformer** | Applique un pré-traitement XSLT, convertit les templates BI Publisher RTF en XSL, et éclate les spools multi-documents par clé de burst configurable. |
 | **Générer l'UBL** | Produit des documents UBL 2.1 structurés en s'appuyant sur les valeurs par défaut par template : parties, schemeID, routage BAR, types de processus métier, catégories d'allowance / charge, mentions légales françaises. |
 | **Valider** | Exécute XSD + Schematron + l'extension CTC française avant qu'aucun document ne quitte votre périmètre. Affiche chaque erreur, avertissement et indication de reprise en ligne. |
-| **Déposer** | Transmet à la Plateforme Agréée configurée via un connecteur pluggable. Le backend PA est de la configuration — il s'échange sans modification de code. |
+| **Déposer** | Transmet à la Plateforme Agréée configurée via un connecteur enfichable. Le connecteur PA est un paramètre de configuration — on le change sans toucher au code. |
 | **Suivre** | Interroge la PA pour récupérer les mises à jour de statut et persiste le cycle de vie complet : déposée, reçue, payée, en litige, refusée, rejetée — avec motifs, actions attendues et horodatages. |
 | **Opérer** | Présente la bonne action à la bonne étape : redéposer, envoyer le PDF par e-mail, marquer paiement reçu, émettre un avoir, mettre à jour un statut, annuler en compta — pilotée par des connecteurs API configurables. |
 

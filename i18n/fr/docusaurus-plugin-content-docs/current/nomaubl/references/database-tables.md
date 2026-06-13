@@ -332,7 +332,7 @@ Erreurs XSD et Schematron enregistrées pour une facture. Une ligne par erreur /
 
 | Champ | Type | Description |
 |---|---|---|
-| `UVDOC` / `UVDCT` / `UVKCO` | — | Document / type / société (PK ; orpheline lorsqu'il n'existe pas de ligne F564231). |
+| `UVDOC` / `UVDCT` / `UVKCO` | — | Document / type / société (PK ; orpheline quand il n'existe pas de ligne F564231). |
 | `UVSEQN` | Entier | Numéro de séquence d'erreur (PK). |
 | `UVY56LEVEL` | Texte(10) | Sévérité — `ERROR`, `WARNING`, `INFO`. |
 | `UVSRCL` | Texte(25) | Source — `XSD` / `SCH` / `DB`. |

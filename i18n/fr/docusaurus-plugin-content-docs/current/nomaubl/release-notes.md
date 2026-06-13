@@ -67,7 +67,7 @@ Une grosse mise à jour du constructeur PDF : un logo de société, une couleur 
 - **Format de date par modèle.** Un nouveau menu *Date* dans la barre du constructeur — `yyyy-MM-dd` (défaut), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. Il s'applique aux dates d'émission, d'échéance, de période et de livraison par ligne.
 - **Adresse de livraison complète dans le PDF.** Le bloc LIVRAISON affiche maintenant le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme le bloc client.
 - **Bloc Note (par code).** Un nouveau choix *Note (par code)* dans le sélecteur de bloc personnalisé. L'inspecteur propose une liste déroulante alimentée par la liste de référence `note-types` ; le rendu repère le `cbc:Note` qui porte le marqueur `#CODE#` correspondant et affiche son corps sur place — désactivez la section Notes globale et posez chaque note exactement où elle doit aller.
-- **Slots personnalisés dans la section En-tête.** L'en-tête expose deux slots — *Pied gauche* (sous le bloc fournisseur) et *Pied droit* (sous Profile ID) — chacun acceptant un arbre de blocs complet édité sur place, pour une ligne TVA intra-UE ou une mention de conditions de paiement sans intercaler une section Bloc autonome.
+- **Slots personnalisés dans la section En-tête.** L'en-tête propose deux slots — *Pied gauche* (sous le bloc fournisseur) et *Pied droit* (sous Profile ID) — chacun acceptant un arbre de blocs complet édité sur place, pour une ligne TVA intra-UE ou une mention de conditions de paiement sans intercaler une section Bloc autonome.
 - **Édition en zoom des arbres de blocs.** Les champs de type bloc (la section `block` racine et les nouveaux slots de l'en-tête) s'affichent en carte récapitulative compacte avec une pastille *Éditer* ; un clic confie tout l'inspecteur au constructeur de blocs, avec une barre *← Retour · Section · Slot*, et changer de section sort automatiquement. La liste du type de bloc est triée par ordre alphabétique.
 - **Slots personnalisés dans Parties et Boîte des totaux.** Le même mécanisme s'étend au reste du canvas — Parties reçoit *Pied client* + *Pied livraison* (dans chaque encart), la Boîte des totaux reçoit *Avant totaux* + *Après totaux*.
 
@@ -126,7 +126,7 @@ Un **renvoi en masse** très attendu pour les factures bloquées en *Échec d'en
 
 ### Nouveautés
 
-- **Carte Échec d'envoi sur le Tableau de bord technique.** Une nouvelle carte affiche le nombre de factures actuellement en *Échec d'envoi* (statut 9904) et expose un bouton **Tout renvoyer** d'un seul clic. La fenêtre de progression montre les compteurs en direct (traitées / réussies / échecs) ; vous pouvez la fermer et laisser l'opération continuer en arrière-plan, ou l'arrêter proprement entre deux factures. Le renvoi est cadencé à 100 ms par appel pour ménager la PA. Voir [Tableau de bord technique → Échec d'envoi](./application/tech-dashboard.md#send-failed-row-2-span-4-20260603).
+- **Carte Échec d'envoi sur le Tableau de bord technique.** Une nouvelle carte affiche le nombre de factures actuellement en *Échec d'envoi* (statut 9904) et propose un bouton **Tout renvoyer** d'un seul clic. La fenêtre de progression montre les compteurs en direct (traitées / réussies / échecs) ; vous pouvez la fermer et laisser l'opération continuer en arrière-plan, ou l'arrêter proprement entre deux factures. Le renvoi est cadencé à 100 ms par appel pour ménager la PA. Voir [Tableau de bord technique → Échec d'envoi](./application/tech-dashboard.md#send-failed-row-2-span-4-20260603).
 - **Reprise nocturne automatique dans Paramètres.** Une nouvelle page [Configuration → Système → Reprise auto](./configuration/system/auto-retry.md) permet de programmer une passe quotidienne qui renvoie toutes les factures dans un statut choisi — par défaut 3 h du matin, statut 9904. Utile pour le lot de nuit : tout ce qui est bloqué côté PA est repris avant le matin suivant. Plusieurs planifications coexistent, chacune avec sa propre heure, sa liste de statuts, une fenêtre d'analyse optionnelle et son cadencement.
 - **Sélecteur multi-statuts pour la reprise.** Choisissez un ou plusieurs statuts dans une liste limitée aux codes étiquetés *Erreur – technique* (9904, 9905, 9907, …). Une seule planification peut couvrir d'un coup tous les seaux d'erreurs techniques.
 - **Fenêtre de progression pour les tâches en arrière-plan.** Les opérations longues partagent désormais une fenêtre commune — une barre, des compteurs en direct, un bouton *Annuler* et un bouton *Continuer en arrière-plan* qui masque la fenêtre sans arrêter la tâche. Voir [Tableau de bord technique → Fenêtre de progression partagée](./application/tech-dashboard.md#shared-progress-window).
@@ -135,7 +135,7 @@ Un **renvoi en masse** très attendu pour les factures bloquées en *Échec d'en
 
 ## 2026.06.02 — 2026-06-02 \{#v2026-06-02\}
 
-Un nouveau **rapport quotidien des erreurs** envoyé par courriel à qui de droit — avec la liste complète des évènements jointe en Excel — ainsi qu'une **vue Détaillée** très attendue sur la page Intégration / erreurs qui regroupe toutes les erreurs par facture et permet d'exporter le tout d'un clic. L'outil de mise à jour côté client gagne un réglage manuel pour les installations patchées en avance, et les scripts de lancement Windows / Linux exposent désormais un point d'extension pour les options JVM (emplacement de la clé maîtresse, mémoire, …).
+Un nouveau **rapport quotidien des erreurs** envoyé par courriel à qui de droit — avec la liste complète des évènements jointe en Excel — ainsi qu'une **vue Détaillée** très attendue sur la page Intégration / erreurs qui regroupe toutes les erreurs par facture et permet d'exporter le tout d'un clic. L'outil de mise à jour côté client gagne un réglage manuel pour les installations patchées en avance, et les scripts de lancement Windows / Linux offrent désormais un point d'extension pour les options JVM (emplacement de la clé maîtresse, mémoire, …).
 
 ### Nouveautés
 
@@ -305,7 +305,7 @@ Toutes les installations actuellement en production sont en **2026.05.16** — l
 ### Meilleurs diagnostics en cas d'erreur
 
 - L'en-tête du rapport de mise à jour affiche désormais le répertoire d'environnement résolu et l'URL JDBC, donc une mauvaise machine ou un mauvais chemin saute aux yeux.
-- Les échecs déroulent toute la chaîne de causes — un vague « connection attempt failed » indique maintenant s'il s'agit de `NoRouteToHost`, `Connection refused`, un problème d'authentification, etc.
+- Les échecs déroulent toute la chaîne de causes — un vague « connection attempt failed » indique maintenant si c'est `NoRouteToHost`, `Connection refused`, un problème d'authentification, etc.
 - Le démarrage trace le chemin du fichier de clé maître utilisé pour déchiffrer les propriétés sensibles de la configuration. Quand la page de licence repasse en mode « restreint » parce que la clé a changé, l'erreur pointe désormais directement vers la résolution de la clé maître au lieu d'afficher « Invalid license key format ».
 
 ---
@@ -316,7 +316,7 @@ E-Reporting (Flux 10) ré-écrit contre la spécification DGFiP : une enveloppe 
 
 ### Nouveautés
 
-- **Direction persistée sur chaque facture** — nouvelle colonne `UHDRIN` sur F564231 (`'1'` = reçue d'un fournisseur, `'2'` = émise par l'opérateur). Fixée à l'insertion depuis le modèle de document source puis figée. Changer la *Direction* d'un modèle dans Settings ne re-classe plus les lignes historiques, le filtre de la liste Factures, les règles de notification, ni les enveloppes e-Reporting. Le filtre et le verrouillage des actions de la modale de détail lisent maintenant directement ce drapeau.
+- **Direction enregistrée sur chaque facture** — nouvelle colonne `UHDRIN` sur F564231 (`'1'` = reçue d'un fournisseur, `'2'` = émise par l'opérateur). Fixée à l'insertion depuis le modèle de document source puis figée. Changer la *Direction* d'un modèle dans Settings ne re-classe plus les lignes historiques, le filtre de la liste Factures, les règles de notification, ni les enveloppes e-Reporting. Le filtre et le verrouillage des actions de la modale de détail lisent maintenant directement ce drapeau.
 - **E-Reporting Flux 10 — une enveloppe, les deux sous-blocs**. 10.1 (B2B international détaillé) et 10.3 (B2C agrégé) cohabitent désormais comme enfants parallèles du même `<TransactionsReport>` conformément à la règle G6.29 — au lieu de deux fichiers séparés. Au plus deux fichiers XML par (société, période) : un sortant (Issuer `RoleCode=SE`) et un entrant (Issuer `RoleCode=BY`).
 - **Signe des avoirs dans les agrégats 10.3** — les avoirs (codes UNTDID 1001 `261, 381, 396, 502, 503` selon G1.01) viennent désormais en soustraction de l'agrégat de période au lieu d'y être ajoutés. G1.14 autorise explicitement les montants négatifs sur TT-82 / TT-83 / TT-87 / TT-88, donc une période dominée par les avoirs ressort avec le bon net.
 - **Tables e-Reporting renommées pour cohérence** : `RGY56BAR` → `RGDRIN`, `RHY56BAR` → `RHDRIN`, `RIY56BAR` → `RIDRIN` (avec index alignés). Les trois tables e-Reporting partagent désormais la même nomenclature `DRIN` que F564231.
@@ -373,7 +373,7 @@ Génération de factures UBL directement depuis une requête SQL ou une API REST
 
 ### Timings de debug activés par défaut
 
-- Les durées par étape (parse, validation, insertion en base, envoi à la PA…) sont désormais loggées par défaut à chaque exécution, dans l'interface comme en ligne de commande. La surcharge est négligeable et c'est le moyen le plus rapide de diagnostiquer une exécution lente.
+- Les durées par étape (parse, validation, insertion en base, envoi à la PA…) sont désormais journalisées par défaut à chaque exécution, dans l'interface comme en ligne de commande. La surcharge est négligeable et c'est le moyen le plus rapide de diagnostiquer une exécution lente.
 - Utilisez le nouveau drapeau `--no-debug` (ou décochez la case dans l'interface) pour les ignorer sur les batchs de nuit volumineux.
 
 ### Correction
@@ -628,7 +628,7 @@ Soumission B2B française à la PA : pièces jointes PDF qualifiées (LISIBLE + 
 ### Nouveautés
 
 - **Pièce jointe LISIBLE** : nouveau drapeau Y/N sur les modèles de document. Quand ON, un PDF humainement lisible est généré depuis l'UBL lui-même et réinjecté en tant que pièce jointe « LISIBLE ». Indépendant du sélecteur Attachment existant — les deux peuvent être actifs sur la même facture.
-- **Pièces jointes additionnelles** : liste de documents métier qualifiés (`RIB`, `BON_LIVRAISON`, `BON_COMMANDE`, `PJA`, `BORDEREAU_SUIVI`, `DOCUMENT_ANNEXE`, etc.) à embarquer avec la facture. Éditable dans l'onglet Document ; les chemins acceptent des placeholders comme `%APP_HOME%`, `%DOC%`, `%DCT%`, `%KCO%`. Les fichiers manquants sont loggés et ignorés — ils ne font jamais échouer le traitement.
+- **Pièces jointes additionnelles** : liste de documents métier qualifiés (`RIB`, `BON_LIVRAISON`, `BON_COMMANDE`, `PJA`, `BORDEREAU_SUIVI`, `DOCUMENT_ANNEXE`, etc.) à embarquer avec la facture. Éditable dans l'onglet Document ; les chemins acceptent des placeholders comme `%APP_HOME%`, `%DOC%`, `%DCT%`, `%KCO%`. Les fichiers manquants sont journalisés et ignorés — ils ne font jamais échouer le traitement.
 - **TAG_CUSTOMER_SIRET** (BT-46) : nouvelle variable XSL pour le SIRET de l'acheteur, à côté du SIREN acheteur existant.
 
 ### Corrections
@@ -811,7 +811,7 @@ Version majeure : l'e-Reporting (Flux 10.1 / 10.3) devient une fonctionnalité d
 ### Autre
 
 - **Initialiser la base de données** crée maintenant les trois nouvelles tables e-Reporting (F564240 / F564241 / F564242) en plus des tables existantes. Les noms de tables sont configurables dans **Paramètres → db-nomaubl**.
-- L'éditeur **Rôles** expose les deux nouvelles pages (Journal de traitement, Notes de version) pour pouvoir y donner accès aux rôles existants.
+- L'éditeur **Rôles** propose les deux nouvelles pages (Journal de traitement, Notes de version) pour pouvoir y donner accès aux rôles existants.
 
 ---
 
@@ -895,7 +895,7 @@ Modes interactifs et batch — tous pilotés par un unique `config.json` :
 - Édition à chaud de `config.json` depuis le navigateur. Templates système : `global`, `e-invoicing`, `e-directory`, `statuses`, `db-nomaubl`, `db-jde`, `ftp-jde`, `fetch-invoices`.
 - Listes de codes : `invoice-types`, `vat-categories`, `vatex-codes`, `payment-means`, `scheme-ids`, `unit-codes`, `countries`, `note-types`, `currency-codes`, `rejection-reason-codes`, `action-codes`, `document-reference-codes`, `profile-ids`.
 - Templates de type de document : par document RTF / XSL / clé de burst / routage / type de traitement.
-- Templates de connecteurs API avec substitution de placeholders (`{{username}}`, `{{token}}`, `{{content}}`, …) et auth pluggable (`NONE`, `BASIC`, `BEARER`, `API_KEY`, `OAUTH2`).
+- Templates de connecteurs API avec substitution de placeholders (`{{username}}`, `{{token}}`, `{{content}}`, …) et authentification enfichable (`NONE`, `BASIC`, `BEARER`, `API_KEY`, `OAUTH2`).
 - Surcharges par société `e-invoicing-{kco}`.
 
 ### Authentification & RBAC
@@ -915,7 +915,7 @@ Piloté depuis `global.fetch*Interval` (minutes — 0 désactive) :
 
 ### API HTTP embarquée
 
-Un serveur REST + statique minimal (`com.sun.net.httpserver`) sert le bundle React sur `/` et expose `/api/*` pour les factures, templates, fetch / extract, validation, système de fichiers, licence, packaging, authentification, et la documentation OpenAPI sur `/api/docs`.
+Un serveur REST + statique minimal (`com.sun.net.httpserver`) sert le bundle React sur `/` et sert `/api/*` pour les factures, templates, fetch / extract, validation, système de fichiers, licence, packaging, authentification, et la documentation OpenAPI sur `/api/docs`.
 
 ### E-mail & i18n
 

@@ -168,7 +168,7 @@ Les rapports e-reporting suivent un **cycle de vie dédié**, distinct de celui 
 
 | Code | Tag | Signification |
 |---|---|---|
-| **`9950`** | `EREPORT_CREATED` | XML construit et persisté ; pas encore de tentative de dépôt. |
+| **`9950`** | `EREPORT_CREATED` | XML construit et enregistré ; pas encore de tentative de dépôt. |
 | **`9951`** | `EREPORT_SUBMIT_SKIPPED` | Rapport généré ; envoi PA désactivé (`sendToPA=N` sur le template *e-reporting*). Le XML reste téléchargeable mais n'atteint jamais la PA. |
 | **`9952`** | `EREPORT_SENT_TO_PA` | Rapport déposé sur la PA en HTTP ; en attente de l'accusé de réception initial. |
 | **`9953`** | `EREPORT_PENDING` | La PA a accusé réception et traite le rapport. |

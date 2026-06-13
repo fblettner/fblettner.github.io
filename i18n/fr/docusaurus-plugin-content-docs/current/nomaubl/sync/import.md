@@ -57,7 +57,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   <rect x="240" y="294" width="540" height="24" rx="5" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <rect x="248" y="300" width="56" height="14" rx="3" fill="rgba(148,163,184,0.18)" stroke="rgba(148,163,184,0.40)" strokeWidth="1"/>
   <text x="276" y="310" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">INFO</text>
-  <text x="312" y="310" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">PA · INV-2026-0143 · en attente — nouvelle tentative au prochain balayage</text>
+  <text x="312" y="310" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">PA · INV-2026-0143 · en attente — nouvelle tentative au prochain passage</text>
 
   <rect x="20" y="124" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="139" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bouton unique</text>

@@ -136,7 +136,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   <line x1="570" y1="410" x2="640" y2="410" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#rs-arrow)"/>
 </svg>
 
-Chaque exécution ne lit que les événements postérieurs à l'horodatage repère et l'avance après un balayage réussi — l'exécution suivante reprend exactement là où la précédente s'est arrêtée.
+Chaque exécution ne lit que les événements postérieurs à l'horodatage repère et l'avance après un passage réussi — l'exécution suivante reprend exactement là où la précédente s'est arrêtée.
 
 ---
 
@@ -164,7 +164,7 @@ Sous-ensembles courants :
 - **Tous les codes** *(défaut)* — abonnement à toute la liste de référence. Adapté à tout déploiement qui demande une traçabilité complète.
 - **Codes obligatoires uniquement** — récupération limitée aux codes obligatoires PPF (`200`, `201`, `213`, …). Réduit le volume sur les installations à très fort débit où les statuts intermédiaires ne sont pas exploités en aval.
 
-Les codes `9906` / `9907` ne **font pas** partie de cette récupération — il s'agit de statuts locaux NomaUBL liés à la confirmation d'import asynchrone, traités par *Sync → Import*.
+Les codes `9906` / `9907` ne **font pas** partie de cette récupération — ce sont des statuts locaux NomaUBL liés à la confirmation d'import asynchrone, traités par *Sync → Import*.
 
 ---
 

@@ -11,7 +11,7 @@ L'éditeur **Connecteurs SQL** est l'endroit où sont déclarées des requêtes 
 Cibles typiques :
 
 - Une **seconde base NomaUBL** pour les recherches inter-environnements.
-- Une **base d'ERP source** — JD Edwards, SAP, NetSuite ou un schéma personnalisé — quand une action doit lire un e-mail client, une date de paiement, un code de statut que l'API HTTP n'expose pas.
+- Une **base d'ERP source** — JD Edwards, SAP, NetSuite ou un schéma personnalisé — quand une action doit lire un e-mail client, une date de paiement, un code de statut que l'API HTTP ne fournit pas.
 - Une **base opérationnelle** qu'une action doit mettre à jour — par exemple marquer une facture comme *envoyée* dans un système aval, archiver une ligne, enregistrer une trace d'audit.
 
 La page fonctionne quel que soit le système source, le connecteur SQL pouvant pointer sur n'importe quelle base JDBC accessible.
@@ -193,7 +193,7 @@ Seuls `SELECT`, `INSERT`, `UPDATE`, `DELETE` et `MERGE` sont acceptés. Tout le 
 
 ### Binding des paramètres (`:name` → `?`)
 
-Le binding des paramètres passe par `PreparedStatement`. Le runtime parse le SQL, réécrit chaque jeton `:name` en un `?` positionnel et lie les valeurs positionnellement — les valeurs ne sont **jamais** substituées par concaténation dans le SQL. Le parseur respecte :
+Le binding des paramètres passe par `PreparedStatement`. Le runtime analyse le SQL, réécrit chaque jeton `:name` en un `?` positionnel et lie les valeurs positionnellement — les valeurs ne sont **jamais** substituées par concaténation dans le SQL. L'analyseur respecte :
 
 - les littéraux entre apostrophes (`'O''Brien'`),
 - les identifiants entre guillemets (`"customer.name"`),
@@ -238,7 +238,7 @@ Un runner intégré qui exécute la requête sélectionnée sur la base cible et
 |---|---|
 | **SELECT** | Type d'instruction + nombre de lignes + durée sur la ligne verte de succès ; en dessous, un tableau compact colonnes × lignes. Le runtime plafonne le nombre de lignes à *Max rows* de l'onglet Connection. |
 | **INSERT / UPDATE / DELETE / MERGE** | Type d'instruction + nombre de lignes affectées + durée sur la ligne verte de succès. Pas de tableau — le runtime ne renvoie que le compteur d'updates pour les appels non-`SELECT`. |
-| **Erreur** | Cadre d'erreur rouge avec le message JDBC / parseur (`SQLException`, violation de la liste blanche, `:placeholder` manquant, etc.). |
+| **Erreur** | Cadre d'erreur rouge avec le message JDBC / analyseur (`SQLException`, violation de la liste blanche, `:placeholder` manquant, etc.). |
 
 L'onglet Test appelle la base réelle — *Enregistrer* le connecteur d'abord après une édition ; sinon le test tourne contre la version précédemment enregistrée de la requête.
 
@@ -275,7 +275,7 @@ Exemple : une règle qui commence par chercher l'e-mail du client via une requê
 - **Un connecteur par base, pas par requête.** Un connecteur *crm* à cinq requêtes nommées se lit mieux que cinq connecteurs portant chacun une requête. Le menu déroulant regroupe les requêtes sous le connecteur parent.
 - **Nommer les requêtes par intention, pas par forme SQL.** `findCustomerEmail` se lit mieux que `selectKcoFromF0101`. Le corps du SQL est à un clic dans l'éditeur — le nom est ce que la liste de règles affiche.
 - **Démarrer chaque connecteur en `Writable=Non`.** Passer le drapeau à `Oui` uniquement sur les requêtes qui doivent vraiment écrire. Un connecteur en `SELECT` seul ne peut pas être détourné pour exécuter un `DELETE`, même si une faute de frappe pointe la règle sur la mauvaise requête.
-- **Utiliser des placeholders `:name` pour toute valeur fournie par l'utilisateur.** Concaténer une valeur dans la chaîne SQL contourne le filet de sécurité du binding paramétré. Le parseur ignore volontairement les jetons à l'intérieur des littéraux et des commentaires : un `:` dans une chaîne reste sans effet.
+- **Utiliser des placeholders `:name` pour toute valeur fournie par l'utilisateur.** Concaténer une valeur dans la chaîne SQL court-circuite la protection qu'offrent les paramètres liés. L'analyseur ignore volontairement les jetons à l'intérieur des littéraux et des commentaires : un `:` dans une chaîne reste sans effet.
 - **Réduire Max rows par défaut sur les requêtes orientées tableau de bord.** Un widget qui lit les 10 dernières factures rejetées n'a pas besoin de 1000 lignes en retour ; le plafonner à 50 garde l'interface réactive et le fetch JDBC peu coûteux.
 - **Tester avant d'enregistrer en cas de modification.** L'onglet Test prend en compte l'édition en cours quand il existe des changements non enregistrés, mais le bouton *Run* appelle la base réelle — il n'y a pas de rollback. Une requête `Writable=Oui` testée s'engage si le SQL le décide.
 - **Coupler connecteurs SQL et API via le chaînage des réponses.** Une règle de notification peut lire une valeur via une requête SQL et la transmettre comme paramètre à un webhook HTTP, sans code de chaque côté. Voir [Règles de notification — onglet Actions](../management/notification-rules.md#onglet-actions) pour les détails.

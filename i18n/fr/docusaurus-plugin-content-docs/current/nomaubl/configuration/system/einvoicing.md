@@ -137,7 +137,7 @@ Cet onglet configure le **répertoire des fichiers XSL** utilisés pour **transf
 
 ### api-connecteur
 
-Le transport HTTP de la PA — flux d'authentification, base URL, endpoints — vit dans un [api-connecteur](../api-connectors.md) réutilisable. Cette page **le référence par son nom uniquement** et ne porte jamais de champ d'auth ni d'endpoint HTTP en ligne. L'`pa-default` embarqué couvre le flux standard ; choisir un autre connecteur quand la PA expose un schéma d'auth non standard ou quand plusieurs PA demandent des connecteurs différents.
+Le transport HTTP de la PA — flux d'authentification, base URL, endpoints — vit dans un [api-connecteur](../api-connectors.md) réutilisable. Cette page **le référence par son nom uniquement** et ne porte jamais de champ d'auth ni d'endpoint HTTP en ligne. L'`pa-default` embarqué couvre le flux standard ; choisir un autre connecteur quand la PA utilise un schéma d'auth non standard ou quand plusieurs PA demandent des connecteurs différents.
 
 | Champ | Description |
 |---|---|
@@ -145,7 +145,7 @@ Le transport HTTP de la PA — flux d'authentification, base URL, endpoints — 
 
 ### Surcharges d'endpoint par tâche
 
-Chaque tâche PA dans NomaUBL a un nom d'endpoint par défaut. Quand l'api-connecteur expose un nom différent pour la même tâche, saisir une surcharge ci-dessous. Laisser vide pour utiliser le nom par défaut affiché.
+Chaque tâche PA dans NomaUBL a un nom d'endpoint par défaut. Quand l'api-connecteur utilise un nom différent pour la même tâche, saisir une surcharge ci-dessous. Laisser vide pour utiliser le nom par défaut affiché.
 
 | Champ | Défaut | Utilisé par |
 |---|---|---|
@@ -214,7 +214,7 @@ L'onglet **Actions** qui se trouvait sur cette page dans la version précédente
 ## Conseils & bonnes pratiques
 
 - **Choisir d'abord l'api-connecteur.** Sans connecteur, les champs *Surcharges d'endpoint par tâche* restent masqués et la PA est inaccessible. L'`pa-default` embarqué est un point de départ raisonnable.
-- **Laisser les surcharges par tâche vides quand les noms d'endpoint du connecteur correspondent déjà.** Un connecteur `pa-default` qui expose un endpoint littéralement nommé `import` n'a pas besoin d'une surcharge sur la ligne *Import*. La page n'enregistre que les valeurs qui diffèrent du défaut — saisir le défaut est sans effet mais ajoute du bruit.
+- **Laisser les surcharges par tâche vides quand les noms d'endpoint du connecteur correspondent déjà.** Un connecteur `pa-default` qui propose un endpoint littéralement nommé `import` n'a pas besoin d'une surcharge sur la ligne *Import*. La page n'enregistre que les valeurs qui diffèrent du défaut — saisir le défaut est sans effet mais ajoute du bruit.
 - **Démarrer en `paMode=` (vide)** lors du câblage d'un nouveau type de document. Le pipeline UBL fonctionne de bout en bout sans impliquer la PA, ce qui fait remonter les mappings sources et les échecs Schematron avant que le réseau soit dans la boucle. Basculer sur `API` une fois le côté données propre.
 - **N'utiliser SFTP que quand la PA l'exige réellement.** REST est plus simple à diagnostiquer, et le panneau de test de l'api-connecteur fournit un retour clair. SFTP convient quand la PA impose un dépôt fichier ou pour des soumissions par lots à fort volume.
 - **Modifier les intervalles de polling sur `global → Scheduling`, pas ici.** Les champs de cette page ont été retirés en 2026.05.8, ils n'avaient aucun effet.

@@ -225,7 +225,7 @@ Pour investiguer, exécuter le passage manuellement :
 # → exécute un passage -fetch-status synchrone ; la sortie va sur stdout
 ```
 
-`fetch-import` comme `fetch-status` peuvent être lancés à la demande sans risque — ils sont idempotents vis-à-vis de la PA.
+`fetch-import` comme `fetch-status` peuvent être lancés à la demande sans risque — ils peuvent être relancés sans risque vis-à-vis de la PA.
 
 ---
 
@@ -276,7 +276,7 @@ for env in demo uat prod; do
 done
 ```
 
-Planifier via un timer systemd / cron (Linux / macOS) ou via le Planificateur de tâches Windows — `*/5 * * * *` (ou une tâche `/SC MINUTE /MO 5`) constitue une cadence raisonnable.
+Planifier via un timer systemd / cron (Linux / macOS) ou via le Planificateur de tâches Windows — `*/5 * * * *` (ou une tâche `/SC MINUTE /MO 5`) est une cadence raisonnable.
 
 ### Approche C — Métriques hôte + JVM
 

@@ -14,7 +14,7 @@ Lors du traitement d'un spool d'entrée, NomaUBL applique par défaut les **argu
 
 Le mécanisme est utile car **un même spool peut contenir plusieurs types de documents**. Exemple typique : un spool contient une facture **B2B** et une facture **B2C**. Sans surcharge par type, les deux factures héritent des mêmes arguments d'exécution ; avec cette page, il est possible — par exemple — de forcer l'envoi de la facture B2B vers la PA tout en conservant la facture B2C en local pour l'e-reporting uniquement.
 
-Les sept codes sont fixés par la réglementation ; il n'est pas possible d'en ajouter ni d'en renommer. Ce qui est paramétrable ici est la **politique appliquée à chaque code** lorsqu'il apparaît dans un spool.
+Les sept codes sont fixés par la réglementation ; il n'est pas possible d'en ajouter ni d'en renommer. Ce qui est paramétrable ici est la **politique appliquée à chaque code** quand il apparaît dans un spool.
 
 Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — tant que la source est mappée vers UBL.
 
@@ -129,10 +129,10 @@ Cette page s'applique à des documents issus de n'importe quel système source �
 
 | Code | Portée réglementaire |
 |---|---|
-| **B2B** | Relève de l'**e-invoicing**. |
-| **B2G** | Relève de l'**e-invoicing — secteur public** (Chorus Pro). |
-| **B2BINT** | Relève de l'**e-reporting** des ventes B2B internationales. |
-| **B2C** | Relève de l'**e-reporting — Ventes B2C**. |
+| **B2B** | Concerne l'**e-invoicing**. |
+| **B2G** | Concerne l'**e-invoicing — secteur public** (Chorus Pro). |
+| **B2BINT** | Concerne l'**e-reporting** des ventes B2B internationales. |
+| **B2C** | Concerne l'**e-reporting — Ventes B2C**. |
 | **OUTOFSCOPE** | Hors périmètre de la Réforme française de la facturation électronique. |
 | **ARCHIVEONLY** | Avoir interne (annulation REJETÉE/REFUSÉE) — pas de flux 1, pas de transmission (règle réglementaire **BR-FR-20**). |
 | **DOCUMENT** | Document hors facturation. |

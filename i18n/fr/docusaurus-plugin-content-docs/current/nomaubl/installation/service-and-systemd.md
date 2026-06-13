@@ -73,7 +73,7 @@ Pour le quotidien opérationnel, le wrapper suffit. La couche de supervision au 
 
 ### Réglage JVM — `JAVA_OPTS` *(2026.06.02)* \{#java-opts\}
 
-Les deux wrappers exposent une variable **`JAVA_OPTS`** en tête de fichier. Son contenu est transmis à chaque appel `java -jar` — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Modifier le fichier une fois ; chaque appel ultérieur du wrapper la reprend.
+Les deux wrappers proposent une variable **`JAVA_OPTS`** en tête de fichier. Son contenu est transmis à chaque appel `java -jar` — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Modifier le fichier une fois ; chaque appel ultérieur du wrapper la reprend.
 
 ```bash title="nomaubl.sh — en-tête du fichier"
 # Options JVM transmises à chaque appel java. Défaut : vide.

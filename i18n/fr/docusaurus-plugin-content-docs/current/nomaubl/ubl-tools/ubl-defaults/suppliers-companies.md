@@ -1,6 +1,6 @@
 ---
 title: Sociétés fournisseurs
-description: "UBL Defaults — onglet Suppliers. Annuaire des sociétés vendeur (AccountingSupplierParty) utilisé comme valeurs par défaut lorsque le XML source les omet, indexé par code société."
+description: "UBL Defaults — onglet Suppliers. Annuaire des sociétés vendeur (AccountingSupplierParty) utilisé comme valeurs par défaut quand le XML source les omet, indexé par code société."
 keywords: [NomaUBL, UBL, defaults, supplier, fournisseur, vendeur, BT-27, BT-29, BT-30, BT-31, BT-33, SIREN, SIRET, GLN, NAF, TVA, adresse]
 ---
 

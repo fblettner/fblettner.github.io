@@ -6,7 +6,7 @@ keywords: [NomaUBL, récupération factures, fetch invoices, BIP, BI Publisher, 
 
 # Récupération des factures
 
-L'éditeur **Fetch Invoices** détermine quels **jobs JD Edwards BI Publisher (BIP)** NomaUBL récupère pour traitement. Il est utilisé par l'import batch et par l'ordonnanceur en arrière-plan pour identifier *les sorties BIP éligibles* et *le modèle de document à appliquer à chacune*.
+L'éditeur **Fetch Invoices** détermine quels **jobs JD Edwards BI Publisher (BIP)** NomaUBL récupère pour traitement. Il est utilisé par l'import batch et par l'ordonnanceur en arrière-plan pour identifier *les sorties BIP à traiter* et *le modèle de document à appliquer à chacune*.
 
 :::info[Page spécifique à JD Edwards]
 Cette page est l'une des parties **spécifiques à JDE** de NomaUBL — elle s'appuie sur un serveur BIP JD Edwards. Les autres pages de configuration sont, elles, indépendantes de la source.

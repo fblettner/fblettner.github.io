@@ -317,7 +317,7 @@ Un sélecteur de taille de page en bas du tableau est réglé sur 50 par défaut
 
 ### Colonnes du catalogue *(2026.05.10)*
 
-La requête SQL de la vue Factures joint maintenant `F564231` (UH) et `F564230` (FE) sur doc / dct / kco via un `LEFT JOIN`, donc le catalogue de colonnes expose 16 colonnes archive / journal supplémentaires. Toutes peuvent être ajoutées à la spec depuis le picker `+ Ajouter une colonne` de l'éditeur [Vues de liste](../configuration/list-views.md) — la jointure gauche préserve les lignes factures sans entrée de journal.
+La requête SQL de la vue Factures joint maintenant `F564231` (UH) et `F564230` (FE) sur doc / dct / kco via un `LEFT JOIN`, donc le catalogue de colonnes comporte 16 colonnes archive / journal supplémentaires. Toutes peuvent être ajoutées à la spec depuis le picker `+ Ajouter une colonne` de l'éditeur [Vues de liste](../configuration/list-views.md) — la jointure gauche préserve les lignes factures sans entrée de journal.
 
 | Colonne catalogue | Contenu |
 |---|---|
@@ -569,7 +569,7 @@ Le cycle de vie est en mode ajout seul — les événements sont créés par le 
       <span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '11px', fontWeight: 600, border: '1.5px solid rgba(148,163,184,0.5)', background: 'rgba(148,163,184,0.1)', color: '#cbd5e1'}}>9900 UBL généré</span>
       <span style={{fontSize: '11px', opacity: 0.6, fontFamily: 'monospace'}}>2026-04-24 09:14:02</span>
     </div>
-    <div style={{fontSize: '12px', opacity: 0.78}}>Document UBL construit à partir du XML source et persisté dans NomaUBL.</div>
+    <div style={{fontSize: '12px', opacity: 0.78}}>Document UBL construit à partir du XML source et enregistré dans NomaUBL.</div>
   </div>
 
   <div style={{position: 'relative', marginBottom: '18px'}}>

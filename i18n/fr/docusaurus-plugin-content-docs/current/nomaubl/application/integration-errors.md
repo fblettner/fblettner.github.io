@@ -210,7 +210,7 @@ Un nouveau `ValidationRuleCatalog` analyse les `.sch` embarqués au premier appe
 
 Le catalogue ajoute aussi **douze codes de cycle de vie / intégration** avec une description française : `UBL_CREATION`, `DB_INSERT`, `DB_UPDATE`, `PA_SEND`, `PA_TIMEOUT`, `PDF_RENDER`, `XSL_TRANSFORM`, `EMAIL_SEND`, `NOTIFY_DISPATCH`, `STATUS_TRANSITION`, `EXTRACT_BIP`, `EXTRACT_FTP` — ce sont les codes émis par `ErrorCatalog` quand une étape runtime échoue.
 
-Le catalogue fusionné est exposé sur `GET /api/integration-errors/catalog` ; le frontend le met en cache une fois par chargement de page via le hook `useRuleCatalog`.
+Le catalogue fusionné est accessible via `GET /api/integration-errors/catalog` ; le frontend le met en cache une fois par chargement de page via le hook `useRuleCatalog`.
 
 :::warning[Lacune connue]
 Les 34 `assert` du Schematron `BR-FR-CPRO` n'ont pas d'attribut `id`. Le validateur enregistre donc un code de règle vide pour ces événements ; ils apparaissent dans la vue par événement avec une colonne *Règle* vide et n'apparaissent pas dans les cartes par règle. Le Schematron lui-même fonctionne ; seules les étiquettes de règle manquent.

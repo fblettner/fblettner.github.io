@@ -114,7 +114,7 @@ Le rapport de mise à niveau liste chaque fichier conservé dans une section **A
 |---|---|
 | **Le nouveau JAR est bien celui attendu** — `java -jar nomaubl.jar -help` affiche la version en tête. | Permet de détecter un build erroné posé à côté du wrapper. |
 | **L'utilisateur du service peut écrire dans le répertoire d'environnement et son parent**. | La mise à niveau réécrit `template/`, `xslt/`, `.versions/` et crée une sauvegarde. Un système de fichiers en lecture seule bloque la mise à niveau dès l'étape 1. |
-| **Le compte de base de données dispose des mêmes droits DDL qu'à l'installation** (création de tables, d'index, de séquences, de vues). | L'étape 2 applique les deltas de schéma — les droits DDL sont requis même pour une exécution idempotente sur la même version. |
+| **Le compte de base de données dispose des mêmes droits DDL qu'à l'installation** (création de tables, d'index, de séquences, de vues). | L'étape 2 applique les deltas de schéma — les droits DDL sont requis même pour une réexécution sans effet sur la même version. |
 | **Une véritable sauvegarde de base de données est en place** *(pas seulement l'instantané `backup/` par environnement)*. | Le répertoire `backup/` conserve une copie des fichiers sur disque ; il ne réalise pas d'instantané de la base. Il convient de prendre la sauvegarde habituelle de la base avant une version majeure. |
 | **Une fenêtre de maintenance** suffisante pour un redémarrage — typiquement 1 à 5 minutes par environnement. | Le service est indisponible de l'étape 1 jusqu'à l'étape 6. |
 
@@ -212,7 +212,7 @@ Après un retour arrière, il convient de prendre une nouvelle sauvegarde de bas
 
 ### Nouvelle tentative
 
-Le volet `-upgrade` côté Java est **idempotent** : une nouvelle exécution sur le même environnement saute les étapes déjà réussies et reprend à celle qui a échoué. Une fois la cause sous-jacente corrigée (réseau, privilège manquant, etc.), il suffit de relancer :
+Le volet `-upgrade` côté Java est **ré-exécutable sans risque** : une nouvelle exécution sur le même environnement saute les étapes déjà réussies et reprend à celle qui a échoué. Une fois la cause sous-jacente corrigée (réseau, privilège manquant, etc.), il suffit de relancer :
 
 ```bash
 ./nomaubl.sh upgrade prod      # ou nomaubl.cmd upgrade prod

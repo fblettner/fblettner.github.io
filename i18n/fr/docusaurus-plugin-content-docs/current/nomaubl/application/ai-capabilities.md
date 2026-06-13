@@ -157,7 +157,7 @@ Cinq outils en lecture seule couvrent les questions opérationnelles courantes. 
 | **`list_invoices`** | Jusqu'à 50 factures de F564231, avec filtres : code statut, société, routage BAR (B2B / B2BINT / B2C / B2G / OUTOFSCOPE), nom client (sous-chaîne), période d'émission. | *« Lister les factures en attente pour la société 00070 en EUR »*, *« Échecs d'envoi depuis lundi dernier »* |
 | **`explain_status_code`** | Le nom de tag et les libellés FR / EN d'un code statut. Consulte le catalogue facture (1, 8, 10, 37, 9900–9907 …) et le catalogue e-reporting (9950–9957). | *« Que signifie 9906 ? »*, *« Statut 9954 ? »* |
 | **`validation_errors`** | Erreurs de validation issues de F564236 pour un triplet `DOC + DCT + KCO` (niveau, source, règle, message — mêmes colonnes et même logique de résolution que la page [Erreurs d'intégration](./integration-errors.md)). | *« Quel est le problème pour la facture 10000 / RI / 00001 ? »* |
-| **`lifecycle_history`** | Toutes les transitions de statut enregistrées dans F564235 pour un triplet `DOC + DCT + KCO` — séquence, code statut, message, date / heure, plus le motif de rejet PA, l'action attendue et la note de statut lorsqu'ils sont présents. | *« Pourquoi la facture 12345/RI/00070 a-t-elle été rejetée par la PA ? »*, *« Afficher l'historique complet de cette facture »* |
+| **`lifecycle_history`** | Toutes les transitions de statut enregistrées dans F564235 pour un triplet `DOC + DCT + KCO` — séquence, code statut, message, date / heure, plus le motif de rejet PA, l'action attendue et la note de statut quand ils sont présents. | *« Pourquoi la facture 12345/RI/00070 a-t-elle été rejetée par la PA ? »*, *« Afficher l'historique complet de cette facture »* |
 | **`list_ereports`** | Jusqu'à 50 dépôts de F564240 avec filtres : flux (10.1 / 10.3), société, code statut (9950–9957). | *« Les dix derniers dépôts 10.3 pour la société 00070 »*, *« Dépôts e-reporting en attente »* |
 
 Le déclenchement est automatique : aucun appel manuel à faire. Un garde-fou interrompt l'assistant après **5 appels d'outil par tour**, pour éviter qu'une boucle ne consomme tout le budget API. En cas d'échec d'un outil, l'assistant affiche son nom, les paramètres tentés et le code d'erreur — utile pour le diagnostic.
@@ -307,7 +307,7 @@ Les deux étapes (`list_docs_pages` puis `web_fetch`) sont obligatoires. L'API d
   | 🔍 | `list_invoices`, `lifecycle_history`, `list_ereports`, `validation_errors`, `explain_status_code`, `list_docs_pages` | Consultation en lecture seule de la base NomaUBL ou du sitemap documentaire. |
   | 📖 | `web_fetch` | Téléchargement d'une page de documentation en cours — l'URL choisie figure dans la pastille. |
   | 📥 | `web_fetch_result` | Page reçue. Le préfixe ✓ suivi de l'URL signale un succès ; ❌ suivi d'un code d'erreur signale un échec. |
-  | 🌐 | `web_search` | Une recherche web a été émise (uniquement lorsque la recherche est activée). |
+  | 🌐 | `web_search` | Une recherche web a été émise (uniquement quand la recherche est activée). |
 
 - **Rendu Markdown** — titres, listes à puces, fragments de code et tableaux sont mis en forme dans le panneau, sans texte brut.
 - **Diffusion en flux** — la bulle se remplit pendant que le modèle répond. Le bouton **■** arrête la réponse sans fermer la conversation.

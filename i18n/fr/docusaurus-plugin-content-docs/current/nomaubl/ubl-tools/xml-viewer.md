@@ -160,7 +160,7 @@ Un message en ligne s'affiche en haut de la zone d'édition après chaque action
 
 ## Conseils & bonnes pratiques
 
-- **Utiliser Format après un collage.** La mise en forme automatique au collage gère les ajouts ponctuels ; pour un XML reçu sur une seule ligne, le bouton **Format** restitue la lisibilité.
+- **Utiliser Format après un collage.** La mise en forme automatique au collage gère les ajouts ponctuels ; pour un XML reçu sur une seule ligne, le bouton **Format** rend le XML lisible.
 - **Modifier le champ Server path avant d'enregistrer** permet d'écrire le fichier à un autre emplacement — un *Save As* intégré.
 - **Le visualiseur n'écrase rien automatiquement, sauf via Save.** Charger un autre fichier remplace le tampon sans toucher au disque ; seul **Save to server** enregistre.
 - **Pour des transformations répétables, préférer l'Éditeur XSL.** L'édition à la main produit un résultat ponctuel ; l'Éditeur XSL applique le même mapping à chaque facture suivante.

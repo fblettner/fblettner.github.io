@@ -96,7 +96,7 @@ Les deux points HTTP non authentifiés ne divulguent aucun secret (pas de mots d
   <text x="58" y="276" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Surfaces hôte (deux de droite) → ops / SRE — réponse aux incidents, smoke tests, alerting automatisé.</text>
 
   <rect x="40" y="298" width="920" height="50" rx="10" fill="rgba(0,0,0,0.30)" stroke="#1f2937"/>
-  <text x="58" y="320" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CE QUI N'EST PAS EXPOSÉ EN STANDARD</text>
+  <text x="58" y="320" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CE QUI N'EST PAS DIVULGUÉ EN STANDARD</text>
   <text x="58" y="338" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Prometheus /metrics · traces OpenTelemetry · histogrammes de latence par requête — à raccorder en externe (voir ci-dessous).</text>
 </svg>
 

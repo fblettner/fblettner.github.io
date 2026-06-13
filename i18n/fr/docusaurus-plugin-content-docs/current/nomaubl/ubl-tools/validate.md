@@ -166,7 +166,7 @@ Le nouveau pack `BR-NOMAUBL-rules.sch` capture les règles que l'AIFE impose cô
 |---|---|---|---|
 | **`BR-NOMAUBL-01`** | `fatal` | `cbc:InvoiceTypeCode` (BT-3) ∈ `{261, 381, 396, 502, 503}` *(codes d'avoir)*. | Au moins une `cac:BillingReference/cac:InvoiceDocumentReference` doit être présente, **avec `cbc:ID` (BT-25) et `cbc:IssueDate` (BT-26)**. Sans elle, les PA rejettent l'avoir avec l'erreur de validation modèle `precedingInvoices`. |
 
-La version du pack est exposée sur `GET /api/build-info` sous la clé `schematron.nomaubl` — le pied de page du tableau de bord la lit pour le tampon de version par pack.
+La version du pack est accessible via `GET /api/build-info` sous la clé `schematron.nomaubl` — le pied de page du tableau de bord la lit pour le tampon de version par pack.
 
 ---
 

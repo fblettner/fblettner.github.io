@@ -19,7 +19,7 @@ Cette page s'applique à des documents issus de n'importe quel système source �
 :::info[Refonte en 2026.05.9]
 Deux ajouts sur cette page :
 
-- **Nouvel onglet Webhooks** — configure la façon dont la PA pousse les mises à jour de statut vers NomaUBL. Les requêtes sont signées HMAC avec un secret partagé et POSTées sur `/api/webhook/{connector}/status` ; le vérificateur déduplique les ré-essais « at-least-once » sur l'event id du payload et applique le statut résolu à la facture correspondante. L'onglet expose aussi les surcharges de chemins JSON pour les champs invoice id, status et event id, ainsi qu'une table de correspondance qui traduit le vocabulaire de la PA vers l'ensemble logique `success` / `pending` / `failed`.
+- **Nouvel onglet Webhooks** — configure la façon dont la PA pousse les mises à jour de statut vers NomaUBL. Les requêtes sont signées HMAC avec un secret partagé et POSTées sur `/api/webhook/{connector}/status` ; le vérificateur déduplique les ré-essais « at-least-once » sur l'event id du payload et applique le statut résolu à la facture correspondante. L'onglet propose aussi les surcharges de chemins JSON pour les champs invoice id, status et event id, ainsi qu'une table de correspondance qui traduit le vocabulaire de la PA vers l'ensemble logique `success` / `pending` / `failed`.
 - **Content-Type par endpoint** — chaque endpoint peut désormais déclarer `application/json` *(défaut)* ou `multipart/form-data`. Le builder multipart transforme le corps en liste de parts (`name=value`, `file=@{{filePath}};filename=…;contentType=…`), ce qui permet aux endpoints api-connecteur de piloter des PA qui attendent un upload `multipart/form-data` (par exemple IOPOLE).
 
 `ImportStatusHandler` a aussi été relaxé — tout statut non `failed` / non `pending` est traité comme un succès, ce qui couvre les vocabulaires comme `EMITTED` / `RECEIVED` de IOPOLE sans configuration par PA.
@@ -29,7 +29,7 @@ L'éditeur comporte **cinq onglets** :
 
 1. **Connection** — URL racine, timeout, TLS, en-têtes par défaut.
 2. **Authentication** — None / Basic / Bearer / API Key / OAuth2 (champs conditionnels selon le schéma).
-3. **Endpoints** — catalogue des endpoints HTTP exposés par le connecteur, avec Content-Type par endpoint.
+3. **Endpoints** — catalogue des endpoints HTTP proposés par le connecteur, avec Content-Type par endpoint.
 4. **Webhooks** — URL du webhook entrant, secret partagé, surcharges de chemins JSON et table de statuts pour les mises à jour poussées par la PA.
 5. **Test** — exécuteur intégré permettant d'appeler un endpoint avec des paramètres personnalisés et d'inspecter la réponse.
 

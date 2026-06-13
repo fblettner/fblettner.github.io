@@ -6,7 +6,7 @@ keywords: [NomaUBL, UBL, defaults, BT-118, BT-121, BT-151, TVA, S, Z, E, K, G, A
 
 # Catégories de TVA
 
-L'onglet **VAT** configure la classification TVA portée sur chaque ligne et sur les sous-totaux TVA au niveau document — `BT-118` (catégorie TVA de ligne) / `BT-151` (catégorie TVA de l'article facturé) et `BT-121` (code motif d'exonération). Il expose une catégorie par défaut, un code de taux zéro, un mapping de catégorie et un mapping d'exonération.
+L'onglet **VAT** configure la classification TVA portée sur chaque ligne et sur les sous-totaux TVA au niveau document — `BT-118` (catégorie TVA de ligne) / `BT-151` (catégorie TVA de l'article facturé) et `BT-121` (code motif d'exonération). Il propose une catégorie par défaut, un code de taux zéro, une correspondance de catégorie et une correspondance d'exonération.
 
 Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). Les quatre sections de cet onglet sont gouvernées par une bascule de surcharge unique — l'activer fait basculer l'intégralité du groupe dans le fichier document, et la suppression retire le bloc de surcharge en totalité.
 
@@ -50,7 +50,7 @@ La seconde table de mapping couvre le **BT-121** — le code motif d'exonératio
 
 | Colonne | Description |
 |---|---|
-| **Code de catégorie TVA** | Catégorie UBL nécessitant un code VATEX (typiquement `E`, `K`, `G`, `AE`, `O` — `S` et `Z` sont filtrés car les catégories standard et taux zéro ne portent jamais de motif d'exonération). |
+| **Code de catégorie TVA** | Catégorie UBL qui demande un code VATEX (typiquement `E`, `K`, `G`, `AE`, `O` — `S` et `Z` sont filtrés car les catégories standard et taux zéro ne portent jamais de motif d'exonération). |
 | **Code VATEX** | Code d'exonération issu de la liste de référence *vatex-codes*. |
 
 Quand NomaUBL émet une catégorie qui demande un motif d'exonération, le code `VATEX-*` correspondant est recherché dans ce mapping. Sans ligne pour une catégorie non standard, la Plateforme Agréée destinataire rejette typiquement le document via un échec de règle Schematron.

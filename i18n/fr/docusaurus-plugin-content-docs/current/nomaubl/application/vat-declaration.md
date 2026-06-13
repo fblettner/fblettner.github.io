@@ -14,7 +14,7 @@ Utilisez cette page quand :
 - vous devez rapprocher une ligne CA3 des factures qui la composent — quels clients, quels numéros, quels montants ;
 - vous voulez une synthèse imprimable de la période à joindre au dossier comptable.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Le filtre de période s'applique à la **date d'émission de la facture** — celle imprimée sur la facture elle-même — donc la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures expose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) : un clic sur un montant de la matrice TVA ouvre la liste Factures avec le bon ensemble.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Le filtre de période s'applique à la **date d'émission de la facture** — celle imprimée sur la facture elle-même — donc la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures propose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) : un clic sur un montant de la matrice TVA ouvre la liste Factures avec le bon ensemble.
 
 La matrice est servie depuis les lignes de détail TVA enregistrées (`F564234`), sans relecture de chaque UBL à chaque chargement — la page s'ouvre donc en **quelques secondes que la période contienne 2 000 ou 200 000 factures**. Pour conserver ce comportement, laissez *Enregistrer les détails TVA* activé sous *Paramètres → Connecteurs → db-nomaubl → Tables* — voir [Stockage des détails](../configuration/database-connectors/nomaubl.md#stockage-des-détails).
 
@@ -135,7 +135,7 @@ La barre d'outils au-dessus de la matrice fixe la **période**, un **filtre soci
 
 | Contrôle | Effet |
 |---|---|
-| **Sélecteur de période** | Choisit la période couverte par la matrice. Par défaut, le **mois complet précédent** — celui que vous déclarez. Basculez sur **Trimestre** pour une déclaration trimestrielle. Le filtre s'applique à la **date d'émission de la facture** (celle imprimée sur la facture elle-même) : la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures expose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) — un clic sur un montant ouvre la liste Factures avec ce sélecteur déjà positionné, donc le nombre affiché correspond à celui d'où l'on vient. |
+| **Sélecteur de période** | Choisit la période couverte par la matrice. Par défaut, le **mois complet précédent** — celui que vous déclarez. Basculez sur **Trimestre** pour une déclaration trimestrielle. Le filtre s'applique à la **date d'émission de la facture** (celle imprimée sur la facture elle-même) : la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures propose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) — un clic sur un montant ouvre la liste Factures avec ce sélecteur déjà positionné, donc le nombre affiché correspond à celui d'où l'on vient. |
 | **Boutons Mois / Trimestre** | Basculent entre un pas mensuel et un pas trimestriel. Le libellé du sélecteur de période s'adapte (par ex. *T2 2026*). |
 | **Société** | Optionnel. Restreint la période aux factures d'un code société (KCO). Par défaut : *Toutes les sociétés*. |
 | **▣ Excel** | Télécharge le classeur décrit dans [Export Excel](#export-excel). |

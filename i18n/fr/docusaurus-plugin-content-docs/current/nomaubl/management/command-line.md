@@ -52,7 +52,7 @@ NomaUBL propose deux couches équivalentes — un **wrapper de contrôle de serv
 
 | Couche | Quand l'utiliser |
 |---|---|
-| **`nomaubl.sh`** *(wrapper)* | Exploitation au quotidien sur un serveur hébergeant un ou plusieurs environnements. Gère un fichier PID par instance, prend le **nom d'environnement** au lieu du chemin de configuration complet, expose `start` / `stop` / `restart` / `status` / `log`. |
+| **`nomaubl.sh`** *(wrapper)* | Exploitation au quotidien sur un serveur hébergeant un ou plusieurs environnements. Gère un fichier PID par instance, prend le **nom d'environnement** au lieu du chemin de configuration complet, propose `start` / `stop` / `restart` / `status` / `log`. |
 | **`java -jar nomaubl.jar`** *(direct)* | Déploiement de NomaUBL en conteneur, intégration à un pipeline CI, ou tout contexte qui gère déjà le cycle de vie du processus. Prend le **chemin absolu** vers `config.json`. |
 
 Le wrapper résout sa configuration depuis `<script_dir>/<env>/config/config.json` — autrement dit, le JAR se trouve à côté d'un ou plusieurs répertoires d'environnement, chacun avec un `config/config.json`.
@@ -216,7 +216,7 @@ Pour les environnements **patchés à la main** par anticipation — typiquement
 | # | Étape | Action | Ce qui reste intact |
 |---|---|---|---|
 | 1 | **Arrêt & sauvegarde** | Arrêt du service via `SIGTERM` (10 s de délai), copie de `config/` + `template/` + `ubl/` + `nomaubl.jar` dans `snapshots/<timestamp>/`. Les 5 dernières sauvegardes sont conservées, les plus anciennes sont supprimées. | — |
-| 2 | **Base de données** | Lecture de la version installée depuis la table d'historique des mises à jour, application des deltas de schéma de toutes les versions intermédiaires (idempotent — relancer la mise à jour deux fois ne refait rien la seconde). | Les tables d'exploitation (`F564231`, lignes de cycle de vie…) — seuls les ajouts et renommages de colonnes / index / tables s'appliquent. |
+| 2 | **Base de données** | Lecture de la version installée depuis la table d'historique des mises à jour, application des deltas de schéma de toutes les versions intermédiaires (ré-exécutable sans risque — relancer la mise à jour ne refait rien la seconde fois). | Les tables d'exploitation (`F564231`, lignes de cycle de vie…) — seuls les ajouts et renommages de colonnes / index / tables s'appliquent. |
 | 3 | **Données de référence** | Fusion des nouvelles entrées livrées avec le JAR dans les templates système (statuts, types de document, codes devises, codes d'action, etc.). | Toutes les entrées déjà présentes côté client, y compris celles renommées ou enrichies. |
 | 4 | **XSL framework** | Rafraîchissement de `ubl-common.xsl`, des packs de règles Schematron et du jeu de XSD à la version embarquée dans le JAR. Ces fichiers ne sont pas modifiables côté client. | Le dossier `framework/` est intégralement remplacé — rien de spécifique client à cet endroit. |
 | 5 | **XSL par document** | Pour chaque `template/<nom>/<nom>.xsl`, le wrapper réécrit un fichier neuf à partir du template de référence, puis ré-injecte toutes les valeurs `TAG_*` saisies par le client ainsi que le bloc `NOMAUBL_OVERRIDES_START`…`NOMAUBL_OVERRIDES_END` en fin de fichier. Les **nouveaux TAGs** introduits par la mise à jour arrivent avec leur valeur par défaut de référence — à compléter ensuite si besoin. Les **TAGs supprimés** de la référence sont conservés côté client, marqués d'un commentaire `<!-- removed in <version> -->` pour qu'ils ne passent pas inaperçus. | Valeurs `TAG_*` client · bloc de surcharges client · ressources RTF / images / xml d'exemple par document. |
@@ -384,7 +384,7 @@ Traite un (ou plusieurs) fichier source contre un modèle de document — ou app
 | `--no-db` | N'écrit pas en base (implique `--no-send`). | XML |
 | `--validate` | XSD + Schematron seulement — pas d'insertion BDD, pas de dépôt PA. | UBL |
 | `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. | UBL |
-| `--no-debug` | Ignore les durées par étape (parse, validation, insertion en base, envoi PA) loggées par défaut à chaque exécution. À utiliser sur les batchs nocturnes volumineux quand la surcharge par étape n'apporte rien dans les logs. | tous |
+| `--no-debug` | Ignore les durées par étape (parse, validation, insertion en base, envoi PA) journalisées par défaut à chaque exécution. À utiliser sur les batchs nocturnes volumineux quand la surcharge par étape n'apporte rien dans les logs. | tous |
 
 **Exemples**
 
@@ -443,7 +443,7 @@ Le handler appelle deux tâches du connecteur API sur le modèle PA configuré :
 | **`fetch-received-list`** | Renvoie la liste des références de factures reçues (UUID PA + métadonnées fournisseur) depuis le curseur. |
 | **`fetch-received`** | Télécharge un UBL par UUID PA. |
 
-La déduplication est faite par UUID PA contre les lignes F564231 existantes, donc relancer la passe est sans risque — les factures déjà importées sont ignorées en silence. Le pipeline de traitement s'appuie sur le modèle de document dont la `direction = R` correspond au flux entrant (le modèle livré `received-ubl` par défaut).
+La déduplication est faite par UUID PA contre les lignes F564231 existantes, donc relancer l'import est sans risque — les factures déjà importées sont simplement ignorées. Le pipeline de traitement s'appuie sur le modèle de document dont la `direction = R` correspond au flux entrant (le modèle livré `received-ubl` par défaut).
 
 Pour l'exécuter automatiquement, renseigner **`fetchReceivedInterval`** dans le modèle *global* (minutes entre passes, `0` = désactivé) — même ordonnanceur d'arrière-plan `-serve` que `fetchImportInterval` / `fetchStatusInterval`.
 
@@ -506,7 +506,7 @@ java -jar nomaubl.jar -fetch-single /opt/nomaubl/demo/config/config.json \
 
 ## `-fetch-all` — extraction et traitement par lots
 
-Équivalent de la page *Synchronisation → Fetch Input*. Extrait **tous** les documents éligibles d'une source, puis les traite. Le choix XML / UBL est déduit du modèle — pas d'argument `processType`. Code de retour `1` si au moins un document a échoué.
+Équivalent de la page *Synchronisation → Fetch Input*. Extrait **tous** les documents à traiter d'une source, puis les traite. Le choix XML / UBL est déduit du modèle — pas d'argument `processType`. Code de retour `1` si au moins un document a échoué.
 
 ```text
 -fetch-all <configFile> <template> <source> [<type>] [options…]
@@ -584,8 +584,8 @@ Vue consolidée des options CLI — modes acceptés, effet.
 ## Conseils & bonnes pratiques
 
 - **Programmer les passes via l'ordonnanceur intégré à `-serve` plutôt que via cron.** Configurer `fetchImportInterval` et `fetchStatusInterval` dans le template *global* offre un point unique de paramétrage et survit aux redémarrages d'environnement ; lancer les mêmes passes via cron risque de chevaucher l'ordonnanceur en place.
-- **`fetch-all` est idempotent sur la source `directory`, append-only sur `bip`.** Une relance `directory` reprend les fichiers encore présents dans `dirInput` — typiquement aucun une fois traités et retirés. Une relance `bip` ne récupère que les jobs supérieurs à `lastBipJobNumber`, donc une exécution précédente réussie n'est jamais rejouée.
-- **Utiliser `--validate` lors d'une promotion d'UBL entre environnements.** Cette option exécute XSD + Schematron sans écrire en base ni contacter la PA — un test à blanc avant de basculer sur la passe réelle.
-- **Centraliser `fetchAllParams` dans le template *global* plutôt que sur chaque ligne de cron.** L'ordonnanceur construit la passe depuis cet objet JSON unique, en miroir de la page *Configuration → System → Fetch Invoices*.
+- **`fetch-all` est ré-exécutable sans risque sur la source `directory`, et procède par ajout seul sur `bip`.** Une relance `directory` reprend les fichiers encore présents dans `dirInput` — typiquement aucun une fois traités et retirés. Une relance `bip` ne récupère que les jobs supérieurs à `lastBipJobNumber`, donc une exécution précédente réussie n'est jamais rejouée.
+- **Utiliser `--validate` lors d'une promotion d'UBL entre environnements.** Cette option exécute XSD + Schematron sans écrire en base ni contacter la PA — un test à blanc avant de passer à l'exécution réelle.
+- **Centraliser `fetchAllParams` dans le template *global* plutôt que sur chaque ligne de cron.** L'ordonnanceur compose l'exécution à partir de cet objet JSON unique, en miroir de la page *Configuration → Système → Fetch Invoices*.
 - **Réserver `-extract` à l'inspection ou à la reprise.** `fetch-single` et `fetch-all` extraient en interne ; le mode `-extract` autonome sert à déposer le contenu d'un job BIP sur disque pour analyse hors ligne ou rejeu.
 - **Lancer `-install` sur un répertoire vierge et éditer `config/config.json` ensuite.** L'installeur n'écrase jamais un `config.json` existant ; un fichier obsolète issu d'une tentative précédente l'emportera silencieusement — partir d'un `targetDir` vide pour éviter toute ambiguïté.

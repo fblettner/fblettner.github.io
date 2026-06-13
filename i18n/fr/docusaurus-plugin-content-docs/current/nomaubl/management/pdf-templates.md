@@ -26,7 +26,7 @@ Les modèles PDF étaient auparavant édités en ligne sur la page Documents (on
 ## Accès à la page
 
 - Barre latérale → **Gestion → Modèles PDF**.
-- La page liste toutes les mises en page du catalogue. L'entrée **`built-in`** est la mise en page par défaut livrée — en lecture seule, toujours présente comme filet de sécurité.
+- La page liste toutes les mises en page du catalogue. L'entrée **`built-in`** est la mise en page par défaut livrée — en lecture seule, toujours présente comme valeur de repli.
 - La mise en page par défaut courante — c'est-à-dire celle utilisée par tout document sans `pdfTemplate` explicite — est marquée d'une étoile jaune ★ dans la barre latérale.
 
 ---
@@ -169,7 +169,7 @@ Au moment du rendu PDF d'une facture, NomaUBL parcourt une chaîne en trois temp
 2. À défaut, c'est la propriété `defaultPdfTemplate` du modèle **`global`** qui s'applique — réglée sur cette page via le bouton *Définir par défaut*.
 3. À défaut, la mise en page intégrée **`built-in`** s'applique — toujours présente, jamais supprimable.
 
-Cette troisième étape est le filet de sécurité : un environnement tout juste installé produit des PDF cohérents avant même qu'une mise en page soit créée.
+Cette troisième étape est la valeur de repli : un environnement tout juste installé produit des PDF cohérents avant même qu'une mise en page soit créée.
 
 ---
 
@@ -343,7 +343,7 @@ Liste complète des bascules par section prédéfinie :
 - **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un interrupteur principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client.
 - **Line Table** — trois bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group*), sept bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Amount`, `Tax`) et sept bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, BT-156, BT-157, BT-158, remises / charges, propriétés additionnelles d'article).
 - **Document Allowances** — bascules de colonnes pour type, motif, montant, taxe.
-- **VAT Breakdown** — bascules de colonnes pour catégorie, taux, base imposable, montant de TVA (une colonne d'exemption apparaît automatiquement lorsqu'elle est présente).
+- **VAT Breakdown** — bascules de colonnes pour catégorie, taux, base imposable, montant de TVA (une colonne d'exemption apparaît automatiquement quand elle est présente).
 - **Totals** — sept bascules de lignes couvrant la pile complète (Total HT, Allowances, Charges, Tax Exclusive, Total Tax, Total TTC, Amount Payable).
 - **Payment** — bascules pour moyen de paiement / IBAN / BIC / mention de conditions de paiement.
 - **Notes** — bascule unique pour développer les préfixes `[PMD]` / `[PMT]` à partir du catalogue *note-types*.
@@ -405,7 +405,7 @@ La barre du constructeur porte quelques réglages appliqués à toute la mise en
 
 ## Slots de section
 
-Au-delà des bascules de préréglage, trois sections exposent des **slots nommés**, chacun contenant un arbre de blocs complet (texte, champ, ligne, colonne, tableau, répéter, si, note, …) édité sur place avec le même constructeur. Un slot place un bloc là où, sinon, aucun point d'ancrage n'existe, sans intercaler une section *Bloc* autonome entre deux sections natives :
+Au-delà des bascules de préréglage, trois sections proposent des **slots nommés**, chacun contenant un arbre de blocs complet (texte, champ, ligne, colonne, tableau, répéter, si, note, …) édité sur place avec le même constructeur. Un slot place un bloc là où, sinon, aucun point d'ancrage n'existe, sans intercaler une section *Bloc* autonome entre deux sections natives :
 
 | Section | Slots |
 |---|---|
@@ -442,4 +442,4 @@ La page lit et écrit via les endpoints de templates standards — mêmes routes
 - **Utiliser `block` pour ce que les sections prédéfinies ne couvrent pas.** Mentions légales personnalisées, pieds de page spécifiques à un pays, blocs de signature structurés, filigranes — autant de cas mieux traités par un `block` que par une section prédéfinie.
 - **Itérer dans l'éditeur visuel.** Basculer une section et observer l'aperçu au centre se regénérer est le moyen le plus rapide d'arriver à une mise en page — l'aperçu en direct est toujours visible, pas de modale à ouvrir.
 - **Charger une vraie facture une fois par session.** Le bouton **↑ Charger XML** en haut de l'éditeur alimente le sélecteur de chaque bloc — chargement unique, et chaque auto-complétion XPath utilise vos données.
-- **Ne pas supprimer `built-in`.** Le bouton est désactivé sur cette entrée pour cette raison — c'est le filet de sécurité au bout de la chaîne de résolution.
+- **Ne pas supprimer `built-in`.** Le bouton est désactivé sur cette entrée pour cette raison — c'est la valeur de repli au bout de la chaîne de résolution.

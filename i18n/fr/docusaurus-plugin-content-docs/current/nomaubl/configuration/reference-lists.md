@@ -135,7 +135,7 @@ Les douze listes ci-dessous sont intégrées à NomaUBL et alignées sur la rég
 | **Scheme IDs** | `BT-29` / `BT-30` / `BT-34` / `BT-49` / `BT-71` | Référentiels d'identifiants (schémas d'adressage électronique, schémas d'identifiant tiers). |
 | **Unit of Measure Codes** | Recommandation UN/ECE 20 — `BT-130` | Codes d'unité de quantité sur les lignes de facture (pièce, kilogramme, heure…). |
 | **VAT Category Codes** | EN 16931 — `BT-118` / `BT-151` | Catégorie de TVA au niveau document et au niveau ligne (taux normal, réduit, exonéré, autoliquidation…). |
-| **VATEX Exemption Reason Codes** | VATEX — `BT-121` | Codification du motif d'exonération de TVA, référencé lorsqu'une ligne est exonérée. |
+| **VATEX Exemption Reason Codes** | VATEX — `BT-121` | Codification du motif d'exonération de TVA, référencé quand une ligne est exonérée. |
 | **Expected Action Codes** | `Y56ACTN` (*Action attendue*) | Codes d'action attendus par la Plateforme Agréée (catalogue côté PA). |
 | **Rejection Reason Codes** | `Y56RSRC` (*Motif de rejet*) | Motifs renvoyés par la PA lors du rejet d'une facture. |
 

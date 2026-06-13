@@ -264,7 +264,7 @@ La commande analyse le document UBL déjà conservé sur l'en-tête de chaque fa
 
 L'onglet Colonnes est un éditeur par table qui surcharge les **noms de colonnes** à l'exécution via `UBLColumnConfig`. Chaque sub-handler Java qui lit ou écrit une colonne NomaUBL résout son nom via `cols.<accessor>` au lieu d'une chaîne codée en dur — un renommage de colonne en base (et son enregistrement ici) permet à l'application de continuer à fonctionner sans recompilation.
 
-L'éditeur regroupe les surcharges par table et expose les mêmes noms d'accesseurs que le code Java. Les valeurs par défaut correspondent aux colonnes JDE `F564xxx` (`UHKCO`, `FETXFT`, `RGUKID`, …) ; leur modification est une question côté client et n'est utile que si le schéma diverge du DDL embarqué.
+L'éditeur regroupe les surcharges par table et reprend les mêmes noms d'accesseurs que le code Java. Les valeurs par défaut correspondent aux colonnes JDE `F564xxx` (`UHKCO`, `FETXFT`, `RGUKID`, …) ; leur modification est une question côté client et n'est utile que si le schéma diverge du DDL embarqué.
 
 La nouvelle page **Cross-Reference** générée à la compilation (*Documentation → Cross-Ref*) liste chaque site d'appel Java qui lit `tables.<X>` ou `cols.<X>`, avec un commutateur « accesseurs inutilisés » qui fait apparaître le code mort. Générée par `XrefScanner` à chaque build, sans entretien manuel.
 

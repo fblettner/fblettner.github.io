@@ -1,7 +1,7 @@
 ---
 title: Récupération des entrées
-description: "Automatisation en lot de Extract and Process — balayage d'un répertoire ou de la file d'impression BIP, sélection des éléments dans une liste à cocher, puis exécution du même pipeline Extract → Process sur chaque élément retenu."
-keywords: [NomaUBL, sync, fetch input, lot, batch, BIP, répertoire, last job number, JD Edwards, SAP, NetSuite, ERP personnalisé, balayage, sélection, traitement]
+description: "Automatisation en lot de Extract and Process — analyse d'un répertoire ou de la file d'impression BIP, sélection des éléments dans une liste à cocher, puis exécution du même pipeline Extract → Process sur chaque élément retenu."
+keywords: [NomaUBL, sync, fetch input, lot, batch, BIP, répertoire, last job number, JD Edwards, SAP, NetSuite, ERP personnalisé, analyse, sélection, traitement]
 ---
 
 # Récupération des entrées
@@ -10,7 +10,7 @@ L'écran **Fetch Input** est l'**automatisation en lot** de [*Processing → Ext
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — sauf pour la source BIP, qui est spécifique à JD Edwards.
 
-La sémantique unitaire (résolution du mode, validation, persistance, dépôt PA, post-génération BIP) est documentée dans [*Extract and Process*](../processing/extract-and-process.md). Cette page ne documente que ce qui relève du fonctionnement en lot : l'enchaînement balayage → sélection → traitement, les sources, la récupération incrémentale via **Last Job Number** et les résultats agrégés.
+La sémantique unitaire (résolution du mode, validation, persistance, dépôt PA, post-génération BIP) est documentée dans [*Extract and Process*](../processing/extract-and-process.md). Cette page ne documente que ce qui est propre au fonctionnement en lot : l'enchaînement analyse → sélection → traitement, les sources, la récupération incrémentale via **Last Job Number** et les résultats agrégés.
 
 ---
 
@@ -102,7 +102,7 @@ La sémantique unitaire (résolution du mode, validation, persistance, dépôt P
 
   <rect x="20" y="316" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="331" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Liste à cocher</text>
-  <text x="30" y="344" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">balayage → choix des éléments</text>
+  <text x="30" y="344" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">analyse → choix des éléments</text>
   <line x1="220" y1="332" x2="252" y2="332" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fip-arrow)"/>
 
   <rect x="820" y="448" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -126,7 +126,7 @@ La sémantique unitaire (résolution du mode, validation, persistance, dépôt P
   <text x="500" y="44" fill="currentColor" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Configuration</text>
   <text x="500" y="62" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.7">Process Type + source + paramètres</text>
   <rect x="410" y="110" width="180" height="60" rx="10" fill="url(#fi-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
-  <text x="500" y="146" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🔎 Balayage</text>
+  <text x="500" y="146" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🔎 Analyse</text>
   <line x1="500" y1="80" x2="500" y2="110" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#fi-arrow)"/>
   <rect x="410" y="200" width="180" height="50" rx="10" fill="url(#fi-g-blue)" stroke="#4a9eff" strokeWidth="1.5" strokeDasharray="6 3"/>
   <text x="500" y="222" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Source</text>
@@ -165,7 +165,7 @@ L'enchaînement est en **deux étapes** : un appel Scan recense les candidats sa
 
 ## Processing Options
 
-La première section configure **comment chaque élément retenu est traité**. La sémantique correspond à [*Extract and Process — Traitement*](../processing/extract-and-process.md#traitement) ; cette page expose les mêmes options, qui s'appliquent ensuite à chaque élément retenu.
+La première section configure **comment chaque élément retenu est traité**. La sémantique correspond à [*Extract and Process — Traitement*](../processing/extract-and-process.md#traitement) ; cette page présente les mêmes options, qui s'appliquent ensuite à chaque élément retenu.
 
 | Champ | Description |
 |---|---|
@@ -199,7 +199,7 @@ La seconde section choisit la **source** et ses paramètres.
 
 ### Source = Input Directory
 
-Le balayage retourne tous les fichiers `.xml` présents dans :
+Le analyse retourne tous les fichiers `.xml` présents dans :
 
 - `dirInput/<template>/` quand *Process As = XML* ;
 - `dirInput/ubl/` quand *Process As = UBL*.
@@ -212,17 +212,17 @@ Demander à la Plateforme Agréée la liste des factures adressées à l'opérat
 
 | Champ | Description |
 |---|---|
-| **Modèle de document** | Le modèle `received-ubl` (ou tout modèle dont `direction = R`) — pré-filtré pour qu'un balayage *PA entrante* n'atterrisse jamais sur un modèle côté émission par erreur. |
-| **Émise après** | Date d'émission la plus ancienne à considérer. Par défaut, le curseur enregistré dans le modèle *global* (`lastFetchReceivedAt`). Modifiable pour rattraper — le curseur est replacé sur la date d'émission la plus récente effectivement traitée à la fin de la passe. |
+| **Modèle de document** | Le modèle `received-ubl` (ou tout modèle dont `direction = R`) — pré-filtré pour qu'un analyse *PA entrante* n'atterrisse jamais sur un modèle côté émission par erreur. |
+| **Émise après** | Date d'émission la plus ancienne à considérer. Par défaut, le curseur enregistré dans le modèle *global* (`lastFetchReceivedAt`). Modifiable pour rattraper — le curseur est replacé sur la date d'émission la plus récente effectivement traitée à la fin de l'analyse. |
 | **Inclure déjà importées** | Désactivé par défaut. La PA peut renvoyer deux fois le même UUID ; avec la case décochée, la déduplication contre `F564231` les écarte avant l'affichage des résultats. Cocher pour examiner chaque référence retournée par la PA, par exemple pour re-télécharger un UBL dont l'import précédent a échoué en plein traitement. |
 
-Le balayage appelle la tâche `fetch-received-list` du connecteur API PA. Chaque ligne candidate porte l'UUID PA, le nom du fournisseur, le numéro de TVA du fournisseur, la date d'émission et le total. Cocher les lignes à traiter ; **Process (N)** appelle alors `fetch-received` sur chaque ligne cochée, télécharge l'UBL et exécute le pipeline UBL standard sur le modèle choisi.
+Le analyse appelle la tâche `fetch-received-list` du connecteur API PA. Chaque ligne candidate porte l'UUID PA, le nom du fournisseur, le numéro de TVA du fournisseur, la date d'émission et le total. Cocher les lignes à traiter ; **Process (N)** appelle alors `fetch-received` sur chaque ligne cochée, télécharge l'UBL et exécute le pipeline UBL standard sur le modèle choisi.
 
 Pour exécuter le même flux sans sélection manuelle, le planifier via `global.fetchReceivedInterval` (minutes entre passes, voir [Paramètres globaux](../configuration/system/global.md)) ou l'appeler en ligne de commande avec `-fetch-received` (voir [Ligne de commande](../management/command-line.md)).
 
 ---
 
-## Balayage et sélection
+## Analyse et sélection
 
 Cliquer sur **Scan** pour alimenter la **liste des candidats**. La liste affiche une ligne par candidat avec une case à cocher ; les lignes sont sélectionnées par défaut. Au-dessus de la liste :
 
@@ -233,7 +233,7 @@ Cliquer sur **Scan** pour alimenter la **liste des candidats**. La liste affiche
 
 Chaque ligne porte le nom de base du fichier (mode Directory) ou le nom de base du job BIP (mode BIP). Décocher une ligne l'exclut de l'appel Process suivant, sans modifier le répertoire ni la file BIP sous-jacents.
 
-Cliquer sur **Process (N)** pour exécuter la sélection. Le bouton se désactive durant l'exécution et durant le balayage.
+Cliquer sur **Process (N)** pour exécuter la sélection. Le bouton se désactive durant l'exécution et durant le analyse.
 
 ---
 

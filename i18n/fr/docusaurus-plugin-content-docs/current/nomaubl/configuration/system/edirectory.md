@@ -123,7 +123,7 @@ L'éditeur comporte **deux onglets** :
 
 ## Onglet 2 — Connector
 
-Le transport HTTP de l'annuaire PPF — flux d'authentification, base URL, endpoints — vit dans un [api-connecteur](../api-connectors.md) réutilisable. Cette page **le référence par son nom uniquement** et ne porte jamais de champ d'auth ni d'endpoint HTTP en ligne. L'`ppf-directory` embarqué couvre le flux standard ; choisir un connecteur personnalisé quand l'annuaire expose un schéma d'auth non standard ou route via une passerelle tenant.
+Le transport HTTP de l'annuaire PPF — flux d'authentification, base URL, endpoints — vit dans un [api-connecteur](../api-connectors.md) réutilisable. Cette page **le référence par son nom uniquement** et ne porte jamais de champ d'auth ni d'endpoint HTTP en ligne. L'`ppf-directory` embarqué couvre le flux standard ; choisir un connecteur personnalisé quand l'annuaire utilise un schéma d'auth non standard ou route via une passerelle tenant.
 
 ### api-connecteur
 
@@ -133,7 +133,7 @@ Le transport HTTP de l'annuaire PPF — flux d'authentification, base URL, endpo
 
 ### Surcharges d'endpoint par requête
 
-Quand l'api-connecteur expose des noms d'endpoint différents des défauts, saisir une surcharge ci-dessous. Laisser vide pour utiliser le nom par défaut affiché.
+Quand l'api-connecteur utilise des noms d'endpoint différents des défauts, saisir une surcharge ci-dessous. Laisser vide pour utiliser le nom par défaut affiché.
 
 | Champ | Défaut | Utilisé par |
 |---|---|---|

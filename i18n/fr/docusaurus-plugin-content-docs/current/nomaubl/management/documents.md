@@ -152,7 +152,7 @@ Le choix de la Source bascule la suite de l'onglet entre trois ensembles de cham
 La valeur Direction est écrite une fois sur la ligne au moment de l'insertion (colonne `UHDRIN` sur F564231 — `'1'` pour reçue, `'2'` pour émise). Changer la *Direction* du modèle ensuite ne **re-classe pas** les lignes déjà existantes — le filtre de la liste Factures, les règles de notification et les enveloppes e-Reporting lisent la valeur figée, pas le réglage courant du modèle. Choisir la bonne Direction avant de traiter la première facture sur un nouveau modèle ; n'en changer plus tard qu'en acceptant que les lignes historiques restent sur la direction précédente.
 :::
 
-### Extraction de clé depuis `cbc:ID` *(lorsque Source = UBL)*
+### Extraction de clé depuis `cbc:ID` *(quand Source = UBL)*
 
 Pour les factures UBL, la clé primaire `(doc, dct, kco)` — le triplet qui identifie le document partout ailleurs dans NomaUBL — est extraite du `cbc:ID` de la facture via une regex à **groupes nommés**. Aucune convention de nommage de fichier n'est exigée ; le fichier peut avoir n'importe quel nom.
 
@@ -227,13 +227,13 @@ Une fois le connecteur câblé, le reste de l'*Onglet 1* (Burst Key, Identificat
 
 L'exécution d'un document à source connecteur est décrite sur [Traitement → Traiter un document](../processing/document.md) : la page remplace le sélecteur de fichier par le formulaire de paramètres dérivé du connecteur d'en-tête. Les mêmes paramètres sont transmis en ligne de commande via des arguments `--param clé=valeur` répétables (voir [Ligne de commande](./command-line.md)).
 
-### Éclatement (Document Root) *(lorsque Source = XML)*
+### Éclatement (Document Root) *(quand Source = XML)*
 
 | Champ | Description |
 |---|---|
 | **Burst Key** | Nom de balise XML utilisé pour découper le spool en documents individuels. Cet élément marque la **racine d'un document** — chaque occurrence dans le spool produit un document de sortie. |
 
-### Identification du document *(lorsque Source = XML)*
+### Identification du document *(quand Source = XML)*
 
 NomaUBL utilise ces cinq champs pour savoir **de quel document il s'agit**, à qui il appartient et à quel type métier il correspond. Chaque champ accepte une valeur par défaut si la balise est absente.
 
@@ -245,7 +245,7 @@ NomaUBL utilise ces cinq champs pour savoir **de quel document il s'agit**, à q
 | **Document Type (JDE)** | Type de document tel que défini dans le système source (nommé d'après les codes JD Edwards RI/RM, mais accepte n'importe quelle valeur source). |
 | **Company (JDE)** | Société / unité métier propriétaire du document dans le système source (nom de champ historique, s'applique à tout ERP). |
 
-### Données du document (XPath) *(lorsque Source = XML)*
+### Données du document (XPath) *(quand Source = XML)*
 
 Données fonctionnelles que NomaUBL lit dans le spool pour alimenter la facture UBL et piloter le routage.
 

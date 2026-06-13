@@ -277,7 +277,7 @@ Quand la source est **BIP**, un appel **Apply post-generation** supplémentaire 
 | **Replace Mode** | `Overwrite existing` (défaut) ou `Skip`. |
 | **Send to PA** | `Use settings`, `Force send` ou `Skip sending`. |
 
-La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via la regex `idPattern` du modèle de document — les fichiers peuvent avoir n'importe quel nom. Voir [Documents → Extraction de clé depuis cbc:ID](../management/documents.md#extraction-de-cl%C3%A9-depuis-cbcid-lorsque-source--ubl) pour la mise en place de la regex.
+La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via la regex `idPattern` du modèle de document — les fichiers peuvent avoir n'importe quel nom. Voir [Documents → Extraction de clé depuis cbc:ID](../management/documents.md#extraction-de-cl%C3%A9-depuis-cbcid-quand-source--ubl) pour la mise en place de la regex.
 
 #### Combinaisons non prises en charge
 

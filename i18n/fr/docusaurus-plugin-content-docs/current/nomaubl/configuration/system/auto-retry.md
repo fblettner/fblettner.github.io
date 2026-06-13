@@ -6,7 +6,7 @@ keywords: [NomaUBL, reprise auto, reprise nocturne, échec d'envoi, statut 9904,
 
 # Reprise auto
 
-L'écran **Reprise auto** planifie un passage récurrent qui renvoie chaque facture dans un statut d'erreur technique choisi vers la Plateforme Agréée (PA). La ligne par défaut traite le statut `9904` (*Échec d'envoi*) chaque nuit à 3 h — le filet de sécurité du lot nocturne pour que tout ce qui reste bloqué côté PA en fin de journée soit repris avant la reprise des opérations le matin.
+L'écran **Reprise auto** planifie un passage récurrent qui renvoie chaque facture dans un statut d'erreur technique choisi vers la Plateforme Agréée (PA). La ligne par défaut traite le statut `9904` (*Échec d'envoi*) chaque nuit à 3 h — le garde-fou du lot nocturne pour que tout ce qui reste bloqué côté PA en fin de journée soit repris avant la reprise des opérations le matin.
 
 Plusieurs lignes peuvent coexister : une par combinaison (heure, liste de statuts). Le même chemin de code pilote le bouton manuel *Tout renvoyer N* sur la [carte Échec d'envoi du Tableau de bord technique](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603), si bien que le renvoi manuel et le renvoi planifié produisent des résultats identiques — l'un est déclenché à la main, l'autre par cron.
 
@@ -112,7 +112,7 @@ Chaque ligne est une entrée du catalogue. Le panneau d'édition comporte quatre
 |---|---|---|
 | **Nom** | oui | Texte libre. Affiché dans la liste du catalogue et sur la carte Planificateur du Tableau de bord technique. Exemple : *Reprise nocturne des Échec d'envoi*. |
 | **Description** | non | Légende d'une ligne pour aider les collègues à comprendre l'objet de la reprise. |
-| **Activé** | oui (par défaut : `oui`) | Quand `non`, la ligne reste dans le catalogue mais le planificateur la passe. Utile pour mettre en pause pendant une fenêtre de maintenance ou un arrêt PA volontaire. |
+| **Activé** | oui (par défaut : `oui`) | Quand `non`, la ligne reste dans le catalogue mais le planificateur l'ignore. Utile pour mettre en pause pendant une fenêtre de maintenance ou un arrêt PA volontaire. |
 
 ### 2. Planification
 
@@ -183,7 +183,7 @@ L'exécution déclenchée par *Exécuter maintenant* respecte le même cadenceme
 - **Augmentez le cadencement quand la PA limite le débit.** Un `429 Too Many Requests` après quelques minutes de reprise est un indice pour pousser le cadencement à 250 ms ou 500 ms. Alignez-le sur le budget par seconde documenté par la PA.
 - **Désactivez plutôt que supprimer pendant un arrêt connu.** Une ligne marquée *DÉSACTIVÉ* est intentionnelle et visible ; une ligne supprimée est invisible et facile à oublier une fois l'arrêt terminé.
 - **Ne renvoyez pas les erreurs métier.** Le sélecteur le bloque. Si une facture est en `207` (*Contestée par le destinataire*), aucun renvoi n'y changera quoi que ce soit — seule une action de l'opérateur en amont le peut.
-- **Utilisez le tableau de bord pour les coups uniques, la Reprise auto pour les habitudes.** Les deux chemins partagent le code ; ce qui diffère, c'est qui les déclenche. Un vidage ponctuel après un incident est un clic ; le filet de sécurité quotidien est une ligne.
+- **Utilisez le tableau de bord pour les coups uniques, la Reprise auto pour les habitudes.** Les deux chemins partagent le code ; ce qui diffère, c'est qui les déclenche. Un vidage ponctuel après un incident est un clic ; le garde-fou quotidien est une ligne.
 
 ---
 
