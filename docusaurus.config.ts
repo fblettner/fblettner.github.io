@@ -72,6 +72,14 @@ const config: Config = {
 
   themeConfig: {
     image: 'assets/nomana-banner.png',
+    algolia: {
+      appId: '38HKOO4IUZ',
+      // Search-only API key — public by design, safe to commit.
+      apiKey: 'a31b51a7cc6767e51ad606c3d17b4bd0',
+      indexName: 'docs.nomana-it.fr',
+      // Filters results to the visitor's current language (en / fr) and version.
+      contextualSearch: true,
+    },
     colorMode: {
       defaultMode: 'dark',
       respectPrefersColorScheme: false,
@@ -154,20 +162,6 @@ const config: Config = {
           // 2026.05.4 — Notifications inbox promoted from Management to Application (primary nav).
           {from: '/nomaubl/management/notifications', to: '/nomaubl/application/notifications'},
         ],
-      },
-    ],
-    [
-      require.resolve('@easyops-cn/docusaurus-search-local'),
-      {
-        hashed: true,
-        indexBlog: true,
-        indexDocs: true,
-        indexPages: true,
-        language: ['en'],
-        docsRouteBasePath: '/',
-        blogRouteBasePath: '/blog',
-        highlightSearchTermsOnTargetPage: true,
-        explicitSearchResultPath: true,
       },
     ],
     // Suppress the harmless webpack warning emitted by `vscode-languageserver-types`,
