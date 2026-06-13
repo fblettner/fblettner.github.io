@@ -8,7 +8,7 @@ keywords: [Nomasx-1, sécurité, LDAP, Active Directory, utilisateurs sans AD, c
 
 L'écran **Utilisateurs sans AD** liste tous les comptes connus d'une application connectée qui **ne peuvent pas être rapprochés** d'une entrée LDAP / Active Directory de l'entreprise. Une ligne par couple `(Application, Utilisateur)`.
 
-Le rapprochement s'appuie sur deux attributs AD : la `Description` (généralement le matricule RH) et le `samAccountName` (login Windows). Lorsque ni l'un ni l'autre ne pointe vers une entrée AD, la ligne atterrit ici.
+Le rapprochement s'appuie sur deux attributs AD : la `Description` (généralement le matricule RH) et le `samAccountName` (login Windows). Quand ni l'un ni l'autre ne pointe vers une entrée AD, la ligne atterrit ici.
 
 ---
 

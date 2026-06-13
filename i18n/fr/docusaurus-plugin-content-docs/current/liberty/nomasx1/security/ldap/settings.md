@@ -77,7 +77,7 @@ Deux finalités complémentaires :
 | **Groupe** | `LDAPD_GROUP` — texte libre. | Libellé humain qui rassemble plusieurs départements AD. Sert d'axe de tri / de regroupement sur la grille *Utilisateurs par applications*. |
 | **Département AD** | `LDAP_DEPARTMENT` — doit correspondre à l'attribut `department` d'une entrée LDAP. | Département AD inclus dans l'export pour l'application. |
 
-L'écran est en lecture seule. Les lignes se maintiennent via la table de configuration `SECURITY_LDAP_DPT` ; l'écran restitue le paramétrage en l'état.
+L'écran est en lecture seule. Les lignes se maintiennent via la table de configuration `SECURITY_LDAP_DPT` ; l'écran affiche le paramétrage en l'état.
 
 ---
 
@@ -85,5 +85,5 @@ L'écran est en lecture seule. Les lignes se maintiennent via la table de config
 
 - **Une ligne par paire (Application × Département)** — les doublons sont inutiles. Si un département couvre plusieurs applications, ajouter une ligne par application.
 - **Garder les libellés de *Groupe* stables** — les modifier change la structure de l'export et complique la comparaison avec le livrable du trimestre précédent.
-- **Un département non listé ici n'est pas exporté** — même si des utilisateurs AD portant ce département apparaissent dans l'écran *Utilisateurs LDAP*, ils ne figureront pas dans le fichier Excel correspondant à leur département. Ajouter une ligne lorsqu'un nouveau département commence à émettre des demandes d'accès.
+- **Un département non listé ici n'est pas exporté** — même si des utilisateurs AD portant ce département apparaissent dans l'écran *Utilisateurs LDAP*, ils ne figureront pas dans le fichier Excel correspondant à leur département. Ajouter une ligne quand un nouveau département commence à émettre des demandes d'accès.
 - **La feuille « toutes les entrées LDAP »** dans le fichier exporté est le catalogue brut non filtré — utile pour l'annexe d'audit et pour vérifier qu'une ligne manquante d'une feuille par application ne provient pas d'une absence côté AD.

@@ -6,7 +6,7 @@ keywords: [Nomasx-1, paramètres, JDE, reclassification, surcharge objet, system
 
 # Reclassification
 
-L'écran **Reclassification** surcharge le System Code que Nomasx-1 appliquerait par défaut à un objet JDE. Une ligne par objet. Utile lorsque le SY par défaut d'un programme ne correspond pas à sa réalité licence — typiquement un programme *techniquement* en `H9` mais *commercialement* en `Financials`.
+L'écran **Reclassification** surcharge le System Code que Nomasx-1 appliquerait par défaut à un objet JDE. Une ligne par objet. Utile quand le SY par défaut d'un programme ne correspond pas à sa réalité licence — typiquement un programme *techniquement* en `H9` mais *commercialement* en `Financials`.
 
 Chaque ligne dit : *pour cet objet, utiliser ce `SY` à la place du défaut*. Le changement se propage à toutes les vues OUT et rapports de licence qui passent par *Code système*.
 

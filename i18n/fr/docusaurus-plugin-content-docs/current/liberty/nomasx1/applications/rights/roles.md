@@ -99,6 +99,6 @@ Pour chaque droit accordé au niveau rôle sur une application connectée :
 ## Conseils & bonnes pratiques
 
 - **Filtrer sur *Rôle ID* + trier sur *Objet*** pour obtenir l'inventaire complet de ce qu'un rôle autorise — livrable à discuter avec le propriétaire du rôle lors de la revue.
-- **Traquer les droits trop larges** — les droits sur un objet de haut niveau avec les quatre indicateurs à `Y` sont les attributions les plus généreuses. Confirmer que le rôle en a vraiment besoin.
+- **Repérer les droits trop larges** — les droits sur un objet de haut niveau avec les quatre indicateurs à `Y` sont les attributions les plus généreuses. Confirmer que le rôle en a vraiment besoin.
 - **Un rôle avec très peu de droits** mérite aussi un œil — il peut être redondant avec un autre et candidat au retrait (voir *Rôles non utilisés*).
 - **Combiner avec *Rôles / Menus*** pour vérifier que le rôle accorde à la fois le *droit* et la *navigation* permettant d'atteindre l'objet.

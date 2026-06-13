@@ -84,7 +84,7 @@ C'est la source de l'export Excel par département attendu par les auditeurs —
 Pour chaque tuple *(Groupe, Application, Département AD)* défini dans *Paramètres* :
 
 - **Lister tous les utilisateurs AD du département**, avec leur identité d'entreprise (nom, description, expiration, société, titre).
-- **Rapprocher chaque utilisateur AD de son compte source** lorsqu'il en existe un — identifiant, statut, date de création, dernière connexion, matricule et liste séparée par virgule des rôles portés.
+- **Rapprocher chaque utilisateur AD de son compte source** quand il en existe un — identifiant, statut, date de création, dernière connexion, matricule et liste séparée par virgule des rôles portés.
 - **Découper le résultat pour l'export.** La grille alimente l'export Excel attendu par les auditeurs : un fichier par département, une feuille par application à l'intérieur, plus une feuille d'annexe avec l'ensemble du catalogue LDAP.
 
 Si un utilisateur AD n'a pas de compte rapproché sur l'application, les colonnes côté source restent vides sur la ligne — celle-ci part tout de même dans l'export, ce qui permet à l'auditeur de constater que la personne est *dans le périmètre* du département sans pour autant détenir un compte.

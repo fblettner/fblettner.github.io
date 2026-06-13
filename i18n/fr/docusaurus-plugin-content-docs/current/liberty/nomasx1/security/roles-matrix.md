@@ -95,6 +95,6 @@ Clic droit sur une ligne pour ouvrir le menu.
 ## Conseils & bonnes pratiques
 
 - **Changer d'angle de vue** — plutôt que de discuter de milliers d'affectations individuelles, se concentrer sur la douzaine de combinaisons les plus fréquentes. Chacune est un profil-type *de fait* utilisé dans l'entreprise.
-- **Traquer les exceptions par le bas de la liste** — combinaisons à 1 ou 3 utilisateurs. Elles s'accumulent en silence quand les changements d'accès se font à la main au lieu de passer par un modèle.
+- **Repérer les exceptions en bas de la liste** — combinaisons à 1 ou 3 utilisateurs. Elles s'accumulent discrètement quand les changements d'accès se font à la main au lieu de passer par un modèle.
 - **Recouper les paires incompatibles** — choisir une paire connue comme *non cumulable* (par exemple *créer un fournisseur* + *approuver un paiement*) puis rechercher dans la colonne *Combinaison de rôles*. Chaque occurrence est une exception SoD à confirmer ou corriger.
 - **Utiliser la colonne *Utilisateur témoin*** comme téléportation rapide vers l'écran *Audit Utilisateurs* — elle permet de vérifier concrètement ce que la combinaison autorise dans le système source.

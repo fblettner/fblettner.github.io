@@ -1,6 +1,6 @@
 ---
 title: Nomasx-1 — La plateforme de conformité et d'optimisation de licences
-description: "Nomasx-1 unifie sécurité applicative, Object Usage Tracking, conformité de licences Oracle et JD Edwards et analyse de la Séparation des tâches — agnostique de la source, prêt pour l'audit, on-premise."
+description: "Nomasx-1 réunit en une seule plateforme la sécurité applicative, l'Object Usage Tracking, la conformité des licences Oracle et JD Edwards et l'analyse de la séparation des tâches — quelle que soit la source applicative, prête pour l'audit, on-premise."
 keywords: [Nomasx-1, nomasx1, sécurité applicative, conformité, séparation des tâches, SoD, JD Edwards, JDE, Oracle, optimisation de licences, Object Usage Tracking, LDAP, audit, CSI]
 hide_table_of_contents: false
 ---
@@ -11,8 +11,8 @@ import Link from '@docusaurus/Link';
 
 <div style={{padding: '36px 32px', borderRadius: '18px', margin: '8px 0 36px', background: 'linear-gradient(135deg, rgba(74,158,255,0.18) 0%, rgba(34,197,94,0.14) 100%)', border: '1px solid rgba(74,158,255,0.35)', position: 'relative', overflow: 'hidden'}}>
   <div style={{display: 'inline-block', padding: '4px 12px', borderRadius: '999px', background: 'rgba(74,158,255,0.2)', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '11px', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: '14px'}}>Sécurité applicative · Conformité de licences · Séparation des tâches</div>
-  <h2 style={{fontSize: '34px', lineHeight: '1.15', fontWeight: 800, margin: '0 0 14px', letterSpacing: '-0.02em'}}>Une plateforme pour tout ce que<br/><span style={{background: 'linear-gradient(135deg, #4a9eff, #22c55e)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>l'audit ou la licence demande.</span></h2>
-  <p style={{fontSize: '16px', lineHeight: '1.6', maxWidth: '780px', margin: '0 0 24px', opacity: 0.92}}>Conçu d'abord pour <b>JD Edwards EnterpriseOne sur Oracle</b> — un connecteur dédié lit le security workbench JDE, les tables utilisateurs / rôles / environnements, l'historique Object Usage Tracking et l'instance Oracle sous-jacente en une seule passe. L'architecture s'est depuis ouverte aux autres ERP et bases de données, mais un client JDE se branche et démarre immédiatement, sans export manuel ni job BIP à exécuter au préalable.</p>
+  <h2 style={{fontSize: '34px', lineHeight: '1.15', fontWeight: 800, margin: '0 0 14px', letterSpacing: '-0.02em'}}>Une seule plateforme pour tout ce qu'un<br/><span style={{background: 'linear-gradient(135deg, #4a9eff, #22c55e)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>auditeur ou un responsable des licences attend.</span></h2>
+  <p style={{fontSize: '16px', lineHeight: '1.6', maxWidth: '780px', margin: '0 0 24px', opacity: 0.92}}>Pensé d'abord pour <b>JD Edwards EnterpriseOne sur Oracle</b> : un connecteur dédié lit d'un seul tenant le Security Workbench JDE, les tables utilisateurs / rôles / environnements, l'historique Object Usage Tracking et l'instance Oracle sous-jacente. La plateforme s'est depuis ouverte à d'autres ERP et bases de données — mais pour un client JDE, il suffit de raccorder : c'est opérationnel d'emblée, sans export manuel ni job BIP à lancer au préalable.</p>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '24px'}}>
     <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(74,158,255,0.16)', border: '1px solid rgba(74,158,255,0.45)', fontSize: '12px', fontWeight: 700, color: '#4a9eff'}}>JD Edwards EnterpriseOne — support phare</span>
     <span style={{padding: '7px 14px', borderRadius: '999px', background: 'rgba(34,197,94,0.14)', border: '1px solid rgba(34,197,94,0.42)', fontSize: '12px', fontWeight: 700, color: '#22c55e'}}>Oracle Database — scripts d'audit dédiés</span>
@@ -159,8 +159,8 @@ Une plateforme unique qui aspire chaque source utile — ERP, base de données, 
 
 <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '12px', margin: '20px 0 8px'}}>
   <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(74,158,255,0.35)', background: 'rgba(74,158,255,0.05)'}}>
-    <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#4a9eff'}}>Agnostique de la source</div>
-    <div style={{fontSize: '11px', opacity: 0.78, lineHeight: '1.5'}}>JDE aujourd'hui, SAP demain, une entité cédée sur NetSuite — un nouveau connecteur se branche sans toucher au reste du produit.</div>
+    <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#4a9eff'}}>Indépendant de la source</div>
+    <div style={{fontSize: '11px', opacity: 0.78, lineHeight: '1.5'}}>JDE aujourd'hui, SAP demain, une entité cédée sur NetSuite — un nouveau connecteur se raccorde sans toucher au reste du produit.</div>
   </div>
   <div style={{padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.05)'}}>
     <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '4px', color: '#22c55e'}}>Continu</div>

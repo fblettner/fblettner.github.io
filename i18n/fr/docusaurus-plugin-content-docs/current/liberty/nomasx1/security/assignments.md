@@ -89,7 +89,7 @@ Colonnes masquées portées par la ligne : `RLU_DT_REFRESH`, `RLU_UKID`.
 Les trois filtres au-dessus de la grille (**Application ID**, **Utilisateur ID**, **Rôle ID**) acceptent les opérateurs standards *contains* / *equals* / *notEquals* / *startsWith* / *endsWith* ; les listes déroulantes *Utilisateur ID* et *Rôle ID* sont restreintes à l'application choisie au-dessus.
 
 :::info[Spécifique JDE]
-Sur JD Edwards EnterpriseOne, `*ALL` est le **rôle de connexion par défaut** : lorsqu'un utilisateur se connecte avec `*ALL`, la sécurité de tous les rôles qui lui sont affectés est combinée et appliquée simultanément. Affecter un rôle à un utilisateur revient donc à *l'inclure* dans le `*ALL` de cet utilisateur. L'alternative consiste à se connecter sous un seul rôle précis, n'appliquant alors que la sécurité de ce rôle.
+Sur JD Edwards EnterpriseOne, `*ALL` est le **rôle de connexion par défaut** : quand un utilisateur se connecte avec `*ALL`, la sécurité de tous les rôles qui lui sont affectés est combinée et appliquée simultanément. Affecter un rôle à un utilisateur revient donc à *l'inclure* dans le `*ALL` de cet utilisateur. L'alternative consiste à se connecter sous un seul rôle précis, n'appliquant alors que la sécurité de ce rôle.
 :::
 
 ---

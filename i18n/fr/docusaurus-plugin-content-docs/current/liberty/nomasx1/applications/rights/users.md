@@ -8,7 +8,7 @@ keywords: [Nomasx-1, applications, droits, droits sécurité, droits utilisateur
 
 L'écran **Droits — Utilisateurs** liste tous les droits objet accordés **directement à un utilisateur** sur une application connectée. Une ligne par triplet `(Application, Utilisateur, Objet)`. Seules les lignes `SER_RUN = 'Y'` sont remontées — les droits qui autorisent effectivement l'utilisateur à *lancer* quelque chose.
 
-C'est la base de la pyramide de sécurité : même quand une règle au niveau du rôle interdit l'accès, une ligne explicite au niveau utilisateur peut la surcharger. Les auditeurs ouvrent cet écran pour traquer les exceptions.
+C'est la base de la pyramide de sécurité : même quand une règle au niveau du rôle interdit l'accès, une ligne explicite au niveau utilisateur peut la surcharger. Les auditeurs ouvrent cet écran pour repérer les exceptions.
 
 ---
 

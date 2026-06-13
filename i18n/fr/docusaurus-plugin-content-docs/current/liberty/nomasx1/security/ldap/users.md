@@ -70,7 +70,7 @@ L'extraction de l'annuaire est la *référence unique* de l'identité humaine. L
 - **Cette personne existe-t-elle dans l'annuaire d'entreprise ?** Tout compte présent sur une application connectée mais absent ici est soit un compte technique / batch, soit une identité gérée hors AD (compte de service, login historique), soit un compte fantôme — l'écran *Utilisateurs sans AD* les liste explicitement.
 - **À quel département appartient la personne ?** L'attribut *Département* pilote la matrice *Utilisateurs par applications* — c'est le levier qui rattache les personnes aux applications auxquelles elles doivent avoir accès.
 - **Quand le compte expire-t-il ?** Les prestataires ont en général une date `accountExpires` — trier sur cette colonne fait remonter ceux qui sont sur le point de perdre leur accès AD (et qu'il faut probablement aussi déprovisionner sur chaque application connectée).
-- **Quel est le contexte de communication de l'entreprise ?** Email, téléphone, manager — utile lorsqu'un constat d'audit impose de joindre rapidement la personne.
+- **Quel est le contexte de communication de l'entreprise ?** Email, téléphone, manager — utile quand un constat d'audit impose de joindre rapidement la personne.
 
 ---
 
@@ -104,6 +104,6 @@ Colonnes masquées portées par la ligne : `LDAP_REFRESH` (horodatage du dernier
 ## Conseils & bonnes pratiques
 
 - **Trier *AccountExpires* en ordre croissant** pour faire remonter les prestataires sur le point de perdre leur accès AD. Recouper avec l'écran *Affectations* — tout compte sur le point d'expirer qui détient encore un rôle dans un système source doit y être également déprovisionné.
-- **L'attribut *Description* porte souvent le matricule RH** — lorsqu'il est renseigné, il facilite la jointure avec le champ *Matricule* côté source. Des valeurs incohérentes dans ce champ sont la cause habituelle des faux positifs de *Utilisateurs sans AD*.
+- **L'attribut *Description* porte souvent le matricule RH** — quand il est renseigné, il facilite la jointure avec le champ *Matricule* côté source. Des valeurs incohérentes dans ce champ sont la cause habituelle des faux positifs de *Utilisateurs sans AD*.
 - **Croiser *Titre* et *Département*** pour repérer les configurations incorrectes (par exemple un comptable rattaché au département IT) avant qu'elles n'impactent la matrice *Utilisateurs par applications*.
 - **Le scan LDAP suit la planification configurée au niveau du connecteur.** Un *WhenCreated* obsolète sur l'ensemble des lignes signifie en général que le connecteur LDAP n'a pas tourné récemment.
