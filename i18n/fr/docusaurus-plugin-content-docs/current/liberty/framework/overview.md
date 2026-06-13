@@ -93,7 +93,7 @@ Trois chemins d'entrée dans le framework — choisissez celui qui correspond à
 
 Le **[tutoriel Construire un CRM](./tutorial-crm/01-setup.md)** est un parcours en six étapes qui produit une application de gestion de la relation client opérationnelle — clients, affaires, activités, un tableau de bord du pipeline commercial, connexion OIDC, accès par rôle, l'assistant IA et un job planifié. Le domaine est générique ; aucune connaissance préalable n'est requise au-delà de SQL.
 
-Pour une admin ERP réelle bâtie sur le framework, l'application packagée **[Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview)** couvre JD Edwards de bout en bout, prête à l'emploi — utilisateurs, rôles, security workbench, file BIP, données de référence. Installez-la, pointez-la sur votre base JDE, vous obtenez une admin opérationnelle sans rien construire.
+Pour une admin ERP réelle bâtie sur le framework, l'application packagée **[Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/)** couvre JD Edwards de bout en bout, prête à l'emploi — utilisateurs, rôles, security workbench, file BIP, données de référence. Installez-la, pointez-la sur votre base JDE, vous obtenez une admin opérationnelle sans rien construire.
 
 ### 2. Approche par cas d'usage
 

@@ -138,11 +138,11 @@ ERPs ship with native UIs that are functional but slow, dated and clunky. The fr
 
 ### How to get there
 
-JD Edwards has a packaged answer: **[Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview)** is a Nomana-IT vendor app built on the framework that ships a complete JDE admin — F0092 users, security workbench, BIP queue, master data, audit. Install it, point it at your JDE database, you're done. No tutorial needed.
+JD Edwards has a packaged answer: **[Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/)** is a Nomana-IT vendor app built on the framework that ships a complete JDE admin — F0092 users, security workbench, BIP queue, master data, audit. Install it, point it at your JDE database, you're done. No tutorial needed.
 
 For SAP (`SAPSR3` schema), NetSuite (suite-analytics API), Microsoft Dynamics (on-prem SQL backend) or a non-ERP "admin over an existing database", the [Build a CRM tutorial](./tutorial-crm/01-setup.md) walks through the framework's full surface — the same pattern transfers, you just point the pool at the right database and write the queries.
 
-The Nomana-IT vendor app [Nomasx-1](https://docs.nomana-it.fr/liberty/nomasx1/overview) is another productionised example of this pattern — security maintenance over JDE / SAP / NetSuite. Both Nomasx-1 and Nomajde are license-gated; the framework underneath is the same one this documentation describes.
+The Nomana-IT vendor app [Nomasx-1](https://docs.nomana-it.fr/liberty/nomasx1/overview/) is another productionised example of this pattern — security maintenance over JDE / SAP / NetSuite. Both Nomasx-1 and Nomajde are license-gated; the framework underneath is the same one this documentation describes.
 
 ---
 
@@ -281,7 +281,7 @@ The framework is the right tool when **most of your screens are list-and-edit on
 | You are… | Start with |
 |---|---|
 | **New to the framework and want a clean tutorial** | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) — six steps, generic domain. |
-| **Planning a JDE admin** | Install the packaged app [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview) — JDE-specific, no DIY needed. |
+| **Planning a JDE admin** | Install the packaged app [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/) — JDE-specific, no DIY needed. |
 | **Planning a SAP / NetSuite / other ERP admin** | Walk through [Tutorial — Build a CRM](./tutorial-crm/01-setup.md), the framework pattern transfers. |
 | **Just installing it for the first time** | [Getting Started → Installation](../installation/python-server.md). |
 | **Looking up how to do X specifically** | [Cookbook](./cookbook/crud-existing-table.md) — short recipes. |

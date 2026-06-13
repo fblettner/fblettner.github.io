@@ -93,7 +93,7 @@ Three paths into the framework — pick whichever suits how you read.
 
 The **[Build a CRM tutorial](./tutorial-crm/01-setup.md)** is a six-step walkthrough that produces a working customer-relationship-management application — customers, deals, activities, a sales-pipeline dashboard, OIDC sign-in, role-based access, the AI assistant and a scheduled job. The domain is generic; no prior knowledge needed beyond SQL.
 
-For a real-world ERP admin built on the framework, the packaged **[Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview)** app covers JD Edwards end-to-end out of the box — users, roles, security workbench, BIP queue, master data. Install it, point it at your JDE database, get a working admin without building anything yourself.
+For a real-world ERP admin built on the framework, the packaged **[Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/)** app covers JD Edwards end-to-end out of the box — users, roles, security workbench, BIP queue, master data. Install it, point it at your JDE database, get a working admin without building anything yourself.
 
 ### 2. Use-case-driven
 

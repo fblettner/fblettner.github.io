@@ -4,7 +4,7 @@
 
 Before we begin, ensure you have the following installed on your system:
 
-1. **Docker** and **Docker Compose**: Installation instructions can be found [here](https://docs.nomana-it.fr/liberty/technical/installation).
+1. **Docker** and **Docker Compose**: Installation instructions can be found [here](https://docs.nomana-it.fr/liberty/technical/installation/).
 3. **Git**: Installation instructions can be found [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 
 ## Step 1: Logging into Docker

@@ -106,5 +106,5 @@ A working CRUD interface over your existing table, with:
 
 ## What's next
 
-- For JD Edwards admin specifically, the packaged [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview) app ships every screen you'd build here — pre-built, license-gated.
+- For JD Edwards admin specifically, the packaged [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/) app ships every screen you'd build here — pre-built, license-gated.
 - The full mental model: [Concepts → Connectors](../connectors.md).

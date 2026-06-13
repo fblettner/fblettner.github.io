@@ -6,8 +6,8 @@ This guide will walk you through deploying Liberty Framework using Portainer, ba
 
 Before you begin, ensure the following prerequisites are met:
 
-- You have Docker installed and running on your server. Installation instructions can be found [here](https://docs.nomana-it.fr/liberty/technical/installation).
-- You have Portainer installed and running on your server. Installation instructions can be found [here](https://docs.nomana-it.fr/liberty/technical/tools-deployment).
+- You have Docker installed and running on your server. Installation instructions can be found [here](https://docs.nomana-it.fr/liberty/technical/installation/).
+- You have Portainer installed and running on your server. Installation instructions can be found [here](https://docs.nomana-it.fr/liberty/technical/tools-deployment/).
 - You have access to the Portainer web interface. The URL typically looks like `http://your-server-ip:3000` or `https://your-server-ip:3443`.
 
 ## Accessing Portainer
@@ -133,4 +133,4 @@ By following this guide, you should be able to deploy Liberty Framework using Po
 - **oidc:** ghcr.io/fblettner/liberty-keycloak:latest (Port 8080)
 - **filebrowser:** ghcr.io/fblettner/liberty-filebrowser:latest (Port 80)
 
-Details of all Liberty Framework Services can be found [here](https://docs.nomana-it.fr/liberty/technical/architecture).
+Details of all Liberty Framework Services can be found [here](https://docs.nomana-it.fr/liberty/technical/architecture/).
