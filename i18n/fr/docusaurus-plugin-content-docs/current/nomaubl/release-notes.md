@@ -60,11 +60,25 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ## 2026.06.14 — 2026-06-14 \{#v2026-06-14\}
 
-Une aide au câblage des nouvelles plateformes.
+Regroupement par commande client sur les lignes, un axe parent dans les chemins XSL, et un réglage *Debug* pour câbler les nouvelles plateformes.
 
-### Nouveautés
+### Nouveautés — lignes de facture
+
+- **Regroupement par commande client sur les lignes (BT-132).** Les lignes portent désormais un troisième bandeau de regroupement, sous la livraison et la référence de document, indiquant l'ID de commande client référencée. Il apparaît dans l'aperçu de facture et le PDF par défaut, et se configure par modèle depuis le [constructeur PDF](./management/pdf-templates.md) (*Group by customer order*). Les règles de réinitialisation suivent les autres bandeaux : un changement de livraison ré-imprime les deux fils internes, un changement de référence de document ré-imprime le bandeau commande client.
+- **Commande client dans l'éditeur de ligne.** Le constructeur de [ligne de facture](./application/invoices.md) propose un bouton rapide *Commande client* à côté de *Note* et *Doc Ref*, avec un champ texte unique sous le bloc *References* de la ligne.
+- **Champ commande client dans l'éditeur XSL.** L'[éditeur XSL](./ubl-tools/xsl-editor.md) affiche le nouveau slot BT-132 à côté de BT-131 dans les champs de ligne, pour le pointer vers le chemin source sans toucher au modèle.
+
+### Correspondance XSL
+
+- **Axe parent (`..`) dans les chemins TAG.** Le résolveur de chemin du framework comprend désormais `..` comme segment : un champ par-ligne placé en voisin de l'élément ligne se cible via `../FIELD` (ou `../../FIELD/Sub`). Cela débloque les XML sources où les lignes sont regroupées sous un parent qui porte aussi les références de ligne ; les chemins sans `..` ne changent pas. Voir [Éditeur XSL](./ubl-tools/xsl-editor.md).
+
+### Connecteurs API
 
 - **Réglage Debug sur les connecteurs API.** Un nouveau choix *Debug* (`Y` / `N`) dans l'onglet *Connexion* du [connecteur API](./configuration/api-connectors.md) fait écrire chaque appel sur une ligne — URL, code HTTP et aperçu du corps — dans le journal du service. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête et la forme de la réponse sans demander une version spéciale ; à remettre sur `N` une fois le connecteur stable. Il remplace les traces ponctuelles ajoutées dans *import-status* et *invoice-statuses* et couvre tous les endpoints de manière uniforme.
+
+### Correctifs
+
+- **Position de la Note sur les lignes.** `cbc:Note` (BT-127) est désormais émis avant `cbc:InvoicedQuantity`, conformément à la séquence de ligne UBL 2.1. Le bug était dormant tant qu'aucun slot de note de ligne n'était rempli, mais faisait planter la validation dès qu'un l'était — corrigé pour tout le monde.
 
 ---
 

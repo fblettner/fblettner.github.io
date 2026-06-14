@@ -232,6 +232,7 @@ Un select `TAG_*` ne se limite pas à un seul chemin XML :
 
 - **Concaténation (`+`).** Assemblez plusieurs tags source en une seule valeur UBL avec l'opérateur ` + ` — `'FirstName + LastName'` les joint par une espace, `'First + ", " + Last'` choisit le séparateur, et les chaînes entre guillemets sont rendues telles quelles. Plus besoin d'une étape de pré-traitement XSL quand un champ UBL agrège plusieurs colonnes source.
 - **Liste de valeurs conditionnelle.** Le paramètre `cond_value` des helpers `ubl:emit-item-prop` / `ubl:emit-note` accepte une valeur unique (comme avant) ou une liste séparée par des virgules — `'KWH,M3,LTR'` correspond quand la source vaut l'un des trois. Les espaces autour de chaque élément sont supprimés.
+- **Axe parent (`..`).** *(2026.06.14)* Un chemin peut remonter à l'élément parent : `../FIELD` atteint un voisin de l'élément ligne courant, `../../FIELD/Sub` deux niveaux plus haut. Cela débloque les XML sources où les lignes sont imbriquées sous un parent qui porte aussi les références de ligne (par exemple la commande client référencée, BT-132) ; les chemins sans `..` se résolvent exactement comme avant.
 
 #### Scoping
 

@@ -491,8 +491,9 @@ Des sous-lignes apparaissent sous chaque ligne principale pour :
 - Remise / charge au niveau prix (`BT-147`)
 - Remises / charges au niveau ligne (`BG-27` / `BG-28`)
 - Propriétés additionnelles d'article (`BG-32`)
+- Commande client référencée (`BT-132`)
 
-Quand plusieurs lignes partagent la même livraison ou les mêmes références documentaires (`BT-128`), un **en-tête de livraison** ou un **en-tête de référence documentaire** apparaît une seule fois en haut du groupe, au lieu d'être répété sur chaque ligne.
+Quand plusieurs lignes partagent la même livraison, les mêmes références documentaires (`BT-128`) ou la même commande client référencée (`BT-132`), un **en-tête de livraison**, un **en-tête de référence documentaire** ou un **en-tête de commande client** apparaît une seule fois en haut du groupe, au lieu d'être répété sur chaque ligne. Dans l'éditeur de ligne de Création / Modification de facture, *Commande client* est un bouton rapide à côté de *Note* et *Doc Ref*, sous le bloc *References* de la ligne.
 
 ### Onglet TVA
 

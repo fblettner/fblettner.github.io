@@ -491,8 +491,9 @@ Sub-rows appear under each main row for:
 - Price-level allowance / charge (`BT-147`)
 - Line-level allowances / charges (`BG-27` / `BG-28`)
 - Additional item properties (`BG-32`)
+- Referenced customer order (`BT-132`)
 
-When several lines share the same delivery group or document references (`BT-128`), a **delivery header** or **document-reference header** appears once at the top of that group rather than repeating on every line.
+When several lines share the same delivery group, document references (`BT-128`) or referenced customer order (`BT-132`), a **delivery header**, a **document-reference header** or a **customer-order header** appears once at the top of that group rather than repeating on every line. In the Create / Edit Invoice line editor, *Customer order* is a quick-add alongside *Note* and *Doc Ref* under the line *References* block.
 
 ### VAT tab
 

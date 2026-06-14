@@ -232,6 +232,7 @@ A `TAG_*` select isn't limited to a single XML path:
 
 - **Concatenation (`+`).** Glue several source tags into one UBL value with a ` + ` operator — `'FirstName + LastName'` joins them with a single space, `'First + ", " + Last'` sets a custom joiner, and quoted literals are emitted verbatim. No more XSL preprocessing step when a UBL field combines several source columns.
 - **Conditional value list.** The `cond_value` argument of the `ubl:emit-item-prop` / `ubl:emit-note` helpers accepts a single value (as before) or a comma-separated whitelist — `'KWH,M3,LTR'` matches when the source value is any of the three. Whitespace around each item is trimmed.
+- **Parent axis (`..`).** *(2026.06.14)* A path may step up to the parent element: `../FIELD` reaches a sibling of the current line element, `../../FIELD/Sub` two levels up. It unblocks source XML that nests line items under a parent element which also carries the line-level references (for example the referenced customer order, BT-132); paths without `..` resolve exactly as before.
 
 #### Scoping
 

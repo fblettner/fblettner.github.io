@@ -60,11 +60,25 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ## 2026.06.14 — 2026-06-14 \{#v2026-06-14\}
 
-A debugging aid for wiring new platforms.
+Customer-order grouping on invoice lines, a parent-axis in XSL paths, and a *Debug* setting for wiring new platforms.
 
-### New features
+### New features — invoice lines
 
-- **Debug setting on API connectors.** A new *Debug* choice (`Y` / `N`) on the [API connector](./configuration/api-connectors.md) *Connection* tab makes every API call print a single-line request + response trace — URL, HTTP status and a body preview — to the service log. Use it while wiring a new platform to verify URL substitution, query parameters and the response shape without asking for a custom build; set it back to `N` once the connector is stable. It replaces the previous ad-hoc traces in *import-status* and *invoice-statuses*, covering every endpoint uniformly.
+- **Customer order grouping on lines (BT-132).** Lines now carry a third grouping band, below delivery and document reference, showing the referenced customer-order ID. It appears in the invoice preview and the default PDF template, and is configurable per template from the [PDF builder](./management/pdf-templates.md) (*Group by customer order*). The reset rules match the existing bands: a new delivery re-prints both inner breadcrumbs, a new document reference re-prints the customer-order band.
+- **Customer order in the line editor.** The [invoice line](./application/invoices.md) builder now offers a *Customer order* quick-add next to *Note* and *Doc Ref*, with a single free-text input under the line *References* block.
+- **Customer order field in the XSL editor.** The [XSL editor](./ubl-tools/xsl-editor.md) shows the new BT-132 mapping slot next to BT-131 in the line fields, so you can point it at the source path without hand-editing the template.
+
+### XSL mapping
+
+- **Parent-axis (`..`) in TAG paths.** The framework path resolver now understands `..` as a path segment, so a per-line field that sits as a sibling of the line element is reachable with `../FIELD` (or `../../FIELD/Sub`). This unblocks source XML that groups line items under a parent element alongside line-level references; paths without `..` are unaffected. See [XSL Editor](./ubl-tools/xsl-editor.md).
+
+### API connectors
+
+- **Debug setting on API connectors.** A new *Debug* choice (`Y` / `N`) on the [API connector](./configuration/api-connectors.md) *Connection* tab makes every API call print a single-line request + response trace — URL, HTTP status and a body preview — to the service log. Use it while wiring a new platform to check URL substitution, query parameters and the response shape without asking for a custom build; set it back to `N` once the connector is stable. It replaces the previous ad-hoc traces in *import-status* and *invoice-statuses*, covering every endpoint uniformly.
+
+### Bug fixes
+
+- **Line note position.** `cbc:Note` (BT-127) is now emitted before `cbc:InvoicedQuantity` to match the UBL 2.1 line sequence. It was dormant until a line note slot was filled, but tripped schema validation as soon as one was — now fixed for everyone.
 
 ---
 
