@@ -152,6 +152,19 @@ The Source choice flips the rest of this tab between three distinct sets of fiel
 The Direction value is written once on the row at insert time (column `UHDRIN` on F564231 — `'1'` for received, `'2'` for issued). Changing the template's *Direction* afterwards does **not** re-classify the rows that already exist — the Invoices list filter, notification rules and e-Reporting envelopes read the frozen value, not the live template setting. Pick the right Direction before processing the first invoice on a new template; flip it later only if you accept that historical rows stay on the previous side.
 :::
 
+### Document Identification *(when Source = UBL)* \{#document-identification-ubl\}
+
+*(2026.06.13)* A UBL file carries no spool to extract from, so the **Activity** and **Type** that the XML source pulls by XPath are entered here as plain text. The group sits at the top of the UBL branch and both fields are **mandatory** — they are written to the `F564230` tracking row that the PA send and fetch-import rely on.
+
+| Field | Description |
+|---|---|
+| **Activity** | The activity code stamped on the row (e.g. `UBL`). Stored in `F564230.FEAA10`. |
+| **Type** | The document type (e.g. `FACTURE`). Stored in `F564230.FEAA20`. |
+
+:::info[Why the row matters]
+The UBL-source pipeline now inserts the same `F564230` tracking row the XML pipeline produces, reading the rest of its values straight from the UBL: BT-47 buyer SIREN → `FEALKY`, BT-115 PayableAmount → `FEAEXP`, BT-2 IssueDate → `FEIVD`, BT-9 DueDate → `FEARDU`. Without it the PA send had no row to stamp with its transaction id, `FEUKIDSZ` stayed empty and fetch-import had nothing to poll. Replace mode updates the existing row instead of duplicating it; non-replace mode skips an already-processed invoice with the usual warning.
+:::
+
 ### Key extraction from `cbc:ID` *(when Source = UBL)*
 
 For UBL invoices the `(doc, dct, kco)` primary key — the same triplet that identifies the document everywhere else in NomaUBL — is parsed from the invoice's `cbc:ID` via a regex with **named groups**. There is no filename convention to follow; the file can be named anything.
@@ -311,6 +324,16 @@ Beyond the main human-readable PDF, a document type can embed **extra files into
 | **Path** | Where to read the file from. Supports the path placeholders `%APP_HOME%`, `%ENV%`, `%DOCNAME%`, `%KCO%`, `%DOC%`, `%DCT%` and any `{{token}}` from the invoice catalogue, so the path resolves per invoice — e.g. `%APP_HOME%/cgv/CGV_{{kco}}.pdf`. |
 
 The **`{ }`** button next to the path field opens a searchable token list and inserts the chosen token at the cursor — the invoice catalogue tokens (`{{kco}}`, `{{fedoc}}`, …) and the path constants `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%` — so you don't have to remember the exact spelling. **Add attachment** adds another row.
+
+:::info[UBL-source templates embed attachments too *(2026.06.13)*]
+A template with *Source = UBL* now embeds the same PDFs as the XML flow — after validation and before the database insert, so the stored UBL matches what is sent to the PA:
+
+- **Attachment `attach`** embeds a sibling PDF from the input directory under `cbc:ID="PJA"`.
+- **The readable PDF (`lisible`)** is rendered straight from the parsed UBL by the modern PDF engine and embedded under `cbc:ID="LISIBLE"` (DocumentTypeCode 916).
+- **Additional Attachments** loop exactly as above; the path tokens resolve per invoice.
+
+`attachment=create` stays unsupported for UBL source — it needs BI Publisher rendering from a source XML, which a UBL file doesn't have. Use `attach` or `lisible` instead.
+:::
 
 ### Output
 

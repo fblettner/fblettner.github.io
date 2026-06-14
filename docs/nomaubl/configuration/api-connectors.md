@@ -132,6 +132,7 @@ The editor has **five tabs**:
 | **Base URL** | Root URL of the target API (e.g. `https://api.example.com:9300`). All endpoint paths are appended to this URL. |
 | **Timeout (ms)** | HTTP request timeout in milliseconds. Default `30000` (30 s). |
 | **SSL Verify** | `true` / `false` — whether to validate the server's TLS certificate. Set to `false` only in non-production environments using self-signed certificates. |
+| **Debug** *(2026.06.14)* | `Y` / `N` (default `N`). When `Y`, every call through this connector prints a one-line request + response trace — URL, HTTP status and a body preview — to the service log. Turn it on while wiring a new platform to check URL substitution, query parameters and the response shape; turn it off once the connector is stable. One uniform trace replaces the old ad-hoc logging in *import-status* and *invoice-statuses*. |
 
 ### Default Headers
 
@@ -229,7 +230,13 @@ When **Content-Type** is set to `multipart/form-data`, the body is no longer a s
 | `name=value` | `comment=invoice {{fedoc}}` | Adds a text field named `comment` with the resolved value. |
 | `file=@{{filePath}};filename=invoice.xml;contentType=application/xml` | *(same)* | Attaches a file part named `file`. `{{filePath}}` resolves to the path on disk; `filename` and `contentType` are the headers shipped on that part. |
 
-Typical use case: a PA that takes the UBL invoice as a `multipart/form-data` upload with the XML in a `file` part (IOPOLE's invoice-import endpoint follows this pattern).
+Typical use case: a PA that takes the UBL invoice as a `multipart/form-data` upload with the XML in a `file` part (IOPOLE's invoice-import endpoint follows this pattern). The part name (`file` above) is yours to choose — match whatever the platform expects.
+
+Three placeholders carry the document into the part:
+
+- `{{filePath}}` — the path to the UBL file on disk. On the **initial send** it is the input file; on a **resend** *(2026.06.13)* NomaUBL writes the stored UBL blob to a temporary file first, so `{{filePath}}` works the same way and one connector configuration serves both (the temp file is cleaned up automatically).
+- `{{content}}` — the base64 of the UBL, for platforms that take the bytes inline in a JSON body rather than as a file part.
+- `{{docName}}` — a sanitised `<doc>_<dct>_<kco>` name, handy for the `filename` header.
 
 ### Response Mappings
 
@@ -301,6 +308,27 @@ The body is a JSON template; `{{reportName}}`, `{{reportVersion}}` and `{{compan
 | `companyCode` | Company Code | `00001` |
 
 `reportName` and `reportVersion` are constants for this report and are pre-filled with sensible defaults; `companyCode` is the only parameter typically supplied at runtime — usually injected via the `{{fedct}}` placeholder when this endpoint is bound to a regulatory action in *E-Invoicing → Actions*.
+
+### Endpoint chaining (`then`) \{#endpoint-chaining\}
+
+*(2026.06.13)* An endpoint can hand its result to a follow-up call in the same step. Set **`then`** to the name of the next endpoint, and **`then.itemsField`** / **`then.idField`** to pick the id to carry forward from the first response. That id reaches the follow-up as `{{prevId}}` (also aliased `{{uuid}}`). It powers two-step platform flows — *upload then process*, or *list then fetch each detail* — without a round-trip through NomaUBL between the calls.
+
+### Worked example — Esker (upload, then process) \{#esker\}
+
+Esker takes the invoice in two calls, wired as a `pa-default` API connector:
+
+| Step | Endpoint | What it does |
+|---|---|---|
+| **Send** | `POST /api/v1/fileContent` | A JSON body carries the base64 UBL (`{{content}}`); Esker's own `decode=b64` directive in that body tells *Esker* the content is base64, so no temporary file is needed. The response returns a file id, mapped to `uuid` in *Response Mappings*. |
+| **Import status** | `POST /api/v1/process/{{processName}}` | Mapped to the **import-status** slot — fetch-import invokes it on the next poll. It triggers the actual processing using the file id from the send. |
+
+Authentication is `OAUTH2` with a form-urlencoded **Body Content-Type**; leaving the **Body template** empty lets NomaUBL emit `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}` on its own.
+
+The import-status slot is repointed to the second endpoint from the **Import status** field in [E-Invoicing → Actions](./system/einvoicing.md) — the slot name overrides the connector's default, so the same connector serves the send and the status poll.
+
+:::tip
+PAs that don't return the standard `success/pending/failed` vocabulary (Esker, IOPOLE, …) are now read correctly by import-status: a real HTTP failure counts as an error, while a `2xx` with no `status` field flows the optimistic success branch. Turn on **Debug** on the Connection tab while wiring the two endpoints to watch the traces.
+:::
 
 ---
 

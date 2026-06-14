@@ -152,6 +152,19 @@ Le choix de la Source bascule la suite de l'onglet entre trois ensembles de cham
 La valeur Direction est écrite une fois sur la ligne au moment de l'insertion (colonne `UHDRIN` sur F564231 — `'1'` pour reçue, `'2'` pour émise). Changer la *Direction* du modèle ensuite ne **re-classe pas** les lignes déjà existantes — le filtre de la liste Factures, les règles de notification et les enveloppes e-Reporting lisent la valeur figée, pas le réglage courant du modèle. Choisir la bonne Direction avant de traiter la première facture sur un nouveau modèle ; n'en changer plus tard qu'en acceptant que les lignes historiques restent sur la direction précédente.
 :::
 
+### Identification du document *(quand Source = UBL)* \{#document-identification-ubl\}
+
+*(2026.06.13)* Un fichier UBL ne porte aucun spool d'où extraire les données : l'**Activité** et le **Type** que la source XML récupère par XPath se saisissent ici en texte. Le groupe se trouve en haut de la branche UBL et les deux champs sont **obligatoires** — ils sont écrits dans la ligne de suivi `F564230` dont dépendent l'envoi PA et fetch-import.
+
+| Champ | Description |
+|---|---|
+| **Activité** | Le code d'activité inscrit sur la ligne (par ex. `UBL`). Stocké dans `F564230.FEAA10`. |
+| **Type** | Le type de document (par ex. `FACTURE`). Stocké dans `F564230.FEAA20`. |
+
+:::info[Pourquoi cette ligne compte]
+Le pipeline source UBL insère désormais la même ligne de suivi `F564230` que le pipeline XML, en lisant le reste de ses valeurs directement dans l'UBL : BT-47 SIREN acheteur → `FEALKY`, BT-115 PayableAmount → `FEAEXP`, BT-2 IssueDate → `FEIVD`, BT-9 DueDate → `FEARDU`. Sans elle, l'envoi PA n'avait aucune ligne où inscrire son id de transaction, `FEUKIDSZ` restait vide et fetch-import n'avait rien à interroger. Le mode replace met à jour la ligne existante au lieu de la dupliquer ; le mode sans replace saute une facture déjà traitée avec l'avertissement habituel.
+:::
+
 ### Extraction de clé depuis `cbc:ID` *(quand Source = UBL)*
 
 Pour les factures UBL, la clé primaire `(doc, dct, kco)` — le triplet qui identifie le document partout ailleurs dans NomaUBL — est extraite du `cbc:ID` de la facture via une regex à **groupes nommés**. Aucune convention de nommage de fichier n'est exigée ; le fichier peut avoir n'importe quel nom.
@@ -311,6 +324,16 @@ En plus du PDF lisible principal, un type de document peut joindre **d'autres fi
 | **Chemin** | Où lire le fichier. Accepte les variables de chemin `%APP_HOME%`, `%ENV%`, `%DOCNAME%`, `%KCO%`, `%DOC%`, `%DCT%` ainsi que tout jeton `{{…}}` du catalogue de facture : le chemin est alors calculé pour chaque facture — par ex. `%APP_HOME%/cgv/CGV_{{kco}}.pdf`. |
 
 Le bouton **`{ }`** placé à côté du champ chemin ouvre une liste filtrable et insère le jeton choisi à l'endroit du curseur — aussi bien les jetons du catalogue de facture (`{{kco}}`, `{{fedoc}}`, …) que les variables de chemin `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%` —, ce qui évite d'avoir à retenir leur écriture exacte. **Ajouter une pièce jointe** crée une nouvelle ligne.
+
+:::info[Les modèles source UBL embarquent aussi les pièces jointes *(2026.06.13)*]
+Un modèle en *Source = UBL* embarque désormais les mêmes PDF que le flux XML — après validation et avant l'insert en base, pour que l'UBL stocké corresponde à ce qui est envoyé à la PA :
+
+- **Attachment `attach`** embarque un PDF voisin depuis le répertoire d'entrée sous `cbc:ID="PJA"`.
+- **Le PDF lisible (`lisible`)** est rendu directement depuis l'UBL parsé par le moteur PDF moderne et embarqué sous `cbc:ID="LISIBLE"` (DocumentTypeCode 916).
+- **Les pièces jointes supplémentaires** bouclent exactement comme ci-dessus ; les jetons de chemin sont résolus par facture.
+
+`attachment=create` reste non supporté en source UBL — il exige un rendu BI Publisher depuis un XML source, qu'un fichier UBL n'a pas. Utilisez `attach` ou `lisible` à la place.
+:::
 
 ### Sortie
 

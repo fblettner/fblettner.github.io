@@ -10,7 +10,9 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-06-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-12</span></a>
+  <a href="#v2026-06-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-14</span></a>
+  <a href="#v2026-06-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-13</span></a>
+  <a href="#v2026-06-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-12</span></a>
   <a href="#v2026-06-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-10</span></a>
   <a href="#v2026-06-03" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.03 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-03</span></a>
   <a href="#v2026-06-02" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.02 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-02</span></a>
@@ -53,6 +55,34 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.06.14 — 2026-06-14 \{#v2026-06-14\}
+
+Une aide au câblage des nouvelles plateformes.
+
+### Nouveautés
+
+- **Réglage Debug sur les connecteurs API.** Un nouveau choix *Debug* (`Y` / `N`) dans l'onglet *Connexion* du [connecteur API](./configuration/api-connectors.md) fait écrire chaque appel sur une ligne — URL, code HTTP et aperçu du corps — dans le journal du service. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête et la forme de la réponse sans demander une version spéciale ; à remettre sur `N` une fois le connecteur stable. Il remplace les traces ponctuelles ajoutées dans *import-status* et *invoice-statuses* et couvre tous les endpoints de manière uniforme.
+
+---
+
+## 2026.06.13 — 2026-06-13 \{#v2026-06-13\}
+
+Parité complète pour le pipeline source UBL — il écrit la ligne de suivi, embarque le PDF lisible et les pièces jointes, et renvoie via les plateformes multipart — plus une configuration Esker documentée.
+
+### Nouveautés
+
+- **Le pipeline source UBL écrit F564230.** Le traitement direct UBL insère désormais la même ligne `tableLog` que le pipeline XML, avec les valeurs lues par XPath UBL (BT-47 SIREN acheteur → FEALKY, BT-115 PayableAmount → FEAEXP, BT-2 IssueDate → FEIVD, BT-9 DueDate → FEARDU). Auparavant la ligne était omise, donc l'update `updatePATransactionId` de l'envoi PA ne touchait aucune ligne, FEUKIDSZ restait vide et fetch-import n'avait rien à interroger. Le mode replace se comporte comme le pipeline XML — la ligne existante est mise à jour, pas dupliquée ; le mode sans replace saute la facture avec l'avertissement *déjà traitée* habituel.
+- **Champs Activité / Type sur les modèles UBL.** L'éditeur source XML extrait `activite` / `typePiece` par XPath ; l'éditeur [Documents](./management/documents.md) les expose désormais comme champs texte **Activité** et **Type**, dans un nouveau groupe *Identification du document* en haut de la branche UBL. Les deux sont obligatoires — ils alimentent l'insertion F564230 ci-dessus.
+- **Le renvoi PA fonctionne avec les endpoints multipart.** Un template de corps multipart a besoin d'un fichier réel sur disque. L'envoi initial transmet déjà le chemin d'entrée ; le renvoi ne fournissait que `{{content}}` (base64 du blob en base), ce qui cassait les plateformes multipart. Le renvoi écrit maintenant le blob dans un fichier temporaire et expose `{{filePath}}` et `{{docName}}` (sanitisé comme `<doc>_<dct>_<kco>`), de sorte que la même configuration de [connecteur](./configuration/api-connectors.md) sert à l'envoi initial et au renvoi. Le nettoyage est automatique.
+- **Esker (et similaires) via un connecteur API.** Une configuration `pa-default` fonctionnelle pour Esker est désormais documentée : un premier endpoint poste les octets UBL en JSON (base64), un second — mappé sur le slot *import-status*, puisque fetch-import l'appelle — déclenche le traitement effectif avec l'id de fichier renvoyé par le premier. Le corps de jeton OAuth2 `client_credentials` est construit automatiquement quand le type de contenu du jeton est form-urlencoded et qu'aucun corps explicite n'est défini. Voir [Connecteurs API](./configuration/api-connectors.md).
+- **Pipeline source UBL : LISIBLE et pièces jointes PDF externes.** Le flux XML→UBL honore depuis longtemps les propriétés `lisible`, `attachment` et `additionalAttachments` d'un modèle ; le flux source UBL (`Source = UBL`) les ignorait. Parité rétablie : après validation et avant l'insert en base, les PDF configurés sont embarqués dans le fichier UBL, qui est re-parsé pour que le blob stocké corresponde à ce qui est envoyé à la PA — `attachment=attach` embarque un PDF voisin depuis `dirInput` sous `cbc:ID="PJA"` ; `lisible=Y` rend le PDF lisible directement depuis l'UBL parsé et l'embarque sous `cbc:ID="LISIBLE"` (DocumentTypeCode 916) ; `additionalAttachments` boucle sur le tableau JSON exactement comme le flux XML. `attachment=create` reste non supporté ici — il dépend de BI Publisher rendant le PDF depuis un XML source, que les modèles source UBL n'ont pas ; utilisez `attach` ou `lisible=Y`. Voir [Documents](./management/documents.md).
+
+### Correctifs
+
+- **Arbre de décision import-status corrigé.** Le client import-status distingue désormais *l'appel HTTP a échoué* (réseau, HTTP 4xx/5xx, parse) de *HTTP 2xx sans champ `status` dans la réponse* — le premier compte en erreur, le second flue la branche optimiste de succès, de sorte que les plateformes qui ne parlent pas le vocabulaire `success/pending/failed` (Esker, IOPOLE, …) sont remontées correctement. Avant ce correctif un HTTP 400 comptait silencieusement en succès dans le récapitulatif ; les compteurs reflètent maintenant ce qui s'est réellement passé. Voir [Import](./sync/import.md).
 
 ---
 
