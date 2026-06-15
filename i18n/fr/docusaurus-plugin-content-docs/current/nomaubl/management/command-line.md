@@ -98,6 +98,7 @@ Au-delà du contrôle de service, le wrapper propose des **formes courtes** des 
 | `nomaubl.sh fetch-single <env> <template> <source> <args…> [type] [options]` | `java -jar nomaubl.jar -fetch-single …` |
 | `nomaubl.sh fetch-all <env> <template> <source> [type] [options]` | `java -jar nomaubl.jar -fetch-all …` |
 | `nomaubl.sh extract <env> <jobNumber> [options]` | `java -jar nomaubl.jar -extract <env>/config/config.json <jobNumber> [options]` |
+| `nomaubl.sh pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` | `java -jar nomaubl.jar -pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` |
 | `nomaubl.sh install <targetDir>` | `java -jar nomaubl.jar -install <targetDir>` |
 
 Le reste de la page détaille chacun des modes directs du JAR.
@@ -557,6 +558,34 @@ Extraction bas niveau depuis la BIP Print Queue de JD Edwards (`F9563110` en-tê
 ```bash
 java -jar nomaubl.jar -extract /opt/nomaubl/demo/config/config.json 19 \
                       --both --type PDF --lang FR /tmp/jde-19/
+```
+
+---
+
+## `-pdf2xml` — adaptateur PDF JD Edwards → XML \{#pdf2xml\}
+
+*(2026.06.15)* Convertit un **PDF** de rapport JD Edwards EnterpriseOne dans la même forme XML que JDE produit nativement quand la sortie XML est activée — un site peut donc garder JDE en mode sortie PDF et alimenter sans changement le pipeline XML → XSL → UBL existant. Contrairement aux autres modes, il ne prend aucun environnement : c'est un convertisseur fichier-à-fichier autonome.
+
+```text
+-pdf2xml <input.pdf> <output.xml> [<manifest.xml>]
+```
+
+| Argument | Description |
+|---|---|
+| **`input.pdf`** | Le PDF de rapport JDE à lire. |
+| **`output.xml`** | Où écrire le XML extrait. |
+| **`manifest.xml`** *(optionnel)* | Un échantillon XML JDE natif de la même version de rapport (programme R). Fourni, la sortie est strictement identique au XML natif de JDE ; sans lui, l'alias DD OWObject sert de préfixe d'élément. |
+
+:::info[Spécifique à JDE]
+L'adaptateur lit les métadonnées `OWObject` intégrées au PDF : le drapeau INI JDE qui désactive la compression du flux PDFlib (option Oracle « lecteurs de tags tiers ») doit donc être actif — sinon les métadonnées sont compressées et perdues. Le suffixe universel `_ID<oi>` sur chaque élément est le contrat dans les deux modes : les XSL qui ciblent ce suffixe fonctionnent avec ou sans manifest.
+:::
+
+**Exemple**
+
+```bash
+nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml
+# strictement identique au XML natif de JDE, avec un manifest :
+nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml ./manifests/R42565_FBL0001.xml
 ```
 
 ---

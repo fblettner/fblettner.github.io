@@ -98,6 +98,7 @@ Beyond service control, the wrapper exposes **short forms** of the JAR's process
 | `nomaubl.sh fetch-single <env> <template> <source> <args…> [type] [flags]` | `java -jar nomaubl.jar -fetch-single …` |
 | `nomaubl.sh fetch-all <env> <template> <source> [type] [flags]` | `java -jar nomaubl.jar -fetch-all …` |
 | `nomaubl.sh extract <env> <jobNumber> [flags]` | `java -jar nomaubl.jar -extract <env>/config/config.json <jobNumber> [flags]` |
+| `nomaubl.sh pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` | `java -jar nomaubl.jar -pdf2xml <input.pdf> <output.xml> [<manifest.xml>]` |
 | `nomaubl.sh install <targetDir>` | `java -jar nomaubl.jar -install <targetDir>` |
 
 The remainder of the page describes each direct JAR mode in detail.
@@ -557,6 +558,34 @@ Low-level extraction from the JD Edwards BIP Print Queue (`F9563110` header, `F9
 ```bash
 java -jar nomaubl.jar -extract /opt/nomaubl/demo/config/config.json 19 \
                       --both --type PDF --lang FR /tmp/jde-19/
+```
+
+---
+
+## `-pdf2xml` — JD Edwards PDF → XML adapter \{#pdf2xml\}
+
+*(2026.06.15)* Converts a JD Edwards EnterpriseOne report **PDF** into the same XML shape JDE emits natively when XML output is enabled — so a site can keep JDE in PDF-output mode and still feed the existing XML → XSL → UBL pipeline unchanged. Unlike the other modes it takes no environment: it is a standalone file-to-file converter.
+
+```text
+-pdf2xml <input.pdf> <output.xml> [<manifest.xml>]
+```
+
+| Argument | Description |
+|---|---|
+| **`input.pdf`** | The JDE report PDF to read. |
+| **`output.xml`** | Where to write the extracted XML. |
+| **`manifest.xml`** *(optional)* | A JDE-native XML sample of the same report (R-program) version. When supplied, the output is byte-identical to JDE's native XML; without it, the OWObject DD alias is used as the element prefix. |
+
+:::info[JDE-specific]
+The adapter reads the `OWObject` metadata embedded in the PDF, so the JDE INI flag that disables PDFlib stream compression (Oracle's *third-party tag readers* option) must be on — otherwise the metadata is compressed away. The universal `_ID<oi>` suffix on each element is the contract in both modes, so XSLs that key on the OI suffix work with or without a manifest.
+:::
+
+**Example**
+
+```bash
+nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml
+# byte-identical to JDE's native XML, with a manifest:
+nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml ./manifests/R42565_FBL0001.xml
 ```
 
 ---
