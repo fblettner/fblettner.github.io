@@ -225,7 +225,14 @@ Configures the outbound mail server NomaUBL uses to send notifications and docum
 | Field | Description |
 |---|---|
 | **Enable Authentication** | `Y` / `N` — turn on password-based user login. When `N`, NomaUBL runs without a login wall (typically dev / on-prem behind a corporate VPN). |
+| **Auth Mode** | `internal` / `oidc` / `both` — drives the login screen. `internal` *(default)* keeps the local username + password form. `oidc` switches to a single-sign-on button only. `both` shows the SSO button above the local form, so operators with a database account can still sign in if the IdP is unavailable. Pair with the [OIDC template](./oidc.md) to configure the SSO side. |
 | **Session Timeout (minutes)** | How long an authenticated user session remains valid. Default `480` (8 hours). |
+
+:::info[Self-service password reset]
+With **Auth Mode = `internal`** (or `both`), the login screen exposes a *Forgot password?* link. The user is prompted for both username and email; if they match an active account, a one-shot link valid 60 minutes is sent to the email on file. The link lands on a dedicated page that lets the user choose a new password.
+
+Requires **SMTP** configured under *Tab 3 — Email / SMTP*. Tokens are persisted in `F564255` (see [Database tables](../../references/database-tables.md#f564255--password-reset-tokens)) and expire after a single use.
+:::
 
 ---
 

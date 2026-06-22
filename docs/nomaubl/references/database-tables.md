@@ -1,7 +1,7 @@
 ---
 title: Database Tables
 description: "NomaUBL database schema reference — every table that backs the application: invoice archive, UBL header / lines / VAT, lifecycle events, validation errors, processing log, e-reporting, notifications and authentication. Functional descriptions, primary keys and field references for Oracle and PostgreSQL."
-keywords: [NomaUBL, database, schema, tables, F564230, F564231, F564233, F564234, F564235, F564236, F564237, F564250, F564251, F564252, F564253, F564254, F564260, F564261, F564262, JDE Julian, BLOB, BT-, Oracle, PostgreSQL]
+keywords: [NomaUBL, database, schema, tables, F564230, F564231, F564233, F564234, F564235, F564236, F564237, F564250, F564251, F564252, F564253, F564254, F564255, F564260, F564261, F564262, JDE Julian, BLOB, BT-, Oracle, PostgreSQL]
 ---
 
 # Database Tables
@@ -18,6 +18,10 @@ Release **2026.05.5** introduces several structural changes:
 - **Runtime log `F564237`**: new `FEUKID` PK, columns renamed (`FEMODE` → `FERMK`, `FEMETHOD` → `FERMK2`, `FEMESSAGE` → `FEK74MSG1`).
 - **Authentication overhauled**: `F564252` (sessions) renamed to `SSLSID` / `SSSTDTIM` / `SSETDTIM`. `F564251` (roles) now holds identity only — grants moved to the new `F564254` table (`PMROLE` / `PMCRAPPID` / `PMCRAPPVAL`). User columns (`F564250`) now follow JDE conventions (`USLDAPPSWD`, `USENABL`, `USSECF3`, audit `USUPMJ` / `USTDAY`).
 - **Notifications `F564253`** (introduced in 2026.05.3) is now documented in this reference page.
+:::
+
+:::info[Schema change — 2026.06.21.3]
+The **`F564255` — Password reset tokens** table is added to back the *Forgot password* flow (single-use link with ~60 min TTL). A new `Auth · Password resets` entry (default `F564255`) appears under *Settings → db-nomaubl* so schema validation no longer flags it as missing.
 :::
 
 ---
@@ -165,18 +169,23 @@ Release **2026.05.5** introduces several structural changes:
   <text x="305" y="631" fill="#4ade80" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564252</text>
   <text x="460" y="631" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="end" fontFamily="system-ui, sans-serif" opacity="0.75">Sessions</text>
 
-  <rect x="540" y="552" width="180" height="56" rx="10" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1.2" strokeDasharray="4 3" strokeOpacity="0.7"/>
-  <text x="630" y="574" fill="#4ade80" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.92">F564253</text>
-  <text x="630" y="593" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Notifications</text>
+  <rect x="540" y="534" width="180" height="44" rx="10" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1.2" strokeDasharray="4 3" strokeOpacity="0.7"/>
+  <text x="630" y="554" fill="#4ade80" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.92">F564253</text>
+  <text x="630" y="569" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Notifications</text>
+
+  <rect x="540" y="588" width="180" height="44" rx="10" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1.2" strokeDasharray="4 3" strokeOpacity="0.7"/>
+  <text x="630" y="608" fill="#4ade80" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.92">F564255</text>
+  <text x="630" y="623" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Reset tokens</text>
 
   <path d="M 230 580 L 260 580" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" fill="none"/>
   <path d="M 260 550 L 260 626" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" fill="none"/>
   <line x1="260" y1="550" x2="290" y2="550" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
   <line x1="260" y1="588" x2="290" y2="588" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
   <line x1="260" y1="626" x2="290" y2="626" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
-  <line x1="470" y1="588" x2="540" y2="580" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
+  <line x1="470" y1="588" x2="540" y2="556" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
+  <line x1="230" y1="580" x2="540" y2="610" stroke="#4ade80" strokeWidth="1.2" strokeDasharray="3 3" strokeOpacity="0.6" markerEnd="url(#dt-arrow-green)"/>
   <text x="265" y="545" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">USROLE</text>
-  <text x="265" y="660" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">SSUSER + PMROLE + NTUSER</text>
+  <text x="265" y="660" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">SSUSER + PMROLE + NTUSER + PRUSER</text>
 </svg>
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '16px', margin: '0 0 24px', padding: '10px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', fontSize: '11px', opacity: 0.78}}>
@@ -516,6 +525,21 @@ Currently used `PMCRAPPID` values:
 | `feature` | `settings` | Role can access the *Configuration* menus. |
 | `feature` | `readonly` | Role is restricted to read-only (no edit / delete / resend). |
 
+### F564255 — Password reset tokens
+
+Introduced in **2026.06.21.3** to back the *Forgot password* flow. One row per emailed link. The token is a UUID embedded in the `/reset?token=…` URL; it is single-use and expires after ~60 minutes.
+
+- **Primary key**: `PRTOK`
+- **Notable**: `PRUSED = 'Y'` marks a consumed token — the row stays briefly for audit before sweep. A purge deletes expired tokens and consumed tokens past their audit window.
+
+| Field | Type | Description |
+|---|---|---|
+| `PRTOK` | Text(100) | UUID token embedded in the `/reset?token=…` link (PK). |
+| `PRUSER` | Text(10) | Target user (FK → F564250.USUSER). |
+| `PRSTDTIM` | Timestamp | Token issued-at. |
+| `PRETDTIM` | Timestamp | Token expires-at (~60 min after issue). |
+| `PRUSED` | Text(1) | `Y` once the token has been consumed; prevents replay. |
+
 ---
 
 ## Recommended indexes
@@ -535,5 +559,7 @@ The DDL bundles a small set of indexes that every production deployment should k
 | `F564252_EXP_IX` | F564252 | `SSETDTIM` | Expired-session pruning. |
 | `F564253_USR_IX` | F564253 | `NTUSER`, `NTEV01`, `NTUPMJ DESC` | Bell badge + inbox sort. |
 | `F564254_ROLE_IX` | F564254 | `PMROLE`, `PMCRAPPID` | Fast per-role grant resolution. |
+| `F564255_USR_IX` | F564255 | `PRUSER` | Active tokens per user (abuse protection, invalidation). |
+| `F564255_EXP_IX` | F564255 | `PRETDTIM` | Expired-token sweep. |
 
 The full DDL — including dialect-aware variants for Oracle and PostgreSQL — ships in the JAR under `sql/oracle/ddl.sql` and `sql/postgres/ddl.sql`, and is materialised on disk by **Initialize Database**.

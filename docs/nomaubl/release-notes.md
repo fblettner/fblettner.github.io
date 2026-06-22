@@ -10,7 +10,16 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-06-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-15</span></a>
+  <a href="#v2026-06-22-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.22.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-22</span></a>
+  <a href="#v2026-06-21-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-17</span></a>
+  <a href="#v2026-06-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-16</span></a>
+  <a href="#v2026-06-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-15</span></a>
   <a href="#v2026-06-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-14</span></a>
   <a href="#v2026-06-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-13</span></a>
   <a href="#v2026-06-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-12</span></a>
@@ -56,6 +65,123 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.06.22.5 — 2026-06-22 \{#v2026-06-22-5\}
+
+Single sign-on (SSO) via OIDC — the IdP verifies identity, NomaUBL keeps the call on roles, permissions and row filters.
+
+### New features
+
+- **Single sign-on via OIDC.** The *Auth Mode* field on the Global template switches the login screen between `internal`, `oidc` (SSO only) and `both` (SSO button above the local form). The IdP configuration lives in a new *oidc* system template (issuer URL, client ID/secret, redirect URI, scopes, claim mapping, auto-provisioning with a default role) — created automatically on fresh installs and upgrades, or in one click from the **+ Add OIDC** button in the Configuration Manager header. Sign-in is keyed by email: an *Allowed email domains* allow-list restricts SSO to one or more tenants, and a *Require Google Workspace domain* field enforces the `hd` claim so a personal Gmail can't slip in with the same address. Auto-provisioned accounts get a short JDE-style username derived from the email's local-part. Sessions minted through OIDC lock down the Profile modal — the *Security* tab and identity fields are read-only since password rotation happens at the IdP. Roles, grants and row-filters stay managed in NomaUBL — the IdP only verifies identity.
+
+---
+
+## 2026.06.21.5 — 2026-06-21 \{#v2026-06-21-5\}
+
+### Fixes
+
+- **Daily invoice volume chart legible at every period.** Bars are now clamped between 3 and 36 px so 7-day periods stop rendering giant slabs and long periods stop rendering slivers. Date labels are HTML, so they stay sharp at any period instead of squishing into illegible dashes when the SVG is stretched.
+
+---
+
+## 2026.06.21.4 — 2026-06-21 \{#v2026-06-21-4\}
+
+### Fixes
+
+- **View-only roles can read invoices again.** The detail modal uses the UBL XML endpoint to render *Parties* / *Invoice Lines* / *VAT Recap* / *Notes*; gating it by `invoice.download` was hiding every tab from any role that didn't have the download action. The endpoint is now read-open (still row-filter and visibility gated) — only the explicit **Download UBL** button stays gated by `invoice.download`.
+
+---
+
+## 2026.06.21.3 — 2026-06-21 \{#v2026-06-21-3\}
+
+### New features
+
+- **New `invoice.create` action permission.** The **New invoice** quick action on the dashboard is now gated by its own action grant — a role without `invoice.create` no longer sees the button and the underlying endpoint refuses the call.
+
+### Fixes
+
+- **Password-reset table now appears in *Settings → db-nomaubl*.** The *Auth* section gains an *Auth · Password resets* field (default `F564255`) so the Validate schema check stops reporting it as a missing table. See [Database Tables](./references/database-tables.md).
+
+---
+
+## 2026.06.21.2 — 2026-06-21 \{#v2026-06-21-2\}
+
+### New features
+
+- **Role-based dashboard card visibility.** Each dashboard widget is now an individual permission. *Settings → Roles → Access* has a **Dashboard cards** checklist below *Allowed Pages* — empty list shows every card (existing behaviour), populated list is a strict whitelist. Hidden cards are skipped server-side, so their SQL never runs and their data never reaches the wire.
+- **Daily invoice volume — stacked bars by status.** The single line chart is replaced by a per-day stacked bar split into *Approved* / *In flight* / *Errors-IT* / *Errors-Business*. Hover any day for a per-bucket count tooltip.
+
+### Fixes
+
+- **Dashboard *PA round-trip* card no longer crashes for roles with a row-filter on a header column** (e.g. customer name). The card's lifecycle-only SQL now gates eligible rows through an `EXISTS` against the header table instead of splicing the row-filter clause into a query that didn't know about it.
+
+---
+
+## 2026.06.21.1 — 2026-06-21 \{#v2026-06-21-1\}
+
+### New features
+
+- **Self-service password reset.** *Forgot password?* link on the login screen opens a dialog asking for both username and email; if they match an active account, the user gets a one-shot link valid 60 minutes that lands on a new page to choose a new password. Requires SMTP configured in the `global` template.
+
+---
+
+## 2026.06.21 — 2026-06-21 \{#v2026-06-21\}
+
+Role overhaul: row filters, granular action permissions, a 4-tab editor, an independent *API Reference* page grant. On the PA connector side: inbound endpoints shipped by default. On the UBL side: configurable supplier electronic address (BT-34) and a per-document-type Schematron toggle.
+
+### New features
+
+- **Role-level row filters.** A role can be restricted to a specific subset of invoices (and processing-log / integration-error / e-reporting rows) by picking a column and one or more values in *Settings → Roles → Data scope*. The typical use case is an external-customer role that only sees invoices issued to its own alpha key (UHALKY). The row filter applies to the list views, the dashboard, every per-row endpoint (lifecycle, lines, XML download, PDF render, status push, delete, resend, email), and the generated PDF byte stream. Forbidden rows return the same "not found" shape the UI shows for genuinely missing data, so the response can't be used to probe for invoices a role shouldn't know exist. Multiple filters on the same column combine as OR; filters on different columns combine as AND, side-by-side with the existing Companies grant.
+- **Granular action permissions.** The old all-or-nothing read-only flag is replaced by a per-action whitelist under *Settings → Roles → Actions*. Invoice, E-Reporting and Integration ops are grouped by view; each button can be allowed or blocked independently — edit, delete, resend, push status (with separate PA and DB sub-permissions for the *Set Status* modal's two tabs), validate UBL, download UBL, preset actions, custom actions, email PDF, generate / resend e-reporting batches, and trigger batch integration jobs (*Fetch Received* / *Import Statuses* / *Retrieve Statuses*). Existing roles keep their behaviour: a role with no whitelist set continues to allow every action, and turning the whitelist on pre-populates with everything so nothing changes until the operator explicitly removes a check.
+- **Roles editor reorganised into purpose-built tabs.** The single *Permissions* panel now splits into **Access** (pages + features), **Actions** (the new whitelist), **Data scope** (companies + row filters) and **Members**. The role name and description sit above the tab bar so they stay visible from any tab — *Save* / *Cancel* render on every editing tab.
+- **API Reference is its own page grant.** The sidebar link to `/api/docs` no longer piggy-backs on the *Status Reference* grant, so a role can be given browser access to the app without exposing the raw API contract — useful when handing an external user a log-in that should not see the endpoint catalog. Fresh admin roles get the new `apireference` page automatically; existing admins pick it up on the next init.
+- **`fetch-received-list` and `fetch-received` shipped in the default `pa-default` api-connector.** Fresh installs of the bundled connector now expose the two inbound endpoints alongside the existing six outbound ones, with sensible URL skeletons (`/api/v1/sale/received-invoices?since={{since}}` and `/api/v1/sale/received-invoices/{{uuid}}`). The actual paths still depend on each PA — the operator confirms the URL once and the resolver finds the endpoints by name immediately. **Existing installs** are not auto-migrated: `ConfigMerger` skips customer-owned api-connectors as a whole to preserve URL / auth edits, so operators upgrading need to add the two endpoint rows manually via the **+ Add endpoint** button (copy the names + URL skeletons above).
+- **Seller electronic address (BT-34) is now configurable.** Some customers route their invoices on a Peppol / e-invoicing identifier that is not their SIREN. The *Supplier Companies* panel in *UBL Defaults* gained a dedicated BT-34 field per company, and the XSL editor gained a `TAG_SUPPLIER_ENDPOINT` override for per-document mapping. Resolution order at emission time is: per-document TAG → *UBL Defaults* supplier endpoint → SIREN. Installs that don't set anything keep the current behaviour (SIREN is emitted as endpoint).
+- **Per-document-type Schematron toggle.** The *Document Types* editor gained a Schematron checkbox alongside *Send to PA* / *Keep UBL* / *Keep PDF*. When off for a code, the EN 16931 / CTC-FR Schematron pass is skipped for invoices resolving to that type and no rows land in `F564236`. Shipped defaults enable validation for `B2B` and `B2G` (CTC-FR scope) and disable it for `B2BINT`, `B2C`, `OUTOFSCOPE`, `ARCHIVEONLY`, `DOCUMENT` (out of scope — French rules misfire on consumer transactions and foreign buyers). Customers can flip the flag per code as needed. Existing 7-field document-types rows fall back to the same per-code default so upgrades pick sensible values without manual migration.
+- **UBL-source pipeline reads `document-types` for `sendToPA` + `validate`.** Invoices uploaded as UBL (*Process Document* UI, receive flow, `fetch-received`) now resolve their doc-type code from the doc-template's `processingType.default`, look it up in `document-types`, and let the row drive both the Schematron gate and the `sendToPA` fallback. Explicit caller overrides (UI / CLI `sendToPA=Y/N`) still win. One INFO line per call shows which row drove the decision, mirroring `AUTO_RESOLVE` in the XML pipeline.
+
+### Fixes
+
+- **"Uncheck all" in the role *Actions* tab now actually unchecks every action.** Previously the dual meaning of an empty action list (legacy "all allowed" vs. explicit "none allowed") meant clicking the button reverted the role to all-allowed and silently re-checked everything. The whitelist mode is now a dedicated toggle so the visible checkbox state always matches what gets saved.
+
+---
+
+## 2026.06.17 — 2026-06-17 \{#v2026-06-17\}
+
+Notification PDFs use the configured template, two precision fixes, and proper server-side pagination on the processing log.
+
+### Fixes
+
+- **Notification PDFs now use the configured document template.** PDFs attached to outbound notifications and email notifications were always rendered with the bundled default layout, regardless of the per-document `pdfTemplate` configured on the doc-template (`vrc_pro`, `cdn_facture`, …). The notification dispatcher now resolves the template stored on the invoice and applies it to the attached PDF, matching how the *Process Document* UI renders it. Installs that never set a per-document template keep the existing rendering.
+- **Line allowance amounts with a leading-dot input no longer fail BR-DEC-24.** JDE fields delivered as `.4700` (no integer part) were emitted into the UBL line allowance amount (BT-136) as `0.4700` — four decimals, fatal under the French e-invoicing Schematron rule BR-DEC-24 ("at most 2 decimals"). The amount normalisation function now applies the 2-decimal cap to leading-dot values: `.4700` becomes `0.47`. Same fix in the 6-decimal price helper for consistency.
+- **Processing Log grouped view shows every job in the loaded window.** Long-running batches (one `START` → thousands of intermediate events → one `END`) were rendering as a single `? → END` row when the `START` fell off the server slice. Three things were stacked against this view: the server silently capped responses at 500 events, the client sent only 5,000 even when more were available, and the grouper emitted one orphan row per intermediate event when no matching `START` was on the page. All three are fixed — server cap raised to 200,000, grouped-mode client request raised to 100,000, and dangling intermediates now collapse into a single per-job row carrying every step.
+
+### New features
+
+- **Server-side pagination on the Processing Log flat view.** The flat (non-grouped) Processing Log now paginates against the backend instead of capping at the loaded slice. Operators with long histories can walk through every event without re-running filters. Grouped view keeps its single-window load (capped at 100,000 events) because jobs are stitched together client-side.
+- **Pagination footer on the grouped Processing Log.** The grouped jobs list gained a sticky footer with page size selector (25 / 50 / 100 / 200), first / previous / next / last controls and current-position indicator. Page size persists across reloads.
+
+### Improvements
+
+- **Document-template lists are now sorted alphabetically.** Every place a list of document templates appears in the UI — the *Documents* editor sidebar, the template picker dropdown used by *Process Document* / *UBL Validation* / *Extract from BIP*, the *Global* editor's per-company override picker, the *Fetch Documents* editor's report rows, and the XSL editor's connector sample modal — now lists the templates in alphabetical order. Previously they followed the order they were saved in the config file, which became unscannable as templates were added.
+- **Configuration diagnostics for `AUTO` mode.** Processing in `AUTO` mode now writes two INFO log lines per processed document showing the resolved processing type code, the mapping table used, and the resulting effective mode (`UBL` / `BURST` / `SINGLE` / `BOTH`). Makes it possible to diagnose "AUTO ran the wrong mode" cases from the Processing Log in one or two reads instead of guessing at what the customer's configuration produced.
+
+---
+
+## 2026.06.16 — 2026-06-16 \{#v2026-06-16\}
+
+Actionable error when a BI Publisher RTF subtemplate is missing, and a starter manifest generator for the PDF → XML adapter.
+
+### Fixes
+
+- **Actionable error when a BI Publisher RTF subtemplate is missing.** The PDF generation path used to log a raw `ERROR RUN PDF java.util.EmptyStackException` when XDO's RTF parser hit an unresolvable `IMPORT` — almost always a subtemplate file (`sb_*_header.rtf`, `_footer.rtf`, `_detailslivre.rtf`, `_lettre_sub.rtf`, …) missing from the customer's environment, or an OS-specific path-separator mismatch. The PDF path now catches the underlying runtime exception and prepends a one-line hint telling the operator to verify `IMPORT` paths in the main RTF and confirm every referenced subtemplate exists on the host. Applies to both the `SINGLE`-mode shortcut and the standard processing path.
+- **PDF → XML adapter now groups invoices in batch PDFs.** When a single JDE PDF carries N invoices (batch printing), the converter previously collapsed everything into one `<On_Payment_Terms_S3>` wrapper. It now closes the current wrapper and opens a new one when the next `SI=3` page-header stream appears after a tax-summary section (`SI=7`), so each invoice in the batch is its own addressable XML block. `SI=5` per-page running totals no longer trigger a boundary, fixing the multi-page-invoice split. Verified on a 13,920-page PDF carrying 2,132 invoices: one wrapper per invoice, line items and totals all contained.
+
+### New features
+
+- **Starter manifest generator for the PDF → XML adapter.** New CLI mode `-pdfManifest <input.pdf> <output.manifest.xml>` (also `nomaubl.sh pdf-manifest` / `nomaubl.cmd pdf-manifest`) analyses the PDF and emits a JDE-shape manifest XML, for the case where the customer has no native JDE XML sample of the same R-program to feed `-pdf2xml`. Inferred element names use the printed RC label text where available and the OWObject DD alias as fallback; the customer edits the file to give meaningful names, then reuses it as the 3rd argument of `-pdf2xml`. The root element is derived from the PDF filename (typical JDE spool convention) and multi-line text fields keep a single element name across all their lines via a sticky cache.
 
 ---
 

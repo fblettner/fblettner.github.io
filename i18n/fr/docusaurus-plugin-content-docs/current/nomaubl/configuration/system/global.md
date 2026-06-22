@@ -225,7 +225,14 @@ Configure le serveur SMTP sortant utilisé par NomaUBL pour l'envoi des notifica
 | Champ | Description |
 |---|---|
 | **Enable Authentication** | `Y` / `N` — active la connexion utilisateur par mot de passe. À `N`, NomaUBL s'exécute sans contrôle d'authentification préalable (typiquement en environnement de développement ou en installation interne derrière un VPN d'entreprise). |
+| **Auth Mode** | `internal` / `oidc` / `both` — pilote l'écran de connexion. `internal` *(défaut)* conserve le formulaire local nom d'utilisateur + mot de passe. `oidc` bascule sur un bouton de connexion unique (SSO). `both` affiche le bouton SSO au-dessus du formulaire local, ce qui laisse une porte de secours pour un administrateur disposant d'un compte en base si le fournisseur d'identité est indisponible. À coupler avec le [template OIDC](./oidc.md) pour configurer le SSO côté NomaUBL. |
 | **Session Timeout (minutes)** | Durée de validité d'une session utilisateur authentifiée, exprimée en minutes. Valeur par défaut `480` (8 heures). |
+
+:::info[Réinitialisation de mot de passe en self-service]
+Quand **Auth Mode = `internal`** (ou `both`), l'écran de connexion expose un lien *Mot de passe oublié ?*. L'utilisateur saisit son identifiant et son e-mail ; en cas de correspondance avec un compte actif, un lien à usage unique valable 60 minutes est envoyé à l'e-mail enregistré. Le lien ouvre une page dédiée pour choisir un nouveau mot de passe.
+
+Requiert un **SMTP** configuré dans *Onglet 3 — Email / SMTP*. Les tokens sont persistés dans `F564255` (voir [Tables de base de données](../../references/database-tables.md#f564255--tokens-de-réinitialisation-de-mot-de-passe)) et sont invalidés dès qu'ils ont été utilisés.
+:::
 
 ---
 

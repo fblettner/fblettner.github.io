@@ -1,7 +1,7 @@
 ---
 title: Tables de base de données
 description: "Référence du schéma de base de données NomaUBL — toutes les tables qui supportent l'application : archive de factures, en-tête / lignes / TVA UBL, événements de cycle de vie, erreurs de validation, journal de traitement, e-reporting, notifications et authentification. Descriptions fonctionnelles, clés primaires et référentiel des champs pour Oracle et PostgreSQL."
-keywords: [NomaUBL, base de données, schéma, tables, F564230, F564231, F564233, F564234, F564235, F564236, F564237, F564250, F564251, F564252, F564253, F564254, F564260, F564261, F564262, JDE Julian, BLOB, BT-, Oracle, PostgreSQL]
+keywords: [NomaUBL, base de données, schéma, tables, F564230, F564231, F564233, F564234, F564235, F564236, F564237, F564250, F564251, F564252, F564253, F564254, F564255, F564260, F564261, F564262, JDE Julian, BLOB, BT-, Oracle, PostgreSQL]
 ---
 
 # Tables de base de données
@@ -18,6 +18,10 @@ La version **2026.05.5** apporte plusieurs évolutions structurelles :
 - **Journal d'exécution `F564237`** : nouvelle PK `FEUKID`, colonnes renommées (`FEMODE` → `FERMK`, `FEMETHOD` → `FERMK2`, `FEMESSAGE` → `FEK74MSG1`).
 - **Authentification refondue** : `F564252` (sessions) renommée en `SSLSID` / `SSSTDTIM` / `SSETDTIM`. `F564251` (rôles) ne contient plus que l'identité — les droits passent dans la nouvelle table `F564254` (`PMROLE` / `PMCRAPPID` / `PMCRAPPVAL`). Les colonnes utilisateur (`F564250`) suivent désormais les conventions JDE (`USLDAPPSWD`, `USENABL`, `USSECF3`, audit `USUPMJ` / `USTDAY`).
 - **Notifications `F564253`** (introduite en 2026.05.3) figure désormais dans cette page de référence.
+:::
+
+:::info[Évolution — 2026.06.21.3]
+La table **`F564255` — Tokens de réinitialisation de mot de passe** est ajoutée pour soutenir le flux *Mot de passe oublié* (lien à usage unique avec TTL ~60 minutes). Une nouvelle entrée `Auth · Password resets` (défaut `F564255`) figure dans *Paramètres → db-nomaubl* pour que la validation de schéma ne la signale plus comme manquante.
 :::
 
 ---
@@ -165,18 +169,23 @@ La version **2026.05.5** apporte plusieurs évolutions structurelles :
   <text x="305" y="631" fill="#4ade80" fontSize="12" fontWeight="700" fontFamily="ui-monospace, monospace">F564252</text>
   <text x="460" y="631" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="end" fontFamily="system-ui, sans-serif" opacity="0.75">Sessions</text>
 
-  <rect x="540" y="552" width="180" height="56" rx="10" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1.2" strokeDasharray="4 3" strokeOpacity="0.7"/>
-  <text x="630" y="574" fill="#4ade80" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.92">F564253</text>
-  <text x="630" y="593" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Notifications</text>
+  <rect x="540" y="534" width="180" height="44" rx="10" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1.2" strokeDasharray="4 3" strokeOpacity="0.7"/>
+  <text x="630" y="554" fill="#4ade80" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.92">F564253</text>
+  <text x="630" y="569" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Notifications</text>
+
+  <rect x="540" y="588" width="180" height="44" rx="10" fill="url(#dt-g-green)" stroke="#4ade80" strokeWidth="1.2" strokeDasharray="4 3" strokeOpacity="0.7"/>
+  <text x="630" y="608" fill="#4ade80" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.92">F564255</text>
+  <text x="630" y="623" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Tokens reset</text>
 
   <path d="M 230 580 L 260 580" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" fill="none"/>
   <path d="M 260 550 L 260 626" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" fill="none"/>
   <line x1="260" y1="550" x2="290" y2="550" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
   <line x1="260" y1="588" x2="290" y2="588" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
   <line x1="260" y1="626" x2="290" y2="626" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
-  <line x1="470" y1="588" x2="540" y2="580" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
+  <line x1="470" y1="588" x2="540" y2="556" stroke="#4ade80" strokeWidth="1.4" strokeDasharray="3 3" markerEnd="url(#dt-arrow-green)"/>
+  <line x1="230" y1="580" x2="540" y2="610" stroke="#4ade80" strokeWidth="1.2" strokeDasharray="3 3" strokeOpacity="0.6" markerEnd="url(#dt-arrow-green)"/>
   <text x="265" y="545" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">USROLE</text>
-  <text x="265" y="660" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">SSUSER + PMROLE + NTUSER</text>
+  <text x="265" y="660" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.85">SSUSER + PMROLE + NTUSER + PRUSER</text>
 </svg>
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '16px', margin: '0 0 24px', padding: '10px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', fontSize: '11px', opacity: 0.78}}>
@@ -516,6 +525,21 @@ Valeurs de `PMCRAPPID` actuellement utilisées :
 | `feature` | `settings` | Le rôle accède aux menus *Configuration*. |
 | `feature` | `readonly` | Le rôle est limité à la lecture (pas d'édition / suppression / redépôt). |
 
+### F564255 — Tokens de réinitialisation de mot de passe
+
+Introduite en **2026.06.21.3** pour soutenir le flux *Mot de passe oublié*. Une ligne par lien envoyé par mail. Le token est un UUID inscrit dans l'URL `/reset?token=…` ; il est à usage unique et expire après ~60 minutes.
+
+- **Clé primaire** : `PRTOK`
+- **Notable** : `PRUSED = 'Y'` marque un token déjà consommé — l'enregistrement reste brièvement en place pour l'audit avant balayage. Une purge supprime les tokens expirés et les tokens consommés au-delà du délai d'audit.
+
+| Champ | Type | Description |
+|---|---|---|
+| `PRTOK` | Texte(100) | Token UUID inscrit dans le lien `/reset?token=…` (PK). |
+| `PRUSER` | Texte(10) | Utilisateur cible (FK → F564250.USUSER). |
+| `PRSTDTIM` | Horodatage | Date / heure d'émission du token. |
+| `PRETDTIM` | Horodatage | Date / heure d'expiration (~60 min après émission). |
+| `PRUSED` | Texte(1) | `Y` une fois le token consommé ; empêche le rejeu. |
+
 ---
 
 ## Index recommandés
@@ -535,5 +559,7 @@ La DDL embarque un petit ensemble d'index que tout déploiement en production a 
 | `F564252_EXP_IX` | F564252 | `SSETDTIM` | Purge des sessions expirées. |
 | `F564253_USR_IX` | F564253 | `NTUSER`, `NTEV01`, `NTUPMJ DESC` | Pastille de la cloche + tri de la boîte de réception. |
 | `F564254_ROLE_IX` | F564254 | `PMROLE`, `PMCRAPPID` | Résolution rapide des droits par rôle. |
+| `F564255_USR_IX` | F564255 | `PRUSER` | Liste des tokens actifs d'un utilisateur (anti-abus, invalidation). |
+| `F564255_EXP_IX` | F564255 | `PRETDTIM` | Purge des tokens expirés. |
 
 La DDL complète — incluant les variantes adaptées au dialecte pour Oracle et PostgreSQL — est embarquée dans le JAR sous `sql/oracle/ddl.sql` et `sql/postgres/ddl.sql`, et matérialisée sur disque par **Initialize Database**.

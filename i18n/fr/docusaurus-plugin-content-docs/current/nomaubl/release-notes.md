@@ -10,7 +10,16 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-06-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-15</span></a>
+  <a href="#v2026-06-22-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.22.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-22</span></a>
+  <a href="#v2026-06-21-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-17</span></a>
+  <a href="#v2026-06-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-16</span></a>
+  <a href="#v2026-06-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-15</span></a>
   <a href="#v2026-06-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-14</span></a>
   <a href="#v2026-06-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-13</span></a>
   <a href="#v2026-06-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-12</span></a>
@@ -56,6 +65,123 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.06.22.5 — 2026-06-22 \{#v2026-06-22-5\}
+
+Authentification unique (SSO) via OIDC — l'IdP vérifie l'identité, NomaUBL garde la main sur les rôles, les permissions et les filtres de lignes.
+
+### Nouveautés
+
+- **Authentification unique (SSO) via OIDC.** Le champ *Auth Mode* du modèle Global bascule l'écran de connexion entre `internal`, `oidc` (SSO seul) et `both` (bouton SSO au-dessus du formulaire local). La configuration du fournisseur d'identité tient dans un nouveau modèle système *oidc* (URL de l'émetteur, identifiants client, URI de retour, scopes, correspondance des claims, création automatique des comptes avec un rôle par défaut) — créé automatiquement à l'installation et à la montée de version, ou en un clic via le bouton **+ Add OIDC** dans l'en-tête du gestionnaire de configuration. Les utilisateurs sont identifiés sur leur adresse e-mail : une liste de domaines autorisés cantonne la connexion à un ou plusieurs tenants, et un contrôle du claim `hd` Google Workspace empêche un Gmail personnel d'usurper une adresse Workspace. Pour les comptes créés automatiquement, un identifiant court est dérivé de la partie locale de l'adresse (convention JDE, 10 caractères). Quand un utilisateur est connecté via OIDC, son profil passe en lecture seule (onglet *Sécurité* masqué, champs d'identité non modifiables) — le mot de passe se gère côté fournisseur d'identité. Rôles, permissions et filtres de lignes restent pilotés depuis NomaUBL : le fournisseur ne fait que vérifier l'identité.
+
+---
+
+## 2026.06.21.5 — 2026-06-21 \{#v2026-06-21-5\}
+
+### Corrections
+
+- **Graphique du volume quotidien lisible sur toutes les périodes.** Les barres sont maintenant bornées entre 3 et 36 px : les périodes de 7 jours n'affichent plus d'énormes pavés, les longues périodes plus de traits inutiles. Les étiquettes de dates passent en HTML et restent nettes, sans se transformer en tirets illisibles quand le SVG est étiré.
+
+---
+
+## 2026.06.21.4 — 2026-06-21 \{#v2026-06-21-4\}
+
+### Corrections
+
+- **Les rôles en lecture seule peuvent à nouveau consulter les factures.** Le détail de facture utilise le point d'accès XML UBL pour afficher les onglets *Parties* / *Lignes* / *Récap TVA* / *Notes* ; le protéger par `invoice.download` masquait tous les onglets pour un rôle dépourvu de cette action. Le point d'accès est maintenant accessible en lecture (toujours protégé par le filtre de lignes et la visibilité) — seul le bouton explicite **Télécharger UBL** reste verrouillé par `invoice.download`.
+
+---
+
+## 2026.06.21.3 — 2026-06-21 \{#v2026-06-21-3\}
+
+### Nouveautés
+
+- **Nouvelle permission d'action `invoice.create`.** L'action rapide **Nouvelle facture** du tableau de bord est maintenant protégée par sa propre autorisation — un rôle sans `invoice.create` ne voit plus le bouton, et le point d'accès serveur refuse l'appel.
+
+### Corrections
+
+- **La table de réinitialisation de mot de passe apparaît dans *Paramètres → db-nomaubl*.** La section *Auth* a un nouveau champ *Auth · Password resets* (par défaut `F564255`) pour que la validation du schéma cesse de la signaler comme table manquante. Voir [Tables de base de données](./references/database-tables.md).
+
+---
+
+## 2026.06.21.2 — 2026-06-21 \{#v2026-06-21-2\}
+
+### Nouveautés
+
+- **Visibilité des cartes du Tableau de bord par rôle.** Chaque widget du tableau de bord est maintenant une permission individuelle. *Paramètres → Rôles → Accès* propose une liste **Cartes du tableau de bord** sous *Pages autorisées* — liste vide : toutes les cartes s'affichent (comportement actuel), liste non vide : liste blanche stricte. Les cartes masquées sont ignorées côté serveur ; leurs requêtes ne s'exécutent pas et leurs données ne sortent pas.
+- **Volume quotidien — barres empilées par statut.** Le tracé en ligne unique est remplacé par des barres empilées par jour, décomposées en *Approuvées* / *En cours* / *Erreurs IT* / *Erreurs Métier*. Survoler un jour affiche une info-bulle avec le détail par statut.
+
+### Corrections
+
+- **La carte *PA round-trip* du tableau de bord ne crashe plus pour les rôles avec un filtre de lignes sur une colonne d'en-tête** (par exemple le nom client). La requête uniquement basée sur la table cycle de vie filtre maintenant les lignes éligibles via un `EXISTS` sur la table d'en-tête au lieu d'injecter la clause de filtre dans une requête qui n'en connaissait pas les colonnes.
+
+---
+
+## 2026.06.21.1 — 2026-06-21 \{#v2026-06-21-1\}
+
+### Nouveautés
+
+- **Réinitialisation du mot de passe en libre service.** Un lien *Mot de passe oublié ?* sur l'écran de connexion ouvre une fenêtre qui demande le nom d'utilisateur et l'e-mail ; s'ils correspondent à un compte actif, l'utilisateur reçoit un lien à usage unique valide 60 minutes qui mène à une page où choisir un nouveau mot de passe. Nécessite la configuration SMTP dans le modèle `global`.
+
+---
+
+## 2026.06.21 — 2026-06-21 \{#v2026-06-21\}
+
+Refonte des rôles : filtres de lignes, permissions d'action granulaires, éditeur en 4 onglets, page *API Reference* indépendante. Côté connecteur PA : endpoints de réception livrés par défaut. Côté UBL : adresse électronique fournisseur (BT-34) configurable et bascule Schematron par type de document.
+
+### Nouveautés
+
+- **Filtres de lignes par rôle.** Un rôle peut être limité à un sous-ensemble de factures (et de lignes du journal de traitement, des erreurs d'intégration et de l'e-reporting) en choisissant une colonne et une ou plusieurs valeurs dans *Paramètres → Rôles → Périmètre données*. Cas d'usage typique : un rôle client externe qui ne voit que les factures émises pour sa propre clé alpha (UHALKY). Le filtre s'applique aux vues liste, au tableau de bord, à chaque point d'accès ligne à ligne (cycle de vie, lignes, téléchargement XML, rendu PDF, push de statut, suppression, renvoi, e-mail) ainsi qu'au flux PDF généré. Une ligne masquée renvoie la même réponse « non trouvé » que la donnée réellement absente, pour ne pas révéler l'existence d'une facture interdite. Plusieurs filtres sur la même colonne se combinent en OU, sur des colonnes différentes en ET — en parallèle des sociétés autorisées.
+- **Permissions d'action granulaires.** L'ancien indicateur tout-ou-rien *lecture seule* est remplacé par une liste blanche par action dans *Paramètres → Rôles → Actions*. Les actions Factures, E-Reporting et Intégration sont regroupées par vue ; chaque bouton s'autorise ou se bloque indépendamment — modifier, supprimer, renvoyer, pousser un statut (avec sous-permissions séparées pour les onglets *PA* et *Base de données* du modal *Statut*), valider l'UBL, télécharger l'UBL, actions prédéfinies, actions personnalisées, e-mail PDF, génération / renvoi de lots e-reporting, et déclenchement des jobs d'intégration (*Fetch Received* / *Import Statuses* / *Retrieve Statuses*). Les rôles existants conservent leur comportement : sans liste blanche, tout reste autorisé ; activer le mode liste blanche pré-coche toutes les actions pour que rien ne change tant que l'opérateur n'en décoche pas explicitement.
+- **Éditeur de rôles réorganisé en onglets thématiques.** L'unique panneau *Permissions* est découpé en **Accès** (pages + fonctionnalités), **Actions** (la nouvelle liste blanche), **Périmètre données** (sociétés + filtres de lignes) et **Membres**. Le nom et la description du rôle restent visibles au-dessus de la barre d'onglets ; *Enregistrer* / *Annuler* s'affichent sur chaque onglet d'édition.
+- **API Reference est une page à part entière.** Le lien de la barre latérale vers `/api/docs` n'est plus rattaché à la permission de la *Référence des statuts* — un rôle peut donc obtenir l'accès à l'application sans voir le catalogue brut des points d'accès, utile pour un utilisateur externe à qui l'on remet une connexion qui ne doit pas exposer l'API. Les nouveaux rôles admin reçoivent automatiquement la page `apireference` ; les admins existants la reçoivent à la prochaine initialisation.
+- **`fetch-received-list` et `fetch-received` livrés dans le connecteur par défaut `pa-default`.** Les nouvelles installations du connecteur fourni proposent les deux points d'entrée pour la réception aux côtés des six points sortants existants, avec des schémas d'URL standards (`/api/v1/sale/received-invoices?since={{since}}` et `/api/v1/sale/received-invoices/{{uuid}}`). Les chemins réels dépendent de chaque PA — l'opérateur confirme l'URL une fois et le résolveur trouve les points d'entrée par leur nom. **Les installations existantes** ne sont pas migrées automatiquement : `ConfigMerger` ignore les api-connectors propriétaires du client en bloc afin de préserver les modifications d'URL et d'authentification ; il faut ajouter les deux lignes manuellement via le bouton **+ Ajouter un endpoint** (en reprenant les noms et schémas d'URL ci-dessus).
+- **Adresse électronique du fournisseur (BT-34) configurable.** Certains clients utilisent un identifiant de routage Peppol / facturation électronique différent du SIREN. Le panneau *Sociétés fournisseuses* dans *Valeurs par défaut UBL* a maintenant un champ BT-34 par société, et l'éditeur XSL expose une variable `TAG_SUPPLIER_ENDPOINT` pour une surcharge par document. Ordre de résolution à l'émission : variable du document → adresse configurée dans les *Valeurs par défaut UBL* → SIREN. Les installations sans configuration gardent le comportement actuel (le SIREN est émis comme adresse électronique).
+- **Bascule Schematron par type de document.** L'éditeur *Types de documents* a maintenant une case *Schematron* à côté de *Send to PA* / *Keep UBL* / *Keep PDF*. Quand elle est décochée pour un code, le contrôle Schematron EN 16931 / CTC-FR est ignoré pour les factures résolues à ce type et aucune ligne n'arrive dans `F564236`. Par défaut, la validation est activée pour `B2B` et `B2G` (champ d'application CTC-FR) et désactivée pour `B2BINT`, `B2C`, `OUTOFSCOPE`, `ARCHIVEONLY`, `DOCUMENT` (hors champ — les règles françaises génèrent des faux positifs sur les transactions B2C ou les acheteurs étrangers). Les clients peuvent basculer la case par code selon leurs besoins. Les lignes *document-types* à 7 champs existantes prennent la valeur par défaut par code, ce qui évite une migration manuelle après mise à jour.
+- **Le pipeline UBL lit *document-types* pour `sendToPA` et `validate`.** Les factures déposées au format UBL (interface *Traiter le document*, flux de réception, `fetch-received`) résolvent maintenant leur code de type via la propriété `processingType.default` du modèle de document, recherchent la ligne correspondante dans *document-types* et utilisent la valeur pour piloter à la fois le filtre Schematron et la valeur `sendToPA` par défaut. Les surcharges explicites de l'appelant (interface / CLI `sendToPA=Y/N`) restent prioritaires. Une ligne INFO par appel indique la ligne utilisée, à la manière de `AUTO_RESOLVE` dans le pipeline XML.
+
+### Corrections
+
+- **Le bouton *Tout décocher* de l'onglet *Actions* décoche enfin toutes les cases.** Le double sens d'une liste d'actions vide (héritage *tout autorisé* vs intention explicite *rien autorisé*) faisait qu'un clic remettait le rôle en mode tout-autorisé et re-cochait silencieusement toutes les cases. Le mode liste blanche est maintenant piloté par un interrupteur dédié, ce qui garantit que l'état affiché correspond toujours à ce qui sera enregistré.
+
+---
+
+## 2026.06.17 — 2026-06-17 \{#v2026-06-17\}
+
+PDF de notification au bon modèle, deux correctifs de précision, et une vraie pagination serveur sur le journal de traitement.
+
+### Corrections
+
+- **Les PDF de notification utilisent maintenant le modèle de document configuré.** Les PDF joints aux notifications sortantes et aux e-mails étaient rendus avec la mise en page par défaut fournie, quel que soit le `pdfTemplate` configuré par modèle de document (`vrc_pro`, `cdn_facture`, …). Le dispatcher de notifications résout maintenant le modèle enregistré sur la facture et l'applique au PDF joint, comme le fait déjà l'interface *Traiter le document*. Les installations sans modèle par document conservent le rendu actuel.
+- **Les remises de ligne avec un point en tête ne déclenchent plus BR-DEC-24.** Les champs JDE livrés sous la forme `.4700` (sans partie entière) étaient émis dans le montant de la remise de ligne (BT-136) sous la forme `0.4700` — quatre décimales, fatal sous la règle Schematron française BR-DEC-24 (« 2 décimales au maximum »). La fonction de normalisation des montants applique maintenant le plafond de 2 décimales aux valeurs commençant par un point : `.4700` devient `0.47`. Même correction appliquée à la fonction prix (6 décimales) pour cohérence.
+- **La vue groupée du journal de traitement affiche chaque job de la fenêtre chargée.** Les traitements longs (un `START` → des milliers d'événements intermédiaires → un `END`) étaient affichés comme une seule ligne `? → END` quand le `START` sortait de la tranche serveur. Trois plafonnements s'additionnaient : le serveur limitait silencieusement à 500 événements, le client n'en demandait que 5 000 même si plus étaient disponibles, et le regroupement côté client générait une ligne orpheline par événement intermédiaire en l'absence de `START`. Les trois sont corrigés — plafond serveur porté à 200 000, requête groupée client portée à 100 000, et les événements intermédiaires sans `START` sont maintenant regroupés en une seule ligne par job qui contient toutes les étapes.
+
+### Nouveautés
+
+- **Pagination côté serveur sur la vue à plat du journal de traitement.** La vue à plat (non groupée) pagine maintenant côté backend au lieu de se limiter à la tranche chargée. Les opérateurs avec un historique long peuvent parcourir tous les événements sans relancer les filtres. La vue groupée garde son chargement en une fenêtre unique (plafonné à 100 000 événements), car les jobs sont reconstitués côté client.
+- **Pied de pagination sur la vue groupée du journal de traitement.** La liste des jobs groupés a maintenant un pied de page collant avec un sélecteur de taille de page (25 / 50 / 100 / 200), des boutons première / précédente / suivante / dernière et un indicateur de position. La taille de page est conservée entre rechargements.
+
+### Améliorations
+
+- **Les listes de modèles de document sont triées par ordre alphabétique.** Partout où une liste de modèles de document apparaît dans l'interface — barre latérale de l'éditeur de documents, sélecteur utilisé par *Traiter le document* / *Validation UBL* / *Extraire depuis BIP*, sélecteur de surcharge par société de l'éditeur global, lignes de l'éditeur *Récupérer les documents*, fenêtre de l'éditeur XSL pour les échantillons de connecteurs — l'ordre est maintenant alphabétique. Auparavant ils suivaient l'ordre d'enregistrement dans le fichier de configuration, qui devenait illisible au fil des ajouts.
+- **Diagnostic de configuration pour le mode `AUTO`.** Le traitement en mode `AUTO` écrit maintenant deux lignes de log INFO par document traité, qui indiquent le code de type de traitement résolu, la table de mapping utilisée et le mode effectif retenu (`UBL` / `BURST` / `SINGLE` / `BOTH`). Permet de diagnostiquer les cas « AUTO a lancé le mauvais mode » en une ou deux lectures du journal de traitement, au lieu de deviner ce que la configuration du client a produit.
+
+---
+
+## 2026.06.16 — 2026-06-16 \{#v2026-06-16\}
+
+Message d'erreur clair quand un sous-modèle RTF BI Publisher manque, et générateur de manifest pour l'adaptateur PDF → XML.
+
+### Corrections
+
+- **Message d'erreur clair quand un sous-modèle RTF BI Publisher manque.** La génération PDF affichait un simple `ERROR RUN PDF java.util.EmptyStackException` quand le parseur RTF de XDO rencontrait un `IMPORT` non résolvable — typiquement un sous-modèle (`sb_*_header.rtf`, `_footer.rtf`, `_detailslivre.rtf`, `_lettre_sub.rtf`, …) absent de l'environnement client, ou un séparateur de chemin spécifique à l'OS. Le code attrape maintenant la `RuntimeException` sous-jacente et ajoute une ligne d'indice qui demande à l'opérateur de vérifier les chemins `IMPORT` du RTF principal et que chaque sous-modèle référencé existe sur l'hôte. S'applique au mode `SINGLE` comme au chemin de traitement standard.
+- **L'adaptateur PDF → XML regroupe maintenant les factures d'un PDF batch.** Quand un seul PDF JDE contient N factures (impression batch), le convertisseur regroupait tout dans une seule enveloppe `<On_Payment_Terms_S3>`. Il ferme maintenant l'enveloppe courante et en ouvre une nouvelle quand le flux d'en-tête `SI=3` reprend après une section de récap TVA (`SI=7`) ; chaque facture du batch a son propre bloc XML adressable. Les totaux courants par page `SI=5` ne déclenchent plus de bornage, ce qui corrige la fragmentation des factures multi-pages. Vérifié sur un PDF de 13 920 pages qui portait 2 132 factures : une enveloppe par facture, lignes et totaux contenus.
+
+### Nouveautés
+
+- **Génération de manifest pour l'adaptateur PDF → XML.** Nouveau mode CLI `-pdfManifest <input.pdf> <output.manifest.xml>` (aussi `nomaubl.sh pdf-manifest` / `nomaubl.cmd pdf-manifest`) qui analyse le PDF et produit un manifest XML à la forme JDE, pour le cas où le client n'a pas d'échantillon XML JDE natif de la même version de programme R à fournir à `-pdf2xml`. Les noms d'éléments inférés utilisent le texte des étiquettes RC imprimées quand disponible, et l'alias DD OWObject en repli ; le client édite le fichier pour donner des noms parlants, puis le réutilise comme 3ᵉ argument de `-pdf2xml`. L'élément racine est dérivé du nom de fichier PDF (convention JDE de spool) et les champs texte multi-lignes gardent un seul nom d'élément sur toutes leurs lignes via un cache persistant.
 
 ---
 
