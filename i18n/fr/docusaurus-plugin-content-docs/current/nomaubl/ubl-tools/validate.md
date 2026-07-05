@@ -145,26 +145,30 @@ Les échecs XSD signalent un problème structurel (élément requis manquant, ty
 
 ## Séquence du profil de validation
 
-NomaUBL exécute la validation en **quatre étapes empilées** suivant l'AFNOR XP Z12-012 V1.3.1. Le profil est auto-sélectionné à partir du `CustomizationID` du document — l'utilisateur choisit un template, le moteur s'occupe du reste.
+NomaUBL exécute la validation en **quatre étapes empilées** suivant la publication AFNOR **XP Z12-012 V1.4.0** (30 juin 2026 — pack de référence du FNFE, obligatoire à l'émission à compter du 1er septembre 2026). Le profil est auto-sélectionné à partir du `CustomizationID` du document — l'utilisateur choisit un template, le moteur s'occupe du reste.
 
 | Étape | Pack | S'applique à | Source `.sch` |
 |---|---|---|---|
 | **1** | **XSD 2.1** | Tout document UBL — contrôle structurel. | `UBL-2.1.xsd` (W3C XML Schema). |
 | **2a** | **EN 16931** | Documents qui déclarent la customization EN 16931 (le profil européen socle). | `EN16931-UBL-validation.sch`. |
 | **2b** | **Extended-CTC-FR** *(alternative à 2a)* | Documents qui déclarent le profil français Extended CTC (la majorité des factures B2B / B2G pour la réforme). | `CIUS-FR-validation.sch` + `EXTENDED-CTC-FR-validation.sch`. |
-| **3** | **BR-FR-Flux 2** *(toujours exécuté depuis 2026.05.9)* | Tout document de profil français, **y compris Extended-CTC-FR** — fait remonter les règles `BR-FR-*` / `EXT-FR-FE-*` spécifiques à la réforme que la PA impose côté serveur. | `BR-FR-Flux-2-UBL.sch`. |
+| **3** | **BR-FR-Flux 2** *(toujours exécuté)* | Tout document de profil français, **y compris Extended-CTC-FR** — fait remonter les règles `BR-FR-*` / `EXT-FR-FE-*` spécifiques à la réforme que la PA impose côté serveur. | `BR-FR-Flux-2-UBL.sch`. |
 | **4a** | **CPRO-B2B** | Documents B2B français — profil `BR-FR-CPRO`. | `BR-FR-CPRO-Schematron-UBL.sch` *(rédigé en local, précompilé au build)*. |
-| **4b** | **Règles maison NomaUBL** *(nouveau en 2026.05.9)* | Tout document — les règles côté AIFE absentes des packs publics. | `BR-NOMAUBL-rules.sch` *(rédigé en local, précompilé au build)*. |
+| **4b** | **Règles maison NomaUBL** | Tout document — pack vide aujourd'hui, laissé en place comme point d'accroche pour de futures règles côté AIFE que les packs publics n'auraient pas encore reprises. | `BR-NOMAUBL-rules.sch` *(rédigé en local, précompilé au build)*. |
 
 L'étape 2 est **exclusive** (un profil par document) ; les étapes 3 et 4 s'empilent par-dessus. Un document qui échoue à une règle avec `flag="fatal"` bloque le dépôt sur la PA ; les warnings et entrées informatives sont tracés sans bloquer le pipeline.
 
+### Avertissements filtrés
+
+Certaines règles des packs publics remontent un avertissement sur des structures que NomaUBL émet **volontairement** — les afficher tels quels habituerait les opérateurs à ignorer la liste des warnings. Le moteur écarte ces entrées au moment de la collecte et le fichier schematron reste intact — une future mise à jour du FNFE ne réintroduira donc pas l'avertissement.
+
+| Règle | Pourquoi elle est filtrée |
+|---|---|
+| **`UBL-CR-001`** | *« Une facture UBL ne devrait pas contenir d'extensions. »* Le bloc `ext:UBLExtensions` est justement l'endroit où arrivent les [champs d'extension personnalisés](./xsl-editor.md#custom-extension-fields) — des données attendues par un partenaire mais sans équivalent EN 16931. Émettre l'extension est intentionnel, donc l'avertissement standard est filtré. |
+
 ### Règles maison NomaUBL
 
-Le nouveau pack `BR-NOMAUBL-rules.sch` capture les règles que l'AIFE impose côté serveur et que les packs Schematron publics n'ont pas encore reprises. Les faire remonter localement permet à un document non conforme d'arriver dans `F564236` avant l'aller-retour PA — une étape réseau économisée et l'explication lisible disponible immédiatement pour l'opérateur.
-
-| Règle | Sévérité | Déclenchement | Ce qui est contrôlé |
-|---|---|---|---|
-| **`BR-NOMAUBL-01`** | `fatal` | `cbc:InvoiceTypeCode` (BT-3) ∈ `{261, 381, 396, 502, 503}` *(codes d'avoir)*. | Au moins une `cac:BillingReference/cac:InvoiceDocumentReference` doit être présente, **avec `cbc:ID` (BT-25) et `cbc:IssueDate` (BT-26)**. Sans elle, les PA rejettent l'avoir avec l'erreur de validation modèle `precedingInvoices`. |
+Le pack `BR-NOMAUBL-rules.sch` est un **placeholder structurel** — il est vide aujourd'hui. Il reste dans le pipeline runtime comme point d'accroche prêt à l'emploi pour de futures règles que l'AIFE impose côté serveur et que les packs Schematron publics n'auraient pas encore reprises. Les faire remonter localement placerait l'échec dans `F564236` avant l'aller-retour PA — une étape réseau économisée et l'explication lisible disponible immédiatement pour l'opérateur.
 
 La version du pack est accessible via `GET /api/build-info` sous la clé `schematron.nomaubl` — le pied de page du tableau de bord la lit pour le tampon de version par pack.
 

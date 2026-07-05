@@ -131,6 +131,18 @@ Cet onglet configure le **répertoire des fichiers XSL** utilisés pour **transf
 |---|---|
 | **XSLT Directory** | Répertoire qui contient les fichiers de transformation `.xsl` utilisés pour convertir le XML source en UBL. Le placeholder `%APP_HOME%` se développe vers la racine d'installation NomaUBL. |
 
+### Défauts pour les factures manuelles / sans modèle *(2026.07.05)*
+
+Utilisés quand une facture n'a **aucun modèle de document** — créée dans l'éditeur manuel, ou un UBL déjà formé traité sans modèle. Les valeurs d'un modèle de document priment toujours.
+
+| Champ | Description |
+|---|---|
+| **Activity (FEAA10)** | Code d'activité obligatoire écrit dans la ligne de log `F564230`. Sans lui, une facture manuelle ne peut pas être enregistrée. |
+| **Type (typePiece)** | Type de document inscrit sur la ligne de log. |
+| **LISIBLE** | `Y` rend un PDF lisible depuis l'UBL et l'incorpore comme copie LISIBLE. |
+| **PDF template** | Le modèle qui rend la LISIBLE — *Built-in*, ou un modèle personnalisé depuis [Modèles PDF](../../management/pdf-templates.md). |
+| **Locale** | Locale du PDF rendu (par ex. `fr_FR`, `en_US`). |
+
 ---
 
 ## Onglet 2 — PA Connection

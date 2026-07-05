@@ -145,26 +145,30 @@ XSD failures indicate a structural problem (missing required element, wrong type
 
 ## Validation profile sequence
 
-NomaUBL runs validation in **four layered steps** following AFNOR XP Z12-012 V1.3.1. The profile is auto-selected from the document's `CustomizationID` — the user picks a template, the engine does the rest.
+NomaUBL runs validation in **four layered steps** following the AFNOR **XP Z12-012 V1.4.0** publication (30 June 2026 — the FNFE reference pack, mandatory on issuance from 1 September 2026). The profile is auto-selected from the document's `CustomizationID` — the user picks a template, the engine does the rest.
 
 | Step | Pack | Applied to | Source `.sch` |
 |---|---|---|---|
 | **1** | **XSD 2.1** | Every UBL document — structural check. | `UBL-2.1.xsd` (W3C XML Schema). |
 | **2a** | **EN 16931** | Documents declaring the EN 16931 customization (the European core profile). | `EN16931-UBL-validation.sch`. |
 | **2b** | **Extended-CTC-FR** *(alternative to 2a)* | Documents declaring the French Extended CTC profile (most B2B / B2G invoices for the French reform). | `CIUS-FR-validation.sch` + `EXTENDED-CTC-FR-validation.sch`. |
-| **3** | **BR-FR-Flux 2** *(always runs since 2026.05.9)* | Every French-profile document, **including Extended-CTC-FR** — surfaces the reform-specific `BR-FR-*` / `EXT-FR-FE-*` rules the PA enforces server-side. | `BR-FR-Flux-2-UBL.sch`. |
+| **3** | **BR-FR-Flux 2** *(always runs)* | Every French-profile document, **including Extended-CTC-FR** — surfaces the reform-specific `BR-FR-*` / `EXT-FR-FE-*` rules the PA enforces server-side. | `BR-FR-Flux-2-UBL.sch`. |
 | **4a** | **CPRO-B2B** | French B2B documents — `BR-FR-CPRO` profile. | `BR-FR-CPRO-Schematron-UBL.sch` *(locally authored, precompiled at build)*. |
-| **4b** | **NomaUBL house rules** *(new in 2026.05.9)* | Every document — the AIFE-side rules the public packs do not ship yet. | `BR-NOMAUBL-rules.sch` *(locally authored, precompiled at build)*. |
+| **4b** | **NomaUBL house rules** | Every document — a placeholder pack that ships empty today. Kept as a hook for future AIFE-side rules not yet in the public packs. | `BR-NOMAUBL-rules.sch` *(locally authored, precompiled at build)*. |
 
 Step 2 is **exclusive** (one profile per document); Steps 3 and 4 stack on top. A document that fails any rule with `flag="fatal"` blocks submission to the PA; warnings and informational entries are logged but never block the pipeline.
 
+### Filtered warnings
+
+Some rules in the public packs report a warning on shapes NomaUBL emits **by design** — surfacing them as-is would train operators to ignore the warning list. The engine drops these entries at collection time and the underlying schematron file is left untouched, so a future FNFE refresh won't reintroduce them.
+
+| Rule | Why it's filtered |
+|---|---|
+| **`UBL-CR-001`** | *"A UBL invoice should not include extensions."* The `ext:UBLExtensions` block is where the [Custom Extension Fields](./xsl-editor.md#custom-extension-fields) go — data a trading partner needs that has no EN 16931 home. Emitting the extension is the whole point, so the standard warning is filtered out. |
+
 ### NomaUBL house rules
 
-The new `BR-NOMAUBL-rules.sch` pack captures rules the AIFE enforces server-side but that the public Schematron packs have not picked up yet. Surfacing them locally means a failing document lands in `F564236` before the PA round-trip — saves a network hop and gives the operator the human-readable explanation immediately.
-
-| Rule | Severity | Trigger | What it checks |
-|---|---|---|---|
-| **`BR-NOMAUBL-01`** | `fatal` | `cbc:InvoiceTypeCode` (BT-3) ∈ `{261, 381, 396, 502, 503}` *(credit-note codes)*. | At least one `cac:BillingReference/cac:InvoiceDocumentReference` must be present, **with both `cbc:ID` (BT-25) and `cbc:IssueDate` (BT-26)**. Without it, PAs reject the credit note with the `precedingInvoices` model-validation error. |
+The `BR-NOMAUBL-rules.sch` pack is a **scaffolding placeholder** — it ships empty today. It stays in the runtime pipeline as a ready-made hook for future rules the AIFE enforces server-side but that the public Schematron packs have not picked up yet. Surfacing such rules locally would put the failure in `F564236` before the PA round-trip — saving a network hop and giving the operator the human-readable explanation immediately.
 
 The pack version is exposed at `GET /api/build-info` under `schematron.nomaubl` — the dashboard footer reads it for the per-pack version stamp.
 

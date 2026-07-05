@@ -316,6 +316,23 @@ Every configured field is emitted in its own `ext:UBLExtension` / `ext:Extension
 
 Data placed here sits **outside** the EN 16931 model — prefer the standard field when one exists (BT-19 accounting reference, BT-10 buyer reference…), and confirm with the receiving platform that it actually reads the extension.
 
+#### Preceding invoices — repeating and line-level \{#preceding-invoices\}
+
+For invoices that reference a **prior document** — typically a credit note pointing back at the invoice it corrects — two mappings sit alongside the single-shot BT-25 / BT-26 pair already documented in the *Billing References* section:
+
+**Document-level, repeating (BG-3, 0..n).** The *Preceding Invoices — repeating* section iterates a repeating source group and emits one `cac:BillingReference` per prior invoice found. Two fields:
+
+| Field | Effect |
+|---|---|
+| **Iterator TAG** | Path to the repeating group in the source XML (for example `Header/PriorInvoices/Item`). One `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` is emitted per node the iterator matches. |
+| **Issue date TAG** *(optional)* | Path (relative to the iterator) to the prior invoice's issue date. When present it lands in `cbc:IssueDate`. Leaving it empty emits the reference without a date. |
+
+Both the repeating block and the single BT-25 / BT-26 reference can coexist — pick the one that matches the source shape, or use both when the source carries a headline reference plus a repeating list.
+
+**Line-level (EXT-FR-FE-136).** Useful for line-level credits that back-reference a specific invoice line. A new mapping under the *Invoice Lines* section emits `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` inside the line — with an optional issue date — at the correct schema position.
+
+The line-level XPath is checked by the [Extended-CTC-FR schematron](./validate.md) refreshed to the 30 June 2026 FNFE V1.4.0 publication, so the emitted structure lines up with what the PA expects.
+
 #### Embedded Attachments \{#embedded-attachments\}
 
 The *Embedded Attachments* section attaches a document already carried as base64 in the source spool straight to the UBL invoice — up to four per invoice. Each row maps:

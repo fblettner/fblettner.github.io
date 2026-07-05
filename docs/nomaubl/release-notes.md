@@ -10,6 +10,21 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
+  <a href="#v2026-07-05" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.05 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-05</span></a>
+  <a href="#v2026-07-03" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.03 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-03</span></a>
+  <a href="#v2026-07-02" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.02 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-02</span></a>
+  <a href="#v2026-06-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-26</span></a>
+  <a href="#v2026-06-25" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+  <a href="#v2026-06-23" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.23 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-23</span></a>
+  <a href="#v2026-06-22" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.22 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-22</span></a>
+  <a href="#v2026-06-21-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+  <a href="#v2026-06-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-17</span></a>
+  <a href="#v2026-06-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-16</span></a>
   <a href="#v2026-07-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-05</span></a>
   <a href="#v2026-07-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-03</span></a>
   <a href="#v2026-07-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-02</span></a>
@@ -77,7 +92,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ---
 
-## 2026.07.05.1 — 2026-07-05 \{#v2026-07-05-1\}
+## 2026.07.05 — 2026-07-05 \{#v2026-07-05\}
 
 Multiple preceding invoices per document and per line — plus the French CTC schematron pack refreshed to FNFE V1.4.0.
 
@@ -97,7 +112,7 @@ Multiple preceding invoices per document and per line — plus the French CTC sc
 
 ---
 
-## 2026.07.03.1 — 2026-07-03 \{#v2026-07-03-1\}
+## 2026.07.03 — 2026-07-03 \{#v2026-07-03\}
 
 Embed an attachment already carried as base64 in the source spool, straight into the UBL invoice.
 
@@ -107,7 +122,7 @@ Embed an attachment already carried as base64 in the source spool, straight into
 
 ---
 
-## 2026.07.02.1 — 2026-07-02 \{#v2026-07-02-1\}
+## 2026.07.02 — 2026-07-02 \{#v2026-07-02\}
 
 Constant values in field mappings, plus a batch of BIP scan / extract fixes.
 
@@ -125,7 +140,7 @@ Constant values in field mappings, plus a batch of BIP scan / extract fixes.
 
 ---
 
-## 2026.06.26.1 — 2026-06-26 \{#v2026-06-26-1\}
+## 2026.06.26 — 2026-06-26 \{#v2026-06-26\}
 
 Custom extension fields validate cleanly with more than one field configured.
 
@@ -135,49 +150,22 @@ Custom extension fields validate cleanly with more than one field configured.
 
 ---
 
-## 2026.06.25.4 — 2026-06-25 \{#v2026-06-25-4\}
+## 2026.06.25 — 2026-06-25 \{#v2026-06-25\}
 
-Upgrade report flags templates that still need a manual fix, and File Versions can compare a preserved file with its shipped upstream version.
-
-### Improvements
-
-- **Upgrade flags templates that need a manual fix.** When a customised template (for example a forked `ubl:supplier-party` in `ubl-defaults.xsl`) is preserved during an upgrade but the framework has since added a parameter it doesn't declare, the upgrade report now lists it under *Manual fix required* with the exact `<xsl:param>` to add — instead of compiling fine and then failing at invoice generation with a cryptic `XTSE0680` error.
-- **Compare a file with its upstream version.** In File Versions, a file preserved by the upgrade now carries an *upstream* row — the shipped version saved as `<name>.upstream`. Compare your live file against it to see precisely what the new framework version changed, and merge it by hand.
-
----
-
-## 2026.06.25.3 — 2026-06-25 \{#v2026-06-25-3\}
-
-Custom extension fields (`ext:UBLExtensions`) — a platform-specific escape hatch for data that has no EN 16931 home.
+Custom Extension Fields for data outside EN 16931, the per-line country of origin (BT-159), seller item code (BT-155) and classification version (BT-158-2), a *Trim zeros* switch on the PDF template, and two upgrade-side improvements (a manual-fix report and a compare-to-upstream diff on File Versions).
 
 ### New features
 
 - **Custom extension fields (UBLExtensions).** A new *Custom Extension Fields* section in the XSL editor maps up to eight source values into a UBL `ext:UBLExtensions` block on the invoice — for data a trading partner needs that has no standard EN 16931 home (routing method, delivery-copy address, partner identifiers…). Each field carries an element name, a source path or `{template}` value and the same optional emit conditions as item properties. The block is written as the first element of the invoice, as the UBL schema requires, and is produced only when at least one field resolves. Empty by default, so existing invoices are unchanged. Data placed here sits outside the EN 16931 model — prefer the standard field when one exists (BT-19 accounting reference, BT-10 buyer reference) and confirm with the receiving platform that it reads the extension.
-
----
-
-## 2026.06.25.2 — 2026-06-25 \{#v2026-06-25-2\}
-
-Trim trailing zero decimals from amounts, unit prices and quantities in the PDF — per template.
-
-### New features
-
 - **Trim zeros switch on the PDF template.** A new *Trim zeros* switch in the PDF template builder drops trailing zero decimals from amounts, unit prices and quantities — a whole amount prints as `23` instead of `23.00`, and a `23.0000` unit price prints as `23`. Off by default, which keeps the fixed two-decimal amount and four-decimal price display. Set per template, it applies to the line table, the totals box and both the readable and on-screen PDFs.
-
----
-
-## 2026.06.25.1 — 2026-06-25 \{#v2026-06-25-1\}
-
-Country of origin and seller's item code on the invoice detail and the PDF, and a smoother framework upgrade.
-
-### New features
-
 - **Country of origin on invoice lines (BT-159).** The invoice editor carries a country-of-origin field per line, next to the classification code. The ISO code is written to the UBL, while the invoice detail view and every PDF — preview, batch and notification — show the country's full name resolved from the shared countries list. A toggle in the PDF line layout controls whether it prints.
 - **Classification scheme version on lines (BT-158-2).** A line can now record the version of its classification scheme alongside the list identifier; it appears in brackets after the list ID wherever the classification is shown.
 - **Seller's item code in the PDF (BT-155).** The seller's article code now prints in the per-line detail, between the buyer reference and the standard identifier, with its own show / hide toggle.
 
 ### Improvements
 
+- **Upgrade flags templates that need a manual fix.** When a customised template (for example a forked `ubl:supplier-party` in `ubl-defaults.xsl`) is preserved during an upgrade but the framework has since added a parameter it doesn't declare, the upgrade report now lists it under *Manual fix required* with the exact `<xsl:param>` to add — instead of compiling fine and then failing at invoice generation with a cryptic `XTSE0680` error.
+- **Compare a file with its upstream version.** In File Versions, a file preserved by the upgrade now carries an *upstream* row — the shipped version saved as `<name>.upstream`. Compare your live file against it to see precisely what the new framework version changed, and merge it by hand.
 - **Buyer SIREN recovered from the VAT number.** When a customer record carries no SIREN but does carry a French VAT identifier, the SIREN is derived from it so the buyer's legal identifier and electronic address are still populated.
 - **Country of origin resolved from the shared reference list.** The source country value is now resolved against the canonical countries list when the invoice is produced, instead of a copy of the list baked into each deployment. Correcting a label in the list takes effect everywhere with no re-save.
 - **Cleaner addresses in the PDF.** Seller, customer, agent and delivery addresses are built line by line, so a party whose address starts on the second street line no longer prints a leading blank line. The delivery address also shows its additional street line.
@@ -191,7 +179,7 @@ Country of origin and seller's item code on the invoice detail and the PDF, and 
 
 ---
 
-## 2026.06.23.1 — 2026-06-23 \{#v2026-06-23-1\}
+## 2026.06.23 — 2026-06-23 \{#v2026-06-23\}
 
 Country of origin and commodity classification on invoice lines, allowance / charge reason defaults, and line allowances derived from a percentage alone.
 
@@ -216,7 +204,7 @@ Country of origin and commodity classification on invoice lines, allowance / cha
 
 ---
 
-## 2026.06.22.5 — 2026-06-22 \{#v2026-06-22-5\}
+## 2026.06.22 — 2026-06-22 \{#v2026-06-22\}
 
 Single sign-on (SSO) via OIDC — the IdP verifies identity, NomaUBL keeps the call on roles, permissions and row filters.
 
@@ -226,65 +214,20 @@ Single sign-on (SSO) via OIDC — the IdP verifies identity, NomaUBL keeps the c
 
 ---
 
-## 2026.06.21.5 — 2026-06-21 \{#v2026-06-21-5\}
-
-### Fixes
-
-- **Daily invoice volume chart legible at every period.** Bars are now clamped between 3 and 36 px so 7-day periods stop rendering giant slabs and long periods stop rendering slivers. Date labels are HTML, so they stay sharp at any period instead of squishing into illegible dashes when the SVG is stretched.
-
----
-
-## 2026.06.21.4 — 2026-06-21 \{#v2026-06-21-4\}
-
-### Fixes
-
-- **View-only roles can read invoices again.** The detail modal uses the UBL XML endpoint to render *Parties* / *Invoice Lines* / *VAT Recap* / *Notes*; gating it by `invoice.download` was hiding every tab from any role that didn't have the download action. The endpoint is now read-open (still row-filter and visibility gated) — only the explicit **Download UBL** button stays gated by `invoice.download`.
-
----
-
-## 2026.06.21.3 — 2026-06-21 \{#v2026-06-21-3\}
-
-### New features
-
-- **New `invoice.create` action permission.** The **New invoice** quick action on the dashboard is now gated by its own action grant — a role without `invoice.create` no longer sees the button and the underlying endpoint refuses the call.
-
-### Fixes
-
-- **Password-reset table now appears in *Settings → db-nomaubl*.** The *Auth* section gains an *Auth · Password resets* field (default `F564255`) so the Validate schema check stops reporting it as a missing table. See [Database Tables](./references/database-tables.md).
-
----
-
-## 2026.06.21.2 — 2026-06-21 \{#v2026-06-21-2\}
-
-### New features
-
-- **Role-based dashboard card visibility.** Each dashboard widget is now an individual permission. *Settings → Roles → Access* has a **Dashboard cards** checklist below *Allowed Pages* — empty list shows every card (existing behaviour), populated list is a strict whitelist. Hidden cards are skipped server-side, so their SQL never runs and their data never reaches the wire.
-- **Daily invoice volume — stacked bars by status.** The single line chart is replaced by a per-day stacked bar split into *Approved* / *In flight* / *Errors-IT* / *Errors-Business*. Hover any day for a per-bucket count tooltip.
-
-### Fixes
-
-- **Dashboard *PA round-trip* card no longer crashes for roles with a row-filter on a header column** (e.g. customer name). The card's lifecycle-only SQL now gates eligible rows through an `EXISTS` against the header table instead of splicing the row-filter clause into a query that didn't know about it.
-
----
-
-## 2026.06.21.1 — 2026-06-21 \{#v2026-06-21-1\}
-
-### New features
-
-- **Self-service password reset.** *Forgot password?* link on the login screen opens a dialog asking for both username and email; if they match an active account, the user gets a one-shot link valid 60 minutes that lands on a new page to choose a new password. Requires SMTP configured in the `global` template.
-
----
-
 ## 2026.06.21 — 2026-06-21 \{#v2026-06-21\}
 
-Role overhaul: row filters, granular action permissions, a 4-tab editor, an independent *API Reference* page grant. On the PA connector side: inbound endpoints shipped by default. On the UBL side: configurable supplier electronic address (BT-34) and a per-document-type Schematron toggle.
+Role overhaul day: row filters, granular action permissions, a 4-tab editor, self-service password reset and dashboard cards as individual permissions. On the PA connector side: inbound endpoints shipped by default. On the UBL side: configurable supplier electronic address (BT-34) and a per-document-type Schematron toggle. Daily invoice volume becomes stacked bars by status.
 
 ### New features
 
 - **Role-level row filters.** A role can be restricted to a specific subset of invoices (and processing-log / integration-error / e-reporting rows) by picking a column and one or more values in *Settings → Roles → Data scope*. The typical use case is an external-customer role that only sees invoices issued to its own alpha key (UHALKY). The row filter applies to the list views, the dashboard, every per-row endpoint (lifecycle, lines, XML download, PDF render, status push, delete, resend, email), and the generated PDF byte stream. Forbidden rows return the same "not found" shape the UI shows for genuinely missing data, so the response can't be used to probe for invoices a role shouldn't know exist. Multiple filters on the same column combine as OR; filters on different columns combine as AND, side-by-side with the existing Companies grant.
 - **Granular action permissions.** The old all-or-nothing read-only flag is replaced by a per-action whitelist under *Settings → Roles → Actions*. Invoice, E-Reporting and Integration ops are grouped by view; each button can be allowed or blocked independently — edit, delete, resend, push status (with separate PA and DB sub-permissions for the *Set Status* modal's two tabs), validate UBL, download UBL, preset actions, custom actions, email PDF, generate / resend e-reporting batches, and trigger batch integration jobs (*Fetch Received* / *Import Statuses* / *Retrieve Statuses*). Existing roles keep their behaviour: a role with no whitelist set continues to allow every action, and turning the whitelist on pre-populates with everything so nothing changes until the operator explicitly removes a check.
 - **Roles editor reorganised into purpose-built tabs.** The single *Permissions* panel now splits into **Access** (pages + features), **Actions** (the new whitelist), **Data scope** (companies + row filters) and **Members**. The role name and description sit above the tab bar so they stay visible from any tab — *Save* / *Cancel* render on every editing tab.
+- **New `invoice.create` action permission.** The **New invoice** quick action on the dashboard is gated by its own action grant — a role without `invoice.create` no longer sees the button and the underlying endpoint refuses the call.
+- **Role-based dashboard card visibility.** Each dashboard widget is now an individual permission. *Settings → Roles → Access* has a **Dashboard cards** checklist below *Allowed Pages* — empty list shows every card (existing behaviour), populated list is a strict whitelist. Hidden cards are skipped server-side, so their SQL never runs and their data never reaches the wire.
+- **Self-service password reset.** A *Forgot password?* link on the login screen opens a dialog asking for both username and email; if they match an active account, the user gets a one-shot link valid 60 minutes that lands on a new page to choose a new password. Requires SMTP configured in the `global` template.
 - **API Reference is its own page grant.** The sidebar link to `/api/docs` no longer piggy-backs on the *Status Reference* grant, so a role can be given browser access to the app without exposing the raw API contract — useful when handing an external user a log-in that should not see the endpoint catalog. Fresh admin roles get the new `apireference` page automatically; existing admins pick it up on the next init.
+- **Daily invoice volume — stacked bars by status.** The single line chart is replaced by a per-day stacked bar split into *Approved* / *In flight* / *Errors-IT* / *Errors-Business*. Hover any day for a per-bucket count tooltip.
 - **`fetch-received-list` and `fetch-received` shipped in the default `pa-default` api-connector.** Fresh installs of the bundled connector now expose the two inbound endpoints alongside the existing six outbound ones, with sensible URL skeletons (`/api/v1/sale/received-invoices?since={{since}}` and `/api/v1/sale/received-invoices/{{uuid}}`). The actual paths still depend on each PA — the operator confirms the URL once and the resolver finds the endpoints by name immediately. **Existing installs** are not auto-migrated: `ConfigMerger` skips customer-owned api-connectors as a whole to preserve URL / auth edits, so operators upgrading need to add the two endpoint rows manually via the **+ Add endpoint** button (copy the names + URL skeletons above).
 - **Seller electronic address (BT-34) is now configurable.** Some customers route their invoices on a Peppol / e-invoicing identifier that is not their SIREN. The *Supplier Companies* panel in *UBL Defaults* gained a dedicated BT-34 field per company, and the XSL editor gained a `TAG_SUPPLIER_ENDPOINT` override for per-document mapping. Resolution order at emission time is: per-document TAG → *UBL Defaults* supplier endpoint → SIREN. Installs that don't set anything keep the current behaviour (SIREN is emitted as endpoint).
 - **Per-document-type Schematron toggle.** The *Document Types* editor gained a Schematron checkbox alongside *Send to PA* / *Keep UBL* / *Keep PDF*. When off for a code, the EN 16931 / CTC-FR Schematron pass is skipped for invoices resolving to that type and no rows land in `F564236`. Shipped defaults enable validation for `B2B` and `B2G` (CTC-FR scope) and disable it for `B2BINT`, `B2C`, `OUTOFSCOPE`, `ARCHIVEONLY`, `DOCUMENT` (out of scope — French rules misfire on consumer transactions and foreign buyers). Customers can flip the flag per code as needed. Existing 7-field document-types rows fall back to the same per-code default so upgrades pick sensible values without manual migration.
@@ -293,6 +236,10 @@ Role overhaul: row filters, granular action permissions, a 4-tab editor, an inde
 ### Fixes
 
 - **"Uncheck all" in the role *Actions* tab now actually unchecks every action.** Previously the dual meaning of an empty action list (legacy "all allowed" vs. explicit "none allowed") meant clicking the button reverted the role to all-allowed and silently re-checked everything. The whitelist mode is now a dedicated toggle so the visible checkbox state always matches what gets saved.
+- **View-only roles can read invoices again.** The detail modal uses the UBL XML endpoint to render *Parties* / *Invoice Lines* / *VAT Recap* / *Notes*; gating it by `invoice.download` was hiding every tab from any role that didn't have the download action. The endpoint is now read-open (still row-filter and visibility gated) — only the explicit **Download UBL** button stays gated by `invoice.download`.
+- **Password-reset table now appears in *Settings → db-nomaubl*.** The *Auth* section gains an *Auth · Password resets* field (default `F564255`) so the Validate schema check stops reporting it as a missing table. See [Database Tables](./references/database-tables.md).
+- **Dashboard *PA round-trip* card no longer crashes for roles with a row-filter on a header column** (for example customer name). The card's lifecycle-only SQL now gates eligible rows through an `EXISTS` against the header table instead of splicing the row-filter clause into a query that didn't know about it.
+- **Daily invoice volume chart legible at every period.** Bars are now clamped between 3 and 36 px so 7-day periods stop rendering giant slabs and long periods stop rendering slivers. Date labels are HTML, so they stay sharp at any period instead of squishing into illegible dashes when the SVG is stretched.
 
 ---
 
@@ -330,6 +277,441 @@ Actionable error when a BI Publisher RTF subtemplate is missing, and a starter m
 ### New features
 
 - **Starter manifest generator for the PDF → XML adapter.** New CLI mode `-pdfManifest <input.pdf> <output.manifest.xml>` (also `nomaubl.sh pdf-manifest` / `nomaubl.cmd pdf-manifest`) analyses the PDF and emits a JDE-shape manifest XML, for the case where the customer has no native JDE XML sample of the same R-program to feed `-pdf2xml`. Inferred element names use the printed RC label text where available and the OWObject DD alias as fallback; the customer edits the file to give meaningful names, then reuses it as the 3rd argument of `-pdf2xml`. The root element is derived from the PDF filename (typical JDE spool convention) and multi-line text fields keep a single element name across all their lines via a sticky cache.
+
+---
+
+## 2026.07.05.1 — 2026-07-05 \{#v2026-07-05-1\}
+
+### New features
+
+- **Attach the generated PDF as a regular attachment (PJA), not only as a LISIBLE.** The Attachment setting gains a *generate* mode that renders the invoice PDF with the pdf-template designer and attaches it as a PJA (`cac:AdditionalDocumentReference`) instead of the readable LISIBLE copy. Use it when the designed PDF isn't a compliant French readable invoice: turn LISIBLE off and attach the PDF as a PJA instead. LISIBLE, `create` (RTF/BIPublisher) and `attach` (existing PDF from the input directory) are unchanged.
+- **Preceding-invoice references, extended.** An invoice can reference several prior invoices (BG-3, 0..n) via a new *Preceding Invoices — repeating* mapping in the XSL editor (one `cac:BillingReference` per occurrence, with an optional issue date), and an invoice line can carry its own preceding-invoice reference (EXT-FR-FE-136) — both in the correct schema position.
+- **VAT exemption reason mappable from the spool (BT-121 / BT-120), at document and line level.** The exemption reason code and text can now be mapped from a source field — per VAT breakdown and per line — instead of only a fixed per-category default, as required for exempt / reverse-charge / export / intra-EU invoices. A new *Source → VATEX exemption code* mapping in UBL Defaults also normalises a raw spool code to an allowed VATEX code (unmapped codes pass through, a blank falls back to the per-category default).
+- **Line VAT category code (BT-151) mappable from the spool**, resolved through the same category mapping as the document BT-118 (previously only the line VAT rate BT-152 was settable). A line with no VAT of its own inherits the document VAT (line → document → default).
+- **Readable PDF (LISIBLE) now carries all of the invoice's data.** Per the French rule that the readable copy must contain everything in the structured invoice, the PDF now renders many previously-missing fields — preceding-invoice reference(s) (BT-25/BT-26), invoice period (BT-73/BT-74), VAT point date (BT-7), project reference (BT-11), line preceding-invoice reference (EXT-FR-FE-136) and line VAT exemption reason (EXT-FR-FE-178/179), actual delivery date (BT-72), extra payment details (BT-83/BT-85/BT-89), prepaid (BT-113) and rounding (BT-114), foreign-currency VAT (BT-6/BT-111), and party electronic addresses and identifiers (BT-28/BT-29/BT-32/BT-34/BT-46/BT-49). Each is toggleable in the PDF template.
+
+### Updates
+
+- **French CTC validation rules updated to FNFE V1.4.0 (XP Z12-012, 30 June 2026).** The Flux 2 and EXTENDED-CTC-FR UBL schematrons and the EN 16931 code lists are refreshed to the 30 June 2026 publication; among other things it corrects the XPath for the line preceding-invoice reference (EXT-FR-FE-136) and adds `RECAPITULATIF_COTRAITANCE` to the accepted attachment types. The standard rules become mandatory on issuance from 1 September 2026.
+- **The `UBL-CR-001` warning ("a UBL invoice should not include extensions") is no longer reported** — it fired on the `ext:UBLExtensions` custom fields NomaUBL emits by design. Filtered when validation results are collected; the standard schematron is left untouched, so an update won't reintroduce it.
+- **E-reporting declarations now carry the VAT rate and exemption details.** Each VAT breakdown in the generated e-reporting file now includes the VAT rate (TT-57), the exemption reason (TT-58) and the exemption reason code (TT-59), grouped under the VAT category — they were previously missing.
+- **Searchable dropdowns size to their content.** Dropdown lists (VAT exemption reasons, note types, document types and every other searchable picker) now widen to fit the longest option instead of being clipped to the field's width, capped to the screen edge so they never run off-screen.
+- **Document reference type list completed (UNTDID 1153 / BT-128-1).** The document-reference code picker now offers the full UNTDID 1153 code list (818 codes) with French and English labels, instead of a small curated subset. Existing deployments pick up the new codes through the config upgrade.
+
+### Fixes
+
+- **Preceding-invoice reference no longer breaks the schema.** `cac:OrderReference` now correctly precedes `cac:BillingReference` (`InvoicePeriod → OrderReference → BillingReference`); previously, when both a purchase-order reference (BT-13) and a preceding-invoice reference (BT-25/BT-26) were present they were emitted in the wrong order and the UBL schema rejected it (`cvc-complex-type.2.4.a`). Deployed templates pick up the fix by re-running the upgrade.
+- **Editing an invoice in the manual editor no longer drops data it can't display.** Any UBL element the editor has no field for — e.g. the preceding-invoice reference (BT-25/BT-26), line preceding-invoice reference (EXT-FR-FE-136), VAT accounting currency (BT-6), VAT point date (BT-7), rounding (BT-114) or payment mandate/RUM (BT-89) — is now preserved on save instead of being lost, re-inserted at the correct schema position.
+- **Manual editor: VAT exemption reason is kept, and can be set per line.** A VAT breakdown carrying only an exemption reason text (BT-120) with no code (e.g. a multi-vendor routing token) was dropped when the invoice was opened in the manual editor — the field showed empty. It's now read back and preserved on save. The line editor also gained a VAT exemption field (code + reason, EXT-FR-FE-179/178), so exemption can be set per line, not only per VAT breakdown.
+- **Manually-created / template-less invoices are now fully handled.** The e-invoicing settings editor gained a *Manual / template-less invoice defaults* section — activity (FEAA10, mandatory for the F564230 log row), type, LISIBLE on/off, PDF template (built-in or any custom one) and locale — applied when an invoice has no document template. Previously the mandatory activité had no source on the manual path so saving failed, and no readable PDF (LISIBLE) was produced.
+- **VAT exemption reason: both the code and the full label are now stored.** The invoice-log tables kept a single, short exemption column, so an exempt / reverse-charge invoice (e.g. multi-vendor) whose reason text was long failed the write with *value too long*. The invoice lines and VAT summary now keep the exemption **code** (BT-121 / line EXT-FR-FE-179) and its **reason text** (BT-120 / line EXT-FR-FE-178) in two separate columns, so both are available for the readable PDF and the e-reporting declaration. The invoice detail's VAT summary and invoice lines now show the code with its full reason on a second line.
+- **Path placeholders now resolve when uploading and processing a file.** Two issues: a UBL upload built the destination path in the browser and left `%APP_HOME%` / `%ENV%` literal; and the LISIBLE / attachment output path expanded `%PROCESS_HOME%` *after* `%APP_HOME%` / `%ENV%` (so the ones nested inside `%PROCESS_HOME%` came back unresolved) and never expanded `%FILE_NAME%`. Both wrote files to bogus `%APP_HOME%/…` folders. Uploads now go through the server endpoint, and the output-path resolver expands `%PROCESS_HOME%` (with its nested `%APP_HOME%` / `%ENV%`), `%TEMPLATE%` and `%FILE_NAME%` correctly.
+
+## 2026.07.03.1 — 2026-07-03 \{#v2026-07-03-1\}
+
+### New features
+
+- **Embed a spool attachment in the invoice.** A document already carried as base64 in the source spool can now be attached to the UBL invoice by mapping it in the XSL editor. A new *Embedded Attachments* section maps the base64 field, a filename (literal or a `{Field}` / `{Group/Field}` placeholder, e.g. `{DocNumber}.pdf`), the MIME type, and a qualifier chosen from the platform's reference list (PJA, RIB, BON_LIVRAISON…) into a `cac:AdditionalDocumentReference` / `EmbeddedDocumentBinaryObject` (BT-125) — up to four per invoice. It lands in the correct schema position and sits alongside the existing attachments (external files, generated readable PDF), all kept together. Until now attachments could only come from files on disk or the generated PDF, not from a base64 field inside the spool.
+
+## 2026.07.02.1 — 2026-07-02 \{#v2026-07-02-1\}
+
+### Improvements
+
+- **Constant values in field mappings.** A mapped value wrapped in backticks — e.g. `` `EDI` `` — is emitted as a fixed constant instead of being read from the source. It works for custom extension fields, notes and item properties, and is handy for platform-specific values that never change.
+
+### Fixes
+
+- **BIP jobs in both completed states are collected.** The scan and extract queries now match job status `D` and `FD` (previously `D` only).
+- **BIP language filter corrected.** It was applied to the input-XML query using a column that only exists on the PDF output table, which broke input extraction; the filter now sits on the output query, where that column lives.
+- **Scheduled BIP scan honours the lookback floor.** A web-triggered scan now applies the `bipLookbackDays` Global setting, like the command-line scan already did.
+- **BIP submit-date window fixed.** The date floor now filters the real submit-date column as a window up to today, so jobs submitted today are included and out-of-window jobs (whose numbers can be higher) are excluded.
+- **BIP post-generation no longer errors on the job key.** The job number was mis-read from the file base name, so the JDE cleanup step failed with a number-format error; it now runs.
+
+## 2026.06.26.1 — 2026-06-26 \{#v2026-06-26-1\}
+
+### Fixes
+
+- **Custom extension fields validate with more than one field.** UBL's `ext:ExtensionContent` admits a single child element, so each configured field is emitted in its own `ext:UBLExtension`/`ext:ExtensionContent` block — as a plain unprefixed element in the document's own namespace (no `xmlns`), the structure certified platforms accept.
+
+## 2026.06.25.4 — 2026-06-25 \{#v2026-06-25-4\}
+
+### Improvements
+
+- **Upgrade flags templates that need a manual fix.** When a customer-customized template (e.g. a forked `ubl:supplier-party` in `ubl-defaults.xsl`) is preserved during an upgrade but the framework has since added a parameter it doesn't declare, the upgrade report now lists it under "Manual fix required" with the exact `<xsl:param>` to add — instead of compiling fine and then failing at invoice generation with a cryptic `XTSE0680` error.
+- **Compare a file with its upstream version.** In File Versions, a file the upgrade preserved now shows an *upstream* row — the shipped version saved as `<name>.upstream`. Compare your live file against it to see exactly what the new framework version changed and merge it by hand.
+
+## 2026.06.25.3 — 2026-06-25 \{#v2026-06-25-3\}
+
+### New features
+
+- **Custom extension fields (UBLExtensions).** A new *Custom Extension Fields* section in the XSL editor maps up to eight source values into a UBL `ext:UBLExtensions` block on the invoice — for data a trading partner needs that has no standard EN 16931 home (routing method, delivery copy address, partner identifiers…). Each field has an element name, a source path or `{template}` value, and the same optional emit conditions as item properties. The block is written as the first element of the invoice, as the UBL schema requires, and is produced only when at least one field resolves. Empty by default, so existing invoices are unchanged. Data placed here sits outside the EN 16931 model — prefer the standard field when one exists (BT-19 accounting reference, BT-10 buyer reference), and confirm with the receiving platform that it reads the extension.
+
+## 2026.06.25.2 — 2026-06-25 \{#v2026-06-25-2\}
+
+### New features
+
+- **Trim trailing zeros in the PDF.** A new *Trim zeros* switch in the PDF template builder drops trailing zero decimals from amounts, unit prices and quantities — a whole amount prints as `23` instead of `23.00`, and a `23.0000` unit price as `23`. Off by default, which keeps the fixed two-decimal amount and four-decimal price display. Set per template, it applies to the line table, the totals box and both the readable and on-screen PDFs.
+
+## 2026.06.25.1 — 2026-06-25 \{#v2026-06-25-1\}
+
+### New features
+
+- **Country of origin on invoice lines (BT-159).** The invoice editor carries a country-of-origin field per line, next to the classification code. The ISO code is written to the UBL, while the invoice detail view and every PDF — preview, batch and notification — show the country's full name resolved from the shared countries list. A toggle in the PDF line layout controls whether it prints.
+- **Classification scheme version on lines (BT-158-2).** A line can now record the version of its classification scheme alongside the list identifier; it appears in brackets after the list ID wherever the classification is shown.
+- **Seller's item code in the PDF (BT-155).** The seller's article code now prints in the per-line detail, between the buyer reference and the standard identifier, with its own show/hide toggle.
+
+### Improvements
+
+- **Buyer SIREN recovered from the VAT number.** When a customer record carries no SIREN but does carry a French VAT identifier, the SIREN is derived from it so the buyer's legal identifier and electronic address are still populated.
+- **Country of origin resolved from the shared reference list.** The source country value is now resolved against the canonical countries list when the invoice is produced, instead of a copy of the list being baked into each deployment. Correcting a label in the list takes effect everywhere with no re-save.
+- **Cleaner addresses in the PDF.** Seller, customer, agent and delivery addresses are built line by line, so a party whose address starts on the second street line no longer prints a leading blank line. The delivery address also shows its additional street line.
+- **Smoother framework upgrades.** Before importing new functions, the upgrade aligns each deployment's stylesheet header with the shipped language version and namespaces, so templates that rely on newly added framework features compile without manual edits.
+
+### Fixes
+
+- **No more empty address blocks on invoice lines.** A line that only carries a delivery date no longer emits an empty location or country element, and line addresses no longer fall back to a default country that doesn't belong there.
+- **Delivery heading no longer repeats.** In the PDF, a line with no delivery group no longer clears the breadcrumb and makes the next line that does carry one re-print the delivery heading.
+- **Multi-row notes rebuilt into a single paragraph.** A note split across several source rows can be collected back into one paragraph instead of producing a separate note per row.
+
+## 2026.06.23.1 — 2026-06-23 \{#v2026-06-23-1\}
+
+### New features
+
+- **Country of origin and commodity classification on invoice lines (BT-158 / BT-159).** Two new fields in the Invoice Lines section of the XSL editor map the per-line source path. A *Country & Classification* tab in UBL Defaults sets the source format — ISO code, French description or English description — and the framework resolves the value against the canonical countries list at save time. No parallel mapping table to maintain: if a label is wrong, edit it once in the country list. Classification code, scheme listID and version defaults fall back when the per-line path is empty.
+- **Allowance and charge reason defaults (BR-42 / BR-43).** New *Allowances / Charges* tab in UBL Defaults sets a fallback reason text and reason code per direction. ChargeIndicator picks the pair, so a single configuration covers both allowance and charge cases.
+- **Line allowance derived from a percentage alone.** When the source carries only the percentage, the framework derives both amount and base from the line net amount. Mixed combinations are also covered: percentage + base derives the amount, percentage + amount derives the base. JDE's trailing-sign convention (`25.00-`) is normalised automatically.
+- **Group-less line allowance mode.** When the allowance fields sit directly on the invoice line with no wrapper element, point the AC item TAG at `.` (or leave it empty) and the framework iterates the line itself.
+- **Seller's item identification emitted (BT-155).** The TAG was declared but never reached the output. The framework now emits `cac:SellersItemIdentification/cbc:ID` between item name and country of origin, per the UBL 2.1 sequence.
+
+### Improvements
+
+- **Upgrade propagates new framework symbols into deployed templates.** Two new passes during upgrade close the migration gap that used to require hand-editing every customer template after every release. First, the deployment's defaults file gets any new variables, functions or templates the shipped reference adds — operator-configured values stay untouched. Second, each customer per-document template has legacy duplicates of those same names stripped from its override block so the imported (current) version wins under XSL precedence. Re-running the upgrade now fixes templates that previously failed to compile because the framework body started calling new symbols or new template parameters.
+- **Multi-VAT footer wrapped per rate.** The PDF-to-XML converter now opens a fresh wrapper section for each VAT-rate footer, so an invoice with multiple rates produces one block per rate instead of a flat run of fields. Single-rate invoices still produce one block.
+
+### Fixes
+
+- **Invoice lines no longer dropped after page breaks (PDF-to-XML).** JDE emits the delivery preamble once per BL block; continuation pages stream more line rows without a fresh preamble. The converter used to release the delivery wrapper on every page-header flush, so continuation rows fell onto a flat parent the UBL XSL skipped. The wrapper is now carried across page breaks and only released by the totals or VAT footer.
+- **PDF amounts with ambiguous separators (`1.682.28`).** When the same character serves as both thousands and decimal separator — or after the French comma-to-dot pass turns `1,682.28` into `1.682.28` — the value now collapses to `1682.28`. The last `.` is treated as the decimal, anything earlier is dropped.
+- **Local Schematron rule BR-NOMAUBL-01 retired.** The credit-note preceding-invoice condition is now enforced by `BR-FR-CO-05` in the 2026-04-30 Flux2 v1.3.1 pack, so the local duplicate is gone. The file stays in place as scaffolding for future house rules.
+
+## 2026.06.22.5 — 2026-06-22 \{#v2026-06-22-5\}
+
+### New features
+
+- **Single sign-on via OIDC.** *Auth Mode* on the Global template
+  switches the login screen between `internal`, `oidc` (SSO only)
+  and `both` (SSO button above the local form). The new *oidc*
+  system template holds the IdP settings (issuer URL, client
+  ID/secret, redirect URI, scopes, claim mapping, auto-provisioning
+  with a default role) and is created automatically on fresh
+  installs and upgrades — or in one click from the *+ Add OIDC*
+  button in the Configuration Manager header. Sign-in is keyed by
+  email: an *Allowed email domains* allow-list restricts SSO to one
+  or more tenants, and a *Require Google Workspace domain* field
+  enforces the `hd` claim so a personal Gmail can't slip in with
+  the same address. Auto-provisioned accounts get a short JDE-style
+  username derived from the email's local-part. Sessions minted
+  through OIDC lock down the Profile modal — *Security* tab and
+  identity fields are read-only since password rotation happens at
+  the IdP. Roles, grants and row-filters stay managed in NomaUBL —
+  the IdP only verifies identity.
+
+## 2026.06.21.5 — 2026-06-21 \{#v2026-06-21-5\}
+
+### Fixes
+
+- **Daily invoice volume chart legible at every period.** Bars are
+  now clamped between 3 and 36 px so 7-day periods stop rendering
+  giant slabs and long periods stop rendering slivers; date labels
+  are HTML, so they stay sharp at any period instead of squishing
+  into illegible dashes when the SVG is stretched.
+
+## 2026.06.21.4 — 2026-06-21 \{#v2026-06-21-4\}
+
+### Fixes
+
+- **View-only roles can read invoices again.** The detail modal
+  uses the UBL XML endpoint to render Parties / Invoice Lines /
+  TVA Recap / Notes; gating it by `invoice.download` was hiding
+  every tab from any role that didn't have the download action.
+  The endpoint is now read-open (still row-filter + visibility
+  gated) and only the explicit *Download UBL* button stays gated
+  by `invoice.download`.
+
+## 2026.06.21.3 — 2026-06-21 \{#v2026-06-21-3\}
+
+### New features
+
+- **New `invoice.create` action permission.** The *New invoice*
+  quick action on the dashboard is now gated by its own action
+  grant — a role without `invoice.create` no longer sees the button
+  and the underlying endpoint refuses the call.
+
+### Fixes
+
+- **Password-reset table now appears in Settings → db-nomaubl.**
+  The Auth section gains an *Auth · Password resets* field
+  (default `F564255`) so the Validate schema check stops reporting
+  it as a missing table.
+
+## 2026.06.21.2 — 2026-06-21 \{#v2026-06-21-2\}
+
+### New features
+
+- **Role-based dashboard card visibility.** Each dashboard widget
+  is now an individual permission. Settings → Roles → Access has a
+  *Dashboard cards* checklist below Allowed Pages — empty list shows
+  every card (existing behaviour), populated list is a strict
+  whitelist. Hidden cards are skipped server-side, so their SQL
+  never runs and their data never reaches the wire.
+
+- **Daily invoice volume — stacked bars by status.** The single
+  line chart is replaced by a per-day stacked bar split into
+  Approved / In flight / Errors-IT / Errors-Business. Hover any
+  day for a per-bucket count tooltip.
+
+### Fixes
+
+- **Dashboard PA round-trip card no longer crashes for roles with
+  a row-filter on a header column** (e.g. customer name). The
+  card's lifecycle-only SQL now gates eligible rows through an
+  `EXISTS` against the header table instead of splicing the
+  row-filter clause into a query that didn't know about it.
+
+## 2026.06.21.1 — 2026-06-21 \{#v2026-06-21-1\}
+
+### New features
+
+- **Self-service password reset.** *Forgot password?* link on the
+  login screen opens a dialog asking for both username and email; if
+  they match an active account, the user gets a one-shot link valid
+  60 minutes that lands on a new page to choose a new password.
+  Requires SMTP configured in the `global` template.
+
+## 2026.06.21 — 2026-06-21 \{#v2026-06-21\}
+
+### New features
+
+- **Role-level row filters.** A role can now be restricted to a
+  specific subset of invoices (and processing-log / integration-error
+  / e-reporting rows) by picking a column and one or more values
+  in **Settings → Roles → Data scope**. The typical use case is an
+  external-customer role that should only see invoices issued to its
+  own alpha key (UHALKY) — the row filter applies to the list views,
+  the dashboard, every per-row endpoint (lifecycle, lines, XML
+  download, PDF render, status push, delete, resend, email), and
+  the generated PDF byte stream. Forbidden rows return the same
+  "not found" shape the UI shows for genuinely missing data, so
+  the response can't be used to probe for invoices a role shouldn't
+  know exist. Multiple filters on the same column combine as OR;
+  filters on different columns combine as AND, side-by-side with
+  the existing Companies grant.
+
+- **Granular action permissions.** The old all-or-nothing read-only
+  flag is replaced by a per-action whitelist under **Settings →
+  Roles → Actions**. Invoices, E-Reporting and Integration ops are
+  grouped by view; each button can be allowed or blocked
+  independently — edit, delete, resend, push status (with separate
+  PA and DB sub-permissions for the Set Status modal's two tabs),
+  validate UBL, download UBL, preset actions, custom actions, email
+  PDF, generate / resend e-reporting batches, and trigger batch
+  integration jobs (Fetch Received / Import Statuses / Retrieve
+  Statuses). Existing roles keep their behaviour: a role with no
+  whitelist set continues to allow every action, and turning the
+  whitelist on pre-populates with everything so nothing changes
+  until the operator explicitly removes a check.
+
+- **Roles editor reorganised into purpose-built tabs.** The single
+  Permissions panel now splits into **Access** (pages + features),
+  **Actions** (the new whitelist), **Data scope** (companies + row
+  filters) and **Members**. The role name and description sit above
+  the tab bar so they stay visible from any tab, and Save / Cancel
+  render on every editing tab.
+
+- **API Reference is its own page grant.** The sidebar link to
+  `/api/docs` no longer piggy-backs on the Status Reference grant,
+  so a role can be given browser access to the app without exposing
+  the raw API contract — useful when handing an external user a
+  log-in that should not see the endpoint catalog. Fresh admin
+  roles get the new `apireference` page automatically; existing
+  admins pick it up on the next init.
+
+### Fixes
+
+- **"Uncheck all" in the role Actions tab now actually unchecks
+  every action.** Previously the dual meaning of an empty action
+  list (legacy "all allowed" vs. explicit "none allowed") meant
+  clicking the button reverted the role to all-allowed and silently
+  re-checked everything. The whitelist mode is now a dedicated
+  toggle so the visible checkbox state always matches what gets
+  saved.
+
+### New features
+
+- **`fetch-received-list` and `fetch-received` shipped in the
+  default `pa-default` api-connector.** Fresh installs of the
+  bundled connector now expose the two inbound endpoints
+  alongside the existing six outbound ones, with sensible URL
+  skeletons (`/api/v1/sale/received-invoices?since={{since}}`
+  and `/api/v1/sale/received-invoices/{{uuid}}`). The actual
+  paths still depend on each PA — the operator confirms the
+  URL once and the resolver finds the endpoints by name
+  immediately. **Existing installs** are not auto-migrated:
+  `ConfigMerger` skips customer-owned api-connectors as a whole
+  to preserve URL / auth edits, so operators upgrading need to
+  add the two endpoint rows manually via the Endpoints "+ Add
+  endpoint" button (copy the names + URL skeletons above).
+
+- **Seller electronic address (BT-34) is now configurable.** Some
+  customers route their invoices on a Peppol / e-invoicing
+  identifier that is not their SIREN. The Supplier Companies
+  panel in UBL Defaults gained a dedicated BT-34 field per
+  company, and the XSL editor gained a `TAG_SUPPLIER_ENDPOINT`
+  override for per-document mapping. Resolution order at
+  emission time is: per-document TAG → UBL Defaults supplier
+  endpoint → SIREN. Installs that don't set anything keep the
+  current behaviour (SIREN is emitted as endpoint).
+
+- **Per-document-type Schematron toggle.** The Document Types
+  editor gained a Schematron checkbox alongside Send to PA /
+  Keep UBL / Keep PDF. When off for a code, the EN 16931 /
+  CTC-FR Schematron pass is skipped for invoices resolving to
+  that type and no rows land in `F564236`. Shipped defaults
+  enable validation for `B2B` and `B2G` (CTC-FR scope) and
+  disable it for `B2BINT`, `B2C`, `OUTOFSCOPE`, `ARCHIVEONLY`,
+  `DOCUMENT` (out of scope — French rules misfire on consumer
+  transactions and foreign buyers). Customers can flip the flag
+  per code as needed. Existing 7-field document-types rows fall
+  back to the same per-code default so upgrades pick sensible
+  values without manual migration.
+
+- **UBL-source pipeline reads `document-types` for sendToPA +
+  validate.** Invoices uploaded as UBL (Process Document UI,
+  receive flow, fetch-received) now resolve their doc-type code
+  from the doc-template's `processingType.default`, look it up
+  in `document-types`, and let the row drive both the
+  Schematron gate and the sendToPA fallback. Explicit caller
+  overrides (UI / CLI `sendToPA=Y/N`) still win. One INFO line
+  per call shows which row drove the decision, mirroring
+  `AUTO_RESOLVE` in the XML pipeline.
+
+## 2026.06.17 — 2026-06-17 \{#v2026-06-17\}
+
+### Fixes
+
+- **Notification PDFs now use the configured document template.**
+  PDFs attached to outbound notifications and email
+  notifications were always rendered with the bundled default
+  layout, regardless of the per-document `pdfTemplate` configured
+  on the doc-template (`vrc_pro`, `cdn_facture`, …). The
+  notification dispatcher now resolves the template stored on the
+  invoice and applies it to the attached PDF, matching how the
+  Process Document UI renders it. Installs that never set a
+  per-document template keep the existing rendering.
+
+- **Line allowance amounts with a leading-dot input no longer
+  fail BR-DEC-24.** JDE fields delivered as `.4700` (no integer
+  part) were emitted into the UBL line allowance amount (BT-136)
+  as `0.4700` — four decimals, fatal under the French e-invoicing
+  Schematron rule BR-DEC-24 ("at most 2 decimals"). The amount
+  normalisation function now applies the 2-decimal cap to
+  leading-dot values: `.4700` becomes `0.47`. Same fix in the
+  6-decimal price helper for consistency.
+
+- **Processing Log grouped view shows every job in the loaded
+  window.** Long-running batches (one START → thousands of
+  intermediate events → one END) were rendering as a single
+  "? → END" row when the START fell off the server slice. Three
+  things were stacked against this view: the server silently
+  capped responses at 500 events, the client sent only 5,000 even
+  when more were available, and the grouper emitted one orphan
+  row per intermediate event when no matching START was on the
+  page. All three are fixed — server cap raised to 200,000,
+  grouped-mode client request raised to 100,000, and dangling
+  intermediates now collapse into a single per-job row carrying
+  every step.
+
+### New features
+
+- **Server-side pagination on the Processing Log flat view.** The
+  flat (non-grouped) Processing Log now paginates against the
+  backend instead of capping at the loaded slice. Operators with
+  long histories can walk through every event without re-running
+  filters. Grouped view keeps its single-window load (capped at
+  100,000 events) because jobs are stitched together client-side.
+
+- **Pagination footer on the grouped Processing Log.** The
+  grouped jobs list gained a sticky footer with page size
+  selector (25 / 50 / 100 / 200), first / previous / next / last
+  controls and current-position indicator. Page size persists
+  across reloads.
+
+### Improvements
+
+- **Document-template lists are now sorted alphabetically.** Every
+  place a list of document templates appears in the UI — the
+  Documents editor sidebar, the template picker dropdown used by
+  Process Document / UBL Validation / Extract from BIP, the
+  Global editor's per-company override picker, the Fetch
+  Documents editor's report rows, and the XSL editor's connector
+  sample modal — now lists the templates in alphabetical order.
+  Previously they followed the order they were saved in the
+  config file, which became unscannable as templates were added.
+
+- **Configuration diagnostics for AUTO mode.** Processing in AUTO
+  mode now writes two INFO log lines per processed document
+  showing the resolved processing type code, the mapping table
+  used, and the resulting effective mode (UBL / BURST / SINGLE /
+  BOTH). Makes it possible to diagnose "AUTO ran the wrong mode"
+  cases from the Processing Log in one or two reads instead of
+  guessing at what the customer's configuration produced.
+
+## 2026.06.16 — 2026-06-16 \{#v2026-06-16\}
+
+### Fixes
+
+- **Actionable error when a BI Publisher RTF subtemplate is
+  missing.** The PDF generation path used to log a raw
+  `ERROR RUN PDF java.util.EmptyStackException` when XDO's RTF
+  parser hit an unresolvable IMPORT — almost always a
+  subtemplate file (`sb_*_header.rtf`, `_footer.rtf`,
+  `_detailslivre.rtf`, `_lettre_sub.rtf`, …) missing from the
+  customer's environment, or an OS-specific path-separator
+  mismatch. The PDF path now catches the underlying runtime
+  exception and prepends a one-line hint telling the operator
+  to verify IMPORT paths in the main RTF and confirm every
+  referenced subtemplate exists on the host. Applies to both
+  the SINGLE-mode shortcut and the standard processing path.
+
+### New features
+
+- **Starter manifest generator for the PDF → XML adapter.** New
+  CLI mode `-pdfManifest <input.pdf> <output.manifest.xml>` (also
+  `nomaubl.sh pdf-manifest` / `nomaubl.cmd pdf-manifest`)
+  analyses the PDF and emits a JDE-shape manifest XML, for the
+  case where the customer has no native JDE XML sample of the
+  same R-program to feed `-pdf2xml`. Inferred element names use
+  the printed RC label text where available and the OWObject DD
+  alias as fallback; the customer edits the file to give
+  meaningful names, then reuses it as the 3rd argument of
+  `-pdf2xml`. The root element is derived from the PDF filename
+  (typical JDE spool convention) and multi-line text fields keep
+  a single element name across all their lines via a sticky
+  cache.
+
+### Fixes
+
+- **PDF → XML adapter now groups invoices in batch PDFs.** When a
+  single JDE PDF carries N invoices (batch printing), the
+  converter previously collapsed everything into one
+  `<On_Payment_Terms_S3>` wrapper. It now closes the current
+  wrapper and opens a new one when the next SI=3 page-header
+  stream appears after a tax-summary section (SI=7), so each
+  invoice in the batch is its own addressable XML block. SI=5
+  per-page running totals no longer trigger a boundary, fixing
+  the multi-page-invoice split. Verified on a 13,920-page PDF
+  carrying 2,132 invoices: one wrapper per invoice, line items
+  and totals all contained.
 
 ---
 

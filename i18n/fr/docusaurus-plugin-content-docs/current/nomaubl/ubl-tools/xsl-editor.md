@@ -316,6 +316,23 @@ Chaque champ configuré est émis dans son propre bloc `ext:UBLExtension` / `ext
 
 Les données placées ici sortent du **modèle EN 16931** — privilégier le champ standard lorsqu'il existe (référence comptable BT-19, référence acheteur BT-10…) et vérifier que la plateforme destinataire lit bien l'extension.
 
+#### Factures antérieures — répétées et par ligne \{#preceding-invoices\}
+
+Pour les factures qui référencent un **document précédent** — typiquement un avoir qui pointe sur la facture qu'il corrige — deux mappages viennent compléter la référence unique BT-25 / BT-26 déjà présente dans la section *Billing References* :
+
+**Au niveau document, répété (BG-3, 0..n).** La section *Preceding Invoices — répété* parcourt un groupe source répétitif et émet un `cac:BillingReference` par facture antérieure trouvée. Deux champs :
+
+| Champ | Effet |
+|---|---|
+| **TAG itérateur** | Chemin du groupe répétitif dans le XML source (par exemple `Header/PriorInvoices/Item`). Un `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` est émis par nœud que l'itérateur capture. |
+| **TAG date d'émission** *(facultatif)* | Chemin (relatif à l'itérateur) vers la date d'émission de la facture antérieure. Renseigné, il alimente `cbc:IssueDate` ; laissé vide, la référence est émise sans date. |
+
+Le bloc répété et la référence unique BT-25 / BT-26 peuvent coexister — retenir celle qui colle à la source, ou les deux quand la source porte une référence de tête plus une liste répétitive.
+
+**Au niveau ligne (EXT-FR-FE-136).** Utile pour les avoirs en ligne qui pointent sur une ligne de facture précise. Un nouveau mappage sous la section *Invoice Lines* émet `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` à l'intérieur de la ligne — avec une date d'émission facultative — à la bonne position dans le schéma.
+
+Le XPath de ligne est contrôlé par le [schematron Extended-CTC-FR](./validate.md) aligné sur la publication FNFE V1.4.0 du 30 juin 2026, donc la structure émise correspond à ce que la PA attend.
+
 #### Pièces jointes intégrées \{#embedded-attachments\}
 
 La section *Embedded Attachments* joint à la facture UBL un document déjà encodé en base64 dans le spool source — jusqu'à quatre par facture. Chaque ligne mappe :

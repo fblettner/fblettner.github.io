@@ -312,7 +312,8 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | Field | Values | Description |
 |---|---|---|
 | **UBL XSLT** | path | XSL transform from the source XML to **UBL 2.1**. The placeholder `%APP_HOME%` is expanded to the NomaUBL install root. |
-| **Attachment** | `— None` / `create` / `attach` | How to associate the human-readable PDF with the UBL: `create` = generate the PDF and embed it in the UBL file; `attach` = use a PDF already present in the input directory; empty = no PDF embedded. |
+| **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` *(2026.07.05)* = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
+| **LISIBLE** | `Y` / `N` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. |
 
 ### Additional Attachments
 

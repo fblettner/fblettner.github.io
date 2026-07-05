@@ -131,6 +131,18 @@ This tab configures the **directory of XSL files** used to **transform the sourc
 |---|---|
 | **XSLT Directory** | Directory containing the `.xsl` transform files used to convert the source XML into UBL. The placeholder `%APP_HOME%` expands to the NomaUBL install root. |
 
+### Manual / template-less invoice defaults *(2026.07.05)*
+
+Applied when an invoice has **no document template** — one created in the manual editor, or an already-formed UBL processed without a doc-template. A document template's own values always take precedence.
+
+| Field | Description |
+|---|---|
+| **Activity (FEAA10)** | Mandatory activity code written to the `F564230` log row. Without it a manual invoice can't save. |
+| **Type (typePiece)** | Document type stamped on the log row. |
+| **LISIBLE** | `Y` renders a readable PDF from the UBL and embeds it as the LISIBLE copy. |
+| **PDF template** | Which template renders the LISIBLE — *Built-in*, or any custom one from [PDF Templates](../../management/pdf-templates.md). |
+| **Locale** | Locale for the rendered PDF (e.g. `fr_FR`, `en_US`). |
+
 ---
 
 ## Tab 2 — PA Connection

@@ -312,7 +312,8 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | Champ | Valeurs | Description |
 |---|---|---|
 | **UBL XSLT** | chemin | Transformation XSL du XML source vers l'**UBL 2.1**. Le placeholder `%APP_HOME%` est remplacé par la racine d'installation de NomaUBL. |
-| **Attachment** | `— Aucun` / `create` / `attach` | Comment associer le PDF lisible à l'UBL : `create` = générer le PDF et l'incorporer dans le fichier UBL ; `attach` = utiliser un PDF déjà présent dans le répertoire d'entrée ; vide = aucun PDF incorporé. |
+| **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` *(2026.07.05)* = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
+| **LISIBLE** | `Y` / `N` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. |
 
 ### Pièces jointes complémentaires
 
