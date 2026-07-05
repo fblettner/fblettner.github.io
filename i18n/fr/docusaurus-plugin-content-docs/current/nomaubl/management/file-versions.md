@@ -156,6 +156,7 @@ La barre d'outils indique le chemin du fichier et propose le bouton **Télévers
 |---|---|
 | `upload` *(bleu)* | Téléversement manuel depuis la barre d'outils, ou enregistrement depuis l'éditeur intégré. |
 | `restore` *(orange)* | Version générée par restauration d'une version antérieure (le fichier courant précédent est alors archivé sous cette source). |
+| `upstream` *(ardoise)* | Version livrée d'un fichier conservé par une montée de version du framework. Écrite par la montée de version sous `<name>.upstream` — son rôle est de fournir la référence éditeur à comparer à un fichier courant personnalisé (voir [Comparer avec l'upstream](#upstream) plus bas). |
 | `jde_bip` *(violet)* | Extrait depuis JD Edwards BIP — source spécifique à JDE. |
 | *(autre)* | Toute autre origine reconnue par l'API. |
 
@@ -237,6 +238,19 @@ Deux façons d'entrer dans la comparaison :
 | **Fermer** | **Échap** ou le bouton **Fermer** du bandeau revient au tableau d'historique. |
 
 Les fichiers binaires (PDF, ZIP, images…) n'apparaissent pas dans le sélecteur — la comparaison est réservée aux extensions texte listées dans le [Mode édition](#mode-édition-fichiers-texte).
+
+### Comparer un fichier personnalisé à sa version upstream \{#upstream\}
+
+Quand une montée de version du framework **conserve** un fichier personnalisé (par exemple un `ubl-defaults.xsl` dérivé que vous avez modifié à la main), elle enregistre à côté la version éditeur fraîchement livrée sous `<name>.upstream`. Elle apparaît dans l'historique de versions comme une ligne supplémentaire avec le badge `upstream`, et elle figure dans le sélecteur *Comparer* comme n'importe quelle autre version historique.
+
+Le mode d'emploi :
+
+1. Ouvrir l'historique de versions du fichier personnalisé.
+2. Activer **Comparer** dans la barre d'outils.
+3. Choisir votre fichier courant personnalisé d'un côté et la ligne `upstream` de l'autre.
+4. Ouvrir le diff pour voir précisément ce que la nouvelle version du framework a changé, puis fusionner ces changements dans votre fichier personnalisé à la main.
+
+La ligne `upstream` est rafraîchie à chaque montée de version qui continue de conserver le fichier — `<name>.upstream` reflète donc toujours la référence éditeur actuelle, pas celle d'une version passée. Quand la montée de version finit par ne plus conserver le fichier (parce que vos modifications ont été fusionnées dans l'éditeur, ou parce que le fichier a été remis à la valeur livrée), la ligne `upstream` cesse d'être rafraîchie.
 
 ---
 

@@ -10,7 +10,16 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-06-22-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.22.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-22</span></a>
+  <a href="#v2026-07-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-05</span></a>
+  <a href="#v2026-07-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-03</span></a>
+  <a href="#v2026-07-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-02</span></a>
+  <a href="#v2026-06-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-26</span></a>
+  <a href="#v2026-06-25-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+  <a href="#v2026-06-25-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+  <a href="#v2026-06-25-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+  <a href="#v2026-06-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+  <a href="#v2026-06-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-23</span></a>
+  <a href="#v2026-06-22-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.22.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-22</span></a>
   <a href="#v2026-06-21-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
   <a href="#v2026-06-21-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
   <a href="#v2026-06-21-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
@@ -65,6 +74,145 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Version initiale</span></a>
 </div>
+
+---
+
+## 2026.07.05.1 — 2026-07-05 \{#v2026-07-05-1\}
+
+Plusieurs factures antérieures par document et par ligne — et pack de contrôle CTC France aligné sur FNFE V1.4.0.
+
+### Nouveautés
+
+- **Plusieurs factures antérieures (BG-3, 0..n).** Une facture peut désormais référencer plusieurs factures antérieures, et non plus une seule. Un nouveau mappage *Factures antérieures — répété* dans l'éditeur XSL parcourt un groupe source répétitif et génère un `cac:BillingReference` par occurrence (avec une date d'émission facultative), en complément de la référence unique BT-25/BT-26 existante.
+- **Facture antérieure au niveau ligne (EXT-FR-FE-136).** Une ligne de facture peut désormais porter sa propre référence à une facture antérieure — utile pour les avoirs en ligne. Un nouveau mappage par ligne génère `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` (avec une date d'émission facultative) à l'intérieur de la ligne, à la bonne position dans le schéma.
+
+### Mises à jour
+
+- **Règles de contrôle France CTC portées en V1.4.0 du FNFE (XP Z12-012, 30 juin 2026).** Les schematrons UBL Flux 2 et EXTENDED-CTC-FR, ainsi que les listes de codes EN 16931, sont alignés sur la publication du 30 juin 2026. Elle corrige notamment le chemin XPath de la référence à la facture antérieure en ligne (EXT-FR-FE-136) et ajoute `RECAPITULATIF_COTRAITANCE` aux types de pièces jointes admis. Les règles standard deviennent obligatoires à l'émission à compter du 1er septembre 2026.
+- **L'avertissement `UBL-CR-001` (« une facture UBL ne devrait pas contenir d'extensions ») n'est plus remonté.** Il se déclenchait sur les champs `ext:UBLExtensions` que NomaUBL émet volontairement. Il est désormais filtré lors de la collecte des résultats de validation — le schematron standard reste intact, une mise à jour ne le réintroduira donc pas.
+
+### Corrections
+
+- **La référence à la facture précédente ne casse plus le schéma.** Quand une référence de commande (BT-13) et une référence à la facture précédente (BT-25/BT-26) étaient présentes toutes les deux, elles sortaient dans le mauvais ordre et le schéma UBL refusait le document. `cac:OrderReference` précède désormais `cac:BillingReference`. Les modèles déployés reçoivent le correctif en relançant la montée de version.
+
+---
+
+## 2026.07.03.1 — 2026-07-03 \{#v2026-07-03-1\}
+
+Joindre à la facture UBL une pièce déjà encodée en base64 dans le spool source.
+
+### Nouveautés
+
+- **Joindre une pièce déjà présente dans le spool.** Un document encodé en base64 dans le spool source peut maintenant être joint à la facture UBL en le mappant dans l'éditeur XSL. Une nouvelle section *Pièces jointes intégrées* relie le champ base64, un nom de fichier (texte fixe ou espace réservé `{Champ}` / `{Groupe/Champ}`, par ex. `{DocNumber}.pdf`), le type MIME et un code choisi dans la liste de référence de la plateforme (PJA, RIB, BON_LIVRAISON…) à une `cac:AdditionalDocumentReference` / `EmbeddedDocumentBinaryObject` (BT-125) — jusqu'à quatre par facture. La pièce se place au bon endroit dans le schéma et coexiste avec les pièces jointes déjà gérées (fichiers sur disque, PDF lisible généré). Jusqu'ici, une pièce jointe ne pouvait venir que d'un fichier sur disque ou du PDF généré, jamais d'un champ base64 déjà présent dans le spool.
+
+---
+
+## 2026.07.02.1 — 2026-07-02 \{#v2026-07-02-1\}
+
+Valeurs constantes dans les mappages, et lot de corrections sur le scan / l'extraction BIP.
+
+### Améliorations
+
+- **Valeurs constantes dans les mappages.** Une valeur mappée encadrée par des accents graves — par exemple `` `EDI` `` — est écrite telle quelle au lieu d'être lue dans la source. Valable pour les champs d'extension, les notes et les attributs d'article ; utile pour les valeurs fixes propres à une plateforme.
+
+### Corrections
+
+- **Jobs BIP dans les deux statuts de fin.** Le scan et l'extraction retiennent maintenant les statuts `D` et `FD` (auparavant `D` seul).
+- **Filtre de langue BIP corrigé.** Le filtre s'appuyait sur une colonne qui n'existe que dans la table de sortie PDF ; appliqué à la requête du XML d'entrée, il faisait échouer l'extraction. Il ne porte désormais que sur la requête de sortie, là où la colonne existe.
+- **Scan BIP planifié : l'ancienneté est respectée.** Un scan lancé depuis l'interface web applique désormais le paramètre global `bipLookbackDays`, comme le faisait déjà la ligne de commande.
+- **Fenêtre de date de soumission BIP.** Le filtre s'appuie enfin sur la bonne colonne, sur une fenêtre allant jusqu'au jour même inclus : les jobs soumis aujourd'hui ne sont plus écartés, et ceux hors fenêtre (dont le numéro peut être plus élevé) sont exclus.
+- **Post-génération BIP.** Le numéro de job était mal isolé dans le nom de fichier, ce qui provoquait une erreur de format et empêchait le nettoyage côté JDE ; c'est corrigé.
+
+---
+
+## 2026.06.26.1 — 2026-06-26 \{#v2026-06-26-1\}
+
+Les champs d'extension personnalisés à plusieurs valeurs passent la validation.
+
+### Corrections
+
+- **Champs d'extension personnalisés à plusieurs valeurs.** `ext:ExtensionContent` n'acceptant qu'un seul élément enfant, chaque champ est maintenant émis dans son propre bloc `ext:UBLExtension` / `ext:ExtensionContent` — sous forme d'élément simple sans préfixe ni `xmlns`, dans l'espace de noms du document, comme l'attendent les plateformes agréées.
+
+---
+
+## 2026.06.25.4 — 2026-06-25 \{#v2026-06-25-4\}
+
+Le rapport de montée de version signale les modèles à corriger à la main, et Versions de fichiers sait comparer un fichier conservé à sa version upstream.
+
+### Améliorations
+
+- **La montée de version signale les modèles à corriger à la main.** Quand un modèle personnalisé (par ex. un `ubl:supplier-party` dérivé dans `ubl-defaults.xsl`) est conservé pendant une montée de version mais que le framework y a depuis ajouté un paramètre qu'il ne déclare pas, le rapport de montée de version le liste désormais sous *Correction manuelle requise* avec le `<xsl:param>` exact à ajouter — au lieu de compiler puis d'échouer à la génération de facture avec une erreur `XTSE0680` obscure.
+- **Comparer un fichier avec sa version upstream.** Dans Versions de fichiers, un fichier conservé par la montée de version affiche désormais une ligne *upstream* — la version livrée, enregistrée en `<name>.upstream`. Comparez votre fichier actif avec elle pour voir précisément ce que la nouvelle version du framework a changé, et le fusionner à la main.
+
+---
+
+## 2026.06.25.3 — 2026-06-25 \{#v2026-06-25-3\}
+
+Champs d'extension personnalisés (`ext:UBLExtensions`) — issue de secours pour des données sans équivalent EN 16931.
+
+### Nouveautés
+
+- **Champs d'extension personnalisés (UBLExtensions).** Une nouvelle section *Champs d'extension* dans l'éditeur XSL mappe jusqu'à huit valeurs source vers un bloc `ext:UBLExtensions` sur la facture — pour des données attendues par un partenaire mais sans équivalent standard EN 16931 (mode d'acheminement, adresse de copie de livraison, identifiants partenaires…). Chaque champ porte un nom d'élément, une valeur (chemin source ou modèle `{template}`) et les mêmes conditions d'émission facultatives que les attributs d'article. Le bloc est écrit en tête de facture, comme l'exige le schéma UBL, et n'est produit que si au moins un champ est renseigné. Vide par défaut : les factures existantes restent inchangées. Les données placées ici sortent du modèle EN 16931 — privilégier le champ standard lorsqu'il existe (référence comptable BT-19, référence acheteur BT-10) et vérifier que la plateforme destinataire lit bien l'extension.
+
+---
+
+## 2026.06.25.2 — 2026-06-25 \{#v2026-06-25-2\}
+
+Suppression des zéros inutiles dans le PDF, réglable par modèle.
+
+### Nouveautés
+
+- **Interrupteur *Zéros inutiles* sur le modèle PDF.** Un nouvel interrupteur *Zéros inutiles* dans le concepteur de modèle PDF retire les décimales à zéro des montants, prix unitaires et quantités : un montant entier s'affiche `23` au lieu de `23,00`, et un prix unitaire `23,0000` devient `23`. Désactivé par défaut — l'affichage reste à deux décimales pour les montants et quatre pour les prix. Réglé par modèle, il s'applique au tableau des lignes, au bloc des totaux et aux PDF lisible et à l'écran.
+
+---
+
+## 2026.06.25.1 — 2026-06-25 \{#v2026-06-25-1\}
+
+Pays d'origine et code article vendeur dans le détail facture et le PDF, plus une montée de version plus fluide.
+
+### Nouveautés
+
+- **Pays d'origine en ligne de facture (BT-159).** L'éditeur de facture propose un champ pays d'origine par ligne, à côté du code de classification. Le code ISO part dans l'UBL ; le détail de la facture et tous les PDF — aperçu, traitement par lot et notification — affichent le nom complet du pays, résolu depuis la liste des pays partagée. Un interrupteur dans la mise en page des lignes du PDF en pilote l'affichage.
+- **Version du schéma de classification en ligne (BT-158-2).** Une ligne peut désormais porter la version de son schéma de classification, à côté de l'identifiant de liste ; elle apparaît entre crochets après le listID partout où la classification est affichée.
+- **Code article du vendeur dans le PDF (BT-155).** Le code article du vendeur s'imprime dans le détail de ligne, entre la référence acheteur et l'identifiant standard, avec son propre interrupteur d'affichage.
+
+### Améliorations
+
+- **SIREN acheteur reconstitué depuis le numéro de TVA.** Quand une fiche client ne porte pas de SIREN mais comporte un numéro de TVA français, le SIREN en est déduit pour que l'identifiant légal et l'adresse électronique de l'acheteur restent renseignés.
+- **Pays d'origine résolu depuis la liste de référence partagée.** La valeur source du pays est désormais résolue via la liste canonique des pays au moment de la production de la facture, au lieu d'une copie de la liste figée dans chaque déploiement. Corriger un libellé dans la liste s'applique partout, sans nouvelle sauvegarde.
+- **Adresses plus nettes dans le PDF.** Les adresses du vendeur, du client, de l'agent et de la livraison sont construites ligne à ligne : une partie dont l'adresse commence sur la deuxième ligne de voie n'imprime plus de ligne vide en tête. L'adresse de livraison affiche aussi son complément de voie.
+- **Montées de version plus fluides.** Avant d'importer les nouvelles fonctions, la montée de version aligne l'en-tête de feuille de style de chaque déploiement sur la version de langage et les espaces de noms livrés ; les modèles qui s'appuient sur de nouvelles fonctionnalités du framework compilent alors sans retouche manuelle.
+
+### Corrections
+
+- **Plus de blocs d'adresse vides en ligne de facture.** Une ligne qui ne porte qu'une date de livraison n'émet plus d'élément de lieu ou de pays vide, et les adresses de ligne ne retombent plus sur un pays par défaut qui n'a pas lieu d'être.
+- **L'en-tête de livraison ne se répète plus.** Dans le PDF, une ligne sans groupe de livraison n'efface plus le fil d'Ariane, évitant que la ligne suivante qui en porte un ré-imprime l'en-tête de livraison.
+- **Notes sur plusieurs lignes recomposées en un seul paragraphe.** Une note répartie sur plusieurs lignes source peut être rassemblée en un paragraphe unique au lieu de produire une note par ligne.
+
+---
+
+## 2026.06.23.1 — 2026-06-23 \{#v2026-06-23-1\}
+
+Pays d'origine et classification produit en ligne, motifs de remise et de frais par défaut, remise de ligne dérivée d'un pourcentage seul.
+
+### Nouveautés
+
+- **Pays d'origine et classification produit en ligne (BT-158 / BT-159).** Deux nouveaux champs dans la section *Lignes* de l'éditeur XSL pointent vers le chemin source par ligne. Un onglet *Pays & classification* dans Valeurs par défaut UBL indique le format côté source — code ISO, libellé français ou libellé anglais — et le moteur résout la valeur via la liste canonique des pays au moment de la sauvegarde. Pas de table de correspondance parallèle : si un libellé est erroné, on le corrige une fois dans la liste. Code de classification, listID et version par défaut prennent le relais quand le chemin par ligne renvoie vide.
+- **Motifs de remise et de frais par défaut (BR-42 / BR-43).** Nouvel onglet *Remises / charges* dans Valeurs par défaut UBL : on saisit un libellé et un code motif appliqués quand le chemin du modèle client renvoie vide. `ChargeIndicator` choisit la paire — remise ou frais — donc une seule configuration couvre les deux cas.
+- **Remise de ligne dérivée d'un pourcentage seul.** Quand la source ne porte que le pourcentage, le moteur déduit le montant et la base à partir du net de la ligne. Les combinaisons mixtes fonctionnent aussi : pourcentage + base déduit le montant, pourcentage + montant déduit la base. Le signe en suffixe JDE (`25.00-`) est normalisé automatiquement.
+- **Mode remise de ligne sans groupe.** Quand les champs de remise se trouvent directement sur la ligne, sans élément parent, on pointe le TAG *Item AC* sur `.` (ou on le laisse vide) et le moteur itère la ligne elle-même.
+- **Identifiant article vendeur enfin émis (BT-155).** Le TAG était déclaré mais n'arrivait pas dans la sortie. Le moteur le rend désormais entre le libellé article et le pays d'origine, conformément à la séquence UBL 2.1.
+
+### Améliorations
+
+- **La montée de version propage les nouveaux symboles du framework dans les modèles déployés.** Deux nouvelles passes durant la migration ferment le trou qui imposait de modifier chaque modèle client à la main après chaque version. Premier passage : les nouvelles variables, fonctions et templates de la référence livrée sont ajoutées au fichier de valeurs par défaut du déploiement, sans toucher aux valeurs saisies par l'opérateur. Second passage : pour chaque modèle par document, les doublons hérités de ces mêmes noms sont retirés du bloc d'override, laissant la version importée gagner la précédence XSL. Il suffit désormais de relancer la migration pour réparer les modèles qui ne compilaient plus depuis que le corps du framework s'est mis à appeler de nouveaux symboles ou de nouveaux paramètres de template.
+- **Pied de page TVA encapsulé par taux.** Le convertisseur PDF→XML ouvre désormais un wrapper neuf pour chaque pied de page de taux, ce qui permet à une facture multi-taux de produire un bloc par taux plutôt qu'une suite plate de champs. Les factures à taux unique conservent un seul bloc.
+
+### Corrections
+
+- **Plus de ligne perdue après un saut de page (PDF→XML).** JDE n'émet le préambule de livraison qu'une fois par bloc BL ; les pages de continuation enchaînent les lignes sans nouveau préambule. Le wrapper de livraison est désormais reconduit d'une page à l'autre et n'est relâché que par les totaux ou le pied de page TVA, donc les lignes de continuation restent dans le bon parent.
+- **Montants PDF à séparateurs ambigus (`1.682.28`).** Quand le même caractère sert de séparateur de milliers et de décimal — ou après la conversion française virgule → point qui transforme `1,682.28` en `1.682.28` — la chaîne se réduit désormais à `1682.28`. Le dernier `.` est conservé comme décimal, les précédents sautent.
+- **Règle Schematron locale `BR-NOMAUBL-01` retirée.** La condition « avoir → facture antérieure référencée » est désormais imposée par `BR-FR-CO-05` dans le pack Flux2 v1.3.1 du 2026-04-30. Le doublon local disparaît ; le fichier reste en place comme structure d'accueil pour de futures règles maison.
 
 ---
 

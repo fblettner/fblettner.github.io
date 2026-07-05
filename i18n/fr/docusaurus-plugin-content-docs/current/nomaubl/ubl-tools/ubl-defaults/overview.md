@@ -97,6 +97,8 @@ Chaque onglet correspond à un groupe surchargeable de manière indépendante. L
 | [**Currency Code Mapping**](./currency-code-mapping.md) | BT-5 | Devise par défaut + mapping source → code ISO 4217. |
 | [**Document Type / BAR Routing**](./document-type-bar-routing.md) | BG-25 | Mapping des codes de routage B2B. |
 | [**VAT Categories**](./vat-categories.md) | BT-118 / BT-121 | Catégorie TVA par défaut, taux zéro, mappings des codes de catégorie et des codes d'exonération `VATEX-*`. |
+| [**Pays & classification**](./country-classification.md) | BT-158 / BT-159 | Format côté source du pays d'origine par ligne (code ISO, libellé français, libellé anglais) et repli sur le code de classification, le listID du schéma et sa version quand le chemin par ligne renvoie vide. |
+| [**Remises / charges**](./allowances-charges.md) | BR-42 / BR-43 | Texte et code de motif par défaut, par direction — `ChargeIndicator` choisit la paire, une seule configuration couvre remises et charges. |
 | [**Suppliers / Companies**](./suppliers-companies.md) | BG-4 | Annuaire des sociétés fournisseurs (défaut + alternatives). |
 | [**French Legal Notes**](./french-legal-notes.md) | BT-22 | Modèles de mentions réglementaires françaises (délai de paiement, indemnité de recouvrement, conditions générales…). |
 

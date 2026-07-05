@@ -10,7 +10,16 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-06-22-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.06.22.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-22</span></a>
+  <a href="#v2026-07-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-05</span></a>
+  <a href="#v2026-07-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-03</span></a>
+  <a href="#v2026-07-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-02</span></a>
+  <a href="#v2026-06-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-26</span></a>
+  <a href="#v2026-06-25-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+  <a href="#v2026-06-25-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+  <a href="#v2026-06-25-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+  <a href="#v2026-06-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+  <a href="#v2026-06-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-23</span></a>
+  <a href="#v2026-06-22-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.22.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-22</span></a>
   <a href="#v2026-06-21-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
   <a href="#v2026-06-21-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
   <a href="#v2026-06-21-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
@@ -65,6 +74,145 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v1-0-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>1.0.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· Initial release</span></a>
 </div>
+
+---
+
+## 2026.07.05.1 — 2026-07-05 \{#v2026-07-05-1\}
+
+Multiple preceding invoices per document and per line — plus the French CTC schematron pack refreshed to FNFE V1.4.0.
+
+### New features
+
+- **Multiple preceding-invoice references (BG-3, 0..n).** An invoice can now reference several prior invoices, not just one. A new *Preceding Invoices — repeating* mapping in the XSL editor iterates a repeating source group and emits one `cac:BillingReference` per occurrence (each with an optional issue date), alongside the existing single BT-25/BT-26 reference.
+- **Line-level preceding-invoice reference (EXT-FR-FE-136).** An invoice line can now carry its own reference to a prior invoice — useful for line-level credits. A new per-line mapping emits `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` (with an optional issue date) inside the line, in the correct schema position.
+
+### Updates
+
+- **French CTC validation rules refreshed to FNFE V1.4.0 (XP Z12-012, 30 June 2026).** The Flux 2 and EXTENDED-CTC-FR UBL schematrons, plus the EN 16931 code lists, are aligned with the 30 June 2026 publication. Among other changes, it corrects the XPath for the line-level preceding-invoice reference (EXT-FR-FE-136) and adds `RECAPITULATIF_COTRAITANCE` to the accepted attachment types. The standard rules become mandatory on issuance from 1 September 2026.
+- **The `UBL-CR-001` warning ("a UBL invoice should not include extensions") is no longer surfaced.** It fired on the `ext:UBLExtensions` custom fields NomaUBL emits by design. It's now filtered out when validation results are collected — the standard schematron is left untouched, so a future update won't reintroduce the warning.
+
+### Fixes
+
+- **Preceding-invoice reference no longer breaks the schema.** When a purchase-order reference (BT-13) and a preceding-invoice reference (BT-25/BT-26) were both present, they were emitted in the wrong order and the UBL schema refused the document. `cac:OrderReference` now correctly precedes `cac:BillingReference`. Deployed templates pick up the fix by re-running the upgrade.
+
+---
+
+## 2026.07.03.1 — 2026-07-03 \{#v2026-07-03-1\}
+
+Embed an attachment already carried as base64 in the source spool, straight into the UBL invoice.
+
+### New features
+
+- **Embed a spool attachment in the invoice.** A document already carried as base64 in the source spool can now be attached to the UBL invoice by mapping it in the XSL editor. A new *Embedded Attachments* section maps the base64 field, a filename (literal or a `{Field}` / `{Group/Field}` placeholder, e.g. `{DocNumber}.pdf`), the MIME type and a qualifier picked from the platform's reference list (PJA, RIB, BON_LIVRAISON…) into a `cac:AdditionalDocumentReference` / `EmbeddedDocumentBinaryObject` (BT-125) — up to four per invoice. It lands in the correct schema position and sits alongside the existing attachments (external files, generated readable PDF), all kept together. Until now attachments could only come from files on disk or the generated PDF, not from a base64 field inside the spool.
+
+---
+
+## 2026.07.02.1 — 2026-07-02 \{#v2026-07-02-1\}
+
+Constant values in field mappings, plus a batch of BIP scan / extract fixes.
+
+### Improvements
+
+- **Constant values in field mappings.** A mapped value wrapped in backticks — for example `` `EDI` `` — is emitted as a fixed constant instead of being read from the source. It works on custom extension fields, notes and item properties, and is handy for platform-specific values that never change.
+
+### Fixes
+
+- **BIP jobs in both completed states are collected.** The scan and extract queries now match job status `D` and `FD` (previously only `D`).
+- **BIP language filter fixed.** The filter used a column that only exists on the PDF output table, so applying it to the input-XML query broke the extraction; it now sits on the output query, where the column lives.
+- **Scheduled BIP scan honours the lookback floor.** A scan launched from the web UI now applies the `bipLookbackDays` Global setting, like the command-line scan already did.
+- **BIP submit-date window fixed.** The floor now filters the real submit-date column as a window up to today, so jobs submitted today are included and out-of-window jobs (whose numbers can be higher) are excluded.
+- **BIP post-generation no longer errors on the job key.** The job number was mis-read from the file base name, so the JDE cleanup step failed with a number-format error; it now runs.
+
+---
+
+## 2026.06.26.1 — 2026-06-26 \{#v2026-06-26-1\}
+
+Custom extension fields validate cleanly with more than one field configured.
+
+### Fixes
+
+- **Custom extension fields with several fields configured.** UBL's `ext:ExtensionContent` admits a single child element, so each configured field is now emitted in its own `ext:UBLExtension` / `ext:ExtensionContent` block — as a plain unprefixed element in the document's own namespace (no `xmlns`), the shape accepted by certified platforms.
+
+---
+
+## 2026.06.25.4 — 2026-06-25 \{#v2026-06-25-4\}
+
+Upgrade report flags templates that still need a manual fix, and File Versions can compare a preserved file with its shipped upstream version.
+
+### Improvements
+
+- **Upgrade flags templates that need a manual fix.** When a customised template (for example a forked `ubl:supplier-party` in `ubl-defaults.xsl`) is preserved during an upgrade but the framework has since added a parameter it doesn't declare, the upgrade report now lists it under *Manual fix required* with the exact `<xsl:param>` to add — instead of compiling fine and then failing at invoice generation with a cryptic `XTSE0680` error.
+- **Compare a file with its upstream version.** In File Versions, a file preserved by the upgrade now carries an *upstream* row — the shipped version saved as `<name>.upstream`. Compare your live file against it to see precisely what the new framework version changed, and merge it by hand.
+
+---
+
+## 2026.06.25.3 — 2026-06-25 \{#v2026-06-25-3\}
+
+Custom extension fields (`ext:UBLExtensions`) — a platform-specific escape hatch for data that has no EN 16931 home.
+
+### New features
+
+- **Custom extension fields (UBLExtensions).** A new *Custom Extension Fields* section in the XSL editor maps up to eight source values into a UBL `ext:UBLExtensions` block on the invoice — for data a trading partner needs that has no standard EN 16931 home (routing method, delivery-copy address, partner identifiers…). Each field carries an element name, a source path or `{template}` value and the same optional emit conditions as item properties. The block is written as the first element of the invoice, as the UBL schema requires, and is produced only when at least one field resolves. Empty by default, so existing invoices are unchanged. Data placed here sits outside the EN 16931 model — prefer the standard field when one exists (BT-19 accounting reference, BT-10 buyer reference) and confirm with the receiving platform that it reads the extension.
+
+---
+
+## 2026.06.25.2 — 2026-06-25 \{#v2026-06-25-2\}
+
+Trim trailing zero decimals from amounts, unit prices and quantities in the PDF — per template.
+
+### New features
+
+- **Trim zeros switch on the PDF template.** A new *Trim zeros* switch in the PDF template builder drops trailing zero decimals from amounts, unit prices and quantities — a whole amount prints as `23` instead of `23.00`, and a `23.0000` unit price prints as `23`. Off by default, which keeps the fixed two-decimal amount and four-decimal price display. Set per template, it applies to the line table, the totals box and both the readable and on-screen PDFs.
+
+---
+
+## 2026.06.25.1 — 2026-06-25 \{#v2026-06-25-1\}
+
+Country of origin and seller's item code on the invoice detail and the PDF, and a smoother framework upgrade.
+
+### New features
+
+- **Country of origin on invoice lines (BT-159).** The invoice editor carries a country-of-origin field per line, next to the classification code. The ISO code is written to the UBL, while the invoice detail view and every PDF — preview, batch and notification — show the country's full name resolved from the shared countries list. A toggle in the PDF line layout controls whether it prints.
+- **Classification scheme version on lines (BT-158-2).** A line can now record the version of its classification scheme alongside the list identifier; it appears in brackets after the list ID wherever the classification is shown.
+- **Seller's item code in the PDF (BT-155).** The seller's article code now prints in the per-line detail, between the buyer reference and the standard identifier, with its own show / hide toggle.
+
+### Improvements
+
+- **Buyer SIREN recovered from the VAT number.** When a customer record carries no SIREN but does carry a French VAT identifier, the SIREN is derived from it so the buyer's legal identifier and electronic address are still populated.
+- **Country of origin resolved from the shared reference list.** The source country value is now resolved against the canonical countries list when the invoice is produced, instead of a copy of the list baked into each deployment. Correcting a label in the list takes effect everywhere with no re-save.
+- **Cleaner addresses in the PDF.** Seller, customer, agent and delivery addresses are built line by line, so a party whose address starts on the second street line no longer prints a leading blank line. The delivery address also shows its additional street line.
+- **Smoother framework upgrades.** Before importing new functions, the upgrade aligns each deployment's stylesheet header with the shipped language version and namespaces, so templates that rely on newly added framework features compile without manual edits.
+
+### Fixes
+
+- **No more empty address blocks on invoice lines.** A line that only carries a delivery date no longer emits an empty location or country element, and line addresses no longer fall back to a default country that doesn't belong there.
+- **Delivery heading no longer repeats.** In the PDF, a line with no delivery group no longer clears the breadcrumb and makes the next line that does carry one re-print the delivery heading.
+- **Multi-row notes rebuilt into a single paragraph.** A note split across several source rows can be collected back into one paragraph instead of producing a separate note per row.
+
+---
+
+## 2026.06.23.1 — 2026-06-23 \{#v2026-06-23-1\}
+
+Country of origin and commodity classification on invoice lines, allowance / charge reason defaults, and line allowances derived from a percentage alone.
+
+### New features
+
+- **Country of origin and commodity classification on invoice lines (BT-158 / BT-159).** Two new fields in the *Invoice Lines* section of the XSL editor map the per-line source path. A *Country & Classification* tab in UBL Defaults sets the source format — ISO code, French description or English description — and the framework resolves the value against the canonical countries list at save time. No parallel mapping table to maintain: if a label is wrong, edit it once in the country list. Classification code, scheme listID and version defaults fall back when the per-line path is empty.
+- **Allowance and charge reason defaults (BR-42 / BR-43).** New *Allowances / Charges* tab in UBL Defaults sets a fallback reason text and reason code per direction. `ChargeIndicator` picks the pair, so a single configuration covers both allowance and charge cases.
+- **Line allowance derived from a percentage alone.** When the source carries only the percentage, the framework derives both amount and base from the line net amount. Mixed combinations are also covered: percentage + base derives the amount, percentage + amount derives the base. JDE's trailing-sign convention (`25.00-`) is normalised automatically.
+- **Group-less line allowance mode.** When the allowance fields sit directly on the invoice line with no wrapper element, point the *Item AC* TAG at `.` (or leave it empty) and the framework iterates the line itself.
+- **Seller's item identification emitted (BT-155).** The TAG was declared but never reached the output. The framework now emits `cac:SellersItemIdentification / cbc:ID` between item name and country of origin, per the UBL 2.1 sequence.
+
+### Improvements
+
+- **Upgrade propagates new framework symbols into deployed templates.** Two new passes during upgrade close the migration gap that used to require hand-editing every customer template after every release. First, the deployment's defaults file gets any new variables, functions or templates the shipped reference adds — operator-configured values stay untouched. Second, each customer per-document template has legacy duplicates of those same names stripped from its override block, so the imported (current) version wins under XSL precedence. Re-running the upgrade now fixes templates that previously failed to compile because the framework body started calling new symbols or new template parameters.
+- **Multi-VAT footer wrapped per rate.** The PDF-to-XML converter now opens a fresh wrapper section for each VAT-rate footer, so an invoice with multiple rates produces one block per rate instead of a flat run of fields. Single-rate invoices still produce one block.
+
+### Fixes
+
+- **Invoice lines no longer dropped after page breaks (PDF-to-XML).** JDE emits the delivery preamble once per BL block; continuation pages stream more line rows without a fresh preamble. The delivery wrapper is now carried across page breaks and only released by the totals or VAT footer, so continuation rows stay in the right parent.
+- **PDF amounts with ambiguous separators (`1.682.28`).** When the same character serves as both thousands and decimal separator — or after the French comma-to-dot pass turns `1,682.28` into `1.682.28` — the value now collapses to `1682.28`. The last `.` is treated as the decimal, anything earlier is dropped.
+- **Local Schematron rule `BR-NOMAUBL-01` retired.** The credit-note preceding-invoice condition is now enforced by `BR-FR-CO-05` in the 2026-04-30 Flux2 v1.3.1 pack, so the local duplicate is gone. The file stays in place as scaffolding for future house rules.
 
 ---
 

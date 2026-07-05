@@ -207,18 +207,22 @@ The form is organised by UBL document area. Each section appears only when at le
 | Section | UBL area | Notable variables |
 |---|---|---|
 | **Document Root** | Invoice group element name | `TAG_ROOT` — the XML element wrapping a single invoice. |
+| **Custom Extension Fields** | `ext:UBLExtensions` | Escape hatch for data with no EN 16931 home — see [Custom Extension Fields](#custom-extension-fields) below. |
 | **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-19 | Document number, dates, references. |
 | **Billing References** | BT-11, BT-14 to BT-18, BT-122 to BT-124 | Project, contract, dispatch, supporting documents. |
+| **Preceding Invoices — repeating** *(BG-3, 0..n)* | BT-25, BT-26 | Iterates a repeating source group and emits one `cac:BillingReference` per prior invoice (each with an optional issue date), alongside the single BT-25/BT-26 reference already handled in *Billing References*. |
+| **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Attach a document already carried as base64 in the source spool — up to four per invoice. See [Embedded Attachments](#embedded-attachments) below. |
 | **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact. |
 | **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact. |
 | **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
 | **Delivery** | BT-70 to BT-80 | Delivery date and address. |
 | **Payment** | BT-20, BT-81 to BT-91 | Means, IBAN, BIC, mandate, terms. |
 | **VAT** | BT-110, BT-116 to BT-121 | VAT breakdown rows — see [scoping](#scoping) below. |
-| **Invoice Lines** | BT-126 to BT-161 | Line item details — see [scoping](#scoping) below. |
+| **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158) and classification scheme version (BT-158-2) — see [scoping](#scoping) below. |
 | **Item Properties** *(BG-32)* | BG-32 | Repeating product attributes attached to a line. |
-| **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Per-line discount or charge. |
+| **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Per-line discount or charge. Point the *Item AC* TAG at `.` (or leave it empty) when the allowance fields sit directly on the invoice line with no wrapper element — the framework then iterates the line itself. When the source carries only the percentage, the amount and base are derived from the line net amount; percentage + base derives the amount, percentage + amount derives the base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Per-line document references — supporting documents (BT-128, UNTDID 1153 scheme) and the referenced purchase-order line via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, group EXT-FR-FE-BG-09, placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence). |
+| **Line Preceding Invoice** *(EXT-FR-FE-136)* | Line-level `cac:BillingReference` | Reference to a prior invoice at the line level — useful for line-level credits. Emits `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` (with an optional issue date) inside the line, at the correct schema position. |
 | **Line Delivery** *(EXT-FR-FE-BG-10)* | French extension | Per-line delivery group. |
 | **Line Notes** *(BT-127)* | BT-127 | Free-text notes attached to a line. |
 | **Invoice Notes** *(BT-22)* | BT-22 | Document-level free-text notes. |
@@ -236,7 +240,8 @@ A `TAG_*` select isn't limited to a single XML path:
 
 - **Concatenation (`+`).** Glue several source tags into one UBL value with a ` + ` operator — `'FirstName + LastName'` joins them with a single space, `'First + ", " + Last'` sets a custom joiner, and quoted literals are emitted verbatim. No more XSL preprocessing step when a UBL field combines several source columns.
 - **Conditional value list.** The `cond_value` argument of the `ubl:emit-item-prop` / `ubl:emit-note` helpers accepts a single value (as before) or a comma-separated whitelist — `'KWH,M3,LTR'` matches when the source value is any of the three. Whitespace around each item is trimmed.
-- **Parent axis (`..`).** *(2026.06.14)* A path may step up to the parent element: `../FIELD` reaches a sibling of the current line element, `../../FIELD/Sub` two levels up. It unblocks source XML that nests line items under a parent element which also carries the line-level references (for example the referenced customer order, BT-132); paths without `..` resolve exactly as before.
+- **Parent axis (`..`).** A path may step up to the parent element: `../FIELD` reaches a sibling of the current line element, `../../FIELD/Sub` two levels up. It unblocks source XML that nests line items under a parent element which also carries the line-level references (for example the referenced customer order, BT-132); paths without `..` resolve exactly as before.
+- **Constant values (backticks).** A value wrapped in backticks — for example `` `EDI` `` — is written as a fixed constant instead of being read from the source. Works on custom extension fields, notes and item properties; handy for platform-specific values that never change.
 
 #### Scoping
 
@@ -296,6 +301,33 @@ A blue scope hint banner appears below each context variable to remind which pre
 #### XML Browser drawer
 
 When **Load XML Source** has been used, clicking the `↓` button next to any field opens an **XML Browser drawer** along the right edge of the page. The drawer lists every element path inside the current scope along with its sample value, so the right path can be picked by inspection rather than by typing. Closing the drawer leaves the editor in its previous state.
+
+#### Custom Extension Fields \{#custom-extension-fields\}
+
+For data a trading partner needs but that has no standard EN 16931 home — a routing method, a delivery-copy address, a partner identifier — the *Custom Extension Fields* section maps up to eight source values into a `ext:UBLExtensions` block at the top of the invoice. Each row carries:
+
+| Field | Effect |
+|---|---|
+| **Element name** | The tag written inside `ext:ExtensionContent`. Emitted as a plain unprefixed element in the document's own namespace (no `xmlns`) — the shape certified platforms accept. |
+| **Value** | A source path, an expression combining paths, a `{template}` call or a constant enclosed in backticks (see [Combining and matching source values](#combining-and-matching-source-values) above). |
+| **Emit condition** | The same optional `cond_value` predicate as item properties — omit the row when a source value doesn't match. |
+
+Every configured field is emitted in its own `ext:UBLExtension` / `ext:ExtensionContent` block (UBL admits a single child element per extension content), and the whole block is skipped when no field resolves. Empty by default, so existing invoices are unchanged.
+
+Data placed here sits **outside** the EN 16931 model — prefer the standard field when one exists (BT-19 accounting reference, BT-10 buyer reference…), and confirm with the receiving platform that it actually reads the extension.
+
+#### Embedded Attachments \{#embedded-attachments\}
+
+The *Embedded Attachments* section attaches a document already carried as base64 in the source spool straight to the UBL invoice — up to four per invoice. Each row maps:
+
+| Field | Effect |
+|---|---|
+| **Base64 source path** | The XML path that carries the base64 payload in the spool. |
+| **Filename** | Literal text or a `{Field}` / `{Group/Field}` placeholder — e.g. `{DocNumber}.pdf`. |
+| **MIME type** | The declared media type (`application/pdf`, `image/png`, …). |
+| **Qualifier** | A code picked from the platform's reference list (`PJA`, `RIB`, `BON_LIVRAISON`, …). |
+
+The row is emitted as a `cac:AdditionalDocumentReference` with an inline `EmbeddedDocumentBinaryObject` (BT-125). It lands at the correct schema position and sits alongside the existing attachment sources (external files on disk, the generated readable PDF) — everything stays together in the same output. Until this section, an attachment could only come from a file on disk or the generated PDF, never from a base64 field already inside the spool.
 
 ### XSL Editor
 

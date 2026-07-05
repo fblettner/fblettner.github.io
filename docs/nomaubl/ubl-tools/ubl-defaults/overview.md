@@ -97,6 +97,8 @@ Every tab holds one independently-overridable field group. The pages that follow
 | [**Currency Code Mapping**](./currency-code-mapping.md) | BT-5 | Default currency + source → ISO 4217 code mapping. |
 | [**Document Type / BAR Routing**](./document-type-bar-routing.md) | BG-25 | B2B routing code mapping. |
 | [**VAT Categories**](./vat-categories.md) | BT-118 / BT-121 | Default VAT category, zero rate, category code and `VATEX-*` exemption mappings. |
+| [**Country & Classification**](./country-classification.md) | BT-158 / BT-159 | Source-side format for the line-level country of origin (ISO code, French label, English label) plus the fallback classification code, scheme listID and version when the per-line path is empty. |
+| [**Allowances / Charges**](./allowances-charges.md) | BR-42 / BR-43 | Fallback reason text and reason code per direction — `ChargeIndicator` picks the pair, so a single configuration covers allowances and charges. |
 | [**Suppliers / Companies**](./suppliers-companies.md) | BG-4 | Supplier company directory (default + alternates). |
 | [**French Legal Notes**](./french-legal-notes.md) | BT-22 | Templates for French regulatory notes (payment delay, recovery fee, general terms…). |
 

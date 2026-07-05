@@ -207,18 +207,22 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | Section | Zone UBL | Variables principales |
 |---|---|---|
 | **Document Root** | Élément racine de la facture | `TAG_ROOT` — l'élément XML englobant une facture. |
+| **Custom Extension Fields** | `ext:UBLExtensions` | Issue de secours pour des données sans équivalent EN 16931 — voir [Champs d'extension](#custom-extension-fields) plus bas. |
 | **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-19 | Numéro, dates, références. |
 | **Billing References** | BT-11, BT-14 à BT-18, BT-122 à BT-124 | Projet, contrat, expédition, justificatifs. |
+| **Preceding Invoices — répété** *(BG-3, 0..n)* | BT-25, BT-26 | Parcourt un groupe source répétitif et génère un `cac:BillingReference` par facture antérieure (avec une date d'émission facultative), en complément de la référence unique BT-25/BT-26 déjà gérée dans *Billing References*. |
+| **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Joindre un document déjà encodé en base64 dans le spool source — jusqu'à quatre par facture. Voir [Pièces jointes intégrées](#embedded-attachments) plus bas. |
 | **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur. |
 | **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur. |
 | **Agent Party** | extended-ctc-fr | Tiers intermédiaire optionnel. |
 | **Delivery** | BT-70 à BT-80 | Date et adresse de livraison. |
 | **Payment** | BT-20, BT-81 à BT-91 | Moyen, IBAN, BIC, mandat, conditions. |
 | **VAT** | BT-110, BT-116 à BT-121 | Détail TVA — voir [scoping](#scoping) ci-dessous. |
-| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture — voir [scoping](#scoping) ci-dessous. |
+| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158) et la version de schéma (BT-158-2) par ligne — voir [scoping](#scoping) ci-dessous. |
 | **Item Properties** *(BG-32)* | BG-32 | Attributs produit attachés à une ligne. |
-| **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Remise ou charge par ligne. |
+| **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Remise ou charge par ligne. Pointer le TAG *Item AC* sur `.` (ou le laisser vide) quand les champs de remise se trouvent directement sur la ligne, sans élément parent — le moteur itère alors la ligne elle-même. Quand la source ne porte que le pourcentage, le montant et la base sont déduits du net de la ligne ; pourcentage + base déduit le montant, pourcentage + montant déduit la base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Références de document par ligne — pièces justificatives (BT-128, schéma UNTDID 1153) et la ligne de bon de commande référencée via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, groupe EXT-FR-FE-BG-09, placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1). |
+| **Line Preceding Invoice** *(EXT-FR-FE-136)* | `cac:BillingReference` par ligne | Référence à une facture antérieure au niveau ligne — utile pour un avoir en ligne. Écrit `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` (avec une date d'émission facultative) à l'intérieur de la ligne, à la bonne position dans le schéma. |
 | **Line Delivery** *(EXT-FR-FE-BG-10)* | Extension française | Groupe livraison par ligne. |
 | **Line Notes** *(BT-127)* | BT-127 | Notes libres attachées à une ligne. |
 | **Invoice Notes** *(BT-22)* | BT-22 | Notes libres au niveau document. |
@@ -230,13 +234,14 @@ Chaque champ affiche le libellé du BT, son code BT en badge coloré, la valeur 
 La référence de champs liste désormais chaque groupe (BG) et terme (BT) que le Schematron étendu (BR-FR / CTC-FR 1.3.1) contrôle et que l'éditeur sait mapper — BG-3 à BG-32 et les termes qu'ils encadrent (facture précédente BT-25/26, devise de comptabilisation TVA BT-6 / BT-111, date du fait générateur BT-7, identifiant fiscal vendeur BT-32, subdivisions acheteur / livraison BT-54 / BT-79, contact acheteur BT-56, lieu de livraison BT-71, numéro de carte tronqué BT-87, code unité de quantité BT-130, assiette et motif des charges de ligne BT-142/145, ligne 3 d'adresse de livraison BT-165, et d'autres). Ce que vous pouvez mapper ici correspond désormais exactement à ce que le [validateur](./validate.md) contrôle.
 :::
 
-#### Combiner et filtrer les valeurs source
+#### Combiner et filtrer les valeurs source \{#combining-and-matching-source-values\}
 
 Un select `TAG_*` ne se limite pas à un seul chemin XML :
 
 - **Concaténation (`+`).** Assemblez plusieurs tags source en une seule valeur UBL avec l'opérateur ` + ` — `'FirstName + LastName'` les joint par une espace, `'First + ", " + Last'` choisit le séparateur, et les chaînes entre guillemets sont rendues telles quelles. Plus besoin d'une étape de pré-traitement XSL quand un champ UBL agrège plusieurs colonnes source.
 - **Liste de valeurs conditionnelle.** Le paramètre `cond_value` des helpers `ubl:emit-item-prop` / `ubl:emit-note` accepte une valeur unique (comme avant) ou une liste séparée par des virgules — `'KWH,M3,LTR'` correspond quand la source vaut l'un des trois. Les espaces autour de chaque élément sont supprimés.
-- **Axe parent (`..`).** *(2026.06.14)* Un chemin peut remonter à l'élément parent : `../FIELD` atteint un voisin de l'élément ligne courant, `../../FIELD/Sub` deux niveaux plus haut. Cela débloque les XML sources où les lignes sont imbriquées sous un parent qui porte aussi les références de ligne (par exemple la commande client référencée, BT-132) ; les chemins sans `..` se résolvent exactement comme avant.
+- **Axe parent (`..`).** Un chemin peut remonter à l'élément parent : `../FIELD` atteint un voisin de l'élément ligne courant, `../../FIELD/Sub` deux niveaux plus haut. Cela débloque les XML sources où les lignes sont imbriquées sous un parent qui porte aussi les références de ligne (par exemple la commande client référencée, BT-132) ; les chemins sans `..` se résolvent exactement comme avant.
+- **Valeurs constantes (accents graves).** Une valeur encadrée par des accents graves — par exemple `` `EDI` `` — est écrite telle quelle au lieu d'être lue dans la source. Valable pour les champs d'extension, les notes et les attributs d'article ; utile pour les valeurs fixes propres à une plateforme.
 
 #### Scoping
 
@@ -296,6 +301,33 @@ Une bannière de scope bleue apparaît sous chaque variable de contexte pour rap
 #### Navigateur XML
 
 Une fois **Load XML Source** activé, cliquer sur le bouton `↓` en regard d'un champ ouvre un **navigateur XML** sur le bord droit de la page. Il liste tous les chemins d'éléments du scope courant et leur valeur d'échantillon — le bon chemin se choisit par inspection plutôt que par saisie. Sa fermeture laisse l'éditeur dans son état précédent.
+
+#### Champs d'extension \{#custom-extension-fields\}
+
+Pour des données attendues par un partenaire mais sans équivalent standard EN 16931 — un mode d'acheminement, une adresse de copie de livraison, un identifiant partenaire — la section *Custom Extension Fields* mappe jusqu'à huit valeurs source dans un bloc `ext:UBLExtensions` en tête de facture. Chaque ligne porte :
+
+| Champ | Effet |
+|---|---|
+| **Nom d'élément** | Le nom de balise écrit à l'intérieur de `ext:ExtensionContent`. Émis sous forme d'élément simple sans préfixe ni `xmlns`, dans l'espace de noms du document — la forme qu'attendent les plateformes agréées. |
+| **Valeur** | Un chemin source, une expression combinant plusieurs chemins, un appel de `{template}` ou une constante entre accents graves (voir [Combiner et filtrer les valeurs source](#combining-and-matching-source-values) plus haut). |
+| **Condition d'émission** | Le même prédicat facultatif `cond_value` que les attributs d'article — la ligne est ignorée si la valeur source ne correspond pas. |
+
+Chaque champ configuré est émis dans son propre bloc `ext:UBLExtension` / `ext:ExtensionContent` (UBL n'admet qu'un seul élément enfant par contenu d'extension), et le bloc complet est omis si aucun champ ne se résout. Vide par défaut : les factures existantes restent inchangées.
+
+Les données placées ici sortent du **modèle EN 16931** — privilégier le champ standard lorsqu'il existe (référence comptable BT-19, référence acheteur BT-10…) et vérifier que la plateforme destinataire lit bien l'extension.
+
+#### Pièces jointes intégrées \{#embedded-attachments\}
+
+La section *Embedded Attachments* joint à la facture UBL un document déjà encodé en base64 dans le spool source — jusqu'à quatre par facture. Chaque ligne mappe :
+
+| Champ | Effet |
+|---|---|
+| **Chemin source base64** | Le chemin XML qui porte la charge base64 dans le spool. |
+| **Nom de fichier** | Texte fixe ou espace réservé `{Champ}` / `{Groupe/Champ}` — par ex. `{DocNumber}.pdf`. |
+| **Type MIME** | Le type de média déclaré (`application/pdf`, `image/png`, …). |
+| **Code** | Un code choisi dans la liste de référence de la plateforme (`PJA`, `RIB`, `BON_LIVRAISON`, …). |
+
+La ligne est émise sous forme de `cac:AdditionalDocumentReference` avec un `EmbeddedDocumentBinaryObject` inline (BT-125). Elle se place à la bonne position dans le schéma et coexiste avec les autres sources de pièces jointes déjà gérées (fichiers sur disque, PDF lisible généré) — le tout reste groupé dans la même sortie. Jusqu'à cette section, une pièce jointe ne pouvait venir que d'un fichier sur disque ou du PDF généré, jamais d'un champ base64 déjà présent dans le spool.
 
 ### XSL Editor
 

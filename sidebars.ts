@@ -528,6 +528,8 @@ const sidebars: SidebarsConfig = {
             'nomaubl/ubl-tools/ubl-defaults/currency-code-mapping',
             'nomaubl/ubl-tools/ubl-defaults/document-type-bar-routing',
             'nomaubl/ubl-tools/ubl-defaults/vat-categories',
+            'nomaubl/ubl-tools/ubl-defaults/country-classification',
+            'nomaubl/ubl-tools/ubl-defaults/allowances-charges',
             'nomaubl/ubl-tools/ubl-defaults/suppliers-companies',
             'nomaubl/ubl-tools/ubl-defaults/french-legal-notes',
           ],
