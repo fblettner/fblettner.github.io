@@ -202,6 +202,16 @@ refresh_token_ttl_seconds = 1209600  # default 14 days
 
 Short access TTLs (e.g. 15 minutes) make permission changes propagate faster but increase the refresh load. The default 1-hour balance fits most installs.
 
+### Silent refresh
+
+The refresh is **silent** — the operator never sees a "session expired" prompt on an active browser session:
+
+- A **proactive timer** runs the refresh a short window before the access token expires, so the next API call already carries a fresh token.
+- Any API call that comes back **401** triggers a refresh-and-retry: Liberty asks the server for a new access token with the refresh token, replays the original request, and returns the result to the caller. The single 401 is transparent to the calling code.
+- If the refresh itself is refused (refresh token expired or revoked), the sign-in screen takes over — this is the only path where the user has to re-authenticate.
+
+The two paths are complementary. The proactive timer covers the common case where the session is quiet enough that no request would notice the expiring token; the 401-retry catches the corner case where the timer missed (a paused tab, a device coming out of sleep). Together they make an active session survive the access token's TTL without visible interruption.
+
 ---
 
 ## Sign-out

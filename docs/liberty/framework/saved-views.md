@@ -1,7 +1,7 @@
 ---
 title: Saved grid views
-description: "Save a data grid's columns, sort, filters and grouping as a named view — your own views follow you across devices, and an admin can publish shared views with one set as the default."
-keywords: [Liberty Framework, grid views, saved views, table view, columns, filters, sort, grouping, default view, shared views]
+description: "Save a data grid's columns, sort, filters and grouping as a named view — your own views follow you across devices, and an admin can publish shared views with one set as the default. Includes the Summary view — server-aggregated parent rows with lazy-loaded child rows — and day-grain filtering on timestamp columns."
+keywords: [Liberty Framework, grid views, saved views, table view, summary view, columns, filters, sort, grouping, default view, shared views, day-grain filter, timestamp filter, lazy load]
 ---
 
 # Saved grid views
@@ -38,6 +38,26 @@ A regular user reads shared views and manages their own; publishing a view for e
 | **Reset** | Reverts to the screen's default shared view, or to its base column layout if there is none. Handy when an older saved state conflicts with a column that is now conditionally hidden. *Reset* lives in the Columns menu. |
 
 The grid also remembers, **per device**, the last view you opened on each table — so you land back where you left off — while the views themselves live on the server.
+
+---
+
+## Summary view
+
+A saved view can be marked as a **Summary view** — instead of returning every row, the grid asks the server to aggregate parent rows and returns just the roll-up. Each parent row carries a chevron; clicking it lazy-loads the underlying child rows.
+
+Where it fits:
+
+- **Accurate counts over the full set** — the aggregate runs against the whole query result, not the current page, so a group count reflects the truth even on a million-row query.
+- **Bucketing on a timestamp column** — pick **day**, **month** or **year** as the aggregation bucket; the parent row shows the bucket label and the child rows are the raw records that fell into it.
+- **Server-side heavy-lifting** — the aggregation is a `GROUP BY` executed by the pool, not a JS reduce; child rows are fetched only when their parent is expanded, keeping the payload small.
+
+The summary layout replaces the previous nested grid — expandable **sub-rows** are native, so keyboard navigation and column resizing behave like the rest of the grid.
+
+---
+
+## Day-grain filter on timestamp columns
+
+Filtering a timestamp column doesn't force you to type a full `YYYY-MM-DD HH:MM:SS` bound. The column-header filter lets you pick a **day** and matches every row whose timestamp falls on that day (server-side lower / upper bound). It's the same widget that powers the Summary view's *day* bucket.
 
 ---
 

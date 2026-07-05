@@ -183,7 +183,12 @@ La colonne pointe sur une entrée *Recherche* ; la recherche elle-même est déf
 
 ### `PASSWORD`
 
-Masque la valeur dans les grilles (`••••••••`) et affiche une saisie de type mot de passe sur les formulaires. Combiné à la valeur par défaut côté formulaire `PASSWORD`, met en place un chemin d'écriture haché en Argon2 sûr par construction.
+Masque la valeur dans les grilles (`••••••••`) et affiche une saisie de type mot de passe sur les formulaires. Sur le chemin d'écriture, une colonne réglée `PASSWORD` est **chiffrée au repos** avec la clé maître du framework — le même format `ENC:` en AES-GCM que celui utilisé pour les secrets de la Settings UI. Voir [Chiffrement et secrets](./configuration/encryption-secrets.md).
+
+Deux conventions accompagnent la règle côté formulaire :
+
+- **Un champ vide en modification préserve la valeur stockée.** Un formulaire qui envoie un mot de passe vide en mise à jour n'écrase jamais le secret existant — le chemin d'update saute la colonne quand la valeur entrante est vide. Un utilisateur qui modifie un autre champ n'a donc pas à re-saisir son mot de passe.
+- **Combinée à la valeur par défaut côté formulaire `PASSWORD`**, le framework hache la valeur en clair avec Argon2 *avant* de la chiffrer au repos — le blob sur disque est un wrap AES-GCM autour d'un hash Argon2, et seule une comparaison avec un texte clair fourni par l'appelant permet de ressortir le hash pour vérification.
 
 ---
 

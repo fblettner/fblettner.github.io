@@ -1,7 +1,7 @@
 ---
 title: Vues de grille enregistrées
-description: "Enregistrez les colonnes, le tri, les filtres et le regroupement d'une grille comme une vue nommée — vos vues vous suivent sur tous vos appareils, et un administrateur peut publier des vues partagées dont une par défaut."
-keywords: [Liberty Framework, vues de grille, vues enregistrées, table view, colonnes, filtres, tri, regroupement, vue par défaut, vues partagées]
+description: "Enregistrez les colonnes, le tri, les filtres et le regroupement d'une grille comme une vue nommée — vos vues vous suivent sur tous vos appareils, et un administrateur peut publier des vues partagées dont une par défaut. Inclut la Vue synthèse — lignes parents agrégées côté serveur avec chargement paresseux des lignes filles — et le filtre à la journée sur les colonnes horodatées."
+keywords: [Liberty Framework, vues de grille, vues enregistrées, table view, vue synthèse, colonnes, filtres, tri, regroupement, vue par défaut, vues partagées, filtre à la journée, filtre horodatage, chargement paresseux]
 ---
 
 # Vues de grille enregistrées
@@ -37,7 +37,27 @@ Un utilisateur lit les vues partagées et gère les siennes ; publier une vue po
 | **Supprimer la vue** | Retire l'une de vos vues (l'icône corbeille). |
 | **Réinit.** | Revient à la vue partagée par défaut de l'écran, ou à sa disposition de colonnes de base s'il n'y en a pas. Pratique quand un état enregistré plus ancien entre en conflit avec une colonne désormais masquée sous condition. *Réinit.* se trouve dans le menu Colonnes. |
 
-La grille mémorise aussi, **par appareil**, la dernière vue que vous avez ouverte sur chaque table — vous retombez donc là où vous étiez — tandis que les vues elles-mêmes vivent sur le serveur.
+La grille mémorise aussi, **par appareil**, la dernière vue que vous avez ouverte sur chaque table — vous retombez donc là où vous étiez — tandis que les vues elles-mêmes restent sur le serveur.
+
+---
+
+## Vue synthèse
+
+Une vue enregistrée peut être marquée comme **Vue synthèse** — au lieu de renvoyer chaque ligne, la grille demande au serveur d'agréger les lignes parents et ne renvoie que le résumé. Chaque ligne parent porte un chevron : cliquer dessus déclenche le chargement paresseux des lignes filles sous-jacentes.
+
+Où c'est utile :
+
+- **Comptages exacts sur l'ensemble** — l'agrégation porte sur la totalité du résultat de la requête, pas sur la page courante ; un comptage de groupe reste juste même sur une requête à un million de lignes.
+- **Regroupement sur une colonne horodatée** — choisir **jour**, **mois** ou **année** comme granularité ; la ligne parent affiche le libellé du seau et les lignes filles sont les enregistrements bruts qui y tombent.
+- **Travail lourd côté serveur** — l'agrégation est un `GROUP BY` exécuté par le pool, pas un reduce JavaScript ; les lignes filles ne sont récupérées que lorsqu'un parent est déplié, ce qui garde la charge utile petite.
+
+La mise en page synthèse remplace l'ancienne grille imbriquée — les **sous-lignes** dépliables sont natives, la navigation clavier et le redimensionnement des colonnes se comportent comme dans le reste de la grille.
+
+---
+
+## Filtre à la journée sur les colonnes horodatées
+
+Filtrer une colonne horodatée n'oblige pas à saisir une borne complète `YYYY-MM-DD HH:MM:SS`. Le filtre d'en-tête de colonne laisse choisir une **journée** et retient toutes les lignes dont l'horodatage tombe dans cette journée (borne basse / borne haute côté serveur). C'est le même sélecteur qui alimente le seau *jour* de la Vue synthèse.
 
 ---
 

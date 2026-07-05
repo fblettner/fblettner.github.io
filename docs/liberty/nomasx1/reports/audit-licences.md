@@ -1,7 +1,7 @@
 ---
 title: JD Edwards Licence Audit
-description: "A one-click compliance and optimisation audit for a JD Edwards application — licence inventory, real usage, financial exposure and a remediation plan, rendered as a PDF or Markdown deliverable."
-keywords: [Nomasx-1, reports, licence audit, JD Edwards, Oracle, compliance, optimisation, Object Usage Tracking, segregation of duties, financial risk]
+description: "A one-click compliance and optimisation audit for a JD Edwards application — licence inventory, real usage, financial exposure and a remediation plan, rendered as a PDF or Markdown deliverable. Bilingual (French default, English available); the report opens on a headline KPI band and inline charts (active-users donut, components-by-usage bar, financial risk by component)."
+keywords: [Nomasx-1, reports, licence audit, JD Edwards, Oracle, compliance, optimisation, Object Usage Tracking, segregation of duties, financial risk, KPI, bilingual, French, English]
 ---
 
 # JD Edwards Licence Audit
@@ -59,9 +59,24 @@ This report targets a **JD Edwards EnterpriseOne** application and its Oracle te
 
 ## The deliverable
 
-A confidential, branded document of roughly thirty to forty pages — PDF for the steering committee, Markdown when you want to edit or embed it. The cover carries the title *Audit Licences JD Edwards – \{client\}*, the subtitle *Analyse de conformité et plan d'optimisation des licences Oracle*, and a **Client / Date / Author / Version** block; every page is footed *Confidentiel*. The narrative is written in French, the working language of the audit.
+A confidential, branded document of roughly thirty to forty pages — PDF for the steering committee, Markdown when you want to edit or embed it. The cover carries the title *Audit Licences JD Edwards – \{client\}*, the subtitle *Analyse de conformité et plan d'optimisation des licences Oracle*, and a **Client / Date / Author / Version** block; every page is footed *Confidentiel*.
+
+The report is generated in **French by default** (the working language of the audit); switch the **Language** parameter to `English` for a fully English deliverable.
 
 It is an **internal** compliance-and-optimisation document — the basis for your own decisions and for preparing a contract renewal, not a declaration to hand to the vendor.
+
+---
+
+## Headline KPIs and inline charts
+
+The executive summary opens on a **KPI band** and a small set of inline SVG charts, so the message reads in seconds before the reader dives into the detail:
+
+- **Stat band** — active users, never-used accounts, quantifiable financial risk (€) and unassigned roles.
+- **Active-users donut** — used vs never-used across the audited population.
+- **Components-by-usage bar** — the Oracle components in use ranked by consumption.
+- **Financial-risk-by-component bar** — the euro-denominated exposure sized per component.
+
+The charts render inline in both PDF and Markdown output — no external image assets, no dependency on a chart engine at render time.
 
 ---
 
@@ -104,11 +119,14 @@ The report lives under **Reports** in the Nomasx-1 sidebar, on the framework's *
 
 | Parameter | Required | Default | What it sets |
 |---|---|---|---|
-| **Application** | Yes | — | The `apps_id` to audit. Must exist in the applications registry (*Settings → Global → Applications*). |
-| **Target connector** | No | `nomasx1` | The connector pool that holds the Nomasx-1 tables. |
-| **Schema** | No | `public` | The database schema on that connector. |
+| **Application** | Yes | — | The application to audit. Picked **by name** from the registered applications (*Settings → Global → Applications*) — the run form resolves the name to the underlying `apps_id`. |
+| **Target connector** | No | `nomasx1` | Dropdown of the SQL connectors on the install. |
+| **Schema** | No | `public` | Dropdown of the schemas of the picked target connector. |
+| **Language** | No | `Français` | Report language — `Français` or `English`. |
 | **Audit date label** | No | current month + year | The label printed on the cover page (e.g. *Mai 2026*). |
 | **Client name** | No | the application name | The client name on the cover page. |
+
+Every dropdown resolves server-side against live catalogs — *Application* against the applications registry, *Target connector* against the configured SQL connectors and *Schema* against the schemas of the picked connector. Cascading defaults mean picking a connector re-lists its own schemas.
 
 **Format** — `PDF` for the steering-committee deliverable, `markdown` when you want to edit or embed the content. The run streams the file straight back to the browser.
 

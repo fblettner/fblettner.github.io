@@ -174,6 +174,7 @@ Paramètres réservés aux applications JDE. Renseigner les schémas qui localis
 | **Menu standard** | Activer pour lire les menus JDE standard lors du scan. |
 | **E1 Pages** | Activer pour collecter les E1 Pages. |
 | **E1 Composite** | Activer pour collecter les pages composites. |
+| **Thick LOB** | Activer quand les tables JDE sont distantes et que Nomasx-1 y accède via un DB link. Bascule la collecte des menus de sécurité et la lecture des cross-références de contrôles de formulaire (blobs XML F98751 / F98750) dans un processus thick de courte durée — le pilote asynchrone ne sait pas lire un LOB via un DB link. Laisser désactivé pour une installation JDE locale. |
 | **Purge OUT** | Activer pour que Nomasx-1 nettoie automatiquement les anciennes lignes Object Usage Tracking. |
 | **Rétention OUT (jours)** | Nombre de jours d'historique à conserver lors de la purge. |
 
@@ -219,6 +220,26 @@ Configure **la connexion utilisée par Nomasx-1 pour lire les archive logs Oracl
 | **Base** | Service name / SID de la base. |
 | **SCN** | *System Change Number* de départ — point de reprise de la prochaine extraction. |
 | **Dernier** | Horodatage en lecture seule de la dernière extraction réussie. |
+
+### Onglet 7 — Colonnes auditées
+
+Contrôle **la quantité indexée par table** dans la table de valeurs `AUDIT_TRAIL_VALUES` pour cette application. Grille imbriquée ; une ligne par règle. Masqué à l'ajout — apparaît une fois l'application créée.
+
+Chaque règle porte sur un couple `(schéma, table)` et adopte l'un des trois modes :
+
+| Forme de la règle | Effet |
+|---|---|
+| **Une ligne de colonne nommée** | Seule la colonne listée est indexée pour cette table. Ajouter une ligne par colonne à retenir — les colonnes non listées restent visibles dans le diff à la demande de *Audit Trail*, mais ne sont pas cherchables dans la table de valeurs. |
+| **Une seule ligne `*SQL*`** | Journal seulement — la commande DML complète reste dans `AUDIT_TRAIL_QUERY`, rien n'atterrit dans `AUDIT_TRAIL_VALUES`. À poser sur les tables les plus larges où la recherche colonne par colonne n'a pas d'intérêt. |
+| **Aucune ligne pour la table** | Défaut — toutes les colonnes sont indexées, comportement historique. |
+
+| Champ | À renseigner |
+|---|---|
+| **Schéma** | Schéma propriétaire de la table. |
+| **Table** | Nom de la table (par ex. `F0911`). |
+| **Colonne** | Colonne à indexer, ou `*SQL*` pour le mode journal seulement. |
+
+Cet onglet est le levier pour contenir le volume de la table de valeurs sur les tables larges. La commande DML complète est toujours conservée dans `AUDIT_TRAIL_QUERY` — rien n'est perdu, quelle que soit la règle. Le combiner avec le job *Reconstruction des valeurs* de l'écran [Audit Trail](../../database/audit-trail.md) quand on élargit le périmètre : la ré-analyse de `AUDIT_TRAIL_QUERY` alimente rétroactivement les colonnes nouvellement listées sur les lignes historiques.
 
 ---
 

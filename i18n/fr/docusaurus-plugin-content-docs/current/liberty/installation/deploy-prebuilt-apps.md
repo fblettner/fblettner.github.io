@@ -91,7 +91,7 @@ L'approche par conteneur jetable garantit que **l'hôte n'a besoin ni de Python,
 | ~~`--license-key <jwt>`~~ | **Retiré.** Définir la licence via *Settings → App → License* après l'installation (chiffrée au repos dans `app.toml`, appliquée à chaud sans redémarrage). |
 | `--target <DIR>` | Destination sur l'hôte. Valeur par défaut : `./apps`. Le répertoire est créé s'il n'existe pas. |
 | `--layout <full\|light>` | Disposition de base dont le compose sert de référence pour raccorder `COMPOSE_FILE`. Valeur par défaut : `full`. L'overlay applicatif fonctionne avec les deux. |
-| `--force-config` | Écrase les TOML modifiés par l'opérateur dans `./apps/config/` avec les versions éditeur du wheel. Le comportement par défaut préserve les modifications opérateur d'une réinstallation à l'autre. |
+| `--force-config` | **Fusionne** la config du wheel dans les TOML modifiés par l'opérateur sous `./apps/config/`. La *structure* du wheel — nouveaux connecteurs, nouvelles requêtes, colonnes ajoutées — est appliquée, et les `[pools.*]` de l'opérateur (utilisateur / mot de passe / hôte / dblinks) ainsi que l'authentification API sont préservés. Sans ce drapeau, l'installateur ne touche pas du tout à `./apps/config/`. À passer sans risque à chaque mise à niveau pour récupérer la nouvelle config éditeur sans avoir à re-saisir les identifiants. |
 
 ### L'overlay `docker-compose.apps.yml`
 
@@ -265,7 +265,12 @@ docker compose restart liberty-next       # prend en compte les nouveaux TOML
 # Ensuite dans la SPA : Settings → App → License → Set / Replace → coller le JWT → Save
 ```
 
-Les TOML modifiés par l'opérateur dans `./apps/config/` sont **préservés par défaut** — la CLI `liberty-apps install` embarquée dans le wheel n'écrase qu'avec `--force-config`. Si `hot_reload = true` dans `app.toml`, le redémarrage n'est même pas nécessaire — les éditions de fichiers sont prises en compte à chaud.
+Les TOML modifiés par l'opérateur dans `./apps/config/` restent en place d'une mise à niveau à l'autre. Deux comportements à connaître :
+
+- **Sans `--force-config`** (le défaut) — l'installateur ne touche pas à `./apps/config/`. Les TOML existants restent tels quels, identifiants compris ; les nouveaux connecteurs / requêtes / colonnes issus du wheel ne sont **pas** appliqués.
+- **Avec `--force-config`** — l'installateur **fusionne** la structure du wheel dans les TOML existants. Les nouveaux connecteurs, nouvelles requêtes et nouvelles colonnes arrivent ; les `[pools.*]` de l'opérateur (utilisateur / mot de passe / hôte / dblinks) et l'authentification API sont préservés. À passer sans risque à chaque mise à niveau pour récupérer la nouvelle config éditeur sans re-saisir les identifiants.
+
+Si `hot_reload = true` dans `app.toml`, le redémarrage n'est même pas nécessaire — les éditions de fichiers sont prises en compte à chaud.
 
 Pour les mises à jour de schéma (release notes mentionnant de nouvelles tables), exécuter *Nomaflow → Catalogue → `nomasx1-upgrade-schema-1`* après le redémarrage. Idempotent.
 
@@ -294,7 +299,7 @@ Voir [Nomaflow → Bundled jobs → nomasx1-init-db](../nomaflow/bundled-jobs.md
 
 Utiliser le wheel pour la livraison éditeur. Utiliser l'écran Package pour les tranches par client, les promotions staging → prod et les mises à niveau au niveau écran.
 
-Les deux canaux coexistent — `install-apps.sh` préserve par défaut les TOML modifiés par l'opérateur, donc les mises à niveau du wheel et les éditions via l'écran Package ne s'opposent pas.
+Les deux canaux coexistent — `install-apps.sh` laisse par défaut les TOML modifiés par l'opérateur intacts, et même avec `--force-config` il fusionne la structure du wheel sans toucher aux identifiants ; les mises à niveau du wheel et les éditions via l'écran Package ne s'opposent pas.
 
 ---
 
@@ -309,7 +314,7 @@ Les deux canaux coexistent — `install-apps.sh` préserve par défaut les TOML 
 | Connexion refusée depuis un job de collecte Nomasx-1. | Le connecteur `jdedwards` n'est pas configuré ou les identifiants sont incorrects. | *Settings → Connectors → jdedwards* → corriger l'URL JDBC et les identifiants → tester depuis l'interface avant de relancer le job. |
 | `nomasx1-import-reference` se termine en erreur avec *« target application not found »*. | L'application cible (par défaut `nomasx1`) n'est pas créée dans *Settings → Applications*. | Ajouter d'abord l'application depuis l'interface (le contrôle préalable refuse de démarrer sinon). |
 | Wheel mis à niveau mais les jobs n'affichent pas les nouveaux ordonnancements. | Nomaflow met `jobs.toml` en cache. | `docker compose restart liberty-next` (ou cliquer sur *Settings → Reload*). |
-| `./apps/config/connectors.toml` écrasé lors de la mise à niveau du wheel. | Les éditions client sont perdues. | Ne passer `--force-config` QUE pour récupérer les valeurs par défaut éditeur. Le comportement par défaut préserve les éditions opérateur. |
+| Le wheel ajoute de nouveaux connecteurs / requêtes, mais l'app ne les voit pas. | L'installateur a laissé `./apps/config/` intact — comportement par défaut sans `--force-config`. | Relancer l'installateur avec `--force-config` : il fusionne la nouvelle structure dans les TOML existants et laisse les identifiants en place. |
 | `--apps URL` échoue avec une erreur de téléchargement. | L'URL du wheel exige une authentification. | Télécharger le wheel au préalable et fournir le chemin local : `./install-apps.sh ./liberty_apps-X.Y.Z.whl`. |
 
 ---

@@ -205,6 +205,29 @@ The framework uses the discovered schema to:
 - Type-coerce parameter values before binding.
 - Feed the AI assistant's tool schema with the right field shapes.
 
+### Schema and DB-link tokens
+
+A SQL query can carry two placeholder tokens that let the same text run against any pool — local or remote — without maintaining a per-environment variant of the query:
+
+| Token | Resolves to | Where it's configured |
+|---|---|---|
+| `#SCHEMA.<NAME>#` | The pool's mapping for schema `<NAME>` (e.g. `SY920.`). Empty when the pool has no entry — the token drops out and the table name is written bare. | Pool settings — the *Schemas* map on each pool. |
+| `#DBLINK.<NAME>#` | The pool's DB-link suffix for schema `<NAME>` (e.g. `@ORCLPROD`). Appended **after** the table name, so a `#SCHEMA.SY#F0092#DBLINK.SY#` resolves to `SY920.F0092@ORCLPROD`. Empty when no entry — nothing is appended, and the query stays local. | Pool settings — the *DB links* map on each pool (`dblinks = { SY = "@ORCLPROD", … }`). |
+
+The two are position-independent: `#SCHEMA.…#` prefixes the table, `#DBLINK.…#` suffixes it. The same query works locally (both mappings empty), against a remote schema without a link (schema mapped, dblink empty) or via a database link (both mapped) — the pool decides which shape to emit.
+
+A non-empty DB-link value must be a bare `@link` reference (starts with `@`, no whitespace, no semicolons). Anything else is refused at pool load — a config-injection guard against a DB-link value that would try to smuggle SQL past the parser.
+
+### Thick-mode fetch for LOBs over a DB link
+
+The async database driver is *thin*-mode by default — no OCI client needed, everything runs on the event loop. Fetching a **LOB across a DB link** is the one case thin mode can't cover: the LOB comes back as a remote locator that the thin driver can't materialise, so the call fails with `ORA-22992` / `ORA-03149`.
+
+A per-connector **Thick LOB** toggle switches the read for that connector into a short-lived subprocess that turns on the thick (OCI) client *there and only there* — the subprocess fetches the rows with the LOBs materialised as bytes and returns them; the main app process stays thin and async.
+
+- The Oracle Instant Client is bundled in the framework's Docker image (amd64 and arm64), so nothing extra to install for a container deployment.
+- Bare-metal installs need the Instant Client on the host (`ORACLE_HOME` / `LD_LIBRARY_PATH` set).
+- Enable Thick LOB only on the connectors that need it — a LOB read across a DB link. Everything else stays on the async driver.
+
 ---
 
 ## HTTP connector

@@ -183,7 +183,12 @@ The column points at a *Lookup* entry; the lookup itself is defined on the *Look
 
 ### `PASSWORD`
 
-Masks the value in grids (`••••••••`) and renders a password input on forms. Combined with the *Form-layer default* `PASSWORD`, sets up an Argon2-hashed write path that's safe by construction.
+Masks the value in grids (`••••••••`) and renders a password input on forms. On the write path, a `PASSWORD`-ruled column is **encrypted at rest** with the framework's master key — the same AES-GCM `ENC:`-prefixed blob format used for Settings-UI secrets. See [Encryption & secrets](./configuration/encryption-secrets.md).
+
+Two form conventions come with the rule:
+
+- **Blank on UPDATE preserves the stored value.** A form that submits an empty password on an update never overwrites the existing secret — the update path skips the column when the incoming value is empty. That way a user editing another field doesn't have to retype the password.
+- **Combined with the *Form-layer default* `PASSWORD`**, the framework Argon2-hashes the plaintext *before* it's encrypted at rest — the on-disk blob is an AES-GCM wrap around an Argon2 hash, and only a comparison against a caller-supplied plaintext ever recovers the hash for verification.
 
 ---
 

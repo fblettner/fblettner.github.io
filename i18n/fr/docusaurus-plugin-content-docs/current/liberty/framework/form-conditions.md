@@ -78,6 +78,27 @@ Le bouton *Tester* en haut de l'éditeur de champ ouvre un petit volet d'aperçu
 
 ---
 
+## Défaut conditionnel — `default_when`
+
+Un quatrième créneau, sur l'éditeur de champ, sème une valeur quand une condition devient vraie. C'est un **défaut conditionnel**, complémentaire du *Défaut* statique — à utiliser quand la valeur dépend d'un autre champ.
+
+| Champ | Effet |
+|---|---|
+| **Défaut quand** | Expression booléenne qui active la règle. Quand elle vaut vrai, la valeur ci-dessous est écrite dans le champ. |
+| **Valeur** | La valeur à écrire. Littéraux, jetons de session (`${session.user}`) et références à d'autres champs sont acceptés — évalués à la volée. |
+| **Verrou** | Contrôle si le champ reste éditable après l'écriture. |
+
+Le drapeau **Verrou** prend deux valeurs :
+
+| Verrou | Comportement |
+|---|---|
+| `true` *(défaut si omis)* | Le champ est rempli **et désactivé** tant que la condition tient — un forçage strict. L'opérateur ne peut pas surcharger. |
+| `false` | Le champ est rempli **mais reste éditable** — l'opérateur peut surcharger la valeur semée. Utile pour *proposer* une valeur par défaut que l'utilisateur peut affiner (par ex. semer une colonne de recherche à `*ALL` tout en laissant l'opérateur choisir une valeur précise). |
+
+Deux règles sur le même champ ne se cumulent pas — la première qui correspond gagne, dans l'ordre de déclaration. Quand la condition repasse à faux, la valeur semée reste si le champ était verrouillé (c'était une règle stricte) mais est effacée si le champ était resté éditable (la règle cesse de s'appliquer).
+
+---
+
 ## Syntaxe des expressions
 
 Le langage d'expression est petit et sûr — comparable à une clause SQL `WHERE` mais évalué côté client.

@@ -110,6 +110,28 @@ For permanent records, write to an **application-level audit table** from within
 
 ---
 
+## Per-run log buffer
+
+The Nomaflow runner keeps each run's log in a **bounded ring buffer** — a soft cap on how many lines a single run can accumulate before older entries are dropped. The default is **5000 lines per run**, which is comfortably above what a typical job emits.
+
+| Setting | Default | Where |
+|---|---|---|
+| **Run log max lines** | `5000` | *Settings → Job runner → Run log max lines*, or `[jobs] run_log_max_lines` in the framework's TOML. |
+
+When to raise the cap:
+
+- A job that legitimately emits **tens of thousands of lines** — a per-table ETL over thousands of source tables, a scan over a very large catalogue. Without a raise, the run's **head is dropped** and the earliest lines (usually the ones that name the setup) disappear from the run detail.
+- A very verbose DEBUG session where you want the full trace for a one-off diagnostic.
+
+When to leave it alone:
+
+- A job that emits under a few hundred lines per run — the buffer is nowhere near saturation and raising the ceiling costs memory across every concurrent run.
+- A recurring high-volume job that would be better refactored to log per-batch summaries rather than per-record lines. The buffer is a shock absorber, not a substitute for well-scoped logging.
+
+The cap applies to the **live streaming buffer**; the persisted log rows go straight to the database and are only pruned by the retention window described above.
+
+---
+
 ## Permissions
 
 Three permission shapes gate Nomaflow:

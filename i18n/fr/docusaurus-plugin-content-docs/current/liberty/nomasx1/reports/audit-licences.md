@@ -59,9 +59,24 @@ Ce rapport cible une application **JD Edwards EnterpriseOne** et son socle techn
 
 ## Le livrable
 
-Un document confidentiel, aux couleurs de la marque, d'environ trente à quarante pages — PDF pour le comité de pilotage, Markdown quand on veut l'éditer ou l'intégrer. La couverture porte le titre *Audit Licences JD Edwards – \{client\}*, le sous-titre *Analyse de conformité et plan d'optimisation des licences Oracle*, et un bloc **Client / Date / Auteur / Version** ; chaque page est marquée *Confidentiel* en pied. La rédaction est en français, langue de travail de l'audit.
+Un document confidentiel, aux couleurs de la marque, d'environ trente à quarante pages — PDF pour le comité de pilotage, Markdown quand on veut l'éditer ou l'intégrer. La couverture porte le titre *Audit Licences JD Edwards – \{client\}*, le sous-titre *Analyse de conformité et plan d'optimisation des licences Oracle*, et un bloc **Client / Date / Auteur / Version** ; chaque page est marquée *Confidentiel* en pied.
+
+Le rapport est généré **en français par défaut** (langue de travail de l'audit) ; basculer le paramètre **Langue** sur `English` pour un livrable entièrement anglais.
 
 C'est un document **interne** de conformité et d'optimisation — la base de vos propres décisions et de la préparation d'un renouvellement de contrat, pas une déclaration à remettre à l'éditeur.
+
+---
+
+## KPI en tête de synthèse et graphiques inline
+
+La synthèse s'ouvre sur un **bandeau d'indicateurs** et quelques graphiques SVG inline, pour que le message se lise en quelques secondes avant l'entrée dans le détail :
+
+- **Bandeau d'indicateurs** — utilisateurs actifs, comptes jamais utilisés, risque financier chiffrable (€) et rôles non affectés.
+- **Donut utilisateurs actifs** — utilisés vs jamais utilisés sur la population auditée.
+- **Barre composants par usage** — les composants Oracle en usage classés par consommation.
+- **Barre risque financier par composant** — l'exposition en euros dimensionnée composant par composant.
+
+Les graphiques s'affichent inline en sortie PDF comme en Markdown — pas d'image externe, pas de dépendance à un moteur de graphique au rendu.
 
 ---
 
@@ -104,11 +119,14 @@ Le rapport se trouve sous **Rapports** dans la barre latérale de Nomasx-1, sur 
 
 | Paramètre | Requis | Valeur par défaut | Ce qu'il définit |
 |---|---|---|---|
-| **Application** | Oui | — | L'`apps_id` à auditer. Doit exister dans le registre des applications (*Configuration → Global → Applications*). |
-| **Connecteur cible** | Non | `nomasx1` | Le pool de connecteurs qui héberge les tables Nomasx-1. |
-| **Schéma** | Non | `public` | Le schéma de base de données sur ce connecteur. |
+| **Application** | Oui | — | L'application à auditer. Choisie **par son nom** dans le registre des applications (*Configuration → Global → Applications*) — le formulaire résout le nom en `apps_id` sous-jacent. |
+| **Connecteur cible** | Non | `nomasx1` | Liste déroulante des connecteurs SQL de l'installation. |
+| **Schéma** | Non | `public` | Liste déroulante des schémas du connecteur cible retenu. |
+| **Langue** | Non | `Français` | Langue du rapport — `Français` ou `English`. |
 | **Libellé de date d'audit** | Non | mois + année en cours | Le libellé imprimé sur la page de couverture (ex. *Mai 2026*). |
 | **Nom du client** | Non | le nom de l'application | Le nom du client sur la page de couverture. |
+
+Chaque liste déroulante se résout côté serveur sur des catalogues vivants — *Application* sur le registre des applications, *Connecteur cible* sur les connecteurs SQL configurés et *Schéma* sur les schémas du connecteur retenu. Les cascades font que changer de connecteur ré-affiche ses propres schémas.
 
 **Format** — `PDF` pour le livrable du comité de pilotage, `markdown` quand on veut éditer ou intégrer le contenu. L'exécution renvoie le fichier directement dans le navigateur.
 

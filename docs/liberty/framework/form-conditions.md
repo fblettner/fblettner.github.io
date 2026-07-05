@@ -78,6 +78,27 @@ The *Test* button at the top of the field editor opens a small preview pane (see
 
 ---
 
+## Conditional default — `default_when`
+
+A fourth slot on the field editor seeds a value when a condition becomes true. It is a **conditional default**, complementing the static *Default* — use it when the value depends on another field.
+
+| Field | Effect |
+|---|---|
+| **Default when** | Boolean expression that turns the rule on. When it evaluates to true, the target value below is written into the field. |
+| **Value** | The value to write. Literals, session tokens (`${session.user}`), and references to other fields are all accepted — evaluated on the fly. |
+| **Lock** | Controls whether the field stays editable after the value is written. |
+
+The **Lock** flag has two settings:
+
+| Lock | Behaviour |
+|---|---|
+| `true` *(default when omitted)* | The field is filled **and disabled** while the condition holds — a hard forcing. The operator cannot type over it. |
+| `false` | The field is filled **but stays editable** — the operator can override the seeded value. Useful to *suggest* a default that the user can narrow (e.g. default a lookup column to `*ALL` while letting the operator pick a specific value). |
+
+Two rules on the same field don't stack — the first matching one wins in declaration order. When the condition flips back to false, the seeded value stays if the field was locked (it was a hard rule), but is cleared when the field was left editable (the rule stops applying).
+
+---
+
 ## Expression syntax
 
 The expression language is small and safe — comparable to a SQL `WHERE` clause but evaluated client-side.

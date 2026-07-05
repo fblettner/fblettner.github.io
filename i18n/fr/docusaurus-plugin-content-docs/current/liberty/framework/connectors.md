@@ -205,6 +205,29 @@ Le framework utilise le schéma découvert pour :
 - Convertir les valeurs des paramètres au bon type avant la liaison.
 - Alimenter le schéma d'outil de l'assistant IA avec les bons types de champs.
 
+### Jetons de schéma et de DB link
+
+Une requête SQL peut porter deux jetons de substitution : le même texte tourne alors sur n'importe quel pool — local ou distant — sans qu'il faille maintenir une variante de la requête par environnement.
+
+| Jeton | Résout en | Où le configurer |
+|---|---|---|
+| `#SCHEMA.<NOM>#` | Le mappage du pool pour le schéma `<NOM>` (par ex. `SY920.`). Vide quand le pool n'a pas d'entrée — le jeton disparaît et le nom de table est écrit brut. | Paramètres du pool — la table *Schemas* de chaque pool. |
+| `#DBLINK.<NOM>#` | Le suffixe de DB link du pool pour le schéma `<NOM>` (par ex. `@ORCLPROD`). Ajouté **après** le nom de table : `#SCHEMA.SY#F0092#DBLINK.SY#` devient donc `SY920.F0092@ORCLPROD`. Vide quand il n'y a pas d'entrée — rien n'est ajouté et la requête reste locale. | Paramètres du pool — la table *DB links* de chaque pool (`dblinks = { SY = "@ORCLPROD", … }`). |
+
+Les deux jetons sont indépendants : `#SCHEMA.…#` préfixe la table, `#DBLINK.…#` la suffixe. Une même requête tourne en local (les deux mappages vides), sur un schéma distant sans lien (schéma mappé, dblink vide), ou via un DB link (les deux mappés) — c'est le pool qui décide quelle forme émettre.
+
+Une valeur de DB link non vide doit être une référence `@lien` nue (commence par `@`, pas d'espace, pas de point-virgule). Toute autre valeur est refusée au chargement du pool — garde-fou contre une valeur qui tenterait de faire passer du SQL en douce au parseur.
+
+### Lecture thick-mode pour les LOB via un DB link
+
+Le pilote de base de données asynchrone tourne en mode *thin* par défaut — pas de client OCI, tout reste sur la boucle d'événements. Lire un **LOB via un DB link** est le seul cas que le mode thin ne couvre pas : le LOB revient sous forme de locator distant que le pilote thin ne sait pas matérialiser, et l'appel échoue en `ORA-22992` / `ORA-03149`.
+
+Une bascule **Thick LOB** par connecteur bascule la lecture de ce connecteur dans un sous-processus court : ce sous-processus active le client thick (OCI) *là et seulement là*, récupère les lignes avec les LOB matérialisés en octets et les renvoie ; le processus principal reste thin et asynchrone.
+
+- Le client Oracle Instant Client est embarqué dans l'image Docker du framework (amd64 et arm64) — rien à installer côté conteneur.
+- Les installations bare-metal ont besoin de l'Instant Client sur l'hôte (`ORACLE_HOME` / `LD_LIBRARY_PATH` renseignés).
+- N'activer *Thick LOB* que sur les connecteurs qui en ont besoin — une lecture de LOB via un DB link. Tout le reste garde le pilote asynchrone.
+
 ---
 
 ## Connecteur HTTP

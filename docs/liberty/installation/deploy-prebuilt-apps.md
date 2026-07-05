@@ -91,7 +91,7 @@ The throwaway-container approach means **your host needs no Python, no pip, no v
 | ~~`--license-key <jwt>`~~ | **Removed.** Set the license via *Settings → App → License* after install (encrypted at rest in `app.toml`, applied live without restart). |
 | `--target <DIR>` | Destination on the host. Default: `./apps`. The directory is created if missing. |
 | `--layout <full\|light>` | Which base layout's compose to use when wiring `COMPOSE_FILE`. Default: `full`. The apps overlay works on both. |
-| `--force-config` | Overwrite operator-edited TOMLs in `./apps/config/` with the wheel's vendor versions. Default behaviour preserves operator edits across re-installs. |
+| `--force-config` | **Merge** the wheel's config into the operator-edited TOMLs in `./apps/config/`. The wheel's *structure* — new connectors, new queries, added columns — is applied, and the operator's own `[pools.*]` (DB user / password / host / dblinks) and API auth are preserved. Default behaviour without the flag skips config touch-ups entirely. Safe to pass on every upgrade to pick up new vendor config without re-entering credentials. |
 
 ### The `docker-compose.apps.yml` overlay
 
@@ -264,7 +264,12 @@ Drop a new wheel and re-run:
 docker compose restart liberty-next       # picks up the new TOMLs
 ```
 
-Operator-edited TOMLs in `./apps/config/` are **preserved by default** — the wheel's `liberty-apps install` CLI only overwrites when `--force-config` is passed. If `hot_reload = true` in `app.toml`, you don't even need the restart — file edits are picked up live.
+Operator-edited TOMLs in `./apps/config/` are safe to keep across upgrades. Two behaviours to know:
+
+- **Without `--force-config`** (the default) — the installer leaves `./apps/config/` untouched. Existing TOMLs stay exactly as they are, credentials included; new vendor connectors / queries / columns from the wheel are **not** applied.
+- **With `--force-config`** — the installer **merges** the wheel's structure into the existing TOMLs. New connectors, new queries and new columns land; the operator's own `[pools.*]` (DB user / password / host / dblinks) and any API auth are preserved. Safe to pass on every upgrade to pick up new vendor config without re-entering credentials.
+
+If `hot_reload = true` in `app.toml`, you don't even need the restart — file edits are picked up live.
 
 For schema updates (release notes mention new tables), run *Nomaflow → Catalogue → `nomasx1-upgrade-schema-1`* after the restart. Idempotent.
 
@@ -293,7 +298,7 @@ See [Nomaflow → Bundled jobs → nomasx1-init-db](../nomaflow/bundled-jobs.md#
 
 Use the wheel for vendor delivery. Use the Package screen for per-customer slices, staging → prod promotions and screen-level upgrades.
 
-The two channels coexist — `install-apps.sh` preserves operator-edited TOMLs by default, so wheel upgrades and Package-screen edits don't fight each other.
+The two channels coexist — `install-apps.sh` leaves operator-edited TOMLs alone by default, and even with `--force-config` it merges the wheel's structure without touching credentials, so wheel upgrades and Package-screen edits don't fight each other.
 
 ---
 
@@ -308,7 +313,7 @@ The two channels coexist — `install-apps.sh` preserves operator-edited TOMLs b
 | Connection refused from a Nomasx-1 collection job. | The `jdedwards` connector isn't configured or credentials are wrong. | *Settings → Connectors → jdedwards* → fix the JDBC URL + credentials → test from the UI before retrying the job. |
 | `nomasx1-import-reference` errors with *"target application not found"*. | The target app (default `nomasx1`) isn't created in *Settings → Applications*. | Add the application from the UI first (the precheck refuses to start otherwise). |
 | Upgraded the wheel but jobs don't show the new schedules. | Nomaflow caches `jobs.toml`. | `docker compose restart liberty-next` (or click *Settings → Reload*). |
-| `./apps/config/connectors.toml` overwritten on wheel upgrade. | Customer edits gone. | Pass `--force-config` ONLY when you want vendor defaults. The default behaviour preserves operator edits. |
+| Wheel adds new connectors / queries but the app doesn't pick them up. | The installer left `./apps/config/` untouched — the default without `--force-config`. | Re-run the installer with `--force-config` — it merges the new structure into the existing TOMLs and leaves credentials in place. |
 | `--apps URL` install fails with download error. | The wheel URL is auth-gated. | Pre-download the wheel and pass the local path: `./install-apps.sh ./liberty_apps-X.Y.Z.whl`. |
 
 ---

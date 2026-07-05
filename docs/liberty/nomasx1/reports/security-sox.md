@@ -61,6 +61,20 @@ The **segregation-of-duties** sections build on the SoD conflict refresh (`nomas
 
 A branded document of roughly twenty to thirty pages — PDF for the steering committee or the auditor, Markdown when you want to edit or embed it. The cover carries the title *Security & SoD Assessment – \{client\}* (in French, *Évaluation Sécurité & Séparation des tâches – \{client\}*), a security-review subtitle, and an **Application / Date / Prepared by: NOMANA-IT** block. The report is generated in **English by default**; switch the **Language** parameter to `Français` for a fully French deliverable.
 
+---
+
+## Headline KPIs and inline charts
+
+The executive summary opens on a **KPI band** and a small set of inline SVG charts, sized to make the security story readable at a glance:
+
+- **Stat band** — headline metrics: total users, dormant accounts, privileged accounts and total SoD violations.
+- **Findings-by-severity donut** — how the report's findings distribute across `high` / `medium` / `low`.
+- **Most-conflicted roles bar** — the roles that carry the most conflicts, ranked by user count and distinct SoD rules.
+- **Conflicts-by-process bar** — the SoD violations grouped by the business process the matrix assigns them to (when the matrix carries a process dimension).
+- **SoD trend line** — the total-violations curve across recent refreshes; prints a *not enough history* note when only one refresh exists.
+
+The charts render inline in both PDF and Markdown output — no external image assets, no dependency on a chart engine at render time.
+
 It is an **internal** security-and-compliance document — the basis for your own remediation decisions and for an access review, not an attestation to file with a regulator.
 
 ---
@@ -102,13 +116,15 @@ The report lives under **Reports** in the Nomasx-1 sidebar, on the framework's *
 
 | Parameter | Required | Default | What it sets |
 |---|---|---|---|
-| **Application** | Yes | — | The `apps_id` to assess. Picked by name from the applications registry (*Settings → Global → Applications*). |
-| **Target connector** | No | `nomasx1` | The connector pool that holds the Nomasx-1 tables. |
-| **Schema** | No | `public` | The database schema on that connector. |
+| **Application** | Yes | — | The application to assess. Picked **by name** from the registered applications (*Settings → Global → Applications*) — the run form resolves the name to the underlying `apps_id`. |
+| **Target connector** | No | `nomasx1` | Dropdown of the SQL connectors on the install. |
+| **Schema** | No | `public` | Dropdown of the schemas of the picked target connector. |
 | **Language** | No | `English` | Report language — `English` or `Français`. |
 | **Dormancy window (days)** | No | `90` | An enabled account with no sign-in within this many days counts as dormant. |
 | **Report date label** | No | current month + year | The label printed on the cover page (e.g. *June 2026*). |
 | **Client name** | No | the application name | The client name on the cover page. |
+
+Every dropdown resolves server-side against live catalogs — *Application* against the applications registry, *Target connector* against the configured SQL connectors and *Schema* against the schemas of the picked connector. Cascading defaults mean picking a connector re-lists its own schemas.
 
 **Format** — `PDF` for the steering-committee deliverable, `markdown` when you want to edit or embed the content. The run streams the file straight back to the browser.
 

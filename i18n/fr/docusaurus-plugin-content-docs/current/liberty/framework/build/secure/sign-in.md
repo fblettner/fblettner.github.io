@@ -202,6 +202,16 @@ refresh_token_ttl_seconds = 1209600  # défaut 14 jours
 
 Des TTL d'accès courts (par exemple 15 minutes) propagent plus vite les changements de permissions mais augmentent la charge de rafraîchissement. L'équilibre par défaut d'1 heure convient à la plupart des installations.
 
+### Rafraîchissement silencieux
+
+Le rafraîchissement est **silencieux** — l'opérateur ne voit jamais de message « session expirée » sur une session active dans le navigateur :
+
+- Un **minuteur proactif** déclenche le rafraîchissement peu avant l'expiration du jeton d'accès, pour que l'appel API suivant embarque déjà un jeton neuf.
+- Tout appel API qui revient en **401** déclenche un rafraîchissement suivi d'un nouvel essai : Liberty demande au serveur un nouveau jeton d'accès à partir du jeton de rafraîchissement, rejoue la requête initiale et renvoie le résultat à l'appelant. Ce 401 unique est transparent pour le code appelant.
+- Si le rafraîchissement lui-même est refusé (jeton de rafraîchissement expiré ou révoqué), l'écran de connexion reprend la main — c'est le seul chemin qui redemande une authentification.
+
+Les deux mécanismes se complètent. Le minuteur proactif couvre le cas courant d'une session assez calme pour qu'aucune requête ne tombe sur le jeton en fin de vie ; le rejeu sur 401 rattrape le cas limite où le minuteur a manqué (onglet en pause, appareil qui sort de veille). Ensemble, ils font traverser à une session active la fin du TTL du jeton d'accès sans coupure visible.
+
 ---
 
 ## Se déconnecter

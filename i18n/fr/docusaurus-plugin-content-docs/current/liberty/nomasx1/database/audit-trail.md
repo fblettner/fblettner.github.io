@@ -1,7 +1,7 @@
 ---
 title: Audit Trail
-description: "En-tête de la piste d'audit base — une ligne par opération auditée, regroupée par application, date, schéma et table."
-keywords: [Nomasx-1, base de données, audit trail, audit DML, INSERT, UPDATE, DELETE, audit système source]
+description: "En-tête de la piste d'audit base — une ligne par opération auditée, regroupée par application, date, schéma et table. Chaque ligne se déplie sur un diff AVANT / APRÈS au niveau colonne, reconstruit à la demande depuis la commande DML stockée, avec des jobs de purge et de reconstruction des valeurs pour piloter l'historique."
+keywords: [Nomasx-1, base de données, audit trail, audit DML, INSERT, UPDATE, DELETE, audit système source, diff avant après, colonnes auditées, purge, reconstruction]
 ---
 
 # Audit Trail
@@ -94,9 +94,51 @@ Pour chaque mutation auditée au niveau base sur une application connectée :
 
 ---
 
-## Conseils & bonnes pratiques
+## Diff au niveau colonne — lignes dépliables
+
+Chaque ligne se déplie via le chevron natif à gauche sur un **diff AVANT / APRÈS** au niveau colonne. Les valeurs sont **reconstruites à la demande depuis la commande DML stockée** (`AUDIT_TRAIL_QUERY`) — le diff est calculé quand on déplie, pas stocké en double. Conséquences :
+
+- La table de valeurs peut être **purgée** pour récupérer de l'espace, le diff se reconstruit tout de même depuis le DML.
+- Seules les colonnes changées sont surlignées ; les inchangées apparaissent estompées pour le contexte (et peuvent être masquées via la barre d'outils de la ligne).
+- `INSERT` montre toutes les valeurs persistées en *APRÈS* ; `DELETE` les montre en *AVANT* ; `UPDATE` montre les deux, avec les cellules changées entourées.
+
+La vue synthèse remplace l'ancienne grille imbriquée — les **sous-lignes** dépliables sont natives, la navigation clavier et le redimensionnement des colonnes se comportent comme dans le reste de la grille.
+
+---
+
+## Périmètre d'audit — onglet Colonnes auditées
+
+Chaque application connectée décide **de la quantité indexée par table** dans la table des valeurs via l'onglet *Colonnes auditées* de l'éditeur d'application. Trois modes possibles :
+
+| Règle posée sur la table | Effet |
+|---|---|
+| **Aucune ligne pour la table** | Défaut — toutes les colonnes de la ligne sont indexées dans `AUDIT_TRAIL_VALUES`. |
+| **Une ou plusieurs lignes de colonnes** | Seules les colonnes listées sont indexées. Les autres apparaissent quand même dans le diff à la demande (reconstruit depuis `AUDIT_TRAIL_QUERY`), simplement pas cherchables dans la table de valeurs. |
+| **Une seule ligne `*SQL*`** | Journal seulement — la commande DML complète reste dans `AUDIT_TRAIL_QUERY` et **rien n'est indexé** dans `AUDIT_TRAIL_VALUES`. À poser sur les tables les plus larges où la recherche colonne par colonne n'a pas d'intérêt. |
+
+La commande DML complète est toujours conservée dans `AUDIT_TRAIL_QUERY` — rien n'est perdu, quel que soit le mode retenu. C'est le levier pour contenir le volume de la table de valeurs sur les tables larges (une ligne `F0911` indexerait sinon des dizaines de colonnes par opération).
+
+---
+
+## Jobs de purge et de reconstruction
+
+Deux jobs Nomaflow encadrent cet écran pour tenir l'historique en forme :
+
+| Job | Ce qu'il fait |
+|---|---|
+| **Purge de la piste d'audit** | Supprime les lignes de `AUDIT_TRAIL_HEADER` (et leurs valeurs par cascade) plus anciennes qu'une date de coupe. La commande DML, l'en-tête et ses valeurs disparaissent ensemble — c'est ce qui applique une politique de rétention. |
+| **Reconstruction des valeurs** | Ré-analyse `AUDIT_TRAIL_QUERY` sur une plage de dates choisie et réalimente `AUDIT_TRAIL_VALUES` depuis le DML brut. Utile après avoir élargi la règle *Colonnes auditées* d'une table (les lignes historiques reçoivent les colonnes fraîchement listées sans recollecte côté source), ou après une purge des valeurs. |
+
+Les deux jobs tournent sous Nomaflow avec suivi dans le log de run, et traitent le périmètre standard de l'audit (connecteurs et applications).
+
+---
+
+## Conseils et bonnes pratiques
 
 - **Filtrer sur *Opération = DELETE*** sur la période d'audit — chaque suppression doit être justifiable.
+- **Déplier la ligne avant d'ouvrir *Audit Lookup*.** Pour un diff sur un seul enregistrement, la ligne dépliée montre déjà chaque colonne changée ; *Audit Lookup* est l'écran de descente pour un `UPDATE` sur plusieurs lignes, quand on veut parcourir chaque enregistrement touché.
 - **Filtrer sur un *Utilisateur*** pour retrouver l'activité base d'un compte précis. Comparer à la ligne *Transactions* correspondante pour savoir si la modification est passée par l'application ou directement par la base.
 - **Un *Nombre* sortant de la fourchette habituelle** sur une même table mérite une question à l'équipe DBA.
+- **Réduire les tables larges via *Colonnes auditées*.** Sur une table de type `F0911`, ne lister que les colonnes qu'on cherchera un jour — la table de valeurs reste petite et le diff colonne par colonne montre tout depuis le DML reconstitué.
+- **Planifier la purge** en accord avec la politique de rétention ; enchaîner *Reconstruction des valeurs* après avoir élargi le périmètre d'audit d'une table pour combler les valeurs qui manqueraient sinon.
 - **L'écran est en lecture seule pour tous sauf un administrateur.** Des entrées d'écriture existent (`audit_trail_post` / `audit_trail_put`) mais sont destinées au pipeline d'ingestion Nomasx-1, pas à une saisie manuelle.

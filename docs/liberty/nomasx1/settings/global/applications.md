@@ -174,6 +174,7 @@ Settings used only when the application is a JDE one. Fill in the schemas that l
 | **Standard Menu** | Turn on to read the standard JDE menus during the scan. |
 | **E1 Pages** | Turn on to collect E1 Pages. |
 | **E1 Composite** | Turn on to collect composite pages. |
+| **Thick LOB** | Turn on when the JDE tables live remote and Nomasx-1 reaches them over a database link. Switches the security-menus collection and the form-control cross-reference (F98751 / F98750 XML blobs) to a short-lived thick-mode process — the async driver can't fetch a LOB across a database link. Leave off for a local JDE install. |
 | **Purge OUT** | Turn on to let Nomasx-1 clean up old Object Usage Tracking rows automatically. |
 | **OUT Retention Days** | Days of usage history to keep when the purge runs. |
 
@@ -219,6 +220,26 @@ Configures the **connection Nomasx-1 uses to read the Oracle archive logs** for 
 | **Database** | Service name / SID of the database. |
 | **SCN** | Starting *System Change Number* — where the next extraction resumes from. |
 | **Last** | Read-only timestamp of the last successful extract. |
+
+### Tab 7 — Audit Columns
+
+Controls **how much of each audited table is indexed** into the values table `AUDIT_TRAIL_VALUES` for this application. Embedded grid; one row per rule. Hidden on **Add** — appears only after the application exists.
+
+Every rule applies to a `(schema, table)` pair and picks one of three modes:
+
+| Rule shape | Effect |
+|---|---|
+| **A named-column row** | Only the listed column is indexed for this table. Add one row per column to keep — the columns not listed are still visible through the on-demand diff on *Audit Trail*, but they aren't searchable in the values table. |
+| **A single `*SQL*` row** | Journal-only — the full DML statement stays in `AUDIT_TRAIL_QUERY`, nothing lands in `AUDIT_TRAIL_VALUES`. Use it on the widest tables where per-column search isn't needed. |
+| **No row for the table** | Default — every column is indexed, the historical behaviour. |
+
+| Field | What to enter |
+|---|---|
+| **Schema** | Schema that owns the table. |
+| **Table** | Table name (e.g. `F0911`). |
+| **Column** | Column to index, or `*SQL*` for the journal-only mode. |
+
+The tab is the lever to keep the values table's volume in check on wide tables. The full DML statement is always retained in `AUDIT_TRAIL_QUERY` — nothing is lost, whatever the rule set. Pair it with the *Rebuild values* job on the [Audit Trail](../../database/audit-trail.md) screen when you widen the rule set: re-parsing `AUDIT_TRAIL_QUERY` back-fills the newly-listed columns for the historical rows.
 
 ---
 

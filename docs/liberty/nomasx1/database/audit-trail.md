@@ -1,7 +1,7 @@
 ---
 title: Audit Trail
-description: "Header of the database-level audit trail — one row per audited operation, grouped by application, date, schema and table."
-keywords: [Nomasx-1, database, audit trail, DML audit, INSERT, UPDATE, DELETE, source-system audit]
+description: "Header of the database-level audit trail — one row per audited operation, grouped by application, date, schema and table. Each row expands to a field-level BEFORE / AFTER diff parsed on demand from the stored DML statement, plus purge and rebuild-values jobs to manage the history."
+keywords: [Nomasx-1, database, audit trail, DML audit, INSERT, UPDATE, DELETE, source-system audit, value diff, before after, audit columns, purge, rebuild]
 ---
 
 # Audit Trail
@@ -94,9 +94,51 @@ For every audited database mutation on a connected application:
 
 ---
 
+## Field-level diff — expandable rows
+
+Every row expands via the native chevron on the left to a **BEFORE / AFTER diff** at the column level. Column values are **parsed on demand from the stored DML statement** (`AUDIT_TRAIL_QUERY`) — the diff is built when you expand the row, not stored twice. Consequences:
+
+- The values table can be **purged** to reclaim space, and the diff still reconstructs from the DML alone.
+- Only the columns that changed are highlighted; unchanged columns are shown greyed out for context (and can be hidden through the row toolbar).
+- `INSERT` shows all persisted values as *AFTER*; `DELETE` shows them as *BEFORE*; `UPDATE` shows both, with changed cells outlined.
+
+The summary view replaces the previous nested grid — expandable **sub-rows** are native, so keyboard navigation and column resizing behave like the rest of the grid.
+
+---
+
+## Auditing scope — Audit Columns tab
+
+Each connected application decides **how much of each audited table** is indexed into the values table via the *Audit Columns* tab on the application editor. Three modes per table:
+
+| Rule set on the table | Effect |
+|---|---|
+| **No row for the table** | Default — every column of the row is indexed into `AUDIT_TRAIL_VALUES`. |
+| **One or more column rows** | Only the listed columns are indexed. Other columns still appear in the on-demand diff (parsed from `AUDIT_TRAIL_QUERY`), just not searchable in the values table. |
+| **A single `*SQL*` row** | Journal-only — the full DML statement is retained in `AUDIT_TRAIL_QUERY` and **nothing is indexed** into `AUDIT_TRAIL_VALUES`. Use it on the widest tables where per-column search is not needed. |
+
+The full DML statement is always retained in `AUDIT_TRAIL_QUERY`, so nothing is lost regardless of the rule set. The tab is the lever to keep the values table's volume in check on wide tables (a `F0911` row would otherwise index tens of columns per operation).
+
+---
+
+## Purge and rebuild jobs
+
+Two Nomaflow jobs sit alongside this screen to keep the history in shape:
+
+| Job | What it does |
+|---|---|
+| **Audit trail purge** | Deletes rows from `AUDIT_TRAIL_HEADER` (and cascading values) older than a cutoff date. The DML statement, the header and its values are all removed — use this to enforce a retention policy. |
+| **Rebuild values** | Re-parses `AUDIT_TRAIL_QUERY` for a chosen date range and re-populates `AUDIT_TRAIL_VALUES` from the raw DML. Useful after enlarging the *Audit Columns* rule on a table (previously-indexed rows get the freshly-listed columns without re-collecting from source), or after a values purge. |
+
+Both jobs run under Nomaflow with progress in the run log and reach into the standard audit-trail scope (connectors and applications).
+
+---
+
 ## Tips & best practices
 
 - **Filter on *Operation = DELETE*** in the audit period — every deletion has to be justifiable.
+- **Expand the row before opening *Audit Lookup*.** For a single-record diff, the expanded row already shows every changed column; *Audit Lookup* is the drill-down for a multi-record `UPDATE` where you want to walk each affected row.
 - **Filter on a *User*** to retrieve the database-level activity of a specific account. Match against the corresponding *Activity log* row to see whether the change was driven through the application or directly on the database.
 - **A *Count* above the day's typical range** for the same table is the kind of anomaly worth a question to the DBA team.
+- **Trim wide tables via *Audit Columns*.** On a `F0911`-style table, list only the columns you would ever search on — the values table stays small, and the field-level diff still shows everything from the parsed DML.
+- **Run the purge on a schedule** aligned with your retention policy; use *Rebuild values* after enlarging the audit scope of a table to backfill the values that would otherwise be missing.
 - **The screen is read-only for everyone except an administrator.** Editable entry points exist (`audit_trail_post` / `audit_trail_put`) but are intended for the Nomasx-1 ingestion pipeline, not manual data entry.

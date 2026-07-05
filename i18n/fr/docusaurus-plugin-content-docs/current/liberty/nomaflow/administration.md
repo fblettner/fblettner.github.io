@@ -110,6 +110,28 @@ Pour des enregistrements permanents, écrire dans une **table d'audit au niveau 
 
 ---
 
+## Tampon de log par exécution
+
+Le runner Nomaflow conserve le log de chaque exécution dans un **tampon circulaire borné** — un plafond souple sur le nombre de lignes qu'une seule exécution accumule avant que les plus anciennes soient éjectées. Le défaut est **5000 lignes par exécution**, largement au-dessus de ce qu'un job classique émet.
+
+| Réglage | Défaut | Où |
+|---|---|---|
+| **Lignes max du log d'exécution** | `5000` | *Paramètres → Runner de jobs → Lignes max du log d'exécution*, ou `[jobs] run_log_max_lines` dans le TOML du framework. |
+
+Quand augmenter le plafond :
+
+- Un job qui émet légitimement **des dizaines de milliers de lignes** — un ETL table par table sur des milliers de tables source, un scan sur un très gros catalogue. Sans hausse, la **tête du log est éjectée** et les toutes premières lignes (celles qui décrivent typiquement le paramétrage) disparaissent du détail d'exécution.
+- Une session DEBUG très verbeuse dont on veut la trace complète pour un diagnostic ponctuel.
+
+Quand ne pas y toucher :
+
+- Un job qui émet quelques centaines de lignes par exécution — le tampon est loin de saturer, hausser le plafond coûte de la mémoire sur chaque exécution concurrente.
+- Un job récurrent très volumineux qu'il vaudrait mieux refactorer pour tracer des résumés par lot plutôt qu'une ligne par enregistrement. Le tampon amortit, il ne remplace pas un log bien cadré.
+
+Le plafond s'applique au **tampon de streaming live** ; les lignes de log persistées vont directement en base et ne sont supprimées que par la fenêtre de rétention décrite plus haut.
+
+---
+
 ## Permissions
 
 Trois formes de permission encadrent Nomaflow :

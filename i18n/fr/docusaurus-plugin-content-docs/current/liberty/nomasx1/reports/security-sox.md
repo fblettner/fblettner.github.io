@@ -59,7 +59,21 @@ Les sections de **séparation des tâches** s'appuient sur le rafraîchissement 
 
 ## Le livrable
 
-Un document de marque d'une vingtaine à une trentaine de pages — PDF pour le comité de pilotage ou l'auditeur, Markdown pour le retravailler ou l'intégrer. La page de garde porte le titre *Évaluation Sécurité & Séparation des tâches – \{client\}*, un sous-titre de revue de sécurité, et un bloc **Application / Date / Réalisé par : NOMANA-IT**. Le rapport est produit **en anglais par défaut** ; passez le paramètre **Langue** à `Français` pour un livrable entièrement français.
+Un document de marque d'une vingtaine à une trentaine de pages — PDF pour le comité de pilotage ou l'auditeur, Markdown pour le retravailler ou l'intégrer. La page de garde porte le titre *Évaluation Sécurité & Séparation des tâches – \{client\}*, un sous-titre de revue de sécurité, et un bloc **Application / Date / Réalisé par : NOMANA-IT**. Le rapport est produit **en anglais par défaut** ; basculer le paramètre **Langue** sur `Français` pour un livrable entièrement français.
+
+---
+
+## KPI en tête de synthèse et graphiques inline
+
+La synthèse s'ouvre sur un **bandeau d'indicateurs** et quelques graphiques SVG inline, dimensionnés pour que l'histoire sécurité se lise d'un coup d'œil :
+
+- **Bandeau d'indicateurs** — indicateurs de tête : total utilisateurs, comptes dormants, comptes à privilèges et total des violations SoD.
+- **Donut constats par gravité** — répartition des constats du rapport entre `élevée` / `moyenne` / `faible`.
+- **Barre rôles les plus conflictuels** — les rôles qui portent le plus de conflits, classés par nombre d'utilisateurs et de règles SoD distinctes.
+- **Barre conflits par processus** — les violations SoD groupées par processus métier tel qu'attribué par la matrice (quand la matrice porte une dimension processus).
+- **Courbe de tendance SoD** — la courbe du total des violations sur les rafraîchissements récents ; affiche une note *historique insuffisant* quand il n'y a qu'un seul rafraîchissement.
+
+Les graphiques s'affichent inline en sortie PDF comme en Markdown — pas d'image externe, pas de dépendance à un moteur de graphique au rendu.
 
 C'est un document **interne** de sécurité et de conformité — la base de vos propres décisions de remédiation et d'une revue des accès, pas une attestation à déposer auprès d'un régulateur.
 
@@ -102,13 +116,15 @@ Le rapport se trouve sous **Rapports** dans la barre latérale de Nomasx-1, sur 
 
 | Paramètre | Requis | Défaut | Ce qu'il définit |
 |---|---|---|---|
-| **Application** | Oui | — | L'`apps_id` à évaluer. Choisi par nom dans le registre des applications (*Paramètres → Global → Applications*). |
-| **Connecteur cible** | Non | `nomasx1` | Le pool de connecteurs qui porte les tables Nomasx-1. |
-| **Schéma** | Non | `public` | Le schéma de base de données sur ce connecteur. |
+| **Application** | Oui | — | L'application à évaluer. Choisie **par son nom** dans le registre des applications (*Configuration → Global → Applications*) — le formulaire résout le nom en `apps_id` sous-jacent. |
+| **Connecteur cible** | Non | `nomasx1` | Liste déroulante des connecteurs SQL de l'installation. |
+| **Schéma** | Non | `public` | Liste déroulante des schémas du connecteur cible retenu. |
 | **Langue** | Non | `English` | Langue du rapport — `English` ou `Français`. |
 | **Fenêtre de dormance (jours)** | Non | `90` | Un compte actif sans connexion depuis ce nombre de jours est compté comme dormant. |
 | **Libellé de date** | Non | mois + année courants | Le libellé imprimé en page de garde (ex. *juin 2026*). |
 | **Nom du client** | Non | le nom de l'application | Le nom du client en page de garde. |
+
+Chaque liste déroulante se résout côté serveur sur des catalogues vivants — *Application* sur le registre des applications, *Connecteur cible* sur les connecteurs SQL configurés et *Schéma* sur les schémas du connecteur retenu. Les cascades font que changer de connecteur ré-affiche ses propres schémas.
 
 **Format** — `PDF` pour le livrable du comité de pilotage, `markdown` pour retravailler ou intégrer le contenu. L'exécution renvoie le fichier directement dans le navigateur.
 
