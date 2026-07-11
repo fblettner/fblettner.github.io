@@ -234,6 +234,10 @@ Each variable field shows the human-readable description of the BT, the BT code 
 The field reference now lists every Business Group and Business Term that the extended Schematron (BR-FR / CTC-FR 1.3.1) checks and the editor can map — BG-3 through BG-32 and the Business Terms they wrap (preceding invoice BT-25/26, VAT accounting currency BT-6 / BT-111, tax point date BT-7, seller tax registration BT-32, buyer / deliver-to country subdivisions BT-54 / BT-79, buyer contact BT-56, deliver-to location BT-71, card PAN BT-87, invoiced-quantity unit BT-130, line charge base + reason BT-142/145, deliver-to address line 3 BT-165, and more). What you can map here now matches exactly what the [validator](./validate.md) checks.
 :::
 
+:::info[More mappable fields *(2026.07.08)*]
+The editor gained a **Buyer trading name** mapping (BT-45 → `cac:PartyName/cbc:Name` on the customer party, mirroring the seller trading name BT-28), and three document-totals mappings — **Sum of charges** (BT-108), **Amount already paid** (BT-113) and **Rounding amount** (BT-114). When a prepaid or rounding amount is mapped, the amount due (BT-115) is computed as *total with VAT − prepaid + rounding*. A mapping added to a template now always shows in its section, even when the built-in field list didn't include it.
+:::
+
 #### Combining and matching source values
 
 A `TAG_*` select isn't limited to a single XML path:

@@ -219,6 +219,8 @@ All other placeholders must be **declared in the endpoint's Parameters section**
 | **Body** | Request body — a JSON template with `{{param}}` placeholders. The **Format JSON** button pretty-prints the value. For `multipart/form-data`, the body is parsed as one part per line (`name=value` or `file=@{{filePath}};filename=…;contentType=…`). |
 | **Query params** | Query string template with `{{param}}` placeholders (e.g. `pageSize={{pageSize}}&page={{page}}`). |
 | **Response field** | Optional dot-notation path (e.g. `data.items`) extracting a sub-tree of the response — useful when the caller is only interested in part of the payload. |
+| **Response type** *(2026.07.08)* | `JSON` *(default)* or `XML`. In `XML` mode *Response field* and *Response mappings* are read as **XPath**, so a platform that answers import-status with a UBL `ApplicationResponse` — status in `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — can be polled like a JSON one. The `cac` / `cbc` / `ext` prefixes are recognised; use `//*[local-name()='X']` for anything else. |
+| **Status map** *(2026.07.08)* | Translates the platform's own status words (e.g. `send_error`, `sent`, `processing`) to the internal *accepted / pending / rejected* outcomes, so import-status marks the invoice correctly instead of optimistically treating an unrecognised status as accepted. |
 | **Description** | Free-text description shown in dropdowns and in the editor header. |
 
 #### Multipart bodies

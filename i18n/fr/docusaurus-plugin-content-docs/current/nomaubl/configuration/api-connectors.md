@@ -219,6 +219,8 @@ Tous les autres placeholders doivent être **déclarés dans la section Paramete
 | **Body** | Corps de requête — modèle JSON avec placeholders `{{param}}`. Le bouton **Format JSON** met en forme la valeur. Pour `multipart/form-data`, le corps est lu comme une part par ligne (`name=value` ou `file=@{{filePath}};filename=…;contentType=…`). |
 | **Query params** | Modèle de chaîne de requête avec placeholders `{{param}}` (par ex. `pageSize={{pageSize}}&page={{page}}`). |
 | **Response field** | Chemin optionnel en notation pointée (par ex. `data.items`) qui extrait un sous-arbre de la réponse — utile pour ne récupérer qu'un fragment du payload. |
+| **Response type** *(2026.07.08)* | `JSON` *(défaut)* ou `XML`. En mode `XML`, *Response field* et *Response mappings* sont lus comme du **XPath** : une plateforme qui répond à import-status par un `ApplicationResponse` UBL — statut dans `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — s'interroge comme une plateforme JSON. Les préfixes `cac` / `cbc` / `ext` sont reconnus ; utilisez `//*[local-name()='X']` pour le reste. |
+| **Status map** *(2026.07.08)* | Traduit les mots de statut propres à la plateforme (par ex. `send_error`, `sent`, `processing`) vers les issues internes *accepted / pending / rejected*, pour qu'import-status marque la facture correctement au lieu de traiter par optimisme un statut inconnu comme accepté. |
 | **Description** | Description en texte libre affichée dans les listes déroulantes et dans l'en-tête de l'éditeur. |
 
 #### Corps multipart

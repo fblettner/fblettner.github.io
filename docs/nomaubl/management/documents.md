@@ -369,6 +369,27 @@ The visual editor — section list, per-section drawer, live preview, block sect
 
 ---
 
+## Tab 5 — 🔗 Enrichment *(2026.07.09)*
+
+When the source spool is missing data the invoice needs — a customer's VAT number, a label from a reference table — the **Enrichment** tab fetches it from a [SQL](../configuration/sql-connectors.md) or [API connector](../configuration/api-connectors.md) and injects it into the spool **before** the XSL transform runs. The fetched values then map in the [XSL editor](../ubl-tools/xsl-editor.md) like any other spool field, and are archived with the source.
+
+Each **rule** describes one lookup:
+
+| Setting | What it does |
+|---|---|
+| **Scope** | An XPath that picks where the rule applies — the whole document, or a repeating node such as each invoice line. Fields from that scope feed the lookup, and the results are written back inside it. |
+| **Connector + query / endpoint** | The SQL query or REST endpoint to call. |
+| **Parameters** | Fields taken from the scope, sent as query / endpoint parameters. |
+| **Output** | Each returned column / field → the name of the new element written into the spool. |
+| **Target** | Where the new elements land — on the scope node itself, in a new group, or in an existing group. |
+| **Result** | A single flat set of fields, or a repeating group (one child per returned row). |
+
+Rules run in order, so a later rule can use what an earlier one added; identical lookups are cached, so the connector is called once per distinct key. The enriched spool is stored with the archived source (`F564230`), so re-processing a document doesn't call the connector again. Nothing runs unless a rule is configured — existing templates are unaffected.
+
+**Dry run** — with a sample spool loaded, *Dry run* tries the rules against it: it calls the real connectors and shows the enriched XML, a summary and any warnings, without changing anything. Download the result (named after the sample, e.g. `26000001CG00005_enrich.xml`) to build the XSL mapping straight away.
+
+---
+
 ## Tips & best practices
 
 - **Always set defaults** on Document Identification fields — they save you from spool variations that omit a tag occasionally.

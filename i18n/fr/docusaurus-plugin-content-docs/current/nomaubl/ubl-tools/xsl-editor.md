@@ -234,6 +234,10 @@ Chaque champ affiche le libellé du BT, son code BT en badge coloré, la valeur 
 La référence de champs liste désormais chaque groupe (BG) et terme (BT) que le Schematron étendu (BR-FR / CTC-FR 1.3.1) contrôle et que l'éditeur sait mapper — BG-3 à BG-32 et les termes qu'ils encadrent (facture précédente BT-25/26, devise de comptabilisation TVA BT-6 / BT-111, date du fait générateur BT-7, identifiant fiscal vendeur BT-32, subdivisions acheteur / livraison BT-54 / BT-79, contact acheteur BT-56, lieu de livraison BT-71, numéro de carte tronqué BT-87, code unité de quantité BT-130, assiette et motif des charges de ligne BT-142/145, ligne 3 d'adresse de livraison BT-165, et d'autres). Ce que vous pouvez mapper ici correspond désormais exactement à ce que le [validateur](./validate.md) contrôle.
 :::
 
+:::info[Encore plus de champs mappables *(2026.07.08)*]
+L'éditeur a gagné un mappage **Buyer trading name** (BT-45 → `cac:PartyName/cbc:Name` sur la partie client, à l'image du nom commercial vendeur BT-28), et trois mappages de totaux document — **Sum of charges** (BT-108), **Amount already paid** (BT-113) et **Rounding amount** (BT-114). Quand un montant déjà payé ou un arrondi est mappé, le montant dû (BT-115) est calculé comme *total avec TVA − déjà payé + arrondi*. Un mappage ajouté à un modèle apparaît désormais toujours dans sa section, même quand la liste de champs intégrée ne le prévoyait pas.
+:::
+
 #### Combiner et filtrer les valeurs source \{#combining-and-matching-source-values\}
 
 Un select `TAG_*` ne se limite pas à un seul chemin XML :

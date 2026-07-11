@@ -477,6 +477,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/application/dashboard',
         'nomaubl/application/tech-dashboard',
         'nomaubl/application/invoices',
+        'nomaubl/application/edocuments',
         'nomaubl/application/ereporting',
         'nomaubl/application/edirectory',
         'nomaubl/application/vat-declaration',

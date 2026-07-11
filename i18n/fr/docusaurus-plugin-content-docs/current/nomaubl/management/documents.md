@@ -369,6 +369,27 @@ L'éditeur visuel — liste de sections, tiroir par section, aperçu en direct, 
 
 ---
 
+## Onglet 5 — 🔗 Enrichment *(2026.07.09)*
+
+Quand le spool source n'a pas une donnée dont la facture a besoin — le numéro de TVA d'un client, un libellé issu d'une table de référence — l'onglet **Enrichment** va la chercher sur un [connecteur SQL](../configuration/sql-connectors.md) ou [API](../configuration/api-connectors.md) et l'injecte dans le spool **avant** la transformation XSL. Les valeurs récupérées se mappent alors dans l'[éditeur XSL](../ubl-tools/xsl-editor.md) comme n'importe quel champ du spool, et sont archivées avec la source.
+
+Chaque **règle** décrit une recherche :
+
+| Réglage | Ce qu'il fait |
+|---|---|
+| **Scope** | Un XPath qui choisit où la règle s'applique — tout le document, ou un nœud répété comme chaque ligne de facture. Les champs de ce périmètre alimentent la recherche, et les résultats y sont réécrits. |
+| **Connecteur + requête / endpoint** | La requête SQL ou l'endpoint REST à appeler. |
+| **Paramètres** | Les champs pris dans le périmètre, envoyés comme paramètres de requête / endpoint. |
+| **Output** | Chaque colonne / champ retourné → le nom du nouvel élément écrit dans le spool. |
+| **Target** | Où atterrissent les nouveaux éléments — sur le nœud du périmètre, dans un nouveau groupe, ou dans un groupe existant. |
+| **Result** | Un jeu de champs à plat, ou un groupe répété (un enfant par ligne retournée). |
+
+Les règles s'exécutent dans l'ordre : une règle ultérieure peut utiliser ce qu'une précédente a ajouté ; les recherches identiques sont mises en cache, donc le connecteur est appelé une fois par clé distincte. Le spool enrichi est stocké avec la source archivée (`F564230`) : re-traiter un document n'appelle pas le connecteur à nouveau. Rien ne s'exécute tant qu'aucune règle n'est configurée — les modèles existants ne changent pas.
+
+**Dry run** — avec un spool d'exemple chargé, *Dry run* essaie les règles dessus : il appelle les vrais connecteurs et montre le XML enrichi, un résumé et d'éventuels avertissements, sans rien modifier. Téléchargez le résultat (nommé d'après l'exemple, par ex. `26000001CG00005_enrich.xml`) pour construire le mappage XSL dans la foulée.
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Toujours définir des valeurs par défaut** sur les champs « Identification du document » — elles couvrent les variations de spool où une balise peut être ponctuellement absente.
