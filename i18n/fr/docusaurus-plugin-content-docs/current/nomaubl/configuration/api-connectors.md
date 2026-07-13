@@ -198,6 +198,10 @@ Choix typique pour **JD Edwards AIS** et la plupart des API PA modernes — Noma
 
 Catalogue des endpoints HTTP accessibles via ce connecteur. Chaque entrée est une carte repliable ; un clic sur l'en-tête développe ou replie la carte.
 
+:::tip[Endpoints attendus *(2026.07.13)*]
+L'éditeur liste les endpoints plateforme que NomaUBL connaît — *send*, *import status*, *invoice statuses*, leurs variantes `-selfbilled` (qui routent les documents d'auto-facturation / flux achats et retombent sur le flux standard) et la vérification d'annuaire — en signalant ceux déjà configurés et en proposant un **ajout** en un clic pour ceux manquants : un endpoint requis passe plus difficilement inaperçu.
+:::
+
 Des **placeholders `{{param}}`** peuvent être utilisés dans les URLs, les en-têtes, les paramètres de requête et les corps. Trois placeholders sont disponibles d'emblée :
 
 - `{{token}}` — le jeton OAUTH2 (quand l'authentification `OAUTH2` est configurée)

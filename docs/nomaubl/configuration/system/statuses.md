@@ -190,7 +190,7 @@ Two changes shipped in 2026.05.5:
 | **Tag** *(read-only)* | `STATUS_DEPOSITED` | Internal name referenced by `InvoiceStatusCatalog` factory methods in Java. The editor displays it as read-only — renaming would break Java callers silently. |
 | **Label · French** | `Déposée` | Human-readable French label shown in the UI when the active locale is French. |
 | **Label · English** | `Deposited` | Human-readable English label shown in the UI when the active locale is English. |
-| **PA Code** | `fr_e_invoicing_200` | Event name sent to the Plateforme Agréée API — placed in the `names[]` payload of status calls. Must match what the PA expects exactly. |
+| **PA Code(s)** | `fr_e_invoicing_200` | Event name sent to the Plateforme Agréée API — placed in the `names[]` payload of status calls. **Several codes, comma-separated**, may map to this one status *(2026.07.13)*, so a single list serves invoices whose statuses arrive from different sources (your main platform and Chorus Pro, say) without duplicating it. Each code must match what its PA expects exactly. |
 | **Polling — Collect from PA API** | checkbox | When ticked, NomaUBL polls this status from the PA API on every *Sync → Retrieve Statuses* run. Untick to skip a status during polling. |
 | **Groups** | multi-select | Top-level counter and funnel stage the status belongs to — drives the dashboard widgets and the SQL filters in `DashboardApi`. See [Groups](#groups) below. |
 

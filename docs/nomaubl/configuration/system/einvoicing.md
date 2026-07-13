@@ -210,6 +210,11 @@ The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 |---|---|---|
 | **Page size** | `100` | Number of statuses fetched per page when polling the PA. |
 | **Last retrieved at** | *(updated automatically)* | ISO datetime of the most recent successful retrieval (e.g. `2025-01-01T00:00:00Z`). Updated automatically after each retrieval run; manual edits act as a starting point — useful to re-replay a window. |
+| **Lifecycle endpoints** *(2026.07.13)* | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
+
+:::info[Self-billed invoices route to their own endpoints *(2026.07.13)*]
+A self-billed invoice (type 261, 389, 471, 473, 500, 501 or 502) is submitted through the platform's procurement channel: NomaUBL automatically uses the `-selfbilled` variant of an endpoint (`import-selfbilled`, `import-status-selfbilled`) when the connector defines it, and falls back to the standard endpoint otherwise. The platform connection — URL and credentials — is unchanged; only the endpoints differ.
+:::
 
 :::info[Polling intervals live on `global`]
 The intervals that drive how often the background scheduler polls the PA — `fetchImportInterval`, `fetchStatusInterval`, e-reporting cadence — are read from the [`global` template](./global.md), under *Scheduling*. The *Background Scheduling* group on this page used to write those keys here, but the scheduler never read them from this template — the dead-write was retired in 2026.05.8. Edit the intervals on `global → Scheduling` and they apply across all companies.

@@ -212,8 +212,8 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Billing References** | BT-11, BT-14 à BT-18, BT-122 à BT-124 | Projet, contrat, expédition, justificatifs. |
 | **Preceding Invoices — répété** *(BG-3, 0..n)* | BT-25, BT-26 | Parcourt un groupe source répétitif et génère un `cac:BillingReference` par facture antérieure (avec une date d'émission facultative), en complément de la référence unique BT-25/BT-26 déjà gérée dans *Billing References*. |
 | **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Joindre un document déjà encodé en base64 dans le spool source — jusqu'à quatre par facture. Voir [Pièces jointes intégrées](#embedded-attachments) plus bas. |
-| **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur. |
-| **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur. |
+| **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur — plus, dans le panneau *Seller Identifiers* *(2026.07.12)*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-29), chacun un champ source + un code de la liste *Scheme IDs*. |
+| **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur — plus, dans le panneau *Buyer Identifiers* *(2026.07.12)*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-46), chacun un champ source + un code de la liste *Scheme IDs*. |
 | **Agent Party** | extended-ctc-fr | Tiers intermédiaire optionnel. |
 | **Delivery** | BT-70 à BT-80 | Date et adresse de livraison. |
 | **Payment** | BT-20, BT-81 à BT-91 | Moyen, IBAN, BIC, mandat, conditions. |

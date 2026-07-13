@@ -25,7 +25,9 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-06-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
   <a href="#v2026-06-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-17</span></a>
   <a href="#v2026-06-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-16</span></a>
-  <a href="#v2026-07-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-11</span></a>
+  <a href="#v2026-07-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-13</span></a>
+  <a href="#v2026-07-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-12</span></a>
+  <a href="#v2026-07-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-11</span></a>
   <a href="#v2026-07-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-09</span></a>
   <a href="#v2026-07-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-08</span></a>
   <a href="#v2026-07-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-05</span></a>
@@ -282,6 +284,39 @@ Actionable error when a BI Publisher RTF subtemplate is missing, and a starter m
 - **Starter manifest generator for the PDF → XML adapter.** New CLI mode `-pdfManifest <input.pdf> <output.manifest.xml>` (also `nomaubl.sh pdf-manifest` / `nomaubl.cmd pdf-manifest`) analyses the PDF and emits a JDE-shape manifest XML, for the case where the customer has no native JDE XML sample of the same R-program to feed `-pdf2xml`. Inferred element names use the printed RC label text where available and the OWObject DD alias as fallback; the customer edits the file to give meaningful names, then reuses it as the 3rd argument of `-pdf2xml`. The root element is derived from the PDF filename (typical JDE spool convention) and multi-line text fields keep a single element name across all their lines via a sticky cache.
 
 ---
+
+## 2026.07.13.1 — 2026-07-13 \{#v2026-07-13-1\}
+
+### New features
+
+- **Self-billed invoices route to their own platform endpoints.** A self-billed invoice (invoice type 261, 389, 471, 473, 500, 501 or 502) is now submitted through the platform's procurement channel rather than the sales one. On the connector, a `-selfbilled` variant of an endpoint (send, import status) is used automatically for these documents and falls back to the standard endpoint when it isn't defined. The lifecycle poll can query several status endpoints, set as a comma-separated list in the e-invoicing *Lifecycle endpoints* field, so self-billed and standard invoices are both collected. The platform connection — URL and credentials — is unchanged; only the endpoints differ.
+- **One status can be recognised from several source codes.** In a statuses list, a status can now carry several platform status codes in its *PA Code(s)* field, comma-separated. A single list therefore serves invoices whose statuses arrive from different sources — for example your main platform and Chorus Pro — without duplicating the list. Several source codes may map to the same internal status.
+
+### Improvements
+
+- **The connector editor shows the endpoints it expects.** The API connector editor now lists the known platform endpoints (send, import status, invoice statuses, their self-billed variants, directory check…), with a marker for those already configured and a one-click add for those missing, so a required endpoint is no longer easy to overlook.
+
+### Fixes
+
+- **Updated French CTC Schematron from AFNOR.** Corrects the charge-total reconciliation rule (*BR-FREXT-CO-12*), which mistakenly tested the allowance total instead of the charge total, and now accepts the `BY` and `SE` party-identifier scheme codes (*BR-FREXT-CL-10*). Supplied by AFNOR following our ticket.
+- **Scheduled BIP batches no longer risk processing the same jobs twice.** The last-retrieved BIP job number is now recorded at the *start* of a batch, before the jobs are extracted and processed, instead of at the end. A scheduled run that starts while a previous batch is still running now sees the updated marker and picks up nothing, so the same spools are never extracted, generated or re-sent to the platform twice. A job that fails after the marker advances is not retried automatically; its spool is retained and can be resent.
+
+## 2026.07.12.1 — 2026-07-12 \{#v2026-07-12-1\}
+
+### New features
+
+- **Extra buyer and seller identifiers with a scheme.** A document template can now map up to four additional identifiers for the buyer (BT-46) and the seller (BT-29), on top of the usual SIREN/SIRET/GLN — for example a customer account number allocated by the supplier's ERP. Each identifier is a source-spool field plus a scheme code chosen from the *Scheme IDs* reference list. They are configured in the new *Buyer Identifiers* / *Seller Identifiers* panels of the XSL editor, and the readable PDF shows each one labelled after its scheme (taken from the *Scheme IDs* list). *(Requires the XSL framework redeploy and the document templates upgraded.)*
+
+### Improvements
+
+- **The readable PDF now shows labels, not codes.** Coded fields on the generated PDF display only their human label — invoice type, profile, payment method, note categories, document references and item identifiers no longer carry the raw code (e.g. *Payment: Bank transfer* instead of *Payment: 30 — Bank transfer*, and a note reads *Payment information —* instead of *[PMD] Payment information —*). The codes remain in the UBL for machine processing.
+- **Invoice status polling captures the action, rejection reason and note.** When lifecycle events are retrieved from the platform, the action code, rejection reason code and status note carried inside the event detail are now stored in their own columns — with the reason and action labels resolved from the *Rejection reason codes* / *Action codes* reference lists. Which fields to read is configurable per platform on the connector's *invoice-statuses* endpoint, so a platform returning a different shape can be mapped without a code change.
+
+### Fixes
+
+- **Status polling no longer re-checks the same events every run.** The "last retrieved" watermark is now written in the platform's local time. A platform that compares the retrieval filter against its local timestamps was otherwise handed a value hours in the past on each poll, so it returned the previous window again and again.
+- **A line with a VAT rate but no amount no longer breaks the VAT totals.** An invoice line that carries a VAT rate but has no net amount (nothing invoiced, and no discount) is now flagged as an *information* line, so it is excluded from the VAT breakdown reconciliation. Previously a standard-rated line with a zero amount and no matching VAT breakdown was rejected (*BR-FREXT-S-01*). *(Requires the XSL framework redeploy and the document templates upgraded.)*
+- **A per-line VAT exemption no longer leaks onto the other lines.** When exemption reasons are mapped per line and one line was exempt (e.g. *Not subject to VAT*, category O) while another was standard-rated, the standard-rated line wrongly inherited the first line's exemption reason code. That mismatch broke the VAT breakdown reconciliation and raised the *BR-FREXT-S-08rev* warning. Each line now uses only its own exemption reason; a line without one falls back to the reason appropriate to its VAT category (none for standard-rated), so a mixed invoice validates. A line that genuinely maps its own exemption still keeps it. *(Requires the XSL framework redeploy and the document templates upgraded.)*
 
 ## 2026.07.11.1 — 2026-07-11 \{#v2026-07-11-1\}
 

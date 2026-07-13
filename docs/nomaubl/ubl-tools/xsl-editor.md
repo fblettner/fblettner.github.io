@@ -212,8 +212,8 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Billing References** | BT-11, BT-14 to BT-18, BT-122 to BT-124 | Project, contract, dispatch, supporting documents. |
 | **Preceding Invoices — repeating** *(BG-3, 0..n)* | BT-25, BT-26 | Iterates a repeating source group and emits one `cac:BillingReference` per prior invoice (each with an optional issue date), alongside the single BT-25/BT-26 reference already handled in *Billing References*. |
 | **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Attach a document already carried as base64 in the source spool — up to four per invoice. See [Embedded Attachments](#embedded-attachments) below. |
-| **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact. |
-| **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact. |
+| **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel *(2026.07.12)*, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. |
+| **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel *(2026.07.12)*, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
 | **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
 | **Delivery** | BT-70 to BT-80 | Delivery date and address. |
 | **Payment** | BT-20, BT-81 to BT-91 | Means, IBAN, BIC, mandate, terms. |

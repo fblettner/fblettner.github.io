@@ -10,7 +10,9 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-07-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-11</span></a>
+  <a href="#v2026-07-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-13</span></a>
+  <a href="#v2026-07-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-12</span></a>
+  <a href="#v2026-07-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-11</span></a>
   <a href="#v2026-07-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-09</span></a>
   <a href="#v2026-07-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-08</span></a>
   <a href="#v2026-07-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-05</span></a>
@@ -97,6 +99,39 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 </div>
 
 ---
+
+## 2026.07.13.1 — 2026-07-13 \{#v2026-07-13-1\}
+
+### Nouveautés
+
+- **Les factures d'auto-facturation empruntent leurs propres points d'accès.** Une facture d'auto-facturation (type 261, 389, 471, 473, 500, 501 ou 502) est désormais transmise via le canal « achats » de la plateforme plutôt que le canal « ventes ». Sur le connecteur, une variante `-selfbilled` d'un point d'accès (envoi, statut d'import) est employée automatiquement pour ces documents, avec repli sur le point d'accès standard lorsqu'elle n'est pas définie. La relève du cycle de vie peut interroger plusieurs points d'accès de statut, indiqués sous forme de liste séparée par des virgules dans le champ *Lifecycle endpoints* de l'e-invoicing, afin de collecter à la fois les factures d'auto-facturation et les factures standard. La connexion à la plateforme — URL et identifiants — reste identique : seuls les points d'accès diffèrent.
+- **Un même statut peut être reconnu à partir de plusieurs codes source.** Dans une liste de statuts, un statut peut désormais porter plusieurs codes de statut plateforme dans son champ *PA Code(s)*, séparés par des virgules. Une seule liste sert ainsi des factures dont les statuts proviennent de sources différentes — par exemple votre plateforme principale et Chorus Pro — sans dupliquer la liste. Plusieurs codes source peuvent pointer vers le même statut interne.
+
+### Améliorations
+
+- **L'éditeur de connecteur affiche les points d'accès attendus.** L'éditeur de connecteur d'API liste désormais les points d'accès connus de la plateforme (envoi, statut d'import, statuts de facture, leurs variantes d'auto-facturation, vérification d'annuaire…), avec un repère pour ceux déjà configurés et un ajout en un clic pour ceux manquants ; un point d'accès requis ne passe donc plus inaperçu.
+
+### Corrections
+
+- **Mise à jour du Schematron CTC français fournie par l'AFNOR.** Corrige la règle de cohérence du total des charges (*BR-FREXT-CO-12*), qui testait par erreur le total des remises au lieu du total des charges, et accepte désormais les codes de schéma d'identifiant `BY` et `SE` (*BR-FREXT-CL-10*). Fournie par l'AFNOR suite à notre ticket.
+- **Les traitements BIP planifiés ne risquent plus de traiter deux fois les mêmes travaux.** Le numéro du dernier travail BIP relevé est désormais enregistré au *début* du lot, avant l'extraction et le traitement, et non plus à la fin. Un traitement planifié qui démarre alors qu'un lot précédent est encore en cours voit le marqueur à jour et ne reprend rien : les mêmes spools ne sont plus extraits, générés ni renvoyés deux fois à la plateforme. Un travail qui échoue après l'avancement du marqueur n'est pas rejoué automatiquement ; son spool est conservé et peut être renvoyé.
+
+## 2026.07.12.1 — 2026-07-12 \{#v2026-07-12-1\}
+
+### Nouveautés
+
+- **Identifiants supplémentaires pour l'acheteur et le vendeur, avec schéma.** Un modèle de document peut désormais mapper jusqu'à quatre identifiants additionnels pour l'acheteur (BT-46) et pour le vendeur (BT-29), en plus des habituels SIREN/SIRET/GLN — par exemple un numéro de compte client attribué par l'ERP du fournisseur. Chaque identifiant associe un champ du flux source et un code de schéma choisi dans la liste de référence *Scheme IDs*. Ils se paramètrent dans les nouveaux panneaux *Identifiants acheteur* / *Identifiants vendeur* de l'éditeur XSL, et le PDF lisible affiche chacun d'eux libellé d'après son schéma (repris de la liste *Scheme IDs*). *(Nécessite le redéploiement du socle XSL et la mise à niveau des modèles de document.)*
+
+### Améliorations
+
+- **Le PDF lisible affiche désormais les libellés, pas les codes.** Sur le PDF généré, les champs codifiés n'affichent plus que leur libellé lisible — type de facture, profil, mode de paiement, catégories de note, références de document et identifiants d'article ne portent plus le code brut (par ex. *Paiement : Virement* au lieu de *Paiement : 30 — Virement*, et une note affiche *Informations de paiement —* au lieu de *[PMD] Informations de paiement —*). Les codes restent présents dans l'UBL pour le traitement automatisé.
+- **La relève des statuts récupère l'action, le motif de rejet et la note.** Lors de la récupération des événements de cycle de vie auprès de la plateforme, le code action, le code motif de rejet et la note de statut présents dans le détail de l'événement sont désormais enregistrés dans des colonnes dédiées — les libellés du motif et de l'action étant repris des listes de référence *Rejection reason codes* / *Action codes*. Les champs à lire se paramètrent par plateforme sur le point d'accès *invoice-statuses* du connecteur : une plateforme au format différent se mappe sans modification de code.
+
+### Corrections
+
+- **La relève des statuts ne revérifie plus les mêmes événements à chaque passage.** L'horodatage « dernière relève » est désormais écrit à l'heure locale de la plateforme. Une plateforme qui compare le filtre de relève à ses horodatages locaux recevait sinon une valeur en retard de plusieurs heures à chaque appel, et renvoyait donc encore et encore la même fenêtre.
+- **Une ligne portant un taux de TVA mais sans montant ne fausse plus les totaux de TVA.** Une ligne de facture qui porte un taux de TVA sans montant net (rien de facturé, ni remise) est désormais marquée comme ligne d'*information* et exclue du contrôle de cohérence du récapitulatif de TVA. Auparavant, une ligne au taux normal avec un montant à zéro et sans récapitulatif de TVA correspondant était rejetée (*BR-FREXT-S-01*). *(Nécessite le redéploiement du socle XSL et la mise à niveau des modèles de document.)*
+- **Une exonération de TVA à la ligne ne déborde plus sur les autres lignes.** Lorsque les motifs d'exonération sont mappés à la ligne et qu'une ligne était exonérée (par ex. *Non soumis à la TVA*, catégorie O) tandis qu'une autre était au taux normal, la ligne au taux normal héritait à tort du code motif d'exonération de la première ligne. Cette incohérence faisait échouer le contrôle de cohérence du récapitulatif de TVA et déclenchait l'avertissement *BR-FREXT-S-08rev*. Chaque ligne n'utilise désormais que son propre motif d'exonération ; à défaut, elle reprend celui correspondant à sa catégorie de TVA (aucun au taux normal), de sorte qu'une facture mixte se valide. Une ligne qui mappe réellement son propre motif le conserve. *(Nécessite le redéploiement du socle XSL et la mise à niveau des modèles de document.)*
 
 ## 2026.07.11.1 — 2026-07-11 \{#v2026-07-11-1\}
 

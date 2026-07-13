@@ -203,6 +203,10 @@ La barre latérale liste toutes les mises en page enregistrées, plus la `built-
 
 Le bouton **Ouvrir l'éditeur visuel** ouvre la mise en page dans un éditeur plein écran à trois volets côte à côte — c'est la manière de référence pour éditer un `pdf-template`. L'ancien parcours (liste de sections + tiroirs par section, clic sur un bouton Aperçu qui ouvre une modale) disparaît ; l'éditeur regroupe tout sur un seul écran, aperçu toujours visible.
 
+:::info[Le PDF lisible affiche les libellés, pas les codes *(2026.07.12)*]
+Les champs codifiés n'affichent que leur libellé lisible — type de facture, profil, mode de paiement, catégories de note, références de document et identifiants d'article ne portent plus le code brut (*Paiement : Virement*, pas *Paiement : 30 — Virement* ; une note affiche *Informations de paiement —*, pas *[PMD] Informations de paiement —*). Les codes restent dans l'UBL pour le traitement automatisé.
+:::
+
 <svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <linearGradient id="pdfvb-card-fr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>

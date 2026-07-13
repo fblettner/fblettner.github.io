@@ -190,7 +190,7 @@ Deux évolutions livrées en 2026.05.5 :
 | **Tag** *(lecture seule)* | `STATUS_DEPOSITED` | Nom interne référencé par les fabriques `InvoiceStatusCatalog` du code Java. L'éditeur l'affiche en lecture seule — un renommage casserait silencieusement les appelants Java. |
 | **Libellé · Français** | `Déposée` | Libellé français affiché dans l'interface quand la locale active est le français. |
 | **Libellé · Anglais** | `Deposited` | Libellé anglais affiché dans l'interface quand la locale active est l'anglais. |
-| **PA Code** | `fr_e_invoicing_200` | Nom d'événement transmis à l'API de la Plateforme Agréée — placé dans le tableau `names[]` des appels de statut. Doit correspondre exactement à ce qu'attend la PA. |
+| **PA Code(s)** | `fr_e_invoicing_200` | Nom d'événement transmis à l'API de la Plateforme Agréée — placé dans le tableau `names[]` des appels de statut. **Plusieurs codes, séparés par des virgules**, peuvent pointer vers ce statut *(2026.07.13)* : une seule liste sert des factures dont les statuts viennent de sources différentes (votre plateforme principale et Chorus Pro, par exemple) sans la dupliquer. Chaque code doit correspondre exactement à ce qu'attend sa PA. |
 | **Polling — Interroger via la PA** | case à cocher | Quand cochée, NomaUBL interroge ce statut auprès de l'API de la PA à chaque exécution de *Synchronisation → Récupérer les statuts*. Décocher pour exclure un statut du polling. |
 | **Groupes** | multi-sélection | Compteur de niveau supérieur et étape funnel auxquels le statut est rattaché — alimente les widgets du tableau de bord et les filtres SQL de `DashboardApi`. Voir [Groupes](#groupes) ci-dessous. |
 

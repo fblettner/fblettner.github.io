@@ -203,6 +203,10 @@ The sidebar list contains every saved layout plus the bundled `built-in`.
 
 The **Open visual builder** button opens the layout in a full-screen editor with three panes side-by-side — the canonical way to edit a `pdf-template`. The old single-page flow (section list + per-section drawers, click a Preview button to open a modal) is gone; the builder unifies everything in one screen with the preview always visible.
 
+:::info[The readable PDF shows labels, not codes *(2026.07.12)*]
+Coded fields render only their human label — invoice type, profile, payment method, note categories, document references and item identifiers no longer carry the raw code (*Payment: Bank transfer*, not *Payment: 30 — Bank transfer*; a note reads *Payment information —*, not *[PMD] Payment information —*). The codes stay in the UBL for machine processing.
+:::
+
 <svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <linearGradient id="pdfvb-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
