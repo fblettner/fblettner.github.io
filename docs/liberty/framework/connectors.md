@@ -230,6 +230,19 @@ A per-connector **Thick LOB** toggle switches the read for that connector into a
 
 ---
 
+### Multi-pool connectors \{#multi-pool\} *(2026.07.14)*
+
+One SQL connector can serve **several pools** — several database or JDE instances — without cloning the connector or duplicating its screens. Alongside the default **Pool**, list the extra ones in **Pools** (both are dropdowns of configured pools in *Settings → Connectors → Settings…*); the same named queries and the same screens then run against any pool in the set.
+
+The pool is chosen at runtime:
+
+- **In the app** — when the current app spans a multi-pool connector, the app switcher shows a **Pool** picker. Picking a pool re-runs that app's screens against the chosen instance. The choice is per app and persisted, and it applies only to the connectors that actually declare that pool — an app's other (single-pool) connectors keep their default rather than erroring.
+- **In jobs** — the `sql_copy` and `sql_query` [steps](../nomaflow/steps.md) take `source_pool` / `target_pool` to target a specific instance without a new connector.
+
+The reachable set is the default `pool` plus `pools`; a request or a job can never reach a pool outside it, and only pool **names** reach the picker — never a URL or credentials. A connector with just a `pool` behaves exactly as before.
+
+---
+
 ## HTTP connector
 
 The form re-shapes when *Type* is set to `HTTP`. The pool dropdown disappears; a *Base URL* + *Authentication* block takes its place.

@@ -230,6 +230,19 @@ Une bascule **Thick LOB** par connecteur bascule la lecture de ce connecteur dan
 
 ---
 
+### Connecteurs multi-pools \{#multi-pool\} *(2026.07.14)*
+
+Un même connecteur SQL peut desservir **plusieurs pools** — plusieurs bases ou instances JDE — sans cloner le connecteur ni dupliquer ses écrans. À côté du **Pool** par défaut, listez les autres dans **Pools** (deux listes déroulantes de pools configurés, dans les réglages du connecteur) ; les mêmes requêtes nommées et les mêmes écrans s'exécutent alors sur n'importe quel pool de l'ensemble.
+
+Le pool se choisit à l'exécution :
+
+- **Dans l'application** — quand l'application courante passe par un connecteur multi-pools, le sélecteur d'applications affiche un choix **Pool**. Choisir un pool relance les écrans de l'application sur l'instance retenue. Le choix est par application et enregistré, et ne s'applique qu'aux connecteurs qui déclarent réellement ce pool — les autres connecteurs (mono-pool) de l'application gardent leur pool par défaut au lieu d'échouer.
+- **Dans les tâches** — les [steps](../nomaflow/steps.md) `sql_copy` et `sql_query` prennent `source_pool` / `target_pool` pour cibler une instance précise, sans nouveau connecteur.
+
+L'ensemble atteignable est le `pool` par défaut plus `pools` ; une requête ou une tâche ne peut jamais atteindre un pool en dehors, et seuls les **noms** de pool arrivent au sélecteur — jamais d'URL ni d'identifiants. Un connecteur avec un seul `pool` se comporte exactement comme avant.
+
+---
+
 ## Connecteur HTTP
 
 Le formulaire se remodèle quand *Type* vaut `HTTP`. La liste déroulante du pool disparaît ; un bloc *URL de base* + *Authentification* prend sa place.

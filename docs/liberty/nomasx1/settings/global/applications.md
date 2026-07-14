@@ -164,6 +164,7 @@ Settings used only when the application is a JDE one. Fill in the schemas that l
 
 | Field | What to enter |
 |---|---|
+| **Pool** *(2026.07.14)* | The connector pool the collection jobs use for this application, so a single `jdedwards` connector can serve several JDE environments — point each apps_id at its own pool. Leave blank to keep the job's default `source_connector`. Only the connection changes; the JDE schemas and DB-links below still come from these settings. |
 | **JDE SY** | Schema that holds the JDE *System* tables. |
 | **JDE DTA** | Schema that holds the *Business Data* tables. |
 | **JDE CTL** | Schema that holds the *Control* tables. |

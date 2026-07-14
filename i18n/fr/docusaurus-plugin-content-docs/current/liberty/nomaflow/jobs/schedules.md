@@ -174,6 +174,16 @@ Chaque pastille représente un déclenchement — un clic dessus mène à la fic
 
 ---
 
+## Presets planifiables \{#schedulable-presets\} *(2026.07.14)*
+
+Un **preset** — un jeu de paramètres d'exécution enregistré (params, `op_kwargs`, activations de steps, niveau de log) — peut porter son propre **cron + fuseau horaire**. Le planificateur déclenche alors la tâche selon cette planification *avec les paramètres du preset* : une même tâche tourne sur plusieurs planifications avec des entrées différentes, sans clonage.
+
+Chaque preset a sa propre bascule **d'activation**, **indépendante du `Enabled` de la tâche** : un preset activé se déclenche même quand la planification propre de la tâche est coupée (le `Enabled` de la tâche ne pilote que son propre cron). La vue calendrier liste **une ligne par planification** — le cron de la tâche plus celui de chaque preset — et signale un déclencheur planifié mais désactivé, pour qu'on voie tout de suite pourquoi il ne part pas.
+
+Pratique pour le cas « même tâche, fenêtres différentes » — un run complet nocturne et un incrémental horaire du même ETL, chacun un preset avec son cron et ses paramètres.
+
+---
+
 ## Modèles adoptés par la plupart des installations
 
 | Charge de travail | Planification | Raison |

@@ -8503,6 +8503,19 @@ Une bascule **Thick LOB** par connecteur bascule la lecture de ce connecteur dan
 
 ---
 
+### Connecteurs multi-pools \{#multi-pool\} *(2026.07.14)*
+
+Un même connecteur SQL peut desservir **plusieurs pools** — plusieurs bases ou instances JDE — sans cloner le connecteur ni dupliquer ses écrans. À côté du **Pool** par défaut, listez les autres dans **Pools** (deux listes déroulantes de pools configurés, dans les réglages du connecteur) ; les mêmes requêtes nommées et les mêmes écrans s'exécutent alors sur n'importe quel pool de l'ensemble.
+
+Le pool se choisit à l'exécution :
+
+- **Dans l'application** — quand l'application courante passe par un connecteur multi-pools, le sélecteur d'applications affiche un choix **Pool**. Choisir un pool relance les écrans de l'application sur l'instance retenue. Le choix est par application et enregistré, et ne s'applique qu'aux connecteurs qui déclarent réellement ce pool — les autres connecteurs (mono-pool) de l'application gardent leur pool par défaut au lieu d'échouer.
+- **Dans les tâches** — les [steps](../nomaflow/steps.md) `sql_copy` et `sql_query` prennent `source_pool` / `target_pool` pour cibler une instance précise, sans nouveau connecteur.
+
+L'ensemble atteignable est le `pool` par défaut plus `pools` ; une requête ou une tâche ne peut jamais atteindre un pool en dehors, et seuls les **noms** de pool arrivent au sélecteur — jamais d'URL ni d'identifiants. Un connecteur avec un seul `pool` se comporte exactement comme avant.
+
+---
+
 ## Connecteur HTTP
 
 Le formulaire se remodèle quand *Type* vaut `HTTP`. La liste déroulante du pool disparaît ; un bloc *URL de base* + *Authentification* prend sa place.
@@ -18388,6 +18401,12 @@ La plupart des installations adoptent `<domaine>-<objectif>` ou `<domaine>-<obje
 
 ---
 
+### Dupliquer & supprimer *(2026.07.14)*
+
+**Dupliquer** une tâche demande d'emblée le **nouvel identifiant** — l'identifiant est immuable dans l'éditeur, une copie a donc besoin de son propre nom dès le départ. **Supprimer** retire la tâche de `jobs.toml` (configuration seulement) ; son historique d'exécutions est conservé.
+
+---
+
 ## ② Planification
 
 Le bloc qui détermine quand la tâche se déclenche automatiquement.
@@ -18688,6 +18707,16 @@ Quand l'aperçu indique autre chose que ce qui était attendu, vous avez détect
 La page **Tâches** comporte un bouton **📅 Vue calendrier** dans la barre d'outils. Il ouvre un calendrier de tous les prochains déclenchements de toutes les tâches activées — utile quand vous avez dix tâches cron et souhaitez repérer les collisions.
 
 Chaque pastille représente un déclenchement — un clic dessus mène à la fiche de la tâche dans le catalogue. La couleur des pastilles vient des étiquettes (le calendrier utilise la première étiquette de la tâche). Les heures où deux tâches lourdes s'exécuteraient en même temps sont signalées par un avertissement — Nomaflow n'impose pas d'exécution sérielle, mais le calendrier aide à éviter les chevauchements.
+
+---
+
+## Presets planifiables \{#schedulable-presets\} *(2026.07.14)*
+
+Un **preset** — un jeu de paramètres d'exécution enregistré (params, `op_kwargs`, activations de steps, niveau de log) — peut porter son propre **cron + fuseau horaire**. Le planificateur déclenche alors la tâche selon cette planification *avec les paramètres du preset* : une même tâche tourne sur plusieurs planifications avec des entrées différentes, sans clonage.
+
+Chaque preset a sa propre bascule **d'activation**, **indépendante du `Enabled` de la tâche** : un preset activé se déclenche même quand la planification propre de la tâche est coupée (le `Enabled` de la tâche ne pilote que son propre cron). La vue calendrier liste **une ligne par planification** — le cron de la tâche plus celui de chaque preset — et signale un déclencheur planifié mais désactivé, pour qu'on voie tout de suite pourquoi il ne part pas.
+
+Pratique pour le cas « même tâche, fenêtres différentes » — un run complet nocturne et un incrémental horaire du même ETL, chacun un preset avec son cron et ses paramètres.
 
 ---
 
@@ -24307,6 +24336,7 @@ Paramètres réservés aux applications JDE. Renseigner les schémas qui localis
 
 | Champ | À renseigner |
 |---|---|
+| **Pool** *(2026.07.14)* | Le pool de connecteur que les tâches de collecte utilisent pour cette application : un seul connecteur `jdedwards` peut ainsi desservir plusieurs environnements JDE — pointez chaque apps_id sur son propre pool. Laissez vide pour conserver le `source_connector` par défaut de la tâche. Seule la connexion change ; les schémas et DB-links JDE ci-dessous proviennent toujours de ces paramètres. |
 | **JDE SY** | Schéma qui contient les tables JDE *System*. |
 | **JDE DTA** | Schéma qui contient les tables *Business Data*. |
 | **JDE CTL** | Schéma qui contient les tables *Control*. |

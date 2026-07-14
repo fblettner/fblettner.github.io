@@ -174,6 +174,16 @@ Each chip is a fire — click it to jump to the job's catalogue card. Chips are 
 
 ---
 
+## Schedulable presets \{#schedulable-presets\} *(2026.07.14)*
+
+A **preset** — a saved set of run parameters (params, `op_kwargs`, step toggles, log level) — can carry its own **cron + timezone**. The scheduler then fires the job on that schedule *with the preset's parameters*, so one job runs on several schedules with different inputs, without cloning it.
+
+Each preset has its own **enable** toggle, **independent of the job's `Enabled`**: an enabled preset fires even when the job's own schedule is off (the job's `Enabled` gates only the job's own cron). The Schedule view lists **one row per schedule** — the job's cron plus each preset's — and marks a scheduled-but-disabled trigger, so it's clear why one isn't firing.
+
+Use it for the common "same job, different windows" case — a nightly full run and an hourly incremental of the same ETL, each a preset with its own cron and parameters.
+
+---
+
 ## Patterns most installs settle on
 
 | Workload | Schedule | Why |

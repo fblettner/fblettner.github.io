@@ -83,6 +83,12 @@ La plupart des installations adoptent `<domaine>-<objectif>` ou `<domaine>-<obje
 
 ---
 
+### Dupliquer & supprimer *(2026.07.14)*
+
+**Dupliquer** une tâche demande d'emblée le **nouvel identifiant** — l'identifiant est immuable dans l'éditeur, une copie a donc besoin de son propre nom dès le départ. **Supprimer** retire la tâche de `jobs.toml` (configuration seulement) ; son historique d'exécutions est conservé.
+
+---
+
 ## ② Planification
 
 Le bloc qui détermine quand la tâche se déclenche automatiquement.

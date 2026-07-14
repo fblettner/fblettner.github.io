@@ -12902,6 +12902,19 @@ A per-connector **Thick LOB** toggle switches the read for that connector into a
 
 ---
 
+### Multi-pool connectors \{#multi-pool\} *(2026.07.14)*
+
+One SQL connector can serve **several pools** — several database or JDE instances — without cloning the connector or duplicating its screens. Alongside the default **Pool**, list the extra ones in **Pools** (both are dropdowns of configured pools in *Settings → Connectors → Settings…*); the same named queries and the same screens then run against any pool in the set.
+
+The pool is chosen at runtime:
+
+- **In the app** — when the current app spans a multi-pool connector, the app switcher shows a **Pool** picker. Picking a pool re-runs that app's screens against the chosen instance. The choice is per app and persisted, and it applies only to the connectors that actually declare that pool — an app's other (single-pool) connectors keep their default rather than erroring.
+- **In jobs** — the `sql_copy` and `sql_query` [steps](../nomaflow/steps.md) take `source_pool` / `target_pool` to target a specific instance without a new connector.
+
+The reachable set is the default `pool` plus `pools`; a request or a job can never reach a pool outside it, and only pool **names** reach the picker — never a URL or credentials. A connector with just a `pool` behaves exactly as before.
+
+---
+
 ## HTTP connector
 
 The form re-shapes when *Type* is set to `HTTP`. The pool dropdown disappears; a *Base URL* + *Authentication* block takes its place.
@@ -22784,6 +22797,12 @@ Most installs settle on `<domain>-<purpose>` or `<domain>-<purpose>-<scope>`:
 
 ---
 
+### Duplicate & delete *(2026.07.14)*
+
+**Duplicate** a job and you're prompted for the **new id** up front — the id is immutable in the editor, so a copy needs its own name from the start. **Delete** removes the job from `jobs.toml` (configuration only); its past run history is kept.
+
+---
+
 ## ② Schedule
 
 The block that decides when the job auto-fires.
@@ -23084,6 +23103,16 @@ When the preview reads something different than you expected, you caught a bug *
 The **Jobs** page has a **📅 Schedule view** button in the toolbar. It opens a calendar of every upcoming fire across every enabled job — useful when you have ten cron jobs and want to spot collisions.
 
 Each chip is a fire — click it to jump to the job's catalogue card. Chips are coloured by tag (the calendar uses the first tag the job carries). Hours where two heavy jobs would run at the same time are flagged with a warning — Nomaflow doesn't enforce serial execution, but the calendar helps you avoid overlap.
+
+---
+
+## Schedulable presets \{#schedulable-presets\} *(2026.07.14)*
+
+A **preset** — a saved set of run parameters (params, `op_kwargs`, step toggles, log level) — can carry its own **cron + timezone**. The scheduler then fires the job on that schedule *with the preset's parameters*, so one job runs on several schedules with different inputs, without cloning it.
+
+Each preset has its own **enable** toggle, **independent of the job's `Enabled`**: an enabled preset fires even when the job's own schedule is off (the job's `Enabled` gates only the job's own cron). The Schedule view lists **one row per schedule** — the job's cron plus each preset's — and marks a scheduled-but-disabled trigger, so it's clear why one isn't firing.
+
+Use it for the common "same job, different windows" case — a nightly full run and an hourly incremental of the same ETL, each a preset with its own cron and parameters.
 
 ---
 
@@ -28793,6 +28822,7 @@ Settings used only when the application is a JDE one. Fill in the schemas that l
 
 | Field | What to enter |
 |---|---|
+| **Pool** *(2026.07.14)* | The connector pool the collection jobs use for this application, so a single `jdedwards` connector can serve several JDE environments — point each apps_id at its own pool. Leave blank to keep the job's default `source_connector`. Only the connection changes; the JDE schemas and DB-links below still come from these settings. |
 | **JDE SY** | Schema that holds the JDE *System* tables. |
 | **JDE DTA** | Schema that holds the *Business Data* tables. |
 | **JDE CTL** | Schema that holds the *Control* tables. |
