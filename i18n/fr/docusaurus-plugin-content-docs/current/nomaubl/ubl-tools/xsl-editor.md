@@ -196,7 +196,7 @@ Le formulaire de mapping — l'alternative visuelle à la rédaction XSLT manuel
 | Bouton | Comportement |
 |---|---|
 | **Load XML Source** | Charge un échantillon XML (côté navigateur) et en extrait tous les chemins d'éléments. Les chemins alimentent les sélecteurs en regard de chaque champ — les valeurs se renseignent par clic plutôt que par saisie. |
-| **Charger un échantillon connecteur** *(2026.05.16)* | Quand le modèle de document actif est en `source = Connecteur`, ce bouton appelle une fois la requête SQL ou l'endpoint REST configuré, puis injecte la réponse dans le même sélecteur de chemins. Les listes déroulantes XPath autocomplètent alors sur des données réelles — même expérience qu'avec un vrai spool XML, sans aucun fichier. Le bouton est masqué pour les modèles `XML` et `UBL`. |
+| **Charger un échantillon connecteur** | Quand le modèle de document actif est en `source = Connecteur`, ce bouton appelle une fois la requête SQL ou l'endpoint REST configuré, puis injecte la réponse dans le même sélecteur de chemins. Les listes déroulantes XPath autocomplètent alors sur des données réelles — même expérience qu'avec un vrai spool XML, sans aucun fichier. Le bouton est masqué pour les modèles `XML` et `UBL`. |
 | **AI Auto-Map** ✦ | Ouvre la modale *AI Auto-Map*. À partir d'un échantillon XML (et d'un PDF optionnel), l'IA renvoie un mapping JSON des variables `TAG_*` vers les chemins XML, correctement scopés. Voir [AI Auto-Map](#ai-auto-map) ci-dessous. |
 | **Save Mappings** | Réécrit dans le fichier XSLT les valeurs courantes de toutes les variables `TAG_*`. Le point indicateur (`●`) apparaît quand le mapping a changé sans avoir été enregistré. |
 
@@ -212,8 +212,8 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Billing References** | BT-11, BT-14 à BT-18, BT-122 à BT-124 | Projet, contrat, expédition, justificatifs. |
 | **Preceding Invoices — répété** *(BG-3, 0..n)* | BT-25, BT-26 | Parcourt un groupe source répétitif et génère un `cac:BillingReference` par facture antérieure (avec une date d'émission facultative), en complément de la référence unique BT-25/BT-26 déjà gérée dans *Billing References*. |
 | **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Joindre un document déjà encodé en base64 dans le spool source — jusqu'à quatre par facture. Voir [Pièces jointes intégrées](#embedded-attachments) plus bas. |
-| **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur — plus, dans le panneau *Seller Identifiers* *(2026.07.12)*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-29), chacun un champ source + un code de la liste *Scheme IDs*. |
-| **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur — plus, dans le panneau *Buyer Identifiers* *(2026.07.12)*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-46), chacun un champ source + un code de la liste *Scheme IDs*. |
+| **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur — plus, dans le panneau *Seller Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-29), chacun un champ source + un code de la liste *Scheme IDs*. |
+| **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur — plus, dans le panneau *Buyer Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-46), chacun un champ source + un code de la liste *Scheme IDs*. |
 | **Agent Party** | extended-ctc-fr | Tiers intermédiaire optionnel. |
 | **Delivery** | BT-70 à BT-80 | Date et adresse de livraison. |
 | **Payment** | BT-20, BT-81 à BT-91 | Moyen, IBAN, BIC, mandat, conditions. |
@@ -230,11 +230,11 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 
 Chaque champ affiche le libellé du BT, son code BT en badge coloré, la valeur courante (chemin XML ou expression) et un sélecteur `↓` qui ouvre le [navigateur XML](#navigateur-xml) sur la droite.
 
-:::info[Couverture complète des champs *(2026.06.15)*]
+:::info[Couverture complète des champs]
 La référence de champs liste désormais chaque groupe (BG) et terme (BT) que le Schematron étendu (BR-FR / CTC-FR 1.3.1) contrôle et que l'éditeur sait mapper — BG-3 à BG-32 et les termes qu'ils encadrent (facture précédente BT-25/26, devise de comptabilisation TVA BT-6 / BT-111, date du fait générateur BT-7, identifiant fiscal vendeur BT-32, subdivisions acheteur / livraison BT-54 / BT-79, contact acheteur BT-56, lieu de livraison BT-71, numéro de carte tronqué BT-87, code unité de quantité BT-130, assiette et motif des charges de ligne BT-142/145, ligne 3 d'adresse de livraison BT-165, et d'autres). Ce que vous pouvez mapper ici correspond désormais exactement à ce que le [validateur](./validate.md) contrôle.
 :::
 
-:::info[Encore plus de champs mappables *(2026.07.08)*]
+:::info[Encore plus de champs mappables]
 L'éditeur a gagné un mappage **Buyer trading name** (BT-45 → `cac:PartyName/cbc:Name` sur la partie client, à l'image du nom commercial vendeur BT-28), et trois mappages de totaux document — **Sum of charges** (BT-108), **Amount already paid** (BT-113) et **Rounding amount** (BT-114). Quand un montant déjà payé ou un arrondi est mappé, le montant dû (BT-115) est calculé comme *total avec TVA − déjà payé + arrondi*. Un mappage ajouté à un modèle apparaît désormais toujours dans sa section, même quand la liste de champs intégrée ne le prévoyait pas.
 :::
 

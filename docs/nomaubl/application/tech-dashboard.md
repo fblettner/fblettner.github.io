@@ -275,7 +275,7 @@ The card subtitle on the right shows the **build version + build date** baked in
 
 Static shortcut list — the IT operator's most-used pages. Each link uses the same `onNavigate` mechanism as the sidebar so it lands on the target page directly. Default targets: **Settings**, **Processing Log**, **File Versions**, **Cross-Reference**.
 
-### Send Failed (row 2, span 4) *(2026.06.03)*
+### Send Failed (row 2, span 4) \{#send-failed\}
 
 A single big-number card showing how many invoices are currently in *Send failed* (status `9904`). When the count is non-zero, a **Resend all N** button below the number replays every matching invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md). Clicking it opens the [shared progress window](#shared-progress-window) — live counters, a *Cancel* button and a *Run in background* button that hides the window while the work keeps going server-side. The resend is throttled at **100 ms per call** so the PA stays inside its rate budget.
 
@@ -294,7 +294,7 @@ Lists every active scheduler job:
 
 - **Built-ins** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — driven by `BackgroundScheduler` polling intervals.
 - **Per-template `fetch-all`** — one row per template that has a scheduled extract / sync.
-- **Per-row Auto-Retry sweeps** *(2026.06.03)* — one row per saved entry on the [Auto-Retry](../configuration/system/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
+- **Per-row Auto-Retry sweeps** — one row per saved entry on the [Auto-Retry](../configuration/system/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
 
 Each row shows the job name, the cadence, and a status pill (green active, blue scheduled-soon, orange paused). The card subtitle reports the active count.
 
@@ -341,7 +341,7 @@ Path values that contain runtime placeholders (`%TEMPLATE%`, `%FILE_NAME%`) are 
 
 Average end-to-end processing time per template, in seconds, over the last 14 days. The card pulls flat `START` / `END` events from `F564237` and pairs them in Java keyed on `(FEWDS1|FEUPMJ)` — the prior implementation used a self-join SQL with ambiguous `FETMPL` and incorrect `e.FEUPMT - s.FEUPMT` math, which is now fixed.
 
-#### Per-step breakdown when `debugProfile` is on *(2026.05.9)*
+#### Per-step breakdown when `debugProfile` is on
 
 When the [`debugProfile`](../configuration/system/global.md) toggle on the `global` template is set to `Y`, every processing run writes one row per pipeline stage to `F564237` — **header parsing**, **lines parsing**, **validation**, **UBL emit**, **PA send**. The Template processing time card surfaces them as a stacked breakdown under the per-template totals, so a slow stage is visible at a glance without digging into the runtime log.
 

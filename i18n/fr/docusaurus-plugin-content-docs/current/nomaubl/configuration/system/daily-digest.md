@@ -230,7 +230,6 @@ L'exécution *Envoyer maintenant* met aussi à jour le badge *dernier envoi*, ce
 | La pièce jointe contient des erreurs plus anciennes que la fenêtre d'analyse. | La fenêtre d'analyse sélectionne d'abord les **factures** qui ont au moins une erreur dans la fenêtre, puis exporte **toutes** les erreurs de ces factures — c'est le même comportement que la [Vue détaillée](../../application/integration-errors.md#detailed-view). C'est intentionnel. | S'il vous faut un export strict à la fenêtre, faites-le manuellement depuis l'onglet *Par évènement*. |
 | Deux destinataires reçoivent le même rapport en double. | Deux lignes de rapport dans le catalogue ont des listes de destinataires qui se recoupent. | Auditez le catalogue ; fusionnez ou dédoublonnez. |
 | Le rapport part à la mauvaise heure. | Le fuseau horaire pointe sur la mauvaise zone. | Ouvrez le rapport, renseignez le bon fuseau IANA (`Europe/Paris`, `Africa/Casablanca`, …) et enregistrez. |
-| Le formulaire a perdu les valeurs après Enregistrer. *(2026.05.x)* | Corrigé en 2026.06.02. | Mettez à jour vers la build courante — le formulaire se rafraîchit désormais depuis l'enregistrement fraîchement sauvegardé. |
 
 ---
 

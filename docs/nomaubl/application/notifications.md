@@ -145,7 +145,7 @@ A notification row carries five visual cues: the **status badge** at the left (c
 | **Subject (top line)** | `NTSUBJ` (rule's `emailSubject`, or the dispatcher default) | Short, human-readable headline. The default is `Invoice {doc} {dct} {kco} — {statusLabel}`. |
 | **Message (second line)** | `NTMSGE` (rule's `emailBody`, or the dispatcher default) | The fuller body text. Truncated on overflow; the modal that opens on click carries the full lifecycle. |
 | **Meta line** | `NTDOC · NTDCT · NTKCO · reason · action · rule` | Canonical invoice identifiers, plus the PA rejection reason / expected action / rule name when present. The reason and action are resolved against the *rejection-reason-codes* and *action-codes* catalogues, so the user reads the human label, not the bare code. |
-| **Action audit chips** *(2026.05.7)* | `NTK74MSG2` audit footer | One coloured chip per connector call the dispatcher fired for the rule. See [Action audit chips](#action-audit-chips) below. |
+| **Action audit chips** | `NTK74MSG2` audit footer | One coloured chip per connector call the dispatcher fired for the rule. See [Action audit chips](#action-audit-chips) below. |
 | **Relative time** | `NTUPMJ` + `NTTDAY` | *just now*, *2 min ago*, *14:32* (today), *Yesterday*, then the absolute `dd/mm/yyyy hh:mm` for older entries. |
 | **Dismiss button** | per-row | Removes the row from the inbox without marking the rest as read. |
 

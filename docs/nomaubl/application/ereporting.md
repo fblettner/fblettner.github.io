@@ -310,7 +310,7 @@ The toolbar above the table combines three free-text filters with two quick acti
 | **Refresh** | Re-runs the current query without changing filters. |
 | **Generate report** | Opens the *Generate dialog* — described below. Hidden on read-only sessions. |
 
-### Advanced Filters *(2026.05.10)*
+### Advanced Filters
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.ereporting`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 

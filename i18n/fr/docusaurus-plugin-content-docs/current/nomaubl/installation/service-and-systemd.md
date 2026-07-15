@@ -71,7 +71,7 @@ Le jeu complet des commandes de cycle de vie (identique sur les deux wrappers, r
 
 Pour le quotidien opérationnel, le wrapper suffit. La couche de supervision au niveau du système d'exploitation ci-dessous ajoute le démarrage **automatique** au boot et le redémarrage sur crash.
 
-### Réglage JVM — `JAVA_OPTS` *(2026.06.02)* \{#java-opts\}
+### Réglage JVM — `JAVA_OPTS` \{#java-opts\}
 
 Les deux wrappers proposent une variable **`JAVA_OPTS`** en tête de fichier. Son contenu est transmis à chaque appel `java -jar` — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Modifier le fichier une fois ; chaque appel ultérieur du wrapper la reprend.
 

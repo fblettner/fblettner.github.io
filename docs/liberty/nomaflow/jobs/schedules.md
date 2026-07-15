@@ -174,7 +174,7 @@ Each chip is a fire — click it to jump to the job's catalogue card. Chips are 
 
 ---
 
-## Schedulable presets \{#schedulable-presets\} *(2026.07.14)*
+## Schedulable presets \{#schedulable-presets\}
 
 A **preset** — a saved set of run parameters (params, `op_kwargs`, step toggles, log level) — can carry its own **cron + timezone**. The scheduler then fires the job on that schedule *with the preset's parameters*, so one job runs on several schedules with different inputs, without cloning it.
 

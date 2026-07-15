@@ -154,7 +154,7 @@ La valeur Direction est écrite une fois sur la ligne au moment de l'insertion (
 
 ### Identification du document *(quand Source = UBL)* \{#document-identification-ubl\}
 
-*(2026.06.13)* Un fichier UBL ne porte aucun spool d'où extraire les données : l'**Activité** et le **Type** que la source XML récupère par XPath se saisissent ici en texte. Le groupe se trouve en haut de la branche UBL et les deux champs sont **obligatoires** — ils sont écrits dans la ligne de suivi `F564230` dont dépendent l'envoi PA et fetch-import.
+ Un fichier UBL ne porte aucun spool d'où extraire les données : l'**Activité** et le **Type** que la source XML récupère par XPath se saisissent ici en texte. Le groupe se trouve en haut de la branche UBL et les deux champs sont **obligatoires** — ils sont écrits dans la ligne de suivi `F564230` dont dépendent l'envoi PA et fetch-import.
 
 | Champ | Description |
 |---|---|
@@ -312,7 +312,7 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | Champ | Valeurs | Description |
 |---|---|---|
 | **UBL XSLT** | chemin | Transformation XSL du XML source vers l'**UBL 2.1**. Le placeholder `%APP_HOME%` est remplacé par la racine d'installation de NomaUBL. |
-| **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` *(2026.07.05)* = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
+| **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
 | **LISIBLE** | `Y` / `N` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. |
 
 ### Pièces jointes complémentaires
@@ -326,7 +326,7 @@ En plus du PDF lisible principal, un type de document peut joindre **d'autres fi
 
 Le bouton **`{ }`** placé à côté du champ chemin ouvre une liste filtrable et insère le jeton choisi à l'endroit du curseur — aussi bien les jetons du catalogue de facture (`{{kco}}`, `{{fedoc}}`, …) que les variables de chemin `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%` —, ce qui évite d'avoir à retenir leur écriture exacte. **Ajouter une pièce jointe** crée une nouvelle ligne.
 
-:::info[Les modèles source UBL embarquent aussi les pièces jointes *(2026.06.13)*]
+:::info[Les modèles source UBL embarquent aussi les pièces jointes]
 Un modèle en *Source = UBL* embarque désormais les mêmes PDF que le flux XML — après validation et avant l'insert en base, pour que l'UBL stocké corresponde à ce qui est envoyé à la PA :
 
 - **Attachment `attach`** embarque un PDF voisin depuis le répertoire d'entrée sous `cbc:ID="PJA"`.
@@ -369,7 +369,7 @@ L'éditeur visuel — liste de sections, tiroir par section, aperçu en direct, 
 
 ---
 
-## Onglet 5 — 🔗 Enrichment *(2026.07.09)*
+## Onglet 5 — 🔗 Enrichment
 
 Quand le spool source n'a pas une donnée dont la facture a besoin — le numéro de TVA d'un client, un libellé issu d'une table de référence — l'onglet **Enrichment** va la chercher sur un [connecteur SQL](../configuration/sql-connectors.md) ou [API](../configuration/api-connectors.md) et l'injecte dans le spool **avant** la transformation XSL. Les valeurs récupérées se mappent alors dans l'[éditeur XSL](../ubl-tools/xsl-editor.md) comme n'importe quel champ du spool, et sont archivées avec la source.
 

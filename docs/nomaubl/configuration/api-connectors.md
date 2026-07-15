@@ -132,7 +132,7 @@ The editor has **five tabs**:
 | **Base URL** | Root URL of the target API (e.g. `https://api.example.com:9300`). All endpoint paths are appended to this URL. |
 | **Timeout (ms)** | HTTP request timeout in milliseconds. Default `30000` (30 s). |
 | **SSL Verify** | `true` / `false` — whether to validate the server's TLS certificate. Set to `false` only in non-production environments using self-signed certificates. |
-| **Debug** *(2026.06.14)* | `Y` / `N` (default `N`). When `Y`, every call through this connector prints a one-line request + response trace — URL, HTTP status and a body preview — to the service log. Turn it on while wiring a new platform to check URL substitution, query parameters and the response shape; turn it off once the connector is stable. One uniform trace replaces the old ad-hoc logging in *import-status* and *invoice-statuses*. |
+| **Debug** | `Y` / `N` (default `N`). When `Y`, every call through this connector prints a one-line request + response trace — URL, HTTP status and a body preview — to the service log. Turn it on while wiring a new platform to check URL substitution, query parameters and the response shape; turn it off once the connector is stable. One uniform trace replaces the old ad-hoc logging in *import-status* and *invoice-statuses*. |
 
 ### Default Headers
 
@@ -188,9 +188,9 @@ This is the typical choice for **JD Edwards AIS** and most modern PA APIs — No
 | **Endpoint path** | Path to the token endpoint (e.g. `/v7.3/tokenrequest` for JD Edwards AIS, `/oauth2/token` for an OAuth2 client_credentials flow). Combined with **Base URL**. |
 | **Token field** | Dot-notation JSON path used to extract the token from the response (e.g. `userInfo.token` for JD Edwards AIS). **Leave empty** to auto-detect — the runtime tries `access_token` first then `token`, which covers the standard OAuth2 client_credentials response shape without configuration. |
 | **Token TTL (minutes)** | How long the token is cached before a new one is requested. Default `55` minutes. |
-| **Body Content-Type** *(2026.05.8)* | `application/json` *(default)* or `application/x-www-form-urlencoded`. The form variant emits the token request body as URL-encoded pairs, which is what the standard OAuth2 `client_credentials` flow expects. |
+| **Body Content-Type** | `application/json` *(default)* or `application/x-www-form-urlencoded`. The form variant emits the token request body as URL-encoded pairs, which is what the standard OAuth2 `client_credentials` flow expects. |
 | **Body template** | Custom request body, with `{{username}}` / `{{password}}` placeholders. **Leave empty** to use sensible defaults: JSON mode emits the JD Edwards AIS payload (`{ username, password, deviceName }`); form mode emits `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`. |
-| **Token request headers** *(2026.05.8)* | Optional. Semicolon-separated `Key:Value` pairs sent **only on the token request** — for PAs that require a tenant-id header on the auth call itself. Example: `customer-id:CUST123;X-Tenant:acme`. |
+| **Token request headers** | Optional. Semicolon-separated `Key:Value` pairs sent **only on the token request** — for PAs that require a tenant-id header on the auth call itself. Example: `customer-id:CUST123;X-Tenant:acme`. |
 
 ---
 
@@ -198,7 +198,7 @@ This is the typical choice for **JD Edwards AIS** and most modern PA APIs — No
 
 The catalogue of HTTP endpoints reachable through this connector. Each entry is a collapsible card; click the header to expand or collapse.
 
-:::tip[Expected endpoints *(2026.07.13)*]
+:::tip[Expected endpoints]
 The editor lists the platform endpoints NomaUBL knows about — *send*, *import status*, *invoice statuses*, their `-selfbilled` variants (which route self-billed / purchase-flow documents and fall back to the standard flow) and the directory check — marking those already configured and offering a one-click **add** for those missing, so a required endpoint is harder to overlook.
 :::
 
@@ -218,13 +218,13 @@ All other placeholders must be **declared in the endpoint's Parameters section**
 | **Label** | Human-readable label shown in the editor and in dropdowns when a user picks an endpoint (e.g. `Get Order Lines`). |
 | **Method** | HTTP method (`GET` / `POST` / `PUT` / `DELETE` / `PATCH`). |
 | **URL path** | Endpoint path appended to the connector's **Base URL** (e.g. `/v7.3/orchestrator/{{name}}`). |
-| **Content-Type** *(2026.05.9)* | `application/json` *(default)* or `multipart/form-data`. The multipart variant turns the body into a list of parts — see *Multipart bodies* below. |
+| **Content-Type** | `application/json` *(default)* or `multipart/form-data`. The multipart variant turns the body into a list of parts — see *Multipart bodies* below. |
 | **Extra headers** | Semicolon-separated `Key:Value` pairs added to (or overriding) the connector's default headers (e.g. `X-Custom:value;Authorization:Bearer {{token}}`). |
 | **Body** | Request body — a JSON template with `{{param}}` placeholders. The **Format JSON** button pretty-prints the value. For `multipart/form-data`, the body is parsed as one part per line (`name=value` or `file=@{{filePath}};filename=…;contentType=…`). |
 | **Query params** | Query string template with `{{param}}` placeholders (e.g. `pageSize={{pageSize}}&page={{page}}`). |
 | **Response field** | Optional dot-notation path (e.g. `data.items`) extracting a sub-tree of the response — useful when the caller is only interested in part of the payload. |
-| **Response type** *(2026.07.08)* | `JSON` *(default)* or `XML`. In `XML` mode *Response field* and *Response mappings* are read as **XPath**, so a platform that answers import-status with a UBL `ApplicationResponse` — status in `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — can be polled like a JSON one. The `cac` / `cbc` / `ext` prefixes are recognised; use `//*[local-name()='X']` for anything else. |
-| **Status map** *(2026.07.08)* | Translates the platform's own status words (e.g. `send_error`, `sent`, `processing`) to the internal *accepted / pending / rejected* outcomes, so import-status marks the invoice correctly instead of optimistically treating an unrecognised status as accepted. |
+| **Response type** | `JSON` *(default)* or `XML`. In `XML` mode *Response field* and *Response mappings* are read as **XPath**, so a platform that answers import-status with a UBL `ApplicationResponse` — status in `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — can be polled like a JSON one. The `cac` / `cbc` / `ext` prefixes are recognised; use `//*[local-name()='X']` for anything else. |
+| **Status map** | Translates the platform's own status words (e.g. `send_error`, `sent`, `processing`) to the internal *accepted / pending / rejected* outcomes, so import-status marks the invoice correctly instead of optimistically treating an unrecognised status as accepted. |
 | **Description** | Free-text description shown in dropdowns and in the editor header. |
 
 #### Multipart bodies
@@ -240,7 +240,7 @@ Typical use case: a PA that takes the UBL invoice as a `multipart/form-data` upl
 
 Three placeholders carry the document into the part:
 
-- `{{filePath}}` — the path to the UBL file on disk. On the **initial send** it is the input file; on a **resend** *(2026.06.13)* NomaUBL writes the stored UBL blob to a temporary file first, so `{{filePath}}` works the same way and one connector configuration serves both (the temp file is cleaned up automatically).
+- `{{filePath}}` — the path to the UBL file on disk. On the **initial send** it is the input file; on a **resend** NomaUBL writes the stored UBL blob to a temporary file first, so `{{filePath}}` works the same way and one connector configuration serves both (the temp file is cleaned up automatically).
 - `{{content}}` — the base64 of the UBL, for platforms that take the bytes inline in a JSON body rather than as a file part.
 - `{{docName}}` — a sanitised `<doc>_<dct>_<kco>` name, handy for the `filename` header.
 
@@ -317,7 +317,7 @@ The body is a JSON template; `{{reportName}}`, `{{reportVersion}}` and `{{compan
 
 ### Endpoint chaining (`then`) \{#endpoint-chaining\}
 
-*(2026.06.13)* An endpoint can hand its result to a follow-up call in the same step. Set **`then`** to the name of the next endpoint, and **`then.itemsField`** / **`then.idField`** to pick the id to carry forward from the first response. That id reaches the follow-up as `{{prevId}}` (also aliased `{{uuid}}`). It powers two-step platform flows — *upload then process*, or *list then fetch each detail* — without a round-trip through NomaUBL between the calls.
+ An endpoint can hand its result to a follow-up call in the same step. Set **`then`** to the name of the next endpoint, and **`then.itemsField`** / **`then.idField`** to pick the id to carry forward from the first response. That id reaches the follow-up as `{{prevId}}` (also aliased `{{uuid}}`). It powers two-step platform flows — *upload then process*, or *list then fetch each detail* — without a round-trip through NomaUBL between the calls.
 
 ### Worked example — Esker (upload, then process) \{#esker\}
 

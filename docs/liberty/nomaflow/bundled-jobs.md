@@ -253,7 +253,7 @@ This job — and its `-all` sibling — solves the JDE-specific problem that rol
 |---|---|
 | `REMERGE_SECURITY` | `nomajde.security:j_remerge_security` — reads the active draft package, derives the impacted parent set via the anchored `F00926` role queries, re-merges F00950 / F00950W / F9006 per parent. |
 
-**Parameters** *(2026.06.09)*
+**Parameters**
 
 | Key | Default | What |
 |---|---|---|

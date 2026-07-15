@@ -164,7 +164,7 @@ The same toolbar drives both views.
 
 | Control | Behaviour |
 |---|---|
-| **View toggle** | *By rule* (default after a deep-link from the dashboard), *By event*, or *Detailed* *(2026.06.02)*. Other filters carry across — switching tabs keeps the search, severity and category filters intact. |
+| **View toggle** | *By rule* (default after a deep-link from the dashboard), *By event*, or *Detailed*. Other filters carry across — switching tabs keeps the search, severity and category filters intact. |
 | **Search** | Substring match against `DOC`, `DCT`, `KCO` and the message text. Server-side, debounced. |
 | **Category** | *All sources* (default), *UBL validation* (Schematron / XSD rules — `UVSRCL IN ('EN16931', 'CIUSFR', 'FREXTIC', 'CPRO', 'XSD', 'UBL')`), *Integration / lifecycle* (everything else — runtime errors emitted by the dispatcher: PDF, PA, DB, …). |
 | **Severity chips** | *All* / *FATAL* / *ERROR* / *WARNING* / *INFO*. One severity at a time; clicking the active chip resets to *All*. |
@@ -172,7 +172,7 @@ The same toolbar drives both views.
 | **Refresh** | Re-runs the current query. |
 | **Export** *(detailed only)* | Drops every event in scope to an Excel file. Every group's events are written — even those hidden inside a collapsed row on screen. The same data the [Daily Digest](../configuration/system/daily-digest.md) emails as an attachment. |
 
-### Advanced Filters *(2026.05.10)*
+### Advanced Filters
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.integration-errors`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
@@ -227,7 +227,7 @@ Since 2026.05.10 the table renders through **DataTableV2** in spec-driven mode: 
 | Column | Source | Description |
 |---|---|---|
 | **Severity** | `UVY56LEVEL` | Coloured badge — *FATAL* / *ERROR* / *WARNING* / *INFO*. |
-| **Date** *(2026.05.9)* | `UVUPMJ` + `UVUPMT` | Date and time the event was recorded. Same time context as the Tech Dashboard's recent-errors card, so triage no longer requires opening a row first. |
+| **Date** | `UVUPMJ` + `UVUPMT` | Date and time the event was recorded. Same time context as the Tech Dashboard's recent-errors card, so triage no longer requires opening a row first. |
 | **Doc** | `UVDOC` | Document number from the source data. |
 | **Dct** | `UVDCT` | Document type. |
 | **Kco** | `UVKCO` | Company code. |

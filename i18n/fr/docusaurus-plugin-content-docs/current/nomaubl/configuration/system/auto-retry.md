@@ -8,7 +8,7 @@ keywords: [NomaUBL, reprise auto, reprise nocturne, échec d'envoi, statut 9904,
 
 L'écran **Reprise auto** planifie un passage récurrent qui renvoie chaque facture dans un statut d'erreur technique choisi vers la Plateforme Agréée (PA). La ligne par défaut traite le statut `9904` (*Échec d'envoi*) chaque nuit à 3 h — le garde-fou du lot nocturne pour que tout ce qui reste bloqué côté PA en fin de journée soit repris avant la reprise des opérations le matin.
 
-Plusieurs lignes peuvent coexister : une par combinaison (heure, liste de statuts). Le même chemin de code pilote le bouton manuel *Tout renvoyer N* sur la [carte Échec d'envoi du Tableau de bord technique](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603), si bien que le renvoi manuel et le renvoi planifié produisent des résultats identiques — l'un est déclenché à la main, l'autre par cron.
+Plusieurs lignes peuvent coexister : une par combinaison (heure, liste de statuts). Le même chemin de code pilote le bouton manuel *Tout renvoyer N* sur la [carte Échec d'envoi du Tableau de bord technique](../../application/tech-dashboard.md#send-failed), si bien que le renvoi manuel et le renvoi planifié produisent des résultats identiques — l'un est déclenché à la main, l'autre par cron.
 
 La page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP sur mesure. Le renvoi lit `F564231` pour sélectionner les factures concernées et appelle l'api-connector PA configuré pour chacune ; le format source est transparent.
 
@@ -193,7 +193,7 @@ L'exécution déclenchée par *Exécuter maintenant* respecte le même cadenceme
 |---|---|---|
 | La ligne planifiée ne se déclenche pas. | La ligne est *DÉSACTIVÉE*. | Ouvrez la ligne, basculez *Activé* sur oui, enregistrez. |
 | La ligne se déclenche mais traite zéro facture. | La liste de statuts et la fenêtre d'analyse combinées donnent zéro correspondance. | Inspectez la page [E-Invoicing](../../application/invoices.md) avec le même filtre de statuts ; élargissez la fenêtre ou assouplissez la liste de statuts. |
-| La reprise se termine mais le décompte est très inférieur au nombre de la [carte Échec d'envoi](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603). | Le tableau de bord compte chaque `9904` sans tenir compte de l'âge ; une ligne avec une fenêtre de 7 jours ignore tout ce qui est plus ancien. | Soit retirez la fenêtre (`0` = aucun filtre), soit planifiez une seconde ligne avec une fenêtre plus large pour le stock ancien. |
+| La reprise se termine mais le décompte est très inférieur au nombre de la [carte Échec d'envoi](../../application/tech-dashboard.md#send-failed). | Le tableau de bord compte chaque `9904` sans tenir compte de l'âge ; une ligne avec une fenêtre de 7 jours ignore tout ce qui est plus ancien. | Soit retirez la fenêtre (`0` = aucun filtre), soit planifiez une seconde ligne avec une fenêtre plus large pour le stock ancien. |
 | Erreurs `429 Too Many Requests` dans le journal d'exécution. | Limite de débit PA atteinte. | Augmentez le cadencement (par ex. 100 ms → 250 ms) sur la ligne et relancez. |
 | Deux lignes ont toutes deux démarré à `03:00` et l'une a bloqué l'autre. | Aucun décalage de minute — elles ont sollicité le pool de connexions en même temps. | Échelonnez les lignes (`:00`, `:15`, `:30`). |
 | Le bouton *Exécuter maintenant* est grisé. | La reprise est déjà en cours (un passage planifié ou un *Exécuter maintenant* précédent). | Ouvrez la carte Planificateur du tableau de bord → cliquez sur la ligne active → utilisez *Annuler* dans la fenêtre modale si besoin, ou attendez. |
@@ -203,7 +203,7 @@ L'exécution déclenchée par *Exécuter maintenant* respecte le même cadenceme
 
 ## Pour aller plus loin
 
-- [Tableau de bord technique → Échec d'envoi](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603) — le renvoi manuel en un clic ; même chemin de code, déclenché à la main.
+- [Tableau de bord technique → Échec d'envoi](../../application/tech-dashboard.md#send-failed) — le renvoi manuel en un clic ; même chemin de code, déclenché à la main.
 - [Fenêtre de progression partagée](../../application/tech-dashboard.md#shared-progress-window) — la fenêtre modale qu'ouvre chaque opération longue.
 - [E-Invoicing](./einvoicing.md) — l'api-connector PA que le renvoi appelle ; ajustez-y les délais d'attente et les nombres de tentatives.
 - [Statuts](./statuses.md) — le catalogue des codes de statut, dont l'étiquette *Erreur – technique* qui filtre le sélecteur multi-statuts de cette page.

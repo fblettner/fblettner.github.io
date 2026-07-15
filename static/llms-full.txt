@@ -8237,7 +8237,7 @@ Source: https://docs.nomana-it.fr/liberty/framework/build/queries/create-from-da
 
 The CRUD Wizard — point Liberty at an existing table, tick the columns, get the four CRUD queries auto-generated and saved in one click.
 
-When the table already lives in your database, the fastest path is the **CRUD Wizard**. You point it at a schema and a table, tick the columns you want the screen to see, mark which ones identify a row, and Liberty writes the four queries (`_get`, `_put`, `_post`, `_delete`) for you — including the `:NAME_ORIGINAL` rebind on UPDATE so a dialog's Save knows which row to find.
+When the table already lives in your database, the fastest path is the **CRUD Wizard**. You point it at a schema and a table, tick the columns you want the screen to see, mark which ones identify a row, and Liberty writes the four queries (`_get`, `_put`, `_post`, `_delete`) for you — including the `:NAME_ORIGINAL` rebind on UPDATE so a dialog's Save knows which row to find. Generated **column identifiers and bind names are upper-cased** (matching the SELECT wizard), so JDE columns come out uppercase.
 
 This is the recommended path for any table that already exists. Skip it only when the table doesn't exist yet or when you want hand-written SQL — see [Create a custom query](./create-custom.md).
 
@@ -8973,6 +8973,10 @@ Both go through the **Scaffold** modal — tick a table, tick column(s), get a l
 **Settings → Connectors → pick a connector → mode bar: Sequences** (or **Lookups**) **→ ＋ Add sequence** (or **＋ Add lookup**).
 
 The modal opens, introspects the pool, lists the schemas / tables.
+
+:::note[No table required]
+You don't have to start from a table. Skip the table pick and **write the SQL directly** in the preview, then *Use this query* — handy for a lookup whose source is a join or a hand-written `SELECT`.
+:::
 
 ---
 
@@ -12868,7 +12872,7 @@ Clicking *+ Add query* or an existing row opens the query editor:
 | **Parameters** | Sub-table — see [Parameter binding](./build/queries/parameter-binding.md) for every field. |
 | **Column hints** | Optional sub-table. Each row binds a result column to a dictionary entry: *Column* (dropdown of columns the *Test* button discovered) + *Dictionary* (dropdown of dictionary entries). Drives labels, formats, enums, lookups. Columns without a hint fall back to the column name as the label. |
 
-The **▶ Test** button at the top of the editor runs the query against the live pool with placeholder values for the parameters and shows the first 50 rows. The first successful test populates the *Column hints* dropdown with the discovered columns; subsequent tests refresh it.
+The **▶ Test** button at the top of the editor runs the query against the live pool with placeholder values for the parameters and shows the first 50 rows. The first successful test populates the *Column hints* dropdown with the discovered columns; subsequent tests refresh it. A failing query shows a **concise error summary with an expandable detail** — the SQL and the bound parameters in readable blocks, one bind per line.
 
 The framework uses the discovered schema to:
 
@@ -12902,7 +12906,7 @@ A per-connector **Thick LOB** toggle switches the read for that connector into a
 
 ---
 
-### Multi-pool connectors \{#multi-pool\} *(2026.07.14)*
+### Multi-pool connectors \{#multi-pool\}
 
 One SQL connector can serve **several pools** — several database or JDE instances — without cloning the connector or duplicating its screens. Alongside the default **Pool**, list the extra ones in **Pools** (both are dropdowns of configured pools in *Settings → Connectors → Settings…*); the same named queries and the same screens then run against any pool in the set.
 
@@ -21309,7 +21313,7 @@ This job — and its `-all` sibling — solves the JDE-specific problem that rol
 |---|---|
 | `REMERGE_SECURITY` | `nomajde.security:j_remerge_security` — reads the active draft package, derives the impacted parent set via the anchored `F00926` role queries, re-merges F00950 / F00950W / F9006 per parent. |
 
-**Parameters** *(2026.06.09)*
+**Parameters**
 
 | Key | Default | What |
 |---|---|---|
@@ -22797,7 +22801,7 @@ Most installs settle on `<domain>-<purpose>` or `<domain>-<purpose>-<scope>`:
 
 ---
 
-### Duplicate & delete *(2026.07.14)*
+### Duplicate & delete
 
 **Duplicate** a job and you're prompted for the **new id** up front — the id is immutable in the editor, so a copy needs its own name from the start. **Delete** removes the job from `jobs.toml` (configuration only); its past run history is kept.
 
@@ -23106,7 +23110,7 @@ Each chip is a fire — click it to jump to the job's catalogue card. Chips are 
 
 ---
 
-## Schedulable presets \{#schedulable-presets\} *(2026.07.14)*
+## Schedulable presets \{#schedulable-presets\}
 
 A **preset** — a saved set of run parameters (params, `op_kwargs`, step toggles, log level) — can carry its own **cron + timezone**. The scheduler then fires the job on that schedule *with the preset's parameters*, so one job runs on several schedules with different inputs, without cloning it.
 
@@ -25753,7 +25757,7 @@ Saving a new user / role chains four JDE inserts in one go:
 
 The four steps run as a single save — there is no half-created record to clean up if any step fails.
 
-### Server-side security re-merge *(2026.06.09)*
+### Server-side security re-merge
 
 Every save on a child role (a role that's *included by* other parent roles) triggers a server-side merge step that re-derives the parents' F00950 / F00950W / F9006 rows from the new child state. Without this, a permission change on a child would only surface in production after every parent that includes it was opened + re-saved by hand.
 
@@ -28822,7 +28826,7 @@ Settings used only when the application is a JDE one. Fill in the schemas that l
 
 | Field | What to enter |
 |---|---|
-| **Pool** *(2026.07.14)* | The connector pool the collection jobs use for this application, so a single `jdedwards` connector can serve several JDE environments — point each apps_id at its own pool. Leave blank to keep the job's default `source_connector`. Only the connection changes; the JDE schemas and DB-links below still come from these settings. |
+| **Pool** | The connector pool the collection jobs use for this application, so a single `jdedwards` connector can serve several JDE environments — point each apps_id at its own pool. Leave blank to keep the job's default `source_connector`. Only the connection changes; the JDE schemas and DB-links below still come from these settings. |
 | **JDE SY** | Schema that holds the JDE *System* tables. |
 | **JDE DTA** | Schema that holds the *Business Data* tables. |
 | **JDE CTL** | Schema that holds the *Control* tables. |
@@ -31858,7 +31862,7 @@ The toolbar above the table combines three free-text filters with two quick acti
 | **Refresh** | Re-runs the current query without changing filters. |
 | **Generate report** | Opens the *Generate dialog* — described below. Hidden on read-only sessions. |
 
-### Advanced Filters *(2026.05.10)*
+### Advanced Filters
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.ereporting`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
@@ -32122,7 +32126,7 @@ The same toolbar drives both views.
 
 | Control | Behaviour |
 |---|---|
-| **View toggle** | *By rule* (default after a deep-link from the dashboard), *By event*, or *Detailed* *(2026.06.02)*. Other filters carry across — switching tabs keeps the search, severity and category filters intact. |
+| **View toggle** | *By rule* (default after a deep-link from the dashboard), *By event*, or *Detailed*. Other filters carry across — switching tabs keeps the search, severity and category filters intact. |
 | **Search** | Substring match against `DOC`, `DCT`, `KCO` and the message text. Server-side, debounced. |
 | **Category** | *All sources* (default), *UBL validation* (Schematron / XSD rules — `UVSRCL IN ('EN16931', 'CIUSFR', 'FREXTIC', 'CPRO', 'XSD', 'UBL')`), *Integration / lifecycle* (everything else — runtime errors emitted by the dispatcher: PDF, PA, DB, …). |
 | **Severity chips** | *All* / *FATAL* / *ERROR* / *WARNING* / *INFO*. One severity at a time; clicking the active chip resets to *All*. |
@@ -32130,7 +32134,7 @@ The same toolbar drives both views.
 | **Refresh** | Re-runs the current query. |
 | **Export** *(detailed only)* | Drops every event in scope to an Excel file. Every group's events are written — even those hidden inside a collapsed row on screen. The same data the [Daily Digest](../configuration/system/daily-digest.md) emails as an attachment. |
 
-### Advanced Filters *(2026.05.10)*
+### Advanced Filters
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.integration-errors`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
@@ -32185,7 +32189,7 @@ Since 2026.05.10 the table renders through **DataTableV2** in spec-driven mode: 
 | Column | Source | Description |
 |---|---|---|
 | **Severity** | `UVY56LEVEL` | Coloured badge — *FATAL* / *ERROR* / *WARNING* / *INFO*. |
-| **Date** *(2026.05.9)* | `UVUPMJ` + `UVUPMT` | Date and time the event was recorded. Same time context as the Tech Dashboard's recent-errors card, so triage no longer requires opening a row first. |
+| **Date** | `UVUPMJ` + `UVUPMT` | Date and time the event was recorded. Same time context as the Tech Dashboard's recent-errors card, so triage no longer requires opening a row first. |
 | **Doc** | `UVDOC` | Document number from the source data. |
 | **Dct** | `UVDCT` | Document type. |
 | **Kco** | `UVKCO` | Company code. |
@@ -32354,11 +32358,11 @@ Rejected (29)
 
 When at least one filter is active, an **✕ Clear filter** chip appears at the end of the chip row. It clears every active filter except the date range.
 
-### Status chip overflow *(2026.05.10)*
+### Status chip overflow
 
 The Status chip row caps at **5 inline chips**; the rest fold into a `+N more` dropdown with a coloured dot per code. Multi-status drill-throughs from the dashboards (e.g. *In flight* = 5 codes) hoist the active value back into the inline group when it falls past the cap, so the active filter stays visible.
 
-### Advanced Filters *(2026.05.10)*
+### Advanced Filters
 
 A collapsible **Advanced Filters** panel sits below the chip row. It exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec — with a per-column operator picker (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay as a draft until **Run** commits them, so typing in the panel does not spam the back-end.
 
@@ -32437,11 +32441,11 @@ Since 2026.05.10 the grid renders through **DataTableV2** in spec-driven mode: c
 | **Total TTC** | Total amount including VAT. |
 | **Currency** | ISO 4217 code. |
 | **Status** | Status badge — code + label, coloured by family. |
-| **Review** *(2026.05.9)* | Coloured **review-flag badge** sourced from `UHALRTPSD`. Lit up when the row needs operator attention — typically a status the dispatcher could not auto-resolve, a manual edit flagged on save, or a downstream system marking the row for re-check. Empty when the flag is clear. The column is a quick scan target: a few yellow badges in an otherwise green page tell you exactly where to start. |
+| **Review** | Coloured **review-flag badge** sourced from `UHALRTPSD`. Lit up when the row needs operator attention — typically a status the dispatcher could not auto-resolve, a manual edit flagged on save, or a downstream system marking the row for re-check. Empty when the flag is clear. The column is a quick scan target: a few yellow badges in an otherwise green page tell you exactly where to start. |
 
 A page-size selector at the bottom defaults to 50 rows per page; values up to 500 are accepted. The total count of matching invoices is shown next to the pagination controls.
 
-### Catalog columns *(2026.05.10)*
+### Catalog columns
 
 The Invoices view's SQL now joins `F564231` (UH) and `F564230` (FE) on doc / dct / kco via a `LEFT JOIN`, so the column catalog exposes 16 additional archive / log columns. Any of them can be added to the spec via the [List Views](../configuration/list-views.md) editor's `+ Add column` picker — the `LEFT JOIN` keeps invoice rows when no log entry exists.
 
@@ -32980,7 +32984,7 @@ A notification row carries five visual cues: the **status badge** at the left (c
 | **Subject (top line)** | `NTSUBJ` (rule's `emailSubject`, or the dispatcher default) | Short, human-readable headline. The default is `Invoice {doc} {dct} {kco} — {statusLabel}`. |
 | **Message (second line)** | `NTMSGE` (rule's `emailBody`, or the dispatcher default) | The fuller body text. Truncated on overflow; the modal that opens on click carries the full lifecycle. |
 | **Meta line** | `NTDOC · NTDCT · NTKCO · reason · action · rule` | Canonical invoice identifiers, plus the PA rejection reason / expected action / rule name when present. The reason and action are resolved against the *rejection-reason-codes* and *action-codes* catalogues, so the user reads the human label, not the bare code. |
-| **Action audit chips** *(2026.05.7)* | `NTK74MSG2` audit footer | One coloured chip per connector call the dispatcher fired for the rule. See [Action audit chips](#action-audit-chips) below. |
+| **Action audit chips** | `NTK74MSG2` audit footer | One coloured chip per connector call the dispatcher fired for the rule. See [Action audit chips](#action-audit-chips) below. |
 | **Relative time** | `NTUPMJ` + `NTTDAY` | *just now*, *2 min ago*, *14:32* (today), *Yesterday*, then the absolute `dd/mm/yyyy hh:mm` for older entries. |
 | **Dismiss button** | per-row | Removes the row from the inbox without marking the rest as read. |
 
@@ -33120,7 +33124,7 @@ The card subtitle on the right shows the **build version + build date** baked in
 
 Static shortcut list — the IT operator's most-used pages. Each link uses the same `onNavigate` mechanism as the sidebar so it lands on the target page directly. Default targets: **Settings**, **Processing Log**, **File Versions**, **Cross-Reference**.
 
-### Send Failed (row 2, span 4) *(2026.06.03)*
+### Send Failed (row 2, span 4) \{#send-failed\}
 
 A single big-number card showing how many invoices are currently in *Send failed* (status `9904`). When the count is non-zero, a **Resend all N** button below the number replays every matching invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md). Clicking it opens the [shared progress window](#shared-progress-window) — live counters, a *Cancel* button and a *Run in background* button that hides the window while the work keeps going server-side. The resend is throttled at **100 ms per call** so the PA stays inside its rate budget.
 
@@ -33139,7 +33143,7 @@ Lists every active scheduler job:
 
 - **Built-ins** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — driven by `BackgroundScheduler` polling intervals.
 - **Per-template `fetch-all`** — one row per template that has a scheduled extract / sync.
-- **Per-row Auto-Retry sweeps** *(2026.06.03)* — one row per saved entry on the [Auto-Retry](../configuration/system/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
+- **Per-row Auto-Retry sweeps** — one row per saved entry on the [Auto-Retry](../configuration/system/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
 
 Each row shows the job name, the cadence, and a status pill (green active, blue scheduled-soon, orange paused). The card subtitle reports the active count.
 
@@ -33186,7 +33190,7 @@ Path values that contain runtime placeholders (`%TEMPLATE%`, `%FILE_NAME%`) are 
 
 Average end-to-end processing time per template, in seconds, over the last 14 days. The card pulls flat `START` / `END` events from `F564237` and pairs them in Java keyed on `(FEWDS1|FEUPMJ)` — the prior implementation used a self-join SQL with ambiguous `FETMPL` and incorrect `e.FEUPMT - s.FEUPMT` math, which is now fixed.
 
-#### Per-step breakdown when `debugProfile` is on *(2026.05.9)*
+#### Per-step breakdown when `debugProfile` is on
 
 When the [`debugProfile`](../configuration/system/global.md) toggle on the `global` template is set to `Y`, every processing run writes one row per pipeline stage to `F564237` — **header parsing**, **lines parsing**, **validation**, **UBL emit**, **PA send**. The Template processing time card surfaces them as a stacked breakdown under the per-template totals, so a slow stage is visible at a glance without digging into the runtime log.
 
@@ -33445,7 +33449,7 @@ The editor has **five tabs**:
 | **Base URL** | Root URL of the target API (e.g. `https://api.example.com:9300`). All endpoint paths are appended to this URL. |
 | **Timeout (ms)** | HTTP request timeout in milliseconds. Default `30000` (30 s). |
 | **SSL Verify** | `true` / `false` — whether to validate the server's TLS certificate. Set to `false` only in non-production environments using self-signed certificates. |
-| **Debug** *(2026.06.14)* | `Y` / `N` (default `N`). When `Y`, every call through this connector prints a one-line request + response trace — URL, HTTP status and a body preview — to the service log. Turn it on while wiring a new platform to check URL substitution, query parameters and the response shape; turn it off once the connector is stable. One uniform trace replaces the old ad-hoc logging in *import-status* and *invoice-statuses*. |
+| **Debug** | `Y` / `N` (default `N`). When `Y`, every call through this connector prints a one-line request + response trace — URL, HTTP status and a body preview — to the service log. Turn it on while wiring a new platform to check URL substitution, query parameters and the response shape; turn it off once the connector is stable. One uniform trace replaces the old ad-hoc logging in *import-status* and *invoice-statuses*. |
 
 ### Default Headers
 
@@ -33501,9 +33505,9 @@ This is the typical choice for **JD Edwards AIS** and most modern PA APIs — No
 | **Endpoint path** | Path to the token endpoint (e.g. `/v7.3/tokenrequest` for JD Edwards AIS, `/oauth2/token` for an OAuth2 client_credentials flow). Combined with **Base URL**. |
 | **Token field** | Dot-notation JSON path used to extract the token from the response (e.g. `userInfo.token` for JD Edwards AIS). **Leave empty** to auto-detect — the runtime tries `access_token` first then `token`, which covers the standard OAuth2 client_credentials response shape without configuration. |
 | **Token TTL (minutes)** | How long the token is cached before a new one is requested. Default `55` minutes. |
-| **Body Content-Type** *(2026.05.8)* | `application/json` *(default)* or `application/x-www-form-urlencoded`. The form variant emits the token request body as URL-encoded pairs, which is what the standard OAuth2 `client_credentials` flow expects. |
+| **Body Content-Type** | `application/json` *(default)* or `application/x-www-form-urlencoded`. The form variant emits the token request body as URL-encoded pairs, which is what the standard OAuth2 `client_credentials` flow expects. |
 | **Body template** | Custom request body, with `{{username}}` / `{{password}}` placeholders. **Leave empty** to use sensible defaults: JSON mode emits the JD Edwards AIS payload (`{ username, password, deviceName }`); form mode emits `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`. |
-| **Token request headers** *(2026.05.8)* | Optional. Semicolon-separated `Key:Value` pairs sent **only on the token request** — for PAs that require a tenant-id header on the auth call itself. Example: `customer-id:CUST123;X-Tenant:acme`. |
+| **Token request headers** | Optional. Semicolon-separated `Key:Value` pairs sent **only on the token request** — for PAs that require a tenant-id header on the auth call itself. Example: `customer-id:CUST123;X-Tenant:acme`. |
 
 ---
 
@@ -33511,7 +33515,7 @@ This is the typical choice for **JD Edwards AIS** and most modern PA APIs — No
 
 The catalogue of HTTP endpoints reachable through this connector. Each entry is a collapsible card; click the header to expand or collapse.
 
-:::tip[Expected endpoints *(2026.07.13)*]
+:::tip[Expected endpoints]
 The editor lists the platform endpoints NomaUBL knows about — *send*, *import status*, *invoice statuses*, their `-selfbilled` variants (which route self-billed / purchase-flow documents and fall back to the standard flow) and the directory check — marking those already configured and offering a one-click **add** for those missing, so a required endpoint is harder to overlook.
 :::
 
@@ -33531,13 +33535,13 @@ All other placeholders must be **declared in the endpoint's Parameters section**
 | **Label** | Human-readable label shown in the editor and in dropdowns when a user picks an endpoint (e.g. `Get Order Lines`). |
 | **Method** | HTTP method (`GET` / `POST` / `PUT` / `DELETE` / `PATCH`). |
 | **URL path** | Endpoint path appended to the connector's **Base URL** (e.g. `/v7.3/orchestrator/{{name}}`). |
-| **Content-Type** *(2026.05.9)* | `application/json` *(default)* or `multipart/form-data`. The multipart variant turns the body into a list of parts — see *Multipart bodies* below. |
+| **Content-Type** | `application/json` *(default)* or `multipart/form-data`. The multipart variant turns the body into a list of parts — see *Multipart bodies* below. |
 | **Extra headers** | Semicolon-separated `Key:Value` pairs added to (or overriding) the connector's default headers (e.g. `X-Custom:value;Authorization:Bearer {{token}}`). |
 | **Body** | Request body — a JSON template with `{{param}}` placeholders. The **Format JSON** button pretty-prints the value. For `multipart/form-data`, the body is parsed as one part per line (`name=value` or `file=@{{filePath}};filename=…;contentType=…`). |
 | **Query params** | Query string template with `{{param}}` placeholders (e.g. `pageSize={{pageSize}}&page={{page}}`). |
 | **Response field** | Optional dot-notation path (e.g. `data.items`) extracting a sub-tree of the response — useful when the caller is only interested in part of the payload. |
-| **Response type** *(2026.07.08)* | `JSON` *(default)* or `XML`. In `XML` mode *Response field* and *Response mappings* are read as **XPath**, so a platform that answers import-status with a UBL `ApplicationResponse` — status in `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — can be polled like a JSON one. The `cac` / `cbc` / `ext` prefixes are recognised; use `//*[local-name()='X']` for anything else. |
-| **Status map** *(2026.07.08)* | Translates the platform's own status words (e.g. `send_error`, `sent`, `processing`) to the internal *accepted / pending / rejected* outcomes, so import-status marks the invoice correctly instead of optimistically treating an unrecognised status as accepted. |
+| **Response type** | `JSON` *(default)* or `XML`. In `XML` mode *Response field* and *Response mappings* are read as **XPath**, so a platform that answers import-status with a UBL `ApplicationResponse` — status in `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — can be polled like a JSON one. The `cac` / `cbc` / `ext` prefixes are recognised; use `//*[local-name()='X']` for anything else. |
+| **Status map** | Translates the platform's own status words (e.g. `send_error`, `sent`, `processing`) to the internal *accepted / pending / rejected* outcomes, so import-status marks the invoice correctly instead of optimistically treating an unrecognised status as accepted. |
 | **Description** | Free-text description shown in dropdowns and in the editor header. |
 
 #### Multipart bodies
@@ -33553,7 +33557,7 @@ Typical use case: a PA that takes the UBL invoice as a `multipart/form-data` upl
 
 Three placeholders carry the document into the part:
 
-- `{{filePath}}` — the path to the UBL file on disk. On the **initial send** it is the input file; on a **resend** *(2026.06.13)* NomaUBL writes the stored UBL blob to a temporary file first, so `{{filePath}}` works the same way and one connector configuration serves both (the temp file is cleaned up automatically).
+- `{{filePath}}` — the path to the UBL file on disk. On the **initial send** it is the input file; on a **resend** NomaUBL writes the stored UBL blob to a temporary file first, so `{{filePath}}` works the same way and one connector configuration serves both (the temp file is cleaned up automatically).
 - `{{content}}` — the base64 of the UBL, for platforms that take the bytes inline in a JSON body rather than as a file part.
 - `{{docName}}` — a sanitised `<doc>_<dct>_<kco>` name, handy for the `filename` header.
 
@@ -33630,7 +33634,7 @@ The body is a JSON template; `{{reportName}}`, `{{reportVersion}}` and `{{compan
 
 ### Endpoint chaining (`then`) \{#endpoint-chaining\}
 
-*(2026.06.13)* An endpoint can hand its result to a follow-up call in the same step. Set **`then`** to the name of the next endpoint, and **`then.itemsField`** / **`then.idField`** to pick the id to carry forward from the first response. That id reaches the follow-up as `{{prevId}}` (also aliased `{{uuid}}`). It powers two-step platform flows — *upload then process*, or *list then fetch each detail* — without a round-trip through NomaUBL between the calls.
+ An endpoint can hand its result to a follow-up call in the same step. Set **`then`** to the name of the next endpoint, and **`then.itemsField`** / **`then.idField`** to pick the id to carry forward from the first response. That id reaches the follow-up as `{{prevId}}` (also aliased `{{uuid}}`). It powers two-step platform flows — *upload then process*, or *list then fetch each detail* — without a round-trip through NomaUBL between the calls.
 
 ### Worked example — Esker (upload, then process) \{#esker\}
 
@@ -34246,7 +34250,7 @@ Above the column rows, each view card carries a *Defaults* row with the per-view
 | Field | Description |
 |---|---|
 | **Page size** | Initial page size for the in-grid TanStack paginator. Persists as `spec.defaultPageSize`. Default: `50`. |
-| **Max rows** *(2026.05.12)* | Hard cap on the slice loaded by a single Run. The four spec-driven views now operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Default: `5000`. |
+| **Max rows** | Hard cap on the slice loaded by a single Run. The four spec-driven views now operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Default: `5000`. |
 
 When the slice cap is hit during a Run, the page toolbar shows a translated `X / Y rows` notice next to the Run button — a hint that the operator should narrow the date range or the *Advanced Filters* to get the most relevant slice. The notice is informational; the page keeps working.
 
@@ -34267,7 +34271,7 @@ The list of operators offered per column depends on the catalog entry's filter b
 
 Marking a column **Filter** = off in the spec keeps it visible in the grid but removes its chip from the panel; useful for read-only fields the operator does not need to query.
 
-### refList columns — multi-select picker *(2026.05.13)*
+### refList columns — multi-select picker
 
 A column can be bound to a reference list — either a regulated one from [Reference Lists](./reference-lists.md) (statuses, currencies, country codes, …) or an operator-defined one from [Custom Lists](./custom-lists.md). Setting `refList: <list-name>` on the column spec is all that is needed: cell renderer, per-column filter dropdown and *Advanced Filters* multi-select picker switch on automatically.
 
@@ -34865,7 +34869,7 @@ Tokens inside any of those constructs are passed through unchanged.
 
 The parameter spec drives the *Test* tab and the call-site editor: each declared `:name` becomes a labelled input pre-filled with its `default` value. Spec rows are semicolon-separated; each row has up to three pipe-delimited fields. Empty fields are accepted (a parameter with no default just renders an empty input).
 
-#### Surrounding quotes stripped on string params *(2026.05.15)*
+#### Surrounding quotes stripped on string params
 
 The runtime strips one matching pair of surrounding single or double quotes from each bound string param before the JDBC `setString`. Typing `'01'` in a default or in the test panel — the way a SQL literal is written — used to silently return 0 rows because JDBC bound the 4-character string verbatim; stripping the quotes lets either convention work.
 
@@ -34951,7 +34955,7 @@ Settings → Auto-Retry schedules a daily sweep that replays every invoice in a 
 
 The **Auto-Retry** screen schedules a recurring sweep that replays every invoice in a chosen technical-error status back to the Plateforme Agréée (PA). The default row sweeps status `9904` (*Send failed*) every night at 3 a.m. — the overnight batch's safety net so that anything stuck on the PA side at the close of business is picked up before operations resume in the morning.
 
-Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [Tech Dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
+Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [Tech Dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The replay reads `F564231` to pick invoices in scope and calls the configured PA api-connector for each one; the source format is transparent.
 
@@ -35063,7 +35067,7 @@ The *Run now* run honours the same throttle, same lookback, same status list as 
 |---|---|---|
 | Scheduled row doesn't fire. | Row is *DISABLED*. | Open the row, toggle *Enabled* on, save. |
 | Row fires but processes zero invoices. | The status list and the lookback window combine to zero matches. | Inspect the [E-Invoicing](../../application/invoices.md) page with the same status filter; either widen the lookback or relax the status list. |
-| Sweep finishes but the count is far below the [Send Failed card's](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603) number. | The dashboard counts every `9904` regardless of age; a row with a 7-day lookback ignores anything older. | Either drop the lookback (`0` = no filter) or schedule a second row with a wider lookback for old back-stock. |
+| Sweep finishes but the count is far below the [Send Failed card's](../../application/tech-dashboard.md#send-failed) number. | The dashboard counts every `9904` regardless of age; a row with a 7-day lookback ignores anything older. | Either drop the lookback (`0` = no filter) or schedule a second row with a wider lookback for old back-stock. |
 | `429 Too Many Requests` errors in the run log. | PA rate-limit hit. | Raise the throttle (e.g. 100 ms → 250 ms) on the row and re-run. |
 | Two rows both fired at `03:00` and one stalled the other. | No minute offset — they hit the connection pool simultaneously. | Stagger the rows (`:00`, `:15`, `:30`). |
 | *Run now* button is greyed out. | The sweep is already running (a scheduled or earlier *Run now*). | Open the dashboard's Scheduler card → click the active row → use the modal's *Cancel* if needed, or wait. |
@@ -35073,7 +35077,7 @@ The *Run now* run honours the same throttle, same lookback, same status list as 
 
 ## What's next
 
-- [Tech Dashboard → Send Failed](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603) — the one-click manual replay; same code path, fired by hand.
+- [Tech Dashboard → Send Failed](../../application/tech-dashboard.md#send-failed) — the one-click manual replay; same code path, fired by hand.
 - [Shared progress window](../../application/tech-dashboard.md#shared-progress-window) — the modal every long-running operation opens.
 - [E-Invoicing](./einvoicing.md) → the PA api-connector that the replay calls; tune timeouts and retry counts there.
 - [Statuses](./statuses.md) — the catalogue of status codes, including the *Error – tech* tag that filters the multi-status picker on this page.
@@ -35227,7 +35231,6 @@ The *Send now* run also updates the *last sent* badge, so the scheduled run that
 | The attachment contains errors older than the lookback window. | The lookback window selects **invoices** that have at least one error in the window, then exports **every** error of those invoices — the same behaviour as the [Detailed view](../../application/integration-errors.md#detailed-view). This is intentional. | If you need strict-window export, do it from the *By event* tab manually. |
 | Two recipients get the same digest twice. | Two digest rows in the catalogue have overlapping recipient lists. | Audit the catalogue; merge or de-dup. |
 | The digest fires at the wrong hour. | Timezone is set to the wrong zone. | Open the digest, set the correct IANA timezone (`Europe/Paris`, `Africa/Casablanca`, …) and save. |
-| The form lost the values after Save. *(2026.05.x)* | Fixed in 2026.06.02. | Upgrade to the current build — the form now refreshes from the freshly-saved record. |
 
 ---
 
@@ -35430,7 +35433,7 @@ This tab configures the **directory of XSL files** used to **transform the sourc
 |---|---|
 | **XSLT Directory** | Directory containing the `.xsl` transform files used to convert the source XML into UBL. The placeholder `%APP_HOME%` expands to the NomaUBL install root. |
 
-### Manual / template-less invoice defaults *(2026.07.05)*
+### Manual / template-less invoice defaults
 
 Applied when an invoice has **no document template** — one created in the manual editor, or an already-formed UBL processed without a doc-template. A document template's own values always take precedence.
 
@@ -35509,9 +35512,9 @@ The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 |---|---|---|
 | **Page size** | `100` | Number of statuses fetched per page when polling the PA. |
 | **Last retrieved at** | *(updated automatically)* | ISO datetime of the most recent successful retrieval (e.g. `2025-01-01T00:00:00Z`). Updated automatically after each retrieval run; manual edits act as a starting point — useful to re-replay a window. |
-| **Lifecycle endpoints** *(2026.07.13)* | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
+| **Lifecycle endpoints** | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
 
-:::info[Self-billed invoices route to their own endpoints *(2026.07.13)*]
+:::info[Self-billed invoices route to their own endpoints]
 A self-billed invoice (type 261, 389, 471, 473, 500, 501 or 502) is submitted through the platform's procurement channel: NomaUBL automatically uses the `-selfbilled` variant of an endpoint (`import-selfbilled`, `import-status-selfbilled`) when the connector defines it, and falls back to the standard endpoint otherwise. The platform connection — URL and credentials — is unchanged; only the endpoints differ.
 :::
 
@@ -35813,7 +35816,7 @@ The editor has **six tabs**:
 | Field | Values | Description |
 |---|---|---|
 | **Update DB** | `Y` / `N` | When `Y`, processing runs persist their results to the database. Set to `N` only for dry runs / debugging. |
-| **`debugProfile`** *(2026.05.9)* | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [Tech Dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
+| **`debugProfile`** | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [Tech Dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
 
 ### PDF
 
@@ -36123,7 +36126,7 @@ Two changes shipped in 2026.05.5:
 | **Tag** *(read-only)* | `STATUS_DEPOSITED` | Internal name referenced by `InvoiceStatusCatalog` factory methods in Java. The editor displays it as read-only — renaming would break Java callers silently. |
 | **Label · French** | `Déposée` | Human-readable French label shown in the UI when the active locale is French. |
 | **Label · English** | `Deposited` | Human-readable English label shown in the UI when the active locale is English. |
-| **PA Code(s)** | `fr_e_invoicing_200` | Event name sent to the Plateforme Agréée API — placed in the `names[]` payload of status calls. **Several codes, comma-separated**, may map to this one status *(2026.07.13)*, so a single list serves invoices whose statuses arrive from different sources (your main platform and Chorus Pro, say) without duplicating it. Each code must match what its PA expects exactly. |
+| **PA Code(s)** | `fr_e_invoicing_200` | Event name sent to the Plateforme Agréée API — placed in the `names[]` payload of status calls. **Several codes, comma-separated**, may map to this one status, so a single list serves invoices whose statuses arrive from different sources (your main platform and Chorus Pro, say) without duplicating it. Each code must match what its PA expects exactly. |
 | **Polling — Collect from PA API** | checkbox | When ticked, NomaUBL polls this status from the PA API on every *Sync → Retrieve Statuses* run. Untick to skip a status during polling. |
 | **Groups** | multi-select | Top-level counter and funnel stage the status belongs to — drives the dashboard widgets and the SQL filters in `DashboardApi`. See [Groups](#groups) below. |
 
@@ -37586,7 +37589,7 @@ The full set of lifecycle commands (same on both wrappers, replace `./nomaubl.sh
 
 For the day-to-day operational pattern, the wrapper is enough. The OS-level supervision layer below adds **automatic** start at boot and restart on crash.
 
-### JVM tuning — `JAVA_OPTS` *(2026.06.02)* \{#java-opts\}
+### JVM tuning — `JAVA_OPTS` \{#java-opts\}
 
 Both wrappers expose a **`JAVA_OPTS`** variable near the top of the file. Anything in it is forwarded to every `java -jar` invocation — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Edit the file once; every subsequent wrapper call picks it up.
 
@@ -38341,7 +38344,7 @@ Beyond service control, the wrapper exposes **short forms** of the JAR's process
 
 The remainder of the page describes each direct JAR mode in detail.
 
-### `JAVA_OPTS` — passing JVM flags through the wrapper *(2026.06.02)*
+### `JAVA_OPTS` — passing JVM flags through the wrapper
 
 Both wrappers (`nomaubl.sh`, `nomaubl.cmd`) expose a **`JAVA_OPTS`** variable near the top of the file. Anything in it is forwarded to every `java -jar` invocation the wrapper makes — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Use it for site-wide JVM flags without editing the wrapper's command lines.
 
@@ -38385,7 +38388,7 @@ End-to-end upgrade of an existing environment to the JAR currently in place. Rep
 ./nomaubl.sh upgrade prod --from-version 2026.05.20    # force the baseline manually
 ```
 
-### `--from-version` — manual baseline *(2026.06.02)*
+### `--from-version` — manual baseline
 
 By default, the upgrade reads the current installed version from the upgrade-history table and applies every migration whose target version is **strictly newer** than what's there. That works for any environment that has been upgraded through `nomaubl.sh upgrade` since the table was added.
 
@@ -38754,7 +38757,7 @@ java -jar nomaubl.jar -extract /opt/nomaubl/demo/config/config.json 19 \
 
 ## `-pdf2xml` — JD Edwards PDF → XML adapter \{#pdf2xml\}
 
-*(2026.06.15)* Converts a JD Edwards EnterpriseOne report **PDF** into the same XML shape JDE emits natively when XML output is enabled — so a site can keep JDE in PDF-output mode and still feed the existing XML → XSL → UBL pipeline unchanged. Unlike the other modes it takes no environment: it is a standalone file-to-file converter.
+ Converts a JD Edwards EnterpriseOne report **PDF** into the same XML shape JDE emits natively when XML output is enabled — so a site can keep JDE in PDF-output mode and still feed the existing XML → XSL → UBL pipeline unchanged. Unlike the other modes it takes no environment: it is a standalone file-to-file converter.
 
 ```text
 -pdf2xml <input.pdf> <output.xml> [<manifest.xml>]
@@ -38863,7 +38866,7 @@ The Direction value is written once on the row at insert time (column `UHDRIN` o
 
 ### Document Identification *(when Source = UBL)* \{#document-identification-ubl\}
 
-*(2026.06.13)* A UBL file carries no spool to extract from, so the **Activity** and **Type** that the XML source pulls by XPath are entered here as plain text. The group sits at the top of the UBL branch and both fields are **mandatory** — they are written to the `F564230` tracking row that the PA send and fetch-import rely on.
+ A UBL file carries no spool to extract from, so the **Activity** and **Type** that the XML source pulls by XPath are entered here as plain text. The group sits at the top of the UBL branch and both fields are **mandatory** — they are written to the `F564230` tracking row that the PA send and fetch-import rely on.
 
 | Field | Description |
 |---|---|
@@ -39017,7 +39020,7 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | Field | Values | Description |
 |---|---|---|
 | **UBL XSLT** | path | XSL transform from the source XML to **UBL 2.1**. The placeholder `%APP_HOME%` is expanded to the NomaUBL install root. |
-| **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` *(2026.07.05)* = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
+| **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
 | **LISIBLE** | `Y` / `N` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. |
 
 ### Additional Attachments
@@ -39031,7 +39034,7 @@ Beyond the main human-readable PDF, a document type can embed **extra files into
 
 The **`{ }`** button next to the path field opens a searchable token list and inserts the chosen token at the cursor — the invoice catalogue tokens (`{{kco}}`, `{{fedoc}}`, …) and the path constants `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%` — so you don't have to remember the exact spelling. **Add attachment** adds another row.
 
-:::info[UBL-source templates embed attachments too *(2026.06.13)*]
+:::info[UBL-source templates embed attachments too]
 A template with *Source = UBL* now embeds the same PDFs as the XML flow — after validation and before the database insert, so the stored UBL matches what is sent to the PA:
 
 - **Attachment `attach`** embeds a sibling PDF from the input directory under `cbc:ID="PJA"`.
@@ -39074,7 +39077,7 @@ The visual editor — section list, per-section drawer, live preview, block sect
 
 ---
 
-## Tab 5 — 🔗 Enrichment *(2026.07.09)*
+## Tab 5 — 🔗 Enrichment
 
 When the source spool is missing data the invoice needs — a customer's VAT number, a label from a reference table — the **Enrichment** tab fetches it from a [SQL](../configuration/sql-connectors.md) or [API connector](../configuration/api-connectors.md) and injects it into the spool **before** the XSL transform runs. The fetched values then map in the [XSL editor](../ubl-tools/xsl-editor.md) like any other spool field, and are archived with the source.
 
@@ -39622,7 +39625,7 @@ The sidebar list contains every saved layout plus the bundled `built-in`.
 
 The **Open visual builder** button opens the layout in a full-screen editor with three panes side-by-side — the canonical way to edit a `pdf-template`. The old single-page flow (section list + per-section drawers, click a Preview button to open a modal) is gone; the builder unifies everything in one screen with the preview always visible.
 
-:::info[The readable PDF shows labels, not codes *(2026.07.12)*]
+:::info[The readable PDF shows labels, not codes]
 Coded fields render only their human label — invoice type, profile, payment method, note categories, document references and item identifiers no longer carry the raw code (*Payment: Bank transfer*, not *Payment: 30 — Bank transfer*; a note reads *Payment information —*, not *[PMD] Payment information —*). The codes stay in the UBL for machine processing.
 :::
 
@@ -39663,7 +39666,7 @@ The full list of toggles per preset section:
 
 - **Header** — eight `META · …` toggles (invoice number, issue date, due date, contract / order / buyer references, invoice type, profile ID) plus six `Supplier · …` toggles (address, SIREN, legal form, VAT, phone, email).
 - **Parties** — Customer and Delivery boxes, with separate toggles for SIREN, VAT, address, location ID and a *Show Delivery box* master switch (when off, the layout renders a single-column Customer block). The Delivery box shows the delivery party name (falling back to `ID: …` when only the location ID is set), the full street, postal code + city and country code — matching the Customer box.
-- **Line Table** — group-header toggles (*Delivery group*, *Page break per delivery*, *Document Reference group* and, *(2026.06.14)*, *Group by customer order* — a third band below the delivery and document-reference bands, showing the referenced customer-order ID, BT-132), seven column toggles (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Amount`, `Tax`) and nine sub-detail toggles for line metadata (BT-127, BT-134/135, **BT-155 — Seller's item code**, BT-156, BT-157, BT-158, **BT-159 — Country of origin** *(prints the country's full name resolved from the shared countries list — not the ISO code)*, allowances / charges, additional item properties). The customer-order band follows the same reset rules as the others: a new delivery re-prints both inner breadcrumbs, a new document reference re-prints the customer-order band.
+- **Line Table** — group-header toggles (*Delivery group*, *Page break per delivery*, *Document Reference group* and,, *Group by customer order* — a third band below the delivery and document-reference bands, showing the referenced customer-order ID, BT-132), seven column toggles (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Amount`, `Tax`) and nine sub-detail toggles for line metadata (BT-127, BT-134/135, **BT-155 — Seller's item code**, BT-156, BT-157, BT-158, **BT-159 — Country of origin** *(prints the country's full name resolved from the shared countries list — not the ISO code)*, allowances / charges, additional item properties). The customer-order band follows the same reset rules as the others: a new delivery re-prints both inner breadcrumbs, a new document reference re-prints the customer-order band.
 - **Document Allowances** — column toggles for type, reason, amount, tax.
 - **VAT Breakdown** — column toggles for category, rate, taxable, tax amount (an exemption column auto-appears when present).
 - **Totals** — seven row toggles covering the full totals stack (Total HT, Allowances, Charges, Tax Exclusive, Total Tax, Total TTC, Amount Payable).
@@ -39829,7 +39832,7 @@ The toolbar above the table combines a view toggle, a free-text search, two drop
 
 When grouped, the page over-fetches (`pageSize × 4`, capped at 200) so START / END pairs and intermediate steps land on the same page and the grouping engine has the full job in hand.
 
-### Advanced Filters *(2026.05.10)*
+### Advanced Filters
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.processing-log`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
@@ -42161,7 +42164,7 @@ A long-asked **bulk resend** for invoices stuck in *Send failed* — one card on
 
 ### New features
 
-- **Send Failed card on the Tech Dashboard.** A new card shows the number of invoices currently in *Send failed* (status 9904) and exposes a one-click **Resend all N** action. Clicking it opens a progress window with live counters (processed / succeeded / failed); you can close that window and let the run finish in the background, or cancel it cleanly between two invoices. The resend is throttled at 100 ms per call so the PA stays happy. See [Tech Dashboard → Send Failed](./application/tech-dashboard.md#send-failed-row-2-span-4-20260603).
+- **Send Failed card on the Tech Dashboard.** A new card shows the number of invoices currently in *Send failed* (status 9904) and exposes a one-click **Resend all N** action. Clicking it opens a progress window with live counters (processed / succeeded / failed); you can close that window and let the run finish in the background, or cancel it cleanly between two invoices. The resend is throttled at 100 ms per call so the PA stays happy. See [Tech Dashboard → Send Failed](./application/tech-dashboard.md#send-failed).
 - **Nightly auto-retry in Settings.** A new [Configuration → System → Auto-Retry](./configuration/system/auto-retry.md) page lets you schedule a daily sweep of every invoice in a chosen status — by default 3 a.m., status 9904. Useful for the batch that runs overnight: anything stuck on the PA side is retried before the next morning. Multiple schedules are supported, each with its own hour, status list, optional lookback window and throttle.
 - **Multi-status picker on auto-retry.** Pick one or several statuses from a dropdown limited to codes tagged *Error – tech* (9904, 9905, 9907, …). One schedule can sweep every tech-error bucket at once.
 - **Background-job progress window.** Long-running operations now share a common progress UI — a bar, live counters, a *Cancel* button, and a *Run in background* button that hides the window while the work keeps going server-side. See [Tech Dashboard → Shared progress window](./application/tech-dashboard.md#shared-progress-window).
@@ -44427,7 +44430,7 @@ This is the form-based mapping editor — the visual replacement for hand-writte
 | Button | Behaviour |
 |---|---|
 | **Load XML Source** | Loads a sample XML file (browser-side) and extracts every element path. Paths populate the picker dropdowns next to each variable field, so values can be filled by clicking rather than typing. |
-| **Load connector sample** *(2026.05.16)* | When the active document template has `source = Connector`, this button calls the configured SQL query or REST endpoint once and feeds the response into the same path picker. The XPath dropdowns then autocomplete against actual data — same UX as a real XML spool, no file needed. The button is hidden for `XML` and `UBL` templates. |
+| **Load connector sample** | When the active document template has `source = Connector`, this button calls the configured SQL query or REST endpoint once and feeds the response into the same path picker. The XPath dropdowns then autocomplete against actual data — same UX as a real XML spool, no file needed. The button is hidden for `XML` and `UBL` templates. |
 | **AI Auto-Map** ✦ | Opens the *AI Auto-Map* modal. Provide a sample XML (and optionally a rendered PDF) — the AI returns a JSON mapping of `TAG_*` variables to XML paths, scoped correctly. See [AI Auto-Map](#ai-auto-map) below. |
 | **Save Mappings** | Writes the current values of all `TAG_*` variables back into the XSLT file. The dot indicator (`●`) appears when mappings have changed but are not saved. |
 
@@ -44443,8 +44446,8 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Billing References** | BT-11, BT-14 to BT-18, BT-122 to BT-124 | Project, contract, dispatch, supporting documents. |
 | **Preceding Invoices — repeating** *(BG-3, 0..n)* | BT-25, BT-26 | Iterates a repeating source group and emits one `cac:BillingReference` per prior invoice (each with an optional issue date), alongside the single BT-25/BT-26 reference already handled in *Billing References*. |
 | **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Attach a document already carried as base64 in the source spool — up to four per invoice. See [Embedded Attachments](#embedded-attachments) below. |
-| **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel *(2026.07.12)*, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. |
-| **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel *(2026.07.12)*, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
+| **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. |
+| **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
 | **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
 | **Delivery** | BT-70 to BT-80 | Delivery date and address. |
 | **Payment** | BT-20, BT-81 to BT-91 | Means, IBAN, BIC, mandate, terms. |
@@ -44461,11 +44464,11 @@ The form is organised by UBL document area. Each section appears only when at le
 
 Each variable field shows the human-readable description of the BT, the BT code as a coloured badge, the current value (an XML path or expression), and a `↓` picker that opens the [XML Browser drawer](#xml-browser-drawer) on the right.
 
-:::info[Full field coverage *(2026.06.15)*]
+:::info[Full field coverage]
 The field reference now lists every Business Group and Business Term that the extended Schematron (BR-FR / CTC-FR 1.3.1) checks and the editor can map — BG-3 through BG-32 and the Business Terms they wrap (preceding invoice BT-25/26, VAT accounting currency BT-6 / BT-111, tax point date BT-7, seller tax registration BT-32, buyer / deliver-to country subdivisions BT-54 / BT-79, buyer contact BT-56, deliver-to location BT-71, card PAN BT-87, invoiced-quantity unit BT-130, line charge base + reason BT-142/145, deliver-to address line 3 BT-165, and more). What you can map here now matches exactly what the [validator](./validate.md) checks.
 :::
 
-:::info[More mappable fields *(2026.07.08)*]
+:::info[More mappable fields]
 The editor gained a **Buyer trading name** mapping (BT-45 → `cac:PartyName/cbc:Name` on the customer party, mirroring the seller trading name BT-28), and three document-totals mappings — **Sum of charges** (BT-108), **Amount already paid** (BT-113) and **Rounding amount** (BT-114). When a prepaid or rounding amount is mapped, the amount due (BT-115) is computed as *total with VAT − prepaid + rounding*. A mapping added to a template now always shows in its section, even when the built-in field list didn't include it.
 :::
 

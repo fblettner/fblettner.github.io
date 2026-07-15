@@ -23,6 +23,10 @@ Both go through the **Scaffold** modal — tick a table, tick column(s), get a l
 
 The modal opens, introspects the pool, lists the schemas / tables.
 
+:::note[No table required]
+You don't have to start from a table. Skip the table pick and **write the SQL directly** in the preview, then *Use this query* — handy for a lookup whose source is a join or a hand-written `SELECT`.
+:::
+
 ---
 
 ## Sequence — generate the next id

@@ -132,7 +132,7 @@ L'éditeur comporte **cinq onglets** :
 | **Base URL** | URL racine de l'API cible (par ex. `https://api.example.com:9300`). Tous les chemins d'endpoint y sont ajoutés. |
 | **Timeout (ms)** | Délai d'expiration des requêtes HTTP en millisecondes. Valeur par défaut `30000` (30 s). |
 | **SSL Verify** | `true` / `false` — active la validation du certificat TLS du serveur. À positionner à `false` uniquement en environnement non-production utilisant des certificats auto-signés. |
-| **Debug** *(2026.06.14)* | `Y` / `N` (défaut `N`). Quand `Y`, chaque appel passant par ce connecteur écrit une trace requête + réponse sur une ligne — URL, code HTTP et aperçu du corps — dans le journal du service. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête et la forme de la réponse ; à désactiver une fois le connecteur stable. Une trace uniforme remplace l'ancien log ponctuel de *import-status* et *invoice-statuses*. |
+| **Debug** | `Y` / `N` (défaut `N`). Quand `Y`, chaque appel passant par ce connecteur écrit une trace requête + réponse sur une ligne — URL, code HTTP et aperçu du corps — dans le journal du service. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête et la forme de la réponse ; à désactiver une fois le connecteur stable. Une trace uniforme remplace l'ancien log ponctuel de *import-status* et *invoice-statuses*. |
 
 ### Default Headers
 
@@ -188,9 +188,9 @@ Choix typique pour **JD Edwards AIS** et la plupart des API PA modernes — Noma
 | **Endpoint path** | Chemin de l'endpoint d'obtention du jeton (par ex. `/v7.3/tokenrequest` pour JD Edwards AIS, `/oauth2/token` pour un flux OAuth2 client_credentials). Combiné à **Base URL**. |
 | **Token field** | Chemin JSON en notation pointée pour extraire le jeton de la réponse (par ex. `userInfo.token` pour JD Edwards AIS). **Laisser vide** pour la détection auto — le runtime tente `access_token` puis `token`, ce qui couvre la réponse standard d'un flux OAuth2 client_credentials sans configuration. |
 | **Token TTL (minutes)** | Durée de mise en cache du jeton avant nouvelle demande. Valeur par défaut `55` minutes. |
-| **Body Content-Type** *(2026.05.8)* | `application/json` *(défaut)* ou `application/x-www-form-urlencoded`. La variante formulaire émet le corps de la requête de jeton sous forme de paires URL-encodées, ce qu'attend le flux OAuth2 `client_credentials` standard. |
+| **Body Content-Type** | `application/json` *(défaut)* ou `application/x-www-form-urlencoded`. La variante formulaire émet le corps de la requête de jeton sous forme de paires URL-encodées, ce qu'attend le flux OAuth2 `client_credentials` standard. |
 | **Body template** | Corps personnalisé pour la requête de jeton, avec placeholders `{{username}}` / `{{password}}`. **Laisser vide** pour utiliser des valeurs par défaut adaptées : le mode JSON émet le payload JD Edwards AIS (`{ username, password, deviceName }`) ; le mode formulaire émet `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`. |
-| **Token request headers** *(2026.05.8)* | Optionnel. Paires `Key:Value` séparées par point-virgule envoyées **uniquement sur la requête de jeton** — pour les PA qui exigent un en-tête tenant-id sur l'appel d'auth lui-même. Exemple : `customer-id:CUST123;X-Tenant:acme`. |
+| **Token request headers** | Optionnel. Paires `Key:Value` séparées par point-virgule envoyées **uniquement sur la requête de jeton** — pour les PA qui exigent un en-tête tenant-id sur l'appel d'auth lui-même. Exemple : `customer-id:CUST123;X-Tenant:acme`. |
 
 ---
 
@@ -198,7 +198,7 @@ Choix typique pour **JD Edwards AIS** et la plupart des API PA modernes — Noma
 
 Catalogue des endpoints HTTP accessibles via ce connecteur. Chaque entrée est une carte repliable ; un clic sur l'en-tête développe ou replie la carte.
 
-:::tip[Endpoints attendus *(2026.07.13)*]
+:::tip[Endpoints attendus]
 L'éditeur liste les endpoints plateforme que NomaUBL connaît — *send*, *import status*, *invoice statuses*, leurs variantes `-selfbilled` (qui routent les documents d'auto-facturation / flux achats et retombent sur le flux standard) et la vérification d'annuaire — en signalant ceux déjà configurés et en proposant un **ajout** en un clic pour ceux manquants : un endpoint requis passe plus difficilement inaperçu.
 :::
 
@@ -218,13 +218,13 @@ Tous les autres placeholders doivent être **déclarés dans la section Paramete
 | **Label** | Libellé lisible affiché dans l'éditeur et dans les listes déroulantes pendant le choix d'un endpoint (par ex. `Get Order Lines`). |
 | **Method** | Méthode HTTP (`GET` / `POST` / `PUT` / `DELETE` / `PATCH`). |
 | **URL path** | Chemin de l'endpoint ajouté à la **Base URL** du connecteur (par ex. `/v7.3/orchestrator/{{name}}`). |
-| **Content-Type** *(2026.05.9)* | `application/json` *(défaut)* ou `multipart/form-data`. La variante multipart transforme le corps en liste de parts — voir *Corps multipart* ci-dessous. |
+| **Content-Type** | `application/json` *(défaut)* ou `multipart/form-data`. La variante multipart transforme le corps en liste de parts — voir *Corps multipart* ci-dessous. |
 | **Extra headers** | Paires `Key:Value` séparées par des points-virgules, ajoutées aux en-têtes par défaut du connecteur (ou les surchargeant) (par ex. `X-Custom:value;Authorization:Bearer {{token}}`). |
 | **Body** | Corps de requête — modèle JSON avec placeholders `{{param}}`. Le bouton **Format JSON** met en forme la valeur. Pour `multipart/form-data`, le corps est lu comme une part par ligne (`name=value` ou `file=@{{filePath}};filename=…;contentType=…`). |
 | **Query params** | Modèle de chaîne de requête avec placeholders `{{param}}` (par ex. `pageSize={{pageSize}}&page={{page}}`). |
 | **Response field** | Chemin optionnel en notation pointée (par ex. `data.items`) qui extrait un sous-arbre de la réponse — utile pour ne récupérer qu'un fragment du payload. |
-| **Response type** *(2026.07.08)* | `JSON` *(défaut)* ou `XML`. En mode `XML`, *Response field* et *Response mappings* sont lus comme du **XPath** : une plateforme qui répond à import-status par un `ApplicationResponse` UBL — statut dans `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — s'interroge comme une plateforme JSON. Les préfixes `cac` / `cbc` / `ext` sont reconnus ; utilisez `//*[local-name()='X']` pour le reste. |
-| **Status map** *(2026.07.08)* | Traduit les mots de statut propres à la plateforme (par ex. `send_error`, `sent`, `processing`) vers les issues internes *accepted / pending / rejected*, pour qu'import-status marque la facture correctement au lieu de traiter par optimisme un statut inconnu comme accepté. |
+| **Response type** | `JSON` *(défaut)* ou `XML`. En mode `XML`, *Response field* et *Response mappings* sont lus comme du **XPath** : une plateforme qui répond à import-status par un `ApplicationResponse` UBL — statut dans `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — s'interroge comme une plateforme JSON. Les préfixes `cac` / `cbc` / `ext` sont reconnus ; utilisez `//*[local-name()='X']` pour le reste. |
+| **Status map** | Traduit les mots de statut propres à la plateforme (par ex. `send_error`, `sent`, `processing`) vers les issues internes *accepted / pending / rejected*, pour qu'import-status marque la facture correctement au lieu de traiter par optimisme un statut inconnu comme accepté. |
 | **Description** | Description en texte libre affichée dans les listes déroulantes et dans l'en-tête de l'éditeur. |
 
 #### Corps multipart
@@ -240,7 +240,7 @@ Cas d'usage typique : une PA qui prend la facture UBL en upload `multipart/form-
 
 Trois placeholders portent le document dans la part :
 
-- `{{filePath}}` — le chemin du fichier UBL sur disque. À l'**envoi initial**, c'est le fichier d'entrée ; au **renvoi** *(2026.06.13)*, NomaUBL écrit d'abord le blob UBL stocké dans un fichier temporaire, donc `{{filePath}}` fonctionne de la même façon et une seule configuration de connecteur sert les deux (le fichier temporaire est nettoyé automatiquement).
+- `{{filePath}}` — le chemin du fichier UBL sur disque. À l'**envoi initial**, c'est le fichier d'entrée ; au **renvoi**, NomaUBL écrit d'abord le blob UBL stocké dans un fichier temporaire, donc `{{filePath}}` fonctionne de la même façon et une seule configuration de connecteur sert les deux (le fichier temporaire est nettoyé automatiquement).
 - `{{content}}` — le base64 de l'UBL, pour les plateformes qui prennent les octets en ligne dans un corps JSON plutôt qu'en part fichier.
 - `{{docName}}` — un nom `<doc>_<dct>_<kco>` sanitisé, pratique pour l'en-tête `filename`.
 
@@ -317,7 +317,7 @@ Le corps est un modèle JSON ; `{{reportName}}`, `{{reportVersion}}` et `{{compa
 
 ### Chaînage d'endpoints (`then`) \{#endpoint-chaining\}
 
-*(2026.06.13)* Un endpoint peut transmettre son résultat à un appel de suivi dans la même étape. Renseignez **`then`** avec le nom de l'endpoint suivant, et **`then.itemsField`** / **`then.idField`** pour choisir l'id à transmettre depuis la première réponse. Cet id arrive dans l'appel de suivi sous `{{prevId}}` (aussi aliasé `{{uuid}}`). Cela pilote les flux de plateforme en deux temps — *déposer puis traiter*, ou *lister puis récupérer chaque détail* — sans aller-retour par NomaUBL entre les deux appels.
+ Un endpoint peut transmettre son résultat à un appel de suivi dans la même étape. Renseignez **`then`** avec le nom de l'endpoint suivant, et **`then.itemsField`** / **`then.idField`** pour choisir l'id à transmettre depuis la première réponse. Cet id arrive dans l'appel de suivi sous `{{prevId}}` (aussi aliasé `{{uuid}}`). Cela pilote les flux de plateforme en deux temps — *déposer puis traiter*, ou *lister puis récupérer chaque détail* — sans aller-retour par NomaUBL entre les deux appels.
 
 ### Exemple complet — Esker (dépôt, puis traitement) \{#esker\}
 

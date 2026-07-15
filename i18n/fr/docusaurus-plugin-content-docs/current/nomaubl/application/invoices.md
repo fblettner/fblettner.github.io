@@ -224,11 +224,11 @@ Une déroulante distincte filtre par code **BAR** (`B2B`, `B2G`, `B2BINT`, `B2C`
 
 Quand au moins un filtre est actif, une puce **✕ Effacer le filtre** apparaît en fin de rangée. Elle efface tous les filtres sauf la plage de dates.
 
-### Débordement des pastilles de statut *(2026.05.10)*
+### Débordement des pastilles de statut
 
 La ligne de pastilles de statut est plafonnée à **5 pastilles inline** ; le reste se replie dans un menu `+N more` avec un point coloré par code. Les drill-throughs multi-statuts depuis les tableaux de bord (par ex. *En vol* = 5 codes) remontent la valeur active dans le groupe inline quand elle tombe au-delà du plafond, donc le filtre actif reste visible.
 
-### Filtres avancés *(2026.05.10)*
+### Filtres avancés
 
 Un panneau **Filtres avancés** pliable se trouve sous la rangée de pastilles. Il propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active — avec un sélecteur d'opérateur par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas, donc taper dans le panneau ne sature pas le back-end.
 
@@ -311,11 +311,11 @@ Depuis 2026.05.10, la grille passe par **DataTableV2** en mode piloté par spec 
 | **Total TTC** | Montant total toutes taxes comprises. |
 | **Devise** | Code ISO 4217. |
 | **Statut** | Badge de statut — code + libellé, coloré par famille. |
-| **Revue** *(2026.05.9)* | **Badge de drapeau de revue** coloré, alimenté par `UHALRTPSD`. Allumé quand la ligne demande une attention opérateur — typiquement un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Vide quand le drapeau est libre. La colonne se balaie d'un coup d'œil : quelques badges jaunes dans une page sinon verte indiquent précisément par où commencer. |
+| **Revue** | **Badge de drapeau de revue** coloré, alimenté par `UHALRTPSD`. Allumé quand la ligne demande une attention opérateur — typiquement un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Vide quand le drapeau est libre. La colonne se balaie d'un coup d'œil : quelques badges jaunes dans une page sinon verte indiquent précisément par où commencer. |
 
 Un sélecteur de taille de page en bas du tableau est réglé sur 50 par défaut ; des valeurs jusqu'à 500 sont acceptées. Le nombre total de factures correspondant aux filtres apparaît à côté de la pagination.
 
-### Colonnes du catalogue *(2026.05.10)*
+### Colonnes du catalogue
 
 La requête SQL de la vue Factures joint maintenant `F564231` (UH) et `F564230` (FE) sur doc / dct / kco via un `LEFT JOIN`, donc le catalogue de colonnes comporte 16 colonnes archive / journal supplémentaires. Toutes peuvent être ajoutées à la spec depuis le picker `+ Ajouter une colonne` de l'éditeur [Vues de liste](../configuration/list-views.md) — la jointure gauche préserve les lignes factures sans entrée de journal.
 

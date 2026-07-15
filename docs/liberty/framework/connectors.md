@@ -196,7 +196,7 @@ Clicking *+ Add query* or an existing row opens the query editor:
 | **Parameters** | Sub-table — see [Parameter binding](./build/queries/parameter-binding.md) for every field. |
 | **Column hints** | Optional sub-table. Each row binds a result column to a dictionary entry: *Column* (dropdown of columns the *Test* button discovered) + *Dictionary* (dropdown of dictionary entries). Drives labels, formats, enums, lookups. Columns without a hint fall back to the column name as the label. |
 
-The **▶ Test** button at the top of the editor runs the query against the live pool with placeholder values for the parameters and shows the first 50 rows. The first successful test populates the *Column hints* dropdown with the discovered columns; subsequent tests refresh it.
+The **▶ Test** button at the top of the editor runs the query against the live pool with placeholder values for the parameters and shows the first 50 rows. The first successful test populates the *Column hints* dropdown with the discovered columns; subsequent tests refresh it. A failing query shows a **concise error summary with an expandable detail** — the SQL and the bound parameters in readable blocks, one bind per line.
 
 The framework uses the discovered schema to:
 
@@ -230,7 +230,7 @@ A per-connector **Thick LOB** toggle switches the read for that connector into a
 
 ---
 
-### Multi-pool connectors \{#multi-pool\} *(2026.07.14)*
+### Multi-pool connectors \{#multi-pool\}
 
 One SQL connector can serve **several pools** — several database or JDE instances — without cloning the connector or duplicating its screens. Alongside the default **Pool**, list the extra ones in **Pools** (both are dropdowns of configured pools in *Settings → Connectors → Settings…*); the same named queries and the same screens then run against any pool in the set.
 

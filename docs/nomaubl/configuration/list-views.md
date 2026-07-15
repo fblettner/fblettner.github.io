@@ -203,7 +203,7 @@ Above the column rows, each view card carries a *Defaults* row with the per-view
 | Field | Description |
 |---|---|
 | **Page size** | Initial page size for the in-grid TanStack paginator. Persists as `spec.defaultPageSize`. Default: `50`. |
-| **Max rows** *(2026.05.12)* | Hard cap on the slice loaded by a single Run. The four spec-driven views now operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Default: `5000`. |
+| **Max rows** | Hard cap on the slice loaded by a single Run. The four spec-driven views now operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Default: `5000`. |
 
 When the slice cap is hit during a Run, the page toolbar shows a translated `X / Y rows` notice next to the Run button — a hint that the operator should narrow the date range or the *Advanced Filters* to get the most relevant slice. The notice is informational; the page keeps working.
 
@@ -224,7 +224,7 @@ The list of operators offered per column depends on the catalog entry's filter b
 
 Marking a column **Filter** = off in the spec keeps it visible in the grid but removes its chip from the panel; useful for read-only fields the operator does not need to query.
 
-### refList columns — multi-select picker *(2026.05.13)*
+### refList columns — multi-select picker
 
 A column can be bound to a reference list — either a regulated one from [Reference Lists](./reference-lists.md) (statuses, currencies, country codes, …) or an operator-defined one from [Custom Lists](./custom-lists.md). Setting `refList: <list-name>` on the column spec is all that is needed: cell renderer, per-column filter dropdown and *Advanced Filters* multi-select picker switch on automatically.
 

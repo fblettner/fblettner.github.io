@@ -230,7 +230,6 @@ The *Send now* run also updates the *last sent* badge, so the scheduled run that
 | The attachment contains errors older than the lookback window. | The lookback window selects **invoices** that have at least one error in the window, then exports **every** error of those invoices — the same behaviour as the [Detailed view](../../application/integration-errors.md#detailed-view). This is intentional. | If you need strict-window export, do it from the *By event* tab manually. |
 | Two recipients get the same digest twice. | Two digest rows in the catalogue have overlapping recipient lists. | Audit the catalogue; merge or de-dup. |
 | The digest fires at the wrong hour. | Timezone is set to the wrong zone. | Open the digest, set the correct IANA timezone (`Europe/Paris`, `Africa/Casablanca`, …) and save. |
-| The form lost the values after Save. *(2026.05.x)* | Fixed in 2026.06.02. | Upgrade to the current build — the form now refreshes from the freshly-saved record. |
 
 ---
 

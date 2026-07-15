@@ -23,6 +23,10 @@ Tous deux passent par la fenêtre **Scaffold** — cochez une table, cochez la o
 
 La fenêtre s'ouvre, introspecte le pool et liste les schémas/tables.
 
+:::note[Aucune table requise]
+Vous n'êtes pas obligé de partir d'une table. Sautez le choix de la table et **écrivez le SQL directement** dans l'aperçu, puis *Utiliser cette requête* — pratique pour une recherche dont la source est une jointure ou un `SELECT` écrit à la main.
+:::
+
 ---
 
 ## Séquence — générer le prochain id

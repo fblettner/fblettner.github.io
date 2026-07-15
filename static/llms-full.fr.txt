@@ -3838,7 +3838,7 @@ Source: https://docs.nomana-it.fr/fr/liberty/framework/build/queries/create-from
 
 L'Assistant CRUD — pointez Liberty sur une table existante, cochez les colonnes, obtenez les quatre requêtes CRUD générées et enregistrées en un clic.
 
-Quand la table existe déjà dans la base, le chemin le plus rapide est l'**Assistant CRUD**. Vous le pointez sur un schéma et une table, cochez les colonnes que l'écran doit voir, marquez celles qui identifient une ligne, et Liberty écrit les quatre requêtes (`_get`, `_put`, `_post`, `_delete`) à votre place — y compris la reliaison `:NAME_ORIGINAL` sur UPDATE pour que l'Enregistrer d'un dialogue sache quelle ligne retrouver.
+Quand la table existe déjà dans la base, le chemin le plus rapide est l'**Assistant CRUD**. Vous le pointez sur un schéma et une table, cochez les colonnes que l'écran doit voir, marquez celles qui identifient une ligne, et Liberty écrit les quatre requêtes (`_get`, `_put`, `_post`, `_delete`) à votre place — y compris la reliaison `:NAME_ORIGINAL` sur UPDATE pour que l'Enregistrer d'un dialogue sache quelle ligne retrouver. Les **identifiants de colonnes et noms de liaison générés sont en majuscules** (comme l'assistant SELECT) : les colonnes JDE ressortent en majuscules.
 
 C'est le chemin recommandé pour toute table déjà existante. À éviter uniquement quand la table n'existe pas encore ou quand vous voulez du SQL écrit à la main — voir [Créer une requête personnalisée](./create-custom.md).
 
@@ -4574,6 +4574,10 @@ Tous deux passent par la fenêtre **Scaffold** — cochez une table, cochez la o
 **Paramètres → Connecteurs → sélectionnez un connecteur → barre de modes : Séquences** (ou **Recherches**) **→ ＋ Ajouter une séquence** (ou **＋ Ajouter une recherche**).
 
 La fenêtre s'ouvre, introspecte le pool et liste les schémas/tables.
+
+:::note[Aucune table requise]
+Vous n'êtes pas obligé de partir d'une table. Sautez le choix de la table et **écrivez le SQL directement** dans l'aperçu, puis *Utiliser cette requête* — pratique pour une recherche dont la source est une jointure ou un `SELECT` écrit à la main.
+:::
 
 ---
 
@@ -8469,7 +8473,7 @@ Cliquer sur *+ Ajouter requête* ou sur une ligne existante ouvre l'éditeur de 
 | **Paramètres** | Sous-table — voir [Liaison des paramètres](./build/queries/parameter-binding.md) pour chaque champ. |
 | **Indices de colonnes** | Sous-table optionnelle. Chaque ligne lie une colonne du résultat à une entrée du dictionnaire : *Colonne* (liste déroulante des colonnes découvertes par le bouton *Tester*) + *Dictionnaire* (liste déroulante des entrées du dictionnaire). Détermine libellés, formats, énumérations, recherches. Les colonnes sans indice retombent sur le nom de la colonne comme libellé. |
 
-Le bouton **▶ Tester** en haut de l'éditeur exécute la requête sur le pool live avec des valeurs de remplissage pour les paramètres et affiche les 50 premières lignes. Le premier test réussi remplit la liste déroulante *Indices de colonnes* avec les colonnes découvertes ; les tests suivants la rafraîchissent.
+Le bouton **▶ Tester** en haut de l'éditeur exécute la requête sur le pool live avec des valeurs de remplissage pour les paramètres et affiche les 50 premières lignes. Le premier test réussi remplit la liste déroulante *Indices de colonnes* avec les colonnes découvertes ; les tests suivants la rafraîchissent. Une requête en échec affiche un **résumé d'erreur concis avec un détail dépliable** — le SQL et les paramètres liés en blocs lisibles, une liaison par ligne.
 
 Le framework utilise le schéma découvert pour :
 
@@ -8503,7 +8507,7 @@ Une bascule **Thick LOB** par connecteur bascule la lecture de ce connecteur dan
 
 ---
 
-### Connecteurs multi-pools \{#multi-pool\} *(2026.07.14)*
+### Connecteurs multi-pools \{#multi-pool\}
 
 Un même connecteur SQL peut desservir **plusieurs pools** — plusieurs bases ou instances JDE — sans cloner le connecteur ni dupliquer ses écrans. À côté du **Pool** par défaut, listez les autres dans **Pools** (deux listes déroulantes de pools configurés, dans les réglages du connecteur) ; les mêmes requêtes nommées et les mêmes écrans s'exécutent alors sur n'importe quel pool de l'ensemble.
 
@@ -16911,7 +16915,7 @@ Cette tâche — et son équivalent `-all` — résout le problème propre à JD
 |---|---|
 | `REMERGE_SECURITY` | `nomajde.security:j_remerge_security` — lit le paquet brouillon actif, déduit l'ensemble des parents impactés via les requêtes `F00926` ancrées par rôle, re-fusionne F00950 / F00950W / F9006 pour chaque parent. |
 
-**Paramètres** *(2026.06.09)*
+**Paramètres**
 
 | Clé | Défaut | Description |
 |---|---|---|
@@ -18401,7 +18405,7 @@ La plupart des installations adoptent `<domaine>-<objectif>` ou `<domaine>-<obje
 
 ---
 
-### Dupliquer & supprimer *(2026.07.14)*
+### Dupliquer & supprimer
 
 **Dupliquer** une tâche demande d'emblée le **nouvel identifiant** — l'identifiant est immuable dans l'éditeur, une copie a donc besoin de son propre nom dès le départ. **Supprimer** retire la tâche de `jobs.toml` (configuration seulement) ; son historique d'exécutions est conservé.
 
@@ -18710,7 +18714,7 @@ Chaque pastille représente un déclenchement — un clic dessus mène à la fic
 
 ---
 
-## Presets planifiables \{#schedulable-presets\} *(2026.07.14)*
+## Presets planifiables \{#schedulable-presets\}
 
 Un **preset** — un jeu de paramètres d'exécution enregistré (params, `op_kwargs`, activations de steps, niveau de log) — peut porter son propre **cron + fuseau horaire**. Le planificateur déclenche alors la tâche selon cette planification *avec les paramètres du preset* : une même tâche tourne sur plusieurs planifications avec des entrées différentes, sans clonage.
 
@@ -21349,7 +21353,7 @@ L'enregistrement d'un nouvel utilisateur / rôle enchaîne quatre insertions JDE
 
 Les quatre étapes s'exécutent en un seul enregistrement — si l'une d'elles échoue, aucun enregistrement partiel n'est laissé en l'état.
 
-### Re-fusion côté serveur de la sécurité *(2026.06.09)*
+### Re-fusion côté serveur de la sécurité
 
 Chaque enregistrement sur un rôle enfant (un rôle *inclus par* d'autres rôles parents) déclenche une étape de fusion côté serveur qui re-dérive les lignes F00950 / F00950W / F9006 des parents à partir du nouvel état de l'enfant. Sans cela, un changement de permission sur un enfant n'apparaîtrait en production qu'après que chaque parent qui l'inclut ait été ouvert puis ré-enregistré à la main.
 
@@ -24336,7 +24340,7 @@ Paramètres réservés aux applications JDE. Renseigner les schémas qui localis
 
 | Champ | À renseigner |
 |---|---|
-| **Pool** *(2026.07.14)* | Le pool de connecteur que les tâches de collecte utilisent pour cette application : un seul connecteur `jdedwards` peut ainsi desservir plusieurs environnements JDE — pointez chaque apps_id sur son propre pool. Laissez vide pour conserver le `source_connector` par défaut de la tâche. Seule la connexion change ; les schémas et DB-links JDE ci-dessous proviennent toujours de ces paramètres. |
+| **Pool** | Le pool de connecteur que les tâches de collecte utilisent pour cette application : un seul connecteur `jdedwards` peut ainsi desservir plusieurs environnements JDE — pointez chaque apps_id sur son propre pool. Laissez vide pour conserver le `source_connector` par défaut de la tâche. Seule la connexion change ; les schémas et DB-links JDE ci-dessous proviennent toujours de ces paramètres. |
 | **JDE SY** | Schéma qui contient les tables JDE *System*. |
 | **JDE DTA** | Schéma qui contient les tables *Business Data*. |
 | **JDE CTL** | Schéma qui contient les tables *Control*. |
@@ -26615,7 +26619,7 @@ La barre d'outils au-dessus du tableau combine trois filtres texte avec deux rac
 | **Rafraîchir** | Relance la requête courante sans modifier les filtres. |
 | **Générer un rapport** | Ouvre la *modale de génération* — décrite plus bas. Masquée pour les sessions en lecture seule. |
 
-### Filtres avancés *(2026.05.10)*
+### Filtres avancés
 
 Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.ereporting`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
 
@@ -26879,7 +26883,7 @@ La même barre d'outils pilote les deux vues.
 
 | Contrôle | Comportement |
 |---|---|
-| **Bascule de vue** | *Par règle* (vue par défaut après un lien profond depuis le tableau de bord), *Par évènement* ou *Détaillée* *(2026.06.02)*. Les autres filtres sont conservés au changement de vue — la recherche, la sévérité et la catégorie restent appliquées. |
+| **Bascule de vue** | *Par règle* (vue par défaut après un lien profond depuis le tableau de bord), *Par évènement* ou *Détaillée*. Les autres filtres sont conservés au changement de vue — la recherche, la sévérité et la catégorie restent appliquées. |
 | **Recherche** | Correspondance par sous-chaîne sur `DOC`, `DCT`, `KCO` et le texte du message. Exécutée côté serveur, avec un délai (debounce). |
 | **Catégorie** | *Toutes sources* (par défaut), *Validation UBL* (règles Schematron / XSD — `UVSRCL IN ('EN16931', 'CIUSFR', 'FREXTIC', 'CPRO', 'XSD', 'UBL')`), *Intégration / cycle de vie* (le reste — erreurs runtime émises par le dispatcher : PDF, PA, base, …). |
 | **Pastilles de sévérité** | *Toutes* / *FATAL* / *ERROR* / *WARNING* / *INFO*. Une seule sévérité à la fois ; cliquer à nouveau sur la pastille active retire le filtre. |
@@ -26887,7 +26891,7 @@ La même barre d'outils pilote les deux vues.
 | **Rafraîchir** | Relance la requête en cours. |
 | **Exporter** *(vue détaillée uniquement)* | Génère un fichier Excel avec tous les évènements du périmètre. Les évènements de chaque groupe sont écrits — y compris ceux cachés dans un groupe replié à l'écran. Mêmes données que celles envoyées par le [Rapport quotidien](../configuration/system/daily-digest.md) en pièce jointe. |
 
-### Filtres avancés *(2026.05.10)*
+### Filtres avancés
 
 Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.integration-errors`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
 
@@ -26942,7 +26946,7 @@ Depuis 2026.05.10, la table passe par **DataTableV2** en mode piloté par spec :
 | Colonne | Source | Description |
 |---|---|---|
 | **Sévérité** | `UVY56LEVEL` | Badge coloré — *FATAL* / *ERROR* / *WARNING* / *INFO*. |
-| **Date** *(2026.05.9)* | `UVUPMJ` + `UVUPMT` | Date et heure d'enregistrement de l'événement. Même contexte temporel que la carte « erreurs récentes » du Tableau de bord IT — le triage n'a plus besoin d'ouvrir une ligne au préalable. |
+| **Date** | `UVUPMJ` + `UVUPMT` | Date et heure d'enregistrement de l'événement. Même contexte temporel que la carte « erreurs récentes » du Tableau de bord IT — le triage n'a plus besoin d'ouvrir une ligne au préalable. |
 | **Doc** | `UVDOC` | Numéro de document issu des données source. |
 | **Dct** | `UVDCT` | Type de document. |
 | **Kco** | `UVKCO` | Code société. |
@@ -27111,11 +27115,11 @@ Refusée (29)
 
 Quand au moins un filtre est actif, une puce **✕ Effacer le filtre** apparaît en fin de rangée. Elle efface tous les filtres sauf la plage de dates.
 
-### Débordement des pastilles de statut *(2026.05.10)*
+### Débordement des pastilles de statut
 
 La ligne de pastilles de statut est plafonnée à **5 pastilles inline** ; le reste se replie dans un menu `+N more` avec un point coloré par code. Les drill-throughs multi-statuts depuis les tableaux de bord (par ex. *En vol* = 5 codes) remontent la valeur active dans le groupe inline quand elle tombe au-delà du plafond, donc le filtre actif reste visible.
 
-### Filtres avancés *(2026.05.10)*
+### Filtres avancés
 
 Un panneau **Filtres avancés** pliable se trouve sous la rangée de pastilles. Il propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active — avec un sélecteur d'opérateur par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas, donc taper dans le panneau ne sature pas le back-end.
 
@@ -27194,11 +27198,11 @@ Depuis 2026.05.10, la grille passe par **DataTableV2** en mode piloté par spec 
 | **Total TTC** | Montant total toutes taxes comprises. |
 | **Devise** | Code ISO 4217. |
 | **Statut** | Badge de statut — code + libellé, coloré par famille. |
-| **Revue** *(2026.05.9)* | **Badge de drapeau de revue** coloré, alimenté par `UHALRTPSD`. Allumé quand la ligne demande une attention opérateur — typiquement un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Vide quand le drapeau est libre. La colonne se balaie d'un coup d'œil : quelques badges jaunes dans une page sinon verte indiquent précisément par où commencer. |
+| **Revue** | **Badge de drapeau de revue** coloré, alimenté par `UHALRTPSD`. Allumé quand la ligne demande une attention opérateur — typiquement un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Vide quand le drapeau est libre. La colonne se balaie d'un coup d'œil : quelques badges jaunes dans une page sinon verte indiquent précisément par où commencer. |
 
 Un sélecteur de taille de page en bas du tableau est réglé sur 50 par défaut ; des valeurs jusqu'à 500 sont acceptées. Le nombre total de factures correspondant aux filtres apparaît à côté de la pagination.
 
-### Colonnes du catalogue *(2026.05.10)*
+### Colonnes du catalogue
 
 La requête SQL de la vue Factures joint maintenant `F564231` (UH) et `F564230` (FE) sur doc / dct / kco via un `LEFT JOIN`, donc le catalogue de colonnes comporte 16 colonnes archive / journal supplémentaires. Toutes peuvent être ajoutées à la spec depuis le picker `+ Ajouter une colonne` de l'éditeur [Vues de liste](../configuration/list-views.md) — la jointure gauche préserve les lignes factures sans entrée de journal.
 
@@ -27737,7 +27741,7 @@ Une ligne de notification comporte cinq éléments : le **badge de statut** à g
 | **Sujet (ligne du haut)** | `NTSUBJ` (champ `emailSubject` de la règle ou message par défaut) | Titre court, lisible. La valeur par défaut est `Invoice {doc} {dct} {kco} — {statusLabel}`. |
 | **Message (deuxième ligne)** | `NTMSGE` (champ `emailBody` de la règle ou message par défaut) | Corps du texte. Tronqué s'il dépasse ; la modale ouverte au clic affiche l'historique complet. |
 | **Ligne méta** | `NTDOC · NTDCT · NTKCO · motif · action · règle` | Identifiants canoniques de la facture, plus le motif de rejet PA, l'action attendue et le nom de la règle s'ils sont présents. Motif et action sont lus dans les catalogues *rejection-reason-codes* et *action-codes* — c'est le libellé lisible qui s'affiche, pas le code brut. |
-| **Pastilles d'audit d'actions** *(2026.05.7)* | pied d'audit `NTK74MSG2` | Une pastille colorée par appel de connecteur déclenché par la règle. Voir [Pastilles d'audit d'actions](#pastilles-daudit-dactions) ci-dessous. |
+| **Pastilles d'audit d'actions** | pied d'audit `NTK74MSG2` | Une pastille colorée par appel de connecteur déclenché par la règle. Voir [Pastilles d'audit d'actions](#pastilles-daudit-dactions) ci-dessous. |
 | **Horodatage relatif** | `NTUPMJ` + `NTTDAY` | *à l'instant*, *il y a 2 min*, *14:32* (aujourd'hui), *Hier*, puis l'horodatage absolu `dd/mm/yyyy hh:mm` pour les entrées plus anciennes. |
 | **Bouton de suppression** | par ligne | Retire la ligne de la boîte de réception sans marquer les autres lues. |
 
@@ -27877,7 +27881,7 @@ Le sous-titre de la carte affiche, à droite, la **version du build et la date d
 
 Liste statique de raccourcis — les pages les plus utilisées par l'opérateur IT. Chaque lien utilise le même mécanisme `onNavigate` que la barre latérale et ouvre directement la page cible. Cibles par défaut : **Paramètres**, **Journal de traitement**, **Versions de fichiers**, **Références croisées**.
 
-### Échec d'envoi (ligne 2, largeur 4) *(2026.06.03)* \{#send-failed-row-2-span-4-20260603\}
+### Échec d'envoi (ligne 2, largeur 4) \{#send-failed\}
 
 Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi est limité à **100 ms par appel** pour que la PA reste dans son enveloppe de débit.
 
@@ -27896,7 +27900,7 @@ Liste tous les jobs actifs du planificateur :
 
 - **Jobs intégrés** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — pilotés par les intervalles de polling de `BackgroundScheduler`.
 - **`fetch-all` par modèle** — une ligne par modèle avec un job d'extraction / synchronisation programmé.
-- **Passages Reprise auto par ligne** *(2026.06.03)* — une ligne par entrée enregistrée sur la page [Reprise auto](../configuration/system/auto-retry.md), avec l'heure planifiée et la liste des statuts ciblés en guise de cadence.
+- **Passages Reprise auto par ligne** — une ligne par entrée enregistrée sur la page [Reprise auto](../configuration/system/auto-retry.md), avec l'heure planifiée et la liste des statuts ciblés en guise de cadence.
 
 Chaque ligne affiche le nom du job, la cadence, et une pastille de statut (vert actif, bleu prévu sous peu, orange en pause). Le sous-titre indique le décompte des jobs actifs.
 
@@ -27943,7 +27947,7 @@ Les valeurs de chemin contenant des jokers d'exécution (`%TEMPLATE%`, `%FILE_NA
 
 Temps moyen de traitement de bout en bout par modèle, en secondes, sur les 14 derniers jours. La carte charge les événements `START` / `END` de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` — la précédente version utilisait une auto-jointure SQL avec un `FETMPL` ambigu et une arithmétique `e.FEUPMT - s.FEUPMT` incorrecte ; ce point est corrigé.
 
-#### Décomposition par étape quand `debugProfile` est actif *(2026.05.9)*
+#### Décomposition par étape quand `debugProfile` est actif
 
 Quand le commutateur [`debugProfile`](../configuration/system/global.md) sur le modèle `global` est à `Y`, chaque exécution écrit une ligne par étape du pipeline dans `F564237` — **analyse d'en-tête**, **analyse des lignes**, **validation**, **émission UBL**, **envoi PA**. La carte Temps de traitement par modèle les fait remonter sous forme de décomposition empilée sous les totaux par modèle — une étape lente se repère d'un coup d'œil sans plonger dans le journal d'exécution.
 
@@ -28202,7 +28206,7 @@ L'éditeur comporte **cinq onglets** :
 | **Base URL** | URL racine de l'API cible (par ex. `https://api.example.com:9300`). Tous les chemins d'endpoint y sont ajoutés. |
 | **Timeout (ms)** | Délai d'expiration des requêtes HTTP en millisecondes. Valeur par défaut `30000` (30 s). |
 | **SSL Verify** | `true` / `false` — active la validation du certificat TLS du serveur. À positionner à `false` uniquement en environnement non-production utilisant des certificats auto-signés. |
-| **Debug** *(2026.06.14)* | `Y` / `N` (défaut `N`). Quand `Y`, chaque appel passant par ce connecteur écrit une trace requête + réponse sur une ligne — URL, code HTTP et aperçu du corps — dans le journal du service. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête et la forme de la réponse ; à désactiver une fois le connecteur stable. Une trace uniforme remplace l'ancien log ponctuel de *import-status* et *invoice-statuses*. |
+| **Debug** | `Y` / `N` (défaut `N`). Quand `Y`, chaque appel passant par ce connecteur écrit une trace requête + réponse sur une ligne — URL, code HTTP et aperçu du corps — dans le journal du service. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête et la forme de la réponse ; à désactiver une fois le connecteur stable. Une trace uniforme remplace l'ancien log ponctuel de *import-status* et *invoice-statuses*. |
 
 ### Default Headers
 
@@ -28258,9 +28262,9 @@ Choix typique pour **JD Edwards AIS** et la plupart des API PA modernes — Noma
 | **Endpoint path** | Chemin de l'endpoint d'obtention du jeton (par ex. `/v7.3/tokenrequest` pour JD Edwards AIS, `/oauth2/token` pour un flux OAuth2 client_credentials). Combiné à **Base URL**. |
 | **Token field** | Chemin JSON en notation pointée pour extraire le jeton de la réponse (par ex. `userInfo.token` pour JD Edwards AIS). **Laisser vide** pour la détection auto — le runtime tente `access_token` puis `token`, ce qui couvre la réponse standard d'un flux OAuth2 client_credentials sans configuration. |
 | **Token TTL (minutes)** | Durée de mise en cache du jeton avant nouvelle demande. Valeur par défaut `55` minutes. |
-| **Body Content-Type** *(2026.05.8)* | `application/json` *(défaut)* ou `application/x-www-form-urlencoded`. La variante formulaire émet le corps de la requête de jeton sous forme de paires URL-encodées, ce qu'attend le flux OAuth2 `client_credentials` standard. |
+| **Body Content-Type** | `application/json` *(défaut)* ou `application/x-www-form-urlencoded`. La variante formulaire émet le corps de la requête de jeton sous forme de paires URL-encodées, ce qu'attend le flux OAuth2 `client_credentials` standard. |
 | **Body template** | Corps personnalisé pour la requête de jeton, avec placeholders `{{username}}` / `{{password}}`. **Laisser vide** pour utiliser des valeurs par défaut adaptées : le mode JSON émet le payload JD Edwards AIS (`{ username, password, deviceName }`) ; le mode formulaire émet `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`. |
-| **Token request headers** *(2026.05.8)* | Optionnel. Paires `Key:Value` séparées par point-virgule envoyées **uniquement sur la requête de jeton** — pour les PA qui exigent un en-tête tenant-id sur l'appel d'auth lui-même. Exemple : `customer-id:CUST123;X-Tenant:acme`. |
+| **Token request headers** | Optionnel. Paires `Key:Value` séparées par point-virgule envoyées **uniquement sur la requête de jeton** — pour les PA qui exigent un en-tête tenant-id sur l'appel d'auth lui-même. Exemple : `customer-id:CUST123;X-Tenant:acme`. |
 
 ---
 
@@ -28268,7 +28272,7 @@ Choix typique pour **JD Edwards AIS** et la plupart des API PA modernes — Noma
 
 Catalogue des endpoints HTTP accessibles via ce connecteur. Chaque entrée est une carte repliable ; un clic sur l'en-tête développe ou replie la carte.
 
-:::tip[Endpoints attendus *(2026.07.13)*]
+:::tip[Endpoints attendus]
 L'éditeur liste les endpoints plateforme que NomaUBL connaît — *send*, *import status*, *invoice statuses*, leurs variantes `-selfbilled` (qui routent les documents d'auto-facturation / flux achats et retombent sur le flux standard) et la vérification d'annuaire — en signalant ceux déjà configurés et en proposant un **ajout** en un clic pour ceux manquants : un endpoint requis passe plus difficilement inaperçu.
 :::
 
@@ -28288,13 +28292,13 @@ Tous les autres placeholders doivent être **déclarés dans la section Paramete
 | **Label** | Libellé lisible affiché dans l'éditeur et dans les listes déroulantes pendant le choix d'un endpoint (par ex. `Get Order Lines`). |
 | **Method** | Méthode HTTP (`GET` / `POST` / `PUT` / `DELETE` / `PATCH`). |
 | **URL path** | Chemin de l'endpoint ajouté à la **Base URL** du connecteur (par ex. `/v7.3/orchestrator/{{name}}`). |
-| **Content-Type** *(2026.05.9)* | `application/json` *(défaut)* ou `multipart/form-data`. La variante multipart transforme le corps en liste de parts — voir *Corps multipart* ci-dessous. |
+| **Content-Type** | `application/json` *(défaut)* ou `multipart/form-data`. La variante multipart transforme le corps en liste de parts — voir *Corps multipart* ci-dessous. |
 | **Extra headers** | Paires `Key:Value` séparées par des points-virgules, ajoutées aux en-têtes par défaut du connecteur (ou les surchargeant) (par ex. `X-Custom:value;Authorization:Bearer {{token}}`). |
 | **Body** | Corps de requête — modèle JSON avec placeholders `{{param}}`. Le bouton **Format JSON** met en forme la valeur. Pour `multipart/form-data`, le corps est lu comme une part par ligne (`name=value` ou `file=@{{filePath}};filename=…;contentType=…`). |
 | **Query params** | Modèle de chaîne de requête avec placeholders `{{param}}` (par ex. `pageSize={{pageSize}}&page={{page}}`). |
 | **Response field** | Chemin optionnel en notation pointée (par ex. `data.items`) qui extrait un sous-arbre de la réponse — utile pour ne récupérer qu'un fragment du payload. |
-| **Response type** *(2026.07.08)* | `JSON` *(défaut)* ou `XML`. En mode `XML`, *Response field* et *Response mappings* sont lus comme du **XPath** : une plateforme qui répond à import-status par un `ApplicationResponse` UBL — statut dans `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — s'interroge comme une plateforme JSON. Les préfixes `cac` / `cbc` / `ext` sont reconnus ; utilisez `//*[local-name()='X']` pour le reste. |
-| **Status map** *(2026.07.08)* | Traduit les mots de statut propres à la plateforme (par ex. `send_error`, `sent`, `processing`) vers les issues internes *accepted / pending / rejected*, pour qu'import-status marque la facture correctement au lieu de traiter par optimisme un statut inconnu comme accepté. |
+| **Response type** | `JSON` *(défaut)* ou `XML`. En mode `XML`, *Response field* et *Response mappings* sont lus comme du **XPath** : une plateforme qui répond à import-status par un `ApplicationResponse` UBL — statut dans `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — s'interroge comme une plateforme JSON. Les préfixes `cac` / `cbc` / `ext` sont reconnus ; utilisez `//*[local-name()='X']` pour le reste. |
+| **Status map** | Traduit les mots de statut propres à la plateforme (par ex. `send_error`, `sent`, `processing`) vers les issues internes *accepted / pending / rejected*, pour qu'import-status marque la facture correctement au lieu de traiter par optimisme un statut inconnu comme accepté. |
 | **Description** | Description en texte libre affichée dans les listes déroulantes et dans l'en-tête de l'éditeur. |
 
 #### Corps multipart
@@ -28310,7 +28314,7 @@ Cas d'usage typique : une PA qui prend la facture UBL en upload `multipart/form-
 
 Trois placeholders portent le document dans la part :
 
-- `{{filePath}}` — le chemin du fichier UBL sur disque. À l'**envoi initial**, c'est le fichier d'entrée ; au **renvoi** *(2026.06.13)*, NomaUBL écrit d'abord le blob UBL stocké dans un fichier temporaire, donc `{{filePath}}` fonctionne de la même façon et une seule configuration de connecteur sert les deux (le fichier temporaire est nettoyé automatiquement).
+- `{{filePath}}` — le chemin du fichier UBL sur disque. À l'**envoi initial**, c'est le fichier d'entrée ; au **renvoi**, NomaUBL écrit d'abord le blob UBL stocké dans un fichier temporaire, donc `{{filePath}}` fonctionne de la même façon et une seule configuration de connecteur sert les deux (le fichier temporaire est nettoyé automatiquement).
 - `{{content}}` — le base64 de l'UBL, pour les plateformes qui prennent les octets en ligne dans un corps JSON plutôt qu'en part fichier.
 - `{{docName}}` — un nom `<doc>_<dct>_<kco>` sanitisé, pratique pour l'en-tête `filename`.
 
@@ -28387,7 +28391,7 @@ Le corps est un modèle JSON ; `{{reportName}}`, `{{reportVersion}}` et `{{compa
 
 ### Chaînage d'endpoints (`then`) \{#endpoint-chaining\}
 
-*(2026.06.13)* Un endpoint peut transmettre son résultat à un appel de suivi dans la même étape. Renseignez **`then`** avec le nom de l'endpoint suivant, et **`then.itemsField`** / **`then.idField`** pour choisir l'id à transmettre depuis la première réponse. Cet id arrive dans l'appel de suivi sous `{{prevId}}` (aussi aliasé `{{uuid}}`). Cela pilote les flux de plateforme en deux temps — *déposer puis traiter*, ou *lister puis récupérer chaque détail* — sans aller-retour par NomaUBL entre les deux appels.
+ Un endpoint peut transmettre son résultat à un appel de suivi dans la même étape. Renseignez **`then`** avec le nom de l'endpoint suivant, et **`then.itemsField`** / **`then.idField`** pour choisir l'id à transmettre depuis la première réponse. Cet id arrive dans l'appel de suivi sous `{{prevId}}` (aussi aliasé `{{uuid}}`). Cela pilote les flux de plateforme en deux temps — *déposer puis traiter*, ou *lister puis récupérer chaque détail* — sans aller-retour par NomaUBL entre les deux appels.
 
 ### Exemple complet — Esker (dépôt, puis traitement) \{#esker\}
 
@@ -29003,7 +29007,7 @@ Au-dessus des lignes de colonne, chaque carte de vue a une ligne *Défauts* avec
 | Champ | Description |
 |---|---|
 | **Page size** | Taille de page initiale du paginateur TanStack en grille. Persiste sous `spec.defaultPageSize`. Défaut : `50`. |
-| **Max rows** *(2026.05.12)* | Cap dur sur la tranche chargée par un seul *Exécuter*. Les quatre vues pilotées par spec fonctionnent maintenant en **mode hybride client-side** : chaque *Exécuter* charge une tranche capée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — pas d'aller-retour quand on tape dans la ligne de filtre par colonne. Persiste sous `spec.maxRows`. Défaut : `5000`. |
+| **Max rows** | Cap dur sur la tranche chargée par un seul *Exécuter*. Les quatre vues pilotées par spec fonctionnent maintenant en **mode hybride client-side** : chaque *Exécuter* charge une tranche capée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — pas d'aller-retour quand on tape dans la ligne de filtre par colonne. Persiste sous `spec.maxRows`. Défaut : `5000`. |
 
 Quand le cap de la tranche est atteint pendant un *Exécuter*, la barre d'outils de la page affiche un message traduit `X / Y lignes` à côté du bouton *Exécuter* — indication que l'opérateur devrait affiner la plage de dates ou les *Filtres avancés* pour obtenir la tranche la plus pertinente. Le message est informatif ; la page continue de fonctionner.
 
@@ -29024,7 +29028,7 @@ La liste d'opérateurs proposée par colonne dépend du comportement de filtre d
 
 Marquer une colonne **Filtre** = désactivé dans la spec la laisse visible dans la grille mais retire sa pastille du panneau — utile pour les champs en lecture seule que l'opérateur n'a pas besoin d'interroger.
 
-### Colonnes refList — picker multi-sélection *(2026.05.13)*
+### Colonnes refList — picker multi-sélection
 
 Une colonne peut être rattachée à une liste de référence — soit un catalogue réglementaire de [Listes de référence](./reference-lists.md) (statuts, devises, codes pays, …), soit une liste définie par l'opérateur dans [Listes personnalisées](./custom-lists.md). Renseigner `refList: <nom-de-liste>` sur la spec de colonne suffit : renderer de cellule, dropdown de filtre par colonne et picker multi-sélection des *Filtres avancés* s'activent automatiquement.
 
@@ -29622,7 +29626,7 @@ Les jetons à l'intérieur de l'un de ces constructs passent inchangés.
 
 La spec des paramètres pilote l'onglet *Test* et l'éditeur des appels : chaque `:name` déclaré devient un champ étiqueté pré-rempli avec la valeur `default`. Les lignes de spec sont séparées par des points-virgules ; chaque ligne contient jusqu'à trois champs séparés par des barres verticales. Les champs vides sont acceptés (un paramètre sans défaut donne simplement un champ vide).
 
-#### Strip des guillemets sur les paramètres chaîne *(2026.05.15)*
+#### Strip des guillemets sur les paramètres chaîne
 
 Le runtime retire une paire de guillemets simples ou doubles entourant chaque paramètre chaîne avant le `setString` JDBC. Taper `'01'` dans une valeur par défaut ou dans le panneau de test — la façon d'écrire un littéral SQL — donnait silencieusement 0 ligne car JDBC liait la chaîne de 4 caractères telle quelle ; le strip permet aux deux conventions de fonctionner.
 
@@ -29708,7 +29712,7 @@ Paramètres → Reprise auto planifie un passage quotidien qui renvoie chaque fa
 
 L'écran **Reprise auto** planifie un passage récurrent qui renvoie chaque facture dans un statut d'erreur technique choisi vers la Plateforme Agréée (PA). La ligne par défaut traite le statut `9904` (*Échec d'envoi*) chaque nuit à 3 h — le garde-fou du lot nocturne pour que tout ce qui reste bloqué côté PA en fin de journée soit repris avant la reprise des opérations le matin.
 
-Plusieurs lignes peuvent coexister : une par combinaison (heure, liste de statuts). Le même chemin de code pilote le bouton manuel *Tout renvoyer N* sur la [carte Échec d'envoi du Tableau de bord technique](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603), si bien que le renvoi manuel et le renvoi planifié produisent des résultats identiques — l'un est déclenché à la main, l'autre par cron.
+Plusieurs lignes peuvent coexister : une par combinaison (heure, liste de statuts). Le même chemin de code pilote le bouton manuel *Tout renvoyer N* sur la [carte Échec d'envoi du Tableau de bord technique](../../application/tech-dashboard.md#send-failed), si bien que le renvoi manuel et le renvoi planifié produisent des résultats identiques — l'un est déclenché à la main, l'autre par cron.
 
 La page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP sur mesure. Le renvoi lit `F564231` pour sélectionner les factures concernées et appelle l'api-connector PA configuré pour chacune ; le format source est transparent.
 
@@ -29820,7 +29824,7 @@ L'exécution déclenchée par *Exécuter maintenant* respecte le même cadenceme
 |---|---|---|
 | La ligne planifiée ne se déclenche pas. | La ligne est *DÉSACTIVÉE*. | Ouvrez la ligne, basculez *Activé* sur oui, enregistrez. |
 | La ligne se déclenche mais traite zéro facture. | La liste de statuts et la fenêtre d'analyse combinées donnent zéro correspondance. | Inspectez la page [E-Invoicing](../../application/invoices.md) avec le même filtre de statuts ; élargissez la fenêtre ou assouplissez la liste de statuts. |
-| La reprise se termine mais le décompte est très inférieur au nombre de la [carte Échec d'envoi](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603). | Le tableau de bord compte chaque `9904` sans tenir compte de l'âge ; une ligne avec une fenêtre de 7 jours ignore tout ce qui est plus ancien. | Soit retirez la fenêtre (`0` = aucun filtre), soit planifiez une seconde ligne avec une fenêtre plus large pour le stock ancien. |
+| La reprise se termine mais le décompte est très inférieur au nombre de la [carte Échec d'envoi](../../application/tech-dashboard.md#send-failed). | Le tableau de bord compte chaque `9904` sans tenir compte de l'âge ; une ligne avec une fenêtre de 7 jours ignore tout ce qui est plus ancien. | Soit retirez la fenêtre (`0` = aucun filtre), soit planifiez une seconde ligne avec une fenêtre plus large pour le stock ancien. |
 | Erreurs `429 Too Many Requests` dans le journal d'exécution. | Limite de débit PA atteinte. | Augmentez le cadencement (par ex. 100 ms → 250 ms) sur la ligne et relancez. |
 | Deux lignes ont toutes deux démarré à `03:00` et l'une a bloqué l'autre. | Aucun décalage de minute — elles ont sollicité le pool de connexions en même temps. | Échelonnez les lignes (`:00`, `:15`, `:30`). |
 | Le bouton *Exécuter maintenant* est grisé. | La reprise est déjà en cours (un passage planifié ou un *Exécuter maintenant* précédent). | Ouvrez la carte Planificateur du tableau de bord → cliquez sur la ligne active → utilisez *Annuler* dans la fenêtre modale si besoin, ou attendez. |
@@ -29830,7 +29834,7 @@ L'exécution déclenchée par *Exécuter maintenant* respecte le même cadenceme
 
 ## Pour aller plus loin
 
-- [Tableau de bord technique → Échec d'envoi](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603) — le renvoi manuel en un clic ; même chemin de code, déclenché à la main.
+- [Tableau de bord technique → Échec d'envoi](../../application/tech-dashboard.md#send-failed) — le renvoi manuel en un clic ; même chemin de code, déclenché à la main.
 - [Fenêtre de progression partagée](../../application/tech-dashboard.md#shared-progress-window) — la fenêtre modale qu'ouvre chaque opération longue.
 - [E-Invoicing](./einvoicing.md) — l'api-connector PA que le renvoi appelle ; ajustez-y les délais d'attente et les nombres de tentatives.
 - [Statuts](./statuses.md) — le catalogue des codes de statut, dont l'étiquette *Erreur – technique* qui filtre le sélecteur multi-statuts de cette page.
@@ -29984,7 +29988,6 @@ L'exécution *Envoyer maintenant* met aussi à jour le badge *dernier envoi*, ce
 | La pièce jointe contient des erreurs plus anciennes que la fenêtre d'analyse. | La fenêtre d'analyse sélectionne d'abord les **factures** qui ont au moins une erreur dans la fenêtre, puis exporte **toutes** les erreurs de ces factures — c'est le même comportement que la [Vue détaillée](../../application/integration-errors.md#detailed-view). C'est intentionnel. | S'il vous faut un export strict à la fenêtre, faites-le manuellement depuis l'onglet *Par évènement*. |
 | Deux destinataires reçoivent le même rapport en double. | Deux lignes de rapport dans le catalogue ont des listes de destinataires qui se recoupent. | Auditez le catalogue ; fusionnez ou dédoublonnez. |
 | Le rapport part à la mauvaise heure. | Le fuseau horaire pointe sur la mauvaise zone. | Ouvrez le rapport, renseignez le bon fuseau IANA (`Europe/Paris`, `Africa/Casablanca`, …) et enregistrez. |
-| Le formulaire a perdu les valeurs après Enregistrer. *(2026.05.x)* | Corrigé en 2026.06.02. | Mettez à jour vers la build courante — le formulaire se rafraîchit désormais depuis l'enregistrement fraîchement sauvegardé. |
 
 ---
 
@@ -30187,7 +30190,7 @@ Cet onglet configure le **répertoire des fichiers XSL** utilisés pour **transf
 |---|---|
 | **XSLT Directory** | Répertoire qui contient les fichiers de transformation `.xsl` utilisés pour convertir le XML source en UBL. Le placeholder `%APP_HOME%` se développe vers la racine d'installation NomaUBL. |
 
-### Défauts pour les factures manuelles / sans modèle *(2026.07.05)*
+### Défauts pour les factures manuelles / sans modèle
 
 Utilisés quand une facture n'a **aucun modèle de document** — créée dans l'éditeur manuel, ou un UBL déjà formé traité sans modèle. Les valeurs d'un modèle de document priment toujours.
 
@@ -30266,9 +30269,9 @@ La section **Status Retrieval** pilote la boucle de récupération des statuts d
 |---|---|---|
 | **Page size** | `100` | Nombre de statuts récupérés par page lors du polling de la PA. |
 | **Last retrieved at** | *(mis à jour automatiquement)* | Date ISO de la dernière récupération réussie (par exemple `2025-01-01T00:00:00Z`). Mis à jour automatiquement après chaque exécution ; une édition manuelle agit comme point de départ — utile pour rejouer une fenêtre. |
-| **Lifecycle endpoints** *(2026.07.13)* | *(vide = `invoice-statuses`)* | Nom(s) d'endpoint du connecteur à interroger pour les événements de cycle de vie, séparés par des virgules. Ajoutez `invoice-statuses-selfbilled` à côté de `invoice-statuses` quand la plateforme répartit ses cycles de vie ventes et achats (auto-facturation) sur des endpoints distincts, pour collecter les deux. Les endpoints inconnus sont ignorés. |
+| **Lifecycle endpoints** | *(vide = `invoice-statuses`)* | Nom(s) d'endpoint du connecteur à interroger pour les événements de cycle de vie, séparés par des virgules. Ajoutez `invoice-statuses-selfbilled` à côté de `invoice-statuses` quand la plateforme répartit ses cycles de vie ventes et achats (auto-facturation) sur des endpoints distincts, pour collecter les deux. Les endpoints inconnus sont ignorés. |
 
-:::info[Les factures d'auto-facturation empruntent leurs propres endpoints *(2026.07.13)*]
+:::info[Les factures d'auto-facturation empruntent leurs propres endpoints]
 Une facture d'auto-facturation (type 261, 389, 471, 473, 500, 501 ou 502) est transmise via le canal « achats » de la plateforme : NomaUBL emploie automatiquement la variante `-selfbilled` d'un endpoint (`import-selfbilled`, `import-status-selfbilled`) quand le connecteur la définit, et retombe sur l'endpoint standard sinon. La connexion à la plateforme — URL et identifiants — reste identique ; seuls les endpoints diffèrent.
 :::
 
@@ -30570,7 +30573,7 @@ L'éditeur comporte **six onglets** :
 | Champ | Valeurs | Description |
 |---|---|---|
 | **Update DB** | `Y` / `N` | À `Y`, les exécutions de traitement enregistrent leurs résultats en base de données. À positionner à `N` uniquement pour des exécutions à blanc (dry-run) ou des phases de débogage. |
-| **`debugProfile`** *(2026.05.9)* | `Y` / `N` | À `Y`, chaque exécution écrit des **lignes de chronométrage par étape** dans `F564237` pour chaque phase du pipeline : analyse d'en-tête, analyse des lignes, validation, émission UBL, envoi PA. Les lignes apparaissent sur le [Tableau de bord IT](../../application/tech-dashboard.md) — le flux *Traitements en cours · direct* les marque avec le nom de l'étape, et le widget *Temps par modèle* décompose la moyenne par étape. À laisser à `N` en production ; à passer à `Y` le temps d'un lot pour analyser un pipeline lent. À désactiver dès que l'étape lente est identifiée — les lignes additionnelles gonflent rapidement `F564237` sous charge. |
+| **`debugProfile`** | `Y` / `N` | À `Y`, chaque exécution écrit des **lignes de chronométrage par étape** dans `F564237` pour chaque phase du pipeline : analyse d'en-tête, analyse des lignes, validation, émission UBL, envoi PA. Les lignes apparaissent sur le [Tableau de bord IT](../../application/tech-dashboard.md) — le flux *Traitements en cours · direct* les marque avec le nom de l'étape, et le widget *Temps par modèle* décompose la moyenne par étape. À laisser à `N` en production ; à passer à `Y` le temps d'un lot pour analyser un pipeline lent. À désactiver dès que l'étape lente est identifiée — les lignes additionnelles gonflent rapidement `F564237` sous charge. |
 
 ### PDF
 
@@ -30880,7 +30883,7 @@ Deux évolutions livrées en 2026.05.5 :
 | **Tag** *(lecture seule)* | `STATUS_DEPOSITED` | Nom interne référencé par les fabriques `InvoiceStatusCatalog` du code Java. L'éditeur l'affiche en lecture seule — un renommage casserait silencieusement les appelants Java. |
 | **Libellé · Français** | `Déposée` | Libellé français affiché dans l'interface quand la locale active est le français. |
 | **Libellé · Anglais** | `Deposited` | Libellé anglais affiché dans l'interface quand la locale active est l'anglais. |
-| **PA Code(s)** | `fr_e_invoicing_200` | Nom d'événement transmis à l'API de la Plateforme Agréée — placé dans le tableau `names[]` des appels de statut. **Plusieurs codes, séparés par des virgules**, peuvent pointer vers ce statut *(2026.07.13)* : une seule liste sert des factures dont les statuts viennent de sources différentes (votre plateforme principale et Chorus Pro, par exemple) sans la dupliquer. Chaque code doit correspondre exactement à ce qu'attend sa PA. |
+| **PA Code(s)** | `fr_e_invoicing_200` | Nom d'événement transmis à l'API de la Plateforme Agréée — placé dans le tableau `names[]` des appels de statut. **Plusieurs codes, séparés par des virgules**, peuvent pointer vers ce statut : une seule liste sert des factures dont les statuts viennent de sources différentes (votre plateforme principale et Chorus Pro, par exemple) sans la dupliquer. Chaque code doit correspondre exactement à ce qu'attend sa PA. |
 | **Polling — Interroger via la PA** | case à cocher | Quand cochée, NomaUBL interroge ce statut auprès de l'API de la PA à chaque exécution de *Synchronisation → Récupérer les statuts*. Décocher pour exclure un statut du polling. |
 | **Groupes** | multi-sélection | Compteur de niveau supérieur et étape funnel auxquels le statut est rattaché — alimente les widgets du tableau de bord et les filtres SQL de `DashboardApi`. Voir [Groupes](#groupes) ci-dessous. |
 
@@ -32343,7 +32346,7 @@ Le jeu complet des commandes de cycle de vie (identique sur les deux wrappers, r
 
 Pour le quotidien opérationnel, le wrapper suffit. La couche de supervision au niveau du système d'exploitation ci-dessous ajoute le démarrage **automatique** au boot et le redémarrage sur crash.
 
-### Réglage JVM — `JAVA_OPTS` *(2026.06.02)* \{#java-opts\}
+### Réglage JVM — `JAVA_OPTS` \{#java-opts\}
 
 Les deux wrappers proposent une variable **`JAVA_OPTS`** en tête de fichier. Son contenu est transmis à chaque appel `java -jar` — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Modifier le fichier une fois ; chaque appel ultérieur du wrapper la reprend.
 
@@ -33098,7 +33101,7 @@ Au-delà du contrôle de service, le wrapper propose des **formes courtes** des 
 
 Le reste de la page détaille chacun des modes directs du JAR.
 
-### `JAVA_OPTS` — passer des options JVM via le wrapper *(2026.06.02)*
+### `JAVA_OPTS` — passer des options JVM via le wrapper
 
 Les deux wrappers (`nomaubl.sh`, `nomaubl.cmd`) déclarent une variable **`JAVA_OPTS`** en haut du fichier. Tout ce qu'elle contient est transmis à chaque invocation `java -jar` du wrapper — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Cela permet d'appliquer des options JVM communes au site sans toucher aux lignes de commande du wrapper.
 
@@ -33142,7 +33145,7 @@ Mise à jour de bout en bout d'un environnement existant vers le JAR en place. R
 ./nomaubl.sh upgrade prod --from-version 2026.05.20    # forcer la version de départ manuellement
 ```
 
-### `--from-version` — version de départ manuelle *(2026.06.02)*
+### `--from-version` — version de départ manuelle
 
 Par défaut, la mise à jour lit la version installée dans la table d'historique des mises à jour et applique toutes les migrations dont la version cible est **strictement supérieure** à celle qui s'y trouve. Cela couvre tous les environnements passés par `nomaubl.sh upgrade` depuis l'ajout de cette table.
 
@@ -33511,7 +33514,7 @@ java -jar nomaubl.jar -extract /opt/nomaubl/demo/config/config.json 19 \
 
 ## `-pdf2xml` — adaptateur PDF JD Edwards → XML \{#pdf2xml\}
 
-*(2026.06.15)* Convertit un **PDF** de rapport JD Edwards EnterpriseOne dans la même forme XML que JDE produit nativement quand la sortie XML est activée — un site peut donc garder JDE en mode sortie PDF et alimenter sans changement le pipeline XML → XSL → UBL existant. Contrairement aux autres modes, il ne prend aucun environnement : c'est un convertisseur fichier-à-fichier autonome.
+ Convertit un **PDF** de rapport JD Edwards EnterpriseOne dans la même forme XML que JDE produit nativement quand la sortie XML est activée — un site peut donc garder JDE en mode sortie PDF et alimenter sans changement le pipeline XML → XSL → UBL existant. Contrairement aux autres modes, il ne prend aucun environnement : c'est un convertisseur fichier-à-fichier autonome.
 
 ```text
 -pdf2xml <input.pdf> <output.xml> [<manifest.xml>]
@@ -33620,7 +33623,7 @@ La valeur Direction est écrite une fois sur la ligne au moment de l'insertion (
 
 ### Identification du document *(quand Source = UBL)* \{#document-identification-ubl\}
 
-*(2026.06.13)* Un fichier UBL ne porte aucun spool d'où extraire les données : l'**Activité** et le **Type** que la source XML récupère par XPath se saisissent ici en texte. Le groupe se trouve en haut de la branche UBL et les deux champs sont **obligatoires** — ils sont écrits dans la ligne de suivi `F564230` dont dépendent l'envoi PA et fetch-import.
+ Un fichier UBL ne porte aucun spool d'où extraire les données : l'**Activité** et le **Type** que la source XML récupère par XPath se saisissent ici en texte. Le groupe se trouve en haut de la branche UBL et les deux champs sont **obligatoires** — ils sont écrits dans la ligne de suivi `F564230` dont dépendent l'envoi PA et fetch-import.
 
 | Champ | Description |
 |---|---|
@@ -33774,7 +33777,7 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | Champ | Valeurs | Description |
 |---|---|---|
 | **UBL XSLT** | chemin | Transformation XSL du XML source vers l'**UBL 2.1**. Le placeholder `%APP_HOME%` est remplacé par la racine d'installation de NomaUBL. |
-| **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` *(2026.07.05)* = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
+| **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
 | **LISIBLE** | `Y` / `N` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. |
 
 ### Pièces jointes complémentaires
@@ -33788,7 +33791,7 @@ En plus du PDF lisible principal, un type de document peut joindre **d'autres fi
 
 Le bouton **`{ }`** placé à côté du champ chemin ouvre une liste filtrable et insère le jeton choisi à l'endroit du curseur — aussi bien les jetons du catalogue de facture (`{{kco}}`, `{{fedoc}}`, …) que les variables de chemin `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%` —, ce qui évite d'avoir à retenir leur écriture exacte. **Ajouter une pièce jointe** crée une nouvelle ligne.
 
-:::info[Les modèles source UBL embarquent aussi les pièces jointes *(2026.06.13)*]
+:::info[Les modèles source UBL embarquent aussi les pièces jointes]
 Un modèle en *Source = UBL* embarque désormais les mêmes PDF que le flux XML — après validation et avant l'insert en base, pour que l'UBL stocké corresponde à ce qui est envoyé à la PA :
 
 - **Attachment `attach`** embarque un PDF voisin depuis le répertoire d'entrée sous `cbc:ID="PJA"`.
@@ -33831,7 +33834,7 @@ L'éditeur visuel — liste de sections, tiroir par section, aperçu en direct, 
 
 ---
 
-## Onglet 5 — 🔗 Enrichment *(2026.07.09)*
+## Onglet 5 — 🔗 Enrichment
 
 Quand le spool source n'a pas une donnée dont la facture a besoin — le numéro de TVA d'un client, un libellé issu d'une table de référence — l'onglet **Enrichment** va la chercher sur un [connecteur SQL](../configuration/sql-connectors.md) ou [API](../configuration/api-connectors.md) et l'injecte dans le spool **avant** la transformation XSL. Les valeurs récupérées se mappent alors dans l'[éditeur XSL](../ubl-tools/xsl-editor.md) comme n'importe quel champ du spool, et sont archivées avec la source.
 
@@ -34379,7 +34382,7 @@ La barre latérale liste toutes les mises en page enregistrées, plus la `built-
 
 Le bouton **Ouvrir l'éditeur visuel** ouvre la mise en page dans un éditeur plein écran à trois volets côte à côte — c'est la manière de référence pour éditer un `pdf-template`. L'ancien parcours (liste de sections + tiroirs par section, clic sur un bouton Aperçu qui ouvre une modale) disparaît ; l'éditeur regroupe tout sur un seul écran, aperçu toujours visible.
 
-:::info[Le PDF lisible affiche les libellés, pas les codes *(2026.07.12)*]
+:::info[Le PDF lisible affiche les libellés, pas les codes]
 Les champs codifiés n'affichent que leur libellé lisible — type de facture, profil, mode de paiement, catégories de note, références de document et identifiants d'article ne portent plus le code brut (*Paiement : Virement*, pas *Paiement : 30 — Virement* ; une note affiche *Informations de paiement —*, pas *[PMD] Informations de paiement —*). Les codes restent dans l'UBL pour le traitement automatisé.
 :::
 
@@ -34420,7 +34423,7 @@ Liste complète des bascules par section prédéfinie :
 
 - **Header** — huit bascules `META · …` (numéro de facture, date d'émission, date d'échéance, références contrat / commande / acheteur, type de facture, profil ID), plus six bascules `Supplier · …` (adresse, SIREN, forme légale, TVA, téléphone, e-mail).
 - **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un switch principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client.
-- **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et, *(2026.06.14)*, *Group by customer order* — un troisième bandeau sous ceux de la livraison et de la référence de document, indiquant l'ID de commande client référencée, BT-132), sept bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Amount`, `Tax`) et neuf bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau commande client suit les mêmes règles de réinitialisation que les autres : un changement de livraison ré-imprime les deux fils internes, un changement de référence de document ré-imprime le bandeau commande client.
+- **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et,, *Group by customer order* — un troisième bandeau sous ceux de la livraison et de la référence de document, indiquant l'ID de commande client référencée, BT-132), sept bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Amount`, `Tax`) et neuf bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau commande client suit les mêmes règles de réinitialisation que les autres : un changement de livraison ré-imprime les deux fils internes, un changement de référence de document ré-imprime le bandeau commande client.
 - **Document Allowances** — bascules de colonnes pour type, motif, montant, taxe.
 - **VAT Breakdown** — bascules de colonnes pour catégorie, taux, base imposable, montant de TVA (une colonne d'exemption apparaît automatiquement quand elle est présente).
 - **Totals** — sept bascules de lignes couvrant la pile complète (Total HT, Allowances, Charges, Tax Exclusive, Total Tax, Total TTC, Amount Payable).
@@ -34586,7 +34589,7 @@ La barre d'outils combine la bascule de vue, une recherche libre, deux filtres d
 
 En vue groupée, la page extrait davantage (`pageSize × 4`, plafonné à 200) pour que les paires START / END et les étapes intermédiaires se retrouvent sur la même page et que le moteur de groupement dispose du job complet.
 
-### Filtres avancés *(2026.05.10)*
+### Filtres avancés
 
 Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.processing-log`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
 
@@ -37038,7 +37041,7 @@ Un **renvoi en masse** très attendu pour les factures bloquées en *Échec d'en
 
 ### Nouveautés
 
-- **Carte Échec d'envoi sur le Tableau de bord technique.** Une nouvelle carte affiche le nombre de factures actuellement en *Échec d'envoi* (statut 9904) et propose un bouton **Tout renvoyer** d'un seul clic. La fenêtre de progression montre les compteurs en direct (traitées / réussies / échecs) ; vous pouvez la fermer et laisser l'opération continuer en arrière-plan, ou l'arrêter proprement entre deux factures. Le renvoi est cadencé à 100 ms par appel pour ménager la PA. Voir [Tableau de bord technique → Échec d'envoi](./application/tech-dashboard.md#send-failed-row-2-span-4-20260603).
+- **Carte Échec d'envoi sur le Tableau de bord technique.** Une nouvelle carte affiche le nombre de factures actuellement en *Échec d'envoi* (statut 9904) et propose un bouton **Tout renvoyer** d'un seul clic. La fenêtre de progression montre les compteurs en direct (traitées / réussies / échecs) ; vous pouvez la fermer et laisser l'opération continuer en arrière-plan, ou l'arrêter proprement entre deux factures. Le renvoi est cadencé à 100 ms par appel pour ménager la PA. Voir [Tableau de bord technique → Échec d'envoi](./application/tech-dashboard.md#send-failed).
 - **Reprise nocturne automatique dans Paramètres.** Une nouvelle page [Configuration → Système → Reprise auto](./configuration/system/auto-retry.md) permet de programmer une passe quotidienne qui renvoie toutes les factures dans un statut choisi — par défaut 3 h du matin, statut 9904. Utile pour le lot de nuit : tout ce qui est bloqué côté PA est repris avant le matin suivant. Plusieurs planifications coexistent, chacune avec sa propre heure, sa liste de statuts, une fenêtre d'analyse optionnelle et son cadencement.
 - **Sélecteur multi-statuts pour la reprise.** Choisissez un ou plusieurs statuts dans une liste limitée aux codes étiquetés *Erreur – technique* (9904, 9905, 9907, …). Une seule planification peut couvrir d'un coup tous les seaux d'erreurs techniques.
 - **Fenêtre de progression pour les tâches en arrière-plan.** Les opérations longues partagent désormais une fenêtre commune — une barre, des compteurs en direct, un bouton *Annuler* et un bouton *Continuer en arrière-plan* qui masque la fenêtre sans arrêter la tâche. Voir [Tableau de bord technique → Fenêtre de progression partagée](./application/tech-dashboard.md#shared-progress-window).
@@ -39304,7 +39307,7 @@ Le formulaire de mapping — l'alternative visuelle à la rédaction XSLT manuel
 | Bouton | Comportement |
 |---|---|
 | **Load XML Source** | Charge un échantillon XML (côté navigateur) et en extrait tous les chemins d'éléments. Les chemins alimentent les sélecteurs en regard de chaque champ — les valeurs se renseignent par clic plutôt que par saisie. |
-| **Charger un échantillon connecteur** *(2026.05.16)* | Quand le modèle de document actif est en `source = Connecteur`, ce bouton appelle une fois la requête SQL ou l'endpoint REST configuré, puis injecte la réponse dans le même sélecteur de chemins. Les listes déroulantes XPath autocomplètent alors sur des données réelles — même expérience qu'avec un vrai spool XML, sans aucun fichier. Le bouton est masqué pour les modèles `XML` et `UBL`. |
+| **Charger un échantillon connecteur** | Quand le modèle de document actif est en `source = Connecteur`, ce bouton appelle une fois la requête SQL ou l'endpoint REST configuré, puis injecte la réponse dans le même sélecteur de chemins. Les listes déroulantes XPath autocomplètent alors sur des données réelles — même expérience qu'avec un vrai spool XML, sans aucun fichier. Le bouton est masqué pour les modèles `XML` et `UBL`. |
 | **AI Auto-Map** ✦ | Ouvre la modale *AI Auto-Map*. À partir d'un échantillon XML (et d'un PDF optionnel), l'IA renvoie un mapping JSON des variables `TAG_*` vers les chemins XML, correctement scopés. Voir [AI Auto-Map](#ai-auto-map) ci-dessous. |
 | **Save Mappings** | Réécrit dans le fichier XSLT les valeurs courantes de toutes les variables `TAG_*`. Le point indicateur (`●`) apparaît quand le mapping a changé sans avoir été enregistré. |
 
@@ -39320,8 +39323,8 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Billing References** | BT-11, BT-14 à BT-18, BT-122 à BT-124 | Projet, contrat, expédition, justificatifs. |
 | **Preceding Invoices — répété** *(BG-3, 0..n)* | BT-25, BT-26 | Parcourt un groupe source répétitif et génère un `cac:BillingReference` par facture antérieure (avec une date d'émission facultative), en complément de la référence unique BT-25/BT-26 déjà gérée dans *Billing References*. |
 | **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Joindre un document déjà encodé en base64 dans le spool source — jusqu'à quatre par facture. Voir [Pièces jointes intégrées](#embedded-attachments) plus bas. |
-| **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur — plus, dans le panneau *Seller Identifiers* *(2026.07.12)*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-29), chacun un champ source + un code de la liste *Scheme IDs*. |
-| **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur — plus, dans le panneau *Buyer Identifiers* *(2026.07.12)*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-46), chacun un champ source + un code de la liste *Scheme IDs*. |
+| **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur — plus, dans le panneau *Seller Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-29), chacun un champ source + un code de la liste *Scheme IDs*. |
+| **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur — plus, dans le panneau *Buyer Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-46), chacun un champ source + un code de la liste *Scheme IDs*. |
 | **Agent Party** | extended-ctc-fr | Tiers intermédiaire optionnel. |
 | **Delivery** | BT-70 à BT-80 | Date et adresse de livraison. |
 | **Payment** | BT-20, BT-81 à BT-91 | Moyen, IBAN, BIC, mandat, conditions. |
@@ -39338,11 +39341,11 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 
 Chaque champ affiche le libellé du BT, son code BT en badge coloré, la valeur courante (chemin XML ou expression) et un sélecteur `↓` qui ouvre le [navigateur XML](#navigateur-xml) sur la droite.
 
-:::info[Couverture complète des champs *(2026.06.15)*]
+:::info[Couverture complète des champs]
 La référence de champs liste désormais chaque groupe (BG) et terme (BT) que le Schematron étendu (BR-FR / CTC-FR 1.3.1) contrôle et que l'éditeur sait mapper — BG-3 à BG-32 et les termes qu'ils encadrent (facture précédente BT-25/26, devise de comptabilisation TVA BT-6 / BT-111, date du fait générateur BT-7, identifiant fiscal vendeur BT-32, subdivisions acheteur / livraison BT-54 / BT-79, contact acheteur BT-56, lieu de livraison BT-71, numéro de carte tronqué BT-87, code unité de quantité BT-130, assiette et motif des charges de ligne BT-142/145, ligne 3 d'adresse de livraison BT-165, et d'autres). Ce que vous pouvez mapper ici correspond désormais exactement à ce que le [validateur](./validate.md) contrôle.
 :::
 
-:::info[Encore plus de champs mappables *(2026.07.08)*]
+:::info[Encore plus de champs mappables]
 L'éditeur a gagné un mappage **Buyer trading name** (BT-45 → `cac:PartyName/cbc:Name` sur la partie client, à l'image du nom commercial vendeur BT-28), et trois mappages de totaux document — **Sum of charges** (BT-108), **Amount already paid** (BT-113) et **Rounding amount** (BT-114). Quand un montant déjà payé ou un arrondi est mappé, le montant dû (BT-115) est calculé comme *total avec TVA − déjà payé + arrondi*. Un mappage ajouté à un modèle apparaît désormais toujours dans sa section, même quand la liste de champs intégrée ne le prévoyait pas.
 :::
 

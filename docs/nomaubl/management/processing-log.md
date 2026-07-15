@@ -179,7 +179,7 @@ The toolbar above the table combines a view toggle, a free-text search, two drop
 
 When grouped, the page over-fetches (`pageSize × 4`, capped at 200) so START / END pairs and intermediate steps land on the same page and the grouping engine has the full job in hand.
 
-### Advanced Filters *(2026.05.10)*
+### Advanced Filters
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.processing-log`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 

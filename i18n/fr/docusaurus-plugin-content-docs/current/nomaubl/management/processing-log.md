@@ -179,7 +179,7 @@ La barre d'outils combine la bascule de vue, une recherche libre, deux filtres d
 
 En vue groupée, la page extrait davantage (`pageSize × 4`, plafonné à 200) pour que les paires START / END et les étapes intermédiaires se retrouvent sur la même page et que le moteur de groupement dispose du job complet.
 
-### Filtres avancés *(2026.05.10)*
+### Filtres avancés
 
 Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.processing-log`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
 

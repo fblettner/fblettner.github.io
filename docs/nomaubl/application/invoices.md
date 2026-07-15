@@ -224,11 +224,11 @@ To the right, a row of **status chips** appears: one per status currently presen
 
 When at least one filter is active, an **✕ Clear filter** chip appears at the end of the chip row. It clears every active filter except the date range.
 
-### Status chip overflow *(2026.05.10)*
+### Status chip overflow
 
 The Status chip row caps at **5 inline chips**; the rest fold into a `+N more` dropdown with a coloured dot per code. Multi-status drill-throughs from the dashboards (e.g. *In flight* = 5 codes) hoist the active value back into the inline group when it falls past the cap, so the active filter stays visible.
 
-### Advanced Filters *(2026.05.10)*
+### Advanced Filters
 
 A collapsible **Advanced Filters** panel sits below the chip row. It exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec — with a per-column operator picker (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay as a draft until **Run** commits them, so typing in the panel does not spam the back-end.
 
@@ -311,11 +311,11 @@ Since 2026.05.10 the grid renders through **DataTableV2** in spec-driven mode: c
 | **Total TTC** | Total amount including VAT. |
 | **Currency** | ISO 4217 code. |
 | **Status** | Status badge — code + label, coloured by family. |
-| **Review** *(2026.05.9)* | Coloured **review-flag badge** sourced from `UHALRTPSD`. Lit up when the row needs operator attention — typically a status the dispatcher could not auto-resolve, a manual edit flagged on save, or a downstream system marking the row for re-check. Empty when the flag is clear. The column is a quick scan target: a few yellow badges in an otherwise green page tell you exactly where to start. |
+| **Review** | Coloured **review-flag badge** sourced from `UHALRTPSD`. Lit up when the row needs operator attention — typically a status the dispatcher could not auto-resolve, a manual edit flagged on save, or a downstream system marking the row for re-check. Empty when the flag is clear. The column is a quick scan target: a few yellow badges in an otherwise green page tell you exactly where to start. |
 
 A page-size selector at the bottom defaults to 50 rows per page; values up to 500 are accepted. The total count of matching invoices is shown next to the pagination controls.
 
-### Catalog columns *(2026.05.10)*
+### Catalog columns
 
 The Invoices view's SQL now joins `F564231` (UH) and `F564230` (FE) on doc / dct / kco via a `LEFT JOIN`, so the column catalog exposes 16 additional archive / log columns. Any of them can be added to the spec via the [List Views](../configuration/list-views.md) editor's `+ Add column` picker — the `LEFT JOIN` keeps invoice rows when no log entry exists.
 

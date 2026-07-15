@@ -71,7 +71,7 @@ The full set of lifecycle commands (same on both wrappers, replace `./nomaubl.sh
 
 For the day-to-day operational pattern, the wrapper is enough. The OS-level supervision layer below adds **automatic** start at boot and restart on crash.
 
-### JVM tuning — `JAVA_OPTS` *(2026.06.02)* \{#java-opts\}
+### JVM tuning — `JAVA_OPTS` \{#java-opts\}
 
 Both wrappers expose a **`JAVA_OPTS`** variable near the top of the file. Anything in it is forwarded to every `java -jar` invocation — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Edit the file once; every subsequent wrapper call picks it up.
 

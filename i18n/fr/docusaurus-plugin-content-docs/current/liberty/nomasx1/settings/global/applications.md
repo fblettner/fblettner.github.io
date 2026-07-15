@@ -164,7 +164,7 @@ Paramètres réservés aux applications JDE. Renseigner les schémas qui localis
 
 | Champ | À renseigner |
 |---|---|
-| **Pool** *(2026.07.14)* | Le pool de connecteur que les tâches de collecte utilisent pour cette application : un seul connecteur `jdedwards` peut ainsi desservir plusieurs environnements JDE — pointez chaque apps_id sur son propre pool. Laissez vide pour conserver le `source_connector` par défaut de la tâche. Seule la connexion change ; les schémas et DB-links JDE ci-dessous proviennent toujours de ces paramètres. |
+| **Pool** | Le pool de connecteur que les tâches de collecte utilisent pour cette application : un seul connecteur `jdedwards` peut ainsi desservir plusieurs environnements JDE — pointez chaque apps_id sur son propre pool. Laissez vide pour conserver le `source_connector` par défaut de la tâche. Seule la connexion change ; les schémas et DB-links JDE ci-dessous proviennent toujours de ces paramètres. |
 | **JDE SY** | Schéma qui contient les tables JDE *System*. |
 | **JDE DTA** | Schéma qui contient les tables *Business Data*. |
 | **JDE CTL** | Schéma qui contient les tables *Control*. |

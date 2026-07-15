@@ -8,7 +8,7 @@ keywords: [NomaUBL, auto-retry, nightly retry, send failed, status 9904, 9905, 9
 
 The **Auto-Retry** screen schedules a recurring sweep that replays every invoice in a chosen technical-error status back to the Plateforme Agréée (PA). The default row sweeps status `9904` (*Send failed*) every night at 3 a.m. — the overnight batch's safety net so that anything stuck on the PA side at the close of business is picked up before operations resume in the morning.
 
-Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [Tech Dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
+Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [Tech Dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The replay reads `F564231` to pick invoices in scope and calls the configured PA api-connector for each one; the source format is transparent.
 
@@ -193,7 +193,7 @@ The *Run now* run honours the same throttle, same lookback, same status list as 
 |---|---|---|
 | Scheduled row doesn't fire. | Row is *DISABLED*. | Open the row, toggle *Enabled* on, save. |
 | Row fires but processes zero invoices. | The status list and the lookback window combine to zero matches. | Inspect the [E-Invoicing](../../application/invoices.md) page with the same status filter; either widen the lookback or relax the status list. |
-| Sweep finishes but the count is far below the [Send Failed card's](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603) number. | The dashboard counts every `9904` regardless of age; a row with a 7-day lookback ignores anything older. | Either drop the lookback (`0` = no filter) or schedule a second row with a wider lookback for old back-stock. |
+| Sweep finishes but the count is far below the [Send Failed card's](../../application/tech-dashboard.md#send-failed) number. | The dashboard counts every `9904` regardless of age; a row with a 7-day lookback ignores anything older. | Either drop the lookback (`0` = no filter) or schedule a second row with a wider lookback for old back-stock. |
 | `429 Too Many Requests` errors in the run log. | PA rate-limit hit. | Raise the throttle (e.g. 100 ms → 250 ms) on the row and re-run. |
 | Two rows both fired at `03:00` and one stalled the other. | No minute offset — they hit the connection pool simultaneously. | Stagger the rows (`:00`, `:15`, `:30`). |
 | *Run now* button is greyed out. | The sweep is already running (a scheduled or earlier *Run now*). | Open the dashboard's Scheduler card → click the active row → use the modal's *Cancel* if needed, or wait. |
@@ -203,7 +203,7 @@ The *Run now* run honours the same throttle, same lookback, same status list as 
 
 ## What's next
 
-- [Tech Dashboard → Send Failed](../../application/tech-dashboard.md#send-failed-row-2-span-4-20260603) — the one-click manual replay; same code path, fired by hand.
+- [Tech Dashboard → Send Failed](../../application/tech-dashboard.md#send-failed) — the one-click manual replay; same code path, fired by hand.
 - [Shared progress window](../../application/tech-dashboard.md#shared-progress-window) — the modal every long-running operation opens.
 - [E-Invoicing](./einvoicing.md) → the PA api-connector that the replay calls; tune timeouts and retry counts there.
 - [Statuses](./statuses.md) — the catalogue of status codes, including the *Error – tech* tag that filters the multi-status picker on this page.

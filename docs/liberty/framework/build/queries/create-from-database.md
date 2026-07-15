@@ -6,7 +6,7 @@ keywords: [Liberty Framework, queries, CRUD, wizard, generate from database, int
 
 # Create from a database table
 
-When the table already lives in your database, the fastest path is the **CRUD Wizard**. You point it at a schema and a table, tick the columns you want the screen to see, mark which ones identify a row, and Liberty writes the four queries (`_get`, `_put`, `_post`, `_delete`) for you — including the `:NAME_ORIGINAL` rebind on UPDATE so a dialog's Save knows which row to find.
+When the table already lives in your database, the fastest path is the **CRUD Wizard**. You point it at a schema and a table, tick the columns you want the screen to see, mark which ones identify a row, and Liberty writes the four queries (`_get`, `_put`, `_post`, `_delete`) for you — including the `:NAME_ORIGINAL` rebind on UPDATE so a dialog's Save knows which row to find. Generated **column identifiers and bind names are upper-cased** (matching the SELECT wizard), so JDE columns come out uppercase.
 
 This is the recommended path for any table that already exists. Skip it only when the table doesn't exist yet or when you want hand-written SQL — see [Create a custom query](./create-custom.md).
 

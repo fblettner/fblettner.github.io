@@ -103,7 +103,7 @@ Au-delà du contrôle de service, le wrapper propose des **formes courtes** des 
 
 Le reste de la page détaille chacun des modes directs du JAR.
 
-### `JAVA_OPTS` — passer des options JVM via le wrapper *(2026.06.02)*
+### `JAVA_OPTS` — passer des options JVM via le wrapper
 
 Les deux wrappers (`nomaubl.sh`, `nomaubl.cmd`) déclarent une variable **`JAVA_OPTS`** en haut du fichier. Tout ce qu'elle contient est transmis à chaque invocation `java -jar` du wrapper — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Cela permet d'appliquer des options JVM communes au site sans toucher aux lignes de commande du wrapper.
 
@@ -147,7 +147,7 @@ Mise à jour de bout en bout d'un environnement existant vers le JAR en place. R
 ./nomaubl.sh upgrade prod --from-version 2026.05.20    # forcer la version de départ manuellement
 ```
 
-### `--from-version` — version de départ manuelle *(2026.06.02)*
+### `--from-version` — version de départ manuelle
 
 Par défaut, la mise à jour lit la version installée dans la table d'historique des mises à jour et applique toutes les migrations dont la version cible est **strictement supérieure** à celle qui s'y trouve. Cela couvre tous les environnements passés par `nomaubl.sh upgrade` depuis l'ajout de cette table.
 
@@ -564,7 +564,7 @@ java -jar nomaubl.jar -extract /opt/nomaubl/demo/config/config.json 19 \
 
 ## `-pdf2xml` — adaptateur PDF JD Edwards → XML \{#pdf2xml\}
 
-*(2026.06.15)* Convertit un **PDF** de rapport JD Edwards EnterpriseOne dans la même forme XML que JDE produit nativement quand la sortie XML est activée — un site peut donc garder JDE en mode sortie PDF et alimenter sans changement le pipeline XML → XSL → UBL existant. Contrairement aux autres modes, il ne prend aucun environnement : c'est un convertisseur fichier-à-fichier autonome.
+ Convertit un **PDF** de rapport JD Edwards EnterpriseOne dans la même forme XML que JDE produit nativement quand la sortie XML est activée — un site peut donc garder JDE en mode sortie PDF et alimenter sans changement le pipeline XML → XSL → UBL existant. Contrairement aux autres modes, il ne prend aucun environnement : c'est un convertisseur fichier-à-fichier autonome.
 
 ```text
 -pdf2xml <input.pdf> <output.xml> [<manifest.xml>]

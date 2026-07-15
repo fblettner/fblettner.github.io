@@ -204,7 +204,7 @@ Les jetons à l'intérieur de l'un de ces constructs passent inchangés.
 
 La spec des paramètres pilote l'onglet *Test* et l'éditeur des appels : chaque `:name` déclaré devient un champ étiqueté pré-rempli avec la valeur `default`. Les lignes de spec sont séparées par des points-virgules ; chaque ligne contient jusqu'à trois champs séparés par des barres verticales. Les champs vides sont acceptés (un paramètre sans défaut donne simplement un champ vide).
 
-#### Strip des guillemets sur les paramètres chaîne *(2026.05.15)*
+#### Strip des guillemets sur les paramètres chaîne
 
 Le runtime retire une paire de guillemets simples ou doubles entourant chaque paramètre chaîne avant le `setString` JDBC. Taper `'01'` dans une valeur par défaut ou dans le panneau de test — la façon d'écrire un littéral SQL — donnait silencieusement 0 ligne car JDBC liait la chaîne de 4 caractères telle quelle ; le strip permet aux deux conventions de fonctionner.
 

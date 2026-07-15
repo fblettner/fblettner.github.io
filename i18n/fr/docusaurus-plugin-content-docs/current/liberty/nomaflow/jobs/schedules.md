@@ -174,7 +174,7 @@ Chaque pastille représente un déclenchement — un clic dessus mène à la fic
 
 ---
 
-## Presets planifiables \{#schedulable-presets\} *(2026.07.14)*
+## Presets planifiables \{#schedulable-presets\}
 
 Un **preset** — un jeu de paramètres d'exécution enregistré (params, `op_kwargs`, activations de steps, niveau de log) — peut porter son propre **cron + fuseau horaire**. Le planificateur déclenche alors la tâche selon cette planification *avec les paramètres du preset* : une même tâche tourne sur plusieurs planifications avec des entrées différentes, sans clonage.
 

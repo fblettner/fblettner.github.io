@@ -196,7 +196,7 @@ This is the form-based mapping editor — the visual replacement for hand-writte
 | Button | Behaviour |
 |---|---|
 | **Load XML Source** | Loads a sample XML file (browser-side) and extracts every element path. Paths populate the picker dropdowns next to each variable field, so values can be filled by clicking rather than typing. |
-| **Load connector sample** *(2026.05.16)* | When the active document template has `source = Connector`, this button calls the configured SQL query or REST endpoint once and feeds the response into the same path picker. The XPath dropdowns then autocomplete against actual data — same UX as a real XML spool, no file needed. The button is hidden for `XML` and `UBL` templates. |
+| **Load connector sample** | When the active document template has `source = Connector`, this button calls the configured SQL query or REST endpoint once and feeds the response into the same path picker. The XPath dropdowns then autocomplete against actual data — same UX as a real XML spool, no file needed. The button is hidden for `XML` and `UBL` templates. |
 | **AI Auto-Map** ✦ | Opens the *AI Auto-Map* modal. Provide a sample XML (and optionally a rendered PDF) — the AI returns a JSON mapping of `TAG_*` variables to XML paths, scoped correctly. See [AI Auto-Map](#ai-auto-map) below. |
 | **Save Mappings** | Writes the current values of all `TAG_*` variables back into the XSLT file. The dot indicator (`●`) appears when mappings have changed but are not saved. |
 
@@ -212,8 +212,8 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Billing References** | BT-11, BT-14 to BT-18, BT-122 to BT-124 | Project, contract, dispatch, supporting documents. |
 | **Preceding Invoices — repeating** *(BG-3, 0..n)* | BT-25, BT-26 | Iterates a repeating source group and emits one `cac:BillingReference` per prior invoice (each with an optional issue date), alongside the single BT-25/BT-26 reference already handled in *Billing References*. |
 | **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Attach a document already carried as base64 in the source spool — up to four per invoice. See [Embedded Attachments](#embedded-attachments) below. |
-| **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel *(2026.07.12)*, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. |
-| **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel *(2026.07.12)*, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
+| **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. |
+| **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
 | **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
 | **Delivery** | BT-70 to BT-80 | Delivery date and address. |
 | **Payment** | BT-20, BT-81 to BT-91 | Means, IBAN, BIC, mandate, terms. |
@@ -230,11 +230,11 @@ The form is organised by UBL document area. Each section appears only when at le
 
 Each variable field shows the human-readable description of the BT, the BT code as a coloured badge, the current value (an XML path or expression), and a `↓` picker that opens the [XML Browser drawer](#xml-browser-drawer) on the right.
 
-:::info[Full field coverage *(2026.06.15)*]
+:::info[Full field coverage]
 The field reference now lists every Business Group and Business Term that the extended Schematron (BR-FR / CTC-FR 1.3.1) checks and the editor can map — BG-3 through BG-32 and the Business Terms they wrap (preceding invoice BT-25/26, VAT accounting currency BT-6 / BT-111, tax point date BT-7, seller tax registration BT-32, buyer / deliver-to country subdivisions BT-54 / BT-79, buyer contact BT-56, deliver-to location BT-71, card PAN BT-87, invoiced-quantity unit BT-130, line charge base + reason BT-142/145, deliver-to address line 3 BT-165, and more). What you can map here now matches exactly what the [validator](./validate.md) checks.
 :::
 
-:::info[More mappable fields *(2026.07.08)*]
+:::info[More mappable fields]
 The editor gained a **Buyer trading name** mapping (BT-45 → `cac:PartyName/cbc:Name` on the customer party, mirroring the seller trading name BT-28), and three document-totals mappings — **Sum of charges** (BT-108), **Amount already paid** (BT-113) and **Rounding amount** (BT-114). When a prepaid or rounding amount is mapped, the amount due (BT-115) is computed as *total with VAT − prepaid + rounding*. A mapping added to a template now always shows in its section, even when the built-in field list didn't include it.
 :::
 

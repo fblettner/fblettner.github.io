@@ -83,7 +83,7 @@ Most installs settle on `<domain>-<purpose>` or `<domain>-<purpose>-<scope>`:
 
 ---
 
-### Duplicate & delete *(2026.07.14)*
+### Duplicate & delete
 
 **Duplicate** a job and you're prompted for the **new id** up front — the id is immutable in the editor, so a copy needs its own name from the start. **Delete** removes the job from `jobs.toml` (configuration only); its past run history is kept.
 

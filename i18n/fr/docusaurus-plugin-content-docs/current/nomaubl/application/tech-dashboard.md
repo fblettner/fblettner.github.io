@@ -275,7 +275,7 @@ Le sous-titre de la carte affiche, à droite, la **version du build et la date d
 
 Liste statique de raccourcis — les pages les plus utilisées par l'opérateur IT. Chaque lien utilise le même mécanisme `onNavigate` que la barre latérale et ouvre directement la page cible. Cibles par défaut : **Paramètres**, **Journal de traitement**, **Versions de fichiers**, **Références croisées**.
 
-### Échec d'envoi (ligne 2, largeur 4) *(2026.06.03)* \{#send-failed-row-2-span-4-20260603\}
+### Échec d'envoi (ligne 2, largeur 4) \{#send-failed\}
 
 Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi est limité à **100 ms par appel** pour que la PA reste dans son enveloppe de débit.
 
@@ -294,7 +294,7 @@ Liste tous les jobs actifs du planificateur :
 
 - **Jobs intégrés** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — pilotés par les intervalles de polling de `BackgroundScheduler`.
 - **`fetch-all` par modèle** — une ligne par modèle avec un job d'extraction / synchronisation programmé.
-- **Passages Reprise auto par ligne** *(2026.06.03)* — une ligne par entrée enregistrée sur la page [Reprise auto](../configuration/system/auto-retry.md), avec l'heure planifiée et la liste des statuts ciblés en guise de cadence.
+- **Passages Reprise auto par ligne** — une ligne par entrée enregistrée sur la page [Reprise auto](../configuration/system/auto-retry.md), avec l'heure planifiée et la liste des statuts ciblés en guise de cadence.
 
 Chaque ligne affiche le nom du job, la cadence, et une pastille de statut (vert actif, bleu prévu sous peu, orange en pause). Le sous-titre indique le décompte des jobs actifs.
 
@@ -341,7 +341,7 @@ Les valeurs de chemin contenant des jokers d'exécution (`%TEMPLATE%`, `%FILE_NA
 
 Temps moyen de traitement de bout en bout par modèle, en secondes, sur les 14 derniers jours. La carte charge les événements `START` / `END` de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` — la précédente version utilisait une auto-jointure SQL avec un `FETMPL` ambigu et une arithmétique `e.FEUPMT - s.FEUPMT` incorrecte ; ce point est corrigé.
 
-#### Décomposition par étape quand `debugProfile` est actif *(2026.05.9)*
+#### Décomposition par étape quand `debugProfile` est actif
 
 Quand le commutateur [`debugProfile`](../configuration/system/global.md) sur le modèle `global` est à `Y`, chaque exécution écrit une ligne par étape du pipeline dans `F564237` — **analyse d'en-tête**, **analyse des lignes**, **validation**, **émission UBL**, **envoi PA**. La carte Temps de traitement par modèle les fait remonter sous forme de décomposition empilée sous les totaux par modèle — une étape lente se repère d'un coup d'œil sans plonger dans le journal d'exécution.
 

@@ -273,7 +273,7 @@ L'enregistrement d'un nouvel utilisateur / rôle enchaîne quatre insertions JDE
 
 Les quatre étapes s'exécutent en un seul enregistrement — si l'une d'elles échoue, aucun enregistrement partiel n'est laissé en l'état.
 
-### Re-fusion côté serveur de la sécurité *(2026.06.09)*
+### Re-fusion côté serveur de la sécurité
 
 Chaque enregistrement sur un rôle enfant (un rôle *inclus par* d'autres rôles parents) déclenche une étape de fusion côté serveur qui re-dérive les lignes F00950 / F00950W / F9006 des parents à partir du nouvel état de l'enfant. Sans cela, un changement de permission sur un enfant n'apparaîtrait en production qu'après que chaque parent qui l'inclut ait été ouvert puis ré-enregistré à la main.
 

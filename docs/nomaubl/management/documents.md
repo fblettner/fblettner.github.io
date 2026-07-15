@@ -154,7 +154,7 @@ The Direction value is written once on the row at insert time (column `UHDRIN` o
 
 ### Document Identification *(when Source = UBL)* \{#document-identification-ubl\}
 
-*(2026.06.13)* A UBL file carries no spool to extract from, so the **Activity** and **Type** that the XML source pulls by XPath are entered here as plain text. The group sits at the top of the UBL branch and both fields are **mandatory** — they are written to the `F564230` tracking row that the PA send and fetch-import rely on.
+ A UBL file carries no spool to extract from, so the **Activity** and **Type** that the XML source pulls by XPath are entered here as plain text. The group sits at the top of the UBL branch and both fields are **mandatory** — they are written to the `F564230` tracking row that the PA send and fetch-import rely on.
 
 | Field | Description |
 |---|---|
@@ -312,7 +312,7 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | Field | Values | Description |
 |---|---|---|
 | **UBL XSLT** | path | XSL transform from the source XML to **UBL 2.1**. The placeholder `%APP_HOME%` is expanded to the NomaUBL install root. |
-| **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` *(2026.07.05)* = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
+| **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
 | **LISIBLE** | `Y` / `N` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. |
 
 ### Additional Attachments
@@ -326,7 +326,7 @@ Beyond the main human-readable PDF, a document type can embed **extra files into
 
 The **`{ }`** button next to the path field opens a searchable token list and inserts the chosen token at the cursor — the invoice catalogue tokens (`{{kco}}`, `{{fedoc}}`, …) and the path constants `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%` — so you don't have to remember the exact spelling. **Add attachment** adds another row.
 
-:::info[UBL-source templates embed attachments too *(2026.06.13)*]
+:::info[UBL-source templates embed attachments too]
 A template with *Source = UBL* now embeds the same PDFs as the XML flow — after validation and before the database insert, so the stored UBL matches what is sent to the PA:
 
 - **Attachment `attach`** embeds a sibling PDF from the input directory under `cbc:ID="PJA"`.
@@ -369,7 +369,7 @@ The visual editor — section list, per-section drawer, live preview, block sect
 
 ---
 
-## Tab 5 — 🔗 Enrichment *(2026.07.09)*
+## Tab 5 — 🔗 Enrichment
 
 When the source spool is missing data the invoice needs — a customer's VAT number, a label from a reference table — the **Enrichment** tab fetches it from a [SQL](../configuration/sql-connectors.md) or [API connector](../configuration/api-connectors.md) and injects it into the spool **before** the XSL transform runs. The fetched values then map in the [XSL editor](../ubl-tools/xsl-editor.md) like any other spool field, and are archived with the source.
 

@@ -131,7 +131,7 @@ Cet onglet configure le **répertoire des fichiers XSL** utilisés pour **transf
 |---|---|
 | **XSLT Directory** | Répertoire qui contient les fichiers de transformation `.xsl` utilisés pour convertir le XML source en UBL. Le placeholder `%APP_HOME%` se développe vers la racine d'installation NomaUBL. |
 
-### Défauts pour les factures manuelles / sans modèle *(2026.07.05)*
+### Défauts pour les factures manuelles / sans modèle
 
 Utilisés quand une facture n'a **aucun modèle de document** — créée dans l'éditeur manuel, ou un UBL déjà formé traité sans modèle. Les valeurs d'un modèle de document priment toujours.
 
@@ -210,9 +210,9 @@ La section **Status Retrieval** pilote la boucle de récupération des statuts d
 |---|---|---|
 | **Page size** | `100` | Nombre de statuts récupérés par page lors du polling de la PA. |
 | **Last retrieved at** | *(mis à jour automatiquement)* | Date ISO de la dernière récupération réussie (par exemple `2025-01-01T00:00:00Z`). Mis à jour automatiquement après chaque exécution ; une édition manuelle agit comme point de départ — utile pour rejouer une fenêtre. |
-| **Lifecycle endpoints** *(2026.07.13)* | *(vide = `invoice-statuses`)* | Nom(s) d'endpoint du connecteur à interroger pour les événements de cycle de vie, séparés par des virgules. Ajoutez `invoice-statuses-selfbilled` à côté de `invoice-statuses` quand la plateforme répartit ses cycles de vie ventes et achats (auto-facturation) sur des endpoints distincts, pour collecter les deux. Les endpoints inconnus sont ignorés. |
+| **Lifecycle endpoints** | *(vide = `invoice-statuses`)* | Nom(s) d'endpoint du connecteur à interroger pour les événements de cycle de vie, séparés par des virgules. Ajoutez `invoice-statuses-selfbilled` à côté de `invoice-statuses` quand la plateforme répartit ses cycles de vie ventes et achats (auto-facturation) sur des endpoints distincts, pour collecter les deux. Les endpoints inconnus sont ignorés. |
 
-:::info[Les factures d'auto-facturation empruntent leurs propres endpoints *(2026.07.13)*]
+:::info[Les factures d'auto-facturation empruntent leurs propres endpoints]
 Une facture d'auto-facturation (type 261, 389, 471, 473, 500, 501 ou 502) est transmise via le canal « achats » de la plateforme : NomaUBL emploie automatiquement la variante `-selfbilled` d'un endpoint (`import-selfbilled`, `import-status-selfbilled`) quand le connecteur la définit, et retombe sur l'endpoint standard sinon. La connexion à la plateforme — URL et identifiants — reste identique ; seuls les endpoints diffèrent.
 :::
 

@@ -203,7 +203,7 @@ Au-dessus des lignes de colonne, chaque carte de vue a une ligne *Défauts* avec
 | Champ | Description |
 |---|---|
 | **Page size** | Taille de page initiale du paginateur TanStack en grille. Persiste sous `spec.defaultPageSize`. Défaut : `50`. |
-| **Max rows** *(2026.05.12)* | Cap dur sur la tranche chargée par un seul *Exécuter*. Les quatre vues pilotées par spec fonctionnent maintenant en **mode hybride client-side** : chaque *Exécuter* charge une tranche capée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — pas d'aller-retour quand on tape dans la ligne de filtre par colonne. Persiste sous `spec.maxRows`. Défaut : `5000`. |
+| **Max rows** | Cap dur sur la tranche chargée par un seul *Exécuter*. Les quatre vues pilotées par spec fonctionnent maintenant en **mode hybride client-side** : chaque *Exécuter* charge une tranche capée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — pas d'aller-retour quand on tape dans la ligne de filtre par colonne. Persiste sous `spec.maxRows`. Défaut : `5000`. |
 
 Quand le cap de la tranche est atteint pendant un *Exécuter*, la barre d'outils de la page affiche un message traduit `X / Y lignes` à côté du bouton *Exécuter* — indication que l'opérateur devrait affiner la plage de dates ou les *Filtres avancés* pour obtenir la tranche la plus pertinente. Le message est informatif ; la page continue de fonctionner.
 
@@ -224,7 +224,7 @@ La liste d'opérateurs proposée par colonne dépend du comportement de filtre d
 
 Marquer une colonne **Filtre** = désactivé dans la spec la laisse visible dans la grille mais retire sa pastille du panneau — utile pour les champs en lecture seule que l'opérateur n'a pas besoin d'interroger.
 
-### Colonnes refList — picker multi-sélection *(2026.05.13)*
+### Colonnes refList — picker multi-sélection
 
 Une colonne peut être rattachée à une liste de référence — soit un catalogue réglementaire de [Listes de référence](./reference-lists.md) (statuts, devises, codes pays, …), soit une liste définie par l'opérateur dans [Listes personnalisées](./custom-lists.md). Renseigner `refList: <nom-de-liste>` sur la spec de colonne suffit : renderer de cellule, dropdown de filtre par colonne et picker multi-sélection des *Filtres avancés* s'activent automatiquement.
 

@@ -196,7 +196,7 @@ Cliquer sur *+ Ajouter requête* ou sur une ligne existante ouvre l'éditeur de 
 | **Paramètres** | Sous-table — voir [Liaison des paramètres](./build/queries/parameter-binding.md) pour chaque champ. |
 | **Indices de colonnes** | Sous-table optionnelle. Chaque ligne lie une colonne du résultat à une entrée du dictionnaire : *Colonne* (liste déroulante des colonnes découvertes par le bouton *Tester*) + *Dictionnaire* (liste déroulante des entrées du dictionnaire). Détermine libellés, formats, énumérations, recherches. Les colonnes sans indice retombent sur le nom de la colonne comme libellé. |
 
-Le bouton **▶ Tester** en haut de l'éditeur exécute la requête sur le pool live avec des valeurs de remplissage pour les paramètres et affiche les 50 premières lignes. Le premier test réussi remplit la liste déroulante *Indices de colonnes* avec les colonnes découvertes ; les tests suivants la rafraîchissent.
+Le bouton **▶ Tester** en haut de l'éditeur exécute la requête sur le pool live avec des valeurs de remplissage pour les paramètres et affiche les 50 premières lignes. Le premier test réussi remplit la liste déroulante *Indices de colonnes* avec les colonnes découvertes ; les tests suivants la rafraîchissent. Une requête en échec affiche un **résumé d'erreur concis avec un détail dépliable** — le SQL et les paramètres liés en blocs lisibles, une liaison par ligne.
 
 Le framework utilise le schéma découvert pour :
 
@@ -230,7 +230,7 @@ Une bascule **Thick LOB** par connecteur bascule la lecture de ce connecteur dan
 
 ---
 
-### Connecteurs multi-pools \{#multi-pool\} *(2026.07.14)*
+### Connecteurs multi-pools \{#multi-pool\}
 
 Un même connecteur SQL peut desservir **plusieurs pools** — plusieurs bases ou instances JDE — sans cloner le connecteur ni dupliquer ses écrans. À côté du **Pool** par défaut, listez les autres dans **Pools** (deux listes déroulantes de pools configurés, dans les réglages du connecteur) ; les mêmes requêtes nommées et les mêmes écrans s'exécutent alors sur n'importe quel pool de l'ensemble.
 

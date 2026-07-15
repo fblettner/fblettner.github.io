@@ -131,7 +131,7 @@ This tab configures the **directory of XSL files** used to **transform the sourc
 |---|---|
 | **XSLT Directory** | Directory containing the `.xsl` transform files used to convert the source XML into UBL. The placeholder `%APP_HOME%` expands to the NomaUBL install root. |
 
-### Manual / template-less invoice defaults *(2026.07.05)*
+### Manual / template-less invoice defaults
 
 Applied when an invoice has **no document template** — one created in the manual editor, or an already-formed UBL processed without a doc-template. A document template's own values always take precedence.
 
@@ -210,9 +210,9 @@ The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 |---|---|---|
 | **Page size** | `100` | Number of statuses fetched per page when polling the PA. |
 | **Last retrieved at** | *(updated automatically)* | ISO datetime of the most recent successful retrieval (e.g. `2025-01-01T00:00:00Z`). Updated automatically after each retrieval run; manual edits act as a starting point — useful to re-replay a window. |
-| **Lifecycle endpoints** *(2026.07.13)* | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
+| **Lifecycle endpoints** | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
 
-:::info[Self-billed invoices route to their own endpoints *(2026.07.13)*]
+:::info[Self-billed invoices route to their own endpoints]
 A self-billed invoice (type 261, 389, 471, 473, 500, 501 or 502) is submitted through the platform's procurement channel: NomaUBL automatically uses the `-selfbilled` variant of an endpoint (`import-selfbilled`, `import-status-selfbilled`) when the connector defines it, and falls back to the standard endpoint otherwise. The platform connection — URL and credentials — is unchanged; only the endpoints differ.
 :::
 

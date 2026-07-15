@@ -253,7 +253,7 @@ Cette tâche — et son équivalent `-all` — résout le problème propre à JD
 |---|---|
 | `REMERGE_SECURITY` | `nomajde.security:j_remerge_security` — lit le paquet brouillon actif, déduit l'ensemble des parents impactés via les requêtes `F00926` ancrées par rôle, re-fusionne F00950 / F00950W / F9006 pour chaque parent. |
 
-**Paramètres** *(2026.06.09)*
+**Paramètres**
 
 | Clé | Défaut | Description |
 |---|---|---|

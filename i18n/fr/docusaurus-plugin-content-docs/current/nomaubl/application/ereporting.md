@@ -310,7 +310,7 @@ La barre d'outils au-dessus du tableau combine trois filtres texte avec deux rac
 | **Rafraîchir** | Relance la requête courante sans modifier les filtres. |
 | **Générer un rapport** | Ouvre la *modale de génération* — décrite plus bas. Masquée pour les sessions en lecture seule. |
 
-### Filtres avancés *(2026.05.10)*
+### Filtres avancés
 
 Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.ereporting`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
 

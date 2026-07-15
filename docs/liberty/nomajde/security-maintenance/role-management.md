@@ -273,7 +273,7 @@ Saving a new user / role chains four JDE inserts in one go:
 
 The four steps run as a single save — there is no half-created record to clean up if any step fails.
 
-### Server-side security re-merge *(2026.06.09)*
+### Server-side security re-merge
 
 Every save on a child role (a role that's *included by* other parent roles) triggers a server-side merge step that re-derives the parents' F00950 / F00950W / F9006 rows from the new child state. Without this, a permission change on a child would only surface in production after every parent that includes it was opened + re-saved by hand.
 

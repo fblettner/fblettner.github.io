@@ -6,7 +6,7 @@ keywords: [Liberty Framework, requêtes, CRUD, assistant, générer depuis la ba
 
 # Créer depuis une table de base
 
-Quand la table existe déjà dans la base, le chemin le plus rapide est l'**Assistant CRUD**. Vous le pointez sur un schéma et une table, cochez les colonnes que l'écran doit voir, marquez celles qui identifient une ligne, et Liberty écrit les quatre requêtes (`_get`, `_put`, `_post`, `_delete`) à votre place — y compris la reliaison `:NAME_ORIGINAL` sur UPDATE pour que l'Enregistrer d'un dialogue sache quelle ligne retrouver.
+Quand la table existe déjà dans la base, le chemin le plus rapide est l'**Assistant CRUD**. Vous le pointez sur un schéma et une table, cochez les colonnes que l'écran doit voir, marquez celles qui identifient une ligne, et Liberty écrit les quatre requêtes (`_get`, `_put`, `_post`, `_delete`) à votre place — y compris la reliaison `:NAME_ORIGINAL` sur UPDATE pour que l'Enregistrer d'un dialogue sache quelle ligne retrouver. Les **identifiants de colonnes et noms de liaison générés sont en majuscules** (comme l'assistant SELECT) : les colonnes JDE ressortent en majuscules.
 
 C'est le chemin recommandé pour toute table déjà existante. À éviter uniquement quand la table n'existe pas encore ou quand vous voulez du SQL écrit à la main — voir [Créer une requête personnalisée](./create-custom.md).
 

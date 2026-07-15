@@ -143,7 +143,7 @@ Une ligne de notification comporte cinq éléments : le **badge de statut** à g
 | **Sujet (ligne du haut)** | `NTSUBJ` (champ `emailSubject` de la règle ou message par défaut) | Titre court, lisible. La valeur par défaut est `Invoice {doc} {dct} {kco} — {statusLabel}`. |
 | **Message (deuxième ligne)** | `NTMSGE` (champ `emailBody` de la règle ou message par défaut) | Corps du texte. Tronqué s'il dépasse ; la modale ouverte au clic affiche l'historique complet. |
 | **Ligne méta** | `NTDOC · NTDCT · NTKCO · motif · action · règle` | Identifiants canoniques de la facture, plus le motif de rejet PA, l'action attendue et le nom de la règle s'ils sont présents. Motif et action sont lus dans les catalogues *rejection-reason-codes* et *action-codes* — c'est le libellé lisible qui s'affiche, pas le code brut. |
-| **Pastilles d'audit d'actions** *(2026.05.7)* | pied d'audit `NTK74MSG2` | Une pastille colorée par appel de connecteur déclenché par la règle. Voir [Pastilles d'audit d'actions](#pastilles-daudit-dactions) ci-dessous. |
+| **Pastilles d'audit d'actions** | pied d'audit `NTK74MSG2` | Une pastille colorée par appel de connecteur déclenché par la règle. Voir [Pastilles d'audit d'actions](#pastilles-daudit-dactions) ci-dessous. |
 | **Horodatage relatif** | `NTUPMJ` + `NTTDAY` | *à l'instant*, *il y a 2 min*, *14:32* (aujourd'hui), *Hier*, puis l'horodatage absolu `dd/mm/yyyy hh:mm` pour les entrées plus anciennes. |
 | **Bouton de suppression** | par ligne | Retire la ligne de la boîte de réception sans marquer les autres lues. |
 

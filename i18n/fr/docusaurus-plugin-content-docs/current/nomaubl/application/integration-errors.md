@@ -164,7 +164,7 @@ La même barre d'outils pilote les deux vues.
 
 | Contrôle | Comportement |
 |---|---|
-| **Bascule de vue** | *Par règle* (vue par défaut après un lien profond depuis le tableau de bord), *Par évènement* ou *Détaillée* *(2026.06.02)*. Les autres filtres sont conservés au changement de vue — la recherche, la sévérité et la catégorie restent appliquées. |
+| **Bascule de vue** | *Par règle* (vue par défaut après un lien profond depuis le tableau de bord), *Par évènement* ou *Détaillée*. Les autres filtres sont conservés au changement de vue — la recherche, la sévérité et la catégorie restent appliquées. |
 | **Recherche** | Correspondance par sous-chaîne sur `DOC`, `DCT`, `KCO` et le texte du message. Exécutée côté serveur, avec un délai (debounce). |
 | **Catégorie** | *Toutes sources* (par défaut), *Validation UBL* (règles Schematron / XSD — `UVSRCL IN ('EN16931', 'CIUSFR', 'FREXTIC', 'CPRO', 'XSD', 'UBL')`), *Intégration / cycle de vie* (le reste — erreurs runtime émises par le dispatcher : PDF, PA, base, …). |
 | **Pastilles de sévérité** | *Toutes* / *FATAL* / *ERROR* / *WARNING* / *INFO*. Une seule sévérité à la fois ; cliquer à nouveau sur la pastille active retire le filtre. |
@@ -172,7 +172,7 @@ La même barre d'outils pilote les deux vues.
 | **Rafraîchir** | Relance la requête en cours. |
 | **Exporter** *(vue détaillée uniquement)* | Génère un fichier Excel avec tous les évènements du périmètre. Les évènements de chaque groupe sont écrits — y compris ceux cachés dans un groupe replié à l'écran. Mêmes données que celles envoyées par le [Rapport quotidien](../configuration/system/daily-digest.md) en pièce jointe. |
 
-### Filtres avancés *(2026.05.10)*
+### Filtres avancés
 
 Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.integration-errors`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
 
@@ -227,7 +227,7 @@ Depuis 2026.05.10, la table passe par **DataTableV2** en mode piloté par spec :
 | Colonne | Source | Description |
 |---|---|---|
 | **Sévérité** | `UVY56LEVEL` | Badge coloré — *FATAL* / *ERROR* / *WARNING* / *INFO*. |
-| **Date** *(2026.05.9)* | `UVUPMJ` + `UVUPMT` | Date et heure d'enregistrement de l'événement. Même contexte temporel que la carte « erreurs récentes » du Tableau de bord IT — le triage n'a plus besoin d'ouvrir une ligne au préalable. |
+| **Date** | `UVUPMJ` + `UVUPMT` | Date et heure d'enregistrement de l'événement. Même contexte temporel que la carte « erreurs récentes » du Tableau de bord IT — le triage n'a plus besoin d'ouvrir une ligne au préalable. |
 | **Doc** | `UVDOC` | Numéro de document issu des données source. |
 | **Dct** | `UVDCT` | Type de document. |
 | **Kco** | `UVKCO` | Code société. |

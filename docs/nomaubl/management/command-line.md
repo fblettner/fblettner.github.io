@@ -103,7 +103,7 @@ Beyond service control, the wrapper exposes **short forms** of the JAR's process
 
 The remainder of the page describes each direct JAR mode in detail.
 
-### `JAVA_OPTS` — passing JVM flags through the wrapper *(2026.06.02)*
+### `JAVA_OPTS` — passing JVM flags through the wrapper
 
 Both wrappers (`nomaubl.sh`, `nomaubl.cmd`) expose a **`JAVA_OPTS`** variable near the top of the file. Anything in it is forwarded to every `java -jar` invocation the wrapper makes — `start`, `process`, `upgrade`, `fetch-*`, `extract`, `install`. Use it for site-wide JVM flags without editing the wrapper's command lines.
 
@@ -147,7 +147,7 @@ End-to-end upgrade of an existing environment to the JAR currently in place. Rep
 ./nomaubl.sh upgrade prod --from-version 2026.05.20    # force the baseline manually
 ```
 
-### `--from-version` — manual baseline *(2026.06.02)*
+### `--from-version` — manual baseline
 
 By default, the upgrade reads the current installed version from the upgrade-history table and applies every migration whose target version is **strictly newer** than what's there. That works for any environment that has been upgraded through `nomaubl.sh upgrade` since the table was added.
 
@@ -564,7 +564,7 @@ java -jar nomaubl.jar -extract /opt/nomaubl/demo/config/config.json 19 \
 
 ## `-pdf2xml` — JD Edwards PDF → XML adapter \{#pdf2xml\}
 
-*(2026.06.15)* Converts a JD Edwards EnterpriseOne report **PDF** into the same XML shape JDE emits natively when XML output is enabled — so a site can keep JDE in PDF-output mode and still feed the existing XML → XSL → UBL pipeline unchanged. Unlike the other modes it takes no environment: it is a standalone file-to-file converter.
+ Converts a JD Edwards EnterpriseOne report **PDF** into the same XML shape JDE emits natively when XML output is enabled — so a site can keep JDE in PDF-output mode and still feed the existing XML → XSL → UBL pipeline unchanged. Unlike the other modes it takes no environment: it is a standalone file-to-file converter.
 
 ```text
 -pdf2xml <input.pdf> <output.xml> [<manifest.xml>]
