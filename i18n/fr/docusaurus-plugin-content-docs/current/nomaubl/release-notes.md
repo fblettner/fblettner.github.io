@@ -10,7 +10,12 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-07-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-13</span></a>
+  <a href="#v2026-07-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-24</span></a>
+  <a href="#v2026-07-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-20</span></a>
+  <a href="#v2026-07-17-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.17.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-17</span></a>
+  <a href="#v2026-07-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-16</span></a>
+  <a href="#v2026-07-15-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.15.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-15</span></a>
+  <a href="#v2026-07-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-13</span></a>
   <a href="#v2026-07-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-12</span></a>
   <a href="#v2026-07-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-11</span></a>
   <a href="#v2026-07-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-09</span></a>
@@ -99,6 +104,57 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 </div>
 
 ---
+
+## 2026.07.24.1 — 2026-07-24 \{#v2026-07-24-1\}
+
+### Améliorations
+
+- **Le webhook entrant de statut PA est désormais documenté dans la référence de l'API.** L'endpoint que la plateforme appelle pour pousser les mises à jour de statut (`/api/webhook/{connector}/{event}`) — son URL, ses en-têtes de signature, le format de charge utile attendu et la correspondance des statuts — figure maintenant dans la référence de l'API (redoc), et peut donc être configuré côté plateforme sans lire le code source.
+
+### Corrections
+
+- **PDF-vers-XML JDE : le texte multiligne d'une pièce jointe de ligne est conservé dans un seul champ.** Lors de la conversion d'un PDF d'état JDE, un texte d'objet média joint imprimé sur plusieurs lignes est désormais émis comme un champ unique dont les lignes sont réunies par des sauts de ligne — conformément à la sortie XML native de JDE — au lieu d'un élément par ligne, dont la transformation en aval ne lisait que la première.
+- **Les factures B2C ne portent plus le numéro de TVA ni l'identifiant d'immatriculation de l'acheteur.** Sur une facture B2C (particulier), le schéma de TVA de l'acheteur (BT-48) et son identifiant d'immatriculation légale (BT-47) sont désormais omis, même lorsque les données source les fournissent encore — un particulier n'en possède aucun, et les émettre rendait la facture invalide. Le nom de l'acheteur est conservé. Les factures B2B, B2G et B2B international sont inchangées, et les identifiants du vendeur ne sont jamais concernés. *(Nécessite le redéploiement du socle XSL.)*
+
+## 2026.07.20.1 — 2026-07-20 \{#v2026-07-20-1\}
+
+### Corrections
+
+- **L'attachement d'un PDF à une facture UBL fonctionne désormais.** Pour un modèle de source UBL avec *Pièce jointe = attach*, le PDF est maintenant recherché sous le nom du fichier UBL d'entrée (`<nom>.pdf` déposé à côté de `<nom>.xml`) plutôt que sous un identifiant interne — il est donc réellement intégré. Une fois intégré, le PDF est supprimé du dossier d'entrée, comme le fichier UBL qui l'accompagnait.
+- **Les relèves planifiées de dossier n'inondent plus le journal.** Un fichier qui échoue en boucle (par exemple un fichier dont l'identifiant ne peut être analysé et qui reste dans le dossier) était inscrit intégralement dans le journal — sous forme de données brutes — à chaque relève. Le planificateur n'écrit désormais qu'une seule ligne concise par exécution.
+
+## 2026.07.17.1 — 2026-07-17 \{#v2026-07-17-1\}
+
+### Nouveautés
+
+- **Se connecter à une plateforme qui s'authentifie par jeton de rafraîchissement OAuth2.** Le connecteur d'API prend désormais en charge le flux OAuth2 `refresh_token`, avec un champ *Jeton de rafraîchissement* dédié et masqué : le jeton n'est jamais inscrit dans le corps de la requête — pour des plateformes (comme Yooz Rising) qui délivrent un jeton hors ligne longue durée. Un nouveau bouton *Tester l'authentification* dans l'éditeur de connecteur récupère un jeton et indique le succès ou l'erreur exacte, ce qui permet de vérifier les identifiants avant d'envoyer une facture.
+- **Relever le statut d'import en masse pour les plateformes sans consultation par facture.** Le contrôle du statut d'import peut désormais fonctionner en mode *recherche* : au lieu d'interroger les factures une à une, il demande à la plateforme tous les flux modifiés depuis le dernier contrôle (en mémorisant cette date d'une exécution à l'autre) et met à jour les factures en attente correspondantes grâce à leur identifiant de transaction stocké. Ce mode s'adresse aux plateformes — comme Yooz Rising — qui n'offrent pas de consultation de statut par facture. Il se règle dans *Paramètres → e-invoicing → Relève des statuts* ; le mode par défaut reste la consultation par facture, sans impact sur les plateformes déjà en service.
+
+### Améliorations
+
+- **Transmettre le type de transaction de la facture aux plateformes qui l'exigent.** Lorsqu'une plateforme attend le type de transaction à la soumission (par ex. le `processingRule` de Yooz Rising), il est désormais déduit automatiquement de la facture — B2B, B2G, B2C ou B2B international — et transmis, aussi bien à l'envoi initial qu'au renvoi.
+- **Les en-têtes de connecteur peuvent porter le code société.** Un en-tête de requête peut désormais référencer la société de la facture (`{{kco}}`) — pour les plateformes qui cadrent leurs requêtes par organisation, comme l'`Organization-Id` de Yooz Rising.
+- **Les factures UBL sont lues dans le dossier d'entrée propre à leur modèle.** Un modèle de document de source UBL balaie désormais `<entrée>/<modèle>` — la même convention par modèle que pour le XML — au lieu d'un unique dossier partagé `<entrée>/ubl`. Plusieurs modèles UBL peuvent ainsi être planifiés sur des dossiers différents. *(Installations existantes : déplacez les fichiers UBL du dossier partagé vers le dossier du modèle.)*
+
+### Corrections
+
+- **Une relève UBL planifiée ne retraite plus le même fichier.** Après le passage au dossier d'entrée par modèle ci-dessus, un fichier UBL restait dans son dossier d'entrée une fois traité : chaque relève planifiée le reprenait donc — une boucle sans fin. Un fichier UBL traité avec succès est désormais supprimé de son dossier d'entrée, comme le sont déjà les entrées XML générées. Les fichiers en échec, ainsi que les exécutions en validation seule, sont conservés.
+
+## 2026.07.16.1 — 2026-07-16 \{#v2026-07-16-1\}
+
+### Améliorations
+
+- **Les factures UBL existantes sont désormais validées et routées selon leur type de document.** Lors du traitement direct d'un fichier UBL (au lieu de le générer depuis un flux), le type de transaction — B2B, B2G, B2C ou B2B international — est désormais lu dans la note de routage propre à chaque facture pour décider si la validation Schematron s'applique et si la facture est envoyée à la plateforme. Ce comportement s'aligne sur celui du flux de génération : un lot mêlant par exemple des factures B2G et B2C est traité correctement, fichier par fichier. Auparavant, la décision était figée par modèle (le type de document par défaut). Les fichiers UBL sans note de routage reprennent le type de document par défaut, comme auparavant.
+
+### Corrections
+
+- **La relève des jobs BIP suit désormais un point d'avancement par hôte JDE.** Les numéros de job JDE (RJJOBNBR) sont uniques par hôte d'exécution, et non globalement : un repère unique ignorait silencieusement les jobs des hôtes aux numéros plus bas dès qu'un hôte au numéro plus élevé le faisait avancer. La relève conserve maintenant un repère par hôte et ne balaie que les hôtes configurés. Ils se paramètrent dans *Paramètres → Global → Traitement par lot* : ajoutez chaque hôte avec son numéro de départ, ou cliquez sur *Récupérer le dernier n° de job par hôte* pour les initialiser tous en un clic depuis le maximum actuel ; ils s'incrémentent ensuite automatiquement. *(Installations existantes : ajoutez vos hôtes une fois — un hôte non listé n'est pas balayé.)*
+
+## 2026.07.15.1 — 2026-07-15 \{#v2026-07-15-1\}
+
+### Nouveautés
+
+- **Adresse électronique de l'acheteur (BT-49) configurable par type de transaction.** Le schéma et la valeur de l'adresse électronique de l'acheteur peuvent désormais être définis indépendamment de ceux du vendeur (BT-34) et varier selon le type de transaction — B2B, B2G, B2C et B2B international. Pour chaque type, vous choisissez le schéma et l'origine de la valeur : une balise source (réutilisant un champ déjà mappé par le modèle, par exemple l'e-mail de contact de l'acheteur) avec une constante de repli utilisée lorsque cette balise est vide. Les factures B2C et internationales — dépourvues d'adresse électronique basée sur le SIRET — peuvent ainsi porter une adresse e-mail (schéma EM), tandis que les factures B2B/B2G nationales conservent leur routage habituel. La configuration se fait dans *Valeurs par défaut UBL → Identifiants de schéma* ; les types non listés conservent le schéma par défaut et la valeur d'adresse actuelle. La liste de référence *Identifiants de schéma* gagne également une entrée E-mail (EM). *(Nécessite le redéploiement du socle XSL.)*
 
 ## 2026.07.13.1 — 2026-07-13 \{#v2026-07-13-1\}
 

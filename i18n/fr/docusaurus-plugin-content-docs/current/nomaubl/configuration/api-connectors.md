@@ -138,7 +138,7 @@ L'éditeur comporte **cinq onglets** :
 
 | Champ | Description |
 |---|---|
-| **Headers** | Paires `Key:Value` séparées par des points-virgules, appliquées à **tous** les endpoints du connecteur (par ex. `Content-Type:application/json;Accept:application/json`). Les *Extra headers* d'un endpoint peuvent surcharger ces valeurs au cas par cas. |
+| **Headers** | Paires `Key:Value` séparées par des points-virgules, appliquées à **tous** les endpoints du connecteur (par ex. `Content-Type:application/json;Accept:application/json`). Une valeur peut référencer `{{kco}}` (la société de la facture) — pour les plateformes qui cadrent les requêtes par organisation, comme un en-tête `Organization-Id`. Les *Extra headers* d'un endpoint peuvent surcharger ces valeurs au cas par cas. |
 
 ---
 
@@ -189,8 +189,11 @@ Choix typique pour **JD Edwards AIS** et la plupart des API PA modernes — Noma
 | **Token field** | Chemin JSON en notation pointée pour extraire le jeton de la réponse (par ex. `userInfo.token` pour JD Edwards AIS). **Laisser vide** pour la détection auto — le runtime tente `access_token` puis `token`, ce qui couvre la réponse standard d'un flux OAuth2 client_credentials sans configuration. |
 | **Token TTL (minutes)** | Durée de mise en cache du jeton avant nouvelle demande. Valeur par défaut `55` minutes. |
 | **Body Content-Type** | `application/json` *(défaut)* ou `application/x-www-form-urlencoded`. La variante formulaire émet le corps de la requête de jeton sous forme de paires URL-encodées, ce qu'attend le flux OAuth2 `client_credentials` standard. |
-| **Body template** | Corps personnalisé pour la requête de jeton, avec placeholders `{{username}}` / `{{password}}`. **Laisser vide** pour utiliser des valeurs par défaut adaptées : le mode JSON émet le payload JD Edwards AIS (`{ username, password, deviceName }`) ; le mode formulaire émet `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`. |
+| **Body template** | Corps personnalisé pour la requête de jeton, avec placeholders `{{username}}` / `{{password}}`. **Laisser vide** pour utiliser des valeurs par défaut adaptées : le mode JSON émet le payload JD Edwards AIS (`{ username, password, deviceName }`) ; le mode formulaire émet `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`, ou `grant_type=refresh_token` quand un **Refresh token** est renseigné. |
+| **Refresh token** | Un jeton OAuth2 hors ligne de longue durée pour le grant `refresh_token` — pour les plateformes (comme Yooz Rising) qui en délivrent un. Masqué, et gardé hors du corps de la requête ; un corps personnalisé peut le référencer par `{{refreshToken}}`. |
 | **Token request headers** | Optionnel. Paires `Key:Value` séparées par point-virgule envoyées **uniquement sur la requête de jeton** — pour les PA qui exigent un en-tête tenant-id sur l'appel d'auth lui-même. Exemple : `customer-id:CUST123;X-Tenant:acme`. |
+
+**Test authentication** — un bouton du formulaire OAUTH2 récupère un jeton avec les identifiants configurés et signale le succès ou l'erreur exacte, pour vérifier la connexion avant l'envoi d'une facture.
 
 ---
 

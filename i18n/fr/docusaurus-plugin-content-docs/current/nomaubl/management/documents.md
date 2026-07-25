@@ -210,6 +210,12 @@ Quand le groupe est rempli, la recherche s'exécute **avant** la regex sur `cbc:
 
 Le modèle livré `received-ubl` arrive avec ce groupe **présent mais vide** : choisir le connecteur et la cible dans *Paramètres → Modèles de document*, renseigner les paramètres, et le flux côté réception est câblé de bout en bout.
 
+### Dossier d'entrée et routage *(quand Source = UBL)*
+
+Un modèle source UBL scanne son **propre** dossier d'entrée `<input>/<template>` — la même convention par modèle que pour un modèle XML — si bien que plusieurs modèles UBL peuvent être planifiés sur des dossiers différents. Un fichier UBL traité avec succès est retiré du dossier ; un fichier qui échoue, et les exécutions en validation seule, le conservent.
+
+Chaque facture UBL est validée et routée selon **son propre** type de transaction — B2B, B2G, B2C ou B2B international — lu dans la note de routage de la facture, donc un lot mélangeant les types est traité fichier par fichier. Un fichier sans note de routage reprend le type de document par défaut du modèle.
+
 ### Source Connecteur *(quand Source = Connecteur)*
 
 Quand *Source* vaut `Connecteur`, NomaUBL récupère les données du document en direct depuis un [connecteur SQL](../configuration/sql-connectors.md) ou un [connecteur API](../configuration/api-connectors.md) au lieu de lire un fichier. La même chaîne XSLT transforme ensuite le résultat en UBL — pas de spool, pas de surveillance de répertoire, pas de fichier temporaire.

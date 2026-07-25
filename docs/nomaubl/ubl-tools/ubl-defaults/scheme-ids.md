@@ -26,6 +26,14 @@ Each field is populated from the *scheme-ids* reference list (see *Configuration
 
 ---
 
+## Buyer electronic address by transaction type
+
+The **buyer** electronic address (BT-49) can be set independently of the seller's (BT-34) and can differ by transaction type — B2B, B2G, B2C and B2B international. For each type you pick the scheme and where the value comes from: a source tag the template already maps (for example the buyer's contact email) plus a fallback constant used when that tag is empty.
+
+This lets B2C and international invoices — which have no SIRET-based electronic address — carry an email address (scheme **EM**) instead, while domestic B2B / B2G invoices keep their usual endpoint routing. Types you don't list keep the default scheme (`0225`) and the current endpoint value. The *Scheme IDs* list carries an **Email (EM)** entry for this.
+
+---
+
 ## Tips & best practices
 
 - **Use `0225` for the BT-49 endpoint in France.** The Plateforme Agréée recognises `0225` as the EAS code for the French e-invoicing endpoint registry. Other values are rejected by the addressing check (REJ_ADR).

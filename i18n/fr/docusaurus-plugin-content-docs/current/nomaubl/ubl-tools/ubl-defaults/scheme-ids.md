@@ -26,6 +26,14 @@ Chaque champ est rempli à partir de la liste de référence *scheme-ids* (voir 
 
 ---
 
+## Adresse électronique de l'acheteur par type de transaction
+
+L'adresse électronique de l'**acheteur** (BT-49) se règle indépendamment de celle du vendeur (BT-34) et peut varier selon le type de transaction — B2B, B2G, B2C et B2B international. Pour chaque type, vous choisissez le schéma et l'origine de la valeur : un tag source que le modèle mappe déjà (par exemple l'e-mail de contact de l'acheteur) et une constante de repli utilisée quand ce tag est vide.
+
+Les factures B2C et internationales — qui n'ont pas d'adresse électronique fondée sur le SIRET — peuvent ainsi porter une adresse e-mail (schéma **EM**), tandis que les factures B2B / B2G domestiques gardent leur routage d'endpoint habituel. Les types non listés conservent le schéma par défaut (`0225`) et la valeur d'endpoint courante. La liste *Identifiants de schéma* porte une entrée **Email (EM)** à cet effet.
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Utiliser `0225` pour l'endpoint BT-49 en France.** La Plateforme Agréée reconnaît `0225` comme code EAS de l'annuaire d'adresses électroniques français. Toute autre valeur est rejetée par le contrôle d'adressage (REJ_ADR).

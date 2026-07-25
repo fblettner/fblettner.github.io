@@ -139,7 +139,7 @@ L'éditeur comporte **six onglets** :
 
 | Champ | Description |
 |---|---|
-| **Last BIP Job Number** | Borne supérieure du dernier job BIP JDE consommé. Utilisée par la source BIP pour ignorer les jobs déjà traités. *(BIP / spécifique JDE.)* |
+| **Hôtes des jobs BIP** | Une borne supérieure **par hôte d'exécution JDE** (`RJRPDEXHST`) — les numéros de job BIP (`RJJOBNBR`) sont uniques par hôte, pas globalement. Ajoutez chaque hôte avec son numéro de départ, ou cliquez *Retrieve last job # per host* pour les amorcer tous depuis le maximum courant en un clic ; ils avancent ensuite automatiquement. **Seuls les hôtes listés sont scannés.** *(BIP / spécifique JDE.)* |
 | **Fenêtre BIP (jours)** | Limite l'analyse BIP dans le temps. À `0`, aucune limite : tous les jobs postérieurs au dernier numéro traité sont repris. À `N > 0`, seuls ceux modifiés au cours des N derniers jours le sont. Pratique à la première installation ou après une longue interruption : on évite ainsi de parcourir des années d'historique. L'analyse lancée à la main, le lot planifié et la commande `nomaubl -fetch-all` en tiennent compte. *(Spécifique BIP / JDE.)* |
 
 ---

@@ -138,7 +138,7 @@ The editor has **five tabs**:
 
 | Field | Description |
 |---|---|
-| **Headers** | Semicolon-separated `Key:Value` pairs applied to **every** endpoint of this connector (e.g. `Content-Type:application/json;Accept:application/json`). Per-endpoint *Extra headers* can override these on a case-by-case basis. |
+| **Headers** | Semicolon-separated `Key:Value` pairs applied to **every** endpoint of this connector (e.g. `Content-Type:application/json;Accept:application/json`). A value can reference `{{kco}}` (the invoice's company) — for platforms that scope requests by organisation, such as an `Organization-Id` header. Per-endpoint *Extra headers* can override these on a case-by-case basis. |
 
 ---
 
@@ -189,8 +189,11 @@ This is the typical choice for **JD Edwards AIS** and most modern PA APIs — No
 | **Token field** | Dot-notation JSON path used to extract the token from the response (e.g. `userInfo.token` for JD Edwards AIS). **Leave empty** to auto-detect — the runtime tries `access_token` first then `token`, which covers the standard OAuth2 client_credentials response shape without configuration. |
 | **Token TTL (minutes)** | How long the token is cached before a new one is requested. Default `55` minutes. |
 | **Body Content-Type** | `application/json` *(default)* or `application/x-www-form-urlencoded`. The form variant emits the token request body as URL-encoded pairs, which is what the standard OAuth2 `client_credentials` flow expects. |
-| **Body template** | Custom request body, with `{{username}}` / `{{password}}` placeholders. **Leave empty** to use sensible defaults: JSON mode emits the JD Edwards AIS payload (`{ username, password, deviceName }`); form mode emits `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`. |
+| **Body template** | Custom request body, with `{{username}}` / `{{password}}` placeholders. **Leave empty** to use sensible defaults: JSON mode emits the JD Edwards AIS payload (`{ username, password, deviceName }`); form mode emits `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`, or `grant_type=refresh_token` when a **Refresh token** is set. |
+| **Refresh token** | A long-lived OAuth2 offline token for the `refresh_token` grant — for platforms (such as Yooz Rising) that issue one. Masked, and kept out of the request body; a custom body can reference it as `{{refreshToken}}`. |
 | **Token request headers** | Optional. Semicolon-separated `Key:Value` pairs sent **only on the token request** — for PAs that require a tenant-id header on the auth call itself. Example: `customer-id:CUST123;X-Tenant:acme`. |
+
+**Test authentication** — a button in the OAUTH2 form fetches a token with the configured credentials and reports success or the exact error, so the connection is verified before an invoice is sent.
 
 ---
 

@@ -139,7 +139,7 @@ The editor has **six tabs**:
 
 | Field | Description |
 |---|---|
-| **Last BIP Job Number** | High-water mark of the last JDE BIP job number consumed. Used by the BIP source to skip already-processed jobs. *(BIP / JDE-specific.)* |
+| **BIP job hosts** | One high-water mark **per JDE execution host** (`RJRPDEXHST`) — BIP job numbers (`RJJOBNBR`) are unique per host, not globally. Add each host with its starting number, or click *Retrieve last job # per host* to seed them all from the current maximum in one click; from then on they advance automatically. **Only listed hosts are scanned.** *(BIP / JDE-specific.)* |
 | **BIP Lookback (days)** | Date floor on the BIP scan. `0` = no floor — every job after the watermark is eligible. `N > 0` = only jobs updated in the last N days. Handy on a first install or after a long gap, to skip years of history rather than walking the whole queue. Applies to the manual scan, the scheduled batch and the `nomaubl -fetch-all` command. *(BIP / JDE-specific.)* |
 
 ---

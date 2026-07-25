@@ -33455,7 +33455,7 @@ The editor has **five tabs**:
 
 | Field | Description |
 |---|---|
-| **Headers** | Semicolon-separated `Key:Value` pairs applied to **every** endpoint of this connector (e.g. `Content-Type:application/json;Accept:application/json`). Per-endpoint *Extra headers* can override these on a case-by-case basis. |
+| **Headers** | Semicolon-separated `Key:Value` pairs applied to **every** endpoint of this connector (e.g. `Content-Type:application/json;Accept:application/json`). A value can reference `{{kco}}` (the invoice's company) — for platforms that scope requests by organisation, such as an `Organization-Id` header. Per-endpoint *Extra headers* can override these on a case-by-case basis. |
 
 ---
 
@@ -33506,8 +33506,11 @@ This is the typical choice for **JD Edwards AIS** and most modern PA APIs — No
 | **Token field** | Dot-notation JSON path used to extract the token from the response (e.g. `userInfo.token` for JD Edwards AIS). **Leave empty** to auto-detect — the runtime tries `access_token` first then `token`, which covers the standard OAuth2 client_credentials response shape without configuration. |
 | **Token TTL (minutes)** | How long the token is cached before a new one is requested. Default `55` minutes. |
 | **Body Content-Type** | `application/json` *(default)* or `application/x-www-form-urlencoded`. The form variant emits the token request body as URL-encoded pairs, which is what the standard OAuth2 `client_credentials` flow expects. |
-| **Body template** | Custom request body, with `{{username}}` / `{{password}}` placeholders. **Leave empty** to use sensible defaults: JSON mode emits the JD Edwards AIS payload (`{ username, password, deviceName }`); form mode emits `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`. |
+| **Body template** | Custom request body, with `{{username}}` / `{{password}}` placeholders. **Leave empty** to use sensible defaults: JSON mode emits the JD Edwards AIS payload (`{ username, password, deviceName }`); form mode emits `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`, or `grant_type=refresh_token` when a **Refresh token** is set. |
+| **Refresh token** | A long-lived OAuth2 offline token for the `refresh_token` grant — for platforms (such as Yooz Rising) that issue one. Masked, and kept out of the request body; a custom body can reference it as `{{refreshToken}}`. |
 | **Token request headers** | Optional. Semicolon-separated `Key:Value` pairs sent **only on the token request** — for PAs that require a tenant-id header on the auth call itself. Example: `customer-id:CUST123;X-Tenant:acme`. |
+
+**Test authentication** — a button in the OAUTH2 form fetches a token with the configured credentials and reports success or the exact error, so the connection is verified before an invoice is sent.
 
 ---
 
@@ -35512,6 +35515,7 @@ The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 |---|---|---|
 | **Page size** | `100` | Number of statuses fetched per page when polling the PA. |
 | **Last retrieved at** | *(updated automatically)* | ISO datetime of the most recent successful retrieval (e.g. `2025-01-01T00:00:00Z`). Updated automatically after each retrieval run; manual edits act as a starting point — useful to re-replay a window. |
+| **Import status mode** | `per-invoice` *(default)* | `per-invoice` polls each pending invoice by its stored transaction id. `search` instead asks the platform for every flow updated since the last check (the date is kept between runs) and matches the results to the pending invoices — for platforms with no per-invoice status lookup, such as Yooz Rising. |
 | **Lifecycle endpoints** | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
 
 :::info[Self-billed invoices route to their own endpoints]
@@ -35792,7 +35796,7 @@ The editor has **six tabs**:
 
 | Field | Description |
 |---|---|
-| **Last BIP Job Number** | High-water mark of the last JDE BIP job number consumed. Used by the BIP source to skip already-processed jobs. *(BIP / JDE-specific.)* |
+| **BIP job hosts** | One high-water mark **per JDE execution host** (`RJRPDEXHST`) — BIP job numbers (`RJJOBNBR`) are unique per host, not globally. Add each host with its starting number, or click *Retrieve last job # per host* to seed them all from the current maximum in one click; from then on they advance automatically. **Only listed hosts are scanned.** *(BIP / JDE-specific.)* |
 | **BIP Lookback (days)** | Date floor on the BIP scan. `0` = no floor — every job after the watermark is eligible. `N > 0` = only jobs updated in the last N days. Handy on a first install or after a long gap, to skip years of history rather than walking the whole queue. Applies to the manual scan, the scheduled batch and the `nomaubl -fetch-all` command. *(BIP / JDE-specific.)* |
 
 ---
@@ -38922,6 +38926,12 @@ When the group is filled in, the lookup runs **before** the regex-on-`cbc:ID` pa
 
 The bundled `received-ubl` template ships with this group **present but empty**: pick the connector and the target in *Settings → Document Templates*, fill in the parameters, and the receive-side flow is wired end-to-end.
 
+### Input folder and routing *(when Source = UBL)*
+
+A UBL-source template scans its **own** input folder `<input>/<template>` — the same per-template convention as an XML template — so several UBL templates can run on schedule against different folders. A UBL file that processes successfully is removed from the folder; a file that fails, and validation-only runs, keep it.
+
+Each UBL invoice is validated and routed by **its own** transaction type — B2B, B2G, B2C or B2B international — read from the invoice's routing note, so a batch mixing types is handled file by file. A file that carries no routing note uses the template's default document type.
+
 ### Connector source *(when Source = Connector)*
 
 When *Source* is `Connector`, NomaUBL fetches the document data live from a [SQL connector](../configuration/sql-connectors.md) or an [API connector](../configuration/api-connectors.md) instead of reading a file. The same XSLT pipeline then turns the result into UBL — no spool, no file watcher, no transient directory.
@@ -41278,6 +41288,11 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
  2026.06.21 · 2026-06-21
  2026.06.17 · 2026-06-17
  2026.06.16 · 2026-06-16
+ 2026.07.24.1 · 2026-07-24
+ 2026.07.20.1 · 2026-07-20
+ 2026.07.17.1 · 2026-07-17
+ 2026.07.16.1 · 2026-07-16
+ 2026.07.15.1 · 2026-07-15
  2026.07.13.1 · 2026-07-13
  2026.07.12.1 · 2026-07-12
  2026.07.11.1 · 2026-07-11
@@ -41536,6 +41551,57 @@ Actionable error when a BI Publisher RTF subtemplate is missing, and a starter m
 - **Starter manifest generator for the PDF → XML adapter.** New CLI mode `-pdfManifest <input.pdf> <output.manifest.xml>` (also `nomaubl.sh pdf-manifest` / `nomaubl.cmd pdf-manifest`) analyses the PDF and emits a JDE-shape manifest XML, for the case where the customer has no native JDE XML sample of the same R-program to feed `-pdf2xml`. Inferred element names use the printed RC label text where available and the OWObject DD alias as fallback; the customer edits the file to give meaningful names, then reuses it as the 3rd argument of `-pdf2xml`. The root element is derived from the PDF filename (typical JDE spool convention) and multi-line text fields keep a single element name across all their lines via a sticky cache.
 
 ---
+
+## 2026.07.24.1 — 2026-07-24 \{#v2026-07-24-1\}
+
+### Improvements
+
+- **The inbound PA status webhook is now documented in the API reference.** The endpoint the platform calls to push invoice status updates (`/api/webhook/{connector}/{event}`) — its URL, signature headers, expected payload and status mapping — now appears in the API reference (redoc), so it can be configured on the platform without reading the source.
+
+### Fixes
+
+- **JDE PDF-to-XML: a line's multi-line attachment text is kept in one field.** When converting a JDE report PDF, an attached media-object text printed over several lines is now emitted as a single field with the lines joined by line breaks — matching JDE's native XML output — instead of a separate element per line, of which the downstream transform would read only the first.
+- **B2C invoices no longer carry the buyer's VAT number or registration identifier.** On a B2C (consumer) invoice the buyer VAT scheme (BT-48) and legal registration identifier (BT-47) are now omitted, even when the source data still supplies them — a private individual has neither, and emitting them made the invoice invalid. The buyer's name is kept. B2B, B2G and B2B-international invoices are unchanged, and the seller's identifiers are never affected. *(Requires the XSL framework redeploy.)*
+
+## 2026.07.20.1 — 2026-07-20 \{#v2026-07-20-1\}
+
+### Fixes
+
+- **Attaching a PDF to a UBL invoice now works.** For a UBL-source template with *Attachment = attach*, the PDF is now located by the UBL input file's own name (`<name>.pdf` dropped next to `<name>.xml`) rather than an internal identifier — so it is actually embedded. Once embedded, the PDF is removed from the input folder, like the UBL file it arrived with.
+- **Scheduled directory scans no longer flood the log.** A file that keeps failing (for example one whose identifier can't be parsed and stays in the folder) was written to the log in full — as raw data — on every scan. The scheduler now logs a single concise line per run.
+
+## 2026.07.17.1 — 2026-07-17 \{#v2026-07-17-1\}
+
+### New features
+
+- **Connect to a platform that authenticates with an OAuth2 refresh token.** The API connector now supports the OAuth2 `refresh_token` grant, with a dedicated masked *Refresh token* field so the token is never written into the request body — for platforms (such as Yooz Rising) that issue a long-lived offline token. A new *Test authentication* button in the connector editor fetches a token and reports success or the exact error, so credentials can be verified before sending an invoice.
+- **Retrieve import status in bulk for platforms without a per-invoice lookup.** The import-status check can now run in *search* mode: instead of querying one invoice at a time, it asks the platform for all flows updated since the last check (remembering that date from one run to the next) and updates the matching pending invoices by their stored platform transaction id. This is for platforms — such as Yooz Rising — that offer no per-invoice status lookup. The mode is set in *Settings → e-invoicing → Status retrieval*; the default stays per-invoice, so platforms that already work are unaffected.
+
+### Improvements
+
+- **Send the invoice's transaction type to platforms that require it.** When a platform expects the transaction type at submission (e.g. Yooz Rising's `processingRule`), it is now derived automatically from the invoice — B2B, B2G, B2C or B2B international — and sent, both on the initial send and on a resend.
+- **Connector headers can carry the company code.** A request header can now reference the invoice's company (`{{kco}}`) — for platforms that scope requests by organisation, such as Yooz Rising's `Organization-Id`.
+- **UBL invoices are read from their own template's input folder.** A UBL-source document template now scans `<input>/<template>` — the same per-template convention as XML — instead of a single shared `<input>/ubl`. This lets several UBL templates be scheduled against different folders. *(Existing installs: move UBL files from the shared folder into the template's folder.)*
+
+### Fixes
+
+- **A scheduled UBL scan no longer reprocesses the same file.** After the per-template input change above, a UBL file was left in its input folder once processed, so each scheduled scan picked it up again — an endless loop. A successfully processed UBL file is now removed from its input folder, matching how generated XML inputs are already consumed. Files that fail, and validation-only runs, keep the file.
+
+## 2026.07.16.1 — 2026-07-16 \{#v2026-07-16-1\}
+
+### Improvements
+
+- **Existing UBL invoices are now validated and routed per document type.** When processing a UBL file directly (rather than generating it from a spool), the transaction type — B2B, B2G, B2C or B2B international — is now read from each invoice's own routing note to decide whether Schematron validation runs and whether the invoice is sent to the platform. This matches how the generation flow already behaves, so a batch mixing, say, B2G and B2C invoices is handled correctly file by file. Previously the decision was fixed per template (the default document type). UBL files that carry no routing note fall back to the default document type as before.
+
+### Fixes
+
+- **BIP job scanning now tracks a watermark per JDE host.** JDE job numbers (RJJOBNBR) are unique per execution host, not globally, so a single high-water mark silently skipped jobs from hosts with lower numbers once a higher-numbered host advanced it. The scan now keeps one watermark per host and only scans the hosts you configure. Set them in *Settings → Global → Batch Processing* — add each host with its starting number, or click *Retrieve last job # per host* to seed them all from the current maximum in one click; from then on they advance automatically. *(Existing installs: add your hosts once — an unlisted host is not scanned.)*
+
+## 2026.07.15.1 — 2026-07-15 \{#v2026-07-15-1\}
+
+### New features
+
+- **Buyer electronic address (BT-49) configurable per transaction type.** The buyer electronic address scheme and value can now be set independently of the seller's (BT-34) and can differ by transaction type — B2B, B2G, B2C and B2B international. For each type you choose the scheme and where the value comes from: a source tag (reusing a field the template already maps, such as the buyer's contact email) with a fallback constant used when that tag is empty. This lets B2C and international invoices — which have no SIRET-based electronic address — carry an email address (scheme EM) instead, while domestic B2B/B2G invoices keep their usual routing. It is configured in *UBL Defaults → Scheme IDs*; types you don't list keep the default scheme and the current endpoint value. The *Scheme IDs* reference list also gains an Email (EM) entry. *(Requires the XSL framework redeploy.)*
 
 ## 2026.07.13.1 — 2026-07-13 \{#v2026-07-13-1\}
 
@@ -43922,6 +43988,14 @@ The override mechanism is described in the [Overview](./overview.md).
 | **Delivery location** | BT-71 | (varies) | Identifier scheme of the delivery location. |
 
 Each field is populated from the *scheme-ids* reference list (see *Configuration → Reference Lists*). Pick the value that matches the registry the underlying identifier belongs to.
+
+---
+
+## Buyer electronic address by transaction type
+
+The **buyer** electronic address (BT-49) can be set independently of the seller's (BT-34) and can differ by transaction type — B2B, B2G, B2C and B2B international. For each type you pick the scheme and where the value comes from: a source tag the template already maps (for example the buyer's contact email) plus a fallback constant used when that tag is empty.
+
+This lets B2C and international invoices — which have no SIRET-based electronic address — carry an email address (scheme **EM**) instead, while domestic B2B / B2G invoices keep their usual endpoint routing. Types you don't list keep the default scheme (`0225`) and the current endpoint value. The *Scheme IDs* list carries an **Email (EM)** entry for this.
 
 ---
 

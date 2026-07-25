@@ -28212,7 +28212,7 @@ L'éditeur comporte **cinq onglets** :
 
 | Champ | Description |
 |---|---|
-| **Headers** | Paires `Key:Value` séparées par des points-virgules, appliquées à **tous** les endpoints du connecteur (par ex. `Content-Type:application/json;Accept:application/json`). Les *Extra headers* d'un endpoint peuvent surcharger ces valeurs au cas par cas. |
+| **Headers** | Paires `Key:Value` séparées par des points-virgules, appliquées à **tous** les endpoints du connecteur (par ex. `Content-Type:application/json;Accept:application/json`). Une valeur peut référencer `{{kco}}` (la société de la facture) — pour les plateformes qui cadrent les requêtes par organisation, comme un en-tête `Organization-Id`. Les *Extra headers* d'un endpoint peuvent surcharger ces valeurs au cas par cas. |
 
 ---
 
@@ -28263,8 +28263,11 @@ Choix typique pour **JD Edwards AIS** et la plupart des API PA modernes — Noma
 | **Token field** | Chemin JSON en notation pointée pour extraire le jeton de la réponse (par ex. `userInfo.token` pour JD Edwards AIS). **Laisser vide** pour la détection auto — le runtime tente `access_token` puis `token`, ce qui couvre la réponse standard d'un flux OAuth2 client_credentials sans configuration. |
 | **Token TTL (minutes)** | Durée de mise en cache du jeton avant nouvelle demande. Valeur par défaut `55` minutes. |
 | **Body Content-Type** | `application/json` *(défaut)* ou `application/x-www-form-urlencoded`. La variante formulaire émet le corps de la requête de jeton sous forme de paires URL-encodées, ce qu'attend le flux OAuth2 `client_credentials` standard. |
-| **Body template** | Corps personnalisé pour la requête de jeton, avec placeholders `{{username}}` / `{{password}}`. **Laisser vide** pour utiliser des valeurs par défaut adaptées : le mode JSON émet le payload JD Edwards AIS (`{ username, password, deviceName }`) ; le mode formulaire émet `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`. |
+| **Body template** | Corps personnalisé pour la requête de jeton, avec placeholders `{{username}}` / `{{password}}`. **Laisser vide** pour utiliser des valeurs par défaut adaptées : le mode JSON émet le payload JD Edwards AIS (`{ username, password, deviceName }`) ; le mode formulaire émet `grant_type=client_credentials&client_id={{username}}&client_secret={{password}}`, ou `grant_type=refresh_token` quand un **Refresh token** est renseigné. |
+| **Refresh token** | Un jeton OAuth2 hors ligne de longue durée pour le grant `refresh_token` — pour les plateformes (comme Yooz Rising) qui en délivrent un. Masqué, et gardé hors du corps de la requête ; un corps personnalisé peut le référencer par `{{refreshToken}}`. |
 | **Token request headers** | Optionnel. Paires `Key:Value` séparées par point-virgule envoyées **uniquement sur la requête de jeton** — pour les PA qui exigent un en-tête tenant-id sur l'appel d'auth lui-même. Exemple : `customer-id:CUST123;X-Tenant:acme`. |
+
+**Test authentication** — un bouton du formulaire OAUTH2 récupère un jeton avec les identifiants configurés et signale le succès ou l'erreur exacte, pour vérifier la connexion avant l'envoi d'une facture.
 
 ---
 
@@ -30269,6 +30272,7 @@ La section **Status Retrieval** pilote la boucle de récupération des statuts d
 |---|---|---|
 | **Page size** | `100` | Nombre de statuts récupérés par page lors du polling de la PA. |
 | **Last retrieved at** | *(mis à jour automatiquement)* | Date ISO de la dernière récupération réussie (par exemple `2025-01-01T00:00:00Z`). Mis à jour automatiquement après chaque exécution ; une édition manuelle agit comme point de départ — utile pour rejouer une fenêtre. |
+| **Import status mode** | `per-invoice` *(défaut)* | `per-invoice` interroge chaque facture en attente par son id de transaction. `search` demande plutôt à la plateforme tous les flux mis à jour depuis la dernière relève (la date est conservée d'une exécution à l'autre) et rapproche les résultats des factures en attente — pour les plateformes sans recherche de statut par facture, comme Yooz Rising. |
 | **Lifecycle endpoints** | *(vide = `invoice-statuses`)* | Nom(s) d'endpoint du connecteur à interroger pour les événements de cycle de vie, séparés par des virgules. Ajoutez `invoice-statuses-selfbilled` à côté de `invoice-statuses` quand la plateforme répartit ses cycles de vie ventes et achats (auto-facturation) sur des endpoints distincts, pour collecter les deux. Les endpoints inconnus sont ignorés. |
 
 :::info[Les factures d'auto-facturation empruntent leurs propres endpoints]
@@ -30549,7 +30553,7 @@ L'éditeur comporte **six onglets** :
 
 | Champ | Description |
 |---|---|
-| **Last BIP Job Number** | Borne supérieure du dernier job BIP JDE consommé. Utilisée par la source BIP pour ignorer les jobs déjà traités. *(BIP / spécifique JDE.)* |
+| **Hôtes des jobs BIP** | Une borne supérieure **par hôte d'exécution JDE** (`RJRPDEXHST`) — les numéros de job BIP (`RJJOBNBR`) sont uniques par hôte, pas globalement. Ajoutez chaque hôte avec son numéro de départ, ou cliquez *Retrieve last job # per host* pour les amorcer tous depuis le maximum courant en un clic ; ils avancent ensuite automatiquement. **Seuls les hôtes listés sont scannés.** *(BIP / spécifique JDE.)* |
 | **Fenêtre BIP (jours)** | Limite l'analyse BIP dans le temps. À `0`, aucune limite : tous les jobs postérieurs au dernier numéro traité sont repris. À `N > 0`, seuls ceux modifiés au cours des N derniers jours le sont. Pratique à la première installation ou après une longue interruption : on évite ainsi de parcourir des années d'historique. L'analyse lancée à la main, le lot planifié et la commande `nomaubl -fetch-all` en tiennent compte. *(Spécifique BIP / JDE.)* |
 
 ---
@@ -33679,6 +33683,12 @@ Quand le groupe est rempli, la recherche s'exécute **avant** la regex sur `cbc:
 
 Le modèle livré `received-ubl` arrive avec ce groupe **présent mais vide** : choisir le connecteur et la cible dans *Paramètres → Modèles de document*, renseigner les paramètres, et le flux côté réception est câblé de bout en bout.
 
+### Dossier d'entrée et routage *(quand Source = UBL)*
+
+Un modèle source UBL scanne son **propre** dossier d'entrée `<input>/<template>` — la même convention par modèle que pour un modèle XML — si bien que plusieurs modèles UBL peuvent être planifiés sur des dossiers différents. Un fichier UBL traité avec succès est retiré du dossier ; un fichier qui échoue, et les exécutions en validation seule, le conservent.
+
+Chaque facture UBL est validée et routée selon **son propre** type de transaction — B2B, B2G, B2C ou B2B international — lu dans la note de routage de la facture, donc un lot mélangeant les types est traité fichier par fichier. Un fichier sans note de routage reprend le type de document par défaut du modèle.
+
 ### Source Connecteur *(quand Source = Connecteur)*
 
 Quand *Source* vaut `Connecteur`, NomaUBL récupère les données du document en direct depuis un [connecteur SQL](../configuration/sql-connectors.md) ou un [connecteur API](../configuration/api-connectors.md) au lieu de lire un fichier. La même chaîne XSLT transforme ensuite le résultat en UBL — pas de spool, pas de surveillance de répertoire, pas de fichier temporaire.
@@ -36020,6 +36030,11 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
  Versions
+ 2026.07.24.1 · 2026-07-24
+ 2026.07.20.1 · 2026-07-20
+ 2026.07.17.1 · 2026-07-17
+ 2026.07.16.1 · 2026-07-16
+ 2026.07.15.1 · 2026-07-15
  2026.07.13.1 · 2026-07-13
  2026.07.12.1 · 2026-07-12
  2026.07.11.1 · 2026-07-11
@@ -36108,6 +36123,57 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
  1.0.0 · Version initiale
 
 ---
+
+## 2026.07.24.1 — 2026-07-24 \{#v2026-07-24-1\}
+
+### Améliorations
+
+- **Le webhook entrant de statut PA est désormais documenté dans la référence de l'API.** L'endpoint que la plateforme appelle pour pousser les mises à jour de statut (`/api/webhook/{connector}/{event}`) — son URL, ses en-têtes de signature, le format de charge utile attendu et la correspondance des statuts — figure maintenant dans la référence de l'API (redoc), et peut donc être configuré côté plateforme sans lire le code source.
+
+### Corrections
+
+- **PDF-vers-XML JDE : le texte multiligne d'une pièce jointe de ligne est conservé dans un seul champ.** Lors de la conversion d'un PDF d'état JDE, un texte d'objet média joint imprimé sur plusieurs lignes est désormais émis comme un champ unique dont les lignes sont réunies par des sauts de ligne — conformément à la sortie XML native de JDE — au lieu d'un élément par ligne, dont la transformation en aval ne lisait que la première.
+- **Les factures B2C ne portent plus le numéro de TVA ni l'identifiant d'immatriculation de l'acheteur.** Sur une facture B2C (particulier), le schéma de TVA de l'acheteur (BT-48) et son identifiant d'immatriculation légale (BT-47) sont désormais omis, même lorsque les données source les fournissent encore — un particulier n'en possède aucun, et les émettre rendait la facture invalide. Le nom de l'acheteur est conservé. Les factures B2B, B2G et B2B international sont inchangées, et les identifiants du vendeur ne sont jamais concernés. *(Nécessite le redéploiement du socle XSL.)*
+
+## 2026.07.20.1 — 2026-07-20 \{#v2026-07-20-1\}
+
+### Corrections
+
+- **L'attachement d'un PDF à une facture UBL fonctionne désormais.** Pour un modèle de source UBL avec *Pièce jointe = attach*, le PDF est maintenant recherché sous le nom du fichier UBL d'entrée (`<nom>.pdf` déposé à côté de `<nom>.xml`) plutôt que sous un identifiant interne — il est donc réellement intégré. Une fois intégré, le PDF est supprimé du dossier d'entrée, comme le fichier UBL qui l'accompagnait.
+- **Les relèves planifiées de dossier n'inondent plus le journal.** Un fichier qui échoue en boucle (par exemple un fichier dont l'identifiant ne peut être analysé et qui reste dans le dossier) était inscrit intégralement dans le journal — sous forme de données brutes — à chaque relève. Le planificateur n'écrit désormais qu'une seule ligne concise par exécution.
+
+## 2026.07.17.1 — 2026-07-17 \{#v2026-07-17-1\}
+
+### Nouveautés
+
+- **Se connecter à une plateforme qui s'authentifie par jeton de rafraîchissement OAuth2.** Le connecteur d'API prend désormais en charge le flux OAuth2 `refresh_token`, avec un champ *Jeton de rafraîchissement* dédié et masqué : le jeton n'est jamais inscrit dans le corps de la requête — pour des plateformes (comme Yooz Rising) qui délivrent un jeton hors ligne longue durée. Un nouveau bouton *Tester l'authentification* dans l'éditeur de connecteur récupère un jeton et indique le succès ou l'erreur exacte, ce qui permet de vérifier les identifiants avant d'envoyer une facture.
+- **Relever le statut d'import en masse pour les plateformes sans consultation par facture.** Le contrôle du statut d'import peut désormais fonctionner en mode *recherche* : au lieu d'interroger les factures une à une, il demande à la plateforme tous les flux modifiés depuis le dernier contrôle (en mémorisant cette date d'une exécution à l'autre) et met à jour les factures en attente correspondantes grâce à leur identifiant de transaction stocké. Ce mode s'adresse aux plateformes — comme Yooz Rising — qui n'offrent pas de consultation de statut par facture. Il se règle dans *Paramètres → e-invoicing → Relève des statuts* ; le mode par défaut reste la consultation par facture, sans impact sur les plateformes déjà en service.
+
+### Améliorations
+
+- **Transmettre le type de transaction de la facture aux plateformes qui l'exigent.** Lorsqu'une plateforme attend le type de transaction à la soumission (par ex. le `processingRule` de Yooz Rising), il est désormais déduit automatiquement de la facture — B2B, B2G, B2C ou B2B international — et transmis, aussi bien à l'envoi initial qu'au renvoi.
+- **Les en-têtes de connecteur peuvent porter le code société.** Un en-tête de requête peut désormais référencer la société de la facture (`{{kco}}`) — pour les plateformes qui cadrent leurs requêtes par organisation, comme l'`Organization-Id` de Yooz Rising.
+- **Les factures UBL sont lues dans le dossier d'entrée propre à leur modèle.** Un modèle de document de source UBL balaie désormais `<entrée>/<modèle>` — la même convention par modèle que pour le XML — au lieu d'un unique dossier partagé `<entrée>/ubl`. Plusieurs modèles UBL peuvent ainsi être planifiés sur des dossiers différents. *(Installations existantes : déplacez les fichiers UBL du dossier partagé vers le dossier du modèle.)*
+
+### Corrections
+
+- **Une relève UBL planifiée ne retraite plus le même fichier.** Après le passage au dossier d'entrée par modèle ci-dessus, un fichier UBL restait dans son dossier d'entrée une fois traité : chaque relève planifiée le reprenait donc — une boucle sans fin. Un fichier UBL traité avec succès est désormais supprimé de son dossier d'entrée, comme le sont déjà les entrées XML générées. Les fichiers en échec, ainsi que les exécutions en validation seule, sont conservés.
+
+## 2026.07.16.1 — 2026-07-16 \{#v2026-07-16-1\}
+
+### Améliorations
+
+- **Les factures UBL existantes sont désormais validées et routées selon leur type de document.** Lors du traitement direct d'un fichier UBL (au lieu de le générer depuis un flux), le type de transaction — B2B, B2G, B2C ou B2B international — est désormais lu dans la note de routage propre à chaque facture pour décider si la validation Schematron s'applique et si la facture est envoyée à la plateforme. Ce comportement s'aligne sur celui du flux de génération : un lot mêlant par exemple des factures B2G et B2C est traité correctement, fichier par fichier. Auparavant, la décision était figée par modèle (le type de document par défaut). Les fichiers UBL sans note de routage reprennent le type de document par défaut, comme auparavant.
+
+### Corrections
+
+- **La relève des jobs BIP suit désormais un point d'avancement par hôte JDE.** Les numéros de job JDE (RJJOBNBR) sont uniques par hôte d'exécution, et non globalement : un repère unique ignorait silencieusement les jobs des hôtes aux numéros plus bas dès qu'un hôte au numéro plus élevé le faisait avancer. La relève conserve maintenant un repère par hôte et ne balaie que les hôtes configurés. Ils se paramètrent dans *Paramètres → Global → Traitement par lot* : ajoutez chaque hôte avec son numéro de départ, ou cliquez sur *Récupérer le dernier n° de job par hôte* pour les initialiser tous en un clic depuis le maximum actuel ; ils s'incrémentent ensuite automatiquement. *(Installations existantes : ajoutez vos hôtes une fois — un hôte non listé n'est pas balayé.)*
+
+## 2026.07.15.1 — 2026-07-15 \{#v2026-07-15-1\}
+
+### Nouveautés
+
+- **Adresse électronique de l'acheteur (BT-49) configurable par type de transaction.** Le schéma et la valeur de l'adresse électronique de l'acheteur peuvent désormais être définis indépendamment de ceux du vendeur (BT-34) et varier selon le type de transaction — B2B, B2G, B2C et B2B international. Pour chaque type, vous choisissez le schéma et l'origine de la valeur : une balise source (réutilisant un champ déjà mappé par le modèle, par exemple l'e-mail de contact de l'acheteur) avec une constante de repli utilisée lorsque cette balise est vide. Les factures B2C et internationales — dépourvues d'adresse électronique basée sur le SIRET — peuvent ainsi porter une adresse e-mail (schéma EM), tandis que les factures B2B/B2G nationales conservent leur routage habituel. La configuration se fait dans *Valeurs par défaut UBL → Identifiants de schéma* ; les types non listés conservent le schéma par défaut et la valeur d'adresse actuelle. La liste de référence *Identifiants de schéma* gagne également une entrée E-mail (EM). *(Nécessite le redéploiement du socle XSL.)*
 
 ## 2026.07.13.1 — 2026-07-13 \{#v2026-07-13-1\}
 
@@ -38799,6 +38865,14 @@ Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md).
 | **Delivery location** | BT-71 | (variable) | Référentiel du lieu de livraison. |
 
 Chaque champ est rempli à partir de la liste de référence *scheme-ids* (voir *Configuration → Reference Lists*). Sélectionner la valeur correspondant au référentiel auquel l'identifiant appartient.
+
+---
+
+## Adresse électronique de l'acheteur par type de transaction
+
+L'adresse électronique de l'**acheteur** (BT-49) se règle indépendamment de celle du vendeur (BT-34) et peut varier selon le type de transaction — B2B, B2G, B2C et B2B international. Pour chaque type, vous choisissez le schéma et l'origine de la valeur : un tag source que le modèle mappe déjà (par exemple l'e-mail de contact de l'acheteur) et une constante de repli utilisée quand ce tag est vide.
+
+Les factures B2C et internationales — qui n'ont pas d'adresse électronique fondée sur le SIRET — peuvent ainsi porter une adresse e-mail (schéma **EM**), tandis que les factures B2B / B2G domestiques gardent leur routage d'endpoint habituel. Les types non listés conservent le schéma par défaut (`0225`) et la valeur d'endpoint courante. La liste *Identifiants de schéma* porte une entrée **Email (EM)** à cet effet.
 
 ---
 

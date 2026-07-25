@@ -25,7 +25,12 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-06-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
   <a href="#v2026-06-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-17</span></a>
   <a href="#v2026-06-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-16</span></a>
-  <a href="#v2026-07-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-13</span></a>
+  <a href="#v2026-07-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-24</span></a>
+  <a href="#v2026-07-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-20</span></a>
+  <a href="#v2026-07-17-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.17.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-17</span></a>
+  <a href="#v2026-07-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-16</span></a>
+  <a href="#v2026-07-15-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.15.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-15</span></a>
+  <a href="#v2026-07-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-13</span></a>
   <a href="#v2026-07-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-12</span></a>
   <a href="#v2026-07-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-11</span></a>
   <a href="#v2026-07-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-09</span></a>
@@ -284,6 +289,57 @@ Actionable error when a BI Publisher RTF subtemplate is missing, and a starter m
 - **Starter manifest generator for the PDF → XML adapter.** New CLI mode `-pdfManifest <input.pdf> <output.manifest.xml>` (also `nomaubl.sh pdf-manifest` / `nomaubl.cmd pdf-manifest`) analyses the PDF and emits a JDE-shape manifest XML, for the case where the customer has no native JDE XML sample of the same R-program to feed `-pdf2xml`. Inferred element names use the printed RC label text where available and the OWObject DD alias as fallback; the customer edits the file to give meaningful names, then reuses it as the 3rd argument of `-pdf2xml`. The root element is derived from the PDF filename (typical JDE spool convention) and multi-line text fields keep a single element name across all their lines via a sticky cache.
 
 ---
+
+## 2026.07.24.1 — 2026-07-24 \{#v2026-07-24-1\}
+
+### Improvements
+
+- **The inbound PA status webhook is now documented in the API reference.** The endpoint the platform calls to push invoice status updates (`/api/webhook/{connector}/{event}`) — its URL, signature headers, expected payload and status mapping — now appears in the API reference (redoc), so it can be configured on the platform without reading the source.
+
+### Fixes
+
+- **JDE PDF-to-XML: a line's multi-line attachment text is kept in one field.** When converting a JDE report PDF, an attached media-object text printed over several lines is now emitted as a single field with the lines joined by line breaks — matching JDE's native XML output — instead of a separate element per line, of which the downstream transform would read only the first.
+- **B2C invoices no longer carry the buyer's VAT number or registration identifier.** On a B2C (consumer) invoice the buyer VAT scheme (BT-48) and legal registration identifier (BT-47) are now omitted, even when the source data still supplies them — a private individual has neither, and emitting them made the invoice invalid. The buyer's name is kept. B2B, B2G and B2B-international invoices are unchanged, and the seller's identifiers are never affected. *(Requires the XSL framework redeploy.)*
+
+## 2026.07.20.1 — 2026-07-20 \{#v2026-07-20-1\}
+
+### Fixes
+
+- **Attaching a PDF to a UBL invoice now works.** For a UBL-source template with *Attachment = attach*, the PDF is now located by the UBL input file's own name (`<name>.pdf` dropped next to `<name>.xml`) rather than an internal identifier — so it is actually embedded. Once embedded, the PDF is removed from the input folder, like the UBL file it arrived with.
+- **Scheduled directory scans no longer flood the log.** A file that keeps failing (for example one whose identifier can't be parsed and stays in the folder) was written to the log in full — as raw data — on every scan. The scheduler now logs a single concise line per run.
+
+## 2026.07.17.1 — 2026-07-17 \{#v2026-07-17-1\}
+
+### New features
+
+- **Connect to a platform that authenticates with an OAuth2 refresh token.** The API connector now supports the OAuth2 `refresh_token` grant, with a dedicated masked *Refresh token* field so the token is never written into the request body — for platforms (such as Yooz Rising) that issue a long-lived offline token. A new *Test authentication* button in the connector editor fetches a token and reports success or the exact error, so credentials can be verified before sending an invoice.
+- **Retrieve import status in bulk for platforms without a per-invoice lookup.** The import-status check can now run in *search* mode: instead of querying one invoice at a time, it asks the platform for all flows updated since the last check (remembering that date from one run to the next) and updates the matching pending invoices by their stored platform transaction id. This is for platforms — such as Yooz Rising — that offer no per-invoice status lookup. The mode is set in *Settings → e-invoicing → Status retrieval*; the default stays per-invoice, so platforms that already work are unaffected.
+
+### Improvements
+
+- **Send the invoice's transaction type to platforms that require it.** When a platform expects the transaction type at submission (e.g. Yooz Rising's `processingRule`), it is now derived automatically from the invoice — B2B, B2G, B2C or B2B international — and sent, both on the initial send and on a resend.
+- **Connector headers can carry the company code.** A request header can now reference the invoice's company (`{{kco}}`) — for platforms that scope requests by organisation, such as Yooz Rising's `Organization-Id`.
+- **UBL invoices are read from their own template's input folder.** A UBL-source document template now scans `<input>/<template>` — the same per-template convention as XML — instead of a single shared `<input>/ubl`. This lets several UBL templates be scheduled against different folders. *(Existing installs: move UBL files from the shared folder into the template's folder.)*
+
+### Fixes
+
+- **A scheduled UBL scan no longer reprocesses the same file.** After the per-template input change above, a UBL file was left in its input folder once processed, so each scheduled scan picked it up again — an endless loop. A successfully processed UBL file is now removed from its input folder, matching how generated XML inputs are already consumed. Files that fail, and validation-only runs, keep the file.
+
+## 2026.07.16.1 — 2026-07-16 \{#v2026-07-16-1\}
+
+### Improvements
+
+- **Existing UBL invoices are now validated and routed per document type.** When processing a UBL file directly (rather than generating it from a spool), the transaction type — B2B, B2G, B2C or B2B international — is now read from each invoice's own routing note to decide whether Schematron validation runs and whether the invoice is sent to the platform. This matches how the generation flow already behaves, so a batch mixing, say, B2G and B2C invoices is handled correctly file by file. Previously the decision was fixed per template (the default document type). UBL files that carry no routing note fall back to the default document type as before.
+
+### Fixes
+
+- **BIP job scanning now tracks a watermark per JDE host.** JDE job numbers (RJJOBNBR) are unique per execution host, not globally, so a single high-water mark silently skipped jobs from hosts with lower numbers once a higher-numbered host advanced it. The scan now keeps one watermark per host and only scans the hosts you configure. Set them in *Settings → Global → Batch Processing* — add each host with its starting number, or click *Retrieve last job # per host* to seed them all from the current maximum in one click; from then on they advance automatically. *(Existing installs: add your hosts once — an unlisted host is not scanned.)*
+
+## 2026.07.15.1 — 2026-07-15 \{#v2026-07-15-1\}
+
+### New features
+
+- **Buyer electronic address (BT-49) configurable per transaction type.** The buyer electronic address scheme and value can now be set independently of the seller's (BT-34) and can differ by transaction type — B2B, B2G, B2C and B2B international. For each type you choose the scheme and where the value comes from: a source tag (reusing a field the template already maps, such as the buyer's contact email) with a fallback constant used when that tag is empty. This lets B2C and international invoices — which have no SIRET-based electronic address — carry an email address (scheme EM) instead, while domestic B2B/B2G invoices keep their usual routing. It is configured in *UBL Defaults → Scheme IDs*; types you don't list keep the default scheme and the current endpoint value. The *Scheme IDs* reference list also gains an Email (EM) entry. *(Requires the XSL framework redeploy.)*
 
 ## 2026.07.13.1 — 2026-07-13 \{#v2026-07-13-1\}
 

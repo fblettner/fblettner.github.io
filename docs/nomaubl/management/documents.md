@@ -210,6 +210,12 @@ When the group is filled in, the lookup runs **before** the regex-on-`cbc:ID` pa
 
 The bundled `received-ubl` template ships with this group **present but empty**: pick the connector and the target in *Settings → Document Templates*, fill in the parameters, and the receive-side flow is wired end-to-end.
 
+### Input folder and routing *(when Source = UBL)*
+
+A UBL-source template scans its **own** input folder `<input>/<template>` — the same per-template convention as an XML template — so several UBL templates can run on schedule against different folders. A UBL file that processes successfully is removed from the folder; a file that fails, and validation-only runs, keep it.
+
+Each UBL invoice is validated and routed by **its own** transaction type — B2B, B2G, B2C or B2B international — read from the invoice's routing note, so a batch mixing types is handled file by file. A file that carries no routing note uses the template's default document type.
+
 ### Connector source *(when Source = Connector)*
 
 When *Source* is `Connector`, NomaUBL fetches the document data live from a [SQL connector](../configuration/sql-connectors.md) or an [API connector](../configuration/api-connectors.md) instead of reading a file. The same XSLT pipeline then turns the result into UBL — no spool, no file watcher, no transient directory.
