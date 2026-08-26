@@ -58,7 +58,7 @@ La liste complète est gérée dans la liste de référence *profile-ids* (*Conf
 
 ## Sélection par règles
 
-L'éditeur de règles est identique à celui de l'onglet [Type de facture](./invoice-type.md) — combinateur `AND` / `OR`, mêmes dix opérateurs (`gt0`, `lt0`, `ge0`, `le0`, `eq`, `ne`, `not-empty`, `empty`, `contains`, `not-contains`), évaluation de haut en bas. Le sélecteur de résultat reprend les valeurs *profile-ids*.
+L'éditeur de règles est identique à celui de l'onglet [Type de facture](./invoice-type.md) — combinateur `AND` / `OR`, mêmes dix opérateurs (`gt0`, `lt0`, `ge0`, `le0`, `eq`, `ne`, `not-empty`, `empty`, `contains`, `not-contains`), évaluation de haut en bas avec la première règle satisfaite qui l'emporte, et des poignées pour réordonner la liste et placer les cas les plus spécifiques en premier. Le sélecteur de résultat reprend les valeurs *profile-ids*.
 
 Les règles combinent typiquement la classification produit / ligne de la source avec des indicateurs de cycle de vie pour déterminer le bon code Cadre.
 

@@ -121,6 +121,7 @@ Each digest is one row in the catalogue. The edit pane has four sections.
 | Field | Required | What |
 |---|---|---|
 | **Name** | yes | Free text. Shown in the catalogue list and at the top of the email body. Example: *Accounting · ACME*. |
+| **Report** | yes (default: `Integration errors`) | What the digest reports. **Integration errors** collects the failing events from the [Integration Errors](../../application/integration-errors.md) page — the historical behaviour. **All archived invoices** instead reports every archived invoice in the window, and the attached spreadsheet carries the [E-Documents](../../application/edocuments.md) columns and honours the per-column filters below, so a digest can double as a daily archive extract. |
 | **Recipients** | yes | One or more email addresses, comma- or semicolon-separated. Every address gets the same email — there's no per-address customisation here; create another digest if recipients should see different cuts. |
 | **Enabled** | yes (default: `on`) | When `off`, the digest is kept in the catalogue but skipped at send time. Useful for pausing a digest during a maintenance window without losing the configuration. |
 
@@ -144,7 +145,7 @@ A small chip group identical to the [Integration Errors](../../application/integ
 | `WARNING` | Lower-severity issues that don't block submission (deprecated tax codes, optional fields missing). |
 | `INFO` | Verbose — typically used for diagnostic digests during incident response. |
 
-Pick **one** severity (or `All`). A multi-severity digest is two separate digest rows in the catalogue.
+Pick **one** severity (or `All`). A multi-severity digest is two separate digest rows in the catalogue. The severity filter applies to the **Integration errors** report only — the *All archived invoices* report has no severity and ignores this chip group.
 
 ### 4. Per-column equality filters
 

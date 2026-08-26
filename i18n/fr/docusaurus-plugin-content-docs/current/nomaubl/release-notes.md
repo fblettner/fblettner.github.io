@@ -10,7 +10,11 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-07-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-24</span></a>
+  <a href="#v2026-08-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.08.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-26</span></a>
+  <a href="#v2026-08-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-25</span></a>
+  <a href="#v2026-08-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-19</span></a>
+  <a href="#v2026-08-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-18</span></a>
+  <a href="#v2026-07-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-24</span></a>
   <a href="#v2026-07-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-20</span></a>
   <a href="#v2026-07-17-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.17.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-17</span></a>
   <a href="#v2026-07-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-16</span></a>
@@ -104,6 +108,58 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 </div>
 
 ---
+
+## 2026.08.26.1 — 2026-08-26 \{#v2026-08-26-1\}
+
+### Nouveautés
+
+- **Le résumé quotidien peut lister toutes les factures archivées, pas seulement les erreurs.** Chaque résumé quotidien dispose désormais d'une option **Rapport** : *Erreurs d'intégration* (le résumé existant, les factures ayant des erreurs de validation dans la fenêtre) ou *Toutes les factures archivées* (chaque facture créée dans la fenêtre). Le rapport documents joint les colonnes e-documents — numéro et type de document, société, activité, sous-type, envoi PA, client, montant, dates, fichier source, UUID PA, statut et motif — et peut être restreint avec les mêmes filtres de colonne (par ex. sous-type ou activité). Le filtre de gravité ne s'applique qu'au rapport d'erreurs.
+
+## 2026.08.25.1 — 2026-08-25 \{#v2026-08-25-1\}
+
+### Nouveautés
+
+- **Connecteurs API SOAP / XML.** Un point de terminaison de connecteur API peut désormais envoyer un corps de requête XML (SOAP) : choisissez le type de contenu `text/xml` ou `application/soap+xml`, collez l'enveloppe comme corps avec des `{{variables}}`, et l'en-tête Content-Type est renseigné automatiquement. Les valeurs insérées dans le corps sont échappées en XML : un `&` ou un `<` dans un champ (par ex. une raison sociale) ne peut plus casser l'enveloppe. Les réponses sont lues via les correspondances `xml` / XPath existantes, si bien qu'un service SOAP s'appelle depuis les actions de notification et les connecteurs comme n'importe quelle API REST.
+
+### Améliorations
+
+- **Les listes de factures et de documents sont bien plus rapides sur les grandes tables.** Filtrer une archive volumineuse (des millions de lignes) ne provoque plus de balayage complet : un filtre sur un numéro de document entièrement numérique interroge désormais la clé primaire, les colonnes de code/clé (type de document, société, clé alpha) utilisent leurs index, et la recherche texte porte par défaut sur le début de la valeur — saisir explicitement `%…%` effectue toujours une recherche sur toute la chaîne à la demande.
+- **Le débogage des connecteurs affiche davantage.** Lorsque le débogage d'un connecteur est activé, la ligne de requête indique désormais les en-têtes envoyés (valeurs sensibles masquées), et les corps de requête/réponse sont journalisés en entier (limités par un `debugBodyLimit` optionnel) — de quoi voir une enveloppe ou une erreur SOAP complète.
+
+### Corrections
+
+- **Les actions de notification n'envoient plus le remplissage de la base aux API et aux emails.** Les valeurs lues dans des colonnes de largeur fixe étaient transmises aux actions API (et affichées dans les emails) avec un remplissage d'espaces en fin, que certains services rejetaient. Elles sont désormais nettoyées avant usage ; l'espacement interne est préservé.
+- **Une action de notification en échec indique désormais la raison.** Lorsqu'une action API échoue, l'email de notification, l'entrée du portail et le résultat du test de la règle incluent maintenant le code HTTP et le corps de la réponse (par ex. l'erreur SOAP), au lieu de signaler seulement l'échec.
+
+## 2026.08.19.1 — 2026-08-19 \{#v2026-08-19-1\}
+
+### Améliorations
+
+- **Le motif de rejet et l'action attendue sont désormais disponibles comme colonnes de liste.** Le motif de rejet de la PA (code et libellé), l'action attendue (code et libellé) et la note de statut peuvent maintenant être ajoutés aux vues liste des factures et des e-documents et filtrés, au même titre que les colonnes existantes.
+
+### Corrections
+
+- **Le PDF lisible n'affiche plus de livraison dans l'en-tête lorsqu'il n'y en a pas.** Lorsqu'une facture ne porte des informations de livraison que sur ses lignes (et aucune au niveau de l'en-tête), le PDF lisible affichait la livraison de la première ligne dans le bloc livraison de l'en-tête. Ce bloc n'apparaît désormais que si une livraison est réellement définie au niveau de l'en-tête ; la livraison au niveau ligne n'est pas affectée.
+- **Le retraitement d'une facture archivée n'échoue plus sur une esperluette isolée.** Une source stockée dans l'archive contenant un `&` non échappé (par ex. une raison sociale comme *Research & Industry*) échouait au parsing lors du retraitement. L'entrée est désormais réparée en amont — avant tout pré-transform d'entrée et avant le parsing : la facture se traite même lorsqu'un pré-transform est configuré, et son archive est réécrite proprement. Les sources bien formées ne sont pas modifiées.
+- **Les avoirs de facture d'acompte (503) et les avoirs auto-facturés affacturés (502) sont désormais émis en tant qu'avoirs.** Les codes de type de facture `502` et `503` produisaient une facture UBL au lieu d'un avoir, car la liste des codes d'avoir ne les reconnaissait pas. Les deux génèrent désormais correctement un avoir. La liste des codes a par ailleurs été déplacée dans le socle, de sorte que les ajouts futurs atteignent chaque modèle lors de la mise à niveau, sans édition manuelle des valeurs par défaut de chaque modèle. *(Nécessite le redéploiement du socle XSL.)*
+
+## 2026.08.18.1 — 2026-08-18 \{#v2026-08-18-1\}
+
+### Nouveautés
+
+- **Numéro d'ordre de vente (BT-14) et sa date sur la référence de bon de commande.** La référence de commande peut désormais porter aussi le numéro d'ordre de vente et une date, tous deux définis dans l'éditeur XSL à côté de la référence de bon de commande. *(Nécessite le redéploiement du socle XSL.)*
+- **Identifiant standard de l'article sur les lignes (BT-157).** Une ligne de facture peut désormais porter un identifiant standard d'article tel qu'un GTIN, dont le schéma est choisi dans la liste ISO 6523 (par ex. `0160` pour le GTIN). La valeur provient de la source, le schéma d'une liste déroulante — le tout se configure dans l'éditeur XSL. *(Nécessite le redéploiement du socle XSL.)*
+- **Réordonner les règles de type de facture et de profil par glisser-déposer.** Dans l'éditeur des valeurs UBL par défaut, les règles qui déterminent le type de facture (380, 381…) ou le profil peuvent maintenant être réordonnées en les faisant glisser, sans avoir à les supprimer et les recréer ni à modifier le JSON. L'ordre compte — la première règle valide l'emporte.
+
+### Corrections
+
+- **Les adresses multilignes impriment chaque ligne sur sa propre rangée.** Les lignes d'adresse au-delà de la première sont désormais séparées par des sauts de ligne : le PDF lisible affiche chacune sur sa propre rangée au lieu de les accoler sur une seule ligne. *(Nécessite le redéploiement du socle XSL.)*
+- **Le filtrage multi-valeur fonctionne pour toute colonne adossée à une liste.** Sélectionner plusieurs valeurs dans un filtre basé sur une liste (code activité, et toute colonne dotée d'une liste de référence ou personnalisée) les prend désormais toutes en compte, au lieu de ne rien renvoyer. Auparavant, seul le filtre de statut gérait les sélections multiples.
+
+- **Les factures à montant nul sont désormais valides.** Une facture dont toutes les lignes sont à zéro émet maintenant la ventilation de TVA obligatoire et conserve ses lignes en lignes de détail : elle passe les règles de ventilation de TVA (BR-CO-18, BR-FREXT-S-01) au lieu d'être rejetée. Les lignes imbriquées sous un groupe de livraison sont désormais correctement prises en compte par les totaux et la logique TVA. *(Nécessite le redéploiement du socle XSL.)*
+- **Les pièces jointes PDF intégrées sont placées correctement en présence d'une référence de projet ou de contrat.** Une pièce jointe injectée (copie lisible, RIB…) se place désormais à la bonne position dans la séquence UBL — avant la référence de projet et le vendeur — au lieu d'après, corrigeant un rejet d'ordre de schéma (`cvc-complex-type.2.4.a`) observé lorsque les références acheteur, commande et projet étaient toutes renseignées.
+- **Les notes de ligne conservent leurs sauts de ligne.** Une note multiligne rattachée à une ligne de facture conserve désormais ses sauts de ligne jusqu'à l'UBL au lieu d'être réduite à une seule ligne. *(Nécessite le redéploiement du socle XSL.)*
+- **Le PDF lisible n'affiche plus le marqueur interne sur une note de ligne.** Une note de ligne portant un marqueur interne `#CODE#` (par ex. `#ZZZ#`) n'affiche plus que son texte sur le PDF, comme le faisaient déjà les notes au niveau du document.
 
 ## 2026.07.24.1 — 2026-07-24 \{#v2026-07-24-1\}
 

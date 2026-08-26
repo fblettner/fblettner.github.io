@@ -25,7 +25,11 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-06-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
   <a href="#v2026-06-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-17</span></a>
   <a href="#v2026-06-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-16</span></a>
-  <a href="#v2026-07-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.07.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-24</span></a>
+  <a href="#v2026-08-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.08.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-26</span></a>
+  <a href="#v2026-08-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-25</span></a>
+  <a href="#v2026-08-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-19</span></a>
+  <a href="#v2026-08-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-18</span></a>
+  <a href="#v2026-07-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-24</span></a>
   <a href="#v2026-07-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-20</span></a>
   <a href="#v2026-07-17-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.17.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-17</span></a>
   <a href="#v2026-07-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-16</span></a>
@@ -289,6 +293,58 @@ Actionable error when a BI Publisher RTF subtemplate is missing, and a starter m
 - **Starter manifest generator for the PDF → XML adapter.** New CLI mode `-pdfManifest <input.pdf> <output.manifest.xml>` (also `nomaubl.sh pdf-manifest` / `nomaubl.cmd pdf-manifest`) analyses the PDF and emits a JDE-shape manifest XML, for the case where the customer has no native JDE XML sample of the same R-program to feed `-pdf2xml`. Inferred element names use the printed RC label text where available and the OWObject DD alias as fallback; the customer edits the file to give meaningful names, then reuses it as the 3rd argument of `-pdf2xml`. The root element is derived from the PDF filename (typical JDE spool convention) and multi-line text fields keep a single element name across all their lines via a sticky cache.
 
 ---
+
+## 2026.08.26.1 — 2026-08-26 \{#v2026-08-26-1\}
+
+### New features
+
+- **Daily digest can report all archived invoices, not just errors.** Each daily digest now has a **Report** option: *Integration errors* (the existing digest, invoices with validation errors in the window) or *All archived invoices* (every invoice created in the window). The documents report attaches the e-documents columns — document number, type, company, activity, sub-type, send-to-PA, customer, amount, dates, source file, PA UUID, status and reason — and can be narrowed with the same column filters (e.g. sub-type or activity). The severity filter applies to the errors report only.
+
+## 2026.08.25.1 — 2026-08-25 \{#v2026-08-25-1\}
+
+### New features
+
+- **SOAP / XML API connectors.** An API connector endpoint can now send an XML (SOAP) request body: pick `text/xml` or `application/soap+xml` as the content-type, paste the envelope as the body with `{{placeholders}}`, and the Content-Type header is set automatically. Values substituted into the body are XML-escaped, so a `&` or `<` in a field (e.g. a customer name) can no longer break the envelope. Responses are read with the existing `xml` / XPath mappings, so SOAP services can be called from notification actions and connectors like any REST API.
+
+### Improvements
+
+- **Invoice and document lists are much faster on large tables.** Filtering a big archive (millions of rows) no longer forces a full-table scan: an all-digits document-number filter now seeks the primary key, code/key columns (document type, company, alpha key) use their indexes, and text search matches from the start of the value by default — typing explicit `%…%` still does a full substring search on demand.
+- **Connector debug shows more.** With a connector's debug enabled, the request log line now lists the request headers (credential values masked), and request/response bodies are logged in full (bounded by an optional `debugBodyLimit`) — enough to see a complete SOAP envelope or fault.
+
+### Fixes
+
+- **Notification actions no longer send database padding to APIs and emails.** Values read from fixed-width database columns were passed to API actions (and shown in emails) with trailing blank padding, which some services rejected. They are now trimmed before use; internal spacing is preserved.
+- **A failed notification action now shows why.** When an API action fails, the notification email, portal entry and rule Test result now include the HTTP status and the response body (e.g. the SOAP fault), instead of only reporting that the action failed.
+
+## 2026.08.19.1 — 2026-08-19 \{#v2026-08-19-1\}
+
+### Improvements
+
+- **Rejection reason and expected action are now available as list columns.** The PA rejection reason (code and label), the expected action (code and label) and the status note can now be added to the invoice and e-documents list views and filtered on, alongside the existing columns.
+
+### Fixes
+
+- **The readable PDF no longer shows a delivery in the header when there is none.** When an invoice carries delivery details only on its lines (and none at header level), the readable PDF used to paint the first line's delivery in the header delivery box. The header delivery box now appears only when a header-level delivery is actually set; line-level delivery is unaffected.
+- **Reprocessing an archived invoice no longer fails on a stray ampersand.** A source stored in the invoice archive that held an unescaped `&` (e.g. a company name like *Research & Industry*) failed to parse on reprocessing. The input is now repaired up front — before any input pre-transform and before parsing — so the invoice processes even when a pre-transform is configured, and its archive is rewritten clean. Well-formed sources are untouched.
+- **Credit notes for prepayment (503) and self-billed factored credit notes (502) are now emitted as credit notes.** Invoice type codes `502` and `503` produced a UBL Invoice instead of a Credit Note, because the credit-note code list didn't recognize them. Both now correctly produce a Credit Note. The code list has also been moved into the framework so future additions reach every template on upgrade, without editing each template's defaults by hand. *(Requires the XSL framework redeploy.)*
+
+## 2026.08.18.1 — 2026-08-18 \{#v2026-08-18-1\}
+
+### New features
+
+- **Sales order reference (BT-14) and its date on the purchase order reference.** The order reference can now also carry the sales order number and a reference date, both set in the XSL editor next to the purchase order reference. *(Requires the XSL framework redeploy.)*
+- **Standard item identifier on invoice lines (BT-157).** An invoice line can now carry a standard item identifier such as a GTIN, with its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN). The value comes from the source, the scheme from a dropdown — configured in the XSL editor. *(Requires the XSL framework redeploy.)*
+- **Reorder invoice-type and profile rules by drag and drop.** In the UBL defaults editor, the rules that set the invoice type (380, 381…) or the profile can now be reordered by dragging them, instead of deleting and recreating them or editing the JSON. Order matters — the first matching rule wins.
+
+### Fixes
+
+- **Multi-line addresses print each line on its own row.** Address lines beyond the first are now separated by line breaks, so the readable PDF shows each on its own row instead of running them together on one line. *(Requires the XSL framework redeploy.)*
+- **Multi-select filtering now works for any list-backed column.** Selecting several values in a list-driven filter (activity code, and any other column with a reference or custom list assigned) now matches all of them, instead of silently returning nothing. Previously only the status filter honored multiple selections.
+
+- **Fully zero-amount invoices now validate.** An invoice whose lines are all zero now emits the mandatory VAT breakdown and keeps its lines as detail lines, so it passes the VAT-breakdown rules (BR-CO-18, BR-FREXT-S-01) instead of being rejected. Lines nested under a delivery group are now correctly accounted for by the totals and VAT logic. *(Requires the XSL framework redeploy.)*
+- **Embedded PDF attachments are placed correctly when a project or contract reference is present.** An injected attachment (readable copy, RIB…) now lands in its correct position in the UBL sequence — before the project reference and the seller — instead of after it, fixing a schema-ordering rejection (`cvc-complex-type.2.4.a`) seen when the buyer, order and project references were all set.
+- **Line notes keep their line breaks.** A multi-line note attached to an invoice line now keeps its line breaks through to the UBL instead of being flattened to a single line. *(Requires the XSL framework redeploy.)*
+- **The readable PDF no longer shows the internal marker on a line note.** A line note carrying an internal `#CODE#` marker (e.g. `#ZZZ#`) now shows only its text on the PDF, as the document-level notes already did.
 
 ## 2026.07.24.1 — 2026-07-24 \{#v2026-07-24-1\}
 

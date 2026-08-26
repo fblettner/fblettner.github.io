@@ -204,6 +204,10 @@ Each input narrows the list as you type — the search updates after a brief pau
 | **Customer name** | The buyer party name. |
 | **Country** | ISO 3166 two-letter code of the counterparty (e.g. `FR`, `DE`). Pre-filled automatically when the page is opened from a [VAT Declaration](./vat-declaration.md) drill-down. |
 
+:::info[How the text filters match]
+A text filter matches from the **start** of the value and uses the column's index, so the list stays fast on a large table. To search for text anywhere in the value, wrap it in percent signs — `%acme%` matches *acme* wherever it appears, at the cost of a full scan. The **Doc** filter takes a shortcut: an all-digits value seeks the document number directly rather than scanning. Filters on columns backed by a reference list (status, routing…) accept **several values at once** — pick more than one and the list shows rows matching any of them.
+:::
+
 ### BAR routing dropdown
 
 A separate dropdown filters by **BAR routing** code (`B2B`, `B2G`, `B2BINT`, `B2C`, `OUTOFSCOPE`, `ARCHIVEONLY`, `DOCUMENT`) — the channel classification documented in *UBL Defaults → Document Type / BAR Routing*.
@@ -560,6 +564,8 @@ The **lifecycle** is the audit trail of every status the invoice has been in. Ea
 - Optional details for refusals: rejection reason code + label, expected action code + label, additional status note.
 
 The lifecycle is append-only — events are added by the *Sync → Retrieve Statuses* sweep and never modified.
+
+The three refusal fields — **rejection reason**, **expected action** and **status note** — also live in the column catalog, so they can be pinned as list columns and filtered from the [List Views](../configuration/list-views.md) editor when a team needs to scan or sort by refusal reason without opening each invoice.
 
 <div style={{margin: '22px 0', position: 'relative', paddingLeft: '28px'}}>
   <div style={{position: 'absolute', left: '9px', top: '14px', bottom: '18px', width: '2px', background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)'}} />

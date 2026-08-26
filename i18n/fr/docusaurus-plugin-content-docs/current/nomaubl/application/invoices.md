@@ -204,6 +204,10 @@ Chaque champ filtre la liste à la saisie — la recherche se déclenche après 
 | **Nom du client** | Nom de la partie acheteur. |
 | **Pays** | Code pays ISO 3166 à deux lettres de la contrepartie (par ex. `FR`, `DE`). Pré-rempli automatiquement quand la page est ouverte depuis un drill-down de la [Déclaration de TVA](./vat-declaration.md). |
 
+:::info[Comment les filtres texte trouvent les lignes]
+Un filtre texte correspond depuis le **début** de la valeur et utilise l'index de la colonne : la liste reste rapide sur une grande table. Pour chercher un texte n'importe où dans la valeur, encadrez-le de signes pourcent — `%acme%` trouve *acme* où qu'il apparaisse, au prix d'un parcours complet. Le filtre **Doc** prend un raccourci : une valeur entièrement numérique recherche le numéro de document directement au lieu de parcourir. Les filtres sur les colonnes adossées à une liste de référence (statut, routage…) acceptent **plusieurs valeurs à la fois** — sélectionnez-en plusieurs et la liste affiche les lignes qui correspondent à l'une d'elles.
+:::
+
 ### Sélecteur de routage BAR
 
 Une déroulante distincte filtre par code **BAR** (`B2B`, `B2G`, `B2BINT`, `B2C`, `OUTOFSCOPE`, `ARCHIVEONLY`, `DOCUMENT`) — la classification de canal documentée dans *UBL Defaults → Document Type / BAR Routing*.
@@ -560,6 +564,8 @@ Le **cycle de vie** est la trace d'audit de tous les statuts traversés par la f
 - Pour les refus, détails facultatifs : code et libellé du motif de rejet, code et libellé de l'action attendue, note de statut additionnelle.
 
 Le cycle de vie est en mode ajout seul — les événements sont créés par le job *Synchronisation → Récupérer les statuts* et ne sont jamais modifiés.
+
+Les trois champs de refus — **motif de rejet**, **action attendue** et **note de statut** — figurent aussi dans le catalogue de colonnes : on peut les épingler comme colonnes de liste et les filtrer depuis l'éditeur de [Vues de liste](../configuration/list-views.md) quand une équipe doit balayer ou trier par motif de refus sans ouvrir chaque facture.
 
 <div style={{margin: '22px 0', position: 'relative', paddingLeft: '28px'}}>
   <div style={{position: 'absolute', left: '9px', top: '14px', bottom: '18px', width: '2px', background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)'}} />

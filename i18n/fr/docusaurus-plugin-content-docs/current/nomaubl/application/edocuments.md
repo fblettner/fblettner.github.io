@@ -59,7 +59,7 @@ Chaque ligne est un document tel qu'il a été reçu ; l'ouvrir montre le **spoo
 
 Les colonnes par défaut sont les champs de l'archive : **numéro de document**, **type**, **société**, **activité**, **sous-type**, un indicateur **envoi PA**, **client**, **montant**, **date du document**, **date d'archivage**, **fichier source** et l'**UUID PA**. Les filtres portent sur l'**activité**, le **client**, le **fichier source** et la **période** habituelle.
 
-Les colonnes et filtres se règlent depuis *Paramètres → Vues de liste → E-Documents* — le même mécanisme de vue de liste qu'ailleurs : épinglez les colonnes que votre équipe consulte et masquez le reste.
+Les colonnes et filtres se règlent depuis *Paramètres → Vues de liste → E-Documents* — le même mécanisme de vue de liste qu'ailleurs : épinglez les colonnes que votre équipe consulte et masquez le reste. Le catalogue porte aussi les champs de refus — **motif de rejet**, **action attendue** et **note de statut** — pour qu'une vue d'archive affiche en colonne pourquoi un document a été refusé, sans avoir à l'ouvrir un par un.
 
 ---
 

@@ -71,7 +71,7 @@ Chaque **règle** comporte :
 
 ### Ordre d'évaluation
 
-Les règles sont évaluées **de haut en bas**. La première règle dont la combinaison de conditions est satisfaite l'emporte. La valeur par défaut n'est utilisée que quand aucune règle ne s'applique. Pour réordonner, supprimer et recréer — l'éditeur ne propose pas de poignée de glisser-déposer pour le moment.
+Les règles sont évaluées **de haut en bas**. La première règle dont la combinaison de conditions est satisfaite l'emporte. La valeur par défaut n'est utilisée que quand aucune règle ne s'applique. L'ordre compte donc — placez les cas les plus spécifiques en premier. Faites glisser une règle par sa poignée pour réordonner la liste ; le nouvel ordre est enregistré avec le reste de l'onglet.
 
 ---
 

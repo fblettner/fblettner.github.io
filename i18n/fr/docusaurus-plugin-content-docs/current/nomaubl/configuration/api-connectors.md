@@ -20,7 +20,7 @@ Cette page s'applique à des documents issus de n'importe quel système source �
 Deux ajouts sur cette page :
 
 - **Nouvel onglet Webhooks** — configure la façon dont la PA pousse les mises à jour de statut vers NomaUBL. Les requêtes sont signées HMAC avec un secret partagé et POSTées sur `/api/webhook/{connector}/status` ; le vérificateur déduplique les ré-essais « at-least-once » sur l'event id du payload et applique le statut résolu à la facture correspondante. L'onglet propose aussi les surcharges de chemins JSON pour les champs invoice id, status et event id, ainsi qu'une table de correspondance qui traduit le vocabulaire de la PA vers l'ensemble logique `success` / `pending` / `failed`.
-- **Content-Type par endpoint** — chaque endpoint peut désormais déclarer `application/json` *(défaut)* ou `multipart/form-data`. Le builder multipart transforme le corps en liste de parts (`name=value`, `file=@{{filePath}};filename=…;contentType=…`), ce qui permet aux endpoints api-connecteur de piloter des PA qui attendent un upload `multipart/form-data` (par exemple IOPOLE).
+- **Content-Type par endpoint** — chaque endpoint déclare `application/json` *(défaut)*, `multipart/form-data`, ou un type XML (`text/xml` / `application/soap+xml`). Le builder multipart transforme le corps en liste de parts (`name=value`, `file=@{{filePath}};filename=…;contentType=…`), ce qui permet à un endpoint de piloter une PA qui attend un upload `multipart/form-data` (par exemple IOPOLE) ; un type XML envoie une enveloppe SOAP / XML telle quelle, les valeurs des placeholders étant échappées XML, de quoi appeler aussi un service web SOAP historique.
 
 `ImportStatusHandler` a aussi été relaxé — tout statut non `failed` / non `pending` est traité comme un succès, ce qui couvre les vocabulaires comme `EMITTED` / `RECEIVED` de IOPOLE sans configuration par PA.
 :::
@@ -132,7 +132,7 @@ L'éditeur comporte **cinq onglets** :
 | **Base URL** | URL racine de l'API cible (par ex. `https://api.example.com:9300`). Tous les chemins d'endpoint y sont ajoutés. |
 | **Timeout (ms)** | Délai d'expiration des requêtes HTTP en millisecondes. Valeur par défaut `30000` (30 s). |
 | **SSL Verify** | `true` / `false` — active la validation du certificat TLS du serveur. À positionner à `false` uniquement en environnement non-production utilisant des certificats auto-signés. |
-| **Debug** | `Y` / `N` (défaut `N`). Quand `Y`, chaque appel passant par ce connecteur écrit une trace requête + réponse sur une ligne — URL, code HTTP et aperçu du corps — dans le journal du service. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête et la forme de la réponse ; à désactiver une fois le connecteur stable. Une trace uniforme remplace l'ancien log ponctuel de *import-status* et *invoice-statuses*. |
+| **Debug** | `Y` / `N` (défaut `N`). Quand `Y`, chaque appel passant par ce connecteur est tracé dans le journal du service — l'URL et le code HTTP, les **en-têtes** de requête et de réponse (l'autorisation et les autres en-têtes sensibles étant masqués), et les **corps** complets de requête et de réponse, chacun tronqué à la longueur `debugBodyLimit` pour qu'un gros contenu ne noie pas le journal. À activer pendant le câblage d'une nouvelle plateforme pour vérifier la substitution d'URL, les paramètres de requête, les en-têtes et les corps exacts échangés ; à désactiver une fois le connecteur stable. |
 
 ### Default Headers
 
@@ -221,9 +221,9 @@ Tous les autres placeholders doivent être **déclarés dans la section Paramete
 | **Label** | Libellé lisible affiché dans l'éditeur et dans les listes déroulantes pendant le choix d'un endpoint (par ex. `Get Order Lines`). |
 | **Method** | Méthode HTTP (`GET` / `POST` / `PUT` / `DELETE` / `PATCH`). |
 | **URL path** | Chemin de l'endpoint ajouté à la **Base URL** du connecteur (par ex. `/v7.3/orchestrator/{{name}}`). |
-| **Content-Type** | `application/json` *(défaut)* ou `multipart/form-data`. La variante multipart transforme le corps en liste de parts — voir *Corps multipart* ci-dessous. |
+| **Content-Type** | `application/json` *(défaut)*, `multipart/form-data`, ou un type XML (`text/xml` / `application/soap+xml`). La variante multipart transforme le corps en liste de parts — voir *Corps multipart* ci-dessous. Un type XML envoie le corps tel quel après substitution des `{{placeholder}}`, les valeurs substituées étant échappées XML pour qu'une enveloppe SOAP ou XML reste bien formée — voir *Corps SOAP / XML* ci-dessous. |
 | **Extra headers** | Paires `Key:Value` séparées par des points-virgules, ajoutées aux en-têtes par défaut du connecteur (ou les surchargeant) (par ex. `X-Custom:value;Authorization:Bearer {{token}}`). |
-| **Body** | Corps de requête — modèle JSON avec placeholders `{{param}}`. Le bouton **Format JSON** met en forme la valeur. Pour `multipart/form-data`, le corps est lu comme une part par ligne (`name=value` ou `file=@{{filePath}};filename=…;contentType=…`). |
+| **Body** | Corps de requête — modèle JSON avec placeholders `{{param}}`. Le bouton **Format JSON** met en forme la valeur. Pour `multipart/form-data`, le corps est lu comme une part par ligne (`name=value` ou `file=@{{filePath}};filename=…;contentType=…`). Pour un type XML, le corps est l'enveloppe SOAP / XML elle-même, avec des placeholders `{{param}}` à l'intérieur des éléments. |
 | **Query params** | Modèle de chaîne de requête avec placeholders `{{param}}` (par ex. `pageSize={{pageSize}}&page={{page}}`). |
 | **Response field** | Chemin optionnel en notation pointée (par ex. `data.items`) qui extrait un sous-arbre de la réponse — utile pour ne récupérer qu'un fragment du payload. |
 | **Response type** | `JSON` *(défaut)* ou `XML`. En mode `XML`, *Response field* et *Response mappings* sont lus comme du **XPath** : une plateforme qui répond à import-status par un `ApplicationResponse` UBL — statut dans `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — s'interroge comme une plateforme JSON. Les préfixes `cac` / `cbc` / `ext` sont reconnus ; utilisez `//*[local-name()='X']` pour le reste. |
@@ -246,6 +246,21 @@ Trois placeholders portent le document dans la part :
 - `{{filePath}}` — le chemin du fichier UBL sur disque. À l'**envoi initial**, c'est le fichier d'entrée ; au **renvoi**, NomaUBL écrit d'abord le blob UBL stocké dans un fichier temporaire, donc `{{filePath}}` fonctionne de la même façon et une seule configuration de connecteur sert les deux (le fichier temporaire est nettoyé automatiquement).
 - `{{content}}` — le base64 de l'UBL, pour les plateformes qui prennent les octets en ligne dans un corps JSON plutôt qu'en part fichier.
 - `{{docName}}` — un nom `<doc>_<dct>_<kco>` sanitisé, pratique pour l'en-tête `filename`.
+
+#### Corps SOAP / XML
+
+Quand le **Content-Type** vaut `text/xml` ou `application/soap+xml`, le corps est une enveloppe SOAP ou XML envoyée telle quelle. Les valeurs `{{placeholder}}` sont substituées à leur place et échappées XML (`&`, `<`, `>`, guillemets) : une valeur contenant des caractères réservés ne peut donc pas casser l'enveloppe. Associez ce réglage à **Response type** `XML` pour lire la réponse par XPath — la requête et la réponse sont alors en XML de bout en bout, ce qu'attend un service web SOAP historique.
+
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:inv="urn:pa:invoice">
+  <soapenv:Body>
+    <inv:SubmitInvoice>
+      <inv:Reference>{{fedoc}}</inv:Reference>
+      <inv:Payload>{{content}}</inv:Payload>
+    </inv:SubmitInvoice>
+  </soapenv:Body>
+</soapenv:Envelope>
+```
 
 ### Response Mappings
 

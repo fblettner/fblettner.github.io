@@ -20,7 +20,7 @@ This page applies to documents from any source system — JD Edwards, SAP, NetSu
 Two additions on this page:
 
 - **New Webhooks tab** — configure how the PA pushes status updates back to NomaUBL. Requests are HMAC-signed with a shared secret and POSTed to `/api/webhook/{connector}/status`; the verifier dedupes at-least-once retries on the payload's event id and applies the resolved status to the matching invoice. The tab also exposes JSON path overrides for the invoice id, status and event id fields, plus a status map from the PA's vocabulary to the logical `success` / `pending` / `failed` set.
-- **Per-endpoint Content-Type** — endpoints can now declare `application/json` *(default)* or `multipart/form-data`. The multipart builder turns the body into a list of parts (`name=value`, `file=@{{filePath}};filename=…;contentType=…`), so api-connector endpoints can drive PAs that expect a `multipart/form-data` invoice upload (e.g. IOPOLE).
+- **Per-endpoint Content-Type** — each endpoint declares `application/json` *(default)*, `multipart/form-data`, or an XML type (`text/xml` / `application/soap+xml`). The multipart builder turns the body into a list of parts (`name=value`, `file=@{{filePath}};filename=…;contentType=…`), so an endpoint can drive a PA that expects a `multipart/form-data` invoice upload (e.g. IOPOLE); an XML type sends a SOAP / XML envelope verbatim with the placeholder values XML-escaped, so a legacy SOAP web service can be called too.
 
 `ImportStatusHandler` was also relaxed — non-`failed` / non-`pending` statuses are treated as success, so vocabularies like IOPOLE's `EMITTED` / `RECEIVED` work without per-PA config.
 :::
@@ -132,7 +132,7 @@ The editor has **five tabs**:
 | **Base URL** | Root URL of the target API (e.g. `https://api.example.com:9300`). All endpoint paths are appended to this URL. |
 | **Timeout (ms)** | HTTP request timeout in milliseconds. Default `30000` (30 s). |
 | **SSL Verify** | `true` / `false` — whether to validate the server's TLS certificate. Set to `false` only in non-production environments using self-signed certificates. |
-| **Debug** | `Y` / `N` (default `N`). When `Y`, every call through this connector prints a one-line request + response trace — URL, HTTP status and a body preview — to the service log. Turn it on while wiring a new platform to check URL substitution, query parameters and the response shape; turn it off once the connector is stable. One uniform trace replaces the old ad-hoc logging in *import-status* and *invoice-statuses*. |
+| **Debug** | `Y` / `N` (default `N`). When `Y`, every call through this connector traces to the service log — the URL and HTTP status, the request and response **headers** (authorization and other sensitive headers masked), and the full request and response **bodies**, each capped at the `debugBodyLimit` length so a large payload doesn't flood the log. Turn it on while wiring a new platform to check URL substitution, query parameters, headers and the exact bodies exchanged; turn it off once the connector is stable. |
 
 ### Default Headers
 
@@ -221,9 +221,9 @@ All other placeholders must be **declared in the endpoint's Parameters section**
 | **Label** | Human-readable label shown in the editor and in dropdowns when a user picks an endpoint (e.g. `Get Order Lines`). |
 | **Method** | HTTP method (`GET` / `POST` / `PUT` / `DELETE` / `PATCH`). |
 | **URL path** | Endpoint path appended to the connector's **Base URL** (e.g. `/v7.3/orchestrator/{{name}}`). |
-| **Content-Type** | `application/json` *(default)* or `multipart/form-data`. The multipart variant turns the body into a list of parts — see *Multipart bodies* below. |
+| **Content-Type** | `application/json` *(default)*, `multipart/form-data`, or an XML type (`text/xml` / `application/soap+xml`). The multipart variant turns the body into a list of parts — see *Multipart bodies* below. An XML type sends the body verbatim after `{{placeholder}}` substitution, with the substituted values XML-escaped so a SOAP or XML envelope stays well-formed — see *SOAP / XML bodies* below. |
 | **Extra headers** | Semicolon-separated `Key:Value` pairs added to (or overriding) the connector's default headers (e.g. `X-Custom:value;Authorization:Bearer {{token}}`). |
-| **Body** | Request body — a JSON template with `{{param}}` placeholders. The **Format JSON** button pretty-prints the value. For `multipart/form-data`, the body is parsed as one part per line (`name=value` or `file=@{{filePath}};filename=…;contentType=…`). |
+| **Body** | Request body — a JSON template with `{{param}}` placeholders. The **Format JSON** button pretty-prints the value. For `multipart/form-data`, the body is parsed as one part per line (`name=value` or `file=@{{filePath}};filename=…;contentType=…`). For an XML type, the body is the SOAP / XML envelope itself, with `{{param}}` placeholders inside the elements. |
 | **Query params** | Query string template with `{{param}}` placeholders (e.g. `pageSize={{pageSize}}&page={{page}}`). |
 | **Response field** | Optional dot-notation path (e.g. `data.items`) extracting a sub-tree of the response — useful when the caller is only interested in part of the payload. |
 | **Response type** | `JSON` *(default)* or `XML`. In `XML` mode *Response field* and *Response mappings* are read as **XPath**, so a platform that answers import-status with a UBL `ApplicationResponse` — status in `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — can be polled like a JSON one. The `cac` / `cbc` / `ext` prefixes are recognised; use `//*[local-name()='X']` for anything else. |
@@ -246,6 +246,21 @@ Three placeholders carry the document into the part:
 - `{{filePath}}` — the path to the UBL file on disk. On the **initial send** it is the input file; on a **resend** NomaUBL writes the stored UBL blob to a temporary file first, so `{{filePath}}` works the same way and one connector configuration serves both (the temp file is cleaned up automatically).
 - `{{content}}` — the base64 of the UBL, for platforms that take the bytes inline in a JSON body rather than as a file part.
 - `{{docName}}` — a sanitised `<doc>_<dct>_<kco>` name, handy for the `filename` header.
+
+#### SOAP / XML bodies
+
+When **Content-Type** is `text/xml` or `application/soap+xml`, the body is a SOAP or XML envelope sent verbatim. `{{placeholder}}` values are substituted in place and XML-escaped (`&`, `<`, `>`, quotes), so a value that contains reserved characters can't break the envelope. Pair it with **Response type** `XML` to read the answer back through XPath — the request and the response are then both XML end to end, which is what a legacy SOAP web service expects.
+
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:inv="urn:pa:invoice">
+  <soapenv:Body>
+    <inv:SubmitInvoice>
+      <inv:Reference>{{fedoc}}</inv:Reference>
+      <inv:Payload>{{content}}</inv:Payload>
+    </inv:SubmitInvoice>
+  </soapenv:Body>
+</soapenv:Envelope>
+```
 
 ### Response Mappings
 

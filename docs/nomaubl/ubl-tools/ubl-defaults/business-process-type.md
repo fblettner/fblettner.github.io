@@ -58,7 +58,7 @@ The full list lives in the *profile-ids* reference list (*Configuration → Refe
 
 ## Rule-based selection
 
-The rule editor is the same as on the [Invoice Type](./invoice-type.md) tab — `AND` / `OR` combinator, the same ten operators (`gt0`, `lt0`, `ge0`, `le0`, `eq`, `ne`, `not-empty`, `empty`, `contains`, `not-contains`), top-to-bottom evaluation. The result selector lists the *profile-ids* values.
+The rule editor is the same as on the [Invoice Type](./invoice-type.md) tab — `AND` / `OR` combinator, the same ten operators (`gt0`, `lt0`, `ge0`, `le0`, `eq`, `ne`, `not-empty`, `empty`, `contains`, `not-contains`), top-to-bottom evaluation with the first matching rule winning, and drag handles to reorder the list so the most specific cases come first. The result selector lists the *profile-ids* values.
 
 Rules typically combine the source's product / line classification with lifecycle flags to land on the correct Cadre code.
 

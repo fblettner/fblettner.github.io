@@ -71,7 +71,7 @@ Each **rule** has:
 
 ### Evaluation order
 
-Rules are evaluated **top to bottom**. The first rule whose combinator-evaluated conditions match wins. The default is used only when no rule matches. Reorder rules by deleting and re-adding to put the most specific cases first — the editor does not currently expose drag handles.
+Rules are evaluated **top to bottom**. The first rule whose combinator-evaluated conditions match wins. The default is used only when no rule matches. Order therefore matters — put the most specific cases first. Drag a rule by its handle to reorder the list; the new order is saved with the rest of the tab.
 
 ---
 

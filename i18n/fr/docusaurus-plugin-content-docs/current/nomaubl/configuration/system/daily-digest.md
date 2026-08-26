@@ -121,6 +121,7 @@ Chaque rapport est une ligne du catalogue. Le panneau d'édition comporte quatre
 | Champ | Obligatoire | Description |
 |---|---|---|
 | **Nom** | oui | Texte libre. Affiché dans la liste du catalogue et en tête du corps de l'email. Exemple : *Comptabilité · ACME*. |
+| **Rapport** | oui (défaut : `Erreurs d'intégration`) | Ce que couvre le rapport. **Erreurs d'intégration** rassemble les évènements en échec de la page [Erreurs d'intégration](../../application/integration-errors.md) — le comportement d'origine. **Toutes les factures archivées** couvre à la place chaque facture archivée sur la fenêtre, et la feuille jointe porte les colonnes de la page [E-Documents](../../application/edocuments.md) et respecte les filtres par colonne ci-dessous ; un rapport peut ainsi servir aussi d'extraction d'archive quotidienne. |
 | **Destinataires** | oui | Une ou plusieurs adresses email, séparées par virgule ou point-virgule. Chaque adresse reçoit le même email — il n'y a pas de personnalisation par adresse ici ; créez un autre rapport si les destinataires doivent voir des coupes différentes. |
 | **Activé** | oui (défaut : `on`) | Quand il vaut `off`, le rapport est conservé dans le catalogue mais ignoré au moment de l'envoi. Pratique pour mettre en pause un rapport pendant une fenêtre de maintenance sans perdre la configuration. |
 
@@ -144,7 +145,7 @@ Un petit groupe de pastilles identique à la barre d'outils des [Erreurs d'inté
 | `WARNING` | Anomalies de moindre gravité qui ne bloquent pas la transmission (codes de TVA obsolètes, champs optionnels manquants). |
 | `INFO` | Verbeux — utilisé typiquement pour les rapports de diagnostic en gestion d'incident. |
 
-Choisissez **une seule** sévérité (ou `All`). Un rapport multi-sévérités correspond à deux lignes de rapport distinctes dans le catalogue.
+Choisissez **une seule** sévérité (ou `All`). Un rapport multi-sévérités correspond à deux lignes de rapport distinctes dans le catalogue. Le filtre de sévérité ne s'applique qu'au rapport **Erreurs d'intégration** — le rapport *Toutes les factures archivées* n'a pas de sévérité et ignore ce groupe de chips.
 
 ### 4. Filtres d'égalité par colonne
 

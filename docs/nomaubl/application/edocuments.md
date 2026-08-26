@@ -59,7 +59,7 @@ Each row is a document as it was received; open it to see the **archived source 
 
 The default columns are the archive fields: **document number**, **type**, **company**, **activity**, **sub-type**, a **send-to-PA** flag, **customer**, **amount**, **document date**, **archive date**, **source file** and the **PA UUID**. Filters cover **activity**, **customer**, **source file** and the usual **period range**.
 
-Columns and filters are configurable from *Settings → List Views → E-Documents* — the same list-view mechanism used elsewhere, so you can pin the columns your team scans and hide the rest.
+Columns and filters are configurable from *Settings → List Views → E-Documents* — the same list-view mechanism used elsewhere, so you can pin the columns your team scans and hide the rest. The catalog also carries the refusal fields — **rejection reason**, **expected action** and **status note** — so an archive view can surface why a document was refused as a column, without opening each one.
 
 ---
 
