@@ -27311,7 +27311,11 @@ La requête SQL de la vue Factures joint maintenant `F564231` (UH) et `F564230` 
 
 ### Navigation au clic
 
-Cliquer sur une ligne ouvre la **modale de détail** de la facture. Toutes les actions de la page sont unitaires : pas de sélection multi-lignes.
+Cliquer sur une ligne ouvre la **modale de détail** de la facture. La plupart des actions sont unitaires, mais la liste permet aussi un **renvoi groupé** — voir ci-dessous.
+
+### Renvoi groupé \{#bulk-resend\}
+
+Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne est cochée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Seules les factures réellement transmissibles sont sélectionnables — les lignes dont le type de document est réglé sur *Ne pas envoyer* sont désactivées, pour qu'une facture non transmissible ne se glisse pas dans un lot par erreur. Pour la même raison, l'action **Renvoyer** unitaire est masquée sur les lignes *Ne pas envoyer*.
 
 ### Export
 
@@ -27932,9 +27936,9 @@ Une purge quotidienne exécutée par `BackgroundScheduler` supprime toute ligne 
 ## Tableau de bord IT
 Source: https://docs.nomana-it.fr/fr/nomaubl/application/tech-dashboard/
 
-Page de santé opérationnelle pour les équipes IT : 14 widgets qui couvrent heap JVM, GC, threads et uptime, ping base, informations de build, espace disque et nombre de fichiers, débit de traitement, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, événements de traitement en direct (paires START / END des jobs en cours, plus erreurs inline), vérification de configuration, tables de base, erreurs récentes et planificateur en arrière-plan. Un seul aller-retour par rafraîchissement, aucune authentification requise pour le bloc système.
+Page de santé opérationnelle pour les équipes IT : 15 widgets qui couvrent heap JVM, GC, threads et uptime, ping base, informations de build, espace disque et nombre de fichiers, débit de traitement, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, événements de traitement en direct (paires START / END des jobs en cours, plus erreurs inline), vérification de configuration, tables de base, erreurs récentes et planificateur en arrière-plan. Un seul aller-retour par rafraîchissement, aucune authentification requise pour le bloc système.
 
-Le **Tableau de bord IT** est la vue opérationnelle de NomaUBL destinée aux équipes techniques — une page unique qui regroupe 14 widgets couvrant la JVM, la base de données, le système de fichiers, le pipeline de traitement, le planificateur et un flux en direct des traitements en cours. Il complète le [tableau de bord métier](./dashboard.md) : le public métier voit les volumes de factures et les délais d'aller-retour PA, l'équipe IT voit la pression heap, les événements START / END pilotés par le planificateur et l'usage disque.
+Le **Tableau de bord IT** est la vue opérationnelle de NomaUBL destinée aux équipes techniques — une page unique qui regroupe 15 widgets couvrant la JVM, la base de données, le système de fichiers, le pipeline de traitement, le planificateur et un flux en direct des traitements en cours. Il complète le [tableau de bord métier](./dashboard.md) : le public métier voit les volumes de factures et les délais d'aller-retour PA, l'équipe IT voit la pression heap, les événements START / END pilotés par le planificateur et l'usage disque.
 
 Chaque rafraîchissement appelle quatre endpoints back-end en parallèle — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — pour que la page se charge en un seul aller-retour et reste légère pour la base.
 
@@ -27966,10 +27970,10 @@ La grille à 12 colonnes est organisée en huit rangées :
 | Rangée | Disposition | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **Santé système** · **Raccourcis** |
-| 2 | `4 + 4 + 4` | **Échec d'envoi** · **Courbe d'erreurs · 14j** · **Taux de relance · 14j** |
-| 3 | `4 + 4 + 4` | **Planificateur** · **Débit · 14j** · **Sessions / Clients actifs** |
-| 4 | `4 + 8` | **JVM · threads + GC** · **Système de fichiers** |
-| 5 | `8 + 4` | *(réservé)* · **Temps de traitement par modèle · 14j** |
+| 2 | `4 + 4 + 4` | **Échec d'envoi** · **Planificateur** · **Courbe d'erreurs · 14j** |
+| 3 | `4 + 4 + 4` | **En attente de revue** · **Taux de relance · 14j** · **JVM · threads + GC** |
+| 4 | `4 + 4` | **Débit · 14j** · **Sessions / Clients actifs** |
+| 5 | `8 + 4` | **Système de fichiers** · **Temps de traitement par modèle · 14j** |
 | 6 | `12` | **Traitements en cours · direct** |
 | 7 | `12` | **Vérification de configuration** |
 | 8 | `5 + 7` | **Tables de base** · **Erreurs récentes** |
@@ -28006,6 +28010,10 @@ Liste statique de raccourcis — les pages les plus utilisées par l'opérateur 
 ### Échec d'envoi (ligne 2, largeur 4) \{#send-failed\}
 
 Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi est limité à **100 ms par appel** pour que la PA reste dans son enveloppe de débit.
+
+### En attente de revue (rangée 3, span 4) \{#waiting-for-review\}
+
+Une carte en grand chiffre qui compte les factures **retenues avant envoi** — celles dont le type de document porte le drapeau d'envoi `W` (*En attente*) sur la page [Types de document](../configuration/system/document-types.md). Ces factures ont été générées et validées, mais volontairement pas transmises, pour qu'un utilisateur puisse les vérifier au préalable. Quand le compteur n'est pas à zéro, un bouton **Tout envoyer (N)** libère chaque facture retenue vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même [fenêtre de progression](#shared-progress-window) que *Échec d'envoi*. Elle reprend le principe de la carte *Échec d'envoi* — même grand chiffre, même action groupée en un clic — mais pour la file de revue plutôt que la file d'échecs.
 
 | Élément | Comportement |
 |---|---|
@@ -28410,6 +28418,8 @@ Des **placeholders `{{param}}`** peuvent être utilisés dans les URLs, les en-t
 - `{{password}}` — le mot de passe configuré
 
 Tous les autres placeholders doivent être **déclarés dans la section Parameters de l'endpoint** (voir ci-dessous).
+
+Un placeholder intégré supplémentaire, `{{passThrough}}`, se résout en un drapeau **archivage seul** déduit du type de routage de la facture. Les factures en e-reporting plutôt qu'en routage (B2C, B2BInt, Archivage seul, Hors périmètre) le résolvent en archivage seul, tandis que les B2B / B2G le résolvent en transmission — le tout déterminé automatiquement au premier envoi comme à tout renvoi. Placez `{{passThrough}}` dans le corps de l'endpoint d'envoi quand la plateforme cible (par ex. Yooz) sait archiver un document sans le transmettre à un destinataire : ces factures sont alors archivées sur la plateforme au lieu d'être transmises.
 
 ### Champs par endpoint
 
@@ -30189,7 +30199,7 @@ Chaque ligne de l'éditeur correspond à l'un des sept codes. La colonne **Code*
 | **Code** | figé | L'un des sept codes réglementaires ci-dessus. Lecture seule. Le survol du code affiche l'indication réglementaire associée. |
 | **Description** | texte libre | Libellé affiché dans les modèles de documents et l'interface. Initialisé avec la description réglementaire ci-dessus. |
 | **Default** | case à cocher | Quand cochée, ce code est **pré-sélectionné** dans les nouveaux modèles de documents créés. **Une seule ligne peut être marquée par défaut à la fois** — cocher une autre ligne décoche automatiquement la précédente. |
-| **Send to PA** | `Y` / `N` / `F` | Surcharge par type de l'argument d'exécution *envoi vers Plateforme Agréée* : `Y` = envoi ; `N` = pas d'envoi ; `F` = **envoi forcé**, même quand l'argument d'exécution demande de l'ignorer. Valeur par défaut : `Y` pour B2B, `N` pour tous les autres codes. |
+| **Send to PA** | `Y` / `N` / `F` / `W` | Surcharge par type de l'argument d'exécution *envoi vers Plateforme Agréée* : `Y` = envoi ; `N` = pas d'envoi ; `F` = **envoi forcé**, même quand l'argument d'exécution demande de l'ignorer ; `W` = **En attente** — la facture est générée et validée mais **retenue pour revue** au lieu d'être envoyée, puis libérée depuis la carte *En attente de revue* du [Tableau de bord IT](../../application/tech-dashboard.md). Valeur par défaut : `Y` pour B2B, `N` pour tous les autres codes. Un type réglé sur `N` (*Ne pas envoyer*) est réellement non transmissible : l'action **Renvoyer** est masquée sur ces factures et tout envoi manuel ou groupé est refusé. |
 | **GS** | case à cocher | Quand cochée, exécute un post-traitement **Ghostscript** sur le PDF produit pour ce type (par ex. compression / linéarisation), indépendamment de l'argument d'exécution. Désactivé par défaut. |
 | **Mode** | *(par défaut)* / `UBL` / `BURST` | Surcharge par type de l'argument d'exécution *Mode* : vide = **aucune surcharge** (le mode passé en argument est conservé) ; `UBL` = forcer une sortie UBL uniquement pour ce type ; `BURST` = forcer une sortie éclatée pour ce type. |
 | **UBL** | case à cocher | Quand cochée, conserve le **fichier UBL** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `Y` (conservé). |
@@ -36239,6 +36249,9 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
+  2026.08.29.1 · 2026-08-29
+  2026.08.28.1 · 2026-08-28
+  2026.08.27.1 · 2026-08-27
   2026.08.26.1 · 2026-08-26
   2026.08.25.1 · 2026-08-25
   2026.08.19.1 · 2026-08-19
@@ -36336,6 +36349,47 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   1.0.0 · Version initiale
 
 ---
+
+## 2026.08.29.1 — 2026-08-29 \{#v2026-08-29-1\}
+
+### Nouveautés
+
+- **La classification d'article peut être répétée sur une ligne de facture.** Le mappage **Classification d'article (BT-158)** au niveau ligne devient un groupe répétable (jusqu'à quatre entrées), chacune avec son propre chemin source et son schéma (STI, CPV, UNSPSC…) ; une ligne peut ainsi porter plusieurs codes de classification — comme le fait déjà l'identifiant d'article standard. Les modèles à classification unique existants continuent de fonctionner sans changement.
+- **Prise en charge du payeur en prélèvement (SEPA).** Les factures peuvent désormais porter le bloc complet payeur / mandat de paiement — raison sociale du débiteur, SIREN, TVA, adresse, contact, identifiants, adresse électronique, ainsi que la référence de mandat et le compte débité (IBAN). Une nouvelle section **Payeur / Mandat de prélèvement** dans l'éditeur de mappage permet de le configurer, et le PDF lisible affiche le payeur et le compte débité aux côtés des informations de paiement. Émis uniquement lorsqu'un champ payeur est renseigné, de sorte que les factures ordinaires restent inchangées.
+
+### Améliorations
+
+- **Validation de la facturation électronique française mise à jour vers le jeu de règles 1.4.0.03.** Le Schematron BR-FR (Flux 2) reprend la dernière correction FNFE-MPE : une référence de document au niveau ligne — par exemple un numéro de bon de livraison — contenant un espace n'est plus rejetée à tort, et *B2CInt* est désormais accepté comme code de routage.
+
+### Corrections
+
+- **Convertisseur PDF vers XML : les lignes d'une commande ne sont plus scindées lors d'un saut de page.** Lorsqu'une commande s'étendait sur un saut de page, ses lignes pouvaient être éparpillées entre plusieurs blocs de livraison et mêlées à celles de la commande précédente, laissant des sections de ligne orphelines. Les lignes restent désormais regroupées sous leur bloc de livraison quels que soient les sauts de page — seul un changement de numéro de facture démarre un nouveau bloc.
+- **PDF lisible : tous les codes de classification d'article sont affichés.** Lorsqu'une ligne portait plusieurs codes de classification (BT-158), le PDF lisible n'affichait que le premier ; il liste désormais chaque code, avec son schéma.
+
+## 2026.08.28.1 — 2026-08-28 \{#v2026-08-28-1\}
+
+### Améliorations
+
+- **Les codes de routage longs ne sont plus tronqués.** Le champ du code de routage/traitement de la facture a été élargi (10 → 20 caractères), afin que des valeurs telles que *ArchiveOnly* et *OutOfScope* soient enregistrées en entier. Une migration de base de données est appliquée automatiquement lors de la mise à niveau.
+
+## 2026.08.27.1 — 2026-08-27 \{#v2026-08-27-1\}
+
+### Nouveautés
+
+- **Revoir les factures avant leur envoi (En attente).** Les types de document disposent d'une nouvelle option d'envoi **En attente (W)** : les factures concernées sont générées et validées, mais retenues au lieu d'être envoyées à la PA, afin d'être revues au préalable. Une nouvelle carte **En attente de revue** sur le tableau de bord technique compte les factures retenues et les envoie toutes à la PA en un clic.
+
+### Améliorations
+
+- **Les types de document « Ne pas envoyer » ne peuvent plus être transmis à la PA.** Lorsqu'un type de document est réglé sur *Ne pas envoyer*, l'action Renvoyer est masquée sur la facture et la plateforme refuse tout envoi manuel ou groupé — une facture non transmissible ne peut donc plus partir par erreur.
+
+- **Envoyer plusieurs factures à la PA d'un coup.** La liste des factures dispose désormais d'une case à cocher sur chaque ligne et d'un bouton **Renvoyer la sélection**, permettant de renvoyer un lot de factures en une seule action (avec suivi de progression). Seules les factures qui peuvent être envoyées sont sélectionnables — les lignes *Ne pas envoyer* sont désactivées.
+
+- **Les factures à archiver uniquement (B2C, B2BInt) ne sont plus transmises à un destinataire.** Pour les plateformes qui le prennent en charge (par ex. Yooz), les factures dont le type de routage est B2C, B2BInt, Archivage seul ou Hors périmètre (toutes en e-reporting plutôt qu'en routage) sont désormais signalées comme archivage seul dans l'appel API, tandis que les B2B / B2G continuent d'être transmises — le tout déterminé automatiquement à partir de la facture, au premier envoi comme à tout renvoi. Utilisez la variable `{{passThrough}}` dans le corps du connecteur pour l'activer.
+
+### Corrections
+
+- **PDF lisible : les libellés commande et référence acheteur sont désormais traduits.** Sur une facture française, les libellés « Order » et « Buyer Ref. » de l'en-tête du PDF lisible restaient en anglais ; ils s'affichent maintenant **Réf. commande** et **Réf. acheteur**.
+- **PDF lisible : la référence de facture antérieure au niveau ligne affiche sa date.** Sur un avoir, une référence de facture antérieure portée par une ligne n'affichait que le numéro de document ; elle affiche désormais la date d'émission à côté, comme la référence de l'en-tête.
 
 ## 2026.08.26.1 — 2026-08-26 \{#v2026-08-26-1\}
 
@@ -39667,8 +39721,9 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Agent Party** | extended-ctc-fr | Tiers intermédiaire optionnel. |
 | **Delivery** | BT-70 à BT-80 | Date et adresse de livraison. |
 | **Payment** | BT-20, BT-81 à BT-91 | Moyen, IBAN, BIC, mandat, conditions. |
+| **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | Payeur en prélèvement SEPA — la partie débitrice, la référence de mandat (BT-89) et le compte débité (IBAN, BT-91). Voir [Payeur / mandat de prélèvement](#payer-mandate) ci-dessous. |
 | **VAT** | BT-110, BT-116 à BT-121 | Détail TVA — voir [scoping](#scoping) ci-dessous. |
-| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158), la version de schéma (BT-158-2) et l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) par ligne — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN) — voir [scoping](#scoping) ci-dessous. |
+| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158, groupe répétable jusqu'à quatre codes), la version de schéma (BT-158-2) et l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) par ligne — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN) — voir [scoping](#scoping) ci-dessous. |
 | **Item Properties** *(BG-32)* | BG-32 | Attributs produit attachés à une ligne. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Remise ou charge par ligne. Pointer le TAG *Item AC* sur `.` (ou le laisser vide) quand les champs de remise se trouvent directement sur la ligne, sans élément parent — le moteur itère alors la ligne elle-même. Quand la source ne porte que le pourcentage, le montant et la base sont déduits du net de la ligne ; pourcentage + base déduit le montant, pourcentage + montant déduit la base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Références de document par ligne — pièces justificatives (BT-128, schéma UNTDID 1153) et la ligne de bon de commande référencée via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, groupe EXT-FR-FE-BG-09, placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1). |
@@ -39750,6 +39805,17 @@ La section *Embedded Attachments* joint à la facture UBL un document déjà enc
 | **Code** | Un code choisi dans la liste de référence de la plateforme (`PJA`, `RIB`, `BON_LIVRAISON`, …). |
 
 La ligne est émise sous forme de `cac:AdditionalDocumentReference` avec un `EmbeddedDocumentBinaryObject` inline (BT-125). Elle se place à la bonne position dans le schéma et coexiste avec les autres sources de pièces jointes déjà gérées (fichiers sur disque, PDF lisible généré) — le tout reste groupé dans la même sortie. Jusqu'à cette section, une pièce jointe ne pouvait venir que d'un fichier sur disque ou du PDF généré, jamais d'un champ base64 déjà présent dans le spool.
+
+#### Payeur / mandat de prélèvement \{#payer-mandate\}
+
+Pour les factures réglées par **prélèvement SEPA**, le payeur n'est pas toujours l'acheteur — la section *Payer / Direct-debit mandate* mappe le bloc débiteur complet (groupe d'extension française EXT-FR-FE-BG-02). Elle porte la partie payeur — nom commercial et raison sociale, SIREN, TVA, adresse, contact, adresse électronique et code de rôle — plus les deux champs de mandat :
+
+| Champ | Effet |
+|---|---|
+| **Référence de mandat** *(BT-89)* | L'identifiant du mandat SEPA, émis en `cac:PaymentMeans/cac:PaymentMandate/cbc:ID`. |
+| **Compte débité (IBAN)** *(BT-91)* | Le compte du débiteur sur lequel le montant est prélevé, émis en `cac:PaymentMandate/cac:PayerFinancialAccount/cbc:ID`. |
+
+Les identifiants payeur supplémentaires (0..n) vont dans le panneau *Payer Identifiers* associé, chacun un champ source et un schéma de la liste *Scheme IDs*. Le bloc entier n'est émis **que lorsqu'un champ payeur est renseigné**, de sorte que les factures ordinaires restent inchangées ; quand il est présent, le PDF lisible affiche le payeur et le compte débité aux côtés des informations de paiement.
 
 ### XSL Editor
 

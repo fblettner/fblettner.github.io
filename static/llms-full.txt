@@ -32761,7 +32761,11 @@ The Invoices view's SQL now joins `F564231` (UH) and `F564230` (FE) on doc / dct
 
 ### Click-through
 
-Clicking any row opens the **Detail modal** for that invoice. Every action on this page is per-invoice — no multi-row selection.
+Clicking any row opens the **Detail modal** for that invoice. Most actions are per-invoice, but the list also supports a **bulk resend** — see below.
+
+### Bulk resend \{#bulk-resend\}
+
+Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). Only invoices that may actually be sent are selectable — rows whose document type is set to *Do not send* are disabled, so a non-transmissible invoice can't be swept into a batch by mistake. For the same reason, the per-invoice **Resend** action is hidden on *Do not send* rows.
 
 ### Export
 
@@ -33384,7 +33388,7 @@ Source: https://docs.nomana-it.fr/nomaubl/application/tech-dashboard/
 
 Operational health page for the IT team: 14 widgets covering JVM heap, GC, threads and uptime, database ping, build info, filesystem free space and file counts, processing throughput, error trend, retry rate, template processing time, active sessions, live process events (START / END pairs from running jobs, plus inline errors), configuration check, database tables, recent errors, and the background scheduler. One round-trip per refresh, no auth required to render the system block.
 
-The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 14 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and a live feed of running jobs. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, scheduler-driven START / END events and disk usage.
+The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 15 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and a live feed of running jobs. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, scheduler-driven START / END events and disk usage.
 
 Every refresh hits four backend endpoints in parallel — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — so the page lands in one round-trip and stays light on the database.
 
@@ -33416,10 +33420,10 @@ The 12-column grid is laid out as eight rows:
 | Row | Layout | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **System Health** · **Quick links** |
-| 2 | `4 + 4 + 4` | **Send Failed** · **Error trend · 14d** · **Retry rate · 14d** |
-| 3 | `4 + 4 + 4` | **Scheduler** · **Throughput · 14d** · **Active sessions / clients** |
-| 4 | `4 + 8` | **JVM · threads + GC** · **Filesystem** |
-| 5 | `8 + 4` | *(reserved)* · **Template processing time · 14d** |
+| 2 | `4 + 4 + 4` | **Send Failed** · **Scheduler** · **Error trend · 14d** |
+| 3 | `4 + 4 + 4` | **Waiting for review** · **Retry rate · 14d** · **JVM · threads + GC** |
+| 4 | `4 + 4` | **Throughput · 14d** · **Active sessions / clients** |
+| 5 | `8 + 4` | **Filesystem** · **Template processing time · 14d** |
 | 6 | `12` | **Live process events** |
 | 7 | `12` | **Configuration check** |
 | 8 | `5 + 7` | **Database tables** · **Recent errors** |
@@ -33465,6 +33469,10 @@ A single big-number card showing how many invoices are currently in *Send failed
 | Throttle | 100 ms between calls — fixed in code; not operator-tunable here. The [Auto-Retry](../configuration/system/auto-retry.md) schedule exposes its own throttle for the scheduled equivalent. |
 
 Use the manual button for a one-shot replay during business hours (a brief PA outage that cleared, a small batch you want resent now). For unattended overnight retries, schedule a row on the [Auto-Retry](../configuration/system/auto-retry.md) page — same code path, no operator action required.
+
+### Waiting for review (row 3, span 4) \{#waiting-for-review\}
+
+A big-number card that counts the invoices **held before sending** — the ones whose document type carries the `W` (*Waiting*) send flag on the [Document Types](../configuration/system/document-types.md) page. These invoices were generated and validated but deliberately not transmitted, so a user can check them first. When the count is non-zero, a **Send all N** button releases every held invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same [progress window](#shared-progress-window) as *Send Failed*. It mirrors the *Send Failed* card — same big number, same one-click bulk action — but for the review queue rather than the failure queue.
 
 ### Scheduler (row 3, span 4)
 
@@ -33860,6 +33868,8 @@ You can use **`{{param}}` placeholders** in URLs, headers, query parameters and 
 - `{{password}}` — the configured Password
 
 All other placeholders must be **declared in the endpoint's Parameters section** (see below).
+
+One more built-in placeholder, `{{passThrough}}`, resolves to an **archive-only** flag derived from the invoice's routing type. Invoices that are e-reported rather than routed (B2C, B2BInt, Archive-only, Out-of-scope) resolve it as archive-only, while B2B / B2G resolve it as transmit — determined automatically on both the first send and any resend. Put `{{passThrough}}` in the send endpoint's body when the target platform (e.g. Yooz) can archive a document without forwarding it to a recipient, so those invoices are archived on the platform instead of transmitted.
 
 ### Per-endpoint fields
 
@@ -35639,7 +35649,7 @@ Each of the seven codes is one row in the editor. The **Code** column is read-on
 | **Code** | fixed | One of the seven regulatory codes above. Read-only. Hover the code to see the regulatory hint. |
 | **Description** | text | Free-text label shown in document templates and UI. Defaults to the regulatory description above. |
 | **Default** | checkbox | When ticked, this code is **pre-selected** in newly created document templates. **Only one row can be the default at a time** — ticking another row automatically un-ticks the previous one. |
-| **Send to PA** | `Y` / `N` / `F` | Per-type override of the runtime *send to Plateforme Agréée* argument: `Y` = send; `N` = do not send; `F` = **force send** even when the runtime argument says skip. Default: `Y` for B2B, `N` for every other code. |
+| **Send to PA** | `Y` / `N` / `F` / `W` | Per-type override of the runtime *send to Plateforme Agréée* argument: `Y` = send; `N` = do not send; `F` = **force send** even when the runtime argument says skip; `W` = **Waiting** — the invoice is generated and validated but **held for review** instead of being sent, then released from the *Waiting for review* card on the [Tech Dashboard](../../application/tech-dashboard.md). Default: `Y` for B2B, `N` for every other code. A type set to `N` (*Do not send*) is truly non-transmissible: the **Resend** action is hidden on those invoices and any manual or bulk send is refused. |
 | **GS** | checkbox | When ticked, runs **Ghostscript** post-processing on the produced PDF for this type (e.g. compression / linearisation), regardless of the runtime argument. Off by default. |
 | **Mode** | *(default)* / `UBL` / `BURST` | Per-type override of the runtime *Mode* argument: empty = **no override** (the runtime mode is kept); `UBL` = force UBL-only output for this type; `BURST` = force bursted output for this type. |
 | **UBL** | checkbox | When ticked, keeps the generated **UBL file** in the bursting output directory after processing for this type. Default: `Y` (kept). |
@@ -41704,6 +41714,9 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   2026.06.21 · 2026-06-21
   2026.06.17 · 2026-06-17
   2026.06.16 · 2026-06-16
+  2026.08.29.1 · 2026-08-29
+  2026.08.28.1 · 2026-08-28
+  2026.08.27.1 · 2026-08-27
   2026.08.26.1 · 2026-08-26
   2026.08.25.1 · 2026-08-25
   2026.08.19.1 · 2026-08-19
@@ -41971,6 +41984,45 @@ Actionable error when a BI Publisher RTF subtemplate is missing, and a starter m
 - **Starter manifest generator for the PDF → XML adapter.** New CLI mode `-pdfManifest <input.pdf> <output.manifest.xml>` (also `nomaubl.sh pdf-manifest` / `nomaubl.cmd pdf-manifest`) analyses the PDF and emits a JDE-shape manifest XML, for the case where the customer has no native JDE XML sample of the same R-program to feed `-pdf2xml`. Inferred element names use the printed RC label text where available and the OWObject DD alias as fallback; the customer edits the file to give meaningful names, then reuses it as the 3rd argument of `-pdf2xml`. The root element is derived from the PDF filename (typical JDE spool convention) and multi-line text fields keep a single element name across all their lines via a sticky cache.
 
 ---
+
+## 2026.08.29.1 — 2026-08-29 \{#v2026-08-29-1\}
+
+### New features
+
+- **Item classification can be repeated on an invoice line.** The line-item **Item classification (BT-158)** mapping is now a repeatable group (up to four entries), each with its own source path and scheme (STI, CPV, UNSPSC…), so a line can carry several classification codes — the same way the standard item identifier already works. Existing single-classification templates keep working unchanged.
+- **Direct-debit payer (SEPA prélèvement) support.** Invoices can now carry the full payer / payment-mandate block — the debtor's name, SIREN, VAT, address, contact, identifiers, electronic address, plus the mandate reference and debited account (IBAN). A new **Payer / Direct-debit mandate** section in the mapping editor configures it, and the readable PDF shows the payer and debited account alongside the payment details. Emitted only when a payer field is set, so ordinary invoices are unchanged.
+
+### Improvements
+
+- **French e-invoicing validation updated to the 1.4.0.03 rule pack.** The BR-FR (Flux 2) Schematron was updated to the latest FNFE-MPE correction: a line-level document reference — such as a delivery-note number — that contains a space is no longer wrongly rejected, and *B2CInt* is now accepted as a routing code.
+
+### Fixes
+
+- **PDF-to-XML converter: an order's lines are no longer split across a page break.** When an order spanned a page break, its line items could be scattered across delivery blocks and mixed with the previous order's, leaving orphan line sections. Line items now stay grouped under their delivery block whatever the page breaks — only a change of invoice number starts a new block.
+- **Readable PDF: all item classification codes are now shown.** When an invoice line carried several classification codes (BT-158), the readable PDF printed only the first; it now lists every code, each with its scheme.
+
+## 2026.08.28.1 — 2026-08-28 \{#v2026-08-28-1\}
+
+### Improvements
+
+- **Longer routing codes are no longer truncated.** The invoice routing/treatment code field was widened (10 → 20 characters), so values such as *ArchiveOnly* and *OutOfScope* are stored in full. A database migration is applied automatically on upgrade.
+
+## 2026.08.27.1 — 2026-08-27 \{#v2026-08-27-1\}
+
+### New features
+
+- **Review invoices before they are sent (Waiting).** Document types gain a **Waiting (W)** send option: matching invoices are generated and validated but held instead of being sent to the PA, so they can be reviewed first. A new **Waiting for review** card on the Technical Dashboard counts the held invoices and releases them all to the PA in one click.
+
+### Improvements
+
+- **"Do not send" document types can no longer be sent to the PA.** When a document type is set to *Do not send*, the Resend action is hidden on the invoice and the platform refuses any manual or bulk send — so a non-transmissible invoice can't be pushed out by mistake.
+- **Send several invoices to the PA at once.** The invoice list now has a checkbox on each row and a **Resend selected** button, so a batch of invoices can be resent in one action (with a progress view). Only invoices that may be sent are selectable — *Do not send* rows are disabled.
+- **Archive-only invoices (B2C, B2BInt) are no longer transmitted to a recipient.** For platforms that support it (e.g. Yooz), invoices whose routing type is B2C, B2BInt, Archive-only or Out-of-scope (all e-reported rather than routed) are now flagged as archive-only on the API call, while B2B / B2G keep transmitting — determined automatically from the invoice, on both the first send and any resend. Use the `{{passThrough}}` placeholder in the connector body to enable it.
+
+### Fixes
+
+- **Readable PDF: order and buyer reference labels are now translated.** On a French invoice, the "Order" and "Buyer Ref." labels in the readable PDF header stayed in English; they now show as **Réf. commande** and **Réf. acheteur**.
+- **Readable PDF: line-level preceding-invoice reference now shows its date.** On a credit note, a preceding-invoice reference carried on an invoice line printed only the document number; it now prints the issue date next to it, like the header reference.
 
 ## 2026.08.26.1 — 2026-08-26 \{#v2026-08-26-1\}
 
@@ -44997,8 +45049,9 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
 | **Delivery** | BT-70 to BT-80 | Delivery date and address. |
 | **Payment** | BT-20, BT-81 to BT-91 | Means, IBAN, BIC, mandate, terms. |
+| **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | SEPA direct-debit payer — the debtor party plus the mandate reference (BT-89) and debited account IBAN (BT-91). See [Payer / direct-debit mandate](#payer-mandate) below. |
 | **VAT** | BT-110, BT-116 to BT-121 | VAT breakdown rows — see [scoping](#scoping) below. |
-| **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158), classification scheme version (BT-158-2) and the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN) — see [scoping](#scoping) below. |
+| **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158, a repeatable group of up to four codes), classification scheme version (BT-158-2) and the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN) — see [scoping](#scoping) below. |
 | **Item Properties** *(BG-32)* | BG-32 | Repeating product attributes attached to a line. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Per-line discount or charge. Point the *Item AC* TAG at `.` (or leave it empty) when the allowance fields sit directly on the invoice line with no wrapper element — the framework then iterates the line itself. When the source carries only the percentage, the amount and base are derived from the line net amount; percentage + base derives the amount, percentage + amount derives the base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Per-line document references — supporting documents (BT-128, UNTDID 1153 scheme) and the referenced purchase-order line via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, group EXT-FR-FE-BG-09, placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence). |
@@ -45080,6 +45133,17 @@ The *Embedded Attachments* section attaches a document already carried as base64
 | **Qualifier** | A code picked from the platform's reference list (`PJA`, `RIB`, `BON_LIVRAISON`, …). |
 
 The row is emitted as a `cac:AdditionalDocumentReference` with an inline `EmbeddedDocumentBinaryObject` (BT-125). It lands at the correct schema position and sits alongside the existing attachment sources (external files on disk, the generated readable PDF) — everything stays together in the same output. Until this section, an attachment could only come from a file on disk or the generated PDF, never from a base64 field already inside the spool.
+
+#### Payer / direct-debit mandate \{#payer-mandate\}
+
+For invoices settled by **SEPA direct debit**, the payer is not always the buyer — the *Payer / Direct-debit mandate* section maps the full debtor block (French extension group EXT-FR-FE-BG-02). It carries the payer party — trading and legal name, SIREN, VAT, address, contact, electronic address and role — plus the two mandate fields:
+
+| Field | Effect |
+|---|---|
+| **Mandate reference** *(BT-89)* | The SEPA mandate identifier, emitted as `cac:PaymentMeans/cac:PaymentMandate/cbc:ID`. |
+| **Debited account (IBAN)** *(BT-91)* | The debtor account the amount is drawn from, emitted as `cac:PaymentMandate/cac:PayerFinancialAccount/cbc:ID`. |
+
+Extra payer identifiers (0..n) go in the companion *Payer Identifiers* panel, each a source field plus a scheme from the *Scheme IDs* list. The whole block is emitted **only when a payer field is set**, so ordinary invoices are unchanged; when present, the readable PDF shows the payer and the debited account next to the payment details.
 
 ### XSL Editor
 

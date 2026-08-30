@@ -217,8 +217,9 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
 | **Delivery** | BT-70 to BT-80 | Delivery date and address. |
 | **Payment** | BT-20, BT-81 to BT-91 | Means, IBAN, BIC, mandate, terms. |
+| **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | SEPA direct-debit payer — the debtor party plus the mandate reference (BT-89) and debited account IBAN (BT-91). See [Payer / direct-debit mandate](#payer-mandate) below. |
 | **VAT** | BT-110, BT-116 to BT-121 | VAT breakdown rows — see [scoping](#scoping) below. |
-| **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158), classification scheme version (BT-158-2) and the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN) — see [scoping](#scoping) below. |
+| **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158, a repeatable group of up to four codes), classification scheme version (BT-158-2) and the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN) — see [scoping](#scoping) below. |
 | **Item Properties** *(BG-32)* | BG-32 | Repeating product attributes attached to a line. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Per-line discount or charge. Point the *Item AC* TAG at `.` (or leave it empty) when the allowance fields sit directly on the invoice line with no wrapper element — the framework then iterates the line itself. When the source carries only the percentage, the amount and base are derived from the line net amount; percentage + base derives the amount, percentage + amount derives the base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Per-line document references — supporting documents (BT-128, UNTDID 1153 scheme) and the referenced purchase-order line via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, group EXT-FR-FE-BG-09, placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence). |
@@ -349,6 +350,17 @@ The *Embedded Attachments* section attaches a document already carried as base64
 | **Qualifier** | A code picked from the platform's reference list (`PJA`, `RIB`, `BON_LIVRAISON`, …). |
 
 The row is emitted as a `cac:AdditionalDocumentReference` with an inline `EmbeddedDocumentBinaryObject` (BT-125). It lands at the correct schema position and sits alongside the existing attachment sources (external files on disk, the generated readable PDF) — everything stays together in the same output. Until this section, an attachment could only come from a file on disk or the generated PDF, never from a base64 field already inside the spool.
+
+#### Payer / direct-debit mandate \{#payer-mandate\}
+
+For invoices settled by **SEPA direct debit**, the payer is not always the buyer — the *Payer / Direct-debit mandate* section maps the full debtor block (French extension group EXT-FR-FE-BG-02). It carries the payer party — trading and legal name, SIREN, VAT, address, contact, electronic address and role — plus the two mandate fields:
+
+| Field | Effect |
+|---|---|
+| **Mandate reference** *(BT-89)* | The SEPA mandate identifier, emitted as `cac:PaymentMeans/cac:PaymentMandate/cbc:ID`. |
+| **Debited account (IBAN)** *(BT-91)* | The debtor account the amount is drawn from, emitted as `cac:PaymentMandate/cac:PayerFinancialAccount/cbc:ID`. |
+
+Extra payer identifiers (0..n) go in the companion *Payer Identifiers* panel, each a source field plus a scheme from the *Scheme IDs* list. The whole block is emitted **only when a payer field is set**, so ordinary invoices are unchanged; when present, the readable PDF shows the payer and the debited account next to the payment details.
 
 ### XSL Editor
 

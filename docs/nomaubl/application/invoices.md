@@ -339,7 +339,11 @@ The Invoices view's SQL now joins `F564231` (UH) and `F564230` (FE) on doc / dct
 
 ### Click-through
 
-Clicking any row opens the **Detail modal** for that invoice. Every action on this page is per-invoice — no multi-row selection.
+Clicking any row opens the **Detail modal** for that invoice. Most actions are per-invoice, but the list also supports a **bulk resend** — see below.
+
+### Bulk resend \{#bulk-resend\}
+
+Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). Only invoices that may actually be sent are selectable — rows whose document type is set to *Do not send* are disabled, so a non-transmissible invoice can't be swept into a batch by mistake. For the same reason, the per-invoice **Resend** action is hidden on *Do not send* rows.
 
 ### Export
 

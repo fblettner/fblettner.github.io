@@ -10,7 +10,10 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-08-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.08.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-26</span></a>
+  <a href="#v2026-08-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.08.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-29</span></a>
+  <a href="#v2026-08-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-28</span></a>
+  <a href="#v2026-08-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-27</span></a>
+  <a href="#v2026-08-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-26</span></a>
   <a href="#v2026-08-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-25</span></a>
   <a href="#v2026-08-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-19</span></a>
   <a href="#v2026-08-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-18</span></a>
@@ -108,6 +111,47 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 </div>
 
 ---
+
+## 2026.08.29.1 — 2026-08-29 \{#v2026-08-29-1\}
+
+### Nouveautés
+
+- **La classification d'article peut être répétée sur une ligne de facture.** Le mappage **Classification d'article (BT-158)** au niveau ligne devient un groupe répétable (jusqu'à quatre entrées), chacune avec son propre chemin source et son schéma (STI, CPV, UNSPSC…) ; une ligne peut ainsi porter plusieurs codes de classification — comme le fait déjà l'identifiant d'article standard. Les modèles à classification unique existants continuent de fonctionner sans changement.
+- **Prise en charge du payeur en prélèvement (SEPA).** Les factures peuvent désormais porter le bloc complet payeur / mandat de paiement — raison sociale du débiteur, SIREN, TVA, adresse, contact, identifiants, adresse électronique, ainsi que la référence de mandat et le compte débité (IBAN). Une nouvelle section **Payeur / Mandat de prélèvement** dans l'éditeur de mappage permet de le configurer, et le PDF lisible affiche le payeur et le compte débité aux côtés des informations de paiement. Émis uniquement lorsqu'un champ payeur est renseigné, de sorte que les factures ordinaires restent inchangées.
+
+### Améliorations
+
+- **Validation de la facturation électronique française mise à jour vers le jeu de règles 1.4.0.03.** Le Schematron BR-FR (Flux 2) reprend la dernière correction FNFE-MPE : une référence de document au niveau ligne — par exemple un numéro de bon de livraison — contenant un espace n'est plus rejetée à tort, et *B2CInt* est désormais accepté comme code de routage.
+
+### Corrections
+
+- **Convertisseur PDF vers XML : les lignes d'une commande ne sont plus scindées lors d'un saut de page.** Lorsqu'une commande s'étendait sur un saut de page, ses lignes pouvaient être éparpillées entre plusieurs blocs de livraison et mêlées à celles de la commande précédente, laissant des sections de ligne orphelines. Les lignes restent désormais regroupées sous leur bloc de livraison quels que soient les sauts de page — seul un changement de numéro de facture démarre un nouveau bloc.
+- **PDF lisible : tous les codes de classification d'article sont affichés.** Lorsqu'une ligne portait plusieurs codes de classification (BT-158), le PDF lisible n'affichait que le premier ; il liste désormais chaque code, avec son schéma.
+
+## 2026.08.28.1 — 2026-08-28 \{#v2026-08-28-1\}
+
+### Améliorations
+
+- **Les codes de routage longs ne sont plus tronqués.** Le champ du code de routage/traitement de la facture a été élargi (10 → 20 caractères), afin que des valeurs telles que *ArchiveOnly* et *OutOfScope* soient enregistrées en entier. Une migration de base de données est appliquée automatiquement lors de la mise à niveau.
+
+## 2026.08.27.1 — 2026-08-27 \{#v2026-08-27-1\}
+
+### Nouveautés
+
+- **Revoir les factures avant leur envoi (En attente).** Les types de document disposent d'une nouvelle option d'envoi **En attente (W)** : les factures concernées sont générées et validées, mais retenues au lieu d'être envoyées à la PA, afin d'être revues au préalable. Une nouvelle carte **En attente de revue** sur le tableau de bord technique compte les factures retenues et les envoie toutes à la PA en un clic.
+
+### Améliorations
+
+- **Les types de document « Ne pas envoyer » ne peuvent plus être transmis à la PA.** Lorsqu'un type de document est réglé sur *Ne pas envoyer*, l'action Renvoyer est masquée sur la facture et la plateforme refuse tout envoi manuel ou groupé — une facture non transmissible ne peut donc plus partir par erreur.
+
+- **Envoyer plusieurs factures à la PA d'un coup.** La liste des factures dispose désormais d'une case à cocher sur chaque ligne et d'un bouton **Renvoyer la sélection**, permettant de renvoyer un lot de factures en une seule action (avec suivi de progression). Seules les factures qui peuvent être envoyées sont sélectionnables — les lignes *Ne pas envoyer* sont désactivées.
+
+- **Les factures à archiver uniquement (B2C, B2BInt) ne sont plus transmises à un destinataire.** Pour les plateformes qui le prennent en charge (par ex. Yooz), les factures dont le type de routage est B2C, B2BInt, Archivage seul ou Hors périmètre (toutes en e-reporting plutôt qu'en routage) sont désormais signalées comme archivage seul dans l'appel API, tandis que les B2B / B2G continuent d'être transmises — le tout déterminé automatiquement à partir de la facture, au premier envoi comme à tout renvoi. Utilisez la variable `{{passThrough}}` dans le corps du connecteur pour l'activer.
+
+### Corrections
+
+- **PDF lisible : les libellés commande et référence acheteur sont désormais traduits.** Sur une facture française, les libellés « Order » et « Buyer Ref. » de l'en-tête du PDF lisible restaient en anglais ; ils s'affichent maintenant **Réf. commande** et **Réf. acheteur**.
+- **PDF lisible : la référence de facture antérieure au niveau ligne affiche sa date.** Sur un avoir, une référence de facture antérieure portée par une ligne n'affichait que le numéro de document ; elle affiche désormais la date d'émission à côté, comme la référence de l'en-tête.
 
 ## 2026.08.26.1 — 2026-08-26 \{#v2026-08-26-1\}
 

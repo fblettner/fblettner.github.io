@@ -1,12 +1,12 @@
 ---
 title: Tableau de bord IT
-description: "Page de santé opérationnelle pour les équipes IT : 14 widgets qui couvrent heap JVM, GC, threads et uptime, ping base, informations de build, espace disque et nombre de fichiers, débit de traitement, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, événements de traitement en direct (paires START / END des jobs en cours, plus erreurs inline), vérification de configuration, tables de base, erreurs récentes et planificateur en arrière-plan. Un seul aller-retour par rafraîchissement, aucune authentification requise pour le bloc système."
+description: "Page de santé opérationnelle pour les équipes IT : 15 widgets qui couvrent heap JVM, GC, threads et uptime, ping base, informations de build, espace disque et nombre de fichiers, débit de traitement, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, événements de traitement en direct (paires START / END des jobs en cours, plus erreurs inline), vérification de configuration, tables de base, erreurs récentes et planificateur en arrière-plan. Un seul aller-retour par rafraîchissement, aucune authentification requise pour le bloc système."
 keywords: [NomaUBL, tableau de bord IT, opérations, santé système, JVM, heap, GC, ping base, système de fichiers, débit, courbe d'erreurs, taux de relance, temps de traitement, sessions actives, événements de traitement, suivi planificateur, vérification de configuration, planificateur, F564237]
 ---
 
 # Tableau de bord IT
 
-Le **Tableau de bord IT** est la vue opérationnelle de NomaUBL destinée aux équipes techniques — une page unique qui regroupe 14 widgets couvrant la JVM, la base de données, le système de fichiers, le pipeline de traitement, le planificateur et un flux en direct des traitements en cours. Il complète le [tableau de bord métier](./dashboard.md) : le public métier voit les volumes de factures et les délais d'aller-retour PA, l'équipe IT voit la pression heap, les événements START / END pilotés par le planificateur et l'usage disque.
+Le **Tableau de bord IT** est la vue opérationnelle de NomaUBL destinée aux équipes techniques — une page unique qui regroupe 15 widgets couvrant la JVM, la base de données, le système de fichiers, le pipeline de traitement, le planificateur et un flux en direct des traitements en cours. Il complète le [tableau de bord métier](./dashboard.md) : le public métier voit les volumes de factures et les délais d'aller-retour PA, l'équipe IT voit la pression heap, les événements START / END pilotés par le planificateur et l'usage disque.
 
 Chaque rafraîchissement appelle quatre endpoints back-end en parallèle — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — pour que la page se charge en un seul aller-retour et reste légère pour la base.
 
@@ -238,10 +238,10 @@ La grille à 12 colonnes est organisée en huit rangées :
 | Rangée | Disposition | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **Santé système** · **Raccourcis** |
-| 2 | `4 + 4 + 4` | **Échec d'envoi** · **Courbe d'erreurs · 14j** · **Taux de relance · 14j** |
-| 3 | `4 + 4 + 4` | **Planificateur** · **Débit · 14j** · **Sessions / Clients actifs** |
-| 4 | `4 + 8` | **JVM · threads + GC** · **Système de fichiers** |
-| 5 | `8 + 4` | *(réservé)* · **Temps de traitement par modèle · 14j** |
+| 2 | `4 + 4 + 4` | **Échec d'envoi** · **Planificateur** · **Courbe d'erreurs · 14j** |
+| 3 | `4 + 4 + 4` | **En attente de revue** · **Taux de relance · 14j** · **JVM · threads + GC** |
+| 4 | `4 + 4` | **Débit · 14j** · **Sessions / Clients actifs** |
+| 5 | `8 + 4` | **Système de fichiers** · **Temps de traitement par modèle · 14j** |
 | 6 | `12` | **Traitements en cours · direct** |
 | 7 | `12` | **Vérification de configuration** |
 | 8 | `5 + 7` | **Tables de base** · **Erreurs récentes** |
@@ -278,6 +278,10 @@ Liste statique de raccourcis — les pages les plus utilisées par l'opérateur 
 ### Échec d'envoi (ligne 2, largeur 4) \{#send-failed\}
 
 Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi est limité à **100 ms par appel** pour que la PA reste dans son enveloppe de débit.
+
+### En attente de revue (rangée 3, span 4) \{#waiting-for-review\}
+
+Une carte en grand chiffre qui compte les factures **retenues avant envoi** — celles dont le type de document porte le drapeau d'envoi `W` (*En attente*) sur la page [Types de document](../configuration/system/document-types.md). Ces factures ont été générées et validées, mais volontairement pas transmises, pour qu'un utilisateur puisse les vérifier au préalable. Quand le compteur n'est pas à zéro, un bouton **Tout envoyer (N)** libère chaque facture retenue vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même [fenêtre de progression](#shared-progress-window) que *Échec d'envoi*. Elle reprend le principe de la carte *Échec d'envoi* — même grand chiffre, même action groupée en un clic — mais pour la file de revue plutôt que la file d'échecs.
 
 | Élément | Comportement |
 |---|---|

@@ -213,6 +213,8 @@ You can use **`{{param}}` placeholders** in URLs, headers, query parameters and 
 
 All other placeholders must be **declared in the endpoint's Parameters section** (see below).
 
+One more built-in placeholder, `{{passThrough}}`, resolves to an **archive-only** flag derived from the invoice's routing type. Invoices that are e-reported rather than routed (B2C, B2BInt, Archive-only, Out-of-scope) resolve it as archive-only, while B2B / B2G resolve it as transmit — determined automatically on both the first send and any resend. Put `{{passThrough}}` in the send endpoint's body when the target platform (e.g. Yooz) can archive a document without forwarding it to a recipient, so those invoices are archived on the platform instead of transmitted.
+
 ### Per-endpoint fields
 
 | Field | Description |

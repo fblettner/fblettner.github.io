@@ -217,8 +217,9 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Agent Party** | extended-ctc-fr | Tiers intermédiaire optionnel. |
 | **Delivery** | BT-70 à BT-80 | Date et adresse de livraison. |
 | **Payment** | BT-20, BT-81 à BT-91 | Moyen, IBAN, BIC, mandat, conditions. |
+| **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | Payeur en prélèvement SEPA — la partie débitrice, la référence de mandat (BT-89) et le compte débité (IBAN, BT-91). Voir [Payeur / mandat de prélèvement](#payer-mandate) ci-dessous. |
 | **VAT** | BT-110, BT-116 à BT-121 | Détail TVA — voir [scoping](#scoping) ci-dessous. |
-| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158), la version de schéma (BT-158-2) et l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) par ligne — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN) — voir [scoping](#scoping) ci-dessous. |
+| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158, groupe répétable jusqu'à quatre codes), la version de schéma (BT-158-2) et l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) par ligne — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN) — voir [scoping](#scoping) ci-dessous. |
 | **Item Properties** *(BG-32)* | BG-32 | Attributs produit attachés à une ligne. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Remise ou charge par ligne. Pointer le TAG *Item AC* sur `.` (ou le laisser vide) quand les champs de remise se trouvent directement sur la ligne, sans élément parent — le moteur itère alors la ligne elle-même. Quand la source ne porte que le pourcentage, le montant et la base sont déduits du net de la ligne ; pourcentage + base déduit le montant, pourcentage + montant déduit la base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Références de document par ligne — pièces justificatives (BT-128, schéma UNTDID 1153) et la ligne de bon de commande référencée via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, groupe EXT-FR-FE-BG-09, placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1). |
@@ -349,6 +350,17 @@ La section *Embedded Attachments* joint à la facture UBL un document déjà enc
 | **Code** | Un code choisi dans la liste de référence de la plateforme (`PJA`, `RIB`, `BON_LIVRAISON`, …). |
 
 La ligne est émise sous forme de `cac:AdditionalDocumentReference` avec un `EmbeddedDocumentBinaryObject` inline (BT-125). Elle se place à la bonne position dans le schéma et coexiste avec les autres sources de pièces jointes déjà gérées (fichiers sur disque, PDF lisible généré) — le tout reste groupé dans la même sortie. Jusqu'à cette section, une pièce jointe ne pouvait venir que d'un fichier sur disque ou du PDF généré, jamais d'un champ base64 déjà présent dans le spool.
+
+#### Payeur / mandat de prélèvement \{#payer-mandate\}
+
+Pour les factures réglées par **prélèvement SEPA**, le payeur n'est pas toujours l'acheteur — la section *Payer / Direct-debit mandate* mappe le bloc débiteur complet (groupe d'extension française EXT-FR-FE-BG-02). Elle porte la partie payeur — nom commercial et raison sociale, SIREN, TVA, adresse, contact, adresse électronique et code de rôle — plus les deux champs de mandat :
+
+| Champ | Effet |
+|---|---|
+| **Référence de mandat** *(BT-89)* | L'identifiant du mandat SEPA, émis en `cac:PaymentMeans/cac:PaymentMandate/cbc:ID`. |
+| **Compte débité (IBAN)** *(BT-91)* | Le compte du débiteur sur lequel le montant est prélevé, émis en `cac:PaymentMandate/cac:PayerFinancialAccount/cbc:ID`. |
+
+Les identifiants payeur supplémentaires (0..n) vont dans le panneau *Payer Identifiers* associé, chacun un champ source et un schéma de la liste *Scheme IDs*. Le bloc entier n'est émis **que lorsqu'un champ payeur est renseigné**, de sorte que les factures ordinaires restent inchangées ; quand il est présent, le PDF lisible affiche le payeur et le compte débité aux côtés des informations de paiement.
 
 ### XSL Editor
 

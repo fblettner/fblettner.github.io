@@ -25,7 +25,10 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-06-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
   <a href="#v2026-06-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-17</span></a>
   <a href="#v2026-06-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-16</span></a>
-  <a href="#v2026-08-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.08.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-26</span></a>
+  <a href="#v2026-08-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.08.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-29</span></a>
+  <a href="#v2026-08-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-28</span></a>
+  <a href="#v2026-08-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-27</span></a>
+  <a href="#v2026-08-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-26</span></a>
   <a href="#v2026-08-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-25</span></a>
   <a href="#v2026-08-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-19</span></a>
   <a href="#v2026-08-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-18</span></a>
@@ -293,6 +296,45 @@ Actionable error when a BI Publisher RTF subtemplate is missing, and a starter m
 - **Starter manifest generator for the PDF → XML adapter.** New CLI mode `-pdfManifest <input.pdf> <output.manifest.xml>` (also `nomaubl.sh pdf-manifest` / `nomaubl.cmd pdf-manifest`) analyses the PDF and emits a JDE-shape manifest XML, for the case where the customer has no native JDE XML sample of the same R-program to feed `-pdf2xml`. Inferred element names use the printed RC label text where available and the OWObject DD alias as fallback; the customer edits the file to give meaningful names, then reuses it as the 3rd argument of `-pdf2xml`. The root element is derived from the PDF filename (typical JDE spool convention) and multi-line text fields keep a single element name across all their lines via a sticky cache.
 
 ---
+
+## 2026.08.29.1 — 2026-08-29 \{#v2026-08-29-1\}
+
+### New features
+
+- **Item classification can be repeated on an invoice line.** The line-item **Item classification (BT-158)** mapping is now a repeatable group (up to four entries), each with its own source path and scheme (STI, CPV, UNSPSC…), so a line can carry several classification codes — the same way the standard item identifier already works. Existing single-classification templates keep working unchanged.
+- **Direct-debit payer (SEPA prélèvement) support.** Invoices can now carry the full payer / payment-mandate block — the debtor's name, SIREN, VAT, address, contact, identifiers, electronic address, plus the mandate reference and debited account (IBAN). A new **Payer / Direct-debit mandate** section in the mapping editor configures it, and the readable PDF shows the payer and debited account alongside the payment details. Emitted only when a payer field is set, so ordinary invoices are unchanged.
+
+### Improvements
+
+- **French e-invoicing validation updated to the 1.4.0.03 rule pack.** The BR-FR (Flux 2) Schematron was updated to the latest FNFE-MPE correction: a line-level document reference — such as a delivery-note number — that contains a space is no longer wrongly rejected, and *B2CInt* is now accepted as a routing code.
+
+### Fixes
+
+- **PDF-to-XML converter: an order's lines are no longer split across a page break.** When an order spanned a page break, its line items could be scattered across delivery blocks and mixed with the previous order's, leaving orphan line sections. Line items now stay grouped under their delivery block whatever the page breaks — only a change of invoice number starts a new block.
+- **Readable PDF: all item classification codes are now shown.** When an invoice line carried several classification codes (BT-158), the readable PDF printed only the first; it now lists every code, each with its scheme.
+
+## 2026.08.28.1 — 2026-08-28 \{#v2026-08-28-1\}
+
+### Improvements
+
+- **Longer routing codes are no longer truncated.** The invoice routing/treatment code field was widened (10 → 20 characters), so values such as *ArchiveOnly* and *OutOfScope* are stored in full. A database migration is applied automatically on upgrade.
+
+## 2026.08.27.1 — 2026-08-27 \{#v2026-08-27-1\}
+
+### New features
+
+- **Review invoices before they are sent (Waiting).** Document types gain a **Waiting (W)** send option: matching invoices are generated and validated but held instead of being sent to the PA, so they can be reviewed first. A new **Waiting for review** card on the Technical Dashboard counts the held invoices and releases them all to the PA in one click.
+
+### Improvements
+
+- **"Do not send" document types can no longer be sent to the PA.** When a document type is set to *Do not send*, the Resend action is hidden on the invoice and the platform refuses any manual or bulk send — so a non-transmissible invoice can't be pushed out by mistake.
+- **Send several invoices to the PA at once.** The invoice list now has a checkbox on each row and a **Resend selected** button, so a batch of invoices can be resent in one action (with a progress view). Only invoices that may be sent are selectable — *Do not send* rows are disabled.
+- **Archive-only invoices (B2C, B2BInt) are no longer transmitted to a recipient.** For platforms that support it (e.g. Yooz), invoices whose routing type is B2C, B2BInt, Archive-only or Out-of-scope (all e-reported rather than routed) are now flagged as archive-only on the API call, while B2B / B2G keep transmitting — determined automatically from the invoice, on both the first send and any resend. Use the `{{passThrough}}` placeholder in the connector body to enable it.
+
+### Fixes
+
+- **Readable PDF: order and buyer reference labels are now translated.** On a French invoice, the "Order" and "Buyer Ref." labels in the readable PDF header stayed in English; they now show as **Réf. commande** and **Réf. acheteur**.
+- **Readable PDF: line-level preceding-invoice reference now shows its date.** On a credit note, a preceding-invoice reference carried on an invoice line printed only the document number; it now prints the issue date next to it, like the header reference.
 
 ## 2026.08.26.1 — 2026-08-26 \{#v2026-08-26-1\}
 

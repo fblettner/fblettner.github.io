@@ -339,7 +339,11 @@ La requête SQL de la vue Factures joint maintenant `F564231` (UH) et `F564230` 
 
 ### Navigation au clic
 
-Cliquer sur une ligne ouvre la **modale de détail** de la facture. Toutes les actions de la page sont unitaires : pas de sélection multi-lignes.
+Cliquer sur une ligne ouvre la **modale de détail** de la facture. La plupart des actions sont unitaires, mais la liste permet aussi un **renvoi groupé** — voir ci-dessous.
+
+### Renvoi groupé \{#bulk-resend\}
+
+Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne est cochée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Seules les factures réellement transmissibles sont sélectionnables — les lignes dont le type de document est réglé sur *Ne pas envoyer* sont désactivées, pour qu'une facture non transmissible ne se glisse pas dans un lot par erreur. Pour la même raison, l'action **Renvoyer** unitaire est masquée sur les lignes *Ne pas envoyer*.
 
 ### Export
 

@@ -6,7 +6,7 @@ keywords: [NomaUBL, tech dashboard, IT, operations, system health, JVM, heap, GC
 
 # Tech Dashboard
 
-The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 14 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and a live feed of running jobs. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, scheduler-driven START / END events and disk usage.
+The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 15 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and a live feed of running jobs. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, scheduler-driven START / END events and disk usage.
 
 Every refresh hits four backend endpoints in parallel — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — so the page lands in one round-trip and stays light on the database.
 
@@ -238,10 +238,10 @@ The 12-column grid is laid out as eight rows:
 | Row | Layout | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **System Health** · **Quick links** |
-| 2 | `4 + 4 + 4` | **Send Failed** · **Error trend · 14d** · **Retry rate · 14d** |
-| 3 | `4 + 4 + 4` | **Scheduler** · **Throughput · 14d** · **Active sessions / clients** |
-| 4 | `4 + 8` | **JVM · threads + GC** · **Filesystem** |
-| 5 | `8 + 4` | *(reserved)* · **Template processing time · 14d** |
+| 2 | `4 + 4 + 4` | **Send Failed** · **Scheduler** · **Error trend · 14d** |
+| 3 | `4 + 4 + 4` | **Waiting for review** · **Retry rate · 14d** · **JVM · threads + GC** |
+| 4 | `4 + 4` | **Throughput · 14d** · **Active sessions / clients** |
+| 5 | `8 + 4` | **Filesystem** · **Template processing time · 14d** |
 | 6 | `12` | **Live process events** |
 | 7 | `12` | **Configuration check** |
 | 8 | `5 + 7` | **Database tables** · **Recent errors** |
@@ -287,6 +287,10 @@ A single big-number card showing how many invoices are currently in *Send failed
 | Throttle | 100 ms between calls — fixed in code; not operator-tunable here. The [Auto-Retry](../configuration/system/auto-retry.md) schedule exposes its own throttle for the scheduled equivalent. |
 
 Use the manual button for a one-shot replay during business hours (a brief PA outage that cleared, a small batch you want resent now). For unattended overnight retries, schedule a row on the [Auto-Retry](../configuration/system/auto-retry.md) page — same code path, no operator action required.
+
+### Waiting for review (row 3, span 4) \{#waiting-for-review\}
+
+A big-number card that counts the invoices **held before sending** — the ones whose document type carries the `W` (*Waiting*) send flag on the [Document Types](../configuration/system/document-types.md) page. These invoices were generated and validated but deliberately not transmitted, so a user can check them first. When the count is non-zero, a **Send all N** button releases every held invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same [progress window](#shared-progress-window) as *Send Failed*. It mirrors the *Send Failed* card — same big number, same one-click bulk action — but for the review queue rather than the failure queue.
 
 ### Scheduler (row 3, span 4)
 

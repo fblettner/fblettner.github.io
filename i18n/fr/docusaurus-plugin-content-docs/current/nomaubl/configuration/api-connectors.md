@@ -213,6 +213,8 @@ Des **placeholders `{{param}}`** peuvent être utilisés dans les URLs, les en-t
 
 Tous les autres placeholders doivent être **déclarés dans la section Parameters de l'endpoint** (voir ci-dessous).
 
+Un placeholder intégré supplémentaire, `{{passThrough}}`, se résout en un drapeau **archivage seul** déduit du type de routage de la facture. Les factures en e-reporting plutôt qu'en routage (B2C, B2BInt, Archivage seul, Hors périmètre) le résolvent en archivage seul, tandis que les B2B / B2G le résolvent en transmission — le tout déterminé automatiquement au premier envoi comme à tout renvoi. Placez `{{passThrough}}` dans le corps de l'endpoint d'envoi quand la plateforme cible (par ex. Yooz) sait archiver un document sans le transmettre à un destinataire : ces factures sont alors archivées sur la plateforme au lieu d'être transmises.
+
 ### Champs par endpoint
 
 | Champ | Description |
