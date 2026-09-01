@@ -27317,6 +27317,10 @@ Cliquer sur une ligne ouvre la **modale de détail** de la facture. La plupart d
 
 Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne est cochée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Seules les factures réellement transmissibles sont sélectionnables — les lignes dont le type de document est réglé sur *Ne pas envoyer* sont désactivées, pour qu'une facture non transmissible ne se glisse pas dans un lot par erreur. Pour la même raison, l'action **Renvoyer** unitaire est masquée sur les lignes *Ne pas envoyer*.
 
+### Retraitement \{#reprocess\}
+
+Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures éligibles au retraitement. Le retraitement **reconstruit** une facture à partir du XML JDE archivé lors du premier dépôt — en régénérant la facture électronique, le PDF et le XML — pour une facture **rejetée** par la plateforme (statut 213) ou **déposée mais non transmise** (statut 200). La facture conserve son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont éligibles ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
+
 ### Export
 
 Un bouton **Exporter** dans la barre d'outils exporte la vue courante (filtres compris) au format CSV sous le nom `invoices.csv`.
@@ -27936,9 +27940,9 @@ Une purge quotidienne exécutée par `BackgroundScheduler` supprime toute ligne 
 ## Tableau de bord IT
 Source: https://docs.nomana-it.fr/fr/nomaubl/application/tech-dashboard/
 
-Page de santé opérationnelle pour les équipes IT : 15 widgets qui couvrent heap JVM, GC, threads et uptime, ping base, informations de build, espace disque et nombre de fichiers, débit de traitement, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, événements de traitement en direct (paires START / END des jobs en cours, plus erreurs inline), vérification de configuration, tables de base, erreurs récentes et planificateur en arrière-plan. Un seul aller-retour par rafraîchissement, aucune authentification requise pour le bloc système.
+Page de santé opérationnelle pour les équipes IT : 16 widgets qui couvrent heap JVM, GC, threads et uptime, ping base, informations de build, espace disque et nombre de fichiers, débit de traitement, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, événements de traitement en direct (paires START / END des jobs en cours, plus erreurs inline), vérification de configuration, tables de base, erreurs récentes et planificateur en arrière-plan. Un seul aller-retour par rafraîchissement, aucune authentification requise pour le bloc système.
 
-Le **Tableau de bord IT** est la vue opérationnelle de NomaUBL destinée aux équipes techniques — une page unique qui regroupe 15 widgets couvrant la JVM, la base de données, le système de fichiers, le pipeline de traitement, le planificateur et un flux en direct des traitements en cours. Il complète le [tableau de bord métier](./dashboard.md) : le public métier voit les volumes de factures et les délais d'aller-retour PA, l'équipe IT voit la pression heap, les événements START / END pilotés par le planificateur et l'usage disque.
+Le **Tableau de bord IT** est la vue opérationnelle de NomaUBL destinée aux équipes techniques — une page unique qui regroupe 16 widgets couvrant la JVM, la base de données, le système de fichiers, le pipeline de traitement, le planificateur et un flux en direct des traitements en cours. Il complète le [tableau de bord métier](./dashboard.md) : le public métier voit les volumes de factures et les délais d'aller-retour PA, l'équipe IT voit la pression heap, les événements START / END pilotés par le planificateur et l'usage disque.
 
 Chaque rafraîchissement appelle quatre endpoints back-end en parallèle — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — pour que la page se charge en un seul aller-retour et reste légère pour la base.
 
@@ -27970,9 +27974,9 @@ La grille à 12 colonnes est organisée en huit rangées :
 | Rangée | Disposition | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **Santé système** · **Raccourcis** |
-| 2 | `4 + 4 + 4` | **Échec d'envoi** · **Planificateur** · **Courbe d'erreurs · 14j** |
-| 3 | `4 + 4 + 4` | **En attente de revue** · **Taux de relance · 14j** · **JVM · threads + GC** |
-| 4 | `4 + 4` | **Débit · 14j** · **Sessions / Clients actifs** |
+| 2 | `4 + 4 + 4` | **Échec d'envoi** · **En attente de revue** · **À retraiter** |
+| 3 | `4 + 4 + 4` | **Planificateur** · **Courbe d'erreurs · 14j** · **Taux de relance · 14j** |
+| 4 | `4 + 4 + 4` | **JVM · threads + GC** · **Débit · 14j** · **Sessions / Clients actifs** |
 | 5 | `8 + 4` | **Système de fichiers** · **Temps de traitement par modèle · 14j** |
 | 6 | `12` | **Traitements en cours · direct** |
 | 7 | `12` | **Vérification de configuration** |
@@ -28014,6 +28018,10 @@ Une seule carte en grand chiffre qui indique combien de factures sont actuelleme
 ### En attente de revue (rangée 3, span 4) \{#waiting-for-review\}
 
 Une carte en grand chiffre qui compte les factures **retenues avant envoi** — celles dont le type de document porte le drapeau d'envoi `W` (*En attente*) sur la page [Types de document](../configuration/system/document-types.md). Ces factures ont été générées et validées, mais volontairement pas transmises, pour qu'un utilisateur puisse les vérifier au préalable. Quand le compteur n'est pas à zéro, un bouton **Tout envoyer (N)** libère chaque facture retenue vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même [fenêtre de progression](#shared-progress-window) que *Échec d'envoi*. Elle reprend le principe de la carte *Échec d'envoi* — même grand chiffre, même action groupée en un clic — mais pour la file de revue plutôt que la file d'échecs.
+
+### À retraiter (rangée 2, span 4) \{#to-reprocess\}
+
+Une carte en grand chiffre qui compte les factures **éligibles au retraitement** — celles que la plateforme a **rejetées** (statut 213) ou **déposées sans les transmettre** (statut 200), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** reconstruit chaque facture éligible à partir de son XML JDE archivé (en régénérant la facture électronique, le PDF et le XML) via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
 
 | Élément | Comportement |
 |---|---|
@@ -30376,7 +30384,7 @@ Chaque tâche PA dans NomaUBL a un nom d'endpoint par défaut. Quand l'api-conne
 | **Import** | `import` | Soumission d'une facture à la PA. |
 | **Import status** | `import-status` | Sondage du statut d'import de la PA. |
 | **Invoice statuses** | `invoice-statuses` | Boucle de récupération des statuts du cycle de vie. |
-| **Resolve invoice** | `resolve-invoice` | Résolution d'un identifiant attribué par la PA à partir d'une clé de document NomaUBL. |
+| **Resolve invoice** | `resolve-invoice` | Résolution d'un identifiant attribué par la PA à partir d'une clé de document NomaUBL. **Facultatif** — laissé indéfini, la mise à jour d'un statut vers la plateforme utilise l'UUID plateforme capturé lors du dépôt au lieu d'une recherche : un connecteur sans endpoint de recherche fonctionne donc quand même. Les plateformes qui exigent la recherche continuent de l'utiliser. |
 | **Post status** | `post-status` | Renvoi des statuts vendeur (actions réglementaires) vers la PA. |
 | **Report import** | `report-import` | Soumission e-Reporting quand le template [e-reporting](./ereporting.md) retombe sur le connecteur e-invoicing. |
 
@@ -34023,6 +34031,7 @@ Un modèle en *Source = UBL* embarque désormais les mêmes PDF que le flux XML 
 |---|---|
 | **No-Data Key** | Nom d'un élément XML qui **doit exister** dans le spool. Si absent, NomaUBL considère le document comme vide et l'ignore. Utile pour écarter les sections de spool qui ne correspondent pas à des factures réelles. |
 | **Set Locale** | Locale utilisée pour rendre le PDF (par ex. `en_US`, `fr_FR`). Affecte uniquement le formatage des dates et nombres dans le PDF. |
+| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir du XML JDE archivé lors du premier dépôt — après un **rejet** par la plateforme (statut 213) ou un **dépôt non transmis** (statut 200). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Seuls les modèles à **source XML** sont éligibles. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande. |
 
 ---
 
@@ -36249,6 +36258,8 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
+  2026.09.01.1 · 2026-09-01
+  2026.08.31.1 · 2026-08-31
   2026.08.29.1 · 2026-08-29
   2026.08.28.1 · 2026-08-28
   2026.08.27.1 · 2026-08-27
@@ -36328,6 +36339,31 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.09.01.1 — 2026-09-01 \{#v2026-09-01-1\}
+
+### Nouveautés
+
+- **Un document justificatif peut être référencé sans pièce jointe (BT-122 / BT-123).** Dans la section *Documents justificatifs* de l'éditeur de mappage, une entrée peut désormais porter uniquement une référence de document justificatif (BT-122) et une description facultative (BT-123), sans pièce jointe — une facture peut ainsi renvoyer à un document sans l'embarquer. Les entrées comportant un fichier restent inchangées.
+- **Identifiant d'objet facturé (BT-18).** Une nouvelle section de mappage *Identifiants d'objet facturé* enregistre l'objet auquel se rapporte la facture (abonnement, compteur, actif…), le schéma étant choisi dans la liste des codes de référence de document. L'identifiant apparaît également sur le PDF lisible (bloc facture), avec le libellé de son schéma.
+
+### Améliorations
+
+- **La mise à jour d'un statut sur la plateforme ne nécessite plus d'endpoint de recherche.** Lorsque le connecteur de la plateforme ne définit pas d'endpoint *resolve-invoice*, le statut est désormais envoyé avec l'UUID plateforme capturé lors du dépôt au lieu d'échouer. Les plateformes qui exigent la recherche continuent de l'utiliser.
+- **La Référence UBL documente désormais le bloc payeur / prélèvement et d'autres champs récents.** La page de référence liste la partie payeur complète (EXT-FR-FE-BG-02 / EXT-FR-FE-43…65), la date du bon de commande, le nom commercial de l'acheteur, ainsi que l'identifiant et la version du schéma de classification d'article.
+
+---
+
+## 2026.08.31.1 — 2026-08-31 \{#v2026-08-31-1\}
+
+### Nouveautés
+
+- **Retraitement d'une facture rejetée ou non transmise.** Une facture **rejetée** par la plateforme (statut 213) ou **déposée mais non transmise** (statut 200) peut désormais être retraitée : elle est reconstruite à partir du XML JDE archivé lors du premier dépôt. La facture électronique est régénérée — la facture reste donc dans la liste E-invoicing — et le PDF lisible ainsi que le XML sont produits. La facture **conserve son statut** : une entrée *Retraitement* est inscrite dans son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une seule fois. Le retraitement est **désactivé par défaut** et s'active par type de document via le nouveau paramètre **Autoriser le retraitement** (paramétrage du document) ; seules les factures à source XML sont éligibles.
+  - **Liste E-invoicing** — cochez une ou plusieurs factures puis cliquez sur **Retraiter la sélection**.
+  - **Tableau de bord IT** — la nouvelle carte **À retraiter** indique le nombre de factures éligibles et les retraite toutes en un clic.
+  - **Ligne de commande** — `./nomaubl.sh reprocess <env>` retraite toutes les factures éligibles, pour la planification ou les traitements par lot.
 
 ---
 
@@ -40524,7 +40560,8 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-14, BT-19 | Numéro, dates, références. La référence de commande porte à la fois le bon de commande de l'acheteur (BT-13) et la **référence de commande du vendeur** (BT-14, `cac:OrderReference/cbc:SalesOrderID`) avec sa propre date de référence — les deux se règlent côte à côte, chacun depuis un champ source. |
 | **Billing References** | BT-11, BT-14 à BT-18, BT-122 à BT-124 | Projet, contrat, expédition, justificatifs. |
 | **Preceding Invoices — répété** *(BG-3, 0..n)* | BT-25, BT-26 | Parcourt un groupe source répétitif et génère un `cac:BillingReference` par facture antérieure (avec une date d'émission facultative), en complément de la référence unique BT-25/BT-26 déjà gérée dans *Billing References*. |
-| **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Joindre un document déjà encodé en base64 dans le spool source — jusqu'à quatre par facture. Voir [Pièces jointes intégrées](#embedded-attachments) plus bas. |
+| **Supporting Documents** *(BG-24 · BT-122 / BT-123 / BT-125)* | `cac:AdditionalDocumentReference` | Références de documents justificatifs — une référence (BT-122) avec une description facultative (BT-123), et éventuellement un fichier intégré (BT-125) encodé en base64 dans le spool source. Jusqu'à quatre par facture. Voir [Documents justificatifs](#supporting-documents) plus bas. |
+| **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Jusqu'à quatre identifiants de l'objet auquel se rapporte la facture (abonnement, compteur, actif…), chacun avec un schéma issu de la liste *document-reference-codes*. Voir [Identifiants d'objet facturé](#invoiced-object-identifiers) plus bas. |
 | **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur — plus, dans le panneau *Seller Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-29), chacun un champ source + un code de la liste *Scheme IDs*. |
 | **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur — plus, dans le panneau *Buyer Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-46), chacun un champ source + un code de la liste *Scheme IDs*. |
 | **Agent Party** | extended-ctc-fr | Tiers intermédiaire optionnel. |
@@ -40602,18 +40639,23 @@ Le bloc répété et la référence unique BT-25 / BT-26 peuvent coexister — r
 
 Le XPath de ligne est contrôlé par le [schematron Extended-CTC-FR](./validate.md) aligné sur la publication FNFE V1.4.0 du 30 juin 2026, donc la structure émise correspond à ce que la PA attend.
 
-#### Pièces jointes intégrées \{#embedded-attachments\}
+#### Documents justificatifs \{#supporting-documents\}
 
-La section *Embedded Attachments* joint à la facture UBL un document déjà encodé en base64 dans le spool source — jusqu'à quatre par facture. Chaque ligne mappe :
+La section *Supporting Documents* (groupe BG-24) joint ou référence des documents justificatifs sur la facture UBL — jusqu'à quatre par facture. Chaque ligne mappe :
 
 | Champ | Effet |
 |---|---|
-| **Chemin source base64** | Le chemin XML qui porte la charge base64 dans le spool. |
-| **Nom de fichier** | Texte fixe ou espace réservé `{Champ}` / `{Groupe/Champ}` — par ex. `{DocNumber}.pdf`. |
-| **Type MIME** | Le type de média déclaré (`application/pdf`, `image/png`, …). |
-| **Code** | Un code choisi dans la liste de référence de la plateforme (`PJA`, `RIB`, `BON_LIVRAISON`, …). |
+| **Référence** *(BT-122)* | La référence du document justificatif (`cbc:ID`). Sert aussi de code de pièce jointe quand un fichier est intégré — un code de la liste de référence de la plateforme (`PJA`, `RIB`, `BON_LIVRAISON`, …) ; vide, la valeur `PJA` s'applique par défaut si un fichier est présent. |
+| **Description** *(BT-123)* | Texte fixe ou espace réservé `{Champ}` / `{Groupe/Champ}` — par ex. `{DocNumber}`. Vide, la référence est reprise. |
+| **Chemin source base64** *(facultatif, BT-125)* | Le chemin XML qui porte une charge base64 dans le spool. À renseigner pour intégrer le fichier ; laissé vide, la ligne reste une **référence seule**. |
+| **Nom de fichier** | Nom du fichier intégré — texte fixe ou espace réservé `{Champ}` (par ex. `{DocNumber}.pdf`). |
+| **Type MIME** | Le type de média déclaré du fichier intégré (`application/pdf`, `image/png`, …). |
 
-La ligne est émise sous forme de `cac:AdditionalDocumentReference` avec un `EmbeddedDocumentBinaryObject` inline (BT-125). Elle se place à la bonne position dans le schéma et coexiste avec les autres sources de pièces jointes déjà gérées (fichiers sur disque, PDF lisible généré) — le tout reste groupé dans la même sortie. Jusqu'à cette section, une pièce jointe ne pouvait venir que d'un fichier sur disque ou du PDF généré, jamais d'un champ base64 déjà présent dans le spool.
+Chaque ligne est émise sous forme de `cac:AdditionalDocumentReference` à la bonne position dans le schéma. Quand le chemin base64 est renseigné, la référence porte un `EmbeddedDocumentBinaryObject` inline (BT-125) — le fichier peut venir d'un champ base64 du spool, aux côtés des autres sources de pièces jointes (fichiers sur disque, PDF lisible généré). Laissé vide, la ligne n'émet que la référence (BT-122) et sa description (BT-123) — une facture peut ainsi renvoyer à un document sans l'embarquer.
+
+#### Identifiants d'objet facturé \{#invoiced-object-identifiers\}
+
+La section *Invoiced Object Identifiers* enregistre ce à quoi **se rapporte** la facture (BT-18) — un abonnement, un compteur, un actif, une ligne de contrat… — avec jusqu'à quatre identifiants. Chaque ligne est une valeur source plus un **schéma** choisi dans la liste *document-reference-codes*, et est émise sous forme de `cac:AdditionalDocumentReference` avec un `DocumentTypeCode` `130`. L'identifiant apparaît aussi sur le bloc facture du PDF lisible, avec le libellé de son schéma.
 
 #### Payeur / mandat de prélèvement \{#payer-mandate\}
 

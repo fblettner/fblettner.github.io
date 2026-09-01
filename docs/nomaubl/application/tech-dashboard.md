@@ -6,7 +6,7 @@ keywords: [NomaUBL, tech dashboard, IT, operations, system health, JVM, heap, GC
 
 # Tech Dashboard
 
-The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 15 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and a live feed of running jobs. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, scheduler-driven START / END events and disk usage.
+The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 16 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and a live feed of running jobs. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, scheduler-driven START / END events and disk usage.
 
 Every refresh hits four backend endpoints in parallel — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — so the page lands in one round-trip and stays light on the database.
 
@@ -238,9 +238,9 @@ The 12-column grid is laid out as eight rows:
 | Row | Layout | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **System Health** · **Quick links** |
-| 2 | `4 + 4 + 4` | **Send Failed** · **Scheduler** · **Error trend · 14d** |
-| 3 | `4 + 4 + 4` | **Waiting for review** · **Retry rate · 14d** · **JVM · threads + GC** |
-| 4 | `4 + 4` | **Throughput · 14d** · **Active sessions / clients** |
+| 2 | `4 + 4 + 4` | **Send Failed** · **Waiting for review** · **To reprocess** |
+| 3 | `4 + 4 + 4` | **Scheduler** · **Error trend · 14d** · **Retry rate · 14d** |
+| 4 | `4 + 4 + 4` | **JVM · threads + GC** · **Throughput · 14d** · **Active sessions / clients** |
 | 5 | `8 + 4` | **Filesystem** · **Template processing time · 14d** |
 | 6 | `12` | **Live process events** |
 | 7 | `12` | **Configuration check** |
@@ -291,6 +291,10 @@ Use the manual button for a one-shot replay during business hours (a brief PA ou
 ### Waiting for review (row 3, span 4) \{#waiting-for-review\}
 
 A big-number card that counts the invoices **held before sending** — the ones whose document type carries the `W` (*Waiting*) send flag on the [Document Types](../configuration/system/document-types.md) page. These invoices were generated and validated but deliberately not transmitted, so a user can check them first. When the count is non-zero, a **Send all N** button releases every held invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same [progress window](#shared-progress-window) as *Send Failed*. It mirrors the *Send Failed* card — same big number, same one-click bulk action — but for the review queue rather than the failure queue.
+
+### To reprocess (row 2, span 4) \{#to-reprocess\}
+
+A big-number card that counts the invoices **eligible for reprocessing** — those the platform **rejected** (status 213) or **deposited but did not transmit** (status 200), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button rebuilds every eligible invoice from its archived JDE XML source (regenerating the e-invoice, PDF and XML) through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
 
 ### Scheduler (row 3, span 4)
 

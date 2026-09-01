@@ -211,7 +211,8 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-14, BT-19 | Numéro, dates, références. La référence de commande porte à la fois le bon de commande de l'acheteur (BT-13) et la **référence de commande du vendeur** (BT-14, `cac:OrderReference/cbc:SalesOrderID`) avec sa propre date de référence — les deux se règlent côte à côte, chacun depuis un champ source. |
 | **Billing References** | BT-11, BT-14 à BT-18, BT-122 à BT-124 | Projet, contrat, expédition, justificatifs. |
 | **Preceding Invoices — répété** *(BG-3, 0..n)* | BT-25, BT-26 | Parcourt un groupe source répétitif et génère un `cac:BillingReference` par facture antérieure (avec une date d'émission facultative), en complément de la référence unique BT-25/BT-26 déjà gérée dans *Billing References*. |
-| **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Joindre un document déjà encodé en base64 dans le spool source — jusqu'à quatre par facture. Voir [Pièces jointes intégrées](#embedded-attachments) plus bas. |
+| **Supporting Documents** *(BG-24 · BT-122 / BT-123 / BT-125)* | `cac:AdditionalDocumentReference` | Références de documents justificatifs — une référence (BT-122) avec une description facultative (BT-123), et éventuellement un fichier intégré (BT-125) encodé en base64 dans le spool source. Jusqu'à quatre par facture. Voir [Documents justificatifs](#supporting-documents) plus bas. |
+| **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Jusqu'à quatre identifiants de l'objet auquel se rapporte la facture (abonnement, compteur, actif…), chacun avec un schéma issu de la liste *document-reference-codes*. Voir [Identifiants d'objet facturé](#invoiced-object-identifiers) plus bas. |
 | **Seller / Supplier** | BT-27 à BT-43 | Identification, adresse et contact du vendeur — plus, dans le panneau *Seller Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-29), chacun un champ source + un code de la liste *Scheme IDs*. |
 | **Buyer / Customer** | BT-44 à BT-58, BT-163 | Identification, adresse et contact de l'acheteur — plus, dans le panneau *Buyer Identifiers*, jusqu'à quatre identifiants supplémentaires avec un schéma (BT-46), chacun un champ source + un code de la liste *Scheme IDs*. |
 | **Agent Party** | extended-ctc-fr | Tiers intermédiaire optionnel. |
@@ -338,18 +339,23 @@ Le bloc répété et la référence unique BT-25 / BT-26 peuvent coexister — r
 
 Le XPath de ligne est contrôlé par le [schematron Extended-CTC-FR](./validate.md) aligné sur la publication FNFE V1.4.0 du 30 juin 2026, donc la structure émise correspond à ce que la PA attend.
 
-#### Pièces jointes intégrées \{#embedded-attachments\}
+#### Documents justificatifs \{#supporting-documents\}
 
-La section *Embedded Attachments* joint à la facture UBL un document déjà encodé en base64 dans le spool source — jusqu'à quatre par facture. Chaque ligne mappe :
+La section *Supporting Documents* (groupe BG-24) joint ou référence des documents justificatifs sur la facture UBL — jusqu'à quatre par facture. Chaque ligne mappe :
 
 | Champ | Effet |
 |---|---|
-| **Chemin source base64** | Le chemin XML qui porte la charge base64 dans le spool. |
-| **Nom de fichier** | Texte fixe ou espace réservé `{Champ}` / `{Groupe/Champ}` — par ex. `{DocNumber}.pdf`. |
-| **Type MIME** | Le type de média déclaré (`application/pdf`, `image/png`, …). |
-| **Code** | Un code choisi dans la liste de référence de la plateforme (`PJA`, `RIB`, `BON_LIVRAISON`, …). |
+| **Référence** *(BT-122)* | La référence du document justificatif (`cbc:ID`). Sert aussi de code de pièce jointe quand un fichier est intégré — un code de la liste de référence de la plateforme (`PJA`, `RIB`, `BON_LIVRAISON`, …) ; vide, la valeur `PJA` s'applique par défaut si un fichier est présent. |
+| **Description** *(BT-123)* | Texte fixe ou espace réservé `{Champ}` / `{Groupe/Champ}` — par ex. `{DocNumber}`. Vide, la référence est reprise. |
+| **Chemin source base64** *(facultatif, BT-125)* | Le chemin XML qui porte une charge base64 dans le spool. À renseigner pour intégrer le fichier ; laissé vide, la ligne reste une **référence seule**. |
+| **Nom de fichier** | Nom du fichier intégré — texte fixe ou espace réservé `{Champ}` (par ex. `{DocNumber}.pdf`). |
+| **Type MIME** | Le type de média déclaré du fichier intégré (`application/pdf`, `image/png`, …). |
 
-La ligne est émise sous forme de `cac:AdditionalDocumentReference` avec un `EmbeddedDocumentBinaryObject` inline (BT-125). Elle se place à la bonne position dans le schéma et coexiste avec les autres sources de pièces jointes déjà gérées (fichiers sur disque, PDF lisible généré) — le tout reste groupé dans la même sortie. Jusqu'à cette section, une pièce jointe ne pouvait venir que d'un fichier sur disque ou du PDF généré, jamais d'un champ base64 déjà présent dans le spool.
+Chaque ligne est émise sous forme de `cac:AdditionalDocumentReference` à la bonne position dans le schéma. Quand le chemin base64 est renseigné, la référence porte un `EmbeddedDocumentBinaryObject` inline (BT-125) — le fichier peut venir d'un champ base64 du spool, aux côtés des autres sources de pièces jointes (fichiers sur disque, PDF lisible généré). Laissé vide, la ligne n'émet que la référence (BT-122) et sa description (BT-123) — une facture peut ainsi renvoyer à un document sans l'embarquer.
+
+#### Identifiants d'objet facturé \{#invoiced-object-identifiers\}
+
+La section *Invoiced Object Identifiers* enregistre ce à quoi **se rapporte** la facture (BT-18) — un abonnement, un compteur, un actif, une ligne de contrat… — avec jusqu'à quatre identifiants. Chaque ligne est une valeur source plus un **schéma** choisi dans la liste *document-reference-codes*, et est émise sous forme de `cac:AdditionalDocumentReference` avec un `DocumentTypeCode` `130`. L'identifiant apparaît aussi sur le bloc facture du PDF lisible, avec le libellé de son schéma.
 
 #### Payeur / mandat de prélèvement \{#payer-mandate\}
 

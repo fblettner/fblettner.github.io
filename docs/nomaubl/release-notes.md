@@ -10,7 +10,9 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-08-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.08.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-29</span></a>
+  <a href="#v2026-09-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-01</span></a>
+  <a href="#v2026-08-31-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.31.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-31</span></a>
+  <a href="#v2026-08-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-29</span></a>
   <a href="#v2026-08-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-28</span></a>
   <a href="#v2026-08-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-27</span></a>
   <a href="#v2026-08-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-26</span></a>
@@ -90,6 +92,31 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
 </div>
+
+---
+
+## 2026.09.01.1 — 2026-09-01 \{#v2026-09-01-1\}
+
+### New features
+
+- **Supporting documents can be referenced without an attachment (BT-122 / BT-123).** In the mapping editor's *Supporting Documents* section, an entry can now carry just a supporting-document reference (BT-122) and an optional description (BT-123) with the attachment left empty — so an invoice can point to a document without embedding it. Entries that do carry a file are unchanged.
+- **Invoiced object identifiers (BT-18).** A new *Invoiced Object Identifiers* mapping section records the object an invoice relates to (subscription, meter, asset…), with the scheme chosen from the document-reference-codes list. The identifier is also shown on the readable PDF (invoice block), labelled by its scheme.
+
+### Improvements
+
+- **Setting an invoice status on the platform no longer needs a lookup endpoint.** When the platform connector doesn't define a *resolve-invoice* search endpoint, the status is now posted using the platform UUID captured at submission instead of failing. Platforms that require the lookup keep using it.
+- **UBL Reference now documents the payer / direct-debit block and other recently-added fields.** The reference page lists the full payer party (EXT-FR-FE-BG-02 / EXT-FR-FE-43…65), the order reference date, the buyer trading name, and the item-classification scheme id and version.
+
+---
+
+## 2026.08.31.1 — 2026-08-31 \{#v2026-08-31-1\}
+
+### New features
+
+- **Reprocess a rejected or non-transmitted invoice.** An invoice that was **rejected** by the platform (status 213) or **deposited but not transmitted** (status 200) can now be reprocessed: it is rebuilt from the JDE XML source archived at first submission. The e-invoice is regenerated — so the invoice stays in the E-invoicing list — and the readable PDF and XML are produced. The invoice **keeps its current status**: a *Retraitement* entry is recorded in its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Reprocess is **off by default** and enabled per document type with the new **Allow reprocess** setting (document setup); only XML-source templates are eligible.
+  - **E-invoicing list** — tick one or more invoices and click **Reprocess selected**.
+  - **IT dashboard** — the new **To reprocess** card shows how many invoices are eligible and reprocesses them all in one click.
+  - **Command line** — `./nomaubl.sh reprocess <env>` reprocesses every eligible invoice, for scheduling or bulk runs.
 
 ---
 

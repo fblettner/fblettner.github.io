@@ -32767,6 +32767,10 @@ Clicking any row opens the **Detail modal** for that invoice. Most actions are p
 
 Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). Only invoices that may actually be sent are selectable — rows whose document type is set to *Do not send* are disabled, so a non-transmissible invoice can't be swept into a batch by mistake. For the same reason, the per-invoice **Resend** action is hidden on *Do not send* rows.
 
+### Reprocess \{#reprocess\}
+
+A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing **rebuilds** an invoice from the JDE XML source archived at first submission — regenerating the e-invoice, PDF and XML — for an invoice the platform **rejected** (status 213) or **deposited but did not transmit** (status 200). The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
+
 ### Export
 
 A small **Export** button in the toolbar exports the current view (filters applied) as a CSV file named `invoices.csv`.
@@ -33388,7 +33392,7 @@ Source: https://docs.nomana-it.fr/nomaubl/application/tech-dashboard/
 
 Operational health page for the IT team: 14 widgets covering JVM heap, GC, threads and uptime, database ping, build info, filesystem free space and file counts, processing throughput, error trend, retry rate, template processing time, active sessions, live process events (START / END pairs from running jobs, plus inline errors), configuration check, database tables, recent errors, and the background scheduler. One round-trip per refresh, no auth required to render the system block.
 
-The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 15 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and a live feed of running jobs. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, scheduler-driven START / END events and disk usage.
+The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 16 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and a live feed of running jobs. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, scheduler-driven START / END events and disk usage.
 
 Every refresh hits four backend endpoints in parallel — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — so the page lands in one round-trip and stays light on the database.
 
@@ -33420,9 +33424,9 @@ The 12-column grid is laid out as eight rows:
 | Row | Layout | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **System Health** · **Quick links** |
-| 2 | `4 + 4 + 4` | **Send Failed** · **Scheduler** · **Error trend · 14d** |
-| 3 | `4 + 4 + 4` | **Waiting for review** · **Retry rate · 14d** · **JVM · threads + GC** |
-| 4 | `4 + 4` | **Throughput · 14d** · **Active sessions / clients** |
+| 2 | `4 + 4 + 4` | **Send Failed** · **Waiting for review** · **To reprocess** |
+| 3 | `4 + 4 + 4` | **Scheduler** · **Error trend · 14d** · **Retry rate · 14d** |
+| 4 | `4 + 4 + 4` | **JVM · threads + GC** · **Throughput · 14d** · **Active sessions / clients** |
 | 5 | `8 + 4` | **Filesystem** · **Template processing time · 14d** |
 | 6 | `12` | **Live process events** |
 | 7 | `12` | **Configuration check** |
@@ -33473,6 +33477,10 @@ Use the manual button for a one-shot replay during business hours (a brief PA ou
 ### Waiting for review (row 3, span 4) \{#waiting-for-review\}
 
 A big-number card that counts the invoices **held before sending** — the ones whose document type carries the `W` (*Waiting*) send flag on the [Document Types](../configuration/system/document-types.md) page. These invoices were generated and validated but deliberately not transmitted, so a user can check them first. When the count is non-zero, a **Send all N** button releases every held invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same [progress window](#shared-progress-window) as *Send Failed*. It mirrors the *Send Failed* card — same big number, same one-click bulk action — but for the review queue rather than the failure queue.
+
+### To reprocess (row 2, span 4) \{#to-reprocess\}
+
+A big-number card that counts the invoices **eligible for reprocessing** — those the platform **rejected** (status 213) or **deposited but did not transmit** (status 200), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button rebuilds every eligible invoice from its archived JDE XML source (regenerating the e-invoice, PDF and XML) through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
 
 ### Scheduler (row 3, span 4)
 
@@ -35826,7 +35834,7 @@ Each PA task in NomaUBL has a default endpoint name. When the api-connector expo
 | **Import** | `import` | Submitting an invoice to the PA. |
 | **Import status** | `import-status` | Polling whether the PA has accepted an import. |
 | **Invoice statuses** | `invoice-statuses` | The lifecycle-status retrieval loop. |
-| **Resolve invoice** | `resolve-invoice` | Looking up a PA-assigned identifier from a NomaUBL document key. |
+| **Resolve invoice** | `resolve-invoice` | Looking up a PA-assigned identifier from a NomaUBL document key. **Optional** — when it is left undefined, pushing a status back to the platform uses the platform UUID captured at submission instead of a lookup, so a connector without a search endpoint still works. Platforms that require the lookup keep using it. |
 | **Post status** | `post-status` | Pushing seller statuses (regulatory actions) back to the PA. |
 | **Report import** | `report-import` | E-Reporting submission when the [e-reporting](./ereporting.md) template falls back to the e-invoicing connector. |
 
@@ -39473,6 +39481,7 @@ A template with *Source = UBL* now embeds the same PDFs as the XML flow — afte
 |---|---|
 | **No-Data Key** | Name of an XML element that **must exist** in the spool. If absent, NomaUBL considers the document empty and skips it. Useful to filter out spool sections that aren't real invoices. |
 | **Set Locale** | Locale used to render the PDF (e.g. `en_US`, `fr_FR`). Affects date and number formatting in the PDF only. |
+| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — after a platform **rejection** (status 213) or a **deposit that was not transmitted** (status 200). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. Only **XML-source** templates are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
 
 ---
 
@@ -41699,6 +41708,8 @@ NomaUBL release notes — every user-visible change shipped in the platform, ver
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
   Versions
+  2026.09.01.1 · 2026-09-01
+  2026.08.31.1 · 2026-08-31
   2026.08.29.1 · 2026-08-29
   2026.08.28.1 · 2026-08-28
   2026.08.27.1 · 2026-08-27
@@ -41778,6 +41789,31 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.09.01.1 — 2026-09-01 \{#v2026-09-01-1\}
+
+### New features
+
+- **Supporting documents can be referenced without an attachment (BT-122 / BT-123).** In the mapping editor's *Supporting Documents* section, an entry can now carry just a supporting-document reference (BT-122) and an optional description (BT-123) with the attachment left empty — so an invoice can point to a document without embedding it. Entries that do carry a file are unchanged.
+- **Invoiced object identifiers (BT-18).** A new *Invoiced Object Identifiers* mapping section records the object an invoice relates to (subscription, meter, asset…), with the scheme chosen from the document-reference-codes list. The identifier is also shown on the readable PDF (invoice block), labelled by its scheme.
+
+### Improvements
+
+- **Setting an invoice status on the platform no longer needs a lookup endpoint.** When the platform connector doesn't define a *resolve-invoice* search endpoint, the status is now posted using the platform UUID captured at submission instead of failing. Platforms that require the lookup keep using it.
+- **UBL Reference now documents the payer / direct-debit block and other recently-added fields.** The reference page lists the full payer party (EXT-FR-FE-BG-02 / EXT-FR-FE-43…65), the order reference date, the buyer trading name, and the item-classification scheme id and version.
+
+---
+
+## 2026.08.31.1 — 2026-08-31 \{#v2026-08-31-1\}
+
+### New features
+
+- **Reprocess a rejected or non-transmitted invoice.** An invoice that was **rejected** by the platform (status 213) or **deposited but not transmitted** (status 200) can now be reprocessed: it is rebuilt from the JDE XML source archived at first submission. The e-invoice is regenerated — so the invoice stays in the E-invoicing list — and the readable PDF and XML are produced. The invoice **keeps its current status**: a *Retraitement* entry is recorded in its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Reprocess is **off by default** and enabled per document type with the new **Allow reprocess** setting (document setup); only XML-source templates are eligible.
+  - **E-invoicing list** — tick one or more invoices and click **Reprocess selected**.
+  - **IT dashboard** — the new **To reprocess** card shows how many invoices are eligible and reprocesses them all in one click.
+  - **Command line** — `./nomaubl.sh reprocess <env>` reprocesses every eligible invoice, for scheduling or bulk runs.
 
 ---
 
@@ -45772,7 +45808,8 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-14, BT-19 | Document number, dates, references. The order reference carries both the buyer's purchase order (BT-13) and the seller's **sales order reference** (BT-14, `cac:OrderReference/cbc:SalesOrderID`) with its own reference date — set the two side by side, each from a source field. |
 | **Billing References** | BT-11, BT-14 to BT-18, BT-122 to BT-124 | Project, contract, dispatch, supporting documents. |
 | **Preceding Invoices — repeating** *(BG-3, 0..n)* | BT-25, BT-26 | Iterates a repeating source group and emits one `cac:BillingReference` per prior invoice (each with an optional issue date), alongside the single BT-25/BT-26 reference already handled in *Billing References*. |
-| **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Attach a document already carried as base64 in the source spool — up to four per invoice. See [Embedded Attachments](#embedded-attachments) below. |
+| **Supporting Documents** *(BG-24 · BT-122 / BT-123 / BT-125)* | `cac:AdditionalDocumentReference` | Supporting-document references — a reference (BT-122) with an optional description (BT-123), and optionally an embedded file (BT-125) carried as base64 in the source spool. Up to four per invoice. See [Supporting documents](#supporting-documents) below. |
+| **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Up to four identifiers of the object the invoice relates to (subscription, meter, asset…), each with a scheme from the *document-reference-codes* list. See [Invoiced object identifiers](#invoiced-object-identifiers) below. |
 | **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. |
 | **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
 | **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
@@ -45850,18 +45887,23 @@ Both the repeating block and the single BT-25 / BT-26 reference can coexist — 
 
 The line-level XPath is checked by the [Extended-CTC-FR schematron](./validate.md) refreshed to the 30 June 2026 FNFE V1.4.0 publication, so the emitted structure lines up with what the PA expects.
 
-#### Embedded Attachments \{#embedded-attachments\}
+#### Supporting documents \{#supporting-documents\}
 
-The *Embedded Attachments* section attaches a document already carried as base64 in the source spool straight to the UBL invoice — up to four per invoice. Each row maps:
+The *Supporting Documents* section (group BG-24) attaches or references supporting documents on the UBL invoice — up to four per invoice. Each row maps:
 
 | Field | Effect |
 |---|---|
-| **Base64 source path** | The XML path that carries the base64 payload in the spool. |
-| **Filename** | Literal text or a `{Field}` / `{Group/Field}` placeholder — e.g. `{DocNumber}.pdf`. |
-| **MIME type** | The declared media type (`application/pdf`, `image/png`, …). |
-| **Qualifier** | A code picked from the platform's reference list (`PJA`, `RIB`, `BON_LIVRAISON`, …). |
+| **Reference** *(BT-122)* | The supporting-document reference (`cbc:ID`). Also used as the attachment qualifier when a file is embedded — a code from the platform's reference list (`PJA`, `RIB`, `BON_LIVRAISON`, …); blank defaults to `PJA` when a file is present. |
+| **Description** *(BT-123)* | Literal text or a `{Field}` / `{Group/Field}` placeholder — e.g. `{DocNumber}`. Blank falls back to the reference. |
+| **Base64 source path** *(optional, BT-125)* | The XML path that carries a base64 payload in the spool. Fill it to embed the file; leave it empty to keep the row as a **reference only**. |
+| **Filename** | Filename for the embedded part — literal or a `{Field}` placeholder (e.g. `{DocNumber}.pdf`). |
+| **MIME type** | The declared media type of the embedded file (`application/pdf`, `image/png`, …). |
 
-The row is emitted as a `cac:AdditionalDocumentReference` with an inline `EmbeddedDocumentBinaryObject` (BT-125). It lands at the correct schema position and sits alongside the existing attachment sources (external files on disk, the generated readable PDF) — everything stays together in the same output. Until this section, an attachment could only come from a file on disk or the generated PDF, never from a base64 field already inside the spool.
+Each row is emitted as a `cac:AdditionalDocumentReference` at the correct schema position. When the base64 path is set, the reference carries an inline `EmbeddedDocumentBinaryObject` (BT-125) — the file can come from a base64 field inside the spool, alongside the other attachment sources (external files on disk, the generated readable PDF). When it is left empty, the row emits just the reference (BT-122) and its description (BT-123) — so an invoice can point to a document without embedding it.
+
+#### Invoiced object identifiers \{#invoiced-object-identifiers\}
+
+The *Invoiced Object Identifiers* section records what the invoice **relates to** (BT-18) — a subscription, a meter, an asset, a contract line… — with up to four identifiers. Each row is a source value plus a **scheme** picked from the *document-reference-codes* list, and is emitted as a `cac:AdditionalDocumentReference` with `DocumentTypeCode` `130`. The identifier is also shown on the readable PDF's invoice block, labelled by its scheme.
 
 #### Payer / direct-debit mandate \{#payer-mandate\}
 

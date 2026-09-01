@@ -164,7 +164,7 @@ Chaque tâche PA dans NomaUBL a un nom d'endpoint par défaut. Quand l'api-conne
 | **Import** | `import` | Soumission d'une facture à la PA. |
 | **Import status** | `import-status` | Sondage du statut d'import de la PA. |
 | **Invoice statuses** | `invoice-statuses` | Boucle de récupération des statuts du cycle de vie. |
-| **Resolve invoice** | `resolve-invoice` | Résolution d'un identifiant attribué par la PA à partir d'une clé de document NomaUBL. |
+| **Resolve invoice** | `resolve-invoice` | Résolution d'un identifiant attribué par la PA à partir d'une clé de document NomaUBL. **Facultatif** — laissé indéfini, la mise à jour d'un statut vers la plateforme utilise l'UUID plateforme capturé lors du dépôt au lieu d'une recherche : un connecteur sans endpoint de recherche fonctionne donc quand même. Les plateformes qui exigent la recherche continuent de l'utiliser. |
 | **Post status** | `post-status` | Renvoi des statuts vendeur (actions réglementaires) vers la PA. |
 | **Report import** | `report-import` | Soumission e-Reporting quand le template [e-reporting](./ereporting.md) retombe sur le connecteur e-invoicing. |
 

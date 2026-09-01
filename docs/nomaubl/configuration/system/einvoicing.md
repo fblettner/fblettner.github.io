@@ -164,7 +164,7 @@ Each PA task in NomaUBL has a default endpoint name. When the api-connector expo
 | **Import** | `import` | Submitting an invoice to the PA. |
 | **Import status** | `import-status` | Polling whether the PA has accepted an import. |
 | **Invoice statuses** | `invoice-statuses` | The lifecycle-status retrieval loop. |
-| **Resolve invoice** | `resolve-invoice` | Looking up a PA-assigned identifier from a NomaUBL document key. |
+| **Resolve invoice** | `resolve-invoice` | Looking up a PA-assigned identifier from a NomaUBL document key. **Optional** — when it is left undefined, pushing a status back to the platform uses the platform UUID captured at submission instead of a lookup, so a connector without a search endpoint still works. Platforms that require the lookup keep using it. |
 | **Post status** | `post-status` | Pushing seller statuses (regulatory actions) back to the PA. |
 | **Report import** | `report-import` | E-Reporting submission when the [e-reporting](./ereporting.md) template falls back to the e-invoicing connector. |
 

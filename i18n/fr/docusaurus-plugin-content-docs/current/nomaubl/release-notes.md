@@ -10,7 +10,9 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-08-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.08.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-29</span></a>
+  <a href="#v2026-09-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-01</span></a>
+  <a href="#v2026-08-31-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.31.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-31</span></a>
+  <a href="#v2026-08-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-29</span></a>
   <a href="#v2026-08-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-28</span></a>
   <a href="#v2026-08-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-27</span></a>
   <a href="#v2026-08-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-26</span></a>
@@ -90,6 +92,31 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
 </div>
+
+---
+
+## 2026.09.01.1 — 2026-09-01 \{#v2026-09-01-1\}
+
+### Nouveautés
+
+- **Un document justificatif peut être référencé sans pièce jointe (BT-122 / BT-123).** Dans la section *Documents justificatifs* de l'éditeur de mappage, une entrée peut désormais porter uniquement une référence de document justificatif (BT-122) et une description facultative (BT-123), sans pièce jointe — une facture peut ainsi renvoyer à un document sans l'embarquer. Les entrées comportant un fichier restent inchangées.
+- **Identifiant d'objet facturé (BT-18).** Une nouvelle section de mappage *Identifiants d'objet facturé* enregistre l'objet auquel se rapporte la facture (abonnement, compteur, actif…), le schéma étant choisi dans la liste des codes de référence de document. L'identifiant apparaît également sur le PDF lisible (bloc facture), avec le libellé de son schéma.
+
+### Améliorations
+
+- **La mise à jour d'un statut sur la plateforme ne nécessite plus d'endpoint de recherche.** Lorsque le connecteur de la plateforme ne définit pas d'endpoint *resolve-invoice*, le statut est désormais envoyé avec l'UUID plateforme capturé lors du dépôt au lieu d'échouer. Les plateformes qui exigent la recherche continuent de l'utiliser.
+- **La Référence UBL documente désormais le bloc payeur / prélèvement et d'autres champs récents.** La page de référence liste la partie payeur complète (EXT-FR-FE-BG-02 / EXT-FR-FE-43…65), la date du bon de commande, le nom commercial de l'acheteur, ainsi que l'identifiant et la version du schéma de classification d'article.
+
+---
+
+## 2026.08.31.1 — 2026-08-31 \{#v2026-08-31-1\}
+
+### Nouveautés
+
+- **Retraitement d'une facture rejetée ou non transmise.** Une facture **rejetée** par la plateforme (statut 213) ou **déposée mais non transmise** (statut 200) peut désormais être retraitée : elle est reconstruite à partir du XML JDE archivé lors du premier dépôt. La facture électronique est régénérée — la facture reste donc dans la liste E-invoicing — et le PDF lisible ainsi que le XML sont produits. La facture **conserve son statut** : une entrée *Retraitement* est inscrite dans son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une seule fois. Le retraitement est **désactivé par défaut** et s'active par type de document via le nouveau paramètre **Autoriser le retraitement** (paramétrage du document) ; seules les factures à source XML sont éligibles.
+  - **Liste E-invoicing** — cochez une ou plusieurs factures puis cliquez sur **Retraiter la sélection**.
+  - **Tableau de bord IT** — la nouvelle carte **À retraiter** indique le nombre de factures éligibles et les retraite toutes en un clic.
+  - **Ligne de commande** — `./nomaubl.sh reprocess <env>` retraite toutes les factures éligibles, pour la planification ou les traitements par lot.
 
 ---
 

@@ -211,7 +211,8 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-14, BT-19 | Document number, dates, references. The order reference carries both the buyer's purchase order (BT-13) and the seller's **sales order reference** (BT-14, `cac:OrderReference/cbc:SalesOrderID`) with its own reference date — set the two side by side, each from a source field. |
 | **Billing References** | BT-11, BT-14 to BT-18, BT-122 to BT-124 | Project, contract, dispatch, supporting documents. |
 | **Preceding Invoices — repeating** *(BG-3, 0..n)* | BT-25, BT-26 | Iterates a repeating source group and emits one `cac:BillingReference` per prior invoice (each with an optional issue date), alongside the single BT-25/BT-26 reference already handled in *Billing References*. |
-| **Embedded Attachments** *(BT-125)* | `cac:AdditionalDocumentReference / EmbeddedDocumentBinaryObject` | Attach a document already carried as base64 in the source spool — up to four per invoice. See [Embedded Attachments](#embedded-attachments) below. |
+| **Supporting Documents** *(BG-24 · BT-122 / BT-123 / BT-125)* | `cac:AdditionalDocumentReference` | Supporting-document references — a reference (BT-122) with an optional description (BT-123), and optionally an embedded file (BT-125) carried as base64 in the source spool. Up to four per invoice. See [Supporting documents](#supporting-documents) below. |
+| **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Up to four identifiers of the object the invoice relates to (subscription, meter, asset…), each with a scheme from the *document-reference-codes* list. See [Invoiced object identifiers](#invoiced-object-identifiers) below. |
 | **Seller / Supplier** | BT-27 to BT-43 | Seller party identification, address, contact — plus, in the *Seller Identifiers* panel, up to four extra identifiers with a scheme (BT-29), each a source field + a code from the *Scheme IDs* list. |
 | **Buyer / Customer** | BT-44 to BT-58, BT-163 | Buyer party identification, address, contact — plus, in the *Buyer Identifiers* panel, up to four extra identifiers with a scheme (BT-46), each a source field + a code from the *Scheme IDs* list. |
 | **Agent Party** | extended-ctc-fr | Optional intermediate agent party. |
@@ -338,18 +339,23 @@ Both the repeating block and the single BT-25 / BT-26 reference can coexist — 
 
 The line-level XPath is checked by the [Extended-CTC-FR schematron](./validate.md) refreshed to the 30 June 2026 FNFE V1.4.0 publication, so the emitted structure lines up with what the PA expects.
 
-#### Embedded Attachments \{#embedded-attachments\}
+#### Supporting documents \{#supporting-documents\}
 
-The *Embedded Attachments* section attaches a document already carried as base64 in the source spool straight to the UBL invoice — up to four per invoice. Each row maps:
+The *Supporting Documents* section (group BG-24) attaches or references supporting documents on the UBL invoice — up to four per invoice. Each row maps:
 
 | Field | Effect |
 |---|---|
-| **Base64 source path** | The XML path that carries the base64 payload in the spool. |
-| **Filename** | Literal text or a `{Field}` / `{Group/Field}` placeholder — e.g. `{DocNumber}.pdf`. |
-| **MIME type** | The declared media type (`application/pdf`, `image/png`, …). |
-| **Qualifier** | A code picked from the platform's reference list (`PJA`, `RIB`, `BON_LIVRAISON`, …). |
+| **Reference** *(BT-122)* | The supporting-document reference (`cbc:ID`). Also used as the attachment qualifier when a file is embedded — a code from the platform's reference list (`PJA`, `RIB`, `BON_LIVRAISON`, …); blank defaults to `PJA` when a file is present. |
+| **Description** *(BT-123)* | Literal text or a `{Field}` / `{Group/Field}` placeholder — e.g. `{DocNumber}`. Blank falls back to the reference. |
+| **Base64 source path** *(optional, BT-125)* | The XML path that carries a base64 payload in the spool. Fill it to embed the file; leave it empty to keep the row as a **reference only**. |
+| **Filename** | Filename for the embedded part — literal or a `{Field}` placeholder (e.g. `{DocNumber}.pdf`). |
+| **MIME type** | The declared media type of the embedded file (`application/pdf`, `image/png`, …). |
 
-The row is emitted as a `cac:AdditionalDocumentReference` with an inline `EmbeddedDocumentBinaryObject` (BT-125). It lands at the correct schema position and sits alongside the existing attachment sources (external files on disk, the generated readable PDF) — everything stays together in the same output. Until this section, an attachment could only come from a file on disk or the generated PDF, never from a base64 field already inside the spool.
+Each row is emitted as a `cac:AdditionalDocumentReference` at the correct schema position. When the base64 path is set, the reference carries an inline `EmbeddedDocumentBinaryObject` (BT-125) — the file can come from a base64 field inside the spool, alongside the other attachment sources (external files on disk, the generated readable PDF). When it is left empty, the row emits just the reference (BT-122) and its description (BT-123) — so an invoice can point to a document without embedding it.
+
+#### Invoiced object identifiers \{#invoiced-object-identifiers\}
+
+The *Invoiced Object Identifiers* section records what the invoice **relates to** (BT-18) — a subscription, a meter, an asset, a contract line… — with up to four identifiers. Each row is a source value plus a **scheme** picked from the *document-reference-codes* list, and is emitted as a `cac:AdditionalDocumentReference` with `DocumentTypeCode` `130`. The identifier is also shown on the readable PDF's invoice block, labelled by its scheme.
 
 #### Payer / direct-debit mandate \{#payer-mandate\}
 

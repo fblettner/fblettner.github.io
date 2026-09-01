@@ -345,6 +345,10 @@ Clicking any row opens the **Detail modal** for that invoice. Most actions are p
 
 Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). Only invoices that may actually be sent are selectable — rows whose document type is set to *Do not send* are disabled, so a non-transmissible invoice can't be swept into a batch by mistake. For the same reason, the per-invoice **Resend** action is hidden on *Do not send* rows.
 
+### Reprocess \{#reprocess\}
+
+A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing **rebuilds** an invoice from the JDE XML source archived at first submission — regenerating the e-invoice, PDF and XML — for an invoice the platform **rejected** (status 213) or **deposited but did not transmit** (status 200). The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
+
 ### Export
 
 A small **Export** button in the toolbar exports the current view (filters applied) as a CSV file named `invoices.csv`.
