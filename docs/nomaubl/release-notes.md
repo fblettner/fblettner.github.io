@@ -10,7 +10,11 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-09-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-01</span></a>
+  <a href="#v2026-09-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-06</span></a>
+  <a href="#v2026-09-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-05</span></a>
+  <a href="#v2026-09-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-04</span></a>
+  <a href="#v2026-09-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-03</span></a>
+  <a href="#v2026-09-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-01</span></a>
   <a href="#v2026-08-31-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.31.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-31</span></a>
   <a href="#v2026-08-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-29</span></a>
   <a href="#v2026-08-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-28</span></a>
@@ -92,6 +96,65 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
 </div>
+
+---
+
+## 2026.09.06.1 — 2026-09-06 \{#v2026-09-06-1\}
+
+### Improvements
+
+- **French Schematron packs updated to V1.4.0 fix04 (2026-09-04).** The Flux 2 (CIUS-FR) and EXTENDED-CTC-FR validation rules are upgraded to the latest FNFE publication — date-format handling, multi-note checks, the BT-23 message and the charge-reason `listID` control are corrected, and the FATAL mode now applies from **October 1, 2026**. The About page shows the new versions.
+- **E-reporting (Flux 10) transmissions are now validated before sending.** Every generated report is checked against the official PPF schema and the Annexe 7 v1.8 rules — exactly like B2B invoices. A non-conform report is recorded with the new status *9958 — Echec de validation* and the detailed findings, is never sent to the PA, and its invoices stay available: once the cause is fixed, the next run rebuilds the same period automatically.
+- **Regenerate an e-reporting report.** A report that was not accepted (created, send failed, import failed, rejected, validation failed) can be regenerated from its detail view: the report is cancelled (new status *9959 — Annulé, régénéré*, kept for audit), its invoices become selectable again, and a new report is built for the same period — including late arrivals — then validated and submitted per your settings. Cancelled reports no longer offer Resend or Download. Reports already with the PA cannot be regenerated.
+
+### Fixes
+
+- **E-reporting XML now conforms to the official Flux 10 format.** The transmission is wrapped in the required `Report` envelope, the mandatory business process block is always present with the official profile identifier, seller and buyer carry the identifiers the PPF accepts (with the VAT number derived automatically from the SIREN or the intra-community identifier), and amounts follow the official schema. Previously generated reports can be resubmitted correctly via Regenerate.
+- **E-reporting status labels no longer show blank.** Status codes added after your configuration was created (9958, 9959…) now display their built-in labels; your customized labels keep priority.
+- **The web interface updates immediately after a deployment.** Browsers could keep running the previous version of the interface from cache after a server update; pages are now revalidated on every load, and the application bundles are cached efficiently.
+
+---
+
+## 2026.09.05.1 — 2026-09-05 \{#v2026-09-05-1\}
+
+### Improvements
+
+- **Keep PDF now also generates the PDF for UBL-mode document types.** For a document type processed in UBL mode (for example B2C e-reporting), ticking *PDF* now produces the readable PDF and its index XML — exactly as in BURST mode — and copies them to the burst output directory. Previously the checkbox only copied files that BURST mode had produced, so UBL-mode types never got a PDF.
+- **Reprocessing now covers validated invoices that were never sent.** Invoices in *Validation réussie* (9901) — typically document types configured not to be sent — can now be reprocessed from the dashboard, the invoice list or the command line, regenerating their outputs (readable PDF and XML included) from the archived source. Useful to produce files that are missing for invoices processed before today's improvements.
+
+### Fixes
+
+- **PA status retrieval no longer misses events.** The date used to ask the platform for "everything since the last poll" was recorded in local time labelled as UTC; a platform comparing it as real UTC saw a date two hours in the future and returned nothing, so status updates (rejections, refusals…) were silently skipped. The date is now recorded in true UTC. After updating, set *paStatusLastRetrievedAt* back a few hours once to catch up on the missed window.
+- **Statuses received from the PA now trigger notification rules.** Statuses fetched by the lifecycle poll (Rejected 213, Refused 210, Deposited 200 with a reason…) updated the invoice but bypassed the notification engine — rules on those statuses only fired from the manual test button. They now go out on the configured channels like any other status change.
+- **Splitting a large spool across parallel workers no longer aborts with an internal error.** Even after the 2026.09.03.1 fix, bursting a multi-invoice file could still fail intermittently with a fatal indexing error: the parallel workers were still reading from one shared in-memory copy of the source file. Each invoice now gets its own private copy before the work is split, so parallel runs complete reliably.
+
+---
+
+## 2026.09.04.1 — 2026-09-04 \{#v2026-09-04-1\}
+
+### Improvements
+
+- **Process a whole folder of invoice files in one run — in parallel.** For XML-spool templates, processing can run once against the template's input folder instead of once per file, and now handles several files at the same time to use the available CPU — much faster when a folder holds thousands of single-invoice files. Each file is still handled as its own unit (its name, source archive and traceability are kept) and a failure on one file doesn't stop the others.
+- **Limit how much CPU processing uses.** A new *Max threads* setting (Global settings → Processing) caps how many invoices are processed at once, so a shared server keeps headroom for other services. Leave it blank to use every available core.
+- **Scheduled and on-demand folder processing of XML templates now runs in parallel.** A directory scan for an XML-spool template processes the whole folder in one fast parallel pass — like the command-line batch — instead of one file at a time. UBL templates and per-job (BIP) processing are unchanged.
+- **Failed files are set aside instead of looping.** A new *Errors Directory* setting (Global settings → Directories): when a file fails, it is moved to the errors folder so a repeated directory run no longer retries the same failing file endlessly. Leave it blank to keep the previous behaviour (file stays in place).
+- **Clearer message when the template or configuration is wrong.** A template name that isn't defined in the configuration (or a configuration missing its global section) now reports exactly what's missing, instead of a generic internal error.
+
+### Fixes
+
+- **Invoice list: the selection checkbox column is no longer over-wide.** It is now sized to the checkbox and centred, instead of taking an equal share of the table width.
+- **Reliable high-volume and parallel processing.** Processing a large spool or a big folder could occasionally fail with an internal error, report a duplicate log-entry error, exhaust system resources, or print a spurious "could not load status definitions" warning. These no longer happen, so large runs at full parallelism complete cleanly.
+- **Invoice lines without a delivery block are no longer dropped.** In the PDF-to-XML conversion, a line with no preceding delivery/BL block (for example a standalone shipping charge) could be placed outside its delivery grouping and then skipped further down the pipeline — losing a real line and unbalancing the invoice total. Such lines now stay grouped and are kept, so line counts and totals reconcile.
+
+---
+
+## 2026.09.03.1 — 2026-09-03 \{#v2026-09-03-1\}
+
+### Fixes
+
+- **Invoice lines now show every classification code.** When an invoice line carries several item classification codes (BT-158), the invoice detail view lists them all instead of only the first — matching what the readable PDF already shows.
+- **Processing large spools in parallel no longer fails intermittently.** On big spools, concurrent workers could abort a run with an internal indexing error; the invoice records are now snapshotted before being split across threads, so runs at full parallelism complete reliably.
+- **Amounts with a trailing minus sign are read as negative.** Source values where the sign trails the number (mainframe/COBOL overpunch, e.g. `123.45-`) are now converted to proper negative amounts (`-123.45`) in the UBL and the readable PDF, instead of being treated as positive. Well-formed values are unaffected.
 
 ---
 

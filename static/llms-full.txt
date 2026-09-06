@@ -32115,8 +32115,18 @@ E-reporting reports go through a **dedicated lifecycle** distinct from the invoi
 | **`9955`** | `EREPORT_DEPOSITED` | PA accepted and registered the report — terminal success. |
 | **`9956`** | `EREPORT_FAILED_IMPORT` | PA could not import the report (post-acknowledgement processing error). |
 | **`9957`** | `EREPORT_REJECTED` | PA rejected the report on a validation rule — terminal failure. The next attempt requires a corrected `RE`. |
+| **`9958`** | `EREPORT_ERROR_VALIDATION` | Report failed the **pre-send validation** (PPF schema + Annexe 7 rules) — it is never sent to the PA, the detailed findings are recorded, and its invoices stay available. **Self-healing**: once the cause is fixed, the next run rebuilds the same period automatically. |
+| **`9959`** | `EREPORT_CANCELLED` | Report cancelled by a **Regenerate** — kept for audit while its invoices are freed and a replacement report is built for the same period. |
 
-Codes `9950` – `9954` are *transient* (the report is still moving). `9955` – `9957` are *terminal* (no further automatic transition); a `RE` (replacement) report is the only way to override a `9957` for the same period.
+Codes `9950` – `9954` are *transient* (the report is still moving). `9955` – `9957` are *terminal* (no further automatic transition); a `RE` (replacement) report is the only way to override a `9957` for the same period. `9958` is a recoverable pre-send failure — see [Validation before sending](#validation-before-sending) — and `9959` is an audit record left behind by [Regenerate](#regenerate-a-report).
+
+### Validation before sending \{#validation-before-sending\}
+
+Every generated report is checked **before** it is sent — against the official PPF schema and the Annexe 7 rules — exactly like a B2B invoice. A report that doesn't conform is written with status **`9958` — Validation failed**, carries the detailed findings, and is **never sent** to the PA. Its invoices stay available, so once the cause is fixed the next run rebuilds the same period on its own — nothing to unlock by hand.
+
+### Regenerate a report \{#regenerate-a-report\}
+
+A report that was **not accepted** — created, send failed, import failed, rejected or validation failed — can be rebuilt from its **detail view** with **Regenerate**. The current report is cancelled (status **`9959` — Cancelled, regenerated**, kept for audit), its invoices become selectable again, and a fresh report is built for the **same period** — including any late arrivals — then validated and submitted according to your settings. A cancelled report no longer offers **Resend** or **Download**. A report already at the PA (sent, pending or deposited) can't be regenerated.
 
 ---
 
@@ -32769,7 +32779,7 @@ Each row carries a **checkbox**, and a **Resend selected (N)** button appears in
 
 ### Reprocess \{#reprocess\}
 
-A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing **rebuilds** an invoice from the JDE XML source archived at first submission — regenerating the e-invoice, PDF and XML — for an invoice the platform **rejected** (status 213) or **deposited but did not transmit** (status 200). The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
+A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing **rebuilds** an invoice from the JDE XML source archived at first submission — regenerating the e-invoice, PDF and XML — for an invoice the platform **rejected** (status 213), **deposited but did not transmit** (status 200), or that was **validated but never sent** (status 9901). The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
 
 ### Export
 
@@ -33480,7 +33490,7 @@ A big-number card that counts the invoices **held before sending** — the ones 
 
 ### To reprocess (row 2, span 4) \{#to-reprocess\}
 
-A big-number card that counts the invoices **eligible for reprocessing** — those the platform **rejected** (status 213) or **deposited but did not transmit** (status 200), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button rebuilds every eligible invoice from its archived JDE XML source (regenerating the e-invoice, PDF and XML) through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
+A big-number card that counts the invoices **eligible for reprocessing** — those the platform **rejected** (status 213), **deposited but did not transmit** (status 200), or that were **validated but never sent** (status 9901), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button rebuilds every eligible invoice from its archived JDE XML source (regenerating the e-invoice, PDF and XML) through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
 
 ### Scheduler (row 3, span 4)
 
@@ -35661,7 +35671,7 @@ Each of the seven codes is one row in the editor. The **Code** column is read-on
 | **GS** | checkbox | When ticked, runs **Ghostscript** post-processing on the produced PDF for this type (e.g. compression / linearisation), regardless of the runtime argument. Off by default. |
 | **Mode** | *(default)* / `UBL` / `BURST` | Per-type override of the runtime *Mode* argument: empty = **no override** (the runtime mode is kept); `UBL` = force UBL-only output for this type; `BURST` = force bursted output for this type. |
 | **UBL** | checkbox | When ticked, keeps the generated **UBL file** in the bursting output directory after processing for this type. Default: `Y` (kept). |
-| **PDF** | checkbox | When ticked, keeps the generated **PDF file** in the bursting output directory after processing for this type. Default: `N` (not kept). |
+| **PDF** | checkbox | When ticked, keeps the generated **PDF file** in the bursting output directory after processing for this type. Default: `N` (not kept). For a type processed in **UBL mode** (e.g. B2C e-reporting), ticking it also **produces** the readable PDF and its index XML — as bursting mode does — and copies them to the output directory. |
 
 ---
 
@@ -36156,6 +36166,7 @@ The editor has **six tabs**:
 | **Temp Directory** | Scratch space for temporary artefacts. |
 | **Single Output Dir** | Output directory for documents processed in *single* mode. |
 | **Bursting Directory** | Output directory for documents produced by *bursting* mode (one file per invoice). |
+| **Errors Directory** | Where a file that fails processing is moved. During a directory run, moving the failed file aside stops a repeated scan from retrying the same file endlessly. Leave it blank to keep the file in place (the previous behaviour). |
 
 ### Batch Processing
 
@@ -36185,6 +36196,7 @@ The editor has **six tabs**:
 | Field | Values | Description |
 |---|---|---|
 | **Update DB** | `Y` / `N` | When `Y`, processing runs persist their results to the database. Set to `N` only for dry runs / debugging. |
+| **Max threads** | *(blank = all cores)* | Caps how many invoices are processed at once. An XML-spool template can process its whole input folder in a single **parallel** pass — much faster on a folder of thousands of single-invoice files, and used the same way by a scheduled scan, an on-demand run and the command-line batch. Each file stays its own unit (name, source archive and traceability kept) and one file's failure doesn't stop the others. Set a value to keep headroom for other services on a shared host; leave it blank to use every available core. UBL templates and per-job (BIP) processing are unaffected. |
 | **`debugProfile`** | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [Tech Dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
 
 ### PDF
@@ -39481,7 +39493,7 @@ A template with *Source = UBL* now embeds the same PDFs as the XML flow — afte
 |---|---|
 | **No-Data Key** | Name of an XML element that **must exist** in the spool. If absent, NomaUBL considers the document empty and skips it. Useful to filter out spool sections that aren't real invoices. |
 | **Set Locale** | Locale used to render the PDF (e.g. `en_US`, `fr_FR`). Affects date and number formatting in the PDF only. |
-| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — after a platform **rejection** (status 213) or a **deposit that was not transmitted** (status 200). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. Only **XML-source** templates are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
+| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — after a platform **rejection** (status 213), a **deposit that was not transmitted** (status 200), or a **validation that was never sent** (status 9901, typically a type set not to be sent). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. Only **XML-source** templates are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
 
 ---
 
@@ -41708,6 +41720,10 @@ NomaUBL release notes — every user-visible change shipped in the platform, ver
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
   Versions
+  2026.09.06.1 · 2026-09-06
+  2026.09.05.1 · 2026-09-05
+  2026.09.04.1 · 2026-09-04
+  2026.09.03.1 · 2026-09-03
   2026.09.01.1 · 2026-09-01
   2026.08.31.1 · 2026-08-31
   2026.08.29.1 · 2026-08-29
@@ -41789,6 +41805,65 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.09.06.1 — 2026-09-06 \{#v2026-09-06-1\}
+
+### Improvements
+
+- **French Schematron packs updated to V1.4.0 fix04 (2026-09-04).** The Flux 2 (CIUS-FR) and EXTENDED-CTC-FR validation rules are upgraded to the latest FNFE publication — date-format handling, multi-note checks, the BT-23 message and the charge-reason `listID` control are corrected, and the FATAL mode now applies from **October 1, 2026**. The About page shows the new versions.
+- **E-reporting (Flux 10) transmissions are now validated before sending.** Every generated report is checked against the official PPF schema and the Annexe 7 v1.8 rules — exactly like B2B invoices. A non-conform report is recorded with the new status *9958 — Echec de validation* and the detailed findings, is never sent to the PA, and its invoices stay available: once the cause is fixed, the next run rebuilds the same period automatically.
+- **Regenerate an e-reporting report.** A report that was not accepted (created, send failed, import failed, rejected, validation failed) can be regenerated from its detail view: the report is cancelled (new status *9959 — Annulé, régénéré*, kept for audit), its invoices become selectable again, and a new report is built for the same period — including late arrivals — then validated and submitted per your settings. Cancelled reports no longer offer Resend or Download. Reports already with the PA cannot be regenerated.
+
+### Fixes
+
+- **E-reporting XML now conforms to the official Flux 10 format.** The transmission is wrapped in the required `Report` envelope, the mandatory business process block is always present with the official profile identifier, seller and buyer carry the identifiers the PPF accepts (with the VAT number derived automatically from the SIREN or the intra-community identifier), and amounts follow the official schema. Previously generated reports can be resubmitted correctly via Regenerate.
+- **E-reporting status labels no longer show blank.** Status codes added after your configuration was created (9958, 9959…) now display their built-in labels; your customized labels keep priority.
+- **The web interface updates immediately after a deployment.** Browsers could keep running the previous version of the interface from cache after a server update; pages are now revalidated on every load, and the application bundles are cached efficiently.
+
+---
+
+## 2026.09.05.1 — 2026-09-05 \{#v2026-09-05-1\}
+
+### Improvements
+
+- **Keep PDF now also generates the PDF for UBL-mode document types.** For a document type processed in UBL mode (for example B2C e-reporting), ticking *PDF* now produces the readable PDF and its index XML — exactly as in BURST mode — and copies them to the burst output directory. Previously the checkbox only copied files that BURST mode had produced, so UBL-mode types never got a PDF.
+- **Reprocessing now covers validated invoices that were never sent.** Invoices in *Validation réussie* (9901) — typically document types configured not to be sent — can now be reprocessed from the dashboard, the invoice list or the command line, regenerating their outputs (readable PDF and XML included) from the archived source. Useful to produce files that are missing for invoices processed before today's improvements.
+
+### Fixes
+
+- **PA status retrieval no longer misses events.** The date used to ask the platform for "everything since the last poll" was recorded in local time labelled as UTC; a platform comparing it as real UTC saw a date two hours in the future and returned nothing, so status updates (rejections, refusals…) were silently skipped. The date is now recorded in true UTC. After updating, set *paStatusLastRetrievedAt* back a few hours once to catch up on the missed window.
+- **Statuses received from the PA now trigger notification rules.** Statuses fetched by the lifecycle poll (Rejected 213, Refused 210, Deposited 200 with a reason…) updated the invoice but bypassed the notification engine — rules on those statuses only fired from the manual test button. They now go out on the configured channels like any other status change.
+- **Splitting a large spool across parallel workers no longer aborts with an internal error.** Even after the 2026.09.03.1 fix, bursting a multi-invoice file could still fail intermittently with a fatal indexing error: the parallel workers were still reading from one shared in-memory copy of the source file. Each invoice now gets its own private copy before the work is split, so parallel runs complete reliably.
+
+---
+
+## 2026.09.04.1 — 2026-09-04 \{#v2026-09-04-1\}
+
+### Improvements
+
+- **Process a whole folder of invoice files in one run — in parallel.** For XML-spool templates, processing can run once against the template's input folder instead of once per file, and now handles several files at the same time to use the available CPU — much faster when a folder holds thousands of single-invoice files. Each file is still handled as its own unit (its name, source archive and traceability are kept) and a failure on one file doesn't stop the others.
+- **Limit how much CPU processing uses.** A new *Max threads* setting (Global settings → Processing) caps how many invoices are processed at once, so a shared server keeps headroom for other services. Leave it blank to use every available core.
+- **Scheduled and on-demand folder processing of XML templates now runs in parallel.** A directory scan for an XML-spool template processes the whole folder in one fast parallel pass — like the command-line batch — instead of one file at a time. UBL templates and per-job (BIP) processing are unchanged.
+- **Failed files are set aside instead of looping.** A new *Errors Directory* setting (Global settings → Directories): when a file fails, it is moved to the errors folder so a repeated directory run no longer retries the same failing file endlessly. Leave it blank to keep the previous behaviour (file stays in place).
+- **Clearer message when the template or configuration is wrong.** A template name that isn't defined in the configuration (or a configuration missing its global section) now reports exactly what's missing, instead of a generic internal error.
+
+### Fixes
+
+- **Invoice list: the selection checkbox column is no longer over-wide.** It is now sized to the checkbox and centred, instead of taking an equal share of the table width.
+- **Reliable high-volume and parallel processing.** Processing a large spool or a big folder could occasionally fail with an internal error, report a duplicate log-entry error, exhaust system resources, or print a spurious "could not load status definitions" warning. These no longer happen, so large runs at full parallelism complete cleanly.
+- **Invoice lines without a delivery block are no longer dropped.** In the PDF-to-XML conversion, a line with no preceding delivery/BL block (for example a standalone shipping charge) could be placed outside its delivery grouping and then skipped further down the pipeline — losing a real line and unbalancing the invoice total. Such lines now stay grouped and are kept, so line counts and totals reconcile.
+
+---
+
+## 2026.09.03.1 — 2026-09-03 \{#v2026-09-03-1\}
+
+### Fixes
+
+- **Invoice lines now show every classification code.** When an invoice line carries several item classification codes (BT-158), the invoice detail view lists them all instead of only the first — matching what the readable PDF already shows.
+- **Processing large spools in parallel no longer fails intermittently.** On big spools, concurrent workers could abort a run with an internal indexing error; the invoice records are now snapshotted before being split across threads, so runs at full parallelism complete reliably.
+- **Amounts with a trailing minus sign are read as negative.** Source values where the sign trails the number (mainframe/COBOL overpunch, e.g. `123.45-`) are now converted to proper negative amounts (`-123.45`) in the UBL and the readable PDF, instead of being treated as positive. Well-formed values are unaffected.
 
 ---
 
@@ -45652,6 +45727,8 @@ NomaUBL runs validation in **four layered steps** following the AFNOR **XP Z12-0
 | **4b** | **NomaUBL house rules** | Every document — a placeholder pack that ships empty today. Kept as a hook for future AIFE-side rules not yet in the public packs. | `BR-NOMAUBL-rules.sch` *(locally authored, precompiled at build)*. |
 
 Step 2 is **exclusive** (one profile per document); Steps 3 and 4 stack on top. A document that fails any rule with `flag="fatal"` blocks submission to the PA; warnings and informational entries are logged but never block the pipeline.
+
+The French profile packs (`CIUS-FR-validation.sch`, `EXTENDED-CTC-FR-validation.sch`) enforce their checks as **FATAL** — blocking submission — from **1 October 2026**. Before that date the same checks surface as warnings, so a document that will be rejected under the reform can be spotted and corrected ahead of the cutover.
 
 ### Filtered warnings
 

@@ -26665,8 +26665,18 @@ Les rapports e-reporting suivent un **cycle de vie dédié**, distinct de celui 
 | **`9955`** | `EREPORT_DEPOSITED` | La PA a accepté et enregistré le rapport — succès terminal. |
 | **`9956`** | `EREPORT_FAILED_IMPORT` | La PA n'a pas pu importer le rapport (erreur de traitement post-acquittement). |
 | **`9957`** | `EREPORT_REJECTED` | La PA a rejeté le rapport sur une règle de validation — échec terminal. La reprise passe par un `RE` corrigé. |
+| **`9958`** | `EREPORT_ERROR_VALIDATION` | Le rapport a échoué à la **validation avant envoi** (schéma PPF + règles de l'Annexe 7) — il n'est jamais envoyé à la PA, le détail des anomalies est enregistré et ses factures restent disponibles. **Auto-correctif** : une fois la cause corrigée, l'exécution suivante reconstruit automatiquement la même période. |
+| **`9959`** | `EREPORT_CANCELLED` | Rapport annulé par une **régénération** — conservé pour l'audit pendant que ses factures sont libérées et qu'un rapport de remplacement est construit pour la même période. |
 
-Les codes `9950` – `9954` sont *transitoires* (le rapport est en mouvement). `9955` – `9957` sont *terminaux* (pas de transition automatique ultérieure) ; un rapport `RE` (remplacement) est le seul moyen de surcharger un `9957` sur la même période.
+Les codes `9950` – `9954` sont *transitoires* (le rapport est en mouvement). `9955` – `9957` sont *terminaux* (pas de transition automatique ultérieure) ; un rapport `RE` (remplacement) est le seul moyen de surcharger un `9957` sur la même période. `9958` est un échec avant envoi récupérable — voir [Validation avant envoi](#validation-before-sending) — et `9959` est une trace d'audit laissée par [Régénérer](#regenerate-a-report).
+
+### Validation avant envoi \{#validation-before-sending\}
+
+Chaque rapport généré est contrôlé **avant** son envoi — contre le schéma officiel du PPF et les règles de l'Annexe 7 — exactement comme une facture B2B. Un rapport non conforme est enregistré avec le statut **`9958` — Echec de validation**, porte le détail des anomalies et n'est **jamais envoyé** à la PA. Ses factures restent disponibles : une fois la cause corrigée, l'exécution suivante reconstruit d'elle-même la même période — rien à débloquer à la main.
+
+### Régénérer un rapport \{#regenerate-a-report\}
+
+Un rapport **non accepté** — généré, échec d'envoi, échec d'import, rejeté ou échec de validation — peut être reconstruit depuis sa **fiche** avec **Régénérer**. Le rapport courant est annulé (statut **`9959` — Annulé, régénéré**, conservé pour l'audit), ses factures redeviennent sélectionnables, et un nouveau rapport est construit pour la **même période** — retardataires compris — puis validé et transmis selon vos réglages. Un rapport annulé ne propose plus **Renvoyer** ni **Télécharger**. Un rapport déjà à la PA (envoyé, en attente ou déposé) ne peut pas être régénéré.
 
 ---
 
@@ -27319,7 +27329,7 @@ Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection
 
 ### Retraitement \{#reprocess\}
 
-Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures éligibles au retraitement. Le retraitement **reconstruit** une facture à partir du XML JDE archivé lors du premier dépôt — en régénérant la facture électronique, le PDF et le XML — pour une facture **rejetée** par la plateforme (statut 213) ou **déposée mais non transmise** (statut 200). La facture conserve son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont éligibles ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
+Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures éligibles au retraitement. Le retraitement **reconstruit** une facture à partir du XML JDE archivé lors du premier dépôt — en régénérant la facture électronique, le PDF et le XML — pour une facture **rejetée** par la plateforme (statut 213), **déposée mais non transmise** (statut 200), ou **validée mais jamais envoyée** (statut 9901). La facture conserve son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont éligibles ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
 
 ### Export
 
@@ -28021,7 +28031,7 @@ Une carte en grand chiffre qui compte les factures **retenues avant envoi** — 
 
 ### À retraiter (rangée 2, span 4) \{#to-reprocess\}
 
-Une carte en grand chiffre qui compte les factures **éligibles au retraitement** — celles que la plateforme a **rejetées** (statut 213) ou **déposées sans les transmettre** (statut 200), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** reconstruit chaque facture éligible à partir de son XML JDE archivé (en régénérant la facture électronique, le PDF et le XML) via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
+Une carte en grand chiffre qui compte les factures **éligibles au retraitement** — celles que la plateforme a **rejetées** (statut 213), **déposées sans les transmettre** (statut 200), ou **validées mais jamais envoyées** (statut 9901), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** reconstruit chaque facture éligible à partir de son XML JDE archivé (en régénérant la facture électronique, le PDF et le XML) via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
 
 | Élément | Comportement |
 |---|---|
@@ -30211,7 +30221,7 @@ Chaque ligne de l'éditeur correspond à l'un des sept codes. La colonne **Code*
 | **GS** | case à cocher | Quand cochée, exécute un post-traitement **Ghostscript** sur le PDF produit pour ce type (par ex. compression / linéarisation), indépendamment de l'argument d'exécution. Désactivé par défaut. |
 | **Mode** | *(par défaut)* / `UBL` / `BURST` | Surcharge par type de l'argument d'exécution *Mode* : vide = **aucune surcharge** (le mode passé en argument est conservé) ; `UBL` = forcer une sortie UBL uniquement pour ce type ; `BURST` = forcer une sortie éclatée pour ce type. |
 | **UBL** | case à cocher | Quand cochée, conserve le **fichier UBL** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `Y` (conservé). |
-| **PDF** | case à cocher | Quand cochée, conserve le **fichier PDF** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `N` (non conservé). |
+| **PDF** | case à cocher | Quand cochée, conserve le **fichier PDF** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `N` (non conservé). Pour un type traité en **mode UBL** (par ex. le e-reporting B2C), la cocher **produit** aussi le PDF lisible et son XML d'index — comme le fait le mode bursting — et les copie vers le répertoire de sortie. |
 
 ---
 
@@ -30706,6 +30716,7 @@ L'éditeur comporte **six onglets** :
 | **Temp Directory** | Répertoire temporaire utilisé pour les artéfacts intermédiaires. |
 | **Single Output Dir** | Répertoire de sortie des documents traités en mode *single*. |
 | **Bursting Directory** | Répertoire de sortie des documents produits en mode *bursting* (un fichier par facture). |
+| **Errors Directory** | Répertoire où un fichier en échec de traitement est déplacé. Lors d'un traitement de dossier, mettre le fichier fautif de côté empêche un balayage répété de réessayer indéfiniment le même fichier. Laissé vide, le fichier reste en place (comportement précédent). |
 
 ### Batch Processing
 
@@ -30735,6 +30746,7 @@ L'éditeur comporte **six onglets** :
 | Champ | Valeurs | Description |
 |---|---|---|
 | **Update DB** | `Y` / `N` | À `Y`, les exécutions de traitement enregistrent leurs résultats en base de données. À positionner à `N` uniquement pour des exécutions à blanc (dry-run) ou des phases de débogage. |
+| **Max threads** | *(vide = tous les cœurs)* | Limite le nombre de factures traitées simultanément. Un modèle à source XML peut traiter tout son dossier d'entrée en une seule passe **parallèle** — bien plus rapide sur un dossier de milliers de fichiers mono-facture, et de la même façon pour un balayage planifié, une exécution à la demande et le traitement par lot en ligne de commande. Chaque fichier reste une unité à part entière (nom, archive source et traçabilité conservés) et l'échec d'un fichier n'arrête pas les autres. Renseignez une valeur pour garder des ressources aux autres services d'un serveur partagé ; laissez vide pour utiliser tous les cœurs disponibles. Les modèles UBL et le traitement par travail (BIP) ne sont pas concernés. |
 | **`debugProfile`** | `Y` / `N` | À `Y`, chaque exécution écrit des **lignes de chronométrage par étape** dans `F564237` pour chaque phase du pipeline : analyse d'en-tête, analyse des lignes, validation, émission UBL, envoi PA. Les lignes apparaissent sur le [Tableau de bord IT](../../application/tech-dashboard.md) — le flux *Traitements en cours · direct* les marque avec le nom de l'étape, et le widget *Temps par modèle* décompose la moyenne par étape. À laisser à `N` en production ; à passer à `Y` le temps d'un lot pour analyser un pipeline lent. À désactiver dès que l'étape lente est identifiée — les lignes additionnelles gonflent rapidement `F564237` sous charge. |
 
 ### PDF
@@ -34031,7 +34043,7 @@ Un modèle en *Source = UBL* embarque désormais les mêmes PDF que le flux XML 
 |---|---|
 | **No-Data Key** | Nom d'un élément XML qui **doit exister** dans le spool. Si absent, NomaUBL considère le document comme vide et l'ignore. Utile pour écarter les sections de spool qui ne correspondent pas à des factures réelles. |
 | **Set Locale** | Locale utilisée pour rendre le PDF (par ex. `en_US`, `fr_FR`). Affecte uniquement le formatage des dates et nombres dans le PDF. |
-| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir du XML JDE archivé lors du premier dépôt — après un **rejet** par la plateforme (statut 213) ou un **dépôt non transmis** (statut 200). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Seuls les modèles à **source XML** sont éligibles. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande. |
+| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir du XML JDE archivé lors du premier dépôt — après un **rejet** par la plateforme (statut 213), un **dépôt non transmis** (statut 200), ou une **validation jamais envoyée** (statut 9901, typiquement un type configuré pour ne pas être envoyé). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Seuls les modèles à **source XML** sont éligibles. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande. |
 
 ---
 
@@ -36258,6 +36270,10 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
+  2026.09.06.1 · 2026-09-06
+  2026.09.05.1 · 2026-09-05
+  2026.09.04.1 · 2026-09-04
+  2026.09.03.1 · 2026-09-03
   2026.09.01.1 · 2026-09-01
   2026.08.31.1 · 2026-08-31
   2026.08.29.1 · 2026-08-29
@@ -36339,6 +36355,65 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.09.06.1 — 2026-09-06 \{#v2026-09-06-1\}
+
+### Améliorations
+
+- **Schematrons français mis à jour en V1.4.0 fix04 (04/09/2026).** Les règles de validation Flux 2 (CIUS-FR) et EXTENDED-CTC-FR passent à la dernière publication FNFE : traitement des formats de date, contrôles multi-notes, message du BT-23 et contrôle du `listID` des motifs de charge corrigés ; le mode FATAL s'applique désormais à compter du **1er octobre 2026**. La page À propos affiche les nouvelles versions.
+- **Les transmissions e-reporting (Flux 10) sont désormais validées avant envoi.** Chaque rapport généré est contrôlé contre le schéma officiel du PPF et les règles de l'Annexe 7 v1.8 — comme les factures B2B. Un rapport non conforme est enregistré avec le nouveau statut *9958 — Echec de validation* et le détail des anomalies, n'est jamais envoyé à la PA, et ses factures restent disponibles : une fois la cause corrigée, l'exécution suivante reconstruit automatiquement la même période.
+- **Régénérer un rapport e-reporting.** Un rapport non accepté (généré, échec d'envoi, échec d'import, rejeté, échec de validation) peut être régénéré depuis sa fiche : le rapport est annulé (nouveau statut *9959 — Annulé, régénéré*, conservé pour l'audit), ses factures redeviennent sélectionnables et un nouveau rapport est construit pour la même période — retardataires compris — puis validé et transmis selon vos réglages. Un rapport annulé ne propose plus Renvoyer ni Télécharger. Un rapport déjà transmis à la PA ne peut pas être régénéré.
+
+### Corrections
+
+- **Le XML e-reporting respecte désormais le format officiel Flux 10.** La transmission est enveloppée dans l'élément `Report` requis, le bloc processus métier obligatoire est toujours présent avec l'identifiant de profil officiel, vendeur et acheteur portent les identifiants acceptés par le PPF (avec le numéro de TVA dérivé automatiquement du SIREN ou de l'identifiant intracommunautaire), et les montants suivent le schéma officiel. Les rapports générés précédemment peuvent être retransmis correctement via Régénérer.
+- **Les libellés de statut e-reporting ne s'affichent plus à vide.** Les codes ajoutés après la création de votre configuration (9958, 9959…) affichent désormais leur libellé intégré ; vos libellés personnalisés restent prioritaires.
+- **L'interface web se met à jour immédiatement après un déploiement.** Le navigateur pouvait continuer d'exécuter l'ancienne version de l'interface depuis son cache après une mise à jour du serveur ; les pages sont désormais revalidées à chaque chargement et les ressources de l'application mises en cache efficacement.
+
+---
+
+## 2026.09.05.1 — 2026-09-05 \{#v2026-09-05-1\}
+
+### Améliorations
+
+- **La case PDF génère désormais le PDF pour les types de document en mode UBL.** Pour un type de document traité en mode UBL (par exemple le e-reporting B2C), cocher *PDF* produit maintenant le PDF lisible et son XML d'index — exactement comme en mode BURST — puis les copie vers le répertoire de sortie burst. Auparavant, la case ne faisait que copier des fichiers produits par le mode BURST : les types en mode UBL n'obtenaient donc jamais de PDF.
+- **Le retraitement couvre désormais les factures validées jamais envoyées.** Les factures en *Validation réussie* (9901) — typiquement des types de document configurés pour ne pas être envoyés — peuvent maintenant être retraitées depuis le tableau de bord, la liste des factures ou la ligne de commande : leurs fichiers (PDF lisible et XML compris) sont régénérés depuis la source archivée. Pratique pour produire les fichiers manquants des factures traitées avant les améliorations du jour.
+
+### Corrections
+
+- **La récupération des statuts PA ne manque plus d'événements.** La date envoyée à la plateforme pour demander « tout depuis la dernière interrogation » était enregistrée en heure locale étiquetée UTC ; une plateforme qui la compare en UTC réel la voyait deux heures dans le futur et ne renvoyait rien : les changements de statut (rejets, refus…) étaient perdus silencieusement. La date est désormais enregistrée en UTC réel. Après mise à jour, reculez une fois *paStatusLastRetrievedAt* de quelques heures pour rattraper la fenêtre manquée.
+- **Les statuts reçus de la PA déclenchent désormais les règles de notification.** Les statuts récupérés par l'interrogation du cycle de vie (rejetée 213, refusée 210, déposée 200 avec motif…) mettaient à jour la facture mais contournaient le moteur de notification : les règles associées ne partaient que depuis le bouton de test. Elles partent maintenant sur les canaux configurés comme tout autre changement de statut.
+- **L'éclatement d'un gros fichier multi-factures en parallèle ne s'interrompt plus sur une erreur interne.** Malgré le correctif de la version 2026.09.03.1, le traitement pouvait encore échouer par intermittence sur une erreur d'indexation fatale : les traitements parallèles lisaient toujours la même copie en mémoire du fichier source. Chaque facture reçoit désormais sa propre copie privée avant la répartition du travail — les exécutions parallèles se terminent de façon fiable.
+
+---
+
+## 2026.09.04.1 — 2026-09-04 \{#v2026-09-04-1\}
+
+### Améliorations
+
+- **Traiter un dossier entier de fichiers de facture en une seule exécution — en parallèle.** Pour les modèles à source XML, le traitement peut s'exécuter une seule fois sur le dossier d'entrée du modèle plutôt qu'une fois par fichier, et traite désormais plusieurs fichiers en même temps pour exploiter le processeur disponible — bien plus rapide lorsqu'un dossier contient des milliers de fichiers mono-facture. Chaque fichier reste traité comme une unité à part entière (son nom, son archive source et sa traçabilité sont conservés) et l'échec d'un fichier n'interrompt pas les autres.
+- **Limiter l'utilisation du processeur par le traitement.** Un nouveau réglage *Max threads* (Paramètres globaux, onglet Traitement) limite le nombre de factures traitées simultanément : un serveur partagé conserve ainsi des ressources pour les autres services. Laissez-le vide pour utiliser tous les cœurs disponibles.
+- **Le traitement d'un dossier de modèles XML, planifié ou à la demande, s'exécute désormais en parallèle.** Le balayage d'un dossier pour un modèle à source XML traite l'ensemble du dossier en une seule passe parallèle — comme le traitement par lot en ligne de commande — au lieu d'un fichier à la fois. Les modèles UBL et le traitement par travail (BIP) restent inchangés.
+- **Les fichiers en échec sont mis de côté au lieu de boucler.** Un nouveau réglage *Répertoire des erreurs* (Paramètres globaux, onglet Répertoires) : lorsqu'un fichier échoue, il est déplacé vers le dossier des erreurs afin qu'un balayage répété du dossier ne réessaie plus indéfiniment le même fichier en échec. Laissez-le vide pour conserver le comportement précédent (le fichier reste en place).
+- **Message plus clair lorsque le modèle ou la configuration est incorrect.** Un nom de modèle absent de la configuration (ou une configuration sans section global) indique désormais précisément ce qui manque, au lieu d'une erreur interne générique.
+
+### Corrections
+
+- **Liste des factures : la colonne de case à cocher n'est plus trop large.** Elle est désormais dimensionnée à la case et centrée, au lieu d'occuper une part égale de la largeur du tableau.
+- **Traitement fiable des gros volumes et en parallèle.** Le traitement d'un gros lot ou d'un dossier volumineux pouvait occasionnellement échouer sur une erreur interne, signaler une erreur de clé de journal en double, épuiser les ressources système ou afficher un avertissement injustifié « impossible de charger les définitions de statut ». Ces problèmes ne se produisent plus : les exécutions volumineuses en pleine parallélisation se terminent proprement.
+- **Les lignes de facture sans bloc de livraison ne sont plus perdues.** Lors de la conversion PDF vers XML, une ligne sans bloc de livraison/BL précédent (par exemple des frais de port isolés) pouvait se retrouver hors de son regroupement de livraison, puis être ignorée plus loin dans la chaîne — faisant disparaître une ligne réelle et déséquilibrant le total de la facture. Ces lignes restent désormais regroupées et sont conservées, si bien que le nombre de lignes et les totaux concordent.
+
+---
+
+## 2026.09.03.1 — 2026-09-03 \{#v2026-09-03-1\}
+
+### Corrections
+
+- **Les lignes de facture affichent désormais tous les codes de classification.** Lorsqu'une ligne porte plusieurs codes de classification d'article (BT-158), le détail de la facture les liste tous, et non plus seulement le premier — comme le fait déjà le PDF lisible.
+- **Le traitement des gros spools en parallèle n'échoue plus par intermittence.** Sur les gros spools, plusieurs threads simultanés pouvaient interrompre un traitement avec une erreur d'indexation interne ; les enregistrements de factures sont désormais figés avant d'être répartis entre les threads, si bien que les traitements à pleine parallélisation aboutissent de façon fiable.
+- **Les montants dont le signe moins est en fin de valeur sont lus comme négatifs.** Les valeurs où le signe suit le nombre (surponction mainframe/COBOL, ex. `123.45-`) sont désormais converties en montants négatifs corrects (`-123.45`) dans l'UBL et le PDF lisible, au lieu d'être considérées comme positives. Les valeurs bien formées ne changent pas.
 
 ---
 
@@ -40404,6 +40479,8 @@ NomaUBL exécute la validation en **quatre étapes empilées** suivant la public
 | **4b** | **Règles maison NomaUBL** | Tout document — pack vide aujourd'hui, laissé en place comme point d'accroche pour de futures règles côté AIFE que les packs publics n'auraient pas encore reprises. | `BR-NOMAUBL-rules.sch` *(rédigé en local, précompilé au build)*. |
 
 L'étape 2 est **exclusive** (un profil par document) ; les étapes 3 et 4 s'empilent par-dessus. Un document qui échoue à une règle avec `flag="fatal"` bloque le dépôt sur la PA ; les warnings et entrées informatives sont tracés sans bloquer le pipeline.
+
+Les packs de profil français (`CIUS-FR-validation.sch`, `EXTENDED-CTC-FR-validation.sch`) appliquent leurs contrôles en mode **FATAL** — bloquant le dépôt — à compter du **1er octobre 2026**. Avant cette date, les mêmes contrôles remontent en warnings : un document qui sera rejeté sous la réforme peut ainsi être repéré et corrigé avant la bascule.
 
 ### Avertissements filtrés
 

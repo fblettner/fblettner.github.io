@@ -134,6 +134,7 @@ The editor has **six tabs**:
 | **Temp Directory** | Scratch space for temporary artefacts. |
 | **Single Output Dir** | Output directory for documents processed in *single* mode. |
 | **Bursting Directory** | Output directory for documents produced by *bursting* mode (one file per invoice). |
+| **Errors Directory** | Where a file that fails processing is moved. During a directory run, moving the failed file aside stops a repeated scan from retrying the same file endlessly. Leave it blank to keep the file in place (the previous behaviour). |
 
 ### Batch Processing
 
@@ -163,6 +164,7 @@ The editor has **six tabs**:
 | Field | Values | Description |
 |---|---|---|
 | **Update DB** | `Y` / `N` | When `Y`, processing runs persist their results to the database. Set to `N` only for dry runs / debugging. |
+| **Max threads** | *(blank = all cores)* | Caps how many invoices are processed at once. An XML-spool template can process its whole input folder in a single **parallel** pass — much faster on a folder of thousands of single-invoice files, and used the same way by a scheduled scan, an on-demand run and the command-line batch. Each file stays its own unit (name, source archive and traceability kept) and one file's failure doesn't stop the others. Set a value to keep headroom for other services on a shared host; leave it blank to use every available core. UBL templates and per-job (BIP) processing are unaffected. |
 | **`debugProfile`** | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [Tech Dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
 
 ### PDF

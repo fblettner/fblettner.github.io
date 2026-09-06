@@ -158,6 +158,8 @@ NomaUBL exécute la validation en **quatre étapes empilées** suivant la public
 
 L'étape 2 est **exclusive** (un profil par document) ; les étapes 3 et 4 s'empilent par-dessus. Un document qui échoue à une règle avec `flag="fatal"` bloque le dépôt sur la PA ; les warnings et entrées informatives sont tracés sans bloquer le pipeline.
 
+Les packs de profil français (`CIUS-FR-validation.sch`, `EXTENDED-CTC-FR-validation.sch`) appliquent leurs contrôles en mode **FATAL** — bloquant le dépôt — à compter du **1er octobre 2026**. Avant cette date, les mêmes contrôles remontent en warnings : un document qui sera rejeté sous la réforme peut ainsi être repéré et corrigé avant la bascule.
+
 ### Avertissements filtrés
 
 Certaines règles des packs publics remontent un avertissement sur des structures que NomaUBL émet **volontairement** — les afficher tels quels habituerait les opérateurs à ignorer la liste des warnings. Le moteur écarte ces entrées au moment de la collecte et le fichier schematron reste intact — une future mise à jour du FNFE ne réintroduira donc pas l'avertissement.

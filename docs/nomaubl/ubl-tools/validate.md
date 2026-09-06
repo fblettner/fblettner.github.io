@@ -158,6 +158,8 @@ NomaUBL runs validation in **four layered steps** following the AFNOR **XP Z12-0
 
 Step 2 is **exclusive** (one profile per document); Steps 3 and 4 stack on top. A document that fails any rule with `flag="fatal"` blocks submission to the PA; warnings and informational entries are logged but never block the pipeline.
 
+The French profile packs (`CIUS-FR-validation.sch`, `EXTENDED-CTC-FR-validation.sch`) enforce their checks as **FATAL** — blocking submission — from **1 October 2026**. Before that date the same checks surface as warnings, so a document that will be rejected under the reform can be spotted and corrected ahead of the cutover.
+
 ### Filtered warnings
 
 Some rules in the public packs report a warning on shapes NomaUBL emits **by design** — surfacing them as-is would train operators to ignore the warning list. The engine drops these entries at collection time and the underlying schematron file is left untouched, so a future FNFE refresh won't reintroduce them.

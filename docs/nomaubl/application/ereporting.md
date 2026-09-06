@@ -176,8 +176,18 @@ E-reporting reports go through a **dedicated lifecycle** distinct from the invoi
 | **`9955`** | `EREPORT_DEPOSITED` | PA accepted and registered the report — terminal success. |
 | **`9956`** | `EREPORT_FAILED_IMPORT` | PA could not import the report (post-acknowledgement processing error). |
 | **`9957`** | `EREPORT_REJECTED` | PA rejected the report on a validation rule — terminal failure. The next attempt requires a corrected `RE`. |
+| **`9958`** | `EREPORT_ERROR_VALIDATION` | Report failed the **pre-send validation** (PPF schema + Annexe 7 rules) — it is never sent to the PA, the detailed findings are recorded, and its invoices stay available. **Self-healing**: once the cause is fixed, the next run rebuilds the same period automatically. |
+| **`9959`** | `EREPORT_CANCELLED` | Report cancelled by a **Regenerate** — kept for audit while its invoices are freed and a replacement report is built for the same period. |
 
-Codes `9950` – `9954` are *transient* (the report is still moving). `9955` – `9957` are *terminal* (no further automatic transition); a `RE` (replacement) report is the only way to override a `9957` for the same period.
+Codes `9950` – `9954` are *transient* (the report is still moving). `9955` – `9957` are *terminal* (no further automatic transition); a `RE` (replacement) report is the only way to override a `9957` for the same period. `9958` is a recoverable pre-send failure — see [Validation before sending](#validation-before-sending) — and `9959` is an audit record left behind by [Regenerate](#regenerate-a-report).
+
+### Validation before sending \{#validation-before-sending\}
+
+Every generated report is checked **before** it is sent — against the official PPF schema and the Annexe 7 rules — exactly like a B2B invoice. A report that doesn't conform is written with status **`9958` — Validation failed**, carries the detailed findings, and is **never sent** to the PA. Its invoices stay available, so once the cause is fixed the next run rebuilds the same period on its own — nothing to unlock by hand.
+
+### Regenerate a report \{#regenerate-a-report\}
+
+A report that was **not accepted** — created, send failed, import failed, rejected or validation failed — can be rebuilt from its **detail view** with **Regenerate**. The current report is cancelled (status **`9959` — Cancelled, regenerated**, kept for audit), its invoices become selectable again, and a fresh report is built for the **same period** — including any late arrivals — then validated and submitted according to your settings. A cancelled report no longer offers **Resend** or **Download**. A report already at the PA (sent, pending or deposited) can't be regenerated.
 
 ---
 

@@ -152,7 +152,7 @@ Each of the seven codes is one row in the editor. The **Code** column is read-on
 | **GS** | checkbox | When ticked, runs **Ghostscript** post-processing on the produced PDF for this type (e.g. compression / linearisation), regardless of the runtime argument. Off by default. |
 | **Mode** | *(default)* / `UBL` / `BURST` | Per-type override of the runtime *Mode* argument: empty = **no override** (the runtime mode is kept); `UBL` = force UBL-only output for this type; `BURST` = force bursted output for this type. |
 | **UBL** | checkbox | When ticked, keeps the generated **UBL file** in the bursting output directory after processing for this type. Default: `Y` (kept). |
-| **PDF** | checkbox | When ticked, keeps the generated **PDF file** in the bursting output directory after processing for this type. Default: `N` (not kept). |
+| **PDF** | checkbox | When ticked, keeps the generated **PDF file** in the bursting output directory after processing for this type. Default: `N` (not kept). For a type processed in **UBL mode** (e.g. B2C e-reporting), ticking it also **produces** the readable PDF and its index XML — as bursting mode does — and copies them to the output directory. |
 
 ---
 

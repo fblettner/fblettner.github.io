@@ -152,7 +152,7 @@ Chaque ligne de l'éditeur correspond à l'un des sept codes. La colonne **Code*
 | **GS** | case à cocher | Quand cochée, exécute un post-traitement **Ghostscript** sur le PDF produit pour ce type (par ex. compression / linéarisation), indépendamment de l'argument d'exécution. Désactivé par défaut. |
 | **Mode** | *(par défaut)* / `UBL` / `BURST` | Surcharge par type de l'argument d'exécution *Mode* : vide = **aucune surcharge** (le mode passé en argument est conservé) ; `UBL` = forcer une sortie UBL uniquement pour ce type ; `BURST` = forcer une sortie éclatée pour ce type. |
 | **UBL** | case à cocher | Quand cochée, conserve le **fichier UBL** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `Y` (conservé). |
-| **PDF** | case à cocher | Quand cochée, conserve le **fichier PDF** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `N` (non conservé). |
+| **PDF** | case à cocher | Quand cochée, conserve le **fichier PDF** généré dans le répertoire de sortie *bursting* après traitement pour ce type. Valeur par défaut : `N` (non conservé). Pour un type traité en **mode UBL** (par ex. le e-reporting B2C), la cocher **produit** aussi le PDF lisible et son XML d'index — comme le fait le mode bursting — et les copie vers le répertoire de sortie. |
 
 ---
 

@@ -10,7 +10,11 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-09-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-01</span></a>
+  <a href="#v2026-09-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-06</span></a>
+  <a href="#v2026-09-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-05</span></a>
+  <a href="#v2026-09-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-04</span></a>
+  <a href="#v2026-09-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-03</span></a>
+  <a href="#v2026-09-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-01</span></a>
   <a href="#v2026-08-31-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.31.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-31</span></a>
   <a href="#v2026-08-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-29</span></a>
   <a href="#v2026-08-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-28</span></a>
@@ -92,6 +96,65 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
 </div>
+
+---
+
+## 2026.09.06.1 — 2026-09-06 \{#v2026-09-06-1\}
+
+### Améliorations
+
+- **Schematrons français mis à jour en V1.4.0 fix04 (04/09/2026).** Les règles de validation Flux 2 (CIUS-FR) et EXTENDED-CTC-FR passent à la dernière publication FNFE : traitement des formats de date, contrôles multi-notes, message du BT-23 et contrôle du `listID` des motifs de charge corrigés ; le mode FATAL s'applique désormais à compter du **1er octobre 2026**. La page À propos affiche les nouvelles versions.
+- **Les transmissions e-reporting (Flux 10) sont désormais validées avant envoi.** Chaque rapport généré est contrôlé contre le schéma officiel du PPF et les règles de l'Annexe 7 v1.8 — comme les factures B2B. Un rapport non conforme est enregistré avec le nouveau statut *9958 — Echec de validation* et le détail des anomalies, n'est jamais envoyé à la PA, et ses factures restent disponibles : une fois la cause corrigée, l'exécution suivante reconstruit automatiquement la même période.
+- **Régénérer un rapport e-reporting.** Un rapport non accepté (généré, échec d'envoi, échec d'import, rejeté, échec de validation) peut être régénéré depuis sa fiche : le rapport est annulé (nouveau statut *9959 — Annulé, régénéré*, conservé pour l'audit), ses factures redeviennent sélectionnables et un nouveau rapport est construit pour la même période — retardataires compris — puis validé et transmis selon vos réglages. Un rapport annulé ne propose plus Renvoyer ni Télécharger. Un rapport déjà transmis à la PA ne peut pas être régénéré.
+
+### Corrections
+
+- **Le XML e-reporting respecte désormais le format officiel Flux 10.** La transmission est enveloppée dans l'élément `Report` requis, le bloc processus métier obligatoire est toujours présent avec l'identifiant de profil officiel, vendeur et acheteur portent les identifiants acceptés par le PPF (avec le numéro de TVA dérivé automatiquement du SIREN ou de l'identifiant intracommunautaire), et les montants suivent le schéma officiel. Les rapports générés précédemment peuvent être retransmis correctement via Régénérer.
+- **Les libellés de statut e-reporting ne s'affichent plus à vide.** Les codes ajoutés après la création de votre configuration (9958, 9959…) affichent désormais leur libellé intégré ; vos libellés personnalisés restent prioritaires.
+- **L'interface web se met à jour immédiatement après un déploiement.** Le navigateur pouvait continuer d'exécuter l'ancienne version de l'interface depuis son cache après une mise à jour du serveur ; les pages sont désormais revalidées à chaque chargement et les ressources de l'application mises en cache efficacement.
+
+---
+
+## 2026.09.05.1 — 2026-09-05 \{#v2026-09-05-1\}
+
+### Améliorations
+
+- **La case PDF génère désormais le PDF pour les types de document en mode UBL.** Pour un type de document traité en mode UBL (par exemple le e-reporting B2C), cocher *PDF* produit maintenant le PDF lisible et son XML d'index — exactement comme en mode BURST — puis les copie vers le répertoire de sortie burst. Auparavant, la case ne faisait que copier des fichiers produits par le mode BURST : les types en mode UBL n'obtenaient donc jamais de PDF.
+- **Le retraitement couvre désormais les factures validées jamais envoyées.** Les factures en *Validation réussie* (9901) — typiquement des types de document configurés pour ne pas être envoyés — peuvent maintenant être retraitées depuis le tableau de bord, la liste des factures ou la ligne de commande : leurs fichiers (PDF lisible et XML compris) sont régénérés depuis la source archivée. Pratique pour produire les fichiers manquants des factures traitées avant les améliorations du jour.
+
+### Corrections
+
+- **La récupération des statuts PA ne manque plus d'événements.** La date envoyée à la plateforme pour demander « tout depuis la dernière interrogation » était enregistrée en heure locale étiquetée UTC ; une plateforme qui la compare en UTC réel la voyait deux heures dans le futur et ne renvoyait rien : les changements de statut (rejets, refus…) étaient perdus silencieusement. La date est désormais enregistrée en UTC réel. Après mise à jour, reculez une fois *paStatusLastRetrievedAt* de quelques heures pour rattraper la fenêtre manquée.
+- **Les statuts reçus de la PA déclenchent désormais les règles de notification.** Les statuts récupérés par l'interrogation du cycle de vie (rejetée 213, refusée 210, déposée 200 avec motif…) mettaient à jour la facture mais contournaient le moteur de notification : les règles associées ne partaient que depuis le bouton de test. Elles partent maintenant sur les canaux configurés comme tout autre changement de statut.
+- **L'éclatement d'un gros fichier multi-factures en parallèle ne s'interrompt plus sur une erreur interne.** Malgré le correctif de la version 2026.09.03.1, le traitement pouvait encore échouer par intermittence sur une erreur d'indexation fatale : les traitements parallèles lisaient toujours la même copie en mémoire du fichier source. Chaque facture reçoit désormais sa propre copie privée avant la répartition du travail — les exécutions parallèles se terminent de façon fiable.
+
+---
+
+## 2026.09.04.1 — 2026-09-04 \{#v2026-09-04-1\}
+
+### Améliorations
+
+- **Traiter un dossier entier de fichiers de facture en une seule exécution — en parallèle.** Pour les modèles à source XML, le traitement peut s'exécuter une seule fois sur le dossier d'entrée du modèle plutôt qu'une fois par fichier, et traite désormais plusieurs fichiers en même temps pour exploiter le processeur disponible — bien plus rapide lorsqu'un dossier contient des milliers de fichiers mono-facture. Chaque fichier reste traité comme une unité à part entière (son nom, son archive source et sa traçabilité sont conservés) et l'échec d'un fichier n'interrompt pas les autres.
+- **Limiter l'utilisation du processeur par le traitement.** Un nouveau réglage *Max threads* (Paramètres globaux, onglet Traitement) limite le nombre de factures traitées simultanément : un serveur partagé conserve ainsi des ressources pour les autres services. Laissez-le vide pour utiliser tous les cœurs disponibles.
+- **Le traitement d'un dossier de modèles XML, planifié ou à la demande, s'exécute désormais en parallèle.** Le balayage d'un dossier pour un modèle à source XML traite l'ensemble du dossier en une seule passe parallèle — comme le traitement par lot en ligne de commande — au lieu d'un fichier à la fois. Les modèles UBL et le traitement par travail (BIP) restent inchangés.
+- **Les fichiers en échec sont mis de côté au lieu de boucler.** Un nouveau réglage *Répertoire des erreurs* (Paramètres globaux, onglet Répertoires) : lorsqu'un fichier échoue, il est déplacé vers le dossier des erreurs afin qu'un balayage répété du dossier ne réessaie plus indéfiniment le même fichier en échec. Laissez-le vide pour conserver le comportement précédent (le fichier reste en place).
+- **Message plus clair lorsque le modèle ou la configuration est incorrect.** Un nom de modèle absent de la configuration (ou une configuration sans section global) indique désormais précisément ce qui manque, au lieu d'une erreur interne générique.
+
+### Corrections
+
+- **Liste des factures : la colonne de case à cocher n'est plus trop large.** Elle est désormais dimensionnée à la case et centrée, au lieu d'occuper une part égale de la largeur du tableau.
+- **Traitement fiable des gros volumes et en parallèle.** Le traitement d'un gros lot ou d'un dossier volumineux pouvait occasionnellement échouer sur une erreur interne, signaler une erreur de clé de journal en double, épuiser les ressources système ou afficher un avertissement injustifié « impossible de charger les définitions de statut ». Ces problèmes ne se produisent plus : les exécutions volumineuses en pleine parallélisation se terminent proprement.
+- **Les lignes de facture sans bloc de livraison ne sont plus perdues.** Lors de la conversion PDF vers XML, une ligne sans bloc de livraison/BL précédent (par exemple des frais de port isolés) pouvait se retrouver hors de son regroupement de livraison, puis être ignorée plus loin dans la chaîne — faisant disparaître une ligne réelle et déséquilibrant le total de la facture. Ces lignes restent désormais regroupées et sont conservées, si bien que le nombre de lignes et les totaux concordent.
+
+---
+
+## 2026.09.03.1 — 2026-09-03 \{#v2026-09-03-1\}
+
+### Corrections
+
+- **Les lignes de facture affichent désormais tous les codes de classification.** Lorsqu'une ligne porte plusieurs codes de classification d'article (BT-158), le détail de la facture les liste tous, et non plus seulement le premier — comme le fait déjà le PDF lisible.
+- **Le traitement des gros spools en parallèle n'échoue plus par intermittence.** Sur les gros spools, plusieurs threads simultanés pouvaient interrompre un traitement avec une erreur d'indexation interne ; les enregistrements de factures sont désormais figés avant d'être répartis entre les threads, si bien que les traitements à pleine parallélisation aboutissent de façon fiable.
+- **Les montants dont le signe moins est en fin de valeur sont lus comme négatifs.** Les valeurs où le signe suit le nombre (surponction mainframe/COBOL, ex. `123.45-`) sont désormais converties en montants négatifs corrects (`-123.45`) dans l'UBL et le PDF lisible, au lieu d'être considérées comme positives. Les valeurs bien formées ne changent pas.
 
 ---
 

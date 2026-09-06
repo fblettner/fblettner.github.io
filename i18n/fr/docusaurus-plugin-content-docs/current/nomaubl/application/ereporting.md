@@ -176,8 +176,18 @@ Les rapports e-reporting suivent un **cycle de vie dédié**, distinct de celui 
 | **`9955`** | `EREPORT_DEPOSITED` | La PA a accepté et enregistré le rapport — succès terminal. |
 | **`9956`** | `EREPORT_FAILED_IMPORT` | La PA n'a pas pu importer le rapport (erreur de traitement post-acquittement). |
 | **`9957`** | `EREPORT_REJECTED` | La PA a rejeté le rapport sur une règle de validation — échec terminal. La reprise passe par un `RE` corrigé. |
+| **`9958`** | `EREPORT_ERROR_VALIDATION` | Le rapport a échoué à la **validation avant envoi** (schéma PPF + règles de l'Annexe 7) — il n'est jamais envoyé à la PA, le détail des anomalies est enregistré et ses factures restent disponibles. **Auto-correctif** : une fois la cause corrigée, l'exécution suivante reconstruit automatiquement la même période. |
+| **`9959`** | `EREPORT_CANCELLED` | Rapport annulé par une **régénération** — conservé pour l'audit pendant que ses factures sont libérées et qu'un rapport de remplacement est construit pour la même période. |
 
-Les codes `9950` – `9954` sont *transitoires* (le rapport est en mouvement). `9955` – `9957` sont *terminaux* (pas de transition automatique ultérieure) ; un rapport `RE` (remplacement) est le seul moyen de surcharger un `9957` sur la même période.
+Les codes `9950` – `9954` sont *transitoires* (le rapport est en mouvement). `9955` – `9957` sont *terminaux* (pas de transition automatique ultérieure) ; un rapport `RE` (remplacement) est le seul moyen de surcharger un `9957` sur la même période. `9958` est un échec avant envoi récupérable — voir [Validation avant envoi](#validation-before-sending) — et `9959` est une trace d'audit laissée par [Régénérer](#regenerate-a-report).
+
+### Validation avant envoi \{#validation-before-sending\}
+
+Chaque rapport généré est contrôlé **avant** son envoi — contre le schéma officiel du PPF et les règles de l'Annexe 7 — exactement comme une facture B2B. Un rapport non conforme est enregistré avec le statut **`9958` — Echec de validation**, porte le détail des anomalies et n'est **jamais envoyé** à la PA. Ses factures restent disponibles : une fois la cause corrigée, l'exécution suivante reconstruit d'elle-même la même période — rien à débloquer à la main.
+
+### Régénérer un rapport \{#regenerate-a-report\}
+
+Un rapport **non accepté** — généré, échec d'envoi, échec d'import, rejeté ou échec de validation — peut être reconstruit depuis sa **fiche** avec **Régénérer**. Le rapport courant est annulé (statut **`9959` — Annulé, régénéré**, conservé pour l'audit), ses factures redeviennent sélectionnables, et un nouveau rapport est construit pour la **même période** — retardataires compris — puis validé et transmis selon vos réglages. Un rapport annulé ne propose plus **Renvoyer** ni **Télécharger**. Un rapport déjà à la PA (envoyé, en attente ou déposé) ne peut pas être régénéré.
 
 ---
 

@@ -134,6 +134,7 @@ L'éditeur comporte **six onglets** :
 | **Temp Directory** | Répertoire temporaire utilisé pour les artéfacts intermédiaires. |
 | **Single Output Dir** | Répertoire de sortie des documents traités en mode *single*. |
 | **Bursting Directory** | Répertoire de sortie des documents produits en mode *bursting* (un fichier par facture). |
+| **Errors Directory** | Répertoire où un fichier en échec de traitement est déplacé. Lors d'un traitement de dossier, mettre le fichier fautif de côté empêche un balayage répété de réessayer indéfiniment le même fichier. Laissé vide, le fichier reste en place (comportement précédent). |
 
 ### Batch Processing
 
@@ -163,6 +164,7 @@ L'éditeur comporte **six onglets** :
 | Champ | Valeurs | Description |
 |---|---|---|
 | **Update DB** | `Y` / `N` | À `Y`, les exécutions de traitement enregistrent leurs résultats en base de données. À positionner à `N` uniquement pour des exécutions à blanc (dry-run) ou des phases de débogage. |
+| **Max threads** | *(vide = tous les cœurs)* | Limite le nombre de factures traitées simultanément. Un modèle à source XML peut traiter tout son dossier d'entrée en une seule passe **parallèle** — bien plus rapide sur un dossier de milliers de fichiers mono-facture, et de la même façon pour un balayage planifié, une exécution à la demande et le traitement par lot en ligne de commande. Chaque fichier reste une unité à part entière (nom, archive source et traçabilité conservés) et l'échec d'un fichier n'arrête pas les autres. Renseignez une valeur pour garder des ressources aux autres services d'un serveur partagé ; laissez vide pour utiliser tous les cœurs disponibles. Les modèles UBL et le traitement par travail (BIP) ne sont pas concernés. |
 | **`debugProfile`** | `Y` / `N` | À `Y`, chaque exécution écrit des **lignes de chronométrage par étape** dans `F564237` pour chaque phase du pipeline : analyse d'en-tête, analyse des lignes, validation, émission UBL, envoi PA. Les lignes apparaissent sur le [Tableau de bord IT](../../application/tech-dashboard.md) — le flux *Traitements en cours · direct* les marque avec le nom de l'étape, et le widget *Temps par modèle* décompose la moyenne par étape. À laisser à `N` en production ; à passer à `Y` le temps d'un lot pour analyser un pipeline lent. À désactiver dès que l'étape lente est identifiée — les lignes additionnelles gonflent rapidement `F564237` sous charge. |
 
 ### PDF
