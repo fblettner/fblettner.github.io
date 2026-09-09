@@ -54,6 +54,16 @@ L'annuaire affiche une carte par société. Chaque carte contient :
 | **City** | BT-37 | Localité. |
 | **Country** | BT-40 | Code pays ISO 3166-1 alpha-2 (choisi dans la liste de référence *countries*). |
 
+### Coordonnées bancaires
+
+| Champ | UBL | Description |
+|---|---|---|
+| **IBAN** | BT-84 | Compte de paiement crédité par l'acheteur. |
+| **BIC** | BT-86 | Identifiant bancaire du compte de paiement. |
+| **Account name** | BT-85 | Titulaire du compte. |
+
+Ce sont des valeurs de **repli** : quand le fichier source ne porte aucune coordonnée bancaire et que le moyen de paiement est un **virement** (codes `30`, `42`, `58` — les seuls où l'IBAN est obligatoire), la facture reprend l'IBAN, le BIC et le titulaire de la société émettrice rapprochée. Les autres moyens de paiement et l'autofacturation ne sont pas concernés ; toute coordonnée bancaire fournie par la source reste prioritaire.
+
 L'icône corbeille de l'en-tête de carte supprime la société ; le bouton **Add** en bas ajoute une carte vide.
 
 ---

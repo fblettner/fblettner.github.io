@@ -250,6 +250,15 @@ Tâches d'arrière-plan exécutées par NomaUBL en mode serveur. **Les modificat
 | **Status retrieval interval (min)** | Minutes entre deux récupérations automatiques des statuts de cycle de vie depuis la PA. `0` = désactivé. |
 | **Received fetch interval (min)** | Minutes entre deux passes *PA entrante* automatiques — même flux que le mode *Sync → Fetch Input → PA entrante (factures fournisseur)* et la commande CLI `-fetch-received`. `0` = désactivé. Le curseur de la date d'émission la plus récente traitée est enregistré dans `lastFetchReceivedAt`, chaque passe ne récupérant ainsi que les factures arrivées depuis la précédente. |
 
+### Bulk Send
+
+Valeurs par défaut de tout envoi groupé vers la PA — *Tout envoyer* (factures en attente) et *Tout renvoyer* du [Tableau de bord IT](../../application/tech-dashboard.md), le [renvoi groupé de la liste des factures](../../application/invoices.md#bulk-resend) et la commande `-send-waiting`. Chaque routine de reprise nocturne [Auto-Retry](./auto-retry.md) peut les surcharger sur sa propre ligne.
+
+| Champ | Description |
+|---|---|
+| **Parallel workers** | *(défaut `4`)* Nombre de factures envoyées à la PA en même temps. Mettre `1` pour l'ancien comportement séquentiel. |
+| **Delay per worker (ms)** | *(défaut `100`)* Pause qu'observe chaque travailleur entre deux appels, pour rester dans l'enveloppe de débit de la PA. |
+
 ### Batch Document Processing
 
 Liste de **jobs batch** récurrents. Chaque job s'exécute indépendamment selon son propre intervalle et détecte les nouveaux documents à traiter. Utilisez **+ Ajouter un job batch** pour en créer un, et le bouton **×** pour en supprimer un.

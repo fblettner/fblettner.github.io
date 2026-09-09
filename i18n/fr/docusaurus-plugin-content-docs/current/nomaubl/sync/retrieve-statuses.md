@@ -195,6 +195,20 @@ Quand un appel à la PA échoue pour des raisons de transport (réseau, expirati
 
 ---
 
+## Contrôles d'intégrité
+
+Au-delà de la récupération incrémentale, la page propose deux contrôles à la demande qui réconcilient le cycle de vie enregistré avec la plateforme et avec lui-même. Les deux s'exécutent en **arrière-plan** et sont réexécutables sans risque.
+
+### Statuts manquants
+
+Choisissez une date : le contrôle compare **tous les événements de la plateforme depuis celle-ci** avec le cycle de vie déjà enregistré. Ce qui manque s'affiche dans un **tableau à sélection** — appliquez tout ou seulement les lignes retenues, avec déclenchement optionnel des [règles de notification](../management/notification-rules.md) (désactivé par défaut). Les événements non applicables sont signalés **à part**, pour ne rien changer en silence : un statut interne obsolète (étape plateforme déjà dépassée), une facture inconnue, ou un code sans mappage.
+
+### Ordre du cycle de vie
+
+Le second contrôle balaie la base à la recherche de lignes de cycle de vie mal ordonnées — une étape interne de plateforme enregistrée **après** un statut standard — et de **codes invalides** (texte brut de plateforme stocké par erreur de mappage). Les lignes sélectionnées se suppriment en un clic, et le statut courant de la facture est réaligné sur son dernier événement restant.
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Planifier la récupération.** L'*ordonnanceur en arrière-plan* de NomaUBL peut exécuter cette page périodiquement — voir la propriété `fetchStatusInterval` du template *e-invoicing* (valeur en minutes ; `0` désactive l'ordonnanceur). Toutes les 15 minutes à 1 heure est typique.

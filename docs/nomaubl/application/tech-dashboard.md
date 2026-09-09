@@ -294,7 +294,7 @@ A big-number card that counts the invoices **held before sending** — the ones 
 
 ### To reprocess (row 2, span 4) \{#to-reprocess\}
 
-A big-number card that counts the invoices **eligible for reprocessing** — those the platform **rejected** (status 213), **deposited but did not transmit** (status 200), or that were **validated but never sent** (status 9901), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button rebuilds every eligible invoice from its archived JDE XML source (regenerating the e-invoice, PDF and XML) through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
+A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button rebuilds every eligible invoice from its archived JDE XML source (regenerating the e-invoice, PDF and XML) through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
 
 ### Scheduler (row 3, span 4)
 

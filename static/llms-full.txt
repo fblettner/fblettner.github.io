@@ -31997,6 +31997,8 @@ Clicking a row opens a viewer with two panes:
 
 Each pane is shown formatted and can be **downloaded**, named after the document. A document that failed before producing UBL shows only the source spool — which is precisely what you need to see why.
 
+When the document has a **template** and an **archived source**, the viewer also offers an **Extract & Process** button: it re-extracts the archived spool and re-runs it through the document's template — the same pipeline as the [Extract & Process](../processing/extract-and-process.md) page with the *Archive* source, with the parameters taken from the document itself. Replace mode is forced, so the rerun overwrites the previous result. Handy to regenerate a document's outputs after a template or configuration change.
+
 ---
 
 ## Query it over REST
@@ -32779,7 +32781,7 @@ Each row carries a **checkbox**, and a **Resend selected (N)** button appears in
 
 ### Reprocess \{#reprocess\}
 
-A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing **rebuilds** an invoice from the JDE XML source archived at first submission — regenerating the e-invoice, PDF and XML — for an invoice the platform **rejected** (status 213), **deposited but did not transmit** (status 200), or that was **validated but never sent** (status 9901). The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
+A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing **rebuilds** an invoice from the JDE XML source archived at first submission — regenerating the e-invoice, PDF and XML — for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`). The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
 
 ### Export
 
@@ -32808,7 +32810,7 @@ Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parti
 
 ### Summary tab *(default)*
 
-The Summary tab shows a coloured **status badge** at the top, followed by **action buttons** (Edit UBL, Copy, Delete) on the right.
+The Summary tab shows a coloured **status badge** at the top, followed by **action buttons** (Edit UBL, Copy, Delete) on the right. Right under the badge, when the platform returned them, the current **rejection reason**, **expected action** and **status note** are shown inline, and the full **status message** sits in a collapsed group — expand it for the platform's long error text. The same values feed the custom actions as `{message}`, `{reasonLabel}`, `{actionLabel}` and `{actionNote}` placeholders (see [Actions](../management/actions.md#custom-actions)), with no list-view column needed.
 
 Below the status, when the invoice is in a status that requires a follow-up action by the seller (e.g. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), a blue **Seller actions** banner appears with the recommended actions:
 
@@ -33490,7 +33492,7 @@ A big-number card that counts the invoices **held before sending** — the ones 
 
 ### To reprocess (row 2, span 4) \{#to-reprocess\}
 
-A big-number card that counts the invoices **eligible for reprocessing** — those the platform **rejected** (status 213), **deposited but did not transmit** (status 200), or that were **validated but never sent** (status 9901), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button rebuilds every eligible invoice from its archived JDE XML source (regenerating the e-invoice, PDF and XML) through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
+A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button rebuilds every eligible invoice from its archived JDE XML source (regenerating the e-invoice, PDF and XML) through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
 
 ### Scheduler (row 3, span 4)
 
@@ -35891,6 +35893,8 @@ The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 | **Page size** | `100` | Number of statuses fetched per page when polling the PA. |
 | **Last retrieved at** | *(updated automatically)* | ISO datetime of the most recent successful retrieval (e.g. `2025-01-01T00:00:00Z`). Updated automatically after each retrieval run; manual edits act as a starting point — useful to re-replay a window. |
 | **Import status mode** | `per-invoice` *(default)* | `per-invoice` polls each pending invoice by its stored transaction id. `search` instead asks the platform for every flow updated since the last check (the date is kept between runs) and matches the results to the pending invoices — for platforms with no per-invoice status lookup, such as Yooz Rising. |
+| **Import parallel** | *(default `4`, max `8`)* | How many pending invoices (status 9906) the import-status check polls **at the same time**. Raise it to clear a large pending backlog faster; set `1` for the previous one-at-a-time behaviour. |
+| **Poll parallel** | *(default `4`)* | Same setting for the per-invoice lifecycle poll — how many invoices its status is fetched for concurrently. |
 | **Lifecycle endpoints** | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
 
 :::info[Self-billed invoices route to their own endpoints]
@@ -36281,6 +36285,15 @@ Background tasks executed by NomaUBL when running in serve mode. **Changes on th
 | **Import poll interval (min)** | Minutes between automatic import-status polls for pending invoices (status `9906`). `0` = disabled. |
 | **Status retrieval interval (min)** | Minutes between automatic lifecycle-status retrievals from the PA. `0` = disabled. |
 | **Received fetch interval (min)** | Minutes between automatic *PA inbound* sweeps — the same flow as the *Sync → Fetch Input → PA inbound (supplier invoices)* mode and the `-fetch-received` CLI. `0` = disabled. Persists the cursor of the highest issue date processed in `lastFetchReceivedAt` so each sweep only pulls invoices that arrived since the previous one. |
+
+### Bulk Send
+
+Defaults for every bulk send to the PA — *Send all waiting* and *Resend all* on the [Tech Dashboard](../../application/tech-dashboard.md), the [invoice-list bulk resend](../../application/invoices.md#bulk-resend), and the `-send-waiting` CLI. Each nightly [Auto-Retry](./auto-retry.md) routine can override them on its own row.
+
+| Field | Description |
+|---|---|
+| **Parallel workers** | *(default `4`)* How many invoices are sent to the PA at the same time. Set `1` for the previous sequential behaviour. |
+| **Delay per worker (ms)** | *(default `100`)* Pause each worker waits between two calls, to stay inside the PA's rate budget. |
 
 ### Batch Document Processing
 
@@ -38646,6 +38659,10 @@ Since 2026.05.15 each parameter row gets a `{ }` picker next to its value input.
 | `{{invoiceType}}` | Document UBL invoice type (`380`, `381`, …). |
 | `{{orderRef}}` | Customer purchase-order reference. |
 | `{{contractRef}}` | Customer contract reference. |
+| `{{message}}` | Full status message returned by the platform. |
+| `{{reasonLabel}}` | Current rejection reason (label). |
+| `{{actionLabel}}` | Current expected action (label). |
+| `{{actionNote}}` | Current status note. |
 
 Free text and placeholders can mix — `Y;reason={statusCode}` is a valid value.
 
@@ -38678,11 +38695,14 @@ Each custom action carries:
 | **ID** | Free-form identifier (e.g. `pushToCrm`). Stored as `customAction.N.id`. The picker prevents duplicates within a scope. |
 | **Label** | Button text shown in the modal (e.g. *Push to CRM*). Stored as `customAction.N.label`. |
 | **Direction** | `Any` *(default)* / `Issued only (sales)` / `Received only (purchases)`. Empty = the button is visible on both sides. When set, the button is hidden on invoices of the other direction — so an emit-side *Sync to CRM* and a receive-side *Mark as paid* can live on the same template and the detail modal only surfaces what makes sense for the current invoice. Evaluated against the `UHDRIN` flag stored on the row. |
+| **Statuses** | Optional list of status codes the button is limited to. Empty = every status. Set it so a *Create case* button only appears on rejected invoices, for example. |
 | **Calls list** | Same call-card editor as regulatory bindings — connector, endpoint / query, parameters, optional *Stop on failure*. The same `{call.N.fieldName}` response-chaining contract applies. |
 
 **+ Add custom action** at the bottom of the section appends a new entry. Remove with the per-row 🗑 button.
 
-In the invoice detail modal, custom actions render in their own `ActionsSection` beneath the preset seller actions. Always visible — there is no status-driven enable / disable for this group; the user picks the action they need. The result banner is anchored to the group whose button fired the chain (`actionResult.source` field), and is cleared automatically when the modal closes or switches invoice — stale banners do not carry over.
+In the invoice detail modal, custom actions render in their own `ActionsSection` beneath the preset seller actions. A button appears only on invoices matching its **Statuses** filter (and its **Direction**); leave the filter empty to show it on every status. The result banner is anchored to the group whose button fired the chain (`actionResult.source` field), and is cleared automatically when the modal closes or switches invoice — stale banners do not carry over.
+
+Clicking a custom action first opens a **review window** listing every value about to be sent — resolved from the invoice, and **editable** — with **Run** and **Cancel**. Adjust a value (for example the `{message}` sent to the downstream system) before it goes out, or cancel without any call being made. Alongside the invoice fields in *Placeholders* above, the review resolves the current status details — `{message}`, `{reasonLabel}`, `{actionLabel}`, `{actionNote}` — so a case opened from a rejection carries the platform's own wording.
 
 ---
 
@@ -39084,6 +39104,23 @@ java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json --ver
 java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json \
                       --since 2026-04-01
 ```
+
+---
+
+## `-send-waiting` — send invoices held for review to the PA \{#send-waiting\}
+
+Sends every invoice **held for review** (document type on the `W` — *Waiting* — send flag) to the Plateforme Agréée — the command-line equivalent of the *Waiting for review* card's **Send all** button on the [Tech Dashboard](../application/tech-dashboard.md#waiting-for-review), for scheduling the release outside the web server.
+
+```bash
+java -jar nomaubl.jar -send-waiting /opt/nomaubl/demo/config/config.json [--parallel N] [--delay MS]
+```
+
+| Flag | Effect |
+|---|---|
+| **`--parallel <N>`** | How many invoices are sent at once. Defaults to the *Bulk Send* workers on [`global → Scheduling`](../configuration/system/global.md); `1` sends sequentially. |
+| **`--delay <ms>`** | Pause between two calls per worker (defaults to the *Bulk Send* delay). |
+
+The exit code reflects failures, so a scheduler can detect a run that didn't fully succeed.
 
 ---
 
@@ -39493,7 +39530,7 @@ A template with *Source = UBL* now embeds the same PDFs as the XML flow — afte
 |---|---|
 | **No-Data Key** | Name of an XML element that **must exist** in the spool. If absent, NomaUBL considers the document empty and skips it. Useful to filter out spool sections that aren't real invoices. |
 | **Set Locale** | Locale used to render the PDF (e.g. `en_US`, `fr_FR`). Affects date and number formatting in the PDF only. |
-| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — after a platform **rejection** (status 213), a **deposit that was not transmitted** (status 200), or a **validation that was never sent** (status 9901, typically a type set not to be sent). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. Only **XML-source** templates are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
+| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. Only **XML-source** templates are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
 
 ---
 
@@ -41720,6 +41757,9 @@ NomaUBL release notes — every user-visible change shipped in the platform, ver
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
   Versions
+  2026.09.09.1 · 2026-09-09
+  2026.09.08.1 · 2026-09-08
+  2026.09.07.1 · 2026-09-07
   2026.09.06.1 · 2026-09-06
   2026.09.05.1 · 2026-09-05
   2026.09.04.1 · 2026-09-04
@@ -41805,6 +41845,52 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.09.09.1 — 2026-09-09 \{#v2026-09-09-1\}
+
+### Improvements
+
+- **Integrity check for lifecycle statuses.** The *Retrieve Statuses* page gains a check: pick a date and compare every platform event since then with the recorded lifecycle. Missing statuses are listed in a selectable table — apply all or only some, optionally firing the notification rules (off by default). Obsolete internal statuses (platform stage already passed), unknown invoices and unmapped codes are reported separately. Runs in the background; safe to re-run at any time.
+- **Lifecycle ordering check.** A second check scans the database for internal platform statuses recorded *after* a standard lifecycle status, and for invalid codes (raw platform text stored by a mapping mistake). Selected rows can be removed in one click; the invoice status is realigned with its last remaining event.
+- **Status details on the invoice.** The invoice summary now shows, under the status badge, the current rejection reason, expected action and status note, plus the full status message in a collapsed group (useful for long platform errors). All of them are also available as custom-action parameters — `{message}`, `{reasonLabel}`, `{actionLabel}`, `{actionNote}` — alongside the notification-style `{doc}`, `{dct}`, `{kco}`, with no list-view configuration required.
+- **Custom actions: status filter and review before run.** Each custom action can now be limited to chosen statuses (empty = every status), so a "create case" button only appears on rejected invoices. And clicking a custom action first opens a review window with every value about to be sent — editable — with Run / Cancel: adjust the message if needed, or back out safely.
+
+### Fixes
+
+- **Status updates can no longer be lost or misordered.** Three long-standing race conditions in the status polls are closed: two flows writing the same invoice at the same moment no longer collide on the lifecycle table (the loser now retries instead of dropping the event); the import check no longer applies a stale outcome — and no longer knocks the status backwards — when the lifecycle poll advanced the invoice during the run; and events created around a poll's cutoff are no longer skipped forever — each run now re-scans a short overlap, with duplicates structurally impossible.
+- **Pre-lifecycle statuses stay in their place.** Internal platform stages (export validated, import validated…) are no longer appended once the invoice's official lifecycle has started, on any retrieval path.
+
+---
+
+## 2026.09.08.1 — 2026-09-08 \{#v2026-09-08-1\}
+
+### Improvements
+
+- **Reprocess scope tightened.** Reprocess (invoice list, IT dashboard card, `-reprocess` command) now applies only to deposited-but-not-transmitted invoices (200 with reason NON_TRANSMISE); validated-never-sent invoices (9901) are no longer offered, in addition to yesterday's removal of rejected invoices (213).
+- **Bank details per company.** Each supplier company in the XSL Editor (Suppliers tab) can now carry its IBAN (BT-84), BIC (BT-86) and account holder (BT-85). When the source file provides no value and the payment means is a credit transfer (codes 30, 42, 58 — the only ones where the IBAN is mandatory), the invoice's company details are used automatically. Other payment means and self-billed invoices are unaffected. Existing installations must run the upgrade for their document templates to gain the fallback.
+
+---
+
+## 2026.09.07.1 — 2026-09-07 \{#v2026-09-07-1\}
+
+### Improvements
+
+- **Status pages now show live progress.** *Retrieve Statuses* and *Import Status* run in the background and their results table fills as the run advances (start, requests done, summary) instead of appearing only at the end. The run's lines are also kept in the server log — they were previously missing whenever the run was triggered from the interface.
+- **Import status checks run in parallel.** Pending invoices (9906) are checked several at a time — new *Import parallel* setting on the e-invoicing Status tab (default 4, max 8). A new *Poll parallel* setting does the same for the per-invoice lifecycle poll.
+- **Bulk sending runs in parallel.** *Send all waiting*, *Resend all* and the invoice-list bulk resend send several invoices at a time. Defaults are configurable under global settings → Scheduling → *Bulk Send* (workers + delay per worker); each nightly auto-retry routine can override them. Setting workers to 1 restores the previous sequential behaviour.
+- **New command `-send-waiting`.** Sends every invoice held for review (flag W) to the PA from the command line — the equivalent of the dashboard button, for scheduling outside the web server. Options `--delay` and `--parallel`; exit code reflects failures.
+- **Quieter scheduled runs.** The periodic status polls no longer write per-invoice "still pending" lines or step-by-step progress to the log — one summary line per run; the detailed narration remains on interface and command-line runs.
+- **Extract & Process directly from E-Documents.** The document detail view now offers an *Extract & Process* button: the archived spool is re-extracted and re-processed with the document's template, exactly like the Extract & Process page with the Archive source — parameters are taken from the document itself, and replace mode is forced so the rerun overwrites the previous result. Available only when the document has a template and an archived source.
+- **Reprocess is now reserved for never-transmitted invoices.** Rejected invoices (213) are no longer offered for reprocess — eligibility is limited to deposited-but-not-transmitted (200) and validated-never-sent (9901) invoices, in the invoice list, the IT dashboard card and the `-reprocess` command.
+
+### Fixes
+
+- **Default status list completed.** The shipped statuses template now includes the internal codes the application can produce or that platforms commonly report (9908 mail sent, 9909 PA export failed, 9911 PA export validated, 9912 reprocessing, 9913 PA import validated), so their labels display out of the box instead of showing the bare code.
+- **Lifecycle notes from the platform now display as readable text.** Rejection details (rule texts) sent by the platform arrived with encoded characters (`'`, `\/`…) and were shown as-is in the invoice lifecycle. Retrieved statuses are now stored as clean text, and events recorded before the fix are displayed decoded.
+- **Amounts without a leading digit no longer fail validation.** A negative amount below one euro coming from JDE as `-.80` is now emitted as `-0.80`, as required by the French decimal rules (BR-FR-DEC-01). Existing installations must run the upgrade for their document templates to pick up the correction.
+- **Send failures (9904) now record their cause.** The status message and the error detail carry the actual reason — timeout, connection failure, or the platform's HTTP response — instead of a generic "send failed". A timeout after the platform accepted the invoice (invoice present at the PA but no identifier stored) is now recognisable directly on the invoice, so you know to verify at the PA before resending.
 
 ---
 
@@ -44690,6 +44776,20 @@ When the PA call fails for transport reasons (network, timeout, credentials), th
 
 ---
 
+## Integrity checks
+
+Beyond the incremental retrieval, the page offers two on-demand checks that reconcile the recorded lifecycle with the platform and with itself. Both run in the **background** and are safe to re-run at any time.
+
+### Missing statuses
+
+Pick a date and the check compares **every platform event since then** with the lifecycle already recorded. Anything missing is listed in a **selectable table** — apply all of them or only the rows you pick, optionally firing the [notification rules](../management/notification-rules.md) (off by default). Events that don't apply are reported **separately** so nothing is silently changed: an obsolete internal status (a platform stage the invoice has already moved past), an unknown invoice, or a code with no mapping.
+
+### Lifecycle ordering
+
+The second check scans the database for lifecycle rows that are out of order — an internal platform stage recorded **after** a standard lifecycle status — and for **invalid codes** (raw platform text stored by a mapping mistake). Selected rows are removed in one click, and the invoice's current status is realigned with its last remaining event.
+
+---
+
 ## Tips & best practices
 
 - **Schedule the retrieval.** The *background scheduler* in NomaUBL can run this page periodically — see the `fetchStatusInterval` property of the *e-invoicing* template (a value in minutes; `0` disables the scheduler). Every 15 minutes to 1 hour is typical.
@@ -45424,6 +45524,16 @@ The directory holds one card per company. Each card contains:
 | **Postal code** | BT-38 | Postal code. |
 | **City** | BT-37 | City. |
 | **Country** | BT-40 | ISO 3166-1 alpha-2 country code (picked from the *countries* reference list). |
+
+### Bank details
+
+| Field | UBL | Description |
+|---|---|---|
+| **IBAN** | BT-84 | Payment account the buyer credits. |
+| **BIC** | BT-86 | Bank identifier of the payment account. |
+| **Account name** | BT-85 | Account holder name. |
+
+These are a **fallback**: when the source file carries no bank details and the payment means is a **credit transfer** (codes `30`, `42`, `58` — the only ones where the IBAN is mandatory), the invoice takes the IBAN, BIC and account name from the supplier company matched on the invoice. Other payment means and self-billed invoices are unaffected; any bank field the source provides takes precedence.
 
 The trash icon in the card header removes the supplier; the **Add** button at the bottom adds a fresh empty card.
 

@@ -250,6 +250,15 @@ Background tasks executed by NomaUBL when running in serve mode. **Changes on th
 | **Status retrieval interval (min)** | Minutes between automatic lifecycle-status retrievals from the PA. `0` = disabled. |
 | **Received fetch interval (min)** | Minutes between automatic *PA inbound* sweeps — the same flow as the *Sync → Fetch Input → PA inbound (supplier invoices)* mode and the `-fetch-received` CLI. `0` = disabled. Persists the cursor of the highest issue date processed in `lastFetchReceivedAt` so each sweep only pulls invoices that arrived since the previous one. |
 
+### Bulk Send
+
+Defaults for every bulk send to the PA — *Send all waiting* and *Resend all* on the [Tech Dashboard](../../application/tech-dashboard.md), the [invoice-list bulk resend](../../application/invoices.md#bulk-resend), and the `-send-waiting` CLI. Each nightly [Auto-Retry](./auto-retry.md) routine can override them on its own row.
+
+| Field | Description |
+|---|---|
+| **Parallel workers** | *(default `4`)* How many invoices are sent to the PA at the same time. Set `1` for the previous sequential behaviour. |
+| **Delay per worker (ms)** | *(default `100`)* Pause each worker waits between two calls, to stay inside the PA's rate budget. |
+
 ### Batch Document Processing
 
 A list of recurring **batch jobs**. Each job runs independently on its own interval and scans for new documents to process. Use **+ Add batch job** to create one and the **×** button to delete one.

@@ -54,6 +54,16 @@ The directory holds one card per company. Each card contains:
 | **City** | BT-37 | City. |
 | **Country** | BT-40 | ISO 3166-1 alpha-2 country code (picked from the *countries* reference list). |
 
+### Bank details
+
+| Field | UBL | Description |
+|---|---|---|
+| **IBAN** | BT-84 | Payment account the buyer credits. |
+| **BIC** | BT-86 | Bank identifier of the payment account. |
+| **Account name** | BT-85 | Account holder name. |
+
+These are a **fallback**: when the source file carries no bank details and the payment means is a **credit transfer** (codes `30`, `42`, `58` — the only ones where the IBAN is mandatory), the invoice takes the IBAN, BIC and account name from the supplier company matched on the invoice. Other payment means and self-billed invoices are unaffected; any bank field the source provides takes precedence.
+
 The trash icon in the card header removes the supplier; the **Add** button at the bottom adds a fresh empty card.
 
 ---

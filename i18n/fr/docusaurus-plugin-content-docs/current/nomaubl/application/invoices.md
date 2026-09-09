@@ -347,7 +347,7 @@ Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection
 
 ### Retraitement \{#reprocess\}
 
-Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures éligibles au retraitement. Le retraitement **reconstruit** une facture à partir du XML JDE archivé lors du premier dépôt — en régénérant la facture électronique, le PDF et le XML — pour une facture **rejetée** par la plateforme (statut 213), **déposée mais non transmise** (statut 200), ou **validée mais jamais envoyée** (statut 9901). La facture conserve son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont éligibles ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
+Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures éligibles au retraitement. Le retraitement **reconstruit** une facture à partir du XML JDE archivé lors du premier dépôt — en régénérant la facture électronique, le PDF et le XML — pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`). La facture conserve son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont éligibles ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
 
 ### Export
 
@@ -378,7 +378,7 @@ Cliquer sur une ligne ouvre une modale qui contient sept onglets en haut : **Ré
 
 ### Onglet Résumé *(défaut)*
 
-L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite.
+L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
 
 Sous le statut, quand la facture est dans un statut qui demande une action côté vendeur (par ex. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), un bandeau bleu **Actions vendeur** propose les actions recommandées :
 

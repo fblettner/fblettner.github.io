@@ -26547,6 +26547,8 @@ Un clic sur une ligne ouvre une visionneuse à deux volets :
 
 Chaque volet s'affiche formaté et se **télécharge**, nommé d'après le document. Un document qui a échoué avant de produire un UBL n'affiche que le spool source — exactement ce qu'il faut pour comprendre pourquoi.
 
+Quand le document a un **modèle** et une **source archivée**, la visionneuse propose aussi un bouton **Extract & Process** : il ré-extrait le spool archivé et le retraite avec le modèle du document — le même pipeline que la page [Extraire & Traiter](../processing/extract-and-process.md) en source *Archive*, les paramètres venant du document lui-même. Le mode remplacement est forcé, la nouvelle exécution écrasant le résultat précédent. Pratique pour régénérer les sorties d'un document après un changement de modèle ou de configuration.
+
 ---
 
 ## L'interroger en REST
@@ -27329,7 +27331,7 @@ Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection
 
 ### Retraitement \{#reprocess\}
 
-Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures éligibles au retraitement. Le retraitement **reconstruit** une facture à partir du XML JDE archivé lors du premier dépôt — en régénérant la facture électronique, le PDF et le XML — pour une facture **rejetée** par la plateforme (statut 213), **déposée mais non transmise** (statut 200), ou **validée mais jamais envoyée** (statut 9901). La facture conserve son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont éligibles ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
+Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures éligibles au retraitement. Le retraitement **reconstruit** une facture à partir du XML JDE archivé lors du premier dépôt — en régénérant la facture électronique, le PDF et le XML — pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`). La facture conserve son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont éligibles ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
 
 ### Export
 
@@ -27358,7 +27360,7 @@ Cliquer sur une ligne ouvre une modale qui contient sept onglets en haut : **Ré
 
 ### Onglet Résumé *(défaut)*
 
-L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite.
+L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
 
 Sous le statut, quand la facture est dans un statut qui demande une action côté vendeur (par ex. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), un bandeau bleu **Actions vendeur** propose les actions recommandées :
 
@@ -28031,7 +28033,7 @@ Une carte en grand chiffre qui compte les factures **retenues avant envoi** — 
 
 ### À retraiter (rangée 2, span 4) \{#to-reprocess\}
 
-Une carte en grand chiffre qui compte les factures **éligibles au retraitement** — celles que la plateforme a **rejetées** (statut 213), **déposées sans les transmettre** (statut 200), ou **validées mais jamais envoyées** (statut 9901), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** reconstruit chaque facture éligible à partir de son XML JDE archivé (en régénérant la facture électronique, le PDF et le XML) via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
+Une carte en grand chiffre qui compte les factures **éligibles au retraitement** — celles que la plateforme a **déposées sans les transmettre** (statut 200, motif `NON_TRANSMISE`), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** reconstruit chaque facture éligible à partir de son XML JDE archivé (en régénérant la facture électronique, le PDF et le XML) via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
 
 | Élément | Comportement |
 |---|---|
@@ -30441,6 +30443,8 @@ La section **Status Retrieval** pilote la boucle de récupération des statuts d
 | **Page size** | `100` | Nombre de statuts récupérés par page lors du polling de la PA. |
 | **Last retrieved at** | *(mis à jour automatiquement)* | Date ISO de la dernière récupération réussie (par exemple `2025-01-01T00:00:00Z`). Mis à jour automatiquement après chaque exécution ; une édition manuelle agit comme point de départ — utile pour rejouer une fenêtre. |
 | **Import status mode** | `per-invoice` *(défaut)* | `per-invoice` interroge chaque facture en attente par son id de transaction. `search` demande plutôt à la plateforme tous les flux mis à jour depuis la dernière relève (la date est conservée d'une exécution à l'autre) et rapproche les résultats des factures en attente — pour les plateformes sans recherche de statut par facture, comme Yooz Rising. |
+| **Import parallel** | *(défaut `4`, max `8`)* | Nombre de factures en attente (statut 9906) que le contrôle de statut d'import interroge **en même temps**. À augmenter pour résorber plus vite un gros arriéré ; mettre `1` pour l'ancien comportement séquentiel. |
+| **Poll parallel** | *(défaut `4`)* | Même réglage pour l'interrogation du cycle de vie par facture — nombre de factures dont le statut est récupéré simultanément. |
 | **Lifecycle endpoints** | *(vide = `invoice-statuses`)* | Nom(s) d'endpoint du connecteur à interroger pour les événements de cycle de vie, séparés par des virgules. Ajoutez `invoice-statuses-selfbilled` à côté de `invoice-statuses` quand la plateforme répartit ses cycles de vie ventes et achats (auto-facturation) sur des endpoints distincts, pour collecter les deux. Les endpoints inconnus sont ignorés. |
 
 :::info[Les factures d'auto-facturation empruntent leurs propres endpoints]
@@ -30831,6 +30835,15 @@ Tâches d'arrière-plan exécutées par NomaUBL en mode serveur. **Les modificat
 | **Import poll interval (min)** | Minutes entre deux interrogations automatiques du statut d'import pour les factures en attente (statut `9906`). `0` = désactivé. |
 | **Status retrieval interval (min)** | Minutes entre deux récupérations automatiques des statuts de cycle de vie depuis la PA. `0` = désactivé. |
 | **Received fetch interval (min)** | Minutes entre deux passes *PA entrante* automatiques — même flux que le mode *Sync → Fetch Input → PA entrante (factures fournisseur)* et la commande CLI `-fetch-received`. `0` = désactivé. Le curseur de la date d'émission la plus récente traitée est enregistré dans `lastFetchReceivedAt`, chaque passe ne récupérant ainsi que les factures arrivées depuis la précédente. |
+
+### Bulk Send
+
+Valeurs par défaut de tout envoi groupé vers la PA — *Tout envoyer* (factures en attente) et *Tout renvoyer* du [Tableau de bord IT](../../application/tech-dashboard.md), le [renvoi groupé de la liste des factures](../../application/invoices.md#bulk-resend) et la commande `-send-waiting`. Chaque routine de reprise nocturne [Auto-Retry](./auto-retry.md) peut les surcharger sur sa propre ligne.
+
+| Champ | Description |
+|---|---|
+| **Parallel workers** | *(défaut `4`)* Nombre de factures envoyées à la PA en même temps. Mettre `1` pour l'ancien comportement séquentiel. |
+| **Delay per worker (ms)** | *(défaut `100`)* Pause qu'observe chaque travailleur entre deux appels, pour rester dans l'enveloppe de débit de la PA. |
 
 ### Batch Document Processing
 
@@ -33196,6 +33209,10 @@ Depuis 2026.05.15, chaque ligne de paramètre reçoit un picker `{ }` à côté 
 | `{{invoiceType}}` | Type de facture UBL (`380`, `381`, …). |
 | `{{orderRef}}` | Référence du bon de commande client. |
 | `{{contractRef}}` | Référence du contrat client. |
+| `{{message}}` | Message de statut complet renvoyé par la plateforme. |
+| `{{reasonLabel}}` | Motif de rejet courant (libellé). |
+| `{{actionLabel}}` | Action attendue courante (libellé). |
+| `{{actionNote}}` | Note de statut courante. |
 
 Texte libre et placeholders peuvent se mélanger — `Y;reason={statusCode}` est une valeur valide.
 
@@ -33228,11 +33245,14 @@ Chaque action personnalisée porte :
 | **ID** | Identifiant libre (par ex. `pushToCrm`). Enregistré sous `customAction.N.id`. Le picker évite les doublons dans une portée. |
 | **Label** | Texte du bouton dans la modale (par ex. *Pousser vers CRM*). Enregistré sous `customAction.N.label`. |
 | **Direction** | `Toutes` *(défaut)* / `Émises uniquement (ventes)` / `Reçues uniquement (achats)`. Vide = bouton visible des deux côtés. Une fois fixée, le bouton est masqué sur les factures de la direction opposée — un *Sync CRM* côté émission et un *Marquer payée* côté réception peuvent coexister sur le même modèle, la modale n'affichant que ce qui a du sens pour la facture courante. Évalué contre l'indicateur `UHDRIN` stocké sur la ligne. |
+| **Statuses** | Liste facultative de codes de statut auxquels le bouton se limite. Vide = tous les statuts. À renseigner pour qu'un bouton *Créer un dossier* n'apparaisse que sur les factures rejetées, par exemple. |
 | **Liste d'appels** | Même éditeur de call-card que les liaisons réglementaires — connecteur, endpoint / requête, paramètres, *Arrêt sur échec* optionnel. Le même contrat de chaînage `{call.N.fieldName}` s'applique. |
 
 **+ Ajouter une action personnalisée** au pied de la section ajoute une nouvelle entrée. Retirer avec le bouton 🗑 par ligne.
 
-Dans la modale de détail facture, les actions personnalisées sont rendues dans leur propre `ActionsSection` sous les actions vendeur prédéfinies. Toujours visibles — il n'y a pas d'activation pilotée par le statut pour ce groupe ; l'utilisateur choisit l'action qu'il veut. Le bandeau de résultat est rattaché au groupe dont le bouton a déclenché la chaîne (champ `actionResult.source`) et est effacé automatiquement quand la modale se ferme ou change de facture — les bandeaux périmés ne restent pas.
+Dans la modale de détail facture, les actions personnalisées sont rendues dans leur propre `ActionsSection` sous les actions vendeur prédéfinies. Un bouton n'apparaît que sur les factures correspondant à son filtre **Statuses** (et à sa **Direction**) ; laisser le filtre vide l'affiche sur tous les statuts. Le bandeau de résultat est rattaché au groupe dont le bouton a déclenché la chaîne (champ `actionResult.source`) et est effacé automatiquement quand la modale se ferme ou change de facture — les bandeaux périmés ne restent pas.
+
+Le clic sur une action personnalisée ouvre d'abord une **fenêtre de revue** listant toutes les valeurs sur le point d'être envoyées — résolues depuis la facture et **modifiables** — avec **Exécuter** et **Annuler**. Ajustez une valeur (par exemple le `{message}` transmis au système aval) avant l'envoi, ou renoncez sans qu'aucun appel ne parte. Aux côtés des champs facture des *Placeholders* ci-dessus, la revue résout les détails de statut courants — `{message}`, `{reasonLabel}`, `{actionLabel}`, `{actionNote}` — pour qu'un dossier ouvert depuis un rejet reprenne les termes mêmes de la plateforme.
 
 ---
 
@@ -33634,6 +33654,23 @@ java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json --ver
 java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json \
                       --since 2026-04-01
 ```
+
+---
+
+## `-send-waiting` — envoyer à la PA les factures retenues pour revue \{#send-waiting\}
+
+Envoie à la Plateforme Agréée toutes les factures **retenues pour revue** (type de document sur l'indicateur d'envoi `W` — *En attente*) — l'équivalent en ligne de commande du bouton **Tout envoyer** de la carte *En attente de revue* du [Tableau de bord IT](../application/tech-dashboard.md#waiting-for-review), pour planifier la libération hors du serveur web.
+
+```bash
+java -jar nomaubl.jar -send-waiting /opt/nomaubl/demo/config/config.json [--parallel N] [--delay MS]
+```
+
+| Option | Effet |
+|---|---|
+| **`--parallel <N>`** | Nombre de factures envoyées à la fois. Défaut : les *Bulk Send* workers de [`global → Scheduling`](../configuration/system/global.md) ; `1` envoie en séquentiel. |
+| **`--delay <ms>`** | Pause entre deux appels par travailleur (défaut : le délai *Bulk Send*). |
+
+Le code de sortie reflète les échecs : un ordonnanceur peut ainsi détecter une exécution qui n'a pas pleinement abouti.
 
 ---
 
@@ -34043,7 +34080,7 @@ Un modèle en *Source = UBL* embarque désormais les mêmes PDF que le flux XML 
 |---|---|
 | **No-Data Key** | Nom d'un élément XML qui **doit exister** dans le spool. Si absent, NomaUBL considère le document comme vide et l'ignore. Utile pour écarter les sections de spool qui ne correspondent pas à des factures réelles. |
 | **Set Locale** | Locale utilisée pour rendre le PDF (par ex. `en_US`, `fr_FR`). Affecte uniquement le formatage des dates et nombres dans le PDF. |
-| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir du XML JDE archivé lors du premier dépôt — après un **rejet** par la plateforme (statut 213), un **dépôt non transmis** (statut 200), ou une **validation jamais envoyée** (statut 9901, typiquement un type configuré pour ne pas être envoyé). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Seuls les modèles à **source XML** sont éligibles. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande. |
+| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir du XML JDE archivé lors du premier dépôt — quand elles ont été **déposées sans être transmises** (statut 200, motif `NON_TRANSMISE`). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Seuls les modèles à **source XML** sont éligibles. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande. |
 
 ---
 
@@ -36270,6 +36307,9 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
+  2026.09.09.1 · 2026-09-09
+  2026.09.08.1 · 2026-09-08
+  2026.09.07.1 · 2026-09-07
   2026.09.06.1 · 2026-09-06
   2026.09.05.1 · 2026-09-05
   2026.09.04.1 · 2026-09-04
@@ -36355,6 +36395,52 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.09.09.1 — 2026-09-09 \{#v2026-09-09-1\}
+
+### Améliorations
+
+- **Contrôle d'intégrité des statuts de cycle de vie.** La page *Récupérer les statuts* offre un contrôle : choisir une date et comparer tous les événements de la plateforme depuis celle-ci avec le cycle de vie enregistré. Les statuts manquants s'affichent dans un tableau à sélection — application de tout ou partie, avec déclenchement optionnel des règles de notification (désactivé par défaut). Les statuts internes obsolètes (étape plateforme déjà dépassée), les factures inconnues et les codes non mappés sont signalés à part. S'exécute en arrière-plan ; réexécutable sans risque.
+- **Contrôle d'ordre du cycle de vie.** Un second contrôle balaie la base à la recherche de statuts internes de plateforme enregistrés *après* un statut standard du cycle de vie, et de codes invalides (texte brut de plateforme stocké par erreur de mappage). Les lignes sélectionnées se suppriment en un clic ; le statut de la facture est réaligné sur son dernier événement restant.
+- **Détails de statut sur la facture.** Le résumé de la facture affiche désormais, sous le badge de statut, le motif de rejet, l'action attendue et la note de statut courants, ainsi que le message de statut complet dans un groupe replié (utile pour les longues erreurs de plateforme). Tous sont aussi disponibles comme paramètres d'actions personnalisées — `{message}`, `{reasonLabel}`, `{actionLabel}`, `{actionNote}` — aux côtés de `{doc}`, `{dct}`, `{kco}` comme dans les notifications, sans configuration de vue de liste.
+- **Actions personnalisées : filtre par statut et revue avant exécution.** Chaque action personnalisée peut désormais être limitée à des statuts choisis (vide = tous les statuts) : un bouton « créer un dossier » n'apparaît que sur les factures rejetées. Et le clic sur une action ouvre d'abord une fenêtre de revue avec toutes les valeurs sur le point d'être envoyées — modifiables — et Exécuter / Annuler : ajustez le message si besoin, ou renoncez sans risque.
+
+### Corrections
+
+- **Les statuts ne peuvent plus être perdus ni désordonnés.** Trois situations de concurrence des interrogations de statuts sont fermées : deux flux écrivant la même facture au même instant n'entrent plus en collision sur la table de cycle de vie (le perdant réessaie au lieu de perdre l'événement) ; le contrôle d'import n'applique plus un résultat périmé — et ne fait plus reculer le statut — lorsque l'interrogation du cycle de vie a fait avancer la facture pendant l'exécution ; et les événements créés autour du seuil d'une interrogation ne sont plus ignorés définitivement — chaque exécution rebalaye désormais une courte fenêtre, sans risque de doublon.
+- **Les statuts pré-cycle de vie restent à leur place.** Les étapes internes de plateforme (export validé, import validé…) ne sont plus ajoutées une fois le cycle de vie officiel de la facture commencé, quel que soit le canal de récupération.
+
+---
+
+## 2026.09.08.1 — 2026-09-08 \{#v2026-09-08-1\}
+
+### Améliorations
+
+- **Périmètre du retraitement resserré.** Le retraitement (liste des factures, carte du tableau de bord IT, commande `-reprocess`) ne concerne plus que les factures déposées non transmises (200 avec motif NON_TRANSMISE) ; les factures validées jamais envoyées (9901) ne sont plus proposées, après le retrait des factures rejetées (213) la veille.
+- **Coordonnées bancaires par société.** Chaque société émettrice de l'éditeur XSL (onglet Sociétés) peut désormais porter son IBAN (BT-84), son BIC (BT-86) et le titulaire du compte (BT-85). Lorsque le fichier source ne fournit pas de valeur et que le moyen de paiement est un virement (codes 30, 42, 58 — les seuls où l'IBAN est obligatoire), les coordonnées de la société de la facture sont utilisées automatiquement. Les autres moyens de paiement et l'autofacturation ne sont pas concernés. Les installations existantes doivent exécuter la mise à niveau pour que leurs modèles de documents bénéficient de ce repli.
+
+---
+
+## 2026.09.07.1 — 2026-09-07 \{#v2026-09-07-1\}
+
+### Améliorations
+
+- **Les pages de statuts affichent la progression en direct.** *Récupérer les statuts* et *Statut d'import* s'exécutent en arrière-plan et leur tableau de résultats se remplit au fil de l'exécution (démarrage, requêtes traitées, synthèse) au lieu de n'apparaître qu'à la fin. Les lignes de l'exécution restent aussi dans le journal du serveur — elles en disparaissaient lorsque l'exécution était lancée depuis l'interface.
+- **Le contrôle des statuts d'import s'exécute en parallèle.** Les factures en attente (9906) sont vérifiées plusieurs à la fois — nouveau réglage *Import parallel* dans l'onglet Statut du modèle e-invoicing (défaut 4, max 8). Le nouveau réglage *Poll parallel* fait de même pour l'interrogation du cycle de vie par facture.
+- **Les envois en masse s'exécutent en parallèle.** *Tout envoyer* (factures en attente de revue), *Tout renvoyer* et le renvoi multiple de la liste des factures traitent plusieurs factures à la fois. Les valeurs par défaut se règlent dans Paramètres globaux → Planification → *Bulk Send* (nombre de travailleurs + délai par travailleur) ; chaque routine de reprise nocturne peut les surcharger. Un nombre de travailleurs à 1 rétablit le comportement séquentiel précédent.
+- **Nouvelle commande `-send-waiting`.** Envoie à la PA toutes les factures retenues pour revue (indicateur W) depuis la ligne de commande — l'équivalent du bouton du tableau de bord, pour une planification hors serveur web. Options `--delay` et `--parallel` ; le code de sortie reflète les échecs.
+- **Exécutions planifiées plus discrètes.** Les interrogations périodiques n'écrivent plus dans le journal les lignes « toujours en attente » par facture ni la progression pas à pas — une ligne de synthèse par exécution ; le détail reste affiché pour les exécutions depuis l'interface ou la ligne de commande.
+- **Extraire & Traiter directement depuis E-Documents.** La fiche d'un document propose désormais un bouton *Extraire & Traiter* : le spool archivé est ré-extrait puis retraité avec le modèle du document, comme sur la page Extraire & Traiter en source Archive — les paramètres viennent du document lui-même, et le mode remplacement est forcé pour que la nouvelle exécution écrase le résultat précédent. Disponible uniquement si le document a un modèle et une source archivée.
+- **Le retraitement est réservé aux factures jamais transmises.** Les factures rejetées (213) ne sont plus proposées au retraitement — l'éligibilité se limite aux factures déposées non transmises (200) et validées jamais envoyées (9901), dans la liste des factures, la carte du tableau de bord IT et la commande `-reprocess`.
+
+### Corrections
+
+- **Liste des statuts par défaut complétée.** Le modèle de statuts livré inclut désormais les codes internes que l'application peut produire ou que les plateformes remontent couramment (9908 courrier transmis, 9909 échec d'export PA, 9911 export PA validé, 9912 retraitement, 9913 import PA validé) : leurs libellés s'affichent d'emblée au lieu du code brut.
+- **Les notes de cycle de vie de la plateforme s'affichent désormais en clair.** Les détails de rejet (textes de règles) transmis par la plateforme arrivaient avec des caractères encodés (`'`, `\/`…) et s'affichaient tels quels dans le cycle de vie de la facture. Les statuts récupérés sont maintenant enregistrés en texte lisible, et les événements antérieurs à la correction sont affichés décodés.
+- **Les montants sans chiffre avant la virgule ne font plus échouer la validation.** Un montant négatif inférieur à un euro reçu de JDE sous la forme `-.80` est désormais émis `-0.80`, comme l'exigent les règles décimales françaises (BR-FR-DEC-01). Les installations existantes doivent exécuter la mise à niveau pour que leurs modèles de documents bénéficient de la correction.
+- **Les échecs d'envoi (9904) enregistrent désormais leur cause.** Le message de statut et le détail d'erreur portent la raison réelle — délai dépassé, échec de connexion ou réponse HTTP de la plateforme — au lieu d'un « échec d'envoi » générique. Un délai dépassé après acceptation par la plateforme (facture présente chez la PA mais sans identifiant enregistré) se reconnaît désormais directement sur la facture : on sait qu'il faut vérifier chez la PA avant de renvoyer.
 
 ---
 
@@ -39442,6 +39528,20 @@ Quand un appel à la PA échoue pour des raisons de transport (réseau, expirati
 
 ---
 
+## Contrôles d'intégrité
+
+Au-delà de la récupération incrémentale, la page propose deux contrôles à la demande qui réconcilient le cycle de vie enregistré avec la plateforme et avec lui-même. Les deux s'exécutent en **arrière-plan** et sont réexécutables sans risque.
+
+### Statuts manquants
+
+Choisissez une date : le contrôle compare **tous les événements de la plateforme depuis celle-ci** avec le cycle de vie déjà enregistré. Ce qui manque s'affiche dans un **tableau à sélection** — appliquez tout ou seulement les lignes retenues, avec déclenchement optionnel des [règles de notification](../management/notification-rules.md) (désactivé par défaut). Les événements non applicables sont signalés **à part**, pour ne rien changer en silence : un statut interne obsolète (étape plateforme déjà dépassée), une facture inconnue, ou un code sans mappage.
+
+### Ordre du cycle de vie
+
+Le second contrôle balaie la base à la recherche de lignes de cycle de vie mal ordonnées — une étape interne de plateforme enregistrée **après** un statut standard — et de **codes invalides** (texte brut de plateforme stocké par erreur de mappage). Les lignes sélectionnées se suppriment en un clic, et le statut courant de la facture est réaligné sur son dernier événement restant.
+
+---
+
 ## Conseils & bonnes pratiques
 
 - **Planifier la récupération.** L'*ordonnanceur en arrière-plan* de NomaUBL peut exécuter cette page périodiquement — voir la propriété `fetchStatusInterval` du template *e-invoicing* (valeur en minutes ; `0` désactive l'ordonnanceur). Toutes les 15 minutes à 1 heure est typique.
@@ -40176,6 +40276,16 @@ L'annuaire affiche une carte par société. Chaque carte contient :
 | **Postal code** | BT-38 | Code postal. |
 | **City** | BT-37 | Localité. |
 | **Country** | BT-40 | Code pays ISO 3166-1 alpha-2 (choisi dans la liste de référence *countries*). |
+
+### Coordonnées bancaires
+
+| Champ | UBL | Description |
+|---|---|---|
+| **IBAN** | BT-84 | Compte de paiement crédité par l'acheteur. |
+| **BIC** | BT-86 | Identifiant bancaire du compte de paiement. |
+| **Account name** | BT-85 | Titulaire du compte. |
+
+Ce sont des valeurs de **repli** : quand le fichier source ne porte aucune coordonnée bancaire et que le moyen de paiement est un **virement** (codes `30`, `42`, `58` — les seuls où l'IBAN est obligatoire), la facture reprend l'IBAN, le BIC et le titulaire de la société émettrice rapprochée. Les autres moyens de paiement et l'autofacturation ne sont pas concernés ; toute coordonnée bancaire fournie par la source reste prioritaire.
 
 L'icône corbeille de l'en-tête de carte supprime la société ; le bouton **Add** en bas ajoute une carte vide.
 

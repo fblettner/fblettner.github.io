@@ -459,6 +459,23 @@ java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json \
 
 ---
 
+## `-send-waiting` — send invoices held for review to the PA \{#send-waiting\}
+
+Sends every invoice **held for review** (document type on the `W` — *Waiting* — send flag) to the Plateforme Agréée — the command-line equivalent of the *Waiting for review* card's **Send all** button on the [Tech Dashboard](../application/tech-dashboard.md#waiting-for-review), for scheduling the release outside the web server.
+
+```bash
+java -jar nomaubl.jar -send-waiting /opt/nomaubl/demo/config/config.json [--parallel N] [--delay MS]
+```
+
+| Flag | Effect |
+|---|---|
+| **`--parallel <N>`** | How many invoices are sent at once. Defaults to the *Bulk Send* workers on [`global → Scheduling`](../configuration/system/global.md); `1` sends sequentially. |
+| **`--delay <ms>`** | Pause between two calls per worker (defaults to the *Bulk Send* delay). |
+
+The exit code reflects failures, so a scheduler can detect a run that didn't fully succeed.
+
+---
+
 ## `-fetch-single` — extract one document, then process it
 
 Equivalent of the *Application → Extract and Process* page. Extracts a single document from a source channel, drops the resulting file into `dirInput` (XML template) or `<dirInput>/ubl/` (UBL template), then immediately runs the matching pipeline. The XML-vs-UBL choice is **inferred from the template's `source` property** — no separate `processType` argument anymore.

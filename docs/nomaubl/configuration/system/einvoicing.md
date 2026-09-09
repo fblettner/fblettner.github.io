@@ -211,6 +211,8 @@ The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 | **Page size** | `100` | Number of statuses fetched per page when polling the PA. |
 | **Last retrieved at** | *(updated automatically)* | ISO datetime of the most recent successful retrieval (e.g. `2025-01-01T00:00:00Z`). Updated automatically after each retrieval run; manual edits act as a starting point — useful to re-replay a window. |
 | **Import status mode** | `per-invoice` *(default)* | `per-invoice` polls each pending invoice by its stored transaction id. `search` instead asks the platform for every flow updated since the last check (the date is kept between runs) and matches the results to the pending invoices — for platforms with no per-invoice status lookup, such as Yooz Rising. |
+| **Import parallel** | *(default `4`, max `8`)* | How many pending invoices (status 9906) the import-status check polls **at the same time**. Raise it to clear a large pending backlog faster; set `1` for the previous one-at-a-time behaviour. |
+| **Poll parallel** | *(default `4`)* | Same setting for the per-invoice lifecycle poll — how many invoices its status is fetched for concurrently. |
 | **Lifecycle endpoints** | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
 
 :::info[Self-billed invoices route to their own endpoints]

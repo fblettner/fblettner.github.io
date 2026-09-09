@@ -347,7 +347,7 @@ Each row carries a **checkbox**, and a **Resend selected (N)** button appears in
 
 ### Reprocess \{#reprocess\}
 
-A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing **rebuilds** an invoice from the JDE XML source archived at first submission — regenerating the e-invoice, PDF and XML — for an invoice the platform **rejected** (status 213), **deposited but did not transmit** (status 200), or that was **validated but never sent** (status 9901). The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
+A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing **rebuilds** an invoice from the JDE XML source archived at first submission — regenerating the e-invoice, PDF and XML — for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`). The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
 
 ### Export
 
@@ -378,7 +378,7 @@ Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parti
 
 ### Summary tab *(default)*
 
-The Summary tab shows a coloured **status badge** at the top, followed by **action buttons** (Edit UBL, Copy, Delete) on the right.
+The Summary tab shows a coloured **status badge** at the top, followed by **action buttons** (Edit UBL, Copy, Delete) on the right. Right under the badge, when the platform returned them, the current **rejection reason**, **expected action** and **status note** are shown inline, and the full **status message** sits in a collapsed group — expand it for the platform's long error text. The same values feed the custom actions as `{message}`, `{reasonLabel}`, `{actionLabel}` and `{actionNote}` placeholders (see [Actions](../management/actions.md#custom-actions)), with no list-view column needed.
 
 Below the status, when the invoice is in a status that requires a follow-up action by the seller (e.g. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), a blue **Seller actions** banner appears with the recommended actions:
 

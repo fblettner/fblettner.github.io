@@ -213,6 +213,10 @@ Since 2026.05.15 each parameter row gets a `{ }` picker next to its value input.
 | `{{invoiceType}}` | Document UBL invoice type (`380`, `381`, …). |
 | `{{orderRef}}` | Customer purchase-order reference. |
 | `{{contractRef}}` | Customer contract reference. |
+| `{{message}}` | Full status message returned by the platform. |
+| `{{reasonLabel}}` | Current rejection reason (label). |
+| `{{actionLabel}}` | Current expected action (label). |
+| `{{actionNote}}` | Current status note. |
 
 Free text and placeholders can mix — `Y;reason={statusCode}` is a valid value.
 
@@ -245,11 +249,14 @@ Each custom action carries:
 | **ID** | Free-form identifier (e.g. `pushToCrm`). Stored as `customAction.N.id`. The picker prevents duplicates within a scope. |
 | **Label** | Button text shown in the modal (e.g. *Push to CRM*). Stored as `customAction.N.label`. |
 | **Direction** | `Any` *(default)* / `Issued only (sales)` / `Received only (purchases)`. Empty = the button is visible on both sides. When set, the button is hidden on invoices of the other direction — so an emit-side *Sync to CRM* and a receive-side *Mark as paid* can live on the same template and the detail modal only surfaces what makes sense for the current invoice. Evaluated against the `UHDRIN` flag stored on the row. |
+| **Statuses** | Optional list of status codes the button is limited to. Empty = every status. Set it so a *Create case* button only appears on rejected invoices, for example. |
 | **Calls list** | Same call-card editor as regulatory bindings — connector, endpoint / query, parameters, optional *Stop on failure*. The same `{call.N.fieldName}` response-chaining contract applies. |
 
 **+ Add custom action** at the bottom of the section appends a new entry. Remove with the per-row 🗑 button.
 
-In the invoice detail modal, custom actions render in their own `ActionsSection` beneath the preset seller actions. Always visible — there is no status-driven enable / disable for this group; the user picks the action they need. The result banner is anchored to the group whose button fired the chain (`actionResult.source` field), and is cleared automatically when the modal closes or switches invoice — stale banners do not carry over.
+In the invoice detail modal, custom actions render in their own `ActionsSection` beneath the preset seller actions. A button appears only on invoices matching its **Statuses** filter (and its **Direction**); leave the filter empty to show it on every status. The result banner is anchored to the group whose button fired the chain (`actionResult.source` field), and is cleared automatically when the modal closes or switches invoice — stale banners do not carry over.
+
+Clicking a custom action first opens a **review window** listing every value about to be sent — resolved from the invoice, and **editable** — with **Run** and **Cancel**. Adjust a value (for example the `{message}` sent to the downstream system) before it goes out, or cancel without any call being made. Alongside the invoice fields in *Placeholders* above, the review resolves the current status details — `{message}`, `{reasonLabel}`, `{actionLabel}`, `{actionNote}` — so a case opened from a rejection carries the platform's own wording.
 
 ---
 

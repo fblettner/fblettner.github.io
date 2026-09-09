@@ -10,7 +10,10 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-09-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-06</span></a>
+  <a href="#v2026-09-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-09</span></a>
+  <a href="#v2026-09-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-08</span></a>
+  <a href="#v2026-09-07-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.07.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-07</span></a>
+  <a href="#v2026-09-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-06</span></a>
   <a href="#v2026-09-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-05</span></a>
   <a href="#v2026-09-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-04</span></a>
   <a href="#v2026-09-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-03</span></a>
@@ -96,6 +99,52 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
 </div>
+
+---
+
+## 2026.09.09.1 — 2026-09-09 \{#v2026-09-09-1\}
+
+### Améliorations
+
+- **Contrôle d'intégrité des statuts de cycle de vie.** La page *Récupérer les statuts* offre un contrôle : choisir une date et comparer tous les événements de la plateforme depuis celle-ci avec le cycle de vie enregistré. Les statuts manquants s'affichent dans un tableau à sélection — application de tout ou partie, avec déclenchement optionnel des règles de notification (désactivé par défaut). Les statuts internes obsolètes (étape plateforme déjà dépassée), les factures inconnues et les codes non mappés sont signalés à part. S'exécute en arrière-plan ; réexécutable sans risque.
+- **Contrôle d'ordre du cycle de vie.** Un second contrôle balaie la base à la recherche de statuts internes de plateforme enregistrés *après* un statut standard du cycle de vie, et de codes invalides (texte brut de plateforme stocké par erreur de mappage). Les lignes sélectionnées se suppriment en un clic ; le statut de la facture est réaligné sur son dernier événement restant.
+- **Détails de statut sur la facture.** Le résumé de la facture affiche désormais, sous le badge de statut, le motif de rejet, l'action attendue et la note de statut courants, ainsi que le message de statut complet dans un groupe replié (utile pour les longues erreurs de plateforme). Tous sont aussi disponibles comme paramètres d'actions personnalisées — `{message}`, `{reasonLabel}`, `{actionLabel}`, `{actionNote}` — aux côtés de `{doc}`, `{dct}`, `{kco}` comme dans les notifications, sans configuration de vue de liste.
+- **Actions personnalisées : filtre par statut et revue avant exécution.** Chaque action personnalisée peut désormais être limitée à des statuts choisis (vide = tous les statuts) : un bouton « créer un dossier » n'apparaît que sur les factures rejetées. Et le clic sur une action ouvre d'abord une fenêtre de revue avec toutes les valeurs sur le point d'être envoyées — modifiables — et Exécuter / Annuler : ajustez le message si besoin, ou renoncez sans risque.
+
+### Corrections
+
+- **Les statuts ne peuvent plus être perdus ni désordonnés.** Trois situations de concurrence des interrogations de statuts sont fermées : deux flux écrivant la même facture au même instant n'entrent plus en collision sur la table de cycle de vie (le perdant réessaie au lieu de perdre l'événement) ; le contrôle d'import n'applique plus un résultat périmé — et ne fait plus reculer le statut — lorsque l'interrogation du cycle de vie a fait avancer la facture pendant l'exécution ; et les événements créés autour du seuil d'une interrogation ne sont plus ignorés définitivement — chaque exécution rebalaye désormais une courte fenêtre, sans risque de doublon.
+- **Les statuts pré-cycle de vie restent à leur place.** Les étapes internes de plateforme (export validé, import validé…) ne sont plus ajoutées une fois le cycle de vie officiel de la facture commencé, quel que soit le canal de récupération.
+
+---
+
+## 2026.09.08.1 — 2026-09-08 \{#v2026-09-08-1\}
+
+### Améliorations
+
+- **Périmètre du retraitement resserré.** Le retraitement (liste des factures, carte du tableau de bord IT, commande `-reprocess`) ne concerne plus que les factures déposées non transmises (200 avec motif NON_TRANSMISE) ; les factures validées jamais envoyées (9901) ne sont plus proposées, après le retrait des factures rejetées (213) la veille.
+- **Coordonnées bancaires par société.** Chaque société émettrice de l'éditeur XSL (onglet Sociétés) peut désormais porter son IBAN (BT-84), son BIC (BT-86) et le titulaire du compte (BT-85). Lorsque le fichier source ne fournit pas de valeur et que le moyen de paiement est un virement (codes 30, 42, 58 — les seuls où l'IBAN est obligatoire), les coordonnées de la société de la facture sont utilisées automatiquement. Les autres moyens de paiement et l'autofacturation ne sont pas concernés. Les installations existantes doivent exécuter la mise à niveau pour que leurs modèles de documents bénéficient de ce repli.
+
+---
+
+## 2026.09.07.1 — 2026-09-07 \{#v2026-09-07-1\}
+
+### Améliorations
+
+- **Les pages de statuts affichent la progression en direct.** *Récupérer les statuts* et *Statut d'import* s'exécutent en arrière-plan et leur tableau de résultats se remplit au fil de l'exécution (démarrage, requêtes traitées, synthèse) au lieu de n'apparaître qu'à la fin. Les lignes de l'exécution restent aussi dans le journal du serveur — elles en disparaissaient lorsque l'exécution était lancée depuis l'interface.
+- **Le contrôle des statuts d'import s'exécute en parallèle.** Les factures en attente (9906) sont vérifiées plusieurs à la fois — nouveau réglage *Import parallel* dans l'onglet Statut du modèle e-invoicing (défaut 4, max 8). Le nouveau réglage *Poll parallel* fait de même pour l'interrogation du cycle de vie par facture.
+- **Les envois en masse s'exécutent en parallèle.** *Tout envoyer* (factures en attente de revue), *Tout renvoyer* et le renvoi multiple de la liste des factures traitent plusieurs factures à la fois. Les valeurs par défaut se règlent dans Paramètres globaux → Planification → *Bulk Send* (nombre de travailleurs + délai par travailleur) ; chaque routine de reprise nocturne peut les surcharger. Un nombre de travailleurs à 1 rétablit le comportement séquentiel précédent.
+- **Nouvelle commande `-send-waiting`.** Envoie à la PA toutes les factures retenues pour revue (indicateur W) depuis la ligne de commande — l'équivalent du bouton du tableau de bord, pour une planification hors serveur web. Options `--delay` et `--parallel` ; le code de sortie reflète les échecs.
+- **Exécutions planifiées plus discrètes.** Les interrogations périodiques n'écrivent plus dans le journal les lignes « toujours en attente » par facture ni la progression pas à pas — une ligne de synthèse par exécution ; le détail reste affiché pour les exécutions depuis l'interface ou la ligne de commande.
+- **Extraire & Traiter directement depuis E-Documents.** La fiche d'un document propose désormais un bouton *Extraire & Traiter* : le spool archivé est ré-extrait puis retraité avec le modèle du document, comme sur la page Extraire & Traiter en source Archive — les paramètres viennent du document lui-même, et le mode remplacement est forcé pour que la nouvelle exécution écrase le résultat précédent. Disponible uniquement si le document a un modèle et une source archivée.
+- **Le retraitement est réservé aux factures jamais transmises.** Les factures rejetées (213) ne sont plus proposées au retraitement — l'éligibilité se limite aux factures déposées non transmises (200) et validées jamais envoyées (9901), dans la liste des factures, la carte du tableau de bord IT et la commande `-reprocess`.
+
+### Corrections
+
+- **Liste des statuts par défaut complétée.** Le modèle de statuts livré inclut désormais les codes internes que l'application peut produire ou que les plateformes remontent couramment (9908 courrier transmis, 9909 échec d'export PA, 9911 export PA validé, 9912 retraitement, 9913 import PA validé) : leurs libellés s'affichent d'emblée au lieu du code brut.
+- **Les notes de cycle de vie de la plateforme s'affichent désormais en clair.** Les détails de rejet (textes de règles) transmis par la plateforme arrivaient avec des caractères encodés (`'`, `\/`…) et s'affichaient tels quels dans le cycle de vie de la facture. Les statuts récupérés sont maintenant enregistrés en texte lisible, et les événements antérieurs à la correction sont affichés décodés.
+- **Les montants sans chiffre avant la virgule ne font plus échouer la validation.** Un montant négatif inférieur à un euro reçu de JDE sous la forme `-.80` est désormais émis `-0.80`, comme l'exigent les règles décimales françaises (BR-FR-DEC-01). Les installations existantes doivent exécuter la mise à niveau pour que leurs modèles de documents bénéficient de la correction.
+- **Les échecs d'envoi (9904) enregistrent désormais leur cause.** Le message de statut et le détail d'erreur portent la raison réelle — délai dépassé, échec de connexion ou réponse HTTP de la plateforme — au lieu d'un « échec d'envoi » générique. Un délai dépassé après acceptation par la plateforme (facture présente chez la PA mais sans identifiant enregistré) se reconnaît désormais directement sur la facture : on sait qu'il faut vérifier chez la PA avant de renvoyer.
 
 ---
 

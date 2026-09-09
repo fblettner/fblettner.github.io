@@ -459,6 +459,23 @@ java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json \
 
 ---
 
+## `-send-waiting` — envoyer à la PA les factures retenues pour revue \{#send-waiting\}
+
+Envoie à la Plateforme Agréée toutes les factures **retenues pour revue** (type de document sur l'indicateur d'envoi `W` — *En attente*) — l'équivalent en ligne de commande du bouton **Tout envoyer** de la carte *En attente de revue* du [Tableau de bord IT](../application/tech-dashboard.md#waiting-for-review), pour planifier la libération hors du serveur web.
+
+```bash
+java -jar nomaubl.jar -send-waiting /opt/nomaubl/demo/config/config.json [--parallel N] [--delay MS]
+```
+
+| Option | Effet |
+|---|---|
+| **`--parallel <N>`** | Nombre de factures envoyées à la fois. Défaut : les *Bulk Send* workers de [`global → Scheduling`](../configuration/system/global.md) ; `1` envoie en séquentiel. |
+| **`--delay <ms>`** | Pause entre deux appels par travailleur (défaut : le délai *Bulk Send*). |
+
+Le code de sortie reflète les échecs : un ordonnanceur peut ainsi détecter une exécution qui n'a pas pleinement abouti.
+
+---
+
 ## `-fetch-single` — extraire un document, puis le traiter
 
 Équivalent de la page *Processing → Extraction et traitement*. Extrait un document d'un canal source, dépose le fichier résultant dans `dirInput` (modèle XML) ou `<dirInput>/ubl/` (modèle UBL), puis lance immédiatement le pipeline correspondant. Le choix XML ou UBL est **déduit de la propriété `source` du modèle** — l'argument `processType` disparaît.

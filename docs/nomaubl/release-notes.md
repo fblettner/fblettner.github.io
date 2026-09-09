@@ -10,7 +10,10 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-09-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-06</span></a>
+  <a href="#v2026-09-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-09</span></a>
+  <a href="#v2026-09-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-08</span></a>
+  <a href="#v2026-09-07-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.07.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-07</span></a>
+  <a href="#v2026-09-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-06</span></a>
   <a href="#v2026-09-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-05</span></a>
   <a href="#v2026-09-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-04</span></a>
   <a href="#v2026-09-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-03</span></a>
@@ -96,6 +99,52 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
 </div>
+
+---
+
+## 2026.09.09.1 — 2026-09-09 \{#v2026-09-09-1\}
+
+### Improvements
+
+- **Integrity check for lifecycle statuses.** The *Retrieve Statuses* page gains a check: pick a date and compare every platform event since then with the recorded lifecycle. Missing statuses are listed in a selectable table — apply all or only some, optionally firing the notification rules (off by default). Obsolete internal statuses (platform stage already passed), unknown invoices and unmapped codes are reported separately. Runs in the background; safe to re-run at any time.
+- **Lifecycle ordering check.** A second check scans the database for internal platform statuses recorded *after* a standard lifecycle status, and for invalid codes (raw platform text stored by a mapping mistake). Selected rows can be removed in one click; the invoice status is realigned with its last remaining event.
+- **Status details on the invoice.** The invoice summary now shows, under the status badge, the current rejection reason, expected action and status note, plus the full status message in a collapsed group (useful for long platform errors). All of them are also available as custom-action parameters — `{message}`, `{reasonLabel}`, `{actionLabel}`, `{actionNote}` — alongside the notification-style `{doc}`, `{dct}`, `{kco}`, with no list-view configuration required.
+- **Custom actions: status filter and review before run.** Each custom action can now be limited to chosen statuses (empty = every status), so a "create case" button only appears on rejected invoices. And clicking a custom action first opens a review window with every value about to be sent — editable — with Run / Cancel: adjust the message if needed, or back out safely.
+
+### Fixes
+
+- **Status updates can no longer be lost or misordered.** Three long-standing race conditions in the status polls are closed: two flows writing the same invoice at the same moment no longer collide on the lifecycle table (the loser now retries instead of dropping the event); the import check no longer applies a stale outcome — and no longer knocks the status backwards — when the lifecycle poll advanced the invoice during the run; and events created around a poll's cutoff are no longer skipped forever — each run now re-scans a short overlap, with duplicates structurally impossible.
+- **Pre-lifecycle statuses stay in their place.** Internal platform stages (export validated, import validated…) are no longer appended once the invoice's official lifecycle has started, on any retrieval path.
+
+---
+
+## 2026.09.08.1 — 2026-09-08 \{#v2026-09-08-1\}
+
+### Improvements
+
+- **Reprocess scope tightened.** Reprocess (invoice list, IT dashboard card, `-reprocess` command) now applies only to deposited-but-not-transmitted invoices (200 with reason NON_TRANSMISE); validated-never-sent invoices (9901) are no longer offered, in addition to yesterday's removal of rejected invoices (213).
+- **Bank details per company.** Each supplier company in the XSL Editor (Suppliers tab) can now carry its IBAN (BT-84), BIC (BT-86) and account holder (BT-85). When the source file provides no value and the payment means is a credit transfer (codes 30, 42, 58 — the only ones where the IBAN is mandatory), the invoice's company details are used automatically. Other payment means and self-billed invoices are unaffected. Existing installations must run the upgrade for their document templates to gain the fallback.
+
+---
+
+## 2026.09.07.1 — 2026-09-07 \{#v2026-09-07-1\}
+
+### Improvements
+
+- **Status pages now show live progress.** *Retrieve Statuses* and *Import Status* run in the background and their results table fills as the run advances (start, requests done, summary) instead of appearing only at the end. The run's lines are also kept in the server log — they were previously missing whenever the run was triggered from the interface.
+- **Import status checks run in parallel.** Pending invoices (9906) are checked several at a time — new *Import parallel* setting on the e-invoicing Status tab (default 4, max 8). A new *Poll parallel* setting does the same for the per-invoice lifecycle poll.
+- **Bulk sending runs in parallel.** *Send all waiting*, *Resend all* and the invoice-list bulk resend send several invoices at a time. Defaults are configurable under global settings → Scheduling → *Bulk Send* (workers + delay per worker); each nightly auto-retry routine can override them. Setting workers to 1 restores the previous sequential behaviour.
+- **New command `-send-waiting`.** Sends every invoice held for review (flag W) to the PA from the command line — the equivalent of the dashboard button, for scheduling outside the web server. Options `--delay` and `--parallel`; exit code reflects failures.
+- **Quieter scheduled runs.** The periodic status polls no longer write per-invoice "still pending" lines or step-by-step progress to the log — one summary line per run; the detailed narration remains on interface and command-line runs.
+- **Extract & Process directly from E-Documents.** The document detail view now offers an *Extract & Process* button: the archived spool is re-extracted and re-processed with the document's template, exactly like the Extract & Process page with the Archive source — parameters are taken from the document itself, and replace mode is forced so the rerun overwrites the previous result. Available only when the document has a template and an archived source.
+- **Reprocess is now reserved for never-transmitted invoices.** Rejected invoices (213) are no longer offered for reprocess — eligibility is limited to deposited-but-not-transmitted (200) and validated-never-sent (9901) invoices, in the invoice list, the IT dashboard card and the `-reprocess` command.
+
+### Fixes
+
+- **Default status list completed.** The shipped statuses template now includes the internal codes the application can produce or that platforms commonly report (9908 mail sent, 9909 PA export failed, 9911 PA export validated, 9912 reprocessing, 9913 PA import validated), so their labels display out of the box instead of showing the bare code.
+- **Lifecycle notes from the platform now display as readable text.** Rejection details (rule texts) sent by the platform arrived with encoded characters (`'`, `\/`…) and were shown as-is in the invoice lifecycle. Retrieved statuses are now stored as clean text, and events recorded before the fix are displayed decoded.
+- **Amounts without a leading digit no longer fail validation.** A negative amount below one euro coming from JDE as `-.80` is now emitted as `-0.80`, as required by the French decimal rules (BR-FR-DEC-01). Existing installations must run the upgrade for their document templates to pick up the correction.
+- **Send failures (9904) now record their cause.** The status message and the error detail carry the actual reason — timeout, connection failure, or the platform's HTTP response — instead of a generic "send failed". A timeout after the platform accepted the invoice (invoice present at the PA but no identifier stored) is now recognisable directly on the invoice, so you know to verify at the PA before resending.
 
 ---
 

@@ -195,6 +195,20 @@ When the PA call fails for transport reasons (network, timeout, credentials), th
 
 ---
 
+## Integrity checks
+
+Beyond the incremental retrieval, the page offers two on-demand checks that reconcile the recorded lifecycle with the platform and with itself. Both run in the **background** and are safe to re-run at any time.
+
+### Missing statuses
+
+Pick a date and the check compares **every platform event since then** with the lifecycle already recorded. Anything missing is listed in a **selectable table** — apply all of them or only the rows you pick, optionally firing the [notification rules](../management/notification-rules.md) (off by default). Events that don't apply are reported **separately** so nothing is silently changed: an obsolete internal status (a platform stage the invoice has already moved past), an unknown invoice, or a code with no mapping.
+
+### Lifecycle ordering
+
+The second check scans the database for lifecycle rows that are out of order — an internal platform stage recorded **after** a standard lifecycle status — and for **invalid codes** (raw platform text stored by a mapping mistake). Selected rows are removed in one click, and the invoice's current status is realigned with its last remaining event.
+
+---
+
 ## Tips & best practices
 
 - **Schedule the retrieval.** The *background scheduler* in NomaUBL can run this page periodically — see the `fetchStatusInterval` property of the *e-invoicing* template (a value in minutes; `0` disables the scheduler). Every 15 minutes to 1 hour is typical.

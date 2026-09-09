@@ -213,6 +213,10 @@ Depuis 2026.05.15, chaque ligne de paramètre reçoit un picker `{ }` à côté 
 | `{{invoiceType}}` | Type de facture UBL (`380`, `381`, …). |
 | `{{orderRef}}` | Référence du bon de commande client. |
 | `{{contractRef}}` | Référence du contrat client. |
+| `{{message}}` | Message de statut complet renvoyé par la plateforme. |
+| `{{reasonLabel}}` | Motif de rejet courant (libellé). |
+| `{{actionLabel}}` | Action attendue courante (libellé). |
+| `{{actionNote}}` | Note de statut courante. |
 
 Texte libre et placeholders peuvent se mélanger — `Y;reason={statusCode}` est une valeur valide.
 
@@ -245,11 +249,14 @@ Chaque action personnalisée porte :
 | **ID** | Identifiant libre (par ex. `pushToCrm`). Enregistré sous `customAction.N.id`. Le picker évite les doublons dans une portée. |
 | **Label** | Texte du bouton dans la modale (par ex. *Pousser vers CRM*). Enregistré sous `customAction.N.label`. |
 | **Direction** | `Toutes` *(défaut)* / `Émises uniquement (ventes)` / `Reçues uniquement (achats)`. Vide = bouton visible des deux côtés. Une fois fixée, le bouton est masqué sur les factures de la direction opposée — un *Sync CRM* côté émission et un *Marquer payée* côté réception peuvent coexister sur le même modèle, la modale n'affichant que ce qui a du sens pour la facture courante. Évalué contre l'indicateur `UHDRIN` stocké sur la ligne. |
+| **Statuses** | Liste facultative de codes de statut auxquels le bouton se limite. Vide = tous les statuts. À renseigner pour qu'un bouton *Créer un dossier* n'apparaisse que sur les factures rejetées, par exemple. |
 | **Liste d'appels** | Même éditeur de call-card que les liaisons réglementaires — connecteur, endpoint / requête, paramètres, *Arrêt sur échec* optionnel. Le même contrat de chaînage `{call.N.fieldName}` s'applique. |
 
 **+ Ajouter une action personnalisée** au pied de la section ajoute une nouvelle entrée. Retirer avec le bouton 🗑 par ligne.
 
-Dans la modale de détail facture, les actions personnalisées sont rendues dans leur propre `ActionsSection` sous les actions vendeur prédéfinies. Toujours visibles — il n'y a pas d'activation pilotée par le statut pour ce groupe ; l'utilisateur choisit l'action qu'il veut. Le bandeau de résultat est rattaché au groupe dont le bouton a déclenché la chaîne (champ `actionResult.source`) et est effacé automatiquement quand la modale se ferme ou change de facture — les bandeaux périmés ne restent pas.
+Dans la modale de détail facture, les actions personnalisées sont rendues dans leur propre `ActionsSection` sous les actions vendeur prédéfinies. Un bouton n'apparaît que sur les factures correspondant à son filtre **Statuses** (et à sa **Direction**) ; laisser le filtre vide l'affiche sur tous les statuts. Le bandeau de résultat est rattaché au groupe dont le bouton a déclenché la chaîne (champ `actionResult.source`) et est effacé automatiquement quand la modale se ferme ou change de facture — les bandeaux périmés ne restent pas.
+
+Le clic sur une action personnalisée ouvre d'abord une **fenêtre de revue** listant toutes les valeurs sur le point d'être envoyées — résolues depuis la facture et **modifiables** — avec **Exécuter** et **Annuler**. Ajustez une valeur (par exemple le `{message}` transmis au système aval) avant l'envoi, ou renoncez sans qu'aucun appel ne parte. Aux côtés des champs facture des *Placeholders* ci-dessus, la revue résout les détails de statut courants — `{message}`, `{reasonLabel}`, `{actionLabel}`, `{actionNote}` — pour qu'un dossier ouvert depuis un rejet reprenne les termes mêmes de la plateforme.
 
 ---
 

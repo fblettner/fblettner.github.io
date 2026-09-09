@@ -72,6 +72,8 @@ Un clic sur une ligne ouvre une visionneuse à deux volets :
 
 Chaque volet s'affiche formaté et se **télécharge**, nommé d'après le document. Un document qui a échoué avant de produire un UBL n'affiche que le spool source — exactement ce qu'il faut pour comprendre pourquoi.
 
+Quand le document a un **modèle** et une **source archivée**, la visionneuse propose aussi un bouton **Extract & Process** : il ré-extrait le spool archivé et le retraite avec le modèle du document — le même pipeline que la page [Extraire & Traiter](../processing/extract-and-process.md) en source *Archive*, les paramètres venant du document lui-même. Le mode remplacement est forcé, la nouvelle exécution écrasant le résultat précédent. Pratique pour régénérer les sorties d'un document après un changement de modèle ou de configuration.
+
 ---
 
 ## L'interroger en REST
