@@ -64,6 +64,14 @@ L'annuaire affiche une carte par société. Chaque carte contient :
 
 Ce sont des valeurs de **repli** : quand le fichier source ne porte aucune coordonnée bancaire et que le moyen de paiement est un **virement** (codes `30`, `42`, `58` — les seuls où l'IBAN est obligatoire), la facture reprend l'IBAN, le BIC et le titulaire de la société émettrice rapprochée. Les autres moyens de paiement et l'autofacturation ne sont pas concernés ; toute coordonnée bancaire fournie par la source reste prioritaire.
 
+### Exigibilité de la TVA
+
+| Champ | UBL | Description |
+|---|---|---|
+| **VAT point date code** | BT-8 | Défaut par société du code d'exigibilité TVA sous *TVA sur les débits* — *date de facture*, *date de livraison* ou *date d'encaissement*. Utilisé quand le fichier source n'en porte pas ; le mappage source reste prioritaire. |
+
+Les codes et leurs libellés se trouvent dans la liste de référence **Codes d'exigibilité TVA** (UNTDID 2005), modifiable dans *Configuration → Reference Lists* comme les autres listes. Le PDF lisible affiche l'exigibilité en clair — par ex. `Exigibilité TVA : Date de facture (débits)` — y compris quand la période de facturation ne porte pas de dates.
+
 L'icône corbeille de l'en-tête de carte supprime la société ; le bouton **Add** en bas ajoute une carte vide.
 
 ---

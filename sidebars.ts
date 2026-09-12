@@ -481,6 +481,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/application/ereporting',
         'nomaubl/application/edirectory',
         'nomaubl/application/vat-declaration',
+        'nomaubl/application/reports',
         'nomaubl/application/integration-errors',
         'nomaubl/application/notifications',
         'nomaubl/application/ai-capabilities',

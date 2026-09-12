@@ -26342,6 +26342,18 @@ Un seul filtre figure tout en haut de la page. Il restreint chaque widget qui d�
 
 Certains widgets ignorent volontairement le filtre — *Factures bloquées* (toujours les 90 derniers jours) et *Couverture e-Reporting* (toujours le mois en cours). Chacun affiche sa propre fenêtre, la différence est donc explicite.
 
+### Base de date
+
+À côté du filtre de période, un sélecteur de **base de date** choisit la date contre laquelle tout le tableau de bord lit la fenêtre — chaque widget compte ainsi sur le même pied et les chiffres se recoupent :
+
+| Valeur | Lue contre |
+|---|---|
+| **Date d'activité** *(défaut)* | La dernière mise à jour — le comportement historique. |
+| **Date document** | La date d'émission des factures (BT-2). |
+| **Date d'archivage** | La date de traitement des documents dans l'archive. |
+
+Cartes de synthèse, pipeline des statuts, volume quotidien, répartition par société et principales erreurs suivent tous ce choix. La liste [E-Invoicing](./invoices.md#base-de-date) et la page [Rapports](./reports.md) proposent la même base *Date d'archivage*.
+
 ---
 
 ## Cartes KPI hero
@@ -27176,6 +27188,7 @@ Un sélecteur, à côté du filtre de période, choisit **sur quelle colonne de 
 |---|---|---|
 | **Date de mise à jour** *(par défaut)* | Dernière modification de la facture dans NomaUBL. | Exploitation au quotidien — comportement historique de la liste. |
 | **Date d'émission** | Celle imprimée sur la facture (BT-2 du document UBL). | Rapprochement avec la page [Déclaration de TVA](./vat-declaration.md) ou avec un système externe indexé sur la date d'émission. |
+| **Date d'archivage** | La date à laquelle le document a été traité dans l'archive. | Rapprochement avec la page [Rapports](./reports.md) et le [Tableau de bord](./dashboard.md), qui proposent la même base *Date d'archivage*. |
 
 Le choix est **conservé pendant la session en cours** — fermer la modale d'une facture et rouvrir la liste maintient la position du sélecteur. Le sélecteur est aussi **positionné automatiquement** quand la liste Factures est ouverte depuis un drill-down de la page TVA, donc le nombre affiché correspond à celui d'où l'on vient.
 
@@ -27342,6 +27355,8 @@ Un bouton **Exporter** dans la barre d'outils exporte la vue courante (filtres c
 ## Modale de détail
 
 Cliquer sur une ligne ouvre une modale qui contient sept onglets en haut : **Résumé**, **Parties**, **Lignes**, **TVA**, **Notes**, **Historique**, **PDF**. Le titre de la modale affiche le triplet `DOC / DCT / KCO`. Un **bouton plein écran** dans l'en-tête bascule entre vue fenêtrée et vue plein écran.
+
+Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête passent d'une facture à l'autre de la liste sans fermer la fenêtre — même ordre et mêmes filtres que le tableau affiché — avec un indicateur de position (par ex. `3 / 50`). Après la dernière facture, la navigation reboucle sur la première.
 
   
     12345 / RI / 00070
@@ -28308,6 +28323,67 @@ Le PDF est une synthèse imprimable — il ne remplace pas le dépôt sur le por
 Les factures créées avant cette version n'ont pas de pays de contrepartie renseigné. Elles sont classées en **France** par défaut tant que la facture sous-jacente n'a pas été retraitée (pour que le pays soit capturé depuis le document UBL et enregistré). Toute nouvelle facture est désormais créée avec le bon pays.
 
 Si une facture intra-UE ou hors UE apparaît encore sous *France*, la relancer depuis la [liste Factures](./invoices.md) (Modifier → Enregistrer, ou un nouveau Traiter depuis [Synchronisation → Fetch Input](../sync/fetch-input.md)) rafraîchit le pays.
+
+---
+
+## Rapports
+Source: https://docs.nomana-it.fr/fr/nomaubl/application/reports/
+
+Reporting analytique de NomaUBL — un tableau croisé des statistiques de statuts (nombre de factures par activité, statut et motif de rejet, par type de transaction) et un requêteur sans SQL sur les factures, les documents archivés, les événements de cycle de vie et les erreurs de validation, avec rapports nommés enregistrés et export Excel/CSV.
+
+La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle s'ouvre sur deux onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts**, et un **Requêteur** à composer soi-même. La page est conçue pour accueillir d'autres onglets de rapports au fil du temps.
+
+Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [Accès](#access) plus bas).
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Statistiques statuts
+
+Le premier onglet est un tableau croisé prêt à l'emploi : le **nombre de factures** ventilé par **code activité → statut → motif de rejet**, réparti en colonnes par **type de transaction** (`B2B`, `B2BINT`, `B2C`, `B2G`). Chaque niveau porte son effectif et un **pourcentage** de son parent — un motif en part de son statut, un statut en part de son activité, une activité en part du total.
+
+- **Dépliez / repliez** une activité ou un statut pour descendre dans le détail ; les **sous-totaux** apparaissent à chaque niveau.
+- Un statut à motif de rejet unique tient sur **une seule ligne**, sans ligne imbriquée supplémentaire.
+- Le **filtre de période** en haut propose les trois mêmes bases de dates que le [Tableau de bord](./dashboard.md) — *Date d'activité*, *Date document* ou *Date d'archivage* — pour que le rapport se recoupe avec les chiffres affichés ailleurs.
+- **Export Excel** produit un classeur à **deux feuilles** : le rapport exactement tel qu'affiché, et les données brutes à plat, prêtes pour vos propres tableaux croisés.
+
+---
+
+## Requêteur
+
+Le second onglet compose une extraction **sans SQL**. Choisissez un **jeu de données**, sélectionnez les colonnes, affinez avec des filtres, exécutez — et enregistrez au besoin le résultat comme rapport nommé.
+
+| Jeu de données | Ce qu'il couvre |
+|---|---|
+| **Factures** | Les lignes e-invoicing — le même catalogue que la liste [E-Invoicing](./invoices.md). |
+| **Documents archivés** | Tout document capturé — l'archive [E-Documents](./edocuments.md). |
+| **Événements de cycle de vie** | Une ligne par événement de statut du cycle de vie de la facture. |
+| **Erreurs de validation** | Les anomalies des [Erreurs d'intégration](./integration-errors.md). |
+
+- **Colonnes** — choisissez les colonnes à inclure dans le catalogue du jeu de données.
+- **Filtres** — les filtres statut, motif, action et type de transaction se choisissent dans des listes déroulantes **multi-sélection** alimentées par les listes de référence ; les dates par **plage** ; la **barre de période** avec son choix de base de date ouvre l'écran. Un filtre **numéro de document** effectue une recherche numérique exacte.
+- **Résultats** dans la grille standard avec tout son outillage : recherche, filtres par colonne, regroupement, affichage / masquage et réordonnancement des colonnes, export **CSV / Excel**.
+
+### Rapports enregistrés
+
+Une requête — son **jeu de données, ses colonnes, ses filtres, la disposition des colonnes et le regroupement** — peut être **enregistrée comme rapport nommé** et rechargée en deux clics. La bibliothèque de rapports se trouve dans un fichier dédié `config-reports.json`, simple à sauvegarder et à promouvoir d'un serveur à l'autre.
+
+---
+
+## Accès \{#access\}
+
+La page Rapports s'accorde **par rôle** : activez la page *Rapports* du groupe **Navigation** sur la page [Rôles](../configuration/security/roles.md). Sans elle, l'entrée de menu reste masquée.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Partez des Statistiques statuts pour la lecture récurrente.** Elles répondent à « combien de factures, dans quel statut, et pourquoi rejetées » sans réglage — exportez le classeur à deux feuilles quand un collègue veut croiser les chiffres bruts.
+- **Enregistrez les requêtes que l'équipe rejoue.** Un rapport nommé conserve ses colonnes, ses filtres et sa disposition : une extraction mensuelle tient en deux clics plutôt qu'une reconstruction — et `config-reports.json` suit le déploiement.
+- **Adaptez la base de date à la question.** *Date d'archivage* répond à « ce que nous avons traité », *Date document* à « ce que nous avons émis », *Date d'activité* à « ce qui a changé » — choisissez celle qu'attend l'audience avant de lire les effectifs.
 
 ---
 
@@ -30726,7 +30802,7 @@ L'éditeur comporte **six onglets** :
 
 | Champ | Description |
 |---|---|
-| **Hôtes des jobs BIP** | Une borne supérieure **par hôte d'exécution JDE** (`RJRPDEXHST`) — les numéros de job BIP (`RJJOBNBR`) sont uniques par hôte, pas globalement. Ajoutez chaque hôte avec son numéro de départ, ou cliquez *Retrieve last job # per host* pour les amorcer tous depuis le maximum courant en un clic ; ils avancent ensuite automatiquement. **Seuls les hôtes listés sont scannés.** *(BIP / spécifique JDE.)* |
+| **Hôtes des jobs BIP** | Un repère haut **par hôte d'exécution JDE** (`RJRPDEXHST`). Le repère suit chaque hôte par **date de fin du job**, et non par numéro — un numéro est attribué à la soumission, si bien qu'un job long qui se termine après un job plus récent au numéro supérieur pourrait sinon passer sous le repère et n'être jamais récupéré. La date de fin s'affiche à côté du numéro de job pour chaque hôte, et reste **modifiable**. Ajoutez chaque hôte avec son numéro de départ (le premier lot après mise à niveau renseigne la date automatiquement), ou cliquez *Retrieve last job # per host* pour les amorcer tous depuis le maximum courant ; ils avancent ensuite après chaque job, un lot interrompu reprenant exactement où il s'était arrêté. **Seuls les hôtes listés sont scannés.** *(BIP / spécifique JDE.)* |
 | **Fenêtre BIP (jours)** | Limite l'analyse BIP dans le temps. À `0`, aucune limite : tous les jobs postérieurs au dernier numéro traité sont repris. À `N > 0`, seuls ceux modifiés au cours des N derniers jours le sont. Pratique à la première installation ou après une longue interruption : on évite ainsi de parcourir des années d'historique. L'analyse lancée à la main, le lot planifié et la commande `nomaubl -fetch-all` en tiennent compte. *(Spécifique BIP / JDE.)* |
 
 ---
@@ -36307,6 +36383,9 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
+  2026.09.12.1 · 2026-09-12
+  2026.09.11.1 · 2026-09-11
+  2026.09.10.1 · 2026-09-10
   2026.09.09.1 · 2026-09-09
   2026.09.08.1 · 2026-09-08
   2026.09.07.1 · 2026-09-07
@@ -36395,6 +36474,41 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.09.12.1 — 2026-09-12 \{#v2026-09-12-1\}
+
+### Améliorations
+
+- **Parcourir les factures sans quitter la fenêtre.** La fiche facture gagne des flèches précédent / suivant (et les touches ← →) pour passer d'une facture à l'autre de la liste — même ordre et mêmes filtres que le tableau affiché, avec un indicateur de position (par ex. 3 / 50). Après la dernière facture, la navigation reboucle sur la première.
+- **Batch BIP : plus aucun job manqué.** La récupération par lot suit désormais chaque hôte JDE par **date de fin du job** et non plus par numéro. Les numéros étant attribués à la soumission, un job long se terminant après un job plus récent au numéro supérieur passait sous le repère et n'était jamais récupéré — le suivi par date de fin rend ce cas impossible. Le repère avance après chaque job : un lot interrompu reprend exactement où il s'était arrêté, sans rien retraiter. La transition est automatique (le premier lot après mise à niveau renseigne la date, visible et modifiable à côté du numéro dans Paramètres → Global), le garde-fou sur la date de soumission est conservé, et les exécutions par numéro de job explicite restent inchangées.
+- **Batch BIP : choix des sorties extraites.** Les paramètres de récupération gagnent une sélection des types de sortie (PDF, XML, Excel…) appliquée lors de l'extraction des sorties de job — plusieurs types peuvent être combinés, par exemple le XML plus le PDF lisible à intégrer dans l'UBL. Un défaut s'applique à tous les états et chaque filtre d'état peut le surcharger ; vide = toutes les sorties.
+- **Modèles UBL : les conditions acceptent des chemins d'éléments.** Dans les définitions à séparateur « | » des champs d'extension personnalisés, des notes et des propriétés d'article, les colonnes condition et non-vide acceptent désormais un chemin avec « / » (par ex. `Facture_Entete_S4/CLI_TYPE_ID242`) en plus d'un simple nom d'élément — nécessaire quand les champs du fichier source se trouvent sous un groupe intermédiaire. Un nom simple se comporte exactement comme avant : les modèles existants ne changent pas ; la colonne valeur acceptait déjà les chemins.
+- **Référence API mise à jour.** La documentation servie sur `/api/docs` couvre désormais tous les points d'accès — une quarantaine d'entrées manquaient, dont toute la section Rapports (statistiques, requêteur, rapports enregistrés), les contrôles d'intégrité et d'ordre du cycle de vie, le détail de statut d'une facture, la déclaration de TVA, les travaux d'arrière-plan et les informations système, les connecteurs SQL, ainsi que les parcours de réinitialisation de mot de passe et de connexion OIDC. Les exemples de requêtes et de réponses reflètent les échanges réels, et trois nouvelles sections (Rapports, TVA, Système) structurent la lecture.
+
+---
+
+## 2026.09.11.1 — 2026-09-11 \{#v2026-09-11-1\}
+
+### Améliorations
+
+- **Nouvelle page Rapports — statistiques des statuts.** Une entrée *Rapports* dans le menu ouvre le premier rapport analytique : le nombre de factures ventilé par code activité, statut et motif de rejet, réparti par type de transaction (B2B, B2BINT, B2C, B2G) avec effectifs et pourcentages à chaque niveau. Les lignes se déplient et se replient avec sous-totaux ; un statut sans détail de motif tient sur une seule ligne. Le filtre de période propose les trois mêmes bases de dates que le tableau de bord (date d'activité, date document, date d'archivage). Un clic exporte un classeur Excel à deux feuilles : le rapport tel qu'affiché et les données à plat, prêtes pour vos propres tableaux croisés. L'accès s'accorde par rôle (nouvelle page *Rapports* du groupe Navigation) ; la page est conçue pour accueillir d'autres onglets de rapports.
+- **Page Rapports — requêteur.** Un second onglet permet de construire ses propres extractions sans SQL : choisir un jeu de données (factures, documents archivés, évènements de cycle de vie, erreurs de validation), sélectionner les colonnes, puis affiner avec des filtres — statuts, motifs, actions et types de transaction se choisissent dans des listes déroulantes multi-sélection alimentées par les listes de référence, les dates par plage, et la barre de période avec son choix de base de date ouvre l'écran. Les résultats s'affichent dans la grille standard avec tout son outillage : recherche, filtres par colonne, regroupement, affichage et réordonnancement des colonnes, export CSV/Excel. Une requête peut être **enregistrée comme rapport nommé** — jeu de données, colonnes, filtres, disposition des colonnes et regroupement compris — et rechargée en deux clics ; la bibliothèque de rapports réside dans un fichier dédié `config-reports.json`, simple à sauvegarder et à promouvoir entre serveurs. Le filtre sur le numéro de document effectue une recherche numérique exacte, et des libellés plus clairs (*N° document*, *Type document*, *Type transaction*) profitent aussi au choix de colonnes des vues de liste dans les Paramètres.
+
+### Corrections
+
+- **Fiche facture : messages rémanents effacés.** La confirmation affichée après *Renvoyer à la PA* (ainsi que les résultats de validation et de modification) ne persiste plus après la fermeture de la fenêtre — chaque message s'efface désormais à la fermeture ou à l'ouverture d'une autre facture.
+
+---
+
+## 2026.09.10.1 — 2026-09-10 \{#v2026-09-10-1\}
+
+### Améliorations
+
+- **Une base de dates unique pour tout le tableau de bord.** Un sélecteur près du filtre de période choisit la date qui pilote tous les indicateurs — *Date d'activité* (dernière mise à jour, comportement historique), *Date document* (factures émises) ou la nouvelle *Date d'archivage* (documents traités). Cartes de synthèse, pipeline des statuts, volume quotidien, répartition par société et principales erreurs suivent tous le même choix : les chiffres se recoupent. Le sélecteur de date de la liste des factures gagne la même option *Date d'archivage*.
+- **Les échecs d'écriture d'archive expliquent leur cause.** Quand la ligne d'archive (F564230) ne peut pas être écrite depuis une source UBL, le résultat affiche la cause réelle (champ obligatoire manquant, erreur base de données) au lieu de renvoyer au journal — et une violation de longueur liste chaque valeur écrite avec sa taille, désignant immédiatement la colonne en cause.
+- **Exigibilité de la TVA (BT-8) par société, et sur le PDF lisible.** Pour les factures en « TVA sur les débits », le code de date d'exigibilité devient un défaut par société : chaque société émettrice (éditeur XSL, onglet Sociétés) peut le définir — date de facture, de livraison ou d'encaissement — utilisé quand le fichier source n'en porte pas ; le mappage source reste prioritaire. Les codes et leurs libellés résident dans une nouvelle liste de référence *Codes d'exigibilité TVA*, modifiable dans les Paramètres comme les autres listes. Le PDF lisible affiche désormais l'exigibilité en clair (par ex. « Exigibilité TVA : Date de facture (débits) »), y compris lorsque la période de facturation ne porte pas de dates. Les installations existantes doivent exécuter la mise à niveau (modèles et liste de référence).
 
 ---
 
@@ -39288,6 +39402,7 @@ La seconde section choisit la **source** et ses paramètres.
 |---|---|
 | **Language** | Filtre optionnel sur la langue BIP (par ex. `FR`). |
 | **Extract Mode** | `Extract Input (XML)`, `Extract Output` ou `Extract Both`. Voir [*Extract BIP*](../extract/extract-bip.md) pour la sémantique. |
+| **Output types** | Les sorties de job à récupérer lors de l'extraction des sorties — `PDF`, `XML`, `Excel`… Plusieurs types peuvent être combinés (par ex. le XML plus le PDF lisible à intégrer dans l'UBL). Un défaut s'applique à tous les états et chaque filtre d'état peut le surcharger ; vide = toutes les sorties. |
 | **Last Job Number** | Pré-rempli depuis `global.lastBipJobNumber`. L'appel Scan ne retourne que les jobs dont `jobNumber > Last Job Number`. Le champ est modifiable pour rebalayer une autre plage, mais la configuration globale est mise à jour avec le plus grand numéro de job traité après chaque lot — la récupération incrémentale est le mode par défaut. |
 | **Fenêtre (jours)** | Limite l'analyse dans le temps. À `0`, aucune limite : tous les jobs postérieurs au dernier numéro traité. À `N > 0`, seuls ceux modifiés au cours des N derniers jours — utile à la première installation ou après une longue interruption, pour ne pas parcourir des années d'historique. Reprend la valeur de *Paramètres → Global → Traitement par lot → Fenêtre BIP (jours)* ; modifiable le temps d'une analyse ponctuelle. |
 
@@ -40287,6 +40402,14 @@ L'annuaire affiche une carte par société. Chaque carte contient :
 
 Ce sont des valeurs de **repli** : quand le fichier source ne porte aucune coordonnée bancaire et que le moyen de paiement est un **virement** (codes `30`, `42`, `58` — les seuls où l'IBAN est obligatoire), la facture reprend l'IBAN, le BIC et le titulaire de la société émettrice rapprochée. Les autres moyens de paiement et l'autofacturation ne sont pas concernés ; toute coordonnée bancaire fournie par la source reste prioritaire.
 
+### Exigibilité de la TVA
+
+| Champ | UBL | Description |
+|---|---|---|
+| **VAT point date code** | BT-8 | Défaut par société du code d'exigibilité TVA sous *TVA sur les débits* — *date de facture*, *date de livraison* ou *date d'encaissement*. Utilisé quand le fichier source n'en porte pas ; le mappage source reste prioritaire. |
+
+Les codes et leurs libellés se trouvent dans la liste de référence **Codes d'exigibilité TVA** (UNTDID 2005), modifiable dans *Configuration → Reference Lists* comme les autres listes. Le PDF lisible affiche l'exigibilité en clair — par ex. `Exigibilité TVA : Date de facture (débits)` — y compris quand la période de facturation ne porte pas de dates.
+
 L'icône corbeille de l'en-tête de carte supprime la société ; le bouton **Add** en bas ajoute une carte vide.
 
 ---
@@ -40784,6 +40907,7 @@ Un select `TAG_*` ne se limite pas à un seul chemin XML :
 - **Liste de valeurs conditionnelle.** Le paramètre `cond_value` des helpers `ubl:emit-item-prop` / `ubl:emit-note` accepte une valeur unique (comme avant) ou une liste séparée par des virgules — `'KWH,M3,LTR'` correspond quand la source vaut l'un des trois. Les espaces autour de chaque élément sont supprimés.
 - **Axe parent (`..`).** Un chemin peut remonter à l'élément parent : `../FIELD` atteint un voisin de l'élément ligne courant, `../../FIELD/Sub` deux niveaux plus haut. Cela débloque les XML sources où les lignes sont imbriquées sous un parent qui porte aussi les références de ligne (par exemple la commande client référencée, BT-132) ; les chemins sans `..` se résolvent exactement comme avant.
 - **Valeurs constantes (accents graves).** Une valeur encadrée par des accents graves — par exemple `` `EDI` `` — est écrite telle quelle au lieu d'être lue dans la source. Valable pour les champs d'extension, les notes et les attributs d'article ; utile pour les valeurs fixes propres à une plateforme.
+- **Chemins d'éléments dans les conditions.** Dans les définitions à séparateur « | » des champs d'extension personnalisés, des notes et des attributs d'article, les colonnes **condition** et **non-vide** acceptent un chemin avec « / » — par ex. `Facture_Entete_S4/CLI_TYPE_ID242` — en plus d'un simple nom d'élément, nécessaire quand le champ source se trouve sous un groupe intermédiaire. Un nom simple se comporte comme avant : les modèles existants ne changent pas ; la colonne valeur acceptait déjà les chemins.
 
 #### Scoping
 

@@ -10,7 +10,10 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-09-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-09</span></a>
+  <a href="#v2026-09-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-12</span></a>
+  <a href="#v2026-09-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-11</span></a>
+  <a href="#v2026-09-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-10</span></a>
+  <a href="#v2026-09-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-09</span></a>
   <a href="#v2026-09-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-08</span></a>
   <a href="#v2026-09-07-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.07.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-07</span></a>
   <a href="#v2026-09-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-06</span></a>
@@ -99,6 +102,41 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
 </div>
+
+---
+
+## 2026.09.12.1 — 2026-09-12 \{#v2026-09-12-1\}
+
+### Improvements
+
+- **Browse invoices without leaving the window.** The invoice window gains previous / next arrows (and the ← → keys) to move through the invoices of the list — same order and filters as the table on screen, with a position indicator (e.g. 3 / 50). Past the last invoice, navigation loops back to the first.
+- **BIP batch: no more missed jobs.** The batch fetch now tracks each JDE host by **job completion time** instead of job number. Job numbers are assigned at submission, so a long-running job finishing after a shorter, higher-numbered one could fall below the watermark and never be fetched — completion-time tracking makes that impossible. The mark advances after each job, so an interrupted batch resumes exactly where it stopped, re-fetching nothing. The transition is automatic (first run after upgrade fills the date, visible and editable next to the job number in Settings → Global), the submit-date lookback safeguard is unchanged, and explicit job-number runs are unaffected.
+- **BIP batch: choice of extracted outputs.** The fetch settings gain an output-type selection (PDF, XML, Excel…) applied when the batch extracts job outputs — several types can be combined, e.g. XML plus the readable PDF to embed in the UBL. A default applies to every report and each report filter can override it; empty keeps extracting every output type.
+- **UBL templates: conditions accept element paths.** In the pipe-separated specs for custom extension fields, notes and item properties, the condition and non-empty columns now accept a slash path (e.g. `Facture_Entete_S4/CLI_TYPE_ID242`) in addition to a plain element name — required for source files whose fields sit below an intermediate group. Plain names behave exactly as before, so existing templates are unaffected; the value column already supported paths.
+- **API reference brought up to date.** The documentation served at `/api/docs` now covers every endpoint — around forty entries had accumulated undocumented, including the whole Reports section (statistics, query tool, saved reports), the lifecycle integrity and ordering checks, the invoice status detail, the VAT declaration, background jobs and system information, SQL connectors, and the password-reset / OIDC sign-in flows. Request and response examples reflect the actual payloads, and three new sections (Reports, VAT, System) organise the reading.
+
+---
+
+## 2026.09.11.1 — 2026-09-11 \{#v2026-09-11-1\}
+
+### Improvements
+
+- **New Reports page — status statistics.** A new *Reports* entry in the sidebar opens the first analytical report: invoice counts broken down by activity code, status and rejection reason, split per transaction type (B2B, B2BINT, B2C, B2G) with counts and percentages at every level. Rows expand and collapse with subtotals, and a status with a single reason renders as one compact line. The period filter offers the same three date bases as the dashboard (activity, document or archive date). One click exports an Excel workbook with two sheets: the report as displayed and the flat data, ready for custom pivots. Access is granted per role (new *Reports* page in the Navigation group); the page is designed to host further report tabs.
+- **Reports page — query tool.** A second tab lets operators build their own extractions without SQL: pick a dataset (invoices, archived documents, lifecycle events, validation errors), choose the columns, and narrow with filters — status, reason, action and transaction-type filters use searchable multi-select pickers fed by the reference lists, dates use range pickers, and the period bar with its date-basis toggle leads the screen. Results load into the standard grid with all its tooling: search, per-column filters, grouping, column show/hide and reorder, CSV/Excel export. A query can be **saved as a named report** — dataset, columns, filters, column layout and grouping included — and restored in two clicks; the report library lives in its own `config-reports.json` file, easy to back up and promote between servers. Document-number filters perform exact numeric lookups, and clearer column names (*Document number*, *Document type*, *Transaction type*) also improve the list-view column picker in Settings.
+
+### Fixes
+
+- **Invoice window: stale messages cleared.** The confirmation shown after *Resend to PA* (and the validation / edit results) no longer lingers after closing the window — every message now clears when the window closes or another invoice is opened.
+
+---
+
+## 2026.09.10.1 — 2026-09-10 \{#v2026-09-10-1\}
+
+### Improvements
+
+- **One date basis for the whole dashboard.** A selector next to the period filter chooses which date drives every widget — *Activity date* (last update, the historical behaviour), *Document date* (invoices issued), or the new *Archive date* (documents processed). Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the same choice, so their numbers reconcile. The invoice list's date selector gains the same *Archive date* option.
+- **Failed archive writes now say why.** When the invoice archive row (F564230) cannot be written from a UBL source, the result shows the actual cause (missing mandatory field, database error) instead of pointing at the log — and a length-constraint violation lists every written value with its size, naming the offending column immediately.
+- **VAT point date (BT-8) per company, and on the readable PDF.** For invoices under "TVA sur les débits", the VAT point date code is now a company-level default: each supplier company (XSL Editor, Suppliers tab) can set it — invoice date, delivery date or paid to date — used whenever the source file carries no value; the source mapping keeps priority. The codes and their labels live in a new *VAT point date codes* reference list, editable under Settings like the other code lists. The readable PDF now displays the VAT point as its meaning (e.g. « Exigibilité TVA : Date de facture (débits) »), including when the invoice period carries no dates. Existing installations must run the upgrade (templates and reference list).
 
 ---
 

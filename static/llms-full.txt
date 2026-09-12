@@ -31792,6 +31792,18 @@ A single filter sits at the very top of the page. It restricts every widget that
 
 A small set of widgets ignore the date filter on purpose — *Stale invoices* (always counts the last 90 days) and *E-Reporting coverage* (always the current month). Each carries its own time-window indicator so the difference is obvious.
 
+### Date basis
+
+Next to the period filter, a **date basis** selector chooses which date the whole dashboard reads the window against — so every widget counts on the same footing and the numbers reconcile:
+
+| Value | Reads against |
+|---|---|
+| **Activity date** *(default)* | The last update — the historical behaviour. |
+| **Document date** | The date invoices were issued (BT-2). |
+| **Archive date** | The date documents were processed into the archive. |
+
+Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the choice. The [E-Invoicing](./invoices.md#date-basis) list and the [Reports](./reports.md) page offer the same *Archive date* basis.
+
 ---
 
 ## Hero KPI cards
@@ -32626,6 +32638,7 @@ A selector sits next to the date range and controls **which date column the peri
 |---|---|---|
 | **Update date** *(default)* | The last time the invoice was modified in NomaUBL. | Day-to-day operations — same behaviour as the list has always had. |
 | **Issue date** | The date printed on the invoice itself (BT-2 from the UBL). | Reconciling against the [VAT Declaration](./vat-declaration.md) page or any external system that keys off the issue date. |
+| **Archive date** | The date the document was processed into the archive. | Reconciling against the [Reports](./reports.md) page and the [Dashboard](./dashboard.md), which offer the same *Archive date* basis. |
 
 The choice is **remembered for the current session** — closing the modal of an invoice and reopening the list keeps the selector where it was. The toggle is also **pre-selected automatically** when the Invoices list is opened from a VAT page drill-down, so the count on Invoices matches the count you came from.
 
@@ -32792,6 +32805,8 @@ A small **Export** button in the toolbar exports the current view (filters appli
 ## Detail modal
 
 Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parties**, **Lines**, **VAT**, **Notes**, **History**, **PDF**. The modal title shows the invoice's `DOC / DCT / KCO` triplet. A **fullscreen toggle** in the header switches between a windowed and a full-screen view.
+
+**Previous / next arrows** (and the ← → keys) in the header move through the invoices of the list without closing the window — the same order and filters as the table on screen — with a position indicator (e.g. `3 / 50`). Past the last invoice, navigation loops back to the first.
 
   
     12345 / RI / 00070
@@ -33758,6 +33773,67 @@ The PDF is meant as a printable synthesis — not a substitute for filing on the
 Invoices created before this release have no counterparty country on file. They are classified as **Domestic** by default until the underlying invoice is re-processed (so the country is captured from the UBL document and persisted). Any new invoice from now on lands with the correct country.
 
 If you spot an intra-EU or outside-EU invoice still showing under *Domestic*, re-running it from the [Invoices list](./invoices.md) (Edit → Save, or a fresh Process from [Sync → Fetch Input](../sync/fetch-input.md)) refreshes the country.
+
+---
+
+## Reports
+Source: https://docs.nomana-it.fr/nomaubl/application/reports/
+
+Analytical reporting for NomaUBL — a status-statistics pivot (invoice counts by activity, status and rejection reason, per transaction type) and a no-SQL query tool over invoices, archived documents, lifecycle events and validation errors, with saved named reports and Excel/CSV export.
+
+The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It opens on two tabs: a ready-made **Status statistics** pivot and a build-your-own **Query tool**. The page is designed to host further report tabs over time.
+
+Open it from the sidebar — **Reports**. Access is granted per role (see [Access](#access) below).
+
+---
+
+## At a glance
+
+---
+
+## Status statistics
+
+The first tab is a ready-made pivot: **invoice counts** broken down by **activity code → status → rejection reason**, and split into columns by **transaction type** (`B2B`, `B2BINT`, `B2C`, `B2G`). Every level carries its count and a **percentage** of its parent — a reason as a share of its status, a status as a share of its activity, an activity as a share of the whole.
+
+- **Expand / collapse** any activity or status to drill down; **subtotals** are shown at every level.
+- A status that has a single rejection reason renders as **one compact line** rather than an extra nested row.
+- The **period filter** at the top offers the same three date bases as the [Dashboard](./dashboard.md) — *Activity date*, *Document date* or *Archive date* — so the report reconciles with the figures shown elsewhere.
+- **Export Excel** writes a workbook with **two sheets**: the report exactly as displayed, and the flat underlying data ready for your own pivot tables.
+
+---
+
+## Query tool
+
+The second tab builds an extraction **without SQL**. Pick a **dataset**, choose the columns, narrow with filters, run — and optionally save the result as a named report.
+
+| Dataset | What it covers |
+|---|---|
+| **Invoices** | The e-invoicing rows — the same catalog as the [E-Invoicing](./invoices.md) list. |
+| **Archived documents** | Every captured document — the [E-Documents](./edocuments.md) archive. |
+| **Lifecycle events** | One row per status event recorded on the invoice lifecycle. |
+| **Validation errors** | The [Integration Errors](./integration-errors.md) findings. |
+
+- **Columns** — pick which columns to include from the dataset's catalog.
+- **Filters** — status, reason, action and transaction-type filters use searchable **multi-select** pickers fed by the reference lists; dates use **range** pickers; the **period bar** with its date-basis toggle leads the screen. A **document-number** filter performs an exact numeric lookup.
+- **Results** land in the standard grid with all its tooling: search, per-column filters, grouping, column show / hide and reorder, and **CSV / Excel** export.
+
+### Saved reports
+
+A query — its **dataset, columns, filters, column layout and grouping** — can be **saved as a named report** and restored in two clicks. The report library lives in its own `config-reports.json` file, so it is easy to back up and to promote from one server to another.
+
+---
+
+## Access
+
+The Reports page is gated **per role**: grant the *Reports* page in the **Navigation** group on the [Roles](../configuration/security/roles.md) page. Without it, the sidebar entry is hidden.
+
+---
+
+## Tips & best practices
+
+- **Start from Status statistics for the recurring read.** It answers "how many invoices, in which status, and why rejected" without any setup — export the two-sheet workbook when a colleague wants to pivot the raw figures.
+- **Save the queries your team re-runs.** A named report keeps its columns, filters and layout, so a monthly extraction is two clicks rather than a rebuild — and `config-reports.json` travels with a deployment.
+- **Match the date basis to the question.** *Archive date* answers "what did we process", *Document date* "what did we issue", *Activity date* "what changed" — pick the one the audience expects before reading the counts.
 
 ---
 
@@ -36176,7 +36252,7 @@ The editor has **six tabs**:
 
 | Field | Description |
 |---|---|
-| **BIP job hosts** | One high-water mark **per JDE execution host** (`RJRPDEXHST`) — BIP job numbers (`RJJOBNBR`) are unique per host, not globally. Add each host with its starting number, or click *Retrieve last job # per host* to seed them all from the current maximum in one click; from then on they advance automatically. **Only listed hosts are scanned.** *(BIP / JDE-specific.)* |
+| **BIP job hosts** | One high-water mark **per JDE execution host** (`RJRPDEXHST`). The mark tracks each host by **job completion time**, not by job number — a job number is assigned at submission, so a long-running job that finishes after a shorter, higher-numbered one could otherwise fall below the mark and never be fetched. The completion date is shown next to the job number for each host, and is **editable**. Add each host with its starting number (the first batch after an upgrade fills the date automatically), or click *Retrieve last job # per host* to seed them all from the current maximum; from then on they advance after each job, so an interrupted batch resumes exactly where it stopped. **Only listed hosts are scanned.** *(BIP / JDE-specific.)* |
 | **BIP Lookback (days)** | Date floor on the BIP scan. `0` = no floor — every job after the watermark is eligible. `N > 0` = only jobs updated in the last N days. Handy on a first install or after a long gap, to skip years of history rather than walking the whole queue. Applies to the manual scan, the scheduled batch and the `nomaubl -fetch-all` command. *(BIP / JDE-specific.)* |
 
 ---
@@ -41757,6 +41833,9 @@ NomaUBL release notes — every user-visible change shipped in the platform, ver
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
   Versions
+  2026.09.12.1 · 2026-09-12
+  2026.09.11.1 · 2026-09-11
+  2026.09.10.1 · 2026-09-10
   2026.09.09.1 · 2026-09-09
   2026.09.08.1 · 2026-09-08
   2026.09.07.1 · 2026-09-07
@@ -41845,6 +41924,41 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.09.12.1 — 2026-09-12 \{#v2026-09-12-1\}
+
+### Improvements
+
+- **Browse invoices without leaving the window.** The invoice window gains previous / next arrows (and the ← → keys) to move through the invoices of the list — same order and filters as the table on screen, with a position indicator (e.g. 3 / 50). Past the last invoice, navigation loops back to the first.
+- **BIP batch: no more missed jobs.** The batch fetch now tracks each JDE host by **job completion time** instead of job number. Job numbers are assigned at submission, so a long-running job finishing after a shorter, higher-numbered one could fall below the watermark and never be fetched — completion-time tracking makes that impossible. The mark advances after each job, so an interrupted batch resumes exactly where it stopped, re-fetching nothing. The transition is automatic (first run after upgrade fills the date, visible and editable next to the job number in Settings → Global), the submit-date lookback safeguard is unchanged, and explicit job-number runs are unaffected.
+- **BIP batch: choice of extracted outputs.** The fetch settings gain an output-type selection (PDF, XML, Excel…) applied when the batch extracts job outputs — several types can be combined, e.g. XML plus the readable PDF to embed in the UBL. A default applies to every report and each report filter can override it; empty keeps extracting every output type.
+- **UBL templates: conditions accept element paths.** In the pipe-separated specs for custom extension fields, notes and item properties, the condition and non-empty columns now accept a slash path (e.g. `Facture_Entete_S4/CLI_TYPE_ID242`) in addition to a plain element name — required for source files whose fields sit below an intermediate group. Plain names behave exactly as before, so existing templates are unaffected; the value column already supported paths.
+- **API reference brought up to date.** The documentation served at `/api/docs` now covers every endpoint — around forty entries had accumulated undocumented, including the whole Reports section (statistics, query tool, saved reports), the lifecycle integrity and ordering checks, the invoice status detail, the VAT declaration, background jobs and system information, SQL connectors, and the password-reset / OIDC sign-in flows. Request and response examples reflect the actual payloads, and three new sections (Reports, VAT, System) organise the reading.
+
+---
+
+## 2026.09.11.1 — 2026-09-11 \{#v2026-09-11-1\}
+
+### Improvements
+
+- **New Reports page — status statistics.** A new *Reports* entry in the sidebar opens the first analytical report: invoice counts broken down by activity code, status and rejection reason, split per transaction type (B2B, B2BINT, B2C, B2G) with counts and percentages at every level. Rows expand and collapse with subtotals, and a status with a single reason renders as one compact line. The period filter offers the same three date bases as the dashboard (activity, document or archive date). One click exports an Excel workbook with two sheets: the report as displayed and the flat data, ready for custom pivots. Access is granted per role (new *Reports* page in the Navigation group); the page is designed to host further report tabs.
+- **Reports page — query tool.** A second tab lets operators build their own extractions without SQL: pick a dataset (invoices, archived documents, lifecycle events, validation errors), choose the columns, and narrow with filters — status, reason, action and transaction-type filters use searchable multi-select pickers fed by the reference lists, dates use range pickers, and the period bar with its date-basis toggle leads the screen. Results load into the standard grid with all its tooling: search, per-column filters, grouping, column show/hide and reorder, CSV/Excel export. A query can be **saved as a named report** — dataset, columns, filters, column layout and grouping included — and restored in two clicks; the report library lives in its own `config-reports.json` file, easy to back up and promote between servers. Document-number filters perform exact numeric lookups, and clearer column names (*Document number*, *Document type*, *Transaction type*) also improve the list-view column picker in Settings.
+
+### Fixes
+
+- **Invoice window: stale messages cleared.** The confirmation shown after *Resend to PA* (and the validation / edit results) no longer lingers after closing the window — every message now clears when the window closes or another invoice is opened.
+
+---
+
+## 2026.09.10.1 — 2026-09-10 \{#v2026-09-10-1\}
+
+### Improvements
+
+- **One date basis for the whole dashboard.** A selector next to the period filter chooses which date drives every widget — *Activity date* (last update, the historical behaviour), *Document date* (invoices issued), or the new *Archive date* (documents processed). Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the same choice, so their numbers reconcile. The invoice list's date selector gains the same *Archive date* option.
+- **Failed archive writes now say why.** When the invoice archive row (F564230) cannot be written from a UBL source, the result shows the actual cause (missing mandatory field, database error) instead of pointing at the log — and a length-constraint violation lists every written value with its size, naming the offending column immediately.
+- **VAT point date (BT-8) per company, and on the readable PDF.** For invoices under "TVA sur les débits", the VAT point date code is now a company-level default: each supplier company (XSL Editor, Suppliers tab) can set it — invoice date, delivery date or paid to date — used whenever the source file carries no value; the source mapping keeps priority. The codes and their labels live in a new *VAT point date codes* reference list, editable under Settings like the other code lists. The readable PDF now displays the VAT point as its meaning (e.g. « Exigibilité TVA : Date de facture (débits) »), including when the invoice period carries no dates. Existing installations must run the upgrade (templates and reference list).
 
 ---
 
@@ -44536,6 +44650,7 @@ The second section picks the **source** and any source-specific parameters.
 |---|---|
 | **Language** | Optional BIP language filter (e.g. `FR`). |
 | **Extract Mode** | `Extract Input (XML)`, `Extract Output` or `Extract Both`. See [*Extract BIP*](../extract/extract-bip.md) for the semantics. |
+| **Output types** | Which job outputs to pull when the batch extracts outputs — `PDF`, `XML`, `Excel`… Several can be combined (e.g. XML plus the readable PDF to embed in the UBL). A default applies to every report and each report filter can override it; empty keeps extracting every output type. |
 | **Last Job Number** | Pre-filled from `global.lastBipJobNumber`. The Scan call returns only jobs with `jobNumber > Last Job Number`. The field can be edited to re-scan a different range, but the global config is updated to the highest processed job number after each batch — incremental retrieval is the default. |
 | **Lookback (days)** | Date floor on the scan. `0` = no floor (every job after the watermark). `N > 0` = only jobs updated in the last N days — useful on a first install or after a long gap, to skip years of history. Pre-filled from *Settings → Global → Batch Processing → BIP Lookback (days)*; editable for a one-off scan. |
 
@@ -45535,6 +45650,14 @@ The directory holds one card per company. Each card contains:
 
 These are a **fallback**: when the source file carries no bank details and the payment means is a **credit transfer** (codes `30`, `42`, `58` — the only ones where the IBAN is mandatory), the invoice takes the IBAN, BIC and account name from the supplier company matched on the invoice. Other payment means and self-billed invoices are unaffected; any bank field the source provides takes precedence.
 
+### VAT point date
+
+| Field | UBL | Description |
+|---|---|---|
+| **VAT point date code** | BT-8 | Company default for the VAT point date code under *TVA sur les débits* — *invoice date*, *delivery date* or *paid to date*. Used whenever the source file carries no value; the source mapping keeps priority. |
+
+The codes and their labels live in the **VAT point date codes** reference list (UNTDID 2005), editable under *Configuration → Reference Lists* like the other code lists. The readable PDF renders the VAT point in plain words — e.g. `Exigibilité TVA : Date de facture (débits)` — including when the invoice period carries no dates.
+
 The trash icon in the card header removes the supplier; the **Add** button at the bottom adds a fresh empty card.
 
 ---
@@ -46032,6 +46155,7 @@ A `TAG_*` select isn't limited to a single XML path:
 - **Conditional value list.** The `cond_value` argument of the `ubl:emit-item-prop` / `ubl:emit-note` helpers accepts a single value (as before) or a comma-separated whitelist — `'KWH,M3,LTR'` matches when the source value is any of the three. Whitespace around each item is trimmed.
 - **Parent axis (`..`).** A path may step up to the parent element: `../FIELD` reaches a sibling of the current line element, `../../FIELD/Sub` two levels up. It unblocks source XML that nests line items under a parent element which also carries the line-level references (for example the referenced customer order, BT-132); paths without `..` resolve exactly as before.
 - **Constant values (backticks).** A value wrapped in backticks — for example `` `EDI` `` — is written as a fixed constant instead of being read from the source. Works on custom extension fields, notes and item properties; handy for platform-specific values that never change.
+- **Element paths in conditions.** In the pipe-separated specs for custom extension fields, notes and item properties, the **condition** and **non-empty** columns accept a slash path — e.g. `Facture_Entete_S4/CLI_TYPE_ID242` — in addition to a plain element name, needed when the source field sits below an intermediate group. Plain names behave exactly as before, so existing templates are unaffected; the value column already accepted paths.
 
 #### Scoping
 

@@ -211,6 +211,18 @@ A single filter sits at the very top of the page. It restricts every widget that
 
 A small set of widgets ignore the date filter on purpose — *Stale invoices* (always counts the last 90 days) and *E-Reporting coverage* (always the current month). Each carries its own time-window indicator so the difference is obvious.
 
+### Date basis
+
+Next to the period filter, a **date basis** selector chooses which date the whole dashboard reads the window against — so every widget counts on the same footing and the numbers reconcile:
+
+| Value | Reads against |
+|---|---|
+| **Activity date** *(default)* | The last update — the historical behaviour. |
+| **Document date** | The date invoices were issued (BT-2). |
+| **Archive date** | The date documents were processed into the archive. |
+
+Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the choice. The [E-Invoicing](./invoices.md#date-basis) list and the [Reports](./reports.md) page offer the same *Archive date* basis.
+
 ---
 
 ## Hero KPI cards

@@ -64,6 +64,14 @@ The directory holds one card per company. Each card contains:
 
 These are a **fallback**: when the source file carries no bank details and the payment means is a **credit transfer** (codes `30`, `42`, `58` — the only ones where the IBAN is mandatory), the invoice takes the IBAN, BIC and account name from the supplier company matched on the invoice. Other payment means and self-billed invoices are unaffected; any bank field the source provides takes precedence.
 
+### VAT point date
+
+| Field | UBL | Description |
+|---|---|---|
+| **VAT point date code** | BT-8 | Company default for the VAT point date code under *TVA sur les débits* — *invoice date*, *delivery date* or *paid to date*. Used whenever the source file carries no value; the source mapping keeps priority. |
+
+The codes and their labels live in the **VAT point date codes** reference list (UNTDID 2005), editable under *Configuration → Reference Lists* like the other code lists. The readable PDF renders the VAT point in plain words — e.g. `Exigibilité TVA : Date de facture (débits)` — including when the invoice period carries no dates.
+
 The trash icon in the card header removes the supplier; the **Add** button at the bottom adds a fresh empty card.
 
 ---

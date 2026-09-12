@@ -188,6 +188,7 @@ Un sélecteur, à côté du filtre de période, choisit **sur quelle colonne de 
 |---|---|---|
 | **Date de mise à jour** *(par défaut)* | Dernière modification de la facture dans NomaUBL. | Exploitation au quotidien — comportement historique de la liste. |
 | **Date d'émission** | Celle imprimée sur la facture (BT-2 du document UBL). | Rapprochement avec la page [Déclaration de TVA](./vat-declaration.md) ou avec un système externe indexé sur la date d'émission. |
+| **Date d'archivage** | La date à laquelle le document a été traité dans l'archive. | Rapprochement avec la page [Rapports](./reports.md) et le [Tableau de bord](./dashboard.md), qui proposent la même base *Date d'archivage*. |
 
 Le choix est **conservé pendant la session en cours** — fermer la modale d'une facture et rouvrir la liste maintient la position du sélecteur. Le sélecteur est aussi **positionné automatiquement** quand la liste Factures est ouverte depuis un drill-down de la page TVA, donc le nombre affiché correspond à celui d'où l'on vient.
 
@@ -358,6 +359,8 @@ Un bouton **Exporter** dans la barre d'outils exporte la vue courante (filtres c
 ## Modale de détail
 
 Cliquer sur une ligne ouvre une modale qui contient sept onglets en haut : **Résumé**, **Parties**, **Lignes**, **TVA**, **Notes**, **Historique**, **PDF**. Le titre de la modale affiche le triplet `DOC / DCT / KCO`. Un **bouton plein écran** dans l'en-tête bascule entre vue fenêtrée et vue plein écran.
+
+Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête passent d'une facture à l'autre de la liste sans fermer la fenêtre — même ordre et mêmes filtres que le tableau affiché — avec un indicateur de position (par ex. `3 / 50`). Après la dernière facture, la navigation reboucle sur la première.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '0', margin: '20px 0', overflow: 'hidden'}}>
   <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)'}}>

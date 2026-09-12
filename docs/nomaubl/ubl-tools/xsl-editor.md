@@ -248,6 +248,7 @@ A `TAG_*` select isn't limited to a single XML path:
 - **Conditional value list.** The `cond_value` argument of the `ubl:emit-item-prop` / `ubl:emit-note` helpers accepts a single value (as before) or a comma-separated whitelist — `'KWH,M3,LTR'` matches when the source value is any of the three. Whitespace around each item is trimmed.
 - **Parent axis (`..`).** A path may step up to the parent element: `../FIELD` reaches a sibling of the current line element, `../../FIELD/Sub` two levels up. It unblocks source XML that nests line items under a parent element which also carries the line-level references (for example the referenced customer order, BT-132); paths without `..` resolve exactly as before.
 - **Constant values (backticks).** A value wrapped in backticks — for example `` `EDI` `` — is written as a fixed constant instead of being read from the source. Works on custom extension fields, notes and item properties; handy for platform-specific values that never change.
+- **Element paths in conditions.** In the pipe-separated specs for custom extension fields, notes and item properties, the **condition** and **non-empty** columns accept a slash path — e.g. `Facture_Entete_S4/CLI_TYPE_ID242` — in addition to a plain element name, needed when the source field sits below an intermediate group. Plain names behave exactly as before, so existing templates are unaffected; the value column already accepted paths.
 
 #### Scoping
 

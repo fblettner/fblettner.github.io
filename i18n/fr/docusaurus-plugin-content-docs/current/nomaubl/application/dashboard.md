@@ -211,6 +211,18 @@ Un seul filtre figure tout en haut de la page. Il restreint chaque widget qui d�
 
 Certains widgets ignorent volontairement le filtre — *Factures bloquées* (toujours les 90 derniers jours) et *Couverture e-Reporting* (toujours le mois en cours). Chacun affiche sa propre fenêtre, la différence est donc explicite.
 
+### Base de date
+
+À côté du filtre de période, un sélecteur de **base de date** choisit la date contre laquelle tout le tableau de bord lit la fenêtre — chaque widget compte ainsi sur le même pied et les chiffres se recoupent :
+
+| Valeur | Lue contre |
+|---|---|
+| **Date d'activité** *(défaut)* | La dernière mise à jour — le comportement historique. |
+| **Date document** | La date d'émission des factures (BT-2). |
+| **Date d'archivage** | La date de traitement des documents dans l'archive. |
+
+Cartes de synthèse, pipeline des statuts, volume quotidien, répartition par société et principales erreurs suivent tous ce choix. La liste [E-Invoicing](./invoices.md#base-de-date) et la page [Rapports](./reports.md) proposent la même base *Date d'archivage*.
+
 ---
 
 ## Cartes KPI hero

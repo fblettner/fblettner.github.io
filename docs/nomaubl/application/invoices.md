@@ -188,6 +188,7 @@ A selector sits next to the date range and controls **which date column the peri
 |---|---|---|
 | **Update date** *(default)* | The last time the invoice was modified in NomaUBL. | Day-to-day operations — same behaviour as the list has always had. |
 | **Issue date** | The date printed on the invoice itself (BT-2 from the UBL). | Reconciling against the [VAT Declaration](./vat-declaration.md) page or any external system that keys off the issue date. |
+| **Archive date** | The date the document was processed into the archive. | Reconciling against the [Reports](./reports.md) page and the [Dashboard](./dashboard.md), which offer the same *Archive date* basis. |
 
 The choice is **remembered for the current session** — closing the modal of an invoice and reopening the list keeps the selector where it was. The toggle is also **pre-selected automatically** when the Invoices list is opened from a VAT page drill-down, so the count on Invoices matches the count you came from.
 
@@ -358,6 +359,8 @@ A small **Export** button in the toolbar exports the current view (filters appli
 ## Detail modal
 
 Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parties**, **Lines**, **VAT**, **Notes**, **History**, **PDF**. The modal title shows the invoice's `DOC / DCT / KCO` triplet. A **fullscreen toggle** in the header switches between a windowed and a full-screen view.
+
+**Previous / next arrows** (and the ← → keys) in the header move through the invoices of the list without closing the window — the same order and filters as the table on screen — with a position indicator (e.g. `3 / 50`). Past the last invoice, navigation loops back to the first.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '0', margin: '20px 0', overflow: 'hidden'}}>
   <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)'}}>
