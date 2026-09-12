@@ -31920,7 +31920,7 @@ See the [Configuration → System → e-directory](../configuration/system/edire
 
 ## How a search runs
 
-The two lookups happen in sequence: INSEE first to populate the rows, then a parallel PPF check per row. The user sees the table fill in two passes.
+The two lookups happen in sequence: INSEE first to populate the companies, then **one PPF directory call per company** to list its registered identifiers. The user sees the results fill in two passes.
 
 ---
 
@@ -31937,43 +31937,38 @@ The query is sent to `recherche-entreprises.api.gouv.fr` server-side; the API re
 
 ---
 
-## Results table
+## Results
 
-After the search, the table populates with one row per match. Each row corresponds to either a SIREN (the legal entity) or a SIRET (a specific establishment of the entity).
+Results are grouped **by company**: one collapsed card per **SIREN**, showing the legal name, the head-office address, the INSEE administrative state and a **directory summary** — how many identifiers the PPF holds for the company and how many are enabled. Expand a card to reveal two groups:
 
-| Column | Description |
-|---|---|
-| **Type** | Coloured badge — `SIREN` (blue, the legal entity) or `SIRET` (grey, a specific establishment). |
-| **Identifier** | The 9-digit SIREN or 14-digit SIRET. |
-| **Name** | Legal name (`nom_raison_sociale`). |
-| **Address** | Full postal address of the establishment. |
-| **State** | `Active` (green) when the establishment is administratively active; `C` (red) when ceased. |
-| **Directory** | Result of the PPF directory check — see below. |
+### Establishments (INSEE)
 
-### Directory check states
+An inner collapsible list of the company's establishments — each **SIRET** with its address and administrative state, from the INSEE registry. Searching by SIREN or SIRET now lists **all** establishments of the company (a second INSEE lookup by company name fills what the numeric search omits).
 
-The Directory column is populated automatically right after the search lands — one PPF call per row. While calls are in flight, rows display a spinner. Each row eventually resolves to one of:
+### PPF directory lines
 
-✓Reachable— Registered on the PPF, ready to receive electronic invoices.
-✗Not found— Not in the PPF directory; an invoice would return a routing error (REJ_ADR).
-⚠Error— The PPF call failed (network, credentials). The API message is shown next to the icon.
-⟳Loading— PPF call in flight; the row will resolve to one of the states above.
+Every identifier registered for the SIREN on the PPF, **whatever its form** — a SIREN, a SIREN + SIRET, a routing code or a suffix — each with its **enabled / disabled** state. Identifiers that carry a suffix, such as `422250845_FGX`, are listed here too — a form the previous per-row check could not surface.
+
+✓Enabled— Registered and reachable on the PPF; an invoice addressed to it is delivered.
+✕Disabled— Registered but not currently reachable; addressing it would return a routing error (REJ_ADR).
+
+The listing goes through the connector's `directory-check-siren` endpoint, which returns the full lines with per-endpoint response mappings (ATGP and Yooz shapes are supported). When that endpoint isn't configured, the page **says so** rather than guessing — set it under [Configuration → System → e-directory](../configuration/system/edirectory.md). The processing-time directory check is unchanged; the older `directory-check-siret` endpoint is obsolete.
 
 ---
 
 ## Result count
 
-Above the table, a small label indicates the number of results returned by INSEE for the query (e.g. `12 results`).
+Above the results, a small label indicates the number of companies returned by INSEE for the query (e.g. `12 results`).
 
 ---
 
 ## Tips & best practices
 
 - **Search by name first, then narrow down.** INSEE returns the legal entity (SIREN) and its establishments (SIRET) — picking the right SIRET avoids the common "right SIREN, wrong establishment" mistake when issuing invoices.
-- **A red Not found is not always permanent.** A buyer may not yet be registered on the PPF; ask them to register before re-trying. The directory state changes daily as more companies subscribe to the PPF.
-- **Cross-check the active state.** A `Ceased` establishment cannot receive an invoice even if it appears in the PPF directory. Always check the State column before trusting an electronic-address mapping.
-- **For batch lookups, prefer the API.** The page does one search at a time. To validate a directory of customers in one pass, call `/api/insee-search` and `/api/check-directory` directly — see *References → API Reference* for the schemas.
-- **A directory error often means a credentials issue.** Repeated `Error` states on rows that should resolve typically come from misconfigured PPF credentials in *Configuration → System → e-directory* — fix them there before rerunning a search.
+- **A disabled line is not always permanent.** A buyer may not yet be registered, or a specific identifier not yet enabled; ask them to register before re-trying. The directory state changes daily as more companies subscribe to the PPF.
+- **Match the exact identifier, not just the SIREN.** The directory lines show which form is actually reachable — a plain SIREN, a SIREN + SIRET, or a suffixed code. Address the invoice to an **enabled** line; a company can have several, only some enabled.
+- **Cross-check the establishment state.** A ceased establishment cannot receive an invoice even if the company appears in the directory. Check the INSEE state on the establishment before trusting an electronic-address mapping.
+- **If the lines don't appear, wire the endpoint.** An empty directory list with a "not configured" note means the connector has no `directory-check-siren` endpoint — set it under *Configuration → System → e-directory*, with the response mappings for your platform (ATGP, Yooz).
 
 ---
 
@@ -41934,6 +41929,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Browse invoices without leaving the window.** The invoice window gains previous / next arrows (and the ← → keys) to move through the invoices of the list — same order and filters as the table on screen, with a position indicator (e.g. 3 / 50). Past the last invoice, navigation loops back to the first.
 - **BIP batch: no more missed jobs.** The batch fetch now tracks each JDE host by **job completion time** instead of job number. Job numbers are assigned at submission, so a long-running job finishing after a shorter, higher-numbered one could fall below the watermark and never be fetched — completion-time tracking makes that impossible. The mark advances after each job, so an interrupted batch resumes exactly where it stopped, re-fetching nothing. The transition is automatic (first run after upgrade fills the date, visible and editable next to the job number in Settings → Global), the submit-date lookback safeguard is unchanged, and explicit job-number runs are unaffected.
 - **BIP batch: choice of extracted outputs.** The fetch settings gain an output-type selection (PDF, XML, Excel…) applied when the batch extracts job outputs — several types can be combined, e.g. XML plus the readable PDF to embed in the UBL. A default applies to every report and each report filter can override it; empty keeps extracting every output type.
+- **E-Directory: every PPF addressing identifier visible.** The page is reorganised by company: one collapsed card per SIREN (name, head-office address, INSEE state, directory summary) that expands into the INSEE establishments (their own collapsible group) and a new **PPF directory lines** list — every identifier registered for the SIREN, whatever its form (SIREN, SIREN+SIRET, routing code, suffix), with its enabled/disabled state. Identifiers like `422250845_FGX`, previously undetectable, now appear. One directory call per company replaces the per-row probes; searching by SIREN or SIRET now lists all establishments (a second INSEE lookup by company name fills what the numeric search omits). The listing goes through the connector's `directory-check-siren` endpoint, now returning the full lines with per-endpoint response mappings (ATGP and Yooz shapes supported); when the endpoint is not configured, the page says so instead of guessing. The processing-time directory check is unchanged; the `directory-check-siret` endpoint is obsolete.
 - **UBL templates: conditions accept element paths.** In the pipe-separated specs for custom extension fields, notes and item properties, the condition and non-empty columns now accept a slash path (e.g. `Facture_Entete_S4/CLI_TYPE_ID242`) in addition to a plain element name — required for source files whose fields sit below an intermediate group. Plain names behave exactly as before, so existing templates are unaffected; the value column already supported paths.
 - **API reference brought up to date.** The documentation served at `/api/docs` now covers every endpoint — around forty entries had accumulated undocumented, including the whole Reports section (statistics, query tool, saved reports), the lifecycle integrity and ordering checks, the invoice status detail, the VAT declaration, background jobs and system information, SQL connectors, and the password-reset / OIDC sign-in flows. Request and response examples reflect the actual payloads, and three new sections (Reports, VAT, System) organise the reading.
 

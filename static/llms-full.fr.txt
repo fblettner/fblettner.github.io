@@ -26470,7 +26470,7 @@ Voir la page [Configuration → Système → e-directory](../configuration/syste
 
 ## Déroulement d'une recherche
 
-Les deux requêtes s'enchaînent : INSEE d'abord pour remplir les lignes, puis le contrôle PPF en parallèle, ligne par ligne. L'utilisateur voit le tableau se remplir en deux passes.
+Les deux requêtes s'enchaînent : INSEE d'abord pour remplir les sociétés, puis **un seul appel annuaire PPF par société** pour lister ses identifiants enregistrés. L'utilisateur voit les résultats se remplir en deux passes.
 
 ---
 
@@ -26487,43 +26487,38 @@ La requête est envoyée à `recherche-entreprises.api.gouv.fr` côté serveur ;
 
 ---
 
-## Tableau des résultats
+## Résultats
 
-Après la recherche, le tableau se remplit à raison d'une ligne par correspondance. Chaque ligne correspond soit à un SIREN (entité juridique), soit à un SIRET (établissement spécifique).
+Les résultats sont regroupés **par société** : une carte repliée par **SIREN**, avec la raison sociale, l'adresse du siège, l'état administratif INSEE et une **synthèse annuaire** — combien d'identifiants le PPF détient pour la société et combien sont actifs. Dépliez une carte pour révéler deux groupes :
 
-| Colonne | Description |
-|---|---|
-| **Type** | Badge coloré — `SIREN` (bleu, entité juridique) ou `SIRET` (gris, établissement). |
-| **Identifiant** | SIREN à 9 chiffres ou SIRET à 14 chiffres. |
-| **Nom** | Raison sociale (`nom_raison_sociale`). |
-| **Adresse** | Adresse postale complète de l'établissement. |
-| **État** | `Actif` (vert) quand l'établissement est administrativement actif ; `C` (rouge) quand il est cessé. |
-| **Annuaire** | Résultat du contrôle annuaire PPF — voir ci-dessous. |
+### Établissements (INSEE)
 
-### États du contrôle annuaire
+Une liste repliable des établissements de la société — chaque **SIRET** avec son adresse et son état administratif, issus du registre INSEE. La recherche par SIREN ou SIRET liste désormais **tous** les établissements de la société (une seconde interrogation INSEE par raison sociale complète ce que la recherche numérique omet).
 
-La colonne Annuaire se remplit automatiquement dès la fin de la recherche — un appel PPF par ligne. Pendant l'exécution, les lignes affichent un spinner. Chaque ligne aboutit ensuite à l'un de ces états :
+### Lignes annuaire PPF
 
-✓Joignable— Inscrit sur le PPF, prêt à recevoir des factures électroniques.
-✗Introuvable— Absent de l'annuaire PPF ; une facture serait retournée avec une erreur de routage (REJ_ADR).
-⚠Erreur— L'appel PPF a échoué (réseau, identifiants). Le message de l'API s'affiche à côté de l'icône.
-⟳Chargement— Appel PPF en cours ; la ligne aboutira à l'un des états ci-dessus.
+Chaque identifiant enregistré pour le SIREN sur le PPF, **quelle que soit sa forme** — un SIREN, un SIREN + SIRET, un code de routage ou un suffixe — avec son état **actif / désactivé**. Les identifiants à suffixe, comme `422250845_FGX`, y figurent aussi — une forme que le contrôle ligne à ligne précédent ne savait pas faire apparaître.
+
+✓Actif— Enregistré et joignable sur le PPF ; une facture adressée à cet identifiant est distribuée.
+✕Désactivé— Enregistré mais pas joignable actuellement ; l'adresser renverrait une erreur de routage (REJ_ADR).
+
+Le listage passe par l'endpoint `directory-check-siren` du connecteur, qui renvoie les lignes complètes avec un mappage de réponse par endpoint (formats ATGP et Yooz pris en charge). Quand cet endpoint n'est pas configuré, la page **l'indique** au lieu de deviner — réglez-le sous [Configuration → Système → e-directory](../configuration/system/edirectory.md). Le contrôle annuaire au moment du traitement est inchangé ; l'ancien endpoint `directory-check-siret` est obsolète.
 
 ---
 
 ## Compteur de résultats
 
-Au-dessus du tableau, un petit libellé indique le nombre de résultats renvoyés par INSEE pour la requête (par ex. `12 résultats`).
+Au-dessus des résultats, un petit libellé indique le nombre de sociétés renvoyées par INSEE pour la requête (par ex. `12 résultats`).
 
 ---
 
 ## Conseils & bonnes pratiques
 
 - **Rechercher d'abord par nom, puis affiner.** INSEE retourne l'entité juridique (SIREN) et ses établissements (SIRET) — sélectionner le bon SIRET évite l'erreur courante « bon SIREN, mauvais établissement » à l'émission d'une facture.
-- **Un Introuvable rouge n'est pas toujours définitif.** Un acheteur peut ne pas être encore enregistré sur le PPF ; lui demander de s'inscrire avant de retenter. L'état de l'annuaire évolue chaque jour à mesure que les sociétés s'inscrivent sur le PPF.
-- **Vérifier l'état actif.** Un établissement cessé ne peut pas recevoir de facture, même s'il apparaît dans l'annuaire PPF. Toujours contrôler la colonne État avant de se fier à un mapping d'adresse électronique.
-- **Pour des recherches en lot, préférer l'API.** Cette page traite une requête à la fois. Pour valider un annuaire de clients en une passe, appeler directement `/api/insee-search` et `/api/check-directory` — voir *References → API Reference* pour les schémas.
-- **Une erreur d'annuaire indique souvent un problème d'identifiants.** Des `Erreur` répétées sur des lignes qui devraient répondre viennent typiquement d'identifiants PPF mal configurés dans *Configuration → Système → e-directory* — corriger là avant de relancer la recherche.
+- **Une ligne désactivée n'est pas toujours définitive.** Un acheteur peut ne pas être encore enregistré, ou un identifiant précis pas encore activé ; lui demander de s'inscrire avant de retenter. L'état de l'annuaire évolue chaque jour à mesure que les sociétés s'inscrivent sur le PPF.
+- **Cibler l'identifiant exact, pas seulement le SIREN.** Les lignes d'annuaire montrent quelle forme est réellement joignable — un SIREN seul, un SIREN + SIRET ou un code à suffixe. Adressez la facture à une ligne **active** ; une société peut en avoir plusieurs, seules certaines actives.
+- **Vérifier l'état de l'établissement.** Un établissement cessé ne peut pas recevoir de facture, même si la société apparaît dans l'annuaire. Contrôler l'état INSEE de l'établissement avant de se fier à un mapping d'adresse électronique.
+- **Si les lignes n'apparaissent pas, câbler l'endpoint.** Une liste d'annuaire vide avec la note « non configuré » signale un connecteur sans endpoint `directory-check-siren` — réglez-le sous *Configuration → Système → e-directory*, avec le mappage de réponse de votre plateforme (ATGP, Yooz).
 
 ---
 
@@ -36484,6 +36479,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Parcourir les factures sans quitter la fenêtre.** La fiche facture gagne des flèches précédent / suivant (et les touches ← →) pour passer d'une facture à l'autre de la liste — même ordre et mêmes filtres que le tableau affiché, avec un indicateur de position (par ex. 3 / 50). Après la dernière facture, la navigation reboucle sur la première.
 - **Batch BIP : plus aucun job manqué.** La récupération par lot suit désormais chaque hôte JDE par **date de fin du job** et non plus par numéro. Les numéros étant attribués à la soumission, un job long se terminant après un job plus récent au numéro supérieur passait sous le repère et n'était jamais récupéré — le suivi par date de fin rend ce cas impossible. Le repère avance après chaque job : un lot interrompu reprend exactement où il s'était arrêté, sans rien retraiter. La transition est automatique (le premier lot après mise à niveau renseigne la date, visible et modifiable à côté du numéro dans Paramètres → Global), le garde-fou sur la date de soumission est conservé, et les exécutions par numéro de job explicite restent inchangées.
 - **Batch BIP : choix des sorties extraites.** Les paramètres de récupération gagnent une sélection des types de sortie (PDF, XML, Excel…) appliquée lors de l'extraction des sorties de job — plusieurs types peuvent être combinés, par exemple le XML plus le PDF lisible à intégrer dans l'UBL. Un défaut s'applique à tous les états et chaque filtre d'état peut le surcharger ; vide = toutes les sorties.
+- **E-Directory : tous les identifiants d'adressage PPF visibles.** La page est réorganisée par société : une carte repliée par SIREN (raison sociale, adresse du siège, état INSEE, synthèse annuaire) qui se déplie sur les établissements INSEE (groupe repliable) et une nouvelle liste **Lignes annuaire PPF** — chaque identifiant enregistré pour le SIREN, quelle que soit sa forme (SIREN, SIREN+SIRET, code routage, suffixe), avec son état actif/désactivé. Les identifiants comme `422250845_FGX`, invisibles auparavant, apparaissent désormais. Un seul appel annuaire par société remplace les vérifications ligne à ligne ; la recherche par SIREN ou SIRET liste maintenant tous les établissements (une seconde interrogation INSEE par raison sociale complète ce que la recherche numérique omet). Le listage passe par l'endpoint `directory-check-siren` du connecteur, qui renvoie désormais les lignes complètes avec un mappage de réponse par endpoint (formats ATGP et Yooz pris en charge) ; si l'endpoint n'est pas configuré, la page l'indique clairement. Le contrôle annuaire au moment du traitement est inchangé ; l'endpoint `directory-check-siret` devient obsolète.
 - **Modèles UBL : les conditions acceptent des chemins d'éléments.** Dans les définitions à séparateur « | » des champs d'extension personnalisés, des notes et des propriétés d'article, les colonnes condition et non-vide acceptent désormais un chemin avec « / » (par ex. `Facture_Entete_S4/CLI_TYPE_ID242`) en plus d'un simple nom d'élément — nécessaire quand les champs du fichier source se trouvent sous un groupe intermédiaire. Un nom simple se comporte exactement comme avant : les modèles existants ne changent pas ; la colonne valeur acceptait déjà les chemins.
 - **Référence API mise à jour.** La documentation servie sur `/api/docs` couvre désormais tous les points d'accès — une quarantaine d'entrées manquaient, dont toute la section Rapports (statistiques, requêteur, rapports enregistrés), les contrôles d'intégrité et d'ordre du cycle de vie, le détail de statut d'une facture, la déclaration de TVA, les travaux d'arrière-plan et les informations système, les connecteurs SQL, ainsi que les parcours de réinitialisation de mot de passe et de connexion OIDC. Les exemples de requêtes et de réponses reflètent les échanges réels, et trois nouvelles sections (Rapports, TVA, Système) structurent la lecture.
 

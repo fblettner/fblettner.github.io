@@ -45,52 +45,51 @@ Voir la page [Configuration → Système → e-directory](../configuration/syste
   <rect x="686" y="102" width="94" height="32" rx="6" fill="url(#edir-pg-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
   <text x="733" y="122" fill="#e2e8f0" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">🔍 Rechercher</text>
 
-  <rect x="240" y="156" width="540" height="34" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="177" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NOM · SIREN · SIRET · ADRESSE · ÉTAT · ANNUAIRE PPF</text>
+  <text x="240" y="152" fill="#cbd5e1" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Résultats — une carte par société (SIREN)</text>
 
-  <rect x="240" y="194" width="540" height="48" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="213" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="600">ACME Manufacturing</text>
-  <text x="252" y="231" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">123 456 789 · 12345678900012 · 12 rue de Rivoli, 75001 Paris</text>
-  <rect x="612" y="200" width="80" height="18" rx="9" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="652" y="213" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Active</text>
-  <rect x="700" y="200" width="74" height="18" rx="9" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="737" y="213" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">✓ Joignable</text>
+  <rect x="240" y="160" width="540" height="40" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1.2"/>
+  <text x="252" y="178" fill="#4a9eff" fontSize="11" fontFamily="ui-monospace, monospace">▾</text>
+  <text x="270" y="177" fill="#e2e8f0" fontSize="11" fontWeight="600" fontFamily="system-ui, sans-serif">ACME Manufacturing</text>
+  <text x="270" y="192" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">SIREN 123 456 789 · 12 rue de Rivoli, 75001 Paris</text>
+  <rect x="606" y="169" width="70" height="18" rx="9" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="641" y="182" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Active</text>
+  <rect x="682" y="169" width="92" height="18" rx="9" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <text x="728" y="182" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">5 lignes · 4 actives</text>
 
-  <rect x="240" y="246" width="540" height="48" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="265" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="600">ACME Logistics</text>
-  <text x="252" y="283" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">123 456 789 · 12345678900037 · 8 av. du Général Leclerc, 92100 Boulogne</text>
-  <rect x="612" y="252" width="80" height="18" rx="9" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="652" y="265" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Active</text>
-  <rect x="700" y="252" width="74" height="18" rx="9" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="737" y="265" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Non joign.</text>
+  <text x="264" y="222" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Établissements (INSEE)</text>
+  <text x="264" y="238" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12345678900012 — 12 rue de Rivoli, 75001 Paris · Active</text>
+  <text x="264" y="252" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12345678900037 — 8 av. du Général Leclerc, 92100 Boulogne · Active</text>
 
-  <rect x="240" y="298" width="540" height="48" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="317" fill="#cbd5e1" fontSize="11" fontFamily="system-ui, sans-serif" fontWeight="600">ACME Old SARL</text>
-  <text x="252" y="335" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">123 456 789 · 12345678900029 · 4 rue Lafayette, 75009 Paris</text>
-  <rect x="608" y="304" width="84" height="18" rx="9" fill="rgba(255,69,58,0.10)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="650" y="317" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Fermée</text>
-  <rect x="700" y="304" width="74" height="18" rx="9" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="737" y="317" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">— ignorée</text>
+  <text x="264" y="280" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Lignes annuaire PPF</text>
+  <rect x="264" y="288" width="500" height="20" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="274" y="302" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">123456789 · SIREN</text>
+  <text x="742" y="302" fill="#4ade80" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif" fontWeight="700">✓ actif</text>
+  <rect x="264" y="310" width="500" height="20" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="274" y="324" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">12345678900012 · SIREN+SIRET</text>
+  <text x="742" y="324" fill="#4ade80" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif" fontWeight="700">✓ actif</text>
+  <rect x="264" y="332" width="500" height="20" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="274" y="346" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">123456789_FGX · code routage</text>
+  <text x="742" y="346" fill="#f87171" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif" fontWeight="700">✕ désactivé</text>
 
-  <line x1="240" y1="364" x2="780" y2="364" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="384" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">3 résultats · registre INSEE</text>
+  <line x1="240" y1="372" x2="780" y2="372" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="392" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">1 société · 2 établissements · 5 lignes d'annuaire</text>
 
-  <text x="240" y="416" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">Le registre INSEE est interrogé en premier (API publique gratuite). La vérification dans l'annuaire PPF s'exécute sur chaque résultat avec les identifiants configurés sous Configuration → Système → e-directory.</text>
+  <text x="240" y="420" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">INSEE est interrogé en premier (API publique gratuite) ; un seul appel annuaire PPF par société liste ensuite chaque identifiant enregistré, avec les identifiants configurés sous Configuration → Système → e-directory.</text>
 
   <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un seul champ de recherche</text>
   <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nom · SIREN · SIRET — auto-détecté</text>
   <line x1="200" y1="115" x2="240" y2="118" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
 
-  <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Badge Joignable PPF</text>
-  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Joignable / Non / Fermée</text>
-  <line x1="820" y1="216" x2="780" y2="212" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
+  <rect x="820" y="164" width="164" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="830" y="179" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Synthèse annuaire</text>
+  <text x="830" y="192" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">lignes · combien actives</text>
+  <line x1="820" y1="180" x2="778" y2="178" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
 
-  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">État administratif INSEE</text>
-  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Active / Fermée — fermées ignorées</text>
-  <line x1="200" y1="316" x2="240" y2="316" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
+  <rect x="20" y="322" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="337" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Lignes annuaire PPF</text>
+  <text x="30" y="350" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chaque identifiant · actif / désactivé</text>
+  <line x1="200" y1="338" x2="262" y2="342" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
 </svg>
 
 ---
@@ -137,7 +136,7 @@ Voir la page [Configuration → Système → e-directory](../configuration/syste
   <line x1="850" y1="115" x2="870" y2="155" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-arrow-slate)"/>
 </svg>
 
-Les deux requêtes s'enchaînent : INSEE d'abord pour remplir les lignes, puis le contrôle PPF en parallèle, ligne par ligne. L'utilisateur voit le tableau se remplir en deux passes.
+Les deux requêtes s'enchaînent : INSEE d'abord pour remplir les sociétés, puis **un seul appel annuaire PPF par société** pour lister ses identifiants enregistrés. L'utilisateur voit les résultats se remplir en deux passes.
 
 ---
 
@@ -154,42 +153,37 @@ La requête est envoyée à `recherche-entreprises.api.gouv.fr` côté serveur ;
 
 ---
 
-## Tableau des résultats
+## Résultats
 
-Après la recherche, le tableau se remplit à raison d'une ligne par correspondance. Chaque ligne correspond soit à un SIREN (entité juridique), soit à un SIRET (établissement spécifique).
+Les résultats sont regroupés **par société** : une carte repliée par **SIREN**, avec la raison sociale, l'adresse du siège, l'état administratif INSEE et une **synthèse annuaire** — combien d'identifiants le PPF détient pour la société et combien sont actifs. Dépliez une carte pour révéler deux groupes :
 
-| Colonne | Description |
-|---|---|
-| **Type** | Badge coloré — `SIREN` (bleu, entité juridique) ou `SIRET` (gris, établissement). |
-| **Identifiant** | SIREN à 9 chiffres ou SIRET à 14 chiffres. |
-| **Nom** | Raison sociale (`nom_raison_sociale`). |
-| **Adresse** | Adresse postale complète de l'établissement. |
-| **État** | `Actif` (vert) quand l'établissement est administrativement actif ; `C` (rouge) quand il est cessé. |
-| **Annuaire** | Résultat du contrôle annuaire PPF — voir ci-dessous. |
+### Établissements (INSEE)
 
-### États du contrôle annuaire
+Une liste repliable des établissements de la société — chaque **SIRET** avec son adresse et son état administratif, issus du registre INSEE. La recherche par SIREN ou SIRET liste désormais **tous** les établissements de la société (une seconde interrogation INSEE par raison sociale complète ce que la recherche numérique omet).
 
-La colonne Annuaire se remplit automatiquement dès la fin de la recherche — un appel PPF par ligne. Pendant l'exécution, les lignes affichent un spinner. Chaque ligne aboutit ensuite à l'un de ces états :
+### Lignes annuaire PPF
+
+Chaque identifiant enregistré pour le SIREN sur le PPF, **quelle que soit sa forme** — un SIREN, un SIREN + SIRET, un code de routage ou un suffixe — avec son état **actif / désactivé**. Les identifiants à suffixe, comme `422250845_FGX`, y figurent aussi — une forme que le contrôle ligne à ligne précédent ne savait pas faire apparaître.
 
 <div style={{display: 'flex', flexDirection: 'column', gap: '6px', margin: '14px 0'}}>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(50,215,75,0.08)', border: '1px solid rgba(50,215,75,0.3)'}}><span style={{color: '#4ade80', fontWeight: 700, fontSize: '14px'}}>✓</span><span style={{color: '#4ade80', fontWeight: 600, fontSize: '13px'}}>Joignable</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Inscrit sur le PPF, prêt à recevoir des factures électroniques.</span></div>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(255,69,58,0.08)', border: '1px solid rgba(255,69,58,0.3)'}}><span style={{color: '#f87171', fontWeight: 700, fontSize: '14px'}}>✗</span><span style={{color: '#f87171', fontWeight: 600, fontSize: '13px'}}>Introuvable</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Absent de l'annuaire PPF ; une facture serait retournée avec une erreur de routage (REJ_ADR).</span></div>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(255,159,10,0.08)', border: '1px solid rgba(255,159,10,0.3)'}}><span style={{color: '#fb923c', fontWeight: 700, fontSize: '14px'}}>⚠</span><span style={{color: '#fb923c', fontWeight: 600, fontSize: '13px'}}>Erreur</span><span style={{opacity: 0.7, fontSize: '12px'}}>— L'appel PPF a échoué (réseau, identifiants). Le message de l'API s'affiche à côté de l'icône.</span></div>
-<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(120,120,120,0.08)', border: '1px solid rgba(255,255,255,0.1)'}}><span style={{opacity: 0.6, fontSize: '14px'}}>⟳</span><span style={{opacity: 0.6, fontWeight: 600, fontSize: '13px'}}>Chargement</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Appel PPF en cours ; la ligne aboutira à l'un des états ci-dessus.</span></div>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(50,215,75,0.08)', border: '1px solid rgba(50,215,75,0.3)'}}><span style={{color: '#4ade80', fontWeight: 700, fontSize: '14px'}}>✓</span><span style={{color: '#4ade80', fontWeight: 600, fontSize: '13px'}}>Actif</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Enregistré et joignable sur le PPF ; une facture adressée à cet identifiant est distribuée.</span></div>
+<div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(255,69,58,0.08)', border: '1px solid rgba(255,69,58,0.3)'}}><span style={{color: '#f87171', fontWeight: 700, fontSize: '14px'}}>✕</span><span style={{color: '#f87171', fontWeight: 600, fontSize: '13px'}}>Désactivé</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Enregistré mais pas joignable actuellement ; l'adresser renverrait une erreur de routage (REJ_ADR).</span></div>
 </div>
+
+Le listage passe par l'endpoint `directory-check-siren` du connecteur, qui renvoie les lignes complètes avec un mappage de réponse par endpoint (formats ATGP et Yooz pris en charge). Quand cet endpoint n'est pas configuré, la page **l'indique** au lieu de deviner — réglez-le sous [Configuration → Système → e-directory](../configuration/system/edirectory.md). Le contrôle annuaire au moment du traitement est inchangé ; l'ancien endpoint `directory-check-siret` est obsolète.
 
 ---
 
 ## Compteur de résultats
 
-Au-dessus du tableau, un petit libellé indique le nombre de résultats renvoyés par INSEE pour la requête (par ex. `12 résultats`).
+Au-dessus des résultats, un petit libellé indique le nombre de sociétés renvoyées par INSEE pour la requête (par ex. `12 résultats`).
 
 ---
 
 ## Conseils & bonnes pratiques
 
 - **Rechercher d'abord par nom, puis affiner.** INSEE retourne l'entité juridique (SIREN) et ses établissements (SIRET) — sélectionner le bon SIRET évite l'erreur courante « bon SIREN, mauvais établissement » à l'émission d'une facture.
-- **Un Introuvable rouge n'est pas toujours définitif.** Un acheteur peut ne pas être encore enregistré sur le PPF ; lui demander de s'inscrire avant de retenter. L'état de l'annuaire évolue chaque jour à mesure que les sociétés s'inscrivent sur le PPF.
-- **Vérifier l'état actif.** Un établissement cessé ne peut pas recevoir de facture, même s'il apparaît dans l'annuaire PPF. Toujours contrôler la colonne État avant de se fier à un mapping d'adresse électronique.
-- **Pour des recherches en lot, préférer l'API.** Cette page traite une requête à la fois. Pour valider un annuaire de clients en une passe, appeler directement `/api/insee-search` et `/api/check-directory` — voir *References → API Reference* pour les schémas.
-- **Une erreur d'annuaire indique souvent un problème d'identifiants.** Des `Erreur` répétées sur des lignes qui devraient répondre viennent typiquement d'identifiants PPF mal configurés dans *Configuration → Système → e-directory* — corriger là avant de relancer la recherche.
+- **Une ligne désactivée n'est pas toujours définitive.** Un acheteur peut ne pas être encore enregistré, ou un identifiant précis pas encore activé ; lui demander de s'inscrire avant de retenter. L'état de l'annuaire évolue chaque jour à mesure que les sociétés s'inscrivent sur le PPF.
+- **Cibler l'identifiant exact, pas seulement le SIREN.** Les lignes d'annuaire montrent quelle forme est réellement joignable — un SIREN seul, un SIREN + SIRET ou un code à suffixe. Adressez la facture à une ligne **active** ; une société peut en avoir plusieurs, seules certaines actives.
+- **Vérifier l'état de l'établissement.** Un établissement cessé ne peut pas recevoir de facture, même si la société apparaît dans l'annuaire. Contrôler l'état INSEE de l'établissement avant de se fier à un mapping d'adresse électronique.
+- **Si les lignes n'apparaissent pas, câbler l'endpoint.** Une liste d'annuaire vide avec la note « non configuré » signale un connecteur sans endpoint `directory-check-siren` — réglez-le sous *Configuration → Système → e-directory*, avec le mappage de réponse de votre plateforme (ATGP, Yooz).
