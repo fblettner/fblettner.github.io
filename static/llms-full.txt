@@ -35542,7 +35542,7 @@ Settings → Daily Digest schedules a recurring email of the day's integration e
 
 The **Daily Digest** screen schedules a recurring email that bundles every integration error of the day and attaches the full event list as an Excel file. The body of the email summarises the period and the row counts; the attachment carries the exact data the [Integration Errors](../../application/integration-errors.md) page's *Detailed* tab exports — same columns, same shape.
 
-The point is operational: instead of asking a team to open the SPA every morning to check for failed invoices, the digest pushes the day's errors to their inbox at a fixed time. Several digests can coexist so different teams receive different cuts of the same data — the accounting team for company `ACME`, the operations team for activity `VRAC`, the development team for everything with severity `FATAL`.
+The point is operational: instead of asking a team to open the SPA every morning to check for failed invoices, the digest pushes the day's errors to their inbox at a fixed time. Several digests can coexist so different teams receive different cuts of the same data — the accounting team for company `ACME`, the operations team for activity `Central`, the development team for everything with severity `FATAL`.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The errors come from the validation pipeline and are stored in `F564236`, so the source format is transparent here.
 
@@ -35605,7 +35605,7 @@ The digest carries a list of `(column, value)` pairs that narrow the event set. 
 | Column | Example value | Common use |
 |---|---|---|
 | **Company** (`KCO`) | `00070` | One digest per company on a multi-company install. |
-| **Activity code** | `ISC`, `VRAC`, `BIP` | One digest per business activity. |
+| **Activity code** | `Stores`, `Central`, `BIP` | One digest per business activity. |
 | **Source** | `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, `INTEG` | Send the UBL-validation set to the template team, the integration set to the ops team. |
 | **Rule** | `BR-CL-23`, `UBL_CREATION` | Watch a specific failing rule. |
 | **Business unit** | `MU-LYO`, `MU-PAR` | Per-BU routing. |
@@ -35622,7 +35622,7 @@ The body summarises the period, the row counts and a top-5 of failing rules:
 Subject: NomaUBL daily digest — Accounting · ACME — 7 errors, 3 invoices
 
 Period:        last 1 day (2026-06-01 07:00 → 2026-06-02 07:00 Europe/Paris)
-Filters:       company = 00070, activity = ISC, severity = ERROR / FATAL
+Filters:       company = 00070, activity = Stores, severity = ERROR / FATAL
 Events:        7
 Invoices:      3
 

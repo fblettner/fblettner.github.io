@@ -8,7 +8,7 @@ keywords: [NomaUBL, rapport quotidien, erreurs d'intégration, email, pièce joi
 
 L'écran **Rapport quotidien** planifie un email récurrent qui regroupe toutes les erreurs d'intégration de la journée et joint la liste complète des évènements au format Excel. Le corps de l'email résume la période et les compteurs ; la pièce jointe contient exactement les mêmes données que l'export de l'onglet *Vue détaillée* de la page [Erreurs d'intégration](../../application/integration-errors.md) — mêmes colonnes, même structure.
 
-L'objectif est opérationnel : au lieu de demander à une équipe d'ouvrir la SPA chaque matin pour vérifier les factures en échec, le rapport pousse les erreurs du jour vers leur boîte mail à heure fixe. Plusieurs rapports peuvent coexister pour que des équipes différentes reçoivent des coupes différentes des mêmes données — l'équipe comptabilité pour la société `ACME`, l'équipe opérations pour l'activité `VRAC`, l'équipe développement pour tout ce qui est de sévérité `FATAL`.
+L'objectif est opérationnel : au lieu de demander à une équipe d'ouvrir la SPA chaque matin pour vérifier les factures en échec, le rapport pousse les erreurs du jour vers leur boîte mail à heure fixe. Plusieurs rapports peuvent coexister pour que des équipes différentes reçoivent des coupes différentes des mêmes données — l'équipe comptabilité pour la société `ACME`, l'équipe opérations pour l'activité `Centrale`, l'équipe développement pour tout ce qui est de sévérité `FATAL`.
 
 Cette page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé. Les erreurs proviennent du pipeline de validation et sont enregistrées dans `F564236`, le format source est donc transparent ici.
 
@@ -55,7 +55,7 @@ Cette page est entièrement nouvelle. Elle remplace le flux *Export* ad hoc de l
   <text x="252" y="148" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Comptabilité · ACME</text>
   <text x="252" y="164" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">accounting@acme.example · ops-acme@acme.example</text>
   <text x="252" y="184" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Chaque jour · 07:00 Europe/Paris · sur 1 jour · sévérité = ERROR / FATAL</text>
-  <text x="252" y="200" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Filtres : KCO = 00070 · Activité = ISC</text>
+  <text x="252" y="200" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Filtres : KCO = 00070 · Activité = Magasins</text>
   <rect x="252" y="214" width="56" height="20" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e" strokeWidth="1"/>
   <text x="280" y="228" fill="#22c55e" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">ACTIVÉ</text>
   <rect x="314" y="214" width="78" height="20" rx="10" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
@@ -64,10 +64,10 @@ Cette page est entièrement nouvelle. Elle remplace le flux *Export* ad hoc de l
   <text x="738" y="229" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Modifier</text>
 
   <rect x="240" y="262" width="540" height="120" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="282" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Opérations · VRAC</text>
+  <text x="252" y="282" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Opérations · Centrale</text>
   <text x="252" y="298" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">operations@example.com</text>
   <text x="252" y="318" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Chaque jour · 06:30 Europe/Paris · sur 2 jours · sévérité = all</text>
-  <text x="252" y="334" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Filtres : Activité = VRAC</text>
+  <text x="252" y="334" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Filtres : Activité = Centrale</text>
   <rect x="252" y="348" width="56" height="20" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e" strokeWidth="1"/>
   <text x="280" y="362" fill="#22c55e" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">ACTIVÉ</text>
 
@@ -81,7 +81,7 @@ Cette page est entièrement nouvelle. Elle remplace le flux *Export* ad hoc de l
 
   <text x="240" y="552" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Planning d'envoi</text>
   <line x1="240" y1="558" x2="788" y2="558" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="576" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">06:30  Opérations · VRAC          → operations@example.com         · 12 évènements · 4 factures</text>
+  <text x="240" y="576" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">06:30  Opérations · Centrale          → operations@example.com         · 12 évènements · 4 factures</text>
   <text x="240" y="592" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">07:00  Comptabilité · ACME       → accounting@acme + ops-acme    · 7 évènements · 3 factures</text>
 
   <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -154,7 +154,7 @@ Le rapport porte une liste de paires `(colonne, valeur)` qui restreignent le jeu
 | Colonne | Exemple de valeur | Usage courant |
 |---|---|---|
 | **Société** (`KCO`) | `00070` | Un rapport par société sur une installation multi-sociétés. |
-| **Code d'activité** | `ISC`, `VRAC`, `BIP` | Un rapport par activité métier. |
+| **Code d'activité** | `Magasins`, `Centrale`, `BIP` | Un rapport par activité métier. |
 | **Source** | `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, `INTEG` | Envoyer le jeu de validations UBL à l'équipe template, le jeu d'intégration à l'équipe ops. |
 | **Règle** | `BR-CL-23`, `UBL_CREATION` | Surveiller une règle en échec précise. |
 | **Business unit** | `MU-LYO`, `MU-PAR` | Routage par BU. |
@@ -171,7 +171,7 @@ Le corps résume la période, les compteurs et un top 5 des règles en échec :
 Subject: NomaUBL rapport quotidien — Comptabilité · ACME — 7 erreurs, 3 factures
 
 Période :      sur 1 jour (2026-06-01 07:00 → 2026-06-02 07:00 Europe/Paris)
-Filtres :      société = 00070, activité = ISC, sévérité = ERROR / FATAL
+Filtres :      société = 00070, activité = Magasins, sévérité = ERROR / FATAL
 Évènements :   7
 Factures :     3
 

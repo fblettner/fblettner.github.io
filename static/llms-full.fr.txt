@@ -30092,7 +30092,7 @@ Paramètres → Rapport quotidien planifie un email récurrent qui rassemble les
 
 L'écran **Rapport quotidien** planifie un email récurrent qui regroupe toutes les erreurs d'intégration de la journée et joint la liste complète des évènements au format Excel. Le corps de l'email résume la période et les compteurs ; la pièce jointe contient exactement les mêmes données que l'export de l'onglet *Vue détaillée* de la page [Erreurs d'intégration](../../application/integration-errors.md) — mêmes colonnes, même structure.
 
-L'objectif est opérationnel : au lieu de demander à une équipe d'ouvrir la SPA chaque matin pour vérifier les factures en échec, le rapport pousse les erreurs du jour vers leur boîte mail à heure fixe. Plusieurs rapports peuvent coexister pour que des équipes différentes reçoivent des coupes différentes des mêmes données — l'équipe comptabilité pour la société `ACME`, l'équipe opérations pour l'activité `VRAC`, l'équipe développement pour tout ce qui est de sévérité `FATAL`.
+L'objectif est opérationnel : au lieu de demander à une équipe d'ouvrir la SPA chaque matin pour vérifier les factures en échec, le rapport pousse les erreurs du jour vers leur boîte mail à heure fixe. Plusieurs rapports peuvent coexister pour que des équipes différentes reçoivent des coupes différentes des mêmes données — l'équipe comptabilité pour la société `ACME`, l'équipe opérations pour l'activité `Centrale`, l'équipe développement pour tout ce qui est de sévérité `FATAL`.
 
 Cette page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé. Les erreurs proviennent du pipeline de validation et sont enregistrées dans `F564236`, le format source est donc transparent ici.
 
@@ -30155,7 +30155,7 @@ Le rapport porte une liste de paires `(colonne, valeur)` qui restreignent le jeu
 | Colonne | Exemple de valeur | Usage courant |
 |---|---|---|
 | **Société** (`KCO`) | `00070` | Un rapport par société sur une installation multi-sociétés. |
-| **Code d'activité** | `ISC`, `VRAC`, `BIP` | Un rapport par activité métier. |
+| **Code d'activité** | `Magasins`, `Centrale`, `BIP` | Un rapport par activité métier. |
 | **Source** | `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, `INTEG` | Envoyer le jeu de validations UBL à l'équipe template, le jeu d'intégration à l'équipe ops. |
 | **Règle** | `BR-CL-23`, `UBL_CREATION` | Surveiller une règle en échec précise. |
 | **Business unit** | `MU-LYO`, `MU-PAR` | Routage par BU. |
@@ -30172,7 +30172,7 @@ Le corps résume la période, les compteurs et un top 5 des règles en échec :
 Subject: NomaUBL rapport quotidien — Comptabilité · ACME — 7 erreurs, 3 factures
 
 Période :      sur 1 jour (2026-06-01 07:00 → 2026-06-02 07:00 Europe/Paris)
-Filtres :      société = 00070, activité = ISC, sévérité = ERROR / FATAL
+Filtres :      société = 00070, activité = Magasins, sévérité = ERROR / FATAL
 Évènements :   7
 Factures :     3
 

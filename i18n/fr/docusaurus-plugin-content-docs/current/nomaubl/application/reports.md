@@ -39,12 +39,12 @@ Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [A
   <text x="880" y="124" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif" textAnchor="middle">B2G</text>
 
   <g fontFamily="ui-monospace, monospace" fontSize="10">
-    <text x="50" y="150" fill="#e2e8f0">▾ ISC</text><text x="640" y="150" fill="#cbd5e1" textAnchor="middle">1 240</text><text x="720" y="150" fill="#cbd5e1" textAnchor="middle">86</text><text x="800" y="150" fill="#cbd5e1" textAnchor="middle">402</text><text x="880" y="150" fill="#cbd5e1" textAnchor="middle">57</text>
+    <text x="50" y="150" fill="#e2e8f0">▾ Magasins</text><text x="640" y="150" fill="#cbd5e1" textAnchor="middle">1 240</text><text x="720" y="150" fill="#cbd5e1" textAnchor="middle">86</text><text x="800" y="150" fill="#cbd5e1" textAnchor="middle">402</text><text x="880" y="150" fill="#cbd5e1" textAnchor="middle">57</text>
     <text x="66" y="170" fill="#4ade80">▾ 205 Payée</text><text x="640" y="170" fill="#94a3b8" textAnchor="middle">1 180 · 95%</text>
     <text x="66" y="190" fill="#f87171">▸ 213 Rejetée</text><text x="640" y="190" fill="#94a3b8" textAnchor="middle">60 · 5%</text>
     <text x="82" y="210" fill="#94a3b8">REJ_ADR — code adressage</text><text x="640" y="210" fill="#64748b" textAnchor="middle">44 · 73%</text>
     <text x="82" y="230" fill="#94a3b8">REJ_SIRET — SIRET inconnu</text><text x="640" y="230" fill="#64748b" textAnchor="middle">16 · 27%</text>
-    <text x="50" y="256" fill="#e2e8f0">▸ VRAC</text><text x="640" y="256" fill="#cbd5e1" textAnchor="middle">318</text><text x="720" y="256" fill="#cbd5e1" textAnchor="middle">—</text><text x="800" y="256" fill="#cbd5e1" textAnchor="middle">54</text><text x="880" y="256" fill="#cbd5e1" textAnchor="middle">—</text>
+    <text x="50" y="256" fill="#e2e8f0">▸ Centrale</text><text x="640" y="256" fill="#cbd5e1" textAnchor="middle">318</text><text x="720" y="256" fill="#cbd5e1" textAnchor="middle">—</text><text x="800" y="256" fill="#cbd5e1" textAnchor="middle">54</text><text x="880" y="256" fill="#cbd5e1" textAnchor="middle">—</text>
   </g>
 
   <rect x="40" y="270" width="920" height="18" rx="4" fill="rgba(74,158,255,0.05)" stroke="rgba(74,158,255,0.25)" strokeWidth="1"/>

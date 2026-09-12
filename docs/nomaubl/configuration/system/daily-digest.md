@@ -8,7 +8,7 @@ keywords: [NomaUBL, daily digest, integration errors, email, Excel attachment, r
 
 The **Daily Digest** screen schedules a recurring email that bundles every integration error of the day and attaches the full event list as an Excel file. The body of the email summarises the period and the row counts; the attachment carries the exact data the [Integration Errors](../../application/integration-errors.md) page's *Detailed* tab exports — same columns, same shape.
 
-The point is operational: instead of asking a team to open the SPA every morning to check for failed invoices, the digest pushes the day's errors to their inbox at a fixed time. Several digests can coexist so different teams receive different cuts of the same data — the accounting team for company `ACME`, the operations team for activity `VRAC`, the development team for everything with severity `FATAL`.
+The point is operational: instead of asking a team to open the SPA every morning to check for failed invoices, the digest pushes the day's errors to their inbox at a fixed time. Several digests can coexist so different teams receive different cuts of the same data — the accounting team for company `ACME`, the operations team for activity `Central`, the development team for everything with severity `FATAL`.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The errors come from the validation pipeline and are stored in `F564236`, so the source format is transparent here.
 
@@ -55,7 +55,7 @@ The page is brand new. It replaces the ad-hoc *Export* workflow on the Integrati
   <text x="252" y="148" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Accounting · ACME</text>
   <text x="252" y="164" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">accounting@acme.example · ops-acme@acme.example</text>
   <text x="252" y="184" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Every day · 07:00 Europe/Paris · last 1 day · severity = ERROR / FATAL</text>
-  <text x="252" y="200" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Filters: KCO = 00070 · Activity = ISC</text>
+  <text x="252" y="200" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Filters: KCO = 00070 · Activity = Stores</text>
   <rect x="252" y="214" width="56" height="20" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e" strokeWidth="1"/>
   <text x="280" y="228" fill="#22c55e" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">ENABLED</text>
   <rect x="314" y="214" width="78" height="20" rx="10" fill="rgba(74,158,255,0.10)" stroke="#4a9eff" strokeWidth="1"/>
@@ -64,10 +64,10 @@ The page is brand new. It replaces the ad-hoc *Export* workflow on the Integrati
   <text x="738" y="229" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Edit</text>
 
   <rect x="240" y="262" width="540" height="120" rx="10" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="282" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Operations · VRAC</text>
+  <text x="252" y="282" fill="#cbd5e1" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Operations · Central</text>
   <text x="252" y="298" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">operations@example.com</text>
   <text x="252" y="318" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Every day · 06:30 Europe/Paris · last 2 days · severity = all</text>
-  <text x="252" y="334" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Filters: Activity = VRAC</text>
+  <text x="252" y="334" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">Filters: Activity = Central</text>
   <rect x="252" y="348" width="56" height="20" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e" strokeWidth="1"/>
   <text x="280" y="362" fill="#22c55e" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">ENABLED</text>
 
@@ -81,7 +81,7 @@ The page is brand new. It replaces the ad-hoc *Export* workflow on the Integrati
 
   <text x="240" y="552" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Send timeline</text>
   <line x1="240" y1="558" x2="788" y2="558" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="576" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">06:30  Operations · VRAC          → operations@example.com         · 12 events · 4 invoices</text>
+  <text x="240" y="576" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">06:30  Operations · Central          → operations@example.com         · 12 events · 4 invoices</text>
   <text x="240" y="592" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">07:00  Accounting · ACME          → accounting@acme + ops-acme    · 7 events · 3 invoices</text>
 
   <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -154,7 +154,7 @@ The digest carries a list of `(column, value)` pairs that narrow the event set. 
 | Column | Example value | Common use |
 |---|---|---|
 | **Company** (`KCO`) | `00070` | One digest per company on a multi-company install. |
-| **Activity code** | `ISC`, `VRAC`, `BIP` | One digest per business activity. |
+| **Activity code** | `Stores`, `Central`, `BIP` | One digest per business activity. |
 | **Source** | `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, `INTEG` | Send the UBL-validation set to the template team, the integration set to the ops team. |
 | **Rule** | `BR-CL-23`, `UBL_CREATION` | Watch a specific failing rule. |
 | **Business unit** | `MU-LYO`, `MU-PAR` | Per-BU routing. |
@@ -171,7 +171,7 @@ The body summarises the period, the row counts and a top-5 of failing rules:
 Subject: NomaUBL daily digest — Accounting · ACME — 7 errors, 3 invoices
 
 Period:        last 1 day (2026-06-01 07:00 → 2026-06-02 07:00 Europe/Paris)
-Filters:       company = 00070, activity = ISC, severity = ERROR / FATAL
+Filters:       company = 00070, activity = Stores, severity = ERROR / FATAL
 Events:        7
 Invoices:      3
 
