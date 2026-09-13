@@ -4,6 +4,10 @@ description: "Notes de version NomaUBL — chaque changement visible pour l'util
 keywords: [NomaUBL, notes de version, changelog, version, e-reporting, journal de traitement, dashboard, AFNOR XP Z12-014, Schematron, RFE, Réforme de la Facturation Électronique]
 ---
 
+<head>
+  <meta name="docsearch:noindex" content="true" />
+</head>
+
 # Notes de version
 
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.

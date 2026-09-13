@@ -4,6 +4,10 @@ description: "NomaUBL release notes — every user-visible change shipped in the
 keywords: [NomaUBL, release notes, changelog, version, e-reporting, processing log, dashboard, AFNOR XP Z12-014, Schematron, RFE, Réforme de la Facturation Électronique]
 ---
 
+<head>
+  <meta name="docsearch:noindex" content="true" />
+</head>
+
 # Release Notes
 
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
