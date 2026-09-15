@@ -57,6 +57,7 @@ Open it from the sidebar — **Reports**. Access is granted per role (see [Acces
 
 The first tab is a ready-made pivot: **invoice counts** broken down by **activity code → status → rejection reason**, and split into columns by **transaction type** (`B2B`, `B2BINT`, `B2C`, `B2G`). Every level carries its count and a **percentage** of its parent — a reason as a share of its status, a status as a share of its activity, an activity as a share of the whole.
 
+- **Choose the grouping.** Chips above the report pick which levels build it — activity, status, rejection reason — in any combination (e.g. statistics per status only). Expansion, percentages and the Excel export all follow the chosen grouping.
 - **Expand / collapse** any activity or status to drill down; **subtotals** are shown at every level.
 - A status that has a single rejection reason renders as **one compact line** rather than an extra nested row.
 - The **period filter** at the top offers the same three date bases as the [Dashboard](./dashboard.md) — *Activity date*, *Document date* or *Archive date* — so the report reconciles with the figures shown elsewhere.

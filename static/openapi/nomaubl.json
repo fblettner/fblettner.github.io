@@ -900,6 +900,28 @@
         }
       }
     },
+    "/api/invoices/{doc}/{dct}/{kco}/fix-buyer": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Quick-fix the buyer identifiers",
+        "description": "Corrects the buyer identifiers most often rejected by the PA — SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49, with its scheme) — inside the invoice's stored UBL, without rebuilding the rest of the document. Only the identifiers supplied are replaced; everything else is preserved byte-for-byte. The invoice is then revalidated, an audit event records the old and new values in the lifecycle history, and when resend=true and validation passes it is resubmitted to the PA. Format safeguards apply (SIREN/SIRET length and check-digit coherence, VAT shape) and the PA-protection rule blocks the call once the platform has taken the invoice over. Powers the Fix buyer button in the invoice window.",
+        "parameters": [
+          { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
+          { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
+          { "name": "kco", "in": "path", "schema": { "type": "string" }, "description": "Company code (UHKCO)", "required": true }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "siren": "803206317", "siret": "80320631700015", "vat": "FR59803206317", "endpointId": "80320631700015", "endpointScheme": "0225", "resend": true } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "changed": ["siret", "endpointId"], "status": "valid", "resent": true } } } }
+          }
+        }
+      }
+    },
     "/api/invoices/{doc}/{dct}/{kco}/reprocess": {
       "post": {
         "tags": ["Invoices"],

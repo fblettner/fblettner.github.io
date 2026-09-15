@@ -60,7 +60,7 @@ Voir la page [Configuration → Système → e-directory](../configuration/syste
   <text x="264" y="238" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12345678900012 — 12 rue de Rivoli, 75001 Paris · Active</text>
   <text x="264" y="252" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12345678900037 — 8 av. du Général Leclerc, 92100 Boulogne · Active</text>
 
-  <text x="264" y="280" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Lignes annuaire PPF</text>
+  <text x="264" y="280" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Adresses électroniques</text>
   <rect x="264" y="288" width="500" height="20" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="274" y="302" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">123456789 · SIREN</text>
   <text x="742" y="302" fill="#4ade80" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif" fontWeight="700">✓ actif</text>
@@ -72,7 +72,7 @@ Voir la page [Configuration → Système → e-directory](../configuration/syste
   <text x="742" y="346" fill="#f87171" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif" fontWeight="700">✕ désactivé</text>
 
   <line x1="240" y1="372" x2="780" y2="372" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="392" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">1 société · 2 établissements · 5 lignes d'annuaire</text>
+  <text x="240" y="392" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">1 société · 2 établissements · 5 adresses électroniques</text>
 
   <text x="240" y="420" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">INSEE est interrogé en premier (API publique gratuite) ; un seul appel annuaire PPF par société liste ensuite chaque identifiant enregistré, avec les identifiants configurés sous Configuration → Système → e-directory.</text>
 
@@ -87,7 +87,7 @@ Voir la page [Configuration → Système → e-directory](../configuration/syste
   <line x1="820" y1="180" x2="778" y2="178" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
 
   <rect x="20" y="322" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="337" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Lignes annuaire PPF</text>
+  <text x="30" y="337" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Adresses électroniques</text>
   <text x="30" y="350" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chaque identifiant · actif / désactivé</text>
   <line x1="200" y1="338" x2="262" y2="342" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
 </svg>
@@ -155,13 +155,13 @@ La requête est envoyée à `recherche-entreprises.api.gouv.fr` côté serveur ;
 
 ## Résultats
 
-Les résultats sont regroupés **par société** : une carte repliée par **SIREN**, avec la raison sociale, l'adresse du siège, l'état administratif INSEE et une **synthèse annuaire** — combien d'identifiants le PPF détient pour la société et combien sont actifs. Dépliez une carte pour révéler deux groupes :
+Les résultats sont regroupés **par société** : une carte repliée par **SIREN**, avec la raison sociale, l'adresse du siège, l'état administratif INSEE et une **synthèse des adresses électroniques** — combien d'adresses électroniques le PPF détient pour la société et combien sont actives. Dépliez une carte pour révéler deux groupes :
 
 ### Établissements (INSEE)
 
 Une liste repliable des établissements de la société — chaque **SIRET** avec son adresse et son état administratif, issus du registre INSEE. La recherche par SIREN ou SIRET liste désormais **tous** les établissements de la société (une seconde interrogation INSEE par raison sociale complète ce que la recherche numérique omet).
 
-### Lignes annuaire PPF
+### Adresses électroniques
 
 Chaque identifiant enregistré pour le SIREN sur le PPF, **quelle que soit sa forme** — un SIREN, un SIREN + SIRET, un code de routage ou un suffixe — avec son état **actif / désactivé**. Les identifiants à suffixe, comme `422250845_FGX`, y figurent aussi — une forme que le contrôle ligne à ligne précédent ne savait pas faire apparaître.
 
@@ -170,7 +170,7 @@ Chaque identifiant enregistré pour le SIREN sur le PPF, **quelle que soit sa fo
 <div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(255,69,58,0.08)', border: '1px solid rgba(255,69,58,0.3)'}}><span style={{color: '#f87171', fontWeight: 700, fontSize: '14px'}}>✕</span><span style={{color: '#f87171', fontWeight: 600, fontSize: '13px'}}>Désactivé</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Enregistré mais pas joignable actuellement ; l'adresser renverrait une erreur de routage (REJ_ADR).</span></div>
 </div>
 
-Le listage passe par l'endpoint `directory-check-siren` du connecteur, qui renvoie les lignes complètes avec un mappage de réponse par endpoint (formats ATGP et Yooz pris en charge). Quand cet endpoint n'est pas configuré, la page **l'indique** au lieu de deviner — réglez-le sous [Configuration → Système → e-directory](../configuration/system/edirectory.md). Le contrôle annuaire au moment du traitement est inchangé ; l'ancien endpoint `directory-check-siret` est obsolète.
+Le listage passe par l'endpoint `directory-check-siren` du connecteur, qui renvoie les lignes complètes avec un mappage de réponse par endpoint (formats ATGP, Yooz et Esker pris en charge — y compris les indicateurs numériques comme le `HasAssignedPlatform` 1/0 d'Esker, en plus de true/false). Quand cet endpoint n'est pas configuré, la page **l'indique** au lieu de deviner — réglez-le sous [Configuration → Système → e-directory](../configuration/system/edirectory.md). Le contrôle annuaire au moment du traitement est inchangé ; l'ancien endpoint `directory-check-siret` est obsolète.
 
 ---
 
@@ -184,6 +184,6 @@ Au-dessus des résultats, un petit libellé indique le nombre de sociétés renv
 
 - **Rechercher d'abord par nom, puis affiner.** INSEE retourne l'entité juridique (SIREN) et ses établissements (SIRET) — sélectionner le bon SIRET évite l'erreur courante « bon SIREN, mauvais établissement » à l'émission d'une facture.
 - **Une ligne désactivée n'est pas toujours définitive.** Un acheteur peut ne pas être encore enregistré, ou un identifiant précis pas encore activé ; lui demander de s'inscrire avant de retenter. L'état de l'annuaire évolue chaque jour à mesure que les sociétés s'inscrivent sur le PPF.
-- **Cibler l'identifiant exact, pas seulement le SIREN.** Les lignes d'annuaire montrent quelle forme est réellement joignable — un SIREN seul, un SIREN + SIRET ou un code à suffixe. Adressez la facture à une ligne **active** ; une société peut en avoir plusieurs, seules certaines actives.
+- **Cibler l'identifiant exact, pas seulement le SIREN.** Les lignes d'adresses électroniques montrent quelle forme est réellement joignable — un SIREN seul, un SIREN + SIRET ou un code à suffixe. Adressez la facture à une ligne **active** ; une société peut en avoir plusieurs, seules certaines actives.
 - **Vérifier l'état de l'établissement.** Un établissement cessé ne peut pas recevoir de facture, même si la société apparaît dans l'annuaire. Contrôler l'état INSEE de l'établissement avant de se fier à un mapping d'adresse électronique.
 - **Si les lignes n'apparaissent pas, câbler l'endpoint.** Une liste d'annuaire vide avec la note « non configuré » signale un connecteur sans endpoint `directory-check-siren` — réglez-le sous *Configuration → Système → e-directory*, avec le mappage de réponse de votre plateforme (ATGP, Yooz).

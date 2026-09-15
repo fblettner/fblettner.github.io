@@ -476,6 +476,29 @@ The exit code reflects failures, so a scheduler can detect a run that didn't ful
 
 ---
 
+## `-status-integrity` and `-status-order-check` — lifecycle checks \{#status-checks\}
+
+The two lifecycle maintenance checks — the same repairs as the [Retrieve Statuses](../sync/retrieve-statuses.md#integrity-checks) buttons and the scheduled [Lifecycle Checks](./lifecycle-checks.md) page — run from the CLI for a cron outside the web server.
+
+```bash
+# Integrity check — backfill PA statuses the poll missed
+java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--apply] [--notify]
+
+# Ordering check — re-sequence events recorded out of order
+java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [--apply]
+```
+
+| Flag | Effect |
+|---|---|
+| **`--lookback <N>`** | Integrity window in days (mutually exclusive with `--since`). |
+| **`--since <YYYY-MM-DD>`** | Integrity window start date. |
+| **`--apply`** | Apply the repairs; omit to report only (dry run). |
+| **`--notify`** | Fire the notification rules on backfilled transitions (integrity only). |
+
+Both repairs are idempotent and chronologically ordered — re-running over an already-clean lifecycle changes nothing.
+
+---
+
 ## `-fetch-single` — extract one document, then process it
 
 Equivalent of the *Application → Extract and Process* page. Extracts a single document from a source channel, drops the resulting file into `dirInput` (XML template) or `<dirInput>/ubl/` (UBL template), then immediately runs the matching pipeline. The XML-vs-UBL choice is **inferred from the template's `source` property** — no separate `processType` argument anymore.

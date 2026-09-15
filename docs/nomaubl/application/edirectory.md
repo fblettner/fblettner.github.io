@@ -60,7 +60,7 @@ See the [Configuration → System → e-directory](../configuration/system/edire
   <text x="264" y="238" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12345678900012 — 12 rue de Rivoli, 75001 Paris · Active</text>
   <text x="264" y="252" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12345678900037 — 8 av. du Général Leclerc, 92100 Boulogne · Active</text>
 
-  <text x="264" y="280" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Lignes annuaire PPF</text>
+  <text x="264" y="280" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Electronic addresses</text>
   <rect x="264" y="288" width="500" height="20" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="274" y="302" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">123456789 · SIREN</text>
   <text x="742" y="302" fill="#4ade80" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif" fontWeight="700">✓ enabled</text>
@@ -72,7 +72,7 @@ See the [Configuration → System → e-directory](../configuration/system/edire
   <text x="742" y="346" fill="#f87171" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif" fontWeight="700">✕ disabled</text>
 
   <line x1="240" y1="372" x2="780" y2="372" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="392" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">1 company · 2 establishments · 5 directory lines</text>
+  <text x="240" y="392" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">1 company · 2 establishments · 5 electronic addresses</text>
 
   <text x="240" y="420" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">INSEE is queried first (free public API); one PPF directory call per company then lists every registered identifier, using the credentials under Configuration → System → e-directory.</text>
 
@@ -87,7 +87,7 @@ See the [Configuration → System → e-directory](../configuration/system/edire
   <line x1="820" y1="180" x2="778" y2="178" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
 
   <rect x="20" y="322" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="337" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PPF directory lines</text>
+  <text x="30" y="337" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Electronic addresses</text>
   <text x="30" y="350" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">every identifier · enabled / disabled</text>
   <line x1="200" y1="338" x2="262" y2="342" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-pg-arrow)"/>
 </svg>
@@ -155,13 +155,13 @@ The query is sent to `recherche-entreprises.api.gouv.fr` server-side; the API re
 
 ## Results
 
-Results are grouped **by company**: one collapsed card per **SIREN**, showing the legal name, the head-office address, the INSEE administrative state and a **directory summary** — how many identifiers the PPF holds for the company and how many are enabled. Expand a card to reveal two groups:
+Results are grouped **by company**: one collapsed card per **SIREN**, showing the legal name, the head-office address, the INSEE administrative state and an **electronic-address summary** — how many electronic addresses the PPF holds for the company and how many are enabled. Expand a card to reveal two groups:
 
 ### Establishments (INSEE)
 
 An inner collapsible list of the company's establishments — each **SIRET** with its address and administrative state, from the INSEE registry. Searching by SIREN or SIRET now lists **all** establishments of the company (a second INSEE lookup by company name fills what the numeric search omits).
 
-### PPF directory lines
+### Electronic addresses
 
 Every identifier registered for the SIREN on the PPF, **whatever its form** — a SIREN, a SIREN + SIRET, a routing code or a suffix — each with its **enabled / disabled** state. Identifiers that carry a suffix, such as `422250845_FGX`, are listed here too — a form the previous per-row check could not surface.
 
@@ -170,7 +170,7 @@ Every identifier registered for the SIREN on the PPF, **whatever its form** — 
 <div style={{display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 12px', borderRadius: '6px', background: 'rgba(255,69,58,0.08)', border: '1px solid rgba(255,69,58,0.3)'}}><span style={{color: '#f87171', fontWeight: 700, fontSize: '14px'}}>✕</span><span style={{color: '#f87171', fontWeight: 600, fontSize: '13px'}}>Disabled</span><span style={{opacity: 0.7, fontSize: '12px'}}>— Registered but not currently reachable; addressing it would return a routing error (REJ_ADR).</span></div>
 </div>
 
-The listing goes through the connector's `directory-check-siren` endpoint, which returns the full lines with per-endpoint response mappings (ATGP and Yooz shapes are supported). When that endpoint isn't configured, the page **says so** rather than guessing — set it under [Configuration → System → e-directory](../configuration/system/edirectory.md). The processing-time directory check is unchanged; the older `directory-check-siret` endpoint is obsolete.
+The listing goes through the connector's `directory-check-siren` endpoint, which returns the full lines with per-endpoint response mappings (ATGP, Yooz and Esker shapes are supported — including numeric reachability flags such as Esker’s `HasAssignedPlatform` 1/0 alongside true/false). When that endpoint isn't configured, the page **says so** rather than guessing — set it under [Configuration → System → e-directory](../configuration/system/edirectory.md). The processing-time directory check is unchanged; the older `directory-check-siret` endpoint is obsolete.
 
 ---
 
@@ -184,6 +184,6 @@ Above the results, a small label indicates the number of companies returned by I
 
 - **Search by name first, then narrow down.** INSEE returns the legal entity (SIREN) and its establishments (SIRET) — picking the right SIRET avoids the common "right SIREN, wrong establishment" mistake when issuing invoices.
 - **A disabled line is not always permanent.** A buyer may not yet be registered, or a specific identifier not yet enabled; ask them to register before re-trying. The directory state changes daily as more companies subscribe to the PPF.
-- **Match the exact identifier, not just the SIREN.** The directory lines show which form is actually reachable — a plain SIREN, a SIREN + SIRET, or a suffixed code. Address the invoice to an **enabled** line; a company can have several, only some enabled.
+- **Match the exact identifier, not just the SIREN.** The electronic-address lines show which form is actually reachable — a plain SIREN, a SIREN + SIRET, or a suffixed code. Address the invoice to an **enabled** line; a company can have several, only some enabled.
 - **Cross-check the establishment state.** A ceased establishment cannot receive an invoice even if the company appears in the directory. Check the INSEE state on the establishment before trusting an electronic-address mapping.
 - **If the lines don't appear, wire the endpoint.** An empty directory list with a "not configured" note means the connector has no `directory-check-siren` endpoint — set it under *Configuration → System → e-directory*, with the response mappings for your platform (ATGP, Yooz).

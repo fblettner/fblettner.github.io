@@ -14,7 +14,10 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-09-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-12</span></a>
+  <a href="#v2026-09-15-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.15.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-15</span></a>
+  <a href="#v2026-09-14-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.14.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-14</span></a>
+  <a href="#v2026-09-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-13</span></a>
+  <a href="#v2026-09-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-12</span></a>
   <a href="#v2026-09-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-11</span></a>
   <a href="#v2026-09-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-10</span></a>
   <a href="#v2026-09-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-09</span></a>
@@ -106,6 +109,56 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
 </div>
+
+---
+
+## 2026.09.15.1 — 2026-09-15 \{#v2026-09-15-1\}
+
+### Improvements
+
+- **Lifecycle checks on a schedule and from the command line.** The integrity check (backfill statuses the PA delivered but the poll missed) and the ordering check (re-sequence events recorded out of order) can now run without an operator. A new **Lifecycle checks** page in the Management group schedules them daily — pick the time, the checks to run, the integrity window (default: last day) and whether to repair automatically or report only; repairs are the same idempotent, chronologically-ordered operations as the Import Status page buttons. The CLI gains the matching modes for cron outside the web server: `-status-integrity` (with `--lookback`, `--since`, `--apply`, `--notify`) and `-status-order-check` (with `--apply`).
+- **Invoice list: Updated column carries the time.** The *Updated* value now includes the update time of day, so a list-view column formatted as `datetime` shows `2026-09-15 15:23:45` instead of the bare date. (The issue date keeps date-only — JDE stores no time for it.)
+- **Fix buyer identifiers without re-editing the invoice.** The most frequent PA rejections concern the buyer's SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49). A new **Fix buyer** button in the invoice window (shown only when the invoice is still correctable — hidden once the PA has taken it) opens a compact form pre-filled from the stored UBL, with the INSEE company search and the PPF electronic-address picker. Only the changed identifiers are replaced inside the stored UBL — the rest of the document stays untouched — then the invoice is revalidated on the spot, an audit event records the old and new values in the history, and an option resends to the PA when validation passes. Also available as `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` (documented in the API reference) with format safeguards (SIREN/SIRET length and coherence, VAT shape) and the PA-protection rule enforced.
+- **Review badge on deposited-but-not-transmitted invoices.** An invoice Deposited (200) with reason NON_TRANSMISE is not an error, but the recipient has no active reception address — the operator must forward it manually. The *Review* column now shows the Pending/Reviewed badge for this case too (other 200s keep the quiet dash).
+
+### Fixes
+
+- **Rule descriptions restored in Integration Errors.** The by-rule view (and the rule tooltips) had lost the description of every CIUS-FR, EXT-CTC-FR and CPRO rule: the description catalog still read the schematron files under their pre-upgrade names, and two label formats (CPRO's space separator, slash-labelled ids like `BR-FR-32-LEGALID`) escaped the parser. The catalog now follows the shipped schematron list automatically — a future schematron package upgrade can no longer strip the descriptions — and both label formats are parsed. Descriptions climb from 979 rules to 1205.
+- **Live process events readable.** In the IT dashboard's live feed, intermediate step events (PARSE, VALIDATION, DBINSERT…, SENDTOPA) overflowed their badge column and displayed clipped; the column is now sized for step names and every event renders as an aligned badge like START/END.
+
+---
+
+## 2026.09.14.1 — 2026-09-14 \{#v2026-09-14-1\}
+
+### Improvements
+
+- **Lifecycle events inserted in chronological order.** When a platform delivers (or the integrity check recovers) a status event older than events already recorded, it is now inserted at its chronological position — based on the event's platform timestamp — instead of being appended at the end, and the invoice's current status only changes when the event is genuinely the most recent. Recovering an old missing status can no longer knock an invoice back to a past state. Applies to the regular status poll and to the integrity check's apply.
+- **Ordering check extended to standard statuses.** The lifecycle ordering check now also detects standard statuses recorded in the wrong order (e.g. 202 *Reçue* before 200 *Déposée*) — the numeric order of standard codes is treated as canonical. The repair **re-sequences** the events into the correct order (nothing is deleted; internal statuses keep their positions) and realigns the invoice status, with the usual before/after preview and per-invoice selection.
+- **Report statistics: choose the grouping.** Chips above the report select which levels build it — activity, status, rejection reason, in any combination (e.g. statistics per status only). Expansion, percentages and the Excel export follow the chosen grouping.
+- **Invoice edit: customer picked end-to-end.** Search results are easier to read (badge, name and identifier on one line, address below); searching a bare SIREN or SIRET now lists all the establishments (same second INSEE lookup as E-Directory); an optional SIRET field completes the SIREN. The electronic address is no longer guessed from the SIREN/SIRET: a PPF directory list — opened automatically after selecting a company, or anytime via the button next to the identifier field — shows the electronic addresses registered for the SIREN with their active/disabled state; picking one fills the identifier and its scheme, then the list closes.
+- **Invoice window: history refreshed after saving.** The history tab (lifecycle events and validation errors) reloads right after a save — no need to close and reopen the window.
+- **E-Directory: "electronic addresses" spelled out.** The PPF directory lines are now labelled electronic addresses (section title, column, counter on the company card), making explicit what can actually receive an invoice.
+
+### Fixes
+
+- **Per-file BAR document-type default now saved.** In the XSL Editor's UBL defaults, overriding the default transaction type (Routage BAR) for a specific file reverted to B2B on reload — the override stored the code mappings but not the default. It now persists like the other per-file overrides.
+- **Group / Columns menus scroll.** The grid's Group-by and Columns menus are capped at half the window and scroll internally, so long column lists stay fully reachable.
+- **Edited invoices keep every original detail.** Saving from the edit window rebuilt the XML from the form alone: repeated elements not shown in the form (additional notes, references…) lost all but their first occurrence, invoice-line elements could come out in an order the XSD rejects, and the deliver-to identifier on lines lost its scheme (Schematron EXT-FR-FE-146). All three are fixed — content not shown in the form is preserved as-is, the line element order follows UBL 2.1, and identifier schemes survive the round-trip; the buyer's SIRET and SIREN identifications are carried through as proper buyer identifiers.
+
+---
+
+## 2026.09.13.1 — 2026-09-13 \{#v2026-09-13-1\}
+
+### Fixes
+
+- **BIP batch on multi-host JDE: extraction now scoped to the job's host.** Job numbers are only unique per execution host; extraction by number alone pulled every host's rows for that number — foreign reports' files (PDF, Excel…) landed in the input folder and the processed file could carry the wrong name. Extraction now filters on the host everywhere: the scheduler scan, the Fetch Input selection (which passes each job's host along) and explicit re-runs.
+- **BIP jobs follow their report's pipeline.** A job whose report filter maps to a UBL-source template is now processed through the UBL pipeline (correct file path, in-process run) instead of being handed to the XML subprocess — which failed with "file not found" while the batch still reported success. Missing-input errors are now emitted in the structured log format, so such a file counts as failed instead of green.
+- **"F – Force send" honoured for UBL sources.** A document type set to *Force send* in Document Types now sends on the UBL pipeline exactly as on the XML pipeline (warnings allowed, validation errors still block); it previously fell back silently to the global e-invoicing setting and nothing was sent.
+
+### Improvements
+
+- **API request log shows the multipart detail.** The DEBUG line for a connector call with a multipart body now lists each resolved part (file parts as their path, text parts with their final values) — a PA rejecting a body field can be diagnosed from the log instead of guessing.
+- **E-Directory: Esker directory format supported.** The routing-lines listing also understands numeric reachability flags (Esker's `HasAssignedPlatform` 1/0) in addition to true/false.
 
 ---
 

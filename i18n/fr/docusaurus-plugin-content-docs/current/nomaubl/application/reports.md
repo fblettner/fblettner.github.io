@@ -57,6 +57,7 @@ Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [A
 
 Le premier onglet est un tableau croisé prêt à l'emploi : le **nombre de factures** ventilé par **code activité → statut → motif de rejet**, réparti en colonnes par **type de transaction** (`B2B`, `B2BINT`, `B2C`, `B2G`). Chaque niveau porte son effectif et un **pourcentage** de son parent — un motif en part de son statut, un statut en part de son activité, une activité en part du total.
 
+- **Choisissez le regroupement.** Des puces au-dessus du rapport choisissent les niveaux qui le composent — activité, statut, motif de rejet — dans n'importe quelle combinaison (par ex. des statistiques par statut uniquement). Le dépliage, les pourcentages et l'export Excel suivent le regroupement choisi.
 - **Dépliez / repliez** une activité ou un statut pour descendre dans le détail ; les **sous-totaux** apparaissent à chaque niveau.
 - Un statut à motif de rejet unique tient sur **une seule ligne**, sans ligne imbriquée supplémentaire.
 - Le **filtre de période** en haut propose les trois mêmes bases de dates que le [Tableau de bord](./dashboard.md) — *Date d'activité*, *Date document* ou *Date d'archivage* — pour que le rapport se recoupe avec les chiffres affichés ailleurs.

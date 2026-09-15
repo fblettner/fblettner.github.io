@@ -14,7 +14,10 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-09-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-12</span></a>
+  <a href="#v2026-09-15-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.15.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-15</span></a>
+  <a href="#v2026-09-14-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.14.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-14</span></a>
+  <a href="#v2026-09-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-13</span></a>
+  <a href="#v2026-09-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-12</span></a>
   <a href="#v2026-09-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-11</span></a>
   <a href="#v2026-09-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-10</span></a>
   <a href="#v2026-09-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-09</span></a>
@@ -106,6 +109,56 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
 </div>
+
+---
+
+## 2026.09.15.1 — 2026-09-15 \{#v2026-09-15-1\}
+
+### Améliorations
+
+- **Contrôles du cycle de vie planifiés et en ligne de commande.** Le contrôle d'intégrité (récupération des statuts livrés par la PA mais absents du cycle de vie) et le contrôle d'ordre (réordonnancement des événements enregistrés dans le désordre) s'exécutent désormais sans opérateur. Une nouvelle page **Contrôles du cycle de vie** dans le groupe Gestion les planifie chaque jour — heure, contrôles à exécuter, fenêtre d'intégrité (par défaut : le dernier jour) et réparation automatique ou rapport seul ; les réparations sont les mêmes opérations idempotentes et ordonnées chronologiquement que les boutons de la page Statut d'import. La ligne de commande gagne les modes équivalents pour un cron hors serveur web : `-status-integrity` (avec `--lookback`, `--since`, `--apply`, `--notify`) et `-status-order-check` (avec `--apply`).
+- **Liste des factures : la colonne Mise à jour porte l'heure.** La valeur *Mise à jour* inclut désormais l'heure de modification : une colonne au format `datetime` affiche `2026-09-15 15:23:45` au lieu de la seule date. (La date d'émission reste sans heure — JDE n'en stocke pas pour elle.)
+- **Corriger les identifiants de l'acheteur sans rééditer la facture.** Les rejets PA les plus fréquents concernent le SIREN (BT-47), le SIRET (BT-46), la TVA intracommunautaire (BT-48) et l'adresse électronique (BT-49) de l'acheteur. Un nouveau bouton **Corriger destinataire** dans la fenêtre facture (affiché seulement quand la facture est encore corrigeable — masqué dès que la PA l'a prise en charge) ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la recherche d'entreprises INSEE et le sélecteur d'adresses électroniques de l'annuaire PPF. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est revalidée immédiatement, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option renvoie à la PA si la validation réussit. Également disponible en `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` (documenté dans la référence API) avec garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA appliquée.
+- **Badge Suivi sur les factures déposées non transmises.** Une facture Déposée (200) avec le motif NON_TRANSMISE n'est pas une erreur, mais le destinataire n'a pas d'adresse de réception active — l'opérateur doit la transmettre manuellement. La colonne *Suivi* affiche désormais le badge En attente/Traité pour ce cas aussi (les autres 200 gardent le tiret discret).
+
+### Corrections
+
+- **Descriptions des règles rétablies dans les erreurs d'intégration.** La vue par règle (et les infobulles) avait perdu la description de toutes les règles CIUS-FR, EXT-CTC-FR et CPRO : le catalogue de descriptions lisait encore les schematrons sous leurs noms d'avant mise à niveau, et deux formats d'étiquette (séparateur espace du CPRO, identifiants à barre oblique comme `BR-FR-32-LEGALID`) échappaient à l'analyse. Le catalogue suit désormais automatiquement la liste des schematrons livrés — une future mise à niveau du paquet schematron ne peut plus effacer les descriptions — et les deux formats sont pris en charge. Les descriptions passent de 979 règles à 1205.
+- **Événements de traitement en direct lisibles.** Dans le fil en direct du tableau de bord IT, les événements d'étape intermédiaires (PARSE, VALIDATION, DBINSERT…, SENDTOPA) débordaient de leur colonne et s'affichaient tronqués ; la colonne est désormais dimensionnée pour les noms d'étape et chaque événement s'affiche en badge aligné comme START/END.
+
+---
+
+## 2026.09.14.1 — 2026-09-14 \{#v2026-09-14-1\}
+
+### Améliorations
+
+- **Événements de cycle de vie insérés dans l'ordre chronologique.** Quand une plateforme livre (ou que le contrôle d'intégrité récupère) un statut plus ancien que les événements déjà enregistrés, il s'insère désormais à sa position chronologique — d'après l'horodatage plateforme de l'événement — au lieu d'être ajouté en fin de liste, et le statut courant de la facture ne change que si l'événement est réellement le plus récent. Récupérer un statut manquant ancien ne peut plus ramener une facture à un état passé. S'applique à la récupération régulière des statuts et à l'application du contrôle d'intégrité.
+- **Contrôle d'ordre étendu aux statuts standard.** Le contrôle d'ordre du cycle de vie détecte désormais aussi les statuts standard enregistrés dans le mauvais ordre (par ex. 202 *Reçue* avant 200 *Déposée*) — l'ordre numérique des codes standard fait référence. La réparation **réordonne** les événements (rien n'est supprimé ; les statuts internes gardent leur position) et réaligne le statut de la facture, avec l'aperçu avant/après habituel et la sélection par facture.
+- **Statistiques : regroupement au choix.** Des puces au-dessus du rapport choisissent les niveaux qui le composent — activité, statut, motif de rejet, dans n'importe quelle combinaison (par ex. des statistiques par statut uniquement). Le dépliage, les pourcentages et l'export Excel suivent le regroupement choisi.
+- **Édition de facture : sélection du client de bout en bout.** Les résultats de recherche sont plus lisibles (badge, nom et identifiant sur une ligne, adresse en dessous) ; la recherche par SIREN ou SIRET seul liste désormais tous les établissements (même seconde interrogation INSEE que l'E-Annuaire) ; un champ SIRET facultatif complète le SIREN. L'adresse électronique n'est plus déduite du SIREN/SIRET : une liste annuaire PPF — ouverte automatiquement après le choix d'une entreprise, ou à tout moment via le bouton à côté du champ identifiant — présente les adresses électroniques enregistrées pour le SIREN avec leur état actif/désactivé ; en choisir une renseigne l'identifiant et son schéma, puis la liste se referme.
+- **Fenêtre facture : historique rafraîchi après enregistrement.** L'onglet historique (événements de cycle de vie et erreurs de validation) se recharge aussitôt après un enregistrement — plus besoin de fermer puis rouvrir la fenêtre.
+- **E-Annuaire : « adresses électroniques » en toutes lettres.** Les lignes de l'annuaire PPF s'intitulent désormais adresses électroniques (titre de section, colonne, compteur de la carte entreprise) : ce qui peut réellement recevoir une facture est explicite.
+
+### Corrections
+
+- **Défaut BAR par fichier enregistré.** Dans les valeurs par défaut UBL de l'éditeur XSL, le remplacement du type de transaction par défaut (Routage BAR) pour un fichier donné revenait à B2B au rechargement — le remplacement conservait les transcodifications mais pas le défaut. Il persiste désormais comme les autres remplacements par fichier.
+- **Menus Grouper / Colonnes défilants.** Les menus Grouper et Colonnes de la grille sont limités à la moitié de la fenêtre et défilent, les longues listes de colonnes restent entièrement accessibles.
+- **Les factures modifiées conservent tout leur contenu d'origine.** L'enregistrement depuis la fenêtre d'édition reconstruisait le XML à partir du seul formulaire : les éléments répétés absents du formulaire (notes supplémentaires, références…) perdaient toutes leurs occurrences sauf la première, l'ordre des éléments de ligne pouvait violer le XSD, et l'identifiant du lieu de livraison à la ligne perdait son schéma (Schematron EXT-FR-FE-146). Les trois cas sont corrigés — le contenu absent du formulaire est préservé tel quel, l'ordre des éléments de ligne respecte UBL 2.1 et les schémas d'identifiants survivent à l'aller-retour ; les identifications SIRET et SIREN de l'acheteur sont reprises comme identifiants acheteur à part entière.
+
+---
+
+## 2026.09.13.1 — 2026-09-13 \{#v2026-09-13-1\}
+
+### Corrections
+
+- **Batch BIP sur JDE multi-hôtes : extraction limitée à l'hôte du job.** Les numéros de job ne sont uniques que par hôte d'exécution ; une extraction par numéro seul ramenait les lignes de tous les hôtes — des fichiers d'autres états (PDF, Excel…) atterrissaient dans le répertoire d'entrée et le fichier traité pouvait porter un mauvais nom. L'extraction filtre désormais l'hôte partout : balayage du planificateur, sélection de la page Récupération (qui transmet l'hôte de chaque job) et relances explicites.
+- **Les jobs BIP suivent le pipeline de leur état.** Un job dont le filtre d'état pointe vers un modèle source UBL passe désormais par le pipeline UBL (bon chemin de fichier, exécution en mémoire) au lieu d'être confié au sous-processus XML — qui échouait en « fichier introuvable » pendant que le lot s'affichait réussi. Les erreurs de fichier manquant sortent maintenant au format de journal structuré : un tel fichier compte en échec au lieu de passer au vert.
+- **« F – Envoi forcé » respecté pour les sources UBL.** Un type de document en *Envoi forcé* dans Types de documents envoie désormais sur le pipeline UBL comme sur le pipeline XML (avertissements tolérés, erreurs de validation toujours bloquantes) ; il retombait silencieusement sur le réglage e-invoicing global et rien ne partait.
+
+### Améliorations
+
+- **Le journal des requêtes API détaille le multipart.** La ligne DEBUG d'un appel connecteur à corps multipart liste chaque partie résolue (fichiers par leur chemin, champs texte avec leurs valeurs finales) — un rejet de la PA sur un champ du corps se diagnostique dans le journal au lieu de deviner.
+- **E-Directory : format d'annuaire Esker pris en charge.** Le listage des lignes d'adressage comprend aussi les indicateurs numériques (le `HasAssignedPlatform` 1/0 d'Esker) en plus de true/false.
 
 ---
 

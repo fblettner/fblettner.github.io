@@ -476,6 +476,29 @@ Le code de sortie reflète les échecs : un ordonnanceur peut ainsi détecter un
 
 ---
 
+## `-status-integrity` et `-status-order-check` — contrôles du cycle de vie \{#status-checks\}
+
+Les deux contrôles de maintenance du cycle de vie — les mêmes réparations que les boutons de [Récupérer les statuts](../sync/retrieve-statuses.md#integrity-checks) et la page planifiée [Contrôles du cycle de vie](./lifecycle-checks.md) — s'exécutent en CLI pour un cron hors serveur web.
+
+```bash
+# Contrôle d'intégrité — compléter les statuts PA manqués par l'interrogation
+java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--apply] [--notify]
+
+# Contrôle d'ordre — réordonner les événements enregistrés dans le désordre
+java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [--apply]
+```
+
+| Option | Effet |
+|---|---|
+| **`--lookback <N>`** | Fenêtre d'intégrité en jours (exclusive avec `--since`). |
+| **`--since <YYYY-MM-DD>`** | Date de début de la fenêtre d'intégrité. |
+| **`--apply`** | Applique les réparations ; sans elle, rapport seul (simulation). |
+| **`--notify`** | Déclenche les règles de notification sur les transitions complétées (intégrité seulement). |
+
+Les deux réparations sont idempotentes et ordonnées chronologiquement — les relancer sur un cycle de vie déjà propre ne change rien.
+
+---
+
 ## `-fetch-single` — extraire un document, puis le traiter
 
 Équivalent de la page *Processing → Extraction et traitement*. Extrait un document d'un canal source, dépose le fichier résultant dans `dirInput` (modèle XML) ou `<dirInput>/ubl/` (modèle UBL), puis lance immédiatement le pipeline correspondant. Le choix XML ou UBL est **déduit de la propriété `source` du modèle** — l'argument `processType` disparaît.

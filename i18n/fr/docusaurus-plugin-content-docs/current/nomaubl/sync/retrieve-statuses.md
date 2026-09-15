@@ -195,17 +195,18 @@ Quand un appel à la PA échoue pour des raisons de transport (réseau, expirati
 
 ---
 
-## Contrôles d'intégrité
-
-Au-delà de la récupération incrémentale, la page propose deux contrôles à la demande qui réconcilient le cycle de vie enregistré avec la plateforme et avec lui-même. Les deux s'exécutent en **arrière-plan** et sont réexécutables sans risque.
+## Contrôles d'intégrité \{#integrity-checks\}
+Au-delà de la récupération incrémentale, la page propose deux contrôles à la demande qui réconcilient le cycle de vie enregistré avec la plateforme et avec lui-même. Les deux s'exécutent en **arrière-plan** et sont réexécutables sans risque. Pour les exécuter chaque jour sans opérateur, planifiez-les depuis la page [Contrôles du cycle de vie](../management/lifecycle-checks.md) (ou les modes CLI équivalents).
 
 ### Statuts manquants
 
 Choisissez une date : le contrôle compare **tous les événements de la plateforme depuis celle-ci** avec le cycle de vie déjà enregistré. Ce qui manque s'affiche dans un **tableau à sélection** — appliquez tout ou seulement les lignes retenues, avec déclenchement optionnel des [règles de notification](../management/notification-rules.md) (désactivé par défaut). Les événements non applicables sont signalés **à part**, pour ne rien changer en silence : un statut interne obsolète (étape plateforme déjà dépassée), une facture inconnue, ou un code sans mappage.
 
+Un événement récupéré s'insère à sa **position chronologique** — d'après son horodatage plateforme — au lieu d'être ajouté en fin de liste, et le statut courant de la facture ne bouge que si l'événement récupéré est réellement le plus récent. Compléter un statut manquant ancien ne peut donc pas ramener une facture à un état passé. La même insertion chronologique s'applique à la récupération régulière des statuts.
+
 ### Ordre du cycle de vie
 
-Le second contrôle balaie la base à la recherche de lignes de cycle de vie mal ordonnées — une étape interne de plateforme enregistrée **après** un statut standard — et de **codes invalides** (texte brut de plateforme stocké par erreur de mappage). Les lignes sélectionnées se suppriment en un clic, et le statut courant de la facture est réaligné sur son dernier événement restant.
+Le second contrôle balaie la base à la recherche de lignes **mal ordonnées** — une étape interne de plateforme enregistrée après un statut standard, et des statuts standard enregistrés dans le mauvais ordre (par ex. `202` *Reçue* avant `200` *Déposée*, l'ordre numérique des codes standard faisant référence) — plus les **codes invalides** (texte brut de plateforme stocké par erreur de mappage). La réparation **réordonne** les événements (rien n'est supprimé ; les statuts internes gardent leur position) et réaligne le statut courant de la facture, avec un aperçu avant/après et une sélection par facture.
 
 ---
 

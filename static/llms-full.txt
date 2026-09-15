@@ -31939,20 +31939,20 @@ The query is sent to `recherche-entreprises.api.gouv.fr` server-side; the API re
 
 ## Results
 
-Results are grouped **by company**: one collapsed card per **SIREN**, showing the legal name, the head-office address, the INSEE administrative state and a **directory summary** — how many identifiers the PPF holds for the company and how many are enabled. Expand a card to reveal two groups:
+Results are grouped **by company**: one collapsed card per **SIREN**, showing the legal name, the head-office address, the INSEE administrative state and an **electronic-address summary** — how many electronic addresses the PPF holds for the company and how many are enabled. Expand a card to reveal two groups:
 
 ### Establishments (INSEE)
 
 An inner collapsible list of the company's establishments — each **SIRET** with its address and administrative state, from the INSEE registry. Searching by SIREN or SIRET now lists **all** establishments of the company (a second INSEE lookup by company name fills what the numeric search omits).
 
-### PPF directory lines
+### Electronic addresses
 
 Every identifier registered for the SIREN on the PPF, **whatever its form** — a SIREN, a SIREN + SIRET, a routing code or a suffix — each with its **enabled / disabled** state. Identifiers that carry a suffix, such as `422250845_FGX`, are listed here too — a form the previous per-row check could not surface.
 
 ✓Enabled— Registered and reachable on the PPF; an invoice addressed to it is delivered.
 ✕Disabled— Registered but not currently reachable; addressing it would return a routing error (REJ_ADR).
 
-The listing goes through the connector's `directory-check-siren` endpoint, which returns the full lines with per-endpoint response mappings (ATGP and Yooz shapes are supported). When that endpoint isn't configured, the page **says so** rather than guessing — set it under [Configuration → System → e-directory](../configuration/system/edirectory.md). The processing-time directory check is unchanged; the older `directory-check-siret` endpoint is obsolete.
+The listing goes through the connector's `directory-check-siren` endpoint, which returns the full lines with per-endpoint response mappings (ATGP, Yooz and Esker shapes are supported — including numeric reachability flags such as Esker’s `HasAssignedPlatform` 1/0 alongside true/false). When that endpoint isn't configured, the page **says so** rather than guessing — set it under [Configuration → System → e-directory](../configuration/system/edirectory.md). The processing-time directory check is unchanged; the older `directory-check-siret` endpoint is obsolete.
 
 ---
 
@@ -31966,7 +31966,7 @@ Above the results, a small label indicates the number of companies returned by I
 
 - **Search by name first, then narrow down.** INSEE returns the legal entity (SIREN) and its establishments (SIRET) — picking the right SIRET avoids the common "right SIREN, wrong establishment" mistake when issuing invoices.
 - **A disabled line is not always permanent.** A buyer may not yet be registered, or a specific identifier not yet enabled; ask them to register before re-trying. The directory state changes daily as more companies subscribe to the PPF.
-- **Match the exact identifier, not just the SIREN.** The directory lines show which form is actually reachable — a plain SIREN, a SIREN + SIRET, or a suffixed code. Address the invoice to an **enabled** line; a company can have several, only some enabled.
+- **Match the exact identifier, not just the SIREN.** The electronic-address lines show which form is actually reachable — a plain SIREN, a SIREN + SIRET, or a suffixed code. Address the invoice to an **enabled** line; a company can have several, only some enabled.
 - **Cross-check the establishment state.** A ceased establishment cannot receive an invoice even if the company appears in the directory. Check the INSEE state on the establishment before trusting an electronic-address mapping.
 - **If the lines don't appear, wire the endpoint.** An empty directory list with a "not configured" note means the connector has no `directory-check-siren` endpoint — set it under *Configuration → System → e-directory*, with the response mappings for your platform (ATGP, Yooz).
 
@@ -32717,6 +32717,8 @@ The table shows one row per invoice. Default sort: most recent document number f
 
 Since 2026.05.10 the grid renders through **DataTableV2** in spec-driven mode: column shape, labels, format, alignment, width and the filter-row allow-list come from the `view.invoices` spec stored on `db-nomaubl` (with a bundled default in the JAR). Adding or removing columns is done from the [List Views](../configuration/list-views.md) editor — no code change required when the column already lives in the catalog.
 
+The **Updated** value carries the time of day, so an *Updated* column formatted as `datetime` in the spec shows `2026-09-15 15:23:45` rather than the bare date. (The issue date stays date-only — JDE stores no time for it.)
+
   
     DocDctKcoUBL numberIssue dateCustomer
     Total HTTotal TTCCur.Status
@@ -32757,7 +32759,7 @@ Since 2026.05.10 the grid renders through **DataTableV2** in spec-driven mode: c
 | **Total TTC** | Total amount including VAT. |
 | **Currency** | ISO 4217 code. |
 | **Status** | Status badge — code + label, coloured by family. |
-| **Review** | Coloured **review-flag badge** sourced from `UHALRTPSD`. Lit up when the row needs operator attention — typically a status the dispatcher could not auto-resolve, a manual edit flagged on save, or a downstream system marking the row for re-check. Empty when the flag is clear. The column is a quick scan target: a few yellow badges in an otherwise green page tell you exactly where to start. |
+| **Review** | Coloured **review badge** — *Pending* (awaiting customer service) or *Reviewed*. Lit up when the row needs operator attention — a status the dispatcher could not auto-resolve, a manual edit flagged on save, or a downstream system marking the row for re-check. It also lights up for an invoice **Deposited (200) with reason `NON_TRANSMISE`**: not an error, but the recipient has no active reception address, so the operator must forward it manually — other 200s keep a quiet dash. Empty when nothing is pending: a few badges in an otherwise clear page tell you exactly where to start. |
 
 A page-size selector at the bottom defaults to 50 rows per page; values up to 500 are accepted. The total count of matching invoices is shown next to the pagination controls.
 
@@ -32821,6 +32823,10 @@ Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parti
 ### Summary tab *(default)*
 
 The Summary tab shows a coloured **status badge** at the top, followed by **action buttons** (Edit UBL, Copy, Delete) on the right. Right under the badge, when the platform returned them, the current **rejection reason**, **expected action** and **status note** are shown inline, and the full **status message** sits in a collapsed group — expand it for the platform's long error text. The same values feed the custom actions as `{message}`, `{reasonLabel}`, `{actionLabel}` and `{actionNote}` placeholders (see [Actions](../management/actions.md#custom-actions)), with no list-view column needed.
+
+#### Fix buyer \{#fix-buyer\}
+
+The most frequent PA rejections are about the **buyer's identifiers** — SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49). A **Fix buyer** button opens a compact form pre-filled from the stored UBL, with the [INSEE company search](./edirectory.md) and the PPF electronic-address picker, to correct just those fields without re-editing the whole invoice. Only the changed identifiers are replaced inside the stored UBL — the rest of the document stays untouched — then the invoice is **revalidated on the spot**, an audit event records the old and new values in the history, and an option **resends to the PA** when validation passes. The button appears only while the invoice is still correctable; it is hidden once the PA has taken it over. Format safeguards (SIREN/SIRET length and coherence, VAT shape) and the PA-protection rule apply — the same checks as the `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` endpoint in the [API reference](/nomaubl/api-reference).
 
 Below the status, when the invoice is in a status that requires a follow-up action by the seller (e.g. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), a blue **Seller actions** banner appears with the recommended actions:
 
@@ -33264,7 +33270,7 @@ The modal is split into vertical sections:
 - **Document** — invoice number, type, profile ID, contract / buyer / order references.
 - **Header** — issue / due dates, currency, period start / end.
 - **Supplier** — pre-populates from the supplier directory (*UBL Defaults → Suppliers / Companies*); editable per invoice.
-- **Customer** — manual or via PPF directory lookup.
+- **Customer** — filled end to end from the company search: results show the badge, name and identifier on one line with the address below; searching a bare SIREN or SIRET lists every establishment (the same second INSEE lookup as [E-Directory](./edirectory.md)), and an optional SIRET field completes the SIREN. The electronic address is **not guessed** from the SIREN/SIRET — a PPF electronic-address list (opened automatically after picking a company, or anytime via the button next to the identifier field) shows the addresses registered for the SIREN with their active/disabled state; picking one fills the identifier and its scheme, then the list closes.
 - **Delivery** — optional delivery group.
 - **Payment** — payment means code, IBAN, BIC, mandate, terms.
 - **Allowances / charges** — document-level discounts / charges.
@@ -33790,6 +33796,7 @@ Open it from the sidebar — **Reports**. Access is granted per role (see [Acces
 
 The first tab is a ready-made pivot: **invoice counts** broken down by **activity code → status → rejection reason**, and split into columns by **transaction type** (`B2B`, `B2BINT`, `B2C`, `B2G`). Every level carries its count and a **percentage** of its parent — a reason as a share of its status, a status as a share of its activity, an activity as a share of the whole.
 
+- **Choose the grouping.** Chips above the report pick which levels build it — activity, status, rejection reason — in any combination (e.g. statistics per status only). Expansion, percentages and the Excel export all follow the chosen grouping.
 - **Expand / collapse** any activity or status to drill down; **subtotals** are shown at every level.
 - A status that has a single rejection reason renders as **one compact line** rather than an extra nested row.
 - The **period filter** at the top offers the same three date bases as the [Dashboard](./dashboard.md) — *Activity date*, *Document date* or *Archive date* — so the report reconciles with the figures shown elsewhere.
@@ -39195,6 +39202,29 @@ The exit code reflects failures, so a scheduler can detect a run that didn't ful
 
 ---
 
+## `-status-integrity` and `-status-order-check` — lifecycle checks \{#status-checks\}
+
+The two lifecycle maintenance checks — the same repairs as the [Retrieve Statuses](../sync/retrieve-statuses.md#integrity-checks) buttons and the scheduled [Lifecycle Checks](./lifecycle-checks.md) page — run from the CLI for a cron outside the web server.
+
+```bash
+# Integrity check — backfill PA statuses the poll missed
+java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--apply] [--notify]
+
+# Ordering check — re-sequence events recorded out of order
+java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [--apply]
+```
+
+| Flag | Effect |
+|---|---|
+| **`--lookback <N>`** | Integrity window in days (mutually exclusive with `--since`). |
+| **`--since <YYYY-MM-DD>`** | Integrity window start date. |
+| **`--apply`** | Apply the repairs; omit to report only (dry run). |
+| **`--notify`** | Fire the notification rules on backfilled transitions (integrity only). |
+
+Both repairs are idempotent and chronologically ordered — re-running over an already-clean lifecycle changes nothing.
+
+---
+
 ## `-fetch-single` — extract one document, then process it
 
 Equivalent of the *Application → Extract and Process* page. Extracts a single document from a source channel, drops the resulting file into `dirInput` (XML template) or `<dirInput>/ubl/` (UBL template), then immediately runs the matching pipeline. The XML-vs-UBL choice is **inferred from the template's `source` property** — no separate `processType` argument anymore.
@@ -40097,6 +40127,79 @@ The page reads and writes via the standard template endpoints; the dispatcher ex
 - **Use `role` over `user` whenever possible.** A role-based recipient survives staff changes; a `user`-based one needs an edit each time the assignee leaves. The role list on `F564251` is the source of truth.
 - **Disable, don't delete.** While iterating, flip the rule `off` instead of removing it — the catalogue keeps the history, the dispatcher skips it, and the test runner remains available.
 - **Read the inbox after a release.** Rules sometimes drift from the codes they reference (a status renamed in the catalogue, a reason retired) — the [Notifications](../application/notifications.md) page is the fastest cross-check that the production catalogue is still consistent with the rules in this page.
+
+---
+
+## Lifecycle Checks
+Source: https://docs.nomana-it.fr/nomaubl/management/lifecycle-checks/
+
+Schedule the NomaUBL lifecycle integrity check (backfill PA statuses the poll missed) and the ordering check (re-sequence events recorded out of order) to run daily without an operator — the same repairs as the Retrieve Statuses page buttons, plus the matching CLI modes for cron.
+
+The **Lifecycle Checks** page schedules the two lifecycle maintenance checks so they run **daily without an operator** — the same operations offered as buttons on the [Retrieve Statuses](../sync/retrieve-statuses.md#integrity-checks) page:
+
+- the **integrity check** — backfills the status events the Plateforme Agréée delivered but the regular poll missed;
+- the **ordering check** — re-sequences lifecycle events recorded out of order.
+
+Both repairs are **idempotent** and chronologically ordered: re-running a check over an already-clean lifecycle changes nothing, so a scheduled overlap is safe.
+
+---
+
+## At a glance
+
+---
+
+## How the page is used
+
+Each row is one **scheduled check** — several can coexist (for example a nightly repair plus a wider weekly audit in *report only* mode). **Add** creates one; the per-row card opens the editor.
+
+The scheduler runs in serve mode; changes take effect on the next scheduled run.
+
+---
+
+## Check fields
+
+| Field | Description |
+|---|---|
+| **Description** | Free text shown in the list (e.g. *Nightly reconciliation*). |
+| **Enabled** | When off, the check stays in the list but is skipped at run time. |
+| **Hour** / **Minute** | Time of day the check runs, in the server timezone. |
+| **Integrity check (missing statuses)** | When ticked, fetches every PA event of the window and backfills the ones missing from the lifecycle. |
+| **Compare PA events from the last N days** | The integrity window (default: `1`). The check re-fetches every PA event of the window; re-checking already-recorded events is a no-op, so a generous overlap is safe. |
+| **Ordering check (events out of order)** | When ticked, re-sequences lifecycle events recorded out of order — internal platform stages recorded after a standard status, and standard statuses in the wrong numeric order. |
+| **Repair automatically** | When ticked, the run applies the repairs; left off, it only **reports** what it would change, leaving the lifecycle untouched. |
+
+:::info[Report first, repair once confident]
+Start a new schedule in **report only** mode and read a few runs on [Retrieve Statuses](../sync/retrieve-statuses.md#integrity-checks) before enabling **Repair automatically** — the manual page shows exactly which events each mode would backfill or re-sequence.
+:::
+
+---
+
+## Command line
+
+The same two checks run from the CLI for a cron outside the web server:
+
+```bash
+# Integrity check — backfill missing PA statuses
+java -jar nomaubl.jar -status-integrity <configFile> [--lookback N] [--since YYYY-MM-DD] [--apply] [--notify]
+
+# Ordering check — re-sequence out-of-order events
+java -jar nomaubl.jar -status-order-check <configFile> [--apply]
+```
+
+| Flag | Effect |
+|---|---|
+| **`--lookback <N>`** | Integrity window in days (mutually exclusive with `--since`). |
+| **`--since <YYYY-MM-DD>`** | Integrity window start date. |
+| **`--apply`** | Apply the repairs; omit to report only. |
+| **`--notify`** | Fire the notification rules on backfilled transitions (integrity only). |
+
+---
+
+## Tips & best practices
+
+- **One nightly repair, one wider audit.** A `1`-day repair every night keeps the lifecycle current; a weekly `7`-day *report only* run catches anything the nightly window missed without changing data on its own.
+- **The repairs are the Retrieve Statuses buttons.** Nothing here does more than the manual [integrity and ordering checks](../sync/retrieve-statuses.md#integrity-checks) — the page only puts them on a timer.
+- **Leave `--notify` off for wide catch-up runs.** Backfilling a large window with notifications on can flood recipients with historical transitions; enable it only on the tight nightly window.
 
 ---
 
@@ -41825,9 +41928,14 @@ Source: https://docs.nomana-it.fr/nomaubl/release-notes/
 
 NomaUBL release notes — every user-visible change shipped in the platform, version by version, in reverse chronological order. Mirrors the in-app Release Notes page.
 
+# Release Notes
+
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
   Versions
+  2026.09.15.1 · 2026-09-15
+  2026.09.14.1 · 2026-09-14
+  2026.09.13.1 · 2026-09-13
   2026.09.12.1 · 2026-09-12
   2026.09.11.1 · 2026-09-11
   2026.09.10.1 · 2026-09-10
@@ -41919,6 +42027,56 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.09.15.1 — 2026-09-15 \{#v2026-09-15-1\}
+
+### Improvements
+
+- **Lifecycle checks on a schedule and from the command line.** The integrity check (backfill statuses the PA delivered but the poll missed) and the ordering check (re-sequence events recorded out of order) can now run without an operator. A new **Lifecycle checks** page in the Management group schedules them daily — pick the time, the checks to run, the integrity window (default: last day) and whether to repair automatically or report only; repairs are the same idempotent, chronologically-ordered operations as the Import Status page buttons. The CLI gains the matching modes for cron outside the web server: `-status-integrity` (with `--lookback`, `--since`, `--apply`, `--notify`) and `-status-order-check` (with `--apply`).
+- **Invoice list: Updated column carries the time.** The *Updated* value now includes the update time of day, so a list-view column formatted as `datetime` shows `2026-09-15 15:23:45` instead of the bare date. (The issue date keeps date-only — JDE stores no time for it.)
+- **Fix buyer identifiers without re-editing the invoice.** The most frequent PA rejections concern the buyer's SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49). A new **Fix buyer** button in the invoice window (shown only when the invoice is still correctable — hidden once the PA has taken it) opens a compact form pre-filled from the stored UBL, with the INSEE company search and the PPF electronic-address picker. Only the changed identifiers are replaced inside the stored UBL — the rest of the document stays untouched — then the invoice is revalidated on the spot, an audit event records the old and new values in the history, and an option resends to the PA when validation passes. Also available as `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` (documented in the API reference) with format safeguards (SIREN/SIRET length and coherence, VAT shape) and the PA-protection rule enforced.
+- **Review badge on deposited-but-not-transmitted invoices.** An invoice Deposited (200) with reason NON_TRANSMISE is not an error, but the recipient has no active reception address — the operator must forward it manually. The *Review* column now shows the Pending/Reviewed badge for this case too (other 200s keep the quiet dash).
+
+### Fixes
+
+- **Rule descriptions restored in Integration Errors.** The by-rule view (and the rule tooltips) had lost the description of every CIUS-FR, EXT-CTC-FR and CPRO rule: the description catalog still read the schematron files under their pre-upgrade names, and two label formats (CPRO's space separator, slash-labelled ids like `BR-FR-32-LEGALID`) escaped the parser. The catalog now follows the shipped schematron list automatically — a future schematron package upgrade can no longer strip the descriptions — and both label formats are parsed. Descriptions climb from 979 rules to 1205.
+- **Live process events readable.** In the IT dashboard's live feed, intermediate step events (PARSE, VALIDATION, DBINSERT…, SENDTOPA) overflowed their badge column and displayed clipped; the column is now sized for step names and every event renders as an aligned badge like START/END.
+
+---
+
+## 2026.09.14.1 — 2026-09-14 \{#v2026-09-14-1\}
+
+### Improvements
+
+- **Lifecycle events inserted in chronological order.** When a platform delivers (or the integrity check recovers) a status event older than events already recorded, it is now inserted at its chronological position — based on the event's platform timestamp — instead of being appended at the end, and the invoice's current status only changes when the event is genuinely the most recent. Recovering an old missing status can no longer knock an invoice back to a past state. Applies to the regular status poll and to the integrity check's apply.
+- **Ordering check extended to standard statuses.** The lifecycle ordering check now also detects standard statuses recorded in the wrong order (e.g. 202 *Reçue* before 200 *Déposée*) — the numeric order of standard codes is treated as canonical. The repair **re-sequences** the events into the correct order (nothing is deleted; internal statuses keep their positions) and realigns the invoice status, with the usual before/after preview and per-invoice selection.
+- **Report statistics: choose the grouping.** Chips above the report select which levels build it — activity, status, rejection reason, in any combination (e.g. statistics per status only). Expansion, percentages and the Excel export follow the chosen grouping.
+- **Invoice edit: customer picked end-to-end.** Search results are easier to read (badge, name and identifier on one line, address below); searching a bare SIREN or SIRET now lists all the establishments (same second INSEE lookup as E-Directory); an optional SIRET field completes the SIREN. The electronic address is no longer guessed from the SIREN/SIRET: a PPF directory list — opened automatically after selecting a company, or anytime via the button next to the identifier field — shows the electronic addresses registered for the SIREN with their active/disabled state; picking one fills the identifier and its scheme, then the list closes.
+- **Invoice window: history refreshed after saving.** The history tab (lifecycle events and validation errors) reloads right after a save — no need to close and reopen the window.
+- **E-Directory: "electronic addresses" spelled out.** The PPF directory lines are now labelled electronic addresses (section title, column, counter on the company card), making explicit what can actually receive an invoice.
+
+### Fixes
+
+- **Per-file BAR document-type default now saved.** In the XSL Editor's UBL defaults, overriding the default transaction type (Routage BAR) for a specific file reverted to B2B on reload — the override stored the code mappings but not the default. It now persists like the other per-file overrides.
+- **Group / Columns menus scroll.** The grid's Group-by and Columns menus are capped at half the window and scroll internally, so long column lists stay fully reachable.
+- **Edited invoices keep every original detail.** Saving from the edit window rebuilt the XML from the form alone: repeated elements not shown in the form (additional notes, references…) lost all but their first occurrence, invoice-line elements could come out in an order the XSD rejects, and the deliver-to identifier on lines lost its scheme (Schematron EXT-FR-FE-146). All three are fixed — content not shown in the form is preserved as-is, the line element order follows UBL 2.1, and identifier schemes survive the round-trip; the buyer's SIRET and SIREN identifications are carried through as proper buyer identifiers.
+
+---
+
+## 2026.09.13.1 — 2026-09-13 \{#v2026-09-13-1\}
+
+### Fixes
+
+- **BIP batch on multi-host JDE: extraction now scoped to the job's host.** Job numbers are only unique per execution host; extraction by number alone pulled every host's rows for that number — foreign reports' files (PDF, Excel…) landed in the input folder and the processed file could carry the wrong name. Extraction now filters on the host everywhere: the scheduler scan, the Fetch Input selection (which passes each job's host along) and explicit re-runs.
+- **BIP jobs follow their report's pipeline.** A job whose report filter maps to a UBL-source template is now processed through the UBL pipeline (correct file path, in-process run) instead of being handed to the XML subprocess — which failed with "file not found" while the batch still reported success. Missing-input errors are now emitted in the structured log format, so such a file counts as failed instead of green.
+- **"F – Force send" honoured for UBL sources.** A document type set to *Force send* in Document Types now sends on the UBL pipeline exactly as on the XML pipeline (warnings allowed, validation errors still block); it previously fell back silently to the global e-invoicing setting and nothing was sent.
+
+### Improvements
+
+- **API request log shows the multipart detail.** The DEBUG line for a connector call with a multipart body now lists each resolved part (file parts as their path, text parts with their final values) — a PA rejecting a body field can be diagnosed from the log instead of guessing.
+- **E-Directory: Esker directory format supported.** The routing-lines listing also understands numeric reachability flags (Esker's `HasAssignedPlatform` 1/0) in addition to true/false.
 
 ---
 
@@ -44887,17 +45045,18 @@ When the PA call fails for transport reasons (network, timeout, credentials), th
 
 ---
 
-## Integrity checks
-
-Beyond the incremental retrieval, the page offers two on-demand checks that reconcile the recorded lifecycle with the platform and with itself. Both run in the **background** and are safe to re-run at any time.
+## Integrity checks \{#integrity-checks\}
+Beyond the incremental retrieval, the page offers two on-demand checks that reconcile the recorded lifecycle with the platform and with itself. Both run in the **background** and are safe to re-run at any time. To run them daily without an operator, schedule them on the [Lifecycle Checks](../management/lifecycle-checks.md) page (or the matching CLI modes).
 
 ### Missing statuses
 
 Pick a date and the check compares **every platform event since then** with the lifecycle already recorded. Anything missing is listed in a **selectable table** — apply all of them or only the rows you pick, optionally firing the [notification rules](../management/notification-rules.md) (off by default). Events that don't apply are reported **separately** so nothing is silently changed: an obsolete internal status (a platform stage the invoice has already moved past), an unknown invoice, or a code with no mapping.
 
+A recovered event is inserted at its **chronological position** — from the event's platform timestamp — not appended at the end, and the invoice's current status only moves when the recovered event is genuinely the most recent. Backfilling an old missing status therefore can't knock an invoice back to a past state. The same chronological insertion applies to the regular status poll.
+
 ### Lifecycle ordering
 
-The second check scans the database for lifecycle rows that are out of order — an internal platform stage recorded **after** a standard lifecycle status — and for **invalid codes** (raw platform text stored by a mapping mistake). Selected rows are removed in one click, and the invoice's current status is realigned with its last remaining event.
+The second check scans the database for lifecycle rows that are **out of order** — an internal platform stage recorded after a standard status, and standard statuses recorded in the wrong order (e.g. `202` *Reçue* before `200` *Déposée*, the numeric order of standard codes being canonical) — plus **invalid codes** (raw platform text stored by a mapping mistake). The repair **re-sequences** the events into the correct order (nothing is deleted; internal statuses keep their positions) and realigns the invoice's current status, with a before/after preview and per-invoice selection.
 
 ---
 

@@ -195,17 +195,18 @@ When the PA call fails for transport reasons (network, timeout, credentials), th
 
 ---
 
-## Integrity checks
-
-Beyond the incremental retrieval, the page offers two on-demand checks that reconcile the recorded lifecycle with the platform and with itself. Both run in the **background** and are safe to re-run at any time.
+## Integrity checks \{#integrity-checks\}
+Beyond the incremental retrieval, the page offers two on-demand checks that reconcile the recorded lifecycle with the platform and with itself. Both run in the **background** and are safe to re-run at any time. To run them daily without an operator, schedule them on the [Lifecycle Checks](../management/lifecycle-checks.md) page (or the matching CLI modes).
 
 ### Missing statuses
 
 Pick a date and the check compares **every platform event since then** with the lifecycle already recorded. Anything missing is listed in a **selectable table** — apply all of them or only the rows you pick, optionally firing the [notification rules](../management/notification-rules.md) (off by default). Events that don't apply are reported **separately** so nothing is silently changed: an obsolete internal status (a platform stage the invoice has already moved past), an unknown invoice, or a code with no mapping.
 
+A recovered event is inserted at its **chronological position** — from the event's platform timestamp — not appended at the end, and the invoice's current status only moves when the recovered event is genuinely the most recent. Backfilling an old missing status therefore can't knock an invoice back to a past state. The same chronological insertion applies to the regular status poll.
+
 ### Lifecycle ordering
 
-The second check scans the database for lifecycle rows that are out of order — an internal platform stage recorded **after** a standard lifecycle status — and for **invalid codes** (raw platform text stored by a mapping mistake). Selected rows are removed in one click, and the invoice's current status is realigned with its last remaining event.
+The second check scans the database for lifecycle rows that are **out of order** — an internal platform stage recorded after a standard status, and standard statuses recorded in the wrong order (e.g. `202` *Reçue* before `200` *Déposée*, the numeric order of standard codes being canonical) — plus **invalid codes** (raw platform text stored by a mapping mistake). The repair **re-sequences** the events into the correct order (nothing is deleted; internal statuses keep their positions) and realigns the invoice's current status, with a before/after preview and per-invoice selection.
 
 ---
 

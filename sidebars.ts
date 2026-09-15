@@ -557,6 +557,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/management/pdf-templates',
         'nomaubl/management/actions',
         'nomaubl/management/notification-rules',
+        'nomaubl/management/lifecycle-checks',
         'nomaubl/management/file-versions',
         'nomaubl/management/processing-log',
         'nomaubl/management/command-line',

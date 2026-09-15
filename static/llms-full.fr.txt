@@ -26489,20 +26489,20 @@ La requête est envoyée à `recherche-entreprises.api.gouv.fr` côté serveur ;
 
 ## Résultats
 
-Les résultats sont regroupés **par société** : une carte repliée par **SIREN**, avec la raison sociale, l'adresse du siège, l'état administratif INSEE et une **synthèse annuaire** — combien d'identifiants le PPF détient pour la société et combien sont actifs. Dépliez une carte pour révéler deux groupes :
+Les résultats sont regroupés **par société** : une carte repliée par **SIREN**, avec la raison sociale, l'adresse du siège, l'état administratif INSEE et une **synthèse des adresses électroniques** — combien d'adresses électroniques le PPF détient pour la société et combien sont actives. Dépliez une carte pour révéler deux groupes :
 
 ### Établissements (INSEE)
 
 Une liste repliable des établissements de la société — chaque **SIRET** avec son adresse et son état administratif, issus du registre INSEE. La recherche par SIREN ou SIRET liste désormais **tous** les établissements de la société (une seconde interrogation INSEE par raison sociale complète ce que la recherche numérique omet).
 
-### Lignes annuaire PPF
+### Adresses électroniques
 
 Chaque identifiant enregistré pour le SIREN sur le PPF, **quelle que soit sa forme** — un SIREN, un SIREN + SIRET, un code de routage ou un suffixe — avec son état **actif / désactivé**. Les identifiants à suffixe, comme `422250845_FGX`, y figurent aussi — une forme que le contrôle ligne à ligne précédent ne savait pas faire apparaître.
 
 ✓Actif— Enregistré et joignable sur le PPF ; une facture adressée à cet identifiant est distribuée.
 ✕Désactivé— Enregistré mais pas joignable actuellement ; l'adresser renverrait une erreur de routage (REJ_ADR).
 
-Le listage passe par l'endpoint `directory-check-siren` du connecteur, qui renvoie les lignes complètes avec un mappage de réponse par endpoint (formats ATGP et Yooz pris en charge). Quand cet endpoint n'est pas configuré, la page **l'indique** au lieu de deviner — réglez-le sous [Configuration → Système → e-directory](../configuration/system/edirectory.md). Le contrôle annuaire au moment du traitement est inchangé ; l'ancien endpoint `directory-check-siret` est obsolète.
+Le listage passe par l'endpoint `directory-check-siren` du connecteur, qui renvoie les lignes complètes avec un mappage de réponse par endpoint (formats ATGP, Yooz et Esker pris en charge — y compris les indicateurs numériques comme le `HasAssignedPlatform` 1/0 d'Esker, en plus de true/false). Quand cet endpoint n'est pas configuré, la page **l'indique** au lieu de deviner — réglez-le sous [Configuration → Système → e-directory](../configuration/system/edirectory.md). Le contrôle annuaire au moment du traitement est inchangé ; l'ancien endpoint `directory-check-siret` est obsolète.
 
 ---
 
@@ -26516,7 +26516,7 @@ Au-dessus des résultats, un petit libellé indique le nombre de sociétés renv
 
 - **Rechercher d'abord par nom, puis affiner.** INSEE retourne l'entité juridique (SIREN) et ses établissements (SIRET) — sélectionner le bon SIRET évite l'erreur courante « bon SIREN, mauvais établissement » à l'émission d'une facture.
 - **Une ligne désactivée n'est pas toujours définitive.** Un acheteur peut ne pas être encore enregistré, ou un identifiant précis pas encore activé ; lui demander de s'inscrire avant de retenter. L'état de l'annuaire évolue chaque jour à mesure que les sociétés s'inscrivent sur le PPF.
-- **Cibler l'identifiant exact, pas seulement le SIREN.** Les lignes d'annuaire montrent quelle forme est réellement joignable — un SIREN seul, un SIREN + SIRET ou un code à suffixe. Adressez la facture à une ligne **active** ; une société peut en avoir plusieurs, seules certaines actives.
+- **Cibler l'identifiant exact, pas seulement le SIREN.** Les lignes d'adresses électroniques montrent quelle forme est réellement joignable — un SIREN seul, un SIREN + SIRET ou un code à suffixe. Adressez la facture à une ligne **active** ; une société peut en avoir plusieurs, seules certaines actives.
 - **Vérifier l'état de l'établissement.** Un établissement cessé ne peut pas recevoir de facture, même si la société apparaît dans l'annuaire. Contrôler l'état INSEE de l'établissement avant de se fier à un mapping d'adresse électronique.
 - **Si les lignes n'apparaissent pas, câbler l'endpoint.** Une liste d'annuaire vide avec la note « non configuré » signale un connecteur sans endpoint `directory-check-siren` — réglez-le sous *Configuration → Système → e-directory*, avec le mappage de réponse de votre plateforme (ATGP, Yooz).
 
@@ -27267,6 +27267,8 @@ Le tableau affiche une ligne par facture. Tri par défaut : numéro de document 
 
 Depuis 2026.05.10, la grille passe par **DataTableV2** en mode piloté par spec : la forme des colonnes — libellés, format, alignement, largeur et la liste blanche de filtres — vient de la spec `view.invoices` stockée sur `db-nomaubl` (avec un défaut embarqué dans le JAR). Ajouter ou retirer des colonnes se fait depuis l'éditeur [Vues de liste](../configuration/list-views.md) — aucune modification de code n'est nécessaire quand la colonne vit déjà dans le catalogue.
 
+La valeur **Mise à jour** porte l'heure : une colonne *Mise à jour* au format `datetime` dans la spec affiche `2026-09-15 15:23:45` au lieu de la seule date. (La date d'émission reste sans heure — JDE n'en stocke pas pour elle.)
+
   
     DocDctKcoNuméro UBLDate d'émissionClient
     Total HTTotal TTCDeviseStatut
@@ -27307,7 +27309,7 @@ Depuis 2026.05.10, la grille passe par **DataTableV2** en mode piloté par spec 
 | **Total TTC** | Montant total toutes taxes comprises. |
 | **Devise** | Code ISO 4217. |
 | **Statut** | Badge de statut — code + libellé, coloré par famille. |
-| **Revue** | **Badge de drapeau de revue** coloré, alimenté par `UHALRTPSD`. Allumé quand la ligne demande une attention opérateur — typiquement un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Vide quand le drapeau est libre. La colonne se balaie d'un coup d'œil : quelques badges jaunes dans une page sinon verte indiquent précisément par où commencer. |
+| **Suivi** | **Badge de suivi** coloré — *En attente* (du service client) ou *Traité*. Allumé quand la ligne demande une attention opérateur — un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Il s'allume aussi pour une facture **Déposée (200) avec le motif `NON_TRANSMISE`** : pas une erreur, mais le destinataire n'a pas d'adresse de réception active, l'opérateur doit donc la transmettre manuellement — les autres 200 gardent un tiret discret. Vide quand rien n'est en attente : quelques badges dans une page sinon nette indiquent précisément par où commencer. |
 
 Un sélecteur de taille de page en bas du tableau est réglé sur 50 par défaut ; des valeurs jusqu'à 500 sont acceptées. Le nombre total de factures correspondant aux filtres apparaît à côté de la pagination.
 
@@ -27339,7 +27341,7 @@ Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection
 
 ### Retraitement \{#reprocess\}
 
-Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures éligibles au retraitement. Le retraitement **reconstruit** une facture à partir du XML JDE archivé lors du premier dépôt — en régénérant la facture électronique, le PDF et le XML — pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`). La facture conserve son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont éligibles ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
+Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures concernées par le retraitement. Le retraitement **reconstruit** une facture à partir du XML JDE archivé lors du premier dépôt — en régénérant la facture électronique, le PDF et le XML — pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`). La facture conserve son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont concernées ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
 
 ### Export
 
@@ -27371,6 +27373,10 @@ Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête 
 ### Onglet Résumé *(défaut)*
 
 L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
+
+#### Corriger destinataire \{#fix-buyer\}
+
+Les rejets PA les plus fréquents portent sur les **identifiants de l'acheteur** — SIREN (BT-47), SIRET (BT-46), TVA intracommunautaire (BT-48) et adresse électronique (BT-49). Un bouton **Corriger destinataire** ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la [recherche d'entreprises INSEE](./edirectory.md) et le sélecteur d'adresses électroniques du PPF, pour corriger uniquement ces champs sans rééditer toute la facture. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est **revalidée immédiatement**, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option **renvoie à la PA** si la validation réussit. Le bouton n'apparaît que tant que la facture est encore corrigeable ; il est masqué dès que la PA l'a prise en charge. Des garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA s'appliquent — les mêmes contrôles que l'endpoint `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` de la [référence API](/nomaubl/api-reference).
 
 Sous le statut, quand la facture est dans un statut qui demande une action côté vendeur (par ex. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), un bandeau bleu **Actions vendeur** propose les actions recommandées :
 
@@ -27814,7 +27820,7 @@ La modale est divisée en sections verticales :
 - **Document** — numéro, type de facture, profile ID, références contrat / acheteur / commande.
 - **En-tête** — dates d'émission / échéance, devise, période de début / fin.
 - **Fournisseur** — alimenté depuis l'annuaire des fournisseurs (*UBL Defaults → Suppliers / Companies*) ; modifiable par facture.
-- **Client** — saisie manuelle ou recherche via l'annuaire PPF.
+- **Client** — renseigné de bout en bout depuis la recherche d'entreprise : les résultats affichent le badge, le nom et l'identifiant sur une ligne, l'adresse en dessous ; une recherche par SIREN ou SIRET seul liste tous les établissements (même seconde interrogation INSEE que l'[E-Directory](./edirectory.md)), et un champ SIRET facultatif complète le SIREN. L'adresse électronique n'est **pas déduite** du SIREN/SIRET — une liste d'adresses électroniques du PPF (ouverte automatiquement après le choix d'une entreprise, ou à tout moment via le bouton à côté du champ identifiant) présente les adresses enregistrées pour le SIREN avec leur état actif/désactivé ; en choisir une renseigne l'identifiant et son schéma, puis la liste se referme.
 - **Livraison** — groupe livraison facultatif.
 - **Paiement** — code de moyen de paiement, IBAN, BIC, mandat, conditions.
 - **Remises / charges** — remises / charges au niveau document.
@@ -28340,6 +28346,7 @@ Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [A
 
 Le premier onglet est un tableau croisé prêt à l'emploi : le **nombre de factures** ventilé par **code activité → statut → motif de rejet**, réparti en colonnes par **type de transaction** (`B2B`, `B2BINT`, `B2C`, `B2G`). Chaque niveau porte son effectif et un **pourcentage** de son parent — un motif en part de son statut, un statut en part de son activité, une activité en part du total.
 
+- **Choisissez le regroupement.** Des puces au-dessus du rapport choisissent les niveaux qui le composent — activité, statut, motif de rejet — dans n'importe quelle combinaison (par ex. des statistiques par statut uniquement). Le dépliage, les pourcentages et l'export Excel suivent le regroupement choisi.
 - **Dépliez / repliez** une activité ou un statut pour descendre dans le détail ; les **sous-totaux** apparaissent à chaque niveau.
 - Un statut à motif de rejet unique tient sur **une seule ligne**, sans ligne imbriquée supplémentaire.
 - Le **filtre de période** en haut propose les trois mêmes bases de dates que le [Tableau de bord](./dashboard.md) — *Date d'activité*, *Date document* ou *Date d'archivage* — pour que le rapport se recoupe avec les chiffres affichés ailleurs.
@@ -33745,6 +33752,29 @@ Le code de sortie reflète les échecs : un ordonnanceur peut ainsi détecter un
 
 ---
 
+## `-status-integrity` et `-status-order-check` — contrôles du cycle de vie \{#status-checks\}
+
+Les deux contrôles de maintenance du cycle de vie — les mêmes réparations que les boutons de [Récupérer les statuts](../sync/retrieve-statuses.md#integrity-checks) et la page planifiée [Contrôles du cycle de vie](./lifecycle-checks.md) — s'exécutent en CLI pour un cron hors serveur web.
+
+```bash
+# Contrôle d'intégrité — compléter les statuts PA manqués par l'interrogation
+java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--apply] [--notify]
+
+# Contrôle d'ordre — réordonner les événements enregistrés dans le désordre
+java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [--apply]
+```
+
+| Option | Effet |
+|---|---|
+| **`--lookback <N>`** | Fenêtre d'intégrité en jours (exclusive avec `--since`). |
+| **`--since <YYYY-MM-DD>`** | Date de début de la fenêtre d'intégrité. |
+| **`--apply`** | Applique les réparations ; sans elle, rapport seul (simulation). |
+| **`--notify`** | Déclenche les règles de notification sur les transitions complétées (intégrité seulement). |
+
+Les deux réparations sont idempotentes et ordonnées chronologiquement — les relancer sur un cycle de vie déjà propre ne change rien.
+
+---
+
 ## `-fetch-single` — extraire un document, puis le traiter
 
 Équivalent de la page *Processing → Extraction et traitement*. Extrait un document d'un canal source, dépose le fichier résultant dans `dirInput` (modèle XML) ou `<dirInput>/ubl/` (modèle UBL), puis lance immédiatement le pipeline correspondant. Le choix XML ou UBL est **déduit de la propriété `source` du modèle** — l'argument `processType` disparaît.
@@ -34647,6 +34677,79 @@ La page lit et écrit via les endpoints de templates standards ; le dispatcher p
 - **Privilégier `role` à `user`.** Un destinataire basé sur un rôle survit aux changements d'effectif ; un destinataire `user` demande une modification à chaque départ. La liste des rôles dans `F564251` est la source de vérité.
 - **Désactiver plutôt que supprimer.** En cours d'itération, basculer la règle sur `off` au lieu de la retirer — le catalogue conserve l'historique, le dispatcher ignore la règle, et le panneau de test reste disponible.
 - **Vérifier la boîte de réception après une livraison.** Les règles peuvent finir par utiliser des codes obsolètes (un statut renommé dans le catalogue, un motif retiré) — la page [Notifications](../application/notifications.md) est le contrôle croisé le plus rapide pour voir la cohérence entre le catalogue de production et les règles définies ici.
+
+---
+
+## Contrôles du cycle de vie
+Source: https://docs.nomana-it.fr/fr/nomaubl/management/lifecycle-checks/
+
+Planifier le contrôle d'intégrité (récupérer les statuts PA manqués par l'interrogation) et le contrôle d'ordre (réordonner les événements enregistrés dans le désordre) pour une exécution quotidienne sans opérateur — les mêmes réparations que les boutons de la page Récupérer les statuts, avec les modes CLI équivalents pour un cron.
+
+La page **Contrôles du cycle de vie** planifie les deux contrôles de maintenance pour qu'ils s'exécutent **chaque jour sans opérateur** — les mêmes opérations que les boutons de la page [Récupérer les statuts](../sync/retrieve-statuses.md#integrity-checks) :
+
+- le **contrôle d'intégrité** — récupère les événements de statut livrés par la Plateforme Agréée mais manqués par l'interrogation régulière ;
+- le **contrôle d'ordre** — réordonne les événements de cycle de vie enregistrés dans le désordre.
+
+Les deux réparations sont **idempotentes** et ordonnées chronologiquement : réexécuter un contrôle sur un cycle de vie déjà propre ne change rien, un recouvrement planifié est donc sans risque.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Utilisation de la page
+
+Chaque ligne est un **contrôle planifié** — plusieurs peuvent coexister (par exemple une réparation nocturne plus un audit hebdomadaire plus large en mode *rapport seul*). **Ajouter** en crée un ; la carte de chaque ligne ouvre l'éditeur.
+
+Le planificateur tourne en mode serveur ; les changements prennent effet à la prochaine exécution planifiée.
+
+---
+
+## Champs d'un contrôle
+
+| Champ | Description |
+|---|---|
+| **Description** | Texte libre affiché dans la liste (par ex. *Réconciliation nocturne*). |
+| **Enabled** | Décoché, le contrôle reste dans la liste mais est sauté à l'exécution. |
+| **Hour** / **Minute** | Heure d'exécution, dans le fuseau du serveur. |
+| **Integrity check (missing statuses)** | Coché, récupère tous les événements PA de la fenêtre et complète ceux qui manquent au cycle de vie. |
+| **Compare PA events from the last N days** | La fenêtre d'intégrité (défaut : `1`). Le contrôle relit tous les événements PA de la fenêtre ; revérifier des événements déjà enregistrés est sans effet, un recouvrement large est donc sûr. |
+| **Ordering check (events out of order)** | Coché, réordonne les événements enregistrés dans le désordre — étapes internes de plateforme placées après un statut standard, et statuts standard dans le mauvais ordre numérique. |
+| **Repair automatically** | Coché, l'exécution applique les réparations ; sinon, elle **signale** seulement ce qu'elle changerait, sans toucher au cycle de vie. |
+
+:::info[Signaler d'abord, réparer une fois en confiance]
+Démarrez une planification en mode **rapport seul** et lisez quelques exécutions sur [Récupérer les statuts](../sync/retrieve-statuses.md#integrity-checks) avant d'activer **Repair automatically** — la page manuelle montre exactement quels événements chaque mode compléterait ou réordonnerait.
+:::
+
+---
+
+## Ligne de commande
+
+Les deux mêmes contrôles s'exécutent en CLI pour un cron hors serveur web :
+
+```bash
+# Contrôle d'intégrité — compléter les statuts PA manquants
+java -jar nomaubl.jar -status-integrity <configFile> [--lookback N] [--since YYYY-MM-DD] [--apply] [--notify]
+
+# Contrôle d'ordre — réordonner les événements dans le désordre
+java -jar nomaubl.jar -status-order-check <configFile> [--apply]
+```
+
+| Option | Effet |
+|---|---|
+| **`--lookback <N>`** | Fenêtre d'intégrité en jours (exclusive avec `--since`). |
+| **`--since <YYYY-MM-DD>`** | Date de début de la fenêtre d'intégrité. |
+| **`--apply`** | Applique les réparations ; sans elle, rapport seul. |
+| **`--notify`** | Déclenche les règles de notification sur les transitions complétées (intégrité seulement). |
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Une réparation nocturne, un audit plus large.** Une réparation d'`1` jour chaque nuit garde le cycle de vie à jour ; une exécution hebdomadaire de `7` jours en *rapport seul* rattrape ce que la fenêtre nocturne a manqué, sans rien modifier d'elle-même.
+- **Les réparations sont les boutons de Récupérer les statuts.** Rien ici ne fait plus que les [contrôles d'intégrité et d'ordre](../sync/retrieve-statuses.md#integrity-checks) manuels — la page ne fait que les mettre sur minuterie.
+- **Laissez `--notify` désactivé pour les grands rattrapages.** Compléter une large fenêtre avec les notifications actives peut inonder les destinataires de transitions historiques ; ne l'activez que sur la fenêtre nocturne étroite.
 
 ---
 
@@ -36375,9 +36478,14 @@ Source: https://docs.nomana-it.fr/fr/nomaubl/release-notes/
 
 Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré dans la plateforme, version par version, dans l'ordre antéchronologique. Reflète la page Notes de version disponible dans l'application.
 
+# Notes de version
+
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
+  2026.09.15.1 · 2026-09-15
+  2026.09.14.1 · 2026-09-14
+  2026.09.13.1 · 2026-09-13
   2026.09.12.1 · 2026-09-12
   2026.09.11.1 · 2026-09-11
   2026.09.10.1 · 2026-09-10
@@ -36469,6 +36577,56 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.09.15.1 — 2026-09-15 \{#v2026-09-15-1\}
+
+### Améliorations
+
+- **Contrôles du cycle de vie planifiés et en ligne de commande.** Le contrôle d'intégrité (récupération des statuts livrés par la PA mais absents du cycle de vie) et le contrôle d'ordre (réordonnancement des événements enregistrés dans le désordre) s'exécutent désormais sans opérateur. Une nouvelle page **Contrôles du cycle de vie** dans le groupe Gestion les planifie chaque jour — heure, contrôles à exécuter, fenêtre d'intégrité (par défaut : le dernier jour) et réparation automatique ou rapport seul ; les réparations sont les mêmes opérations idempotentes et ordonnées chronologiquement que les boutons de la page Statut d'import. La ligne de commande gagne les modes équivalents pour un cron hors serveur web : `-status-integrity` (avec `--lookback`, `--since`, `--apply`, `--notify`) et `-status-order-check` (avec `--apply`).
+- **Liste des factures : la colonne Mise à jour porte l'heure.** La valeur *Mise à jour* inclut désormais l'heure de modification : une colonne au format `datetime` affiche `2026-09-15 15:23:45` au lieu de la seule date. (La date d'émission reste sans heure — JDE n'en stocke pas pour elle.)
+- **Corriger les identifiants de l'acheteur sans rééditer la facture.** Les rejets PA les plus fréquents concernent le SIREN (BT-47), le SIRET (BT-46), la TVA intracommunautaire (BT-48) et l'adresse électronique (BT-49) de l'acheteur. Un nouveau bouton **Corriger destinataire** dans la fenêtre facture (affiché seulement quand la facture est encore corrigeable — masqué dès que la PA l'a prise en charge) ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la recherche d'entreprises INSEE et le sélecteur d'adresses électroniques de l'annuaire PPF. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est revalidée immédiatement, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option renvoie à la PA si la validation réussit. Également disponible en `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` (documenté dans la référence API) avec garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA appliquée.
+- **Badge Suivi sur les factures déposées non transmises.** Une facture Déposée (200) avec le motif NON_TRANSMISE n'est pas une erreur, mais le destinataire n'a pas d'adresse de réception active — l'opérateur doit la transmettre manuellement. La colonne *Suivi* affiche désormais le badge En attente/Traité pour ce cas aussi (les autres 200 gardent le tiret discret).
+
+### Corrections
+
+- **Descriptions des règles rétablies dans les erreurs d'intégration.** La vue par règle (et les infobulles) avait perdu la description de toutes les règles CIUS-FR, EXT-CTC-FR et CPRO : le catalogue de descriptions lisait encore les schematrons sous leurs noms d'avant mise à niveau, et deux formats d'étiquette (séparateur espace du CPRO, identifiants à barre oblique comme `BR-FR-32-LEGALID`) échappaient à l'analyse. Le catalogue suit désormais automatiquement la liste des schematrons livrés — une future mise à niveau du paquet schematron ne peut plus effacer les descriptions — et les deux formats sont pris en charge. Les descriptions passent de 979 règles à 1205.
+- **Événements de traitement en direct lisibles.** Dans le fil en direct du tableau de bord IT, les événements d'étape intermédiaires (PARSE, VALIDATION, DBINSERT…, SENDTOPA) débordaient de leur colonne et s'affichaient tronqués ; la colonne est désormais dimensionnée pour les noms d'étape et chaque événement s'affiche en badge aligné comme START/END.
+
+---
+
+## 2026.09.14.1 — 2026-09-14 \{#v2026-09-14-1\}
+
+### Améliorations
+
+- **Événements de cycle de vie insérés dans l'ordre chronologique.** Quand une plateforme livre (ou que le contrôle d'intégrité récupère) un statut plus ancien que les événements déjà enregistrés, il s'insère désormais à sa position chronologique — d'après l'horodatage plateforme de l'événement — au lieu d'être ajouté en fin de liste, et le statut courant de la facture ne change que si l'événement est réellement le plus récent. Récupérer un statut manquant ancien ne peut plus ramener une facture à un état passé. S'applique à la récupération régulière des statuts et à l'application du contrôle d'intégrité.
+- **Contrôle d'ordre étendu aux statuts standard.** Le contrôle d'ordre du cycle de vie détecte désormais aussi les statuts standard enregistrés dans le mauvais ordre (par ex. 202 *Reçue* avant 200 *Déposée*) — l'ordre numérique des codes standard fait référence. La réparation **réordonne** les événements (rien n'est supprimé ; les statuts internes gardent leur position) et réaligne le statut de la facture, avec l'aperçu avant/après habituel et la sélection par facture.
+- **Statistiques : regroupement au choix.** Des puces au-dessus du rapport choisissent les niveaux qui le composent — activité, statut, motif de rejet, dans n'importe quelle combinaison (par ex. des statistiques par statut uniquement). Le dépliage, les pourcentages et l'export Excel suivent le regroupement choisi.
+- **Édition de facture : sélection du client de bout en bout.** Les résultats de recherche sont plus lisibles (badge, nom et identifiant sur une ligne, adresse en dessous) ; la recherche par SIREN ou SIRET seul liste désormais tous les établissements (même seconde interrogation INSEE que l'E-Annuaire) ; un champ SIRET facultatif complète le SIREN. L'adresse électronique n'est plus déduite du SIREN/SIRET : une liste annuaire PPF — ouverte automatiquement après le choix d'une entreprise, ou à tout moment via le bouton à côté du champ identifiant — présente les adresses électroniques enregistrées pour le SIREN avec leur état actif/désactivé ; en choisir une renseigne l'identifiant et son schéma, puis la liste se referme.
+- **Fenêtre facture : historique rafraîchi après enregistrement.** L'onglet historique (événements de cycle de vie et erreurs de validation) se recharge aussitôt après un enregistrement — plus besoin de fermer puis rouvrir la fenêtre.
+- **E-Annuaire : « adresses électroniques » en toutes lettres.** Les lignes de l'annuaire PPF s'intitulent désormais adresses électroniques (titre de section, colonne, compteur de la carte entreprise) : ce qui peut réellement recevoir une facture est explicite.
+
+### Corrections
+
+- **Défaut BAR par fichier enregistré.** Dans les valeurs par défaut UBL de l'éditeur XSL, le remplacement du type de transaction par défaut (Routage BAR) pour un fichier donné revenait à B2B au rechargement — le remplacement conservait les transcodifications mais pas le défaut. Il persiste désormais comme les autres remplacements par fichier.
+- **Menus Grouper / Colonnes défilants.** Les menus Grouper et Colonnes de la grille sont limités à la moitié de la fenêtre et défilent, les longues listes de colonnes restent entièrement accessibles.
+- **Les factures modifiées conservent tout leur contenu d'origine.** L'enregistrement depuis la fenêtre d'édition reconstruisait le XML à partir du seul formulaire : les éléments répétés absents du formulaire (notes supplémentaires, références…) perdaient toutes leurs occurrences sauf la première, l'ordre des éléments de ligne pouvait violer le XSD, et l'identifiant du lieu de livraison à la ligne perdait son schéma (Schematron EXT-FR-FE-146). Les trois cas sont corrigés — le contenu absent du formulaire est préservé tel quel, l'ordre des éléments de ligne respecte UBL 2.1 et les schémas d'identifiants survivent à l'aller-retour ; les identifications SIRET et SIREN de l'acheteur sont reprises comme identifiants acheteur à part entière.
+
+---
+
+## 2026.09.13.1 — 2026-09-13 \{#v2026-09-13-1\}
+
+### Corrections
+
+- **Batch BIP sur JDE multi-hôtes : extraction limitée à l'hôte du job.** Les numéros de job ne sont uniques que par hôte d'exécution ; une extraction par numéro seul ramenait les lignes de tous les hôtes — des fichiers d'autres états (PDF, Excel…) atterrissaient dans le répertoire d'entrée et le fichier traité pouvait porter un mauvais nom. L'extraction filtre désormais l'hôte partout : balayage du planificateur, sélection de la page Récupération (qui transmet l'hôte de chaque job) et relances explicites.
+- **Les jobs BIP suivent le pipeline de leur état.** Un job dont le filtre d'état pointe vers un modèle source UBL passe désormais par le pipeline UBL (bon chemin de fichier, exécution en mémoire) au lieu d'être confié au sous-processus XML — qui échouait en « fichier introuvable » pendant que le lot s'affichait réussi. Les erreurs de fichier manquant sortent maintenant au format de journal structuré : un tel fichier compte en échec au lieu de passer au vert.
+- **« F – Envoi forcé » respecté pour les sources UBL.** Un type de document en *Envoi forcé* dans Types de documents envoie désormais sur le pipeline UBL comme sur le pipeline XML (avertissements tolérés, erreurs de validation toujours bloquantes) ; il retombait silencieusement sur le réglage e-invoicing global et rien ne partait.
+
+### Améliorations
+
+- **Le journal des requêtes API détaille le multipart.** La ligne DEBUG d'un appel connecteur à corps multipart liste chaque partie résolue (fichiers par leur chemin, champs texte avec leurs valeurs finales) — un rejet de la PA sur un champ du corps se diagnostique dans le journal au lieu de deviner.
+- **E-Directory : format d'annuaire Esker pris en charge.** Le listage des lignes d'adressage comprend aussi les indicateurs numériques (le `HasAssignedPlatform` 1/0 d'Esker) en plus de true/false.
 
 ---
 
@@ -39639,17 +39797,18 @@ Quand un appel à la PA échoue pour des raisons de transport (réseau, expirati
 
 ---
 
-## Contrôles d'intégrité
-
-Au-delà de la récupération incrémentale, la page propose deux contrôles à la demande qui réconcilient le cycle de vie enregistré avec la plateforme et avec lui-même. Les deux s'exécutent en **arrière-plan** et sont réexécutables sans risque.
+## Contrôles d'intégrité \{#integrity-checks\}
+Au-delà de la récupération incrémentale, la page propose deux contrôles à la demande qui réconcilient le cycle de vie enregistré avec la plateforme et avec lui-même. Les deux s'exécutent en **arrière-plan** et sont réexécutables sans risque. Pour les exécuter chaque jour sans opérateur, planifiez-les depuis la page [Contrôles du cycle de vie](../management/lifecycle-checks.md) (ou les modes CLI équivalents).
 
 ### Statuts manquants
 
 Choisissez une date : le contrôle compare **tous les événements de la plateforme depuis celle-ci** avec le cycle de vie déjà enregistré. Ce qui manque s'affiche dans un **tableau à sélection** — appliquez tout ou seulement les lignes retenues, avec déclenchement optionnel des [règles de notification](../management/notification-rules.md) (désactivé par défaut). Les événements non applicables sont signalés **à part**, pour ne rien changer en silence : un statut interne obsolète (étape plateforme déjà dépassée), une facture inconnue, ou un code sans mappage.
 
+Un événement récupéré s'insère à sa **position chronologique** — d'après son horodatage plateforme — au lieu d'être ajouté en fin de liste, et le statut courant de la facture ne bouge que si l'événement récupéré est réellement le plus récent. Compléter un statut manquant ancien ne peut donc pas ramener une facture à un état passé. La même insertion chronologique s'applique à la récupération régulière des statuts.
+
 ### Ordre du cycle de vie
 
-Le second contrôle balaie la base à la recherche de lignes de cycle de vie mal ordonnées — une étape interne de plateforme enregistrée **après** un statut standard — et de **codes invalides** (texte brut de plateforme stocké par erreur de mappage). Les lignes sélectionnées se suppriment en un clic, et le statut courant de la facture est réaligné sur son dernier événement restant.
+Le second contrôle balaie la base à la recherche de lignes **mal ordonnées** — une étape interne de plateforme enregistrée après un statut standard, et des statuts standard enregistrés dans le mauvais ordre (par ex. `202` *Reçue* avant `200` *Déposée*, l'ordre numérique des codes standard faisant référence) — plus les **codes invalides** (texte brut de plateforme stocké par erreur de mappage). La réparation **réordonne** les événements (rien n'est supprimé ; les statuts internes gardent leur position) et réaligne le statut courant de la facture, avec un aperçu avant/après et une sélection par facture.
 
 ---
 
