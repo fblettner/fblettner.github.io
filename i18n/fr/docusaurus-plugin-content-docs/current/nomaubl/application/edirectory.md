@@ -172,6 +172,37 @@ Chaque identifiant enregistré pour le SIREN sur le PPF, **quelle que soit sa fo
 
 Le listage passe par l'endpoint `directory-check-siren` du connecteur, qui renvoie les lignes complètes avec un mappage de réponse par endpoint (formats ATGP, Yooz et Esker pris en charge — y compris les indicateurs numériques comme le `HasAssignedPlatform` 1/0 d'Esker, en plus de true/false). Quand cet endpoint n'est pas configuré, la page **l'indique** au lieu de deviner — réglez-le sous [Configuration → Système → e-directory](../configuration/system/edirectory.md). Le contrôle annuaire au moment du traitement est inchangé ; l'ancien endpoint `directory-check-siret` est obsolète.
 
+### Annuaire Peppol \{#peppol-directory\}
+
+Déplier une carte entreprise interroge aussi le **réseau Peppol public** — aucun compte requis. Un groupe *Annuaire Peppol* liste chaque **participant** enregistré pour le SIREN (les enregistrements français utilisent l'ICD `0225`, identifiants par établissement compris), avec son nom, sa **date d'enregistrement** et la **plateforme qui l'opère** — la PA (par ex. Pennylane) avec son identifiant de siège Peppol, résolue via la découverte officielle **SML/SMP**. Les URLs du point d'accès et du SMP se trouvent dans l'infobulle de la plateforme.
+
+| Colonne | Contenu |
+|---|---|
+| **Participant** | L'identifiant de participant Peppol (ICD + valeur, par ex. `0225:80320631700015`). |
+| **Plateforme (PA)** | La plateforme qui opère le participant, avec son identifiant de siège ; `non résolu` quand l'étape SMP n'a pas abouti. |
+| **Enregistré le** | La date d'enregistrement Peppol du participant. |
+
+La recherche ne s'exécute **qu'au premier dépliage** et est aussi exposée en `POST /api/peppol-lookup` pour les intégrations (voir la [référence API](/nomaubl/api-reference)). Un participant sans plateforme joignable affiche quand même son enregistrement et son nom — seule la cellule *Plateforme* indique `non résolu`.
+
+---
+
+## Flux réseau (firewall)
+
+Tous les appels externes de l'E-Directory sont faits **côté serveur** — depuis le serveur NomaUBL, pas le navigateur de l'utilisateur — les règles firewall portent donc sur le trafic sortant du serveur. Hormis le connecteur PA, les destinations sont :
+
+| Objet | Destination | Port / Protocole |
+|---|---|---|
+| Recherche d'entreprise (INSEE) | `recherche-entreprises.api.gouv.fr` | HTTPS 443 |
+| Annuaire Peppol (carte de visite) | `directory.peppol.eu` | HTTPS 443 |
+| Résolution SML Peppol | Requêtes DNS NAPTR sur `*.iso6523-actorid-upis.edelivery.tech.ec.europa.eu` | DNS 53 (via le résolveur habituel du serveur) |
+| SMP Peppol (résolution de la plateforme) | dynamique — le SMP de la plateforme de chaque participant (par ex. `smp.pennylane.com`) | HTTPS 443 |
+
+Ce qui compte pour les règles :
+
+- **INSEE et `directory.peppol.eu` sont des noms d'hôte fixes** — faciles à autoriser. L'entrée INSEE couvre aussi la recherche client de la modale facture et la recherche [Corriger destinataire](./invoices.md#fix-buyer) (même API).
+- **L'étape SML est uniquement DNS** — pas de HTTP. Si le serveur résout déjà le DNS public via le résolveur d'entreprise, il n'y a rien à ouvrir ; cela ne casse que si le DNS sortant est restreint aux zones internes.
+- **Le SMP ne peut pas être autorisé à l'avance** — c'est le domaine de la plateforme de chaque acheteur (Pennylane, Esker, Yooz… un par participant) ; la résolution de la plateforme demande donc une autorisation large *HTTPS 443 sortant* pour fonctionner de façon générale. Si ce n'est pas acceptable, l'impact reste doux : la section Peppol affiche quand même le participant, son nom et sa date d'enregistrement depuis `directory.peppol.eu`, et la colonne *Plateforme* indique `non résolu`.
+
 ---
 
 ## Compteur de résultats

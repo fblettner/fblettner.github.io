@@ -172,6 +172,37 @@ Every identifier registered for the SIREN on the PPF, **whatever its form** — 
 
 The listing goes through the connector's `directory-check-siren` endpoint, which returns the full lines with per-endpoint response mappings (ATGP, Yooz and Esker shapes are supported — including numeric reachability flags such as Esker’s `HasAssignedPlatform` 1/0 alongside true/false). When that endpoint isn't configured, the page **says so** rather than guessing — set it under [Configuration → System → e-directory](../configuration/system/edirectory.md). The processing-time directory check is unchanged; the older `directory-check-siret` endpoint is obsolete.
 
+### Peppol directory \{#peppol-directory\}
+
+Expanding a company card also queries the **public Peppol network** — no account needed. A *Peppol directory* group lists each registered **participant** for the SIREN (French registrations use ICD `0225`, per-establishment identifiers included), with its name, its **registration date**, and the **service provider that operates it** — the PA (e.g. Pennylane) with its Peppol seat id, resolved through the official **SML/SMP** discovery. The access-point and SMP URLs sit in the provider's tooltip.
+
+| Column | Content |
+|---|---|
+| **Participant** | The Peppol participant identifier (ICD + value, e.g. `0225:80320631700015`). |
+| **Plateforme (PA)** | The service provider operating the participant, with its seat id; `non résolu` when the SMP step couldn't resolve it. |
+| **Enregistré le** | The participant's Peppol registration date. |
+
+The lookup runs on the **first expand only** and is also exposed as `POST /api/peppol-lookup` for integrations (see the [API reference](/nomaubl/api-reference)). A participant with no reachable provider still lists its registration and name — only the *Plateforme* cell reads `non résolu`.
+
+---
+
+## Network flows (firewall)
+
+Every E-Directory external call is made **server-side** — from the NomaUBL server, not the user's browser — so the firewall rules apply to the server's outbound traffic. Besides the PA connector, the destinations are:
+
+| Purpose | Destination | Port / Protocol |
+|---|---|---|
+| Company search (INSEE) | `recherche-entreprises.api.gouv.fr` | HTTPS 443 |
+| Peppol directory (business card) | `directory.peppol.eu` | HTTPS 443 |
+| Peppol SML resolution | DNS NAPTR queries on `*.iso6523-actorid-upis.edelivery.tech.ec.europa.eu` | DNS 53 (via the server's normal resolver) |
+| Peppol SMP (provider resolution) | dynamic — the SMP host of each participant's platform (e.g. `smp.pennylane.com`) | HTTPS 443 |
+
+What matters for the rules:
+
+- **INSEE and `directory.peppol.eu` are fixed hostnames** — easy to whitelist. The INSEE entry also covers the invoice modal's client search and the [Fix buyer](./invoices.md#fix-buyer) search (same API).
+- **The SML step is DNS only** — no HTTP. If the server already resolves public DNS through the corporate resolver, there is nothing to open; it only breaks when outbound DNS is restricted to internal zones.
+- **The SMP host can't be whitelisted in advance** — it's whatever domain each buyer's platform uses (Pennylane, Esker, Yooz… one per participant), so provider resolution needs a broad *HTTPS 443 outbound* allowance to work generally. If that isn't acceptable, the impact is graceful: the Peppol section still shows the participant, name and registration date from `directory.peppol.eu`, and the *Plateforme* column reads `non résolu`.
+
 ---
 
 ## Result count

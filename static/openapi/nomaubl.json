@@ -619,6 +619,23 @@
         }
       }
     },
+    "/api/peppol-lookup": {
+      "post": {
+        "tags": ["Integration"],
+        "summary": "Peppol participant + provider lookup",
+        "description": "Queries the public Peppol network for a SIREN (no account needed) and returns every registered participant with the service provider (access point / PA) operating it. Three server-side hops: the Peppol directory business card (directory.peppol.eu), the SML DNS resolution (NAPTR under *.iso6523-actorid-upis.edelivery.tech.ec.europa.eu) and the participant's SMP (dynamic host). French registrations use ICD 0225, per-establishment identifiers included. When the SMP can't be resolved, the participant is still returned with its name and registration date and apProvider is left empty. Powers the E-Directory company card's Peppol section (lazy, on first expand).",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "siren": "803206317" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "participants": [ { "participantId": "0225:80320631700015", "name": "SARL AG VISION", "registrationDate": "2026-06-01", "apProvider": "Pennylane", "apSeat": "PFR000123", "apEndpoint": "https://ap.pennylane.com/as4", "smpUrl": "https://smp.pennylane.com/0225:80320631700015" } ] } } } }
+          }
+        }
+      }
+    },
     "/api/invoices": {
       "get": {
         "tags": ["Invoices"],
