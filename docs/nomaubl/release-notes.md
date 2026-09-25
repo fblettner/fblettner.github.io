@@ -14,7 +14,13 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-09-15-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.15.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-15</span></a>
+  <a href="#v2026-09-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.09.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-25</span></a>
+  <a href="#v2026-09-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-23</span></a>
+  <a href="#v2026-09-22-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.22.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-22</span></a>
+  <a href="#v2026-09-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-18</span></a>
+  <a href="#v2026-09-17-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.17.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-17</span></a>
+  <a href="#v2026-09-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-16</span></a>
+  <a href="#v2026-09-15-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.15.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-15</span></a>
   <a href="#v2026-09-14-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.14.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-14</span></a>
   <a href="#v2026-09-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-13</span></a>
   <a href="#v2026-09-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-12</span></a>
@@ -109,6 +115,81 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
   <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
 </div>
+
+---
+
+## 2026.09.25.1 — 2026-09-25 \{#v2026-09-25-1\}
+
+### Improvements
+
+- **New *Business Rules* page (Documentation).** Two tabs. *Points of attention*: twelve topics written from chapter 4.4 of AFNOR XP Z12-012 (June 2026) and checked against the standard — line and total calculation, rounding, gross/discount/net price, allowances and charges, VAT categories and exemption codes, non-VAT taxes and WEEE, credit notes vs negative invoices, notes and mandatory mentions, profile and invoicing framework, data types, sub-lines, multi-seller invoices — each stating what the standard requires and how NomaUBL implements it, with the chapter cited. *Rule catalogue*: the 148 French CTC rules of the AFNOR matrix (BR-FR controls, consistency, flux 1/10.1 mapping, numeric formats, multi-seller, PPF rules) with full text, family filter, search and the terms each rule constrains. Granted with the other documentation pages.
+- **UBL reference rebuilt from the AFNOR XP Z12-012 V1.4 matrix.** 455 UBL terms instead of 201 — every EXTENDED-CTC-FR block is now covered (buyer/seller agents, invoicee, invoicer, payer, line seller, line-level delivery and references, Incoterms, exchange rate, non-VAT taxes, scheme identifiers). Each term shows its official definition in French and English, its data type, code list and profile (BASIC WL / EN 16931 / EXTENDED), the NomaUBL usage hint as a separate note, and the business rules that apply to it — click a rule to read it in place. CII-only terms are deliberately absent. Long identifiers no longer overlap the label, and terms follow the matrix order.
+- **AFNOR line amount check before sending.** New validation rule BR-NOMAUBL-02 compares each line's net amount (BT-131) with the AFNOR formula — price ÷ base quantity × quantity, minus line allowances, plus line charges — and reports a *warning* (never an error) beyond 0.011. EN 16931 does not check this formula today; a net price left in BT-146 with the discount repeated as a line allowance is the typical case it catches.
+- **Invoice window: price details (BG-29).** Lines gain a *Price (BG-29)* block with gross price (BT-148) and price discount (BT-147); the net price is derived and drives the line amount, the header price is locked while the block is active. The line amount now divides by the price base quantity (BT-149) — a price per 100 or 1,000 units is computed correctly.
+- **XSL editor: gross price and base quantity mapping.** New line variables `TAG_LINE_GROSS_PRICE` (BT-148) and `TAG_LINE_PRICE_BASE_QTY` (BT-149). A spool carrying gross + discount maps both and the net price is derived as gross − discount; a spool carrying net + discount still gets its gross emitted as net + discount. Line fields are reordered by theme (identification, quantities, prices, VAT, references, classification) and the hints shortened to one line.
+
+### Fixes
+
+- **Rounding now follows AFNOR (half away from zero).** The invoice window rounded ties toward positive infinity and was exposed to binary floating point: −13.455 came out as −13.45 and 13.455 could come out as 13.45. Every amount computation (price × quantity, line amount, VAT base and amount, document totals, unit prices to 6 decimals) now rounds half away from zero, as §4.4.6 of XP Z12-012 requires. Credit lines with negative quantities and .xx5 ties are the cases affected; the XSL path never computed amounts and is unchanged.
+- **Item classification code (BT-158) keeps its internal spacing.** The mapped value was whitespace-normalised, which collapsed multiple spaces inside a classification code and broke matching on the buyer side. Only leading and trailing whitespace is trimmed now; every other line field is untouched.
+
+---
+
+## 2026.09.23.1 — 2026-09-23 \{#v2026-09-23-1\}
+
+### Improvements
+
+- **BIP extraction waits for JDE instead of failing on the race.** A `fetch-single … bip` triggered right after a report ends could find no row in the job control table (F9563110) because JDE commits it asynchronously — the whole file then went unprocessed. The extractor now polls the job with increasing backoff (~80 s window): a not-yet-committed row is retried, a still-running job is waited for, a job ended in error fails immediately with a clear message. A job already Done costs one probe and no wait; every caller (CLI, scheduler, web) is covered — the `sleep` workaround in launch scripts can be removed.
+- **Ingestion cutoff: minimum invoice date.** New *Min invoice date* setting (E-Invoicing → Settings → Processing): XML-pipeline invoices dated before it are skipped at the door — no database write, no generation, no PA send. This guards re-runs of old BIP jobs and legacy archives (documents with an F564230 row but no header would otherwise be treated as "never reached the PA" and resent). Empty or unparseable dates are not blocked; empty setting = no cutoff.
+- **Skipped invoices are now traced in the processing log.** Overnight runs whose invoices were all held back used to show only START/END SUCCESSFUL. Every skipped invoice now writes its own F564237 row — date cutoff ("dated … before minInvoiceDate"), PA-protected duplicate ("already processed by the PA — replace refused") or legacy duplicate — always, without debug mode.
+
+---
+
+## 2026.09.22.1 — 2026-09-22 \{#v2026-09-22-1\}
+
+### Fixes
+
+- **Blank bank details no longer abort invoice generation.** A supplier row saved in the XSL editor with an empty IBAN or BIC produced an empty-bodied entry in the per-company payment defaults, and every credit-transfer invoice of that company then failed at UBL creation with "An empty sequence is not allowed as the result of a call to ubl:supplier-iban#1". Blank values are now written as an explicit empty string (existing files are repaired by re-saving the Suppliers tab once). A transfer invoice genuinely missing its IBAN now surfaces as a normal validation error (BR-61) instead of a generation abort; non-transfer invoices were and remain unaffected.
+- **Generator sequence fix in the base template.** `invoice.xsl` emitted the preceding-invoice reference (BG-3) before the order reference (BT-13), an order both UBL schemas reject when the two are present; the blocks now follow the schema sequence (OrderReference, then BillingReference), matching the main template.
+
+---
+
+## 2026.09.18.1 — 2026-09-18 \{#v2026-09-18-1\}
+
+### Improvements
+
+- **Preceding invoices editable in the invoice window.** The header section gains a *Preceding invoices* block (BG-3, 0..n): reference number (BT-25) and optional issue date (BT-26), with add/remove per row — emitted at their schema position for invoices and credit notes (where BG-3 is the reference to the corrected invoice). The invoice lines gain their own *Preceding invoice* references (EXT-FR-FE-136) in the References group: number, optional date, and the **DocumentStatusCode** picked from INFORMATION / DETAIL / GROUP. Document-level and line-level references stay strictly at their own level — existing line references are no longer read-only.
+- **PA pollers ordered and loss-proof after the quiet window.** The import-status poll and the lifecycle status retrieval no longer run concurrently: on a shared wake-up (typically when the quiet window ends over a night's send backlog) the import poll always goes first — the status retrieval waits, and with staggered intervals it defers until one import poll has completed after the window. Lifecycle events therefore always resolve against confirmed invoice UUIDs instead of being dropped. And when an event fetch loses a page (throttling while the PA digests the backlog), the applied events are kept but the watermark no longer advances — the next tick re-pulls the same window (re-applied events are no-ops), so no status can slip behind the cutoff anymore; a warning line reports each incomplete run.
+- **Customer: multiple buyer identifiers (BT-46).** Besides the SIREN and SIRET fields, the invoice window's customer section gains an *Other ids (BT-46)* block: any number of additional buyer identifiers, each with its scheme picked from the EAS list. Identifiers that existed on the document beyond the SIREN/SIRET (a routing code, a second SIRET…) are now visible, editable and deletable instead of being carried invisibly.
+
+### Fixes
+
+- **Editing a PA-processed invoice: no more silent no-op.** The *Edit* button is now hidden for invoices the PA has already processed (Rejected 213, Deposited 200, Refused 210…) — the processor was refusing the rewrite anyway but reported it as a successful save. *Copy* remains available on those statuses (creating a new invoice is the right action there) and *Set Status* stays the deliberate unlock. If the save path is still reached, the window now shows an explicit "not saved — already processed by the PA" warning instead of a green confirmation.
+
+---
+
+## 2026.09.17.1 — 2026-09-17 \{#v2026-09-17-1\}
+
+### Improvements
+
+- **PA pollers: pause without restart, and a daily quiet window.** The IT dashboard's Scheduler card gains a pause/resume button on the *PA import poll* and *PA status retrieve* jobs — effective on the next tick, deliberately runtime-only (a server restart always resumes, so a pause can't be forgotten). New `global` properties `fetchQuietFrom` / `fetchQuietTo` (HH:mm, may cross midnight, editable in Settings → Global) define a daily window during which both pollers skip their runs automatically — set it over the send campaigns so the per-invoice import polls don't pile up while the PA is integrating (PA feedback: a long send left invoices pending up to an hour, each accumulating polls that ended up blocking the imports). The window applies without restart and shows on the Scheduler card, highlighted while active. Also exposed as `POST /api/scheduler/pause`.
+
+### Fixes
+
+- **Editing keeps the invoice's original activity and sub-type — always.** Saving an edit (or a buyer fix) re-derived FEAA10 / FESUBTYP from today's template configuration, which could reject the save ("FEAA10 mandatory", or ORA-12899 when an XML template's spool tag name leaked in as a value). The F564230 update no longer touches those two columns: the values written when the document was first processed are the source of truth. Template resolution now only applies where it belongs — fresh inserts (manual creation uses the e-invoicing defaults, batch files their doc template).
+- **Reprocess help texts corrected.** The CLI and shell usage still described eligibility as "Rejected 213 or Deposited 200"; the actual rule — unchanged — is Deposited 200 with reason NON_TRANSMISE and template opt-in. Descriptions now match the behaviour.
+
+---
+
+## 2026.09.16.1 — 2026-09-16 \{#v2026-09-16-1\}
+
+### Improvements
+
+- **Dashboard: per-status card rows.** Two new card rows under the hero metrics, organised by the action they call for. First row — invoices that can be **fixed and resent**: 213 (Rejected), 9905 (Validation failed), 9907 (PA import failed). Second row — statuses where the invoice is final and a **new invoice must be issued**: 207, 208, 210. Each card shows the count for the selected period with the status label, colours up when non-zero, and clicks through to the invoice list filtered on that status. The rows have their own visibility key (*Status cards*) in the role's dashboard-card whitelist.
+- **Edited invoices can no longer disappear.** Saving an edit rewrites the invoice (purge then re-insert); a failure between the two used to leave the invoice deleted from F564231 with nothing in the log. The rewrite now runs in a single transaction — any failure rolls back and leaves the invoice exactly as it was — and every failure reason is written to the server log.
+- **Editing works for credit notes.** The edit window read credit notes correctly but always saved them back as an Invoice document (wrong root, wrong line elements), producing invalid XML. A credit note now rebuilds with its own vocabulary — CreditNote root, CreditNoteLine, CreditedQuantity, CreditNoteTypeCode, payment due date in its schema-correct position — and the preserved elements (including the reference to the original invoice) merge cleanly.
+- **Edit save keeps the invoice's context.** The save now passes the invoice's document template along: activity and sub-type resolve from that template's defaults (fixes the "FEAA10 mandatory" failure on edit), the template name is no longer blanked from the invoice, the archived source spool in F564230 is left untouched (reprocess-from-archive stays possible), and the send-to-PA flag reflects the configured intent instead of being forced to "not send" — so a sendable invoice shows its *Resend to PA* button right after an edit.
+- **Delete a single lifecycle event.** The history tab gains a per-event delete button (with confirmation): the event is removed and the invoice status realigns on the last remaining event — the clean manual fix when a PA delivers a stray status (e.g. a Refusée it later superseded). Gated by a new dedicated action (*Delete lifecycle event*) in the roles, and available as `DELETE /api/invoices/{doc}/{dct}/{kco}/lifecycle/{seqn}`.
 
 ---
 

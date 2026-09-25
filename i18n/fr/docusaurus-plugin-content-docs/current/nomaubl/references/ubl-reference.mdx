@@ -1,15 +1,23 @@
 ---
 title: Référence UBL
-description: "Référence des champs UBL pour la réforme française de la facturation électronique — chaque champ BT avec son XPath, sa cardinalité et un exemple, regroupé par section (en-tête, vendeur, acheteur, TVA, totaux, ligne, etc.)."
-keywords: [NomaUBL, UBL, EN 16931, Factur-X, BT, BG, XPath, facturation électronique, France, extended-ctc-fr, BT-1, BT-22, BT-110, BT-115, vendeur, acheteur, TVA, ligne, cardinalité]
+description: "Référence des champs UBL pour la réforme française de la facturation électronique — 455 termes UBL de la matrice AFNOR XP Z12-012 V1.4, chacun avec son XPath, sa cardinalité, son profil, son type de données, sa liste de codes, sa définition, sa note d'usage et les règles métier qui le contraignent, regroupés par section."
+keywords: [NomaUBL, UBL, EN 16931, Factur-X, BT, BG, XPath, facturation électronique, France, extended-ctc-fr, AFNOR, XP Z12-012, profil, liste de codes, règles métier, BT-1, BT-110, vendeur, acheteur, TVA, ligne, cardinalité]
 ---
 
 import UBLReference from '@site/src/components/reference/UBLReference';
 
 # Référence UBL
 
-L'écran liste l'ensemble des **termes métier UBL (BT)** transportés par le flux français de facturation électronique (EN 16931 / extended-ctc-fr / Factur-X). Chaque ligne indique l'identifiant BT, le libellé (accompagné, le cas échéant, d'une description et d'un exemple), le XPath canonique dans le document UBL et la cardinalité (`1..1`, `0..1`, `0..n`, `1..n`).
+L'écran liste l'ensemble des **termes métier UBL (BT)** transportés par le flux français de facturation électronique — **455 termes** reconstruits depuis la matrice **AFNOR XP Z12-012 V1.4**, couvrant tous les blocs EXTENDED-CTC-FR (mandataires acheteur/vendeur, destinataire de facture, émetteur, payeur, vendeur à la ligne, livraison et références au niveau ligne, Incoterms, taux de change, taxes hors TVA, identifiants de schéma). Les termes propres au CII sont volontairement absents, et l'ordre suit celui de la matrice.
 
-La barre permet de filtrer par section (en-tête, vendeur, acheteur, bénéficiaire, représentant fiscal, livraison, paiement, remises & charges, TVA, totaux, ligne de facture) ou de rechercher dans le BT, le XPath, le libellé, la description et l'exemple. Le tableau est regroupé par section et codé par couleur — le même code couleur est repris dans l'éditeur de facture de l'application.
+Chaque ligne indique :
+
+- l'**identifiant BT** et le **libellé** ;
+- la **définition** officielle (français et anglais) et la **note d'usage** NomaUBL sur une ligne à part ;
+- le **profil** du terme — `BASIC WL`, `EN 16931` ou `EXTENDED` — son **type de données** et sa **liste de codes** (ISO 6523, UNTDID 5305, TVA…) ;
+- le **XPath** canonique et la **cardinalité** (`1..1`, `0..1`, `0..n`, `1..n`) ;
+- les **règles métier** qui le contraignent — chaque identifiant renvoie à la page [Règles métier](./business-rules.mdx).
+
+La barre permet de filtrer par section (en-tête, vendeur, acheteur, bénéficiaire, représentant fiscal, livraison, paiement, remises & charges, TVA, totaux, ligne de facture) ou de rechercher dans le BT, le XPath, le libellé, la définition, la note, la liste de codes et les règles. Le tableau est regroupé par section et codé par couleur — le même code couleur que l'éditeur de facture de l'application.
 
 <UBLReference />

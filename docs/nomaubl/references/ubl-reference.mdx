@@ -1,15 +1,23 @@
 ---
 title: UBL Reference
-description: "UBL field reference for the French e-invoicing reform — every BT field with its XPath, cardinality and example, grouped by section (header, supplier, customer, tax, totals, line, etc.)."
-keywords: [NomaUBL, UBL, EN 16931, Factur-X, BT, BG, XPath, e-invoicing, France, extended-ctc-fr, BT-1, BT-22, BT-110, BT-115, supplier, customer, tax, line, cardinality]
+description: "UBL field reference for the French e-invoicing reform — 455 UBL terms from the AFNOR XP Z12-012 V1.4 matrix, each with its XPath, cardinality, profile, data type, code list, definition, usage note and the business rules that constrain it, grouped by section."
+keywords: [NomaUBL, UBL, EN 16931, Factur-X, BT, BG, XPath, e-invoicing, France, extended-ctc-fr, AFNOR, XP Z12-012, profile, code list, business rules, BT-1, BT-110, supplier, customer, tax, line, cardinality]
 ---
 
 import UBLReference from '@site/src/components/reference/UBLReference';
 
 # UBL Reference
 
-The screen lists every **UBL business term (BT)** carried by the French e-invoicing flow under EN 16931 / extended-ctc-fr / Factur-X. Each row shows the BT identifier, the human-readable label (with description and example where relevant), the canonical XPath inside the UBL document and the cardinality (`1..1`, `0..1`, `0..n`, `1..n`).
+The screen lists every **UBL business term (BT)** carried by the French e-invoicing flow — **455 terms** rebuilt from the **AFNOR XP Z12-012 V1.4** matrix, covering every EXTENDED-CTC-FR block (buyer/seller agents, invoicee, invoicer, payer, line seller, line-level delivery and references, Incoterms, exchange rate, non-VAT taxes, scheme identifiers). CII-only terms are deliberately absent, and terms follow the matrix order.
 
-Filter by section (header, supplier, customer, payee, tax representative, delivery, payment, allowances & charges, tax, totals, invoice line) or search across BT, XPath, label, description and example. The table is grouped by section and color-coded — the same colour scheme is reused inside the application's invoice editor.
+Each row shows:
+
+- the **BT identifier** and the human-readable **label**;
+- the official **definition** (French and English) and the NomaUBL **usage note** as a separate line;
+- the **profile** the term belongs to — `BASIC WL`, `EN 16931` or `EXTENDED` — its **data type** and its **code list** (ISO 6523, UNTDID 5305, VAT…);
+- the canonical **XPath** and the **cardinality** (`1..1`, `0..1`, `0..n`, `1..n`);
+- the **business rules** that constrain it — each identifier links to the [Business Rules](./business-rules.mdx) page.
+
+Filter by section (header, supplier, customer, payee, tax representative, delivery, payment, allowances & charges, tax, totals, invoice line) or search across BT, XPath, label, definition, note, code list and rules. The table is grouped by section and colour-coded — the same scheme the application's invoice editor uses.
 
 <UBLReference />

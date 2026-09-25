@@ -1,0 +1,213 @@
+.scroll {
+  margin: 16px 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  margin-bottom: 16px;
+}
+
+.tab,
+.tabActive {
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--ifm-color-emphasis-700);
+}
+.tabActive {
+  color: var(--ifm-color-primary);
+  border-bottom-color: var(--ifm-color-primary);
+}
+
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.families {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fam,
+.famActive {
+  font-size: 0.68rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-700);
+  border: 1px solid var(--ifm-color-emphasis-300);
+}
+.famActive {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}
+
+.search {
+  flex: 1;
+  min-width: 220px;
+  max-width: 320px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+  font-size: 0.82rem;
+}
+
+.verified {
+  font-size: 0.72rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 14px;
+}
+
+.topic {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  background: var(--ifm-background-surface-color);
+}
+
+.topicHead {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.chapter {
+  font-size: 0.66rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: var(--ifm-color-primary);
+  background: rgba(74, 158, 255, 0.10);
+  border: 1px solid rgba(74, 158, 255, 0.30);
+  white-space: nowrap;
+}
+
+.topicTitle {
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.sub {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-600);
+  margin-top: 10px;
+  margin-bottom: 2px;
+}
+
+.list {
+  margin: 0 0 4px;
+  padding-left: 18px;
+}
+.list li {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  margin: 2px 0;
+}
+
+.ruleCard {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: var(--ifm-background-surface-color);
+}
+
+.ruleHead {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.ruleId {
+  font-size: 0.68rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.ruleTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.uncontrolled {
+  font-size: 0.62rem;
+  font-family: var(--ifm-font-family-monospace);
+  color: var(--ifm-color-emphasis-600);
+  border: 1px dashed var(--ifm-color-emphasis-400);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.ruleText {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--ifm-color-emphasis-800);
+  white-space: pre-wrap;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin-top: 8px;
+}
+.chipsLabel {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-emphasis-600);
+}
+.chip {
+  font-size: 0.62rem;
+  font-family: var(--ifm-font-family-monospace);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--ifm-color-emphasis-700);
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  white-space: nowrap;
+}
+
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.85rem;
+}
+
+.source {
+  font-size: 0.75rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-top: 10px;
+}

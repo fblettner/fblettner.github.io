@@ -218,3 +218,60 @@
   color: var(--ifm-color-emphasis-600);
   margin-top: 8px;
 }
+
+.note {
+  font-size: 0.72rem;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.45;
+  padding-left: 8px;
+  border-left: 2px solid var(--ifm-color-emphasis-300);
+  margin-top: 2px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+  align-items: center;
+}
+
+.profile {
+  font-size: 0.62rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--ifm-color-primary);
+  background: rgba(74, 158, 255, 0.10);
+  border: 1px solid rgba(74, 158, 255, 0.30);
+  white-space: nowrap;
+}
+
+.chip {
+  font-size: 0.62rem;
+  font-family: var(--ifm-font-family-monospace);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--ifm-color-emphasis-700);
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  white-space: nowrap;
+}
+
+.ruleChip {
+  font-size: 0.62rem;
+  font-family: var(--ifm-font-family-monospace);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--ifm-color-emphasis-800);
+  background: var(--ifm-color-emphasis-100);
+  border: 1px dashed var(--ifm-color-emphasis-400);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.ruleChip:hover {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+}

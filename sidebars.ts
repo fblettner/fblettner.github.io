@@ -619,6 +619,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/references/status-reference',
         'nomaubl/references/reason-codes',
         'nomaubl/references/ubl-reference',
+        'nomaubl/references/business-rules',
         'nomaubl/references/database-tables',
         {
           type: 'link',

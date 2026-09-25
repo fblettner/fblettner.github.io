@@ -80,6 +80,12 @@ function FilterBar({
   );
 }
 
+const PROFILE_LABEL: Record<string, string> = {
+  basic: 'BASIC WL',
+  en16931: 'EN 16931',
+  extended: 'EXTENDED',
+};
+
 function FieldRow({field: f, lang}: {field: UBLField; lang: Lang}) {
   const cfg = SECTION_CONFIG[f.section];
   return (
@@ -93,7 +99,18 @@ function FieldRow({field: f, lang}: {field: UBLField; lang: Lang}) {
       <div className={styles.labelWrap}>
         <div className={styles.label}>{f.label[lang]}</div>
         {f.desc && <div className={styles.desc}>{f.desc[lang]}</div>}
+        {f.note && <div className={styles.note}>{f.note[lang]}</div>}
         {f.example && <div className={styles.example}>{f.example}</div>}
+        {(f.profile || f.type || f.codeList || (f.rules && f.rules.length > 0)) && (
+          <div className={styles.meta}>
+            {f.profile && <span className={styles.profile}>{PROFILE_LABEL[f.profile] ?? f.profile}</span>}
+            {f.type && <span className={styles.chip}>{f.type}</span>}
+            {f.codeList && <span className={styles.chip}>{f.codeList}</span>}
+            {f.rules?.map((r) => (
+              <a key={r} className={styles.ruleChip} href={`${lang === 'fr' ? '/fr' : ''}/nomaubl/references/business-rules/`} title={lang === 'fr' ? 'Voir la règle' : 'View the rule'}>{r}</a>
+            ))}
+          </div>
+        )}
       </div>
       <code className={styles.xpath}>{f.xpath}</code>
       <span className={styles.cardinality}>{f.cardinality}</span>
