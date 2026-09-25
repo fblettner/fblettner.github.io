@@ -306,6 +306,8 @@ Liste tous les jobs actifs du planificateur :
 
 Chaque ligne affiche le nom du job, la cadence, et une pastille de statut (vert actif, bleu prévu sous peu, orange en pause). Le sous-titre indique le décompte des jobs actifs.
 
+Les jobs **interrogation d'import PA** et **récupération des statuts PA** portent un bouton **pause / reprise** — effectif au tick suivant et volontairement transitoire (un redémarrage du serveur relance toujours, une pause ne peut donc pas être oubliée). La [fenêtre calme quotidienne](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) s'affiche aussi ici, en surbrillance quand elle est active — pendant celle-ci, les deux interrogations sautent automatiquement leurs exécutions.
+
 ### Courbe d'erreurs · 14j (rangée 2, span 4)
 
 Sparkline sur 14 jours des événements d'erreur enregistrés dans `F564237` (niveau `ERROR` ou `FATAL`). Le survol d'un point révèle la date et le compte ; le sous-titre indique la moyenne quotidienne et le total cumulé du jour.

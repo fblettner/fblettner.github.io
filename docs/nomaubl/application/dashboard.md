@@ -240,6 +240,15 @@ The **In flight** / **Rejected — IT** / **Rejected — Business** cards used t
 
 A red border + red value on **Rejected — IT** signals a non-zero count; same orange treatment on **Rejected — Business**.
 
+### Per-status cards
+
+Two card rows sit under the hero metrics, organised by the action each status calls for:
+
+- **Fix and resend** — `213` (Rejected), `9905` (Validation failed), `9907` (PA import failed): invoices that can be corrected and re-sent.
+- **Issue a new invoice** — `207`, `208`, `210`: statuses where the invoice is final and a new one must be issued.
+
+Each card shows the count for the selected period with the status label, colours up when non-zero, and clicks through to the invoice list filtered on that status. The rows have their own visibility key — *Status cards* — in the role's dashboard-card whitelist.
+
 ---
 
 ## The widget grid

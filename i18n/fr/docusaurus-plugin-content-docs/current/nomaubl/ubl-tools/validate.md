@@ -170,7 +170,12 @@ Certaines règles des packs publics remontent un avertissement sur des structure
 
 ### Règles maison NomaUBL
 
-Le pack `BR-NOMAUBL-rules.sch` est un **placeholder structurel** — il est vide aujourd'hui. Il reste dans le pipeline runtime comme point d'accroche prêt à l'emploi pour de futures règles que l'AIFE impose côté serveur et que les packs Schematron publics n'auraient pas encore reprises. Les faire remonter localement placerait l'échec dans `F564236` avant l'aller-retour PA — une étape réseau économisée et l'explication lisible disponible immédiatement pour l'opérateur.
+Le pack `BR-NOMAUBL-rules.sch` porte les règles côté AIFE que les packs Schematron publics ne livrent pas encore, remontées localement pour que l'échec atterrisse dans `F564236` avant l'aller-retour PA :
+
+- **`BR-NOMAUBL-01`** *(fatal)* — pour un avoir dont le `BT-3` est dans `{261, 381, 396, 502, 503}`, au moins une référence de facture antérieure (`cac:BillingReference/cac:InvoiceDocumentReference`) avec son `cbc:ID` (BT-25) et son `cbc:IssueDate` (BT-26) doit être présente ; sinon les PA rejettent ces avoirs sur une erreur de validation de modèle.
+- **`BR-NOMAUBL-02`** *(avertissement)* — compare le montant net de chaque ligne (BT-131) à la formule AFNOR (prix ÷ quantité de base × quantité, moins les remises de ligne, plus les charges de ligne) et avertit au-delà de `0,011`. EN 16931 ne contrôle pas cette formule aujourd'hui ; le cas typique détecté est un prix net laissé en BT-146 avec la remise répétée en remise de ligne. Un avertissement ne bloque jamais l'envoi.
+
+Le pack reste un point d'accroche prêt à l'emploi pour les prochaines règles AIFE.
 
 La version du pack est accessible via `GET /api/build-info` sous la clé `schematron.nomaubl` — le pied de page du tableau de bord la lit pour le tampon de version par pack.
 

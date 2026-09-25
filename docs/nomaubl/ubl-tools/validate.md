@@ -170,7 +170,12 @@ Some rules in the public packs report a warning on shapes NomaUBL emits **by des
 
 ### NomaUBL house rules
 
-The `BR-NOMAUBL-rules.sch` pack is a **scaffolding placeholder** — it ships empty today. It stays in the runtime pipeline as a ready-made hook for future rules the AIFE enforces server-side but that the public Schematron packs have not picked up yet. Surfacing such rules locally would put the failure in `F564236` before the PA round-trip — saving a network hop and giving the operator the human-readable explanation immediately.
+The `BR-NOMAUBL-rules.sch` pack carries the AIFE-side rules the public Schematron packs don't ship yet, surfaced locally so the failure lands in `F564236` before the PA round-trip:
+
+- **`BR-NOMAUBL-01`** *(fatal)* — for a credit note whose `BT-3` is in `{261, 381, 396, 502, 503}`, at least one preceding-invoice reference (`cac:BillingReference/cac:InvoiceDocumentReference`) with both its `cbc:ID` (BT-25) and `cbc:IssueDate` (BT-26) must be present; PAs reject these credit notes on a model-validation error otherwise.
+- **`BR-NOMAUBL-02`** *(warning)* — compares each line's net amount (BT-131) with the AFNOR formula (price ÷ base quantity × quantity, minus line allowances, plus line charges) and warns beyond `0.011`. EN 16931 doesn't check this formula today; the typical case it catches is a net price left in BT-146 with the discount repeated as a line allowance. A warning never blocks the send.
+
+The pack stays a ready-made hook for further AIFE rules as they appear.
 
 The pack version is exposed at `GET /api/build-info` under `schematron.nomaubl` — the dashboard footer reads it for the per-pack version stamp.
 

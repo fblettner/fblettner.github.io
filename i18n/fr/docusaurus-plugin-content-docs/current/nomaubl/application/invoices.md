@@ -580,7 +580,7 @@ Le **cycle de vie** est la trace d'audit de tous les statuts traversés par la f
 - Le libellé du statut et le message renvoyé par la plateforme.
 - Pour les refus, détails facultatifs : code et libellé du motif de rejet, code et libellé de l'action attendue, note de statut additionnelle.
 
-Le cycle de vie est en mode ajout seul — les événements sont créés par le job *Synchronisation → Récupérer les statuts* et ne sont jamais modifiés.
+Le cycle de vie est en mode ajout seul — les événements sont créés par le job *Synchronisation → Récupérer les statuts* et ne sont jamais modifiés. Chaque événement porte toutefois un bouton **supprimer** (avec confirmation) : retirer un événement réaligne le statut de la facture sur le dernier restant — la correction manuelle propre quand la plateforme a livré un statut parasite (une *Refusée* qu'elle a ensuite dépassée, par exemple). Réservé par une action dédiée **Supprimer l'événement de cycle de vie** dans les [rôles](../configuration/security/roles.md).
 
 Les trois champs de refus — **motif de rejet**, **action attendue** et **note de statut** — figurent aussi dans le catalogue de colonnes : on peut les épingler comme colonnes de liste et les filtrer depuis l'éditeur de [Vues de liste](../configuration/list-views.md) quand une équipe doit balayer ou trier par motif de refus sans ouvrir chaque facture.
 
@@ -847,14 +847,14 @@ Depuis 2026.05.10, modifier une facture existante ne réinitialise plus son `cbc
 La modale est divisée en sections verticales :
 
 - **Document** — numéro, type de facture, profile ID, références contrat / acheteur / commande.
-- **En-tête** — dates d'émission / échéance, devise, période de début / fin.
+- **En-tête** — dates d'émission / échéance, devise, période de début / fin, ainsi qu'un bloc **Factures antérieures** (BG-3, 0..n) : chaque ligne un numéro de référence (BT-25) et une date d'émission facultative (BT-26), avec **＋ Ajouter une facture antérieure (BG-3)**. Sur un avoir, c'est la référence à la facture corrigée.
 - **Fournisseur** — alimenté depuis l'annuaire des fournisseurs (*UBL Defaults → Suppliers / Companies*) ; modifiable par facture.
-- **Client** — renseigné de bout en bout depuis la recherche d'entreprise : les résultats affichent le badge, le nom et l'identifiant sur une ligne, l'adresse en dessous ; une recherche par SIREN ou SIRET seul liste tous les établissements (même seconde interrogation INSEE que l'[E-Directory](./edirectory.md)), et un champ SIRET facultatif complète le SIREN. L'adresse électronique n'est **pas déduite** du SIREN/SIRET — une liste d'adresses électroniques du PPF (ouverte automatiquement après le choix d'une entreprise, ou à tout moment via le bouton à côté du champ identifiant) présente les adresses enregistrées pour le SIREN avec leur état actif/désactivé ; en choisir une renseigne l'identifiant et son schéma, puis la liste se referme.
+- **Client** — renseigné de bout en bout depuis la recherche d'entreprise : les résultats affichent le badge, le nom et l'identifiant sur une ligne, l'adresse en dessous ; une recherche par SIREN ou SIRET seul liste tous les établissements (même seconde interrogation INSEE que l'[E-Directory](./edirectory.md)), et un champ SIRET facultatif complète le SIREN. L'adresse électronique n'est **pas déduite** du SIREN/SIRET — une liste d'adresses électroniques du PPF (ouverte automatiquement après le choix d'une entreprise, ou à tout moment via le bouton à côté du champ identifiant) présente les adresses enregistrées pour le SIREN avec leur état actif/désactivé ; en choisir une renseigne l'identifiant et son schéma, puis la liste se referme. Un bloc **Autres id. (BT-46)** ajoute autant d'identifiants acheteur supplémentaires que voulu, chacun avec son schéma de la liste EAS — un code de routage ou un second SIRET porté par le document devient visible, modifiable et supprimable au lieu de voyager de façon invisible.
 - **Livraison** — groupe livraison facultatif.
 - **Paiement** — code de moyen de paiement, IBAN, BIC, mandat, conditions.
 - **Remises / charges** — remises / charges au niveau document.
 - **Notes** — notes libres par préfixe `BT-22`.
-- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés. Le champ Prix unitaire accepte une précision fine (jusqu'à 6 décimales), pour les prix qui en portent plus de 2 à la source.
+- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés. Le champ Prix unitaire accepte une précision fine (jusqu'à 6 décimales), pour les prix qui en portent plus de 2 à la source. Un bloc **Prix (BG-29)** par ligne fixe le prix unitaire brut (**BT-148**) et la remise sur prix (**BT-147**) ; le prix net en est déduit et pilote le montant de ligne, lequel divise par la **quantité de base** (BT-149) — un prix pour 100 ou 1 000 unités est ainsi calculé correctement. Le bloc *Références* de la ligne porte aussi des références de **facture antérieure** par ligne (EXT-FR-FE-136) — numéro, date facultative et un **DocumentStatusCode** choisi parmi `INFORMATION` / `DETAIL` / `GROUP`.
 - **Récapitulatif TVA** — calculé automatiquement depuis les lignes (lecture seule — les modifications de ligne s'y reflètent).
 - **Totaux** — calculés automatiquement (lecture seule).
 

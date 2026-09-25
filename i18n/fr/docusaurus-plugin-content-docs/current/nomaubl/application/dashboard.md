@@ -240,6 +240,15 @@ Les cartes **En cours** / **Rejetée — IT** / **Rejetée — Business** perdai
 
 Une bordure rouge et une valeur rouge sur **Rejetée — IT** signalent un compteur strictement positif. Même traitement en orange sur **Rejetée — Business**.
 
+### Cartes par statut
+
+Deux rangées de cartes sous les KPI hero, organisées selon l'action qu'appelle chaque statut :
+
+- **Corriger et renvoyer** — `213` (Rejetée), `9905` (Échec de validation), `9907` (Échec d'import PA) : des factures qui peuvent être corrigées et renvoyées.
+- **Émettre une nouvelle facture** — `207`, `208`, `210` : des statuts où la facture est définitive et où une nouvelle doit être émise.
+
+Chaque carte affiche le compteur de la période choisie avec le libellé du statut, se colore quand il n'est pas à zéro, et ouvre au clic la liste des factures filtrée sur ce statut. Les rangées ont leur propre clé de visibilité — *Cartes de statut* — dans la liste blanche des cartes du rôle.
+
 ---
 
 ## La grille de widgets

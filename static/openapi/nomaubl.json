@@ -602,6 +602,23 @@
         }
       }
     },
+    "/api/scheduler/pause": {
+      "post": {
+        "tags": ["Scheduler"],
+        "summary": "Pause / resume a PA poller",
+        "description": "Pauses or resumes one of the PA poller jobs at runtime — job is 'import' (the import-status poll) or 'status' (the lifecycle status retrieval). Effective on the next tick and deliberately runtime-only: a server restart always resumes, so a pause can't be forgotten. Drives the pause/resume button on the Tech Dashboard's Scheduler card. Complements the daily quiet window (global fetchQuietFrom / fetchQuietTo).",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "job": "import", "paused": true } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "importPaused": true, "statusPaused": false } } } }
+          }
+        }
+      }
+    },
     "/api/check-directory": {
       "post": {
         "tags": ["Integration"],
@@ -758,6 +775,25 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "type": "object", "properties": { "events": { "type": "array", "items": { "$ref": "#/components/schemas/LifecycleEvent" } } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/{doc}/{dct}/{kco}/lifecycle/{seqn}": {
+      "delete": {
+        "tags": ["Invoices"],
+        "summary": "Delete one lifecycle event",
+        "description": "Removes a single lifecycle event (by its sequence number) from the invoice's history and realigns the invoice's current status on the last remaining event — the clean manual fix when the platform delivered a stray status that it later superseded. Gated by a dedicated 'Delete lifecycle event' action grant.",
+        "parameters": [
+          { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
+          { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
+          { "name": "kco", "in": "path", "schema": { "type": "string" }, "description": "Company code (UHKCO)", "required": true },
+          { "name": "seqn", "in": "path", "schema": { "type": "integer" }, "description": "Sequence number of the lifecycle event to delete", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
           }
         }
       }

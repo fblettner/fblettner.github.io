@@ -26371,6 +26371,15 @@ Les cartes **En cours** / **Rejetée — IT** / **Rejetée — Business** perdai
 
 Une bordure rouge et une valeur rouge sur **Rejetée — IT** signalent un compteur strictement positif. Même traitement en orange sur **Rejetée — Business**.
 
+### Cartes par statut
+
+Deux rangées de cartes sous les KPI hero, organisées selon l'action qu'appelle chaque statut :
+
+- **Corriger et renvoyer** — `213` (Rejetée), `9905` (Échec de validation), `9907` (Échec d'import PA) : des factures qui peuvent être corrigées et renvoyées.
+- **Émettre une nouvelle facture** — `207`, `208`, `210` : des statuts où la facture est définitive et où une nouvelle doit être émise.
+
+Chaque carte affiche le compteur de la période choisie avec le libellé du statut, se colore quand il n'est pas à zéro, et ouvre au clic la liste des factures filtrée sur ce statut. Les rangées ont leur propre clé de visibilité — *Cartes de statut* — dans la liste blanche des cartes du rôle.
+
 ---
 
 ## La grille de widgets
@@ -27590,7 +27599,7 @@ Le **cycle de vie** est la trace d'audit de tous les statuts traversés par la f
 - Le libellé du statut et le message renvoyé par la plateforme.
 - Pour les refus, détails facultatifs : code et libellé du motif de rejet, code et libellé de l'action attendue, note de statut additionnelle.
 
-Le cycle de vie est en mode ajout seul — les événements sont créés par le job *Synchronisation → Récupérer les statuts* et ne sont jamais modifiés.
+Le cycle de vie est en mode ajout seul — les événements sont créés par le job *Synchronisation → Récupérer les statuts* et ne sont jamais modifiés. Chaque événement porte toutefois un bouton **supprimer** (avec confirmation) : retirer un événement réaligne le statut de la facture sur le dernier restant — la correction manuelle propre quand la plateforme a livré un statut parasite (une *Refusée* qu'elle a ensuite dépassée, par exemple). Réservé par une action dédiée **Supprimer l'événement de cycle de vie** dans les [rôles](../configuration/security/roles.md).
 
 Les trois champs de refus — **motif de rejet**, **action attendue** et **note de statut** — figurent aussi dans le catalogue de colonnes : on peut les épingler comme colonnes de liste et les filtrer depuis l'éditeur de [Vues de liste](../configuration/list-views.md) quand une équipe doit balayer ou trier par motif de refus sans ouvrir chaque facture.
 
@@ -27849,14 +27858,14 @@ Depuis 2026.05.10, modifier une facture existante ne réinitialise plus son `cbc
 La modale est divisée en sections verticales :
 
 - **Document** — numéro, type de facture, profile ID, références contrat / acheteur / commande.
-- **En-tête** — dates d'émission / échéance, devise, période de début / fin.
+- **En-tête** — dates d'émission / échéance, devise, période de début / fin, ainsi qu'un bloc **Factures antérieures** (BG-3, 0..n) : chaque ligne un numéro de référence (BT-25) et une date d'émission facultative (BT-26), avec **＋ Ajouter une facture antérieure (BG-3)**. Sur un avoir, c'est la référence à la facture corrigée.
 - **Fournisseur** — alimenté depuis l'annuaire des fournisseurs (*UBL Defaults → Suppliers / Companies*) ; modifiable par facture.
-- **Client** — renseigné de bout en bout depuis la recherche d'entreprise : les résultats affichent le badge, le nom et l'identifiant sur une ligne, l'adresse en dessous ; une recherche par SIREN ou SIRET seul liste tous les établissements (même seconde interrogation INSEE que l'[E-Directory](./edirectory.md)), et un champ SIRET facultatif complète le SIREN. L'adresse électronique n'est **pas déduite** du SIREN/SIRET — une liste d'adresses électroniques du PPF (ouverte automatiquement après le choix d'une entreprise, ou à tout moment via le bouton à côté du champ identifiant) présente les adresses enregistrées pour le SIREN avec leur état actif/désactivé ; en choisir une renseigne l'identifiant et son schéma, puis la liste se referme.
+- **Client** — renseigné de bout en bout depuis la recherche d'entreprise : les résultats affichent le badge, le nom et l'identifiant sur une ligne, l'adresse en dessous ; une recherche par SIREN ou SIRET seul liste tous les établissements (même seconde interrogation INSEE que l'[E-Directory](./edirectory.md)), et un champ SIRET facultatif complète le SIREN. L'adresse électronique n'est **pas déduite** du SIREN/SIRET — une liste d'adresses électroniques du PPF (ouverte automatiquement après le choix d'une entreprise, ou à tout moment via le bouton à côté du champ identifiant) présente les adresses enregistrées pour le SIREN avec leur état actif/désactivé ; en choisir une renseigne l'identifiant et son schéma, puis la liste se referme. Un bloc **Autres id. (BT-46)** ajoute autant d'identifiants acheteur supplémentaires que voulu, chacun avec son schéma de la liste EAS — un code de routage ou un second SIRET porté par le document devient visible, modifiable et supprimable au lieu de voyager de façon invisible.
 - **Livraison** — groupe livraison facultatif.
 - **Paiement** — code de moyen de paiement, IBAN, BIC, mandat, conditions.
 - **Remises / charges** — remises / charges au niveau document.
 - **Notes** — notes libres par préfixe `BT-22`.
-- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés. Le champ Prix unitaire accepte une précision fine (jusqu'à 6 décimales), pour les prix qui en portent plus de 2 à la source.
+- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés. Le champ Prix unitaire accepte une précision fine (jusqu'à 6 décimales), pour les prix qui en portent plus de 2 à la source. Un bloc **Prix (BG-29)** par ligne fixe le prix unitaire brut (**BT-148**) et la remise sur prix (**BT-147**) ; le prix net en est déduit et pilote le montant de ligne, lequel divise par la **quantité de base** (BT-149) — un prix pour 100 ou 1 000 unités est ainsi calculé correctement. Le bloc *Références* de la ligne porte aussi des références de **facture antérieure** par ligne (EXT-FR-FE-136) — numéro, date facultative et un **DocumentStatusCode** choisi parmi `INFORMATION` / `DETAIL` / `GROUP`.
 - **Récapitulatif TVA** — calculé automatiquement depuis les lignes (lecture seule — les modifications de ligne s'y reflètent).
 - **Totaux** — calculés automatiquement (lecture seule).
 
@@ -28100,6 +28109,8 @@ Liste tous les jobs actifs du planificateur :
 - **Passages Reprise auto par ligne** — une ligne par entrée enregistrée sur la page [Reprise auto](../configuration/system/auto-retry.md), avec l'heure planifiée et la liste des statuts ciblés en guise de cadence.
 
 Chaque ligne affiche le nom du job, la cadence, et une pastille de statut (vert actif, bleu prévu sous peu, orange en pause). Le sous-titre indique le décompte des jobs actifs.
+
+Les jobs **interrogation d'import PA** et **récupération des statuts PA** portent un bouton **pause / reprise** — effectif au tick suivant et volontairement transitoire (un redémarrage du serveur relance toujours, une pause ne peut donc pas être oubliée). La [fenêtre calme quotidienne](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) s'affiche aussi ici, en surbrillance quand elle est active — pendant celle-ci, les deux interrogations sautent automatiquement leurs exécutions.
 
 ### Courbe d'erreurs · 14j (rangée 2, span 4)
 
@@ -30554,6 +30565,7 @@ La section **Status Retrieval** pilote la boucle de récupération des statuts d
 | **Import status mode** | `per-invoice` *(défaut)* | `per-invoice` interroge chaque facture en attente par son id de transaction. `search` demande plutôt à la plateforme tous les flux mis à jour depuis la dernière relève (la date est conservée d'une exécution à l'autre) et rapproche les résultats des factures en attente — pour les plateformes sans recherche de statut par facture, comme Yooz Rising. |
 | **Import parallel** | *(défaut `4`, max `8`)* | Nombre de factures en attente (statut 9906) que le contrôle de statut d'import interroge **en même temps**. À augmenter pour résorber plus vite un gros arriéré ; mettre `1` pour l'ancien comportement séquentiel. |
 | **Poll parallel** | *(défaut `4`)* | Même réglage pour l'interrogation du cycle de vie par facture — nombre de factures dont le statut est récupéré simultanément. |
+| **Min invoice date** | *(vide = pas de seuil)* | Un **seuil d'ingestion** : une facture du pipeline XML datée avant cette date est écartée d'emblée — pas d'écriture en base, pas de génération, pas d'envoi PA. Il protège les relances d'anciens jobs BIP et les archives héritées (un document avec une ligne d'archive mais sans en-tête paraîtrait sinon « jamais envoyé » et serait renvoyé). Les dates de facture vides ou illisibles ne sont jamais bloquées. |
 | **Lifecycle endpoints** | *(vide = `invoice-statuses`)* | Nom(s) d'endpoint du connecteur à interroger pour les événements de cycle de vie, séparés par des virgules. Ajoutez `invoice-statuses-selfbilled` à côté de `invoice-statuses` quand la plateforme répartit ses cycles de vie ventes et achats (auto-facturation) sur des endpoints distincts, pour collecter les deux. Les endpoints inconnus sont ignorés. |
 
 :::info[Les factures d'auto-facturation empruntent leurs propres endpoints]
@@ -30943,6 +30955,7 @@ Tâches d'arrière-plan exécutées par NomaUBL en mode serveur. **Les modificat
 |---|---|
 | **Import poll interval (min)** | Minutes entre deux interrogations automatiques du statut d'import pour les factures en attente (statut `9906`). `0` = désactivé. |
 | **Status retrieval interval (min)** | Minutes entre deux récupérations automatiques des statuts de cycle de vie depuis la PA. `0` = désactivé. |
+| **Quiet window from / to (HH:mm)** | Fenêtre quotidienne pendant laquelle les deux interrogations PA (import et récupération des statuts) sont automatiquement suspendues — à placer sur une campagne d'envoi pour que les interrogations d'import par facture ne s'accumulent pas pendant que la PA intègre le lot. Peut franchir minuit ; laisser les deux vides pour désactiver. S'applique sans redémarrage et s'affiche sur la carte *Planificateur* du Tableau de bord IT, en surbrillance quand elle est active. |
 | **Received fetch interval (min)** | Minutes entre deux passes *PA entrante* automatiques — même flux que le mode *Sync → Fetch Input → PA entrante (factures fournisseur)* et la commande CLI `-fetch-received`. `0` = désactivé. Le curseur de la date d'émission la plus récente traitée est enregistré dans `lastFetchReceivedAt`, chaque passe ne récupérant ainsi que les factures arrivées depuis la précédente. |
 
 ### Bulk Send
@@ -41017,7 +41030,12 @@ Certaines règles des packs publics remontent un avertissement sur des structure
 
 ### Règles maison NomaUBL
 
-Le pack `BR-NOMAUBL-rules.sch` est un **placeholder structurel** — il est vide aujourd'hui. Il reste dans le pipeline runtime comme point d'accroche prêt à l'emploi pour de futures règles que l'AIFE impose côté serveur et que les packs Schematron publics n'auraient pas encore reprises. Les faire remonter localement placerait l'échec dans `F564236` avant l'aller-retour PA — une étape réseau économisée et l'explication lisible disponible immédiatement pour l'opérateur.
+Le pack `BR-NOMAUBL-rules.sch` porte les règles côté AIFE que les packs Schematron publics ne livrent pas encore, remontées localement pour que l'échec atterrisse dans `F564236` avant l'aller-retour PA :
+
+- **`BR-NOMAUBL-01`** *(fatal)* — pour un avoir dont le `BT-3` est dans `{261, 381, 396, 502, 503}`, au moins une référence de facture antérieure (`cac:BillingReference/cac:InvoiceDocumentReference`) avec son `cbc:ID` (BT-25) et son `cbc:IssueDate` (BT-26) doit être présente ; sinon les PA rejettent ces avoirs sur une erreur de validation de modèle.
+- **`BR-NOMAUBL-02`** *(avertissement)* — compare le montant net de chaque ligne (BT-131) à la formule AFNOR (prix ÷ quantité de base × quantité, moins les remises de ligne, plus les charges de ligne) et avertit au-delà de `0,011`. EN 16931 ne contrôle pas cette formule aujourd'hui ; le cas typique détecté est un prix net laissé en BT-146 avec la remise répétée en remise de ligne. Un avertissement ne bloque jamais l'envoi.
+
+Le pack reste un point d'accroche prêt à l'emploi pour les prochaines règles AIFE.
 
 La version du pack est accessible via `GET /api/build-info` sous la clé `schematron.nomaubl` — le pied de page du tableau de bord la lit pour le tampon de version par pack.
 
@@ -41171,7 +41189,7 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Payment** | BT-20, BT-81 à BT-91 | Moyen, IBAN, BIC, mandat, conditions. |
 | **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | Payeur en prélèvement SEPA — la partie débitrice, la référence de mandat (BT-89) et le compte débité (IBAN, BT-91). Voir [Payeur / mandat de prélèvement](#payer-mandate) ci-dessous. |
 | **VAT** | BT-110, BT-116 à BT-121 | Détail TVA — voir [scoping](#scoping) ci-dessous. |
-| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158, groupe répétable jusqu'à quatre codes), la version de schéma (BT-158-2) et l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) par ligne — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN) — voir [scoping](#scoping) ci-dessous. |
+| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158, groupe répétable jusqu'à quatre codes), la version de schéma (BT-158-2), l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN), et le **prix brut** (`TAG_LINE_GROSS_PRICE` → BT-148) avec la **quantité de base** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). Un spool portant brut + remise mappe les deux et le prix net est déduit (brut − remise) ; un spool portant net + remise émet son brut égal à net + remise. Les champs de ligne sont regroupés par thème (identification, quantités, prix, TVA, références, classification) — voir [scoping](#scoping) ci-dessous. |
 | **Item Properties** *(BG-32)* | BG-32 | Attributs produit attachés à une ligne. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Remise ou charge par ligne. Pointer le TAG *Item AC* sur `.` (ou le laisser vide) quand les champs de remise se trouvent directement sur la ligne, sans élément parent — le moteur itère alors la ligne elle-même. Quand la source ne porte que le pourcentage, le montant et la base sont déduits du net de la ligne ; pourcentage + base déduit le montant, pourcentage + montant déduit la base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Références de document par ligne — pièces justificatives (BT-128, schéma UNTDID 1153) et la ligne de bon de commande référencée via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, groupe EXT-FR-FE-BG-09, placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1). |

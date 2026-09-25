@@ -580,7 +580,7 @@ The **lifecycle** is the audit trail of every status the invoice has been in. Ea
 - The status label and the message returned by the platform.
 - Optional details for refusals: rejection reason code + label, expected action code + label, additional status note.
 
-The lifecycle is append-only — events are added by the *Sync → Retrieve Statuses* sweep and never modified.
+The lifecycle is append-only — events are added by the *Sync → Retrieve Statuses* sweep and never modified. Each event does carry a **delete** button (with confirmation): removing an event realigns the invoice status on the last remaining one — the clean manual fix when the platform delivered a stray status (a *Refusée* it later superseded, say). It is gated by a dedicated **Delete lifecycle event** action in the [roles](../configuration/security/roles.md).
 
 The three refusal fields — **rejection reason**, **expected action** and **status note** — also live in the column catalog, so they can be pinned as list columns and filtered from the [List Views](../configuration/list-views.md) editor when a team needs to scan or sort by refusal reason without opening each invoice.
 
@@ -847,14 +847,14 @@ Since 2026.05.10, editing an existing invoice no longer flips its `cbc:Customiza
 The modal is split into vertical sections:
 
 - **Document** — invoice number, type, profile ID, contract / buyer / order references.
-- **Header** — issue / due dates, currency, period start / end.
+- **Header** — issue / due dates, currency, period start / end, plus a **Preceding invoices** block (BG-3, 0..n): each row a reference number (BT-25) and an optional issue date (BT-26), added or removed with **＋ Add a preceding invoice (BG-3)**. On a credit note this is the reference to the corrected invoice.
 - **Supplier** — pre-populates from the supplier directory (*UBL Defaults → Suppliers / Companies*); editable per invoice.
-- **Customer** — filled end to end from the company search: results show the badge, name and identifier on one line with the address below; searching a bare SIREN or SIRET lists every establishment (the same second INSEE lookup as [E-Directory](./edirectory.md)), and an optional SIRET field completes the SIREN. The electronic address is **not guessed** from the SIREN/SIRET — a PPF electronic-address list (opened automatically after picking a company, or anytime via the button next to the identifier field) shows the addresses registered for the SIREN with their active/disabled state; picking one fills the identifier and its scheme, then the list closes.
+- **Customer** — filled end to end from the company search: results show the badge, name and identifier on one line with the address below; searching a bare SIREN or SIRET lists every establishment (the same second INSEE lookup as [E-Directory](./edirectory.md)), and an optional SIRET field completes the SIREN. The electronic address is **not guessed** from the SIREN/SIRET — a PPF electronic-address list (opened automatically after picking a company, or anytime via the button next to the identifier field) shows the addresses registered for the SIREN with their active/disabled state; picking one fills the identifier and its scheme, then the list closes. An **Other ids (BT-46)** block adds any number of extra buyer identifiers, each with its scheme from the EAS list — a routing code or a second SIRET carried on the document is now visible, editable and removable instead of travelling invisibly.
 - **Delivery** — optional delivery group.
 - **Payment** — payment means code, IBAN, BIC, mandate, terms.
 - **Allowances / charges** — document-level discounts / charges.
 - **Notes** — free-text notes per `BT-22` prefix.
-- **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties. The unit-price input accepts fine precision (up to 6 decimals), to match prices that carry more than 2 decimals at source.
+- **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties. The unit-price input accepts fine precision (up to 6 decimals), to match prices that carry more than 2 decimals at source. A per-line **Price (BG-29)** block sets the gross unit price (**BT-148**) and the price discount (**BT-147**); the net price is derived and drives the line amount, and the line amount divides by the **price base quantity** (BT-149) so a price per 100 or 1,000 units is computed correctly. The line *References* block also holds per-line **Preceding invoice** references (EXT-FR-FE-136) — number, optional date and a **DocumentStatusCode** picked from `INFORMATION` / `DETAIL` / `GROUP`.
 - **VAT summary** — auto-computed from the lines (read-only — line edits are reflected here).
 - **Totals** — auto-computed (read-only).
 

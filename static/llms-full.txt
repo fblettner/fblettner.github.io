@@ -31821,6 +31821,15 @@ The **In flight** / **Rejected — IT** / **Rejected — Business** cards used t
 
 A red border + red value on **Rejected — IT** signals a non-zero count; same orange treatment on **Rejected — Business**.
 
+### Per-status cards
+
+Two card rows sit under the hero metrics, organised by the action each status calls for:
+
+- **Fix and resend** — `213` (Rejected), `9905` (Validation failed), `9907` (PA import failed): invoices that can be corrected and re-sent.
+- **Issue a new invoice** — `207`, `208`, `210`: statuses where the invoice is final and a new one must be issued.
+
+Each card shows the count for the selected period with the status label, colours up when non-zero, and clicks through to the invoice list filtered on that status. The rows have their own visibility key — *Status cards* — in the role's dashboard-card whitelist.
+
 ---
 
 ## The widget grid
@@ -33040,7 +33049,7 @@ The **lifecycle** is the audit trail of every status the invoice has been in. Ea
 - The status label and the message returned by the platform.
 - Optional details for refusals: rejection reason code + label, expected action code + label, additional status note.
 
-The lifecycle is append-only — events are added by the *Sync → Retrieve Statuses* sweep and never modified.
+The lifecycle is append-only — events are added by the *Sync → Retrieve Statuses* sweep and never modified. Each event does carry a **delete** button (with confirmation): removing an event realigns the invoice status on the last remaining one — the clean manual fix when the platform delivered a stray status (a *Refusée* it later superseded, say). It is gated by a dedicated **Delete lifecycle event** action in the [roles](../configuration/security/roles.md).
 
 The three refusal fields — **rejection reason**, **expected action** and **status note** — also live in the column catalog, so they can be pinned as list columns and filtered from the [List Views](../configuration/list-views.md) editor when a team needs to scan or sort by refusal reason without opening each invoice.
 
@@ -33299,14 +33308,14 @@ Since 2026.05.10, editing an existing invoice no longer flips its `cbc:Customiza
 The modal is split into vertical sections:
 
 - **Document** — invoice number, type, profile ID, contract / buyer / order references.
-- **Header** — issue / due dates, currency, period start / end.
+- **Header** — issue / due dates, currency, period start / end, plus a **Preceding invoices** block (BG-3, 0..n): each row a reference number (BT-25) and an optional issue date (BT-26), added or removed with **＋ Add a preceding invoice (BG-3)**. On a credit note this is the reference to the corrected invoice.
 - **Supplier** — pre-populates from the supplier directory (*UBL Defaults → Suppliers / Companies*); editable per invoice.
-- **Customer** — filled end to end from the company search: results show the badge, name and identifier on one line with the address below; searching a bare SIREN or SIRET lists every establishment (the same second INSEE lookup as [E-Directory](./edirectory.md)), and an optional SIRET field completes the SIREN. The electronic address is **not guessed** from the SIREN/SIRET — a PPF electronic-address list (opened automatically after picking a company, or anytime via the button next to the identifier field) shows the addresses registered for the SIREN with their active/disabled state; picking one fills the identifier and its scheme, then the list closes.
+- **Customer** — filled end to end from the company search: results show the badge, name and identifier on one line with the address below; searching a bare SIREN or SIRET lists every establishment (the same second INSEE lookup as [E-Directory](./edirectory.md)), and an optional SIRET field completes the SIREN. The electronic address is **not guessed** from the SIREN/SIRET — a PPF electronic-address list (opened automatically after picking a company, or anytime via the button next to the identifier field) shows the addresses registered for the SIREN with their active/disabled state; picking one fills the identifier and its scheme, then the list closes. An **Other ids (BT-46)** block adds any number of extra buyer identifiers, each with its scheme from the EAS list — a routing code or a second SIRET carried on the document is now visible, editable and removable instead of travelling invisibly.
 - **Delivery** — optional delivery group.
 - **Payment** — payment means code, IBAN, BIC, mandate, terms.
 - **Allowances / charges** — document-level discounts / charges.
 - **Notes** — free-text notes per `BT-22` prefix.
-- **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties. The unit-price input accepts fine precision (up to 6 decimals), to match prices that carry more than 2 decimals at source.
+- **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties. The unit-price input accepts fine precision (up to 6 decimals), to match prices that carry more than 2 decimals at source. A per-line **Price (BG-29)** block sets the gross unit price (**BT-148**) and the price discount (**BT-147**); the net price is derived and drives the line amount, and the line amount divides by the **price base quantity** (BT-149) so a price per 100 or 1,000 units is computed correctly. The line *References* block also holds per-line **Preceding invoice** references (EXT-FR-FE-136) — number, optional date and a **DocumentStatusCode** picked from `INFORMATION` / `DETAIL` / `GROUP`.
 - **VAT summary** — auto-computed from the lines (read-only — line edits are reflected here).
 - **Totals** — auto-computed (read-only).
 
@@ -33550,6 +33559,8 @@ Lists every active scheduler job:
 - **Per-row Auto-Retry sweeps** — one row per saved entry on the [Auto-Retry](../configuration/system/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
 
 Each row shows the job name, the cadence, and a status pill (green active, blue scheduled-soon, orange paused). The card subtitle reports the active count.
+
+The **PA import poll** and **PA status retrieve** jobs carry a **pause / resume** button — effective on the next tick and deliberately runtime-only, so a server restart always resumes and a pause can't be forgotten. The [daily quiet window](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) is shown here too, highlighted while active — during it both pollers skip their runs automatically.
 
 ### Error trend · 14d (row 2, span 4)
 
@@ -36004,6 +36015,7 @@ The **Status Retrieval** section drives the lifecycle-status retrieval loop.
 | **Import status mode** | `per-invoice` *(default)* | `per-invoice` polls each pending invoice by its stored transaction id. `search` instead asks the platform for every flow updated since the last check (the date is kept between runs) and matches the results to the pending invoices — for platforms with no per-invoice status lookup, such as Yooz Rising. |
 | **Import parallel** | *(default `4`, max `8`)* | How many pending invoices (status 9906) the import-status check polls **at the same time**. Raise it to clear a large pending backlog faster; set `1` for the previous one-at-a-time behaviour. |
 | **Poll parallel** | *(default `4`)* | Same setting for the per-invoice lifecycle poll — how many invoices its status is fetched for concurrently. |
+| **Min invoice date** | *(empty = no cutoff)* | An **ingestion cutoff**: an XML-pipeline invoice dated before this date is skipped at the door — no database write, no generation, no PA send. It guards re-runs of old BIP jobs and legacy archives (a document with an archive row but no header would otherwise look "never sent" and be resent). Empty or unparseable invoice dates are never blocked. |
 | **Lifecycle endpoints** | *(blank = `invoice-statuses`)* | Connector endpoint name(s) to poll for lifecycle events, comma-separated. Add `invoice-statuses-selfbilled` next to `invoice-statuses` when the platform splits its sales and purchase (self-billing) lifecycle across separate endpoints, so both are collected. Unknown endpoints are skipped. |
 
 :::info[Self-billed invoices route to their own endpoints]
@@ -36393,6 +36405,7 @@ Background tasks executed by NomaUBL when running in serve mode. **Changes on th
 |---|---|
 | **Import poll interval (min)** | Minutes between automatic import-status polls for pending invoices (status `9906`). `0` = disabled. |
 | **Status retrieval interval (min)** | Minutes between automatic lifecycle-status retrievals from the PA. `0` = disabled. |
+| **Quiet window from / to (HH:mm)** | A daily window during which both PA pollers (import poll and status retrieval) skip their runs automatically — set it over a send campaign so per-invoice import polls don't pile up while the PA is integrating the batch. May cross midnight; leave both empty to disable. It applies without a restart and shows on the Tech Dashboard's *Scheduler* card, highlighted while active. |
 | **Received fetch interval (min)** | Minutes between automatic *PA inbound* sweeps — the same flow as the *Sync → Fetch Input → PA inbound (supplier invoices)* mode and the `-fetch-received` CLI. `0` = disabled. Persists the cursor of the highest issue date processed in `lastFetchReceivedAt` so each sweep only pulls invoices that arrived since the previous one. |
 
 ### Bulk Send
@@ -46265,7 +46278,12 @@ Some rules in the public packs report a warning on shapes NomaUBL emits **by des
 
 ### NomaUBL house rules
 
-The `BR-NOMAUBL-rules.sch` pack is a **scaffolding placeholder** — it ships empty today. It stays in the runtime pipeline as a ready-made hook for future rules the AIFE enforces server-side but that the public Schematron packs have not picked up yet. Surfacing such rules locally would put the failure in `F564236` before the PA round-trip — saving a network hop and giving the operator the human-readable explanation immediately.
+The `BR-NOMAUBL-rules.sch` pack carries the AIFE-side rules the public Schematron packs don't ship yet, surfaced locally so the failure lands in `F564236` before the PA round-trip:
+
+- **`BR-NOMAUBL-01`** *(fatal)* — for a credit note whose `BT-3` is in `{261, 381, 396, 502, 503}`, at least one preceding-invoice reference (`cac:BillingReference/cac:InvoiceDocumentReference`) with both its `cbc:ID` (BT-25) and `cbc:IssueDate` (BT-26) must be present; PAs reject these credit notes on a model-validation error otherwise.
+- **`BR-NOMAUBL-02`** *(warning)* — compares each line's net amount (BT-131) with the AFNOR formula (price ÷ base quantity × quantity, minus line allowances, plus line charges) and warns beyond `0.011`. EN 16931 doesn't check this formula today; the typical case it catches is a net price left in BT-146 with the discount repeated as a line allowance. A warning never blocks the send.
+
+The pack stays a ready-made hook for further AIFE rules as they appear.
 
 The pack version is exposed at `GET /api/build-info` under `schematron.nomaubl` — the dashboard footer reads it for the per-pack version stamp.
 
@@ -46419,7 +46437,7 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Payment** | BT-20, BT-81 to BT-91 | Means, IBAN, BIC, mandate, terms. |
 | **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | SEPA direct-debit payer — the debtor party plus the mandate reference (BT-89) and debited account IBAN (BT-91). See [Payer / direct-debit mandate](#payer-mandate) below. |
 | **VAT** | BT-110, BT-116 to BT-121 | VAT breakdown rows — see [scoping](#scoping) below. |
-| **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158, a repeatable group of up to four codes), classification scheme version (BT-158-2) and the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN) — see [scoping](#scoping) below. |
+| **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158, a repeatable group of up to four codes), classification scheme version (BT-158-2), the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN), and the **gross price** (`TAG_LINE_GROSS_PRICE` → BT-148) with the **price base quantity** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). A spool carrying gross + discount maps both and the net price is derived as gross − discount; a spool carrying net + discount emits its gross as net + discount. Line fields are grouped by theme (identification, quantities, prices, VAT, references, classification) — see [scoping](#scoping) below. |
 | **Item Properties** *(BG-32)* | BG-32 | Repeating product attributes attached to a line. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Per-line discount or charge. Point the *Item AC* TAG at `.` (or leave it empty) when the allowance fields sit directly on the invoice line with no wrapper element — the framework then iterates the line itself. When the source carries only the percentage, the amount and base are derived from the line net amount; percentage + base derives the amount, percentage + amount derives the base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Per-line document references — supporting documents (BT-128, UNTDID 1153 scheme) and the referenced purchase-order line via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, group EXT-FR-FE-BG-09, placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence). |
