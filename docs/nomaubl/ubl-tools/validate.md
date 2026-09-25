@@ -18,7 +18,7 @@ Three changes shipped in 2026.05.9 on the validation side:
 
 - **Precompiled Schematron** — the runtime no longer compiles `.sch` files. `UBLValidator` loads precompiled `.xsl` straight from the JAR classpath, failing fast at startup if any expected file is missing. AFNOR's three packs ship as published; the two locally-authored rules (`BR-FR-CPRO-Schematron-UBL` + `BR-NOMAUBL-rules`) are precompiled at build time by `build.sh` via Saxon CLI + `xmlresolver`. Cold-start drops a noticeable beat — three XSLT compiles × five packs no longer happen per JVM.
 - **Flux 2 always runs** — AFNOR XP Z12-012 V1.3.1 splits validation into 4 steps: Step 2 picks EN 16931 *or* Extended-CTC-FR (based on `CustomizationID`), Step 3 runs **BR-FR-Flux 2 unconditionally** on top. The previous code treated Extended-CTC-FR as a superset and skipped Flux 2 — missing the reform-specific `BR-FR-*` / `EXT-FR-FE-*` rules the PA still enforces server-side. The Extended profile now runs both steps.
-- **New `BR-NOMAUBL-rules.sch` pack** — captures AIFE-side rules the public Schematron packs do not ship yet. First rule (`BR-NOMAUBL-01`, fatal): if BT-3 ∈ `{261, 381, 396, 502, 503}`, at least one `cac:BillingReference/cac:InvoiceDocumentReference` with both `cbc:ID` (BT-25) and `cbc:IssueDate` (BT-26) must be present. PAs reject these credit notes today with a model-validation error; the rule surfaces it locally so the failure lands in `F564236` before the round-trip. Wired through `BuildInfo` (`schematron.nomaubl` version in `/api/build-info`) and runs as the final layer after CPRO-B2G.
+- **`BR-NOMAUBL-rules.sch` pack** — captures rules no shipped Schematron pack encodes yet, surfaced locally so the failure lands in `F564236` before the round-trip. It holds `BR-NOMAUBL-02` (AFNOR §4.4.5 line-amount coherence, warning). Its earlier `BR-NOMAUBL-01` (credit note must reference a preceding invoice) was dropped once the standard Flux 2 pack enforced the same condition through `BR-FR-CO-05`. Wired through `BuildInfo` (`schematron.nomaubl` version in `/api/build-info`) and runs as the final layer after CPRO-B2G.
 
 The **directory check** also moved to validation time in 2026.05.9 — an unknown counterparty surfaces in `F564236` before the document is queued, instead of waiting for the send step to fail.
 :::
@@ -170,12 +170,11 @@ Some rules in the public packs report a warning on shapes NomaUBL emits **by des
 
 ### NomaUBL house rules
 
-The `BR-NOMAUBL-rules.sch` pack carries the AIFE-side rules the public Schematron packs don't ship yet, surfaced locally so the failure lands in `F564236` before the PA round-trip:
+The `BR-NOMAUBL-rules.sch` pack carries the rules that no shipped Schematron pack encodes yet, surfaced locally so the failure lands in `F564236` before the PA round-trip. It holds a single rule today:
 
-- **`BR-NOMAUBL-01`** *(fatal)* — for a credit note whose `BT-3` is in `{261, 381, 396, 502, 503}`, at least one preceding-invoice reference (`cac:BillingReference/cac:InvoiceDocumentReference`) with both its `cbc:ID` (BT-25) and `cbc:IssueDate` (BT-26) must be present; PAs reject these credit notes on a model-validation error otherwise.
 - **`BR-NOMAUBL-02`** *(warning)* — compares each line's net amount (BT-131) with the AFNOR formula (price ÷ base quantity × quantity, minus line allowances, plus line charges) and warns beyond `0.011`. EN 16931 doesn't check this formula today; the typical case it catches is a net price left in BT-146 with the discount repeated as a line allowance. A warning never blocks the send.
 
-The pack stays a ready-made hook for further AIFE rules as they appear.
+The requirement that a credit note reference a preceding invoice is **not** a house rule — the earlier `BR-NOMAUBL-01` was dropped once the **standard** Flux 2 pack started enforcing the same condition through **`BR-FR-CO-05`**. The house rules are relaxed as the upstream AFNOR / FNFE-MPE packs catch up, so the pack stays a ready-made hook for whatever they don't cover yet.
 
 The pack version is exposed at `GET /api/build-info` under `schematron.nomaubl` — the dashboard footer reads it for the per-pack version stamp.
 
