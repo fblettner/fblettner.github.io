@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import {
   UBL_FIELDS,
@@ -9,7 +9,14 @@ import {
   type UBLField,
   type UBLSection,
 } from '@site/src/data/ubl';
+import {
+  BUSINESS_RULES,
+  RULE_FAMILY_CONFIG,
+  type BusinessRule,
+} from '@site/src/data/businessRules';
 import styles from './UBLReference.module.css';
+
+const RULE_BY_ID = new Map(BUSINESS_RULES.map((r) => [r.id, r]));
 
 type Lang = 'en' | 'fr';
 
@@ -86,7 +93,7 @@ const PROFILE_LABEL: Record<string, string> = {
   extended: 'EXTENDED',
 };
 
-function FieldRow({field: f, lang}: {field: UBLField; lang: Lang}) {
+function FieldRow({field: f, lang, onRuleClick}: {field: UBLField; lang: Lang; onRuleClick: (id: string) => void}) {
   const cfg = SECTION_CONFIG[f.section];
   return (
     <div className={styles.row}>
@@ -107,13 +114,63 @@ function FieldRow({field: f, lang}: {field: UBLField; lang: Lang}) {
             {f.type && <span className={styles.chip}>{f.type}</span>}
             {f.codeList && <span className={styles.chip}>{f.codeList}</span>}
             {f.rules?.map((r) => (
-              <a key={r} className={styles.ruleChip} href={`${lang === 'fr' ? '/fr' : ''}/nomaubl/references/business-rules/`} title={lang === 'fr' ? 'Voir la règle' : 'View the rule'}>{r}</a>
+              <button
+                key={r}
+                type="button"
+                className={styles.ruleChip}
+                onClick={() => onRuleClick(r)}
+                title={lang === 'fr' ? 'Voir la règle' : 'View the rule'}
+              >
+                {r}
+              </button>
             ))}
           </div>
         )}
       </div>
       <code className={styles.xpath}>{f.xpath}</code>
       <span className={styles.cardinality}>{f.cardinality}</span>
+    </div>
+  );
+}
+
+function RuleModal({rule, lang, onClose}: {rule: BusinessRule; lang: Lang; onClose: () => void}) {
+  const fc = RULE_FAMILY_CONFIG[rule.family];
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  return (
+    <div className={styles.overlay} role="dialog" aria-modal="true" onClick={onClose}>
+      <div className={styles.ruleModal} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.ruleModalHeader}>
+          <span
+            className={styles.ruleModalId}
+            style={{background: fc.bg, color: fc.color, borderColor: fc.border}}
+          >
+            {rule.id}
+          </span>
+          <div className={styles.ruleModalTitle}>{rule.title}</div>
+          <button type="button" className={styles.ruleModalClose} onClick={onClose} aria-label="Close">✕</button>
+        </div>
+        <div className={styles.ruleModalBody}>
+          <div className={styles.ruleModalFamily}>{fc.label[lang]}</div>
+          <div className={styles.ruleModalText}>{rule.text}</div>
+          {rule.bts && rule.bts.length > 0 && (
+            <div className={styles.meta}>
+              {rule.bts.map((b) => <span key={b} className={styles.chip}>{b}</span>)}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -125,6 +182,8 @@ export default function UBLReference() {
 
   const [sectionFilter, setSectionFilter] = useState<SectionFilter>('all');
   const [search, setSearch] = useState('');
+  const [openRule, setOpenRule] = useState<string | null>(null);
+  const activeRule = openRule ? RULE_BY_ID.get(openRule) ?? null : null;
 
   const visible = useMemo(
     () => UBL_FIELDS.filter((f) => matchesUBL(f, sectionFilter, search)),
@@ -173,7 +232,7 @@ export default function UBLReference() {
                   <span className={styles.fieldCount}>({fields.length})</span>
                 </div>
                 {fields.map((f) => (
-                  <FieldRow key={f.bt} field={f} lang={lang} />
+                  <FieldRow key={f.bt} field={f} lang={lang} onRuleClick={setOpenRule} />
                 ))}
               </div>
             );
@@ -181,6 +240,9 @@ export default function UBLReference() {
         </div>
       )}
       <div className={styles.source}>{t.source}</div>
+      {activeRule && (
+        <RuleModal rule={activeRule} lang={lang} onClose={() => setOpenRule(null)} />
+      )}
     </div>
   );
 }

@@ -270,8 +270,95 @@
   border: 1px dashed var(--ifm-color-emphasis-400);
   text-decoration: none;
   white-space: nowrap;
+  cursor: pointer;
+  line-height: 1.5;
 }
 .ruleChip:hover {
   border-color: var(--ifm-color-primary);
   color: var(--ifm-color-primary);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 26, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.ruleModal {
+  background: var(--ifm-background-color);
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 620px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.ruleModalHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+  flex-shrink: 0;
+}
+
+.ruleModalId {
+  font-size: 0.7rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.ruleModalTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  flex: 1;
+}
+
+.ruleModalClose {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-600);
+  padding: 2px 6px;
+  line-height: 1;
+}
+.ruleModalClose:hover {
+  color: var(--ifm-color-emphasis-900);
+}
+
+.ruleModalBody {
+  padding: 14px 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ruleModalFamily {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-emphasis-600);
+  font-weight: 700;
+}
+
+.ruleModalText {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-800);
+  white-space: pre-wrap;
 }
