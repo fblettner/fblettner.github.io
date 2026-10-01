@@ -231,7 +231,7 @@ Configure le serveur SMTP sortant utilisé par NomaUBL pour l'envoi des notifica
 | **Session Timeout (minutes)** | Durée de validité d'une session utilisateur authentifiée, exprimée en minutes. Valeur par défaut `480` (8 heures). |
 
 :::info[Réinitialisation de mot de passe en self-service]
-Quand **Auth Mode = `internal`** (ou `both`), l'écran de connexion expose un lien *Mot de passe oublié ?*. L'utilisateur saisit son identifiant et son e-mail ; en cas de correspondance avec un compte actif, un lien à usage unique valable 60 minutes est envoyé à l'e-mail enregistré. Le lien ouvre une page dédiée pour choisir un nouveau mot de passe.
+Quand **Auth Mode = `internal`** (ou `both`), l'écran de connexion affiche un lien *Mot de passe oublié ?*. L'utilisateur saisit son identifiant et son e-mail ; en cas de correspondance avec un compte actif, un lien à usage unique valable 60 minutes est envoyé à l'e-mail enregistré. Le lien ouvre une page dédiée pour choisir un nouveau mot de passe.
 
 Requiert un **SMTP** configuré dans *Onglet 3 — Email / SMTP*. Les tokens sont persistés dans `F564255` (voir [Tables de base de données](../../references/database-tables.md#f564255--tokens-de-réinitialisation-de-mot-de-passe)) et sont invalidés dès qu'ils ont été utilisés.
 :::
@@ -270,6 +270,7 @@ Liste de **jobs batch** récurrents. Chaque job s'exécute indépendamment selon
 |---|---|
 | **Label** | Nom lisible affiché dans la liste des jobs (par ex. `BIP invoices`). |
 | **Interval (min)** | Minutes entre deux exécutions. `0` = désactivé (le job existe mais n'est pas planifié). |
+| **Daily at (HH:mm)** | Renseigné, le job s'exécute une fois par jour à cette heure locale au lieu de suivre son intervalle — comme la reprise automatique et les contrôles du cycle de vie. La liste des jobs, le Tableau de bord IT et la carte du planificateur affichent alors *chaque jour à 06:30*. |
 
 #### Paramètres par job
 
@@ -280,7 +281,7 @@ Les champs suivants définissent la stratégie de récupération et de traitemen
 | **Process type** | `xml` / `ubl` | `xml` = chaîne complète (transformation + traitement) ; `ubl` = traitement UBL direct (l'entrée est déjà UBL). |
 | **Template** *(si Process type = `xml`)* | depuis liste | Modèle de document à appliquer. Liste des modèles de type `document`. |
 | **Mode** *(si Process type = `xml`)* | `AUTO` / `SINGLE` / `BURST` / `UBL` | Mode de traitement — `AUTO` laisse NomaUBL décider ; `SINGLE` et `BURST` forcent la stratégie de sortie correspondante ; `UBL` produit uniquement de l'UBL. |
-| **Source** | `bip` / `directory` | Où récupérer les documents : `bip` = file d'impression JDE *(spécifique JDE)* ; `directory` = balaye l'**Input Directory** configuré à l'onglet 1. |
+| **Source** | `bip` / `directory` / `watch-folders` | Où récupérer les documents : `bip` = file d'impression JDE *(spécifique JDE)* ; `directory` = balaye l'**Input Directory** configuré à l'onglet 1 ; `watch-folders` = lance la récupération des [dossiers surveillés](./watched-folders.md) — le job cible alors un répertoire configuré (choisi dans une liste) ou tous. |
 | **Extract mode** *(si Source = `bip`)* | `input` / `output` / `both` | Quels artéfacts BIP récupérer : `input` = XML source uniquement ; `output` = fichiers de sortie générés uniquement ; `both` = les deux. |
 | **Language filter** *(si Source = `bip`)* | texte | Filtre BIP optionnel par langue (par ex. `FR`). Vide = toutes les langues. |
 | **Replace existing** | `Y` / `N` | À `Y`, ré-importe les documents déjà présents dans NomaUBL (écrase) ; à `N`, ignore les doublons. |

@@ -26060,7 +26060,6 @@ Chaque endpoint y est documenté avec la forme exacte de requête / réponse gé
 - [Configuration → Interface Paramètres](../framework/configuration/settings-ui.md) — l'éditeur dans le navigateur qui consomme la famille `/admin/config/*`.
 - [Authentification → Rôles et permissions](../framework/build/secure/roles-and-permissions.md) — les codes de permission vérifiés par chaque endpoint.---
 
-
 # === NomaUBL — facturation électronique ===
 
 ## Capacités IA
@@ -27349,7 +27348,7 @@ La valeur **Mise à jour** porte l'heure : une colonne *Mise à jour* au format 
 | **Total TTC** | Montant total toutes taxes comprises. |
 | **Devise** | Code ISO 4217. |
 | **Statut** | Badge de statut — code + libellé, coloré par famille. |
-| **Suivi** | **Badge de suivi** coloré — *En attente* (du service client) ou *Traité*. Allumé quand la ligne demande une attention opérateur — un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Il s'allume aussi pour une facture **Déposée (200) avec le motif `NON_TRANSMISE`** : pas une erreur, mais le destinataire n'a pas d'adresse de réception active, l'opérateur doit donc la transmettre manuellement — les autres 200 gardent un tiret discret. Vide quand rien n'est en attente : quelques badges dans une page sinon nette indiquent précisément par où commencer. |
+| **Suivi** | **Badge de suivi** coloré — *En attente* (du service client) ou *Traité*. Allumé quand la ligne demande une attention opérateur — un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Il s'allume aussi pour une facture **Déposée (200) avec le motif `NON_TRANSMISE`** : pas une erreur, mais le destinataire n'a pas d'adresse de réception active, l'opérateur doit donc la transmettre manuellement — les autres 200 gardent un tiret discret. Une facture **corrigée à la main** — enregistrée depuis la fenêtre facture ou réparée avec *Corriger destinataire* — passe à *Traité* dès que la validation qui suit ne signale aucune erreur, quel que soit son statut. Vide quand rien n'est en attente : quelques badges dans une page sinon nette indiquent précisément par où commencer. |
 
 Un sélecteur de taille de page en bas du tableau est réglé sur 50 par défaut ; des valeurs jusqu'à 500 sont acceptées. Le nombre total de factures correspondant aux filtres apparaît à côté de la pagination.
 
@@ -27416,7 +27415,7 @@ L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **bo
 
 #### Corriger destinataire \{#fix-buyer\}
 
-Les rejets PA les plus fréquents portent sur les **identifiants de l'acheteur** — SIREN (BT-47), SIRET (BT-46), TVA intracommunautaire (BT-48) et adresse électronique (BT-49). Un bouton **Corriger destinataire** ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la [recherche d'entreprises INSEE](./edirectory.md) et le sélecteur d'adresses électroniques du PPF, pour corriger uniquement ces champs sans rééditer toute la facture. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est **revalidée immédiatement**, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option **renvoie à la PA** si la validation réussit. Le bouton n'apparaît que tant que la facture est encore corrigeable ; il est masqué dès que la PA l'a prise en charge. Des garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA s'appliquent — les mêmes contrôles que l'endpoint `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` de la [référence API](/nomaubl/api-reference).
+Les rejets PA les plus fréquents portent sur les **identifiants de l'acheteur** — SIREN (BT-47), SIRET (BT-46), TVA intracommunautaire (BT-48) et adresse électronique (BT-49). Un bouton **Corriger destinataire** ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la [recherche d'entreprises INSEE](./edirectory.md) et le sélecteur d'adresses électroniques du PPF, pour corriger uniquement ces champs sans rééditer toute la facture. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est **revalidée immédiatement**, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option **renvoie à la PA** si la validation réussit. Le bouton n'apparaît que tant que la facture est encore corrigeable — avant sa prise en charge par la PA, ou quand elle a été **rejetée (213) pour un motif d'adressage** : `ADR_ERR`, `REJ_ADR` (contrôle d'adressage de la plateforme) ou `DEST_INC` (destinataire inconnu de l'annuaire). Dans ces trois cas, la facture n'est jamais parvenue au client, le renvoi est donc sans risque ; tout autre statut traité par la PA reste verrouillé. Une réparation dont la validation ne signale aucune erreur marque aussi la facture *Traité* dans la liste. Des garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA s'appliquent — les mêmes contrôles que l'endpoint `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` de la [référence API](/nomaubl/api-reference).
 
 Sous le statut, quand la facture est dans un statut qui demande une action côté vendeur (par ex. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), un bandeau bleu **Actions vendeur** propose les actions recommandées :
 
@@ -28107,6 +28106,7 @@ Liste tous les jobs actifs du planificateur :
 - **Jobs intégrés** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — pilotés par les intervalles de polling de `BackgroundScheduler`.
 - **`fetch-all` par modèle** — une ligne par modèle avec un job d'extraction / synchronisation programmé.
 - **Passages Reprise auto par ligne** — une ligne par entrée enregistrée sur la page [Reprise auto](../configuration/system/auto-retry.md), avec l'heure planifiée et la liste des statuts ciblés en guise de cadence.
+- **Contrôles quotidiens du cycle de vie** — une ligne par entrée planifiée sur la page [Contrôles du cycle de vie](../management/lifecycle-checks.md), à côté des synthèses et des reprises auto, avec son heure et sa dernière exécution.
 
 Chaque ligne affiche le nom du job, la cadence, et une pastille de statut (vert actif, bleu prévu sous peu, orange en pause). Le sous-titre indique le décompte des jobs actifs.
 
@@ -28684,6 +28684,12 @@ Le corps est un modèle JSON ; `{{reportName}}`, `{{reportVersion}}` et `{{compa
 ### Chaînage d'endpoints (`then`) \{#endpoint-chaining\}
 
  Un endpoint peut transmettre son résultat à un appel de suivi dans la même étape. Renseignez **`then`** avec le nom de l'endpoint suivant, et **`then.itemsField`** / **`then.idField`** pour choisir l'id à transmettre depuis la première réponse. Cet id arrive dans l'appel de suivi sous `{{prevId}}` (aussi aliasé `{{uuid}}`). Cela pilote les flux de plateforme en deux temps — *déposer puis traiter*, ou *lister puis récupérer chaque détail* — sans aller-retour par NomaUBL entre les deux appels.
+
+En mode tableau, le champ **Item filter** (`then.filter`) restreint les éléments de liste qui sont chaînés : des conditions sur des champs de l'élément en notation pointée, plusieurs valeurs acceptées séparées par `|`, plusieurs conditions par `;` — par ex. `flowSyntax=CDAR`. Les éléments non concernés sont écartés **avant** l'appel de détail : ils ne coûtent aucune requête et n'atteignent jamais les résultats ; la trace de debug indique combien ont été écartés. Vide = pas de filtre.
+
+#### Statuts de cycle de vie depuis un flux CDAR \{#cdar-lifecycle\}
+
+Certaines PA (type Esker) publient les statuts de cycle de vie sous forme de recherche de flux suivie d'un message **CDAR** par flux — `flows/search`, puis `flows/{id}?docType=Original`. Le câblage se fait par configuration seule : la chaîne transporte chaque détail XML intact, et la récupération du cycle de vie évalue les mappages de réponse `event.*` comme des **XPath** sur ce message. `event.item` désigne le nœud répété (un événement par facture référencée) ; les chemins relatifs se résolvent à l'intérieur, les chemins absolus sur tout le message ; les dates UN/CEFACT (formats `204` / `102`) sont converties automatiquement, et les préfixes CDAR `rsm`, `ram`, `udt`, `qdt` sont préenregistrés. Le bouton **Pre-map CDAR lifecycle** remplit les neuf mappages en un clic (statut = `ProcessConditionCode`, facture = `IssuerAssignedID`, motif, action, note, dates). Les mappages `event.*` sont lus à la fois sur l'endpoint de liste et sur l'endpoint de détail chaîné — la liste l'emporte en cas de conflit — : les chemins d'éléments de liste (`item.<champ>`) restent sur la liste, les XPath CDAR sur le détail, là où l'onglet *Test* les évalue.
 
 ### Exemple complet — Esker (dépôt, puis traitement) \{#esker\}
 
@@ -30560,9 +30566,11 @@ La section **Status Retrieval** pilote la boucle de récupération des statuts d
 
 | Champ | Défaut | Description |
 |---|---|---|
-| **Page size** | `100` | Nombre de statuts récupérés par page lors du polling de la PA. |
-| **Last retrieved at** | *(mis à jour automatiquement)* | Date ISO de la dernière récupération réussie (par exemple `2025-01-01T00:00:00Z`). Mis à jour automatiquement après chaque exécution ; une édition manuelle agit comme point de départ — utile pour rejouer une fenêtre. |
-| **Import status mode** | `per-invoice` *(défaut)* | `per-invoice` interroge chaque facture en attente par son id de transaction. `search` demande plutôt à la plateforme tous les flux mis à jour depuis la dernière relève (la date est conservée d'une exécution à l'autre) et rapproche les résultats des factures en attente — pour les plateformes sans recherche de statut par facture, comme Yooz Rising. |
+| **Page size** | `100` | Nombre de statuts récupérés par page lors du polling de la PA. Pour une recherche de flux AFNOR (un `limit`, sans offset), il doit correspondre à ce que l'endpoint envoie comme `limit` via la variable `{{pageSize}}` : en mode *Last event*, une page pleine est suivie d'une nouvelle recherche à partir de son événement le plus récent jusqu'à obtenir une page incomplète — une rafale plus grande qu'une page n'est jamais tronquée. |
+| **Last retrieved at** | *(mis à jour automatiquement)* | Date ISO de la dernière récupération réussie (par exemple `2025-01-01T00:00:00Z`). Mis à jour automatiquement après chaque exécution ; une édition manuelle agit comme point de départ — utile pour rejouer une fenêtre. Tenue **par source de statuts** : une surcharge société qui interroge via son propre connecteur ou endpoint de statuts garde sa propre date (à sa première exécution, elle part de celle du modèle par défaut), tandis que les surcharges qui partagent le connecteur par défaut suivent la date du modèle par défaut. Une page en échec ne retient que cette source. |
+| **Status connector** | *(vide = même connecteur que la PA)* | Connecteur utilisé **uniquement** pour la récupération des statuts de cycle de vie. À renseigner sur une surcharge société quand la PA délivre des identifiants de statuts distincts par société (Esker) : l'envoi garde le connecteur PA partagé, les statuts passent par celui-ci. |
+| **Watermark advance** | `Now` *(défaut)* | Mode recherche uniquement. *Now* place le curseur à l'heure d'interrogation. *Last event* le place sur le `updatedAt` source de l'élément le plus récent récupéré — pour les PA qui plafonnent leur recherche sans pagination (Yooz : 200 flux), une rafale est ainsi vidée sur plusieurs interrogations au lieu d'en perdre la fin. Demande le mappage connecteur `event.updatedAt` (par ex. `item.updatedAt`) et des éléments renvoyés du plus ancien au plus récent. |
+| **Import status mode** | `per-invoice` *(défaut)* | `per-invoice` interroge chaque facture en attente par son id de transaction. `search` demande plutôt à la plateforme tous les flux mis à jour depuis la dernière récupération (la date est conservée d'une exécution à l'autre) et rapproche les résultats des factures en attente — pour les plateformes sans recherche de statut par facture, comme Yooz Rising. |
 | **Import parallel** | *(défaut `4`, max `8`)* | Nombre de factures en attente (statut 9906) que le contrôle de statut d'import interroge **en même temps**. À augmenter pour résorber plus vite un gros arriéré ; mettre `1` pour l'ancien comportement séquentiel. |
 | **Poll parallel** | *(défaut `4`)* | Même réglage pour l'interrogation du cycle de vie par facture — nombre de factures dont le statut est récupéré simultanément. |
 | **Min invoice date** | *(vide = pas de seuil)* | Un **seuil d'ingestion** : une facture du pipeline XML datée avant cette date est écartée d'emblée — pas d'écriture en base, pas de génération, pas d'envoi PA. Il protège les relances d'anciens jobs BIP et les archives héritées (un document avec une ligne d'archive mais sans en-tête paraîtrait sinon « jamais envoyé » et serait renvoyé). Les dates de facture vides ou illisibles ne sont jamais bloquées. |
@@ -30798,6 +30806,76 @@ Utilisez le bouton **+ Ajouter un report** pour ajouter une ligne, et le bouton 
 
 ---
 
+## Dossiers surveillés
+Source: https://docs.nomana-it.fr/fr/nomaubl/configuration/system/watched-folders/
+
+Les dossiers surveillés récupèrent les sorties PDF / XML de JD Edwards dans des répertoires montés, convertissent les PDF en XML en parallèle et lancent un lot par modèle de document — planifiés depuis global → Planification, à la demande depuis l'éditeur ou en ligne de commande.
+
+Le modèle système **Watched folders** permet à NomaUBL d'aller chercher les documents source directement dans des répertoires — typiquement le partage réseau où JD Edwards dépose ses sorties d'états — au lieu d'attendre qu'on les pousse dans le répertoire d'entrée. Chaque exécution parcourt les dossiers configurés, garde les nouveaux fichiers, **convertit les PDF en XML en parallèle** (les fichiers XML sont copiés tels quels) dans le répertoire d'entrée du modèle de document, puis lance **un lot par modèle**.
+
+Il s'ouvre dans **Configuration → Système → Watched folders**. Le modèle est livré vide : rien ne s'exécute tant qu'aucun dossier n'est configuré ni aucun job planifié.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Dossiers
+
+Chaque ligne du tableau est un dossier surveillé ; **＋ Add folder** ajoute une ligne, **×** la supprime.
+
+| Colonne | Description |
+|---|---|
+| **Directory** | Le dossier à parcourir (par ex. `/data/mnt/jde_outputs`). |
+| **Pattern** | Motif de nom des fichiers à récupérer (par ex. `R42565_*`). |
+| **Template** | Le modèle de document qui traite les fichiers — ils sont déposés dans son répertoire d'entrée. |
+| **Manifest** | Manifeste pdf2xml facultatif, utilisé pour convertir les PDF de ce dossier. |
+| **Overlap h** | Fenêtre de recouvrement en heures (défaut `2`) : chaque exécution regarde les fichiers plus récents que le dernier scan **moins** cette fenêtre. |
+| **Mount** | Coché, le répertoire doit être un partage monté — un point de montage non monté est signalé en erreur au lieu d'être lu comme vide. |
+| **Last scan** | Le repère écrit à chaque exécution (instant UTC). Videz-le ou saisissez une date (`yyyy-MM-dd`, `yyyy-MM-ddTHH:mm:ss` en heure serveur, ou un instant ISO) pour reparcourir à partir de ce point. |
+
+Au-dessus du tableau, **Parallel conversions** (défaut `4`) fixe le nombre de PDF convertis simultanément ; le lot garde son propre pool de traitement.
+
+---
+
+## Déroulement d'une exécution
+
+1. **Lister** — chaque dossier est parcouru à la recherche des fichiers qui correspondent à son motif et sont plus récents que *dernier scan − recouvrement*. Un dossier parcouru pour la première fois, sans date, ne prend que la fenêtre de recouvrement — utilisez une date de rattrapage pour l'historique.
+2. **Filtrer** — les fichiers déjà traités (nom de fichier source présent dans l'archive) ou déjà en attente au format XML dans le répertoire d'entrée du modèle sont écartés.
+3. **Convertir** — les PDF sont convertis en XML en parallèle dans le répertoire d'entrée du modèle ; les XML sont copiés tels quels.
+4. **Traiter** — un lot s'exécute par modèle, avec le parallélisme propre au lot.
+
+La date de dernier scan avance à chaque exécution. Un fichier en échec est **réessayé** tant qu'il reste dans la fenêtre de recouvrement et signalé **par son nom** — il ne bloque jamais les autres.
+
+---
+
+## Exécuter maintenant
+
+Le groupe **Run now** exécute la configuration enregistrée à la demande :
+
+- **Dry run** — liste seulement ce qui serait converti et traité.
+- **Scan and process** — lance la récupération complète.
+- Une **date de rattrapage** facultative élargit la fenêtre de chaque dossier pour cette exécution uniquement.
+
+---
+
+## Planification et ligne de commande
+
+- **Planifié** — dans [global → Planification → Batch Document Processing](./global.md), ajoutez un job de lot avec la source **Watched folders**, toutes les *N* minutes ou **chaque jour** à heure fixe. Le job peut cibler un seul dossier (choisi parmi les répertoires configurés) ou tous.
+- **Ligne de commande** — `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]`.
+- **API** — `POST /api/watch-folders/run`.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Gardez un recouvrement plus long que le temps de copie.** Un fichier encore en cours d'écriture au passage du scan est repris à l'exécution suivante tant qu'il reste dans la fenêtre.
+- **Cochez *Mount* sur les partages réseau.** Sinon, un partage non monté ressemble à un dossier vide et rien n'est traité, sans alerte.
+- **Commencez par un dry run.** Il montre exactement quels fichiers une nouvelle ligne de dossier récupérerait avant toute conversion.
+
+---
+
 ## Global
 Source: https://docs.nomana-it.fr/fr/nomaubl/configuration/system/global/
 
@@ -30938,7 +31016,7 @@ Configure le serveur SMTP sortant utilisé par NomaUBL pour l'envoi des notifica
 | **Session Timeout (minutes)** | Durée de validité d'une session utilisateur authentifiée, exprimée en minutes. Valeur par défaut `480` (8 heures). |
 
 :::info[Réinitialisation de mot de passe en self-service]
-Quand **Auth Mode = `internal`** (ou `both`), l'écran de connexion expose un lien *Mot de passe oublié ?*. L'utilisateur saisit son identifiant et son e-mail ; en cas de correspondance avec un compte actif, un lien à usage unique valable 60 minutes est envoyé à l'e-mail enregistré. Le lien ouvre une page dédiée pour choisir un nouveau mot de passe.
+Quand **Auth Mode = `internal`** (ou `both`), l'écran de connexion affiche un lien *Mot de passe oublié ?*. L'utilisateur saisit son identifiant et son e-mail ; en cas de correspondance avec un compte actif, un lien à usage unique valable 60 minutes est envoyé à l'e-mail enregistré. Le lien ouvre une page dédiée pour choisir un nouveau mot de passe.
 
 Requiert un **SMTP** configuré dans *Onglet 3 — Email / SMTP*. Les tokens sont persistés dans `F564255` (voir [Tables de base de données](../../references/database-tables.md#f564255--tokens-de-réinitialisation-de-mot-de-passe)) et sont invalidés dès qu'ils ont été utilisés.
 :::
@@ -30977,6 +31055,7 @@ Liste de **jobs batch** récurrents. Chaque job s'exécute indépendamment selon
 |---|---|
 | **Label** | Nom lisible affiché dans la liste des jobs (par ex. `BIP invoices`). |
 | **Interval (min)** | Minutes entre deux exécutions. `0` = désactivé (le job existe mais n'est pas planifié). |
+| **Daily at (HH:mm)** | Renseigné, le job s'exécute une fois par jour à cette heure locale au lieu de suivre son intervalle — comme la reprise automatique et les contrôles du cycle de vie. La liste des jobs, le Tableau de bord IT et la carte du planificateur affichent alors *chaque jour à 06:30*. |
 
 #### Paramètres par job
 
@@ -30987,7 +31066,7 @@ Les champs suivants définissent la stratégie de récupération et de traitemen
 | **Process type** | `xml` / `ubl` | `xml` = chaîne complète (transformation + traitement) ; `ubl` = traitement UBL direct (l'entrée est déjà UBL). |
 | **Template** *(si Process type = `xml`)* | depuis liste | Modèle de document à appliquer. Liste des modèles de type `document`. |
 | **Mode** *(si Process type = `xml`)* | `AUTO` / `SINGLE` / `BURST` / `UBL` | Mode de traitement — `AUTO` laisse NomaUBL décider ; `SINGLE` et `BURST` forcent la stratégie de sortie correspondante ; `UBL` produit uniquement de l'UBL. |
-| **Source** | `bip` / `directory` | Où récupérer les documents : `bip` = file d'impression JDE *(spécifique JDE)* ; `directory` = balaye l'**Input Directory** configuré à l'onglet 1. |
+| **Source** | `bip` / `directory` / `watch-folders` | Où récupérer les documents : `bip` = file d'impression JDE *(spécifique JDE)* ; `directory` = balaye l'**Input Directory** configuré à l'onglet 1 ; `watch-folders` = lance la récupération des [dossiers surveillés](./watched-folders.md) — le job cible alors un répertoire configuré (choisi dans une liste) ou tous. |
 | **Extract mode** *(si Source = `bip`)* | `input` / `output` / `both` | Quels artéfacts BIP récupérer : `input` = XML source uniquement ; `output` = fichiers de sortie générés uniquement ; `both` = les deux. |
 | **Language filter** *(si Source = `bip`)* | texte | Filtre BIP optionnel par langue (par ex. `FR`). Vide = toutes les langues. |
 | **Replace existing** | `Y` / `N` | À `Y`, ré-importe les documents déjà présents dans NomaUBL (écrase) ; à `N`, ignore les doublons. |
@@ -31188,11 +31267,11 @@ Deux évolutions livrées en 2026.05.5 :
 
 | Colonne | Exemple | Description |
 |---|---|---|
-| **Code** | `200` | Code de statut réglementaire enregistré en base (`tableHeader`). Identifiant canonique du statut dans NomaUBL. |
+| **Code** | `200` | Code de statut réglementaire enregistré en base (`tableHeader`). Identifiant de référence du statut dans NomaUBL. |
 | **Tag** *(lecture seule)* | `STATUS_DEPOSITED` | Nom interne référencé par les fabriques `InvoiceStatusCatalog` du code Java. L'éditeur l'affiche en lecture seule — un renommage casserait silencieusement les appelants Java. |
 | **Libellé · Français** | `Déposée` | Libellé français affiché dans l'interface quand la locale active est le français. |
 | **Libellé · Anglais** | `Deposited` | Libellé anglais affiché dans l'interface quand la locale active est l'anglais. |
-| **PA Code(s)** | `fr_e_invoicing_200` | Nom d'événement transmis à l'API de la Plateforme Agréée — placé dans le tableau `names[]` des appels de statut. **Plusieurs codes, séparés par des virgules**, peuvent pointer vers ce statut : une seule liste sert des factures dont les statuts viennent de sources différentes (votre plateforme principale et Chorus Pro, par exemple) sans la dupliquer. Chaque code doit correspondre exactement à ce qu'attend sa PA. |
+| **PA Code(s)** | `fr_e_invoicing_200` | Nom d'événement transmis à l'API de la Plateforme Agréée — placé dans le tableau `names[]` des appels de statut. **Plusieurs codes, séparés par des virgules**, peuvent pointer vers ce statut : une seule liste sert des factures dont les statuts viennent de sources différentes (votre plateforme principale et Chorus Pro, par exemple) sans la dupliquer. Chaque code doit correspondre exactement à ce qu'attend sa PA. **Laissé vide** sur une ligne où *Collect from PA API* est coché, le statut est rapproché sur son propre code — ce que renvoie une plateforme à base de CDAR — et la liste livrée fonctionne telle quelle ; ces codes implicites restent hors du filtre `names[]` envoyé aux PA qui filtrent côté serveur. |
 | **Polling — Interroger via la PA** | case à cocher | Quand cochée, NomaUBL interroge ce statut auprès de l'API de la PA à chaque exécution de *Synchronisation → Récupérer les statuts*. Décocher pour exclure un statut du polling. |
 | **Groupes** | multi-sélection | Compteur de niveau supérieur et étape funnel auxquels le statut est rattaché — alimente les widgets du tableau de bord et les filtres SQL de `DashboardApi`. Voir [Groupes](#groupes) ci-dessous. |
 
@@ -33595,6 +33674,23 @@ Le switch *Enregistrer les détails TVA* n'a **pas** besoin d'être activé pour
 
 ---
 
+## `watch-folders <env>` — récupérer les dossiers surveillés \{#watch-folders\}
+
+Lance la récupération des [dossiers surveillés](../configuration/system/watched-folders.md) en ligne de commande — la même exécution que le bouton *Scan and process* de l'éditeur et que le job de lot planifié avec la source *Watched folders*.
+
+```bash
+./nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]
+```
+
+| Option | Effet |
+|---|---|
+| **`--folder <N>`** | Seulement la ligne de dossier `N` ; sans elle, tous les dossiers configurés. |
+| **`--since <date>`** | Date de rattrapage — élargit la fenêtre de chaque dossier pour cette exécution (`yyyy-MM-dd` ou ISO). |
+| **`--dry-run`** | Liste ce qui serait converti et traité, sans rien modifier. |
+| **`--no-process`** | Convertit et dépose les fichiers dans les répertoires d'entrée des modèles, sans lancer de lot. |
+
+---
+
 ## `-help` — bannière d'aide
 
 Affiche la bannière d'aide intégrée et termine. Reconnu sous `-help`, `--help` ou `-h`. Lancer le JAR sans argument produit le même résultat.
@@ -34195,6 +34291,7 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | Champ | Valeurs | Description |
 |---|---|---|
 | **UBL XSLT** | chemin | Transformation XSL du XML source vers l'**UBL 2.1**. Le placeholder `%APP_HOME%` est remplacé par la racine d'installation de NomaUBL. |
+| **Custom Schematron** | chemin(s) | Une ou plusieurs feuilles Schematron **précompilées** (`.xsl`, séparées par des virgules, `%APP_HOME%` / `%ENV%` acceptés) qui portent les règles propres au client — une classification obligatoire, un format de référence acheteur… Elles s'exécutent **après** les packs standard, sur ce modèle uniquement : les règles client ne touchent jamais aux packs livrés que la mise à niveau rafraîchit. Une feuille est chargée une fois par horodatage de fichier : un fichier modifié est pris en compte à la validation suivante, sans redémarrage. Les anomalies arrivent dans les erreurs de validation sous une source courte tirée du nom de fichier (`BR-ACME-rules.xsl` → `ACME`) ; un fichier absent ou invalide est signalé en erreur sur la facture. Le traitement par lot et unitaire, le bouton *Valider* et l'API de validation en tiennent tous compte. |
 | **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
 | **LISIBLE** | `Y` / `N` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. |
 
@@ -34916,7 +35013,7 @@ Liste complète des bascules par section prédéfinie :
 
 - **Header** — huit bascules `META · …` (numéro de facture, date d'émission, date d'échéance, références contrat / commande / acheteur, type de facture, profil ID), plus six bascules `Supplier · …` (adresse, SIREN, forme légale, TVA, téléphone, e-mail).
 - **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un switch principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client.
-- **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et,, *Group by customer order* — un troisième bandeau sous ceux de la livraison et de la référence de document, indiquant l'ID de commande client référencée, BT-132), sept bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Amount`, `Tax`) et neuf bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau commande client suit les mêmes règles de réinitialisation que les autres : un changement de livraison ré-imprime les deux fils internes, un changement de référence de document ré-imprime le bandeau commande client.
+- **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et,, *Group by customer order* — un troisième bandeau sous ceux de la livraison et de la référence de document, indiquant l'ID de commande client référencée, BT-132), des bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — la colonne *Unit price* (BT-146) affiche la quantité de base quand elle diffère de 1 (`40,49 / 100`) ; la colonne **Net unit price** (montant de ligne ÷ quantité, soit le prix une fois les remises et charges de ligne intégrées) est **désactivée par défaut**, le prix de l'article seul restant la mise en page standard ; les sous-lignes couvrent le nombre réel de colonnes, masquer ou ajouter une colonne ne les décale donc jamais — et neuf bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau commande client suit les mêmes règles de réinitialisation que les autres : un changement de livraison ré-imprime les deux fils internes, un changement de référence de document ré-imprime le bandeau commande client.
 - **Document Allowances** — bascules de colonnes pour type, motif, montant, taxe.
 - **VAT Breakdown** — bascules de colonnes pour catégorie, taux, base imposable, montant de TVA (une colonne d'exemption apparaît automatiquement quand elle est présente).
 - **Totals** — sept bascules de lignes couvrant la pile complète (Total HT, Allowances, Charges, Tax Exclusive, Total Tax, Total TTC, Amount Payable).
@@ -34974,6 +35071,9 @@ La barre du constructeur porte quelques réglages appliqués à toute la mise en
 |---|---|
 | **Accent** | La couleur d'accent des titres de section (CLIENT / LIVRAISON), du total mis en évidence, du soulignement de l'en-tête du tableau de lignes et du fond des lignes surlignées. Saisissez un hexa à 6 chiffres avec ou sans `#` ; la teinte de fond est dérivée automatiquement. Vide = bleu par défaut. |
 | **Date** | Le format de date appliqué dans tout le PDF — dates d'émission, d'échéance, de période et de livraison par ligne. Valeurs : `yyyy-MM-dd` (défaut), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. |
+| **Show logo** | Dessine le logo de la société en haut du bloc vendeur, en page 1. Le fichier vient du *Logo path* de [Paramètres → Global → Traitement → PDF](../configuration/system/global.md), où un *Logo offset X (pt)* le décale aussi horizontalement. PNG, JPG et GIF sont pris en charge. |
+| **Trim zeros** | Supprime les zéros décimaux de fin sur les montants, prix unitaires et quantités — un montant rond s'imprime `23` au lieu de `23.00`, un prix unitaire `23.0000` s'imprime `23`. Désactivé par défaut. Réglage propre au modèle, appliqué au tableau de lignes, au bloc des totaux et aux PDF lisible et à l'écran. |
+| **Decimals** — *amount* / *price* / *qty* | Nombre de décimales imprimées par nature de nombre, chacune `auto` ou `0` à `6`. *Amount* couvre les montants de ligne, remises, lignes de TVA et totaux ; *price* le prix de l'article, le prix unitaire net et la remise sur prix ; *qty* les quantités facturées. `auto` garde l'affichage standard (montants à 2 décimales, prix et quantités tels que dans l'UBL) : les modèles existants restent inchangés. Un nombre fixe est arrondi au plus éloigné de zéro, comme l'exige l'AFNOR ; *Trim zeros* s'applique en plus. |
 | **Afficher le logo** | Dessine le logo de la société en haut du bloc fournisseur de la page 1. L'image vient du champ *Chemin du logo* dans [Paramètres → Global → Traitement → PDF](../configuration/system/global.md), où un *Décalage X du logo (pt)* la décale aussi horizontalement. PNG, JPG et GIF sont pris en charge. |
 | **Zéros inutiles** | Retire les décimales à zéro des montants, prix unitaires et quantités : un montant entier s'affiche `23` au lieu de `23,00`, et un prix unitaire `23,0000` devient `23`. Désactivé par défaut — l'affichage reste à deux décimales pour les montants et quatre pour les prix. Le réglage est par modèle et s'applique au tableau des lignes, au bloc des totaux et aux PDF lisible et à l'écran. |
 
@@ -36546,11 +36646,13 @@ Source: https://docs.nomana-it.fr/fr/nomaubl/release-notes/
 
 Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré dans la plateforme, version par version, dans l'ordre antéchronologique. Reflète la page Notes de version disponible dans l'application.
 
-# Notes de version
-
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
+  2026.10.01.1 · 2026-10-01
+  2026.09.30.1 · 2026-09-30
+  2026.09.28.1 · 2026-09-28
+  2026.09.26.1 · 2026-09-26
   2026.09.25.1 · 2026-09-25
   2026.09.23.1 · 2026-09-23
   2026.09.22.1 · 2026-09-22
@@ -36654,6 +36756,73 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.10.01.1 — 2026-10-01 \{#v2026-10-01-1\}
+
+### Améliorations
+
+- **Les factures corrigées à la main sont marquées traitées.** Enregistrer une facture depuis la fenêtre facture ou la corriger avec Corriger le destinataire positionne désormais l'indicateur de suivi du service client (F564231.UHALRTPSD = Y), à condition que la validation qui suit ne remonte aucune erreur. La colonne Suivi de la liste des factures affiche « Traité » sur toute ligne marquée, quel que soit son statut ; le tiret reste pour les lignes sans intervention et « En attente » pour les lignes en erreur à examiner. L'API conserve le comportement actuel : le nouveau champ `alertProcessed` des points d'entrée create-ubl et fix-buyer vaut N par défaut.
+- **L'état du planificateur liste les contrôles quotidiens du cycle de vie** à côté des synthèses et des relances automatiques, avec leur heure et leur dernière exécution.
+- **Compilation propre** : plus aucun avertissement du compilateur avec toutes les catégories de contrôle actives, imports et code inutilisés supprimés.
+
+- **Dossiers surveillés : récupération des PDF / XML JDE, conversion et lot dans l'application.** Nouveau gabarit système *Dossiers surveillés* : des lignes répertoire, motif de nom de fichier, modèle de document, manifeste pdf2xml facultatif, fenêtre de recouvrement et garde « partage monté obligatoire ». Une exécution liste chaque dossier à la recherche des fichiers correspondant au motif et plus récents que la dernière analyse moins le recouvrement, écarte ceux déjà traités (nom du fichier source dans F564230) ou déjà en attente en XML dans le dossier d'entrée du modèle, convertit les PDF en parallèle dans ce dossier (les XML sont copiés tels quels), puis lance un lot par modèle — le lot conserve son propre parallélisme. La date de dernière analyse avance à chaque exécution : un fichier en échec est retenté tant qu'il reste dans la fenêtre de recouvrement et signalé par son nom sans bloquer les autres ; un partage non monté est signalé au lieu d'être lu comme vide. La page propose un essai à blanc et une exécution avec date de reprise facultative. Disponible comme source *Dossiers surveillés* des travaux par lot sous global → Planification, via `nomaubl.sh watch-folders <env> [--folder N] [--since d] [--dry-run] [--no-process]` et via `POST /api/watch-folders/run`. La mise à niveau crée le gabarit vide ; rien ne s'exécute tant qu'un dossier et un travail ne sont pas configurés.
+- **Les travaux par lot peuvent s'exécuter une fois par jour.** Chaque travail par lot sous global → Planification gagne un champ *Daily at (HH:mm)* : renseigné, le travail s'exécute à cette heure locale au lieu de son intervalle, comme la relance automatique et les contrôles de cycle de vie. La liste des travaux, le tableau de bord technique et la carte de santé du planificateur affichent « chaque jour à 06:30 ». Avec la source Dossiers surveillés, le travail choisit un dossier dans une liste des répertoires configurés, ou tous.
+
+### Corrections
+
+- **Corriger le destinataire et la fenêtre d'édition n'écrasent plus les clés client.** L'enregistrement d'une facture corrigée remplaçait la clé alpha (F564230.FEALKY) par le SIREN de l'acheteur lu dans l'UBL et remettait le numéro client (F564231.UHAN8) à zéro : le remplacement réécrivait les deux à partir du document au lieu de la ligne existante. La clé alpha enregistrée est désormais conservée dès qu'elle existe — le SIREN reste la valeur de repli des factures créées directement en UBL — et le numéro client est repris quand l'appelant n'en fournit pas. Concerne Corriger le destinataire, la fenêtre d'édition et tout retraitement en mode remplacement, avec ou sans renvoi ; le traitement par lot depuis un spool JDE est inchangé.
+
+---
+
+## 2026.09.30.1 — 2026-09-30 \{#v2026-09-30-1\}
+
+### Améliorations
+
+- **Règles Schematron client par modèle de document.** Nouveau réglage *Custom Schematron* dans l'onglet UBL d'un modèle de document : une ou plusieurs feuilles Schematron précompilées (.xsl, séparées par des virgules, `%APP_HOME%` / `%ENV%` acceptés) exécutées après les packs standard sur ce modèle uniquement. Les règles propres à un client — classification obligatoire, format de référence acheteur — ne touchent plus aux packs livrés, que la mise à niveau rafraîchit, et ne s'appliquent qu'aux modèles qui les déclarent. Les feuilles sont chargées une fois par empreinte de fichier et mises en cache : un fichier modifié est pris en compte à la validation suivante, sans redémarrage. Les constats apparaissent dans les erreurs de validation sous une source courte tirée du nom de fichier (`BR-KRYS-rules.xsl` → `KRYS`) ; un fichier absent ou invalide est signalé comme une erreur sur la facture. Traitement par lot et unitaire, bouton Valider et API de validation tiennent tous compte du réglage.
+
+### Corrections
+
+- **Les erreurs de validation à source ou identifiant de règle trop longs sont de nouveau enregistrées.** Source et règle sont tronquées à la largeur de leur colonne (10 et 30 caractères) avant insertion : un identifiant trop long ne fait plus perdre l'ensemble du résultat de validation.
+
+- **Rabais sur prix déduit des prix net et brut.** Quand un modèle de document mappe le prix net (BT-146) et le prix brut (BT-148) sans montant de rabais — le cas courant d'un spool JDE : prix net, prix de base et facteur de remise — le rabais sur prix (BT-147) est désormais déduit (brut − net) et émis avec le brut en base. Le prix brut était jusqu'ici perdu sans avertissement, alors que la France l'impose dès qu'il diffère du net. Un brut égal ou inférieur au net n'émet aucun rabais ; les mappings brut + rabais et net + rabais ne changent pas.
+
+### Corrections
+
+- **PDF lisible : rabais sur prix affiché comme un prix.** La sous-ligne rabais / prix de base (BT-147 / BT-148) utilisait le format des montants à 2 décimales ; ce sont des prix unitaires, qui conservent désormais leurs décimales comme le prix unitaire (jusqu'à 6, ou les décimales de prix du modèle). Les remises et charges de ligne restent des montants.
+
+- **Colonne PU net inactive par défaut.** La colonne *PU net HT* ajoutée le 28/09 n'apparaît plus que si le modèle l'active : le modèle intégré et les modèles existants n'affichent que le prix de l'article, comme auparavant. Activation par modèle dans les colonnes du tableau des lignes.
+
+- **PDF lisible : décimales par type de nombre.** Le modèle PDF gagne trois réglages à côté de *Supprimer les zéros* : décimales des montants, des prix unitaires et des quantités, chacun en *auto* ou de 0 à 6. Auto conserve l'affichage actuel (montants à 2 décimales, prix et quantités tels que dans l'UBL), les modèles existants ne changent donc pas. Un nombre fixe s'applique à tous les nombres du type — montants de ligne, remises, lignes de TVA et totaux ; prix de l'article, PU net et rabais sur prix ; quantités facturées — arrondis au plus proche, loin de zéro, comme l'exige l'AFNOR ; *Supprimer les zéros* s'applique ensuite. Les montants arrondissaient jusqu'ici les demi-centimes au pair, ce qui pouvait s'écarter d'un centime de la valeur AFNOR dans de rares cas ; corrigé au passage.
+- **BT-33 forme juridique sans le SIREN.** La mention légale complémentaire du vendeur (CompanyLegalForm) produite par la feuille de style des valeurs par défaut devient *Capital 5 000 Euros - APE 62.02A* (ou *Capital 5 000 Euros* sans APE) : le SIREN figure déjà en BT-30 et apparaissait deux fois sur le PDF. La fenêtre facture compose le même texte quand le champ est vide. Les feuilles de style installées qui portent encore l'ancienne concaténation sont réécrites par la mise à niveau et par tout enregistrement depuis l'éditeur des valeurs UBL ; une ligne personnalisée à la main est laissée telle quelle.
+
+---
+
+## 2026.09.28.1 — 2026-09-28 \{#v2026-09-28-1\}
+
+### Améliorations
+
+- **Corriger le destinataire sur tout rejet d'adressage.** Une facture Rejetée (213) peut être corrigée puis renvoyée dès que son motif est l'un des trois codes d'adressage : `ADR_ERR` (déjà pris en charge), `REJ_ADR` (contrôle d'adressage de la plateforme) et `DEST_INC` (destinataire inconnu dans l'annuaire). Dans les trois cas la facture n'est jamais parvenue au client, ce qui rend le renvoi sans risque. Le bouton *Corriger destinataire* et l'API de correction appliquent la même règle ; tout autre statut traité par la PA reste verrouillé et le renvoi simple est inchangé.
+
+- **PDF lisible : prix unitaire net par ligne.** Le tableau des lignes gagne une colonne *PU net HT* entre le prix de l'article et le montant : montant de ligne ÷ quantité, c'est-à-dire le prix que le client multiplie par la quantité pour retrouver le montant, remises et charges de ligne comprises. Sur une ligne ordinaire elle reprend le prix de l'article tel quel ; sinon la valeur est arrondie au plus proche, loin de zéro, à 6 décimales au plus. La colonne du prix de l'article s'intitule désormais *PU HT* (BT-146) et affiche la quantité de base du prix quand elle diffère de 1 (`40,49 / 100`), jusqu'ici ignorée. Les sous-lignes de remise de ligne et de rabais sur prix sont conservées : elles expliquent l'écart entre les deux prix. Nouvelle option *Net unit price* dans les colonnes du tableau des lignes du modèle PDF, inactive par défaut — le prix de l'article seul reste la présentation standard. Les sous-lignes s'étendent désormais sur le nombre réel de colonnes : masquer ou ajouter une colonne ne les décale plus. Les pièces jointes LISIBLE / PJA intégrées utilisent le même moteur et changent de même.
+
+- **Un repère de reprise par source de statuts.** La date de reprise des statuts (*Dernière récupération*, onglet Statut) est désormais tenue par source et non plus une fois pour toutes les sociétés. Une surcharge de société qui interroge son propre connecteur ou point d'entrée de statuts (Esker, Yooz par société) part de sa propre date et l'enregistre à son tour ; les surcharges qui partagent le connecteur par défaut continuent de suivre la date du gabarit par défaut. En mode *Dernier événement*, le curseur est le dernier élément de la page de recherche de la société concernée : une rafale chez une société ne peut plus pousser le curseur d'une autre au-delà d'événements qu'elle n'a pas encore vus. Une page en échec ne retient que la source concernée. Au premier passage après mise à jour, une surcharge sans date propre part de celle du gabarit par défaut puis garde la sienne — rien à saisir à la main.
+- **Page pleine → reprise depuis le dernier événement (recherche de flux AFNOR, sans offset).** La recherche de flux AFNOR accepte une `limit` mais aucun offset : une fenêtre contenant plus d'événements que la taille de page était tronquée, à l'interrogation comme au contrôle d'intégrité. En mode *Dernier événement*, une page revenue pleine (éléments = taille de page) déclenche désormais une nouvelle recherche depuis la plus grande date `updatedAt` de la page, jusqu'à obtenir une page incomplète, atteindre la date de fin ou constater que le curseur n'avance plus ; les événements repris à la frontière ne sont conservés qu'une fois. Une page pleine dont tous les éléments portent la même date s'arrête avec un avertissement invitant à augmenter la taille de page. Les PA disposant d'une vraie pagination (`hasMore`) et le mode *Maintenant* sont inchangés. La variable `{{pageSize}}` doit être ce que le point d'entrée transmet comme `limit` AFNOR.
+
+### Corrections
+
+- **L'enregistrement du repère ne modifie plus les autres gabarits.** La date était écrite en remplaçant chaque occurrence de la propriété dans le fichier de configuration ; elle n'est plus écrite que dans les propriétés du gabarit concerné.
+
+---
+
+## 2026.09.26.1 — 2026-09-26 \{#v2026-09-26-1\}
+
+### Améliorations
+
+- **Repère de reprise du cycle de vie sur le dernier événement (PA sans pagination).** Nouveau réglage *Avancement du repère* dans l'onglet Statut : *Maintenant* (défaut, inchangé) ou *Dernier événement*. Dans ce mode, le curseur de reprise devient la plus grande date `updatedAt` observée sur toute la page de recherche — tous les éléments de la page, y compris ceux écartés par le filtre de chaîne — de sorte qu'une PA qui plafonne sa recherche sans pagination (Yooz : 200 flux, `updatedBefore` ignoré) est vidée au fil des interrogations au lieu de perdre la fin d'une rafale. Requiert le mapping `event.updatedAt = item.updatedAt` sur le point d'entrée de liste ; se rabat sur la date propre des événements pour une liste simple, et sur « maintenant » avec un avertissement quand aucune date n'est portée. Limite connue tant que Yooz ordonne sa page par date de soumission : sur une page pleine, un flux traité plus vite que ses voisins peut passer sous le curseur ; accepté comme contournement en attendant la correction de la recherche par Yooz.
+- **Mappings de cycle de vie fusionnés le long de la chaîne.** Les mappings `event.*` sont désormais lus à la fois sur le point d'entrée de liste et sur le point d'entrée de détail chaîné (la liste l'emporte en cas de conflit) : les XPath CDAR restent sur le détail, là où l'onglet Test les évalue, les chemins d'élément de liste (`item.<champ>`) sur la liste. Auparavant un seul mapping sur la liste masquait tous ceux du détail.
+- **Chaîne de connecteur : filtre d'éléments.** Un point d'entrée de liste chaîné peut désormais restreindre les éléments à récupérer : nouveau champ *Filtre d'éléments* dans le bloc Chaîne (`champ=valeur`, plusieurs valeurs avec `|`, plusieurs conditions avec `;`, sur les champs en notation pointée de l'élément). Les éléments non retenus sont écartés avant l'appel de détail : aucune requête, aucune fuite dans les résultats. Conçu pour les recherches de flux qui renvoient plus que des messages de cycle de vie — la recherche `flows/search` de Yooz renvoie aujourd'hui des factures UBL avec les statuts CDAR : `flowSyntax=CDAR` ne conserve que les statuts. Vide = aucun filtre ; les chaînes existantes ne changent pas. La trace debug du connecteur indique le nombre d'éléments écartés.
+
+---
+
 ## 2026.09.25.1 — 2026-09-25 \{#v2026-09-25-1\}
 
 ### Améliorations
@@ -36662,6 +36831,10 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Référence UBL reconstruite depuis la matrice AFNOR XP Z12-012 V1.4.** 455 termes UBL au lieu de 201 — tous les blocs EXTENDED-CTC-FR sont couverts (agents acheteur et vendeur, adressée à, tiers facturant, payeur, vendeur à la ligne, livraison et références à la ligne, Incoterms, taux de change, taxes hors TVA, identifiants de schéma). Chaque terme affiche sa définition officielle en français et en anglais, son type, sa liste de codes et son profil (BASIC WL / EN 16931 / EXTENDED), l'indication d'usage NomaUBL en note distincte, et les règles de gestion qui s'y appliquent — un clic sur une règle l'affiche sur place. Les termes propres à CII sont volontairement absents. Les identifiants longs ne chevauchent plus le libellé et l'ordre suit la matrice.
 - **Contrôle AFNOR du montant de ligne avant envoi.** Nouvelle règle de validation BR-NOMAUBL-02 : le montant net de chaque ligne (BT-131) est comparé à la formule AFNOR — prix ÷ quantité de base × quantité, moins les remises de ligne, plus les charges de ligne — et un *avertissement* (jamais une erreur) est émis au-delà de 0,011. L'EN 16931 ne contrôle pas cette formule aujourd'hui ; le cas typique détecté est un prix net laissé en BT-146 avec la remise répétée en remise de ligne.
 - **Fenêtre facture : détail du prix (BG-29).** Les lignes gagnent un bloc *Prix (BG-29)* avec prix brut (BT-148) et rabais (BT-147) ; le prix net est déduit et pilote le montant de ligne, le prix d'en-tête est verrouillé tant que le bloc est actif. Le montant de ligne divise désormais par la quantité de base du prix (BT-149) — un prix aux 100 ou aux 1 000 unités est calculé correctement.
+- **Statuts de cycle de vie depuis un flux CDAR (PA de type Esker), par simple paramétrage.** Les PA qui exposent les statuts sous forme d'une recherche de flux suivie d'un message CDAR par flux (`flows/search` puis `flows/{id}?docType=Original`) se raccordent désormais sans code : la chaîne du connecteur transporte chaque détail XML intact et la récupération des statuts évalue les mappings `event.*` comme des XPath sur ce détail — `event.item` désigne le nœud répétitif (un événement par facture référencée), les chemins relatifs se résolvent à l'intérieur, les chemins absolus sur le message entier ; les dates UN/CEFACT (formats 204/102) sont converties automatiquement. Les préfixes CDAR `rsm`, `ram`, `udt`, `qdt` sont préenregistrés. Un bouton **Pré-mapper CDAR cycle de vie** dans l'éditeur de connecteur remplit les neuf mappings (statut = ProcessConditionCode, facture = IssuerAssignedID, motif, action, note, dates) ; les mappings peuvent être portés par le point d'entrée de liste ou par le point d'entrée de détail chaîné. L'onglet Test évalue les XPath relatifs à l'item de la même façon, et la trace debug du connecteur affiche désormais une ligne `CHAIN` par exécution et par flux récupéré.
+- **Connecteur de statuts par société.** Une surcharge par société peut désormais interroger les statuts de cycle de vie via son propre connecteur tandis que l'envoi reste sur le connecteur PA partagé : nouveau champ *Connecteur de statuts* dans l'onglet Statut (gabarit par défaut et chaque surcharge), vide = « identique au connecteur PA ». Conçu pour les PA qui délivrent des identifiants de statuts distincts par société (Esker) : un connecteur de statuts par société, dupliqué depuis le premier avec le bouton *Copier*, branché sur chaque surcharge. Les configurations existantes ne changent pas.
+- **Contrôle d'intégrité borné par date et par société.** Le contrôle accepte désormais une date de fin (« du … au », vide = maintenant) et une société facultative ; une exécution ciblée n'interroge que le connecteur de statuts de cette société et ne recherche que ses factures, un rattrapage par société ne remonte donc plus les événements de toutes les sociétés. La borne haute parvient au connecteur via les variables `{{toDate}}` / `{{toDateRaw}}` (`updatedBefore` chez Esker) ; les dates simples sont étendues à la journée entière. Le contrôle planifié quotidien est inchangé.
+- **Code PA vide = code AFNOR.** Une ligne de statut cochée *Collecter depuis l'API PA* sans code PA est désormais reconnue sur son propre code, celui que renvoie une plateforme basée sur le CDAR ; le gabarit de statuts livré fonctionne tel quel au lieu d'exiger la répétition de chaque code dans le champ code PA. Les lignes avec un code PA explicite (vocabulaire ATGP, Chorus) se comportent comme avant, et ces codes implicites ne sont pas transmis dans le filtre `names[]` des PA qui filtrent côté serveur.
 - **Éditeur XSL : mapping du prix brut et de la quantité de base.** Nouvelles variables de ligne `TAG_LINE_GROSS_PRICE` (BT-148) et `TAG_LINE_PRICE_BASE_QTY` (BT-149). Un spool en brut + remise mappe les deux et le prix net est déduit (brut − remise) ; un spool en net + remise continue d'émettre le brut comme net + remise. Les champs de ligne sont regroupés par thème (identification, quantités, prix, TVA, références, classification) et les indications réduites à une ligne.
 
 ### Corrections
@@ -37424,7 +37597,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   valider l'UBL, télécharger l'UBL, actions prédéfinies, actions
   personnalisées, e-mail PDF, génération / renvoi de lots
   e-reporting, et déclenchement des jobs Intégration (réception PA,
-
+  import des statuts, récupération des statuts). Les rôles
   existants conservent leur comportement : sans liste blanche, tout
   reste autorisé ; activer le mode liste blanche pré-coche toutes
   les actions pour que rien ne change tant que l'opérateur n'en
@@ -39506,7 +39679,7 @@ de traitement et d'une nouvelle page Notes de version.
   lister et inspecter les rapports Flux 10.1 (B2C) et 10.3
   (B2BINT). Inclut une fenêtre de génération avec sélecteur de
   période, une modale de détail avec les factures incluses et un
-
+  export CSV / Excel, plus une action « Télécharger XML ».
 - **Ligne de commande** : nouveau mode `-ereporting` avec filtres
   par plage de dates, société et flux.
 - **Planificateur d'arrière-plan** : nouvelle tâche
@@ -39952,7 +40125,7 @@ Au-delà de la récupération incrémentale, la page propose deux contrôles à 
 
 ### Statuts manquants
 
-Choisissez une date : le contrôle compare **tous les événements de la plateforme depuis celle-ci** avec le cycle de vie déjà enregistré. Ce qui manque s'affiche dans un **tableau à sélection** — appliquez tout ou seulement les lignes retenues, avec déclenchement optionnel des [règles de notification](../management/notification-rules.md) (désactivé par défaut). Les événements non applicables sont signalés **à part**, pour ne rien changer en silence : un statut interne obsolète (étape plateforme déjà dépassée), une facture inconnue, ou un code sans mappage.
+Choisissez une période — **du** … **au** … (fin vide = maintenant) — et, au besoin, **une société** : le contrôle compare **tous les événements de la plateforme sur cette fenêtre** avec le cycle de vie déjà enregistré. Une exécution limitée à une société n'interroge que son connecteur de statuts et ne recherche que ses factures : un rattrapage par société ne ramène plus les événements de toutes les sociétés. La borne de fin parvient au connecteur via les variables `{{toDate}}` / `{{toDateRaw}}` (Esker `updatedBefore`) ; une date simple couvre la journée entière. Ce qui manque s'affiche dans un **tableau à sélection** — appliquez tout ou seulement les lignes retenues, avec déclenchement optionnel des [règles de notification](../management/notification-rules.md) (désactivé par défaut). Les événements non applicables sont signalés **à part**, pour ne rien changer en silence : un statut interne obsolète (étape plateforme déjà dépassée), une facture inconnue, ou un code sans mappage.
 
 Un événement récupéré s'insère à sa **position chronologique** — d'après son horodatage plateforme — au lieu d'être ajouté en fin de liste, et le statut courant de la facture ne bouge que si l'événement récupéré est réellement le plus récent. Compléter un statut manquant ancien ne peut donc pas ramener une facture à un état passé. La même insertion chronologique s'applique à la récupération régulière des statuts.
 
@@ -41036,6 +41209,10 @@ Le pack `BR-NOMAUBL-rules.sch` porte les règles qu'aucun pack Schematron livré
 
 L'obligation, pour un avoir, de référencer une facture antérieure n'est **pas** une règle maison : l'ancienne `BR-NOMAUBL-01` a été retirée quand le pack **standard** Flux 2 a commencé à imposer la même condition via **`BR-FR-CO-05`**. Les règles maison sont assouplies à mesure que les packs AFNOR / FNFE-MPE amont rattrapent leur retard ; le pack reste donc un point d'accroche pour ce qu'ils ne couvrent pas encore.
 
+### Règles client par modèle
+
+Les règles propres à un client — une classification obligatoire, un format de référence acheteur — ne vont dans aucun des packs ci-dessus. Un modèle de document liste ses propres feuilles précompilées dans **Custom Schematron** (voir [Documents → UBL](../management/documents.md)) ; elles s'exécutent **après** les packs standard, sur ce modèle uniquement, et leurs anomalies apparaissent sous une source courte tirée du nom de fichier.
+
 La version du pack est accessible via `GET /api/build-info` sous la clé `schematron.nomaubl` — le pied de page du tableau de bord la lit pour le tampon de version par pack.
 
 ---
@@ -41188,7 +41365,7 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Payment** | BT-20, BT-81 à BT-91 | Moyen, IBAN, BIC, mandat, conditions. |
 | **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | Payeur en prélèvement SEPA — la partie débitrice, la référence de mandat (BT-89) et le compte débité (IBAN, BT-91). Voir [Payeur / mandat de prélèvement](#payer-mandate) ci-dessous. |
 | **VAT** | BT-110, BT-116 à BT-121 | Détail TVA — voir [scoping](#scoping) ci-dessous. |
-| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158, groupe répétable jusqu'à quatre codes), la version de schéma (BT-158-2), l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN), et le **prix brut** (`TAG_LINE_GROSS_PRICE` → BT-148) avec la **quantité de base** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). Un spool portant brut + remise mappe les deux et le prix net est déduit (brut − remise) ; un spool portant net + remise émet son brut égal à net + remise. Les champs de ligne sont regroupés par thème (identification, quantités, prix, TVA, références, classification) — voir [scoping](#scoping) ci-dessous. |
+| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158, groupe répétable jusqu'à quatre codes), la version de schéma (BT-158-2), l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN), et le **prix brut** (`TAG_LINE_GROSS_PRICE` → BT-148) avec la **quantité de base** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). Un spool portant brut + remise mappe les deux et le prix net est déduit (brut − remise) ; un spool portant net + remise émet son brut égal à net + remise ; un spool portant net + brut sans montant de remise — le cas courant d'un spool JDE — reçoit une remise sur prix (BT-147) déduite comme brut − net, le brut servant de base (aucune remise quand le brut n'excède pas le net). Les champs de ligne sont regroupés par thème (identification, quantités, prix, TVA, références, classification) — voir [scoping](#scoping) ci-dessous. |
 | **Item Properties** *(BG-32)* | BG-32 | Attributs produit attachés à une ligne. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Remise ou charge par ligne. Pointer le TAG *Item AC* sur `.` (ou le laisser vide) quand les champs de remise se trouvent directement sur la ligne, sans élément parent — le moteur itère alors la ligne elle-même. Quand la source ne porte que le pourcentage, le montant et la base sont déduits du net de la ligne ; pourcentage + base déduit le montant, pourcentage + montant déduit la base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Références de document par ligne — pièces justificatives (BT-128, schéma UNTDID 1153) et la ligne de bon de commande référencée via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, groupe EXT-FR-FE-BG-09, placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1). |
@@ -41240,7 +41417,7 @@ Pour des données attendues par un partenaire mais sans équivalent standard EN 
 
 Chaque champ configuré est émis dans son propre bloc `ext:UBLExtension` / `ext:ExtensionContent` (UBL n'admet qu'un seul élément enfant par contenu d'extension), et le bloc complet est omis si aucun champ ne se résout. Vide par défaut : les factures existantes restent inchangées.
 
-Les données placées ici sortent du **modèle EN 16931** — privilégier le champ standard lorsqu'il existe (référence comptable BT-19, référence acheteur BT-10…) et vérifier que la plateforme destinataire lit bien l'extension.
+Les données placées ici sortent du **modèle EN 16931** — privilégier le champ standard quand il existe (référence comptable BT-19, référence acheteur BT-10…) et vérifier que la plateforme destinataire lit bien l'extension.
 
 #### Factures antérieures — répétées et par ligne \{#preceding-invoices\}
 
@@ -41286,7 +41463,7 @@ Pour les factures réglées par **prélèvement SEPA**, le payeur n'est pas touj
 | **Référence de mandat** *(BT-89)* | L'identifiant du mandat SEPA, émis en `cac:PaymentMeans/cac:PaymentMandate/cbc:ID`. |
 | **Compte débité (IBAN)** *(BT-91)* | Le compte du débiteur sur lequel le montant est prélevé, émis en `cac:PaymentMandate/cac:PayerFinancialAccount/cbc:ID`. |
 
-Les identifiants payeur supplémentaires (0..n) vont dans le panneau *Payer Identifiers* associé, chacun un champ source et un schéma de la liste *Scheme IDs*. Le bloc entier n'est émis **que lorsqu'un champ payeur est renseigné**, de sorte que les factures ordinaires restent inchangées ; quand il est présent, le PDF lisible affiche le payeur et le compte débité aux côtés des informations de paiement.
+Les identifiants payeur supplémentaires (0..n) vont dans le panneau *Payer Identifiers* associé, chacun un champ source et un schéma de la liste *Scheme IDs*. Le bloc entier n'est émis **que si un champ payeur est renseigné**, de sorte que les factures ordinaires restent inchangées ; quand il est présent, le PDF lisible affiche le payeur et le compte débité aux côtés des informations de paiement.
 
 ### XSL Editor
 
@@ -41339,3 +41516,5 @@ Après création, le nouveau fichier devient le fichier sélectionné et est cha
 - **Ne pas modifier les fichiers partagés.** `ubl-common.xsl`, `ubl-template.xsl` et `ubl-defaults.xsl` sont filtrés du sélecteur pour une raison : toute modification y touche toutes les transformations et risque de ne pas survivre à une montée de version NomaUBL.
 - **Utiliser l'onglet XSL Editor pour ce que le formulaire ne couvre pas.** Logique conditionnelle, XPath personnalisé, templates nommés — Monaco donne toute la puissance de XSLT 1.0 / 2.0 en complément du mapping du formulaire.
 - **Valider après chaque modification de mapping.** *UBL Tools → Validate* avec `Source = XML` exécute la transformation et les règles Schematron en une passe ; la table de logs signale tout chemin erroné ou variable manquante.
+
+---

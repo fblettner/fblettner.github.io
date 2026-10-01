@@ -270,6 +270,7 @@ A list of recurring **batch jobs**. Each job runs independently on its own inter
 |---|---|
 | **Label** | Human-readable name displayed in the job list (e.g. `BIP invoices`). |
 | **Interval (min)** | Minutes between two runs. `0` = disabled (job exists but is not scheduled). |
+| **Daily at (HH:mm)** | When set, the job runs once a day at that local time instead of following its interval — like the auto-retry and the lifecycle checks. The job list, the Tech Dashboard and the scheduler card then show *daily at 06:30*. |
 
 #### Per-job parameters
 
@@ -280,7 +281,7 @@ The remaining fields configure how the job picks up and processes documents:
 | **Process type** | `xml` / `ubl` | `xml` = full pipeline (transform + process); `ubl` = direct UBL processing (input is already UBL). |
 | **Template** *(when Process type = `xml`)* | from list | Document template to apply. Lists templates of type `document`. |
 | **Mode** *(when Process type = `xml`)* | `AUTO` / `SINGLE` / `BURST` / `UBL` | Processing mode — `AUTO` lets NomaUBL decide; `SINGLE` and `BURST` force the corresponding output strategy; `UBL` produces UBL only. |
-| **Source** | `bip` / `directory` | Where to fetch documents from: `bip` = JDE Print Queue *(JDE-specific)*; `directory` = scan the **Input Directory** configured in Tab 1. |
+| **Source** | `bip` / `directory` / `watch-folders` | Where to fetch documents from: `bip` = JDE Print Queue *(JDE-specific)*; `directory` = scan the **Input Directory** configured in Tab 1; `watch-folders` = run the [Watched folders](./watched-folders.md) pickup — the job then targets one configured directory (picked from a dropdown) or all of them. |
 | **Extract mode** *(when Source = `bip`)* | `input` / `output` / `both` | Which BIP artefacts to pull: `input` = source XML only; `output` = generated output files only; `both` = both. |
 | **Language filter** *(when Source = `bip`)* | text | Optional BIP language filter (e.g. `FR`). Empty = all languages. |
 | **Replace existing** | `Y` / `N` | When `Y`, re-import documents that already exist in NomaUBL (overwrite); when `N`, skip duplicates. |

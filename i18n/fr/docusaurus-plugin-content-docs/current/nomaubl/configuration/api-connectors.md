@@ -339,6 +339,12 @@ Le corps est un modèle JSON ; `{{reportName}}`, `{{reportVersion}}` et `{{compa
 
  Un endpoint peut transmettre son résultat à un appel de suivi dans la même étape. Renseignez **`then`** avec le nom de l'endpoint suivant, et **`then.itemsField`** / **`then.idField`** pour choisir l'id à transmettre depuis la première réponse. Cet id arrive dans l'appel de suivi sous `{{prevId}}` (aussi aliasé `{{uuid}}`). Cela pilote les flux de plateforme en deux temps — *déposer puis traiter*, ou *lister puis récupérer chaque détail* — sans aller-retour par NomaUBL entre les deux appels.
 
+En mode tableau, le champ **Item filter** (`then.filter`) restreint les éléments de liste qui sont chaînés : des conditions sur des champs de l'élément en notation pointée, plusieurs valeurs acceptées séparées par `|`, plusieurs conditions par `;` — par ex. `flowSyntax=CDAR`. Les éléments non concernés sont écartés **avant** l'appel de détail : ils ne coûtent aucune requête et n'atteignent jamais les résultats ; la trace de debug indique combien ont été écartés. Vide = pas de filtre.
+
+#### Statuts de cycle de vie depuis un flux CDAR \{#cdar-lifecycle\}
+
+Certaines PA (type Esker) publient les statuts de cycle de vie sous forme de recherche de flux suivie d'un message **CDAR** par flux — `flows/search`, puis `flows/{id}?docType=Original`. Le câblage se fait par configuration seule : la chaîne transporte chaque détail XML intact, et la récupération du cycle de vie évalue les mappages de réponse `event.*` comme des **XPath** sur ce message. `event.item` désigne le nœud répété (un événement par facture référencée) ; les chemins relatifs se résolvent à l'intérieur, les chemins absolus sur tout le message ; les dates UN/CEFACT (formats `204` / `102`) sont converties automatiquement, et les préfixes CDAR `rsm`, `ram`, `udt`, `qdt` sont préenregistrés. Le bouton **Pre-map CDAR lifecycle** remplit les neuf mappages en un clic (statut = `ProcessConditionCode`, facture = `IssuerAssignedID`, motif, action, note, dates). Les mappages `event.*` sont lus à la fois sur l'endpoint de liste et sur l'endpoint de détail chaîné — la liste l'emporte en cas de conflit — : les chemins d'éléments de liste (`item.<champ>`) restent sur la liste, les XPath CDAR sur le détail, là où l'onglet *Test* les évalue.
+
 ### Exemple complet — Esker (dépôt, puis traitement) \{#esker\}
 
 Esker prend la facture en deux appels, câblés comme un connecteur API `pa-default` :

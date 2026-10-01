@@ -303,6 +303,7 @@ Liste tous les jobs actifs du planificateur :
 - **Jobs intégrés** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — pilotés par les intervalles de polling de `BackgroundScheduler`.
 - **`fetch-all` par modèle** — une ligne par modèle avec un job d'extraction / synchronisation programmé.
 - **Passages Reprise auto par ligne** — une ligne par entrée enregistrée sur la page [Reprise auto](../configuration/system/auto-retry.md), avec l'heure planifiée et la liste des statuts ciblés en guise de cadence.
+- **Contrôles quotidiens du cycle de vie** — une ligne par entrée planifiée sur la page [Contrôles du cycle de vie](../management/lifecycle-checks.md), à côté des synthèses et des reprises auto, avec son heure et sa dernière exécution.
 
 Chaque ligne affiche le nom du job, la cadence, et une pastille de statut (vert actif, bleu prévu sous peu, orange en pause). Le sous-titre indique le décompte des jobs actifs.
 

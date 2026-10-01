@@ -176,6 +176,10 @@ Le pack `BR-NOMAUBL-rules.sch` porte les règles qu'aucun pack Schematron livré
 
 L'obligation, pour un avoir, de référencer une facture antérieure n'est **pas** une règle maison : l'ancienne `BR-NOMAUBL-01` a été retirée quand le pack **standard** Flux 2 a commencé à imposer la même condition via **`BR-FR-CO-05`**. Les règles maison sont assouplies à mesure que les packs AFNOR / FNFE-MPE amont rattrapent leur retard ; le pack reste donc un point d'accroche pour ce qu'ils ne couvrent pas encore.
 
+### Règles client par modèle
+
+Les règles propres à un client — une classification obligatoire, un format de référence acheteur — ne vont dans aucun des packs ci-dessus. Un modèle de document liste ses propres feuilles précompilées dans **Custom Schematron** (voir [Documents → UBL](../management/documents.md)) ; elles s'exécutent **après** les packs standard, sur ce modèle uniquement, et leurs anomalies apparaissent sous une source courte tirée du nom de fichier.
+
 La version du pack est accessible via `GET /api/build-info` sous la clé `schematron.nomaubl` — le pied de page du tableau de bord la lit pour le tampon de version par pack.
 
 ---

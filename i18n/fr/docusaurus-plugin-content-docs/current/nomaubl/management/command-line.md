@@ -275,6 +275,23 @@ Le switch *Enregistrer les détails TVA* n'a **pas** besoin d'être activé pour
 
 ---
 
+## `watch-folders <env>` — récupérer les dossiers surveillés \{#watch-folders\}
+
+Lance la récupération des [dossiers surveillés](../configuration/system/watched-folders.md) en ligne de commande — la même exécution que le bouton *Scan and process* de l'éditeur et que le job de lot planifié avec la source *Watched folders*.
+
+```bash
+./nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]
+```
+
+| Option | Effet |
+|---|---|
+| **`--folder <N>`** | Seulement la ligne de dossier `N` ; sans elle, tous les dossiers configurés. |
+| **`--since <date>`** | Date de rattrapage — élargit la fenêtre de chaque dossier pour cette exécution (`yyyy-MM-dd` ou ISO). |
+| **`--dry-run`** | Liste ce qui serait converti et traité, sans rien modifier. |
+| **`--no-process`** | Convertit et dépose les fichiers dans les répertoires d'entrée des modèles, sans lancer de lot. |
+
+---
+
 ## `-help` — bannière d'aide
 
 Affiche la bannière d'aide intégrée et termine. Reconnu sous `-help`, `--help` ou `-h`. Lancer le JAR sans argument produit le même résultat.

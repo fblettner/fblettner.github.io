@@ -176,6 +176,10 @@ The `BR-NOMAUBL-rules.sch` pack carries the rules that no shipped Schematron pac
 
 The requirement that a credit note reference a preceding invoice is **not** a house rule — the earlier `BR-NOMAUBL-01` was dropped once the **standard** Flux 2 pack started enforcing the same condition through **`BR-FR-CO-05`**. The house rules are relaxed as the upstream AFNOR / FNFE-MPE packs catch up, so the pack stays a ready-made hook for whatever they don't cover yet.
 
+### Customer rules per template
+
+Rules specific to one customer — a mandatory classification, a buyer-reference pattern — don't go into any of the packs above. A document template lists its own precompiled stylesheets in **Custom Schematron** (see [Documents → UBL](../management/documents.md)); they run **after** the standard packs on that template only, and their findings appear under a short source derived from the file name.
+
 The pack version is exposed at `GET /api/build-info` under `schematron.nomaubl` — the dashboard footer reads it for the per-pack version stamp.
 
 ---

@@ -303,6 +303,7 @@ Lists every active scheduler job:
 - **Built-ins** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — driven by `BackgroundScheduler` polling intervals.
 - **Per-template `fetch-all`** — one row per template that has a scheduled extract / sync.
 - **Per-row Auto-Retry sweeps** — one row per saved entry on the [Auto-Retry](../configuration/system/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
+- **Daily lifecycle checks** — one row per scheduled entry on the [Lifecycle checks](../management/lifecycle-checks.md) page, next to the digests and auto-retries, with its time and last run.
 
 Each row shows the job name, the cadence, and a status pill (green active, blue scheduled-soon, orange paused). The card subtitle reports the active count.
 

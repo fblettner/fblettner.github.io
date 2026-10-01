@@ -275,6 +275,23 @@ backfill-vat — issue date 2026-04-01 → 2026-04-30
 
 ---
 
+## `watch-folders <env>` — pick up watched folders \{#watch-folders\}
+
+Runs the [Watched folders](../configuration/system/watched-folders.md) pickup from the command line — the same run as the editor's *Scan and process* button and the scheduled batch job with the *Watched folders* source.
+
+```bash
+./nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]
+```
+
+| Flag | Effect |
+|---|---|
+| **`--folder <N>`** | Only the folder row `N`; omit to run every configured folder. |
+| **`--since <date>`** | Backfill date — widens every folder's window for this run (`yyyy-MM-dd` or ISO). |
+| **`--dry-run`** | Lists what would be converted and processed, without touching anything. |
+| **`--no-process`** | Converts and drops the files into the template input folders, but runs no batch. |
+
+---
+
 ## `-help` — usage banner
 
 Emit the built-in help banner and exit. Accepted as `-help`, `--help` or `-h`. Invoking the JAR without any argument has the same effect.

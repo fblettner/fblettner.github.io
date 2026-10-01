@@ -28,6 +28,47 @@
     { "name": "Webhook",       "description": "Inbound PA status-push receiver. Public, HMAC-signed endpoint the Plateforme Agreee calls to update an invoice's status without polling — the push counterpart of /api/import." }
   ],
   "paths": {
+    "/api/watch-folders/run": {
+      "post": {
+        "tags": [
+          "Process"
+        ],
+        "summary": "Run the watched-folders scan",
+        "description": "Scans the configured watched folders and converts the new spool files. Same job as the `watch-folders` batch source and the `nomaubl.sh watch-folders` command.",
+        "operationId": "runWatchFolders",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "dryRun": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "List the matching files without converting them."
+                  },
+                  "since": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Backfill: also pick up files modified since this date."
+                  },
+                  "folder": {
+                    "type": "integer",
+                    "description": "Index of a single folder to scan; all folders when omitted."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Scan summary (files found, converted, skipped, failed)."
+          }
+        }
+      }
+    },
     "/api/auth/login": {
       "post": {
         "tags": ["Auth"],

@@ -577,6 +577,7 @@ const sidebars: SidebarsConfig = {
             'nomaubl/configuration/system/einvoicing',
             'nomaubl/configuration/system/ereporting',
             'nomaubl/configuration/system/fetch-invoices',
+            'nomaubl/configuration/system/watched-folders',
             'nomaubl/configuration/system/global',
             'nomaubl/configuration/system/oidc',
             'nomaubl/configuration/system/document-types',

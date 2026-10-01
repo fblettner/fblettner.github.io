@@ -339,6 +339,12 @@ The body is a JSON template; `{{reportName}}`, `{{reportVersion}}` and `{{compan
 
  An endpoint can hand its result to a follow-up call in the same step. Set **`then`** to the name of the next endpoint, and **`then.itemsField`** / **`then.idField`** to pick the id to carry forward from the first response. That id reaches the follow-up as `{{prevId}}` (also aliased `{{uuid}}`). It powers two-step platform flows — *upload then process*, or *list then fetch each detail* — without a round-trip through NomaUBL between the calls.
 
+In array mode, the **Item filter** field (`then.filter`) restricts which list items are chained: conditions on dot-notation fields of the item, several accepted values separated by `|`, several conditions by `;` — e.g. `flowSyntax=CDAR`. Non-matching items are skipped **before** the detail call, so they cost no request and never reach the results; the debug trace reports how many were skipped. Empty means no filter.
+
+#### Lifecycle statuses from a CDAR flow \{#cdar-lifecycle\}
+
+Some PAs (Esker-style) expose lifecycle statuses as a flow search followed by one **CDAR** message per flow — `flows/search`, then `flows/{id}?docType=Original`. This is wired by configuration only: the chain carries each XML detail intact, and the lifecycle retrieval evaluates the `event.*` response mappings as **XPaths** on it. `event.item` names the repeating node (one event per referenced invoice); relative paths resolve inside it, absolute paths on the whole message; UN/CEFACT dates (formats `204` / `102`) are converted automatically, and the CDAR prefixes `rsm`, `ram`, `udt`, `qdt` are pre-registered. The **Pre-map CDAR lifecycle** button fills the nine mappings in one click (status = `ProcessConditionCode`, invoice = `IssuerAssignedID`, reason, action, note, dates). The `event.*` mappings are read from both the list endpoint and its chained detail endpoint — the list wins on conflict — so list-item paths (`item.<field>`) can stay on the list while the CDAR XPaths stay on the detail, where the *Test* tab evaluates them.
+
 ### Worked example — Esker (upload, then process) \{#esker\}
 
 Esker takes the invoice in two calls, wired as a `pa-default` API connector:

@@ -186,11 +186,11 @@ Deux évolutions livrées en 2026.05.5 :
 
 | Colonne | Exemple | Description |
 |---|---|---|
-| **Code** | `200` | Code de statut réglementaire enregistré en base (`tableHeader`). Identifiant canonique du statut dans NomaUBL. |
+| **Code** | `200` | Code de statut réglementaire enregistré en base (`tableHeader`). Identifiant de référence du statut dans NomaUBL. |
 | **Tag** *(lecture seule)* | `STATUS_DEPOSITED` | Nom interne référencé par les fabriques `InvoiceStatusCatalog` du code Java. L'éditeur l'affiche en lecture seule — un renommage casserait silencieusement les appelants Java. |
 | **Libellé · Français** | `Déposée` | Libellé français affiché dans l'interface quand la locale active est le français. |
 | **Libellé · Anglais** | `Deposited` | Libellé anglais affiché dans l'interface quand la locale active est l'anglais. |
-| **PA Code(s)** | `fr_e_invoicing_200` | Nom d'événement transmis à l'API de la Plateforme Agréée — placé dans le tableau `names[]` des appels de statut. **Plusieurs codes, séparés par des virgules**, peuvent pointer vers ce statut : une seule liste sert des factures dont les statuts viennent de sources différentes (votre plateforme principale et Chorus Pro, par exemple) sans la dupliquer. Chaque code doit correspondre exactement à ce qu'attend sa PA. |
+| **PA Code(s)** | `fr_e_invoicing_200` | Nom d'événement transmis à l'API de la Plateforme Agréée — placé dans le tableau `names[]` des appels de statut. **Plusieurs codes, séparés par des virgules**, peuvent pointer vers ce statut : une seule liste sert des factures dont les statuts viennent de sources différentes (votre plateforme principale et Chorus Pro, par exemple) sans la dupliquer. Chaque code doit correspondre exactement à ce qu'attend sa PA. **Laissé vide** sur une ligne où *Collect from PA API* est coché, le statut est rapproché sur son propre code — ce que renvoie une plateforme à base de CDAR — et la liste livrée fonctionne telle quelle ; ces codes implicites restent hors du filtre `names[]` envoyé aux PA qui filtrent côté serveur. |
 | **Polling — Interroger via la PA** | case à cocher | Quand cochée, NomaUBL interroge ce statut auprès de l'API de la PA à chaque exécution de *Synchronisation → Récupérer les statuts*. Décocher pour exclure un statut du polling. |
 | **Groupes** | multi-sélection | Compteur de niveau supérieur et étape funnel auxquels le statut est rattaché — alimente les widgets du tableau de bord et les filtres SQL de `DashboardApi`. Voir [Groupes](#groupes) ci-dessous. |
 
