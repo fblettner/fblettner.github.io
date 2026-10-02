@@ -61,6 +61,7 @@ Le premier onglet est un tableau croisé prêt à l'emploi : le **nombre de fact
 - **Dépliez / repliez** une activité ou un statut pour descendre dans le détail ; les **sous-totaux** apparaissent à chaque niveau.
 - Un statut à motif de rejet unique tient sur **une seule ligne**, sans ligne imbriquée supplémentaire.
 - Le **filtre de période** en haut propose les trois mêmes bases de dates que le [Tableau de bord](./dashboard.md) — *Date d'activité*, *Date document* ou *Date d'archivage* — pour que le rapport se recoupe avec les chiffres affichés ailleurs.
+- **Exclure les erreurs traitées** écarte les factures déjà traitées par le service client qui restent dans un statut en erreur — le même bouton que sur le [Tableau de bord](./dashboard.md#exclure-erreurs-traitees) ; les factures traitées dans les autres statuts restent comptées.
 - **Export Excel** produit un classeur à **deux feuilles** : le rapport exactement tel qu'affiché, et les données brutes à plat, prêtes pour vos propres tableaux croisés.
 
 ---

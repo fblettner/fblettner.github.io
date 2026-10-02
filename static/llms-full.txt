@@ -31803,6 +31803,15 @@ Next to the period filter, a **date basis** selector chooses which date the whol
 
 Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the choice. The [E-Invoicing](./invoices.md#date-basis) list and the [Reports](./reports.md) page offer the same *Archive date* basis.
 
+### Exclude reviewed errors \{#exclude-reviewed\}
+
+The **Exclude reviewed errors** toggle, in the same filter bar, hides the invoices that customer service has already reviewed (*Reviewed* in the **Review** column of the [E-Invoicing](./invoices.md) list) but that still sit in an error status — the statuses placed in the `errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md). The error KPIs then show only what is left to handle.
+
+- Reviewed invoices in any other status stay counted, and the totals remain the real number of invoices.
+- Every widget follows the toggle, and it is kept when leaving the dashboard and coming back.
+- Clicking a tile carries the toggle to the [E-Invoicing](./invoices.md#exclude-reviewed) list, so the count on both pages agrees.
+- Off by default.
+
 ---
 
 ## Hero KPI cards
@@ -32653,6 +32662,7 @@ The toolbar above the table combines date filtering, free-text search, status ch
     Contract
     Customer name
     BAR ▾
+    Exclude reviewed errors
     
     ↻ Refresh
     + New invoice
@@ -32738,6 +32748,10 @@ A new chip row sits next to the Status chips: **All** / **Issued** / **Received*
 The chip resolves against the `UHDRIN` flag stored on each row — a template's *Direction* change does not re-classify historical rows, so the result is stable over time.
 
 On a *Received* row the **Counterparty** column reads from `AccountingSupplierParty` (the supplier), not from `AccountingCustomerParty` — so the column shows the supplier name on inbound invoices and the customer name on outbound ones. The status workflow, the detail modal and the column catalog are otherwise identical; only the emit-only seller actions (Resend to PA, Send completed, Credit note…) are hidden on received-direction rows.
+
+### Exclude reviewed errors \{#exclude-reviewed\}
+
+The **Exclude reviewed errors** toggle, next to the direction selector, hides the rows already marked *Reviewed* that still sit in an error status (`errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md)), so the list keeps only the errors nobody has looked at yet. Reviewed rows in any other status stay listed. The toggle is set automatically when the list opens from a [Dashboard](./dashboard.md#exclude-reviewed) tile where it was on. The `GET /api/invoices` endpoint takes the same filter as `excludeReviewedErrors=true`.
 
 ### Refresh and New invoice
 
@@ -32865,7 +32879,7 @@ The Summary tab shows a coloured **status badge** at the top, followed by **acti
 
 #### Fix buyer \{#fix-buyer\}
 
-The most frequent PA rejections are about the **buyer's identifiers** — SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49). A **Fix buyer** button opens a compact form pre-filled from the stored UBL, with the [INSEE company search](./edirectory.md) and the PPF electronic-address picker, to correct just those fields without re-editing the whole invoice. Only the changed identifiers are replaced inside the stored UBL — the rest of the document stays untouched — then the invoice is **revalidated on the spot**, an audit event records the old and new values in the history, and an option **resends to the PA** when validation passes. The button appears only while the invoice is still correctable — before the PA has taken it over, or when it was **Rejected (213) for an addressing reason**: `ADR_ERR`, `REJ_ADR` (the platform's addressing control) or `DEST_INC` (recipient unknown in the directory). In those three cases the invoice never reached the customer, which makes the resend safe; every other PA-processed status stays locked. A repair whose validation raises no error also marks the invoice *Reviewed* in the list. Format safeguards (SIREN/SIRET length and coherence, VAT shape) and the PA-protection rule apply — the same checks as the `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` endpoint in the [API reference](/nomaubl/api-reference).
+The most frequent PA rejections are about the **buyer's identifiers** — SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49). A **Fix buyer** button opens a compact form pre-filled from the stored UBL, with the [INSEE company search](./edirectory.md) and the PPF electronic-address picker, to correct just those fields without re-editing the whole invoice. Only the changed identifiers are replaced inside the stored UBL — the rest of the document stays untouched — then the invoice is **revalidated on the spot**, an audit event records the old and new values in the history, and an option **resends to the PA** when validation passes. The button appears only while the invoice is still correctable — before the PA has taken it over, or when it was **Rejected (213) for an addressing reason**: `ADR_ERR`, `REJ_ADR` (the platform's addressing control) or `DEST_INC` (recipient unknown in the directory). In those three cases the invoice never reached the customer, which makes the resend safe; every other PA-processed status stays locked. A repair whose validation raises no error also marks the invoice *Reviewed* in the list. The buyer electronic address (BT-49) keeps the scheme already on the document — `0225` when there is none. The correction is logged as a plain history entry (*Identifiants acheteur corrigés*), without triggering the notification rule of the current status again, and the outcome of the new validation (`9901` / `9902`) is added to the history whenever it differs from the latest event. The customer keys stored on the row (alpha key, customer number) are kept; the same applies to a save from the edit window. Format safeguards (SIREN/SIRET length and coherence, VAT shape) and the PA-protection rule apply — the same checks as the `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` endpoint in the [API reference](/nomaubl/api-reference).
 
 Below the status, when the invoice is in a status that requires a follow-up action by the seller (e.g. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), a blue **Seller actions** banner appears with the recommended actions:
 
@@ -32984,9 +32998,8 @@ Sub-rows appear under each main row for:
 - Price-level allowance / charge (`BT-147`)
 - Line-level allowances / charges (`BG-27` / `BG-28`)
 - Additional item properties (`BG-32`)
-- Referenced customer order (`BT-132`)
 
-When several lines share the same delivery group, document references (`BT-128`) or referenced customer order (`BT-132`), a **delivery header**, a **document-reference header** or a **customer-order header** appears once at the top of that group rather than repeating on every line. In the Create / Edit Invoice line editor, *Customer order* is a quick-add alongside *Note* and *Doc Ref* under the line *References* block.
+When several lines share the same delivery group, document references (`BT-128`) or customer order number (`EXT-FR-FE-135`), a **delivery header**, a **document-reference header** or a **Customer Order Reference header** appears once at the top of that group rather than repeating on every line.
 
 ### VAT tab
 
@@ -33310,11 +33323,11 @@ The modal is split into vertical sections:
 - **Header** — issue / due dates, currency, period start / end, plus a **Preceding invoices** block (BG-3, 0..n): each row a reference number (BT-25) and an optional issue date (BT-26), added or removed with **＋ Add a preceding invoice (BG-3)**. On a credit note this is the reference to the corrected invoice.
 - **Supplier** — pre-populates from the supplier directory (*UBL Defaults → Suppliers / Companies*); editable per invoice.
 - **Customer** — filled end to end from the company search: results show the badge, name and identifier on one line with the address below; searching a bare SIREN or SIRET lists every establishment (the same second INSEE lookup as [E-Directory](./edirectory.md)), and an optional SIRET field completes the SIREN. The electronic address is **not guessed** from the SIREN/SIRET — a PPF electronic-address list (opened automatically after picking a company, or anytime via the button next to the identifier field) shows the addresses registered for the SIREN with their active/disabled state; picking one fills the identifier and its scheme, then the list closes. An **Other ids (BT-46)** block adds any number of extra buyer identifiers, each with its scheme from the EAS list — a routing code or a second SIRET carried on the document is now visible, editable and removable instead of travelling invisibly.
-- **Delivery** — optional delivery group.
+- **Delivery** — optional document-level delivery group (BG-13). It shows only the delivery set at document level; deliveries carried by the lines stay on the lines and are never copied up to the header.
 - **Payment** — payment means code, IBAN, BIC, mandate, terms.
 - **Allowances / charges** — document-level discounts / charges.
 - **Notes** — free-text notes per `BT-22` prefix.
-- **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties. The unit-price input accepts fine precision (up to 6 decimals), to match prices that carry more than 2 decimals at source. A per-line **Price (BG-29)** block sets the gross unit price (**BT-148**) and the price discount (**BT-147**); the net price is derived and drives the line amount, and the line amount divides by the **price base quantity** (BT-149) so a price per 100 or 1,000 units is computed correctly. The line *References* block also holds per-line **Preceding invoice** references (EXT-FR-FE-136) — number, optional date and a **DocumentStatusCode** picked from `INFORMATION` / `DETAIL` / `GROUP`.
+- **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties. The unit-price input accepts fine precision (up to 6 decimals), to match prices that carry more than 2 decimals at source. A per-line **Price (BG-29)** block sets the gross unit price (**BT-148**) and the price discount (**BT-147**); the net price is derived and drives the line amount, and the line amount divides by the **price base quantity** (BT-149) so a price per 100 or 1,000 units is computed correctly. The line *References* block also holds per-line **Preceding invoice** references (EXT-FR-FE-136) — number, optional date and a **DocumentStatusCode** picked from `INFORMATION` / `DETAIL` / `GROUP`. Three quick-add buttons in the same block fill the **order references** of the line, all carried by `cac:OrderLineReference`: **Customer Order Reference** (the buyer's order number, EXT-FR-FE-135 — the key the PDF groups lines on), **Order number** (the seller's order number, EXT-FR-FE-144) and **Customer line no.** (the line number inside the buyer's order, BT-132).
 - **VAT summary** — auto-computed from the lines (read-only — line edits are reflected here).
 - **Totals** — auto-computed (read-only).
 
@@ -33842,6 +33855,7 @@ The first tab is a ready-made pivot: **invoice counts** broken down by **activit
 - **Expand / collapse** any activity or status to drill down; **subtotals** are shown at every level.
 - A status that has a single rejection reason renders as **one compact line** rather than an extra nested row.
 - The **period filter** at the top offers the same three date bases as the [Dashboard](./dashboard.md) — *Activity date*, *Document date* or *Archive date* — so the report reconciles with the figures shown elsewhere.
+- **Exclude reviewed errors** leaves out the invoices already reviewed by customer service that still sit in an error status — the same toggle as on the [Dashboard](./dashboard.md#exclude-reviewed); reviewed invoices in other statuses stay counted.
 - **Export Excel** writes a workbook with **two sheets**: the report exactly as displayed, and the flat underlying data ready for your own pivot tables.
 
 ---
@@ -40463,7 +40477,7 @@ The full list of toggles per preset section:
 
 - **Header** — eight `META · …` toggles (invoice number, issue date, due date, contract / order / buyer references, invoice type, profile ID) plus six `Supplier · …` toggles (address, SIREN, legal form, VAT, phone, email).
 - **Parties** — Customer and Delivery boxes, with separate toggles for SIREN, VAT, address, location ID and a *Show Delivery box* master switch (when off, the layout renders a single-column Customer block). The Delivery box shows the delivery party name (falling back to `ID: …` when only the location ID is set), the full street, postal code + city and country code — matching the Customer box.
-- **Line Table** — group-header toggles (*Delivery group*, *Page break per delivery*, *Document Reference group* and,, *Group by customer order* — a third band below the delivery and document-reference bands, showing the referenced customer-order ID, BT-132), column toggles (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — the *Unit price* column (BT-146) shows the price base quantity when it differs from 1 (`40,49 / 100`); the **Net unit price** column (line amount ÷ quantity, i.e. the price once line allowances and charges are folded in) is **off by default**, so the item price alone stays the standard layout. Sub-rows span the real column count, so hiding or adding columns never misaligns them. The line table also carries nine sub-detail toggles for line metadata (BT-127, BT-134/135, **BT-155 — Seller's item code**, BT-156, BT-157, BT-158, **BT-159 — Country of origin** *(prints the country's full name resolved from the shared countries list — not the ISO code)*, allowances / charges, additional item properties). The customer-order band follows the same reset rules as the others: a new delivery re-prints both inner breadcrumbs, a new document reference re-prints the customer-order band.
+- **Line Table** — group-header toggles (*Delivery group*, *Page break per delivery*, *Document Reference group* and *Group by order (EXT-FR-FE-135, EXT-FR-FE-144)* — a third band below the delivery and document-reference bands, carrying the buyer's and the seller's order numbers on one line: *Customer Order Reference: … Order number: …*), an *Order line reference (BT-132)* toggle that prints the customer line number under each line — and, when order grouping is off, the two order numbers as detail rows too, column toggles (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — the *Unit price* column (BT-146) shows the price base quantity when it differs from 1 (`40,49 / 100`); the **Net unit price** column (line amount ÷ quantity, i.e. the price once line allowances and charges are folded in) is **off by default**, so the item price alone stays the standard layout. Sub-rows span the real column count, so hiding or adding columns never misaligns them. The line table also carries nine sub-detail toggles for line metadata (BT-127, BT-134/135, **BT-155 — Seller's item code**, BT-156, BT-157, BT-158, **BT-159 — Country of origin** *(prints the country's full name resolved from the shared countries list — not the ISO code)*, allowances / charges, additional item properties). The order band follows the same reset rules as the others: a new delivery re-prints both inner breadcrumbs, a new document reference re-prints the order band.
 - **Document Allowances** — column toggles for type, reason, amount, tax.
 - **VAT Breakdown** — column toggles for category, rate, taxable, tax amount (an exemption column auto-appears when present).
 - **Totals** — seven row toggles covering the full totals stack (Total HT, Allowances, Charges, Tax Exclusive, Total Tax, Total TTC, Amount Payable).
@@ -42097,7 +42111,8 @@ NomaUBL release notes — every user-visible change shipped in the platform, ver
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
   Versions
-  2026.10.01.1 · 2026-10-01
+  2026.10.02.1 · 2026-10-01
+  2026.10.01.1 · 2026-09-30
   2026.09.30.1 · 2026-09-30
   2026.09.28.1 · 2026-09-28
   2026.09.26.1 · 2026-09-26
@@ -42204,6 +42219,20 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ---
 
+## 2026.10.02.1 — 2026-10-02 \{#v2026-10-02-1\}
+
+### Improvements
+
+- **"Exclude reviewed errors" on the Dashboard, the Reports and the invoice list.** A new toggle hides the invoices already reviewed by customer service (F564231.UHALRTPSD = Y) that still sit in an error status (the errorTech / errorBusiness groups of the statuses template), so the error KPIs show what is left to handle. Reviewed invoices in any other status stay counted, and the totals remain the true number of invoices. Available on the Dashboard filter bar (kept across navigation), on the Reports status statistics tab and on the invoice list; a dashboard tile click carries the toggle to the list so both agree. The APIs take `excludeReviewed=true` (invoice stats, dashboard overview, status statistics) and `excludeReviewedErrors=true` (invoice list), default off.
+- **Line order references: customer order, order number and customer line number.** The invoice line carries three distinct references in the same UBL group (`cac:OrderLineReference`): the customer line number (BT-132, `cbc:LineID`), the customer order number (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`) and the seller's order number (EXT-FR-FE-144, `cbc:SalesOrderID`). The XSL framework gets one mapping slot for each (TAG_LINE_ORDER_LINE_REF, TAG_LINE_ORDER_REF, TAG_LINE_SALES_ORDER_REF); when only the order number is mapped, the mandatory order id falls back to the header purchase order (BT-13). The invoice window offers the three fields per line. The generated PDF groups lines on the order band "Customer Order Reference: … Order number: …" and prints the customer line number under each line; with grouping off, the three references appear as detail rows under each line. Previously the customer line number was treated as the customer order, which printed a band before nearly every line.
+
+### Fixes
+
+- **Fix buyer / edit window: successful re-validation now recorded in the history.** When an invoice in "Echec de validation" (9905) was repaired and validated successfully, the status row was updated to 9901 but no lifecycle event was written, so the history still ended on 9905. The validation outcome (9901 / 9902) is now appended whenever it differs from the latest event; an identical re-save stays silent.
+- **Fix buyer: no more spurious notification, electronic address scheme kept.** The audit line "Identifiants acheteur corrigés" is now a plain history entry; it no longer re-fires the notification rule of the current status (e.g. 9905) on every correction. The buyer electronic address (BT-49) keeps the scheme already on the document, or 0225 when none, instead of being inferred from the digit count (a 9-digit identifier used to get 0002).
+
+---
+
 ## 2026.10.01.1 — 2026-10-01 \{#v2026-10-01-1\}
 
 ### Improvements
@@ -42217,6 +42246,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ### Fixes
 
+- **E-Documents detail shows the template again.** The archived-document modal took the template, type and UBL number from the list row, which only carried the columns of the current view layout; with those columns hidden the Summary showed dashes and Reprocess stayed disabled with "No template recorded". The list now sends them on every row whatever the layout.
+- **Invoice window no longer invents a header delivery.** Opening an invoice whose deliveries are on the lines filled the header delivery form with the first line's delivery, and saving wrote it back as a document-level delivery (BG-13), which then showed a Delivery box on the PDF. The window now reads only the document-level delivery; line deliveries stay on the lines.
 - **Fix buyer and the edit window no longer overwrite the customer keys.** Saving a corrected invoice replaced the alpha key (F564230.FEALKY) with the buyer SIREN read from the UBL and reset the customer number (F564231.UHAN8) to zero, because the replace rewrote both from the document instead of the stored row. The stored alpha key is now kept whenever it exists — the SIREN remains the fallback for invoices created directly from UBL — and the customer number is carried over when the caller has none. Applies to Fix buyer, the edit window and any replace-mode reprocess, with or without resend; batch processing from a JDE spool is unchanged.
 
 ---
@@ -46614,7 +46645,7 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158, a repeatable group of up to four codes), classification scheme version (BT-158-2), the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN), and the **gross price** (`TAG_LINE_GROSS_PRICE` → BT-148) with the **price base quantity** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). A spool carrying gross + discount maps both and the net price is derived as gross − discount; a spool carrying net + discount emits its gross as net + discount; a spool carrying net + gross but no discount amount — the usual JDE spool — gets the price discount (BT-147) derived as gross − net, with the gross as base (no discount when the gross is not above the net). Line fields are grouped by theme (identification, quantities, prices, VAT, references, classification) — see [scoping](#scoping) below. |
 | **Item Properties** *(BG-32)* | BG-32 | Repeating product attributes attached to a line. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Per-line discount or charge. Point the *Item AC* TAG at `.` (or leave it empty) when the allowance fields sit directly on the invoice line with no wrapper element — the framework then iterates the line itself. When the source carries only the percentage, the amount and base are derived from the line net amount; percentage + base derives the amount, percentage + amount derives the base. |
-| **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Per-line document references — supporting documents (BT-128, UNTDID 1153 scheme) and the referenced purchase-order line via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, group EXT-FR-FE-BG-09, placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence). |
+| **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132, EXT-FR-FE-135, EXT-FR-FE-144 | Per-line document references — supporting documents (BT-128, UNTDID 1153 scheme) and three order references in the same `cac:OrderLineReference` group (EXT-FR-FE-BG-09, placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence): `TAG_LINE_ORDER_REF` → *Customer Order Reference*, the buyer's order number (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`) that the PDF groups lines on; `TAG_LINE_SALES_ORDER_REF` → *Sales order*, the seller's order number (EXT-FR-FE-144, `cbc:SalesOrderID`); `TAG_LINE_ORDER_LINE_REF` → *Order line reference*, the line number inside the buyer's order (BT-132, `cbc:LineID`). When only the seller's order number is mapped, the mandatory order ID falls back to the header purchase order (BT-13). |
 | **Line Preceding Invoice** *(EXT-FR-FE-136)* | Line-level `cac:BillingReference` | Reference to a prior invoice at the line level — useful for line-level credits. Emits `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` (with an optional issue date) inside the line, at the correct schema position. |
 | **Line Delivery** *(EXT-FR-FE-BG-10)* | French extension | Per-line delivery group. |
 | **Line Notes** *(BT-127)* | BT-127 | Free-text notes attached to a line. |

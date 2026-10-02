@@ -35,6 +35,8 @@ The dashboard was rebuilt as a 12-column widget grid in 2026.05.4. The previous 
   <rect x="220" y="20" width="580" height="640" rx="14" fill="url(#dash-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Dashboard</text>
+  <rect x="478" y="30" width="154" height="22" rx="5" fill="none" stroke="#334155" strokeWidth="1"/>
+  <text x="555" y="45" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Exclude reviewed errors</text>
   <rect x="640" y="30" width="146" height="22" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
   <text x="650" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">📅 Yesterday ▾</text>
 
@@ -222,6 +224,15 @@ Next to the period filter, a **date basis** selector chooses which date the whol
 | **Archive date** | The date documents were processed into the archive. |
 
 Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the choice. The [E-Invoicing](./invoices.md#date-basis) list and the [Reports](./reports.md) page offer the same *Archive date* basis.
+
+### Exclude reviewed errors \{#exclude-reviewed\}
+
+The **Exclude reviewed errors** toggle, in the same filter bar, hides the invoices that customer service has already reviewed (*Reviewed* in the **Review** column of the [E-Invoicing](./invoices.md) list) but that still sit in an error status — the statuses placed in the `errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md). The error KPIs then show only what is left to handle.
+
+- Reviewed invoices in any other status stay counted, and the totals remain the real number of invoices.
+- Every widget follows the toggle, and it is kept when leaving the dashboard and coming back.
+- Clicking a tile carries the toggle to the [E-Invoicing](./invoices.md#exclude-reviewed) list, so the count on both pages agrees.
+- Off by default.
 
 ---
 

@@ -14,7 +14,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-10-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.10.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-01</span></a>
+  <a href="#v2026-10-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.10.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-01</span></a>
+  <a href="#v2026-10-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
   <a href="#v2026-09-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
   <a href="#v2026-09-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-28</span></a>
   <a href="#v2026-09-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-26</span></a>
@@ -122,6 +123,20 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.10.02.1 — 2026-10-02 \{#v2026-10-02-1\}
+
+### Améliorations
+
+- **« Exclure les erreurs traitées » sur le tableau de bord, les rapports et la liste des factures.** Un nouveau bouton masque les factures déjà traitées par le service client (F564231.UHALRTPSD = Y) qui restent dans un statut en erreur (groupes errorTech / errorBusiness du gabarit des statuts) : les indicateurs d'erreur montrent ce qu'il reste à traiter. Les factures traitées dans tout autre statut restent comptées et les totaux restent le vrai nombre de factures. Disponible dans la barre de filtres du tableau de bord (conservé d'une page à l'autre), dans l'onglet statistiques des statuts des rapports et dans la liste des factures ; un clic sur une tuile du tableau de bord transmet le réglage à la liste pour que les deux concordent. Les API acceptent `excludeReviewed=true` (statistiques factures, vue d'ensemble du tableau de bord, statistiques des statuts) et `excludeReviewedErrors=true` (liste des factures), désactivé par défaut.
+- **Références de commande en ligne : commande client, numéro de commande et n° ligne client.** Une ligne de facture porte trois références distinctes dans le même groupe UBL (`cac:OrderLineReference`) : le n° de ligne client (BT-132, `cbc:LineID`), le numéro de commande client (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`) et le numéro de commande du vendeur (EXT-FR-FE-144, `cbc:SalesOrderID`). Le socle XSL dispose désormais d'une variable de mappage pour chacune (TAG_LINE_ORDER_LINE_REF, TAG_LINE_ORDER_REF, TAG_LINE_SALES_ORDER_REF) ; si seul le numéro de commande vendeur est mappé, l'identifiant obligatoire reprend la commande d'achat d'en-tête (BT-13). La fenêtre facture propose les trois champs sur chaque ligne. Le PDF regroupe les lignes sous un bandeau « Référence Cde Client : … Numéro de commande : … » et affiche le n° ligne client sous chaque ligne ; sans regroupement, les trois références s'affichent en lignes de détail. Jusqu'ici le n° de ligne client était pris pour la commande client, d'où un bandeau devant presque chaque ligne.
+
+### Corrections
+
+- **Correction acheteur / fenêtre facture : la revalidation réussie apparaît dans l'historique.** Une facture en « Echec de validation » (9905) corrigée puis validée passait bien en 9901 dans la table des statuts, mais aucun événement n'était écrit : l'historique restait sur 9905. Le résultat de la validation (9901 / 9902) est désormais ajouté dès qu'il diffère du dernier événement ; un réenregistrement identique n'ajoute rien.
+- **Correction acheteur : plus de notification intempestive, schéma de l'adresse électronique conservé.** La ligne d'audit « Identifiants acheteur corrigés » est désormais une simple entrée d'historique : elle ne redéclenche plus la règle de notification du statut courant (9905 par exemple) à chaque correction. L'adresse électronique de l'acheteur (BT-49) conserve le schéma déjà présent dans le document, ou 0225 à défaut, au lieu d'être déduit du nombre de chiffres (un identifiant à 9 chiffres recevait 0002).
+
+---
+
 ## 2026.10.01.1 — 2026-10-01 \{#v2026-10-01-1\}
 
 ### Améliorations
@@ -135,6 +150,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Corrections
 
+- **Le détail E-Documents affiche de nouveau le modèle.** La fenêtre de document archivé prenait le modèle, le type et le numéro UBL dans la ligne de liste, qui ne portait que les colonnes de la disposition courante ; ces colonnes masquées, le Résumé affichait des tirets et Retraiter restait inactif avec « Aucun modèle enregistré ». La liste les transmet désormais sur chaque ligne, quelle que soit la disposition.
+- **La fenêtre facture n'invente plus de livraison d'en-tête.** À l'ouverture d'une facture dont les livraisons sont portées par les lignes, le formulaire de livraison d'en-tête se remplissait avec la livraison de la première ligne, et l'enregistrement la réécrivait comme livraison de document (BG-13), ce qui faisait apparaître un cadre Livraison sur le PDF. La fenêtre ne lit plus que la livraison de niveau document ; les livraisons de ligne restent sur les lignes.
 - **Corriger le destinataire et la fenêtre d'édition n'écrasent plus les clés client.** L'enregistrement d'une facture corrigée remplaçait la clé alpha (F564230.FEALKY) par le SIREN de l'acheteur lu dans l'UBL et remettait le numéro client (F564231.UHAN8) à zéro : le remplacement réécrivait les deux à partir du document au lieu de la ligne existante. La clé alpha enregistrée est désormais conservée dès qu'elle existe — le SIREN reste la valeur de repli des factures créées directement en UBL — et le numéro client est repris quand l'appelant n'en fournit pas. Concerne Corriger le destinataire, la fenêtre d'édition et tout retraitement en mode remplacement, avec ou sans renvoi ; le traitement par lot depuis un spool JDE est inchangé.
 
 ---

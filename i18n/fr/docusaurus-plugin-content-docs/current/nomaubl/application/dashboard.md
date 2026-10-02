@@ -35,6 +35,8 @@ Le tableau de bord a été reconstruit en grille à 12 colonnes en 2026.05.4. L'
   <rect x="220" y="20" width="580" height="640" rx="14" fill="url(#dash-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tableau de bord</text>
+  <rect x="472" y="30" width="160" height="22" rx="5" fill="none" stroke="#334155" strokeWidth="1"/>
+  <text x="552" y="45" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Exclure les erreurs traitées</text>
   <rect x="640" y="30" width="146" height="22" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
   <text x="650" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">📅 Hier ▾</text>
 
@@ -222,6 +224,15 @@ Certains widgets ignorent volontairement le filtre — *Factures bloquées* (tou
 | **Date d'archivage** | La date de traitement des documents dans l'archive. |
 
 Cartes de synthèse, pipeline des statuts, volume quotidien, répartition par société et principales erreurs suivent tous ce choix. La liste [E-Invoicing](./invoices.md#base-de-date) et la page [Rapports](./reports.md) proposent la même base *Date d'archivage*.
+
+### Exclure les erreurs traitées \{#exclure-erreurs-traitees\}
+
+Le bouton **Exclure les erreurs traitées**, dans la même barre de filtres, masque les factures déjà traitées par le service client (*Traité* dans la colonne **Suivi** de la liste [E-Invoicing](./invoices.md)) mais toujours dans un statut en erreur — les statuts rattachés aux groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md). Les indicateurs d'erreur ne montrent alors que ce qu'il reste à traiter.
+
+- Les factures traitées dans tout autre statut restent comptées, et les totaux restent le nombre réel de factures.
+- Tous les widgets suivent ce réglage, conservé quand on quitte le tableau de bord puis qu'on y revient.
+- Un clic sur une tuile transmet le réglage à la liste [E-Invoicing](./invoices.md#exclure-erreurs-traitees) : les deux pages affichent le même nombre.
+- Désactivé par défaut.
 
 ---
 

@@ -26353,6 +26353,15 @@ Certains widgets ignorent volontairement le filtre — *Factures bloquées* (tou
 
 Cartes de synthèse, pipeline des statuts, volume quotidien, répartition par société et principales erreurs suivent tous ce choix. La liste [E-Invoicing](./invoices.md#base-de-date) et la page [Rapports](./reports.md) proposent la même base *Date d'archivage*.
 
+### Exclure les erreurs traitées \{#exclure-erreurs-traitees\}
+
+Le bouton **Exclure les erreurs traitées**, dans la même barre de filtres, masque les factures déjà traitées par le service client (*Traité* dans la colonne **Suivi** de la liste [E-Invoicing](./invoices.md)) mais toujours dans un statut en erreur — les statuts rattachés aux groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md). Les indicateurs d'erreur ne montrent alors que ce qu'il reste à traiter.
+
+- Les factures traitées dans tout autre statut restent comptées, et les totaux restent le nombre réel de factures.
+- Tous les widgets suivent ce réglage, conservé quand on quitte le tableau de bord puis qu'on y revient.
+- Un clic sur une tuile transmet le réglage à la liste [E-Invoicing](./invoices.md#exclure-erreurs-traitees) : les deux pages affichent le même nombre.
+- Désactivé par défaut.
+
 ---
 
 ## Cartes KPI hero
@@ -27203,6 +27212,7 @@ La barre d'outils au-dessus du tableau combine filtre de dates, recherche texte,
     Contrat
     Nom du client
     BAR ▾
+    Exclure les erreurs traitées
     
     ↻ Rafraîchir
     + Nouvelle facture
@@ -27288,6 +27298,10 @@ Une nouvelle rangée de chips s'installe à côté des chips Statut : **Toutes**
 Le chip s'appuie sur l'indicateur `UHDRIN` enregistré sur chaque ligne — un changement de *Direction* sur un modèle ne re-classe pas les lignes historiques, le résultat reste donc stable dans le temps.
 
 Sur une ligne *Reçue*, la colonne **Contrepartie** lit depuis `AccountingSupplierParty` (le fournisseur), pas depuis `AccountingCustomerParty` — la colonne affiche donc le nom du fournisseur sur les factures entrantes et le nom du client sur les sortantes. Le cycle de vie, la modale de détail et le catalogue de colonnes sont par ailleurs identiques ; seules les actions vendeur (Renvoyer à la PA, Marquer envoyée, Avoir…) sont masquées sur les lignes Reçues.
+
+### Exclure les erreurs traitées \{#exclure-erreurs-traitees\}
+
+Le bouton **Exclure les erreurs traitées**, à côté du sélecteur de direction, masque les lignes déjà marquées *Traité* qui restent dans un statut en erreur (groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md)) : la liste ne garde que les erreurs que personne n'a encore regardées. Les lignes traitées dans tout autre statut restent affichées. Le bouton est activé automatiquement quand la liste s'ouvre depuis une tuile du [Tableau de bord](./dashboard.md#exclure-erreurs-traitees) où il l'était. L'endpoint `GET /api/invoices` accepte le même filtre avec `excludeReviewedErrors=true`.
 
 ### Rafraîchir et Nouvelle facture
 
@@ -27415,7 +27429,7 @@ L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **bo
 
 #### Corriger destinataire \{#fix-buyer\}
 
-Les rejets PA les plus fréquents portent sur les **identifiants de l'acheteur** — SIREN (BT-47), SIRET (BT-46), TVA intracommunautaire (BT-48) et adresse électronique (BT-49). Un bouton **Corriger destinataire** ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la [recherche d'entreprises INSEE](./edirectory.md) et le sélecteur d'adresses électroniques du PPF, pour corriger uniquement ces champs sans rééditer toute la facture. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est **revalidée immédiatement**, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option **renvoie à la PA** si la validation réussit. Le bouton n'apparaît que tant que la facture est encore corrigeable — avant sa prise en charge par la PA, ou quand elle a été **rejetée (213) pour un motif d'adressage** : `ADR_ERR`, `REJ_ADR` (contrôle d'adressage de la plateforme) ou `DEST_INC` (destinataire inconnu de l'annuaire). Dans ces trois cas, la facture n'est jamais parvenue au client, le renvoi est donc sans risque ; tout autre statut traité par la PA reste verrouillé. Une réparation dont la validation ne signale aucune erreur marque aussi la facture *Traité* dans la liste. Des garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA s'appliquent — les mêmes contrôles que l'endpoint `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` de la [référence API](/nomaubl/api-reference).
+Les rejets PA les plus fréquents portent sur les **identifiants de l'acheteur** — SIREN (BT-47), SIRET (BT-46), TVA intracommunautaire (BT-48) et adresse électronique (BT-49). Un bouton **Corriger destinataire** ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la [recherche d'entreprises INSEE](./edirectory.md) et le sélecteur d'adresses électroniques du PPF, pour corriger uniquement ces champs sans rééditer toute la facture. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est **revalidée immédiatement**, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option **renvoie à la PA** si la validation réussit. Le bouton n'apparaît que tant que la facture est encore corrigeable — avant sa prise en charge par la PA, ou quand elle a été **rejetée (213) pour un motif d'adressage** : `ADR_ERR`, `REJ_ADR` (contrôle d'adressage de la plateforme) ou `DEST_INC` (destinataire inconnu de l'annuaire). Dans ces trois cas, la facture n'est jamais parvenue au client, le renvoi est donc sans risque ; tout autre statut traité par la PA reste verrouillé. Une réparation dont la validation ne signale aucune erreur marque aussi la facture *Traité* dans la liste. L'adresse électronique de l'acheteur (BT-49) conserve le schéma déjà présent dans le document — `0225` à défaut. La correction est tracée par une simple entrée d'historique (*Identifiants acheteur corrigés*), sans redéclencher la règle de notification du statut courant, et le résultat de la nouvelle validation (`9901` / `9902`) s'ajoute à l'historique dès qu'il diffère du dernier événement. Les clés client enregistrées sur la ligne (clé alpha, numéro client) sont conservées ; il en va de même pour un enregistrement depuis la fenêtre de modification. Des garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA s'appliquent — les mêmes contrôles que l'endpoint `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` de la [référence API](/nomaubl/api-reference).
 
 Sous le statut, quand la facture est dans un statut qui demande une action côté vendeur (par ex. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), un bandeau bleu **Actions vendeur** propose les actions recommandées :
 
@@ -27534,9 +27548,8 @@ Des sous-lignes apparaissent sous chaque ligne principale pour :
 - Remise / charge au niveau prix (`BT-147`)
 - Remises / charges au niveau ligne (`BG-27` / `BG-28`)
 - Propriétés additionnelles d'article (`BG-32`)
-- Commande client référencée (`BT-132`)
 
-Quand plusieurs lignes partagent la même livraison, les mêmes références documentaires (`BT-128`) ou la même commande client référencée (`BT-132`), un **en-tête de livraison**, un **en-tête de référence documentaire** ou un **en-tête de commande client** apparaît une seule fois en haut du groupe, au lieu d'être répété sur chaque ligne. Dans l'éditeur de ligne de Création / Modification de facture, *Commande client* est un bouton rapide à côté de *Note* et *Doc Ref*, sous le bloc *References* de la ligne.
+Quand plusieurs lignes partagent la même livraison, les mêmes références documentaires (`BT-128`) ou le même numéro de commande client (`EXT-FR-FE-135`), un **en-tête de livraison**, un **en-tête de référence documentaire** ou un **en-tête Référence Cde Client** apparaît une seule fois en haut du groupe, au lieu d'être répété sur chaque ligne.
 
 ### Onglet TVA
 
@@ -27860,11 +27873,11 @@ La modale est divisée en sections verticales :
 - **En-tête** — dates d'émission / échéance, devise, période de début / fin, ainsi qu'un bloc **Factures antérieures** (BG-3, 0..n) : chaque ligne un numéro de référence (BT-25) et une date d'émission facultative (BT-26), avec **＋ Ajouter une facture antérieure (BG-3)**. Sur un avoir, c'est la référence à la facture corrigée.
 - **Fournisseur** — alimenté depuis l'annuaire des fournisseurs (*UBL Defaults → Suppliers / Companies*) ; modifiable par facture.
 - **Client** — renseigné de bout en bout depuis la recherche d'entreprise : les résultats affichent le badge, le nom et l'identifiant sur une ligne, l'adresse en dessous ; une recherche par SIREN ou SIRET seul liste tous les établissements (même seconde interrogation INSEE que l'[E-Directory](./edirectory.md)), et un champ SIRET facultatif complète le SIREN. L'adresse électronique n'est **pas déduite** du SIREN/SIRET — une liste d'adresses électroniques du PPF (ouverte automatiquement après le choix d'une entreprise, ou à tout moment via le bouton à côté du champ identifiant) présente les adresses enregistrées pour le SIREN avec leur état actif/désactivé ; en choisir une renseigne l'identifiant et son schéma, puis la liste se referme. Un bloc **Autres id. (BT-46)** ajoute autant d'identifiants acheteur supplémentaires que voulu, chacun avec son schéma de la liste EAS — un code de routage ou un second SIRET porté par le document devient visible, modifiable et supprimable au lieu de voyager de façon invisible.
-- **Livraison** — groupe livraison facultatif.
+- **Livraison** — groupe livraison facultatif au niveau du document (BG-13). Seule la livraison saisie au niveau document y apparaît ; les livraisons portées par les lignes restent sur les lignes et ne remontent jamais dans l'en-tête.
 - **Paiement** — code de moyen de paiement, IBAN, BIC, mandat, conditions.
 - **Remises / charges** — remises / charges au niveau document.
 - **Notes** — notes libres par préfixe `BT-22`.
-- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés. Le champ Prix unitaire accepte une précision fine (jusqu'à 6 décimales), pour les prix qui en portent plus de 2 à la source. Un bloc **Prix (BG-29)** par ligne fixe le prix unitaire brut (**BT-148**) et la remise sur prix (**BT-147**) ; le prix net en est déduit et pilote le montant de ligne, lequel divise par la **quantité de base** (BT-149) — un prix pour 100 ou 1 000 unités est ainsi calculé correctement. Le bloc *Références* de la ligne porte aussi des références de **facture antérieure** par ligne (EXT-FR-FE-136) — numéro, date facultative et un **DocumentStatusCode** choisi parmi `INFORMATION` / `DETAIL` / `GROUP`.
+- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés. Le champ Prix unitaire accepte une précision fine (jusqu'à 6 décimales), pour les prix qui en portent plus de 2 à la source. Un bloc **Prix (BG-29)** par ligne fixe le prix unitaire brut (**BT-148**) et la remise sur prix (**BT-147**) ; le prix net en est déduit et pilote le montant de ligne, lequel divise par la **quantité de base** (BT-149) — un prix pour 100 ou 1 000 unités est ainsi calculé correctement. Le bloc *Références* de la ligne porte aussi des références de **facture antérieure** par ligne (EXT-FR-FE-136) — numéro, date facultative et un **DocumentStatusCode** choisi parmi `INFORMATION` / `DETAIL` / `GROUP`. Trois boutons rapides du même bloc renseignent les **références de commande** de la ligne, toutes portées par `cac:OrderLineReference` : **Référence Cde Client** (numéro de commande de l'acheteur, EXT-FR-FE-135 — la clé de regroupement des lignes sur le PDF), **Numéro de commande** (numéro de commande du vendeur, EXT-FR-FE-144) et **N° ligne client** (numéro de la ligne dans la commande de l'acheteur, BT-132).
 - **Récapitulatif TVA** — calculé automatiquement depuis les lignes (lecture seule — les modifications de ligne s'y reflètent).
 - **Totaux** — calculés automatiquement (lecture seule).
 
@@ -28392,6 +28405,7 @@ Le premier onglet est un tableau croisé prêt à l'emploi : le **nombre de fact
 - **Dépliez / repliez** une activité ou un statut pour descendre dans le détail ; les **sous-totaux** apparaissent à chaque niveau.
 - Un statut à motif de rejet unique tient sur **une seule ligne**, sans ligne imbriquée supplémentaire.
 - Le **filtre de période** en haut propose les trois mêmes bases de dates que le [Tableau de bord](./dashboard.md) — *Date d'activité*, *Date document* ou *Date d'archivage* — pour que le rapport se recoupe avec les chiffres affichés ailleurs.
+- **Exclure les erreurs traitées** écarte les factures déjà traitées par le service client qui restent dans un statut en erreur — le même bouton que sur le [Tableau de bord](./dashboard.md#exclure-erreurs-traitees) ; les factures traitées dans les autres statuts restent comptées.
 - **Export Excel** produit un classeur à **deux feuilles** : le rapport exactement tel qu'affiché, et les données brutes à plat, prêtes pour vos propres tableaux croisés.
 
 ---
@@ -35013,7 +35027,7 @@ Liste complète des bascules par section prédéfinie :
 
 - **Header** — huit bascules `META · …` (numéro de facture, date d'émission, date d'échéance, références contrat / commande / acheteur, type de facture, profil ID), plus six bascules `Supplier · …` (adresse, SIREN, forme légale, TVA, téléphone, e-mail).
 - **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un switch principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client.
-- **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et,, *Group by customer order* — un troisième bandeau sous ceux de la livraison et de la référence de document, indiquant l'ID de commande client référencée, BT-132), des bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — la colonne *Unit price* (BT-146) affiche la quantité de base quand elle diffère de 1 (`40,49 / 100`) ; la colonne **Net unit price** (montant de ligne ÷ quantité, soit le prix une fois les remises et charges de ligne intégrées) est **désactivée par défaut**, le prix de l'article seul restant la mise en page standard ; les sous-lignes couvrent le nombre réel de colonnes, masquer ou ajouter une colonne ne les décale donc jamais — et neuf bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau commande client suit les mêmes règles de réinitialisation que les autres : un changement de livraison ré-imprime les deux fils internes, un changement de référence de document ré-imprime le bandeau commande client.
+- **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et *Group by order (EXT-FR-FE-135, EXT-FR-FE-144)* — un troisième bandeau sous ceux de la livraison et de la référence de document, qui réunit sur une ligne les numéros de commande de l'acheteur et du vendeur : *Référence Cde Client : … Numéro de commande : …*), une bascule *Order line reference (BT-132)* qui imprime le n° de ligne client sous chaque ligne — et, sans regroupement par commande, les deux numéros de commande en lignes de détail, des bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — la colonne *Unit price* (BT-146) affiche la quantité de base quand elle diffère de 1 (`40,49 / 100`) ; la colonne **Net unit price** (montant de ligne ÷ quantité, soit le prix une fois les remises et charges de ligne intégrées) est **désactivée par défaut**, le prix de l'article seul restant la mise en page standard ; les sous-lignes couvrent le nombre réel de colonnes, masquer ou ajouter une colonne ne les décale donc jamais — et neuf bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau de commande suit les mêmes règles de réinitialisation que les autres : un changement de livraison réimprime les deux fils internes, un changement de référence de document réimprime le bandeau de commande.
 - **Document Allowances** — bascules de colonnes pour type, motif, montant, taxe.
 - **VAT Breakdown** — bascules de colonnes pour catégorie, taux, base imposable, montant de TVA (une colonne d'exemption apparaît automatiquement quand elle est présente).
 - **Totals** — sept bascules de lignes couvrant la pile complète (Total HT, Allowances, Charges, Tax Exclusive, Total Tax, Total TTC, Amount Payable).
@@ -36649,7 +36663,8 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
-  2026.10.01.1 · 2026-10-01
+  2026.10.02.1 · 2026-10-01
+  2026.10.01.1 · 2026-09-30
   2026.09.30.1 · 2026-09-30
   2026.09.28.1 · 2026-09-28
   2026.09.26.1 · 2026-09-26
@@ -36756,6 +36771,20 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.10.02.1 — 2026-10-02 \{#v2026-10-02-1\}
+
+### Améliorations
+
+- **« Exclure les erreurs traitées » sur le tableau de bord, les rapports et la liste des factures.** Un nouveau bouton masque les factures déjà traitées par le service client (F564231.UHALRTPSD = Y) qui restent dans un statut en erreur (groupes errorTech / errorBusiness du gabarit des statuts) : les indicateurs d'erreur montrent ce qu'il reste à traiter. Les factures traitées dans tout autre statut restent comptées et les totaux restent le vrai nombre de factures. Disponible dans la barre de filtres du tableau de bord (conservé d'une page à l'autre), dans l'onglet statistiques des statuts des rapports et dans la liste des factures ; un clic sur une tuile du tableau de bord transmet le réglage à la liste pour que les deux concordent. Les API acceptent `excludeReviewed=true` (statistiques factures, vue d'ensemble du tableau de bord, statistiques des statuts) et `excludeReviewedErrors=true` (liste des factures), désactivé par défaut.
+- **Références de commande en ligne : commande client, numéro de commande et n° ligne client.** Une ligne de facture porte trois références distinctes dans le même groupe UBL (`cac:OrderLineReference`) : le n° de ligne client (BT-132, `cbc:LineID`), le numéro de commande client (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`) et le numéro de commande du vendeur (EXT-FR-FE-144, `cbc:SalesOrderID`). Le socle XSL dispose désormais d'une variable de mappage pour chacune (TAG_LINE_ORDER_LINE_REF, TAG_LINE_ORDER_REF, TAG_LINE_SALES_ORDER_REF) ; si seul le numéro de commande vendeur est mappé, l'identifiant obligatoire reprend la commande d'achat d'en-tête (BT-13). La fenêtre facture propose les trois champs sur chaque ligne. Le PDF regroupe les lignes sous un bandeau « Référence Cde Client : … Numéro de commande : … » et affiche le n° ligne client sous chaque ligne ; sans regroupement, les trois références s'affichent en lignes de détail. Jusqu'ici le n° de ligne client était pris pour la commande client, d'où un bandeau devant presque chaque ligne.
+
+### Corrections
+
+- **Correction acheteur / fenêtre facture : la revalidation réussie apparaît dans l'historique.** Une facture en « Echec de validation » (9905) corrigée puis validée passait bien en 9901 dans la table des statuts, mais aucun événement n'était écrit : l'historique restait sur 9905. Le résultat de la validation (9901 / 9902) est désormais ajouté dès qu'il diffère du dernier événement ; un réenregistrement identique n'ajoute rien.
+- **Correction acheteur : plus de notification intempestive, schéma de l'adresse électronique conservé.** La ligne d'audit « Identifiants acheteur corrigés » est désormais une simple entrée d'historique : elle ne redéclenche plus la règle de notification du statut courant (9905 par exemple) à chaque correction. L'adresse électronique de l'acheteur (BT-49) conserve le schéma déjà présent dans le document, ou 0225 à défaut, au lieu d'être déduit du nombre de chiffres (un identifiant à 9 chiffres recevait 0002).
+
+---
+
 ## 2026.10.01.1 — 2026-10-01 \{#v2026-10-01-1\}
 
 ### Améliorations
@@ -36769,6 +36798,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Corrections
 
+- **Le détail E-Documents affiche de nouveau le modèle.** La fenêtre de document archivé prenait le modèle, le type et le numéro UBL dans la ligne de liste, qui ne portait que les colonnes de la disposition courante ; ces colonnes masquées, le Résumé affichait des tirets et Retraiter restait inactif avec « Aucun modèle enregistré ». La liste les transmet désormais sur chaque ligne, quelle que soit la disposition.
+- **La fenêtre facture n'invente plus de livraison d'en-tête.** À l'ouverture d'une facture dont les livraisons sont portées par les lignes, le formulaire de livraison d'en-tête se remplissait avec la livraison de la première ligne, et l'enregistrement la réécrivait comme livraison de document (BG-13), ce qui faisait apparaître un cadre Livraison sur le PDF. La fenêtre ne lit plus que la livraison de niveau document ; les livraisons de ligne restent sur les lignes.
 - **Corriger le destinataire et la fenêtre d'édition n'écrasent plus les clés client.** L'enregistrement d'une facture corrigée remplaçait la clé alpha (F564230.FEALKY) par le SIREN de l'acheteur lu dans l'UBL et remettait le numéro client (F564231.UHAN8) à zéro : le remplacement réécrivait les deux à partir du document au lieu de la ligne existante. La clé alpha enregistrée est désormais conservée dès qu'elle existe — le SIREN reste la valeur de repli des factures créées directement en UBL — et le numéro client est repris quand l'appelant n'en fournit pas. Concerne Corriger le destinataire, la fenêtre d'édition et tout retraitement en mode remplacement, avec ou sans renvoi ; le traitement par lot depuis un spool JDE est inchangé.
 
 ---
@@ -41368,7 +41399,7 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158, groupe répétable jusqu'à quatre codes), la version de schéma (BT-158-2), l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN), et le **prix brut** (`TAG_LINE_GROSS_PRICE` → BT-148) avec la **quantité de base** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). Un spool portant brut + remise mappe les deux et le prix net est déduit (brut − remise) ; un spool portant net + remise émet son brut égal à net + remise ; un spool portant net + brut sans montant de remise — le cas courant d'un spool JDE — reçoit une remise sur prix (BT-147) déduite comme brut − net, le brut servant de base (aucune remise quand le brut n'excède pas le net). Les champs de ligne sont regroupés par thème (identification, quantités, prix, TVA, références, classification) — voir [scoping](#scoping) ci-dessous. |
 | **Item Properties** *(BG-32)* | BG-32 | Attributs produit attachés à une ligne. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Remise ou charge par ligne. Pointer le TAG *Item AC* sur `.` (ou le laisser vide) quand les champs de remise se trouvent directement sur la ligne, sans élément parent — le moteur itère alors la ligne elle-même. Quand la source ne porte que le pourcentage, le montant et la base sont déduits du net de la ligne ; pourcentage + base déduit le montant, pourcentage + montant déduit la base. |
-| **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132 | Références de document par ligne — pièces justificatives (BT-128, schéma UNTDID 1153) et la ligne de bon de commande référencée via `TAG_LINE_ORDER_LINE_REF` → `cac:OrderLineReference/cbc:LineID` (BT-132, groupe EXT-FR-FE-BG-09, placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1). |
+| **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132, EXT-FR-FE-135, EXT-FR-FE-144 | Références de document par ligne — pièces justificatives (BT-128, schéma UNTDID 1153) et trois références de commande dans le même groupe `cac:OrderLineReference` (EXT-FR-FE-BG-09, placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1) : `TAG_LINE_ORDER_REF` → *Customer Order Reference*, numéro de commande de l'acheteur (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`), qui sert au regroupement des lignes sur le PDF ; `TAG_LINE_SALES_ORDER_REF` → *Sales order*, numéro de commande du vendeur (EXT-FR-FE-144, `cbc:SalesOrderID`) ; `TAG_LINE_ORDER_LINE_REF` → *Order line reference*, numéro de la ligne dans la commande de l'acheteur (BT-132, `cbc:LineID`). Si seul le numéro de commande du vendeur est mappé, l'identifiant de commande obligatoire reprend la commande d'achat de l'en-tête (BT-13). |
 | **Line Preceding Invoice** *(EXT-FR-FE-136)* | `cac:BillingReference` par ligne | Référence à une facture antérieure au niveau ligne — utile pour un avoir en ligne. Écrit `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` (avec une date d'émission facultative) à l'intérieur de la ligne, à la bonne position dans le schéma. |
 | **Line Delivery** *(EXT-FR-FE-BG-10)* | Extension française | Groupe livraison par ligne. |
 | **Line Notes** *(BT-127)* | BT-127 | Notes libres attachées à une ligne. |

@@ -709,7 +709,8 @@
           { "name": "sortBy", "in": "query", "schema": { "type": "string" }, "description": "Column to sort by (e.g. fedoc, issueDate, statusCode)", "required": false },
           { "name": "sortDir", "in": "query", "schema": { "type": "string" }, "description": "Sort direction: ASC or DESC (default DESC)", "required": false },
           { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "Last update date lower bound (yyyy-MM-dd)", "required": false },
-          { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "Last update date upper bound (yyyy-MM-dd)", "required": false }
+          { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "Last update date upper bound (yyyy-MM-dd)", "required": false },
+          { "name": "excludeReviewedErrors", "in": "query", "schema": { "type": "boolean" }, "description": "true = drop reviewed invoices (UHALRTPSD = Y) that sit in an errorTech / errorBusiness status — the dashboard / reports drill-down filter. Default false.", "required": false }
         ],
         "responses": {
           "200": {
@@ -792,7 +793,8 @@
         "description": "Returns aggregated counts of invoices grouped by status code for dashboard display. Each entry includes the status code, human-readable label, and count. Optionally filtered by last update date range. Use this to populate status chips or a summary dashboard.",
         "parameters": [
           { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "Last update date lower bound (yyyy-MM-dd)", "required": false },
-          { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "Last update date upper bound (yyyy-MM-dd)", "required": false }
+          { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "Last update date upper bound (yyyy-MM-dd)", "required": false },
+          { "name": "excludeReviewed", "in": "query", "schema": { "type": "boolean" }, "description": "true = drop reviewed invoices (UHALRTPSD = Y) that sit in an errorTech / errorBusiness status; other statuses keep them. Default false.", "required": false }
         ],
         "responses": {
           "200": {
@@ -951,7 +953,7 @@
       "post": {
         "tags": ["Invoices"],
         "summary": "Create invoice from UBL XML",
-        "description": "Creates a new invoice by parsing a UBL 2.1 XML document and inserting header, lines, VAT summary, and lifecycle event into the database using UBLDatabaseHandler. The XML must conform to EN 16931 UBL 2.1 structure with proper namespaces.",
+        "description": "Creates a new invoice by parsing a UBL 2.1 XML document and inserting header, lines, VAT summary, and lifecycle event into the database using UBLDatabaseHandler. The XML must conform to EN 16931 UBL 2.1 structure with proper namespaces. alertProcessed=\"Y\" also marks the invoice as reviewed by customer service (F564231.UHALRTPSD) when the validation raises no error — what the invoice window sends; default N.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateUblRequest" } } }
@@ -998,7 +1000,7 @@
       "post": {
         "tags": ["Invoices"],
         "summary": "Quick-fix the buyer identifiers",
-        "description": "Corrects the buyer identifiers most often rejected by the PA — SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49, with its scheme) — inside the invoice's stored UBL, without rebuilding the rest of the document. Only the identifiers supplied are replaced; everything else is preserved byte-for-byte. The invoice is then revalidated, an audit event records the old and new values in the lifecycle history, and when resend=true and validation passes it is resubmitted to the PA. Format safeguards apply (SIREN/SIRET length and check-digit coherence, VAT shape) and the PA-protection rule blocks the call once the platform has taken the invoice over. Powers the Fix buyer button in the invoice window.",
+        "description": "Corrects the buyer identifiers most often rejected by the PA — SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49, with its scheme) — inside the invoice's stored UBL, without rebuilding the rest of the document. Only the identifiers supplied are replaced; everything else is preserved byte-for-byte. The invoice is then revalidated, an audit event records the old and new values in the lifecycle history, and when resend=true and validation passes it is resubmitted to the PA. Format safeguards apply (SIREN/SIRET length and check-digit coherence, VAT shape) and the PA-protection rule blocks the call once the platform has taken the invoice over. Powers the Fix buyer button in the invoice window. The electronic address scheme is endpointScheme when given, else the scheme already on the document, else 0225. alertProcessed=\"Y\" also marks the invoice as reviewed by customer service (F564231.UHALRTPSD) when the validation raises no error; default N.",
         "parameters": [
           { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
           { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
@@ -1006,7 +1008,7 @@
         ],
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "siren": "803206317", "siret": "80320631700015", "vat": "FR59803206317", "endpointId": "80320631700015", "endpointScheme": "0225", "resend": true } } } }
+          "content": { "application/json": { "schema": { "type": "object", "example": { "siren": "803206317", "siret": "80320631700015", "vat": "FR59803206317", "endpointId": "80320631700015", "endpointScheme": "0225", "resend": true, "alertProcessed": "N" } } } }
         },
         "responses": {
           "200": {
@@ -1635,7 +1637,8 @@
         "parameters": [
           { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "ISO date lower bound (YYYY-MM-DD)", "required": false },
           { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "ISO date upper bound (YYYY-MM-DD)", "required": false },
-          { "name": "errorCategory", "in": "query", "schema": { "type": "string" }, "description": "Filter for top-error-rules widget — 'ubl' | 'integration' | 'all'", "required": false }
+          { "name": "errorCategory", "in": "query", "schema": { "type": "string" }, "description": "Filter for top-error-rules widget — 'ubl' | 'integration' | 'all'", "required": false },
+          { "name": "excludeReviewed", "in": "query", "schema": { "type": "boolean" }, "description": "true = drop reviewed invoices (UHALRTPSD = Y) that sit in an errorTech / errorBusiness status; other statuses keep them. Default false.", "required": false }
         ],
         "responses": {
           "200": {
@@ -1695,7 +1698,8 @@
         "parameters": [
           { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "ISO date lower bound (yyyy-MM-dd)", "required": false },
           { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "ISO date upper bound (yyyy-MM-dd)", "required": false },
-          { "name": "dateBasis", "in": "query", "schema": { "type": "string" }, "description": "update (default) | issue | archive", "required": false }
+          { "name": "dateBasis", "in": "query", "schema": { "type": "string" }, "description": "update (default) | issue | archive", "required": false },
+          { "name": "excludeReviewed", "in": "query", "schema": { "type": "boolean" }, "description": "true = drop reviewed invoices (UHALRTPSD = Y) that sit in an errorTech / errorBusiness status; other statuses keep them. Default false.", "required": false }
         ],
         "responses": {
           "200": {
@@ -2698,7 +2702,8 @@
           "doc": { "type": "string", "description": "Document number (will become UHDOC primary key)" },
           "dct": { "type": "string", "description": "Document type (e.g. RI)" },
           "kco": { "type": "string", "description": "Company code (e.g. 00070)" },
-          "xml": { "type": "string", "description": "Complete UBL 2.1 XML document as a string" }
+          "xml": { "type": "string", "description": "Complete UBL 2.1 XML document as a string" },
+          "alertProcessed": { "type": "string", "description": "Y = mark the invoice reviewed by customer service (F564231.UHALRTPSD) unless the validation raises an error; default N" }
         }
       },
       "ExtractXmlRequest": {

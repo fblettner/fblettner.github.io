@@ -14,7 +14,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-10-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.10.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-01</span></a>
+  <a href="#v2026-10-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.10.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-01</span></a>
+  <a href="#v2026-10-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
   <a href="#v2026-09-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
   <a href="#v2026-09-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-28</span></a>
   <a href="#v2026-09-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-26</span></a>
@@ -122,6 +123,20 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ---
 
+## 2026.10.02.1 — 2026-10-02 \{#v2026-10-02-1\}
+
+### Improvements
+
+- **"Exclude reviewed errors" on the Dashboard, the Reports and the invoice list.** A new toggle hides the invoices already reviewed by customer service (F564231.UHALRTPSD = Y) that still sit in an error status (the errorTech / errorBusiness groups of the statuses template), so the error KPIs show what is left to handle. Reviewed invoices in any other status stay counted, and the totals remain the true number of invoices. Available on the Dashboard filter bar (kept across navigation), on the Reports status statistics tab and on the invoice list; a dashboard tile click carries the toggle to the list so both agree. The APIs take `excludeReviewed=true` (invoice stats, dashboard overview, status statistics) and `excludeReviewedErrors=true` (invoice list), default off.
+- **Line order references: customer order, order number and customer line number.** The invoice line carries three distinct references in the same UBL group (`cac:OrderLineReference`): the customer line number (BT-132, `cbc:LineID`), the customer order number (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`) and the seller's order number (EXT-FR-FE-144, `cbc:SalesOrderID`). The XSL framework gets one mapping slot for each (TAG_LINE_ORDER_LINE_REF, TAG_LINE_ORDER_REF, TAG_LINE_SALES_ORDER_REF); when only the order number is mapped, the mandatory order id falls back to the header purchase order (BT-13). The invoice window offers the three fields per line. The generated PDF groups lines on the order band "Customer Order Reference: … Order number: …" and prints the customer line number under each line; with grouping off, the three references appear as detail rows under each line. Previously the customer line number was treated as the customer order, which printed a band before nearly every line.
+
+### Fixes
+
+- **Fix buyer / edit window: successful re-validation now recorded in the history.** When an invoice in "Echec de validation" (9905) was repaired and validated successfully, the status row was updated to 9901 but no lifecycle event was written, so the history still ended on 9905. The validation outcome (9901 / 9902) is now appended whenever it differs from the latest event; an identical re-save stays silent.
+- **Fix buyer: no more spurious notification, electronic address scheme kept.** The audit line "Identifiants acheteur corrigés" is now a plain history entry; it no longer re-fires the notification rule of the current status (e.g. 9905) on every correction. The buyer electronic address (BT-49) keeps the scheme already on the document, or 0225 when none, instead of being inferred from the digit count (a 9-digit identifier used to get 0002).
+
+---
+
 ## 2026.10.01.1 — 2026-10-01 \{#v2026-10-01-1\}
 
 ### Improvements
@@ -135,6 +150,8 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ### Fixes
 
+- **E-Documents detail shows the template again.** The archived-document modal took the template, type and UBL number from the list row, which only carried the columns of the current view layout; with those columns hidden the Summary showed dashes and Reprocess stayed disabled with "No template recorded". The list now sends them on every row whatever the layout.
+- **Invoice window no longer invents a header delivery.** Opening an invoice whose deliveries are on the lines filled the header delivery form with the first line's delivery, and saving wrote it back as a document-level delivery (BG-13), which then showed a Delivery box on the PDF. The window now reads only the document-level delivery; line deliveries stay on the lines.
 - **Fix buyer and the edit window no longer overwrite the customer keys.** Saving a corrected invoice replaced the alpha key (F564230.FEALKY) with the buyer SIREN read from the UBL and reset the customer number (F564231.UHAN8) to zero, because the replace rewrote both from the document instead of the stored row. The stored alpha key is now kept whenever it exists — the SIREN remains the fallback for invoices created directly from UBL — and the customer number is carried over when the caller has none. Applies to Fix buyer, the edit window and any replace-mode reprocess, with or without resend; batch processing from a JDE spool is unchanged.
 
 ---

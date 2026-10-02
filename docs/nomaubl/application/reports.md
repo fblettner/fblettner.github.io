@@ -61,6 +61,7 @@ The first tab is a ready-made pivot: **invoice counts** broken down by **activit
 - **Expand / collapse** any activity or status to drill down; **subtotals** are shown at every level.
 - A status that has a single rejection reason renders as **one compact line** rather than an extra nested row.
 - The **period filter** at the top offers the same three date bases as the [Dashboard](./dashboard.md) — *Activity date*, *Document date* or *Archive date* — so the report reconciles with the figures shown elsewhere.
+- **Exclude reviewed errors** leaves out the invoices already reviewed by customer service that still sit in an error status — the same toggle as on the [Dashboard](./dashboard.md#exclude-reviewed); reviewed invoices in other statuses stay counted.
 - **Export Excel** writes a workbook with **two sheets**: the report exactly as displayed, and the flat underlying data ready for your own pivot tables.
 
 ---
