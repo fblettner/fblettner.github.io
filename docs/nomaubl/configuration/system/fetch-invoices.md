@@ -8,6 +8,8 @@ keywords: [NomaUBL, fetch invoices, BIP, BI Publisher, JD Edwards, JDE, batch pr
 
 The **Fetch Invoices** editor controls which **JD Edwards BI Publisher (BIP)** jobs NomaUBL pulls in for processing. It is used by the batch import and the background scheduler to decide *which BIP outputs are eligible* and *how each one should be parsed*.
 
+A job is picked up once its BI Publisher output is done (`D`, `FD`). A job in **`FX`** — the UBE ran but the BI Publisher transformation failed — still stores its source XML, which is all the UBL flow needs: batch scans and single extracts in **input** (or both) mode accept it too. Output-only extracts keep `D` / `FD` and report an explicit error on an `FX` job.
+
 :::info[JD Edwards–specific page]
 This page is one of the **JDE-specific** parts of NomaUBL — it talks to a JD Edwards BIP server. The other configuration pages are source-agnostic.
 :::

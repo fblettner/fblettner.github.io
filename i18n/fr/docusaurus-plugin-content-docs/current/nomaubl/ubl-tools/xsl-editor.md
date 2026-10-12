@@ -336,7 +336,7 @@ Pour les factures qui référencent un **document précédent** — typiquement 
 
 Le bloc répété et la référence unique BT-25 / BT-26 peuvent coexister — retenir celle qui colle à la source, ou les deux quand la source porte une référence de tête plus une liste répétitive.
 
-**Au niveau ligne (EXT-FR-FE-136).** Utile pour les avoirs en ligne qui pointent sur une ligne de facture précise. Un nouveau mappage sous la section *Invoice Lines* émet `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` à l'intérieur de la ligne — avec une date d'émission facultative — à la bonne position dans le schéma.
+**Au niveau ligne (EXT-FR-FE-136).** Utile pour les avoirs en ligne qui pointent sur une ligne de facture précise. Un nouveau mappage sous la section *Invoice Lines* émet `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` à l'intérieur de la ligne — avec une date d'émission facultative — à la bonne position dans le schéma. Sur le PDF généré, une ligne dont la référence de facturation porte le statut `INFORMATION` — le marqueur de sous-type d'une ligne à montant nul — s'imprime comme **Ligne d'information** et non comme une référence de facture antérieure.
 
 Le XPath de ligne est contrôlé par le [schematron Extended-CTC-FR](./validate.md) aligné sur la publication FNFE V1.4.0 du 30 juin 2026, donc la structure émise correspond à ce que la PA attend.
 

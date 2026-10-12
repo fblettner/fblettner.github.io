@@ -14,7 +14,11 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', alignItems: 'center'}}>
   <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-10-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.10.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-01</span></a>
+  <a href="#v2026-10-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.10.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-01</span></a>
+  <a href="#v2026-10-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
+  <a href="#v2026-10-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
+  <a href="#v2026-10-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
+  <a href="#v2026-10-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
   <a href="#v2026-10-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
   <a href="#v2026-09-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
   <a href="#v2026-09-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.18)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-28</span></a>
@@ -123,6 +127,54 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ---
 
+## 2026.10.12.1 — 2026-10-12 \{#v2026-10-12-1\}
+
+### Improvements
+
+- **Integrity reports.** A new "Integrity" tab on the Reports page runs SQL checks that list what is missing or wrong in NomaUBL compared with a source system: JDE print jobs never integrated, accounting records whose amounts differ, … The checks are defined in the new "Integrity reports" settings template: name, description, database connector, SQL (SELECT only, read-only, row cap and timeout), key columns, and date placeholders filled from the page's period (\{from\}/\{to\}, \{fromJde\}/\{toJde\}, \{fromDMY\}/\{toDMY\}). Results show in the standard grid (search, filters, columns, export), every row being one anomaly. A check can carry an action: "Integrate BIP jobs" maps the job, template and host columns of the result and, on the selected rows, runs the same extraction and processing as `fetch-single <template> bip <job>` through the fetch-invoices batch, with confirmation; the check is re-run afterwards and the summary lists any failed job. Other action types (API or SQL connector calls) will follow.
+- **Confirmation before resending to the PA from the invoice window.** The "Resend to PA" button now asks for confirmation, since the document is transmitted immediately and its status moves to Pending (9906). The resend from the invoice list already had one.
+
+---
+
+## 2026.10.11.1 — 2026-10-11 \{#v2026-10-11-1\}
+
+### Improvements
+
+- **SSO (OIDC): token endpoint authentication mode and debug logging.** A new "Token endpoint authentication" setting on the oidc template selects how the authorization code is exchanged: PKCE with the secret in the request body (default, unchanged) or HTTP Basic (Authorization header, no PKCE), for identity providers that accept only the latter. A "Debug logging" switch writes the discovery result, the authorize URL, the token exchange and the ID-token claims to the server log, with tokens and secrets redacted. Sign-ins and refusals (IdP error, expired state, token exchange failure, domain refusal, unknown account) are now always logged.
+- **Status statistics by amount.** The status statistics report gets a "Measure" switch: invoice count (as before) or net amount (sum of the tax-exclusive amount, BT-109). Cells, subtotals and percentages follow the selected measure, since a few invoices can weigh most of the money. The Excel export follows the view and its data sheet carries both figures. The API returns an `amount` per grouped row.
+- **Reprocess is a reprint.** Reprocessing a non-transmitted invoice regenerates the readable PDF/XML and the UBL file from the archived source into the output and burst folders, without any database change and without re-validating: the stored e-invoice (including a later Fix buyer correction) and its validation results stay as they are, no error status is written. A `--no-validate` option is available on the process command.
+
+### Fixes
+
+- **Integrity check: disputed and suspended statuses.** Disputed (207) and suspended (208) are interim statuses that may be followed by a lower code such as approved (205) or refused (210). The ordering check sorted them by code and pushed them after the final status, which then became the header status. They now keep their chronological position among the other statuses of their cycle, and never count as an inversion. Histories already mangled this way are repaired by the next run.
+
+---
+
+## 2026.10.06.1 — 2026-10-06 \{#v2026-10-06-1\}
+
+### Improvements
+
+- **Invoice deletion follows the PA protection and removes the document entirely.** Deleting an invoice (invoice window button or API) is now refused once the PA has processed it (any standard lifecycle status, 9911, 9913), with the same exception as Fix buyer: a 213 rejection for an addressing reason can still be deleted. The deletion also removes the F564230 log row (source XML, PA transaction reference, source file name), so a later run of the same document starts fresh and the watched folders can pick its source file up again. The button is hidden on protected statuses and the confirmation lists the log among the removed records.
+
+### Fixes
+
+- **Business unit and routing code kept on edit / Fix buyer.** Saving an invoice from the invoice window or correcting the buyer blanked F564230.FEAC04 (business unit) and FEROUT (routing code), since the UBL path carries neither. Both now keep the values set when the document was first processed, as the alpha key already did.
+
+---
+
+## 2026.10.05.1 — 2026-10-05 \{#v2026-10-05-1\}
+
+### Improvements
+
+- **BI Publisher jobs in FX status are picked up when the source XML is extracted.** A job whose UBE ran but whose BI Publisher transformation failed (RJRPDJBSTS = FX) still stores its source XML, which is all the UBL flow needs. Batch scans and single extracts in input (or both) mode now accept FX jobs alongside D / FD. Output-only extracts keep D / FD and report an explicit error on an FX job instead of waiting for it.
+- **Generated PDF: information lines.** A line whose billing reference carries the INFORMATION status (the sub-type marker of a zero-amount line) is shown as "Information line" instead of a preceding invoice reference. Real preceding references are unchanged.
+
+### Fixes
+
+- **Integrity check: lifecycle ordering on re-emitted invoices.** Invoices sent again after a correction (Fix buyer, edit window, reprocess keep the history) carry several PA cycles. The ordering check treated the whole history as one cycle: it merged the second run's statuses into the first, pushed the rejections to the end, and reported the second cycle's "Import validated" event as misordered. Each cycle, opened by a sent / pending / reprocess event, is now ordered on its own, membership being decided on event time. Histories already mangled by the previous rule are detected and put back in order by the next run; correctly ordered re-emitted invoices are no longer reported.
+
+---
+
 ## 2026.10.02.1 — 2026-10-02 \{#v2026-10-02-1\}
 
 ### Improvements
@@ -134,6 +186,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 - **Fix buyer / edit window: successful re-validation now recorded in the history.** When an invoice in "Echec de validation" (9905) was repaired and validated successfully, the status row was updated to 9901 but no lifecycle event was written, so the history still ended on 9905. The validation outcome (9901 / 9902) is now appended whenever it differs from the latest event; an identical re-save stays silent.
 - **Fix buyer: no more spurious notification, electronic address scheme kept.** The audit line "Identifiants acheteur corrigés" is now a plain history entry; it no longer re-fires the notification rule of the current status (e.g. 9905) on every correction. The buyer electronic address (BT-49) keeps the scheme already on the document, or 0225 when none, instead of being inferred from the digit count (a 9-digit identifier used to get 0002).
+- **Invoice window: removed elements no longer come back on save.** Deleting a line VAT exemption, a note, a delivery block, an order reference or an item detail in the invoice window is now kept after saving. Previously the save merged the original document back in and restored any element the form no longer emitted. Elements the window does not manage are still preserved unchanged.
 
 ---
 
@@ -294,6 +347,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Fix buyer identifiers without re-editing the invoice.** The most frequent PA rejections concern the buyer's SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49). A new **Fix buyer** button in the invoice window (shown only when the invoice is still correctable — hidden once the PA has taken it) opens a compact form pre-filled from the stored UBL, with the INSEE company search and the PPF electronic-address picker. Only the changed identifiers are replaced inside the stored UBL — the rest of the document stays untouched — then the invoice is revalidated on the spot, an audit event records the old and new values in the history, and an option resends to the PA when validation passes. Also available as `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` (documented in the API reference) with format safeguards (SIREN/SIRET length and coherence, VAT shape) and the PA-protection rule enforced.
 - **Review badge on deposited-but-not-transmitted invoices.** An invoice Deposited (200) with reason NON_TRANSMISE is not an error, but the recipient has no active reception address — the operator must forward it manually. The *Review* column now shows the Pending/Reviewed badge for this case too (other 200s keep the quiet dash).
 - **E-Directory: Peppol registration and platform per company.** Expanding a company card now also queries the public Peppol network (no account needed): a new *Peppol directory* section lists each registered participant (French registrations use ICD 0225, including per-establishment identifiers), its name, registration date and — resolved through the official SML/SMP discovery — the **service provider operating it** (the PA, e.g. Pennylane, with its Peppol seat id; access-point and SMP URLs in the tooltip). The lookup runs on first expand only, and is also exposed as `POST /api/peppol-lookup` for integrations (documented in the API reference).
+- **Fix buyer also on rejected addressing errors, with history preserved.** The *Fix buyer* button now also appears for a Rejected (213) invoice whose reason code is ADR_ERR — the addressing error the feature exists to repair (other PA-processed statuses remain locked). The fix now always preserves the full lifecycle history: the PA's own events, the audit line with old and new values, and the fresh validation outcome read as one continuous trail. Reference-list dropdowns (reason codes, action codes, statuses…) are now sorted by code. Peppol lookups honour the e-directory `sslVerify` setting (TLS-intercepting proxies), and an unreachable Peppol Directory now reports the network error instead of showing "not registered".
 
 ### Fixes
 
@@ -379,6 +433,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Integrity check for lifecycle statuses.** The *Retrieve Statuses* page gains a check: pick a date and compare every platform event since then with the recorded lifecycle. Missing statuses are listed in a selectable table — apply all or only some, optionally firing the notification rules (off by default). Obsolete internal statuses (platform stage already passed), unknown invoices and unmapped codes are reported separately. Runs in the background; safe to re-run at any time.
 - **Lifecycle ordering check.** A second check scans the database for internal platform statuses recorded *after* a standard lifecycle status, and for invalid codes (raw platform text stored by a mapping mistake). Selected rows can be removed in one click; the invoice status is realigned with its last remaining event.
 - **Status details on the invoice.** The invoice summary now shows, under the status badge, the current rejection reason, expected action and status note, plus the full status message in a collapsed group (useful for long platform errors). All of them are also available as custom-action parameters — `{message}`, `{reasonLabel}`, `{actionLabel}`, `{actionNote}` — alongside the notification-style `{doc}`, `{dct}`, `{kco}`, with no list-view configuration required.
+- **Smarter duplicate handling, safer resend.** Re-processing an already-archived document is now decided by its status rather than by the Replace parameter alone. Documents that are not sent to the platform keep the historic behaviour (archived once; Replace to overwrite). Invoices that never reached the platform (created, validation or send failed, interrupted run) are reprocessed automatically — no flag needed. Invoices already processed by the platform (standard lifecycle status, or export/import validated) are always skipped: Replace is refused, and the *Resend to PA* button and bulk resends refuse them too. To deliberately push such an invoice again, first set its status back with *Set status*. The Reprocess flow is unaffected — it remains the sanctioned regeneration path for those invoices, and now records only the single *Reprocessed* event in the history instead of replaying the creation stages.
 - **Custom actions: status filter and review before run.** Each custom action can now be limited to chosen statuses (empty = every status), so a "create case" button only appears on rejected invoices. And clicking a custom action first opens a review window with every value about to be sent — editable — with Run / Cancel: adjust the message if needed, or back out safely.
 
 ### Fixes
@@ -425,6 +480,10 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **French Schematron packs updated to V1.4.0 fix04 (2026-09-04).** The Flux 2 (CIUS-FR) and EXTENDED-CTC-FR validation rules are upgraded to the latest FNFE publication — date-format handling, multi-note checks, the BT-23 message and the charge-reason `listID` control are corrected, and the FATAL mode now applies from **October 1, 2026**. The About page shows the new versions.
 - **E-reporting (Flux 10) transmissions are now validated before sending.** Every generated report is checked against the official PPF schema and the Annexe 7 v1.8 rules — exactly like B2B invoices. A non-conform report is recorded with the new status *9958 — Echec de validation* and the detailed findings, is never sent to the PA, and its invoices stay available: once the cause is fixed, the next run rebuilds the same period automatically.
 - **Regenerate an e-reporting report.** A report that was not accepted (created, send failed, import failed, rejected, validation failed) can be regenerated from its detail view: the report is cancelled (new status *9959 — Annulé, régénéré*, kept for audit), its invoices become selectable again, and a new report is built for the same period — including late arrivals — then validated and submitted per your settings. Cancelled reports no longer offer Resend or Download. Reports already with the PA cannot be regenerated.
+
+- **Lifecycle statuses without a webhook — per-invoice retrieval mode.** A new *Per invoice* lifecycle mode (Status tab) covers platforms with no date-windowed search API (e.g. TX2): each run polls a bounded, fairly-rotated batch of invoices still in the configured "active" statuses, reads their full history (standard UBL ApplicationResponse, rejection reason included), maps the platform codes through the statuses template and applies only what isn't recorded yet — notifications fire as usual. An invoice reaching a terminal status (210, 213…) stops being polled. Platforms accepting a document-id list can be queried several invoices per request (*Poll group size*), keeping the API volume low even at tens of thousands of invoices per day. The default *Search by date* mode is unchanged.
+- **Import status: priority mapping across multiple codes.** When the platform's import response carries several status codes (a lifecycle history), the status map's declaration order now decides — the first matching entry wins. A plain XPath replaces conditional expression workarounds; single-code platforms are unaffected.
+- **Rejection reason from XML platforms.** When an import is rejected and the platform reports the cause in XML rather than a JSON error list, the mapped reason now becomes the failure message on the invoice (9907) instead of leaving it blank.
 
 ### Fixes
 
@@ -488,6 +547,13 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 - **Setting an invoice status on the platform no longer needs a lookup endpoint.** When the platform connector doesn't define a *resolve-invoice* search endpoint, the status is now posted using the platform UUID captured at submission instead of failing. Platforms that require the lookup keep using it.
 - **UBL Reference now documents the payer / direct-debit block and other recently-added fields.** The reference page lists the full payer party (EXT-FR-FE-BG-02 / EXT-FR-FE-43…65), the order reference date, the buyer trading name, and the item-classification scheme id and version.
+
+### Fixes
+
+- **Advanced-filter "contains" matches text anywhere again.** The *contains* (`~`) operator on the invoice list finds the term mid-value, not only at the start (e.g. a customer filter `~ SAVOIE` matches "… SAVOIE …"). Exact and programmatic filters keep using the fast indexed match.
+- **Retrieving platform statuses no longer fails on XML responses.** Polling lifecycle statuses from a platform that answers in XML (UBL *ApplicationResponse*) previously errored out; the built-in XML parser is now used regardless of the Oracle libraries on the class-path.
+- **Status polling supports platforms that return a plain list.** The lifecycle-status poll now also reads a bare JSON array response, not only a list wrapped under a named field — so report-style status endpoints can be wired up.
+- **Supplier electronic address (BT-34) is now saved.** In UBL Defaults → supplier companies, the electronic address field persists on save like every other company field.
 
 ---
 
@@ -1049,7 +1115,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   PDFs attached to outbound notifications and email
   notifications were always rendered with the bundled default
   layout, regardless of the per-document `pdfTemplate` configured
-  on the doc-template (`vrc_pro`, `cdn_facture`, …). The
+  on the doc-template (`invoices`, `credit_notes`, …). The
   notification dispatcher now resolves the template stored on the
   invoice and applies it to the attached PDF, matching how the
   Process Document UI renders it. Installs that never set a
@@ -1578,7 +1644,7 @@ a JVM-options hook for the master key location.
   list of equality filters (Company, Activity code, Source,
   Rule, Business unit, …) so different teams can receive
   different cuts of the same data. For example, one digest for
-  activity = ISC sent to one address and another for VRAC to
+  activity = Stores sent to one address and another for Central to
   another address.
 - **Detailed view on Integration Errors.** A third tab next to
   *By event* and *By rule*. One row per invoice by default — the
@@ -2856,8 +2922,8 @@ invoice lifecycle.
 ### Core pipeline (JDE → UBL → PA)
 - **JDE XML extraction** from the BIP Print Queue
   (`F95630`/`F95631`/`F9563110`), JDE Archive, SFTP and the local
-  filesystem; routed by document-type templates (`vrc_pro`,
-  `isc_facture`, …).
+  filesystem; routed by document-type templates (`invoices`,
+  `credit_notes`, …).
 - **XSLT 2.0 transformation** via Saxon-HE — generates UBL 2.1 invoices
   and credit notes, with a configurable XSL framework
   (`ubl-common.xsl` + `ubl-template.xsl`).

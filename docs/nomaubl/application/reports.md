@@ -6,7 +6,7 @@ keywords: [NomaUBL, reports, reporting, statistics, status, rejection reason, qu
 
 # Reports
 
-The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It opens on two tabs: a ready-made **Status statistics** pivot and a build-your-own **Query tool**. The page is designed to host further report tabs over time.
+The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It opens on three tabs: a ready-made **Status statistics** pivot, a build-your-own **Query tool**, and **Integrity** — SQL checks that list what is missing or wrong compared with a source system.
 
 Open it from the sidebar — **Reports**. Access is granted per role (see [Access](#access) below).
 
@@ -58,11 +58,18 @@ Open it from the sidebar — **Reports**. Access is granted per role (see [Acces
 The first tab is a ready-made pivot: **invoice counts** broken down by **activity code → status → rejection reason**, and split into columns by **transaction type** (`B2B`, `B2BINT`, `B2C`, `B2G`). Every level carries its count and a **percentage** of its parent — a reason as a share of its status, a status as a share of its activity, an activity as a share of the whole.
 
 - **Choose the grouping.** Chips above the report pick which levels build it — activity, status, rejection reason — in any combination (e.g. statistics per status only). Expansion, percentages and the Excel export all follow the chosen grouping.
+- **Choose the measure.** The **Measure** switch counts invoices (**Invoice count**, the default) or sums their tax-exclusive amount (**Net amount**, BT-109). Cells, subtotals and percentages follow the measure — a handful of invoices can carry most of the money. The Excel export follows the view, and its data sheet carries both figures.
 - **Expand / collapse** any activity or status to drill down; **subtotals** are shown at every level.
 - A status that has a single rejection reason renders as **one compact line** rather than an extra nested row.
 - The **period filter** at the top offers the same three date bases as the [Dashboard](./dashboard.md) — *Activity date*, *Document date* or *Archive date* — so the report reconciles with the figures shown elsewhere.
 - **Exclude reviewed errors** leaves out the invoices already reviewed by customer service that still sit in an error status — the same toggle as on the [Dashboard](./dashboard.md#exclude-reviewed); reviewed invoices in other statuses stay counted.
 - **Export Excel** writes a workbook with **two sheets**: the report exactly as displayed, and the flat underlying data ready for your own pivot tables.
+
+---
+
+## Integrity \{#integrity\}
+
+The **Integrity** tab runs the SQL checks defined under [Configuration → System → Integrity reports](../configuration/system/integrity-reports.md): pick a check, a period (last 30 days by default) and **Run**. Every row of the result is one anomaly, shown in the standard grid (search, filters, columns, export). A check that carries an action lets you tick rows and **Integrate the selection** — see [Integrity reports](../configuration/system/integrity-reports.md#reports-integrity) for the full walkthrough.
 
 ---
 

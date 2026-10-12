@@ -27394,7 +27394,7 @@ Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection
 
 ### Retraitement \{#reprocess\}
 
-Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures concernées par le retraitement. Le retraitement **reconstruit** une facture à partir du XML JDE archivé lors du premier dépôt — en régénérant la facture électronique, le PDF et le XML — pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`). La facture conserve son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont concernées ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
+Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures concernées par le retraitement. Le retraitement est une **réimpression** : pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`), il régénère le PDF / XML lisible et le fichier UBL à partir du XML JDE archivé lors du premier dépôt, dans les dossiers de sortie et d'éclatement. Rien ne change en base et l'UBL n'est pas revalidé : la facture électronique enregistrée, y compris une correction ultérieure par *Corriger destinataire*, reste la référence, et ses résultats de validation sont conservés. La facture garde son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont concernées ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
 
 ### Export
 
@@ -27425,11 +27425,11 @@ Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête 
 
 ### Onglet Résumé *(défaut)*
 
-L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
+L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. **Supprimer** retire la facture et tous les enregistrements associés — ligne de journal (XML source, référence de transaction PA, nom du fichier source), cycle de vie, lignes, TVA et validation : un nouveau traitement du même document repart de zéro, et les [dossiers surveillés](../configuration/system/watched-folders.md) peuvent reprendre son fichier source. La suppression suit la même protection que *Corriger destinataire* : le bouton disparaît dès que la PA a traité la facture, sauf pour un rejet **213** au motif d'adressage. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
 
 #### Corriger destinataire \{#fix-buyer\}
 
-Les rejets PA les plus fréquents portent sur les **identifiants de l'acheteur** — SIREN (BT-47), SIRET (BT-46), TVA intracommunautaire (BT-48) et adresse électronique (BT-49). Un bouton **Corriger destinataire** ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la [recherche d'entreprises INSEE](./edirectory.md) et le sélecteur d'adresses électroniques du PPF, pour corriger uniquement ces champs sans rééditer toute la facture. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est **revalidée immédiatement**, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option **renvoie à la PA** si la validation réussit. Le bouton n'apparaît que tant que la facture est encore corrigeable — avant sa prise en charge par la PA, ou quand elle a été **rejetée (213) pour un motif d'adressage** : `ADR_ERR`, `REJ_ADR` (contrôle d'adressage de la plateforme) ou `DEST_INC` (destinataire inconnu de l'annuaire). Dans ces trois cas, la facture n'est jamais parvenue au client, le renvoi est donc sans risque ; tout autre statut traité par la PA reste verrouillé. Une réparation dont la validation ne signale aucune erreur marque aussi la facture *Traité* dans la liste. L'adresse électronique de l'acheteur (BT-49) conserve le schéma déjà présent dans le document — `0225` à défaut. La correction est tracée par une simple entrée d'historique (*Identifiants acheteur corrigés*), sans redéclencher la règle de notification du statut courant, et le résultat de la nouvelle validation (`9901` / `9902`) s'ajoute à l'historique dès qu'il diffère du dernier événement. Les clés client enregistrées sur la ligne (clé alpha, numéro client) sont conservées ; il en va de même pour un enregistrement depuis la fenêtre de modification. Des garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA s'appliquent — les mêmes contrôles que l'endpoint `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` de la [référence API](/nomaubl/api-reference).
+Les rejets PA les plus fréquents portent sur les **identifiants de l'acheteur** — SIREN (BT-47), SIRET (BT-46), TVA intracommunautaire (BT-48) et adresse électronique (BT-49). Un bouton **Corriger destinataire** ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la [recherche d'entreprises INSEE](./edirectory.md) et le sélecteur d'adresses électroniques du PPF, pour corriger uniquement ces champs sans rééditer toute la facture. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est **revalidée immédiatement**, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option **renvoie à la PA** si la validation réussit. Le bouton n'apparaît que tant que la facture est encore corrigeable — avant sa prise en charge par la PA, ou quand elle a été **rejetée (213) pour un motif d'adressage** : `ADR_ERR`, `REJ_ADR` (contrôle d'adressage de la plateforme) ou `DEST_INC` (destinataire inconnu de l'annuaire). Dans ces trois cas, la facture n'est jamais parvenue au client, le renvoi est donc sans risque ; tout autre statut traité par la PA reste verrouillé. Une réparation dont la validation ne signale aucune erreur marque aussi la facture *Traité* dans la liste. L'adresse électronique de l'acheteur (BT-49) conserve le schéma déjà présent dans le document — `0225` à défaut. La correction est tracée par une simple entrée d'historique (*Identifiants acheteur corrigés*), sans redéclencher la règle de notification du statut courant, et le résultat de la nouvelle validation (`9901` / `9902`) s'ajoute à l'historique dès qu'il diffère du dernier événement. Les clés enregistrées sur la ligne au premier traitement du document (clé alpha, numéro client, unité opérationnelle, code d'acheminement) sont conservées ; il en va de même pour un enregistrement depuis la fenêtre de modification. Des garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA s'appliquent — les mêmes contrôles que l'endpoint `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` de la [référence API](/nomaubl/api-reference).
 
 Sous le statut, quand la facture est dans un statut qui demande une action côté vendeur (par ex. `205`, `206`, `207`, `208`, `210`, `213`, `9904`, `9907`), un bandeau bleu **Actions vendeur** propose les actions recommandées :
 
@@ -27887,7 +27887,7 @@ Un **bouton plein écran** dans l'en-tête bascule entre fenêtré et plein écr
 
 ### Confirmation de redépôt
 
-Le bouton **Renvoyer** (dans l'onglet Historique, ou via le bandeau Actions vendeur sur les statuts `9904` / `9907`) ouvre une confirmation avant de redéposer le document UBL sur la Plateforme Agréée. Après confirmation, la facture est redéposée. Un bandeau en ligne affiche le succès ou l'erreur renvoyée par la PA. Le cycle de vie est mis à jour pour refléter le nouveau dépôt.
+Le bouton **Renvoyer** (dans l'onglet Historique, ou via le bandeau Actions vendeur sur les statuts `9904` / `9907`) ouvre une confirmation avant de redéposer le document UBL sur la Plateforme Agréée — le document part immédiatement et son statut passe à *En attente* (`9906`). Après confirmation, la facture est redéposée. Un bandeau en ligne affiche le succès ou l'erreur renvoyée par la PA. Le cycle de vie est mis à jour pour refléter le nouveau dépôt.
 
 ---
 
@@ -28387,7 +28387,7 @@ Source: https://docs.nomana-it.fr/fr/nomaubl/application/reports/
 
 Reporting analytique de NomaUBL — un tableau croisé des statistiques de statuts (nombre de factures par activité, statut et motif de rejet, par type de transaction) et un requêteur sans SQL sur les factures, les documents archivés, les événements de cycle de vie et les erreurs de validation, avec rapports nommés enregistrés et export Excel/CSV.
 
-La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle s'ouvre sur deux onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts**, et un **Requêteur** à composer soi-même. La page est conçue pour accueillir d'autres onglets de rapports au fil du temps.
+La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle s'ouvre sur trois onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts**, un **Requêteur** à composer soi-même, et **Intégrité** — des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source.
 
 Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [Accès](#access) plus bas).
 
@@ -28402,11 +28402,18 @@ Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [A
 Le premier onglet est un tableau croisé prêt à l'emploi : le **nombre de factures** ventilé par **code activité → statut → motif de rejet**, réparti en colonnes par **type de transaction** (`B2B`, `B2BINT`, `B2C`, `B2G`). Chaque niveau porte son effectif et un **pourcentage** de son parent — un motif en part de son statut, un statut en part de son activité, une activité en part du total.
 
 - **Choisissez le regroupement.** Des puces au-dessus du rapport choisissent les niveaux qui le composent — activité, statut, motif de rejet — dans n'importe quelle combinaison (par ex. des statistiques par statut uniquement). Le dépliage, les pourcentages et l'export Excel suivent le regroupement choisi.
+- **Choisissez la mesure.** Le switch **Mesure** compte les factures (**Nombre de factures**, par défaut) ou additionne leur montant hors taxes (**Montant HT**, BT-109). Cellules, sous-totaux et pourcentages suivent la mesure — quelques factures peuvent porter l'essentiel des montants. L'export Excel suit l'affichage, et sa feuille de données porte les deux valeurs.
 - **Dépliez / repliez** une activité ou un statut pour descendre dans le détail ; les **sous-totaux** apparaissent à chaque niveau.
 - Un statut à motif de rejet unique tient sur **une seule ligne**, sans ligne imbriquée supplémentaire.
 - Le **filtre de période** en haut propose les trois mêmes bases de dates que le [Tableau de bord](./dashboard.md) — *Date d'activité*, *Date document* ou *Date d'archivage* — pour que le rapport se recoupe avec les chiffres affichés ailleurs.
 - **Exclure les erreurs traitées** écarte les factures déjà traitées par le service client qui restent dans un statut en erreur — le même bouton que sur le [Tableau de bord](./dashboard.md#exclure-erreurs-traitees) ; les factures traitées dans les autres statuts restent comptées.
 - **Export Excel** produit un classeur à **deux feuilles** : le rapport exactement tel qu'affiché, et les données brutes à plat, prêtes pour vos propres tableaux croisés.
+
+---
+
+## Intégrité \{#integrite\}
+
+L'onglet **Intégrité** exécute les contrôles SQL définis dans [Configuration → Système → Integrity reports](../configuration/system/integrity-reports.md) : choisir un contrôle, une période (30 derniers jours par défaut) puis **Exécuter**. Chaque ligne du résultat est une anomalie, affichée dans la grille standard (recherche, filtres, colonnes, export). Un contrôle doté d'une action permet de cocher des lignes puis d'**Intégrer la sélection** — le détail se trouve dans [Rapports d'intégrité](../configuration/system/integrity-reports.md#rapports-integrite).
 
 ---
 
@@ -30778,6 +30785,8 @@ Configurer les jobs JD Edwards BI Publisher (BIP) que NomaUBL récupère pour tr
 
 L'éditeur **Fetch Invoices** détermine quels **jobs JD Edwards BI Publisher (BIP)** NomaUBL récupère pour traitement. Il est utilisé par l'import batch et par l'ordonnanceur en arrière-plan pour identifier *les sorties BIP à traiter* et *le modèle de document à appliquer à chacune*.
 
+Un job est pris en compte dès que sa sortie BI Publisher est terminée (`D`, `FD`). Un job en **`FX`** — l'UBE s'est exécuté mais la transformation BI Publisher a échoué — conserve malgré tout son XML source, seul élément utile au flux UBL : les scans batch et les extractions unitaires en mode **input** (ou both) l'acceptent aussi. Les extractions en mode output seul s'en tiennent à `D` / `FD` et signalent une erreur explicite sur un job `FX`.
+
 :::info[Page spécifique à JD Edwards]
 Cette page est l'une des parties **spécifiques à JDE** de NomaUBL — elle s'appuie sur un serveur BIP JD Edwards. Les autres pages de configuration sont, elles, indépendantes de la source.
 :::
@@ -30887,6 +30896,128 @@ Le groupe **Run now** exécute la configuration enregistrée à la demande :
 - **Gardez un recouvrement plus long que le temps de copie.** Un fichier encore en cours d'écriture au passage du scan est repris à l'exécution suivante tant qu'il reste dans la fenêtre.
 - **Cochez *Mount* sur les partages réseau.** Sinon, un partage non monté ressemble à un dossier vide et rien n'est traité, sans alerte.
 - **Commencez par un dry run.** Il montre exactement quels fichiers une nouvelle ligne de dossier récupérerait avant toute conversion.
+
+---
+
+## Rapports d'intégrité
+Source: https://docs.nomana-it.fr/fr/nomaubl/configuration/system/integrity-reports/
+
+Les rapports d'intégrité sont des contrôles SQL en lecture seule qui listent ce qui manque ou diverge dans NomaUBL par rapport à un système source — travaux d'impression jamais intégrés, montants différents — affichés dans Rapports → Intégrité, avec une action facultative sur les lignes sélectionnées.
+
+Le modèle système **Integrity reports** regroupe des **contrôles SQL** qui comparent NomaUBL à un système source et listent ce qui **manque ou diverge** : travaux d'impression jamais intégrés, écritures comptables dont les montants diffèrent des factures électroniques… Chaque contrôle est un `SELECT` exécuté en lecture seule sur un connecteur de base de données, et **chaque ligne renvoyée est une anomalie**. Les résultats s'affichent dans l'onglet **Intégrité** de la page [Rapports](../../application/reports.md#integrite), où un contrôle peut aussi proposer une **action** sur les lignes sélectionnées.
+
+Il s'ouvre dans **Configuration → Système → Integrity reports**. Sur une installation qui ne dispose pas encore du modèle, le bouton **Add integrity reports** le crée sans redémarrer le service. Le modèle est livré vide : rien n'apparaît dans la page Rapports tant qu'aucun contrôle n'est défini.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Paramètres généraux
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **Max rows** | `5000` | Nombre maximal de lignes par exécution. Au-delà, le résultat est tronqué et signalé *résultat tronqué au plafond de lignes* dans la page Rapports. |
+| **Timeout (s)** | `120` | Délai maximal d'exécution de la requête, en secondes. |
+
+---
+
+## Contrôles
+
+Chaque contrôle est un groupe repliable — un clic sur son titre l'ouvre, **×** le supprime, **+ Add check** en ajoute un.
+
+| Champ | Description |
+|---|---|
+| **Name** | Identifiant affiché dans la page Rapports (par ex. `missing-pdf`). À garder stable. |
+| **Description** | Une ligne qui dit ce que le contrôle détecte (par ex. *Travaux d'impression PDF non intégrés*). |
+| **Connector** | Le [connecteur de base de données](../database-connectors/nomaubl.md) sur lequel s'exécute le `SELECT` — la base JD Edwards, la base NomaUBL ou tout autre connecteur déclaré sur la plateforme. |
+| **Key columns** | Facultatif. Colonnes du résultat, séparées par des virgules, qui identifient l'enregistrement visé par une action (par ex. `JCPID, JCVERS, JCJOBNBR`, ou numéro + type de document + société). |
+| **SQL (SELECT only)** | La requête. Une seule instruction `SELECT` (ou `WITH`) ; toute autre instruction est refusée avant d'atteindre la base. La connexion est ouverte en lecture seule. |
+| **Action** | Ce que la page Rapports peut faire des lignes sélectionnées : aucune action, ou **Integrate BIP jobs**. |
+
+### Variables de date
+
+Le SQL peut reprendre la période choisie dans la page Rapports. Les variables sont remplacées avant l'exécution ; sans période, l'intervalle va du `1900-01-01` à aujourd'hui.
+
+| Variable | Format | Exemple |
+|---|---|---|
+| `{from}` / `{to}` | `yyyy-MM-dd` | `2026-09-01` |
+| `{fromJde}` / `{toJde}` | Date julienne JDE (`CYYDDD`) | `126244` |
+| `{fromDMY}` / `{toDMY}` | `dd-MM-yyyy` | `01-09-2026` |
+
+Le champ SQL propose la forme habituelle d'un contrôle — les enregistrements source de la période qui n'ont jamais atteint le journal NomaUBL (`F564230`) :
+
+```sql
+SELECT … FROM … WHERE JCSTDTIM > TO_DATE('{fromDMY}','dd-MM-yyyy')
+  AND … NOT IN (SELECT TRIM(FEWDS1) FROM PRODDTA.F564230 WHERE FEUPMJ > {fromJde})
+```
+
+### Action *Integrate BIP jobs*
+
+:::info[Spécifique à JDE]
+Cette action extrait des travaux JD Edwards BI Publisher. Les contrôles sans action fonctionnent avec tout système source.
+:::
+
+Avec **Action** = **Integrate BIP jobs**, les lignes sélectionnées sont intégrées exactement comme par la commande `fetch-single <template> bip <job>` (voir [Ligne de commande](../../management/command-line.md)), via le lot [Fetch Invoices](./fetch-invoices.md). Cinq champs indiquent les colonnes du résultat à utiliser :
+
+| Champ | Description |
+|---|---|
+| **Job column** | Colonne du résultat qui porte le numéro de travail JDE (`RJJOBNBR`). Obligatoire. |
+| **Template column** | Colonne du résultat qui porte le nom du modèle de document. À laisser vide pour utiliser le modèle fixe. |
+| **Fixed template** | Modèle de document utilisé quand la colonne modèle est vide ou absente. |
+| **Host column** | Colonne du résultat qui porte le serveur d'exécution JDE — uniquement sur les installations JD Edwards à plusieurs serveurs. Facultatif. |
+| **Processing type** | `AUTO` *(défaut)*, `SINGLE`, `BURST`, `UBL` ou `BOTH`. |
+
+---
+
+## Dans la page Rapports \{#rapports-integrite\}
+
+  
+    Contrôle
+    missing-pdf ▾
+    📅 30 derniers jours
+    ▶ Exécuter
+    Voir le SQL
+  
+  Connecteur : db-jde · Colonnes clés : JCPID, JCVERS, JCJOBNBR · Action : fetch-single invoices bip {'{JCJOBNBR}'}
+  
+    3 anomalie(s)
+    
+    Intégrer la sélection (2)
+  
+  
+    JCPIDJCVERSJCJOBNBRJCSTDTIM
+    ☑R42565ZJDE000113533062026-10-08 06:12
+    ☑R42565ZJDE000113534122026-10-09 06:10
+    ☐R42565ZJDE000213535202026-10-10 06:11
+  
+
+1. **Choisir un contrôle** et une **période** (30 derniers jours par défaut), puis **Exécuter**. **Voir le SQL** affiche la requête du contrôle.
+2. La ligne d'en-tête rappelle le connecteur, les colonnes clés et l'action configurée. Le résultat indique **Aucune anomalie** ou *N anomalie(s)* ; chaque ligne est une anomalie, dans la grille standard — recherche, filtres, choix des colonnes et export.
+3. Quand le contrôle porte une action, cocher les lignes puis cliquer sur **Intégrer la sélection (N)**. Une confirmation rappelle que les travaux sont extraits et traités comme lors d'un traitement normal — validation, stockage et envoi selon le paramétrage du modèle.
+4. Après l'action, le contrôle est relancé : les lignes intégrées sortent du résultat, et un bandeau de synthèse affiche *N intégré(s), N en échec sur N*, avec le nom de chaque travail en échec.
+
+---
+
+## API
+
+| Endpoint | Rôle |
+|---|---|
+| `GET /api/reports/integrity` | Liste les contrôles configurés (nom, description, connecteur, colonnes clés, SQL). |
+| `POST /api/reports/integrity/run` | Exécute un contrôle — corps `{ "name", "dateFrom", "dateTo" }` — et renvoie les colonnes et les lignes du résultat. |
+| `POST /api/reports/integrity/action` | Exécute l'action du contrôle sur les lignes sélectionnées — corps `{ "name", "jobs": [...], "templates": [...], "hosts": [...] }` — et renvoie le résultat par travail et la synthèse. |
+
+Les schémas complets se trouvent dans la [référence API](/nomaubl/api-reference).
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Une question par contrôle.** Un contrôle qui répond à une seule question (*travaux non intégrés*, *montants différents*) donne un résultat exploitable ligne par ligne.
+- **Renvoyer les colonnes clés.** Même sans action, elles permettent de remonter facilement de chaque anomalie à l'enregistrement source.
+- **Limiter la requête à la période.** Les variables de date la cantonnent à la fenêtre choisie et la gardent bien en deçà du délai maximal.
+- **Pointer l'action sur le numéro de travail.** La colonne travail doit contenir le numéro de travail JDE ; les lignes qui n'en ont pas sont ignorées par *Intégrer la sélection*.
 
 ---
 
@@ -31145,6 +31276,8 @@ Le SSO est une nouvelle capacité — sur une mise à jour, vérifier la liste *
 | **Client secret** | Optionnel pour les clients publics PKCE (le fournisseur peut être configuré sans). Stocké en Base64 sur disque. |
 | **Redirect URI** | Doit correspondre **exactement** à l'URI de redirection enregistrée côté IdP. Valeur typique : `https://<votre-hôte>/api/auth/oidc/callback`. |
 | **Scopes** | Séparés par des espaces. Par défaut `openid profile email`. Ajouter ici les scopes spécifiques au fournisseur quand des claims supplémentaires sont nécessaires. |
+| **Token endpoint authentication** | Mode d'échange du code d'autorisation contre les jetons. **PKCE** *(défaut)* transmet le secret dans le corps de la requête (`client_secret_post`) ; **HTTP Basic** le transmet dans l'en-tête `Authorization` (`client_secret_basic`), sans PKCE — pour les fournisseurs d'identité qui n'acceptent que ce mode. Reprendre le réglage du client côté IdP. |
+| **Debug logging** | `Y` écrit dans le journal serveur le résultat de la découverte, l'URL d'autorisation, l'échange de jetons et les claims du jeton d'identité, jetons et secrets masqués. Les connexions et les refus (erreur IdP, état expiré, échec de l'échange de jetons, domaine refusé, compte inconnu) sont toujours journalisés. |
 
 ---
 
@@ -33813,6 +33946,7 @@ Traite un (ou plusieurs) fichier source contre un modèle de document — ou app
 | `--replace` | Purge les cinq tables UBL pour `(doc, dct, kco)` avant ré-import. | tous |
 | `--no-send` | N'envoie pas à la Plateforme Agréée. | tous |
 | `--no-db` | N'écrit pas en base (implique `--no-send`). | XML |
+| `--no-validate` | Ne valide pas l'UBL — utilisé par la réimpression du retraitement, où la facture électronique enregistrée reste la référence. | XML |
 | `--validate` | XSD + Schematron seulement — pas d'insertion BDD, pas de dépôt PA. | UBL |
 | `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. | UBL |
 | `--no-debug` | Ignore les durées par étape (parse, validation, insertion en base, envoi PA) journalisées par défaut à chaque exécution. À utiliser sur les batchs nocturnes volumineux quand la surcharge par étape n'apporte rien dans les logs. | tous |
@@ -36663,7 +36797,11 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
-  2026.10.02.1 · 2026-10-01
+  2026.10.12.1 · 2026-10-01
+  2026.10.11.1 · 2026-09-30
+  2026.10.06.1 · 2026-09-30
+  2026.10.05.1 · 2026-09-30
+  2026.10.02.1 · 2026-09-30
   2026.10.01.1 · 2026-09-30
   2026.09.30.1 · 2026-09-30
   2026.09.28.1 · 2026-09-28
@@ -36771,6 +36909,54 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.10.12.1 — 2026-10-12 \{#v2026-10-12-1\}
+
+### Améliorations
+
+- **Rapports d'intégrité.** Un nouvel onglet « Intégrité » de la page Rapports exécute des contrôles SQL qui listent ce qui manque ou diverge dans NomaUBL par rapport à un système source : travaux d'impression JDE jamais intégrés, écritures comptables dont les montants diffèrent, … Les contrôles se définissent dans le nouveau gabarit de paramétrage « Rapports d'intégrité » : nom, description, connecteur base de données, SQL (SELECT uniquement, lecture seule, plafond de lignes et délai), colonnes clés, et des marqueurs de date renseignés depuis la période de la page (\{from\}/\{to\}, \{fromJde\}/\{toJde\}, \{fromDMY\}/\{toDMY\}). Le résultat s'affiche dans la grille standard (recherche, filtres, colonnes, export), chaque ligne étant une anomalie. Un contrôle peut porter une action : « Intégrer les travaux BIP » associe les colonnes travail, modèle et hôte du résultat et, sur les lignes sélectionnées, lance la même extraction et le même traitement que `fetch-single <modèle> bip <travail>` via le batch de récupération, après confirmation ; le contrôle est relancé ensuite et le résumé liste les travaux en échec. D'autres types d'action (appels de connecteur API ou SQL) suivront.
+- **Confirmation avant le renvoi à la PA depuis la fenêtre facture.** Le bouton « Renvoyer à la PA » demande désormais confirmation, le document étant transmis immédiatement avec passage du statut à En attente (9906). Le renvoi depuis la liste des factures en avait déjà une.
+
+---
+
+## 2026.10.11.1 — 2026-10-11 \{#v2026-10-11-1\}
+
+### Améliorations
+
+- **SSO (OIDC) : mode d'authentification au token endpoint et journal de débogage.** Un nouveau réglage « Authentification au token endpoint » du gabarit oidc choisit comment le code d'autorisation est échangé : PKCE avec le secret dans le corps de la requête (par défaut, inchangé) ou HTTP Basic (en-tête Authorization, sans PKCE), pour les fournisseurs d'identité qui n'acceptent que ce dernier. Un interrupteur « Journal de débogage » écrit dans le journal serveur la découverte, l'URL d'autorisation, l'échange du token et les revendications du jeton d'identité, jetons et secrets masqués. Les connexions et les refus (erreur IdP, état expiré, échec d'échange, domaine refusé, compte inconnu) sont désormais toujours journalisés.
+- **Statistiques des statuts en montant.** Le rapport de statistiques des statuts gagne un sélecteur « Mesure » : nombre de factures (comme avant) ou montant HT (somme du montant hors taxe, BT-109). Cellules, sous-totaux et pourcentages suivent la mesure choisie, car quelques factures peuvent représenter l'essentiel des montants. L'export Excel suit la vue et sa feuille de données porte les deux chiffres. L'API renvoie un champ `amount` par ligne regroupée.
+- **Le retraitement est une réimpression.** Retraiter une facture non transmise régénère le PDF/XML lisible et le fichier UBL depuis la source archivée vers les dossiers de sortie et de burst, sans aucune modification en base et sans revalidation : la facture électronique stockée (y compris une correction acheteur ultérieure) et ses résultats de validation restent tels quels, aucun statut d'erreur n'est écrit. Une option `--no-validate` est disponible sur la commande de traitement.
+
+### Corrections
+
+- **Contrôle d'intégrité : statuts en litige et suspendue.** En litige (207) et suspendue (208) sont des statuts intermédiaires qui peuvent être suivis d'un code inférieur comme approuvée (205) ou refusée (210). Le contrôle d'ordre les triait par code et les plaçait après le statut final, qui devenait alors le statut d'en-tête. Ils conservent désormais leur position chronologique parmi les autres statuts de leur cycle et ne comptent plus comme une inversion. Les historiques déjà déformés sont remis en ordre au prochain passage.
+
+---
+
+## 2026.10.06.1 — 2026-10-06 \{#v2026-10-06-1\}
+
+### Améliorations
+
+- **La suppression d'une facture respecte la protection PA et efface le document en entier.** Supprimer une facture (bouton de la fenêtre facture ou API) est désormais refusé dès que la PA l'a traitée (tout statut standard du cycle de vie, 9911, 9913), avec la même exception que la correction acheteur : un rejet 213 pour motif d'adressage reste supprimable. La suppression retire aussi la ligne F564230 (XML source, référence de transaction PA, nom du fichier source) : un nouveau traitement du même document repart de zéro et les dossiers surveillés peuvent reprendre son fichier source. Le bouton est masqué sur les statuts protégés et la confirmation mentionne le journal parmi les enregistrements supprimés.
+
+### Corrections
+
+- **Centre de coûts et code de routage conservés à l'édition / correction acheteur.** Enregistrer une facture depuis la fenêtre facture ou corriger le destinataire effaçait F564230.FEAC04 (centre de coûts) et FEROUT (code de routage), le flux UBL ne portant ni l'un ni l'autre. Les deux conservent désormais les valeurs du premier traitement, comme c'était déjà le cas pour la clé alpha.
+
+---
+
+## 2026.10.05.1 — 2026-10-05 \{#v2026-10-05-1\}
+
+### Améliorations
+
+- **Travaux BI Publisher en statut FX pris en compte quand on extrait le XML source.** Un travail dont l'UBE a tourné mais dont la transformation BI Publisher a échoué (RJRPDJBSTS = FX) conserve son XML source, et c'est tout ce dont le flux UBL a besoin. Les scans batch et les extractions unitaires en mode source (ou les deux) acceptent désormais les travaux FX en plus de D / FD. Les extractions de sorties seules restent sur D / FD et signalent clairement un travail FX au lieu d'attendre.
+- **PDF généré : lignes d'information.** Une ligne dont la référence de facturation porte le statut INFORMATION (marqueur de sous-type d'une ligne à montant nul) s'affiche « Ligne d'information » au lieu d'une facture antérieure. Les vraies références antérieures ne changent pas.
+
+### Corrections
+
+- **Contrôle d'intégrité : ordre du cycle de vie des factures réémises.** Une facture renvoyée après correction (correction acheteur, fenêtre facture, retraitement conservent l'historique) comporte plusieurs cycles PA. Le contrôle d'ordre considérait tout l'historique comme un seul cycle : il mélangeait les statuts du second envoi avec ceux du premier, repoussait les rejets en fin d'historique et signalait à tort l'« Import PA validé » du second cycle. Chaque cycle, ouvert par un événement envoi / en attente / retraitement, est désormais ordonné séparément, l'appartenance étant décidée sur l'heure de l'événement. Les historiques déjà déformés par l'ancienne règle sont détectés et remis en ordre au prochain passage ; les factures réémises correctement ordonnées ne sont plus signalées.
+
+---
+
 ## 2026.10.02.1 — 2026-10-02 \{#v2026-10-02-1\}
 
 ### Améliorations
@@ -36782,6 +36968,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 - **Correction acheteur / fenêtre facture : la revalidation réussie apparaît dans l'historique.** Une facture en « Echec de validation » (9905) corrigée puis validée passait bien en 9901 dans la table des statuts, mais aucun événement n'était écrit : l'historique restait sur 9905. Le résultat de la validation (9901 / 9902) est désormais ajouté dès qu'il diffère du dernier événement ; un réenregistrement identique n'ajoute rien.
 - **Correction acheteur : plus de notification intempestive, schéma de l'adresse électronique conservé.** La ligne d'audit « Identifiants acheteur corrigés » est désormais une simple entrée d'historique : elle ne redéclenche plus la règle de notification du statut courant (9905 par exemple) à chaque correction. L'adresse électronique de l'acheteur (BT-49) conserve le schéma déjà présent dans le document, ou 0225 à défaut, au lieu d'être déduit du nombre de chiffres (un identifiant à 9 chiffres recevait 0002).
+- **Fenêtre facture : les éléments supprimés ne réapparaissent plus à l'enregistrement.** Supprimer une exonération de TVA sur une ligne, une note, un bloc livraison, une référence de commande ou un détail d'article dans la fenêtre facture est désormais conservé après enregistrement. Jusqu'ici, la fusion avec le document d'origine réinjectait tout élément que le formulaire n'émettait plus. Les éléments non gérés par la fenêtre restent préservés tels quels.
 
 ---
 
@@ -36942,6 +37129,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Corriger les identifiants de l'acheteur sans rééditer la facture.** Les rejets PA les plus fréquents concernent le SIREN (BT-47), le SIRET (BT-46), la TVA intracommunautaire (BT-48) et l'adresse électronique (BT-49) de l'acheteur. Un nouveau bouton **Corriger destinataire** dans la fenêtre facture (affiché seulement quand la facture est encore corrigeable — masqué dès que la PA l'a prise en charge) ouvre un formulaire compact pré-rempli depuis l'UBL stocké, avec la recherche d'entreprises INSEE et le sélecteur d'adresses électroniques de l'annuaire PPF. Seuls les identifiants modifiés sont remplacés dans l'UBL stocké — le reste du document est intact — puis la facture est revalidée immédiatement, un événement d'audit trace les anciennes et nouvelles valeurs dans l'historique, et une option renvoie à la PA si la validation réussit. Également disponible en `POST /api/invoices/{doc}/{dct}/{kco}/fix-buyer` (documenté dans la référence API) avec garde-fous de format (longueur et cohérence SIREN/SIRET, forme de la TVA) et la règle de protection PA appliquée.
 - **Badge Suivi sur les factures déposées non transmises.** Une facture Déposée (200) avec le motif NON_TRANSMISE n'est pas une erreur, mais le destinataire n'a pas d'adresse de réception active — l'opérateur doit la transmettre manuellement. La colonne *Suivi* affiche désormais le badge En attente/Traité pour ce cas aussi (les autres 200 gardent le tiret discret).
 - **E-Annuaire : enregistrement Peppol et plateforme par entreprise.** Déplier une carte entreprise interroge désormais aussi le réseau Peppol public (aucun compte requis) : une nouvelle section *Annuaire Peppol* liste chaque participant enregistré (les enregistrements français utilisent l'ICD 0225, y compris les identifiants par établissement), son nom, sa date d'enregistrement et — résolue via la découverte officielle SML/SMP — la **plateforme qui l'opère** (la PA, par ex. Pennylane, avec son identifiant de siège Peppol ; URLs du point d'accès et du SMP dans l'infobulle). La recherche ne s'exécute qu'au premier dépliage, et est aussi exposée en `POST /api/peppol-lookup` pour les intégrations (documentée dans la référence API).
+- **Corriger destinataire aussi sur les rejets d'adressage, avec historique préservé.** Le bouton *Corriger destinataire* apparaît désormais aussi pour une facture Rejetée (213) dont le motif est ADR_ERR — l'erreur d'adressage que la fonction sert à réparer (les autres statuts traités par la PA restent verrouillés). La correction préserve désormais toujours l'historique complet du cycle de vie : les événements de la PA, la ligne d'audit avec anciennes et nouvelles valeurs et le nouveau résultat de validation se lisent en continu. Les listes de référence (motifs, actions, statuts…) sont désormais triées par code. Les recherches Peppol respectent le paramètre `sslVerify` de l'e-annuaire (proxys à interception TLS), et un annuaire Peppol injoignable signale l'erreur réseau au lieu d'afficher « non enregistré ».
 
 ### Corrections
 
@@ -37002,7 +37190,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 ### Améliorations
 
 - **Nouvelle page Rapports — statistiques des statuts.** Une entrée *Rapports* dans le menu ouvre le premier rapport analytique : le nombre de factures ventilé par code activité, statut et motif de rejet, réparti par type de transaction (B2B, B2BINT, B2C, B2G) avec effectifs et pourcentages à chaque niveau. Les lignes se déplient et se replient avec sous-totaux ; un statut sans détail de motif tient sur une seule ligne. Le filtre de période propose les trois mêmes bases de dates que le tableau de bord (date d'activité, date document, date d'archivage). Un clic exporte un classeur Excel à deux feuilles : le rapport tel qu'affiché et les données à plat, prêtes pour vos propres tableaux croisés. L'accès s'accorde par rôle (nouvelle page *Rapports* du groupe Navigation) ; la page est conçue pour accueillir d'autres onglets de rapports.
-- **Page Rapports — requêteur.** Un second onglet permet de construire ses propres extractions sans SQL : choisir un jeu de données (factures, documents archivés, évènements de cycle de vie, erreurs de validation), sélectionner les colonnes, puis affiner avec des filtres — statuts, motifs, actions et types de transaction se choisissent dans des listes déroulantes multi-sélection alimentées par les listes de référence, les dates par plage, et la barre de période avec son choix de base de date ouvre l'écran. Les résultats s'affichent dans la grille standard avec tout son outillage : recherche, filtres par colonne, regroupement, affichage et réordonnancement des colonnes, export CSV/Excel. Une requête peut être **enregistrée comme rapport nommé** — jeu de données, colonnes, filtres, disposition des colonnes et regroupement compris — et rechargée en deux clics ; la bibliothèque de rapports réside dans un fichier dédié `config-reports.json`, simple à sauvegarder et à promouvoir entre serveurs. Le filtre sur le numéro de document effectue une recherche numérique exacte, et des libellés plus clairs (*N° document*, *Type document*, *Type transaction*) profitent aussi au choix de colonnes des vues de liste dans les Paramètres.
+- **Page Rapports — requêteur.** Un second onglet permet de construire ses propres extractions sans SQL : choisir un jeu de données (factures, documents archivés, évènements de cycle de vie, erreurs de validation), sélectionner les colonnes, puis affiner avec des filtres — statuts, motifs, actions et types de transaction se choisissent dans des listes déroulantes multi-sélection alimentées par les listes de référence, les dates par plage, et la barre de période avec son choix de base de date ouvre l'écran. Les résultats s'affichent dans la grille standard avec tout son outillage : recherche, filtres par colonne, regroupement, affichage et réordonnancement des colonnes, export CSV/Excel. Une requête peut être **enregistrée comme rapport nommé** — jeu de données, colonnes, filtres, disposition des colonnes et regroupement compris — et rechargée en deux clics ; la bibliothèque de rapports se trouve dans un fichier dédié `config-reports.json`, simple à sauvegarder et à promouvoir entre serveurs. Le filtre sur le numéro de document effectue une recherche numérique exacte, et des libellés plus clairs (*N° document*, *Type document*, *Type transaction*) profitent aussi au choix de colonnes des vues de liste dans les Paramètres.
 
 ### Corrections
 
@@ -37016,7 +37204,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 - **Une base de dates unique pour tout le tableau de bord.** Un sélecteur près du filtre de période choisit la date qui pilote tous les indicateurs — *Date d'activité* (dernière mise à jour, comportement historique), *Date document* (factures émises) ou la nouvelle *Date d'archivage* (documents traités). Cartes de synthèse, pipeline des statuts, volume quotidien, répartition par société et principales erreurs suivent tous le même choix : les chiffres se recoupent. Le sélecteur de date de la liste des factures gagne la même option *Date d'archivage*.
 - **Les échecs d'écriture d'archive expliquent leur cause.** Quand la ligne d'archive (F564230) ne peut pas être écrite depuis une source UBL, le résultat affiche la cause réelle (champ obligatoire manquant, erreur base de données) au lieu de renvoyer au journal — et une violation de longueur liste chaque valeur écrite avec sa taille, désignant immédiatement la colonne en cause.
-- **Exigibilité de la TVA (BT-8) par société, et sur le PDF lisible.** Pour les factures en « TVA sur les débits », le code de date d'exigibilité devient un défaut par société : chaque société émettrice (éditeur XSL, onglet Sociétés) peut le définir — date de facture, de livraison ou d'encaissement — utilisé quand le fichier source n'en porte pas ; le mappage source reste prioritaire. Les codes et leurs libellés résident dans une nouvelle liste de référence *Codes d'exigibilité TVA*, modifiable dans les Paramètres comme les autres listes. Le PDF lisible affiche désormais l'exigibilité en clair (par ex. « Exigibilité TVA : Date de facture (débits) »), y compris lorsque la période de facturation ne porte pas de dates. Les installations existantes doivent exécuter la mise à niveau (modèles et liste de référence).
+- **Exigibilité de la TVA (BT-8) par société, et sur le PDF lisible.** Pour les factures en « TVA sur les débits », le code de date d'exigibilité devient un défaut par société : chaque société émettrice (éditeur XSL, onglet Sociétés) peut le définir — date de facture, de livraison ou d'encaissement — utilisé quand le fichier source n'en porte pas ; le mappage source reste prioritaire. Les codes et leurs libellés se trouvent dans une nouvelle liste de référence *Codes d'exigibilité TVA*, modifiable dans les Paramètres comme les autres listes. Le PDF lisible affiche désormais l'exigibilité en clair (par ex. « Exigibilité TVA : Date de facture (débits) »), y compris quand la période de facturation ne porte pas de dates. Les installations existantes doivent exécuter la mise à niveau (modèles et liste de référence).
 
 ---
 
@@ -37027,11 +37215,12 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Contrôle d'intégrité des statuts de cycle de vie.** La page *Récupérer les statuts* offre un contrôle : choisir une date et comparer tous les événements de la plateforme depuis celle-ci avec le cycle de vie enregistré. Les statuts manquants s'affichent dans un tableau à sélection — application de tout ou partie, avec déclenchement optionnel des règles de notification (désactivé par défaut). Les statuts internes obsolètes (étape plateforme déjà dépassée), les factures inconnues et les codes non mappés sont signalés à part. S'exécute en arrière-plan ; réexécutable sans risque.
 - **Contrôle d'ordre du cycle de vie.** Un second contrôle balaie la base à la recherche de statuts internes de plateforme enregistrés *après* un statut standard du cycle de vie, et de codes invalides (texte brut de plateforme stocké par erreur de mappage). Les lignes sélectionnées se suppriment en un clic ; le statut de la facture est réaligné sur son dernier événement restant.
 - **Détails de statut sur la facture.** Le résumé de la facture affiche désormais, sous le badge de statut, le motif de rejet, l'action attendue et la note de statut courants, ainsi que le message de statut complet dans un groupe replié (utile pour les longues erreurs de plateforme). Tous sont aussi disponibles comme paramètres d'actions personnalisées — `{message}`, `{reasonLabel}`, `{actionLabel}`, `{actionNote}` — aux côtés de `{doc}`, `{dct}`, `{kco}` comme dans les notifications, sans configuration de vue de liste.
+- **Doublons mieux gérés, renvoi sécurisé.** Le retraitement d'un document déjà archivé se décide désormais selon son statut, et plus seulement selon le paramètre Remplacer. Les documents non envoyés à la plateforme gardent le comportement historique (archivés une fois ; Remplacer pour écraser). Les factures qui n'ont jamais atteint la plateforme (créées, échec de validation ou d'envoi, exécution interrompue) sont retraitées automatiquement — sans indicateur. Les factures déjà traitées par la plateforme (statut standard du cycle de vie, ou export/import validé) sont toujours ignorées : Remplacer est refusé, et le bouton *Renvoyer à la PA* comme les renvois en masse les refusent également. Pour repousser volontairement une telle facture, repositionnez d'abord son statut avec *Définir statut*. Le retraitement n'est pas concerné — il reste le canal officiel de régénération de ces factures, et n'enregistre plus dans l'historique que le seul événement *Retraitement*, sans rejouer les étapes de création.
 - **Actions personnalisées : filtre par statut et revue avant exécution.** Chaque action personnalisée peut désormais être limitée à des statuts choisis (vide = tous les statuts) : un bouton « créer un dossier » n'apparaît que sur les factures rejetées. Et le clic sur une action ouvre d'abord une fenêtre de revue avec toutes les valeurs sur le point d'être envoyées — modifiables — et Exécuter / Annuler : ajustez le message si besoin, ou renoncez sans risque.
 
 ### Corrections
 
-- **Les statuts ne peuvent plus être perdus ni désordonnés.** Trois situations de concurrence des interrogations de statuts sont fermées : deux flux écrivant la même facture au même instant n'entrent plus en collision sur la table de cycle de vie (le perdant réessaie au lieu de perdre l'événement) ; le contrôle d'import n'applique plus un résultat périmé — et ne fait plus reculer le statut — lorsque l'interrogation du cycle de vie a fait avancer la facture pendant l'exécution ; et les événements créés autour du seuil d'une interrogation ne sont plus ignorés définitivement — chaque exécution rebalaye désormais une courte fenêtre, sans risque de doublon.
+- **Les statuts ne peuvent plus être perdus ni désordonnés.** Trois situations de concurrence des interrogations de statuts sont fermées : deux flux écrivant la même facture au même instant n'entrent plus en collision sur la table de cycle de vie (le perdant réessaie au lieu de perdre l'événement) ; le contrôle d'import n'applique plus un résultat périmé — et ne fait plus reculer le statut — quand l'interrogation du cycle de vie a fait avancer la facture pendant l'exécution ; et les événements créés autour du seuil d'une interrogation ne sont plus ignorés définitivement — chaque exécution rebalaye désormais une courte fenêtre, sans risque de doublon.
 - **Les statuts pré-cycle de vie restent à leur place.** Les étapes internes de plateforme (export validé, import validé…) ne sont plus ajoutées une fois le cycle de vie officiel de la facture commencé, quel que soit le canal de récupération.
 
 ---
@@ -37041,7 +37230,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 ### Améliorations
 
 - **Périmètre du retraitement resserré.** Le retraitement (liste des factures, carte du tableau de bord IT, commande `-reprocess`) ne concerne plus que les factures déposées non transmises (200 avec motif NON_TRANSMISE) ; les factures validées jamais envoyées (9901) ne sont plus proposées, après le retrait des factures rejetées (213) la veille.
-- **Coordonnées bancaires par société.** Chaque société émettrice de l'éditeur XSL (onglet Sociétés) peut désormais porter son IBAN (BT-84), son BIC (BT-86) et le titulaire du compte (BT-85). Lorsque le fichier source ne fournit pas de valeur et que le moyen de paiement est un virement (codes 30, 42, 58 — les seuls où l'IBAN est obligatoire), les coordonnées de la société de la facture sont utilisées automatiquement. Les autres moyens de paiement et l'autofacturation ne sont pas concernés. Les installations existantes doivent exécuter la mise à niveau pour que leurs modèles de documents bénéficient de ce repli.
+- **Coordonnées bancaires par société.** Chaque société émettrice de l'éditeur XSL (onglet Sociétés) peut désormais porter son IBAN (BT-84), son BIC (BT-86) et le titulaire du compte (BT-85). Quand le fichier source ne fournit pas de valeur et que le moyen de paiement est un virement (codes 30, 42, 58 — les seuls où l'IBAN est obligatoire), les coordonnées de la société de la facture sont utilisées automatiquement. Les autres moyens de paiement et l'autofacturation ne sont pas concernés. Les installations existantes doivent exécuter la mise à niveau pour que leurs modèles de documents bénéficient de ce repli.
 
 ---
 
@@ -37049,7 +37238,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Améliorations
 
-- **Les pages de statuts affichent la progression en direct.** *Récupérer les statuts* et *Statut d'import* s'exécutent en arrière-plan et leur tableau de résultats se remplit au fil de l'exécution (démarrage, requêtes traitées, synthèse) au lieu de n'apparaître qu'à la fin. Les lignes de l'exécution restent aussi dans le journal du serveur — elles en disparaissaient lorsque l'exécution était lancée depuis l'interface.
+- **Les pages de statuts affichent la progression en direct.** *Récupérer les statuts* et *Statut d'import* s'exécutent en arrière-plan et leur tableau de résultats se remplit au fil de l'exécution (démarrage, requêtes traitées, synthèse) au lieu de n'apparaître qu'à la fin. Les lignes de l'exécution restent aussi dans le journal du serveur — elles en disparaissaient quand l'exécution était lancée depuis l'interface.
 - **Le contrôle des statuts d'import s'exécute en parallèle.** Les factures en attente (9906) sont vérifiées plusieurs à la fois — nouveau réglage *Import parallel* dans l'onglet Statut du modèle e-invoicing (défaut 4, max 8). Le nouveau réglage *Poll parallel* fait de même pour l'interrogation du cycle de vie par facture.
 - **Les envois en masse s'exécutent en parallèle.** *Tout envoyer* (factures en attente de revue), *Tout renvoyer* et le renvoi multiple de la liste des factures traitent plusieurs factures à la fois. Les valeurs par défaut se règlent dans Paramètres globaux → Planification → *Bulk Send* (nombre de travailleurs + délai par travailleur) ; chaque routine de reprise nocturne peut les surcharger. Un nombre de travailleurs à 1 rétablit le comportement séquentiel précédent.
 - **Nouvelle commande `-send-waiting`.** Envoie à la PA toutes les factures retenues pour revue (indicateur W) depuis la ligne de commande — l'équivalent du bouton du tableau de bord, pour une planification hors serveur web. Options `--delay` et `--parallel` ; le code de sortie reflète les échecs.
@@ -37073,6 +37262,10 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Schematrons français mis à jour en V1.4.0 fix04 (04/09/2026).** Les règles de validation Flux 2 (CIUS-FR) et EXTENDED-CTC-FR passent à la dernière publication FNFE : traitement des formats de date, contrôles multi-notes, message du BT-23 et contrôle du `listID` des motifs de charge corrigés ; le mode FATAL s'applique désormais à compter du **1er octobre 2026**. La page À propos affiche les nouvelles versions.
 - **Les transmissions e-reporting (Flux 10) sont désormais validées avant envoi.** Chaque rapport généré est contrôlé contre le schéma officiel du PPF et les règles de l'Annexe 7 v1.8 — comme les factures B2B. Un rapport non conforme est enregistré avec le nouveau statut *9958 — Echec de validation* et le détail des anomalies, n'est jamais envoyé à la PA, et ses factures restent disponibles : une fois la cause corrigée, l'exécution suivante reconstruit automatiquement la même période.
 - **Régénérer un rapport e-reporting.** Un rapport non accepté (généré, échec d'envoi, échec d'import, rejeté, échec de validation) peut être régénéré depuis sa fiche : le rapport est annulé (nouveau statut *9959 — Annulé, régénéré*, conservé pour l'audit), ses factures redeviennent sélectionnables et un nouveau rapport est construit pour la même période — retardataires compris — puis validé et transmis selon vos réglages. Un rapport annulé ne propose plus Renvoyer ni Télécharger. Un rapport déjà transmis à la PA ne peut pas être régénéré.
+
+- **Statuts du cycle de vie sans webhook — mode de récupération par facture.** Un nouveau mode *Par facture* (onglet Statut) couvre les plateformes sans API de recherche par date (ex. TX2) : chaque exécution interroge un lot borné et équitablement réparti de factures encore dans les statuts « actifs » configurés, lit leur historique complet (ApplicationResponse UBL standard, motif de rejet compris), traduit les codes plateforme via le modèle statuses et n'applique que ce qui n'est pas déjà enregistré — les notifications partent normalement. Une facture arrivée à un statut terminal (210, 213…) n'est plus interrogée. Les plateformes acceptant une liste d'identifiants peuvent être interrogées par groupes de factures (*Poll group size*), ce qui maintient un volume d'appels réduit même à plusieurs dizaines de milliers de factures par jour. Le mode *Recherche par date* par défaut est inchangé.
+- **Statut d'import : correspondance par priorité sur plusieurs codes.** Quand la réponse d'import de la plateforme contient plusieurs codes de statut (un historique), l'ordre de déclaration de la table de correspondance décide désormais — la première entrée trouvée l'emporte. Un XPath simple remplace les expressions conditionnelles de contournement ; les plateformes à code unique ne changent pas.
+- **Motif de rejet des plateformes XML.** Quand un import est rejeté et que la plateforme indique la cause en XML plutôt que dans une liste d'erreurs JSON, le motif est désormais repris comme message d'échec sur la facture (9907) au lieu de rester vide.
 
 ### Corrections
 
@@ -37101,11 +37294,11 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Améliorations
 
-- **Traiter un dossier entier de fichiers de facture en une seule exécution — en parallèle.** Pour les modèles à source XML, le traitement peut s'exécuter une seule fois sur le dossier d'entrée du modèle plutôt qu'une fois par fichier, et traite désormais plusieurs fichiers en même temps pour exploiter le processeur disponible — bien plus rapide lorsqu'un dossier contient des milliers de fichiers mono-facture. Chaque fichier reste traité comme une unité à part entière (son nom, son archive source et sa traçabilité sont conservés) et l'échec d'un fichier n'interrompt pas les autres.
+- **Traiter un dossier entier de fichiers de facture en une seule exécution — en parallèle.** Pour les modèles à source XML, le traitement peut s'exécuter une seule fois sur le dossier d'entrée du modèle plutôt qu'une fois par fichier, et traite désormais plusieurs fichiers en même temps pour exploiter le processeur disponible — bien plus rapide quand un dossier contient des milliers de fichiers mono-facture. Chaque fichier reste traité comme une unité à part entière (son nom, son archive source et sa traçabilité sont conservés) et l'échec d'un fichier n'interrompt pas les autres.
 - **Limiter l'utilisation du processeur par le traitement.** Un nouveau réglage *Max threads* (Paramètres globaux, onglet Traitement) limite le nombre de factures traitées simultanément : un serveur partagé conserve ainsi des ressources pour les autres services. Laissez-le vide pour utiliser tous les cœurs disponibles.
 - **Le traitement d'un dossier de modèles XML, planifié ou à la demande, s'exécute désormais en parallèle.** Le balayage d'un dossier pour un modèle à source XML traite l'ensemble du dossier en une seule passe parallèle — comme le traitement par lot en ligne de commande — au lieu d'un fichier à la fois. Les modèles UBL et le traitement par travail (BIP) restent inchangés.
-- **Les fichiers en échec sont mis de côté au lieu de boucler.** Un nouveau réglage *Répertoire des erreurs* (Paramètres globaux, onglet Répertoires) : lorsqu'un fichier échoue, il est déplacé vers le dossier des erreurs afin qu'un balayage répété du dossier ne réessaie plus indéfiniment le même fichier en échec. Laissez-le vide pour conserver le comportement précédent (le fichier reste en place).
-- **Message plus clair lorsque le modèle ou la configuration est incorrect.** Un nom de modèle absent de la configuration (ou une configuration sans section global) indique désormais précisément ce qui manque, au lieu d'une erreur interne générique.
+- **Les fichiers en échec sont mis de côté au lieu de boucler.** Un nouveau réglage *Répertoire des erreurs* (Paramètres globaux, onglet Répertoires) : quand un fichier échoue, il est déplacé vers le dossier des erreurs afin qu'un balayage répété du dossier ne réessaie plus indéfiniment le même fichier en échec. Laissez-le vide pour conserver le comportement précédent (le fichier reste en place).
+- **Message plus clair quand le modèle ou la configuration est incorrect.** Un nom de modèle absent de la configuration (ou une configuration sans section global) indique désormais précisément ce qui manque, au lieu d'une erreur interne générique.
 
 ### Corrections
 
@@ -37119,7 +37312,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Corrections
 
-- **Les lignes de facture affichent désormais tous les codes de classification.** Lorsqu'une ligne porte plusieurs codes de classification d'article (BT-158), le détail de la facture les liste tous, et non plus seulement le premier — comme le fait déjà le PDF lisible.
+- **Les lignes de facture affichent désormais tous les codes de classification.** Quand une ligne porte plusieurs codes de classification d'article (BT-158), le détail de la facture les liste tous, et non plus seulement le premier — comme le fait déjà le PDF lisible.
 - **Le traitement des gros spools en parallèle n'échoue plus par intermittence.** Sur les gros spools, plusieurs threads simultanés pouvaient interrompre un traitement avec une erreur d'indexation interne ; les enregistrements de factures sont désormais figés avant d'être répartis entre les threads, si bien que les traitements à pleine parallélisation aboutissent de façon fiable.
 - **Les montants dont le signe moins est en fin de valeur sont lus comme négatifs.** Les valeurs où le signe suit le nombre (surponction mainframe/COBOL, ex. `123.45-`) sont désormais converties en montants négatifs corrects (`-123.45`) dans l'UBL et le PDF lisible, au lieu d'être considérées comme positives. Les valeurs bien formées ne changent pas.
 
@@ -37134,8 +37327,15 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Améliorations
 
-- **La mise à jour d'un statut sur la plateforme ne nécessite plus d'endpoint de recherche.** Lorsque le connecteur de la plateforme ne définit pas d'endpoint *resolve-invoice*, le statut est désormais envoyé avec l'UUID plateforme capturé lors du dépôt au lieu d'échouer. Les plateformes qui exigent la recherche continuent de l'utiliser.
+- **La mise à jour d'un statut sur la plateforme ne nécessite plus d'endpoint de recherche.** Quand le connecteur de la plateforme ne définit pas d'endpoint *resolve-invoice*, le statut est désormais envoyé avec l'UUID plateforme capturé lors du dépôt au lieu d'échouer. Les plateformes qui exigent la recherche continuent de l'utiliser.
 - **La Référence UBL documente désormais le bloc payeur / prélèvement et d'autres champs récents.** La page de référence liste la partie payeur complète (EXT-FR-FE-BG-02 / EXT-FR-FE-43…65), la date du bon de commande, le nom commercial de l'acheteur, ainsi que l'identifiant et la version du schéma de classification d'article.
+
+### Corrections
+
+- **Le filtre « contient » retrouve le texte n'importe où.** L'opérateur *contient* (`~`) de la liste des factures retrouve le terme au milieu d'une valeur, et plus seulement au début (par ex. un filtre client `~ SAVOIE` retrouve « … SAVOIE … »). Les filtres exacts et programmatiques conservent la recherche indexée rapide.
+- **La récupération des statuts ne plante plus sur les réponses XML.** L'interrogation des statuts auprès d'une plateforme répondant en XML (UBL *ApplicationResponse*) échouait ; l'analyseur XML intégré est désormais utilisé quelles que soient les bibliothèques Oracle présentes.
+- **La récupération des statuts gère les plateformes renvoyant une liste simple.** L'interrogation des statuts lit maintenant aussi une réponse au format tableau JSON brut, et non uniquement une liste encapsulée sous un champ nommé — permettant de brancher des endpoints de type rapport.
+- **L'adresse électronique fournisseur (BT-34) est désormais enregistrée.** Dans Valeurs par défaut UBL → sociétés fournisseur, l'adresse électronique est conservée à l'enregistrement comme les autres champs de la société.
 
 ---
 
@@ -37155,7 +37355,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 ### Nouveautés
 
 - **La classification d'article peut être répétée sur une ligne de facture.** Le mappage **Classification d'article (BT-158)** au niveau ligne devient un groupe répétable (jusqu'à quatre entrées), chacune avec son propre chemin source et son schéma (STI, CPV, UNSPSC…) ; une ligne peut ainsi porter plusieurs codes de classification — comme le fait déjà l'identifiant d'article standard. Les modèles à classification unique existants continuent de fonctionner sans changement.
-- **Prise en charge du payeur en prélèvement (SEPA).** Les factures peuvent désormais porter le bloc complet payeur / mandat de paiement — raison sociale du débiteur, SIREN, TVA, adresse, contact, identifiants, adresse électronique, ainsi que la référence de mandat et le compte débité (IBAN). Une nouvelle section **Payeur / Mandat de prélèvement** dans l'éditeur de mappage permet de le configurer, et le PDF lisible affiche le payeur et le compte débité aux côtés des informations de paiement. Émis uniquement lorsqu'un champ payeur est renseigné, de sorte que les factures ordinaires restent inchangées.
+- **Prise en charge du payeur en prélèvement (SEPA).** Les factures peuvent désormais porter le bloc complet payeur / mandat de paiement — raison sociale du débiteur, SIREN, TVA, adresse, contact, identifiants, adresse électronique, ainsi que la référence de mandat et le compte débité (IBAN). Une nouvelle section **Payeur / Mandat de prélèvement** dans l'éditeur de mappage permet de le configurer, et le PDF lisible affiche le payeur et le compte débité aux côtés des informations de paiement. Émis uniquement quand un champ payeur est renseigné, de sorte que les factures ordinaires restent inchangées.
 
 ### Améliorations
 
@@ -37163,8 +37363,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Corrections
 
-- **Convertisseur PDF vers XML : les lignes d'une commande ne sont plus scindées lors d'un saut de page.** Lorsqu'une commande s'étendait sur un saut de page, ses lignes pouvaient être éparpillées entre plusieurs blocs de livraison et mêlées à celles de la commande précédente, laissant des sections de ligne orphelines. Les lignes restent désormais regroupées sous leur bloc de livraison quels que soient les sauts de page — seul un changement de numéro de facture démarre un nouveau bloc.
-- **PDF lisible : tous les codes de classification d'article sont affichés.** Lorsqu'une ligne portait plusieurs codes de classification (BT-158), le PDF lisible n'affichait que le premier ; il liste désormais chaque code, avec son schéma.
+- **Convertisseur PDF vers XML : les lignes d'une commande ne sont plus scindées lors d'un saut de page.** Quand une commande s'étendait sur un saut de page, ses lignes pouvaient être éparpillées entre plusieurs blocs de livraison et mêlées à celles de la commande précédente, laissant des sections de ligne orphelines. Les lignes restent désormais regroupées sous leur bloc de livraison quels que soient les sauts de page — seul un changement de numéro de facture démarre un nouveau bloc.
+- **PDF lisible : tous les codes de classification d'article sont affichés.** Quand une ligne portait plusieurs codes de classification (BT-158), le PDF lisible n'affichait que le premier ; il liste désormais chaque code, avec son schéma.
 
 ## 2026.08.28.1 — 2026-08-28 \{#v2026-08-28-1\}
 
@@ -37180,7 +37380,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Améliorations
 
-- **Les types de document « Ne pas envoyer » ne peuvent plus être transmis à la PA.** Lorsqu'un type de document est réglé sur *Ne pas envoyer*, l'action Renvoyer est masquée sur la facture et la plateforme refuse tout envoi manuel ou groupé — une facture non transmissible ne peut donc plus partir par erreur.
+- **Les types de document « Ne pas envoyer » ne peuvent plus être transmis à la PA.** Quand un type de document est réglé sur *Ne pas envoyer*, l'action Renvoyer est masquée sur la facture et la plateforme refuse tout envoi manuel ou groupé — une facture non transmissible ne peut donc plus partir par erreur.
 
 - **Envoyer plusieurs factures à la PA d'un coup.** La liste des factures dispose désormais d'une case à cocher sur chaque ligne et d'un bouton **Renvoyer la sélection**, permettant de renvoyer un lot de factures en une seule action (avec suivi de progression). Seules les factures qui peuvent être envoyées sont sélectionnables — les lignes *Ne pas envoyer* sont désactivées.
 
@@ -37206,12 +37406,12 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 ### Améliorations
 
 - **Les listes de factures et de documents sont bien plus rapides sur les grandes tables.** Filtrer une archive volumineuse (des millions de lignes) ne provoque plus de balayage complet : un filtre sur un numéro de document entièrement numérique interroge désormais la clé primaire, les colonnes de code/clé (type de document, société, clé alpha) utilisent leurs index, et la recherche texte porte par défaut sur le début de la valeur — saisir explicitement `%…%` effectue toujours une recherche sur toute la chaîne à la demande.
-- **Le débogage des connecteurs affiche davantage.** Lorsque le débogage d'un connecteur est activé, la ligne de requête indique désormais les en-têtes envoyés (valeurs sensibles masquées), et les corps de requête/réponse sont journalisés en entier (limités par un `debugBodyLimit` optionnel) — de quoi voir une enveloppe ou une erreur SOAP complète.
+- **Le débogage des connecteurs affiche davantage.** Quand le débogage d'un connecteur est activé, la ligne de requête indique désormais les en-têtes envoyés (valeurs sensibles masquées), et les corps de requête/réponse sont journalisés en entier (limités par un `debugBodyLimit` optionnel) — de quoi voir une enveloppe ou une erreur SOAP complète.
 
 ### Corrections
 
 - **Les actions de notification n'envoient plus le remplissage de la base aux API et aux emails.** Les valeurs lues dans des colonnes de largeur fixe étaient transmises aux actions API (et affichées dans les emails) avec un remplissage d'espaces en fin, que certains services rejetaient. Elles sont désormais nettoyées avant usage ; l'espacement interne est préservé.
-- **Une action de notification en échec indique désormais la raison.** Lorsqu'une action API échoue, l'email de notification, l'entrée du portail et le résultat du test de la règle incluent maintenant le code HTTP et le corps de la réponse (par ex. l'erreur SOAP), au lieu de signaler seulement l'échec.
+- **Une action de notification en échec indique désormais la raison.** Quand une action API échoue, l'email de notification, l'entrée du portail et le résultat du test de la règle incluent maintenant le code HTTP et le corps de la réponse (par ex. l'erreur SOAP), au lieu de signaler seulement l'échec.
 
 ## 2026.08.19.1 — 2026-08-19 \{#v2026-08-19-1\}
 
@@ -37221,8 +37421,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Corrections
 
-- **Le PDF lisible n'affiche plus de livraison dans l'en-tête lorsqu'il n'y en a pas.** Lorsqu'une facture ne porte des informations de livraison que sur ses lignes (et aucune au niveau de l'en-tête), le PDF lisible affichait la livraison de la première ligne dans le bloc livraison de l'en-tête. Ce bloc n'apparaît désormais que si une livraison est réellement définie au niveau de l'en-tête ; la livraison au niveau ligne n'est pas affectée.
-- **Le retraitement d'une facture archivée n'échoue plus sur une esperluette isolée.** Une source stockée dans l'archive contenant un `&` non échappé (par ex. une raison sociale comme *Research & Industry*) échouait au parsing lors du retraitement. L'entrée est désormais réparée en amont — avant tout pré-transform d'entrée et avant le parsing : la facture se traite même lorsqu'un pré-transform est configuré, et son archive est réécrite proprement. Les sources bien formées ne sont pas modifiées.
+- **Le PDF lisible n'affiche plus de livraison dans l'en-tête quand il n'y en a pas.** Quand une facture ne porte des informations de livraison que sur ses lignes (et aucune au niveau de l'en-tête), le PDF lisible affichait la livraison de la première ligne dans le bloc livraison de l'en-tête. Ce bloc n'apparaît désormais que si une livraison est réellement définie au niveau de l'en-tête ; la livraison au niveau ligne n'est pas affectée.
+- **Le retraitement d'une facture archivée n'échoue plus sur un caractère `&` isolé.** Une source stockée dans l'archive contenant un `&` non échappé (par ex. une raison sociale comme *Research & Industry*) échouait au parsing lors du retraitement. L'entrée est désormais réparée en amont — avant tout pré-transform d'entrée et avant le parsing : la facture se traite même quand un pré-transform est configuré, et son archive est réécrite proprement. Les sources bien formées ne sont pas modifiées.
 - **Les avoirs de facture d'acompte (503) et les avoirs auto-facturés affacturés (502) sont désormais émis en tant qu'avoirs.** Les codes de type de facture `502` et `503` produisaient une facture UBL au lieu d'un avoir, car la liste des codes d'avoir ne les reconnaissait pas. Les deux génèrent désormais correctement un avoir. La liste des codes a par ailleurs été déplacée dans le socle, de sorte que les ajouts futurs atteignent chaque modèle lors de la mise à niveau, sans édition manuelle des valeurs par défaut de chaque modèle. *(Nécessite le redéploiement du socle XSL.)*
 
 ## 2026.08.18.1 — 2026-08-18 \{#v2026-08-18-1\}
@@ -37239,7 +37439,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Le filtrage multi-valeur fonctionne pour toute colonne adossée à une liste.** Sélectionner plusieurs valeurs dans un filtre basé sur une liste (code activité, et toute colonne dotée d'une liste de référence ou personnalisée) les prend désormais toutes en compte, au lieu de ne rien renvoyer. Auparavant, seul le filtre de statut gérait les sélections multiples.
 
 - **Les factures à montant nul sont désormais valides.** Une facture dont toutes les lignes sont à zéro émet maintenant la ventilation de TVA obligatoire et conserve ses lignes en lignes de détail : elle passe les règles de ventilation de TVA (BR-CO-18, BR-FREXT-S-01) au lieu d'être rejetée. Les lignes imbriquées sous un groupe de livraison sont désormais correctement prises en compte par les totaux et la logique TVA. *(Nécessite le redéploiement du socle XSL.)*
-- **Les pièces jointes PDF intégrées sont placées correctement en présence d'une référence de projet ou de contrat.** Une pièce jointe injectée (copie lisible, RIB…) se place désormais à la bonne position dans la séquence UBL — avant la référence de projet et le vendeur — au lieu d'après, corrigeant un rejet d'ordre de schéma (`cvc-complex-type.2.4.a`) observé lorsque les références acheteur, commande et projet étaient toutes renseignées.
+- **Les pièces jointes PDF intégrées sont placées correctement en présence d'une référence de projet ou de contrat.** Une pièce jointe injectée (copie lisible, RIB…) se place désormais à la bonne position dans la séquence UBL — avant la référence de projet et le vendeur — au lieu d'après, corrigeant un rejet d'ordre de schéma (`cvc-complex-type.2.4.a`) observé quand les références acheteur, commande et projet étaient toutes renseignées.
 - **Les notes de ligne conservent leurs sauts de ligne.** Une note multiligne rattachée à une ligne de facture conserve désormais ses sauts de ligne jusqu'à l'UBL au lieu d'être réduite à une seule ligne. *(Nécessite le redéploiement du socle XSL.)*
 - **Le PDF lisible n'affiche plus le marqueur interne sur une note de ligne.** Une note de ligne portant un marqueur interne `#CODE#` (par ex. `#ZZZ#`) n'affiche plus que son texte sur le PDF, comme le faisaient déjà les notes au niveau du document.
 
@@ -37252,7 +37452,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 ### Corrections
 
 - **PDF-vers-XML JDE : le texte multiligne d'une pièce jointe de ligne est conservé dans un seul champ.** Lors de la conversion d'un PDF d'état JDE, un texte d'objet média joint imprimé sur plusieurs lignes est désormais émis comme un champ unique dont les lignes sont réunies par des sauts de ligne — conformément à la sortie XML native de JDE — au lieu d'un élément par ligne, dont la transformation en aval ne lisait que la première.
-- **Les factures B2C ne portent plus le numéro de TVA ni l'identifiant d'immatriculation de l'acheteur.** Sur une facture B2C (particulier), le schéma de TVA de l'acheteur (BT-48) et son identifiant d'immatriculation légale (BT-47) sont désormais omis, même lorsque les données source les fournissent encore — un particulier n'en possède aucun, et les émettre rendait la facture invalide. Le nom de l'acheteur est conservé. Les factures B2B, B2G et B2B international sont inchangées, et les identifiants du vendeur ne sont jamais concernés. *(Nécessite le redéploiement du socle XSL.)*
+- **Les factures B2C ne portent plus le numéro de TVA ni l'identifiant d'immatriculation de l'acheteur.** Sur une facture B2C (particulier), le schéma de TVA de l'acheteur (BT-48) et son identifiant d'immatriculation légale (BT-47) sont désormais omis, même quand les données source les fournissent encore — un particulier n'en possède aucun, et les émettre rendait la facture invalide. Le nom de l'acheteur est conservé. Les factures B2B, B2G et B2B international sont inchangées, et les identifiants du vendeur ne sont jamais concernés. *(Nécessite le redéploiement du socle XSL.)*
 
 ## 2026.07.20.1 — 2026-07-20 \{#v2026-07-20-1\}
 
@@ -37270,7 +37470,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Améliorations
 
-- **Transmettre le type de transaction de la facture aux plateformes qui l'exigent.** Lorsqu'une plateforme attend le type de transaction à la soumission (par ex. le `processingRule` de Yooz Rising), il est désormais déduit automatiquement de la facture — B2B, B2G, B2C ou B2B international — et transmis, aussi bien à l'envoi initial qu'au renvoi.
+- **Transmettre le type de transaction de la facture aux plateformes qui l'exigent.** Quand une plateforme attend le type de transaction à la soumission (par ex. le `processingRule` de Yooz Rising), il est désormais déduit automatiquement de la facture — B2B, B2G, B2C ou B2B international — et transmis, aussi bien à l'envoi initial qu'au renvoi.
 - **Les en-têtes de connecteur peuvent porter le code société.** Un en-tête de requête peut désormais référencer la société de la facture (`{{kco}}`) — pour les plateformes qui cadrent leurs requêtes par organisation, comme l'`Organization-Id` de Yooz Rising.
 - **Les factures UBL sont lues dans le dossier d'entrée propre à leur modèle.** Un modèle de document de source UBL balaie désormais `<entrée>/<modèle>` — la même convention par modèle que pour le XML — au lieu d'un unique dossier partagé `<entrée>/ubl`. Plusieurs modèles UBL peuvent ainsi être planifiés sur des dossiers différents. *(Installations existantes : déplacez les fichiers UBL du dossier partagé vers le dossier du modèle.)*
 
@@ -37292,13 +37492,13 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Nouveautés
 
-- **Adresse électronique de l'acheteur (BT-49) configurable par type de transaction.** Le schéma et la valeur de l'adresse électronique de l'acheteur peuvent désormais être définis indépendamment de ceux du vendeur (BT-34) et varier selon le type de transaction — B2B, B2G, B2C et B2B international. Pour chaque type, vous choisissez le schéma et l'origine de la valeur : une balise source (réutilisant un champ déjà mappé par le modèle, par exemple l'e-mail de contact de l'acheteur) avec une constante de repli utilisée lorsque cette balise est vide. Les factures B2C et internationales — dépourvues d'adresse électronique basée sur le SIRET — peuvent ainsi porter une adresse e-mail (schéma EM), tandis que les factures B2B/B2G nationales conservent leur routage habituel. La configuration se fait dans *Valeurs par défaut UBL → Identifiants de schéma* ; les types non listés conservent le schéma par défaut et la valeur d'adresse actuelle. La liste de référence *Identifiants de schéma* gagne également une entrée E-mail (EM). *(Nécessite le redéploiement du socle XSL.)*
+- **Adresse électronique de l'acheteur (BT-49) configurable par type de transaction.** Le schéma et la valeur de l'adresse électronique de l'acheteur peuvent désormais être définis indépendamment de ceux du vendeur (BT-34) et varier selon le type de transaction — B2B, B2G, B2C et B2B international. Pour chaque type, vous choisissez le schéma et l'origine de la valeur : une balise source (réutilisant un champ déjà mappé par le modèle, par exemple l'e-mail de contact de l'acheteur) avec une constante de repli utilisée quand cette balise est vide. Les factures B2C et internationales — dépourvues d'adresse électronique basée sur le SIRET — peuvent ainsi porter une adresse e-mail (schéma EM), tandis que les factures B2B/B2G nationales conservent leur routage habituel. La configuration se fait dans *Valeurs par défaut UBL → Identifiants de schéma* ; les types non listés conservent le schéma par défaut et la valeur d'adresse actuelle. La liste de référence *Identifiants de schéma* gagne également une entrée E-mail (EM). *(Nécessite le redéploiement du socle XSL.)*
 
 ## 2026.07.13.1 — 2026-07-13 \{#v2026-07-13-1\}
 
 ### Nouveautés
 
-- **Les factures d'auto-facturation empruntent leurs propres points d'accès.** Une facture d'auto-facturation (type 261, 389, 471, 473, 500, 501 ou 502) est désormais transmise via le canal « achats » de la plateforme plutôt que le canal « ventes ». Sur le connecteur, une variante `-selfbilled` d'un point d'accès (envoi, statut d'import) est employée automatiquement pour ces documents, avec repli sur le point d'accès standard lorsqu'elle n'est pas définie. La relève du cycle de vie peut interroger plusieurs points d'accès de statut, indiqués sous forme de liste séparée par des virgules dans le champ *Lifecycle endpoints* de l'e-invoicing, afin de collecter à la fois les factures d'auto-facturation et les factures standard. La connexion à la plateforme — URL et identifiants — reste identique : seuls les points d'accès diffèrent.
+- **Les factures d'auto-facturation empruntent leurs propres points d'accès.** Une facture d'auto-facturation (type 261, 389, 471, 473, 500, 501 ou 502) est désormais transmise via le canal « achats » de la plateforme plutôt que le canal « ventes ». Sur le connecteur, une variante `-selfbilled` d'un point d'accès (envoi, statut d'import) est employée automatiquement pour ces documents, avec repli sur le point d'accès standard quand elle n'est pas définie. La relève du cycle de vie peut interroger plusieurs points d'accès de statut, indiqués sous forme de liste séparée par des virgules dans le champ *Lifecycle endpoints* de l'e-invoicing, afin de collecter à la fois les factures d'auto-facturation et les factures standard. La connexion à la plateforme — URL et identifiants — reste identique : seuls les points d'accès diffèrent.
 - **Un même statut peut être reconnu à partir de plusieurs codes source.** Dans une liste de statuts, un statut peut désormais porter plusieurs codes de statut plateforme dans son champ *PA Code(s)*, séparés par des virgules. Une seule liste sert ainsi des factures dont les statuts proviennent de sources différentes — par exemple votre plateforme principale et Chorus Pro — sans dupliquer la liste. Plusieurs codes source peuvent pointer vers le même statut interne.
 
 ### Améliorations
@@ -37325,23 +37525,23 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 - **La relève des statuts ne revérifie plus les mêmes événements à chaque passage.** L'horodatage « dernière relève » est désormais écrit à l'heure locale de la plateforme. Une plateforme qui compare le filtre de relève à ses horodatages locaux recevait sinon une valeur en retard de plusieurs heures à chaque appel, et renvoyait donc encore et encore la même fenêtre.
 - **Une ligne portant un taux de TVA mais sans montant ne fausse plus les totaux de TVA.** Une ligne de facture qui porte un taux de TVA sans montant net (rien de facturé, ni remise) est désormais marquée comme ligne d'*information* et exclue du contrôle de cohérence du récapitulatif de TVA. Auparavant, une ligne au taux normal avec un montant à zéro et sans récapitulatif de TVA correspondant était rejetée (*BR-FREXT-S-01*). *(Nécessite le redéploiement du socle XSL et la mise à niveau des modèles de document.)*
-- **Une exonération de TVA à la ligne ne déborde plus sur les autres lignes.** Lorsque les motifs d'exonération sont mappés à la ligne et qu'une ligne était exonérée (par ex. *Non soumis à la TVA*, catégorie O) tandis qu'une autre était au taux normal, la ligne au taux normal héritait à tort du code motif d'exonération de la première ligne. Cette incohérence faisait échouer le contrôle de cohérence du récapitulatif de TVA et déclenchait l'avertissement *BR-FREXT-S-08rev*. Chaque ligne n'utilise désormais que son propre motif d'exonération ; à défaut, elle reprend celui correspondant à sa catégorie de TVA (aucun au taux normal), de sorte qu'une facture mixte se valide. Une ligne qui mappe réellement son propre motif le conserve. *(Nécessite le redéploiement du socle XSL et la mise à niveau des modèles de document.)*
+- **Une exonération de TVA à la ligne ne déborde plus sur les autres lignes.** Quand les motifs d'exonération sont mappés à la ligne et qu'une ligne était exonérée (par ex. *Non soumis à la TVA*, catégorie O) tandis qu'une autre était au taux normal, la ligne au taux normal héritait à tort du code motif d'exonération de la première ligne. Cette incohérence faisait échouer le contrôle de cohérence du récapitulatif de TVA et déclenchait l'avertissement *BR-FREXT-S-08rev*. Chaque ligne n'utilise désormais que son propre motif d'exonération ; à défaut, elle reprend celui correspondant à sa catégorie de TVA (aucun au taux normal), de sorte qu'une facture mixte se valide. Une ligne qui mappe réellement son propre motif le conserve. *(Nécessite le redéploiement du socle XSL et la mise à niveau des modèles de document.)*
 
 ## 2026.07.11.1 — 2026-07-11 \{#v2026-07-11-1\}
 
 ### Nouveautés
 
-- **E-Documents — consulter tous les documents archivés.** Une nouvelle page *E-Documents* liste l'ensemble des documents de l'archive, et pas seulement ceux devenus des factures : un flux qui a échoué tôt, ou un type de document qui ne produit jamais de facture, reste ainsi consultable. Les colonnes par défaut reprennent les champs de l'archive (numéro de document, type, société, activité, sous-type, indicateur d'envoi à la PA, client, montant, date document, date d'archivage, fichier source, UUID PA), avec des filtres sur l'activité, le client, le fichier source et la période habituelle. Un clic sur un document ouvre une visionneuse affichant le **flux source archivé** et, lorsque le document est devenu une facture, l'**UBL généré** — chacun présenté mis en forme et téléchargeable (nommé d'après le document). Les colonnes et les filtres se configurent depuis *Paramètres → Vues de liste → E-Documents*, et un point d'accès REST dédié (`/api/list-documents`, documenté dans la référence d'API intégrée) expose la même archive aux applications externes. La page suit les mêmes règles d'accès par société / rôle que la liste des factures ; accordez-la à un rôle depuis *Paramètres → Rôles*.
+- **E-Documents — consulter tous les documents archivés.** Une nouvelle page *E-Documents* liste l'ensemble des documents de l'archive, et pas seulement ceux devenus des factures : un flux qui a échoué tôt, ou un type de document qui ne produit jamais de facture, reste ainsi consultable. Les colonnes par défaut reprennent les champs de l'archive (numéro de document, type, société, activité, sous-type, indicateur d'envoi à la PA, client, montant, date document, date d'archivage, fichier source, UUID PA), avec des filtres sur l'activité, le client, le fichier source et la période habituelle. Un clic sur un document ouvre une visionneuse affichant le **flux source archivé** et, quand le document est devenu une facture, l'**UBL généré** — chacun présenté mis en forme et téléchargeable (nommé d'après le document). Les colonnes et les filtres se configurent depuis *Paramètres → Vues de liste → E-Documents*, et un point d'accès REST dédié (`/api/list-documents`, documenté dans la référence d'API intégrée) expose la même archive aux applications externes. La page suit les mêmes règles d'accès par société / rôle que la liste des factures ; accordez-la à un rôle depuis *Paramètres → Rôles*.
 - **Joindre un fichier du disque dont le nom vient du flux.** Le chemin d'une pièce jointe additionnelle sur un modèle de document accepte désormais un espace réservé `{BaliseFlux}` (accolade simple) résolu depuis un élément du flux source — par ex. `%APP_HOME%/pj/{NumeroPJ_ID12}.pdf`. Le fichier est lu sur le disque et intégré avec le qualifiant choisi (PJA, RIB…), ce qui permet enfin de récupérer une pièce jointe dont le nom de fichier n'est connu qu'à l'exécution. Les espaces réservés existants (`%APP_HOME%`, `%KCO%`, `{{doc}}`…) restent inchangés.
 
 ### Corrections
 
-- **La visualisation d'un document affiche désormais toutes les pièces jointes, pas seulement la première.** Lorsqu'une facture portait plusieurs PDF intégrés (par ex. une PJA plus un bordereau ou un RIB), le PDF fusionné n'ajoutait que le premier. Il ajoute maintenant **toutes** les pièces jointes PDF intégrées à la suite de la facture, dans l'ordre. La copie lisible (LISIBLE) est ignorée pour ne pas afficher la facture en double, et toute pièce jointe non PDF est écartée (elle ne peut pas être fusionnée en pages).
+- **La visualisation d'un document affiche désormais toutes les pièces jointes, pas seulement la première.** Quand une facture portait plusieurs PDF intégrés (par ex. une PJA plus un bordereau ou un RIB), le PDF fusionné n'ajoutait que le premier. Il ajoute maintenant **toutes** les pièces jointes PDF intégrées à la suite de la facture, dans l'ordre. La copie lisible (LISIBLE) est ignorée pour ne pas afficher la facture en double, et toute pièce jointe non PDF est écartée (elle ne peut pas être fusionnée en pages).
 - **Les notes de ligne ne se répètent plus dans le bloc de notes du document.** Une note attachée à une ligne de facture s'affichait correctement avec sa ligne, mais réapparaissait aussi en fin de PDF lisible (et dans l'onglet Notes de la facture) parmi les notes de niveau document. Le bloc de notes de fin de document ne liste désormais que les véritables notes de niveau document ; les notes de ligne restent avec leur ligne et la note de conditions de paiement reste dans l'encadré paiement.
 - **Les avoirs comportent enfin leurs lignes.** Sur un avoir, les montants de la source sont négatifs, et la transformation traitait toute ligne à prix négatif comme une remise au niveau du document — l'avoir sortait donc *sans aucune ligne*. Les lignes d'avoir sont désormais émises en `cac:CreditNoteLine`, avec le prix unitaire en valeur absolue (positive) et le montant négatif conservé sur la ligne, en cohérence avec les totaux du document. Les factures classiques où une ligne négative représente une remise ne changent pas. *(Nécessite le redéploiement du socle XSL et la mise à niveau des modèles de document.)*
 - **La livraison à la ligne gagne une 4ᵉ ligne d'adresse.** L'adresse de livraison au niveau ligne (EXT-FR-FE-BG-10) n'exposait que trois lignes d'adresse alors que les adresses acheteur et livraison au niveau document en ont quatre ; elle en compte désormais quatre, par cohérence. *(Nécessite la mise à niveau du socle XSL pour être émise.)*
 - **Le code de type d'un avoir est de nouveau enregistré.** Le type de facture (BT-3) était écrit dans le journal pour les factures mais laissé vide pour les documents émis en tant que véritable avoir, car seul `cbc:InvoiceTypeCode` était lu. Le type d'avoir (`cbc:CreditNoteTypeCode`, par ex. 381) est maintenant lu également, de sorte que le type est aussi stocké pour les avoirs.
-- **Une remise de ligne à 0 % ne crée plus de réduction vide.** Lorsque le facteur de remise d'une ligne (par ex. un pourcentage de *Remise*) est mappé mais que la ligne n'a pas de remise (facteur = 0), plus aucune `cac:AllowanceCharge` n'est émise. Auparavant, une réduction était produite dès que le champ montant était renseigné — affichant le prix net comme montant de la remise avec une base négative — alors qu'il n'y avait aucune remise réelle. Les remises en pourcentage réelles et les remises en montant seul ne changent pas. *(Nécessite la mise à niveau du socle XSL.)*
+- **Une remise de ligne à 0 % ne crée plus de réduction vide.** Quand le facteur de remise d'une ligne (par ex. un pourcentage de *Remise*) est mappé mais que la ligne n'a pas de remise (facteur = 0), plus aucune `cac:AllowanceCharge` n'est émise. Auparavant, une réduction était produite dès que le champ montant était renseigné — affichant le prix net comme montant de la remise avec une base négative — alors qu'il n'y avait aucune remise réelle. Les remises en pourcentage réelles et les remises en montant seul ne changent pas. *(Nécessite la mise à niveau du socle XSL.)*
 - **Le nom du contact vendeur (BT-41) apparaît désormais sur le PDF lisible.** Le PDF généré lisait le téléphone (BT-42) et le courriel (BT-43) du contact vendeur mais ignorait le nom du contact, si bien que le BT-41 n'apparaissait jamais sur le LISIBLE. Il est maintenant lu depuis l'UBL et imprimé dans le bloc fournisseur, avec une option *Nom du contact* dans la section Fournisseur du modèle PDF.
 - **Une constante peut désormais être concaténée avec un champ dans un mappage.** Un mappage pouvait déjà utiliser une constante entre accents graves (`` `CONST` ``) ou joindre deux champs avec ` + `, mais une constante ne pouvait pas être combinée à un champ. La concaténation reconnaît maintenant aussi les constantes entre accents graves, si bien que des mappages comme `` `Ref-` + DocNumber `` ou `` Amount + ` EUR` `` fonctionnent. *(Nécessite le redéploiement du socle XSL.)*
 - **La catégorie de TVA « O » ne porte plus de taux, et un taux à zéro est correctement formaté.** Pour la catégorie *Non soumis à la TVA* (O), la facture n'émet plus de taux de TVA sur la ligne (BT-152) ni dans le récapitulatif de TVA (BT-119), conformément à BR-O-05 / BR-O-09 — un taux `0.00` était auparavant émis puis rejeté. Par ailleurs, un taux à zéro arrivant du flux sous la forme `.00` (point en tête) est désormais normalisé en `0.00`, corrigeant les rejets BR-FR-16 / BR-FR-DEC-04 « taux `.00` invalide » pour les catégories qui portent légitimement un taux à 0 (E / Z / AE …). *(Nécessite le redéploiement du socle XSL.)*
@@ -37354,16 +37554,16 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Corrections
 
-- **Le récapitulatif de TVA du document est agrégé par catégorie, taux et exonération.** Lorsque plusieurs lignes de récapitulatif TVA de la source aboutissaient à la même catégorie de TVA cible — par exemple deux codes de taxe source associés tous les deux à *Taux standard* — la facture émettait deux `cac:TaxSubtotal` pour la même catégorie et le même taux, ce qui est invalide (EN 16931 BR-S-08) et rejeté par la plateforme. Le récapitulatif de TVA est désormais regroupé par la combinaison résolue catégorie (BT-118), taux (BT-119) et code / motif d'exonération (BT-121 / BT-120) : un récapitulatif par combinaison. Les montants imposable et de taxe sont **additionnés depuis la source** (et non recalculés) : une véritable incohérence comptable apparaît donc toujours comme une erreur de validation au lieu d'être corrigée silencieusement.
+- **Le récapitulatif de TVA du document est agrégé par catégorie, taux et exonération.** Quand plusieurs lignes de récapitulatif TVA de la source aboutissaient à la même catégorie de TVA cible — par exemple deux codes de taxe source associés tous les deux à *Taux standard* — la facture émettait deux `cac:TaxSubtotal` pour la même catégorie et le même taux, ce qui est invalide (EN 16931 BR-S-08) et rejeté par la plateforme. Le récapitulatif de TVA est désormais regroupé par la combinaison résolue catégorie (BT-118), taux (BT-119) et code / motif d'exonération (BT-121 / BT-120) : un récapitulatif par combinaison. Les montants imposable et de taxe sont **additionnés depuis la source** (et non recalculés) : une véritable incohérence comptable apparaît donc toujours comme une erreur de validation au lieu d'être corrigée silencieusement.
 
 ## 2026.07.08.1 — 2026-07-08 \{#v2026-07-08-1\}
 
 ### Nouveautés
 
-- **Appellation commerciale de l'acheteur (BT-45).** L'appellation commerciale de l'acheteur peut désormais être mappée depuis un champ source (nouveau mappage *Appellation commerciale de l'acheteur* dans l'éditeur XSL) et est émise en `cac:PartyName/cbc:Name` sur la partie acheteur, à la bonne position dans le schéma — comme l'appellation commerciale du vendeur (BT-28). Émise uniquement lorsqu'une valeur est mappée.
-- **Les totaux du document gagnent les charges, le montant payé et l'arrondi (BT-108 / BT-113 / BT-114).** Le bloc des totaux peut désormais porter la somme des charges au niveau document (`cbc:ChargeTotalAmount`), le montant déjà payé (`cbc:PrepaidAmount`) et un montant d'arrondi (`cbc:PayableRoundingAmount`), chacun mappable depuis un champ source dans l'éditeur XSL (trois nouveaux mappages *Somme des charges*, *Montant déjà payé* et *Montant d'arrondi*) et émis à la bonne position dans le schéma. Lorsqu'un montant payé ou un arrondi est présent, le montant à payer (BT-115) est désormais calculé comme **total avec TVA − payé + arrondi** au lieu du seul total avec TVA ; sans aucun des deux, le montant à payer est inchangé.
+- **Appellation commerciale de l'acheteur (BT-45).** L'appellation commerciale de l'acheteur peut désormais être mappée depuis un champ source (nouveau mappage *Appellation commerciale de l'acheteur* dans l'éditeur XSL) et est émise en `cac:PartyName/cbc:Name` sur la partie acheteur, à la bonne position dans le schéma — comme l'appellation commerciale du vendeur (BT-28). Émise uniquement quand une valeur est mappée.
+- **Les totaux du document gagnent les charges, le montant payé et l'arrondi (BT-108 / BT-113 / BT-114).** Le bloc des totaux peut désormais porter la somme des charges au niveau document (`cbc:ChargeTotalAmount`), le montant déjà payé (`cbc:PrepaidAmount`) et un montant d'arrondi (`cbc:PayableRoundingAmount`), chacun mappable depuis un champ source dans l'éditeur XSL (trois nouveaux mappages *Somme des charges*, *Montant déjà payé* et *Montant d'arrondi*) et émis à la bonne position dans le schéma. Quand un montant payé ou un arrondi est présent, le montant à payer (BT-115) est désormais calculé comme **total avec TVA − payé + arrondi** au lieu du seul total avec TVA ; sans aucun des deux, le montant à payer est inchangé.
 
-- **Le suivi de statut fonctionne désormais avec les plateformes qui répondent en XML.** Un point d'accès de connecteur API dispose d'un paramètre *Type de réponse* : *JSON* (par défaut, inchangé) ou *XML*. En mode XML, le *Champ de réponse* et les *Correspondances de réponse* sont interprétés comme des expressions XPath : une plateforme qui renvoie un `ApplicationResponse` UBL — dont le statut se trouve dans `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — peut être interrogée comme n'importe quelle plateforme JSON. Les préfixes courants `cac` / `cbc` / `ext` sont reconnus ; utilisez `//*[local-name()='X']` pour les autres. Un champ *Table de statuts* associé au point d'accès traduit le vocabulaire propre à la plateforme (par exemple `send_error`, `sent`, `processing`) vers les états internes *acceptée / en attente / rejetée*, de sorte que la facture reçoit le bon statut au lieu d'être considérée acceptée par défaut lorsque le code renvoyé n'est pas reconnu. Les plateformes JSON ne sont pas affectées — laissez les deux champs à leur valeur par défaut.
+- **Le suivi de statut fonctionne désormais avec les plateformes qui répondent en XML.** Un point d'accès de connecteur API dispose d'un paramètre *Type de réponse* : *JSON* (par défaut, inchangé) ou *XML*. En mode XML, le *Champ de réponse* et les *Correspondances de réponse* sont interprétés comme des expressions XPath : une plateforme qui renvoie un `ApplicationResponse` UBL — dont le statut se trouve dans `//cac:DocumentResponse/cac:Response/cbc:ResponseCode` — peut être interrogée comme n'importe quelle plateforme JSON. Les préfixes courants `cac` / `cbc` / `ext` sont reconnus ; utilisez `//*[local-name()='X']` pour les autres. Un champ *Table de statuts* associé au point d'accès traduit le vocabulaire propre à la plateforme (par exemple `send_error`, `sent`, `processing`) vers les états internes *acceptée / en attente / rejetée*, de sorte que la facture reçoit le bon statut au lieu d'être considérée acceptée par défaut quand le code renvoyé n'est pas reconnu. Les plateformes JSON ne sont pas affectées — laissez les deux champs à leur valeur par défaut.
 
 ### Corrections
 
@@ -37378,8 +37578,8 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Nouveautés
 
-- **Les factures d'auto-facturation affectent correctement les parties.** Pour les types d'auto-facturation (389, 261, 471, 473, 500, 501, 502), l'entreprise qui exploite NomaUBL est l'*acheteur* et non le vendeur. Vous mappez désormais les parties comme pour une facture normale (votre société en fournisseur) ; lorsque le type est auto-facturé, les deux parties sont inversées à l'émission : votre société se retrouve côté acheteur — avec SIREN/TVA/SIRET/adresse électronique complets issus du référentiel société — et l'autre partie côté vendeur, le bénéficiaire du paiement étant le vendeur. Auparavant, le vendeur héritait de l'adresse et de l'identité de votre société pour chaque champ non mappé, et l'acheteur restait sans TVA/SIREN. Les modèles déjà déployés récupèrent le changement en relançant la mise à niveau.
-- **Joindre le PDF généré comme pièce jointe classique (PJA), et non plus seulement comme LISIBLE.** Le paramètre Pièce jointe gagne un mode *generate* qui produit le PDF de la facture avec le concepteur de modèle PDF et le joint comme PJA (`cac:AdditionalDocumentReference`) au lieu de la copie lisible LISIBLE. À utiliser lorsque le PDF conçu n'est pas un lisible conforme aux règles françaises : désactivez le LISIBLE et joignez plutôt le PDF en PJA. Le LISIBLE, `create` (RTF/BIPublisher) et `attach` (PDF existant du répertoire d'entrée) restent inchangés.
+- **Les factures d'auto-facturation affectent correctement les parties.** Pour les types d'auto-facturation (389, 261, 471, 473, 500, 501, 502), l'entreprise qui exploite NomaUBL est l'*acheteur* et non le vendeur. Vous mappez désormais les parties comme pour une facture normale (votre société en fournisseur) ; quand le type est auto-facturé, les deux parties sont inversées à l'émission : votre société se retrouve côté acheteur — avec SIREN/TVA/SIRET/adresse électronique complets issus du référentiel société — et l'autre partie côté vendeur, le bénéficiaire du paiement étant le vendeur. Auparavant, le vendeur héritait de l'adresse et de l'identité de votre société pour chaque champ non mappé, et l'acheteur restait sans TVA/SIREN. Les modèles déjà déployés récupèrent le changement en relançant la mise à niveau.
+- **Joindre le PDF généré comme pièce jointe classique (PJA), et non plus seulement comme LISIBLE.** Le paramètre Pièce jointe gagne un mode *generate* qui produit le PDF de la facture avec le concepteur de modèle PDF et le joint comme PJA (`cac:AdditionalDocumentReference`) au lieu de la copie lisible LISIBLE. À utiliser quand le PDF conçu n'est pas un lisible conforme aux règles françaises : désactivez le LISIBLE et joignez plutôt le PDF en PJA. Le LISIBLE, `create` (RTF/BIPublisher) et `attach` (PDF existant du répertoire d'entrée) restent inchangés.
 - **Références aux factures antérieures, étendues.** Une facture peut référencer plusieurs factures antérieures (BG-3, 0..n) via un nouveau mappage *Factures antérieures — répété* dans l'éditeur XSL (un `cac:BillingReference` par occurrence, avec une date d'émission facultative), et une ligne de facture peut porter sa propre référence à une facture antérieure (EXT-FR-FE-136) — le tout au bon endroit dans le schéma.
 - **Motif d'exonération de TVA mappable depuis le spool (BT-121 / BT-120), aux niveaux document et ligne.** Le code et le libellé du motif d'exonération peuvent maintenant être mappés depuis un champ source — pour chaque ventilation de TVA et chaque ligne — au lieu d'une seule valeur par défaut par catégorie, ce qu'exigent les factures exonérées / en autoliquidation / à l'export / intracommunautaires. Une nouvelle correspondance *Code source → code VATEX* dans les valeurs par défaut UBL normalise aussi un code source brut vers un code VATEX autorisé (les codes non reconnus sont conservés, un code vide retombe sur la valeur par défaut de la catégorie).
 - **Code de catégorie de TVA en ligne (BT-151) mappable depuis le spool**, résolu via le même mappage de catégorie que le BT-118 au niveau document (auparavant seul le taux BT-152 était réglable par ligne). Une ligne sans TVA propre hérite de la TVA du document (ligne → document → valeur par défaut).
@@ -37396,10 +37596,10 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 ### Corrections
 
 - **La résolution automatique du type de document lit désormais le mappage des valeurs par défaut UBL.** En mode AUTO, le mappage *source → type de document* (par ex. `C` → `B2C`) défini une seule fois dans les valeurs par défaut UBL était ignoré : le résolveur n'analysait que le XSL propre à chaque modèle de document, et non le `ubl-defaults.xsl` partagé qu'il importe ; le code source brut était donc transmis sans traduction et le comportement par type de document (Schematron activé/désactivé, envoi à la PA, mode de traitement) retombait sur la ligne par défaut. Il suit désormais la chaîne `xsl:import` et lit le mappage là où `resolve-document-type` est défini, de sorte que le type de document est résolu correctement, sans duplication par modèle.
-- **La référence à la facture précédente ne casse plus le schéma.** `cac:OrderReference` précède désormais `cac:BillingReference` (`InvoicePeriod → OrderReference → BillingReference`) ; auparavant, lorsqu'une référence de commande (BT-13) et une référence à la facture précédente (BT-25/BT-26) étaient toutes deux présentes, leur ordre était inversé et le schéma UBL le rejetait (`cvc-complex-type.2.4.a`). Les modèles déployés reçoivent le correctif en relançant la montée de version.
+- **La référence à la facture précédente ne casse plus le schéma.** `cac:OrderReference` précède désormais `cac:BillingReference` (`InvoicePeriod → OrderReference → BillingReference`) ; auparavant, quand une référence de commande (BT-13) et une référence à la facture précédente (BT-25/BT-26) étaient toutes deux présentes, leur ordre était inversé et le schéma UBL le rejetait (`cvc-complex-type.2.4.a`). Les modèles déployés reçoivent le correctif en relançant la montée de version.
 - **La modification d'une facture dans l'éditeur manuel ne supprime plus les données qu'il n'affiche pas.** Tout élément UBL sans champ dédié dans l'éditeur — réf. à la facture antérieure (BT-25/BT-26), réf. en ligne (EXT-FR-FE-136), devise de comptabilisation de la TVA (BT-6), date d'exigibilité (BT-7), arrondi (BT-114) ou mandat/RUM (BT-89) — est désormais conservé à l'enregistrement au lieu d'être perdu, réinséré à la bonne position dans le schéma.
 - **Éditeur manuel : le motif d'exonération de TVA est conservé et réglable par ligne.** Une ventilation de TVA ne portant que le libellé du motif d'exonération (BT-120) sans code (par ex. un jeton de routage multi-vendeur) était perdue à l'ouverture de la facture dans l'éditeur manuel — le champ apparaissait vide. Il est désormais relu et conservé à l'enregistrement. L'éditeur de ligne dispose aussi d'un champ d'exonération de TVA (code + motif, EXT-FR-FE-179/178) : l'exonération se règle par ligne, et non plus seulement par ventilation.
-- **Les factures créées manuellement / sans modèle sont désormais gérées complètement.** L'éditeur de paramètres e-invoicing dispose d'une section *Valeurs par défaut (factures manuelles / sans modèle)* — activité (FEAA10, obligatoire pour la ligne F564230), type, LISIBLE oui/non, modèle PDF (intégré ou personnalisé) et langue — appliquée lorsqu'une facture n'a pas de modèle de document. Auparavant, l'activité obligatoire n'avait pas de source sur le chemin manuel (l'enregistrement échouait) et aucun PDF lisible n'était produit.
+- **Les factures créées manuellement / sans modèle sont désormais gérées complètement.** L'éditeur de paramètres e-invoicing dispose d'une section *Valeurs par défaut (factures manuelles / sans modèle)* — activité (FEAA10, obligatoire pour la ligne F564230), type, LISIBLE oui/non, modèle PDF (intégré ou personnalisé) et langue — appliquée quand une facture n'a pas de modèle de document. Auparavant, l'activité obligatoire n'avait pas de source sur le chemin manuel (l'enregistrement échouait) et aucun PDF lisible n'était produit.
 - **Motif d'exonération de TVA : le code et le libellé complet sont désormais enregistrés tous les deux.** Les tables de journal ne disposaient que d'une seule colonne courte : une facture exonérée / en autoliquidation (par ex. multi-vendeur) au libellé long échouait avec *value too long*. Les lignes de facture et la ventilation de TVA conservent à présent le **code** d'exonération (BT-121 / EXT-FR-FE-179 en ligne) et son **libellé** (BT-120 / EXT-FR-FE-178 en ligne) dans deux colonnes distinctes, disponibles pour le PDF lisible comme pour la déclaration d'e-reporting. Le récapitulatif de TVA et les lignes du détail de facture affichent désormais le code et son libellé complet sur une seconde ligne.
 - **Les emplacements (placeholders) se résolvent désormais au téléversement et au traitement d'un fichier.** Deux problèmes : un téléversement UBL construisait le chemin côté navigateur en laissant `%APP_HOME%` / `%ENV%` littéraux ; et le chemin de sortie du LISIBLE / des pièces jointes développait `%PROCESS_HOME%` *après* `%APP_HOME%` / `%ENV%` (ceux imbriqués dans `%PROCESS_HOME%` revenaient donc non résolus) et ne développait jamais `%FILE_NAME%`. Les deux écrivaient dans des dossiers `%APP_HOME%/…` erronés. Les téléversements passent désormais par le serveur, et le résolveur de chemin de sortie développe correctement `%PROCESS_HOME%` (avec ses `%APP_HOME%` / `%ENV%` imbriqués), `%TEMPLATE%` et `%FILE_NAME%`.
 
@@ -37433,14 +37633,14 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Améliorations
 
-- **La montée de version signale les modèles à corriger à la main.** Lorsqu'un modèle personnalisé (par ex. un `ubl:supplier-party` dérivé dans `ubl-defaults.xsl`) est conservé pendant une montée de version mais que le framework y a depuis ajouté un paramètre qu'il ne déclare pas, le rapport de montée de version le liste désormais sous « Correction manuelle requise » avec le `<xsl:param>` exact à ajouter — au lieu de compiler puis d'échouer à la génération de facture avec une erreur `XTSE0680` obscure.
+- **La montée de version signale les modèles à corriger à la main.** Quand un modèle personnalisé (par ex. un `ubl:supplier-party` dérivé dans `ubl-defaults.xsl`) est conservé pendant une montée de version mais que le framework y a depuis ajouté un paramètre qu'il ne déclare pas, le rapport de montée de version le liste désormais sous « Correction manuelle requise » avec le `<xsl:param>` exact à ajouter — au lieu de compiler puis d'échouer à la génération de facture avec une erreur `XTSE0680` obscure.
 - **Comparer un fichier avec sa version upstream.** Dans Versions de fichiers, un fichier conservé par la montée de version affiche désormais une ligne *upstream* — la version livrée, enregistrée en `<name>.upstream`. Comparez votre fichier actif avec elle pour voir précisément ce que la nouvelle version du framework a changé et le fusionner à la main.
 
 ## 2026.06.25.3 — 2026-06-25 \{#v2026-06-25-3\}
 
 ### Nouvelles fonctionnalités
 
-- **Champs d'extension personnalisés (UBLExtensions).** Une nouvelle section *Champs d'extension* dans l'éditeur XSL mappe jusqu'à huit valeurs source vers un bloc `ext:UBLExtensions` sur la facture — pour des données attendues par un partenaire mais sans équivalent standard EN 16931 (mode d'acheminement, adresse de copie de livraison, identifiants partenaires…). Chaque champ porte un nom d'élément, une valeur (chemin source ou modèle `{template}`) et les mêmes conditions d'émission facultatives que les attributs d'article. Le bloc est écrit en tête de facture, comme l'exige le schéma UBL, et n'est produit que si au moins un champ est renseigné. Vide par défaut : les factures existantes restent inchangées. Les données placées ici sont hors du modèle EN 16931 — privilégiez le champ standard lorsqu'il existe (référence comptable BT-19, référence acheteur BT-10) et vérifiez que la plateforme destinataire lit bien l'extension.
+- **Champs d'extension personnalisés (UBLExtensions).** Une nouvelle section *Champs d'extension* dans l'éditeur XSL mappe jusqu'à huit valeurs source vers un bloc `ext:UBLExtensions` sur la facture — pour des données attendues par un partenaire mais sans équivalent standard EN 16931 (mode d'acheminement, adresse de copie de livraison, identifiants partenaires…). Chaque champ porte un nom d'élément, une valeur (chemin source ou modèle `{template}`) et les mêmes conditions d'émission facultatives que les attributs d'article. Le bloc est écrit en tête de facture, comme l'exige le schéma UBL, et n'est produit que si au moins un champ est renseigné. Vide par défaut : les factures existantes restent inchangées. Les données placées ici sont hors du modèle EN 16931 — privilégiez le champ standard quand il existe (référence comptable BT-19, référence acheteur BT-10) et vérifiez que la plateforme destinataire lit bien l'extension.
 
 ## 2026.06.25.2 — 2026-06-25 \{#v2026-06-25-2\}
 
@@ -37458,7 +37658,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Améliorations
 
-- **SIREN acheteur reconstitué depuis le numéro de TVA.** Lorsqu'une fiche client ne porte pas de SIREN mais comporte un numéro de TVA français, le SIREN en est déduit pour que l'identifiant légal et l'adresse électronique de l'acheteur restent renseignés.
+- **SIREN acheteur reconstitué depuis le numéro de TVA.** Quand une fiche client ne porte pas de SIREN mais comporte un numéro de TVA français, le SIREN en est déduit pour que l'identifiant légal et l'adresse électronique de l'acheteur restent renseignés.
 - **Pays d'origine résolu depuis la liste de référence partagée.** La valeur source du pays est désormais résolue via la liste canonique des pays au moment de la production de la facture, au lieu d'une copie de la liste figée dans chaque déploiement. Corriger un libellé dans la liste s'applique partout, sans nouvelle sauvegarde.
 - **Adresses plus nettes dans le PDF.** Les adresses du vendeur, du client, de l'agent et de la livraison sont construites ligne à ligne : une partie dont l'adresse commence sur la deuxième ligne de voie n'imprime plus de ligne vide en tête. L'adresse de livraison affiche aussi son complément de voie.
 - **Montées de version plus fluides.** Avant d'importer les nouvelles fonctions, la montée de version aligne l'en-tête de feuille de style de chaque déploiement sur la version de langage et les espaces de noms livrés ; les modèles qui s'appuient sur de nouvelles fonctionnalités du framework compilent alors sans retouche manuelle.
@@ -37473,9 +37673,9 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Nouvelles fonctionnalités
 
-- **Pays d'origine et classification produit en ligne de facture (BT-158 / BT-159).** Deux nouveaux champs dans la section *Lignes* de l'éditeur XSL pointent vers le chemin source par ligne. Un onglet *Pays & classification* dans Valeurs par défaut UBL indique le format côté source — code ISO, libellé français ou libellé anglais — et le moteur résout la valeur via la liste canonique des pays au moment de la sauvegarde. Pas de table de correspondance parallèle : si un libellé est erroné, on le corrige une fois dans la liste. Code de classification, listID et version par défaut prennent le relais lorsque le chemin par ligne renvoie vide.
-- **Motifs de remise et de frais par défaut (BR-42 / BR-43).** Nouvel onglet *Remises / charges* dans Valeurs par défaut UBL : on saisit un libellé et un code motif appliqués lorsque le chemin du modèle client renvoie vide. L'indicateur ChargeIndicator choisit la paire — remise ou frais — donc une seule configuration couvre les deux cas.
-- **Dérivation d'une remise de ligne à partir d'un pourcentage seul.** Lorsque la source ne porte que le pourcentage, le moteur déduit le montant et la base à partir du net de la ligne. Les combinaisons mixtes fonctionnent aussi : pourcentage + base déduit le montant, pourcentage + montant déduit la base. Le signe en suffixe JDE (`25.00-`) est normalisé automatiquement.
+- **Pays d'origine et classification produit en ligne de facture (BT-158 / BT-159).** Deux nouveaux champs dans la section *Lignes* de l'éditeur XSL pointent vers le chemin source par ligne. Un onglet *Pays & classification* dans Valeurs par défaut UBL indique le format côté source — code ISO, libellé français ou libellé anglais — et le moteur résout la valeur via la liste canonique des pays au moment de la sauvegarde. Pas de table de correspondance parallèle : si un libellé est erroné, on le corrige une fois dans la liste. Code de classification, listID et version par défaut prennent le relais quand le chemin par ligne renvoie vide.
+- **Motifs de remise et de frais par défaut (BR-42 / BR-43).** Nouvel onglet *Remises / charges* dans Valeurs par défaut UBL : on saisit un libellé et un code motif appliqués quand le chemin du modèle client renvoie vide. L'indicateur ChargeIndicator choisit la paire — remise ou frais — donc une seule configuration couvre les deux cas.
+- **Dérivation d'une remise de ligne à partir d'un pourcentage seul.** Quand la source ne porte que le pourcentage, le moteur déduit le montant et la base à partir du net de la ligne. Les combinaisons mixtes fonctionnent aussi : pourcentage + base déduit le montant, pourcentage + montant déduit la base. Le signe en suffixe JDE (`25.00-`) est normalisé automatiquement.
 - **Mode remise de ligne sans groupe.** Quand les champs de remise se trouvent directement sur la ligne, sans élément parent, on pointe le TAG *Item AC* sur `.` (ou on le laisse vide) et le moteur itère la ligne elle-même.
 - **Identifiant article vendeur enfin émis (BT-155).** Le TAG était déclaré mais n'arrivait pas dans la sortie. Le moteur le rend désormais entre le libellé article et le pays d'origine, conformément à la séquence UBL 2.1.
 
@@ -37487,7 +37687,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 ### Corrections
 
 - **Plus de ligne perdue après un saut de page (PDF→XML).** JDE n'émet le préambule de livraison qu'une fois par bloc BL ; les pages de continuation enchaînent les lignes sans nouveau préambule. Le convertisseur relâchait le wrapper de livraison à chaque flush d'en-tête de page, et les lignes de continuation tombaient sur un parent à plat que le XSL UBL ignorait. Le wrapper est désormais reconduit d'une page à l'autre et n'est relâché que par les totaux ou le pied de page TVA.
-- **Montants PDF avec séparateurs ambigus (`1.682.28`).** Lorsque le même caractère sert de séparateur de milliers et de décimal — ou après la conversion française virgule → point qui transforme `1,682.28` en `1.682.28` — la chaîne se réduit désormais à `1682.28`. Le dernier `.` est conservé comme décimal, les précédents sautent.
+- **Montants PDF avec séparateurs ambigus (`1.682.28`).** Quand le même caractère sert de séparateur de milliers et de décimal — ou après la conversion française virgule → point qui transforme `1,682.28` en `1.682.28` — la chaîne se réduit désormais à `1682.28`. Le dernier `.` est conservé comme décimal, les précédents sautent.
 - **Règle Schematron locale BR-NOMAUBL-01 retirée.** La condition « avoir → facture antérieure référencée » est désormais imposée par `BR-FR-CO-05` dans le pack Flux2 v1.3.1 du 2026-04-30. Le doublon local disparaît ; le fichier reste en place comme structure d'accueil pour de futures règles maison.
 
 ## 2026.06.22.5 — 2026-06-22 \{#v2026-06-22-5\}
@@ -37509,7 +37709,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   `hd` Google Workspace empêche un Gmail personnel d'usurper une
   adresse Workspace. Pour les comptes créés automatiquement, un
   identifiant court est dérivé de la partie locale de l'adresse
-  (convention JDE 10 caractères). Lorsqu'un utilisateur est
+  (convention JDE 10 caractères). Quand un utilisateur est
   connecté via OIDC, son profil passe en lecture seule (onglet
   Sécurité masqué, champs non modifiables) — le mot de passe se
   gère côté fournisseur d'identité. Rôles, permissions et filtres
@@ -37525,7 +37725,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   de 7 jours n'affichent plus d'énormes pavés, les longues périodes
   plus de traits inutiles ; les étiquettes de dates passent en HTML
   et restent nettes, sans se transformer en tirets illisibles
-  lorsque le SVG est étiré.
+  quand le SVG est étiré.
 
 ## 2026.06.21.4 — 2026-06-21 \{#v2026-06-21-4\}
 
@@ -37730,7 +37930,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   document configuré.** Les PDF joints aux notifications sortantes
   et aux courriels étaient rendus avec la mise en page par défaut
   fournie, quel que soit le `pdfTemplate` configuré par modèle de
-  document (`vrc_pro`, `cdn_facture`, …). Le dispatcheur de
+  document (`invoices`, `credit_notes`, …). Le dispatcheur de
   notifications résout maintenant le modèle enregistré sur la
   facture et l'applique au PDF joint, comme le fait déjà
   l'interface "Traiter le document". Les installations sans
@@ -37751,7 +37951,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   présent dans la fenêtre chargée.** Les traitements longs (un
   START → des milliers d'événements intermédiaires → un END)
   étaient affichés sous la forme d'une seule ligne "? → END"
-  lorsque le START sortait de la tranche serveur. Trois
+  quand le START sortait de la tranche serveur. Trois
   plafonnements s'additionnaient : le serveur limitait
   silencieusement à 500 événements, le client n'en demandait
   que 5 000 même si plus étaient disponibles, et le regroupement
@@ -38036,7 +38236,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Logo sur les factures PDF.** Nouveau bouton « Afficher le
   logo » dans le constructeur de modèle PDF, associé à un champ
   « Chemin du logo » dans **Paramètres → Global → Traitement →
-  PDF**. Lorsque le bouton est activé, l'image est dessinée en
+  PDF**. Quand le bouton est activé, l'image est dessinée en
   haut du bloc fournisseur de la page 1 ; la colonne numéro de
   facture / dates conserve sa position en haut de page. Le chemin
   accepte les jetons habituels (`%APP_HOME%`, `%ENV%`, `%KCO%`,
@@ -38307,8 +38507,8 @@ exposent désormais un point d'extension pour les options JVM
 - **Routage par colonne sur le rapport.** Chaque rapport porte
   une liste de filtres d'égalité (Société, Code activité,
   Source, Règle, Centre, …) pour que chaque équipe reçoive son
-  périmètre. Par exemple, un rapport pour activité = ISC envoyé
-  à une adresse, un autre pour VRAC envoyé à une autre adresse.
+  périmètre. Par exemple, un rapport pour activité = Magasins envoyé
+  à une adresse, un autre pour Centrale envoyé à une autre adresse.
 - **Vue Détaillée sur Intégration / erreurs.** Un troisième
   onglet à côté de *Par évènement* et *Par règle*. Une ligne par
   facture par défaut — l'évènement le plus récent de cette
@@ -38478,7 +38678,7 @@ très gros volumes — elle s'ouvre aussi rapidement sur un mois de
   chargement. Quel que soit le volume de la période — un petit
   mois ou un trimestre chargé — la page s'ouvre en quelques
   secondes.
-- **Message plus clair lorsque les données manquent.** Si la
+- **Message plus clair quand les données manquent.** Si la
   base ne contient pas encore les détails TVA de la période
   sélectionnée, la page affiche désormais la commande exacte à
   exécuter, avec les dates déjà pré-remplies, au lieu de
@@ -39749,7 +39949,7 @@ du cycle de vie des factures.
 
 ### Pipeline principal (JDE → UBL → PA)
 
-- **Extraction du XML JDE** depuis la file d'attente BIP (`F95630`/`F95631`/`F9563110`), l'archive JDE, en SFTP ou depuis le système de fichiers local ; routage par template de type de document (`vrc_pro`, `isc_facture`, …).
+- **Extraction du XML JDE** depuis la file d'attente BIP (`F95630`/`F95631`/`F9563110`), l'archive JDE, en SFTP ou depuis le système de fichiers local ; routage par template de type de document (`invoices`, `credit_notes`, …).
 - **Transformation XSLT 2.0** via Saxon-HE — produit des factures et avoirs UBL 2.1 à partir d'un framework XSL configurable (`ubl-common.xsl` + `ubl-template.xsl`).
 - **Validation** : XSD (UBL 2.1) + Schematron — **EN 16931**, **BR-FR Flux 2** (CIUS-FR / FNFE-MPE) et **BR-FR CPRO** (Chorus Pro pour le B2G), avec gestion des sévérités (`fatal`, `error`, `warning`, `info`).
 - **Soumission PA** en HTTP (Java 11 `HttpClient`), token OAuth2 mis en cache et auto-rafraîchi sur 401, plus un canal SFTP de secours.
@@ -40163,6 +40363,13 @@ Un événement récupéré s'insère à sa **position chronologique** — d'apr�
 ### Ordre du cycle de vie
 
 Le second contrôle balaie la base à la recherche de lignes **mal ordonnées** — une étape interne de plateforme enregistrée après un statut standard, et des statuts standard enregistrés dans le mauvais ordre (par ex. `202` *Reçue* avant `200` *Déposée*, l'ordre numérique des codes standard faisant référence) — plus les **codes invalides** (texte brut de plateforme stocké par erreur de mappage). La réparation **réordonne** les événements (rien n'est supprimé ; les statuts internes gardent leur position) et réaligne le statut courant de la facture, avec un aperçu avant/après et une sélection par facture.
+
+Deux cas suivent leur propre règle :
+
+- **Factures réémises.** Une facture renvoyée après une correction (*Corriger destinataire*, fenêtre de modification, retraitement) porte plusieurs cycles PA. Chaque cycle — ouvert par un événement d'envoi, de mise en attente ou de retraitement — est ordonné séparément ; un événement appartient au cycle dans lequel tombe son horodatage.
+- **En litige (`207`) et suspendue (`208`).** Ces statuts intermédiaires peuvent être suivis d'un code inférieur, comme `205` *Approuvée* ou `210` *Refusée* : ils gardent leur position chronologique dans leur cycle et ne comptent jamais comme une inversion.
+
+Les historiques mal ordonnés par une règle antérieure sont détectés et remis en ordre à l'exécution suivante.
 
 ---
 
@@ -41463,7 +41670,7 @@ Pour les factures qui référencent un **document précédent** — typiquement 
 
 Le bloc répété et la référence unique BT-25 / BT-26 peuvent coexister — retenir celle qui colle à la source, ou les deux quand la source porte une référence de tête plus une liste répétitive.
 
-**Au niveau ligne (EXT-FR-FE-136).** Utile pour les avoirs en ligne qui pointent sur une ligne de facture précise. Un nouveau mappage sous la section *Invoice Lines* émet `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` à l'intérieur de la ligne — avec une date d'émission facultative — à la bonne position dans le schéma.
+**Au niveau ligne (EXT-FR-FE-136).** Utile pour les avoirs en ligne qui pointent sur une ligne de facture précise. Un nouveau mappage sous la section *Invoice Lines* émet `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` à l'intérieur de la ligne — avec une date d'émission facultative — à la bonne position dans le schéma. Sur le PDF généré, une ligne dont la référence de facturation porte le statut `INFORMATION` — le marqueur de sous-type d'une ligne à montant nul — s'imprime comme **Ligne d'information** et non comme une référence de facture antérieure.
 
 Le XPath de ligne est contrôlé par le [schematron Extended-CTC-FR](./validate.md) aligné sur la publication FNFE V1.4.0 du 30 juin 2026, donc la structure émise correspond à ce que la PA attend.
 
@@ -41549,3 +41756,4 @@ Après création, le nouveau fichier devient le fichier sélectionné et est cha
 - **Valider après chaque modification de mapping.** *UBL Tools → Validate* avec `Source = XML` exécute la transformation et les règles Schematron en une passe ; la table de logs signale tout chemin erroné ou variable manquante.
 
 ---
+

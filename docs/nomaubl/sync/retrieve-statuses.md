@@ -208,6 +208,13 @@ A recovered event is inserted at its **chronological position** — from the eve
 
 The second check scans the database for lifecycle rows that are **out of order** — an internal platform stage recorded after a standard status, and standard statuses recorded in the wrong order (e.g. `202` *Reçue* before `200` *Déposée*, the numeric order of standard codes being canonical) — plus **invalid codes** (raw platform text stored by a mapping mistake). The repair **re-sequences** the events into the correct order (nothing is deleted; internal statuses keep their positions) and realigns the invoice's current status, with a before/after preview and per-invoice selection.
 
+Two cases are handled on their own terms:
+
+- **Re-emitted invoices.** An invoice sent again after a correction (*Fix buyer*, edit window, reprocess) carries several PA cycles. Each cycle — opened by a sent, pending or reprocess event — is ordered on its own, an event belonging to the cycle its timestamp falls in.
+- **Disputed (`207`) and suspended (`208`).** These interim statuses may be followed by a lower code such as `205` *Approved* or `210` *Refused*: they keep their chronological position within their cycle and never count as an inversion.
+
+Histories ordered wrongly by an earlier rule are detected and put back in order by the next run.
+
 ---
 
 ## Tips & best practices

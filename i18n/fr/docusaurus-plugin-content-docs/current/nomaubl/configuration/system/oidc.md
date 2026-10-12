@@ -127,6 +127,8 @@ Le SSO est une nouvelle capacité — sur une mise à jour, vérifier la liste *
 | **Client secret** | Optionnel pour les clients publics PKCE (le fournisseur peut être configuré sans). Stocké en Base64 sur disque. |
 | **Redirect URI** | Doit correspondre **exactement** à l'URI de redirection enregistrée côté IdP. Valeur typique : `https://<votre-hôte>/api/auth/oidc/callback`. |
 | **Scopes** | Séparés par des espaces. Par défaut `openid profile email`. Ajouter ici les scopes spécifiques au fournisseur quand des claims supplémentaires sont nécessaires. |
+| **Token endpoint authentication** | Mode d'échange du code d'autorisation contre les jetons. **PKCE** *(défaut)* transmet le secret dans le corps de la requête (`client_secret_post`) ; **HTTP Basic** le transmet dans l'en-tête `Authorization` (`client_secret_basic`), sans PKCE — pour les fournisseurs d'identité qui n'acceptent que ce mode. Reprendre le réglage du client côté IdP. |
+| **Debug logging** | `Y` écrit dans le journal serveur le résultat de la découverte, l'URL d'autorisation, l'échange de jetons et les claims du jeton d'identité, jetons et secrets masqués. Les connexions et les refus (erreur IdP, état expiré, échec de l'échange de jetons, domaine refusé, compte inconnu) sont toujours journalisés. |
 
 ---
 

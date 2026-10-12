@@ -400,6 +400,7 @@ Process one (or many) source files against one document template — or call a S
 | `--replace` | Purge the five UBL tables for `(doc, dct, kco)` before re-insert. | all |
 | `--no-send` | Skip submission to the Plateforme Agréée. | all |
 | `--no-db` | Skip the database write step (implies `--no-send`). | XML |
+| `--no-validate` | Skip the UBL validation entirely — used by the reprocess reprint, where the stored e-invoice stays the reference. | XML |
 | `--validate` | XSD + Schematron only — no DB insert, no PA send. | UBL |
 | `--send` | Force submission to the PA, overriding the configured default. | UBL |
 | `--no-debug` | Skip the per-step timings (parse, validation, DB insert, send to PA) that are logged by default in every run. Recommended on heavy nightly batches where the per-step overhead is not worth the extra log volume. | all |

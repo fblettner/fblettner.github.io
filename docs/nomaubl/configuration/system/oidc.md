@@ -127,6 +127,8 @@ SSO is a new capability — operators upgrading from a prior version should revi
 | **Client secret** | Optional for public PKCE clients (the IdP can be configured without one). Stored Base64-encoded on disk. |
 | **Redirect URI** | Must exactly match the redirect URI registered on the IdP side. Typical value: `https://<your-host>/api/auth/oidc/callback`. |
 | **Scopes** | Space-separated. Defaults to `openid profile email`. Add provider-specific scopes here when extra claims are needed. |
+| **Token endpoint authentication** | How the authorization code is exchanged for tokens. **PKCE** *(default)* sends the secret in the request body (`client_secret_post`); **HTTP Basic** sends it in the `Authorization` header (`client_secret_basic`), without PKCE — for identity providers that accept only the latter. Match the client's setting on the IdP. |
+| **Debug logging** | `Y` writes the discovery result, the authorize URL, the token exchange and the ID-token claims to the server log, with tokens and secrets redacted. Sign-ins and refusals (IdP error, expired state, token exchange failure, domain refusal, unknown account) are always logged. |
 
 ---
 

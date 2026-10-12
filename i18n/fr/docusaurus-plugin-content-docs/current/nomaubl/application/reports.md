@@ -6,7 +6,7 @@ keywords: [NomaUBL, rapports, reporting, statistiques, statut, motif de rejet, r
 
 # Rapports
 
-La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle s'ouvre sur deux onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts**, et un **Requêteur** à composer soi-même. La page est conçue pour accueillir d'autres onglets de rapports au fil du temps.
+La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle s'ouvre sur trois onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts**, un **Requêteur** à composer soi-même, et **Intégrité** — des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source.
 
 Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [Accès](#access) plus bas).
 
@@ -58,11 +58,18 @@ Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [A
 Le premier onglet est un tableau croisé prêt à l'emploi : le **nombre de factures** ventilé par **code activité → statut → motif de rejet**, réparti en colonnes par **type de transaction** (`B2B`, `B2BINT`, `B2C`, `B2G`). Chaque niveau porte son effectif et un **pourcentage** de son parent — un motif en part de son statut, un statut en part de son activité, une activité en part du total.
 
 - **Choisissez le regroupement.** Des puces au-dessus du rapport choisissent les niveaux qui le composent — activité, statut, motif de rejet — dans n'importe quelle combinaison (par ex. des statistiques par statut uniquement). Le dépliage, les pourcentages et l'export Excel suivent le regroupement choisi.
+- **Choisissez la mesure.** Le switch **Mesure** compte les factures (**Nombre de factures**, par défaut) ou additionne leur montant hors taxes (**Montant HT**, BT-109). Cellules, sous-totaux et pourcentages suivent la mesure — quelques factures peuvent porter l'essentiel des montants. L'export Excel suit l'affichage, et sa feuille de données porte les deux valeurs.
 - **Dépliez / repliez** une activité ou un statut pour descendre dans le détail ; les **sous-totaux** apparaissent à chaque niveau.
 - Un statut à motif de rejet unique tient sur **une seule ligne**, sans ligne imbriquée supplémentaire.
 - Le **filtre de période** en haut propose les trois mêmes bases de dates que le [Tableau de bord](./dashboard.md) — *Date d'activité*, *Date document* ou *Date d'archivage* — pour que le rapport se recoupe avec les chiffres affichés ailleurs.
 - **Exclure les erreurs traitées** écarte les factures déjà traitées par le service client qui restent dans un statut en erreur — le même bouton que sur le [Tableau de bord](./dashboard.md#exclure-erreurs-traitees) ; les factures traitées dans les autres statuts restent comptées.
 - **Export Excel** produit un classeur à **deux feuilles** : le rapport exactement tel qu'affiché, et les données brutes à plat, prêtes pour vos propres tableaux croisés.
+
+---
+
+## Intégrité \{#integrite\}
+
+L'onglet **Intégrité** exécute les contrôles SQL définis dans [Configuration → Système → Integrity reports](../configuration/system/integrity-reports.md) : choisir un contrôle, une période (30 derniers jours par défaut) puis **Exécuter**. Chaque ligne du résultat est une anomalie, affichée dans la grille standard (recherche, filtres, colonnes, export). Un contrôle doté d'une action permet de cocher des lignes puis d'**Intégrer la sélection** — le détail se trouve dans [Rapports d'intégrité](../configuration/system/integrity-reports.md#rapports-integrite).
 
 ---
 

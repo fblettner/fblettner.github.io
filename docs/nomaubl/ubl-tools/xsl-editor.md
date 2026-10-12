@@ -336,7 +336,7 @@ For invoices that reference a **prior document** — typically a credit note poi
 
 Both the repeating block and the single BT-25 / BT-26 reference can coexist — pick the one that matches the source shape, or use both when the source carries a headline reference plus a repeating list.
 
-**Line-level (EXT-FR-FE-136).** Useful for line-level credits that back-reference a specific invoice line. A new mapping under the *Invoice Lines* section emits `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` inside the line — with an optional issue date — at the correct schema position.
+**Line-level (EXT-FR-FE-136).** Useful for line-level credits that back-reference a specific invoice line. A new mapping under the *Invoice Lines* section emits `cac:BillingReference / cac:InvoiceDocumentReference / cbc:ID` inside the line — with an optional issue date — at the correct schema position. On the generated PDF, a line whose billing reference carries the `INFORMATION` status — the sub-type marker of a zero-amount line — is printed as **Information line** rather than as a preceding-invoice reference.
 
 The line-level XPath is checked by the [Extended-CTC-FR schematron](./validate.md) refreshed to the 30 June 2026 FNFE V1.4.0 publication, so the emitted structure lines up with what the PA expects.
 

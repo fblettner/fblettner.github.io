@@ -208,6 +208,13 @@ Un événement récupéré s'insère à sa **position chronologique** — d'apr�
 
 Le second contrôle balaie la base à la recherche de lignes **mal ordonnées** — une étape interne de plateforme enregistrée après un statut standard, et des statuts standard enregistrés dans le mauvais ordre (par ex. `202` *Reçue* avant `200` *Déposée*, l'ordre numérique des codes standard faisant référence) — plus les **codes invalides** (texte brut de plateforme stocké par erreur de mappage). La réparation **réordonne** les événements (rien n'est supprimé ; les statuts internes gardent leur position) et réaligne le statut courant de la facture, avec un aperçu avant/après et une sélection par facture.
 
+Deux cas suivent leur propre règle :
+
+- **Factures réémises.** Une facture renvoyée après une correction (*Corriger destinataire*, fenêtre de modification, retraitement) porte plusieurs cycles PA. Chaque cycle — ouvert par un événement d'envoi, de mise en attente ou de retraitement — est ordonné séparément ; un événement appartient au cycle dans lequel tombe son horodatage.
+- **En litige (`207`) et suspendue (`208`).** Ces statuts intermédiaires peuvent être suivis d'un code inférieur, comme `205` *Approuvée* ou `210` *Refusée* : ils gardent leur position chronologique dans leur cycle et ne comptent jamais comme une inversion.
+
+Les historiques mal ordonnés par une règle antérieure sont détectés et remis en ordre à l'exécution suivante.
+
 ---
 
 ## Conseils & bonnes pratiques
