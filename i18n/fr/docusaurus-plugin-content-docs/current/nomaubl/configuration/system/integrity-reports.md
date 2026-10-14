@@ -6,7 +6,7 @@ keywords: [NomaUBL, rapports d'intégrité, contrôles d'intégrité, SQL, rappr
 
 # Rapports d'intégrité
 
-Le modèle système **Integrity reports** regroupe des **contrôles SQL** qui comparent NomaUBL à un système source et listent ce qui **manque ou diverge** : travaux d'impression jamais intégrés, écritures comptables dont les montants diffèrent des factures électroniques… Chaque contrôle est un `SELECT` exécuté en lecture seule sur un connecteur de base de données, et **chaque ligne renvoyée est une anomalie**. Les résultats s'affichent dans l'onglet **Intégrité** de la page [Rapports](../../application/reports.md#integrite), où un contrôle peut aussi proposer une **action** sur les lignes sélectionnées.
+Le modèle système **Integrity reports** regroupe des **contrôles SQL** qui comparent NomaUBL à un système source et listent ce qui **manque ou diverge** : travaux d'impression jamais intégrés, écritures comptables dont les montants diffèrent des factures électroniques… Chaque contrôle exécute des `SELECT` en lecture seule — une requête unique, ou une requête source et une requête cible sur deux bases différentes, comparées en mémoire — et **chaque ligne renvoyée est une anomalie**. Les résultats s'affichent dans l'onglet **Intégrité** de la page [Rapports](../../application/reports.md#integrite), où un contrôle peut aussi proposer une **action** sur les lignes sélectionnées.
 
 Il s'ouvre dans **Configuration → Système → Integrity reports**. Sur une installation qui ne dispose pas encore du modèle, le bouton **Add integrity reports** le crée sans redémarrer le service. Le modèle est livré vide : rien n'apparaît dans la page Rapports tant qu'aucun contrôle n'est défini.
 
@@ -64,6 +64,51 @@ Il s'ouvre dans **Configuration → Système → Integrity reports**. Sur une in
 
 ---
 
+## Modes \{#modes\}
+
+Le champ **Mode** d'un contrôle détermine la façon dont ses lignes sont produites.
+
+| Mode | Résultat |
+|---|---|
+| **Direct** *(défaut)* | Une seule requête ; ses lignes sont les anomalies. Pour deux systèmes dans la même base. |
+| **Missing** | Lignes source dont la clé est absente de la cible. |
+| **Extra** | Lignes cible dont la clé est absente de la source. |
+| **Mismatch** | Clés présentes des deux côtés dont les colonnes comparées diffèrent. |
+
+Les trois modes de comparaison exécutent une **requête source** et une **requête cible**, chacune sur son propre connecteur — par exemple JD Edwards sur SQL Server et NomaUBL sur PostgreSQL — et rapprochent leurs lignes **en mémoire** sur les colonnes clés. Les clés sont normalisées avant le rapprochement : espaces de fin, zéros de tête, nombre de décimales et formats de date ne faussent plus la correspondance.
+
+<svg viewBox="0 0 1000 260" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="irc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+  </defs>
+  <rect x="20" y="24" width="230" height="90" rx="12" fill="#0d1220" stroke="#334155" strokeWidth="1.2"/>
+  <text x="135" y="54" fill="#cbd5e1" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Requête source</text>
+  <text x="135" y="78" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">Source connector · Source SQL</text>
+  <rect x="20" y="146" width="230" height="90" rx="12" fill="#0d1220" stroke="#334155" strokeWidth="1.2"/>
+  <text x="135" y="176" fill="#cbd5e1" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Requête cible</text>
+  <text x="135" y="200" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">Target connector · Target SQL</text>
+  <line x1="252" y1="69" x2="356" y2="118" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#irc-arrow)"/>
+  <line x1="252" y1="191" x2="356" y2="142" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#irc-arrow)"/>
+  <rect x="360" y="80" width="240" height="100" rx="12" fill="#0d1220" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="480" y="112" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapprochement sur les clés</text>
+  <text x="480" y="136" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">clés normalisées</text>
+  <text x="480" y="156" fill="#64748b" fontSize="9.5" textAnchor="middle" fontFamily="ui-monospace, monospace">"0042 " = "42"</text>
+  <line x1="602" y1="110" x2="676" y2="56" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#irc-arrow)"/>
+  <line x1="602" y1="130" x2="676" y2="130" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#irc-arrow)"/>
+  <line x1="602" y1="150" x2="676" y2="204" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#irc-arrow)"/>
+  <rect x="680" y="24" width="300" height="60" rx="10" fill="rgba(248,113,113,0.06)" stroke="rgba(248,113,113,0.45)" strokeWidth="1.2"/>
+  <text x="700" y="50" fill="#f87171" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Missing</text>
+  <text x="700" y="70" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">dans la source, absente de la cible</text>
+  <rect x="680" y="100" width="300" height="60" rx="10" fill="rgba(251,146,60,0.06)" stroke="rgba(251,146,60,0.45)" strokeWidth="1.2"/>
+  <text x="700" y="126" fill="#fb923c" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Extra</text>
+  <text x="700" y="146" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">dans la cible, absente de la source</text>
+  <rect x="680" y="176" width="300" height="60" rx="10" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.45)" strokeWidth="1.2"/>
+  <text x="700" y="202" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Mismatch</text>
+  <text x="700" y="222" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">des deux côtés, colonnes comparées différentes</text>
+</svg>
+
+---
+
 ## Contrôles
 
 Chaque contrôle est un groupe repliable — un clic sur son titre l'ouvre, **×** le supprime, **+ Add check** en ajoute un.
@@ -72,10 +117,23 @@ Chaque contrôle est un groupe repliable — un clic sur son titre l'ouvre, **×
 |---|---|
 | **Name** | Identifiant affiché dans la page Rapports (par ex. `missing-pdf`). À garder stable. |
 | **Description** | Une ligne qui dit ce que le contrôle détecte (par ex. *Travaux d'impression PDF non intégrés*). |
+| **Mode** | *Direct*, *Missing*, *Extra* ou *Mismatch* — voir [Modes](#modes). |
 | **Connector** | Le [connecteur de base de données](../database-connectors/nomaubl.md) sur lequel s'exécute le `SELECT` — la base JD Edwards, la base NomaUBL ou tout autre connecteur déclaré sur la plateforme. |
 | **Key columns** | Facultatif. Colonnes du résultat, séparées par des virgules, qui identifient l'enregistrement visé par une action (par ex. `JCPID, JCVERS, JCJOBNBR`, ou numéro + type de document + société). |
 | **SQL (SELECT only)** | La requête. Une seule instruction `SELECT` (ou `WITH`) ; toute autre instruction est refusée avant d'atteindre la base. La connexion est ouverte en lecture seule. |
 | **Action** | Ce que la page Rapports peut faire des lignes sélectionnées : aucune action, ou **Integrate BIP jobs**. |
+
+Dans les modes de comparaison, **Connector**, **Key columns** et **SQL** deviennent **Source connector**, **Source key columns** et **Source SQL**, et d'autres champs apparaissent :
+
+| Champ | Description |
+|---|---|
+| **Target connector** | Connecteur de base de données de la requête cible — il peut différer de celui de la source. |
+| **Target key columns** | Colonnes du résultat cible qui correspondent aux colonnes clés de la source, dans le même ordre. Vide = mêmes noms. |
+| **Target SQL** | La requête cible (par ex. `SELECT TRIM(FEWDS1) AS JOBKEY FROM F564230 WHERE FEUPMJ >= {fromJde}`). Les variables de date s'appliquent aux deux requêtes. |
+| **Compare columns** *(Mismatch)* | Paires de colonnes `SOURCE=CIBLE` séparées par des virgules (par ex. `AMOUNT_HT=UHATXA, DOC_DATE=UHDIVJ`). Une ligne est une anomalie dès qu'une paire diffère. |
+| **Tolerance** *(Mismatch)* | Deux valeurs numériques dont l'écart ne dépasse pas ce montant sont considérées comme égales. Par défaut `0.01`. |
+
+En mode *Mismatch*, le résultat reprend les colonnes source, puis une colonne `TARGET_<colonne>` par paire comparée avec la valeur cible, et une colonne `DIFFERENCE` qui nomme les colonnes en écart.
 
 ### Variables de date
 
@@ -137,7 +195,7 @@ Avec **Action** = **Integrate BIP jobs**, les lignes sélectionnées sont intég
 </div>
 
 1. **Choisir un contrôle** et une **période** (30 derniers jours par défaut), puis **Exécuter**. **Voir le SQL** affiche la requête du contrôle.
-2. La ligne d'en-tête rappelle le connecteur, les colonnes clés et l'action configurée. Le résultat indique **Aucune anomalie** ou *N anomalie(s)* ; chaque ligne est une anomalie, dans la grille standard — recherche, filtres, choix des colonnes et export.
+2. La ligne d'en-tête rappelle le connecteur, les colonnes clés et l'action configurée. Sur un contrôle de comparaison, une seconde ligne ajoute le mode, le connecteur cible et, en *Mismatch*, les colonnes comparées avec la tolérance ; **Voir le SQL** affiche alors les deux requêtes, et le décompte indique *N source / N cible*. Le résultat indique **Aucune anomalie** ou *N anomalie(s)* ; chaque ligne est une anomalie, dans la grille standard — recherche, filtres, choix des colonnes et export.
 3. Quand le contrôle porte une action, cocher les lignes puis cliquer sur **Intégrer la sélection (N)**. Une confirmation rappelle que les travaux sont extraits et traités comme lors d'un traitement normal — validation, stockage et envoi selon le paramétrage du modèle.
 4. Après l'action, le contrôle est relancé : les lignes intégrées sortent du résultat, et un bandeau de synthèse affiche *N intégré(s), N en échec sur N*, avec le nom de chaque travail en échec.
 

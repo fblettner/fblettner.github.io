@@ -87,7 +87,7 @@ Document templates used to live under *Configuration → Documents*. They were l
   <rect x="420" y="314" width="350" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="430" y="330" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">//header/routing</text>
 
-  <text x="420" y="362" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Date format <text fill="#64748b" fontSize="9" fontWeight="400">(2026.05.9)</text></text>
+  <text x="420" y="362" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Date format</text>
   <rect x="420" y="370" width="200" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="430" y="386" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">dd/MM/yyyy</text>
   <text x="628" y="386" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">SimpleDateFormat</text>
@@ -165,9 +165,30 @@ The Direction value is written once on the row at insert time (column `UHDRIN` o
 The UBL-source pipeline now inserts the same `F564230` tracking row the XML pipeline produces, reading the rest of its values straight from the UBL: BT-47 buyer SIREN → `FEALKY`, BT-115 PayableAmount → `FEAEXP`, BT-2 IssueDate → `FEIVD`, BT-9 DueDate → `FEARDU`. Without it the PA send had no row to stamp with its transaction id, `FEUKIDSZ` stayed empty and fetch-import had nothing to poll. Replace mode updates the existing row instead of duplicating it; non-replace mode skips an already-processed invoice with the usual warning.
 :::
 
-### Key extraction from `cbc:ID` *(when Source = UBL)*
+### Document key *(when Source = UBL)* \{#key-extraction-from-cbcid-when-source--ubl\}
 
-For UBL invoices the `(doc, dct, kco)` primary key — the same triplet that identifies the document everywhere else in NomaUBL — is parsed from the invoice's `cbc:ID` via a regex with **named groups**. There is no filename convention to follow; the file can be named anything.
+The **Document key (doc / dct / kco)** group decides how a UBL document gets its `(doc, dct, kco)` primary key — the same triplet that identifies the document everywhere else in NomaUBL. The **Key mode** selector offers two ways:
+
+| Key mode | Behaviour |
+|---|---|
+| **From cbc:ID (regex pattern)** *(default)* | The key is parsed from the invoice's `cbc:ID` with a regex — see below. |
+| **Sequence (NomaUBL numbers the document)** | NomaUBL hands out the document number itself, under a fixed document type and company. |
+
+#### Sequence mode
+
+Meant for **received invoices**, whose `cbc:ID` follows each supplier's own format, and usable for emitted UBL when the numbering format is not known.
+
+| Field | Description |
+|---|---|
+| **Document type (dct)** | Fixed JDE document type of the sequence — `II` (incoming invoice) when empty. Pick a type JD Edwards does not use for the same company. |
+| **Company (kco)** | Fixed company code. Required. |
+| **Sequence start** | First number handed out; afterwards, one above the highest number stored for this document type and company. |
+
+The supplier's invoice number stays stored as the **UBL number** (BT-1). Each processing hands out a new number: a document received twice gets two numbers.
+
+#### From cbc:ID (regex pattern)
+
+The key is parsed from the invoice's `cbc:ID` via a regex with **named groups**. There is no filename convention to follow; the file can be named anything.
 
 | Field | Description |
 |---|---|
@@ -280,7 +301,7 @@ Functional data NomaUBL reads from the spool to populate the UBL invoice and to 
 
 > 💡 Each Document Data field has its own **default value**. Defaults are used when the XML tag is missing or empty, which is useful when a value is constant for a given template.
 
-### Date format *(when Source = XML, 2026.05.9)*
+### Date format *(when Source = XML)*
 
 | Field | Default | Description |
 |---|---|---|
@@ -321,6 +342,51 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | **Custom Schematron** | path(s) | One or more **precompiled** Schematron stylesheets (`.xsl`, comma-separated, `%APP_HOME%` / `%ENV%` accepted) holding this customer's own rules — a mandatory classification, a buyer-reference pattern… They run **after** the standard packs, on this template only, so customer rules never touch the shipped packs the upgrade refreshes. A stylesheet is loaded once per file stamp: an edited file is picked up on the next validation without a restart. Findings land in the validation errors under a short source derived from the file name (`BR-ACME-rules.xsl` → `ACME`); a missing or broken file is reported as an error on the invoice. Batch and single processing, the *Validate* button and the validate API all honour it. |
 | **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
 | **LISIBLE** | `Y` / `N` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. |
+
+### Processing rules \{#processing-rules\}
+
+The **Processing rules** group routes the documents of the XML pipeline **before anything is generated**. Each rule combines one or more conditions on the document with one outcome. Rules are evaluated per document once its document type is resolved, **in order — the first match wins**; no matching rule means normal processing. They apply to every XML ingestion path: scheduler, [watched folders](../configuration/system/watched-folders.md), *process*, *fetch-single* and *Fetch Input*. UBL-source documents are deliberately left out — their transaction type is already written in the document.
+
+<div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px'}}>
+  <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px'}}>
+    <div style={{display: 'grid', gridTemplateColumns: '1fr 190px 150px auto', gap: '6px', alignItems: 'center'}}>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>Gratuities</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>Treat as document type ▾</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(74,158,255,0.4)', borderRadius: '5px', color: '#4a9eff', fontFamily: 'monospace'}}>ARCHIVEONLY ▾</span>
+      <span style={{opacity: 0.6}}>↑ ↓ <span style={{color: '#f87171'}}>Remove</span></span>
+    </div>
+    <div style={{display: 'grid', gridTemplateColumns: '24px 200px 140px 1fr', gap: '6px', alignItems: 'center'}}>
+      <span style={{opacity: 0.5}}>if</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>Invoice amount (montant) ▾</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>is zero / empty ▾</span>
+      <span />
+    </div>
+    <span style={{opacity: 0.6}}>＋ Add condition</span>
+  </div>
+  <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px'}}>
+    <div style={{display: 'grid', gridTemplateColumns: '1fr 190px 150px auto', gap: '6px', alignItems: 'center'}}>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>Internal documents</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(248,113,113,0.4)', borderRadius: '5px', color: '#f87171'}}>Exclude (record only) ▾</span>
+      <span />
+      <span style={{opacity: 0.6}}>↑ ↓ <span style={{color: '#f87171'}}>Remove</span></span>
+    </div>
+    <div style={{display: 'grid', gridTemplateColumns: '24px 200px 140px 1fr', gap: '6px', alignItems: 'center'}}>
+      <span style={{opacity: 0.5}}>if</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>JDE document type (typeJDE) ▾</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>in list (a, b, c) ▾</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px', fontFamily: 'monospace'}}>RX, RZ</span>
+    </div>
+    <span style={{opacity: 0.6}}>＋ Add condition</span>
+  </div>
+  <span style={{opacity: 0.7}}>＋ Add rule</span>
+</div>
+
+| Outcome | Effect |
+|---|---|
+| **Treat as document type** | The document continues as the chosen [document type](../configuration/system/document-types.md), with that type's send / validate / mode / keep settings — e.g. a zero-amount gratuity routed to `ARCHIVEONLY`. |
+| **Exclude (record only)** | The document is only recorded: its source is archived and its header stored, with the status **Excluded by rule** (`9914`, the message being the rule name) and a lifecycle event. It is visible in the invoice list and counted by the integrity checks, but never validated, output nor sent. |
+
+**Conditions** — every condition of a rule must match (*if … and …*). Fields: JDE document type, resolved document type, processing type (raw spool value), invoice amount, company, activity code, type piece, customer number, document number, or **XPath on the document…** (any XPath or spool tag, e.g. `Code_Nature_ID12`). Operators: in list / not in list (`RM, RX`), `=`, `≠`, is zero / empty, is not zero, `<`, `>`, is empty, is not empty, matches regex. **↑** / **↓** reorder the rules; the rule name shows in the log and in the status message.
 
 ### Additional Attachments
 

@@ -87,7 +87,7 @@ Les modèles de document figuraient auparavant sous *Configuration → Documents
   <rect x="420" y="314" width="350" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="430" y="330" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">//header/routing</text>
 
-  <text x="420" y="362" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Format de date <text fill="#64748b" fontSize="9" fontWeight="400">(2026.05.9)</text></text>
+  <text x="420" y="362" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Format de date</text>
   <rect x="420" y="370" width="200" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="430" y="386" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">dd/MM/yyyy</text>
   <text x="628" y="386" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">SimpleDateFormat</text>
@@ -165,9 +165,30 @@ La valeur Direction est écrite une fois sur la ligne au moment de l'insertion (
 Le pipeline source UBL insère désormais la même ligne de suivi `F564230` que le pipeline XML, en lisant le reste de ses valeurs directement dans l'UBL : BT-47 SIREN acheteur → `FEALKY`, BT-115 PayableAmount → `FEAEXP`, BT-2 IssueDate → `FEIVD`, BT-9 DueDate → `FEARDU`. Sans elle, l'envoi PA n'avait aucune ligne où inscrire son id de transaction, `FEUKIDSZ` restait vide et fetch-import n'avait rien à interroger. Le mode replace met à jour la ligne existante au lieu de la dupliquer ; le mode sans replace saute une facture déjà traitée avec l'avertissement habituel.
 :::
 
-### Extraction de clé depuis `cbc:ID` *(quand Source = UBL)*
+### Clé du document *(quand Source = UBL)* \{#cle-du-document\}
 
-Pour les factures UBL, la clé primaire `(doc, dct, kco)` — le triplet qui identifie le document partout ailleurs dans NomaUBL — est extraite du `cbc:ID` de la facture via une regex à **groupes nommés**. Aucune convention de nommage de fichier n'est exigée ; le fichier peut avoir n'importe quel nom.
+Le groupe **Document key (doc / dct / kco)** détermine comment un document UBL obtient sa clé primaire `(doc, dct, kco)` — le triplet qui identifie le document partout ailleurs dans NomaUBL. Le sélecteur **Key mode** propose deux modes :
+
+| Key mode | Fonctionnement |
+|---|---|
+| **From cbc:ID (regex pattern)** *(défaut)* | La clé est extraite du `cbc:ID` de la facture par une regex — voir plus bas. |
+| **Sequence (NomaUBL numbers the document)** | NomaUBL attribue lui-même le numéro de document, sous un type de document et une société fixes. |
+
+#### Mode séquence
+
+Prévu pour les **factures reçues**, dont le `cbc:ID` suit le format propre à chaque fournisseur ; utilisable aussi pour de l'UBL émis quand le format de numérotation n'est pas connu.
+
+| Champ | Description |
+|---|---|
+| **Document type (dct)** | Type de document JDE fixe de la séquence — `II` (facture entrante) s'il est vide. Choisir un type que JD Edwards n'utilise pas pour la même société. |
+| **Company (kco)** | Code société fixe. Obligatoire. |
+| **Sequence start** | Premier numéro attribué ; ensuite, le plus grand numéro enregistré pour ce type de document et cette société, plus un. |
+
+Le numéro de facture du fournisseur reste enregistré comme **numéro UBL** (BT-1). Chaque traitement attribue un nouveau numéro : un document reçu deux fois obtient deux numéros.
+
+#### Depuis `cbc:ID` (regex)
+
+La clé est extraite du `cbc:ID` de la facture via une regex à **groupes nommés**. Aucune convention de nommage de fichier n'est exigée ; le fichier peut avoir n'importe quel nom.
 
 | Champ | Description |
 |---|---|
@@ -280,7 +301,7 @@ Données fonctionnelles que NomaUBL lit dans le spool pour alimenter la facture 
 
 > 💡 Chaque champ « Données du document » dispose de sa propre **valeur par défaut**. Les valeurs par défaut sont utilisées quand la balise XML est absente ou vide — pratique quand une valeur est constante pour un modèle donné.
 
-### Format de date *(quand Source = XML, 2026.05.9)*
+### Format de date *(quand Source = XML)*
 
 | Champ | Défaut | Description |
 |---|---|---|
@@ -321,6 +342,51 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | **Custom Schematron** | chemin(s) | Une ou plusieurs feuilles Schematron **précompilées** (`.xsl`, séparées par des virgules, `%APP_HOME%` / `%ENV%` acceptés) qui portent les règles propres au client — une classification obligatoire, un format de référence acheteur… Elles s'exécutent **après** les packs standard, sur ce modèle uniquement : les règles client ne touchent jamais aux packs livrés que la mise à niveau rafraîchit. Une feuille est chargée une fois par horodatage de fichier : un fichier modifié est pris en compte à la validation suivante, sans redémarrage. Les anomalies arrivent dans les erreurs de validation sous une source courte tirée du nom de fichier (`BR-ACME-rules.xsl` → `ACME`) ; un fichier absent ou invalide est signalé en erreur sur la facture. Le traitement par lot et unitaire, le bouton *Valider* et l'API de validation en tiennent tous compte. |
 | **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
 | **LISIBLE** | `Y` / `N` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. |
+
+### Règles de traitement \{#regles-de-traitement\}
+
+Le groupe **Processing rules** oriente les documents du flux XML **avant toute génération**. Chaque règle associe une ou plusieurs conditions sur le document à un résultat. Les règles sont évaluées pour chaque document une fois son type de document déterminé, **dans l'ordre — la première qui correspond l'emporte** ; sans règle correspondante, le traitement est normal. Elles s'appliquent à tous les chemins d'entrée XML : planificateur, [dossiers surveillés](../configuration/system/watched-folders.md), *process*, *fetch-single* et *Fetch Input*. Les documents de source UBL sont volontairement écartés : leur type de transaction figure déjà dans le document.
+
+<div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px'}}>
+  <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px'}}>
+    <div style={{display: 'grid', gridTemplateColumns: '1fr 190px 150px auto', gap: '6px', alignItems: 'center'}}>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>Gratuités</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>Treat as document type ▾</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(74,158,255,0.4)', borderRadius: '5px', color: '#4a9eff', fontFamily: 'monospace'}}>ARCHIVEONLY ▾</span>
+      <span style={{opacity: 0.6}}>↑ ↓ <span style={{color: '#f87171'}}>Remove</span></span>
+    </div>
+    <div style={{display: 'grid', gridTemplateColumns: '24px 200px 140px 1fr', gap: '6px', alignItems: 'center'}}>
+      <span style={{opacity: 0.5}}>if</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>Invoice amount (montant) ▾</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>is zero / empty ▾</span>
+      <span />
+    </div>
+    <span style={{opacity: 0.6}}>＋ Add condition</span>
+  </div>
+  <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px'}}>
+    <div style={{display: 'grid', gridTemplateColumns: '1fr 190px 150px auto', gap: '6px', alignItems: 'center'}}>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>Documents internes</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(248,113,113,0.4)', borderRadius: '5px', color: '#f87171'}}>Exclude (record only) ▾</span>
+      <span />
+      <span style={{opacity: 0.6}}>↑ ↓ <span style={{color: '#f87171'}}>Remove</span></span>
+    </div>
+    <div style={{display: 'grid', gridTemplateColumns: '24px 200px 140px 1fr', gap: '6px', alignItems: 'center'}}>
+      <span style={{opacity: 0.5}}>if</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>JDE document type (typeJDE) ▾</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px'}}>in list (a, b, c) ▾</span>
+      <span style={{padding: '4px 8px', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px', fontFamily: 'monospace'}}>RX, RZ</span>
+    </div>
+    <span style={{opacity: 0.6}}>＋ Add condition</span>
+  </div>
+  <span style={{opacity: 0.7}}>＋ Add rule</span>
+</div>
+
+| Résultat | Effet |
+|---|---|
+| **Treat as document type** | Le document poursuit son traitement sous le [type de document](../configuration/system/document-types.md) choisi, avec les réglages d'envoi / validation / mode / conservation de ce type — par exemple une gratuité à montant nul orientée vers `ARCHIVEONLY`. |
+| **Exclude (record only)** | Le document est seulement enregistré : sa source est archivée et son en-tête conservé, avec le statut **Exclue par règle** (`9914`, le message reprenant le nom de la règle) et un événement de cycle de vie. Il apparaît dans la liste des factures et est compté par les contrôles d'intégrité, mais il n'est jamais validé, produit ni envoyé. |
+
+**Conditions** — toutes les conditions d'une règle doivent être remplies (*if … and …*). Champs : type de document JDE, type de document déterminé, type de traitement (valeur brute du spool), montant de la facture, société, code activité, type pièce, numéro client, numéro de document, ou **XPath on the document…** (tout XPath ou balise du spool, par ex. `Code_Nature_ID12`). Opérateurs : dans la liste / hors de la liste (`RM, RX`), `=`, `≠`, nul ou vide, non nul, `<`, `>`, vide, non vide, correspond à une regex. **↑** / **↓** changent l'ordre des règles ; le nom de la règle apparaît dans le journal et dans le message de statut.
 
 ### Pièces jointes complémentaires
 

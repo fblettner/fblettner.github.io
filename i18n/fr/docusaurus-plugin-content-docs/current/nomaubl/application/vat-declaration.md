@@ -184,6 +184,8 @@ Si la base ne contient encore aucune ligne de détail TVA (`F564234`) pour la p�
 
 La commande est documentée sous [Ligne de commande → `backfill-vat`](../management/command-line.md#backfill-vat). Une fois la reconstruction faite, rouvrez la page TVA — la matrice se remplit comme attendu.
 
+Une erreur côté serveur — une erreur de base de données, par exemple — ne s'affiche jamais comme une période vide : la page indique le message d'erreur, qui est aussi écrit dans le journal serveur.
+
 ---
 
 ## Export Excel

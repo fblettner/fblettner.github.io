@@ -27870,14 +27870,14 @@ Depuis 2026.05.10, modifier une facture existante ne réinitialise plus son `cbc
 La modale est divisée en sections verticales :
 
 - **Document** — numéro, type de facture, profile ID, références contrat / acheteur / commande.
-- **En-tête** — dates d'émission / échéance, devise, période de début / fin, ainsi qu'un bloc **Factures antérieures** (BG-3, 0..n) : chaque ligne un numéro de référence (BT-25) et une date d'émission facultative (BT-26), avec **＋ Ajouter une facture antérieure (BG-3)**. Sur un avoir, c'est la référence à la facture corrigée.
+- **En-tête** — dates d'émission / échéance, devise, période de début / fin, l'**Avis d'expédition** (BT-16 — numéro et date), ainsi qu'un bloc **Factures antérieures** (BG-3, 0..n) : chaque ligne un numéro de référence (BT-25) et une date d'émission facultative (BT-26), avec **＋ Ajouter une facture antérieure (BG-3)**. Sur un avoir, c'est la référence à la facture corrigée.
 - **Fournisseur** — alimenté depuis l'annuaire des fournisseurs (*UBL Defaults → Suppliers / Companies*) ; modifiable par facture.
 - **Client** — renseigné de bout en bout depuis la recherche d'entreprise : les résultats affichent le badge, le nom et l'identifiant sur une ligne, l'adresse en dessous ; une recherche par SIREN ou SIRET seul liste tous les établissements (même seconde interrogation INSEE que l'[E-Directory](./edirectory.md)), et un champ SIRET facultatif complète le SIREN. L'adresse électronique n'est **pas déduite** du SIREN/SIRET — une liste d'adresses électroniques du PPF (ouverte automatiquement après le choix d'une entreprise, ou à tout moment via le bouton à côté du champ identifiant) présente les adresses enregistrées pour le SIREN avec leur état actif/désactivé ; en choisir une renseigne l'identifiant et son schéma, puis la liste se referme. Un bloc **Autres id. (BT-46)** ajoute autant d'identifiants acheteur supplémentaires que voulu, chacun avec son schéma de la liste EAS — un code de routage ou un second SIRET porté par le document devient visible, modifiable et supprimable au lieu de voyager de façon invisible.
 - **Livraison** — groupe livraison facultatif au niveau du document (BG-13). Seule la livraison saisie au niveau document y apparaît ; les livraisons portées par les lignes restent sur les lignes et ne remontent jamais dans l'en-tête.
 - **Paiement** — code de moyen de paiement, IBAN, BIC, mandat, conditions.
 - **Remises / charges** — remises / charges au niveau document.
 - **Notes** — notes libres par préfixe `BT-22`.
-- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés. Le champ Prix unitaire accepte une précision fine (jusqu'à 6 décimales), pour les prix qui en portent plus de 2 à la source. Un bloc **Prix (BG-29)** par ligne fixe le prix unitaire brut (**BT-148**) et la remise sur prix (**BT-147**) ; le prix net en est déduit et pilote le montant de ligne, lequel divise par la **quantité de base** (BT-149) — un prix pour 100 ou 1 000 unités est ainsi calculé correctement. Le bloc *Références* de la ligne porte aussi des références de **facture antérieure** par ligne (EXT-FR-FE-136) — numéro, date facultative et un **DocumentStatusCode** choisi parmi `INFORMATION` / `DETAIL` / `GROUP`. Trois boutons rapides du même bloc renseignent les **références de commande** de la ligne, toutes portées par `cac:OrderLineReference` : **Référence Cde Client** (numéro de commande de l'acheteur, EXT-FR-FE-135 — la clé de regroupement des lignes sur le PDF), **Numéro de commande** (numéro de commande du vendeur, EXT-FR-FE-144) et **N° ligne client** (numéro de la ligne dans la commande de l'acheteur, BT-132).
+- **Lignes** — lignes de facture avec article, quantité, unité, prix, remises, propriétés. Le champ Prix unitaire accepte une précision fine (jusqu'à 6 décimales), pour les prix qui en portent plus de 2 à la source. Un bloc **Prix (BG-29)** par ligne fixe le prix unitaire brut (**BT-148**) et la remise sur prix (**BT-147**) ; le prix net en est déduit et pilote le montant de ligne, lequel divise par la **quantité de base** (BT-149) — un prix pour 100 ou 1 000 unités est ainsi calculé correctement. Le bloc *Références* de la ligne porte aussi des références de **facture antérieure** par ligne (EXT-FR-FE-136) — numéro, date facultative et un **DocumentStatusCode** choisi parmi `INFORMATION` / `DETAIL` / `GROUP`. Trois boutons rapides du même bloc renseignent les **références de commande** de la ligne, toutes portées par `cac:OrderLineReference` : **Référence Cde Client** (numéro de commande de l'acheteur, EXT-FR-FE-135 — la clé de regroupement des lignes sur le PDF), **Numéro de commande** (numéro de commande du vendeur, EXT-FR-FE-144) et **N° ligne client** (numéro de la ligne dans la commande de l'acheteur, BT-132). Un quatrième bouton, **Avis d'expédition**, ajoute la référence et la date de l'avis d'expédition de la ligne (EXT-FR-FE-BG-07).
 - **Récapitulatif TVA** — calculé automatiquement depuis les lignes (lecture seule — les modifications de ligne s'y reflètent).
 - **Totaux** — calculés automatiquement (lecture seule).
 
@@ -28344,6 +28344,8 @@ Si la base ne contient encore aucune ligne de détail TVA (`F564234`) pour la p�
   Relançable sans risque sur la même période, sans créer de doublons.
 
 La commande est documentée sous [Ligne de commande → `backfill-vat`](../management/command-line.md#backfill-vat). Une fois la reconstruction faite, rouvrez la page TVA — la matrice se remplit comme attendu.
+
+Une erreur côté serveur — une erreur de base de données, par exemple — ne s'affiche jamais comme une période vide : la page indique le message d'erreur, qui est aussi écrit dans le journal serveur.
 
 ---
 
@@ -30904,7 +30906,7 @@ Source: https://docs.nomana-it.fr/fr/nomaubl/configuration/system/integrity-repo
 
 Les rapports d'intégrité sont des contrôles SQL en lecture seule qui listent ce qui manque ou diverge dans NomaUBL par rapport à un système source — travaux d'impression jamais intégrés, montants différents — affichés dans Rapports → Intégrité, avec une action facultative sur les lignes sélectionnées.
 
-Le modèle système **Integrity reports** regroupe des **contrôles SQL** qui comparent NomaUBL à un système source et listent ce qui **manque ou diverge** : travaux d'impression jamais intégrés, écritures comptables dont les montants diffèrent des factures électroniques… Chaque contrôle est un `SELECT` exécuté en lecture seule sur un connecteur de base de données, et **chaque ligne renvoyée est une anomalie**. Les résultats s'affichent dans l'onglet **Intégrité** de la page [Rapports](../../application/reports.md#integrite), où un contrôle peut aussi proposer une **action** sur les lignes sélectionnées.
+Le modèle système **Integrity reports** regroupe des **contrôles SQL** qui comparent NomaUBL à un système source et listent ce qui **manque ou diverge** : travaux d'impression jamais intégrés, écritures comptables dont les montants diffèrent des factures électroniques… Chaque contrôle exécute des `SELECT` en lecture seule — une requête unique, ou une requête source et une requête cible sur deux bases différentes, comparées en mémoire — et **chaque ligne renvoyée est une anomalie**. Les résultats s'affichent dans l'onglet **Intégrité** de la page [Rapports](../../application/reports.md#integrite), où un contrôle peut aussi proposer une **action** sur les lignes sélectionnées.
 
 Il s'ouvre dans **Configuration → Système → Integrity reports**. Sur une installation qui ne dispose pas encore du modèle, le bouton **Add integrity reports** le crée sans redémarrer le service. Le modèle est livré vide : rien n'apparaît dans la page Rapports tant qu'aucun contrôle n'est défini.
 
@@ -30923,6 +30925,21 @@ Il s'ouvre dans **Configuration → Système → Integrity reports**. Sur une in
 
 ---
 
+## Modes \{#modes\}
+
+Le champ **Mode** d'un contrôle détermine la façon dont ses lignes sont produites.
+
+| Mode | Résultat |
+|---|---|
+| **Direct** *(défaut)* | Une seule requête ; ses lignes sont les anomalies. Pour deux systèmes dans la même base. |
+| **Missing** | Lignes source dont la clé est absente de la cible. |
+| **Extra** | Lignes cible dont la clé est absente de la source. |
+| **Mismatch** | Clés présentes des deux côtés dont les colonnes comparées diffèrent. |
+
+Les trois modes de comparaison exécutent une **requête source** et une **requête cible**, chacune sur son propre connecteur — par exemple JD Edwards sur SQL Server et NomaUBL sur PostgreSQL — et rapprochent leurs lignes **en mémoire** sur les colonnes clés. Les clés sont normalisées avant le rapprochement : espaces de fin, zéros de tête, nombre de décimales et formats de date ne faussent plus la correspondance.
+
+---
+
 ## Contrôles
 
 Chaque contrôle est un groupe repliable — un clic sur son titre l'ouvre, **×** le supprime, **+ Add check** en ajoute un.
@@ -30931,10 +30948,23 @@ Chaque contrôle est un groupe repliable — un clic sur son titre l'ouvre, **×
 |---|---|
 | **Name** | Identifiant affiché dans la page Rapports (par ex. `missing-pdf`). À garder stable. |
 | **Description** | Une ligne qui dit ce que le contrôle détecte (par ex. *Travaux d'impression PDF non intégrés*). |
+| **Mode** | *Direct*, *Missing*, *Extra* ou *Mismatch* — voir [Modes](#modes). |
 | **Connector** | Le [connecteur de base de données](../database-connectors/nomaubl.md) sur lequel s'exécute le `SELECT` — la base JD Edwards, la base NomaUBL ou tout autre connecteur déclaré sur la plateforme. |
 | **Key columns** | Facultatif. Colonnes du résultat, séparées par des virgules, qui identifient l'enregistrement visé par une action (par ex. `JCPID, JCVERS, JCJOBNBR`, ou numéro + type de document + société). |
 | **SQL (SELECT only)** | La requête. Une seule instruction `SELECT` (ou `WITH`) ; toute autre instruction est refusée avant d'atteindre la base. La connexion est ouverte en lecture seule. |
 | **Action** | Ce que la page Rapports peut faire des lignes sélectionnées : aucune action, ou **Integrate BIP jobs**. |
+
+Dans les modes de comparaison, **Connector**, **Key columns** et **SQL** deviennent **Source connector**, **Source key columns** et **Source SQL**, et d'autres champs apparaissent :
+
+| Champ | Description |
+|---|---|
+| **Target connector** | Connecteur de base de données de la requête cible — il peut différer de celui de la source. |
+| **Target key columns** | Colonnes du résultat cible qui correspondent aux colonnes clés de la source, dans le même ordre. Vide = mêmes noms. |
+| **Target SQL** | La requête cible (par ex. `SELECT TRIM(FEWDS1) AS JOBKEY FROM F564230 WHERE FEUPMJ >= {fromJde}`). Les variables de date s'appliquent aux deux requêtes. |
+| **Compare columns** *(Mismatch)* | Paires de colonnes `SOURCE=CIBLE` séparées par des virgules (par ex. `AMOUNT_HT=UHATXA, DOC_DATE=UHDIVJ`). Une ligne est une anomalie dès qu'une paire diffère. |
+| **Tolerance** *(Mismatch)* | Deux valeurs numériques dont l'écart ne dépasse pas ce montant sont considérées comme égales. Par défaut `0.01`. |
+
+En mode *Mismatch*, le résultat reprend les colonnes source, puis une colonne `TARGET_<colonne>` par paire comparée avec la valeur cible, et une colonne `DIFFERENCE` qui nomme les colonnes en écart.
 
 ### Variables de date
 
@@ -30994,7 +31024,7 @@ Avec **Action** = **Integrate BIP jobs**, les lignes sélectionnées sont intég
   
 
 1. **Choisir un contrôle** et une **période** (30 derniers jours par défaut), puis **Exécuter**. **Voir le SQL** affiche la requête du contrôle.
-2. La ligne d'en-tête rappelle le connecteur, les colonnes clés et l'action configurée. Le résultat indique **Aucune anomalie** ou *N anomalie(s)* ; chaque ligne est une anomalie, dans la grille standard — recherche, filtres, choix des colonnes et export.
+2. La ligne d'en-tête rappelle le connecteur, les colonnes clés et l'action configurée. Sur un contrôle de comparaison, une seconde ligne ajoute le mode, le connecteur cible et, en *Mismatch*, les colonnes comparées avec la tolérance ; **Voir le SQL** affiche alors les deux requêtes, et le décompte indique *N source / N cible*. Le résultat indique **Aucune anomalie** ou *N anomalie(s)* ; chaque ligne est une anomalie, dans la grille standard — recherche, filtres, choix des colonnes et export.
 3. Quand le contrôle porte une action, cocher les lignes puis cliquer sur **Intégrer la sélection (N)**. Une confirmation rappelle que les travaux sont extraits et traités comme lors d'un traitement normal — validation, stockage et envoi selon le paramétrage du modèle.
 4. Après l'action, le contrôle est relancé : les lignes intégrées sortent du résultat, et un bandeau de synthèse affiche *N intégré(s), N en échec sur N*, avec le nom de chaque travail en échec.
 
@@ -34288,9 +34318,30 @@ La valeur Direction est écrite une fois sur la ligne au moment de l'insertion (
 Le pipeline source UBL insère désormais la même ligne de suivi `F564230` que le pipeline XML, en lisant le reste de ses valeurs directement dans l'UBL : BT-47 SIREN acheteur → `FEALKY`, BT-115 PayableAmount → `FEAEXP`, BT-2 IssueDate → `FEIVD`, BT-9 DueDate → `FEARDU`. Sans elle, l'envoi PA n'avait aucune ligne où inscrire son id de transaction, `FEUKIDSZ` restait vide et fetch-import n'avait rien à interroger. Le mode replace met à jour la ligne existante au lieu de la dupliquer ; le mode sans replace saute une facture déjà traitée avec l'avertissement habituel.
 :::
 
-### Extraction de clé depuis `cbc:ID` *(quand Source = UBL)*
+### Clé du document *(quand Source = UBL)* \{#cle-du-document\}
 
-Pour les factures UBL, la clé primaire `(doc, dct, kco)` — le triplet qui identifie le document partout ailleurs dans NomaUBL — est extraite du `cbc:ID` de la facture via une regex à **groupes nommés**. Aucune convention de nommage de fichier n'est exigée ; le fichier peut avoir n'importe quel nom.
+Le groupe **Document key (doc / dct / kco)** détermine comment un document UBL obtient sa clé primaire `(doc, dct, kco)` — le triplet qui identifie le document partout ailleurs dans NomaUBL. Le sélecteur **Key mode** propose deux modes :
+
+| Key mode | Fonctionnement |
+|---|---|
+| **From cbc:ID (regex pattern)** *(défaut)* | La clé est extraite du `cbc:ID` de la facture par une regex — voir plus bas. |
+| **Sequence (NomaUBL numbers the document)** | NomaUBL attribue lui-même le numéro de document, sous un type de document et une société fixes. |
+
+#### Mode séquence
+
+Prévu pour les **factures reçues**, dont le `cbc:ID` suit le format propre à chaque fournisseur ; utilisable aussi pour de l'UBL émis quand le format de numérotation n'est pas connu.
+
+| Champ | Description |
+|---|---|
+| **Document type (dct)** | Type de document JDE fixe de la séquence — `II` (facture entrante) s'il est vide. Choisir un type que JD Edwards n'utilise pas pour la même société. |
+| **Company (kco)** | Code société fixe. Obligatoire. |
+| **Sequence start** | Premier numéro attribué ; ensuite, le plus grand numéro enregistré pour ce type de document et cette société, plus un. |
+
+Le numéro de facture du fournisseur reste enregistré comme **numéro UBL** (BT-1). Chaque traitement attribue un nouveau numéro : un document reçu deux fois obtient deux numéros.
+
+#### Depuis `cbc:ID` (regex)
+
+La clé est extraite du `cbc:ID` de la facture via une regex à **groupes nommés**. Aucune convention de nommage de fichier n'est exigée ; le fichier peut avoir n'importe quel nom.
 
 | Champ | Description |
 |---|---|
@@ -34401,7 +34452,7 @@ Données fonctionnelles que NomaUBL lit dans le spool pour alimenter la facture 
 
 > 💡 Chaque champ « Données du document » dispose de sa propre **valeur par défaut**. Les valeurs par défaut sont utilisées quand la balise XML est absente ou vide — pratique quand une valeur est constante pour un modèle donné.
 
-### Format de date *(quand Source = XML, 2026.05.9)*
+### Format de date *(quand Source = XML)*
 
 | Champ | Défaut | Description |
 |---|---|---|
@@ -34442,6 +34493,49 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | **Custom Schematron** | chemin(s) | Une ou plusieurs feuilles Schematron **précompilées** (`.xsl`, séparées par des virgules, `%APP_HOME%` / `%ENV%` acceptés) qui portent les règles propres au client — une classification obligatoire, un format de référence acheteur… Elles s'exécutent **après** les packs standard, sur ce modèle uniquement : les règles client ne touchent jamais aux packs livrés que la mise à niveau rafraîchit. Une feuille est chargée une fois par horodatage de fichier : un fichier modifié est pris en compte à la validation suivante, sans redémarrage. Les anomalies arrivent dans les erreurs de validation sous une source courte tirée du nom de fichier (`BR-ACME-rules.xsl` → `ACME`) ; un fichier absent ou invalide est signalé en erreur sur la facture. Le traitement par lot et unitaire, le bouton *Valider* et l'API de validation en tiennent tous compte. |
 | **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
 | **LISIBLE** | `Y` / `N` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. |
+
+### Règles de traitement \{#regles-de-traitement\}
+
+Le groupe **Processing rules** oriente les documents du flux XML **avant toute génération**. Chaque règle associe une ou plusieurs conditions sur le document à un résultat. Les règles sont évaluées pour chaque document une fois son type de document déterminé, **dans l'ordre — la première qui correspond l'emporte** ; sans règle correspondante, le traitement est normal. Elles s'appliquent à tous les chemins d'entrée XML : planificateur, [dossiers surveillés](../configuration/system/watched-folders.md), *process*, *fetch-single* et *Fetch Input*. Les documents de source UBL sont volontairement écartés : leur type de transaction figure déjà dans le document.
+
+  
+    
+      Gratuités
+      Treat as document type ▾
+      ARCHIVEONLY ▾
+      ↑ ↓ Remove
+    
+    
+      if
+      Invoice amount (montant) ▾
+      is zero / empty ▾
+      
+    
+    ＋ Add condition
+  
+  
+    
+      Documents internes
+      Exclude (record only) ▾
+      
+      ↑ ↓ Remove
+    
+    
+      if
+      JDE document type (typeJDE) ▾
+      in list (a, b, c) ▾
+      RX, RZ
+    
+    ＋ Add condition
+  
+  ＋ Add rule
+
+| Résultat | Effet |
+|---|---|
+| **Treat as document type** | Le document poursuit son traitement sous le [type de document](../configuration/system/document-types.md) choisi, avec les réglages d'envoi / validation / mode / conservation de ce type — par exemple une gratuité à montant nul orientée vers `ARCHIVEONLY`. |
+| **Exclude (record only)** | Le document est seulement enregistré : sa source est archivée et son en-tête conservé, avec le statut **Exclue par règle** (`9914`, le message reprenant le nom de la règle) et un événement de cycle de vie. Il apparaît dans la liste des factures et est compté par les contrôles d'intégrité, mais il n'est jamais validé, produit ni envoyé. |
+
+**Conditions** — toutes les conditions d'une règle doivent être remplies (*if … and …*). Champs : type de document JDE, type de document déterminé, type de traitement (valeur brute du spool), montant de la facture, société, code activité, type pièce, numéro client, numéro de document, ou **XPath on the document…** (tout XPath ou balise du spool, par ex. `Code_Nature_ID12`). Opérateurs : dans la liste / hors de la liste (`RM, RX`), `=`, `≠`, nul ou vide, non nul, `<`, `>`, vide, non vide, correspond à une regex. **↑** / **↓** changent l'ordre des règles ; le nom de la règle apparaît dans le journal et dans le message de statut.
 
 ### Pièces jointes complémentaires
 
@@ -35159,9 +35253,9 @@ Le tiroir regroupe les bascules par préfixe **`Catégorie · Nom`** et les pré
 
 Liste complète des bascules par section prédéfinie :
 
-- **Header** — huit bascules `META · …` (numéro de facture, date d'émission, date d'échéance, références contrat / commande / acheteur, type de facture, profil ID), plus six bascules `Supplier · …` (adresse, SIREN, forme légale, TVA, téléphone, e-mail).
+- **Header** — neuf bascules `META · …` (numéro de facture, date d'émission, date d'échéance, références contrat / avis d'expédition (BT-16) / commande / acheteur, type de facture, profil ID), plus six bascules `Supplier · …` (adresse, SIREN, forme légale, TVA, téléphone, e-mail).
 - **Parties** — boîtes Client et Livraison, avec bascules séparées pour SIREN, TVA, adresse, identifiant de localisation et un switch principal *Show Delivery box* (désactivé, la mise en page rend un bloc Client en colonne unique). La boîte Livraison affiche le nom du destinataire (repli sur `ID: …` si seul l'identifiant de site est renseigné), la rue complète, le code postal + ville et le pays — comme la boîte Client.
-- **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et *Group by order (EXT-FR-FE-135, EXT-FR-FE-144)* — un troisième bandeau sous ceux de la livraison et de la référence de document, qui réunit sur une ligne les numéros de commande de l'acheteur et du vendeur : *Référence Cde Client : … Numéro de commande : …*), une bascule *Order line reference (BT-132)* qui imprime le n° de ligne client sous chaque ligne — et, sans regroupement par commande, les deux numéros de commande en lignes de détail, des bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — la colonne *Unit price* (BT-146) affiche la quantité de base quand elle diffère de 1 (`40,49 / 100`) ; la colonne **Net unit price** (montant de ligne ÷ quantité, soit le prix une fois les remises et charges de ligne intégrées) est **désactivée par défaut**, le prix de l'article seul restant la mise en page standard ; les sous-lignes couvrent le nombre réel de colonnes, masquer ou ajouter une colonne ne les décale donc jamais — et neuf bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau de commande suit les mêmes règles de réinitialisation que les autres : un changement de livraison réimprime les deux fils internes, un changement de référence de document réimprime le bandeau de commande.
+- **Line Table** — bascules d'en-tête de groupe (*Delivery group*, *Page break per delivery*, *Document Reference group* et *Group by order (EXT-FR-FE-135, EXT-FR-FE-144)* — un troisième bandeau sous ceux de la livraison et de la référence de document, qui réunit sur une ligne les numéros de commande de l'acheteur et du vendeur : *Référence Cde Client : … Numéro de commande : …*), une bascule *Order line reference (BT-132)* qui imprime le n° de ligne client sous chaque ligne — et, sans regroupement par commande, les deux numéros de commande en lignes de détail, des bascules de colonnes (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — la colonne *Unit price* (BT-146) affiche la quantité de base quand elle diffère de 1 (`40,49 / 100`) ; la colonne **Net unit price** (montant de ligne ÷ quantité, soit le prix une fois les remises et charges de ligne intégrées) est **désactivée par défaut**, le prix de l'article seul restant la mise en page standard ; les sous-lignes couvrent le nombre réel de colonnes, masquer ou ajouter une colonne ne les décale donc jamais — et dix bascules de sous-détail pour les métadonnées de ligne (BT-127, BT-134/135, **avis d'expédition de la ligne** (EXT-FR-FE-BG-07), **BT-155 — Code article vendeur**, BT-156, BT-157, BT-158, **BT-159 — Pays d'origine** *(imprime le nom complet du pays résolu depuis la liste des pays partagée — pas le code ISO)*, remises / charges, propriétés additionnelles d'article). Le bandeau de commande suit les mêmes règles de réinitialisation que les autres : un changement de livraison réimprime les deux fils internes, un changement de référence de document réimprime le bandeau de commande.
 - **Document Allowances** — bascules de colonnes pour type, motif, montant, taxe.
 - **VAT Breakdown** — bascules de colonnes pour catégorie, taux, base imposable, montant de TVA (une colonne d'exemption apparaît automatiquement quand elle est présente).
 - **Totals** — sept bascules de lignes couvrant la pile complète (Total HT, Allowances, Charges, Tax Exclusive, Total Tax, Total TTC, Amount Payable).
@@ -35222,8 +35316,17 @@ La barre du constructeur porte quelques réglages appliqués à toute la mise en
 | **Show logo** | Dessine le logo de la société en haut du bloc vendeur, en page 1. Le fichier vient du *Logo path* de [Paramètres → Global → Traitement → PDF](../configuration/system/global.md), où un *Logo offset X (pt)* le décale aussi horizontalement. PNG, JPG et GIF sont pris en charge. |
 | **Trim zeros** | Supprime les zéros décimaux de fin sur les montants, prix unitaires et quantités — un montant rond s'imprime `23` au lieu de `23.00`, un prix unitaire `23.0000` s'imprime `23`. Désactivé par défaut. Réglage propre au modèle, appliqué au tableau de lignes, au bloc des totaux et aux PDF lisible et à l'écran. |
 | **Decimals** — *amount* / *price* / *qty* | Nombre de décimales imprimées par nature de nombre, chacune `auto` ou `0` à `6`. *Amount* couvre les montants de ligne, remises, lignes de TVA et totaux ; *price* le prix de l'article, le prix unitaire net et la remise sur prix ; *qty* les quantités facturées. `auto` garde l'affichage standard (montants à 2 décimales, prix et quantités tels que dans l'UBL) : les modèles existants restent inchangés. Un nombre fixe est arrondi au plus éloigné de zéro, comme l'exige l'AFNOR ; *Trim zeros* s'applique en plus. |
-| **Afficher le logo** | Dessine le logo de la société en haut du bloc fournisseur de la page 1. L'image vient du champ *Chemin du logo* dans [Paramètres → Global → Traitement → PDF](../configuration/system/global.md), où un *Décalage X du logo (pt)* la décale aussi horizontalement. PNG, JPG et GIF sont pris en charge. |
-| **Zéros inutiles** | Retire les décimales à zéro des montants, prix unitaires et quantités : un montant entier s'affiche `23` au lieu de `23,00`, et un prix unitaire `23,0000` devient `23`. Désactivé par défaut — l'affichage reste à deux décimales pour les montants et quatre pour les prix. Le réglage est par modèle et s'applique au tableau des lignes, au bloc des totaux et aux PDF lisible et à l'écran. |
+
+### Libellés \{#libelles\}
+
+Tous les textes imprimés par le générateur PDF — 46 libellés répartis entre l'en-tête du document, les parties, le tableau des lignes, le détail des lignes, le récapitulatif TVA, les totaux et le paiement — peuvent être remplacés **par modèle PDF et par langue**. Ouvrir **Labels** dans le groupe *Template* du constructeur :
+
+- chaque ligne affiche la clé du libellé avec un champ **FR** et un champ **EN** ; le texte par défaut s'affiche en indication, et un champ laissé vide le conserve ;
+- une zone **Search…** et un filtre **Overridden only (N)** aident à retrouver un libellé ; les clés remplacées sont mises en évidence ;
+- **×** rétablit le texte par défaut d'une ligne, et **Copy labels from…** reprend les libellés remplacés d'un autre modèle PDF ;
+- l'aperçu en direct tient compte des remplacements au fil de la saisie.
+
+Un client qui préfère *N° de facture* à *N° facture UBL* l'obtient sur son seul modèle ; les autres modèles gardent le texte par défaut. Le catalogue complet, avec le texte EN / FR par défaut de chaque clé, est disponible via `GET /api/pdf-templates/labels`.
 
 ---
 
@@ -36203,7 +36306,7 @@ Quand la source est **BIP**, un appel **Apply post-generation** supplémentaire 
 | **Replace Mode** | `Overwrite existing` (défaut) ou `Skip`. |
 | **Send to PA** | `Use settings`, `Force send` ou `Skip sending`. |
 
-La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via la regex `idPattern` du modèle de document — les fichiers peuvent avoir n'importe quel nom. Voir [Documents → Extraction de clé depuis cbc:ID](../management/documents.md#extraction-de-cl%C3%A9-depuis-cbcid-quand-source--ubl) pour la mise en place de la regex.
+La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via la regex `idPattern` du modèle de document — les fichiers peuvent avoir n'importe quel nom. Voir [Documents → Extraction de clé depuis cbc:ID](../management/documents.md#cle-du-document) pour la mise en place de la regex.
 
 #### Combinaisons non prises en charge
 
@@ -36797,7 +36900,8 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
-  2026.10.12.1 · 2026-10-01
+  2026.10.14.1 · 2026-10-01
+  2026.10.12.1 · 2026-09-30
   2026.10.11.1 · 2026-09-30
   2026.10.06.1 · 2026-09-30
   2026.10.05.1 · 2026-09-30
@@ -36909,12 +37013,33 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.10.14.1 — 2026-10-14 \{#v2026-10-14-1\}
+
+### Améliorations
+
+- **Libellés du PDF par gabarit.** Chaque texte imprimé par le générateur PDF (46 libellés : en-tête du document, parties, tableau des lignes, détails de ligne, récapitulatif TVA, totaux, paiement) peut désormais être redéfini par gabarit PDF et par langue, depuis un nouveau panneau « Libellés » du constructeur visuel : le libellé par défaut s'affiche en indication, un champ vide le conserve, une recherche et un filtre « redéfinis seulement » aident à les retrouver, chaque ligne peut être réinitialisée, et les libellés d'un autre gabarit PDF peuvent être recopiés. L'aperçu en direct reflète les redéfinitions. Un client qui demande « N° de facture » à la place de « N° facture UBL » l'obtient sur son seul gabarit ; les autres clients et les gabarits existants ne changent pas.
+- **Règles de traitement par gabarit de document.** Un nouveau groupe « Processing rules » du gabarit de document (onglet Document) aiguille les documents du flux XML avant toute génération. Chaque règle combine des conditions sur le document (type de document JDE, type de document résolu, type de traitement brut, montant de la facture, société, code activité, type de pièce, numéro client, numéro de document, ou tout XPath / balise du spool, avec des opérateurs dans la liste, égalité, nullité, comparaison, vide et expression régulière) et l'un de deux résultats : « traiter comme le type de document X », qui poursuit le document avec les réglages envoi / validation / mode / conservation de ce type (par exemple une gratuité à montant nul aiguillée vers ARCHIVEONLY), ou « exclure », qui se contente d'enregistrer le document. Un document exclu conserve sa source archivée et son en-tête, porte le nouveau statut « Exclue par règle » (9914, message = nom de la règle) avec un événement de cycle de vie, reste visible dans la liste et comptabilisé par les contrôles d'intégrité, mais n'est jamais validé, produit ni envoyé. Les règles sont ordonnées, la première qui correspond l'emporte, et elles s'appliquent à tous les chemins d'intégration XML (planificateur, dossiers surveillés, process, fetch-single, page Récupération). Les documents UBL sont volontairement exclus du dispositif : leur type de transaction est déjà inscrit dans le document.
+- **Clé en séquence pour les documents UBL.** Un gabarit de document à source UBL peut désormais numéroter lui-même ses documents au lieu de dériver la clé du numéro de facture : mode de clé « Séquence » dans l'onglet Document, avec un type de document fixe (II, facture entrante, par défaut), une société fixe et un début de séquence. Le numéro suivant est le plus élevé stocké pour ce type et cette société, plus un. Prévu pour les factures reçues, dont le numéro suit le format propre à chaque fournisseur, et utilisable pour l'UBL émis quand le format n'est pas connu. Le numéro de facture reste stocké tel quel comme numéro UBL (BT-1). Un document traité deux fois reçoit deux numéros. Les modes motif regex et recherche par connecteur ne changent pas.
+- **Références d'avis d'expédition.** Le socle XSL, l'éditeur XSL, la fenêtre facture et le PDF gèrent désormais l'avis d'expédition au niveau du document (BT-16 : référence et date) et au niveau de la ligne (EXT-FR-FE-BG-07 : référence EXT-FR-FE-140, date EXT-FR-FE-201, numéro de ligne d'expédition facultatif). Nouvelles variables de mappage TAG_DESPATCH_REF / TAG_DESPATCH_DATE et TAG_LINE_DESPATCH_REF / TAG_LINE_DESPATCH_DATE / TAG_LINE_DESPATCH_LINE_ID ; la fenêtre facture propose les champs en en-tête et par ligne ; le PDF les imprime dans le bloc facture et en détail de ligne, avec leurs propres options et un libellé redéfinissable.
+
+### Corrections
+
+- **Identifiants de ligne uniques par facture.** Avec des lignes regroupées par livraison, le numéro de ligne (BT-126) repartait à 1 à chaque livraison, d'où des identifiants en double dans une même facture et, côté base, des lignes perdues sur le conflit de clé. La numérotation est désormais continue sur l'ensemble des livraisons ; les numéros de ligne par défaut des références de commande et d'expédition la suivent.
+- **Fenêtre facture : boutons de références de ligne.** Les boutons « Référence Cde Client », « Numéro de commande », « N° ligne client » et « Avis d'expédition » d'une ligne n'ouvraient pas leur champ.
+
+---
+
 ## 2026.10.12.1 — 2026-10-12 \{#v2026-10-12-1\}
 
 ### Améliorations
 
 - **Rapports d'intégrité.** Un nouvel onglet « Intégrité » de la page Rapports exécute des contrôles SQL qui listent ce qui manque ou diverge dans NomaUBL par rapport à un système source : travaux d'impression JDE jamais intégrés, écritures comptables dont les montants diffèrent, … Les contrôles se définissent dans le nouveau gabarit de paramétrage « Rapports d'intégrité » : nom, description, connecteur base de données, SQL (SELECT uniquement, lecture seule, plafond de lignes et délai), colonnes clés, et des marqueurs de date renseignés depuis la période de la page (\{from\}/\{to\}, \{fromJde\}/\{toJde\}, \{fromDMY\}/\{toDMY\}). Le résultat s'affiche dans la grille standard (recherche, filtres, colonnes, export), chaque ligne étant une anomalie. Un contrôle peut porter une action : « Intégrer les travaux BIP » associe les colonnes travail, modèle et hôte du résultat et, sur les lignes sélectionnées, lance la même extraction et le même traitement que `fetch-single <modèle> bip <travail>` via le batch de récupération, après confirmation ; le contrôle est relancé ensuite et le résumé liste les travaux en échec. D'autres types d'action (appels de connecteur API ou SQL) suivront.
+- **Rapports d'intégrité entre deux bases.** Un contrôle peut désormais comparer une requête source et une requête cible exécutées sur des connecteurs différents (JDE sous MSSQL, NomaUBL sous Postgres…), rapprochées en mémoire sur des colonnes clés : « Manquants » liste les lignes source absentes de la cible, « En trop » l'inverse, « Écarts » les clés présentes des deux côtés dont les colonnes comparées diffèrent (montants à une tolérance près, 0,01 par défaut), la valeur cible et les colonnes en écart étant ajoutées au résultat. Les clés sont normalisées avant rapprochement (espaces de fin, zéros de tête, décimales, dates). Le mode « Direct » à une seule requête ne change pas.
 - **Confirmation avant le renvoi à la PA depuis la fenêtre facture.** Le bouton « Renvoyer à la PA » demande désormais confirmation, le document étant transmis immédiatement avec passage du statut à En attente (9906). Le renvoi depuis la liste des factures en avait déjà une.
+
+### Corrections
+
+- **Déclaration de TVA sous Oracle.** Les requêtes de la déclaration plaçaient l'alias de table devant l'appel TRIM, qu'Oracle refuse (ORA-00904 "UH"."TRIM") ; la page affichait alors « Aucune facture sur cette période » au lieu de l'erreur. Les deux points sont corrigés : les requêtes sont valides sur tous les dialectes, et un échec côté serveur est désormais affiché sur la page et journalisé.
 
 ---
 
@@ -41591,7 +41716,7 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 |---|---|---|
 | **Document Root** | Élément racine de la facture | `TAG_ROOT` — l'élément XML englobant une facture. |
 | **Custom Extension Fields** | `ext:UBLExtensions` | Issue de secours pour des données sans équivalent EN 16931 — voir [Champs d'extension](#custom-extension-fields) plus bas. |
-| **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-14, BT-19 | Numéro, dates, références. La référence de commande porte à la fois le bon de commande de l'acheteur (BT-13) et la **référence de commande du vendeur** (BT-14, `cac:OrderReference/cbc:SalesOrderID`) avec sa propre date de référence — les deux se règlent côte à côte, chacun depuis un champ source. |
+| **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-14, BT-19 | Numéro, dates, références. La référence de commande porte à la fois le bon de commande de l'acheteur (BT-13) et la **référence de commande du vendeur** (BT-14, `cac:OrderReference/cbc:SalesOrderID`) avec sa propre date de référence — les deux se règlent côte à côte, chacun depuis un champ source. L'**avis d'expédition** (BT-16, `cac:DespatchDocumentReference`) se mappe avec `TAG_DESPATCH_REF` et `TAG_DESPATCH_DATE`, la date n'étant émise qu'avec une référence. |
 | **Billing References** | BT-11, BT-14 à BT-18, BT-122 à BT-124 | Projet, contrat, expédition, justificatifs. |
 | **Preceding Invoices — répété** *(BG-3, 0..n)* | BT-25, BT-26 | Parcourt un groupe source répétitif et génère un `cac:BillingReference` par facture antérieure (avec une date d'émission facultative), en complément de la référence unique BT-25/BT-26 déjà gérée dans *Billing References*. |
 | **Supporting Documents** *(BG-24 · BT-122 / BT-123 / BT-125)* | `cac:AdditionalDocumentReference` | Références de documents justificatifs — une référence (BT-122) avec une description facultative (BT-123), et éventuellement un fichier intégré (BT-125) encodé en base64 dans le spool source. Jusqu'à quatre par facture. Voir [Documents justificatifs](#supporting-documents) plus bas. |
@@ -41603,7 +41728,7 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Payment** | BT-20, BT-81 à BT-91 | Moyen, IBAN, BIC, mandat, conditions. |
 | **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | Payeur en prélèvement SEPA — la partie débitrice, la référence de mandat (BT-89) et le compte débité (IBAN, BT-91). Voir [Payeur / mandat de prélèvement](#payer-mandate) ci-dessous. |
 | **VAT** | BT-110, BT-116 à BT-121 | Détail TVA — voir [scoping](#scoping) ci-dessous. |
-| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158, groupe répétable jusqu'à quatre codes), la version de schéma (BT-158-2), l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN), et le **prix brut** (`TAG_LINE_GROSS_PRICE` → BT-148) avec la **quantité de base** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). Un spool portant brut + remise mappe les deux et le prix net est déduit (brut − remise) ; un spool portant net + remise émet son brut égal à net + remise ; un spool portant net + brut sans montant de remise — le cas courant d'un spool JDE — reçoit une remise sur prix (BT-147) déduite comme brut − net, le brut servant de base (aucune remise quand le brut n'excède pas le net). Les champs de ligne sont regroupés par thème (identification, quantités, prix, TVA, références, classification) — voir [scoping](#scoping) ci-dessous. |
+| **Invoice Lines** | BT-126 à BT-161 | Lignes de facture, avec le pays d'origine (BT-159), le code de classification (BT-158, groupe répétable jusqu'à quatre codes), la version de schéma (BT-158-2), l'**identifiant article normalisé** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — un code enregistré comme un GTIN, sa valeur depuis un champ source et son schéma choisi dans la liste ISO 6523 (par ex. `0160` pour un GTIN), et le **prix brut** (`TAG_LINE_GROSS_PRICE` → BT-148) avec la **quantité de base** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). Un spool portant brut + remise mappe les deux et le prix net est déduit (brut − remise) ; un spool portant net + remise émet son brut égal à net + remise ; un spool portant net + brut sans montant de remise — le cas courant d'un spool JDE — reçoit une remise sur prix (BT-147) déduite comme brut − net, le brut servant de base (aucune remise quand le brut n'excède pas le net). Les champs de ligne sont regroupés par thème (identification, quantités, prix, TVA, références, classification) — voir [scoping](#scoping) ci-dessous. Les numéros de ligne (BT-126) se suivent d'un groupe de livraison à l'autre et restent donc uniques dans la facture. L'**avis d'expédition** de la ligne (EXT-FR-FE-BG-07, `cac:DespatchLineReference`) se mappe avec `TAG_LINE_DESPATCH_REF` (EXT-FR-FE-140), `TAG_LINE_DESPATCH_DATE` (EXT-FR-FE-201) et `TAG_LINE_DESPATCH_LINE_ID` — le numéro de ligne de l'avis, à défaut le numéro de ligne de la facture. |
 | **Item Properties** *(BG-32)* | BG-32 | Attributs produit attachés à une ligne. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Remise ou charge par ligne. Pointer le TAG *Item AC* sur `.` (ou le laisser vide) quand les champs de remise se trouvent directement sur la ligne, sans élément parent — le moteur itère alors la ligne elle-même. Quand la source ne porte que le pourcentage, le montant et la base sont déduits du net de la ligne ; pourcentage + base déduit le montant, pourcentage + montant déduit la base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132, EXT-FR-FE-135, EXT-FR-FE-144 | Références de document par ligne — pièces justificatives (BT-128, schéma UNTDID 1153) et trois références de commande dans le même groupe `cac:OrderLineReference` (EXT-FR-FE-BG-09, placé entre InvoicePeriod et DocumentReference selon la séquence UBL 2.1) : `TAG_LINE_ORDER_REF` → *Customer Order Reference*, numéro de commande de l'acheteur (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`), qui sert au regroupement des lignes sur le PDF ; `TAG_LINE_SALES_ORDER_REF` → *Sales order*, numéro de commande du vendeur (EXT-FR-FE-144, `cbc:SalesOrderID`) ; `TAG_LINE_ORDER_LINE_REF` → *Order line reference*, numéro de la ligne dans la commande de l'acheteur (BT-132, `cbc:LineID`). Si seul le numéro de commande du vendeur est mappé, l'identifiant de commande obligatoire reprend la commande d'achat de l'en-tête (BT-13). |

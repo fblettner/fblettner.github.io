@@ -33320,14 +33320,14 @@ Since 2026.05.10, editing an existing invoice no longer flips its `cbc:Customiza
 The modal is split into vertical sections:
 
 - **Document** — invoice number, type, profile ID, contract / buyer / order references.
-- **Header** — issue / due dates, currency, period start / end, plus a **Preceding invoices** block (BG-3, 0..n): each row a reference number (BT-25) and an optional issue date (BT-26), added or removed with **＋ Add a preceding invoice (BG-3)**. On a credit note this is the reference to the corrected invoice.
+- **Header** — issue / due dates, currency, period start / end, the **Despatch advice** (BT-16 — number and date), plus a **Preceding invoices** block (BG-3, 0..n): each row a reference number (BT-25) and an optional issue date (BT-26), added or removed with **＋ Add a preceding invoice (BG-3)**. On a credit note this is the reference to the corrected invoice.
 - **Supplier** — pre-populates from the supplier directory (*UBL Defaults → Suppliers / Companies*); editable per invoice.
 - **Customer** — filled end to end from the company search: results show the badge, name and identifier on one line with the address below; searching a bare SIREN or SIRET lists every establishment (the same second INSEE lookup as [E-Directory](./edirectory.md)), and an optional SIRET field completes the SIREN. The electronic address is **not guessed** from the SIREN/SIRET — a PPF electronic-address list (opened automatically after picking a company, or anytime via the button next to the identifier field) shows the addresses registered for the SIREN with their active/disabled state; picking one fills the identifier and its scheme, then the list closes. An **Other ids (BT-46)** block adds any number of extra buyer identifiers, each with its scheme from the EAS list — a routing code or a second SIRET carried on the document is now visible, editable and removable instead of travelling invisibly.
 - **Delivery** — optional document-level delivery group (BG-13). It shows only the delivery set at document level; deliveries carried by the lines stay on the lines and are never copied up to the header.
 - **Payment** — payment means code, IBAN, BIC, mandate, terms.
 - **Allowances / charges** — document-level discounts / charges.
 - **Notes** — free-text notes per `BT-22` prefix.
-- **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties. The unit-price input accepts fine precision (up to 6 decimals), to match prices that carry more than 2 decimals at source. A per-line **Price (BG-29)** block sets the gross unit price (**BT-148**) and the price discount (**BT-147**); the net price is derived and drives the line amount, and the line amount divides by the **price base quantity** (BT-149) so a price per 100 or 1,000 units is computed correctly. The line *References* block also holds per-line **Preceding invoice** references (EXT-FR-FE-136) — number, optional date and a **DocumentStatusCode** picked from `INFORMATION` / `DETAIL` / `GROUP`. Three quick-add buttons in the same block fill the **order references** of the line, all carried by `cac:OrderLineReference`: **Customer Order Reference** (the buyer's order number, EXT-FR-FE-135 — the key the PDF groups lines on), **Order number** (the seller's order number, EXT-FR-FE-144) and **Customer line no.** (the line number inside the buyer's order, BT-132).
+- **Lines** — invoice lines with item, quantity, unit, price, allowances, item properties. The unit-price input accepts fine precision (up to 6 decimals), to match prices that carry more than 2 decimals at source. A per-line **Price (BG-29)** block sets the gross unit price (**BT-148**) and the price discount (**BT-147**); the net price is derived and drives the line amount, and the line amount divides by the **price base quantity** (BT-149) so a price per 100 or 1,000 units is computed correctly. The line *References* block also holds per-line **Preceding invoice** references (EXT-FR-FE-136) — number, optional date and a **DocumentStatusCode** picked from `INFORMATION` / `DETAIL` / `GROUP`. Three quick-add buttons in the same block fill the **order references** of the line, all carried by `cac:OrderLineReference`: **Customer Order Reference** (the buyer's order number, EXT-FR-FE-135 — the key the PDF groups lines on), **Order number** (the seller's order number, EXT-FR-FE-144) and **Customer line no.** (the line number inside the buyer's order, BT-132). A fourth button, **Despatch advice**, adds the line's despatch advice reference and date (EXT-FR-FE-BG-07).
 - **VAT summary** — auto-computed from the lines (read-only — line edits are reflected here).
 - **Totals** — auto-computed (read-only).
 
@@ -33794,6 +33794,8 @@ If the database does not yet hold any VAT detail row (`F564234`) for the selecte
   Safe to re-run on the same period without creating duplicates.
 
 The command is documented under [Command Line → `backfill-vat`](../management/command-line.md#backfill-vat). Once the rebuild has run, reopen the VAT page and the matrix is populated as expected.
+
+A server-side failure — a database error, for instance — is never shown as an empty period: the page displays the error message, and the error is written to the server log.
 
 ---
 
@@ -36354,7 +36356,7 @@ Source: https://docs.nomana-it.fr/nomaubl/configuration/system/integrity-reports
 
 Integrity reports are read-only SQL checks that list what is missing or wrong in NomaUBL compared with a source system — print jobs never integrated, amounts that differ — shown on Reports → Integrity, with an optional action on the selected rows.
 
-The **Integrity reports** system template holds a list of **SQL checks** that compare NomaUBL with a source system and list what is **missing or wrong**: print jobs that were never integrated, accounting records whose amounts differ from the e-invoices… Each check is a `SELECT` run read-only against a database connector, and **every row it returns is one anomaly**. The results are shown on the **Integrity** tab of the [Reports](../../application/reports.md#integrity) page, where a check can also carry an **action** on the selected rows.
+The **Integrity reports** system template holds a list of **SQL checks** that compare NomaUBL with a source system and list what is **missing or wrong**: print jobs that were never integrated, accounting records whose amounts differ from the e-invoices… Each check runs read-only `SELECT` statements — a single query, or a source query and a target query on two different databases compared in memory — and **every row it returns is one anomaly**. The results are shown on the **Integrity** tab of the [Reports](../../application/reports.md#integrity) page, where a check can also carry an **action** on the selected rows.
 
 Open it under **Configuration → System → Integrity reports**. On an installation that does not have the template yet, an **Add integrity reports** button creates it without restarting the service. The template ships empty: nothing appears on the Reports page until a check is defined.
 
@@ -36373,6 +36375,21 @@ Open it under **Configuration → System → Integrity reports**. On an installa
 
 ---
 
+## Modes \{#modes\}
+
+The **Mode** field of a check decides how its rows are produced.
+
+| Mode | Result |
+|---|---|
+| **Direct** *(default)* | One query; its rows are the anomalies. For two systems in the same database. |
+| **Missing** | Source rows whose key is absent from the target. |
+| **Extra** | Target rows whose key is absent from the source. |
+| **Mismatch** | Keys present on both sides whose compared columns differ. |
+
+The three comparison modes run a **source query** and a **target query**, each on its own connector — JD Edwards on SQL Server and NomaUBL on PostgreSQL, for instance — and match their rows **in memory** on the key columns. Keys are normalised before matching: trailing spaces, leading zeros, decimal scale and date formats no longer get in the way.
+
+---
+
 ## Checks
 
 Each check is a collapsible group — click its title to open it, **×** removes it, **+ Add check** appends one.
@@ -36381,10 +36398,23 @@ Each check is a collapsible group — click its title to open it, **×** removes
 |---|---|
 | **Name** | Identifier shown on the Reports page (e.g. `missing-pdf`). Keep it stable. |
 | **Description** | One line explaining what the check finds (e.g. *PDF print jobs not integrated*). |
+| **Mode** | *Direct*, *Missing*, *Extra* or *Mismatch* — see [Modes](#modes). |
 | **Connector** | The [database connector](../database-connectors/nomaubl.md) the `SELECT` runs against — the JD Edwards database, the NomaUBL database or any other connector declared on the platform. |
 | **Key columns** | Optional. Comma-separated result columns that identify the record an action works on (e.g. `JCPID, JCVERS, JCJOBNBR`, or document number + type + company). |
 | **SQL (SELECT only)** | The query. A single `SELECT` (or `WITH`) statement; anything else is refused before it reaches the database. The connection is opened read-only. |
 | **Action** | What the Reports page can do with the selected rows: *none*, or **Integrate BIP jobs**. |
+
+In the comparison modes, **Connector**, **Key columns** and **SQL** become **Source connector**, **Source key columns** and **Source SQL**, and further fields appear:
+
+| Field | Description |
+|---|---|
+| **Target connector** | Database connector of the target query — it may differ from the source. |
+| **Target key columns** | Columns of the target result matching the source key columns, in the same order. Empty = same names. |
+| **Target SQL** | The target query (e.g. `SELECT TRIM(FEWDS1) AS JOBKEY FROM F564230 WHERE FEUPMJ >= {fromJde}`). The date placeholders apply to both queries. |
+| **Compare columns** *(Mismatch)* | Comma-separated `SOURCE=TARGET` column pairs (e.g. `AMOUNT_HT=UHATXA, DOC_DATE=UHDIVJ`). A row is an anomaly when any pair differs. |
+| **Tolerance** *(Mismatch)* | Numeric values differing by at most this amount are equal. Default `0.01`. |
+
+In *Mismatch* mode, the result carries the source columns, then one `TARGET_<column>` column per compared pair with the target value, and a `DIFFERENCE` column naming the columns that differ.
 
 ### Date placeholders
 
@@ -36444,7 +36474,7 @@ When **Action** is set to **Integrate BIP jobs**, the selected rows are integrat
   
 
 1. **Pick a check** and a **period** (last 30 days by default), then **Run**. **Show SQL** displays the query of the check.
-2. The header line recalls the connector, the key columns and the configured action. The result reads **No anomaly** or *N anomaly(ies)*, every row being one anomaly in the standard grid — search, filters, column chooser and export.
+2. The header line recalls the connector, the key columns and the configured action. On a comparison check, a second line adds the mode, the target connector and, for *Mismatch*, the compared columns with the tolerance; **Show SQL** then displays both queries, and the count reads *N source / N target*. The result reads **No anomaly** or *N anomaly(ies)*, every row being one anomaly in the standard grid — search, filters, column chooser and export.
 3. When the check carries an action, tick the rows and click **Integrate selection (N)**. A confirmation recalls that the jobs are extracted and processed like a normal run — validation, storage and sending follow the template settings.
 4. After the action, the check runs again: integrated rows drop out of the result, and a summary banner shows *N integrated, N failed out of N*, with the name of every failed job.
 
@@ -39738,9 +39768,30 @@ The Direction value is written once on the row at insert time (column `UHDRIN` o
 The UBL-source pipeline now inserts the same `F564230` tracking row the XML pipeline produces, reading the rest of its values straight from the UBL: BT-47 buyer SIREN → `FEALKY`, BT-115 PayableAmount → `FEAEXP`, BT-2 IssueDate → `FEIVD`, BT-9 DueDate → `FEARDU`. Without it the PA send had no row to stamp with its transaction id, `FEUKIDSZ` stayed empty and fetch-import had nothing to poll. Replace mode updates the existing row instead of duplicating it; non-replace mode skips an already-processed invoice with the usual warning.
 :::
 
-### Key extraction from `cbc:ID` *(when Source = UBL)*
+### Document key *(when Source = UBL)* \{#key-extraction-from-cbcid-when-source--ubl\}
 
-For UBL invoices the `(doc, dct, kco)` primary key — the same triplet that identifies the document everywhere else in NomaUBL — is parsed from the invoice's `cbc:ID` via a regex with **named groups**. There is no filename convention to follow; the file can be named anything.
+The **Document key (doc / dct / kco)** group decides how a UBL document gets its `(doc, dct, kco)` primary key — the same triplet that identifies the document everywhere else in NomaUBL. The **Key mode** selector offers two ways:
+
+| Key mode | Behaviour |
+|---|---|
+| **From cbc:ID (regex pattern)** *(default)* | The key is parsed from the invoice's `cbc:ID` with a regex — see below. |
+| **Sequence (NomaUBL numbers the document)** | NomaUBL hands out the document number itself, under a fixed document type and company. |
+
+#### Sequence mode
+
+Meant for **received invoices**, whose `cbc:ID` follows each supplier's own format, and usable for emitted UBL when the numbering format is not known.
+
+| Field | Description |
+|---|---|
+| **Document type (dct)** | Fixed JDE document type of the sequence — `II` (incoming invoice) when empty. Pick a type JD Edwards does not use for the same company. |
+| **Company (kco)** | Fixed company code. Required. |
+| **Sequence start** | First number handed out; afterwards, one above the highest number stored for this document type and company. |
+
+The supplier's invoice number stays stored as the **UBL number** (BT-1). Each processing hands out a new number: a document received twice gets two numbers.
+
+#### From cbc:ID (regex pattern)
+
+The key is parsed from the invoice's `cbc:ID` via a regex with **named groups**. There is no filename convention to follow; the file can be named anything.
 
 | Field | Description |
 |---|---|
@@ -39851,7 +39902,7 @@ Functional data NomaUBL reads from the spool to populate the UBL invoice and to 
 
 > 💡 Each Document Data field has its own **default value**. Defaults are used when the XML tag is missing or empty, which is useful when a value is constant for a given template.
 
-### Date format *(when Source = XML, 2026.05.9)*
+### Date format *(when Source = XML)*
 
 | Field | Default | Description |
 |---|---|---|
@@ -39892,6 +39943,49 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | **Custom Schematron** | path(s) | One or more **precompiled** Schematron stylesheets (`.xsl`, comma-separated, `%APP_HOME%` / `%ENV%` accepted) holding this customer's own rules — a mandatory classification, a buyer-reference pattern… They run **after** the standard packs, on this template only, so customer rules never touch the shipped packs the upgrade refreshes. A stylesheet is loaded once per file stamp: an edited file is picked up on the next validation without a restart. Findings land in the validation errors under a short source derived from the file name (`BR-ACME-rules.xsl` → `ACME`); a missing or broken file is reported as an error on the invoice. Batch and single processing, the *Validate* button and the validate API all honour it. |
 | **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
 | **LISIBLE** | `Y` / `N` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. |
+
+### Processing rules \{#processing-rules\}
+
+The **Processing rules** group routes the documents of the XML pipeline **before anything is generated**. Each rule combines one or more conditions on the document with one outcome. Rules are evaluated per document once its document type is resolved, **in order — the first match wins**; no matching rule means normal processing. They apply to every XML ingestion path: scheduler, [watched folders](../configuration/system/watched-folders.md), *process*, *fetch-single* and *Fetch Input*. UBL-source documents are deliberately left out — their transaction type is already written in the document.
+
+  
+    
+      Gratuities
+      Treat as document type ▾
+      ARCHIVEONLY ▾
+      ↑ ↓ Remove
+    
+    
+      if
+      Invoice amount (montant) ▾
+      is zero / empty ▾
+      
+    
+    ＋ Add condition
+  
+  
+    
+      Internal documents
+      Exclude (record only) ▾
+      
+      ↑ ↓ Remove
+    
+    
+      if
+      JDE document type (typeJDE) ▾
+      in list (a, b, c) ▾
+      RX, RZ
+    
+    ＋ Add condition
+  
+  ＋ Add rule
+
+| Outcome | Effect |
+|---|---|
+| **Treat as document type** | The document continues as the chosen [document type](../configuration/system/document-types.md), with that type's send / validate / mode / keep settings — e.g. a zero-amount gratuity routed to `ARCHIVEONLY`. |
+| **Exclude (record only)** | The document is only recorded: its source is archived and its header stored, with the status **Excluded by rule** (`9914`, the message being the rule name) and a lifecycle event. It is visible in the invoice list and counted by the integrity checks, but never validated, output nor sent. |
+
+**Conditions** — every condition of a rule must match (*if … and …*). Fields: JDE document type, resolved document type, processing type (raw spool value), invoice amount, company, activity code, type piece, customer number, document number, or **XPath on the document…** (any XPath or spool tag, e.g. `Code_Nature_ID12`). Operators: in list / not in list (`RM, RX`), `=`, `≠`, is zero / empty, is not zero, `<`, `>`, is empty, is not empty, matches regex. **↑** / **↓** reorder the rules; the rule name shows in the log and in the status message.
 
 ### Additional Attachments
 
@@ -40609,9 +40703,9 @@ The drawer groups toggles by **`Category · Name`** prefix and arranges them in 
 
 The full list of toggles per preset section:
 
-- **Header** — eight `META · …` toggles (invoice number, issue date, due date, contract / order / buyer references, invoice type, profile ID) plus six `Supplier · …` toggles (address, SIREN, legal form, VAT, phone, email).
+- **Header** — nine `META · …` toggles (invoice number, issue date, due date, contract / despatch advice (BT-16) / order / buyer references, invoice type, profile ID) plus six `Supplier · …` toggles (address, SIREN, legal form, VAT, phone, email).
 - **Parties** — Customer and Delivery boxes, with separate toggles for SIREN, VAT, address, location ID and a *Show Delivery box* master switch (when off, the layout renders a single-column Customer block). The Delivery box shows the delivery party name (falling back to `ID: …` when only the location ID is set), the full street, postal code + city and country code — matching the Customer box.
-- **Line Table** — group-header toggles (*Delivery group*, *Page break per delivery*, *Document Reference group* and *Group by order (EXT-FR-FE-135, EXT-FR-FE-144)* — a third band below the delivery and document-reference bands, carrying the buyer's and the seller's order numbers on one line: *Customer Order Reference: … Order number: …*), an *Order line reference (BT-132)* toggle that prints the customer line number under each line — and, when order grouping is off, the two order numbers as detail rows too, column toggles (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — the *Unit price* column (BT-146) shows the price base quantity when it differs from 1 (`40,49 / 100`); the **Net unit price** column (line amount ÷ quantity, i.e. the price once line allowances and charges are folded in) is **off by default**, so the item price alone stays the standard layout. Sub-rows span the real column count, so hiding or adding columns never misaligns them. The line table also carries nine sub-detail toggles for line metadata (BT-127, BT-134/135, **BT-155 — Seller's item code**, BT-156, BT-157, BT-158, **BT-159 — Country of origin** *(prints the country's full name resolved from the shared countries list — not the ISO code)*, allowances / charges, additional item properties). The order band follows the same reset rules as the others: a new delivery re-prints both inner breadcrumbs, a new document reference re-prints the order band.
+- **Line Table** — group-header toggles (*Delivery group*, *Page break per delivery*, *Document Reference group* and *Group by order (EXT-FR-FE-135, EXT-FR-FE-144)* — a third band below the delivery and document-reference bands, carrying the buyer's and the seller's order numbers on one line: *Customer Order Reference: … Order number: …*), an *Order line reference (BT-132)* toggle that prints the customer line number under each line — and, when order grouping is off, the two order numbers as detail rows too, column toggles (`Line #`, `Description`, `Quantity`, `Unit`, `Unit Price`, `Net unit price`, `Amount`, `Tax`) — the *Unit price* column (BT-146) shows the price base quantity when it differs from 1 (`40,49 / 100`); the **Net unit price** column (line amount ÷ quantity, i.e. the price once line allowances and charges are folded in) is **off by default**, so the item price alone stays the standard layout. Sub-rows span the real column count, so hiding or adding columns never misaligns them. The line table also carries ten sub-detail toggles for line metadata (BT-127, BT-134/135, **line despatch advice** (EXT-FR-FE-BG-07), **BT-155 — Seller's item code**, BT-156, BT-157, BT-158, **BT-159 — Country of origin** *(prints the country's full name resolved from the shared countries list — not the ISO code)*, allowances / charges, additional item properties). The order band follows the same reset rules as the others: a new delivery re-prints both inner breadcrumbs, a new document reference re-prints the order band.
 - **Document Allowances** — column toggles for type, reason, amount, tax.
 - **VAT Breakdown** — column toggles for category, rate, taxable, tax amount (an exemption column auto-appears when present).
 - **Totals** — seven row toggles covering the full totals stack (Total HT, Allowances, Charges, Tax Exclusive, Total Tax, Total TTC, Amount Payable).
@@ -40672,6 +40766,17 @@ The builder toolbar carries a few settings applied to the whole layout:
 | **Show logo** | Draws the company logo at the top of the supplier block on page 1. The file comes from *Logo path* in [Settings → Global → Processing → PDF](../configuration/system/global.md), where a *Logo offset X (pt)* also shifts it horizontally. PNG, JPG and GIF are supported. |
 | **Trim zeros** | Drops trailing zero decimals from amounts, unit prices and quantities — a whole amount prints as `23` instead of `23.00`, and a `23.0000` unit price prints as `23`. Off by default, which keeps the fixed two-decimal amount and four-decimal price display. The setting is per template and applies to the line table, the totals box, and both the readable and on-screen PDFs. |
 | **Decimals** — *amount* / *price* / *qty* | Decimals printed per kind of number, each `auto` or `0`–`6`. *Amount* covers line amounts, allowances, VAT rows and totals; *price* covers the item price, the net unit price and the price discount; *qty* covers invoiced quantities. `auto` keeps the standard display (amounts 2 decimals, prices and quantities as in the UBL), so existing templates render unchanged. A fixed count is rounded half away from zero, as AFNOR requires; *Trim zeros* still applies on top. |
+
+### Labels \{#labels\}
+
+Every text the PDF generator prints — 46 labels across the document header, parties, lines table, line details, VAT summary, totals and payment — can be overridden **per PDF template and per language**. Open **Labels** in the *Template* group of the builder:
+
+- each row shows the label key with an **FR** and an **EN** field; the default wording shows as placeholder, and a blank field keeps it;
+- a **Search…** box and an **Overridden only (N)** filter help find a label; overridden keys are highlighted;
+- **×** resets a row to the default, and **Copy labels from…** loads the overrides of another PDF template;
+- the live preview reflects the overrides as you type.
+
+A customer asking for *N° de facture* instead of *N° facture UBL* gets it on their template only; other templates keep the default wording. The full catalogue, with each key's default EN / FR text, is available from `GET /api/pdf-templates/labels`.
 
 ---
 
@@ -42245,7 +42350,8 @@ NomaUBL release notes — every user-visible change shipped in the platform, ver
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
   Versions
-  2026.10.12.1 · 2026-10-01
+  2026.10.14.1 · 2026-10-01
+  2026.10.12.1 · 2026-09-30
   2026.10.11.1 · 2026-09-30
   2026.10.06.1 · 2026-09-30
   2026.10.05.1 · 2026-09-30
@@ -42357,12 +42463,33 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ---
 
+## 2026.10.14.1 — 2026-10-14 \{#v2026-10-14-1\}
+
+### Improvements
+
+- **PDF labels per template.** Every text the PDF generator prints (46 labels: document header, parties, lines table, line details, VAT summary, totals, payment) can now be overridden per PDF template and per language, from a new "Labels" panel in the visual builder: the default wording shows as placeholder, a blank field keeps it, a search box and an "overridden only" filter help find them, each row can be reset, and the labels of another PDF template can be copied in. The live preview reflects the overrides. A customer asking for "N° de facture" instead of "N° facture UBL" gets it on their template only; other customers and existing templates are unchanged.
+- **Processing rules per document template.** A new "Processing rules" group on the document template (Document tab) routes documents of the XML pipeline before anything is generated. Each rule combines conditions on the document (JDE document type, resolved document type, raw processing type, invoice amount, company, activity, type piece, customer number, document number, or any XPath / spool tag, with in-list, equality, zero, comparison, emptiness and regex operators) with one of two outcomes: "treat as document type X", which continues the document with that type's send / validate / mode / keep settings (for example a zero-amount gratuity routed to ARCHIVEONLY), or "exclude", which records the document only. An excluded document keeps its archived source and header, carries the new status "Excluded by rule" (9914, message = rule name) with a lifecycle event, is visible in the list and counted by the integrity checks, but is never validated, output nor sent. Rules are ordered, the first match wins, and apply to every XML ingestion path (scheduler, watched folders, process, fetch-single, Fetch Input). UBL documents are deliberately left out: their transaction type is already written in the document.
+- **Sequence key mode for UBL documents.** A UBL-source document template can now number its documents itself instead of deriving the key from the invoice number: key mode "Sequence" on the Document tab, with a fixed document type (II, incoming invoice, by default), a fixed company and a sequence start. The next number is one above the highest stored for that type and company. Meant for received invoices, whose number follows each supplier's own format, and usable for emitted UBL when the format is not known. The invoice number itself stays stored as the UBL number (BT-1). A document processed twice gets two numbers. The regex pattern and the connector lookup modes are unchanged.
+- **Despatch advice references.** The XSL framework, the XSL editor, the invoice window and the PDF now handle the despatch advice at document level (BT-16: reference and date) and at line level (EXT-FR-FE-BG-07: reference EXT-FR-FE-140, date EXT-FR-FE-201, optional despatch line number). New mapping slots TAG_DESPATCH_REF / TAG_DESPATCH_DATE and TAG_LINE_DESPATCH_REF / TAG_LINE_DESPATCH_DATE / TAG_LINE_DESPATCH_LINE_ID; the invoice window offers the fields in the header and per line; the PDF prints them in the invoice block and as a line detail, with their own toggles and an overridable label.
+
+### Fixes
+
+- **Invoice line identifiers unique per invoice.** With lines grouped by delivery, the line number (BT-126) restarted at 1 on every delivery, giving duplicated identifiers inside one invoice and, on the database side, line rows lost on the key collision. Numbering is now continuous across the delivery groups; the fallback line numbers of the order and despatch line references follow it.
+- **Invoice window: line reference buttons.** The "Customer Order Reference", "Order number", "Customer line no." and "Despatch advice" buttons on a line did not open their field.
+
+---
+
 ## 2026.10.12.1 — 2026-10-12 \{#v2026-10-12-1\}
 
 ### Improvements
 
 - **Integrity reports.** A new "Integrity" tab on the Reports page runs SQL checks that list what is missing or wrong in NomaUBL compared with a source system: JDE print jobs never integrated, accounting records whose amounts differ, … The checks are defined in the new "Integrity reports" settings template: name, description, database connector, SQL (SELECT only, read-only, row cap and timeout), key columns, and date placeholders filled from the page's period (\{from\}/\{to\}, \{fromJde\}/\{toJde\}, \{fromDMY\}/\{toDMY\}). Results show in the standard grid (search, filters, columns, export), every row being one anomaly. A check can carry an action: "Integrate BIP jobs" maps the job, template and host columns of the result and, on the selected rows, runs the same extraction and processing as `fetch-single <template> bip <job>` through the fetch-invoices batch, with confirmation; the check is re-run afterwards and the summary lists any failed job. Other action types (API or SQL connector calls) will follow.
+- **Integrity reports across two databases.** A check can now compare a source query and a target query running on different connectors (JDE on MSSQL, NomaUBL on Postgres…), matched in memory on key columns: "Missing" lists source rows absent from the target, "Extra" the reverse, "Mismatch" the keys present on both sides whose compared columns differ (amounts within a tolerance, 0.01 by default), with the target value and the differing columns added to the result. Keys are normalised before matching (trailing spaces, leading zeros, decimal scale, dates). The single-query "Direct" mode is unchanged.
 - **Confirmation before resending to the PA from the invoice window.** The "Resend to PA" button now asks for confirmation, since the document is transmitted immediately and its status moves to Pending (9906). The resend from the invoice list already had one.
+
+### Fixes
+
+- **VAT declaration on Oracle.** The declaration queries placed the table alias in front of the TRIM call, which Oracle rejects (ORA-00904 "UH"."TRIM"); the page then showed "No invoices in this period" instead of the error. Both are fixed: the queries are valid on every dialect, and a server-side failure is now displayed on the page and logged.
 
 ---
 
@@ -46837,7 +46964,7 @@ The form is organised by UBL document area. Each section appears only when at le
 |---|---|---|
 | **Document Root** | Invoice group element name | `TAG_ROOT` — the XML element wrapping a single invoice. |
 | **Custom Extension Fields** | `ext:UBLExtensions` | Escape hatch for data with no EN 16931 home — see [Custom Extension Fields](#custom-extension-fields) below. |
-| **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-14, BT-19 | Document number, dates, references. The order reference carries both the buyer's purchase order (BT-13) and the seller's **sales order reference** (BT-14, `cac:OrderReference/cbc:SalesOrderID`) with its own reference date — set the two side by side, each from a source field. |
+| **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-14, BT-19 | Document number, dates, references. The order reference carries both the buyer's purchase order (BT-13) and the seller's **sales order reference** (BT-14, `cac:OrderReference/cbc:SalesOrderID`) with its own reference date — set the two side by side, each from a source field. The **despatch advice** (BT-16, `cac:DespatchDocumentReference`) is mapped with `TAG_DESPATCH_REF` and `TAG_DESPATCH_DATE`, the date being emitted only with a reference. |
 | **Billing References** | BT-11, BT-14 to BT-18, BT-122 to BT-124 | Project, contract, dispatch, supporting documents. |
 | **Preceding Invoices — repeating** *(BG-3, 0..n)* | BT-25, BT-26 | Iterates a repeating source group and emits one `cac:BillingReference` per prior invoice (each with an optional issue date), alongside the single BT-25/BT-26 reference already handled in *Billing References*. |
 | **Supporting Documents** *(BG-24 · BT-122 / BT-123 / BT-125)* | `cac:AdditionalDocumentReference` | Supporting-document references — a reference (BT-122) with an optional description (BT-123), and optionally an embedded file (BT-125) carried as base64 in the source spool. Up to four per invoice. See [Supporting documents](#supporting-documents) below. |
@@ -46849,7 +46976,7 @@ The form is organised by UBL document area. Each section appears only when at le
 | **Payment** | BT-20, BT-81 to BT-91 | Means, IBAN, BIC, mandate, terms. |
 | **Payer / Direct-debit mandate** *(EXT-FR-FE-BG-02)* | BT-89, BT-91 | SEPA direct-debit payer — the debtor party plus the mandate reference (BT-89) and debited account IBAN (BT-91). See [Payer / direct-debit mandate](#payer-mandate) below. |
 | **VAT** | BT-110, BT-116 to BT-121 | VAT breakdown rows — see [scoping](#scoping) below. |
-| **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158, a repeatable group of up to four codes), classification scheme version (BT-158-2), the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN), and the **gross price** (`TAG_LINE_GROSS_PRICE` → BT-148) with the **price base quantity** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). A spool carrying gross + discount maps both and the net price is derived as gross − discount; a spool carrying net + discount emits its gross as net + discount; a spool carrying net + gross but no discount amount — the usual JDE spool — gets the price discount (BT-147) derived as gross − net, with the gross as base (no discount when the gross is not above the net). Line fields are grouped by theme (identification, quantities, prices, VAT, references, classification) — see [scoping](#scoping) below. |
+| **Invoice Lines** | BT-126 to BT-161 | Line item details, including the per-line country of origin (BT-159), commodity classification (BT-158, a repeatable group of up to four codes), classification scheme version (BT-158-2), the **standard item identifier** (BT-157, `cac:Item/cac:StandardItemIdentification/cbc:ID`) — a registered code such as a GTIN, its value from a source field and its scheme picked from the ISO 6523 list (e.g. `0160` for GTIN), and the **gross price** (`TAG_LINE_GROSS_PRICE` → BT-148) with the **price base quantity** (`TAG_LINE_PRICE_BASE_QTY` → BT-149). A spool carrying gross + discount maps both and the net price is derived as gross − discount; a spool carrying net + discount emits its gross as net + discount; a spool carrying net + gross but no discount amount — the usual JDE spool — gets the price discount (BT-147) derived as gross − net, with the gross as base (no discount when the gross is not above the net). Line fields are grouped by theme (identification, quantities, prices, VAT, references, classification) — see [scoping](#scoping) below. Line numbers (BT-126) run on continuously across delivery groups, so they stay unique within the invoice. The line's **despatch advice** (EXT-FR-FE-BG-07, `cac:DespatchLineReference`) takes `TAG_LINE_DESPATCH_REF` (EXT-FR-FE-140), `TAG_LINE_DESPATCH_DATE` (EXT-FR-FE-201) and `TAG_LINE_DESPATCH_LINE_ID` — the despatch line number, the invoice line number when empty. |
 | **Item Properties** *(BG-32)* | BG-32 | Repeating product attributes attached to a line. |
 | **Line Allowances/Charges** *(BG-27 / BG-28)* | BG-27 / BG-28 | Per-line discount or charge. Point the *Item AC* TAG at `.` (or leave it empty) when the allowance fields sit directly on the invoice line with no wrapper element — the framework then iterates the line itself. When the source carries only the percentage, the amount and base are derived from the line net amount; percentage + base derives the amount, percentage + amount derives the base. |
 | **Line Document References** *(BT-128, BT-132)* | BT-128, BT-132, EXT-FR-FE-135, EXT-FR-FE-144 | Per-line document references — supporting documents (BT-128, UNTDID 1153 scheme) and three order references in the same `cac:OrderLineReference` group (EXT-FR-FE-BG-09, placed between InvoicePeriod and DocumentReference per the UBL 2.1 sequence): `TAG_LINE_ORDER_REF` → *Customer Order Reference*, the buyer's order number (EXT-FR-FE-135, `cac:OrderReference/cbc:ID`) that the PDF groups lines on; `TAG_LINE_SALES_ORDER_REF` → *Sales order*, the seller's order number (EXT-FR-FE-144, `cbc:SalesOrderID`); `TAG_LINE_ORDER_LINE_REF` → *Order line reference*, the line number inside the buyer's order (BT-132, `cbc:LineID`). When only the seller's order number is mapped, the mandatory order ID falls back to the header purchase order (BT-13). |

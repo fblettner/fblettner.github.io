@@ -184,6 +184,8 @@ If the database does not yet hold any VAT detail row (`F564234`) for the selecte
 
 The command is documented under [Command Line → `backfill-vat`](../management/command-line.md#backfill-vat). Once the rebuild has run, reopen the VAT page and the matrix is populated as expected.
 
+A server-side failure — a database error, for instance — is never shown as an empty period: the page displays the error message, and the error is written to the server log.
+
 ---
 
 ## Excel export

@@ -1752,7 +1752,7 @@
           "Reports"
         ],
         "summary": "Run an integrity check",
-        "description": "Executes one configured check read-only (SELECT / WITH only, single statement) against its db connector, capped by the template's maxRows (default 5000) and timeoutSeconds (default 120). Date placeholders in the SQL are substituted from the optional range: {from} / {to} (yyyy-MM-dd), {fromJde} / {toJde} (JDE julian CYYDDD), {fromDMY} / {toDMY} (dd-MM-yyyy); defaults 1900-01-01 and today. Returns the result columns and rows as they come from the database.",
+        "description": "Executes one configured check read-only (SELECT / WITH only, single statement per query) against its db connector — or, in the missing / extra / mismatch modes, a source and a target query on two connectors matched in memory on the key columns (keys normalised: trailing spaces, leading zeros, decimal scale, dates; mismatch adds a TARGET_<column> per compared pair and a DIFFERENCE column, numbers compared within the check's tolerance, 0.01 by default; the response then carries sourceCount / targetCount) — capped by the template's maxRows (default 5000) and timeoutSeconds (default 120). Date placeholders in the SQL are substituted from the optional range: {from} / {to} (yyyy-MM-dd), {fromJde} / {toJde} (JDE julian CYYDDD), {fromDMY} / {toDMY} (dd-MM-yyyy); defaults 1900-01-01 and today. Returns the result columns and rows as they come from the database.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2407,6 +2407,38 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "summary": "Notified user@example.com via portal+email; action ACK queued" } } } }
+          }
+        }
+      }
+    },
+    "/api/pdf-templates/labels": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "PDF label catalog",
+        "description": "Every text the PDF generator prints (46 keys: document header, parties, lines table, line details, VAT summary, totals, payment) with its default English and French wording. A PDF template may override any of them per language through its labels block ({ \"labels\": { \"fr\": { key: text }, \"en\": { key: text } } }); blank = default. Edited in the visual builder's Labels panel; the override only applies to documents rendered with that template.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "labels": [
+                      {
+                        "key": "invoiceNo",
+                        "group": "header",
+                        "en": "Invoice No.",
+                        "fr": "N° facture UBL"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
           }
         }
       }

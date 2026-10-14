@@ -6,7 +6,7 @@ keywords: [NomaUBL, integrity reports, integrity checks, SQL, reconciliation, an
 
 # Integrity Reports
 
-The **Integrity reports** system template holds a list of **SQL checks** that compare NomaUBL with a source system and list what is **missing or wrong**: print jobs that were never integrated, accounting records whose amounts differ from the e-invoices… Each check is a `SELECT` run read-only against a database connector, and **every row it returns is one anomaly**. The results are shown on the **Integrity** tab of the [Reports](../../application/reports.md#integrity) page, where a check can also carry an **action** on the selected rows.
+The **Integrity reports** system template holds a list of **SQL checks** that compare NomaUBL with a source system and list what is **missing or wrong**: print jobs that were never integrated, accounting records whose amounts differ from the e-invoices… Each check runs read-only `SELECT` statements — a single query, or a source query and a target query on two different databases compared in memory — and **every row it returns is one anomaly**. The results are shown on the **Integrity** tab of the [Reports](../../application/reports.md#integrity) page, where a check can also carry an **action** on the selected rows.
 
 Open it under **Configuration → System → Integrity reports**. On an installation that does not have the template yet, an **Add integrity reports** button creates it without restarting the service. The template ships empty: nothing appears on the Reports page until a check is defined.
 
@@ -64,6 +64,51 @@ Open it under **Configuration → System → Integrity reports**. On an installa
 
 ---
 
+## Modes \{#modes\}
+
+The **Mode** field of a check decides how its rows are produced.
+
+| Mode | Result |
+|---|---|
+| **Direct** *(default)* | One query; its rows are the anomalies. For two systems in the same database. |
+| **Missing** | Source rows whose key is absent from the target. |
+| **Extra** | Target rows whose key is absent from the source. |
+| **Mismatch** | Keys present on both sides whose compared columns differ. |
+
+The three comparison modes run a **source query** and a **target query**, each on its own connector — JD Edwards on SQL Server and NomaUBL on PostgreSQL, for instance — and match their rows **in memory** on the key columns. Keys are normalised before matching: trailing spaces, leading zeros, decimal scale and date formats no longer get in the way.
+
+<svg viewBox="0 0 1000 260" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="irc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+  </defs>
+  <rect x="20" y="24" width="230" height="90" rx="12" fill="#0d1220" stroke="#334155" strokeWidth="1.2"/>
+  <text x="135" y="54" fill="#cbd5e1" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Source query</text>
+  <text x="135" y="78" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">Source connector · Source SQL</text>
+  <rect x="20" y="146" width="230" height="90" rx="12" fill="#0d1220" stroke="#334155" strokeWidth="1.2"/>
+  <text x="135" y="176" fill="#cbd5e1" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Target query</text>
+  <text x="135" y="200" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">Target connector · Target SQL</text>
+  <line x1="252" y1="69" x2="356" y2="118" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#irc-arrow)"/>
+  <line x1="252" y1="191" x2="356" y2="142" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#irc-arrow)"/>
+  <rect x="360" y="80" width="240" height="100" rx="12" fill="#0d1220" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="480" y="112" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Match on key columns</text>
+  <text x="480" y="136" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">normalised keys</text>
+  <text x="480" y="156" fill="#64748b" fontSize="9.5" textAnchor="middle" fontFamily="ui-monospace, monospace">"0042 " = "42"</text>
+  <line x1="602" y1="110" x2="676" y2="56" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#irc-arrow)"/>
+  <line x1="602" y1="130" x2="676" y2="130" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#irc-arrow)"/>
+  <line x1="602" y1="150" x2="676" y2="204" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#irc-arrow)"/>
+  <rect x="680" y="24" width="300" height="60" rx="10" fill="rgba(248,113,113,0.06)" stroke="rgba(248,113,113,0.45)" strokeWidth="1.2"/>
+  <text x="700" y="50" fill="#f87171" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Missing</text>
+  <text x="700" y="70" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">in the source, absent from the target</text>
+  <rect x="680" y="100" width="300" height="60" rx="10" fill="rgba(251,146,60,0.06)" stroke="rgba(251,146,60,0.45)" strokeWidth="1.2"/>
+  <text x="700" y="126" fill="#fb923c" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Extra</text>
+  <text x="700" y="146" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">in the target, absent from the source</text>
+  <rect x="680" y="176" width="300" height="60" rx="10" fill="rgba(74,158,255,0.06)" stroke="rgba(74,158,255,0.45)" strokeWidth="1.2"/>
+  <text x="700" y="202" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Mismatch</text>
+  <text x="700" y="222" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">on both sides, compared columns differ</text>
+</svg>
+
+---
+
 ## Checks
 
 Each check is a collapsible group — click its title to open it, **×** removes it, **+ Add check** appends one.
@@ -72,10 +117,23 @@ Each check is a collapsible group — click its title to open it, **×** removes
 |---|---|
 | **Name** | Identifier shown on the Reports page (e.g. `missing-pdf`). Keep it stable. |
 | **Description** | One line explaining what the check finds (e.g. *PDF print jobs not integrated*). |
+| **Mode** | *Direct*, *Missing*, *Extra* or *Mismatch* — see [Modes](#modes). |
 | **Connector** | The [database connector](../database-connectors/nomaubl.md) the `SELECT` runs against — the JD Edwards database, the NomaUBL database or any other connector declared on the platform. |
 | **Key columns** | Optional. Comma-separated result columns that identify the record an action works on (e.g. `JCPID, JCVERS, JCJOBNBR`, or document number + type + company). |
 | **SQL (SELECT only)** | The query. A single `SELECT` (or `WITH`) statement; anything else is refused before it reaches the database. The connection is opened read-only. |
 | **Action** | What the Reports page can do with the selected rows: *none*, or **Integrate BIP jobs**. |
+
+In the comparison modes, **Connector**, **Key columns** and **SQL** become **Source connector**, **Source key columns** and **Source SQL**, and further fields appear:
+
+| Field | Description |
+|---|---|
+| **Target connector** | Database connector of the target query — it may differ from the source. |
+| **Target key columns** | Columns of the target result matching the source key columns, in the same order. Empty = same names. |
+| **Target SQL** | The target query (e.g. `SELECT TRIM(FEWDS1) AS JOBKEY FROM F564230 WHERE FEUPMJ >= {fromJde}`). The date placeholders apply to both queries. |
+| **Compare columns** *(Mismatch)* | Comma-separated `SOURCE=TARGET` column pairs (e.g. `AMOUNT_HT=UHATXA, DOC_DATE=UHDIVJ`). A row is an anomaly when any pair differs. |
+| **Tolerance** *(Mismatch)* | Numeric values differing by at most this amount are equal. Default `0.01`. |
+
+In *Mismatch* mode, the result carries the source columns, then one `TARGET_<column>` column per compared pair with the target value, and a `DIFFERENCE` column naming the columns that differ.
 
 ### Date placeholders
 
@@ -137,7 +195,7 @@ When **Action** is set to **Integrate BIP jobs**, the selected rows are integrat
 </div>
 
 1. **Pick a check** and a **period** (last 30 days by default), then **Run**. **Show SQL** displays the query of the check.
-2. The header line recalls the connector, the key columns and the configured action. The result reads **No anomaly** or *N anomaly(ies)*, every row being one anomaly in the standard grid — search, filters, column chooser and export.
+2. The header line recalls the connector, the key columns and the configured action. On a comparison check, a second line adds the mode, the target connector and, for *Mismatch*, the compared columns with the tolerance; **Show SQL** then displays both queries, and the count reads *N source / N target*. The result reads **No anomaly** or *N anomaly(ies)*, every row being one anomaly in the standard grid — search, filters, column chooser and export.
 3. When the check carries an action, tick the rows and click **Integrate selection (N)**. A confirmation recalls that the jobs are extracted and processed like a normal run — validation, storage and sending follow the template settings.
 4. After the action, the check runs again: integrated rows drop out of the result, and a summary banner shows *N integrated, N failed out of N*, with the name of every failed job.
 
