@@ -33977,6 +33977,7 @@ Traite un (ou plusieurs) fichier source contre un modèle de document — ou app
 | `--no-send` | N'envoie pas à la Plateforme Agréée. | tous |
 | `--no-db` | N'écrit pas en base (implique `--no-send`). | XML |
 | `--no-validate` | Ne valide pas l'UBL — utilisé par la réimpression du retraitement, où la facture électronique enregistrée reste la référence. | XML |
+| `--repair` | Reconstruit les tables facture (en-tête, lignes, TVA, validation) d'un document dont l'archive et l'historique de statuts sont intacts — archive et historique inchangés, aucun événement de cycle de vie, statut d'en-tête repris du dernier événement réel de l'historique, aucun envoi. Voir [Traitement de document → Réparation](../processing/document.md#reparation). | tous |
 | `--validate` | XSD + Schematron seulement — pas d'insertion BDD, pas de dépôt PA. | UBL |
 | `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. | UBL |
 | `--no-debug` | Ignore les durées par étape (parse, validation, insertion en base, envoi PA) journalisées par défaut à chaque exécution. À utiliser sur les batchs nocturnes volumineux quand la surcharge par étape n'apporte rien dans les logs. | tous |
@@ -36133,6 +36134,7 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 | **Mode** | UBL | `Process & Validate` (défaut) ou `Validate only`. |
 | **Send to PA** | UBL | `Use settings`, `Force send` ou `Skip sending`. *Force send* est la surcharge propre à UBL qui contourne l'option `sendToPA` du template e-invoicing. |
 | **Replace** | les deux | `Skip` laisse intactes les lignes existantes ; `Overwrite` purge les cinq tables UBL pour le même `(doc, dct, kco)` et ré-importe proprement. |
+| **Réparation** | les deux | `Non` (défaut) ou `Reconstruire les tables facture, conserver l'historique, sans envoi` — voir [Réparation](#reparation) plus bas. |
 
 ---
 
@@ -36160,6 +36162,19 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 
 ---
 
+## Réparation \{#reparation\}
+
+La **réparation** reconstruit les tables facture — en-tête, lignes, récapitulatif TVA et lignes de validation — d'un document qui les a perdues alors que sa **source archivée** et son **historique de statuts** sont intacts (la trace d'un remplacement interrompu en cours de route). Le document est régénéré depuis sa source avec le modèle choisi, comme lors d'un traitement normal, à quatre différences près :
+
+- la ligne d'archive reste intacte — identifiant de transaction PA, indicateur d'envoi et source ;
+- l'historique des statuts n'est ni purgé ni complété, et aucune règle de notification ne se déclenche, puisque la facture ne change pas d'état ;
+- l'en-tête reconstruit reprend le statut, le motif et l'action du **dernier événement de l'historique qui correspond à un état réel** — le marqueur de retraitement `9912` est ignoré, si bien qu'un `200` `NON_TRANSMISE` réimprimé revient comme tel ;
+- rien n'est envoyé à la PA, quel que soit le réglage *Send to PA*.
+
+Un document sans aucun historique est traité normalement. La même réparation est disponible en ligne de commande avec `-process … --repair`.
+
+---
+
 ## API REST
 
 ```http
@@ -36173,7 +36188,8 @@ Content-Type: application/json
   "validateOnly": false,             // source UBL
   "sendToPA":     "",                // UBL: "" | "Y" | "N"
   "noSend":       false,             // XML: désactive le dépôt
-  "replaceMode":  false              // les deux: purge avant ré-import
+  "replaceMode":  false,             // les deux : purge avant ré-import
+  "repairMode":   false              // les deux : reconstruction autour de l'archive et de l'historique
 }
 ```
 
@@ -36900,7 +36916,8 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
-  2026.10.14.1 · 2026-10-01
+  2026.10.16.1 · 2026-10-01
+  2026.10.14.1 · 2026-09-30
   2026.10.12.1 · 2026-09-30
   2026.10.11.1 · 2026-09-30
   2026.10.06.1 · 2026-09-30
@@ -37013,6 +37030,19 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ---
 
+## 2026.10.16.1 — 2026-10-16 \{#v2026-10-16-1\}
+
+### Améliorations
+
+- **Option Réparation sur la page Traiter un document.** Un nouveau réglage « Réparation » reconstruit les tables facture d'un document dont l'en-tête, les lignes, le récapitulatif TVA et les contrôles de validation ont disparu alors que sa source archivée et son historique de statuts sont toujours là (situation laissée par un ancien remplacement interrompu en cours de route). Le document est régénéré depuis sa source avec le gabarit choisi, comme un traitement ordinaire, mais la ligne d'archive reste intacte (identifiant de transaction PA, indicateur d'envoi, source), l'historique n'est ni purgé ni complété, l'en-tête reconstruit reprend le statut, le motif et l'action du dernier événement de l'historique qui soit un véritable état (le marqueur de retraitement 9912 est ignoré, une 200 NON_TRANSMISE réimprimée redevient donc telle quelle), et rien n'est envoyé à la PA. Aucune règle de notification ne se déclenche pendant une réparation, la facture ne changeant pas d'état. Disponible aussi en ligne de commande avec `-process … --repair`. Un document sans aucun historique est traité normalement.
+
+### Corrections
+
+- **Avoirs : référence de projet refusée par le schéma.** UBL 2.1 ne prévoit pas d'élément de référence de projet sur un avoir ; tout document RM qui en portait une échouait au contrôle XSD (cvc-complex-type.2.4.a sur ProjectReference). Le socle XSL émet désormais la référence de projet (BT-11) d'un avoir sous forme de référence documentaire additionnelle de type 50, conformément à la norme EN 16931 ; les factures ne changent pas. La fenêtre facture produit et relit les deux formes, et le PDF imprime la référence de projet quelle que soit la forme. Les gabarits opérateur récupèrent la correction à leur prochaine mise à niveau.
+- **Page de documentation de l'API vide.** La documentation d'API intégrée chargeait l'afficheur Redoc depuis le CDN sans numéro de version. Redoc 3.0 est sorti le 14 octobre avec un point d'entrée différent, et la page a cessé de s'afficher ce jour-là sur toutes les installations. L'afficheur est désormais figé sur la lignée 2.x.
+
+---
+
 ## 2026.10.14.1 — 2026-10-14 \{#v2026-10-14-1\}
 
 ### Améliorations
@@ -37020,6 +37050,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Libellés du PDF par gabarit.** Chaque texte imprimé par le générateur PDF (46 libellés : en-tête du document, parties, tableau des lignes, détails de ligne, récapitulatif TVA, totaux, paiement) peut désormais être redéfini par gabarit PDF et par langue, depuis un nouveau panneau « Libellés » du constructeur visuel : le libellé par défaut s'affiche en indication, un champ vide le conserve, une recherche et un filtre « redéfinis seulement » aident à les retrouver, chaque ligne peut être réinitialisée, et les libellés d'un autre gabarit PDF peuvent être recopiés. L'aperçu en direct reflète les redéfinitions. Un client qui demande « N° de facture » à la place de « N° facture UBL » l'obtient sur son seul gabarit ; les autres clients et les gabarits existants ne changent pas.
 - **Règles de traitement par gabarit de document.** Un nouveau groupe « Processing rules » du gabarit de document (onglet Document) aiguille les documents du flux XML avant toute génération. Chaque règle combine des conditions sur le document (type de document JDE, type de document résolu, type de traitement brut, montant de la facture, société, code activité, type de pièce, numéro client, numéro de document, ou tout XPath / balise du spool, avec des opérateurs dans la liste, égalité, nullité, comparaison, vide et expression régulière) et l'un de deux résultats : « traiter comme le type de document X », qui poursuit le document avec les réglages envoi / validation / mode / conservation de ce type (par exemple une gratuité à montant nul aiguillée vers ARCHIVEONLY), ou « exclure », qui se contente d'enregistrer le document. Un document exclu conserve sa source archivée et son en-tête, porte le nouveau statut « Exclue par règle » (9914, message = nom de la règle) avec un événement de cycle de vie, reste visible dans la liste et comptabilisé par les contrôles d'intégrité, mais n'est jamais validé, produit ni envoyé. Les règles sont ordonnées, la première qui correspond l'emporte, et elles s'appliquent à tous les chemins d'intégration XML (planificateur, dossiers surveillés, process, fetch-single, page Récupération). Les documents UBL sont volontairement exclus du dispositif : leur type de transaction est déjà inscrit dans le document.
 - **Clé en séquence pour les documents UBL.** Un gabarit de document à source UBL peut désormais numéroter lui-même ses documents au lieu de dériver la clé du numéro de facture : mode de clé « Séquence » dans l'onglet Document, avec un type de document fixe (II, facture entrante, par défaut), une société fixe et un début de séquence. Le numéro suivant est le plus élevé stocké pour ce type et cette société, plus un. Prévu pour les factures reçues, dont le numéro suit le format propre à chaque fournisseur, et utilisable pour l'UBL émis quand le format n'est pas connu. Le numéro de facture reste stocké tel quel comme numéro UBL (BT-1). Un document traité deux fois reçoit deux numéros. Les modes motif regex et recherche par connecteur ne changent pas.
+- **Page des notes de version : liste des versions repliable.** Les pastilles de version n'affichent que les douze versions les plus récentes, avec une pastille « Tout afficher » pour la liste complète et « Réduire » pour la replier ; le choix est mémorisé par navigateur.
 - **Références d'avis d'expédition.** Le socle XSL, l'éditeur XSL, la fenêtre facture et le PDF gèrent désormais l'avis d'expédition au niveau du document (BT-16 : référence et date) et au niveau de la ligne (EXT-FR-FE-BG-07 : référence EXT-FR-FE-140, date EXT-FR-FE-201, numéro de ligne d'expédition facultatif). Nouvelles variables de mappage TAG_DESPATCH_REF / TAG_DESPATCH_DATE et TAG_LINE_DESPATCH_REF / TAG_LINE_DESPATCH_DATE / TAG_LINE_DESPATCH_LINE_ID ; la fenêtre facture propose les champs en en-tête et par ligne ; le PDF les imprime dans le bloc facture et en détail de ligne, avec leurs propres options et un libellé redéfinissable.
 
 ### Corrections
@@ -41717,7 +41748,7 @@ Le formulaire est organisé par zone du document UBL. Chaque section n'apparaît
 | **Document Root** | Élément racine de la facture | `TAG_ROOT` — l'élément XML englobant une facture. |
 | **Custom Extension Fields** | `ext:UBLExtensions` | Issue de secours pour des données sans équivalent EN 16931 — voir [Champs d'extension](#custom-extension-fields) plus bas. |
 | **Invoice Header** | BT-1, BT-2, BT-3, BT-9, BT-10, BT-12, BT-13, BT-14, BT-19 | Numéro, dates, références. La référence de commande porte à la fois le bon de commande de l'acheteur (BT-13) et la **référence de commande du vendeur** (BT-14, `cac:OrderReference/cbc:SalesOrderID`) avec sa propre date de référence — les deux se règlent côte à côte, chacun depuis un champ source. L'**avis d'expédition** (BT-16, `cac:DespatchDocumentReference`) se mappe avec `TAG_DESPATCH_REF` et `TAG_DESPATCH_DATE`, la date n'étant émise qu'avec une référence. |
-| **Billing References** | BT-11, BT-14 à BT-18, BT-122 à BT-124 | Projet, contrat, expédition, justificatifs. |
+| **Billing References** | BT-11, BT-14 à BT-18, BT-122 à BT-124 | Projet, contrat, expédition, justificatifs. UBL 2.1 ne prévoit pas de référence de projet sur un avoir : la référence de projet (BT-11) y est émise comme référence de document complémentaire de type `50`, comme le prévoit la correspondance EN 16931 — les factures gardent `cac:ProjectReference`. La fenêtre facture et le PDF lisent les deux formes. |
 | **Preceding Invoices — répété** *(BG-3, 0..n)* | BT-25, BT-26 | Parcourt un groupe source répétitif et génère un `cac:BillingReference` par facture antérieure (avec une date d'émission facultative), en complément de la référence unique BT-25/BT-26 déjà gérée dans *Billing References*. |
 | **Supporting Documents** *(BG-24 · BT-122 / BT-123 / BT-125)* | `cac:AdditionalDocumentReference` | Références de documents justificatifs — une référence (BT-122) avec une description facultative (BT-123), et éventuellement un fichier intégré (BT-125) encodé en base64 dans le spool source. Jusqu'à quatre par facture. Voir [Documents justificatifs](#supporting-documents) plus bas. |
 | **Invoiced Object Identifiers** *(BT-18)* | `cac:AdditionalDocumentReference` *(DocumentTypeCode 130)* | Jusqu'à quatre identifiants de l'objet auquel se rapporte la facture (abonnement, compteur, actif…), chacun avec un schéma issu de la liste *document-reference-codes*. Voir [Identifiants d'objet facturé](#invoiced-object-identifiers) plus bas. |

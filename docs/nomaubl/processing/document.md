@@ -198,6 +198,7 @@ The form has four common controls plus per-source extras.
 | **Mode** | UBL | `Process & Validate` (default) or `Validate only`. |
 | **Send to PA** | UBL | `Use settings`, `Force send` or `Skip sending`. *Force send* is the UBL-only override that bypasses the e-invoicing template's `sendToPA` flag. |
 | **Replace** | both | `Skip` keeps existing rows untouched; `Overwrite` purges the five UBL tables for the same `(doc, dct, kco)` and re-imports cleanly. |
+| **Repair** | both | `No` (default) or `Rebuild invoice tables, keep history, no send` — see [Repair](#repair) below. |
 
 ---
 
@@ -225,6 +226,19 @@ The form has four common controls plus per-source extras.
 
 ---
 
+## Repair \{#repair\}
+
+**Repair** rebuilds the invoice tables — header, lines, VAT summary and validation rows — of a document that lost them while its **archived source** and its **status history** survived (the trace of a replace interrupted midway). The document is regenerated from its source with the chosen template, exactly like a normal run, with four differences:
+
+- the archive row is left untouched — PA transaction id, send flag and source;
+- the status history is neither purged nor extended, and no notification rule fires, since the invoice does not change state;
+- the rebuilt header takes the status, reason and action of the **latest history event that is a real state** — the reprocess marker `9912` is looked past, so a reprinted `200` `NON_TRANSMISE` comes back as such;
+- nothing is sent to the PA, whatever *Send to PA* says.
+
+A document with no history at all is processed normally. The same repair is available on the command line with `-process … --repair`.
+
+---
+
 ## REST API
 
 ```http
@@ -238,7 +252,8 @@ Content-Type: application/json
   "validateOnly": false,             // UBL source
   "sendToPA":     "",                // UBL: "" | "Y" | "N"
   "noSend":       false,             // XML: skip submit
-  "replaceMode":  false              // both: purge before re-insert
+  "replaceMode":  false,             // both: purge before re-insert
+  "repairMode":   false              // both: rebuild around the surviving archive + history
 }
 ```
 

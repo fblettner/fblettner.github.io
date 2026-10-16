@@ -432,7 +432,7 @@
       "post": {
         "tags": ["Process"],
         "summary": "Process a document",
-        "description": "Single processing entry point. The pipeline is selected by the document template's `source` property: XML (XML spool input — XSL transform — UBL) or UBL (already-formed UBL invoice; (doc, dct, kco) parsed from cbc:ID via the template's `idPattern` regex). When replaceMode is true, existing invoices in the database are overwritten. XML-source flags: noSend (skip PA send), mode (AUTO|SINGLE|BURST|UBL). UBL-source flags: validateOnly (no DB / no PA), sendToPA (Y|N — overrides settings).",
+        "description": "Single processing entry point. The pipeline is selected by the document template's `source` property: XML (XML spool input — XSL transform — UBL) or UBL (already-formed UBL invoice; (doc, dct, kco) parsed from cbc:ID via the template's `idPattern` regex). When replaceMode is true, existing invoices in the database are overwritten. XML-source flags: noSend (skip PA send), mode (AUTO|SINGLE|BURST|UBL). UBL-source flags: validateOnly (no DB / no PA), sendToPA (Y|N — overrides settings). repairMode (all sources): rebuilds the invoice tables (header, lines, VAT, validation) of a document whose F564230 archive and F564235 history survived a lost replace — archive and history untouched, no lifecycle event written, header status/reason/action copied from the latest history event, never sent to the PA. Implies replace; ignores noSend/sendToPA/validateOnly.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProcessRequest" } } }
@@ -2739,7 +2739,8 @@
           "replaceMode": { "type": "boolean", "description": "If true, overwrite existing invoices in the database" },
           "noSend": { "type": "boolean", "description": "XML source only — if true, skip PA sending regardless of settings" },
           "validateOnly": { "type": "boolean", "description": "UBL source only — if true, validate without DB insert / PA send" },
-          "sendToPA": { "type": "string", "description": "UBL source only — null/empty = use settings, 'Y' = force send, 'N' = skip" }
+          "sendToPA": { "type": "string", "description": "UBL source only — null/empty = use settings, 'Y' = force send, 'N' = skip" },
+          "repairMode": { "type": "boolean", "description": "Rebuild header/lines/VAT/validation around the surviving F564230 + F564235; no event, no send, status from the latest history event" }
         }
       },
       "ValidateRequest": {

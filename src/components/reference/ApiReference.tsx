@@ -3,8 +3,11 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 import {useColorMode} from '@docusaurus/theme-common';
 import styles from './ApiReference.module.css';
 
+// Pinned to the 2.x line: the "latest" URL serves Redoc 3.0 since
+// 2026-10-14, whose standalone bundle no longer exposes window.Redoc.init —
+// the page went blank with no change on our side (same fix as the app).
 const REDOC_SCRIPT_SRC =
-  'https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js';
+  'https://cdn.jsdelivr.net/npm/redoc@2/bundles/redoc.standalone.js';
 
 const THEME_LIGHT = {
   colors: {

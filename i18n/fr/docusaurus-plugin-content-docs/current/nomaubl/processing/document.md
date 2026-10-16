@@ -198,6 +198,7 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 | **Mode** | UBL | `Process & Validate` (défaut) ou `Validate only`. |
 | **Send to PA** | UBL | `Use settings`, `Force send` ou `Skip sending`. *Force send* est la surcharge propre à UBL qui contourne l'option `sendToPA` du template e-invoicing. |
 | **Replace** | les deux | `Skip` laisse intactes les lignes existantes ; `Overwrite` purge les cinq tables UBL pour le même `(doc, dct, kco)` et ré-importe proprement. |
+| **Réparation** | les deux | `Non` (défaut) ou `Reconstruire les tables facture, conserver l'historique, sans envoi` — voir [Réparation](#reparation) plus bas. |
 
 ---
 
@@ -225,6 +226,19 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 
 ---
 
+## Réparation \{#reparation\}
+
+La **réparation** reconstruit les tables facture — en-tête, lignes, récapitulatif TVA et lignes de validation — d'un document qui les a perdues alors que sa **source archivée** et son **historique de statuts** sont intacts (la trace d'un remplacement interrompu en cours de route). Le document est régénéré depuis sa source avec le modèle choisi, comme lors d'un traitement normal, à quatre différences près :
+
+- la ligne d'archive reste intacte — identifiant de transaction PA, indicateur d'envoi et source ;
+- l'historique des statuts n'est ni purgé ni complété, et aucune règle de notification ne se déclenche, puisque la facture ne change pas d'état ;
+- l'en-tête reconstruit reprend le statut, le motif et l'action du **dernier événement de l'historique qui correspond à un état réel** — le marqueur de retraitement `9912` est ignoré, si bien qu'un `200` `NON_TRANSMISE` réimprimé revient comme tel ;
+- rien n'est envoyé à la PA, quel que soit le réglage *Send to PA*.
+
+Un document sans aucun historique est traité normalement. La même réparation est disponible en ligne de commande avec `-process … --repair`.
+
+---
+
 ## API REST
 
 ```http
@@ -238,7 +252,8 @@ Content-Type: application/json
   "validateOnly": false,             // source UBL
   "sendToPA":     "",                // UBL: "" | "Y" | "N"
   "noSend":       false,             // XML: désactive le dépôt
-  "replaceMode":  false              // les deux: purge avant ré-import
+  "replaceMode":  false,             // les deux : purge avant ré-import
+  "repairMode":   false              // les deux : reconstruction autour de l'archive et de l'historique
 }
 ```
 
