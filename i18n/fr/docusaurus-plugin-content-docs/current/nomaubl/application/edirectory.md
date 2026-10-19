@@ -136,7 +136,7 @@ Voir la page [Configuration → Système → e-directory](../configuration/syste
   <line x1="850" y1="115" x2="870" y2="155" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-arrow-slate)"/>
 </svg>
 
-Les deux requêtes s'enchaînent : INSEE d'abord pour remplir les sociétés, puis **un seul appel annuaire PPF par société** pour lister ses identifiants enregistrés. L'utilisateur voit les résultats se remplir en deux passes.
+Les deux requêtes s'enchaînent : INSEE d'abord pour remplir les sociétés, puis **un seul appel annuaire PPF par société** pour lister ses identifiants enregistrés. Les résultats s'affichent en deux temps. Déplier ensuite une carte entreprise lance la [recherche Peppol](#peppol-directory) pour cette entreprise.
 
 ---
 
@@ -174,34 +174,86 @@ Le listage passe par l'endpoint `directory-check-siren` du connecteur, qui renvo
 
 ### Annuaire Peppol \{#peppol-directory\}
 
-Déplier une carte entreprise interroge aussi le **réseau Peppol public** — aucun compte requis. Un groupe *Annuaire Peppol* liste chaque **participant** enregistré pour le SIREN (les enregistrements français utilisent l'ICD `0225`, identifiants par établissement compris), avec son nom, sa **date d'enregistrement** et la **plateforme qui l'opère** — la PA (par ex. Pennylane) avec son identifiant de siège Peppol, résolue via la découverte officielle **SML/SMP**. Les URLs du point d'accès et du SMP se trouvent dans l'infobulle de la plateforme.
+Déplier une carte entreprise interroge aussi le **réseau Peppol public** — aucun compte requis. Un groupe *Annuaire Peppol* liste chaque **participant** enregistré pour l'entreprise, avec son nom, sa **date d'enregistrement** et la **plateforme qui l'opère** — la PA (par ex. Pennylane) avec son identifiant de siège Peppol, résolue via la découverte officielle **SML/SMP**. Les URL du point d'accès et du SMP se trouvent dans l'infobulle de la plateforme.
+
+Les participants sont trouvés de deux façons :
+
+- les **fiches** de l'[annuaire Peppol](https://directory.peppol.eu) qui correspondent au SIREN ;
+- des **interrogations directes du SML** pour chaque identifiant qu'une entreprise française peut détenir — publier une fiche dans l'annuaire est facultatif, et certaines plateformes ne le font pas. Sont interrogés le SIREN sous les schémas `0225` et `0002`, chaque adresse inscrite dans l'annuaire PPF (simple, suffixée, SIRET, routée) sous `0225`, et le SIRET de chaque établissement sous `0009`. Un participant trouvé de cette façon affiche **sans fiche annuaire** à la place de sa date d'enregistrement.
 
 | Colonne | Contenu |
 |---|---|
 | **Participant** | L'identifiant de participant Peppol (ICD + valeur, par ex. `0225:80320631700015`). |
 | **Plateforme (PA)** | La plateforme qui opère le participant, avec son identifiant de siège ; `non résolu` quand l'étape SMP n'a pas abouti. |
-| **Enregistré le** | La date d'enregistrement Peppol du participant. |
+| **Enregistré le** | La date d'enregistrement Peppol du participant — *sans fiche annuaire* pour un participant trouvé uniquement par le SML. |
 
-La recherche ne s'exécute **qu'au premier dépliage** et est aussi exposée en `POST /api/peppol-lookup` pour les intégrations (voir la [référence API](/nomaubl/api-reference)). Un participant sans plateforme joignable affiche quand même son enregistrement et son nom — seule la cellule *Plateforme* indique `non résolu`.
+La recherche s'exécute une fois pour chaque carte entreprise ouverte — y compris une carte restée ouverte depuis une recherche précédente — et elle est aussi disponible en `POST /api/peppol-lookup` pour les intégrations (voir la [référence API](/nomaubl/api-reference)). Un participant sans plateforme joignable affiche quand même son enregistrement et son nom — seule la cellule *Plateforme* indique `non résolu`. Une indisponibilité de l'annuaire Peppol ne masque plus les participants trouvés par le SML.
+
+La page entière est aussi accessible en un seul appel : `GET /api/e-directory/search?q=…` (ou `POST` avec `{q, peppol}`) renvoie les entreprises INSEE qui correspondent à un nom, un SIREN ou un SIRET, avec siège et établissements, les lignes de l'annuaire PPF de chaque entreprise et, avec `peppol=true`, ses participants Peppol.
 
 ---
 
-## Flux réseau (firewall)
+## Flux réseau (firewall) \{#network-flows\}
 
 Tous les appels externes de l'E-Directory sont faits **côté serveur** — depuis le serveur NomaUBL, pas le navigateur de l'utilisateur — les règles firewall portent donc sur le trafic sortant du serveur. Hormis le connecteur PA, les destinations sont :
+
+<svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="edir-fw-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+  </defs>
+  <rect x="20" y="150" width="200" height="100" rx="12" fill="#0d1220" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="120" y="190" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Serveur NomaUBL</text>
+  <text x="120" y="212" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">trafic sortant uniquement</text>
+  <line x1="300" y1="20" x2="300" y2="380" stroke="#f87171" strokeWidth="1.4" strokeDasharray="6 4"/>
+  <text x="300" y="396" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">firewall</text>
+  <line x1="222" y1="200" x2="372" y2="52" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-fw-arrow)"/>
+  <rect x="376" y="30" width="604" height="44" rx="9" fill="#0d1220" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="392" y="48" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Recherche d'entreprise (INSEE)</text>
+  <text x="392" y="65" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">recherche-entreprises.api.gouv.fr</text>
+  <text x="966" y="57" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">HTTPS 443</text>
+  <line x1="222" y1="200" x2="372" y2="110" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-fw-arrow)"/>
+  <rect x="376" y="88" width="604" height="44" rx="9" fill="#0d1220" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="392" y="106" fill="#4a9eff" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Annuaire Peppol — fiches</text>
+  <text x="392" y="123" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">directory.peppol.eu</text>
+  <text x="966" y="115" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">HTTPS 443</text>
+  <line x1="222" y1="200" x2="372" y2="168" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-fw-arrow)"/>
+  <rect x="376" y="146" width="604" height="44" rx="9" fill="#0d1220" stroke="#4ade80" strokeWidth="1.2"/>
+  <text x="392" y="164" fill="#4ade80" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">SML — zone principale (OpenPeppol)</text>
+  <text x="392" y="181" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">*.participant.sml.prod.tech.peppol.org</text>
+  <text x="966" y="173" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">DNS 53 · NAPTR</text>
+  <line x1="222" y1="200" x2="372" y2="226" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-fw-arrow)"/>
+  <rect x="376" y="204" width="604" height="44" rx="9" fill="#0d1220" stroke="#94a3b8" strokeWidth="1.2"/>
+  <text x="392" y="222" fill="#94a3b8" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">SML — zone de repli (ancien SML de la CE)</text>
+  <text x="392" y="239" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">*.edelivery.tech.ec.europa.eu</text>
+  <text x="966" y="231" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">DNS 53 · NAPTR</text>
+  <line x1="222" y1="200" x2="372" y2="284" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-fw-arrow)"/>
+  <rect x="376" y="262" width="604" height="44" rx="9" fill="#0d1220" stroke="#fb923c" strokeWidth="1.2"/>
+  <text x="392" y="280" fill="#fb923c" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Résolveurs publics — seulement si le résolveur du serveur ne répond pas</text>
+  <text x="392" y="297" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">8.8.8.8 · 1.1.1.1</text>
+  <text x="966" y="289" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">DNS 53 · UDP/TCP</text>
+  <line x1="222" y1="200" x2="372" y2="342" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#edir-fw-arrow)"/>
+  <rect x="376" y="320" width="604" height="44" rx="9" fill="#0d1220" stroke="#a78bfa" strokeWidth="1.2"/>
+  <text x="392" y="338" fill="#a78bfa" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">SMP de la plateforme de chaque participant</text>
+  <text x="392" y="355" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">hôte dynamique, par ex. smp.pennylane.com</text>
+  <text x="966" y="347" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">HTTPS 443</text>
+</svg>
 
 | Objet | Destination | Port / Protocole |
 |---|---|---|
 | Recherche d'entreprise (INSEE) | `recherche-entreprises.api.gouv.fr` | HTTPS 443 |
-| Annuaire Peppol (carte de visite) | `directory.peppol.eu` | HTTPS 443 |
-| Résolution SML Peppol | Requêtes DNS NAPTR sur `*.iso6523-actorid-upis.edelivery.tech.ec.europa.eu` | DNS 53 (via le résolveur habituel du serveur) |
+| Annuaire Peppol (fiches) | `directory.peppol.eu` | HTTPS 443 |
+| Résolution SML Peppol — **zone principale** (OpenPeppol) | Requêtes DNS NAPTR sur `*.iso6523-actorid-upis.participant.sml.prod.tech.peppol.org` | DNS 53 via le résolveur du serveur |
+| Résolution SML Peppol — **zone de repli** (ancien SML de la Commission européenne) | Requêtes DNS NAPTR sur `*.iso6523-actorid-upis.edelivery.tech.ec.europa.eu` | DNS 53 via le résolveur du serveur |
+| Résolveurs DNS publics — utilisés uniquement si le résolveur du serveur ne répond pas | `8.8.8.8`, `1.1.1.1` | DNS 53 (UDP et TCP) |
 | SMP Peppol (résolution de la plateforme) | dynamique — le SMP de la plateforme de chaque participant (par ex. `smp.pennylane.com`) | HTTPS 443 |
 
 Ce qui compte pour les règles :
 
 - **INSEE et `directory.peppol.eu` sont des noms d'hôte fixes** — faciles à autoriser. L'entrée INSEE couvre aussi la recherche client de la modale facture et la recherche [Corriger destinataire](./invoices.md#fix-buyer) (même API).
-- **L'étape SML est uniquement DNS** — pas de HTTP. Si le serveur résout déjà le DNS public via le résolveur d'entreprise, il n'y a rien à ouvrir ; cela ne casse que si le DNS sortant est restreint aux zones internes.
-- **Le SMP ne peut pas être autorisé à l'avance** — c'est le domaine de la plateforme de chaque acheteur (Pennylane, Esker, Yooz… un par participant) ; la résolution de la plateforme demande donc une autorisation large *HTTPS 443 sortant* pour fonctionner de façon générale. Si ce n'est pas acceptable, l'impact reste doux : la section Peppol affiche quand même le participant, son nom et sa date d'enregistrement depuis `directory.peppol.eu`, et la colonne *Plateforme* indique `non résolu`.
+- **Le SML a changé de zone en 2026.** OpenPeppol a repris le Service Metadata Locator, et les enregistrements des participants se trouvent désormais dans la zone `participant.sml.prod.tech.peppol.org`. NomaUBL l'interroge en premier et garde l'ancienne zone `edelivery.tech.ec.europa.eu` en repli. Une politique DNS qui n'autorisait que l'ancienne zone doit ajouter la nouvelle — sinon la plupart des participants ne sont plus trouvés.
+- **L'étape SML est uniquement DNS** — pas de HTTP. Si le serveur résout déjà le DNS public via le résolveur d'entreprise, il n'y a rien à ouvrir. Certains résolveurs d'entreprise bloquent ou altèrent les requêtes NAPTR : NomaUBL réessaie alors via les résolveurs publics `8.8.8.8` et `1.1.1.1`. Il faut donc soit laisser le résolveur d'entreprise relayer les requêtes NAPTR des deux zones, soit autoriser le DNS sortant (port 53, UDP et TCP) vers ces deux adresses.
+- **Le SMP ne peut pas être autorisé à l'avance** — c'est le domaine de la plateforme de chaque acheteur (Pennylane, Esker, Yooz… un par participant) ; la résolution de la plateforme demande donc une autorisation large *HTTPS 443 sortant* pour fonctionner de façon générale. Si ce n'est pas acceptable, l'impact reste limité : la section Peppol affiche quand même le participant, et la colonne *Plateforme* indique `non résolu`.
+- **Diagnostic.** Quand `directory.peppol.eu` est injoignable, les participants trouvés par les interrogations SML restent affichés. Si rien n'est trouvé du tout, la section Peppol indique *Peppol Directory unreachable (directory.peppol.eu) — check outbound HTTPS/firewall*.
 
 ---
 

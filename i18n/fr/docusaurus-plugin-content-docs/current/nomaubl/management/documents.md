@@ -143,7 +143,7 @@ Cet onglet indique à NomaUBL **où trouver chaque information** sur les documen
 
 | Champ | Valeurs | Description |
 |---|---|---|
-| **Source** | `XML` (défaut) / `UBL` / `Connecteur` | Sélectionne le pipeline d'entrée. **`XML`** — un spool XML provenant de tout système source, transformé en UBL 2.1 par la chaîne XSL. **`UBL`** — des fichiers déjà au format UBL 2.1 (l'ERP émet du UBL nativement, ou le fichier vient d'un système amont en UBL) ; aucune transformation XSL ne s'exécute. **`Connecteur`** — aucun fichier : NomaUBL appelle une requête SQL ou un endpoint REST qui renvoie le document, puis applique la même chaîne XSL au résultat. |
+| **Source** | `XML` (défaut) / `UBL` / `Connecteur` / `PDF` | Sélectionne le pipeline d'entrée. **`PDF`** — un PDF texte issu de n'importe quel système, converti en XML à plat puis traité exactement comme un spool XML — voir [Extraction PDF](#extraction-pdf). **`XML`** — un spool XML provenant de tout système source, transformé en UBL 2.1 par la chaîne XSL. **`UBL`** — des fichiers déjà au format UBL 2.1 (l'ERP émet du UBL nativement, ou le fichier vient d'un système amont en UBL) ; aucune transformation XSL ne s'exécute. **`Connecteur`** — aucun fichier : NomaUBL appelle une requête SQL ou un endpoint REST qui renvoie le document, puis applique la même chaîne XSL au résultat. |
 | **Direction** | `Émise` (défaut) / `Reçue` | Côté de la transaction traité par ce modèle. **`Émise`** — factures envoyées par l'opérateur à un client. **`Reçue`** — factures reçues d'un fournisseur ; la contrepartie de la ligne est la partie fournisseur, les actions vendeur (Renvoyer à la PA, Marquer envoyée, Avoir…) sont masquées dans la modale de détail, et la liste Factures classe la ligne sous le chip *Reçues*. Positionné par défaut sur le modèle livré `received-ubl`. |
 
 Le choix de la Source bascule la suite de l'onglet entre trois ensembles de champs distincts. Les autres sections de la page — *Traitement*, *Avancé*, *PDF Template* — s'appliquent à l'identique aux trois sources. Le champ Direction est orthogonal : toute combinaison Source × Direction est valide, même si *Reçue* va le plus souvent de pair avec *UBL* (factures fournisseur poussées par la PA).
@@ -318,6 +318,90 @@ Choisir le modèle qui correspond littéralement aux dates source. Valeurs coura
 | `20260512` | `yyyyMMdd` |
 
 Le modèle ne s'applique que quand la *Source* du document est `XML`. Les sources UBL continuent d'émettre de l'ISO via le XSL, le champ est donc ignoré dans ce cas. La valeur par défaut conserve la compatibilité ascendante des flux UBL existants sans aucune modification.
+
+### Extraction PDF *(quand Source = PDF)* \{#extraction-pdf\}
+
+Avec **Source = PDF**, le modèle prend en entrée un **PDF texte** issu de n'importe quel système — pas seulement JD Edwards — et le convertit en un XML à plat que l'[éditeur XSL](../ubl-tools/xsl-editor.md) mappe comme un spool. La conversion reconstruit la mise en page et écrit ce qu'elle lit ; elle ne connaît rien des factures. Les PDF scannés (images sans texte) sont refusés avec une erreur explicite.
+
+<svg viewBox="0 0 1000 230" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="pdfx-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+  </defs>
+  <rect x="20" y="40" width="190" height="150" rx="12" fill="#0d1220" stroke="#334155" strokeWidth="1.2"/>
+  <text x="115" y="70" fill="#cbd5e1" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">PDF texte</text>
+  <text x="115" y="94" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">tout générateur</text>
+  <text x="115" y="114" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">facture, avoir…</text>
+  <text x="115" y="150" fill="#64748b" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">scans refusés</text>
+  <line x1="212" y1="115" x2="270" y2="115" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#pdfx-arrow)"/>
+  <rect x="274" y="20" width="300" height="190" rx="12" fill="#0d1220" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="424" y="46" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">XML à plat</text>
+  <text x="294" y="74" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;Montant_TTC&gt;1189.55&lt;/Montant_TTC&gt;</text>
+  <text x="294" y="94" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;TVA&gt; + &lt;TVA_taux&gt;</text>
+  <text x="294" y="114" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;Lignes&gt;&lt;Ligne&gt;…</text>
+  <text x="294" y="134" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;Adresse_1&gt; Nom · Rue · Ville</text>
+  <text x="294" y="154" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;Textes&gt;&lt;Texte&gt;…</text>
+  <text x="294" y="174" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;FichierPDF&gt;</text>
+  <text x="294" y="196" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">+ champs regex du modèle</text>
+  <line x1="576" y1="115" x2="634" y2="115" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#pdfx-arrow)"/>
+  <rect x="638" y="60" width="150" height="110" rx="12" fill="#0d1220" stroke="#334155" strokeWidth="1.2"/>
+  <text x="713" y="98" fill="#cbd5e1" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">XSL</text>
+  <text x="713" y="122" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">mappage comme un spool</text>
+  <line x1="790" y1="115" x2="830" y2="115" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#pdfx-arrow)"/>
+  <rect x="834" y="60" width="146" height="110" rx="12" fill="rgba(50,215,75,0.06)" stroke="rgba(50,215,75,0.45)" strokeWidth="1.2"/>
+  <text x="907" y="98" fill="#4ade80" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">UBL 2.1</text>
+  <text x="907" y="122" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">validation · stockage · envoi</text>
+</svg>
+
+| Ce que contient le PDF | Ce que reçoit le XML |
+|---|---|
+| Une ligne lue comme *Libellé : valeur* (ou libellé et valeur sur deux colonnes) | Un élément nommé d'après le libellé — `Montant TTC 1 189,55 €` → `<Montant_TTC>1189.55</Montant_TTC>`. Montants et pourcentages passent au point décimal, les dates `dd/MM/yyyy` au format ISO, et les identifiants imprimés avec des espaces (numéro de TVA, SIREN, code postal) sont compactés. |
+| Un taux inclus dans un libellé (`TVA 20,00%`) | Un élément voisin, pour que le nom reste stable : `<TVA>198.26</TVA><TVA_taux>20.00</TVA_taux>`. |
+| Une période (`01/09/2026 – 30/09/2026`) | Ses dates de début et de fin en `<…_debut>` et `<…_fin>`, chacune mappable sur son propre champ UBL. |
+| Le tableau entre les ancres de début et de fin | `<Lignes>/<Ligne>`, colonnes nommées d'après la ligne d'en-tête (déduites de la première ligne quand l'en-tête tient dans une seule cellule) ; les libellés sur plusieurs lignes sont fusionnés, un trait horizontal ferme le tableau. |
+| Les cadres des parties | Des blocs `<Adresse_N>` — `Nom`, lignes `Rue`, `Code_postal`, `Ville`, `Pays`, ainsi que les lignes libellées imprimées dans le cadre (code fournisseur, SIRET, TVA, téléphone, e-mail). |
+| Chaque ligne imprimée | `<Textes>/<Texte n="…" page="…">`, cellules séparées par ` \| `, pour que tout ce que les règles ci-dessus n'ont pas capté reste accessible par XPath. |
+| Le fichier lui-même | `<FichierPDF>` avec son chemin — `{FichierPDF}` en [pièce jointe complémentaire](#pièces-jointes-complémentaires) intègre le PDF d'origine dans l'UBL. |
+
+Le groupe **PDF extraction** règle la conversion :
+
+| Champ | Description |
+|---|---|
+| **Table start** | Regex testée sur chaque ligne : les cellules de la ligne trouvée nomment les colonnes du tableau (par ex. `PRESTATION \| Qté \| P.U. HT \| Montant HT`). |
+| **Table end** | Regex testée sur la première ligne qui suit le tableau — cette ligne n'en fait pas partie. |
+| **Layout match** | Regex facultative que le texte de la page doit contenir ; un fichier qui ne correspond pas est refusé — utile quand un dossier mélange plusieurs mises en page. |
+| **Page match** | Regex facultative : seules les pages dont le texte correspond sont converties — une impression qui contient un relevé et la facture ne garde que les pages de la facture. |
+| **Field 1** … **Field 5** | `Nom\|regex` appliquée au texte de la page ; le premier groupe (à défaut la correspondance entière) devient `<Nom>`. Ajouter `=>texte` pour réécrire la correspondance, `$1` admis — `Type_JDE\|^FACTURE=>F9`. Deux champs peuvent porter le même nom si un seul des deux peut correspondre. |
+
+Un échantillon converti se présente ainsi :
+
+```xml
+<Document fichier="invoice-2026-0412.pdf" pages="1">
+  <Numero>F2026-0412</Numero>
+  <Date_document>2026-10-05</Date_document>
+  <Période>01/09/2026 – 30/09/2026</Période>
+  <Période_debut>2026-09-01</Période_debut>
+  <Période_fin>2026-09-30</Période_fin>
+  <TVA>198.26</TVA>
+  <TVA_taux>20.00</TVA_taux>
+  <Montant_TTC>1189.55</Montant_TTC>
+  <Adresse_1>
+    <Nom>ACME SERVICES</Nom>
+    <Rue>12 rue des Lilas</Rue>
+    <Code_postal>75011</Code_postal>
+    <Ville>PARIS</Ville>
+    <SIRET>80320631700015</SIRET>
+  </Adresse_1>
+  <Lignes>
+    <Ligne><PRESTATION>Maintenance</PRESTATION><Qté>1</Qté><P_U_HT>991.29</P_U_HT><Montant_HT>991.29</Montant_HT></Ligne>
+  </Lignes>
+  <Textes>
+    <Texte n="1" page="1">FACTURE | N° : F2026-0412</Texte>
+  </Textes>
+  <FichierPDF>/data/input/invoices/invoice-2026-0412.pdf</FichierPDF>
+</Document>
+```
+
+L'éditeur de document et l'éditeur XSL **chargent tous deux un échantillon directement depuis un PDF** — le PDF est converti côté serveur avec les réglages enregistrés du modèle (enregistrer le modèle après avoir modifié les ancres). La page [Traitement de document](../processing/document.md), les [dossiers surveillés](../configuration/system/watched-folders.md) et la ligne de commande traitent les modèles à source PDF comme les modèles XML ; `-pdf2xml <in.pdf> <out.xml> --text` convertit un fichier isolé (voir [Ligne de commande](./command-line.md)).
 
 ---
 

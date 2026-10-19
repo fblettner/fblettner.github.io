@@ -403,7 +403,7 @@ Process one (or many) source files against one document template — or call a S
 | `--no-validate` | Skip the UBL validation entirely — used by the reprocess reprint, where the stored e-invoice stays the reference. | XML |
 | `--repair` | Rebuild the invoice tables (header, lines, VAT, validation) of a document whose archive and status history survived — archive and history untouched, no lifecycle event, header status taken from the latest real history event, nothing sent. See [Process Document → Repair](../processing/document.md#repair). | all |
 | `--validate` | XSD + Schematron only — no DB insert, no PA send. | UBL |
-| `--send` | Force submission to the PA, overriding the configured default. | UBL |
+| `--send` | Force submission to the PA, overriding the configured default. A UBL source sends the file; XML, PDF and connector sources send every document as if its document type said `F`. | all |
 | `--no-debug` | Skip the per-step timings (parse, validation, DB insert, send to PA) that are logged by default in every run. Recommended on heavy nightly batches where the per-step overhead is not worth the extra log volume. | all |
 
 **Examples**
@@ -501,7 +501,7 @@ The two lifecycle maintenance checks — the same repairs as the [Retrieve Statu
 
 ```bash
 # Integrity check — backfill PA statuses the poll missed
-java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--apply] [--notify]
+java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--until <ISO>] [--company <kco>] [--apply] [--notify]
 
 # Ordering check — re-sequence events recorded out of order
 java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [--apply]
@@ -511,10 +511,12 @@ java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [
 |---|---|
 | **`--lookback <N>`** | Integrity window in days (mutually exclusive with `--since`). |
 | **`--since <YYYY-MM-DD>`** | Integrity window start date. |
+| **`--until <ISO>`** | Integrity window end — date or timestamp; empty = now. |
+| **`--company <kco>`** | Limit the integrity check to one company: only its status connector is queried and only its invoices are looked up. |
 | **`--apply`** | Apply the repairs; omit to report only (dry run). |
 | **`--notify`** | Fire the notification rules on backfilled transitions (integrity only). |
 
-Both repairs are idempotent and chronologically ordered — re-running over an already-clean lifecycle changes nothing.
+Both repairs are chronologically ordered and safe to re-run — running them again over an already-clean lifecycle changes nothing. The integrity run logs its progress (pages fetched, events compared every thousand, final summary).
 
 ---
 
@@ -646,6 +648,14 @@ nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml
 # byte-identical to JDE's native XML, with a manifest:
 nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml ./manifests/R42565_FBL0001.xml
 ```
+
+### Text mode — any PDF → flat XML \{#pdf2xml-text\}
+
+```text
+-pdf2xml <input.pdf> <output.xml> --text [--config <file> --template <name>]
+```
+
+Converts **any text PDF** — not only JD Edwards — into the flat XML of a [PDF-source template](./documents.md#pdf-extraction): labelled values, one table, every printed row. It gives the sample to load in the document editor and the XSL editor. With `--config` / `--template`, the template's PDF extraction settings apply (table anchors, layout match, regex fields); otherwise the defaults. Scanned PDFs are refused.
 
 ---
 

@@ -31937,7 +31937,7 @@ See the [Configuration → System → e-directory](../configuration/system/edire
 
 ## How a search runs
 
-The two lookups happen in sequence: INSEE first to populate the companies, then **one PPF directory call per company** to list its registered identifiers. The user sees the results fill in two passes.
+The two lookups happen in sequence: INSEE first to populate the companies, then **one PPF directory call per company** to list its registered identifiers. The user sees the results fill in two passes. Expanding a company card then runs the [Peppol lookup](#peppol-directory) for that company.
 
 ---
 
@@ -31973,34 +31973,45 @@ The listing goes through the connector's `directory-check-siren` endpoint, which
 
 ### Peppol directory \{#peppol-directory\}
 
-Expanding a company card also queries the **public Peppol network** — no account needed. A *Peppol directory* group lists each registered **participant** for the SIREN (French registrations use ICD `0225`, per-establishment identifiers included), with its name, its **registration date**, and the **service provider that operates it** — the PA (e.g. Pennylane) with its Peppol seat id, resolved through the official **SML/SMP** discovery. The access-point and SMP URLs sit in the provider's tooltip.
+Expanding a company card also queries the **public Peppol network** — no account needed. A *Peppol directory* group lists each registered **participant** of the company, with its name, its **registration date** and the **service provider that operates it** — the PA (e.g. Pennylane) with its Peppol seat id, resolved through the official **SML/SMP** discovery. The access-point and SMP URLs sit in the provider's tooltip.
+
+Participants are found in two ways:
+
+- **Business cards** of the [Peppol Directory](https://directory.peppol.eu) matching the SIREN.
+- **Direct SML probes** of every identifier a French company can hold — publishing a business card is optional, and some providers do not. The probes cover the SIREN under schemes `0225` and `0002`, every address registered in the PPF directory (bare, suffixed, SIRET, routed) under `0225`, and the SIRET of each establishment under `0009`. A participant found this way shows **no business card** in place of its registration date.
 
 | Column | Content |
 |---|---|
 | **Participant** | The Peppol participant identifier (ICD + value, e.g. `0225:80320631700015`). |
 | **Plateforme (PA)** | The service provider operating the participant, with its seat id; `non résolu` when the SMP step couldn't resolve it. |
-| **Enregistré le** | The participant's Peppol registration date. |
+| **Enregistré le** | The participant's Peppol registration date — *no business card* for a participant found through the SML only. |
 
-The lookup runs on the **first expand only** and is also exposed as `POST /api/peppol-lookup` for integrations (see the [API reference](/nomaubl/api-reference)). A participant with no reachable provider still lists its registration and name — only the *Plateforme* cell reads `non résolu`.
+The lookup runs once for every open company card — including a card left open from a previous search — and is also available as `POST /api/peppol-lookup` for integrations (see the [API reference](/nomaubl/api-reference)). A participant with no reachable provider still lists its registration and name — only the *Plateforme* cell reads `non résolu`. An outage of the Peppol Directory no longer hides the participants found through the SML.
+
+The whole page is also available as a single call: `GET /api/e-directory/search?q=…` (or `POST` with `{q, peppol}`) returns the INSEE companies matching a name, SIREN or SIRET with head office and establishments, the PPF directory lines of each company and, with `peppol=true`, its Peppol participants.
 
 ---
 
-## Network flows (firewall)
+## Network flows (firewall) \{#network-flows\}
 
 Every E-Directory external call is made **server-side** — from the NomaUBL server, not the user's browser — so the firewall rules apply to the server's outbound traffic. Besides the PA connector, the destinations are:
 
 | Purpose | Destination | Port / Protocol |
 |---|---|---|
 | Company search (INSEE) | `recherche-entreprises.api.gouv.fr` | HTTPS 443 |
-| Peppol directory (business card) | `directory.peppol.eu` | HTTPS 443 |
-| Peppol SML resolution | DNS NAPTR queries on `*.iso6523-actorid-upis.edelivery.tech.ec.europa.eu` | DNS 53 (via the server's normal resolver) |
+| Peppol directory (business cards) | `directory.peppol.eu` | HTTPS 443 |
+| Peppol SML resolution — **primary zone** (OpenPeppol) | DNS NAPTR queries on `*.iso6523-actorid-upis.participant.sml.prod.tech.peppol.org` | DNS 53 via the server's resolver |
+| Peppol SML resolution — **fallback zone** (former European Commission SML) | DNS NAPTR queries on `*.iso6523-actorid-upis.edelivery.tech.ec.europa.eu` | DNS 53 via the server's resolver |
+| Public DNS resolvers — used only when the server's resolver answers nothing | `8.8.8.8`, `1.1.1.1` | DNS 53 (UDP and TCP) |
 | Peppol SMP (provider resolution) | dynamic — the SMP host of each participant's platform (e.g. `smp.pennylane.com`) | HTTPS 443 |
 
 What matters for the rules:
 
 - **INSEE and `directory.peppol.eu` are fixed hostnames** — easy to whitelist. The INSEE entry also covers the invoice modal's client search and the [Fix buyer](./invoices.md#fix-buyer) search (same API).
-- **The SML step is DNS only** — no HTTP. If the server already resolves public DNS through the corporate resolver, there is nothing to open; it only breaks when outbound DNS is restricted to internal zones.
-- **The SMP host can't be whitelisted in advance** — it's whatever domain each buyer's platform uses (Pennylane, Esker, Yooz… one per participant), so provider resolution needs a broad *HTTPS 443 outbound* allowance to work generally. If that isn't acceptable, the impact is graceful: the Peppol section still shows the participant, name and registration date from `directory.peppol.eu`, and the *Plateforme* column reads `non résolu`.
+- **The SML moved in 2026.** OpenPeppol took over the Service Metadata Locator and participant records now live in the `participant.sml.prod.tech.peppol.org` zone. NomaUBL queries it first and keeps the former `edelivery.tech.ec.europa.eu` zone as fallback. A DNS policy that only allowed the former zone must add the new one — otherwise most participants are no longer found.
+- **The SML step is DNS only** — no HTTP. If the server already resolves public DNS through the corporate resolver, there is nothing to open. Some corporate resolvers drop or mangle NAPTR queries: NomaUBL then retries through the public resolvers `8.8.8.8` and `1.1.1.1`. Either let the corporate resolver forward NAPTR queries for both zones, or allow outbound DNS (port 53, UDP and TCP) to those two addresses.
+- **The SMP host can't be whitelisted in advance** — it's whatever domain each buyer's platform uses (Pennylane, Esker, Yooz… one per participant), so provider resolution needs a broad *HTTPS 443 outbound* allowance to work generally. If that isn't acceptable, the impact is graceful: the Peppol section still shows the participant, and the *Plateforme* column reads `non résolu`.
+- **Diagnosis.** When `directory.peppol.eu` is unreachable, the participants found by the SML probes are still listed. When nothing is found at all, the Peppol section shows *Peppol Directory unreachable (directory.peppol.eu) — check outbound HTTPS/firewall*.
 
 ---
 
@@ -36318,7 +36329,7 @@ Above the table, **Parallel conversions** (default `4`) sets how many PDFs are c
 
 1. **List** — every folder is listed for files matching its pattern and newer than *last scan − overlap*. A folder scanned for the first time, without a date, only takes the overlap window — use a backfill date for history.
 2. **Filter** — files already processed (source file name found in the archive) or already waiting as XML in the template's input folder are dropped.
-3. **Convert** — PDFs are converted to XML in parallel into the template's input folder; XML files are copied as is.
+3. **Convert** — PDFs are converted to XML in parallel into the template's input folder; XML files are copied as is. For a [PDF-source template](../../management/documents.md#pdf-extraction), any text PDF goes through the template's PDF extraction settings instead of the JD Edwards converter.
 4. **Process** — one batch runs per template, with the batch's own parallelism.
 
 The last-scan date advances on every run. A file that fails is **retried** while it stays inside the overlap window and reported **by name** — it never blocks the others.
@@ -39429,7 +39440,7 @@ Process one (or many) source files against one document template — or call a S
 | `--no-validate` | Skip the UBL validation entirely — used by the reprocess reprint, where the stored e-invoice stays the reference. | XML |
 | `--repair` | Rebuild the invoice tables (header, lines, VAT, validation) of a document whose archive and status history survived — archive and history untouched, no lifecycle event, header status taken from the latest real history event, nothing sent. See [Process Document → Repair](../processing/document.md#repair). | all |
 | `--validate` | XSD + Schematron only — no DB insert, no PA send. | UBL |
-| `--send` | Force submission to the PA, overriding the configured default. | UBL |
+| `--send` | Force submission to the PA, overriding the configured default. A UBL source sends the file; XML, PDF and connector sources send every document as if its document type said `F`. | all |
 | `--no-debug` | Skip the per-step timings (parse, validation, DB insert, send to PA) that are logged by default in every run. Recommended on heavy nightly batches where the per-step overhead is not worth the extra log volume. | all |
 
 **Examples**
@@ -39527,7 +39538,7 @@ The two lifecycle maintenance checks — the same repairs as the [Retrieve Statu
 
 ```bash
 # Integrity check — backfill PA statuses the poll missed
-java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--apply] [--notify]
+java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--until <ISO>] [--company <kco>] [--apply] [--notify]
 
 # Ordering check — re-sequence events recorded out of order
 java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [--apply]
@@ -39537,10 +39548,12 @@ java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [
 |---|---|
 | **`--lookback <N>`** | Integrity window in days (mutually exclusive with `--since`). |
 | **`--since <YYYY-MM-DD>`** | Integrity window start date. |
+| **`--until <ISO>`** | Integrity window end — date or timestamp; empty = now. |
+| **`--company <kco>`** | Limit the integrity check to one company: only its status connector is queried and only its invoices are looked up. |
 | **`--apply`** | Apply the repairs; omit to report only (dry run). |
 | **`--notify`** | Fire the notification rules on backfilled transitions (integrity only). |
 
-Both repairs are idempotent and chronologically ordered — re-running over an already-clean lifecycle changes nothing.
+Both repairs are chronologically ordered and safe to re-run — running them again over an already-clean lifecycle changes nothing. The integrity run logs its progress (pages fetched, events compared every thousand, final summary).
 
 ---
 
@@ -39673,6 +39686,14 @@ nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml
 nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml ./manifests/R42565_FBL0001.xml
 ```
 
+### Text mode — any PDF → flat XML \{#pdf2xml-text\}
+
+```text
+-pdf2xml <input.pdf> <output.xml> --text [--config <file> --template <name>]
+```
+
+Converts **any text PDF** — not only JD Edwards — into the flat XML of a [PDF-source template](./documents.md#pdf-extraction): labelled values, one table, every printed row. It gives the sample to load in the document editor and the XSL editor. With `--config` / `--template`, the template's PDF extraction settings apply (table anchors, layout match, regex fields); otherwise the defaults. Scanned PDFs are refused.
+
 ---
 
 ## Flags reference
@@ -39747,7 +39768,7 @@ This tab tells NomaUBL **where to find each piece of data** on every incoming do
 
 | Field | Values | Description |
 |---|---|---|
-| **Source** | `XML` (default) / `UBL` / `Connector` | Picks the input pipeline. **`XML`** — an XML spool from any source system, transformed to UBL 2.1 by the XSL pipeline. **`UBL`** — files that are already UBL 2.1 invoices (your ERP emits UBL natively, or the file came from an upstream system in UBL form); no XSL transform runs. **`Connector`** — no file at all: NomaUBL calls a SQL query or a REST endpoint that returns the document, then runs the same XSL pipeline against the result. |
+| **Source** | `XML` (default) / `UBL` / `Connector` / `PDF` | Picks the input pipeline. **`PDF`** — a text PDF from any system, converted into a flat XML and then processed exactly like an XML spool — see [PDF extraction](#pdf-extraction). **`XML`** — an XML spool from any source system, transformed to UBL 2.1 by the XSL pipeline. **`UBL`** — files that are already UBL 2.1 invoices (your ERP emits UBL natively, or the file came from an upstream system in UBL form); no XSL transform runs. **`Connector`** — no file at all: NomaUBL calls a SQL query or a REST endpoint that returns the document, then runs the same XSL pipeline against the result. |
 | **Direction** | `Issued` (default) / `Received` | What side of the transaction this template handles. **`Issued`** — invoices the operator emits to a customer. **`Received`** — invoices the operator gets from a supplier; the row's counterparty is the supplier party, the emit-only seller actions (Resend to PA, Send completed, Credit note…) are hidden in the detail modal, and the Invoices list shows the row under the *Received* filter chip. Set on the `received-ubl` bundled template by default. |
 
 The Source choice flips the rest of this tab between three distinct sets of fields. The remaining sections of the page — *Processing*, *Advanced*, *PDF Template* — apply identically to all three sources. The Direction field is orthogonal: any combination of Source × Direction is valid, although *Received* is most often paired with *UBL* (PA-pushed supplier invoices).
@@ -39920,6 +39941,61 @@ Pick the pattern that matches the source dates literally. Common values:
 | `20260512` | `yyyyMMdd` |
 
 The pattern applies only when the document's *Source* is `XML`. UBL sources keep emitting ISO through the XSL, so the field is ignored there. The default keeps existing UBL flows back-compat without any edit.
+
+### PDF extraction *(when Source = PDF)* \{#pdf-extraction\}
+
+With **Source = PDF**, the template takes a **text PDF** from any system — not only JD Edwards — and converts it into a flat XML that the [XSL editor](../ubl-tools/xsl-editor.md) maps like a spool. The conversion rebuilds the page layout and writes what it reads; it knows nothing about invoices. Scanned PDFs (images without text) are refused with an explicit error.
+
+| What the PDF holds | What the XML gets |
+|---|---|
+| A row read as *Label : value* (or label and value in two columns) | One element named after the label — `Montant TTC 1 189,55 €` → `<Montant_TTC>1189.55</Montant_TTC>`. Amounts and percents use a dot decimal, `dd/MM/yyyy` dates become ISO, identifiers printed with spaces (VAT number, SIREN, postal code) are compacted. |
+| A rate inside a label (`TVA 20,00%`) | A sibling element, so the name stays stable: `<TVA>198.26</TVA><TVA_taux>20.00</TVA_taux>`. |
+| A period (`01/09/2026 – 30/09/2026`) | Its two bounds as `<…_debut>` and `<…_fin>`, each mappable to its own UBL field. |
+| The table between the start and end anchors | `<Lignes>/<Ligne>`, columns named after the header row (inferred from the first row when the header is a single cell); wrapped labels are merged, a ruled line closes the table. |
+| The party boxes | `<Adresse_N>` blocks — `Nom`, `Rue` lines, `Code_postal`, `Ville`, `Pays`, plus the labelled lines printed in the box (supplier code, SIRET, VAT, phone, e-mail). |
+| Every printed row | `<Textes>/<Texte n="…" page="…">`, cells separated by ` \| `, so anything the rules above missed stays reachable by XPath. |
+| The file itself | `<FichierPDF>` with its path — use `{FichierPDF}` as an [additional attachment](#additional-attachments) to embed the original PDF in the UBL. |
+
+The **PDF extraction** group sets the conversion:
+
+| Field | Description |
+|---|---|
+| **Table start** | Regex matched on a row: that row's cells name the table columns (e.g. `PRESTATION \| Qté \| P.U. HT \| Montant HT`). |
+| **Table end** | Regex matched on the first row after the table — the row itself is not part of it. |
+| **Layout match** | Optional regex the page text must contain; a file that does not match is refused — useful when a folder mixes several layouts. |
+| **Page match** | Optional regex: only the pages whose text matches are converted — a print holding a statement and the invoice keeps the invoice pages only. |
+| **Field 1** … **Field 5** | `Name\|regex` run on the page text; the first group (else the whole match) becomes `<Name>`. Add `=>text` to rewrite the match, `$1` allowed — `Type_JDE\|^FACTURE=>F9`. Two fields may share a name when only one of them can match. |
+
+A converted sample looks like this:
+
+```xml
+<Document fichier="invoice-2026-0412.pdf" pages="1">
+  <Numero>F2026-0412</Numero>
+  <Date_document>2026-10-05</Date_document>
+  <Période>01/09/2026 – 30/09/2026</Période>
+  <Période_debut>2026-09-01</Période_debut>
+  <Période_fin>2026-09-30</Période_fin>
+  <TVA>198.26</TVA>
+  <TVA_taux>20.00</TVA_taux>
+  <Montant_TTC>1189.55</Montant_TTC>
+  <Adresse_1>
+    <Nom>ACME SERVICES</Nom>
+    <Rue>12 rue des Lilas</Rue>
+    <Code_postal>75011</Code_postal>
+    <Ville>PARIS</Ville>
+    <SIRET>80320631700015</SIRET>
+  </Adresse_1>
+  <Lignes>
+    <Ligne><PRESTATION>Maintenance</PRESTATION><Qté>1</Qté><P_U_HT>991.29</P_U_HT><Montant_HT>991.29</Montant_HT></Ligne>
+  </Lignes>
+  <Textes>
+    <Texte n="1" page="1">FACTURE | N° : F2026-0412</Texte>
+  </Textes>
+  <FichierPDF>/data/input/invoices/invoice-2026-0412.pdf</FichierPDF>
+</Document>
+```
+
+The document editor and the XSL editor both **load a sample straight from a PDF** — the PDF is converted server-side with the template's saved settings (save the template first after changing the anchors). The [Process Document](../processing/document.md) page, the [watched folders](../configuration/system/watched-folders.md) and the command line process PDF-source templates like XML ones; `-pdf2xml <in.pdf> <out.xml> --text` converts a single file on its own (see [Command line](./command-line.md)).
 
 ---
 
@@ -41555,6 +41631,7 @@ The first decision a document template makes is its **Source**. It is set on the
 |---|---|---|
 | **XML** | XML spool from any ERP needing transformation to UBL. JDE BIP output, SAP IDoc-derived XML, NetSuite saved-search XML, custom ERP exports. | XSL transform → UBL 2.1 → XSD + Schematron → DB → optional PA submit. The page exposes the *Mode* selector (AUTO / SINGLE / BURST / UBL) and the *Send to PA* toggle. |
 | **UBL** | The file is already a UBL 2.1 invoice (your ERP emits UBL natively, or the file came from an upstream PA in UBL form). | Parse the invoice, extract `(doc, dct, kco)` from `cbc:ID`, validate, persist, optionally submit. The page exposes a *Validate only* mode and a *Send to PA* toggle. |
+| **PDF** | A text PDF from any system, with no XML or UBL export available. | The PDF is converted into a flat XML with the template's [PDF extraction](../management/documents.md#pdf-extraction) settings, then follows the XML pipeline. The page offers the same *Mode* selector and *Send to PA* options as XML; the file picker accepts `.pdf`. |
 
 Once the template is selected, the **Source** field on the form shows the resolved value and the rest of the form reconfigures itself.
 
@@ -41580,7 +41657,7 @@ The form has four common controls plus per-source extras.
 | **Source** | both | Read-only display of the template's resolved `source`. Switching templates updates this field and reshapes the form. |
 | **Select File** | both | Two buttons — *Upload File* (browser file picker) or *Browse Server* (open the embedded file browser against `dirInput`). XML uploads are copied to the template's working directory; UBL uploads land in `<dirInput>/ubl/`. |
 | **Mode** | XML | `AUTO` (default), `SINGLE`, `BURST` or `UBL`. See [Modes (XML source)](#modes-xml-source) below. |
-| **Send to PA** | XML | `Use settings` (default) or `Skip sending`. |
+| **Send to PA** | XML / PDF | `Use settings` (default), `Force send` or `Skip sending`. *Force send* sends every document of the run to the PA as if its document type said `F`. |
 | **Mode** | UBL | `Process & Validate` (default) or `Validate only`. |
 | **Send to PA** | UBL | `Use settings`, `Force send` or `Skip sending`. *Force send* is the UBL-only override that bypasses the e-invoicing template's `sendToPA` flag. |
 | **Replace** | both | `Skip` keeps existing rows untouched; `Overwrite` purges the five UBL tables for the same `(doc, dct, kco)` and re-imports cleanly. |
@@ -42366,7 +42443,9 @@ NomaUBL release notes — every user-visible change shipped in the platform, ver
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
   Versions
-  2026.10.16.1 · 2026-10-01
+  2026.10.19.1 · 2026-10-01
+  2026.10.18.1 · 2026-09-30
+  2026.10.16.1 · 2026-09-30
   2026.10.14.1 · 2026-09-30
   2026.10.12.1 · 2026-09-30
   2026.10.11.1 · 2026-09-30
@@ -42477,6 +42556,41 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.10.19.1 — 2026-10-19 \{#v2026-10-19-1\}
+
+### Improvements
+
+- **Integrity check: progress and logs on the page.** The run reports its progress as it goes: pages fetched from the platform, events compared every thousand with the running counts, and a final summary. From the Import Status page these lines now appear live under the Integrity check section while the run works, instead of being readable only in the server log. Events outside the requested window are dropped with a logged count (a connector bounding only the start date returns everything up to now), duplicates delivered twice are collapsed, and the invoice lookups are done once per invoice instead of once per event. The command line gains `--until <ISO>` and `--company <kco>` on `-status-integrity`.
+- **Ordering check: invoice status drift.** The check now also reports an invoice whose status differs from the latest real state of its history, shown as "current → expected", and realigns it on apply. Until now a header carrying a stale value was fixed only when a row of the same invoice had to be removed or re-sequenced. The scheduled run and the command line pick the new finding up with no change.
+- **E-Directory as an API.** `GET /api/e-directory/search?q=…` (or POST with `{q, peppol}`) returns in one call what the E-Directory page assembles: the INSEE companies matching a name, SIREN or SIRET with head office and establishments, the PPF directory lines of each company, and with `peppol=true` its Peppol participants. Documented in the API reference.
+- **Peppol lookup without business card.** Publishing a business card in the Peppol Directory is optional, and some providers do not. The lookup now also probes the SML directly for the identifiers a French company can hold: the SIREN under schemes 0225 and 0002, every address registered in the PPF directory (bare, suffixed, SIRET, routed) under 0225, and the SIRETs of the establishments under 0009. A company registered on an SMP without a business card now lists all its addresses with the resolved platform, marked "no business card" in place of the registration date.
+
+### Fixes
+
+- **Peppol lookup failing intermittently.** OpenPeppol took over the Service Metadata Locator in 2026 and participant records moved to its DNS zone. The lookup still queried the former European Commission zone, so it only worked for participants not yet removed from it. It now queries the Peppol zone first, with the former zone as fallback, retries DNS and falls back to public resolvers when the system resolver answers nothing. A Peppol Directory outage no longer hides the DNS results.
+- **E-Directory: Peppol not checked after a second search.** A company left open from a previous search came back open but its Peppol lookup never ran. It now runs for every open company whose lookup has not started.
+
+- **Statuses of a resent invoice not recorded.** After a rejection and a resend, the statuses of the second cycle (deposited, received, transmitted…) were ignored by the status retrieval and by the integrity check, because the duplicate guard considered every code the invoice had ever carried as already recorded. The guard now works per submission cycle: a code counts as recorded only since the last send, pending or reprocess event, while the exact same platform event (same code and timestamp) is still recognised across cycles.
+- **Integrity check limited to 500 missing events.** The result listed at most 500 rows, so the Apply button could only backfill the first 500 and the check had to be rerun. Missing and applied rows are no longer limited; only the informational not-found and unmapped rows stop being listed past two thousand, with a log line saying so. The scheduled run was not affected.
+- **Invoice status overwritten by the reprocess or mail-sent marker.** When the history of an invoice ended with the reprocess marker (9912) or the mail-sent marker (9908), the ordering check, the integrity backfill, the status retrieval and the deletion of a history event copied that marker into the invoice status. All header realignments now take the latest real state of the history, looking past both markers in whatever order they appear, so a deposited 200 NON_TRANSMISE stays as such. The mail-sent marker is also treated as an application event: the status retrieval no longer drops it and the ordering check no longer reports it as misordered.
+
+---
+
+## 2026.10.18.1 — 2026-10-18 \{#v2026-10-18-1\}
+
+### Improvements
+
+- **PDF as a document source.** A document template can now take a text PDF from any system (not only JDE) as its source. The PDF is converted into a flat XML that the XSL editor maps like a spool: one element per labelled value on the page (amounts, percents and dates normalised, spaced identifiers such as VAT numbers compacted, a rate printed in a label like "TVA 20,00%" split into its own element, a period into its start and end), one table (columns named after its header, or inferred from the first row when the header is a single cell, wrapped labels merged, closed by a ruled line), the party boxes as address blocks (name, street lines, postal code, city, country, plus the labelled lines printed against them such as supplier code, SIRET, VAT, phone, e-mail), every printed row kept for anything else, and the path of the PDF so the original can be embedded as an attachment. Settings on the template: table start and end anchors, a layout match, a page match (a print holding a statement and the invoice keeps the invoice pages only), and regex fields with an optional rewrite (`Type_JDE|^FACTURE=>F9`). The Process document page, watched folders and the command line process PDF-source templates like XML ones; `-pdf2xml <in.pdf> <out.xml> --text` converts a file on its own; the document editor and the XSL editor load a sample straight from a PDF. Scanned PDFs are refused with an explicit error.
+- **Force send from the Process document page.** The send option of XML and PDF sources now offers "Force send" next to "Use settings" and "Skip": every document of the run is sent to the PA as if its document type said F. Available on the command line as `--send`.
+- **XSL mapping: constants and flat recaps.** A mapping variable can hold a constant between backticks (`TAG_COMPANY_CODE` = `` `00009` ``), so a single-company source still gets its company in the UBL number and the seller block. A repeating-group variable can point at the document itself with `.`, for a source whose single VAT recap is printed on the document rather than in a group.
+
+### Fixes
+
+- **UBL defaults: per-template payment default not saved.** With the payment override enabled on a document template, the default payment code was written to the global defaults and lost on save. The override now carries its own default.
+- **UBL defaults: suppliers override no longer compiles.** A suppliers override saved recently produced a seller template missing the additional-identifiers parameter the framework now passes, and the transform failed with XTSE0680. Fixed for new saves; a template whose suppliers override was saved before this version needs one re-save from the UBL defaults page.
 
 ---
 
@@ -45764,6 +45878,10 @@ Pick a period — **from** a date **until** another (empty end = now) — and op
 
 A recovered event is inserted at its **chronological position** — from the event's platform timestamp — not appended at the end, and the invoice's current status only moves when the recovered event is genuinely the most recent. Backfilling an old missing status therefore can't knock an invoice back to a past state. The same chronological insertion applies to the regular status poll.
 
+While the check runs, its **progress shows live** under the section: pages fetched from the platform, events compared every thousand with the running counts, then a final summary. Events outside the requested window are dropped with a logged count (a connector bounding only the start date returns everything up to now), events delivered twice are collapsed, and each invoice is looked up once. The list of missing events is not capped, so **Apply** backfills them all in one pass; only the informational *not found* and *unmapped* rows stop being listed past two thousand, with a log line saying so.
+
+**Resent invoices.** After a rejection and a resend, the statuses of the new cycle (deposited, received, transmitted…) are recorded like the first ones: a code counts as already recorded only since the invoice's last send, pending or reprocess event, while the exact same platform event — same code, same timestamp — is still recognised across cycles. The regular status poll follows the same rule.
+
 ### Lifecycle ordering
 
 The second check scans the database for lifecycle rows that are **out of order** — an internal platform stage recorded after a standard status, and standard statuses recorded in the wrong order (e.g. `202` *Reçue* before `200` *Déposée*, the numeric order of standard codes being canonical) — plus **invalid codes** (raw platform text stored by a mapping mistake). The repair **re-sequences** the events into the correct order (nothing is deleted; internal statuses keep their positions) and realigns the invoice's current status, with a before/after preview and per-invoice selection.
@@ -45774,6 +45892,8 @@ Two cases are handled on their own terms:
 - **Disputed (`207`) and suspended (`208`).** These interim statuses may be followed by a lower code such as `205` *Approved* or `210` *Refused*: they keep their chronological position within their cycle and never count as an inversion.
 
 Histories ordered wrongly by an earlier rule are detected and put back in order by the next run.
+
+The check also reports an **invoice whose status differs from the latest real state of its history**, shown as *current → expected*, and realigns it on apply. The *latest real state* looks past the reprocess marker (`9912`) and the mail-sent marker (`9908`) in whatever order they appear — so a deposited `200` `NON_TRANSMISE` stays as such. The same rule applies to every header realignment: integrity backfill, status poll and deletion of a history event. The mail-sent marker counts as an application event: it is never reported as misordered.
 
 ---
 
@@ -47034,7 +47154,8 @@ A `TAG_*` select isn't limited to a single XML path:
 - **Concatenation (`+`).** Glue several source tags into one UBL value with a ` + ` operator — `'FirstName + LastName'` joins them with a single space, `'First + ", " + Last'` sets a custom joiner, and quoted literals are emitted verbatim. No more XSL preprocessing step when a UBL field combines several source columns.
 - **Conditional value list.** The `cond_value` argument of the `ubl:emit-item-prop` / `ubl:emit-note` helpers accepts a single value (as before) or a comma-separated whitelist — `'KWH,M3,LTR'` matches when the source value is any of the three. Whitespace around each item is trimmed.
 - **Parent axis (`..`).** A path may step up to the parent element: `../FIELD` reaches a sibling of the current line element, `../../FIELD/Sub` two levels up. It unblocks source XML that nests line items under a parent element which also carries the line-level references (for example the referenced customer order, BT-132); paths without `..` resolve exactly as before.
-- **Constant values (backticks).** A value wrapped in backticks — for example `` `EDI` `` — is written as a fixed constant instead of being read from the source. Works on custom extension fields, notes and item properties; handy for platform-specific values that never change.
+- **Constant values (backticks).** A value wrapped in backticks — for example `` `EDI` `` — is written as a fixed constant instead of being read from the source. Works on every mapping variable as well as custom extension fields, notes and item properties — e.g. `TAG_COMPANY_CODE` = `` `00009` `` gives a single-company source its company in the UBL number and the seller block. Constants and fields can be joined with ` + ` (`` `Ref-` + DocNumber ``).
+- **The document itself (`.`).** A repeating-group variable (`TAG_VAT_LINE`, `TAG_LINE_ITEM`…) can point at the document with `.` — for a flat source whose single VAT recap is printed on the document rather than in a group.
 - **Element paths in conditions.** In the pipe-separated specs for custom extension fields, notes and item properties, the **condition** and **non-empty** columns accept a slash path — e.g. `Facture_Entete_S4/CLI_TYPE_ID242` — in addition to a plain element name, needed when the source field sits below an intermediate group. Plain names behave exactly as before, so existing templates are unaffected; the value column already accepted paths.
 
 #### Scoping

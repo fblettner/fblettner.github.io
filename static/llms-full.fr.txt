@@ -26487,7 +26487,7 @@ Voir la page [Configuration → Système → e-directory](../configuration/syste
 
 ## Déroulement d'une recherche
 
-Les deux requêtes s'enchaînent : INSEE d'abord pour remplir les sociétés, puis **un seul appel annuaire PPF par société** pour lister ses identifiants enregistrés. L'utilisateur voit les résultats se remplir en deux passes.
+Les deux requêtes s'enchaînent : INSEE d'abord pour remplir les sociétés, puis **un seul appel annuaire PPF par société** pour lister ses identifiants enregistrés. Les résultats s'affichent en deux temps. Déplier ensuite une carte entreprise lance la [recherche Peppol](#peppol-directory) pour cette entreprise.
 
 ---
 
@@ -26523,34 +26523,45 @@ Le listage passe par l'endpoint `directory-check-siren` du connecteur, qui renvo
 
 ### Annuaire Peppol \{#peppol-directory\}
 
-Déplier une carte entreprise interroge aussi le **réseau Peppol public** — aucun compte requis. Un groupe *Annuaire Peppol* liste chaque **participant** enregistré pour le SIREN (les enregistrements français utilisent l'ICD `0225`, identifiants par établissement compris), avec son nom, sa **date d'enregistrement** et la **plateforme qui l'opère** — la PA (par ex. Pennylane) avec son identifiant de siège Peppol, résolue via la découverte officielle **SML/SMP**. Les URLs du point d'accès et du SMP se trouvent dans l'infobulle de la plateforme.
+Déplier une carte entreprise interroge aussi le **réseau Peppol public** — aucun compte requis. Un groupe *Annuaire Peppol* liste chaque **participant** enregistré pour l'entreprise, avec son nom, sa **date d'enregistrement** et la **plateforme qui l'opère** — la PA (par ex. Pennylane) avec son identifiant de siège Peppol, résolue via la découverte officielle **SML/SMP**. Les URL du point d'accès et du SMP se trouvent dans l'infobulle de la plateforme.
+
+Les participants sont trouvés de deux façons :
+
+- les **fiches** de l'[annuaire Peppol](https://directory.peppol.eu) qui correspondent au SIREN ;
+- des **interrogations directes du SML** pour chaque identifiant qu'une entreprise française peut détenir — publier une fiche dans l'annuaire est facultatif, et certaines plateformes ne le font pas. Sont interrogés le SIREN sous les schémas `0225` et `0002`, chaque adresse inscrite dans l'annuaire PPF (simple, suffixée, SIRET, routée) sous `0225`, et le SIRET de chaque établissement sous `0009`. Un participant trouvé de cette façon affiche **sans fiche annuaire** à la place de sa date d'enregistrement.
 
 | Colonne | Contenu |
 |---|---|
 | **Participant** | L'identifiant de participant Peppol (ICD + valeur, par ex. `0225:80320631700015`). |
 | **Plateforme (PA)** | La plateforme qui opère le participant, avec son identifiant de siège ; `non résolu` quand l'étape SMP n'a pas abouti. |
-| **Enregistré le** | La date d'enregistrement Peppol du participant. |
+| **Enregistré le** | La date d'enregistrement Peppol du participant — *sans fiche annuaire* pour un participant trouvé uniquement par le SML. |
 
-La recherche ne s'exécute **qu'au premier dépliage** et est aussi exposée en `POST /api/peppol-lookup` pour les intégrations (voir la [référence API](/nomaubl/api-reference)). Un participant sans plateforme joignable affiche quand même son enregistrement et son nom — seule la cellule *Plateforme* indique `non résolu`.
+La recherche s'exécute une fois pour chaque carte entreprise ouverte — y compris une carte restée ouverte depuis une recherche précédente — et elle est aussi disponible en `POST /api/peppol-lookup` pour les intégrations (voir la [référence API](/nomaubl/api-reference)). Un participant sans plateforme joignable affiche quand même son enregistrement et son nom — seule la cellule *Plateforme* indique `non résolu`. Une indisponibilité de l'annuaire Peppol ne masque plus les participants trouvés par le SML.
+
+La page entière est aussi accessible en un seul appel : `GET /api/e-directory/search?q=…` (ou `POST` avec `{q, peppol}`) renvoie les entreprises INSEE qui correspondent à un nom, un SIREN ou un SIRET, avec siège et établissements, les lignes de l'annuaire PPF de chaque entreprise et, avec `peppol=true`, ses participants Peppol.
 
 ---
 
-## Flux réseau (firewall)
+## Flux réseau (firewall) \{#network-flows\}
 
 Tous les appels externes de l'E-Directory sont faits **côté serveur** — depuis le serveur NomaUBL, pas le navigateur de l'utilisateur — les règles firewall portent donc sur le trafic sortant du serveur. Hormis le connecteur PA, les destinations sont :
 
 | Objet | Destination | Port / Protocole |
 |---|---|---|
 | Recherche d'entreprise (INSEE) | `recherche-entreprises.api.gouv.fr` | HTTPS 443 |
-| Annuaire Peppol (carte de visite) | `directory.peppol.eu` | HTTPS 443 |
-| Résolution SML Peppol | Requêtes DNS NAPTR sur `*.iso6523-actorid-upis.edelivery.tech.ec.europa.eu` | DNS 53 (via le résolveur habituel du serveur) |
+| Annuaire Peppol (fiches) | `directory.peppol.eu` | HTTPS 443 |
+| Résolution SML Peppol — **zone principale** (OpenPeppol) | Requêtes DNS NAPTR sur `*.iso6523-actorid-upis.participant.sml.prod.tech.peppol.org` | DNS 53 via le résolveur du serveur |
+| Résolution SML Peppol — **zone de repli** (ancien SML de la Commission européenne) | Requêtes DNS NAPTR sur `*.iso6523-actorid-upis.edelivery.tech.ec.europa.eu` | DNS 53 via le résolveur du serveur |
+| Résolveurs DNS publics — utilisés uniquement si le résolveur du serveur ne répond pas | `8.8.8.8`, `1.1.1.1` | DNS 53 (UDP et TCP) |
 | SMP Peppol (résolution de la plateforme) | dynamique — le SMP de la plateforme de chaque participant (par ex. `smp.pennylane.com`) | HTTPS 443 |
 
 Ce qui compte pour les règles :
 
 - **INSEE et `directory.peppol.eu` sont des noms d'hôte fixes** — faciles à autoriser. L'entrée INSEE couvre aussi la recherche client de la modale facture et la recherche [Corriger destinataire](./invoices.md#fix-buyer) (même API).
-- **L'étape SML est uniquement DNS** — pas de HTTP. Si le serveur résout déjà le DNS public via le résolveur d'entreprise, il n'y a rien à ouvrir ; cela ne casse que si le DNS sortant est restreint aux zones internes.
-- **Le SMP ne peut pas être autorisé à l'avance** — c'est le domaine de la plateforme de chaque acheteur (Pennylane, Esker, Yooz… un par participant) ; la résolution de la plateforme demande donc une autorisation large *HTTPS 443 sortant* pour fonctionner de façon générale. Si ce n'est pas acceptable, l'impact reste doux : la section Peppol affiche quand même le participant, son nom et sa date d'enregistrement depuis `directory.peppol.eu`, et la colonne *Plateforme* indique `non résolu`.
+- **Le SML a changé de zone en 2026.** OpenPeppol a repris le Service Metadata Locator, et les enregistrements des participants se trouvent désormais dans la zone `participant.sml.prod.tech.peppol.org`. NomaUBL l'interroge en premier et garde l'ancienne zone `edelivery.tech.ec.europa.eu` en repli. Une politique DNS qui n'autorisait que l'ancienne zone doit ajouter la nouvelle — sinon la plupart des participants ne sont plus trouvés.
+- **L'étape SML est uniquement DNS** — pas de HTTP. Si le serveur résout déjà le DNS public via le résolveur d'entreprise, il n'y a rien à ouvrir. Certains résolveurs d'entreprise bloquent ou altèrent les requêtes NAPTR : NomaUBL réessaie alors via les résolveurs publics `8.8.8.8` et `1.1.1.1`. Il faut donc soit laisser le résolveur d'entreprise relayer les requêtes NAPTR des deux zones, soit autoriser le DNS sortant (port 53, UDP et TCP) vers ces deux adresses.
+- **Le SMP ne peut pas être autorisé à l'avance** — c'est le domaine de la plateforme de chaque acheteur (Pennylane, Esker, Yooz… un par participant) ; la résolution de la plateforme demande donc une autorisation large *HTTPS 443 sortant* pour fonctionner de façon générale. Si ce n'est pas acceptable, l'impact reste limité : la section Peppol affiche quand même le participant, et la colonne *Plateforme* indique `non résolu`.
+- **Diagnostic.** Quand `directory.peppol.eu` est injoignable, les participants trouvés par les interrogations SML restent affichés. Si rien n'est trouvé du tout, la section Peppol indique *Peppol Directory unreachable (directory.peppol.eu) — check outbound HTTPS/firewall*.
 
 ---
 
@@ -30868,7 +30879,7 @@ Au-dessus du tableau, **Parallel conversions** (défaut `4`) fixe le nombre de P
 
 1. **Lister** — chaque dossier est parcouru à la recherche des fichiers qui correspondent à son motif et sont plus récents que *dernier scan − recouvrement*. Un dossier parcouru pour la première fois, sans date, ne prend que la fenêtre de recouvrement — utilisez une date de rattrapage pour l'historique.
 2. **Filtrer** — les fichiers déjà traités (nom de fichier source présent dans l'archive) ou déjà en attente au format XML dans le répertoire d'entrée du modèle sont écartés.
-3. **Convertir** — les PDF sont convertis en XML en parallèle dans le répertoire d'entrée du modèle ; les XML sont copiés tels quels.
+3. **Convertir** — les PDF sont convertis en XML en parallèle dans le répertoire d'entrée du modèle ; les XML sont copiés tels quels. Pour un [modèle à source PDF](../../management/documents.md#extraction-pdf), tout PDF texte passe par les réglages d'extraction PDF du modèle au lieu du convertisseur JD Edwards.
 4. **Traiter** — un lot s'exécute par modèle, avec le parallélisme propre au lot.
 
 La date de dernier scan avance à chaque exécution. Un fichier en échec est **réessayé** tant qu'il reste dans la fenêtre de recouvrement et signalé **par son nom** — il ne bloque jamais les autres.
@@ -33979,7 +33990,7 @@ Traite un (ou plusieurs) fichier source contre un modèle de document — ou app
 | `--no-validate` | Ne valide pas l'UBL — utilisé par la réimpression du retraitement, où la facture électronique enregistrée reste la référence. | XML |
 | `--repair` | Reconstruit les tables facture (en-tête, lignes, TVA, validation) d'un document dont l'archive et l'historique de statuts sont intacts — archive et historique inchangés, aucun événement de cycle de vie, statut d'en-tête repris du dernier événement réel de l'historique, aucun envoi. Voir [Traitement de document → Réparation](../processing/document.md#reparation). | tous |
 | `--validate` | XSD + Schematron seulement — pas d'insertion BDD, pas de dépôt PA. | UBL |
-| `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. | UBL |
+| `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. Une source UBL envoie le fichier ; les sources XML, PDF et connecteur envoient chaque document comme si son type de document indiquait `F`. | tous |
 | `--no-debug` | Ignore les durées par étape (parse, validation, insertion en base, envoi PA) journalisées par défaut à chaque exécution. À utiliser sur les batchs nocturnes volumineux quand la surcharge par étape n'apporte rien dans les logs. | tous |
 
 **Exemples**
@@ -34077,7 +34088,7 @@ Les deux contrôles de maintenance du cycle de vie — les mêmes réparations q
 
 ```bash
 # Contrôle d'intégrité — compléter les statuts PA manqués par l'interrogation
-java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--apply] [--notify]
+java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--until <ISO>] [--company <kco>] [--apply] [--notify]
 
 # Contrôle d'ordre — réordonner les événements enregistrés dans le désordre
 java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [--apply]
@@ -34087,10 +34098,12 @@ java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [
 |---|---|
 | **`--lookback <N>`** | Fenêtre d'intégrité en jours (exclusive avec `--since`). |
 | **`--since <YYYY-MM-DD>`** | Date de début de la fenêtre d'intégrité. |
+| **`--until <ISO>`** | Fin de la fenêtre d'intégrité — date ou horodatage ; vide = maintenant. |
+| **`--company <kco>`** | Limite le contrôle d'intégrité à une société : seul son connecteur de statuts est interrogé et seules ses factures sont recherchées. |
 | **`--apply`** | Applique les réparations ; sans elle, rapport seul (simulation). |
 | **`--notify`** | Déclenche les règles de notification sur les transitions complétées (intégrité seulement). |
 
-Les deux réparations sont idempotentes et ordonnées chronologiquement — les relancer sur un cycle de vie déjà propre ne change rien.
+Les deux réparations respectent l'ordre chronologique et peuvent être relancées sans risque : sur un cycle de vie déjà propre, elles ne changent rien. Le contrôle d'intégrité journalise sa progression (pages récupérées, événements comparés par tranche de mille, synthèse finale).
 
 ---
 
@@ -34223,6 +34236,14 @@ nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml
 nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml ./manifests/R42565_FBL0001.xml
 ```
 
+### Mode texte — tout PDF → XML à plat \{#pdf2xml-text\}
+
+```text
+-pdf2xml <input.pdf> <output.xml> --text [--config <file> --template <name>]
+```
+
+Convertit **n'importe quel PDF texte** — pas seulement JD Edwards — en XML à plat d'un [modèle à source PDF](./documents.md#extraction-pdf) : valeurs libellées, un tableau, chaque ligne imprimée. On obtient ainsi l'échantillon à charger dans l'éditeur de document et l'éditeur XSL. Avec `--config` / `--template`, les réglages d'extraction PDF du modèle s'appliquent (ancres du tableau, mise en page attendue, champs regex) ; sinon, les valeurs par défaut. Les PDF scannés sont refusés.
+
 ---
 
 ## Référence des options
@@ -34297,7 +34318,7 @@ Cet onglet indique à NomaUBL **où trouver chaque information** sur les documen
 
 | Champ | Valeurs | Description |
 |---|---|---|
-| **Source** | `XML` (défaut) / `UBL` / `Connecteur` | Sélectionne le pipeline d'entrée. **`XML`** — un spool XML provenant de tout système source, transformé en UBL 2.1 par la chaîne XSL. **`UBL`** — des fichiers déjà au format UBL 2.1 (l'ERP émet du UBL nativement, ou le fichier vient d'un système amont en UBL) ; aucune transformation XSL ne s'exécute. **`Connecteur`** — aucun fichier : NomaUBL appelle une requête SQL ou un endpoint REST qui renvoie le document, puis applique la même chaîne XSL au résultat. |
+| **Source** | `XML` (défaut) / `UBL` / `Connecteur` / `PDF` | Sélectionne le pipeline d'entrée. **`PDF`** — un PDF texte issu de n'importe quel système, converti en XML à plat puis traité exactement comme un spool XML — voir [Extraction PDF](#extraction-pdf). **`XML`** — un spool XML provenant de tout système source, transformé en UBL 2.1 par la chaîne XSL. **`UBL`** — des fichiers déjà au format UBL 2.1 (l'ERP émet du UBL nativement, ou le fichier vient d'un système amont en UBL) ; aucune transformation XSL ne s'exécute. **`Connecteur`** — aucun fichier : NomaUBL appelle une requête SQL ou un endpoint REST qui renvoie le document, puis applique la même chaîne XSL au résultat. |
 | **Direction** | `Émise` (défaut) / `Reçue` | Côté de la transaction traité par ce modèle. **`Émise`** — factures envoyées par l'opérateur à un client. **`Reçue`** — factures reçues d'un fournisseur ; la contrepartie de la ligne est la partie fournisseur, les actions vendeur (Renvoyer à la PA, Marquer envoyée, Avoir…) sont masquées dans la modale de détail, et la liste Factures classe la ligne sous le chip *Reçues*. Positionné par défaut sur le modèle livré `received-ubl`. |
 
 Le choix de la Source bascule la suite de l'onglet entre trois ensembles de champs distincts. Les autres sections de la page — *Traitement*, *Avancé*, *PDF Template* — s'appliquent à l'identique aux trois sources. Le champ Direction est orthogonal : toute combinaison Source × Direction est valide, même si *Reçue* va le plus souvent de pair avec *UBL* (factures fournisseur poussées par la PA).
@@ -34470,6 +34491,61 @@ Choisir le modèle qui correspond littéralement aux dates source. Valeurs coura
 | `20260512` | `yyyyMMdd` |
 
 Le modèle ne s'applique que quand la *Source* du document est `XML`. Les sources UBL continuent d'émettre de l'ISO via le XSL, le champ est donc ignoré dans ce cas. La valeur par défaut conserve la compatibilité ascendante des flux UBL existants sans aucune modification.
+
+### Extraction PDF *(quand Source = PDF)* \{#extraction-pdf\}
+
+Avec **Source = PDF**, le modèle prend en entrée un **PDF texte** issu de n'importe quel système — pas seulement JD Edwards — et le convertit en un XML à plat que l'[éditeur XSL](../ubl-tools/xsl-editor.md) mappe comme un spool. La conversion reconstruit la mise en page et écrit ce qu'elle lit ; elle ne connaît rien des factures. Les PDF scannés (images sans texte) sont refusés avec une erreur explicite.
+
+| Ce que contient le PDF | Ce que reçoit le XML |
+|---|---|
+| Une ligne lue comme *Libellé : valeur* (ou libellé et valeur sur deux colonnes) | Un élément nommé d'après le libellé — `Montant TTC 1 189,55 €` → `<Montant_TTC>1189.55</Montant_TTC>`. Montants et pourcentages passent au point décimal, les dates `dd/MM/yyyy` au format ISO, et les identifiants imprimés avec des espaces (numéro de TVA, SIREN, code postal) sont compactés. |
+| Un taux inclus dans un libellé (`TVA 20,00%`) | Un élément voisin, pour que le nom reste stable : `<TVA>198.26</TVA><TVA_taux>20.00</TVA_taux>`. |
+| Une période (`01/09/2026 – 30/09/2026`) | Ses dates de début et de fin en `<…_debut>` et `<…_fin>`, chacune mappable sur son propre champ UBL. |
+| Le tableau entre les ancres de début et de fin | `<Lignes>/<Ligne>`, colonnes nommées d'après la ligne d'en-tête (déduites de la première ligne quand l'en-tête tient dans une seule cellule) ; les libellés sur plusieurs lignes sont fusionnés, un trait horizontal ferme le tableau. |
+| Les cadres des parties | Des blocs `<Adresse_N>` — `Nom`, lignes `Rue`, `Code_postal`, `Ville`, `Pays`, ainsi que les lignes libellées imprimées dans le cadre (code fournisseur, SIRET, TVA, téléphone, e-mail). |
+| Chaque ligne imprimée | `<Textes>/<Texte n="…" page="…">`, cellules séparées par ` \| `, pour que tout ce que les règles ci-dessus n'ont pas capté reste accessible par XPath. |
+| Le fichier lui-même | `<FichierPDF>` avec son chemin — `{FichierPDF}` en [pièce jointe complémentaire](#pièces-jointes-complémentaires) intègre le PDF d'origine dans l'UBL. |
+
+Le groupe **PDF extraction** règle la conversion :
+
+| Champ | Description |
+|---|---|
+| **Table start** | Regex testée sur chaque ligne : les cellules de la ligne trouvée nomment les colonnes du tableau (par ex. `PRESTATION \| Qté \| P.U. HT \| Montant HT`). |
+| **Table end** | Regex testée sur la première ligne qui suit le tableau — cette ligne n'en fait pas partie. |
+| **Layout match** | Regex facultative que le texte de la page doit contenir ; un fichier qui ne correspond pas est refusé — utile quand un dossier mélange plusieurs mises en page. |
+| **Page match** | Regex facultative : seules les pages dont le texte correspond sont converties — une impression qui contient un relevé et la facture ne garde que les pages de la facture. |
+| **Field 1** … **Field 5** | `Nom\|regex` appliquée au texte de la page ; le premier groupe (à défaut la correspondance entière) devient `<Nom>`. Ajouter `=>texte` pour réécrire la correspondance, `$1` admis — `Type_JDE\|^FACTURE=>F9`. Deux champs peuvent porter le même nom si un seul des deux peut correspondre. |
+
+Un échantillon converti se présente ainsi :
+
+```xml
+<Document fichier="invoice-2026-0412.pdf" pages="1">
+  <Numero>F2026-0412</Numero>
+  <Date_document>2026-10-05</Date_document>
+  <Période>01/09/2026 – 30/09/2026</Période>
+  <Période_debut>2026-09-01</Période_debut>
+  <Période_fin>2026-09-30</Période_fin>
+  <TVA>198.26</TVA>
+  <TVA_taux>20.00</TVA_taux>
+  <Montant_TTC>1189.55</Montant_TTC>
+  <Adresse_1>
+    <Nom>ACME SERVICES</Nom>
+    <Rue>12 rue des Lilas</Rue>
+    <Code_postal>75011</Code_postal>
+    <Ville>PARIS</Ville>
+    <SIRET>80320631700015</SIRET>
+  </Adresse_1>
+  <Lignes>
+    <Ligne><PRESTATION>Maintenance</PRESTATION><Qté>1</Qté><P_U_HT>991.29</P_U_HT><Montant_HT>991.29</Montant_HT></Ligne>
+  </Lignes>
+  <Textes>
+    <Texte n="1" page="1">FACTURE | N° : F2026-0412</Texte>
+  </Textes>
+  <FichierPDF>/data/input/invoices/invoice-2026-0412.pdf</FichierPDF>
+</Document>
+```
+
+L'éditeur de document et l'éditeur XSL **chargent tous deux un échantillon directement depuis un PDF** — le PDF est converti côté serveur avec les réglages enregistrés du modèle (enregistrer le modèle après avoir modifié les ancres). La page [Traitement de document](../processing/document.md), les [dossiers surveillés](../configuration/system/watched-folders.md) et la ligne de commande traitent les modèles à source PDF comme les modèles XML ; `-pdf2xml <in.pdf> <out.xml> --text` convertit un fichier isolé (voir [Ligne de commande](./command-line.md)).
 
 ---
 
@@ -36105,6 +36181,7 @@ La première décision d'un modèle de document est sa **Source**. Elle se défi
 |---|---|---|
 | **XML** | Spool XML provenant de tout ERP qui demande une transformation vers UBL. Sortie BIP JDE, XML dérivé d'IDoc SAP, XML issu d'une saved-search NetSuite, exports d'ERP personnalisés. | Transformation XSL → UBL 2.1 → XSD + Schematron → BDD → dépôt PA optionnel. La page propose le sélecteur *Mode* (AUTO / SINGLE / BURST / UBL) et le sélecteur *Send to PA*. |
 | **UBL** | Le fichier est déjà une facture UBL 2.1 (l'ERP émet de l'UBL nativement, ou le fichier provient d'une PA en aval au format UBL). | Lecture de la facture, extraction de `(doc, dct, kco)` depuis `cbc:ID`, validation, persistance, dépôt optionnel. La page propose un mode *Validate only* et un sélecteur *Send to PA*. |
+| **PDF** | Un PDF texte issu de n'importe quel système, sans export XML ni UBL disponible. | Le PDF est converti en XML à plat selon les réglages d'[extraction PDF](../management/documents.md#extraction-pdf) du modèle, puis suit le pipeline XML. La page propose le même sélecteur *Mode* et les mêmes options *Send to PA* que pour le XML ; le sélecteur de fichier accepte les `.pdf`. |
 
 Une fois le modèle sélectionné, le champ **Source** du formulaire affiche la valeur résolue, et le reste du formulaire se reconfigure automatiquement.
 
@@ -36130,7 +36207,7 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 | **Source** | les deux | Affichage en lecture seule de la valeur `source` résolue du modèle. Changer de modèle met à jour ce champ et reconfigure le formulaire. |
 | **Select File** | les deux | Deux boutons — *Upload File* (sélecteur de fichiers du navigateur) ou *Browse Server* (ouvre l'explorateur de fichiers embarqué dans `dirInput`). Les téléversements XML sont copiés dans le répertoire de travail du modèle ; les téléversements UBL atterrissent dans `<dirInput>/ubl/`. |
 | **Mode** | XML | `AUTO` (défaut), `SINGLE`, `BURST` ou `UBL`. Voir [Modes (source XML)](#modes-source-xml) ci-dessous. |
-| **Send to PA** | XML | `Use settings` (défaut) ou `Skip sending`. |
+| **Send to PA** | XML / PDF | `Use settings` (défaut), `Force send` ou `Skip sending`. *Force send* envoie chaque document du traitement à la PA comme si son type de document indiquait `F`. |
 | **Mode** | UBL | `Process & Validate` (défaut) ou `Validate only`. |
 | **Send to PA** | UBL | `Use settings`, `Force send` ou `Skip sending`. *Force send* est la surcharge propre à UBL qui contourne l'option `sendToPA` du template e-invoicing. |
 | **Replace** | les deux | `Skip` laisse intactes les lignes existantes ; `Overwrite` purge les cinq tables UBL pour le même `(doc, dct, kco)` et ré-importe proprement. |
@@ -36916,7 +36993,9 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
-  2026.10.16.1 · 2026-10-01
+  2026.10.19.1 · 2026-10-01
+  2026.10.18.1 · 2026-09-30
+  2026.10.16.1 · 2026-09-30
   2026.10.14.1 · 2026-09-30
   2026.10.12.1 · 2026-09-30
   2026.10.11.1 · 2026-09-30
@@ -37027,6 +37106,41 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.10.19.1 — 2026-10-19 \{#v2026-10-19-1\}
+
+### Améliorations
+
+- **Contrôle d'intégrité : avancement et journal à l'écran.** Le contrôle rend compte de son avancement au fil de l'eau : pages récupérées auprès de la plateforme, événements comparés par tranche de mille avec les compteurs courants, puis un bilan final. Depuis la page Statut des imports, ces lignes s'affichent désormais en direct sous la section Contrôle d'intégrité pendant l'exécution, au lieu de n'être lisibles que dans le journal du serveur. Les événements hors de la fenêtre demandée sont écartés et comptés (un connecteur qui ne borne que la date de début renvoie tout jusqu'à maintenant), les doublons livrés deux fois sont fusionnés, et la recherche de la facture se fait une fois par facture et non plus par événement. La ligne de commande `-status-integrity` accepte `--until <ISO>` et `--company <kco>`.
+- **Contrôle d'ordonnancement : dérive du statut de facture.** Le contrôle signale désormais aussi une facture dont le statut diffère du dernier état réel de son historique, affiché « actuel → attendu », et le réaligne à l'application. Jusqu'ici un statut d'en-tête erroné n'était corrigé que si une ligne de la même facture devait être supprimée ou ré-ordonnée. L'exécution planifiée et la ligne de commande en bénéficient sans changement.
+- **L'annuaire électronique en API.** `GET /api/e-directory/search?q=…` (ou POST avec `{q, peppol}`) renvoie en un appel ce que la page Annuaire électronique assemble : les entreprises INSEE correspondant à un nom, un SIREN ou un SIRET avec siège et établissements, les adresses électroniques de l'annuaire PPF de chaque entreprise, et avec `peppol=true` ses participants Peppol. Documenté dans la référence API.
+- **Recherche Peppol sans fiche annuaire.** La publication d'une fiche dans l'annuaire Peppol est facultative et certaines plateformes s'en passent. La recherche interroge désormais aussi directement le SML pour les identifiants qu'une entreprise française peut détenir : le SIREN sous les schémas 0225 et 0002, chaque adresse inscrite à l'annuaire PPF (simple, suffixée, SIRET, routage) sous 0225, et les SIRET des établissements sous 0009. Une entreprise inscrite sur un SMP sans fiche annuaire affiche désormais toutes ses adresses avec la plateforme résolue, signalées « sans fiche annuaire » à la place de la date d'enregistrement.
+
+### Corrections
+
+- **Recherche Peppol aléatoire.** OpenPeppol a repris en 2026 l'exploitation du Service Metadata Locator et les enregistrements des participants ont changé de zone DNS. La recherche interrogeait encore l'ancienne zone de la Commission européenne et ne fonctionnait plus que pour les participants pas encore retirés de celle-ci. Elle interroge désormais la zone Peppol en premier, l'ancienne en secours, réessaie les requêtes DNS et bascule sur des résolveurs publics quand le résolveur du système ne répond rien. Une indisponibilité de l'annuaire Peppol ne masque plus les résultats DNS.
+- **Annuaire électronique : Peppol non vérifié après une seconde recherche.** Une entreprise restée dépliée d'une recherche précédente revenait dépliée sans que sa recherche Peppol ne soit lancée. Elle se lance désormais pour toute entreprise dépliée dont la recherche n'a pas démarré.
+
+- **Statuts d'une facture renvoyée non enregistrés.** Après un rejet puis un renvoi, les statuts du second cycle (déposée, reçue, transmise…) étaient ignorés par la récupération des statuts et par le contrôle d'intégrité : la protection contre les doublons considérait comme déjà enregistré tout code que la facture avait un jour porté. Elle raisonne désormais par cycle d'envoi : un code ne compte comme enregistré que depuis le dernier événement d'envoi, d'attente ou de retraitement, tandis qu'un même événement de la plateforme (même code, même horodatage) reste reconnu d'un cycle à l'autre.
+- **Contrôle d'intégrité limité à 500 événements manquants.** Le résultat ne listait que 500 lignes au plus : le bouton Appliquer ne pouvait rattraper que les 500 premiers événements et il fallait relancer le contrôle. Les lignes manquantes et appliquées ne sont plus limitées ; seules les lignes d'information (facture introuvable, code non mappé) cessent d'être listées au-delà de deux mille, avec une ligne de journal qui le signale. L'exécution planifiée n'était pas concernée.
+- **Statut de facture écrasé par le marqueur de retraitement ou de courrier.** Quand l'historique d'une facture se terminait par le marqueur de retraitement (9912) ou de courrier transmis (9908), le contrôle d'ordonnancement, le rattrapage d'intégrité, la récupération des statuts et la suppression d'un événement recopiaient ce marqueur dans le statut de la facture. Tous les réalignements d'en-tête prennent désormais le dernier état réel de l'historique, en ignorant les deux marqueurs quel que soit leur ordre : une facture déposée 200 NON_TRANSMISE le reste. Le marqueur de courrier est par ailleurs traité comme un événement de l'application : la récupération des statuts ne l'écarte plus et le contrôle d'ordonnancement ne le signale plus comme mal ordonné.
+
+---
+
+## 2026.10.18.1 — 2026-10-18 \{#v2026-10-18-1\}
+
+### Améliorations
+
+- **Le PDF comme source de document.** Un gabarit de document peut désormais prendre en entrée un PDF texte issu de n'importe quel système, et plus seulement de JDE. Le PDF est converti en un XML à plat que l'éditeur XSL mappe comme un spool : un élément par valeur libellée de la page (montants, pourcentages et dates normalisés, identifiants espacés tels que les numéros de TVA compactés, un taux inscrit dans un libellé comme « TVA 20,00% » isolé dans son propre élément, une période scindée en début et fin), un tableau (colonnes nommées d'après son en-tête, ou déduites de la première ligne quand l'en-tête tient en une cellule, libellés repliés recollés, fermé par un filet), les cartouches des parties sous forme de blocs d'adresse (nom, lignes de rue, code postal, ville, pays, plus les lignes libellées imprimées contre eux : code fournisseur, SIRET, TVA, téléphone, e-mail), chaque ligne imprimée conservée pour le reste, et le chemin du PDF afin de joindre l'original. Réglages du gabarit : ancres de début et de fin du tableau, un motif de reconnaissance de la mise en page, un motif de page (une impression qui réunit un relevé et la facture ne garde que les pages de la facture), et des champs par expression régulière avec réécriture facultative (`Type_JDE|^FACTURE=>F9`). La page Traiter un document, les dossiers surveillés et la ligne de commande traitent un gabarit à source PDF comme un gabarit XML ; `-pdf2xml <entrée.pdf> <sortie.xml> --text` convertit un fichier isolément ; l'éditeur de gabarit et l'éditeur XSL chargent un exemple directement depuis un PDF. Un PDF scanné est refusé avec un message explicite.
+- **Envoi forcé depuis la page Traiter un document.** Le choix d'envoi des sources XML et PDF propose désormais « Forcer l'envoi » à côté de « Selon les paramètres » et « Ne pas envoyer » : chaque document du traitement part vers la PA comme si son type de document indiquait F. Disponible en ligne de commande avec `--send`.
+- **Mappage XSL : constantes et récapitulatif à plat.** Une variable de mappage peut contenir une constante entre accents graves (`TAG_COMPANY_CODE` = `` `00009` ``) : une source mono-société retrouve ainsi sa société dans le numéro UBL et dans le bloc vendeur. Une variable de groupe répétitif peut désigner le document lui-même avec `.`, pour une source dont l'unique récapitulatif de TVA est imprimé sur le document plutôt que dans un groupe.
+
+### Corrections
+
+- **Valeurs par défaut UBL : code paiement par gabarit non enregistré.** Avec la surcharge paiement activée sur un gabarit de document, le code de paiement par défaut était écrit dans les valeurs globales et perdu à l'enregistrement. La surcharge porte désormais sa propre valeur par défaut.
+- **Valeurs par défaut UBL : la surcharge fournisseurs ne compilait plus.** Une surcharge fournisseurs enregistrée récemment produisait un gabarit vendeur sans le paramètre des identifiants additionnels que le socle transmet désormais, et la transformation échouait en XTSE0680. Corrigé pour les nouveaux enregistrements ; un gabarit dont la surcharge fournisseurs a été enregistrée avant cette version demande un nouvel enregistrement depuis la page des valeurs par défaut UBL.
 
 ---
 
@@ -40512,9 +40626,13 @@ Au-delà de la récupération incrémentale, la page propose deux contrôles à 
 
 ### Statuts manquants
 
-Choisissez une période — **du** … **au** … (fin vide = maintenant) — et, au besoin, **une société** : le contrôle compare **tous les événements de la plateforme sur cette fenêtre** avec le cycle de vie déjà enregistré. Une exécution limitée à une société n'interroge que son connecteur de statuts et ne recherche que ses factures : un rattrapage par société ne ramène plus les événements de toutes les sociétés. La borne de fin parvient au connecteur via les variables `{{toDate}}` / `{{toDateRaw}}` (Esker `updatedBefore`) ; une date simple couvre la journée entière. Ce qui manque s'affiche dans un **tableau à sélection** — appliquez tout ou seulement les lignes retenues, avec déclenchement optionnel des [règles de notification](../management/notification-rules.md) (désactivé par défaut). Les événements non applicables sont signalés **à part**, pour ne rien changer en silence : un statut interne obsolète (étape plateforme déjà dépassée), une facture inconnue, ou un code sans mappage.
+Choisissez une période — **du** … **au** … (fin vide = maintenant) — et, au besoin, **une société** : le contrôle compare **tous les événements de la plateforme sur cette fenêtre** avec le cycle de vie déjà enregistré. Une exécution limitée à une société n'interroge que son connecteur de statuts et ne recherche que ses factures : un rattrapage par société ne ramène plus les événements de toutes les sociétés. La date de fin parvient au connecteur via les variables `{{toDate}}` / `{{toDateRaw}}` (Esker `updatedBefore`) ; une date simple couvre la journée entière. Ce qui manque s'affiche dans un **tableau à sélection** — appliquez tout ou seulement les lignes retenues, avec déclenchement optionnel des [règles de notification](../management/notification-rules.md) (désactivé par défaut). Les événements non applicables sont signalés **à part**, pour ne rien changer en silence : un statut interne obsolète (étape plateforme déjà dépassée), une facture inconnue, ou un code sans mappage.
 
 Un événement récupéré s'insère à sa **position chronologique** — d'après son horodatage plateforme — au lieu d'être ajouté en fin de liste, et le statut courant de la facture ne bouge que si l'événement récupéré est réellement le plus récent. Compléter un statut manquant ancien ne peut donc pas ramener une facture à un état passé. La même insertion chronologique s'applique à la récupération régulière des statuts.
+
+Pendant le contrôle, sa **progression s'affiche en direct** sous la section : pages récupérées auprès de la plateforme, événements comparés par tranche de mille avec les compteurs en cours, puis une synthèse finale. Les événements hors de la fenêtre demandée sont écartés et leur nombre est journalisé (un connecteur qui ne limite que la date de début renvoie tout jusqu'à maintenant), les événements reçus deux fois ne sont comptés qu'une fois, et chaque facture n'est recherchée qu'une seule fois. La liste des événements manquants n'est pas plafonnée : **Appliquer** les complète tous en une passe ; seules les lignes informatives *introuvables* et *non mappées* cessent d'être listées au-delà de deux mille, avec une ligne de journal qui le signale.
+
+**Factures renvoyées.** Après un rejet et un renvoi, les statuts du nouveau cycle (déposée, reçue, transmise…) sont enregistrés comme les premiers : un code ne compte comme déjà enregistré que depuis le dernier événement d'envoi, de mise en attente ou de retraitement de la facture, tandis que le même événement plateforme — même code, même horodatage — reste reconnu d'un cycle à l'autre. La récupération régulière des statuts suit la même règle.
 
 ### Ordre du cycle de vie
 
@@ -40526,6 +40644,8 @@ Deux cas suivent leur propre règle :
 - **En litige (`207`) et suspendue (`208`).** Ces statuts intermédiaires peuvent être suivis d'un code inférieur, comme `205` *Approuvée* ou `210` *Refusée* : ils gardent leur position chronologique dans leur cycle et ne comptent jamais comme une inversion.
 
 Les historiques mal ordonnés par une règle antérieure sont détectés et remis en ordre à l'exécution suivante.
+
+Le contrôle signale aussi une **facture dont le statut diffère du dernier état réel de son historique**, affichée sous la forme *actuel → attendu*, et la réaligne à l'application. Le *dernier état réel* ignore le marqueur de retraitement (`9912`) et le marqueur de courrier transmis (`9908`), dans n'importe quel ordre — un `200` `NON_TRANSMISE` déposé reste donc tel quel. La même règle s'applique à tous les réalignements d'en-tête : complément d'intégrité, récupération des statuts et suppression d'un événement d'historique. Le marqueur de courrier transmis compte comme un événement applicatif : il n'est jamais signalé comme mal ordonné.
 
 ---
 
@@ -41786,7 +41906,8 @@ Un select `TAG_*` ne se limite pas à un seul chemin XML :
 - **Concaténation (`+`).** Assemblez plusieurs tags source en une seule valeur UBL avec l'opérateur ` + ` — `'FirstName + LastName'` les joint par une espace, `'First + ", " + Last'` choisit le séparateur, et les chaînes entre guillemets sont rendues telles quelles. Plus besoin d'une étape de pré-traitement XSL quand un champ UBL agrège plusieurs colonnes source.
 - **Liste de valeurs conditionnelle.** Le paramètre `cond_value` des helpers `ubl:emit-item-prop` / `ubl:emit-note` accepte une valeur unique (comme avant) ou une liste séparée par des virgules — `'KWH,M3,LTR'` correspond quand la source vaut l'un des trois. Les espaces autour de chaque élément sont supprimés.
 - **Axe parent (`..`).** Un chemin peut remonter à l'élément parent : `../FIELD` atteint un voisin de l'élément ligne courant, `../../FIELD/Sub` deux niveaux plus haut. Cela débloque les XML sources où les lignes sont imbriquées sous un parent qui porte aussi les références de ligne (par exemple la commande client référencée, BT-132) ; les chemins sans `..` se résolvent exactement comme avant.
-- **Valeurs constantes (accents graves).** Une valeur encadrée par des accents graves — par exemple `` `EDI` `` — est écrite telle quelle au lieu d'être lue dans la source. Valable pour les champs d'extension, les notes et les attributs d'article ; utile pour les valeurs fixes propres à une plateforme.
+- **Valeurs constantes (accents graves).** Une valeur encadrée par des accents graves — par exemple `` `EDI` `` — est écrite telle quelle au lieu d'être lue dans la source. Valable pour toutes les variables de mappage ainsi que les champs d'extension, les notes et les attributs d'article — par exemple `TAG_COMPANY_CODE` = `` `00009` `` donne à une source mono-société sa société dans le numéro UBL et le bloc vendeur. Constantes et champs se combinent avec ` + ` (`` `Ref-` + DocNumber ``).
+- **Le document lui-même (`.`).** Une variable de groupe répété (`TAG_VAT_LINE`, `TAG_LINE_ITEM`…) peut désigner le document avec `.` — pour une source à plat dont l'unique récapitulatif TVA est imprimé sur le document et non dans un groupe.
 - **Chemins d'éléments dans les conditions.** Dans les définitions à séparateur « | » des champs d'extension personnalisés, des notes et des attributs d'article, les colonnes **condition** et **non-vide** acceptent un chemin avec « / » — par ex. `Facture_Entete_S4/CLI_TYPE_ID242` — en plus d'un simple nom d'élément, nécessaire quand le champ source se trouve sous un groupe intermédiaire. Un nom simple se comporte comme avant : les modèles existants ne changent pas ; la colonne valeur acceptait déjà les chemins.
 
 #### Scoping

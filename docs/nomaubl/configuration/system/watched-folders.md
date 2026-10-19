@@ -71,7 +71,7 @@ Above the table, **Parallel conversions** (default `4`) sets how many PDFs are c
 
 1. **List** — every folder is listed for files matching its pattern and newer than *last scan − overlap*. A folder scanned for the first time, without a date, only takes the overlap window — use a backfill date for history.
 2. **Filter** — files already processed (source file name found in the archive) or already waiting as XML in the template's input folder are dropped.
-3. **Convert** — PDFs are converted to XML in parallel into the template's input folder; XML files are copied as is.
+3. **Convert** — PDFs are converted to XML in parallel into the template's input folder; XML files are copied as is. For a [PDF-source template](../../management/documents.md#pdf-extraction), any text PDF goes through the template's PDF extraction settings instead of the JD Edwards converter.
 4. **Process** — one batch runs per template, with the batch's own parallelism.
 
 The last-scan date advances on every run. A file that fails is **retried** while it stays inside the overlap window and reported **by name** — it never blocks the others.

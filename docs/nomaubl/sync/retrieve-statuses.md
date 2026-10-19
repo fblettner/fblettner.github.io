@@ -204,6 +204,10 @@ Pick a period — **from** a date **until** another (empty end = now) — and op
 
 A recovered event is inserted at its **chronological position** — from the event's platform timestamp — not appended at the end, and the invoice's current status only moves when the recovered event is genuinely the most recent. Backfilling an old missing status therefore can't knock an invoice back to a past state. The same chronological insertion applies to the regular status poll.
 
+While the check runs, its **progress shows live** under the section: pages fetched from the platform, events compared every thousand with the running counts, then a final summary. Events outside the requested window are dropped with a logged count (a connector bounding only the start date returns everything up to now), events delivered twice are collapsed, and each invoice is looked up once. The list of missing events is not capped, so **Apply** backfills them all in one pass; only the informational *not found* and *unmapped* rows stop being listed past two thousand, with a log line saying so.
+
+**Resent invoices.** After a rejection and a resend, the statuses of the new cycle (deposited, received, transmitted…) are recorded like the first ones: a code counts as already recorded only since the invoice's last send, pending or reprocess event, while the exact same platform event — same code, same timestamp — is still recognised across cycles. The regular status poll follows the same rule.
+
 ### Lifecycle ordering
 
 The second check scans the database for lifecycle rows that are **out of order** — an internal platform stage recorded after a standard status, and standard statuses recorded in the wrong order (e.g. `202` *Reçue* before `200` *Déposée*, the numeric order of standard codes being canonical) — plus **invalid codes** (raw platform text stored by a mapping mistake). The repair **re-sequences** the events into the correct order (nothing is deleted; internal statuses keep their positions) and realigns the invoice's current status, with a before/after preview and per-invoice selection.
@@ -214,6 +218,8 @@ Two cases are handled on their own terms:
 - **Disputed (`207`) and suspended (`208`).** These interim statuses may be followed by a lower code such as `205` *Approved* or `210` *Refused*: they keep their chronological position within their cycle and never count as an inversion.
 
 Histories ordered wrongly by an earlier rule are detected and put back in order by the next run.
+
+The check also reports an **invoice whose status differs from the latest real state of its history**, shown as *current → expected*, and realigns it on apply. The *latest real state* looks past the reprocess marker (`9912`) and the mail-sent marker (`9908`) in whatever order they appear — so a deposited `200` `NON_TRANSMISE` stays as such. The same rule applies to every header realignment: integrity backfill, status poll and deletion of a history event. The mail-sent marker counts as an application event: it is never reported as misordered.
 
 ---
 

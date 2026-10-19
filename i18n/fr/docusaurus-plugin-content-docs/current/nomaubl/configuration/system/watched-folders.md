@@ -71,7 +71,7 @@ Au-dessus du tableau, **Parallel conversions** (défaut `4`) fixe le nombre de P
 
 1. **Lister** — chaque dossier est parcouru à la recherche des fichiers qui correspondent à son motif et sont plus récents que *dernier scan − recouvrement*. Un dossier parcouru pour la première fois, sans date, ne prend que la fenêtre de recouvrement — utilisez une date de rattrapage pour l'historique.
 2. **Filtrer** — les fichiers déjà traités (nom de fichier source présent dans l'archive) ou déjà en attente au format XML dans le répertoire d'entrée du modèle sont écartés.
-3. **Convertir** — les PDF sont convertis en XML en parallèle dans le répertoire d'entrée du modèle ; les XML sont copiés tels quels.
+3. **Convertir** — les PDF sont convertis en XML en parallèle dans le répertoire d'entrée du modèle ; les XML sont copiés tels quels. Pour un [modèle à source PDF](../../management/documents.md#extraction-pdf), tout PDF texte passe par les réglages d'extraction PDF du modèle au lieu du convertisseur JD Edwards.
 4. **Traiter** — un lot s'exécute par modèle, avec le parallélisme propre au lot.
 
 La date de dernier scan avance à chaque exécution. Un fichier en échec est **réessayé** tant qu'il reste dans la fenêtre de recouvrement et signalé **par son nom** — il ne bloque jamais les autres.

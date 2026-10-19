@@ -403,7 +403,7 @@ Traite un (ou plusieurs) fichier source contre un modèle de document — ou app
 | `--no-validate` | Ne valide pas l'UBL — utilisé par la réimpression du retraitement, où la facture électronique enregistrée reste la référence. | XML |
 | `--repair` | Reconstruit les tables facture (en-tête, lignes, TVA, validation) d'un document dont l'archive et l'historique de statuts sont intacts — archive et historique inchangés, aucun événement de cycle de vie, statut d'en-tête repris du dernier événement réel de l'historique, aucun envoi. Voir [Traitement de document → Réparation](../processing/document.md#reparation). | tous |
 | `--validate` | XSD + Schematron seulement — pas d'insertion BDD, pas de dépôt PA. | UBL |
-| `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. | UBL |
+| `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. Une source UBL envoie le fichier ; les sources XML, PDF et connecteur envoient chaque document comme si son type de document indiquait `F`. | tous |
 | `--no-debug` | Ignore les durées par étape (parse, validation, insertion en base, envoi PA) journalisées par défaut à chaque exécution. À utiliser sur les batchs nocturnes volumineux quand la surcharge par étape n'apporte rien dans les logs. | tous |
 
 **Exemples**
@@ -501,7 +501,7 @@ Les deux contrôles de maintenance du cycle de vie — les mêmes réparations q
 
 ```bash
 # Contrôle d'intégrité — compléter les statuts PA manqués par l'interrogation
-java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--apply] [--notify]
+java -jar nomaubl.jar -status-integrity /opt/nomaubl/demo/config/config.json [--lookback N] [--since YYYY-MM-DD] [--until <ISO>] [--company <kco>] [--apply] [--notify]
 
 # Contrôle d'ordre — réordonner les événements enregistrés dans le désordre
 java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [--apply]
@@ -511,10 +511,12 @@ java -jar nomaubl.jar -status-order-check /opt/nomaubl/demo/config/config.json [
 |---|---|
 | **`--lookback <N>`** | Fenêtre d'intégrité en jours (exclusive avec `--since`). |
 | **`--since <YYYY-MM-DD>`** | Date de début de la fenêtre d'intégrité. |
+| **`--until <ISO>`** | Fin de la fenêtre d'intégrité — date ou horodatage ; vide = maintenant. |
+| **`--company <kco>`** | Limite le contrôle d'intégrité à une société : seul son connecteur de statuts est interrogé et seules ses factures sont recherchées. |
 | **`--apply`** | Applique les réparations ; sans elle, rapport seul (simulation). |
 | **`--notify`** | Déclenche les règles de notification sur les transitions complétées (intégrité seulement). |
 
-Les deux réparations sont idempotentes et ordonnées chronologiquement — les relancer sur un cycle de vie déjà propre ne change rien.
+Les deux réparations respectent l'ordre chronologique et peuvent être relancées sans risque : sur un cycle de vie déjà propre, elles ne changent rien. Le contrôle d'intégrité journalise sa progression (pages récupérées, événements comparés par tranche de mille, synthèse finale).
 
 ---
 
@@ -646,6 +648,14 @@ nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml
 # strictement identique au XML natif de JDE, avec un manifest :
 nomaubl.sh pdf2xml ./input/R42565.pdf ./output/R42565.xml ./manifests/R42565_FBL0001.xml
 ```
+
+### Mode texte — tout PDF → XML à plat \{#pdf2xml-text\}
+
+```text
+-pdf2xml <input.pdf> <output.xml> --text [--config <file> --template <name>]
+```
+
+Convertit **n'importe quel PDF texte** — pas seulement JD Edwards — en XML à plat d'un [modèle à source PDF](./documents.md#extraction-pdf) : valeurs libellées, un tableau, chaque ligne imprimée. On obtient ainsi l'échantillon à charger dans l'éditeur de document et l'éditeur XSL. Avec `--config` / `--template`, les réglages d'extraction PDF du modèle s'appliquent (ancres du tableau, mise en page attendue, champs regex) ; sinon, les valeurs par défaut. Les PDF scannés sont refusés.
 
 ---
 

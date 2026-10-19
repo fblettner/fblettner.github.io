@@ -26,6 +26,7 @@ The first decision a document template makes is its **Source**. It is set on the
 |---|---|---|
 | **XML** | XML spool from any ERP needing transformation to UBL. JDE BIP output, SAP IDoc-derived XML, NetSuite saved-search XML, custom ERP exports. | XSL transform → UBL 2.1 → XSD + Schematron → DB → optional PA submit. The page exposes the *Mode* selector (AUTO / SINGLE / BURST / UBL) and the *Send to PA* toggle. |
 | **UBL** | The file is already a UBL 2.1 invoice (your ERP emits UBL natively, or the file came from an upstream PA in UBL form). | Parse the invoice, extract `(doc, dct, kco)` from `cbc:ID`, validate, persist, optionally submit. The page exposes a *Validate only* mode and a *Send to PA* toggle. |
+| **PDF** | A text PDF from any system, with no XML or UBL export available. | The PDF is converted into a flat XML with the template's [PDF extraction](../management/documents.md#pdf-extraction) settings, then follows the XML pipeline. The page offers the same *Mode* selector and *Send to PA* options as XML; the file picker accepts `.pdf`. |
 
 Once the template is selected, the **Source** field on the form shows the resolved value and the rest of the form reconfigures itself.
 
@@ -194,7 +195,7 @@ The form has four common controls plus per-source extras.
 | **Source** | both | Read-only display of the template's resolved `source`. Switching templates updates this field and reshapes the form. |
 | **Select File** | both | Two buttons — *Upload File* (browser file picker) or *Browse Server* (open the embedded file browser against `dirInput`). XML uploads are copied to the template's working directory; UBL uploads land in `<dirInput>/ubl/`. |
 | **Mode** | XML | `AUTO` (default), `SINGLE`, `BURST` or `UBL`. See [Modes (XML source)](#modes-xml-source) below. |
-| **Send to PA** | XML | `Use settings` (default) or `Skip sending`. |
+| **Send to PA** | XML / PDF | `Use settings` (default), `Force send` or `Skip sending`. *Force send* sends every document of the run to the PA as if its document type said `F`. |
 | **Mode** | UBL | `Process & Validate` (default) or `Validate only`. |
 | **Send to PA** | UBL | `Use settings`, `Force send` or `Skip sending`. *Force send* is the UBL-only override that bypasses the e-invoicing template's `sendToPA` flag. |
 | **Replace** | both | `Skip` keeps existing rows untouched; `Overwrite` purges the five UBL tables for the same `(doc, dct, kco)` and re-imports cleanly. |

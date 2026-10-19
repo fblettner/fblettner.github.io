@@ -143,7 +143,7 @@ This tab tells NomaUBL **where to find each piece of data** on every incoming do
 
 | Field | Values | Description |
 |---|---|---|
-| **Source** | `XML` (default) / `UBL` / `Connector` | Picks the input pipeline. **`XML`** — an XML spool from any source system, transformed to UBL 2.1 by the XSL pipeline. **`UBL`** — files that are already UBL 2.1 invoices (your ERP emits UBL natively, or the file came from an upstream system in UBL form); no XSL transform runs. **`Connector`** — no file at all: NomaUBL calls a SQL query or a REST endpoint that returns the document, then runs the same XSL pipeline against the result. |
+| **Source** | `XML` (default) / `UBL` / `Connector` / `PDF` | Picks the input pipeline. **`PDF`** — a text PDF from any system, converted into a flat XML and then processed exactly like an XML spool — see [PDF extraction](#pdf-extraction). **`XML`** — an XML spool from any source system, transformed to UBL 2.1 by the XSL pipeline. **`UBL`** — files that are already UBL 2.1 invoices (your ERP emits UBL natively, or the file came from an upstream system in UBL form); no XSL transform runs. **`Connector`** — no file at all: NomaUBL calls a SQL query or a REST endpoint that returns the document, then runs the same XSL pipeline against the result. |
 | **Direction** | `Issued` (default) / `Received` | What side of the transaction this template handles. **`Issued`** — invoices the operator emits to a customer. **`Received`** — invoices the operator gets from a supplier; the row's counterparty is the supplier party, the emit-only seller actions (Resend to PA, Send completed, Credit note…) are hidden in the detail modal, and the Invoices list shows the row under the *Received* filter chip. Set on the `received-ubl` bundled template by default. |
 
 The Source choice flips the rest of this tab between three distinct sets of fields. The remaining sections of the page — *Processing*, *Advanced*, *PDF Template* — apply identically to all three sources. The Direction field is orthogonal: any combination of Source × Direction is valid, although *Received* is most often paired with *UBL* (PA-pushed supplier invoices).
@@ -318,6 +318,90 @@ Pick the pattern that matches the source dates literally. Common values:
 | `20260512` | `yyyyMMdd` |
 
 The pattern applies only when the document's *Source* is `XML`. UBL sources keep emitting ISO through the XSL, so the field is ignored there. The default keeps existing UBL flows back-compat without any edit.
+
+### PDF extraction *(when Source = PDF)* \{#pdf-extraction\}
+
+With **Source = PDF**, the template takes a **text PDF** from any system — not only JD Edwards — and converts it into a flat XML that the [XSL editor](../ubl-tools/xsl-editor.md) maps like a spool. The conversion rebuilds the page layout and writes what it reads; it knows nothing about invoices. Scanned PDFs (images without text) are refused with an explicit error.
+
+<svg viewBox="0 0 1000 230" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="pdfx-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+  </defs>
+  <rect x="20" y="40" width="190" height="150" rx="12" fill="#0d1220" stroke="#334155" strokeWidth="1.2"/>
+  <text x="115" y="70" fill="#cbd5e1" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Text PDF</text>
+  <text x="115" y="94" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">any generator</text>
+  <text x="115" y="114" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">invoice, credit note…</text>
+  <text x="115" y="150" fill="#64748b" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">scans refused</text>
+  <line x1="212" y1="115" x2="270" y2="115" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#pdfx-arrow)"/>
+  <rect x="274" y="20" width="300" height="190" rx="12" fill="#0d1220" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="424" y="46" fill="#4a9eff" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Flat XML</text>
+  <text x="294" y="74" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;Montant_TTC&gt;1189.55&lt;/Montant_TTC&gt;</text>
+  <text x="294" y="94" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;TVA&gt; + &lt;TVA_taux&gt;</text>
+  <text x="294" y="114" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;Lignes&gt;&lt;Ligne&gt;…</text>
+  <text x="294" y="134" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;Adresse_1&gt; Nom · Rue · Ville</text>
+  <text x="294" y="154" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;Textes&gt;&lt;Texte&gt;…</text>
+  <text x="294" y="174" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">&lt;FichierPDF&gt;</text>
+  <text x="294" y="196" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">+ regex fields of the template</text>
+  <line x1="576" y1="115" x2="634" y2="115" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#pdfx-arrow)"/>
+  <rect x="638" y="60" width="150" height="110" rx="12" fill="#0d1220" stroke="#334155" strokeWidth="1.2"/>
+  <text x="713" y="98" fill="#cbd5e1" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">XSL</text>
+  <text x="713" y="122" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">mapping like a spool</text>
+  <line x1="790" y1="115" x2="830" y2="115" stroke="#94a3b8" strokeWidth="1.4" markerEnd="url(#pdfx-arrow)"/>
+  <rect x="834" y="60" width="146" height="110" rx="12" fill="rgba(50,215,75,0.06)" stroke="rgba(50,215,75,0.45)" strokeWidth="1.2"/>
+  <text x="907" y="98" fill="#4ade80" fontSize="12" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">UBL 2.1</text>
+  <text x="907" y="122" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">validate · store · send</text>
+</svg>
+
+| What the PDF holds | What the XML gets |
+|---|---|
+| A row read as *Label : value* (or label and value in two columns) | One element named after the label — `Montant TTC 1 189,55 €` → `<Montant_TTC>1189.55</Montant_TTC>`. Amounts and percents use a dot decimal, `dd/MM/yyyy` dates become ISO, identifiers printed with spaces (VAT number, SIREN, postal code) are compacted. |
+| A rate inside a label (`TVA 20,00%`) | A sibling element, so the name stays stable: `<TVA>198.26</TVA><TVA_taux>20.00</TVA_taux>`. |
+| A period (`01/09/2026 – 30/09/2026`) | Its two bounds as `<…_debut>` and `<…_fin>`, each mappable to its own UBL field. |
+| The table between the start and end anchors | `<Lignes>/<Ligne>`, columns named after the header row (inferred from the first row when the header is a single cell); wrapped labels are merged, a ruled line closes the table. |
+| The party boxes | `<Adresse_N>` blocks — `Nom`, `Rue` lines, `Code_postal`, `Ville`, `Pays`, plus the labelled lines printed in the box (supplier code, SIRET, VAT, phone, e-mail). |
+| Every printed row | `<Textes>/<Texte n="…" page="…">`, cells separated by ` \| `, so anything the rules above missed stays reachable by XPath. |
+| The file itself | `<FichierPDF>` with its path — use `{FichierPDF}` as an [additional attachment](#additional-attachments) to embed the original PDF in the UBL. |
+
+The **PDF extraction** group sets the conversion:
+
+| Field | Description |
+|---|---|
+| **Table start** | Regex matched on a row: that row's cells name the table columns (e.g. `PRESTATION \| Qté \| P.U. HT \| Montant HT`). |
+| **Table end** | Regex matched on the first row after the table — the row itself is not part of it. |
+| **Layout match** | Optional regex the page text must contain; a file that does not match is refused — useful when a folder mixes several layouts. |
+| **Page match** | Optional regex: only the pages whose text matches are converted — a print holding a statement and the invoice keeps the invoice pages only. |
+| **Field 1** … **Field 5** | `Name\|regex` run on the page text; the first group (else the whole match) becomes `<Name>`. Add `=>text` to rewrite the match, `$1` allowed — `Type_JDE\|^FACTURE=>F9`. Two fields may share a name when only one of them can match. |
+
+A converted sample looks like this:
+
+```xml
+<Document fichier="invoice-2026-0412.pdf" pages="1">
+  <Numero>F2026-0412</Numero>
+  <Date_document>2026-10-05</Date_document>
+  <Période>01/09/2026 – 30/09/2026</Période>
+  <Période_debut>2026-09-01</Période_debut>
+  <Période_fin>2026-09-30</Période_fin>
+  <TVA>198.26</TVA>
+  <TVA_taux>20.00</TVA_taux>
+  <Montant_TTC>1189.55</Montant_TTC>
+  <Adresse_1>
+    <Nom>ACME SERVICES</Nom>
+    <Rue>12 rue des Lilas</Rue>
+    <Code_postal>75011</Code_postal>
+    <Ville>PARIS</Ville>
+    <SIRET>80320631700015</SIRET>
+  </Adresse_1>
+  <Lignes>
+    <Ligne><PRESTATION>Maintenance</PRESTATION><Qté>1</Qté><P_U_HT>991.29</P_U_HT><Montant_HT>991.29</Montant_HT></Ligne>
+  </Lignes>
+  <Textes>
+    <Texte n="1" page="1">FACTURE | N° : F2026-0412</Texte>
+  </Textes>
+  <FichierPDF>/data/input/invoices/invoice-2026-0412.pdf</FichierPDF>
+</Document>
+```
+
+The document editor and the XSL editor both **load a sample straight from a PDF** — the PDF is converted server-side with the template's saved settings (save the template first after changing the anchors). The [Process Document](../processing/document.md) page, the [watched folders](../configuration/system/watched-folders.md) and the command line process PDF-source templates like XML ones; `-pdf2xml <in.pdf> <out.xml> --text` converts a single file on its own (see [Command line](./command-line.md)).
 
 ---
 

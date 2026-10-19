@@ -26,6 +26,7 @@ La première décision d'un modèle de document est sa **Source**. Elle se défi
 |---|---|---|
 | **XML** | Spool XML provenant de tout ERP qui demande une transformation vers UBL. Sortie BIP JDE, XML dérivé d'IDoc SAP, XML issu d'une saved-search NetSuite, exports d'ERP personnalisés. | Transformation XSL → UBL 2.1 → XSD + Schematron → BDD → dépôt PA optionnel. La page propose le sélecteur *Mode* (AUTO / SINGLE / BURST / UBL) et le sélecteur *Send to PA*. |
 | **UBL** | Le fichier est déjà une facture UBL 2.1 (l'ERP émet de l'UBL nativement, ou le fichier provient d'une PA en aval au format UBL). | Lecture de la facture, extraction de `(doc, dct, kco)` depuis `cbc:ID`, validation, persistance, dépôt optionnel. La page propose un mode *Validate only* et un sélecteur *Send to PA*. |
+| **PDF** | Un PDF texte issu de n'importe quel système, sans export XML ni UBL disponible. | Le PDF est converti en XML à plat selon les réglages d'[extraction PDF](../management/documents.md#extraction-pdf) du modèle, puis suit le pipeline XML. La page propose le même sélecteur *Mode* et les mêmes options *Send to PA* que pour le XML ; le sélecteur de fichier accepte les `.pdf`. |
 
 Une fois le modèle sélectionné, le champ **Source** du formulaire affiche la valeur résolue, et le reste du formulaire se reconfigure automatiquement.
 
@@ -194,7 +195,7 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 | **Source** | les deux | Affichage en lecture seule de la valeur `source` résolue du modèle. Changer de modèle met à jour ce champ et reconfigure le formulaire. |
 | **Select File** | les deux | Deux boutons — *Upload File* (sélecteur de fichiers du navigateur) ou *Browse Server* (ouvre l'explorateur de fichiers embarqué dans `dirInput`). Les téléversements XML sont copiés dans le répertoire de travail du modèle ; les téléversements UBL atterrissent dans `<dirInput>/ubl/`. |
 | **Mode** | XML | `AUTO` (défaut), `SINGLE`, `BURST` ou `UBL`. Voir [Modes (source XML)](#modes-source-xml) ci-dessous. |
-| **Send to PA** | XML | `Use settings` (défaut) ou `Skip sending`. |
+| **Send to PA** | XML / PDF | `Use settings` (défaut), `Force send` ou `Skip sending`. *Force send* envoie chaque document du traitement à la PA comme si son type de document indiquait `F`. |
 | **Mode** | UBL | `Process & Validate` (défaut) ou `Validate only`. |
 | **Send to PA** | UBL | `Use settings`, `Force send` ou `Skip sending`. *Force send* est la surcharge propre à UBL qui contourne l'option `sendToPA` du template e-invoicing. |
 | **Replace** | les deux | `Skip` laisse intactes les lignes existantes ; `Overwrite` purge les cinq tables UBL pour le même `(doc, dct, kco)` et ré-importe proprement. |

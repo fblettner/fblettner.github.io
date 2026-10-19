@@ -428,6 +428,60 @@
         }
       }
     },
+    "/api/pdf2xml": {
+      "post": {
+        "tags": [
+          "Process"
+        ],
+        "summary": "Convert a text PDF to the flat XML of a PDF-source template",
+        "description": "Body: raw PDF bytes (application/octet-stream). Query: template (optional — its pdf.tableStart / pdf.tableEnd / pdf.match / pdf.field.N settings; defaults otherwise), filename. Returns the XML text the PDF-source pipeline would process: one element per labelled value, <Lignes>/<Ligne> for the table, <Textes>/<Texte> for every row. Preview only: nothing is written to dirInput. Used by the document editor and the XSL editor to load a sample straight from a PDF.",
+        "parameters": [
+          {
+            "name": "template",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "xml": "<?xml version=\"1.0\"?><Document …>…</Document>"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/process": {
       "post": {
         "tags": ["Process"],
@@ -565,7 +619,7 @@
       "get": {
         "tags": ["Integration"],
         "summary": "Poll the integrity-check result",
-        "description": "Returns {running:true} while the background integrity check started by the POST is still working, then the stored result: totals (totalEvents, alreadyRecorded, missing, applied, invoiceNotFound, unmappedCode, superseded) plus a per-event details array. Returns an error when no integrity run has been started yet in this server session.",
+        "description": "Returns {running:true} plus the log lines emitted so far (logs[]: fetch pages, compare progress) while the background integrity check started by the POST is still working, then the stored result with the full log: totals (totalEvents, alreadyRecorded, missing, applied, invoiceNotFound, unmappedCode, superseded) plus a per-event details array. Returns an error when no integrity run has been started yet in this server session.",
         "responses": {
           "200": {
             "description": "Success",
@@ -593,7 +647,7 @@
       "post": {
         "tags": ["Integration"],
         "summary": "Check lifecycle event ordering",
-        "description": "DB-only scan for PA-stage internal (99xx) lifecycle rows recorded AFTER a standard cycle-de-vie status — the ordering anomaly left behind by out-of-order processing. A dry run (apply=false) reports the offending rows; apply=true deletes the selected rows and realigns the invoice header with the last remaining event. keys optionally restricts the fix to specific rows. Runs synchronously and returns the same result shape as the integrity check. Requires the integration-run action grant.",
+        "description": "DB-only scan for PA-stage internal (99xx) lifecycle rows recorded AFTER a standard cycle-de-vie status (state misordered / invalid), standard statuses out of order (out-of-order, repaired by re-sequencing) and invoice headers that differ from the latest real state of their history (header-drift, key doc|dct|kco|header; the history-only markers 9912 and 9908 are looked past). A dry run (apply=false) reports the findings; apply=true deletes / re-sequences the selected rows and realigns the invoice header with the last real state. keys optionally restricts the fix. Runs synchronously and returns the same result shape as the integrity check. Requires the integration-run action grant.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "type": "object", "example": { "apply": false, "keys": ["12345|RI|00070|9906"] } } } }
@@ -677,11 +731,123 @@
         }
       }
     },
+    "/api/e-directory/search": {
+      "get": {
+        "tags": [
+          "Integration"
+        ],
+        "summary": "E-Directory search (composed)",
+        "description": "What the E-Directory page shows, in one call. q is a company name, SIREN or SIRET. Returns the INSEE companies matching the query (head office and matching establishments; a bare SIREN / SIRET is re-searched by company name so the establishments come back, as the page does), and for each company the PPF directory lines registered for its SIREN through the e-directory connector (directory.configured=false when the connector defines no listing endpoint; directory.error when the lookup failed for that company). peppol=true adds the Peppol participants per company (three network hops each — off by default). Also accepted as POST with body {q, peppol}.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Company name, SIREN or SIRET"
+          },
+          {
+            "name": "peppol",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Add the Peppol participants of each company (default false)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "success": true,
+                    "query": "NOMANA",
+                    "total": 1,
+                    "directoryConfigured": true,
+                    "companies": [
+                      {
+                        "siren": "794221705",
+                        "name": "NOMANA-IT",
+                        "headOffice": {
+                          "siret": "79422170500028",
+                          "postalCode": "33000",
+                          "city": "BORDEAUX",
+                          "status": "A"
+                        },
+                        "establishments": [
+                          {
+                            "siret": "79422170500028",
+                            "status": "A"
+                          }
+                        ],
+                        "directory": {
+                          "configured": true,
+                          "lines": [
+                            {
+                              "identifier": "794221705",
+                              "platform": true,
+                              "status": "enabled"
+                            }
+                          ]
+                        },
+                        "peppol": {
+                          "participants": [
+                            {
+                              "participantId": "0225:794221705",
+                              "name": "NOMANA-IT",
+                              "regDate": "2026-04-14",
+                              "apProvider": "Pennylane",
+                              "source": "directory"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Integration"
+        ],
+        "summary": "E-Directory search (composed, POST form)",
+        "description": "Same as the GET form with the parameters in the body.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "q": "794221705",
+                  "peppol": false
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/peppol-lookup": {
       "post": {
         "tags": ["Integration"],
         "summary": "Peppol participant + provider lookup",
-        "description": "Queries the public Peppol network for a SIREN (no account needed) and returns every registered participant with the service provider (access point / PA) operating it. Three server-side hops: the Peppol directory business card (directory.peppol.eu), the SML DNS resolution (NAPTR under *.iso6523-actorid-upis.edelivery.tech.ec.europa.eu) and the participant's SMP (dynamic host). French registrations use ICD 0225, per-establishment identifiers included. When the SMP can't be resolved, the participant is still returned with its name and registration date and apProvider is left empty. Powers the E-Directory company card's Peppol section (lazy, on first expand).",
+        "description": "Queries the public Peppol network for a SIREN (no account needed) and returns every registered participant with the service provider (access point / PA) operating it. Three server-side hops: the Peppol directory business card (directory.peppol.eu), the SML DNS resolution (NAPTR under *.iso6523-actorid-upis.participant.sml.prod.tech.peppol.org (EC zone edelivery.tech.ec.europa.eu as fallback)) and the participant's SMP (dynamic host). French registrations use ICD 0225, per-establishment identifiers included. When the SMP can't be resolved, the participant is still returned with its name and registration date and apProvider is left empty. Powers the E-Directory company card's Peppol section (lazy, on first expand). Because a business card is optional, the deterministic French identifiers are also probed in DNS — 0225:SIREN, 0002:SIREN, 0225:<id> for every PPF directory identifier passed in the optional identifiers[] (bare, suffixed SIREN_FGX, SIRET, routed) and 0009:SIRET for the optional sirets[] (head office first, 25 at most): a participant registered on an SMP without a business card is returned with source=dns and the optional name. SML zone: participant.sml.prod.tech.peppol.org (Peppol SML, 2026), with the legacy EC zone as fallback; public resolvers are tried when the system resolver answers nothing. directoryError is set when the directory was unreachable but the DNS probes still ran.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "type": "object", "example": { "siren": "803206317" } } } }
@@ -2739,7 +2905,7 @@
           "replaceMode": { "type": "boolean", "description": "If true, overwrite existing invoices in the database" },
           "noSend": { "type": "boolean", "description": "XML source only — if true, skip PA sending regardless of settings" },
           "validateOnly": { "type": "boolean", "description": "UBL source only — if true, validate without DB insert / PA send" },
-          "sendToPA": { "type": "string", "description": "UBL source only — null/empty = use settings, 'Y' = force send, 'N' = skip" },
+          "sendToPA": { "type": "string", "description": "null/empty = use settings; UBL source: 'Y' = force send, 'N' = skip; XML / PDF / connector sources: 'F' (or 'Y') = send every document as if its document type said F (overrides the template)" },
           "repairMode": { "type": "boolean", "description": "Rebuild header/lines/VAT/validation around the surviving F564230 + F564235; no event, no send, status from the latest history event" }
         }
       },
