@@ -490,11 +490,12 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Sync',
-      link: {type: 'generated-index', slug: '/nomaubl/sync', description: 'Inbound/outbound synchronisation: fetch input, import and retrieve statuses.'},
+      link: {type: 'generated-index', slug: '/nomaubl/sync', description: 'Inbound/outbound synchronisation: fetch input, import, retrieve statuses and watched folders.'},
       items: [
         'nomaubl/sync/fetch-input',
         'nomaubl/sync/import',
         'nomaubl/sync/retrieve-statuses',
+        'nomaubl/sync/watched-folders',
       ],
     },
     {
@@ -559,6 +560,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/management/notification-rules',
         'nomaubl/management/lifecycle-checks',
         'nomaubl/management/file-versions',
+        'nomaubl/management/server-log',
         'nomaubl/management/processing-log',
         'nomaubl/management/command-line',
       ],
@@ -577,7 +579,6 @@ const sidebars: SidebarsConfig = {
             'nomaubl/configuration/system/einvoicing',
             'nomaubl/configuration/system/ereporting',
             'nomaubl/configuration/system/fetch-invoices',
-            'nomaubl/configuration/system/watched-folders',
             'nomaubl/configuration/system/integrity-reports',
             'nomaubl/configuration/system/global',
             'nomaubl/configuration/system/oidc',

@@ -26533,10 +26533,10 @@ Les participants sont trouvés de deux façons :
 | Colonne | Contenu |
 |---|---|
 | **Participant** | L'identifiant de participant Peppol (ICD + valeur, par ex. `0225:80320631700015`). |
-| **Plateforme (PA)** | La plateforme qui opère le participant, avec son identifiant de siège ; `non résolu` quand l'étape SMP n'a pas abouti. |
+| **Plateforme (PA)** | La plateforme qui opère le participant, avec son identifiant de siège. Quand le certificat du SMP ne peut pas être lu, l'hôte SMP suivi de *SMP non joignable*, la raison dans l'infobulle ; `non résolu` avec la raison quand le SML n'a donné aucun SMP. Avec *Resolve platform via SMP* = `N`, l'hôte SMP. |
 | **Enregistré le** | La date d'enregistrement Peppol du participant — *sans fiche annuaire* pour un participant trouvé uniquement par le SML. |
 
-La recherche s'exécute une fois pour chaque carte entreprise ouverte — y compris une carte restée ouverte depuis une recherche précédente — et elle est aussi disponible en `POST /api/peppol-lookup` pour les intégrations (voir la [référence API](/nomaubl/api-reference)). Un participant sans plateforme joignable affiche quand même son enregistrement et son nom — seule la cellule *Plateforme* indique `non résolu`. Une indisponibilité de l'annuaire Peppol ne masque plus les participants trouvés par le SML.
+La recherche s'exécute une fois pour chaque carte entreprise ouverte — y compris une carte restée ouverte depuis une recherche précédente — et elle est aussi disponible en `POST /api/peppol-lookup` pour les intégrations (voir la [référence API](/nomaubl/api-reference)). Un participant sans plateforme joignable affiche quand même son enregistrement et son nom. Le journal serveur liste chaque participant non résolu avec sa raison. Une indisponibilité de l'annuaire Peppol ne masque plus les participants trouvés par le SML.
 
 La page entière est aussi accessible en un seul appel : `GET /api/e-directory/search?q=…` (ou `POST` avec `{q, peppol}`) renvoie les entreprises INSEE qui correspondent à un nom, un SIREN ou un SIRET, avec siège et établissements, les lignes de l'annuaire PPF de chaque entreprise et, avec `peppol=true`, ses participants Peppol.
 
@@ -26552,15 +26552,15 @@ Tous les appels externes de l'E-Directory sont faits **côté serveur** — depu
 | Annuaire Peppol (fiches) | `directory.peppol.eu` | HTTPS 443 |
 | Résolution SML Peppol — **zone principale** (OpenPeppol) | Requêtes DNS NAPTR sur `*.iso6523-actorid-upis.participant.sml.prod.tech.peppol.org` | DNS 53 via le résolveur du serveur |
 | Résolution SML Peppol — **zone de repli** (ancien SML de la Commission européenne) | Requêtes DNS NAPTR sur `*.iso6523-actorid-upis.edelivery.tech.ec.europa.eu` | DNS 53 via le résolveur du serveur |
-| Résolveurs DNS publics — utilisés uniquement si le résolveur du serveur ne répond pas | `8.8.8.8`, `1.1.1.1` | DNS 53 (UDP et TCP) |
-| SMP Peppol (résolution de la plateforme) | dynamique — le SMP de la plateforme de chaque participant (par ex. `smp.pennylane.com`) | HTTPS 443 |
+| Résolveurs DNS publics — uniquement avec *Public DNS fallback* = `Y`, quand le résolveur du serveur ne répond pas | `8.8.8.8`, `1.1.1.1` | DNS 53 (UDP et TCP) |
+| SMP Peppol (résolution de la plateforme) — uniquement avec *Resolve platform via SMP* = `Y` | dynamique — le SMP de la plateforme de chaque participant (par ex. `smp.pennylane.com`) | HTTPS 443 |
 
 Ce qui compte pour les règles :
 
 - **INSEE et `directory.peppol.eu` sont des noms d'hôte fixes** — faciles à autoriser. L'entrée INSEE couvre aussi la recherche client de la modale facture et la recherche [Corriger destinataire](./invoices.md#fix-buyer) (même API).
 - **Le SML a changé de zone en 2026.** OpenPeppol a repris le Service Metadata Locator, et les enregistrements des participants se trouvent désormais dans la zone `participant.sml.prod.tech.peppol.org`. NomaUBL l'interroge en premier et garde l'ancienne zone `edelivery.tech.ec.europa.eu` en repli. Une politique DNS qui n'autorisait que l'ancienne zone doit ajouter la nouvelle — sinon la plupart des participants ne sont plus trouvés.
-- **L'étape SML est uniquement DNS** — pas de HTTP. Si le serveur résout déjà le DNS public via le résolveur d'entreprise, il n'y a rien à ouvrir. Certains résolveurs d'entreprise bloquent ou altèrent les requêtes NAPTR : NomaUBL réessaie alors via les résolveurs publics `8.8.8.8` et `1.1.1.1`. Il faut donc soit laisser le résolveur d'entreprise relayer les requêtes NAPTR des deux zones, soit autoriser le DNS sortant (port 53, UDP et TCP) vers ces deux adresses.
-- **Le SMP ne peut pas être autorisé à l'avance** — c'est le domaine de la plateforme de chaque acheteur (Pennylane, Esker, Yooz… un par participant) ; la résolution de la plateforme demande donc une autorisation large *HTTPS 443 sortant* pour fonctionner de façon générale. Si ce n'est pas acceptable, l'impact reste limité : la section Peppol affiche quand même le participant, et la colonne *Plateforme* indique `non résolu`.
+- **L'étape SML est uniquement DNS** — pas de HTTP. Si le serveur résout déjà le DNS public via le résolveur d'entreprise, il n'y a rien à ouvrir. Certains résolveurs d'entreprise bloquent ou altèrent les requêtes NAPTR : laisser le résolveur d'entreprise relayer les requêtes NAPTR des deux zones, ou passer **Public DNS fallback** à `Y` dans les [réglages e-directory](../configuration/system/edirectory.md#peppol-lookup) et autoriser le DNS sortant (port 53, UDP et TCP) vers `8.8.8.8` et `1.1.1.1`. Ce repli est **désactivé par défaut**. Une réponse *nom inexistant* du résolveur du serveur est définitive — un identifiant non enregistré n'est pas réessayé ailleurs — et un résolveur public défaillant est écarté pour le reste de la recherche.
+- **Le SMP ne peut pas être autorisé à l'avance** — c'est le domaine de la plateforme de chaque acheteur (Pennylane, Esker, Yooz… un par participant) ; la résolution de la plateforme demande donc une autorisation large *HTTPS 443 sortant* pour fonctionner de façon générale. Si ce n'est pas acceptable, passer **Resolve platform via SMP** à `N` : la recherche s'arrête à la réponse du SML et la colonne *Plateforme* affiche l'hôte SMP (`smp.pennylane.com`), qui désigne déjà la plateforme — seuls son nom officiel et son identifiant de siège manquent.
 - **Diagnostic.** Quand `directory.peppol.eu` est injoignable, les participants trouvés par les interrogations SML restent affichés. Si rien n'est trouvé du tout, la section Peppol indique *Peppol Directory unreachable (directory.peppol.eu) — check outbound HTTPS/firewall*.
 
 ---
@@ -26577,7 +26577,7 @@ Au-dessus des résultats, un petit libellé indique le nombre de sociétés renv
 - **Une ligne désactivée n'est pas toujours définitive.** Un acheteur peut ne pas être encore enregistré, ou un identifiant précis pas encore activé ; lui demander de s'inscrire avant de retenter. L'état de l'annuaire évolue chaque jour à mesure que les sociétés s'inscrivent sur le PPF.
 - **Cibler l'identifiant exact, pas seulement le SIREN.** Les lignes d'adresses électroniques montrent quelle forme est réellement joignable — un SIREN seul, un SIREN + SIRET ou un code à suffixe. Adressez la facture à une ligne **active** ; une société peut en avoir plusieurs, seules certaines actives.
 - **Vérifier l'état de l'établissement.** Un établissement cessé ne peut pas recevoir de facture, même si la société apparaît dans l'annuaire. Contrôler l'état INSEE de l'établissement avant de se fier à un mapping d'adresse électronique.
-- **Si les lignes n'apparaissent pas, câbler l'endpoint.** Une liste d'annuaire vide avec la note « non configuré » signale un connecteur sans endpoint `directory-check-siren` — réglez-le sous *Configuration → Système → e-directory*, avec le mappage de réponse de votre plateforme (ATGP, Yooz).
+- **Si les lignes n'apparaissent pas, câbler l'endpoint.** Une liste d'annuaire vide avec la note « non configuré » signale un connecteur sans endpoint `directory-check-siren` — à régler dans *Configuration → Système → e-directory*, avec le mappage de réponse de la plateforme (ATGP, Yooz, Esker). La liste est lue dans le **Response field** de l'endpoint (`records` pour Esker, `results`…).
 
 ---
 
@@ -26975,11 +26975,13 @@ Ouverte via **Générer un rapport** dans la barre d'outils. Construit et dépos
 | **Flux à générer** | Sélection multiple entre `10.1` et `10.3`. Les deux sont sélectionnés par défaut — un rapport est émis par flux actif. |
 | **Type de document** | Une valeur parmi `IN` (initial), `RE` (remplacement), `CO` (annulation), `MO` (modification). Défaut : `IN`. |
 | **Début / fin de période** | Dates ISO 8601 délimitant la fenêtre déclarative. |
-| **Calculer la période** | Pré-remplit *Début* / *Fin* avec la prochaine fenêtre due selon la fréquence configurée (`MONTHLY` / `DECADAL` / `WEEKLY`). |
+| **Calculer la période** | Pré-remplit *Début* / *Fin* avec la prochaine fenêtre due, exactement comme l'exécution planifiée : selon le **paramétrage de la société** (fréquence `MONTHLY` / `DECADAL` / `WEEKLY`) et le **dernier rapport valide** de cette société pour le sens choisi. La modale indique la fréquence appliquée et le rapport qu'elle prolonge (*après le dernier rapport terminé le …*, ou *aucun rapport précédent, période en cours*). Une société doit être saisie pour le calcul. |
 | **Annuler** | Ferme la modale sans générer. |
-| **Générer** | Construit le XML pour chaque flux sélectionné, persiste la ligne du rapport et dépose sur la PA. La liste se rafraîchit en cas de succès. |
+| **Générer** | Construit le XML pour chaque flux sélectionné, enregistre la ligne du rapport et la dépose sur la PA. L'exécution se fait **en arrière-plan** : la modale affiche son journal au fil de l'eau, puis rafraîchit la liste à la fin — une longue période ne se termine plus par une erreur de proxy. |
 
 Lors de la génération, les blocs **Expéditeur**, **Émetteur** et **Business Process** par facture (TT-7 / TT-12 / TT-28 / TT-29) sont remplis à partir du template *e-reporting*. Ces valeurs par défaut se configurent une seule fois dans *Configuration → Système → E-Reporting* (Expéditeur / matricule PA + rôle `WK`, Émetteur / SIREN sous schéma `0002` pour les sociétés françaises, Business Process émis uniquement sur les factures B2BINT). En l'absence d'identifiant de transmission saisi manuellement, le rapport est identifié par **`{siren}-{flux}-{début}-{fin}`** : la valeur reste stable d'une régénération à l'autre sur la même période et permet à la PA de dédupliquer des dépôts identiques.
+
+Le bloc **acheteur** porte l'**identifiant légal** de l'acheteur, et non son adresse électronique : une adresse française (schéma `0225`) ou un SIRET (`0009`) donne le SIREN sous le schéma `0002`, avec le numéro de TVA qui en découle ; les schémas `0002`, `0223`, `0227`, `0228` et `0229` sont repris tels quels. Un acheteur sans identifiant exploitable (vide, `0`, schéma e-mail) est écarté du rapport et la facture est nommée dans le journal, pour compléter la fiche client — la validation signale alors l'acheteur manquant sur cette facture plutôt qu'une erreur de schéma (G2.19) sur tout le rapport.
 
 Après une exécution réussie, les nouveaux rapports apparaissent en tête de liste avec un statut `9950` (Généré) qui progresse rapidement par `9952` (Envoyé PA) et `9953` (En attente), puis aboutit à `9955` (Déposé) quand la PA accuse réception. Quand l'option *Send to PA* est désactivée (`sendToPA=N`), le rapport reste en `9951` (Envoi désactivé) et le XML reste téléchargeable pour relecture hors ligne.
 
@@ -27407,6 +27409,10 @@ Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection
 
 Un bouton **Retraiter la sélection (N)** apparaît à côté de *Renvoyer la sélection* quand les lignes cochées comprennent des factures concernées par le retraitement. Le retraitement est une **réimpression** : pour une facture **déposée sans être transmise** par la plateforme (statut 200, motif `NON_TRANSMISE`), il régénère le PDF / XML lisible et le fichier UBL à partir du XML JDE archivé lors du premier dépôt, dans les dossiers de sortie et d'éclatement. Rien ne change en base et l'UBL n'est pas revalidé : la facture électronique enregistrée, y compris une correction ultérieure par *Corriger destinataire*, reste la référence, et ses résultats de validation sont conservés. La facture garde son statut, une entrée *Retraitement* est ajoutée à son historique, rien n'est renvoyé à la plateforme, et chaque facture n'est retraitée qu'une fois. Seules les factures d'un modèle avec **Allow reprocess** activé (un modèle à source XML — voir [Documents](../management/documents.md)) sont concernées ; les autres sont ignorées dans la sélection. Le même traitement est disponible depuis le [Tableau de bord IT](tech-dashboard.md#to-reprocess) et la ligne de commande.
 
+La sélection couvre aussi les **échecs de validation** : une facture en *Échec de validation* (`9905`) sur un modèle où **Allow full reprocess** est activé est **retraitée en totalité** — enrichissement interrogé de nouveau, UBL régénéré, validé et envoyé à la PA selon les réglages du modèle et du type de document ; l'historique est conservé et un nouveau cycle démarre. La confirmation précise quelles factures sont réimprimées et lesquelles sont retraitées en totalité. La fenêtre facture propose le même retraitement complet via un bouton **Retraiter** sur une `9905`.
+
+Plusieurs factures sont retraitées en **un lot par modèle**, en arrière-plan avec son journal en direct : leurs sources sont déposées dans un dossier de travail, le réglage global *Max threads* limite le parallélisme et une facture n'est jamais traitée deux fois. Une facture seule est toujours traitée à part.
+
 ### Export
 
 Un bouton **Exporter** dans la barre d'outils exporte la vue courante (filtres compris) au format CSV sous le nom `invoices.csv`.
@@ -27436,7 +27442,7 @@ Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête 
 
 ### Onglet Résumé *(défaut)*
 
-L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. **Supprimer** retire la facture et tous les enregistrements associés — ligne de journal (XML source, référence de transaction PA, nom du fichier source), cycle de vie, lignes, TVA et validation : un nouveau traitement du même document repart de zéro, et les [dossiers surveillés](../configuration/system/watched-folders.md) peuvent reprendre son fichier source. La suppression suit la même protection que *Corriger destinataire* : le bouton disparaît dès que la PA a traité la facture, sauf pour un rejet **213** au motif d'adressage. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
+L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. **Supprimer** retire la facture et tous les enregistrements associés — ligne de journal (XML source, référence de transaction PA, nom du fichier source), cycle de vie, lignes, TVA et validation : un nouveau traitement du même document repart de zéro, et les [dossiers surveillés](../sync/watched-folders.md) peuvent reprendre son fichier source. La suppression suit la même protection que *Corriger destinataire* : le bouton disparaît dès que la PA a traité la facture, sauf pour un rejet **213** au motif d'adressage. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
 
 #### Corriger destinataire \{#fix-buyer\}
 
@@ -28060,22 +28066,23 @@ La grille utilise `align-items: stretch` et chaque carte grandit avec `flex: 1` 
 
 ## Disposition
 
-La grille à 12 colonnes est organisée en huit rangées :
+La grille à 12 colonnes est organisée en neuf rangées :
 
 | Rangée | Disposition | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **Santé système** · **Raccourcis** |
-| 2 | `4 + 4 + 4` | **Échec d'envoi** · **En attente de revue** · **À retraiter** |
+| 2 | `3 + 3 + 3 + 3` | **Échec d'envoi** · **En attente de revue** · **À retraiter** · **À retraiter en totalité** |
 | 3 | `4 + 4 + 4` | **Planificateur** · **Courbe d'erreurs · 14j** · **Taux de relance · 14j** |
 | 4 | `4 + 4 + 4` | **JVM · threads + GC** · **Débit · 14j** · **Sessions / Clients actifs** |
 | 5 | `8 + 4` | **Système de fichiers** · **Temps de traitement par modèle · 14j** |
-| 6 | `12` | **Traitements en cours · direct** |
-| 7 | `12` | **Vérification de configuration** |
-| 8 | `5 + 7` | **Tables de base** · **Erreurs récentes** |
+| 6 | `12` | **Traitements en cours** |
+| 7 | `12` | **Événements de traitement en direct** |
+| 8 | `12` | **Vérification de configuration** |
+| 9 | `5 + 7` | **Tables de base** · **Erreurs récentes** |
 
 Un bouton **Rafraîchir** dans l'en-tête de la page relance les quatre endpoints en parallèle.
 
-La carte **Échec d'envoi** est arrivée en 2026.06.03, en même temps que la page [Reprise auto](../configuration/system/auto-retry.md) dans les Paramètres — la relance manuelle en un clic sur le tableau de bord et le passage planifié de nuit utilisent le même chemin de relance sous-jacent.
+La relance manuelle en un clic de la carte **Échec d'envoi** et le passage planifié de nuit de la page [Reprise auto](../configuration/system/auto-retry.md) utilisent le même chemin de relance sous-jacent.
 
 ---
 
@@ -28102,17 +28109,9 @@ Le sous-titre de la carte affiche, à droite, la **version du build et la date d
 
 Liste statique de raccourcis — les pages les plus utilisées par l'opérateur IT. Chaque lien utilise le même mécanisme `onNavigate` que la barre latérale et ouvre directement la page cible. Cibles par défaut : **Paramètres**, **Journal de traitement**, **Versions de fichiers**, **Références croisées**.
 
-### Échec d'envoi (ligne 2, largeur 4) \{#send-failed\}
+### Échec d'envoi (rangée 2, span 3) \{#send-failed\}
 
 Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi est limité à **100 ms par appel** pour que la PA reste dans son enveloppe de débit.
-
-### En attente de revue (rangée 3, span 4) \{#waiting-for-review\}
-
-Une carte en grand chiffre qui compte les factures **retenues avant envoi** — celles dont le type de document porte le drapeau d'envoi `W` (*En attente*) sur la page [Types de document](../configuration/system/document-types.md). Ces factures ont été générées et validées, mais volontairement pas transmises, pour qu'un utilisateur puisse les vérifier au préalable. Quand le compteur n'est pas à zéro, un bouton **Tout envoyer (N)** libère chaque facture retenue vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même [fenêtre de progression](#shared-progress-window) que *Échec d'envoi*. Elle reprend le principe de la carte *Échec d'envoi* — même grand chiffre, même action groupée en un clic — mais pour la file de revue plutôt que la file d'échecs.
-
-### À retraiter (rangée 2, span 4) \{#to-reprocess\}
-
-Une carte en grand chiffre qui compte les factures **éligibles au retraitement** — celles que la plateforme a **déposées sans les transmettre** (statut 200, motif `NON_TRANSMISE`), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** reconstruit chaque facture éligible à partir de son XML JDE archivé (en régénérant la facture électronique, le PDF et le XML) via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
 
 | Élément | Comportement |
 |---|---|
@@ -28122,6 +28121,20 @@ Une carte en grand chiffre qui compte les factures **éligibles au retraitement*
 | Limitation de débit | 100 ms entre deux appels — fixé dans le code, non paramétrable ici par l'opérateur. La planification [Reprise auto](../configuration/system/auto-retry.md) propose sa propre limite pour l'équivalent planifié. |
 
 Le bouton manuel sert à un renvoi ponctuel en pleine journée (une coupure PA passagère qui s'est résolue, un petit lot à relancer tout de suite). Pour des relances de nuit sans supervision, planifier une ligne sur la page [Reprise auto](../configuration/system/auto-retry.md) — même chemin de code, sans intervention d'un opérateur.
+
+### En attente de revue (rangée 2, span 3) \{#waiting-for-review\}
+
+Une carte en grand chiffre qui compte les factures **retenues avant envoi** — celles dont le type de document porte le drapeau d'envoi `W` (*En attente*) sur la page [Types de document](../configuration/system/document-types.md). Ces factures ont été générées et validées, mais volontairement pas transmises, pour qu'un utilisateur puisse les vérifier au préalable. Quand le compteur n'est pas à zéro, un bouton **Tout envoyer (N)** libère chaque facture retenue vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même [fenêtre de progression](#shared-progress-window) que *Échec d'envoi*. Elle reprend le principe de la carte *Échec d'envoi* — même grand chiffre, même action groupée en un clic — mais pour la file de revue plutôt que la file d'échecs.
+
+### À retraiter (rangée 2, span 3) \{#to-reprocess\}
+
+Une carte en grand chiffre qui compte les factures **concernées par le retraitement** — celles que la plateforme a **déposées sans les transmettre** (statut 200, motif `NON_TRANSMISE`), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** **réimprime** chaque facture concernée à partir de sa source archivée — PDF / XML lisible et fichier UBL régénérés, sans modification en base ni nouvelle validation — via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
+
+### À retraiter en totalité (rangée 2, span 3) \{#to-reprocess-full\}
+
+Le pendant de la carte précédente pour les factures en **échec de validation** (`9905`) sur un modèle où **Allow full reprocess** est activé. Une fois les données corrigées dans le système source, un bouton **Tout retraiter (N)** retraite chaque facture **en totalité** depuis sa source archivée : l'enrichissement est interrogé de nouveau, l'UBL régénéré, validé et envoyé à la PA selon les réglages du modèle et du type de document. L'historique des statuts est conservé et un marqueur de retraitement ouvre un nouveau cycle — les statuts qui suivent sont donc enregistrés comme nouveaux.
+
+Les deux cartes lancent un **lot unique par modèle**, en arrière-plan avec son journal en direct : les sources sont déposées dans un dossier de travail, le réglage **Max threads** des réglages globaux limite le parallélisme, et une facture n'est jamais traitée deux fois.
 
 ### Planificateur (rangée 3, span 4)
 
@@ -28136,15 +28149,15 @@ Chaque ligne affiche le nom du job, la cadence, et une pastille de statut (vert 
 
 Les jobs **interrogation d'import PA** et **récupération des statuts PA** portent un bouton **pause / reprise** — effectif au tick suivant et volontairement transitoire (un redémarrage du serveur relance toujours, une pause ne peut donc pas être oubliée). La [fenêtre calme quotidienne](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) s'affiche aussi ici, en surbrillance quand elle est active — pendant celle-ci, les deux interrogations sautent automatiquement leurs exécutions.
 
-### Courbe d'erreurs · 14j (rangée 2, span 4)
+### Courbe d'erreurs · 14j (rangée 3, span 4)
 
 Sparkline sur 14 jours des événements d'erreur enregistrés dans `F564237` (niveau `ERROR` ou `FATAL`). Le survol d'un point révèle la date et le compte ; le sous-titre indique la moyenne quotidienne et le total cumulé du jour.
 
-### Taux de relance · 14j (rangée 2, span 4)
+### Taux de relance · 14j (rangée 3, span 4)
 
 Un seul grand chiffre : ratio des *runs ayant abouti après une ou plusieurs relances* sur le total des runs des 14 derniers jours. Le sous-titre donne les valeurs absolues et la variation par rapport à la fenêtre précédente de 14 jours (vert quand le taux baisse, orange quand il monte).
 
-### JVM · threads + GC (rangée 3, span 4)
+### JVM · threads + GC (rangée 4, span 4)
 
 Carte complémentaire de Santé système pour un diagnostic JVM plus poussé :
 
@@ -28153,11 +28166,11 @@ Carte complémentaire de Santé système pour un diagnostic JVM plus poussé :
 - **GC** — nom du collecteur + temps total passé en GC.
 - **Classes chargées** — compteur du class-loader, utile pour repérer une fuite metaspace.
 
-### Débit · 14j (rangée 3, span 4)
+### Débit · 14j (rangée 4, span 4)
 
 Histogramme journalier des documents traités sur les 14 derniers jours. **Cliquer sur une barre** ouvre *Journal de traitement* pré-filtré sur ce jour — chemin direct entre « la barre du jour est courte » et « voyons ce qui a vraiment tourné ».
 
-### Sessions / Clients actifs · 15 min (rangée 3, span 4)
+### Sessions / Clients actifs · 15 min (rangée 4, span 4)
 
 Deux modes :
 
@@ -28166,7 +28179,7 @@ Deux modes :
 
 Dans les deux cas, chaque ligne affiche IP / utilisateur, l'horodatage du dernier accès et le compteur de hits.
 
-### Système de fichiers (rangée 4, span 8)
+### Système de fichiers (rangée 5, span 8)
 
 Pour chaque chemin configuré (`appHome`, `processHome`, `dirInput`, `singleOutput`, `burstOutput`, `dirArchive`, `dirError`) :
 
@@ -28175,7 +28188,7 @@ Pour chaque chemin configuré (`appHome`, `processHome`, `dirInput`, `singleOutp
 
 Les valeurs de chemin contenant des jokers d'exécution (`%TEMPLATE%`, `%FILE_NAME%`) sont tronquées au premier joker rencontré ; le rapport porte alors sur le répertoire **le plus profond existant par sa forme** au-dessus. `dirOutput` est exclu : il est toujours couvert par `processHome`.
 
-### Temps de traitement par modèle · 14j (rangée 4, span 4)
+### Temps de traitement par modèle · 14j (rangée 5, span 4)
 
 Temps moyen de traitement de bout en bout par modèle, en secondes, sur les 14 derniers jours. La carte charge les événements `START` / `END` de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` — la précédente version utilisait une auto-jointure SQL avec un `FETMPL` ambigu et une arithmétique `e.FEUPMT - s.FEUPMT` incorrecte ; ce point est corrigé.
 
@@ -28185,7 +28198,11 @@ Quand le commutateur [`debugProfile`](../configuration/system/global.md) sur le 
 
 Le flux Traitements en cours en dessous balise aussi les lignes avec le nom de l'étape, ce qui permet de trier un lot lent en direct. Laisser `debugProfile` à `N` en production ; passer à `Y` le temps d'un lot pour analyser un pipeline lent — les lignes additionnelles gonflent vite `F564237` sous charge.
 
-### Traitements en cours · direct (rangée 5, span 12)
+### Traitements en cours (rangée 6, span 12) \{#running-processes\}
+
+La liste des JVM de traitement actives sur la machine, relevée toutes les 5 s : celles lancées par ce serveur, avec la dernière ligne affichée par chacune, et les JVM **détachées** laissées par une instance précédente, un cron ou un lancement manuel (*sortie non capturée*). Chaque ligne indique le mode (`-process`, `-watch-folders`, `-import`), les arguments, la durée écoulée et un bouton **Arrêter**, qui termine cette JVM et ses propres sous-processus uniquement — les factures en cours restent dans leur état et les fichiers d'entrée sont conservés. L'arrêt demande le droit *integration-run*. Rien n'est arrêté au redémarrage du serveur : un lot peut donc se poursuivre pendant une mise à jour.
+
+### Événements de traitement en direct (rangée 7, span 12)
 
 Flux en direct des jobs qui démarrent et se terminent — la plupart sont lancés par le planificateur en arrière-plan. Le widget interroge `F564237` toutes les **5 secondes** avec un curseur incrémental `since=` ; chaque ligne porte un **badge de méthode** coloré :
 
@@ -28202,7 +28219,7 @@ Le flux est **dédupliqué sur `FEUKID`** — la même ligne ne peut donc pas ap
 
 La liste défilante est plafonnée aux 100 derniers événements ; les lignes plus anciennes sortent par le bas à mesure que de nouvelles arrivent. Pour une analyse approfondie, utiliser la page [Journal de traitement](../management/processing-log.md), qui conserve l'historique complet avec les vues groupées par job.
 
-### Vérification de configuration (rangée 6, span 12)
+### Vérification de configuration (rangée 8, span 12)
 
 Valide la configuration *orientée connecteur* utilisée aujourd'hui par l'application. Les anomalies sont listées par zone avec une sévérité (rouge erreur, orange avertissement, bleu information). La vérification couvre :
 
@@ -28216,11 +28233,11 @@ Les anciennes vérifications sur `paApiBaseUrl` / `paApiUsername` / `ublXsdPath`
 
 Une vérification propre s'affiche en `✔ 0 anomalie` en vert ; sinon la carte liste les anomalies par ordre de sévérité.
 
-### Tables de base (rangée 7, span 5)
+### Tables de base (rangée 9, span 5)
 
 Nombre de lignes par table NomaUBL — factures (`F564231`), cycle de vie (`F564235`), validation (`F564236`), journal d'exécution (`F564237`), notifications (`F564253`), e-Reporting (`F564260`–`F564262`), auth (`F564250`–`F564252`, `F564254`). Utile pour repérer une croissance inattendue (par exemple une table de notifications qui devrait avoir quelques centaines de lignes mais en a des millions).
 
-### Erreurs récentes (rangée 7, span 7)
+### Erreurs récentes (rangée 9, span 7)
 
 Les 8 derniers événements de `F564237` filtrés sur `level IN ('ERROR', 'FATAL')`. Chaque ligne affiche le badge de niveau, le code de cycle de vie et le triplet, le message et un horodatage relatif (*il y a 2 min*, *il y a 1 h*). Cliquer sur une ligne ouvre l'entrée correspondante dans *Journal de traitement*, où se trouvent la stack complète et les options de relance.
 
@@ -29811,7 +29828,8 @@ Cliquer sur **+ Nouvel utilisateur** en haut à droite de la section ouvre le fo
 | Champ | Description |
 |---|---|
 | **Username** | Identifiant de connexion. Doit être unique. **Non modifiable après création.** |
-| **Password** | Mot de passe initial du compte. |
+| **Password** | Mot de passe initial du compte. Avec le SSO activé (*Auth Mode* `oidc` ou `both`), il est facultatif : laissé vide, le compte se connecte uniquement via le fournisseur d'identité, n'a pas de mot de passe local et n'est jamais invité à en changer. |
+| **Require a new password at the first local login** | Case à cocher affichée dès qu'un mot de passe est saisi, **cochée par défaut**. La décocher laisse l'utilisateur conserver le mot de passe initial. Une session ouverte via le SSO n'est jamais redirigée vers l'écran de changement de mot de passe. |
 | **Full Name** | Nom complet affiché dans l'interface. |
 | **Email** | Adresse e-mail du compte. |
 | **Role** | Rôle affecté à l'utilisateur (liste déroulante des rôles définis dans *Security → Roles*). |
@@ -29829,7 +29847,7 @@ Cliquer sur **✏️** sur une ligne ouvre le formulaire d'édition. Le formulai
 | **Username** | Masqué — les identifiants sont immuables. |
 | **Password** | Masqué — utiliser **Reset Password** ci-dessous à la place. |
 | **Active** | `Yes` / `No` — autorise ou non la connexion. La désactivation préserve l'historique de l'utilisateur sans lui accorder d'accès. |
-| **Reset Password** | Champ optionnel. **Laisser vide pour conserver le mot de passe actuel** ; saisir une nouvelle valeur pour l'écraser. |
+| **Reset Password** | Champ optionnel. **Laisser vide pour conserver le mot de passe actuel** ; saisir une nouvelle valeur pour l'écraser — la case *Require a new password at the first local login* apparaît alors, comme à la création. |
 
 Cliquer sur **Enregistrer** pour enregistrer ou sur **Annuler** pour annuler.
 
@@ -29853,7 +29871,7 @@ Des messages en ligne s'affichent sous le tableau :
 ## Conseils & bonnes pratiques
 
 - **Aligner Username sur l'identifiant SSO / d'entreprise** dès que possible, même si NomaUBL n'est pas encore fédéré — la migration SSO future en sera grandement simplifiée.
-- **Définir un mot de passe initial robuste** à la création, puis demander à l'utilisateur de le changer dès la première connexion.
+- **Définir un mot de passe initial robuste** à la création et laisser cochée *Require a new password at the first local login* : l'utilisateur choisit le sien à la première connexion.
 - **Préférer *Active = No* à la suppression** au départ d'un collaborateur — l'accès est immédiatement révoqué, la piste d'audit est conservée.
 - **Utiliser Reset Password avec parcimonie.** Quand les utilisateurs peuvent changer leur mot de passe ailleurs, ce champ sert principalement au déblocage après perte de mot de passe.
 - **Relancer *Initialize Database*** *(Database Connectors → NomaUBL)* sur un déploiement neuf si aucun utilisateur n'existe — l'opération provisionne le compte `admin` initial.
@@ -30448,6 +30466,15 @@ L'éditeur comporte **deux onglets** :
 |---|---|---|
 | **Results per page** | `10` | Nombre maximal de résultats renvoyés par requête de recherche INSEE. Augmenter pour élargir chaque page de résultats, diminuer pour limiter la taille des réponses réseau. |
 
+### Recherche Peppol \{#peppol-lookup\}
+
+Réglages de la [recherche Peppol](../../application/edirectory.md#peppol-directory) de la page E-Directory, pour les serveurs placés sur un réseau restreint (voir [Flux réseau](../../application/edirectory.md#network-flows)).
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **Resolve platform via SMP** | `Y` | `Y` lit le nom et l'identifiant de siège de la plateforme dans le certificat de son SMP — HTTPS vers le SMP de chaque plateforme. `N` s'arrête à la réponse du SML : la colonne *Plateforme* affiche l'hôte SMP (par ex. `smp.pennylane.com`), sans appel à attendre. Choisir `N` quand le réseau n'autorise pas le HTTPS vers les SMP des plateformes. |
+| **Public DNS fallback** | `N` | `N` n'utilise que le résolveur du serveur. `Y` relance les interrogations SML via `8.8.8.8` / `1.1.1.1` quand ce résolveur ne répond pas. Garder `N` quand le réseau interdit les résolveurs externes. |
+
 ---
 
 ## Onglet 2 — Connector
@@ -30663,7 +30690,8 @@ L'éditeur comporte **quatre onglets** :
 ## Accès à l'éditeur
 
 - *Paramètres* → modèle **e-reporting** (la ressource au niveau système).
-- La portée par défaut est le template platform-wide `e-reporting`. Les surcharges par société se trouvent sur les templates `e-reporting-{kco}` et suivent la même forme ; le résolveur côté runtime regarde d'abord le template par société puis retombe sur le template platform-wide.
+- Une barre **Scope** en haut choisit le paramétrage modifié : **Default (e-reporting)** ou **Company *kco* (e-reporting-*kco*)**. Saisir un code société puis cliquer sur **Add override** crée un paramétrage société initialisé à partir du défaut ; **Delete override** supprime celui qui est sélectionné. Chaque société peut ainsi avoir son propre émetteur, sa fréquence et sa connexion PA.
+- À l'exécution, le paramétrage de la société est lu en premier, puis le défaut. Les sociétés à traiter sont déduites des paramétrages société ; **Companies (kco) override**, sur le défaut, ne nomme que les sociétés à traiter **avec les réglages par défaut** — une société qui a son propre paramétrage utilise celui-ci.
 
 ---
 
@@ -30839,76 +30867,6 @@ Utilisez le bouton **+ Ajouter un report** pour ajouter une ligne, et le bouton 
 - **Utiliser All Versions avec parcimonie.** Pertinent quand il existe de nombreuses versions ad hoc d'un même report ; sinon, préférer fixer une Version précise par ligne pour maîtriser le périmètre traité.
 - **Une ligne par tuple (Report, Version, Template).** Si un même report demande des modèles distincts selon la version, ajouter plusieurs lignes.
 - **Ne pas omettre d'affecter un Template.** Une ligne sans modèle filtrera correctement les jobs, mais la génération UBL ne pourra pas produire la pièce jointe PDF quand elle est attendue.
-
----
-
-## Dossiers surveillés
-Source: https://docs.nomana-it.fr/fr/nomaubl/configuration/system/watched-folders/
-
-Les dossiers surveillés récupèrent les sorties PDF / XML de JD Edwards dans des répertoires montés, convertissent les PDF en XML en parallèle et lancent un lot par modèle de document — planifiés depuis global → Planification, à la demande depuis l'éditeur ou en ligne de commande.
-
-Le modèle système **Watched folders** permet à NomaUBL d'aller chercher les documents source directement dans des répertoires — typiquement le partage réseau où JD Edwards dépose ses sorties d'états — au lieu d'attendre qu'on les pousse dans le répertoire d'entrée. Chaque exécution parcourt les dossiers configurés, garde les nouveaux fichiers, **convertit les PDF en XML en parallèle** (les fichiers XML sont copiés tels quels) dans le répertoire d'entrée du modèle de document, puis lance **un lot par modèle**.
-
-Il s'ouvre dans **Configuration → Système → Watched folders**. Le modèle est livré vide : rien ne s'exécute tant qu'aucun dossier n'est configuré ni aucun job planifié.
-
----
-
-## Vue d'ensemble
-
----
-
-## Dossiers
-
-Chaque ligne du tableau est un dossier surveillé ; **＋ Add folder** ajoute une ligne, **×** la supprime.
-
-| Colonne | Description |
-|---|---|
-| **Directory** | Le dossier à parcourir (par ex. `/data/mnt/jde_outputs`). |
-| **Pattern** | Motif de nom des fichiers à récupérer (par ex. `R42565_*`). |
-| **Template** | Le modèle de document qui traite les fichiers — ils sont déposés dans son répertoire d'entrée. |
-| **Manifest** | Manifeste pdf2xml facultatif, utilisé pour convertir les PDF de ce dossier. |
-| **Overlap h** | Fenêtre de recouvrement en heures (défaut `2`) : chaque exécution regarde les fichiers plus récents que le dernier scan **moins** cette fenêtre. |
-| **Mount** | Coché, le répertoire doit être un partage monté — un point de montage non monté est signalé en erreur au lieu d'être lu comme vide. |
-| **Last scan** | Le repère écrit à chaque exécution (instant UTC). Videz-le ou saisissez une date (`yyyy-MM-dd`, `yyyy-MM-ddTHH:mm:ss` en heure serveur, ou un instant ISO) pour reparcourir à partir de ce point. |
-
-Au-dessus du tableau, **Parallel conversions** (défaut `4`) fixe le nombre de PDF convertis simultanément ; le lot garde son propre pool de traitement.
-
----
-
-## Déroulement d'une exécution
-
-1. **Lister** — chaque dossier est parcouru à la recherche des fichiers qui correspondent à son motif et sont plus récents que *dernier scan − recouvrement*. Un dossier parcouru pour la première fois, sans date, ne prend que la fenêtre de recouvrement — utilisez une date de rattrapage pour l'historique.
-2. **Filtrer** — les fichiers déjà traités (nom de fichier source présent dans l'archive) ou déjà en attente au format XML dans le répertoire d'entrée du modèle sont écartés.
-3. **Convertir** — les PDF sont convertis en XML en parallèle dans le répertoire d'entrée du modèle ; les XML sont copiés tels quels. Pour un [modèle à source PDF](../../management/documents.md#extraction-pdf), tout PDF texte passe par les réglages d'extraction PDF du modèle au lieu du convertisseur JD Edwards.
-4. **Traiter** — un lot s'exécute par modèle, avec le parallélisme propre au lot.
-
-La date de dernier scan avance à chaque exécution. Un fichier en échec est **réessayé** tant qu'il reste dans la fenêtre de recouvrement et signalé **par son nom** — il ne bloque jamais les autres.
-
----
-
-## Exécuter maintenant
-
-Le groupe **Run now** exécute la configuration enregistrée à la demande :
-
-- **Dry run** — liste seulement ce qui serait converti et traité.
-- **Scan and process** — lance la récupération complète.
-- Une **date de rattrapage** facultative élargit la fenêtre de chaque dossier pour cette exécution uniquement.
-
----
-
-## Planification et ligne de commande
-
-- **Planifié** — dans [global → Planification → Batch Document Processing](./global.md), ajoutez un job de lot avec la source **Watched folders**, toutes les *N* minutes ou **chaque jour** à heure fixe. Le job peut cibler un seul dossier (choisi parmi les répertoires configurés) ou tous.
-- **Ligne de commande** — `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]`.
-- **API** — `POST /api/watch-folders/run`.
-
----
-
-## Conseils & bonnes pratiques
-
-- **Gardez un recouvrement plus long que le temps de copie.** Un fichier encore en cours d'écriture au passage du scan est repris à l'exécution suivante tant qu'il reste dans la fenêtre.
-- **Cochez *Mount* sur les partages réseau.** Sinon, un partage non monté ressemble à un dossier vide et rien n'est traité, sans alerte.
-- **Commencez par un dry run.** Il montre exactement quels fichiers une nouvelle ligne de dossier récupérerait avant toute conversion.
 
 ---
 
@@ -31093,7 +31051,8 @@ L'éditeur comporte **six onglets** :
 | Champ | Description |
 |---|---|
 | **Application Home** | Répertoire racine d'installation de NomaUBL (par ex. `/app/nomaubl`). Résolu par le placeholder `%APP_HOME%` utilisé dans les chemins de modèles de documents. |
-| **Environment** | Nom court d'environnement (par ex. `demo`, `PD`). Résout le placeholder `%ENV%` dans les chemins des modèles de documents (`rtf`, `xsl`, `ublXslt`), permettant à un même modèle de cibler plusieurs environnements. |
+| **Environment** | Nom court d'environnement (par ex. `demo`, `PD`). Résout le placeholder `%ENV%` dans les chemins des modèles de documents (`rtf`, `xsl`, `ublXslt`), permettant à un même modèle de cibler plusieurs environnements. Le nom s'affiche aussi en **badge à droite du titre de l'application** et dans l'onglet du navigateur. |
+| **Theme colour** | Sélecteur de couleur, à côté de l'environnement. Remplace le bleu d'accent de toute l'interface — titre, badge d'environnement, boutons principaux, liens, contours de focus — pour distinguer chaque environnement d'un coup d'œil. Badge et couleur sont servis par un endpoint public : la page de connexion les affiche déjà. Vide = bleu par défaut. |
 | **Process Home** | Répertoire de travail utilisé par NomaUBL pendant le traitement (par ex. `/app/nomaubl/process`). |
 
 ### File Paths
@@ -31135,8 +31094,9 @@ L'éditeur comporte **six onglets** :
 | Champ | Valeurs | Description |
 |---|---|---|
 | **Update DB** | `Y` / `N` | À `Y`, les exécutions de traitement enregistrent leurs résultats en base de données. À positionner à `N` uniquement pour des exécutions à blanc (dry-run) ou des phases de débogage. |
-| **Max threads** | *(vide = tous les cœurs)* | Limite le nombre de factures traitées simultanément. Un modèle à source XML peut traiter tout son dossier d'entrée en une seule passe **parallèle** — bien plus rapide sur un dossier de milliers de fichiers mono-facture, et de la même façon pour un balayage planifié, une exécution à la demande et le traitement par lot en ligne de commande. Chaque fichier reste une unité à part entière (nom, archive source et traçabilité conservés) et l'échec d'un fichier n'arrête pas les autres. Renseignez une valeur pour garder des ressources aux autres services d'un serveur partagé ; laissez vide pour utiliser tous les cœurs disponibles. Les modèles UBL et le traitement par travail (BIP) ne sont pas concernés. |
+| **Max threads** | *(vide = tous les cœurs)* | Limite le nombre de factures traitées simultanément. Un modèle à source XML peut traiter tout son dossier d'entrée en une seule passe **parallèle** — bien plus rapide sur un dossier de milliers de fichiers mono-facture, et de la même façon pour un balayage planifié, une exécution à la demande et le traitement par lot en ligne de commande. Chaque fichier reste une unité à part entière (nom, archive source et traçabilité conservés) et l'échec d'un fichier n'arrête pas les autres. Renseignez une valeur pour garder des ressources aux autres services d'un serveur partagé ; laissez vide pour utiliser tous les cœurs disponibles. Les modèles UBL et le traitement par travail (BIP) ne sont pas concernés. Il limite aussi le retraitement groupé, qui lance un lot par modèle. |
 | **`debugProfile`** | `Y` / `N` | À `Y`, chaque exécution écrit des **lignes de chronométrage par étape** dans `F564237` pour chaque phase du pipeline : analyse d'en-tête, analyse des lignes, validation, émission UBL, envoi PA. Les lignes apparaissent sur le [Tableau de bord IT](../../application/tech-dashboard.md) — le flux *Traitements en cours · direct* les marque avec le nom de l'étape, et le widget *Temps par modèle* décompose la moyenne par étape. À laisser à `N` en production ; à passer à `Y` le temps d'un lot pour analyser un pipeline lent. À désactiver dès que l'étape lente est identifiée — les lignes additionnelles gonflent rapidement `F564237` sous charge. |
+| **Server log file** | chemin *(vide = automatique)* | Fichier lu par la page [Journal serveur](../../management/server-log.md). Vide = le fichier vers lequel le lanceur redirige la sortie du serveur (`nomaubl-<env>.log`) ; à renseigner quand le serveur tourne sous un autre lanceur. |
 
 ### PDF
 
@@ -31144,6 +31104,7 @@ L'éditeur comporte **six onglets** :
 |---|---|
 | **Logo path** | Chemin du logo de la société, dessiné en haut du bloc fournisseur quand un modèle PDF a *Afficher le logo* activé (voir [Modèles PDF](../../management/pdf-templates.md)). Accepte les variables de chemin `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%`, `%KCO%`, `%DOC%`, `%DCT%` et tout jeton `{{…}}` du catalogue de facture — par ex. `%APP_HOME%/logos/{{kco}}.png`, pour que chaque société pointe vers son propre logo. Un bouton `{ }` ouvre une liste de jetons filtrable. PNG, JPG et GIF sont pris en charge. |
 | **Logo offset X (pt)** | Décalage horizontal du logo, en points, pour absorber une marge interne au fichier source. Défaut `0`. |
+| **Logo width (pt)** / **Logo height (pt)** | Cadre dans lequel le logo est mis à l'échelle, en points : proportions conservées, agrandissement si l'image est plus petite ; une seule dimension laisse l'autre suivre l'image. Vide = l'ancien plafond de 200 × 80 points, sans agrandissement. L'aperçu du constructeur visuel utilise la même taille que le PDF produit. |
 
 ---
 
@@ -31252,7 +31213,7 @@ Les champs suivants définissent la stratégie de récupération et de traitemen
 | **Process type** | `xml` / `ubl` | `xml` = chaîne complète (transformation + traitement) ; `ubl` = traitement UBL direct (l'entrée est déjà UBL). |
 | **Template** *(si Process type = `xml`)* | depuis liste | Modèle de document à appliquer. Liste des modèles de type `document`. |
 | **Mode** *(si Process type = `xml`)* | `AUTO` / `SINGLE` / `BURST` / `UBL` | Mode de traitement — `AUTO` laisse NomaUBL décider ; `SINGLE` et `BURST` forcent la stratégie de sortie correspondante ; `UBL` produit uniquement de l'UBL. |
-| **Source** | `bip` / `directory` / `watch-folders` | Où récupérer les documents : `bip` = file d'impression JDE *(spécifique JDE)* ; `directory` = balaye l'**Input Directory** configuré à l'onglet 1 ; `watch-folders` = lance la récupération des [dossiers surveillés](./watched-folders.md) — le job cible alors un répertoire configuré (choisi dans une liste) ou tous. |
+| **Source** | `bip` / `directory` / `watch-folders` | Où récupérer les documents : `bip` = file d'impression JDE *(spécifique JDE)* ; `directory` = balaye l'**Input Directory** configuré à l'onglet 1 ; `watch-folders` = lance la récupération des [dossiers surveillés](../../sync/watched-folders.md) — le job cible alors un répertoire configuré (choisi dans une liste) ou tous. |
 | **Extract mode** *(si Source = `bip`)* | `input` / `output` / `both` | Quels artéfacts BIP récupérer : `input` = XML source uniquement ; `output` = fichiers de sortie générés uniquement ; `both` = les deux. |
 | **Language filter** *(si Source = `bip`)* | texte | Filtre BIP optionnel par langue (par ex. `FR`). Vide = toutes les langues. |
 | **Replace existing** | `Y` / `N` | À `Y`, ré-importe les documents déjà présents dans NomaUBL (écrase) ; à `N`, ignore les doublons. |
@@ -31314,11 +31275,11 @@ Le SSO est une nouvelle capacité — sur une mise à jour, vérifier la liste *
 |---|---|
 | **Issuer URL** | URL de base du fournisseur OIDC — par exemple `https://idp.example.com/realms/myrealm` pour un realm Keycloak, l'URL du tenant Auth0 ou l'endpoint Azure AD. NomaUBL récupère les métadonnées via `<issuer>/.well-known/openid-configuration` : les endpoints individuels (autorisation, token, userinfo, JWKS) n'ont jamais à être saisis manuellement. |
 | **Client ID** | Identifiant du client OIDC déclaré côté IdP pour NomaUBL. |
-| **Client secret** | Optionnel pour les clients publics PKCE (le fournisseur peut être configuré sans). Stocké en Base64 sur disque. |
+| **Client secret** | Optionnel pour les clients publics PKCE (le fournisseur peut être configuré sans). Transmis au fournisseur d'identité exactement tel que saisi. |
 | **Redirect URI** | Doit correspondre **exactement** à l'URI de redirection enregistrée côté IdP. Valeur typique : `https://<votre-hôte>/api/auth/oidc/callback`. |
 | **Scopes** | Séparés par des espaces. Par défaut `openid profile email`. Ajouter ici les scopes spécifiques au fournisseur quand des claims supplémentaires sont nécessaires. |
 | **Token endpoint authentication** | Mode d'échange du code d'autorisation contre les jetons. **PKCE** *(défaut)* transmet le secret dans le corps de la requête (`client_secret_post`) ; **HTTP Basic** le transmet dans l'en-tête `Authorization` (`client_secret_basic`), sans PKCE — pour les fournisseurs d'identité qui n'acceptent que ce mode. Reprendre le réglage du client côté IdP. |
-| **Debug logging** | `Y` écrit dans le journal serveur le résultat de la découverte, l'URL d'autorisation, l'échange de jetons et les claims du jeton d'identité, jetons et secrets masqués. Les connexions et les refus (erreur IdP, état expiré, échec de l'échange de jetons, domaine refusé, compte inconnu) sont toujours journalisés. |
+| **Debug logging** | `Y` écrit dans le journal serveur le résultat de la découverte, l'URL d'autorisation, l'échange de jetons et les claims du jeton d'identité, jetons et secrets masqués ; la requête de jeton affiche aussi la longueur et l'empreinte SHA-256 du secret client réellement envoyé, à comparer avec celle du fournisseur quand il répond `invalid_client`. Les connexions et les refus (erreur IdP, état expiré, échec de l'échange de jetons, domaine refusé, compte inconnu) sont toujours journalisés. |
 
 ---
 
@@ -33864,7 +33825,7 @@ Le switch *Enregistrer les détails TVA* n'a **pas** besoin d'être activé pour
 
 ## `watch-folders <env>` — récupérer les dossiers surveillés \{#watch-folders\}
 
-Lance la récupération des [dossiers surveillés](../configuration/system/watched-folders.md) en ligne de commande — la même exécution que le bouton *Scan and process* de l'éditeur et que le job de lot planifié avec la source *Watched folders*.
+Lance la récupération des [dossiers surveillés](../sync/watched-folders.md) en ligne de commande — la même exécution que le bouton *Scan and process* de l'éditeur et que le job de lot planifié avec la source *Watched folders*.
 
 ```bash
 ./nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]
@@ -33989,6 +33950,7 @@ Traite un (ou plusieurs) fichier source contre un modèle de document — ou app
 | `--no-db` | N'écrit pas en base (implique `--no-send`). | XML |
 | `--no-validate` | Ne valide pas l'UBL — utilisé par la réimpression du retraitement, où la facture électronique enregistrée reste la référence. | XML |
 | `--repair` | Reconstruit les tables facture (en-tête, lignes, TVA, validation) d'un document dont l'archive et l'historique de statuts sont intacts — archive et historique inchangés, aucun événement de cycle de vie, statut d'en-tête repris du dernier événement réel de l'historique, aucun envoi. Voir [Traitement de document → Réparation](../processing/document.md#reparation). | tous |
+| `--input-dir <dir>` | Exécute le lot sur un autre dossier que le répertoire d'entrée du modèle — utilisé par le retraitement groupé, qui dépose les sources dans un dossier de travail. | XML |
 | `--validate` | XSD + Schematron seulement — pas d'insertion BDD, pas de dépôt PA. | UBL |
 | `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. Une source UBL envoie le fichier ; les sources XML, PDF et connecteur envoient chaque document comme si son type de document indiquait `F`. | tous |
 | `--no-debug` | Ignore les durées par étape (parse, validation, insertion en base, envoi PA) journalisées par défaut à chaque exécution. À utiliser sur les batchs nocturnes volumineux quand la surcharge par étape n'apporte rien dans les logs. | tous |
@@ -34010,6 +33972,16 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
                       --param customer=00001234 --param docNumber=2026000125 \
                       --no-debug
 ```
+
+---
+
+## `-reprocess` — retraiter les factures concernées \{#reprocess\}
+
+```bash
+java -jar nomaubl.jar -reprocess <configFile> [--full]
+```
+
+Sans option, réimprime toutes les factures **déposées non transmises** (`200` `NON_TRANSMISE`) d'un modèle avec *Allow reprocess* — sorties régénérées depuis la source archivée, sans modification en base ni envoi. Avec **`--full`**, retraite en totalité toutes les factures **en échec de validation** (`9905`) d'un modèle avec *Allow full reprocess* : enrichissement interrogé de nouveau, UBL régénéré, validé et envoyé selon les réglages, historique conservé. Les deux modes lancent un lot par modèle — voir [Documents → Sortie](./documents.md) pour les deux réglages du modèle.
 
 ---
 
@@ -34500,6 +34472,7 @@ Avec **Source = PDF**, le modèle prend en entrée un **PDF texte** issu de n'im
 |---|---|
 | Une ligne lue comme *Libellé : valeur* (ou libellé et valeur sur deux colonnes) | Un élément nommé d'après le libellé — `Montant TTC 1 189,55 €` → `<Montant_TTC>1189.55</Montant_TTC>`. Montants et pourcentages passent au point décimal, les dates `dd/MM/yyyy` au format ISO, et les identifiants imprimés avec des espaces (numéro de TVA, SIREN, code postal) sont compactés. |
 | Un taux inclus dans un libellé (`TVA 20,00%`) | Un élément voisin, pour que le nom reste stable : `<TVA>198.26</TVA><TVA_taux>20.00</TVA_taux>`. |
+| Une valeur faite de segments séparés par ` / `, dont certains portent leur propre libellé (`VIREMENT / IBAN : FR76 … / BIC : CCBPFRPPBDX / Titulaire : ACME SA`) | La partie sans libellé reste dans l'élément et chaque segment libellé devient un élément voisin — `Paiement`, `Paiement_IBAN`, `Paiement_BIC`, `Paiement_Titulaire` — mappable séparément ; les espaces de regroupement de l'IBAN sont supprimés. |
 | Une période (`01/09/2026 – 30/09/2026`) | Ses dates de début et de fin en `<…_debut>` et `<…_fin>`, chacune mappable sur son propre champ UBL. |
 | Le tableau entre les ancres de début et de fin | `<Lignes>/<Ligne>`, colonnes nommées d'après la ligne d'en-tête (déduites de la première ligne quand l'en-tête tient dans une seule cellule) ; les libellés sur plusieurs lignes sont fusionnés, un trait horizontal ferme le tableau. |
 | Les cadres des parties | Des blocs `<Adresse_N>` — `Nom`, lignes `Rue`, `Code_postal`, `Ville`, `Pays`, ainsi que les lignes libellées imprimées dans le cadre (code fournisseur, SIRET, TVA, téléphone, e-mail). |
@@ -34545,7 +34518,7 @@ Un échantillon converti se présente ainsi :
 </Document>
 ```
 
-L'éditeur de document et l'éditeur XSL **chargent tous deux un échantillon directement depuis un PDF** — le PDF est converti côté serveur avec les réglages enregistrés du modèle (enregistrer le modèle après avoir modifié les ancres). La page [Traitement de document](../processing/document.md), les [dossiers surveillés](../configuration/system/watched-folders.md) et la ligne de commande traitent les modèles à source PDF comme les modèles XML ; `-pdf2xml <in.pdf> <out.xml> --text` convertit un fichier isolé (voir [Ligne de commande](./command-line.md)).
+L'éditeur de document et l'éditeur XSL **chargent tous deux un échantillon directement depuis un PDF** — le PDF est converti côté serveur avec les réglages enregistrés du modèle (enregistrer le modèle après avoir modifié les ancres). La page [Traitement de document](../processing/document.md), les [dossiers surveillés](../sync/watched-folders.md) et la ligne de commande traitent les modèles à source PDF comme les modèles XML ; `-pdf2xml <in.pdf> <out.xml> --text` convertit un fichier isolé (voir [Ligne de commande](./command-line.md)).
 
 ---
 
@@ -34558,7 +34531,7 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | Champ | Valeurs | Description |
 |---|---|---|
 | **Transform** | `Y` / `N` | Active ou non la chaîne de transformation XSL avant la génération UBL. |
-| **XSL Pre-processing** | chemin | XSL optionnelle appliquée avant l'indexation, par exemple pour normaliser le XML source brut (JD Edwards, SAP, NetSuite, ERP personnalisé…). |
+| **XSL Pre-processing** | chemin | XSL optionnelle appliquée avant l'indexation, par exemple pour normaliser le XML source brut (JD Edwards, SAP, NetSuite, ERP personnalisé…). Elle doit **supporter un second passage** : un retraitement rejoue la source archivée, qui l'a déjà traversée — chaque élément ajouté par la XSL doit être protégé par `not(...)` pour qu'un second passage n'ajoute rien. |
 | **XSL Indexation** | chemin | XSL utilisée pour générer l'indexation / les métadonnées appliquées au document. Produit un fichier XML associé au PDF généré, utilisé pour l'indexation. |
 | **RTF Template** | chemin | Modèle RTF utilisé par BI Publisher pour produire le PDF lisible. |
 
@@ -34570,10 +34543,11 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 | **Custom Schematron** | chemin(s) | Une ou plusieurs feuilles Schematron **précompilées** (`.xsl`, séparées par des virgules, `%APP_HOME%` / `%ENV%` acceptés) qui portent les règles propres au client — une classification obligatoire, un format de référence acheteur… Elles s'exécutent **après** les packs standard, sur ce modèle uniquement : les règles client ne touchent jamais aux packs livrés que la mise à niveau rafraîchit. Une feuille est chargée une fois par horodatage de fichier : un fichier modifié est pris en compte à la validation suivante, sans redémarrage. Les anomalies arrivent dans les erreurs de validation sous une source courte tirée du nom de fichier (`BR-ACME-rules.xsl` → `ACME`) ; un fichier absent ou invalide est signalé en erreur sur la facture. Le traitement par lot et unitaire, le bouton *Valider* et l'API de validation en tiennent tous compte. |
 | **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
 | **LISIBLE** | `Y` / `N` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. |
+| **Invert sign** | `N – No` (défaut) / `Credit notes only` / `All documents` | Inverse le signe des montants lus dans la source : montants nets de ligne, totaux du document, montants payés d'avance et d'arrondi, TVA totale et chaque ligne du récapitulatif TVA. Le prix unitaire est toujours émis en positif, les remises et charges sont lues en valeur absolue, et la quantité prend le signe du montant de sa ligne. *Credit notes only* s'applique aux documents résolus en `381`, `396`, `261`, `262`, `502` ou `503`. Un spool qui imprime un avoir avec des montants négatifs donne ainsi l'avoir (CreditNote) positif attendu par la norme, sans modifier la XSL du document. |
 
 ### Règles de traitement \{#regles-de-traitement\}
 
-Le groupe **Processing rules** oriente les documents du flux XML **avant toute génération**. Chaque règle associe une ou plusieurs conditions sur le document à un résultat. Les règles sont évaluées pour chaque document une fois son type de document déterminé, **dans l'ordre — la première qui correspond l'emporte** ; sans règle correspondante, le traitement est normal. Elles s'appliquent à tous les chemins d'entrée XML : planificateur, [dossiers surveillés](../configuration/system/watched-folders.md), *process*, *fetch-single* et *Fetch Input*. Les documents de source UBL sont volontairement écartés : leur type de transaction figure déjà dans le document.
+Le groupe **Processing rules** oriente les documents du flux XML **avant toute génération**. Chaque règle associe une ou plusieurs conditions sur le document à un résultat. Les règles sont évaluées pour chaque document une fois son type de document déterminé, **dans l'ordre — la première qui correspond l'emporte** ; sans règle correspondante, le traitement est normal. Elles s'appliquent à tous les chemins d'entrée XML : planificateur, [dossiers surveillés](../sync/watched-folders.md), *process*, *fetch-single* et *Fetch Input*. Les documents de source UBL sont volontairement écartés : leur type de transaction figure déjà dans le document.
 
   
     
@@ -34641,7 +34615,8 @@ Un modèle en *Source = UBL* embarque désormais les mêmes PDF que le flux XML 
 |---|---|
 | **No-Data Key** | Nom d'un élément XML qui **doit exister** dans le spool. Si absent, NomaUBL considère le document comme vide et l'ignore. Utile pour écarter les sections de spool qui ne correspondent pas à des factures réelles. |
 | **Set Locale** | Locale utilisée pour rendre le PDF (par ex. `en_US`, `fr_FR`). Affecte uniquement le formatage des dates et nombres dans le PDF. |
-| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir du XML JDE archivé lors du premier dépôt — quand elles ont été **déposées sans être transmises** (statut 200, motif `NON_TRANSMISE`). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Seuls les modèles à **source XML** sont éligibles. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande. |
+| **Allow reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, les factures produites depuis ce modèle peuvent être **retraitées** — reconstruites à partir du XML JDE archivé lors du premier dépôt — quand elles ont été **déposées sans être transmises** (statut 200, motif `NON_TRANSMISE`). Le retraitement régénère la facture électronique, le PDF et le XML, conserve le statut courant de la facture, inscrit une entrée *Retraitement* dans son historique et ne renvoie jamais rien à la plateforme ; chaque facture n'est retraitée qu'une fois. Les sources XML et PDF sont concernées. Le retraitement se déclenche depuis la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess) ou la ligne de commande. |
+| **Allow full reprocess** | `Y` / `N` (défaut `N`). Quand `Y`, une facture en *Échec de validation* (`9905`) peut être **retraitée en totalité** depuis sa source archivée, une fois les données corrigées dans le système source : l'enrichissement est interrogé de nouveau, l'UBL régénéré, validé et envoyé à la PA selon les réglages du modèle et du type de document. L'historique des statuts est conservé et un marqueur de retraitement ouvre un nouveau cycle. Sources XML et PDF. Se déclenche depuis la fenêtre facture (bouton *Retraiter* sur une `9905`), la [liste des factures](../application/invoices.md#reprocess), le [Tableau de bord IT](../application/tech-dashboard.md#to-reprocess-full), l'API (`kind: "full"`) ou `-reprocess --full`. |
 
 ---
 
@@ -34684,7 +34659,7 @@ Chaque **règle** décrit une recherche :
 | **Target** | Où atterrissent les nouveaux éléments — sur le nœud du périmètre, dans un nouveau groupe, ou dans un groupe existant. |
 | **Result** | Un jeu de champs à plat, ou un groupe répété (un enfant par ligne retournée). |
 
-Les règles s'exécutent dans l'ordre : une règle ultérieure peut utiliser ce qu'une précédente a ajouté ; les recherches identiques sont mises en cache, donc le connecteur est appelé une fois par clé distincte. Le spool enrichi est stocké avec la source archivée (`F564230`) : re-traiter un document n'appelle pas le connecteur à nouveau. Rien ne s'exécute tant qu'aucune règle n'est configurée — les modèles existants ne changent pas.
+Les règles s'exécutent dans l'ordre : une règle ultérieure peut utiliser ce qu'une précédente a ajouté ; les recherches identiques sont mises en cache, donc le connecteur est appelé une fois par clé distincte. Le spool enrichi est stocké avec la source archivée (`F564230`) : une réimpression n'appelle pas le connecteur à nouveau. Un retraitement complet l'interroge de nouveau, et l'enrichissement **remplace** alors les lignes du passage précédent au lieu de s'y ajouter (les règles à ligne unique écrasaient déjà leurs champs). Rien ne s'exécute tant qu'aucune règle n'est configurée — les modèles existants ne changent pas.
 
 **Dry run** — avec un spool d'exemple chargé, *Dry run* essaie les règles dessus : il appelle les vrais connecteurs et montre le XML enrichi, un résumé et d'éventuels avertissements, sans rien modifier. Téléchargez le résultat (nommé d'après l'exemple, par ex. `26000001CG00005_enrich.xml`) pour construire le mappage XSL dans la foulée.
 
@@ -34904,6 +34879,64 @@ Des messages en ligne s'affichent en haut du panneau principal et disparaissent 
 - **Exclure les fichiers d'origine `jde_bip` pendant un packaging**, sauf si l'environnement cible pointe sur le même JDE — il s'agit en général de sorties spécifiques à un environnement, non transférables.
 - **Surveiller le compteur de fichiers par dossier** en cas de travail sur de grandes arborescences XSL — c'est le moyen le plus rapide de repérer un sous-ensemble mal packagé.
 - **Télécharger une version historique avant de la restaurer** pour garder une copie locale du fichier courant et de la version restaurée hors de NomaUBL.
+
+---
+
+## Journal serveur
+Source: https://docs.nomana-it.fr/fr/nomaubl/management/server-log/
+
+La page Journal serveur affiche la fin du fichier journal du serveur NomaUBL, lignes les plus récentes en tête, avec filtres par sévérité et par module, recherche de texte et rafraîchissement automatique — sans accès shell.
+
+La page **Journal serveur** affiche la **fin du fichier journal du serveur**, lignes les plus récentes en tête : un administrateur suit ce que fait le serveur — un lot, une recherche Peppol, une transformation en échec — sans ouvrir de shell sur la machine. Elle s'ouvre dans **Gestion → Journal serveur** ; l'accès se donne par rôle, comme pour les autres pages de gestion (voir [Rôles](../configuration/security/roles.md)).
+
+---
+
+## Vue d'ensemble
+
+  
+    Taille lue512 KB ▾
+    Sévérité☑ ERROR☑ WARN☑ INFO☐ DEBUG☐ Non structuré
+    ModuleTous les modules ▾
+    Rechercher…
+    ☐ Rafraîchissement auto
+    ↻ Rafraîchir
+  
+  Fichier : /opt/nomaubl/logs/nomaubl-prod.log · 48,2 Mo · 3 ligne(s) affichée(s) sur 2 914 dans les 512 derniers Ko
+  
+    2026-10-22 06:12:04INFOPROCESSbatch invoices — 412 file(s), 4 thread(s)
+    2026-10-22 06:12:31WARNPEPPOL0225:803206317 — SMP certificate unreadable (smp.example.com)
+    2026-10-22 06:13:02ERRORUBLR42565_ZJDE0001_1353306 — XSLT failed: XTDE0640
+        at net.sf.saxon.…  (3 lines)
+  
+
+---
+
+## Commandes
+
+| Commande | Effet |
+|---|---|
+| **Taille lue** | La quantité lue en fin de fichier : `128 KB`, `512 KB` *(défaut)*, `2 MB` ou `8 MB`. Quand le fichier est plus grand, la ligne d'état le signale — augmenter la taille lue pour remonter plus loin. |
+| **Sévérité** | Cases à cocher `ERROR`, `WARN`, `INFO` *(les trois cochées par défaut)*, `DEBUG` et **Non structuré** — les lignes qui ne suivent pas la forme `** NIVEAU ** MODULE ** … : message`. |
+| **Module** | Liste construite à partir des modules rencontrés dans les lignes lues (`PROCESS`, `UBL`, `PEPPOL`…) ; **Tous les modules** par défaut. |
+| **Rechercher…** | Filtre de texte, sans distinction de casse. |
+| **Rafraîchissement auto** | Relit la fin du fichier toutes les 5 secondes. |
+| **Rafraîchir** | Relit la fin du fichier immédiatement. |
+
+Les piles d'appels restent **rattachées à la ligne qui les a produites** : un filtre sur `ERROR` garde la pile entière. La ligne d'état indique le fichier lu, sa taille et le nombre de lignes affichées sur celles parcourues.
+
+---
+
+## Fichier lu
+
+La page trouve le fichier seule : le `nomaubl-<env>.log` du lanceur ou, sous Linux, le fichier vers lequel la sortie du serveur est redirigée. Si le serveur tourne sous un autre lanceur, indiquer son chemin dans **Server log file** des [réglages globaux](../configuration/system/global.md) ; laissé vide, la détection automatique s'applique. Si aucun fichier n'est trouvé, la page le signale et renvoie vers ce réglage.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Commencer par `ERROR` et `WARN`.** Décocher `INFO` pour ne garder que ce qui mérite un coup d'œil, puis élargir avec la liste des modules.
+- **Suivre une exécution avec le rafraîchissement auto.** Lancer un lot ou un parcours, cocher *Rafraîchissement auto* et regarder les lignes arriver.
+- **Augmenter la taille lue pour un événement plus ancien.** Les 512 Ko par défaut couvrent l'activité récente ; passer à 2 ou 8 Mo pour remonter plus loin.
 
 ---
 
@@ -35390,7 +35423,7 @@ La barre du constructeur porte quelques réglages appliqués à toute la mise en
 |---|---|
 | **Accent** | La couleur d'accent des titres de section (CLIENT / LIVRAISON), du total mis en évidence, du soulignement de l'en-tête du tableau de lignes et du fond des lignes surlignées. Saisissez un hexa à 6 chiffres avec ou sans `#` ; la teinte de fond est dérivée automatiquement. Vide = bleu par défaut. |
 | **Date** | Le format de date appliqué dans tout le PDF — dates d'émission, d'échéance, de période et de livraison par ligne. Valeurs : `yyyy-MM-dd` (défaut), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. |
-| **Show logo** | Dessine le logo de la société en haut du bloc vendeur, en page 1. Le fichier vient du *Logo path* de [Paramètres → Global → Traitement → PDF](../configuration/system/global.md), où un *Logo offset X (pt)* le décale aussi horizontalement. PNG, JPG et GIF sont pris en charge. |
+| **Show logo** | Dessine le logo de la société en haut du bloc vendeur, en page 1. Le fichier vient du *Logo path* de [Paramètres → Global → Traitement → PDF](../configuration/system/global.md), où un *Logo offset X (pt)* le décale aussi horizontalement et où *Logo width / height (pt)* fixent le cadre de mise à l'échelle (proportions conservées ; vide = 200 × 80 points au plus). L'aperçu du constructeur utilise la même taille que le PDF produit. PNG, JPG et GIF sont pris en charge. |
 | **Trim zeros** | Supprime les zéros décimaux de fin sur les montants, prix unitaires et quantités — un montant rond s'imprime `23` au lieu de `23.00`, un prix unitaire `23.0000` s'imprime `23`. Désactivé par défaut. Réglage propre au modèle, appliqué au tableau de lignes, au bloc des totaux et aux PDF lisible et à l'écran. |
 | **Decimals** — *amount* / *price* / *qty* | Nombre de décimales imprimées par nature de nombre, chacune `auto` ou `0` à `6`. *Amount* couvre les montants de ligne, remises, lignes de TVA et totaux ; *price* le prix de l'article, le prix unitaire net et la remise sur prix ; *qty* les quantités facturées. `auto` garde l'affichage standard (montants à 2 décimales, prix et quantités tels que dans l'UBL) : les modèles existants restent inchangés. Un nombre fixe est arrondi au plus éloigné de zéro, comme l'exige l'AFNOR ; *Trim zeros* s'applique en plus. |
 
@@ -36993,7 +37026,11 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
-  2026.10.19.1 · 2026-10-01
+  2026.10.23.1 · 2026-10-01
+  2026.10.22.1 · 2026-09-30
+  2026.10.21.1 · 2026-09-30
+  2026.10.20.1 · 2026-09-30
+  2026.10.19.1 · 2026-09-30
   2026.10.18.1 · 2026-09-30
   2026.10.16.1 · 2026-09-30
   2026.10.14.1 · 2026-09-30
@@ -37106,6 +37143,67 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.10.23.1 — 2026-10-23 \{#v2026-10-23-1\}
+
+### Améliorations
+
+- **Inversion de signe sur un gabarit de document.** Un nouveau réglage « Invert sign » dans l'onglet Processing (groupe UBL) inverse le signe des montants lus dans la source : montants nets de ligne, totaux du document, acompte et arrondi, TVA totale et chaque ligne de la ventilation de TVA. Le prix unitaire est toujours émis positif, les remises et frais sont lus en valeur absolue, et la quantité prend le signe du montant de sa ligne. Trois choix : Non (par défaut), Avoirs seulement (documents résolus en 381, 396, 261, 262, 502 ou 503) et Tous les documents. Un spool qui imprime un avoir en montants négatifs produit ainsi l'avoir positif attendu par la norme, sans toucher au XSL client. La valeur est transmise à la transformation à l'exécution ; un XSL de document client en bénéficie dès que la fusion de mise à jour a rafraîchi son corps commun.
+- **Dossiers surveillés : page dédiée, tous les gabarits, nouvelles options.** Les dossiers surveillés ont désormais leur page dans le groupe Synchronisation, avec Enregistrer et Rafraîchir dans l'en-tête, et ne figurent plus dans la liste des réglages. Chaque dossier est une carte dépliable dont les champs sont répartis en trois blocs : dossier, relevé, lot. Nouvelles options par dossier : la fenêtre de relevé (« depuis le dernier relevé », comportement précédent, ou « tous les fichiers », chaque fichier correspondant quelle que soit sa date, sans jalon) et les options de lot d'une tâche planifiée de type Répertoire (mode remplacement, envoi à la PA, mode de traitement) ; en mode remplacement, un fichier déjà traité est repris. Tous les gabarits à fichiers sont pris en charge : les gabarits XML et PDF conservent le lot en une seule JVM, un gabarit UBL passe par la boucle fichier par fichier, les échecs étant déplacés vers le dossier d'erreurs. Un dossier qui est le dossier d'entrée du gabarit devient un simple déclencheur de lot, sans copie, sans date ni dédoublonnage : l'équivalent d'une tâche planifiée Répertoire. L'ordre d'exécution est inchangé : toutes les conversions d'abord, puis un lot par gabarit. Les dossiers alimentant un même gabarit doivent porter les mêmes options de lot ; la première ligne l'emporte et l'écart est journalisé. Les lignes existantes et les tâches planifiées gardent leur comportement ; les sources Répertoire et BIP du planificateur restent disponibles.
+- **Badge d'environnement et couleur du thème.** Les réglages globaux gagnent une « Couleur du thème » à côté du nom d'environnement. L'environnement s'affiche en badge à droite du titre et dans l'onglet du navigateur, et la couleur remplace le bleu d'accent de toute l'interface : titre, badge, boutons principaux, liens, contours de focus. Les deux sont servis par un point d'accès public, la page de connexion les porte donc déjà. Couleur vide = bleu par défaut.
+
+---
+
+## 2026.10.22.1 — 2026-10-22 \{#v2026-10-22-1\}
+
+### Améliorations
+
+- **Retraitement complet des échecs de validation.** Un nouveau réglage « Allow full reprocess » sur le gabarit de document permet de retraiter en totalité une facture en *Échec de validation* (9905) à partir de sa source archivée, une fois les données corrigées à la source : l'enrichissement est interrogé à nouveau, l'UBL régénéré, validé et envoyé à la PA quand le gabarit et le type de document le prévoient. L'historique des statuts est conservé et un marqueur de retraitement ouvre un nouveau cycle, de sorte que les statuts qui suivent sont enregistrés comme nouveaux. Disponible depuis la fenêtre de la facture (bouton « Retraiter » sur une 9905), depuis la sélection de la liste des factures, depuis une nouvelle carte « À retraiter en totalité » du tableau de bord IT, sur l'API (`kind: "full"`) et en ligne de commande (`-reprocess --full`). La réimpression existante des factures déposées non transmises est inchangée et garde son propre réglage « Allow reprocess ». Les deux s'appliquent aux sources XML et PDF.
+- **Pré-traitement et enrichissement rejouables.** Un retraitement rejoue la source archivée, qui est déjà passée par le XSL de pré-traitement du gabarit et par l'enrichissement. L'enrichissement remplace désormais les lignes d'une exécution précédente au lieu de s'y ajouter (les règles à ligne unique écrasaient déjà leurs champs), et le champ de pré-traitement de l'éditeur de gabarit énonce la règle pour les transformations client : chaque élément ajouté par le XSL doit être protégé par `not(...)` afin qu'un second passage n'ajoute rien. Le tableau de bord IT affiche les quatre cartes de compteurs sur une seule ligne.
+- **Retraitement groupé en un seul lot.** « Tout retraiter » et la sélection de plusieurs factures déposent désormais les sources dans un dossier de travail et lancent un seul lot de traitement par gabarit, en arrière-plan avec son journal en direct, au lieu d'une JVM par facture : le réglage « Max threads » des réglages globaux borne le parallélisme et une facture n'est jamais traitée deux fois. Une facture seule reste traitée à l'unité. La ligne de commande gagne `--input-dir <dossier>` sur `-process` pour lancer un lot sur un autre dossier que l'entrée du gabarit.
+- **Traitements en cours sur le tableau de bord IT.** Une nouvelle carte liste les JVM de traitement actives sur le serveur : celles lancées par cette instance, avec la dernière ligne écrite par chacune, et les JVM détachées laissées par une instance précédente, un cron ou un lancement manuel. Chaque ligne indique le mode, les arguments, la durée écoulée et un bouton Arrêter, qui ne termine que cette JVM et ses propres sous-processus ; il demande le droit de lancer les intégrations. Rien n'est arrêté au redémarrage du serveur, un lot peut donc se poursuivre pendant une mise à jour ; le script de lancement est inchangé.
+- **Page Journal serveur.** Dans Gestion, après Versions de fichiers : la fin du fichier journal du serveur, lignes les plus récentes en tête, avec la quantité lue (128 Ko à 8 Mo), des cases par sévérité, la liste des modules rencontrés, une recherche texte et un rafraîchissement automatique. Les traces d'exception restent rattachées à la ligne qui les a produites. Le fichier est trouvé sans réglage (le `nomaubl-<env>.log` du script de lancement, ou la sortie redirigée du serveur sous Linux) ; le réglage « Server log file » des réglages globaux couvre un autre mode de lancement.
+
+### Corrections
+
+- **Erreur « création PDF » injustifiée sur les gabarits sans RTF.** Forcer le PDF lisible (« Keep PDF » sur un type de document, ou une réimpression) sur un gabarit sans modèle RTF, dont les gabarits à source PDF, journalisait une erreur de création de PDF. Le rendu forcé est désormais ignoré quand il n'y a rien pour le produire.
+
+---
+
+## 2026.10.21.1 — 2026-10-21 \{#v2026-10-21-1\}
+
+### Améliorations
+
+- **E-reporting : paramétrage par société.** Les réglages e-reporting reçoivent la même barre de portée que l'e-invoicing : choisir le paramétrage par défaut ou celui d'une société, créer le paramétrage d'une société (`e-reporting-{kco}`) initialisé à partir du défaut, le supprimer. Chaque société peut ainsi porter son propre déclarant, sa périodicité et sa connexion PA. Les sociétés à traiter sont détectées à partir de ces paramétrages ; la liste « Companies » du défaut ne nomme que les sociétés traitées avec les réglages par défaut.
+- **E-reporting : génération en arrière-plan.** La génération rend la main immédiatement et la fenêtre affiche le journal de l'exécution au fil de l'eau, puis rafraîchit la liste à la fin. Une période volumineuse ne se termine plus par une erreur du proxy pendant que le traitement continue sans être vu sur le serveur.
+- **PDF : taille du logo.** Deux nouveaux réglages à côté du chemin et du décalage du logo, « Largeur » et « Hauteur » du logo en points : le logo est mis à l'échelle pour tenir dans ce cadre, proportions conservées, agrandi si l'image est plus petite ; une seule dimension renseignée laisse l'autre suivre l'image. Laissés vides, le plafond précédent de 200 × 80 points s'applique sans agrandissement. L'aperçu de l'éditeur visuel utilise la même taille que le PDF produit.
+- **Contrôle d'ordonnancement en arrière-plan.** Contrôler et Nettoyer rendent la main immédiatement, la page affiche le journal de l'exécution au fil de l'eau puis les constats. L'analyse de dérive du statut lit l'historique en une seule passe et journalise son avancement toutes les 50 000 lignes, le résultat par paire « actuel → attendu » et un bilan final. Une base volumineuse ne se termine plus par une erreur du proxy.
+- **Utilisateurs : changement de mot de passe à la première connexion au choix, et comptes SSO seuls.** La création d'un utilisateur, ou la réinitialisation d'un mot de passe, affiche désormais une case « Exiger un nouveau mot de passe à la première connexion locale », cochée par défaut. Avec le SSO activé, le mot de passe à la création devient facultatif : laissé vide, le compte se connecte uniquement par le fournisseur d'identité, n'a pas de mot de passe local et n'est jamais invité à en changer. Une session ouverte par SSO n'est plus envoyée vers l'écran de changement de mot de passe, qui demandait un ancien mot de passe que l'utilisateur n'avait jamais eu.
+- **Dossiers surveillés : un seul traitement à la fois, analyse en arrière-plan.** Le traitement par lot d'un gabarit pose désormais un verrou sur son dossier d'entrée le temps de son exécution : un second lot ne peut plus démarrer sur les mêmes fichiers ; une analyse manuelle ou planifiée qui trouve le dossier verrouillé convertit les nouveaux fichiers mais laisse le lot en cours et le signale dans son journal. Le bouton « Scan and process » des réglages s'exécute en arrière-plan avec le journal en direct, au lieu d'une requête qui dépassait le délai du proxy et incitait à relancer.
+
+### Corrections
+
+- **Statut de facture réaligné sur un artefact de retraitement.** Jusqu'au 11 octobre un retraitement régénérait le document par le traitement normal, laissant un événement « validation réussie » juste avant son marqueur de retraitement. Le réalignement d'en-tête s'arrêtait sur cet événement, et le nettoyage de lundi a mis 1 967 factures en 9901 ou 9902 au lieu de leur statut déposé. Un événement de génération situé juste sous un marqueur de retraitement est désormais ignoré comme le marqueur, de même qu'une ligne d'historique sans code, partout où le statut est réaligné. L'analyse de dérive ne saute plus non plus les factures retraitées dont l'ordre est correct, ce qui les cachait de la liste.
+- **SSO : échange de jeton refusé avec invalid_client.** Le secret client passait par un décodage Base64 au chargement alors qu'il est stocké tel que saisi. Un secret composé de lettres et de chiffres se décode sans erreur en octets aléatoires, envoyés au fournisseur d'identité ; qu'un secret survive dépendait de sa longueur et de ses caractères. Le décodage n'est désormais conservé que s'il produit du texte lisible, et avec la journalisation de débogage la requête de jeton imprime la longueur et une empreinte SHA-256 du secret réellement envoyé, à comparer avec celle du fournisseur.
+- **Traitement par lot : un fichier en échec arrêtait tout le lot.** Une erreur fatale sur un fichier, entrée absente ou transformation en échec, arrêtait la JVM du lot avec tous les autres fichiers en cours, ce qui apparaissait dans le journal des traitements comme des lignes démarrées sans fin et laissait leurs entrées à retraiter. Le fichier est désormais marqué en échec et déplacé dans le dossier des erreurs pendant que les autres se terminent. Deux lots sur le même dossier, que cela et une relance produisaient, étaient aussi la cause d'erreurs « fichier introuvable » sur des entrées supprimées par l'autre lot et de documents traités deux fois. Le mode lot ne supprime plus non plus les PDF joints des fichiers encore en cours après un fichier réussi.
+- **E-reporting : identifiant de l'acheteur refusé (G2.19).** Le bloc acheteur portait l'adresse électronique de l'acheteur (schéma 0225, l'adresse de routage PPF) au lieu de son identifiant légal. Une adresse française ou un SIRET donnent désormais le SIREN sous le schéma 0002 avec le numéro de TVA qui en découle ; 0002, 0223, 0227, 0228 et 0229 passent tels quels. Un acheteur sans identifiant exploitable (vide, « 0 », un schéma e-mail) est laissé hors du rapport et la facture est nommée dans le journal pour compléter la fiche client ; la validation signale alors l'acheteur manquant sur cette facture plutôt qu'une erreur de schéma sur tout le rapport.
+- **E-reporting : « Calculer la période » ignorait les réglages et les rapports précédents.** La fenêtre supposait toujours une périodicité mensuelle et la recherche du dernier rapport n'aboutissait jamais : le mois en cours était proposé à chaque fois, puis soumis comme période. Le calcul suit désormais le paramétrage de la société (mensuel, décadaire, hebdomadaire) et le dernier rapport valide de la société pour le sens concerné, exactement comme l'exécution planifiée, et la fenêtre indique la périodicité appliquée et le rapport qu'elle suit. Une société doit être renseignée pour calculer.
+
+---
+
+## 2026.10.20.1 — 2026-10-20 \{#v2026-10-20-1\}
+
+### Améliorations
+
+- **Source PDF : segments libellés dans une valeur.** Une valeur imprimée en segments séparés par « / » dont certains portent leur propre libellé, comme `VIREMENT / IBAN : FR76 … / BIC : CCBPFRPPBDX / Titulaire : ACME SA`, conserve désormais la partie sans libellé dans son élément et produit un élément frère par segment libellé (`Paiement`, `Paiement_IBAN`, `Paiement_BIC`, `Paiement_Titulaire`), chacun mappable séparément. Les espaces de groupage de l'IBAN sont retirés comme pour les autres identifiants.
+- **Recherche Peppol sur réseau restreint.** Deux nouveaux réglages sur le gabarit e-directory. « Résolution de la plateforme via SMP » (Y par défaut) : passer à N quand le réseau n'autorise pas le HTTPS vers les serveurs SMP des plateformes ; la recherche s'arrête alors à la réponse DNS et la colonne plateforme affiche l'hôte SMP (`smp.pennylane.com`) au lieu du nom et du siège lus dans son certificat, sans aucun appel à attendre. « Résolveurs DNS publics en secours » (N par défaut) : la recherche n'utilise que le résolveur du serveur ; Y autorise un nouvel essai via 8.8.8.8 / 1.1.1.1 quand celui-ci ne répond rien. Quand le SMP ne peut pas être lu, la page affiche désormais l'hôte et la cause au lieu d'un simple « non résolu », et le journal du serveur liste chaque participant non résolu avec sa cause.
+
+### Corrections
+
+- **Recherche Peppol très lente quand les résolveurs externes sont bloqués.** Un identifiant non inscrit dans Peppol était réessayé via les résolveurs publics sur les deux zones DNS, ce qui coûtait plus d'une minute par identifiant sur un serveur sans accès à ceux-ci. Une réponse « nom inexistant » du résolveur du serveur est désormais définitive, et un résolveur public en échec est abandonné pour le reste de la recherche.
+- **Adresses de l'annuaire PPF absentes avec un connecteur Esker.** La liste par SIREN lisait le tableau de réponse sous un nom de propriété que l'éditeur de connecteur n'écrit pas : seule une réponse dont le tableau s'appelait par hasard `results` fonctionnait. Le « champ de réponse » du point d'accès est désormais pris en compte, `records` compris.
 
 ---
 
@@ -37265,7 +37363,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
 ### Améliorations
 
-- **Règles Schematron client par modèle de document.** Nouveau réglage *Custom Schematron* dans l'onglet UBL d'un modèle de document : une ou plusieurs feuilles Schematron précompilées (.xsl, séparées par des virgules, `%APP_HOME%` / `%ENV%` acceptés) exécutées après les packs standard sur ce modèle uniquement. Les règles propres à un client — classification obligatoire, format de référence acheteur — ne touchent plus aux packs livrés, que la mise à niveau rafraîchit, et ne s'appliquent qu'aux modèles qui les déclarent. Les feuilles sont chargées une fois par empreinte de fichier et mises en cache : un fichier modifié est pris en compte à la validation suivante, sans redémarrage. Les constats apparaissent dans les erreurs de validation sous une source courte tirée du nom de fichier (`BR-KRYS-rules.xsl` → `KRYS`) ; un fichier absent ou invalide est signalé comme une erreur sur la facture. Traitement par lot et unitaire, bouton Valider et API de validation tiennent tous compte du réglage.
+- **Règles Schematron client par modèle de document.** Nouveau réglage *Custom Schematron* dans l'onglet UBL d'un modèle de document : une ou plusieurs feuilles Schematron précompilées (.xsl, séparées par des virgules, `%APP_HOME%` / `%ENV%` acceptés) exécutées après les packs standard sur ce modèle uniquement. Les règles propres à un client — classification obligatoire, format de référence acheteur — ne touchent plus aux packs livrés, que la mise à niveau rafraîchit, et ne s'appliquent qu'aux modèles qui les déclarent. Les feuilles sont chargées une fois par empreinte de fichier et mises en cache : un fichier modifié est pris en compte à la validation suivante, sans redémarrage. Les constats apparaissent dans les erreurs de validation sous une source courte tirée du nom de fichier (`BR-ACME-rules.xsl` → `ACME`) ; un fichier absent ou invalide est signalé comme une erreur sur la facture. Traitement par lot et unitaire, bouton Valider et API de validation tiennent tous compte du réglage.
 
 ### Corrections
 
@@ -40645,7 +40743,9 @@ Deux cas suivent leur propre règle :
 
 Les historiques mal ordonnés par une règle antérieure sont détectés et remis en ordre à l'exécution suivante.
 
-Le contrôle signale aussi une **facture dont le statut diffère du dernier état réel de son historique**, affichée sous la forme *actuel → attendu*, et la réaligne à l'application. Le *dernier état réel* ignore le marqueur de retraitement (`9912`) et le marqueur de courrier transmis (`9908`), dans n'importe quel ordre — un `200` `NON_TRANSMISE` déposé reste donc tel quel. La même règle s'applique à tous les réalignements d'en-tête : complément d'intégrité, récupération des statuts et suppression d'un événement d'historique. Le marqueur de courrier transmis compte comme un événement applicatif : il n'est jamais signalé comme mal ordonné.
+Le contrôle signale aussi une **facture dont le statut diffère du dernier état réel de son historique**, affichée sous la forme *actuel → attendu*, et la réaligne à l'application. Le *dernier état réel* ignore le marqueur de retraitement (`9912`) et le marqueur de courrier transmis (`9908`), dans n'importe quel ordre — un `200` `NON_TRANSMISE` déposé reste donc tel quel. La même règle s'applique à tous les réalignements d'en-tête : complément d'intégrité, récupération des statuts et suppression d'un événement d'historique. Le marqueur de courrier transmis compte comme un événement applicatif : il n'est jamais signalé comme mal ordonné. Un événement de génération placé juste sous un marqueur de retraitement — la trace laissée par un ancien retraitement — est ignoré comme le marqueur, de même qu'une ligne d'historique sans code.
+
+**Contrôler l'ordre** et **Nettoyer N sélectionné(s)** s'exécutent **en arrière-plan** : la page affiche le journal de l'exécution au fil de l'eau, puis les résultats. La recherche d'écarts de statut lit l'historique une seule fois, en un passage, journalise sa progression toutes les 50 000 lignes, le résultat par paire *actuel → attendu* et une synthèse finale — une base volumineuse ne se termine plus par une erreur de proxy.
 
 ---
 
@@ -40656,6 +40756,125 @@ Le contrôle signale aussi une **facture dont le statut diffère du dernier éta
 - **L'horodatage repère n'avance que dans un sens.** Relancer la page n'a aucun effet sur les événements déjà appliqués. Pour rejouer une fenêtre (par ex. après restauration d'une sauvegarde de base ancienne), abaisser manuellement `lastRetrievalDate` dans le template *e-invoicing* — l'exécution suivante récupérera tous les événements depuis cette date.
 - **Restreindre les codes configurés en cas de volume.** La liste par défaut couvre tous les codes de la réforme ; les installations à fort débit qui n'exploitent que les codes obligatoires PPF peuvent réduire la liste pour alléger la charge côté PA et côté local.
 - **Le cycle de vie est la trace d'audit.** La table de cycle de vie (`F564235`) est en mode ajout seul et représente l'historique complet ; l'en-tête de facture (`F564231`) ne contient que le statut le plus récent. Pour instruire un litige ou retrouver une mise à jour PA manquante, c'est dans la table de cycle de vie qu'il faut chercher.
+
+---
+
+## Dossiers surveillés
+Source: https://docs.nomana-it.fr/fr/nomaubl/sync/watched-folders/
+
+Les dossiers surveillés récupèrent les sorties PDF / XML de JD Edwards dans des répertoires montés, convertissent les PDF en XML en parallèle et lancent un lot par modèle de document — planifiés depuis global → Planification, à la demande depuis la page ou en ligne de commande.
+
+La page **Dossiers surveillés** permet à NomaUBL d'aller chercher les documents source directement dans des répertoires — typiquement le partage réseau où JD Edwards dépose ses sorties d'états — au lieu d'attendre qu'on les pousse dans le répertoire d'entrée. Chaque exécution parcourt les dossiers configurés, garde les nouveaux fichiers, **convertit les PDF en XML en parallèle** (les fichiers XML et UBL sont copiés tels quels) dans le répertoire d'entrée du modèle de document, puis lance **un lot par modèle** — le lot en une seule JVM pour un modèle XML ou PDF, la boucle fichier par fichier pour un modèle UBL.
+
+Elle s'ouvre depuis le menu latéral, dans **Synchronisation → Dossiers surveillés** ; **Enregistrer** et **Rafraîchir** se trouvent dans l'en-tête de la page. La configuration est livrée vide : rien ne s'exécute tant qu'aucun dossier n'est configuré ni aucun job planifié.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Dossiers
+
+Chaque dossier surveillé est une **carte repliable** : son en-tête affiche le numéro, le répertoire et un résumé sur une ligne ; un clic l'ouvre, **×** supprime le dossier, **＋ Add folder** en ajoute un. **Parallel conversions** (défaut `4`), au-dessus des cartes, fixe le nombre de PDF convertis simultanément ; le lot garde son propre pool de traitement.
+
+  
+    Dossiers surveillés
+    
+      ↻ Rafraîchir
+      💾 Enregistrer
+    
+  
+  
+    
+      #1/data/mnt/jde_outputsR42565_* → invoices · since last scan×
+    
+    
+      FolderDirectory · Pattern · Template · Manifest
+      ScanWindow · Overlap (hours) · Last scan · Require mount
+      BatchReplace · Send to PA · Mode
+    
+  
+  
+    #2%APP_HOME%/%ENV%/input/credit_notes→ credit_notes · input folder
+  
+  ＋ Add folder
+
+Les champs des cartes restent en anglais, comme dans l'application.
+
+### Dossier (*Folder*)
+
+| Champ | Description |
+|---|---|
+| **Directory** | Le dossier à parcourir — un partage monté ou un dossier local (par ex. `/data/mnt/jde_outputs`) ; `%APP_HOME%` / `%ENV%` acceptés. Quand il **est** le répertoire d'entrée du modèle, la ligne déclenche simplement le lot — voir [Mode répertoire d'entrée](#mode-repertoire-entree). |
+| **Pattern** | Motif de nom des fichiers à récupérer (par ex. `R42565_*`). Par défaut `*.xml` sur le répertoire d'entrée du modèle. |
+| **Template** | Le modèle de document qui traite les fichiers — les modèles XML, PDF et UBL sont tous pris en charge. |
+| **Manifest** | PDF JD Edwards uniquement : manifeste pdf2xml facultatif (échantillon XML natif JDE). Vide = mode alias DD. |
+
+### Parcours (*Scan*)
+
+| Champ | Description |
+|---|---|
+| **Window** | **Since last scan** *(défaut)* : les fichiers plus récents que le dernier scan moins le recouvrement. **All files** : tous les fichiers qui correspondent au motif, quelle que soit leur date, sans repère de date — seul le contrôle des fichiers déjà traités empêche un second passage. |
+| **Overlap (hours)** | *Since last scan* uniquement — fenêtre de recouvrement sous le dernier scan (défaut `2`) ; un fichier en échec est réessayé tant qu'il reste dedans. |
+| **Last scan** | *Since last scan* uniquement — le repère écrit à chaque exécution (instant UTC). Le vider ou saisir une date (`yyyy-MM-dd`, `yyyy-MM-ddTHH:mm:ss` en heure serveur, ou un instant ISO) fait reparcourir à partir de ce point ; un premier scan sans repère ne prend que le recouvrement. |
+| **Require mount** | Coché, le répertoire doit être un partage monté — un point de montage non monté est signalé au lieu d'être lu comme vide. |
+
+### Lot (*Batch*)
+
+Les options du lot du modèle, comme sur un job planifié *Directory* :
+
+| Champ | Description |
+|---|---|
+| **Replace** | Mode remplacement : un fichier déjà traité est repris. À éviter avec *All files*, sauf si les fichiers sont supprimés après traitement. |
+| **Send to PA** | **Template settings** *(défaut)*, **Y – Force (UBL templates)** ou **N – Skip**. |
+| **Mode** | Mode de traitement d'un lot XML : `AUTO` *(défaut, déterminé document par document)*, `SINGLE`, `BURST` ou `UBL`. |
+
+Les dossiers qui alimentent le **même modèle** doivent porter les mêmes options de lot : la première ligne l'emporte, et un écart est journalisé.
+
+---
+
+## Déroulement d'une exécution
+
+1. **Lister** — chaque dossier est parcouru à la recherche des fichiers qui correspondent à son motif — plus récents que *dernier scan − recouvrement*, ou tous avec *All files*. Un dossier parcouru pour la première fois, sans date, ne prend que la fenêtre de recouvrement — utiliser une date de rattrapage pour l'historique.
+2. **Filtrer** — les fichiers déjà traités (nom de fichier source présent dans l'archive) ou déjà en attente au format XML dans le répertoire d'entrée du modèle sont écartés, sauf si le dossier est en mode remplacement.
+3. **Convertir** — les PDF sont convertis en XML en parallèle dans le répertoire d'entrée du modèle ; les fichiers XML et UBL sont copiés tels quels. Pour un [modèle à source PDF](../management/documents.md#extraction-pdf), tout PDF texte passe par les réglages d'extraction PDF du modèle au lieu du convertisseur JD Edwards.
+4. **Traiter** — une fois toutes les conversions faites, un lot s'exécute par modèle : le lot en une seule JVM pour un modèle XML ou PDF, avec le parallélisme propre au lot ; la boucle fichier par fichier pour un modèle UBL, les fichiers en échec étant déplacés dans le dossier des erreurs.
+
+La date de dernier scan avance à chaque exécution. Un fichier en échec est **réessayé** tant qu'il reste dans la fenêtre de recouvrement et signalé **par son nom** — il ne bloque jamais les autres : dans un lot, un fichier en erreur est marqué en échec et déplacé dans le dossier des erreurs pendant que les autres fichiers se terminent.
+
+**Un seul lot à la fois.** Le lot d'un modèle verrouille son répertoire d'entrée pendant toute sa durée : un second lot ne peut pas démarrer sur les mêmes fichiers. Un parcours manuel ou planifié qui trouve le répertoire verrouillé convertit quand même les nouveaux fichiers, laisse le traitement au lot en cours et le signale dans son journal.
+
+### Mode répertoire d'entrée \{#mode-repertoire-entree\}
+
+Un dossier dont le **Directory est le répertoire d'entrée du modèle** déclenche simplement le lot : ni copie, ni date, ni contrôle des fichiers déjà traités — le lot prend ce que contient le répertoire. C'est la forme « dossier surveillé » d'un job planifié *Directory*.
+
+---
+
+## Exécuter maintenant
+
+Le groupe **Run now** exécute la configuration enregistrée à la demande :
+
+- **Dry run** — liste seulement ce qui serait converti et traité.
+- **Scan and process** — lance la récupération complète **en arrière-plan** : le journal de l'exécution s'affiche en direct sous les boutons, sans requête qui dépasse le délai du proxy.
+- Une **date de rattrapage** facultative élargit la fenêtre de chaque dossier pour cette exécution uniquement.
+
+---
+
+## Planification et ligne de commande
+
+- **Planifié** — dans [global → Planification → Batch Document Processing](../configuration/system/global.md), ajouter un job de lot avec la source **Watched folders**, toutes les *N* minutes ou **chaque jour** à heure fixe. Le job peut cibler un seul dossier (choisi parmi les répertoires configurés) ou tous. Les sources *Directory* et *BIP* restent disponibles.
+- **Ligne de commande** — `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]`.
+- **API** — `POST /api/watch-folders/run`.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Garder un recouvrement plus long que le temps de copie.** Un fichier encore en cours d'écriture au passage du scan est repris à l'exécution suivante tant qu'il reste dans la fenêtre.
+- **Cocher *Require mount* sur les partages réseau.** Sinon, un partage non monté ressemble à un dossier vide et rien n'est traité, sans alerte.
+- **Commencer par un dry run.** Il montre exactement quels fichiers un nouveau dossier récupérerait avant toute conversion.
+- **Un modèle, un seul jeu d'options de lot.** Deux dossiers qui alimentent le même modèle avec des options différentes sont traités avec les options de la première ligne.
 
 ---
 

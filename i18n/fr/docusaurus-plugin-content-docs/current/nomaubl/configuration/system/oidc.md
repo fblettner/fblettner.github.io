@@ -124,11 +124,11 @@ Le SSO est une nouvelle capacité — sur une mise à jour, vérifier la liste *
 |---|---|
 | **Issuer URL** | URL de base du fournisseur OIDC — par exemple `https://idp.example.com/realms/myrealm` pour un realm Keycloak, l'URL du tenant Auth0 ou l'endpoint Azure AD. NomaUBL récupère les métadonnées via `<issuer>/.well-known/openid-configuration` : les endpoints individuels (autorisation, token, userinfo, JWKS) n'ont jamais à être saisis manuellement. |
 | **Client ID** | Identifiant du client OIDC déclaré côté IdP pour NomaUBL. |
-| **Client secret** | Optionnel pour les clients publics PKCE (le fournisseur peut être configuré sans). Stocké en Base64 sur disque. |
+| **Client secret** | Optionnel pour les clients publics PKCE (le fournisseur peut être configuré sans). Transmis au fournisseur d'identité exactement tel que saisi. |
 | **Redirect URI** | Doit correspondre **exactement** à l'URI de redirection enregistrée côté IdP. Valeur typique : `https://<votre-hôte>/api/auth/oidc/callback`. |
 | **Scopes** | Séparés par des espaces. Par défaut `openid profile email`. Ajouter ici les scopes spécifiques au fournisseur quand des claims supplémentaires sont nécessaires. |
 | **Token endpoint authentication** | Mode d'échange du code d'autorisation contre les jetons. **PKCE** *(défaut)* transmet le secret dans le corps de la requête (`client_secret_post`) ; **HTTP Basic** le transmet dans l'en-tête `Authorization` (`client_secret_basic`), sans PKCE — pour les fournisseurs d'identité qui n'acceptent que ce mode. Reprendre le réglage du client côté IdP. |
-| **Debug logging** | `Y` écrit dans le journal serveur le résultat de la découverte, l'URL d'autorisation, l'échange de jetons et les claims du jeton d'identité, jetons et secrets masqués. Les connexions et les refus (erreur IdP, état expiré, échec de l'échange de jetons, domaine refusé, compte inconnu) sont toujours journalisés. |
+| **Debug logging** | `Y` écrit dans le journal serveur le résultat de la découverte, l'URL d'autorisation, l'échange de jetons et les claims du jeton d'identité, jetons et secrets masqués ; la requête de jeton affiche aussi la longueur et l'empreinte SHA-256 du secret client réellement envoyé, à comparer avec celle du fournisseur quand il répond `invalid_client`. Les connexions et les refus (erreur IdP, état expiré, échec de l'échange de jetons, domaine refusé, compte inconnu) sont toujours journalisés. |
 
 ---
 

@@ -219,7 +219,9 @@ Deux cas suivent leur propre règle :
 
 Les historiques mal ordonnés par une règle antérieure sont détectés et remis en ordre à l'exécution suivante.
 
-Le contrôle signale aussi une **facture dont le statut diffère du dernier état réel de son historique**, affichée sous la forme *actuel → attendu*, et la réaligne à l'application. Le *dernier état réel* ignore le marqueur de retraitement (`9912`) et le marqueur de courrier transmis (`9908`), dans n'importe quel ordre — un `200` `NON_TRANSMISE` déposé reste donc tel quel. La même règle s'applique à tous les réalignements d'en-tête : complément d'intégrité, récupération des statuts et suppression d'un événement d'historique. Le marqueur de courrier transmis compte comme un événement applicatif : il n'est jamais signalé comme mal ordonné.
+Le contrôle signale aussi une **facture dont le statut diffère du dernier état réel de son historique**, affichée sous la forme *actuel → attendu*, et la réaligne à l'application. Le *dernier état réel* ignore le marqueur de retraitement (`9912`) et le marqueur de courrier transmis (`9908`), dans n'importe quel ordre — un `200` `NON_TRANSMISE` déposé reste donc tel quel. La même règle s'applique à tous les réalignements d'en-tête : complément d'intégrité, récupération des statuts et suppression d'un événement d'historique. Le marqueur de courrier transmis compte comme un événement applicatif : il n'est jamais signalé comme mal ordonné. Un événement de génération placé juste sous un marqueur de retraitement — la trace laissée par un ancien retraitement — est ignoré comme le marqueur, de même qu'une ligne d'historique sans code.
+
+**Contrôler l'ordre** et **Nettoyer N sélectionné(s)** s'exécutent **en arrière-plan** : la page affiche le journal de l'exécution au fil de l'eau, puis les résultats. La recherche d'écarts de statut lit l'historique une seule fois, en un passage, journalise sa progression toutes les 50 000 lignes, le résultat par paire *actuel → attendu* et une synthèse finale — une base volumineuse ne se termine plus par une erreur de proxy.
 
 ---
 

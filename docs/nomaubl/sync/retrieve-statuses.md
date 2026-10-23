@@ -219,7 +219,9 @@ Two cases are handled on their own terms:
 
 Histories ordered wrongly by an earlier rule are detected and put back in order by the next run.
 
-The check also reports an **invoice whose status differs from the latest real state of its history**, shown as *current → expected*, and realigns it on apply. The *latest real state* looks past the reprocess marker (`9912`) and the mail-sent marker (`9908`) in whatever order they appear — so a deposited `200` `NON_TRANSMISE` stays as such. The same rule applies to every header realignment: integrity backfill, status poll and deletion of a history event. The mail-sent marker counts as an application event: it is never reported as misordered.
+The check also reports an **invoice whose status differs from the latest real state of its history**, shown as *current → expected*, and realigns it on apply. The *latest real state* looks past the reprocess marker (`9912`) and the mail-sent marker (`9908`) in whatever order they appear — so a deposited `200` `NON_TRANSMISE` stays as such. The same rule applies to every header realignment: integrity backfill, status poll and deletion of a history event. The mail-sent marker counts as an application event: it is never reported as misordered. A generation event sitting directly under a reprocess marker — the trace an earlier reprocess left — is ignored like the marker, and so is a history row without a code.
+
+**Check ordering** and **Clean N selected** run **in the background**: the page shows the run's log as it goes, then the findings. The status-drift scan reads the history once, in a single pass, logs its progress every 50 000 rows, the result by *current → expected* pair and a closing summary — a large database no longer ends in a proxy error.
 
 ---
 

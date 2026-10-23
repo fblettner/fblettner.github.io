@@ -277,7 +277,7 @@ Le switch *Enregistrer les détails TVA* n'a **pas** besoin d'être activé pour
 
 ## `watch-folders <env>` — récupérer les dossiers surveillés \{#watch-folders\}
 
-Lance la récupération des [dossiers surveillés](../configuration/system/watched-folders.md) en ligne de commande — la même exécution que le bouton *Scan and process* de l'éditeur et que le job de lot planifié avec la source *Watched folders*.
+Lance la récupération des [dossiers surveillés](../sync/watched-folders.md) en ligne de commande — la même exécution que le bouton *Scan and process* de l'éditeur et que le job de lot planifié avec la source *Watched folders*.
 
 ```bash
 ./nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]
@@ -402,6 +402,7 @@ Traite un (ou plusieurs) fichier source contre un modèle de document — ou app
 | `--no-db` | N'écrit pas en base (implique `--no-send`). | XML |
 | `--no-validate` | Ne valide pas l'UBL — utilisé par la réimpression du retraitement, où la facture électronique enregistrée reste la référence. | XML |
 | `--repair` | Reconstruit les tables facture (en-tête, lignes, TVA, validation) d'un document dont l'archive et l'historique de statuts sont intacts — archive et historique inchangés, aucun événement de cycle de vie, statut d'en-tête repris du dernier événement réel de l'historique, aucun envoi. Voir [Traitement de document → Réparation](../processing/document.md#reparation). | tous |
+| `--input-dir <dir>` | Exécute le lot sur un autre dossier que le répertoire d'entrée du modèle — utilisé par le retraitement groupé, qui dépose les sources dans un dossier de travail. | XML |
 | `--validate` | XSD + Schematron seulement — pas d'insertion BDD, pas de dépôt PA. | UBL |
 | `--send` | Force le dépôt PA, en surcharge du paramètre par défaut. Une source UBL envoie le fichier ; les sources XML, PDF et connecteur envoient chaque document comme si son type de document indiquait `F`. | tous |
 | `--no-debug` | Ignore les durées par étape (parse, validation, insertion en base, envoi PA) journalisées par défaut à chaque exécution. À utiliser sur les batchs nocturnes volumineux quand la surcharge par étape n'apporte rien dans les logs. | tous |
@@ -423,6 +424,16 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
                       --param customer=00001234 --param docNumber=2026000125 \
                       --no-debug
 ```
+
+---
+
+## `-reprocess` — retraiter les factures concernées \{#reprocess\}
+
+```bash
+java -jar nomaubl.jar -reprocess <configFile> [--full]
+```
+
+Sans option, réimprime toutes les factures **déposées non transmises** (`200` `NON_TRANSMISE`) d'un modèle avec *Allow reprocess* — sorties régénérées depuis la source archivée, sans modification en base ni envoi. Avec **`--full`**, retraite en totalité toutes les factures **en échec de validation** (`9905`) d'un modèle avec *Allow full reprocess* : enrichissement interrogé de nouveau, UBL régénéré, validé et envoyé selon les réglages, historique conservé. Les deux modes lancent un lot par modèle — voir [Documents → Sortie](./documents.md) pour les deux réglages du modèle.
 
 ---
 

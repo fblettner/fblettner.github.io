@@ -119,6 +119,16 @@ L'éditeur comporte **deux onglets** :
 |---|---|---|
 | **Results per page** | `10` | Nombre maximal de résultats renvoyés par requête de recherche INSEE. Augmenter pour élargir chaque page de résultats, diminuer pour limiter la taille des réponses réseau. |
 
+
+### Recherche Peppol \{#peppol-lookup\}
+
+Réglages de la [recherche Peppol](../../application/edirectory.md#peppol-directory) de la page E-Directory, pour les serveurs placés sur un réseau restreint (voir [Flux réseau](../../application/edirectory.md#network-flows)).
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **Resolve platform via SMP** | `Y` | `Y` lit le nom et l'identifiant de siège de la plateforme dans le certificat de son SMP — HTTPS vers le SMP de chaque plateforme. `N` s'arrête à la réponse du SML : la colonne *Plateforme* affiche l'hôte SMP (par ex. `smp.pennylane.com`), sans appel à attendre. Choisir `N` quand le réseau n'autorise pas le HTTPS vers les SMP des plateformes. |
+| **Public DNS fallback** | `N` | `N` n'utilise que le résolveur du serveur. `Y` relance les interrogations SML via `8.8.8.8` / `1.1.1.1` quand ce résolveur ne répond pas. Garder `N` quand le réseau interdit les résolveurs externes. |
+
 ---
 
 ## Onglet 2 — Connector

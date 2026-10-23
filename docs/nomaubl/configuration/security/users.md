@@ -123,7 +123,8 @@ Click **+ New User** at the top right of the section to open the create form. Fi
 | Field | Description |
 |---|---|
 | **Username** | Login identifier. Must be unique. **Cannot be changed after creation.** |
-| **Password** | Initial password set on the account. |
+| **Password** | Initial password set on the account. With SSO enabled (*Auth Mode* `oidc` or `both`), it is optional: left empty, the account signs in through the identity provider only, has no local password and is never asked to change one. |
+| **Require a new password at the first local login** | Checkbox shown once a password is typed, **ticked by default**. Untick it to let the user keep the initial password. A session opened through SSO is never sent to the change-password screen. |
 | **Full Name** | Display name shown in the UI. |
 | **Email** | Account email. |
 | **Role** | Role assigned to the user (dropdown listing roles defined in *Security → Roles*). |
@@ -141,7 +142,7 @@ Click **✏️** on any row to open the edit form for that user. The form is the
 | **Username** | Hidden — usernames are immutable. |
 | **Password** | Hidden — use **Reset Password** below instead. |
 | **Active** | `Yes` / `No` — toggles whether the account can log in. Disabling preserves the user's history without granting access. |
-| **Reset Password** | Optional field. **Leave empty to keep the current password**; type a new value to overwrite it. |
+| **Reset Password** | Optional field. **Leave empty to keep the current password**; type a new value to overwrite it — the *Require a new password at the first local login* checkbox then appears, as on creation. |
 
 Click **Save** to persist or **Cancel** to discard.
 
@@ -165,7 +166,7 @@ Inline feedback appears below the table:
 ## Tips & best practices
 
 - **Match Username to your SSO / corporate identifier** when applicable, even if NomaUBL is not federated yet — it makes future SSO migration painless.
-- **Set a strong initial password** on creation, then ask the user to change it on first login.
+- **Set a strong initial password** on creation and keep *Require a new password at the first local login* ticked, so the user picks their own at first login.
 - **Prefer *Active = No* over deletion** when an employee leaves — keeps the audit trail intact while immediately revoking access.
 - **Use Reset Password sparingly.** When users can change their own password elsewhere, this field is mostly for unlocking accounts after a password loss.
 - **Re-run *Initialize Database*** *(Database Connectors → NomaUBL)* on a fresh deployment if no users exist — it provisions the seed `admin`.

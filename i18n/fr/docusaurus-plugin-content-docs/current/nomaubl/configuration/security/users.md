@@ -123,7 +123,8 @@ Cliquer sur **+ Nouvel utilisateur** en haut à droite de la section ouvre le fo
 | Champ | Description |
 |---|---|
 | **Username** | Identifiant de connexion. Doit être unique. **Non modifiable après création.** |
-| **Password** | Mot de passe initial du compte. |
+| **Password** | Mot de passe initial du compte. Avec le SSO activé (*Auth Mode* `oidc` ou `both`), il est facultatif : laissé vide, le compte se connecte uniquement via le fournisseur d'identité, n'a pas de mot de passe local et n'est jamais invité à en changer. |
+| **Require a new password at the first local login** | Case à cocher affichée dès qu'un mot de passe est saisi, **cochée par défaut**. La décocher laisse l'utilisateur conserver le mot de passe initial. Une session ouverte via le SSO n'est jamais redirigée vers l'écran de changement de mot de passe. |
 | **Full Name** | Nom complet affiché dans l'interface. |
 | **Email** | Adresse e-mail du compte. |
 | **Role** | Rôle affecté à l'utilisateur (liste déroulante des rôles définis dans *Security → Roles*). |
@@ -141,7 +142,7 @@ Cliquer sur **✏️** sur une ligne ouvre le formulaire d'édition. Le formulai
 | **Username** | Masqué — les identifiants sont immuables. |
 | **Password** | Masqué — utiliser **Reset Password** ci-dessous à la place. |
 | **Active** | `Yes` / `No` — autorise ou non la connexion. La désactivation préserve l'historique de l'utilisateur sans lui accorder d'accès. |
-| **Reset Password** | Champ optionnel. **Laisser vide pour conserver le mot de passe actuel** ; saisir une nouvelle valeur pour l'écraser. |
+| **Reset Password** | Champ optionnel. **Laisser vide pour conserver le mot de passe actuel** ; saisir une nouvelle valeur pour l'écraser — la case *Require a new password at the first local login* apparaît alors, comme à la création. |
 
 Cliquer sur **Enregistrer** pour enregistrer ou sur **Annuler** pour annuler.
 
@@ -165,7 +166,7 @@ Des messages en ligne s'affichent sous le tableau :
 ## Conseils & bonnes pratiques
 
 - **Aligner Username sur l'identifiant SSO / d'entreprise** dès que possible, même si NomaUBL n'est pas encore fédéré — la migration SSO future en sera grandement simplifiée.
-- **Définir un mot de passe initial robuste** à la création, puis demander à l'utilisateur de le changer dès la première connexion.
+- **Définir un mot de passe initial robuste** à la création et laisser cochée *Require a new password at the first local login* : l'utilisateur choisit le sien à la première connexion.
 - **Préférer *Active = No* à la suppression** au départ d'un collaborateur — l'accès est immédiatement révoqué, la piste d'audit est conservée.
 - **Utiliser Reset Password avec parcimonie.** Quand les utilisateurs peuvent changer leur mot de passe ailleurs, ce champ sert principalement au déblocage après perte de mot de passe.
 - **Relancer *Initialize Database*** *(Database Connectors → NomaUBL)* sur un déploiement neuf si aucun utilisateur n'existe — l'opération provisionne le compte `admin` initial.

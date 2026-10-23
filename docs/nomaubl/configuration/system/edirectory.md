@@ -119,6 +119,16 @@ The editor has **two tabs**:
 |---|---|---|
 | **Results per page** | `10` | Maximum number of results returned per INSEE search query. Increase to widen each result page; decrease to limit network payloads. |
 
+
+### Peppol lookup \{#peppol-lookup\}
+
+Settings for the [Peppol lookup](../../application/edirectory.md#peppol-directory) of the E-Directory page, for servers on restricted networks (see [Network flows](../../application/edirectory.md#network-flows)).
+
+| Field | Default | Description |
+|---|---|---|
+| **Resolve platform via SMP** | `Y` | `Y` reads the provider's name and seat from its SMP certificate — HTTPS to each provider's SMP host. `N` stops at the SML answer: the *Plateforme* column shows the SMP host (e.g. `smp.pennylane.com`), with no call to wait for. Set `N` when the network does not allow HTTPS to the providers' SMP hosts. |
+| **Public DNS fallback** | `N` | `N` uses the server's resolver only. `Y` retries the SML lookups through `8.8.8.8` / `1.1.1.1` when that resolver gives no answer. Keep `N` when the network forbids external resolvers. |
+
 ---
 
 ## Tab 2 — Connector

@@ -26,7 +26,8 @@ The editor has **four tabs**:
 ## Opening the editor
 
 - *Settings* → **e-reporting** template (the system-level resource).
-- The default scope is the platform-wide `e-reporting` template. Per-company overrides live on `e-reporting-{kco}` templates and follow the same shape; the runtime resolver looks at the per-company template first and falls back to the platform-wide one.
+- A **Scope** bar at the top picks the setup being edited: **Default (e-reporting)** or **Company *kco* (e-reporting-*kco*)**. Type a company code and click **Add override** to create a company setup seeded from the default; **Delete override** removes the selected one. Each company can thus carry its own issuer, frequency and PA connection.
+- The runtime looks at the company setup first and falls back to the default. The companies to run are detected from the company setups; **Companies (kco) override**, on the default, only names the companies to run **with the default settings** — a company with its own setup uses that setup instead.
 
 ---
 

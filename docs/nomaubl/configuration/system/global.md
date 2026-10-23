@@ -122,7 +122,8 @@ The editor has **six tabs**:
 | Field | Description |
 |---|---|
 | **Application Home** | Root install directory of NomaUBL (e.g. `/app/nomaubl`). Resolved by the `%APP_HOME%` placeholder used in document template paths. |
-| **Environment** | Short environment name (e.g. `demo`, `PD`). Resolves the `%ENV%` placeholder used in document template paths (`rtf`, `xsl`, `ublXslt`) so the same template can target multiple environments. |
+| **Environment** | Short environment name (e.g. `demo`, `PD`). Resolves the `%ENV%` placeholder used in document template paths (`rtf`, `xsl`, `ublXslt`) so the same template can target multiple environments. The name is also shown as a **badge right of the application title** and in the browser tab. |
+| **Theme colour** | Colour picker, next to the environment. Replaces the accent blue of the whole interface — title, environment badge, primary buttons, links, focus rings — so each environment is told apart at a glance. Badge and colour are served by a public endpoint, so the login page already carries them. Blank keeps the default blue. |
 | **Process Home** | Working directory used by NomaUBL during processing (e.g. `/app/nomaubl/process`). |
 
 ### File Paths
@@ -164,8 +165,9 @@ The editor has **six tabs**:
 | Field | Values | Description |
 |---|---|---|
 | **Update DB** | `Y` / `N` | When `Y`, processing runs persist their results to the database. Set to `N` only for dry runs / debugging. |
-| **Max threads** | *(blank = all cores)* | Caps how many invoices are processed at once. An XML-spool template can process its whole input folder in a single **parallel** pass — much faster on a folder of thousands of single-invoice files, and used the same way by a scheduled scan, an on-demand run and the command-line batch. Each file stays its own unit (name, source archive and traceability kept) and one file's failure doesn't stop the others. Set a value to keep headroom for other services on a shared host; leave it blank to use every available core. UBL templates and per-job (BIP) processing are unaffected. |
+| **Max threads** | *(blank = all cores)* | Caps how many invoices are processed at once. An XML-spool template can process its whole input folder in a single **parallel** pass — much faster on a folder of thousands of single-invoice files, and used the same way by a scheduled scan, an on-demand run and the command-line batch. Each file stays its own unit (name, source archive and traceability kept) and one file's failure doesn't stop the others. Set a value to keep headroom for other services on a shared host; leave it blank to use every available core. UBL templates and per-job (BIP) processing are unaffected. It also bounds the bulk reprocess, which runs one batch per template. |
 | **`debugProfile`** | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [Tech Dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
+| **Server log file** | path *(blank = automatic)* | File read by the [Server log](../../management/server-log.md) page. Blank = the file the launcher redirects the server output to (`nomaubl-<env>.log`); set it when the server runs under another launcher. |
 
 ### PDF
 
@@ -173,6 +175,7 @@ The editor has **six tabs**:
 |---|---|
 | **Logo path** | Path to the company logo drawn at the top of the supplier block when a PDF template has *Show logo* on (see [PDF Templates](../../management/pdf-templates.md)). Accepts the path variables `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%`, `%KCO%`, `%DOC%`, `%DCT%` and any `{{token}}` from the invoice catalogue — e.g. `%APP_HOME%/logos/{{kco}}.png`, so each company resolves to its own logo. A `{ }` button opens a searchable token list. PNG, JPG and GIF are supported. |
 | **Logo offset X (pt)** | Horizontal shift of the logo, in points, to absorb whitespace baked into the source image. Default `0`. |
+| **Logo width (pt)** / **Logo height (pt)** | Box the logo is scaled to fit, in points: ratio kept, enlarged when the image is smaller; one dimension alone lets the other follow the image. Blank = the previous cap of 200 × 80 points, without enlarging. The visual builder preview uses the same size as the produced PDF. |
 
 ---
 
@@ -281,7 +284,7 @@ The remaining fields configure how the job picks up and processes documents:
 | **Process type** | `xml` / `ubl` | `xml` = full pipeline (transform + process); `ubl` = direct UBL processing (input is already UBL). |
 | **Template** *(when Process type = `xml`)* | from list | Document template to apply. Lists templates of type `document`. |
 | **Mode** *(when Process type = `xml`)* | `AUTO` / `SINGLE` / `BURST` / `UBL` | Processing mode — `AUTO` lets NomaUBL decide; `SINGLE` and `BURST` force the corresponding output strategy; `UBL` produces UBL only. |
-| **Source** | `bip` / `directory` / `watch-folders` | Where to fetch documents from: `bip` = JDE Print Queue *(JDE-specific)*; `directory` = scan the **Input Directory** configured in Tab 1; `watch-folders` = run the [Watched folders](./watched-folders.md) pickup — the job then targets one configured directory (picked from a dropdown) or all of them. |
+| **Source** | `bip` / `directory` / `watch-folders` | Where to fetch documents from: `bip` = JDE Print Queue *(JDE-specific)*; `directory` = scan the **Input Directory** configured in Tab 1 (a [watched folder](../../sync/watched-folders.md#input-folder-mode) pointing at the input folder does the same); `watch-folders` = run the [Watched folders](../../sync/watched-folders.md) pickup — the job then targets one configured directory (picked from a dropdown) or all of them. |
 | **Extract mode** *(when Source = `bip`)* | `input` / `output` / `both` | Which BIP artefacts to pull: `input` = source XML only; `output` = generated output files only; `both` = both. |
 | **Language filter** *(when Source = `bip`)* | text | Optional BIP language filter (e.g. `FR`). Empty = all languages. |
 | **Replace existing** | `Y` / `N` | When `Y`, re-import documents that already exist in NomaUBL (overwrite); when `N`, skip duplicates. |

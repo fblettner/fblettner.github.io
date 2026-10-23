@@ -161,6 +161,8 @@ const config: Config = {
           {from: '/nomaubl/configuration/documents', to: '/nomaubl/management/documents'},
           // 2026.05.4 — Notifications inbox promoted from Management to Application (primary nav).
           {from: '/nomaubl/management/notifications', to: '/nomaubl/application/notifications'},
+          // 2026.10.23 — Watched folders promoted from Configuration → System to its own Synchronization page.
+          {from: '/nomaubl/configuration/system/watched-folders', to: '/nomaubl/sync/watched-folders'},
         ],
       },
     ],

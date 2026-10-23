@@ -233,22 +233,23 @@ La grille utilise `align-items: stretch` et chaque carte grandit avec `flex: 1` 
 
 ## Disposition
 
-La grille à 12 colonnes est organisée en huit rangées :
+La grille à 12 colonnes est organisée en neuf rangées :
 
 | Rangée | Disposition | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **Santé système** · **Raccourcis** |
-| 2 | `4 + 4 + 4` | **Échec d'envoi** · **En attente de revue** · **À retraiter** |
+| 2 | `3 + 3 + 3 + 3` | **Échec d'envoi** · **En attente de revue** · **À retraiter** · **À retraiter en totalité** |
 | 3 | `4 + 4 + 4` | **Planificateur** · **Courbe d'erreurs · 14j** · **Taux de relance · 14j** |
 | 4 | `4 + 4 + 4` | **JVM · threads + GC** · **Débit · 14j** · **Sessions / Clients actifs** |
 | 5 | `8 + 4` | **Système de fichiers** · **Temps de traitement par modèle · 14j** |
-| 6 | `12` | **Traitements en cours · direct** |
-| 7 | `12` | **Vérification de configuration** |
-| 8 | `5 + 7` | **Tables de base** · **Erreurs récentes** |
+| 6 | `12` | **Traitements en cours** |
+| 7 | `12` | **Événements de traitement en direct** |
+| 8 | `12` | **Vérification de configuration** |
+| 9 | `5 + 7` | **Tables de base** · **Erreurs récentes** |
 
 Un bouton **Rafraîchir** dans l'en-tête de la page relance les quatre endpoints en parallèle.
 
-La carte **Échec d'envoi** est arrivée en 2026.06.03, en même temps que la page [Reprise auto](../configuration/system/auto-retry.md) dans les Paramètres — la relance manuelle en un clic sur le tableau de bord et le passage planifié de nuit utilisent le même chemin de relance sous-jacent.
+La relance manuelle en un clic de la carte **Échec d'envoi** et le passage planifié de nuit de la page [Reprise auto](../configuration/system/auto-retry.md) utilisent le même chemin de relance sous-jacent.
 
 ---
 
@@ -275,17 +276,9 @@ Le sous-titre de la carte affiche, à droite, la **version du build et la date d
 
 Liste statique de raccourcis — les pages les plus utilisées par l'opérateur IT. Chaque lien utilise le même mécanisme `onNavigate` que la barre latérale et ouvre directement la page cible. Cibles par défaut : **Paramètres**, **Journal de traitement**, **Versions de fichiers**, **Références croisées**.
 
-### Échec d'envoi (ligne 2, largeur 4) \{#send-failed\}
+### Échec d'envoi (rangée 2, span 3) \{#send-failed\}
 
 Une seule carte en grand chiffre qui indique combien de factures sont actuellement en *Échec d'envoi* (statut `9904`). Quand le compteur n'est pas à zéro, un bouton **Tout renvoyer (N)** sous le chiffre rejoue chaque facture concernée vers la [Plateforme Agréée](../configuration/system/einvoicing.md). Le clic ouvre la [fenêtre de progression partagée](#shared-progress-window) — compteurs en direct, bouton *Annuler* et bouton *Continuer en arrière-plan* qui masque la fenêtre pendant que le traitement se poursuit côté serveur. Le renvoi est limité à **100 ms par appel** pour que la PA reste dans son enveloppe de débit.
-
-### En attente de revue (rangée 3, span 4) \{#waiting-for-review\}
-
-Une carte en grand chiffre qui compte les factures **retenues avant envoi** — celles dont le type de document porte le drapeau d'envoi `W` (*En attente*) sur la page [Types de document](../configuration/system/document-types.md). Ces factures ont été générées et validées, mais volontairement pas transmises, pour qu'un utilisateur puisse les vérifier au préalable. Quand le compteur n'est pas à zéro, un bouton **Tout envoyer (N)** libère chaque facture retenue vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même [fenêtre de progression](#shared-progress-window) que *Échec d'envoi*. Elle reprend le principe de la carte *Échec d'envoi* — même grand chiffre, même action groupée en un clic — mais pour la file de revue plutôt que la file d'échecs.
-
-### À retraiter (rangée 2, span 4) \{#to-reprocess\}
-
-Une carte en grand chiffre qui compte les factures **éligibles au retraitement** — celles que la plateforme a **déposées sans les transmettre** (statut 200, motif `NON_TRANSMISE`), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** reconstruit chaque facture éligible à partir de son XML JDE archivé (en régénérant la facture électronique, le PDF et le XML) via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
 
 | Élément | Comportement |
 |---|---|
@@ -295,6 +288,20 @@ Une carte en grand chiffre qui compte les factures **éligibles au retraitement*
 | Limitation de débit | 100 ms entre deux appels — fixé dans le code, non paramétrable ici par l'opérateur. La planification [Reprise auto](../configuration/system/auto-retry.md) propose sa propre limite pour l'équivalent planifié. |
 
 Le bouton manuel sert à un renvoi ponctuel en pleine journée (une coupure PA passagère qui s'est résolue, un petit lot à relancer tout de suite). Pour des relances de nuit sans supervision, planifier une ligne sur la page [Reprise auto](../configuration/system/auto-retry.md) — même chemin de code, sans intervention d'un opérateur.
+
+### En attente de revue (rangée 2, span 3) \{#waiting-for-review\}
+
+Une carte en grand chiffre qui compte les factures **retenues avant envoi** — celles dont le type de document porte le drapeau d'envoi `W` (*En attente*) sur la page [Types de document](../configuration/system/document-types.md). Ces factures ont été générées et validées, mais volontairement pas transmises, pour qu'un utilisateur puisse les vérifier au préalable. Quand le compteur n'est pas à zéro, un bouton **Tout envoyer (N)** libère chaque facture retenue vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même [fenêtre de progression](#shared-progress-window) que *Échec d'envoi*. Elle reprend le principe de la carte *Échec d'envoi* — même grand chiffre, même action groupée en un clic — mais pour la file de revue plutôt que la file d'échecs.
+
+### À retraiter (rangée 2, span 3) \{#to-reprocess\}
+
+Une carte en grand chiffre qui compte les factures **concernées par le retraitement** — celles que la plateforme a **déposées sans les transmettre** (statut 200, motif `NON_TRANSMISE`), sur un modèle où **Allow reprocess** est activé. Quand le compteur n'est pas à zéro, un bouton **Tout retraiter (N)** **réimprime** chaque facture concernée à partir de sa source archivée — PDF / XML lisible et fichier UBL régénérés, sans modification en base ni nouvelle validation — via la même [fenêtre de progression](#shared-progress-window). Le retraitement conserve le statut de chaque facture, inscrit une entrée *Retraitement* dans l'historique et ne renvoie jamais rien à la plateforme — voir [Documents → Allow reprocess](../management/documents.md) pour le réglage par modèle et [Factures](invoices.md#reprocess) pour la même action sur des lignes sélectionnées.
+
+### À retraiter en totalité (rangée 2, span 3) \{#to-reprocess-full\}
+
+Le pendant de la carte précédente pour les factures en **échec de validation** (`9905`) sur un modèle où **Allow full reprocess** est activé. Une fois les données corrigées dans le système source, un bouton **Tout retraiter (N)** retraite chaque facture **en totalité** depuis sa source archivée : l'enrichissement est interrogé de nouveau, l'UBL régénéré, validé et envoyé à la PA selon les réglages du modèle et du type de document. L'historique des statuts est conservé et un marqueur de retraitement ouvre un nouveau cycle — les statuts qui suivent sont donc enregistrés comme nouveaux.
+
+Les deux cartes lancent un **lot unique par modèle**, en arrière-plan avec son journal en direct : les sources sont déposées dans un dossier de travail, le réglage **Max threads** des réglages globaux limite le parallélisme, et une facture n'est jamais traitée deux fois.
 
 ### Planificateur (rangée 3, span 4)
 
@@ -309,15 +316,15 @@ Chaque ligne affiche le nom du job, la cadence, et une pastille de statut (vert 
 
 Les jobs **interrogation d'import PA** et **récupération des statuts PA** portent un bouton **pause / reprise** — effectif au tick suivant et volontairement transitoire (un redémarrage du serveur relance toujours, une pause ne peut donc pas être oubliée). La [fenêtre calme quotidienne](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) s'affiche aussi ici, en surbrillance quand elle est active — pendant celle-ci, les deux interrogations sautent automatiquement leurs exécutions.
 
-### Courbe d'erreurs · 14j (rangée 2, span 4)
+### Courbe d'erreurs · 14j (rangée 3, span 4)
 
 Sparkline sur 14 jours des événements d'erreur enregistrés dans `F564237` (niveau `ERROR` ou `FATAL`). Le survol d'un point révèle la date et le compte ; le sous-titre indique la moyenne quotidienne et le total cumulé du jour.
 
-### Taux de relance · 14j (rangée 2, span 4)
+### Taux de relance · 14j (rangée 3, span 4)
 
 Un seul grand chiffre : ratio des *runs ayant abouti après une ou plusieurs relances* sur le total des runs des 14 derniers jours. Le sous-titre donne les valeurs absolues et la variation par rapport à la fenêtre précédente de 14 jours (vert quand le taux baisse, orange quand il monte).
 
-### JVM · threads + GC (rangée 3, span 4)
+### JVM · threads + GC (rangée 4, span 4)
 
 Carte complémentaire de Santé système pour un diagnostic JVM plus poussé :
 
@@ -326,11 +333,11 @@ Carte complémentaire de Santé système pour un diagnostic JVM plus poussé :
 - **GC** — nom du collecteur + temps total passé en GC.
 - **Classes chargées** — compteur du class-loader, utile pour repérer une fuite metaspace.
 
-### Débit · 14j (rangée 3, span 4)
+### Débit · 14j (rangée 4, span 4)
 
 Histogramme journalier des documents traités sur les 14 derniers jours. **Cliquer sur une barre** ouvre *Journal de traitement* pré-filtré sur ce jour — chemin direct entre « la barre du jour est courte » et « voyons ce qui a vraiment tourné ».
 
-### Sessions / Clients actifs · 15 min (rangée 3, span 4)
+### Sessions / Clients actifs · 15 min (rangée 4, span 4)
 
 Deux modes :
 
@@ -339,7 +346,7 @@ Deux modes :
 
 Dans les deux cas, chaque ligne affiche IP / utilisateur, l'horodatage du dernier accès et le compteur de hits.
 
-### Système de fichiers (rangée 4, span 8)
+### Système de fichiers (rangée 5, span 8)
 
 Pour chaque chemin configuré (`appHome`, `processHome`, `dirInput`, `singleOutput`, `burstOutput`, `dirArchive`, `dirError`) :
 
@@ -348,7 +355,7 @@ Pour chaque chemin configuré (`appHome`, `processHome`, `dirInput`, `singleOutp
 
 Les valeurs de chemin contenant des jokers d'exécution (`%TEMPLATE%`, `%FILE_NAME%`) sont tronquées au premier joker rencontré ; le rapport porte alors sur le répertoire **le plus profond existant par sa forme** au-dessus. `dirOutput` est exclu : il est toujours couvert par `processHome`.
 
-### Temps de traitement par modèle · 14j (rangée 4, span 4)
+### Temps de traitement par modèle · 14j (rangée 5, span 4)
 
 Temps moyen de traitement de bout en bout par modèle, en secondes, sur les 14 derniers jours. La carte charge les événements `START` / `END` de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` — la précédente version utilisait une auto-jointure SQL avec un `FETMPL` ambigu et une arithmétique `e.FEUPMT - s.FEUPMT` incorrecte ; ce point est corrigé.
 
@@ -358,7 +365,11 @@ Quand le commutateur [`debugProfile`](../configuration/system/global.md) sur le 
 
 Le flux Traitements en cours en dessous balise aussi les lignes avec le nom de l'étape, ce qui permet de trier un lot lent en direct. Laisser `debugProfile` à `N` en production ; passer à `Y` le temps d'un lot pour analyser un pipeline lent — les lignes additionnelles gonflent vite `F564237` sous charge.
 
-### Traitements en cours · direct (rangée 5, span 12)
+### Traitements en cours (rangée 6, span 12) \{#running-processes\}
+
+La liste des JVM de traitement actives sur la machine, relevée toutes les 5 s : celles lancées par ce serveur, avec la dernière ligne affichée par chacune, et les JVM **détachées** laissées par une instance précédente, un cron ou un lancement manuel (*sortie non capturée*). Chaque ligne indique le mode (`-process`, `-watch-folders`, `-import`), les arguments, la durée écoulée et un bouton **Arrêter**, qui termine cette JVM et ses propres sous-processus uniquement — les factures en cours restent dans leur état et les fichiers d'entrée sont conservés. L'arrêt demande le droit *integration-run*. Rien n'est arrêté au redémarrage du serveur : un lot peut donc se poursuivre pendant une mise à jour.
+
+### Événements de traitement en direct (rangée 7, span 12)
 
 Flux en direct des jobs qui démarrent et se terminent — la plupart sont lancés par le planificateur en arrière-plan. Le widget interroge `F564237` toutes les **5 secondes** avec un curseur incrémental `since=` ; chaque ligne porte un **badge de méthode** coloré :
 
@@ -375,7 +386,7 @@ Le flux est **dédupliqué sur `FEUKID`** — la même ligne ne peut donc pas ap
 
 La liste défilante est plafonnée aux 100 derniers événements ; les lignes plus anciennes sortent par le bas à mesure que de nouvelles arrivent. Pour une analyse approfondie, utiliser la page [Journal de traitement](../management/processing-log.md), qui conserve l'historique complet avec les vues groupées par job.
 
-### Vérification de configuration (rangée 6, span 12)
+### Vérification de configuration (rangée 8, span 12)
 
 Valide la configuration *orientée connecteur* utilisée aujourd'hui par l'application. Les anomalies sont listées par zone avec une sévérité (rouge erreur, orange avertissement, bleu information). La vérification couvre :
 
@@ -389,11 +400,11 @@ Les anciennes vérifications sur `paApiBaseUrl` / `paApiUsername` / `ublXsdPath`
 
 Une vérification propre s'affiche en `✔ 0 anomalie` en vert ; sinon la carte liste les anomalies par ordre de sévérité.
 
-### Tables de base (rangée 7, span 5)
+### Tables de base (rangée 9, span 5)
 
 Nombre de lignes par table NomaUBL — factures (`F564231`), cycle de vie (`F564235`), validation (`F564236`), journal d'exécution (`F564237`), notifications (`F564253`), e-Reporting (`F564260`–`F564262`), auth (`F564250`–`F564252`, `F564254`). Utile pour repérer une croissance inattendue (par exemple une table de notifications qui devrait avoir quelques centaines de lignes mais en a des millions).
 
-### Erreurs récentes (rangée 7, span 7)
+### Erreurs récentes (rangée 9, span 7)
 
 Les 8 derniers événements de `F564237` filtrés sur `level IN ('ERROR', 'FATAL')`. Chaque ligne affiche le badge de niveau, le code de cycle de vie et le triplet, le message et un horodatage relatif (*il y a 2 min*, *il y a 1 h*). Cliquer sur une ligne ouvre l'entrée correspondante dans *Journal de traitement*, où se trouvent la stack complète et les options de relance.
 

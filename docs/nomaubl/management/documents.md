@@ -356,6 +356,7 @@ With **Source = PDF**, the template takes a **text PDF** from any system — not
 |---|---|
 | A row read as *Label : value* (or label and value in two columns) | One element named after the label — `Montant TTC 1 189,55 €` → `<Montant_TTC>1189.55</Montant_TTC>`. Amounts and percents use a dot decimal, `dd/MM/yyyy` dates become ISO, identifiers printed with spaces (VAT number, SIREN, postal code) are compacted. |
 | A rate inside a label (`TVA 20,00%`) | A sibling element, so the name stays stable: `<TVA>198.26</TVA><TVA_taux>20.00</TVA_taux>`. |
+| A value made of segments separated by ` / `, some carrying their own label (`VIREMENT / IBAN : FR76 … / BIC : CCBPFRPPBDX / Titulaire : ACME SA`) | The unlabelled part stays in the element and each labelled segment becomes a sibling — `Paiement`, `Paiement_IBAN`, `Paiement_BIC`, `Paiement_Titulaire` — each mappable on its own; grouping spaces inside the IBAN are removed. |
 | A period (`01/09/2026 – 30/09/2026`) | Its two bounds as `<…_debut>` and `<…_fin>`, each mappable to its own UBL field. |
 | The table between the start and end anchors | `<Lignes>/<Ligne>`, columns named after the header row (inferred from the first row when the header is a single cell); wrapped labels are merged, a ruled line closes the table. |
 | The party boxes | `<Adresse_N>` blocks — `Nom`, `Rue` lines, `Code_postal`, `Ville`, `Pays`, plus the labelled lines printed in the box (supplier code, SIRET, VAT, phone, e-mail). |
@@ -401,7 +402,7 @@ A converted sample looks like this:
 </Document>
 ```
 
-The document editor and the XSL editor both **load a sample straight from a PDF** — the PDF is converted server-side with the template's saved settings (save the template first after changing the anchors). The [Process Document](../processing/document.md) page, the [watched folders](../configuration/system/watched-folders.md) and the command line process PDF-source templates like XML ones; `-pdf2xml <in.pdf> <out.xml> --text` converts a single file on its own (see [Command line](./command-line.md)).
+The document editor and the XSL editor both **load a sample straight from a PDF** — the PDF is converted server-side with the template's saved settings (save the template first after changing the anchors). The [Process Document](../processing/document.md) page, the [watched folders](../sync/watched-folders.md) and the command line process PDF-source templates like XML ones; `-pdf2xml <in.pdf> <out.xml> --text` converts a single file on its own (see [Command line](./command-line.md)).
 
 ---
 
@@ -414,7 +415,7 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | Field | Values | Description |
 |---|---|---|
 | **Transform** | `Y` / `N` | Whether to apply an XSL transformation pipeline before generating UBL. |
-| **XSL Pre-processing** | path | Optional XSL applied before indexation, e.g. to normalise the raw source XML (JD Edwards, SAP, NetSuite, custom ERP…). |
+| **XSL Pre-processing** | path | Optional XSL applied before indexation, e.g. to normalise the raw source XML (JD Edwards, SAP, NetSuite, custom ERP…). It must be **safe to run twice**: a reprocess replays the archived source, which already went through it — guard every element the XSL adds with `not(...)` so a second pass adds nothing. |
 | **XSL Indexation** | path | XSL used to generate the indexation / metadata applied to the document. Produces an XML file paired with the generated PDF for indexing purposes. |
 | **RTF Template** | path | RTF template used by BI Publisher to render the human-readable PDF. |
 
@@ -426,10 +427,11 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | **Custom Schematron** | path(s) | One or more **precompiled** Schematron stylesheets (`.xsl`, comma-separated, `%APP_HOME%` / `%ENV%` accepted) holding this customer's own rules — a mandatory classification, a buyer-reference pattern… They run **after** the standard packs, on this template only, so customer rules never touch the shipped packs the upgrade refreshes. A stylesheet is loaded once per file stamp: an edited file is picked up on the next validation without a restart. Findings land in the validation errors under a short source derived from the file name (`BR-ACME-rules.xsl` → `ACME`); a missing or broken file is reported as an error on the invoice. Batch and single processing, the *Validate* button and the validate API all honour it. |
 | **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
 | **LISIBLE** | `Y` / `N` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. |
+| **Invert sign** | `N – No` (default) / `Credit notes only` / `All documents` | Flips the sign of the amounts read from the source: line net amounts, document totals, prepaid and rounding amounts, total VAT and every VAT breakdown row. The unit price is always emitted as a positive value, allowance and charge amounts are read as absolute values, and the quantity takes the sign of its line amount. *Credit notes only* applies to documents resolved as `381`, `396`, `261`, `262`, `502` or `503`. A spool that prints a credit note with negative amounts thus yields the positive CreditNote the standard expects, with no change to the document XSL. |
 
 ### Processing rules \{#processing-rules\}
 
-The **Processing rules** group routes the documents of the XML pipeline **before anything is generated**. Each rule combines one or more conditions on the document with one outcome. Rules are evaluated per document once its document type is resolved, **in order — the first match wins**; no matching rule means normal processing. They apply to every XML ingestion path: scheduler, [watched folders](../configuration/system/watched-folders.md), *process*, *fetch-single* and *Fetch Input*. UBL-source documents are deliberately left out — their transaction type is already written in the document.
+The **Processing rules** group routes the documents of the XML pipeline **before anything is generated**. Each rule combines one or more conditions on the document with one outcome. Rules are evaluated per document once its document type is resolved, **in order — the first match wins**; no matching rule means normal processing. They apply to every XML ingestion path: scheduler, [watched folders](../sync/watched-folders.md), *process*, *fetch-single* and *Fetch Input*. UBL-source documents are deliberately left out — their transaction type is already written in the document.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px'}}>
   <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px'}}>
@@ -499,7 +501,8 @@ A template with *Source = UBL* now embeds the same PDFs as the XML flow — afte
 |---|---|
 | **No-Data Key** | Name of an XML element that **must exist** in the spool. If absent, NomaUBL considers the document empty and skips it. Useful to filter out spool sections that aren't real invoices. |
 | **Set Locale** | Locale used to render the PDF (e.g. `en_US`, `fr_FR`). Affects date and number formatting in the PDF only. |
-| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. Only **XML-source** templates are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
+| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. XML and PDF sources are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
+| **Allow full reprocess** | `Y` / `N` (default `N`). When `Y`, an invoice in *Validation failed* (`9905`) can be **reprocessed in full** from its archived source once the data was corrected at the source: the enrichment is queried again, the UBL regenerated, validated and sent to the PA when the template and document type say so. The status history is kept and a reprocess marker opens a new cycle. XML and PDF sources. Triggered from the invoice window (*Reprocess* button on a `9905`), the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess-full), the API (`kind: "full"`) or `-reprocess --full`. |
 
 ---
 
@@ -542,7 +545,7 @@ Each **rule** describes one lookup:
 | **Target** | Where the new elements land — on the scope node itself, in a new group, or in an existing group. |
 | **Result** | A single flat set of fields, or a repeating group (one child per returned row). |
 
-Rules run in order, so a later rule can use what an earlier one added; identical lookups are cached, so the connector is called once per distinct key. The enriched spool is stored with the archived source (`F564230`), so re-processing a document doesn't call the connector again. Nothing runs unless a rule is configured — existing templates are unaffected.
+Rules run in order, so a later rule can use what an earlier one added; identical lookups are cached, so the connector is called once per distinct key. The enriched spool is stored with the archived source (`F564230`), so a reprint doesn't call the connector again. A full reprocess queries it again, and the enrichment then **replaces** the rows of the previous run instead of adding to them (single-row rules already overwrote their fields). Nothing runs unless a rule is configured — existing templates are unaffected.
 
 **Dry run** — with a sample spool loaded, *Dry run* tries the rules against it: it calls the real connectors and shows the enriched XML, a summary and any warnings, without changing anything. Download the result (named after the sample, e.g. `26000001CG00005_enrich.xml`) to build the XSL mapping straight away.
 

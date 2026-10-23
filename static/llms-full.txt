@@ -31983,10 +31983,10 @@ Participants are found in two ways:
 | Column | Content |
 |---|---|
 | **Participant** | The Peppol participant identifier (ICD + value, e.g. `0225:80320631700015`). |
-| **Plateforme (PA)** | The service provider operating the participant, with its seat id; `non résolu` when the SMP step couldn't resolve it. |
+| **Plateforme (PA)** | The service provider operating the participant, with its seat id. When the SMP certificate cannot be read, the SMP host followed by *SMP non joignable*, the reason in the tooltip; `non résolu` with the reason when the SML gave no SMP. With *Resolve platform via SMP* = `N`, the SMP host. |
 | **Enregistré le** | The participant's Peppol registration date — *no business card* for a participant found through the SML only. |
 
-The lookup runs once for every open company card — including a card left open from a previous search — and is also available as `POST /api/peppol-lookup` for integrations (see the [API reference](/nomaubl/api-reference)). A participant with no reachable provider still lists its registration and name — only the *Plateforme* cell reads `non résolu`. An outage of the Peppol Directory no longer hides the participants found through the SML.
+The lookup runs once for every open company card — including a card left open from a previous search — and is also available as `POST /api/peppol-lookup` for integrations (see the [API reference](/nomaubl/api-reference)). A participant with no reachable provider still lists its registration and name. The server log lists each unresolved participant with its reason. An outage of the Peppol Directory no longer hides the participants found through the SML.
 
 The whole page is also available as a single call: `GET /api/e-directory/search?q=…` (or `POST` with `{q, peppol}`) returns the INSEE companies matching a name, SIREN or SIRET with head office and establishments, the PPF directory lines of each company and, with `peppol=true`, its Peppol participants.
 
@@ -32002,15 +32002,15 @@ Every E-Directory external call is made **server-side** — from the NomaUBL ser
 | Peppol directory (business cards) | `directory.peppol.eu` | HTTPS 443 |
 | Peppol SML resolution — **primary zone** (OpenPeppol) | DNS NAPTR queries on `*.iso6523-actorid-upis.participant.sml.prod.tech.peppol.org` | DNS 53 via the server's resolver |
 | Peppol SML resolution — **fallback zone** (former European Commission SML) | DNS NAPTR queries on `*.iso6523-actorid-upis.edelivery.tech.ec.europa.eu` | DNS 53 via the server's resolver |
-| Public DNS resolvers — used only when the server's resolver answers nothing | `8.8.8.8`, `1.1.1.1` | DNS 53 (UDP and TCP) |
-| Peppol SMP (provider resolution) | dynamic — the SMP host of each participant's platform (e.g. `smp.pennylane.com`) | HTTPS 443 |
+| Public DNS resolvers — only with *Public DNS fallback* = `Y`, when the server's resolver answers nothing | `8.8.8.8`, `1.1.1.1` | DNS 53 (UDP and TCP) |
+| Peppol SMP (provider resolution) — only with *Resolve platform via SMP* = `Y` | dynamic — the SMP host of each participant's platform (e.g. `smp.pennylane.com`) | HTTPS 443 |
 
 What matters for the rules:
 
 - **INSEE and `directory.peppol.eu` are fixed hostnames** — easy to whitelist. The INSEE entry also covers the invoice modal's client search and the [Fix buyer](./invoices.md#fix-buyer) search (same API).
 - **The SML moved in 2026.** OpenPeppol took over the Service Metadata Locator and participant records now live in the `participant.sml.prod.tech.peppol.org` zone. NomaUBL queries it first and keeps the former `edelivery.tech.ec.europa.eu` zone as fallback. A DNS policy that only allowed the former zone must add the new one — otherwise most participants are no longer found.
-- **The SML step is DNS only** — no HTTP. If the server already resolves public DNS through the corporate resolver, there is nothing to open. Some corporate resolvers drop or mangle NAPTR queries: NomaUBL then retries through the public resolvers `8.8.8.8` and `1.1.1.1`. Either let the corporate resolver forward NAPTR queries for both zones, or allow outbound DNS (port 53, UDP and TCP) to those two addresses.
-- **The SMP host can't be whitelisted in advance** — it's whatever domain each buyer's platform uses (Pennylane, Esker, Yooz… one per participant), so provider resolution needs a broad *HTTPS 443 outbound* allowance to work generally. If that isn't acceptable, the impact is graceful: the Peppol section still shows the participant, and the *Plateforme* column reads `non résolu`.
+- **The SML step is DNS only** — no HTTP. If the server already resolves public DNS through the corporate resolver, there is nothing to open. Some corporate resolvers drop or mangle NAPTR queries: let the corporate resolver forward NAPTR queries for both zones, or set **Public DNS fallback** to `Y` in the [e-directory settings](../configuration/system/edirectory.md#peppol-lookup) and allow outbound DNS (port 53, UDP and TCP) to `8.8.8.8` and `1.1.1.1`. The fallback is **off by default**. A *no such name* answer from the server's resolver is final — an unregistered identifier is not retried elsewhere — and a failing public resolver is dropped for the rest of the lookup.
+- **The SMP host can't be whitelisted in advance** — it's whatever domain each buyer's platform uses (Pennylane, Esker, Yooz… one per participant), so provider resolution needs a broad *HTTPS 443 outbound* allowance to work generally. If that isn't acceptable, set **Resolve platform via SMP** to `N`: the lookup stops at the SML answer and the *Plateforme* column shows the SMP host (`smp.pennylane.com`), which already names the provider — only its official name and seat are missing.
 - **Diagnosis.** When `directory.peppol.eu` is unreachable, the participants found by the SML probes are still listed. When nothing is found at all, the Peppol section shows *Peppol Directory unreachable (directory.peppol.eu) — check outbound HTTPS/firewall*.
 
 ---
@@ -32027,7 +32027,7 @@ Above the results, a small label indicates the number of companies returned by I
 - **A disabled line is not always permanent.** A buyer may not yet be registered, or a specific identifier not yet enabled; ask them to register before re-trying. The directory state changes daily as more companies subscribe to the PPF.
 - **Match the exact identifier, not just the SIREN.** The electronic-address lines show which form is actually reachable — a plain SIREN, a SIREN + SIRET, or a suffixed code. Address the invoice to an **enabled** line; a company can have several, only some enabled.
 - **Cross-check the establishment state.** A ceased establishment cannot receive an invoice even if the company appears in the directory. Check the INSEE state on the establishment before trusting an electronic-address mapping.
-- **If the lines don't appear, wire the endpoint.** An empty directory list with a "not configured" note means the connector has no `directory-check-siren` endpoint — set it under *Configuration → System → e-directory*, with the response mappings for your platform (ATGP, Yooz).
+- **If the lines don't appear, wire the endpoint.** An empty directory list with a "not configured" note means the connector has no `directory-check-siren` endpoint — set it under *Configuration → System → e-directory*, with the response mappings for your platform (ATGP, Yooz, Esker). The listing reads its array from the endpoint's **Response field** (`records` for Esker, `results`…).
 
 ---
 
@@ -32425,11 +32425,13 @@ Opens from **Generate report** in the toolbar. Builds and submits one or several
 | **Flux to generate** | Multi-select between `10.1` and `10.3`. Both are selected by default — the generator emits one report per active flux. |
 | **Document type** | One of `IN` (initial), `RE` (replacement), `CO` (cancellation), `MO` (modification). The default is `IN`. |
 | **Period start / end** | ISO 8601 dates that delimit the declaration window. |
-| **Compute period** | Auto-fills *Period start* / *Period end* with the next due window using the configured frequency (`MONTHLY` / `DECADAL` / `WEEKLY`). |
+| **Compute period** | Auto-fills *Period start* / *Period end* with the next due window, exactly as the scheduled run does: it follows the **company's setup** (frequency `MONTHLY` / `DECADAL` / `WEEKLY`) and the **last valid report** of that company for the direction. The dialog states the frequency applied and the report it follows (*after the last report ending …*, or *no previous report, current period*). A company must be entered to compute. |
 | **Cancel** | Closes the dialog without generating. |
-| **Generate** | Builds the XML for each selected flux, persists the report row, and submits to the PA. The list refreshes on success. |
+| **Generate** | Builds the XML for each selected flux, stores the report row and submits it to the PA. The run happens **in the background**: the dialog shows its log as it goes, then refreshes the list when done — a large period no longer ends in a proxy error. |
 
 When the generator builds a report, it derives the per-invoice **Sender**, **Issuer** and **Business Process** blocks (TT-7 / TT-12 / TT-28 / TT-29) from the *e-reporting* template — those defaults are configured once in *Settings → System → E-Reporting* (Sender / PA matricule + role `WK`, Issuer / SIREN scheme `0002` for French companies, Business Process emitted only on B2BINT invoices). When no transmission ID is provided manually, the report is identified as **`{siren}-{flux}-{start}-{end}`** so it stays stable across regenerations of the same period and lets the PA deduplicate identical retransmissions.
+
+The **buyer** block carries the buyer's **legal identifier**, not its electronic address: a French address (scheme `0225`) or a SIRET (`0009`) yields the SIREN under scheme `0002`, with the VAT number derived from it; schemes `0002`, `0223`, `0227`, `0228` and `0229` pass through. A buyer with no usable identifier (blank, `0`, an e-mail scheme) is left out of the report and the invoice is named in the log, so the customer record can be completed — the validation then reports the missing buyer on that invoice rather than a scheme error (G2.19) on the whole report.
 
 After a successful run, the new reports appear at the top of the list with a `9950` (Created) status that quickly progresses through `9952` (Sent to PA) and `9953` (Pending), then lands on `9955` (Deposited) once the PA acknowledges receipt. When the *Send to PA* flag is off (`sendToPA=N`), the report stays at `9951` (Submit skipped) and the XML can still be downloaded for offline review.
 
@@ -32857,6 +32859,10 @@ Each row carries a **checkbox**, and a **Resend selected (N)** button appears in
 
 A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing is a **reprint**: for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), it regenerates the readable PDF / XML and the UBL file from the JDE XML source archived at first submission, into the output and burst folders. Nothing changes in the database and the UBL is not validated again — the stored e-invoice, including a later *Fix buyer* correction, stays the reference, and its validation results are kept. The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
 
+The selection also covers **validation failures**: an invoice in *Validation failed* (`9905`) on a template with **Allow full reprocess** enabled is **reprocessed in full** — enrichment queried again, UBL regenerated, validated and sent to the PA when the template and document type say so; the history is kept and a new cycle starts. The confirmation states which invoices are reprinted and which are reprocessed in full. The invoice window offers the same full reprocess through a **Reprocess** button on a `9905`.
+
+Several invoices are reprocessed as **one batch per template**, in the background with its live log: their sources are staged in a working folder, the *Max threads* global setting bounds the parallelism and an invoice is never processed twice. A single invoice still runs on its own.
+
 ### Export
 
 A small **Export** button in the toolbar exports the current view (filters applied) as a CSV file named `invoices.csv`.
@@ -32886,7 +32892,7 @@ Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parti
 
 ### Summary tab *(default)*
 
-The Summary tab shows a coloured **status badge** at the top, followed by **action buttons** (Edit UBL, Copy, Delete) on the right. **Delete** removes the invoice and every related record — log row (source XML, PA transaction reference, source file name), lifecycle, lines, VAT and validation — so a later run of the same document starts fresh and the [watched folders](../configuration/system/watched-folders.md) can pick its source file up again. Deletion follows the same protection as *Fix buyer*: the button is hidden once the PA has processed the invoice, except for a **213** rejection with an addressing reason. Right under the badge, when the platform returned them, the current **rejection reason**, **expected action** and **status note** are shown inline, and the full **status message** sits in a collapsed group — expand it for the platform's long error text. The same values feed the custom actions as `{message}`, `{reasonLabel}`, `{actionLabel}` and `{actionNote}` placeholders (see [Actions](../management/actions.md#custom-actions)), with no list-view column needed.
+The Summary tab shows a coloured **status badge** at the top, followed by **action buttons** (Edit UBL, Copy, Delete) on the right. **Delete** removes the invoice and every related record — log row (source XML, PA transaction reference, source file name), lifecycle, lines, VAT and validation — so a later run of the same document starts fresh and the [watched folders](../sync/watched-folders.md) can pick its source file up again. Deletion follows the same protection as *Fix buyer*: the button is hidden once the PA has processed the invoice, except for a **213** rejection with an addressing reason. Right under the badge, when the platform returned them, the current **rejection reason**, **expected action** and **status note** are shown inline, and the full **status message** sits in a collapsed group — expand it for the platform's long error text. The same values feed the custom actions as `{message}`, `{reasonLabel}`, `{actionLabel}` and `{actionNote}` placeholders (see [Actions](../management/actions.md#custom-actions)), with no list-view column needed.
 
 #### Fix buyer \{#fix-buyer\}
 
@@ -33510,22 +33516,23 @@ The grid uses `align-items: stretch` and each card grows with `flex: 1` inside i
 
 ## Layout
 
-The 12-column grid is laid out as eight rows:
+The 12-column grid is laid out as nine rows:
 
 | Row | Layout | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **System Health** · **Quick links** |
-| 2 | `4 + 4 + 4` | **Send Failed** · **Waiting for review** · **To reprocess** |
+| 2 | `3 + 3 + 3 + 3` | **Send Failed** · **Waiting for review** · **To reprocess** · **To reprocess in full** |
 | 3 | `4 + 4 + 4` | **Scheduler** · **Error trend · 14d** · **Retry rate · 14d** |
 | 4 | `4 + 4 + 4` | **JVM · threads + GC** · **Throughput · 14d** · **Active sessions / clients** |
 | 5 | `8 + 4` | **Filesystem** · **Template processing time · 14d** |
-| 6 | `12` | **Live process events** |
-| 7 | `12` | **Configuration check** |
-| 8 | `5 + 7` | **Database tables** · **Recent errors** |
+| 6 | `12` | **Running processes** |
+| 7 | `12` | **Live process events** |
+| 8 | `12` | **Configuration check** |
+| 9 | `5 + 7` | **Database tables** · **Recent errors** |
 
 A **Refresh** button in the page header re-runs all four endpoints in parallel.
 
-The **Send Failed** card landed in 2026.06.03 alongside the [Auto-Retry](../configuration/system/auto-retry.md) page in Settings — the manual one-click retry on the dashboard and the scheduled overnight sweep both call the same underlying replay path.
+The manual one-click retry of the **Send Failed** card and the scheduled overnight sweep of the [Auto-Retry](../configuration/system/auto-retry.md) page call the same underlying replay path.
 
 ---
 
@@ -33552,7 +33559,7 @@ The card subtitle on the right shows the **build version + build date** baked in
 
 Static shortcut list — the IT operator's most-used pages. Each link uses the same `onNavigate` mechanism as the sidebar so it lands on the target page directly. Default targets: **Settings**, **Processing Log**, **File Versions**, **Cross-Reference**.
 
-### Send Failed (row 2, span 4) \{#send-failed\}
+### Send Failed (row 2, span 3) \{#send-failed\}
 
 A single big-number card showing how many invoices are currently in *Send failed* (status `9904`). When the count is non-zero, a **Resend all N** button below the number replays every matching invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md). Clicking it opens the [shared progress window](#shared-progress-window) — live counters, a *Cancel* button and a *Run in background* button that hides the window while the work keeps going server-side. The resend is throttled at **100 ms per call** so the PA stays inside its rate budget.
 
@@ -33565,13 +33572,19 @@ A single big-number card showing how many invoices are currently in *Send failed
 
 Use the manual button for a one-shot replay during business hours (a brief PA outage that cleared, a small batch you want resent now). For unattended overnight retries, schedule a row on the [Auto-Retry](../configuration/system/auto-retry.md) page — same code path, no operator action required.
 
-### Waiting for review (row 3, span 4) \{#waiting-for-review\}
+### Waiting for review (row 2, span 3) \{#waiting-for-review\}
 
 A big-number card that counts the invoices **held before sending** — the ones whose document type carries the `W` (*Waiting*) send flag on the [Document Types](../configuration/system/document-types.md) page. These invoices were generated and validated but deliberately not transmitted, so a user can check them first. When the count is non-zero, a **Send all N** button releases every held invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same [progress window](#shared-progress-window) as *Send Failed*. It mirrors the *Send Failed* card — same big number, same one-click bulk action — but for the review queue rather than the failure queue.
 
-### To reprocess (row 2, span 4) \{#to-reprocess\}
+### To reprocess (row 2, span 3) \{#to-reprocess\}
 
-A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button rebuilds every eligible invoice from its archived JDE XML source (regenerating the e-invoice, PDF and XML) through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
+A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button **reprints** every eligible invoice from its archived source — readable PDF / XML and UBL file regenerated, no database change, no new validation — through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
+
+### To reprocess in full (row 2, span 3) \{#to-reprocess-full\}
+
+The counterpart of the previous card for **validation-failed** invoices (`9905`) on a template with **Allow full reprocess** enabled. Once the data was corrected at the source, a **Reprocess all N** button reprocesses every eligible invoice **in full** from its archived source: the enrichment is queried again, the UBL regenerated, validated and sent to the PA when the template and document type say so. The status history is kept and a reprocess marker opens a new cycle, so the statuses that follow are recorded as new.
+
+Both cards run **one batch per template**, in the background with its live log: the sources are staged in a working folder, the **Max threads** setting of the global settings bounds the parallelism, and an invoice is never processed twice.
 
 ### Scheduler (row 3, span 4)
 
@@ -33586,15 +33599,15 @@ Each row shows the job name, the cadence, and a status pill (green active, blue 
 
 The **PA import poll** and **PA status retrieve** jobs carry a **pause / resume** button — effective on the next tick and deliberately runtime-only, so a server restart always resumes and a pause can't be forgotten. The [daily quiet window](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) is shown here too, highlighted while active — during it both pollers skip their runs automatically.
 
-### Error trend · 14d (row 2, span 4)
+### Error trend · 14d (row 3, span 4)
 
 A 14-day sparkline of error events recorded in `F564237` (level `ERROR` or `FATAL`). Hovering a point reveals the day and count; the subtitle shows the daily average plus today's running count.
 
-### Retry rate · 14d (row 2, span 4)
+### Retry rate · 14d (row 3, span 4)
 
 Single big number: ratio of *runs that succeeded only after one or more retries* over total runs in the trailing 14 days. The subtitle gives the absolute counts and the delta against the previous 14-day window (green when down, orange when up).
 
-### JVM · threads + GC (row 3, span 4)
+### JVM · threads + GC (row 4, span 4)
 
 Companion card to System Health for deeper JVM diagnostics:
 
@@ -33603,11 +33616,11 @@ Companion card to System Health for deeper JVM diagnostics:
 - **GC** — collector name + total time spent in GC.
 - **Loaded classes** — class-loader counter, useful for spotting metaspace leaks.
 
-### Throughput · 14d (row 3, span 4)
+### Throughput · 14d (row 4, span 4)
 
 Daily processed-document bar chart over the last 14 days. **Click a bar** to jump to *Processing Log* pre-filtered on that day — a quick path from "today's column is short" to "show me what actually ran".
 
-### Active sessions / Active clients · 15m (row 3, span 4)
+### Active sessions / Active clients · 15m (row 4, span 4)
 
 Two modes:
 
@@ -33616,7 +33629,7 @@ Two modes:
 
 Either way, each row shows IP / user, the last-seen timestamp, and the running hit count.
 
-### Filesystem (row 4, span 8)
+### Filesystem (row 5, span 8)
 
 For each configured path (`appHome`, `processHome`, `dirInput`, `singleOutput`, `burstOutput`, `dirArchive`, `dirError`):
 
@@ -33625,7 +33638,7 @@ For each configured path (`appHome`, `processHome`, `dirInput`, `singleOutput`, 
 
 Path values that contain runtime placeholders (`%TEMPLATE%`, `%FILE_NAME%`) are truncated at the first placeholder, and the report runs against the deepest **existing-by-shape** directory above it. `dirOutput` is excluded because it is always covered by `processHome`.
 
-### Template processing time · 14d (row 4, span 4)
+### Template processing time · 14d (row 5, span 4)
 
 Average end-to-end processing time per template, in seconds, over the last 14 days. The card pulls flat `START` / `END` events from `F564237` and pairs them in Java keyed on `(FEWDS1|FEUPMJ)` — the prior implementation used a self-join SQL with ambiguous `FETMPL` and incorrect `e.FEUPMT - s.FEUPMT` math, which is now fixed.
 
@@ -33635,7 +33648,11 @@ When the [`debugProfile`](../configuration/system/global.md) toggle on the `glob
 
 The Live process events tail below also tags the rows with the step name so a slow batch can be triaged in real time. Leave `debugProfile` at `N` in production; flip it to `Y` for the duration of a batch run when triaging a slow pipeline — the extra rows inflate `F564237` quickly under load.
 
-### Live process events (row 5, span 12)
+### Running processes (row 6, span 12) \{#running-processes\}
+
+The processing JVMs alive on the host, polled every 5 s: those started by this server, with the last line each printed, and the **detached** ones left by a previous instance, a cron or a manual run (*output not captured*). Each row shows the mode (`-process`, `-watch-folders`, `-import`), the arguments, the elapsed time and a **Stop** button, which terminates that JVM and its own child processes only — invoices in progress stay in their current state and input files are left in place. Stopping requires the *integration-run* grant. Nothing is stopped when the server restarts, so a batch can run through an upgrade.
+
+### Live process events (row 7, span 12)
 
 A live feed of jobs starting and finishing in real time — most of them launched by the background scheduler. Polls `F564237` every **5 seconds** with an incremental `since=` cursor; each row carries a coloured **method badge**:
 
@@ -33652,7 +33669,7 @@ The feed is **deduplicated on `FEUKID`** so the same row never appears twice acr
 
 The scrollable list is capped at the latest 100 events; older rows fall off the bottom as new ones come in. For deeper investigation use the [Processing Log](../management/processing-log.md) page, which keeps the full history with grouped-job views.
 
-### Configuration check (row 6, span 12)
+### Configuration check (row 8, span 12)
 
 Validates the *connector-style* configuration the application uses today. Issues are listed by area with severity (red error, orange warning, blue info). The check runs against:
 
@@ -33666,11 +33683,11 @@ Old checks against `paApiBaseUrl` / `paApiUsername` / `ublXsdPath` / `ublSchemat
 
 A clean check renders as `✔ 0 issues` in green; otherwise the card lists the issues in order of severity.
 
-### Database tables (row 7, span 5)
+### Database tables (row 9, span 5)
 
 Per-table row count for every NomaUBL table — invoices (`F564231`), lifecycle (`F564235`), validation (`F564236`), runtime log (`F564237`), notifications (`F564253`), e-Reporting (`F564260`–`F564262`), auth (`F564250`–`F564252`, `F564254`). Useful for spotting unexpected growth (e.g. a notifications table that should be ~hundreds of rows but holds millions).
 
-### Recent errors (row 7, span 7)
+### Recent errors (row 9, span 7)
 
 Last 8 events from `F564237` filtered on `level IN ('ERROR', 'FATAL')`. Each row shows the level badge, the lifecycle code and triplet, the message, and a relative timestamp (*2m ago*, *1h ago*). Clicking a row opens the corresponding entry in *Processing Log*, where the full stack and replay options live.
 
@@ -35261,7 +35278,8 @@ Click **+ New User** at the top right of the section to open the create form. Fi
 | Field | Description |
 |---|---|
 | **Username** | Login identifier. Must be unique. **Cannot be changed after creation.** |
-| **Password** | Initial password set on the account. |
+| **Password** | Initial password set on the account. With SSO enabled (*Auth Mode* `oidc` or `both`), it is optional: left empty, the account signs in through the identity provider only, has no local password and is never asked to change one. |
+| **Require a new password at the first local login** | Checkbox shown once a password is typed, **ticked by default**. Untick it to let the user keep the initial password. A session opened through SSO is never sent to the change-password screen. |
 | **Full Name** | Display name shown in the UI. |
 | **Email** | Account email. |
 | **Role** | Role assigned to the user (dropdown listing roles defined in *Security → Roles*). |
@@ -35279,7 +35297,7 @@ Click **✏️** on any row to open the edit form for that user. The form is the
 | **Username** | Hidden — usernames are immutable. |
 | **Password** | Hidden — use **Reset Password** below instead. |
 | **Active** | `Yes` / `No` — toggles whether the account can log in. Disabling preserves the user's history without granting access. |
-| **Reset Password** | Optional field. **Leave empty to keep the current password**; type a new value to overwrite it. |
+| **Reset Password** | Optional field. **Leave empty to keep the current password**; type a new value to overwrite it — the *Require a new password at the first local login* checkbox then appears, as on creation. |
 
 Click **Save** to persist or **Cancel** to discard.
 
@@ -35303,7 +35321,7 @@ Inline feedback appears below the table:
 ## Tips & best practices
 
 - **Match Username to your SSO / corporate identifier** when applicable, even if NomaUBL is not federated yet — it makes future SSO migration painless.
-- **Set a strong initial password** on creation, then ask the user to change it on first login.
+- **Set a strong initial password** on creation and keep *Require a new password at the first local login* ticked, so the user picks their own at first login.
 - **Prefer *Active = No* over deletion** when an employee leaves — keeps the audit trail intact while immediately revoking access.
 - **Use Reset Password sparingly.** When users can change their own password elsewhere, this field is mostly for unlocking accounts after a password loss.
 - **Re-run *Initialize Database*** *(Database Connectors → NomaUBL)* on a fresh deployment if no users exist — it provisions the seed `admin`.
@@ -35898,6 +35916,15 @@ The editor has **two tabs**:
 |---|---|---|
 | **Results per page** | `10` | Maximum number of results returned per INSEE search query. Increase to widen each result page; decrease to limit network payloads. |
 
+### Peppol lookup \{#peppol-lookup\}
+
+Settings for the [Peppol lookup](../../application/edirectory.md#peppol-directory) of the E-Directory page, for servers on restricted networks (see [Network flows](../../application/edirectory.md#network-flows)).
+
+| Field | Default | Description |
+|---|---|---|
+| **Resolve platform via SMP** | `Y` | `Y` reads the provider's name and seat from its SMP certificate — HTTPS to each provider's SMP host. `N` stops at the SML answer: the *Plateforme* column shows the SMP host (e.g. `smp.pennylane.com`), with no call to wait for. Set `N` when the network does not allow HTTPS to the providers' SMP hosts. |
+| **Public DNS fallback** | `N` | `N` uses the server's resolver only. `Y` retries the SML lookups through `8.8.8.8` / `1.1.1.1` when that resolver gives no answer. Keep `N` when the network forbids external resolvers. |
+
 ---
 
 ## Tab 2 — Connector
@@ -36113,7 +36140,8 @@ The editor has **four tabs**:
 ## Opening the editor
 
 - *Settings* → **e-reporting** template (the system-level resource).
-- The default scope is the platform-wide `e-reporting` template. Per-company overrides live on `e-reporting-{kco}` templates and follow the same shape; the runtime resolver looks at the per-company template first and falls back to the platform-wide one.
+- A **Scope** bar at the top picks the setup being edited: **Default (e-reporting)** or **Company *kco* (e-reporting-*kco*)**. Type a company code and click **Add override** to create a company setup seeded from the default; **Delete override** removes the selected one. Each company can thus carry its own issuer, frequency and PA connection.
+- The runtime looks at the company setup first and falls back to the default. The companies to run are detected from the company setups; **Companies (kco) override**, on the default, only names the companies to run **with the default settings** — a company with its own setup uses that setup instead.
 
 ---
 
@@ -36289,76 +36317,6 @@ Use the **+ Add Report** button to append a row, and the **×** button on a row 
 - **Use All Versions sparingly.** It's useful when you have many ad-hoc versions of the same report; otherwise, prefer pinning a specific Version per row so you know exactly what's being processed.
 - **One row per (Report, Version, Template) tuple.** If the same report needs different templates for different versions, add multiple rows.
 - **Don't forget to assign a Template.** A row without a template can still match jobs, but the UBL generation will fail to produce a PDF attachment when one is expected.
-
----
-
-## Watched Folders
-Source: https://docs.nomana-it.fr/nomaubl/configuration/system/watched-folders/
-
-Watched folders pick up JD Edwards PDF / XML outputs from mounted directories, convert PDFs to XML in parallel, and run one batch per document template — scheduled from global → Scheduling, on demand from the editor, or from the command line.
-
-The **Watched folders** system template lets NomaUBL fetch source documents straight from directories — typically the network share where JD Edwards drops its report outputs — instead of waiting for files to be pushed into the input folder. Each run lists the configured folders, keeps the new files, **converts PDFs to XML in parallel** (XML files are copied as is) into the document template's input folder, then runs **one batch per template**.
-
-Open it under **Configuration → System → Watched folders**. The template ships empty: nothing runs until a folder is configured and a job is scheduled.
-
----
-
-## At a glance
-
----
-
-## Folders
-
-Each row of the table is one watched folder; **＋ Add folder** appends a row, **×** removes it.
-
-| Column | Description |
-|---|---|
-| **Directory** | The folder to scan (e.g. `/data/mnt/jde_outputs`). |
-| **Pattern** | File-name pattern of the files to pick up (e.g. `R42565_*`). |
-| **Template** | The document template the files are processed with — they land in its input folder. |
-| **Manifest** | Optional pdf2xml manifest used to convert the PDFs of this folder. |
-| **Overlap h** | Overlap window in hours (default `2`): each run looks at files newer than the last scan **minus** this window. |
-| **Mount** | When ticked, the directory must be a mounted share — an unmounted mount point is reported as an error instead of being read as empty. |
-| **Last scan** | The watermark written by every run (UTC instant). Clear it or type a date (`yyyy-MM-dd`, `yyyy-MM-ddTHH:mm:ss` in server time, or an ISO instant) to rescan from that point. |
-
-Above the table, **Parallel conversions** (default `4`) sets how many PDFs are converted at once; the batch itself keeps its own thread pool.
-
----
-
-## How a run works
-
-1. **List** — every folder is listed for files matching its pattern and newer than *last scan − overlap*. A folder scanned for the first time, without a date, only takes the overlap window — use a backfill date for history.
-2. **Filter** — files already processed (source file name found in the archive) or already waiting as XML in the template's input folder are dropped.
-3. **Convert** — PDFs are converted to XML in parallel into the template's input folder; XML files are copied as is. For a [PDF-source template](../../management/documents.md#pdf-extraction), any text PDF goes through the template's PDF extraction settings instead of the JD Edwards converter.
-4. **Process** — one batch runs per template, with the batch's own parallelism.
-
-The last-scan date advances on every run. A file that fails is **retried** while it stays inside the overlap window and reported **by name** — it never blocks the others.
-
----
-
-## Run now
-
-The **Run now** group runs the saved configuration on demand:
-
-- **Dry run** — only lists what would be converted and processed.
-- **Scan and process** — runs the full pickup.
-- An optional **backfill date** widens every folder's window for this run only.
-
----
-
-## Scheduling and command line
-
-- **Scheduled** — under [global → Scheduling → Batch Document Processing](./global.md), add a batch job with the source **Watched folders**, every *N* minutes or **daily at** a fixed time. The job can target a single folder (picked from the configured directories) or all of them.
-- **Command line** — `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]`.
-- **API** — `POST /api/watch-folders/run`.
-
----
-
-## Tips & best practices
-
-- **Keep the overlap larger than the copy time.** A file still being written when the scan passes is picked up on the next run as long as it stays inside the window.
-- **Tick *Mount* on network shares.** An unmounted share otherwise looks like an empty folder and nothing is processed, silently.
-- **Start with a dry run.** It shows exactly which files a new folder row would pick up before anything is converted.
 
 ---
 
@@ -36543,7 +36501,8 @@ The editor has **six tabs**:
 | Field | Description |
 |---|---|
 | **Application Home** | Root install directory of NomaUBL (e.g. `/app/nomaubl`). Resolved by the `%APP_HOME%` placeholder used in document template paths. |
-| **Environment** | Short environment name (e.g. `demo`, `PD`). Resolves the `%ENV%` placeholder used in document template paths (`rtf`, `xsl`, `ublXslt`) so the same template can target multiple environments. |
+| **Environment** | Short environment name (e.g. `demo`, `PD`). Resolves the `%ENV%` placeholder used in document template paths (`rtf`, `xsl`, `ublXslt`) so the same template can target multiple environments. The name is also shown as a **badge right of the application title** and in the browser tab. |
+| **Theme colour** | Colour picker, next to the environment. Replaces the accent blue of the whole interface — title, environment badge, primary buttons, links, focus rings — so each environment is told apart at a glance. Badge and colour are served by a public endpoint, so the login page already carries them. Blank keeps the default blue. |
 | **Process Home** | Working directory used by NomaUBL during processing (e.g. `/app/nomaubl/process`). |
 
 ### File Paths
@@ -36585,8 +36544,9 @@ The editor has **six tabs**:
 | Field | Values | Description |
 |---|---|---|
 | **Update DB** | `Y` / `N` | When `Y`, processing runs persist their results to the database. Set to `N` only for dry runs / debugging. |
-| **Max threads** | *(blank = all cores)* | Caps how many invoices are processed at once. An XML-spool template can process its whole input folder in a single **parallel** pass — much faster on a folder of thousands of single-invoice files, and used the same way by a scheduled scan, an on-demand run and the command-line batch. Each file stays its own unit (name, source archive and traceability kept) and one file's failure doesn't stop the others. Set a value to keep headroom for other services on a shared host; leave it blank to use every available core. UBL templates and per-job (BIP) processing are unaffected. |
+| **Max threads** | *(blank = all cores)* | Caps how many invoices are processed at once. An XML-spool template can process its whole input folder in a single **parallel** pass — much faster on a folder of thousands of single-invoice files, and used the same way by a scheduled scan, an on-demand run and the command-line batch. Each file stays its own unit (name, source archive and traceability kept) and one file's failure doesn't stop the others. Set a value to keep headroom for other services on a shared host; leave it blank to use every available core. UBL templates and per-job (BIP) processing are unaffected. It also bounds the bulk reprocess, which runs one batch per template. |
 | **`debugProfile`** | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [Tech Dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
+| **Server log file** | path *(blank = automatic)* | File read by the [Server log](../../management/server-log.md) page. Blank = the file the launcher redirects the server output to (`nomaubl-<env>.log`); set it when the server runs under another launcher. |
 
 ### PDF
 
@@ -36594,6 +36554,7 @@ The editor has **six tabs**:
 |---|---|
 | **Logo path** | Path to the company logo drawn at the top of the supplier block when a PDF template has *Show logo* on (see [PDF Templates](../../management/pdf-templates.md)). Accepts the path variables `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%`, `%KCO%`, `%DOC%`, `%DCT%` and any `{{token}}` from the invoice catalogue — e.g. `%APP_HOME%/logos/{{kco}}.png`, so each company resolves to its own logo. A `{ }` button opens a searchable token list. PNG, JPG and GIF are supported. |
 | **Logo offset X (pt)** | Horizontal shift of the logo, in points, to absorb whitespace baked into the source image. Default `0`. |
+| **Logo width (pt)** / **Logo height (pt)** | Box the logo is scaled to fit, in points: ratio kept, enlarged when the image is smaller; one dimension alone lets the other follow the image. Blank = the previous cap of 200 × 80 points, without enlarging. The visual builder preview uses the same size as the produced PDF. |
 
 ---
 
@@ -36702,7 +36663,7 @@ The remaining fields configure how the job picks up and processes documents:
 | **Process type** | `xml` / `ubl` | `xml` = full pipeline (transform + process); `ubl` = direct UBL processing (input is already UBL). |
 | **Template** *(when Process type = `xml`)* | from list | Document template to apply. Lists templates of type `document`. |
 | **Mode** *(when Process type = `xml`)* | `AUTO` / `SINGLE` / `BURST` / `UBL` | Processing mode — `AUTO` lets NomaUBL decide; `SINGLE` and `BURST` force the corresponding output strategy; `UBL` produces UBL only. |
-| **Source** | `bip` / `directory` / `watch-folders` | Where to fetch documents from: `bip` = JDE Print Queue *(JDE-specific)*; `directory` = scan the **Input Directory** configured in Tab 1; `watch-folders` = run the [Watched folders](./watched-folders.md) pickup — the job then targets one configured directory (picked from a dropdown) or all of them. |
+| **Source** | `bip` / `directory` / `watch-folders` | Where to fetch documents from: `bip` = JDE Print Queue *(JDE-specific)*; `directory` = scan the **Input Directory** configured in Tab 1 (a [watched folder](../../sync/watched-folders.md#input-folder-mode) pointing at the input folder does the same); `watch-folders` = run the [Watched folders](../../sync/watched-folders.md) pickup — the job then targets one configured directory (picked from a dropdown) or all of them. |
 | **Extract mode** *(when Source = `bip`)* | `input` / `output` / `both` | Which BIP artefacts to pull: `input` = source XML only; `output` = generated output files only; `both` = both. |
 | **Language filter** *(when Source = `bip`)* | text | Optional BIP language filter (e.g. `FR`). Empty = all languages. |
 | **Replace existing** | `Y` / `N` | When `Y`, re-import documents that already exist in NomaUBL (overwrite); when `N`, skip duplicates. |
@@ -36764,11 +36725,11 @@ SSO is a new capability — operators upgrading from a prior version should revi
 |---|---|
 | **Issuer URL** | Base URL of the OIDC IdP — for example `https://idp.example.com/realms/myrealm` for a Keycloak realm, an Auth0 tenant URL, or the Azure AD endpoint. NomaUBL fetches the IdP metadata from `<issuer>/.well-known/openid-configuration` so the individual endpoints (authorise, token, userinfo, JWKS) never need to be entered. |
 | **Client ID** | The OIDC client registered on the IdP side for NomaUBL. |
-| **Client secret** | Optional for public PKCE clients (the IdP can be configured without one). Stored Base64-encoded on disk. |
+| **Client secret** | Optional for public PKCE clients (the IdP can be configured without one). Sent to the identity provider exactly as typed. |
 | **Redirect URI** | Must exactly match the redirect URI registered on the IdP side. Typical value: `https://<your-host>/api/auth/oidc/callback`. |
 | **Scopes** | Space-separated. Defaults to `openid profile email`. Add provider-specific scopes here when extra claims are needed. |
 | **Token endpoint authentication** | How the authorization code is exchanged for tokens. **PKCE** *(default)* sends the secret in the request body (`client_secret_post`); **HTTP Basic** sends it in the `Authorization` header (`client_secret_basic`), without PKCE — for identity providers that accept only the latter. Match the client's setting on the IdP. |
-| **Debug logging** | `Y` writes the discovery result, the authorize URL, the token exchange and the ID-token claims to the server log, with tokens and secrets redacted. Sign-ins and refusals (IdP error, expired state, token exchange failure, domain refusal, unknown account) are always logged. |
+| **Debug logging** | `Y` writes the discovery result, the authorize URL, the token exchange and the ID-token claims to the server log, with tokens and secrets redacted; the token request also prints the length and SHA-256 fingerprint of the client secret actually sent, to compare with the provider's when it answers `invalid_client`. Sign-ins and refusals (IdP error, expired state, token exchange failure, domain refusal, unknown account) are always logged. |
 
 ---
 
@@ -39314,7 +39275,7 @@ backfill-vat — issue date 2026-04-01 → 2026-04-30
 
 ## `watch-folders <env>` — pick up watched folders \{#watch-folders\}
 
-Runs the [Watched folders](../configuration/system/watched-folders.md) pickup from the command line — the same run as the editor's *Scan and process* button and the scheduled batch job with the *Watched folders* source.
+Runs the [Watched folders](../sync/watched-folders.md) pickup from the command line — the same run as the editor's *Scan and process* button and the scheduled batch job with the *Watched folders* source.
 
 ```bash
 ./nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]
@@ -39439,6 +39400,7 @@ Process one (or many) source files against one document template — or call a S
 | `--no-db` | Skip the database write step (implies `--no-send`). | XML |
 | `--no-validate` | Skip the UBL validation entirely — used by the reprocess reprint, where the stored e-invoice stays the reference. | XML |
 | `--repair` | Rebuild the invoice tables (header, lines, VAT, validation) of a document whose archive and status history survived — archive and history untouched, no lifecycle event, header status taken from the latest real history event, nothing sent. See [Process Document → Repair](../processing/document.md#repair). | all |
+| `--input-dir <dir>` | Run the batch on another folder than the template's input folder — used by the bulk reprocess, which stages the sources in a working folder. | XML |
 | `--validate` | XSD + Schematron only — no DB insert, no PA send. | UBL |
 | `--send` | Force submission to the PA, overriding the configured default. A UBL source sends the file; XML, PDF and connector sources send every document as if its document type said `F`. | all |
 | `--no-debug` | Skip the per-step timings (parse, validation, DB insert, send to PA) that are logged by default in every run. Recommended on heavy nightly batches where the per-step overhead is not worth the extra log volume. | all |
@@ -39460,6 +39422,16 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
                       --param customer=00001234 --param docNumber=2026000125 \
                       --no-debug
 ```
+
+---
+
+## `-reprocess` — reprocess eligible invoices \{#reprocess\}
+
+```bash
+java -jar nomaubl.jar -reprocess <configFile> [--full]
+```
+
+Without option, reprints every **deposited-not-transmitted** invoice (`200` `NON_TRANSMISE`) on a template with *Allow reprocess* — outputs regenerated from the archived source, no database change, no send. With **`--full`**, reprocesses every **validation-failed** invoice (`9905`) on a template with *Allow full reprocess*: enrichment queried again, UBL regenerated, validated and sent per settings, history kept. Both run one batch per template — see [Documents → Output](./documents.md) for the two template settings.
 
 ---
 
@@ -39950,6 +39922,7 @@ With **Source = PDF**, the template takes a **text PDF** from any system — not
 |---|---|
 | A row read as *Label : value* (or label and value in two columns) | One element named after the label — `Montant TTC 1 189,55 €` → `<Montant_TTC>1189.55</Montant_TTC>`. Amounts and percents use a dot decimal, `dd/MM/yyyy` dates become ISO, identifiers printed with spaces (VAT number, SIREN, postal code) are compacted. |
 | A rate inside a label (`TVA 20,00%`) | A sibling element, so the name stays stable: `<TVA>198.26</TVA><TVA_taux>20.00</TVA_taux>`. |
+| A value made of segments separated by ` / `, some carrying their own label (`VIREMENT / IBAN : FR76 … / BIC : CCBPFRPPBDX / Titulaire : ACME SA`) | The unlabelled part stays in the element and each labelled segment becomes a sibling — `Paiement`, `Paiement_IBAN`, `Paiement_BIC`, `Paiement_Titulaire` — each mappable on its own; grouping spaces inside the IBAN are removed. |
 | A period (`01/09/2026 – 30/09/2026`) | Its two bounds as `<…_debut>` and `<…_fin>`, each mappable to its own UBL field. |
 | The table between the start and end anchors | `<Lignes>/<Ligne>`, columns named after the header row (inferred from the first row when the header is a single cell); wrapped labels are merged, a ruled line closes the table. |
 | The party boxes | `<Adresse_N>` blocks — `Nom`, `Rue` lines, `Code_postal`, `Ville`, `Pays`, plus the labelled lines printed in the box (supplier code, SIRET, VAT, phone, e-mail). |
@@ -39995,7 +39968,7 @@ A converted sample looks like this:
 </Document>
 ```
 
-The document editor and the XSL editor both **load a sample straight from a PDF** — the PDF is converted server-side with the template's saved settings (save the template first after changing the anchors). The [Process Document](../processing/document.md) page, the [watched folders](../configuration/system/watched-folders.md) and the command line process PDF-source templates like XML ones; `-pdf2xml <in.pdf> <out.xml> --text` converts a single file on its own (see [Command line](./command-line.md)).
+The document editor and the XSL editor both **load a sample straight from a PDF** — the PDF is converted server-side with the template's saved settings (save the template first after changing the anchors). The [Process Document](../processing/document.md) page, the [watched folders](../sync/watched-folders.md) and the command line process PDF-source templates like XML ones; `-pdf2xml <in.pdf> <out.xml> --text` converts a single file on its own (see [Command line](./command-line.md)).
 
 ---
 
@@ -40008,7 +39981,7 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | Field | Values | Description |
 |---|---|---|
 | **Transform** | `Y` / `N` | Whether to apply an XSL transformation pipeline before generating UBL. |
-| **XSL Pre-processing** | path | Optional XSL applied before indexation, e.g. to normalise the raw source XML (JD Edwards, SAP, NetSuite, custom ERP…). |
+| **XSL Pre-processing** | path | Optional XSL applied before indexation, e.g. to normalise the raw source XML (JD Edwards, SAP, NetSuite, custom ERP…). It must be **safe to run twice**: a reprocess replays the archived source, which already went through it — guard every element the XSL adds with `not(...)` so a second pass adds nothing. |
 | **XSL Indexation** | path | XSL used to generate the indexation / metadata applied to the document. Produces an XML file paired with the generated PDF for indexing purposes. |
 | **RTF Template** | path | RTF template used by BI Publisher to render the human-readable PDF. |
 
@@ -40020,10 +39993,11 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 | **Custom Schematron** | path(s) | One or more **precompiled** Schematron stylesheets (`.xsl`, comma-separated, `%APP_HOME%` / `%ENV%` accepted) holding this customer's own rules — a mandatory classification, a buyer-reference pattern… They run **after** the standard packs, on this template only, so customer rules never touch the shipped packs the upgrade refreshes. A stylesheet is loaded once per file stamp: an edited file is picked up on the next validation without a restart. Findings land in the validation errors under a short source derived from the file name (`BR-ACME-rules.xsl` → `ACME`); a missing or broken file is reported as an error on the invoice. Batch and single processing, the *Validate* button and the validate API all honour it. |
 | **Attachment** | `— None` / `create` / `attach` / `generate` | How the main PDF is associated with the UBL. `create` = render via RTF / BI Publisher and embed it. `attach` = reuse a PDF already in the input directory. `generate` = render the PDF with the [PDF-template designer](./pdf-templates.md) and attach it as a **PJA** (`cac:AdditionalDocumentReference`) — use it when the designed PDF isn't a compliant French readable copy. Empty = no PDF. Independent of **LISIBLE** below. |
 | **LISIBLE** | `Y` / `N` | When `Y`, render a readable PDF from the UBL through the resolved PDF template and embed it as the LISIBLE copy (`cbc:ID="LISIBLE"`). Independent of *Attachment* — both can be on. |
+| **Invert sign** | `N – No` (default) / `Credit notes only` / `All documents` | Flips the sign of the amounts read from the source: line net amounts, document totals, prepaid and rounding amounts, total VAT and every VAT breakdown row. The unit price is always emitted as a positive value, allowance and charge amounts are read as absolute values, and the quantity takes the sign of its line amount. *Credit notes only* applies to documents resolved as `381`, `396`, `261`, `262`, `502` or `503`. A spool that prints a credit note with negative amounts thus yields the positive CreditNote the standard expects, with no change to the document XSL. |
 
 ### Processing rules \{#processing-rules\}
 
-The **Processing rules** group routes the documents of the XML pipeline **before anything is generated**. Each rule combines one or more conditions on the document with one outcome. Rules are evaluated per document once its document type is resolved, **in order — the first match wins**; no matching rule means normal processing. They apply to every XML ingestion path: scheduler, [watched folders](../configuration/system/watched-folders.md), *process*, *fetch-single* and *Fetch Input*. UBL-source documents are deliberately left out — their transaction type is already written in the document.
+The **Processing rules** group routes the documents of the XML pipeline **before anything is generated**. Each rule combines one or more conditions on the document with one outcome. Rules are evaluated per document once its document type is resolved, **in order — the first match wins**; no matching rule means normal processing. They apply to every XML ingestion path: scheduler, [watched folders](../sync/watched-folders.md), *process*, *fetch-single* and *Fetch Input*. UBL-source documents are deliberately left out — their transaction type is already written in the document.
 
   
     
@@ -40091,7 +40065,8 @@ A template with *Source = UBL* now embeds the same PDFs as the XML flow — afte
 |---|---|
 | **No-Data Key** | Name of an XML element that **must exist** in the spool. If absent, NomaUBL considers the document empty and skips it. Useful to filter out spool sections that aren't real invoices. |
 | **Set Locale** | Locale used to render the PDF (e.g. `en_US`, `fr_FR`). Affects date and number formatting in the PDF only. |
-| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. Only **XML-source** templates are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
+| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. XML and PDF sources are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
+| **Allow full reprocess** | `Y` / `N` (default `N`). When `Y`, an invoice in *Validation failed* (`9905`) can be **reprocessed in full** from its archived source once the data was corrected at the source: the enrichment is queried again, the UBL regenerated, validated and sent to the PA when the template and document type say so. The status history is kept and a reprocess marker opens a new cycle. XML and PDF sources. Triggered from the invoice window (*Reprocess* button on a `9905`), the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess-full), the API (`kind: "full"`) or `-reprocess --full`. |
 
 ---
 
@@ -40134,7 +40109,7 @@ Each **rule** describes one lookup:
 | **Target** | Where the new elements land — on the scope node itself, in a new group, or in an existing group. |
 | **Result** | A single flat set of fields, or a repeating group (one child per returned row). |
 
-Rules run in order, so a later rule can use what an earlier one added; identical lookups are cached, so the connector is called once per distinct key. The enriched spool is stored with the archived source (`F564230`), so re-processing a document doesn't call the connector again. Nothing runs unless a rule is configured — existing templates are unaffected.
+Rules run in order, so a later rule can use what an earlier one added; identical lookups are cached, so the connector is called once per distinct key. The enriched spool is stored with the archived source (`F564230`), so a reprint doesn't call the connector again. A full reprocess queries it again, and the enrichment then **replaces** the rows of the previous run instead of adding to them (single-row rules already overwrote their fields). Nothing runs unless a rule is configured — existing templates are unaffected.
 
 **Dry run** — with a sample spool loaded, *Dry run* tries the rules against it: it calls the real connectors and shows the enriched XML, a summary and any warnings, without changing anything. Download the result (named after the sample, e.g. `26000001CG00005_enrich.xml`) to build the XSL mapping straight away.
 
@@ -40354,6 +40329,64 @@ Inline feedback at the top of the main panel auto-clears after 4 seconds:
 - **Skip JDE-extracted files (`jde_bip` source) when packaging** unless the receiving environment also runs against the same JDE — they are typically environment-specific outputs, not portable assets.
 - **Keep an eye on the file count badge per folder** when working on large XSL trees — it's the quickest way to spot a mis-packaged subset.
 - **Download a historic version before restoring** if you want to keep a local copy of both the current and the historic file outside NomaUBL.
+
+---
+
+## Server Log
+Source: https://docs.nomana-it.fr/nomaubl/management/server-log/
+
+The Server Log page shows the end of the NomaUBL server log file, newest lines first, with severity and module filters, a text search and auto-refresh — no shell access needed.
+
+The **Server log** page shows the **end of the server log file**, newest lines first, so an administrator can follow what the server does — a batch, a Peppol lookup, a failed transformation — without opening a shell on the host. Open it under **Management → Server log**; access is granted per role, like the other Management pages (see [Roles](../configuration/security/roles.md)).
+
+---
+
+## At a glance
+
+  
+    Tail512 KB ▾
+    Severity☑ ERROR☑ WARN☑ INFO☐ DEBUG☐ Unstructured
+    ModuleAll modules ▾
+    Search…
+    ☐ Auto-refresh
+    ↻ Refresh
+  
+  File: /opt/nomaubl/logs/nomaubl-prod.log · 48.2 MB · 3 line(s) shown of 2 914 in the last 512 KB
+  
+    2026-10-22 06:12:04INFOPROCESSbatch invoices — 412 file(s), 4 thread(s)
+    2026-10-22 06:12:31WARNPEPPOL0225:803206317 — SMP certificate unreadable (smp.example.com)
+    2026-10-22 06:13:02ERRORUBLR42565_ZJDE0001_1353306 — XSLT failed: XTDE0640
+        at net.sf.saxon.…  (3 lines)
+  
+
+---
+
+## Controls
+
+| Control | Effect |
+|---|---|
+| **Tail** | How much of the end of the file is read: `128 KB`, `512 KB` *(default)*, `2 MB` or `8 MB`. When the file is larger, the status line says so — raise the tail to read further back. |
+| **Severity** | Checkboxes `ERROR`, `WARN`, `INFO` *(the three ticked by default)*, `DEBUG` and **Unstructured** — the lines that do not follow the `** LEVEL ** MODULE ** … : message` form. |
+| **Module** | List built from the modules seen in the lines read (`PROCESS`, `UBL`, `PEPPOL`…); **All modules** by default. |
+| **Search…** | Case-insensitive text filter. |
+| **Auto-refresh** | Reloads the tail every 5 seconds. |
+| **Refresh** | Reloads the tail now. |
+
+Stack traces stay **attached to the line that threw them**, so filtering on `ERROR` keeps the whole trace. The status line shows the file read, its size and how many lines are shown out of those scanned.
+
+---
+
+## Which file is read
+
+The page finds the file on its own: the launcher's `nomaubl-<env>.log`, or — on Linux — the file the server's output is redirected to. When the server runs under another launcher, set its path in **Server log file** in the [global settings](../configuration/system/global.md); left blank, the automatic detection applies. If no file can be found, the page says so and points to that setting.
+
+---
+
+## Tips & best practices
+
+- **Start from `ERROR` and `WARN`.** Untick `INFO` to keep only what needs a look, then widen with the module list.
+- **Follow a run with auto-refresh.** Launch a batch or a scan, tick *Auto-refresh* and watch the lines come in.
+- **Raise the tail for an older event.** The default 512 KB covers recent activity; switch to 2 MB or 8 MB to go further back.
 
 ---
 
@@ -40840,7 +40873,7 @@ The builder toolbar carries a few settings applied to the whole layout:
 |---|---|
 | **Accent** | The accent colour for the section titles (CUSTOMER / DELIVERY), the highlighted total, the line-table header underline and the row-highlight background. Enter a 6-digit hex with or without `#`; the soft row-highlight tint is derived automatically. Empty keeps the default blue. |
 | **Date** | The date pattern applied across the PDF — issue, due, period and per-line delivery dates. Choices: `yyyy-MM-dd` (default), `dd/MM/yyyy`, `dd-MM-yyyy`, `MM/dd/yyyy`, `dd MMM yyyy`, `dd MMMM yyyy`. |
-| **Show logo** | Draws the company logo at the top of the supplier block on page 1. The file comes from *Logo path* in [Settings → Global → Processing → PDF](../configuration/system/global.md), where a *Logo offset X (pt)* also shifts it horizontally. PNG, JPG and GIF are supported. |
+| **Show logo** | Draws the company logo at the top of the supplier block on page 1. The file comes from *Logo path* in [Settings → Global → Processing → PDF](../configuration/system/global.md), where a *Logo offset X (pt)* also shifts it horizontally and *Logo width / height (pt)* set the box it is scaled to (ratio kept; blank = 200 × 80 points at most). The builder preview uses the same size as the produced PDF. PNG, JPG and GIF are supported. |
 | **Trim zeros** | Drops trailing zero decimals from amounts, unit prices and quantities — a whole amount prints as `23` instead of `23.00`, and a `23.0000` unit price prints as `23`. Off by default, which keeps the fixed two-decimal amount and four-decimal price display. The setting is per template and applies to the line table, the totals box, and both the readable and on-screen PDFs. |
 | **Decimals** — *amount* / *price* / *qty* | Decimals printed per kind of number, each `auto` or `0`–`6`. *Amount* covers line amounts, allowances, VAT rows and totals; *price* covers the item price, the net unit price and the price discount; *qty* covers invoiced quantities. `auto` keeps the standard display (amounts 2 decimals, prices and quantities as in the UBL), so existing templates render unchanged. A fixed count is rounded half away from zero, as AFNOR requires; *Trim zeros* still applies on top. |
 
@@ -42443,7 +42476,11 @@ NomaUBL release notes — every user-visible change shipped in the platform, ver
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
   Versions
-  2026.10.19.1 · 2026-10-01
+  2026.10.23.1 · 2026-10-01
+  2026.10.22.1 · 2026-09-30
+  2026.10.21.1 · 2026-09-30
+  2026.10.20.1 · 2026-09-30
+  2026.10.19.1 · 2026-09-30
   2026.10.18.1 · 2026-09-30
   2026.10.16.1 · 2026-09-30
   2026.10.14.1 · 2026-09-30
@@ -42556,6 +42593,67 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   2026.04.2 · 2026-04-29
   2026.04.1 · 2026-04-29
   2026.04.0 · 2026-04-29
+
+---
+
+## 2026.10.23.1 — 2026-10-23 \{#v2026-10-23-1\}
+
+### Improvements
+
+- **Invert sign on a document template.** A new "Invert sign" setting in the Processing tab (UBL group) flips the sign of the amounts read from the source: line net amounts, document totals, prepaid and rounding amounts, total VAT and every VAT breakdown row. The unit price is always emitted as a positive value, allowance and charge amounts are read as absolute values, and the quantity takes the sign of its line amount. Three choices: No (default), Credit notes only (documents resolved as 381, 396, 261, 262, 502, 503) and All documents. A spool that prints a credit note with negative amounts thus yields the positive CreditNote the standard expects, with no change to the customer XSL. The value is passed to the transform at run time; a customer document XSL picks the behaviour up once the upgrade merge has refreshed its framework body.
+- **Watched folders: own page, every template, new options.** The watched folders are now a page of the Synchronization group, with Save and Refresh in the header, and no longer appear in the Settings list. Each folder is a collapsible card with its fields in three groups: folder, scan and batch. New per-folder options: the scan window ("since last scan", the previous behaviour, or "all files", every matching file whatever its date, with no watermark) and the batch options of a scheduled Directory job (replace mode, send to PA, processing mode); replace mode takes a file already processed again. Every file-based template is supported: XML and PDF templates keep the single-JVM batch, a UBL template gets the per-file loop with failures moved to the errors folder. A folder that is the template's own input folder is a plain batch trigger, no copy, no date, no dedup, which is the watched-folder form of a scheduled Directory job. The run order is unchanged: all conversions first, then one batch per template. Folders feeding the same template must carry the same batch options; the first row wins and a mismatch is logged. Existing rows and scheduled jobs keep their behaviour, and the Directory and BIP scheduler sources remain available.
+- **Environment badge and theme colour.** The global settings gain a "Theme colour" next to the environment name. The environment is shown as a badge right of the title and in the browser tab, and the colour replaces the accent blue of the whole interface: title, badge, primary buttons, links, focus rings. Both are served by a public endpoint, so the login page already carries them. Blank colour keeps the default blue.
+
+---
+
+## 2026.10.22.1 — 2026-10-22 \{#v2026-10-22-1\}
+
+### Improvements
+
+- **Full reprocess of validation failures.** A new "Allow full reprocess" setting on the document template lets an invoice in *Validation failed* (9905) be reprocessed in full from its archived source once the data was corrected at the source: the enrichment is queried again, the UBL regenerated, validated and sent to the PA when the template and document type say so. The status history is kept and a reprocess marker opens a new cycle, so the statuses that follow are recorded as new. Available from the invoice window ("Reprocess" button on a 9905), from the invoice list selection, from a new "To reprocess in full" card on the IT dashboard, on the API (`kind: "full"`) and on the command line (`-reprocess --full`). The existing reprint of deposited-not-transmitted invoices is unchanged and keeps its own "Allow reprocess" setting. Both apply to XML and PDF sources.
+- **Replay-safe pre-processing and enrichment.** A reprocess replays the archived source, which already went through the template's pre-processing XSL and enrichment. The enrichment now replaces the rows of a previous run instead of adding to them (single-row rules already overwrote their fields), and the pre-processing field of the document editor states the rule for customer transforms: every element the XSL adds must be guarded with `not(...)` so a second pass adds nothing. The IT dashboard shows the four counter cards on one row.
+- **Bulk reprocess as a single batch.** "Reprocess all" and a selection of several invoices now stage the sources in a working folder and run one processing batch per template, in the background with its live log, instead of one JVM per invoice: the "Max threads" setting of the global settings bounds the parallelism and an invoice is never processed twice. A single invoice still runs on its own. The command line gains `--input-dir <folder>` on `-process` to run a batch on a folder other than the template's input.
+- **Running processes on the IT dashboard.** A new card lists the processing JVMs alive on the host: those started by this server, with the last line each printed, and the detached ones left by a previous instance, a cron or a manual run. Each row shows the mode, the arguments, the elapsed time and a Stop button, which terminates that JVM and its own child processes only; it requires the integration-run grant. Nothing is stopped when the server restarts, so a batch can run through an upgrade; the launcher script is unchanged.
+- **Server log page.** Under Management, after File versions: the end of the server log file, newest lines first, with the amount read (128 KB to 8 MB), severity checkboxes, a module list built from the lines seen, a text search and an auto-refresh. Stack traces stay attached to the line that threw them. The file is found on its own (the launcher's `nomaubl-<env>.log`, or the server's redirected output on Linux); a "Server log file" setting in the global settings covers another launcher.
+
+### Fixes
+
+- **Spurious "PDF creation" error on templates without an RTF.** Forcing the readable PDF ("Keep PDF" on a document type, or a reprint) on a template that has no RTF template, PDF-source templates among them, logged a PDF creation error. The forced render is now skipped when there is nothing to render with.
+
+---
+
+## 2026.10.21.1 — 2026-10-21 \{#v2026-10-21-1\}
+
+### Improvements
+
+- **E-reporting: per-company setups.** The e-reporting settings gain the same scope bar as e-invoicing: pick the default or a company setup, create a company setup (`e-reporting-{kco}`) seeded from the default, delete it. Each company can thus carry its own issuer, frequency and PA connection. The companies to run are detected from these setups; the "Companies" list on the default only names companies to run with the default settings.
+- **E-reporting: generation runs in the background.** Generate returns at once and the dialog shows the run's log as it goes, then refreshes the list when done. A large period no longer ends in a proxy error while the run continues unseen on the server.
+- **PDF: logo size.** Two new settings next to the logo path and offset, "Logo width" and "Logo height" in points: the logo is scaled to fit that box, ratio kept, enlarged when the image is smaller; one dimension alone lets the other follow the image. Left blank, the previous cap of 200 × 80 points applies without enlarging. The visual builder preview uses the same size as the produced PDF.
+- **Ordering check runs in the background.** Check and Clean return at once, the page shows the run's log as it goes and then the findings. The status-drift scan reads the history once, in a single pass, and logs its progress every 50 000 rows, the result by "current → expected" pair, and a closing summary. A large base no longer ends in a proxy error.
+- **Users: password change at first login is a choice, and SSO-only accounts.** Creating a user, or resetting a password, now shows a "Require a new password at the first local login" checkbox, ticked by default. With SSO enabled the password at creation is optional: left empty, the account signs in through the identity provider only, has no local password and is never asked to change one. A session opened through SSO is no longer sent to the change-password screen, which asked for an old password the user never had.
+- **Watched folders: one batch at a time, scan in the background.** The processing batch of a template now takes a lock on its input folder for its duration, so a second batch cannot start on the same files: a manual or scheduled scan that finds the folder locked converts the new files but leaves the batch to the running one and says so in its log. The "Scan and process" button of the settings runs in the background with the live log, instead of a request that outlived the proxy timeout and invited a relaunch.
+
+### Fixes
+
+- **Invoice status realigned on a reprocess artefact.** Until 11 October a reprocess regenerated the document through the normal pipeline, leaving a "validation successful" event just before its reprocess marker. The header realignment then landed on that event, and Monday's Clean set 1 967 invoices to 9901 or 9902 instead of their deposited status. A generation event sitting directly under a reprocess marker is now ignored like the marker, as is a history row without a code, everywhere the status is realigned. The drift scan also no longer skips reprocessed invoices whose order is correct, which hid these from the list.
+- **SSO: token exchange refused with invalid_client.** The client secret was passed through a Base64 decode on load although it is stored as typed. A secret made of letters and digits decodes without error into random bytes, which were sent to the identity provider; whether a secret survived depended on its length and characters. The decode is now kept only when it yields printable text, and with debug logging the token request prints a length and SHA-256 fingerprint of the secret actually sent, to compare with the provider's.
+- **Batch processing: one failing file killed the whole batch.** A fatal error on a file, a missing input or a failed transformation, stopped the batch JVM with every other file in flight, which appeared as started-but-never-ended rows in the processing log and left their inputs to be processed again. The file is now marked failed and moved to the errors folder while the others finish. Two batches on the same folder, which this and a relaunch produced, were also the cause of "no such file" errors on inputs deleted by the other batch and of documents processed twice. Batch mode also no longer deletes the attachment PDFs of files still in flight after a successful file.
+- **E-reporting: buyer identifier refused (G2.19).** The buyer block carried the buyer's electronic address (scheme 0225, the PPF routing address) instead of its legal identifier. A French address or a SIRET now yields the SIREN under scheme 0002 with the VAT number derived from it; 0002, 0223, 0227, 0228 and 0229 pass through. A buyer with no usable identifier (blank, "0", an email scheme) is left out of the report and the invoice is named in the log, so the customer record can be completed; the validation then reports the missing buyer on that invoice rather than a scheme error on the whole report.
+- **E-reporting: "Compute period" ignored the settings and the previous reports.** The dialog always assumed a monthly frequency, and the lookup of the last report never matched, so the current month was proposed every time and then submitted as the period. The computation now follows the company's setup (monthly, decadal, weekly) and the last valid report of the company for the direction, exactly as the scheduled run does, and the dialog states which frequency it applied and which report it follows. A company must be entered to compute.
+
+---
+
+## 2026.10.20.1 — 2026-10-20 \{#v2026-10-20-1\}
+
+### Improvements
+
+- **PDF source: labelled segments inside a value.** A value printed as segments separated by " / " where some carry their own label, such as `VIREMENT / IBAN : FR76 … / BIC : CCBPFRPPBDX / Titulaire : ACME SA`, now keeps the unlabelled part in its element and yields one sibling element per labelled segment (`Paiement`, `Paiement_IBAN`, `Paiement_BIC`, `Paiement_Titulaire`), each mappable on its own. Grouping spaces inside the IBAN are removed as for other identifiers.
+- **Peppol lookup on restricted networks.** Two new settings on the e-directory template. "Resolve platform via SMP" (default Y): set to N when the network does not allow HTTPS to the providers' SMP hosts; the lookup then stops at the DNS answer and the platform column shows the SMP host (`smp.pennylane.com`) instead of the provider name and seat read from its certificate, with no call to wait for. "Public DNS fallback" (default N): the lookup uses the server's resolver only; Y allows a retry through 8.8.8.8 / 1.1.1.1 when that resolver gives no answer. When the SMP cannot be read, the page now shows the host and the reason instead of a bare "unresolved", and the server log lists each unresolved participant with its reason.
+
+### Fixes
+
+- **Peppol lookup very slow when external resolvers are blocked.** An identifier not registered in Peppol was retried through the public resolvers on both DNS zones, which on a server without access to them cost over a minute per identifier. A "no such name" answer from the server's resolver is now final, and a failing public resolver is dropped for the rest of the lookup.
+- **PPF directory lines not listed with an Esker connector.** The SIREN listing read the response array under a property name the connector editor does not write, so only a response whose array happened to be named `results` worked. The "Response field" of the endpoint is now honoured, `records` included.
 
 ---
 
@@ -42715,7 +42813,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 ### Improvements
 
-- **Customer Schematron rules per document template.** New *Custom Schematron* setting on the UBL tab of a document template: one or more precompiled Schematron stylesheets (.xsl, comma-separated, `%APP_HOME%` / `%ENV%` accepted) run after the standard packs on that template only. Customer-specific rules — a mandatory classification, a buyer reference pattern — no longer need to touch the shipped packs, which the upgrade refreshes, and apply only to the templates that opt in. Stylesheets are loaded once per file stamp and cached, so an edited file is picked up on the next validation without restart. Findings land in the validation errors under a short source derived from the file name (`BR-KRYS-rules.xsl` → `KRYS`); a missing or broken file is reported as an error on the invoice. Batch and single processing, the Validate button and the validate API all honour the setting.
+- **Customer Schematron rules per document template.** New *Custom Schematron* setting on the UBL tab of a document template: one or more precompiled Schematron stylesheets (.xsl, comma-separated, `%APP_HOME%` / `%ENV%` accepted) run after the standard packs on that template only. Customer-specific rules — a mandatory classification, a buyer reference pattern — no longer need to touch the shipped packs, which the upgrade refreshes, and apply only to the templates that opt in. Stylesheets are loaded once per file stamp and cached, so an edited file is picked up on the next validation without restart. Findings land in the validation errors under a short source derived from the file name (`BR-ACME-rules.xsl` → `ACME`); a missing or broken file is reported as an error on the invoice. Batch and single processing, the Validate button and the validate API all honour the setting.
 
 ### Fixes
 
@@ -45893,7 +45991,9 @@ Two cases are handled on their own terms:
 
 Histories ordered wrongly by an earlier rule are detected and put back in order by the next run.
 
-The check also reports an **invoice whose status differs from the latest real state of its history**, shown as *current → expected*, and realigns it on apply. The *latest real state* looks past the reprocess marker (`9912`) and the mail-sent marker (`9908`) in whatever order they appear — so a deposited `200` `NON_TRANSMISE` stays as such. The same rule applies to every header realignment: integrity backfill, status poll and deletion of a history event. The mail-sent marker counts as an application event: it is never reported as misordered.
+The check also reports an **invoice whose status differs from the latest real state of its history**, shown as *current → expected*, and realigns it on apply. The *latest real state* looks past the reprocess marker (`9912`) and the mail-sent marker (`9908`) in whatever order they appear — so a deposited `200` `NON_TRANSMISE` stays as such. The same rule applies to every header realignment: integrity backfill, status poll and deletion of a history event. The mail-sent marker counts as an application event: it is never reported as misordered. A generation event sitting directly under a reprocess marker — the trace an earlier reprocess left — is ignored like the marker, and so is a history row without a code.
+
+**Check ordering** and **Clean N selected** run **in the background**: the page shows the run's log as it goes, then the findings. The status-drift scan reads the history once, in a single pass, logs its progress every 50 000 rows, the result by *current → expected* pair and a closing summary — a large database no longer ends in a proxy error.
 
 ---
 
@@ -45904,6 +46004,123 @@ The check also reports an **invoice whose status differs from the latest real st
 - **The watermark only ever moves forward.** Re-running the page has no effect on already-applied events. To replay a window (e.g. after restoring an old database backup), lower `lastRetrievalDate` manually in the *e-invoicing* template — the next run will re-pull every event since that date.
 - **Trim the configured status names if volume is an issue.** The default set covers every reform code; high-throughput installations that only need the PPF-mandatory codes can shrink the list to reduce PA-side and local-side load.
 - **The lifecycle is the audit trail.** The lifecycle table (`F564235`) is append-only and represents the complete history; the invoice header (`F564231`) only carries the most recent status. Use the lifecycle when investigating disputes or chasing a missing PA-side update.
+
+---
+
+## Watched Folders
+Source: https://docs.nomana-it.fr/nomaubl/sync/watched-folders/
+
+Watched folders pick up JD Edwards PDF / XML outputs from mounted directories, convert PDFs to XML in parallel, and run one batch per document template — scheduled from global → Scheduling, on demand from the page, or from the command line.
+
+The **Watched folders** page lets NomaUBL fetch source documents straight from directories — typically the network share where JD Edwards drops its report outputs — instead of waiting for files to be pushed into the input folder. Each run lists the configured folders, keeps the new files, **converts PDFs to XML in parallel** (XML and UBL files are copied as is) into the document template's input folder, then runs **one batch per template** — the single-JVM batch for an XML or PDF template, the per-file loop for a UBL template.
+
+Open it from the sidebar under **Sync → Watched folders**; **Save** and **Refresh** sit in the page header. The configuration ships empty: nothing runs until a folder is configured and a job is scheduled.
+
+---
+
+## At a glance
+
+---
+
+## Folders
+
+Each watched folder is a **collapsible card**: its header shows the number, the directory and a one-line summary; click it to open the fields, **×** removes the folder, **＋ Add folder** appends one. **Parallel conversions** (default `4`), above the cards, sets how many PDFs are converted at once; the batch itself keeps its own thread pool.
+
+  
+    Watched folders
+    
+      ↻ Refresh
+      💾 Save
+    
+  
+  
+    
+      #1/data/mnt/jde_outputsR42565_* → invoices · since last scan×
+    
+    
+      FolderDirectory · Pattern · Template · Manifest
+      ScanWindow · Overlap (hours) · Last scan · Require mount
+      BatchReplace · Send to PA · Mode
+    
+  
+  
+    #2%APP_HOME%/%ENV%/input/credit_notes→ credit_notes · input folder
+  
+  ＋ Add folder
+
+### Folder
+
+| Field | Description |
+|---|---|
+| **Directory** | The folder to scan — a mounted share or a local folder (e.g. `/data/mnt/jde_outputs`); `%APP_HOME%` / `%ENV%` accepted. When it **is** the template's own input folder, the row is a plain batch trigger — see [Input folder mode](#input-folder-mode). |
+| **Pattern** | File-name glob of the files to pick up (e.g. `R42565_*`). Defaults to `*.xml` on the template's input folder. |
+| **Template** | The document template the files are processed with — XML, PDF and UBL templates are all supported. |
+| **Manifest** | JD Edwards PDF only: optional pdf2xml manifest (a JDE-native XML sample). Blank = DD-alias mode. |
+
+### Scan
+
+| Field | Description |
+|---|---|
+| **Window** | **Since last scan** *(default)*: files newer than the last scan minus the overlap. **All files**: every matching file whatever its date, with no watermark — the check against already processed files alone prevents a second run. |
+| **Overlap (hours)** | *Since last scan* only — rescan window below the last scan (default `2`); a failed file is retried while it stays inside it. |
+| **Last scan** | *Since last scan* only — the watermark written by every run (UTC instant). Clear it or type a date (`yyyy-MM-dd`, `yyyy-MM-ddTHH:mm:ss` in server time, or an ISO instant) to rescan from that point; a first scan without one takes only the overlap. |
+| **Require mount** | When ticked, the directory must be a mounted share — an unmounted mount point is reported instead of being read as empty. |
+
+### Batch
+
+The options of the template's batch, as on a scheduled *Directory* job:
+
+| Field | Description |
+|---|---|
+| **Replace** | Replace mode: a file already processed is taken again. Avoid it with *All files* unless the files are removed after processing. |
+| **Send to PA** | **Template settings** *(default)*, **Y – Force (UBL templates)** or **N – Skip**. |
+| **Mode** | Processing mode of an XML batch: `AUTO` *(default, resolved per document)*, `SINGLE`, `BURST` or `UBL`. |
+
+Folders feeding the **same template** must carry the same batch options: the first row wins, and a mismatch is logged.
+
+---
+
+## How a run works
+
+1. **List** — every folder is listed for files matching its pattern — newer than *last scan − overlap*, or all of them with *All files*. A folder scanned for the first time, without a date, only takes the overlap window — use a backfill date for history.
+2. **Filter** — files already processed (source file name found in the archive) or already waiting as XML in the template's input folder are dropped, unless the folder is in replace mode.
+3. **Convert** — PDFs are converted to XML in parallel into the template's input folder; XML and UBL files are copied as is. For a [PDF-source template](../management/documents.md#pdf-extraction), any text PDF goes through the template's PDF extraction settings instead of the JD Edwards converter.
+4. **Process** — once every conversion is done, one batch runs per template: the single-JVM batch for an XML or PDF template, with the batch's own parallelism; the per-file loop for a UBL template, failed files being moved to the errors folder.
+
+The last-scan date advances on every run. A file that fails is **retried** while it stays inside the overlap window and reported **by name** — it never blocks the others: inside a batch, a file that fails is marked failed and moved to the errors folder while the other files finish.
+
+**One batch at a time.** A template's batch locks its input folder for its whole duration, so a second batch cannot start on the same files. A manual or scheduled scan that finds the folder locked still converts the new files, leaves the batch to the running one and says so in its log.
+
+### Input folder mode \{#input-folder-mode\}
+
+A folder whose **Directory is the template's own input folder** is a plain batch trigger: no copy, no date, no check against processed files — the batch takes what the folder holds. It is the watched-folder form of a scheduled *Directory* job.
+
+---
+
+## Run now
+
+The **Run now** group runs the saved configuration on demand:
+
+- **Dry run** — only lists what would be converted and processed.
+- **Scan and process** — runs the full pickup **in the background**: the run's log shows live under the buttons, so the page never waits on a request that outlives the proxy timeout.
+- An optional **backfill date** widens every folder's window for this run only.
+
+---
+
+## Scheduling and command line
+
+- **Scheduled** — under [global → Scheduling → Batch Document Processing](../configuration/system/global.md), add a batch job with the source **Watched folders**, every *N* minutes or **daily at** a fixed time. The job can target a single folder (picked from the configured directories) or all of them. The *Directory* and *BIP* sources remain available.
+- **Command line** — `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]`.
+- **API** — `POST /api/watch-folders/run`.
+
+---
+
+## Tips & best practices
+
+- **Keep the overlap larger than the copy time.** A file still being written when the scan passes is picked up on the next run as long as it stays inside the window.
+- **Tick *Require mount* on network shares.** An unmounted share otherwise looks like an empty folder and nothing is processed, silently.
+- **Start with a dry run.** It shows exactly which files a new folder would pick up before anything is converted.
+- **Give one template one set of batch options.** Two folders feeding the same template with different options are processed with the first row's options.
 
 ---
 

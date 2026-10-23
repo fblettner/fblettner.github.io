@@ -233,22 +233,23 @@ The grid uses `align-items: stretch` and each card grows with `flex: 1` inside i
 
 ## Layout
 
-The 12-column grid is laid out as eight rows:
+The 12-column grid is laid out as nine rows:
 
 | Row | Layout | Widgets |
 |---|---|---|
 | 1 | `8 + 4` | **System Health** · **Quick links** |
-| 2 | `4 + 4 + 4` | **Send Failed** · **Waiting for review** · **To reprocess** |
+| 2 | `3 + 3 + 3 + 3` | **Send Failed** · **Waiting for review** · **To reprocess** · **To reprocess in full** |
 | 3 | `4 + 4 + 4` | **Scheduler** · **Error trend · 14d** · **Retry rate · 14d** |
 | 4 | `4 + 4 + 4` | **JVM · threads + GC** · **Throughput · 14d** · **Active sessions / clients** |
 | 5 | `8 + 4` | **Filesystem** · **Template processing time · 14d** |
-| 6 | `12` | **Live process events** |
-| 7 | `12` | **Configuration check** |
-| 8 | `5 + 7` | **Database tables** · **Recent errors** |
+| 6 | `12` | **Running processes** |
+| 7 | `12` | **Live process events** |
+| 8 | `12` | **Configuration check** |
+| 9 | `5 + 7` | **Database tables** · **Recent errors** |
 
 A **Refresh** button in the page header re-runs all four endpoints in parallel.
 
-The **Send Failed** card landed in 2026.06.03 alongside the [Auto-Retry](../configuration/system/auto-retry.md) page in Settings — the manual one-click retry on the dashboard and the scheduled overnight sweep both call the same underlying replay path.
+The manual one-click retry of the **Send Failed** card and the scheduled overnight sweep of the [Auto-Retry](../configuration/system/auto-retry.md) page call the same underlying replay path.
 
 ---
 
@@ -275,7 +276,7 @@ The card subtitle on the right shows the **build version + build date** baked in
 
 Static shortcut list — the IT operator's most-used pages. Each link uses the same `onNavigate` mechanism as the sidebar so it lands on the target page directly. Default targets: **Settings**, **Processing Log**, **File Versions**, **Cross-Reference**.
 
-### Send Failed (row 2, span 4) \{#send-failed\}
+### Send Failed (row 2, span 3) \{#send-failed\}
 
 A single big-number card showing how many invoices are currently in *Send failed* (status `9904`). When the count is non-zero, a **Resend all N** button below the number replays every matching invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md). Clicking it opens the [shared progress window](#shared-progress-window) — live counters, a *Cancel* button and a *Run in background* button that hides the window while the work keeps going server-side. The resend is throttled at **100 ms per call** so the PA stays inside its rate budget.
 
@@ -288,13 +289,19 @@ A single big-number card showing how many invoices are currently in *Send failed
 
 Use the manual button for a one-shot replay during business hours (a brief PA outage that cleared, a small batch you want resent now). For unattended overnight retries, schedule a row on the [Auto-Retry](../configuration/system/auto-retry.md) page — same code path, no operator action required.
 
-### Waiting for review (row 3, span 4) \{#waiting-for-review\}
+### Waiting for review (row 2, span 3) \{#waiting-for-review\}
 
 A big-number card that counts the invoices **held before sending** — the ones whose document type carries the `W` (*Waiting*) send flag on the [Document Types](../configuration/system/document-types.md) page. These invoices were generated and validated but deliberately not transmitted, so a user can check them first. When the count is non-zero, a **Send all N** button releases every held invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same [progress window](#shared-progress-window) as *Send Failed*. It mirrors the *Send Failed* card — same big number, same one-click bulk action — but for the review queue rather than the failure queue.
 
-### To reprocess (row 2, span 4) \{#to-reprocess\}
+### To reprocess (row 2, span 3) \{#to-reprocess\}
 
-A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button rebuilds every eligible invoice from its archived JDE XML source (regenerating the e-invoice, PDF and XML) through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
+A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button **reprints** every eligible invoice from its archived source — readable PDF / XML and UBL file regenerated, no database change, no new validation — through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
+
+### To reprocess in full (row 2, span 3) \{#to-reprocess-full\}
+
+The counterpart of the previous card for **validation-failed** invoices (`9905`) on a template with **Allow full reprocess** enabled. Once the data was corrected at the source, a **Reprocess all N** button reprocesses every eligible invoice **in full** from its archived source: the enrichment is queried again, the UBL regenerated, validated and sent to the PA when the template and document type say so. The status history is kept and a reprocess marker opens a new cycle, so the statuses that follow are recorded as new.
+
+Both cards run **one batch per template**, in the background with its live log: the sources are staged in a working folder, the **Max threads** setting of the global settings bounds the parallelism, and an invoice is never processed twice.
 
 ### Scheduler (row 3, span 4)
 
@@ -309,15 +316,15 @@ Each row shows the job name, the cadence, and a status pill (green active, blue 
 
 The **PA import poll** and **PA status retrieve** jobs carry a **pause / resume** button — effective on the next tick and deliberately runtime-only, so a server restart always resumes and a pause can't be forgotten. The [daily quiet window](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) is shown here too, highlighted while active — during it both pollers skip their runs automatically.
 
-### Error trend · 14d (row 2, span 4)
+### Error trend · 14d (row 3, span 4)
 
 A 14-day sparkline of error events recorded in `F564237` (level `ERROR` or `FATAL`). Hovering a point reveals the day and count; the subtitle shows the daily average plus today's running count.
 
-### Retry rate · 14d (row 2, span 4)
+### Retry rate · 14d (row 3, span 4)
 
 Single big number: ratio of *runs that succeeded only after one or more retries* over total runs in the trailing 14 days. The subtitle gives the absolute counts and the delta against the previous 14-day window (green when down, orange when up).
 
-### JVM · threads + GC (row 3, span 4)
+### JVM · threads + GC (row 4, span 4)
 
 Companion card to System Health for deeper JVM diagnostics:
 
@@ -326,11 +333,11 @@ Companion card to System Health for deeper JVM diagnostics:
 - **GC** — collector name + total time spent in GC.
 - **Loaded classes** — class-loader counter, useful for spotting metaspace leaks.
 
-### Throughput · 14d (row 3, span 4)
+### Throughput · 14d (row 4, span 4)
 
 Daily processed-document bar chart over the last 14 days. **Click a bar** to jump to *Processing Log* pre-filtered on that day — a quick path from "today's column is short" to "show me what actually ran".
 
-### Active sessions / Active clients · 15m (row 3, span 4)
+### Active sessions / Active clients · 15m (row 4, span 4)
 
 Two modes:
 
@@ -339,7 +346,7 @@ Two modes:
 
 Either way, each row shows IP / user, the last-seen timestamp, and the running hit count.
 
-### Filesystem (row 4, span 8)
+### Filesystem (row 5, span 8)
 
 For each configured path (`appHome`, `processHome`, `dirInput`, `singleOutput`, `burstOutput`, `dirArchive`, `dirError`):
 
@@ -348,7 +355,7 @@ For each configured path (`appHome`, `processHome`, `dirInput`, `singleOutput`, 
 
 Path values that contain runtime placeholders (`%TEMPLATE%`, `%FILE_NAME%`) are truncated at the first placeholder, and the report runs against the deepest **existing-by-shape** directory above it. `dirOutput` is excluded because it is always covered by `processHome`.
 
-### Template processing time · 14d (row 4, span 4)
+### Template processing time · 14d (row 5, span 4)
 
 Average end-to-end processing time per template, in seconds, over the last 14 days. The card pulls flat `START` / `END` events from `F564237` and pairs them in Java keyed on `(FEWDS1|FEUPMJ)` — the prior implementation used a self-join SQL with ambiguous `FETMPL` and incorrect `e.FEUPMT - s.FEUPMT` math, which is now fixed.
 
@@ -358,7 +365,11 @@ When the [`debugProfile`](../configuration/system/global.md) toggle on the `glob
 
 The Live process events tail below also tags the rows with the step name so a slow batch can be triaged in real time. Leave `debugProfile` at `N` in production; flip it to `Y` for the duration of a batch run when triaging a slow pipeline — the extra rows inflate `F564237` quickly under load.
 
-### Live process events (row 5, span 12)
+### Running processes (row 6, span 12) \{#running-processes\}
+
+The processing JVMs alive on the host, polled every 5 s: those started by this server, with the last line each printed, and the **detached** ones left by a previous instance, a cron or a manual run (*output not captured*). Each row shows the mode (`-process`, `-watch-folders`, `-import`), the arguments, the elapsed time and a **Stop** button, which terminates that JVM and its own child processes only — invoices in progress stay in their current state and input files are left in place. Stopping requires the *integration-run* grant. Nothing is stopped when the server restarts, so a batch can run through an upgrade.
+
+### Live process events (row 7, span 12)
 
 A live feed of jobs starting and finishing in real time — most of them launched by the background scheduler. Polls `F564237` every **5 seconds** with an incremental `since=` cursor; each row carries a coloured **method badge**:
 
@@ -375,7 +386,7 @@ The feed is **deduplicated on `FEUKID`** so the same row never appears twice acr
 
 The scrollable list is capped at the latest 100 events; older rows fall off the bottom as new ones come in. For deeper investigation use the [Processing Log](../management/processing-log.md) page, which keeps the full history with grouped-job views.
 
-### Configuration check (row 6, span 12)
+### Configuration check (row 8, span 12)
 
 Validates the *connector-style* configuration the application uses today. Issues are listed by area with severity (red error, orange warning, blue info). The check runs against:
 
@@ -389,11 +400,11 @@ Old checks against `paApiBaseUrl` / `paApiUsername` / `ublXsdPath` / `ublSchemat
 
 A clean check renders as `✔ 0 issues` in green; otherwise the card lists the issues in order of severity.
 
-### Database tables (row 7, span 5)
+### Database tables (row 9, span 5)
 
 Per-table row count for every NomaUBL table — invoices (`F564231`), lifecycle (`F564235`), validation (`F564236`), runtime log (`F564237`), notifications (`F564253`), e-Reporting (`F564260`–`F564262`), auth (`F564250`–`F564252`, `F564254`). Useful for spotting unexpected growth (e.g. a notifications table that should be ~hundreds of rows but holds millions).
 
-### Recent errors (row 7, span 7)
+### Recent errors (row 9, span 7)
 
 Last 8 events from `F564237` filtered on `level IN ('ERROR', 'FATAL')`. Each row shows the level badge, the lifecycle code and triplet, the message, and a relative timestamp (*2m ago*, *1h ago*). Clicking a row opens the corresponding entry in *Processing Log*, where the full stack and replay options live.
 

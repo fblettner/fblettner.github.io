@@ -277,7 +277,7 @@ backfill-vat — issue date 2026-04-01 → 2026-04-30
 
 ## `watch-folders <env>` — pick up watched folders \{#watch-folders\}
 
-Runs the [Watched folders](../configuration/system/watched-folders.md) pickup from the command line — the same run as the editor's *Scan and process* button and the scheduled batch job with the *Watched folders* source.
+Runs the [Watched folders](../sync/watched-folders.md) pickup from the command line — the same run as the editor's *Scan and process* button and the scheduled batch job with the *Watched folders* source.
 
 ```bash
 ./nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]
@@ -402,6 +402,7 @@ Process one (or many) source files against one document template — or call a S
 | `--no-db` | Skip the database write step (implies `--no-send`). | XML |
 | `--no-validate` | Skip the UBL validation entirely — used by the reprocess reprint, where the stored e-invoice stays the reference. | XML |
 | `--repair` | Rebuild the invoice tables (header, lines, VAT, validation) of a document whose archive and status history survived — archive and history untouched, no lifecycle event, header status taken from the latest real history event, nothing sent. See [Process Document → Repair](../processing/document.md#repair). | all |
+| `--input-dir <dir>` | Run the batch on another folder than the template's input folder — used by the bulk reprocess, which stages the sources in a working folder. | XML |
 | `--validate` | XSD + Schematron only — no DB insert, no PA send. | UBL |
 | `--send` | Force submission to the PA, overriding the configured default. A UBL source sends the file; XML, PDF and connector sources send every document as if its document type said `F`. | all |
 | `--no-debug` | Skip the per-step timings (parse, validation, DB insert, send to PA) that are logged by default in every run. Recommended on heavy nightly batches where the per-step overhead is not worth the extra log volume. | all |
@@ -423,6 +424,16 @@ java -jar nomaubl.jar -process /opt/nomaubl/demo/config/config.json \
                       --param customer=00001234 --param docNumber=2026000125 \
                       --no-debug
 ```
+
+---
+
+## `-reprocess` — reprocess eligible invoices \{#reprocess\}
+
+```bash
+java -jar nomaubl.jar -reprocess <configFile> [--full]
+```
+
+Without option, reprints every **deposited-not-transmitted** invoice (`200` `NON_TRANSMISE`) on a template with *Allow reprocess* — outputs regenerated from the archived source, no database change, no send. With **`--full`**, reprocesses every **validation-failed** invoice (`9905`) on a template with *Allow full reprocess*: enrichment queried again, UBL regenerated, validated and sent per settings, history kept. Both run one batch per template — see [Documents → Output](./documents.md) for the two template settings.
 
 ---
 

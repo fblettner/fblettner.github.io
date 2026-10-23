@@ -122,7 +122,8 @@ L'éditeur comporte **six onglets** :
 | Champ | Description |
 |---|---|
 | **Application Home** | Répertoire racine d'installation de NomaUBL (par ex. `/app/nomaubl`). Résolu par le placeholder `%APP_HOME%` utilisé dans les chemins de modèles de documents. |
-| **Environment** | Nom court d'environnement (par ex. `demo`, `PD`). Résout le placeholder `%ENV%` dans les chemins des modèles de documents (`rtf`, `xsl`, `ublXslt`), permettant à un même modèle de cibler plusieurs environnements. |
+| **Environment** | Nom court d'environnement (par ex. `demo`, `PD`). Résout le placeholder `%ENV%` dans les chemins des modèles de documents (`rtf`, `xsl`, `ublXslt`), permettant à un même modèle de cibler plusieurs environnements. Le nom s'affiche aussi en **badge à droite du titre de l'application** et dans l'onglet du navigateur. |
+| **Theme colour** | Sélecteur de couleur, à côté de l'environnement. Remplace le bleu d'accent de toute l'interface — titre, badge d'environnement, boutons principaux, liens, contours de focus — pour distinguer chaque environnement d'un coup d'œil. Badge et couleur sont servis par un endpoint public : la page de connexion les affiche déjà. Vide = bleu par défaut. |
 | **Process Home** | Répertoire de travail utilisé par NomaUBL pendant le traitement (par ex. `/app/nomaubl/process`). |
 
 ### File Paths
@@ -164,8 +165,9 @@ L'éditeur comporte **six onglets** :
 | Champ | Valeurs | Description |
 |---|---|---|
 | **Update DB** | `Y` / `N` | À `Y`, les exécutions de traitement enregistrent leurs résultats en base de données. À positionner à `N` uniquement pour des exécutions à blanc (dry-run) ou des phases de débogage. |
-| **Max threads** | *(vide = tous les cœurs)* | Limite le nombre de factures traitées simultanément. Un modèle à source XML peut traiter tout son dossier d'entrée en une seule passe **parallèle** — bien plus rapide sur un dossier de milliers de fichiers mono-facture, et de la même façon pour un balayage planifié, une exécution à la demande et le traitement par lot en ligne de commande. Chaque fichier reste une unité à part entière (nom, archive source et traçabilité conservés) et l'échec d'un fichier n'arrête pas les autres. Renseignez une valeur pour garder des ressources aux autres services d'un serveur partagé ; laissez vide pour utiliser tous les cœurs disponibles. Les modèles UBL et le traitement par travail (BIP) ne sont pas concernés. |
+| **Max threads** | *(vide = tous les cœurs)* | Limite le nombre de factures traitées simultanément. Un modèle à source XML peut traiter tout son dossier d'entrée en une seule passe **parallèle** — bien plus rapide sur un dossier de milliers de fichiers mono-facture, et de la même façon pour un balayage planifié, une exécution à la demande et le traitement par lot en ligne de commande. Chaque fichier reste une unité à part entière (nom, archive source et traçabilité conservés) et l'échec d'un fichier n'arrête pas les autres. Renseignez une valeur pour garder des ressources aux autres services d'un serveur partagé ; laissez vide pour utiliser tous les cœurs disponibles. Les modèles UBL et le traitement par travail (BIP) ne sont pas concernés. Il limite aussi le retraitement groupé, qui lance un lot par modèle. |
 | **`debugProfile`** | `Y` / `N` | À `Y`, chaque exécution écrit des **lignes de chronométrage par étape** dans `F564237` pour chaque phase du pipeline : analyse d'en-tête, analyse des lignes, validation, émission UBL, envoi PA. Les lignes apparaissent sur le [Tableau de bord IT](../../application/tech-dashboard.md) — le flux *Traitements en cours · direct* les marque avec le nom de l'étape, et le widget *Temps par modèle* décompose la moyenne par étape. À laisser à `N` en production ; à passer à `Y` le temps d'un lot pour analyser un pipeline lent. À désactiver dès que l'étape lente est identifiée — les lignes additionnelles gonflent rapidement `F564237` sous charge. |
+| **Server log file** | chemin *(vide = automatique)* | Fichier lu par la page [Journal serveur](../../management/server-log.md). Vide = le fichier vers lequel le lanceur redirige la sortie du serveur (`nomaubl-<env>.log`) ; à renseigner quand le serveur tourne sous un autre lanceur. |
 
 ### PDF
 
@@ -173,6 +175,7 @@ L'éditeur comporte **six onglets** :
 |---|---|
 | **Logo path** | Chemin du logo de la société, dessiné en haut du bloc fournisseur quand un modèle PDF a *Afficher le logo* activé (voir [Modèles PDF](../../management/pdf-templates.md)). Accepte les variables de chemin `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%`, `%KCO%`, `%DOC%`, `%DCT%` et tout jeton `{{…}}` du catalogue de facture — par ex. `%APP_HOME%/logos/{{kco}}.png`, pour que chaque société pointe vers son propre logo. Un bouton `{ }` ouvre une liste de jetons filtrable. PNG, JPG et GIF sont pris en charge. |
 | **Logo offset X (pt)** | Décalage horizontal du logo, en points, pour absorber une marge interne au fichier source. Défaut `0`. |
+| **Logo width (pt)** / **Logo height (pt)** | Cadre dans lequel le logo est mis à l'échelle, en points : proportions conservées, agrandissement si l'image est plus petite ; une seule dimension laisse l'autre suivre l'image. Vide = l'ancien plafond de 200 × 80 points, sans agrandissement. L'aperçu du constructeur visuel utilise la même taille que le PDF produit. |
 
 ---
 
@@ -281,7 +284,7 @@ Les champs suivants définissent la stratégie de récupération et de traitemen
 | **Process type** | `xml` / `ubl` | `xml` = chaîne complète (transformation + traitement) ; `ubl` = traitement UBL direct (l'entrée est déjà UBL). |
 | **Template** *(si Process type = `xml`)* | depuis liste | Modèle de document à appliquer. Liste des modèles de type `document`. |
 | **Mode** *(si Process type = `xml`)* | `AUTO` / `SINGLE` / `BURST` / `UBL` | Mode de traitement — `AUTO` laisse NomaUBL décider ; `SINGLE` et `BURST` forcent la stratégie de sortie correspondante ; `UBL` produit uniquement de l'UBL. |
-| **Source** | `bip` / `directory` / `watch-folders` | Où récupérer les documents : `bip` = file d'impression JDE *(spécifique JDE)* ; `directory` = balaye l'**Input Directory** configuré à l'onglet 1 ; `watch-folders` = lance la récupération des [dossiers surveillés](./watched-folders.md) — le job cible alors un répertoire configuré (choisi dans une liste) ou tous. |
+| **Source** | `bip` / `directory` / `watch-folders` | Où récupérer les documents : `bip` = file d'impression JDE *(spécifique JDE)* ; `directory` = balaye l'**Input Directory** configuré à l'onglet 1 ; `watch-folders` = lance la récupération des [dossiers surveillés](../../sync/watched-folders.md) — le job cible alors un répertoire configuré (choisi dans une liste) ou tous. |
 | **Extract mode** *(si Source = `bip`)* | `input` / `output` / `both` | Quels artéfacts BIP récupérer : `input` = XML source uniquement ; `output` = fichiers de sortie générés uniquement ; `both` = les deux. |
 | **Language filter** *(si Source = `bip`)* | texte | Filtre BIP optionnel par langue (par ex. `FR`). Vide = toutes les langues. |
 | **Replace existing** | `Y` / `N` | À `Y`, ré-importe les documents déjà présents dans NomaUBL (écrase) ; à `N`, ignore les doublons. |

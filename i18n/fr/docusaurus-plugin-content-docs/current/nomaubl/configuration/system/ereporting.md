@@ -26,7 +26,8 @@ L'éditeur comporte **quatre onglets** :
 ## Accès à l'éditeur
 
 - *Paramètres* → modèle **e-reporting** (la ressource au niveau système).
-- La portée par défaut est le template platform-wide `e-reporting`. Les surcharges par société se trouvent sur les templates `e-reporting-{kco}` et suivent la même forme ; le résolveur côté runtime regarde d'abord le template par société puis retombe sur le template platform-wide.
+- Une barre **Scope** en haut choisit le paramétrage modifié : **Default (e-reporting)** ou **Company *kco* (e-reporting-*kco*)**. Saisir un code société puis cliquer sur **Add override** crée un paramétrage société initialisé à partir du défaut ; **Delete override** supprime celui qui est sélectionné. Chaque société peut ainsi avoir son propre émetteur, sa fréquence et sa connexion PA.
+- À l'exécution, le paramétrage de la société est lu en premier, puis le défaut. Les sociétés à traiter sont déduites des paramétrages société ; **Companies (kco) override**, sur le défaut, ne nomme que les sociétés à traiter **avec les réglages par défaut** — une société qui a son propre paramétrage utilise celui-ci.
 
 ---
 

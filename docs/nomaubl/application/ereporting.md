@@ -528,11 +528,13 @@ Opens from **Generate report** in the toolbar. Builds and submits one or several
 | **Flux to generate** | Multi-select between `10.1` and `10.3`. Both are selected by default — the generator emits one report per active flux. |
 | **Document type** | One of `IN` (initial), `RE` (replacement), `CO` (cancellation), `MO` (modification). The default is `IN`. |
 | **Period start / end** | ISO 8601 dates that delimit the declaration window. |
-| **Compute period** | Auto-fills *Period start* / *Period end* with the next due window using the configured frequency (`MONTHLY` / `DECADAL` / `WEEKLY`). |
+| **Compute period** | Auto-fills *Period start* / *Period end* with the next due window, exactly as the scheduled run does: it follows the **company's setup** (frequency `MONTHLY` / `DECADAL` / `WEEKLY`) and the **last valid report** of that company for the direction. The dialog states the frequency applied and the report it follows (*after the last report ending …*, or *no previous report, current period*). A company must be entered to compute. |
 | **Cancel** | Closes the dialog without generating. |
-| **Generate** | Builds the XML for each selected flux, persists the report row, and submits to the PA. The list refreshes on success. |
+| **Generate** | Builds the XML for each selected flux, stores the report row and submits it to the PA. The run happens **in the background**: the dialog shows its log as it goes, then refreshes the list when done — a large period no longer ends in a proxy error. |
 
 When the generator builds a report, it derives the per-invoice **Sender**, **Issuer** and **Business Process** blocks (TT-7 / TT-12 / TT-28 / TT-29) from the *e-reporting* template — those defaults are configured once in *Settings → System → E-Reporting* (Sender / PA matricule + role `WK`, Issuer / SIREN scheme `0002` for French companies, Business Process emitted only on B2BINT invoices). When no transmission ID is provided manually, the report is identified as **`{siren}-{flux}-{start}-{end}`** so it stays stable across regenerations of the same period and lets the PA deduplicate identical retransmissions.
+
+The **buyer** block carries the buyer's **legal identifier**, not its electronic address: a French address (scheme `0225`) or a SIRET (`0009`) yields the SIREN under scheme `0002`, with the VAT number derived from it; schemes `0002`, `0223`, `0227`, `0228` and `0229` pass through. A buyer with no usable identifier (blank, `0`, an e-mail scheme) is left out of the report and the invoice is named in the log, so the customer record can be completed — the validation then reports the missing buyer on that invoice rather than a scheme error (G2.19) on the whole report.
 
 After a successful run, the new reports appear at the top of the list with a `9950` (Created) status that quickly progresses through `9952` (Sent to PA) and `9953` (Pending), then lands on `9955` (Deposited) once the PA acknowledges receipt. When the *Send to PA* flag is off (`sendToPA=N`), the report stays at `9951` (Submit skipped) and the XML can still be downloaded for offline review.
 

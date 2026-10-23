@@ -10,7 +10,7 @@
   "tags": [
     { "name": "Auth",          "description": "AuthApi — login/logout/session, change-password, user and role admin, init-database. All protected endpoints require a Bearer token." },
     { "name": "Config",        "description": "ConfigApi — template CRUD (global, e-invoicing, e-directory, e-reporting, document templates), build-info and validate-ddl." },
-    { "name": "Invoices",      "description": "InvoiceApi — invoice CRUD, list/stats/lifecycle/lines/VAT/notes/XML, status push to PA, resend, validate, PDF preview, send-email, plus DB — disk XML extract." },
+    { "name": "Invoices",      "description": "InvoiceApi — invoice CRUD, list/stats/lifecycle/lines/VAT/notes/XML, status push to PA, resend, validate, PDF preview, send-email, plus DB → disk XML extract." },
     { "name": "Documents",     "description": "DocumentApi — the E-Documents archive browser / external query API. Lists every archived document (F564230), whether or not it became a UBL invoice, and returns the archived source spool + generated UBL per document." },
     { "name": "Process",       "description": "ProcessApi — single-shot run + validate plus the batch fetch loop (list-files + run-batch). The run-batch loop also accepts a BIP source by calling JdeApi internally." },
     { "name": "JDE",           "description": "JdeApi — strictly JDE BI Publisher (BIP) endpoints: extract input/output XML or PDF, apply post-generation, list BIP jobs after a watermark." },
@@ -28,47 +28,6 @@
     { "name": "Webhook",       "description": "Inbound PA status-push receiver. Public, HMAC-signed endpoint the Plateforme Agreee calls to update an invoice's status without polling — the push counterpart of /api/import." }
   ],
   "paths": {
-    "/api/watch-folders/run": {
-      "post": {
-        "tags": [
-          "Process"
-        ],
-        "summary": "Run the watched-folders scan",
-        "description": "Scans the configured watched folders and converts the new spool files. Same job as the `watch-folders` batch source and the `nomaubl.sh watch-folders` command.",
-        "operationId": "runWatchFolders",
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "dryRun": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "List the matching files without converting them."
-                  },
-                  "since": {
-                    "type": "string",
-                    "format": "date",
-                    "description": "Backfill: also pick up files modified since this date."
-                  },
-                  "folder": {
-                    "type": "integer",
-                    "description": "Index of a single folder to scan; all folders when omitted."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Scan summary (files found, converted, skipped, failed)."
-          }
-        }
-      }
-    },
     "/api/auth/login": {
       "post": {
         "tags": ["Auth"],
@@ -213,7 +172,7 @@
       "post": {
         "tags": ["Auth"],
         "summary": "Create a new user",
-        "description": "Creates a new user account with the specified username, password, role, and optional profile fields. The username must be unique. If no role is specified, defaults to 'viewer'. Requires authentication. The password is stored as a bcrypt hash.",
+        "description": "Creates a new user account with the specified username, password, role, and optional profile fields. The username must be unique. If no role is specified, defaults to 'viewer'. forcePasswordChange (default true) asks for a new password at the first local login; a blank password creates an SSO-only account with no local password, which cannot log in locally and is never asked to change a password. Requires authentication. The password is stored hashed.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateUserRequest" } } }
@@ -230,7 +189,7 @@
       "put": {
         "tags": ["Auth"],
         "summary": "Update a user",
-        "description": "Updates an existing user's role, fullName, email, active status, and optionally resets their password. The username is specified in the URL path. If newPassword is provided, the user's password is changed without requiring the old password (admin reset). Requires authentication.",
+        "description": "Updates an existing user's role, fullName, email, active status, and optionally resets their password (forcePasswordChange, default true, asks for a new one at the next local login). The username is specified in the URL path. If newPassword is provided, the user's password is changed without requiring the old password (admin reset). Requires authentication.",
         "parameters": [
           { "name": "username", "in": "path", "schema": { "type": "string" }, "description": "Username to update", "required": true }
         ],
@@ -428,65 +387,11 @@
         }
       }
     },
-    "/api/pdf2xml": {
-      "post": {
-        "tags": [
-          "Process"
-        ],
-        "summary": "Convert a text PDF to the flat XML of a PDF-source template",
-        "description": "Body: raw PDF bytes (application/octet-stream). Query: template (optional — its pdf.tableStart / pdf.tableEnd / pdf.match / pdf.field.N settings; defaults otherwise), filename. Returns the XML text the PDF-source pipeline would process: one element per labelled value, <Lignes>/<Ligne> for the table, <Textes>/<Texte> for every row. Preview only: nothing is written to dirInput. Used by the document editor and the XSL editor to load a sample straight from a PDF.",
-        "parameters": [
-          {
-            "name": "template",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "filename",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/octet-stream": {
-              "schema": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "example": {
-                    "success": true,
-                    "xml": "<?xml version=\"1.0\"?><Document …>…</Document>"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/process": {
       "post": {
         "tags": ["Process"],
         "summary": "Process a document",
-        "description": "Single processing entry point. The pipeline is selected by the document template's `source` property: XML (XML spool input — XSL transform — UBL) or UBL (already-formed UBL invoice; (doc, dct, kco) parsed from cbc:ID via the template's `idPattern` regex). When replaceMode is true, existing invoices in the database are overwritten. XML-source flags: noSend (skip PA send), mode (AUTO|SINGLE|BURST|UBL). UBL-source flags: validateOnly (no DB / no PA), sendToPA (Y|N — overrides settings). repairMode (all sources): rebuilds the invoice tables (header, lines, VAT, validation) of a document whose F564230 archive and F564235 history survived a lost replace — archive and history untouched, no lifecycle event written, header status/reason/action copied from the latest history event, never sent to the PA. Implies replace; ignores noSend/sendToPA/validateOnly.",
+        "description": "Single processing entry point. The pipeline is selected by the document template's `source` property: XML (XML spool input → XSL transform → UBL), UBL (already-formed UBL invoice; (doc, dct, kco) parsed from cbc:ID via the template's `idPattern` regex), connector, or PDF (text PDF converted to a flat XML of labelled values, one table and raw rows — settings pdf.tableStart / pdf.tableEnd / pdf.match / pdf.pageMatch / pdf.field.N — then processed as XML). When replaceMode is true, existing invoices in the database are overwritten. XML-source flags: noSend (skip PA send), mode (AUTO|SINGLE|BURST|UBL). UBL-source flags: validateOnly (no DB / no PA), sendToPA (Y|N — overrides settings). repairMode (all sources): rebuilds the invoice tables (header, lines, VAT, validation) of a document whose F564230 archive and F564235 history survived a lost replace — archive and history untouched, no lifecycle event written, header status/reason/action copied from the latest history event, never sent to the PA. Implies replace; ignores noSend/sendToPA/validateOnly.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProcessRequest" } } }
@@ -495,6 +400,19 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RunResult" } } }
+          }
+        }
+      }
+    },
+    "/api/pdf2xml": {
+      "post": {
+        "tags": ["Process"],
+        "summary": "Convert a text PDF to the flat XML of a PDF-source template",
+        "description": "Body: raw PDF bytes (application/octet-stream). Query: template (optional — its pdf.tableStart / pdf.tableEnd / pdf.match / pdf.field.N settings; defaults otherwise), filename. Returns the XML text the PDF-source pipeline would process: one element per labelled value, <Lignes>/<Ligne> for the table, <Textes>/<Texte> for every row. Preview only: nothing is written to dirInput. Used by the document editor and the XSL editor to load a sample straight from a PDF.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "xml": "<?xml version=\"1.0\"?><Document …>…</Document>" } } } }
           }
         }
       }
@@ -623,17 +541,17 @@
         "responses": {
           "200": {
             "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "totalEvents": 120, "alreadyRecorded": 115, "missing": 5, "applied": 0, "invoiceNotFound": 0, "unmappedCode": 0, "superseded": 0, "details": [ { "invoiceNumber": "FA-2026-001", "doc": "12345", "dct": "RI", "kco": "00070", "paCode": "203", "internalCode": "10", "statusAt": "2026-08-01T10:00:00", "state": "missing", "key": "12345|RI|00070|10" } ] } } } }
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "running": false, "logs": [], "totalEvents": 120, "alreadyRecorded": 115, "missing": 5, "applied": 0, "invoiceNotFound": 0, "unmappedCode": 0, "superseded": 0, "details": [ { "invoiceNumber": "FA-2026-001", "doc": "12345", "dct": "RI", "kco": "00070", "paCode": "203", "internalCode": "10", "statusAt": "2026-08-01T10:00:00", "state": "missing", "key": "12345|RI|00070|10" } ] } } } }
           }
         }
       },
       "post": {
         "tags": ["Integration"],
         "summary": "Start a lifecycle integrity check",
-        "description": "Starts a background check that fetches every PA event since the given date and compares it with the recorded lifecycle: a dry run (apply=false) reports the missing events, apply=true backfills them (idempotent — already-recorded codes are no-ops). fireNotifications controls whether backfilled transitions also fire notification rules; keys optionally restricts the run to specific event keys. The regular poll's watermark is never touched. Returns {running:true} immediately — poll the GET for the result. Requires the integration-run action grant.",
+        "description": "Starts a background check that fetches every PA event since the given date and compares it with the recorded lifecycle: a dry run (apply=false) reports the missing events, apply=true backfills them (idempotent — already-recorded codes are no-ops). fireNotifications controls whether backfilled transitions also fire notification rules; keys optionally restricts the run to specific event keys. until (optional, default now) bounds the PA search window on the right — exposed to the connector as {{toDate}} / {{toDateRaw}}; company (optional kco) limits the fetch to that company's status connector and the invoice lookup to that company. Plain dates are widened to the full day. The regular poll's watermark is never touched. Returns {running:true} immediately — poll the GET for the result. Requires the integration-run action grant.",
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "since": "2026-08-01", "apply": false, "fireNotifications": false, "keys": ["12345|RI|00070|10"] } } } }
+          "content": { "application/json": { "schema": { "type": "object", "example": { "since": "2026-08-01", "until": "2026-08-31", "company": "00070", "apply": false, "fireNotifications": false, "keys": ["12345|RI|00070|10"] } } } }
         },
         "responses": {
           "200": {
@@ -647,7 +565,7 @@
       "post": {
         "tags": ["Integration"],
         "summary": "Check lifecycle event ordering",
-        "description": "DB-only scan for PA-stage internal (99xx) lifecycle rows recorded AFTER a standard cycle-de-vie status (state misordered / invalid), standard statuses out of order (out-of-order, repaired by re-sequencing) and invoice headers that differ from the latest real state of their history (header-drift, key doc|dct|kco|header; the history-only markers 9912 and 9908 are looked past). A dry run (apply=false) reports the findings; apply=true deletes / re-sequences the selected rows and realigns the invoice header with the last real state. keys optionally restricts the fix. Runs synchronously and returns the same result shape as the integrity check. Requires the integration-run action grant.",
+        "description": "DB-only scan for PA-stage internal (99xx) lifecycle rows recorded AFTER a standard cycle-de-vie status (state misordered / invalid), standard statuses out of order (out-of-order, repaired by re-sequencing) and invoice headers that differ from the latest real state of their history (header-drift, key doc|dct|kco|header; the history-only markers 9912 and 9908 are looked past). A dry run (apply=false) reports the findings; apply=true deletes / re-sequences the selected rows and realigns the invoice header with the last real state. keys optionally restricts the fix. Runs in the background (whole-table scan): the POST returns {running:true}; poll GET on the same path for the log lines so far, then the result with the full log. Runs synchronously and returns the same result shape as the integrity check. Requires the integration-run action grant.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "type": "object", "example": { "apply": false, "keys": ["12345|RI|00070|9906"] } } } }
@@ -684,6 +602,23 @@
         }
       }
     },
+    "/api/scheduler/pause": {
+      "post": {
+        "tags": ["Scheduler"],
+        "summary": "Pause / resume a PA poller",
+        "description": "Pauses or resumes one of the two PA pollers without restarting the server: job='import' (the import-status poll on /import/{uuid}) or job='status' (the lifecycle status retrieval). Runtime-only — a server restart always resumes both, so a pause can never be forgotten forever. Complementary: the global fetchQuietFrom / fetchQuietTo properties (HH:mm, may cross midnight) define a daily window during which both pollers skip their runs automatically — set it over the send campaigns so per-invoice import polls don't pile up on the PA (requested by @GP). Returns the fresh scheduler status.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "job": "import", "paused": true } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "importActive": true, "importPaused": true, "statusPaused": false, "quietFrom": "06:00", "quietTo": "07:00", "quietActive": false } } } }
+          }
+        }
+      }
+    },
     "/api/scheduler": {
       "get": {
         "tags": ["Scheduler"],
@@ -693,23 +628,6 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SchedulerStatus" } } }
-          }
-        }
-      }
-    },
-    "/api/scheduler/pause": {
-      "post": {
-        "tags": ["Scheduler"],
-        "summary": "Pause / resume a PA poller",
-        "description": "Pauses or resumes one of the PA poller jobs at runtime — job is 'import' (the import-status poll) or 'status' (the lifecycle status retrieval). Effective on the next tick and deliberately runtime-only: a server restart always resumes, so a pause can't be forgotten. Drives the pause/resume button on the Tech Dashboard's Scheduler card. Complements the daily quiet window (global fetchQuietFrom / fetchQuietTo).",
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "job": "import", "paused": true } } } }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "importPaused": true, "statusPaused": false } } } }
           }
         }
       }
@@ -727,135 +645,6 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "configured": true, "lines": [{ "identifier": "422250845_FGX", "siret": "", "suffix": "FGX", "routingIdentifier": "", "platform": true, "status": "enabled", "name": "" }] } } } }
-          }
-        }
-      }
-    },
-    "/api/e-directory/search": {
-      "get": {
-        "tags": [
-          "Integration"
-        ],
-        "summary": "E-Directory search (composed)",
-        "description": "What the E-Directory page shows, in one call. q is a company name, SIREN or SIRET. Returns the INSEE companies matching the query (head office and matching establishments; a bare SIREN / SIRET is re-searched by company name so the establishments come back, as the page does), and for each company the PPF directory lines registered for its SIREN through the e-directory connector (directory.configured=false when the connector defines no listing endpoint; directory.error when the lookup failed for that company). peppol=true adds the Peppol participants per company (three network hops each — off by default). Also accepted as POST with body {q, peppol}.",
-        "parameters": [
-          {
-            "name": "q",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Company name, SIREN or SIRET"
-          },
-          {
-            "name": "peppol",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            },
-            "description": "Add the Peppol participants of each company (default false)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "example": {
-                    "success": true,
-                    "query": "NOMANA",
-                    "total": 1,
-                    "directoryConfigured": true,
-                    "companies": [
-                      {
-                        "siren": "794221705",
-                        "name": "NOMANA-IT",
-                        "headOffice": {
-                          "siret": "79422170500028",
-                          "postalCode": "33000",
-                          "city": "BORDEAUX",
-                          "status": "A"
-                        },
-                        "establishments": [
-                          {
-                            "siret": "79422170500028",
-                            "status": "A"
-                          }
-                        ],
-                        "directory": {
-                          "configured": true,
-                          "lines": [
-                            {
-                              "identifier": "794221705",
-                              "platform": true,
-                              "status": "enabled"
-                            }
-                          ]
-                        },
-                        "peppol": {
-                          "participants": [
-                            {
-                              "participantId": "0225:794221705",
-                              "name": "NOMANA-IT",
-                              "regDate": "2026-04-14",
-                              "apProvider": "Pennylane",
-                              "source": "directory"
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Integration"
-        ],
-        "summary": "E-Directory search (composed, POST form)",
-        "description": "Same as the GET form with the parameters in the body.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "example": {
-                  "q": "794221705",
-                  "peppol": false
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/peppol-lookup": {
-      "post": {
-        "tags": ["Integration"],
-        "summary": "Peppol participant + provider lookup",
-        "description": "Queries the public Peppol network for a SIREN (no account needed) and returns every registered participant with the service provider (access point / PA) operating it. Three server-side hops: the Peppol directory business card (directory.peppol.eu), the SML DNS resolution (NAPTR under *.iso6523-actorid-upis.participant.sml.prod.tech.peppol.org (EC zone edelivery.tech.ec.europa.eu as fallback)) and the participant's SMP (dynamic host). French registrations use ICD 0225, per-establishment identifiers included. When the SMP can't be resolved, the participant is still returned with its name and registration date and apProvider is left empty. Powers the E-Directory company card's Peppol section (lazy, on first expand). Because a business card is optional, the deterministic French identifiers are also probed in DNS — 0225:SIREN, 0002:SIREN, 0225:<id> for every PPF directory identifier passed in the optional identifiers[] (bare, suffixed SIREN_FGX, SIRET, routed) and 0009:SIRET for the optional sirets[] (head office first, 25 at most): a participant registered on an SMP without a business card is returned with source=dns and the optional name. SML zone: participant.sml.prod.tech.peppol.org (Peppol SML, 2026), with the legacy EC zone as fallback; public resolvers are tried when the system resolver answers nothing. directoryError is set when the directory was unreachable but the DNS probes still ran.",
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "siren": "803206317" } } } }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "participants": [ { "participantId": "0225:80320631700015", "name": "SARL AG VISION", "registrationDate": "2026-06-01", "apProvider": "Pennylane", "apSeat": "PFR000123", "apEndpoint": "https://ap.pennylane.com/as4", "smpUrl": "https://smp.pennylane.com/0225:80320631700015" } ] } } } }
           }
         }
       }
@@ -992,17 +781,17 @@
       "delete": {
         "tags": ["Invoices"],
         "summary": "Delete one lifecycle event",
-        "description": "Removes a single lifecycle event (by its sequence number) from the invoice's history and realigns the invoice's current status on the last remaining event — the clean manual fix when the platform delivered a stray status that it later superseded. Gated by a dedicated 'Delete lifecycle event' action grant.",
+        "description": "Removes a single status event (F564235 row, identified by its sequence number) from the invoice's history, then realigns the header status (F564231) with the last remaining event. Manual cleanup for stray PA events — e.g. a Refusée delivered although the PA later kept processing the invoice. Requires the dedicated invoice.lifecycle-delete action. Nothing else is touched; the operation is one event at a time by design.",
         "parameters": [
           { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
           { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
           { "name": "kco", "in": "path", "schema": { "type": "string" }, "description": "Company code (UHKCO)", "required": true },
-          { "name": "seqn", "in": "path", "schema": { "type": "integer" }, "description": "Sequence number of the lifecycle event to delete", "required": true }
+          { "name": "seqn", "in": "path", "schema": { "type": "integer" }, "description": "Event sequence number (USSEQN)", "required": true }
         ],
         "responses": {
           "200": {
             "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "status": "204" } } } }
           }
         }
       }
@@ -1145,6 +934,23 @@
         }
       }
     },
+    "/api/invoices/{doc}/{dct}/{kco}/fix-buyer": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Fix buyer identifiers in the stored UBL",
+        "description": "Surgically corrects the buyer identifiers inside the stored UBL (F564231 BLOB) — the most frequent PA rejection causes: SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49). Only the fields present in the body change; the rest of the document stays byte-identical. The endpoint scheme is endpointScheme when given, else the scheme already on the document, else 0225 (French PPF routing scheme); an empty siret removes the optional BT-46. The patched document is then revalidated and stored through the same pipeline as the edit window (status 9901/9902/9905, F564236 refreshed, audit lifecycle event with old/new values). Refused on PA-protected statuses, except a 213 Rejetée whose reason is an addressing one (ADR_ERR, REJ_ADR, DEST_INC): the invoice never reached the customer, so it may be repaired and resent. alertProcessed=\"Y\" also marks the invoice as reviewed by customer service (F564231.UHALRTPSD) when the validation raises no error; default N. resend=true chains a resend when the invoice is sendable after revalidation.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "siren": "123456789", "siret": "12345678900012", "vat": "FR40123456789", "endpointId": "123456789_XYZ", "endpointScheme": "0225", "resend": false, "alertProcessed": "N" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "status": "9901", "changes": [ { "field": "siren", "from": "123456780", "to": "123456789" } ], "validationErrors": [] } } } }
+          }
+        }
+      }
+    },
     "/api/invoices/{doc}/{dct}/{kco}/status": {
       "post": {
         "tags": ["Invoices"],
@@ -1162,33 +968,11 @@
         }
       }
     },
-    "/api/invoices/{doc}/{dct}/{kco}/fix-buyer": {
-      "post": {
-        "tags": ["Invoices"],
-        "summary": "Quick-fix the buyer identifiers",
-        "description": "Corrects the buyer identifiers most often rejected by the PA — SIREN (BT-47), SIRET (BT-46), intra-community VAT (BT-48) and electronic address (BT-49, with its scheme) — inside the invoice's stored UBL, without rebuilding the rest of the document. Only the identifiers supplied are replaced; everything else is preserved byte-for-byte. The invoice is then revalidated, an audit event records the old and new values in the lifecycle history, and when resend=true and validation passes it is resubmitted to the PA. Format safeguards apply (SIREN/SIRET length and check-digit coherence, VAT shape) and the PA-protection rule blocks the call once the platform has taken the invoice over. Powers the Fix buyer button in the invoice window. The electronic address scheme is endpointScheme when given, else the scheme already on the document, else 0225. alertProcessed=\"Y\" also marks the invoice as reviewed by customer service (F564231.UHALRTPSD) when the validation raises no error; default N.",
-        "parameters": [
-          { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
-          { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
-          { "name": "kco", "in": "path", "schema": { "type": "string" }, "description": "Company code (UHKCO)", "required": true }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "siren": "803206317", "siret": "80320631700015", "vat": "FR59803206317", "endpointId": "80320631700015", "endpointScheme": "0225", "resend": true, "alertProcessed": "N" } } } }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "changed": ["siret", "endpointId"], "status": "valid", "resent": true } } } }
-          }
-        }
-      }
-    },
     "/api/invoices/{doc}/{dct}/{kco}/reprocess": {
       "post": {
         "tags": ["Invoices"],
         "summary": "Reprocess one invoice from archived source",
-        "description": "Reprints the invoice: regenerates its outputs (readable PDF/XML plus the UBL file) from the archived JDE source spool (F564230.FETXFT) into the output folders WITHOUT any database change, WITHOUT re-validating the UBL and WITHOUT sending to the PA — the stored e-invoice and its validation results stay as they are, the status/reason/message are kept and a single 9912 'Retraitement' lifecycle event is appended, which also makes the invoice ineligible for a second reprocess. Eligible only for Deposited (200) invoices with reason NON_TRANSMISE whose template opts in (allowReprocess=Y). The template is read from the invoice row, never chosen by the caller.",
+        "description": "Reprints the invoice: regenerates its outputs (readable PDF/XML plus the UBL file) from the archived JDE source spool (F564230.FETXFT) into the output folders WITHOUT any database change, WITHOUT re-validating the UBL and WITHOUT sending to the PA — the stored e-invoice and its validation results stay as they are, the status/reason/message are kept and a single 9912 'Retraitement' lifecycle event is appended, which also makes the invoice ineligible for a second reprocess. The kind follows the status: a validation-failed invoice (9905) on a template with allowFullReprocess=Y is reprocessed in full, a Deposited NON_TRANSMISE one on a template with allowReprocess=Y is reprinted; kind=reprint|full in the body forces one. In the full kind the archived source goes through the normal pipeline again as a history-preserving replace: enrichment re-queried, UBL regenerated, validated and sent when the template and document type say so; the 9912 marker is written first and opens a new submission cycle, and a full reprocess may run again later. The template is read from the invoice row, never chosen by the caller.",
         "parameters": [
           { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
           { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
@@ -1196,7 +980,7 @@
         ],
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "mode": "AUTO" } } } }
+          "content": { "application/json": { "schema": { "type": "object", "example": { "mode": "AUTO", "kind": "reprint" } } } }
         },
         "responses": {
           "200": {
@@ -1227,10 +1011,10 @@
       "post": {
         "tags": ["Invoices"],
         "summary": "Bulk reprocess a selection",
-        "description": "Reprocesses the supplied key list synchronously with the same history-preserving, no-send flow as the single reprocess endpoint (regenerate from archived source, 9912 event, status restored). Returns an ok/failed tally plus a compact per-key result list.",
+        "description": "Reprocesses the supplied key list synchronously with the same flow as the single reprocess endpoint — the kind follows each invoice's status (9905 → full, 200 NON_TRANSMISE → reprint), kind=reprint|full forces one. The invoices are staged and processed as ONE batch per template and kind, in the background: the POST returns {running:true}; poll GET /api/invoices/reprocess-all for the log, then the ok/failed tally plus a compact per-key result list.",
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "keys": [ { "doc": "12345", "dct": "RI", "kco": "00070" } ], "mode": "AUTO" } } } }
+          "content": { "application/json": { "schema": { "type": "object", "example": { "keys": [ { "doc": "12345", "dct": "RI", "kco": "00070" } ], "mode": "AUTO", "kind": "reprint" } } } }
         },
         "responses": {
           "200": {
@@ -1244,7 +1028,7 @@
       "post": {
         "tags": ["Invoices"],
         "summary": "Reprocess every eligible invoice",
-        "description": "Reprocesses EVERY eligible invoice — Deposited (200) with reason NON_TRANSMISE, not already reprocessed (no 9912 event) and whose template opts in — rather than a hand-picked selection. Same synchronous, history-preserving, no-send flow per invoice; also the entry point for the -reprocess CLI mode. Returns the same ok/failed tally as the bulk endpoint.",
+        "description": "Runs in the background as one staged batch per template (POST returns {running:true}; GET on the same path polls the log, then the tally). With {\"kind\":\"full\"}: every validation-failed (9905) invoice on a template with allowFullReprocess=Y, reprocessed in full. Default: reprints EVERY eligible invoice — Deposited (200) with reason NON_TRANSMISE, not already reprocessed (no 9912 event) and whose template opts in — rather than a hand-picked selection. Same synchronous, history-preserving, no-send flow per invoice; also the entry point for the -reprocess CLI mode. Returns the same ok/failed tally as the bulk endpoint.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "type": "object", "example": { "mode": "AUTO" } } } }
@@ -1260,7 +1044,7 @@
     "/api/invoices/reprocess-eligible/count": {
       "get": {
         "tags": ["Invoices"],
-        "summary": "Count reprocess-eligible invoices",
+        "summary": "Count reprocess-eligible invoices (kind=full for the validation-failed set)",
         "description": "Returns how many invoices are currently eligible for reprocess (Deposited 200 with reason NON_TRANSMISE, no prior 9912 event, template opted in). Drives the Tech Dashboard 'Reprocess' card so its total matches what reprocess-all would actually run.",
         "responses": {
           "200": {
@@ -1312,7 +1096,7 @@
       "post": {
         "tags": ["Process"],
         "summary": "List input files",
-        "description": "Lists all XML files in the input directory. The directory is selected by the document template's `source` property: XML — dirInput with %TEMPLATE% resolved; UBL — dirInput/ubl.",
+        "description": "Lists all XML files in the input directory. The directory is selected by the document template's `source` property: XML → dirInput with %TEMPLATE% resolved; UBL → dirInput/ubl.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "type": "object", "example": { "template": "invoices" } } } }
@@ -1359,7 +1143,7 @@
       "post": {
         "tags": ["Process"],
         "summary": "Run batch processing",
-        "description": "Processes multiple files in batch mode. The pipeline is selected by the document template's `source` property (XML — -process subprocess; UBL — in-process via UBLInvoiceProcessor with cbc:ID regex parsing). Source 'directory' scans dirInput (XML) or dirInput/ubl (UBL). Source 'bip' extracts from BIP Print Queue jobs. Duplicate documents are skipped when replaceMode is false.",
+        "description": "Processes multiple files in batch mode. The pipeline is selected by the document template's `source` property (XML → -process subprocess; UBL → in-process via UBLInvoiceProcessor with cbc:ID regex parsing). Source 'directory' scans dirInput (XML) or dirInput/ubl (UBL). Source 'bip' extracts from BIP Print Queue jobs. Duplicate documents are skipped when replaceMode is false.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BatchRunRequest" } } }
@@ -1368,6 +1152,23 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BatchRunResult" } } }
+          }
+        }
+      }
+    },
+    "/api/watch-folders/run": {
+      "post": {
+        "tags": ["Process"],
+        "summary": "Scan the watched folders now",
+        "description": "Runs the watched-folder pickup (watch-folders template): lists each folder for files matching its name pattern and newer than its watermark minus the overlap, drops the ones already in F564230 (source file name) or already waiting as XML in the input folder, converts the PDFs in parallel into the document template's input folder, then runs one -process batch per template. folder limits the run to one entry (1-based), since widens the window for a backfill (yyyy-MM-dd or ISO instant), dryRun only reports, noProcess converts without the batch. The watermark advances to the scan start on every non-dry run. Runs in the background: the POST returns {running:true}; poll GET on the same path for the log lines so far, then the result with the full log. A template whose input folder is locked by a running batch is not started again (batches[template] says SKIPPED).",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "folder": 1, "since": "2026-09-01", "dryRun": true, "noProcess": false } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "dryRun": true, "converted": 0, "failed": 0, "folders": [ { "index": 1, "dir": "/data/mnt/SPBTCH30_ARCH", "template": "r5542565p", "cutoff": "2026-09-01T00:00:00Z", "matched": 1200, "candidates": 14, "alreadyProcessed": 12, "pending": 0, "converted": 0, "failed": 0, "error": null, "failures": [], "files": [ "R5542565P_GE001M_605784_PDF.pdf" ] } ], "batches": {} } } } }
           }
         }
       }
@@ -1681,6 +1482,51 @@
         }
       }
     },
+    "/api/peppol-lookup": {
+      "post": {
+        "tags": ["Integration"],
+        "summary": "Look up a SIREN in the public Peppol network",
+        "description": "Anonymous three-step lookup: the Peppol Directory business card (directory.peppol.eu — participant identifiers, name, registration date; French registrations use ICD 0225), then per participant the SML DNS NAPTR resolution to its SMP host, and the SMP service metadata whose AS4 certificate identifies the service provider (the French 'PA'): subject O= is the provider name, CN= its Peppol seat id. Each resolution step is best-effort — a participant found in the directory is returned even when the SML/SMP step fails (see its error field). Because a business card is optional, the deterministic French identifiers are also probed in DNS — 0225:SIREN, 0002:SIREN, 0225:<id> for every PPF directory identifier passed in the optional identifiers[] (bare, suffixed SIREN_FGX, SIRET, routed — the French Peppol identifiers are exactly those) and 0009:SIRET for the optional sirets[] (head office first, 25 at most): a participant registered on an SMP without a business card is returned with source=dns and the optional name. SML zone: participant.sml.prod.tech.peppol.org (Peppol SML, 2026), with the legacy EC zone as fallback, through the server's resolver only unless the e-directory setting peppolPublicDns=Y allows 8.8.8.8 / 1.1.1.1 as a fallback when it gives no answer. With the e-directory setting peppolResolveSmp=N the lookup stops after the SML step: smpUrl is filled (its host names the provider), apProvider / apSeat / apEndpoint stay empty — for networks that do not allow HTTPS to the providers' SMP hosts. directoryError is set when the directory was unreachable but the DNS probes still ran. No API key required; needs outbound DNS + HTTPS to the public Peppol infrastructure.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "siren": "794221705", "sirets": ["79422170500028"], "name": "NOMANA-IT", "identifiers": ["794221705", "794221705_FGX"] } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "participants": [ { "participantId": "0225:794221705", "name": "NOMANA-IT", "countryCode": "FR", "regDate": "2026-04-14", "smpUrl": "https://smp.pennylane.com", "apEndpoint": "https://pdp.pennylane.com/peppol/access_point/as4", "apProvider": "Pennylane", "apSeat": "POP000748", "source": "directory", "error": "" } ] } } } }
+          }
+        }
+      }
+    },
+    "/api/e-directory/search": {
+      "get": {
+        "tags": ["Integration"],
+        "summary": "E-Directory search (composed)",
+        "description": "What the E-Directory page shows, in one call. q is a company name, SIREN or SIRET. Returns the INSEE companies matching the query (head office and matching establishments; a bare SIREN / SIRET is re-searched by company name so the establishments come back, as the page does), and for each company the PPF directory lines registered for its SIREN through the e-directory connector (directory.configured=false when the connector defines no listing endpoint; directory.error when the lookup failed for that company). peppol=true adds the Peppol participants per company (three network hops each — off by default). Also accepted as POST with body {q, peppol}.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "query": "NOMANA", "total": 1, "directoryConfigured": true, "companies": [ { "siren": "794221705", "name": "NOMANA-IT", "headOffice": { "siret": "79422170500028", "address": "1 RUE X 33000 BORDEAUX", "street": "RUE X", "postalCode": "33000", "city": "BORDEAUX", "status": "A" }, "establishments": [ { "siret": "79422170500028", "address": "1 RUE X 33000 BORDEAUX", "street": "RUE X", "postalCode": "33000", "city": "BORDEAUX", "status": "A" } ], "directory": { "configured": true, "lines": [ { "identifier": "794221705", "siret": "", "suffix": "", "routingIdentifier": "", "platform": true, "status": "enabled", "name": "" } ] }, "peppol": { "participants": [ { "participantId": "0225:794221705", "name": "NOMANA-IT", "countryCode": "FR", "regDate": "2026-04-14", "smpUrl": "https://smp.pennylane.com", "apEndpoint": "https://pdp.pennylane.com/peppol/access_point/as4", "apProvider": "Pennylane", "apSeat": "POP000748", "error": "" } ] } } ] } } } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Integration"],
+        "summary": "E-Directory search (composed, POST form)",
+        "description": "Same as the GET form with the parameters in the body.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "q": "794221705", "peppol": false } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "query": "794221705", "total": 1, "directoryConfigured": true, "companies": [ "…" ] } } } }
+          }
+        }
+      }
+    },
     "/api/ai/chat": {
       "post": {
         "tags": ["AI"],
@@ -1728,7 +1574,7 @@
       "get": {
         "tags": ["Config"],
         "summary": "Column-override metadata",
-        "description": "Returns the static metadata the DbNomaubl — Columns editor needs to render: ordered table groups, each with its column field/key/default. Static — never changes per install — so the React tab can fetch it once. The actual override values live in the {@code db-nomaubl-columns} template ({@code config-columns.json}) and are read via the standard /api/config/template endpoint.",
+        "description": "Returns the static metadata the DbNomaubl → Columns editor needs to render: ordered table groups, each with its column field/key/default. Static — never changes per install — so the React tab can fetch it once. The actual override values live in the {@code db-nomaubl-columns} template ({@code config-columns.json}) and are read via the standard /api/config/template endpoint.",
         "responses": {
           "200": {
             "description": "Success",
@@ -1778,6 +1624,19 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "name": "invoices", "columns": [ { "name": "ublNumber", "labelEn": "Invoice number", "labelFr": "Numero de facture", "type": "string" } ] } } } }
+          }
+        }
+      }
+    },
+    "/api/pdf-templates/labels": {
+      "get": {
+        "tags": ["PDF templates"],
+        "summary": "PDF label catalog",
+        "description": "Every text the PDF generator prints (46 keys: document header, parties, lines table, line details, VAT summary, totals, payment) with its default English and French wording. A PDF template may override any of them per language through its labels block ({ \"labels\": { \"fr\": { key: text }, \"en\": { key: text } } }); blank = default. Edited in the visual builder's Labels panel; the override only applies to documents rendered with that template.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "labels": [ { "key": "invoiceNo", "group": "header", "en": "Invoice No.", "fr": "N° facture UBL" } ] } } } }
           }
         }
       }
@@ -1877,150 +1736,47 @@
     },
     "/api/reports/integrity": {
       "get": {
-        "tags": [
-          "Reports"
-        ],
+        "tags": ["Reports"],
         "summary": "Integrity checks (configured)",
         "description": "Lists the SQL integrity checks defined in the integrity-reports template (name, description, connector, key columns, SQL). Each check is a SELECT run against a db connector whose rows are the anomalies to act on — e.g. JDE print jobs never integrated, or accounting records whose amounts differ from the e-invoices.",
         "responses": {
           "200": {
             "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "example": {
-                    "success": true,
-                    "checks": [
-                      {
-                        "name": "missing-pdf",
-                        "description": "PDF jobs not processed",
-                        "connector": "db-jde",
-                        "keyColumns": [
-                          "JCPID",
-                          "JCVERS",
-                          "JCJOBNBR"
-                        ],
-                        "sql": "SELECT … WHERE JCSTDTIM > TO_DATE('{fromDMY}','dd-MM-yyyy') …"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "checks": [ { "name": "missing-pdf", "description": "PDF jobs not processed", "connector": "db-jde", "keyColumns": [ "JCPID", "JCVERS", "JCJOBNBR" ], "sql": "SELECT … WHERE JCSTDTIM > TO_DATE('{fromDMY}','dd-MM-yyyy')" } ] } } } }
           }
         }
       }
     },
     "/api/reports/integrity/run": {
       "post": {
-        "tags": [
-          "Reports"
-        ],
+        "tags": ["Reports"],
         "summary": "Run an integrity check",
-        "description": "Executes one configured check read-only (SELECT / WITH only, single statement per query) against its db connector — or, in the missing / extra / mismatch modes, a source and a target query on two connectors matched in memory on the key columns (keys normalised: trailing spaces, leading zeros, decimal scale, dates; mismatch adds a TARGET_<column> per compared pair and a DIFFERENCE column, numbers compared within the check's tolerance, 0.01 by default; the response then carries sourceCount / targetCount) — capped by the template's maxRows (default 5000) and timeoutSeconds (default 120). Date placeholders in the SQL are substituted from the optional range: {from} / {to} (yyyy-MM-dd), {fromJde} / {toJde} (JDE julian CYYDDD), {fromDMY} / {toDMY} (dd-MM-yyyy); defaults 1900-01-01 and today. Returns the result columns and rows as they come from the database.",
+        "description": "Executes one configured check read-only (SELECT / WITH only, single statement) against its db connector, capped by the template's maxRows (default 5000) and timeoutSeconds (default 120). Date placeholders in the SQL are substituted from the optional range: {from} / {to} (yyyy-MM-dd), {fromJde} / {toJde} (JDE julian CYYDDD), {fromDMY} / {toDMY} (dd-MM-yyyy); defaults 1900-01-01 and today. Returns the result columns and rows as they come from the database.",
         "requestBody": {
           "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "example": {
-                  "name": "missing-pdf",
-                  "dateFrom": "2026-09-01",
-                  "dateTo": "2026-10-12"
-                }
-              }
-            }
-          }
+          "content": { "application/json": { "schema": { "type": "object", "example": { "name": "missing-pdf", "dateFrom": "2026-09-01", "dateTo": "2026-10-12" } } } }
         },
         "responses": {
           "200": {
             "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "example": {
-                    "success": true,
-                    "name": "missing-pdf",
-                    "keyColumns": [
-                      "JCPID",
-                      "JCVERS",
-                      "JCJOBNBR"
-                    ],
-                    "columns": [
-                      {
-                        "name": "JOBKEY",
-                        "type": "string"
-                      }
-                    ],
-                    "rows": [
-                      [
-                        "R42565_ZJDE0001_1353306"
-                      ]
-                    ],
-                    "count": 1,
-                    "truncated": false
-                  }
-                }
-              }
-            }
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "name": "missing-pdf", "keyColumns": [ "JCPID", "JCVERS", "JCJOBNBR" ], "columns": [ { "name": "JOBKEY", "type": "string" } ], "rows": [ [ "R5542565P_GE0001_123456" ] ], "count": 1, "truncated": false, "durationMs": 240 } } } }
           }
         }
       }
     },
     "/api/reports/integrity/action": {
       "post": {
-        "tags": [
-          "Reports"
-        ],
+        "tags": ["Reports"],
         "summary": "Run a check's action on selected rows",
         "description": "Executes the follow-up action configured on the check for the selected result rows. Action fetch-bip integrates the JDE BI Publisher job of each row — the same as the command `fetch-single <template> bip <job> AUTO` — through the fetch-invoices run-batch: jobs[] are the values of the check's job column, templates[] of its template column (else the check's fixed template), hosts[] of its host column (optional, multi-host JDE). Returns the run-batch result (per-file success and logs, summary).",
         "requestBody": {
           "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "example": {
-                  "name": "missing-pdf",
-                  "jobs": [
-                    1353306
-                  ],
-                  "templates": [
-                    "invoices"
-                  ]
-                }
-              }
-            }
-          }
+          "content": { "application/json": { "schema": { "type": "object", "example": { "name": "missing-pdf", "jobs": [ 1353306 ], "templates": [ "invoices" ] } } } }
         },
         "responses": {
           "200": {
             "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "example": {
-                    "success": true,
-                    "results": [
-                      {
-                        "file": "R42565_ZJDE0001_1353306",
-                        "success": true,
-                        "logs": []
-                      }
-                    ],
-                    "summary": {
-                      "total": 1,
-                      "succeeded": 1,
-                      "failed": 0
-                    }
-                  }
-                }
-              }
-            }
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "results": [ { "file": "R574256A_AZ0004_1353306", "success": true, "logs": [] } ], "summary": { "total": 1, "succeeded": 1, "failed": 0 } } } } }
           }
         }
       }
@@ -2349,7 +2105,7 @@
         "description": "Streams a ZIP file containing the selected server-side paths (relative to the env directory). Path-traversal is rejected.",
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "files": [ "config/config.json", "template/invoices/template.xsl" ] } } } }
+          "content": { "application/json": { "schema": { "type": "object", "example": { "files": [ "config/config.json", "template/central/template.xsl" ] } } } }
         },
         "responses": {
           "200": {
@@ -2375,6 +2131,67 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "imported": 4, "files": [] } } } }
+          }
+        }
+      }
+    },
+    "/api/branding": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Instance branding (public)",
+        "description": "Environment name and theme colour of this instance, from global.envName and global.themeColor (#RRGGBB). Public, so the UI can show the environment badge and accent colour before login. Empty values mean the defaults.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "envName": "PROD", "themeColor": "#FF453A" } } } }
+          }
+        }
+      }
+    },
+    "/api/system/processes": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Processing JVMs on the host",
+        "description": "The NomaUBL processing JVMs alive on this host: children this server spawned (with the last output line each produced) and detached ones started by a previous server instance, by hand or by cron. pid, mode (-process, -watch-folders…), arguments without the config path, start time, elapsed time. Nothing is stopped automatically on a server restart.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "serverPid": 142850, "processes": [ { "pid": 143250, "mode": "-process", "args": "r5542565p --input-dir /data/nomaubl/rec/input/r5542565p/_reprocess_full_1760000000 --verbose --replace --preserve-history --force-replace", "startedAt": "2026-10-22T11:44:02Z", "elapsedMs": 120000, "detached": false, "lastLine": " ** INFO ** RUN ** START : Processing AUTO — template=r5542565p, file=26038904_RX_00005" } ] } } } }
+          }
+        }
+      }
+    },
+    "/api/system/processes/{pid}/stop": {
+      "post": {
+        "tags": ["System"],
+        "summary": "Stop a processing JVM",
+        "description": "Terminates the given NomaUBL processing JVM and its own children (never the server, never another program). A stopped batch leaves its input files in place; its lock is ignored once the process is gone. Requires the integration-run action grant.",
+        "parameters": [
+          { "name": "pid", "in": "path", "schema": { "type": "integer" }, "description": "Process id", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/system/log": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Tail of the server log file",
+        "description": "Reads the end of the server log file — the file the launcher redirected stdout to (resolved through /proc/self/fd/1 on Linux), else global.serverLogFile — and returns its lines newest first, split into severity / module / submodule / message when they follow the ' ** LEVEL ** MODULE ** SUB : msg' form. tailKb (default 512, max 8192) bounds the read; severity (comma list, OTHER = unstructured lines), module and q (text) filter; modules lists the modules seen in the tail. At most 5000 lines.",
+        "parameters": [
+          { "name": "tailKb", "in": "query", "schema": { "type": "integer" }, "description": "KB read from the end of the file (default 512)", "required": false },
+          { "name": "severity", "in": "query", "schema": { "type": "string" }, "description": "e.g. ERROR,WARN", "required": false },
+          { "name": "module", "in": "query", "schema": { "type": "string" }, "description": "e.g. STATUS", "required": false },
+          { "name": "q", "in": "query", "schema": { "type": "string" }, "description": "text to search", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "file": "/data/nomaubl/nomaubl-rec.log", "sizeBytes": 52428800, "tailKb": 512, "truncated": true, "scanned": 4100, "kept": 12, "modules": ["API", "STATUS"], "logs": [ { "severity": "ERROR", "module": "STATUS", "submodule": "RETRIEVE", "message": "…" } ] } } } }
           }
         }
       }
@@ -2419,7 +2236,7 @@
       "post": {
         "tags": ["EReporting"],
         "summary": "Generate one or more e-reports",
-        "description": "Runs the e-reporting handler in-process — generates the XML, persists it, optionally submits to the PA. {@code start}/{@code end} default to the next-due period for the configured frequency when omitted.",
+        "description": "Starts the e-reporting handler in the background (no-op when a run is already in progress) — generates the XML, validates it, persists it, optionally submits to the PA. Returns at once with {running:true}; poll GET /api/ereporting/generate/progress for the live log and the final summary. {@code start}/{@code end} default to the next-due period for the configured frequency when omitted.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "type": "object", "example": { "kco": "00070", "flux": ["10.1","10.3"], "start": "2026-04-01", "end": "2026-04-30", "typeCode": "IN" } } } }
@@ -2427,7 +2244,20 @@
         "responses": {
           "200": {
             "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "running": true } } } }
+          }
+        }
+      }
+    },
+    "/api/ereporting/generate/progress": {
+      "get": {
+        "tags": ["EReporting"],
+        "summary": "E-reporting generation progress",
+        "description": "Log lines of the background generation started by POST /api/ereporting/generate, plus running:true while it works. success is false when a line of severity ERROR was emitted (e.g. a report that failed the Flux 10 validation).",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "running": false, "success": true, "logs": [ { "severity": "INFO", "module": "EREPORTING", "submodule": "GENERATED", "message": "…" } ] } } } }
           }
         }
       }
@@ -2468,16 +2298,16 @@
       "get": {
         "tags": ["EReporting"],
         "summary": "Compute next due e-reporting period",
-        "description": "Returns the next period to generate based on the configured frequency (MONTHLY|DECADAL|WEEKLY) and the most-recent reported {@code RGEFDJ} for the given (kco, flux). Used by the Generate dialog to pre-fill the period picker.",
+        "description": "Returns the period the next run would generate for a company: the frequency of its e-reporting-{kco} template (default e-reporting) unless frequency is given, starting the day after the last report of that company and direction — validation-failed and cancelled reports excluded, as the run does — or the current period when none exists. frequencySource says where the frequency came from, lastPeriodEnd the report it follows (empty when none). Used by the Generate dialog to pre-fill the period picker.",
         "parameters": [
-          { "name": "kco", "in": "query", "schema": { "type": "string" }, "description": "Company code", "required": false },
-          { "name": "flux", "in": "query", "schema": { "type": "string" }, "description": "Flux — 10.1 or 10.3", "required": false },
-          { "name": "frequency", "in": "query", "schema": { "type": "string" }, "description": "MONTHLY | DECADAL | WEEKLY", "required": false }
+          { "name": "kco", "in": "query", "schema": { "type": "string" }, "description": "Company code (required for the last-period lookup)", "required": false },
+          { "name": "direction", "in": "query", "schema": { "type": "string" }, "description": "2 = outbound (default), 1 = inbound", "required": false },
+          { "name": "frequency", "in": "query", "schema": { "type": "string" }, "description": "MONTHLY | DECADAL | WEEKLY — overrides the template", "required": false }
         ],
         "responses": {
           "200": {
             "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "frequency": "MONTHLY", "start": "2026-04-01", "end": "2026-04-30", "startJde": 126091, "endJde": 126120 } } } }
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "frequency": "DECADAL", "frequencySource": "e-reporting-00070", "direction": "2", "lastPeriodEnd": "2026-04-10", "start": "2026-04-11", "end": "2026-04-20", "startJde": 126101, "endJde": 126110 } } } }
           }
         }
       }
@@ -2573,38 +2403,6 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "summary": "Notified user@example.com via portal+email; action ACK queued" } } } }
-          }
-        }
-      }
-    },
-    "/api/pdf-templates/labels": {
-      "get": {
-        "tags": [
-          "Invoices"
-        ],
-        "summary": "PDF label catalog",
-        "description": "Every text the PDF generator prints (46 keys: document header, parties, lines table, line details, VAT summary, totals, payment) with its default English and French wording. A PDF template may override any of them per language through its labels block ({ \"labels\": { \"fr\": { key: text }, \"en\": { key: text } } }); blank = default. Edited in the visual builder's Labels panel; the override only applies to documents rendered with that template.",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "example": {
-                    "success": true,
-                    "labels": [
-                      {
-                        "key": "invoiceNo",
-                        "group": "header",
-                        "en": "Invoice No.",
-                        "fr": "N° facture UBL"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
           }
         }
       }

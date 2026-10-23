@@ -124,11 +124,11 @@ SSO is a new capability — operators upgrading from a prior version should revi
 |---|---|
 | **Issuer URL** | Base URL of the OIDC IdP — for example `https://idp.example.com/realms/myrealm` for a Keycloak realm, an Auth0 tenant URL, or the Azure AD endpoint. NomaUBL fetches the IdP metadata from `<issuer>/.well-known/openid-configuration` so the individual endpoints (authorise, token, userinfo, JWKS) never need to be entered. |
 | **Client ID** | The OIDC client registered on the IdP side for NomaUBL. |
-| **Client secret** | Optional for public PKCE clients (the IdP can be configured without one). Stored Base64-encoded on disk. |
+| **Client secret** | Optional for public PKCE clients (the IdP can be configured without one). Sent to the identity provider exactly as typed. |
 | **Redirect URI** | Must exactly match the redirect URI registered on the IdP side. Typical value: `https://<your-host>/api/auth/oidc/callback`. |
 | **Scopes** | Space-separated. Defaults to `openid profile email`. Add provider-specific scopes here when extra claims are needed. |
 | **Token endpoint authentication** | How the authorization code is exchanged for tokens. **PKCE** *(default)* sends the secret in the request body (`client_secret_post`); **HTTP Basic** sends it in the `Authorization` header (`client_secret_basic`), without PKCE — for identity providers that accept only the latter. Match the client's setting on the IdP. |
-| **Debug logging** | `Y` writes the discovery result, the authorize URL, the token exchange and the ID-token claims to the server log, with tokens and secrets redacted. Sign-ins and refusals (IdP error, expired state, token exchange failure, domain refusal, unknown account) are always logged. |
+| **Debug logging** | `Y` writes the discovery result, the authorize URL, the token exchange and the ID-token claims to the server log, with tokens and secrets redacted; the token request also prints the length and SHA-256 fingerprint of the client secret actually sent, to compare with the provider's when it answers `invalid_client`. Sign-ins and refusals (IdP error, expired state, token exchange failure, domain refusal, unknown account) are always logged. |
 
 ---
 
