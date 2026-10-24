@@ -580,6 +580,35 @@ Un cron mensuel lancé le premier jour du mois produit le rapport du mois écoul
 
 ---
 
+## `-techreport` — rapport technique \{#techreport\}
+
+Produit le [rapport technique](../application/technical-report.md) de la version — la documentation développeur tirée des analyses du code embarquées à la construction.
+
+```bash
+java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <fichier>] [--date <libellé>] [--sections a,b,...] [--api-detail] [--snippets]
+```
+
+| Option | Effet |
+|---|---|
+| **`--lang`**, **`--format`**, **`--out`**, **`--date`** | Comme pour `-report`. Fichier par défaut : `nomaubl-technical-<langue>.md` (ou `.pdf`) dans le dossier courant. |
+| **`--sections <ids>`** | Sections séparées par des virgules : `scope`, `architecture`, `data`, `flows`, `configuration`, `statuses`, `impact`, `api`, `cli`, `build`, `appendix`. Par défaut : toutes. |
+| **`--api-detail`** | Détaille chaque opération de l'API (description et paramètres). |
+| **`--snippets`** | Ajoute les extraits de code en annexe. |
+
+---
+
+## `-demo` — corpus de démonstration \{#demo\}
+
+Remplit une instance de démonstration avec des factures fictives traitées par les vraies chaînes, puis conduit leurs cycles de vie datés, sans envoi à une plateforme. Demande **Demo instance = Y** dans les paramètres globaux — voir [Corpus de démonstration](../installation/demo-corpus.md).
+
+```bash
+java -jar nomaubl.jar -demo /opt/nomaubl/demo/config/config.json [--seed N] [--invoices 300] [--companies 5] [--customers 30] [--from aaaa-MM] [--months 6] [--sources ubl,jde,pdf,recv] [--out <dossier>] [--reset] [--no-process] [--no-lifecycle]
+```
+
+`--reset` retire tout ce que la démonstration a créé. Les options sont décrites sur la page [Corpus de démonstration](../installation/demo-corpus.md#en-ligne-de-commande).
+
+---
+
 ## `-purge` — purge de rétention \{#purge\}
 
 Exécute la [purge de rétention](../sync/scheduled-jobs/overview.md#retention) — la tâche que le serveur lance toutes les 24 heures — pour les sites qui la scriptent : lignes par fichier, durées des étapes et exécutions des tâches du journal des traitements, erreurs de validation des factures terminées, notifications. Le nombre de jours conservés par table vient de [`global → Job defaults → Retention`](../configuration/system/global.md#retention) ; vide ou `0` conserve tout (valeur par défaut).
@@ -595,7 +624,7 @@ java -jar nomaubl.jar -purge /opt/nomaubl/demo/config/config.json [--dry-run]
 Chaque table affiche une ligne avec son nombre de lignes, puis une ligne de synthèse.
 
 :::note[Pas de commande dans le wrapper]
-`nomaubl.sh` ne propose pas de commande `report`, `audit` ou `purge` : ces trois options se lancent avec `java -jar nomaubl.jar`, depuis le dossier de l'environnement.
+`nomaubl.sh` ne propose pas de commande `report`, `audit`, `techreport`, `demo` ou `purge` : ces options se lancent avec `java -jar nomaubl.jar`, depuis le dossier de l'environnement.
 :::
 
 ---

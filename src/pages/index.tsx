@@ -152,9 +152,11 @@ function DemoCard() {
     <section className={styles.demo}>
       <div className={styles.demoInner}>
         <div>
-          <h2 className={styles.demoTitle}>Try the Liberty demo</h2>
+          <h2 className={styles.demoTitle}>
+            {translate({id: 'homepage.demo.liberty.title', message: 'Try the Liberty demo'})}
+          </h2>
           <p className={styles.demoSubtitle}>
-            Apps available: LIBERTY, NOMASX-1 and NOMAJDE.
+            {translate({id: 'homepage.demo.liberty.subtitle', message: 'Apps available: LIBERTY, NOMASX-1 and NOMAJDE.'})}
           </p>
         </div>
         <pre className={styles.demoCreds}>
@@ -166,7 +168,30 @@ Password = demo2026`}</code>
           to="https://liberty.nomana-it.fr/"
           target="_blank"
           rel="noopener">
-          Launch demo →
+          {translate({id: 'homepage.demo.launch', message: 'Launch demo →'})}
+        </Link>
+      </div>
+      <div className={styles.demoInner}>
+        <div>
+          <h2 className={styles.demoTitle}>
+            {translate({id: 'homepage.demo.nomaubl.title', message: 'Try the NomaUBL demo'})}
+          </h2>
+          <p className={styles.demoSubtitle}>
+            {translate({
+              id: 'homepage.demo.nomaubl.subtitle',
+              message: 'E-invoicing on fictitious data: invoices, lifecycles, e-reporting and reports.',
+            })}
+          </p>
+        </div>
+        <span className={styles.demoCreds}>
+          {translate({id: 'homepage.demo.nomaubl.noLogin', message: 'No login required'})}
+        </span>
+        <Link
+          className="button button--primary button--lg"
+          to="https://nomaubl.nomana-it.fr/"
+          target="_blank"
+          rel="noopener">
+          {translate({id: 'homepage.demo.launch', message: 'Launch demo →'})}
         </Link>
       </div>
     </section>

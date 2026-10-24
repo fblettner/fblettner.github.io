@@ -70,7 +70,7 @@ Un clic sur une ligne ouvre une visionneuse à deux volets :
 - **Spool source archivé** — le document exactement tel qu'il a été reçu, avant toute transformation.
 - **UBL généré** — présent quand le document est devenu une facture ; l'UBL produit et envoyé.
 
-Chaque volet s'affiche formaté et se **télécharge**, nommé d'après le document. Un document qui a échoué avant de produire un UBL n'affiche que le spool source — exactement ce qu'il faut pour comprendre pourquoi.
+Chaque volet s'affiche formaté et se **télécharge**, nommé d'après le document. Quand le document a une [post-transformation](../ubl-tools/post-transform.md), le volet UBL propose aussi **Télécharger CII** (ou *Télécharger fichier converti*) : l'UBL archivé converti à la demande. Un document qui a échoué avant de produire un UBL n'affiche que le spool source — exactement ce qu'il faut pour comprendre pourquoi.
 
 Quand le document a un **modèle** et une **source archivée**, la visionneuse propose aussi un bouton **Extract & Process** : il ré-extrait le spool archivé et le retraite avec le modèle du document — le même pipeline que la page [Extraire & Traiter](../processing/extract-and-process.md) en source *Archive*, les paramètres venant du document lui-même. Le mode remplacement est forcé, la nouvelle exécution écrasant le résultat précédent. Pratique pour régénérer les sorties d'un document après un changement de modèle ou de configuration.
 

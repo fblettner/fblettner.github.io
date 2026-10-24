@@ -392,7 +392,7 @@ Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parti
 
 ### Summary tab *(default)*
 
-The Summary tab shows a coloured **status badge** at the top, followed by **action buttons** (Edit UBL, Copy, Delete) on the right. **Delete** removes the invoice and every related record — log row (source XML, PA transaction reference, source file name), lifecycle, lines, VAT and validation — so a later run of the same document starts fresh and the [watched folders](../management/watched-folders.md) can pick its source file up again. Deletion follows the same protection as *Fix buyer*: the button is hidden once the PA has processed the invoice, except for a **213** rejection with an addressing reason. Right under the badge, when the platform returned them, the current **rejection reason**, **expected action** and **status note** are shown inline, and the full **status message** sits in a collapsed group — expand it for the platform's long error text. The same values feed the custom actions as `{message}`, `{reasonLabel}`, `{actionLabel}` and `{actionNote}` placeholders (see [Actions](../management/actions.md#custom-actions)), with no list-view column needed.
+The Summary tab shows a coloured **status badge** at the top — with, under it, the status details and the **Rule set** the invoice was produced under (see [Rule sets](../ubl-tools/rule-sets.md)) — followed by **action buttons** (Edit UBL, Copy, Delete) on the right. **Delete** removes the invoice and every related record — log row (source XML, PA transaction reference, source file name), lifecycle, lines, VAT and validation — so a later run of the same document starts fresh and the [watched folders](../management/watched-folders.md) can pick its source file up again. Deletion follows the same protection as *Fix buyer*: the button is hidden once the PA has processed the invoice, except for a **213** rejection with an addressing reason. Right under the badge, when the platform returned them, the current **rejection reason**, **expected action** and **status note** are shown inline, and the full **status message** sits in a collapsed group — expand it for the platform's long error text. The same values feed the custom actions as `{message}`, `{reasonLabel}`, `{actionLabel}` and `{actionNote}` placeholders (see [Actions](../management/actions.md#custom-actions)), with no list-view column needed.
 
 #### Fix buyer \{#fix-buyer\}
 
@@ -579,6 +579,8 @@ Three sections in this tab:
 | **Validate UBL** | Re-runs XSD + Schematron validation on the UBL stored in the database. The result is shown inline (valid / warning / error) with details when applicable. |
 | **Set status** | Opens the *Set Status modal* — see below. |
 | **Resend** | Submits the UBL to the Plateforme Agréée again. Confirms before running. |
+| **Download UBL** | Saves the archived UBL of the invoice. |
+| **Download CII** | Shown when the document has a [post-transform](../ubl-tools/post-transform.md): the archived UBL converted on demand, named after the post-transform (*Download converted file* when it has no name). |
 
 #### Lifecycle group
 

@@ -99,9 +99,15 @@ Les libellés de cet éditeur restent en anglais, comme dans l'application.
 | Champ | Description |
 |---|---|
 | **Application Home** | Répertoire racine d'installation de NomaUBL (par ex. `/app/nomaubl`). Résolu par le placeholder `%APP_HOME%` utilisé dans les chemins de documents. |
+| **Demo instance** | `N` (défaut) / `Y`. Désigne l'instance comme instance de démonstration : elle peut alors, et seulement alors, être remplie de factures fictives — voir [Corpus de démonstration](../../installation/demo-corpus.md). Jamais sur une instance client. |
 | **Environment** | Nom court d'environnement (par ex. `demo`, `PD`). Résout le placeholder `%ENV%` dans les chemins des documents (`rtf`, `xsl`, `ublXslt`), permettant à un même modèle de cibler plusieurs environnements. Le nom s'affiche aussi en **badge à droite du titre de l'application** et dans l'onglet du navigateur. |
 | **Theme colour** | Sélecteur de couleur, à côté de l'environnement. Remplace le bleu d'accent de toute l'interface — titre, badge d'environnement, boutons principaux, liens, contours de focus — pour distinguer chaque environnement d'un coup d'œil. Badge et couleur sont servis par un endpoint public : la page de connexion les affiche déjà. Vide = bleu par défaut. |
 | **Process Home** | Répertoire de travail utilisé par NomaUBL pendant le traitement (par ex. `/app/nomaubl/process`). |
+
+
+Les champs de chemin — *Process Home*, les répertoires ci-dessous et le *Server log file* de l'onglet Logs — portent le bouton **Insérer une variable** `{ }` : il liste `%APP_HOME%`, `%ENV%` et `%PROCESS_HOME%` et insère celle choisie à la position du curseur.
+
+Quand *Demo instance* vaut `Y`, l'onglet affiche aussi un bloc **Demo corpus** qui remplit ou réinitialise les données de démonstration en tâche de fond — voir [Corpus de démonstration](../../installation/demo-corpus.md#from-the-settings).
 
 ### File Paths
 
@@ -218,7 +224,7 @@ Réglages de l'[assistant IA](../../application/ai-capabilities.md) intégré.
 |---|---|
 | **Source** | `llms` *(défaut)* : le fichier de documentation est téléchargé et interrogé sur ce serveur. `sitemap` : le modèle consulte lui-même les pages (fonctionnement précédent). |
 | **llms-full.txt URL** | Pages en anglais (défaut `https://docs.nomana-it.fr/llms-full.txt`). Rafraîchi toutes les 6 heures ; une URL, un chemin local ou une URL `file:`. S'il est injoignable au démarrage, la copie fournie avec l'application est utilisée. |
-| **llms-full.fr.txt URL** | Pages en français, utilisées quand l'interface est en français. Vide = pages anglaises pour toutes les langues. |
+| **llms-full.fr.txt URL** | Pages en français, utilisées quand l'interface est en français (défaut `https://docs.nomana-it.fr/llms-full.fr.txt`, retenu aussi quand le champ est vide). Si le fichier français ne peut pas être chargé, l'assistant se replie sur les pages anglaises. |
 | **Section** | Partie du fichier à indexer (son en-tête `# === … ===`, par ex. `NomaUBL`). Vide = tout le fichier. |
 
 ### Playbooks

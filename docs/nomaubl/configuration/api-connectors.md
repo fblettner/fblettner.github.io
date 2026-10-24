@@ -239,6 +239,7 @@ Three placeholders carry the document into the part:
 - `{{filePath}}` — the path to the UBL file on disk. On the **initial send** it is the input file; on a **resend** NomaUBL writes the stored UBL blob to a temporary file first, so `{{filePath}}` works the same way and one connector configuration serves both (the temp file is cleaned up automatically).
 - `{{content}}` — the base64 of the UBL, for platforms that take the bytes inline in a JSON body rather than as a file part.
 - `{{docName}}` — a sanitised `<doc>_<dct>_<kco>` name, handy for the `filename` header.
+- `{{derivedFilePath}}` / `{{derivedContent}}` — the path and the base64 of the file written by the document's [post-transform](../ubl-tools/post-transform.md) (CII…), for a platform that expects that syntax rather than UBL; empty when the document has none. `{{filePath}}` and `{{content}}` stay the UBL, which keeps the routing.
 
 #### SOAP / XML bodies
 

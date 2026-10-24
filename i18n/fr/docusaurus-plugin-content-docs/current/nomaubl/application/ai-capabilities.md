@@ -107,26 +107,30 @@ L'assistant connaît **la page affichée et la facture ouverte** : *« pourquoi 
 | **Barre de contexte** | La page affichée et, quand une fenêtre de facture est ouverte, une pastille avec le numéro et le statut de la facture. **×** sur la pastille écarte la facture de la conversation en cours. |
 | **Pastilles d'outil** | Chaque outil appelé, avec les filtres reçus. |
 | **📋 Copier** | Copie la réponse en Markdown, sans la ligne de relances. |
-| **Suggestions** | Au-dessus de la zone de saisie : les relances proposées par la dernière réponse ou, en début de conversation, trois questions adaptées à la page. |
+| **Domaines et questions** | Au-dessus de la zone de saisie : les relances de la dernière réponse, ou les quatre questions d'un domaine — voir [Contexte et questions de départ](#contexte-et-questions-de-départ). |
 
 ---
 
-## Contexte et suggestions
+## Contexte et questions de départ
 
 Chaque question part avec la **page affichée**, son **filtre de navigation** et la **facture ouverte** (document, type, société, numéro, statut, client). L'assistant considère que la question porte sur eux, sauf indication contraire.
 
-En début de conversation, les suggestions dépendent de la page :
+Au-dessus de la zone de saisie, un **sélecteur de domaine** propose quatre questions par domaine. Une question qui se termine par *…* remplit seulement la zone de saisie, à compléter (un numéro de facture, un client).
 
-| Page | Suggestions |
+| Domaine | Questions |
 |---|---|
-| Une fenêtre de facture est ouverte | *Pourquoi cette facture est-elle dans ce statut ?* · *Résume son cycle de vie* · *Que corriger pour la représenter ?* |
-| Tableau de bord IT, Journal serveur, Journal des traitements | *Des erreurs dans le journal serveur aujourd'hui ?* · *L'instance est-elle en bonne santé ?* · *Quelles factures ont échoué cette semaine et pourquoi ?* |
-| Tableau de bord, E-Invoicing | *Fais-moi la synthèse des factures de ce mois* · *Quelles factures attendent une action et que faire ?* · *Quelles factures ont échoué cette semaine et pourquoi ?* |
-| Rapports, E-Reporting | *Fais-moi la synthèse des factures de ce mois* · *Quelles factures attendent une action et que faire ?* · *Quels documents sont envoyés à la plateforme ?* |
-| Paramètres, Rôles, Utilisateurs, Développeur, Documents, Règles de notification, Actions, Tâches planifiées | *Quels documents sont envoyés à la plateforme ?* · *Quelles règles de notification sont actives ?* · *Qu'est-ce qui a changé dans la dernière version ?* |
-| Autres pages | *Fais-moi la synthèse des factures de ce mois* · *Que faire d'une facture refusée par le client ?* · *Quels documents sont envoyés à la plateforme ?* |
+| **Cette facture** *(quand une facture est ouverte)* | *Pourquoi cette facture est-elle dans ce statut ?* · *Résume son cycle de vie* · *Que corriger pour la représenter ?* · *Quelles sont ses erreurs de validation ?* |
+| **Période** | *Fais-moi la synthèse des factures de ce mois* · *Synthèse du mois dernier, comparée au mois précédent* · *Taux de dépôt et taux d'erreur de ce mois* · *Montants HT déposés ce mois, par société* |
+| **Reste à traiter** | *Quelles factures attendent une action et que faire ?* · *Quelles factures refusées restent à traiter ?* · *Des factures en attente de la plateforme depuis plus de 2 jours ?* · *Quelles factures sont déposées mais non transmises ?* |
+| **Factures** | *Quelles factures ont échoué cette semaine et pourquoi ?* · *Cherche la facture n° …* · *Factures du client …* · *Y a-t-il des doublons ce mois ?* |
+| **Statuts & erreurs** | *Que signifie le statut 9906 ?* · *Que faire d'une facture refusée par le client ?* · *Que faire d'une facture rejetée par la plateforme ?* · *Que signifie la règle BR-FR-…* |
+| **Configuration** | *Quels documents sont envoyés à la plateforme ?* · *Quelles règles de notification sont actives ?* · *Qui a accès à quoi (rôles et utilisateurs) ?* · *Comment est configurée la connexion à la plateforme ?* |
+| **Documentation** | *Comment fonctionnent les dossiers surveillés ?* · *Comment fonctionne le e-reporting ?* · *Comment renvoyer ou retraiter une facture ?* · *Qu'est-ce qui a changé dans la dernière version ?* |
+| **Technique** | *Des erreurs dans le journal serveur aujourd'hui ?* · *L'instance est-elle en bonne santé ?* · *Les tâches planifiées ont-elles toutes tourné ?* · *Lance les contrôles d'intégrité du mois* |
 
-Chaque réponse se termine par **une à trois relances** : la réponse naturelle à une question posée par l'assistant, la vérification suivante ou une question plus approfondie. Elles remplacent les suggestions et s'envoient d'un clic.
+La page choisit le domaine de départ : **Cette facture** quand une facture est ouverte ; **Technique** sur le tableau de bord IT, le Diagnostic et les Tâches planifiées ; **Configuration** sur les Paramètres, Rôles, Utilisateurs, Développeur, Documents, Règles de notification, Actions et Dossiers surveillés ; **Documentation** sur les pages de référence et les notes de version ; **Période** partout ailleurs — la comptabilité et les ventes arrivent sur la période, l'informatique sur l'instance.
+
+Chaque réponse se termine par **une à trois relances** : la réponse naturelle à une question posée par l'assistant, la vérification suivante ou une question plus approfondie. Elles remplacent les questions du domaine ; un clic sur un domaine les fait revenir.
 
 ---
 
@@ -140,6 +144,8 @@ Chaque réponse se termine par **une à trois relances** : la réponse naturelle
 | **`read_doc_page`** | 📖 | Lit une page trouvée par `search_docs`, par tranches de 12 000 caractères pour les pages longues. |
 | **`list_doc_pages`** | 📑 | La table des matières de la documentation, quand la recherche ne donne rien de pertinent. |
 | **`instance_docs`** | 🔍 | Le [rapport d'implémentation](./implementation-report.md) de cette instance : table des matières, une section, ou une recherche dans les sections. Appelé en premier pour toute question sur le paramétrage de *cette* instance. |
+
+La documentation est indexée par langue : une interface en français interroge les pages françaises, une interface en anglais les pages anglaises. L'index est actualisé toutes les six heures ; quand le site est injoignable, l'assistant utilise la copie de la documentation intégrée à l'application et le signale dans sa réponse.
 
 L'assistant cite la page utilisée et en donne le lien. Il n'invente ni réglage, ni code de statut, ni URL : quand la documentation ne couvre pas un point, il le dit.
 

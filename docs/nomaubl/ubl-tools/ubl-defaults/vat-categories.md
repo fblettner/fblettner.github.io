@@ -8,7 +8,7 @@ keywords: [NomaUBL, UBL, defaults, BT-118, BT-121, BT-151, VAT, TVA, S, Z, E, K,
 
 The **VAT** tab configures the VAT classification carried in every line and in the document-level VAT subtotals — `BT-118` (line VAT category) / `BT-151` (item VAT category) and `BT-121` (VAT exemption reason code). It exposes a default VAT category, a zero-rate code, a category mapping and an exemption mapping.
 
-The override mechanism is described in the [Overview](./overview.md). All four sections of this tab are governed by a single override toggle — toggling it pulls the entire group into the document file, and removing it deletes the entire override block.
+The override mechanism is described in the [Overview](./overview.md). All the sections of this tab — the rate grid included — are governed by a single override toggle — toggling it pulls the entire group into the document file, and removing it deletes the entire override block.
 
 ---
 
@@ -42,6 +42,31 @@ source XML VAT code
 
 The zero-rate setting takes precedence when the line's computed VAT amount is zero — it overrides the mapping for that case.
 
+
+A source code ending in `*` covers every code starting with it — `FRND_*` matches `FRND_1`, `FRND_3`… Exact codes are tried first, whatever the order of the rows.
+
+---
+
+## VAT rate by source code \{#vat-rate-by-source\}
+
+The **Source code → VAT rate mappings (BT-152)** grid gives a rate to a line from the code its VAT category is read from (`TAG_LINE_VAT_CATEGORY` in the mapping): a tax zone, a tax type, or a composite code built in the mapping. It serves sources whose spool prints no rate, or a rate that must not be trusted.
+
+| Column | Description |
+|---|---|
+| **External code** | The source code. A code ending in `*` covers every code starting with it; exact codes are tried first. |
+| **VAT rate (%)** | The rate, e.g. `5.5` (a comma typed is turned into a dot). |
+
+**When the line carries a rate** decides between the two:
+
+| Option | Effect |
+|---|---|
+| **Keep the source rate, the map fills blanks** *(default)* | The rate read from the source wins; the grid fills only the lines without one. |
+| **A matching map entry wins** | A matching row replaces the rate printed by the source. |
+
+The rate found applies to the line (BT-152) and to the VAT breakdown rows built from the lines. Nothing changes in the produced invoices until the grid is filled. A document can override the grid like the rest of the VAT tab.
+
+Example: `FRND_3 → 5.5`, `FRND_* → 20` — the code `FRND_3` gives 5.5 %, any other `FRND_…` code 20 %.
+
 ---
 
 ## VATEX exemption-code mapping
@@ -54,6 +79,9 @@ The second mapping table covers **BT-121** — the VAT exemption reason code (`V
 | **VATEX code** | The exemption code from the *vatex-codes* reference list. |
 
 When NomaUBL emits a category needing an exemption reason, it looks up the corresponding `VATEX-*` code from this mapping. Without a row for a non-standard category, the receiving Plateforme Agréée typically rejects the document with a Schematron rule failure.
+
+
+An exemption reason is never emitted on the taxed (`S`) and zero-rated (`Z`) categories, whatever the source carries.
 
 ---
 

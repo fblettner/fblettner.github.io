@@ -199,6 +199,19 @@ Le formulaire de mapping — l'alternative visuelle à la rédaction XSLT manuel
 | **Charger un échantillon connecteur** | Quand le document actif est en `source = Connecteur`, ce bouton appelle une fois la requête SQL ou l'endpoint REST configuré, puis injecte la réponse dans le même sélecteur de chemins. Les listes déroulantes XPath autocomplètent alors sur des données réelles — même expérience qu'avec un vrai spool XML, sans aucun fichier. Le bouton est masqué pour les modèles `XML` et `UBL`. |
 | **AI Auto-Map** ✦ | Ouvre la modale *AI Auto-Map*. À partir d'un échantillon XML (et d'un PDF optionnel), l'IA renvoie un mapping JSON des variables `TAG_*` vers les chemins XML, correctement scopés. Voir [AI Auto-Map](#ai-auto-map) ci-dessous. |
 | **Save Mappings** | Réécrit dans le fichier XSLT les valeurs courantes de toutes les variables `TAG_*`. Le point indicateur (`●`) apparaît quand le mapping a changé sans avoir été enregistré. |
+| **Vérifier le mapping** | Liste les champs obligatoires du jeu de règles sans source ni valeur par défaut, puis transforme l'échantillon chargé avec le mapping en cours et le valide — voir [Jeux de règles](#rule-sets) ci-dessous. |
+
+#### Jeux de règles \{#rule-sets\}
+
+Le haut de l'onglet s'appuie sur un [jeu de règles](./rule-sets.md) — *EN 16931 basique*, *EN 16931* ou *France étendu (CTC)* — présélectionné sur le jeu du document et modifiable pour en prévisualiser un autre. Chaque balise porte alors un badge — **obligatoire**, **conditionnel**, **optionnel**, **par défaut** (renseigné par les valeurs UBL par défaut), **hors du jeu** — avec la note de la condition en info-bulle.
+
+| Contrôle | Effet |
+|---|---|
+| **Jeu de règles** | Le jeu lu par l'onglet ; le choix est mémorisé dans le navigateur pour le fichier et ne le modifie pas. |
+| **Toutes les balises** / **Obligatoires et conditionnelles** / **Obligatoires manquantes** | Restreignent le formulaire aux balises exigées par le jeu, ou aux obligatoires encore sans source. |
+| **Afficher les balises hors du jeu** | Affiche les balises que le jeu ne connaît pas, masquées par défaut — les balises de l'extension française n'apparaissent que sous le jeu étendu. |
+| **Obligatoires renseignées** | Pour chaque groupe, les champs obligatoires dotés d'une source, d'une constante ou d'une valeur UBL par défaut. |
+| **Vérifier le mapping** | D'abord les champs obligatoires manquants, puis l'échantillon chargé transformé avec le mapping en cours et validé avec les contrôles du jeu et les contrôles spécifiques du document ; anomalies regroupées par champ, balises concernées mises en évidence. Rien n'est écrit en base et rien n'est envoyé. |
 
 #### Sections
 
@@ -250,6 +263,11 @@ Un select `TAG_*` ne se limite pas à un seul chemin XML :
 - **Valeurs constantes (accents graves).** Une valeur encadrée par des accents graves — par exemple `` `EDI` `` — est écrite telle quelle au lieu d'être lue dans la source. Valable pour toutes les variables de mappage ainsi que les champs d'extension, les notes et les attributs d'article — par exemple `TAG_COMPANY_CODE` = `` `00009` `` donne à une source mono-société sa société dans le numéro UBL et le bloc vendeur. Constantes et champs se combinent avec ` + ` (`` `Ref-` + DocNumber ``).
 - **Le document lui-même (`.`).** Une variable de groupe répété (`TAG_VAT_LINE`, `TAG_LINE_ITEM`…) peut désigner le document avec `.` — pour une source à plat dont l'unique récapitulatif TVA est imprimé sur le document et non dans un groupe.
 - **Chemins d'éléments dans les conditions.** Dans les définitions à séparateur « | » des champs d'extension personnalisés, des notes et des attributs d'article, les colonnes **condition** et **non-vide** acceptent un chemin avec « / » — par ex. `Facture_Entete_S4/CLI_TYPE_ID242` — en plus d'un simple nom d'élément, nécessaire quand le champ source se trouve sous un groupe intermédiaire. Un nom simple se comporte comme avant : les modèles existants ne changent pas ; la colonne valeur acceptait déjà les chemins.
+- **Somme (`sum(a, b, …)`).** Additionne les montants trouvés à plusieurs chemins — `sum(Vat/Amount)` totalise tous les montants de TVA du bloc, `sum(Net, Charges)` additionne deux champs.
+- **N'importe où (`//Champ`).** Trouve un champ n'importe où dans le bloc de la facture, quelle que soit sa profondeur — `//OrderNumber`.
+- **Saut de ligne (`"\n"`).** Dans une concaténation, `"\n"` insère un saut de ligne — `Terms1 + "\n" + Terms2` pour des conditions de paiement imprimées sur deux lignes.
+
+La section **Document Root** rappelle ces syntaxes au-dessus de ses champs : *Chemins : élément, parent/élément, ../élément, //élément (n'importe où), sum(a, b), a + " " + b, "\n" saut de ligne*. Les mappings existants produisent le même résultat qu'avant.
 
 #### Scoping
 

@@ -199,6 +199,19 @@ This is the form-based mapping editor — the visual replacement for hand-writte
 | **Load connector sample** | When the active document has `source = Connector`, this button calls the configured SQL query or REST endpoint once and feeds the response into the same path picker. The XPath dropdowns then autocomplete against actual data — same UX as a real XML spool, no file needed. The button is hidden for `XML` and `UBL` templates. |
 | **AI Auto-Map** ✦ | Opens the *AI Auto-Map* modal. Provide a sample XML (and optionally a rendered PDF) — the AI returns a JSON mapping of `TAG_*` variables to XML paths, scoped correctly. See [AI Auto-Map](#ai-auto-map) below. |
 | **Save Mappings** | Writes the current values of all `TAG_*` variables back into the XSLT file. The dot indicator (`●`) appears when mappings have changed but are not saved. |
+| **Check mapping** | Lists the required fields of the rule set with no source and no default, then transforms the loaded sample with the mapping as edited and validates it — see [Rule sets](#rule-sets) below. |
+
+#### Rule sets \{#rule-sets\}
+
+The top of the tab reads a [rule set](./rule-sets.md) — *EN 16931 basic*, *EN 16931* or *France extended (CTC)* — preselected on the set of the document and switchable to preview another one. Each tag then carries a badge — **required**, **conditional**, **optional**, **by default** (filled by the UBL defaults), **not in this set** — with the note of the condition in its tooltip.
+
+| Control | Effect |
+|---|---|
+| **Rule set** | The set read by the tab; the choice is remembered in the browser for the file and changes nothing in it. |
+| **All tags** / **Required and conditional** / **Missing required** | Narrow the form to the tags the set requires, or to the required ones still without a source. |
+| **Show tags outside the set** | Shows the tags the set does not know, hidden by default — the French extension tags appear only under the extended set. |
+| **Required mapped** | Per group, the required fields with a source, a constant or a UBL default. |
+| **Check mapping** | Missing required fields first, then the loaded sample transformed with the mapping as edited and validated with the packs of the set and the document's custom packs; findings grouped by field, tags concerned highlighted. Nothing is written to the database and nothing is sent. |
 
 #### Sections
 
@@ -250,6 +263,11 @@ A `TAG_*` select isn't limited to a single XML path:
 - **Constant values (backticks).** A value wrapped in backticks — for example `` `EDI` `` — is written as a fixed constant instead of being read from the source. Works on every mapping variable as well as custom extension fields, notes and item properties — e.g. `TAG_COMPANY_CODE` = `` `00009` `` gives a single-company source its company in the UBL number and the seller block. Constants and fields can be joined with ` + ` (`` `Ref-` + DocNumber ``).
 - **The document itself (`.`).** A repeating-group variable (`TAG_VAT_LINE`, `TAG_LINE_ITEM`…) can point at the document with `.` — for a flat source whose single VAT recap is printed on the document rather than in a group.
 - **Element paths in conditions.** In the pipe-separated specs for custom extension fields, notes and item properties, the **condition** and **non-empty** columns accept a slash path — e.g. `Facture_Entete_S4/CLI_TYPE_ID242` — in addition to a plain element name, needed when the source field sits below an intermediate group. Plain names behave exactly as before, so existing templates are unaffected; the value column already accepted paths.
+- **Sum (`sum(a, b, …)`).** Adds the amounts found at several paths — `sum(Vat/Amount)` totals every VAT amount of the block, `sum(Net, Charges)` adds two fields.
+- **Anywhere (`//Field`).** Finds a field anywhere in the invoice block, whatever its depth — `//OrderNumber`.
+- **Line break (`"\n"`).** In a concatenation, `"\n"` inserts a line break — `Terms1 + "\n" + Terms2` for payment terms printed on two lines.
+
+The **Document Root** section recalls these syntaxes above its fields: *Paths: element, parent/element, ../element, //element (anywhere), sum(a, b), a + " " + b, "\n" line break*. Existing mappings produce the same output as before.
 
 #### Scoping
 

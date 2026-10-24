@@ -70,7 +70,7 @@ Clicking a row opens a viewer with two panes:
 - **Archived source spool** — the document exactly as it was received, before any transform.
 - **Generated UBL** — present when the document became an invoice; the UBL that was produced and sent.
 
-Each pane is shown formatted and can be **downloaded**, named after the document. A document that failed before producing UBL shows only the source spool — which is precisely what you need to see why.
+Each pane is shown formatted and can be **downloaded**, named after the document. When the document has a [post-transform](../ubl-tools/post-transform.md), the UBL pane also offers **Download CII** (or *Download converted file*): the archived UBL converted on demand. A document that failed before producing UBL shows only the source spool — which is precisely what you need to see why.
 
 When the document has a **template** and an **archived source**, the viewer also offers an **Extract & Process** button: it re-extracts the archived spool and re-runs it through the document's template — the same pipeline as the [Extract & Process](../processing/extract-and-process.md) page with the *Archive* source, with the parameters taken from the document itself. Replace mode is forced, so the rerun overwrites the previous result. Handy to regenerate a document's outputs after a template or configuration change.
 

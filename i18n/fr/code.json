@@ -368,5 +368,23 @@
   "homepage.meta.description": {
     "message": "Documentation des logiciels édités par Nomana-IT : la plateforme low-code Liberty Next, Nomaflow, Nomasx-1, Nomajde pour JD Edwards EnterpriseOne, la facturation électronique NomaUBL et les API JD Edwards / BI Publisher, avec des assistants IA intégrés fondés sur Claude.",
     "description": "Meta description of the home page"
+  },
+  "homepage.demo.liberty.title": {
+    "message": "Essayer la démo Liberty"
+  },
+  "homepage.demo.liberty.subtitle": {
+    "message": "Applications disponibles : LIBERTY, NOMASX-1 et NOMAJDE."
+  },
+  "homepage.demo.launch": {
+    "message": "Lancer la démo →"
+  },
+  "homepage.demo.nomaubl.title": {
+    "message": "Essayer la démo NomaUBL"
+  },
+  "homepage.demo.nomaubl.subtitle": {
+    "message": "La facturation électronique sur des données fictives : factures, cycles de vie, e-reporting et rapports."
+  },
+  "homepage.demo.nomaubl.noLogin": {
+    "message": "Sans identifiant"
   }
 }

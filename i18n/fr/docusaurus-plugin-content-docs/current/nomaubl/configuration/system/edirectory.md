@@ -108,6 +108,7 @@ L'éditeur comporte **deux onglets** :
 | Champ | Valeurs | Description |
 |---|---|---|
 | **Enable Check** | `Y` / `N` | Quand cette option est activée, NomaUBL interroge l'annuaire PPF **avant l'envoi de chaque facture** pour vérifier que le **code adressage électronique** du document existe et est actif dans l'annuaire public. À désactiver pour ignorer la vérification (utile en test). |
+| **Recipient not found** | `Warn and send (default)` / `Block the send — invoice stops at validation failed` | Comportement quand le contrôle ne trouve pas le destinataire. **Warn** : l'absence est enregistrée comme anomalie de niveau avertissement `DIRECTORY_CHECK` et la facture part. **Block** : sur une facture destinée à la plateforme, une réponse définitive — destinataire non inscrit, ou trouvé mais non joignable — ou une adresse électronique absente (`EndpointID`) est une anomalie bloquante ; la facture s'arrête en échec de validation (`9905`) et n'est pas envoyée. Une erreur de connecteur ou de réseau reste un avertissement dans les deux modes, et les factures paramétrées pour ne pas être envoyées ne sont jamais bloquées. |
 
 ### Recherche INSEE
 

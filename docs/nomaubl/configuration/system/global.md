@@ -97,9 +97,15 @@ The jobs themselves — polls, batch document jobs, daily digests, auto-retries,
 | Field | Description |
 |---|---|
 | **Application Home** | Root install directory of NomaUBL (e.g. `/app/nomaubl`). Resolved by the `%APP_HOME%` placeholder used in document paths. |
+| **Demo instance** | `N` (default) / `Y`. Marks the instance as a demonstration instance: only then can it be filled with fictitious invoices — see [Demo corpus](../../installation/demo-corpus.md). Never on a customer instance. |
 | **Environment** | Short environment name (e.g. `demo`, `PD`). Resolves the `%ENV%` placeholder used in document paths (`rtf`, `xsl`, `ublXslt`) so the same template can target multiple environments. The name is also shown as a **badge right of the application title** and in the browser tab. |
 | **Theme colour** | Colour picker, next to the environment. Replaces the accent blue of the whole interface — title, environment badge, primary buttons, links, focus rings — so each environment is told apart at a glance. Badge and colour are served by a public endpoint, so the login page already carries them. Blank keeps the default blue. |
 | **Process Home** | Working directory used by NomaUBL during processing (e.g. `/app/nomaubl/process`). |
+
+
+The path fields — *Process Home*, the directories below and the *Server log file* of the Logs tab — carry the **insert placeholder** button `{ }`: it lists `%APP_HOME%`, `%ENV%` and `%PROCESS_HOME%` and inserts the one picked at the cursor.
+
+When *Demo instance* is `Y`, the tab also shows a **Demo corpus** block that fills or resets the demonstration data as a background job — see [Demo corpus](../../installation/demo-corpus.md#from-the-settings).
 
 ### File Paths
 
@@ -216,7 +222,7 @@ Settings of the in-app [AI assistant](../../application/ai-capabilities.md).
 |---|---|
 | **Source** | `llms` *(default)*: the documentation file is downloaded and searched on this server. `sitemap`: the model fetches the pages itself (previous behaviour). |
 | **llms-full.txt URL** | English pages (default `https://docs.nomana-it.fr/llms-full.txt`). Refreshed every 6 hours; a URL, a local path or a `file:` URL. If it cannot be reached at start, the copy bundled in the application is used. |
-| **llms-full.fr.txt URL** | French pages, used when the interface is in French. Empty = English pages for every language. |
+| **llms-full.fr.txt URL** | French pages, used when the interface is in French (default `https://docs.nomana-it.fr/llms-full.fr.txt`, also used when the field is blank). When the French file cannot be loaded, the assistant falls back to the English pages. |
 | **Section** | Part of the file to index (its `# === … ===` header, e.g. `NomaUBL`). Blank = the whole file. |
 
 ### Playbooks

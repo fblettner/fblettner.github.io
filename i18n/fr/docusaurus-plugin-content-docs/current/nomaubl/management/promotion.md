@@ -8,7 +8,7 @@ keywords: [NomaUBL, promotion, export, import, paquet, environnements, développ
 
 La page **Promotion** transfère la configuration d'une instance à une autre — du développement vers la recette, de la recette vers la production — **élément par élément**, avec les fichiers utilisés par chaque élément. L'export produit un paquet ; l'import montre ce que le paquet modifierait, champ par champ, puis l'écrit après un instantané de version. Les clés propres à une instance — mots de passe, URL, hôtes, licence, nom de l'environnement… — **ne voyagent jamais** et ne sont jamais écrasées sur la cible.
 
-Accès : **Gestion → Promotion**.
+Accès : **Gestion → Promotion**. La page compte quatre vues : **Exporter** (préparer un paquet), **Promouvoir** (envoyer la sélection directement à une autre instance), **Importer** (appliquer un paquet) et **Historique**.
 
 ---
 
@@ -200,6 +200,49 @@ Ce qu'écrit *Appliquer* :
 - l'import forme **une seule entrée du journal des versions**, avec son auteur et son commentaire.
 
 La grille est la table de données partagée ; sa vue figure dans l'éditeur des [vues de liste](../configuration/list-views.md).
+
+---
+
+## Promouvoir vers une autre instance \{#promote\}
+
+Quand les deux instances peuvent communiquer, la vue **Promouvoir** envoie la sélection de la vue Exporter directement à une instance cible, sans manipuler de fichier ZIP. Le paquet est constitué comme pour un export, puis transmis à l'aperçu de la cible, puis à son import.
+
+1. **Cocher les éléments** dans la vue Exporter (avec leurs dépendances).
+2. Dans **Promouvoir**, choisir l'**Instance cible** (la dernière utilisée est mémorisée), la règle des **Éléments et fichiers modifiés** — *Remplacer par le paquet* ou *Conserver la cible, n'écrire que les nouveaux* — et un commentaire.
+3. **Simulation sur la cible** : la cible renvoie son propre aperçu — nouveaux, modifiés, identiques, ignorés, avec les écarts par champ — affiché sous *Cible … · Aperçu*. Rien n'est écrit.
+4. **Promouvoir** applique ce plan après confirmation ; la cible prend un instantané de version avant chaque écriture, et ses clés d'instance conservent leur valeur. Le résultat indique *Promue vers … : n élément(s) et n fichier(s) écrits*.
+
+L'export ZIP reste disponible pour les instances qui ne peuvent pas communiquer.
+
+### Instances cibles \{#targets\}
+
+Les cibles se définissent une fois dans **Paramètres → Promotion targets** (domaine Platform) ; tant qu'aucune n'existe, l'en-tête des Paramètres propose **Add promotion targets**. Chaque cible comporte :
+
+| Champ | Description |
+|---|---|
+| **Name** | Affiché dans la liste des cibles de la page Promotion. |
+| **URL** | Racine de l'instance cible, avec son préfixe de chemin s'il y en a un (par exemple `https://test.example/nomaubl`). |
+| **Username** / **Password** | Compte sur la cible, qui doit y disposer de la fonctionnalité *Settings access* ; vide quand la cible fonctionne sans authentification. Le mot de passe est enregistré encodé et décodé sur le serveur uniquement pour l'appel. |
+
+Le compte n'est jamais transmis au navigateur et ne voyage jamais dans un paquet. Cet éditeur reste en anglais dans l'application.
+
+---
+
+## Historique \{#history\}
+
+La vue **Historique** liste chaque paquet exporté, import appliqué et promotion appliquée sur l'instance, du plus récent au plus ancien :
+
+| Colonne | Description |
+|---|---|
+| **Quand** | Date et heure. |
+| **Sens** | *Export*, *Import* ou *Promue*. |
+| **Contrepartie** | La cible d'une promotion, la source d'un import. |
+| **Auteur** | Qui l'a lancée. |
+| **Politique** | *replace* ou *keep*. |
+| **Éléments** / **Fichiers** | Nombres. |
+| **Commentaire** | Le commentaire saisi. |
+
+Une ligne ouvre l'entrée avec son plan complet et ses écarts. Une instance source garde ses promotions, une cible ses imports. Chaque entrée est un fichier JSON du dossier `promotions` de l'environnement.
 
 ---
 

@@ -104,7 +104,7 @@ The navigation on the left groups the entries by **what you want to set**, not b
 
 | Area | Entries |
 |---|---|
-| **Platform** | The [global settings](./system/global.md) tabs — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant*, *License* — then the databases: [NomaUBL database](./database-connectors/nomaubl.md), [JD Edwards database](./database-connectors/jdedwards.md) and any other database connector. |
+| **Platform** | The [global settings](./system/global.md) tabs — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant*, *License* — then **Promotion targets** (the instances the [Promotion](../management/promotion.md#targets) page can promote to) and the databases: [NomaUBL database](./database-connectors/nomaubl.md), [JD Edwards database](./database-connectors/jdedwards.md) and any other database connector. |
 | **Security** | *Authentication* (global tab), [Single sign-on (OIDC)](./system/oidc.md), [Users](./security/users.md) and [Roles](./security/roles.md). |
 | **E-invoicing** | [E-invoicing](./system/einvoicing.md), [Document types](./system/document-types.md), [Status catalogue](./system/statuses.md), [Directory lookup](./system/edirectory.md). |
 | **E-reporting** | [E-reporting](./system/ereporting.md) and the *E-reporting status catalogue*. |
@@ -140,7 +140,7 @@ Settings rarely changed are folded under an **Advanced** line, closed by default
 | Action | Effect |
 |---|---|
 | **Add API** · **Add SQL** · **Add List** | Create an API connector, a SQL connector or a custom list. |
-| **Add OIDC** · **Add integrity reports** | Shown while the instance has no single sign-on or integrity-check template; creates it. |
+| **Add OIDC** · **Add integrity reports** · **Add promotion targets** | Shown while the instance has no single sign-on, integrity-check or promotion-target template; creates it. |
 | **Copy** | Duplicate the selected template under a new name. Not available on the system templates. |
 | **Remove** | Delete the selected template. Not available on the system templates. |
 | **Description (optional)** | Free description of the template, shown under its entry. |

@@ -8,7 +8,7 @@ keywords: [NomaUBL, UBL, defaults, BT-118, BT-121, BT-151, TVA, S, Z, E, K, G, A
 
 L'onglet **VAT** configure la classification TVA portée sur chaque ligne et sur les sous-totaux TVA au niveau document — `BT-118` (catégorie TVA de ligne) / `BT-151` (catégorie TVA de l'article facturé) et `BT-121` (code motif d'exonération). Il propose une catégorie par défaut, un code de taux zéro, une correspondance de catégorie et une correspondance d'exonération.
 
-Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). Les quatre sections de cet onglet sont gouvernées par une bascule de surcharge unique — l'activer fait basculer l'intégralité du groupe dans le fichier document, et la suppression retire le bloc de surcharge en totalité.
+Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). Toutes les sections de cet onglet — y compris la grille des taux — sont gouvernées par une bascule de surcharge unique — l'activer fait basculer l'intégralité du groupe dans le fichier document, et la suppression retire le bloc de surcharge en totalité.
 
 ---
 
@@ -42,6 +42,31 @@ code TVA source du XML
 
 Le paramètre de taux zéro l'emporte quand le montant de TVA calculé sur la ligne est nul — il prime sur le mapping dans ce cas.
 
+
+Un code source terminé par `*` couvre tous les codes qui commencent ainsi — `FRND_*` couvre `FRND_1`, `FRND_3`… Les codes exacts passent d'abord, quel que soit l'ordre des lignes.
+
+---
+
+## Taux de TVA par code source \{#vat-rate-by-source\}
+
+La grille **Correspondances code source → taux de TVA (BT-152)** attribue un taux à une ligne à partir du code dont sa catégorie TVA est tirée (`TAG_LINE_VAT_CATEGORY` dans le mapping) : une zone fiscale, un type de taxe ou un code composé dans le mapping. Elle sert les sources dont le spool n'imprime pas de taux, ou un taux auquel il ne faut pas se fier.
+
+| Colonne | Description |
+|---|---|
+| **Code externe** | Le code source. Un code terminé par `*` couvre tous les codes qui commencent ainsi ; les codes exacts passent d'abord. |
+| **Taux de TVA (%)** | Le taux, par exemple `5.5` (une virgule saisie devient un point). |
+
+**Si la ligne porte déjà un taux** tranche entre les deux :
+
+| Option | Effet |
+|---|---|
+| **Garder le taux source, la table complète les vides** *(défaut)* | Le taux lu dans la source l'emporte ; la grille ne renseigne que les lignes qui n'en ont pas. |
+| **Une correspondance trouvée l'emporte** | Une ligne de la grille qui correspond remplace le taux imprimé par la source. |
+
+Le taux trouvé s'applique à la ligne (BT-152) et aux lignes de ventilation de TVA construites à partir des lignes. Rien ne change dans les factures produites tant que la grille est vide. Un document peut remplacer la grille comme le reste de l'onglet TVA.
+
+Exemple : `FRND_3 → 5.5`, `FRND_* → 20` — le code `FRND_3` donne 5,5 %, tout autre code `FRND_…` donne 20 %.
+
 ---
 
 ## Mapping des codes d'exonération VATEX
@@ -54,6 +79,9 @@ La seconde table de mapping couvre le **BT-121** — le code motif d'exonératio
 | **Code VATEX** | Code d'exonération issu de la liste de référence *vatex-codes*. |
 
 Quand NomaUBL émet une catégorie qui demande un motif d'exonération, le code `VATEX-*` correspondant est recherché dans ce mapping. Sans ligne pour une catégorie non standard, la Plateforme Agréée destinataire rejette typiquement le document via un échec de règle Schematron.
+
+
+Aucun motif d'exonération n'est émis sur les catégories taxée (`S`) et à taux zéro (`Z`), quoi que porte la source.
 
 ---
 

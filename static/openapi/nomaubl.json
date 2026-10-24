@@ -1017,6 +1017,24 @@
         }
       }
     },
+    "/api/invoices/{doc}/{dct}/{kco}/derived": {
+      "get": {
+        "tags": ["Invoices"],
+        "summary": "Derived document (post-transform)",
+        "description": "Runs the archived UBL through the post-transform stylesheet of the invoice's document template (postTransform / postTransformSuffix, e.g. the shipped ubl-to-cii.xsl) and returns the result as a JSON string with the file name to save it under and the template's name for it (postTransformName, e.g.\n\nCII). Computed on demand, nothing is stored. Error when the template names no post-transform; same visibility rule as /xml.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
+          { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
+          { "name": "kco", "in": "path", "schema": { "type": "string" }, "description": "Company code (UHKCO)", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "xml": "<?xml version=\"1.0\"?>…", "fileName": "1001-RI-00010-cii.xml", "label": "CII" } } } }
+          }
+        }
+      }
+    },
     "/api/invoices/create-ubl": {
       "post": {
         "tags": ["Invoices"],
@@ -1040,7 +1058,7 @@
         "tags": ["Invoices"],
         "x-permission": "invoice.resend",
         "summary": "Resend invoice to PA",
-        "description": "Re-submits the invoice's UBL XML to the Plateforme Agreee.\n\nThe XML is retrieved from the database BLOB and sent via the PA import API. A new UUID is assigned and the invoice status is updated to 9906 (pending). Use this when a previous submission failed or was rejected and the issue has been resolved.\n\n**Access:** invoice.resend.",
+        "description": "Re-submits the invoice's UBL XML to the Plateforme Agreee.\n\nThe XML is retrieved from the database BLOB and sent via the PA import API. A new UUID is assigned and the invoice status is updated to 9906 (pending). Use this when a previous submission failed or was rejected and the issue has been resolved. The connector body receives the same placeholders as the initial send, including {{derivedContent}} / {{derivedFilePath}} (the document template's post-transform output, computed again from the archived UBL; empty when the template has none).\n\n**Access:** invoice.resend.",
         "responses": {
           "200": {
             "description": "Success",
@@ -1998,11 +2016,13 @@
       "get": {
         "tags": ["VAT"],
         "summary": "VAT declaration matrix (CA3)",
-        "description": "Aggregates invoices by (direction x country group x VAT rate) for the period and returns one row per cell of the CA3-style matrix, with base amount, VAT amount, invoice count and the drill-down filter for the details endpoint.\n\nRead-only by design — entering or amending VAT declarations is the accounting system's job; NomaUBL only summarises invoices. dateFrom and dateTo are required; kco optionally restricts to one company.\n\n**Access:** any signed-in user.",
+        "description": "Aggregates invoices by (direction x country group x VAT rate) for the period and returns one row per cell of the CA3-style matrix, with base amount, VAT amount, invoice count and the drill-down filter for the details endpoint.\n\nRead-only by design — entering or amending VAT declarations is the accounting system's job; NomaUBL only summarises invoices. Invoices refused by the buyer (210) or rejected by the platform (213) call for an internal credit note: excludeMode=all (default) leaves them all out, excludeMode=reviewed leaves out only those customer service marked reviewed. dateFrom and dateTo are required; kco optionally restricts to one company.\n\n**Access:** any signed-in user.",
         "parameters": [
           { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "Period lower bound (yyyy-MM-dd)", "required": true },
           { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "Period upper bound (yyyy-MM-dd)", "required": true },
-          { "name": "kco", "in": "query", "schema": { "type": "string" }, "description": "Company code filter", "required": false }
+          { "name": "kco", "in": "query", "schema": { "type": "string" }, "description": "Company code filter", "required": false },
+          { "name": "excludeMode", "in": "query", "schema": { "type": "string" }, "description": "all (default): every refused (210) or rejected (213) invoice is left out; reviewed: only those customer service marked reviewed", "required": false },
+          { "name": "excludeUnsent", "in": "query", "schema": { "type": "string" }, "description": "1 to also leave out the invoices flagged to be sent that never reached the platform (validation, send or import failure, not yet sent)", "required": false }
         ],
         "responses": {
           "200": {
@@ -2042,7 +2062,9 @@
         "parameters": [
           { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "Period lower bound (yyyy-MM-dd)", "required": true },
           { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "Period upper bound (yyyy-MM-dd)", "required": true },
-          { "name": "kco", "in": "query", "schema": { "type": "string" }, "description": "Company code filter", "required": false }
+          { "name": "kco", "in": "query", "schema": { "type": "string" }, "description": "Company code filter", "required": false },
+          { "name": "excludeMode", "in": "query", "schema": { "type": "string" }, "description": "all (default): every refused (210) or rejected (213) invoice is left out; reviewed: only those customer service marked reviewed", "required": false },
+          { "name": "excludeUnsent", "in": "query", "schema": { "type": "string" }, "description": "1 to also leave out the invoices flagged to be sent that never reached the platform (validation, send or import failure, not yet sent)", "required": false }
         ],
         "responses": {
           "200": {
@@ -2632,7 +2654,7 @@
       "get": {
         "tags": ["Documents"],
         "summary": "Generated UBL document",
-        "description": "Returns the generated UBL 2.1 XML for the document, read from F564231.UHTXFT.\n\nReturns {\"xml\": null} when the document never became a UBL invoice (no header row / no BLOB). Access is gated by the caller's company / row grants.\n\n**Access:** any signed-in user.",
+        "description": "Returns the generated UBL 2.1 XML for the document, read from F564231.UHTXFT.\n\nReturns {\"xml\": null} when the document never became a UBL invoice (no header row / no BLOB). derivedSuffix / derivedLabel describe the template's post-transform when it has one, so the window can offer the derived download. Access is gated by the caller's company / row grants.\n\n**Access:** any signed-in user.",
         "parameters": [
           { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
           { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
@@ -2641,7 +2663,25 @@
         "responses": {
           "200": {
             "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "example": { "xml": null } } } }
+            "content": { "application/json": { "schema": { "type": "object", "example": { "xml": null, "derivedSuffix": "-cii.xml", "derivedLabel": "CII" } } } }
+          }
+        }
+      }
+    },
+    "/api/list-documents/{doc}/{dct}/{kco}/derived": {
+      "get": {
+        "tags": ["Documents"],
+        "summary": "Derived document (post-transform)",
+        "description": "Runs the archived UBL through the post-transform stylesheet of the document's template and returns the result as a JSON string with the file name to save it under and the template's name for it.\n\nComputed on demand, nothing is stored. Error when the template names no post-transform.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "doc", "in": "path", "schema": { "type": "string" }, "description": "Document number (UHDOC)", "required": true },
+          { "name": "dct", "in": "path", "schema": { "type": "string" }, "description": "Document type (UHDCT)", "required": true },
+          { "name": "kco", "in": "path", "schema": { "type": "string" }, "description": "Company code (UHKCO)", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "xml": "<?xml version=\"1.0\"?>…", "fileName": "1001_RI_00010-cii.xml", "label": "CII" } } } }
           }
         }
       }
@@ -2864,6 +2904,27 @@
         }
       }
     },
+    "/api/reports/technical": {
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Technical report (Markdown or PDF)",
+        "description": "Generates the developer documentation of the release from the scans bundled at build: scope, architecture, data model (tables and columns with their configuration keys, flows and call sites), the flow documents with the tables, statuses and keys their code touches, the configuration reference (every key with its settings field, flows, call sites and state), the status model (invoice and e-reporting tags, codes, groups), the impact matrix per flow with the most referenced columns and keys, the API reference, the command line from the built-in help, the build steps and jar layout, and an appendix of code references.\n\nProduct documentation: identical on every instance of a release except the resolved table names. A copy is kept under the environment's reports folder. Requires the settings feature.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "lang", "in": "query", "schema": { "type": "string" }, "description": "fr (default) or en", "required": false },
+          { "name": "format", "in": "query", "schema": { "type": "string" }, "description": "md (default) or pdf", "required": false },
+          { "name": "date", "in": "query", "schema": { "type": "string" }, "description": "Date label on the cover (default: today)", "required": false },
+          { "name": "sections", "in": "query", "schema": { "type": "string" }, "description": "Comma-separated: scope, architecture, data, flows, configuration, statuses, impact, api, cli, build, appendix (default: all)", "required": false },
+          { "name": "apiDetail", "in": "query", "schema": { "type": "string" }, "description": "1 to include the description and parameters of every API operation (default: one row per operation)", "required": false },
+          { "name": "snippets", "in": "query", "schema": { "type": "string" }, "description": "1 to include the code snippets in the appendix (default: files and counts only)", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "contentType": "text/markdown or application/pdf", "note": "file download" } } } }
+          }
+        }
+      }
+    },
     "/api/promotion/items": {
       "get": {
         "tags": ["Files & versions"],
@@ -2935,6 +2996,116 @@
         }
       }
     },
+    "/api/promotion/targets": {
+      "get": {
+        "tags": ["Files & versions"],
+        "summary": "Promotion target instances",
+        "description": "The instances defined in Settings › Promotion targets (instance.N.name / url / username / password): name and URL only, the account never leaves the server. configured=false when the promotion template does not exist yet.\n\nRequires the settings feature.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "configured": true, "targets": [ { "name": "test", "url": "https://test.example/nomaubl" } ] } } } }
+          }
+        }
+      }
+    },
+    "/api/promotion/push": {
+      "post": {
+        "tags": ["Files & versions"],
+        "x-permission": "any signed-in user",
+        "summary": "Promote the selection to another instance",
+        "description": "Builds the package of the given items (as the export does), signs in on the target instance named in target (an instance of Settings › Promotion targets: its URL and account are read on the server) and calls the target's own /api/promotion/preview (apply=false, dry run) or /api/promotion/import (apply=true).\n\nReturns the target's answer with the target URL added. A promotion that applied is one entry of this instance's promotion history; the target records its import. Requires the settings feature.\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "items": ["document:invoices"], "target": "test", "policy": "replace", "comment": "release 2026.10", "apply": false } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "target": "https://test.example/nomaubl", "applied": false, "policy": "replace", "summary": { "itemsNew": 1, "itemsChanged": 0, "itemsIdentical": 0, "itemsSkipped": 0, "filesNew": 2, "filesChanged": 0, "filesIdentical": 0, "filesSkipped": 0 }, "items": [], "files": [] } } } }
+          }
+        }
+      }
+    },
+    "/api/promotion/history": {
+      "get": {
+        "tags": ["Files & versions"],
+        "summary": "Promotion history",
+        "description": "The promotions recorded on this instance, newest first: every package exported, every import applied and every push applied, with who, when, the counterpart (source environment or target URL), the policy, the comment and the number of items and files.\n\nKept as one JSON file per entry under the environment's promotions folder. Requires the settings feature.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "entries": [ { "id": "20261024-181200-123-push", "at": "2026-10-24T16:12:00Z", "author": "admin", "direction": "push", "counterpart": "https://test.example/nomaubl", "policy": "replace", "comment": "", "items": 3, "files": 2 } ] } } } }
+          }
+        }
+      }
+    },
+    "/api/promotion/history/{id}": {
+      "get": {
+        "tags": ["Files & versions"],
+        "summary": "One promotion history entry",
+        "description": "The entry with its plan: the manifest and, for an import or a push, the item rows with their field diffs and the file rows as the preview or the import returned them.\n\nRequires the settings feature.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Entry id from the history list", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "entry": { "id": "20261024-181200-123-push", "direction": "push", "plan": { "manifest": {}, "summary": {}, "items": [], "files": [] } } } } } }
+          }
+        }
+      }
+    },
+    "/api/rulesets": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Rule sets of the mapping editor",
+        "description": "The rule sets (EN 16931 basic, EN 16931, France extended CTC) with their labels, and the set derived for the template file given in ?file=: extended when the file's override block or the UBL defaults next to it carry the extended customization id or an extended profile code, EN 16931 otherwise — the same choice the validator makes.\n\nA rule set is a JSON descriptor generated at build from the UBL reference data (config/rulesets/<id>.json, overridable under the environment's config/rulesets).\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "file", "in": "query", "schema": { "type": "string" }, "description": "Absolute path of the template stylesheet", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "default": "en16931", "sets": [ { "id": "en16931", "label": "EN 16931", "labelFr": "EN 16931", "description": "…", "descriptionFr": "…" } ] } } } }
+          }
+        }
+      }
+    },
+    "/api/rulesets/{id}": {
+      "get": {
+        "tags": ["System"],
+        "summary": "One rule set",
+        "description": "The descriptor: customization id, profile, validator packs, the fields of the set with their status (required, conditional, optional), cardinality, labels, note and rules, the tags without a BT (technical, groups, extension) with their status, and the BTs the UBL defaults fill.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "en16931-basic, en16931 or fr-extended-ctc", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "ruleSet": { "id": "en16931", "packs": ["EN16931", "CIUS-FR", "CPRO-B2G", "NOMAUBL"], "fields": [ { "bt": "BT-1", "status": "required", "cardinality": "1..1" } ], "extraTags": [], "defaultsCovered": ["BT-24"] } } } } }
+          }
+        }
+      }
+    },
+    "/api/xsl/check": {
+      "post": {
+        "tags": ["System"],
+        "x-permission": "any signed-in user",
+        "summary": "Check a mapping against a rule set",
+        "description": "Body {file, ruleSet, tagVars, sampleXml, template}.\n\nLists the required fields of the set the mapping leaves blank (no source, not filled by the UBL defaults), then, when a sample is given, transforms it with the template as edited (the tag values of the body replace the file's, in a temporary copy next to it) and validates the UBL with the standard packs plus the template's custom ones. Each finding carries the BT read from its rule id or message.\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "file": "/app/nomaubl/demo/ubl/invoice.xsl", "ruleSet": "en16931", "tagVars": { "TAG_DOCUMENT_ID": "Invoice_Number_ID27" }, "sampleXml": "<Report>…</Report>", "template": "invoices" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "ruleSet": "en16931", "missingRequired": [ { "tag": "TAG_ISSUE_DATE", "bt": "BT-2", "labelEn": "Invoice issue date", "labelFr": "Date d'émission" } ], "transformed": true, "transformError": null, "fatal": 1, "errors": 0, "warnings": 2, "findings": [ { "level": "FATAL", "source": "EN16931", "rule": "BR-02", "bt": "BT-2", "message": "[BR-02]-An Invoice shall have an Invoice issue date (BT-2)." } ] } } } }
+          }
+        }
+      }
+    },
     "/api/dev/developer": {
       "get": {
         "tags": ["System"],
@@ -2983,6 +3154,51 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "type": "object", "example": { "generatedAt": "2026-09-11", "entries": [ { "accessor": "cols.headerDoc", "file": "InvoiceApi.java", "line": 731 } ] } } } }
+          }
+        }
+      }
+    },
+    "/api/demo": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Demo corpus status",
+        "description": "Whether this instance is a demo instance (global.demoInstance = Y), whether the database switch (global.updateDB) is on, and which demo documents are installed.\n\nThe demo corpus fills a demo or test instance with fictitious invoices through the real pipelines; it is refused on any other instance.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "demoInstance": true, "updateDb": true, "installed": ["demo_ubl", "demo_jde", "demo_pdf", "demo_received"] } } } }
+          }
+        }
+      }
+    },
+    "/api/demo/start": {
+      "post": {
+        "tags": ["System"],
+        "x-permission": "any signed-in user",
+        "summary": "Fill the demo corpus (background job)",
+        "description": "Runs nomaubl.sh demo in the background: deterministic fictitious companies, customers and suppliers, invoices as UBL files, JDE-like spools, text PDFs and received supplier invoices, processed by the real pipelines, then driven through realistic lifecycle paths with dated events, e-reporting envelopes of the completed months and portal notifications.\n\nBody values are strings: invoices (default 300), months (6), seed (2026), sources (ubl,jde,pdf,recv), from (yyyy-MM). Poll GET /api/jobs/{id}: the summary follows the progress and ends with the run's counts. Refused unless global.demoInstance = Y; requires global.updateDB = Y and the environment's framework stylesheets.\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "invoices": "300", "months": "6", "seed": "2026", "sources": "ubl,jde,pdf,recv" } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "jobId": "5edf…" } } } }
+          }
+        }
+      }
+    },
+    "/api/demo/reset": {
+      "post": {
+        "tags": ["System"],
+        "x-permission": "any signed-in user",
+        "summary": "Reset the demo corpus (background job)",
+        "description": "Removes everything the demo created: the invoices of the four demo documents in every table, the e-reporting envelopes of the demo companies, the notification rows of the demo rule, the generated files, inputs, processing trees and mappings, the demo documents and the demo rule. Returns a job id.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "jobId": "5edf…" } } } }
           }
         }
       }

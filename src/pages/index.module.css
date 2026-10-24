@@ -139,6 +139,10 @@
   border: 1px solid var(--ifm-toc-border-color);
 }
 
+.demoInner + .demoInner {
+  margin-top: 1.25rem;
+}
+
 @media (max-width: 768px) {
   .demoInner {
     grid-template-columns: 1fr;

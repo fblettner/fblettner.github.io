@@ -458,6 +458,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/installation/configure',
         'nomaubl/installation/service-and-systemd',
         'nomaubl/installation/upgrade',
+        'nomaubl/installation/demo-corpus',
       ],
     },
     {
@@ -484,6 +485,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/application/reports',
         'nomaubl/application/implementation-report',
         'nomaubl/application/audit-report',
+        'nomaubl/application/technical-report',
         {
           type: 'category',
           label: 'Diagnostics',
@@ -536,6 +538,8 @@ const sidebars: SidebarsConfig = {
       items: [
         'nomaubl/ubl-tools/validate',
         'nomaubl/ubl-tools/xsl-editor',
+        'nomaubl/ubl-tools/rule-sets',
+        'nomaubl/ubl-tools/post-transform',
         'nomaubl/ubl-tools/xml-viewer',
         {
           type: 'category',

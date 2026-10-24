@@ -580,6 +580,35 @@ A monthly cron on the first day of the month produces the report of the month ju
 
 ---
 
+## `-techreport` — technical report \{#techreport\}
+
+Writes the [technical report](../application/technical-report.md) of the release — the developer documentation generated from the code scans bundled at build.
+
+```bash
+java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--api-detail] [--snippets]
+```
+
+| Flag | Effect |
+|---|---|
+| **`--lang`**, **`--format`**, **`--out`**, **`--date`** | As for `-report`. Default file: `nomaubl-technical-<lang>.md` (or `.pdf`) in the current folder. |
+| **`--sections <ids>`** | Comma-separated sections: `scope`, `architecture`, `data`, `flows`, `configuration`, `statuses`, `impact`, `api`, `cli`, `build`, `appendix`. Default: all. |
+| **`--api-detail`** | Detail every API operation (description and parameters). |
+| **`--snippets`** | Add the code snippets to the appendix. |
+
+---
+
+## `-demo` — demo corpus \{#demo\}
+
+Fills a demonstration instance with fictitious invoices processed through the real pipelines, then drives them through dated lifecycles, with no platform send. Requires **Demo instance = Y** in the global settings — see [Demo corpus](../installation/demo-corpus.md).
+
+```bash
+java -jar nomaubl.jar -demo /opt/nomaubl/demo/config/config.json [--seed N] [--invoices 300] [--companies 5] [--customers 30] [--from yyyy-MM] [--months 6] [--sources ubl,jde,pdf,recv] [--out <dir>] [--reset] [--no-process] [--no-lifecycle]
+```
+
+`--reset` removes everything the demo created. The flags are described on the [Demo corpus](../installation/demo-corpus.md#from-the-command-line) page.
+
+---
+
 ## `-purge` — retention purge \{#purge\}
 
 Runs the [retention purge](../sync/scheduled-jobs/overview.md#retention) — the same job the server runs every 24 hours — for sites that script it: per-file rows, step timings and job runs of the processing log, validation errors of finished invoices, notifications. The number of days kept per store comes from [`global → Job defaults → Retention`](../configuration/system/global.md#retention); empty or `0` keeps everything (the default).
@@ -595,7 +624,7 @@ java -jar nomaubl.jar -purge /opt/nomaubl/demo/config/config.json [--dry-run]
 Each store prints one line with its count, then a summary line.
 
 :::note[No wrapper command]
-`nomaubl.sh` has no `report`, `audit` or `purge` command: run these three switches with `java -jar nomaubl.jar`, from the environment folder.
+`nomaubl.sh` has no `report`, `audit`, `techreport`, `demo` or `purge` command: run these switches with `java -jar nomaubl.jar`, from the environment folder.
 :::
 
 ---

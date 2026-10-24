@@ -107,26 +107,30 @@ The assistant knows **the page you are on and the invoice you have open**, so *"
 | **Context bar** | The page you are on and, when an invoice window is open, a chip with the invoice number and status. **×** on the chip leaves the invoice out of the current chat. |
 | **Tool pills** | Each tool called, with the filters it received. |
 | **📋 Copy** | Copies the reply as Markdown, without the follow-up line. |
-| **Suggestions** | Above the input: the follow-ups proposed by the last reply, or, at the start of a chat, three questions suited to the page. |
+| **Domains and questions** | Above the input: the follow-ups of the last reply, or the four questions of a domain — see [Context and starter questions](#context-and-starter-questions). |
 
 ---
 
-## Context and suggestions
+## Context and starter questions
 
 With every question the panel sends the **current page**, its **navigation filter** and the **open invoice** (document, type, company, number, status, customer). The assistant assumes the question is about them unless told otherwise.
 
-At the start of a chat, the suggestions depend on the page:
+Above the input, a **domain picker** offers four questions per domain. A question ending with *…* only fills the input, to be completed (an invoice number, a customer).
 
-| Where you are | Suggestions |
+| Domain | Questions |
 |---|---|
-| An invoice window is open | *Why is this invoice in this status?* · *Summarise its lifecycle* · *What should I fix to resubmit it?* |
-| IT dashboard, Server log, Processing log | *Any errors in the server log today?* · *Is the instance healthy?* · *Which invoices failed this week and why?* |
-| Dashboard, E-Invoicing | *Give me this month's invoice summary* · *Which invoices await an action and what to do?* · *Which invoices failed this week and why?* |
-| Reports, E-Reporting | *Give me this month's invoice summary* · *Which invoices await an action and what to do?* · *Which documents are sent to the platform?* |
-| Settings, Roles, Users, Developer, Documents, Notification rules, Actions, Scheduled jobs | *Which documents are sent to the platform?* · *Which notification rules are active?* · *What changed in the last release?* |
-| Any other page | *Give me this month's invoice summary* · *What to do with an invoice refused by the customer?* · *Which documents are sent to the platform?* |
+| **This invoice** *(when an invoice is open)* | *Why is this invoice in this status?* · *Summarise its lifecycle* · *What should I fix to resubmit it?* · *What are its validation errors?* |
+| **Period** | *Give me this month's invoice summary* · *Last month's summary, compared to the month before* · *Deposit rate and error rate this month* · *Net amounts deposited this month, per company* |
+| **Backlog** | *Which invoices await an action and what to do?* · *Which refused invoices still await an action?* · *Any invoices pending at the platform for more than 2 days?* · *Which invoices are deposited but not transmitted?* |
+| **Invoices** | *Which invoices failed this week and why?* · *Find invoice number …* · *Invoices of customer …* · *Any duplicates this month?* |
+| **Statuses & errors** | *What does status 9906 mean?* · *What to do with an invoice refused by the customer?* · *What to do with an invoice rejected by the platform?* · *What does rule BR-FR-…* |
+| **Configuration** | *Which documents are sent to the platform?* · *Which notification rules are active?* · *Who has access to what (roles and users)?* · *How is the platform connection configured?* |
+| **Documentation** | *How do watched folders work?* · *How does e-reporting work?* · *How do I resend or reprocess an invoice?* · *What changed in the last release?* |
+| **Technical** | *Any errors in the server log today?* · *Is the instance healthy?* · *Did all scheduled jobs run?* · *Run this month's integrity checks* |
 
-Every reply ends with **one to three follow-ups** — the natural answer to a question the assistant asked, the next check, or a deeper question. They replace the suggestions; one click sends them.
+The page chooses the starting domain: **This invoice** when an invoice is open; **Technical** on the IT dashboard, Diagnostics and Scheduled jobs; **Configuration** on Settings, Roles, Users, Developer, Documents, Notification rules, Actions and Watched folders; **Documentation** on the reference pages and the release notes; **Period** everywhere else — accounting and sales land on the period, IT on the instance.
+
+Every reply ends with **one to three follow-ups** — the natural answer to a question the assistant asked, the next check, or a deeper question. They show in place of the domain's questions; a click on a domain brings its questions back.
 
 ---
 
@@ -140,6 +144,8 @@ Every reply ends with **one to three follow-ups** — the natural answer to a qu
 | **`read_doc_page`** | 📖 | Reads one page found by `search_docs`, in windows of 12,000 characters for long pages. |
 | **`list_doc_pages`** | 📑 | The table of contents of the documentation, when the search finds nothing relevant. |
 | **`instance_docs`** | 🔍 | The [implementation report](./implementation-report.md) of this instance: table of contents, one section, or a search across sections. Called first for any question about how *this* instance is configured. |
+
+The documentation is indexed per language: a French interface searches the French pages, an English interface the English ones. The index is refreshed every six hours; when the site cannot be reached, the assistant uses the copy of the documentation bundled with the application and says so in its answer.
 
 The assistant quotes the page it used and gives its link. It never invents a setting, a status code or a URL: when the documentation does not cover a point, it says so.
 

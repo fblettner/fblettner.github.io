@@ -108,6 +108,7 @@ The editor has **two tabs**:
 | Field | Values | Description |
 |---|---|---|
 | **Enable Check** | `Y` / `N` | When enabled, NomaUBL queries the PPF directory **before sending each invoice** to verify that the **electronic addressing code** on the document exists and is active in the public directory. Disable to skip the verification (useful for testing). |
+| **Recipient not found** | `Warn and send (default)` / `Block the send — invoice stops at validation failed` | What happens when the check does not find the recipient. **Warn**: the miss is recorded as a warning finding `DIRECTORY_CHECK` and the invoice is sent. **Block**: on an invoice meant for the platform, a definitive answer — not registered, or found but not reachable — or a missing electronic address (`EndpointID`) is a fatal finding; the invoice stops at validation failed (`9905`) and is not sent. A connector or network error only warns in both modes, and invoices configured not to be sent are never blocked. |
 
 ### INSEE Search
 

@@ -2158,26 +2158,30 @@ L'assistant connaît **la page affichée et la facture ouverte** : *« pourquoi 
 | **Barre de contexte** | La page affichée et, quand une fenêtre de facture est ouverte, une pastille avec le numéro et le statut de la facture. **×** sur la pastille écarte la facture de la conversation en cours. |
 | **Pastilles d'outil** | Chaque outil appelé, avec les filtres reçus. |
 | **📋 Copier** | Copie la réponse en Markdown, sans la ligne de relances. |
-| **Suggestions** | Au-dessus de la zone de saisie : les relances proposées par la dernière réponse ou, en début de conversation, trois questions adaptées à la page. |
+| **Domaines et questions** | Au-dessus de la zone de saisie : les relances de la dernière réponse, ou les quatre questions d'un domaine — voir [Contexte et questions de départ](#contexte-et-questions-de-départ). |
 
 ---
 
-## Contexte et suggestions
+## Contexte et questions de départ
 
 Chaque question part avec la **page affichée**, son **filtre de navigation** et la **facture ouverte** (document, type, société, numéro, statut, client). L'assistant considère que la question porte sur eux, sauf indication contraire.
 
-En début de conversation, les suggestions dépendent de la page :
+Au-dessus de la zone de saisie, un **sélecteur de domaine** propose quatre questions par domaine. Une question qui se termine par *…* remplit seulement la zone de saisie, à compléter (un numéro de facture, un client).
 
-| Page | Suggestions |
+| Domaine | Questions |
 |---|---|
-| Une fenêtre de facture est ouverte | *Pourquoi cette facture est-elle dans ce statut ?* · *Résume son cycle de vie* · *Que corriger pour la représenter ?* |
-| Tableau de bord IT, Journal serveur, Journal des traitements | *Des erreurs dans le journal serveur aujourd'hui ?* · *L'instance est-elle en bonne santé ?* · *Quelles factures ont échoué cette semaine et pourquoi ?* |
-| Tableau de bord, E-Invoicing | *Fais-moi la synthèse des factures de ce mois* · *Quelles factures attendent une action et que faire ?* · *Quelles factures ont échoué cette semaine et pourquoi ?* |
-| Rapports, E-Reporting | *Fais-moi la synthèse des factures de ce mois* · *Quelles factures attendent une action et que faire ?* · *Quels documents sont envoyés à la plateforme ?* |
-| Paramètres, Rôles, Utilisateurs, Développeur, Documents, Règles de notification, Actions, Tâches planifiées | *Quels documents sont envoyés à la plateforme ?* · *Quelles règles de notification sont actives ?* · *Qu'est-ce qui a changé dans la dernière version ?* |
-| Autres pages | *Fais-moi la synthèse des factures de ce mois* · *Que faire d'une facture refusée par le client ?* · *Quels documents sont envoyés à la plateforme ?* |
+| **Cette facture** *(quand une facture est ouverte)* | *Pourquoi cette facture est-elle dans ce statut ?* · *Résume son cycle de vie* · *Que corriger pour la représenter ?* · *Quelles sont ses erreurs de validation ?* |
+| **Période** | *Fais-moi la synthèse des factures de ce mois* · *Synthèse du mois dernier, comparée au mois précédent* · *Taux de dépôt et taux d'erreur de ce mois* · *Montants HT déposés ce mois, par société* |
+| **Reste à traiter** | *Quelles factures attendent une action et que faire ?* · *Quelles factures refusées restent à traiter ?* · *Des factures en attente de la plateforme depuis plus de 2 jours ?* · *Quelles factures sont déposées mais non transmises ?* |
+| **Factures** | *Quelles factures ont échoué cette semaine et pourquoi ?* · *Cherche la facture n° …* · *Factures du client …* · *Y a-t-il des doublons ce mois ?* |
+| **Statuts & erreurs** | *Que signifie le statut 9906 ?* · *Que faire d'une facture refusée par le client ?* · *Que faire d'une facture rejetée par la plateforme ?* · *Que signifie la règle BR-FR-…* |
+| **Configuration** | *Quels documents sont envoyés à la plateforme ?* · *Quelles règles de notification sont actives ?* · *Qui a accès à quoi (rôles et utilisateurs) ?* · *Comment est configurée la connexion à la plateforme ?* |
+| **Documentation** | *Comment fonctionnent les dossiers surveillés ?* · *Comment fonctionne le e-reporting ?* · *Comment renvoyer ou retraiter une facture ?* · *Qu'est-ce qui a changé dans la dernière version ?* |
+| **Technique** | *Des erreurs dans le journal serveur aujourd'hui ?* · *L'instance est-elle en bonne santé ?* · *Les tâches planifiées ont-elles toutes tourné ?* · *Lance les contrôles d'intégrité du mois* |
 
-Chaque réponse se termine par **une à trois relances** : la réponse naturelle à une question posée par l'assistant, la vérification suivante ou une question plus approfondie. Elles remplacent les suggestions et s'envoient d'un clic.
+La page choisit le domaine de départ : **Cette facture** quand une facture est ouverte ; **Technique** sur le tableau de bord IT, le Diagnostic et les Tâches planifiées ; **Configuration** sur les Paramètres, Rôles, Utilisateurs, Développeur, Documents, Règles de notification, Actions et Dossiers surveillés ; **Documentation** sur les pages de référence et les notes de version ; **Période** partout ailleurs — la comptabilité et les ventes arrivent sur la période, l'informatique sur l'instance.
+
+Chaque réponse se termine par **une à trois relances** : la réponse naturelle à une question posée par l'assistant, la vérification suivante ou une question plus approfondie. Elles remplacent les questions du domaine ; un clic sur un domaine les fait revenir.
 
 ---
 
@@ -2191,6 +2195,8 @@ Chaque réponse se termine par **une à trois relances** : la réponse naturelle
 | **`read_doc_page`** | 📖 | Lit une page trouvée par `search_docs`, par tranches de 12 000 caractères pour les pages longues. |
 | **`list_doc_pages`** | 📑 | La table des matières de la documentation, quand la recherche ne donne rien de pertinent. |
 | **`instance_docs`** | 🔍 | Le [rapport d'implémentation](./implementation-report.md) de cette instance : table des matières, une section, ou une recherche dans les sections. Appelé en premier pour toute question sur le paramétrage de *cette* instance. |
+
+La documentation est indexée par langue : une interface en français interroge les pages françaises, une interface en anglais les pages anglaises. L'index est actualisé toutes les six heures ; quand le site est injoignable, l'assistant utilise la copie de la documentation intégrée à l'application et le signale dans sa réponse.
 
 L'assistant cite la page utilisée et en donne le lien. Il n'invente ni réglage, ni code de statut, ni URL : quand la documentation ne couvre pas un point, il le dit.
 
@@ -28050,6 +28056,99 @@ C'est la piste d'audit destinée à l'exploitant — utile pour confirmer « oui
 
 ---
 
+## NomaUBL — Corpus de démonstration
+Source: https://docs.nomana-it.fr/fr/nomaubl/installation/demo-corpus/
+
+Remplir une instance de démonstration NomaUBL avec des données fictives mais réalistes — factures et avoirs émis à partir de fichiers UBL, de spools de type JDE et de PDF texte, factures fournisseurs, cycles de vie, enveloppes d'e-reporting et notifications — par les vraies chaînes de traitement, depuis Paramètres › Global ou la ligne de commande, et le réinitialiser en une étape.
+
+Le **corpus de démonstration** remplit une instance de démonstration avec des données fictives mais réalistes, pour présenter ou tester chaque page de NomaUBL sans fichier client : factures et avoirs émis de toute nature, factures fournisseurs, cycles de vie avec statuts de plateforme, enveloppes d'e-reporting et notifications. Tout passe par les **vraies chaînes de traitement** — génération UBL, validation, archivage, journal des traitements — mais rien n'est envoyé à une plateforme. La même graine produit le même corpus, et une réinitialisation retire tout ce que la démonstration a créé.
+
+:::warning[Instances de démonstration uniquement]
+Le corpus ne peut être créé que sur une instance marquée **Demo instance = Y**. Ne jamais régler cette option sur une instance client.
+:::
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Prérequis
+
+| Réglage | Emplacement | Valeur |
+|---|---|---|
+| **Demo instance** | [Paramètres › Global › Directories](../configuration/system/global.md) | `Y` |
+| **Update DB** | Paramètres › Global › Processing | `Y` — les chaînes spool et PDF et le journal des traitements doivent écrire en base. |
+
+Les feuilles de style de l'environnement doivent être installées (elles le sont après une [installation](./install-and-layout.md) standard).
+
+---
+
+## Contenu du corpus
+
+| Document | Source | Contenu |
+|---|---|---|
+| `demo_ubl` | Fichiers UBL | Factures et avoirs émis couvrant les types de facture (380, 381, 384, 389, 261, 262), EN 16931 et le profil étendu français, les types de transaction (B2B, B2G, B2C, B2BINT, hors champ), toutes les catégories de TVA, remises et charges de document et de ligne, acomptes, bénéficiaires, représentants fiscaux, livraisons, moyens de paiement, pièces jointes et références. Paramétré avec la [post-transformation](../ubl-tools/post-transform.md) UBL vers CII. |
+| `demo_jde` | Spools XML de type JDE | Plusieurs factures par fichier, par la chaîne XML ; le mapping, produit à partir du modèle livré, montre des chemins imbriqués, une constante, un total de TVA additionné, un champ trouvé n'importe où dans le bloc et un saut de ligne. |
+| `demo_pdf` | PDF texte | Relus par la conversion PDF vers XML : deux blocs d'adresse, des lignes étiquetées, un tableau et des champs par expression régulière pour la clé du document. |
+| `demo_received` | Factures fournisseurs UBL | Factures reçues de six fournisseurs français fictifs, conduites selon le parcours acheteur : mise à disposition, prise en charge, approuvée, en litige, refusée, payée. |
+
+Autour d'eux :
+
+- **Sociétés et clients** — cinq sociétés émettrices et trente acheteurs, fictifs, avec des identifiants valides (SIREN, numéro de TVA, IBAN).
+- **Cycles de vie** — les factures destinées à la plateforme suivent des parcours datés réalistes : envoyée, en attente, déposée, non transmise, refusée, rejetée, en litige, suspendue, approuvée, payée, avec des échecs d'envoi et d'import et des renvois ; certaines sont marquées comme vues. Rien n'atteint une vraie plateforme.
+- **Anomalies** — toutes les factures passent les contrôles français, sauf quelques-unes volontairement invalides pour illustrer les erreurs de validation.
+- **E-reporting** — des enveloppes pour chaque mois terminé, produites par le vrai traitement d'e-reporting, puis conduites jusqu'à déposée, échec d'import ou rejetée.
+- **Notifications** — une règle de notification limitée au portail pour les refus, rejets et échecs.
+
+---
+
+## Depuis les paramètres \{#from-the-settings\}
+
+Quand *Demo instance* vaut `Y`, l'onglet **Directories** des [paramètres globaux](../configuration/system/global.md) affiche un bloc **Demo corpus** :
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **Invoices** | `300` | Nombre de factures produites. |
+| **Months** | `6` | Période couverte, qui se termine au mois en cours. |
+| **Seed** | `2026` | Même graine, même corpus. |
+| **Sources** | `ubl,jde,pdf,recv` | Parmi `ubl`, `jde`, `pdf`, `recv` (factures reçues). |
+
+**Fill the demo corpus** et **Reset the demo corpus** s'exécutent en tâche de fond avec la fenêtre de progression habituelle. La réinitialisation demande confirmation et retire toutes les factures, enveloppes, lignes de notification, fichiers et documents créés par la démonstration sur l'instance. Enregistrer les paramètres avant de remplir le corpus.
+
+Ce bloc reste en anglais dans l'application.
+
+---
+
+## En ligne de commande
+
+```bash
+java -jar nomaubl.jar -demo /opt/nomaubl/demo/config/config.json [--seed N] [--invoices 300] [--companies 5] [--customers 30] [--from aaaa-MM] [--months 6] [--sources ubl,jde,pdf,recv] [--out <dossier>] [--reset] [--no-process] [--no-lifecycle]
+```
+
+| Option | Effet |
+|---|---|
+| **`--seed`**, **`--invoices`**, **`--months`**, **`--sources`** | Comme dans le bloc des paramètres. |
+| **`--companies`** / **`--customers`** | Nombre de sociétés émettrices (5) et d'acheteurs (30). |
+| **`--from <aaaa-MM>`** | Premier mois de la période, à la place de *Months* compté depuis aujourd'hui. |
+| **`--out <dossier>`** | Dossier des fichiers produits. |
+| **`--no-process`** | Produit les fichiers sans les traiter. |
+| **`--no-lifecycle`** | Traite les factures sans conduire leur cycle de vie. |
+| **`--reset`** | Retire tout ce que la démonstration a créé. |
+
+Voir [Ligne de commande](../management/command-line.md#demo).
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Réserver un environnement de démonstration**, à côté de la recette et de la production, installé comme les autres ; ne régler *Demo instance* que sur lui.
+- **Fixer la graine** pour une formation ou une démonstration enregistrée : les mêmes factures reviennent après une réinitialisation.
+- **Réinitialiser avant de remplir de nouveau.** Un remplissage s'ajoute à l'existant ; une réinitialisation repart d'une base propre.
+- **S'appuyer sur le corpus pour essayer un réglage** — un jeu de règles, une post-transformation, une règle de notification — sur des centaines de factures variées avant de toucher une instance client.
+
+---
+
 ## NomaUBL — Supervision — vue d'ensemble
 Source: https://docs.nomana-it.fr/fr/nomaubl/monitoring/overview/
 
@@ -29131,7 +29230,7 @@ Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête 
 
 ### Onglet Résumé *(défaut)*
 
-L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. **Supprimer** retire la facture et tous les enregistrements associés — ligne de journal (XML source, référence de transaction PA, nom du fichier source), cycle de vie, lignes, TVA et validation : un nouveau traitement du même document repart de zéro, et les [dossiers surveillés](../management/watched-folders.md) peuvent reprendre son fichier source. La suppression suit la même protection que *Corriger destinataire* : le bouton disparaît dès que la PA a traité la facture, sauf pour un rejet **213** au motif d'adressage. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
+L'onglet Résumé affiche un **badge de statut** coloré en haut — avec, en dessous, le détail du statut et le **jeu de règles** selon lequel la facture a été produite (voir [Jeux de règles](../ubl-tools/rule-sets.md)) — suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. **Supprimer** retire la facture et tous les enregistrements associés — ligne de journal (XML source, référence de transaction PA, nom du fichier source), cycle de vie, lignes, TVA et validation : un nouveau traitement du même document repart de zéro, et les [dossiers surveillés](../management/watched-folders.md) peuvent reprendre son fichier source. La suppression suit la même protection que *Corriger destinataire* : le bouton disparaît dès que la PA a traité la facture, sauf pour un rejet **213** au motif d'adressage. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
 
 #### Corriger destinataire \{#fix-buyer\}
 
@@ -29308,6 +29407,8 @@ Trois sections dans cet onglet :
 | **Valider l'UBL** | Relance la validation XSD + Schematron sur le document UBL stocké en base. Le résultat (valide / avertissement / erreur) s'affiche en ligne, avec le détail si nécessaire. |
 | **Modifier le statut** | Ouvre la *modale de modification de statut* — voir plus bas. |
 | **Renvoyer** | Redépose le document UBL sur la Plateforme Agréée. Une confirmation est demandée avant exécution. |
+| **Télécharger UBL** | Enregistre l'UBL archivé de la facture. |
+| **Télécharger CII** | Affiché quand le document a une [post-transformation](../ubl-tools/post-transform.md) : l'UBL archivé converti à la demande, au nom de la post-transformation (*Télécharger fichier converti* quand elle n'a pas de nom). |
 
 #### Groupe Cycle de vie
 
@@ -29639,7 +29740,7 @@ Un clic sur une ligne ouvre une visionneuse à deux volets :
 - **Spool source archivé** — le document exactement tel qu'il a été reçu, avant toute transformation.
 - **UBL généré** — présent quand le document est devenu une facture ; l'UBL produit et envoyé.
 
-Chaque volet s'affiche formaté et se **télécharge**, nommé d'après le document. Un document qui a échoué avant de produire un UBL n'affiche que le spool source — exactement ce qu'il faut pour comprendre pourquoi.
+Chaque volet s'affiche formaté et se **télécharge**, nommé d'après le document. Quand le document a une [post-transformation](../ubl-tools/post-transform.md), le volet UBL propose aussi **Télécharger CII** (ou *Télécharger fichier converti*) : l'UBL archivé converti à la demande. Un document qui a échoué avant de produire un UBL n'affiche que le spool source — exactement ce qu'il faut pour comprendre pourquoi.
 
 Quand le document a un **modèle** et une **source archivée**, la visionneuse propose aussi un bouton **Extract & Process** : il ré-extrait le spool archivé et le retraite avec le modèle du document — le même pipeline que la page [Extraire & Traiter](../processing/extract-and-process.md) en source *Archive*, les paramètres venant du document lui-même. Le mode remplacement est forcé, la nouvelle exécution écrasant le résultat précédent. Pratique pour régénérer les sorties d'un document après un changement de modèle ou de configuration.
 
@@ -30196,8 +30297,23 @@ La barre d'outils au-dessus de la matrice fixe la **période**, un **filtre soci
 | **Sélecteur de période** | Choisit la période couverte par la matrice. Par défaut, le **mois complet précédent** — celui que vous déclarez. Basculez sur **Trimestre** pour une déclaration trimestrielle. Le filtre s'applique à la **date d'émission de la facture** (celle imprimée sur la facture elle-même) : la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures propose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) — un clic sur un montant ouvre la liste Factures avec ce sélecteur déjà positionné, donc le nombre affiché correspond à celui d'où l'on vient. |
 | **Boutons Mois / Trimestre** | Basculent entre un pas mensuel et un pas trimestriel. Le libellé du sélecteur de période s'adapte (par ex. *T2 2026*). |
 | **Société** | Optionnel. Restreint la période aux factures d'un code société (KCO). Par défaut : *Toutes les sociétés*. |
+| **Exclure toutes les refusées et rejetées** | Cochée par défaut. Écarte toutes les factures refusées par l'acheteur (`210`) ou rejetées par la plateforme (`213`) : elles appellent un avoir interne. Décochée, seules celles que le service client a marquées comme vues sont écartées — voir [Factures écartées](#excluded-invoices). |
+| **Exclure les factures à envoyer non parvenues à la plateforme** | Décochée par défaut. Écarte aussi les factures à envoyer dont le statut est encore interne : échec de validation, d'envoi ou d'import, ou pas encore envoyées. |
 | **▣ Excel** | Télécharge le classeur décrit dans [Export Excel](#export-excel). |
 | **📄 PDF CA3** | Télécharge la synthèse au format CA3 décrite dans [Export PDF — mise en page CA3](#export-pdf--mise-en-page-ca3). |
+
+---
+
+## Factures écartées \{#excluded-invoices\}
+
+La déclaration retient les factures émises sur la période, à l'exception de :
+
+| Cas | Écartée quand |
+|---|---|
+| Refusée par l'acheteur (`210`) ou rejetée par la plateforme (`213`) | *Exclure toutes les refusées et rejetées* est cochée (défaut) — ou, décochée, une fois que le service client a marqué la facture comme vue dans sa fenêtre, l'avoir interne étant fait. |
+| À envoyer, jamais parvenue à la plateforme | *Exclure les factures à envoyer non parvenues à la plateforme* est cochée : la facture est à envoyer et son statut est encore interne (`99xx` autre que `9906`, en attente sur la plateforme, et `9911`, export validé). |
+
+Les deux règles s'appliquent à la matrice, au détail, à l'export Excel et au PDF, dont le pied de page rappelle les règles appliquées. Par l'API, les mêmes choix passent par les paramètres `excludeMode` (`all` ou `reviewed`) et `excludeUnsent`.
 
 ---
 
@@ -30284,7 +30400,7 @@ Source: https://docs.nomana-it.fr/fr/nomaubl/application/reports/
 
 Reporting analytique de NomaUBL en cinq onglets — un tableau croisé des statistiques de statuts (nombre de factures par activité, statut et motif de rejet, par type de transaction) et un requêteur sans SQL sur les factures, les documents archivés, les événements de cycle de vie et les erreurs de validation, avec rapports nommés enregistrés et export Excel/CSV, des contrôles d'intégrité SQL, et les rapports d'audit et d'implémentation produits en PDF ou Markdown.
 
-La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle compte cinq onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts** ; **Intégrité**, des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source ; un **Requêteur** à composer soi-même ; enfin deux documents produits à la demande, le [rapport d'audit](./audit-report.md) et le [rapport d'implémentation](./implementation-report.md).
+La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle compte six onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts** ; **Intégrité**, des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source ; un **Requêteur** à composer soi-même ; enfin trois documents produits à la demande, le [rapport d'audit](./audit-report.md), le [rapport d'implémentation](./implementation-report.md) et le [rapport technique](./technical-report.md).
 
 Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [Accès](#access) plus bas).
 
@@ -30335,16 +30451,17 @@ Une requête — son **jeu de données, ses colonnes, ses filtres, la dispositio
 
 ---
 
-## Rapports d'audit et d'implémentation
+## Rapports d'audit, d'implémentation et technique
 
-Les deux derniers onglets produisent un document, en PDF ou en Markdown, et non une grille :
+Les trois derniers onglets produisent un document, en PDF ou en Markdown, et non une grille :
 
 | Onglet | Document | Page |
 |---|---|---|
 | **Rapport d'audit** | L'activité d'une période — volumes, situation, encours, cycle de vie, erreurs, opérations et contrôles de cohérence — pour une revue interne ou un auditeur. | [Rapport d'audit](./audit-report.md) |
 | **Rapport d'implémentation** | La documentation de l'instance telle qu'elle fonctionne — architecture, règles intégrées, documents et correspondances UBL, paramètres des plateformes, exploitation, sécurité — pour un dossier de passation ou un état des lieux avant mise à jour. | [Rapport d'implémentation](./implementation-report.md) |
+| **Rapport technique** | La documentation développeur de la version — modèle de données, flux, référence de configuration, modèle de statuts, API — identique sur toutes les instances. | [Rapport technique](./technical-report.md) |
 
-Les deux sont aussi disponibles en [ligne de commande](../management/command-line.md#report), pour les planifier ou les conserver avec une version.
+Les trois sont aussi disponibles en [ligne de commande](../management/command-line.md#report), pour les planifier ou les conserver avec une version.
 
 ---
 
@@ -30582,6 +30699,78 @@ L'onglet fait partie de la page *Rapports* : accorder **Rapports** sur la page [
 - **Marquer vues les factures traitées hors NomaUBL.** Un avoir émis directement dans l'ERP ne change pas le statut de la facture d'origine ; la marquer vue garde un reste à traiter significatif.
 - **Renseigner la Min invoice date après une mise en production.** Les factures de test ou de reprise antérieures sortent alors des chiffres toutes périodes.
 - **La durée de chaque étape est écrite dans le journal serveur.** Sur une instance volumineuse, le [journal serveur](./diagnostics/server-log.md) montre la section qui prend du temps.
+
+---
+
+## NomaUBL — Rapport technique
+Source: https://docs.nomana-it.fr/fr/nomaubl/application/technical-report/
+
+Le rapport technique de NomaUBL — la documentation développeur de la version, produite à partir des analyses du code embarquées à la construction : architecture, modèle de données, flux, référence de configuration, modèle de statuts, matrice d'impact, référence de l'API, ligne de commande, compilation et paquetage, en PDF ou Markdown, en français ou en anglais.
+
+L'onglet **Rapport technique** de la page [Rapports](./reports.md) produit la **documentation développeur de la version** : comment NomaUBL est construit, à quoi sert chaque table et chaque clé de configuration, quels flux les utilisent, ce que propose l'API. Il est produit à partir des analyses du code intégrées à l'application à la construction — les mêmes sources que la [référence développeur](../references/developer.md) — et il est donc **identique sur toutes les instances d'une même version**, quel que soit le système source (JD Edwards, SAP, NetSuite ou un ERP personnalisé).
+
+Il complète les deux autres documents de la page : le [rapport d'implémentation](./implementation-report.md) décrit le paramétrage de *cette* instance, le [rapport d'audit](./audit-report.md) l'activité d'une période.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Contrôles
+
+| Contrôle | Description |
+|---|---|
+| **Langue** | Français ou anglais ; par défaut, la langue de l'interface. |
+| **Libellé de date (page de garde)** | Texte libre imprimé sur la page de garde ; vide = date du jour. |
+| **Sections** | Les onze sections, toutes cochées par défaut ; chacune affiche son identifiant. |
+| **Détailler chaque opération de l'API (description et paramètres)** | Visible quand *Référence de l'API* est cochée. Décochée par défaut : la référence liste alors les opérations avec leur accès seulement. |
+| **Inclure les extraits de code en annexe (long)** | Visible quand *Annexe : références dans le code* est cochée. Décochée par défaut. |
+| **Télécharger le PDF / Télécharger le Markdown** | Produit le fichier et le télécharge (`nomaubl-technical-<date>-<heure>.pdf` ou `.md`). Une copie est conservée dans le dossier `reports` de l'environnement. |
+
+---
+
+## Sections
+
+| Section (identifiant) | Contenu |
+|---|---|
+| **Périmètre** (`scope`) | La version de NomaUBL, sa date de compilation, l'analyse du code à l'origine du document, la date et l'auteur de la génération, et l'environnement dont les noms de tables sont résolus. |
+| **Architecture** (`architecture`) | Composants (interface, serveur, clients de plateforme, rapports), exécution (un dossier et un serveur par environnement) et sécurité (authentification, sessions). |
+| **Modèle de données** (`data`) | Chaque table avec ses colonnes, les clés de configuration, flux et appels qui les utilisent, et le nom retenu dans cette instance quand il diffère. |
+| **Flux** (`flows`) | Les documents de flux — traiter un fichier, suivi des imports, récupération des statuts, e-reporting, dossiers surveillés, retraitement — chacun complété des tables, statuts et clés que son code utilise. |
+| **Référence de configuration** (`configuration`) | Chaque clé avec son champ de paramétrage, l'endroit où elle se modifie, les flux qui la lisent, ses appels et son état, avec une synthèse des écarts. |
+| **Modèle de statuts** (`statuses`) | Statuts des factures et de l'e-reporting : noms, codes, libellés, groupes et flux qui les attribuent. |
+| **Matrice d'impact** (`impact`) | Pour chaque flux, les colonnes et clés les plus référencées. |
+| **Référence de l'API** (`api`) | Les opérations de l'API avec l'accès que chacune demande ; avec l'option, leur description et leurs paramètres. |
+| **Ligne de commande** (`cli`) | Les options, tirées de l'aide intégrée. |
+| **Compilation et paquetage** (`build`) | Les étapes de construction, les éléments produits et l'organisation du jar. |
+| **Annexe : références dans le code** (`appendix`) | Les références du code qui fondent les sections ; avec l'option, les extraits. |
+
+---
+
+## Ligne de commande et API
+
+```bash
+java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <fichier>] [--date <libellé>] [--sections a,b,...] [--api-detail] [--snippets]
+```
+
+Par défaut : toutes les sections, Markdown, français, fichier `nomaubl-technical-<langue>.md` dans le dossier courant (la ligne de commande ne conserve pas de copie dans `reports`). Voir [Ligne de commande](../management/command-line.md#techreport).
+
+La route de l'API est `GET /api/reports/technical`, avec les paramètres `lang`, `format`, `date`, `sections`, `apiDetail` et `snippets`.
+
+---
+
+## Accès
+
+L'onglet fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../configuration/security/roles.md). La génération demande en outre la fonctionnalité *Settings access*.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Le produire à chaque mise à jour** et le conserver avec les notes de version : c'est la vue développeur de ce qui a changé.
+- **Le remettre à un intégrateur** avec le [rapport d'implémentation](./implementation-report.md) de l'instance : le premier explique le produit, le second son paramétrage.
+- **Ne cocher que les sections utiles** pour un document ciblé — modèle de données et référence de configuration pour une question de base ou de réglage, référence de l'API pour une intégration.
 
 ---
 
@@ -32672,6 +32861,19 @@ Le formulaire de mapping — l'alternative visuelle à la rédaction XSLT manuel
 | **Charger un échantillon connecteur** | Quand le document actif est en `source = Connecteur`, ce bouton appelle une fois la requête SQL ou l'endpoint REST configuré, puis injecte la réponse dans le même sélecteur de chemins. Les listes déroulantes XPath autocomplètent alors sur des données réelles — même expérience qu'avec un vrai spool XML, sans aucun fichier. Le bouton est masqué pour les modèles `XML` et `UBL`. |
 | **AI Auto-Map** ✦ | Ouvre la modale *AI Auto-Map*. À partir d'un échantillon XML (et d'un PDF optionnel), l'IA renvoie un mapping JSON des variables `TAG_*` vers les chemins XML, correctement scopés. Voir [AI Auto-Map](#ai-auto-map) ci-dessous. |
 | **Save Mappings** | Réécrit dans le fichier XSLT les valeurs courantes de toutes les variables `TAG_*`. Le point indicateur (`●`) apparaît quand le mapping a changé sans avoir été enregistré. |
+| **Vérifier le mapping** | Liste les champs obligatoires du jeu de règles sans source ni valeur par défaut, puis transforme l'échantillon chargé avec le mapping en cours et le valide — voir [Jeux de règles](#rule-sets) ci-dessous. |
+
+#### Jeux de règles \{#rule-sets\}
+
+Le haut de l'onglet s'appuie sur un [jeu de règles](./rule-sets.md) — *EN 16931 basique*, *EN 16931* ou *France étendu (CTC)* — présélectionné sur le jeu du document et modifiable pour en prévisualiser un autre. Chaque balise porte alors un badge — **obligatoire**, **conditionnel**, **optionnel**, **par défaut** (renseigné par les valeurs UBL par défaut), **hors du jeu** — avec la note de la condition en info-bulle.
+
+| Contrôle | Effet |
+|---|---|
+| **Jeu de règles** | Le jeu lu par l'onglet ; le choix est mémorisé dans le navigateur pour le fichier et ne le modifie pas. |
+| **Toutes les balises** / **Obligatoires et conditionnelles** / **Obligatoires manquantes** | Restreignent le formulaire aux balises exigées par le jeu, ou aux obligatoires encore sans source. |
+| **Afficher les balises hors du jeu** | Affiche les balises que le jeu ne connaît pas, masquées par défaut — les balises de l'extension française n'apparaissent que sous le jeu étendu. |
+| **Obligatoires renseignées** | Pour chaque groupe, les champs obligatoires dotés d'une source, d'une constante ou d'une valeur UBL par défaut. |
+| **Vérifier le mapping** | D'abord les champs obligatoires manquants, puis l'échantillon chargé transformé avec le mapping en cours et validé avec les contrôles du jeu et les contrôles spécifiques du document ; anomalies regroupées par champ, balises concernées mises en évidence. Rien n'est écrit en base et rien n'est envoyé. |
 
 #### Sections
 
@@ -32723,6 +32925,11 @@ Un select `TAG_*` ne se limite pas à un seul chemin XML :
 - **Valeurs constantes (accents graves).** Une valeur encadrée par des accents graves — par exemple `` `EDI` `` — est écrite telle quelle au lieu d'être lue dans la source. Valable pour toutes les variables de mappage ainsi que les champs d'extension, les notes et les attributs d'article — par exemple `TAG_COMPANY_CODE` = `` `00009` `` donne à une source mono-société sa société dans le numéro UBL et le bloc vendeur. Constantes et champs se combinent avec ` + ` (`` `Ref-` + DocNumber ``).
 - **Le document lui-même (`.`).** Une variable de groupe répété (`TAG_VAT_LINE`, `TAG_LINE_ITEM`…) peut désigner le document avec `.` — pour une source à plat dont l'unique récapitulatif TVA est imprimé sur le document et non dans un groupe.
 - **Chemins d'éléments dans les conditions.** Dans les définitions à séparateur « | » des champs d'extension personnalisés, des notes et des attributs d'article, les colonnes **condition** et **non-vide** acceptent un chemin avec « / » — par ex. `Facture_Entete_S4/CLI_TYPE_ID242` — en plus d'un simple nom d'élément, nécessaire quand le champ source se trouve sous un groupe intermédiaire. Un nom simple se comporte comme avant : les modèles existants ne changent pas ; la colonne valeur acceptait déjà les chemins.
+- **Somme (`sum(a, b, …)`).** Additionne les montants trouvés à plusieurs chemins — `sum(Vat/Amount)` totalise tous les montants de TVA du bloc, `sum(Net, Charges)` additionne deux champs.
+- **N'importe où (`//Champ`).** Trouve un champ n'importe où dans le bloc de la facture, quelle que soit sa profondeur — `//OrderNumber`.
+- **Saut de ligne (`"\n"`).** Dans une concaténation, `"\n"` insère un saut de ligne — `Terms1 + "\n" + Terms2` pour des conditions de paiement imprimées sur deux lignes.
+
+La section **Document Root** rappelle ces syntaxes au-dessus de ses champs : *Chemins : élément, parent/élément, ../élément, //élément (n'importe où), sum(a, b), a + " " + b, "\n" saut de ligne*. Les mappings existants produisent le même résultat qu'avant.
 
 #### Scoping
 
@@ -32845,6 +33052,164 @@ Après création, le nouveau fichier devient le fichier sélectionné et est cha
 - **Ne pas modifier les fichiers partagés.** `ubl-common.xsl`, `ubl-template.xsl` et `ubl-defaults.xsl` sont filtrés du sélecteur pour une raison : toute modification y touche toutes les transformations et risque de ne pas survivre à une montée de version NomaUBL.
 - **Utiliser l'onglet XSL Editor pour ce que le formulaire ne couvre pas.** Logique conditionnelle, XPath personnalisé, templates nommés — Monaco donne toute la puissance de XSLT 1.0 / 2.0 en complément du mapping du formulaire.
 - **Valider après chaque modification de mapping.** *UBL Tools → Validate* avec `Source = XML` exécute la transformation et les règles Schematron en une passe ; la table de logs signale tout chemin erroné ou variable manquante.
+
+---
+
+## NomaUBL — Jeux de règles
+Source: https://docs.nomana-it.fr/fr/nomaubl/ubl-tools/rule-sets/
+
+Les jeux de règles de NomaUBL — EN 16931 basique, EN 16931 et France étendu (CTC) : quels champs UBL une norme exige, quels jeux de validation s'appliquent, comment un document choisit son jeu, et comment l'onglet de mapping de l'éditeur XSL, la fenêtre de la facture et les pages de référence l'utilisent.
+
+Un **jeu de règles** décrit une norme selon laquelle une facture est produite : les champs UBL qu'elle exige, ceux qu'elle exige sous condition, ceux qu'elle laisse facultatifs, et les jeux de validation qui la contrôlent. NomaUBL livre trois jeux, produits à partir des données de la [référence UBL](../references/ubl-reference.mdx) pour ne jamais s'en écarter. Un document désigne son jeu ; le validateur applique alors les contrôles de ce jeu, et l'onglet de mapping de l'[éditeur XSL](./xsl-editor.md) indique, balise par balise, ce que le jeu attend — quel que soit le système source, JD Edwards, SAP, NetSuite ou un ERP personnalisé.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Les jeux livrés
+
+| Jeu | Champs | Identifiant de personnalisation | Jeux de validation |
+|---|---|---|---|
+| **EN 16931 basique** (`en16931-basic`) | 155 — le sous-ensemble BASIC que porte toute facture française | `urn:cen.eu:en16931:2017` | EN 16931, Flux 2 (CIUS-FR), CPRO B2G, règles spécifiques |
+| **EN 16931** (`en16931`) | 243 — le modèle EN 16931 complet sous le CIUS français | `urn:cen.eu:en16931:2017` | EN 16931, Flux 2 (CIUS-FR), CPRO B2G, règles spécifiques |
+| **France étendu (CTC)** (`fr-extended-ctc`) | 455 — EN 16931 plus l'extension française (champs EXT-FR-FE) | `urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended` | CTC-FR étendu (à la place d'EN 16931), Flux 2, CPRO B2G, règles spécifiques |
+
+Chaque champ d'un jeu porte un statut :
+
+| Statut | Signification |
+|---|---|
+| **obligatoire** | Le jeu exige le champ sur chaque facture. |
+| **conditionnel** | Obligatoire sous condition — date d'échéance ou conditions de paiement quand un montant est dû (BR-CO-25), date ou code de période d'exigibilité de la TVA (BR-CO-03), identifiants du vendeur (BR-CO-26)… La note précise la condition et les identifiants de règle. |
+| **optionnel** | Autorisé, non exigé. |
+| **par défaut** | Obligatoire, et renseigné par les [valeurs UBL par défaut](./ubl-defaults/overview.md) quand le mapping le laisse vide. |
+| **hors du jeu** | Le jeu ne connaît pas le champ — par exemple les balises EXT-FR-FE sous les deux jeux EN 16931. |
+
+Un [Schematron spécifique](../management/documents.md#ubl) défini sur le document s'exécute toujours après les contrôles du jeu.
+
+---
+
+## Choisir le jeu d'un document
+
+Dans l'onglet **UBL** du [document](../management/documents.md#ubl), le champ **Rule set** désigne le jeu :
+
+- **vide** — *Derived from the UBL defaults (customization id and profile)* : le comportement d'un document qui ne désigne aucun jeu. Le jeu suit l'identifiant de personnalisation émis par les valeurs UBL par défaut — France étendu pour les profils étendus, EN 16931 sinon ;
+- **un jeu** — le validateur applique les contrôles de ce jeu dans toutes les chaînes : traitement par lot et unitaire, page Traiter un document, validation depuis la fenêtre de la facture et vérification de l'éditeur XSL.
+
+Les deux jeux EN 16931 et le jeu France étendu reprennent exactement les contrôles du choix déduit : désigner le jeu d'un document existant ne change aucune anomalie. Un identifiant de jeu inconnu est signalé par un avertissement, et le choix déduit s'applique.
+
+---
+
+## Dans l'éditeur XSL
+
+L'onglet **Mapping des variables** de l'[éditeur XSL](./xsl-editor.md#rule-sets) s'appuie sur un jeu de règles :
+
+- **Jeu de règles** — présélectionné sur le jeu du document, modifiable pour en prévisualiser un autre ; le choix est mémorisé dans le navigateur pour chaque fichier et ne modifie aucun fichier ;
+- **un badge par balise** — obligatoire, conditionnel, optionnel, par défaut, hors du jeu — avec la note de la condition en info-bulle ;
+- **filtres** — *Toutes les balises*, *Obligatoires et conditionnelles*, *Obligatoires manquantes* ; les balises hors du jeu restent masquées tant que **Afficher les balises hors du jeu** n'est pas cochée : les balises de l'extension française n'apparaissent donc que sous le jeu étendu ;
+- **complétude par groupe** — *Obligatoires renseignées 4 / 5* : un champ obligatoire compte quand il a une source, une constante ou une valeur UBL par défaut ;
+- **Vérifier le mapping** — liste les champs obligatoires du jeu sans source ni valeur par défaut, puis transforme l'échantillon chargé avec le mapping en cours et le valide avec les contrôles du jeu et les contrôles spécifiques du document. Le rapport regroupe les anomalies par champ et met en évidence les balises concernées. Rien n'est écrit en base et rien n'est envoyé.
+
+---
+
+## Ailleurs dans l'application
+
+- **Fenêtre de la facture** — indique le jeu selon lequel la facture a été produite, lu dans son UBL archivé.
+- **[Référence UBL](../references/ubl-reference.mdx)** — un filtre par jeu affiche les champs d'un jeu avec leur statut.
+- **[Règles métier](../references/business-rules.mdx)** — le même filtre ne garde que les règles qui portent sur un champ du jeu.
+
+---
+
+## Adapter un jeu
+
+Les jeux sont intégrés à l'application et produits à la construction à partir des données de la référence UBL. Un environnement peut en remplacer un par un fichier du même nom placé sous `<env>/config/rulesets/` (par exemple `en16931.json`), lu avant le jeu intégré. Les autres normes fondées sur UBL — Peppol BIS Billing, XRechnung… — s'ajoutent sous forme de jeux intégrés avec leurs contrôles. Les formats nationaux qui ne sont pas en UBL passent par une [post-transformation](./post-transform.md).
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Désigner le jeu de chaque document.** Le choix déduit fonctionne, mais un jeu explicite indique la norme visée et garde l'onglet de mapping aligné sur elle.
+- **Lancer Vérifier le mapping sur un échantillon réel** avant le premier lot d'un nouveau document : les champs obligatoires manquants d'abord, puis les anomalies par champ.
+- **Utiliser le filtre Obligatoires manquantes pendant le mapping.** Le formulaire se réduit à ce qui bloque encore le jeu.
+- **Garder un Schematron spécifique pour les règles propres au client.** Le jeu de règles couvre la norme ; les contrôles propres au client restent dans les contrôles spécifiques du document.
+
+---
+
+## NomaUBL — Post-transformation
+Source: https://docs.nomana-it.fr/fr/nomaubl/ubl-tools/post-transform/
+
+La post-transformation de NomaUBL — convertir l'UBL validé dans une autre syntaxe (CII D16B avec la feuille ubl-to-cii.xsl livrée, un format national avec votre propre feuille) tandis que l'UBL reste le pivot : fichier écrit à côté de l'UBL, téléchargement depuis la fenêtre de la facture, envoi par le connecteur de la plateforme.
+
+Une **post-transformation** convertit l'UBL validé d'un document dans une autre syntaxe au moyen d'une feuille XSL : Cross Industry Invoice (CII) avec la feuille livrée avec NomaUBL, ou le format propre à un pays avec votre propre feuille. **L'UBL reste le pivot** : la base, les statuts, la validation et le routage continuent de s'appuyer sur l'UBL ; le fichier converti est une sortie supplémentaire, écrite à côté de l'UBL, téléchargeable depuis la fenêtre de la facture et, quand la plateforme l'attend, envoyée à sa place.
+
+La post-transformation se règle par [document](../management/documents.md#ubl) et s'exécute dans les deux chaînes de traitement, quelle que soit la source — un spool JD Edwards, un extrait SAP ou NetSuite, un ERP personnalisé ou un fichier UBL.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Réglages
+
+Dans l'onglet **UBL** du [document](../management/documents.md#ubl) :
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **Post-transform** | *(vide = aucune)* | Feuille appliquée à l'UBL validé. Les variables de chemin sont acceptées (`%APP_HOME%`, `%ENV%`) et le bouton des variables les insère. Exemple : `%APP_HOME%/%ENV%/xsl/ubl-to-cii.xsl`. |
+| **Post-transform output** | `-cii.xml` | Suffixe qui remplace le `.xml` du nom du fichier UBL : `F2026-1203.xml` donne `F2026-1203-cii.xml`. Le téléchargement reprend ce nom. |
+| **Post-transform name** | *(vide)* | Nom court de la syntaxe produite, affiché sur les boutons de téléchargement : `CII` donne **Télécharger CII** ; vide donne **Télécharger fichier converti**. |
+
+---
+
+## Déroulement
+
+1. La source est transformée en UBL puis validée selon le [jeu de règles](./rule-sets.md) du document, comme sans post-transformation.
+2. Si la validation ne signale **aucune anomalie bloquante**, l'UBL passe par la feuille et le résultat est écrit **à côté du fichier UBL**, avec le suffixe de sortie.
+3. Si la feuille échoue, l'échec est enregistré comme anomalie de niveau **avertissement** `POST_TRANSFORM` sur la facture, visible dans ses erreurs de validation et dans les [Erreurs d'intégration](../application/diagnostics/integration-errors.md). L'UBL poursuit son chemin : une facture n'est jamais bloquée par sa post-transformation.
+
+Une facture qui présente une anomalie bloquante n'a pas de fichier converti ; il est produit au traitement suivant, une fois la facture corrigée et traitée de nouveau.
+
+---
+
+## Télécharger le fichier converti
+
+La fenêtre de la facture ([E-Invoicing](../application/invoices.md)) et celle du document ([E-Documents](../application/edocuments.md)) affichent un bouton **Télécharger CII** (ou **Télécharger fichier converti**) quand le document a une post-transformation. Le fichier est **calculé à la demande à partir de l'UBL archivé** : il est donc disponible pour toute facture archivée, y compris celles traitées avant la mise en place de la post-transformation. Une erreur de conversion s'affiche dans la fenêtre (*Échec de la conversion : …*).
+
+---
+
+## Envoyer le fichier converti à la plateforme
+
+Le corps du [connecteur API](../configuration/api-connectors.md) de la plateforme peut transmettre le fichier converti à la place de l'UBL, au moyen de deux variables :
+
+| Variable | Valeur |
+|---|---|
+| `{{derivedContent}}` | Base64 du fichier converti, comme `{{content}}` pour l'UBL. Vide quand le document n'a pas de post-transformation. |
+| `{{derivedFilePath}}` | Chemin du fichier converti sur le disque. Vide quand le document n'a pas de post-transformation. |
+
+`{{content}}` et `{{filePath}}` désignent toujours l'UBL. Lors d'un renvoi, le fichier converti est recalculé à partir de l'UBL archivé. Le routage de la facture — destinataire, type de document, statuts — continue de lire l'UBL.
+
+---
+
+## La feuille livrée : UBL vers CII
+
+`ubl-to-cii.xsl` convertit une Invoice ou une CreditNote UBL 2.1 en **Cross Industry Invoice D16B** selon le modèle de base EN 16931 : parties et identifiants, notes avec leurs codes de sujet, références, livraison, moyens de paiement avec l'IBAN ou un compte propriétaire, remises et charges, ventilation de TVA, lignes et pièces jointes. Elle a été contrôlée sur le corpus de démonstration avec les règles officielles EN 16931 pour CII. Le document UBL de [démonstration](../installation/demo-corpus.md) l'utilise.
+
+---
+
+## Autres formats
+
+Un pays dont le format n'est pas UBL — une syntaxe nationale imposée par une plateforme ou une administration fiscale — se traite avec une feuille du même type : l'UBL en entrée, la syntaxe nationale en sortie. Les normes fondées sur UBL se traitent autrement, par un [jeu de règles](./rule-sets.md) qui leur est propre. Chaque circuit d'envoi national (connecteur, statuts) fait l'objet d'un paramétrage dédié.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Valider d'abord l'UBL.** La post-transformation ne s'exécute que sur une facture sans anomalie bloquante : un UBL correct conditionne une conversion correcte.
+- **Nommer la syntaxe.** *Post-transform name* remplace le bouton générique par *Télécharger CII*, plus parlant pour les utilisateurs.
+- **Surveiller les avertissements POST_TRANSFORM** après la mise en place d'une nouvelle feuille : ils désignent les factures que la feuille ne sait pas traiter.
+- **Placer ses propres feuilles dans l'environnement**, à côté des autres fichiers XSL, et écrire le chemin avec `%APP_HOME%` / `%ENV%` : le même réglage vaut alors pour tous les environnements.
 
 ---
 
@@ -33537,7 +33902,7 @@ UBL Defaults — onglet VAT. Catégorie TVA par défaut, taux zéro, mapping sou
 
 L'onglet **VAT** configure la classification TVA portée sur chaque ligne et sur les sous-totaux TVA au niveau document — `BT-118` (catégorie TVA de ligne) / `BT-151` (catégorie TVA de l'article facturé) et `BT-121` (code motif d'exonération). Il propose une catégorie par défaut, un code de taux zéro, une correspondance de catégorie et une correspondance d'exonération.
 
-Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). Les quatre sections de cet onglet sont gouvernées par une bascule de surcharge unique — l'activer fait basculer l'intégralité du groupe dans le fichier document, et la suppression retire le bloc de surcharge en totalité.
+Le mécanisme de surcharge est décrit dans la [Vue d'ensemble](./overview.md). Toutes les sections de cet onglet — y compris la grille des taux — sont gouvernées par une bascule de surcharge unique — l'activer fait basculer l'intégralité du groupe dans le fichier document, et la suppression retire le bloc de surcharge en totalité.
 
 ---
 
@@ -33571,6 +33936,30 @@ code TVA source du XML
 
 Le paramètre de taux zéro l'emporte quand le montant de TVA calculé sur la ligne est nul — il prime sur le mapping dans ce cas.
 
+Un code source terminé par `*` couvre tous les codes qui commencent ainsi — `FRND_*` couvre `FRND_1`, `FRND_3`… Les codes exacts passent d'abord, quel que soit l'ordre des lignes.
+
+---
+
+## Taux de TVA par code source \{#vat-rate-by-source\}
+
+La grille **Correspondances code source → taux de TVA (BT-152)** attribue un taux à une ligne à partir du code dont sa catégorie TVA est tirée (`TAG_LINE_VAT_CATEGORY` dans le mapping) : une zone fiscale, un type de taxe ou un code composé dans le mapping. Elle sert les sources dont le spool n'imprime pas de taux, ou un taux auquel il ne faut pas se fier.
+
+| Colonne | Description |
+|---|---|
+| **Code externe** | Le code source. Un code terminé par `*` couvre tous les codes qui commencent ainsi ; les codes exacts passent d'abord. |
+| **Taux de TVA (%)** | Le taux, par exemple `5.5` (une virgule saisie devient un point). |
+
+**Si la ligne porte déjà un taux** tranche entre les deux :
+
+| Option | Effet |
+|---|---|
+| **Garder le taux source, la table complète les vides** *(défaut)* | Le taux lu dans la source l'emporte ; la grille ne renseigne que les lignes qui n'en ont pas. |
+| **Une correspondance trouvée l'emporte** | Une ligne de la grille qui correspond remplace le taux imprimé par la source. |
+
+Le taux trouvé s'applique à la ligne (BT-152) et aux lignes de ventilation de TVA construites à partir des lignes. Rien ne change dans les factures produites tant que la grille est vide. Un document peut remplacer la grille comme le reste de l'onglet TVA.
+
+Exemple : `FRND_3 → 5.5`, `FRND_* → 20` — le code `FRND_3` donne 5,5 %, tout autre code `FRND_…` donne 20 %.
+
 ---
 
 ## Mapping des codes d'exonération VATEX
@@ -33583,6 +33972,8 @@ La seconde table de mapping couvre le **BT-121** — le code motif d'exonératio
 | **Code VATEX** | Code d'exonération issu de la liste de référence *vatex-codes*. |
 
 Quand NomaUBL émet une catégorie qui demande un motif d'exonération, le code `VATEX-*` correspondant est recherché dans ce mapping. Sans ligne pour une catégorie non standard, la Plateforme Agréée destinataire rejette typiquement le document via un échec de règle Schematron.
+
+Aucun motif d'exonération n'est émis sur les catégories taxée (`S`) et à taux zéro (`Z`), quoi que porte la source.
 
 ---
 
@@ -34360,6 +34751,10 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 |---|---|---|
 | **UBL XSLT** | chemin | Transformation XSL du XML source vers l'**UBL 2.1**. Le placeholder `%APP_HOME%` est remplacé par la racine d'installation de NomaUBL. |
 | **Custom Schematron** | chemin(s) | Une ou plusieurs feuilles Schematron **précompilées** (`.xsl`, séparées par des virgules, `%APP_HOME%` / `%ENV%` acceptés) qui portent les règles propres au client — une classification obligatoire, un format de référence acheteur… Elles s'exécutent **après** les packs standard, sur ce modèle uniquement : les règles client ne touchent jamais aux packs livrés que la mise à niveau rafraîchit. Une feuille est chargée une fois par horodatage de fichier : un fichier modifié est pris en compte à la validation suivante, sans redémarrage. Les anomalies arrivent dans les erreurs de validation sous une source courte tirée du nom de fichier (`BR-ACME-rules.xsl` → `ACME`) ; un fichier absent ou invalide est signalé en erreur sur la facture. Le traitement par lot et unitaire, le bouton *Valider* et l'API de validation en tiennent tous compte. |
+| **Rule set** | *(vide = déduit)* / `EN 16931 basique` / `EN 16931` / `France étendu (CTC)` | La norme selon laquelle le document est produit : les contrôles de validation et les champs obligatoires affichés dans l'onglet de mapping de l'éditeur XSL viennent de ce jeu. Vide conserve le choix déduit de l'identifiant de personnalisation des valeurs UBL par défaut. Voir [Jeux de règles](../ubl-tools/rule-sets.md). |
+| **Post-transform** | chemin | Feuille appliquée à l'UBL validé pour écrire une autre syntaxe à côté de lui — par exemple la feuille livrée `ubl-to-cii.xsl` (UBL vers CII D16B). Vide = aucune. Voir [Post-transformation](../ubl-tools/post-transform.md). |
+| **Post-transform output** | suffixe, défaut `-cii.xml` | Remplace le `.xml` du nom du fichier UBL ; le téléchargement depuis les fenêtres de la facture et du document reprend ce nom. |
+| **Post-transform name** | texte | Nom court de la syntaxe produite sur les boutons de téléchargement (`CII` → *Télécharger CII*). Le connecteur de la plateforme peut envoyer le fichier converti avec `{{derivedContent}}` / `{{derivedFilePath}}`. |
 | **Attachment** | `— Aucun` / `create` / `attach` / `generate` | Comment le PDF principal est associé à l'UBL. `create` = rendu via RTF / BI Publisher puis incorporé. `attach` = réutiliser un PDF déjà présent dans le répertoire d'entrée. `generate` = rendre le PDF avec le [concepteur de modèle PDF](./pdf-templates.md) et l'attacher en **PJA** (`cac:AdditionalDocumentReference`) — à utiliser quand le PDF conçu n'est pas une copie lisible conforme. Vide = aucun PDF. Indépendant de **LISIBLE** ci-dessous. |
 | **LISIBLE** | `Y` / `N` | Quand `Y`, rendre un PDF lisible depuis l'UBL via le modèle PDF résolu et l'incorporer comme copie LISIBLE (`cbc:ID="LISIBLE"`). Indépendant d'*Attachment* — les deux peuvent être actifs. |
 | **Invert sign** | `N – No` (défaut) / `Credit notes only` / `All documents` | Inverse le signe des montants lus dans la source : montants nets de ligne, totaux du document, montants payés d'avance et d'arrondi, TVA totale et chaque ligne du récapitulatif TVA. Le prix unitaire est toujours émis en positif, les remises et charges sont lues en valeur absolue, et la quantité prend le signe du montant de sa ligne. *Credit notes only* s'applique aux documents résolus en `381`, `396`, `261`, `262`, `502` ou `503`. Un spool qui imprime un avoir avec des montants négatifs donne ainsi l'avoir (CreditNote) positif attendu par la norme, sans modifier la XSL du document. |
@@ -35453,7 +35848,7 @@ Transférer la configuration NomaUBL d'une instance à l'autre élément par él
 
 La page **Promotion** transfère la configuration d'une instance à une autre — du développement vers la recette, de la recette vers la production — **élément par élément**, avec les fichiers utilisés par chaque élément. L'export produit un paquet ; l'import montre ce que le paquet modifierait, champ par champ, puis l'écrit après un instantané de version. Les clés propres à une instance — mots de passe, URL, hôtes, licence, nom de l'environnement… — **ne voyagent jamais** et ne sont jamais écrasées sur la cible.
 
-Accès : **Gestion → Promotion**.
+Accès : **Gestion → Promotion**. La page compte quatre vues : **Exporter** (préparer un paquet), **Promouvoir** (envoyer la sélection directement à une autre instance), **Importer** (appliquer un paquet) et **Historique**.
 
 ---
 
@@ -35536,6 +35931,49 @@ Ce qu'écrit *Appliquer* :
 - l'import forme **une seule entrée du journal des versions**, avec son auteur et son commentaire.
 
 La grille est la table de données partagée ; sa vue figure dans l'éditeur des [vues de liste](../configuration/list-views.md).
+
+---
+
+## Promouvoir vers une autre instance \{#promote\}
+
+Quand les deux instances peuvent communiquer, la vue **Promouvoir** envoie la sélection de la vue Exporter directement à une instance cible, sans manipuler de fichier ZIP. Le paquet est constitué comme pour un export, puis transmis à l'aperçu de la cible, puis à son import.
+
+1. **Cocher les éléments** dans la vue Exporter (avec leurs dépendances).
+2. Dans **Promouvoir**, choisir l'**Instance cible** (la dernière utilisée est mémorisée), la règle des **Éléments et fichiers modifiés** — *Remplacer par le paquet* ou *Conserver la cible, n'écrire que les nouveaux* — et un commentaire.
+3. **Simulation sur la cible** : la cible renvoie son propre aperçu — nouveaux, modifiés, identiques, ignorés, avec les écarts par champ — affiché sous *Cible … · Aperçu*. Rien n'est écrit.
+4. **Promouvoir** applique ce plan après confirmation ; la cible prend un instantané de version avant chaque écriture, et ses clés d'instance conservent leur valeur. Le résultat indique *Promue vers … : n élément(s) et n fichier(s) écrits*.
+
+L'export ZIP reste disponible pour les instances qui ne peuvent pas communiquer.
+
+### Instances cibles \{#targets\}
+
+Les cibles se définissent une fois dans **Paramètres → Promotion targets** (domaine Platform) ; tant qu'aucune n'existe, l'en-tête des Paramètres propose **Add promotion targets**. Chaque cible comporte :
+
+| Champ | Description |
+|---|---|
+| **Name** | Affiché dans la liste des cibles de la page Promotion. |
+| **URL** | Racine de l'instance cible, avec son préfixe de chemin s'il y en a un (par exemple `https://test.example/nomaubl`). |
+| **Username** / **Password** | Compte sur la cible, qui doit y disposer de la fonctionnalité *Settings access* ; vide quand la cible fonctionne sans authentification. Le mot de passe est enregistré encodé et décodé sur le serveur uniquement pour l'appel. |
+
+Le compte n'est jamais transmis au navigateur et ne voyage jamais dans un paquet. Cet éditeur reste en anglais dans l'application.
+
+---
+
+## Historique \{#history\}
+
+La vue **Historique** liste chaque paquet exporté, import appliqué et promotion appliquée sur l'instance, du plus récent au plus ancien :
+
+| Colonne | Description |
+|---|---|
+| **Quand** | Date et heure. |
+| **Sens** | *Export*, *Import* ou *Promue*. |
+| **Contrepartie** | La cible d'une promotion, la source d'un import. |
+| **Auteur** | Qui l'a lancée. |
+| **Politique** | *replace* ou *keep*. |
+| **Éléments** / **Fichiers** | Nombres. |
+| **Commentaire** | Le commentaire saisi. |
+
+Une ligne ouvre l'entrée avec son plan complet et ses écarts. Une instance source garde ses promotions, une cible ses imports. Chaque entrée est un fichier JSON du dossier `promotions` de l'environnement.
 
 ---
 
@@ -36051,6 +36489,35 @@ Un cron mensuel lancé le premier jour du mois produit le rapport du mois écoul
 
 ---
 
+## `-techreport` — rapport technique \{#techreport\}
+
+Produit le [rapport technique](../application/technical-report.md) de la version — la documentation développeur tirée des analyses du code embarquées à la construction.
+
+```bash
+java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <fichier>] [--date <libellé>] [--sections a,b,...] [--api-detail] [--snippets]
+```
+
+| Option | Effet |
+|---|---|
+| **`--lang`**, **`--format`**, **`--out`**, **`--date`** | Comme pour `-report`. Fichier par défaut : `nomaubl-technical-<langue>.md` (ou `.pdf`) dans le dossier courant. |
+| **`--sections <ids>`** | Sections séparées par des virgules : `scope`, `architecture`, `data`, `flows`, `configuration`, `statuses`, `impact`, `api`, `cli`, `build`, `appendix`. Par défaut : toutes. |
+| **`--api-detail`** | Détaille chaque opération de l'API (description et paramètres). |
+| **`--snippets`** | Ajoute les extraits de code en annexe. |
+
+---
+
+## `-demo` — corpus de démonstration \{#demo\}
+
+Remplit une instance de démonstration avec des factures fictives traitées par les vraies chaînes, puis conduit leurs cycles de vie datés, sans envoi à une plateforme. Demande **Demo instance = Y** dans les paramètres globaux — voir [Corpus de démonstration](../installation/demo-corpus.md).
+
+```bash
+java -jar nomaubl.jar -demo /opt/nomaubl/demo/config/config.json [--seed N] [--invoices 300] [--companies 5] [--customers 30] [--from aaaa-MM] [--months 6] [--sources ubl,jde,pdf,recv] [--out <dossier>] [--reset] [--no-process] [--no-lifecycle]
+```
+
+`--reset` retire tout ce que la démonstration a créé. Les options sont décrites sur la page [Corpus de démonstration](../installation/demo-corpus.md#en-ligne-de-commande).
+
+---
+
 ## `-purge` — purge de rétention \{#purge\}
 
 Exécute la [purge de rétention](../sync/scheduled-jobs/overview.md#retention) — la tâche que le serveur lance toutes les 24 heures — pour les sites qui la scriptent : lignes par fichier, durées des étapes et exécutions des tâches du journal des traitements, erreurs de validation des factures terminées, notifications. Le nombre de jours conservés par table vient de [`global → Job defaults → Retention`](../configuration/system/global.md#retention) ; vide ou `0` conserve tout (valeur par défaut).
@@ -36066,7 +36533,7 @@ java -jar nomaubl.jar -purge /opt/nomaubl/demo/config/config.json [--dry-run]
 Chaque table affiche une ligne avec son nombre de lignes, puis une ligne de synthèse.
 
 :::note[Pas de commande dans le wrapper]
-`nomaubl.sh` ne propose pas de commande `report`, `audit` ou `purge` : ces trois options se lancent avec `java -jar nomaubl.jar`, depuis le dossier de l'environnement.
+`nomaubl.sh` ne propose pas de commande `report`, `audit`, `techreport`, `demo` ou `purge` : ces options se lancent avec `java -jar nomaubl.jar`, depuis le dossier de l'environnement.
 :::
 
 ---
@@ -36266,7 +36733,7 @@ La navigation de gauche regroupe les entrées selon **ce que l'on veut régler**
 
 | Domaine | Entrées |
 |---|---|
-| **Platform** | Les onglets des [paramètres globaux](./system/global.md) — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant*, *License* — puis les bases : [base NomaUBL](./database-connectors/nomaubl.md), [base JD Edwards](./database-connectors/jdedwards.md) et les autres connecteurs de base de données. |
+| **Platform** | Les onglets des [paramètres globaux](./system/global.md) — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant*, *License* — puis **Promotion targets** (les instances vers lesquelles la page [Promotion](../management/promotion.md#targets) peut promouvoir) et les bases : [base NomaUBL](./database-connectors/nomaubl.md), [base JD Edwards](./database-connectors/jdedwards.md) et les autres connecteurs de base de données. |
 | **Security** | *Authentication* (onglet global), [authentification unique (OIDC)](./system/oidc.md), [utilisateurs](./security/users.md) et [rôles](./security/roles.md). |
 | **E-invoicing** | [E-invoicing](./system/einvoicing.md), [types de documents](./system/document-types.md), [catalogue des statuts](./system/statuses.md), [annuaire](./system/edirectory.md). |
 | **E-reporting** | [E-reporting](./system/ereporting.md) et le catalogue des statuts de l'e-reporting. |
@@ -36302,7 +36769,7 @@ Les réglages rarement modifiés sont repliés sous une ligne **Advanced**, ferm
 | Action | Effet |
 |---|---|
 | **Add API** · **Add SQL** · **Add List** | Crée un connecteur API, un connecteur SQL ou une liste personnalisée. |
-| **Add OIDC** · **Add integrity reports** | Affichés tant que l'instance n'a pas de modèle d'authentification unique ou de contrôles d'intégrité ; crée ce modèle. |
+| **Add OIDC** · **Add integrity reports** · **Add promotion targets** | Affichés tant que l'instance n'a pas de modèle d'authentification unique, de contrôles d'intégrité ou d'instances de promotion ; crée ce modèle. |
 | **Copy** | Duplique le modèle sélectionné sous un nouveau nom. Indisponible sur les modèles système. |
 | **Remove** | Supprime le modèle sélectionné. Indisponible sur les modèles système. |
 | **Description (optional)** | Description libre du modèle, affichée sous son entrée. |
@@ -36358,6 +36825,7 @@ L'éditeur comporte **deux onglets** :
 | Champ | Valeurs | Description |
 |---|---|---|
 | **Enable Check** | `Y` / `N` | Quand cette option est activée, NomaUBL interroge l'annuaire PPF **avant l'envoi de chaque facture** pour vérifier que le **code adressage électronique** du document existe et est actif dans l'annuaire public. À désactiver pour ignorer la vérification (utile en test). |
+| **Recipient not found** | `Warn and send (default)` / `Block the send — invoice stops at validation failed` | Comportement quand le contrôle ne trouve pas le destinataire. **Warn** : l'absence est enregistrée comme anomalie de niveau avertissement `DIRECTORY_CHECK` et la facture part. **Block** : sur une facture destinée à la plateforme, une réponse définitive — destinataire non inscrit, ou trouvé mais non joignable — ou une adresse électronique absente (`EndpointID`) est une anomalie bloquante ; la facture s'arrête en échec de validation (`9905`) et n'est pas envoyée. Une erreur de connecteur ou de réseau reste un avertissement dans les deux modes, et les factures paramétrées pour ne pas être envoyées ne sont jamais bloquées. |
 
 ### Recherche INSEE
 
@@ -36967,9 +37435,14 @@ Les libellés de cet éditeur restent en anglais, comme dans l'application.
 | Champ | Description |
 |---|---|
 | **Application Home** | Répertoire racine d'installation de NomaUBL (par ex. `/app/nomaubl`). Résolu par le placeholder `%APP_HOME%` utilisé dans les chemins de documents. |
+| **Demo instance** | `N` (défaut) / `Y`. Désigne l'instance comme instance de démonstration : elle peut alors, et seulement alors, être remplie de factures fictives — voir [Corpus de démonstration](../../installation/demo-corpus.md). Jamais sur une instance client. |
 | **Environment** | Nom court d'environnement (par ex. `demo`, `PD`). Résout le placeholder `%ENV%` dans les chemins des documents (`rtf`, `xsl`, `ublXslt`), permettant à un même modèle de cibler plusieurs environnements. Le nom s'affiche aussi en **badge à droite du titre de l'application** et dans l'onglet du navigateur. |
 | **Theme colour** | Sélecteur de couleur, à côté de l'environnement. Remplace le bleu d'accent de toute l'interface — titre, badge d'environnement, boutons principaux, liens, contours de focus — pour distinguer chaque environnement d'un coup d'œil. Badge et couleur sont servis par un endpoint public : la page de connexion les affiche déjà. Vide = bleu par défaut. |
 | **Process Home** | Répertoire de travail utilisé par NomaUBL pendant le traitement (par ex. `/app/nomaubl/process`). |
+
+Les champs de chemin — *Process Home*, les répertoires ci-dessous et le *Server log file* de l'onglet Logs — portent le bouton **Insérer une variable** `{ }` : il liste `%APP_HOME%`, `%ENV%` et `%PROCESS_HOME%` et insère celle choisie à la position du curseur.
+
+Quand *Demo instance* vaut `Y`, l'onglet affiche aussi un bloc **Demo corpus** qui remplit ou réinitialise les données de démonstration en tâche de fond — voir [Corpus de démonstration](../../installation/demo-corpus.md#from-the-settings).
 
 ### File Paths
 
@@ -37086,7 +37559,7 @@ Réglages de l'[assistant IA](../../application/ai-capabilities.md) intégré.
 |---|---|
 | **Source** | `llms` *(défaut)* : le fichier de documentation est téléchargé et interrogé sur ce serveur. `sitemap` : le modèle consulte lui-même les pages (fonctionnement précédent). |
 | **llms-full.txt URL** | Pages en anglais (défaut `https://docs.nomana-it.fr/llms-full.txt`). Rafraîchi toutes les 6 heures ; une URL, un chemin local ou une URL `file:`. S'il est injoignable au démarrage, la copie fournie avec l'application est utilisée. |
-| **llms-full.fr.txt URL** | Pages en français, utilisées quand l'interface est en français. Vide = pages anglaises pour toutes les langues. |
+| **llms-full.fr.txt URL** | Pages en français, utilisées quand l'interface est en français (défaut `https://docs.nomana-it.fr/llms-full.fr.txt`, retenu aussi quand le champ est vide). Si le fichier français ne peut pas être chargé, l'assistant se replie sur les pages anglaises. |
 | **Section** | Partie du fichier à indexer (son en-tête `# === … ===`, par ex. `NomaUBL`). Vide = tout le fichier. |
 
 ### Playbooks
@@ -37992,6 +38465,7 @@ Trois placeholders portent le document dans la part :
 - `{{filePath}}` — le chemin du fichier UBL sur disque. À l'**envoi initial**, c'est le fichier d'entrée ; au **renvoi**, NomaUBL écrit d'abord le blob UBL stocké dans un fichier temporaire, donc `{{filePath}}` fonctionne de la même façon et une seule configuration de connecteur sert les deux (le fichier temporaire est nettoyé automatiquement).
 - `{{content}}` — le base64 de l'UBL, pour les plateformes qui prennent les octets en ligne dans un corps JSON plutôt qu'en part fichier.
 - `{{docName}}` — un nom `<doc>_<dct>_<kco>` sanitisé, pratique pour l'en-tête `filename`.
+- `{{derivedFilePath}}` / `{{derivedContent}}` — le chemin et le base64 du fichier produit par la [post-transformation](../ubl-tools/post-transform.md) du document (CII…), pour une plateforme qui attend cette syntaxe plutôt que l'UBL ; vides quand le document n'en a pas. `{{filePath}}` et `{{content}}` restent l'UBL, qui porte le routage.
 
 #### Corps SOAP / XML
 
@@ -39133,6 +39607,8 @@ Chaque ligne indique :
 
 La barre permet de filtrer par section (en-tête, vendeur, acheteur, bénéficiaire, représentant fiscal, livraison, paiement, remises & charges, TVA, totaux, ligne de facture) ou de rechercher dans le BT, le XPath, le libellé, la définition, la note, la liste de codes et les règles. Le tableau est regroupé par section et codé par couleur — le même code couleur que l'éditeur de facture de l'application.
 
+Dans l'application, un filtre par **jeu de règles** affiche les champs d'un [jeu de règles](../ubl-tools/rule-sets.md) — EN 16931 basique, EN 16931 ou France étendu (CTC) — avec leur statut dans ce jeu : obligatoire, conditionnel, optionnel.
+
 ---
 
 ## NomaUBL — Règles métier
@@ -39148,6 +39624,8 @@ Deux vues sur les règles CTC françaises de la matrice **AFNOR XP Z12-012 V1.4*
 - **Catalogue de règles** — les 148 règles CTC françaises de la matrice (contrôles BR-FR, cohérence, mapping flux 1 / 10.1, formats numériques, multi-vendeurs, règles PPF) avec leur texte complet, un filtre par famille, la recherche et les [termes UBL](./ubl-reference.mdx) que chaque règle contraint.
 
 Chaque terme UBL de la page [Référence UBL](./ubl-reference.mdx) renvoie aux règles qui s'y appliquent.
+
+Dans l'application, le même filtre par **jeu de règles** que sur la référence UBL ne garde que les règles qui portent sur un champ du [jeu de règles](../ubl-tools/rule-sets.md) choisi.
 
 ---
 
@@ -39827,14 +40305,28 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Rapport d'audit : cycle de vie et contrôles de cohérence.** Deux sections rejoignent le rapport d'audit. Cycle de vie et délais : les factures atteignant chaque étape par mois (créées, validées, en échec, envoyées, déposées, reçues, approuvées, refusées, rejetées, payées) et les délais création → premier envoi, premier envoi → dépôt, création → dépôt et dépôt → premier statut acheteur, en médiane et 90e centile. Contrôles de cohérence : factures en statut de plateforme sans identifiant de plateforme, factures envoyées sans UBL archivé, attentes anormales, numéros en double dans une société, total TVA contre la ventilation enregistrée, total HT contre les lignes enregistrées, refus et rejets sans suite ; une option ajoute les contrôles d'intégrité SQL configurés avec JDE et leur nombre d'écarts. La synthèse et la section Situation comptent les factures déposées mais non transmises (200 avec le motif NON_TRANSMISE) et expliquent que le destinataire n'est déclaré auprès d'aucune plateforme. Le tableau des statuts est trié par code.
 - **Rapport d'audit : exploitation, activité, évolution et graphiques.** Une section Exploitation liste les exécutions des tâches planifiées avec erreurs et durées, les fichiers traités par mode et document, les notifications du portail par règle et les enveloppes de e-reporting par statut. Les volumes s'ouvrent sur l'évolution dans la période, par jour, semaine ou mois selon sa longueur, avec les factures déposées et en erreur par intervalle ; un tableau par activité donne factures, dépôts, erreurs et montants par secteur ; les tableaux par société, document et type de flux portent la période précédente et l'écart. Le PDF trace des graphiques : factures par intervalle, par activité, répartition par famille de statut, étapes du cycle de vie par intervalle et règles les plus fréquentes. Un mois civil, un trimestre ou une année entiers se comparent aux mois précédents plutôt qu'au même nombre de jours ; l'onglet propose un sélecteur de mois civil à côté des dates libres. Rejets, refus et événements d'erreur sont triés par code ; les enveloppes de e-reporting couvrant une période qui se termine dans la période d'audit sont incluses.
 - **Rapport d'audit : cohérent, lisible et complet.** La synthèse décompose les factures traitées en niveaux qui s'additionnent : hors envoi plateforme (types de flux réglés pour ne pas être envoyés, B2C ou international par exemple), à envoyer, déposées, en cours, approuvées, rejetées, non déposées et pourquoi. Les taux de dépôt se calculent sur les factures à envoyer, dans la synthèse, par jour et par activité. Les tentatives d'envoi, les renvois (relances automatiques comprises) et le taux d'échec d'envoi mesurent la disponibilité de la plateforme. Les corrections d'identifiants acheteur sont comptées comme des actions. Le contrôle de suivi couvre tous les statuts en attente d'une action, en deux familles : à corriger et renvoyer (rejetée, échec de validation, échec d'import) et réponse à l'acheteur attendue (en litige, suspendue, refusée). Le reste à traiter affiche par statut les factures non vues depuis plus de 30 jours et des montants HT ; la date minimale de facture des réglages borne ses chiffres toutes périodes. Nouveaux contrôles : lignes de TVA avec un montant sans taux ; les enveloppes de e-reporting en échec sont signalées. Les tableaux par activité sont scindés en deux, les légendes des graphiques passent à la ligne, le tableau par mode de traitement et les rappels de ligne de commande disparaissent.
+- **Assistant IA : l'instance, la période, la documentation hors ligne.** Deux nouveaux outils : le rapport d'implémentation de l'instance, lu par section ou interrogé par mots-clés, pour répondre à partir de la configuration réelle (documents envoyés à la plateforme, packs de règles, règles de notification, rôles et utilisateurs, actions permises par un statut) ; et les chiffres d'une période, synthèse et reste à traiter du rapport d'audit en quelques secondes, pour une synthèse mensuelle, des taux, des montants ou ce qui attend une action, dans le périmètre de sociétés de l'utilisateur. Les procédures suivent les deux familles d'action (à corriger et renvoyer ; réponse à l'acheteur, avoir obligatoire pour un refus seulement) et une procédure « reste à traiter » s'ajoute. L'index documentaire est par langue : les pages françaises fondent les réponses en français (nouveau réglage d'URL, vide = pages anglaises). La section NomaUBL de la documentation est embarquée dans le jar et sert quand le site est injoignable, avec une mention dans la réponse ; l'URL accepte aussi un fichier local. Les questions de départ deviennent un choix de domaine (période, reste à traiter, factures, statuts et erreurs, configuration, documentation, technique, cette facture) avec quatre questions chacun, la page choisissant le domaine initial ; les domaines restent disponibles après une réponse, à côté de ses suites.
+- **Rapport technique.** La page Rapports gagne un onglet Rapport technique, avec la route d'API et la ligne de commande, qui produit la documentation développeur de la version en Markdown ou PDF à partir des analyses embarquées à la compilation : périmètre, architecture, modèle de données (chaque table avec ses colonnes, clés de configuration, flux et points d'appel, et le nom résolu dans l'instance quand il diffère), les documents de flux complétés des tables, statuts et clés que leur code touche, la référence de configuration (chaque clé avec son champ de réglage, l'endroit où elle s'édite, les flux, les points d'appel et l'état, avec une synthèse des écarts), le modèle de statuts (étiquettes de facture et de e-reporting avec codes, libellés, groupes et flux), la matrice d'impact par flux avec les colonnes et clés les plus référencées, la référence de l'API avec l'accès par opération, la ligne de commande d'après l'aide intégrée, les étapes de compilation avec les artefacts générés et le contenu du jar, et une annexe des références dans le code. Deux options : détailler chaque opération de l'API, inclure les extraits de code. Identique sur toutes les instances d'une version.
+- **Sélecteur de variables partout où un jeton est résolu.** Le bouton d'insertion de variable accompagne désormais chaque champ que le serveur substitue : les constantes de chemin sur les répertoires et le fichier journal des réglages globaux, l'XSLT UBL et le Schematron spécifique du document, le répertoire XSLT de l'e-invoicing, le répertoire et le manifeste d'un dossier surveillé, la source d'image d'un bloc de modèle PDF ; les répertoires de traitement et l'XSLT du document proposent aussi les jetons d'exécution du nom de document et du nom de fichier. Les points d'un connecteur API proposent, par point, les identifiants et le jeton intégrés, les paramètres déclarés du point et les valeurs transmises par les appelants ; le corps et les en-têtes d'authentification proposent les noms d'authentification ; les sources de connecteur proposent les jetons à accolade simple ; les requêtes d'un connecteur SQL proposent leurs paramètres déclarés en jetons :nom. Le panneau s'ouvre du côté où il a la place et n'est plus coupé par sa ligne.
+- **Déclaration de TVA : factures refusées, rejetées et non envoyées.** La déclaration comptait toutes les factures émises sur la période, quel que soit leur statut. Les factures refusées par le client (210) ou rejetées par la plateforme (213) appellent un avoir interne : une case, cochée par défaut, les exclut toutes ; décochée, seules celles vues par le service client sont exclues. Une seconde case, décochée par défaut, exclut aussi les factures à envoyer qui ne sont jamais parvenues à la plateforme (échec de validation, d'envoi ou d'import, pas encore envoyées). Les deux s'appliquent à la matrice, au détail, à l'export Excel et au PDF, dont le pied de page énonce les règles appliquées ; l'API prend excludeMode et excludeUnsent.
+- **Contrôle annuaire : avertir ou bloquer.** Les réglages E-directory gagnent un mode « Destinataire introuvable ». Avertir et envoyer, par défaut, conserve le comportement actuel : l'absence est enregistrée en avertissement et la facture est envoyée. Bloquer : sur une facture destinée à la plateforme, une réponse définitive de l'annuaire (non inscrit, trouvé mais non joignable) ou un EndpointID absent devient un constat bloquant ; la facture s'arrête en échec de validation et n'est pas envoyée. Une erreur de connecteur ou de réseau n'avertit que, dans les deux modes, et les factures réglées pour ne pas être envoyées ne sont jamais bloquées. Le circuit des fichiers UBL enregistre désormais le résultat de la recherche comme le circuit JDE.
+- **Instance de démonstration : un corpus d'exemple en une commande.** Un réglage global déclare une instance comme instance de démonstration ; sur elle seule, la commande `-demo` remplit la base de factures fictives : cinq sociétés émettrices et trente clients aux identifiants valides, factures et avoirs de tous types, toutes les catégories de TVA, remises et frais au document et à la ligne, acomptes, bénéficiaires, représentants fiscaux, livraisons, tous les moyens de paiement, pièces jointes et références, réparties sur les six derniers mois. Chaque facture passe les jeux de règles français, quelques-unes sont volontairement invalides, et toutes suivent le circuit de traitement réel ; celles destinées à la plateforme parcourent ensuite des trajets réalistes, envoyée, en attente, déposée, refusée, rejetée, en litige, suspendue, approuvée, payée, avec des échecs d'envoi et d'import, datés sur la période. La même valeur d'initialisation (seed) donne le même corpus ; une option de remise à zéro efface tout ce que la commande a créé. Le corpus existe aussi sous forme de spools XML à la JDE et de PDF texte, via deux documents de démonstration supplémentaires qui passent par le circuit XML réel : le mapping du spool, généré à partir du modèle du framework, montre les chemins imbriqués, une constante, un total de TVA sommé, un champ atteint n'importe où dans le bloc et un saut de ligne dans les conditions de règlement ; le document PDF montre la conversion PDF vers XML avec deux blocs d'adresse, des lignes libellées, un tableau et des champs par expression régulière pour la clé du document. Une seule exécution produit les trois sources (60 % de fichiers UBL, 30 % de factures en spool, 10 % de factures PDF) ; `--sources` la restreint. La démonstration exige le réglage global Update DB à Y et écrit ses lignes dans le journal des traitements comme la page Traiter. Elle couvre aussi le versant plateforme : des factures fournisseurs reçues en UBL par un quatrième document de démonstration et menées sur le parcours acheteur (mise à disposition, prise en charge, approuvée et payée, en litige, refusée) ; des enveloppes d'e-reporting produites par le traitement réel pour chaque mois révolu, émetteur et expéditeur vides complétés avec la première société de démonstration, puis menées jusqu'à déposée, import échoué ou rejetée ; une règle de notification portail seul pour les refus, rejets et échecs, le répartiteur n'étant démarré que si aucune règle de l'instance n'envoie de courriel. Quand le réglage Instance de démonstration vaut Y, Réglages › Global affiche un bloc Corpus de démonstration qui remplit ou remet à zéro le corpus en tâche de fond avec la fenêtre de progression habituelle. La remise à zéro efface tout ce que la démonstration a créé.
+- **Promotion : promouvoir vers une autre instance, et un historique.** Les instances cibles se définissent une fois dans Réglages › Instances de promotion (nom, URL, compte ; le mot de passe est stocké encodé et n'est utilisé que par le serveur pour l'appel, jamais dans un paquet). Sur la page Promotion, une vue Promouvoir envoie la sélection de la vue Export vers la cible choisie : une simulation montre d'abord l'aperçu de la cible elle-même, nouveau, modifié, identique, ignoré avec le détail des champs, puis Promouvoir l'applique avec la politique et le commentaire habituels. L'export ZIP reste pour les sites qui ne se joignent pas. Une vue Historique liste chaque paquet exporté, import appliqué et promotion appliquée sur l'instance, avec qui, quand, la contrepartie, la politique, le commentaire et le plan complet ; une source garde ses promotions, une cible ses imports.
+- **Onglet mapping : jeux de règles.** L'onglet Variable Mapping de l'éditeur XSL lit désormais un jeu de règles : EN 16931 basique, EN 16931 ou France étendu, présélectionné sur celui que le modèle produit aujourd'hui et modifiable pour en prévisualiser un autre. Chaque balise indique si le jeu l'exige, l'exige sous condition (avec la note et les règles), la laisse optionnelle, ne la connaît pas, ou la tient des valeurs UBL par défaut. Des filtres réduisent la liste aux balises obligatoires et conditionnelles ou aux obligatoires encore vides ; les balises hors du jeu sont masquées sauf demande, si bien que les balises de l'extension française n'apparaissent que sous le jeu étendu. Une ligne de complétude par groupe compte les champs obligatoires qui ont une source, une constante ou une valeur par défaut. « Vérifier le mapping » liste les champs obligatoires sans source, puis transforme l'échantillon chargé avec le mapping en cours d'édition et le valide ; le rapport regroupe les constats par champ et les balises concernées sont mises en évidence. Les jeux de règles sont générés à partir des données de référence UBL à la compilation et peuvent être remplacés par environnement. Un modèle de document peut désormais nommer son jeu de règles dans son onglet UBL : le validateur exécute alors les jeux de contrôles que le jeu liste, dans tous les circuits comme dans la validation de la fenêtre de facture ; vide conserve le choix actuel d'après l'identifiant de personnalisation, et les deux jeux par défaut reprennent exactement la chaîne d'aujourd'hui. La fenêtre de facture nomme le jeu sous lequel une facture a été produite, et les pages Référence UBL et Règles métier reçoivent le même filtre, avec le statut de chaque champ.
+- **Mapping : nouvelles écritures de balises.** Les valeurs de balise d'un mapping de document acceptent trois écritures de plus : `sum(a, b, …)` additionne les montants trouvés à plusieurs chemins, `//Champ` cherche un champ n'importe où dans le spool, et `"\n"` dans une concaténation insère un saut de ligne. Les mappings existants produisent la même sortie qu'avant. Le panneau de mapping rappelle ces écritures au-dessus des champs racine.
+- **Valeurs UBL par défaut : taux de TVA par code source.** L'onglet TVA gagne une table qui associe la source de catégorie TVA de la ligne (zone de taxe, type de taxe ou code composé dans le mapping) à un taux, avec un choix : garder le taux source et laisser la table compléter les taux vides, par défaut, ou laisser une correspondance trouvée l'emporter sur le taux imprimé. Le même taux s'applique aux lignes de ventilation de TVA, et un document peut remplacer la table comme le reste de la famille TVA. Sur les tables de catégorie et de taux, un code source terminé par `*` couvre tous les codes qui commencent ainsi ; les codes exacts passent d'abord. Aucun motif d'exonération n'est plus émis sur les catégories taxée et à taux zéro, quoi que dise la source. Rien ne change dans les factures produites tant que la table est vide ; la mise à niveau ajoute la table à chaque fichier de valeurs par défaut existant.
+- **Post-transformation : l'UBL validé dans une autre syntaxe.** L'onglet UBL d'un document gagne une feuille de style de post-transformation et un suffixe de sortie. Après une validation sans erreur bloquante, l'UBL passe par la feuille de style et le résultat est écrit à côté de lui ; un échec est consigné en avertissement et l'UBL poursuit son chemin. L'UBL reste le pivot partout. Les fenêtres de facture et de document gagnent le téléchargement du fichier dérivé, nommé d'après le nom de post-transformation défini sur le document, calculé à la demande depuis l'UBL archivé. Le corps du connecteur de la plateforme peut envoyer le fichier converti plutôt que l'UBL grâce à deux nouvelles variables, contenu dérivé et chemin du fichier dérivé, à l'envoi initial comme au renvoi ; l'UBL garde le routage. Feuille de style livrée : UBL vers Cross Industry Invoice (CII D16B, socle EN 16931), vérifiée sur le corpus de démonstration avec les règles officielles EN 16931 CII ; le document UBL de démonstration en est équipé.
 
 ### Corrections
 
+- **Enveloppe d'e-reporting : avoirs et clients européens.** Le bloc détaillé d'un avoir ou d'une facture rectificative ne portait aucune référence à la facture antérieure, exigée par la règle G1.32 de la plateforme ; les factures antérieures sont désormais lues dans les références de facturation de l'UBL archivé et écrites avec leur date. L'identifiant légal de l'acheteur était omis quand son adresse électronique était un numéro de TVA sous son schéma national (allemand, néerlandais, italien, espagnol…), ce qui échouait à la règle G6.28 ; ces schémas sont maintenant ramenés à l'identifiant TVA attendu par l'enveloppe.
+- **Fenêtre de progression des tâches.** Elle dessinait son propre fond, et la page transparaissait ; elle utilise maintenant le cadre de fenêtre partagé, comme le renvoi depuis le tableau de bord IT.
 - **Rapport d'audit sur une grosse instance.** Le rapport lançait le contrôle d'ordre du cycle de vie sur toute la table et triait en base chaque ligne du cycle de vie ; les deux figeaient la génération sur une grosse instance. Le contrôle d'ordre reste au contrôle de cycle de vie quotidien, les lignes sont repliées en mémoire, la période précédente ne calcule que ses compteurs de synthèse, la requête des constats ne trie plus chaque message et l'analyse des erreurs réutilise les lignes déjà lues. Le rapport tourne en tâche de fond avec une barre de progression qui nomme l'étape en cours, et la durée de chaque étape est écrite dans le journal serveur. Deux contrôles étaient faux : le test de l'identifiant de plateforme manquait les valeurs à blancs sur Oracle, et les écarts d'intégrité étaient comptés à zéro.
 - **Développeur → API plantait.** Trois exemples de requête ajoutés avec les points d'API de promotion étaient du texte brut dans le document OpenAPI, ce qui le rendait invalide pour la vue API comme pour Redoc. Ce sont désormais des objets JSON, et la vue affiche un message au lieu d'échouer si le document est illisible.
 - **Filtres « contient » avec un souligné.** Le constructeur de filtres partagé prenait le souligné pour un joker explicite : une valeur comme un fragment de nom de fichier partait sans jokers autour et devait correspondre à la valeur entière. Seul le signe pour cent est un joker désormais ; cela corrige le filtre fichier du journal des traitements et tous les filtres texte des autres grilles.
 - **Carte XSD de la vue par règle.** La carte sans identifiant de règle ouvrait les événements avec un filtre vide et montrait tout. Elle filtre maintenant sur « sans règle » et sa source ; la colonne source de la vue des erreurs d'intégration devient un filtre serveur.
 - **Chiffres du rapport d'audit.** Le taux de validation du premier coup comptait les échecs d'envoi à la plateforme comme des constats de validation et oubliait les factures corrigées depuis ; il vient maintenant du cycle de vie. L'étape « déposées », les délais et la synthèse avaient trois définitions du dépôt ; toutes prennent le premier statut de plateforme. Les corrections d'identifiants acheteur étaient comptées comme des échecs d'import. Le tableau des familles de statut ne totalisait pas. La ligne des approuvées comptait les simples dépôts. Le tableau des échecs ne disait pas qu'il était tronqué.
+- **Rapport d'audit sur PostgreSQL.** Le filtre d'intention d'envoi comparait la colonne du drapeau à un nombre ; la colonne est une chaîne sur PostgreSQL, qui refusait la requête. Elle est maintenant comparée en texte sur les deux bases.
 
 ---
 

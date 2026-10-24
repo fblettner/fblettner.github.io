@@ -8,7 +8,7 @@ keywords: [NomaUBL, promotion, export, import, package, environments, dev, test,
 
 The **Promotion** page moves configuration from one instance to another — development to test, test to production — **item by item**, with the files each item uses. Export builds a package; import shows what the package would change, field by field, then writes it after a version snapshot. The keys that belong to an instance — passwords, URLs, hosts, the license, the environment name… — **never travel** and are never overwritten on the target.
 
-Open it from **Management → Promotion**.
+Open it from **Management → Promotion**. The page has four views: **Export** (build a package), **Promote** (send the selection straight to another instance), **Import** (apply a package) and **History**.
 
 ---
 
@@ -200,6 +200,49 @@ What *Apply* writes:
 - the import is **one entry of the versioning log**, with its author and comment.
 
 The grid is the shared data table; its view is listed in the [List views](../configuration/list-views.md) editor.
+
+---
+
+## Promote to another instance \{#promote\}
+
+When the two instances can reach each other, the **Promote** view sends the selection of the Export view straight to a target instance, without handling a ZIP file. The package is built as for an export and sent to the target's own preview, then to its import.
+
+1. **Pick the items** in the Export view (with their dependencies).
+2. In **Promote**, choose the **Target instance** (the last one used is remembered), the policy for **Changed items and files** — *Replace with the package* or *Keep the target, write only new ones* — and a comment.
+3. **Dry run on the target**: the target answers with its own preview — new, changed, identical, skipped, with the field diffs — shown under *Target … · Preview*. Nothing is written.
+4. **Promote** applies that plan after a confirmation; the target takes a version snapshot before each write, and its instance keys keep their values. The result reads *Promoted to …: n item(s) and n file(s) written*.
+
+The ZIP export stays for instances that cannot reach each other.
+
+### Target instances \{#targets\}
+
+The targets are defined once in **Settings → Promotion targets** (Platform area); while none is defined, the Settings header offers **Add promotion targets**. Each target has:
+
+| Field | Description |
+|---|---|
+| **Name** | Shown in the target list of the Promotion page. |
+| **URL** | Root of the target instance, with its path prefix when it has one (e.g. `https://test.example/nomaubl`). |
+| **Username** / **Password** | Account on the target, which must hold the *Settings access* feature there; leave blank when the target runs without sign-in. The password is stored encoded and decoded on the server only for the call. |
+
+The account is never sent to the browser and never travels in a package. This editor is in English in the application.
+
+---
+
+## History \{#history\}
+
+The **History** view lists every package exported, import applied and promotion applied on the instance, newest first:
+
+| Column | Description |
+|---|---|
+| **When** | Date and time. |
+| **Direction** | *Export*, *Import* or *Promoted*. |
+| **Counterpart** | The target of a promotion, the source of an import. |
+| **Author** | Who ran it. |
+| **Policy** | *replace* or *keep*. |
+| **Items** / **Files** | Counts. |
+| **Comment** | The comment entered. |
+
+A row opens the entry with its full plan and diffs. A source instance keeps its promotions, a target its imports. Each entry is a JSON file under the environment's `promotions` folder.
 
 ---
 

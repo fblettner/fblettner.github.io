@@ -392,7 +392,7 @@ Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête 
 
 ### Onglet Résumé *(défaut)*
 
-L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. **Supprimer** retire la facture et tous les enregistrements associés — ligne de journal (XML source, référence de transaction PA, nom du fichier source), cycle de vie, lignes, TVA et validation : un nouveau traitement du même document repart de zéro, et les [dossiers surveillés](../management/watched-folders.md) peuvent reprendre son fichier source. La suppression suit la même protection que *Corriger destinataire* : le bouton disparaît dès que la PA a traité la facture, sauf pour un rejet **213** au motif d'adressage. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
+L'onglet Résumé affiche un **badge de statut** coloré en haut — avec, en dessous, le détail du statut et le **jeu de règles** selon lequel la facture a été produite (voir [Jeux de règles](../ubl-tools/rule-sets.md)) — suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. **Supprimer** retire la facture et tous les enregistrements associés — ligne de journal (XML source, référence de transaction PA, nom du fichier source), cycle de vie, lignes, TVA et validation : un nouveau traitement du même document repart de zéro, et les [dossiers surveillés](../management/watched-folders.md) peuvent reprendre son fichier source. La suppression suit la même protection que *Corriger destinataire* : le bouton disparaît dès que la PA a traité la facture, sauf pour un rejet **213** au motif d'adressage. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
 
 #### Corriger destinataire \{#fix-buyer\}
 
@@ -579,6 +579,8 @@ Trois sections dans cet onglet :
 | **Valider l'UBL** | Relance la validation XSD + Schematron sur le document UBL stocké en base. Le résultat (valide / avertissement / erreur) s'affiche en ligne, avec le détail si nécessaire. |
 | **Modifier le statut** | Ouvre la *modale de modification de statut* — voir plus bas. |
 | **Renvoyer** | Redépose le document UBL sur la Plateforme Agréée. Une confirmation est demandée avant exécution. |
+| **Télécharger UBL** | Enregistre l'UBL archivé de la facture. |
+| **Télécharger CII** | Affiché quand le document a une [post-transformation](../ubl-tools/post-transform.md) : l'UBL archivé converti à la demande, au nom de la post-transformation (*Télécharger fichier converti* quand elle n'a pas de nom). |
 
 #### Groupe Cycle de vie
 

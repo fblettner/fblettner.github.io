@@ -138,8 +138,23 @@ La barre d'outils au-dessus de la matrice fixe la **période**, un **filtre soci
 | **Sélecteur de période** | Choisit la période couverte par la matrice. Par défaut, le **mois complet précédent** — celui que vous déclarez. Basculez sur **Trimestre** pour une déclaration trimestrielle. Le filtre s'applique à la **date d'émission de la facture** (celle imprimée sur la facture elle-même) : la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures propose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) — un clic sur un montant ouvre la liste Factures avec ce sélecteur déjà positionné, donc le nombre affiché correspond à celui d'où l'on vient. |
 | **Boutons Mois / Trimestre** | Basculent entre un pas mensuel et un pas trimestriel. Le libellé du sélecteur de période s'adapte (par ex. *T2 2026*). |
 | **Société** | Optionnel. Restreint la période aux factures d'un code société (KCO). Par défaut : *Toutes les sociétés*. |
+| **Exclure toutes les refusées et rejetées** | Cochée par défaut. Écarte toutes les factures refusées par l'acheteur (`210`) ou rejetées par la plateforme (`213`) : elles appellent un avoir interne. Décochée, seules celles que le service client a marquées comme vues sont écartées — voir [Factures écartées](#excluded-invoices). |
+| **Exclure les factures à envoyer non parvenues à la plateforme** | Décochée par défaut. Écarte aussi les factures à envoyer dont le statut est encore interne : échec de validation, d'envoi ou d'import, ou pas encore envoyées. |
 | **▣ Excel** | Télécharge le classeur décrit dans [Export Excel](#export-excel). |
 | **📄 PDF CA3** | Télécharge la synthèse au format CA3 décrite dans [Export PDF — mise en page CA3](#export-pdf--mise-en-page-ca3). |
+
+---
+
+## Factures écartées \{#excluded-invoices\}
+
+La déclaration retient les factures émises sur la période, à l'exception de :
+
+| Cas | Écartée quand |
+|---|---|
+| Refusée par l'acheteur (`210`) ou rejetée par la plateforme (`213`) | *Exclure toutes les refusées et rejetées* est cochée (défaut) — ou, décochée, une fois que le service client a marqué la facture comme vue dans sa fenêtre, l'avoir interne étant fait. |
+| À envoyer, jamais parvenue à la plateforme | *Exclure les factures à envoyer non parvenues à la plateforme* est cochée : la facture est à envoyer et son statut est encore interne (`99xx` autre que `9906`, en attente sur la plateforme, et `9911`, export validé). |
+
+Les deux règles s'appliquent à la matrice, au détail, à l'export Excel et au PDF, dont le pied de page rappelle les règles appliquées. Par l'API, les mêmes choix passent par les paramètres `excludeMode` (`all` ou `reviewed`) et `excludeUnsent`.
 
 ---
 

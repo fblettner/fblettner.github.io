@@ -108,7 +108,7 @@ La navigation de gauche regroupe les entrées selon **ce que l'on veut régler**
 
 | Domaine | Entrées |
 |---|---|
-| **Platform** | Les onglets des [paramètres globaux](./system/global.md) — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant*, *License* — puis les bases : [base NomaUBL](./database-connectors/nomaubl.md), [base JD Edwards](./database-connectors/jdedwards.md) et les autres connecteurs de base de données. |
+| **Platform** | Les onglets des [paramètres globaux](./system/global.md) — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant*, *License* — puis **Promotion targets** (les instances vers lesquelles la page [Promotion](../management/promotion.md#targets) peut promouvoir) et les bases : [base NomaUBL](./database-connectors/nomaubl.md), [base JD Edwards](./database-connectors/jdedwards.md) et les autres connecteurs de base de données. |
 | **Security** | *Authentication* (onglet global), [authentification unique (OIDC)](./system/oidc.md), [utilisateurs](./security/users.md) et [rôles](./security/roles.md). |
 | **E-invoicing** | [E-invoicing](./system/einvoicing.md), [types de documents](./system/document-types.md), [catalogue des statuts](./system/statuses.md), [annuaire](./system/edirectory.md). |
 | **E-reporting** | [E-reporting](./system/ereporting.md) et le catalogue des statuts de l'e-reporting. |
@@ -144,7 +144,7 @@ Les réglages rarement modifiés sont repliés sous une ligne **Advanced**, ferm
 | Action | Effet |
 |---|---|
 | **Add API** · **Add SQL** · **Add List** | Crée un connecteur API, un connecteur SQL ou une liste personnalisée. |
-| **Add OIDC** · **Add integrity reports** | Affichés tant que l'instance n'a pas de modèle d'authentification unique ou de contrôles d'intégrité ; crée ce modèle. |
+| **Add OIDC** · **Add integrity reports** · **Add promotion targets** | Affichés tant que l'instance n'a pas de modèle d'authentification unique, de contrôles d'intégrité ou d'instances de promotion ; crée ce modèle. |
 | **Copy** | Duplique le modèle sélectionné sous un nouveau nom. Indisponible sur les modèles système. |
 | **Remove** | Supprime le modèle sélectionné. Indisponible sur les modèles système. |
 | **Description (optional)** | Description libre du modèle, affichée sous son entrée. |

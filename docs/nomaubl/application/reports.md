@@ -6,7 +6,7 @@ keywords: [NomaUBL, reports, reporting, audit report, implementation report, sta
 
 # Reports
 
-The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has five tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, a build-your-own **Query tool**, and two documents generated on demand, the [Audit report](./audit-report.md) and the [Implementation report](./implementation-report.md).
+The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has six tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, a build-your-own **Query tool**, and three documents generated on demand, the [Audit report](./audit-report.md), the [Implementation report](./implementation-report.md) and the [Technical report](./technical-report.md).
 
 Open it from the sidebar — **Reports**. Access is granted per role (see [Access](#access) below).
 
@@ -21,16 +21,18 @@ Open it from the sidebar — **Reports**. Access is granted per role (see [Acces
   <rect x="30" y="24" width="940" height="272" rx="14" fill="url(#rep-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="50" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Reports</text>
 
-  <rect x="50" y="66" width="120" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="110" y="83" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Status statistics</text>
-  <rect x="176" y="66" width="80" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="216" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Integrity</text>
-  <rect x="262" y="66" width="90" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="307" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Query tool</text>
-  <rect x="358" y="66" width="100" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="408" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit report</text>
-  <rect x="464" y="66" width="140" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="534" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Implementation report</text>
+  <rect x="50" y="66" width="104" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="102" y="83" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Status statistics</text>
+  <rect x="158" y="66" width="62" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="189" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Integrity</text>
+  <rect x="224" y="66" width="74" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="261" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Query tool</text>
+  <rect x="302" y="66" width="88" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="346" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit report</text>
+  <rect x="394" y="66" width="128" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="458" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Implementation report</text>
+  <rect x="526" y="66" width="104" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="578" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Technical report</text>
 
   <rect x="740" y="66" width="100" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="790" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Archive date ▾</text>
@@ -100,16 +102,17 @@ A query — its **dataset, columns, filters, column layout and grouping** — ca
 
 ---
 
-## Audit and implementation reports
+## Audit, implementation and technical reports
 
-The last two tabs generate a document, in PDF or Markdown, rather than a grid:
+The last three tabs generate a document, in PDF or Markdown, rather than a grid:
 
 | Tab | Document | Page |
 |---|---|---|
 | **Audit report** | The activity of a period — volumes, situation, backlog, lifecycle, errors, operations and consistency checks — for an internal review or an auditor. | [Audit report](./audit-report.md) |
 | **Implementation report** | The documentation of the instance as it runs — architecture, built-in rules, documents and UBL mappings, platform settings, operations, security — for a hand-over file or an upgrade snapshot. | [Implementation report](./implementation-report.md) |
+| **Technical report** | The developer documentation of the release — data model, flows, configuration reference, status model, API — identical on every instance. | [Technical report](./technical-report.md) |
 
-Both are also available from the [command line](../management/command-line.md#report), to schedule them or keep them with a release.
+All three are also available from the [command line](../management/command-line.md#report), to schedule them or keep them with a release.
 
 ---
 

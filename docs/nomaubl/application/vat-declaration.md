@@ -138,8 +138,23 @@ The toolbar above the matrix sets the **period**, an optional **company filter**
 | **Period selector** | Picks the period the matrix covers. Defaults to the **previous full month** — what you'd file. Switch to **Quarter** when you declare quarterly. The filter is applied against the **invoice's issue date** (the date printed on the invoice itself), so the period stays stable even if the underlying data is rebuilt later. The Invoices list exposes the same date basis via its [Date basis toggle](./invoices.md#date-basis) — drilling into a VAT amount opens the Invoices list with that toggle pre-selected, so the count matches the one you came from. |
 | **Month / Quarter chips** | Toggle between monthly and quarterly granularity. The label of the period selector adapts (e.g. *Q2 2026*). |
 | **Company** | Optional. Restricts the period to invoices of one company code (KCO). Defaults to *All companies*. |
+| **Exclude all refused and rejected** | On by default. Leaves out every invoice refused by the buyer (`210`) or rejected by the platform (`213`): both call for an internal credit note. Unchecked, only those customer service marked reviewed are left out — see [Invoices left out](#excluded-invoices). |
+| **Exclude to-send invoices not at the platform** | Off by default. Also leaves out the invoices flagged to be sent whose status is still internal: validation, send or import failure, or not yet sent. |
 | **▣ Excel** | Downloads the workbook described under [Excel export](#excel-export). |
 | **📄 PDF CA3** | Downloads the CA3-styled synthesis described under [PDF export — CA3 form layout](#pdf-export--ca3-form-layout). |
+
+---
+
+## Invoices left out \{#excluded-invoices\}
+
+The declaration counts the invoices issued in the period, minus:
+
+| Case | Left out when |
+|---|---|
+| Refused by the buyer (`210`) or rejected by the platform (`213`) | *Exclude all refused and rejected* is checked (default) — or, unchecked, once customer service has marked the invoice reviewed in its window, the internal credit note being done. |
+| To be sent, never reached the platform | *Exclude to-send invoices not at the platform* is checked: the invoice is flagged to be sent and its status is still internal (`99xx` other than `9906`, pending at the platform, and `9911`, export validated). |
+
+The two rules apply to the matrix, the drill-down, the Excel export and the PDF, whose footer states the rules applied. Over the API, the same choices are the `excludeMode` (`all` or `reviewed`) and `excludeUnsent` parameters.
 
 ---
 
