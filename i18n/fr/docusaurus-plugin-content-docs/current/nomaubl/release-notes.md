@@ -163,7 +163,6 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 </div>
 {/* versions:end */}
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.24.1 — 2026-10-24 \{#v2026-10-24-1\}
@@ -196,7 +195,6 @@ toc_max_heading_level: 2
 - **Carte XSD de la vue par règle.** La carte sans identifiant de règle ouvrait les événements avec un filtre vide et montrait tout. Elle filtre maintenant sur « sans règle » et sa source ; la colonne source de la vue des erreurs d'intégration devient un filtre serveur.
 - **Chiffres du rapport d'audit.** Le taux de validation du premier coup comptait les échecs d'envoi à la plateforme comme des constats de validation et oubliait les factures corrigées depuis ; il vient maintenant du cycle de vie. L'étape « déposées », les délais et la synthèse avaient trois définitions du dépôt ; toutes prennent le premier statut de plateforme. Les corrections d'identifiants acheteur étaient comptées comme des échecs d'import. Le tableau des familles de statut ne totalisait pas. La ligne des approuvées comptait les simples dépôts. Le tableau des échecs ne disait pas qu'il était tronqué.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.23.1 — 2026-10-23 \{#v2026-10-23-1\}
@@ -218,7 +216,6 @@ toc_max_heading_level: 2
 - **Navigation et réglages suivent.** Les pages Rapport quotidien, Reprise auto et Contrôles cycle de vie quittent le groupe Gestion, leurs formulaires vivent dans l'éditeur des tâches planifiées ; les droits de rôle qui les mentionnent encore sont simplement sans effet. Les dossiers surveillés reviennent dans Gestion, à côté des versions de fichiers : la page configure les dossiers, leur planification est un lot de la page Tâches planifiées. Dans les réglages, l'onglet Scheduling devient « Job defaults » et ne garde que de vrais paramètres : fenêtre silencieuse, cadence des envois en masse (travailleurs parallèles, délai par travailleur), jalons BIP et profondeur de reprise. Les intervalles d'interrogation, la rétention des notifications et la liste des lots ont quitté les réglages pour la page. Trois intervalles qui n'avaient aucun champ (cycle e-reporting, factures reçues, rétention des notifications) se modifient désormais depuis leur tâche. Stockage, noms de modèles, ligne de commande et comportement du planificateur sont inchangés ; le point d'état renvoie en plus, par tâche, la prochaine exécution, l'indicateur d'exécution en cours, la suspension et la source du lot, et deux points d'action (lancer, recharger) rejoignent la suspension, qui accepte maintenant toute tâche.
 - **Le dictionnaire des données remplace la page Références croisées.** Même emplacement dans le menu Documentation, même droit de page. La page est produite à la construction à partir de trois sources jusque-là séparées : le DDL de la base (rôle et notes de la table, clé primaire, index, type de colonne, nullabilité, valeur par défaut, commentaires en ligne et COMMENT ON), les noms configurables (accesseurs de tables et de colonnes avec leur clé de configuration) et chaque appel Java de ces accesseurs, qualifié en écriture ou en lecture et rattaché à un flux (traitement, import PA, statuts PA, factures reçues, e-reporting, entrée, tâches, notifications, authentification, API, écrans, base de données, ligne de commande). La liste de gauche présente les seize tables par groupe de flux, avec une recherche sur les noms, les colonnes, les commentaires et les codes BT. La fiche de la table donne le rôle, la clé, l'accesseur, le renommage en vigueur dans les réglages de la base NomaUBL, les index, les notes et les flux qui l'écrivent et la lisent ; les tables de facture portent un bandeau cliquable du cycle de vie, de l'archive au journal des traitements. La grille des colonnes est la table partagée (présente dans l'éditeur des vues) : colonne, remplacement, type, description, code BT, accesseur, écrans qui l'affichent, flux, nombre d'écritures et de lectures ; une ligne ouvre les références de code, écritures d'abord, par flux. Servie par un nouveau point d'API à côté de celui des références croisées, qui demeure. Effet de bord du croisement : l'éditeur des colonnes des réglages de la base NomaUBL proposait encore la colonne de sous-flux e-reporting supprimée en mai 2026 et ignorait la colonne de direction qui l'a remplacée ; corrigé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.22.1 — 2026-10-22 \{#v2026-10-22-1\}
@@ -235,7 +232,6 @@ toc_max_heading_level: 2
 
 - **Erreur « création PDF » injustifiée sur les modèles sans RTF.** Forcer le PDF lisible (« Keep PDF » sur un type de document, ou une réimpression) sur un modèle sans modèle RTF, dont les modèles à source PDF, journalisait une erreur de création de PDF. Le rendu forcé est désormais ignoré quand il n'y a rien pour le produire.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.21.1 — 2026-10-21 \{#v2026-10-21-1\}
@@ -257,7 +253,6 @@ toc_max_heading_level: 2
 - **E-reporting : identifiant de l'acheteur refusé (G2.19).** Le bloc acheteur portait l'adresse électronique de l'acheteur (schéma 0225, l'adresse de routage PPF) au lieu de son identifiant légal. Une adresse française ou un SIRET donnent désormais le SIREN sous le schéma 0002 avec le numéro de TVA qui en découle ; 0002, 0223, 0227, 0228 et 0229 passent tels quels. Un acheteur sans identifiant exploitable (vide, « 0 », un schéma e-mail) est laissé hors du rapport et la facture est nommée dans le journal pour compléter la fiche client ; la validation signale alors l'acheteur manquant sur cette facture plutôt qu'une erreur de schéma sur tout le rapport.
 - **E-reporting : « Calculer la période » ignorait les réglages et les rapports précédents.** La fenêtre supposait toujours une périodicité mensuelle et la recherche du dernier rapport n'aboutissait jamais : le mois en cours était proposé à chaque fois, puis soumis comme période. Le calcul suit désormais le paramétrage de la société (mensuel, décadaire, hebdomadaire) et le dernier rapport valide de la société pour le sens concerné, exactement comme l'exécution planifiée, et la fenêtre indique la périodicité appliquée et le rapport qu'elle suit. Une société doit être renseignée pour calculer.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.20.1 — 2026-10-20 \{#v2026-10-20-1\}
@@ -272,7 +267,6 @@ toc_max_heading_level: 2
 - **Recherche Peppol très lente quand les résolveurs externes sont bloqués.** Un identifiant non inscrit dans Peppol était réessayé via les résolveurs publics sur les deux zones DNS, ce qui coûtait plus d'une minute par identifiant sur un serveur sans accès à ceux-ci. Une réponse « nom inexistant » du résolveur du serveur est désormais définitive, et un résolveur public en échec est abandonné pour le reste de la recherche.
 - **Adresses de l'annuaire PPF absentes avec un connecteur Esker.** La liste par SIREN lisait le tableau de réponse sous un nom de propriété que l'éditeur de connecteur n'écrit pas : seule une réponse dont le tableau s'appelait par hasard `results` fonctionnait. Le « champ de réponse » du point d'accès est désormais pris en compte, `records` compris.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.19.1 — 2026-10-19 \{#v2026-10-19-1\}
@@ -293,7 +287,6 @@ toc_max_heading_level: 2
 - **Contrôle d'intégrité limité à 500 événements manquants.** Le résultat ne listait que 500 lignes au plus : le bouton Appliquer ne pouvait rattraper que les 500 premiers événements et il fallait relancer le contrôle. Les lignes manquantes et appliquées ne sont plus limitées ; seules les lignes d'information (facture introuvable, code non mappé) cessent d'être listées au-delà de deux mille, avec une ligne de journal qui le signale. L'exécution planifiée n'était pas concernée.
 - **Statut de facture écrasé par le marqueur de retraitement ou de courrier.** Quand l'historique d'une facture se terminait par le marqueur de retraitement (9912) ou de courrier transmis (9908), le contrôle d'ordonnancement, le rattrapage d'intégrité, la récupération des statuts et la suppression d'un événement recopiaient ce marqueur dans le statut de la facture. Tous les réalignements d'en-tête prennent désormais le dernier état réel de l'historique, en ignorant les deux marqueurs quel que soit leur ordre : une facture déposée 200 NON_TRANSMISE le reste. Le marqueur de courrier est par ailleurs traité comme un événement de l'application : la récupération des statuts ne l'écarte plus et le contrôle d'ordonnancement ne le signale plus comme mal ordonné.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.18.1 — 2026-10-18 \{#v2026-10-18-1\}
@@ -309,7 +302,6 @@ toc_max_heading_level: 2
 - **Valeurs par défaut UBL : code paiement par modèle non enregistré.** Avec la surcharge paiement activée sur un document, le code de paiement par défaut était écrit dans les valeurs globales et perdu à l'enregistrement. La surcharge porte désormais sa propre valeur par défaut.
 - **Valeurs par défaut UBL : la surcharge fournisseurs ne compilait plus.** Une surcharge fournisseurs enregistrée récemment produisait un modèle vendeur sans le paramètre des identifiants additionnels que le socle transmet désormais, et la transformation échouait en XTSE0680. Corrigé pour les nouveaux enregistrements ; un modèle dont la surcharge fournisseurs a été enregistrée avant cette version demande un nouvel enregistrement depuis la page des valeurs par défaut UBL.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.16.1 — 2026-10-16 \{#v2026-10-16-1\}
@@ -323,7 +315,6 @@ toc_max_heading_level: 2
 - **Avoirs : référence de projet refusée par le schéma.** UBL 2.1 ne prévoit pas d'élément de référence de projet sur un avoir ; tout document RM qui en portait une échouait au contrôle XSD (cvc-complex-type.2.4.a sur ProjectReference). Le socle XSL émet désormais la référence de projet (BT-11) d'un avoir sous forme de référence documentaire additionnelle de type 50, conformément à la norme EN 16931 ; les factures ne changent pas. La fenêtre facture produit et relit les deux formes, et le PDF imprime la référence de projet quelle que soit la forme. Les modèles opérateur récupèrent la correction à leur prochaine mise à niveau.
 - **Page de documentation de l'API vide.** La documentation d'API intégrée chargeait l'afficheur Redoc depuis le CDN sans numéro de version. Redoc 3.0 est sorti le 14 octobre avec un point d'entrée différent, et la page a cessé de s'afficher ce jour-là sur toutes les installations. L'afficheur est désormais figé sur la lignée 2.x.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.14.1 — 2026-10-14 \{#v2026-10-14-1\}
@@ -341,7 +332,6 @@ toc_max_heading_level: 2
 - **Identifiants de ligne uniques par facture.** Avec des lignes regroupées par livraison, le numéro de ligne (BT-126) repartait à 1 à chaque livraison, d'où des identifiants en double dans une même facture et, côté base, des lignes perdues sur le conflit de clé. La numérotation est désormais continue sur l'ensemble des livraisons ; les numéros de ligne par défaut des références de commande et d'expédition la suivent.
 - **Fenêtre facture : boutons de références de ligne.** Les boutons « Référence Cde Client », « Numéro de commande », « N° ligne client » et « Avis d'expédition » d'une ligne n'ouvraient pas leur champ.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.12.1 — 2026-10-12 \{#v2026-10-12-1\}
@@ -356,7 +346,6 @@ toc_max_heading_level: 2
 
 - **Déclaration de TVA sous Oracle.** Les requêtes de la déclaration plaçaient l'alias de table devant l'appel TRIM, qu'Oracle refuse (ORA-00904 "UH"."TRIM") ; la page affichait alors « Aucune facture sur cette période » au lieu de l'erreur. Les deux points sont corrigés : les requêtes sont valides sur tous les dialectes, et un échec côté serveur est désormais affiché sur la page et journalisé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.11.1 — 2026-10-11 \{#v2026-10-11-1\}
@@ -371,7 +360,6 @@ toc_max_heading_level: 2
 
 - **Contrôle d'intégrité : statuts en litige et suspendue.** En litige (207) et suspendue (208) sont des statuts intermédiaires qui peuvent être suivis d'un code inférieur comme approuvée (205) ou refusée (210). Le contrôle d'ordre les triait par code et les plaçait après le statut final, qui devenait alors le statut d'en-tête. Ils conservent désormais leur position chronologique parmi les autres statuts de leur cycle et ne comptent plus comme une inversion. Les historiques déjà déformés sont remis en ordre au prochain passage.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.06.1 — 2026-10-06 \{#v2026-10-06-1\}
@@ -384,7 +372,6 @@ toc_max_heading_level: 2
 
 - **Centre de coûts et code de routage conservés à l'édition / correction acheteur.** Enregistrer une facture depuis la fenêtre facture ou corriger le destinataire effaçait F564230.FEAC04 (centre de coûts) et FEROUT (code de routage), le flux UBL ne portant ni l'un ni l'autre. Les deux conservent désormais les valeurs du premier traitement, comme c'était déjà le cas pour la clé alpha.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.05.1 — 2026-10-05 \{#v2026-10-05-1\}
@@ -398,7 +385,6 @@ toc_max_heading_level: 2
 
 - **Contrôle d'intégrité : ordre du cycle de vie des factures réémises.** Une facture renvoyée après correction (correction acheteur, fenêtre facture, retraitement conservent l'historique) comporte plusieurs cycles PA. Le contrôle d'ordre considérait tout l'historique comme un seul cycle : il mélangeait les statuts du second envoi avec ceux du premier, repoussait les rejets en fin d'historique et signalait à tort l'« Import PA validé » du second cycle. Chaque cycle, ouvert par un événement envoi / en attente / retraitement, est désormais ordonné séparément, l'appartenance étant décidée sur l'heure de l'événement. Les historiques déjà déformés par l'ancienne règle sont détectés et remis en ordre au prochain passage ; les factures réémises correctement ordonnées ne sont plus signalées.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.02.1 — 2026-10-02 \{#v2026-10-02-1\}
@@ -414,7 +400,6 @@ toc_max_heading_level: 2
 - **Correction acheteur : plus de notification intempestive, schéma de l'adresse électronique conservé.** La ligne d'audit « Identifiants acheteur corrigés » est désormais une simple entrée d'historique : elle ne redéclenche plus la règle de notification du statut courant (9905 par exemple) à chaque correction. L'adresse électronique de l'acheteur (BT-49) conserve le schéma déjà présent dans le document, ou 0225 à défaut, au lieu d'être déduit du nombre de chiffres (un identifiant à 9 chiffres recevait 0002).
 - **Fenêtre facture : les éléments supprimés ne réapparaissent plus à l'enregistrement.** Supprimer une exonération de TVA sur une ligne, une note, un bloc livraison, une référence de commande ou un détail d'article dans la fenêtre facture est désormais conservé après enregistrement. Jusqu'ici, la fusion avec le document d'origine réinjectait tout élément que le formulaire n'émettait plus. Les éléments non gérés par la fenêtre restent préservés tels quels.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.10.01.1 — 2026-10-01 \{#v2026-10-01-1\}
@@ -434,7 +419,6 @@ toc_max_heading_level: 2
 - **La fenêtre facture n'invente plus de livraison d'en-tête.** À l'ouverture d'une facture dont les livraisons sont portées par les lignes, le formulaire de livraison d'en-tête se remplissait avec la livraison de la première ligne, et l'enregistrement la réécrivait comme livraison de document (BG-13), ce qui faisait apparaître un cadre Livraison sur le PDF. La fenêtre ne lit plus que la livraison de niveau document ; les livraisons de ligne restent sur les lignes.
 - **Corriger le destinataire et la fenêtre d'édition n'écrasent plus les clés client.** L'enregistrement d'une facture corrigée remplaçait la clé alpha (F564230.FEALKY) par le SIREN de l'acheteur lu dans l'UBL et remettait le numéro client (F564231.UHAN8) à zéro : le remplacement réécrivait les deux à partir du document au lieu de la ligne existante. La clé alpha enregistrée est désormais conservée dès qu'elle existe — le SIREN reste la valeur de repli des factures créées directement en UBL — et le numéro client est repris quand l'appelant n'en fournit pas. Concerne Corriger le destinataire, la fenêtre d'édition et tout retraitement en mode remplacement, avec ou sans renvoi ; le traitement par lot depuis un spool JDE est inchangé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.30.1 — 2026-09-30 \{#v2026-09-30-1\}
@@ -458,7 +442,6 @@ toc_max_heading_level: 2
 - **PDF lisible : décimales par type de nombre.** Le modèle PDF gagne trois réglages à côté de *Supprimer les zéros* : décimales des montants, des prix unitaires et des quantités, chacun en *auto* ou de 0 à 6. Auto conserve l'affichage actuel (montants à 2 décimales, prix et quantités tels que dans l'UBL), les modèles existants ne changent donc pas. Un nombre fixe s'applique à tous les nombres du type — montants de ligne, remises, lignes de TVA et totaux ; prix de l'article, PU net et rabais sur prix ; quantités facturées — arrondis au plus proche, loin de zéro, comme l'exige l'AFNOR ; *Supprimer les zéros* s'applique ensuite. Les montants arrondissaient jusqu'ici les demi-centimes au pair, ce qui pouvait s'écarter d'un centime de la valeur AFNOR dans de rares cas ; corrigé au passage.
 - **BT-33 forme juridique sans le SIREN.** La mention légale complémentaire du vendeur (CompanyLegalForm) produite par la feuille de style des valeurs par défaut devient *Capital 5 000 Euros - APE 62.02A* (ou *Capital 5 000 Euros* sans APE) : le SIREN figure déjà en BT-30 et apparaissait deux fois sur le PDF. La fenêtre facture compose le même texte quand le champ est vide. Les feuilles de style installées qui portent encore l'ancienne concaténation sont réécrites par la mise à niveau et par tout enregistrement depuis l'éditeur des valeurs UBL ; une ligne personnalisée à la main est laissée telle quelle.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.28.1 — 2026-09-28 \{#v2026-09-28-1\}
@@ -476,7 +459,6 @@ toc_max_heading_level: 2
 
 - **L'enregistrement du repère ne modifie plus les autres modèles.** La date était écrite en remplaçant chaque occurrence de la propriété dans le fichier de configuration ; elle n'est plus écrite que dans les propriétés du modèle concerné.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.26.1 — 2026-09-26 \{#v2026-09-26-1\}
@@ -487,7 +469,6 @@ toc_max_heading_level: 2
 - **Mappings de cycle de vie fusionnés le long de la chaîne.** Les mappings `event.*` sont désormais lus à la fois sur le point d'entrée de liste et sur le point d'entrée de détail chaîné (la liste l'emporte en cas de conflit) : les XPath CDAR restent sur le détail, là où l'onglet Test les évalue, les chemins d'élément de liste (`item.<champ>`) sur la liste. Auparavant un seul mapping sur la liste masquait tous ceux du détail.
 - **Chaîne de connecteur : filtre d'éléments.** Un point d'entrée de liste chaîné peut désormais restreindre les éléments à récupérer : nouveau champ *Filtre d'éléments* dans le bloc Chaîne (`champ=valeur`, plusieurs valeurs avec `|`, plusieurs conditions avec `;`, sur les champs en notation pointée de l'élément). Les éléments non retenus sont écartés avant l'appel de détail : aucune requête, aucune fuite dans les résultats. Conçu pour les recherches de flux qui renvoient plus que des messages de cycle de vie — la recherche `flows/search` de Yooz renvoie aujourd'hui des factures UBL avec les statuts CDAR : `flowSyntax=CDAR` ne conserve que les statuts. Vide = aucun filtre ; les chaînes existantes ne changent pas. La trace debug du connecteur indique le nombre d'éléments écartés.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.25.1 — 2026-09-25 \{#v2026-09-25-1\}
@@ -509,7 +490,6 @@ toc_max_heading_level: 2
 - **Les arrondis suivent désormais l'AFNOR (demi à l'écart de zéro).** La fenêtre facture arrondissait les demis vers l'infini positif et subissait la représentation binaire des décimaux : −13,455 donnait −13,45 et 13,455 pouvait donner 13,45. Tous les calculs de montants (prix × quantité, montant de ligne, base et montant de TVA, totaux du document, prix unitaires à 6 décimales) arrondissent désormais le demi à l'écart de zéro, comme l'exige le §4.4.6 de la XP Z12-012. Les lignes d'avoir à quantité négative et les demis en ,xx5 sont les cas concernés ; le chemin XSL ne calculait aucun montant et reste inchangé.
 - **Le code de classification d'article (BT-158) conserve ses espaces internes.** La valeur mappée était normalisée, ce qui fusionnait les espaces multiples à l'intérieur d'un code de classification et cassait le rapprochement côté acheteur. Seuls les espaces de début et de fin sont désormais retirés ; aucun autre champ de ligne n'est modifié.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.23.1 — 2026-09-23 \{#v2026-09-23-1\}
@@ -520,7 +500,6 @@ toc_max_heading_level: 2
 - **Garde-fou d'ingestion : date de facture minimale.** Nouveau réglage *Min invoice date* (E-Invoicing → Settings → Processing) : les factures du pipeline XML antérieures à cette date sont écartées dès l'entrée — aucune écriture en base, aucune génération, aucun envoi PA. Protège des relances d'anciens travaux BIP et des archives historiques (un document avec une ligne F564230 mais sans en-tête serait sinon traité comme « jamais parvenu à la PA » et renvoyé). Les dates vides ou illisibles ne sont pas bloquées ; réglage vide = pas de seuil.
 - **Les factures écartées sont désormais tracées dans le journal de traitement.** Les exécutions nocturnes dont toutes les factures étaient retenues n'affichaient que START/END SUCCESSFUL. Chaque facture écartée écrit désormais sa propre ligne F564237 — seuil de date (« dated … before minInvoiceDate »), doublon protégé par la PA (« already processed by the PA — replace refused ») ou doublon historique — systématiquement, sans mode debug.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.22.1 — 2026-09-22 \{#v2026-09-22-1\}
@@ -530,7 +509,6 @@ toc_max_heading_level: 2
 - **Des coordonnées bancaires vides n'interrompent plus la génération.** Une ligne fournisseur enregistrée dans l'éditeur XSL avec un IBAN ou un BIC vide produisait une entrée à corps vide dans les défauts de paiement par société, et toutes les factures par virement de cette société échouaient alors à la création UBL avec « An empty sequence is not allowed as the result of a call to ubl:supplier-iban#1 ». Les valeurs vides sont désormais écrites comme chaîne vide explicite (les fichiers existants se réparent en réenregistrant une fois l'onglet Fournisseurs). Une facture par virement réellement dépourvue d'IBAN ressort désormais en erreur de validation normale (BR-61) au lieu d'un arrêt de génération ; les factures hors virement n'étaient pas et ne sont pas concernées.
 - **Correction de séquence dans le modèle de base.** `invoice.xsl` émettait la référence de facture antérieure (BG-3) avant la référence de commande (BT-13), un ordre que les deux schémas UBL rejettent quand les deux sont présents ; les blocs suivent désormais la séquence du schéma (OrderReference puis BillingReference), comme le modèle principal.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.18.1 — 2026-09-18 \{#v2026-09-18-1\}
@@ -545,7 +523,6 @@ toc_max_heading_level: 2
 
 - **Modification d'une facture traitée par la PA : fin du faux enregistrement.** Le bouton *Modifier* est désormais masqué pour les factures déjà traitées par la PA (Rejetée 213, Déposée 200, Refusée 210…) — le traitement refusait de toute façon la réécriture mais la signalait comme un enregistrement réussi. *Copier* reste disponible sur ces statuts (créer une nouvelle facture est l'action adaptée) et *Définir statut* reste le déverrouillage volontaire. Si le chemin d'enregistrement est malgré tout atteint, la fenêtre affiche désormais un avertissement explicite « non enregistré — déjà traitée par la PA » au lieu d'une confirmation verte.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.17.1 — 2026-09-17 \{#v2026-09-17-1\}
@@ -559,7 +536,6 @@ toc_max_heading_level: 2
 - **La modification conserve l'activité et le sous-type d'origine — toujours.** L'enregistrement d'une modification (ou d'une correction destinataire) re-déduisait FEAA10 / FESUBTYP de la configuration actuelle des modèles, ce qui pouvait rejeter l'enregistrement (« FEAA10 obligatoire », ou ORA-12899 quand le nom de balise spool d'un modèle XML fuyait comme valeur). La mise à jour de F564230 ne touche plus ces deux colonnes : les valeurs écrites au premier traitement du document font référence. La résolution par modèle ne s'applique plus qu'aux insertions nouvelles (création manuelle via les défauts e-invoicing, fichiers du batch via leur modèle de document).
 - **Textes d'aide du retraitement corrigés.** La CLI et l'usage shell décrivaient encore l'éligibilité comme « Rejetée 213 ou Déposée 200 » ; la règle réelle — inchangée — est Déposée 200 avec motif NON_TRANSMISE et modèle autorisé. Les descriptions correspondent désormais au comportement.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.16.1 — 2026-09-16 \{#v2026-09-16-1\}
@@ -572,7 +548,6 @@ toc_max_heading_level: 2
 - **L'enregistrement conserve le contexte de la facture.** L'enregistrement transmet désormais le modèle de document de la facture : l'activité et le sous-type se résolvent depuis les défauts de ce modèle (corrige l'échec « FEAA10 obligatoire » à la modification), le nom du modèle n'est plus effacé de la facture, le spool source archivé de F564230 reste intact (le retraitement depuis l'archive reste possible), et l'indicateur d'envoi à la PA reflète l'intention configurée au lieu d'être forcé à « ne pas envoyer » — une facture éligible affiche donc son bouton *Renvoyer à la PA* aussitôt après une modification.
 - **Supprimer un événement du cycle de vie.** L'onglet historique gagne un bouton de suppression par événement (avec confirmation) : l'événement est retiré et le statut de la facture se réaligne sur le dernier événement restant — la résolution manuelle propre quand une PA livre un statut parasite (par ex. une Refusée qu'elle a ensuite dépassée). Protégé par une nouvelle action dédiée (*Delete lifecycle event*) dans les rôles, et disponible en `DELETE /api/invoices/{doc}/{dct}/{kco}/lifecycle/{seqn}`.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.15.1 — 2026-09-15 \{#v2026-09-15-1\}
@@ -591,7 +566,6 @@ toc_max_heading_level: 2
 - **Descriptions des règles rétablies dans les erreurs d'intégration.** La vue par règle (et les infobulles) avait perdu la description de toutes les règles CIUS-FR, EXT-CTC-FR et CPRO : le catalogue de descriptions lisait encore les schematrons sous leurs noms d'avant mise à niveau, et deux formats d'étiquette (séparateur espace du CPRO, identifiants à barre oblique comme `BR-FR-32-LEGALID`) échappaient à l'analyse. Le catalogue suit désormais automatiquement la liste des schematrons livrés — une future mise à niveau du paquet schematron ne peut plus effacer les descriptions — et les deux formats sont pris en charge. Les descriptions passent de 979 règles à 1205.
 - **Événements de traitement en direct lisibles.** Dans le fil en direct du tableau de bord IT, les événements d'étape intermédiaires (PARSE, VALIDATION, DBINSERT…, SENDTOPA) débordaient de leur colonne et s'affichaient tronqués ; la colonne est désormais dimensionnée pour les noms d'étape et chaque événement s'affiche en badge aligné comme START/END.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.14.1 — 2026-09-14 \{#v2026-09-14-1\}
@@ -611,7 +585,6 @@ toc_max_heading_level: 2
 - **Menus Grouper / Colonnes défilants.** Les menus Grouper et Colonnes de la grille sont limités à la moitié de la fenêtre et défilent, les longues listes de colonnes restent entièrement accessibles.
 - **Les factures modifiées conservent tout leur contenu d'origine.** L'enregistrement depuis la fenêtre d'édition reconstruisait le XML à partir du seul formulaire : les éléments répétés absents du formulaire (notes supplémentaires, références…) perdaient toutes leurs occurrences sauf la première, l'ordre des éléments de ligne pouvait violer le XSD, et l'identifiant du lieu de livraison à la ligne perdait son schéma (Schematron EXT-FR-FE-146). Les trois cas sont corrigés — le contenu absent du formulaire est préservé tel quel, l'ordre des éléments de ligne respecte UBL 2.1 et les schémas d'identifiants survivent à l'aller-retour ; les identifications SIRET et SIREN de l'acheteur sont reprises comme identifiants acheteur à part entière.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.13.1 — 2026-09-13 \{#v2026-09-13-1\}
@@ -627,7 +600,6 @@ toc_max_heading_level: 2
 - **Le journal des requêtes API détaille le multipart.** La ligne DEBUG d'un appel connecteur à corps multipart liste chaque partie résolue (fichiers par leur chemin, champs texte avec leurs valeurs finales) — un rejet de la PA sur un champ du corps se diagnostique dans le journal au lieu de deviner.
 - **E-Directory : format d'annuaire Esker pris en charge.** Le listage des lignes d'adressage comprend aussi les indicateurs numériques (le `HasAssignedPlatform` 1/0 d'Esker) en plus de true/false.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.12.1 — 2026-09-12 \{#v2026-09-12-1\}
@@ -641,7 +613,6 @@ toc_max_heading_level: 2
 - **Modèles UBL : les conditions acceptent des chemins d'éléments.** Dans les définitions à séparateur « | » des champs d'extension personnalisés, des notes et des propriétés d'article, les colonnes condition et non-vide acceptent désormais un chemin avec « / » (par ex. `Facture_Entete_S4/CLI_TYPE_ID242`) en plus d'un simple nom d'élément — nécessaire quand les champs du fichier source se trouvent sous un groupe intermédiaire. Un nom simple se comporte exactement comme avant : les modèles existants ne changent pas ; la colonne valeur acceptait déjà les chemins.
 - **Référence API mise à jour.** La documentation servie sur `/api/docs` couvre désormais tous les points d'accès — une quarantaine d'entrées manquaient, dont toute la section Rapports (statistiques, requêteur, rapports enregistrés), les contrôles d'intégrité et d'ordre du cycle de vie, le détail de statut d'une facture, la déclaration de TVA, les travaux d'arrière-plan et les informations système, les connecteurs SQL, ainsi que les parcours de réinitialisation de mot de passe et de connexion OIDC. Les exemples de requêtes et de réponses reflètent les échanges réels, et trois nouvelles sections (Rapports, TVA, Système) structurent la lecture.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.11.1 — 2026-09-11 \{#v2026-09-11-1\}
@@ -655,7 +626,6 @@ toc_max_heading_level: 2
 
 - **Fiche facture : messages rémanents effacés.** La confirmation affichée après *Renvoyer à la PA* (ainsi que les résultats de validation et de modification) ne persiste plus après la fermeture de la fenêtre — chaque message s'efface désormais à la fermeture ou à l'ouverture d'une autre facture.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.10.1 — 2026-09-10 \{#v2026-09-10-1\}
@@ -666,7 +636,6 @@ toc_max_heading_level: 2
 - **Les échecs d'écriture d'archive expliquent leur cause.** Quand la ligne d'archive (F564230) ne peut pas être écrite depuis une source UBL, le résultat affiche la cause réelle (champ obligatoire manquant, erreur base de données) au lieu de renvoyer au journal — et une violation de longueur liste chaque valeur écrite avec sa taille, désignant immédiatement la colonne en cause.
 - **Exigibilité de la TVA (BT-8) par société, et sur le PDF lisible.** Pour les factures en « TVA sur les débits », le code de date d'exigibilité devient un défaut par société : chaque société émettrice (éditeur XSL, onglet Sociétés) peut le définir — date de facture, de livraison ou d'encaissement — utilisé quand le fichier source n'en porte pas ; le mappage source reste prioritaire. Les codes et leurs libellés se trouvent dans une nouvelle liste de référence *Codes d'exigibilité TVA*, modifiable dans les Paramètres comme les autres listes. Le PDF lisible affiche désormais l'exigibilité en clair (par ex. « Exigibilité TVA : Date de facture (débits) »), y compris quand la période de facturation ne porte pas de dates. Les installations existantes doivent exécuter la mise à niveau (modèles et liste de référence).
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.09.1 — 2026-09-09 \{#v2026-09-09-1\}
@@ -684,7 +653,6 @@ toc_max_heading_level: 2
 - **Les statuts ne peuvent plus être perdus ni désordonnés.** Trois situations de concurrence des interrogations de statuts sont fermées : deux flux écrivant la même facture au même instant n'entrent plus en collision sur la table de cycle de vie (le perdant réessaie au lieu de perdre l'événement) ; le contrôle d'import n'applique plus un résultat périmé — et ne fait plus reculer le statut — quand l'interrogation du cycle de vie a fait avancer la facture pendant l'exécution ; et les événements créés autour du seuil d'une interrogation ne sont plus ignorés définitivement — chaque exécution rebalaye désormais une courte fenêtre, sans risque de doublon.
 - **Les statuts pré-cycle de vie restent à leur place.** Les étapes internes de plateforme (export validé, import validé…) ne sont plus ajoutées une fois le cycle de vie officiel de la facture commencé, quel que soit le canal de récupération.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.08.1 — 2026-09-08 \{#v2026-09-08-1\}
@@ -694,7 +662,6 @@ toc_max_heading_level: 2
 - **Périmètre du retraitement resserré.** Le retraitement (liste des factures, carte du tableau de bord IT, commande `-reprocess`) ne concerne plus que les factures déposées non transmises (200 avec motif NON_TRANSMISE) ; les factures validées jamais envoyées (9901) ne sont plus proposées, après le retrait des factures rejetées (213) la veille.
 - **Coordonnées bancaires par société.** Chaque société émettrice de l'éditeur XSL (onglet Sociétés) peut désormais porter son IBAN (BT-84), son BIC (BT-86) et le titulaire du compte (BT-85). Quand le fichier source ne fournit pas de valeur et que le moyen de paiement est un virement (codes 30, 42, 58 — les seuls où l'IBAN est obligatoire), les coordonnées de la société de la facture sont utilisées automatiquement. Les autres moyens de paiement et l'autofacturation ne sont pas concernés. Les installations existantes doivent exécuter la mise à niveau pour que leurs modèles de documents bénéficient de ce repli.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.07.1 — 2026-09-07 \{#v2026-09-07-1\}
@@ -716,7 +683,6 @@ toc_max_heading_level: 2
 - **Les montants sans chiffre avant la virgule ne font plus échouer la validation.** Un montant négatif inférieur à un euro reçu de JDE sous la forme `-.80` est désormais émis `-0.80`, comme l'exigent les règles décimales françaises (BR-FR-DEC-01). Les installations existantes doivent exécuter la mise à niveau pour que leurs modèles de documents bénéficient de la correction.
 - **Les échecs d'envoi (9904) enregistrent désormais leur cause.** Le message de statut et le détail d'erreur portent la raison réelle — délai dépassé, échec de connexion ou réponse HTTP de la plateforme — au lieu d'un « échec d'envoi » générique. Un délai dépassé après acceptation par la plateforme (facture présente chez la PA mais sans identifiant enregistré) se reconnaît désormais directement sur la facture : on sait qu'il faut vérifier chez la PA avant de renvoyer.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.06.1 — 2026-09-06 \{#v2026-09-06-1\}
@@ -737,7 +703,6 @@ toc_max_heading_level: 2
 - **Les libellés de statut e-reporting ne s'affichent plus à vide.** Les codes ajoutés après la création de votre configuration (9958, 9959…) affichent désormais leur libellé intégré ; vos libellés personnalisés restent prioritaires.
 - **L'interface web se met à jour immédiatement après un déploiement.** Le navigateur pouvait continuer d'exécuter l'ancienne version de l'interface depuis son cache après une mise à jour du serveur ; les pages sont désormais revalidées à chaque chargement et les ressources de l'application mises en cache efficacement.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.05.1 — 2026-09-05 \{#v2026-09-05-1\}
@@ -753,7 +718,6 @@ toc_max_heading_level: 2
 - **Les statuts reçus de la PA déclenchent désormais les règles de notification.** Les statuts récupérés par l'interrogation du cycle de vie (rejetée 213, refusée 210, déposée 200 avec motif…) mettaient à jour la facture mais contournaient le moteur de notification : les règles associées ne partaient que depuis le bouton de test. Elles partent maintenant sur les canaux configurés comme tout autre changement de statut.
 - **L'éclatement d'un gros fichier multi-factures en parallèle ne s'interrompt plus sur une erreur interne.** Malgré le correctif de la version 2026.09.03.1, le traitement pouvait encore échouer par intermittence sur une erreur d'indexation fatale : les traitements parallèles lisaient toujours la même copie en mémoire du fichier source. Chaque facture reçoit désormais sa propre copie privée avant la répartition du travail — les exécutions parallèles se terminent de façon fiable.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.04.1 — 2026-09-04 \{#v2026-09-04-1\}
@@ -772,7 +736,6 @@ toc_max_heading_level: 2
 - **Traitement fiable des gros volumes et en parallèle.** Le traitement d'un gros lot ou d'un dossier volumineux pouvait occasionnellement échouer sur une erreur interne, signaler une erreur de clé de journal en double, épuiser les ressources système ou afficher un avertissement injustifié « impossible de charger les définitions de statut ». Ces problèmes ne se produisent plus : les exécutions volumineuses en pleine parallélisation se terminent proprement.
 - **Les lignes de facture sans bloc de livraison ne sont plus perdues.** Lors de la conversion PDF vers XML, une ligne sans bloc de livraison/BL précédent (par exemple des frais de port isolés) pouvait se retrouver hors de son regroupement de livraison, puis être ignorée plus loin dans la chaîne — faisant disparaître une ligne réelle et déséquilibrant le total de la facture. Ces lignes restent désormais regroupées et sont conservées, si bien que le nombre de lignes et les totaux concordent.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.03.1 — 2026-09-03 \{#v2026-09-03-1\}
@@ -783,7 +746,6 @@ toc_max_heading_level: 2
 - **Le traitement des gros spools en parallèle n'échoue plus par intermittence.** Sur les gros spools, plusieurs threads simultanés pouvaient interrompre un traitement avec une erreur d'indexation interne ; les enregistrements de factures sont désormais figés avant d'être répartis entre les threads, si bien que les traitements à pleine parallélisation aboutissent de façon fiable.
 - **Les montants dont le signe moins est en fin de valeur sont lus comme négatifs.** Les valeurs où le signe suit le nombre (surponction mainframe/COBOL, ex. `123.45-`) sont désormais converties en montants négatifs corrects (`-123.45`) dans l'UBL et le PDF lisible, au lieu d'être considérées comme positives. Les valeurs bien formées ne changent pas.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.09.01.1 — 2026-09-01 \{#v2026-09-01-1\}
@@ -805,7 +767,6 @@ toc_max_heading_level: 2
 - **La récupération des statuts gère les plateformes renvoyant une liste simple.** L'interrogation des statuts lit maintenant aussi une réponse au format tableau JSON brut, et non uniquement une liste encapsulée sous un champ nommé — permettant de brancher des endpoints de type rapport.
 - **L'adresse électronique fournisseur (BT-34) est désormais enregistrée.** Dans Valeurs par défaut UBL → sociétés fournisseur, l'adresse électronique est conservée à l'enregistrement comme les autres champs de la société.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.08.31.1 — 2026-08-31 \{#v2026-08-31-1\}
@@ -817,7 +778,6 @@ toc_max_heading_level: 2
   - **Tableau de bord IT** — la nouvelle carte **À retraiter** indique le nombre de factures éligibles et les retraite toutes en un clic.
   - **Ligne de commande** — `./nomaubl.sh reprocess <env>` retraite toutes les factures éligibles, pour la planification ou les traitements par lot.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.08.29.1 — 2026-08-29 \{#v2026-08-29-1\}
@@ -1521,7 +1481,6 @@ toc_max_heading_level: 2
   Vérifié sur un PDF de 13 920 pages portant 2 132 factures :
   une enveloppe par facture, lignes et totaux contenus.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.06.15 — 2026-06-15 \{#v2026-06-15\}
@@ -1565,7 +1524,6 @@ toc_max_heading_level: 2
   contrat dans les deux modes, donc les XSL qui ciblent ce
   suffixe fonctionnent sans manifest.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.06.14 — 2026-06-14 \{#v2026-06-14\}
@@ -1620,7 +1578,6 @@ toc_max_heading_level: 2
   — l'interrupteur couvre tous les endpoints de manière
   uniforme.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.06.13 — 2026-06-13 \{#v2026-06-13\}
@@ -1700,7 +1657,6 @@ toc_max_heading_level: 2
   silencieusement en `success=1` dans le récap ; les compteurs
   reflètent maintenant ce qui s'est réellement passé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.06.12 — 2026-06-12 \{#v2026-06-12\}
@@ -1856,7 +1812,6 @@ trois fichiers depuis `${env}/xsl/` vers `${env}/ubl/` et
 relancez le traitement — ou appliquez 2026.06.12 et rejouez la
 mise à niveau.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.06.10 — 2026-06-10 \{#v2026-06-10\}
@@ -1912,7 +1867,6 @@ robustesse.
   vrai 404 au lieu de `index.html` en `text/html` ; un
   rafraîchissement de la page suffit à la remettre en état.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.06.03 — 2026-06-03 \{#v2026-06-03\}
@@ -1954,7 +1908,6 @@ lendemain matin.
   bouton *Continuer en arrière-plan* qui masque la fenêtre sans
   arrêter la tâche.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.06.02 — 2026-06-02 \{#v2026-06-02\}
@@ -2041,7 +1994,6 @@ exposent désormais un point d'extension pour les options JVM
   aux valeurs par défaut après Enregistrer ; il reflète à
   nouveau l'état réellement enregistré.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.26 — 2026-05-26 \{#v2026-05-26\}
@@ -2111,7 +2063,6 @@ corrections pour les installations Oracle et Windows.
   l'identifiant TVA, ce que les validateurs de schéma stricts
   refusent. L'ordre est corrigé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.24 — 2026-05-20 \{#v2026-05-24\}
@@ -2142,7 +2093,6 @@ de TVA tombe à chaque fois sur le bon ensemble de factures.
     utiliser pour s'aligner avec la page Déclaration de TVA.
   Le choix est conservé pendant la session en cours.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.23 — 2026-05-20 \{#v2026-05-23\}
@@ -2205,7 +2155,6 @@ après la mise à jour. Les nouveaux interrupteurs prennent par
 défaut la valeur correspondant à l'ancienne configuration. Aucune
 modification manuelle n'est requise.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.22 — 2026-05-19 \{#v2026-05-22\}
@@ -2240,7 +2189,6 @@ dans la barre d'outils et choisissez deux lignes vous-même.
 Fermez la comparaison avec **Échap** ou le bouton **Fermer** pour
 revenir à l'historique.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.21 — 2026-05-19 \{#v2026-05-21\}
@@ -2301,7 +2249,6 @@ d'information de pays et apparaissent par défaut en « France »
 jusqu'à leur retraitement. Toute nouvelle facture est désormais
 enregistrée avec le bon pays.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.20 — 2026-05-19 \{#v2026-05-20\}
@@ -2368,7 +2315,6 @@ renommage des colonnes des tables enveloppe e-Reporting) en une passe.
   changé, l'erreur pointe désormais directement vers la résolution de
   la clé maître au lieu d'afficher « Invalid license key format ».
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.19 — 2026-05-19 \{#v2026-05-19\}
@@ -2415,7 +2361,6 @@ tables e-Reporting (F564260 / F564261 / F564262) avant le prochain
 run. Les lignes F564231 existantes héritent de `UHDRIN = '2'` (sortant)
 via la valeur par défaut de la colonne.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.18 — 2026-05-18 \{#v2026-05-18\}
@@ -2450,7 +2395,6 @@ Direction de la liste Factures.
   est résolu à partir de la carte direction → modèle de document au
   moment de la requête, indépendamment du contenu de la vue stockée.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.17 — 2026-05-18 \{#v2026-05-17\}
@@ -2499,7 +2443,6 @@ même liste Factures, même cycle de vie, même modale de détail.
   les lignes existantes continuent de fonctionner sans aucune
   migration.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.16 — 2026-05-14 \{#v2026-05-16\}
@@ -2544,7 +2487,6 @@ d'affichage dans le journal de traitement.
   lignes étiquetées PARTIAL. Les événements restent maintenant
   regroupés sous leur job d'origine.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.15 — 2026-05-14 \{#v2026-05-15\}
@@ -2590,7 +2532,6 @@ peuvent se rafraîchir depuis une requête SQL ou une API REST.
   manquait parfois dans le menu déroulant à la réouverture de
   l'éditeur. Corrigé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.14 — 2026-05-14 \{#v2026-05-14\}
@@ -2615,7 +2556,6 @@ faciles à parcourir et à insérer.
   donc toute colonne qui alimente une notification peut aussi
   alimenter un appel d'API vers un système aval.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.13 — 2026-05-14 \{#v2026-05-13\}
@@ -2642,7 +2582,6 @@ avancés → Exécuter renvoie maintenant vraiment l'union.
   champs opérandes tiennent côte à côte. Repasser à un opérateur
   simple restore la largeur d'origine.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.12 — 2026-05-14 \{#v2026-05-12\}
@@ -2669,7 +2608,6 @@ change de page.
   codes et libellés, au lieu d'un champ texte. Les codes numériques
   et les valeurs paddées par Oracle sont correctement reconnus.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.11 — 2026-05-13 \{#v2026-05-11\}
@@ -2696,7 +2634,6 @@ statuts…).
   anglais. Corrigé — les sélecteurs de statut affichent maintenant
   le libellé lisible.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.10 — 2026-05-13 \{#v2026-05-10\}
@@ -2738,7 +2675,6 @@ formats, leurs filtres — sans écrire de code.
   étaient actifs. Limite à 5 pastilles en ligne maintenant, le reste
   se replie dans un menu « +N de plus ».
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.9 — 2026-05-12 \{#v2026-05-9\}
@@ -2802,7 +2738,6 @@ d'intégration plus lisible et plusieurs améliorations de confort.
   des sauts de ligne s'affichent maintenant correctement dans le
   cycle de vie de la facture.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.8 — 2026-05-09 \{#v2026-05-8\}
@@ -2837,7 +2772,6 @@ les trois modèles système ont une mise en page à onglets cohérente.
   écrivait silencieusement dans le mauvais modèle — supprimé, avec
   un pointeur vers le bon endroit (`global` → Scheduling).
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.7 — 2026-05-09 \{#v2026-05-7\}
@@ -2897,7 +2831,6 @@ de détail facture.
   pour que la même barre d'utilisation disque ne se répète plus pour
   chaque répertoire sur le même montage.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.6 — 2026-05-09 \{#v2026-05-6\}
@@ -2928,7 +2861,6 @@ disque, débit, erreurs, planificateur, etc.
   validait des noms de propriétés qui n'existent plus depuis des
   mois.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.5 — 2026-05-08 \{#v2026-05-5\}
@@ -2982,7 +2914,6 @@ date corrigés.
   en dessous) pour que le texte long des règles ne se batte plus
   pour l'espace horizontal.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.4 — 2026-05-07 \{#v2026-05-4\}
@@ -3027,7 +2958,6 @@ extraite des fichiers Schematron eux-mêmes.
   `NULL <> ''` est traité comme faux — la clause WHERE s'effondrait
   et les deux requêtes renvoyaient zéro ligne. Corrigé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.3 — 2026-05-06 \{#v2026-05-3\}
@@ -3064,7 +2994,6 @@ vous définissez dans l'interface.
   `notificationsRetentionDays` dans les paramètres globaux (90 jours
   par défaut) sont purgées quotidiennement.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.2 — 2026-05-06 \{#v2026-05-2\}
@@ -3108,7 +3037,6 @@ sur l'aller-retour.
   `{content}` ou `{statusAt}` — laissant `config.json` impossible à
   recharger. Corrigé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.1 — 2026-05-05 \{#v2026-05-1\}
@@ -3144,7 +3072,6 @@ réutilisez sur plusieurs documents.
 - **Blocage de l'éditeur** sur édition rapide : l'éditeur sur canvas
   se rafraîchissait à chaque frappe et volait le focus. Corrigé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.05.0 — 2026-05-05 \{#v2026-05-0\}
@@ -3190,7 +3117,6 @@ le modèle de document lui-même qui décide quel pipeline exécuter.
 - L'aperçu PDF `/invoice/view` accepte soit le numéro de facture UBL
   (`?id=...`) soit la clé composée (`?doc=&dct=&kco=`).
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.10 — 2026-05-04 \{#v2026-04-10\}
@@ -3210,7 +3136,6 @@ toc_max_heading_level: 2
   est désormais disponible dans le catalogue de l'Éditeur XSL et est
   correctement émis dans l'UBL.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.9 — 2026-04-30 \{#v2026-04-9\}
@@ -3231,7 +3156,6 @@ toc_max_heading_level: 2
   d'une liste de référence à une autre pouvait ouvrir l'éditeur avec
   les lignes de la liste précédente. Corrigé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.8 — 2026-04-29 \{#v2026-04-8\}
@@ -3249,7 +3173,6 @@ toc_max_heading_level: 2
   qu'une réponse termine de streamer — fini le clic dans l'input
   avant chaque question de suivi.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.7 — 2026-04-29 \{#v2026-04-7\}
@@ -3265,7 +3188,6 @@ toc_max_heading_level: 2
   visibles dans le chat, donc tout échec est visible au lieu d'être
   silencieusement absorbé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.6 — 2026-04-29 \{#v2026-04-6\}
@@ -3280,7 +3202,6 @@ toc_max_heading_level: 2
   Global → IA** pour pointer l'assistant vers un site de
   documentation personnalisé ou en restreindre la portée.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.5 — 2026-04-29 \{#v2026-04-5\}
@@ -3294,7 +3215,6 @@ toc_max_heading_level: 2
   désormais `docs.nomana-it.fr` par défaut, sans intervention
   manuelle.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.4 — 2026-04-29 \{#v2026-04-4\}
@@ -3315,7 +3235,6 @@ toc_max_heading_level: 2
   titres, gras, listes, tableaux, blocs de code et liens s'affichent
   correctement au lieu de `###` / `**` bruts.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.3 — 2026-04-29 \{#v2026-04-3\}
@@ -3361,7 +3280,6 @@ modèle de données e-Reporting et des éditeurs de paramètres.
   numéros de version affichés ne retombent plus sur la version
   source EN 16931 embarquée.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.2 — 2026-04-29 \{#v2026-04-2\}
@@ -3373,7 +3291,6 @@ toc_max_heading_level: 2
   de validation autonome) échouait avec une erreur de schéma.
   Corrigé.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.1 — 2026-04-29 \{#v2026-04-1\}
@@ -3409,7 +3326,6 @@ toc_max_heading_level: 2
   sont corrigés — les uploads vont dans `<input>/ubl/` et la
   validation résout correctement le chemin.
 
-toc_max_heading_level: 2
 ---
 
 ## 2026.04.0 — 2026-04-29 \{#v2026-04-0\}
@@ -3452,7 +3368,6 @@ de traitement et d'une nouvelle page Notes de version.
   traitement, Notes de version) pour pouvoir y donner accès aux
   rôles existants.
 
-toc_max_heading_level: 2
 ---
 
 ## 1.0.0 — Version initiale
