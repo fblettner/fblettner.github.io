@@ -16,26 +16,91 @@ Accès : **Rapports → Rapport d'implémentation**.
 
 ## Vue d'ensemble
 
-<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '16px', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '13px'}}>
-  <div style={{display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '14px'}}>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.75}}>Statistiques statuts</span>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.75}}>Intégrité</span>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.75}}>Requêteur</span>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.75}}>Rapport d'audit</span>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid #4a9eff', background: 'rgba(74,158,255,0.10)', color: '#4a9eff', fontWeight: 600}}>Rapport d'implémentation</span>
-  </div>
-  <div style={{opacity: 0.75, marginBottom: '12px'}}>Description technique et fonctionnelle de cette instance, produite à partir de sa configuration et de sa base de données. Secrets et clés propres à l'instance masqués.</div>
-  <div style={{display: 'grid', gridTemplateColumns: '200px 1fr', gap: '8px 12px', alignItems: 'center'}}>
-    <b>Langue</b><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '160px'}}>Français ▾</span>
-    <b>Libellé de date (page de garde)</b><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.6}}>par défaut : aujourd'hui</span>
-    <span></span><span>☐ Afficher les clés techniques à côté des libellés</span>
-    <b>Sections</b><span style={{lineHeight: 1.9}}>☑ Contexte · ☑ Architecture · ☑ Fonctionnement et règles de gestion · ☑ Documents · ☑ Transformation UBL et règles · ☑ Réglages de plateforme · ☑ Exploitation · ☑ Sécurité · ☑ Référentiels · ☐ Annexe : clés de configuration · ☐ Annexe : référence API</span>
-  </div>
-  <div style={{display: 'flex', gap: '8px', marginTop: '14px'}}>
-    <span style={{padding: '6px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontWeight: 600}}>Télécharger le PDF</span>
-    <span style={{padding: '6px 14px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.35)'}}>Télécharger le Markdown</span>
-  </div>
-</div>
+<svg viewBox="0 0 1200 411" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="ir-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="ir-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="ir-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="367" rx="14" fill="url(#ir-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="240" y="32" width="128" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="304.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Statistiques statuts</text>
+  <rect x="374" y="32" width="69" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="408.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Intégrité</text>
+  <rect x="449" y="32" width="69" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="483.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Requêteur</text>
+  <rect x="524" y="32" width="101" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="574.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport d'audit</text>
+  <rect x="631" y="32" width="149" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="705.5" y="46.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport d'implémentation</text>
+  <line x1="220" y1="66" x2="980" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="88" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Description technique et fonctionnelle de l'instance, produite depuis sa configuration et sa base. Secrets masqués.</text>
+  <text x="240" y="117" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Langue</text>
+  <rect x="410" y="103" width="140" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="420" y="117.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Français ▾</text>
+  <text x="240" y="149" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Libellé de date (garde)</text>
+  <rect x="410" y="135" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="420" y="149.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">par défaut : aujourd'hui</text>
+  <rect x="410" y="172" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="427" y="181" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Afficher les clés techniques à côté des libellés</text>
+  <text x="240" y="211" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
+  <rect x="410" y="202" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M412.5,207.5 L414.8,209.8 L418.8,205" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="427" y="211" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Contexte</text>
+  <rect x="670" y="202" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,207.5 L674.8,209.8 L678.8,205" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687" y="211" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Architecture</text>
+  <rect x="410" y="223" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M412.5,228.5 L414.8,230.8 L418.8,226" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="427" y="232" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Fonctionnement et règles de gestion</text>
+  <rect x="670" y="223" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,228.5 L674.8,230.8 L678.8,226" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687" y="232" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Documents</text>
+  <rect x="410" y="244" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M412.5,249.5 L414.8,251.8 L418.8,247" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="427" y="253" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Transformation UBL et règles</text>
+  <rect x="670" y="244" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,249.5 L674.8,251.8 L678.8,247" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687" y="253" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Réglages de plateforme</text>
+  <rect x="410" y="265" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M412.5,270.5 L414.8,272.8 L418.8,268" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="427" y="274" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Exploitation</text>
+  <rect x="670" y="265" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,270.5 L674.8,272.8 L678.8,268" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687" y="274" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Sécurité</text>
+  <rect x="410" y="286" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M412.5,291.5 L414.8,293.8 L418.8,289" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="427" y="295" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Référentiels</text>
+  <rect x="670" y="286" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="687" y="295" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Annexe : clés de configuration</text>
+  <rect x="410" y="307" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="427" y="316" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Annexe : référence API</text>
+  <rect x="240" y="341" width="134" height="26" rx="5" fill="url(#ir-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="307.0" y="357.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Télécharger le PDF</text>
+  <rect x="382" y="341" width="162" height="26" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="463.0" y="357.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Télécharger le Markdown</text>
+  <rect x="20" y="26" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="41" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">5e onglet des Rapports</text>
+  <text x="30" y="54" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à côté du rapport d'audit</text>
+  <line x1="200" y1="43.0" x2="240" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ir-arrow)"/>
+  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Langue</text>
+  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les libellés suivent la langue</text>
+  <line x1="200" y1="117.0" x2="410" y2="114" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ir-arrow)"/>
+  <rect x="20" y="220" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
+  <text x="30" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">neuf premières cochées</text>
+  <line x1="200" y1="237.0" x2="410" y2="230" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ir-arrow)"/>
+  <rect x="1000" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clés techniques</text>
+  <text x="1010" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">pour un lecteur technique</text>
+  <line x1="1000" y1="177.0" x2="710" y2="177" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ir-arrow)"/>
+  <rect x="1000" y="335" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="350" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PDF ou Markdown</text>
+  <text x="1010" y="363" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">copie dans reports/</text>
+  <line x1="1000" y1="352.0" x2="534" y2="354" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ir-arrow)"/>
+</svg>
 
 | Contrôle | Description |
 |---|---|

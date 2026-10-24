@@ -16,26 +16,91 @@ Open it from **Reports → Implementation report**.
 
 ## At a glance
 
-<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '16px', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '13px'}}>
-  <div style={{display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '14px'}}>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.75}}>Status statistics</span>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.75}}>Integrity</span>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.75}}>Query tool</span>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.75}}>Audit report</span>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid #4a9eff', background: 'rgba(74,158,255,0.10)', color: '#4a9eff', fontWeight: 600}}>Implementation report</span>
-  </div>
-  <div style={{opacity: 0.75, marginBottom: '12px'}}>Technical and functional description of this instance, generated from its configuration and database. Secrets and instance keys are masked.</div>
-  <div style={{display: 'grid', gridTemplateColumns: '160px 1fr', gap: '8px 12px', alignItems: 'center'}}>
-    <b>Language</b><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '160px'}}>Français ▾</span>
-    <b>Date label (cover)</b><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.6}}>default: today</span>
-    <span></span><span>☐ Show technical keys next to setting labels</span>
-    <b>Sections</b><span style={{lineHeight: 1.9}}>☑ Context · ☑ Architecture · ☑ How it works and built-in rules · ☑ Documents · ☑ UBL transform and rules · ☑ Platform settings · ☑ Operations · ☑ Security · ☑ Reference data · ☐ Appendix: configuration keys · ☐ Appendix: API reference</span>
-  </div>
-  <div style={{display: 'flex', gap: '8px', marginTop: '14px'}}>
-    <span style={{padding: '6px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontWeight: 600}}>Download PDF</span>
-    <span style={{padding: '6px 14px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.35)'}}>Download Markdown</span>
-  </div>
-</div>
+<svg viewBox="0 0 1200 411" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="ir-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="ir-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="ir-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="367" rx="14" fill="url(#ir-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="240" y="32" width="112" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="296.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Status statistics</text>
+  <rect x="358" y="32" width="69" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="392.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Integrity</text>
+  <rect x="433" y="32" width="75" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="470.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Query tool</text>
+  <rect x="514" y="32" width="85" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="556.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit report</text>
+  <rect x="605" y="32" width="133" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="671.5" y="46.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Implementation report</text>
+  <line x1="220" y1="66" x2="980" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="88" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Technical and functional description of this instance, generated from its configuration and database. Secrets are masked.</text>
+  <text x="240" y="117" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Language</text>
+  <rect x="410" y="103" width="140" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="420" y="117.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Français ▾</text>
+  <text x="240" y="149" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Date label (cover)</text>
+  <rect x="410" y="135" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="420" y="149.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">default: today</text>
+  <rect x="410" y="172" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="427" y="181" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Show technical keys next to setting labels</text>
+  <text x="240" y="211" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
+  <rect x="410" y="202" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M412.5,207.5 L414.8,209.8 L418.8,205" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="427" y="211" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Context</text>
+  <rect x="670" y="202" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,207.5 L674.8,209.8 L678.8,205" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687" y="211" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Architecture</text>
+  <rect x="410" y="223" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M412.5,228.5 L414.8,230.8 L418.8,226" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="427" y="232" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">How it works and built-in rules</text>
+  <rect x="670" y="223" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,228.5 L674.8,230.8 L678.8,226" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687" y="232" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Documents</text>
+  <rect x="410" y="244" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M412.5,249.5 L414.8,251.8 L418.8,247" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="427" y="253" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">UBL transform and rules</text>
+  <rect x="670" y="244" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,249.5 L674.8,251.8 L678.8,247" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687" y="253" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Platform settings</text>
+  <rect x="410" y="265" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M412.5,270.5 L414.8,272.8 L418.8,268" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="427" y="274" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Operations</text>
+  <rect x="670" y="265" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M672.5,270.5 L674.8,272.8 L678.8,268" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="687" y="274" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Security</text>
+  <rect x="410" y="286" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M412.5,291.5 L414.8,293.8 L418.8,289" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="427" y="295" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Reference data</text>
+  <rect x="670" y="286" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="687" y="295" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Appendix: configuration keys</text>
+  <rect x="410" y="307" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="427" y="316" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Appendix: API reference</text>
+  <rect x="240" y="341" width="100" height="26" rx="5" fill="url(#ir-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="290.0" y="357.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Download PDF</text>
+  <rect x="348" y="341" width="128" height="26" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="412.0" y="357.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Download Markdown</text>
+  <rect x="20" y="26" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="41" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Fifth tab of Reports</text>
+  <text x="30" y="54" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">next to the audit report</text>
+  <line x1="200" y1="43.0" x2="240" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ir-arrow)"/>
+  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Language</text>
+  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">labels follow the language</text>
+  <line x1="200" y1="117.0" x2="410" y2="114" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ir-arrow)"/>
+  <rect x="20" y="220" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
+  <text x="30" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">first nine ticked by default</text>
+  <line x1="200" y1="237.0" x2="410" y2="230" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ir-arrow)"/>
+  <rect x="1000" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Technical keys</text>
+  <text x="1010" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">for a technical reader</text>
+  <line x1="1000" y1="177.0" x2="710" y2="177" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ir-arrow)"/>
+  <rect x="1000" y="335" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="350" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PDF or Markdown</text>
+  <text x="1010" y="363" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">copy kept in reports/</text>
+  <line x1="1000" y1="352.0" x2="500" y2="354" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ir-arrow)"/>
+</svg>
 
 | Control | Description |
 |---|---|

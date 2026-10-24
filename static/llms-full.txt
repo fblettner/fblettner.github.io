@@ -35626,25 +35626,6 @@ Open it from **Reports → Implementation report**.
 
 ## At a glance
 
-  
-    Status statistics
-    Integrity
-    Query tool
-    Audit report
-    Implementation report
-  
-  Technical and functional description of this instance, generated from its configuration and database. Secrets and instance keys are masked.
-  
-    LanguageFrançais ▾
-    Date label (cover)default: today
-    ☐ Show technical keys next to setting labels
-    Sections☑ Context · ☑ Architecture · ☑ How it works and built-in rules · ☑ Documents · ☑ UBL transform and rules · ☑ Platform settings · ☑ Operations · ☑ Security · ☑ Reference data · ☐ Appendix: configuration keys · ☐ Appendix: API reference
-  
-  
-    Download PDF
-    Download Markdown
-  
-
 | Control | Description |
 |---|---|
 | **Language** | Drop-down: French or English. Defaults to the language of the interface. Labels of settings, statuses and lists follow the language. |
@@ -35724,22 +35705,6 @@ Open it from **Reports → Audit report**.
 ---
 
 ## At a glance
-
-  Audit of a period from the NomaUBL tables: key figures with the previous period, volumes, situation by status, errors and their handling. The platform is not queried.
-  
-    PeriodCalendar month ▾ 2026-09 compared to the previous month
-    Date basisIssue date (BT-2) ▾
-    Companiesempty: all visible
-    DirectionIssued and received ▾
-    LanguageEnglish ▾
-    Sections☑ Executive summary · ☑ Volumes · ☑ Situation by status · ☑ Backlog, all periods · ☑ Lifecycle and delays · ☑ Errors and handling · ☑ Operations over the period · ☑ Consistency checks
-    ☐ Also run the SQL integrity checks against JDE (slower)
-  
-  
-    Download PDF
-    Download Markdown
-    Running — Lifecycle and delays · 5 / 9
-  
 
 | Control | Description |
 |---|---|
@@ -35888,16 +35853,6 @@ Open it from the sidebar — **Diagnostics**, in the Navigation group.
 ---
 
 ## At a glance
-
-  Diagnostics
-  Integration errors by rule or by event, every failure in one list, the processing log and the server log — four views of one page.
-  
-    Integration errors
-    Processing log
-    Failures
-    Server log
-  
-  Period: Yesterday ▾ · the selected view below — its own filters, grid and export
 
 - **One grant per view.** Each view keeps the page grant it had before it joined Diagnostics: *Integration errors*, *Processing log*, *Server log*, plus *Failures* for the new view. A role sees only the views it is granted, and the sidebar shows Diagnostics as soon as one of them is granted. See [Roles](../../configuration/security/roles.md).
 - **Links land on the right view.** The cards of the [Dashboard](../dashboard.md) and the [Tech dashboard](../tech-dashboard.md) open Diagnostics on the matching view, with the same filters.
@@ -36385,31 +36340,6 @@ Open it from **Diagnostics → Failures**.
 
 ## At a glance
 
-  
-    Yesterday ▾
-    Kind
-    Validation 30
-    PA rejection 2
-    Send / import 6
-    Processing 3
-    Job 1
-    All templates ▾
-    Company
-    ☑ Unresolved only
-    Search in messages (all pages)…
-    Refresh
-  
-  
-    WhenKindSourceTemplateCompanyStatusLevelRuleMessage
-    
-      07:12ValidationF2026-1203invoices000019905ERRORBR-CO-15Invoice total with VAT ≠ total without VAT + VAT↗
-      06:40Send / importF2026-1188invoices000019904ERROR—Send failed: HTTP 503↗
-      05:02ProcessingR42565_XJDE0001_123457credit_notes——ERROR—Transform failed: missing element↗
-      04:00JobNightly BIP———ERROR—Connection refused↗
-    
-  
-  42 failure(s)
-
 ---
 
 ## The kinds of failure
@@ -36661,37 +36591,6 @@ The assistant knows **the page you are on and the invoice you have open**, so *"
 ---
 
 ## At a glance
-
-  
-    ✦AI Assistant
-    Default ▾
-    +
-    ×
-  
-  
-    Context:invoices
-    🧾 F2026-1203 · 210 ×
-  
-  
-    Why is this invoice in this status?
-    
-      🧭 load_playbook · refused-invoice
-      🧾 invoice_dossier · 1203 RI 00001
-    
-    
-      Invoice F2026-1203 was refused by the buyer (status 210) on 2026-10-22, reason PU_ERR — incorrect unit prices.
-      Next step: issue an internal credit note, then a corrected invoice.
-      📋 Copy
-    
-    
-      Show its lifecycle
-      Other refusals this month?
-    
-  
-  
-    Ask about this invoice, a setting, an error…
-    ➤
-  
 
 | Element | Role |
 |---|---|
@@ -37184,29 +37083,6 @@ Open it from **Synchronization → Scheduled jobs**. The *Scheduler* card of the
 ---
 
 ## At a glance
-
-  Scheduled jobs
-  Every job the server runs on a schedule — trigger, state, last and next run. Run now, pause the PA polls, or open the job's settings.
-  
-    All kinds ▾
-    ☑ Auto-refresh
-    Refresh
-    New job
-    9 active of 12 job(s) · quiet window 06:00–07:00
-  
-  
-    KindJobTriggerStateLast runDurationResultNext runActions
-    
-      PollPA import pollevery 5 minOn2 min ago3stotal=12 success=12in 3 min▶ ⏸ ⟲
-      PollPA status retrievalevery 15 minPaused1 h ago12sOK—▶ ▷ ⟲
-      BatchNightly BIPdaily 04:00On4 h ago6 minProcessed 420/420, 0 failedin 20 h▶ ⏸ ⟲
-      Digestops-digestdaily 06:00On2 h ago1ssent to 2 recipientsin 22 h▶ ⏸ ⟲
-      Auto-retryretry-send-faileddaily 03:00Runningnow——in 24 h▶ ⏸ ⟲
-      SystemRetention purgedaily · keep 90 daysOn5 h ago450 mspurged 0 row(s)in 19 h▶ ⏸ ⟲
-      PollReceived invoices fetch—Off————▶
-    
-  
-  ▶ Run now · ⏸ Pause · ▷ Resume · ⟲ Run history — the job name opens its editor
 
 ---
 
@@ -41017,31 +40893,6 @@ The global settings, single sign-on and the column overrides of the NomaUBL data
 
 ## Export
 
-  
-    
-      Export
-      Import
-    
-    Filter items…
-  
-  
-    
-      ☑ DOCUMENT TEMPLATE (2)
-      ☑ invoices — Customer invoices
-        pdf-template:standard xsl/invoices.xsl ubl/invoices-ubl.xsl
-      ☐ credit_notes — Credit notes
-      ☐ PDF TEMPLATE (1)
-      ☑ standard dependency
-    
-    
-      Selection
-      1 item(s), 1 dependency(ies), 2 file(s)
-      The package holds the items, their files with paths relative to the environment root, and a manifest…
-      Export package
-      Clear selection
-    
-  
-
 1. **Pick the items** in the tree, grouped by kind with their count. The kind check box selects every visible item of the kind; **Filter items…** narrows the tree.
 2. **Read the dependencies** shown under each item: the files it uses and the items added with it. A PDF template named by a selected document is ticked automatically and flagged *dependency*.
 3. **Export package** downloads the ZIP. The side panel counts the items, dependencies and files of the selection; **Clear selection** starts again.
@@ -41816,38 +41667,6 @@ Documents, PDF templates, actions, notification rules and watched folders are no
 
 ## At a glance
 
-  
-    SettingsPlatform, security, e-invoicing, e-reporting, jobs, connectors and reference data of this instance.
-    
-      + Add API
-      + Add SQL
-      + Add List
-      Copy
-      Remove
-    
-  
-  
-    
-      retention
-      JOBS & INBOUND · 1 ▾
-      
-        Job defaults
-        Quiet window, bulk send throttle, BIP watermarks…
-        ↳ Processing log (days) (Retention) · Step timings (days) (Retention) · Job runs (days) (Retention)
-      
-      PLATFORM ›
-      E-INVOICING ›
-    
-    
-      
-        Job defaultsglobal
-        Description (optional)
-        Save
-      
-      Quiet window · Bulk Send · Retention · BIP print queue
-    
-  
-
 ---
 
 ## Navigation by intent
@@ -42545,27 +42364,6 @@ The jobs themselves — polls, batch document jobs, daily digests, auto-retries,
 ---
 
 ## At a glance
-
-  
-    Directories
-    Processing
-    Logs
-    PDF
-    Email
-    AI
-    Job defaults
-    License
-    Authentication
-  
-  Server log
-  
-    Server log fileauto (stdout of the server)
-    Log size cap (MB)100
-    Log files kept5
-    Log repeat window (s)600
-    Log levelsSTATUS=WARN, API=INFO, *=INFO
-  
-  Save
 
 ---
 
@@ -45178,29 +44976,6 @@ Open it from **Documentation → Developer**.
 
 ## At a glance
 
-  Developer reference
-  Tables and columns, configuration keys, flows, impact and the API — generated at build time from the DDL, the configuration classes, the settings editors, the Java sources and the OpenAPI document.
-  
-    Tables
-    Configuration
-    Flows
-    Impact
-    API
-  
-  
-    
-      Search table, column, comment…
-      Invoice lifecycle
-      F564230 · Log / ArchiveF564231 · UBL Invoice HeaderF564235 · LifecycleF564236 · Validation
-      E-reporting · Notifications · Security
-    
-    
-      F564230 — Purpose · Primary key · Accessor · Configuration key · Renamed to · Indexes · Written by · Read by
-      Column · Override · Type · Description · BT · Accessor · Screens · Flows · Writes · Reads
-      FEDOC · — · NUMBER · Document number · — · logDoc · E-Documents · Processing · 3 · 41
-    
-  
-
 ---
 
 ## Tables
@@ -45287,21 +45062,21 @@ NomaUBL release notes — every user-visible change shipped in the platform, ver
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
   Versions
-  2026.10.24.1 · 2026-10-01
-  2026.10.23.1 · 2026-09-30
-  2026.10.22.1 · 2026-09-30
-  2026.10.21.1 · 2026-09-30
-  2026.10.20.1 · 2026-09-30
-  2026.10.19.1 · 2026-09-30
-  2026.10.18.1 · 2026-09-30
-  2026.10.16.1 · 2026-09-30
-  2026.10.14.1 · 2026-09-30
-  2026.10.12.1 · 2026-09-30
-  2026.10.11.1 · 2026-09-30
-  2026.10.06.1 · 2026-09-30
-  2026.10.05.1 · 2026-09-30
-  2026.10.02.1 · 2026-09-30
-  2026.10.01.1 · 2026-09-30
+  2026.10.24.1 · 2026-10-24
+  2026.10.23.1 · 2026-10-23
+  2026.10.22.1 · 2026-10-22
+  2026.10.21.1 · 2026-10-21
+  2026.10.20.1 · 2026-10-20
+  2026.10.19.1 · 2026-10-19
+  2026.10.18.1 · 2026-10-18
+  2026.10.16.1 · 2026-10-16
+  2026.10.14.1 · 2026-10-14
+  2026.10.12.1 · 2026-10-12
+  2026.10.11.1 · 2026-10-11
+  2026.10.06.1 · 2026-10-06
+  2026.10.05.1 · 2026-10-05
+  2026.10.02.1 · 2026-10-02
+  2026.10.01.1 · 2026-10-01
   2026.09.30.1 · 2026-09-30
   2026.09.28.1 · 2026-09-28
   2026.09.26.1 · 2026-09-26

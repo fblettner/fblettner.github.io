@@ -16,23 +16,103 @@ Open it from **Reports → Audit report**.
 
 ## At a glance
 
-<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '16px', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '13px'}}>
-  <div style={{opacity: 0.75, marginBottom: '12px'}}>Audit of a period from the NomaUBL tables: key figures with the previous period, volumes, situation by status, errors and their handling. The platform is not queried.</div>
-  <div style={{display: 'grid', gridTemplateColumns: '130px 1fr', gap: '8px 12px', alignItems: 'center'}}>
-    <b>Period</b><span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>Calendar month ▾</span> <span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>2026-09</span> <span style={{opacity: 0.6}}>compared to the previous month</span></span>
-    <b>Date basis</b><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '160px'}}>Issue date (BT-2) ▾</span>
-    <b>Companies</b><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.6}}>empty: all visible</span>
-    <b>Direction</b><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '160px'}}>Issued and received ▾</span>
-    <b>Language</b><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '160px'}}>English ▾</span>
-    <b>Sections</b><span style={{lineHeight: 1.9}}>☑ Executive summary · ☑ Volumes · ☑ Situation by status · ☑ Backlog, all periods · ☑ Lifecycle and delays · ☑ Errors and handling · ☑ Operations over the period · ☑ Consistency checks</span>
-    <span></span><span>☐ Also run the SQL integrity checks against JDE (slower)</span>
-  </div>
-  <div style={{display: 'flex', gap: '8px', marginTop: '14px', alignItems: 'center'}}>
-    <span style={{padding: '6px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontWeight: 600}}>Download PDF</span>
-    <span style={{padding: '6px 14px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.35)'}}>Download Markdown</span>
-    <span style={{flex: 1, marginLeft: '12px'}}><span style={{opacity: 0.7}}>Running — Lifecycle and delays · 5 / 9</span><span style={{display: 'block', height: '6px', borderRadius: '3px', background: 'rgba(148,163,184,0.2)', marginTop: '4px'}}><span style={{display: 'block', width: '55%', height: '6px', borderRadius: '3px', background: '#4a9eff'}}></span></span></span>
-  </div>
-</div>
+<svg viewBox="0 0 1200 389" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="ar-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="ar-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="ar-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="345" rx="14" fill="url(#ar-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="240" y="32" width="112" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="296.0" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Status statistics</text>
+  <rect x="358" y="32" width="69" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="392.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Integrity</text>
+  <rect x="433" y="32" width="75" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="470.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Query tool</text>
+  <rect x="514" y="32" width="85" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="556.5" y="46.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit report</text>
+  <rect x="605" y="32" width="133" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="671.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Implementation report</text>
+  <line x1="220" y1="66" x2="980" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="88" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Audit of a period from the NomaUBL tables: key figures, volumes, situation, errors and their handling.</text>
+  <text x="240" y="117" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Period</text>
+  <rect x="390" y="103" width="111" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="400" y="117.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Calendar month ▾</text>
+  <rect x="507" y="103" width="65" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="517" y="117.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">2026-09</text>
+  <text x="582" y="117" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">compared to the previous month</text>
+  <text x="240" y="149" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Date basis</text>
+  <rect x="390" y="135" width="128" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="400" y="149.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Issue date (BT-2) ▾</text>
+  <text x="640" y="149" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Companies</text>
+  <rect x="720" y="135" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="730" y="149.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">empty: all visible</text>
+  <text x="240" y="181" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
+  <rect x="390" y="167" width="139" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="400" y="181.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Issued and received ▾</text>
+  <text x="640" y="181" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Language</text>
+  <rect x="720" y="167" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="730" y="181.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">English ▾</text>
+  <text x="240" y="213" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
+  <rect x="390" y="204" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M392.5,209.5 L394.8,211.8 L398.8,207" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="407" y="213" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Executive summary</text>
+  <rect x="650" y="204" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M652.5,209.5 L654.8,211.8 L658.8,207" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="667" y="213" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Volumes</text>
+  <rect x="390" y="225" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M392.5,230.5 L394.8,232.8 L398.8,228" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="407" y="234" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Situation by status</text>
+  <rect x="650" y="225" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M652.5,230.5 L654.8,232.8 L658.8,228" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="667" y="234" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Backlog, all periods</text>
+  <rect x="390" y="246" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M392.5,251.5 L394.8,253.8 L398.8,249" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="407" y="255" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Lifecycle and delays</text>
+  <rect x="650" y="246" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M652.5,251.5 L654.8,253.8 L658.8,249" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="667" y="255" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Errors and handling</text>
+  <rect x="390" y="267" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M392.5,272.5 L394.8,274.8 L398.8,270" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="407" y="276" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Operations over the period</text>
+  <rect x="650" y="267" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M652.5,272.5 L654.8,274.8 L658.8,270" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="667" y="276" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Consistency checks</text>
+  <rect x="390" y="292" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="407" y="301" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Also run the SQL integrity checks against JDE (slower)</text>
+  <rect x="240" y="319" width="100" height="26" rx="5" fill="url(#ar-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="290.0" y="335.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Download PDF</text>
+  <rect x="348" y="319" width="128" height="26" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="412.0" y="335.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Download Markdown</text>
+  <text x="492" y="329" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Running — Lifecycle and delays · 5 / 9</text>
+  <rect x="492" y="335" width="468" height="6" rx="3" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="492" y="335" width="260" height="6" rx="3" fill="#4a9eff"/>
+  <rect x="20" y="26" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="41" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Fourth tab of Reports</text>
+  <text x="30" y="54" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Reports → Audit report</text>
+  <line x1="200" y1="43.0" x2="240" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Period</text>
+  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">month or custom dates, compared</text>
+  <line x1="200" y1="117.0" x2="390" y2="114" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="20" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
+  <text x="30" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">all ticked by default</text>
+  <line x1="200" y1="227.0" x2="390" y2="222" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="1000" y="130" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Scope</text>
+  <text x="1010" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">companies · direction · language</text>
+  <line x1="1000" y1="147.0" x2="870" y2="147" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="1000" y="279" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="294" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Integrity checks</text>
+  <text x="1010" y="307" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">optional, against the source</text>
+  <line x1="1000" y1="296.0" x2="720" y2="297" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="1000" y="349" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="364" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Background run</text>
+  <text x="1010" y="377" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">progress bar names the step</text>
+  <line x1="1000" y1="366.0" x2="950" y2="338" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+</svg>
 
 | Control | Description |
 |---|---|

@@ -16,28 +16,77 @@ Les tâches elles-mêmes — interrogations de la PA, lots de documents, rapport
 
 ## Vue d'ensemble
 
-<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '16px', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '13px'}}>
-  <div style={{display: 'flex', flexWrap: 'wrap', border: '1px solid rgba(148,163,184,0.25)', borderRadius: '8px', overflow: 'hidden', marginBottom: '14px'}}>
-    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>Directories</span>
-    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>Processing</span>
-    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)', background: 'rgba(74,158,255,0.12)', color: '#4a9eff', fontWeight: 600}}>Logs</span>
-    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>PDF</span>
-    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>Email</span>
-    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>AI</span>
-    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>Job defaults</span>
-    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>License</span>
-    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>Authentication</span>
-  </div>
-  <div style={{fontWeight: 700, marginBottom: '8px'}}>Server log</div>
-  <div style={{display: 'grid', gridTemplateColumns: '200px 1fr', gap: '8px 12px', alignItems: 'center'}}>
-    <span>Server log file</span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.6}}>auto (stdout of the server)</span>
-    <span>Log size cap (MB)</span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '80px'}}>100</span>
-    <span>Log files kept</span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '80px'}}>5</span>
-    <span>Log repeat window (s)</span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '80px'}}>600</span>
-    <span>Log levels</span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.6}}>STATUS=WARN, API=INFO, *=INFO</span>
-  </div>
-  <div style={{display: 'flex', gap: '8px', marginTop: '14px'}}><span style={{padding: '6px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontWeight: 600}}>Enregistrer</span></div>
-</div>
+<svg viewBox="0 0 1200 338" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="gl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="gl-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="gl-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="292" rx="14" fill="url(#gl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Server log</text>
+  <text x="320" y="48" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">global</text>
+  <rect x="900" y="32" width="60" height="22" rx="5" fill="url(#gl-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="930.0" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">💾 Save</text>
+  <rect x="240" y="72" width="80" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="280.0" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Directories</text>
+  <rect x="325" y="72" width="75" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="362.5" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Processing</text>
+  <rect x="405" y="72" width="43" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="426.5" y="86.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Logs</text>
+  <rect x="453" y="72" width="37" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="471.5" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">PDF</text>
+  <rect x="495" y="72" width="48" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="519.0" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Email</text>
+  <rect x="548" y="72" width="32" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="564.0" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">AI</text>
+  <rect x="585" y="72" width="85" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="627.5" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Job defaults</text>
+  <rect x="675" y="72" width="59" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="704.5" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">License</text>
+  <rect x="739" y="72" width="96" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="787.0" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Authentication</text>
+  <text x="240" y="124" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SERVER LOG</text>
+  <text x="240" y="153" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Server log file</text>
+  <rect x="420" y="138" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="152.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">auto (stdout of the server)</text>
+  <text x="240" y="185" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Log size cap (MB)</text>
+  <rect x="420" y="170" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="184.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">100</text>
+  <text x="240" y="217" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Log files kept</text>
+  <rect x="420" y="202" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="216.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">5</text>
+  <text x="240" y="249" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Log repeat window (s)</text>
+  <rect x="420" y="234" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="248.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">600</text>
+  <text x="240" y="281" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Log levels</text>
+  <rect x="420" y="266" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="280.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">STATUS=WARN, API=INFO, ·=INFO</text>
+  <rect x="20" y="66" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Neuf onglets</text>
+  <text x="30" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un par domaine de l'instance</text>
+  <line x1="200" y1="83.0" x2="240" y2="83" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#gl-arrow)"/>
+  <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Fichier journal</text>
+  <text x="30" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">lu par Diagnostic → Journal serveur</text>
+  <line x1="200" y1="157.0" x2="420" y2="149" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#gl-arrow)"/>
+  <rect x="20" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Fenêtre de répétition</text>
+  <text x="30" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">lignes identiques comptées</text>
+  <line x1="200" y1="247.0" x2="420" y2="245" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#gl-arrow)"/>
+  <rect x="1000" y="172" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="187" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rotation intégrée</text>
+  <text x="1010" y="200" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">copie en .1 et troncature, 5 gardées</text>
+  <line x1="1000" y1="189.0" x2="720" y2="197" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#gl-arrow)"/>
+  <rect x="1000" y="270" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Niveaux par module</text>
+  <text x="1010" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">MODULE=NIVEAU, · = les autres</text>
+  <line x1="1000" y1="287.0" x2="720" y2="277" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#gl-arrow)"/>
+  <rect x="1000" y="26" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="41" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Save</text>
+  <text x="1010" y="54" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">enregistre le modèle global</text>
+  <line x1="1000" y1="43.0" x2="960" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#gl-arrow)"/>
+</svg>
 
 Les libellés de cet éditeur restent en anglais, comme dans l'application.
 

@@ -14,39 +14,87 @@ Documents, PDF templates, actions, notification rules and watched folders are no
 
 ## At a glance
 
-<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '16px', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '13px'}}>
-  <div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '12px'}}>
-    <div><div style={{fontWeight: 700, fontSize: '15px'}}>Settings</div><div style={{opacity: 0.7}}>Platform, security, e-invoicing, e-reporting, jobs, connectors and reference data of this instance.</div></div>
-    <div style={{display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'flex-start'}}>
-      <span style={{padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>+ Add API</span>
-      <span style={{padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>+ Add SQL</span>
-      <span style={{padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>+ Add List</span>
-      <span style={{padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>Copy</span>
-      <span style={{padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(239,68,68,0.5)', color: '#ef4444'}}>Remove</span>
-    </div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: 'minmax(200px, 260px) 1fr', gap: '12px'}}>
-    <div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '8px', padding: '8px', lineHeight: 1.7}}>
-      <div style={{padding: '4px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7, marginBottom: '8px'}}>retention</div>
-      <div style={{fontWeight: 700, opacity: 0.7}}>JOBS & INBOUND · 1 ▾</div>
-      <div style={{padding: '4px 8px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)'}}>
-        <b>Job defaults</b><br/>
-        <span style={{opacity: 0.7, fontSize: '12px'}}>Quiet window, bulk send throttle, BIP watermarks…</span><br/>
-        <span style={{color: '#4a9eff', fontSize: '11px'}}>↳ Processing log (days) (Retention) · Step timings (days) (Retention) · Job runs (days) (Retention)</span>
-      </div>
-      <div style={{fontWeight: 700, opacity: 0.4, marginTop: '6px'}}>PLATFORM ›</div>
-      <div style={{fontWeight: 700, opacity: 0.4}}>E-INVOICING ›</div>
-    </div>
-    <div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '8px', padding: '8px'}}>
-      <div style={{display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap'}}>
-        <b>Job defaults</b><span style={{opacity: 0.6, fontSize: '11px'}}>global</span>
-        <span style={{flex: 1, minWidth: '120px', padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.6}}>Description (optional)</span>
-        <span style={{padding: '3px 10px', borderRadius: '6px', background: '#4a9eff', color: '#fff'}}>Save</span>
-      </div>
-      <div style={{marginTop: '10px', opacity: 0.7}}>Quiet window · Bulk Send · Retention · BIP print queue</div>
-    </div>
-  </div>
-</div>
+<svg viewBox="0 0 1200 410" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="so-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="so-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="so-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="364" rx="14" fill="url(#so-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Platform, security, e-invoicing, e-reporting, jobs, connectors and reference data of this instance.</text>
+  <rect x="907" y="30" width="53" height="22" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="933.5" y="44.5" fill="#f87171" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Remove</text>
+  <rect x="859" y="30" width="42" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="880.0" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Copy</text>
+  <rect x="777" y="30" width="76" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="815.0" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add List</text>
+  <rect x="701" y="30" width="70" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="736.0" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add SQL</text>
+  <rect x="625" y="30" width="70" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="660.0" y="44.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add API</text>
+  <rect x="240" y="84" width="230" height="280" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="248" y="92" width="214" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="258" y="106.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">🔍 retention</text>
+  <text x="252" y="134" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">JOBS &amp; INBOUND   1  ▾</text>
+  <rect x="246" y="142" width="218" height="62" rx="5" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="254" y="160" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Job defaults</text>
+  <text x="254" y="174" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Quiet window, bulk send throttle, BIP…</text>
+  <text x="254" y="192" fill="#4a9eff" fontSize="8.5" fontFamily="system-ui, sans-serif">↳ Processing log (days) (Retention) · …</text>
+  <text x="252" y="228" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">PLATFORM  ›</text>
+  <text x="252" y="247" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SECURITY  ›</text>
+  <text x="252" y="266" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">E-INVOICING  ›</text>
+  <text x="252" y="285" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">E-REPORTING  ›</text>
+  <text x="252" y="304" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">VIEWS &amp; UI  ›</text>
+  <text x="252" y="323" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">API CONNECTORS  ›</text>
+  <text x="252" y="342" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">REFERENCE DATA  ›</text>
+  <rect x="482" y="84" width="478" height="280" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="496" y="106" fill="#e2e8f0" fontSize="12" fontWeight="700" fontFamily="system-ui, sans-serif">Job defaults</text>
+  <text x="582" y="106" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">global</text>
+  <rect x="632" y="92" width="258" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="642" y="106.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Description (optional)</text>
+  <rect x="898" y="92" width="52" height="22" rx="5" fill="url(#so-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="924.0" y="106.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">💾 Save</text>
+  <text x="496" y="140" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">RETENTION</text>
+  <text x="496" y="168" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Processing log (days)</text>
+  <rect x="672" y="154" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="682" y="168.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">90</text>
+  <text x="496" y="198" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Step timings (days)</text>
+  <rect x="672" y="184" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="682" y="198.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">30</text>
+  <text x="496" y="228" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Job runs (days)</text>
+  <rect x="672" y="214" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="682" y="228.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">90</text>
+  <text x="496" y="258" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Notifications (days)</text>
+  <rect x="672" y="244" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="682" y="258.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">0 = keep</text>
+  <text x="496" y="294" fill="#64748b" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">▸ ADVANCED</text>
+  <rect x="20" y="88" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="103" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Search every field</text>
+  <text x="30" y="116" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">labels, hints and keys</text>
+  <line x1="200" y1="105.0" x2="248" y2="103" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#so-arrow)"/>
+  <rect x="20" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Matching fields</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">listed under the entry</text>
+  <line x1="200" y1="177.0" x2="254" y2="190" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#so-arrow)"/>
+  <rect x="20" y="250" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Areas by intent</text>
+  <text x="30" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">collapsed, with their count</text>
+  <line x1="200" y1="267.0" x2="252" y2="245" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#so-arrow)"/>
+  <rect x="1000" y="24" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="39" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Header actions</text>
+  <text x="1010" y="52" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">add, copy, remove a template</text>
+  <line x1="1000" y1="41.0" x2="960" y2="41" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#so-arrow)"/>
+  <rect x="1000" y="120" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One tab per entry</text>
+  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">global tabs open alone</text>
+  <line x1="1000" y1="137.0" x2="960" y2="106" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#so-arrow)"/>
+  <rect x="1000" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Advanced fold</text>
+  <text x="1010" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rare settings, closed by default</text>
+  <line x1="1000" y1="317.0" x2="572" y2="290" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#so-arrow)"/>
+</svg>
 
 ---
 

@@ -30176,25 +30176,6 @@ Accès : **Rapports → Rapport d'implémentation**.
 
 ## Vue d'ensemble
 
-  
-    Statistiques statuts
-    Intégrité
-    Requêteur
-    Rapport d'audit
-    Rapport d'implémentation
-  
-  Description technique et fonctionnelle de cette instance, produite à partir de sa configuration et de sa base de données. Secrets et clés propres à l'instance masqués.
-  
-    LangueFrançais ▾
-    Libellé de date (page de garde)par défaut : aujourd'hui
-    ☐ Afficher les clés techniques à côté des libellés
-    Sections☑ Contexte · ☑ Architecture · ☑ Fonctionnement et règles de gestion · ☑ Documents · ☑ Transformation UBL et règles · ☑ Réglages de plateforme · ☑ Exploitation · ☑ Sécurité · ☑ Référentiels · ☐ Annexe : clés de configuration · ☐ Annexe : référence API
-  
-  
-    Télécharger le PDF
-    Télécharger le Markdown
-  
-
 | Contrôle | Description |
 |---|---|
 | **Langue** | Liste déroulante : français ou anglais. Par défaut, la langue de l'interface. Les libellés des réglages, des statuts et des listes suivent la langue choisie. |
@@ -30274,22 +30255,6 @@ Accès : **Rapports → Rapport d'audit**.
 ---
 
 ## Vue d'ensemble
-
-  Audit d'une période à partir des tables NomaUBL : chiffres clés avec la période précédente, volumes, situation par statut, erreurs et leur traitement. La plateforme n'est pas interrogée.
-  
-    PériodeMois civil ▾ 2026-09 comparé au mois précédent
-    Date de référenceDate d'émission (BT-2) ▾
-    Sociétésvide : toutes les sociétés visibles
-    DirectionÉmises et reçues ▾
-    LangueFrançais ▾
-    Sections☑ Synthèse · ☑ Volumes · ☑ Situation par statut · ☑ Reste à traiter, toutes périodes · ☑ Cycle de vie et délais · ☑ Erreurs et traitement · ☑ Exploitation sur la période · ☑ Contrôles de cohérence
-    ☐ Exécuter aussi les contrôles d'intégrité SQL avec JDE (plus long)
-  
-  
-    Télécharger le PDF
-    Télécharger le Markdown
-    En cours — Cycle de vie et délais · 5 / 9
-  
 
 | Contrôle | Description |
 |---|---|
@@ -30438,16 +30403,6 @@ Accès : menu latéral, **Diagnostic**, dans le groupe Navigation.
 ---
 
 ## Vue d'ensemble
-
-  Diagnostic
-  Les erreurs d'intégration par règle ou par événement, toutes les anomalies dans une seule liste, le journal des traitements et le journal serveur : quatre vues d'une même page.
-  
-    Erreurs d'intégration
-    Journal des traitements
-    Anomalies
-    Journal serveur
-  
-  Période : Hier ▾ · la vue choisie en dessous — ses filtres, sa grille et son export
 
 - **Un droit par vue.** Chaque vue garde le droit de page qu'elle avait avant de rejoindre Diagnostic : *Erreurs d'intégration*, *Journal des traitements*, *Journal serveur*, plus *Anomalies* pour la nouvelle vue. Un rôle ne voit que les vues qui lui sont accordées, et le menu affiche Diagnostic dès que l'une d'elles l'est. Voir [Rôles](../../configuration/security/roles.md).
 - **Les liens ouvrent la bonne vue.** Les cartes du [tableau de bord](../dashboard.md) et du [tableau de bord IT](../tech-dashboard.md) ouvrent Diagnostic sur la vue correspondante, avec les mêmes filtres.
@@ -30935,31 +30890,6 @@ Accès : **Diagnostic → Anomalies**.
 
 ## Vue d'ensemble
 
-  
-    Hier ▾
-    Type
-    Validation 30
-    Rejet PA 2
-    Envoi / import 6
-    Traitement 3
-    Tâche 1
-    Tous les modèles ▾
-    Société
-    ☑ Non résolues seulement
-    Rechercher dans les messages (toutes les pages)…
-    Actualiser
-  
-  
-    QuandTypeSourceModèleSociétéStatutNiveauRègleMessage
-    
-      07:12ValidationF2026-1203invoices000019905ERRORBR-CO-15Total TTC ≠ total HT + TVA↗
-      06:40Envoi / importF2026-1188invoices000019904ERROR—Échec d'envoi : HTTP 503↗
-      05:02TraitementR42565_XJDE0001_123457credit_notes——ERROR—Échec de transformation : élément manquant↗
-      04:00TâcheBIP nocturne———ERROR—Connexion refusée↗
-    
-  
-  42 anomalie(s)
-
 ---
 
 ## Les types d'anomalie
@@ -31211,37 +31141,6 @@ L'assistant connaît **la page affichée et la facture ouverte** : *« pourquoi 
 ---
 
 ## Vue d'ensemble
-
-  
-    ✦Assistant IA
-    Par défaut ▾
-    +
-    ×
-  
-  
-    Contexte :invoices
-    🧾 F2026-1203 · 210 ×
-  
-  
-    Pourquoi cette facture est-elle dans ce statut ?
-    
-      🧭 load_playbook · refused-invoice
-      🧾 invoice_dossier · 1203 RI 00001
-    
-    
-      La facture F2026-1203 a été refusée par l'acheteur (statut 210) le 22/10/2026, motif PU_ERR — prix unitaires incorrects.
-      Étape suivante : émettre un avoir interne, puis une facture corrigée.
-      📋 Copier
-    
-    
-      Montre son cycle de vie
-      D'autres refus ce mois-ci ?
-    
-  
-  
-    Posez une question sur cette facture, un réglage, une erreur…
-    ➤
-  
 
 | Élément | Rôle |
 |---|---|
@@ -31734,29 +31633,6 @@ Accès : **Synchronisation → Tâches planifiées**. La carte *Planificateur* d
 ---
 
 ## Vue d'ensemble
-
-  Tâches planifiées
-  Toutes les tâches exécutées par le serveur selon un calendrier : déclencheur, état, dernière et prochaine exécution. Lancer maintenant, suspendre les interrogations de la PA ou ouvrir le paramétrage.
-  
-    Tous les types ▾
-    ☑ Actualisation auto
-    Actualiser
-    Nouvelle tâche
-    9 active(s) sur 12 tâche(s) · fenêtre silencieuse 06:00–07:00
-  
-  
-    TypeTâcheDéclencheurÉtatDernière exécutionDuréeRésultatProchaine exécutionActions
-    
-      InterrogationImport PA (suivi des dépôts)toutes les 5 minActifil y a 2 min3 stotal=12 success=12dans 3 min▶ ⏸ ⟲
-      InterrogationRécupération des statuts PAtoutes les 15 minSuspenduil y a 1 h12 sOK—▶ ▷ ⟲
-      LotBIP nocturnechaque jour à 04:00Actifil y a 4 h6 minProcessed 420/420, 0 faileddans 20 h▶ ⏸ ⟲
-      Rapportrapport-exploitationchaque jour à 06:00Actifil y a 2 h1 ssent to 2 recipientsdans 22 h▶ ⏸ ⟲
-      Reprise autoretry-send-failedchaque jour à 03:00En coursmaintenant——dans 24 h▶ ⏸ ⟲
-      SystèmePurge de rétentionchaque jour · conserve 90 joursActifil y a 5 h450 mspurged 0 row(s)dans 19 h▶ ⏸ ⟲
-      InterrogationFactures reçues—Inactif————▶
-    
-  
-  ▶ Lancer maintenant · ⏸ Suspendre · ▷ Reprendre · ⟲ Historique des exécutions — le nom de la tâche ouvre son éditeur
 
 Les résultats d'exécution s'affichent tels que le serveur les écrit, en anglais.
 
@@ -35573,31 +35449,6 @@ Les paramètres globaux, l'authentification unique et les noms de colonnes rempl
 
 ## Exporter
 
-  
-    
-      Exporter
-      Importer
-    
-    Filtrer les éléments…
-  
-  
-    
-      ☑ DOCUMENT (2)
-      ☑ invoices — Factures clients
-        pdf-template:standard xsl/invoices.xsl ubl/invoices-ubl.xsl
-      ☐ credit_notes — Avoirs
-      ☐ MODÈLE PDF (1)
-      ☑ standard dépendance
-    
-    
-      Sélection
-      1 élément(s), 1 dépendance(s), 2 fichier(s)
-      Le paquet contient les éléments, leurs fichiers avec des chemins relatifs à la racine de l'environnement, et un manifeste…
-      Exporter le paquet
-      Vider la sélection
-    
-  
-
 1. **Cocher les éléments** dans l'arborescence, regroupés par type avec leur nombre. La case du type sélectionne tous les éléments visibles de ce type ; **Filtrer les éléments…** restreint l'arborescence.
 2. **Vérifier les dépendances** affichées sous chaque élément : les fichiers qu'il utilise et les éléments ajoutés avec lui. Le modèle PDF désigné par un document sélectionné est coché automatiquement et marqué *dépendance*.
 3. **Exporter le paquet** télécharge le ZIP. Le panneau latéral compte les éléments, dépendances et fichiers de la sélection ; **Vider la sélection** permet de repartir de zéro.
@@ -36376,38 +36227,6 @@ La navigation et les éditeurs de paramètres restent en anglais dans l'applicat
 
 ## Vue d'ensemble
 
-  
-    SettingsPlatform, security, e-invoicing, e-reporting, jobs, connectors and reference data of this instance.
-    
-      + Add API
-      + Add SQL
-      + Add List
-      Copy
-      Remove
-    
-  
-  
-    
-      retention
-      JOBS & INBOUND · 1 ▾
-      
-        Job defaults
-        Quiet window, bulk send throttle, BIP watermarks…
-        ↳ Processing log (days) (Retention) · Step timings (days) (Retention) · Job runs (days) (Retention)
-      
-      PLATFORM ›
-      E-INVOICING ›
-    
-    
-      
-        Job defaultsglobal
-        Description (optional)
-        Save
-      
-      Quiet window · Bulk Send · Retention · BIP print queue
-    
-  
-
 ---
 
 ## Une navigation par besoin
@@ -37105,27 +36924,6 @@ Les tâches elles-mêmes — interrogations de la PA, lots de documents, rapport
 ---
 
 ## Vue d'ensemble
-
-  
-    Directories
-    Processing
-    Logs
-    PDF
-    Email
-    AI
-    Job defaults
-    License
-    Authentication
-  
-  Server log
-  
-    Server log fileauto (stdout of the server)
-    Log size cap (MB)100
-    Log files kept5
-    Log repeat window (s)600
-    Log levelsSTATUS=WARN, API=INFO, *=INFO
-  
-  Enregistrer
 
 Les libellés de cet éditeur restent en anglais, comme dans l'application.
 
@@ -39740,29 +39538,6 @@ Accès : **Documentation → Développeur**.
 
 ## Vue d'ensemble
 
-  Référence développeur
-  Tables et colonnes, clés de configuration, flux, impact et API : produits à la construction à partir du DDL, des classes de configuration, des éditeurs de paramètres, des sources Java et du document OpenAPI.
-  
-    Tables
-    Configuration
-    Flux
-    Impact
-    API
-  
-  
-    
-      Rechercher une table, une colonne, un commentaire…
-      Cycle de vie de la facture
-      F564230 · Log / ArchiveF564231 · UBL Invoice HeaderF564235 · LifecycleF564236 · Validation
-      E-reporting · Notifications · Sécurité
-    
-    
-      F564230 — Rôle · Clé primaire · Accesseur · Clé de configuration · Renommée en · Index · Écrite par · Lue par
-      Colonne · Nom remplacé · Type · Description · BT · Accesseur · Écrans · Flux · Écritures · Lectures
-      FEDOC · — · NUMBER · Numéro de document · — · logDoc · E-Documents · Traitement · 3 · 41
-    
-  
-
 ---
 
 ## Tables
@@ -39849,21 +39624,21 @@ Notes de version NomaUBL — chaque changement visible pour l'utilisateur livré
 Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, ligne de commande, comportement — est consigné ici. La version la plus récente apparaît en haut. Cette page reflète la carte **À propos de cette version** et l'écran *Notes de version* dédié disponible dans l'application.
 
   Versions
-  2026.10.24.1 · 2026-10-01
-  2026.10.23.1 · 2026-09-30
-  2026.10.22.1 · 2026-09-30
-  2026.10.21.1 · 2026-09-30
-  2026.10.20.1 · 2026-09-30
-  2026.10.19.1 · 2026-09-30
-  2026.10.18.1 · 2026-09-30
-  2026.10.16.1 · 2026-09-30
-  2026.10.14.1 · 2026-09-30
-  2026.10.12.1 · 2026-09-30
-  2026.10.11.1 · 2026-09-30
-  2026.10.06.1 · 2026-09-30
-  2026.10.05.1 · 2026-09-30
-  2026.10.02.1 · 2026-09-30
-  2026.10.01.1 · 2026-09-30
+  2026.10.24.1 · 2026-10-24
+  2026.10.23.1 · 2026-10-23
+  2026.10.22.1 · 2026-10-22
+  2026.10.21.1 · 2026-10-21
+  2026.10.20.1 · 2026-10-20
+  2026.10.19.1 · 2026-10-19
+  2026.10.18.1 · 2026-10-18
+  2026.10.16.1 · 2026-10-16
+  2026.10.14.1 · 2026-10-14
+  2026.10.12.1 · 2026-10-12
+  2026.10.11.1 · 2026-10-11
+  2026.10.06.1 · 2026-10-06
+  2026.10.05.1 · 2026-10-05
+  2026.10.02.1 · 2026-10-02
+  2026.10.01.1 · 2026-10-01
   2026.09.30.1 · 2026-09-30
   2026.09.28.1 · 2026-09-28
   2026.09.26.1 · 2026-09-26

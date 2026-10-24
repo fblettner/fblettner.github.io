@@ -14,6 +14,92 @@ Accès : **Gestion → Promotion**.
 
 ## Vue d'ensemble
 
+<svg viewBox="0 0 1200 392" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="pm-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="pm-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="pm-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="346" rx="14" fill="url(#pm-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Promotion</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Transférer documents, modèles PDF, listes, tâches, connecteurs et réglages d'une instance à l'autre.</text>
+  <rect x="240" y="80" width="136" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="241" y="81" width="66" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="274.0" y="95.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Exporter</text>
+  <line x1="308" y1="85" x2="308" y2="99" stroke="#334155" strokeWidth="1"/>
+  <text x="342.0" y="95.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Importer</text>
+  <rect x="420" y="80" width="240" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="95.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Filtrer les éléments…</text>
+  <rect x="240" y="116" width="470" height="230" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="252" y="127" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M254.5,132.5 L256.8,134.8 L260.8,130" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="269" y="136" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">DOCUMENT (2)</text>
+  <rect x="264" y="151" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M266.5,156.5 L268.8,158.8 L272.8,154" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="281" y="160" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">invoices</text>
+  <text x="340" y="160" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">— Factures clients</text>
+  <rect x="280" y="167" width="117" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="338.5" y="178.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">pdf-template:standard</text>
+  <rect x="403" y="167" width="94" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="450.0" y="178.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">xsl/invoices.xsl</text>
+  <rect x="503" y="167" width="113" height="16" rx="8.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="559.5" y="178.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">ubl/invoices-ubl.xsl</text>
+  <rect x="264" y="193" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="281" y="202" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">credit_notes</text>
+  <text x="356" y="202" fill="#64748b" fontSize="9.5" fontFamily="system-ui, sans-serif">— Avoirs</text>
+  <rect x="252" y="223" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="269" y="232" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">MODÈLE PDF (1)</text>
+  <rect x="264" y="247" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M266.5,252.5 L268.8,254.8 L272.8,250" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="281" y="256" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">standard</text>
+  <rect x="333.8" y="244" width="65" height="16" rx="8.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="366.3" y="255.2" fill="#4a9eff" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">dépendance</text>
+  <rect x="252" y="277" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="269" y="286" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">CONNECTEUR (3)  ›</text>
+  <rect x="252" y="299" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="269" y="308" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">MODÈLE DE RÉGLAGES (4)  ›</text>
+  <rect x="722" y="116" width="238" height="230" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="736" y="138" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Sélection</text>
+  <text x="736" y="158" fill="#94a3b8" fontSize="8" fontFamily="ui-monospace, monospace">1 élément(s), 1 dépendance(s), 2 fichier(s)</text>
+  <text x="736" y="184" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Le paquet contient les éléments, leurs</text>
+  <text x="736" y="199" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">fichiers relatifs à la racine et un</text>
+  <text x="736" y="214" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">manifeste. Mots de passe, secrets, URL,</text>
+  <text x="736" y="229" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">hôtes, licence… ne sont jamais exportés.</text>
+  <rect x="736" y="260" width="210" height="26" rx="5" fill="url(#pm-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="841.0" y="276.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Exporter le paquet</text>
+  <rect x="736" y="294" width="210" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="841.0" y="309.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Vider la sélection</text>
+  <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exporter ou importer</text>
+  <text x="30" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">aperçu avant toute écriture</text>
+  <line x1="200" y1="93.0" x2="240" y2="92" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
+  <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Arborescence par type</text>
+  <text x="30" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">cocher un type = tout</text>
+  <line x1="200" y1="157.0" x2="252" y2="132" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
+  <rect x="20" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dépendances</text>
+  <text x="30" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">fichiers et modèle PDF suivent</text>
+  <line x1="200" y1="247.0" x2="280" y2="178" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
+  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ajouté automatiquement</text>
+  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">désigné par un document</text>
+  <line x1="200" y1="317.0" x2="333.8" y2="252" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
+  <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Compteur de sélection</text>
+  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">éléments, dépendances, fichiers</text>
+  <line x1="1000" y1="167.0" x2="960" y2="155" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
+  <rect x="1000" y="230" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="245" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clés d'instance</text>
+  <text x="1010" y="258" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">jamais exportées ni écrasées</text>
+  <line x1="1000" y1="247.0" x2="960" y2="215" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
+  <rect x="1000" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exporter le paquet</text>
+  <text x="1010" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ZIP : manifeste, éléments, fichiers</text>
+  <line x1="1000" y1="307.0" x2="946" y2="273" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pm-arrow)"/>
+</svg>
+
 <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" style={{width: '100%', maxWidth: '760px', margin: '24px 0', fontFamily: 'system-ui, sans-serif'}}>
   <defs><marker id="pr-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#4a9eff"/></marker></defs>
   <rect x="10" y="30" width="200" height="110" rx="10" fill="rgba(74,158,255,0.08)" stroke="#4a9eff"/>
@@ -55,33 +141,6 @@ Les paramètres globaux, l'authentification unique et les noms de colonnes rempl
 ---
 
 ## Exporter
-
-<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '16px', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '13px'}}>
-  <div style={{display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap'}}>
-    <span style={{display: 'inline-flex', border: '1px solid rgba(148,163,184,0.3)', borderRadius: '999px', overflow: 'hidden'}}>
-      <span style={{padding: '4px 11px', background: 'rgba(74,158,255,0.12)', color: '#4a9eff', fontWeight: 600}}>Exporter</span>
-      <span style={{padding: '4px 11px'}}>Importer</span>
-    </span>
-    <span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', minWidth: '200px', opacity: 0.6}}>Filtrer les éléments…</span>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '1fr minmax(200px, 280px)', gap: '12px'}}>
-    <div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '8px'}}>
-      <div style={{padding: '6px 12px', fontWeight: 700, fontSize: '11px', opacity: 0.7, borderBottom: '1px solid rgba(148,163,184,0.25)'}}>☑ DOCUMENT (2)</div>
-      <div style={{padding: '6px 12px 6px 20px', borderBottom: '1px solid rgba(148,163,184,0.25)'}}>☑ <code>invoices</code> <span style={{opacity: 0.6}}>— Factures clients</span><br/>
-        <code style={{fontSize: '11px'}}>pdf-template:standard</code> <code style={{fontSize: '11px'}}>xsl/invoices.xsl</code> <code style={{fontSize: '11px'}}>ubl/invoices-ubl.xsl</code></div>
-      <div style={{padding: '6px 12px 6px 20px', borderBottom: '1px solid rgba(148,163,184,0.25)'}}>☐ <code>credit_notes</code> <span style={{opacity: 0.6}}>— Avoirs</span></div>
-      <div style={{padding: '6px 12px', fontWeight: 700, fontSize: '11px', opacity: 0.7, borderBottom: '1px solid rgba(148,163,184,0.25)'}}>☐ MODÈLE PDF (1)</div>
-      <div style={{padding: '6px 12px 6px 20px'}}>☑ <code>standard</code> <span style={{padding: '0 6px', borderRadius: '4px', background: 'rgba(74,158,255,0.12)', color: '#4a9eff', fontSize: '11px', fontWeight: 700}}>dépendance</span></div>
-    </div>
-    <div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '8px', padding: '10px', lineHeight: 1.6}}>
-      <b>Sélection</b><br/>
-      <span style={{fontFamily: 'monospace', fontSize: '11px', opacity: 0.7}}>1 élément(s), 1 dépendance(s), 2 fichier(s)</span><br/>
-      <span style={{opacity: 0.8, fontSize: '12px'}}>Le paquet contient les éléments, leurs fichiers avec des chemins relatifs à la racine de l'environnement, et un manifeste…</span><br/>
-      <span style={{display: 'inline-block', marginTop: '6px', padding: '3px 10px', borderRadius: '6px', background: '#4a9eff', color: '#fff'}}>Exporter le paquet</span>
-      <span style={{display: 'inline-block', marginTop: '6px', padding: '3px 10px', opacity: 0.7}}>Vider la sélection</span>
-    </div>
-  </div>
-</div>
 
 1. **Cocher les éléments** dans l'arborescence, regroupés par type avec leur nombre. La case du type sélectionne tous les éléments visibles de ce type ; **Filtrer les éléments…** restreint l'arborescence.
 2. **Vérifier les dépendances** affichées sous chaque élément : les fichiers qu'il utilise et les éléments ajoutés avec lui. Le modèle PDF désigné par un document sélectionné est coché automatiquement et marqué *dépendance*.

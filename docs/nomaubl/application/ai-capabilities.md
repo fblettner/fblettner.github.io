@@ -27,38 +27,78 @@ The assistant knows **the page you are on and the invoice you have open**, so *"
 
 ## At a glance
 
-<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '0', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '12.5px', maxWidth: '440px'}}>
-  <div style={{display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 12px', borderBottom: '1px solid rgba(148,163,184,0.25)'}}>
-    <span>✦</span><b style={{flex: 1}}>AI Assistant</b>
-    <span style={{padding: '2px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>Default ▾</span>
-    <span style={{padding: '2px 7px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>+</span>
-    <span style={{padding: '2px 7px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>×</span>
-  </div>
-  <div style={{display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderBottom: '1px solid rgba(148,163,184,0.25)', opacity: 0.85}}>
-    <span>Context:</span><code>invoices</code>
-    <span style={{padding: '1px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>🧾 F2026-1203 · 210 ×</span>
-  </div>
-  <div style={{padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px'}}>
-    <div style={{alignSelf: 'flex-end', padding: '6px 10px', borderRadius: '10px', background: 'rgba(74,158,255,0.15)'}}>Why is this invoice in this status?</div>
-    <div style={{display: 'flex', gap: '6px', flexWrap: 'wrap'}}>
-      <span style={{padding: '1px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', fontSize: '11px'}}>🧭 load_playbook · refused-invoice</span>
-      <span style={{padding: '1px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', fontSize: '11px'}}>🧾 invoice_dossier · 1203 RI 00001</span>
-    </div>
-    <div style={{padding: '8px 10px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.25)', lineHeight: 1.5}}>
-      <div>Invoice <b>F2026-1203</b> was <b>refused by the buyer</b> (status 210) on 2026-10-22, reason <code>PU_ERR</code> — incorrect unit prices.</div>
-      <div><b>Next step:</b> issue an internal credit note, then a corrected invoice.</div>
-      <div style={{opacity: 0.6, marginTop: '4px'}}>📋 Copy</div>
-    </div>
-    <div style={{display: 'flex', gap: '6px', flexWrap: 'wrap'}}>
-      <span style={{padding: '3px 9px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>Show its lifecycle</span>
-      <span style={{padding: '3px 9px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>Other refusals this month?</span>
-    </div>
-  </div>
-  <div style={{display: 'flex', gap: '6px', padding: '10px 12px', borderTop: '1px solid rgba(148,163,184,0.25)'}}>
-    <span style={{flex: 1, padding: '6px 10px', borderRadius: '8px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.6}}>Ask about this invoice, a setting, an error…</span>
-    <span style={{padding: '6px 10px', borderRadius: '8px', background: '#4a9eff', color: '#fff'}}>➤</span>
-  </div>
-</div>
+<svg viewBox="0 0 1000 430" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="ai-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="ai-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="ai-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+  </defs>
+
+  <rect x="300" y="20" width="400" height="390" rx="14" fill="url(#ai-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="318" y="48" fill="#c084fc" fontSize="13" fontFamily="system-ui, sans-serif">✦</text>
+  <text x="336" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">AI Assistant</text>
+  <rect x="522" y="32" width="90" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="532" y="46.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Default ▾</text>
+  <rect x="618" y="32" width="28" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="632.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">+</text>
+  <rect x="652" y="32" width="28" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="666.0" y="46.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">×</text>
+  <line x1="300" y1="66" x2="700" y2="66" stroke="#1f2937" strokeWidth="1"/>
+  <text x="318" y="84" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Context:</text>
+  <text x="372" y="84" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">invoices</text>
+  <rect x="430" y="72" width="123" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="491.5" y="84.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">🧾 F2026-1203 · 210  ×</text>
+  <line x1="300" y1="98" x2="700" y2="98" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="462" y="112" width="220" height="26" rx="10" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="572.0" y="129" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Why is this invoice in this status?</text>
+  <rect x="318" y="148" width="184" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="410.0" y="160.2" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">🧭 load_playbook · refused-invoice</text>
+  <rect x="318" y="172" width="184" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="410.0" y="184.2" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">🧾 invoice_dossier · 1203 RI 00001</text>
+  <rect x="318" y="198" width="364" height="104" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="330" y="220" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">Invoice F2026-1203 was refused by the buyer</text>
+  <text x="330" y="236" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">(status 210) on 2026-10-22, reason PU_ERR —</text>
+  <text x="330" y="252" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">incorrect unit prices.</text>
+  <text x="330" y="274" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Next step: issue an internal credit note,</text>
+  <text x="330" y="292" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">then a corrected invoice.   📋 Copy</text>
+  <rect x="318" y="314" width="113" height="22" rx="11.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="374.5" y="328.2" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Show its lifecycle</text>
+  <rect x="437" y="314" width="156" height="22" rx="11.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="515.0" y="328.2" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Other refusals this month?</text>
+  <line x1="300" y1="350" x2="700" y2="350" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="318" y="362" width="324" height="28" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="328" y="379.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Ask about this invoice, a setting, an error…</text>
+  <rect x="648" y="362" width="34" height="28" rx="5" fill="url(#ai-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="665.0" y="379.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">➤</text>
+  <rect x="20" y="70" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="85" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Context bar</text>
+  <text x="30" y="98" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">page + open invoice · × to drop it</text>
+  <line x1="240" y1="87.0" x2="430" y2="81" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ai-arrow)"/>
+  <rect x="20" y="150" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tool pills</text>
+  <text x="30" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">each call with its filters</text>
+  <line x1="240" y1="167.0" x2="318" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ai-arrow)"/>
+  <rect x="20" y="314" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="329" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Follow-ups</text>
+  <text x="30" y="342" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">proposed by the reply · one click</text>
+  <line x1="240" y1="331.0" x2="318" y2="325" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ai-arrow)"/>
+  <rect x="760" y="22" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="37" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">New chat</text>
+  <text x="770" y="50" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the thread is kept otherwise</text>
+  <line x1="760" y1="39.0" x2="632" y2="56" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ai-arrow)"/>
+  <rect x="760" y="100" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Model picker</text>
+  <text x="770" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Default · Sonnet · Opus · Fable · Haiku</text>
+  <line x1="760" y1="117.0" x2="567" y2="56" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ai-arrow)"/>
+  <rect x="760" y="220" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sourced, read-only reply</text>
+  <text x="770" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">docs · instance · data</text>
+  <line x1="760" y1="237.0" x2="682" y2="240" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ai-arrow)"/>
+  <rect x="760" y="360" width="220" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="770" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Enter to send</text>
+  <text x="770" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">■ stops a reply in progress</text>
+  <line x1="760" y1="377.0" x2="682" y2="376" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ai-arrow)"/>
+</svg>
 
 | Element | Role |
 |---|---|
