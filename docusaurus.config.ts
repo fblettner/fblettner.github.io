@@ -49,20 +49,9 @@ const config: Config = {
           editUrl: 'https://github.com/fblettner/fblettner.github.io/edit/main/',
           showLastUpdateTime: true,
         },
-        blog: {
-          path: 'blog',
-          routeBasePath: 'blog',
-          blogSidebarCount: 'ALL',
-          showReadingTime: true,
-          editUrl: 'https://github.com/fblettner/fblettner.github.io/edit/main/',
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        // The blog moved to https://nomana-it.fr/insights/ — the old URLs are
+        // served by the redirect pages in static/blog/.
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -104,7 +93,7 @@ const config: Config = {
         {type: 'docSidebar', sidebarId: 'nomajdeSidebar', position: 'left', label: 'Nomajde'},
         {type: 'docSidebar', sidebarId: 'nomaublSidebar', position: 'left', label: 'NomaUBL'},
         {type: 'docSidebar', sidebarId: 'apiSidebar', position: 'left', label: 'API'},
-        {to: '/blog', label: 'Blog', position: 'left'},
+        {href: 'https://nomana-it.fr/insights/', label: 'Blog', position: 'left'},
         {type: 'localeDropdown', position: 'right'},
         {
           href: 'https://github.com/fblettner',

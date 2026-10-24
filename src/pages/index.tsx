@@ -34,7 +34,7 @@ function Hero() {
           <Link className="button button--secondary button--lg" to="/api/getting-started/">
             API
           </Link>
-          <Link className="button button--secondary button--lg" to="/blog/">
+          <Link className="button button--secondary button--lg" href="https://nomana-it.fr/insights/">
             Blog
           </Link>
         </div>
