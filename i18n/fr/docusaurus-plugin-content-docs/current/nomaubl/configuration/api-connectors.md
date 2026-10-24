@@ -16,15 +16,6 @@ Les connecteurs sont consommés par la page [Liaisons d'actions](../management/a
 
 Cette page s'applique à des documents issus de n'importe quel système source — JD Edwards, SAP, NetSuite, ERP personnalisé — tant que la source est mappée vers UBL.
 
-:::info[Refonte en 2026.05.9]
-Deux ajouts sur cette page :
-
-- **Nouvel onglet Webhooks** — configure la façon dont la PA pousse les mises à jour de statut vers NomaUBL. Les requêtes sont signées HMAC avec un secret partagé et POSTées sur `/api/webhook/{connector}/status` ; le vérificateur déduplique les ré-essais « at-least-once » sur l'event id du payload et applique le statut résolu à la facture correspondante. L'onglet propose aussi les surcharges de chemins JSON pour les champs invoice id, status et event id, ainsi qu'une table de correspondance qui traduit le vocabulaire de la PA vers l'ensemble logique `success` / `pending` / `failed`.
-- **Content-Type par endpoint** — chaque endpoint déclare `application/json` *(défaut)*, `multipart/form-data`, ou un type XML (`text/xml` / `application/soap+xml`). Le builder multipart transforme le corps en liste de parts (`name=value`, `file=@{{filePath}};filename=…;contentType=…`), ce qui permet à un endpoint de piloter une PA qui attend un upload `multipart/form-data` (par exemple IOPOLE) ; un type XML envoie une enveloppe SOAP / XML telle quelle, les valeurs des placeholders étant échappées XML, de quoi appeler aussi un service web SOAP historique.
-
-`ImportStatusHandler` a aussi été relaxé — tout statut non `failed` / non `pending` est traité comme un succès, ce qui couvre les vocabulaires comme `EMITTED` / `RECEIVED` de IOPOLE sans configuration par PA.
-:::
-
 L'éditeur comporte **cinq onglets** :
 
 1. **Connection** — URL racine, timeout, TLS, en-têtes par défaut.
@@ -95,7 +86,7 @@ L'éditeur comporte **cinq onglets** :
   <text x="250" y="402" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">&amp;client_id={'{{username}}'}</text>
   <text x="250" y="418" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">&amp;client_secret={'{{password}}'}</text>
 
-  <text x="240" y="446" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EN-TÊTES DE LA REQUÊTE DE JETON  <text fill="#64748b" fontSize="8" fontStyle="italic">(2026.05.8)</text></text>
+  <text x="240" y="446" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EN-TÊTES DE LA REQUÊTE DE JETON</text>
   <rect x="240" y="454" width="540" height="40" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="250" y="471" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">customer-id:CUST123;X-Tenant:acme</text>
   <text x="250" y="487" fill="#64748b" fontSize="8" fontStyle="italic" fontFamily="system-ui, sans-serif">envoyés uniquement sur la requête de jeton — pour les PA qui exigent un en-tête tenant-id sur l'auth</text>

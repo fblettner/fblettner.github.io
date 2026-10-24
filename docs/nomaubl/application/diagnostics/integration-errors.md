@@ -6,6 +6,8 @@ keywords: [NomaUBL, integration errors, validation, F564236, by-rule, by-event, 
 
 # Integration Errors
 
+Integration errors is a view of the [Diagnostics](./overview.md) page — **Diagnostics → Integration errors**, the default view, opened **by rule** on yesterday's activity. The view keeps its own page grant.
+
 The **Integration Errors** screen is the **failure-analysis tool** over the validation table (`F564236`). It surfaces every entry recorded by the validation pipeline — from XSD / Schematron rule failures to lifecycle-level integration errors (PDF, PA, DB, …) — and presents them through three complementary views:
 
 - **by-rule** — ranked cards grouped by `(rule, source)`, each card showing how many invoices the rule has touched plus per-severity chips. The fastest way to spot *which rule is biting hardest right now*.
@@ -14,20 +16,12 @@ The **Integration Errors** screen is the **failure-analysis tool** over the vali
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The errors come from the validation pipeline, which itself works on the generated UBL, so the source format is transparent here.
 
-:::info[Refreshed in 2026.05.4]
-Previously the page was the orphan-error view only — a flat table of `F564236` rows that had no matching invoice header. It is now a proper failure-analysis tool: by-rule + by-event toggle, a category filter (UBL vs Integration / lifecycle), human descriptions extracted from the bundled Schematron files, and an `Unmatched only` checkbox that keeps the orphan-error behaviour one click away. Default view is *all errors* — orphans are no longer the main filter.
-:::
-
-:::info[Refreshed in 2026.06.02]
-A third **Detailed** tab joins *By rule* and *By event*. One row per invoice by default with the freshest event surfaced and a `+N` pill counting the rest — expand to read the full per-invoice timeline. The period filter (e.g. *Last 30 days*) selects invoices first then brings back every event for them, so a single invoice's timeline is always complete in one place. The Excel export drops every row in scope, even those hidden inside collapsed groups. Schematron messages wrap inside the cell instead of being truncated; the *Current status* column accepts manual resize and reveals the full label.
-:::
-
 ---
 
 ## Opening the page
 
 - Sidebar → **Application → Integration Errors**.
-- From the [Dashboard](./dashboard.md): the **Top failing rules** widget's *View all* link opens this page on the **by-rule** tab; clicking a specific rule lands on the **by-event** tab with that rule pre-applied as a filter chip.
+- From the [Dashboard](../dashboard.md): the **Top failing rules** widget's *View all* link opens this page on the **by-rule** tab; clicking a specific rule lands on the **by-event** tab with that rule pre-applied as a filter chip.
 
 ---
 
@@ -168,17 +162,17 @@ The same toolbar drives both views.
 | **Search** | Substring match against `DOC`, `DCT`, `KCO` and the message text. Server-side, debounced. |
 | **Category** | *All sources* (default), *UBL validation* (Schematron / XSD rules — `UVSRCL IN ('EN16931', 'CIUSFR', 'FREXTIC', 'CPRO', 'XSD', 'UBL')`), *Integration / lifecycle* (everything else — runtime errors emitted by the dispatcher: PDF, PA, DB, …). |
 | **Severity chips** | *All* / *FATAL* / *ERROR* / *WARNING* / *INFO*. One severity at a time; clicking the active chip resets to *All*. |
-| **`Unmatched only`** *(by-event only)* | Restores the orphan-only behaviour of the previous version — keeps just the rows that have no joined invoice header. Off by default; one click away when needed. |
+| **`Unmatched only`** *(by-event only)* | Keeps just the orphan rows — the ones that have no joined invoice header. Off by default; one click away when needed. |
 | **Refresh** | Re-runs the current query. |
-| **Export** *(detailed only)* | Drops every event in scope to an Excel file. Every group's events are written — even those hidden inside a collapsed row on screen. The same data the [Daily Digest](../configuration/system/daily-digest.md) emails as an attachment. |
+| **Export** *(detailed only)* | Drops every event in scope to an Excel file. Every group's events are written — even those hidden inside a collapsed row on screen. The same data the [Daily Digest](../../sync/scheduled-jobs/daily-digest.md) emails as an attachment. |
 
 ### Advanced Filters
 
-A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.integration-errors`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
+A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../../configuration/list-views.md) spec (`view.integration-errors`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
 The Tech Dashboard's *Recent errors* drill-through also surfaces here: when the dashboard passes `{ doc, dct, kco }`, a chip shows the active drill-through filter and offers a one-click `×` clear. Useful when the panel is collapsed and the filter would otherwise stay invisible.
 
-Since 2026.05.12 the page runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, default 5000), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. Since 2026.05.13, the `invoiceStatus` refList column gets a **multi-select picker** that issues an `IN (?,?,?)` clause on the server so picking several statuses returns the union.
+The page runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, default 5000), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. The `invoiceStatus` refList column gets a **multi-select picker** that issues an `IN (?,?,?)` clause on the server so picking several statuses returns the union.
 
 ---
 
@@ -198,9 +192,9 @@ Cards are sorted by descending count; clicking one switches to the **by-event** 
 
 ### Where the descriptions come from
 
-In 2026.05.4 the page started decorating rule codes with the **human description** of each rule, so a code like `BR-CL-23` no longer needs to be cross-referenced against an external Schematron file.
+The page decorates each rule code with the **human description** of the rule, so a code like `BR-CL-23` does not need to be cross-referenced against an external Schematron file.
 
-A new `ValidationRuleCatalog` parses the bundled `.sch` files at first call and extracts a `{rule id → description}` map by matching `[<id>]<separator><description>` lines inside each `<assert>` block. The separator is permissive (`-` or `:`, optional surrounding whitespace) and covers the three formats in the four bundled schematrons:
+The `ValidationRuleCatalog` parses the bundled `.sch` files at first call and extracts a `{rule id → description}` map by matching `[<id>]<separator><description>` lines inside each `<assert>` block. The separator is permissive (`-` or `:`, optional surrounding whitespace) and covers the three formats in the four bundled schematrons:
 
 | Schematron | Format | Example |
 |---|---|---|
@@ -222,7 +216,7 @@ The `BR-FR-CPRO` schematron's 34 asserts have no `id` attribute, so the validato
 
 A flat table, one row per validation event. The default sort is by document key ascending (so the same invoice's rows stay grouped) and pagination defaults to 50 rows per page.
 
-Since 2026.05.10 the table renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.integration-errors` spec on `db-nomaubl` and the bundled default ships every column listed below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../configuration/list-views.md) editor.
+The table renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.integration-errors` spec on `db-nomaubl` and the bundled default ships every column listed below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../../configuration/list-views.md) editor.
 
 | Column | Source | Description |
 |---|---|---|
@@ -237,20 +231,16 @@ Since 2026.05.10 the table renders through **DataTableV2** in spec-driven mode: 
 | **Invoice now** | `F564231` lookup | The invoice's *current* status, joined live so you see whether the failure has been re-processed. Empty when no invoice header exists (orphan error). |
 | **Customer** | `F564231.UHALPH` | Customer name when the invoice exists. Helpful when triaging by counterparty. |
 
-:::info[Message column dropped — 2026.05.9]
-The Message column was removed in 2026.05.9. Schematron / XPath messages were too long for a grid cell (the column was eating ~720 px and still cut off context), so the full message now lives in a **detail modal** opened by clicking the row. The modal also splits the CTC-FR debug context (`Num Fact: …, Code: S, rate: 20, …`) from the French explanation — the explanation becomes the main line, the debug fields render as a small monospace grid underneath.
-:::
-
 ### Clicking a row
 
-The row click is **always actionable** since 2026.05.9 — both matched and orphan rows open a modal:
+The row click is **always actionable** — both matched and orphan rows open a modal:
 
-- **Matched rows** (where the invoice exists in `F564231`) open the full [E-Invoicing](./invoices.md) detail modal on the **History tab** — same modal the inbox row click on [Notifications](./notifications.md) uses. The lifecycle, the validation errors and the PA payload sit one tab away.
+- **Matched rows** (where the invoice exists in `F564231`) open the full [E-Invoicing](../invoices.md) detail modal on the **History tab** — same modal the inbox row click on [Notifications](../notifications.md) uses. The lifecycle, the validation errors and the PA payload sit one tab away.
 - **Unmatched / orphan rows** open the new **`ErrorDetailModal`** — a focused view sized to a single validation event with no surrounding invoice. It shows: the level badge, the rule identifier + description (resolved through `useRuleCatalog`), the source, the date, the `doc / dct / kco` triplet (with a *no matching invoice in F564231* hint), the customer when known, and the full message rendered through the same `splitValidationMessage` helper as the matched-row modal.
 
 ### `Unmatched only`
 
-A small checkbox in the toolbar — `Unmatched only` — restores the previous version's behaviour: only the rows that have no joined invoice header. These are *orphan* errors, typically transformation failures that prevented the invoice from ever being persisted (the XSL produced something the UBL validator could not parse, or a `FATAL` aborted the pipeline before the database insert).
+A small checkbox in the toolbar — `Unmatched only` — restricts the list to the rows that have no joined invoice header. These are *orphan* errors, typically transformation failures that prevented the invoice from ever being persisted (the XSL produced something the UBL validator could not parse, or a `FATAL` aborted the pipeline before the database insert).
 
 The default view shows *every* error, matched or not. Switching the checkbox on is one click; nothing else is needed.
 
@@ -258,7 +248,6 @@ The default view shows *every* error, matched or not. Switching the checkbox on 
 
 ## Detailed view \{#detailed-view\}
 
-*Added 2026.06.02.*
 
 The detailed view turns the flat by-event table into a **per-invoice timeline**. One row per invoice by default — the freshest event the active filters select, with a chevron and a `+N` pill counting the older events behind it. Click the chevron to reveal every event of that invoice; click again to collapse.
 
@@ -279,7 +268,7 @@ This is intentional and applies to detailed-view only. The by-event and by-rule 
 
 ### Export to Excel
 
-The toolbar's *Export* button drops the full data set in scope to an Excel file — every event of every invoice in scope, regardless of which groups are currently collapsed on screen. The columns match the table; one row per event. The file is the same data the [Daily Digest](../configuration/system/daily-digest.md) attaches to its scheduled emails — typically the convenient artefact to share when triaging by another team.
+The toolbar's *Export* button drops the full data set in scope to an Excel file — every event of every invoice in scope, regardless of which groups are currently collapsed on screen. The columns match the table; one row per event. The file is the same data the [Daily Digest](../../sync/scheduled-jobs/daily-digest.md) attaches to its scheduled emails — typically the convenient artefact to share when triaging by another team.
 
 ### When to use which view
 
@@ -289,7 +278,7 @@ The toolbar's *Export* button drops the full data set in scope to an Excel file 
 | *Show me every event of severity X today.* | By event. |
 | *Read every error of this one invoice in order.* | Detailed (or click a row in by-event — both lead to the per-invoice history modal). |
 | *Triage a recent integration incident across a handful of invoices.* | Detailed, sorted by most recent event. |
-| *Send the day's errors to another team.* | Detailed → *Export*, or wire a [Daily Digest](../configuration/system/daily-digest.md) so the email goes out without manual action. |
+| *Send the day's errors to another team.* | Detailed → *Export*, or wire a [Daily Digest](../../sync/scheduled-jobs/daily-digest.md) so the email goes out without manual action. |
 
 ---
 
@@ -301,9 +290,9 @@ The page is read-only — the actual fix happens upstream (source data, template
 2. **Scope the category.** *UBL validation* surfaces only Schematron / XSD events; *Integration / lifecycle* surfaces only the runtime errors the dispatcher emits. Mixing them only helps when you are looking for a specific document.
 3. **Click the rule** to switch to *By event* with the filter chip pre-applied. The list now shows every invoice that hit the rule.
 4. **Click a row** to open the invoice's *History* tab. The validation errors, the lifecycle and the PA payload all sit there.
-5. **Read the message + the rule description.** The description gives the *what*; the message gives the *where* (which field, which line). For Schematron rules, cross-reference with the [Reason Codes](../references/reason-codes.mdx) page when needed.
+5. **Read the message + the rule description.** The description gives the *what*; the message gives the *where* (which field, which line). For Schematron rules, cross-reference with the [Reason Codes](../../references/reason-codes.mdx) page when needed.
 6. **Open the source XML in *UBL Tools → XML Viewer*** for the `(doc, dct, kco)` triplet — the file lives in `dirInput/<template>/`. Reading the source confirms whether the failure is data-side (missing field) or template-side (XSL bug).
-7. **Re-run the pipeline once the source is fixed.** Use [Process Document](../processing/document.md) on the corrected file. Once the invoice is successfully persisted, *Invoice now* shifts on this page from empty to the new status, and the row stops being orphan.
+7. **Re-run the pipeline once the source is fixed.** Use [Process Document](../../processing/document.md) on the corrected file. Once the invoice is successfully persisted, *Invoice now* shifts on this page from empty to the new status, and the row stops being orphan.
 
 ---
 
@@ -312,6 +301,6 @@ The page is read-only — the actual fix happens upstream (source data, template
 - **Start with by-rule.** A single rule with hundreds of hits points to one upstream change (a renamed field, a stale tax code, a regenerated counterparty list). Fixing the rule typically clears most rows on this page in one re-run.
 - **Use the category filter to triage.** *UBL validation* failures are usually template / XSL bugs; *Integration / lifecycle* errors are usually environment / connector issues (PA outage, SMTP timeout, DB lock). Knowing which side you are on cuts the investigation time in half.
 - **Watch FATAL first.** A non-zero FATAL means the pipeline aborted — the invoice was never persisted at all and only the orphan row exists. ERROR rows mean the invoice may have made it partway and the regular *E-Invoicing* page also carries something for them.
-- **`Unmatched only` is the legacy view.** The previous version of this page only ever showed orphans. Toggle the checkbox on to restore that behaviour for compatibility — the by-rule view, the category filter and the rule descriptions all keep working.
+- **`Unmatched only` isolates orphans.** Toggle the checkbox on to see only the orphan errors — the by-rule view, the category filter and the rule descriptions all keep working.
 - **Errors auto-disappear after a successful re-import.** Once the invoice header is created or updated, the row's *Invoice now* column reflects the new status. Orphan rows (no header at all) similarly stop being orphan once a successful run lands. The underlying entry stays in `F564236` for audit, but it leaves the *unmatched* set.
-- **Deep-links from the dashboard save a step.** The *Top failing rules* widget on the [Dashboard](./dashboard.md) lands here pre-filtered — a one-click drill from "this rule is biting" to "show me the events".
+- **Deep-links from the dashboard save a step.** The *Top failing rules* widget on the [Dashboard](../dashboard.md) lands here pre-filtered — a one-click drill from "this rule is biting" to "show me the events".

@@ -1,27 +1,27 @@
 ---
 title: Rapport quotidien
-description: "Paramètres → Rapport quotidien planifie un email récurrent qui rassemble les erreurs d'intégration de la journée et joint la liste complète des évènements au format Excel. Plusieurs rapports peuvent être configurés par groupe de destinataires, chacun avec son heure d'envoi, sa fenêtre d'analyse, son filtre de sévérité et son routage par colonne — chaque équipe reçoit une coupe différente des mêmes données."
+description: "Tâches planifiées → Rapport planifie un email récurrent qui rassemble les erreurs d'intégration de la journée et joint la liste complète des évènements au format Excel. Plusieurs rapports peuvent être configurés par groupe de destinataires, chacun avec son heure d'envoi, sa fenêtre d'analyse, son filtre de sévérité et son routage par colonne — chaque équipe reçoit une coupe différente des mêmes données."
 keywords: [NomaUBL, rapport quotidien, erreurs d'intégration, email, pièce jointe Excel, récurrent, planificateur, fenêtre d'analyse, filtre de sévérité, routage par colonne, société, activité, business unit, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Rapport quotidien
 
-L'écran **Rapport quotidien** planifie un email récurrent qui regroupe toutes les erreurs d'intégration de la journée et joint la liste complète des évènements au format Excel. Le corps de l'email résume la période et les compteurs ; la pièce jointe contient exactement les mêmes données que l'export de l'onglet *Vue détaillée* de la page [Erreurs d'intégration](../../application/integration-errors.md) — mêmes colonnes, même structure.
+:::info[Où le trouver]
+Ce formulaire s'ouvre depuis la page [Tâches planifiées](./overview.md) : cliquer sur une tâche de type *Rapport* pour la modifier, ou **Nouvelle tâche → Rapport** pour en créer une. **Enregistrer et appliquer** recharge immédiatement la planification, sans redémarrage du serveur. L'ancienne page *Rapport quotidien* a quitté le menu.
+:::
+
+L'écran **Rapport quotidien** planifie un email récurrent qui regroupe toutes les erreurs d'intégration de la journée et joint la liste complète des évènements au format Excel. Le corps de l'email résume la période et les compteurs ; la pièce jointe contient exactement les mêmes données que l'export de l'onglet *Vue détaillée* de la page [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) — mêmes colonnes, même structure.
 
 L'objectif est opérationnel : au lieu de demander à une équipe d'ouvrir la SPA chaque matin pour vérifier les factures en échec, le rapport pousse les erreurs du jour vers leur boîte mail à heure fixe. Plusieurs rapports peuvent coexister pour que des équipes différentes reçoivent des coupes différentes des mêmes données — l'équipe comptabilité pour la société `ACME`, l'équipe opérations pour l'activité `Centrale`, l'équipe développement pour tout ce qui est de sévérité `FATAL`.
 
 Cette page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP personnalisé. Les erreurs proviennent du pipeline de validation et sont enregistrées dans `F564236`, le format source est donc transparent ici.
-
-:::info[Nouveauté 2026.06.02]
-Cette page est entièrement nouvelle. Elle remplace le flux *Export* ad hoc de la page Erreurs d'intégration pour les destinataires planifiés — les opérateurs qui n'ouvrent pas la SPA chaque jour mais qui ont quand même besoin des données. Le flux d'export reste disponible pour un tri ponctuel.
-:::
 
 ---
 
 ## Ouvrir l'éditeur
 
 - Barre latérale → **Configuration → Système → Rapport quotidien**.
-- Ou directement depuis la page [Erreurs d'intégration](../../application/integration-errors.md) → barre d'outils → *Envoyer au rapport…* quand l'opérateur veut câbler un email récurrent sur le jeu de filtres courant.
+- Ou directement depuis la page [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) → barre d'outils → *Envoyer au rapport…* quand l'opérateur veut câbler un email récurrent sur le jeu de filtres courant.
 
 ---
 
@@ -121,7 +121,7 @@ Chaque rapport est une ligne du catalogue. Le panneau d'édition comporte quatre
 | Champ | Obligatoire | Description |
 |---|---|---|
 | **Nom** | oui | Texte libre. Affiché dans la liste du catalogue et en tête du corps de l'email. Exemple : *Comptabilité · ACME*. |
-| **Rapport** | oui (défaut : `Erreurs d'intégration`) | Ce que couvre le rapport. **Erreurs d'intégration** rassemble les évènements en échec de la page [Erreurs d'intégration](../../application/integration-errors.md) — le comportement d'origine. **Toutes les factures archivées** couvre à la place chaque facture archivée sur la fenêtre, et la feuille jointe porte les colonnes de la page [E-Documents](../../application/edocuments.md) et respecte les filtres par colonne ci-dessous ; un rapport peut ainsi servir aussi d'extraction d'archive quotidienne. |
+| **Rapport** | oui (défaut : `Erreurs d'intégration`) | Ce que couvre le rapport. **Erreurs d'intégration** rassemble les évènements en échec de la page [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) — le comportement d'origine. **Toutes les factures archivées** couvre à la place chaque facture archivée sur la fenêtre, et la feuille jointe porte les colonnes de la page [E-Documents](../../application/edocuments.md) et respecte les filtres par colonne ci-dessous ; un rapport peut ainsi servir aussi d'extraction d'archive quotidienne. |
 | **Destinataires** | oui | Une ou plusieurs adresses email, séparées par virgule ou point-virgule. Chaque adresse reçoit le même email — il n'y a pas de personnalisation par adresse ici ; créez un autre rapport si les destinataires doivent voir des coupes différentes. |
 | **Activé** | oui (défaut : `on`) | Quand il vaut `off`, le rapport est conservé dans le catalogue mais ignoré au moment de l'envoi. Pratique pour mettre en pause un rapport pendant une fenêtre de maintenance sans perdre la configuration. |
 
@@ -135,7 +135,7 @@ Chaque rapport est une ligne du catalogue. Le panneau d'édition comporte quatre
 
 ### 3. Filtre de sévérité
 
-Un petit groupe de pastilles identique à la barre d'outils des [Erreurs d'intégration](../../application/integration-errors.md) :
+Un petit groupe de pastilles identique à la barre d'outils des [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) :
 
 | Sévérité | Quand l'utiliser |
 |---|---|
@@ -149,7 +149,7 @@ Choisissez **une seule** sévérité (ou `All`). Un rapport multi-sévérités c
 
 ### 4. Filtres d'égalité par colonne
 
-Le rapport porte une liste de paires `(colonne, valeur)` qui restreignent le jeu d'évènements. Les colonnes prises en charge sont les mêmes que celles disponibles à l'égalité depuis les *List Views* de la page [Erreurs d'intégration](../../application/integration-errors.md) :
+Le rapport porte une liste de paires `(colonne, valeur)` qui restreignent le jeu d'évènements. Les colonnes prises en charge sont les mêmes que celles disponibles à l'égalité depuis les *List Views* de la page [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) :
 
 | Colonne | Exemple de valeur | Usage courant |
 |---|---|---|
@@ -183,7 +183,7 @@ Règles les plus en échec
 La liste complète des évènements est jointe (errors-2026-06-02.xlsx).
 ```
 
-La pièce jointe est le même fichier Excel que celui exporté depuis l'onglet *Vue détaillée* des [Erreurs d'intégration](../../application/integration-errors.md) — chaque évènement de chaque facture dans le périmètre, avec des colonnes alignées sur le tableau.
+La pièce jointe est le même fichier Excel que celui exporté depuis l'onglet *Vue détaillée* des [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) — chaque évènement de chaque facture dans le périmètre, avec des colonnes alignées sur le tableau.
 
 Quand la période contient **zéro erreur**, le rapport est envoyé quand même avec un corps court *aucune erreur sur cette période* (sans pièce jointe). Les opérateurs ont demandé ce signal positif — savoir que le rapport s'est exécuté sans incident est en soi une information.
 
@@ -197,9 +197,9 @@ Le planificateur est un démon interne à NomaUBL qui se réveille chaque minute
 |---|---|
 | `Activé = on` | Le prochain déclenchement de `<heure d'envoi>` dans `<fuseau>` collecte les évènements, construit l'Excel et envoie. Le badge *dernier envoi* de la ligne se met à jour. |
 | `Activé = off` | La ligne du catalogue est ignorée à chaque tick. |
-| Échec SMTP | L'envoi est retenté au tick suivant (une minute plus tard) jusqu'à 5 tentatives ; au-delà, l'échec est enregistré dans le [Journal de traitement](../../management/processing-log.md) avec l'erreur SMTP, et le rapport est marqué *échec* pour la journée. Renvoi manuel possible à tout moment via le bouton *Envoyer maintenant*. |
+| Échec SMTP | L'envoi est retenté au tick suivant (une minute plus tard) jusqu'à 5 tentatives ; au-delà, l'échec est enregistré dans le [Journal des traitements](../../application/diagnostics/processing-log.md) avec l'erreur SMTP, et le rapport est marqué *échec* pour la journée. Renvoi manuel possible à tout moment via le bouton *Envoyer maintenant*. |
 
-L'exécution du rapport lit la configuration SMTP depuis la section `smtp` de [Système → Global](./global.md) à l'échelle de la plateforme — le même SMTP qui alimente les [Règles de notification](../../management/notification-rules.md) et les notifications par facture. Vérifiez que ces identifiants fonctionnent avant de câbler un rapport quotidien.
+L'exécution du rapport lit la configuration SMTP depuis la section `smtp` de [Système → Global](../../configuration/system/global.md) à l'échelle de la plateforme — le même SMTP qui alimente les [Règles de notification](../../management/notification-rules.md) et les notifications par facture. Vérifiez que ces identifiants fonctionnent avant de câbler un rapport quotidien.
 
 ### Bouton Envoyer maintenant
 
@@ -226,9 +226,9 @@ L'exécution *Envoyer maintenant* met aussi à jour le badge *dernier envoi*, ce
 
 | Symptôme | Cause probable | Correction |
 |---|---|---|
-| La ligne du rapport dans le catalogue est marquée *échec*. | Rejet SMTP (authentification, relais refusé, rebond destinataire). | Ouvrez le [Journal de traitement](../../management/processing-log.md), filtrez sur `daily-digest`, lisez l'erreur SMTP. Corrigez les identifiants [Global → SMTP](./global.md), puis cliquez sur *Envoyer maintenant*. |
+| La ligne du rapport dans le catalogue est marquée *échec*. | Rejet SMTP (authentification, relais refusé, rebond destinataire). | Ouvrez le [Journal des traitements](../../application/diagnostics/processing-log.md), filtrez sur `daily-digest`, lisez l'erreur SMTP. Corrigez les identifiants [Global → SMTP](../../configuration/system/global.md), puis cliquez sur *Envoyer maintenant*. |
 | L'email est arrivé mais la pièce jointe est vide. | Le jeu de filtres ne trouve aucun évènement correspondant dans la fenêtre d'analyse. | Détendez un filtre (par exemple, retirez le code d'activité) ou étendez la fenêtre à `7 days` ; cliquez sur *Envoyer maintenant* pour revérifier. |
-| La pièce jointe contient des erreurs plus anciennes que la fenêtre d'analyse. | La fenêtre d'analyse sélectionne d'abord les **factures** qui ont au moins une erreur dans la fenêtre, puis exporte **toutes** les erreurs de ces factures — c'est le même comportement que la [Vue détaillée](../../application/integration-errors.md#detailed-view). C'est intentionnel. | S'il vous faut un export strict à la fenêtre, faites-le manuellement depuis l'onglet *Par évènement*. |
+| La pièce jointe contient des erreurs plus anciennes que la fenêtre d'analyse. | La fenêtre d'analyse sélectionne d'abord les **factures** qui ont au moins une erreur dans la fenêtre, puis exporte **toutes** les erreurs de ces factures — c'est le même comportement que la [Vue détaillée](../../application/diagnostics/integration-errors.md#detailed-view). C'est intentionnel. | S'il vous faut un export strict à la fenêtre, faites-le manuellement depuis l'onglet *Par évènement*. |
 | Deux destinataires reçoivent le même rapport en double. | Deux lignes de rapport dans le catalogue ont des listes de destinataires qui se recoupent. | Auditez le catalogue ; fusionnez ou dédoublonnez. |
 | Le rapport part à la mauvaise heure. | Le fuseau horaire pointe sur la mauvaise zone. | Ouvrez le rapport, renseignez le bon fuseau IANA (`Europe/Paris`, `Africa/Casablanca`, …) et enregistrez. |
 
@@ -236,7 +236,7 @@ L'exécution *Envoyer maintenant* met aussi à jour le badge *dernier envoi*, ce
 
 ## Pour aller plus loin
 
-- [Erreurs d'intégration](../../application/integration-errors.md) — la page SPA que le rapport résume ; mêmes données, tri interactif.
+- [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) — la page SPA que le rapport résume ; mêmes données, tri interactif.
 - [Règles de notification](../../management/notification-rules.md) — notifications email par évènement (un email par facture qui correspond) ; utile quand la latence prime sur le récapitulatif quotidien.
-- [Système → Global → SMTP](./global.md) — la configuration SMTP sortante que le rapport utilise.
-- [Journal de traitement](../../management/processing-log.md) — diagnostics des envois de rapport en échec.
+- [Système → Global → SMTP](../../configuration/system/global.md) — la configuration SMTP sortante que le rapport utilise.
+- [Journal des traitements](../../application/diagnostics/processing-log.md) — diagnostics des envois de rapport en échec.

@@ -472,7 +472,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Application',
-      link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: dashboard, tech dashboard, invoices, e-reporting, e-directory, VAT declaration, integration errors, notifications and AI capabilities.'},
+      link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: dashboard, tech dashboard, invoices, e-reporting, e-directory, VAT declaration, reports (implementation and audit), Diagnostics (integration errors, processing log, failures, server log), notifications and the AI assistant.'},
       items: [
         'nomaubl/application/dashboard',
         'nomaubl/application/tech-dashboard',
@@ -482,7 +482,19 @@ const sidebars: SidebarsConfig = {
         'nomaubl/application/edirectory',
         'nomaubl/application/vat-declaration',
         'nomaubl/application/reports',
-        'nomaubl/application/integration-errors',
+        'nomaubl/application/implementation-report',
+        'nomaubl/application/audit-report',
+        {
+          type: 'category',
+          label: 'Diagnostics',
+          link: {type: 'doc', id: 'nomaubl/application/diagnostics/overview'},
+          items: [
+            'nomaubl/application/diagnostics/integration-errors',
+            'nomaubl/application/diagnostics/processing-log',
+            'nomaubl/application/diagnostics/failures',
+            'nomaubl/application/diagnostics/server-log',
+          ],
+        },
         'nomaubl/application/notifications',
         'nomaubl/application/ai-capabilities',
       ],
@@ -490,12 +502,21 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Sync',
-      link: {type: 'generated-index', slug: '/nomaubl/sync', description: 'Inbound/outbound synchronisation: fetch input, import, retrieve statuses and watched folders.'},
+      link: {type: 'generated-index', slug: '/nomaubl/sync', description: 'Inbound/outbound synchronisation: fetch input, import, retrieve statuses and the Scheduled jobs page (polls, batch jobs, daily digests, auto-retries, lifecycle checks, retention).'},
       items: [
         'nomaubl/sync/fetch-input',
         'nomaubl/sync/import',
         'nomaubl/sync/retrieve-statuses',
-        'nomaubl/sync/watched-folders',
+        {
+          type: 'category',
+          label: 'Scheduled Jobs',
+          link: {type: 'doc', id: 'nomaubl/sync/scheduled-jobs/overview'},
+          items: [
+            'nomaubl/sync/scheduled-jobs/daily-digest',
+            'nomaubl/sync/scheduled-jobs/auto-retry',
+            'nomaubl/sync/scheduled-jobs/lifecycle-checks',
+          ],
+        },
       ],
     },
     {
@@ -552,16 +573,15 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Management',
-      link: {type: 'generated-index', slug: '/nomaubl/management', description: 'Operational management: document templates, PDF templates, action bindings, notification rules, file versions, processing log and the command-line interface.'},
+      link: {type: 'generated-index', slug: '/nomaubl/management', description: 'Operational management: documents, PDF templates, action bindings, notification rules, watched folders, file versions, promotion between instances and the command-line interface.'},
       items: [
         'nomaubl/management/documents',
         'nomaubl/management/pdf-templates',
         'nomaubl/management/actions',
         'nomaubl/management/notification-rules',
-        'nomaubl/management/lifecycle-checks',
+        'nomaubl/management/watched-folders',
         'nomaubl/management/file-versions',
-        'nomaubl/management/server-log',
-        'nomaubl/management/processing-log',
+        'nomaubl/management/promotion',
         'nomaubl/management/command-line',
       ],
     },
@@ -570,10 +590,11 @@ const sidebars: SidebarsConfig = {
       label: 'Configuration',
       link: {type: 'generated-index', slug: '/nomaubl/configuration', description: 'Application-wide configuration: system parameters, reference lists, connectors and security.'},
       items: [
+        'nomaubl/configuration/settings-overview',
         {
           type: 'category',
           label: 'System',
-          link: {type: 'generated-index', slug: '/nomaubl/configuration/system', description: 'System-level parameters: e-directory, e-invoicing, fetch invoices, document types, statuses and the daily digest.'},
+          link: {type: 'generated-index', slug: '/nomaubl/configuration/system', description: 'System-level parameters: e-directory, e-invoicing, e-reporting, JDE print queue, integrity checks, global settings, single sign-on, document types and statuses.'},
           items: [
             'nomaubl/configuration/system/edirectory',
             'nomaubl/configuration/system/einvoicing',
@@ -584,8 +605,6 @@ const sidebars: SidebarsConfig = {
             'nomaubl/configuration/system/oidc',
             'nomaubl/configuration/system/document-types',
             'nomaubl/configuration/system/statuses',
-            'nomaubl/configuration/system/daily-digest',
-            'nomaubl/configuration/system/auto-retry',
           ],
         },
         'nomaubl/configuration/reference-lists',
@@ -624,6 +643,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/references/ubl-reference',
         'nomaubl/references/business-rules',
         'nomaubl/references/database-tables',
+        'nomaubl/references/developer',
         {
           type: 'link',
           label: 'API Reference',

@@ -6,7 +6,7 @@ keywords: [NomaUBL, journal serveur, fichier journal, log, diagnostic, sévérit
 
 # Journal serveur
 
-La page **Journal serveur** affiche la **fin du fichier journal du serveur**, lignes les plus récentes en tête : un administrateur suit ce que fait le serveur — un lot, une recherche Peppol, une transformation en échec — sans ouvrir de shell sur la machine. Elle s'ouvre dans **Gestion → Journal serveur** ; l'accès se donne par rôle, comme pour les autres pages de gestion (voir [Rôles](../configuration/security/roles.md)).
+La page **Journal serveur** affiche la **fin du fichier journal du serveur**, lignes les plus récentes en tête : un administrateur suit ce que fait le serveur — un lot, une recherche Peppol, une transformation en échec — sans ouvrir de shell sur la machine. C'est une vue de la page [Diagnostic](./overview.md) — **Diagnostic → Journal serveur** — qui garde son propre droit de page (voir [Rôles](../../configuration/security/roles.md)). Les lignes s'affichent dans la table de données partagée, avec ses filtres, son tri, sa pagination et son export ; ses colonnes se règlent dans l'éditeur des [vues de liste](../../configuration/list-views.md).
 
 ---
 
@@ -49,7 +49,7 @@ Les piles d'appels restent **rattachées à la ligne qui les a produites** : un 
 
 ## Fichier lu
 
-La page trouve le fichier seule : le `nomaubl-<env>.log` du lanceur ou, sous Linux, le fichier vers lequel la sortie du serveur est redirigée. Si le serveur tourne sous un autre lanceur, indiquer son chemin dans **Server log file** des [réglages globaux](../configuration/system/global.md) ; laissé vide, la détection automatique s'applique. Si aucun fichier n'est trouvé, la page le signale et renvoie vers ce réglage.
+La page trouve le fichier seule : le `nomaubl-<env>.log` du lanceur ou, sous Linux, le fichier vers lequel la sortie du serveur est redirigée. Si le serveur est démarré par un autre lanceur, indiquer son chemin dans **Server log file** des [réglages globaux](../../configuration/system/global.md) ; laissé vide, la détection automatique s'applique. Si aucun fichier n'est trouvé, la page le signale et renvoie vers ce réglage.
 
 ---
 

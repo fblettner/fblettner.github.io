@@ -233,7 +233,7 @@ Un déploiement NomaUBL couvre chaque étape, de la sortie ERP brute à la factu
 | **Générer l'UBL** | Produit des documents UBL 2.1 structurés en s'appuyant sur les valeurs par défaut par template : parties, schemeID, routage BAR, types de processus métier, catégories d'allowance / charge, mentions légales françaises. |
 | **Valider** | Exécute XSD + Schematron + l'extension CTC française avant qu'aucun document ne quitte votre périmètre. Affiche chaque erreur, avertissement et indication de reprise en ligne. |
 | **Déposer** | Transmet à la Plateforme Agréée configurée via un connecteur enfichable. Le connecteur PA est un paramètre de configuration — on le change sans toucher au code. |
-| **Suivre** | Interroge la PA pour récupérer les mises à jour de statut et persiste le cycle de vie complet : déposée, reçue, payée, en litige, refusée, rejetée — avec motifs, actions attendues et horodatages. |
+| **Suivre** | Interroge la PA pour récupérer les mises à jour de statut et enregistre le cycle de vie complet : déposée, reçue, payée, en litige, refusée, rejetée — avec motifs, actions attendues et horodatages. |
 | **Opérer** | Présente la bonne action à la bonne étape : redéposer, envoyer le PDF par e-mail, marquer paiement reçu, émettre un avoir, mettre à jour un statut, annuler en compta — pilotée par des connecteurs API configurables. |
 
 ---
@@ -325,7 +325,7 @@ NomaUBL repose sur un **modèle de templates** : chaque source produit du XML, N
   <div style={{padding: '22px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'linear-gradient(160deg, rgba(255,159,10,0.06), rgba(255,159,10,0.01))'}}>
     <div style={{marginBottom: '12px', lineHeight: 1}}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fb923c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"/><path d="M12 14V3"/><path d="M8 7l4-4 4 4"/></svg></div>
     <div style={{fontSize: '15px', fontWeight: 700, marginBottom: '6px', color: '#fb923c'}}>Déposer & suivre sur toute PA</div>
-    <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.6', marginBottom: '10px'}}>Le backend PA est de la configuration. Dépôt, récupération du cycle de vie, persistance des litiges, refus et accusés de paiement. Changer de Plateforme Agréée sans reconstruire le reste de la chaîne.</div>
+    <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.6', marginBottom: '10px'}}>Le backend PA est de la configuration. Dépôt, récupération du cycle de vie, enregistrement des litiges, refus et accusés de paiement. Changer de Plateforme Agréée sans reconstruire le reste de la chaîne.</div>
     <div style={{fontSize: '11px', opacity: 0.7}}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign: '-1px', marginRight: '5px', opacity: 0.7}}><path d="M7 17L16 8"/><path d="M9 7h8v8"/></svg><Link to="/nomaubl/sync/import">Import</Link> · <Link to="/nomaubl/sync/retrieve-statuses">Retrieve Statuses</Link></div>
   </div>
 
@@ -333,7 +333,7 @@ NomaUBL repose sur un **modèle de templates** : chaque source produit du XML, N
     <div style={{marginBottom: '12px', lineHeight: 1}}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14.6 6.6a3.6 3.6 0 0 0-4.8 4.8L4 17.2V20h2.8l5.8-5.8a3.6 3.6 0 0 0 4.8-4.8l-2.4 2.4-2-2z"/></svg></div>
     <div style={{fontSize: '15px', fontWeight: 700, marginBottom: '6px', color: '#f87171'}}>Opérer le cycle de vie</div>
     <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.6', marginBottom: '10px'}}>Redéposer, mettre à jour un statut, envoyer le PDF par e-mail, marquer paiement reçu, émettre un avoir, annuler en compta — la bonne action est proposée à la bonne étape. Chaque événement est journalisé, append-only, prêt pour l'audit.</div>
-    <div style={{fontSize: '11px', opacity: 0.7}}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign: '-1px', marginRight: '5px', opacity: 0.7}}><path d="M7 17L16 8"/><path d="M9 7h8v8"/></svg><Link to="/nomaubl/application/invoices">E-Invoicing</Link> · <Link to="/nomaubl/application/integration-errors">Integration Errors</Link></div>
+    <div style={{fontSize: '11px', opacity: 0.7}}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign: '-1px', marginRight: '5px', opacity: 0.7}}><path d="M7 17L16 8"/><path d="M9 7h8v8"/></svg><Link to="/nomaubl/application/invoices">E-Invoicing</Link> · <Link to="/nomaubl/application/diagnostics/integration-errors">Integration Errors</Link></div>
   </div>
 
   <div style={{padding: '22px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'linear-gradient(160deg, rgba(0,122,255,0.06), rgba(0,122,255,0.01))'}}>

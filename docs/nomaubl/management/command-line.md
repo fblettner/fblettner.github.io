@@ -277,7 +277,7 @@ backfill-vat — issue date 2026-04-01 → 2026-04-30
 
 ## `watch-folders <env>` — pick up watched folders \{#watch-folders\}
 
-Runs the [Watched folders](../sync/watched-folders.md) pickup from the command line — the same run as the editor's *Scan and process* button and the scheduled batch job with the *Watched folders* source.
+Runs the [Watched folders](./watched-folders.md) pickup from the command line — the same run as the editor's *Scan and process* button and the scheduled batch job with the *Watched folders* source.
 
 ```bash
 ./nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]
@@ -369,7 +369,7 @@ java -jar nomaubl.jar -serve /opt/nomaubl/demo/config/config.json 8090
 
 ## `-process` — single document-processing entry point
 
-Process one (or many) source files against one document template — or call a SQL / REST connector when the template's `source` is `Connector`. The pipeline is selected by the template's `source` property (`XML` for XML spools requiring an XSL transform, `UBL` for already-formed UBL 2.1 invoices, `Connector` for live calls to a SQL query or REST endpoint).
+Process one (or many) source files against one document — or call a SQL / REST connector when the template's `source` is `Connector`. The pipeline is selected by the template's `source` property (`XML` for XML spools requiring an XSL transform, `UBL` for already-formed UBL 2.1 invoices, `Connector` for live calls to a SQL query or REST endpoint).
 
 ```text
 -process <configFile> <template> <file|dir|---> [type] [--param key=value …] [--verbose] [--replace] [--no-send] [--no-db] [--validate] [--send] [--no-debug]
@@ -378,7 +378,7 @@ Process one (or many) source files against one document template — or call a S
 | Argument | Description |
 |---|---|
 | **`configFile`** | Absolute path to `config.json`. |
-| **`template`** | Document template name (e.g. `invoices`, `credit_notes`). The template's `source` property drives the pipeline — see [Documents](./documents.md). |
+| **`template`** | Document name (e.g. `invoices`, `credit_notes`). The template's `source` property drives the pipeline — see [Documents](./documents.md). |
 | **`file \| dir \| ---`** | One source file or a directory of source files. For an **XML** template, the file is expected at `<dirInput>/<file>.xml` if no extension is given. For a **UBL** template, the path may be absolute or relative to `<dirInput>/ubl/`. When a directory is given, every matching file is processed in alphabetical order. For a **Connector** template, pass `---` (three dashes) in place of the file path — the source is the connector, not a file. |
 | **`type`** | XML templates only — processing type (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignored on UBL and Connector templates. |
 
@@ -387,7 +387,7 @@ Process one (or many) source files against one document template — or call a S
 | Value | Effect |
 |---|---|
 | **`AUTO`** | Resolve the type per document from the *Document Types* configuration. Default for spools mixing several document types. |
-| **`SINGLE`** | One PDF per source file — single-document templates. |
+| **`SINGLE`** | One PDF per source file — single-documents. |
 | **`BURST`** | Split the source on `burstKey` and process every sub-document in parallel (`numProc`). |
 | **`UBL`** | UBL-only — produces UBL 2.1, no PDF. |
 
@@ -474,7 +474,7 @@ The handler walks two api-connector tasks on the configured PA template:
 | **`fetch-received-list`** | Returns the list of received invoice references (PA UUID + supplier metadata) since the cursor. |
 | **`fetch-received`** | Downloads one UBL by PA UUID. |
 
-Deduplication is by PA UUID against the existing F564231 rows, so re-running the sweep is safe — already-imported invoices are skipped silently. The processing pipeline runs against the document template whose `direction = R` matches the inbound flow (the bundled `received-ubl` template by default).
+Deduplication is by PA UUID against the existing F564231 rows, so re-running the sweep is safe — already-imported invoices are skipped silently. The processing pipeline runs against the document whose `direction = R` matches the inbound flow (the bundled `received-ubl` template by default).
 
 To schedule it automatically, set **`fetchReceivedInterval`** in the *global* template (minutes between sweeps, `0` = disabled) — same `-serve` background scheduler that drives `fetchImportInterval` / `fetchStatusInterval`.
 
@@ -499,7 +499,7 @@ java -jar nomaubl.jar -send-waiting /opt/nomaubl/demo/config/config.json [--para
 
 | Flag | Effect |
 |---|---|
-| **`--parallel <N>`** | How many invoices are sent at once. Defaults to the *Bulk Send* workers on [`global → Scheduling`](../configuration/system/global.md); `1` sends sequentially. |
+| **`--parallel <N>`** | How many invoices are sent at once. Defaults to the *Bulk Send* workers on [`global → Job defaults`](../configuration/system/global.md#bulk-send); `1` sends sequentially. |
 | **`--delay <ms>`** | Pause between two calls per worker (defaults to the *Bulk Send* delay). |
 
 The exit code reflects failures, so a scheduler can detect a run that didn't fully succeed.
@@ -508,7 +508,7 @@ The exit code reflects failures, so a scheduler can detect a run that didn't ful
 
 ## `-status-integrity` and `-status-order-check` — lifecycle checks \{#status-checks\}
 
-The two lifecycle maintenance checks — the same repairs as the [Retrieve Statuses](../sync/retrieve-statuses.md#integrity-checks) buttons and the scheduled [Lifecycle Checks](./lifecycle-checks.md) page — run from the CLI for a cron outside the web server.
+The two lifecycle maintenance checks — the same repairs as the [Retrieve Statuses](../sync/retrieve-statuses.md#integrity-checks) buttons and the scheduled [Lifecycle Checks](../sync/scheduled-jobs/lifecycle-checks.md) page — run from the CLI for a cron outside the web server.
 
 ```bash
 # Integrity check — backfill PA statuses the poll missed
@@ -531,6 +531,75 @@ Both repairs are chronologically ordered and safe to re-run — running them aga
 
 ---
 
+## Runs recorded in the job history \{#job-runs\}
+
+The job switches — `-fetch-import`, `-fetch-status`, `-fetch-received`, `-ereporting`, `-watch-folders`, `-status-integrity`, `-status-order-check`, `-send-waiting` and `-purge` — record their run in the runtime log, as the scheduler does in server mode: a start row, then an end or error row with the duration. A poll driven by a cron outside the web server therefore shows in the run history of [Scheduled jobs](../sync/scheduled-jobs/overview.md), under the `cli:<switch>` job, and a failed run in the [Failures](../application/diagnostics/failures.md) view of Diagnostics.
+
+---
+
+## `-report` — implementation report \{#report\}
+
+Writes the [implementation report](../application/implementation-report.md) of the instance — the same document as the *Implementation report* tab of the Reports page — for a scripted run or to keep it with a release.
+
+```bash
+java -jar nomaubl.jar -report /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--keys] [--sections a,b,...]
+```
+
+| Flag | Effect |
+|---|---|
+| **`--lang fr\|en`** | Language of the report. Default `fr`. |
+| **`--format md\|pdf`** | Markdown (default) or PDF. |
+| **`--out <file>`** | Output file. Default `nomaubl-implementation-<lang>.md` (or `.pdf`) in the current folder. |
+| **`--date <label>`** | Label printed on the cover (e.g. `Go-live V2`); blank = today's date. |
+| **`--keys`** | Show the configuration key next to each setting label. |
+| **`--sections <ids>`** | Comma-separated sections: `context`, `architecture`, `guide`, `templates`, `ubl`, `platform`, `operations`, `security`, `reference`, `appendixConfig`, `appendixApi`. Default: the first nine. |
+
+Secrets are masked, as in the application.
+
+---
+
+## `-audit` — audit report of a period \{#audit\}
+
+Writes the [audit report](../application/audit-report.md) of a period — the same document as the *Audit report* tab of the Reports page.
+
+```bash
+java -jar nomaubl.jar -audit /opt/nomaubl/demo/config/config.json [--from <yyyy-MM-dd> --to <yyyy-MM-dd>] [--basis issue|update] [--kco a,b] [--direction I|R] [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--integrity]
+```
+
+| Flag | Effect |
+|---|---|
+| **`--from` / `--to`** | The period, ISO dates. Default: the previous month. |
+| **`--basis issue\|update`** | Date basis: issue date (BT-2, default) or last activity. |
+| **`--kco <a,b>`** | Companies to include; default: all. |
+| **`--direction I\|R`** | `I` issued, `R` received; default: both. |
+| **`--lang`**, **`--format`**, **`--out`**, **`--date`** | As for `-report`. Default file: `nomaubl-audit-<lang>.md` (or `.pdf`) in the current folder. |
+| **`--sections <ids>`** | Comma-separated sections: `summary`, `volumes`, `status`, `backlog`, `lifecycle`, `errors`, `operations`, `checks`. Default: all. |
+| **`--integrity`** | Also run the configured [integrity checks](../configuration/system/integrity-reports.md) on the period and add their results. |
+
+A monthly cron on the first day of the month produces the report of the month just ended, without any date to pass.
+
+---
+
+## `-purge` — retention purge \{#purge\}
+
+Runs the [retention purge](../sync/scheduled-jobs/overview.md#retention) — the same job the server runs every 24 hours — for sites that script it: per-file rows, step timings and job runs of the processing log, validation errors of finished invoices, notifications. The number of days kept per store comes from [`global → Job defaults → Retention`](../configuration/system/global.md#retention); empty or `0` keeps everything (the default).
+
+```bash
+java -jar nomaubl.jar -purge /opt/nomaubl/demo/config/config.json [--dry-run]
+```
+
+| Flag | Effect |
+|---|---|
+| **`--dry-run`** | Count the rows that would be deleted, without deleting. |
+
+Each store prints one line with its count, then a summary line.
+
+:::note[No wrapper command]
+`nomaubl.sh` has no `report`, `audit` or `purge` command: run these three switches with `java -jar nomaubl.jar`, from the environment folder.
+:::
+
+---
+
 ## `-fetch-single` — extract one document, then process it
 
 Equivalent of the *Application → Extract and Process* page. Extracts a single document from a source channel, drops the resulting file into `dirInput` (XML template) or `<dirInput>/ubl/` (UBL template), then immediately runs the matching pipeline. The XML-vs-UBL choice is **inferred from the template's `source` property** — no separate `processType` argument anymore.
@@ -542,7 +611,7 @@ Equivalent of the *Application → Extract and Process* page. Extracts a single 
 | Argument | Description |
 |---|---|
 | **`configFile`** | Absolute path to `config.json`. |
-| **`template`** | Document template name. Its `source` property selects the pipeline (XML or UBL). |
+| **`template`** | Document name. Its `source` property selects the pipeline (XML or UBL). |
 | **`source`** | Extraction channel — see table below. |
 | **`sourceArgs`** | Source-specific arguments. |
 | **`type`** | Processing type for XML templates (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignored on UBL templates. |

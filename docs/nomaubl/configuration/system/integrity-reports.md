@@ -117,6 +117,7 @@ Each check is a collapsible group — click its title to open it, **×** removes
 |---|---|
 | **Name** | Identifier shown on the Reports page (e.g. `missing-pdf`). Keep it stable. |
 | **Description** | One line explaining what the check finds (e.g. *PDF print jobs not integrated*). |
+| **Start from** | Optional. Pre-fills the check from a known JD Edwards comparison — see [Query templates](#query-templates). |
 | **Mode** | *Direct*, *Missing*, *Extra* or *Mismatch* — see [Modes](#modes). |
 | **Connector** | The [database connector](../database-connectors/nomaubl.md) the `SELECT` runs against — the JD Edwards database, the NomaUBL database or any other connector declared on the platform. |
 | **Key columns** | Optional. Comma-separated result columns that identify the record an action works on (e.g. `JCPID, JCVERS, JCJOBNBR`, or document number + type + company). |
@@ -152,6 +153,37 @@ SELECT … FROM … WHERE JCSTDTIM > TO_DATE('{fromDMY}','dd-MM-yyyy')
   AND … NOT IN (SELECT TRIM(FEWDS1) FROM PRODDTA.F564230 WHERE FEUPMJ > {fromJde})
 ```
 
+The **Insert placeholder** picker, under the label of each SQL field, lists every placeholder with its format and inserts it at the cursor.
+
+### BIP placeholders \{#bip-placeholders\}
+
+:::info[JDE-specific]
+These placeholders read the report list of the [JDE print queue (BIP)](./fetch-invoices.md) settings.
+:::
+
+Three more placeholders follow the BIP setup, so a check never needs a hand-kept list of reports and versions:
+
+| Placeholder | Replaced by |
+|---|---|
+| `{bipReports}` | The configured report names, quoted, for an `IN` list: `'R42565','R03B505'`. |
+| `{bipFilter:REPORTCOL,VERSIONCOL}` | The predicate the BIP scan uses, on the named columns: `((TRIM(REPORTCOL)='R42565' AND TRIM(VERSIONCOL)='XJDE0001') OR TRIM(REPORTCOL)='R03B505')`. A row set to all versions matches on the report alone. |
+| `{bipTemplate:REPORTCOL,VERSIONCOL}` | A `CASE` expression giving the document of each row, from the document set on each report row. |
+
+With no report configured, the filter becomes `1=0` and the list `NULL`: the check returns nothing rather than every job.
+
+### Query templates \{#query-templates\}
+
+The **Start from** list pre-fills a check — mode, connectors, key columns, SQL and action — from a known comparison:
+
+| Template | Check |
+|---|---|
+| **BIP jobs not integrated (F986114 vs F564230)** | The BIP print jobs of the configured reports that never reached NomaUBL, with the *Integrate BIP jobs* action. Uses `{bipFilter}` and `{bipTemplate}`. |
+| **Accounting invoices not in NomaUBL (F03B11 vs F564231)** | Customer ledger invoices of the period absent from NomaUBL. |
+| **Sales-order invoices not in NomaUBL (F4211/F42119 vs F564231)** | Invoices written by sales order update, open and history lines, absent from NomaUBL. |
+| **Amounts JDE vs NomaUBL (F03B11 vs F564231, mismatch)** | Invoices present on both sides whose amounts differ. |
+
+On a check that already has SQL, the editor asks for confirmation before replacing it (*Replace this check?*). The schema prefixes (`PRODDTA`, `SVM920`) and the status codes are the usual ones: adjust them to the JD Edwards environment, then save.
+
 ### Action *Integrate BIP jobs*
 
 :::info[JDE-specific]
@@ -163,8 +195,8 @@ When **Action** is set to **Integrate BIP jobs**, the selected rows are integrat
 | Field | Description |
 |---|---|
 | **Job column** | Result column holding the JDE job number (`RJJOBNBR`). Required. |
-| **Template column** | Result column holding the document template name. Leave empty to use the fixed template. |
-| **Fixed template** | Document template used when the template column is empty or missing. |
+| **Template column** | Result column holding the document name. Leave empty to use the fixed template. |
+| **Fixed template** | Document used when the template column is empty or missing. |
 | **Host column** | Result column holding the JDE execution host — only on JD Edwards installations with several hosts. Optional. |
 | **Processing type** | `AUTO` *(default)*, `SINGLE`, `BURST`, `UBL` or `BOTH`. |
 

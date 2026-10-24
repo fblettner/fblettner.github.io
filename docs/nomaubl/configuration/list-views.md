@@ -6,7 +6,7 @@ keywords: [NomaUBL, list views, spec, column catalog, DataTableV2, invoices, int
 
 # List Views
 
-The **List Views** editor is the configuration page for the four spec-driven list pages: [Invoices](../application/invoices.md), [Integration Errors](../application/integration-errors.md), [E-Reporting](../application/ereporting.md) and [Processing Log](../management/processing-log.md). One JSON spec per view drives the column shape on each page — labels, type, format, alignment, width, default sort and the filter-row allow-list — and is editable here without touching code.
+The **List Views** editor is the configuration page of the grids built on the shared data table — invoices, e-documents, e-reporting, the four views of [Diagnostics](../application/diagnostics/overview.md), the scheduled jobs and their runs, the views of the [Developer reference](../references/developer.md) and the import preview of [Promotion](../management/promotion.md); the full list is under [Views](#view-selector). One JSON spec per view drives the column shape on each grid — labels, type, format, alignment, width, default sort and the filter-row allow-list — and is editable here without touching code.
 
 A second concept lives next to the spec: the **column catalog**. Each view ships a catalog of every column the underlying tables can produce — the catalog is the source of truth for what is addressable, the spec picks a subset and presents it. The `+ Add column` picker is just a filtered view of the catalog.
 
@@ -140,18 +140,25 @@ A second concept lives next to the spec: the **column catalog**. Each view ships
 
 ---
 
-## View selector
+## Views \{#view-selector\}
 
-A pill bar at the top of the page switches between the four views currently driven by a spec:
+The editor shows **one collapsible card per view**. A card loads its spec only when it is opened; **Save**, in the header of the Settings page, writes every change made in the cards.
 
-| View | Page driven |
-|---|---|
-| **Invoices** | [Invoices](../application/invoices.md) — `view.invoices`. |
-| **Integration Errors** | [Integration Errors](../application/integration-errors.md) — `view.integration-errors`. |
-| **E-Reporting** | [E-Reporting](../application/ereporting.md) — `view.ereporting`. |
-| **Processing Log** | [Processing Log](../management/processing-log.md) — `view.processing-log`. |
-
-Only one view at a time is loaded into the editor. Switching views does not lose unsaved changes on the previous view as long as the page stays open; **Save** writes the active card only.
+| Card | Grid driven | Property |
+|---|---|---|
+| **Integration Errors** | [Integration errors](../application/diagnostics/integration-errors.md) view of Diagnostics | `view.integrationErrors` |
+| **Processing Log** | [Processing log](../application/diagnostics/processing-log.md) view of Diagnostics | `view.processingLog` |
+| **E-Reporting** | [E-Reporting](../application/ereporting.md) | `view.ereporting` |
+| **Invoices** | [E-Invoicing](../application/invoices.md) list | `view.invoices` |
+| **E-Documents** | [E-Documents](../application/edocuments.md) list | `view.documents` |
+| **Server Log** | [Server log](../application/diagnostics/server-log.md) view of Diagnostics | `view.serverLog` |
+| **Scheduled Jobs** | [Scheduled jobs](../sync/scheduled-jobs/overview.md) grid | `view.scheduledJobs` |
+| **Job Runs** | Run history of a scheduled job | `view.jobRuns` |
+| **Errors** | [Failures](../application/diagnostics/failures.md) view of Diagnostics | `view.errors` |
+| **Data Dictionary** | Columns grid of the [Developer](../references/developer.md#tables) *Tables* view | `view.dataDictionary` |
+| **Configuration Keys** | [Developer](../references/developer.md#configuration) *Configuration* view | `view.configKeys` |
+| **API Operations** | [Developer](../references/developer.md#api) *API* view | `view.apiOperations` |
+| **Promotion Plan** | Import preview of [Promotion](../management/promotion.md) | `view.promotionPlan` |
 
 A small badge next to the view name tells the operator whether the active spec comes from the bundled JAR default (`default`) or from an entry stored on `db-nomaubl` (`override`):
 
@@ -203,7 +210,7 @@ Above the column rows, each view card carries a *Defaults* row with the per-view
 | Field | Description |
 |---|---|
 | **Page size** | Initial page size for the in-grid TanStack paginator. Persists as `spec.defaultPageSize`. Default: `50`. |
-| **Max rows** | Hard cap on the slice loaded by a single Run. The four spec-driven views now operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Default: `5000`. |
+| **Max rows** | Hard cap on the slice loaded by a single Run. The spec-driven views operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Default: `5000`. |
 
 When the slice cap is hit during a Run, the page toolbar shows a translated `X / Y rows` notice next to the Run button — a hint that the operator should narrow the date range or the *Advanced Filters* to get the most relevant slice. The notice is informational; the page keeps working.
 

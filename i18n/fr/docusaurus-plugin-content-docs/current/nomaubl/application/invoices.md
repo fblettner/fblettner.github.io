@@ -134,7 +134,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
   <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Badge Revue</text>
-  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">UHALRTPSD · nouveau 2026.05.9</text>
+  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">UHALRTPSD</text>
   <line x1="820" y1="216" x2="772" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
 
   <rect x="820" y="284" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -240,9 +240,9 @@ Un panneau **Filtres avancés** pliable se trouve sous la rangée de pastilles. 
 
 L'ensemble des colonnes filtrables est défini par la liste blanche `filter: true` de la spec — les opérateurs choisissent quelles colonnes ils interrogent réellement et retirent les autres du panneau sans les perdre dans la grille. Voir [Vues de liste](../configuration/list-views.md) pour l'éditeur.
 
-Depuis 2026.05.12, la page fonctionne en **mode hybride client-side** : chaque *Exécuter* charge une tranche capée depuis le serveur (`spec.maxRows`, 5000 par défaut) et TanStack gère filter / sort / paginate / group dans cette tranche — pas d'aller-retour quand on tape dans la ligne de filtre par colonne, les filtres survivent à la pagination. Quand le cap de la tranche est atteint, un message `X / Y lignes` à côté de *Exécuter* indique d'affiner la plage de dates ou les *Filtres avancés*.
+La page fonctionne en **mode hybride client-side** : chaque *Exécuter* charge une tranche capée depuis le serveur (`spec.maxRows`, 5000 par défaut) et TanStack gère filter / sort / paginate / group dans cette tranche — pas d'aller-retour quand on tape dans la ligne de filtre par colonne, les filtres survivent à la pagination. Quand le cap de la tranche est atteint, un message `X / Y lignes` à côté de *Exécuter* indique d'affiner la plage de dates ou les *Filtres avancés*.
 
-Depuis 2026.05.13, les colonnes refList (Statut, statut e-reporting, listes personnalisées) reçoivent un **picker multi-sélection** dans le panneau Filtres avancés et dans la ligne de filtre par colonne — choisir un nombre quelconque de codes, le déclencheur affiche `N sélectionné(s)` au-delà du plafond inline, et un `✕` à droite réinitialise la sélection en un clic. Le serveur applique une clause `IN (?,?,?)` — choisir trois statuts renvoie l'union.
+Les colonnes refList (Statut, statut e-reporting, listes personnalisées) reçoivent un **picker multi-sélection** dans le panneau Filtres avancés et dans la ligne de filtre par colonne — choisir un nombre quelconque de codes, le déclencheur affiche `N sélectionné(s)` au-delà du plafond inline, et un `✕` à droite réinitialise la sélection en un clic. Le serveur applique une clause `IN (?,?,?)` — choisir trois statuts renvoie l'union.
 
 ### Chip Direction
 
@@ -251,8 +251,8 @@ Une nouvelle rangée de chips s'installe à côté des chips Statut : **Toutes**
 | Chip | Effet |
 |---|---|
 | **Toutes** *(défaut)* | Aucun filtre direction — les factures émises au client (`UHDRIN = '2'`) et reçues du fournisseur (`UHDRIN = '1'`) sont listées ensemble. |
-| **Émises** | Seules les factures envoyées par l'opérateur aux clients. Même périmètre que la liste avant 2026.05.17. |
-| **Reçues** | Seules les factures fournisseur récupérées depuis la PA (voir [Synchronisation → Fetch Input → PA entrante](../sync/fetch-input.md) et le modèle de document livré `received-ubl`). |
+| **Émises** | Seules les factures envoyées par l'opérateur aux clients. |
+| **Reçues** | Seules les factures fournisseur récupérées depuis la PA (voir [Synchronisation → Fetch Input → PA entrante](../sync/fetch-input.md) et le document livré `received-ubl`). |
 
 Le chip s'appuie sur l'indicateur `UHDRIN` enregistré sur chaque ligne — un changement de *Direction* sur un modèle ne re-classe pas les lignes historiques, le résultat reste donc stable dans le temps.
 
@@ -277,7 +277,7 @@ Deux boutons sont placés à droite :
 
 Le tableau affiche une ligne par facture. Tri par défaut : numéro de document décroissant. Cliquer sur un en-tête de colonne pour trier.
 
-Depuis 2026.05.10, la grille passe par **DataTableV2** en mode piloté par spec : la forme des colonnes — libellés, format, alignement, largeur et la liste blanche de filtres — vient de la spec `view.invoices` stockée sur `db-nomaubl` (avec un défaut embarqué dans le JAR). Ajouter ou retirer des colonnes se fait depuis l'éditeur [Vues de liste](../configuration/list-views.md) — aucune modification de code n'est nécessaire quand la colonne vit déjà dans le catalogue.
+La grille passe par **DataTableV2** en mode piloté par spec : la forme des colonnes — libellés, format, alignement, largeur et la liste blanche de filtres — vient de la spec `view.invoices` stockée sur `db-nomaubl` (avec un défaut embarqué dans le JAR). Ajouter ou retirer des colonnes se fait depuis l'éditeur [Vues de liste](../configuration/list-views.md) — aucune modification de code n'est nécessaire quand la colonne figure déjà dans le catalogue.
 
 La valeur **Mise à jour** porte l'heure : une colonne *Mise à jour* au format `datetime` dans la spec affiche `2026-09-15 15:23:45` au lieu de la seule date. (La date d'émission reste sans heure — JDE n'en stocke pas pour elle.)
 
@@ -392,7 +392,7 @@ Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête 
 
 ### Onglet Résumé *(défaut)*
 
-L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. **Supprimer** retire la facture et tous les enregistrements associés — ligne de journal (XML source, référence de transaction PA, nom du fichier source), cycle de vie, lignes, TVA et validation : un nouveau traitement du même document repart de zéro, et les [dossiers surveillés](../sync/watched-folders.md) peuvent reprendre son fichier source. La suppression suit la même protection que *Corriger destinataire* : le bouton disparaît dès que la PA a traité la facture, sauf pour un rejet **213** au motif d'adressage. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
+L'onglet Résumé affiche un **badge de statut** coloré en haut, suivi des **boutons d'action** (Modifier l'UBL, Copier, Supprimer) à droite. **Supprimer** retire la facture et tous les enregistrements associés — ligne de journal (XML source, référence de transaction PA, nom du fichier source), cycle de vie, lignes, TVA et validation : un nouveau traitement du même document repart de zéro, et les [dossiers surveillés](../management/watched-folders.md) peuvent reprendre son fichier source. La suppression suit la même protection que *Corriger destinataire* : le bouton disparaît dès que la PA a traité la facture, sauf pour un rejet **213** au motif d'adressage. Juste sous le badge, quand la plateforme les a renvoyés, le **motif de rejet**, l'**action attendue** et la **note de statut** courants s'affichent en ligne, et le **message de statut** complet se trouve dans un groupe replié — à déplier pour le texte d'erreur long de la plateforme. Ces mêmes valeurs alimentent les actions personnalisées via les variables `{message}`, `{reasonLabel}`, `{actionLabel}` et `{actionNote}` (voir [Actions](../management/actions.md#actions-personnalisees)), sans colonne de vue de liste à configurer.
 
 #### Corriger destinataire \{#fix-buyer\}
 
@@ -423,7 +423,7 @@ Correspondance statut → actions :
 
 Chaque action est rattachée à un *endpoint de connecteur API* configuré dans *Configuration → API Connectors*. Un clic exécute le connecteur avec les données de la facture. Une action grisée signifie que le connecteur n'est pas configuré sur ce déploiement.
 
-Depuis 2026.05.15 un second groupe se trouve sous le groupe réglementaire — **Actions personnalisées**. Boutons toujours visibles configurés sur la page [Actions](../management/actions.md#actions-personnalisees) ; chacun déclenche sa propre chaîne d'appels connecteur et reste indépendant du statut courant de la facture. Le bandeau de résultat est rattaché au groupe dont le bouton a déclenché la chaîne — un échec d'action personnalisée n'écrase pas le bandeau d'une action réglementaire affichée en même temps, et les bandeaux périmés sont effacés automatiquement quand la modale se ferme ou change de facture.
+Un second groupe se trouve sous le groupe réglementaire — **Actions personnalisées**. Boutons toujours visibles configurés sur la page [Actions](../management/actions.md#actions-personnalisees) ; chacun déclenche sa propre chaîne d'appels connecteur et reste indépendant du statut courant de la facture. Le bandeau de résultat est rattaché au groupe dont le bouton a déclenché la chaîne — un échec d'action personnalisée n'écrase pas le bandeau d'une action réglementaire affichée en même temps, et les bandeaux périmés sont effacés automatiquement quand la modale se ferme ou change de facture.
 
 Le reste de l'onglet Résumé se présente sous forme de groupes dépliables :
 
@@ -775,7 +775,7 @@ Pendant l'envoi, la modale est désactivée par un voile jusqu'à la confirmatio
 
 Ouverte depuis **+ Nouvelle facture** dans la barre d'outils, ou depuis les boutons **Modifier l'UBL** / **Copier** de l'onglet Résumé. Permet de créer une facture vierge ou de modifier une facture existante. La modale prend l'apparence d'une facture imprimable. L'utilisateur remplit le formulaire ; à l'enregistrement, NomaUBL génère le document UBL correspondant.
 
-Depuis 2026.05.10, modifier une facture existante ne réinitialise plus son `cbc:CustomizationID` au défaut EN16931. Le formulaire porte maintenant la valeur `customizationId` du UBL source et l'écrit verbatim — les nouvelles factures restent par défaut à `urn:cen.eu:en16931:2017`.
+Modifier une facture existante ne réinitialise plus son `cbc:CustomizationID` au défaut EN16931. Le formulaire porte maintenant la valeur `customizationId` du UBL source et l'écrit verbatim — les nouvelles factures restent par défaut à `urn:cen.eu:en16931:2017`.
 
 <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.025)', boxShadow: '0 12px 32px rgba(0,0,0,0.3)'}}>
   <div style={{padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(74,158,255,0.04)'}}>

@@ -12,10 +12,6 @@ The page is on the same footing as [Notification Rules](./notification-rules.md)
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The connector dropdown lists every API and SQL connector merged with `· API` / `· SQL` suffixes, so the kind is visible at a glance.
 
-:::info[Refreshed in 2026.05.7]
-Action bindings used to hold a **single** call per action. Since 2026.05.7 each binding holds a **list** of connector calls, with a per-call *Stop on failure* flag, response chaining via `{call.N.fieldName}` placeholders, and SQL-connector support next to api-connector. Existing single-call bindings keep working — the legacy flat keys are read into a one-entry call list on load and rewritten into the canonical `action.N.call.M.*` shape on the next save. See the [2026.05.7 release notes](../release-notes.md#v2026-05-7) for the full list.
-:::
-
 ---
 
 ## Opening the editor
@@ -196,7 +192,7 @@ Below the Action ID, the binding holds a **list of connector calls** rendered as
 
 Parameter values support placeholders that are resolved at click time from the row the user is acting on. Both `{field}` (single-brace, the syntax inserted by the `{ }` picker) and the legacy `{{field}}` work — unknown tokens pass through verbatim so a typo surfaces at runtime rather than being silently emptied.
 
-Since 2026.05.15 each parameter row gets a `{ }` picker next to its value input. Click it to open a searchable list of every available placeholder; pick one and the snippet splices into the field at the caret. The list merges the 10 canonical fields below with every column of the [Invoices](../application/invoices.md) view's catalog (`{customerName}`, `{contractRef}`, `{logBusinessUnit}`, `{logPaUuid}`, …) so a call to a downstream system does not need bespoke wiring.
+Each parameter row gets a `{ }` picker next to its value input. Click it to open a searchable list of every available placeholder; pick one and the snippet splices into the field at the caret. The list merges the 10 canonical fields below with every column of the [Invoices](../application/invoices.md) view's catalog (`{customerName}`, `{contractRef}`, `{logBusinessUnit}`, `{logPaUuid}`, …) so a call to a downstream system does not need bespoke wiring.
 
 | Placeholder | Source |
 |---|---|
@@ -240,7 +236,7 @@ Example: a *Resend to PA* binding that first re-submits the invoice to the PA vi
 
 ## Custom actions \{#custom-actions\}
 
-Since 2026.05.15, a **Custom Actions** section sits below the regulatory bindings. Each entry is a free-form button that appears in the invoice detail modal under a *Custom actions* group — independent of the invoice's status. Use it for operator workflows that do not map to a regulatory transition: push the invoice to a CRM, notify a Slack channel, post to a finance API, …
+A **Custom Actions** section sits below the regulatory bindings. Each entry is a free-form button that appears in the invoice detail modal under a *Custom actions* group — independent of the invoice's status. Use it for operator workflows that do not map to a regulatory transition: push the invoice to a CRM, notify a Slack channel, post to a finance API, …
 
 Each custom action carries:
 

@@ -146,8 +146,8 @@ Each of the seven codes is one row in the editor. The **Code** column is read-on
 | Column | Values | Description |
 |---|---|---|
 | **Code** | fixed | One of the seven regulatory codes above. Read-only. Hover the code to see the regulatory hint. |
-| **Description** | text | Free-text label shown in document templates and UI. Defaults to the regulatory description above. |
-| **Default** | checkbox | When ticked, this code is **pre-selected** in newly created document templates. **Only one row can be the default at a time** — ticking another row automatically un-ticks the previous one. |
+| **Description** | text | Free-text label shown in documents and UI. Defaults to the regulatory description above. |
+| **Default** | checkbox | When ticked, this code is **pre-selected** in newly created documents. **Only one row can be the default at a time** — ticking another row automatically un-ticks the previous one. |
 | **Send to PA** | `Y` / `N` / `F` / `W` | Per-type override of the runtime *send to Plateforme Agréée* argument: `Y` = send; `N` = do not send; `F` = **force send** even when the runtime argument says skip; `W` = **Waiting** — the invoice is generated and validated but **held for review** instead of being sent, then released from the *Waiting for review* card on the [Tech Dashboard](../../application/tech-dashboard.md). Default: `Y` for B2B, `N` for every other code. A type set to `N` (*Do not send*) is truly non-transmissible: the **Resend** action is hidden on those invoices and any manual or bulk send is refused. |
 | **GS** | checkbox | When ticked, runs **Ghostscript** post-processing on the produced PDF for this type (e.g. compression / linearisation), regardless of the runtime argument. Off by default. |
 | **Mode** | *(default)* / `UBL` / `BURST` | Per-type override of the runtime *Mode* argument: empty = **no override** (the runtime mode is kept); `UBL` = force UBL-only output for this type; `BURST` = force bursted output for this type. |
@@ -159,7 +159,7 @@ Each of the seven codes is one row in the editor. The **Code** column is read-on
 ## Tips & best practices
 
 - **Think of every column except Code/Description/Default as an override of a runtime argument.** Leave a value empty / unchecked when no override is needed and let the runtime argument win.
-- **Set one Default code that matches your dominant flow.** Most setups make `B2B` the default — ticking it pre-selects B2B in every new document template, saving repeated clicks.
+- **Set one Default code that matches your dominant flow.** Most setups make `B2B` the default — ticking it pre-selects B2B in every new document, saving repeated clicks.
 - **Use `F` (Force send) sparingly.** It overrides the runtime *Send to PA* argument and can cause invoices to be transmitted in environments where you intended to stay offline.
 - **`ARCHIVEONLY` must never reach the PA.** It exists for internally-cancelled credit notes (rule BR-FR-20); leave Send to PA at `N`.
 - **`OUTOFSCOPE` is for documents the reform does not apply to.** Keep them in NomaUBL for traceability but do not send them to a PA.

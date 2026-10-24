@@ -277,7 +277,7 @@ Le switch *Enregistrer les détails TVA* n'a **pas** besoin d'être activé pour
 
 ## `watch-folders <env>` — récupérer les dossiers surveillés \{#watch-folders\}
 
-Lance la récupération des [dossiers surveillés](../sync/watched-folders.md) en ligne de commande — la même exécution que le bouton *Scan and process* de l'éditeur et que le job de lot planifié avec la source *Watched folders*.
+Lance la récupération des [dossiers surveillés](./watched-folders.md) en ligne de commande — la même exécution que le bouton *Scan and process* de l'éditeur et que le job de lot planifié avec la source *Watched folders*.
 
 ```bash
 ./nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]
@@ -369,7 +369,7 @@ java -jar nomaubl.jar -serve /opt/nomaubl/demo/config/config.json 8090
 
 ## `-process` — point d'entrée unique de traitement
 
-Traite un (ou plusieurs) fichier source contre un modèle de document — ou appelle un connecteur SQL / REST quand le `source` du modèle vaut `Connecteur`. Le pipeline est sélectionné par la propriété `source` du modèle (`XML` pour les spools XML qui nécessitent une transformation XSL, `UBL` pour les factures UBL 2.1 déjà formées, `Connecteur` pour les appels en direct à une requête SQL ou un endpoint REST).
+Traite un (ou plusieurs) fichier source contre un document — ou appelle un connecteur SQL / REST quand le `source` du modèle vaut `Connecteur`. Le pipeline est sélectionné par la propriété `source` du modèle (`XML` pour les spools XML qui nécessitent une transformation XSL, `UBL` pour les factures UBL 2.1 déjà formées, `Connecteur` pour les appels en direct à une requête SQL ou un endpoint REST).
 
 ```text
 -process <configFile> <template> <fichier|répertoire|---> [type] [--param clé=valeur …] [--verbose] [--replace] [--no-send] [--no-db] [--validate] [--send] [--no-debug]
@@ -378,7 +378,7 @@ Traite un (ou plusieurs) fichier source contre un modèle de document — ou app
 | Argument | Description |
 |---|---|
 | **`configFile`** | Chemin absolu vers `config.json`. |
-| **`template`** | Nom du modèle de document (par ex. `invoices`, `credit_notes`). La propriété `source` du modèle pilote le pipeline — voir [Documents](./documents.md). |
+| **`template`** | Nom du document (par ex. `invoices`, `credit_notes`). La propriété `source` du modèle pilote le pipeline — voir [Documents](./documents.md). |
 | **`fichier \| répertoire \| ---`** | Un fichier source ou un répertoire de fichiers source. Pour un modèle **XML**, le fichier est attendu sous `<dirInput>/<fichier>.xml` quand l'extension est omise. Pour un modèle **UBL**, le chemin peut être absolu ou relatif à `<dirInput>/ubl/`. Sur un répertoire, chaque fichier correspondant est traité par ordre alphabétique. Pour un modèle **Connecteur**, passer `---` (trois tirets) à la place du chemin — la source est le connecteur, pas un fichier. |
 | **`type`** | Modèles XML uniquement — type de traitement (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignoré sur les modèles UBL et Connecteur. |
 
@@ -474,7 +474,7 @@ Le handler appelle deux tâches du connecteur API sur le modèle PA configuré :
 | **`fetch-received-list`** | Renvoie la liste des références de factures reçues (UUID PA + métadonnées fournisseur) depuis le curseur. |
 | **`fetch-received`** | Télécharge un UBL par UUID PA. |
 
-La déduplication est faite par UUID PA contre les lignes F564231 existantes, donc relancer l'import est sans risque — les factures déjà importées sont simplement ignorées. Le pipeline de traitement s'appuie sur le modèle de document dont la `direction = R` correspond au flux entrant (le modèle livré `received-ubl` par défaut).
+La déduplication est faite par UUID PA contre les lignes F564231 existantes, donc relancer l'import est sans risque — les factures déjà importées sont simplement ignorées. Le pipeline de traitement s'appuie sur le document dont la `direction = R` correspond au flux entrant (le modèle livré `received-ubl` par défaut).
 
 Pour l'exécuter automatiquement, renseigner **`fetchReceivedInterval`** dans le modèle *global* (minutes entre passes, `0` = désactivé) — même ordonnanceur d'arrière-plan `-serve` que `fetchImportInterval` / `fetchStatusInterval`.
 
@@ -499,7 +499,7 @@ java -jar nomaubl.jar -send-waiting /opt/nomaubl/demo/config/config.json [--para
 
 | Option | Effet |
 |---|---|
-| **`--parallel <N>`** | Nombre de factures envoyées à la fois. Défaut : les *Bulk Send* workers de [`global → Scheduling`](../configuration/system/global.md) ; `1` envoie en séquentiel. |
+| **`--parallel <N>`** | Nombre de factures envoyées à la fois. Défaut : les *Bulk Send* workers de [`global → Job defaults`](../configuration/system/global.md#bulk-send) ; `1` envoie en séquentiel. |
 | **`--delay <ms>`** | Pause entre deux appels par travailleur (défaut : le délai *Bulk Send*). |
 
 Le code de sortie reflète les échecs : un ordonnanceur peut ainsi détecter une exécution qui n'a pas pleinement abouti.
@@ -508,7 +508,7 @@ Le code de sortie reflète les échecs : un ordonnanceur peut ainsi détecter un
 
 ## `-status-integrity` et `-status-order-check` — contrôles du cycle de vie \{#status-checks\}
 
-Les deux contrôles de maintenance du cycle de vie — les mêmes réparations que les boutons de [Récupérer les statuts](../sync/retrieve-statuses.md#integrity-checks) et la page planifiée [Contrôles du cycle de vie](./lifecycle-checks.md) — s'exécutent en CLI pour un cron hors serveur web.
+Les deux contrôles de maintenance du cycle de vie — les mêmes réparations que les boutons de [Récupérer les statuts](../sync/retrieve-statuses.md#integrity-checks) et la page planifiée [Contrôles du cycle de vie](../sync/scheduled-jobs/lifecycle-checks.md) — s'exécutent en CLI pour un cron hors serveur web.
 
 ```bash
 # Contrôle d'intégrité — compléter les statuts PA manqués par l'interrogation
@@ -531,6 +531,75 @@ Les deux réparations respectent l'ordre chronologique et peuvent être relancé
 
 ---
 
+## Exécutions enregistrées dans l'historique des tâches \{#job-runs\}
+
+Les options de tâche — `-fetch-import`, `-fetch-status`, `-fetch-received`, `-ereporting`, `-watch-folders`, `-status-integrity`, `-status-order-check`, `-send-waiting` et `-purge` — enregistrent leur exécution dans le journal d'exécution, comme le planificateur en mode serveur : une ligne de début, puis une ligne de fin ou d'erreur avec la durée. Une interrogation lancée par un cron hors du serveur web apparaît donc dans l'historique des exécutions des [Tâches planifiées](../sync/scheduled-jobs/overview.md), sous la tâche `cli:<option>`, et une exécution en échec dans la vue [Anomalies](../application/diagnostics/failures.md) du Diagnostic.
+
+---
+
+## `-report` — rapport d'implémentation \{#report\}
+
+Produit le [rapport d'implémentation](../application/implementation-report.md) de l'instance — le même document que l'onglet *Rapport d'implémentation* de la page Rapports — pour une exécution par script ou pour le conserver avec une version.
+
+```bash
+java -jar nomaubl.jar -report /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <fichier>] [--date <libellé>] [--keys] [--sections a,b,...]
+```
+
+| Option | Effet |
+|---|---|
+| **`--lang fr\|en`** | Langue du rapport. Par défaut `fr`. |
+| **`--format md\|pdf`** | Markdown (par défaut) ou PDF. |
+| **`--out <fichier>`** | Fichier produit. Par défaut `nomaubl-implementation-<langue>.md` (ou `.pdf`) dans le dossier courant. |
+| **`--date <libellé>`** | Libellé imprimé en couverture (par exemple `Mise en service V2`) ; vide = date du jour. |
+| **`--keys`** | Affiche la clé de configuration à côté du libellé de chaque réglage. |
+| **`--sections <ids>`** | Sections séparées par des virgules : `context`, `architecture`, `guide`, `templates`, `ubl`, `platform`, `operations`, `security`, `reference`, `appendixConfig`, `appendixApi`. Par défaut : les neuf premières. |
+
+Les secrets sont masqués, comme dans l'application.
+
+---
+
+## `-audit` — rapport d'audit d'une période \{#audit\}
+
+Produit le [rapport d'audit](../application/audit-report.md) d'une période — le même document que l'onglet *Rapport d'audit* de la page Rapports.
+
+```bash
+java -jar nomaubl.jar -audit /opt/nomaubl/demo/config/config.json [--from <aaaa-MM-jj> --to <aaaa-MM-jj>] [--basis issue|update] [--kco a,b] [--direction I|R] [--lang fr|en] [--format md|pdf] [--out <fichier>] [--date <libellé>] [--sections a,b,...] [--integrity]
+```
+
+| Option | Effet |
+|---|---|
+| **`--from` / `--to`** | La période, en dates ISO. Par défaut : le mois précédent. |
+| **`--basis issue\|update`** | Date de référence : date d'émission (BT-2, par défaut) ou dernière activité. |
+| **`--kco <a,b>`** | Sociétés retenues ; par défaut : toutes. |
+| **`--direction I\|R`** | `I` émises, `R` reçues ; par défaut : les deux. |
+| **`--lang`**, **`--format`**, **`--out`**, **`--date`** | Comme pour `-report`. Fichier par défaut : `nomaubl-audit-<langue>.md` (ou `.pdf`) dans le dossier courant. |
+| **`--sections <ids>`** | Sections séparées par des virgules : `summary`, `volumes`, `status`, `backlog`, `lifecycle`, `errors`, `operations`, `checks`. Par défaut : toutes. |
+| **`--integrity`** | Exécute aussi les [contrôles d'intégrité](../configuration/system/integrity-reports.md) configurés sur la période et en ajoute les résultats. |
+
+Un cron mensuel lancé le premier jour du mois produit le rapport du mois écoulé, sans date à passer.
+
+---
+
+## `-purge` — purge de rétention \{#purge\}
+
+Exécute la [purge de rétention](../sync/scheduled-jobs/overview.md#retention) — la tâche que le serveur lance toutes les 24 heures — pour les sites qui la scriptent : lignes par fichier, durées des étapes et exécutions des tâches du journal des traitements, erreurs de validation des factures terminées, notifications. Le nombre de jours conservés par table vient de [`global → Job defaults → Retention`](../configuration/system/global.md#retention) ; vide ou `0` conserve tout (valeur par défaut).
+
+```bash
+java -jar nomaubl.jar -purge /opt/nomaubl/demo/config/config.json [--dry-run]
+```
+
+| Option | Effet |
+|---|---|
+| **`--dry-run`** | Compte les lignes qui seraient supprimées, sans rien supprimer. |
+
+Chaque table affiche une ligne avec son nombre de lignes, puis une ligne de synthèse.
+
+:::note[Pas de commande dans le wrapper]
+`nomaubl.sh` ne propose pas de commande `report`, `audit` ou `purge` : ces trois options se lancent avec `java -jar nomaubl.jar`, depuis le dossier de l'environnement.
+:::
+
+---
+
 ## `-fetch-single` — extraire un document, puis le traiter
 
 Équivalent de la page *Processing → Extraction et traitement*. Extrait un document d'un canal source, dépose le fichier résultant dans `dirInput` (modèle XML) ou `<dirInput>/ubl/` (modèle UBL), puis lance immédiatement le pipeline correspondant. Le choix XML ou UBL est **déduit de la propriété `source` du modèle** — l'argument `processType` disparaît.
@@ -542,7 +611,7 @@ Les deux réparations respectent l'ordre chronologique et peuvent être relancé
 | Argument | Description |
 |---|---|
 | **`configFile`** | Chemin absolu vers `config.json`. |
-| **`template`** | Nom du modèle de document. Sa propriété `source` choisit le pipeline (XML ou UBL). |
+| **`template`** | Nom du document. Sa propriété `source` choisit le pipeline (XML ou UBL). |
 | **`source`** | Canal d'extraction — voir le tableau ci-dessous. |
 | **`sourceArgs`** | Arguments propres au canal. |
 | **`type`** | Type de traitement pour les modèles XML (`AUTO` \| `SINGLE` \| `BURST` \| `UBL`). Ignoré sur les modèles UBL. |

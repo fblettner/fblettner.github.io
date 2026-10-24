@@ -133,7 +133,7 @@ Chaque sous-répertoire a un rôle précis. Comprendre celui de chacun aide à l
 | **`single/`** | Sorties mono-document du mode `-process ... SINGLE`. |
 | **`burst/`** | Sorties par sous-document du mode `-process ... BURST` (un fichier source produit plusieurs factures). |
 | **`subtmpl/`** | Sous-modèles par template (fragments XSLT additionnels). |
-| **`template/`** | Un sous-répertoire par modèle de document (`invoices/`, `credit_notes/`, …). Chacun contient le XSL maître, le RTF par document, des XML d'exemple et le bloc de surcharges client. |
+| **`template/`** | Un sous-répertoire par document (`invoices/`, `credit_notes/`, …). Chacun contient le XSL maître, le RTF par document, des XML d'exemple et le bloc de surcharges client. |
 | **`xslt/`** | Les bibliothèques XSL du framework (`ubl-common.xsl`, les packs de règles Schematron, le jeu de XSD). Rafraîchies à chaque mise à niveau. |
 | **`.versions/`** | Suivi de version interne — la version du framework dont provient chaque fichier modèle. Utilisé par le flux de mise à niveau pour décider quoi rafraîchir. |
 

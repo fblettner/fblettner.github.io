@@ -10,7 +10,7 @@ NomaUBL embarque une intégration **OIDC** prête à l'emploi qui permet aux uti
 
 L'intégration utilise le flux standard **Authorization Code + PKCE**, récupère les métadonnées du fournisseur depuis son `/.well-known/openid-configuration`, et identifie les utilisateurs NomaUBL par leur claim **e-mail**.
 
-Le comportement de l'écran de connexion est piloté par le champ **Auth Mode** du [template Global](./global.md#onglet-5--authentication) :
+Le comportement de l'écran de connexion est piloté par le champ **Auth Mode** du [modèle Global](./global.md#onglet-9--authentication) :
 
 | Auth Mode | Écran de connexion |
 |---|---|
@@ -20,8 +20,8 @@ Le comportement de l'écran de connexion est piloté par le champ **Auth Mode** 
 
 Un template OIDC par défaut est créé automatiquement sur les nouvelles installations et lors des mises à jour, et peut aussi être créé en un clic depuis le bouton **+ Add OIDC** de l'en-tête du *Configuration Manager*.
 
-:::info[Introduit en 2026.06.22.5]
-Le SSO est une nouvelle capacité — sur une mise à jour, vérifier la liste *Mise en service* en bas de cette page avant de faire basculer `authMode` hors de `internal`.
+:::info[Avant la mise en service]
+Vérifier la liste *Mise en service* en bas de cette page avant de faire passer `authMode` à une autre valeur que `internal`.
 :::
 
 ---
@@ -181,7 +181,7 @@ Les sessions ouvertes via OIDC se comportent un peu différemment des sessions l
 
 ## Mise en service
 
-Une fois le template OIDC rempli, le champ **Auth Mode** du [template Global](./global.md#onglet-5--authentication) contrôle le comportement de l'écran de connexion :
+Une fois le template OIDC rempli, le champ **Auth Mode** du [modèle Global](./global.md#onglet-9--authentication) contrôle le comportement de l'écran de connexion :
 
 | Mode | Effet |
 |---|---|

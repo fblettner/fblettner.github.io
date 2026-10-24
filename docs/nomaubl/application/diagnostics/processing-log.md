@@ -6,6 +6,8 @@ keywords: [NomaUBL, processing log, runtime log, F564237, START, END, lifecycle,
 
 # Processing Log
 
+The Processing log is a view of the [Diagnostics](./overview.md) page — **Diagnostics → Processing log**; it starts on yesterday's activity and keeps its own page grant. Each run of a [scheduled job](../../sync/scheduled-jobs/overview.md) also writes a start row and an end or error row here, with its duration and outcome.
+
 The **Processing Log** screen is the audit-trail viewer for the NomaUBL **runtime log table** (`F564237`). Every job that goes through the platform — XML transformation, UBL generation, validation, BIP extraction, FTP download — emits a stream of events: a `START`, intermediate steps (transformation, conversion, render…), and an `END` with a final outcome (`SUCCESSFUL` or a fatal-error message).
 
 The page exposes that stream in two complementary views — a **grouped** view that pairs every `START` with its matching `END` so each job appears as one row with a status and a duration, and a **flat** view that lists every individual event for forensic-grade tracing. The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP.
@@ -145,7 +147,7 @@ The log is **append-only** — events are written by the pipeline and never modi
 | **Grouped** *(default)* | Day-to-day monitoring. Each job is one row with its status (OK / ERROR / PARTIAL), duration and the last message. Expanding a row reveals every intermediate step. |
 | **Flat** | Detailed analysis when grouping would hide useful context — e.g. inspecting the order of events during a hung job, or chasing a stray `WARNING` between two unrelated runs. One row per event. |
 
-The toggle at the top of the toolbar switches between the two; the choice is persisted in the browser (`processing-log:grouped` in `localStorage`) so the next session opens on the same view. The **default tab** is **Grouped** — restored in 2026.05.10 after a previous build had drifted to *Flat* on first paint; operators get the day-to-day reading mode without having to flip the toggle.
+The toggle at the top of the toolbar switches between the two; the choice is persisted in the browser (`processing-log:grouped` in `localStorage`) so the next session opens on the same view. The **default tab** is **Grouped**, so operators get the day-to-day reading mode without having to flip the toggle.
 
 ---
 
@@ -181,13 +183,13 @@ When grouped, the page over-fetches (`pageSize × 4`, capped at 200) so START / 
 
 ### Advanced Filters
 
-A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.processing-log`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
+A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../../configuration/list-views.md) spec (`view.processing-log`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
 The Tech Dashboard's throughput-bar drill-through into this page now seeds the V2 `DateRangeFilter` via `initialRange`, so the period clicked on the bar stays applied here.
 
-Since 2026.05.10 the Flat view renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.processing-log` spec on `db-nomaubl` and the bundled default ships every column described below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../configuration/list-views.md) editor. The Grouped view keeps its dedicated layout — grouping is not a DataTableV2 feature.
+The Flat view renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.processing-log` spec on `db-nomaubl` and the bundled default ships every column described below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../../configuration/list-views.md) editor. The Grouped view keeps its dedicated layout — grouping is not a DataTableV2 feature.
 
-Since 2026.05.12 the Flat view runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, default 5000), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. refList columns get the **multi-select picker** introduced in 2026.05.13 when applicable.
+The Flat view runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, default 5000), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. refList columns get the **multi-select picker** when applicable.
 
 ---
 

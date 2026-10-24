@@ -1,14 +1,14 @@
 ---
 title: Watched Folders
-description: "Watched folders pick up JD Edwards PDF / XML outputs from mounted directories, convert PDFs to XML in parallel, and run one batch per document template — scheduled from global → Scheduling, on demand from the page, or from the command line."
+description: "Watched folders pick up JD Edwards PDF / XML outputs from mounted directories, convert PDFs to XML in parallel, and run one batch per document — scheduled as a batch job on the Scheduled jobs page, on demand from the page, or from the command line."
 keywords: [NomaUBL, watched folders, watch-folders, PDF pickup, pdf2xml, batch, scheduler, mounted share, overlap window, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Watched Folders
 
-The **Watched folders** page lets NomaUBL fetch source documents straight from directories — typically the network share where JD Edwards drops its report outputs — instead of waiting for files to be pushed into the input folder. Each run lists the configured folders, keeps the new files, **converts PDFs to XML in parallel** (XML and UBL files are copied as is) into the document template's input folder, then runs **one batch per template** — the single-JVM batch for an XML or PDF template, the per-file loop for a UBL template.
+The **Watched folders** page lets NomaUBL fetch source documents straight from directories — typically the network share where JD Edwards drops its report outputs — instead of waiting for files to be pushed into the input folder. Each run lists the configured folders, keeps the new files, **converts PDFs to XML in parallel** (XML and UBL files are copied as is) into the document's input folder, then runs **one batch per template** — the single-JVM batch for an XML or PDF template, the per-file loop for a UBL template.
 
-Open it from the sidebar under **Sync → Watched folders**; **Save** and **Refresh** sit in the page header. The configuration ships empty: nothing runs until a folder is configured and a job is scheduled.
+Open it from the sidebar under **Management → Watched folders**, next to File versions — the page configures the folders, their schedule is a batch job of the [Scheduled jobs](../sync/scheduled-jobs/overview.md) page; **Save** and **Refresh** sit in the page header. The configuration ships empty: nothing runs until a folder is configured and a job is scheduled.
 
 ---
 
@@ -83,7 +83,7 @@ Each watched folder is a **collapsible card**: its header shows the number, the 
 |---|---|
 | **Directory** | The folder to scan — a mounted share or a local folder (e.g. `/data/mnt/jde_outputs`); `%APP_HOME%` / `%ENV%` accepted. When it **is** the template's own input folder, the row is a plain batch trigger — see [Input folder mode](#input-folder-mode). |
 | **Pattern** | File-name glob of the files to pick up (e.g. `R42565_*`). Defaults to `*.xml` on the template's input folder. |
-| **Template** | The document template the files are processed with — XML, PDF and UBL templates are all supported. |
+| **Template** | The document the files are processed with — XML, PDF and UBL templates are all supported. |
 | **Manifest** | JD Edwards PDF only: optional pdf2xml manifest (a JDE-native XML sample). Blank = DD-alias mode. |
 
 ### Scan
@@ -113,7 +113,7 @@ Folders feeding the **same template** must carry the same batch options: the fir
 
 1. **List** — every folder is listed for files matching its pattern — newer than *last scan − overlap*, or all of them with *All files*. A folder scanned for the first time, without a date, only takes the overlap window — use a backfill date for history.
 2. **Filter** — files already processed (source file name found in the archive) or already waiting as XML in the template's input folder are dropped, unless the folder is in replace mode.
-3. **Convert** — PDFs are converted to XML in parallel into the template's input folder; XML and UBL files are copied as is. For a [PDF-source template](../management/documents.md#pdf-extraction), any text PDF goes through the template's PDF extraction settings instead of the JD Edwards converter.
+3. **Convert** — PDFs are converted to XML in parallel into the template's input folder; XML and UBL files are copied as is. For a [PDF-source template](./documents.md#pdf-extraction), any text PDF goes through the template's PDF extraction settings instead of the JD Edwards converter.
 4. **Process** — once every conversion is done, one batch runs per template: the single-JVM batch for an XML or PDF template, with the batch's own parallelism; the per-file loop for a UBL template, failed files being moved to the errors folder.
 
 The last-scan date advances on every run. A file that fails is **retried** while it stays inside the overlap window and reported **by name** — it never blocks the others: inside a batch, a file that fails is marked failed and moved to the errors folder while the other files finish.
@@ -138,7 +138,7 @@ The **Run now** group runs the saved configuration on demand:
 
 ## Scheduling and command line
 
-- **Scheduled** — under [global → Scheduling → Batch Document Processing](../configuration/system/global.md), add a batch job with the source **Watched folders**, every *N* minutes or **daily at** a fixed time. The job can target a single folder (picked from the configured directories) or all of them. The *Directory* and *BIP* sources remain available.
+- **Scheduled** — on the [Scheduled jobs](../sync/scheduled-jobs/overview.md) page, **New job → Batch** with the source **Watched folders**, run every *N* minutes or **daily at** a fixed time. The job can target a single folder (picked from the configured directories) or all of them. The *Directory* and *BIP* sources remain available.
 - **Command line** — `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]`.
 - **API** — `POST /api/watch-folders/run`.
 

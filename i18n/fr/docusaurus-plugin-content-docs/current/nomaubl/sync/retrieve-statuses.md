@@ -196,7 +196,7 @@ Quand un appel à la PA échoue pour des raisons de transport (réseau, expirati
 ---
 
 ## Contrôles d'intégrité \{#integrity-checks\}
-Au-delà de la récupération incrémentale, la page propose deux contrôles à la demande qui réconcilient le cycle de vie enregistré avec la plateforme et avec lui-même. Les deux s'exécutent en **arrière-plan** et sont réexécutables sans risque. Pour les exécuter chaque jour sans opérateur, planifiez-les depuis la page [Contrôles du cycle de vie](../management/lifecycle-checks.md) (ou les modes CLI équivalents).
+Au-delà de la récupération incrémentale, la page propose deux contrôles à la demande qui réconcilient le cycle de vie enregistré avec la plateforme et avec lui-même. Les deux s'exécutent en **arrière-plan** et sont réexécutables sans risque. Pour les exécuter chaque jour sans opérateur, planifiez-les depuis la page [Contrôles du cycle de vie](scheduled-jobs/lifecycle-checks.md) (ou les modes CLI équivalents).
 
 ### Statuts manquants
 

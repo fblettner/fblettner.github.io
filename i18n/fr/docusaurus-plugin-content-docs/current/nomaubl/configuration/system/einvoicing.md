@@ -10,10 +10,6 @@ L'éditeur **E-Invoicing** définit **comment NomaUBL parle à une Plateforme Ag
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — une fois la source mappée vers UBL.
 
-:::info[Refonte en 2026.05.8]
-La configuration PA est désormais homogène entre **e-invoicing**, **[e-directory](./edirectory.md)** et **[e-reporting](./ereporting.md)** — chaque modèle système référence un [api-connecteur](../api-connectors.md) réutilisable au lieu de porter ses propres champs d'authentification et endpoints, et la forme inline historique est supprimée (sans repli). L'éditeur passe de cinq à **quatre onglets** — l'onglet *Mock / Testing* a disparu (pointer un api-connecteur vers un mock Postman ou un stub local pour les tests hors-ligne) et l'onglet *Actions* a migré vers une page dédiée sous [Gestion → Liaisons d'actions](../../management/actions.md). *Send Mode* quitte *PA Connection* pour rejoindre *FTP/SFTP* où il appartient logiquement, et le groupe *Background Scheduling* disparaît (ces intervalles ne fonctionnaient que sur le modèle [global](./global.md)).
-:::
-
 L'éditeur comporte **quatre onglets** :
 
 1. **UBL Validation** — répertoire des transformations XSL utilisées pour convertir le XML source en UBL.
@@ -133,7 +129,7 @@ Cet onglet configure le **répertoire des fichiers XSL** utilisés pour **transf
 
 ### Défauts pour les factures manuelles / sans modèle
 
-Utilisés quand une facture n'a **aucun modèle de document** — créée dans l'éditeur manuel, ou un UBL déjà formé traité sans modèle. Les valeurs d'un modèle de document priment toujours.
+Utilisés quand une facture n'a **aucun document** — créée dans l'éditeur manuel, ou un UBL déjà formé traité sans modèle. Les valeurs d'un document priment toujours.
 
 | Champ | Description |
 |---|---|
@@ -223,14 +219,14 @@ Une facture d'auto-facturation (type 261, 389, 471, 473, 500, 501 ou 502) est tr
 :::
 
 :::info[Les intervalles de polling vivent sur `global`]
-Les intervalles qui pilotent la fréquence de polling de la PA — `fetchImportInterval`, `fetchStatusInterval`, cadence e-reporting — sont lus depuis le [template `global`](./global.md), section *Scheduling*. Le groupe *Background Scheduling* de cette page écrivait ces clés ici, mais le scheduler ne les lisait jamais sur ce template — l'écriture morte a été retirée en 2026.05.8. Modifier les intervalles sur `global → Scheduling` et ils s'appliquent à toutes les sociétés.
+Les intervalles qui pilotent la fréquence de polling de la PA — `fetchImportInterval`, `fetchStatusInterval`, cadence e-reporting — sont des réglages globaux modifiés depuis chaque tâche de la page [Tâches planifiées](../../sync/scheduled-jobs/overview.md) ; ils s'appliquent à toutes les sociétés.
 :::
 
 ---
 
-## Liaisons d'actions — déplacées
+## Liaisons d'actions
 
-L'onglet **Actions** qui se trouvait sur cette page dans la version précédente a été retiré en 2026.05.7 et les liaisons d'actions multi-appels ont migré sur leur propre page sous [Gestion → Liaisons d'actions](../../management/actions.md). La forme de stockage (`action.N.id` / `.connector` / `.endpoint` / `.params` sur ce template) est inchangée — seul l'éditeur a bougé. La nouvelle page gère la liste multi-appels, le drapeau *Arrêt sur échec* par appel et le chaînage des réponses via les placeholders `{call.N.fieldName}`.
+Les liaisons d'actions multi-appels se modifient sur une page dédiée, sous [Gestion → Liaisons d'actions](../../management/actions.md). Elles sont stockées sur ce modèle (`action.N.id` / `.connector` / `.endpoint` / `.params`). Cette page gère la liste multi-appels, le drapeau *Arrêt sur échec* par appel et le chaînage des réponses via les placeholders `{call.N.fieldName}`.
 
 ---
 
@@ -240,6 +236,6 @@ L'onglet **Actions** qui se trouvait sur cette page dans la version précédente
 - **Laisser les surcharges par tâche vides quand les noms d'endpoint du connecteur correspondent déjà.** Un connecteur `pa-default` qui propose un endpoint littéralement nommé `import` n'a pas besoin d'une surcharge sur la ligne *Import*. La page n'enregistre que les valeurs qui diffèrent du défaut — saisir le défaut est sans effet mais ajoute du bruit.
 - **Démarrer en `paMode=` (vide)** lors du câblage d'un nouveau type de document. Le pipeline UBL fonctionne de bout en bout sans impliquer la PA, ce qui fait remonter les mappings sources et les échecs Schematron avant que le réseau soit dans la boucle. Basculer sur `API` une fois le côté données propre.
 - **N'utiliser SFTP que quand la PA l'exige réellement.** REST est plus simple à diagnostiquer, et le panneau de test de l'api-connecteur fournit un retour clair. SFTP convient quand la PA impose un dépôt fichier ou pour des soumissions par lots à fort volume.
-- **Modifier les intervalles de polling sur `global → Scheduling`, pas ici.** Les champs de cette page ont été retirés en 2026.05.8, ils n'avaient aucun effet.
-- **Tester contre un mock Postman ou un stub local** en hors-ligne. L'ancien mock en mémoire ne servait que avant le refactor api-connecteur — pointer plutôt l'api-connecteur vers l'URL du mock.
+- **Modifier les intervalles d'interrogation sur la page Tâches planifiées, pas ici.** Ouvrir la tâche *Import PA (suivi des dépôts)* ou *Récupération des statuts PA* ; l'enregistrement recharge immédiatement la planification.
+- **Tester contre un mock Postman ou un stub local** en hors-ligne : il suffit de pointer l'api-connecteur vers l'URL du mock.
 - **Les surcharges par société se trouvent sur `e-invoicing-{kco}`.** Copier le template `e-invoicing` platform-wide sous le nouveau nom depuis *Paramètres* et ne modifier que les champs qui diffèrent — typiquement `connector`, quelques surcharges d'endpoint ou les identifiants SFTP quand la société `00070` utilise une PA distincte.

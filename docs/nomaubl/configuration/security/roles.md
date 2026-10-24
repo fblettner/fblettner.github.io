@@ -15,15 +15,6 @@ This screen manages NomaUBL's **role-based access control**. Each role bundles f
 
 Roles are application-wide and source-agnostic — they apply equally whether NomaUBL is plugged into JD Edwards, SAP, NetSuite or a custom ERP. Default roles (`admin`, `viewer`) are seeded by the **Initialize Database** action in *Database Connectors → NomaUBL*.
 
-:::info[Refreshed in 2026.06.21]
-The editor has been reorganised around purpose-built tabs and the grant model now goes much finer than pages and read-only:
-
-- **Four tabs** — *Access* (pages, dashboard cards, features), *Actions* (the new per-button whitelist), *Data scope* (companies + row filters), *Members*. The role *Name* and *Description* sit above the tab bar so they stay visible from any tab.
-- **Granular action permissions** — the old all-or-nothing `readonly` flag is replaced by an explicit whitelist over Invoices, E-Reporting and Integration ops. A role with no whitelist set continues to allow every action (legacy behaviour); turning the whitelist on pre-populates with everything so the role does not suddenly lose actions.
-- **Role-level row filters** — pick a column (e.g. the invoice's customer alpha key `UHALKY`) and one or more values; the filter applies to the list views, the dashboard, every per-row endpoint and the rendered PDF stream. Multiple values on the same column are combined as OR; filters on different columns combine as AND, side-by-side with the existing Companies grant.
-- **Per-card dashboard whitelist** — each dashboard widget is its own permission. An empty list shows every card (existing behaviour); a populated list is a strict whitelist and hidden cards never run their SQL nor reach the wire.
-:::
-
 ---
 
 ## Opening the editor
@@ -212,38 +203,83 @@ A short list of binary feature flags. Each row carries a checkbox plus a one-lin
 
 ### Allowed Pages
 
-A grouped checklist mirroring the application's left-hand navigation. Each page checkbox shows the **friendly label** (the same i18n `nav.*` key the Sidebar uses) plus the **page id** in muted monospace beside it — so the row stays informative when localised yet still searchable by id.
+The pages are laid out as **one card per group of the side menu** — same groups, same order, same names: *Navigation*, *Sync*, *Processing*, *UBL*, *Extract*, *Management*, *Documentation*. Each page is a **chip** carrying its menu label; a ticked chip shows a check mark, and hovering it shows the page id. The card header gives the number of pages granted (`3/10`) and an **all** / **none** link that flips the whole group.
 
-| Group | Pages |
+<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '16px', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '12.5px'}}>
+  <div style={{display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '10px'}}>
+    <b>Allowed Pages</b><span style={{opacity: 0.6, fontSize: '11px'}}>(empty = all pages allowed)</span>
+    <span style={{padding: '2px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>All</span>
+    <span style={{padding: '2px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>None</span>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px'}}>
+    <div style={{border: '1px solid #4a9eff', borderRadius: '8px', padding: '8px'}}>
+      <div style={{display: 'flex', gap: '8px', marginBottom: '6px'}}><b>Navigation</b><span style={{opacity: 0.6}}>6/13</span><span style={{marginLeft: 'auto', color: '#4a9eff'}}>all</span></div>
+      <div style={{display: 'flex', flexWrap: 'wrap', gap: '5px'}}>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Dashboard</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ E-Invoicing</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>VAT declaration</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Reports</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>…</span>
+      </div>
+      <div style={{marginTop: '8px', paddingTop: '6px', borderTop: '1px dashed rgba(148,163,184,0.3)'}}>
+        <b>Diagnostics</b> <span style={{opacity: 0.6, fontSize: '11px'}}>One page with four views — each view is granted on its own below.</span>
+        <div style={{display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '4px'}}>
+          <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Integration errors view</span>
+          <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Processing log view</span>
+          <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Failures view</span>
+          <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Server log view</span>
+        </div>
+      </div>
+    </div>
+    <div style={{border: '1px solid rgba(148,163,184,0.3)', borderRadius: '8px', padding: '8px'}}>
+      <div style={{display: 'flex', gap: '8px', marginBottom: '6px'}}><b>Sync</b><span style={{opacity: 0.6}}>0/4</span><span style={{marginLeft: 'auto', color: '#4a9eff'}}>all</span></div>
+      <div style={{display: 'flex', flexWrap: 'wrap', gap: '5px'}}>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Fetch Input</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Fetch Import</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Fetch Statuses</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Scheduled Jobs</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+| Group | Pages (id) |
 |---|---|
-| **Navigation** | `dashboard`, `techdashboard`, `invoices`, `vatdeclaration`, `ereporting`, `edirectory`, `notifications`, `integrationerrors`, `processinglog` |
-| **Processing** | `fetchinput`, `import`, `retrievestatuses` |
-| **Operations** | `process`, `extractandprocess`, `processapi` |
-| **UBL** | `validate`, `xsleditor`, `xmlviewer`, `ubldefaults` |
-| **Extract** | `extractbip` *(JD Edwards-specific)*, `extract`, `extractftp` |
-| **Documentation** | `releasenotes`, `upgradehistory`, `statusreference`, `reasoncodes`, `ublreference`, `xref`, `apireference` |
-| **Management** | `documents`, `pdftemplates`, `actions`, `notificationrules`, `dailydigest`, `autoretry`, `fileversions` |
+| **Navigation** | Dashboard (`dashboard`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
+| **Sync** | Fetch Input (`fetchinput`), Fetch Import (`import`), Fetch Statuses (`retrievestatuses`), Scheduled Jobs (`scheduledjobs`). |
+| **Processing** | Process Document (`process`), Extract & Process (`extractandprocess`), Process API (`processapi`). |
+| **UBL** | UBL Validation (`validate`), XSL Editor (`xsleditor`), XML Viewer (`xmlviewer`), UBL Defaults (`ubldefaults`). |
+| **Extract** | Extract from Archive (`extract`), Extract FTP (`extractftp`), Extract from BIP (`extractbip`, *JD Edwards-specific*). |
+| **Management** | Documents (`documents`), PDF Templates (`pdftemplates`), Actions (`actions`), Notification Rules (`notificationrules`), Watched Folders (`watchfolders`), File Versions (`fileversions`), Promotion (`promotion`). |
+| **Documentation** | Release Notes (`releasenotes`), Upgrade History (`upgradehistory`), Status Reference (`statusreference`), Reason Codes (`reasoncodes`), UBL Reference (`ublreference`), Business Rules (`businessrules`), Developer (`xref`), API Reference (`apireference`). |
 
-Helpers:
+A few chips carry a hint:
 
-- **All** / **None** buttons above the groups — instantly grant or revoke every page.
-- Per-group **check all / uncheck all** toggle — flip an entire group in one click.
-- A group's checkbox shows an **indeterminate state** when only some of its pages are selected.
+- **Diagnostics** is one page with four views: each view is a grant of its own, and the menu shows *Diagnostics* as soon as one of them is granted. See [Diagnostics](../../application/diagnostics/overview.md).
+- **Scheduled Jobs** covers every job — polls, batch jobs, daily digests, auto-retries, lifecycle checks, retention. Running, pausing or saving a job also requires the *Run batch jobs* action (`integration.run`). See [Scheduled jobs](../../sync/scheduled-jobs/overview.md).
+- **Watched Folders** grants the configuration of the folders; their schedule is on *Scheduled Jobs*.
+- **Promotion** also requires the *Settings access* feature. See [Promotion](../../management/promotion.md).
+- **Developer** opens the [Developer reference](../../references/developer.md): tables, configuration keys, flows, impact, API.
+
+Rules:
+
+- **All** / **None** above the cards grant or revoke every page at once.
 - **Empty list = all pages allowed.** Same convention as the other lists: an unfiltered role sees everything.
+- The `admin` role created at initialisation receives every page id listed above, including VAT declaration, Reports and Upgrade History.
 
 ### Dashboard cards
 
-Each dashboard widget is an individual permission keyed by `dashboard.<card>`. The grouping below mirrors the dashboard layout:
+Each dashboard widget is an individual permission keyed by `dashboard.<card>`. The cards are laid out like the pages — one card per group with its chips, count and **all** / **none** link — and mirror the dashboard layout:
 
 | Group | Cards |
 |---|---|
-| **Hero metrics** | `dashboard.total`, `dashboard.inflight`, `dashboard.errors-tech`, `dashboard.errors-business` |
+| **Hero metrics** | `dashboard.total`, `dashboard.inflight`, `dashboard.errors-tech`, `dashboard.errors-business`, `dashboard.status-cards` (status cards 213 / 9905 / 9907 and 207 / 208 / 210) |
 | **Charts & widgets** | `dashboard.pipeline`, `dashboard.volume`, `dashboard.recent`, `dashboard.stale`, `dashboard.error-rules`, `dashboard.per-company`, `dashboard.ereporting`, `dashboard.round-trip` |
 | **Sections** | `dashboard.quick-actions` |
 
-- **Empty list = every card visible** (legacy behaviour).
+- **Empty list = every card visible**.
 - A populated list is a strict whitelist — hidden cards are **skipped server-side**, so their SQL never runs and their data never reaches the wire.
-- The same **All** / **None** / per-group toggles are available as on the Allowed Pages list.
+- The same **All** / **None** buttons and per-group **all** / **none** links are available as on the Allowed Pages cards.
 
 ---
 
@@ -255,7 +291,7 @@ Defines **what the role can do** on the pages it can reach.
 
 | Toggle | Effect |
 |---|---|
-| **Off** *(default)* | Empty whitelist on the server — the role can perform every action allowed by its pages. Equivalent to the legacy behaviour. |
+| **Off** *(default)* | Empty whitelist on the server — the role can perform every action allowed by its pages. |
 | **On** | Only the actions checked below are allowed. Switching on **pre-fills the list with every action** so the role does not suddenly lose access — uncheck from there. |
 
 The helper text under the toggle states *Off (default) = role can perform every action allowed by its pages. On = only the checked actions below are allowed.*
@@ -278,6 +314,7 @@ Grouped by the page where the button lives — the same key can power buttons on
 | **Invoices** | Create | `invoice.create` | Dashboard *Quick action* and the *New invoice* button on the list. |
 | **Invoices** | Edit | `invoice.edit` | Update invoice fields from the detail modal / edit panel. |
 | **Invoices** | Delete | `invoice.delete` | Hard-delete an invoice and all its child records. |
+| **Invoices** | Delete lifecycle event | `invoice.lifecycle-delete` | Remove a single status event from an invoice history; the header realigns on the last remaining event. |
 | **Invoices** | Resend to PA | `invoice.resend` | Submit / re-submit an invoice (or a bulk batch) to the PA. |
 | **Invoices** | Push status (PA) | `invoice.status.pa` | Send a status event through the PA — payment received, in dispute, etc. (the *Set Status* modal's *PA* tab). |
 | **Invoices** | Push status (DB) | `invoice.status.db` | Directly update a status in the database, bypassing the PA — admin break-fix path used when the PA round-trip is broken. |

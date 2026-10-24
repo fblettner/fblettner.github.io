@@ -1,12 +1,12 @@
 ---
 title: Process Document
-description: "Single processing entry point for one or many invoice files. The pipeline is selected automatically by the document template's source property — XML spool (XSL → UBL) or already-formed UBL 2.1 — so the same form covers both flows."
+description: "Single processing entry point for one or many invoice files. The pipeline is selected automatically by the document's source property — XML spool (XSL → UBL) or already-formed UBL 2.1 — so the same form covers both flows."
 keywords: [NomaUBL, processing, document, XML, UBL, source, idPattern, cbc:ID, AUTO, SINGLE, BURST, validate-only, send to PA, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Process Document
 
-The **Process Document** screen is the single processing entry point of NomaUBL. It runs one document template against one (or many) source files and:
+The **Process Document** screen is the single processing entry point of NomaUBL. It runs one document against one (or many) source files and:
 
 1. resolves the template's `source` property (`XML` or `UBL`);
 2. dispatches to the matching pipeline — XSL transform for XML spools, direct validation for already-formed UBL invoices;
@@ -20,7 +20,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## Picking the source
 
-The first decision a document template makes is its **Source**. It is set on the **[Documents](../management/documents.md) → Document tab → Source** field and read here:
+The first decision a document makes is its **Source**. It is set on the **[Documents](../management/documents.md) → Document tab → Source** field and read here:
 
 | Source | When to pick it | What runs |
 |---|---|---|
@@ -191,7 +191,7 @@ The form has four common controls plus per-source extras.
 
 | Field | Source | Description |
 |---|---|---|
-| **Template** | both | Document template (the resource type `document`). The selector lists every template in `config-documents.json`. |
+| **Template** | both | Document (the resource type `document`). The selector lists every template in `config-documents.json`. |
 | **Source** | both | Read-only display of the template's resolved `source`. Switching templates updates this field and reshapes the form. |
 | **Select File** | both | Two buttons — *Upload File* (browser file picker) or *Browse Server* (open the embedded file browser against `dirInput`). XML uploads are copied to the template's working directory; UBL uploads land in `<dirInput>/ubl/`. |
 | **Mode** | XML | `AUTO` (default), `SINGLE`, `BURST` or `UBL`. See [Modes (XML source)](#modes-xml-source) below. |
@@ -221,7 +221,7 @@ The form has four common controls plus per-source extras.
 | Mode | What runs |
 |---|---|
 | **Process & Validate** *(default)* | Parse the UBL invoice, extract `(doc, dct, kco)` from `cbc:ID` (regex on the template), validate XSD + Schematron, persist to `F564231` / `F564233` / `F564234` / `F564235` / `F564236`, write the lifecycle event. *Send to PA* applies. |
-| **Validate only** | Run XSD + Schematron only. No DB write, no PA submission. The result table shows every error with severity / source / rule / message — same columns as the [Integration Errors](../application/integration-errors.md) page. Use it as a quick check before committing the file to the database. |
+| **Validate only** | Run XSD + Schematron only. No DB write, no PA submission. The result table shows every error with severity / source / rule / message — same columns as the [Integration Errors](../application/diagnostics/integration-errors.md) page. Use it as a quick check before committing the file to the database. |
 
 **No more filename convention.** UBL processing always derives `(doc, dct, kco)` from the invoice's `cbc:ID` via the template's `idPattern` regex. The `DOC_DCT_KCO_ubl.xml` naming convention is no longer required — filenames can be anything.
 
@@ -274,7 +274,7 @@ Replaces the legacy `-xml` and `-ubl` flags. The CLI reads the template's `sourc
 
 ## Tips & best practices
 
-- **Pick the right source on the template, not at run time.** `Source` lives on the document template — the *Process Document* form just reads it. Setting it once in [Documents](../management/documents.md) keeps every entry point (this page, *Fetch Input*, the CLI, the scheduler) consistent.
+- **Pick the right source on the template, not at run time.** `Source` lives on the document — the *Process Document* form just reads it. Setting it once in [Documents](../management/documents.md) keeps every entry point (this page, *Fetch Input*, the CLI, the scheduler) consistent.
 - **Use *Validate only* before persisting.** When importing UBL files from a new upstream system, run *Validate only* first to surface XSD / Schematron failures without polluting the database.
 - **`AUTO` for production, explicit for debugging.** Production templates usually want `AUTO` so the document-types table drives the per-row dispatch. When debugging a single template, switch to the explicit `UBL` mode so the trace is unambiguous.
 - **`Replace = Overwrite` purges five tables.** Header (`F564231`), lines (`F564233`), VAT (`F564234`), lifecycle (`F564235`) and validation errors (`F564236`) — the previous run's lifecycle and errors won't bleed into the new run.

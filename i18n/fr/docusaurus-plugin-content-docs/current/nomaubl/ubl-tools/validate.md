@@ -13,16 +13,6 @@ L'écran **Validation** exécute les contrôles **schéma XSD** et **règles mé
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. La validation n'écrit rien en base, ne dépose rien sur la Plateforme Agréée et ne déclenche aucun autre effet de bord — c'est un contrôle en lecture seule.
 
-:::info[Refonte en 2026.05.9]
-Trois évolutions livrées en 2026.05.9 côté validation :
-
-- **Schematron précompilé** — le runtime ne compile plus les fichiers `.sch`. `UBLValidator` charge directement les `.xsl` précompilés depuis le classpath JAR et échoue immédiatement au démarrage si un fichier attendu manque. Les trois packs AFNOR sont livrés tels que publiés ; les deux règles locales (`BR-FR-CPRO-Schematron-UBL` + `BR-NOMAUBL-rules`) sont précompilées au build par `build.sh` via le CLI Saxon + `xmlresolver`. Le démarrage à froid gagne un battement perceptible — trois compilations XSLT × cinq packs ne se rejouent plus à chaque JVM.
-- **Flux 2 systématique** — AFNOR XP Z12-012 V1.3.1 découpe la validation en 4 étapes : l'étape 2 choisit EN 16931 *ou* Extended-CTC-FR (selon `CustomizationID`), l'étape 3 exécute **BR-FR-Flux 2 inconditionnellement** par-dessus. Le code précédent considérait Extended-CTC-FR comme un sur-ensemble et sautait Flux 2 — manquant les règles `BR-FR-*` / `EXT-FR-FE-*` spécifiques à la réforme que la PA continue d'imposer côté serveur. Le profil Extended exécute désormais les deux étapes.
-- **Pack `BR-NOMAUBL-rules.sch`** — capture les règles qu'aucun pack Schematron livré n'encode encore, remontées localement pour que l'échec arrive dans `F564236` avant l'aller-retour. Il contient `BR-NOMAUBL-02` (cohérence du montant de ligne, AFNOR §4.4.5, avertissement). Son ancienne `BR-NOMAUBL-01` (un avoir doit référencer une facture antérieure) a été retirée quand le pack standard Flux 2 a imposé la même condition via `BR-FR-CO-05`. Câblé via `BuildInfo` (version `schematron.nomaubl` dans `/api/build-info`) et exécuté en dernière couche après CPRO-B2G.
-
-La **vérification d'annuaire** s'exécute également au moment de la validation en 2026.05.9 — un contre-parti inconnu remonte dans `F564236` avant la mise en file du document, sans attendre l'échec de l'étape d'envoi.
-:::
-
 ---
 
 ## Vue d'ensemble
@@ -174,11 +164,11 @@ Le pack `BR-NOMAUBL-rules.sch` porte les règles qu'aucun pack Schematron livré
 
 - **`BR-NOMAUBL-02`** *(avertissement)* — compare le montant net de chaque ligne (BT-131) à la formule AFNOR (prix ÷ quantité de base × quantité, moins les remises de ligne, plus les charges de ligne) et avertit au-delà de `0,011`. EN 16931 ne contrôle pas cette formule aujourd'hui ; le cas typique détecté est un prix net laissé en BT-146 avec la remise répétée en remise de ligne. Un avertissement ne bloque jamais l'envoi.
 
-L'obligation, pour un avoir, de référencer une facture antérieure n'est **pas** une règle maison : l'ancienne `BR-NOMAUBL-01` a été retirée quand le pack **standard** Flux 2 a commencé à imposer la même condition via **`BR-FR-CO-05`**. Les règles maison sont assouplies à mesure que les packs AFNOR / FNFE-MPE amont rattrapent leur retard ; le pack reste donc un point d'accroche pour ce qu'ils ne couvrent pas encore.
+L'obligation, pour un avoir, de référencer une facture antérieure n'est **pas** une règle maison : le pack **standard** Flux 2 l'impose via **`BR-FR-CO-05`**. Les règles maison sont assouplies à mesure que les packs AFNOR / FNFE-MPE amont rattrapent leur retard ; le pack reste donc un point d'accroche pour ce qu'ils ne couvrent pas encore.
 
 ### Règles client par modèle
 
-Les règles propres à un client — une classification obligatoire, un format de référence acheteur — ne vont dans aucun des packs ci-dessus. Un modèle de document liste ses propres feuilles précompilées dans **Custom Schematron** (voir [Documents → UBL](../management/documents.md)) ; elles s'exécutent **après** les packs standard, sur ce modèle uniquement, et leurs anomalies apparaissent sous une source courte tirée du nom de fichier.
+Les règles propres à un client — une classification obligatoire, un format de référence acheteur — ne vont dans aucun des packs ci-dessus. Un document liste ses propres feuilles précompilées dans **Custom Schematron** (voir [Documents → UBL](../management/documents.md)) ; elles s'exécutent **après** les packs standard, sur ce modèle uniquement, et leurs anomalies apparaissent sous une source courte tirée du nom de fichier.
 
 La version du pack est accessible via `GET /api/build-info` sous la clé `schematron.nomaubl` — le pied de page du tableau de bord la lit pour le tampon de version par pack.
 

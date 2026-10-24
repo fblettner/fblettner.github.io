@@ -1,21 +1,22 @@
 ---
 title: Supervision — vue d'ensemble
-description: "Où regarder quand NomaUBL s'exécute en production — le Tableau de bord technique in-app, le Journal de traitement, le fichier de log du service, les points HTTP build-info / license. Plus les schémas pour raccorder une supervision externe."
+description: "Où regarder quand NomaUBL s'exécute en production — le Tableau de bord technique in-app, le Journal des traitements, le fichier de log du service, les points HTTP build-info / license. Plus les schémas pour raccorder une supervision externe."
 keywords: [NomaUBL, supervision, tableau de bord technique, journal de traitement, build-info, license, fichier de log, supervision externe]
 ---
 
 # Supervision — vue d'ensemble
 
-La visibilité sur une installation NomaUBL en production se répartit sur quatre surfaces — trois dans l'interface web, une sur l'hôte. Cette page sert de carte : quelle surface répond à quelle question opérationnelle, quand regarder où, ce qui manque et où raccorder une supervision externe.
+La visibilité sur une installation NomaUBL en production se répartit sur plusieurs surfaces : trois pages de l'interface web, le fichier journal sur l'hôte et deux points HTTP. Cette page sert de carte : quelle surface répond à quelle question opérationnelle, quand regarder où, ce qui manque et où raccorder une supervision externe.
 
 | Surface | Ce à quoi elle répond | Où |
 |---|---|---|
-| **Tableau de bord technique** | KPI en direct — factures traitées aujourd'hui, en cours, en échec ; état de soumission par PA ; activité de l'ordonnanceur. | *Application → Tableau de bord technique* (page existante). |
-| **Journal de traitement** | Trace par document — chaque étape de chaque facture, avec le timing, le résultat XSD/Schematron, l'appel à la PA. | *Gestion → Journal de traitement* (page existante). |
+| **Tableau de bord technique** | Indicateurs en direct — factures traitées aujourd'hui, en cours, en échec ; état de soumission par PA ; activité de l'ordonnanceur ; vérification de la configuration. | *Navigation → Tableau de bord IT* — voir [Tableau de bord IT](../application/tech-dashboard.md). |
+| **Diagnostic** | Ce qui a échoué et ce que le serveur a consigné, en quatre vues : erreurs d'intégration, journal des traitements (chaque étape de chaque fichier, avec ses durées), anomalies (tous les échecs dans une seule liste, non résolus par défaut), journal serveur (le fichier journal, filtré par niveau et par module). | *Navigation → Diagnostic* — voir [Diagnostic](../application/diagnostics/overview.md). |
+| **Tâches planifiées** | Chaque tâche d'arrière-plan avec son état, sa dernière exécution, sa durée, son résultat et sa prochaine exécution, ainsi que l'historique de ses exécutions. | *Synchronisation → Tâches planifiées* — voir [Tâches planifiées](../sync/scheduled-jobs/overview.md). |
 | **Fichier de log du service** | Le stderr / stdout de la JVM — démarrage, chargement de configuration, ticks de l'ordonnanceur, erreurs base de données. | `<APP_HOME>/nomaubl-<env>.log` sur l'hôte. |
 | **Points HTTP** | Build info et état de licence au format machine. | `/api/build-info` et `/api/license` sur le service en cours d'exécution. |
 
-Les deux surfaces de l'interface web forment la vue **opérateur** ; le fichier de log et les points HTTP forment la vue **infrastructure** (load balancers, supervision externe, smoke tests CI).
+Les pages de l'interface web forment la vue **opérateur** ; le fichier de log et les points HTTP forment la vue **infrastructure** (load balancers, supervision externe, smoke tests CI).
 
 ---
 
@@ -24,17 +25,19 @@ Les deux surfaces de l'interface web forment la vue **opérateur** ; le fichier 
 | Situation | Surface |
 |---|---|
 | « Le batch du jour s'est-il bien passé ? » | **Tableau de bord technique** — panneau des factures traitées aujourd'hui. |
-| « Quel est le statut de la facture #12345 ? » | **Journal de traitement** — recherche par numéro de document. |
-| « Pourquoi la facture #12345 est-elle bloquée ? » | **Journal de traitement** — descendre dans la trace par étape. |
-| « Pourquoi l'ordonnanceur ne se déclenche-t-il pas ? » | **Fichier de log du service** — chercher les lignes `scheduler tick`. |
+| « Qu'est-ce qui a échoué et reste ouvert ? » | **Diagnostic → Anomalies** — non résolues seulement, les plus récentes d'abord. |
+| « Quel est le statut de la facture #12345 ? » | **Diagnostic → Journal des traitements** — recherche par numéro de document. |
+| « Pourquoi la facture #12345 est-elle bloquée ? » | **Diagnostic → Journal des traitements** — détail de la trace par étape. |
+| « La tâche de nuit s'est-elle exécutée ? » | **Tâches planifiées** — dernière exécution, résultat et historique des exécutions. |
+| « Pourquoi l'ordonnanceur ne se déclenche-t-il pas ? » | **Tâches planifiées** pour l'état de chaque tâche, puis la vue **Journal serveur** ou le fichier journal. |
 | « La JVM s'est-elle arrêtée brutalement ? » | **Fichier de log du service** + `./nomaubl.sh status` (Linux / macOS) ou `nomaubl.cmd status` (Windows). |
 | « La base est-elle joignable ? » | **Fichier de log du service** — chercher `Connected to db-nomaubl` au démarrage. |
-| « La PA est-elle joignable ? » | **Fichier de log du service** — chercher les lignes `pa-default API call`. |
+| « La PA est-elle joignable ? » | **Diagnostic → Journal serveur** (module `PA`) ou le fichier journal — chercher les lignes `pa-default API call`. |
 | « La licence est-elle encore valide ? » | `curl /api/license` — renvoie `valid` / `expired` / `restricted`. |
 | « Quelle version est en service ? » | `curl /api/build-info` — renvoie la version et l'horodatage de build. |
 | « Un redémarrage de processus a-t-il eu lieu cette nuit ? » | `./nomaubl.sh status` / `nomaubl.cmd status` montre le PID courant ; le fichier de log montre la bannière de démarrage. |
 
-Les deux premières lignes passent par l'interface ; tout ce qui suit passe par la CLI ou par un `curl`. La page suivante ([Service et logs](./service-and-logs.md)) détaille le côté CLI.
+Les questions sur les factures, les anomalies et les tâches passent par l'interface ; tout ce qui suit passe par la CLI ou par un `curl`. La page suivante ([Service et logs](./service-and-logs.md)) détaille le côté CLI.
 
 ---
 
@@ -45,7 +48,8 @@ Visibilité :
 | Surface | Permission |
 |---|---|
 | Tableau de bord technique | Disponible pour tout utilisateur connecté — mais les KPI eux-mêmes respectent le filtre de données de chaque utilisateur (ex. portée par société). |
-| Journal de traitement | Restreint aux rôles disposant de la permission `processing-log` (typiquement opérateurs + administrateurs). |
+| Diagnostic | Chaque vue s'accorde séparément sur la page [Rôles](../configuration/security/roles.md) — Erreurs d'intégration, Journal des traitements, Anomalies, Journal serveur. |
+| Tâches planifiées | Le droit de page *Tâches planifiées* ; lancer, suspendre ou enregistrer une tâche demande aussi l'action *Run batch jobs*. |
 | Fichier de log du service / points HTTP | Accessibles à quiconque dispose d'un accès SSH / RDP / HTTP à l'hôte. **À restreindre via le pare-feu et le reverse proxy** — `/api/build-info` et `/api/license` ne sont pas authentifiés. |
 
 Les deux points HTTP non authentifiés ne divulguent aucun secret (pas de mots de passe, pas de jetons, uniquement des métadonnées de build et un résumé de licence), mais ils révèlent la **version** de NomaUBL en service. Pour les installations exposées publiquement, il convient de les filtrer derrière le reverse proxy ou le VPN si ce point est sensible.
@@ -74,7 +78,7 @@ Les deux points HTTP non authentifiés ne divulguent aucun secret (pas de mots d
   <text x="382" y="130" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Trace par document</text>
   <text x="382" y="146" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Timing par étape, résultat XSD</text>
   <text x="382" y="162" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Détail des appels PA</text>
-  <text x="382" y="184" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Gestion → Journal de traitement</text>
+  <text x="382" y="184" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Diagnostic → Journal des traitements</text>
 
   <rect x="504" y="80" width="220" height="120" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
   <text x="614" y="106" fill="#22c55e" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FICHIER DE LOG DU SERVICE</text>
@@ -123,7 +127,7 @@ La plupart des besoins de supervision externe se résument à : **scraper l'hôt
 Une posture de supervision minimale prête pour la production sur une installation mono-hôte :
 
 1. **Démarrage automatique via systemd** avec `Restart=on-failure` — voir [Service et systemd](../installation/service-and-systemd.md).
-2. **Rotation des logs** avec logrotate (`copytruncate`) — même page.
+2. **Rotation des journaux** — intégrée au serveur : au-delà du *Log size cap* (100 Mo par défaut), le journal est copié en `.1` puis tronqué, et cinq copies sont conservées ([`global → Logs`](../configuration/system/global.md)). Logrotate n'est utile que si le serveur est lancé par un autre lanceur.
 3. **Sonde de vivacité** depuis le load balancer / l'outil de monitoring d'uptime qui interroge `/api/build-info` toutes les 30 secondes.
 4. **Alerte de licence** — un petit script qui interroge `/api/license` chaque jour et lève une alerte si `valid: false`.
 5. **Transfert de logs** — rediriger `nomaubl-<env>.log` vers le stockage central de logs (Loki, ELK, Datadog Logs). Le framework écrit en stderr/stdout standard — tout shipper de logs ligne par ligne le capte.
@@ -138,7 +142,7 @@ Les éléments 3, 4 et 5 sont les gains rapides qui couvrent 80 % des incidents 
 | Objectif | À lire |
 |---|---|
 | Parcourir les cartes du Tableau de bord technique. | [Application → Tableau de bord technique](../application/tech-dashboard.md). |
-| Investiguer une facture bloquée ou en échec. | [Gestion → Journal de traitement](../management/processing-log.md). |
+| Investiguer une facture bloquée ou en échec. | [Diagnostic → Journal des traitements](../application/diagnostics/processing-log.md). |
 | Utiliser `status` du wrapper + suivi des logs pour les incidents (Linux ou Windows). | [Service et logs](./service-and-logs.md). |
 | Raccorder une supervision externe (sondes LB, alerting, transfert de logs). | [Service et logs](./service-and-logs.md). |
 
@@ -148,4 +152,4 @@ Les éléments 3, 4 et 5 sont les gains rapides qui couvrent 80 % des incidents 
 
 - [Service et logs](./service-and-logs.md) — la couche CLI + points HTTP en détail.
 - [Application → Tableau de bord technique](../application/tech-dashboard.md) — la vue live in-app.
-- [Gestion → Journal de traitement](../management/processing-log.md) — trace par document.
+- [Diagnostic → Journal des traitements](../application/diagnostics/processing-log.md) — trace par document.

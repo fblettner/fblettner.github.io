@@ -1,27 +1,27 @@
 ---
 title: Daily Digest
-description: "Settings → Daily Digest schedules a recurring email of the day's integration errors, with the full event list attached as an Excel file. Multiple digests can be configured per recipient subset, each with its own send time, lookback window, severity filter and per-column routing — different teams receive different cuts of the same data."
+description: "Scheduled jobs → Digest schedules a recurring email of the day's integration errors, with the full event list attached as an Excel file. Multiple digests can be configured per recipient subset, each with its own send time, lookback window, severity filter and per-column routing — different teams receive different cuts of the same data."
 keywords: [NomaUBL, daily digest, integration errors, email, Excel attachment, recurring, scheduler, lookback window, severity filter, per-column routing, company, activity, business unit, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Daily Digest
 
-The **Daily Digest** screen schedules a recurring email that bundles every integration error of the day and attaches the full event list as an Excel file. The body of the email summarises the period and the row counts; the attachment carries the exact data the [Integration Errors](../../application/integration-errors.md) page's *Detailed* tab exports — same columns, same shape.
+:::info[Where to find it]
+This form opens from the [Scheduled jobs](./overview.md) page: click a job of kind *Digest* to edit it, or **New job → Digest** to create one. **Save & apply** reloads the schedules at once — no server restart. The former *Daily Digest* page has left the menu.
+:::
+
+The **Daily Digest** screen schedules a recurring email that bundles every integration error of the day and attaches the full event list as an Excel file. The body of the email summarises the period and the row counts; the attachment carries the exact data the [Integration Errors](../../application/diagnostics/integration-errors.md) page's *Detailed* tab exports — same columns, same shape.
 
 The point is operational: instead of asking a team to open the SPA every morning to check for failed invoices, the digest pushes the day's errors to their inbox at a fixed time. Several digests can coexist so different teams receive different cuts of the same data — the accounting team for company `ACME`, the operations team for activity `Central`, the development team for everything with severity `FATAL`.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The errors come from the validation pipeline and are stored in `F564236`, so the source format is transparent here.
-
-:::info[Added in 2026.06.02]
-The page is brand new. It replaces the ad-hoc *Export* workflow on the Integration Errors page for scheduled recipients — operators who don't open the SPA daily but need the data anyway. The export workflow is still available for one-off triage.
-:::
 
 ---
 
 ## Opening the editor
 
 - Sidebar → **Configuration → System → Daily Digest**.
-- Or directly from the [Integration Errors](../../application/integration-errors.md) page → toolbar → *Send to digest…* when the operator wants to wire a recurring email for the current filter set.
+- Or directly from the [Integration Errors](../../application/diagnostics/integration-errors.md) page → toolbar → *Send to digest…* when the operator wants to wire a recurring email for the current filter set.
 
 ---
 
@@ -121,7 +121,7 @@ Each digest is one row in the catalogue. The edit pane has four sections.
 | Field | Required | What |
 |---|---|---|
 | **Name** | yes | Free text. Shown in the catalogue list and at the top of the email body. Example: *Accounting · ACME*. |
-| **Report** | yes (default: `Integration errors`) | What the digest reports. **Integration errors** collects the failing events from the [Integration Errors](../../application/integration-errors.md) page — the historical behaviour. **All archived invoices** instead reports every archived invoice in the window, and the attached spreadsheet carries the [E-Documents](../../application/edocuments.md) columns and honours the per-column filters below, so a digest can double as a daily archive extract. |
+| **Report** | yes (default: `Integration errors`) | What the digest reports. **Integration errors** collects the failing events from the [Integration Errors](../../application/diagnostics/integration-errors.md) page — the historical behaviour. **All archived invoices** instead reports every archived invoice in the window, and the attached spreadsheet carries the [E-Documents](../../application/edocuments.md) columns and honours the per-column filters below, so a digest can double as a daily archive extract. |
 | **Recipients** | yes | One or more email addresses, comma- or semicolon-separated. Every address gets the same email — there's no per-address customisation here; create another digest if recipients should see different cuts. |
 | **Enabled** | yes (default: `on`) | When `off`, the digest is kept in the catalogue but skipped at send time. Useful for pausing a digest during a maintenance window without losing the configuration. |
 
@@ -135,7 +135,7 @@ Each digest is one row in the catalogue. The edit pane has four sections.
 
 ### 3. Severity filter
 
-A small chip group identical to the [Integration Errors](../../application/integration-errors.md) toolbar:
+A small chip group identical to the [Integration Errors](../../application/diagnostics/integration-errors.md) toolbar:
 
 | Severity | When to use |
 |---|---|
@@ -149,7 +149,7 @@ Pick **one** severity (or `All`). A multi-severity digest is two separate digest
 
 ### 4. Per-column equality filters
 
-The digest carries a list of `(column, value)` pairs that narrow the event set. The supported columns are the same equality-filterable columns the [Integration Errors](../../application/integration-errors.md) page exposes through *List Views*:
+The digest carries a list of `(column, value)` pairs that narrow the event set. The supported columns are the same equality-filterable columns the [Integration Errors](../../application/diagnostics/integration-errors.md) page exposes through *List Views*:
 
 | Column | Example value | Common use |
 |---|---|---|
@@ -183,7 +183,7 @@ Top failing rules
 The full event list is attached (errors-2026-06-02.xlsx).
 ```
 
-The attachment is the same Excel file the *Detailed* tab of [Integration Errors](../../application/integration-errors.md) exports — every event of every invoice in scope, with columns matching the table.
+The attachment is the same Excel file the *Detailed* tab of [Integration Errors](../../application/diagnostics/integration-errors.md) exports — every event of every invoice in scope, with columns matching the table.
 
 When the period has **zero errors**, the digest is sent anyway with a short *no errors in this period* body (no attachment). Operators have asked for the positive signal — knowing the digest ran without failures is itself information.
 
@@ -197,9 +197,9 @@ The scheduler is a daemon inside NomaUBL that wakes up every minute and checks t
 |---|---|
 | `Enabled = on` | The next firing of `<send_time>` in `<timezone>` collects events, builds the Excel and sends. The row's *last sent* badge updates. |
 | `Enabled = off` | The catalogue row is skipped at every tick. |
-| SMTP failure | The send is retried on the next tick (one minute later) for up to 5 attempts; after that the failure is logged in the [Processing Log](../../management/processing-log.md) with the SMTP error, and the digest is marked *failed* for the day. Manual re-send via the *Send now* button at any time. |
+| SMTP failure | The send is retried on the next tick (one minute later) for up to 5 attempts; after that the failure is logged in the [Processing Log](../../application/diagnostics/processing-log.md) with the SMTP error, and the digest is marked *failed* for the day. Manual re-send via the *Send now* button at any time. |
 
-The digest runtime reads SMTP configuration from the platform-wide [System → Global](./global.md) `smtp` section — the same SMTP that drives [Notification Rules](../../management/notification-rules.md) and the per-invoice notifications. Make sure the credentials work there before wiring a daily digest.
+The digest runtime reads SMTP configuration from the platform-wide [System → Global](../../configuration/system/global.md) `smtp` section — the same SMTP that drives [Notification Rules](../../management/notification-rules.md) and the per-invoice notifications. Make sure the credentials work there before wiring a daily digest.
 
 ### Send-now button
 
@@ -226,9 +226,9 @@ The *Send now* run also updates the *last sent* badge, so the scheduled run that
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| The digest's row in the catalogue shows *failed*. | SMTP rejection (auth, relay refused, recipient bounce). | Open the [Processing Log](../../management/processing-log.md), filter by `daily-digest`, read the SMTP error. Fix the [Global → SMTP](./global.md) credentials, then *Send now*. |
+| The digest's row in the catalogue shows *failed*. | SMTP rejection (auth, relay refused, recipient bounce). | Open the [Processing Log](../../application/diagnostics/processing-log.md), filter by `daily-digest`, read the SMTP error. Fix the [Global → SMTP](../../configuration/system/global.md) credentials, then *Send now*. |
 | The email arrived but the attachment is empty. | The filter set has no matching events in the lookback window. | Loosen one filter (e.g. drop the activity code) or extend the window to `7 days`; *Send now* to re-check. |
-| The attachment contains errors older than the lookback window. | The lookback window selects **invoices** that have at least one error in the window, then exports **every** error of those invoices — the same behaviour as the [Detailed view](../../application/integration-errors.md#detailed-view). This is intentional. | If you need strict-window export, do it from the *By event* tab manually. |
+| The attachment contains errors older than the lookback window. | The lookback window selects **invoices** that have at least one error in the window, then exports **every** error of those invoices — the same behaviour as the [Detailed view](../../application/diagnostics/integration-errors.md#detailed-view). This is intentional. | If you need strict-window export, do it from the *By event* tab manually. |
 | Two recipients get the same digest twice. | Two digest rows in the catalogue have overlapping recipient lists. | Audit the catalogue; merge or de-dup. |
 | The digest fires at the wrong hour. | Timezone is set to the wrong zone. | Open the digest, set the correct IANA timezone (`Europe/Paris`, `Africa/Casablanca`, …) and save. |
 
@@ -236,7 +236,7 @@ The *Send now* run also updates the *last sent* badge, so the scheduled run that
 
 ## What's next
 
-- [Integration Errors](../../application/integration-errors.md) — the SPA page the digest summarises; same data, interactive triage.
+- [Integration Errors](../../application/diagnostics/integration-errors.md) — the SPA page the digest summarises; same data, interactive triage.
 - [Notification Rules](../../management/notification-rules.md) — per-event email notifications (one email per matching invoice); useful when latency matters more than the daily roll-up.
-- [System → Global → SMTP](./global.md) — the outbound SMTP configuration the digest reads from.
-- [Processing Log](../../management/processing-log.md) — diagnostics for failed digest sends.
+- [System → Global → SMTP](../../configuration/system/global.md) — the outbound SMTP configuration the digest reads from.
+- [Processing Log](../../application/diagnostics/processing-log.md) — diagnostics for failed digest sends.

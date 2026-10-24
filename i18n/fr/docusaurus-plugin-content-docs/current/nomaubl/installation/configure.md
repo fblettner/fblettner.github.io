@@ -28,7 +28,7 @@ Cette page est la **carte de transition** entre l'installation et la section Con
 | **Source FTP / SFTP** (en cas d'extraction de fichiers spool via FTP). | [Configuration → FTP Connectors](../configuration/ftp-connectors.md) | Hôte, port, identifiants, répertoire de base. |
 | **Lectures SQL personnalisées** (ERP source hors JDE — SAP, NetSuite, ERP personnalisé). | [Configuration → SQL Connectors](../configuration/sql-connectors.md) | SQL par requête avec paramètres de liaison. |
 | **Paramètres système** — répertoire applicatif, répertoires de batch, SMTP, assistant IA, licence, intervalles d'ordonnanceur. | [Configuration → System → Global](../configuration/system/global.md) | Six onglets : Directories, Processing, SMTP, AI, License & auth, Scheduler. |
-| **Paramètres e-invoicing** (choix du gabarit PA, validation, mode d'envoi). | [Configuration → System → E-invoicing](../configuration/system/einvoicing.md) | Valeurs par défaut par environnement. |
+| **Paramètres e-invoicing** (choix du connecteur PA, validation, mode d'envoi). | [Configuration → Système → E-invoicing](../configuration/system/einvoicing.md) | Valeurs par défaut par environnement. |
 | **Paramètres e-reporting**. | [Configuration → System → E-reporting](../configuration/system/ereporting.md) | Même structure. |
 | **E-directory** (recherche PPF + INSEE). | [Configuration → System → E-directory](../configuration/system/edirectory.md) | Endpoint / identifiants. |
 | **Ordonnanceur fetch-invoices** (filtres de rapports BIP qui pilotent les exécutions `-fetch-all bip`). | [Configuration → System → Fetch invoices](../configuration/system/fetch-invoices.md) | Filtres par rapport. |
@@ -46,7 +46,7 @@ Pour monter un environnement neuf, parcourir les écrans dans cet ordre :
 2. **[Database Connectors → JD Edwards](../configuration/database-connectors/jdedwards.md)** — uniquement si la source est JDE ; à ignorer sinon.
 3. **[API Connectors](../configuration/api-connectors.md)** — raccorder la Plateforme Agréée. Le testeur intégré permet de confirmer le bon fonctionnement de l'authentification avant de poursuivre.
 4. **[System → Global](../configuration/system/global.md)** — SMTP pour les notifications sortantes, clé IA optionnelle, intervalles d'ordonnanceur.
-5. **[System → E-invoicing](../configuration/system/einvoicing.md)** + **[E-reporting](../configuration/system/ereporting.md)** — choix du gabarit PA et des valeurs par défaut.
+5. **[Système → E-invoicing](../configuration/system/einvoicing.md)** + **[E-reporting](../configuration/system/ereporting.md)** — choix du connecteur PA et des valeurs par défaut.
 6. **[Security → Users](../configuration/security/users.md)** — remplacer l'`admin` par défaut par des comptes nominatifs.
 
 Le reste peut attendre qu'un document réel circule dans la chaîne.

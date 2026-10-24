@@ -6,7 +6,11 @@ keywords: [NomaUBL, lifecycle checks, integrity check, ordering check, status ba
 
 # Lifecycle Checks
 
-The **Lifecycle Checks** page schedules the two lifecycle maintenance checks so they run **daily without an operator** — the same operations offered as buttons on the [Retrieve Statuses](../sync/retrieve-statuses.md#integrity-checks) page:
+:::info[Where to find it]
+This form opens from the [Scheduled jobs](./overview.md) page: click a job of kind *Lifecycle check* to edit it, or **New job → Lifecycle check** to create one. **Save & apply** reloads the schedules at once — no server restart. The former *Lifecycle Checks* page has left the menu.
+:::
+
+The **Lifecycle check** form schedules the two lifecycle maintenance checks so they run **daily without an operator** — the same operations offered as buttons on the [Retrieve Statuses](../retrieve-statuses.md#integrity-checks) page:
 
 - the **integrity check** — backfills the status events the Plateforme Agréée delivered but the regular poll missed;
 - the **ordering check** — re-sequences lifecycle events recorded out of order.
@@ -63,7 +67,7 @@ The scheduler runs in serve mode; changes take effect on the next scheduled run.
 | **Repair automatically** | When ticked, the run applies the repairs; left off, it only **reports** what it would change, leaving the lifecycle untouched. |
 
 :::info[Report first, repair once confident]
-Start a new schedule in **report only** mode and read a few runs on [Retrieve Statuses](../sync/retrieve-statuses.md#integrity-checks) before enabling **Repair automatically** — the manual page shows exactly which events each mode would backfill or re-sequence.
+Start a new schedule in **report only** mode and read a few runs on [Retrieve Statuses](../retrieve-statuses.md#integrity-checks) before enabling **Repair automatically** — the manual page shows exactly which events each mode would backfill or re-sequence.
 :::
 
 ---
@@ -92,5 +96,5 @@ java -jar nomaubl.jar -status-order-check <configFile> [--apply]
 ## Tips & best practices
 
 - **One nightly repair, one wider audit.** A `1`-day repair every night keeps the lifecycle current; a weekly `7`-day *report only* run catches anything the nightly window missed without changing data on its own.
-- **The repairs are the Retrieve Statuses buttons.** Nothing here does more than the manual [integrity and ordering checks](../sync/retrieve-statuses.md#integrity-checks) — the page only puts them on a timer.
+- **The repairs are the Retrieve Statuses buttons.** Nothing here does more than the manual [integrity and ordering checks](../retrieve-statuses.md#integrity-checks) — the page only puts them on a timer.
 - **Leave `--notify` off for wide catch-up runs.** Backfilling a large window with notifications on can flood recipients with historical transitions; enable it only on the tight nightly window.

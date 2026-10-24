@@ -6,16 +6,17 @@ keywords: [NomaUBL, monitoring, tech dashboard, processing log, build-info, lice
 
 # Monitoring — overview
 
-Visibility into a running NomaUBL install splits across four surfaces — three in the web UI, one on the host. This page is the map: which surface answers which operational question, when to look where, what's missing and where to wire external monitoring.
+Visibility into a running NomaUBL install splits across several surfaces — three pages of the web UI, the log file on the host and two HTTP endpoints. This page is the map: which surface answers which operational question, when to look where, what's missing and where to wire external monitoring.
 
 | Surface | What it answers | Where |
 |---|---|---|
-| **Tech Dashboard** | Live KPIs — invoices processed today, in flight, failed; per-PA submission state; scheduler activity. | *Application → Tech Dashboard* (existing page). |
-| **Processing Log** | Per-document trace — every step of every invoice, with the timing, the XSD/Schematron result, the PA call. | *Management → Processing Log* (existing page). |
+| **Tech Dashboard** | Live KPIs — invoices processed today, in flight, failed; per-PA submission state; scheduler activity; configuration check. | *Navigation → Tech Dashboard* — see [Tech dashboard](../application/tech-dashboard.md). |
+| **Diagnostics** | What failed and what the server logged, in four views: integration errors, processing log (every step of every file, with timings), failures (every failure in one list, unresolved by default), server log (the log file, filtered by level and module). | *Navigation → Diagnostics* — see [Diagnostics](../application/diagnostics/overview.md). |
+| **Scheduled jobs** | Every background job with its state, last run, duration, result and next run, and the history of its runs. | *Sync → Scheduled jobs* — see [Scheduled jobs](../sync/scheduled-jobs/overview.md). |
 | **Service log file** | The JVM's stderr / stdout — startup, configuration loading, scheduler ticks, database errors. | `<APP_HOME>/nomaubl-<env>.log` on the host. |
 | **HTTP endpoints** | Machine-readable build info + license state. | `/api/build-info` and `/api/license` on the running service. |
 
-The two web UI surfaces are the **operator's** view; the log file + endpoints are the **infrastructure's** view (load balancers, external monitoring, CI smoke tests).
+The web UI pages are the **operator's** view; the log file + endpoints are the **infrastructure's** view (load balancers, external monitoring, CI smoke tests).
 
 ---
 
@@ -24,17 +25,19 @@ The two web UI surfaces are the **operator's** view; the log file + endpoints ar
 | Situation | Surface |
 |---|---|
 | "Did today's batch run successfully?" | **Tech Dashboard** — invoices processed today panel. |
-| "What's the status of invoice #12345?" | **Processing Log** — search by document number. |
-| "Why is invoice #12345 stuck?" | **Processing Log** — drill into the step trace. |
-| "Why isn't the scheduler firing?" | **Service log file** — look for `scheduler tick` lines. |
+| "What failed and is still open?" | **Diagnostics → Failures** — unresolved only, newest first. |
+| "What's the status of invoice #12345?" | **Diagnostics → Processing log** — search by document number. |
+| "Why is invoice #12345 stuck?" | **Diagnostics → Processing log** — drill into the step trace. |
+| "Did the nightly job run?" | **Scheduled jobs** — last run, result and run history. |
+| "Why isn't the scheduler firing?" | **Scheduled jobs** for the state of each job, then the **Server log** view or the log file. |
 | "Did the JVM crash?" | **Service log file** + `./nomaubl.sh status` (Linux / macOS) or `nomaubl.cmd status` (Windows). |
 | "Is the database reachable?" | **Service log file** — look for `Connected to db-nomaubl` on start. |
-| "Is the PA reachable?" | **Service log file** — look for `pa-default API call` lines. |
+| "Is the PA reachable?" | **Diagnostics → Server log** (module `PA`) or the log file — look for `pa-default API call` lines. |
 | "Is the license still valid?" | `curl /api/license` — returns `valid` / `expired` / `restricted`. |
 | "What version is running?" | `curl /api/build-info` — returns version + build timestamp. |
 | "Did a process restart happen overnight?" | `./nomaubl.sh status` / `nomaubl.cmd status` shows current PID; the log file shows the startup banner. |
 
-The first two go through the UI; everything below goes through the CLI or a `curl`. The next page ([Service and logs](./service-and-logs.md)) walks the CLI side in detail.
+The questions on invoices, failures and jobs go through the UI; everything below goes through the CLI or a `curl`. The next page ([Service and logs](./service-and-logs.md)) walks the CLI side in detail.
 
 ---
 
@@ -45,7 +48,8 @@ Visibility:
 | Surface | Permission |
 |---|---|
 | Tech Dashboard | Available to every signed-in user — but the KPIs themselves respect each user's data filter (e.g. per-company scope). |
-| Processing Log | Restricted to roles with the `processing-log` permission (typically operators + admins). |
+| Diagnostics | Each view is granted on its own on the [Roles](../configuration/security/roles.md) page — Integration errors, Processing log, Failures, Server log. |
+| Scheduled jobs | The *Scheduled Jobs* page grant; running, pausing or saving a job also requires the *Run batch jobs* action. |
 | Service log file / endpoints | Available to anyone with SSH / RDP / HTTP access to the host. **Restrict via the firewall and the reverse proxy** — `/api/build-info` and `/api/license` are unauthenticated. |
 
 The two unauthenticated HTTP endpoints don't leak secrets (no passwords, no tokens, only build metadata + license summary), but they do leak the **version** of NomaUBL you run. For public-facing installs, gate them behind the reverse proxy or your VPN if that matters.
@@ -74,7 +78,7 @@ The two unauthenticated HTTP endpoints don't leak secrets (no passwords, no toke
   <text x="382" y="130" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Per-document trace</text>
   <text x="382" y="146" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Step timing, XSD result</text>
   <text x="382" y="162" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">PA call breakdown</text>
-  <text x="382" y="184" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Management → Processing Log</text>
+  <text x="382" y="184" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Diagnostics → Processing log</text>
 
   <rect x="504" y="80" width="220" height="120" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)"/>
   <text x="614" y="106" fill="#22c55e" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SERVICE LOG FILE</text>
@@ -123,7 +127,7 @@ Most external-monitoring needs reduce to: **scrape the host with the standard to
 A minimal "production-ready" monitoring posture for a single host install:
 
 1. **Auto-start via systemd** with `Restart=on-failure` — see [Service and systemd](../installation/service-and-systemd.md).
-2. **Log rotation** with logrotate (`copytruncate`) — same page.
+2. **Log rotation** — built into the server: above the *Log size cap* (100 MB by default) the log is copied to `.1` and truncated, five copies being kept ([`global → Logs`](../configuration/system/global.md)). Logrotate is only needed when the server runs under another launcher.
 3. **Liveness probe** from your load balancer / uptime monitor hitting `/api/build-info` every 30 seconds.
 4. **License alert** — a small script that hits `/api/license` daily and pages if `valid: false`.
 5. **Log forwarding** — pipe `nomaubl-<env>.log` to your central log store (Loki, ELK, Datadog Logs). The framework writes plain stderr/stdout — every line-based log shipper picks it up.
@@ -138,7 +142,7 @@ Items 3, 4 and 5 are the cheap wins that catch 80% of production incidents.
 | Goal | Read |
 |---|---|
 | Walk the Tech Dashboard cards. | [Application → Tech Dashboard](../application/tech-dashboard.md). |
-| Investigate a stuck or failed invoice. | [Management → Processing Log](../management/processing-log.md). |
+| Investigate a stuck or failed invoice. | [Diagnostics → Processing log](../application/diagnostics/processing-log.md). |
 | Use the wrapper's `status` + log tailing for incidents (Linux or Windows). | [Service and logs](./service-and-logs.md). |
 | Wire external monitoring (LB probes, alerting, log forwarding). | [Service and logs](./service-and-logs.md). |
 
@@ -148,4 +152,4 @@ Items 3, 4 and 5 are the cheap wins that catch 80% of production incidents.
 
 - [Service and logs](./service-and-logs.md) — the CLI + endpoints layer in detail.
 - [Application → Tech Dashboard](../application/tech-dashboard.md) — the in-app live view.
-- [Management → Processing Log](../management/processing-log.md) — per-document trace.
+- [Diagnostics → Processing log](../application/diagnostics/processing-log.md) — per-document trace.

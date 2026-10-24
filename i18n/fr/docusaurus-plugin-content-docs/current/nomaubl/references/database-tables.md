@@ -6,23 +6,11 @@ keywords: [NomaUBL, base de données, schéma, tables, F564230, F564231, F564233
 
 # Tables de base de données
 
-NomaUBL persiste chaque artefact du pipeline e-invoicing — la source ERP originale, le document UBL généré, la décomposition par ligne et par taux de TVA, les événements de cycle de vie, les erreurs de validation, le journal de traitement runtime, les soumissions e-reporting et le triplet utilisateur / rôle / session.
+NomaUBL enregistre chaque artefact du pipeline e-invoicing — la source ERP originale, le document UBL généré, la décomposition par ligne et par taux de TVA, les événements de cycle de vie, les erreurs de validation, le journal de traitement runtime, les soumissions e-reporting et le triplet utilisateur / rôle / session.
 
 Le schéma est **identique sur Oracle et PostgreSQL** — la DDL s'adapte au dialecte (`BLOB` ↔ `BYTEA`, `NUMBER` ↔ `INTEGER`, `VARCHAR2` ↔ `VARCHAR`) mais les noms de colonnes, les clés primaires et la sémantique restent les mêmes. Chaque nom de table est configurable dans le template système `db-nomaubl` et créé par l'action **Initialize Database** de l'écran *Settings → Database Connectors*.
 
 Le schéma fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les tables suivent la convention de nommage JDE `F564XXX` car la plateforme a d'abord été construite autour de JDE ; les conventions sont fonctionnelles, pas spécifiques à la source.
-
-:::info[Évolutions de schéma — 2026.05.5]
-La version **2026.05.5** apporte plusieurs évolutions structurelles :
-- **Tables e-reporting renumérotées** : `F564240` / `F564241` / `F564242` deviennent `F564260` / `F564261` / `F564262`. Le type de `RGTXFT` passe de `CLOB` / `TEXT` à `BLOB` / `BYTEA`. Les colonnes FK des tables filles passent de `RGUKID` à `RHUKID` (cycle de vie) et `RIUKID` (mapping).
-- **Journal d'exécution `F564237`** : nouvelle PK `FEUKID`, colonnes renommées (`FEMODE` → `FERMK`, `FEMETHOD` → `FERMK2`, `FEMESSAGE` → `FEK74MSG1`).
-- **Authentification refondue** : `F564252` (sessions) renommée en `SSLSID` / `SSSTDTIM` / `SSETDTIM`. `F564251` (rôles) ne contient plus que l'identité — les droits passent dans la nouvelle table `F564254` (`PMROLE` / `PMCRAPPID` / `PMCRAPPVAL`). Les colonnes utilisateur (`F564250`) suivent désormais les conventions JDE (`USLDAPPSWD`, `USENABL`, `USSECF3`, audit `USUPMJ` / `USTDAY`).
-- **Notifications `F564253`** (introduite en 2026.05.3) figure désormais dans cette page de référence.
-:::
-
-:::info[Évolution — 2026.06.21.3]
-La table **`F564255` — Tokens de réinitialisation de mot de passe** est ajoutée pour soutenir le flux *Mot de passe oublié* (lien à usage unique avec TTL ~60 minutes). Une nouvelle entrée `Auth · Password resets` (défaut `F564255`) figure dans *Paramètres → db-nomaubl* pour que la validation de schéma ne la signale plus comme manquante.
-:::
 
 ---
 
@@ -35,7 +23,7 @@ La table **`F564255` — Tokens de réinitialisation de mot de passe** est ajout
 | **Dates** | Julian JDE — entier au format `CYYDDD` où `C = 1` pour 2000–2099, `YY` correspond aux deux derniers chiffres de l'année et `DDD` au jour de l'année. Exemple : `125108` → 2025-04-18. Conversion à la volée pour l'IHM. |
 | **Heures** | Entier au format `HHMMSS`. Exemple : `143052` → 14:30:52. |
 | **Numériques mis à l'échelle** | Certains montants et taux sont stockés en entiers multipliés par un facteur fixe — diviser à la lecture : `ATXA × 100` (2 décimales), `QNTY × 10000` (4 décimales), `UPRC × 10000` (4 décimales), `TXR1 × 1000` (3 décimales). |
-| **Charges utiles XML** | Stockées en `BLOB` (Oracle) / `BYTEA` (Postgres) pour le XML source ERP, l'UBL généré **et le XML d'e-reporting** (depuis 2026.05.5). UTF-8 partout. |
+| **Charges utiles XML** | Stockées en `BLOB` (Oracle) / `BYTEA` (Postgres) pour le XML source ERP, l'UBL généré **et le XML d'e-reporting**. UTF-8 partout. |
 | **Séquences auto-incrémentées** | Les colonnes `SEQN` utilisent `COALESCE(MAX(SEQN), 0) + 1` à l'insertion — pas besoin de séquence Oracle ni de serial Postgres. |
 
 ---
@@ -90,7 +78,7 @@ La table **`F564255` — Tokens de réinitialisation de mot de passe** est ajout
 
   <rect x="50" y="156" width="180" height="56" rx="10" fill="url(#dt-g-blue)" stroke="#4a9eff" strokeWidth="1.2" strokeDasharray="4 3" strokeOpacity="0.7"/>
   <text x="140" y="178" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.92">F564237</text>
-  <text x="140" y="197" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Journal de traitement</text>
+  <text x="140" y="197" fill="currentColor" fontSize="11" fontStyle="italic" textAnchor="middle" fontFamily="system-ui, sans-serif" opacity="0.78">Journal des traitements</text>
 
   <line x1="140" y1="128" x2="140" y2="156" stroke="#4a9eff" strokeWidth="1.2" strokeDasharray="3 3" strokeOpacity="0.6" markerEnd="url(#dt-arrow-blue-dim)"/>
   <text x="155" y="146" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" opacity="0.7">FEWDS1</text>
@@ -349,7 +337,7 @@ Erreurs XSD et Schematron enregistrées pour une facture. Une ligne par erreur /
 | `UVK74MSG1` | Texte(2000) | Message d'erreur / avertissement. |
 | `UVUSER` / `UVPID` / `UVJOBN` / `UVUPMJ` / `UVTDAY` | — | Colonnes d'audit. |
 
-### F564237 — Journal de traitement runtime
+### F564237 — Journal des traitements (exécution)
 
 Chaque événement écrit par `RuntimeLogHandler` durant le traitement XML / UBL / BIP / FTP — `START`, `END` et toute méthode intermédiaire. Alimente la page *Processing Log* (menu Management).
 
@@ -378,7 +366,7 @@ Trois tables qui consignent les déclarations *(période, flux, société)* dép
 Une ligne par rapport généré. Stocke le XML `<ReportDocument>` et le dernier statut connu.
 
 - **Clé primaire** : `RGUKID` (séquence globalement unique — pas de composante flux / société).
-- **Notable** : `RGY56BAR` vaut `10.1` ou `10.3` ; `RGDCT` est le type de document (`IN` initial, `RE` remplacement, `CO` annulation, `MO` modification) ; `RGTXFT` porte le XML généré en **octets UTF-8** (BLOB / BYTEA depuis 2026.05.5).
+- **Notable** : `RGY56BAR` vaut `10.1` ou `10.3` ; `RGDCT` est le type de document (`IN` initial, `RE` remplacement, `CO` annulation, `MO` modification) ; `RGTXFT` porte le XML généré en **octets UTF-8** (BLOB / BYTEA).
 
 | Champ | Type | Description |
 |---|---|---|
@@ -452,7 +440,7 @@ Une ligne par utilisateur. Les mots de passe sont stockés sous forme de hashs *
 
 ### F564251 — Rôles (identité seule)
 
-Une ligne par rôle. Depuis la 2026.05.5, la table ne contient plus que **l'identité du rôle** — les droits (pages, sociétés, lecture seule, accès paramètres) sont déportés dans `F564254` ligne par ligne.
+Une ligne par rôle. La table contient uniquement **l'identité du rôle** — les droits (pages, sociétés, lecture seule, accès paramètres) sont stockés ligne par ligne dans `F564254`.
 
 - **Clé primaire** : `RLROLE`
 - **Notable** : Aucun changement de schéma pour ajouter une nouvelle dimension de permission — il suffit d'insérer des lignes avec un nouveau `PMCRAPPID` dans `F564254`.
@@ -503,7 +491,7 @@ Une purge quotidienne pilotée par `global.notificationsRetentionDays` (défaut 
 
 ### F564254 — Droits par rôle (RBAC ligne par ligne)
 
-Nouvelle table introduite en **2026.05.5**. Remplace les colonnes CSV `RLPAGES` / `RLCOMPANIES` / `RLSETTINGS` / `RLREADONLY` de l'ancien `F564251` par des lignes typées. Une ligne par triplet `(rôle, type de permission, valeur)`.
+Stocke les droits des rôles sous forme de lignes typées. Une ligne par triplet `(rôle, type de permission, valeur)`.
 
 - **Clé primaire** : `(PMROLE, PMCRAPPID, PMCRAPPVAL)`
 - **Notable** : Une absence de ligne pour un couple `(rôle, type)` signifie *non restreint* sur cette dimension. Ajouter une nouvelle dimension de permission est un INSERT — pas un changement DDL. Drop + Init Database réinjecte les droits par défaut sans toucher aux rôles existants.
@@ -527,7 +515,7 @@ Valeurs de `PMCRAPPID` actuellement utilisées :
 
 ### F564255 — Tokens de réinitialisation de mot de passe
 
-Introduite en **2026.06.21.3** pour soutenir le flux *Mot de passe oublié*. Une ligne par lien envoyé par mail. Le token est un UUID inscrit dans l'URL `/reset?token=…` ; il est à usage unique et expire après ~60 minutes.
+Table du flux *Mot de passe oublié*. Une ligne par lien envoyé par mail. Le token est un UUID inscrit dans l'URL `/reset?token=…` ; il est à usage unique et expire après ~60 minutes.
 
 - **Clé primaire** : `PRTOK`
 - **Notable** : `PRUSED = 'Y'` marque un token déjà consommé — l'enregistrement reste brièvement en place pour l'audit avant balayage. Une purge supprime les tokens expirés et les tokens consommés au-delà du délai d'audit.

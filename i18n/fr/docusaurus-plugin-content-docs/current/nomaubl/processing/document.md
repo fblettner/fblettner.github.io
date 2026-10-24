@@ -1,12 +1,12 @@
 ---
 title: Traitement de document
-description: "Point d'entrée unique pour traiter un (ou plusieurs) fichier facture. Le pipeline est sélectionné automatiquement selon la propriété source du modèle de document — spool XML (XSL → UBL) ou UBL 2.1 déjà formé — un même formulaire couvre les deux flux."
+description: "Point d'entrée unique pour traiter un (ou plusieurs) fichier facture. Le pipeline est sélectionné automatiquement selon la propriété source du document — spool XML (XSL → UBL) ou UBL 2.1 déjà formé — un même formulaire couvre les deux flux."
 keywords: [NomaUBL, traitement, document, XML, UBL, source, idPattern, cbc:ID, AUTO, SINGLE, BURST, validation seule, envoi PA, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Traitement de document
 
-L'écran **Traitement de document** est le point d'entrée unique du traitement dans NomaUBL. Il exécute un modèle de document sur un (ou plusieurs) fichier source et :
+L'écran **Traitement de document** est le point d'entrée unique du traitement dans NomaUBL. Il exécute un document sur un (ou plusieurs) fichier source et :
 
 1. lit la propriété `source` du modèle (`XML` ou `UBL`) ;
 2. aiguille vers le pipeline correspondant — transformation XSL pour les spools XML, validation directe pour les factures déjà au format UBL ;
@@ -20,12 +20,12 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ## Choix de la source
 
-La première décision d'un modèle de document est sa **Source**. Elle se définit dans **[Documents](../management/documents.md) → onglet Document → champ Source** et elle est lue ici :
+La première décision d'un document est sa **Source**. Elle se définit dans **[Documents](../management/documents.md) → onglet Document → champ Source** et elle est lue ici :
 
 | Source | Quand la choisir | Ce qui s'exécute |
 |---|---|---|
 | **XML** | Spool XML provenant de tout ERP qui demande une transformation vers UBL. Sortie BIP JDE, XML dérivé d'IDoc SAP, XML issu d'une saved-search NetSuite, exports d'ERP personnalisés. | Transformation XSL → UBL 2.1 → XSD + Schematron → BDD → dépôt PA optionnel. La page propose le sélecteur *Mode* (AUTO / SINGLE / BURST / UBL) et le sélecteur *Send to PA*. |
-| **UBL** | Le fichier est déjà une facture UBL 2.1 (l'ERP émet de l'UBL nativement, ou le fichier provient d'une PA en aval au format UBL). | Lecture de la facture, extraction de `(doc, dct, kco)` depuis `cbc:ID`, validation, persistance, dépôt optionnel. La page propose un mode *Validate only* et un sélecteur *Send to PA*. |
+| **UBL** | Le fichier est déjà une facture UBL 2.1 (l'ERP émet de l'UBL nativement, ou le fichier provient d'une PA en aval au format UBL). | Lecture de la facture, extraction de `(doc, dct, kco)` depuis `cbc:ID`, validation, enregistrement, dépôt optionnel. La page propose un mode *Validate only* et un sélecteur *Send to PA*. |
 | **PDF** | Un PDF texte issu de n'importe quel système, sans export XML ni UBL disponible. | Le PDF est converti en XML à plat selon les réglages d'[extraction PDF](../management/documents.md#extraction-pdf) du modèle, puis suit le pipeline XML. La page propose le même sélecteur *Mode* et les mêmes options *Send to PA* que pour le XML ; le sélecteur de fichier accepte les `.pdf`. |
 
 Une fois le modèle sélectionné, le champ **Source** du formulaire affiche la valeur résolue, et le reste du formulaire se reconfigure automatiquement.
@@ -155,7 +155,7 @@ Une fois le modèle sélectionné, le champ **Source** du formulaire affiche la 
   <text x="200" y="244" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">XSL → UBL · AUTO / SINGLE / BURST / UBL</text>
   <rect x="660" y="200" width="280" height="60" rx="10" fill="url(#pd-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
   <text x="800" y="226" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Pipeline UBL</text>
-  <text x="800" y="244" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">parser cbc:ID · valider · persister</text>
+  <text x="800" y="244" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">lire cbc:ID · valider · enregistrer</text>
   <path d="M 400 130 L 200 130 L 200 200" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#pd-arrow)"/>
   <text x="270" y="122" fontSize="10" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">XML</text>
   <path d="M 600 130 L 800 130 L 800 200" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#pd-arrow)"/>
@@ -166,7 +166,7 @@ Une fois le modèle sélectionné, le champ **Source** du formulaire affiche la 
   <line x1="200" y1="260" x2="380" y2="305" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#pd-arrow)"/>
   <line x1="800" y1="260" x2="620" y2="305" stroke="#4a9eff" strokeWidth="1.4" markerEnd="url(#pd-arrow)"/>
   <rect x="380" y="380" width="240" height="50" rx="10" fill="url(#pd-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
-  <text x="500" y="402" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">💾 Persistance BDD</text>
+  <text x="500" y="402" fill="#4a9eff" fontSize="13" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">💾 Enregistrement en base</text>
   <text x="500" y="420" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.78">F564231 + UHTMPL = modèle</text>
   <line x1="500" y1="356" x2="500" y2="380" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#pd-arrow)"/>
   <rect x="160" y="460" width="240" height="60" rx="10" fill="url(#pd-g-blue)" stroke="#4a9eff" strokeWidth="1.5"/>
@@ -191,7 +191,7 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 
 | Champ | Source | Description |
 |---|---|---|
-| **Template** | les deux | Modèle de document (resource type `document`). Le sélecteur liste tout modèle figurant dans `config-documents.json`. |
+| **Template** | les deux | Document (resource type `document`). Le sélecteur liste tout modèle figurant dans `config-documents.json`. |
 | **Source** | les deux | Affichage en lecture seule de la valeur `source` résolue du modèle. Changer de modèle met à jour ce champ et reconfigure le formulaire. |
 | **Select File** | les deux | Deux boutons — *Upload File* (sélecteur de fichiers du navigateur) ou *Browse Server* (ouvre l'explorateur de fichiers embarqué dans `dirInput`). Les téléversements XML sont copiés dans le répertoire de travail du modèle ; les téléversements UBL atterrissent dans `<dirInput>/ubl/`. |
 | **Mode** | XML | `AUTO` (défaut), `SINGLE`, `BURST` ou `UBL`. Voir [Modes (source XML)](#modes-source-xml) ci-dessous. |
@@ -221,7 +221,7 @@ Le formulaire comporte quatre contrôles communs et des champs spécifiques par 
 | Mode | Ce qui s'exécute |
 |---|---|
 | **Process & Validate** *(défaut)* | Lecture de la facture UBL, extraction de `(doc, dct, kco)` depuis `cbc:ID` (regex du modèle), validation XSD + Schematron, enregistrement dans `F564231` / `F564233` / `F564234` / `F564235` / `F564236`, écriture de l'événement de cycle de vie. *Send to PA* s'applique. |
-| **Validate only** | Exécute XSD + Schematron uniquement. Aucune écriture en base, aucun dépôt PA. Le tableau de résultats affiche chaque erreur avec sévérité / source / règle / message — mêmes colonnes que la page [Erreurs d'intégration](../application/integration-errors.md). À utiliser comme contrôle rapide avant d'enregistrer le fichier en base. |
+| **Validate only** | Exécute XSD + Schematron uniquement. Aucune écriture en base, aucun dépôt PA. Le tableau de résultats affiche chaque erreur avec sévérité / source / règle / message — mêmes colonnes que la page [Erreurs d'intégration](../application/diagnostics/integration-errors.md). À utiliser comme contrôle rapide avant d'enregistrer le fichier en base. |
 
 **Plus de convention de nommage.** Le traitement UBL extrait toujours `(doc, dct, kco)` depuis le `cbc:ID` de la facture via la regex `idPattern` du modèle. La convention `DOC_DCT_KCO_ubl.xml` n'est plus exigée — les fichiers peuvent avoir n'importe quel nom.
 
@@ -274,7 +274,7 @@ Remplace les anciens drapeaux `-xml` et `-ubl`. Le CLI lit la propriété `sourc
 
 ## Conseils & bonnes pratiques
 
-- **Choisir la bonne source au niveau du modèle, pas au moment de l'exécution.** `Source` se définit sur le modèle de document ; la page *Traitement de document* la lit simplement. Une définition unique dans [Documents](../management/documents.md) garantit la cohérence de tous les points d'entrée (cette page, *Fetch Input*, le CLI, le planificateur).
+- **Choisir la bonne source au niveau du modèle, pas au moment de l'exécution.** `Source` se définit sur le document ; la page *Traitement de document* la lit simplement. Une définition unique dans [Documents](../management/documents.md) garantit la cohérence de tous les points d'entrée (cette page, *Fetch Input*, le CLI, le planificateur).
 - **Utiliser *Validate only* avant l'enregistrement.** À l'import de fichiers UBL provenant d'un nouveau système amont, lancer d'abord *Validate only* pour faire remonter les échecs XSD / Schematron sans polluer la base.
 - **`AUTO` en production, explicite pour le débogage.** Les modèles de production utilisent en général `AUTO` pour que la table des types de document pilote l'aiguillage par ligne. Lors du débogage d'un modèle isolé, repasser au mode `UBL` explicite rend la trace sans ambiguïté.
 - **`Replace = Overwrite` purge cinq tables.** En-tête (`F564231`), lignes (`F564233`), TVA (`F564234`), cycle de vie (`F564235`) et erreurs de validation (`F564236`) — l'historique et les erreurs de l'exécution précédente n'interfèrent pas avec la nouvelle exécution.

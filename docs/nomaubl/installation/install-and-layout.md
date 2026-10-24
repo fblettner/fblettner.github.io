@@ -133,7 +133,7 @@ Each subdirectory has a specific role. Understanding what each does helps when r
 | **`single/`** | One-off single-document outputs from the `-process ... SINGLE` mode. |
 | **`burst/`** | Per-sub-document outputs from the `-process ... BURST` mode (one source file produces many invoices). |
 | **`subtmpl/`** | Per-template sub-templates (additional XSLT fragments). |
-| **`template/`** | One subdirectory per document template (`invoices/`, `credit_notes/`, …). Each holds the master XSL, the per-document RTF, sample XMLs and the customer's overrides block. |
+| **`template/`** | One subdirectory per document (`invoices/`, `credit_notes/`, …). Each holds the master XSL, the per-document RTF, sample XMLs and the customer's overrides block. |
 | **`xslt/`** | The framework's XSL libraries (`ubl-common.xsl`, the Schematron rule packs, the XSD set). Refreshed on every upgrade. |
 | **`.versions/`** | Internal version tracking — which framework version each templated file came from. Used by the upgrade flow to decide what to refresh. |
 

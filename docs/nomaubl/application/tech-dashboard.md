@@ -12,10 +12,6 @@ Every refresh hits four backend endpoints in parallel — `/api/system`, `/api/d
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The widgets read host-level metrics and the NomaUBL processing log; the source format is transparent here.
 
-:::info[New in 2026.05.6]
-The Tech Dashboard is brand new. The Scheduler widget that used to sit on the business Dashboard moved here, and the in-memory `ActivityTracker` introduced in the same release fills in the *Active sessions* card when authentication is disabled.
-:::
-
 ---
 
 ## Opening the page
@@ -61,7 +57,7 @@ The Tech Dashboard is brand new. The Scheduler widget that used to sit on the bu
   <text x="624" y="128" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Settings</text>
   <text x="624" y="146" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Processing Log</text>
   <text x="624" y="164" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ File Versions</text>
-  <text x="624" y="182" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Cross-Reference</text>
+  <text x="624" y="182" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Integration Errors</text>
 
   <rect x="240" y="216" width="178" height="100" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="252" y="236" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SCHEDULER</text>
@@ -249,7 +245,7 @@ The 12-column grid is laid out as nine rows:
 
 A **Refresh** button in the page header re-runs all four endpoints in parallel.
 
-The manual one-click retry of the **Send Failed** card and the scheduled overnight sweep of the [Auto-Retry](../configuration/system/auto-retry.md) page call the same underlying replay path.
+The manual one-click retry of the **Send Failed** card and the scheduled overnight sweep of the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) page call the same underlying replay path.
 
 ---
 
@@ -274,7 +270,7 @@ The card subtitle on the right shows the **build version + build date** baked in
 
 ### Quick links (row 1, span 4)
 
-Static shortcut list — the IT operator's most-used pages. Each link uses the same `onNavigate` mechanism as the sidebar so it lands on the target page directly. Default targets: **Settings**, **Processing Log**, **File Versions**, **Cross-Reference**.
+Static shortcut list — the IT operator's most-used pages, opened directly: **Processing Log** and **Integration Errors** (both views of [Diagnostics](./diagnostics/overview.md)), **Notifications**, **Process Document**, **File Versions** and **Settings**.
 
 ### Send Failed (row 2, span 3) \{#send-failed\}
 
@@ -285,9 +281,9 @@ A single big-number card showing how many invoices are currently in *Send failed
 | Count | Live total — refreshed by the page's *Refresh* button and at every dashboard mount. Coloured red when non-zero. |
 | **Resend all N** button | Disabled when the count is zero. Click to replay every status-`9904` invoice; opens the progress window. |
 | Progress window | Live counters (*processed* / *succeeded* / *failed*), a *Cancel* button and a *Run in background* button — same component as every long-running operation on the platform. |
-| Throttle | 100 ms between calls — fixed in code; not operator-tunable here. The [Auto-Retry](../configuration/system/auto-retry.md) schedule exposes its own throttle for the scheduled equivalent. |
+| Throttle | 100 ms between calls — fixed in code; not operator-tunable here. The [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) schedule exposes its own throttle for the scheduled equivalent. |
 
-Use the manual button for a one-shot replay during business hours (a brief PA outage that cleared, a small batch you want resent now). For unattended overnight retries, schedule a row on the [Auto-Retry](../configuration/system/auto-retry.md) page — same code path, no operator action required.
+Use the manual button for a one-shot replay during business hours (a brief PA outage that cleared, a small batch you want resent now). For unattended overnight retries, schedule a row on the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) page — same code path, no operator action required.
 
 ### Waiting for review (row 2, span 3) \{#waiting-for-review\}
 
@@ -309,10 +305,10 @@ Lists every active scheduler job:
 
 - **Built-ins** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — driven by `BackgroundScheduler` polling intervals.
 - **Per-template `fetch-all`** — one row per template that has a scheduled extract / sync.
-- **Per-row Auto-Retry sweeps** — one row per saved entry on the [Auto-Retry](../configuration/system/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
-- **Daily lifecycle checks** — one row per scheduled entry on the [Lifecycle checks](../management/lifecycle-checks.md) page, next to the digests and auto-retries, with its time and last run.
+- **Per-row Auto-Retry sweeps** — one row per saved entry on the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
+- **Daily lifecycle checks** — one row per scheduled entry on the [Lifecycle checks](../sync/scheduled-jobs/lifecycle-checks.md) page, next to the digests and auto-retries, with its time and last run.
 
-Each row shows the job name, the cadence, and a status pill (green active, blue scheduled-soon, orange paused). The card subtitle reports the active count.
+Each row shows the job name, the cadence, and a status pill (green active, blue scheduled-soon, orange paused). The card subtitle reports the active count; the calendar button of the header opens [Scheduled jobs](../sync/scheduled-jobs/overview.md), where every job is run, paused and edited.
 
 The **PA import poll** and **PA status retrieve** jobs carry a **pause / resume** button — effective on the next tick and deliberately runtime-only, so a server restart always resumes and a pause can't be forgotten. The [daily quiet window](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) is shown here too, highlighted while active — during it both pollers skip their runs automatically.
 
@@ -384,7 +380,7 @@ Each row shows the badge, the **template** + **mode** + **source file** when pre
 
 The feed is **deduplicated on `FEUKID`** so the same row never appears twice across polls, even when the clock jitters. A **Pause / Resume** button on the right of the title freezes polling — useful when reading a long line without it scrolling away.
 
-The scrollable list is capped at the latest 100 events; older rows fall off the bottom as new ones come in. For deeper investigation use the [Processing Log](../management/processing-log.md) page, which keeps the full history with grouped-job views.
+The scrollable list is capped at the latest 100 events; older rows fall off the bottom as new ones come in. For deeper investigation use the [Processing Log](diagnostics/processing-log.md) page, which keeps the full history with grouped-job views.
 
 ### Configuration check (row 8, span 12)
 
@@ -395,8 +391,9 @@ Validates the *connector-style* configuration the application uses today. Issues
 | **PA connector** | `baseUrl`; `authType`; credentials per auth type — `OAUTH2` (clientId/secret/token endpoint), `BASIC` (username/password), `BEARER` (token); presence of an endpoint named `import` (warns when `import-status` is missing). |
 | **e-Directory** | `baseUrl` and `directory-check` endpoint when `checkDirectory=Y`. |
 | **e-Reporting** | `issuerSiren`, `frequency`, `flux` when `sendToPA=Y`. |
+| **Statuses** | Every PA status code received but not mapped in the [status catalogue](../configuration/system/statuses.md): the warning gives the number of events skipped since the server started and an example invoice. Add the code to the catalogue to record these events. |
 
-Old checks against `paApiBaseUrl` / `paApiUsername` / `ublXsdPath` / `ublSchematronPath` are **gone** — those properties no longer exist on the connector schema. The validation assets (XSD / Schematron) are bundled in the JAR.
+The validation assets (XSD / Schematron) are bundled in the JAR.
 
 A clean check renders as `✔ 0 issues` in green; otherwise the card lists the issues in order of severity.
 
@@ -406,13 +403,13 @@ Per-table row count for every NomaUBL table — invoices (`F564231`), lifecycle 
 
 ### Recent errors (row 9, span 7)
 
-Last 8 events from `F564237` filtered on `level IN ('ERROR', 'FATAL')`. Each row shows the level badge, the lifecycle code and triplet, the message, and a relative timestamp (*2m ago*, *1h ago*). Clicking a row opens the corresponding entry in *Processing Log*, where the full stack and replay options live.
+Last 8 events from `F564237` filtered on `level IN ('ERROR', 'FATAL')`. Each row shows the level badge, the lifecycle code and triplet, the message, and a relative timestamp (*2m ago*, *1h ago*). Clicking a row tied to an invoice opens the *Integration Errors* view of [Diagnostics](./diagnostics/overview.md) narrowed to that invoice; a processing row opens the *Processing Log* view. **Open Integration Errors →** opens the view unfiltered.
 
 ---
 
 ## Shared progress window \{#shared-progress-window\}
 
-*Added 2026.06.03.* Every long-running operation in the platform — Resend All from this page, the [Auto-Retry](../configuration/system/auto-retry.md) sweep, the *Detailed view* export on [Integration Errors](./integration-errors.md), the upcoming bulk re-imports — opens the **same modal**. One component, one set of habits.
+Every long-running operation in the platform — Resend All from this page, the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) sweep, the *Detailed view* export on [Integration Errors](diagnostics/integration-errors.md), the upcoming bulk re-imports — opens the **same modal**. One component, one set of habits.
 
 The window stays open by default while the operation runs; closing it is a deliberate action.
 

@@ -1,6 +1,6 @@
 ---
 title: Notifications
-description: "Portal inbox for status-change alerts emitted by NomaUBL — All / Unread tabs, mark-all-read, per-row dismiss, click-through to the linked invoice. Combined with the navbar bell that polls every 30 s and previews the last six entries, the page is the read-side of the notification system shipped in 2026.05.3."
+description: "Portal inbox for status-change alerts emitted by NomaUBL — All / Unread tabs, mark-all-read, per-row dismiss, click-through to the linked invoice. Combined with the navbar bell that polls every 30 s and previews the last six entries, the page is the read-side of the notification system."
 keywords: [NomaUBL, notifications, inbox, bell, NotificationBell, F564253, NTUKID, NTUSER, NTEV01, status changes, mark read, dismiss, invoice, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
@@ -155,7 +155,7 @@ Clicking anywhere in the row body opens the **invoice detail modal** for the lin
 
 ## Action audit chips
 
-Since 2026.05.7, every notification dispatched by a [Notification Rule](../management/notification-rules.md) that defines one or more action calls carries a permanent **audit trail** stored in the `NTK74MSG2` column. The inbox renders the trail as a row of colour-coded chips below the message, one chip per call:
+Every notification dispatched by a [Notification Rule](../management/notification-rules.md) that defines one or more action calls carries a permanent **audit trail** stored in the `NTK74MSG2` column. The inbox renders the trail as a row of colour-coded chips below the message, one chip per call:
 
 | Chip | Colour | Meaning |
 |---|---|---|
@@ -192,7 +192,7 @@ Every delivered notification is one row in **`F564253`** (Oracle + Postgres). Th
 | `NTUSER` | string | Resolved username, or `*` when running with auth disabled (broadcast). |
 | `NTEV01` | string | `0` for unread, `1` for read. The bell badge counts rows where `NTEV01 = 0`. |
 | `NTSUBJ` / `NTMSGE` | string | Subject / message body. |
-| `NTK74MSG2` | string | Action audit footer written by the dispatcher (`OK / FAIL / STOP / SKIP` per call) — drives the chips section. New in 2026.05.7. |
+| `NTK74MSG2` | string | Action audit footer written by the dispatcher (`OK / FAIL / STOP / SKIP` per call) — drives the chips section. |
 | `NTDOC / NTDCT / NTKCO` | mixed | The invoice triplet; nullable for system-level alerts that don't link to a specific invoice. |
 | `NTUPMJ` / `NTTDAY` | jul / hms | Issue date and time. The composite index on `(NTUSER, NTEV01, NTUPMJ DESC)` keeps the bell badge query and the inbox sort fast. |
 

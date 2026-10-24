@@ -1,6 +1,6 @@
 ---
 title: Tableau de bord
-description: "Page d'accueil de NomaUBL — grille à 12 colonnes avec quatre cartes KPI hero (Total / En cours / Rejetée — IT / Rejetée — Business), funnel pipeline, graphique de volume, activité récente, factures bloquées, règles en échec, répartition par société, couverture e-reporting et aller-retour PA — pilotés par un seul filtre de plage de dates. Le suivi du planificateur a migré vers le Tableau de bord IT en 2026.05.6."
+description: "Page d'accueil de NomaUBL — grille à 12 colonnes avec quatre cartes KPI hero (Total / En cours / Rejetée — IT / Rejetée — Business), funnel pipeline, graphique de volume, activité récente, factures bloquées, règles en échec, répartition par société, couverture e-reporting et aller-retour PA — pilotés par un seul filtre de plage de dates. Le suivi du planificateur se trouve sur le Tableau de bord IT dédié."
 keywords: [NomaUBL, tableau de bord, KPI, cartes hero, funnel pipeline, graphique de volume, activité récente, factures bloquées, règles en échec, couverture e-reporting, aller-retour, plage de dates, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
@@ -9,14 +9,6 @@ keywords: [NomaUBL, tableau de bord, KPI, cartes hero, funnel pipeline, graphiqu
 Le **tableau de bord** est la page d'accueil de NomaUBL. Il s'ouvre par défaut après la connexion et présente l'état opérationnel de la plateforme sur une **grille à 12 colonnes** : quatre cartes KPI hero en tête, puis une série de widgets groupés deux par deux qui couvrent le volume d'ingestion, le pipeline du dispatcher, l'activité récente, les factures bloquées, les règles de validation en échec, la répartition par société, la couverture e-reporting et les durées d'aller-retour PA.
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Toutes les valeurs proviennent de la base NomaUBL locale. Le tableau de bord reflète donc ce que NomaUBL a traité et enregistré, et non directement ce que conserve le système source ou la Plateforme Agréée.
-
-:::info[Réalignement en 2026.05.6]
-La rangée du bas passe de `6 + 6` sur deux rangées à une seule rangée `4 + 4 + 4` — Par société, Couverture e-Reporting et Aller-retour PA partagent maintenant une rangée équilibrée plutôt que de laisser une demi-cellule vide. Le widget Santé du planificateur a migré vers le nouveau [Tableau de bord IT](./tech-dashboard.md), où il côtoie les widgets JVM, base et système de fichiers de l'équipe technique. La grille passe également en `align-items: stretch` pour que les panneaux d'une même rangée alignent leur bord bas.
-:::
-
-:::info[Refonte en 2026.05.4]
-Le tableau de bord a été reconstruit en grille à 12 colonnes en 2026.05.4. L'ancienne disposition empilée de cartes-compteurs par statut a été remplacée par quatre KPI hero (Total / En cours / Rejetée — IT / Rejetée — Business) et huit widgets appariés. Les cartes hero appliquent désormais un filtre multi-statuts au clic. *En cours* ouvre donc bien la liste des factures en cours, au lieu de retomber sur la liste complète.
-:::
 
 ---
 
@@ -247,7 +239,7 @@ Quatre cartes résument l'état opérationnel en un coup d'œil. Chacune comport
 | **Rejetée — IT** | Échecs techniques, périmètre IT / dev | `9904` `9905` `9907` (échecs internes) et `213` (rejet technique PA) | E-Invoicing avec `status=9904,9905,9907,213` |
 | **Rejetée — Business** | Échecs côté service client | `206` `207` `208` `210` `221` `501` `600` (litiges commerciaux, refus, suspensions, routage, recouvrement, distribution e-mail) | E-Invoicing avec le multi-statut correspondant |
 
-Les cartes **En cours** / **Rejetée — IT** / **Rejetée — Business** perdaient auparavant le filtre de statut au clic. Le paramètre `/api/invoices?status=` n'acceptait qu'une seule valeur ; une liste était rejetée et la page retombait sur la liste complète. Les cartes hero passent désormais une liste séparée par virgules (`/api/invoices?status=A,B,C`) que le backend transforme en clause `IN (…)` multi-statuts. Le clic ouvre alors le bon sous-ensemble.
+Les cartes **En cours** / **Rejetée — IT** / **Rejetée — Business** passent une liste séparée par virgules (`/api/invoices?status=A,B,C`) que le backend transforme en clause `IN (…)` multi-statuts. Le clic ouvre alors le bon sous-ensemble.
 
 Une bordure rouge et une valeur rouge sur **Rejetée — IT** signalent un compteur strictement positif. Même traitement en orange sur **Rejetée — Business**.
 
@@ -268,7 +260,7 @@ Sous la rangée hero, une grille à 12 colonnes accueille huit widgets, groupés
 
 ### Funnel pipeline *(12 colonnes)*
 
-Cinq étapes horizontales — *Validée / Envoyée PA / Attente / Déposée / Rejetée* — accompagnées de leur compteur. Cliquer sur une étape ouvre E-Invoicing pré-filtré sur le jeu de statuts correspondant. Le funnel se lit de gauche à droite : ce qui stagne en *Attente* alimente le widget *Factures bloquées* en dessous ; ce qui arrive en *Rejetée* renvoie vers la page [Erreurs d'intégration](./integration-errors.md).
+Cinq étapes horizontales — *Validée / Envoyée PA / Attente / Déposée / Rejetée* — accompagnées de leur compteur. Cliquer sur une étape ouvre E-Invoicing pré-filtré sur le jeu de statuts correspondant. Le funnel se lit de gauche à droite : ce qui stagne en *Attente* alimente le widget *Factures bloquées* en dessous ; ce qui arrive en *Rejetée* renvoie vers la page [Erreurs d'intégration](diagnostics/integration-errors.md).
 
 ### Volume quotidien *(12 colonnes)*
 
@@ -276,19 +268,19 @@ Graphique d'aire sur 30 jours du volume d'ingestion quotidien. Même série que 
 
 ### Activité récente *(6 colonnes)* + Bloquées + Règles en échec *(6 colonnes)*
 
-Cette rangée était auparavant en 8/4, avec une colonne droite visiblement plus étroite que la gauche. Elle est rééquilibrée en 6/6 depuis 2026.05.4, pour que les rangées suivantes s'alignent sur les mêmes limites de colonnes.
+La rangée est répartie en 6/6, pour que les rangées suivantes s'alignent sur les mêmes limites de colonnes.
 
 | Widget | Contenu |
 |---|---|
 | **Activité récente** | Les dernières factures touchées dans la plage de dates, avec leur triplet canonique (`doc · dct · kco`), le libellé de statut et un horodatage relatif. Cliquer sur une ligne ouvre la liste [E-Invoicing](./invoices.md) filtrée sur ce statut. |
 | **Factures bloquées** | Jusqu'à 50 lignes dont le statut n'a pas évolué depuis 7 jours. Chaque ligne affiche le triplet, le statut courant et le nombre de jours depuis la dernière mise à jour. |
-| **Règles en échec** | Top 10 des règles de validation en échec sur la plage de dates. Chaque ligne affiche un badge de rang, le code de règle, sa description en deuxième ligne et le compteur. Un sélecteur en en-tête restreint la liste à **TOUT** / **UBL** (Schematron / XSD) / **INTEG** (cycle de vie / erreurs d'exécution). Le lien *Voir tout* ouvre la page [Erreurs d'intégration](./integration-errors.md) sur l'onglet **par règle** ; un clic sur une règle précise ouvre l'onglet **par évènement** avec ce code déjà appliqué comme chip de filtre. |
+| **Règles en échec** | Top 10 des règles de validation en échec sur la plage de dates. Chaque ligne affiche un badge de rang, le code de règle, sa description en deuxième ligne et le compteur. Un sélecteur en en-tête restreint la liste à **TOUT** / **UBL** (Schematron / XSD) / **INTEG** (cycle de vie / erreurs d'exécution). Le lien *Voir tout* ouvre la page [Erreurs d'intégration](diagnostics/integration-errors.md) sur l'onglet **par règle** ; un clic sur une règle précise ouvre l'onglet **par évènement** avec ce code déjà appliqué comme chip de filtre. |
 
-Les barres proportionnelles de la version précédente rendaient des compteurs de *160* et *10* presque identiques visuellement. Les nouvelles lignes ordonnées donnent à chaque règle le même poids visuel, avec le compteur aligné à droite.
+Les lignes classées par rang donnent à chaque règle le même poids visuel, avec le compteur aligné à droite : des compteurs de *160* et de *10* restent faciles à distinguer.
 
 ### Par société *(4 colonnes)* + Couverture e-Reporting *(4 colonnes)* + Aller-retour PA *(4 colonnes)*
 
-Les trois widgets courts partagent une seule rangée équilibrée depuis 2026.05.6 — l'ancienne disposition `6 + 6` sur deux rangées laissait une demi-cellule vide après la migration de la Santé du planificateur vers le [Tableau de bord IT](./tech-dashboard.md).
+Les trois widgets courts partagent une seule rangée équilibrée.
 
 | Widget | Contenu |
 |---|---|
@@ -298,8 +290,8 @@ Les trois widgets courts partagent une seule rangée équilibrée depuis 2026.05
 
 La grille utilise `align-items: stretch` et chaque carte grandit avec `flex: 1` à l'intérieur de son span de colonnes — les trois cartes de cette rangée alignent leur bord bas, même quand l'une porte plus de contenu que les autres.
 
-:::tip[La santé du planificateur a migré]
-Le widget Santé du planificateur n'est plus sur cette page. Il se trouve sur le [Tableau de bord IT](./tech-dashboard.md), aux côtés des widgets JVM, base, système de fichiers et journal d'erreurs en direct. L'équipe IT obtient une page dédiée à ses préoccupations opérationnelles ; le public métier ne voit ici que les indicateurs sur lesquels il agit.
+:::tip[Santé du planificateur]
+Le widget Santé du planificateur se trouve sur le [Tableau de bord IT](./tech-dashboard.md), aux côtés des widgets JVM, base, système de fichiers et journal d'erreurs en direct. L'équipe IT obtient une page dédiée à ses préoccupations opérationnelles ; le public métier ne voit ici que les indicateurs sur lesquels il agit.
 :::
 
 ---
@@ -324,5 +316,5 @@ La carte *À propos de cette version* figure tout en bas. Elle indique le numér
 - **Utiliser les préréglages de date.** *Hier* convient à un tour de surveillance matinal ; *Ce mois-ci* à une vue financière ; *Plage personnalisée* couvre une réconciliation de fin de mois ou une fenêtre d'incident précise.
 - **Recouper le funnel et les compteurs hero.** *En cours* doit correspondre aux étapes *Envoyée PA* + *Attente* du funnel. Un écart révèle en général un statut pas encore mappé d'un côté ou de l'autre.
 - **Les *Règles en échec* dictent le travail.** Une seule règle avec des centaines d'occurrences indique souvent un changement amont unique (un champ renommé, un code TVA obsolète) — corriger la règle calme en général la majorité des erreurs d'intégration.
-- **Le tableau de bord sert à repérer des tendances, pas à examiner une ligne.** Pour le détail d'une facture, ouvrir la modale de la page [E-Invoicing](./invoices.md) ; pour une analyse au niveau règle, passer par la page [Erreurs d'intégration](./integration-errors.md).
+- **Le tableau de bord sert à repérer des tendances, pas à examiner une ligne.** Pour le détail d'une facture, ouvrir la modale de la page [E-Invoicing](./invoices.md) ; pour une analyse au niveau règle, passer par la page [Erreurs d'intégration](diagnostics/integration-errors.md).
 - **Mettre la page en favori.** C'est la page d'accueil quotidienne naturelle. Les favoris persistent après l'expiration de session ; la prochaine connexion ouvre donc la même vue.

@@ -1,7 +1,7 @@
 ---
 title: Fetch Invoices
-description: "Configure which JD Edwards BI Publisher (BIP) jobs NomaUBL retrieves for batch processing, and which document template to use for each."
-keywords: [NomaUBL, fetch invoices, BIP, BI Publisher, JD Edwards, JDE, batch processing, scheduler, document template, report filter]
+description: "Configure which JD Edwards BI Publisher (BIP) jobs NomaUBL retrieves for batch processing, and which document to use for each."
+keywords: [NomaUBL, fetch invoices, BIP, BI Publisher, JD Edwards, JDE, batch processing, scheduler, document, report filter]
 ---
 
 # Fetch Invoices
@@ -85,7 +85,7 @@ This page is one of the **JDE-specific** parts of NomaUBL — it talks to a JD E
   <line x1="220" y1="248" x2="476" y2="246" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fi-arrow)"/>
 
   <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Document template</text>
+  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Document</text>
   <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">required to render the PDF</text>
   <line x1="820" y1="216" x2="720" y2="212" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fi-arrow)"/>
 </svg>
@@ -103,7 +103,7 @@ A list of the BIP reports NomaUBL is allowed to pick up. Each row is a filter: N
 | **Report** | Name of the BIP report (e.g. `R42565`). |
 | **Version** | Specific report version to allow (e.g. `FBL00001`). Disabled when **All Versions** is checked. |
 | **All Versions** | When ticked, every version of the report is accepted and the **Version** field is cleared / disabled. |
-| **Template** | The NomaUBL **document template** used to **produce the PDF attachment** when generating the UBL from this BIP output. **Required** when the document type produces a UBL with a PDF attachment (the dropdown lists templates of type `document` defined in your environment — see *Configuration → Documents*). |
+| **Template** | The NomaUBL **document** used to **produce the PDF attachment** when generating the UBL from this BIP output. **Required** when the document type produces a UBL with a PDF attachment (the dropdown lists templates of type `document` defined in your environment — see *Configuration → Documents*). |
 
 Use the **+ Add Report** button to append a row, and the **×** button on a row to remove it.
 
@@ -111,7 +111,7 @@ Use the **+ Add Report** button to append a row, and the **×** button on a row 
 
 - **Batch processing** — when you run the import manually, only jobs whose Report (and Version, unless All Versions is set) match a row are queued.
 - **Scheduler** — when serve mode is enabled, the same filter applies on each polling tick.
-- **Template** — once a job matches, NomaUBL uses the configured **document template** to produce the PDF that gets attached to the UBL during generation. The template provides the RTF / XSL chain defined in *Configuration → Documents*. It is **required** whenever the document type produces a UBL with a PDF attachment.
+- **Template** — once a job matches, NomaUBL uses the configured **document** to produce the PDF that gets attached to the UBL during generation. The template provides the RTF / XSL chain defined in *Configuration → Documents*. It is **required** whenever the document type produces a UBL with a PDF attachment.
 
 ---
 

@@ -13,16 +13,6 @@ The **Validate** screen runs **XSD schema** and **Schematron business rules** ch
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. Validation never writes to the database, never sends to a Plateforme Agréée, and never triggers any other side effect — it is a read-only check.
 
-:::info[Refreshed in 2026.05.9]
-Three changes shipped in 2026.05.9 on the validation side:
-
-- **Precompiled Schematron** — the runtime no longer compiles `.sch` files. `UBLValidator` loads precompiled `.xsl` straight from the JAR classpath, failing fast at startup if any expected file is missing. AFNOR's three packs ship as published; the two locally-authored rules (`BR-FR-CPRO-Schematron-UBL` + `BR-NOMAUBL-rules`) are precompiled at build time by `build.sh` via Saxon CLI + `xmlresolver`. Cold-start drops a noticeable beat — three XSLT compiles × five packs no longer happen per JVM.
-- **Flux 2 always runs** — AFNOR XP Z12-012 V1.3.1 splits validation into 4 steps: Step 2 picks EN 16931 *or* Extended-CTC-FR (based on `CustomizationID`), Step 3 runs **BR-FR-Flux 2 unconditionally** on top. The previous code treated Extended-CTC-FR as a superset and skipped Flux 2 — missing the reform-specific `BR-FR-*` / `EXT-FR-FE-*` rules the PA still enforces server-side. The Extended profile now runs both steps.
-- **`BR-NOMAUBL-rules.sch` pack** — captures rules no shipped Schematron pack encodes yet, surfaced locally so the failure lands in `F564236` before the round-trip. It holds `BR-NOMAUBL-02` (AFNOR §4.4.5 line-amount coherence, warning). Its earlier `BR-NOMAUBL-01` (credit note must reference a preceding invoice) was dropped once the standard Flux 2 pack enforced the same condition through `BR-FR-CO-05`. Wired through `BuildInfo` (`schematron.nomaubl` version in `/api/build-info`) and runs as the final layer after CPRO-B2G.
-
-The **directory check** also moved to validation time in 2026.05.9 — an unknown counterparty surfaces in `F564236` before the document is queued, instead of waiting for the send step to fail.
-:::
-
 ---
 
 ## At a glance
@@ -111,7 +101,7 @@ The **directory check** also moved to validation time in 2026.05.9 — an unknow
 | Field | Description |
 |---|---|
 | **Source** | `XML (transform to UBL)` runs the template's XSL transformation first, then validates the resulting UBL. `UBL (validate directly)` validates the file as-is. |
-| **Template** | Document template (e.g. `invoices`, `credit_notes`). Required when *Source* is `XML`; hidden when *Source* is `UBL`. The template selects which XSL pipeline runs and which Schematron rule set applies. |
+| **Template** | Document (e.g. `invoices`, `credit_notes`). Required when *Source* is `XML`; hidden when *Source* is `UBL`. The template selects which XSL pipeline runs and which Schematron rule set applies. |
 | **Input File** | Basename (without extension) of the file to validate (e.g. `invoice_001`). For `XML` source, the file is resolved in the template's `dirInput` directory; for `UBL`, in `dirInput/ubl/`. |
 
 Two helpers sit next to the **Input File** field:
@@ -174,11 +164,11 @@ The `BR-NOMAUBL-rules.sch` pack carries the rules that no shipped Schematron pac
 
 - **`BR-NOMAUBL-02`** *(warning)* — compares each line's net amount (BT-131) with the AFNOR formula (price ÷ base quantity × quantity, minus line allowances, plus line charges) and warns beyond `0.011`. EN 16931 doesn't check this formula today; the typical case it catches is a net price left in BT-146 with the discount repeated as a line allowance. A warning never blocks the send.
 
-The requirement that a credit note reference a preceding invoice is **not** a house rule — the earlier `BR-NOMAUBL-01` was dropped once the **standard** Flux 2 pack started enforcing the same condition through **`BR-FR-CO-05`**. The house rules are relaxed as the upstream AFNOR / FNFE-MPE packs catch up, so the pack stays a ready-made hook for whatever they don't cover yet.
+The requirement that a credit note reference a preceding invoice is **not** a house rule — the **standard** Flux 2 pack enforces it through **`BR-FR-CO-05`**. The house rules are relaxed as the upstream AFNOR / FNFE-MPE packs catch up, so the pack stays a ready-made hook for whatever they don't cover yet.
 
 ### Customer rules per template
 
-Rules specific to one customer — a mandatory classification, a buyer-reference pattern — don't go into any of the packs above. A document template lists its own precompiled stylesheets in **Custom Schematron** (see [Documents → UBL](../management/documents.md)); they run **after** the standard packs on that template only, and their findings appear under a short source derived from the file name.
+Rules specific to one customer — a mandatory classification, a buyer-reference pattern — don't go into any of the packs above. A document lists its own precompiled stylesheets in **Custom Schematron** (see [Documents → UBL](../management/documents.md)); they run **after** the standard packs on that template only, and their findings appear under a short source derived from the file name.
 
 The pack version is exposed at `GET /api/build-info` under `schematron.nomaubl` — the dashboard footer reads it for the per-pack version stamp.
 

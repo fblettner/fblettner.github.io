@@ -196,7 +196,7 @@ When the PA call fails for transport reasons (network, timeout, credentials), th
 ---
 
 ## Integrity checks \{#integrity-checks\}
-Beyond the incremental retrieval, the page offers two on-demand checks that reconcile the recorded lifecycle with the platform and with itself. Both run in the **background** and are safe to re-run at any time. To run them daily without an operator, schedule them on the [Lifecycle Checks](../management/lifecycle-checks.md) page (or the matching CLI modes).
+Beyond the incremental retrieval, the page offers two on-demand checks that reconcile the recorded lifecycle with the platform and with itself. Both run in the **background** and are safe to re-run at any time. To run them daily without an operator, schedule them on the [Lifecycle Checks](scheduled-jobs/lifecycle-checks.md) page (or the matching CLI modes).
 
 ### Missing statuses
 

@@ -6,7 +6,11 @@ keywords: [NomaUBL, contrôles cycle de vie, contrôle d'intégrité, contrôle 
 
 # Contrôles du cycle de vie
 
-La page **Contrôles du cycle de vie** planifie les deux contrôles de maintenance pour qu'ils s'exécutent **chaque jour sans opérateur** — les mêmes opérations que les boutons de la page [Récupérer les statuts](../sync/retrieve-statuses.md#integrity-checks) :
+:::info[Où le trouver]
+Ce formulaire s'ouvre depuis la page [Tâches planifiées](./overview.md) : cliquer sur une tâche de type *Contrôle cycle de vie* pour la modifier, ou **Nouvelle tâche → Contrôle cycle de vie** pour en créer une. **Enregistrer et appliquer** recharge immédiatement la planification, sans redémarrage du serveur. L'ancienne page *Contrôles du cycle de vie* a quitté le menu.
+:::
+
+Le formulaire **Contrôle cycle de vie** planifie les deux contrôles de maintenance pour qu'ils s'exécutent **chaque jour sans opérateur** — les mêmes opérations que les boutons de la page [Récupérer les statuts](../retrieve-statuses.md#integrity-checks) :
 
 - le **contrôle d'intégrité** — récupère les événements de statut livrés par la Plateforme Agréée mais manqués par l'interrogation régulière ;
 - le **contrôle d'ordre** — réordonne les événements de cycle de vie enregistrés dans le désordre.
@@ -63,7 +67,7 @@ Le planificateur tourne en mode serveur ; les changements prennent effet à la p
 | **Repair automatically** | Coché, l'exécution applique les réparations ; sinon, elle **signale** seulement ce qu'elle changerait, sans toucher au cycle de vie. |
 
 :::info[Signaler d'abord, réparer une fois en confiance]
-Démarrez une planification en mode **rapport seul** et lisez quelques exécutions sur [Récupérer les statuts](../sync/retrieve-statuses.md#integrity-checks) avant d'activer **Repair automatically** — la page manuelle montre exactement quels événements chaque mode compléterait ou réordonnerait.
+Démarrez une planification en mode **rapport seul** et lisez quelques exécutions sur [Récupérer les statuts](../retrieve-statuses.md#integrity-checks) avant d'activer **Repair automatically** — la page manuelle montre exactement quels événements chaque mode compléterait ou réordonnerait.
 :::
 
 ---
@@ -92,5 +96,5 @@ java -jar nomaubl.jar -status-order-check <configFile> [--apply]
 ## Conseils & bonnes pratiques
 
 - **Une réparation nocturne, un audit plus large.** Une réparation d'`1` jour chaque nuit garde le cycle de vie à jour ; une exécution hebdomadaire de `7` jours en *rapport seul* rattrape ce que la fenêtre nocturne a manqué, sans rien modifier d'elle-même.
-- **Les réparations sont les boutons de Récupérer les statuts.** Rien ici ne fait plus que les [contrôles d'intégrité et d'ordre](../sync/retrieve-statuses.md#integrity-checks) manuels — la page ne fait que les mettre sur minuterie.
+- **Les réparations sont les boutons de Récupérer les statuts.** Rien ici ne fait plus que les [contrôles d'intégrité et d'ordre](../retrieve-statuses.md#integrity-checks) manuels — la page ne fait que les mettre sur minuterie.
 - **Laissez `--notify` désactivé pour les grands rattrapages.** Compléter une large fenêtre avec les notifications actives peut inonder les destinataires de transitions historiques ; ne l'activez que sur la fenêtre nocturne étroite.

@@ -1,12 +1,12 @@
 ---
 title: Reports
-description: "Analytical reporting for NomaUBL — a status-statistics pivot (invoice counts by activity, status and rejection reason, per transaction type) and a no-SQL query tool over invoices, archived documents, lifecycle events and validation errors, with saved named reports and Excel/CSV export."
-keywords: [NomaUBL, reports, reporting, statistics, status, rejection reason, query tool, pivot, Excel export, saved reports, config-reports, JD Edwards, SAP, NetSuite, custom ERP]
+description: "Analytical reporting for NomaUBL — five tabs: a status-statistics pivot (invoice counts by activity, status and rejection reason, per transaction type) and a no-SQL query tool over invoices, archived documents, lifecycle events and validation errors, with saved named reports and Excel/CSV export, SQL integrity checks, and the audit and implementation reports generated as PDF or Markdown."
+keywords: [NomaUBL, reports, reporting, audit report, implementation report, statistics, status, rejection reason, query tool, pivot, Excel export, saved reports, config-reports, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Reports
 
-The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It opens on three tabs: a ready-made **Status statistics** pivot, a build-your-own **Query tool**, and **Integrity** — SQL checks that list what is missing or wrong compared with a source system.
+The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has five tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, a build-your-own **Query tool**, and two documents generated on demand, the [Audit report](./audit-report.md) and the [Implementation report](./implementation-report.md).
 
 Open it from the sidebar — **Reports**. Access is granted per role (see [Access](#access) below).
 
@@ -21,10 +21,16 @@ Open it from the sidebar — **Reports**. Access is granted per role (see [Acces
   <rect x="30" y="24" width="940" height="272" rx="14" fill="url(#rep-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="50" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Reports</text>
 
-  <rect x="50" y="66" width="150" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="125" y="83" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Status statistics</text>
-  <rect x="206" y="66" width="120" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="266" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Query tool</text>
+  <rect x="50" y="66" width="120" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="110" y="83" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Status statistics</text>
+  <rect x="176" y="66" width="80" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="216" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Integrity</text>
+  <rect x="262" y="66" width="90" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="307" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Query tool</text>
+  <rect x="358" y="66" width="100" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="408" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit report</text>
+  <rect x="464" y="66" width="140" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="534" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Implementation report</text>
 
   <rect x="740" y="66" width="100" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="790" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Archive date ▾</text>
@@ -82,7 +88,7 @@ The second tab builds an extraction **without SQL**. Pick a **dataset**, choose 
 | **Invoices** | The e-invoicing rows — the same catalog as the [E-Invoicing](./invoices.md) list. |
 | **Archived documents** | Every captured document — the [E-Documents](./edocuments.md) archive. |
 | **Lifecycle events** | One row per status event recorded on the invoice lifecycle. |
-| **Validation errors** | The [Integration Errors](./integration-errors.md) findings. |
+| **Validation errors** | The [Integration Errors](diagnostics/integration-errors.md) findings. |
 
 - **Columns** — pick which columns to include from the dataset's catalog.
 - **Filters** — status, reason, action and transaction-type filters use searchable **multi-select** pickers fed by the reference lists; dates use **range** pickers; the **period bar** with its date-basis toggle leads the screen. A **document-number** filter performs an exact numeric lookup.
@@ -91,6 +97,19 @@ The second tab builds an extraction **without SQL**. Pick a **dataset**, choose 
 ### Saved reports
 
 A query — its **dataset, columns, filters, column layout and grouping** — can be **saved as a named report** and restored in two clicks. The report library lives in its own `config-reports.json` file, so it is easy to back up and to promote from one server to another.
+
+---
+
+## Audit and implementation reports
+
+The last two tabs generate a document, in PDF or Markdown, rather than a grid:
+
+| Tab | Document | Page |
+|---|---|---|
+| **Audit report** | The activity of a period — volumes, situation, backlog, lifecycle, errors, operations and consistency checks — for an internal review or an auditor. | [Audit report](./audit-report.md) |
+| **Implementation report** | The documentation of the instance as it runs — architecture, built-in rules, documents and UBL mappings, platform settings, operations, security — for a hand-over file or an upgrade snapshot. | [Implementation report](./implementation-report.md) |
+
+Both are also available from the [command line](../management/command-line.md#report), to schedule them or keep them with a release.
 
 ---
 

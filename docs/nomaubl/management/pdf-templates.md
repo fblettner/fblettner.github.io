@@ -1,12 +1,12 @@
 ---
 title: PDF Templates
-description: "First-class library of reusable PDF layouts. Each template is a pdf-template resource referenced by document templates by name. Edit once, propagate everywhere via a full-screen visual builder — palette of sections on the left, live preview in the centre, inspector with options + custom-block tree editor on the right."
+description: "First-class library of reusable PDF layouts. Each template is a pdf-template resource referenced by documents by name. Edit once, propagate everywhere via a full-screen visual builder — palette of sections on the left, live preview in the centre, inspector with options + custom-block tree editor on the right."
 keywords: [NomaUBL, PDF templates, pdf-template, layout, defaultPdfTemplate, built-in, visual builder, block section, field, repeat, table, XPath, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # PDF Templates
 
-The **PDF Templates** screen is the library of **reusable PDF layouts** that NomaUBL applies when rendering an invoice. Every layout is a `pdf-template` resource saved in `config-pdf.json`; document templates pick a layout by **name** via their `pdfTemplate` property — so a single layout can be shared across many documents.
+The **PDF Templates** screen is the library of **reusable PDF layouts** that NomaUBL applies when rendering an invoice. Every layout is a `pdf-template` resource saved in `config-pdf.json`; documents pick a layout by **name** via their `pdfTemplate` property — so a single layout can be shared across many documents.
 
 The page covers four operations:
 
@@ -16,10 +16,6 @@ The page covers four operations:
 - **load a real invoice XML** into the builder so the preview and the XPath autocomplete switch to your data.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — since the input it consumes is the generated UBL 2.1, not the source XML.
-
-:::info[New in 2026.05.1]
-PDF templates were previously edited inline on the Documents page (the *PDF Template* tab) and lived in the document template's properties. They are now first-class shareable resources with their own page. The Documents tab still exists, but it now picks a layout *by name* from this page's catalogue rather than holding the JSON inline.
-:::
 
 ---
 
@@ -165,7 +161,7 @@ The page splits into a left **catalogue** of saved layouts and a right summary p
 
 When NomaUBL renders a PDF for an invoice, it walks a three-step chain to choose the layout:
 
-1. The **document template** of that invoice (read from `F564231.UHTMPL`) carries a `pdfTemplate` property — if set, that name is used.
+1. The **document** of that invoice (read from `F564231.UHTMPL`) carries a `pdfTemplate` property — if set, that name is used.
 2. Otherwise, the `defaultPdfTemplate` property on the **`global`** template is used — set from this page via the **Set as default** button.
 3. Otherwise, the bundled **`built-in`** layout is used — always present, never deletable.
 
@@ -195,13 +191,13 @@ The sidebar list contains every saved layout plus the bundled `built-in`.
 
 - **`built-in`** — pinned to the top, read-only, marked with a `factory` badge. Selecting it opens the editor in a banner-tagged read-only mode. *Copy* is the only way to derive an editable layout from it.
 - **★ marker** — the layout currently used as the default for documents with no explicit `pdfTemplate`. Exactly one layout carries the star at any time.
-- **Description** — free-text label persisted on the resource. Surfaced both in the sidebar and in the *PDF Template* selector on a document template.
+- **Description** — free-text label persisted on the resource. Surfaced both in the sidebar and in the *PDF Template* selector on a document.
 
 ---
 
 ## Visual builder \{#visual-builder\}
 
-The **Open visual builder** button opens the layout in a full-screen editor with three panes side-by-side — the canonical way to edit a `pdf-template`. The old single-page flow (section list + per-section drawers, click a Preview button to open a modal) is gone; the builder unifies everything in one screen with the preview always visible.
+The **Open visual builder** button opens the layout in a full-screen editor with three panes side-by-side — the canonical way to edit a `pdf-template`. The builder unifies everything in one screen with the preview always visible.
 
 :::info[The readable PDF shows labels, not codes]
 Coded fields render only their human label — invoice type, profile, payment method, note categories, document references and item identifiers no longer carry the raw code (*Payment: Bank transfer*, not *Payment: 30 — Bank transfer*; a note reads *Payment information —*, not *[PMD] Payment information —*). The codes stay in the UBL for machine processing.
@@ -406,7 +402,6 @@ The builder toolbar carries a few settings applied to the whole layout:
 | **Trim zeros** | Drops trailing zero decimals from amounts, unit prices and quantities — a whole amount prints as `23` instead of `23.00`, and a `23.0000` unit price prints as `23`. Off by default, which keeps the fixed two-decimal amount and four-decimal price display. The setting is per template and applies to the line table, the totals box, and both the readable and on-screen PDFs. |
 | **Decimals** — *amount* / *price* / *qty* | Decimals printed per kind of number, each `auto` or `0`–`6`. *Amount* covers line amounts, allowances, VAT rows and totals; *price* covers the item price, the net unit price and the price discount; *qty* covers invoiced quantities. `auto` keeps the standard display (amounts 2 decimals, prices and quantities as in the UBL), so existing templates render unchanged. A fixed count is rounded half away from zero, as AFNOR requires; *Trim zeros* still applies on top. |
 
-
 ### Labels \{#labels\}
 
 Every text the PDF generator prints — 46 labels across the document header, parties, lines table, line details, VAT summary, totals and payment — can be overridden **per PDF template and per language**. Open **Labels** in the *Template* group of the builder:
@@ -455,7 +450,7 @@ The page reads and writes via the standard template endpoints — same routes us
 
 - **Start from `built-in` via Copy.** The factory layout is a solid baseline — derive variants by copying and tuning the toggles instead of starting from an empty template.
 - **One layout, many documents.** For each invoice variant (standard, credit note, recipient receipt …) prefer one shared layout over per-document inline JSON. The benefit is a single edit point when the legal mentions or the column set changes.
-- **Set a default early.** Mark a layout as default before connecting customer-specific document templates — every new document then resolves to it implicitly, and the explicit `pdfTemplate` property on a doc template stays reserved for genuine variants.
+- **Set a default early.** Mark a layout as default before connecting customer-specific documents — every new document then resolves to it implicitly, and the explicit `pdfTemplate` property on a doc template stays reserved for genuine variants.
 - **Use `block` for what presets don't cover.** Custom legal mentions, country-specific footers, structured signature blocks, watermarks — all best modelled as a `block` rather than asked of an existing preset.
 - **Iterate inside the visual builder.** Toggling a section, then watching the centre preview re-render is the fastest way to converge on a layout — the live preview is always visible, no modal to open.
 - **Load a real XML once per session.** The **↑ Load XML sample** button at the top of the builder feeds the picker for every block — load it once and every XPath autocompletion uses your data.

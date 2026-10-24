@@ -1,12 +1,12 @@
 ---
 title: Modèles PDF
-description: "Bibliothèque de mises en page PDF réutilisables. Chaque modèle est une ressource pdf-template référencée par son nom depuis les modèles de document. Édition unique, propagation à l'ensemble via un éditeur visuel plein écran — palette de sections à gauche, aperçu en direct au centre, inspecteur avec options + éditeur arborescent des blocs personnalisés à droite."
+description: "Bibliothèque de mises en page PDF réutilisables. Chaque modèle est une ressource pdf-template référencée par son nom depuis les documents. Édition unique, propagation à l'ensemble via un éditeur visuel plein écran — palette de sections à gauche, aperçu en direct au centre, inspecteur avec options + éditeur arborescent des blocs personnalisés à droite."
 keywords: [NomaUBL, modèles PDF, pdf-template, mise en page, defaultPdfTemplate, built-in, éditeur visuel, section block, field, repeat, table, XPath, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Modèles PDF
 
-L'écran **Modèles PDF** est la bibliothèque de **mises en page PDF réutilisables** utilisées par NomaUBL au moment du rendu d'une facture. Chaque mise en page est une ressource `pdf-template` enregistrée dans `config-pdf.json` ; les modèles de document désignent une mise en page par **nom** via leur propriété `pdfTemplate` — une même mise en page peut donc être partagée entre plusieurs documents.
+L'écran **Modèles PDF** est la bibliothèque de **mises en page PDF réutilisables** utilisées par NomaUBL au moment du rendu d'une facture. Chaque mise en page est une ressource `pdf-template` enregistrée dans `config-pdf.json` ; les documents désignent une mise en page par **nom** via leur propriété `pdfTemplate` — une même mise en page peut donc être partagée entre plusieurs documents.
 
 La page couvre quatre opérations :
 
@@ -16,10 +16,6 @@ La page couvre quatre opérations :
 - **charger un XML de facture réel** dans l'éditeur pour que l'aperçu et l'auto-complétion XPath s'alignent sur vos données.
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. L'entrée utilisée est l'UBL 2.1 généré, et non le XML source.
-
-:::info[Nouveauté en 2026.05.1]
-Les modèles PDF étaient auparavant édités en ligne sur la page Documents (onglet *PDF Template*) et stockés dans les propriétés du modèle de document. Ils sont désormais des ressources partageables à part entière, dotées de leur propre page. L'onglet de la page Documents existe toujours, mais il choisit désormais une mise en page **par nom** depuis le catalogue de cette page, au lieu de contenir le JSON en ligne.
-:::
 
 ---
 
@@ -165,7 +161,7 @@ La page comporte un **catalogue** à gauche qui liste les mises en page enregist
 
 Au moment du rendu PDF d'une facture, NomaUBL parcourt une chaîne en trois temps pour choisir la mise en page :
 
-1. Le **modèle de document** de la facture (lu depuis `F564231.UHTMPL`) a une propriété `pdfTemplate` — si elle est renseignée, c'est ce nom qui s'applique.
+1. Le **document** de la facture (lu depuis `F564231.UHTMPL`) a une propriété `pdfTemplate` — si elle est renseignée, c'est ce nom qui s'applique.
 2. À défaut, c'est la propriété `defaultPdfTemplate` du modèle **`global`** qui s'applique — réglée sur cette page via le bouton *Définir par défaut*.
 3. À défaut, la mise en page intégrée **`built-in`** s'applique — toujours présente, jamais supprimable.
 
@@ -195,13 +191,13 @@ La barre latérale liste toutes les mises en page enregistrées, plus la `built-
 
 - **`built-in`** — épinglée en haut, en lecture seule, marquée d'un badge `factory`. Sa sélection ouvre l'éditeur en mode lecture seule, signalé par un bandeau. *Copier* est la seule manière d'en dériver une mise en page éditable.
 - **Marqueur ★** — la mise en page utilisée comme défaut pour les documents sans `pdfTemplate` explicite. Une seule mise en page a l'étoile à un instant donné.
-- **Description** — libellé libre enregistré sur la ressource. Apparaît à la fois dans la barre latérale et dans le sélecteur *PDF Template* d'un modèle de document.
+- **Description** — libellé libre enregistré sur la ressource. Apparaît à la fois dans la barre latérale et dans le sélecteur *PDF Template* d'un document.
 
 ---
 
 ## Éditeur visuel \{#visual-builder\}
 
-Le bouton **Ouvrir l'éditeur visuel** ouvre la mise en page dans un éditeur plein écran à trois volets côte à côte — c'est la manière de référence pour éditer un `pdf-template`. L'ancien parcours (liste de sections + tiroirs par section, clic sur un bouton Aperçu qui ouvre une modale) disparaît ; l'éditeur regroupe tout sur un seul écran, aperçu toujours visible.
+Le bouton **Ouvrir l'éditeur visuel** ouvre la mise en page dans un éditeur plein écran à trois volets côte à côte — c'est la manière de référence pour éditer un `pdf-template`. L'éditeur regroupe tout sur un seul écran, aperçu toujours visible.
 
 :::info[Le PDF lisible affiche les libellés, pas les codes]
 Les champs codifiés n'affichent que leur libellé lisible — type de facture, profil, mode de paiement, catégories de note, références de document et identifiants d'article ne portent plus le code brut (*Paiement : Virement*, pas *Paiement : 30 — Virement* ; une note affiche *Informations de paiement —*, pas *[PMD] Informations de paiement —*). Les codes restent dans l'UBL pour le traitement automatisé.
@@ -327,7 +323,7 @@ L'échantillon est conservé pour la session, pas avec le modèle. Rouvrir l'éd
 
 ### Enregistrer et abandonner
 
-Le bouton **Enregistrer** en haut à droite persiste le modèle directement depuis l'éditeur. Le bouton **Fermer** (`✕`) affiche un message de confirmation *Abandonner / Annuler* tant qu'il reste des modifications non enregistrées — impossible de fermer sans choisir. *Abandonner* écarte chaque modification depuis le dernier enregistrement ; *Annuler* maintient dans l'éditeur.
+Le bouton **Enregistrer** en haut à droite enregistre le modèle directement depuis l'éditeur. Le bouton **Fermer** (`✕`) affiche un message de confirmation *Abandonner / Annuler* tant qu'il reste des modifications non enregistrées — impossible de fermer sans choisir. *Abandonner* écarte chaque modification depuis le dernier enregistrement ; *Annuler* maintient dans l'éditeur.
 
 ---
 
@@ -365,7 +361,7 @@ La nouvelle section **`block`** est une primitive pilotée par XPath qui permet 
 | `row` / `column` | Conteneur avec contrôles `align` (`start` / `center` / `end`) et `gap`. `align: end` et `align: center` réduisent la ligne à environ 50 % pour qu'une paire *libellé + valeur* reste groupée plutôt qu'étirée sur toute la page. |
 | `repeat` | XPath retournant une NodeList ; le `child` du block est rendu une fois par occurrence. |
 | `if` | XPath retournant un booléen ; le `child` du block est rendu si vrai, masqué sinon. |
-| `table` | Grille `lignes × colonnes` avec bordures de cellules optionnelles et ligne d'en-tête stylée. Définir `xpath` la fait itérer (une ligne par occurrence), les enfants servant de gabarit par ligne. |
+| `table` | Grille `lignes × colonnes` avec bordures de cellules optionnelles et ligne d'en-tête stylée. Définir `xpath` la fait itérer (une ligne par occurrence), les enfants servant de modèle à chaque ligne. |
 | `note` | Un bloc **Note (par code)** — choisissez un code dans la liste de référence `note-types` ; le rendu repère le `cbc:Note` qui porte le marqueur `#CODE#` correspondant et affiche son corps sur place. Permet de désactiver la section Notes globale et de poser chaque note exactement où elle doit aller (en-tête, entre les parties, près des totaux, dans une colonne). |
 
 Plusieurs blocks peuvent coexister dans un même modèle — par exemple un pour des mentions légales françaises, un pour une table structurée de conditions de paiement, un pour un filigrane image. Chaque block a un `name` utilisateur affiché à côté de la ligne de section dans l'éditeur ; un modèle qui contient trois blocks se lit ainsi `Block · payment-terms`, `Block · legal-mentions`, `Block · watermark`.
@@ -374,7 +370,7 @@ Plusieurs blocks peuvent coexister dans un même modèle — par exemple un pour
 
 - Le **sélecteur** garde les préfixes de namespace `cbc:` / `cac:` — requis par le moteur namespace-aware ; un XPath saisi à la main sans préfixe ne correspondra à rien.
 - Les sélections sont émises en **`/*/<chemin-complet>`** pour être indépendantes de la racine du document (le même chemin s'applique à `Invoice` comme à `CreditNote`).
-- À l'intérieur d'un ancêtre itérant (un `repeat` ou une `table` munie d'un `xpath`), le sélecteur supprime en plus le chemin de l'itérateur pour que les cellules enfants démarrent en XPath **relatif** (`cbc:TaxAmount` plutôt que `/*/cac:TaxTotal/cac:TaxSubtotal/cbc:TaxAmount`). Les gabarits de ligne restent ainsi portables quand l'itérateur change.
+- À l'intérieur d'un ancêtre itérant (un `repeat` ou une `table` munie d'un `xpath`), le sélecteur supprime en plus le chemin de l'itérateur pour que les cellules enfants démarrent en XPath **relatif** (`cbc:TaxAmount` plutôt que `/*/cac:TaxTotal/cac:TaxSubtotal/cbc:TaxAmount`). Les modèles de ligne restent ainsi portables quand l'itérateur change.
 
 ---
 
@@ -406,7 +402,6 @@ La barre du constructeur porte quelques réglages appliqués à toute la mise en
 | **Show logo** | Dessine le logo de la société en haut du bloc vendeur, en page 1. Le fichier vient du *Logo path* de [Paramètres → Global → Traitement → PDF](../configuration/system/global.md), où un *Logo offset X (pt)* le décale aussi horizontalement et où *Logo width / height (pt)* fixent le cadre de mise à l'échelle (proportions conservées ; vide = 200 × 80 points au plus). L'aperçu du constructeur utilise la même taille que le PDF produit. PNG, JPG et GIF sont pris en charge. |
 | **Trim zeros** | Supprime les zéros décimaux de fin sur les montants, prix unitaires et quantités — un montant rond s'imprime `23` au lieu de `23.00`, un prix unitaire `23.0000` s'imprime `23`. Désactivé par défaut. Réglage propre au modèle, appliqué au tableau de lignes, au bloc des totaux et aux PDF lisible et à l'écran. |
 | **Decimals** — *amount* / *price* / *qty* | Nombre de décimales imprimées par nature de nombre, chacune `auto` ou `0` à `6`. *Amount* couvre les montants de ligne, remises, lignes de TVA et totaux ; *price* le prix de l'article, le prix unitaire net et la remise sur prix ; *qty* les quantités facturées. `auto` garde l'affichage standard (montants à 2 décimales, prix et quantités tels que dans l'UBL) : les modèles existants restent inchangés. Un nombre fixe est arrondi au plus éloigné de zéro, comme l'exige l'AFNOR ; *Trim zeros* s'applique en plus. |
-
 
 ### Libellés \{#libelles\}
 
@@ -456,7 +451,7 @@ La page lit et écrit via les endpoints de templates standards — mêmes routes
 
 - **Partir de `built-in` via Copier.** La mise en page livrée est une base solide — préférer la dériver par copie et ajustement de bascules plutôt que de partir d'un modèle vide.
 - **Un seul modèle, plusieurs documents.** Pour chaque variante de facture (standard, avoir, reçu destinataire …), privilégier un modèle partagé plutôt qu'un JSON inline par document. Le bénéfice : un point d'édition unique quand les mentions légales ou le jeu de colonnes évoluent.
-- **Désigner un défaut tôt.** Marquer une mise en page comme défaut avant le branchement des modèles de document spécifiques aux clients — chaque nouveau document utilise alors ce défaut implicitement, et la propriété `pdfTemplate` explicite reste réservée aux vraies variantes.
+- **Désigner un défaut tôt.** Marquer une mise en page comme défaut avant le branchement des documents spécifiques aux clients — chaque nouveau document utilise alors ce défaut implicitement, et la propriété `pdfTemplate` explicite reste réservée aux vraies variantes.
 - **Utiliser `block` pour ce que les sections prédéfinies ne couvrent pas.** Mentions légales personnalisées, pieds de page spécifiques à un pays, blocs de signature structurés, filigranes — autant de cas mieux traités par un `block` que par une section prédéfinie.
 - **Itérer dans l'éditeur visuel.** Basculer une section et observer l'aperçu au centre se regénérer est le moyen le plus rapide d'arriver à une mise en page — l'aperçu en direct est toujours visible, pas de modale à ouvrir.
 - **Charger une vraie facture une fois par session.** Le bouton **↑ Charger XML** en haut de l'éditeur alimente le sélecteur de chaque bloc — chargement unique, et chaque auto-complétion XPath utilise vos données.

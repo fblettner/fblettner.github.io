@@ -16,15 +16,6 @@ Connectors are used by the [Action Bindings](../management/actions.md) page to w
 
 This page applies to documents from any source system — JD Edwards, SAP, NetSuite, custom ERP — once the source is mapped to UBL.
 
-:::info[Refreshed in 2026.05.9]
-Two additions on this page:
-
-- **New Webhooks tab** — configure how the PA pushes status updates back to NomaUBL. Requests are HMAC-signed with a shared secret and POSTed to `/api/webhook/{connector}/status`; the verifier dedupes at-least-once retries on the payload's event id and applies the resolved status to the matching invoice. The tab also exposes JSON path overrides for the invoice id, status and event id fields, plus a status map from the PA's vocabulary to the logical `success` / `pending` / `failed` set.
-- **Per-endpoint Content-Type** — each endpoint declares `application/json` *(default)*, `multipart/form-data`, or an XML type (`text/xml` / `application/soap+xml`). The multipart builder turns the body into a list of parts (`name=value`, `file=@{{filePath}};filename=…;contentType=…`), so an endpoint can drive a PA that expects a `multipart/form-data` invoice upload (e.g. IOPOLE); an XML type sends a SOAP / XML envelope verbatim with the placeholder values XML-escaped, so a legacy SOAP web service can be called too.
-
-`ImportStatusHandler` was also relaxed — non-`failed` / non-`pending` statuses are treated as success, so vocabularies like IOPOLE's `EMITTED` / `RECEIVED` work without per-PA config.
-:::
-
 The editor has **five tabs**:
 
 1. **Connection** — base URL, timeout, TLS, default headers.
@@ -95,7 +86,7 @@ The editor has **five tabs**:
   <text x="250" y="402" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">&amp;client_id={'{{username}}'}</text>
   <text x="250" y="418" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">&amp;client_secret={'{{password}}'}</text>
 
-  <text x="240" y="446" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOKEN REQUEST HEADERS  <text fill="#64748b" fontSize="8" fontStyle="italic">(2026.05.8)</text></text>
+  <text x="240" y="446" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOKEN REQUEST HEADERS</text>
   <rect x="240" y="454" width="540" height="40" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="250" y="471" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">customer-id:CUST123;X-Tenant:acme</text>
   <text x="250" y="487" fill="#64748b" fontSize="8" fontStyle="italic" fontFamily="system-ui, sans-serif">sent only on the token request — for PAs that need a tenant-id header on the auth call</text>

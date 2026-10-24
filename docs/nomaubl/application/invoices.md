@@ -134,7 +134,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
   <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Review badge</text>
-  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">UHALRTPSD · new in 2026.05.9</text>
+  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">UHALRTPSD</text>
   <line x1="820" y1="216" x2="772" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
 
   <rect x="820" y="284" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -240,9 +240,9 @@ A collapsible **Advanced Filters** panel sits below the chip row. It exposes one
 
 The set of columns that can be filtered is defined in the spec's `filter: true` allow-list — operators decide which columns they actually query and trim the rest from the panel without losing them from the grid. See [List Views](../configuration/list-views.md) for the editor.
 
-Since 2026.05.12 the page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, default 5000) and TanStack handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the date range or the *Advanced Filters*.
+The page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, default 5000) and TanStack handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the date range or the *Advanced Filters*.
 
-Since 2026.05.13, refList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union.
+RefList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union.
 
 ### Direction chip
 
@@ -251,8 +251,8 @@ A new chip row sits next to the Status chips: **All** / **Issued** / **Received*
 | Chip | Effect |
 |---|---|
 | **All** *(default)* | No direction filter — both customer-issued (`UHDRIN = '2'`) and supplier-received (`UHDRIN = '1'`) rows are listed. |
-| **Issued** | Only the invoices the operator sends to customers. Same set the previous list always showed before 2026.05.17. |
-| **Received** | Only the supplier invoices pulled from the PA (see [Sync → Fetch Input → PA inbound](../sync/fetch-input.md) and the bundled `received-ubl` document template). |
+| **Issued** | Only the invoices the operator sends to customers. |
+| **Received** | Only the supplier invoices pulled from the PA (see [Sync → Fetch Input → PA inbound](../sync/fetch-input.md) and the bundled `received-ubl` document). |
 
 The chip resolves against the `UHDRIN` flag stored on each row — a template's *Direction* change does not re-classify historical rows, so the result is stable over time.
 
@@ -277,7 +277,7 @@ Two buttons sit at the right:
 
 The table shows one row per invoice. Default sort: most recent document number first. Click any column header to sort by that column.
 
-Since 2026.05.10 the grid renders through **DataTableV2** in spec-driven mode: column shape, labels, format, alignment, width and the filter-row allow-list come from the `view.invoices` spec stored on `db-nomaubl` (with a bundled default in the JAR). Adding or removing columns is done from the [List Views](../configuration/list-views.md) editor — no code change required when the column already lives in the catalog.
+The grid renders through **DataTableV2** in spec-driven mode: column shape, labels, format, alignment, width and the filter-row allow-list come from the `view.invoices` spec stored on `db-nomaubl` (with a bundled default in the JAR). Adding or removing columns is done from the [List Views](../configuration/list-views.md) editor — no code change required when the column already lives in the catalog.
 
 The **Updated** value carries the time of day, so an *Updated* column formatted as `datetime` in the spec shows `2026-09-15 15:23:45` rather than the bare date. (The issue date stays date-only — JDE stores no time for it.)
 
@@ -392,7 +392,7 @@ Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parti
 
 ### Summary tab *(default)*
 
-The Summary tab shows a coloured **status badge** at the top, followed by **action buttons** (Edit UBL, Copy, Delete) on the right. **Delete** removes the invoice and every related record — log row (source XML, PA transaction reference, source file name), lifecycle, lines, VAT and validation — so a later run of the same document starts fresh and the [watched folders](../sync/watched-folders.md) can pick its source file up again. Deletion follows the same protection as *Fix buyer*: the button is hidden once the PA has processed the invoice, except for a **213** rejection with an addressing reason. Right under the badge, when the platform returned them, the current **rejection reason**, **expected action** and **status note** are shown inline, and the full **status message** sits in a collapsed group — expand it for the platform's long error text. The same values feed the custom actions as `{message}`, `{reasonLabel}`, `{actionLabel}` and `{actionNote}` placeholders (see [Actions](../management/actions.md#custom-actions)), with no list-view column needed.
+The Summary tab shows a coloured **status badge** at the top, followed by **action buttons** (Edit UBL, Copy, Delete) on the right. **Delete** removes the invoice and every related record — log row (source XML, PA transaction reference, source file name), lifecycle, lines, VAT and validation — so a later run of the same document starts fresh and the [watched folders](../management/watched-folders.md) can pick its source file up again. Deletion follows the same protection as *Fix buyer*: the button is hidden once the PA has processed the invoice, except for a **213** rejection with an addressing reason. Right under the badge, when the platform returned them, the current **rejection reason**, **expected action** and **status note** are shown inline, and the full **status message** sits in a collapsed group — expand it for the platform's long error text. The same values feed the custom actions as `{message}`, `{reasonLabel}`, `{actionLabel}` and `{actionNote}` placeholders (see [Actions](../management/actions.md#custom-actions)), with no list-view column needed.
 
 #### Fix buyer \{#fix-buyer\}
 
@@ -423,7 +423,7 @@ Status-by-status mapping:
 
 Each action is bound to an *API connector endpoint* configured in *Configuration → API Connectors* — clicking the button executes the connector with the invoice's data. Greyed-out actions (faded) indicate the connector is not configured for this deployment.
 
-Since 2026.05.15 a second group sits below the regulatory one — **Custom actions**. Always-visible buttons configured on the [Actions](../management/actions.md#custom-actions) page; each fires its own chain of connector calls and is independent of the invoice's current status. The result banner is anchored to the group whose button fired — a custom-action failure does not stomp on a regulatory-action banner shown at the same time, and stale banners are cleared automatically when the modal closes or switches invoice.
+A second group sits below the regulatory one — **Custom actions**. Always-visible buttons configured on the [Actions](../management/actions.md#custom-actions) page; each fires its own chain of connector calls and is independent of the invoice's current status. The result banner is anchored to the group whose button fired — a custom-action failure does not stomp on a regulatory-action banner shown at the same time, and stale banners are cleared automatically when the modal closes or switches invoice.
 
 The rest of the Summary tab presents collapsible groups:
 
@@ -775,7 +775,7 @@ While the e-mail is sending, an overlay covers the modal until the SMTP server c
 
 Opens from **+ New invoice** in the toolbar, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
 
-Since 2026.05.10, editing an existing invoice no longer flips its `cbc:CustomizationID` back to the EN16931 default. The form now carries the `customizationId` value from the source UBL and writes it back verbatim — new invoices still default to `urn:cen.eu:en16931:2017`.
+Editing an existing invoice no longer flips its `cbc:CustomizationID` back to the EN16931 default. The form now carries the `customizationId` value from the source UBL and writes it back verbatim — new invoices still default to `urn:cen.eu:en16931:2017`.
 
 <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.025)', boxShadow: '0 12px 32px rgba(0,0,0,0.3)'}}>
   <div style={{padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(74,158,255,0.04)'}}>

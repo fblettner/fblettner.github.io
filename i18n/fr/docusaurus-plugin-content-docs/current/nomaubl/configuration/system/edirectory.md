@@ -15,10 +15,6 @@ Les deux opérations s'enchaînent généralement : une recherche INSEE résout 
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — une fois la source mappée vers UBL.
 
-:::info[Refonte en 2026.05.8]
-La configuration PA est désormais homogène entre **e-invoicing**, **e-directory** et **e-reporting** — chaque modèle système référence un [api-connecteur](../api-connectors.md) réutilisable au lieu de porter ses propres champs d'authentification et endpoints. Les anciens groupes inline *API Connection* et *Credentials* sont supprimés (sans repli). L'éditeur passe à **deux onglets** : *Directory* (Enable Check + INSEE Search) et *Connector* (sélecteur api-connecteur + surcharges d'endpoint par tâche). L'`ppf-directory` embarqué couvre le flux standard.
-:::
-
 L'éditeur comporte **deux onglets** :
 
 1. **Directory** — sélecteur Enable Check et paramètres de recherche INSEE.
@@ -118,7 +114,6 @@ L'éditeur comporte **deux onglets** :
 | Champ | Défaut | Description |
 |---|---|---|
 | **Results per page** | `10` | Nombre maximal de résultats renvoyés par requête de recherche INSEE. Augmenter pour élargir chaque page de résultats, diminuer pour limiter la taille des réponses réseau. |
-
 
 ### Recherche Peppol \{#peppol-lookup\}
 

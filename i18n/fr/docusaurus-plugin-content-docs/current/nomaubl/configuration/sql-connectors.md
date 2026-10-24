@@ -16,10 +16,6 @@ Cibles typiques :
 
 La page fonctionne quel que soit le système source, le connecteur SQL pouvant pointer sur n'importe quelle base JDBC accessible.
 
-:::info[Nouveau en 2026.05.7]
-Les connecteurs SQL sont nouveaux en 2026.05.7. Ils côtoient les connecteurs API dans *Paramètres*, et les deux types peuvent être câblés depuis les liaisons d'actions et les règles de notification — y compris la nouvelle liste d'appels avec `Arrêt sur échec` et chaînage des réponses via `{call.N.fieldName}`. Voir les [notes de version 2026.05.7](../release-notes.md#v2026-05-7) pour la liste complète.
-:::
-
 L'éditeur a **trois onglets** :
 
 1. **Connection** — type de base, URL JDBC, identifiants, schéma et limites de requêtes.
@@ -206,7 +202,7 @@ La spec des paramètres pilote l'onglet *Test* et l'éditeur des appels : chaque
 
 #### Strip des guillemets sur les paramètres chaîne
 
-Le runtime retire une paire de guillemets simples ou doubles entourant chaque paramètre chaîne avant le `setString` JDBC. Taper `'01'` dans une valeur par défaut ou dans le panneau de test — la façon d'écrire un littéral SQL — donnait silencieusement 0 ligne car JDBC liait la chaîne de 4 caractères telle quelle ; le strip permet aux deux conventions de fonctionner.
+Le runtime retire une paire de guillemets simples ou doubles entourant chaque paramètre chaîne avant le `setString` JDBC. Saisir `'01'` dans une valeur par défaut ou dans le panneau de test — la façon d'écrire un littéral SQL — lie donc `01` et non la chaîne de 4 caractères : les deux conventions fonctionnent.
 
 :::warning[Comparaison CHAR JDE]
 Le strip des guillemets ne remplace **pas** la règle Oracle de comparaison non-blank-padded. Comparer à une colonne JDE `CHAR(n)` demande toujours `WHERE TRIM(col) = :p` dans la requête quand un côté de la comparaison est lié en `VARCHAR2`. C'est une règle Oracle, pas un choix du framework.
@@ -248,7 +244,7 @@ L'onglet Test appelle la base réelle — *Enregistrer* le connecteur d'abord ap
 
 Les connecteurs SQL se branchent aux mêmes points d'appel que les connecteurs API :
 
-- **[Liaisons d'actions](../management/actions.md)** — les boutons réglementaires du modal de détail facture peuvent appeler n'importe quelle requête SQL, seule ou en chaîne, via la liste d'appels multiples livrée en 2026.05.7.
+- **[Liaisons d'actions](../management/actions.md)** — les boutons réglementaires du modal de détail facture peuvent appeler n'importe quelle requête SQL, seule ou en chaîne, via la liste d'appels multiples.
 - **[Règles de notification](../management/notification-rules.md#onglet-actions)** — la même liste d'appels, déclenchée automatiquement quand la règle correspond à un changement de statut.
 
 Dans les deux cas, la liste déroulante des connecteurs liste les connecteurs API et les connecteurs SQL fusionnés avec les suffixes `· API` / `· SQL` ; la liste déroulante des cibles charge les endpoints ou les requêtes selon le type du connecteur choisi.

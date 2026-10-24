@@ -16,7 +16,7 @@ The extraction half offers the same three sources documented under *Extract*:
 
 The processing half offers the same two pipelines documented under *Processing*:
 
-- [Process Document](./document.md) — single processing entry point. The pipeline (XML transformation or direct UBL validation) is selected by the document template's `source` property. Replaces the legacy *Process XML* and *Process UBL* pages.
+- [Process Document](./document.md) — single processing entry point. The pipeline (XML transformation or direct UBL validation) is selected by the document's `source` property.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — except for the BIP source, which is JD Edwards-specific.
 
@@ -256,7 +256,7 @@ Equivalent to running the [Process Document](./document.md) page on the just-ext
 
 | Field | Description |
 |---|---|
-| **Template** | Document template — required. Drives the XSL pipeline and the validation rule set. |
+| **Template** | Document — required. Drives the XSL pipeline and the validation rule set. |
 | **Mode** | `AUTO`, `SINGLE`, `BURST` or `UBL`. See [Process Document — Modes (XML source)](./document.md#modes-xml-source). |
 | **Replace** | `Skip` keeps existing invoices untouched; `Overwrite` re-imports them. |
 | **Send to PA** | `Use settings` (default) or `Skip sending`. |
@@ -277,7 +277,7 @@ Equivalent to running the [Process Document](./document.md) page on the just-ext
 | **Replace Mode** | `Overwrite existing` (default) or `Skip`. |
 | **Send to PA** | `Use settings`, `Force send` or `Skip sending`. |
 
-The `(doc, dct, kco)` primary key is parsed from the invoice's `cbc:ID` via the document template's `idPattern` regex — filenames can be anything. See [Documents → Key extraction from cbc:ID](../management/documents.md#key-extraction-from-cbcid-when-source--ubl) for the regex setup.
+The `(doc, dct, kco)` primary key is parsed from the invoice's `cbc:ID` via the document's `idPattern` regex — filenames can be anything. See [Documents → Key extraction from cbc:ID](../management/documents.md#key-extraction-from-cbcid-when-source--ubl) for the regex setup.
 
 #### Combinations not supported
 

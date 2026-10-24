@@ -16,7 +16,7 @@ La partie extraction propose les trois sources documentées dans *Extract* :
 
 La partie traitement propose les deux pipelines documentés dans *Processing* :
 
-- [Traitement de document](./document.md) — point d'entrée unique. Le pipeline (transformation XML ou validation UBL directe) est sélectionné par la propriété `source` du modèle de document. Remplace les anciennes pages *Process XML* et *Process UBL*.
+- [Traitement de document](./document.md) — point d'entrée unique. Le pipeline (transformation XML ou validation UBL directe) est sélectionné par la propriété `source` du document.
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — sauf pour la source BIP, qui est spécifique à JD Edwards.
 
@@ -182,7 +182,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   <text x="240" y="594" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">SINGLE / BURST / UBL / AUTO</text>
   <rect x="620" y="550" width="280" height="60" rx="10" fill="url(#ep-g-blue-strong)" stroke="#4a9eff" strokeWidth="2"/>
   <text x="760" y="576" fill="#4a9eff" fontSize="13" fontWeight="800" textAnchor="middle" fontFamily="system-ui, sans-serif">⚙ Process Document (UBL)</text>
-  <text x="760" y="594" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">Validate / Persist / Submit</text>
+  <text x="760" y="594" fill="currentColor" fontSize="10" fontStyle="italic" textAnchor="middle" fontFamily="ui-monospace, monospace" opacity="0.85">Valider / Enregistrer / Déposer</text>
   <path d="M 410 510 L 240 510 L 240 550" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#ep-arrow)"/>
   <text x="320" y="502" fontSize="9" fill="#4a9eff" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">XML</text>
   <path d="M 590 510 L 760 510 L 760 550" stroke="#4a9eff" strokeWidth="1.4" fill="none" markerEnd="url(#ep-arrow)"/>
@@ -277,7 +277,7 @@ Quand la source est **BIP**, un appel **Apply post-generation** supplémentaire 
 | **Replace Mode** | `Overwrite existing` (défaut) ou `Skip`. |
 | **Send to PA** | `Use settings`, `Force send` ou `Skip sending`. |
 
-La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via la regex `idPattern` du modèle de document — les fichiers peuvent avoir n'importe quel nom. Voir [Documents → Extraction de clé depuis cbc:ID](../management/documents.md#cle-du-document) pour la mise en place de la regex.
+La clé primaire `(doc, dct, kco)` est extraite du `cbc:ID` de la facture via la regex `idPattern` du document — les fichiers peuvent avoir n'importe quel nom. Voir [Documents → Extraction de clé depuis cbc:ID](../management/documents.md#cle-du-document) pour la mise en place de la regex.
 
 #### Combinaisons non prises en charge
 

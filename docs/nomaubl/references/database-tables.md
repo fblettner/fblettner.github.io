@@ -12,18 +12,6 @@ The schema is **identical on Oracle and PostgreSQL** — the DDL is dialect-awar
 
 The schema applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. Tables follow the JDE `F564XXX` naming convention because the platform was built around JDE first; the conventions are functional, not source-specific.
 
-:::info[Schema changes — 2026.05.5]
-Release **2026.05.5** introduces several structural changes:
-- **E-reporting tables renumbered**: `F564240` / `F564241` / `F564242` become `F564260` / `F564261` / `F564262`. The `RGTXFT` column type moves from `CLOB` / `TEXT` to `BLOB` / `BYTEA`. Child-table FK columns shift from `RGUKID` to `RHUKID` (lifecycle) and `RIUKID` (mapping).
-- **Runtime log `F564237`**: new `FEUKID` PK, columns renamed (`FEMODE` → `FERMK`, `FEMETHOD` → `FERMK2`, `FEMESSAGE` → `FEK74MSG1`).
-- **Authentication overhauled**: `F564252` (sessions) renamed to `SSLSID` / `SSSTDTIM` / `SSETDTIM`. `F564251` (roles) now holds identity only — grants moved to the new `F564254` table (`PMROLE` / `PMCRAPPID` / `PMCRAPPVAL`). User columns (`F564250`) now follow JDE conventions (`USLDAPPSWD`, `USENABL`, `USSECF3`, audit `USUPMJ` / `USTDAY`).
-- **Notifications `F564253`** (introduced in 2026.05.3) is now documented in this reference page.
-:::
-
-:::info[Schema change — 2026.06.21.3]
-The **`F564255` — Password reset tokens** table is added to back the *Forgot password* flow (single-use link with ~60 min TTL). A new `Auth · Password resets` entry (default `F564255`) appears under *Settings → db-nomaubl* so schema validation no longer flags it as missing.
-:::
-
 ---
 
 ## Naming conventions
@@ -35,7 +23,7 @@ The **`F564255` — Password reset tokens** table is added to back the *Forgot p
 | **Dates** | JDE Julian — integer in `CYYDDD` format where `C = 1` for 2000–2099, `YY` is the last two digits of the year, `DDD` is the day of the year. Example: `125108` → 2025-04-18. Converted on the fly for the UI. |
 | **Times** | Integer in `HHMMSS` format. Example: `143052` → 14:30:52. |
 | **Scaled numerics** | Some amounts and rates are stored as integers scaled by a fixed factor — divide on read: `ATXA × 100` (2 decimals), `QNTY × 10000` (4 decimals), `UPRC × 10000` (4 decimals), `TXR1 × 1000` (3 decimals). |
-| **XML payloads** | Stored as `BLOB` (Oracle) / `BYTEA` (Postgres) for JDE source XML, generated UBL **and e-reporting XML** (since 2026.05.5). UTF-8 bytes throughout. |
+| **XML payloads** | Stored as `BLOB` (Oracle) / `BYTEA` (Postgres) for JDE source XML, generated UBL **and e-reporting XML**. UTF-8 bytes throughout. |
 | **Auto-incremented sequences** | `SEQN` columns use `COALESCE(MAX(SEQN), 0) + 1` on insert — no Oracle sequence or Postgres serial required. |
 
 ---
@@ -378,7 +366,7 @@ Three tables that record the *(period, flux, company)* declarations submitted to
 One row per generated report. Stores the `<ReportDocument>` XML and the latest known status.
 
 - **Primary key**: `RGUKID` (globally unique sequence — no flux / company component).
-- **Notable**: `RGY56BAR` is `10.1` or `10.3`; `RGDCT` is the document type (`IN` initial, `RE` replacement, `CO` cancellation, `MO` modification); `RGTXFT` carries the generated XML as **UTF-8 bytes** (BLOB / BYTEA since 2026.05.5).
+- **Notable**: `RGY56BAR` is `10.1` or `10.3`; `RGDCT` is the document type (`IN` initial, `RE` replacement, `CO` cancellation, `MO` modification); `RGTXFT` carries the generated XML as **UTF-8 bytes** (BLOB / BYTEA).
 
 | Field | Type | Description |
 |---|---|---|
@@ -452,7 +440,7 @@ One row per user. Passwords are stored as **PBKDF2-HMAC-SHA256** hashes — neve
 
 ### F564251 — Roles (identity only)
 
-One row per role. As of 2026.05.5, this table stores **role identity only** — the grants (pages, companies, read-only, settings access) live row-by-row in `F564254`.
+One row per role. This table stores **role identity only** — the grants (pages, companies, read-only, settings access) live row-by-row in `F564254`.
 
 - **Primary key**: `RLROLE`
 - **Notable**: No schema change is needed to introduce a new permission dimension — just insert rows with a new `PMCRAPPID` in `F564254`.
@@ -503,7 +491,7 @@ A daily sweep driven by `global.notificationsRetentionDays` (default 90, `0` = d
 
 ### F564254 — Role permission grants (row-based RBAC)
 
-New table introduced in **2026.05.5**. Replaces the CSV columns `RLPAGES` / `RLCOMPANIES` / `RLSETTINGS` / `RLREADONLY` formerly on `F564251` with typed rows. One row per `(role, permission type, value)` triplet.
+Stores role grants as typed rows. One row per `(role, permission type, value)` triplet.
 
 - **Primary key**: `(PMROLE, PMCRAPPID, PMCRAPPVAL)`
 - **Notable**: An empty result set for a given `(role, type)` means *unrestricted* on that dimension. Adding a new permission dimension is an INSERT — not a DDL change. Drop + Init Database re-seeds the default grants without touching existing role rows.
@@ -527,7 +515,7 @@ Currently used `PMCRAPPID` values:
 
 ### F564255 — Password reset tokens
 
-Introduced in **2026.06.21.3** to back the *Forgot password* flow. One row per emailed link. The token is a UUID embedded in the `/reset?token=…` URL; it is single-use and expires after ~60 minutes.
+Backs the *Forgot password* flow. One row per emailed link. The token is a UUID embedded in the `/reset?token=…` URL; it is single-use and expires after ~60 minutes.
 
 - **Primary key**: `PRTOK`
 - **Notable**: `PRUSED = 'Y'` marks a consumed token — the row stays briefly for audit before sweep. A purge deletes expired tokens and consumed tokens past their audit window.

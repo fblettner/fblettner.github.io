@@ -15,15 +15,6 @@ Cet écran gère le **contrôle d'accès par rôle** de NomaUBL. Chaque rôle re
 
 Les rôles s'appliquent à toute l'application et sont indépendants du système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les rôles par défaut (`admin`, `viewer`) sont créés par l'action **Initialiser la base** dans *Database Connectors → NomaUBL*.
 
-:::info[Refonte en 2026.06.21]
-L'éditeur a été réorganisé autour d'onglets ciblés et le modèle de droits descend bien plus finement que « pages + lecture seule » :
-
-- **Quatre onglets** — *Accès* (pages, cartes du tableau de bord, fonctionnalités), *Actions* (la nouvelle liste blanche par bouton), *Périmètre des données* (sociétés + filtres de lignes), *Membres*. Le *Nom* et la *Description* du rôle sont au-dessus de la barre d'onglets : ils restent visibles depuis n'importe quel onglet.
-- **Permissions d'action granulaires** — l'ancien drapeau `readonly` tout-ou-rien est remplacé par une liste blanche explicite sur Factures, E-Reporting et Opérations d'intégration. Un rôle sans liste blanche garde le comportement historique (tout est permis) ; activer la liste blanche pré-coche tout pour que le rôle ne perde pas brutalement ses droits.
-- **Filtres de lignes par rôle** — choisir une colonne (par exemple la clé alpha client de la facture, `UHALKY`) et une ou plusieurs valeurs ; le filtre s'applique aux listes, au tableau de bord, à chaque requête par ligne et au PDF généré. Plusieurs valeurs sur la même colonne se combinent en OU ; des filtres sur des colonnes différentes se combinent en ET, en plus du droit *Sociétés* déjà en place.
-- **Liste blanche par carte du tableau de bord** — chaque widget est une permission. Liste vide → toutes les cartes sont visibles (comportement historique) ; liste remplie → seules les cartes cochées sont visibles, et les autres ne déclenchent même pas leur SQL côté serveur.
-:::
-
 ---
 
 ## Ouvrir l'éditeur
@@ -212,38 +203,83 @@ Quelques drapeaux binaires. Chaque ligne combine une case à cocher et un libell
 
 ### Pages autorisées
 
-Une liste de cases à cocher qui reflète le menu de gauche. Chaque page affiche le **libellé traduit** (la même clé d'i18n `nav.*` que le menu utilise) plus l'**identifiant de page** en monospace estompé à côté — la ligne reste lisible en français tout en permettant une recherche rapide par identifiant.
+Les pages se présentent en **une carte par groupe du menu latéral** — mêmes groupes, même ordre, mêmes noms : *Navigation*, *Synchronisation*, *Traitement*, *UBL*, *Extraction*, *Gestion*, *Documentation*. Chaque page est une **pastille** portant son libellé de menu ; une pastille cochée affiche une coche, et son survol indique l'identifiant de la page. L'en-tête de la carte donne le nombre de pages accordées (`3/10`) et un lien **tout** / **aucun** qui bascule le groupe entier.
 
-| Groupe | Pages |
+<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '16px', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '12.5px'}}>
+  <div style={{display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '10px'}}>
+    <b>Allowed Pages</b><span style={{opacity: 0.6, fontSize: '11px'}}>(empty = all pages allowed)</span>
+    <span style={{padding: '2px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>All</span>
+    <span style={{padding: '2px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>None</span>
+  </div>
+  <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px'}}>
+    <div style={{border: '1px solid #4a9eff', borderRadius: '8px', padding: '8px'}}>
+      <div style={{display: 'flex', gap: '8px', marginBottom: '6px'}}><b>Navigation</b><span style={{opacity: 0.6}}>6/13</span><span style={{marginLeft: 'auto', color: '#4a9eff'}}>tout</span></div>
+      <div style={{display: 'flex', flexWrap: 'wrap', gap: '5px'}}>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Tableau de bord</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ E-Invoicing</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Déclaration de TVA</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Rapports</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>…</span>
+      </div>
+      <div style={{marginTop: '8px', paddingTop: '6px', borderTop: '1px dashed rgba(148,163,184,0.3)'}}>
+        <b>Diagnostic</b> <span style={{opacity: 0.6, fontSize: '11px'}}>Une page à quatre vues : chaque vue s'accorde séparément ci-dessous.</span>
+        <div style={{display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '4px'}}>
+          <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Vue Erreurs d'intégration</span>
+          <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Vue Journal des traitements</span>
+          <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>✓ Vue Anomalies</span>
+          <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Vue Journal serveur</span>
+        </div>
+      </div>
+    </div>
+    <div style={{border: '1px solid rgba(148,163,184,0.3)', borderRadius: '8px', padding: '8px'}}>
+      <div style={{display: 'flex', gap: '8px', marginBottom: '6px'}}><b>Synchronisation</b><span style={{opacity: 0.6}}>0/4</span><span style={{marginLeft: 'auto', color: '#4a9eff'}}>tout</span></div>
+      <div style={{display: 'flex', flexWrap: 'wrap', gap: '5px'}}>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Récupérer Entrée</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Récupérer les imports</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Récupérer les statuts</span>
+        <span style={{padding: '2px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.7}}>Tâches planifiées</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+| Groupe | Pages (identifiant) |
 |---|---|
-| **Navigation** | `dashboard`, `techdashboard`, `invoices`, `vatdeclaration`, `ereporting`, `edirectory`, `notifications`, `integrationerrors`, `processinglog` |
-| **Traitement** | `fetchinput`, `import`, `retrievestatuses` |
-| **Opérations** | `process`, `extractandprocess`, `processapi` |
-| **UBL** | `validate`, `xsleditor`, `xmlviewer`, `ubldefaults` |
-| **Extraction** | `extractbip` *(spécifique JD Edwards)*, `extract`, `extractftp` |
-| **Documentation** | `releasenotes`, `upgradehistory`, `statusreference`, `reasoncodes`, `ublreference`, `xref`, `apireference` |
-| **Gestion** | `documents`, `pdftemplates`, `actions`, `notificationrules`, `dailydigest`, `autoretry`, `fileversions` |
+| **Navigation** | Tableau de bord (`dashboard`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
+| **Synchronisation** | Récupérer Entrée (`fetchinput`), Récupérer les imports (`import`), Récupérer les statuts (`retrievestatuses`), Tâches planifiées (`scheduledjobs`). |
+| **Traitement** | Traiter Document (`process`), Extraire & Traiter (`extractandprocess`), Traiter API (`processapi`). |
+| **UBL** | Validation UBL (`validate`), Éditeur XSL (`xsleditor`), Visionneuse XML (`xmlviewer`), Défauts UBL (`ubldefaults`). |
+| **Extraction** | Extraire depuis Archive (`extract`), Extraire FTP (`extractftp`), Extraire depuis BIP (`extractbip`, *propre à JD Edwards*). |
+| **Gestion** | Documents (`documents`), Modèles PDF (`pdftemplates`), Actions (`actions`), Règles de notification (`notificationrules`), Dossiers surveillés (`watchfolders`), Versions fichiers (`fileversions`), Promotion (`promotion`). |
+| **Documentation** | Notes de version (`releasenotes`), Historique des mises à jour (`upgradehistory`), Référentiel statuts (`statusreference`), Motifs (`reasoncodes`), Référence UBL (`ublreference`), Règles de gestion (`businessrules`), Développeur (`xref`), Référence API (`apireference`). |
 
-Aides :
+Quelques pastilles portent une aide :
 
-- Boutons **Tout** / **Aucun** au-dessus des groupes — accorde ou révoque toutes les pages d'un seul clic.
-- Bascule **tout cocher / tout décocher** par groupe — inverse un groupe entier d'un clic.
-- La case d'un groupe affiche un **état indéterminé** quand seules certaines pages du groupe sont cochées.
-- **Liste vide = toutes les pages autorisées.** Même convention que les autres listes : un rôle non filtré voit tout.
+- **Diagnostic** est une page à quatre vues : chaque vue est un droit distinct, et le menu affiche *Diagnostic* dès que l'une d'elles est accordée. Voir [Diagnostic](../../application/diagnostics/overview.md).
+- **Tâches planifiées** couvre toutes les tâches — imports, tâches batch, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, rétention. Lancer, suspendre ou enregistrer une tâche demande aussi l'action *Run batch jobs* (`integration.run`). Voir [Tâches planifiées](../../sync/scheduled-jobs/overview.md).
+- **Dossiers surveillés** accorde la configuration des dossiers ; leur planification se trouve dans *Tâches planifiées*.
+- **Promotion** demande aussi la fonctionnalité *Settings access*. Voir [Promotion](../../management/promotion.md).
+- **Développeur** ouvre la [référence développeur](../../references/developer.md) : tables, clés de configuration, flux, impact, API.
+
+Règles :
+
+- **All** / **None**, au-dessus des cartes, accordent ou retirent toutes les pages d'un coup.
+- **Liste vide = toutes les pages autorisées.** Même convention que les autres listes : un rôle sans filtre voit tout.
+- Le rôle `admin` créé à l'initialisation reçoit tous les identifiants de page ci-dessus, y compris Déclaration de TVA, Rapports et Historique des mises à jour.
 
 ### Cartes du tableau de bord
 
-Chaque widget du tableau de bord est une permission individuelle indexée par `dashboard.<carte>`. Le regroupement reproduit la mise en page du tableau de bord :
+Chaque widget du tableau de bord est une permission individuelle indexée par `dashboard.<carte>`. Les cartes se présentent comme les pages — une carte par groupe avec ses pastilles, son compteur et son lien **tout** / **aucun** — et reprennent la mise en page du tableau de bord :
 
 | Groupe | Cartes |
 |---|---|
-| **Indicateurs principaux** | `dashboard.total`, `dashboard.inflight`, `dashboard.errors-tech`, `dashboard.errors-business` |
+| **Indicateurs principaux** | `dashboard.total`, `dashboard.inflight`, `dashboard.errors-tech`, `dashboard.errors-business`, `dashboard.status-cards` (cartes de statut 213 / 9905 / 9907 et 207 / 208 / 210) |
 | **Graphiques et widgets** | `dashboard.pipeline`, `dashboard.volume`, `dashboard.recent`, `dashboard.stale`, `dashboard.error-rules`, `dashboard.per-company`, `dashboard.ereporting`, `dashboard.round-trip` |
 | **Sections** | `dashboard.quick-actions` |
 
-- **Liste vide = toutes les cartes visibles** (comportement historique).
+- **Liste vide = toutes les cartes visibles**.
 - Une liste remplie est une liste blanche stricte — les cartes masquées sont **ignorées côté serveur**, leur SQL n'est jamais exécuté et leurs données ne partent pas sur le réseau.
-- Les mêmes contrôles **Tout** / **Aucun** et les bascules par groupe sont disponibles, comme sur la liste des pages.
+- Les mêmes boutons **All** / **None** et liens **tout** / **aucun** par groupe sont disponibles, comme sur les cartes des pages.
 
 ---
 
@@ -255,7 +291,7 @@ Définit **ce que le rôle peut faire** sur les pages qu'il peut atteindre.
 
 | Bascule | Effet |
 |---|---|
-| **Désactivée** *(défaut)* | Aucune liste blanche côté serveur — le rôle peut effectuer toutes les actions autorisées par ses pages. Comportement historique. |
+| **Désactivée** *(défaut)* | Aucune liste blanche côté serveur — le rôle peut effectuer toutes les actions autorisées par ses pages. |
 | **Activée** | Seules les actions cochées en dessous sont autorisées. Activer la bascule **pré-coche toutes les actions** pour que le rôle ne perde pas brutalement ses droits — il suffit ensuite de décocher. |
 
 L'aide sous la bascule indique : *Désactivée (défaut) = le rôle peut effectuer toutes les actions autorisées par ses pages. Activée = seules les actions cochées en dessous sont autorisées.*
@@ -278,6 +314,7 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 | **Factures** | Créer | `invoice.create` | Action rapide du tableau de bord et bouton *Nouvelle facture* sur la liste. |
 | **Factures** | Modifier | `invoice.edit` | Met à jour les champs d'une facture depuis la fenêtre détail ou le panneau d'édition. |
 | **Factures** | Supprimer | `invoice.delete` | Suppression définitive d'une facture et de tous ses enregistrements fils. |
+| **Factures** | Supprimer un événement du cycle de vie | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |
 | **Factures** | Renvoyer à la PA | `invoice.resend` | Soumet ou re-soumet une facture (ou un lot) à la Plateforme Agréée. |
 | **Factures** | Pousser un statut (PA) | `invoice.status.pa` | Envoie un événement de statut via la PA — paiement reçu, en litige, etc. (onglet *PA* de la fenêtre *Définir le statut*). |
 | **Factures** | Pousser un statut (BDD) | `invoice.status.db` | Met directement à jour un statut en base, sans passer par la PA — voie de réparation utilisée quand l'aller-retour PA est cassé. |
@@ -317,7 +354,7 @@ Chaque filtre est une carte avec :
 1. Un **sélecteur de colonne** avec recherche, qui liste toutes les colonnes filtrables des quatre catalogues :
    - **Factures** (colonnes d'en-tête : `UHALKY`, `UHAN8`, nom du client, référence contrat…).
    - **Erreurs d'intégration** (colonnes filtrables du catalogue *Erreurs d'intégration*).
-   - **Journal de traitement** (colonnes du catalogue *Journal de traitement*).
+   - **Journal des traitements** (colonnes du catalogue *Journal des traitements*).
    - **E-Reporting** (colonnes du catalogue *E-Reporting*).
 2. Une liste de **valeurs** pour la colonne choisie, chacune sur sa propre ligne avec son bouton **×**. **+ Ajouter une valeur (OU)** ajoute une autre valeur.
 3. Un bouton **×** au niveau de la carte pour supprimer le filtre entier.
@@ -336,7 +373,7 @@ Sous la liste, **+ Ajouter un filtre** permet à un même rôle de combiner des 
 
 Un filtre de lignes n'est **pas** un simple voile d'IHM : il est appliqué partout où une ligne interdite pourrait fuir.
 
-- Les **listes** (Factures, E-Reporting, Erreurs d'intégration, Journal de traitement) — le filtre est ajouté au SQL.
+- Les **listes** (Factures, E-Reporting, Erreurs d'intégration, Journal des traitements) — le filtre est ajouté au SQL.
 - Le **tableau de bord** — compteurs, graphiques et widgets respectent le filtre du rôle.
 - Les **endpoints par ligne** — cycle de vie, lignes, téléchargement XML, rendu PDF, push de statut, suppression, renvoi, envoi par mail.
 - Le **flux PDF généré** — une ligne interdite ne peut même pas être transformée en PDF.
@@ -363,7 +400,7 @@ Cette vue est **en lecture seule** — pour ajouter ou retirer un utilisateur d'
 
 ## Enregistrer / Annuler
 
-- **Créer** *(en création)* / **Enregistrer** *(en édition)* persiste le rôle et rafraîchit la liste — disponible sur tous les onglets sauf *Membres*.
+- **Créer** *(en création)* / **Enregistrer** *(en édition)* enregistre le rôle et actualise la liste — disponible sur tous les onglets sauf *Membres*.
 - **Annuler** abandonne les changements et ferme le panneau.
 - Des messages inline apparaissent sous le panneau (`Rôle créé`, `Rôle mis à jour`, `Rôle supprimé`, messages d'erreur).
 
@@ -388,7 +425,7 @@ F564254
   PMENABL      — '1' activé / '0' désactivé (utilisé lors du bootstrap spécifique au dialecte)
 ```
 
-Les filtres de lignes sont persistés comme des chaînes `colonne=valeur` — une ligne par paire `(colonne, valeur)`. L'éditeur les regroupe par colonne au chargement et les ré-aplatit à l'enregistrement, pour que l'opérateur ne voie jamais cette représentation brute.
+Les filtres de lignes sont enregistrés sous forme de chaînes `colonne=valeur` — une ligne par paire `(colonne, valeur)`. L'éditeur les regroupe par colonne au chargement et les ré-aplatit à l'enregistrement, pour que l'opérateur ne voie jamais cette représentation brute.
 
 Ajouter une nouvelle dimension de droits revient à un INSERT dans cette même table — pas de changement DDL.
 

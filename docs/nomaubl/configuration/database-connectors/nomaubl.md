@@ -17,14 +17,6 @@ The editor has **four tabs**:
 3. **Columns** — per-table column-name overrides resolved at runtime via `UBLColumnConfig`.
 4. **Initialize** — one-click creation of every NomaUBL table and provisioning of the default `admin` user and roles.
 
-:::info[Refreshed in 2026.05.5]
-- **All tables are now first-class entries** — the auth tables (`F564250` users, `F564251` roles, `F564252` sessions, new `F564254` permissions) and the notifications table (`F564253`) joined the catalogue under the *Tables* tab. They participate in DDL substitution if renamed, on the same footing as invoice / e-reporting tables.
-- **E-Reporting tables renumbered** — `F564240` / `F564241` / `F564242` became `F564260` / `F564261` / `F564262`. The XML payload column moved from `TEXT` / `CLOB` to `BYTEA` / `BLOB` (UTF-8 bytes via `dialect.writeBlob`).
-- **Validate Schema panel** — a new section under *Tables* compares the bundled DDL (the canonical `.sql` files inside the JAR) against the live schema using the names configured here. Reports missing tables, missing or extra columns, and type / size mismatches. Read-only — never alters the schema. Same machinery as the `-validate-ddl` CLI mode.
-- **Columns tab** — dedicated tab to override column names per table; resolves through `UBLColumnConfig` so customer-renamed columns no longer drift silently.
-- **Init log fills the height** — the *Initialize* tab's log area now flexes to fill the available space instead of capping at 200 px.
-:::
-
 ---
 
 ## Opening the editor
@@ -191,7 +183,7 @@ NomaUBL distributes its data across **15 tables** grouped by purpose. The defaul
 | Field | Default | Stores |
 |---|---|---|
 | **Log / Archive** | `F564230` | Persistent log / archive of every processing run. |
-| **Runtime Log** | `F564237` | Live runtime log used by the in-app *Processing Log* viewer. New `FEUKID` PK, columns `FERMK` / `FERMK2` / `FEK74MSG1` (renamed in 2026.05.5). |
+| **Runtime Log** | `F564237` | Live runtime log used by the in-app *Processing Log* viewer. New `FEUKID` PK, columns `FERMK` / `FERMK2` / `FEK74MSG1`. |
 | **Invoice Header** | `F564231` | One row per invoice with its identification, totals, status, addressing data. |
 | **Invoice Lines** | `F564233` | Invoice line items (when *Store line subtotals* is on). |
 | **VAT Summary** | `F564234` | Per-invoice VAT summary by category (when *Store VAT details* is on). |
@@ -202,23 +194,19 @@ NomaUBL distributes its data across **15 tables** grouped by purpose. The defaul
 
 | Field | Default | Stores |
 |---|---|---|
-| **E-Reporting Log** | `F564260` | One row per e-Reporting submission. The XML payload column is `BYTEA` / `BLOB` since 2026.05.5 (UTF-8 bytes via `dialect.writeBlob`). |
-| **E-Reporting Lifecycle** | `F564261` | Status-change history of each submission. FK column renamed to `RHUKID` in 2026.05.5. |
-| **E-Reporting Map** | `F564262` | Per-submission mapping of original invoice → e-Reporting line. FK column renamed to `RIUKID` in 2026.05.5. |
-
-:::warning[Schema migration]
-The e-Reporting tables changed numbering in 2026.05.5 — the previous `F564240` / `F564241` / `F564242` are renamed to `F564260` / `F564261` / `F564262`. If your install pre-dates 2026.05.5 and the data is worth keeping, copy the rows over before re-running *Initialize Database* with the new names. The bundled DDL only creates the new names.
-:::
+| **E-Reporting Log** | `F564260` | One row per e-Reporting submission. The XML payload column is `BYTEA` / `BLOB` (UTF-8 bytes via `dialect.writeBlob`). |
+| **E-Reporting Lifecycle** | `F564261` | Status-change history of each submission. |
+| **E-Reporting Map** | `F564262` | Per-submission mapping of original invoice → e-Reporting line. |
 
 #### Notifications + Auth
 
 | Field | Default | Stores |
 |---|---|---|
-| **Notifications** | `F564253` | Inbox rows surfaced by the navbar bell and the *Application → Notifications* page (introduced in 2026.05.3). |
+| **Notifications** | `F564253` | Inbox rows surfaced by the navbar bell and the *Application → Notifications* page. |
 | **Auth · Users** | `F564250` | User identities (login, hashed password, full name, active flag). |
-| **Auth · Roles** | `F564251` | Role identity (name + description). The CSV grant columns from previous versions are gone — see *Auth · Permissions*. |
+| **Auth · Roles** | `F564251` | Role identity (name + description). Grants are stored in *Auth · Permissions*. |
 | **Auth · Sessions** | `F564252` | Active sessions: `SSLSID` UUID token, `SSUSER`, `SSSTDTIM` start, `SSETDTIM` end. |
-| **Auth · Permissions** | `F564254` | Row-based grants — `PMROLE`, `PMCRAPPID` (`page` / `company` / `feature`), `PMCRAPPVAL`, `PMENABL`. New in 2026.05.5. |
+| **Auth · Permissions** | `F564254` | Row-based grants — `PMROLE`, `PMCRAPPID` (`page` / `company` / `feature`), `PMCRAPPVAL`, `PMENABL`. |
 
 ### Validate Schema
 
@@ -266,7 +254,7 @@ The Columns tab is a per-table editor that overrides **column names** at runtime
 
 The editor groups overrides by table and exposes the same accessor names referenced by Java code. The default values match the JDE `F564xxx` columns (`UHKCO`, `FETXFT`, `RGUKID`, …); changing them is a customer-side concern and rarely needed unless the schema diverges from the bundled DDL.
 
-The new build-time **Cross-Reference** page (*Documentation → Cross-Ref*) lists every Java call site that reads `tables.<X>` or `cols.<X>`, with an "unused accessors" toggle to surface dead code. Generated by `XrefScanner` on every build, no manual upkeep.
+The **Tables** view of the [Developer](../../references/developer.md) page (*Documentation → Developer*) lists, for every table and column, its accessor, its configuration key and every Java call site that writes or reads it, by flow. Generated at build time, no manual upkeep.
 
 ---
 
@@ -282,7 +270,7 @@ One-click bootstrap of a fresh NomaUBL database.
 The operation is **safe to re-run** — existing tables and users are not modified, so each post-upgrade run only creates the new tables and re-seeds missing default grants. Typical lifecycle:
 
 1. Fresh deployment → run *Initialize Database* once. Every table is created, the default `admin` user is seeded.
-2. Upgrade to a new NomaUBL version that adds tables (e.g. 2026.05.3 added `F564253`, 2026.05.5 added `F564254`) → run *Initialize Database* again. Only the missing tables are created.
+2. Upgrade to a new NomaUBL version that adds tables → run *Initialize Database* again. Only the missing tables are created.
 3. Wiped permissions table → drop `F564254` and re-run *Initialize Database*. The default `admin` and `viewer` grants are re-seeded; existing role rows are untouched.
 
 ---
@@ -296,5 +284,5 @@ The operation is **safe to re-run** — existing tables and users are not modifi
 - **Run *Validate schema* after every upgrade.** It catches missing columns introduced by the upgrade and type mismatches that would otherwise produce silent runtime errors. The check is read-only — safe to run anywhere.
 - **Leave *Store VAT details* on when the VAT declaration page is in use.** Without it the page falls back to parsing every UBL on each load — fine on a quiet month, painful on a busy quarter.
 - **Turn *Store line subtotals* off only on volume-constrained installations.** The *Lines* tab of the invoice detail modal still works from the UBL; only third-party SQL reporting on line items goes away.
-- **Re-run *Initialize* after every upgrade.** New NomaUBL versions occasionally add tables (notifications in 2026.05.3, permissions in 2026.05.5); the safe-to-re-run script picks them up without touching existing data.
+- **Re-run *Initialize* after every upgrade.** New NomaUBL versions occasionally add tables; the safe-to-re-run script picks them up without touching existing data.
 - **The init log is colour-coded.** Scan for red lines first — those are real failures that need fixing. Muted `EXISTS:` lines on a re-run are expected.

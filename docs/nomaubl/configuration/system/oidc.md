@@ -10,7 +10,7 @@ NomaUBL ships a built-in **OIDC** single-sign-on integration that lets users aut
 
 The integration uses the standard **Authorization Code + PKCE** flow, fetches the IdP's metadata from its `/.well-known/openid-configuration`, and keys NomaUBL users by their **email** claim.
 
-The login screen's behaviour is driven by the **Auth Mode** field on the [Global template](./global.md#tab-5--authentication):
+The login screen's behaviour is driven by the **Auth Mode** field on the [Global template](./global.md#tab-9--authentication):
 
 | Auth Mode | Login screen |
 |---|---|
@@ -20,8 +20,8 @@ The login screen's behaviour is driven by the **Auth Mode** field on the [Global
 
 A default OIDC template is created automatically on fresh installs and upgrades, and can also be created with one click from the **+ Add OIDC** button in the *Configuration Manager* header.
 
-:::info[Introduced in 2026.06.22.5]
-SSO is a new capability — operators upgrading from a prior version should review the *Switching on* checklist at the bottom of this page before flipping `authMode` away from `internal`.
+:::info[Before switching on]
+Review the *Switching on* checklist at the bottom of this page before moving `authMode` away from `internal`.
 :::
 
 ---
@@ -181,7 +181,7 @@ Sessions minted through OIDC behave slightly differently from local ones:
 
 ## Switching on
 
-Once the OIDC template is filled, the **Auth Mode** field on the [Global template](./global.md#tab-5--authentication) controls how the login screen behaves:
+Once the OIDC template is filled, the **Auth Mode** field on the [Global template](./global.md#tab-9--authentication) controls how the login screen behaves:
 
 | Mode | Result |
 |---|---|

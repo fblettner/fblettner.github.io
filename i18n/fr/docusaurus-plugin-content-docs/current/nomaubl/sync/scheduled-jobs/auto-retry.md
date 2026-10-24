@@ -1,20 +1,20 @@
 ---
 title: Reprise auto
-description: "Paramètres → Reprise auto planifie un passage quotidien qui renvoie chaque facture dans un statut d'erreur technique choisi (par défaut 9904 à 3 h) vers la Plateforme Agréée. Sélecteur multi-statuts, fenêtre d'analyse optionnelle, cadencement par ligne, partagé avec la carte Échec d'envoi du Tableau de bord technique. Le ramassage nocturne pour les lots bloqués côté PA."
+description: "Tâches planifiées → Reprise auto planifie un passage quotidien qui renvoie chaque facture dans un statut d'erreur technique choisi (par défaut 9904 à 3 h) vers la Plateforme Agréée. Sélecteur multi-statuts, fenêtre d'analyse optionnelle, cadencement par ligne, partagé avec la carte Échec d'envoi du Tableau de bord technique. Le ramassage nocturne pour les lots bloqués côté PA."
 keywords: [NomaUBL, reprise auto, reprise nocturne, échec d'envoi, statut 9904, 9905, 9907, Plateforme Agréée, renvoi PA, passage planifié, cadencement, fenêtre d'analyse, JD Edwards, SAP, NetSuite, ERP sur mesure]
 ---
 
 # Reprise auto
+
+:::info[Où le trouver]
+Ce formulaire s'ouvre depuis la page [Tâches planifiées](./overview.md) : cliquer sur une tâche de type *Reprise auto* pour la modifier, ou **Nouvelle tâche → Reprise auto** pour en créer une. **Enregistrer et appliquer** recharge immédiatement la planification, sans redémarrage du serveur. L'ancienne page *Reprise automatique* a quitté le menu.
+:::
 
 L'écran **Reprise auto** planifie un passage récurrent qui renvoie chaque facture dans un statut d'erreur technique choisi vers la Plateforme Agréée (PA). La ligne par défaut traite le statut `9904` (*Échec d'envoi*) chaque nuit à 3 h — le garde-fou du lot nocturne pour que tout ce qui reste bloqué côté PA en fin de journée soit repris avant la reprise des opérations le matin.
 
 Plusieurs lignes peuvent coexister : une par combinaison (heure, liste de statuts). Le même chemin de code pilote le bouton manuel *Tout renvoyer N* sur la [carte Échec d'envoi du Tableau de bord technique](../../application/tech-dashboard.md#send-failed), si bien que le renvoi manuel et le renvoi planifié produisent des résultats identiques — l'un est déclenché à la main, l'autre par cron.
 
 La page s'applique quel que soit le système source — JD Edwards, SAP, NetSuite ou un ERP sur mesure. Le renvoi lit `F564231` pour sélectionner les factures concernées et appelle l'api-connector PA configuré pour chacune ; le format source est transparent.
-
-:::info[Nouveauté 2026.06.03]
-La page est entièrement nouvelle. Elle se marie avec la nouvelle carte **Échec d'envoi** du Tableau de bord technique — le tableau de bord effectue le renvoi immédiat en un clic, la Reprise auto effectue le ramassage nocturne sans surveillance. Les deux utilisent le même moteur de renvoi et respectent le même cadencement par appel (par défaut 100 ms).
-:::
 
 ---
 
@@ -125,7 +125,7 @@ Chaque ligne est une entrée du catalogue. Le panneau d'édition comporte quatre
 
 ### 3. Filtre de statuts
 
-Le sélecteur multi-statuts ne liste que les statuts étiquetés **Erreur – technique** dans le [Catalogue des statuts](./statuses.md) :
+Le sélecteur multi-statuts ne liste que les statuts étiquetés **Erreur – technique** dans le [Catalogue des statuts](../../configuration/system/statuses.md) :
 
 | Code | Libellé | Quand il s'applique |
 |---|---|---|
@@ -205,6 +205,6 @@ L'exécution déclenchée par *Exécuter maintenant* respecte le même cadenceme
 
 - [Tableau de bord technique → Échec d'envoi](../../application/tech-dashboard.md#send-failed) — le renvoi manuel en un clic ; même chemin de code, déclenché à la main.
 - [Fenêtre de progression partagée](../../application/tech-dashboard.md#shared-progress-window) — la fenêtre modale qu'ouvre chaque opération longue.
-- [E-Invoicing](./einvoicing.md) — l'api-connector PA que le renvoi appelle ; ajustez-y les délais d'attente et les nombres de tentatives.
-- [Statuts](./statuses.md) — le catalogue des codes de statut, dont l'étiquette *Erreur – technique* qui filtre le sélecteur multi-statuts de cette page.
+- [E-Invoicing](../../configuration/system/einvoicing.md) — l'api-connector PA que le renvoi appelle ; ajustez-y les délais d'attente et les nombres de tentatives.
+- [Statuts](../../configuration/system/statuses.md) — le catalogue des codes de statut, dont l'étiquette *Erreur – technique* qui filtre le sélecteur multi-statuts de cette page.
 - [Digest quotidien](./daily-digest.md) — planifiez un e-mail quotidien qui résume les erreurs d'intégration ; complément utile à la Reprise auto pour que l'équipe d'astreinte voie ce que le passage n'a pas pu corriger.

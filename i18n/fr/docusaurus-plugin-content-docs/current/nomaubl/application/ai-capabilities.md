@@ -1,338 +1,203 @@
 ---
 title: Capacités IA
-description: "Assistant IA intégré à NomaUBL. Répond aux questions sur le fonctionnement du produit (à partir de la documentation publique) et aux questions sur les données opérationnelles : factures, historique de cycle de vie, erreurs de validation, dépôts e-reporting. Quelques outils en lecture seule. Réponses en flux, appels d'outils visibles, FR et EN."
-keywords: [NomaUBL, assistant IA, Claude, agentique, tool use, list_docs_pages, list_invoices, list_ereports, explain_status_code, validation_errors, lifecycle_history, web_fetch, JD Edwards, SAP, NetSuite, ERP personnalisé]
+description: "L'assistant IA de NomaUBL — un panneau de conversation qui connaît la page et la facture ouvertes, répond à partir de la documentation NomaUBL, de la documentation générée de l'instance et de ses données (dossier de facture, chiffres d'une période, reste à traiter, cycle de vie, erreurs de validation, journal serveur, contrôles d'intégrité, annuaire), suit des procédures de diagnostic, propose des relances et se limite à la lecture."
+keywords: [NomaUBL, assistant IA, Claude, outils, contexte, suggestions, relances, procédures de diagnostic, playbooks, search_docs, invoice_dossier, period_figures, instance_docs, server_log, lifecycle_history, validation_errors, Sonnet, Opus, Haiku, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Capacités IA
 
-L'**assistant IA** est un panneau de discussion intégré à NomaUBL. Il répond à deux types de questions :
+L'**Assistant IA** est un panneau de conversation intégré à NomaUBL. Il répond à trois types de questions :
 
-- *Comment fonctionne le produit ?* — l'assistant consulte la documentation publique sur `docs.nomana-it.fr` et renvoie une réponse sourcée.
-- *Quel est l'état des données ?* — l'assistant interroge la base NomaUBL en **lecture seule** et renvoie les lignes correspondantes : factures, statuts, erreurs de validation, dépôts e-reporting.
+- *Comment fonctionne le produit ?* — à partir de la documentation NomaUBL, indexée par le serveur, avec le titre et le lien de la page utilisée.
+- *Comment cette instance est-elle paramétrée ?* — à partir du [rapport d'implémentation](./implementation-report.md) produit depuis la configuration de l'instance : documents, correspondances, règles, tâches, rôles.
+- *Où en sont mes données ?* — à partir de la base, en **lecture seule** : une facture complète, les chiffres d'une période, le reste à traiter, les erreurs, le journal serveur, les contrôles d'intégrité.
 
-Les réponses s'affichent en flux pendant la génération. Chaque appel d'outil apparaît sous forme de pastille — toutes les actions sont visibles. La langue de la réponse suit celle de la question (français ou anglais).
+L'assistant connaît **la page affichée et la facture ouverte** : *« pourquoi cette facture est-elle refusée ? »* ne demande aucun numéro à saisir. Les réponses s'affichent au fil de leur rédaction ; chaque appel d'outil apparaît sous forme de pastille avec les filtres utilisés ; chaque réponse se termine par des **boutons de relance**. L'assistant fonctionne en français ou en anglais et suit la langue de la question.
 
 ---
 
-## Ouverture du panneau
+## Ouvrir l'assistant
 
-- L'entrée **✦ Assistant IA** dans la barre de navigation (en haut à droite, pastille en dégradé violet) ouvre un tiroir latéral. L'espace de travail se réduit en conséquence.
-- Le sélecteur en haut du panneau permet de choisir un modèle. **Par défaut** convient aux questions courantes. Les modèles plus puissants (Sonnet, Opus) raisonnent plus longuement, mais coûtent plus cher en API.
-- Touche **Entrée** pour envoyer, **Maj+Entrée** pour insérer un saut de ligne, **■** pour arrêter une réponse en cours.
-- Fermer le panneau réinitialise la conversation. L'assistant ne garde aucun historique entre sessions.
+- Cliquer sur **✦ AI Assistant**, à droite de la barre supérieure. Le panneau s'ouvre en tiroir à côté de la page et reste utilisable quand une fenêtre de facture est ouverte.
+- **Entrée** envoie la question, **Maj+Entrée** insère un saut de ligne, **■** interrompt la réponse en cours.
+- **La conversation est conservée** à la fermeture du panneau ou au rechargement de la page (les 40 derniers messages, dans le navigateur). **+ Nouvelle conversation** repart de zéro.
+- **Ouvrir une autre facture démarre une nouvelle conversation** : l'échange précédent portait sur une autre facture et induirait le modèle en erreur.
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
-  <defs>
-    <marker id="aichat-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="aichat-g-panel" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#0f172a" stopOpacity="0.92"/><stop offset="100%" stopColor="#0a0e1a" stopOpacity="0.92"/></linearGradient>
-    <linearGradient id="aichat-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <linearGradient id="aichat-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="aichat-g-cta" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#6d28d9"/><stop offset="100%" stopColor="#4a9eff"/></linearGradient>
-  </defs>
+<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '0', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '12.5px', maxWidth: '440px'}}>
+  <div style={{display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 12px', borderBottom: '1px solid rgba(148,163,184,0.25)'}}>
+    <span>✦</span><b style={{flex: 1}}>Assistant IA</b>
+    <span style={{padding: '2px 8px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>Par défaut ▾</span>
+    <span style={{padding: '2px 7px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>+</span>
+    <span style={{padding: '2px 7px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)'}}>×</span>
+  </div>
+  <div style={{display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderBottom: '1px solid rgba(148,163,184,0.25)', opacity: 0.85}}>
+    <span>Contexte :</span><code>invoices</code>
+    <span style={{padding: '1px 8px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>🧾 F2026-1203 · 210 ×</span>
+  </div>
+  <div style={{padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px'}}>
+    <div style={{alignSelf: 'flex-end', padding: '6px 10px', borderRadius: '10px', background: 'rgba(74,158,255,0.15)'}}>Pourquoi cette facture est-elle dans ce statut ?</div>
+    <div style={{display: 'flex', gap: '6px', flexWrap: 'wrap'}}>
+      <span style={{padding: '1px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', fontSize: '11px'}}>🧭 load_playbook · refused-invoice</span>
+      <span style={{padding: '1px 8px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.3)', fontSize: '11px'}}>🧾 invoice_dossier · 1203 RI 00001</span>
+    </div>
+    <div style={{padding: '8px 10px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.25)', lineHeight: 1.5}}>
+      <div>La facture <b>F2026-1203</b> a été <b>refusée par l'acheteur</b> (statut 210) le 22/10/2026, motif <code>PU_ERR</code> — prix unitaires incorrects.</div>
+      <div><b>Étape suivante :</b> émettre un avoir interne, puis une facture corrigée.</div>
+      <div style={{opacity: 0.6, marginTop: '4px'}}>📋 Copier</div>
+    </div>
+    <div style={{display: 'flex', gap: '6px', flexWrap: 'wrap'}}>
+      <span style={{padding: '3px 9px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>Montre son cycle de vie</span>
+      <span style={{padding: '3px 9px', borderRadius: '999px', border: '1px solid #4a9eff', color: '#4a9eff'}}>D'autres refus ce mois-ci ?</span>
+    </div>
+  </div>
+  <div style={{display: 'flex', gap: '6px', padding: '10px 12px', borderTop: '1px solid rgba(148,163,184,0.25)'}}>
+    <span style={{flex: 1, padding: '6px 10px', borderRadius: '8px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.6}}>Posez une question sur cette facture, un réglage, une erreur…</span>
+    <span style={{padding: '6px 10px', borderRadius: '8px', background: '#4a9eff', color: '#fff'}}>➤</span>
+  </div>
+</div>
 
-  <rect x="240" y="20" width="540" height="580" rx="16" fill="url(#aichat-g-panel)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <line x1="240" y1="68" x2="780" y2="68" stroke="#1f2937" strokeWidth="1"/>
-  <text x="262" y="48" fill="#c084fc" fontSize="14" fontWeight="700" fontFamily="system-ui, sans-serif">✦</text>
-  <text x="284" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Assistant IA</text>
-  <rect x="640" y="32" width="86" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="650" y="47" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">Par défaut ▾</text>
-  <rect x="734" y="32" width="28" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="748" y="48" fill="#64748b" fontSize="13" textAnchor="middle" fontFamily="system-ui, sans-serif">×</text>
-
-  <rect x="430" y="84" width="330" height="36" rx="10" fill="url(#aichat-g-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="446" y="106" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif">quel est le problème pour la facture 10000 / RI / 00001 ?</text>
-
-  <rect x="262" y="134" width="226" height="22" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="270" y="149" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">🔍</text>
-  <text x="284" y="149" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">validation_errors</text>
-  <text x="382" y="149" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">· doc=10000 dct=RI kco=00001</text>
-
-  <rect x="262" y="170" width="406" height="170" rx="10" fill="url(#aichat-g-card)" stroke="#334155" strokeWidth="1"/>
-  <text x="278" y="192" fill="#cbd5e1" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">Recherche des erreurs de validation pour cette facture…</text>
-  <line x1="278" y1="202" x2="652" y2="202" stroke="#1f2937" strokeWidth="1"/>
-  <text x="278" y="222" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif">La facture 10000 / RI / 00001 échoue à un contrôle XSD.</text>
-  <text x="278" y="244" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Problème</text>
-  <text x="320" y="244" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Ordre des éléments UBL 2.1 — AdditionalDocument-</text>
-  <text x="278" y="258" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">         Reference placé avant ProjectReference / Signature.</text>
-  <text x="278" y="282" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cause probable</text>
-  <text x="358" y="282" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Le XSL émet l'élément en ordre incorrect.</text>
-  <text x="278" y="306" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Recommandations</text>
-  <text x="278" y="320" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">• vérifier la transformation JDE → UBL</text>
-  <text x="278" y="332" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">• valider l'ordre face au schéma UBL 2.1</text>
-
-  <rect x="262" y="354" width="78" height="20" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="270" y="368" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📋 Copier</text>
-
-  <rect x="430" y="396" width="76" height="32" rx="9" fill="url(#aichat-g-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="468" y="416" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif" textAnchor="middle">oui</text>
-
-  <rect x="262" y="442" width="160" height="22" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="270" y="457" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">🔍</text>
-  <text x="284" y="457" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">list_invoices</text>
-  <text x="354" y="457" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">· kco=00001</text>
-
-  <rect x="262" y="476" width="406" height="62" rx="10" fill="url(#aichat-g-card)" stroke="#334155" strokeWidth="1"/>
-  <text x="278" y="496" fill="#e2e8f0" fontSize="11" fontFamily="system-ui, sans-serif">Statut de la facture 10000 / RI / 00001 — </text>
-  <text x="278" y="510" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">client · 2025-02-01 · B2C · 140,70 € · </text>
-  <text x="465" y="510" fill="#f87171" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">9905 — Échec de validation</text>
-  <text x="278" y="528" fill="#94a3b8" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">Bloquée depuis le 2025-02-01 sur l'erreur XSD ci-dessus.</text>
-
-  <line x1="240" y1="558" x2="780" y2="558" stroke="#1f2937" strokeWidth="1"/>
-  <rect x="262" y="568" width="440" height="26" rx="6" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="272" y="585" fill="#475569" fontSize="11" fontFamily="system-ui, sans-serif">Posez votre question…</text>
-  <rect x="710" y="568" width="38" height="26" rx="6" fill="url(#aichat-g-cta)"/>
-  <text x="729" y="585" fill="#fff" fontSize="13" textAnchor="middle" fontFamily="system-ui, sans-serif">➤</text>
-
-  <rect x="20" y="32" width="180" height="40" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="50" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Barre de titre</text>
-  <text x="30" y="65" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sélecteur de modèle · fermer</text>
-  <line x1="200" y1="52" x2="240" y2="52" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aichat-arrow)"/>
-
-  <rect x="20" y="134" width="200" height="40" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="152" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Pastille d'appel d'outil</text>
-  <text x="30" y="167" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nom + filtres réellement utilisés</text>
-  <line x1="220" y1="155" x2="262" y2="155" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aichat-arrow)"/>
-
-  <rect x="20" y="240" width="200" height="40" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="258" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Réponse diffusée en flux</text>
-  <text x="30" y="273" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Markdown · titres · tableaux</text>
-  <line x1="220" y1="260" x2="262" y2="260" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aichat-arrow)"/>
-
-  <rect x="20" y="354" width="200" height="40" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="372" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Copie de la réponse</text>
-  <text x="30" y="387" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à coller dans un ticket / mail</text>
-  <line x1="220" y1="370" x2="262" y2="370" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aichat-arrow)"/>
-
-  <rect x="800" y="84" width="180" height="40" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="810" y="102" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Question utilisateur</text>
-  <text x="810" y="117" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">texte libre · FR ou EN</text>
-  <line x1="800" y1="105" x2="760" y2="105" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aichat-arrow)"/>
-
-  <rect x="800" y="396" width="180" height="40" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="810" y="414" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Tour de relance</text>
-  <text x="810" y="429" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">diagnostic multi-étapes</text>
-  <line x1="800" y1="416" x2="510" y2="416" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aichat-arrow)"/>
-
-  <rect x="800" y="558" width="180" height="40" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="810" y="576" fill="currentColor" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Zone de saisie</text>
-  <text x="810" y="591" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Entrée pour envoyer · ■ pour interrompre</text>
-  <line x1="800" y1="580" x2="750" y2="580" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#aichat-arrow)"/>
-</svg>
-
-Chaque action de l'assistant apparaît sous forme de pastille : 🔍 pour une lecture de la base NomaUBL, 📖 pour une page de documentation demandée, 📥 pour le résultat reçu. Les filtres réellement utilisés sont affichés à côté. Aucune étape n'est cachée.
+| Élément | Rôle |
+|---|---|
+| **Choix du modèle** | *Par défaut* utilise le modèle défini par l'administrateur ; la liste propose Sonnet 5.5, Opus 5.5, Fable 5.1 et Haiku 4.5. Le choix est mémorisé dans le navigateur. |
+| **+ Nouvelle conversation** | Efface la conversation. |
+| **Barre de contexte** | La page affichée et, quand une fenêtre de facture est ouverte, une pastille avec le numéro et le statut de la facture. **×** sur la pastille écarte la facture de la conversation en cours. |
+| **Pastilles d'outil** | Chaque outil appelé, avec les filtres reçus. |
+| **📋 Copier** | Copie la réponse en Markdown, sans la ligne de relances. |
+| **Suggestions** | Au-dessus de la zone de saisie : les relances proposées par la dernière réponse ou, en début de conversation, trois questions adaptées à la page. |
 
 ---
 
-## Questions prises en charge
+## Contexte et suggestions
 
-L'assistant est relié à deux sources d'information, toutes les deux en lecture seule.
+Chaque question part avec la **page affichée**, son **filtre de navigation** et la **facture ouverte** (document, type, société, numéro, statut, client). L'assistant considère que la question porte sur eux, sauf indication contraire.
 
-### Sur le produit
+En début de conversation, les suggestions dépendent de la page :
 
-Pour répondre à une question sur le produit, l'assistant consulte la documentation publique `docs.nomana-it.fr` en deux étapes :
+| Page | Suggestions |
+|---|---|
+| Une fenêtre de facture est ouverte | *Pourquoi cette facture est-elle dans ce statut ?* · *Résume son cycle de vie* · *Que corriger pour la représenter ?* |
+| Tableau de bord IT, Journal serveur, Journal des traitements | *Des erreurs dans le journal serveur aujourd'hui ?* · *L'instance est-elle en bonne santé ?* · *Quelles factures ont échoué cette semaine et pourquoi ?* |
+| Tableau de bord, E-Invoicing | *Fais-moi la synthèse des factures de ce mois* · *Quelles factures attendent une action et que faire ?* · *Quelles factures ont échoué cette semaine et pourquoi ?* |
+| Rapports, E-Reporting | *Fais-moi la synthèse des factures de ce mois* · *Quelles factures attendent une action et que faire ?* · *Quels documents sont envoyés à la plateforme ?* |
+| Paramètres, Rôles, Utilisateurs, Développeur, Documents, Règles de notification, Actions, Tâches planifiées | *Quels documents sont envoyés à la plateforme ?* · *Quelles règles de notification sont actives ?* · *Qu'est-ce qui a changé dans la dernière version ?* |
+| Autres pages | *Fais-moi la synthèse des factures de ce mois* · *Que faire d'une facture refusée par le client ?* · *Quels documents sont envoyés à la plateforme ?* |
 
-1. **`list_docs_pages`** — récupère les URL de documentation NomaUBL disponibles via le sitemap du site (rafraîchi toutes les six heures, 200 entrées maximum). La pastille s'affiche sous la forme 🔍 `list_docs_pages · discovering NomaUBL docs URLs`.
-2. **`web_fetch`** — choisit l'URL la plus pertinente dans la liste, puis télécharge la page. Une pastille 📖 affiche l'URL choisie. Juste après, une pastille 📥 `web_fetch_result · ✓ <url>` confirme la réception (ou 📥 ❌ `<error_code>` en cas d'échec).
+Chaque réponse se termine par **une à trois relances** : la réponse naturelle à une question posée par l'assistant, la vérification suivante ou une question plus approfondie. Elles remplacent les suggestions et s'envoient d'un clic.
 
-Ce fonctionnement en deux étapes garantit que l'URL consultée provient toujours du sitemap à jour. L'assistant ne peut pas inventer un lien ni en utiliser un périmé.
+---
 
-Cas d'usage :
+## Ce qu'utilise l'assistant
 
-- doute sur le comportement d'une fonctionnalité (*« À quoi sert Replace = Skip sur Processing → XML ? »*) ;
-- besoin d'une définition rapide pour un collègue (*« Différence entre flux 10.1 et 10.3 ? »*) ;
-- rappel du cycle de vie officiel (*« Comment une facture passe-t-elle du statut 9900 au statut 10 ? »*).
+### Documentation
 
-### Sur les données
-
-Cinq outils en lecture seule couvrent les questions opérationnelles courantes. L'assistant reçoit aussi le catalogue de statuts en vigueur (codes facture et e-reporting, avec tag et libellés FR/EN). Il peut donc traduire automatiquement des expressions comme *« en litige »* ou *« rejected »* vers le bon code, sans approximation.
-
-| Outil | Données retournées | Question typique |
+| Outil | Pastille | Usage |
 |---|---|---|
-| **`list_invoices`** | Jusqu'à 50 factures de F564231, avec filtres : code statut, société, routage BAR (B2B / B2BINT / B2C / B2G / OUTOFSCOPE), nom client (sous-chaîne), période d'émission. | *« Lister les factures en attente pour la société 00070 en EUR »*, *« Échecs d'envoi depuis lundi dernier »* |
-| **`explain_status_code`** | Le nom de tag et les libellés FR / EN d'un code statut. Consulte le catalogue facture (1, 8, 10, 37, 9900–9907 …) et le catalogue e-reporting (9950–9957). | *« Que signifie 9906 ? »*, *« Statut 9954 ? »* |
-| **`validation_errors`** | Erreurs de validation issues de F564236 pour un triplet `DOC + DCT + KCO` (niveau, source, règle, message — mêmes colonnes et même logique de résolution que la page [Erreurs d'intégration](./integration-errors.md)). | *« Quel est le problème pour la facture 10000 / RI / 00001 ? »* |
-| **`lifecycle_history`** | Toutes les transitions de statut enregistrées dans F564235 pour un triplet `DOC + DCT + KCO` — séquence, code statut, message, date / heure, plus le motif de rejet PA, l'action attendue et la note de statut quand ils sont présents. | *« Pourquoi la facture 12345/RI/00070 a-t-elle été rejetée par la PA ? »*, *« Afficher l'historique complet de cette facture »* |
-| **`list_ereports`** | Jusqu'à 50 dépôts de F564240 avec filtres : flux (10.1 / 10.3), société, code statut (9950–9957). | *« Les dix derniers dépôts 10.3 pour la société 00070 »*, *« Dépôts e-reporting en attente »* |
+| **`search_docs`** | 📚 | Recherche dans la documentation NomaUBL, indexée par le serveur à partir de l'export texte intégral du site (`llms-full.txt`) ; renvoie les meilleures pages avec titre, URL et extrait. Appelé en premier pour toute question sur le produit. |
+| **`read_doc_page`** | 📖 | Lit une page trouvée par `search_docs`, par tranches de 12 000 caractères pour les pages longues. |
+| **`list_doc_pages`** | 📑 | La table des matières de la documentation, quand la recherche ne donne rien de pertinent. |
+| **`instance_docs`** | 🔍 | Le [rapport d'implémentation](./implementation-report.md) de cette instance : table des matières, une section, ou une recherche dans les sections. Appelé en premier pour toute question sur le paramétrage de *cette* instance. |
 
-Le déclenchement est automatique : aucun appel manuel à faire. Un garde-fou interrompt l'assistant après **5 appels d'outil par tour**, pour éviter qu'une boucle ne consomme tout le budget API. En cas d'échec d'un outil, l'assistant affiche son nom, les paramètres tentés et le code d'erreur — utile pour le diagnostic.
+L'assistant cite la page utilisée et en donne le lien. Il n'invente ni réglage, ni code de statut, ni URL : quand la documentation ne couvre pas un point, il le dit.
+
+### Données de l'instance
+
+| Outil | Pastille | Contenu renvoyé |
+|---|---|---|
+| **`invoice_dossier`** | 🧾 | Tout sur une facture en un appel : en-tête (statut, client, montants, dates, identifiant PA), lignes, ventilation de TVA, erreurs de validation et cycle de vie complet avec les motifs de la PA. |
+| **`list_invoices`** | 🧾 | Jusqu'à 50 factures filtrées sur le statut, la société, le type de transaction (B2B / B2BINT / B2C / B2G / OUTOFSCOPE), le client, le numéro de facture (BT-1) et les dates d'émission. |
+| **`lifecycle_history`** | 🕘 | Tous les événements de statut d'une facture, avec le motif de rejet de la PA, l'action attendue et la note de statut. |
+| **`validation_errors`** | ⚠️ | Les erreurs de validation d'une facture (niveau, source, règle, message), comme dans les [Erreurs d'intégration](./diagnostics/integration-errors.md). |
+| **`period_figures`** | 🔍 | La synthèse d'une période tirée du [rapport d'audit](./audit-report.md) : indicateurs avec la période précédente et l'écart, ventilation des factures traitées, constats, et reste à traiter toutes périodes confondues (par statut, société et ancienneté). Par défaut : le mois en cours. |
+| **`dashboard_overview`** | 📊 | Les compteurs du [tableau de bord](./dashboard.md) sur une plage de dates. |
+| **`tech_dashboard`** | 🩺 | L'état de l'instance, comme sur le [tableau de bord IT](./tech-dashboard.md) : JVM, tâches planifiées et dernières exécutions, échecs d'envoi, factures en attente, anomalies de configuration, volumétrie des tables. |
+| **`server_log`** | 📜 | La fin du [journal serveur](./diagnostics/server-log.md), du plus récent au plus ancien, filtrée sur le niveau, le module et un texte. |
+| **`integrity_checks`** | 🔎 | Les [contrôles d'intégrité](../configuration/system/integrity-reports.md) configurés et, pour un contrôle, son résultat sur une plage de dates. |
+| **`list_ereports`** | 🔍 | Jusqu'à 50 traitements d'e-reporting filtrés sur le flux (10.1 / 10.3), la société et le statut. |
+| **`explain_status_code`** | 🏷️ | Le nom et les libellés FR / EN d'un code de statut de facture ou d'e-reporting. |
+| **`reason_codes`** | 📋 | Les motifs de rejet et actions attendues de la PA, avec leurs libellés. |
+| **`edirectory_lookup`** | 🏢 | Une entreprise de l'[annuaire](./edirectory.md), par SIREN, SIRET ou raison sociale : données légales et lignes d'adressage. |
+| **`template_settings`** | ⚙️ | Les réglages d'un modèle, secrets masqués. Demande la fonctionnalité *Settings access*. |
+
+L'assistant reçoit aussi le **catalogue des statuts** à jour : *« en litige »*, *« refusée »* ou *« en attente de dépôt »* sont rattachés au bon code.
+
+Les outils de données respectent les droits de l'utilisateur connecté : la visibilité par société du rôle s'applique aux factures, chiffres et reste à traiter consultés par l'assistant.
+
+### Procédures de diagnostic
+
+Pour un diagnostic, l'assistant charge d'abord la **procédure** correspondante (🧭 `load_playbook`), puis en suit les étapes. Les procédures fournies sont :
+
+| Procédure | Diagnostic |
+|---|---|
+| `refused-invoice` | Une facture en attente d'action (213, 9905, 9907, 9904, 207, 208, 210, 221, 206) : ce qui a été refusé, ce qu'il faut corriger, comment la représenter — ou, pour un refus, l'avoir interne à émettre. |
+| `backlog` | Ce qui attend encore une action, pour une société ou toutes : à corriger et renvoyer, réponse attendue par l'acheteur, en attente sur la plateforme, déposé mais non transmis. |
+| `missing-invoice` | Une facture ou une tâche d'impression JDE qui n'est pas arrivée dans NomaUBL : l'étape en échec et ce qu'il faut lancer. |
+| `ereporting-error` | Un traitement d'e-reporting en échec (9956 à 9959) : la donnée en cause et la correction. |
+| `status-not-updated` | Une facture qui garde un ancien statut alors que la plateforme a avancé. |
+
+L'administrateur peut ajouter des procédures ou en remplacer une sous le même nom, depuis le champ *Custom playbooks* des [paramètres globaux](../configuration/system/global.md) (onglet *AI*).
+
+Au plus **10 appels d'outil** s'enchaînent pour une question. Quand un outil échoue, l'assistant indique l'outil, l'entrée et l'erreur.
 
 ---
 
 ## Exemples de conversation
 
-Les transcriptions ci-dessous proviennent d'une session réelle. Le panneau fonctionne à l'identique en anglais.
+### Diagnostiquer la facture ouverte
 
-### Exemple 1 — Diagnostic d'une facture isolée
+> **Utilisateur** — *(facture F2026-1203 ouverte)* Pourquoi cette facture est-elle dans ce statut ?
+>
+> 🧭 `load_playbook · refused-invoice` &nbsp; 🧾 `invoice_dossier · 1203 RI 00001`
+>
+> **Assistant IA** — La facture **F2026-1203** a été **refusée par l'acheteur** (statut 210) le 22/10/2026, motif `PU_ERR` — prix unitaires incorrects. Un refus impose un avoir interne : annuler la facture par un avoir, puis émettre une facture corrigée.
+>
+> *Relances :* `Montre son cycle de vie` · `D'autres refus ce mois-ci ?`
 
-> **Utilisateur**
-> *quel est le problème pour la facture 10000 / RI / 00001*
->
-> 🔍 **`validation_errors`** · `doc=10000 dct=RI kco=00001`
->
-> **Assistant IA**
-> *Je vais chercher les erreurs de validation pour cette facture.*
->
-> La facture 10000 / RI / 00001 a une erreur de validation XSD :
->
-> **Problème :** Structure UBL 2.1 invalide. L'élément `AdditionalDocumentReference` est trouvé à une position non autorisée.
->
-> **Cause probable :** L'ordre des éléments dans le document UBL ne respecte pas le schéma. `AdditionalDocumentReference` devrait apparaître après `ProjectReference`, `Signature` ou `AccountingSupplierParty`.
->
-> **Recommandations :**
-> - Vérifier la transformation JD Edwards → UBL générée par NomaUBL.
-> - S'assurer que les éléments UBL sont ordonnés conformément à la norme UBL 2.1.
-> - Contrôler les données source dans JD Edwards (type de document, références additionnelles).
->
-> *Souhaitez-vous que je consulte le statut global de cette facture ?* &nbsp;📋
->
-> ---
->
-> **Utilisateur**
-> *oui*
->
-> 🔍 **`list_invoices`** · `kco=00001`
->
-> **Assistant IA**
->
-> Statut de la facture 10000 / RI / 00001 :
->
-> | Attribut | Valeur |
-> |---|---|
-> | Client | LE CLIENT |
-> | Date d'émission | 2025-02-01 |
-> | Type de document | B2C |
-> | Montant HT | 130,00 € |
-> | TVA | 10,70 € |
-> | Montant TTC | 140,70 € |
-> | Statut | 🔴 9905 — Échec de validation |
->
-> **Récapitulatif :** la facture est bloquée en validation depuis le 1er février 2025 à cause de l'erreur XSD ci-dessus (élément `AdditionalDocumentReference` mal positionné).
->
-> *Besoin d'aide pour corriger cette facture ?* &nbsp;📋
+### Synthèse du mois
 
-Un triplet (`DOC + DCT + KCO`) suffit pour démarrer le diagnostic. L'assistant enchaîne lui-même les requêtes — d'abord la table de validation, puis l'en-tête de facture — et propose l'étape suivante.
-
-### Exemple 2 — Comptage des échecs sur l'ensemble du parc
-
-> **Utilisateur**
-> *combien de factures au total ne sont pas valides ?*
+> **Utilisateur** — Fais-moi la synthèse des factures de ce mois
 >
-> 🔍 **`list_invoices`** · `status=9905`
+> 🔍 `period_figures · 2026-10-01 → 2026-10-24`
 >
-> **Assistant IA**
+> **Assistant IA** — 1 240 factures traitées (+6 % sur septembre), 1 180 déposées, soit un taux de dépôt de 95 %. 38 attendent une action : 22 à corriger et renvoyer, 16 en attente d'une réponse à l'acheteur. Validation au premier passage : 97 %.
 >
-> **Résultat :** 50 factures en échec de validation (statut 9905).
->
-> Les résultats affichent le maximum de **50 entrées**. Le nombre total exact peut être supérieur.
->
-> **Répartition observée :**
-> - Majorité : société 00002 (49 factures).
-> - Minorité : société 00001 (1 facture) et autres.
-> - Types de documents : surtout des `RI` (factures), 1 `RM` (facture d'avoir).
-> - Période : principalement mars-avril 2026.
->
-> **Recommandations :**
-> - Vérifier si toutes ces factures sont touchées par le même problème XSD.
-> - Examiner en priorité les données source de la société 00002.
-> - Lancer un audit sur la transformation JD Edwards → UBL.
->
-> *Voulez-vous que je vous montre les erreurs détaillées d'une autre facture pour confirmer si c'est le même problème ?* &nbsp;📋
-
-Le plafond de 50 lignes sur `list_invoices` est volontaire : pour un comptage exhaustif, utiliser la page [E-Invoicing](./invoices.md). L'assistant est utile pour *caractériser* un problème (quelle société, quel type de document, quelle période), puis renvoyer vers l'écran dédié pour la liste complète.
-
-### Exemple 3 — Lecture de l'historique de rejet PA
-
-> **Utilisateur**
-> *pourquoi la facture 12345 / RI / 00070 a-t-elle été rejetée par la PA ?*
->
-> 🔍 **`lifecycle_history`** · `doc=12345 dct=RI kco=00070`
->
-> **Assistant IA**
->
-> Voici l'historique complet de la facture 12345 / RI / 00070 :
->
-> | Date | Statut | Message |
+> | En attente | Nombre | La plus ancienne |
 > |---|---|---|
-> | 2026-04-12 09:14 | 9900 — Créée | — |
-> | 2026-04-12 09:15 | 9901 — Validée | XSD + Schematron OK |
-> | 2026-04-12 09:18 | 9903 — Envoyée à la PA | submission_id=ABC-42 |
-> | 2026-04-12 09:42 | 9904 — Rejet PA | `REJ_ADR` — code adressage destinataire inconnu |
+> | 9905 — Échec de validation | 14 | 6 jours |
+> | 213 — Rejetée | 8 | 3 jours |
+> | 210 — Refusée | 16 | 9 jours |
 >
-> **Motif PA :** `REJ_ADR` — l'identifiant SIREN/SIRET du destinataire n'est pas reconnu sur l'annuaire PPF.
->
-> **Action attendue :** vérifier le code adressage du client dans JD Edwards puis relancer le pipeline.
->
-> *Souhaitez-vous que je vérifie l'annuaire PPF pour ce destinataire ?* &nbsp;📋
+> *Relances :* `Détaille les erreurs 9905` · `Quelles sociétés sont en retard ?`
 
-Quand le rejet vient de la Plateforme Agréée et non de la validation locale, `validation_errors` renvoie une liste vide. Dans ce cas, utiliser `lifecycle_history` : il donne le motif PA (`REJ_ADR`, `REJ_FMT`, `REJ_DESTINATAIRE` …) et l'action attendue.
+### Fonctionnement du produit
 
-### Exemple 4 — Consultation du fonctionnement du produit
-
-> **Utilisateur**
-> *qu'est-ce qu'un flux 10.1 ?*
+> **Utilisateur** — Comment fonctionnent les dossiers surveillés ?
 >
-> 🔍 **`list_docs_pages`** · `discovering NomaUBL docs URLs`
+> 📚 `search_docs · watched folders` &nbsp; 📖 `read_doc_page · …/management/watched-folders`
 >
-> 📖 **`web_fetch`** · `https://docs.nomana-it.fr/nomaubl/application/ereporting/`
->
-> 📥 **`web_fetch_result`** · ✓ `https://docs.nomana-it.fr/nomaubl/application/ereporting/`
->
-> **Assistant IA**
->
-> Le **flux 10.1** est le canal e-reporting français pour les transactions **B2BINT** — ventes vers un acheteur dans un autre État membre de l'Union européenne. Pour ce flux :
->
-> - chaque facture est déclarée individuellement (un envoi par facture, sans agrégation) ;
-> - la PA dépose la déclaration auprès de l'administration fiscale via le PPF ;
-> - le format est XML AFNOR XP Z12-014.
->
-> À distinguer du **flux 10.3**, qui agrège les transactions B2C et hors-périmètre par période. Source : [docs.nomana-it.fr/nomaubl/application/ereporting](https://docs.nomana-it.fr/nomaubl/application/ereporting/) &nbsp;📋
-
-Les deux étapes (`list_docs_pages` puis `web_fetch`) sont obligatoires. L'API documentaire n'autorise le téléchargement que d'URL retournées par un appel précédent. L'assistant ne peut donc pas fabriquer de lien.
-
----
-
-## Lecture des réponses
-
-- **Pastilles d'appel d'outil** — affichent les filtres *réellement* appliqués (`status=9906 dateFrom=2026-01-01 …`). En cas de résultat inattendu, la pastille donne l'explication.
-- **Signification des icônes** — chaque icône correspond à un type d'action :
-
-  | Icône | Pastille | Signification |
-  |---|---|---|
-  | 🔍 | `list_invoices`, `lifecycle_history`, `list_ereports`, `validation_errors`, `explain_status_code`, `list_docs_pages` | Consultation en lecture seule de la base NomaUBL ou du sitemap documentaire. |
-  | 📖 | `web_fetch` | Téléchargement d'une page de documentation en cours — l'URL choisie figure dans la pastille. |
-  | 📥 | `web_fetch_result` | Page reçue. Le préfixe ✓ suivi de l'URL signale un succès ; ❌ suivi d'un code d'erreur signale un échec. |
-  | 🌐 | `web_search` | Une recherche web a été émise (uniquement quand la recherche est activée). |
-
-- **Rendu Markdown** — titres, listes à puces, fragments de code et tableaux sont mis en forme dans le panneau, sans texte brut.
-- **Diffusion en flux** — la bulle se remplit pendant que le modèle répond. Le bouton **■** arrête la réponse sans fermer la conversation.
-- **📋 Copier** au pied de chaque réponse copie le Markdown brut dans le presse-papiers — pratique pour le coller dans un ticket ou un e-mail.
+> **Assistant IA** — Un dossier surveillé est parcouru selon une planification ; chaque nouveau fichier est traité avec le document qui lui est associé… *(Source : Dossiers surveillés — lien)*
 
 ---
 
 ## Limites de l'assistant
 
-- **Aucune écriture.** Aucun outil ne modifie la base. Les modifications de configuration, les relances de validation et les changements de statut sont hors périmètre.
-- **Pas de navigation web ouverte.** La consultation documentaire est limitée à la liste blanche définie par l'administrateur (`docs.nomana-it.fr` par défaut).
-- **Pas de pièces jointes.** Le panneau ne gère que du texte. Coller un UBL XML dans un message fonctionne (dans la limite du contexte modèle), mais l'envoi de fichiers n'est pas pris en charge.
-- **Aucune persistance.** Fermer le panneau ou recharger la page réinitialise le fil. Reposer la même question dans un panneau vierge démarre une nouvelle conversation.
-- **Pas de portée multi-instance.** Les outils en lecture seule ciblent la base associée à l'utilisateur authentifié — même périmètre que le reste de l'application.
+- **Aucune modification.** L'assistant se limite à la lecture. Pour un renvoi, un retraitement ou un changement de réglage, il indique l'écran à utiliser.
+- **Pas d'accès au-delà des droits.** Les outils de données appliquent la visibilité par société du rôle, et les réglages demandent la fonctionnalité *Settings access*.
+- **Pas de fichiers.** La conversation est textuelle : un court XML collé dans la question est lu, un fichier ne peut pas être joint.
 
-L'administrateur peut désactiver entièrement les outils de données (l'assistant n'utilise alors que la consultation documentaire), restreindre les domaines documentaires, changer les modèles par défaut ou modifier le prompt système. Tout cela se règle dans le template *global*.
+L'administrateur définit la clé d'API, le modèle par défaut, la source de documentation, les procédures personnalisées, le prompt système et les outils depuis l'onglet *AI* des [paramètres globaux](../configuration/system/global.md).
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Formuler la question, pas l'outil.** *« Lister les factures en attente pour la société 00070 en EUR »* suffit ; pas besoin de demander explicitement `list_invoices`.
-- **Utiliser les noms naturels de statut.** *« En litige »*, *« rejected by the PA »*, *« en attente de dépôt »* sont traduits automatiquement vers le bon code — l'assistant connaît le catalogue de statuts en vigueur.
-- **Préciser les identifiants.** Pour les questions de validation ou de cycle de vie, fournir le triplet complet (`DOC + DCT + KCO`). Sinon, l'assistant doit deviner ou passer par `list_invoices` d'abord.
-- **Pour un rejet PA, utiliser `lifecycle_history` plutôt que `validation_errors`.** La validation locale ne consigne dans F564236 que les échecs XSD / Schematron. Les rejets côté PA (`REJ_ADR`, `REJ_FMT`, …) sont stockés dans la table de cycle de vie : seul `lifecycle_history` les renvoie.
-- **Lire les pastilles d'outil.** Elles forment la trace d'audit de la conversation, y compris les marqueurs 📥 `web_fetch_result` qui confirment qu'une page a bien été téléchargée (ou affichent le code d'erreur en cas d'échec).
-- **Traiter le panneau comme une API externe.** Tout ce qui y est saisi est envoyé au fournisseur du modèle : pas de clés API, pas de numéros de carte complets, pas de données personnelles au-delà de ce que la documentation publique contient déjà.
-- **Pour les audits approfondis, revenir aux pages dédiées.** L'assistant est conçu pour des recherches rapides et des explications. Pour les flux récurrents, les pages [Tableau de bord](./dashboard.md), [E-Invoicing](./invoices.md), [E-Reporting](./ereporting.md) et [Erreurs d'intégration](./integration-errors.md) restent la source de vérité.
+- **Ouvrir la facture, puis poser la question.** La pastille de contexte transmet la facture à l'assistant, sans rien saisir. **×** sur la pastille permet une question générale sans fermer la fenêtre.
+- **Demander la synthèse d'une période en langage courant.** *« Ce mois-ci »*, *« le trimestre dernier »*, *« notre taux de dépôt »* : l'assistant lit les chiffres du rapport d'audit.
+- **Cliquer sur les relances.** Elles poursuivent le diagnostic avec la vérification suivante.
+- **Ouvrir une nouvelle conversation pour un nouveau sujet.** Un long échange sur un autre thème pèse sur les réponses.
+- **Choisir un modèle plus puissant pour un diagnostic long**, le modèle par défaut pour les questions courantes.
+- **Considérer le panneau comme un service externe.** Les questions et les résultats d'outil sont transmis au fournisseur du modèle ; éviter d'y coller des données personnelles que les écrans n'affichent pas déjà.
+- **Pour une liste exhaustive, passer par les pages dédiées.** L'assistant caractérise un problème ; la liste [E-Invoicing](./invoices.md), le [Diagnostic](./diagnostics/overview.md) et les [Rapports](./reports.md) donnent la vue complète.

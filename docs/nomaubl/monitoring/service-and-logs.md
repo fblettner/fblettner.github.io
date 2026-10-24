@@ -202,7 +202,7 @@ Useful for:
 
 ## Scheduler — confirm it's ticking
 
-The background scheduler runs **inside** the `-serve` process. There's no separate scheduler daemon and no separate UI to confirm it's alive — the log file is the source of truth.
+The background scheduler runs **inside** the `-serve` process; there is no separate scheduler daemon. The [Scheduled jobs](../sync/scheduled-jobs/overview.md) page shows each job with its state, last run, result and next run; from the host, the log file confirms the ticks.
 
 ```bash
 grep "scheduler tick" /opt/nomaubl/nomaubl-prod.log | tail -10
@@ -212,7 +212,7 @@ If the last tick was more than `fetchImportInterval + fetchStatusInterval + fetc
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| No `scheduler tick` lines at all. | All three intervals set to `0`. | Set non-zero intervals in `global` template's `fetchImportInterval` etc. |
+| No `scheduler tick` lines at all. | Every poll is inactive or its interval is `0`. | Enable the polls on [Scheduled jobs](../sync/scheduled-jobs/overview.md) and set their interval in the job editor. |
 | Ticks fire but never advance invoices. | The PA template (`pa-default`) is unreachable — each call times out. | Test from the host: `curl https://<pa-base-url>/api/login_check`. |
 | Ticks fire occasionally then stop for hours. | The JVM hit an OOM and the scheduler thread died without restarting the JVM. | Check the log for `OutOfMemoryError`; bump `-Xmx`; consider `Restart=on-failure` in systemd (covered in [Service and systemd](../installation/service-and-systemd.md)). |
 
@@ -304,7 +304,7 @@ The wrapper writes everything to `nomaubl-<env>.log` next to the JAR. For long-t
 | **Custom — `journalctl` if running under systemd** | systemd captures stderr / stdout into the journal; `journalctl -u nomaubl@prod` searches it. |
 | **`logger` for one-off pipes** | `tail -f nomaubl-prod.log | logger -t nomaubl-prod` sends everything to syslog. |
 
-Logrotate (`copytruncate`, see [Service and systemd](../installation/service-and-systemd.md)) ensures the file doesn't grow unbounded. A typical retention: 8 weeks rotated locally + indefinite retention in the central log store.
+The server rotates its own log: above the *Log size cap* (100 MB by default) the file is copied to `.1` and truncated in place, and five copies are kept — see [`global → Logs`](../configuration/system/global.md). Identical warnings repeated within the *Log repeat window* are counted rather than written, and the *Log levels* field lowers the volume per module. Logrotate (`copytruncate`, see [Service and systemd](../installation/service-and-systemd.md)) is only needed when the server runs under another launcher. Keep the long-term history in the central log store.
 
 ---
 
@@ -325,5 +325,6 @@ Logrotate (`copytruncate`, see [Service and systemd](../installation/service-and
 
 - [Overview](./overview.md) — when to look at the Tech Dashboard vs the log.
 - [Application → Tech Dashboard](../application/tech-dashboard.md) — the in-app live view.
-- [Management → Processing Log](../management/processing-log.md) — per-document trace.
+- [Diagnostics → Processing log](../application/diagnostics/processing-log.md) — per-document trace.
+- [Diagnostics → Server log](../application/diagnostics/server-log.md) — the log file in the application, filtered by level and module.
 - [Installation → Service and systemd](../installation/service-and-systemd.md) — supervision + log rotation setup.

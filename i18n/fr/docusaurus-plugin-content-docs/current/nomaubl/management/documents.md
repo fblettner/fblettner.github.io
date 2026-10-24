@@ -16,10 +16,6 @@ Pour chaque type de document, trois éléments sont à renseigner :
 
 Un quatrième onglet — **PDF Template** — est dédié à la mise en page PDF par document (sections affichées, ordre, colonnes et bascules).
 
-:::info[Page déplacée en 2026.05.0]
-Les modèles de document figuraient auparavant sous *Configuration → Documents*. Ils sont désormais accessibles via **Gestion → Documents**, afin que le nouvel éditeur à quatre onglets — et tout particulièrement l'onglet visuel *PDF Template* — dispose d'une page à part entière. Le schéma et les routes restent inchangés : tout modèle existant continue de fonctionner sans étape de migration.
-:::
-
 ---
 
 ## Vue d'ensemble
@@ -162,7 +158,7 @@ La valeur Direction est écrite une fois sur la ligne au moment de l'insertion (
 | **Type** | Le type de document (par ex. `FACTURE`). Stocké dans `F564230.FEAA20`. |
 
 :::info[Pourquoi cette ligne compte]
-Le pipeline source UBL insère désormais la même ligne de suivi `F564230` que le pipeline XML, en lisant le reste de ses valeurs directement dans l'UBL : BT-47 SIREN acheteur → `FEALKY`, BT-115 PayableAmount → `FEAEXP`, BT-2 IssueDate → `FEIVD`, BT-9 DueDate → `FEARDU`. Sans elle, l'envoi PA n'avait aucune ligne où inscrire son id de transaction, `FEUKIDSZ` restait vide et fetch-import n'avait rien à interroger. Le mode replace met à jour la ligne existante au lieu de la dupliquer ; le mode sans replace saute une facture déjà traitée avec l'avertissement habituel.
+Le pipeline source UBL insère la même ligne de suivi `F564230` que le pipeline XML, en lisant le reste de ses valeurs directement dans l'UBL : BT-47 SIREN acheteur → `FEALKY`, BT-115 PayableAmount → `FEAEXP`, BT-2 IssueDate → `FEIVD`, BT-9 DueDate → `FEARDU`. Sans elle, l'envoi PA n'aurait aucune ligne où inscrire son id de transaction, `FEUKIDSZ` resterait vide et fetch-import n'aurait rien à interroger. Le mode replace met à jour la ligne existante au lieu de la dupliquer ; le mode sans replace saute une facture déjà traitée avec l'avertissement habituel.
 :::
 
 ### Clé du document *(quand Source = UBL)* \{#cle-du-document\}
@@ -229,7 +225,7 @@ Un nouveau groupe **Recherche du numéro de document** sur l'onglet *Document* (
 
 Quand le groupe est rempli, la recherche s'exécute **avant** la regex sur `cbc:ID` et son résultat l'emporte. Laisser le groupe vide pour conserver le comportement existant — l'assistant de regex et les valeurs par défaut `(doc, dct, kco)` ci-dessous continuent de s'appliquer sans changement.
 
-Le modèle livré `received-ubl` arrive avec ce groupe **présent mais vide** : choisir le connecteur et la cible dans *Paramètres → Modèles de document*, renseigner les paramètres, et le flux côté réception est câblé de bout en bout.
+Le modèle livré `received-ubl` arrive avec ce groupe **présent mais vide** : choisir le connecteur et la cible dans *Paramètres → Documents*, renseigner les paramètres, et le flux côté réception est câblé de bout en bout.
 
 ### Dossier d'entrée et routage *(quand Source = UBL)*
 
@@ -305,7 +301,7 @@ Données fonctionnelles que NomaUBL lit dans le spool pour alimenter la facture 
 
 | Champ | Défaut | Description |
 |---|---|---|
-| **`dateInputFormat`** | `yyyy-MM-dd` *(ISO)* | Modèle Java `SimpleDateFormat` utilisé pour parser les **dates de document et d'échéance** extraites du XML source avant écriture dans `F564230` / `F564231`. La version précédente codait ISO en dur ; ça fonctionnait sur les sources UBL (le XSL émet de l'ISO) mais échouait silencieusement sur les sources XML dont le format du spool dépend de la locale (`dd/MM/yyyy` pour beaucoup d'ERP français, `MM/dd/yyyy` pour les spools nord-américains, etc.). |
+| **`dateInputFormat`** | `yyyy-MM-dd` *(ISO)* | Modèle Java `SimpleDateFormat` utilisé pour parser les **dates de document et d'échéance** extraites du XML source avant écriture dans `F564230` / `F564231`. Les sources UBL sont toujours en ISO (le XSL émet de l'ISO) ; sur les sources XML, le format du spool dépend de la locale (`dd/MM/yyyy` pour beaucoup d'ERP français, `MM/dd/yyyy` pour les spools nord-américains, etc.). |
 
 Choisir le modèle qui correspond littéralement aux dates source. Valeurs courantes :
 
@@ -402,7 +398,7 @@ Un échantillon converti se présente ainsi :
 </Document>
 ```
 
-L'éditeur de document et l'éditeur XSL **chargent tous deux un échantillon directement depuis un PDF** — le PDF est converti côté serveur avec les réglages enregistrés du modèle (enregistrer le modèle après avoir modifié les ancres). La page [Traitement de document](../processing/document.md), les [dossiers surveillés](../sync/watched-folders.md) et la ligne de commande traitent les modèles à source PDF comme les modèles XML ; `-pdf2xml <in.pdf> <out.xml> --text` convertit un fichier isolé (voir [Ligne de commande](./command-line.md)).
+L'éditeur de document et l'éditeur XSL **chargent tous deux un échantillon directement depuis un PDF** — le PDF est converti côté serveur avec les réglages enregistrés du modèle (enregistrer le modèle après avoir modifié les ancres). La page [Traitement de document](../processing/document.md), les [dossiers surveillés](./watched-folders.md) et la ligne de commande traitent les modèles à source PDF comme les modèles XML ; `-pdf2xml <in.pdf> <out.xml> --text` convertit un fichier isolé (voir [Ligne de commande](./command-line.md)).
 
 ---
 
@@ -431,7 +427,7 @@ Cet onglet contrôle **ce que NomaUBL fait** des données extraites à l'onglet 
 
 ### Règles de traitement \{#regles-de-traitement\}
 
-Le groupe **Processing rules** oriente les documents du flux XML **avant toute génération**. Chaque règle associe une ou plusieurs conditions sur le document à un résultat. Les règles sont évaluées pour chaque document une fois son type de document déterminé, **dans l'ordre — la première qui correspond l'emporte** ; sans règle correspondante, le traitement est normal. Elles s'appliquent à tous les chemins d'entrée XML : planificateur, [dossiers surveillés](../sync/watched-folders.md), *process*, *fetch-single* et *Fetch Input*. Les documents de source UBL sont volontairement écartés : leur type de transaction figure déjà dans le document.
+Le groupe **Processing rules** oriente les documents du flux XML **avant toute génération**. Chaque règle associe une ou plusieurs conditions sur le document à un résultat. Les règles sont évaluées pour chaque document une fois son type de document déterminé, **dans l'ordre — la première qui correspond l'emporte** ; sans règle correspondante, le traitement est normal. Elles s'appliquent à tous les chemins d'entrée XML : planificateur, [dossiers surveillés](./watched-folders.md), *process*, *fetch-single* et *Fetch Input*. Les documents de source UBL sont volontairement écartés : leur type de transaction figure déjà dans le document.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px'}}>
   <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px'}}>
@@ -486,7 +482,7 @@ En plus du PDF lisible principal, un type de document peut joindre **d'autres fi
 Le bouton **`{ }`** placé à côté du champ chemin ouvre une liste filtrable et insère le jeton choisi à l'endroit du curseur — aussi bien les jetons du catalogue de facture (`{{kco}}`, `{{fedoc}}`, …) que les variables de chemin `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%` —, ce qui évite d'avoir à retenir leur écriture exacte. **Ajouter une pièce jointe** crée une nouvelle ligne.
 
 :::info[Les modèles source UBL embarquent aussi les pièces jointes]
-Un modèle en *Source = UBL* embarque désormais les mêmes PDF que le flux XML — après validation et avant l'insert en base, pour que l'UBL stocké corresponde à ce qui est envoyé à la PA :
+Un modèle en *Source = UBL* embarque les mêmes PDF que le flux XML — après validation et avant l'insert en base, pour que l'UBL stocké corresponde à ce qui est envoyé à la PA :
 
 - **Attachment `attach`** embarque un PDF voisin depuis le répertoire d'entrée sous `cbc:ID="PJA"`.
 - **Le PDF lisible (`lisible`)** est rendu directement depuis l'UBL parsé par le moteur PDF moderne et embarqué sous `cbc:ID="LISIBLE"` (DocumentTypeCode 916).
@@ -516,13 +512,13 @@ Un modèle en *Source = UBL* embarque désormais les mêmes PDF que le flux XML 
 
 ## Onglet 4 — 🖼 PDF Template
 
-Le quatrième onglet désigne la **mise en page PDF** appliquée au rendu de ce document. Depuis la version 2026.05.1, les mises en page sont des ressources partageables à part entière, stockées dans `config-pdf.json` et éditées sur la page dédiée [Modèles PDF](./pdf-templates.md). Cet onglet en référence une simplement **par son nom**, via la propriété `pdfTemplate` du modèle.
+Le quatrième onglet désigne la **mise en page PDF** appliquée au rendu de ce document. Les mises en page sont des ressources partageables à part entière, stockées dans `config-pdf.json` et éditées sur la page dédiée [Modèles PDF](./pdf-templates.md). Cet onglet en référence une simplement **par son nom**, via la propriété `pdfTemplate` du modèle.
 
 | Champ | Description |
 |---|---|
 | **PDF Template** | Liste déroulante qui regroupe toute mise en page enregistrée (les ressources `pdf-template` issues de *Modèles PDF*) et la `built-in` livrée. Laisser vide pour basculer sur le défaut global (`global.defaultPdfTemplate`). Champ vide et défaut global vide ramènent à `built-in`. |
 
-La chaîne de résolution au moment du rendu se lit donc : ce champ → `global.defaultPdfTemplate` → `built-in`. Chaque facture enregistrée contient le nom du modèle de document dans `F564231.UHTMPL`, ce qui permet au générateur PDF de regénérer à la demande avec la mise en page active pour ce document.
+La chaîne de résolution au moment du rendu se lit donc : ce champ → `global.defaultPdfTemplate` → `built-in`. Chaque facture enregistrée contient le nom du document dans `F564231.UHTMPL`, ce qui permet au générateur PDF de regénérer à la demande avec la mise en page active pour ce document.
 
 :::tip[Édition de la mise en page]
 L'éditeur visuel — liste de sections, tiroir par section, aperçu en direct, sections block — se trouve sur la page [Gestion → Modèles PDF](./pdf-templates.md). Y rédiger ou affiner une mise en page une seule fois, puis revenir ici pour y rattacher le document. Une même mise en page peut servir plusieurs documents.

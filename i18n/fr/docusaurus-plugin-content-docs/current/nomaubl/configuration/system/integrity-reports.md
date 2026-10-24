@@ -117,6 +117,7 @@ Chaque contrôle est un groupe repliable — un clic sur son titre l'ouvre, **×
 |---|---|
 | **Name** | Identifiant affiché dans la page Rapports (par ex. `missing-pdf`). À garder stable. |
 | **Description** | Une ligne qui dit ce que le contrôle détecte (par ex. *Travaux d'impression PDF non intégrés*). |
+| **Start from** | Facultatif. Préremplit le contrôle à partir d'une comparaison JD Edwards connue — voir [Modèles de requête](#query-templates). |
 | **Mode** | *Direct*, *Missing*, *Extra* ou *Mismatch* — voir [Modes](#modes). |
 | **Connector** | Le [connecteur de base de données](../database-connectors/nomaubl.md) sur lequel s'exécute le `SELECT` — la base JD Edwards, la base NomaUBL ou tout autre connecteur déclaré sur la plateforme. |
 | **Key columns** | Facultatif. Colonnes du résultat, séparées par des virgules, qui identifient l'enregistrement visé par une action (par ex. `JCPID, JCVERS, JCJOBNBR`, ou numéro + type de document + société). |
@@ -152,6 +153,37 @@ SELECT … FROM … WHERE JCSTDTIM > TO_DATE('{fromDMY}','dd-MM-yyyy')
   AND … NOT IN (SELECT TRIM(FEWDS1) FROM PRODDTA.F564230 WHERE FEUPMJ > {fromJde})
 ```
 
+Le sélecteur **Insert placeholder**, sous le libellé de chaque champ SQL, liste toutes les variables avec leur format et insère celle choisie à la position du curseur.
+
+### Variables BIP \{#bip-placeholders\}
+
+:::info[Spécifique à JDE]
+Ces variables lisent la liste des états des réglages de la [file d'impression JDE (BIP)](./fetch-invoices.md).
+:::
+
+Trois variables supplémentaires suivent le paramétrage BIP : un contrôle n'a ainsi jamais besoin d'une liste d'états et de versions tenue à la main.
+
+| Variable | Remplacée par |
+|---|---|
+| `{bipReports}` | Les noms d'états configurés, entre apostrophes, pour une liste `IN` : `'R42565','R03B505'`. |
+| `{bipFilter:COLETAT,COLVERSION}` | Le prédicat utilisé par la recherche BIP, sur les colonnes indiquées : `((TRIM(COLETAT)='R42565' AND TRIM(COLVERSION)='XJDE0001') OR TRIM(COLETAT)='R03B505')`. Une ligne réglée sur toutes les versions ne filtre que sur l'état. |
+| `{bipTemplate:COLETAT,COLVERSION}` | Une expression `CASE` qui donne le document de chaque ligne, d'après le document défini sur chaque ligne d'état. |
+
+Sans état configuré, le filtre devient `1=0` et la liste `NULL` : le contrôle ne renvoie rien plutôt que toutes les tâches.
+
+### Modèles de requête \{#query-templates\}
+
+La liste **Start from** préremplit un contrôle — mode, connecteurs, colonnes clés, SQL et action — à partir d'une comparaison connue :
+
+| Modèle | Contrôle |
+|---|---|
+| **BIP jobs not integrated (F986114 vs F564230)** | Les tâches d'impression BIP des états configurés jamais arrivées dans NomaUBL, avec l'action *Integrate BIP jobs*. Utilise `{bipFilter}` et `{bipTemplate}`. |
+| **Accounting invoices not in NomaUBL (F03B11 vs F564231)** | Les factures du compte client de la période absentes de NomaUBL. |
+| **Sales-order invoices not in NomaUBL (F4211/F42119 vs F564231)** | Les factures produites par la mise à jour des commandes clients, lignes ouvertes et historiques, absentes de NomaUBL. |
+| **Amounts JDE vs NomaUBL (F03B11 vs F564231, mismatch)** | Les factures présentes des deux côtés dont les montants diffèrent. |
+
+Sur un contrôle qui contient déjà du SQL, l'éditeur demande confirmation avant de le remplacer (*Replace this check?*). Les préfixes de schéma (`PRODDTA`, `SVM920`) et les codes de statut sont les valeurs usuelles : les adapter à l'environnement JD Edwards, puis enregistrer.
+
 ### Action *Integrate BIP jobs*
 
 :::info[Spécifique à JDE]
@@ -163,8 +195,8 @@ Avec **Action** = **Integrate BIP jobs**, les lignes sélectionnées sont intég
 | Champ | Description |
 |---|---|
 | **Job column** | Colonne du résultat qui porte le numéro de travail JDE (`RJJOBNBR`). Obligatoire. |
-| **Template column** | Colonne du résultat qui porte le nom du modèle de document. À laisser vide pour utiliser le modèle fixe. |
-| **Fixed template** | Modèle de document utilisé quand la colonne modèle est vide ou absente. |
+| **Template column** | Colonne du résultat qui porte le nom du document. À laisser vide pour utiliser le modèle fixe. |
+| **Fixed template** | Document utilisé quand la colonne modèle est vide ou absente. |
 | **Host column** | Colonne du résultat qui porte le serveur d'exécution JDE — uniquement sur les installations JD Edwards à plusieurs serveurs. Facultatif. |
 | **Processing type** | `AUTO` *(défaut)*, `SINGLE`, `BURST`, `UBL` ou `BOTH`. |
 

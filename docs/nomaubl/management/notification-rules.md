@@ -19,16 +19,6 @@ The **read** side of the system — the inbox where users acknowledge notificati
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. Triggers reference the standard *statuses* and *rejection-reason-codes* catalogues, not source-system-specific codes.
 
-:::info[Refreshed in 2026.05.7]
-Three changes shipped in 2026.05.7:
-
-- **Six-tab editor** — the long single form is split into **General · Trigger · Channels · Email · Actions · Test**. Each tab fits a screen and the action list has room to grow.
-- **Multi-call action list** — the *Actions* tab now holds a list of connector calls instead of a single call. Each call carries a free-form *Description*, an optional *Stop on failure* flag, and the API or SQL connector + target dropdown. Calls fire in declaration order, with response chaining via `{call.N.fieldName}` placeholders.
-- **SQL connector support** — the connector dropdown lists API and [SQL Connectors](../configuration/sql-connectors.md) merged with `· API` / `· SQL` suffixes. The target dropdown loads endpoints or queries depending on the picked connector kind.
-
-Three dispatcher bugs were also fixed at the same time: the action channel no longer needs the legacy *action* checkbox to fire, an empty recipient list no longer suppresses action-only rules, and a hung SMTP `transport.close()` can no longer block the chain. See the [2026.05.7 release notes](../release-notes.md#v2026-05-7) for the full list.
-:::
-
 ---
 
 ## Opening the editor
@@ -202,7 +192,7 @@ A search box at the top of the sidebar filters the list by substring on the rule
 
 ## The rule editor
 
-In 2026.05.7 the editor was reorganised into **six tabs** — each tab fits a screen and the action list has room to grow. The tab resets to *General* when you switch rules.
+The editor is organised into **six tabs** — each tab fits a screen and the action list has room to grow. The tab resets to *General* when you switch rules.
 
 ### General tab
 
@@ -232,7 +222,7 @@ Two delivery channels, plus the recipient settings:
 - **`portal`** — writes a row in `F564253` for the recipient. The user sees it in the [Notifications](../application/notifications.md) inbox and the bell.
 - **`email`** — sends an SMTP message via the configured `e-invoicing` mail account.
 
-The legacy *action* checkbox is gone since 2026.05.7 — action calls fire automatically when the rule has at least one entry in the *Actions* tab. To suppress action calls, disable the rule on the General tab.
+Action calls fire automatically when the rule has at least one entry in the *Actions* tab. To suppress action calls, disable the rule on the General tab.
 
 The recipient model has two independent halves: a **portal target** (user / role) and an **email list**.
 
@@ -256,7 +246,7 @@ The email tab shows its content unconditionally — no checkbox gates it any mor
 
 Available placeholders in subject / body: the 10 canonical notification fields — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}` — plus `{call.N.fieldName}` for outputs of earlier action calls in this rule (see *Actions tab* below).
 
-Since 2026.05.14 the placeholder set also merges every column from the [Invoices](../application/invoices.md) view's catalog — `{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, … — pulled in a single `F564231 LEFT JOIN F564230` SELECT alongside the canonical fields. Amounts are surfaced with two decimals, JDE Julian dates as ISO, CHAR columns trimmed. Canonical fields take precedence when a catalog column happens to share a name, so `{doc}` / `{status}` keep their familiar meaning.
+The placeholder set also merges every column from the [Invoices](../application/invoices.md) view's catalog — `{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, … — pulled in a single `F564231 LEFT JOIN F564230` SELECT alongside the canonical fields. Amounts are surfaced with two decimals, JDE Julian dates as ISO, CHAR columns trimmed. Canonical fields take precedence when a catalog column happens to share a name, so `{doc}` / `{status}` keep their familiar meaning.
 
 A `{ }` button sits next to the Subject input and the Body textarea. Click it to open a searchable picker of every available placeholder; pick one and the `{name}` snippet splices into the field at the caret (or appends with a leading space when the input is not focused). Escape / outside-click closes.
 
@@ -278,7 +268,7 @@ The Actions tab holds a **list** of connector calls instead of a single call. Ea
 
 #### Placeholders
 
-Parameter values support the same `{placeholders}` as the email subject / body — the 10 canonical fields, every Invoices catalog column merged in 2026.05.14, and the `{call.N.fieldName}` form that references the output of an earlier call in the same rule. Each parameter row carries its own `{ }` picker.
+Parameter values support the same `{placeholders}` as the email subject / body — the 10 canonical fields, every Invoices catalog column, and the `{call.N.fieldName}` form that references the output of an earlier call in the same rule. Each parameter row carries its own `{ }` picker.
 
 #### Response chaining
 
@@ -298,7 +288,7 @@ Example: a rule that first reads the customer's email via a SQL query, then send
 
 #### Action calls fire before email
 
-Action calls now run **before** the email channel, so a hung SMTP `transport.close()` can never block them. The portal write still goes first; emails follow once the action chain has run.
+Action calls run **before** the email channel, so a hung SMTP `transport.close()` can never block them. The portal write goes first; emails follow once the action chain has run.
 
 ### Test tab
 

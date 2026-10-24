@@ -1,6 +1,6 @@
 ---
 title: Notifications
-description: "Boîte de réception du portail pour les alertes de changement de statut émises par NomaUBL — onglets Toutes / Non lues, action « tout marquer comme lu », suppression par ligne, accès direct à la facture liée. Avec la cloche de la barre supérieure (qui interroge le compteur toutes les 30 s et affiche les six dernières entrées), la page forme le côté lecture du système de notifications introduit en 2026.05.3."
+description: "Boîte de réception du portail pour les alertes de changement de statut émises par NomaUBL — onglets Toutes / Non lues, action « tout marquer comme lu », suppression par ligne, accès direct à la facture liée. Avec la cloche de la barre supérieure (qui interroge le compteur toutes les 30 s et affiche les six dernières entrées), la page est le point de consultation du système de notifications."
 keywords: [NomaUBL, notifications, boîte de réception, cloche, NotificationBell, F564253, NTUKID, NTUSER, NTEV01, changements de statut, marquer lu, supprimer, facture, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
@@ -153,7 +153,7 @@ Cliquer sur le corps de la ligne ouvre la **modale de détail de facture** pour 
 
 ## Pastilles d'audit d'actions
 
-Depuis 2026.05.7, chaque notification émise par une [Règle de notification](../management/notification-rules.md) qui définit un ou plusieurs appels d'action porte une **trace d'audit** permanente, enregistrée dans la colonne `NTK74MSG2`. La boîte de réception affiche cette trace sous forme d'une rangée de pastilles colorées sous le message, une pastille par appel :
+Chaque notification émise par une [Règle de notification](../management/notification-rules.md) qui définit un ou plusieurs appels d'action porte une **trace d'audit** permanente, enregistrée dans la colonne `NTK74MSG2`. La boîte de réception affiche cette trace sous forme d'une rangée de pastilles colorées sous le message, une pastille par appel :
 
 | Pastille | Couleur | Signification |
 |---|---|---|
@@ -190,7 +190,7 @@ Chaque notification envoyée correspond à une ligne dans **`F564253`** (Oracle 
 | `NTUSER` | chaîne | Nom d'utilisateur résolu, ou `*` quand l'authentification est désactivée (diffusion). |
 | `NTEV01` | chaîne | `0` pour non lue, `1` pour lue. La pastille de la cloche compte les lignes où `NTEV01 = 0`. |
 | `NTSUBJ` / `NTMSGE` | chaîne | Sujet et corps. |
-| `NTK74MSG2` | chaîne | Pied d'audit des actions écrit par le dispatcher (`OK / FAIL / STOP / SKIP` par appel) — alimente les pastilles. Nouveau en 2026.05.7. |
+| `NTK74MSG2` | chaîne | Pied d'audit des actions écrit par le dispatcher (`OK / FAIL / STOP / SKIP` par appel) — alimente les pastilles. |
 | `NTDOC / NTDCT / NTKCO` | mixte | Triplet de la facture ; nullable pour les alertes système qui ne ciblent pas une facture précise. |
 | `NTUPMJ` / `NTTDAY` | jul / hms | Date et heure d'émission. L'index composite `(NTUSER, NTEV01, NTUPMJ DESC)` rend rapides la requête de la pastille et le tri de la boîte. |
 

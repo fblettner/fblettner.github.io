@@ -1,6 +1,6 @@
 ---
 title: Dashboard
-description: "The NomaUBL home page — a 12-column widget grid with hero KPI cards (Total / In flight / Rejected — IT / Rejected — Business), pipeline funnel, volume chart, recent activity, stale invoices, top failing rules, per-company breakdown, e-reporting coverage and PA round-trip — all governed by a single date-range filter. Scheduler-health monitoring lives on the dedicated Tech Dashboard since 2026.05.6."
+description: "The NomaUBL home page — a 12-column widget grid with hero KPI cards (Total / In flight / Rejected — IT / Rejected — Business), pipeline funnel, volume chart, recent activity, stale invoices, top failing rules, per-company breakdown, e-reporting coverage and PA round-trip — all governed by a single date-range filter. Scheduler-health monitoring lives on the dedicated Tech Dashboard."
 keywords: [NomaUBL, dashboard, KPI, hero cards, pipeline funnel, volume chart, recent activity, stale invoices, top failing rules, e-reporting coverage, round-trip, date range, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
@@ -9,14 +9,6 @@ keywords: [NomaUBL, dashboard, KPI, hero cards, pipeline funnel, volume chart, r
 The **Dashboard** is the NomaUBL home page. It opens by default after sign-in and surfaces the operational state of the platform on a **12-column widget grid** — four hero KPI cards at the top, then a sequence of paired widgets that cover ingestion volume, dispatcher pipeline, recent + stale invoices, top failing validation rules, per-company breakdown, e-reporting coverage and PA round-trip times.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. Every number is read from the local NomaUBL database, so the dashboard reflects what NomaUBL has processed and persisted, not directly what the source system or the Plateforme Agréée holds.
-
-:::info[Rebalanced in 2026.05.6]
-The bottom row went from `6 + 6` over two rows to a single `4 + 4 + 4` row — Per-company, E-Reporting coverage and PA round-trip share one balanced row instead of leaving a half-empty cell. The Scheduler-health widget moved to the new [Tech Dashboard](./tech-dashboard.md) where it sits next to the JVM, database and filesystem widgets the IT team relies on. The grid also switched to `align-items: stretch` so panels in the same row align bottoms.
-:::
-
-:::info[Refreshed in 2026.05.4]
-The dashboard was rebuilt as a 12-column widget grid in 2026.05.4. The previous stacked layout of status counter cards was replaced by four hero KPIs (Total / In flight / Rejected — IT / Rejected — Business) plus eight paired widgets. Click-throughs from the hero cards now use a multi-status filter, so *In flight* lands on the actual in-flight invoices instead of dropping the status filter.
-:::
 
 ---
 
@@ -247,7 +239,7 @@ Four cards summarise the operational state of the platform at a glance. Each car
 | **Rejected — IT** | Tech failures owned by the IT / dev team | `9904` `9905` `9907` (internal failures) and `213` (PA technical rejection) | E-Invoicing with `status=9904,9905,9907,213` |
 | **Rejected — Business** | Failures owned by customer-services | `206` `207` `208` `210` `221` `501` `600` (commercial disputes, refusals, suspensions, routing, recovery, e-mail-delivery) | E-Invoicing with the matching multi-status filter |
 
-The **In flight** / **Rejected — IT** / **Rejected — Business** cards used to drop the status filter entirely on click — `/api/invoices?status=` was a single-value parameter, so a list of codes was rejected and the page fell back to the full list. The hero cards now pass a comma list (`/api/invoices?status=A,B,C`) which the backend parses into a multi-status `IN (…)` clause, so the click lands on the actual subset.
+The **In flight** / **Rejected — IT** / **Rejected — Business** cards pass a comma list (`/api/invoices?status=A,B,C`) which the backend parses into a multi-status `IN (…)` clause, so the click lands on the actual subset.
 
 A red border + red value on **Rejected — IT** signals a non-zero count; same orange treatment on **Rejected — Business**.
 
@@ -268,7 +260,7 @@ Below the hero row, a 12-column grid hosts eight widgets paired to balance conte
 
 ### Pipeline funnel *(12 cols)*
 
-Five horizontal stages — *Validated / Sent to PA / Pending / Deposited / Rejected* — with the count under each label. Clicking a stage opens E-Invoicing pre-filtered on the matching status set. The funnel reads left to right: anything sitting on *Pending* for too long flows into the *Stale invoices* widget below; anything on *Rejected* needs the [Integration Errors](./integration-errors.md) page.
+Five horizontal stages — *Validated / Sent to PA / Pending / Deposited / Rejected* — with the count under each label. Clicking a stage opens E-Invoicing pre-filtered on the matching status set. The funnel reads left to right: anything sitting on *Pending* for too long flows into the *Stale invoices* widget below; anything on *Rejected* needs the [Integration Errors](diagnostics/integration-errors.md) page.
 
 ### Daily volume *(12 cols)*
 
@@ -276,19 +268,19 @@ A 30-day area chart of daily ingestion volume — the same series feeding the he
 
 ### Recent activity *(6 cols)* + Stale + Top failing rules *(6 cols)*
 
-This row used to be 8/4, which made the right column visibly thinner than the left. It was rebalanced to 6/6 in 2026.05.4 so all subsequent rows align on the same column boundary.
+The row is split 6/6 so all subsequent rows align on the same column boundary.
 
 | Widget | What it shows |
 |---|---|
 | **Recent activity** | The last few invoices touched in the date range, with their canonical triplet (`doc · dct · kco`), status label and relative timestamp. Clicking a row opens the [E-Invoicing](./invoices.md) list filtered on that status. |
 | **Stale invoices** | Up to 50 rows where the status has not changed in the last 7 days. Each row carries the triplet, the current status and the days-since-last-update count. |
-| **Top failing rules** | Top 10 validation rules by failure count over the date range. Each row shows a rank badge, the rule code, the rule's description as a secondary line, and the count. A header toggle scopes the list to **ALL** / **UBL** (Schematron / XSD) / **INTEG** (lifecycle / runtime errors). The *View all* link opens the [Integration Errors](./integration-errors.md) page on its **by-rule** tab; clicking a specific rule lands on the **by-event** tab with that rule chip pre-applied. |
+| **Top failing rules** | Top 10 validation rules by failure count over the date range. Each row shows a rank badge, the rule code, the rule's description as a secondary line, and the count. A header toggle scopes the list to **ALL** / **UBL** (Schematron / XSD) / **INTEG** (lifecycle / runtime errors). The *View all* link opens the [Integration Errors](diagnostics/integration-errors.md) page on its **by-rule** tab; clicking a specific rule lands on the **by-event** tab with that rule chip pre-applied. |
 
-The proportional bars of the previous version made counts of *160* and *10* almost indistinguishable. The new ranked rows give every rule the same visual weight, with the count on the right.
+Ranked rows give every rule the same visual weight, with the count on the right, so counts of *160* and *10* stay easy to tell apart.
 
 ### Per company *(4 cols)* + E-Reporting coverage *(4 cols)* + PA round-trip *(4 cols)*
 
-The three short widgets share a single balanced row in 2026.05.6 — the previous `6 + 6` over two rows left a half-empty cell once Scheduler-health moved to the [Tech Dashboard](./tech-dashboard.md).
+The three short widgets share a single balanced row.
 
 | Widget | What it shows |
 |---|---|
@@ -298,8 +290,8 @@ The three short widgets share a single balanced row in 2026.05.6 — the previou
 
 The grid uses `align-items: stretch` and each card grows with `flex: 1` inside its column span — so all three cards in this row align bottoms even when one carries more content than the others.
 
-:::tip[Scheduler health moved]
-The Scheduler-health widget is no longer on this page. It lives on the [Tech Dashboard](./tech-dashboard.md) alongside the JVM, database, filesystem and live error tail widgets. The IT team gets a single page sized to operational concerns; the business audience here sees only the metrics they act on.
+:::tip[Scheduler health]
+The Scheduler-health widget is on the [Tech Dashboard](./tech-dashboard.md), alongside the JVM, database, filesystem and live error tail widgets. The IT team gets a single page sized to operational concerns; the business audience here sees only the metrics they act on.
 :::
 
 ---
@@ -324,5 +316,5 @@ The *About this release* card sits at the very bottom and lists the release numb
 - **Use the date-range presets.** *Yesterday* fits a morning monitoring routine; *This month* fits a finance overview; *Custom range* covers month-end reconciliation or specific incident windows.
 - **Match the funnel against the hero counts.** *In flight* should equal the *Sent to PA* + *Pending* stages of the funnel. A divergence is usually a status that has not been mapped yet on either side.
 - **Top failing rules drives the work.** A single rule with hundreds of hits often points to one upstream change (a renamed field, a stale tax code) — fixing the rule typically clears most of the integration errors.
-- **The dashboard is the right place to spot trends, not investigate a row.** For a single-invoice deep-dive use the [E-Invoicing](./invoices.md) detail modal; for a rule-level analysis use the [Integration Errors](./integration-errors.md) page.
+- **The dashboard is the right place to spot trends, not investigate a row.** For a single-invoice deep-dive use the [E-Invoicing](./invoices.md) detail modal; for a rule-level analysis use the [Integration Errors](diagnostics/integration-errors.md) page.
 - **Bookmark the dashboard.** It is the natural daily landing page; bookmarks survive session expiry, so the next sign-in lands on the same view.

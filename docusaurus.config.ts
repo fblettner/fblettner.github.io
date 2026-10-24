@@ -154,6 +154,15 @@ const config: Config = {
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
+          // 2026.10.24 — Diagnostics page hosts the error and log views; Scheduled jobs page hosts digests,
+          // auto-retries and lifecycle checks; Watched folders back under Management.
+          {from: '/nomaubl/management/lifecycle-checks', to: '/nomaubl/sync/scheduled-jobs/lifecycle-checks'},
+          {from: '/nomaubl/configuration/system/auto-retry', to: '/nomaubl/sync/scheduled-jobs/auto-retry'},
+          {from: '/nomaubl/configuration/system/daily-digest', to: '/nomaubl/sync/scheduled-jobs/daily-digest'},
+          {from: '/nomaubl/management/server-log', to: '/nomaubl/application/diagnostics/server-log'},
+          {from: '/nomaubl/management/processing-log', to: '/nomaubl/application/diagnostics/processing-log'},
+          {from: '/nomaubl/application/integration-errors', to: '/nomaubl/application/diagnostics/integration-errors'},
+          {from: '/nomaubl/sync/watched-folders', to: '/nomaubl/management/watched-folders'},
           // 2026.05.0 — Processing pages consolidated into a single Process Document page.
           {from: '/nomaubl/processing/xml', to: '/nomaubl/processing/document'},
           {from: '/nomaubl/processing/ubl', to: '/nomaubl/processing/document'},
@@ -161,8 +170,8 @@ const config: Config = {
           {from: '/nomaubl/configuration/documents', to: '/nomaubl/management/documents'},
           // 2026.05.4 — Notifications inbox promoted from Management to Application (primary nav).
           {from: '/nomaubl/management/notifications', to: '/nomaubl/application/notifications'},
-          // 2026.10.23 — Watched folders promoted from Configuration → System to its own Synchronization page.
-          {from: '/nomaubl/configuration/system/watched-folders', to: '/nomaubl/sync/watched-folders'},
+          // 2026.10.23 — Watched folders left Configuration → System (now under Management).
+          {from: '/nomaubl/configuration/system/watched-folders', to: '/nomaubl/management/watched-folders'},
         ],
       },
     ],

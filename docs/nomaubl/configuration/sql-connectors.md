@@ -16,10 +16,6 @@ Typical targets are:
 
 The page applies to documents from any source system, since the SQL connector can point at any reachable JDBC database.
 
-:::info[New in 2026.05.7]
-SQL connectors are brand new in 2026.05.7. They sit alongside API connectors in *Settings*, and both kinds can be wired into action bindings and notification rules — including the new multi-call list with `Stop on failure` and `{call.N.fieldName}` response chaining. See the [2026.05.7 release notes](../release-notes.md#v2026-05-7) for the full list of changes.
-:::
-
 The editor has **three tabs**:
 
 1. **Connection** — database type, JDBC URL, credentials, schema and query limits.
@@ -206,7 +202,7 @@ The parameter spec drives the *Test* tab and the call-site editor: each declared
 
 #### Surrounding quotes stripped on string params
 
-The runtime strips one matching pair of surrounding single or double quotes from each bound string param before the JDBC `setString`. Typing `'01'` in a default or in the test panel — the way a SQL literal is written — used to silently return 0 rows because JDBC bound the 4-character string verbatim; stripping the quotes lets either convention work.
+The runtime strips one matching pair of surrounding single or double quotes from each bound string param before the JDBC `setString`. Typing `'01'` in a default or in the test panel — the way a SQL literal is written — binds `01`, not the 4-character string, so either convention works.
 
 :::warning[JDE CHAR comparison]
 Stripping the quotes is **not** a substitute for the standard Oracle non-blank-padded comparison rule. Comparing against a JDE `CHAR(n)` column still needs `WHERE TRIM(col) = :p` in the query when one side of the comparison is bound as `VARCHAR2`. That is an Oracle rule, not a framework choice.
@@ -248,7 +244,7 @@ The Test tab calls the live database — *Save* the connector first if you have 
 
 SQL connectors plug into the same call sites as API connectors:
 
-- **[Action Bindings](../management/actions.md)** — the regulatory buttons in the invoice detail modal can call any SQL query, alone or in a chain, via the multi-call list shipped in 2026.05.7.
+- **[Action Bindings](../management/actions.md)** — the regulatory buttons in the invoice detail modal can call any SQL query, alone or in a chain, via the multi-call list.
 - **[Notification Rules](../management/notification-rules.md#actions-tab)** — same multi-call list, fires automatically whenever the rule matches a status change.
 
 In both cases, the connector dropdown lists API connectors and SQL connectors merged with `· API` / `· SQL` suffixes; the target dropdown loads endpoints or queries depending on the picked connector kind.

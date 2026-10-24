@@ -10,10 +10,6 @@ The **E-Reporting** editor configures how NomaUBL **produces and submits the per
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — once the source is mapped to UBL.
 
-:::info[Refreshed in 2026.05.8]
-E-Reporting is now **fully decoupled** from [E-Invoicing](./einvoicing.md). It picks its own [api-connector](../api-connectors.md), its own `endpoint.report-import` and its own `paMode`, so reporting can target a different platform — or use different credentials on the same platform — than invoice import. A new **SFTP transport** lets the bundle be uploaded as a file drop instead of a REST POST. The legacy `sendToPA` Y/N flag was replaced by `paMode` (`API` / `FTP` / empty) for consistency with E-Invoicing. The configuration check now flags `paMode=API` without a `connector` and `paMode=FTP` without `paFtpHost` as errors.
-:::
-
 The editor has **four tabs**:
 
 1. **Identity** — Sender (PA) and Issuer (Declarant) identification fields emitted in the bundle.
@@ -212,7 +208,7 @@ The PA's HTTP transport — authentication flow, base URL, endpoints — lives i
 |---|---|---|
 | **Send Mode** *(`paMode`)* | `API` *(default)* / `FTP` / *(empty)* | Transport used to **submit generated reports** to the PA. `API` routes the bundle through the api-connector picked on the previous tab; `FTP` spools the report XML to a temp file and uploads it via SFTP using the server below; *(empty)* lets NomaUBL **generate reports without submitting them** — useful while validating identity and flux selection before involving the PA. |
 
-The `paMode` field replaces the legacy `sendToPA` Y/N flag in 2026.05.8. Same semantics, single field, consistent with E-Invoicing.
+The `paMode` field works the same way as on the E-Invoicing page.
 
 ### SFTP Server
 
@@ -231,14 +227,12 @@ The whole card is dimmed when *Send Mode* ≠ `FTP` — these fields only apply 
 
 ## Configuration check
 
-The configuration check on the [Tech Dashboard](../../application/tech-dashboard.md) validates the template against the new shape:
+The configuration check on the [Tech Dashboard](../../application/tech-dashboard.md) validates the template against these rules:
 
 - `paMode=API` without a `connector` is reported as an error (the API transport has nothing to call).
 - `paMode=FTP` without `paFtpHost` is reported as an error (the SFTP transport has no server).
 - `paMode=` (empty) with a `connector` is fine — reports generate locally and are not submitted.
 - `issuerSiren`, `frequency` and `flux` are validated whenever `paMode` is non-empty (i.e. the bundle will actually be submitted).
-
-The legacy `sendToPA=Y` / `issuerSiren` check is gone — replaced by the per-`paMode` rules above.
 
 ---
 

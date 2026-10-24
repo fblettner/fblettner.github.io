@@ -1,117 +1,45 @@
 ---
 title: Global
-description: "Paramètres globaux de NomaUBL : répertoires, utilitaires de traitement (XSL, Ghostscript), SMTP, assistant IA, licence & authentification, et planification (polling et jobs batch)."
-keywords: [NomaUBL, paramètres globaux, répertoires, SMTP, Ghostscript, XSL, Anthropic, licence, scheduler, jobs batch, JD Edwards, SAP, NetSuite]
+description: "Paramètres globaux de NomaUBL en neuf onglets : répertoires et environnement, traitement, journal serveur, rendu PDF, e-mail, assistant IA, réglages communs des tâches (fenêtre silencieuse, envoi groupé, rétention, repères BIP), licence et authentification."
+keywords: [NomaUBL, paramètres globaux, répertoires, SMTP, Ghostscript, XSL, Anthropic, licence, journal serveur, rétention, tâches planifiées, assistant IA, JD Edwards, SAP, NetSuite]
 ---
 
 # Global
 
-L'éditeur **Global** rassemble les paramètres qui s'appliquent à **l'ensemble de l'application NomaUBL** — arborescence de fichiers, utilitaires de traitement, serveur SMTP, assistant IA, licence / authentification, ainsi que l'ordonnanceur en arrière-plan qui pilote le polling et les jobs batch.
+Les paramètres **Global** rassemblent ce qui s'applique à **l'ensemble de l'application NomaUBL** : arborescence de fichiers et environnement, options de traitement, journal serveur, rendu PDF, serveur d'e-mails, assistant IA, réglages communs aux tâches planifiées, licence et authentification. Ils valent quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé ; les quelques réglages propres à BIP sont signalés là où ils apparaissent.
 
-Ces paramètres sont en grande majorité **indépendants de la source** et s'appliquent quels que soient les documents : JD Edwards, SAP, NetSuite ou ERP personnalisé. Quelques options spécifiques à BIP sont signalées explicitement.
+L'éditeur comporte **neuf onglets** : Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication. Dans la [navigation des paramètres](../settings-overview.md), chaque onglet est une entrée à part — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* et *License* dans **Platform**, *Authentication* dans **Security**, *Job defaults* dans **Jobs & inbound** — qui n'ouvre que cette partie, sans la rangée d'onglets. La zone de recherche des paramètres retrouve n'importe quel champ de ces onglets par son libellé, son aide ou sa clé.
 
-L'éditeur comporte **six onglets** :
-
-1. **Directories** — racine d'application, chemins de fichiers, état batch.
-2. **Processing** — chemin de configuration XSL, commande Ghostscript, options de traitement.
-3. **Email / SMTP** — serveur d'e-mails sortants.
-4. **AI** — clé d'API Anthropic pour l'Assistant IA intégré.
-5. **Authentication** — clé de licence + authentification utilisateur / délai de session.
-6. **Scheduling** — intervalles de polling automatique de la PA et jobs batch récurrents.
+Les tâches elles-mêmes — interrogations de la PA, lots de documents, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, purge de rétention — ne se règlent pas ici : elles se trouvent sur la page [Tâches planifiées](../../sync/scheduled-jobs/overview.md).
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 540" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
-  <defs>
-    <marker id="glb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="glb-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="glb-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-  </defs>
+<div style={{border: '1px solid rgba(148,163,184,0.25)', borderRadius: '12px', padding: '16px', margin: '24px 0', fontFamily: 'system-ui, sans-serif', fontSize: '13px'}}>
+  <div style={{display: 'flex', flexWrap: 'wrap', border: '1px solid rgba(148,163,184,0.25)', borderRadius: '8px', overflow: 'hidden', marginBottom: '14px'}}>
+    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>Directories</span>
+    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>Processing</span>
+    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)', background: 'rgba(74,158,255,0.12)', color: '#4a9eff', fontWeight: 600}}>Logs</span>
+    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>PDF</span>
+    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>Email</span>
+    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>AI</span>
+    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>Job defaults</span>
+    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>License</span>
+    <span style={{padding: '6px 12px', borderRight: '1px solid rgba(148,163,184,0.25)'}}>Authentication</span>
+  </div>
+  <div style={{fontWeight: 700, marginBottom: '8px'}}>Server log</div>
+  <div style={{display: 'grid', gridTemplateColumns: '200px 1fr', gap: '8px 12px', alignItems: 'center'}}>
+    <span>Server log file</span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.6}}>auto (stdout of the server)</span>
+    <span>Log size cap (MB)</span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '80px'}}>100</span>
+    <span>Log files kept</span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '80px'}}>5</span>
+    <span>Log repeat window (s)</span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', width: '80px'}}>600</span>
+    <span>Log levels</span><span style={{padding: '3px 10px', borderRadius: '6px', border: '1px solid rgba(148,163,184,0.3)', opacity: 0.6}}>STATUS=WARN, API=INFO, *=INFO</span>
+  </div>
+  <div style={{display: 'flex', gap: '8px', marginTop: '14px'}}><span style={{padding: '6px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontWeight: 600}}>Enregistrer</span></div>
+</div>
 
-  <rect x="220" y="20" width="580" height="500" rx="14" fill="url(#glb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <rect x="220" y="20" width="580" height="40" fill="rgba(255,255,255,0.02)"/>
-  <rect x="240" y="28" width="82" height="24" rx="4" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="281" y="44" fill="#4a9eff" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Directories</text>
-  <rect x="328" y="28" width="80" height="24" rx="4" fill="transparent"/>
-  <text x="368" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Processing</text>
-  <rect x="414" y="28" width="80" height="24" rx="4" fill="transparent"/>
-  <text x="454" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Email</text>
-  <rect x="500" y="28" width="44" height="24" rx="4" fill="transparent"/>
-  <text x="522" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">AI</text>
-  <rect x="550" y="28" width="96" height="24" rx="4" fill="transparent"/>
-  <text x="598" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Authentication</text>
-  <rect x="652" y="28" width="80" height="24" rx="4" fill="transparent"/>
-  <text x="692" y="44" fill="#94a3b8" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Scheduling</text>
-  <line x1="220" y1="60" x2="800" y2="60" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="240" y="86" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Répertoires de base</text>
-  <text x="240" y="108" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">APP HOME</text>
-  <rect x="340" y="98" width="440" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="350" y="114" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">/opt/nomaubl</text>
-  <text x="240" y="136" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCESS HOME</text>
-  <rect x="340" y="126" width="440" height="24" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="350" y="142" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace">%APP_HOME%/process</text>
-
-  <line x1="240" y1="166" x2="780" y2="166" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="240" y="188" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Chemins fichiers</text>
-  <text x="240" y="210" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DIR INPUT / DIR OUTPUT / DIR ARCHIVE / DIR ERROR</text>
-  <rect x="240" y="218" width="540" height="22" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="233" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">%PROCESS_HOME%/in/%TEMPLATE%</text>
-  <rect x="240" y="244" width="540" height="22" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="259" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">%PROCESS_HOME%/out/%TEMPLATE%</text>
-  <rect x="240" y="270" width="540" height="22" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="285" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">%PROCESS_HOME%/archive</text>
-  <rect x="240" y="296" width="540" height="22" rx="4" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="250" y="311" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">%PROCESS_HOME%/error</text>
-
-  <line x1="240" y1="338" x2="780" y2="338" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="240" y="360" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Onglet Processing — aperçu</text>
-
-  <text x="240" y="382" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UPDATE DB</text>
-  <rect x="340" y="372" width="120" height="22" rx="5" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="400" y="387" fill="#4ade80" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">Y ▾</text>
-
-  <text x="240" y="410" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">debugProfile <text fill="#64748b" fontSize="8" fontStyle="italic">(2026.05.9)</text></text>
-  <rect x="340" y="400" width="120" height="22" rx="5" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.30)" strokeWidth="1"/>
-  <text x="400" y="415" fill="#fb923c" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">N ▾</text>
-  <text x="468" y="415" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">écrit le chrono par étape dans F564237</text>
-
-  <line x1="240" y1="438" x2="780" y2="438" stroke="#1f2937" strokeWidth="1"/>
-
-  <text x="240" y="460" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Onglet Scheduling — aperçu</text>
-  <text x="240" y="482" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FETCH IMPORT INTERVAL (min)</text>
-  <rect x="450" y="472" width="80" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="490" y="487" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">15</text>
-  <text x="540" y="487" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FETCH STATUS INTERVAL (min)</text>
-  <rect x="730" y="472" width="50" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="755" y="487" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="ui-monospace, monospace">5</text>
-  <text x="240" y="510" fill="#64748b" fontSize="9" fontStyle="italic" fontFamily="system-ui, sans-serif">lu par BackgroundScheduler — réglé ici, utilisé partout</text>
-
-  <rect x="20" y="96" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Éditeur à six onglets</text>
-  <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">paramètres globaux à la plateforme</text>
-  <line x1="220" y1="112" x2="240" y2="108" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#glb-arrow)"/>
-
-  <rect x="20" y="218" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="233" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Chemins avec %PLACEHOLDER%</text>
-  <text x="30" y="246" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">%APP_HOME% / %TEMPLATE% / etc.</text>
-  <line x1="220" y1="234" x2="240" y2="232" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#glb-arrow)"/>
-
-  <rect x="820" y="394" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="409" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">debugProfile · 2026.05.9</text>
-  <text x="830" y="422" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">chrono par étape dans F564237</text>
-  <line x1="820" y1="410" x2="700" y2="410" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#glb-arrow)"/>
-
-  <rect x="20" y="470" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="485" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Intervalles de planification</text>
-  <text x="30" y="498" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">le scheduler les lit ici</text>
-  <line x1="220" y1="486" x2="240" y2="484" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#glb-arrow)"/>
-</svg>
+Les libellés de cet éditeur restent en anglais, comme dans l'application.
 
 ---
 
@@ -121,8 +49,8 @@ L'éditeur comporte **six onglets** :
 
 | Champ | Description |
 |---|---|
-| **Application Home** | Répertoire racine d'installation de NomaUBL (par ex. `/app/nomaubl`). Résolu par le placeholder `%APP_HOME%` utilisé dans les chemins de modèles de documents. |
-| **Environment** | Nom court d'environnement (par ex. `demo`, `PD`). Résout le placeholder `%ENV%` dans les chemins des modèles de documents (`rtf`, `xsl`, `ublXslt`), permettant à un même modèle de cibler plusieurs environnements. Le nom s'affiche aussi en **badge à droite du titre de l'application** et dans l'onglet du navigateur. |
+| **Application Home** | Répertoire racine d'installation de NomaUBL (par ex. `/app/nomaubl`). Résolu par le placeholder `%APP_HOME%` utilisé dans les chemins de documents. |
+| **Environment** | Nom court d'environnement (par ex. `demo`, `PD`). Résout le placeholder `%ENV%` dans les chemins des documents (`rtf`, `xsl`, `ublXslt`), permettant à un même modèle de cibler plusieurs environnements. Le nom s'affiche aussi en **badge à droite du titre de l'application** et dans l'onglet du navigateur. |
 | **Theme colour** | Sélecteur de couleur, à côté de l'environnement. Remplace le bleu d'accent de toute l'interface — titre, badge d'environnement, boutons principaux, liens, contours de focus — pour distinguer chaque environnement d'un coup d'œil. Badge et couleur sont servis par un endpoint public : la page de connexion les affiche déjà. Vide = bleu par défaut. |
 | **Process Home** | Répertoire de travail utilisé par NomaUBL pendant le traitement (par ex. `/app/nomaubl/process`). |
 
@@ -137,13 +65,6 @@ L'éditeur comporte **six onglets** :
 | **Bursting Directory** | Répertoire de sortie des documents produits en mode *bursting* (un fichier par facture). |
 | **Errors Directory** | Répertoire où un fichier en échec de traitement est déplacé. Lors d'un traitement de dossier, mettre le fichier fautif de côté empêche un balayage répété de réessayer indéfiniment le même fichier. Laissé vide, le fichier reste en place (comportement précédent). |
 
-### Batch Processing
-
-| Champ | Description |
-|---|---|
-| **Hôtes des jobs BIP** | Un repère haut **par hôte d'exécution JDE** (`RJRPDEXHST`). Le repère suit chaque hôte par **date de fin du job**, et non par numéro — un numéro est attribué à la soumission, si bien qu'un job long qui se termine après un job plus récent au numéro supérieur pourrait sinon passer sous le repère et n'être jamais récupéré. La date de fin s'affiche à côté du numéro de job pour chaque hôte, et reste **modifiable**. Ajoutez chaque hôte avec son numéro de départ (le premier lot après mise à niveau renseigne la date automatiquement), ou cliquez *Retrieve last job # per host* pour les amorcer tous depuis le maximum courant ; ils avancent ensuite après chaque job, un lot interrompu reprenant exactement où il s'était arrêté. **Seuls les hôtes listés sont scannés.** *(BIP / spécifique JDE.)* |
-| **Fenêtre BIP (jours)** | Limite l'analyse BIP dans le temps. À `0`, aucune limite : tous les jobs postérieurs au dernier numéro traité sont repris. À `N > 0`, seuls ceux modifiés au cours des N derniers jours le sont. Pratique à la première installation ou après une longue interruption : on évite ainsi de parcourir des années d'historique. L'analyse lancée à la main, le lot planifié et la commande `nomaubl -fetch-all` en tiennent compte. *(Spécifique BIP / JDE.)* |
-
 ---
 
 ## Onglet 2 — Processing
@@ -154,20 +75,43 @@ L'éditeur comporte **six onglets** :
 |---|---|
 | **XDO Config** | Chemin vers le fichier de configuration `xdo.cfg` de BI Publisher utilisé pour la génération PDF. |
 
+### Options
+
+| Champ | Valeurs | Description |
+|---|---|---|
+| **Update DB** | `Y` / `N` | À `Y`, les exécutions de traitement enregistrent leurs résultats en base de données. À positionner à `N` uniquement pour des exécutions à blanc (dry-run) ou des phases de débogage. |
+| **Max threads** | *(vide = tous les cœurs)* | Limite le nombre de factures traitées simultanément. Un modèle à source XML peut traiter tout son dossier d'entrée en une seule exécution **parallèle** — bien plus rapide sur un dossier de milliers de fichiers mono-facture, et de la même façon pour un balayage planifié, une exécution à la demande et le traitement par lot en ligne de commande. Chaque fichier reste une unité à part entière (nom, archive source et traçabilité conservés) et l'échec d'un fichier n'arrête pas les autres. Renseignez une valeur pour garder des ressources aux autres services d'un serveur partagé ; laissez vide pour utiliser tous les cœurs disponibles. Les modèles UBL et le traitement par travail (BIP) ne sont pas concernés. Il limite aussi le retraitement groupé, qui lance un lot par modèle. |
+| **`debugProfile`** | `Y` / `N` | À `Y`, chaque exécution écrit des **lignes de chronométrage par étape** dans `F564237` pour chaque phase du pipeline : analyse d'en-tête, analyse des lignes, validation, émission UBL, envoi PA. Les lignes apparaissent sur le [Tableau de bord IT](../../application/tech-dashboard.md) — le flux *Traitements en cours · direct* les marque avec le nom de l'étape, et le widget *Temps par modèle* décompose la moyenne par étape. À laisser à `N` en production ; à passer à `Y` le temps d'un lot pour analyser un pipeline lent. À désactiver dès que l'étape lente est identifiée — les lignes additionnelles gonflent rapidement `F564237` sous charge. |
+
+:::info[Avancé]
+Le groupe **Ghostscript** est replié sous *Advanced* en bas de l'onglet.
+:::
+
 ### Ghostscript
 
 | Champ | Description |
 |---|---|
 | **GS Command** | Ligne de commande complète Ghostscript utilisée pour le post-traitement PDF (par ex. `gs -dBATCH ...`). Les valeurs multi-lignes sont acceptées. |
 
-### Options
+---
 
-| Champ | Valeurs | Description |
+## Onglet 3 — Logs
+
+### Server log
+
+| Champ | Défaut | Description |
 |---|---|---|
-| **Update DB** | `Y` / `N` | À `Y`, les exécutions de traitement enregistrent leurs résultats en base de données. À positionner à `N` uniquement pour des exécutions à blanc (dry-run) ou des phases de débogage. |
-| **Max threads** | *(vide = tous les cœurs)* | Limite le nombre de factures traitées simultanément. Un modèle à source XML peut traiter tout son dossier d'entrée en une seule passe **parallèle** — bien plus rapide sur un dossier de milliers de fichiers mono-facture, et de la même façon pour un balayage planifié, une exécution à la demande et le traitement par lot en ligne de commande. Chaque fichier reste une unité à part entière (nom, archive source et traçabilité conservés) et l'échec d'un fichier n'arrête pas les autres. Renseignez une valeur pour garder des ressources aux autres services d'un serveur partagé ; laissez vide pour utiliser tous les cœurs disponibles. Les modèles UBL et le traitement par travail (BIP) ne sont pas concernés. Il limite aussi le retraitement groupé, qui lance un lot par modèle. |
-| **`debugProfile`** | `Y` / `N` | À `Y`, chaque exécution écrit des **lignes de chronométrage par étape** dans `F564237` pour chaque phase du pipeline : analyse d'en-tête, analyse des lignes, validation, émission UBL, envoi PA. Les lignes apparaissent sur le [Tableau de bord IT](../../application/tech-dashboard.md) — le flux *Traitements en cours · direct* les marque avec le nom de l'étape, et le widget *Temps par modèle* décompose la moyenne par étape. À laisser à `N` en production ; à passer à `Y` le temps d'un lot pour analyser un pipeline lent. À désactiver dès que l'étape lente est identifiée — les lignes additionnelles gonflent rapidement `F564237` sous charge. |
-| **Server log file** | chemin *(vide = automatique)* | Fichier lu par la page [Journal serveur](../../management/server-log.md). Vide = le fichier vers lequel le lanceur redirige la sortie du serveur (`nomaubl-<env>.log`) ; à renseigner quand le serveur tourne sous un autre lanceur. |
+| **Server log file** | *(vide = automatique)* | Fichier lu par la vue [Journal serveur](../../application/diagnostics/server-log.md). Vide = le fichier vers lequel le lanceur redirige la sortie du serveur (`nomaubl-<env>.log`) ; à renseigner quand le serveur est démarré par un autre lanceur. |
+| **Log size cap (MB)** | `100` | Au-delà de cette taille, le journal courant est copié en `.1` puis vidé sur place, les copies plus anciennes étant décalées. Le lanceur continue d'écrire dans le même fichier. `0` = jamais de rotation. |
+| **Log files kept** | `5` | Nombre de copies conservées à côté du journal. |
+| **Log repeat window (s)** | `600` | Une ligne WARN ou ERROR identique à une ligne écrite dans cette fenêtre est comptée et non réécrite ; une ligne de synthèse suit avec le nombre de répétitions. `0` = désactivé. |
+| **Log levels** | *(vide = tout)* | Niveau minimal par module — `DEBUG`, `INFO`, `WARN`, `ERROR` — sous forme de paires `MODULE=NIVEAU` séparées par des virgules ; `*` désigne tous les autres modules (par ex. `STATUS=WARN, API=INFO, *=INFO`). |
+
+La rotation, la suppression des répétitions et les niveaux ne s'appliquent qu'en mode serveur ; un traitement en ligne de commande écrit sur sa propre sortie. Pour un code PA absent du catalogue des statuts ou une facture inconnue de NomaUBL, la récupération des statuts n'écrit pas d'avertissement par événement : l'exécution se termine par une ligne par code, avec son nombre et une facture en exemple, et les codes non reconnus sont listés par le contrôle de configuration du [Tableau de bord IT](../../application/tech-dashboard.md).
+
+---
+
+## Onglet 4 — PDF
 
 ### PDF
 
@@ -179,7 +123,7 @@ L'éditeur comporte **six onglets** :
 
 ---
 
-## Onglet 3 — Email / SMTP
+## Onglet 5 — Email
 
 Configure le serveur SMTP sortant utilisé par NomaUBL pour l'envoi des notifications et des documents par e-mail.
 
@@ -207,23 +151,98 @@ Configure le serveur SMTP sortant utilisé par NomaUBL pour l'envoi des notifica
 
 ---
 
-## Onglet 4 — AI
+## Onglet 6 — AI
+
+Réglages de l'[assistant IA](../../application/ai-capabilities.md) intégré.
 
 ### Anthropic AI
 
 | Champ | Description |
 |---|---|
-| **API Key** | Clé d'API Anthropic utilisée par l'**Assistant IA** intégré à NomaUBL. Sans clé valide, l'Assistant IA est désactivé. |
+| **API Key** | Clé d'API Anthropic. Sans clé valide, le panneau de l'assistant est désactivé. |
+| **Model** | Modèle utilisé sauf choix contraire dans le panneau. Par défaut *Sonnet 5.5* ; Opus, Fable et Haiku sont aussi proposés. |
+| **Max output tokens** | Longueur maximale d'une réponse, de `1024` à `32000` (défaut `8192`). |
+
+### Documentation
+
+| Champ | Description |
+|---|---|
+| **Source** | `llms` *(défaut)* : le fichier de documentation est téléchargé et interrogé sur ce serveur. `sitemap` : le modèle consulte lui-même les pages (fonctionnement précédent). |
+| **llms-full.txt URL** | Pages en anglais (défaut `https://docs.nomana-it.fr/llms-full.txt`). Rafraîchi toutes les 6 heures ; une URL, un chemin local ou une URL `file:`. S'il est injoignable au démarrage, la copie fournie avec l'application est utilisée. |
+| **llms-full.fr.txt URL** | Pages en français, utilisées quand l'interface est en français. Vide = pages anglaises pour toutes les langues. |
+| **Section** | Partie du fichier à indexer (son en-tête `# === … ===`, par ex. `NomaUBL`). Vide = tout le fichier. |
+
+### Playbooks
+
+| Champ | Description |
+|---|---|
+| **Custom playbooks** | Procédures de diagnostic que l'assistant charge à la demande, une par titre `## nom`. Un nom intégré — `refused-invoice`, `missing-invoice`, `ereporting-error`, `status-not-updated` — remplace la procédure fournie. |
+
+### Assistant Behaviour
+
+| Champ | Description |
+|---|---|
+| **System Prompt** | Consigne facultative ajoutée en tête de chaque conversation. Vide = la consigne NomaUBL intégrée. |
+| **Allowed Doc Domains** / **Docs Sitemap URL** / **Docs Path Prefix** | Mode *sitemap* uniquement : domaines que le modèle peut consulter, adresse du plan du site (mise en cache 6 heures), préfixe des entrées retenues. |
+| **Custom Tools** | Outils en lecture seule sur les données de l'instance proposés au modèle (factures, erreurs, historique, tableaux de bord, journal serveur, réglages avec secrets masqués). |
+
+Le groupe **TLS / Corporate Proxy** (chemin et mot de passe d'un magasin de certificats, *Disable TLS validation* réservé à un diagnostic bref) est replié sous *Advanced*.
 
 ---
 
-## Onglet 5 — Authentication
+## Onglet 7 — Job defaults
+
+Réglages communs aux tâches d'arrière-plan. Les tâches elles-mêmes — intervalles, heures quotidiennes, lots de documents, rapports, reprises automatiques et contrôles du cycle de vie — se gèrent dans **Synchronisation → [Tâches planifiées](../../sync/scheduled-jobs/overview.md)** ; un enregistrement depuis cette page recharge immédiatement la planification.
+
+### Quiet window
+
+| Champ | Description |
+|---|---|
+| **Quiet window from / to (HH:mm)** | Fenêtre quotidienne pendant laquelle les deux interrogations PA (import et récupération des statuts) sont automatiquement suspendues — à placer sur une campagne d'envoi pour que les interrogations d'import par facture ne s'accumulent pas pendant que la PA intègre le lot. Peut franchir minuit ; laisser les deux vides pour désactiver. S'applique sans redémarrage et s'affiche sur la carte *Planificateur* du Tableau de bord IT, en surbrillance quand elle est active. |
+
+### Bulk Send
+
+Valeurs par défaut de tout envoi groupé vers la PA — *Tout envoyer* (factures en attente) et *Tout renvoyer* du [Tableau de bord IT](../../application/tech-dashboard.md), le [renvoi groupé de la liste des factures](../../application/invoices.md#bulk-resend) et la commande `-send-waiting`. Chaque routine de reprise nocturne [Auto-Retry](../../sync/scheduled-jobs/auto-retry.md) peut les surcharger sur sa propre ligne.
+
+| Champ | Description |
+|---|---|
+| **Parallel workers** | *(défaut `4`)* Nombre de factures envoyées à la PA en même temps. Mettre `1` pour un envoi séquentiel. |
+| **Delay per worker (ms)** | *(défaut `100`)* Pause qu'observe chaque travailleur entre deux appels, pour rester dans l'enveloppe de débit de la PA. |
+
+### Retention \{#retention\}
+
+Lignes de base conservées par table par la tâche quotidienne **Purge de rétention**. Désactivée par défaut : rien n'est supprimé tant qu'un nombre de jours n'est pas saisi, sauf les notifications, qui gardent leurs 90 jours ; une mise à jour ne supprime donc rien d'elle-même. Le fichier journal du serveur est borné à part (onglet 3).
+
+| Champ | Défaut | Description |
+|---|---|---|
+| **Processing log (days)** | `0` | Lignes START / END / erreur par fichier du journal d'exécution (`F564237`). Vide ou `0` = conservation illimitée ; valeur conseillée `180`. |
+| **Step timings (days)** | `0` | Lignes de chronométrage par étape écrites par `debugProfile` (`F564237`). Valeur conseillée `30`. |
+| **Job runs (days)** | `0` | Lignes d'exécution des tâches planifiées (`F564237`). Valeur conseillée `90`. |
+| **Validation errors of finished invoices (days)** | `0` | Erreurs (`F564236`) des factures en statut terminal (complétée, déposée, refusée…). Valeur conseillée `365`. |
+| **Notifications (days)** | `90` | Notifications de la boîte de réception (`F564253`). Vide = 90 jours ; `0` = conservation illimitée. |
+
+Avant de saisir une valeur, le bouton **Compter seulement** de la tâche Purge de rétention (ou `java -jar nomaubl.jar -purge <configFile> --dry-run`) indique ce que chaque table perdrait avec les valeurs enregistrées.
+
+### BIP print queue
+
+| Champ | Description |
+|---|---|
+| **Hôtes des jobs BIP** | Un repère haut **par hôte d'exécution JDE** (`RJRPDEXHST`). Le repère suit chaque hôte par **date de fin du job**, et non par numéro — un numéro est attribué à la soumission, si bien qu'un job long qui se termine après un job plus récent au numéro supérieur pourrait sinon passer sous le repère et n'être jamais récupéré. La date de fin s'affiche à côté du numéro de job pour chaque hôte, et reste **modifiable**. Ajoutez chaque hôte avec son numéro de départ (le premier lot après mise à niveau renseigne la date automatiquement), ou cliquez *Retrieve last job # per host* pour les amorcer tous depuis le maximum courant ; ils avancent ensuite après chaque job, un lot interrompu reprenant exactement où il s'était arrêté. **Seuls les hôtes listés sont scannés.** *(BIP / spécifique JDE.)* |
+| **Fenêtre BIP (jours)** | Limite l'analyse BIP dans le temps. À `0`, aucune limite : tous les jobs postérieurs au dernier numéro traité sont repris. À `N > 0`, seuls ceux modifiés au cours des N derniers jours le sont. Pratique à la première installation ou après une longue interruption : on évite ainsi de parcourir des années d'historique. L'analyse lancée à la main, le lot planifié et la commande `nomaubl -fetch-all` en tiennent compte. *(Spécifique BIP / JDE.)* |
+
+---
+
+## Onglet 8 — License
 
 ### License
 
 | Champ | Description |
 |---|---|
 | **License Key** | Clé de licence NomaUBL complète. **Sans clé valide, les menus *Navigation*, *Synchronisation* et *UBL* sont désactivés** — seule la Configuration reste accessible. |
+
+---
+
+## Onglet 9 — Authentication
 
 ### Authentication
 
@@ -236,68 +255,15 @@ Configure le serveur SMTP sortant utilisé par NomaUBL pour l'envoi des notifica
 :::info[Réinitialisation de mot de passe en self-service]
 Quand **Auth Mode = `internal`** (ou `both`), l'écran de connexion affiche un lien *Mot de passe oublié ?*. L'utilisateur saisit son identifiant et son e-mail ; en cas de correspondance avec un compte actif, un lien à usage unique valable 60 minutes est envoyé à l'e-mail enregistré. Le lien ouvre une page dédiée pour choisir un nouveau mot de passe.
 
-Requiert un **SMTP** configuré dans *Onglet 3 — Email / SMTP*. Les tokens sont persistés dans `F564255` (voir [Tables de base de données](../../references/database-tables.md#f564255--tokens-de-réinitialisation-de-mot-de-passe)) et sont invalidés dès qu'ils ont été utilisés.
+Requiert un **SMTP** configuré dans *Onglet 5 — Email*. Les jetons sont enregistrés dans `F564255` (voir [Tables de base de données](../../references/database-tables.md#f564255--tokens-de-réinitialisation-de-mot-de-passe)) et sont invalidés dès qu'ils ont été utilisés.
 :::
-
----
-
-## Onglet 6 — Scheduling
-
-Tâches d'arrière-plan exécutées par NomaUBL en mode serveur. **Les modifications apportées dans cet onglet ne sont prises en compte qu'après redémarrage du serveur.**
-
-### Import & Status Polling
-
-| Champ | Description |
-|---|---|
-| **Import poll interval (min)** | Minutes entre deux interrogations automatiques du statut d'import pour les factures en attente (statut `9906`). `0` = désactivé. |
-| **Status retrieval interval (min)** | Minutes entre deux récupérations automatiques des statuts de cycle de vie depuis la PA. `0` = désactivé. |
-| **Quiet window from / to (HH:mm)** | Fenêtre quotidienne pendant laquelle les deux interrogations PA (import et récupération des statuts) sont automatiquement suspendues — à placer sur une campagne d'envoi pour que les interrogations d'import par facture ne s'accumulent pas pendant que la PA intègre le lot. Peut franchir minuit ; laisser les deux vides pour désactiver. S'applique sans redémarrage et s'affiche sur la carte *Planificateur* du Tableau de bord IT, en surbrillance quand elle est active. |
-| **Received fetch interval (min)** | Minutes entre deux passes *PA entrante* automatiques — même flux que le mode *Sync → Fetch Input → PA entrante (factures fournisseur)* et la commande CLI `-fetch-received`. `0` = désactivé. Le curseur de la date d'émission la plus récente traitée est enregistré dans `lastFetchReceivedAt`, chaque passe ne récupérant ainsi que les factures arrivées depuis la précédente. |
-
-### Bulk Send
-
-Valeurs par défaut de tout envoi groupé vers la PA — *Tout envoyer* (factures en attente) et *Tout renvoyer* du [Tableau de bord IT](../../application/tech-dashboard.md), le [renvoi groupé de la liste des factures](../../application/invoices.md#bulk-resend) et la commande `-send-waiting`. Chaque routine de reprise nocturne [Auto-Retry](./auto-retry.md) peut les surcharger sur sa propre ligne.
-
-| Champ | Description |
-|---|---|
-| **Parallel workers** | *(défaut `4`)* Nombre de factures envoyées à la PA en même temps. Mettre `1` pour l'ancien comportement séquentiel. |
-| **Delay per worker (ms)** | *(défaut `100`)* Pause qu'observe chaque travailleur entre deux appels, pour rester dans l'enveloppe de débit de la PA. |
-
-### Batch Document Processing
-
-Liste de **jobs batch** récurrents. Chaque job s'exécute indépendamment selon son propre intervalle et détecte les nouveaux documents à traiter. Utilisez **+ Ajouter un job batch** pour en créer un, et le bouton **×** pour en supprimer un.
-
-#### Champs d'en-tête par job
-
-| Champ | Description |
-|---|---|
-| **Label** | Nom lisible affiché dans la liste des jobs (par ex. `BIP invoices`). |
-| **Interval (min)** | Minutes entre deux exécutions. `0` = désactivé (le job existe mais n'est pas planifié). |
-| **Daily at (HH:mm)** | Renseigné, le job s'exécute une fois par jour à cette heure locale au lieu de suivre son intervalle — comme la reprise automatique et les contrôles du cycle de vie. La liste des jobs, le Tableau de bord IT et la carte du planificateur affichent alors *chaque jour à 06:30*. |
-
-#### Paramètres par job
-
-Les champs suivants définissent la stratégie de récupération et de traitement appliquée par le job :
-
-| Champ | Valeurs | Description |
-|---|---|---|
-| **Process type** | `xml` / `ubl` | `xml` = chaîne complète (transformation + traitement) ; `ubl` = traitement UBL direct (l'entrée est déjà UBL). |
-| **Template** *(si Process type = `xml`)* | depuis liste | Modèle de document à appliquer. Liste des modèles de type `document`. |
-| **Mode** *(si Process type = `xml`)* | `AUTO` / `SINGLE` / `BURST` / `UBL` | Mode de traitement — `AUTO` laisse NomaUBL décider ; `SINGLE` et `BURST` forcent la stratégie de sortie correspondante ; `UBL` produit uniquement de l'UBL. |
-| **Source** | `bip` / `directory` / `watch-folders` | Où récupérer les documents : `bip` = file d'impression JDE *(spécifique JDE)* ; `directory` = balaye l'**Input Directory** configuré à l'onglet 1 ; `watch-folders` = lance la récupération des [dossiers surveillés](../../sync/watched-folders.md) — le job cible alors un répertoire configuré (choisi dans une liste) ou tous. |
-| **Extract mode** *(si Source = `bip`)* | `input` / `output` / `both` | Quels artéfacts BIP récupérer : `input` = XML source uniquement ; `output` = fichiers de sortie générés uniquement ; `both` = les deux. |
-| **Language filter** *(si Source = `bip`)* | texte | Filtre BIP optionnel par langue (par ex. `FR`). Vide = toutes les langues. |
-| **Replace existing** | `Y` / `N` | À `Y`, ré-importe les documents déjà présents dans NomaUBL (écrase) ; à `N`, ignore les doublons. |
-| **Skip PA send** *(si Process type = `xml`)* | `Y` / `N` | À `Y`, le job n'envoie jamais à la Plateforme Agréée — il produit uniquement UBL/PDF en local. |
-| **Validate only** *(si Process type = `ubl`)* | `Y` / `N` | À `Y`, valide l'UBL sans l'envoyer à la PA. |
-| **Send to PA** *(si Process type = `ubl`)* | *(use settings)* / `Y` / `N` | Surcharge la décision « envoi à la PA » du type de document : vide = défaut ; `Y` = force l'envoi ; `N` = force l'omission. |
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Renseigner Environment.** Le placeholder `%ENV%` dans les modèles de documents permet de propager une même configuration de `demo` à `PD` sans modifier chaque chemin.
-- **Redémarrer le serveur après modification du scheduler.** Tous les intervalles de l'onglet 6 (ainsi que les jobs batch) sont lus une seule fois au démarrage ; les modifier dans l'interface ne fait qu'enregistrer la valeur — un redémarrage est requis pour leur prise en compte.
-- **La licence conditionne l'exécution.** Si les menus *Navigation* / *Synchronisation* / *UBL* deviennent inaccessibles, vérifier en priorité la validité de la clé de licence.
-- **Choisir Source `bip` uniquement quand la source est JD Edwards.** Pour les autres ERP (SAP, NetSuite, personnalisé), utiliser `directory` et déposer les sorties XML correspondantes dans l'Input Directory.
-- **Utiliser `validateOnly` pour lancer un dry-run UBL.** À combiner avec `Skip PA send` (ou son équivalent UBL) pendant une migration de modèles, pour valider la chaîne de traitement sans interaction avec la PA.
+- **Renseigner Environment et Theme colour.** Le placeholder `%ENV%` permet de propager une même configuration de `demo` à `PD` sans modifier chaque chemin, et une couleur propre à chaque environnement évite de travailler par erreur sur la production.
+- **Borner le journal serveur avant la mise en production.** Les valeurs par défaut (100 Mo, 5 copies) conviennent à la plupart des serveurs ; ajouter `STATUS=WARN` aux niveaux quand la récupération des statuts est trop bavarde.
+- **Activer la rétention une fois les volumes connus.** Partir des valeurs conseillées, lancer *Compter seulement*, puis activer la tâche de purge.
+- **La licence conditionne l'exécution.** Si les menus *Navigation*, *Synchronisation* et *UBL* disparaissent, vérifier d'abord la clé de licence.
+- **Pointer l'assistant vers les pages françaises** pour des utilisateurs francophones : renseigner *llms-full.fr.txt URL*.

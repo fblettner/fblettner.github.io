@@ -159,7 +159,7 @@ Les résultats sont regroupés **par société** : une carte repliée par **SIRE
 
 ### Établissements (INSEE)
 
-Une liste repliable des établissements de la société — chaque **SIRET** avec son adresse et son état administratif, issus du registre INSEE. La recherche par SIREN ou SIRET liste désormais **tous** les établissements de la société (une seconde interrogation INSEE par raison sociale complète ce que la recherche numérique omet).
+Une liste repliable des établissements de la société — chaque **SIRET** avec son adresse et son état administratif, issus du registre INSEE. La recherche par SIREN ou SIRET liste **tous** les établissements de la société (une seconde interrogation INSEE par raison sociale complète ce que la recherche numérique omet).
 
 ### Adresses électroniques
 

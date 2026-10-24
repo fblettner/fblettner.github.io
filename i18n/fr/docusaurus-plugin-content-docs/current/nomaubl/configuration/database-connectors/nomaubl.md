@@ -17,14 +17,6 @@ L'éditeur comporte **quatre onglets** :
 3. **Columns** — surcharges des noms de colonnes par table, résolues à l'exécution via `UBLColumnConfig`.
 4. **Initialize** — création en un clic de toutes les tables NomaUBL et provisionnement de l'utilisateur `admin` et des rôles par défaut.
 
-:::info[Refonte en 2026.05.5]
-- **Toutes les tables sont désormais des entrées de premier rang** — les tables d'authentification (`F564250` utilisateurs, `F564251` rôles, `F564252` sessions, nouveau `F564254` autorisations) et la table de notifications (`F564253`) rejoignent le catalogue de l'onglet *Tables*. Elles participent à la substitution DDL en cas de renommage, au même titre que les tables de factures et d'e-reporting.
-- **Tables e-Reporting renumérotées** — `F564240` / `F564241` / `F564242` deviennent `F564260` / `F564261` / `F564262`. La colonne du payload XML passe de `TEXT` / `CLOB` à `BYTEA` / `BLOB` (octets UTF-8 via `dialect.writeBlob`).
-- **Panneau Valider le schéma** — une nouvelle section sous *Tables* compare le DDL embarqué (les fichiers `.sql` canoniques inclus dans le JAR) au schéma vivant en utilisant les noms configurés ici. Signale les tables manquantes, les colonnes manquantes ou en trop, et les écarts de type / taille. Lecture seule — n'altère jamais le schéma. Utilise le même mécanisme que le mode CLI `-validate-ddl`.
-- **Onglet Columns** — onglet dédié pour surcharger les noms de colonnes par table ; la résolution passe par `UBLColumnConfig` afin que les colonnes renommées chez le client n'évoluent plus silencieusement.
-- **Le journal d'init remplit la hauteur** — la zone de log de l'onglet *Initialize* occupe désormais l'espace disponible au lieu d'être plafonnée à 200 px.
-:::
-
 ---
 
 ## Accès à l'éditeur
@@ -191,7 +183,7 @@ NomaUBL répartit ses données sur **15 tables** regroupées par usage. Les vale
 | Champ | Défaut | Contenu |
 |---|---|---|
 | **Journal / Archive** | `F564230` | Archive persistante des exécutions de traitement. |
-| **Journal d'exécution** | `F564237` | Journal d'exécution courant utilisé par la page *Journal de traitement*. Nouvelle PK `FEUKID`, colonnes `FERMK` / `FERMK2` / `FEK74MSG1` (renommées en 2026.05.5). |
+| **Journal d'exécution** | `F564237` | Journal d'exécution courant utilisé par la page *Journal des traitements*. Nouvelle PK `FEUKID`, colonnes `FERMK` / `FERMK2` / `FEK74MSG1`. |
 | **En-tête facture** | `F564231` | Une ligne par facture avec ses identifiants, totaux, statut, données d'adressage. |
 | **Lignes de facture** | `F564233` | Lignes de facture (quand *Enregistrer les sous-totaux de ligne* est activé). |
 | **Récapitulatif TVA** | `F564234` | Récapitulatif TVA par catégorie (quand *Enregistrer les détails TVA* est activé). |
@@ -202,23 +194,19 @@ NomaUBL répartit ses données sur **15 tables** regroupées par usage. Les vale
 
 | Champ | Défaut | Contenu |
 |---|---|---|
-| **Journal e-Reporting** | `F564260` | Une ligne par soumission e-Reporting. La colonne du payload XML est en `BYTEA` / `BLOB` depuis 2026.05.5 (octets UTF-8 via `dialect.writeBlob`). |
-| **Cycle de vie e-Reporting** | `F564261` | Historique des changements de statut de chaque soumission. Colonne FK renommée `RHUKID` en 2026.05.5. |
-| **Mappage e-Reporting** | `F564262` | Mappage facture d'origine → ligne e-Reporting par soumission. Colonne FK renommée `RIUKID` en 2026.05.5. |
-
-:::warning[Migration de schéma]
-Les tables e-Reporting changent de numérotation en 2026.05.5 — les anciennes `F564240` / `F564241` / `F564242` deviennent `F564260` / `F564261` / `F564262`. Quand l'installation existe avant la 2026.05.5 et que les données doivent être conservées, copier les lignes vers les nouvelles tables avant de relancer *Initialiser la base* avec les nouveaux noms. Le DDL embarqué ne crée que les nouveaux noms.
-:::
+| **Journal e-Reporting** | `F564260` | Une ligne par soumission e-Reporting. La colonne du payload XML est en `BYTEA` / `BLOB` (octets UTF-8 via `dialect.writeBlob`). |
+| **Cycle de vie e-Reporting** | `F564261` | Historique des changements de statut de chaque soumission. |
+| **Mappage e-Reporting** | `F564262` | Mappage facture d'origine → ligne e-Reporting par soumission. |
 
 #### Notifications + Auth
 
 | Champ | Défaut | Contenu |
 |---|---|---|
-| **Notifications** | `F564253` | Lignes de la boîte de réception alimentant la cloche de la barre supérieure et la page *Application → Notifications* (introduites en 2026.05.3). |
+| **Notifications** | `F564253` | Lignes de la boîte de réception alimentant la cloche de la barre supérieure et la page *Application → Notifications*. |
 | **Auth · Utilisateurs** | `F564250` | Identités utilisateur (login, mot de passe haché, nom complet, indicateur actif). |
-| **Auth · Rôles** | `F564251` | Identité du rôle (nom + description). Les colonnes CSV des versions précédentes ont disparu — voir *Auth · Autorisations*. |
+| **Auth · Rôles** | `F564251` | Identité du rôle (nom + description). Les droits sont stockés dans *Auth · Autorisations*. |
 | **Auth · Sessions** | `F564252` | Sessions actives : `SSLSID` jeton UUID, `SSUSER`, `SSSTDTIM` début, `SSETDTIM` fin. |
-| **Auth · Autorisations** | `F564254` | Autorisations sous forme de lignes — `PMROLE`, `PMCRAPPID` (`page` / `company` / `feature`), `PMCRAPPVAL`, `PMENABL`. Nouveau en 2026.05.5. |
+| **Auth · Autorisations** | `F564254` | Autorisations sous forme de lignes — `PMROLE`, `PMCRAPPID` (`page` / `company` / `feature`), `PMCRAPPVAL`, `PMENABL`. |
 
 ### Valider le schéma
 
@@ -266,7 +254,7 @@ L'onglet Colonnes est un éditeur par table qui surcharge les **noms de colonnes
 
 L'éditeur regroupe les surcharges par table et reprend les mêmes noms d'accesseurs que le code Java. Les valeurs par défaut correspondent aux colonnes JDE `F564xxx` (`UHKCO`, `FETXFT`, `RGUKID`, …) ; leur modification est une question côté client et n'est utile que si le schéma diverge du DDL embarqué.
 
-La nouvelle page **Cross-Reference** générée à la compilation (*Documentation → Cross-Ref*) liste chaque site d'appel Java qui lit `tables.<X>` ou `cols.<X>`, avec un commutateur « accesseurs inutilisés » qui fait apparaître le code mort. Générée par `XrefScanner` à chaque build, sans entretien manuel.
+La vue **Tables** de la page [Développeur](../../references/developer.md) (*Documentation → Développeur*) indique, pour chaque table et colonne, son accesseur, sa clé de configuration et chaque appel Java qui l'écrit ou la lit, par flux. Produite à la construction de l'application, sans entretien manuel.
 
 ---
 
@@ -282,7 +270,7 @@ Initialisation en un clic d'une base NomaUBL vierge.
 L'opération **peut être relancée sans risque** — les tables et utilisateurs déjà présents ne sont pas modifiés ; chaque exécution post-montée de version se contente de créer les nouvelles tables et de recréer les autorisations par défaut manquantes. Cycle de vie typique :
 
 1. Nouveau déploiement → exécuter *Initialiser la base* une fois. Toutes les tables sont créées, l'utilisateur `admin` par défaut est provisionné.
-2. Montée de version qui ajoute des tables (par exemple 2026.05.3 ajoute `F564253`, 2026.05.5 ajoute `F564254`) → relancer *Initialiser la base*. Seules les tables manquantes sont créées.
+2. Montée de version qui ajoute des tables → relancer *Initialiser la base*. Seules les tables manquantes sont créées.
 3. Table d'autorisations vidée → supprimer `F564254` et relancer *Initialiser la base*. Les autorisations `admin` et `viewer` par défaut sont recréées ; les lignes de rôles existantes ne sont pas modifiées.
 
 ---
@@ -291,10 +279,10 @@ L'opération **peut être relancée sans risque** — les tables et utilisateurs
 
 - **Choisir le type de base avant de saisir l'URL JDBC.** Le placeholder et l'aide s'adaptent au type sélectionné, ce qui évite les erreurs de format.
 - **Utiliser un compte DB dédié.** Lui accorder `SELECT / INSERT / UPDATE / DELETE` sur le schéma NomaUBL et le droit `CREATE TABLE` pour l'initialisation.
-- **Conserver les noms par défaut `F564xxx` en cohabitation avec JDE.** Les jointures avec les tables JDE dans les outils de reporting restent ainsi directes.
+- **Conserver les noms par défaut `F564xxx` en coexistence avec JDE.** Les jointures avec les tables JDE dans les outils de reporting restent ainsi directes.
 - **Utiliser l'onglet Colonnes pour migrer un schéma existant.** Une installation client antérieure à un renommage de colonne peut conserver les anciens noms — l'enregistrement ici suffit pour que le code applicatif continue de fonctionner.
 - **Lancer *Valider le schéma* après chaque montée de version.** La vérification capture les colonnes manquantes ajoutées par la mise à jour et les écarts de type qui produiraient sinon des erreurs silencieuses à l'exécution. Lecture seule — sans risque.
 - **Laisser *Enregistrer les détails TVA* activé quand la page Déclaration de TVA est utilisée.** Sans cet switch, la page retombe sur une analyse du document UBL à chaque chargement — supportable sur un mois calme, pénible sur un trimestre chargé.
 - **Désactiver *Enregistrer les sous-totaux de ligne* uniquement sur installations contraintes en volume.** L'onglet *Lignes* de la modale de détail facture fonctionne encore depuis le document UBL ; seul le reporting SQL tiers sur les lignes disparaît.
-- **Relancer *Initialiser* après chaque montée de version.** Les nouvelles versions ajoutent occasionnellement des tables (notifications en 2026.05.3, autorisations en 2026.05.5) ; le script peut être relancé sans risque, il les prend en compte sans toucher aux données existantes.
+- **Relancer *Initialiser* après chaque montée de version.** Les nouvelles versions ajoutent occasionnellement des tables ; le script peut être relancé sans risque, il les prend en compte sans toucher aux données existantes.
 - **Le journal d'init est en couleur.** Repérer les lignes rouges en premier — ce sont des échecs réels à corriger. Les lignes `EXISTS:` atténuées en relance sont attendues.

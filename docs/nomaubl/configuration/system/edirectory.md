@@ -15,10 +15,6 @@ The two are typically chained: an INSEE search resolves the customer's identifie
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — once the source is mapped to UBL.
 
-:::info[Refreshed in 2026.05.8]
-The PA configuration story is now consistent across **e-invoicing**, **e-directory** and **e-reporting** — every system template references a reusable [api-connector](../api-connectors.md) instead of carrying inline auth and endpoints. The legacy inline *API Connection* and *Credentials* groups are gone (no fallback). The editor went to **two tabs**: *Directory* (Enable Check + INSEE Search) and *Connector* (api-connector picker + per-task endpoint overrides). The bundled `ppf-directory` connector covers the standard flow.
-:::
-
 The editor has **two tabs**:
 
 1. **Directory** — Enable Check toggle and INSEE search settings.
@@ -118,7 +114,6 @@ The editor has **two tabs**:
 | Field | Default | Description |
 |---|---|---|
 | **Results per page** | `10` | Maximum number of results returned per INSEE search query. Increase to widen each result page; decrease to limit network payloads. |
-
 
 ### Peppol lookup \{#peppol-lookup\}
 

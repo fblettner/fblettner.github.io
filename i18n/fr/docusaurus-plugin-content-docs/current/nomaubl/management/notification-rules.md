@@ -19,16 +19,6 @@ Le côté **lecture** du système — la boîte de réception où les utilisateu
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les déclencheurs référencent les catalogues standards *statuses* et *rejection-reason-codes*, et non des codes propres au système source.
 
-:::info[Refonte en 2026.05.7]
-Trois évolutions livrées en 2026.05.7 :
-
-- **Éditeur en six onglets** — le formulaire long et unique passe en **Général · Déclencheur · Canaux · Email · Actions · Test**. Chaque onglet tient sur un écran et la liste d'actions a la place de grandir.
-- **Liste d'actions multi-appels** — l'onglet *Actions* porte désormais une liste d'appels de connecteur au lieu d'un seul. Chaque appel a un champ libre *Description*, un drapeau facultatif *Arrêt sur échec*, et la liste déroulante connecteur API ou SQL + cible. Les appels partent dans l'ordre de déclaration, avec chaînage des réponses via les placeholders `{call.N.fieldName}`.
-- **Connecteurs SQL pris en charge** — la liste déroulante des connecteurs liste les connecteurs API et les [Connecteurs SQL](../configuration/sql-connectors.md) fusionnés avec les suffixes `· API` / `· SQL`. La liste des cibles charge les endpoints ou les requêtes selon le type du connecteur choisi.
-
-Trois bugs du dispatcher sont également corrigés : le canal d'action n'a plus besoin de l'ancienne case « action » pour partir, une liste de destinataires vide ne supprime plus les règles purement actionnelles, et un `transport.close()` SMTP bloqué ne peut plus stopper la chaîne. Voir les [notes de version 2026.05.7](../release-notes.md#v2026-05-7) pour la liste complète.
-:::
-
 ---
 
 ## Accès à l'éditeur
@@ -202,7 +192,7 @@ Une zone de recherche en haut de la barre latérale filtre la liste par sous-cha
 
 ## L'éditeur de règle
 
-En 2026.05.7, l'éditeur passe à **six onglets** — chaque onglet tient sur un écran et la liste d'actions a la place de grandir. L'onglet revient à *Général* au changement de règle.
+L'éditeur est organisé en **six onglets** — chaque onglet tient sur un écran et la liste d'actions dispose de l'espace nécessaire pour s'allonger. L'onglet revient à *Général* au changement de règle.
 
 ### Onglet Général
 
@@ -232,7 +222,7 @@ Deux canaux de livraison, plus le bloc destinataire :
 - **`portal`** — écrit une ligne dans `F564253` pour le destinataire. L'utilisateur la voit dans la boîte [Notifications](../application/notifications.md) et dans la cloche.
 - **`email`** — envoie un message SMTP via le compte mail configuré sur le template `e-invoicing`.
 
-L'ancienne case *action* a disparu en 2026.05.7 — les appels d'action partent automatiquement quand la règle a au moins une entrée dans l'onglet *Actions*. Pour bloquer les appels d'action, désactiver la règle depuis l'onglet Général.
+Les appels d'action partent automatiquement quand la règle a au moins une entrée dans l'onglet *Actions*. Pour bloquer les appels d'action, désactiver la règle depuis l'onglet Général.
 
 Le modèle de destinataire comporte deux parties indépendantes : une **cible portail** (utilisateur / rôle) et une **liste d'e-mails**.
 
@@ -256,7 +246,7 @@ L'onglet Email affiche son contenu sans condition — aucune case ne le verrouil
 
 Placeholders disponibles dans le sujet et le corps : les 10 champs canoniques — `{doc}`, `{dct}`, `{kco}`, `{statusCode}`, `{statusLabel}`, `{statusMessage}`, `{reasonCode}`, `{reasonLabel}`, `{actionCode}`, `{actionLabel}`, `{ruleName}`, `{message}` — plus `{call.N.fieldName}` pour les sorties d'appels d'action antérieurs dans la même règle (voir *Onglet Actions* ci-dessous).
 
-Depuis 2026.05.14, le jeu de placeholders fusionne aussi toutes les colonnes du catalogue de la vue [Factures](../application/invoices.md) — `{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, … — tirées par un seul SELECT `F564231 LEFT JOIN F564230` à côté des champs canoniques. Les montants sont rendus à 2 décimales, les dates JDE Julian en ISO, les colonnes CHAR sont trimées. Les champs canoniques priment quand une colonne du catalogue partage un nom — `{doc}` / `{status}` gardent leur sens familier.
+Le jeu de placeholders fusionne aussi toutes les colonnes du catalogue de la vue [Factures](../application/invoices.md) — `{customerName}`, `{contractRef}`, `{totalHT}`, `{currency}`, `{logBusinessUnit}`, `{logPaUuid}`, … — tirées par un seul SELECT `F564231 LEFT JOIN F564230` à côté des champs canoniques. Les montants sont rendus à 2 décimales, les dates JDE Julian en ISO, les colonnes CHAR sont trimées. Les champs canoniques priment quand une colonne du catalogue partage un nom — `{doc}` / `{status}` gardent leur sens familier.
 
 Un bouton `{ }` se trouve à côté de l'input Sujet et du textarea Corps. Cliquer dessus ouvre un picker recherchable de toutes les variables disponibles ; choisir une variable et le snippet `{nom}` s'insère dans le champ au curseur (ou s'ajoute à la fin avec un espace de tête quand l'input n'est pas focalisé). Escape / clic à l'extérieur ferme.
 
@@ -278,7 +268,7 @@ L'onglet Actions porte une **liste** d'appels de connecteur au lieu d'un seul. C
 
 #### Placeholders
 
-Les valeurs de paramètres acceptent les mêmes `{placeholders}` que le sujet et le corps de l'e-mail — les 10 champs canoniques, toutes les colonnes du catalogue Factures fusionnées en 2026.05.14, et la forme `{call.N.fieldName}` qui référence la sortie d'un appel antérieur dans la même règle. Chaque ligne de paramètre porte son propre picker `{ }`.
+Les valeurs de paramètres acceptent les mêmes `{placeholders}` que le sujet et le corps de l'e-mail — les 10 champs canoniques, toutes les colonnes du catalogue Factures, et la forme `{call.N.fieldName}` qui référence la sortie d'un appel antérieur dans la même règle. Chaque ligne de paramètre porte son propre picker `{ }`.
 
 #### Chaînage des réponses
 
@@ -298,7 +288,7 @@ Exemple : une règle qui commence par lire l'e-mail du client via une requête S
 
 #### Les appels d'action partent avant l'e-mail
 
-Les appels d'action sont désormais exécutés **avant** le canal e-mail — un `transport.close()` SMTP bloqué ne peut donc plus les empêcher. L'écriture portail est toujours la première ; les e-mails partent une fois la chaîne d'actions terminée.
+Les appels d'action sont exécutés **avant** le canal e-mail : un `transport.close()` SMTP bloqué ne peut donc pas les empêcher. L'écriture portail passe en premier ; les e-mails partent une fois la chaîne d'actions terminée.
 
 ### Onglet Test
 

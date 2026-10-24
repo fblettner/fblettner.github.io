@@ -1,14 +1,14 @@
 ---
 title: Dossiers surveillés
-description: "Les dossiers surveillés récupèrent les sorties PDF / XML de JD Edwards dans des répertoires montés, convertissent les PDF en XML en parallèle et lancent un lot par modèle de document — planifiés depuis global → Planification, à la demande depuis la page ou en ligne de commande."
+description: "Les dossiers surveillés récupèrent les sorties PDF / XML de JD Edwards dans des répertoires montés, convertissent les PDF en XML en parallèle et lancent un lot par document — planifiés comme lot sur la page Tâches planifiées, à la demande depuis la page ou en ligne de commande."
 keywords: [NomaUBL, dossiers surveillés, watch-folders, récupération PDF, pdf2xml, lot, planificateur, partage monté, fenêtre de recouvrement, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Dossiers surveillés
 
-La page **Dossiers surveillés** permet à NomaUBL d'aller chercher les documents source directement dans des répertoires — typiquement le partage réseau où JD Edwards dépose ses sorties d'états — au lieu d'attendre qu'on les pousse dans le répertoire d'entrée. Chaque exécution parcourt les dossiers configurés, garde les nouveaux fichiers, **convertit les PDF en XML en parallèle** (les fichiers XML et UBL sont copiés tels quels) dans le répertoire d'entrée du modèle de document, puis lance **un lot par modèle** — le lot en une seule JVM pour un modèle XML ou PDF, la boucle fichier par fichier pour un modèle UBL.
+La page **Dossiers surveillés** permet à NomaUBL d'aller chercher les documents source directement dans des répertoires — typiquement le partage réseau où JD Edwards dépose ses sorties d'états — au lieu d'attendre qu'on les pousse dans le répertoire d'entrée. Chaque exécution parcourt les dossiers configurés, garde les nouveaux fichiers, **convertit les PDF en XML en parallèle** (les fichiers XML et UBL sont copiés tels quels) dans le répertoire d'entrée du document, puis lance **un lot par modèle** — le lot en une seule JVM pour un modèle XML ou PDF, la boucle fichier par fichier pour un modèle UBL.
 
-Elle s'ouvre depuis le menu latéral, dans **Synchronisation → Dossiers surveillés** ; **Enregistrer** et **Rafraîchir** se trouvent dans l'en-tête de la page. La configuration est livrée vide : rien ne s'exécute tant qu'aucun dossier n'est configuré ni aucun job planifié.
+Elle s'ouvre depuis le menu latéral, dans **Gestion → Dossiers surveillés**, à côté des versions de fichiers — la page configure les dossiers, leur planification est un lot de la page [Tâches planifiées](../sync/scheduled-jobs/overview.md) ; **Enregistrer** et **Rafraîchir** se trouvent dans l'en-tête de la page. La configuration est livrée vide : rien ne s'exécute tant qu'aucun dossier n'est configuré ni aucun job planifié.
 
 ---
 
@@ -85,7 +85,7 @@ Les champs des cartes restent en anglais, comme dans l'application.
 |---|---|
 | **Directory** | Le dossier à parcourir — un partage monté ou un dossier local (par ex. `/data/mnt/jde_outputs`) ; `%APP_HOME%` / `%ENV%` acceptés. Quand il **est** le répertoire d'entrée du modèle, la ligne déclenche simplement le lot — voir [Mode répertoire d'entrée](#mode-repertoire-entree). |
 | **Pattern** | Motif de nom des fichiers à récupérer (par ex. `R42565_*`). Par défaut `*.xml` sur le répertoire d'entrée du modèle. |
-| **Template** | Le modèle de document qui traite les fichiers — les modèles XML, PDF et UBL sont tous pris en charge. |
+| **Template** | Le document qui traite les fichiers — les modèles XML, PDF et UBL sont tous pris en charge. |
 | **Manifest** | PDF JD Edwards uniquement : manifeste pdf2xml facultatif (échantillon XML natif JDE). Vide = mode alias DD. |
 
 ### Parcours (*Scan*)
@@ -115,7 +115,7 @@ Les dossiers qui alimentent le **même modèle** doivent porter les mêmes optio
 
 1. **Lister** — chaque dossier est parcouru à la recherche des fichiers qui correspondent à son motif — plus récents que *dernier scan − recouvrement*, ou tous avec *All files*. Un dossier parcouru pour la première fois, sans date, ne prend que la fenêtre de recouvrement — utiliser une date de rattrapage pour l'historique.
 2. **Filtrer** — les fichiers déjà traités (nom de fichier source présent dans l'archive) ou déjà en attente au format XML dans le répertoire d'entrée du modèle sont écartés, sauf si le dossier est en mode remplacement.
-3. **Convertir** — les PDF sont convertis en XML en parallèle dans le répertoire d'entrée du modèle ; les fichiers XML et UBL sont copiés tels quels. Pour un [modèle à source PDF](../management/documents.md#extraction-pdf), tout PDF texte passe par les réglages d'extraction PDF du modèle au lieu du convertisseur JD Edwards.
+3. **Convertir** — les PDF sont convertis en XML en parallèle dans le répertoire d'entrée du modèle ; les fichiers XML et UBL sont copiés tels quels. Pour un [modèle à source PDF](./documents.md#extraction-pdf), tout PDF texte passe par les réglages d'extraction PDF du modèle au lieu du convertisseur JD Edwards.
 4. **Traiter** — une fois toutes les conversions faites, un lot s'exécute par modèle : le lot en une seule JVM pour un modèle XML ou PDF, avec le parallélisme propre au lot ; la boucle fichier par fichier pour un modèle UBL, les fichiers en échec étant déplacés dans le dossier des erreurs.
 
 La date de dernier scan avance à chaque exécution. Un fichier en échec est **réessayé** tant qu'il reste dans la fenêtre de recouvrement et signalé **par son nom** — il ne bloque jamais les autres : dans un lot, un fichier en erreur est marqué en échec et déplacé dans le dossier des erreurs pendant que les autres fichiers se terminent.
@@ -140,7 +140,7 @@ Le groupe **Run now** exécute la configuration enregistrée à la demande :
 
 ## Planification et ligne de commande
 
-- **Planifié** — dans [global → Planification → Batch Document Processing](../configuration/system/global.md), ajouter un job de lot avec la source **Watched folders**, toutes les *N* minutes ou **chaque jour** à heure fixe. Le job peut cibler un seul dossier (choisi parmi les répertoires configurés) ou tous. Les sources *Directory* et *BIP* restent disponibles.
+- **Planifié** — sur la page [Tâches planifiées](../sync/scheduled-jobs/overview.md), **Nouvelle tâche → Lot** avec la source **Watched folders**, exécutée toutes les *N* minutes ou **chaque jour** à heure fixe. La tâche peut cibler un seul dossier (choisi parmi les répertoires configurés) ou tous. Les sources *Directory* et *BIP* restent disponibles.
 - **Ligne de commande** — `nomaubl.sh watch-folders <env> [--folder N] [--since <date>] [--dry-run] [--no-process]`.
 - **API** — `POST /api/watch-folders/run`.
 

@@ -1,12 +1,14 @@
 ---
-title: Journal de traitement
+title: Journal des traitements
 description: "Consulter le journal d'exécution NomaUBL — chaque événement START / END / intermédiaire enregistré pendant les traitements XML, UBL, BIP et FTP. Vue groupée par job pour le statut et la durée d'un coup d'œil, ou flux d'événements à plat pour l'analyse détaillée."
 keywords: [NomaUBL, journal de traitement, runtime log, F564237, START, END, cycle de vie, AUTO, SINGLE, BURST, UBL, trace de traitement, jobs orphelins, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
-# Journal de traitement
+# Journal des traitements
 
-L'écran **Processing Log** permet de consulter la **table de journal d'exécution** de NomaUBL (`F564237`). Chaque traitement qui passe par la plateforme — transformation XML, génération UBL, validation, extraction BIP, téléchargement FTP — émet un flux d'événements : un `START`, des étapes intermédiaires (transformation, conversion, rendu…), puis un `END` qui contient le résultat final (`SUCCESSFUL` ou un message d'erreur fatale).
+Le journal des traitements est une vue de la page [Diagnostic](./overview.md) — **Diagnostic → Journal des traitements** ; il démarre sur l'activité de la veille et garde son propre droit de page. Chaque exécution d'une [tâche planifiée](../../sync/scheduled-jobs/overview.md) y laisse aussi une ligne de début et une ligne de fin ou d'erreur, avec sa durée et son résultat.
+
+Cette vue permet de consulter la **table de journal d'exécution** de NomaUBL (`F564237`). Chaque traitement qui passe par la plateforme — transformation XML, génération UBL, validation, extraction BIP, téléchargement FTP — émet un flux d'événements : un `START`, des étapes intermédiaires (transformation, conversion, rendu…), puis un `END` qui contient le résultat final (`SUCCESSFUL` ou un message d'erreur fatale).
 
 La page présente ce flux en deux vues complémentaires : une vue **groupée** qui associe chaque `START` à son `END` correspondant — chaque job apparaît alors sur une seule ligne avec son statut et sa durée — et une vue **à plat** qui liste chaque événement individuel pour une analyse détaillée. La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé.
 
@@ -23,7 +25,7 @@ La page présente ce flux en deux vues complémentaires : une vue **groupée** q
 
   <rect x="220" y="20" width="580" height="440" rx="14" fill="url(#pl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
 
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Journal de traitement</text>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Journal des traitements</text>
   <rect x="696" y="30" width="84" height="22" rx="5" fill="url(#pl-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="738" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">↻ Rafraîchir</text>
   <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
@@ -145,7 +147,7 @@ Le journal est en **mode ajout seul** — les événements sont écrits par le p
 | **Grouped** *(défaut)* | Surveillance au quotidien. Chaque job tient sur une ligne avec son statut (OK / ERROR / PARTIAL), sa durée et son dernier message. L'expansion d'une ligne révèle toutes les étapes intermédiaires. |
 | **Flat** | Analyse détaillée quand le groupement masquerait un contexte utile — par ex. inspecter l'ordre des événements pendant un job suspendu, ou rechercher un `WARNING` isolé entre deux exécutions sans rapport. Une ligne par événement. |
 
-Le bouton de bascule en tête de la barre d'outils permet de basculer entre les deux ; le choix est enregistré dans le navigateur (`processing-log:grouped` dans `localStorage`), donc la prochaine session ouvre la même vue. L'**onglet par défaut** est **Grouped** — restauré en 2026.05.10 après une version précédente qui était passée à *Flat* au premier affichage ; l'opérateur récupère le mode de lecture quotidien sans avoir à manipuler la bascule.
+Le bouton de bascule en tête de la barre d'outils permet de basculer entre les deux ; le choix est enregistré dans le navigateur (`processing-log:grouped` dans `localStorage`), donc la prochaine session ouvre la même vue. L'**onglet par défaut** est **Grouped** : l'opérateur dispose ainsi du mode de lecture quotidien sans avoir à manipuler la bascule.
 
 ---
 
@@ -181,13 +183,13 @@ En vue groupée, la page extrait davantage (`pageSize × 4`, plafonné à 200) p
 
 ### Filtres avancés
 
-Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.processing-log`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
+Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../../configuration/list-views.md) active (`view.processing-log`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
 
 Le drill-through depuis les barres de débit du Tech Dashboard vers cette page amorce maintenant le `DateRangeFilter` V2 via `initialRange` — la période cliquée sur la barre reste appliquée ici.
 
-Depuis 2026.05.10, la vue à plat passe par **DataTableV2** en mode piloté par spec : la forme des colonnes vient de la spec `view.processing-log` sur `db-nomaubl` et le défaut embarqué livre toutes les colonnes décrites plus bas. Ajouter des colonnes depuis le catalogue ou retirer une colonne de la liste blanche de filtres se fait depuis l'éditeur [Vues de liste](../configuration/list-views.md). La vue groupée conserve sa mise en page dédiée — le groupement ne fait pas partie de DataTableV2.
+La vue à plat passe par **DataTableV2** en mode piloté par spec : la forme des colonnes vient de la spec `view.processing-log` sur `db-nomaubl` et le défaut embarqué livre toutes les colonnes décrites plus bas. Ajouter des colonnes depuis le catalogue ou retirer une colonne de la liste blanche de filtres se fait depuis l'éditeur [Vues de liste](../../configuration/list-views.md). La vue groupée conserve sa mise en page dédiée — le groupement ne fait pas partie de DataTableV2.
 
-Depuis 2026.05.12, la vue à plat fonctionne en **mode hybride client-side** — une tranche serveur capée par *Exécuter* (`spec.maxRows`, 5000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. Les colonnes refList reçoivent le **picker multi-sélection** introduit en 2026.05.13 quand c'est pertinent.
+La vue à plat fonctionne en **mode hybride client-side** — une tranche serveur capée par *Exécuter* (`spec.maxRows`, 5000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. Les colonnes refList reçoivent le **picker multi-sélection** quand c'est pertinent.
 
 ---
 

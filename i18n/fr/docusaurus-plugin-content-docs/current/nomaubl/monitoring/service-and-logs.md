@@ -202,7 +202,7 @@ Utile pour :
 
 ## Ordonnanceur — confirmer qu'il avance
 
-L'ordonnanceur en arrière-plan s'exécute **à l'intérieur** du processus `-serve`. Il n'y a ni démon d'ordonnancement séparé ni interface dédiée pour confirmer qu'il est en vie — le fichier journal est la source de vérité.
+L'ordonnanceur en arrière-plan s'exécute **à l'intérieur** du processus `-serve` ; il n'existe pas de démon d'ordonnancement séparé. La page [Tâches planifiées](../sync/scheduled-jobs/overview.md) affiche chaque tâche avec son état, sa dernière exécution, son résultat et sa prochaine exécution ; côté hôte, le fichier journal confirme les déclenchements.
 
 ```bash
 grep "scheduler tick" /opt/nomaubl/nomaubl-prod.log | tail -10
@@ -212,7 +212,7 @@ Si le dernier tick remonte à plus de `fetchImportInterval + fetchStatusInterval
 
 | Symptôme | Cause | Correctif |
 |---|---|---|
-| Aucune ligne `scheduler tick`. | Les trois intervalles sont à `0`. | Définir des intervalles non nuls dans le modèle `global` (`fetchImportInterval`, etc.). |
+| Aucune ligne `scheduler tick`. | Toutes les interrogations sont inactives ou leur intervalle vaut `0`. | Activer les interrogations dans les [Tâches planifiées](../sync/scheduled-jobs/overview.md) et définir leur intervalle dans l'éditeur de la tâche. |
 | Les ticks se déclenchent mais ne font pas avancer les factures. | Le modèle PA (`pa-default`) est injoignable — chaque appel expire. | Tester depuis l'hôte : `curl https://<pa-base-url>/api/login_check`. |
 | Les ticks se déclenchent occasionnellement puis s'arrêtent pendant des heures. | La JVM a heurté un OOM et le thread d'ordonnancement est mort sans redémarrage de la JVM. | Rechercher `OutOfMemoryError` dans le log ; augmenter `-Xmx` ; envisager `Restart=on-failure` dans systemd (couvert dans [Service et systemd](../installation/service-and-systemd.md)). |
 
@@ -304,7 +304,7 @@ Le wrapper écrit tout dans `nomaubl-<env>.log` à côté du JAR. Pour une réte
 | **Personnalisé — `journalctl` sous systemd** | systemd capture stderr / stdout dans le journal ; `journalctl -u nomaubl@prod` y effectue la recherche. |
 | **`logger` pour des pipes ponctuels** | `tail -f nomaubl-prod.log | logger -t nomaubl-prod` envoie tout dans syslog. |
 
-Logrotate (`copytruncate`, voir [Service et systemd](../installation/service-and-systemd.md)) garantit que le fichier ne croît pas sans limite. Rétention typique : 8 semaines de rotation locale + rétention indéfinie dans le stockage central de logs.
+Le serveur gère lui-même la rotation de son journal : au-delà du *Log size cap* (100 Mo par défaut), le fichier est copié en `.1` puis tronqué sur place, et cinq copies sont conservées — voir [`global → Logs`](../configuration/system/global.md). Les avertissements identiques répétés pendant la *Log repeat window* sont comptés au lieu d'être écrits, et le champ *Log levels* réduit le volume par module. Logrotate (`copytruncate`, voir [Service et systemd](../installation/service-and-systemd.md)) n'est utile que si le serveur est lancé par un autre lanceur. L'historique long terme se conserve dans le stockage central des journaux.
 
 ---
 
@@ -325,5 +325,6 @@ Logrotate (`copytruncate`, voir [Service et systemd](../installation/service-and
 
 - [Vue d'ensemble](./overview.md) — quand regarder le Tableau de bord technique vs le log.
 - [Application → Tableau de bord technique](../application/tech-dashboard.md) — la vue en direct in-app.
-- [Gestion → Journal de traitement](../management/processing-log.md) — trace par document.
+- [Diagnostic → Journal des traitements](../application/diagnostics/processing-log.md) — trace par document.
+- [Diagnostic → Journal serveur](../application/diagnostics/server-log.md) — le fichier journal dans l'application, filtré par niveau et par module.
 - [Installation → Service et systemd](../installation/service-and-systemd.md) — supervision + mise en place de la rotation des logs.

@@ -10,10 +10,6 @@ The **E-Invoicing** editor tells NomaUBL **how to talk to a Plateforme Agréée 
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — once the source is mapped to UBL.
 
-:::info[Refreshed in 2026.05.8]
-The PA configuration story is now consistent across **e-invoicing**, **[e-directory](./edirectory.md)** and **[e-reporting](./ereporting.md)** — every system template references a reusable [api-connector](../api-connectors.md) instead of carrying inline auth and endpoints, and the legacy inline shape is gone (no fallback). The editor went from five tabs to **four** — the *Mock / Testing* tab was retired (point an api-connector at a Postman mock or a local stub when you need offline tests) and the *Actions* tab moved to a dedicated page under [Management → Action Bindings](../../management/actions.md). *Send Mode* migrated from *PA Connection* to *FTP/SFTP* where it logically belongs, and the *Background Scheduling* group disappeared (those intervals only ever did anything when set on the [global](./global.md) template).
-:::
-
 The editor has **four tabs**:
 
 1. **UBL Validation** — directory of XSL transforms used to convert the source XML into UBL.
@@ -133,7 +129,7 @@ This tab configures the **directory of XSL files** used to **transform the sourc
 
 ### Manual / template-less invoice defaults
 
-Applied when an invoice has **no document template** — one created in the manual editor, or an already-formed UBL processed without a doc-template. A document template's own values always take precedence.
+Applied when an invoice has **no document** — one created in the manual editor, or an already-formed UBL processed without a doc-template. A document's own values always take precedence.
 
 | Field | Description |
 |---|---|
@@ -223,14 +219,14 @@ A self-billed invoice (type 261, 389, 471, 473, 500, 501 or 502) is submitted th
 :::
 
 :::info[Polling intervals live on `global`]
-The intervals that drive how often the background scheduler polls the PA — `fetchImportInterval`, `fetchStatusInterval`, e-reporting cadence — are read from the [`global` template](./global.md), under *Scheduling*. The *Background Scheduling* group on this page used to write those keys here, but the scheduler never read them from this template — the dead-write was retired in 2026.05.8. Edit the intervals on `global → Scheduling` and they apply across all companies.
+The intervals that drive how often the background scheduler polls the PA — `fetchImportInterval`, `fetchStatusInterval`, e-reporting cadence — are global settings edited from each job of the [Scheduled jobs](../../sync/scheduled-jobs/overview.md) page; they apply across all companies.
 :::
 
 ---
 
-## Action bindings — moved
+## Action bindings
 
-The **Actions** tab that used to live on this page in the previous version was retired in 2026.05.7 and the multi-call action bindings ship as their own page under [Management → Action Bindings](../../management/actions.md). The storage shape (`action.N.id` / `.connector` / `.endpoint` / `.params` on this template) is unchanged — only the editor moved. The new page handles the multi-call list, the per-call *Stop on failure* flag, and the response chaining via `{call.N.fieldName}` placeholders.
+Multi-call action bindings are edited on their own page under [Management → Action Bindings](../../management/actions.md). They are stored on this template (`action.N.id` / `.connector` / `.endpoint` / `.params`). That page handles the multi-call list, the per-call *Stop on failure* flag, and the response chaining via `{call.N.fieldName}` placeholders.
 
 ---
 
@@ -240,6 +236,6 @@ The **Actions** tab that used to live on this page in the previous version was r
 - **Leave the per-task overrides blank when the connector's endpoint names already match.** A `pa-default` connector with an endpoint literally named `import` does not need an override on the *Import* row. The page only stores values that differ from the default — typing the default name is harmless but adds noise.
 - **Start with `paMode=` (empty)** when first wiring up a new document type. The UBL pipeline runs end-to-end without involving the PA, so source mappings and Schematron failures surface before the network is in the loop. Flip to `API` once the data side is clean.
 - **Use SFTP only when the PA actually requires it.** REST is simpler to debug, and the api-connector test runner gives clear feedback. SFTP is appropriate when the PA mandates file drop or for high-volume batch submissions.
-- **Edit polling intervals on `global → Scheduling`, not here.** The fields on this page were retired in 2026.05.8 because they had no effect.
-- **Test against a Postman mock or a local stub** when offline. The retired in-process mock was only useful before the api-connector refactor — point the api-connector at the mock URL instead.
+- **Edit polling intervals on the Scheduled jobs page, not here.** Open the *PA import poll* or *PA status retrieval* job; saving reloads the schedules at once.
+- **Test against a Postman mock or a local stub** when offline: point the api-connector at the mock URL.
 - **Per-company overrides go on `e-invoicing-{kco}`.** Copy the platform-wide `e-invoicing` template under the new name from *Settings* and edit only the fields that differ — typically `connector`, a couple of endpoint overrides, or the SFTP credentials when company `00070` uses a separate PA.

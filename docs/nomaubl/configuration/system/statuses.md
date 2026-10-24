@@ -18,14 +18,6 @@ Each row binds a regulatory code to:
 
 The page applies to documents from any source system — JD Edwards, SAP, NetSuite or a custom ERP — once the source is mapped to UBL.
 
-:::info[Refreshed in 2026.05.5]
-Two changes shipped in 2026.05.5:
-
-- **Groups** field — each status now declares the *top-level* counter it belongs to (`inflight`, `errorTech`, `errorBusiness`, `terminal`) and the *funnel stage* it sits in (`created`, `sent`, `pending`, `transmission`, `approved`, `rejected`). The dashboard counters and the SQL filters in `DashboardApi` read from this single source instead of inlining literal `IN ('9904','9905',…)` lists. Adding a new PA status is one line in the template.
-- **Tag is read-only** — `Tag` values are referenced by `InvoiceStatusCatalog` factory methods in Java; renaming would silently break callers, so the editor protects them.
-- **Inline editor** — each row is a card that expands into a 4-column form (Code, Tag, PA Code, Polling on row 1; FR + EN labels spanning two columns each on row 2; Groups multi-select on row 3). The toolbar carries a search box that matches Code, Tag, both labels, PA Code and group labels.
-:::
-
 ---
 
 ## Opening the editor
@@ -200,7 +192,7 @@ Use **+ Add status** to create a row. The new row opens immediately with empty f
 
 ## Groups
 
-The Groups field replaces the previous CSV columns and inline `IN ('9904','9905',…)` lists in the dashboard backend. It exposes ten predefined values across two axes:
+The Groups field exposes ten predefined values across two axes:
 
 ### Top-level — counters and SQL filters
 

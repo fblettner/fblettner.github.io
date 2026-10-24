@@ -12,10 +12,6 @@ La page est sur le même pied que les [Règles de notification](./notification-r
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Le menu déroulant des connecteurs liste tous les connecteurs API et SQL fusionnés avec les suffixes `· API` / `· SQL` ; le type est ainsi visible d'un coup d'œil.
 
-:::info[Refonte en 2026.05.7]
-Les liaisons d'actions portaient un **seul** appel par action. Depuis 2026.05.7, chaque liaison porte une **liste** d'appels de connecteur, avec un drapeau *Arrêt sur échec* par appel, le chaînage des réponses via les placeholders `{call.N.fieldName}`, et la prise en charge des connecteurs SQL en plus des api-connecteurs. Les liaisons mono-appel existantes continuent de fonctionner — les anciennes clés à plat sont lues comme une liste à un élément au chargement et réécrites au format canonique `action.N.call.M.*` à la prochaine sauvegarde. Voir les [notes de version 2026.05.7](../release-notes.md#v2026-05-7) pour la liste complète.
-:::
-
 ---
 
 ## Accès à l'éditeur
@@ -196,7 +192,7 @@ Sous l'ID d'action, la liaison porte une **liste d'appels** rendus sous forme de
 
 Les valeurs de paramètres acceptent des placeholders résolus au clic à partir de la ligne sur laquelle l'utilisateur agit. La syntaxe `{field}` (accolade simple, syntaxe insérée par le picker `{ }`) et l'ancienne `{{field}}` fonctionnent toutes les deux — les jetons inconnus passent inchangés afin qu'une faute de frappe soit visible à l'exécution.
 
-Depuis 2026.05.15, chaque ligne de paramètre reçoit un picker `{ }` à côté de son input. Cliquer dessus ouvre une liste recherchable de toutes les variables disponibles ; choisir une variable et le snippet s'insère dans le champ au curseur. La liste fusionne les 10 champs canoniques ci-dessous avec toutes les colonnes du catalogue de la vue [Factures](../application/invoices.md) (`{customerName}`, `{contractRef}`, `{logBusinessUnit}`, `{logPaUuid}`, …) — un appel vers un système aval n'a plus besoin de câblage sur mesure.
+Chaque ligne de paramètre reçoit un picker `{ }` à côté de son input. Cliquer dessus ouvre une liste recherchable de toutes les variables disponibles ; choisir une variable et le snippet s'insère dans le champ au curseur. La liste fusionne les 10 champs canoniques ci-dessous avec toutes les colonnes du catalogue de la vue [Factures](../application/invoices.md) (`{customerName}`, `{contractRef}`, `{logBusinessUnit}`, `{logPaUuid}`, …) — un appel vers un système aval n'a plus besoin de câblage sur mesure.
 
 | Placeholder | Source |
 |---|---|
@@ -240,7 +236,7 @@ Exemple : une liaison *Renvoyer à la PA* qui re-soumet d'abord la facture à la
 
 ## Actions personnalisées \{#actions-personnalisees\}
 
-Depuis 2026.05.15, une section **Actions personnalisées** se trouve sous les liaisons réglementaires. Chaque entrée est un bouton libre qui apparaît dans la modale de détail facture dans un groupe *Actions personnalisées* — indépendant du statut de la facture. À utiliser pour les workflows d'opérateur qui ne correspondent pas à une transition réglementaire : pousser la facture vers un CRM, notifier un canal Slack, poster vers une API finance, …
+Une section **Actions personnalisées** se trouve sous les liaisons réglementaires. Chaque entrée est un bouton libre qui apparaît dans la modale de détail facture dans un groupe *Actions personnalisées* — indépendant du statut de la facture. À utiliser pour les workflows d'opérateur qui ne correspondent pas à une transition réglementaire : pousser la facture vers un CRM, notifier un canal Slack, poster vers une API finance, …
 
 Chaque action personnalisée porte :
 

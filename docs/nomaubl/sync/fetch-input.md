@@ -213,7 +213,7 @@ Ask the Plateforme Agréée for the list of invoices addressed to the operator s
 
 | Field | Description |
 |---|---|
-| **Document template** | The `received-ubl` template (or any template with `direction = R`) — pre-filtered so a *PA inbound* scan never lands on an emit-side template by accident. |
+| **Document** | The `received-ubl` template (or any template with `direction = R`) — pre-filtered so a *PA inbound* scan never lands on an emit-side template by accident. |
 | **Issued after** | Earliest issue date to consider. Defaults to the cursor saved in the *global* template (`lastFetchReceivedAt`). Edit to backfill — the cursor is reset to the highest issue date actually processed at the end of the run. |
 | **Include already imported** | Off by default. The PA may return the same UUID twice; with the toggle off the deduplication against `F564231` filters them out before the scan results are shown. Tick to inspect every reference the PA returned, e.g. to re-pull a UBL whose previous import failed mid-pipeline. |
 

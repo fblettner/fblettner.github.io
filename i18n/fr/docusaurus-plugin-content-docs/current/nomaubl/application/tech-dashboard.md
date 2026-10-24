@@ -1,6 +1,6 @@
 ---
 title: Tableau de bord IT
-description: "Page de santé opérationnelle pour les équipes IT : 16 widgets qui couvrent heap JVM, GC, threads et uptime, ping base, informations de build, espace disque et nombre de fichiers, débit de traitement, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, événements de traitement en direct (paires START / END des jobs en cours, plus erreurs inline), vérification de configuration, tables de base, erreurs récentes et planificateur en arrière-plan. Un seul aller-retour par rafraîchissement, aucune authentification requise pour le bloc système."
+description: "Page de santé opérationnelle pour les équipes IT : 16 widgets qui couvrent heap JVM, GC, threads et uptime, ping base, informations de build, espace disque et nombre de fichiers, débit de traitement, courbe d'erreurs, taux de relance, temps de traitement par modèle, sessions actives, événements de traitement en direct (paires START / END des tâches en cours, plus erreurs inline), vérification de configuration, tables de base, erreurs récentes et planificateur en arrière-plan. Un seul aller-retour par rafraîchissement, aucune authentification requise pour le bloc système."
 keywords: [NomaUBL, tableau de bord IT, opérations, santé système, JVM, heap, GC, ping base, système de fichiers, débit, courbe d'erreurs, taux de relance, temps de traitement, sessions actives, événements de traitement, suivi planificateur, vérification de configuration, planificateur, F564237]
 ---
 
@@ -11,10 +11,6 @@ Le **Tableau de bord IT** est la vue opérationnelle de NomaUBL destinée aux é
 Chaque rafraîchissement appelle quatre endpoints back-end en parallèle — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — pour que la page se charge en un seul aller-retour et reste légère pour la base.
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les widgets lisent des métriques niveau hôte et le journal de traitement de NomaUBL ; le format source est transparent à ce stade.
-
-:::info[Nouveau en 2026.05.6]
-Le Tableau de bord IT est une nouvelle page. Le widget Planificateur, qui se trouvait sur le tableau de bord métier, a migré ici. L'`ActivityTracker` en mémoire introduit dans la même version alimente la carte *Sessions actives* quand l'authentification est désactivée.
-:::
 
 ---
 
@@ -59,9 +55,9 @@ Le Tableau de bord IT est une nouvelle page. Le widget Planificateur, qui se tro
   <rect x="612" y="84" width="168" height="120" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="624" y="104" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">RACCOURCIS</text>
   <text x="624" y="128" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Paramètres</text>
-  <text x="624" y="146" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Journal de traitement</text>
+  <text x="624" y="146" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Journal des traitements</text>
   <text x="624" y="164" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Versions de fichiers</text>
-  <text x="624" y="182" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Références croisées</text>
+  <text x="624" y="182" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Erreurs d'intégration</text>
 
   <rect x="240" y="216" width="178" height="100" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="252" y="236" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">PLANIFICATEUR</text>
@@ -249,7 +245,7 @@ La grille à 12 colonnes est organisée en neuf rangées :
 
 Un bouton **Rafraîchir** dans l'en-tête de la page relance les quatre endpoints en parallèle.
 
-La relance manuelle en un clic de la carte **Échec d'envoi** et le passage planifié de nuit de la page [Reprise auto](../configuration/system/auto-retry.md) utilisent le même chemin de relance sous-jacent.
+La relance manuelle en un clic de la carte **Échec d'envoi** et le passage planifié de nuit de la page [Reprise auto](../sync/scheduled-jobs/auto-retry.md) utilisent le même chemin de relance sous-jacent.
 
 ---
 
@@ -274,7 +270,7 @@ Le sous-titre de la carte affiche, à droite, la **version du build et la date d
 
 ### Raccourcis (rangée 1, span 4)
 
-Liste statique de raccourcis — les pages les plus utilisées par l'opérateur IT. Chaque lien utilise le même mécanisme `onNavigate` que la barre latérale et ouvre directement la page cible. Cibles par défaut : **Paramètres**, **Journal de traitement**, **Versions de fichiers**, **Références croisées**.
+Liste statique de raccourcis — les pages les plus utilisées par l'opérateur IT, ouvertes directement : **Journal des traitements** et **Erreurs d'intégration** (deux vues du [Diagnostic](./diagnostics/overview.md)), **Notifications**, **Traiter Document**, **Versions fichiers** et **Paramètres**.
 
 ### Échec d'envoi (rangée 2, span 3) \{#send-failed\}
 
@@ -285,9 +281,9 @@ Une seule carte en grand chiffre qui indique combien de factures sont actuelleme
 | Compteur | Total en direct — rafraîchi par le bouton *Rafraîchir* de la page et à chaque montage du tableau de bord. Affiché en rouge quand il n'est pas à zéro. |
 | Bouton **Tout renvoyer (N)** | Désactivé quand le compteur est à zéro. Un clic rejoue chaque facture au statut `9904` ; la fenêtre de progression s'ouvre. |
 | Fenêtre de progression | Compteurs en direct (*traitées* / *réussies* / *échecs*), bouton *Annuler* et bouton *Continuer en arrière-plan* — même composant que pour chaque traitement long de la plateforme. |
-| Limitation de débit | 100 ms entre deux appels — fixé dans le code, non paramétrable ici par l'opérateur. La planification [Reprise auto](../configuration/system/auto-retry.md) propose sa propre limite pour l'équivalent planifié. |
+| Limitation de débit | 100 ms entre deux appels — fixé dans le code, non paramétrable ici par l'opérateur. La planification [Reprise auto](../sync/scheduled-jobs/auto-retry.md) propose sa propre limite pour l'équivalent planifié. |
 
-Le bouton manuel sert à un renvoi ponctuel en pleine journée (une coupure PA passagère qui s'est résolue, un petit lot à relancer tout de suite). Pour des relances de nuit sans supervision, planifier une ligne sur la page [Reprise auto](../configuration/system/auto-retry.md) — même chemin de code, sans intervention d'un opérateur.
+Le bouton manuel sert à un renvoi ponctuel en pleine journée (une coupure PA passagère qui s'est résolue, un petit lot à relancer tout de suite). Pour des relances de nuit sans supervision, planifier une ligne sur la page [Reprise auto](../sync/scheduled-jobs/auto-retry.md) — même chemin de code, sans intervention d'un opérateur.
 
 ### En attente de revue (rangée 2, span 3) \{#waiting-for-review\}
 
@@ -305,16 +301,16 @@ Les deux cartes lancent un **lot unique par modèle**, en arrière-plan avec son
 
 ### Planificateur (rangée 3, span 4)
 
-Liste tous les jobs actifs du planificateur :
+Liste toutes les tâches actives du planificateur :
 
 - **Jobs intégrés** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — pilotés par les intervalles de polling de `BackgroundScheduler`.
-- **`fetch-all` par modèle** — une ligne par modèle avec un job d'extraction / synchronisation programmé.
-- **Passages Reprise auto par ligne** — une ligne par entrée enregistrée sur la page [Reprise auto](../configuration/system/auto-retry.md), avec l'heure planifiée et la liste des statuts ciblés en guise de cadence.
-- **Contrôles quotidiens du cycle de vie** — une ligne par entrée planifiée sur la page [Contrôles du cycle de vie](../management/lifecycle-checks.md), à côté des synthèses et des reprises auto, avec son heure et sa dernière exécution.
+- **`fetch-all` par modèle** — une ligne par modèle avec une tâche d'extraction / synchronisation programmée.
+- **Passages Reprise auto par ligne** — une ligne par entrée enregistrée sur la page [Reprise auto](../sync/scheduled-jobs/auto-retry.md), avec l'heure planifiée et la liste des statuts ciblés en guise de cadence.
+- **Contrôles quotidiens du cycle de vie** — une ligne par entrée planifiée sur la page [Contrôles du cycle de vie](../sync/scheduled-jobs/lifecycle-checks.md), à côté des synthèses et des reprises auto, avec son heure et sa dernière exécution.
 
-Chaque ligne affiche le nom du job, la cadence, et une pastille de statut (vert actif, bleu prévu sous peu, orange en pause). Le sous-titre indique le décompte des jobs actifs.
+Chaque ligne affiche le nom de la tâche, sa fréquence et une pastille d'état (vert actif, bleu prévu sous peu, orange en pause). Le sous-titre indique le nombre de tâches actives ; le bouton calendrier de l'en-tête ouvre les [Tâches planifiées](../sync/scheduled-jobs/overview.md), où chaque tâche se lance, se suspend et se modifie.
 
-Les jobs **interrogation d'import PA** et **récupération des statuts PA** portent un bouton **pause / reprise** — effectif au tick suivant et volontairement transitoire (un redémarrage du serveur relance toujours, une pause ne peut donc pas être oubliée). La [fenêtre calme quotidienne](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) s'affiche aussi ici, en surbrillance quand elle est active — pendant celle-ci, les deux interrogations sautent automatiquement leurs exécutions.
+Les tâches **interrogation d'import PA** et **récupération des statuts PA** portent un bouton **pause / reprise** — effectif au tick suivant et volontairement transitoire (un redémarrage du serveur relance toujours, une pause ne peut donc pas être oubliée). La [fenêtre calme quotidienne](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) s'affiche aussi ici, en surbrillance quand elle est active — pendant celle-ci, les deux interrogations sautent automatiquement leurs exécutions.
 
 ### Courbe d'erreurs · 14j (rangée 3, span 4)
 
@@ -335,7 +331,7 @@ Carte complémentaire de Santé système pour un diagnostic JVM plus poussé :
 
 ### Débit · 14j (rangée 4, span 4)
 
-Histogramme journalier des documents traités sur les 14 derniers jours. **Cliquer sur une barre** ouvre *Journal de traitement* pré-filtré sur ce jour — chemin direct entre « la barre du jour est courte » et « voyons ce qui a vraiment tourné ».
+Histogramme journalier des documents traités sur les 14 derniers jours. **Cliquer sur une barre** ouvre la vue *Journal des traitements* filtrée sur ce jour — chemin direct entre « la barre du jour est courte » et « voyons ce qui s'est vraiment exécuté ».
 
 ### Sessions / Clients actifs · 15 min (rangée 4, span 4)
 
@@ -371,20 +367,20 @@ La liste des JVM de traitement actives sur la machine, relevée toutes les 5 s :
 
 ### Événements de traitement en direct (rangée 7, span 12)
 
-Flux en direct des jobs qui démarrent et se terminent — la plupart sont lancés par le planificateur en arrière-plan. Le widget interroge `F564237` toutes les **5 secondes** avec un curseur incrémental `since=` ; chaque ligne porte un **badge de méthode** coloré :
+Flux en direct des tâches qui démarrent et se terminent — la plupart sont lancées par le planificateur en arrière-plan. Le widget interroge `F564237` toutes les **5 secondes** avec un curseur incrémental `since=` ; chaque ligne porte un **badge de méthode** coloré :
 
 | Badge | Signification |
 |---|---|
-| **START** *(vert)* | Un job vient de démarrer — `fetch-all`, `retrieve-statuses`, un traitement entrant, etc. |
+| **START** *(vert)* | Une tâche vient de démarrer — `fetch-all`, `retrieve-statuses`, un traitement entrant, etc. |
 | **END** *(bleu)* | Le `END` correspondant à un `START` précédent, avec la durée écoulée quand elle est disponible. |
-| **ERROR** *(rouge)* | Une erreur émise pendant le job — les mots-clés `ERROR`, `FATAL`, `FAILED` reclassent toute ligne en rouge, même quand sa méthode était `START` ou `END`. |
-| **INFO** *(atténué)* | Toute autre ligne écrite par le journal d'exécution pendant le job. |
+| **ERROR** *(rouge)* | Une erreur émise pendant la tâche — les mots-clés `ERROR`, `FATAL`, `FAILED` reclassent toute ligne en rouge, même quand sa méthode était `START` ou `END`. |
+| **INFO** *(atténué)* | Toute autre ligne écrite par le journal d'exécution pendant la tâche. |
 
 Chaque ligne affiche le badge, le **modèle** + le **mode** + le **fichier source** quand ils sont présents, le message et l'horodatage. Une **pastille verte pulsante** apparaît à côté du titre quand un événement a été observé dans les 30 dernières secondes (un traitement est en cours) ; elle bascule en gris quand le flux est inactif depuis plus longtemps.
 
 Le flux est **dédupliqué sur `FEUKID`** — la même ligne ne peut donc pas apparaître deux fois entre deux sondages, même en cas de décalage d'horloge. Un bouton **Pause / Reprendre** à droite du titre fige le sondage : utile pour lire une ligne longue sans la voir défiler.
 
-La liste défilante est plafonnée aux 100 derniers événements ; les lignes plus anciennes sortent par le bas à mesure que de nouvelles arrivent. Pour une analyse approfondie, utiliser la page [Journal de traitement](../management/processing-log.md), qui conserve l'historique complet avec les vues groupées par job.
+La liste défilante est plafonnée aux 100 derniers événements ; les lignes plus anciennes sortent par le bas à mesure que de nouvelles arrivent. Pour une analyse approfondie, utiliser la page [Journal des traitements](diagnostics/processing-log.md), qui conserve l'historique complet avec les vues groupées par tâche.
 
 ### Vérification de configuration (rangée 8, span 12)
 
@@ -395,8 +391,9 @@ Valide la configuration *orientée connecteur* utilisée aujourd'hui par l'appli
 | **Connecteur PA** | `baseUrl` ; `authType` ; identifiants selon le type d'auth — `OAUTH2` (clientId/secret/endpoint token), `BASIC` (utilisateur/mot de passe), `BEARER` (token) ; présence d'un endpoint nommé `import` (avertissement si `import-status` manque). |
 | **e-Directory** | `baseUrl` et endpoint `directory-check` quand `checkDirectory=Y`. |
 | **e-Reporting** | `issuerSiren`, `frequency`, `flux` quand `sendToPA=Y`. |
+| **Statuts** | Chaque code de statut PA reçu mais absent du [catalogue des statuts](../configuration/system/statuses.md) : l'avertissement donne le nombre d'événements ignorés depuis le démarrage du serveur et une facture en exemple. Ajouter le code au catalogue pour enregistrer ces événements. |
 
-Les anciennes vérifications sur `paApiBaseUrl` / `paApiUsername` / `ublXsdPath` / `ublSchematronPath` ont **disparu** — ces propriétés n'existent plus dans le schéma connecteur. Les ressources de validation (XSD / Schematron) sont embarquées dans le JAR.
+Les ressources de validation (XSD / Schematron) sont embarquées dans le JAR.
 
 Une vérification propre s'affiche en `✔ 0 anomalie` en vert ; sinon la carte liste les anomalies par ordre de sévérité.
 
@@ -406,13 +403,13 @@ Nombre de lignes par table NomaUBL — factures (`F564231`), cycle de vie (`F564
 
 ### Erreurs récentes (rangée 9, span 7)
 
-Les 8 derniers événements de `F564237` filtrés sur `level IN ('ERROR', 'FATAL')`. Chaque ligne affiche le badge de niveau, le code de cycle de vie et le triplet, le message et un horodatage relatif (*il y a 2 min*, *il y a 1 h*). Cliquer sur une ligne ouvre l'entrée correspondante dans *Journal de traitement*, où se trouvent la stack complète et les options de relance.
+Les 8 derniers événements de `F564237` filtrés sur `level IN ('ERROR', 'FATAL')`. Chaque ligne affiche le badge de niveau, le code de cycle de vie et le triplet, le message et un horodatage relatif (*il y a 2 min*, *il y a 1 h*). Une ligne liée à une facture ouvre la vue *Erreurs d'intégration* du [Diagnostic](./diagnostics/overview.md), restreinte à cette facture ; une ligne de traitement ouvre la vue *Journal des traitements*. **Open Integration Errors →** ouvre la vue sans filtre.
 
 ---
 
 ## Fenêtre de progression partagée \{#shared-progress-window\}
 
-*Ajoutée en 2026.06.03.* Chaque traitement long de la plateforme — Tout renvoyer depuis cette page, le passage [Reprise auto](../configuration/system/auto-retry.md), l'export *Vue détaillée* sur [Erreurs d'intégration](./integration-errors.md), les futurs ré-imports en masse — ouvre la **même fenêtre modale**. Un seul composant, un seul jeu d'habitudes.
+Chaque traitement long de la plateforme — Tout renvoyer depuis cette page, le passage [Reprise auto](../sync/scheduled-jobs/auto-retry.md), l'export *Vue détaillée* sur [Erreurs d'intégration](diagnostics/integration-errors.md), les futurs ré-imports en masse — ouvre la **même fenêtre modale**. Un seul composant, un seul jeu d'habitudes.
 
 La fenêtre reste ouverte par défaut tant que le traitement tourne ; la fermer est une action volontaire.
 
@@ -446,7 +443,7 @@ La carte Planificateur consomme l'endpoint existant `GET /api/scheduler/status`,
 ## Conseils & bonnes pratiques
 
 - **Surveiller Heap, ping base et espace disque.** Trois signaux d'alerte précoce — la dérive du heap avant un OOM, la latence base avant un blocage, le volume archive avant la saturation disque.
-- **Le flux Traitements en cours vaut mieux que `tail -f`.** Il montre les jobs du planificateur qui démarrent et se terminent en direct, les erreurs ressortent en rouge, et le flux résiste à une déconnexion SSH. À garder ouvert pendant une mise en production ou un import en lot — la plupart des régressions y apparaissent en quelques secondes, et la pastille verte pulsante indique si quelque chose tourne réellement à cet instant.
+- **Le flux Traitements en cours vaut mieux que `tail -f`.** Il montre les tâches du planificateur qui démarrent et se terminent en direct, les erreurs ressortent en rouge, et le flux résiste à une déconnexion SSH. À garder ouvert pendant une mise en production ou un import en lot — la plupart des régressions y apparaissent en quelques secondes, et la pastille verte pulsante indique si une exécution est réellement en cours.
 - **La vérification de configuration doit toujours être verte.** Un nombre d'anomalies non nul après un déploiement est le chemin le plus rapide vers « qu'est-ce qui a changé ? ». À lancer sur chaque environnement après chaque édition de configuration.
 - **Erreurs récentes plutôt que Tables de base.** En triage d'incident, le flux des erreurs récentes est plus dense au pixel ; la carte des tables sert au suivi de tendance sur plusieurs jours.
 - **Une liste *Clients actifs* vide ne signifie pas que personne n'utilise l'application.** Avec l'auth activée, les sessions de plus d'une heure tombent de la liste — la base les conserve dans le cycle de vie. La carte montre *qui est là maintenant*, pas *qui était là ce matin*.

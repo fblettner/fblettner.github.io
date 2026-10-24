@@ -16,10 +16,6 @@ For every document type you tell NomaUBL three things:
 
 A fourth tab — **PDF Template** — is dedicated to the per-document PDF layout (which sections appear, in which order, with which columns and toggles).
 
-:::info[Page moved in 2026.05.0]
-Document templates used to live under *Configuration → Documents*. They were lifted to **Management → Documents** so the new four-tab editor — and especially the visual *PDF Template* tab — has a full-height home. The schema and the routes are unchanged: every existing template keeps working with no migration step.
-:::
-
 ---
 
 ## At a glance
@@ -162,7 +158,7 @@ The Direction value is written once on the row at insert time (column `UHDRIN` o
 | **Type** | The document type (e.g. `FACTURE`). Stored in `F564230.FEAA20`. |
 
 :::info[Why the row matters]
-The UBL-source pipeline now inserts the same `F564230` tracking row the XML pipeline produces, reading the rest of its values straight from the UBL: BT-47 buyer SIREN → `FEALKY`, BT-115 PayableAmount → `FEAEXP`, BT-2 IssueDate → `FEIVD`, BT-9 DueDate → `FEARDU`. Without it the PA send had no row to stamp with its transaction id, `FEUKIDSZ` stayed empty and fetch-import had nothing to poll. Replace mode updates the existing row instead of duplicating it; non-replace mode skips an already-processed invoice with the usual warning.
+The UBL-source pipeline inserts the same `F564230` tracking row the XML pipeline produces, reading the rest of its values straight from the UBL: BT-47 buyer SIREN → `FEALKY`, BT-115 PayableAmount → `FEAEXP`, BT-2 IssueDate → `FEIVD`, BT-9 DueDate → `FEARDU`. Without it the PA send would have no row to stamp with its transaction id, `FEUKIDSZ` would stay empty and fetch-import would have nothing to poll. Replace mode updates the existing row instead of duplicating it; non-replace mode skips an already-processed invoice with the usual warning.
 :::
 
 ### Document key *(when Source = UBL)* \{#key-extraction-from-cbcid-when-source--ubl\}
@@ -229,7 +225,7 @@ A new **Document number lookup** group on the *Document* tab (visible only when 
 
 When the group is filled in, the lookup runs **before** the regex-on-`cbc:ID` path and its result wins. Leave the group empty to keep the legacy behaviour — the regex assistant and the `(doc, dct, kco)` defaults below continue to apply unchanged.
 
-The bundled `received-ubl` template ships with this group **present but empty**: pick the connector and the target in *Settings → Document Templates*, fill in the parameters, and the receive-side flow is wired end-to-end.
+The bundled `received-ubl` template ships with this group **present but empty**: pick the connector and the target in *Settings → Documents*, fill in the parameters, and the receive-side flow is wired end-to-end.
 
 ### Input folder and routing *(when Source = UBL)*
 
@@ -305,7 +301,7 @@ Functional data NomaUBL reads from the spool to populate the UBL invoice and to 
 
 | Field | Default | Description |
 |---|---|---|
-| **`dateInputFormat`** | `yyyy-MM-dd` *(ISO)* | Java `SimpleDateFormat` pattern used to parse **document and due dates** extracted from the source XML before they are written to `F564230` / `F564231`. The previous version hardcoded ISO; that worked on UBL sources (the XSL emits ISO) but silently failed on XML sources where the spool format is locale-dependent (`dd/MM/yyyy` for many French ERPs, `MM/dd/yyyy` for North-American spools, etc.). |
+| **`dateInputFormat`** | `yyyy-MM-dd` *(ISO)* | Java `SimpleDateFormat` pattern used to parse **document and due dates** extracted from the source XML before they are written to `F564230` / `F564231`. UBL sources are always ISO (the XSL emits ISO); on XML sources the spool format is locale-dependent (`dd/MM/yyyy` for many French ERPs, `MM/dd/yyyy` for North-American spools, etc.). |
 
 Pick the pattern that matches the source dates literally. Common values:
 
@@ -402,7 +398,7 @@ A converted sample looks like this:
 </Document>
 ```
 
-The document editor and the XSL editor both **load a sample straight from a PDF** — the PDF is converted server-side with the template's saved settings (save the template first after changing the anchors). The [Process Document](../processing/document.md) page, the [watched folders](../sync/watched-folders.md) and the command line process PDF-source templates like XML ones; `-pdf2xml <in.pdf> <out.xml> --text` converts a single file on its own (see [Command line](./command-line.md)).
+The document editor and the XSL editor both **load a sample straight from a PDF** — the PDF is converted server-side with the template's saved settings (save the template first after changing the anchors). The [Process Document](../processing/document.md) page, the [watched folders](./watched-folders.md) and the command line process PDF-source templates like XML ones; `-pdf2xml <in.pdf> <out.xml> --text` converts a single file on its own (see [Command line](./command-line.md)).
 
 ---
 
@@ -431,7 +427,7 @@ This tab controls **what NomaUBL does** with the data extracted in Tab 1. It app
 
 ### Processing rules \{#processing-rules\}
 
-The **Processing rules** group routes the documents of the XML pipeline **before anything is generated**. Each rule combines one or more conditions on the document with one outcome. Rules are evaluated per document once its document type is resolved, **in order — the first match wins**; no matching rule means normal processing. They apply to every XML ingestion path: scheduler, [watched folders](../sync/watched-folders.md), *process*, *fetch-single* and *Fetch Input*. UBL-source documents are deliberately left out — their transaction type is already written in the document.
+The **Processing rules** group routes the documents of the XML pipeline **before anything is generated**. Each rule combines one or more conditions on the document with one outcome. Rules are evaluated per document once its document type is resolved, **in order — the first match wins**; no matching rule means normal processing. They apply to every XML ingestion path: scheduler, [watched folders](./watched-folders.md), *process*, *fetch-single* and *Fetch Input*. UBL-source documents are deliberately left out — their transaction type is already written in the document.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px'}}>
   <div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px'}}>
@@ -486,7 +482,7 @@ Beyond the main human-readable PDF, a document type can embed **extra files into
 The **`{ }`** button next to the path field opens a searchable token list and inserts the chosen token at the cursor — the invoice catalogue tokens (`{{kco}}`, `{{fedoc}}`, …) and the path constants `%APP_HOME%`, `%ENV%`, `%PROCESS_HOME%` — so you don't have to remember the exact spelling. **Add attachment** adds another row.
 
 :::info[UBL-source templates embed attachments too]
-A template with *Source = UBL* now embeds the same PDFs as the XML flow — after validation and before the database insert, so the stored UBL matches what is sent to the PA:
+A template with *Source = UBL* embeds the same PDFs as the XML flow — after validation and before the database insert, so the stored UBL matches what is sent to the PA:
 
 - **Attachment `attach`** embeds a sibling PDF from the input directory under `cbc:ID="PJA"`.
 - **The readable PDF (`lisible`)** is rendered straight from the parsed UBL by the modern PDF engine and embedded under `cbc:ID="LISIBLE"` (DocumentTypeCode 916).
@@ -516,13 +512,13 @@ A template with *Source = UBL* now embeds the same PDFs as the XML flow — afte
 
 ## Tab 4 — 🖼 PDF Template
 
-The fourth tab picks the **PDF layout** applied when this document is rendered. Since 2026.05.1, layouts are first-class shareable resources stored in `config-pdf.json` and edited on the dedicated [PDF Templates](./pdf-templates.md) page — this tab simply references one of them **by name** via the template's `pdfTemplate` property.
+The fourth tab picks the **PDF layout** applied when this document is rendered. Layouts are first-class shareable resources stored in `config-pdf.json` and edited on the dedicated [PDF Templates](./pdf-templates.md) page — this tab simply references one of them **by name** via the template's `pdfTemplate` property.
 
 | Field | Description |
 |---|---|
 | **PDF Template** | Dropdown listing every saved layout (the `pdf-template` resources from *PDF Templates*), plus the bundled `built-in`. Leave empty to fall back to the global default (`global.defaultPdfTemplate`); empty + no global default falls back to `built-in`. |
 
-The resolution chain at render time is therefore: this field → `global.defaultPdfTemplate` → `built-in`. Every persisted invoice carries the document template name in `F564231.UHTMPL`, so the PDF generator re-renders on demand against the layout that was active for that document.
+The resolution chain at render time is therefore: this field → `global.defaultPdfTemplate` → `built-in`. Every persisted invoice carries the document name in `F564231.UHTMPL`, so the PDF generator re-renders on demand against the layout that was active for that document.
 
 :::tip[Editing the layout itself]
 The visual editor — section list, per-section drawer, live preview, block sections — lives on [Management → PDF Templates](./pdf-templates.md). Open it once to author or tune a layout, then come back here to point the document at it. A single layout can serve many documents.

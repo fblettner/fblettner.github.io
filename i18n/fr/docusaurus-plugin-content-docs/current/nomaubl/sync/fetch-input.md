@@ -10,7 +10,7 @@ L'écran **Fetch Input** est l'**automatisation en lot** de [*Processing → Ext
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — sauf pour la source BIP, qui est spécifique à JD Edwards.
 
-La sémantique unitaire (résolution du mode, validation, persistance, dépôt PA, post-génération BIP) est documentée dans [*Extract and Process*](../processing/extract-and-process.md). Cette page ne documente que ce qui est propre au fonctionnement en lot : l'enchaînement analyse → sélection → traitement, les sources, la récupération incrémentale via **Last Job Number** et les résultats agrégés.
+La sémantique unitaire (résolution du mode, validation, enregistrement, dépôt PA, post-génération BIP) est documentée dans [*Extract and Process*](../processing/extract-and-process.md). Cette page ne documente que ce qui est propre au fonctionnement en lot : l'enchaînement analyse → sélection → traitement, les sources, la récupération incrémentale via **Last Job Number** et les résultats agrégés.
 
 ---
 
@@ -213,7 +213,7 @@ Demander à la Plateforme Agréée la liste des factures adressées à l'opérat
 
 | Champ | Description |
 |---|---|
-| **Modèle de document** | Le modèle `received-ubl` (ou tout modèle dont `direction = R`) — pré-filtré pour qu'une analyse *PA entrante* n'atterrisse jamais sur un modèle côté émission par erreur. |
+| **Document** | Le modèle `received-ubl` (ou tout modèle dont `direction = R`) — pré-filtré pour qu'une analyse *PA entrante* n'atterrisse jamais sur un modèle côté émission par erreur. |
 | **Émise après** | Date d'émission la plus ancienne à considérer. Par défaut, le curseur enregistré dans le modèle *global* (`lastFetchReceivedAt`). Modifiable pour rattraper — le curseur est replacé sur la date d'émission la plus récente effectivement traitée à la fin de l'analyse. |
 | **Inclure déjà importées** | Désactivé par défaut. La PA peut renvoyer deux fois le même UUID ; avec la case décochée, la déduplication contre `F564231` les écarte avant l'affichage des résultats. Cocher pour examiner chaque référence retournée par la PA, par exemple pour re-télécharger un UBL dont l'import précédent a échoué en plein traitement. |
 

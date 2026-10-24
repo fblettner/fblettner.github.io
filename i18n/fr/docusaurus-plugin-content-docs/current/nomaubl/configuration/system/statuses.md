@@ -18,14 +18,6 @@ Chaque ligne associe un code réglementaire à :
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — tant que la source est mappée vers UBL.
 
-:::info[Refonte en 2026.05.5]
-Deux évolutions livrées en 2026.05.5 :
-
-- **Champ Groupes** — chaque statut déclare désormais le compteur *de niveau supérieur* auquel il appartient (`inflight`, `errorTech`, `errorBusiness`, `terminal`) et l'*étape funnel* sur laquelle il se positionne (`created`, `sent`, `pending`, `transmission`, `approved`, `rejected`). Les compteurs du tableau de bord et les filtres SQL de `DashboardApi` sont alimentés par cette source unique au lieu de listes `IN ('9904','9905',…)` codées en dur. Ajouter un nouveau statut PA tient en une ligne dans le template.
-- **Tag en lecture seule** — les valeurs de `Tag` sont référencées par les fabriques `InvoiceStatusCatalog` en Java ; un renommage casserait silencieusement les appelants, l'éditeur les protège donc.
-- **Édition en ligne** — chaque ligne est une carte qui se déplie en un formulaire à 4 colonnes (Code, Tag, PA Code, Polling sur la 1re ligne ; libellés FR + EN sur deux colonnes chacun sur la 2e ; multi-sélection des Groupes sur la 3e). La barre d'outils embarque un champ de recherche qui couvre Code, Tag, libellés, PA Code et libellés de groupes.
-:::
-
 ---
 
 ## Accès à l'éditeur
@@ -200,7 +192,7 @@ Le bouton **+ Ajouter** crée une ligne. La nouvelle ligne s'ouvre directement a
 
 ## Groupes
 
-Le champ Groupes remplace les anciennes colonnes CSV et les listes `IN ('9904','9905',…)` codées en dur dans le backend du tableau de bord. Il propose dix valeurs prédéfinies sur deux axes :
+Le champ Groupes propose dix valeurs prédéfinies sur deux axes :
 
 ### Niveau supérieur — compteurs et filtres SQL
 

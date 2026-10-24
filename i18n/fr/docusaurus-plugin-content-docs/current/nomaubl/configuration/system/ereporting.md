@@ -10,10 +10,6 @@ L'éditeur **E-Reporting** configure la **production et la soumission des bundle
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — une fois la source mappée vers UBL.
 
-:::info[Refonte en 2026.05.8]
-L'E-Reporting est désormais **entièrement désolidarisé** de l'[E-Invoicing](./einvoicing.md). Il choisit son propre [api-connecteur](../api-connectors.md), son propre `endpoint.report-import` et son propre `paMode` — le reporting peut donc cibler une plateforme différente, ou utiliser des identifiants différents sur la même plateforme, par rapport à l'import des factures. Un nouveau **transport SFTP** permet de téléverser le bundle en dépôt fichier au lieu d'un POST REST. L'ancien drapeau `sendToPA` Y/N est remplacé par `paMode` (`API` / `FTP` / vide) pour cohérence avec l'E-Invoicing. La vérification de configuration signale désormais `paMode=API` sans `connector` et `paMode=FTP` sans `paFtpHost` comme erreurs.
-:::
-
 L'éditeur comporte **quatre onglets** :
 
 1. **Identity** — champs d'identification Sender (PA) et Issuer (Déclarant) émis dans le bundle.
@@ -212,7 +208,7 @@ Le transport HTTP de la PA — flux d'authentification, base URL, endpoints — 
 |---|---|---|
 | **Send Mode** *(`paMode`)* | `API` *(défaut)* / `FTP` / *(vide)* | Transport utilisé pour **soumettre les rapports générés** à la PA. `API` route le bundle via l'api-connecteur choisi sur l'onglet précédent ; `FTP` écrit le XML dans un fichier temporaire et le pousse en SFTP via le serveur ci-dessous ; *(vide)* permet à NomaUBL de **générer les rapports sans les soumettre** — utile pour valider l'identité et le choix des flux avant d'impliquer la PA. |
 
-Le champ `paMode` remplace l'ancien drapeau `sendToPA` Y/N en 2026.05.8. Mêmes sémantiques, un seul champ, cohérent avec l'E-Invoicing.
+Le champ `paMode` fonctionne de la même manière que sur la page E-Invoicing.
 
 ### SFTP Server
 
@@ -231,14 +227,12 @@ La carte entière est atténuée quand *Send Mode* ≠ `FTP` — ces champs ne s
 
 ## Vérification de configuration
 
-La vérification de configuration sur le [Tableau de bord IT](../../application/tech-dashboard.md) valide le template selon la nouvelle forme :
+La vérification de configuration sur le [Tableau de bord IT](../../application/tech-dashboard.md) contrôle le modèle selon les règles suivantes :
 
 - `paMode=API` sans `connector` est signalé comme erreur (le transport API n'a rien à appeler).
 - `paMode=FTP` sans `paFtpHost` est signalé comme erreur (le transport SFTP n'a pas de serveur).
 - `paMode=` (vide) avec un `connector` est valide — les rapports sont générés localement et ne sont pas soumis.
 - `issuerSiren`, `frequency` et `flux` sont validés dès que `paMode` est non vide (le bundle sera effectivement soumis).
-
-L'ancien contrôle `sendToPA=Y` / `issuerSiren` est retiré — remplacé par les règles par `paMode` ci-dessus.
 
 ---
 

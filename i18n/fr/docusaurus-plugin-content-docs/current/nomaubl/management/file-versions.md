@@ -146,6 +146,7 @@ La barre d'outils indique le chemin du fichier et propose le bouton **Télévers
 | **Version** | `live` pour le fichier courant, `v1`, `v2`… pour les versions historiques. |
 | **Date** | Date de création de la version. |
 | **Source** | Origine de la version — voir les [badges Source](#badges-source) ci-dessous. |
+| **Par** | Auteur de la version : l'utilisateur connecté pour une modification faite depuis l'application, `system` pour une modification faite par une tâche, la ligne de commande ou une mise à jour. |
 | **Comment** | Commentaire libre saisi lors de l'envoi (par ex. `Edited in browser`). |
 | **Size** | Taille stockée de la version. |
 | **Actions** | Boutons par ligne — voir les [actions par ligne](#actions-par-ligne) ci-dessous. |
@@ -158,6 +159,7 @@ La barre d'outils indique le chemin du fichier et propose le bouton **Télévers
 | `restore` *(orange)* | Version générée par restauration d'une version antérieure (le fichier courant précédent est alors archivé sous cette source). |
 | `upstream` *(ardoise)* | Version livrée d'un fichier conservé par une montée de version du framework. Écrite par la montée de version sous `<name>.upstream` — son rôle est de fournir la référence éditeur à comparer à un fichier courant personnalisé (voir [Comparer avec l'upstream](#upstream) plus bas). |
 | `jde_bip` *(violet)* | Extrait depuis JD Edwards BIP — source spécifique à JDE. |
+| `promotion` *(gris)* | Instantané pris par un import de [promotion](./promotion.md) avant l'écrasement du fichier ; le commentaire est celui saisi à l'import. |
 | *(autre)* | Toute autre origine reconnue par l'API. |
 
 ### Actions par ligne

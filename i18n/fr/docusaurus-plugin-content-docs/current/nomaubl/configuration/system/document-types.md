@@ -146,8 +146,8 @@ Chaque ligne de l'éditeur correspond à l'un des sept codes. La colonne **Code*
 | Colonne | Valeurs | Description |
 |---|---|---|
 | **Code** | figé | L'un des sept codes réglementaires ci-dessus. Lecture seule. Le survol du code affiche l'indication réglementaire associée. |
-| **Description** | texte libre | Libellé affiché dans les modèles de documents et l'interface. Initialisé avec la description réglementaire ci-dessus. |
-| **Default** | case à cocher | Quand cochée, ce code est **pré-sélectionné** dans les nouveaux modèles de documents créés. **Une seule ligne peut être marquée par défaut à la fois** — cocher une autre ligne décoche automatiquement la précédente. |
+| **Description** | texte libre | Libellé affiché dans les documents et l'interface. Initialisé avec la description réglementaire ci-dessus. |
+| **Default** | case à cocher | Quand cochée, ce code est **pré-sélectionné** dans les nouveaux documents créés. **Une seule ligne peut être marquée par défaut à la fois** — cocher une autre ligne décoche automatiquement la précédente. |
 | **Send to PA** | `Y` / `N` / `F` / `W` | Surcharge par type de l'argument d'exécution *envoi vers Plateforme Agréée* : `Y` = envoi ; `N` = pas d'envoi ; `F` = **envoi forcé**, même quand l'argument d'exécution demande de l'ignorer ; `W` = **En attente** — la facture est générée et validée mais **retenue pour revue** au lieu d'être envoyée, puis libérée depuis la carte *En attente de revue* du [Tableau de bord IT](../../application/tech-dashboard.md). Valeur par défaut : `Y` pour B2B, `N` pour tous les autres codes. Un type réglé sur `N` (*Ne pas envoyer*) est réellement non transmissible : l'action **Renvoyer** est masquée sur ces factures et tout envoi manuel ou groupé est refusé. |
 | **GS** | case à cocher | Quand cochée, exécute un post-traitement **Ghostscript** sur le PDF produit pour ce type (par ex. compression / linéarisation), indépendamment de l'argument d'exécution. Désactivé par défaut. |
 | **Mode** | *(par défaut)* / `UBL` / `BURST` | Surcharge par type de l'argument d'exécution *Mode* : vide = **aucune surcharge** (le mode passé en argument est conservé) ; `UBL` = forcer une sortie UBL uniquement pour ce type ; `BURST` = forcer une sortie éclatée pour ce type. |
@@ -159,7 +159,7 @@ Chaque ligne de l'éditeur correspond à l'un des sept codes. La colonne **Code*
 ## Conseils & bonnes pratiques
 
 - **Traiter chaque colonne hors Code/Description/Default comme une surcharge d'argument d'exécution.** Quand aucune surcharge n'est nécessaire, laisser la valeur vide ou décochée — l'argument d'exécution s'applique alors par défaut.
-- **Définir un code Default aligné sur le flux dominant.** La plupart des installations placent `B2B` par défaut — la pré-sélection sur chaque nouveau modèle de document évite des saisies répétées.
+- **Définir un code Default aligné sur le flux dominant.** La plupart des installations placent `B2B` par défaut — la pré-sélection sur chaque nouveau document évite des saisies répétées.
 - **Utiliser `F` (Force send) avec parcimonie.** Cette valeur surcharge l'argument d'exécution *Send to PA* et peut provoquer la transmission de factures dans des environnements supposés rester hors-ligne.
 - **`ARCHIVEONLY` ne doit jamais atteindre la PA.** Ce code couvre les avoirs internes liés aux annulations (règle BR-FR-20) ; conserver Send to PA à `N`.
 - **`OUTOFSCOPE` désigne les documents hors réforme.** Les conserver dans NomaUBL pour la traçabilité, mais ne pas les transmettre à une PA.

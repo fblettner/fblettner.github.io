@@ -28,7 +28,7 @@ Le modèle des plugins est ce qui rend Liberty extensible sans fork. Trois propr
 | Propriété | Ce qu'elle apporte |
 |---|---|
 | **Sur disque, sur `sys.path`** | Chemin d'import Python standard. Pas d'appel d'enregistrement, pas de décorateur, pas de fichier de métadonnées. Déposer un `.py` dans le bon dossier, le référencer par son nom. |
-| **Se trouve dans un dépôt séparé** | Le framework est livré open-source ; un plugin peut être propriétaire, spécifique à un client, plein de gabarits SQL internes. Les deux dépôts évoluent indépendamment. |
+| **Se trouve dans un dépôt séparé** | Le framework est livré open-source ; un plugin peut être propriétaire, spécifique à un client, plein de modèles SQL internes. Les deux dépôts évoluent indépendamment. |
 | **Importable depuis n'importe quel sous-système** | Les étapes `python` de Nomaflow sont aujourd'hui le principal consommateur, mais tout point du framework qui prend une chaîne de callable peut résoudre vers un plugin — futures actions d'écrans personnalisées, règles de dictionnaire personnalisées, etc. |
 
 La séparation est volontaire : **le framework ouvert apporte les primitives ; le plugin porte la logique métier**.
@@ -90,7 +90,7 @@ Un plugin est un package Python normal. Contenu courant :
 |---|---|
 | `__init__.py` | Vide, en général. Sert juste à faire du dossier un package. |
 | `<module>.py` | Fonctions référencées par les étapes `python` de Nomaflow. |
-| `db/` | Modèles SQLAlchemy ou gabarits SQL bruts. La forme persistante du plugin. |
+| `db/` | Modèles SQLAlchemy ou modèles SQL bruts. La forme persistante du plugin. |
 | `queries/` | Fichiers SQL statiques chargés à l'import du module. |
 | `data/` | Données de référence CSV / JSON livrées avec le plugin. |
 | `tests/` | Suite de tests propre au plugin. Exécutée séparément des tests du framework. |

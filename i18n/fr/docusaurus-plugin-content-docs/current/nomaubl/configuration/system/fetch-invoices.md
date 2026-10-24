@@ -1,12 +1,12 @@
 ---
 title: Récupération des factures
-description: "Configurer les jobs JD Edwards BI Publisher (BIP) que NomaUBL récupère pour traitement par lot, et le modèle de document à utiliser pour chacun."
-keywords: [NomaUBL, récupération factures, fetch invoices, BIP, BI Publisher, JD Edwards, JDE, traitement par lot, scheduler, modèle de document, filtre report]
+description: "Configurer les jobs JD Edwards BI Publisher (BIP) que NomaUBL récupère pour traitement par lot, et le document à utiliser pour chacun."
+keywords: [NomaUBL, récupération factures, fetch invoices, BIP, BI Publisher, JD Edwards, JDE, traitement par lot, scheduler, document, filtre report]
 ---
 
 # Récupération des factures
 
-L'éditeur **Fetch Invoices** détermine quels **jobs JD Edwards BI Publisher (BIP)** NomaUBL récupère pour traitement. Il est utilisé par l'import batch et par l'ordonnanceur en arrière-plan pour identifier *les sorties BIP à traiter* et *le modèle de document à appliquer à chacune*.
+L'éditeur **Fetch Invoices** détermine quels **jobs JD Edwards BI Publisher (BIP)** NomaUBL récupère pour traitement. Il est utilisé par l'import batch et par l'ordonnanceur en arrière-plan pour identifier *les sorties BIP à traiter* et *le document à appliquer à chacune*.
 
 Un job est pris en compte dès que sa sortie BI Publisher est terminée (`D`, `FD`). Un job en **`FX`** — l'UBE s'est exécuté mais la transformation BI Publisher a échoué — conserve malgré tout son XML source, seul élément utile au flux UBL : les scans batch et les extractions unitaires en mode **input** (ou both) l'acceptent aussi. Les extractions en mode output seul s'en tiennent à `D` / `FD` et signalent une erreur explicite sur un job `FX`.
 
@@ -85,7 +85,7 @@ Cette page est l'une des parties **spécifiques à JDE** de NomaUBL — elle s'a
   <line x1="220" y1="248" x2="476" y2="246" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fi-arrow)"/>
 
   <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Modèle de document</text>
+  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Document</text>
   <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">obligatoire pour générer le PDF</text>
   <line x1="820" y1="216" x2="720" y2="212" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#fi-arrow)"/>
 </svg>
@@ -103,7 +103,7 @@ Liste des reports BIP que NomaUBL est autorisé à récupérer. Chaque ligne est
 | **Report** | Nom du report BIP (par ex. `R42565`). |
 | **Version** | Version précise du report à autoriser (par ex. `FBL00001`). Désactivée quand **All Versions** est coché. |
 | **All Versions** | Quand cochée, toutes les versions du report sont acceptées et le champ **Version** est vidé / désactivé. |
-| **Template** | **Modèle de document** NomaUBL utilisé pour **produire la pièce jointe PDF** pendant la génération de l'UBL à partir de cette sortie BIP. **Obligatoire** quand le type de document produit un UBL avec pièce jointe PDF (la liste déroulante affiche les modèles de type `document` définis dans votre environnement — voir *Configuration → Documents*). |
+| **Template** | **Document** NomaUBL utilisé pour **produire la pièce jointe PDF** pendant la génération de l'UBL à partir de cette sortie BIP. **Obligatoire** quand le type de document produit un UBL avec pièce jointe PDF (la liste déroulante affiche les modèles de type `document` définis dans votre environnement — voir *Configuration → Documents*). |
 
 Utilisez le bouton **+ Ajouter un report** pour ajouter une ligne, et le bouton **×** d'une ligne pour la supprimer.
 
@@ -111,7 +111,7 @@ Utilisez le bouton **+ Ajouter un report** pour ajouter une ligne, et le bouton 
 
 - **Traitement par lot** — lors d'un import manuel, seuls les jobs dont le Report (et la Version, sauf si All Versions est coché) correspond à une ligne sont mis en file d'attente.
 - **Ordonnanceur** — en mode serveur, le même filtre s'applique à chaque cycle d'interrogation.
-- **Template** — dès qu'un job correspond, NomaUBL utilise le **modèle de document** configuré pour produire le PDF qui sera joint à l'UBL pendant la génération. Le modèle fournit la chaîne RTF / XSL définie dans *Configuration → Documents*. Il est **obligatoire** quand le type de document produit un UBL avec pièce jointe PDF.
+- **Template** — dès qu'un job correspond, NomaUBL utilise le **document** configuré pour produire le PDF qui sera joint à l'UBL pendant la génération. Le modèle fournit la chaîne RTF / XSL définie dans *Configuration → Documents*. Il est **obligatoire** quand le type de document produit un UBL avec pièce jointe PDF.
 
 ---
 

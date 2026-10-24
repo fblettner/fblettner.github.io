@@ -1,12 +1,12 @@
 ---
 title: Rapports
-description: "Reporting analytique de NomaUBL — un tableau croisé des statistiques de statuts (nombre de factures par activité, statut et motif de rejet, par type de transaction) et un requêteur sans SQL sur les factures, les documents archivés, les événements de cycle de vie et les erreurs de validation, avec rapports nommés enregistrés et export Excel/CSV."
-keywords: [NomaUBL, rapports, reporting, statistiques, statut, motif de rejet, requêteur, tableau croisé, export Excel, rapports enregistrés, config-reports, JD Edwards, SAP, NetSuite, ERP personnalisé]
+description: "Reporting analytique de NomaUBL en cinq onglets — un tableau croisé des statistiques de statuts (nombre de factures par activité, statut et motif de rejet, par type de transaction) et un requêteur sans SQL sur les factures, les documents archivés, les événements de cycle de vie et les erreurs de validation, avec rapports nommés enregistrés et export Excel/CSV, des contrôles d'intégrité SQL, et les rapports d'audit et d'implémentation produits en PDF ou Markdown."
+keywords: [NomaUBL, rapports, reporting, rapport d'audit, rapport d'implémentation, statistiques, statut, motif de rejet, requêteur, tableau croisé, export Excel, rapports enregistrés, config-reports, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Rapports
 
-La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle s'ouvre sur trois onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts**, un **Requêteur** à composer soi-même, et **Intégrité** — des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source.
+La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle compte cinq onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts** ; **Intégrité**, des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source ; un **Requêteur** à composer soi-même ; enfin deux documents produits à la demande, le [rapport d'audit](./audit-report.md) et le [rapport d'implémentation](./implementation-report.md).
 
 Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [Accès](#access) plus bas).
 
@@ -21,10 +21,16 @@ Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [A
   <rect x="30" y="24" width="940" height="272" rx="14" fill="url(#rep-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="50" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Rapports</text>
 
-  <rect x="50" y="66" width="150" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="125" y="83" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Statistiques statuts</text>
-  <rect x="206" y="66" width="120" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="266" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Requêteur</text>
+  <rect x="50" y="66" width="130" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="115" y="83" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Statistiques statuts</text>
+  <rect x="186" y="66" width="80" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="226" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Intégrité</text>
+  <rect x="272" y="66" width="90" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="317" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Requêteur</text>
+  <rect x="368" y="66" width="110" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="423" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport d’audit</text>
+  <rect x="484" y="66" width="160" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="564" y="83" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport d’implémentation</text>
 
   <rect x="720" y="66" width="120" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="780" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Date d'archivage ▾</text>
@@ -82,7 +88,7 @@ Le second onglet compose une extraction **sans SQL**. Choisissez un **jeu de don
 | **Factures** | Les lignes e-invoicing — le même catalogue que la liste [E-Invoicing](./invoices.md). |
 | **Documents archivés** | Tout document capturé — l'archive [E-Documents](./edocuments.md). |
 | **Événements de cycle de vie** | Une ligne par événement de statut du cycle de vie de la facture. |
-| **Erreurs de validation** | Les anomalies des [Erreurs d'intégration](./integration-errors.md). |
+| **Erreurs de validation** | Les anomalies des [Erreurs d'intégration](diagnostics/integration-errors.md). |
 
 - **Colonnes** — choisissez les colonnes à inclure dans le catalogue du jeu de données.
 - **Filtres** — les filtres statut, motif, action et type de transaction se choisissent dans des listes déroulantes **multi-sélection** alimentées par les listes de référence ; les dates par **plage** ; la **barre de période** avec son choix de base de date ouvre l'écran. Un filtre **numéro de document** effectue une recherche numérique exacte.
@@ -91,6 +97,19 @@ Le second onglet compose une extraction **sans SQL**. Choisissez un **jeu de don
 ### Rapports enregistrés
 
 Une requête — son **jeu de données, ses colonnes, ses filtres, la disposition des colonnes et le regroupement** — peut être **enregistrée comme rapport nommé** et rechargée en deux clics. La bibliothèque de rapports se trouve dans un fichier dédié `config-reports.json`, simple à sauvegarder et à promouvoir d'un serveur à l'autre.
+
+---
+
+## Rapports d'audit et d'implémentation
+
+Les deux derniers onglets produisent un document, en PDF ou en Markdown, et non une grille :
+
+| Onglet | Document | Page |
+|---|---|---|
+| **Rapport d'audit** | L'activité d'une période — volumes, situation, encours, cycle de vie, erreurs, opérations et contrôles de cohérence — pour une revue interne ou un auditeur. | [Rapport d'audit](./audit-report.md) |
+| **Rapport d'implémentation** | La documentation de l'instance telle qu'elle fonctionne — architecture, règles intégrées, documents et correspondances UBL, paramètres des plateformes, exploitation, sécurité — pour un dossier de passation ou un état des lieux avant mise à jour. | [Rapport d'implémentation](./implementation-report.md) |
+
+Les deux sont aussi disponibles en [ligne de commande](../management/command-line.md#report), pour les planifier ou les conserver avec une version.
 
 ---
 

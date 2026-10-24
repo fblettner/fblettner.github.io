@@ -1,12 +1,12 @@
 ---
 title: Vues de liste
-description: "Modifier la spécification de colonnes par vue (libellés, format, alignement, largeur, liste blanche de filtres) pour chaque page de liste NomaUBL — Factures, Erreurs d'intégration, Journal de traitement, E-Reporting — et ajouter de nouvelles colonnes depuis le catalogue de la vue sans écrire de code."
+description: "Modifier la spécification de colonnes par vue (libellés, format, alignement, largeur, liste blanche de filtres) pour chaque page de liste NomaUBL — Factures, Erreurs d'intégration, Journal des traitements, E-Reporting — et ajouter de nouvelles colonnes depuis le catalogue de la vue sans écrire de code."
 keywords: [NomaUBL, vues de liste, spécification, catalogue de colonnes, DataTableV2, factures, erreurs d'intégration, journal de traitement, e-reporting, listviewspec, filtres avancés]
 ---
 
 # Vues de liste
 
-L'éditeur **Vues de liste** est la page de configuration des quatre pages de liste pilotées par spécification : [Factures](../application/invoices.md), [Erreurs d'intégration](../application/integration-errors.md), [E-Reporting](../application/ereporting.md) et [Journal de traitement](../management/processing-log.md). Une spec JSON par vue pilote la forme des colonnes sur chaque page — libellés, type, format, alignement, largeur, tri par défaut et la liste blanche des filtres — modifiable ici sans toucher au code.
+L'éditeur **Vues de liste** est la page de configuration des grilles construites sur la table de données partagée — factures, e-documents, e-reporting, les quatre vues du [Diagnostic](../application/diagnostics/overview.md), les tâches planifiées et leurs exécutions, les vues de la [référence développeur](../references/developer.md) et l'aperçu d'import de la [promotion](../management/promotion.md) ; la liste complète figure sous [Vues](#view-selector). Une spec JSON par vue pilote la forme des colonnes sur chaque grille — libellés, type, format, alignement, largeur, tri par défaut et la liste blanche des filtres — modifiable ici sans toucher au code.
 
 Un second concept vit à côté de la spec : le **catalogue de colonnes**. Chaque vue livre un catalogue de toutes les colonnes que les tables sous-jacentes peuvent produire — le catalogue est la source de vérité de ce qui est adressable, la spec en sélectionne un sous-ensemble et le présente. Le picker `+ Ajouter une colonne` est juste une vue filtrée du catalogue.
 
@@ -140,18 +140,25 @@ Un second concept vit à côté de la spec : le **catalogue de colonnes**. Chaqu
 
 ---
 
-## Sélecteur de vue
+## Vues \{#view-selector\}
 
-Une barre de pastilles en haut de page bascule entre les quatre vues actuellement pilotées par une spec :
+L'éditeur présente **une carte repliable par vue**. Une carte ne charge sa spec qu'à son ouverture ; **Save**, dans l'en-tête de la page Paramètres, enregistre toutes les modifications faites dans les cartes.
 
-| Vue | Page pilotée |
-|---|---|
-| **Factures** | [Factures](../application/invoices.md) — `view.invoices`. |
-| **Erreurs d'intégration** | [Erreurs d'intégration](../application/integration-errors.md) — `view.integration-errors`. |
-| **E-Reporting** | [E-Reporting](../application/ereporting.md) — `view.ereporting`. |
-| **Journal de traitement** | [Journal de traitement](../management/processing-log.md) — `view.processing-log`. |
-
-Une seule vue à la fois est chargée dans l'éditeur. Le changement de vue ne perd pas les modifications non enregistrées sur la vue précédente tant que la page reste ouverte ; **Enregistrer** écrit uniquement la carte active.
+| Carte | Grille pilotée | Propriété |
+|---|---|---|
+| **Integration Errors** | Vue [Erreurs d'intégration](../application/diagnostics/integration-errors.md) du Diagnostic | `view.integrationErrors` |
+| **Processing Log** | Vue [Journal des traitements](../application/diagnostics/processing-log.md) du Diagnostic | `view.processingLog` |
+| **E-Reporting** | [E-Reporting](../application/ereporting.md) | `view.ereporting` |
+| **Invoices** | Liste [E-Invoicing](../application/invoices.md) | `view.invoices` |
+| **E-Documents** | Liste [E-Documents](../application/edocuments.md) | `view.documents` |
+| **Server Log** | Vue [Journal serveur](../application/diagnostics/server-log.md) du Diagnostic | `view.serverLog` |
+| **Scheduled Jobs** | Grille des [Tâches planifiées](../sync/scheduled-jobs/overview.md) | `view.scheduledJobs` |
+| **Job Runs** | Historique des exécutions d'une tâche planifiée | `view.jobRuns` |
+| **Errors** | Vue [Anomalies](../application/diagnostics/failures.md) du Diagnostic | `view.errors` |
+| **Data Dictionary** | Grille des colonnes de la vue *Tables* de la [référence développeur](../references/developer.md#tables) | `view.dataDictionary` |
+| **Configuration Keys** | Vue *Configuration* de la [référence développeur](../references/developer.md#configuration) | `view.configKeys` |
+| **API Operations** | Vue *API* de la [référence développeur](../references/developer.md#api) | `view.apiOperations` |
+| **Promotion Plan** | Aperçu d'import de la [promotion](../management/promotion.md) | `view.promotionPlan` |
 
 Un petit badge à côté du nom de vue indique si la spec active vient du défaut embarqué dans le JAR (`default`) ou d'une entrée stockée sur `db-nomaubl` (`override`) :
 
@@ -202,8 +209,8 @@ Au-dessus des lignes de colonne, chaque carte de vue a une ligne *Défauts* avec
 
 | Champ | Description |
 |---|---|
-| **Page size** | Taille de page initiale du paginateur TanStack en grille. Persiste sous `spec.defaultPageSize`. Défaut : `50`. |
-| **Max rows** | Cap dur sur la tranche chargée par un seul *Exécuter*. Les quatre vues pilotées par spec fonctionnent maintenant en **mode hybride client-side** : chaque *Exécuter* charge une tranche capée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — pas d'aller-retour quand on tape dans la ligne de filtre par colonne. Persiste sous `spec.maxRows`. Défaut : `5000`. |
+| **Page size** | Taille de page initiale du paginateur TanStack en grille. Enregistrée sous `spec.defaultPageSize`. Défaut : `50`. |
+| **Max rows** | Cap dur sur la tranche chargée par un seul *Exécuter*. Les vues pilotées par spec fonctionnent en **mode hybride côté client** : chaque *Exécuter* charge une tranche capée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — aucun aller-retour pendant la saisie dans la ligne de filtre par colonne. Enregistré sous `spec.maxRows`. Défaut : `5000`. |
 
 Quand le cap de la tranche est atteint pendant un *Exécuter*, la barre d'outils de la page affiche un message traduit `X / Y lignes` à côté du bouton *Exécuter* — indication que l'opérateur devrait affiner la plage de dates ou les *Filtres avancés* pour obtenir la tranche la plus pertinente. Le message est informatif ; la page continue de fonctionner.
 

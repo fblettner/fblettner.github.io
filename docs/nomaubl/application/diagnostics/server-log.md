@@ -6,7 +6,7 @@ keywords: [NomaUBL, server log, log file, tail, troubleshooting, severity, modul
 
 # Server Log
 
-The **Server log** page shows the **end of the server log file**, newest lines first, so an administrator can follow what the server does — a batch, a Peppol lookup, a failed transformation — without opening a shell on the host. Open it under **Management → Server log**; access is granted per role, like the other Management pages (see [Roles](../configuration/security/roles.md)).
+The **Server log** page shows the **end of the server log file**, newest lines first, so an administrator can follow what the server does — a batch, a Peppol lookup, a failed transformation — without opening a shell on the host. It is a view of the [Diagnostics](./overview.md) page — **Diagnostics → Server log** — and keeps its own page grant (see [Roles](../../configuration/security/roles.md)). The lines are shown in the shared data table, with its filters, sorting, paging and export; its columns can be adjusted in the [List views](../../configuration/list-views.md) editor.
 
 ---
 
@@ -49,7 +49,7 @@ Stack traces stay **attached to the line that threw them**, so filtering on `ERR
 
 ## Which file is read
 
-The page finds the file on its own: the launcher's `nomaubl-<env>.log`, or — on Linux — the file the server's output is redirected to. When the server runs under another launcher, set its path in **Server log file** in the [global settings](../configuration/system/global.md); left blank, the automatic detection applies. If no file can be found, the page says so and points to that setting.
+The page finds the file on its own: the launcher's `nomaubl-<env>.log`, or — on Linux — the file the server's output is redirected to. When the server runs under another launcher, set its path in **Server log file** in the [global settings](../../configuration/system/global.md); left blank, the automatic detection applies. If no file can be found, the page says so and points to that setting.
 
 ---
 

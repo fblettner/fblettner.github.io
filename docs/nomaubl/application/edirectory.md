@@ -159,7 +159,7 @@ Results are grouped **by company**: one collapsed card per **SIREN**, showing th
 
 ### Establishments (INSEE)
 
-An inner collapsible list of the company's establishments — each **SIRET** with its address and administrative state, from the INSEE registry. Searching by SIREN or SIRET now lists **all** establishments of the company (a second INSEE lookup by company name fills what the numeric search omits).
+An inner collapsible list of the company's establishments — each **SIRET** with its address and administrative state, from the INSEE registry. Searching by SIREN or SIRET lists **all** establishments of the company (a second INSEE lookup by company name fills what the numeric search omits).
 
 ### Electronic addresses
 

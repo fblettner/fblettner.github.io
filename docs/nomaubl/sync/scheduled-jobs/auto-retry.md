@@ -1,20 +1,20 @@
 ---
 title: Auto-Retry
-description: "Settings → Auto-Retry schedules a daily sweep that replays every invoice in a chosen technical-error status (default 9904 at 3 a.m.) back to the Plateforme Agréée. Multi-status picker, optional lookback window, per-row throttle, shared with the Send Failed card on the Tech Dashboard. The overnight pickup for batches stuck on the PA side."
+description: "Scheduled jobs → Auto-retry schedules a daily sweep that replays every invoice in a chosen technical-error status (default 9904 at 3 a.m.) back to the Plateforme Agréée. Multi-status picker, optional lookback window, per-row throttle, shared with the Send Failed card on the Tech Dashboard. The overnight pickup for batches stuck on the PA side."
 keywords: [NomaUBL, auto-retry, nightly retry, send failed, status 9904, 9905, 9907, Plateforme Agréée, PA replay, scheduled sweep, throttle, lookback, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Auto-Retry
+
+:::info[Where to find it]
+This form opens from the [Scheduled jobs](./overview.md) page: click a job of kind *Auto-retry* to edit it, or **New job → Auto-retry** to create one. **Save & apply** reloads the schedules at once — no server restart. The former *Auto-Retry* page has left the menu.
+:::
 
 The **Auto-Retry** screen schedules a recurring sweep that replays every invoice in a chosen technical-error status back to the Plateforme Agréée (PA). The default row sweeps status `9904` (*Send failed*) every night at 3 a.m. — the overnight batch's safety net so that anything stuck on the PA side at the close of business is picked up before operations resume in the morning.
 
 Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [Tech Dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The replay reads `F564231` to pick invoices in scope and calls the configured PA api-connector for each one; the source format is transparent.
-
-:::info[Added in 2026.06.03]
-The page is brand new. It pairs with the new **Send Failed** card on the Tech Dashboard — the dashboard does the immediate one-click replay, Auto-Retry does the unattended overnight pickup. The two use the same replay engine and respect the same per-call throttle (default 100 ms).
-:::
 
 ---
 
@@ -125,7 +125,7 @@ Each row is one entry in the catalogue. The edit pane has four sections.
 
 ### 3. Status filter
 
-The multi-select picker lists only statuses tagged **Error – tech** in the [Status catalogue](./statuses.md):
+The multi-select picker lists only statuses tagged **Error – tech** in the [Status catalogue](../../configuration/system/statuses.md):
 
 | Code | Label | When it applies |
 |---|---|---|
@@ -205,6 +205,6 @@ The *Run now* run honours the same throttle, same lookback, same status list as 
 
 - [Tech Dashboard → Send Failed](../../application/tech-dashboard.md#send-failed) — the one-click manual replay; same code path, fired by hand.
 - [Shared progress window](../../application/tech-dashboard.md#shared-progress-window) — the modal every long-running operation opens.
-- [E-Invoicing](./einvoicing.md) → the PA api-connector that the replay calls; tune timeouts and retry counts there.
-- [Statuses](./statuses.md) — the catalogue of status codes, including the *Error – tech* tag that filters the multi-status picker on this page.
+- [E-Invoicing](../../configuration/system/einvoicing.md) → the PA api-connector that the replay calls; tune timeouts and retry counts there.
+- [Statuses](../../configuration/system/statuses.md) — the catalogue of status codes, including the *Error – tech* tag that filters the multi-status picker on this page.
 - [Daily Digest](./daily-digest.md) — schedule a daily email summarising the integration errors; useful pairing with Auto-Retry so the on-call team sees what the sweep couldn't fix.
