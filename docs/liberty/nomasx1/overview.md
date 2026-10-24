@@ -9,6 +9,8 @@ import Link from '@docusaurus/Link';
 
 # Nomasx-1
 
+**Nomasx-1** is a security, licence-compliance and segregation-of-duties platform published by Nomana-IT and built with Liberty Next. For any connected application, it brings user and role security, usage tracking, Oracle and JD Edwards licence compliance and segregation-of-duties analysis together in one on-premise application, with a ready-made connector for JD Edwards EnterpriseOne on Oracle.
+
 <div style={{padding: '36px 32px', borderRadius: '18px', margin: '8px 0 36px', background: 'linear-gradient(135deg, rgba(74,158,255,0.18) 0%, rgba(34,197,94,0.14) 100%)', border: '1px solid rgba(74,158,255,0.35)', position: 'relative', overflow: 'hidden'}}>
   <div style={{display: 'inline-block', padding: '4px 12px', borderRadius: '999px', background: 'rgba(74,158,255,0.2)', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '11px', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: '14px'}}>Enterprise security · Licence compliance · Segregation of Duties</div>
   <h2 style={{fontSize: '34px', lineHeight: '1.15', fontWeight: 800, margin: '0 0 14px', letterSpacing: '-0.02em'}}>One platform for everything an<br/><span style={{background: 'linear-gradient(135deg, #4a9eff, #22c55e)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>auditor or licence manager asks for.</span></h2>

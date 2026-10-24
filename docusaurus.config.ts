@@ -131,13 +131,13 @@ const config: Config = {
       additionalLanguages: ['ini', 'bash', 'json', 'yaml', 'sql', 'java', 'tsx', 'jsx'],
     },
     metadata: [
-      {name: 'description', content: 'NOMANA-IT documentation, blog and resources covering Liberty Framework, NomaUBL, JD Edwards and BI Publisher.'},
-      {name: 'keywords', content: 'NOMANA-IT, Liberty Framework, NomaUBL, JD Edwards, EnterpriseOne, BI Publisher, e-invoicing, UBL, Factur-X, Plateforme Agréée, no-code, React, FastAPI, PostgreSQL, AIS, Oracle, documentation'},
+      {name: 'description', content: 'Documentation of the software published by Nomana-IT: Liberty Next low-code platform, Nomaflow scheduling, Nomasx-1 security and licence compliance, Nomajde for JD Edwards EnterpriseOne, NomaUBL French e-invoicing and JD Edwards / BI Publisher APIs — with built-in AI assistants powered by Claude.'},
+      {name: 'keywords', content: 'Nomana-IT, Liberty Next, Liberty Framework, Nomaflow, Nomasx-1, Nomajde, NomaUBL, AI assistant, Claude, Anthropic, llms.txt, JD Edwards, EnterpriseOne, BI Publisher, e-invoicing, UBL, Factur-X, Plateforme Agréée, no-code, React, FastAPI, PostgreSQL, AIS, Oracle, documentation'},
       {name: 'author', content: 'Franck Blettner — NOMANA-IT'},
       {name: 'twitter:card', content: 'summary_large_image'},
       {name: 'twitter:site', content: '@fblettner'},
       {property: 'og:type', content: 'website'},
-      {property: 'og:site_name', content: 'NOMANA-IT Documentation'},
+      {property: 'og:site_name', content: 'Nomana-IT Documentation'},
     ],
   } satisfies Preset.ThemeConfig,
 
@@ -205,11 +205,13 @@ const config: Config = {
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        name: 'NOMANA-IT',
-        url: 'https://docs.nomana-it.fr',
+        '@id': 'https://nomana-it.fr/#organization',
+        name: 'Nomana-IT',
+        url: 'https://nomana-it.fr/',
+        description: 'Software publisher (Liberty Next, Nomaflow, Nomasx-1, Nomajde, NomaUBL) and JD Edwards / Oracle / AI consultancy.',
         logo: 'https://docs.nomana-it.fr/assets/nomana-icon-512.png',
         sameAs: [
-          'https://nomana-it.fr',
+          'https://docs.nomana-it.fr/',
           'https://github.com/fblettner',
           'https://www.linkedin.com/in/franck-blettner-72509510/',
         ],
@@ -222,9 +224,11 @@ const config: Config = {
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        name: 'NOMANA-IT Documentation',
-        url: 'https://docs.nomana-it.fr',
+        '@id': 'https://docs.nomana-it.fr/#website',
+        name: 'Nomana-IT Documentation',
+        url: 'https://docs.nomana-it.fr/',
         inLanguage: ['en', 'fr'],
+        publisher: {'@id': 'https://nomana-it.fr/#organization'},
         potentialAction: {
           '@type': 'SearchAction',
           target: 'https://docs.nomana-it.fr/search?q={search_term_string}',

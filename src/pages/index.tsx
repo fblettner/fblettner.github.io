@@ -2,6 +2,7 @@ import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
+import {translate} from '@docusaurus/Translate';
 
 import styles from './index.module.css';
 
@@ -175,8 +176,12 @@ Password = demo2026`}</code>
 export default function Home(): ReactNode {
   return (
     <Layout
-      title="Documentation, Blog and Resources"
-      description="NOMANA-IT documentation, blog and resources covering Liberty Framework, NomaUBL, JD Edwards and BI Publisher.">
+      title={translate({id: 'homepage.meta.title', message: 'Documentation, Blog and Resources', description: 'Title of the home page'})}
+      description={translate({
+        id: 'homepage.meta.description',
+        message: 'Documentation of the software published by Nomana-IT: Liberty Next low-code platform, Nomaflow, Nomasx-1, Nomajde for JD Edwards EnterpriseOne, NomaUBL French e-invoicing and JD Edwards / BI Publisher APIs — with built-in AI assistants powered by Claude.',
+        description: 'Meta description of the home page',
+      })}>
       <Hero />
       <main>
         <Features />

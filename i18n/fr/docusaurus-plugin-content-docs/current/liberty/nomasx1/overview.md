@@ -9,6 +9,8 @@ import Link from '@docusaurus/Link';
 
 # Nomasx-1
 
+**Nomasx-1** est une plateforme de sécurité, de conformité des licences et de séparation des tâches éditée par Nomana-IT et construite avec Liberty Next. Pour toute application connectée, elle réunit la sécurité des utilisateurs et des rôles, le suivi d'utilisation, la conformité des licences Oracle et JD Edwards et l'analyse de séparation des tâches dans une seule application installée sur site, avec un connecteur prêt à l'emploi pour JD Edwards EnterpriseOne sur Oracle.
+
 <div style={{padding: '36px 32px', borderRadius: '18px', margin: '8px 0 36px', background: 'linear-gradient(135deg, rgba(74,158,255,0.18) 0%, rgba(34,197,94,0.14) 100%)', border: '1px solid rgba(74,158,255,0.35)', position: 'relative', overflow: 'hidden'}}>
   <div style={{display: 'inline-block', padding: '4px 12px', borderRadius: '999px', background: 'rgba(74,158,255,0.2)', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '11px', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: '14px'}}>Sécurité applicative · Conformité de licences · Séparation des tâches</div>
   <h2 style={{fontSize: '34px', lineHeight: '1.15', fontWeight: 800, margin: '0 0 14px', letterSpacing: '-0.02em'}}>Une seule plateforme pour tout ce qu'un<br/><span style={{background: 'linear-gradient(135deg, #4a9eff, #22c55e)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>auditeur ou un responsable des licences attend.</span></h2>

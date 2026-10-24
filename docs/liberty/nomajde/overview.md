@@ -9,6 +9,8 @@ import Link from '@docusaurus/Link';
 
 # Nomajde
 
+**Nomajde** is a companion application for JD Edwards EnterpriseOne, published by Nomana-IT and built with Liberty Next. It gathers the day-to-day administration of JD Edwards — users, roles, security workbench, environments, UDC tables, master data and BI Publisher scheduling — into a few searchable grids with inline editing, and writes every change straight to JD Edwards through SQL and the AIS REST API.
+
 <div style={{padding: '36px 32px', borderRadius: '18px', margin: '8px 0 36px', background: 'linear-gradient(135deg, rgba(74,158,255,0.18) 0%, rgba(251,146,60,0.14) 100%)', border: '1px solid rgba(74,158,255,0.35)', position: 'relative', overflow: 'hidden'}}>
   <div style={{display: 'inline-block', padding: '4px 12px', borderRadius: '999px', background: 'rgba(74,158,255,0.2)', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '11px', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: '14px'}}>JD Edwards EnterpriseOne · Companion application</div>
   <h2 style={{fontSize: '34px', lineHeight: '1.15', fontWeight: 800, margin: '0 0 14px', letterSpacing: '-0.02em'}}>JD Edwards work,<br/><span style={{background: 'linear-gradient(135deg, #4a9eff, #fb923c)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>on one searchable grid.</span></h2>

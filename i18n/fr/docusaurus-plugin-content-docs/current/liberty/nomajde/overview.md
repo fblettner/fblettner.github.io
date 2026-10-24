@@ -9,6 +9,8 @@ import Link from '@docusaurus/Link';
 
 # Nomajde
 
+**Nomajde** est une application compagnon de JD Edwards EnterpriseOne éditée par Nomana-IT et construite avec Liberty Next. Elle regroupe l'administration courante de JD Edwards — utilisateurs, rôles, security workbench, environnements, tables UDC, données de base et planification BI Publisher — dans quelques grilles avec recherche et modification en ligne, et écrit chaque changement directement dans JD Edwards par SQL et par l'API REST AIS.
+
 <div style={{padding: '36px 32px', borderRadius: '18px', margin: '8px 0 36px', background: 'linear-gradient(135deg, rgba(74,158,255,0.18) 0%, rgba(251,146,60,0.14) 100%)', border: '1px solid rgba(74,158,255,0.35)', position: 'relative', overflow: 'hidden'}}>
   <div style={{display: 'inline-block', padding: '4px 12px', borderRadius: '999px', background: 'rgba(74,158,255,0.2)', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '11px', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: '14px'}}>JD Edwards EnterpriseOne · Application compagnon</div>
   <h2 style={{fontSize: '34px', lineHeight: '1.15', fontWeight: 800, margin: '0 0 14px', letterSpacing: '-0.02em'}}>Le travail JD Edwards,<br/><span style={{background: 'linear-gradient(135deg, #4a9eff, #fb923c)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>sur une grille filtrable.</span></h2>
