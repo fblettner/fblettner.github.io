@@ -72,7 +72,7 @@
 
 .tableHeader {
   display: grid;
-  grid-template-columns: 80px 1fr 320px 60px;
+  grid-template-columns: 116px 1fr 320px 60px;
   gap: 12px;
   padding: 10px 14px;
   border-bottom: 1px solid var(--ifm-toc-border-color);
@@ -120,7 +120,7 @@
 
 .row {
   display: grid;
-  grid-template-columns: 80px 1fr 320px 60px;
+  grid-template-columns: 116px 1fr 320px 60px;
   gap: 12px;
   align-items: start;
   padding: 10px 14px;
