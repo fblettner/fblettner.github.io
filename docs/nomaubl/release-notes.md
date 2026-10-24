@@ -2,6 +2,7 @@
 title: Release Notes
 description: "NomaUBL release notes — every user-visible change shipped in the platform, version by version, in reverse chronological order. Mirrors the in-app Release Notes page."
 keywords: [NomaUBL, release notes, changelog, version, e-reporting, processing log, dashboard, AFNOR XP Z12-014, Schematron, RFE, Réforme de la Facturation Électronique]
+toc_max_heading_level: 2
 ---
 
 <head>
@@ -12,128 +13,157 @@ keywords: [NomaUBL, release notes, changelog, version, e-reporting, processing l
 
 Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is consigned here. The most recent release sits at the top. This page mirrors the **About this release** card and the dedicated *Release Notes* screen surfaced inside the application.
 
-<div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)', alignItems: 'center'}}>
-  <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
-  <a href="#v2026-10-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.10.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-24</span></a>
-  <a href="#v2026-10-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-23</span></a>
-  <a href="#v2026-10-22-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.22.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-22</span></a>
-  <a href="#v2026-10-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-21</span></a>
-  <a href="#v2026-10-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-20</span></a>
-  <a href="#v2026-10-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-19</span></a>
-  <a href="#v2026-10-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-18</span></a>
-  <a href="#v2026-10-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-16</span></a>
-  <a href="#v2026-10-14-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.14.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-14</span></a>
-  <a href="#v2026-10-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-12</span></a>
-  <a href="#v2026-10-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-11</span></a>
-  <a href="#v2026-10-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-06</span></a>
-  <a href="#v2026-10-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-05</span></a>
-  <a href="#v2026-10-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-02</span></a>
-  <a href="#v2026-10-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-01</span></a>
-  <a href="#v2026-09-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
-  <a href="#v2026-09-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-28</span></a>
-  <a href="#v2026-09-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-26</span></a>
-  <a href="#v2026-09-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-25</span></a>
-  <a href="#v2026-09-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-23</span></a>
-  <a href="#v2026-09-22-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.22.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-22</span></a>
-  <a href="#v2026-09-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-18</span></a>
-  <a href="#v2026-09-17-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.17.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-17</span></a>
-  <a href="#v2026-09-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-16</span></a>
-  <a href="#v2026-09-15-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.15.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-15</span></a>
-  <a href="#v2026-09-14-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.14.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-14</span></a>
-  <a href="#v2026-09-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-13</span></a>
-  <a href="#v2026-09-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-12</span></a>
-  <a href="#v2026-09-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-11</span></a>
-  <a href="#v2026-09-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-10</span></a>
-  <a href="#v2026-09-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-09</span></a>
-  <a href="#v2026-09-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-08</span></a>
-  <a href="#v2026-09-07-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.07.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-07</span></a>
-  <a href="#v2026-09-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-06</span></a>
-  <a href="#v2026-09-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-05</span></a>
-  <a href="#v2026-09-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-04</span></a>
-  <a href="#v2026-09-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-03</span></a>
-  <a href="#v2026-09-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-01</span></a>
-  <a href="#v2026-08-31-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.31.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-31</span></a>
-  <a href="#v2026-08-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-29</span></a>
-  <a href="#v2026-08-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-28</span></a>
-  <a href="#v2026-08-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-27</span></a>
-  <a href="#v2026-08-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-26</span></a>
-  <a href="#v2026-08-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-25</span></a>
-  <a href="#v2026-08-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-19</span></a>
-  <a href="#v2026-08-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-18</span></a>
-  <a href="#v2026-07-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-24</span></a>
-  <a href="#v2026-07-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-20</span></a>
-  <a href="#v2026-07-17-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.17.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-17</span></a>
-  <a href="#v2026-07-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-16</span></a>
-  <a href="#v2026-07-15-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.15.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-15</span></a>
-  <a href="#v2026-07-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-13</span></a>
-  <a href="#v2026-07-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-12</span></a>
-  <a href="#v2026-07-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-11</span></a>
-  <a href="#v2026-07-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-09</span></a>
-  <a href="#v2026-07-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-08</span></a>
-  <a href="#v2026-07-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-05</span></a>
-  <a href="#v2026-07-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-03</span></a>
-  <a href="#v2026-07-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-02</span></a>
-  <a href="#v2026-06-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-26</span></a>
-  <a href="#v2026-06-25-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
-  <a href="#v2026-06-25-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
-  <a href="#v2026-06-25-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
-  <a href="#v2026-06-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
-  <a href="#v2026-06-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-23</span></a>
-  <a href="#v2026-06-22-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.22.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-22</span></a>
-  <a href="#v2026-06-21-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
-  <a href="#v2026-06-21-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
-  <a href="#v2026-06-21-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
-  <a href="#v2026-06-21-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
-  <a href="#v2026-06-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
-  <a href="#v2026-06-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
-  <a href="#v2026-06-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-17</span></a>
-  <a href="#v2026-06-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-16</span></a>
-  <a href="#v2026-06-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-15</span></a>
-  <a href="#v2026-06-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-14</span></a>
-  <a href="#v2026-06-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-13</span></a>
-  <a href="#v2026-06-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-12</span></a>
-  <a href="#v2026-06-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-10</span></a>
-  <a href="#v2026-06-03" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.03 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-03</span></a>
-  <a href="#v2026-06-02" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.02 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-02</span></a>
-  <a href="#v2026-05-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-26</span></a>
-  <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
-  <a href="#v2026-05-23" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.23 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
-  <a href="#v2026-05-22" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.22 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
-  <a href="#v2026-05-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
-  <a href="#v2026-05-20" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.20 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
-  <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
-  <a href="#v2026-05-18" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.18 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
-  <a href="#v2026-05-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
-  <a href="#v2026-05-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
-  <a href="#v2026-05-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
-  <a href="#v2026-05-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
-  <a href="#v2026-05-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
-  <a href="#v2026-05-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
-  <a href="#v2026-05-11" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.11 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
-  <a href="#v2026-05-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
-  <a href="#v2026-05-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-12</span></a>
-  <a href="#v2026-05-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
-  <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
-  <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
-  <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
-  <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
-  <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
-  <a href="#v2026-05-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
-  <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
-  <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
-  <a href="#v2026-04-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-04</span></a>
-  <a href="#v2026-04-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-30</span></a>
-  <a href="#v2026-04-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
-  <a href="#v2026-04-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
-  <a href="#v2026-04-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
-  <a href="#v2026-04-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
-  <a href="#v2026-04-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
-  <a href="#v2026-04-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
-  <a href="#v2026-04-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
-  <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
-  <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+{/* versions:start */}
+<div style={{padding: '14px 18px', margin: '24px 0', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.25)', background: 'rgba(148,163,184,0.04)'}}>
+  <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
+    <span style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, opacity: 0.65, marginRight: '6px'}}>Versions</span>
+    <a href="#v2026-10-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(74,158,255,0.45)', background: 'rgba(74,158,255,0.08)', color: '#4a9eff', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none'}}>2026.10.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-24</span></a>
+    <a href="#v2026-10-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-23</span></a>
+    <a href="#v2026-10-22-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.22.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-22</span></a>
+    <a href="#v2026-10-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-21</span></a>
+    <a href="#v2026-10-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-20</span></a>
+    <a href="#v2026-10-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-19</span></a>
+  </div>
+  <details style={{marginTop: '12px'}}>
+    <summary style={{cursor: 'pointer', fontSize: '12px', fontWeight: 600, opacity: 0.8}}>All versions (118)</summary>
+    <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
+      <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-10</span>
+      <a href="#v2026-10-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-18</span></a>
+      <a href="#v2026-10-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-16</span></a>
+      <a href="#v2026-10-14-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.14.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-14</span></a>
+      <a href="#v2026-10-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-12</span></a>
+      <a href="#v2026-10-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-11</span></a>
+      <a href="#v2026-10-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-06</span></a>
+      <a href="#v2026-10-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-05</span></a>
+      <a href="#v2026-10-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-02</span></a>
+      <a href="#v2026-10-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.10.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-10-01</span></a>
+    </div>
+    <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
+      <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-09</span>
+      <a href="#v2026-09-30-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.30.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-30</span></a>
+      <a href="#v2026-09-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-28</span></a>
+      <a href="#v2026-09-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-26</span></a>
+      <a href="#v2026-09-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-25</span></a>
+      <a href="#v2026-09-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-23</span></a>
+      <a href="#v2026-09-22-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.22.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-22</span></a>
+      <a href="#v2026-09-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-18</span></a>
+      <a href="#v2026-09-17-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.17.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-17</span></a>
+      <a href="#v2026-09-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-16</span></a>
+      <a href="#v2026-09-15-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.15.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-15</span></a>
+      <a href="#v2026-09-14-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.14.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-14</span></a>
+      <a href="#v2026-09-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-13</span></a>
+      <a href="#v2026-09-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-12</span></a>
+      <a href="#v2026-09-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-11</span></a>
+      <a href="#v2026-09-10-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.10.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-10</span></a>
+      <a href="#v2026-09-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-09</span></a>
+      <a href="#v2026-09-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-08</span></a>
+      <a href="#v2026-09-07-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.07.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-07</span></a>
+      <a href="#v2026-09-06-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.06.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-06</span></a>
+      <a href="#v2026-09-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-05</span></a>
+      <a href="#v2026-09-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-04</span></a>
+      <a href="#v2026-09-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-03</span></a>
+      <a href="#v2026-09-01-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.09.01.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-09-01</span></a>
+    </div>
+    <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
+      <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-08</span>
+      <a href="#v2026-08-31-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.31.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-31</span></a>
+      <a href="#v2026-08-29-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.29.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-29</span></a>
+      <a href="#v2026-08-28-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.28.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-28</span></a>
+      <a href="#v2026-08-27-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.27.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-27</span></a>
+      <a href="#v2026-08-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-26</span></a>
+      <a href="#v2026-08-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-25</span></a>
+      <a href="#v2026-08-19-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.19.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-19</span></a>
+      <a href="#v2026-08-18-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.08.18.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-08-18</span></a>
+    </div>
+    <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
+      <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-07</span>
+      <a href="#v2026-07-24-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.24.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-24</span></a>
+      <a href="#v2026-07-20-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.20.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-20</span></a>
+      <a href="#v2026-07-17-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.17.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-17</span></a>
+      <a href="#v2026-07-16-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.16.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-16</span></a>
+      <a href="#v2026-07-15-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.15.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-15</span></a>
+      <a href="#v2026-07-13-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.13.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-13</span></a>
+      <a href="#v2026-07-12-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.12.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-12</span></a>
+      <a href="#v2026-07-11-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.11.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-11</span></a>
+      <a href="#v2026-07-09-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.09.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-09</span></a>
+      <a href="#v2026-07-08-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.08.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-08</span></a>
+      <a href="#v2026-07-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-05</span></a>
+      <a href="#v2026-07-03-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.03.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-03</span></a>
+      <a href="#v2026-07-02-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.07.02.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-07-02</span></a>
+    </div>
+    <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
+      <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-06</span>
+      <a href="#v2026-06-26-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.26.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-26</span></a>
+      <a href="#v2026-06-25-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+      <a href="#v2026-06-25-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+      <a href="#v2026-06-25-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+      <a href="#v2026-06-25-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.25.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-25</span></a>
+      <a href="#v2026-06-23-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.23.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-23</span></a>
+      <a href="#v2026-06-22-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.22.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-22</span></a>
+      <a href="#v2026-06-21-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+      <a href="#v2026-06-21-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+      <a href="#v2026-06-21-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+      <a href="#v2026-06-21-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+      <a href="#v2026-06-21-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+      <a href="#v2026-06-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-21</span></a>
+      <a href="#v2026-06-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-17</span></a>
+      <a href="#v2026-06-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-16</span></a>
+      <a href="#v2026-06-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-15</span></a>
+      <a href="#v2026-06-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-14</span></a>
+      <a href="#v2026-06-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-13</span></a>
+      <a href="#v2026-06-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-12</span></a>
+      <a href="#v2026-06-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-10</span></a>
+      <a href="#v2026-06-03" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.03 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-03</span></a>
+      <a href="#v2026-06-02" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.06.02 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-06-02</span></a>
+    </div>
+    <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
+      <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-05</span>
+      <a href="#v2026-05-26" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.26 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-26</span></a>
+      <a href="#v2026-05-24" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.24 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
+      <a href="#v2026-05-23" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.23 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-20</span></a>
+      <a href="#v2026-05-22" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.22 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+      <a href="#v2026-05-21" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.21 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+      <a href="#v2026-05-20" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.20 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+      <a href="#v2026-05-19" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.19 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-19</span></a>
+      <a href="#v2026-05-18" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.18 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
+      <a href="#v2026-05-17" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.17 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-18</span></a>
+      <a href="#v2026-05-16" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.16 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+      <a href="#v2026-05-15" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.15 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+      <a href="#v2026-05-14" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.14 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+      <a href="#v2026-05-13" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.13 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+      <a href="#v2026-05-12" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.12 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-14</span></a>
+      <a href="#v2026-05-11" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.11 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
+      <a href="#v2026-05-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-13</span></a>
+      <a href="#v2026-05-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-12</span></a>
+      <a href="#v2026-05-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+      <a href="#v2026-05-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+      <a href="#v2026-05-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-09</span></a>
+      <a href="#v2026-05-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-08</span></a>
+      <a href="#v2026-05-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-07</span></a>
+      <a href="#v2026-05-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
+      <a href="#v2026-05-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-06</span></a>
+      <a href="#v2026-05-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
+      <a href="#v2026-05-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.05.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-05</span></a>
+      <a href="#v2026-04-10" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.10 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-05-04</span></a>
+    </div>
+    <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginTop: '10px'}}>
+      <span style={{fontSize: '11px', fontFamily: 'monospace', fontWeight: 700, opacity: 0.55, minWidth: '64px'}}>2026-04</span>
+      <a href="#v2026-04-9" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.9 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-30</span></a>
+      <a href="#v2026-04-8" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.8 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+      <a href="#v2026-04-7" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.7 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+      <a href="#v2026-04-6" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.6 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+      <a href="#v2026-04-5" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.5 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+      <a href="#v2026-04-4" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.4 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+      <a href="#v2026-04-3" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.3 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+      <a href="#v2026-04-2" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.2 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+      <a href="#v2026-04-1" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.1 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+      <a href="#v2026-04-0" style={{padding: '5px 12px', borderRadius: '999px', border: '1px solid rgba(148,163,184,0.35)', color: 'inherit', fontSize: '12px', fontFamily: 'monospace', fontWeight: 700, textDecoration: 'none', opacity: 0.85}}>2026.04.0 <span style={{opacity: 0.65, fontFamily: 'inherit', fontWeight: 500}}>· 2026-04-29</span></a>
+    </div>
+  </details>
 </div>
+{/* versions:end */}
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.24.1 — 2026-10-24 \{#v2026-10-24-1\}
@@ -166,6 +196,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **XSD card of the by-rule view.** The card without a rule id drilled into the events with an empty filter and showed everything. It now drills on "no rule id" plus its source; the source column of the integration errors view became a server filter.
 - **Audit report figures.** The first-pass validation rate counted the platform send failures as validation findings and missed the invoices fixed since; it is now taken from the lifecycle. The deposited milestone, the delays and the summary used three definitions of a deposit; all use the first platform status. Buyer-identifier fix events were counted as import failures. The status family table did not add up to the total. The approved row included plain deposits. The failures table did not say it was capped.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.23.1 — 2026-10-23 \{#v2026-10-23-1\}
@@ -187,6 +218,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Navigation and settings follow.** The Daily Digest, Auto-Retry and Lifecycle checks pages are removed from Management, their forms now live in the Scheduled jobs editor; existing role grants for those pages are simply ignored. Watched folders returns to Management, next to File versions: it configures folders, its schedule is a batch job on the Scheduled jobs page. In Settings, the Scheduling tab becomes "Job defaults" and keeps only real settings: quiet window, bulk send throttle (parallel workers, delay per worker), BIP watermarks and lookback. The poll intervals, the notifications retention and the batch jobs list left Settings for the page. Three intervals that had no field (e-reporting cycle, received invoices, notifications retention) are now editable from their job. Storage, template names, the command line and the scheduler's behaviour are unchanged; the status endpoint gains the next run, a running flag, the pause flag and the batch source per job, and two operator endpoints (run now, reload) join the existing pause endpoint, which now accepts any job.
 - **Data dictionary replaces the Cross-Reference page.** Same place in the Documentation menu, same page grant. The page is generated at build time from three sources that existed apart: the database DDL (table purpose and notes, primary key, indexes, column type, nullability, default, inline and COMMENT ON descriptions), the configurable names (table and column accessors with their configuration keys) and every Java call site of each accessor, classified as a write or a read and attributed to a flow (processing, import poll, status poll, received invoices, e-reporting, inbound, jobs, notifications, authentication, API, screens, database, CLI). The left list shows the sixteen tables by flow group with a search over names, columns, comments and BT codes. The table card gives the purpose, key, accessor, the current rename from the NomaUBL database settings, indexes, notes and the flows that write and read it; the invoice tables carry a clickable lifecycle strip from the archive to the processing log. The columns grid is the shared data table (listed in the List views editor): column, override, type, description, BT code, accessor, screens that show it, flows, write and read counts; a row opens the code references, writes first, by flow. Served by a new endpoint next to the cross-reference one, which remains. A side effect of the join: the Columns editor of the NomaUBL database settings still offered the e-reporting bar code column dropped in May 2026 and lacked the direction column that replaced it; fixed.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.22.1 — 2026-10-22 \{#v2026-10-22-1\}
@@ -203,6 +235,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 - **Spurious "PDF creation" error on templates without an RTF.** Forcing the readable PDF ("Keep PDF" on a document type, or a reprint) on a template that has no RTF template, PDF-source templates among them, logged a PDF creation error. The forced render is now skipped when there is nothing to render with.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.21.1 — 2026-10-21 \{#v2026-10-21-1\}
@@ -224,6 +257,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **E-reporting: buyer identifier refused (G2.19).** The buyer block carried the buyer's electronic address (scheme 0225, the PPF routing address) instead of its legal identifier. A French address or a SIRET now yields the SIREN under scheme 0002 with the VAT number derived from it; 0002, 0223, 0227, 0228 and 0229 pass through. A buyer with no usable identifier (blank, "0", an email scheme) is left out of the report and the invoice is named in the log, so the customer record can be completed; the validation then reports the missing buyer on that invoice rather than a scheme error on the whole report.
 - **E-reporting: "Compute period" ignored the settings and the previous reports.** The dialog always assumed a monthly frequency, and the lookup of the last report never matched, so the current month was proposed every time and then submitted as the period. The computation now follows the company's setup (monthly, decadal, weekly) and the last valid report of the company for the direction, exactly as the scheduled run does, and the dialog states which frequency it applied and which report it follows. A company must be entered to compute.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.20.1 — 2026-10-20 \{#v2026-10-20-1\}
@@ -238,6 +272,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Peppol lookup very slow when external resolvers are blocked.** An identifier not registered in Peppol was retried through the public resolvers on both DNS zones, which on a server without access to them cost over a minute per identifier. A "no such name" answer from the server's resolver is now final, and a failing public resolver is dropped for the rest of the lookup.
 - **PPF directory lines not listed with an Esker connector.** The SIREN listing read the response array under a property name the connector editor does not write, so only a response whose array happened to be named `results` worked. The "Response field" of the endpoint is now honoured, `records` included.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.19.1 — 2026-10-19 \{#v2026-10-19-1\}
@@ -258,6 +293,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Integrity check limited to 500 missing events.** The result listed at most 500 rows, so the Apply button could only backfill the first 500 and the check had to be rerun. Missing and applied rows are no longer limited; only the informational not-found and unmapped rows stop being listed past two thousand, with a log line saying so. The scheduled run was not affected.
 - **Invoice status overwritten by the reprocess or mail-sent marker.** When the history of an invoice ended with the reprocess marker (9912) or the mail-sent marker (9908), the ordering check, the integrity backfill, the status retrieval and the deletion of a history event copied that marker into the invoice status. All header realignments now take the latest real state of the history, looking past both markers in whatever order they appear, so a deposited 200 NON_TRANSMISE stays as such. The mail-sent marker is also treated as an application event: the status retrieval no longer drops it and the ordering check no longer reports it as misordered.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.18.1 — 2026-10-18 \{#v2026-10-18-1\}
@@ -273,6 +309,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **UBL defaults: per-template payment default not saved.** With the payment override enabled on a document template, the default payment code was written to the global defaults and lost on save. The override now carries its own default.
 - **UBL defaults: suppliers override no longer compiles.** A suppliers override saved recently produced a seller template missing the additional-identifiers parameter the framework now passes, and the transform failed with XTSE0680. Fixed for new saves; a template whose suppliers override was saved before this version needs one re-save from the UBL defaults page.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.16.1 — 2026-10-16 \{#v2026-10-16-1\}
@@ -286,6 +323,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Credit notes: project reference rejected by the schema.** UBL 2.1 has no project reference element on a credit note, so every RM document carrying one failed the XSD check (cvc-complex-type.2.4.a on ProjectReference). The XSL framework now emits the project reference (BT-11) of a credit note as an additional document reference of type 50, as the EN 16931 binding prescribes; invoices are unchanged. The invoice window builds and reads both forms, and the PDF prints the project reference from either. Operator templates pick the change up at their next upgrade.
 - **API documentation page blank.** The embedded API documentation loaded the Redoc viewer from the CDN without a version. Redoc 3.0 was published on 14 October with a different entry point, and the page stopped rendering on every installation that day. The viewer is now pinned to the 2.x line.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.14.1 — 2026-10-14 \{#v2026-10-14-1\}
@@ -303,6 +341,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Invoice line identifiers unique per invoice.** With lines grouped by delivery, the line number (BT-126) restarted at 1 on every delivery, giving duplicated identifiers inside one invoice and, on the database side, line rows lost on the key collision. Numbering is now continuous across the delivery groups; the fallback line numbers of the order and despatch line references follow it.
 - **Invoice window: line reference buttons.** The "Customer Order Reference", "Order number", "Customer line no." and "Despatch advice" buttons on a line did not open their field.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.12.1 — 2026-10-12 \{#v2026-10-12-1\}
@@ -317,6 +356,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 - **VAT declaration on Oracle.** The declaration queries placed the table alias in front of the TRIM call, which Oracle rejects (ORA-00904 "UH"."TRIM"); the page then showed "No invoices in this period" instead of the error. Both are fixed: the queries are valid on every dialect, and a server-side failure is now displayed on the page and logged.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.11.1 — 2026-10-11 \{#v2026-10-11-1\}
@@ -331,6 +371,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 - **Integrity check: disputed and suspended statuses.** Disputed (207) and suspended (208) are interim statuses that may be followed by a lower code such as approved (205) or refused (210). The ordering check sorted them by code and pushed them after the final status, which then became the header status. They now keep their chronological position among the other statuses of their cycle, and never count as an inversion. Histories already mangled this way are repaired by the next run.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.06.1 — 2026-10-06 \{#v2026-10-06-1\}
@@ -343,6 +384,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 - **Business unit and routing code kept on edit / Fix buyer.** Saving an invoice from the invoice window or correcting the buyer blanked F564230.FEAC04 (business unit) and FEROUT (routing code), since the UBL path carries neither. Both now keep the values set when the document was first processed, as the alpha key already did.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.05.1 — 2026-10-05 \{#v2026-10-05-1\}
@@ -356,6 +398,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 - **Integrity check: lifecycle ordering on re-emitted invoices.** Invoices sent again after a correction (Fix buyer, edit window, reprocess keep the history) carry several PA cycles. The ordering check treated the whole history as one cycle: it merged the second run's statuses into the first, pushed the rejections to the end, and reported the second cycle's "Import validated" event as misordered. Each cycle, opened by a sent / pending / reprocess event, is now ordered on its own, membership being decided on event time. Histories already mangled by the previous rule are detected and put back in order by the next run; correctly ordered re-emitted invoices are no longer reported.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.02.1 — 2026-10-02 \{#v2026-10-02-1\}
@@ -371,6 +414,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Fix buyer: no more spurious notification, electronic address scheme kept.** The audit line "Identifiants acheteur corrigés" is now a plain history entry; it no longer re-fires the notification rule of the current status (e.g. 9905) on every correction. The buyer electronic address (BT-49) keeps the scheme already on the document, or 0225 when none, instead of being inferred from the digit count (a 9-digit identifier used to get 0002).
 - **Invoice window: removed elements no longer come back on save.** Deleting a line VAT exemption, a note, a delivery block, an order reference or an item detail in the invoice window is now kept after saving. Previously the save merged the original document back in and restored any element the form no longer emitted. Elements the window does not manage are still preserved unchanged.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.10.01.1 — 2026-10-01 \{#v2026-10-01-1\}
@@ -390,6 +434,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Invoice window no longer invents a header delivery.** Opening an invoice whose deliveries are on the lines filled the header delivery form with the first line's delivery, and saving wrote it back as a document-level delivery (BG-13), which then showed a Delivery box on the PDF. The window now reads only the document-level delivery; line deliveries stay on the lines.
 - **Fix buyer and the edit window no longer overwrite the customer keys.** Saving a corrected invoice replaced the alpha key (F564230.FEALKY) with the buyer SIREN read from the UBL and reset the customer number (F564231.UHAN8) to zero, because the replace rewrote both from the document instead of the stored row. The stored alpha key is now kept whenever it exists — the SIREN remains the fallback for invoices created directly from UBL — and the customer number is carried over when the caller has none. Applies to Fix buyer, the edit window and any replace-mode reprocess, with or without resend; batch processing from a JDE spool is unchanged.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.30.1 — 2026-09-30 \{#v2026-09-30-1\}
@@ -413,6 +458,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Readable PDF: decimals per kind of number.** The PDF template gains three settings next to *Trim zeros*: decimals for amounts, for unit prices and for quantities, each *auto* or 0 to 6. Auto keeps the current display (amounts 2 decimals, prices and quantities as in the UBL), so existing templates render unchanged. A fixed count applies to every number of that kind — line amounts, allowances, VAT rows and totals; item price, net unit price and price discount; invoiced quantities — rounded half away from zero as AFNOR requires; *Trim zeros* still applies on top. Amounts used to round ties to even, which could differ from the AFNOR value by one cent in rare cases; fixed as a side effect.
 - **BT-33 legal form without the SIREN.** The seller's additional legal information (CompanyLegalForm) generated by the defaults stylesheet now reads *Capital 5 000 Euros - APE 62.02A* (or *Capital 5 000 Euros* without APE): the SIREN already stands in BT-30 and was printed twice on the PDF. The invoice window builds the same text when the field is empty. Installed stylesheets that still carry the old concatenation are rewritten by the upgrade and by any save from the UBL defaults editor; a hand-customised line is left alone.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.28.1 — 2026-09-28 \{#v2026-09-28-1\}
@@ -430,6 +476,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 - **Watermark save no longer touches other templates.** The date was written by replacing every occurrence of the property in the configuration file; it is now written only inside the properties of the template concerned.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.26.1 — 2026-09-26 \{#v2026-09-26-1\}
@@ -440,6 +487,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Lifecycle mappings merged across the chain.** The `event.*` mappings are now read from both the list endpoint and its chained detail endpoint (list wins on conflict): CDAR XPaths stay on the detail endpoint where the Test tab evaluates them, list-item paths (`item.<field>`) on the list endpoint. Previously a single mapping on the list endpoint hid all the detail mappings.
 - **Connector chain: item filter.** A chained list endpoint can now restrict which items are fetched: new *Item filter* field in the Chain block (`field=value`, several values with `|`, several conditions with `;`, on dot-notation fields of the list item). Non-matching items are skipped before the detail call, so they cost no request and can never leak into the results. Made for flow searches that return more than lifecycle messages — Yooz `flows/search` currently returns UBL invoices alongside CDAR statuses: `flowSyntax=CDAR` keeps only the statuses. Empty = no filter; existing chains are unchanged. The connector debug trace reports how many items the filter skipped.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.25.1 — 2026-09-25 \{#v2026-09-25-1\}
@@ -461,6 +509,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Rounding now follows AFNOR (half away from zero).** The invoice window rounded ties toward positive infinity and was exposed to binary floating point: −13.455 came out as −13.45 and 13.455 could come out as 13.45. Every amount computation (price × quantity, line amount, VAT base and amount, document totals, unit prices to 6 decimals) now rounds half away from zero, as §4.4.6 of XP Z12-012 requires. Credit lines with negative quantities and .xx5 ties are the cases affected; the XSL path never computed amounts and is unchanged.
 - **Item classification code (BT-158) keeps its internal spacing.** The mapped value was whitespace-normalised, which collapsed multiple spaces inside a classification code and broke matching on the buyer side. Only leading and trailing whitespace is trimmed now; every other line field is untouched.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.23.1 — 2026-09-23 \{#v2026-09-23-1\}
@@ -471,6 +520,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Ingestion cutoff: minimum invoice date.** New *Min invoice date* setting (E-Invoicing → Settings → Processing): XML-pipeline invoices dated before it are skipped at the door — no database write, no generation, no PA send. This guards re-runs of old BIP jobs and legacy archives (documents with an F564230 row but no header would otherwise be treated as "never reached the PA" and resent). Empty or unparseable dates are not blocked; empty setting = no cutoff.
 - **Skipped invoices are now traced in the processing log.** Overnight runs whose invoices were all held back used to show only START/END SUCCESSFUL. Every skipped invoice now writes its own F564237 row — date cutoff ("dated … before minInvoiceDate"), PA-protected duplicate ("already processed by the PA — replace refused") or legacy duplicate — always, without debug mode.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.22.1 — 2026-09-22 \{#v2026-09-22-1\}
@@ -480,6 +530,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Blank bank details no longer abort invoice generation.** A supplier row saved in the XSL editor with an empty IBAN or BIC produced an empty-bodied entry in the per-company payment defaults, and every credit-transfer invoice of that company then failed at UBL creation with "An empty sequence is not allowed as the result of a call to ubl:supplier-iban#1". Blank values are now written as an explicit empty string (existing files are repaired by re-saving the Suppliers tab once). A transfer invoice genuinely missing its IBAN now surfaces as a normal validation error (BR-61) instead of a generation abort; non-transfer invoices were and remain unaffected.
 - **Generator sequence fix in the base template.** `invoice.xsl` emitted the preceding-invoice reference (BG-3) before the order reference (BT-13), an order both UBL schemas reject when the two are present; the blocks now follow the schema sequence (OrderReference, then BillingReference), matching the main template.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.18.1 — 2026-09-18 \{#v2026-09-18-1\}
@@ -494,6 +545,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 - **Editing a PA-processed invoice: no more silent no-op.** The *Edit* button is now hidden for invoices the PA has already processed (Rejected 213, Deposited 200, Refused 210…) — the processor was refusing the rewrite anyway but reported it as a successful save. *Copy* remains available on those statuses (creating a new invoice is the right action there) and *Set Status* stays the deliberate unlock. If the save path is still reached, the window now shows an explicit "not saved — already processed by the PA" warning instead of a green confirmation.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.17.1 — 2026-09-17 \{#v2026-09-17-1\}
@@ -507,6 +559,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Editing keeps the invoice's original activity and sub-type — always.** Saving an edit (or a buyer fix) re-derived FEAA10 / FESUBTYP from today's template configuration, which could reject the save ("FEAA10 mandatory", or ORA-12899 when an XML template's spool tag name leaked in as a value). The F564230 update no longer touches those two columns: the values written when the document was first processed are the source of truth. Template resolution now only applies where it belongs — fresh inserts (manual creation uses the e-invoicing defaults, batch files their doc template).
 - **Reprocess help texts corrected.** The CLI and shell usage still described eligibility as "Rejected 213 or Deposited 200"; the actual rule — unchanged — is Deposited 200 with reason NON_TRANSMISE and template opt-in. Descriptions now match the behaviour.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.16.1 — 2026-09-16 \{#v2026-09-16-1\}
@@ -519,6 +572,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Edit save keeps the invoice's context.** The save now passes the invoice's document template along: activity and sub-type resolve from that template's defaults (fixes the "FEAA10 mandatory" failure on edit), the template name is no longer blanked from the invoice, the archived source spool in F564230 is left untouched (reprocess-from-archive stays possible), and the send-to-PA flag reflects the configured intent instead of being forced to "not send" — so a sendable invoice shows its *Resend to PA* button right after an edit.
 - **Delete a single lifecycle event.** The history tab gains a per-event delete button (with confirmation): the event is removed and the invoice status realigns on the last remaining event — the clean manual fix when a PA delivers a stray status (e.g. a Refusée it later superseded). Gated by a new dedicated action (*Delete lifecycle event*) in the roles, and available as `DELETE /api/invoices/{doc}/{dct}/{kco}/lifecycle/{seqn}`.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.15.1 — 2026-09-15 \{#v2026-09-15-1\}
@@ -537,6 +591,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Rule descriptions restored in Integration Errors.** The by-rule view (and the rule tooltips) had lost the description of every CIUS-FR, EXT-CTC-FR and CPRO rule: the description catalog still read the schematron files under their pre-upgrade names, and two label formats (CPRO's space separator, slash-labelled ids like `BR-FR-32-LEGALID`) escaped the parser. The catalog now follows the shipped schematron list automatically — a future schematron package upgrade can no longer strip the descriptions — and both label formats are parsed. Descriptions climb from 979 rules to 1205.
 - **Live process events readable.** In the IT dashboard's live feed, intermediate step events (PARSE, VALIDATION, DBINSERT…, SENDTOPA) overflowed their badge column and displayed clipped; the column is now sized for step names and every event renders as an aligned badge like START/END.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.14.1 — 2026-09-14 \{#v2026-09-14-1\}
@@ -556,6 +611,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Group / Columns menus scroll.** The grid's Group-by and Columns menus are capped at half the window and scroll internally, so long column lists stay fully reachable.
 - **Edited invoices keep every original detail.** Saving from the edit window rebuilt the XML from the form alone: repeated elements not shown in the form (additional notes, references…) lost all but their first occurrence, invoice-line elements could come out in an order the XSD rejects, and the deliver-to identifier on lines lost its scheme (Schematron EXT-FR-FE-146). All three are fixed — content not shown in the form is preserved as-is, the line element order follows UBL 2.1, and identifier schemes survive the round-trip; the buyer's SIRET and SIREN identifications are carried through as proper buyer identifiers.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.13.1 — 2026-09-13 \{#v2026-09-13-1\}
@@ -571,6 +627,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **API request log shows the multipart detail.** The DEBUG line for a connector call with a multipart body now lists each resolved part (file parts as their path, text parts with their final values) — a PA rejecting a body field can be diagnosed from the log instead of guessing.
 - **E-Directory: Esker directory format supported.** The routing-lines listing also understands numeric reachability flags (Esker's `HasAssignedPlatform` 1/0) in addition to true/false.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.12.1 — 2026-09-12 \{#v2026-09-12-1\}
@@ -584,6 +641,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **UBL templates: conditions accept element paths.** In the pipe-separated specs for custom extension fields, notes and item properties, the condition and non-empty columns now accept a slash path (e.g. `Facture_Entete_S4/CLI_TYPE_ID242`) in addition to a plain element name — required for source files whose fields sit below an intermediate group. Plain names behave exactly as before, so existing templates are unaffected; the value column already supported paths.
 - **API reference brought up to date.** The documentation served at `/api/docs` now covers every endpoint — around forty entries had accumulated undocumented, including the whole Reports section (statistics, query tool, saved reports), the lifecycle integrity and ordering checks, the invoice status detail, the VAT declaration, background jobs and system information, SQL connectors, and the password-reset / OIDC sign-in flows. Request and response examples reflect the actual payloads, and three new sections (Reports, VAT, System) organise the reading.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.11.1 — 2026-09-11 \{#v2026-09-11-1\}
@@ -597,6 +655,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
 - **Invoice window: stale messages cleared.** The confirmation shown after *Resend to PA* (and the validation / edit results) no longer lingers after closing the window — every message now clears when the window closes or another invoice is opened.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.10.1 — 2026-09-10 \{#v2026-09-10-1\}
@@ -607,6 +666,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Failed archive writes now say why.** When the invoice archive row (F564230) cannot be written from a UBL source, the result shows the actual cause (missing mandatory field, database error) instead of pointing at the log — and a length-constraint violation lists every written value with its size, naming the offending column immediately.
 - **VAT point date (BT-8) per company, and on the readable PDF.** For invoices under "TVA sur les débits", the VAT point date code is now a company-level default: each supplier company (XSL Editor, Suppliers tab) can set it — invoice date, delivery date or paid to date — used whenever the source file carries no value; the source mapping keeps priority. The codes and their labels live in a new *VAT point date codes* reference list, editable under Settings like the other code lists. The readable PDF now displays the VAT point as its meaning (e.g. « Exigibilité TVA : Date de facture (débits) »), including when the invoice period carries no dates. Existing installations must run the upgrade (templates and reference list).
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.09.1 — 2026-09-09 \{#v2026-09-09-1\}
@@ -624,6 +684,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Status updates can no longer be lost or misordered.** Three long-standing race conditions in the status polls are closed: two flows writing the same invoice at the same moment no longer collide on the lifecycle table (the loser now retries instead of dropping the event); the import check no longer applies a stale outcome — and no longer knocks the status backwards — when the lifecycle poll advanced the invoice during the run; and events created around a poll's cutoff are no longer skipped forever — each run now re-scans a short overlap, with duplicates structurally impossible.
 - **Pre-lifecycle statuses stay in their place.** Internal platform stages (export validated, import validated…) are no longer appended once the invoice's official lifecycle has started, on any retrieval path.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.08.1 — 2026-09-08 \{#v2026-09-08-1\}
@@ -633,6 +694,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Reprocess scope tightened.** Reprocess (invoice list, IT dashboard card, `-reprocess` command) now applies only to deposited-but-not-transmitted invoices (200 with reason NON_TRANSMISE); validated-never-sent invoices (9901) are no longer offered, in addition to yesterday's removal of rejected invoices (213).
 - **Bank details per company.** Each supplier company in the XSL Editor (Suppliers tab) can now carry its IBAN (BT-84), BIC (BT-86) and account holder (BT-85). When the source file provides no value and the payment means is a credit transfer (codes 30, 42, 58 — the only ones where the IBAN is mandatory), the invoice's company details are used automatically. Other payment means and self-billed invoices are unaffected. Existing installations must run the upgrade for their document templates to gain the fallback.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.07.1 — 2026-09-07 \{#v2026-09-07-1\}
@@ -654,6 +716,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Amounts without a leading digit no longer fail validation.** A negative amount below one euro coming from JDE as `-.80` is now emitted as `-0.80`, as required by the French decimal rules (BR-FR-DEC-01). Existing installations must run the upgrade for their document templates to pick up the correction.
 - **Send failures (9904) now record their cause.** The status message and the error detail carry the actual reason — timeout, connection failure, or the platform's HTTP response — instead of a generic "send failed". A timeout after the platform accepted the invoice (invoice present at the PA but no identifier stored) is now recognisable directly on the invoice, so you know to verify at the PA before resending.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.06.1 — 2026-09-06 \{#v2026-09-06-1\}
@@ -674,6 +737,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **E-reporting status labels no longer show blank.** Status codes added after your configuration was created (9958, 9959…) now display their built-in labels; your customized labels keep priority.
 - **The web interface updates immediately after a deployment.** Browsers could keep running the previous version of the interface from cache after a server update; pages are now revalidated on every load, and the application bundles are cached efficiently.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.05.1 — 2026-09-05 \{#v2026-09-05-1\}
@@ -689,6 +753,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Statuses received from the PA now trigger notification rules.** Statuses fetched by the lifecycle poll (Rejected 213, Refused 210, Deposited 200 with a reason…) updated the invoice but bypassed the notification engine — rules on those statuses only fired from the manual test button. They now go out on the configured channels like any other status change.
 - **Splitting a large spool across parallel workers no longer aborts with an internal error.** Even after the 2026.09.03.1 fix, bursting a multi-invoice file could still fail intermittently with a fatal indexing error: the parallel workers were still reading from one shared in-memory copy of the source file. Each invoice now gets its own private copy before the work is split, so parallel runs complete reliably.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.04.1 — 2026-09-04 \{#v2026-09-04-1\}
@@ -707,6 +772,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Reliable high-volume and parallel processing.** Processing a large spool or a big folder could occasionally fail with an internal error, report a duplicate log-entry error, exhaust system resources, or print a spurious "could not load status definitions" warning. These no longer happen, so large runs at full parallelism complete cleanly.
 - **Invoice lines without a delivery block are no longer dropped.** In the PDF-to-XML conversion, a line with no preceding delivery/BL block (for example a standalone shipping charge) could be placed outside its delivery grouping and then skipped further down the pipeline — losing a real line and unbalancing the invoice total. Such lines now stay grouped and are kept, so line counts and totals reconcile.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.03.1 — 2026-09-03 \{#v2026-09-03-1\}
@@ -717,6 +783,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Processing large spools in parallel no longer fails intermittently.** On big spools, concurrent workers could abort a run with an internal indexing error; the invoice records are now snapshotted before being split across threads, so runs at full parallelism complete reliably.
 - **Amounts with a trailing minus sign are read as negative.** Source values where the sign trails the number (mainframe/COBOL overpunch, e.g. `123.45-`) are now converted to proper negative amounts (`-123.45`) in the UBL and the readable PDF, instead of being treated as positive. Well-formed values are unaffected.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.09.01.1 — 2026-09-01 \{#v2026-09-01-1\}
@@ -738,6 +805,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Status polling supports platforms that return a plain list.** The lifecycle-status poll now also reads a bare JSON array response, not only a list wrapped under a named field — so report-style status endpoints can be wired up.
 - **Supplier electronic address (BT-34) is now saved.** In UBL Defaults → supplier companies, the electronic address field persists on save like every other company field.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.08.31.1 — 2026-08-31 \{#v2026-08-31-1\}
@@ -749,6 +817,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   - **IT dashboard** — the new **To reprocess** card shows how many invoices are eligible and reprocesses them all in one click.
   - **Command line** — `./nomaubl.sh reprocess <env>` reprocesses every eligible invoice, for scheduling or bulk runs.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.08.29.1 — 2026-08-29 \{#v2026-08-29-1\}
@@ -1408,6 +1477,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   carrying 2,132 invoices: one wrapper per invoice, line items
   and totals all contained.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.06.15 — 2026-06-15 \{#v2026-06-15\}
@@ -1448,6 +1518,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   the contract in either mode, so XSLs that key on the OI suffix
   work without the manifest.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.06.14 — 2026-06-14 \{#v2026-06-14\}
@@ -1497,6 +1568,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   import-status and invoice-statuses have been removed — the
   toggle covers all endpoints uniformly.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.06.13 — 2026-06-13 \{#v2026-06-13\}
@@ -1574,6 +1646,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   counted as `success=1` in the run summary; counts now match
   what actually happened.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.06.12 — 2026-06-12 \{#v2026-06-12\}
@@ -1715,6 +1788,7 @@ If you have already upgraded and see that error, copy the three
 files from `${env}/xsl/` to `${env}/ubl/` and re-run the
 processing — or apply 2026.06.12 and re-run the upgrade.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.06.10 — 2026-06-10 \{#v2026-06-10\}
@@ -1766,6 +1840,7 @@ UBL and robustness fixes.
   asset paths now return a proper 404 instead of `index.html`
   with `text/html`; a refresh recovers the page.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.06.03 — 2026-06-03 \{#v2026-06-03\}
@@ -1801,6 +1876,7 @@ fails overnight is picked up automatically the next morning.
   button, and a *Run in background* button that hides the window
   while the work keeps going server-side.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.06.02 — 2026-06-02 \{#v2026-06-02\}
@@ -1880,6 +1956,7 @@ a JVM-options hook for the master key location.
   The form used to fall back to defaults after Save; values now
   refresh from the freshly-saved record.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.26 — 2026-05-26 \{#v2026-05-26\}
@@ -1940,6 +2017,7 @@ Oracle and Windows installs.
   buyer's postal address was placed after the VAT identifier,
   which strict schema validators reject. Order fixed.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.24 — 2026-05-20 \{#v2026-05-24\}
@@ -1969,6 +2047,7 @@ the right set of invoices.
     to align with the VAT declaration page.
   The toggle is remembered for the current session.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.23 — 2026-05-20 \{#v2026-05-23\}
@@ -2024,6 +2103,7 @@ Existing installations keep their current behaviour after the
 upgrade. The new switches default to whatever was previously
 configured. No file edits required.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.22 — 2026-05-19 \{#v2026-05-22\}
@@ -2054,6 +2134,7 @@ the previous version, or turn on **Compare** in the toolbar and
 pick two rows yourself. Close the comparison with **Escape** or
 the **Close** button to return to the history.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.21 — 2026-05-19 \{#v2026-05-21\}
@@ -2110,6 +2191,7 @@ information and appear as "France" by default until they're
 reprocessed. Any new invoice from now on lands with the right
 country.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.20 — 2026-05-19 \{#v2026-05-20\}
@@ -2172,6 +2254,7 @@ column rename) in one pass.
   directly at the master key resolution instead of saying "Invalid
   license key format".
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.19 — 2026-05-19 \{#v2026-05-19\}
@@ -2214,6 +2297,7 @@ back-compat shim. Drop and re-create the three e-Reporting tables
 (F564260 / F564261 / F564262) before the next run. Existing F564231
 rows pick up `UHDRIN = '2'` (outbound) via the column default.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.18 — 2026-05-18 \{#v2026-05-18\}
@@ -2245,6 +2329,7 @@ filter.
   resolved against the document-template direction map at query time,
   independent of what's in the stored spec.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.17 — 2026-05-18 \{#v2026-05-17\}
@@ -2289,6 +2374,7 @@ same Invoices list, same status workflow, same detail modal.
   the template name already stored on the row (`UHTMPL`), so
   existing rows keep working without any migration.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.16 — 2026-05-14 \{#v2026-05-16\}
@@ -2328,6 +2414,7 @@ long-standing display bug in the processing log is fixed.
   same second, the page was splitting them into multiple rows tagged
   PARTIAL. Events now stay grouped under their original job.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.15 — 2026-05-14 \{#v2026-05-15\}
@@ -2368,6 +2455,7 @@ query or REST API.
 - **Custom list editor**: the saved endpoint was sometimes missing
   from the dropdown when re-opening the editor. Fixed.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.14 — 2026-05-14 \{#v2026-05-14\}
@@ -2388,6 +2476,7 @@ easy to discover and insert.
 - Same picker is reused in custom actions, so any column that drives
   a notification can also drive a downstream API call.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.13 — 2026-05-14 \{#v2026-05-13\}
@@ -2412,6 +2501,7 @@ statuses in Advanced Filters → Run now actually returns the union.
   fit side by side. Going back to a single-value operator restores
   the original width.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.12 — 2026-05-14 \{#v2026-05-12\}
@@ -2434,6 +2524,7 @@ when typing in a column filter or flipping pages.
   of a plain text input. Numeric codes and Oracle-padded values now
   match correctly.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.11 — 2026-05-13 \{#v2026-05-11\}
@@ -2456,6 +2547,7 @@ means, VAT categories, statuses, etc.).
   (e.g. `IN_PROGRESS`) instead of the French/English label. Fixed —
   status pickers now show the human label.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.10 — 2026-05-13 \{#v2026-05-10\}
@@ -2493,6 +2585,7 @@ formats, their filters — without writing code.
   used to overflow when many codes were active. Caps at 5 inline
   chips now, with a "+N more" dropdown for the rest.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.9 — 2026-05-12 \{#v2026-05-9\}
@@ -2551,6 +2644,7 @@ several quality-of-life improvements.
   characters (`é` showed as `é`) and embedded newlines now
   display correctly in the invoice lifecycle.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.8 — 2026-05-09 \{#v2026-05-8\}
@@ -2583,6 +2677,7 @@ system templates have a consistent tabbed layout.
   silently writing to the wrong template — removed, with a pointer
   to the right place (`global` → Scheduling).
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.7 — 2026-05-09 \{#v2026-05-7\}
@@ -2629,6 +2724,7 @@ detail modal.
 - Filesystem widget groups paths by partition so the same disk usage
   bar doesn't repeat for every directory on the same mount.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.6 — 2026-05-09 \{#v2026-05-6\}
@@ -2657,6 +2753,7 @@ errors, scheduler, etc.
   perfectly valid configurations because it validated property names
   that haven't existed for months.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.5 — 2026-05-08 \{#v2026-05-5\}
@@ -2701,6 +2798,7 @@ and several long-standing Oracle quirks are fixed.
   error on two lines (header on top, message below) so long rule text
   stops competing for horizontal space.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.4 — 2026-05-07 \{#v2026-05-4\}
@@ -2740,6 +2838,7 @@ themselves.
   the WHERE clause collapsed and both queries returned zero rows.
   Fixed.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.3 — 2026-05-06 \{#v2026-05-3\}
@@ -2769,6 +2868,7 @@ in the UI.
 - **Retention**: notifications older than `notificationsRetentionDays`
   in global settings (default 90 days) are cleaned up daily.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.2 — 2026-05-06 \{#v2026-05-2\}
@@ -2806,6 +2906,7 @@ documents) plus several round-trip integrity fixes.
   placeholders like `{content}` or `{statusAt}` — leaving
   `config.json` unparseable on next reload. Fixed.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.1 — 2026-05-05 \{#v2026-05-1\}
@@ -2838,6 +2939,7 @@ editor — design once, reuse across many documents.
 - **Editor freeze** on rapid edits: the canvas editor was re-rendering
   on every keystroke and stealing focus. Fixed.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.05.0 — 2026-05-05 \{#v2026-05-0\}
@@ -2879,6 +2981,7 @@ itself deciding which pipeline to run.
 - The `/invoice/view` PDF preview route accepts either the UBL
   invoice number (`?id=...`) or the composite key (`?doc=&dct=&kco=`).
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.04.10 — 2026-05-04 \{#v2026-04-10\}
@@ -3017,6 +3120,7 @@ data model and the settings editors.
   listed alongside the others, and the displayed version numbers no
   longer fall back to the embedded EN 16931 source version.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.04.2 — 2026-04-29 \{#v2026-04-2\}
@@ -3027,6 +3131,7 @@ data model and the settings editors.
   existing invoice from the History tab (and the standalone validate
   path) was failing with a schema error. Fixed.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.04.1 — 2026-04-29 \{#v2026-04-1\}
@@ -3057,6 +3162,7 @@ data model and the settings editors.
   "No such file or directory". Both fixed — uploads go to
   `<input>/ubl/` and validation resolves the path correctly.
 
+toc_max_heading_level: 2
 ---
 
 ## 2026.04.0 — 2026-04-29 \{#v2026-04-0\}
@@ -3093,6 +3199,7 @@ feature, alongside a new Processing Log and a new Release Notes page.
 - The **Roles** editor exposes the two new pages (Processing Log,
   Release Notes) so existing roles can be granted access.
 
+toc_max_heading_level: 2
 ---
 
 ## 1.0.0 — Initial release
