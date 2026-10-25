@@ -22,126 +22,155 @@ La matrice est servie depuis les lignes de détail TVA enregistrées (`F564234`)
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="vat-pg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="vat-pg-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="vat-pg-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="vat-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="vat-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="vat-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="vat-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="420" rx="14" fill="url(#vat-pg-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
+  <rect x="220" y="20" width="880" height="430" rx="14" fill="url(#vat-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Déclaration de TVA</text>
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="240" y="84" width="100" height="26" rx="6" fill="url(#vat-pg-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="290" y="101" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">📅 Avril 2026 ▾</text>
-  <rect x="348" y="84" width="56" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="376" y="101" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Mois</text>
-  <rect x="410" y="84" width="76" height="26" rx="6" fill="none" stroke="#334155" strokeWidth="1"/>
-  <text x="448" y="101" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Trimestre</text>
-  <rect x="494" y="84" width="86" height="26" rx="6" fill="none" stroke="#334155" strokeWidth="1"/>
-  <text x="537" y="101" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Société ▾</text>
-  <rect x="660" y="84" width="56" height="26" rx="6" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
-  <text x="688" y="101" fill="#22c55e" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">▣ Excel</text>
-  <rect x="722" y="84" width="58" height="26" rx="6" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
-  <text x="751" y="101" fill="#c084fc" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">📄 PDF CA3</text>
-
-  <text x="240" y="138" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">VENTES</text>
-  <rect x="240" y="146" width="540" height="32" rx="4" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="166" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▾  France</text>
-  <text x="572" y="166" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">128 450,00</text>
-  <text x="672" y="166" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">23 110,00</text>
-  <text x="772" y="166" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">412 factures</text>
-
-  <rect x="262" y="184" width="518" height="26" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="274" y="201" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">20 %</text>
-  <text x="572" y="201" fill="#cbd5e1" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">115 550,00</text>
-  <text x="672" y="201" fill="#cbd5e1" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">23 110,00</text>
-  <text x="772" y="201" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">370</text>
-
-  <rect x="262" y="214" width="518" height="26" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="274" y="231" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">5,5 %</text>
-  <text x="572" y="231" fill="#cbd5e1" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">12 900,00</text>
-  <text x="672" y="231" fill="#cbd5e1" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">709,50</text>
-  <text x="772" y="231" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">42</text>
-
-  <rect x="240" y="248" width="540" height="28" rx="4" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="266" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▸  Intra-UE</text>
-  <text x="572" y="266" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">18 200,00</text>
-  <text x="672" y="266" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">— (exonéré)</text>
-  <text x="772" y="266" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">38</text>
-
-  <rect x="240" y="280" width="540" height="28" rx="4" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="298" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▸  Hors UE</text>
-  <text x="572" y="298" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">9 800,00</text>
-  <text x="672" y="298" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">— (exonéré)</text>
-  <text x="772" y="298" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">12</text>
-
-  <text x="240" y="334" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">ACHATS</text>
-  <rect x="240" y="342" width="540" height="28" rx="4" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="360" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▸  France</text>
-  <text x="572" y="360" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">42 100,00</text>
-  <text x="672" y="360" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">7 530,00</text>
-  <text x="772" y="360" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">157 factures</text>
-
-  <rect x="240" y="374" width="540" height="28" rx="4" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="392" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▸  Acquisitions intra-UE</text>
-  <text x="572" y="392" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">5 600,00</text>
-  <text x="672" y="392" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">1 120,00</text>
-  <text x="772" y="392" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">9</text>
-
-  <rect x="240" y="416" width="200" height="22" rx="11" fill="rgba(255,69,58,0.10)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="340" y="431" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Solde · TVA à payer  16 169,50 €</text>
-
-  <rect x="20" y="80" width="180" height="44" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="98" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sélecteur de période</text>
-  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">par défaut : mois complet précédent</text>
-  <line x1="200" y1="100" x2="240" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-pg-arrow)"/>
-
-  <rect x="820" y="156" width="160" height="44" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="174" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois colonnes</text>
-  <text x="830" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">base · TVA · nombre</text>
-  <line x1="820" y1="170" x2="780" y2="166" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-pg-arrow)"/>
-
-  <rect x="20" y="240" width="180" height="44" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="258" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Zone géographique</text>
-  <text x="30" y="272" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">France / Intra-UE / Hors UE</text>
-  <line x1="200" y1="258" x2="240" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-pg-arrow)"/>
-
-  <rect x="820" y="404" width="160" height="44" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="422" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bloc Solde</text>
-  <text x="830" y="436" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">TVA à payer ou crédit</text>
-  <line x1="820" y1="424" x2="780" y2="427" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-pg-arrow)"/>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">La TVA d'une période au format de la CA3 : collectée, déductible et nette ; un montant ouvre les factures qui le composent.</text>
+  <rect x="240" y="82" width="120" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="241" y="83" width="44" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="263.0" y="97.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Mois</text>
+  <line x1="286" y1="87" x2="286" y2="101" stroke="#334155" strokeWidth="1"/>
+  <text x="323.0" y="97.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Trimestre</text>
+  <rect x="368" y="83" width="55" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="378" y="97.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">2026 ▾</text>
+  <rect x="431" y="83" width="83" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="441" y="97.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">septembre ▾</text>
+  <rect x="522" y="83" width="139" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="532" y="97.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Toutes les sociétés ▾</text>
+  <rect x="673" y="89" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M675.5,94.5 L677.8,96.8 L681.8,92" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="690" y="98" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Exclure refusées et rejetées</text>
+  <rect x="843.12" y="89" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="860.12" y="98" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Exclure les factures non parvenues à la plateforme</text>
+  <rect x="976" y="112" width="52" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1002.0" y="126.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Excel</text>
+  <rect x="1036" y="112" width="44" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1058.0" y="126.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">PDF</text>
+  <text x="240" y="126" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">1 sept. 2026 – 30 sept. 2026</text>
+  <text x="390" y="126" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">comparé au 1 août 2026 – 31 août 2026</text>
+  <rect x="240.0" y="138" width="273.3333333333333" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252.0" y="156" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TVA COLLECTÉE</text>
+  <text x="252.0" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">250 631,56 €</text>
+  <text x="252.0" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">1 253 157,80 € HT · 2 361 factures</text>
+  <text x="252.0" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+4,2 % contre 240 524,10 €</text>
+  <rect x="523.3333333333333" y="138" width="273.3333333333333" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="535.3333333333333" y="156" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TVA DÉDUCTIBLE</text>
+  <text x="535.3333333333333" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">98 412,30 €</text>
+  <text x="535.3333333333333" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">492 061,50 € HT · 418 factures</text>
+  <text x="535.3333333333333" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">−1,8 % contre 100 216,00 €</text>
+  <rect x="806.6666666666666" y="138" width="273.3333333333333" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="818.6666666666666" y="156" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TVA À PAYER</text>
+  <text x="818.6666666666666" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">152 219,26 €</text>
+  <text x="818.6666666666666" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Collectée − déductible</text>
+  <text x="818.6666666666666" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+8,6 % contre 140 308,10 €</text>
+  <rect x="240" y="230" width="840" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LIGNE</text>
+  <text x="720" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BASE HT</text>
+  <text x="860" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TVA</text>
+  <text x="1000" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">FACTURES</text>
+  <rect x="240" y="258" width="840" height="22" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Ventes (TVA collectée)</text>
+  <text x="720" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1 253 157,80</text>
+  <text x="860" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">250 631,56</text>
+  <text x="1000" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 361</text>
+  <rect x="240" y="284" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">   France</text>
+  <text x="720" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1 101 840,00</text>
+  <text x="860" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">220 368,00</text>
+  <text x="1000" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 102</text>
+  <rect x="240" y="310" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">      ▸ 20 %</text>
+  <text x="720" y="324.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">1 080 000,00</text>
+  <text x="860" y="324.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">216 000,00</text>
+  <text x="1000" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 050</text>
+  <rect x="240" y="336" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">      ▸ 10 %</text>
+  <text x="720" y="350.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">21 840,00</text>
+  <text x="860" y="350.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">2 184,00</text>
+  <text x="1000" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">52</text>
+  <rect x="240" y="362" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">   Intra-UE</text>
+  <text x="720" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">151 317,80</text>
+  <text x="860" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">30 263,56</text>
+  <text x="1000" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">259</text>
+  <rect x="240" y="388" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Achats (TVA déductible)</text>
+  <text x="720" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">492 061,50</text>
+  <text x="860" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">98 412,30</text>
+  <text x="1000" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">418</text>
+  <rect x="240" y="414" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">TVA à payer — Collectée − déductible</text>
+  <text x="720" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="860" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">152 219,26</text>
+  <text x="1000" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <rect x="20" y="78" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="93" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Mois ou trimestre</text>
+  <text x="30" y="106" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dernier mois complet par défaut</text>
+  <line x1="200" y1="95.0" x2="240" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="20" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois indicateurs</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">vs mois ou trimestre précédent</text>
+  <line x1="200" y1="177.0" x2="240" y2="178" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="20" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sens, zone, taux</text>
+  <text x="30" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">totaux sur chaque ligne</text>
+  <line x1="200" y1="277.0" x2="250" y2="270" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="20" y="400" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="415" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">TVA nette</text>
+  <text x="30" y="428" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à payer ou crédit</text>
+  <line x1="200" y1="417.0" x2="250" y2="426" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="1120" y="52" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="67" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Société</text>
+  <text x="1130" y="80" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">depuis la liste des sociétés</text>
+  <line x1="1120" y1="69.0" x2="582" y2="82" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="1120" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Deux exclusions</text>
+  <text x="1130" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">expliquées au survol</text>
+  <line x1="1120" y1="113.0" x2="1038.1200000000001" y2="104" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="1120" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Excel et PDF</text>
+  <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">synthèse + détail · CA3</text>
+  <line x1="1120" y1="177.0" x2="1080" y2="123" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="1120" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clic sur un montant</text>
+  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ouvre les factures</text>
+  <line x1="1120" y1="307.0" x2="780" y2="325" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
 </svg>
 
 ---
 
-## Barre d'outils
+## Barre de filtres
 
-La barre d'outils au-dessus de la matrice fixe la **période**, un **filtre société** optionnel et les **boutons d'export**.
-
-<div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)'}}>
-  <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
-    <span style={{padding: '6px 12px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '12px', fontWeight: 600, color: '#4a9eff'}}>📅 Avril 2026 ▾</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '12px', fontWeight: 600, color: '#4a9eff'}}>Mois</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>Trimestre</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>Société ▾</span>
-    <span style={{flex: 1, minWidth: '8px'}} />
-    <span style={{padding: '5px 12px', borderRadius: '6px', background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.4)', fontSize: '12px', fontWeight: 600, color: '#22c55e'}}>▣ Excel</span>
-    <span style={{padding: '5px 12px', borderRadius: '6px', background: 'rgba(192,132,252,0.10)', border: '1px solid rgba(192,132,252,0.4)', fontSize: '12px', fontWeight: 600, color: '#c084fc'}}>📄 PDF CA3</span>
-  </div>
-</div>
+Une seule barre règle la période, la société et les deux exclusions, comme sur les tableaux de bord.
 
 | Contrôle | Effet |
 |---|---|
-| **Sélecteur de période** | Choisit la période couverte par la matrice. Par défaut, le **mois complet précédent** — celui que vous déclarez. Basculez sur **Trimestre** pour une déclaration trimestrielle. Le filtre s'applique à la **date d'émission de la facture** (celle imprimée sur la facture elle-même) : la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures propose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) — un clic sur un montant ouvre la liste Factures avec ce sélecteur déjà positionné, donc le nombre affiché correspond à celui d'où l'on vient. |
-| **Boutons Mois / Trimestre** | Basculent entre un pas mensuel et un pas trimestriel. Le libellé du sélecteur de période s'adapte (par ex. *T2 2026*). |
-| **Société** | Optionnel. Restreint la période aux factures d'un code société (KCO). Par défaut : *Toutes les sociétés*. |
-| **Exclure toutes les refusées et rejetées** | Cochée par défaut. Écarte toutes les factures refusées par l'acheteur (`210`) ou rejetées par la plateforme (`213`) : elles appellent un avoir interne. Décochée, seules celles que le service client a marquées comme vues sont écartées — voir [Factures écartées](#excluded-invoices). |
-| **Exclure les factures à envoyer non parvenues à la plateforme** | Décochée par défaut. Écarte aussi les factures à envoyer dont le statut est encore interne : échec de validation, d'envoi ou d'import, ou pas encore envoyées. |
-| **▣ Excel** | Télécharge le classeur décrit dans [Export Excel](#export-excel). |
-| **📄 PDF CA3** | Télécharge la synthèse au format CA3 décrite dans [Export PDF — mise en page CA3](#export-pdf--mise-en-page-ca3). |
+| **Mois / Trimestre** | Déclaration mensuelle ou trimestrielle. La page s'ouvre sur le **mois complet précédent** — celui que l'on déclare. |
+| **Année** et **mois** / **trimestre** | La période : l'année en cours et les cinq précédentes ; un nom de mois, ou `T1` à `T4`. L'indication sous la barre donne les dates et la période précédente utilisée pour les écarts (*comparé au …*). La période s'applique à la **date d'émission de la facture** : elle reste stable même si les données sont reconstruites plus tard. |
+| **Société** | Une liste des sociétés (la [liste personnalisée](../configuration/custom-lists.md#ready-made-lists) `list-companies`) ; *Toutes les sociétés* par défaut. |
+| **Exclure refusées et rejetées** | Activé par défaut. Les factures refusées (`210`) ou rejetées (`213`) appellent un avoir interne : activé, toutes sont exclues ; désactivé, seulement celles marquées vues par le service client — voir [Factures écartées](#excluded-invoices). L'explication s'affiche au survol. |
+| **Exclure les factures non parvenues à la plateforme** | Désactivé par défaut. Écarte aussi les factures à envoyer dont le statut est encore interne : échec de validation, d'envoi ou d'import, ou pas encore envoyées. |
+| **Excel** | Télécharge le classeur décrit dans [Export Excel](#export-excel). |
+| **PDF** | Télécharge la synthèse au format CA3 décrite dans [Export PDF — mise en page CA3](#export-pdf--mise-en-page-ca3). |
+
+---
+
+## Chiffres clés
+
+| Chiffre | Valeur | Ligne de détail |
+|---|---|---|
+| **TVA collectée** | TVA des ventes. | Base HT et nombre de factures. |
+| **TVA déductible** | TVA des achats. | Base HT et nombre de factures. |
+| **TVA à payer** / **Crédit de TVA** | Collectée moins déductible ; affichée *Crédit de TVA*, en vert, quand elle est négative. | *Collectée − déductible*. |
+
+Sous chaque chiffre, l'écart au mois ou au trimestre précédent (`+4,2 %`) et le montant précédent (`contre …`), calculés avec la même société et les mêmes exclusions.
 
 ---
 
@@ -160,17 +189,16 @@ Les deux règles s'appliquent à la matrice, au détail, à l'export Excel et au
 
 ## La matrice CA3
 
-La matrice s'ouvre **repliée** au niveau des zones géographiques — *France*, *Intra-UE* et *Hors UE*, pour les *Ventes* comme pour les *Achats*. Chaque ligne affiche trois chiffres : **base imposable** (Total HT), **montant de TVA** (Total TVA) et le **nombre de factures**.
+Le tableau se lit par **sens**, puis par **zone**, puis par **taux** :
 
-Cliquez sur le chevron d'une ligne pour la déplier ; un nouveau clic la replie. La matrice comporte **trois niveaux de dépliement** sous chaque zone :
+| Ligne | Contenu |
+|---|---|
+| **Ventes (TVA collectée)** / **Achats (TVA déductible)** | Le sens avec ses totaux — base HT, TVA et nombre de factures. Les ventes d'abord ; un sens sans facture n'est pas affiché. |
+| **France**, **Intra-UE**, **Hors UE** | Chaque zone une fois, avec son sous-total. |
+| **Taux** (`20 %`, `10 %`…, *Sans taux*) | Une ligne par taux présent dans la zone, du plus élevé au plus faible, repliée. Sa flèche ouvre une ligne par routage BAR (`B2B`, `B2C`, `B2BINT`, `B2G`…), dont la flèche ouvre les factures — document, type, société, base et TVA, jusqu'à **200 lignes** (l'export Excel contient la liste complète). |
+| **TVA à payer** / **Crédit de TVA** | La TVA nette de la période, *Collectée − déductible*. |
 
-| Niveau | Contenu | Exemple |
-|---|---|---|
-| **1 — Taux de TVA** | Une ligne par taux présent dans la période pour cette zone. | `20 %`, `10 %`, `5,5 %`, `2,1 %`, `0 %`. |
-| **2 — Type de facture** | Sous une ligne de taux, une ligne par routage BAR — `B2B`, `B2C`, `B2BINT`, `B2G`, *non classé*. | Une ligne `20 %` de *France* se décompose en contributions B2B / B2C. |
-| **3 — Factures individuelles** | Sous une ligne de type, une ligne par facture : numéro, type, société, base imposable, montant de TVA. Plafonné à **200 lignes** en ligne — utilisez l'export Excel pour la liste complète. | `12345 / RI / 00070   Acme Industries SA   500,00   100,00`. |
-
-Chaque montant de la matrice est **cliquable**. Un clic ouvre la [liste Factures](./invoices.md) pré-filtrée sur le même ensemble — même période, même sens, même zone, même taux, même type quand cela s'applique — pour passer dans la liste opérationnelle sans ressaisir aucun filtre.
+Au survol, les montants des lignes de taux et de routage proposent *Voir les factures* : un clic ouvre la [liste des factures](./invoices.md) sur le même sens, la même zone et la même période, en date d'émission, et sur le même routage pour une ligne de routage. Le taux lui-même n'est pas transmis comme filtre. Les montants s'affichent dans la couleur normale.
 
 ### Règles de classement par zone
 
@@ -178,9 +206,9 @@ Le classement utilise le **pays de la contrepartie** capturé sur chaque facture
 
 | Zone | Ventes (émises) | Achats (reçues) |
 |---|---|---|
-| **France** | Pays de l'acheteur = `FR`. | Pays du fournisseur = `FR`. |
+| **France** | Pays de l'acheteur = `FR`, ou inconnu. | Pays du fournisseur = `FR`, ou inconnu. |
 | **Intra-UE** | Pays de l'acheteur dans les 26 autres États membres de l'UE. | Pays du fournisseur dans les 26 autres États membres de l'UE. |
-| **Hors UE** | Tout le reste (ou pays inconnu). | Tout le reste (ou pays inconnu). |
+| **Hors UE** | Tout autre pays. | Tout autre pays. |
 
 Les taux roulés sous *Ventes intra-UE* et *Ventes hors UE* apparaissent en exonéré (`—`) — ils ne contribuent pas à la colonne TVA, seulement à la base imposable. Les *Acquisitions intra-UE* côté Achats portent une TVA autoliquidée et contribuent à la fois à la base imposable et au montant de TVA.
 
@@ -205,7 +233,7 @@ Une erreur côté serveur — une erreur de base de données, par exemple — ne
 
 ## Export Excel
 
-Le bouton **▣ Excel** télécharge un classeur à deux feuilles :
+Le bouton **Excel** télécharge `vat-declaration-<début>-<fin>.xlsx`, un classeur à deux feuilles :
 
 | Feuille | Contenu |
 |---|---|
@@ -218,11 +246,11 @@ Les cellules de montant sont des nombres réels, pas du texte — totaux, tablea
 
 ## Export PDF — mise en page CA3
 
-Le bouton **📄 PDF CA3** télécharge une synthèse d'une page reprenant la mise en page du formulaire officiel **Cerfa 3310-CA3**, prête à être archivée avec le reste de la liasse comptable sans ressaisie.
+Le bouton **PDF** télécharge une synthèse d'une page reprenant la mise en page du formulaire officiel **Cerfa 3310-CA3** (`vat-declaration-<début>-<fin>.pdf`), prête à être archivée avec le reste de la liasse comptable sans ressaisie. Le PDF est en français quelle que soit la langue de l'interface, avec les formats français : montants `125 315,78`, taux `5,5 %`, période `01/09/2026 – 30/09/2026`. Son pied de page rappelle les règles d'exclusion appliquées.
 
 | Bloc | Lignes CA3 |
 |---|---|
-| **Section A — Opérations réalisées** | Ligne **01** (ventes soumises à TVA), **03** (acquisitions intra-UE), **04** (exportations hors UE), **06** (livraisons intra-UE), **7B** (autres opérations non imposables). |
+| **Section A — Opérations réalisées** | Ligne **01** (ventes soumises à TVA), **03** (acquisitions intra-UE), **04** (exportations hors UE), **06** (livraisons intra-UE), **7B** (achats de biens et services hors UE). |
 | **Section B — TVA brute puis déductible** | Une ligne par taux applicable : **08** (20 %), **9B** (10 %), **09** (5,5 %), **10** (2,1 %) et **14** (autres taux), avec total **16**. Puis **20** (TVA déductible sur biens et services) et total **23**. |
 | **Solde** | Soit **28** (*TVA à payer*) quand la période se solde en débit, soit **32** (*crédit*) quand la TVA déductible dépasse la TVA collectée. |
 

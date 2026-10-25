@@ -8,7 +8,7 @@ keywords: [NomaUBL, promotion, export, import, package, environments, dev, test,
 
 The **Promotion** page moves configuration from one instance to another — development to test, test to production — **item by item**, with the files each item uses. Export builds a package; import shows what the package would change, field by field, then writes it after a version snapshot. The keys that belong to an instance — passwords, URLs, hosts, the license, the environment name… — **never travel** and are never overwritten on the target.
 
-Open it from **Management → Promotion**. The page has four views: **Export** (build a package), **Promote** (send the selection straight to another instance), **Import** (apply a package) and **History**.
+Open it from **Management → Promotion**. The page has three views: **Export** (build a package, or promote the selection straight to another instance), **Import** (apply a package) and **History**.
 
 ---
 
@@ -206,12 +206,12 @@ The grid is the shared data table; its view is listed in the [List views](../con
 
 ## Promote to another instance \{#promote\}
 
-When the two instances can reach each other, the **Promote** view sends the selection of the Export view straight to a target instance, without handling a ZIP file. The package is built as for an export and sent to the target's own preview, then to its import.
+When the two instances can reach each other, the selection of the **Export** view is sent straight to a target instance, without handling a ZIP file. The package is built as for an export, sent to the target's own preview, then to its import.
 
 1. **Pick the items** in the Export view (with their dependencies).
-2. In **Promote**, choose the **Target instance** (the last one used is remembered), the policy for **Changed items and files** — *Replace with the package* or *Keep the target, write only new ones* — and a comment.
-3. **Dry run on the target**: the target answers with its own preview — new, changed, identical, skipped, with the field diffs — shown under *Target … · Preview*. Nothing is written.
-4. **Promote** applies that plan after a confirmation; the target takes a version snapshot before each write, and its instance keys keep their values. The result reads *Promoted to …: n item(s) and n file(s) written*.
+2. Under **Promote to an instance**, at the bottom of the Export side panel, choose the **Target instance** (the last one used is remembered) and click **Promote…**.
+3. The **Promote to …** window shows the target's own preview — new, changed, identical, skipped, with the field diffs. Nothing is written yet: *Promote checks the selection on the target first and shows what would change there; nothing is written until you confirm.*
+4. In the same window, choose the policy for **Changed items and files** — *Replace with the package* or *Keep the target, write only new ones* — and a comment, then click **Promote n item(s) and n file(s)**. The target takes a version snapshot before each write, and its instance keys keep their values. The window then reads *Promoted to …: n item(s) and n file(s) written*.
 
 The ZIP export stays for instances that cannot reach each other.
 

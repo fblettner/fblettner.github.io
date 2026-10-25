@@ -26,9 +26,9 @@ Open it from **Explorer**, in the Navigation group of the menu, next to [Reports
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Explorer</text>
   <rect x="370" y="32" width="143" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <rect x="371" y="33" width="64" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="403.0" y="46.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Analysis</text>
+  <text x="403.0" y="46.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Analyses 12</text>
   <line x1="436" y1="37" x2="436" y2="49" stroke="#334155" strokeWidth="1"/>
-  <text x="474.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Dashboards</text>
+  <text x="474.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Dashboards 3</text>
   <rect x="525" y="32" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="535" y="46.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Top customers ▾</text>
   <rect x="1036" y="32" width="44" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
@@ -137,6 +137,12 @@ Open it from **Explorer**, in the Navigation group of the menu, next to [Reports
 
 ---
 
+## Analyses and Dashboards tabs \{#tabs\}
+
+The first row of the Explorer holds two tabs, **Analyses** (the default) and **[Dashboards](#dashboards)**, each with the number saved. On the same row, at the right, sit the picker of the saved analyses (*Saved analyses…*, *— New analysis —*) or dashboards (*Dashboards…*, *— New dashboard —*), **Save**, and the delete button once one is picked.
+
+---
+
 ## The fields
 
 The left pane lists the fields of seven entities, with a search box:
@@ -222,7 +228,7 @@ Each analysis and each dashboard is one JSON file under the environment's config
 
 ## Dashboards \{#dashboards\}
 
-The **Dashboards** mode gathers saved analyses as **tiles** on a four-column grid, each with its width, its height and its view — chart, table or pivot. One **period** at the top applies to every tile. A tile drills like its analysis and opens it in the editor. **Edit layout** adds tiles (*Analysis to add…*, *Add tile*), moves them and sets their size.
+The **Dashboards** tab gathers saved analyses as **tiles** on a four-column grid, each with its width, its height and its view — chart, table or pivot. One **period** at the top applies to every tile. A tile drills like its analysis and opens it in the editor. **Edit layout** adds tiles (*Analysis to add…*, *Add tile*), moves them and sets their size.
 
 <svg viewBox="0 0 1200 410" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -338,11 +344,11 @@ NomaUBL installs twelve analyses and three dashboards, once; they are never over
 
 | Audience | Dashboard | Analyses |
 |---|---|---|
-| **IT** | Operations | Volume per document · Findings per day and source · Send and import failures · Invoices in a workflow status |
+| **IT** | Operations | Volume per document · Findings per day: validation / integration · Send and import failures · Invoices in a workflow status |
 | **Accounting** | Month end | VAT per month and rate · Amounts per status · Top customers · Invoices and credit notes per month |
 | **Audit** | Audit period | Findings per rule · Refusals and rejections per reason · Status events per month · Status statistics |
 
-*Status statistics* reproduces the pivot of the [Reports](reports/overview.md) page, whose tab stays as it is.
+*Status statistics* reproduces the detail table of the [Statistics](./statistics.md#detail-table) dashboard. *Findings per day* splits each day's findings into **validation** (the invoice data broke a Schematron or XSD rule, customer packs included) and **integration** (a technical step failed: platform, database, transformation, PDF, XML, UBL generation, validator, processing).
 
 ---
 

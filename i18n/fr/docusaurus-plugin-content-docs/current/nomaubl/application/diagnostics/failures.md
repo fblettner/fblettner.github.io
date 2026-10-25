@@ -160,8 +160,8 @@ Les groupes de statuts viennent du [catalogue des statuts](../../configuration/s
 
 ## Filtres
 
-- **Période** — hier par défaut.
-- **Type** — pastilles avec leur nombre ; décocher un type l'écarte.
+- **Période** — le [sélecteur de période](../../configuration/default-periods.md#period-picker) commun, sur la [période par défaut](../../configuration/default-periods.md#default-periods) de la vue *Diagnostics*.
+- **Type** — une sélection multiple parmi les cinq types ; *Tous les types* quand aucun n'est choisi.
 - **Modèle** et **Société** — restreindre à un document ou à une société ; les droits par société de l'utilisateur s'appliquent toujours aux types liés à une facture.
 - **Non résolues seulement** — coché par défaut. Masque les anomalies dépassées depuis : la facture a quitté les statuts d'erreur ou le statut de l'événement, ou une exécution réussie a suivi pour le fichier ou la tâche.
 - **Rechercher dans les messages (toutes les pages)** — la recherche se fait côté serveur, sur toutes les pages du résultat et pas seulement sur les lignes affichées.

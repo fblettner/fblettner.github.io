@@ -1,320 +1,333 @@
 ---
-title: Tableau de bord
-description: "Page d'accueil de NomaUBL — grille à 12 colonnes avec quatre cartes KPI hero (Total / En cours / Rejetée — IT / Rejetée — Business), funnel pipeline, graphique de volume, activité récente, factures bloquées, règles en échec, répartition par société, couverture e-reporting et aller-retour PA — pilotés par un seul filtre de plage de dates. Le suivi du planificateur se trouve sur le Tableau de bord IT dédié."
-keywords: [NomaUBL, tableau de bord, KPI, cartes hero, funnel pipeline, graphique de volume, activité récente, factures bloquées, règles en échec, couverture e-reporting, aller-retour, plage de dates, JD Edwards, SAP, NetSuite, ERP personnalisé]
+title: Exploitation
+description: "Le tableau de bord Exploitation de NomaUBL : ce que l'équipe a à traiter sur la période, en trois files de travail (en cours, à corriger puis renvoyer pour l'informatique, nouvelle facture à émettre pour le service client), le graphique d'activité, les factures bloquées depuis le plus longtemps, les derniers événements, les règles en échec, le délai aller-retour PA et la couverture e-reporting, en ventes ou en achats."
+keywords: [NomaUBL, tableau de bord exploitation, files de travail, en cours, à corriger, rejetée, en litige, refusée, graphique d'activité, factures bloquées, derniers événements, règles en échec, aller-retour, couverture e-reporting, ventes, achats, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
-# Tableau de bord
+# Exploitation
 
-Le **tableau de bord** est la page d'accueil de NomaUBL. Il s'ouvre par défaut après la connexion et présente l'état opérationnel de la plateforme sur une **grille à 12 colonnes** : quatre cartes KPI hero en tête, puis une série de widgets groupés deux par deux qui couvrent le volume d'ingestion, le pipeline du dispatcher, l'activité récente, les factures bloquées, les règles de validation en échec, la répartition par société, la couverture e-reporting et les durées d'aller-retour PA.
+Le tableau de bord **Exploitation** montre **ce que l'équipe a à traiter** sur la période. Il s'articule autour de trois files de travail, chacune associée à l'équipe concernée : ce qui est en cours et ne demande rien, ce que l'informatique doit corriger puis renvoyer, et ce que le service client doit régler en émettant une nouvelle facture. Viennent ensuite l'activité de la période, les factures bloquées depuis le plus longtemps, les derniers événements et les règles les plus souvent en échec. Toutes les valeurs proviennent de la base NomaUBL, quel que soit le système source (JD Edwards, SAP, NetSuite ou un ERP personnalisé).
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Toutes les valeurs proviennent de la base NomaUBL locale. Le tableau de bord reflète donc ce que NomaUBL a traité et enregistré, et non directement ce que conserve le système source ou la Plateforme Agréée.
+Accès : **Exploitation**, dans le groupe Navigation, après la [Synthèse](./billing-overview.md). Avec une licence restreinte, c'est la page d'ouverture de l'application. L'état technique du serveur se trouve sur le [tableau de bord IT](./tech-dashboard.md).
 
 ---
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 670" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 598" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="dash-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="dash-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="dash-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
-    <linearGradient id="dash-g-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4ade80" stopOpacity="0.28"/><stop offset="100%" stopColor="#22c55e" stopOpacity="0.10"/></linearGradient>
-    <linearGradient id="dash-g-red" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f87171" stopOpacity="0.32"/><stop offset="100%" stopColor="#dc2626" stopOpacity="0.10"/></linearGradient>
-    <linearGradient id="dash-g-orange" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fb923c" stopOpacity="0.32"/><stop offset="100%" stopColor="#ea580c" stopOpacity="0.10"/></linearGradient>
+    <marker id="ops-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="ops-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="ops-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="ops-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="640" rx="14" fill="url(#dash-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tableau de bord</text>
-  <rect x="472" y="30" width="160" height="22" rx="5" fill="none" stroke="#334155" strokeWidth="1"/>
-  <text x="552" y="45" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Exclure les erreurs traitées</text>
-  <rect x="640" y="30" width="146" height="22" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="650" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">📅 Hier ▾</text>
-
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="240" y="84" width="132" height="58" rx="8" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="252" y="102" fill="#94a3b8" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TOTAL FACTURES</text>
-  <text x="252" y="124" fill="#e2e8f0" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace">1 247</text>
-  <polyline points="312,134 322,128 332,132 342,124 352,126 362,118 366,120" stroke="#94a3b8" strokeWidth="1.2" fill="none" opacity="0.6"/>
-
-  <rect x="380" y="84" width="132" height="58" rx="8" fill="url(#dash-g-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="392" y="102" fill="#4a9eff" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">EN COURS</text>
-  <text x="392" y="124" fill="#e2e8f0" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace">184</text>
-  <polyline points="452,134 462,130 472,132 482,126 492,128 502,122 506,124" stroke="#4a9eff" strokeWidth="1.2" fill="none" opacity="0.7"/>
-
-  <rect x="520" y="84" width="132" height="58" rx="8" fill="url(#dash-g-red)" stroke="#f87171" strokeWidth="1.2"/>
-  <text x="532" y="102" fill="#f87171" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">REJETÉE — IT</text>
-  <text x="532" y="124" fill="#f87171" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace">12</text>
-
-  <rect x="660" y="84" width="132" height="58" rx="8" fill="url(#dash-g-orange)" stroke="#fb923c" strokeWidth="1.2"/>
-  <text x="672" y="102" fill="#fb923c" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">REJETÉE — BUSINESS</text>
-  <text x="672" y="124" fill="#fb923c" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace">5</text>
-
-  <rect x="240" y="158" width="552" height="86" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="178" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Funnel pipeline</text>
-  <rect x="254" y="190" width="100" height="40" rx="6" fill="rgba(74,222,128,0.18)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="304" y="206" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">VALIDÉE</text>
-  <text x="304" y="222" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="middle">1 102</text>
-  <text x="362" y="214" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">→</text>
-  <rect x="378" y="190" width="92" height="40" rx="6" fill="rgba(74,158,255,0.16)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="424" y="206" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">ENVOYÉE PA</text>
-  <text x="424" y="222" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="middle">1 080</text>
-  <text x="482" y="214" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">→</text>
-  <rect x="498" y="190" width="84" height="40" rx="6" fill="rgba(74,158,255,0.16)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="540" y="206" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">ATTENTE</text>
-  <text x="540" y="222" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="middle">184</text>
-  <text x="594" y="214" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">→</text>
-  <rect x="610" y="190" width="76" height="40" rx="6" fill="rgba(74,222,128,0.18)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="648" y="206" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">DÉPOSÉE</text>
-  <text x="648" y="222" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="middle">896</text>
-  <rect x="700" y="190" width="84" height="40" rx="6" fill="rgba(248,113,113,0.16)" stroke="#f87171" strokeWidth="1"/>
-  <text x="742" y="206" fill="#f87171" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">REJETÉE</text>
-  <text x="742" y="222" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="middle">17</text>
-
-  <rect x="240" y="260" width="552" height="84" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="278" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Volume quotidien — 30 jours</text>
-  <polyline points="252,330 282,322 312,316 342,300 372,294 402,288 432,302 462,290 492,278 522,284 552,272 582,266 612,278 642,260 672,266 702,256 732,272 762,260 792,266"
-    stroke="#4a9eff" strokeWidth="1.5" fill="none"/>
-  <polyline points="252,330 282,322 312,316 342,300 372,294 402,288 432,302 462,290 492,278 522,284 552,272 582,266 612,278 642,260 672,266 702,256 732,272 762,260 792,266 792,338 252,338"
-    fill="rgba(74,158,255,0.10)" stroke="none"/>
-
-  <rect x="240" y="360" width="270" height="160" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="378" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Activité récente</text>
-  <text x="254" y="396" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12345 RI 00070 · Déposée</text>
-  <text x="490" y="396" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">2 min</text>
-  <line x1="254" y1="403" x2="496" y2="403" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="416" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12300 RI 00001 · Envoyée PA</text>
-  <text x="490" y="416" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">14:32</text>
-  <line x1="254" y1="423" x2="496" y2="423" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="436" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12299 RI 00001 · Attente</text>
-  <text x="490" y="436" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">Hier</text>
-  <line x1="254" y1="443" x2="496" y2="443" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="456" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12298 RI 00001 · Validée</text>
-  <text x="490" y="456" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">Hier</text>
-
-  <rect x="522" y="360" width="270" height="76" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="536" y="378" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Factures bloquées &gt; 7 j</text>
-  <text x="536" y="395" fill="#fb923c" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">9</text>
-  <text x="552" y="395" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">statut inchangé depuis &gt; 7 jours</text>
-  <text x="536" y="416" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12099 RI 00070 · Attente · 11 j</text>
-  <text x="536" y="429" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12087 RI 00001 · Validée · 9 j</text>
-
-  <rect x="522" y="444" width="270" height="76" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="536" y="462" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Règles en échec</text>
-  <rect x="710" y="452" width="76" height="20" rx="4" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="748" y="466" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">TOUT · UBL · INTEG</text>
-  <text x="540" y="486" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">①</text>
-  <text x="556" y="486" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">BR-CL-23</text>
-  <text x="780" y="486" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="end">52</text>
-  <text x="556" y="498" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">CurrencyCode doit utiliser ISO 4217</text>
-  <text x="540" y="514" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">②</text>
-  <text x="556" y="514" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">BR-FR-12</text>
-  <text x="780" y="514" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="end">38</text>
-
-  <rect x="240" y="536" width="178" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Par société</text>
-  <rect x="254" y="566" width="148" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
-  <rect x="254" y="566" width="112" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
-  <rect x="366" y="566" width="26" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
-  <rect x="392" y="566" width="10" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
-  <text x="254" y="592" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00070 · 132 ok / 22 att. / 6 err.</text>
-  <rect x="254" y="600" width="148" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
-  <rect x="254" y="600" width="98" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
-  <rect x="352" y="600" width="32" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
-  <rect x="384" y="600" width="10" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
-  <text x="254" y="626" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00001 · 86 ok / 14 att. / 4 err.</text>
-
-  <rect x="426" y="536" width="180" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="440" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Couverture e-Reporting</text>
-  <text x="440" y="578" fill="#4ade80" fontSize="14" fontWeight="700" fontFamily="ui-monospace, monospace">98 %</text>
-  <text x="478" y="578" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">B2C ce mois-ci</text>
-  <text x="440" y="600" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.1 · 28 / 28 déposés</text>
-  <text x="440" y="614" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.3 · 4 / 4 déposés</text>
-  <text x="440" y="628" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">toujours le mois en cours</text>
-
-  <rect x="614" y="536" width="178" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="628" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Aller-retour PA</text>
-  <text x="628" y="578" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Envoi → Dépôt · moy. 3,2 h</text>
-  <text x="628" y="594" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Envoi → Rejet · moy. 1,4 h</text>
-  <text x="628" y="614" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">selon la plage de dates</text>
-
-  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cartes KPI hero</text>
-  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">clic → liste filtrée</text>
-  <line x1="200" y1="115" x2="240" y2="113" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="20" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Funnel pipeline</text>
-  <text x="30" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">clic sur étape → multi-statuts</text>
-  <line x1="200" y1="216" x2="240" y2="210" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="20" y="288" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="303" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Volume sur 30 jours</text>
-  <text x="30" y="316" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sparkline d'ingestion</text>
-  <line x1="200" y1="304" x2="240" y2="298" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="820" y="380" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Factures bloquées</text>
-  <text x="830" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">inchangées &gt; 7 j</text>
-  <line x1="820" y1="396" x2="794" y2="392" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="820" y="460" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="475" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Règles en échec</text>
-  <text x="830" y="488" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">bascule TOUT / UBL / INTEG</text>
-  <line x1="820" y1="476" x2="794" y2="472" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="20" y="560" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Empilage par société</text>
-  <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">OK / attente / erreur</text>
-  <line x1="200" y1="576" x2="240" y2="572" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="20" y="610" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Trois widgets · 4+4+4</text>
-  <text x="30" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">étirés pour aligner les bas</text>
-  <line x1="200" y1="626" x2="240" y2="616" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="820" y="556" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="571" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Couverture e-Reporting</text>
-  <text x="830" y="584" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">% B2C / B2BINT déclarés</text>
-  <line x1="820" y1="572" x2="606" y2="572" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="820" y="610" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Aller-retour PA</text>
-  <text x="830" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">moy. envoi → dépôt / rejet</text>
-  <line x1="820" y1="626" x2="794" y2="612" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
+  <rect x="220" y="20" width="760" height="558" rx="14" fill="url(#ops-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Exploitation</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">2 418 factures sur la période · 2 276 approuvées · 115 en cours · 27 à traiter</text>
+  <rect x="240" y="82" width="114" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="241" y="83" width="55" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="268.5" y="97.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Ventes</text>
+  <line x1="297" y1="87" x2="297" y2="101" stroke="#334155" strokeWidth="1"/>
+  <text x="325.5" y="97.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Achats</text>
+  <rect x="364" y="83" width="167" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="374" y="97.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📅 Hier · Date d'activité ▾</text>
+  <rect x="543" y="89" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="560" y="98" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Exclure les erreurs traitées</text>
+  <rect x="728.8" y="83" width="26" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="741.8" y="97.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↻</text>
+  <rect x="240.0" y="120" width="233.33333333333334" height="150" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240.0" y="120" width="233.3" height="3" rx="1.5" fill="#4a9eff"/>
+  <text x="252.0" y="142" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">En cours</text>
+  <text x="461.33333333333337" y="160" fill="#e2e8f0" fontSize="15" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">115</text>
+  <text x="252.0" y="156" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Suivi automatique, rien à faire</text>
+  <text x="252.0" y="176" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Créées, en attente d'envoi</text>
+  <text x="461.33333333333337" y="176" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">12</text>
+  <text x="252.0" y="198" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Envoyées à la plateforme</text>
+  <text x="461.33333333333337" y="198" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">31</text>
+  <text x="252.0" y="220" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">En attente de la plateforme</text>
+  <text x="461.33333333333337" y="220" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">26</text>
+  <text x="252.0" y="242" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">En transmission au client</text>
+  <text x="461.33333333333337" y="242" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">46</text>
+  <rect x="483.33333333333337" y="120" width="233.33333333333334" height="150" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="483.33333333333337" y="120" width="233.3" height="3" rx="1.5" fill="#f87171"/>
+  <text x="495.33333333333337" y="142" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">À corriger puis renvoyer</text>
+  <text x="704.6666666666667" y="160" fill="#f87171" fontSize="15" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">8</text>
+  <text x="495.33333333333337" y="156" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">À traiter par l'informatique</text>
+  <text x="495.33333333333337" y="176" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">213 Rejetée</text>
+  <text x="704.6666666666667" y="176" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">5</text>
+  <text x="495.33333333333337" y="198" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">9905 Échec de validation</text>
+  <text x="704.6666666666667" y="198" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">2</text>
+  <text x="495.33333333333337" y="220" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">9907 Échec d'import par la PA</text>
+  <text x="704.6666666666667" y="220" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">1</text>
+  <rect x="726.6666666666667" y="120" width="233.33333333333334" height="150" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="726.6666666666667" y="120" width="233.3" height="3" rx="1.5" fill="#fb923c"/>
+  <text x="738.6666666666667" y="142" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Une nouvelle facture doit être émise</text>
+  <text x="948.0000000000001" y="160" fill="#fb923c" fontSize="15" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">19</text>
+  <text x="738.6666666666667" y="156" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">À traiter par le service client</text>
+  <text x="738.6666666666667" y="176" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">207 En litige</text>
+  <text x="948.0000000000001" y="176" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">12</text>
+  <text x="738.6666666666667" y="198" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">208 Suspendue</text>
+  <text x="948.0000000000001" y="198" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <text x="738.6666666666667" y="220" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">210 Refusée</text>
+  <text x="948.0000000000001" y="220" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">7</text>
+  <rect x="240" y="284" width="720" height="120" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="304" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Activité par jour</text>
+  <rect x="259.2" y="342.0" width="18.5" height="40.0" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="259.2" y="338.6" width="18.5" height="3.4" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="259.2" y="336.9" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="259.2" y="335.7" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="288.0" y="347.1" width="18.5" height="34.9" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="288.0" y="344.3" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="288.0" y="344.3" width="18.5" height="0.0" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="288.0" y="343.7" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="316.9" y="337.4" width="18.5" height="44.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="316.9" y="335.1" width="18.5" height="2.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="316.9" y="334.6" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="316.9" y="334.6" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="345.7" y="346.6" width="18.5" height="35.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="345.7" y="340.9" width="18.5" height="5.7" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="345.7" y="339.1" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="345.7" y="339.1" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="374.5" y="343.7" width="18.5" height="38.3" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="374.5" y="340.9" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="374.5" y="339.1" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="374.5" y="339.1" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="403.4" y="332.9" width="18.5" height="49.1" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="403.4" y="330.0" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="403.4" y="329.4" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="403.4" y="328.3" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="432.2" y="336.3" width="18.5" height="45.7" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="432.2" y="334.0" width="18.5" height="2.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="432.2" y="332.3" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="432.2" y="332.3" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="461.0" y="343.7" width="18.5" height="38.3" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="461.0" y="341.4" width="18.5" height="2.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="461.0" y="340.9" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="461.0" y="340.3" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="489.9" y="340.3" width="18.5" height="41.7" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="489.9" y="336.9" width="18.5" height="3.4" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="489.9" y="336.9" width="18.5" height="0.0" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="489.9" y="335.7" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="518.7" y="342.6" width="18.5" height="39.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="518.7" y="335.7" width="18.5" height="6.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="518.7" y="335.1" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="518.7" y="335.1" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="547.5" y="337.4" width="18.5" height="44.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="547.5" y="333.4" width="18.5" height="4.0" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="547.5" y="332.3" width="18.5" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="547.5" y="332.3" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="576.4" y="338.0" width="18.5" height="44.0" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="576.4" y="335.1" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="576.4" y="335.1" width="18.5" height="0.0" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="576.4" y="334.0" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="605.2" y="344.3" width="18.5" height="37.7" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="605.2" y="338.0" width="18.5" height="6.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="605.2" y="336.3" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="605.2" y="335.7" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="634.0" y="339.7" width="18.5" height="42.3" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="634.0" y="333.4" width="18.5" height="6.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="634.0" y="332.3" width="18.5" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="634.0" y="331.7" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="662.9" y="343.7" width="18.5" height="38.3" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="662.9" y="340.3" width="18.5" height="3.4" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="662.9" y="339.7" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="662.9" y="339.7" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="691.7" y="337.4" width="18.5" height="44.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="691.7" y="332.9" width="18.5" height="4.6" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="691.7" y="331.1" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="691.7" y="330.6" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="720.5" y="334.6" width="18.5" height="47.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="720.5" y="328.3" width="18.5" height="6.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="720.5" y="327.1" width="18.5" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="720.5" y="326.0" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="749.4" y="346.6" width="18.5" height="35.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="749.4" y="343.7" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="749.4" y="342.0" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="749.4" y="342.0" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="778.2" y="334.0" width="18.5" height="48.0" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="778.2" y="328.9" width="18.5" height="5.1" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="778.2" y="328.3" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="778.2" y="327.7" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="807.0" y="340.3" width="18.5" height="41.7" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="807.0" y="338.0" width="18.5" height="2.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="807.0" y="338.0" width="18.5" height="0.0" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="807.0" y="336.9" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="835.9" y="337.4" width="18.5" height="44.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="835.9" y="332.3" width="18.5" height="5.1" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="835.9" y="331.1" width="18.5" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="835.9" y="330.0" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="864.7" y="341.4" width="18.5" height="40.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="864.7" y="335.1" width="18.5" height="6.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="864.7" y="333.4" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="864.7" y="333.4" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="893.5" y="332.9" width="18.5" height="49.1" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="893.5" y="330.0" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="893.5" y="328.9" width="18.5" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="893.5" y="328.3" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="922.4" y="335.1" width="18.5" height="46.9" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="922.4" y="332.3" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="922.4" y="332.3" width="18.5" height="0.0" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="922.4" y="331.1" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="254" y="388" width="9" height="9" rx="2" fill="#4ade80"/>
+  <text x="267" y="396" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Approuvées</text>
+  <rect x="326.6" y="388" width="9" height="9" rx="2" fill="#4a9eff"/>
+  <text x="339.6" y="396" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">En cours</text>
+  <rect x="389.68" y="388" width="9" height="9" rx="2" fill="#f87171"/>
+  <text x="402.68" y="396" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">À corriger</text>
+  <rect x="462.28" y="388" width="9" height="9" rx="2" fill="#fb923c"/>
+  <text x="475.28" y="396" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Nouvelle facture à émettre</text>
+  <rect x="240.0" y="418" width="355.0" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252.0" y="438" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bloquées depuis le plus longtemps</text>
+  <text x="448.8" y="438" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">les plus anciennes d'abord</text>
+  <text x="252.0" y="460" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">INV-10412 · RI · 00001</text>
+  <text x="583.0" y="460" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">il y a 12 jours</text>
+  <text x="252.0" y="478" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">INV-10433 · RI · 00002</text>
+  <text x="583.0" y="478" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">il y a 9 jours</text>
+  <rect x="605.0" y="418" width="355.0" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="617.0" y="438" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Derniers événements</text>
+  <text x="735.4" y="438" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">les 10 derniers</text>
+  <text x="617.0" y="460" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">INV-10871 · RI · 00001</text>
+  <text x="948.0" y="460" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Approuvée</text>
+  <text x="617.0" y="478" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">INV-10870 · RI · 00001</text>
+  <text x="948.0" y="478" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Envoyée à la PA</text>
+  <rect x="240.0" y="510" width="233.33333333333334" height="48" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252.0" y="530" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Règles en échec</text>
+  <text x="252.0" y="546" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">ALL · UBL · INTEG</text>
+  <rect x="483.33333333333337" y="510" width="233.33333333333334" height="48" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="495.33333333333337" y="530" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Délai aller-retour PA</text>
+  <text x="495.33333333333337" y="546" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">moyenne en jours, envoi → statut</text>
+  <rect x="726.6666666666667" y="510" width="233.33333333333334" height="48" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="738.6666666666667" y="530" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Couverture e-Reporting</text>
+  <text x="738.6666666666667" y="546" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Ouvrir la page →</text>
+  <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ventes ou achats</text>
+  <text x="30" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">période · base de date</text>
+  <line x1="200" y1="93.0" x2="240" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="20" y="170" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">En cours</text>
+  <text x="30" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rien à faire, suivi</text>
+  <line x1="200" y1="187.0" x2="240" y2="190" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="20" y="324" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="339" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Graphique d'activité</text>
+  <text x="30" y="352" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">par jour, semaine ou mois</text>
+  <line x1="200" y1="341.0" x2="254" y2="344" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="20" y="440" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="455" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bloquées le plus longtemps</text>
+  <text x="30" y="468" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les plus anciennes d'abord</text>
+  <line x1="200" y1="457.0" x2="240" y2="458" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="1000" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ligne de synthèse</text>
+  <text x="1010" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">total · approuvées · à traiter</text>
+  <line x1="1000" y1="93.0" x2="940" y2="62" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pour l'informatique</text>
+  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">corriger puis renvoyer</text>
+  <line x1="1000" y1="167.0" x2="706.6666666666667" y2="156" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="1000" y="220" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pour le service client</text>
+  <text x="1010" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nouvelle facture à émettre</text>
+  <line x1="1000" y1="237.0" x2="950" y2="240" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="1000" y="510" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="525" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rangée du bas</text>
+  <text x="1010" y="538" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">règles · aller-retour · e-reporting</text>
+  <line x1="1000" y1="527.0" x2="960" y2="534" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
 </svg>
 
-La grille passe en colonne unique sous environ 900 px. Les cartes hero gardent leur largeur minimale de 220 px sur tout écran : les quatre KPI restent alignés sur une même bande horizontale.
+La description de la page résume la période : `… factures sur la période · … approuvées · … en cours · … à traiter`.
 
 ---
 
-## Filtre de plage de dates
+## Barre de filtres
 
-Un seul filtre figure tout en haut de la page. Il restreint chaque widget qui dépend d'une fenêtre de temps — compteurs hero, funnel pipeline, activité récente, règles en échec, répartition par société.
+| Contrôle | Par défaut | Description |
+|---|---|---|
+| **Ventes / Achats** | Ventes | Bascule tout le tableau de bord entre factures émises et factures reçues. |
+| **Période** | Ce mois-ci, ou la [période par défaut](../configuration/default-periods.md) définie pour *Operations dashboard* | Le [sélecteur de période](../configuration/default-periods.md#period-picker) commun. |
+| **Base de date** | Date d'activité | *Date d'activité* (dernière mise à jour), *Date document* (BT-2) ou *Date d'archivage*, au pied du sélecteur. Tous les blocs la suivent. |
+| **Exclure les erreurs traitées** | Désactivé | Voir ci-dessous. |
+| **↻** | — | Recharge tous les blocs. |
 
-| Préréglage | Fenêtre |
-|---|---|
-| **Aujourd'hui** | Aujourd'hui uniquement. |
-| **Hier** *(défaut)* | La journée précédente entière. |
-| **7 derniers jours** | Les sept derniers jours pleins, fin la veille. |
-| **Ce mois-ci** | Le mois courant, du 1ᵉʳ à aujourd'hui. |
-| **Mois dernier** | Le mois plein précédent. |
-| **Plage personnalisée** | Saisie manuelle des dates **De** et **À**. |
-
-Certains widgets ignorent volontairement le filtre — *Factures bloquées* (toujours les 90 derniers jours) et *Couverture e-Reporting* (toujours le mois en cours). Chacun affiche sa propre fenêtre, la différence est donc explicite.
-
-### Base de date
-
-À côté du filtre de période, un sélecteur de **base de date** choisit la date contre laquelle tout le tableau de bord lit la fenêtre — chaque widget compte ainsi sur le même pied et les chiffres se recoupent :
-
-| Valeur | Lue contre |
-|---|---|
-| **Date d'activité** *(défaut)* | La dernière mise à jour — le comportement historique. |
-| **Date document** | La date d'émission des factures (BT-2). |
-| **Date d'archivage** | La date de traitement des documents dans l'archive. |
-
-Cartes de synthèse, pipeline des statuts, volume quotidien, répartition par société et principales erreurs suivent tous ce choix. La liste [E-Invoicing](./invoices.md#base-de-date) et la page [Rapports](reports/overview.md) proposent la même base *Date d'archivage*.
+Les filtres sont conservés tant que l'application reste ouverte : en quittant le tableau de bord puis en y revenant, on les retrouve tels quels.
 
 ### Exclure les erreurs traitées \{#exclure-erreurs-traitees\}
 
-Le bouton **Exclure les erreurs traitées**, dans la même barre de filtres, masque les factures déjà traitées par le service client (*Traité* dans la colonne **Suivi** de la liste [E-Invoicing](./invoices.md)) mais toujours dans un statut en erreur — les statuts rattachés aux groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md). Les indicateurs d'erreur ne montrent alors que ce qu'il reste à traiter.
+Le switch **Exclure les erreurs traitées** masque les factures déjà traitées par le service client (*Traité* dans la colonne **Suivi** d'[E-Invoicing](./invoices.md)) mais toujours dans un statut en erreur — les groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md). Les files ne montrent alors que ce qu'il reste à traiter.
 
-- Les factures traitées dans tout autre statut restent comptées, et les totaux restent le nombre réel de factures.
-- Tous les widgets suivent ce réglage, conservé quand on quitte le tableau de bord puis qu'on y revient.
-- Un clic sur une tuile transmet le réglage à la liste [E-Invoicing](./invoices.md#exclure-erreurs-traitees) : les deux pages affichent le même nombre.
-- Désactivé par défaut.
+- Les factures traitées dans les autres statuts restent comptées : les totaux restent le nombre réel de factures.
+- Un clic sur une file reporte le switch sur la liste [E-Invoicing](./invoices.md#exclure-erreurs-traitees), pour que les deux pages affichent le même nombre.
 
 ---
 
-## Cartes KPI hero
+## Files de travail
 
-Quatre cartes résument l'état opérationnel en un coup d'œil. Chacune comporte un libellé, le compteur, une sparkline du volume quotidien sur 7 jours, et une légende d'une ligne qui précise les statuts couverts. Sur les installations en licence complète, un clic ouvre la page [E-Invoicing](./invoices.md) avec le bon filtre déjà appliqué.
-
-| Carte | Comptabilise | Statuts couverts | Clic d'accès |
+| File | Pour qui | Lignes | Clic |
 |---|---|---|---|
-| **Total factures** | Toutes les factures de la plage de dates | l'ensemble des statuts | E-Invoicing avec la plage de dates uniquement |
-| **En cours** | Pipeline du dispatcher + transit PA | `9900` `9901` `9902` `9903` `9906` (en cours côté interne) et `201` `202` `203` `204` `214` `224`–`227` (en transit côté PA) | E-Invoicing avec `status=9900,9901,9902,9903,9906,201,202,…` |
-| **Rejetée — IT** | Échecs techniques, périmètre IT / dev | `9904` `9905` `9907` (échecs internes) et `213` (rejet technique PA) | E-Invoicing avec `status=9904,9905,9907,213` |
-| **Rejetée — Business** | Échecs côté service client | `206` `207` `208` `210` `221` `501` `600` (litiges commerciaux, refus, suspensions, routage, recouvrement, distribution e-mail) | E-Invoicing avec le multi-statut correspondant |
+| **En cours** | *Suivi automatique, rien à faire* | *Créées, en attente d'envoi* · *Envoyées à la plateforme* · *En attente de la plateforme* · *En transmission au client* (groupes de statuts `created`, `sent`, `pending`, `transmission`) | Les factures du groupe. |
+| **À corriger puis renvoyer** | *À traiter par l'informatique* | `213` Rejetée, `9905` Échec de validation, `9907` Échec d'import par la PA, puis tout autre statut d'erreur technique qui a des factures. | Les factures dans ce statut. |
+| **Une nouvelle facture doit être émise** | *À traiter par le service client* | `207` En litige, `208` Suspendue, `210` Refusée, puis tout autre statut d'erreur métier qui a des factures. | Les factures dans ce statut. |
 
-Les cartes **En cours** / **Rejetée — IT** / **Rejetée — Business** passent une liste séparée par virgules (`/api/invoices?status=A,B,C`) que le backend transforme en clause `IN (…)` multi-statuts. Le clic ouvre alors le bon sous-ensemble.
-
-Une bordure rouge et une valeur rouge sur **Rejetée — IT** signalent un compteur strictement positif. Même traitement en orange sur **Rejetée — Business**.
-
-### Cartes par statut
-
-Deux rangées de cartes sous les KPI hero, organisées selon l'action qu'appelle chaque statut :
-
-- **Corriger et renvoyer** — `213` (Rejetée), `9905` (Échec de validation), `9907` (Échec d'import PA) : des factures qui peuvent être corrigées et renvoyées.
-- **Émettre une nouvelle facture** — `207`, `208`, `210` : des statuts où la facture est définitive et où une nouvelle doit être émise.
-
-Chaque carte affiche le compteur de la période choisie avec le libellé du statut, se colore quand il n'est pas à zéro, et ouvre au clic la liste des factures filtrée sur ce statut. Les rangées ont leur propre clé de visibilité — *Cartes de statut* — dans la liste blanche des cartes du rôle.
+Chaque file affiche son total, que les lignes détaillent. Un clic sur le total ouvre toutes les factures de la file dans [E-Invoicing](./invoices.md), un clic sur une ligne celles de la ligne seulement (licence complète).
 
 ---
 
-## La grille de widgets
+## Graphique d'activité
 
-Sous la rangée hero, une grille à 12 colonnes accueille huit widgets, groupés deux par deux pour équilibrer la densité de contenu.
-
-### Funnel pipeline *(12 colonnes)*
-
-Cinq étapes horizontales — *Validée / Envoyée PA / Attente / Déposée / Rejetée* — accompagnées de leur compteur. Cliquer sur une étape ouvre E-Invoicing pré-filtré sur le jeu de statuts correspondant. Le funnel se lit de gauche à droite : ce qui stagne en *Attente* alimente le widget *Factures bloquées* en dessous ; ce qui arrive en *Rejetée* renvoie vers la page [Erreurs d'intégration](diagnostics/integration-errors.md).
-
-### Volume quotidien *(12 colonnes)*
-
-Graphique d'aire sur 30 jours du volume d'ingestion quotidien. Même série que les sparklines des cartes hero, mais affichée pleine largeur pour repérer d'un coup d'œil un creux sur une seule journée.
-
-### Activité récente *(6 colonnes)* + Bloquées + Règles en échec *(6 colonnes)*
-
-La rangée est répartie en 6/6, pour que les rangées suivantes s'alignent sur les mêmes limites de colonnes.
-
-| Widget | Contenu |
-|---|---|
-| **Activité récente** | Les dernières factures touchées dans la plage de dates, avec leur triplet canonique (`doc · dct · kco`), le libellé de statut et un horodatage relatif. Cliquer sur une ligne ouvre la liste [E-Invoicing](./invoices.md) filtrée sur ce statut. |
-| **Factures bloquées** | Jusqu'à 50 lignes dont le statut n'a pas évolué depuis 7 jours. Chaque ligne affiche le triplet, le statut courant et le nombre de jours depuis la dernière mise à jour. |
-| **Règles en échec** | Top 10 des règles de validation en échec sur la plage de dates. Chaque ligne affiche un badge de rang, le code de règle, sa description en deuxième ligne et le compteur. Un sélecteur en en-tête restreint la liste à **TOUT** / **UBL** (Schematron / XSD) / **INTEG** (cycle de vie / erreurs d'exécution). Le lien *Voir tout* ouvre la page [Erreurs d'intégration](diagnostics/integration-errors.md) sur l'onglet **par règle** ; un clic sur une règle précise ouvre l'onglet **par évènement** avec ce code déjà appliqué comme chip de filtre. |
-
-Les lignes classées par rang donnent à chaque règle le même poids visuel, avec le compteur aligné à droite : des compteurs de *160* et de *10* restent faciles à distinguer.
-
-### Par société *(4 colonnes)* + Couverture e-Reporting *(4 colonnes)* + Aller-retour PA *(4 colonnes)*
-
-Les trois widgets courts partagent une seule rangée équilibrée.
-
-| Widget | Contenu |
-|---|---|
-| **Par société** | Une barre horizontale empilée par `KCO` (`UHKCO` issu de `F564231`), répartie en *OK* (vert) / *Attente* (bleu) / *Erreur* (rouge), avec le compteur et le code société en libellé. Utile quand un pic se concentre sur une seule société. |
-| **Couverture e-Reporting** | Un pourcentage et trois lignes qui résument l'état des dépôts e-reporting du mois en cours : *Flux 10.1* (détail B2BINT) et *Flux 10.3* (B2C / OUTOFSCOPE agrégé) — *déposés* / *générés*. Le clic sur le widget ouvre la page [E-Reporting](./ereporting.md). |
-| **Aller-retour PA** | Durée moyenne *Envoi → Dépôt* et *Envoi → Rejet* sur la plage de dates, calculée à partir de la table de cycle de vie. Un pic sur l'une de ces moyennes révèle un ralentissement côté PA qu'on ne voit pas dans les seuls compteurs quotidiens. |
-
-La grille utilise `align-items: stretch` et chaque carte grandit avec `flex: 1` à l'intérieur de son span de colonnes — les trois cartes de cette rangée alignent leur bord bas, même quand l'une porte plus de contenu que les autres.
-
-:::tip[Santé du planificateur]
-Le widget Santé du planificateur se trouve sur le [Tableau de bord IT](./tech-dashboard.md), aux côtés des widgets JVM, base, système de fichiers et journal d'erreurs en direct. L'équipe IT obtient une page dédiée à ses préoccupations opérationnelles ; le public métier ne voit ici que les indicateurs sur lesquels il agit.
-:::
+**Activité par jour** — ou **par semaine** au-delà de 62 jours, **par mois** au-delà de 400 jours — empile les factures de la période en *Approuvées*, *En cours*, *À corriger*, *Nouvelle facture à émettre* et *Autre*. Un jour creux ou un pic d'erreurs se repère aussitôt.
 
 ---
 
-## Actions rapides + À propos
+## Factures bloquées et derniers événements
 
-Sous la grille, trois boutons raccourcis sont disponibles :
-
-| Bouton | Effet |
+| Bloc | Contenu |
 |---|---|
-| **Créer une facture** | Ouvre la modale *nouvelle facture* directement depuis le tableau de bord. Après enregistrement, redirige vers la page [E-Invoicing](./invoices.md). |
-| **Référence des statuts** | Ouvre *Références → Référence des statuts* — le catalogue de tous les codes de statut du cycle de vie. |
-| **Codes motifs** | Ouvre *Références → Codes motifs* — le catalogue de tous les codes de refus, rejet ou irrégularité. |
+| **Bloquées depuis le plus longtemps** *(les plus anciennes d'abord)* | Les factures dont le statut n'a pas bougé depuis le plus longtemps, avec le triplet du document (`doc · dct · kco`), le statut et l'ancienneté (*il y a 12 jours*). Vide quand toutes les factures sont dans un statut final ou en transmission. |
+| **Derniers événements** *(les 10 derniers)* | Les derniers événements du cycle de vie, avec le triplet, le statut et l'heure. |
 
-La carte *À propos de cette version* figure tout en bas. Elle indique le numéro de version, la date de build, la version du profil AFNOR et les versions des Schematrons embarqués par module (EN 16931, BR-FR Flux 2, BR-FR CPRO, EXTENDED-CTC-FR).
+Une ligne ouvre [E-Invoicing](./invoices.md) sur son statut.
+
+---
+
+## Règles, aller-retour et e-reporting
+
+| Bloc | Contenu |
+|---|---|
+| **Règles en échec** | Les règles de validation qui échouent le plus sur la période, classées, avec leur description. Onglets **TOUT** / **UBL** (Schematron et XSD) / **INTEG** (erreurs de cycle de vie et d'exécution). *Voir toutes les erreurs →* ouvre les [Erreurs d'intégration](diagnostics/integration-errors.md) regroupées par règle ; une règle ouvre ses événements. |
+| **Délai aller-retour PA** *(moyenne en jours, envoi → statut)* | Pour les factures envoyées à la plateforme, le délai moyen avant que celle-ci positionne l'un de ses propres statuts. Une hausse signale un ralentissement côté plateforme. |
+| **Couverture e-Reporting** | Le dernier rapport par société et par flux, avec le nombre de rapports et de factures. *Ouvrir la page →* ouvre [E-Reporting](./ereporting.md). |
+
+---
+
+## Actions rapides et À propos
+
+**Actions rapides** propose *Nouvelle Facture* (ouvre la fenêtre de création de facture sur le tableau de bord, pour les rôles autorisés à créer des factures), *Référentiel statuts* et *Motifs*. Le bloc replié **À propos de cette version**, en bas de page, indique la version, le profil AFNOR et les versions des Schematrons livrés (voir [Schematrons](../references/schematrons.md)).
+
+---
+
+## Accès
+
+Accorder la page **Exploitation** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; elle ouvre aussi la [Synthèse](./billing-overview.md) et les [Statistiques](./statistics.md). Dans le tableau de bord, chaque bloc peut être masqué par rôle avec les **cartes du tableau de bord** du rôle (libellés en anglais dans l'éditeur des rôles) :
+
+| Carte | Bloc |
+|---|---|
+| *Total invoices* | La ligne de synthèse de la page. |
+| *In flight* | La file *En cours*. |
+| *Rejected — IT* | La file *À corriger puis renvoyer*. |
+| *Rejected — Business* | La file *Une nouvelle facture doit être émise*. |
+| *Status cards* | Les lignes des trois files. |
+| *Daily invoice volume* | Le graphique d'activité. |
+| *Stale invoices* / *Recent activity* | *Bloquées depuis le plus longtemps* / *Derniers événements*. |
+| *Top error rules* / *PA round-trip stats* / *E-Reporting coverage* | Les trois blocs de la rangée du bas. |
+| *Quick actions* | La section Actions rapides. |
+
+Les chiffres suivent la visibilité par société de l'utilisateur connecté. L'ouverture de la liste des factures depuis un bloc demande une licence complète.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Lire d'abord la rangée hero.** Les quatre KPI répondent en un coup d'œil à la question *« y a-t-il quelque chose de cassé en ce moment ? »*. Une bordure rouge non vide sur *Rejetée — IT* est prioritaire sur le reste de la page.
-- **Utiliser les préréglages de date.** *Hier* convient à un tour de surveillance matinal ; *Ce mois-ci* à une vue financière ; *Plage personnalisée* couvre une réconciliation de fin de mois ou une fenêtre d'incident précise.
-- **Recouper le funnel et les compteurs hero.** *En cours* doit correspondre aux étapes *Envoyée PA* + *Attente* du funnel. Un écart révèle en général un statut pas encore mappé d'un côté ou de l'autre.
-- **Les *Règles en échec* dictent le travail.** Une seule règle avec des centaines d'occurrences indique souvent un changement amont unique (un champ renommé, un code TVA obsolète) — corriger la règle calme en général la majorité des erreurs d'intégration.
-- **Le tableau de bord sert à repérer des tendances, pas à examiner une ligne.** Pour le détail d'une facture, ouvrir la modale de la page [E-Invoicing](./invoices.md) ; pour une analyse au niveau règle, passer par la page [Erreurs d'intégration](diagnostics/integration-errors.md).
-- **Mettre la page en favori.** C'est la page d'accueil quotidienne naturelle. Les favoris persistent après l'expiration de session ; la prochaine connexion ouvre donc la même vue.
+- **Lire les files par équipe.** *En cours* ne demande personne ; la file rouge revient à l'informatique, la file orange au service client — chaque équipe part de la sienne.
+- **Choisir *Hier* pour le contrôle du matin.** La période couvre hier et aujourd'hui et compte donc les traitements de nuit en entier ; en faire la [période par défaut](../configuration/default-periods.md) de la vue si l'équipe commence toujours ainsi.
+- **Activer *Exclure les erreurs traitées* en cours de journée.** Les files diminuent au fur et à mesure que le service client marque les factures comme traitées.
+- **Partir des règles en échec pour corriger.** Une règle qui cumule des centaines d'échecs révèle le plus souvent un seul changement en amont (un champ renommé, un code de taxe périmé) ; sa [règle Schematron](../references/schematrons.md) indique précisément ce qui est attendu.
+- **Analyser ailleurs.** Le tableau de bord repère le problème ; la fenêtre de détail d'[E-Invoicing](./invoices.md) et la page [Erreurs d'intégration](diagnostics/integration-errors.md) l'expliquent.

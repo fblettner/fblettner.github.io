@@ -318,7 +318,7 @@ La barre d'outils au-dessus du tableau combine trois filtres texte avec deux rac
 | **Flux** | Code de flux — `10.1` (détail B2BINT) ou `10.3` (B2C / OUTOFSCOPE agrégé). |
 | **Statut** | Recherche libre sur le code ou le libellé du statut courant. |
 | **Rafraîchir** | Relance la requête courante sans modifier les filtres. |
-| **Générer un rapport** | Ouvre la *modale de génération* — décrite plus bas. Masquée pour les sessions en lecture seule. |
+| **Générer un rapport** | Ouvre la [fenêtre de génération](#generate-dialog), décrite plus bas. Masquée pour les sessions en lecture seule. |
 
 ### Filtres avancés
 
@@ -471,66 +471,21 @@ Le cycle de vie est en lecture seule ici ; la seule action disponible est **Renv
 
 ---
 
-## Modale de génération
+## Fenêtre de génération \{#generate-dialog\}
 
-Ouverte via **Générer un rapport** dans la barre d'outils. Construit et dépose un ou plusieurs rapports pour une combinaison société / flux / période choisie.
+Ouverte via **Générer un rapport** dans la barre d'outils. Construit et dépose un ou plusieurs rapports pour une combinaison société / sens / période choisie.
 
-<div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.025)', maxWidth: '520px', boxShadow: '0 8px 24px rgba(0,0,0,0.25)'}}>
-  <div style={{padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-    <div style={{fontWeight: 700, fontSize: '14px'}}>Générer un e-reporting</div>
-    <span style={{opacity: 0.5, fontSize: '12px'}}>✕</span>
-  </div>
-  <div style={{padding: '18px'}}>
-    <div style={{marginBottom: '14px'}}>
-      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, marginBottom: '4px'}}>Société (kco)</div>
-      <div style={{padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', minHeight: '20px'}}>00070</div>
-      <div style={{fontSize: '10px', opacity: 0.55, marginTop: '4px'}}>Laisser vide pour appliquer à toutes les sociétés configurées.</div>
-    </div>
-    <div style={{marginBottom: '14px'}}>
-      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, marginBottom: '6px'}}>Flux à générer</div>
-      <div style={{display: 'flex', gap: '8px'}}>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid rgba(74,158,255,0.5)', background: 'rgba(74,158,255,0.12)', color: '#4a9eff'}}>10.1</span>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid rgba(74,158,255,0.5)', background: 'rgba(74,158,255,0.12)', color: '#4a9eff'}}>10.3</span>
-      </div>
-    </div>
-    <div style={{marginBottom: '14px'}}>
-      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, marginBottom: '6px'}}>Type de document</div>
-      <div style={{display: 'flex', gap: '8px'}}>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid rgba(74,158,255,0.5)', background: 'rgba(74,158,255,0.12)', color: '#4a9eff'}}>IN</span>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 500, border: '1px solid rgba(255,255,255,0.15)', opacity: 0.7}}>RE</span>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 500, border: '1px solid rgba(255,255,255,0.15)', opacity: 0.7}}>CO</span>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 500, border: '1px solid rgba(255,255,255,0.15)', opacity: 0.7}}>MO</span>
-      </div>
-    </div>
-    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px'}}>
-      <div>
-        <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, marginBottom: '4px'}}>Début de période</div>
-        <div style={{padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px'}}>2026-04-01</div>
-      </div>
-      <div>
-        <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, marginBottom: '4px'}}>Fin de période</div>
-        <div style={{padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px'}}>2026-04-30</div>
-      </div>
-    </div>
-    <div>
-      <span style={{padding: '6px 14px', borderRadius: '6px', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '12px', fontWeight: 500}}>📅 Calculer la période</span>
-    </div>
-  </div>
-  <div style={{padding: '12px 18px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'flex-end', gap: '8px', background: 'rgba(255,255,255,0.02)'}}>
-    <span style={{padding: '7px 16px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', fontWeight: 500}}>Annuler</span>
-    <span style={{padding: '7px 16px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '12px', fontWeight: 600}}>Générer</span>
-  </div>
-</div>
+{/* svg:ergen */}
 
 | Champ | Description |
 |---|---|
-| **Société (kco)** | Restreint la génération à une seule société. Laisser vide pour appliquer à **toutes** les sociétés déclarées dans le template *e-reporting*. |
-| **Flux à générer** | Sélection multiple entre `10.1` et `10.3`. Les deux sont sélectionnés par défaut — un rapport est émis par flux actif. |
+| **Société (kco)** | Une liste des sociétés (la [liste personnalisée](../configuration/custom-lists.md#ready-made-lists) `list-companies`). *Toutes les sociétés configurées* s'applique à chaque société déclarée dans le modèle *e-reporting*. |
+| **Sens** | **Émission (ventes)** et / ou **Réception (achats)**, les deux choisis par défaut ; au moins un est requis. Un rapport est produit par société et par sens, et chaque rapport porte les deux flux : 10.1 (B2B international, détail) et 10.3 (B2C, agrégé). |
 | **Type de document** | Une valeur parmi `IN` (initial), `RE` (remplacement), `CO` (annulation), `MO` (modification). Défaut : `IN`. |
 | **Début / fin de période** | Dates ISO 8601 délimitant la fenêtre déclarative. |
 | **Calculer la période** | Pré-remplit *Début* / *Fin* avec la prochaine fenêtre due, exactement comme l'exécution planifiée : selon le **paramétrage de la société** (fréquence `MONTHLY` / `DECADAL` / `WEEKLY`) et le **dernier rapport valide** de cette société pour le sens choisi. La modale indique la fréquence appliquée et le rapport qu'elle prolonge (*après le dernier rapport terminé le …*, ou *aucun rapport précédent, période en cours*). Une société doit être saisie pour le calcul. |
 | **Annuler** | Ferme la modale sans générer. |
-| **Générer** | Construit le XML pour chaque flux sélectionné, enregistre la ligne du rapport et la dépose sur la PA. L'exécution se fait **en arrière-plan** : la modale affiche son journal au fil de l'eau, puis rafraîchit la liste à la fin — une longue période ne se termine plus par une erreur de proxy. |
+| **Générer** | Construit le XML pour chaque société et chaque sens, enregistre la ligne du rapport et la dépose sur la PA. L'exécution se fait **en arrière-plan** : la fenêtre affiche son journal au fil de l'eau, puis rafraîchit la liste à la fin, si bien qu'une longue période ne se termine pas par une erreur de proxy. |
 
 Lors de la génération, les blocs **Expéditeur**, **Émetteur** et **Business Process** par facture (TT-7 / TT-12 / TT-28 / TT-29) sont remplis à partir du template *e-reporting*. Ces valeurs par défaut se configurent une seule fois dans *Configuration → Système → E-Reporting* (Expéditeur / matricule PA + rôle `WK`, Émetteur / SIREN sous schéma `0002` pour les sociétés françaises, Business Process émis uniquement sur les factures B2BINT). En l'absence d'identifiant de transmission saisi manuellement, le rapport est identifié par **`{siren}-{flux}-{début}-{fin}`** : la valeur reste stable d'une régénération à l'autre sur la même période et permet à la PA de dédupliquer des dépôts identiques.
 

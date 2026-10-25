@@ -1,320 +1,333 @@
 ---
-title: Dashboard
-description: "The NomaUBL home page — a 12-column widget grid with hero KPI cards (Total / In flight / Rejected — IT / Rejected — Business), pipeline funnel, volume chart, recent activity, stale invoices, top failing rules, per-company breakdown, e-reporting coverage and PA round-trip — all governed by a single date-range filter. Scheduler-health monitoring lives on the dedicated Tech Dashboard."
-keywords: [NomaUBL, dashboard, KPI, hero cards, pipeline funnel, volume chart, recent activity, stale invoices, top failing rules, e-reporting coverage, round-trip, date range, JD Edwards, SAP, NetSuite, custom ERP]
+title: Operations
+description: "The NomaUBL Operations dashboard: what the team has to handle on the period, as three work queues (in progress, to correct and send again for IT, a new invoice to issue for customer service), the activity chart, the invoices blocked the longest, the latest events, the top failing rules, the PA round-trip time and the e-reporting coverage, for sales or purchases."
+keywords: [NomaUBL, operations dashboard, work queues, in progress, to correct, rejected, disputed, refused, activity chart, stale invoices, latest events, top failing rules, round-trip, e-reporting coverage, sales, purchases, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
-# Dashboard
+# Operations
 
-The **Dashboard** is the NomaUBL home page. It opens by default after sign-in and surfaces the operational state of the platform on a **12-column widget grid** — four hero KPI cards at the top, then a sequence of paired widgets that cover ingestion volume, dispatcher pipeline, recent + stale invoices, top failing validation rules, per-company breakdown, e-reporting coverage and PA round-trip times.
+The **Operations** dashboard shows **what the team has to handle** on the period. Its core is three work queues, each with the team it belongs to: what is in progress and needs nothing, what IT must correct and send again, and what customer service must settle by issuing a new invoice. Below them come the activity of the period, the invoices blocked the longest, the latest events and the rules that fail most. Every number is read from the NomaUBL database, whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
 
-The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. Every number is read from the local NomaUBL database, so the dashboard reflects what NomaUBL has processed and persisted, not directly what the source system or the Plateforme Agréée holds.
+Open it from **Operations** in the Navigation group, after the [Billing overview](./billing-overview.md). Under a restricted licence, it is the page the application opens on. The technical health of the server is on the [IT dashboard](./tech-dashboard.md).
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 670" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 598" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="dash-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="dash-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="dash-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
-    <linearGradient id="dash-g-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4ade80" stopOpacity="0.28"/><stop offset="100%" stopColor="#22c55e" stopOpacity="0.10"/></linearGradient>
-    <linearGradient id="dash-g-red" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f87171" stopOpacity="0.32"/><stop offset="100%" stopColor="#dc2626" stopOpacity="0.10"/></linearGradient>
-    <linearGradient id="dash-g-orange" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fb923c" stopOpacity="0.32"/><stop offset="100%" stopColor="#ea580c" stopOpacity="0.10"/></linearGradient>
+    <marker id="ops-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="ops-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="ops-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="ops-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="640" rx="14" fill="url(#dash-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Dashboard</text>
-  <rect x="478" y="30" width="154" height="22" rx="5" fill="none" stroke="#334155" strokeWidth="1"/>
-  <text x="555" y="45" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Exclude reviewed errors</text>
-  <rect x="640" y="30" width="146" height="22" rx="5" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="650" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">📅 Yesterday ▾</text>
-
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="240" y="84" width="132" height="58" rx="8" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="252" y="102" fill="#94a3b8" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TOTAL INVOICES</text>
-  <text x="252" y="124" fill="#e2e8f0" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace">1 247</text>
-  <polyline points="312,134 322,128 332,132 342,124 352,126 362,118 366,120" stroke="#94a3b8" strokeWidth="1.2" fill="none" opacity="0.6"/>
-
-  <rect x="380" y="84" width="132" height="58" rx="8" fill="url(#dash-g-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="392" y="102" fill="#4a9eff" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">IN FLIGHT</text>
-  <text x="392" y="124" fill="#e2e8f0" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace">184</text>
-  <polyline points="452,134 462,130 472,132 482,126 492,128 502,122 506,124" stroke="#4a9eff" strokeWidth="1.2" fill="none" opacity="0.7"/>
-
-  <rect x="520" y="84" width="132" height="58" rx="8" fill="url(#dash-g-red)" stroke="#f87171" strokeWidth="1.2"/>
-  <text x="532" y="102" fill="#f87171" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">REJECTED — IT</text>
-  <text x="532" y="124" fill="#f87171" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace">12</text>
-
-  <rect x="660" y="84" width="132" height="58" rx="8" fill="url(#dash-g-orange)" stroke="#fb923c" strokeWidth="1.2"/>
-  <text x="672" y="102" fill="#fb923c" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">REJECTED — BUSINESS</text>
-  <text x="672" y="124" fill="#fb923c" fontSize="20" fontWeight="700" fontFamily="ui-monospace, monospace">5</text>
-
-  <rect x="240" y="158" width="552" height="86" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="178" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Pipeline funnel</text>
-  <rect x="254" y="190" width="100" height="40" rx="6" fill="rgba(74,222,128,0.18)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="304" y="206" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">VALIDATED</text>
-  <text x="304" y="222" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="middle">1 102</text>
-  <text x="362" y="214" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">→</text>
-  <rect x="378" y="190" width="92" height="40" rx="6" fill="rgba(74,158,255,0.16)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="424" y="206" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">SENT TO PA</text>
-  <text x="424" y="222" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="middle">1 080</text>
-  <text x="482" y="214" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">→</text>
-  <rect x="498" y="190" width="84" height="40" rx="6" fill="rgba(74,158,255,0.16)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="540" y="206" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">PENDING</text>
-  <text x="540" y="222" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="middle">184</text>
-  <text x="594" y="214" fill="#94a3b8" fontSize="11" fontFamily="ui-monospace, monospace">→</text>
-  <rect x="610" y="190" width="76" height="40" rx="6" fill="rgba(74,222,128,0.18)" stroke="#4ade80" strokeWidth="1"/>
-  <text x="648" y="206" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">DEPOSITED</text>
-  <text x="648" y="222" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="middle">896</text>
-  <rect x="700" y="190" width="84" height="40" rx="6" fill="rgba(248,113,113,0.16)" stroke="#f87171" strokeWidth="1"/>
-  <text x="742" y="206" fill="#f87171" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">REJECTED</text>
-  <text x="742" y="222" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="middle">17</text>
-
-  <rect x="240" y="260" width="552" height="84" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="278" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Daily volume — 30 days</text>
-  <polyline points="252,330 282,322 312,316 342,300 372,294 402,288 432,302 462,290 492,278 522,284 552,272 582,266 612,278 642,260 672,266 702,256 732,272 762,260 792,266"
-    stroke="#4a9eff" strokeWidth="1.5" fill="none"/>
-  <polyline points="252,330 282,322 312,316 342,300 372,294 402,288 432,302 462,290 492,278 522,284 552,272 582,266 612,278 642,260 672,266 702,256 732,272 762,260 792,266 792,338 252,338"
-    fill="rgba(74,158,255,0.10)" stroke="none"/>
-
-  <rect x="240" y="360" width="270" height="160" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="378" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Recent activity</text>
-  <text x="254" y="396" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12345 RI 00070 · Deposited</text>
-  <text x="490" y="396" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">2 min</text>
-  <line x1="254" y1="403" x2="496" y2="403" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="416" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12300 RI 00001 · Sent to PA</text>
-  <text x="490" y="416" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">14:32</text>
-  <line x1="254" y1="423" x2="496" y2="423" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="436" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12299 RI 00001 · Pending</text>
-  <text x="490" y="436" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">Yesterday</text>
-  <line x1="254" y1="443" x2="496" y2="443" stroke="#1f2937" strokeWidth="1"/>
-  <text x="254" y="456" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12298 RI 00001 · Validated</text>
-  <text x="490" y="456" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">Yesterday</text>
-
-  <rect x="522" y="360" width="270" height="76" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="536" y="378" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Stale invoices &gt; 7 d</text>
-  <text x="536" y="395" fill="#fb923c" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace">9</text>
-  <text x="552" y="395" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">unchanged status &gt; 7 days</text>
-  <text x="536" y="416" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12099 RI 00070 · Pending · 11 d</text>
-  <text x="536" y="429" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12087 RI 00001 · Validated · 9 d</text>
-
-  <rect x="522" y="444" width="270" height="76" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="536" y="462" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Top failing rules</text>
-  <rect x="710" y="452" width="76" height="20" rx="4" fill="#0d1220" stroke="#334155" strokeWidth="1"/>
-  <text x="748" y="466" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="middle">ALL · UBL · INTEG</text>
-  <text x="540" y="486" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">①</text>
-  <text x="556" y="486" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">BR-CL-23</text>
-  <text x="780" y="486" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="end">52</text>
-  <text x="556" y="498" fill="#64748b" fontSize="8" fontFamily="system-ui, sans-serif">CurrencyCode must use ISO 4217</text>
-  <text x="540" y="514" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">②</text>
-  <text x="556" y="514" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">BR-FR-12</text>
-  <text x="780" y="514" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="ui-monospace, monospace" textAnchor="end">38</text>
-
-  <rect x="240" y="536" width="178" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="254" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Per company</text>
-  <rect x="254" y="566" width="148" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
-  <rect x="254" y="566" width="112" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
-  <rect x="366" y="566" width="26" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
-  <rect x="392" y="566" width="10" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
-  <text x="254" y="592" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00070 · 132 ok / 22 pend / 6 err</text>
-  <rect x="254" y="600" width="148" height="14" rx="3" fill="#0d1220" stroke="#334155" strokeWidth="0.6"/>
-  <rect x="254" y="600" width="98" height="14" rx="3" fill="rgba(74,222,128,0.5)"/>
-  <rect x="352" y="600" width="32" height="14" rx="3" fill="rgba(74,158,255,0.5)"/>
-  <rect x="384" y="600" width="10" height="14" rx="3" fill="rgba(248,113,113,0.5)"/>
-  <text x="254" y="626" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">00001 · 86 ok / 14 pend / 4 err</text>
-
-  <rect x="426" y="536" width="180" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="440" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">E-Reporting coverage</text>
-  <text x="440" y="578" fill="#4ade80" fontSize="14" fontWeight="700" fontFamily="ui-monospace, monospace">98 %</text>
-  <text x="478" y="578" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">B2C this month</text>
-  <text x="440" y="600" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.1 · 28 / 28 deposited</text>
-  <text x="440" y="614" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Flux 10.3 · 4 / 4 deposited</text>
-  <text x="440" y="628" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">always current month</text>
-
-  <rect x="614" y="536" width="178" height="100" rx="8" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="628" y="554" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">PA round-trip</text>
-  <text x="628" y="578" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Send → Deposit · avg 3.2 h</text>
-  <text x="628" y="594" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">Send → Reject · avg 1.4 h</text>
-  <text x="628" y="614" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">over the date-range filter</text>
-
-  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Hero KPI cards</text>
-  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">click → filtered invoice list</text>
-  <line x1="200" y1="115" x2="240" y2="113" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="20" y="200" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pipeline funnel</text>
-  <text x="30" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">click a stage → multi-status filter</text>
-  <line x1="200" y1="216" x2="240" y2="210" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="20" y="288" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="303" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">30-day volume</text>
-  <text x="30" y="316" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">daily ingestion sparkline</text>
-  <line x1="200" y1="304" x2="240" y2="298" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="820" y="380" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Stale invoices</text>
-  <text x="830" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">stuck &gt; 7 days</text>
-  <line x1="820" y1="396" x2="794" y2="392" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="820" y="460" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="475" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Top failing rules</text>
-  <text x="830" y="488" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ALL / UBL / INTEG toggle</text>
-  <line x1="820" y1="476" x2="794" y2="472" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="20" y="560" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Per-company stack</text>
-  <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">OK / pending / error</text>
-  <line x1="200" y1="576" x2="240" y2="572" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="20" y="610" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three short widgets · 4+4+4</text>
-  <text x="30" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">stretched to align bottoms</text>
-  <line x1="200" y1="626" x2="240" y2="616" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="820" y="556" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="571" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">E-Reporting coverage</text>
-  <text x="830" y="584" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">% B2C / B2BINT declared</text>
-  <line x1="820" y1="572" x2="606" y2="572" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
-
-  <rect x="820" y="610" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="625" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PA round-trip</text>
-  <text x="830" y="638" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">avg send → deposit / reject</text>
-  <line x1="820" y1="626" x2="794" y2="612" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dash-arrow)"/>
+  <rect x="220" y="20" width="760" height="558" rx="14" fill="url(#ops-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Operations</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">2 418 invoices on the period · 2 276 approved · 115 in progress · 27 to handle</text>
+  <rect x="240" y="82" width="126" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="241" y="83" width="50" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="266.0" y="97.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Sales</text>
+  <line x1="292" y1="87" x2="292" y2="101" stroke="#334155" strokeWidth="1"/>
+  <text x="329.0" y="97.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Purchases</text>
+  <rect x="376" y="83" width="184" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="386" y="97.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📅 Yesterday · Activity date ▾</text>
+  <rect x="572" y="89" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="589" y="98" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Exclude reviewed errors</text>
+  <rect x="729.8" y="83" width="26" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="742.8" y="97.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↻</text>
+  <rect x="240.0" y="120" width="233.33333333333334" height="150" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240.0" y="120" width="233.3" height="3" rx="1.5" fill="#4a9eff"/>
+  <text x="252.0" y="142" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">In progress</text>
+  <text x="461.33333333333337" y="160" fill="#e2e8f0" fontSize="15" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">115</text>
+  <text x="252.0" y="156" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Followed automatically, nothing to do</text>
+  <text x="252.0" y="176" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Created, waiting to be sent</text>
+  <text x="461.33333333333337" y="176" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">12</text>
+  <text x="252.0" y="198" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sent to the platform</text>
+  <text x="461.33333333333337" y="198" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">31</text>
+  <text x="252.0" y="220" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Waiting for the platform</text>
+  <text x="461.33333333333337" y="220" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">26</text>
+  <text x="252.0" y="242" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Being transmitted</text>
+  <text x="461.33333333333337" y="242" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">46</text>
+  <rect x="483.33333333333337" y="120" width="233.33333333333334" height="150" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="483.33333333333337" y="120" width="233.3" height="3" rx="1.5" fill="#f87171"/>
+  <text x="495.33333333333337" y="142" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">To correct and send again</text>
+  <text x="704.6666666666667" y="160" fill="#f87171" fontSize="15" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">8</text>
+  <text x="495.33333333333337" y="156" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">To be handled by IT</text>
+  <text x="495.33333333333337" y="176" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">213 Rejected</text>
+  <text x="704.6666666666667" y="176" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">5</text>
+  <text x="495.33333333333337" y="198" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">9905 Validation failed</text>
+  <text x="704.6666666666667" y="198" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">2</text>
+  <text x="495.33333333333337" y="220" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">9907 PA import failed</text>
+  <text x="704.6666666666667" y="220" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">1</text>
+  <rect x="726.6666666666667" y="120" width="233.33333333333334" height="150" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="726.6666666666667" y="120" width="233.3" height="3" rx="1.5" fill="#fb923c"/>
+  <text x="738.6666666666667" y="142" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A new invoice must be issued</text>
+  <text x="948.0000000000001" y="160" fill="#fb923c" fontSize="15" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">19</text>
+  <text x="738.6666666666667" y="156" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">To be handled by customer service</text>
+  <text x="738.6666666666667" y="176" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">207 Disputed</text>
+  <text x="948.0000000000001" y="176" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">12</text>
+  <text x="738.6666666666667" y="198" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">208 Suspended</text>
+  <text x="948.0000000000001" y="198" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <text x="738.6666666666667" y="220" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">210 Refused</text>
+  <text x="948.0000000000001" y="220" fill="#cbd5e1" fontSize="9" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">7</text>
+  <rect x="240" y="284" width="720" height="120" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="304" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Activity per day</text>
+  <rect x="259.2" y="342.0" width="18.5" height="40.0" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="259.2" y="338.6" width="18.5" height="3.4" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="259.2" y="336.9" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="259.2" y="335.7" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="288.0" y="347.1" width="18.5" height="34.9" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="288.0" y="344.3" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="288.0" y="344.3" width="18.5" height="0.0" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="288.0" y="343.7" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="316.9" y="337.4" width="18.5" height="44.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="316.9" y="335.1" width="18.5" height="2.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="316.9" y="334.6" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="316.9" y="334.6" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="345.7" y="346.6" width="18.5" height="35.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="345.7" y="340.9" width="18.5" height="5.7" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="345.7" y="339.1" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="345.7" y="339.1" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="374.5" y="343.7" width="18.5" height="38.3" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="374.5" y="340.9" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="374.5" y="339.1" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="374.5" y="339.1" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="403.4" y="332.9" width="18.5" height="49.1" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="403.4" y="330.0" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="403.4" y="329.4" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="403.4" y="328.3" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="432.2" y="336.3" width="18.5" height="45.7" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="432.2" y="334.0" width="18.5" height="2.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="432.2" y="332.3" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="432.2" y="332.3" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="461.0" y="343.7" width="18.5" height="38.3" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="461.0" y="341.4" width="18.5" height="2.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="461.0" y="340.9" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="461.0" y="340.3" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="489.9" y="340.3" width="18.5" height="41.7" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="489.9" y="336.9" width="18.5" height="3.4" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="489.9" y="336.9" width="18.5" height="0.0" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="489.9" y="335.7" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="518.7" y="342.6" width="18.5" height="39.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="518.7" y="335.7" width="18.5" height="6.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="518.7" y="335.1" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="518.7" y="335.1" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="547.5" y="337.4" width="18.5" height="44.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="547.5" y="333.4" width="18.5" height="4.0" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="547.5" y="332.3" width="18.5" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="547.5" y="332.3" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="576.4" y="338.0" width="18.5" height="44.0" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="576.4" y="335.1" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="576.4" y="335.1" width="18.5" height="0.0" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="576.4" y="334.0" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="605.2" y="344.3" width="18.5" height="37.7" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="605.2" y="338.0" width="18.5" height="6.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="605.2" y="336.3" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="605.2" y="335.7" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="634.0" y="339.7" width="18.5" height="42.3" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="634.0" y="333.4" width="18.5" height="6.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="634.0" y="332.3" width="18.5" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="634.0" y="331.7" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="662.9" y="343.7" width="18.5" height="38.3" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="662.9" y="340.3" width="18.5" height="3.4" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="662.9" y="339.7" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="662.9" y="339.7" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="691.7" y="337.4" width="18.5" height="44.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="691.7" y="332.9" width="18.5" height="4.6" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="691.7" y="331.1" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="691.7" y="330.6" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="720.5" y="334.6" width="18.5" height="47.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="720.5" y="328.3" width="18.5" height="6.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="720.5" y="327.1" width="18.5" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="720.5" y="326.0" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="749.4" y="346.6" width="18.5" height="35.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="749.4" y="343.7" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="749.4" y="342.0" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="749.4" y="342.0" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="778.2" y="334.0" width="18.5" height="48.0" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="778.2" y="328.9" width="18.5" height="5.1" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="778.2" y="328.3" width="18.5" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="778.2" y="327.7" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="807.0" y="340.3" width="18.5" height="41.7" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="807.0" y="338.0" width="18.5" height="2.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="807.0" y="338.0" width="18.5" height="0.0" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="807.0" y="336.9" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="835.9" y="337.4" width="18.5" height="44.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="835.9" y="332.3" width="18.5" height="5.1" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="835.9" y="331.1" width="18.5" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="835.9" y="330.0" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="864.7" y="341.4" width="18.5" height="40.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="864.7" y="335.1" width="18.5" height="6.3" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="864.7" y="333.4" width="18.5" height="1.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="864.7" y="333.4" width="18.5" height="0.0" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="893.5" y="332.9" width="18.5" height="49.1" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="893.5" y="330.0" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="893.5" y="328.9" width="18.5" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="893.5" y="328.3" width="18.5" height="0.6" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="922.4" y="335.1" width="18.5" height="46.9" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="922.4" y="332.3" width="18.5" height="2.9" fill="#4a9eff" fillOpacity="0.85"/>
+  <rect x="922.4" y="332.3" width="18.5" height="0.0" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="922.4" y="331.1" width="18.5" height="1.1" fill="#fb923c" fillOpacity="0.85"/>
+  <rect x="254" y="388" width="9" height="9" rx="2" fill="#4ade80"/>
+  <text x="267" y="396" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Approved</text>
+  <rect x="317.08" y="388" width="9" height="9" rx="2" fill="#4a9eff"/>
+  <text x="330.08" y="396" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">In progress</text>
+  <rect x="394.44" y="388" width="9" height="9" rx="2" fill="#f87171"/>
+  <text x="407.44" y="396" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">To correct</text>
+  <rect x="467.03999999999996" y="388" width="9" height="9" rx="2" fill="#fb923c"/>
+  <text x="480.03999999999996" y="396" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">New invoice to issue</text>
+  <rect x="240.0" y="418" width="355.0" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252.0" y="438" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Blocked the longest</text>
+  <text x="370.4" y="438" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">oldest first</text>
+  <text x="252.0" y="460" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">INV-10412 · RI · 00001</text>
+  <text x="583.0" y="460" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">12 days ago</text>
+  <text x="252.0" y="478" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">INV-10433 · RI · 00002</text>
+  <text x="583.0" y="478" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">9 days ago</text>
+  <rect x="605.0" y="418" width="355.0" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="617.0" y="438" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Latest events</text>
+  <text x="701.8" y="438" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">last 10</text>
+  <text x="617.0" y="460" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">INV-10871 · RI · 00001</text>
+  <text x="948.0" y="460" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Approved</text>
+  <text x="617.0" y="478" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">INV-10870 · RI · 00001</text>
+  <text x="948.0" y="478" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">Sent to PA</text>
+  <rect x="240.0" y="510" width="233.33333333333334" height="48" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252.0" y="530" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Top failing rules</text>
+  <text x="252.0" y="546" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">ALL · UBL · INTEG</text>
+  <rect x="483.33333333333337" y="510" width="233.33333333333334" height="48" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="495.33333333333337" y="530" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PA round-trip time</text>
+  <text x="495.33333333333337" y="546" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">avg days, sent → status</text>
+  <rect x="726.6666666666667" y="510" width="233.33333333333334" height="48" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="738.6666666666667" y="530" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">E-Reporting coverage</text>
+  <text x="738.6666666666667" y="546" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Open page →</text>
+  <rect x="20" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sales or purchases</text>
+  <text x="30" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">period · date basis</text>
+  <line x1="200" y1="93.0" x2="240" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="20" y="170" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">In progress</text>
+  <text x="30" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nothing to do, followed</text>
+  <line x1="200" y1="187.0" x2="240" y2="190" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="20" y="324" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="339" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Activity chart</text>
+  <text x="30" y="352" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">per day, week or month</text>
+  <line x1="200" y1="341.0" x2="254" y2="344" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="20" y="440" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="455" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Blocked the longest</text>
+  <text x="30" y="468" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">oldest first</text>
+  <line x1="200" y1="457.0" x2="240" y2="458" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="1000" y="76" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="91" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Summary line</text>
+  <text x="1010" y="104" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">total · approved · to handle</text>
+  <line x1="1000" y1="93.0" x2="940" y2="62" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="1000" y="150" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">For IT</text>
+  <text x="1010" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">correct, then send again</text>
+  <line x1="1000" y1="167.0" x2="706.6666666666667" y2="156" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="1000" y="220" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">For customer service</text>
+  <text x="1010" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a new invoice to issue</text>
+  <line x1="1000" y1="237.0" x2="950" y2="240" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
+  <rect x="1000" y="510" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="525" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bottom row</text>
+  <text x="1010" y="538" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">rules · round-trip · e-reporting</text>
+  <line x1="1000" y1="527.0" x2="960" y2="534" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ops-arrow)"/>
 </svg>
 
-The grid collapses to a single column below ~900 px. Hero cards keep their 220 px minimum on every screen, so the four KPIs always sit on the same horizontal band.
+The page description sums up the period: `… invoices on the period · … approved · … in progress · … to handle`.
 
 ---
 
-## The date-range filter
+## Filter bar
 
-A single filter sits at the very top of the page. It restricts every widget that depends on a time window — hero KPI counts, pipeline funnel, recent activity, top failing rules, per-company breakdown.
+| Control | Default | Description |
+|---|---|---|
+| **Sales / Purchases** | Sales | Switches the whole dashboard between issued and received invoices. |
+| **Period** | This month, or the [default period](../configuration/default-periods.md) set for *Operations dashboard* | The shared [period picker](../configuration/default-periods.md#period-picker). |
+| **Date basis** | Activity date | *Activity date* (last update), *Document date* (BT-2) or *Archive date*, in the footer of the picker. Every block follows it. |
+| **Exclude reviewed errors** | Off | See below. |
+| **↻** | — | Reloads every block. |
 
-| Preset | Window |
-|---|---|
-| **Today** | Today only. |
-| **Yesterday** *(default)* | The previous full day. |
-| **Last 7 days** | The last seven full days, ending yesterday. |
-| **This month** | The current month from day 1 to today. |
-| **Last month** | The previous full month. |
-| **Custom range** | Pick the **From** and **To** dates manually. |
-
-A small set of widgets ignore the date filter on purpose — *Stale invoices* (always counts the last 90 days) and *E-Reporting coverage* (always the current month). Each carries its own time-window indicator so the difference is obvious.
-
-### Date basis
-
-Next to the period filter, a **date basis** selector chooses which date the whole dashboard reads the window against — so every widget counts on the same footing and the numbers reconcile:
-
-| Value | Reads against |
-|---|---|
-| **Activity date** *(default)* | The last update — the historical behaviour. |
-| **Document date** | The date invoices were issued (BT-2). |
-| **Archive date** | The date documents were processed into the archive. |
-
-Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the choice. The [E-Invoicing](./invoices.md#date-basis) list and the [Reports](reports/overview.md) page offer the same *Archive date* basis.
+The filters are kept while the application stays open: leaving the dashboard and coming back finds them as they were.
 
 ### Exclude reviewed errors \{#exclude-reviewed\}
 
-The **Exclude reviewed errors** toggle, in the same filter bar, hides the invoices that customer service has already reviewed (*Reviewed* in the **Review** column of the [E-Invoicing](./invoices.md) list) but that still sit in an error status — the statuses placed in the `errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md). The error KPIs then show only what is left to handle.
+The **Exclude reviewed errors** switch hides the invoices that customer service has already reviewed (*Reviewed* in the **Review** column of [E-Invoicing](./invoices.md)) but that still sit in an error status — the `errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md). The queues then show only what is left to handle.
 
-- Reviewed invoices in any other status stay counted, and the totals remain the real number of invoices.
-- Every widget follows the toggle, and it is kept when leaving the dashboard and coming back.
-- Clicking a tile carries the toggle to the [E-Invoicing](./invoices.md#exclude-reviewed) list, so the count on both pages agrees.
-- Off by default.
+- Reviewed invoices in any other status stay counted, so the totals remain the real number of invoices.
+- A click on a queue carries the switch to the [E-Invoicing](./invoices.md#exclude-reviewed) list, so the count on both pages agrees.
 
 ---
 
-## Hero KPI cards
+## Work queues
 
-Four cards summarise the operational state of the platform at a glance. Each card carries a label, the count, a 7-day sparkline of daily volume, a one-line caption explaining the underlying status set, and — on full-licence installations — a click-through to the [E-Invoicing](./invoices.md) page with the right filter pre-applied.
-
-| Card | Counts | Statuses behind it | Click-through |
+| Queue | For whom | Rows | Click |
 |---|---|---|---|
-| **Total invoices** | All invoices in the date range | every status | E-Invoicing with date range only |
-| **In flight** | Dispatcher pipeline + PA in-transit | `9900` `9901` `9902` `9903` `9906` (internal in-progress) and `201` `202` `203` `204` `214` `224`–`227` (PA in-transit) | E-Invoicing with `status=9900,9901,9902,9903,9906,201,202,…` |
-| **Rejected — IT** | Tech failures owned by the IT / dev team | `9904` `9905` `9907` (internal failures) and `213` (PA technical rejection) | E-Invoicing with `status=9904,9905,9907,213` |
-| **Rejected — Business** | Failures owned by customer-services | `206` `207` `208` `210` `221` `501` `600` (commercial disputes, refusals, suspensions, routing, recovery, e-mail-delivery) | E-Invoicing with the matching multi-status filter |
+| **In progress** | *Followed automatically, nothing to do* | *Created, waiting to be sent* · *Sent to the platform* · *Waiting for the platform* · *Being transmitted to the customer* (status groups `created`, `sent`, `pending`, `transmission`) | The invoices of the group. |
+| **To correct and send again** | *To be handled by IT* | `213` Rejected, `9905` Validation failed, `9907` PA import failed, then any other technical-error status that has invoices. | The invoices in that status. |
+| **A new invoice must be issued** | *To be handled by customer service* | `207` Disputed, `208` Suspended, `210` Refused, then any other business-error status that has invoices. | The invoices in that status. |
 
-The **In flight** / **Rejected — IT** / **Rejected — Business** cards pass a comma list (`/api/invoices?status=A,B,C`) which the backend parses into a multi-status `IN (…)` clause, so the click lands on the actual subset.
-
-A red border + red value on **Rejected — IT** signals a non-zero count; same orange treatment on **Rejected — Business**.
-
-### Per-status cards
-
-Two card rows sit under the hero metrics, organised by the action each status calls for:
-
-- **Fix and resend** — `213` (Rejected), `9905` (Validation failed), `9907` (PA import failed): invoices that can be corrected and re-sent.
-- **Issue a new invoice** — `207`, `208`, `210`: statuses where the invoice is final and a new one must be issued.
-
-Each card shows the count for the selected period with the status label, colours up when non-zero, and clicks through to the invoice list filtered on that status. The rows have their own visibility key — *Status cards* — in the role's dashboard-card whitelist.
+Each queue gives its total; the rows split it. A click on the total opens all the invoices of the queue in [E-Invoicing](./invoices.md), a click on a row only that row's (full licence).
 
 ---
 
-## The widget grid
+## Activity chart
 
-Below the hero row, a 12-column grid hosts eight widgets paired to balance content density.
-
-### Pipeline funnel *(12 cols)*
-
-Five horizontal stages — *Validated / Sent to PA / Pending / Deposited / Rejected* — with the count under each label. Clicking a stage opens E-Invoicing pre-filtered on the matching status set. The funnel reads left to right: anything sitting on *Pending* for too long flows into the *Stale invoices* widget below; anything on *Rejected* needs the [Integration Errors](diagnostics/integration-errors.md) page.
-
-### Daily volume *(12 cols)*
-
-A 30-day area chart of daily ingestion volume — the same series feeding the hero card sparklines, rendered full-width so a single weekday slump is visible at a glance.
-
-### Recent activity *(6 cols)* + Stale + Top failing rules *(6 cols)*
-
-The row is split 6/6 so all subsequent rows align on the same column boundary.
-
-| Widget | What it shows |
-|---|---|
-| **Recent activity** | The last few invoices touched in the date range, with their canonical triplet (`doc · dct · kco`), status label and relative timestamp. Clicking a row opens the [E-Invoicing](./invoices.md) list filtered on that status. |
-| **Stale invoices** | Up to 50 rows where the status has not changed in the last 7 days. Each row carries the triplet, the current status and the days-since-last-update count. |
-| **Top failing rules** | Top 10 validation rules by failure count over the date range. Each row shows a rank badge, the rule code, the rule's description as a secondary line, and the count. A header toggle scopes the list to **ALL** / **UBL** (Schematron / XSD) / **INTEG** (lifecycle / runtime errors). The *View all* link opens the [Integration Errors](diagnostics/integration-errors.md) page on its **by-rule** tab; clicking a specific rule lands on the **by-event** tab with that rule chip pre-applied. |
-
-Ranked rows give every rule the same visual weight, with the count on the right, so counts of *160* and *10* stay easy to tell apart.
-
-### Per company *(4 cols)* + E-Reporting coverage *(4 cols)* + PA round-trip *(4 cols)*
-
-The three short widgets share a single balanced row.
-
-| Widget | What it shows |
-|---|---|
-| **Per company** | One stacked horizontal bar per `KCO` (`UHKCO` from `F564231`) split into *OK* (green) / *Pending* (blue) / *Error* (red), labelled with the count and the company code. Useful when a spike is concentrated on a single company. |
-| **E-Reporting coverage** | A percentage and three rows summarising the current month's e-reporting submission state: *Flux 10.1* (B2BINT detail) and *Flux 10.3* (B2C / OUTOFSCOPE aggregated) — *deposited* / *generated*. Clicking the widget opens the [E-Reporting](./ereporting.md) page. |
-| **PA round-trip** | Average duration *Send → Deposit* and *Send → Reject* over the date range, computed from the lifecycle table. A spike on one of these reveals a slowdown on the PA side that is otherwise invisible from the daily counts alone. |
-
-The grid uses `align-items: stretch` and each card grows with `flex: 1` inside its column span — so all three cards in this row align bottoms even when one carries more content than the others.
-
-:::tip[Scheduler health]
-The Scheduler-health widget is on the [Tech Dashboard](./tech-dashboard.md), alongside the JVM, database, filesystem and live error tail widgets. The IT team gets a single page sized to operational concerns; the business audience here sees only the metrics they act on.
-:::
+**Activity per day** — or **per week** above 62 days, **per month** above 400 days — stacks the invoices of the period as *Approved*, *In progress*, *To correct*, *New invoice to issue* and *Other*. A single slack day or a spike of errors shows at once.
 
 ---
 
-## Quick actions + About
+## Blocked invoices and latest events
 
-Below the grid, three shortcut buttons remain:
-
-| Button | Behaviour |
+| Block | Content |
 |---|---|
-| **Create invoice** | Opens the *new invoice* modal directly on the dashboard. After saving, navigation hands off to the [E-Invoicing](./invoices.md) page. |
-| **Status reference** | Navigates to *References → Status Reference* — the catalogue of every lifecycle status code. |
-| **Reason codes** | Navigates to *References → Reason Codes* — the catalogue of every refusal / rejection / irregularity reason code. |
+| **Blocked the longest** *(oldest first)* | Invoices whose status has not moved for the longest time, with the document triplet (`doc · dct · kco`), the status and the age (*12 days ago*). Empty when every invoice is in a final or transmission status. |
+| **Latest events** *(last 10)* | The latest lifecycle events, with the triplet, the status and the time. |
 
-The *About this release* card sits at the very bottom and lists the release number, build date, AFNOR profile version and the bundled Schematron versions per module (EN 16931, BR-FR Flux 2, BR-FR CPRO, EXTENDED-CTC-FR).
+A row opens [E-Invoicing](./invoices.md) on its status.
+
+---
+
+## Rules, round-trip and e-reporting
+
+| Block | Content |
+|---|---|
+| **Top failing rules** | The validation rules with the most failures on the period, ranked, with their description. Tabs **ALL** / **UBL** (Schematron and XSD) / **INTEG** (lifecycle and runtime errors). *View all errors →* opens [Integration errors](diagnostics/integration-errors.md) grouped by rule; a rule opens its events. |
+| **PA round-trip time** *(avg days, sent → status)* | For the invoices sent to the platform, the average number of days until the platform set one of its own statuses. A rise reveals a slowdown on the platform side. |
+| **E-Reporting coverage** | The latest report per company and flow, with the number of reports and invoices. *Open page →* opens [E-Reporting](./ereporting.md). |
+
+---
+
+## Quick actions and About
+
+**Quick Actions** offers *New Invoice* (opens the new invoice window on the dashboard, for the roles allowed to create invoices), *Status Reference* and *Reason Codes*. The folded **About this build** block at the bottom gives the release, the AFNOR profile and the versions of the shipped Schematrons (see [Schematrons](../references/schematrons.md)).
+
+---
+
+## Access
+
+Grant the **Operations** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; it also opens the [Billing overview](./billing-overview.md) and [Statistics](./statistics.md). Within the dashboard, each block can be hidden per role with the **dashboard cards** of the role:
+
+| Card | Block |
+|---|---|
+| *Total invoices* | The summary line of the page. |
+| *In flight* | The *In progress* queue. |
+| *Rejected — IT* | The *To correct and send again* queue. |
+| *Rejected — Business* | The *A new invoice must be issued* queue. |
+| *Status cards* | The rows inside the three queues. |
+| *Daily invoice volume* | The activity chart. |
+| *Stale invoices* / *Recent activity* | *Blocked the longest* / *Latest events*. |
+| *Top error rules* / *PA round-trip stats* / *E-Reporting coverage* | The three blocks of the bottom row. |
+| *Quick actions* | The Quick actions section. |
+
+Figures follow the company visibility of the signed-in user. Clicks to the invoice list need a full licence.
 
 ---
 
 ## Tips & best practices
 
-- **Read the hero row first.** The four KPIs answer the question *"is anything broken right now?"* in one glance — a non-zero red border on *Rejected — IT* takes priority over anything else on the page.
-- **Use the date-range presets.** *Yesterday* fits a morning monitoring routine; *This month* fits a finance overview; *Custom range* covers month-end reconciliation or specific incident windows.
-- **Match the funnel against the hero counts.** *In flight* should equal the *Sent to PA* + *Pending* stages of the funnel. A divergence is usually a status that has not been mapped yet on either side.
-- **Top failing rules drives the work.** A single rule with hundreds of hits often points to one upstream change (a renamed field, a stale tax code) — fixing the rule typically clears most of the integration errors.
-- **The dashboard is the right place to spot trends, not investigate a row.** For a single-invoice deep-dive use the [E-Invoicing](./invoices.md) detail modal; for a rule-level analysis use the [Integration Errors](diagnostics/integration-errors.md) page.
-- **Bookmark the dashboard.** It is the natural daily landing page; bookmarks survive session expiry, so the next sign-in lands on the same view.
+- **Read the queues by team.** *In progress* needs nobody; the red queue goes to IT, the orange one to customer service — each team starts from its own.
+- **Use *Yesterday* for the morning check.** It covers yesterday and today, so the night batches are counted in full; set it as the [default period](../configuration/default-periods.md) of the view if the team always starts that way.
+- **Turn *Exclude reviewed errors* on during the day.** The queues then shrink as customer service marks invoices as reviewed.
+- **Top failing rules drives the corrections.** A single rule with hundreds of hits usually points to one upstream change (a renamed field, an outdated tax code); its [Schematron rule](../references/schematrons.md) says exactly what is expected.
+- **Investigate elsewhere.** The dashboard spots the problem; the [E-Invoicing](./invoices.md) detail window and the [Integration errors](diagnostics/integration-errors.md) page explain it.

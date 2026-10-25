@@ -143,7 +143,7 @@ Every reply ends with **one to three follow-ups** — the natural answer to a qu
 | **`search_docs`** | 📚 | Searches the NomaUBL documentation, indexed by the server from the site's full-text export (`llms-full.txt`); returns the best pages with title, URL and passage. Called first for any product question. |
 | **`read_doc_page`** | 📖 | Reads one page found by `search_docs`, in windows of 12,000 characters for long pages. |
 | **`list_doc_pages`** | 📑 | The table of contents of the documentation, when the search finds nothing relevant. |
-| **`instance_docs`** | 🔍 | The [implementation report](reports/implementation-report.md) of this instance: table of contents, one section, or a search across sections. Called first for any question about how *this* instance is configured. |
+| **`instance_docs`** | 📘 | The [implementation report](reports/implementation-report.md) of this instance: table of contents, one section, or a search across sections. Called first for any question about how *this* instance is configured. |
 
 The documentation is indexed per language: a French interface searches the French pages, an English interface the English ones. The index is refreshed every six hours; when the site cannot be reached, the assistant uses the copy of the documentation bundled with the application and says so in its answer.
 
@@ -157,16 +157,20 @@ The assistant quotes the page it used and gives its link. It never invents a set
 | **`list_invoices`** | 🧾 | Up to 50 invoices filtered on status, company, transaction type (B2B / B2BINT / B2C / B2G / OUTOFSCOPE), customer, invoice number (BT-1) and issue dates. |
 | **`lifecycle_history`** | 🕘 | Every status event of an invoice, with the PA rejection reason, expected action and status note. |
 | **`validation_errors`** | ⚠️ | The validation errors of an invoice (level, source, rule, message), as in [Integration errors](./diagnostics/integration-errors.md). |
-| **`period_figures`** | 🔍 | The summary of a period from the [audit report](reports/audit-report.md): indicators with the previous period and the variation, the breakdown of processed invoices, the findings, and the backlog across all periods (by status, company and age). Default: the current month to date. |
-| **`dashboard_overview`** | 📊 | The counters of the [Dashboard](./dashboard.md) for a date range. |
+| **`period_figures`** | 🗓️ | The summary of a period from the [audit report](reports/audit-report.md): indicators with the previous period and the variation, the breakdown of processed invoices, the findings, and the backlog across all periods (by status, company and age). Default: the current month to date. |
+| **`billing_overview`** | 💶 | The figures of the [Billing overview](./billing-overview.md) for a period, sales or purchases: revenue excl. VAT with invoices and credit notes apart, VAT, counts, transmission or acceptance rate, compared with the previous period; twelve months by outcome; what needs a decision, all dates, in amounts; the split per company and per transaction type. Options: date basis (document date by default) and whether to count the reviewed errors. |
+| **`status_statistics`** | 📈 | The data of the [Statistics](./statistics.md) dashboard for a period, sales or purchases: invoices by stage, status, activity code, reason and transaction type (count and amount), the same for the previous period, the trend per day, and the open invoices by waiting time. Same options. |
+| **`dashboard_overview`** | 📊 | The counters of the [Operations](./dashboard.md) dashboard for a date range. |
 | **`tech_dashboard`** | 🩺 | The health of the instance, as on the [IT dashboard](./tech-dashboard.md): JVM, scheduled jobs and their last runs, send failures, waiting invoices, configuration issues, table sizes. |
 | **`server_log`** | 📜 | The end of the [server log](./diagnostics/server-log.md), newest first, filtered on level, module and text. |
 | **`integrity_checks`** | 🔎 | The configured [integrity checks](../configuration/system/integrity-reports.md) and, for one check, its result on a date range. |
-| **`list_ereports`** | 🔍 | Up to 50 e-reporting runs filtered on flow (10.1 / 10.3), company and status. |
+| **`list_ereports`** | 🔍 | Up to 50 e-reporting runs filtered on direction (inbound / outbound — each run carries both flows 10.1 and 10.3), company and status. |
 | **`explain_status_code`** | 🏷️ | The tag and the FR / EN labels of an invoice or e-reporting status code. |
 | **`reason_codes`** | 📋 | The PA rejection reasons and expected actions with their labels. |
 | **`edirectory_lookup`** | 🏢 | A company in the [e-directory](./edirectory.md) by SIREN, SIRET or name: legal data and routing lines. |
 | **`template_settings`** | ⚙️ | The settings of one template, secrets masked. Requires the *Settings access* feature. |
+
+The assistant knows every page of the application — among them the [Billing overview](./billing-overview.md), [Statistics](./statistics.md), the [Explorer](./explorer.md) and the [invoice stages](./invoices.md#status-by-stage) — and answers a question on revenue, credit notes, transmission rate or decisions with `billing_overview`, a question on stages, waiting time or reasons with `status_statistics`. Through the implementation report (`instance_docs`) it also knows the default periods and the dashboard rules of the instance.
 
 The assistant also receives the live **status catalogue**, so *"en litige"*, *"refused"* or *"awaiting deposit"* map to the right code.
 

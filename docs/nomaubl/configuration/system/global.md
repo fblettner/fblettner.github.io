@@ -1,6 +1,6 @@
 ---
 title: Global
-description: "Application-wide NomaUBL settings in nine tabs: directories and environment, processing, server log, PDF rendering, email, AI assistant, job defaults (quiet window, bulk send, retention, BIP watermarks), license and authentication."
+description: "Application-wide NomaUBL settings in ten tabs: directories and environment, processing, server log, PDF rendering, email, AI assistant, job defaults (quiet window, bulk send, retention, BIP watermarks), license, authentication and default periods."
 keywords: [NomaUBL, global settings, directories, SMTP, Ghostscript, XSL, Anthropic, license, server log, retention, job defaults, AI assistant, JD Edwards, SAP, NetSuite]
 ---
 
@@ -8,7 +8,7 @@ keywords: [NomaUBL, global settings, directories, SMTP, Ghostscript, XSL, Anthro
 
 The **Global** settings hold what applies to the **whole NomaUBL application**: file system layout and environment, processing options, the server log, PDF rendering, the email server, the AI assistant, the defaults shared by the scheduled jobs, the license and the authentication. They apply whatever the source system — JD Edwards, SAP, NetSuite or a custom ERP; the few BIP-specific settings are flagged where they appear.
 
-The editor has **nine tabs**: Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication. In the [Settings navigation](../settings-overview.md) each tab is an entry of its own — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* and *License* in **Platform**, *Authentication* in **Security**, *Job defaults* in **Jobs & inbound** — and opens that part only, without the row of tabs. The search box of Settings finds any field of these tabs by its label, hint or key.
+The editor has **ten tabs**: Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication, Periods. In the [Settings navigation](../settings-overview.md) each tab is an entry of its own — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* and *License* in **Platform**, *Authentication* in **Security**, *Job defaults* in **Jobs & inbound**, *Default periods* in **Views & UI** — and opens that part only, without the row of tabs. The search box of Settings finds any field of these tabs by its label, hint or key.
 
 The jobs themselves — polls, batch document jobs, daily digests, auto-retries, lifecycle checks, retention purge — are not set here: they are on the [Scheduled jobs](../../sync/scheduled-jobs/overview.md) page.
 
@@ -46,6 +46,8 @@ The jobs themselves — polls, batch document jobs, daily digests, auto-retries,
   <text x="704.5" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">License</text>
   <rect x="739" y="72" width="96" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
   <text x="787.0" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Authentication</text>
+  <rect x="840" y="72" width="62" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="871.0" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Periods</text>
   <text x="240" y="124" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SERVER LOG</text>
   <text x="240" y="153" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Server log file</text>
   <rect x="420" y="138" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -63,7 +65,7 @@ The jobs themselves — polls, batch document jobs, daily digests, auto-retries,
   <rect x="420" y="266" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="430" y="280.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">STATUS=WARN, API=INFO, ·=INFO</text>
   <rect x="20" y="66" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nine tabs</text>
+  <text x="30" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Ten tabs</text>
   <text x="30" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one per area of the instance</text>
   <line x1="200" y1="83.0" x2="240" y2="83" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#gl-arrow)"/>
   <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -310,6 +312,12 @@ With **Auth Mode = `internal`** (or `both`), the login screen exposes a *Forgot 
 
 Requires **SMTP** configured under *Tab 5 — Email*. Tokens are persisted in `F564255` (see [Database tables](../../references/database-tables.md#f564255--password-reset-tokens)) and expire after a single use.
 :::
+
+---
+
+## Tab 10 — Periods \{#periods\}
+
+The period each page opens on: **Every view** (*This month* unless set) and one override **Per view** (*Same as every view* by default) for the Billing overview, Operations, Statistics, Invoices, E-Documents, Diagnostics, Integration errors, Processing log and Reports › Integrity. Stored as `defaultPeriod` and `defaultPeriod.<view>`. See [Period picker and default periods](../default-periods.md#default-periods).
 
 ---
 

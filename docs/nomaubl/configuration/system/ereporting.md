@@ -1,19 +1,19 @@
 ---
 title: E-Reporting
-description: "Configure how NomaUBL produces and submits e-Reporting bundles — Sender / Issuer identity, schedule and flux, the api-connector that holds the PA's HTTP transport, and the SFTP fallback for outbound submission. Four-tab layout: Identity · Reporting · PA Connection · FTP/SFTP. paMode = API / FTP / empty replaces the legacy sendToPA Y/N flag."
+description: "Configure how NomaUBL produces and submits e-Reporting bundles — Sender / Issuer identity, schedule, the api-connector that holds the PA's HTTP transport, and the SFTP fallback for outbound submission. Four-tab layout: Identity · Reporting · PA Connection · FTP/SFTP. paMode = API / FTP / empty replaces the legacy sendToPA Y/N flag."
 keywords: [NomaUBL, e-reporting, French e-reporting, AFNOR XP Z12-014, Flux 10.1, Flux 10.3, B2BINT, B2C, OUTOFSCOPE, sender, issuer, SIREN, frequency, MONTHLY, paMode, api-connector, SFTP, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # E-Reporting
 
-The **E-Reporting** editor configures how NomaUBL **produces and submits the periodic e-Reporting bundles** required by the French e-invoicing reform. Each company files a regulatory report covering its B2BINT, B2C and out-of-scope flows on a fixed cadence (monthly by default); this page controls the sender / issuer identity emitted in the bundle, the cadence and flux selection, and the PA transport used to upload the bundle once generated.
+The **E-Reporting** editor configures how NomaUBL **produces and submits the periodic e-Reporting bundles** required by the French e-invoicing reform. Each company files a regulatory report covering its B2BINT, B2C and out-of-scope flows on a fixed cadence (monthly by default); this page controls the sender / issuer identity emitted in the bundle, the cadence, and the PA transport used to upload the bundle once generated.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — once the source is mapped to UBL.
 
 The editor has **four tabs**:
 
 1. **Identity** — Sender (PA) and Issuer (Declarant) identification fields emitted in the bundle.
-2. **Reporting** — Business Process (B2BINT) plus Schedule and Flux selection.
+2. **Reporting** — Business Process (B2BINT) plus Schedule.
 3. **PA Connection** — picks the api-connector that holds the PA's HTTP transport, plus the per-task endpoint name override and connection-level parameters.
 4. **FTP/SFTP** — Send Mode toggle and the SFTP server credentials used when the toggle is set to `FTP`.
 
@@ -165,13 +165,14 @@ These fields are emitted on per-invoice `<BusinessProcess>` elements, **only for
 | **Business Process Type ID** | Optional. TT-29 specification identifier. |
 | **Flow Name** | Optional. TT-2 emitted as `<ReportDocument><Name>`. |
 
-### Schedule & Flux
+### Schedule
 
 | Field | Default | Description |
 |---|---|---|
 | **Frequency** | `MONTHLY` | Drives the period auto-computed by the scheduler and the *Generate* dialog default. |
-| **Flux** | `10.1,10.3` | Comma-separated flux codes. Default covers Flux 10.1 (B2BINT detail) and Flux 10.3 (B2C / OUTOFSCOPE aggregated). |
 | **Default Type Code** | `IN` | Default report type code. |
+
+Each report carries both flows — 10.1 (B2B international, detail) and 10.3 (B2C, aggregated) — for one company and one direction; the direction is chosen in the *Generate* dialog of [E-Reporting](../../application/ereporting.md#generate-dialog).
 
 ---
 
@@ -206,7 +207,7 @@ The PA's HTTP transport — authentication flow, base URL, endpoints — lives i
 
 | Field | Values | Description |
 |---|---|---|
-| **Send Mode** *(`paMode`)* | `API` *(default)* / `FTP` / *(empty)* | Transport used to **submit generated reports** to the PA. `API` routes the bundle through the api-connector picked on the previous tab; `FTP` spools the report XML to a temp file and uploads it via SFTP using the server below; *(empty)* lets NomaUBL **generate reports without submitting them** — useful while validating identity and flux selection before involving the PA. |
+| **Send Mode** *(`paMode`)* | `API` *(default)* / `FTP` / *(empty)* | Transport used to **submit generated reports** to the PA. `API` routes the bundle through the api-connector picked on the previous tab; `FTP` spools the report XML to a temp file and uploads it via SFTP using the server below; *(empty)* lets NomaUBL **generate reports without submitting them** — useful while validating the identity before involving the PA. |
 
 The `paMode` field works the same way as on the E-Invoicing page.
 
@@ -232,14 +233,14 @@ The configuration check on the [Tech Dashboard](../../application/tech-dashboard
 - `paMode=API` without a `connector` is reported as an error (the API transport has nothing to call).
 - `paMode=FTP` without `paFtpHost` is reported as an error (the SFTP transport has no server).
 - `paMode=` (empty) with a `connector` is fine — reports generate locally and are not submitted.
-- `issuerSiren`, `frequency` and `flux` are validated whenever `paMode` is non-empty (i.e. the bundle will actually be submitted).
+- `issuerSiren` and the `connector` are checked whenever `paMode` is non-empty (i.e. the bundle will actually be submitted).
 
 ---
 
 ## Tips & best practices
 
 - **Pick a separate api-connector when the reporting platform differs.** A multi-platform install often has e-invoicing on one PA and e-reporting on another — that's why each system template carries its own connector reference. Set both to the same connector name when they share a platform.
-- **Start with `paMode=` (empty)** when first wiring the company up. NomaUBL generates the report locally so identity and flux selection can be validated against a sample without touching the PA. Flip to `API` once the bundle reads correctly.
+- **Start with `paMode=` (empty)** when first wiring the company up. NomaUBL generates the report locally so the identity can be validated against a sample without touching the PA. Flip to `API` once the bundle reads correctly.
 - **Use SFTP only when the PA mandates file drop.** REST submission is simpler to debug and works with the api-connector test panel; SFTP is appropriate for high-volume submissions or when the PA does not expose a REST report-import endpoint.
 - **Per-company overrides go on `e-reporting-{kco}`.** Copy the platform-wide `e-reporting` template under the new name from *Settings* and edit only the fields that differ — typically `issuerSiren`, the `connector` reference, or the SFTP credentials when company `00070` reports through a different platform.
 - **Frequency drives the auto-computed period.** Setting it to `MONTHLY` makes the scheduler emit one bundle per month covering the previous month; `QUARTERLY` extends the window. The *Generate* dialog still lets the user override the period at run time.

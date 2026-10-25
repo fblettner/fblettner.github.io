@@ -861,7 +861,8 @@
         "parameters": [
           { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "Last update date lower bound (yyyy-MM-dd)", "required": false },
           { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "Last update date upper bound (yyyy-MM-dd)", "required": false },
-          { "name": "excludeReviewed", "in": "query", "schema": { "type": "boolean" }, "description": "true = drop reviewed invoices (UHALRTPSD = Y) that sit in an errorTech / errorBusiness status; other statuses keep them. Default false.", "required": false }
+          { "name": "excludeReviewed", "in": "query", "schema": { "type": "boolean" }, "description": "true = drop reviewed invoices (UHALRTPSD = Y) that sit in an errorTech / errorBusiness status; other statuses keep them. Default false.", "required": false },
+          { "name": "direction", "in": "query", "schema": { "type": "string" }, "description": "sales (issued invoices) or purchases (received); absent = both", "required": false }
         ],
         "responses": {
           "200": {
@@ -1775,6 +1776,22 @@
         }
       }
     },
+    "/api/list-views/values/{field}": {
+      "get": {
+        "tags": ["Config"],
+        "summary": "Distinct values of a column",
+        "description": "The distinct non-blank values of one archive-log or validation column, for a custom list refreshed from the NomaUBL database.\n\nFields: activityCode, subType, dct, kco, sendToPaFlag, businessUnit (archive log) and level (validation findings); at most 2,000 values. Validation rules come with their descriptions from the built-in validation-rules list instead.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "field", "in": "path", "schema": { "type": "string" }, "description": "Field name — activityCode, subType, dct, kco, sendToPaFlag, businessUnit or level", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "field": "activityCode", "values": ["FAC", "SRV"] } } } }
+          }
+        }
+      }
+    },
     "/api/list-views/{name}/catalog": {
       "get": {
         "tags": ["Config"],
@@ -1817,6 +1834,27 @@
         }
       }
     },
+    "/api/dashboard/synthese": {
+      "get": {
+        "tags": ["Dashboard"],
+        "summary": "Business dashboard (Synthèse)",
+        "description": "Sales (or, with direction=purchases, received) invoices of the period in amounts, compared with the previous period of the same length. kpi: invoices and credit notes apart, amounts positive (the page shows the net = invoices − credit notes; credit notes = invoice types of kind CREDIT), invoice count, how many were issued (reached the platform: transmitted, or refused / disputed after receipt) and the invoice amount transmitted (transmission rate).\n\nTwelve months of amount by outcome from the status groups (approved + transmission = transmitted, errorTech = to fix, errorBusiness = refused, the rest in progress, excluded left out); what needs a decision over all dates (one line per business status, the platform rejection, the technical failures to fix), in amounts incl. VAT; the split per company and per transaction type; for sales, per company the last e-reporting declaration and the next period due. Amounts in currency units. Honours the user's company and row grants; excludeReviewed drops reviewed invoices in an error status.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "Period start yyyy-MM-dd; with dateTo absent too, the whole history (period, previous and kpi.previous null)", "required": false },
+          { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "Period end yyyy-MM-dd (default: today when dateFrom is given)", "required": false },
+          { "name": "dateBasis", "in": "query", "schema": { "type": "string" }, "description": "update (default), issue or archive", "required": false },
+          { "name": "direction", "in": "query", "schema": { "type": "string" }, "description": "sales (default) or purchases (received invoices)", "required": false },
+          { "name": "excludeReviewed", "in": "query", "schema": { "type": "boolean" }, "description": "Leave out reviewed invoices still in an error status", "required": false },
+          { "name": "lang", "in": "query", "schema": { "type": "string" }, "description": "fr or en, for the status labels", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "direction": "sales", "period": { "from": "2026-09-01", "to": "2026-09-30" }, "previous": { "from": "2026-08-02", "to": "2026-08-31" }, "kpi": { "current": { "ht": 1248300.0, "vat": 249660.0, "count": 300, "issued": 281, "sentHt": 1140900.0, "credits": 18, "creditHt": 42150.0, "creditVat": 8430.0 }, "previous": null }, "months": [ { "month": "2026-09", "transmitted": 1100000.0, "inProgress": 87000.0, "toFix": 21000.0, "refused": 20000.0 } ], "decisions": [ { "codes": "210", "kind": "business", "label": "Refusée", "count": 16, "amount": 38400.0 } ], "companies": [ { "kco": "00040", "ht": 412600.0, "count": 78, "transmittedShare": 89.0 } ], "types": [ { "type": "B2B", "ht": 1018900.0 } ], "ereporting": [ { "kco": "00010", "lastPeriodEnd": "2026-09-30", "lastStatus": "9955", "lastStatusLabel": "Déposé", "lastStatusTone": "ok", "nextStart": "2026-10-01", "nextEnd": "2026-10-31", "frequency": "MONTHLY" } ] } } } }
+          }
+        }
+      }
+    },
     "/api/dashboard/overview": {
       "get": {
         "tags": ["Dashboard"],
@@ -1826,7 +1864,8 @@
           { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "ISO date lower bound (YYYY-MM-DD)", "required": false },
           { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "ISO date upper bound (YYYY-MM-DD)", "required": false },
           { "name": "errorCategory", "in": "query", "schema": { "type": "string" }, "description": "Filter for top-error-rules widget — 'ubl' | 'integration' | 'all'", "required": false },
-          { "name": "excludeReviewed", "in": "query", "schema": { "type": "boolean" }, "description": "true = drop reviewed invoices (UHALRTPSD = Y) that sit in an errorTech / errorBusiness status; other statuses keep them. Default false.", "required": false }
+          { "name": "excludeReviewed", "in": "query", "schema": { "type": "boolean" }, "description": "true = drop reviewed invoices (UHALRTPSD = Y) that sit in an errorTech / errorBusiness status; other statuses keep them. Default false.", "required": false },
+          { "name": "direction", "in": "query", "schema": { "type": "string" }, "description": "sales (issued invoices) or purchases (received); absent = both — applied to every widget", "required": false }
         ],
         "responses": {
           "200": {
@@ -1840,7 +1879,7 @@
       "get": {
         "tags": ["Dashboard"],
         "summary": "IT-team technical dashboard feed",
-        "description": "Single-call feed for the Tech Dashboard: last FATAL/ERROR entries (validation failures and runtime processing log, unioned), 14-day throughput by mode, table row counts, error trend, active sessions (F564252 when auth is on, the in-memory IP tracker otherwise), per-template stats and retry rate.\n\nSections degrade to empty arrays on error rather than failing the whole call.\n\n**Access:** any signed-in user.",
+        "description": "Single-call feed for the Tech Dashboard: last FATAL/ERROR entries (validation failures and runtime processing log, unioned), 14-day throughput by mode, documents processed per day with how many are now in a technical error (processed: date, total, failed), table row counts, error trend, active sessions (F564252 when auth is on, the in-memory IP tracker otherwise), per-template stats and retry rate.\n\nSections degrade to empty arrays on error rather than failing the whole call.\n\n**Access:** any signed-in user.",
         "responses": {
           "200": {
             "description": "Success",
@@ -2090,10 +2129,79 @@
         "tags": ["Reports"],
         "x-permission": "any signed-in user",
         "summary": "Explorer analysis or dashboard as PDF",
-        "description": "Body {lang, kind: analysis|dashboard, title, period, sections:[{title, note, chart?:{type: bar|hbar|line|donut, title, labels[], series[{name, values[]}]}, table[[…]], headRows}]}.\n\nThe sections are written as the audit report's Markdown and rendered by the same engine: cover page with environment, period, date, author and version; contents for a dashboard; running headers and footers; the charts drawn by the renderer; tables limited to 3,000 rows. Returns application/pdf.\n\n**Access:** any signed-in user.",
+        "description": "Body {lang, kind: analysis|dashboard, title, period, sections:[{title, note, chart?:{type: bar|hbar|line|donut, title, labels[], series[{name, values[], color?}], stacked?}, table[[…]], headRows, boldRows?}], category?, source?, flow?}.\n\nThe sections are written as the audit report's Markdown and rendered by the same engine: cover page with environment, period, date, author and version; contents for a dashboard; running headers and footers; the charts drawn by the renderer; tables limited to 3,000 rows. Returns application/pdf.\n\n**Access:** any signed-in user.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "type": "object", "example": { "lang": "fr", "kind": "analysis", "title": "Refus et rejets par motif", "period": "2026-01-01 – 2026-10-25", "sections": [ { "title": "Refus et rejets par motif", "chart": { "type": "bar", "labels": ["2026-09", "2026-10"], "series": [ { "name": "210", "values": [5, 2] } ] }, "table": [["Mois", "Nombre"], ["2026-09", "5"]], "headRows": 1 } ] } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "contentType": "application/pdf" } } } }
+          }
+        }
+      }
+    },
+    "/api/ui/period-defaults": {
+      "get": {
+        "tags": ["Dashboard"],
+        "summary": "Default periods of the views",
+        "description": "The period each view opens on when the user has not chosen one: default (global defaultPeriod, blank = thisMonth) and per-view overrides (global defaultPeriod.<view>).\n\nPresets: today, yesterday, last7, last30, thisMonth, lastMonth, thisQuarter, thisYear, all.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "default": "thisMonth", "views": { "invoices": "yesterday" } } } } }
+          }
+        }
+      }
+    },
+    "/api/dashboard/statistics": {
+      "get": {
+        "tags": ["Dashboard"],
+        "summary": "Status statistics dashboard",
+        "description": "Invoices of the period (direction=sales, the default, or purchases; dateBasis issue / update / archive; excludeReviewed) grouped by status, activity code, reason and transaction type with count and amount excl.\n\nVAT (rows); the status counts of the previous period of the same length (previousByStatus) and its rows in the same breakdown (previousRows), both null for all dates; invoices per day and status over the period (trend, the last twelve months for all dates); the invoices still open by status and days since their last change (ages: 0-1, 2-3, 4-7, 8-30, 30+); the status labels. Company and row grants apply.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "yyyy-MM-dd; with dateTo absent, all dates", "required": false },
+          { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "yyyy-MM-dd", "required": false },
+          { "name": "dateBasis", "in": "query", "schema": { "type": "string" }, "description": "issue | update | archive", "required": false },
+          { "name": "excludeReviewed", "in": "query", "schema": { "type": "boolean" }, "description": "Leave out reviewed invoices still in an error status", "required": false },
+          { "name": "direction", "in": "query", "schema": { "type": "string" }, "description": "sales | purchases", "required": false }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "period": { "from": "2026-10-01", "to": "2026-10-25" }, "previous": { "from": "2026-09-01", "to": "2026-09-25" }, "direction": "sales", "rows": [ { "status": "200", "activity": "AR", "reason": "", "docType": "B2B", "count": 120, "amount": 154200.5 } ], "previousByStatus": [ { "status": "200", "count": 98 } ], "trend": { "from": "2026-10-01", "to": "2026-10-25", "days": [ { "date": "2026-10-01", "status": "200", "count": 6 } ] }, "ages": [ { "status": "9906", "age": "2-3", "count": 4 } ], "labels": { "200": { "fr": "Déposée", "en": "Deposited" } } } } } }
+          }
+        }
+      }
+    },
+    "/api/dashboard/statistics/pdf": {
+      "post": {
+        "tags": ["Dashboard"],
+        "x-permission": "any signed-in user",
+        "summary": "Status statistics as PDF",
+        "description": "Same body and rendering as /api/explorer/pdf, sent by the Statistics page; allowed with the dashboard page. Returns application/pdf (statistics.pdf).\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "lang": "fr", "kind": "analysis", "flow": true, "title": "Statistiques", "period": "2026-10-01 – 2026-10-25", "sections": [] } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "contentType": "application/pdf" } } } }
+          }
+        }
+      }
+    },
+    "/api/dashboard/synthese/pdf": {
+      "post": {
+        "tags": ["Dashboard"],
+        "x-permission": "any signed-in user",
+        "summary": "Synthèse as PDF",
+        "description": "Same body and rendering as /api/explorer/pdf, sent by the Synthèse page (category and source name the report, flow runs the sections on from one another); allowed with the dashboard page.\n\nReturns application/pdf (synthese.pdf).\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "lang": "fr", "kind": "analysis", "category": "Synthèse", "source": "NomaUBL", "title": "Synthèse — ventes", "period": "2026-10-01 – 2026-10-25", "sections": [] } } } }
         },
         "responses": {
           "200": {
@@ -2519,10 +2627,10 @@
       "get": {
         "tags": ["EReporting"],
         "summary": "List e-reporting submissions",
-        "description": "Paged list of generated e-reports with their status and submission outcome. Filterable by company (kco), flux (10.1|10.3), and current status code.\n\n**Access:** any signed-in user.",
+        "description": "Paged list of generated e-reports with their status and submission outcome.\n\nFilterable by company (kco), direction (flux: 1 inbound, 2 outbound), and current status code.\n\n**Access:** any signed-in user.",
         "parameters": [
           { "name": "kco", "in": "query", "schema": { "type": "string" }, "description": "Company code filter", "required": false },
-          { "name": "flux", "in": "query", "schema": { "type": "string" }, "description": "Flux filter — 10.1 (B2C) or 10.3 (B2BINT)", "required": false },
+          { "name": "flux", "in": "query", "schema": { "type": "string" }, "description": "Direction filter — 1 inbound (purchases) or 2 outbound (sales)", "required": false },
           { "name": "status", "in": "query", "schema": { "type": "string" }, "description": "Status code filter", "required": false },
           { "name": "page", "in": "query", "schema": { "type": "integer" }, "description": "1-based page number", "required": false },
           { "name": "pageSize", "in": "query", "schema": { "type": "integer" }, "description": "Rows per page (1-200)", "required": false }
@@ -2556,10 +2664,10 @@
         "tags": ["EReporting"],
         "x-permission": "any signed-in user",
         "summary": "Generate one or more e-reports",
-        "description": "Starts the e-reporting handler in the background (no-op when a run is already in progress) — generates the XML, validates it, persists it, optionally submits to the PA.\n\nReturns at once with {running:true}; poll GET /api/ereporting/generate/progress for the live log and the final summary. {@code start}/{@code end} default to the next-due period for the configured frequency when omitted.\n\n**Access:** any signed-in user.",
+        "description": "Starts the e-reporting handler in the background (no-op when a run is already in progress) — generates the XML, validates it, persists it, optionally submits to the PA.\n\nReturns at once with {running:true}; poll GET /api/ereporting/generate/progress for the live log and the final summary. {@code start}/{@code end} default to the next-due period for the configured frequency when omitted; {@code direction} (2 outbound, 1 inbound) defaults to both. One report per company and direction carries both flows (10.1 B2B international detail, 10.3 B2C aggregates).\n\n**Access:** any signed-in user.",
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "kco": "00070", "flux": ["10.1","10.3"], "start": "2026-04-01", "end": "2026-04-30", "typeCode": "IN" } } } }
+          "content": { "application/json": { "schema": { "type": "object", "example": { "kco": "00070", "direction": ["2","1"], "start": "2026-04-01", "end": "2026-04-30", "typeCode": "IN" } } } }
         },
         "responses": {
           "200": {
@@ -3193,6 +3301,35 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "entry": { "id": "20261024-181200-123-push", "direction": "push", "plan": { "manifest": {}, "summary": {}, "items": [], "files": [] } } } } } }
+          }
+        }
+      }
+    },
+    "/api/schematrons": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Schematron packs",
+        "description": "The Schematron packs the validator runs: the shipped ones (EN 16931, CIUS-FR flux 2, extended CTC FR, Chorus Pro, NomaUBL, e-reporting flux 10) with their version, then the customer packs named by the document templates (customSchematron) with the templates using each one; checks is the number of asserts and reports.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "packs": [ { "id": "en16931", "label": "EN 16931", "group": "shipped", "file": "EN16931-UBL-validation-preprocessed.sch", "version": "1.3.15", "lastUpdate": "2025-10-16", "checks": 979, "templates": [] } ] } } } }
+          }
+        }
+      }
+    },
+    "/api/schematrons/{id}": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Rules of one Schematron pack",
+        "description": "One pack read into patterns, rules (context) and checks (assert or report: id, flag, test, message with its value-of expressions as {expr}, description).\n\nA customer pack is read from the .sch next to its compiled .xsl when present, else from the compiled stylesheet.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Pack id from GET /api/schematrons (e.g. en16931, custom-1)", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "id": "en16931", "label": "EN 16931", "title": "", "file": "EN16931-UBL-validation-preprocessed.sch", "patterns": [ { "id": "UBL-model", "title": "", "rules": [ { "context": "cac:AdditionalDocumentReference", "checks": [ { "id": "BR-52", "kind": "assert", "flag": "fatal", "test": "normalize-space(cbc:ID) != ''", "message": "[BR-52]-Each Additional supporting document …", "description": "Each Additional supporting document …" } ] } ] } ] } } } }
           }
         }
       }

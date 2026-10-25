@@ -1,6 +1,6 @@
 ---
 title: Settings Overview
-description: "How the NomaUBL Settings page is organised — a navigation by intent (Platform, Security, E-invoicing, E-reporting, Jobs & inbound, Views & UI, API, SQL and FTP connectors, Reference data), a search over every field label, hint and key, Advanced folds for rarely used settings, and the header actions."
+description: "How the NomaUBL Settings page is organised — a navigation by intent (Platform, Security, E-invoicing, E-reporting, Jobs & inbound, Views & UI, API, SQL and FTP connectors, Reference data, Custom data), a search over every field label, hint and key, Advanced folds for rarely used settings, and the header actions."
 keywords: [NomaUBL, settings, configuration, navigation, search, platform, security, e-invoicing, e-reporting, jobs, connectors, reference data, advanced, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
@@ -109,11 +109,12 @@ The navigation on the left groups the entries by **what you want to set**, not b
 | **E-invoicing** | [E-invoicing](./system/einvoicing.md), [Document types](./system/document-types.md), [Status catalogue](./system/statuses.md), [Directory lookup](./system/edirectory.md). |
 | **E-reporting** | [E-reporting](./system/ereporting.md) and the *E-reporting status catalogue*. |
 | **Jobs & inbound** | *Job defaults* (global tab), [JDE print queue (BIP)](./system/fetch-invoices.md), [Integrity checks](./system/integrity-reports.md). |
-| **Views & UI** | [List views](./list-views.md). |
+| **Views & UI** | [List views](./list-views.md) and [Default periods](./default-periods.md#default-periods) (global tab *Periods*). |
 | **API connectors** | One entry per [API connector](./api-connectors.md), with the `api` badge. |
 | **SQL connectors** | One entry per [SQL connector](./sql-connectors.md), with the `sql` badge. |
 | **FTP connectors** | *JD Edwards file transfer* and the other [FTP connectors](./ftp-connectors.md), with the `ftp` badge. |
-| **Reference data** | The [reference lists](./reference-lists.md) (`list` badge) and the [custom lists](./custom-lists.md) (`custom` badge). |
+| **Reference data** | The [reference lists](./reference-lists.md) shipped with NomaUBL, with the `list` badge. |
+| **Custom data** | The [custom lists](./custom-lists.md), with the `custom` badge. |
 
 Each entry shows a label and a one-line description; the system templates keep their technical name, shown in small type next to the editor title (for example *Job defaults* · `global`). A global entry opens **only its tab** of the global editor.
 

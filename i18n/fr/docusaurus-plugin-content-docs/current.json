@@ -128,7 +128,7 @@
     "description": "The label for category 'Application' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Application.link.generated-index.description": {
-    "message": "Navigation principale de l'application : tableau de bord, tableau de bord IT, factures, e-reporting, annuaire, déclaration de TVA, rapports (audit, implémentation, technique), Explorateur, notifications, Diagnostic (erreurs d'intégration, journal des traitements, anomalies, journal serveur) et assistant IA.",
+    "message": "Navigation principale de l'application : synthèse, tableaux de bord Exploitation et IT, statistiques, factures, e-documents, e-reporting, annuaire, déclaration de TVA, rapports (intégrité, audit, implémentation, technique), Explorateur, notifications, Diagnostic (erreurs d'intégration, journal des traitements, anomalies, journal serveur) et assistant IA.",
     "description": "The generated-index page description for category 'Application' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.References": {
@@ -136,7 +136,7 @@
     "description": "The label for category 'References' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.References.link.generated-index.description": {
-    "message": "Documents de référence repris dans l'application : codes de statut, codes motif, sémantique UBL, règles métier, schéma de base, référence développeur et API HTTP.",
+    "message": "Documents de référence repris dans l'application : codes de statut, codes motif, sémantique UBL, règles métier, règles Schematron, schéma de base, référence développeur et API HTTP.",
     "description": "The generated-index page description for category 'References' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Sync": {

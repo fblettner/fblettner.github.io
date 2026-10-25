@@ -104,7 +104,7 @@ This page applies to documents from any source system — JD Edwards, SAP, NetSu
 
 ## How each list is edited
 
-Every reference list is presented as a simple **table** with the same three columns. The interaction model is identical across all twelve lists; the difference is only in the codes themselves and the regulatory reference behind each.
+Every reference list is presented as a simple **table** with the same three columns. The interaction model is identical across all fifteen lists; the difference is only in the codes themselves and the regulatory reference behind each.
 
 | Column | Description |
 |---|---|
@@ -115,29 +115,44 @@ Every reference list is presented as a simple **table** with the same three colu
 Use the **+ Add** button at the bottom of the table to add a custom row, and the **×** button on a row to remove one. Rows are sorted by code.
 
 :::info[Custom (non-standard) lists]
-The twelve lists below are the regulated catalogs shipped with NomaUBL. Operator-defined lists — used to drive grid dropdowns and filters from outside data — live on a separate page: [Custom Lists](./custom-lists.md). Those can also be synced from an API or SQL connector instead of being edited row by row.
+The fifteen lists below are the regulated catalogs shipped with NomaUBL. Operator-defined lists — used to drive grid dropdowns and filters from outside data — live on a separate page: [Custom Lists](./custom-lists.md). Those can also be synced from an API or SQL connector instead of being edited row by row.
 :::
 
 ---
 
 ## Standard lists shipped with NomaUBL
 
-The twelve reference lists below are built into NomaUBL and aligned with the regulation. They cover everything the French e-invoicing pipeline needs to validate UBL documents end-to-end.
+The fifteen reference lists below are built into NomaUBL and aligned with the regulation. They cover everything the French e-invoicing pipeline needs to validate UBL documents end-to-end.
 
 | List | Standard / business term | Purpose |
 |---|---|---|
 | **Country Codes** | ISO 3166-1 alpha-2 | Two-letter country codes used for buyer / seller / delivery addresses. |
 | **Currency Codes** | ISO 4217 — `BT-5` / `BT-6` | Document currency and accounting currency on invoices. |
-| **Invoice Type Codes** | UNTDID 1001 — `BT-3` | Type of invoice document (e.g. commercial invoice, credit note, corrected invoice). |
+| **Invoice Type Codes** | UNTDID 1001 — `BT-3` | Type of invoice document (e.g. commercial invoice, credit note, corrected invoice), each marked as an invoice or a credit note — see [below](#invoice-types). |
 | **Note Type Codes** | UNTDID 4451 — `BT-22` | Qualifier of free-text notes attached to the invoice. |
 | **Payment Means Codes** | UNTDID 4461 — `BT-81` | How the invoice is to be paid (transfer, direct debit, card, …). |
 | **Profile IDs** | `BT-23` (*Cadre de facturation*) | Business process / invoicing framework identifier. |
+| **Customization IDs** | `BT-24` | Specification identifier; it decides which Schematron flavour applies (CIUS-FR or extended CTC FR). |
 | **Scheme IDs** | `BT-29` / `BT-30` / `BT-34` / `BT-49` / `BT-71` | Identifier scheme references (electronic addressing schemes, party identifier schemes). |
 | **Unit of Measure Codes** | UN/ECE Recommendation 20 — `BT-130` | Quantity unit codes for invoice lines (piece, kilogram, hour, …). |
-| **VAT Category Codes** | EN 16931 — `BT-118` / `BT-151` | VAT category at document and line level (standard rate, reduced rate, exempt, reverse charge, …). |
+| **VAT Category Codes** | UN/ECE 5305 — `BT-118` / `BT-151` | VAT category at document and line level (standard rate, zero rated, exempt, reverse charge, …, including `L` Canary Islands IGIC and `M` Ceuta and Melilla IPSI). |
 | **VATEX Exemption Reason Codes** | VATEX — `BT-121` | Codified VAT exemption reasons referenced when a line is exempt. |
+| **VAT Point Date Codes** | UNTDID 2005 — `BT-8` | Whether VAT is due on the invoice date, the delivery date or the payment date. |
+| **Document Reference Codes** | UNTDID 1153 — `BT-128-1` | Scheme of an invoiced object identifier (delivery note, purchase order…). |
 | **Expected Action Codes** | `Y56ACTN` (*Action attendue*) | Action codes expected by the Plateforme Agréée (PA-side catalog). |
 | **Rejection Reason Codes** | `Y56RSRC` (*Motif de rejet*) | Reasons returned by the PA when an invoice is rejected. |
+
+The lists hold the complete code lists of their standard — for example 62 invoice type codes, 84 payment means codes, 30 units of measure. An upgrade **adds** the codes a list is missing and never removes or relabels a code already there, so labels adapted on an instance are kept.
+
+### Invoice types: invoice or credit note \{#invoice-types\}
+
+The *Invoice Type Codes* editor has a fourth column, **Type**, with *Invoice* or *Credit note* (the EN 16931 reading of each code; stored as `code = labelFr|labelEn|INVOICE` or `CREDIT`). Thirteen codes are credit notes out of the box: `81`, `83`, `261`, `262`, `296`, `308`, `381`, `396`, `420`, `458`, `502`, `503`, `532`. The type decides:
+
+- whether the UBL is produced as a **CreditNote** document rather than an Invoice;
+- how a document counts in the [Billing overview](../application/billing-overview.md) (credit notes are subtracted from the revenue);
+- the **sign** of the B2C amounts in [e-reporting](../application/ereporting.md).
+
+A code missing from the list, or listed without a type, follows the EN 16931 table.
 
 ---
 

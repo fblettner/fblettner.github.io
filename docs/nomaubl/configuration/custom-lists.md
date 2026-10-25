@@ -8,7 +8,9 @@ keywords: [NomaUBL, custom lists, reference list, dropdown, picker, filter, grid
 
 A **Custom List** is an operator-defined reference list — a `code → labelFr / labelEn` table managed outside the regulated catalogs in [Reference Lists](./reference-lists.md). Its job is to power a grid: assign a custom list to a column in the [List Views](./list-views.md) editor and the column gets a dropdown filter, a multi-select picker in *Advanced Filters*, and a `code — label` cell renderer — all automatically, without any code change.
 
-Each list can be edited row by row, or **synced from a connector** ([API](./api-connectors.md) or [SQL](./sql-connectors.md)) when the source of truth lives in an external system. Same query / endpoint can power several lists by feeding different parameters per list.
+Each list can be edited row by row, **refreshed from the NomaUBL tables** (the codes actually found in the processed documents), or **synced from a connector** ([API](./api-connectors.md) or [SQL](./sql-connectors.md)) when the source of truth lives in an external system. Same query / endpoint can power several lists by feeding different parameters per list.
+
+The custom lists have their own area in the [Settings navigation](./settings-overview.md), **Custom data**, right after *Reference data* (which keeps the shipped lists). Like most Settings editors, the editor is in English only.
 
 ---
 
@@ -159,7 +161,7 @@ A custom list can be backed by an external system instead of being edited by han
 
 | Field | Description |
 |---|---|
-| **Connector** | Dropdown of every `api-connector` and `sql-connector` template defined on the platform. Picking one limits the next field to that connector's targets. |
+| **Connector** | **NomaUBL database** (`@nomaubl`, see below), then every `api-connector` and `sql-connector` template defined on the platform. Picking one limits the next field to that connector's targets. |
 | **Endpoint / Query** | Dropdown of the connector's endpoints (API) or queries (SQL). Disabled until a connector is picked. |
 | **Code field** | Column name (SQL) or JSON key (API) the sync reads as each row's `code`. Required. |
 | **Label FR field** | Column / key for the French label. Required. |
@@ -168,9 +170,44 @@ A custom list can be backed by an external system instead of being edited by han
 | **Parameters** | Per-list key / value pairs sent to the connector as fixed values (no placeholder substitution). The same query can power several lists by saving different values per list; defaults from the endpoint definition apply when a field is left blank. |
 | **Sync now** | Calls the connector, walks the response, builds the row set, and replaces the rows in place. A translated banner reports `Synced N row(s) from connector · endpoint` on success, or the underlying error on failure. |
 
+### From the NomaUBL database \{#nomaubl-source\}
+
+With the **NomaUBL database** connector, the list is filled with the values found in the NomaUBL tables. The endpoint picks the column:
+
+| Endpoint | Values |
+|---|---|
+| *Activity code (F564230)* | Activity codes of the processed documents. |
+| *Sub-type (F564230)* | Document sub-types. |
+| *Document type (F564230)* | Document types (`dct`). |
+| *Company (F564230)* | Companies (`kco`). |
+| *Business unit (F564230)* | Business units. |
+| *Send to PA flag (F564230)* | Send-to-PA flags. |
+| *Validation level (F564236)* | Severity levels of the validation findings. |
+
+No field mapping is needed. **Sync now** only **adds** the codes the list lacks and keeps every existing code and its labels; the banner reads `N new code(s) added, M kept`. The labels of the new codes are then filled in by hand.
+
 The sync config lives on the same list template under `sync.connector`, `sync.endpoint`, `sync.codeField`, `sync.labelFrField`, `sync.labelEnField`, `sync.listPath` and `sync.params`. List consumers (cell renderer, *Advanced Filters* dropdown, per-column filter row) never see those keys as entries — they are filtered out of `parseRefOptions`.
 
 A *Sync now* does not auto-save; it only rebuilds the row table. Click **Save** to persist the synced rows.
+
+---
+
+## Ready-made lists \{#ready-made-lists\}
+
+NomaUBL ships custom lists that the default [List Views](./list-views.md) use for their value-list columns:
+
+| List | Content |
+|---|---|
+| `list-activite` | Activity codes, refreshed from the NomaUBL database. |
+| `list-sub-type` | Document sub-types, refreshed from the NomaUBL database. |
+| `list-companies` | Companies, synced from the `getCompanies` query of the shipped [`jde-sql` connector](./sql-connectors.md#jde-sql). |
+| `list-send-pa` | Send to the PA: `1` Send to the PA, `2` Not sent, `3` Held for review. |
+| `list-level` | Severity levels: Fatal, Error, Warning, Information. |
+| `list-validation-sources` | Sources of the validation findings: XSD schema, EN 16931, CIUS-FR, extended CTC FR, Chorus Pro, NomaUBL rules, and the technical steps (UBL, XML, PDF, XSL transformation, validation, PA, database, processing). |
+| `list-flux` | E-reporting direction: `1` Inbound (purchases), `2` Outbound (sales). |
+| `list-review` | Review flag: `Y` Reviewed, `N` Waiting. |
+
+A built-in **`validation-rules`** list is also available to the list views: the rules of the [Schematron](../references/schematrons.md) catalog, so that a rule column shows its description next to its code.
 
 ---
 
@@ -219,5 +256,5 @@ The list editor and the grid consumers share the same back-end:
 - **Pick a stable name.** The list's name is what column specs reference under `refList`. Renaming a list later breaks every column spec that points to it — better to delete and recreate under the new name once the column specs have been updated.
 - **Keep the FR label populated.** The cell renderer falls back to the FR label when the active locale is FR; an empty FR label surfaces the raw code in the grid, which is rarely what an operator wants.
 - **One connector query, many lists.** When several lists share the same back-end query (e.g. *active business units for company 00070* vs. *active business units for company 00080*), save the query once on a SQL or API connector and feed different *Parameters* per list. The endpoint defaults fill in the rest.
-- **Sync replaces, it does not merge.** A *Sync now* removes every existing row before inserting the new ones. Manual edits made between two syncs are lost — when manual overrides matter, keep the list either manual or fully synced, not both.
+- **A connector sync replaces, the NomaUBL source adds.** With an API or SQL connector, a *Sync now* removes every existing row before inserting the new ones, so manual edits made between two syncs are lost. With the NomaUBL database, the sync only adds the new codes and keeps the labels typed by hand.
 - **Hidden columns can still be filtered.** A column bound to a custom list can be marked `visible: false` in the spec and still surface in *Advanced Filters* — useful for technical fields like `logBusinessUnit` that operators want to filter on but not display.

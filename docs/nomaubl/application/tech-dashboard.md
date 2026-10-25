@@ -1,278 +1,197 @@
 ---
-title: Tech Dashboard
-description: "Operational health page for the IT team: 14 widgets covering JVM heap, GC, threads and uptime, database ping, build info, filesystem free space and file counts, processing throughput, error trend, retry rate, template processing time, active sessions, live process events (START / END pairs from running jobs, plus inline errors), configuration check, database tables, recent errors, and the background scheduler. One round-trip per refresh, no auth required to render the system block."
-keywords: [NomaUBL, tech dashboard, IT, operations, system health, JVM, heap, GC, database ping, filesystem, throughput, error trend, retry rate, template processing time, active sessions, live process events, scheduler events, configuration check, scheduler, F564237]
+title: IT dashboard
+description: "The NomaUBL IT dashboard (Tech Dashboard): a health strip (application, database, disk, memory, scheduler, configuration), the four action cards (send failed, waiting for review, to reprocess, to reprocess in full), processing over the last 14 days (volume, errors, retries, time per document), what is running right now, recent errors, and folded technical details (system, filesystem, JVM, configuration check, database tables, links)."
+keywords: [NomaUBL, IT dashboard, tech dashboard, health, JVM, heap, database ping, disk, scheduler, configuration check, send failed, resend, reprocess, documents processed per day, error rate, retry rate, processing time, running processes, live process events, active sessions, recent errors, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
-# Tech Dashboard
+# IT dashboard
 
-The **Tech Dashboard** is the IT team's operational view of NomaUBL — a single page bundling 16 widgets that cover the JVM, the database, the filesystem, the processing pipeline, the scheduler and a live feed of running jobs. It complements the [business Dashboard](./dashboard.md): the business audience sees invoice volumes and PA round-trip times, the IT team sees heap pressure, scheduler-driven START / END events and disk usage.
+The **IT dashboard** (*Tech Dashboard* in the application) is the IT team's view of NomaUBL. It reads top-down like a checklist: **is everything up?** (a health strip), **what is there to do?** (four action cards with their bulk action), **how did processing go over the last 14 days?**, **what is running right now?**, and the **recent errors**. The detailed technical cards — system, filesystem, JVM, configuration check, database tables — are folded at the bottom and open from the health strip. It complements the [Operations](./dashboard.md) dashboard, which follows the invoices rather than the server.
 
-Every refresh hits four backend endpoints in parallel — `/api/system`, `/api/dashboard/tech`, `/api/dashboard/log-tail`, `/api/dashboard/config-check` — so the page lands in one round-trip and stays light on the database.
-
-The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The widgets read host-level metrics and the NomaUBL processing log; the source format is transparent here.
+The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The cards read host-level metrics and the NomaUBL processing log.
 
 ---
 
 ## Opening the page
 
-- Sidebar → **Documentation → Tech Dashboard**.
-- The page renders even without authentication — the System Health block reports the JVM, the build, the OS and the PA mode regardless. Database-backed widgets show *Not configured* until a connector is set up.
+- Menu → **Navigation → Tech Dashboard**, after Operations.
+- The page title and description stay in English in both languages, as do most card titles.
 
 ---
 
 ## At a glance
 
-<svg viewBox="0 0 1000 880" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 570" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="tech-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="tech-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="tech-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.10"/></linearGradient>
-    <linearGradient id="tech-g-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4ade80" stopOpacity="0.18"/><stop offset="100%" stopColor="#22c55e" stopOpacity="0.04"/></linearGradient>
+    <marker id="tdb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="tdb-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="tdb-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="tdb-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="840" rx="14" fill="url(#tech-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
+  <rect x="220" y="20" width="760" height="530" rx="14" fill="url(#tdb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tech Dashboard</text>
-  <rect x="700" y="30" width="80" height="22" rx="5" fill="url(#tech-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="740" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">↻ Refresh</text>
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="240" y="84" width="362" height="120" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="104" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SYSTEM HEALTH</text>
-  <text x="540" y="104" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">2026.05.6 · 2026-05-09</text>
-  <text x="252" y="128" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Java</text>
-  <text x="252" y="142" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">21.0.5</text>
-  <text x="332" y="128" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Heap</text>
-  <text x="332" y="142" fill="rgb(50,215,75)" fontSize="11" fontFamily="ui-monospace, monospace">412 / 2048 MB · 20%</text>
-  <text x="252" y="166" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Uptime</text>
-  <text x="252" y="180" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">7d 3h</text>
-  <text x="332" y="166" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Database</text>
-  <text x="332" y="180" fill="rgb(50,215,75)" fontSize="11" fontFamily="ui-monospace, monospace">postgres · 18ms</text>
-  <text x="500" y="166" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">PA mode</text>
-  <text x="500" y="180" fill="rgb(50,215,75)" fontSize="11" fontFamily="ui-monospace, monospace">Live</text>
-
-  <rect x="612" y="84" width="168" height="120" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="624" y="104" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">QUICK LINKS</text>
-  <text x="624" y="128" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Settings</text>
-  <text x="624" y="146" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Processing Log</text>
-  <text x="624" y="164" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ File Versions</text>
-  <text x="624" y="182" fill="#4a9eff" fontSize="11" fontFamily="system-ui, sans-serif">→ Integration Errors</text>
-
-  <rect x="240" y="216" width="178" height="100" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="236" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SCHEDULER</text>
-  <text x="372" y="236" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">3 active</text>
-  <rect x="252" y="246" width="156" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="258" y="256" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace">retrieve-statuses · 5m</text>
-  <rect x="252" y="264" width="156" height="14" rx="3" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="258" y="274" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace">notif-purge · daily</text>
-  <rect x="252" y="282" width="156" height="14" rx="3" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="258" y="292" fill="#4a9eff" fontSize="9" fontFamily="ui-monospace, monospace">fetch-all · 15m</text>
-
-  <rect x="428" y="216" width="174" height="100" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="440" y="236" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ERROR TREND · 14d</text>
-  <polyline points="446,302 458,290 470,294 482,280 494,288 506,272 518,278 530,260 542,266 554,258 566,272 578,266 590,260" fill="none" stroke="#f87171" strokeWidth="1.6"/>
-  <circle cx="590" cy="260" r="3" fill="#f87171"/>
-  <text x="446" y="312" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">avg 12/day · today 4</text>
-
-  <rect x="612" y="216" width="168" height="100" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="624" y="236" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">RETRY RATE · 14d</text>
-  <text x="624" y="266" fill="#e2e8f0" fontSize="22" fontWeight="700" fontFamily="ui-monospace, monospace">3.2%</text>
-  <text x="624" y="284" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">142 retries / 4 480 runs</text>
-  <text x="624" y="300" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace">↓ -0.4 vs prev. period</text>
-
-  <rect x="240" y="328" width="178" height="100" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="348" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">JVM · THREADS + GC</text>
-  <text x="252" y="370" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Threads</text>
-  <text x="252" y="384" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">28 / peak 36</text>
-  <text x="332" y="370" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">GC</text>
-  <text x="332" y="384" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">G1 · 18ms</text>
-  <text x="252" y="406" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Loaded classes</text>
-  <text x="252" y="420" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">12 446</text>
-
-  <rect x="428" y="328" width="174" height="100" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="440" y="348" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">THROUGHPUT · 14d</text>
-  <rect x="446" y="392" width="9" height="22" fill="rgba(74,158,255,0.30)"/>
-  <rect x="458" y="386" width="9" height="28" fill="rgba(74,158,255,0.40)"/>
-  <rect x="470" y="378" width="9" height="36" fill="rgba(74,158,255,0.55)"/>
-  <rect x="482" y="372" width="9" height="42" fill="rgba(74,158,255,0.65)"/>
-  <rect x="494" y="380" width="9" height="34" fill="rgba(74,158,255,0.50)"/>
-  <rect x="506" y="368" width="9" height="46" fill="rgba(74,158,255,0.70)"/>
-  <rect x="518" y="372" width="9" height="42" fill="rgba(74,158,255,0.65)"/>
-  <rect x="530" y="364" width="9" height="50" fill="rgba(74,158,255,0.80)"/>
-  <rect x="542" y="358" width="9" height="56" fill="rgba(74,158,255,0.90)" stroke="#4a9eff" strokeWidth="1"/>
-  <rect x="554" y="370" width="9" height="44" fill="rgba(74,158,255,0.65)"/>
-  <rect x="566" y="382" width="9" height="32" fill="rgba(74,158,255,0.45)"/>
-  <rect x="578" y="392" width="9" height="22" fill="rgba(74,158,255,0.30)"/>
-  <text x="446" y="424" fill="#64748b" fontSize="8" fontFamily="ui-monospace, monospace">peak 2026-05-04 · 198 docs</text>
-
-  <rect x="612" y="328" width="168" height="100" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="624" y="348" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">ACTIVE CLIENTS · 15M</text>
-  <text x="624" y="370" fill="#e2e8f0" fontSize="22" fontWeight="700" fontFamily="ui-monospace, monospace">4</text>
-  <text x="624" y="390" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">10.0.0.42 · 32 hits</text>
-  <text x="624" y="404" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">10.0.0.55 · 18 hits</text>
-  <text x="624" y="418" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">10.0.0.61 · 9 hits</text>
-
-  <rect x="240" y="440" width="362" height="80" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="460" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">FILESYSTEM</text>
-  <text x="540" y="460" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">disk usage + file count</text>
-  <text x="252" y="478" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">appHome · /opt/nomaubl</text>
-  <text x="490" y="478" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace">free 64 GB · 412 files</text>
-  <text x="252" y="492" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">dirInput · /data/in</text>
-  <text x="490" y="492" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace">free 64 GB · 86 files</text>
-  <text x="252" y="506" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">dirArchive · /data/archive</text>
-  <text x="490" y="506" fill="rgb(255,159,10)" fontSize="9" fontFamily="ui-monospace, monospace">free 8 GB · 4 800 files</text>
-
-  <rect x="612" y="440" width="168" height="80" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="624" y="460" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">TEMPLATE TIME · 14d</text>
-  <text x="624" y="480" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">invoices · 3.2s</text>
-  <text x="624" y="494" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">credit_notes · 2.8s</text>
-  <text x="624" y="508" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">e-reporting · 5.1s</text>
-
-  <rect x="240" y="532" width="540" height="80" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="552" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">LIVE PROCESS EVENTS</text>
-  <circle cx="358" cy="549" r="3.5" fill="rgb(50,215,75)"/>
-  <text x="368" y="552" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace">process running · 5s poll</text>
-  <text x="668" y="552" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">START / END · errors in red</text>
-  <text x="252" y="572" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace" fontWeight="700">START</text>
-  <text x="290" y="572" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:34:08  fetch-all · invoices · scheduler · 84 docs to process</text>
-  <text x="252" y="586" fill="rgb(0,122,255)" fontSize="9" fontFamily="ui-monospace, monospace" fontWeight="700">END</text>
-  <text x="290" y="586" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">12:34:42  fetch-all · invoices · 84 / 84 OK · 34 s</text>
-  <text x="252" y="600" fill="rgb(255,69,58)" fontSize="9" fontFamily="ui-monospace, monospace" fontWeight="700">ERROR</text>
-  <text x="290" y="600" fill="rgb(255,69,58)" fontSize="9" fontFamily="ui-monospace, monospace">12:35:14  retrieve-statuses · 12399 · UBL_CREATION FAILED</text>
-
-  <rect x="240" y="624" width="540" height="80" rx="8" fill="url(#tech-g-green)" stroke="rgba(50,215,75,0.40)" strokeWidth="1.2"/>
-  <text x="252" y="644" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">CONFIGURATION CHECK</text>
-  <text x="676" y="644" fill="rgb(50,215,75)" fontSize="9" fontFamily="ui-monospace, monospace">✔ 0 issues</text>
-  <text x="252" y="664" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">PA connector — baseUrl, OAUTH2 credentials, import endpoint, import-status endpoint</text>
-  <text x="252" y="680" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">e-Directory — directory-check endpoint when checkDirectory=Y</text>
-  <text x="252" y="696" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">e-Reporting — issuerSiren, frequency, flux when sendToPA=Y</text>
-
-  <rect x="240" y="716" width="220" height="124" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="736" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DATABASE TABLES</text>
-  <text x="436" y="736" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">12 480 rows</text>
-  <text x="252" y="756" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">F564231 invoices</text>
-  <text x="436" y="756" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">3 826</text>
-  <text x="252" y="772" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">F564235 lifecycle</text>
-  <text x="436" y="772" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">15 442</text>
-  <text x="252" y="788" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">F564236 validation</text>
-  <text x="436" y="788" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">6 138</text>
-  <text x="252" y="804" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">F564237 runtime log</text>
-  <text x="436" y="804" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">42 116</text>
-  <text x="252" y="820" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">F564253 notifications</text>
-  <text x="436" y="820" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">812</text>
-
-  <rect x="470" y="716" width="310" height="124" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="482" y="736" fill="#cbd5e1" fontSize="10" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">RECENT ERRORS</text>
-  <text x="766" y="736" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">8 entries</text>
-  <rect x="478" y="746" width="34" height="14" rx="3" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="495" y="757" fill="#f87171" fontSize="8" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">FATAL</text>
-  <text x="518" y="757" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">UBL_CREATION · 12399 · XSL threw NPE</text>
-  <text x="766" y="757" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">2m ago</text>
-  <rect x="478" y="764" width="34" height="14" rx="3" fill="rgba(248,113,113,0.10)" stroke="rgba(248,113,113,0.40)" strokeWidth="1"/>
-  <text x="495" y="775" fill="#f87171" fontSize="8" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">ERROR</text>
-  <text x="518" y="775" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PA_SEND · 12345 · HTTP 502 → retried</text>
-  <text x="766" y="775" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">14m ago</text>
-  <rect x="478" y="782" width="34" height="14" rx="3" fill="rgba(248,113,113,0.10)" stroke="rgba(248,113,113,0.40)" strokeWidth="1"/>
-  <text x="495" y="793" fill="#f87171" fontSize="8" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">ERROR</text>
-  <text x="518" y="793" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">DB_INSERT · 12298 · unique violation</text>
-  <text x="766" y="793" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">1h ago</text>
-  <rect x="478" y="800" width="34" height="14" rx="3" fill="rgba(251,146,60,0.10)" stroke="rgba(251,146,60,0.40)" strokeWidth="1"/>
-  <text x="495" y="811" fill="#fb923c" fontSize="8" textAnchor="middle" fontFamily="ui-monospace, monospace" fontWeight="700">WARN</text>
-  <text x="518" y="811" fill="#cbd5e1" fontSize="9" fontFamily="ui-monospace, monospace">PA_TIMEOUT · 12277 · auto-retry</text>
-  <text x="766" y="811" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace" textAnchor="end">3h ago</text>
-
-  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">System Health</text>
-  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">JVM / DB / OS / build</text>
-  <line x1="200" y1="115" x2="240" y2="118" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
-
-  <rect x="820" y="240" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Retry rate</text>
-  <text x="830" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">14-day moving ratio</text>
-  <line x1="820" y1="256" x2="780" y2="256" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
-
-  <rect x="20" y="350" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">JVM extras</text>
-  <text x="30" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">threads, GC, classes</text>
-  <line x1="200" y1="366" x2="240" y2="370" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
-
-  <rect x="820" y="350" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Active clients</text>
-  <text x="830" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">IP tracker · 15-min window</text>
-  <line x1="820" y1="366" x2="780" y2="366" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
-
-  <rect x="20" y="460" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="475" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filesystem</text>
-  <text x="30" y="488" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">free space + file count</text>
-  <line x1="200" y1="476" x2="240" y2="480" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
-
-  <rect x="20" y="560" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="575" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Live process events</text>
-  <text x="30" y="588" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">START / END · 5 s poll · pause</text>
-  <line x1="200" y1="576" x2="240" y2="566" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
-
-  <rect x="820" y="650" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="665" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Configuration check</text>
-  <text x="830" y="678" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">connector schema validation</text>
-  <line x1="820" y1="666" x2="780" y2="650" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
-
-  <rect x="820" y="780" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="795" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Recent errors</text>
-  <text x="830" y="808" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">click → opens log entry</text>
-  <line x1="820" y1="796" x2="780" y2="780" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tech-arrow)"/>
+  <rect x="876" y="34" width="84" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="918.0" y="48.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Refresh</text>
+  <text x="240" y="80" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">IS EVERYTHING UP?</text>
+  <rect x="240.0" y="88" width="111.66666666666667" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <circle cx="252.0" cy="102" r="3.5" fill="#4ade80"/>
+  <text x="260.0" y="105" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Application</text>
+  <text x="250.0" y="122" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">2026.10.25.1</text>
+  <text x="250.0" y="134" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">up for 3 d</text>
+  <rect x="361.6666666666667" y="88" width="111.66666666666667" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <circle cx="373.6666666666667" cy="102" r="3.5" fill="#4ade80"/>
+  <text x="381.6666666666667" y="105" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Database</text>
+  <text x="371.6666666666667" y="122" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">4 ms</text>
+  <rect x="483.33333333333337" y="88" width="111.66666666666667" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <circle cx="495.33333333333337" cy="102" r="3.5" fill="#4ade80"/>
+  <text x="503.33333333333337" y="105" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Disk</text>
+  <text x="493.33333333333337" y="122" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">38 % free</text>
+  <rect x="605.0" y="88" width="111.66666666666667" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <circle cx="617.0" cy="102" r="3.5" fill="#4ade80"/>
+  <text x="625.0" y="105" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Memory</text>
+  <text x="615.0" y="122" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">41 %</text>
+  <text x="615.0" y="134" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">heap</text>
+  <rect x="726.6666666666667" y="88" width="111.66666666666667" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <circle cx="738.6666666666667" cy="102" r="3.5" fill="#4ade80"/>
+  <text x="746.6666666666667" y="105" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Scheduler</text>
+  <text x="736.6666666666667" y="122" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Running</text>
+  <text x="736.6666666666667" y="134" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">next run 14:05</text>
+  <rect x="848.3333333333334" y="88" width="111.66666666666667" height="52" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <circle cx="860.3333333333334" cy="102" r="3.5" fill="#fb923c"/>
+  <text x="868.3333333333334" y="105" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Configuration</text>
+  <text x="858.3333333333334" y="122" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">1 issue</text>
+  <text x="240" y="162" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TO DO</text>
+  <rect x="240.0" y="170" width="172.5" height="56" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252.0" y="190" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Send failed (9904)</text>
+  <text x="252.0" y="204" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">PA delivery failures</text>
+  <text x="400.5" y="218" fill="#f87171" fontSize="14" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">3</text>
+  <rect x="422.5" y="170" width="172.5" height="56" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="434.5" y="190" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Waiting for review</text>
+  <text x="434.5" y="204" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Held before sending (flag W)</text>
+  <text x="583.0" y="218" fill="#fb923c" fontSize="14" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">6</text>
+  <rect x="605.0" y="170" width="172.5" height="56" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="617.0" y="190" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">To reprocess</text>
+  <text x="617.0" y="204" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Not transmitted</text>
+  <text x="765.5" y="218" fill="#fb923c" fontSize="14" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">2</text>
+  <rect x="787.5" y="170" width="172.5" height="56" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="799.5" y="190" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">To reprocess in full</text>
+  <text x="799.5" y="204" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">Validation failed</text>
+  <text x="948.0" y="218" fill="#f87171" fontSize="14" fontWeight="700" textAnchor="end" fontFamily="system-ui, sans-serif">1</text>
+  <text x="240" y="248" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCESSING · LAST 14 DAYS</text>
+  <rect x="240" y="256" width="720" height="128" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="254" y="266" width="52" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="280.0" y="279.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Volume</text>
+  <rect x="312" y="266" width="52" height="20" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="338.0" y="279.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Errors</text>
+  <rect x="370" y="266" width="57" height="20" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="398.5" y="279.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Retries</text>
+  <rect x="433" y="266" width="107" height="20" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="486.5" y="279.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Time per document</text>
+  <text x="254" y="302" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Documents processed per day</text>
+  <rect x="262.9" y="332.5" width="31.6" height="37.5" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="262.9" y="331.8" width="31.6" height="0.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="312.3" y="323.1" width="31.6" height="46.9" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="312.3" y="322.0" width="31.6" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="361.8" y="332.1" width="31.6" height="37.9" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="361.8" y="331.5" width="31.6" height="0.6" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="411.2" y="331.1" width="31.6" height="38.9" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="411.2" y="330.3" width="31.6" height="0.8" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="460.6" y="338.5" width="31.6" height="31.5" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="460.6" y="338.4" width="31.6" height="0.2" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="510.0" y="324.4" width="31.6" height="45.6" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="510.0" y="323.6" width="31.6" height="0.7" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="559.5" y="331.9" width="31.6" height="38.1" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="559.5" y="331.0" width="31.6" height="0.9" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="608.9" y="328.7" width="31.6" height="41.3" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="608.9" y="327.6" width="31.6" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="658.3" y="338.6" width="31.6" height="31.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="658.3" y="338.5" width="31.6" height="0.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="707.8" y="332.6" width="31.6" height="37.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="707.8" y="332.2" width="31.6" height="0.4" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="757.2" y="339.6" width="31.6" height="30.4" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="757.2" y="339.5" width="31.6" height="0.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="806.6" y="330.5" width="31.6" height="39.5" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="806.6" y="329.4" width="31.6" height="1.1" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="856.0" y="326.9" width="31.6" height="43.1" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="856.0" y="326.0" width="31.6" height="0.9" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="905.5" y="342.0" width="31.6" height="28.0" fill="#4ade80" fillOpacity="0.85"/>
+  <rect x="905.5" y="341.2" width="31.6" height="0.8" fill="#f87171" fillOpacity="0.85"/>
+  <rect x="760" y="294" width="9" height="9" rx="2" fill="#4ade80"/>
+  <text x="773" y="302" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Processed</text>
+  <rect x="827.84" y="294" width="9" height="9" rx="2" fill="#f87171"/>
+  <text x="840.84" y="302" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">In technical error</text>
+  <text x="240" y="406" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">RIGHT NOW</text>
+  <rect x="240.0" y="414" width="172.5" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252.0" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Running processes</text>
+  <rect x="422.5" y="414" width="172.5" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="434.5" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Live process events</text>
+  <rect x="605.0" y="414" width="172.5" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="617.0" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Scheduler</text>
+  <rect x="787.5" y="414" width="172.5" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="799.5" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Active sessions</text>
+  <rect x="240" y="464" width="720" height="28" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="482" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Recent errors</text>
+  <rect x="240" y="502" width="720" height="28" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="520" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">▸ Technical details — system, filesystem, JVM, configuration check, database tables, links</text>
+  <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Health strip</text>
+  <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a tile opens its detail</text>
+  <line x1="200" y1="113.0" x2="240" y2="112" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tdb-arrow)"/>
+  <rect x="20" y="180" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">To do</text>
+  <text x="30" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">four queues for IT</text>
+  <line x1="200" y1="197.0" x2="240" y2="198" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tdb-arrow)"/>
+  <rect x="20" y="300" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">14-day tabs</text>
+  <text x="30" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a day opens its invoices</text>
+  <line x1="200" y1="317.0" x2="254" y2="320" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tdb-arrow)"/>
+  <rect x="20" y="458" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="473" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Recent errors</text>
+  <text x="30" y="486" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">live tail of the log</text>
+  <line x1="200" y1="475.0" x2="240" y2="478" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tdb-arrow)"/>
+  <rect x="1000" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Scheduler tile</text>
+  <text x="1010" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">scrolls to its card</text>
+  <line x1="1000" y1="113.0" x2="782.5000000000001" y2="140" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tdb-arrow)"/>
+  <rect x="1000" y="180" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Each card</text>
+  <text x="1010" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">opens the invoices, actions</text>
+  <line x1="1000" y1="197.0" x2="960" y2="198" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tdb-arrow)"/>
+  <rect x="1000" y="410" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="425" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Right now</text>
+  <text x="1010" y="438" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">processes, events, sessions</text>
+  <line x1="1000" y1="427.0" x2="960" y2="432" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tdb-arrow)"/>
+  <rect x="1000" y="496" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="511" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Technical details</text>
+  <text x="1010" y="524" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">folded by default</text>
+  <line x1="1000" y1="513.0" x2="960" y2="516" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tdb-arrow)"/>
 </svg>
 
-The grid uses `align-items: stretch` and each card grows with `flex: 1` inside its column span — cards in the same row align bottoms, regardless of their internal content height.
+A **Refresh** button in the page header reloads every card.
 
 ---
 
-## Layout
+## Health strip
 
-The 12-column grid is laid out as nine rows:
+The **Is everything up?** strip gives six tiles, each with a green, orange or red dot. A click on a tile scrolls to its detail and, except for *Scheduler*, opens the folded [technical details](#technical-details):
 
-| Row | Layout | Widgets |
+| Tile | Shows | Opens |
 |---|---|---|
-| 1 | `8 + 4` | **System Health** · **Quick links** |
-| 2 | `3 + 3 + 3 + 3` | **Send Failed** · **Waiting for review** · **To reprocess** · **To reprocess in full** |
-| 3 | `4 + 4 + 4` | **Scheduler** · **Error trend · 14d** · **Retry rate · 14d** |
-| 4 | `4 + 4 + 4` | **JVM · threads + GC** · **Throughput · 14d** · **Active sessions / clients** |
-| 5 | `8 + 4` | **Filesystem** · **Template processing time · 14d** |
-| 6 | `12` | **Running processes** |
-| 7 | `12` | **Live process events** |
-| 8 | `12` | **Configuration check** |
-| 9 | `5 + 7` | **Database tables** · **Recent errors** |
-
-A **Refresh** button in the page header re-runs all four endpoints in parallel.
-
-The manual one-click retry of the **Send Failed** card and the scheduled overnight sweep of the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) page call the same underlying replay path.
+| **Application** | The release and `up for …`. | System Health |
+| **Database** | The ping in ms, or *Unreachable*. | System Health |
+| **Disk** | `… % free` on the fullest disk. | Filesystem |
+| **Memory** | Heap use in %. | JVM · threads + GC |
+| **Scheduler** | *Running*, `… paused` or `… job(s) failed`, and the next run. | The Scheduler card in *Right now* |
+| **Configuration** | *No issue* or `… issue(s)`. | Configuration check |
 
 ---
 
-## Widgets
+## To do
 
-### System Health (row 1, span 8)
+Four cards count the invoices waiting for an IT action, each with a button that handles them all at once through the [shared progress window](#shared-progress-window). The manual one-click retry of *Send failed* and the scheduled overnight sweep of the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) page call the same replay path.
 
-JVM, database and host metrics. The most-watched values are colour-coded:
-
-| Stat | Source | Tone rules |
-|---|---|---|
-| **Java** | `Runtime.version()` | neutral. |
-| **Heap** | `MemoryMXBean.getHeapMemoryUsage()` | green &lt; 60 %, orange &lt; 85 %, red ≥ 85 %. |
-| **Uptime** | `RuntimeMXBean.getUptime()` | neutral, formatted as `Xd Yh` / `Xh Ym`. |
-| **CPU cores** | `Runtime.availableProcessors()` | neutral. |
-| **Database** | `dialect.ping()` | green &lt; 100 ms, orange &lt; 500 ms, red beyond or on error. |
-| **Schema** | `db-nomaubl` config | neutral. |
-| **OS** | `os.name` + `os.arch` | neutral. |
-| **PA mode** | `paUseMock` flag | green when *Live*, orange when *Mock*. |
-
-The card subtitle on the right shows the **build version + build date** baked into `nomaubl-version.properties`.
-
-### Quick links (row 1, span 4)
-
-Static shortcut list — the IT operator's most-used pages, opened directly: **Processing Log** and **Integration Errors** (both views of [Diagnostics](./diagnostics/overview.md)), **Notifications**, **Process Document**, **File Versions** and **Settings**.
-
-### Send Failed (row 2, span 3) \{#send-failed\}
+### Send failed (9904) \{#send-failed\}
 
 A single big-number card showing how many invoices are currently in *Send failed* (status `9904`). When the count is non-zero, a **Resend all N** button below the number replays every matching invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md). Clicking it opens the [shared progress window](#shared-progress-window) — live counters, a *Cancel* button and a *Run in background* button that hides the window while the work keeps going server-side. The resend is throttled at **100 ms per call** so the PA stays inside its rate budget.
 
@@ -285,75 +204,41 @@ A single big-number card showing how many invoices are currently in *Send failed
 
 Use the manual button for a one-shot replay during business hours (a brief PA outage that cleared, a small batch you want resent now). For unattended overnight retries, schedule a row on the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) page — same code path, no operator action required.
 
-### Waiting for review (row 2, span 3) \{#waiting-for-review\}
+### Waiting for review \{#waiting-for-review\}
 
 A big-number card that counts the invoices **held before sending** — the ones whose document type carries the `W` (*Waiting*) send flag on the [Document Types](../configuration/system/document-types.md) page. These invoices were generated and validated but deliberately not transmitted, so a user can check them first. When the count is non-zero, a **Send all N** button releases every held invoice to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same [progress window](#shared-progress-window) as *Send Failed*. It mirrors the *Send Failed* card — same big number, same one-click bulk action — but for the review queue rather than the failure queue.
 
-### To reprocess (row 2, span 3) \{#to-reprocess\}
+### To reprocess \{#to-reprocess\}
 
 A big-number card that counts the invoices **eligible for reprocessing** — those the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), on a template with **Allow reprocess** enabled. When the count is non-zero, a **Reprocess all N** button **reprints** every eligible invoice from its archived source — readable PDF / XML and UBL file regenerated, no database change, no new validation — through the same [progress window](#shared-progress-window). Reprocessing keeps each invoice's status, records a *Retraitement* history entry and never re-sends to the platform — see [Documents → Allow reprocess](../management/documents.md) for the per-template switch and [Invoices](invoices.md#reprocess) for the same action on selected rows.
 
-### To reprocess in full (row 2, span 3) \{#to-reprocess-full\}
+### To reprocess in full \{#to-reprocess-full\}
 
 The counterpart of the previous card for **validation-failed** invoices (`9905`) on a template with **Allow full reprocess** enabled. Once the data was corrected at the source, a **Reprocess all N** button reprocesses every eligible invoice **in full** from its archived source: the enrichment is queried again, the UBL regenerated, validated and sent to the PA when the template and document type say so. The status history is kept and a reprocess marker opens a new cycle, so the statuses that follow are recorded as new.
 
 Both cards run **one batch per template**, in the background with its live log: the sources are staged in a working folder, the **Max threads** setting of the global settings bounds the parallelism, and an invoice is never processed twice.
 
-### Scheduler (row 3, span 4)
+---
 
-Lists every active scheduler job:
+## Processing · last 14 days
 
-- **Built-ins** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — driven by `BackgroundScheduler` polling intervals.
-- **Per-template `fetch-all`** — one row per template that has a scheduled extract / sync.
-- **Per-row Auto-Retry sweeps** — one row per saved entry on the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
-- **Daily lifecycle checks** — one row per scheduled entry on the [Lifecycle checks](../sync/scheduled-jobs/lifecycle-checks.md) page, next to the digests and auto-retries, with its time and last run.
+One card with four tabs: **Volume**, **Errors**, **Retries**, **Time per document**.
 
-Each row shows the job name, the cadence, and a status pill (green active, blue scheduled-soon, orange paused). The card subtitle reports the active count; the calendar button of the header opens [Scheduled jobs](../sync/scheduled-jobs/overview.md), where every job is run, paused and edited.
+### Volume
 
-The **PA import poll** and **PA status retrieve** jobs carry a **pause / resume** button — effective on the next tick and deliberately runtime-only, so a server restart always resumes and a pause can't be forgotten. The [daily quiet window](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) is shown here too, highlighted while active — during it both pollers skip their runs automatically.
+**Documents processed per day** over the last 14 days, as stacked bars: *Processed* and *In technical error*; the subtitle gives the totals. **Click a bar** to open [E-Invoicing](./invoices.md) on that day, by archive date — a quick path from "today's column is short" to "show me what was processed".
 
-### Error trend · 14d (row 3, span 4)
+### Errors
 
-A 14-day sparkline of error events recorded in `F564237` (level `ERROR` or `FATAL`). Hovering a point reveals the day and count; the subtitle shows the daily average plus today's running count.
+The **Error rate · 14d** card: a 14-day sparkline of error events recorded in `F564237` (level `ERROR` or `FATAL`). Hovering a point reveals the day and count; the subtitle shows the daily average plus today's running count.
 
-### Retry rate · 14d (row 3, span 4)
+### Retries
 
-Single big number: ratio of *runs that succeeded only after one or more retries* over total runs in the trailing 14 days. The subtitle gives the absolute counts and the delta against the previous 14-day window (green when down, orange when up).
+The **Retry rate · 14d** card: a single big number, ratio of *runs that succeeded only after one or more retries* over total runs in the trailing 14 days. The subtitle gives the absolute counts and the delta against the previous 14-day window (green when down, orange when up).
 
-### JVM · threads + GC (row 4, span 4)
+### Time per document
 
-Companion card to System Health for deeper JVM diagnostics:
-
-- **Threads** — current count + peak.
-- **Daemon threads** — running daemons.
-- **GC** — collector name + total time spent in GC.
-- **Loaded classes** — class-loader counter, useful for spotting metaspace leaks.
-
-### Throughput · 14d (row 4, span 4)
-
-Daily processed-document bar chart over the last 14 days. **Click a bar** to jump to *Processing Log* pre-filtered on that day — a quick path from "today's column is short" to "show me what actually ran".
-
-### Active sessions / Active clients · 15m (row 4, span 4)
-
-Two modes:
-
-- **Auth enabled** — title reads *Active sessions*. Lists every session present in `F564252` whose `SSETDTIM` is within the last hour.
-- **Auth disabled** — title reads *Active clients · 15m*. Lists every IP touched by `WebServer.handle()` in the last 15 minutes, sourced from the new in-memory `ActivityTracker` (no `F564252` rows exist when auth is off).
-
-Either way, each row shows IP / user, the last-seen timestamp, and the running hit count.
-
-### Filesystem (row 5, span 8)
-
-For each configured path (`appHome`, `processHome`, `dirInput`, `singleOutput`, `burstOutput`, `dirArchive`, `dirError`):
-
-- **Free / total** disk space on the underlying volume.
-- **File count** of a recursive walk through the path, **capped at 5000 files** to keep the call cheap.
-
-Path values that contain runtime placeholders (`%TEMPLATE%`, `%FILE_NAME%`) are truncated at the first placeholder, and the report runs against the deepest **existing-by-shape** directory above it. `dirOutput` is excluded because it is always covered by `processHome`.
-
-### Template processing time · 14d (row 5, span 4)
-
-Average end-to-end processing time per template, in seconds, over the last 14 days. The card pulls flat `START` / `END` events from `F564237` and pairs them in Java keyed on `(FEWDS1|FEUPMJ)` — the prior implementation used a self-join SQL with ambiguous `FETMPL` and incorrect `e.FEUPMT - s.FEUPMT` math, which is now fixed.
+The **Template processing time · 14d** card: average end-to-end processing time per template, in seconds, over the last 14 days. The card pulls flat `START` / `END` events from `F564237` and pairs them in Java keyed on `(FEWDS1|FEUPMJ)` — the prior implementation used a self-join SQL with ambiguous `FETMPL` and incorrect `e.FEUPMT - s.FEUPMT` math, which is now fixed.
 
 #### Per-step breakdown when `debugProfile` is on
 
@@ -361,11 +246,17 @@ When the [`debugProfile`](../configuration/system/global.md) toggle on the `glob
 
 The Live process events tail below also tags the rows with the step name so a slow batch can be triaged in real time. Leave `debugProfile` at `N` in production; flip it to `Y` for the duration of a batch run when triaging a slow pipeline — the extra rows inflate `F564237` quickly under load.
 
-### Running processes (row 6, span 12) \{#running-processes\}
+---
+
+## Right now
+
+What is running on the server at this moment: the running processes, the live process events, the scheduler and the active sessions.
+
+### Running processes \{#running-processes\}
 
 The processing JVMs alive on the host, polled every 5 s: those started by this server, with the last line each printed, and the **detached** ones left by a previous instance, a cron or a manual run (*output not captured*). Each row shows the mode (`-process`, `-watch-folders`, `-import`), the arguments, the elapsed time and a **Stop** button, which terminates that JVM and its own child processes only — invoices in progress stay in their current state and input files are left in place. Stopping requires the *integration-run* grant. Nothing is stopped when the server restarts, so a batch can run through an upgrade.
 
-### Live process events (row 7, span 12)
+### Live process events
 
 A live feed of jobs starting and finishing in real time — most of them launched by the background scheduler. Polls `F564237` every **5 seconds** with an incremental `since=` cursor; each row carries a coloured **method badge**:
 
@@ -382,7 +273,80 @@ The feed is **deduplicated on `FEUKID`** so the same row never appears twice acr
 
 The scrollable list is capped at the latest 100 events; older rows fall off the bottom as new ones come in. For deeper investigation use the [Processing Log](diagnostics/processing-log.md) page, which keeps the full history with grouped-job views.
 
-### Configuration check (row 8, span 12)
+### Scheduler
+
+Lists every active scheduler job:
+
+- **Built-ins** — `retrieve-statuses`, `notif-purge`, `clean-archive`, etc. — driven by `BackgroundScheduler` polling intervals.
+- **Per-template `fetch-all`** — one row per template that has a scheduled extract / sync.
+- **Per-row Auto-Retry sweeps** — one row per saved entry on the [Auto-Retry](../sync/scheduled-jobs/auto-retry.md) page, with the scheduled hour and the matched status list as the cadence.
+- **Daily lifecycle checks** — one row per scheduled entry on the [Lifecycle checks](../sync/scheduled-jobs/lifecycle-checks.md) page, next to the digests and auto-retries, with its time and last run.
+
+Each row shows the job name, the cadence, and a status pill (green active, blue scheduled-soon, orange paused). The card subtitle reports the active count; the **Open Scheduled jobs** button opens [Scheduled jobs](../sync/scheduled-jobs/overview.md), where every job is run, paused and edited.
+
+The **PA import poll** and **PA status retrieve** jobs carry a **pause / resume** button — effective on the next tick and deliberately runtime-only, so a server restart always resumes and a pause can't be forgotten. The [daily quiet window](../configuration/system/global.md) (`fetchQuietFrom` / `fetchQuietTo`) is shown here too, highlighted while active — during it both pollers skip their runs automatically.
+
+### Active sessions / Active clients · 15m
+
+Two modes:
+
+- **Auth enabled** — title reads *Active sessions*. Lists every session present in `F564252` whose `SSETDTIM` is within the last hour.
+- **Auth disabled** — title reads *Active clients · 15m*. Lists every IP touched by `WebServer.handle()` in the last 15 minutes, sourced from the new in-memory `ActivityTracker` (no `F564252` rows exist when auth is off).
+
+Either way, each row shows IP / user, the last-seen timestamp, and the running hit count.
+
+---
+
+## Recent errors
+
+The **Recent errors** card lists the last 8 events from `F564237` filtered on `level IN ('ERROR', 'FATAL')`. Each row shows the level badge, the lifecycle code and triplet, the message, and a relative timestamp (*2m ago*, *1h ago*). Clicking a row tied to an invoice opens the *Integration Errors* view of [Diagnostics](./diagnostics/overview.md) narrowed to that invoice; a processing row opens the *Processing Log* view. **Open Integration Errors →** opens the view unfiltered.
+
+---
+
+## Technical details \{#technical-details\}
+
+A folded section — *system, filesystem, JVM, configuration check, database tables, links* — that opens by itself when a tile of the health strip is clicked.
+
+### System Health
+
+JVM, database and host metrics. The most-watched values are colour-coded:
+
+| Stat | Source | Tone rules |
+|---|---|---|
+| **Java** | `Runtime.version()` | neutral. |
+| **Heap** | `MemoryMXBean.getHeapMemoryUsage()` | green &lt; 60 %, orange &lt; 85 %, red ≥ 85 %. |
+| **Uptime** | `RuntimeMXBean.getUptime()` | neutral, formatted as `Xd Yh` / `Xh Ym`. |
+| **CPU cores** | `Runtime.availableProcessors()` | neutral. |
+| **Database** | `dialect.ping()` | green &lt; 100 ms, orange &lt; 500 ms, red beyond or on error. |
+| **Schema** | `db-nomaubl` config | neutral. |
+| **OS** | `os.name` + `os.arch` | neutral. |
+| **PA mode** | `paUseMock` flag | green when *Live*, orange when *Mock*. |
+
+The card subtitle on the right shows the **build version + build date** baked into `nomaubl-version.properties`.
+
+### Quick links
+
+Static shortcut list — the IT operator's most-used pages, opened directly: **Processing Log** and **Integration Errors** (both views of [Diagnostics](./diagnostics/overview.md)), **Notifications**, **Process Document**, **File Versions** and **Settings**.
+
+### Filesystem
+
+For each configured path (`appHome`, `processHome`, `dirInput`, `singleOutput`, `burstOutput`, `dirArchive`, `dirError`):
+
+- **Free / total** disk space on the underlying volume.
+- **File count** of a recursive walk through the path, **capped at 5000 files** to keep the call cheap.
+
+Path values that contain runtime placeholders (`%TEMPLATE%`, `%FILE_NAME%`) are truncated at the first placeholder, and the report runs against the deepest **existing-by-shape** directory above it. `dirOutput` is excluded because it is always covered by `processHome`.
+
+### JVM · threads + GC
+
+Companion card to System Health for deeper JVM diagnostics:
+
+- **Threads** — current count + peak.
+- **Daemon threads** — running daemons.
+- **GC** — collector name + total time spent in GC.
+- **Loaded classes** — class-loader counter, useful for spotting metaspace leaks.
+
+### Configuration check
 
 Validates the *connector-style* configuration the application uses today. Issues are listed by area with severity (red error, orange warning, blue info). The check runs against:
 
@@ -397,13 +361,9 @@ The validation assets (XSD / Schematron) are bundled in the JAR.
 
 A clean check renders as `✔ 0 issues` in green; otherwise the card lists the issues in order of severity.
 
-### Database tables (row 9, span 5)
+### Database tables
 
 Per-table row count for every NomaUBL table — invoices (`F564231`), lifecycle (`F564235`), validation (`F564236`), runtime log (`F564237`), notifications (`F564253`), e-Reporting (`F564260`–`F564262`), auth (`F564250`–`F564252`, `F564254`). Useful for spotting unexpected growth (e.g. a notifications table that should be ~hundreds of rows but holds millions).
-
-### Recent errors (row 9, span 7)
-
-Last 8 events from `F564237` filtered on `level IN ('ERROR', 'FATAL')`. Each row shows the level badge, the lifecycle code and triplet, the message, and a relative timestamp (*2m ago*, *1h ago*). Clicking a row tied to an invoice opens the *Integration Errors* view of [Diagnostics](./diagnostics/overview.md) narrowed to that invoice; a processing row opens the *Processing Log* view. **Open Integration Errors →** opens the view unfiltered.
 
 ---
 
@@ -422,7 +382,6 @@ The window stays open by default while the operation runs; closing it is a delib
 | **Done** | Replaces *Cancel* / *Run in background* when the operation finishes. A summary line shows total / succeeded / failed and the elapsed time. |
 
 Multiple operations can run side by side — each gets its own banner when sent to the background. Closing the browser tab does **not** cancel the work; the server-side run keeps going. Reopening the page surfaces the banner again until the run completes.
-
 ---
 
 ## How widgets refresh
@@ -432,11 +391,11 @@ The Refresh button (or page mount) calls four endpoints in parallel:
 | Endpoint | Feeds |
 |---|---|
 | `GET /api/system` | System Health, JVM extras, Filesystem |
-| `GET /api/dashboard/tech` | Throughput, Error trend, Retry rate, Template stats, Active sessions, Database tables, Recent errors |
+| `GET /api/dashboard/tech` | Volume, Errors, Retries, Time per document, Active sessions, Database tables, Recent errors |
 | `GET /api/dashboard/log-tail` | Live process events (incremental, polled every 5 s with `since=`) |
 | `GET /api/dashboard/config-check` | Configuration check |
 
-The Scheduler card consumes the existing `GET /api/scheduler/status` so it shares the data already loaded by the business Dashboard during a same-session navigation. Each call fails independently — a misconfigured database returns *Not configured* on the data card without breaking System Health or the live tail.
+The Scheduler card reads `GET /api/scheduler/status`. Each call fails independently — a misconfigured database returns *Not configured* on the data card without breaking System Health or the live tail.
 
 ---
 
@@ -447,4 +406,4 @@ The Scheduler card consumes the existing `GET /api/scheduler/status` so it share
 - **Configuration check should always read green.** A non-zero issue count after a deploy is the fastest path to "what changed". Run it on every environment after every config edit.
 - **Recent errors over Database tables.** When triaging an incident the recent-errors feed is denser per pixel; the table stats card is for trend-watching across days.
 - **Empty Active clients does not mean nobody is using the app.** With auth enabled, sessions older than an hour drop off the list — the database lifecycle still records them. The card shows *who is on right now*, not *who was on this morning*.
-- **Template processing time spikes pair with Throughput dips.** When you see a tall blue bar in Throughput followed by a slow template the next day, expect the queue to back up — the IT team can pre-empt by adjusting the scheduler cadence.
+- **Processing-time spikes pair with volume dips.** When you see a tall bar in the Volume tab followed by a slow template the next day, expect the queue to back up — the IT team can pre-empt by adjusting the scheduler cadence.

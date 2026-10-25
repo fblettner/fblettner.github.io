@@ -37,7 +37,7 @@ La page **Journal serveur** affiche la **fin du fichier journal du serveur**, li
 | Commande | Effet |
 |---|---|
 | **Taille lue** | La quantité lue en fin de fichier : `128 KB`, `512 KB` *(défaut)*, `2 MB` ou `8 MB`. Quand le fichier est plus grand, la ligne d'état le signale — augmenter la taille lue pour remonter plus loin. |
-| **Sévérité** | Cases à cocher `ERROR`, `WARN`, `INFO` *(les trois cochées par défaut)*, `DEBUG` et **Non structuré** — les lignes qui ne suivent pas la forme `** NIVEAU ** MODULE ** … : message`. |
+| **Sévérité** | Une sélection multiple parmi `ERROR`, `WARN`, `INFO` *(les trois choisies par défaut)*, `DEBUG` et **Non structuré** — les lignes qui ne suivent pas la forme `** NIVEAU ** MODULE ** … : message` ; *Toutes les sévérités* quand aucune n'est choisie. |
 | **Module** | Liste construite à partir des modules rencontrés dans les lignes lues (`PROCESS`, `UBL`, `PEPPOL`…) ; **Tous les modules** par défaut. |
 | **Rechercher…** | Filtre de texte, sans distinction de casse. |
 | **Rafraîchissement auto** | Relit la fin du fichier toutes les 5 secondes. |

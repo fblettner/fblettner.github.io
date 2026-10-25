@@ -473,10 +473,12 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Application',
-      link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: dashboard, tech dashboard, invoices, e-reporting, e-directory, VAT declaration, reports (audit, implementation, technical), the Explorer, notifications, Diagnostics (integration errors, processing log, failures, server log) and the AI assistant.'},
+      link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: billing overview, operations and IT dashboards, statistics, invoices, e-documents, e-reporting, e-directory, VAT declaration, reports (integrity, audit, implementation, technical), the Explorer, notifications, Diagnostics (integration errors, processing log, failures, server log) and the AI assistant.'},
       items: [
+        'nomaubl/application/billing-overview',
         'nomaubl/application/dashboard',
         'nomaubl/application/tech-dashboard',
+        'nomaubl/application/statistics',
         'nomaubl/application/invoices',
         'nomaubl/application/edocuments',
         'nomaubl/application/ereporting',
@@ -621,6 +623,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/configuration/reference-lists',
         'nomaubl/configuration/custom-lists',
         'nomaubl/configuration/list-views',
+        'nomaubl/configuration/default-periods',
         'nomaubl/configuration/api-connectors',
         'nomaubl/configuration/sql-connectors',
         {
@@ -647,12 +650,13 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'References',
-      link: {type: 'generated-index', slug: '/nomaubl/references', description: 'Reference docs surfaced inside the app: status codes, reason codes, UBL semantics, business rules, database schema, developer reference and HTTP API.'},
+      link: {type: 'generated-index', slug: '/nomaubl/references', description: 'Reference docs surfaced inside the app: status codes, reason codes, UBL semantics, business rules, Schematron rules, database schema, developer reference and HTTP API.'},
       items: [
         'nomaubl/references/status-reference',
         'nomaubl/references/reason-codes',
         'nomaubl/references/ubl-reference',
         'nomaubl/references/business-rules',
+        'nomaubl/references/schematrons',
         'nomaubl/references/database-tables',
         'nomaubl/references/developer',
         {

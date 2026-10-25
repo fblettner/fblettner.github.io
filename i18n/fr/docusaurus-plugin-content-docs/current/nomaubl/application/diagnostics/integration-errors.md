@@ -224,12 +224,13 @@ La table passe par **DataTableV2** en mode piloté par spec : la forme des colon
 | **Date** | `UVUPMJ` + `UVUPMT` | Date et heure d'enregistrement de l'événement. Même contexte temporel que la carte « erreurs récentes » du Tableau de bord IT — le triage n'a plus besoin d'ouvrir une ligne au préalable. |
 | **Doc** | `UVDOC` | Numéro de document issu des données source. |
 | **Dct** | `UVDCT` | Type de document. |
-| **Kco** | `UVKCO` | Code société. |
+| **Kco** | `UVKCO` | Code société, avec son nom tiré de la liste `list-companies`. |
+| **Activité** | Journal d'archive | Code activité du document, avec son libellé tiré de la liste `list-activite`. |
 | **Seq** | `UVSEQN` | Numéro de séquence — ordre dans lequel les règles de validation se sont déclenchées au cours du traitement défaillant. |
 | **Source** | `UVSRCL` | Moteur de validation — `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, ou un compartiment d'intégration. |
 | **Règle** | `UVY56RULE` | Identifiant de règle. La cellule affiche le code accompagné de sa description en dessous (et en infobulle au survol). |
 | **Facture maintenant** | jointure `F564231` | Statut *courant* de la facture, récupéré en temps réel pour vérifier si l'échec a déjà été retraité. Vide quand il n'y a pas d'en-tête (erreur orpheline). |
-| **Client** | `F564231.UHALPH` | Nom du client quand la facture existe. Utile pour trier par contrepartie. |
+| **Tiers** | `F564231.UHALPH` | Nom de la contrepartie quand la facture existe. Utile pour trier par contrepartie. |
 
 ### Clic sur une ligne
 

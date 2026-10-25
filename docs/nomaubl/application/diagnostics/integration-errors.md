@@ -224,12 +224,13 @@ The table renders through **DataTableV2** in spec-driven mode: the column shape 
 | **Date** | `UVUPMJ` + `UVUPMT` | Date and time the event was recorded. Same time context as the Tech Dashboard's recent-errors card, so triage no longer requires opening a row first. |
 | **Doc** | `UVDOC` | Document number from the source data. |
 | **Dct** | `UVDCT` | Document type. |
-| **Kco** | `UVKCO` | Company code. |
+| **Kco** | `UVKCO` | Company code, with its name from the `list-companies` list. |
+| **Activity** | Archive log | Activity code of the document, with its label from the `list-activite` list. |
 | **Seq** | `UVSEQN` | Sequence number — the order in which validation rules fired during the failed run. |
 | **Source** | `UVSRCL` | Validation engine — `EN16931`, `CIUSFR`, `FREXTIC`, `CPRO`, `XSD`, `UBL`, or an integration bucket. |
 | **Rule** | `UVY56RULE` | Rule identifier. The cell shows the code + the description below it (and as a tooltip on hover). |
 | **Invoice now** | `F564231` lookup | The invoice's *current* status, joined live so you see whether the failure has been re-processed. Empty when no invoice header exists (orphan error). |
-| **Customer** | `F564231.UHALPH` | Customer name when the invoice exists. Helpful when triaging by counterparty. |
+| **Party Name** | `F564231.UHALPH` | Counterparty name when the invoice exists. Helpful when triaging by counterparty. |
 
 ### Clicking a row
 

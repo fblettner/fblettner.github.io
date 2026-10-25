@@ -199,3 +199,44 @@ def _render(self):
 
 
 Svg.render = _render
+
+
+def _kpi(self, x, y, w, h, label, value, delta=None, delta_tone="green", sub=None):
+    """Headline figure card: small uppercase label, big value, optional change and sub-line."""
+    self.panel(x, y, w, h)
+    self.text(x + 12, y + 18, label.upper(), fs=8.5, color="#64748b", ls="0.04em")
+    self.text(x + 12, y + 44, value, fs=17, color="#e2e8f0", bold=True)
+    if delta:
+        col = {"green": "#4ade80", "red": "#f87171", "grey": "#94a3b8"}[delta_tone]
+        self.text(x + w - 12, y + 44, delta, fs=9.5, color=col, bold=True, anchor="end")
+    if sub:
+        self.text(x + 12, y + h - 10, sub, fs=8.5, color="#94a3b8")
+
+
+def _stacked_bars(self, x, y, w, h, series, colors, labels=None):
+    """Stacked vertical bars. series: list of bars, each a list of values (same length as colors)."""
+    n = len(series)
+    mx = max(sum(b) for b in series) or 1
+    bw = w / n
+    for i, bar in enumerate(series):
+        top = y + h
+        for v, c in zip(bar, colors):
+            hh = v / mx * (h - 14)
+            top -= hh
+            self.add(f'<rect x="{x + i * bw + bw * 0.18:.1f}" y="{top:.1f}" width="{bw * 0.64:.1f}" height="{hh:.1f}" fill="{c}" fillOpacity="0.85"/>')
+        if labels:
+            self.text(x + i * bw + bw / 2, y + h + 11, labels[i], fs=8, color="#64748b", anchor="middle")
+
+
+def _legend(self, x, y, items):
+    """items: list of (label, color); returns the end x."""
+    for lab, c in items:
+        self.add(f'<rect x="{x}" y="{y - 8}" width="9" height="9" rx="2" fill="{c}"/>')
+        self.text(x + 13, y, lab, fs=8.5, color="#94a3b8")
+        x += 13 + tw(lab, 8.5) + 12
+    return x
+
+
+Svg.kpi = _kpi
+Svg.stacked_bars = _stacked_bars
+Svg.legend = _legend

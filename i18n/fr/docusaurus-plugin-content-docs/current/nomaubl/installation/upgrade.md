@@ -106,6 +106,16 @@ Le rafraîchissement des XSL du socle (étape 4) **n'écrase plus `ubl-defaults.
 
 Le rapport de mise à niveau liste chaque fichier conservé dans une section **Actifs préservés**. Le miroir `${env}/ubl/` bénéficie de la même protection : la mise à niveau le rafraîchit aussi, pour que les XSL par document n'importent jamais une version périmée du socle.
 
+
+### Listes de référence et connecteurs livrés complétés \{#merged-entries\}
+
+La mise à jour **ajoute** ce que la configuration livrée contient et que l'instance n'a pas, rapproché par code ou par nom, sans rien modifier d'autre :
+
+- les **listes de référence** reçoivent leurs codes manquants ; les codes déjà présents conservent leurs libellés. La liste *Invoice Type Codes* reçoit en plus le [type facture / avoir](../configuration/reference-lists.md#invoice-types) de chaque code ;
+- les **connecteurs API et SQL livrés** déjà présents reçoivent les endpoints ou requêtes qui leur manquent (par exemple les requêtes de [`jde-sql`](../configuration/sql-connectors.md#jde-sql)) ; leurs paramètres de connexion et leurs endpoints et requêtes existants sont conservés.
+
+Le rapport de mise à jour liste les ajouts dans la section **New entries — reference lists, connector endpoints and queries**.
+
 ---
 
 ## Avant la mise à niveau

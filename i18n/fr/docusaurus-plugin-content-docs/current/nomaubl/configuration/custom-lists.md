@@ -8,7 +8,9 @@ keywords: [NomaUBL, listes personnalisées, liste de référence, dropdown, pick
 
 Une **liste personnalisée** est une liste de référence définie par l'opérateur — une table `code → libelléFr / libelléEn` gérée à côté des catalogues réglementaires de [Listes de référence](./reference-lists.md). Son rôle : alimenter une grille. Rattacher une liste personnalisée à une colonne dans l'éditeur [Vues de liste](./list-views.md) et la colonne reçoit automatiquement un dropdown de filtre, un picker multi-sélection dans *Filtres avancés* et un renderer de cellule `code — libellé` — sans aucune modification de code.
 
-Chaque liste se saisit ligne par ligne, ou se **synchronise depuis un connecteur** ([API](./api-connectors.md) ou [SQL](./sql-connectors.md)) quand la source de vérité vit dans un système externe. La même requête / le même endpoint peut alimenter plusieurs listes en passant des paramètres différents par liste.
+Chaque liste se saisit ligne par ligne, se **complète depuis les tables NomaUBL** (les codes réellement présents dans les documents traités), ou se **synchronise depuis un connecteur** ([API](./api-connectors.md) ou [SQL](./sql-connectors.md)) quand la source de référence se trouve dans un système externe. La même requête / le même endpoint peut alimenter plusieurs listes en passant des paramètres différents par liste.
+
+Les listes personnalisées ont leur propre zone dans la [navigation des Paramètres](./settings-overview.md), **Custom data**, juste après *Reference data* (qui conserve les listes livrées). Comme la plupart des éditeurs des Paramètres, l'éditeur reste en anglais.
 
 ---
 
@@ -159,18 +161,53 @@ Une liste personnalisée peut s'appuyer sur un système externe au lieu d'être 
 
 | Champ | Description |
 |---|---|
-| **Connecteur** | Liste déroulante de tous les modèles `api-connector` et `sql-connector` définis. Le choix restreint le champ suivant aux cibles de ce connecteur. |
+| **Connector** | **NomaUBL database** (`@nomaubl`, voir ci-dessous), puis tous les modèles `api-connector` et `sql-connector` définis. Le choix restreint le champ suivant aux cibles de ce connecteur. |
 | **Endpoint / Requête** | Liste déroulante des endpoints (API) ou des requêtes (SQL) du connecteur. Désactivée tant qu'aucun connecteur n'est choisi. |
 | **Code field** | Nom de colonne (SQL) ou clé JSON (API) que la sync lit comme `code` de chaque ligne. Obligatoire. |
 | **Label FR field** | Colonne / clé du libellé français. Obligatoire. |
 | **Label EN field** | Colonne / clé du libellé anglais. Optionnel. |
 | **List path** *(API seulement)* | Chemin pointé vers le tableau dans le corps JSON. Supporte `data.items` et `items[0]`. Vide quand le corps est déjà un tableau JSON. |
 | **Paramètres** | Couples clé / valeur par liste envoyés au connecteur comme valeurs fixes (pas de substitution de variables). La même requête peut alimenter plusieurs listes en enregistrant des valeurs différentes par liste ; les valeurs par défaut de la définition d'endpoint s'appliquent quand un champ est laissé vide. |
-| **Synchroniser** | Appelle le connecteur, parcourt la réponse, construit l'ensemble de lignes et remplace les lignes en place. Un bandeau traduit indique `N ligne(s) synchronisée(s) depuis connecteur · endpoint` en cas de succès ou l'erreur sous-jacente en cas d'échec. |
+| **Sync now** | Appelle le connecteur, parcourt la réponse, construit l'ensemble de lignes et remplace les lignes en place. Un bandeau traduit indique `N ligne(s) synchronisée(s) depuis connecteur · endpoint` en cas de succès ou l'erreur sous-jacente en cas d'échec. |
 
-La configuration sync vit sur le même modèle de liste sous `sync.connector`, `sync.endpoint`, `sync.codeField`, `sync.labelFrField`, `sync.labelEnField`, `sync.listPath` et `sync.params`. Les consommateurs de liste (renderer de cellule, dropdown *Filtres avancés*, ligne de filtre par colonne) ne voient jamais ces clés comme des entrées — elles sont filtrées par `parseRefOptions`.
+### Depuis la base NomaUBL \{#nomaubl-source\}
+
+Avec le connecteur **NomaUBL database**, la liste est alimentée par les valeurs présentes dans les tables NomaUBL. L'endpoint choisit la colonne :
+
+| Endpoint | Valeurs |
+|---|---|
+| *Activity code (F564230)* | Codes activité des documents traités. |
+| *Sub-type (F564230)* | Sous-types de document. |
+| *Document type (F564230)* | Types de document (`dct`). |
+| *Company (F564230)* | Sociétés (`kco`). |
+| *Business unit (F564230)* | Unités d'activité. |
+| *Send to PA flag (F564230)* | Indicateurs d'envoi à la PA. |
+| *Validation level (F564236)* | Niveaux de gravité des contrôles de validation. |
+
+Aucun mappage de champ n'est nécessaire. **Sync now** se contente d'**ajouter** les codes absents de la liste et conserve chaque code existant avec ses libellés ; le bandeau indique `N new code(s) added, M kept`. Les libellés des nouveaux codes se complètent ensuite à la main.
+
+La configuration de synchronisation est enregistrée dans le même modèle de liste, sous `sync.connector`, `sync.endpoint`, `sync.codeField`, `sync.labelFrField`, `sync.labelEnField`, `sync.listPath` et `sync.params`. Les consommateurs de liste (renderer de cellule, dropdown *Filtres avancés*, ligne de filtre par colonne) ne voient jamais ces clés comme des entrées — elles sont filtrées par `parseRefOptions`.
 
 Une synchronisation n'enregistre pas la liste automatiquement ; elle ne fait que reconstruire le tableau des lignes. Cliquer sur **Enregistrer** pour valider les lignes synchronisées.
+
+---
+
+## Listes fournies \{#ready-made-lists\}
+
+NomaUBL livre des listes personnalisées utilisées par les [Vues de liste](./list-views.md) par défaut pour leurs colonnes à liste de valeurs :
+
+| Liste | Contenu |
+|---|---|
+| `list-activite` | Codes activité, complétés depuis la base NomaUBL. |
+| `list-sub-type` | Sous-types de document, complétés depuis la base NomaUBL. |
+| `list-companies` | Sociétés, synchronisées par la requête `getCompanies` du [connecteur `jde-sql`](./sql-connectors.md#jde-sql) livré. |
+| `list-send-pa` | Envoi à la PA : `1` Envoi à la PA, `2` Pas d'envoi, `3` En attente de revue. |
+| `list-level` | Niveaux de gravité : Bloquant, Erreur, Avertissement, Information. |
+| `list-validation-sources` | Sources des contrôles de validation : schéma XSD, EN 16931, CIUS-FR, CTC FR étendu, Chorus Pro, règles NomaUBL, et les étapes techniques (UBL, XML, PDF, transformation XSL, validation, PA, base de données, traitement). |
+| `list-flux` | Sens de l'e-reporting : `1` Réception (achats), `2` Émission (ventes). |
+| `list-review` | Indicateur de suivi : `Y` Traité, `N` En attente. |
+
+Une liste intégrée **`validation-rules`** est aussi proposée aux vues de liste : les règles du catalogue [Schematron](../references/schematrons.md), pour qu'une colonne de règle affiche sa description à côté de son code.
 
 ---
 
@@ -219,5 +256,5 @@ L'éditeur de liste et les consommateurs de la grille partagent le même back-en
 - **Choisir un nom stable.** Le nom de la liste est ce que les specs de colonne référencent sous `refList`. Renommer une liste plus tard casse toutes les specs qui pointent dessus — mieux vaut supprimer puis recréer sous le nouveau nom une fois les specs de colonne mises à jour.
 - **Garder le libellé FR rempli.** Le renderer de cellule retombe sur le libellé FR quand la locale active est FR ; un libellé FR vide fait apparaître le code brut dans la grille, ce qui n'est rarement ce qu'un opérateur attend.
 - **Une requête connecteur, plusieurs listes.** Quand plusieurs listes partagent la même requête back-end (par ex. *unités actives pour la société 00070* vs. *unités actives pour la société 00080*), enregistrer la requête une fois sur un connecteur SQL ou API et alimenter des *Paramètres* différents par liste. Les valeurs par défaut de l'endpoint complètent le reste.
-- **La sync remplace, elle ne fusionne pas.** Une synchronisation retire toutes les lignes existantes avant d'insérer les nouvelles. Les modifications manuelles faites entre deux syncs sont perdues — quand des overrides manuels comptent, garder la liste soit manuelle, soit entièrement synchronisée, pas les deux.
+- **La synchronisation par connecteur remplace, la source NomaUBL complète.** Avec un connecteur API ou SQL, *Sync now* retire toutes les lignes existantes avant d'insérer les nouvelles : les modifications manuelles faites entre deux synchronisations sont perdues. Avec la base NomaUBL, la synchronisation ajoute seulement les nouveaux codes et conserve les libellés saisis à la main.
 - **Une colonne cachée reste filtrable.** Une colonne rattachée à une liste personnalisée peut être marquée `visible: false` dans la spec et continuer à apparaître dans *Filtres avancés* — utile pour les champs techniques comme `logBusinessUnit` qu'un opérateur veut filtrer sans les afficher.

@@ -150,7 +150,10 @@ L'éditeur a **trois onglets** :
 | **Database Type** | `Oracle` / `PostgreSQL` / `Microsoft SQL Server` / `Custom JDBC (driver class below)` | Type de moteur. Détermine le format d'URL JDBC proposé et la manière dont le moteur interprète le dialecte à l'exécution. **Microsoft SQL Server** demande le pilote `mssql-jdbc` dans `lib/`. **JDBC personnalisé** vise n'importe quelle autre base (DB2, MariaDB, Snowflake, …) en indiquant sa classe de pilote — sans attendre une nouvelle version de NomaUBL pour en ajouter une. |
 | **Driver class** | texte *(JDBC personnalisé uniquement)* | Nom complet de la classe du pilote JDBC, par ex. `com.example.jdbc.MyDriver`. Visible seulement quand *Database Type* vaut *Custom JDBC* ; déposez le pilote correspondant dans `lib/`. |
 | **JDBC URL** | texte | Chaîne de connexion JDBC complète — `jdbc:oracle:thin:@host:1521/service_name` (Oracle), `jdbc:postgresql://host:5432/database_name` (PostgreSQL), `jdbc:sqlserver://host:port;databaseName=name` (SQL Server), ou le format attendu par le pilote personnalisé. |
-| **Schema** | texte *(facultatif)* | Schéma par défaut. Utilisé par le SQL — aucune préfixation automatique à l'exécution, la valeur est informative et permet d'écrire des noms de tables non qualifiés quand le compte JDBC dispose déjà du bon `current_schema`. |
+| **Schema** | texte *(facultatif)* | Schéma des données, écrit `{{schema}}` dans une requête (par exemple `PRODDTA`). Aucune préfixation automatique n'a lieu par ailleurs : les noms de tables non qualifiés se résolvent sur le `current_schema` du compte JDBC. |
+| **Control schema** | texte *(facultatif)* | Schéma des tables de contrôle, écrit `{{ctlSchema}}` dans une requête (par exemple `PRODCTL`, pour les tables de contrôle JDE comme `F0005`). |
+
+`{{schema}}` et `{{ctlSchema}}` sont remplacés par ces champs à l'exécution de la requête, jamais par l'appelant, et doivent être de simples identifiants. Une requête qui en utilise un alors que le champ est vide échoue avec *Set the Schema / Control schema of connector …*. La même requête s'exécute ainsi sans modification sur chaque environnement.
 
 ### Identifiants
 
@@ -237,6 +240,22 @@ Un runner intégré qui exécute la requête sélectionnée sur la base cible et
 | **Erreur** | Cadre d'erreur rouge avec le message JDBC / analyseur (`SQLException`, violation de la liste blanche, `:placeholder` manquant, etc.). |
 
 L'onglet Test appelle la base réelle — *Enregistrer* le connecteur d'abord après une édition ; sinon le test tourne contre la version précédemment enregistrée de la requête.
+
+---
+
+## Connecteur livré : `jde-sql` \{#jde-sql\}
+
+:::info[Spécifique à JDE]
+NomaUBL livre un connecteur **`jde-sql`** doté de requêtes prêtes à l'emploi sur les tables de JD Edwards EnterpriseOne. Il suffit de renseigner sa connexion (type de base, URL JDBC, compte) et ses deux schémas pour que les requêtes fonctionnent telles quelles.
+:::
+
+| Requête | Écriture | Rôle |
+|---|---|---|
+| `getUDC` — *UDC values* | Non | Valeurs d'un code utilisateur (`F0005`) pour un code produit (`drsy`) et un type de code (`drrt`), en `CODE`, `LABEL_FR`, `LABEL_EN` — prêtes à alimenter une [liste personnalisée](./custom-lists.md). Utilise `{{ctlSchema}}`. |
+| `updateInvoiceStatus` — *Update invoice status* | Oui | Passe les lignes d'échéance d'une facture (`F03B11`, par `doc`, `dct`, `kco`) au statut de paiement `H` et suspend les relances (`RPDNLT = 'N'`), sauf les lignes déjà payées (`P`). Prévue pour une [action](../management/actions.md) sur une facture en litige. Utilise `{{schema}}`. |
+| `getCompanies` — *Companies* | Non | Sociétés JDE (`F0010`) avec leur nom, en `CODE`, `LABEL_FR`, `LABEL_EN`. Elle alimente la [liste personnalisée](./custom-lists.md#ready-made-lists) livrée `list-companies`, qui sert aux sélecteurs de société (déclaration de TVA, rapport d'audit, extraction, récupération des statuts). Utilise `{{schema}}`. |
+
+Une mise à jour ajoute les requêtes absentes du connecteur et conserve celles déjà présentes ; voir [Mise à jour](../installation/upgrade.md).
 
 ---
 

@@ -245,13 +245,13 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 | Group | Pages (id) |
 |---|---|
-| **Navigation** | Dashboard (`dashboard`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
+| **Navigation** | Operations (`dashboard`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
 | **Sync** | Fetch Input (`fetchinput`), Fetch Import (`import`), Fetch Statuses (`retrievestatuses`), Scheduled Jobs (`scheduledjobs`). |
 | **Processing** | Process Document (`process`), Extract & Process (`extractandprocess`), Process API (`processapi`). |
 | **UBL** | UBL Validation (`validate`), XSL Editor (`xsleditor`), XML Viewer (`xmlviewer`), UBL Defaults (`ubldefaults`). |
 | **Extract** | Extract from Archive (`extract`), Extract FTP (`extractftp`), Extract from BIP (`extractbip`, *JD Edwards-specific*). |
 | **Management** | Documents (`documents`), PDF Templates (`pdftemplates`), Actions (`actions`), Notification Rules (`notificationrules`), Watched Folders (`watchfolders`), File Versions (`fileversions`), Promotion (`promotion`). |
-| **Documentation** | Release Notes (`releasenotes`), Upgrade History (`upgradehistory`), Status Reference (`statusreference`), Reason Codes (`reasoncodes`), UBL Reference (`ublreference`), Business Rules (`businessrules`), Developer (`xref`), API Reference (`apireference`). |
+| **Documentation** | Release Notes (`releasenotes`), Upgrade History (`upgradehistory`), Status Reference (`statusreference`), Reason Codes (`reasoncodes`), UBL Reference (`ublreference`), Business Rules (`businessrules`, which also opens Schematrons), Developer (`xref`), API Reference (`apireference`). |
 
 A few chips carry a hint:
 
@@ -260,6 +260,7 @@ A few chips carry a hint:
 - **Watched Folders** grants the configuration of the folders; their schedule is on *Scheduled Jobs*.
 - **Promotion** also requires the *Settings access* feature. See [Promotion](../../management/promotion.md).
 - **Developer** opens the [Developer reference](../../references/developer.md): tables, configuration keys, flows, impact, API.
+- **Operations** also opens the [Billing overview](../../application/billing-overview.md) and [Statistics](../../application/statistics.md), which have no page id of their own; **Business Rules** also opens [Schematrons](../../references/schematrons.md). A role that sees Operations lands on the Billing overview after sign-in.
 
 Rules:
 
@@ -269,12 +270,12 @@ Rules:
 
 ### Dashboard cards
 
-Each dashboard widget is an individual permission keyed by `dashboard.<card>`. The cards are laid out like the pages — one card per group with its chips, count and **all** / **none** link — and mirror the dashboard layout:
+Each block of the [Operations](../../application/dashboard.md#access) dashboard is an individual permission keyed by `dashboard.<card>`. The cards are laid out like the pages — one card per group with its chips, count and **all** / **none** link:
 
 | Group | Cards |
 |---|---|
 | **Hero metrics** | `dashboard.total`, `dashboard.inflight`, `dashboard.errors-tech`, `dashboard.errors-business`, `dashboard.status-cards` (status cards 213 / 9905 / 9907 and 207 / 208 / 210) |
-| **Charts & widgets** | `dashboard.pipeline`, `dashboard.volume`, `dashboard.recent`, `dashboard.stale`, `dashboard.error-rules`, `dashboard.per-company`, `dashboard.ereporting`, `dashboard.round-trip` |
+| **Charts & widgets** | `dashboard.volume`, `dashboard.recent`, `dashboard.stale`, `dashboard.error-rules`, `dashboard.ereporting`, `dashboard.round-trip` (the editor also lists `dashboard.pipeline` and `dashboard.per-company`, which no block of the page uses) |
 | **Sections** | `dashboard.quick-actions` |
 
 - **Empty list = every card visible**.
@@ -311,7 +312,7 @@ Grouped by the page where the button lives — the same key can power buttons on
 
 | Group | Action | Key | Effect |
 |---|---|---|---|
-| **Invoices** | Create | `invoice.create` | Dashboard *Quick action* and the *New invoice* button on the list. |
+| **Invoices** | Create | `invoice.create` | *New Invoice* in the Quick Actions of the Operations dashboard. |
 | **Invoices** | Edit | `invoice.edit` | Update invoice fields from the detail modal / edit panel. |
 | **Invoices** | Delete | `invoice.delete` | Hard-delete an invoice and all its child records. |
 | **Invoices** | Delete lifecycle event | `invoice.lifecycle-delete` | Remove a single status event from an invoice history; the header realigns on the last remaining event. |

@@ -6,7 +6,7 @@ keywords: [NomaUBL, audit report, e-invoicing audit, period report, KPI, deposit
 
 # Audit Report
 
-The **Audit report** tab of the [Reports](./overview.md) page measures how the electronic invoicing of a period went: how many invoices were processed, deposited, approved, rejected or refused, what is still waiting for an action, how long each step took, which errors occurred and how they were handled. The figures come **only from the NomaUBL tables** at the time of generation; the platform is not queried.
+The **Audit report** card of the [Reports](./overview.md) page measures how the electronic invoicing of a period went: how many invoices were processed, deposited, approved, rejected or refused, what is still waiting for an action, how long each step took, which errors occurred and how they were handled. The figures come **only from the NomaUBL tables** at the time of generation; the platform is not queried.
 
 The report is short whatever the volume — it lists no individual invoice — so it can be sent as is to a finance manager, an auditor or a steering committee. It applies to every source system (JD Edwards, SAP, NetSuite or a custom ERP).
 
@@ -16,115 +16,152 @@ Open it from **Reports → Audit report**.
 
 ## At a glance
 
-<svg viewBox="0 0 1200 389" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 492" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="ar-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="ar-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="ar-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="ar-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="rpau-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="rpau-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="rpau-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="rpau-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="345" rx="14" fill="url(#ar-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <rect x="240" y="32" width="107" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="293.5" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Status statistics</text>
-  <rect x="352" y="32" width="67" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="385.5" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Integrity</text>
-  <rect x="424" y="32" width="82" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="465.0" y="46.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit report</text>
-  <rect x="511" y="32" width="127" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="574.5" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Implementation report</text>
-  <rect x="643" y="32" width="102" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="694.0" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Technical report</text>
-  <line x1="220" y1="66" x2="980" y2="66" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="88" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Audit of a period from the NomaUBL tables: key figures, volumes, situation, errors and their handling.</text>
-  <text x="240" y="117" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Period</text>
-  <rect x="390" y="103" width="111" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="400" y="117.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Calendar month ▾</text>
-  <rect x="507" y="103" width="65" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="517" y="117.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">2026-09</text>
-  <text x="582" y="117" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">compared to the previous month</text>
-  <text x="240" y="149" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Date basis</text>
-  <rect x="390" y="135" width="128" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="400" y="149.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Issue date (BT-2) ▾</text>
-  <text x="640" y="149" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Companies</text>
-  <rect x="720" y="135" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="730" y="149.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">empty: all visible</text>
-  <text x="240" y="181" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
-  <rect x="390" y="167" width="139" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="400" y="181.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Issued and received ▾</text>
-  <text x="640" y="181" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Language</text>
-  <rect x="720" y="167" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="730" y="181.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">English ▾</text>
-  <text x="240" y="213" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
-  <rect x="390" y="204" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M392.5,209.5 L394.8,211.8 L398.8,207" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="407" y="213" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Executive summary</text>
-  <rect x="650" y="204" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M652.5,209.5 L654.8,211.8 L658.8,207" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="667" y="213" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Volumes</text>
-  <rect x="390" y="225" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M392.5,230.5 L394.8,232.8 L398.8,228" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="407" y="234" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Situation by status</text>
-  <rect x="650" y="225" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M652.5,230.5 L654.8,232.8 L658.8,228" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="667" y="234" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Backlog, all periods</text>
-  <rect x="390" y="246" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M392.5,251.5 L394.8,253.8 L398.8,249" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="407" y="255" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Lifecycle and delays</text>
-  <rect x="650" y="246" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M652.5,251.5 L654.8,253.8 L658.8,249" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="667" y="255" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Errors and handling</text>
-  <rect x="390" y="267" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M392.5,272.5 L394.8,274.8 L398.8,270" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="407" y="276" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Operations over the period</text>
-  <rect x="650" y="267" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M652.5,272.5 L654.8,274.8 L658.8,270" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="667" y="276" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Consistency checks</text>
-  <rect x="390" y="292" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="407" y="301" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Also run the SQL integrity checks against JDE (slower)</text>
-  <rect x="240" y="319" width="100" height="26" rx="5" fill="url(#ar-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="290.0" y="335.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Download PDF</text>
-  <rect x="348" y="319" width="128" height="26" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="412.0" y="335.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Download Markdown</text>
-  <text x="492" y="329" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Running — Lifecycle and delays · 5 / 9</text>
-  <rect x="492" y="335" width="468" height="6" rx="3" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <rect x="492" y="335" width="260" height="6" rx="3" fill="#4a9eff"/>
-  <rect x="20" y="26" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="41" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Third tab of Reports</text>
-  <text x="30" y="54" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Reports → Audit report</text>
-  <line x1="200" y1="43.0" x2="240" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Period</text>
-  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">month or custom dates, compared</text>
-  <line x1="200" y1="117.0" x2="390" y2="114" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-  <rect x="20" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
-  <text x="30" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">all ticked by default</text>
-  <line x1="200" y1="227.0" x2="390" y2="222" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-  <rect x="1000" y="130" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Scope</text>
-  <text x="1010" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">companies · direction · language</text>
-  <line x1="1000" y1="147.0" x2="870" y2="147" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-  <rect x="1000" y="279" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="294" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Integrity checks</text>
-  <text x="1010" y="307" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">optional, against the source</text>
-  <line x1="1000" y1="296.0" x2="720" y2="297" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-  <rect x="1000" y="349" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="364" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Background run</text>
-  <text x="1010" y="377" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">progress bar names the step</text>
-  <line x1="1000" y1="366.0" x2="950" y2="338" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="220" y="20" width="760" height="452" rx="14" fill="url(#rpau-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Reports</text>
+  <rect x="240.0" y="62" width="172.5" height="44" rx="8" fill="rgba(255,255,255,0.01)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250.0" y="72" width="22" height="22" rx="6" fill="#4ade80" fillOpacity="0.18"/>
+  <text x="280.0" y="81" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Integrity</text>
+  <text x="280.0" y="95" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Compare with JDE, integrate</text>
+  <rect x="422.5" y="62" width="172.5" height="44" rx="8" fill="rgba(255,255,255,0.05)" stroke="#fb923c" strokeWidth="1.4"/>
+  <rect x="432.5" y="72" width="22" height="22" rx="6" fill="#fb923c" fillOpacity="0.18"/>
+  <text x="462.5" y="81" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Audit report</text>
+  <text x="462.5" y="95" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Key figures of a period</text>
+  <rect x="605.0" y="62" width="172.5" height="44" rx="8" fill="rgba(255,255,255,0.01)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="615.0" y="72" width="22" height="22" rx="6" fill="#4a9eff" fillOpacity="0.18"/>
+  <text x="645.0" y="81" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Implementation report</text>
+  <text x="645.0" y="95" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">How this instance works</text>
+  <rect x="787.5" y="62" width="172.5" height="44" rx="8" fill="rgba(255,255,255,0.01)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="797.5" y="72" width="22" height="22" rx="6" fill="#8a93b0" fillOpacity="0.18"/>
+  <text x="827.5" y="81" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Technical report</text>
+  <text x="827.5" y="95" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Developer documentation</text>
+  <rect x="240" y="120" width="250" height="300" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="142" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Settings</text>
+  <text x="254" y="164" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PERIOD</text>
+  <rect x="254" y="172" width="222" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="264" y="186.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">📅 Last month · Issue date (BT-2) ▾</text>
+  <text x="254" y="216" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DIRECTION</text>
+  <rect x="254" y="224" width="162" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="255" y="225" width="42" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="276.0" y="238.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Both</text>
+  <line x1="298" y1="229" x2="298" y2="241" stroke="#334155" strokeWidth="1"/>
+  <text x="325.0" y="238.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Issued</text>
+  <line x1="352" y1="229" x2="352" y2="241" stroke="#334155" strokeWidth="1"/>
+  <text x="384.0" y="238.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Received</text>
+  <text x="254" y="268" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">COMPANIES</text>
+  <rect x="254" y="276" width="222" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="264" y="290.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">empty: all visible</text>
+  <text x="254" y="320" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LANGUAGE</text>
+  <rect x="254" y="328" width="123" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="286.0" y="342.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Français</text>
+  <rect x="319" y="329" width="57" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="347.5" y="342.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">English</text>
+  <rect x="502" y="120" width="458" height="300" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="516" y="142" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Contents</text>
+  <text x="946" y="142" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">8 of 8 sections · All · None</text>
+  <rect x="516.0" y="154.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="162" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,167.5 L530.8,169.8 L534.8,165" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="171" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="171" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Executive summary</text>
+  <text x="544.0" y="184" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Key figures vs previous period</text>
+  <rect x="735.0" y="154.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="162" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,167.5 L749.8,169.8 L753.8,165" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="171" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="171" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Volumes</text>
+  <text x="763.0" y="184" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Per activity, company, document…</text>
+  <rect x="516.0" y="206.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="214" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,219.5 L530.8,221.8 L534.8,217" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="223" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="223" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Situation by status</text>
+  <text x="544.0" y="236" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Current status at generation</text>
+  <rect x="735.0" y="206.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="214" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,219.5 L749.8,221.8 L753.8,217" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="223" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="223" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Backlog, all periods</text>
+  <text x="763.0" y="236" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">What remains to handle</text>
+  <rect x="516.0" y="258.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="266" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,271.5 L530.8,273.8 L534.8,269" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="275" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="275" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Lifecycle and delays</text>
+  <text x="544.0" y="288" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Milestones and delays</text>
+  <rect x="735.0" y="258.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="266" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,271.5 L749.8,273.8 L753.8,269" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="275" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="275" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Errors and handling</text>
+  <text x="763.0" y="288" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Findings, rejections, failures</text>
+  <rect x="516.0" y="310.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="318" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,323.5 L530.8,325.8 L534.8,321" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="327" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="327" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Operations over the period</text>
+  <text x="544.0" y="340" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Jobs, files, notifications</text>
+  <rect x="735.0" y="310.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="318" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,323.5 L749.8,325.8 L753.8,321" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="327" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="327" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Consistency checks</text>
+  <text x="763.0" y="340" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Between tables, optionally JDE</text>
+  <rect x="240" y="432" width="89" height="22" rx="5" fill="url(#rpau-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="284.5" y="446.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Download PDF</text>
+  <rect x="337" y="432" width="66" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="370.0" y="446.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Markdown</text>
+  <rect x="419" y="440" width="200" height="6" rx="3" fill="#1f2937"/><rect x="419" y="440" width="110" height="6" rx="3" fill="#4a9eff"/>
+  <text x="629" y="447" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Running · 12 s · Lifecycle and delays</text>
+  <rect x="20" y="66" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Report cards</text>
+  <text x="30" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one per report</text>
+  <line x1="200" y1="83.0" x2="240" y2="84" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="20" y="170" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Settings</text>
+  <text x="30" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">on the left</text>
+  <line x1="200" y1="187.0" x2="240" y2="180" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="20" y="428" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="443" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PDF or Markdown</text>
+  <text x="30" y="456" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">copy kept in reports/</text>
+  <line x1="200" y1="445.0" x2="240" y2="443" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="1000" y="126" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="141" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">All / None</text>
+  <text x="1010" y="154" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">count of the sections</text>
+  <line x1="1000" y1="143.0" x2="950" y2="142" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="1000" y="240" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Section tiles</text>
+  <text x="1010" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a line on each section</text>
+  <line x1="1000" y1="257.0" x2="950" y2="250" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="20" y="232" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="247" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Shared period picker</text>
+  <text x="30" y="260" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">last month by default</text>
+  <line x1="200" y1="249.0" x2="254" y2="180" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="1000" y="428" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="443" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Background job</text>
+  <text x="1010" y="456" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">progress names the step</text>
+  <line x1="1000" y1="445.0" x2="820" y2="443" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
 </svg>
+
+The page shows **Settings** on the left, the **Contents** on the right and the action bar below.
 
 | Control | Description |
 |---|---|
-| **Period** | Drop-down: **Calendar month** (the previous month by default), compared to the month before; or **Custom dates**, compared to the same number of days before. A custom range that covers whole months, a quarter or a year compares to the preceding months of the same length. |
-| **Date basis** | **Issue date (BT-2)** — an invoice belongs to the period by its issue date — or **Last update**. Statuses and amounts are always those of the generation day. |
-| **Companies** | Company codes separated by commas; empty = every company the signed-in user can see. The role's company visibility always applies. |
-| **Direction** | Issued and received, issued only, received only. |
-| **Language** | French or English; defaults to the interface language. |
-| **Sections** | Tick the parts to include; all are ticked by default. |
-| **Also run the SQL integrity checks against JDE** | Shown when *Consistency checks* is ticked. Runs the checks configured under [Integrity reports](../../configuration/system/integrity-reports.md) on the period and adds their discrepancy counts. Slower: each check queries the source system. |
-| **Download PDF / Download Markdown** | Starts the generation **in the background**. A progress bar names the current step; the file downloads at the end and a copy is kept in `<appHome>/<env>/reports/nomaubl-audit-<date>-<time>.pdf` or `.md`. The window can stay open on another tab meanwhile. |
+| **Period** | The shared [period picker](../../configuration/default-periods.md#period-picker), **Last month** by default. Compared with the previous period of the same kind: a month with the previous month, other dates with the same number of days just before. |
+| **Date basis** | In the footer of the period picker: **Issue date (BT-2)** *(default)* — an invoice belongs to the period by its issue date — or **Last update**. Statuses and amounts are always those of the generation day. |
+| **Direction** | **Both** *(default)*, **Issued** or **Received**. |
+| **Companies** | A multi-select of the companies (the `list-companies` [custom list](../../configuration/custom-lists.md#ready-made-lists)); empty = every company the signed-in user can see. The role's company visibility always applies. |
+| **Language** | **Français** or **English**; defaults to the interface language. |
+| **Contents** | One tile per section with a line on what it holds, all ticked by default; the header gives the count (`8 of 8 sections`) and the **All** / **None** links. |
+| **Also run the SQL integrity checks against JDE (slower)** | Inside the *Consistency checks* tile, shown while it is ticked. Runs the checks configured under [Integrity reports](../../configuration/system/integrity-reports.md) on the period and adds their discrepancy counts. Each check queries the source system. |
+| **Download PDF** / **Markdown** | Starts the generation **in the background**. A progress bar names the current step; the file downloads at the end and a copy is kept in `<appHome>/<env>/reports/nomaubl-audit-<date>-<time>.pdf` or `.md`. The rest of the application stays usable meanwhile. |
 
 ---
 

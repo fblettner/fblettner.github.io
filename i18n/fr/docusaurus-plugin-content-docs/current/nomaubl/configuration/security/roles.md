@@ -245,13 +245,13 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 
 | Groupe | Pages (identifiant) |
 |---|---|
-| **Navigation** | Tableau de bord (`dashboard`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
+| **Navigation** | Exploitation (`dashboard`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
 | **Synchronisation** | Récupérer Entrée (`fetchinput`), Récupérer les imports (`import`), Récupérer les statuts (`retrievestatuses`), Tâches planifiées (`scheduledjobs`). |
 | **Traitement** | Traiter Document (`process`), Extraire & Traiter (`extractandprocess`), Traiter API (`processapi`). |
 | **UBL** | Validation UBL (`validate`), Éditeur XSL (`xsleditor`), Visionneuse XML (`xmlviewer`), Défauts UBL (`ubldefaults`). |
 | **Extraction** | Extraire depuis Archive (`extract`), Extraire FTP (`extractftp`), Extraire depuis BIP (`extractbip`, *propre à JD Edwards*). |
 | **Gestion** | Documents (`documents`), Modèles PDF (`pdftemplates`), Actions (`actions`), Règles de notification (`notificationrules`), Dossiers surveillés (`watchfolders`), Versions fichiers (`fileversions`), Promotion (`promotion`). |
-| **Documentation** | Notes de version (`releasenotes`), Historique des mises à jour (`upgradehistory`), Référentiel statuts (`statusreference`), Motifs (`reasoncodes`), Référence UBL (`ublreference`), Règles de gestion (`businessrules`), Développeur (`xref`), Référence API (`apireference`). |
+| **Documentation** | Notes de version (`releasenotes`), Historique des mises à jour (`upgradehistory`), Référentiel statuts (`statusreference`), Motifs (`reasoncodes`), Référence UBL (`ublreference`), Règles de gestion (`businessrules`, qui ouvre aussi les Schematrons), Développeur (`xref`), Référence API (`apireference`). |
 
 Quelques pastilles portent une aide :
 
@@ -260,6 +260,7 @@ Quelques pastilles portent une aide :
 - **Dossiers surveillés** accorde la configuration des dossiers ; leur planification se trouve dans *Tâches planifiées*.
 - **Promotion** demande aussi la fonctionnalité *Settings access*. Voir [Promotion](../../management/promotion.md).
 - **Développeur** ouvre la [référence développeur](../../references/developer.md) : tables, clés de configuration, flux, impact, API.
+- **Exploitation** ouvre aussi la [Synthèse](../../application/billing-overview.md) et les [Statistiques](../../application/statistics.md), qui n'ont pas d'identifiant de page propre ; **Règles de gestion** ouvre aussi les [Schematrons](../../references/schematrons.md). Un rôle qui voit Exploitation arrive sur la Synthèse après la connexion.
 
 Règles :
 
@@ -269,12 +270,12 @@ Règles :
 
 ### Cartes du tableau de bord
 
-Chaque widget du tableau de bord est une permission individuelle indexée par `dashboard.<carte>`. Les cartes se présentent comme les pages — une carte par groupe avec ses pastilles, son compteur et son lien **tout** / **aucun** — et reprennent la mise en page du tableau de bord :
+Chaque bloc du tableau de bord [Exploitation](../../application/dashboard.md) est une permission individuelle indexée par `dashboard.<carte>`. Les cartes se présentent comme les pages — une carte par groupe avec ses pastilles, son compteur et son lien **tout** / **aucun** :
 
 | Groupe | Cartes |
 |---|---|
 | **Indicateurs principaux** | `dashboard.total`, `dashboard.inflight`, `dashboard.errors-tech`, `dashboard.errors-business`, `dashboard.status-cards` (cartes de statut 213 / 9905 / 9907 et 207 / 208 / 210) |
-| **Graphiques et widgets** | `dashboard.pipeline`, `dashboard.volume`, `dashboard.recent`, `dashboard.stale`, `dashboard.error-rules`, `dashboard.per-company`, `dashboard.ereporting`, `dashboard.round-trip` |
+| **Graphiques et widgets** | `dashboard.volume`, `dashboard.recent`, `dashboard.stale`, `dashboard.error-rules`, `dashboard.ereporting`, `dashboard.round-trip` (l'éditeur propose aussi `dashboard.pipeline` et `dashboard.per-company`, qu'aucun bloc de la page n'utilise) |
 | **Sections** | `dashboard.quick-actions` |
 
 - **Liste vide = toutes les cartes visibles**.
@@ -311,7 +312,7 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 
 | Groupe | Action | Clé | Effet |
 |---|---|---|---|
-| **Factures** | Créer | `invoice.create` | Action rapide du tableau de bord et bouton *Nouvelle facture* sur la liste. |
+| **Factures** | Créer | `invoice.create` | *Nouvelle Facture* dans les Actions rapides du tableau de bord Exploitation. |
 | **Factures** | Modifier | `invoice.edit` | Met à jour les champs d'une facture depuis la fenêtre détail ou le panneau d'édition. |
 | **Factures** | Supprimer | `invoice.delete` | Suppression définitive d'une facture et de tous ses enregistrements fils. |
 | **Factures** | Supprimer un événement du cycle de vie | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |

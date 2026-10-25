@@ -1,6 +1,6 @@
 ---
 title: Global
-description: "Paramètres globaux de NomaUBL en neuf onglets : répertoires et environnement, traitement, journal serveur, rendu PDF, e-mail, assistant IA, réglages communs des tâches (fenêtre silencieuse, envoi groupé, rétention, repères BIP), licence et authentification."
+description: "Paramètres globaux de NomaUBL en dix onglets : répertoires et environnement, traitement, journal serveur, rendu PDF, e-mail, assistant IA, réglages communs des tâches (fenêtre silencieuse, envoi groupé, rétention, repères BIP), licence, authentification et périodes par défaut."
 keywords: [NomaUBL, paramètres globaux, répertoires, SMTP, Ghostscript, XSL, Anthropic, licence, journal serveur, rétention, tâches planifiées, assistant IA, JD Edwards, SAP, NetSuite]
 ---
 
@@ -8,7 +8,7 @@ keywords: [NomaUBL, paramètres globaux, répertoires, SMTP, Ghostscript, XSL, A
 
 Les paramètres **Global** rassemblent ce qui s'applique à **l'ensemble de l'application NomaUBL** : arborescence de fichiers et environnement, options de traitement, journal serveur, rendu PDF, serveur d'e-mails, assistant IA, réglages communs aux tâches planifiées, licence et authentification. Ils valent quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé ; les quelques réglages propres à BIP sont signalés là où ils apparaissent.
 
-L'éditeur comporte **neuf onglets** : Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication. Dans la [navigation des paramètres](../settings-overview.md), chaque onglet est une entrée à part — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* et *License* dans **Platform**, *Authentication* dans **Security**, *Job defaults* dans **Jobs & inbound** — qui n'ouvre que cette partie, sans la rangée d'onglets. La zone de recherche des paramètres retrouve n'importe quel champ de ces onglets par son libellé, son aide ou sa clé.
+L'éditeur comporte **dix onglets** : Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication, Periods. Dans la [navigation des paramètres](../settings-overview.md), chaque onglet est une entrée à part — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* et *License* dans **Platform**, *Authentication* dans **Security**, *Job defaults* dans **Jobs & inbound**, *Default periods* dans **Views & UI** — qui n'ouvre que cette partie, sans la rangée d'onglets. La zone de recherche des paramètres retrouve n'importe quel champ de ces onglets par son libellé, son aide ou sa clé.
 
 Les tâches elles-mêmes — interrogations de la PA, lots de documents, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, purge de rétention — ne se règlent pas ici : elles se trouvent sur la page [Tâches planifiées](../../sync/scheduled-jobs/overview.md).
 
@@ -46,6 +46,8 @@ Les tâches elles-mêmes — interrogations de la PA, lots de documents, rapport
   <text x="704.5" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">License</text>
   <rect x="739" y="72" width="96" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
   <text x="787.0" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Authentication</text>
+  <rect x="840" y="72" width="62" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="871.0" y="86.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Periods</text>
   <text x="240" y="124" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">SERVER LOG</text>
   <text x="240" y="153" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Server log file</text>
   <rect x="420" y="138" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -63,7 +65,7 @@ Les tâches elles-mêmes — interrogations de la PA, lots de documents, rapport
   <rect x="420" y="266" width="300" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="430" y="280.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">STATUS=WARN, API=INFO, ·=INFO</text>
   <rect x="20" y="66" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Neuf onglets</text>
+  <text x="30" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Dix onglets</text>
   <text x="30" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un par domaine de l'instance</text>
   <line x1="200" y1="83.0" x2="240" y2="83" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#gl-arrow)"/>
   <rect x="20" y="140" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
@@ -312,6 +314,12 @@ Quand **Auth Mode = `internal`** (ou `both`), l'écran de connexion affiche un l
 
 Requiert un **SMTP** configuré dans *Onglet 5 — Email*. Les jetons sont enregistrés dans `F564255` (voir [Tables de base de données](../../references/database-tables.md#f564255--tokens-de-réinitialisation-de-mot-de-passe)) et sont invalidés dès qu'ils ont été utilisés.
 :::
+
+---
+
+## Onglet 10 — Periods \{#periods\}
+
+La période d'ouverture de chaque page : **Every view** (*This month* si rien n'est choisi) et une surcharge **Per view** (*Same as every view* par défaut) pour la Synthèse, Exploitation, Statistiques, Invoices, E-Documents, Diagnostic, Erreurs d'intégration, Journal des traitements et Rapports › Intégrité. Enregistrées sous `defaultPeriod` et `defaultPeriod.<vue>`. Voir [Sélecteur de période et périodes par défaut](../default-periods.md#default-periods).
 
 ---
 

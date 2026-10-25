@@ -193,7 +193,7 @@ This is the typical choice for **JD Edwards AIS** and most modern PA APIs — No
 The catalogue of HTTP endpoints reachable through this connector. Each entry is a collapsible card; click the header to expand or collapse.
 
 :::tip[Expected endpoints]
-The editor lists the platform endpoints NomaUBL knows about — *send*, *import status*, *invoice statuses*, their `-selfbilled` variants (which route self-billed / purchase-flow documents and fall back to the standard flow) and the directory check — marking those already configured and offering a one-click **add** for those missing, so a required endpoint is harder to overlook.
+A folded **Endpoints NomaUBL uses** block, with a count of those configured (for example `5/7`), lists the platform endpoints NomaUBL knows about — *send*, *import status*, *invoice statuses*, their `-selfbilled` variants (which route self-billed / purchase-flow documents and fall back to the standard flow) and the directory check — marking those already configured and offering a one-click **add** for those missing, so a required endpoint is harder to overlook. Click the title to unfold it. An upgrade also adds to a shipped connector the endpoints it lacks and keeps the existing ones (see [Upgrade](../installation/upgrade.md)).
 :::
 
 You can use **`{{param}}` placeholders** in URLs, headers, query parameters and bodies. Three placeholders are always available out of the box:

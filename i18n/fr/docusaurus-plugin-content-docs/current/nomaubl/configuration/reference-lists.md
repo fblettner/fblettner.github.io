@@ -104,7 +104,7 @@ Cette page s'applique à des documents issus de n'importe quel système source �
 
 ## Mode d'édition commun à toutes les listes
 
-Chaque liste de référence est présentée sous forme de **tableau** qui contient les mêmes trois colonnes. Le mode d'interaction est identique pour les douze listes ; seules les valeurs de codes et la référence réglementaire associée diffèrent.
+Chaque liste de référence est présentée sous forme de **tableau** qui contient les mêmes trois colonnes. Le mode d'interaction est identique pour les quinze listes ; seules les valeurs de codes et la référence réglementaire associée diffèrent.
 
 | Colonne | Description |
 |---|---|
@@ -115,29 +115,44 @@ Chaque liste de référence est présentée sous forme de **tableau** qui contie
 Utiliser le bouton **+ Ajouter** en bas du tableau pour ajouter une ligne personnalisée, et le bouton **×** d'une ligne pour la supprimer. Les lignes sont triées par code.
 
 :::info[Listes personnalisées (non standard)]
-Les douze listes ci-dessous sont les catalogues réglementaires livrés avec NomaUBL. Les listes définies par les opérateurs — qui pilotent les dropdowns et les filtres d'une grille depuis des données externes — vivent sur une page dédiée : [Listes personnalisées](./custom-lists.md). Elles peuvent aussi être synchronisées depuis un connecteur API ou SQL au lieu d'être saisies ligne par ligne.
+Les quinze listes ci-dessous sont les catalogues réglementaires livrés avec NomaUBL. Les listes définies par les opérateurs — qui alimentent les listes déroulantes et les filtres d'une grille depuis des données externes — se trouvent sur une page dédiée : [Listes personnalisées](./custom-lists.md). Elles peuvent aussi être synchronisées depuis un connecteur API ou SQL au lieu d'être saisies ligne par ligne.
 :::
 
 ---
 
 ## Listes standard fournies par NomaUBL
 
-Les douze listes ci-dessous sont intégrées à NomaUBL et alignées sur la réglementation. Elles couvrent tous les référentiels nécessaires à la validation de bout en bout des documents UBL dans la chaîne française de facturation électronique.
+Les quinze listes ci-dessous sont intégrées à NomaUBL et alignées sur la réglementation. Elles couvrent tous les référentiels nécessaires à la validation de bout en bout des documents UBL dans la chaîne française de facturation électronique.
 
 | Liste | Standard / terme métier | Rôle |
 |---|---|---|
 | **Country Codes** | ISO 3166-1 alpha-2 | Codes pays sur deux lettres utilisés pour les adresses acheteur / vendeur / livraison. |
 | **Currency Codes** | ISO 4217 — `BT-5` / `BT-6` | Devise du document et devise comptable des factures. |
-| **Invoice Type Codes** | UNTDID 1001 — `BT-3` | Type de document de facturation (par ex. facture commerciale, avoir, facture rectificative). |
+| **Invoice Type Codes** | UNTDID 1001 — `BT-3` | Type de document de facturation (par ex. facture commerciale, avoir, facture rectificative), chacun qualifié de facture ou d'avoir — voir [plus bas](#invoice-types). |
 | **Note Type Codes** | UNTDID 4451 — `BT-22` | Qualificatif des notes en texte libre attachées à la facture. |
 | **Payment Means Codes** | UNTDID 4461 — `BT-81` | Modalités de règlement de la facture (virement, prélèvement, carte…). |
 | **Profile IDs** | `BT-23` (*Cadre de facturation*) | Identifiant du cadre de facturation / processus métier. |
+| **Customization IDs** | `BT-24` | Identifiant de spécification ; il détermine le Schematron appliqué (CIUS-FR ou CTC FR étendu). |
 | **Scheme IDs** | `BT-29` / `BT-30` / `BT-34` / `BT-49` / `BT-71` | Référentiels d'identifiants (schémas d'adressage électronique, schémas d'identifiant tiers). |
 | **Unit of Measure Codes** | Recommandation UN/ECE 20 — `BT-130` | Codes d'unité de quantité sur les lignes de facture (pièce, kilogramme, heure…). |
-| **VAT Category Codes** | EN 16931 — `BT-118` / `BT-151` | Catégorie de TVA au niveau document et au niveau ligne (taux normal, réduit, exonéré, autoliquidation…). |
+| **VAT Category Codes** | UN/ECE 5305 — `BT-118` / `BT-151` | Catégorie de TVA au niveau document et au niveau ligne (taux normal, taux zéro, exonéré, autoliquidation…, y compris `L` IGIC des Canaries et `M` IPSI de Ceuta et Melilla). |
 | **VATEX Exemption Reason Codes** | VATEX — `BT-121` | Codification du motif d'exonération de TVA, référencé quand une ligne est exonérée. |
+| **VAT Point Date Codes** | UNTDID 2005 — `BT-8` | Exigibilité de la TVA : date de facture, de livraison ou de paiement. |
+| **Document Reference Codes** | UNTDID 1153 — `BT-128-1` | Schéma de l'identifiant d'objet facturé (bon de livraison, bon de commande…). |
 | **Expected Action Codes** | `Y56ACTN` (*Action attendue*) | Codes d'action attendus par la Plateforme Agréée (catalogue côté PA). |
 | **Rejection Reason Codes** | `Y56RSRC` (*Motif de rejet*) | Motifs renvoyés par la PA lors du rejet d'une facture. |
+
+Les listes contiennent l'intégralité des codes de leur norme — par exemple 62 codes de type de facture, 84 moyens de paiement, 30 unités de mesure. Une mise à jour **ajoute** les codes manquants d'une liste sans jamais supprimer ni renommer un code présent : les libellés adaptés sur une instance sont conservés.
+
+### Types de facture : facture ou avoir \{#invoice-types\}
+
+L'éditeur *Invoice Type Codes* comporte une quatrième colonne, **Type**, avec *Invoice* (facture) ou *Credit note* (avoir) — la lecture EN 16931 de chaque code, enregistrée sous la forme `code = libelléFr|libelléEn|INVOICE` ou `CREDIT`. Treize codes sont des avoirs dès l'installation : `81`, `83`, `261`, `262`, `296`, `308`, `381`, `396`, `420`, `458`, `502`, `503`, `532`. Le type détermine :
+
+- si l'UBL est produit sous forme de document **CreditNote** plutôt que d'Invoice ;
+- la façon dont un document compte dans la [Synthèse](../application/billing-overview.md) (les avoirs viennent en déduction du chiffre d'affaires) ;
+- le **signe** des montants B2C en [e-reporting](../application/ereporting.md).
+
+Un code absent de la liste, ou listé sans type, suit la table EN 16931.
 
 ---
 

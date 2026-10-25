@@ -1,19 +1,19 @@
 ---
 title: E-Reporting
-description: "Configure la production et la soumission des bundles e-Reporting — identité Sender / Issuer, planification et flux, api-connecteur qui porte le transport HTTP de la PA, et repli SFTP pour la soumission sortante. Mise en quatre onglets : Identity · Reporting · PA Connection · FTP/SFTP. paMode = API / FTP / vide remplace l'ancien drapeau sendToPA Y/N."
+description: "Configure la production et la soumission des bundles e-Reporting — identité Sender / Issuer, planification, api-connecteur qui porte le transport HTTP de la PA, et repli SFTP pour la soumission sortante. Mise en quatre onglets : Identity · Reporting · PA Connection · FTP/SFTP. paMode = API / FTP / vide remplace l'ancien drapeau sendToPA Y/N."
 keywords: [NomaUBL, e-reporting, e-reporting français, AFNOR XP Z12-014, Flux 10.1, Flux 10.3, B2BINT, B2C, OUTOFSCOPE, sender, issuer, SIREN, frequency, MONTHLY, paMode, api-connecteur, SFTP, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # E-Reporting
 
-L'éditeur **E-Reporting** configure la **production et la soumission des bundles e-Reporting périodiques** exigés par la réforme française de la facturation électronique. Chaque société dépose un rapport réglementaire couvrant ses flux B2BINT, B2C et hors champ à une cadence fixe (mensuelle par défaut) ; cette page contrôle l'identité sender / issuer émise dans le bundle, la cadence et le choix des flux, et le transport PA utilisé pour téléverser le bundle une fois généré.
+L'éditeur **E-Reporting** configure la **production et la soumission des bundles e-Reporting périodiques** exigés par la réforme française de la facturation électronique. Chaque société dépose un rapport réglementaire couvrant ses flux B2BINT, B2C et hors champ à une cadence fixe (mensuelle par défaut) ; cette page contrôle l'identité sender / issuer émise dans le bundle, la cadence, et le transport PA utilisé pour téléverser le bundle une fois généré.
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé — une fois la source mappée vers UBL.
 
 L'éditeur comporte **quatre onglets** :
 
 1. **Identity** — champs d'identification Sender (PA) et Issuer (Déclarant) émis dans le bundle.
-2. **Reporting** — Business Process (B2BINT) et choix de la cadence et des flux.
+2. **Reporting** — Business Process (B2BINT) et cadence.
 3. **PA Connection** — choix de l'api-connecteur qui porte le transport HTTP de la PA, plus la surcharge du nom d'endpoint et les paramètres de connexion.
 4. **FTP/SFTP** — sélecteur Send Mode et identifiants du serveur SFTP utilisés quand le sélecteur est positionné sur `FTP`.
 
@@ -165,13 +165,14 @@ Ces champs sont émis sur les éléments `<BusinessProcess>` par facture, **uniq
 | **Business Process Type ID** | Optionnel. Identifiant de spécification TT-29. |
 | **Flow Name** | Optionnel. TT-2 émis comme `<ReportDocument><Name>`. |
 
-### Schedule & Flux
+### Schedule
 
 | Champ | Défaut | Description |
 |---|---|---|
 | **Frequency** | `MONTHLY` | Pilote la période auto-calculée par le scheduler et le défaut de la modale *Generate*. |
-| **Flux** | `10.1,10.3` | Codes flux séparés par virgule. Défaut couvre Flux 10.1 (détail B2BINT) et Flux 10.3 (B2C / OUTOFSCOPE agrégé). |
 | **Default Type Code** | `IN` | Code de type de rapport par défaut. |
+
+Chaque rapport porte les deux flux — 10.1 (B2B international, détail) et 10.3 (B2C, agrégé) — pour une société et un sens ; le sens se choisit dans la fenêtre *Generate* de l'[E-Reporting](../../application/ereporting.md#generate-dialog).
 
 ---
 
@@ -179,7 +180,7 @@ Ces champs sont émis sur les éléments `<BusinessProcess>` par facture, **uniq
 
 ### api-connecteur
 
-Le transport HTTP de la PA — flux d'authentification, base URL, endpoints — vit dans un [api-connecteur](../api-connectors.md) réutilisable. L'E-Reporting **choisit son propre connecteur** au lieu de partager celui réglé sur l'[E-Invoicing](./einvoicing.md), ce qui permet de cibler une plateforme différente — ou des identifiants différents sur la même plateforme — par rapport à l'import de factures.
+Le transport HTTP de la PA — flux d'authentification, base URL, endpoints — se trouve dans un [api-connecteur](../api-connectors.md) réutilisable. L'E-Reporting **choisit son propre connecteur** au lieu de partager celui réglé sur l'[E-Invoicing](./einvoicing.md), ce qui permet de cibler une plateforme différente — ou des identifiants différents sur la même plateforme — par rapport à l'import de factures.
 
 | Champ | Description |
 |---|---|
@@ -206,7 +207,7 @@ Le transport HTTP de la PA — flux d'authentification, base URL, endpoints — 
 
 | Champ | Valeurs | Description |
 |---|---|---|
-| **Send Mode** *(`paMode`)* | `API` *(défaut)* / `FTP` / *(vide)* | Transport utilisé pour **soumettre les rapports générés** à la PA. `API` route le bundle via l'api-connecteur choisi sur l'onglet précédent ; `FTP` écrit le XML dans un fichier temporaire et le pousse en SFTP via le serveur ci-dessous ; *(vide)* permet à NomaUBL de **générer les rapports sans les soumettre** — utile pour valider l'identité et le choix des flux avant d'impliquer la PA. |
+| **Send Mode** *(`paMode`)* | `API` *(défaut)* / `FTP` / *(vide)* | Transport utilisé pour **soumettre les rapports générés** à la PA. `API` route le bundle via l'api-connecteur choisi sur l'onglet précédent ; `FTP` écrit le XML dans un fichier temporaire et le pousse en SFTP via le serveur ci-dessous ; *(vide)* permet à NomaUBL de **générer les rapports sans les soumettre** — utile pour valider l'identité avant d'impliquer la PA. |
 
 Le champ `paMode` fonctionne de la même manière que sur la page E-Invoicing.
 
@@ -232,14 +233,14 @@ La vérification de configuration sur le [Tableau de bord IT](../../application/
 - `paMode=API` sans `connector` est signalé comme erreur (le transport API n'a rien à appeler).
 - `paMode=FTP` sans `paFtpHost` est signalé comme erreur (le transport SFTP n'a pas de serveur).
 - `paMode=` (vide) avec un `connector` est valide — les rapports sont générés localement et ne sont pas soumis.
-- `issuerSiren`, `frequency` et `flux` sont validés dès que `paMode` est non vide (le bundle sera effectivement soumis).
+- `issuerSiren` et le `connector` sont contrôlés tant que `paMode` est renseigné (le bundle sera effectivement soumis).
 
 ---
 
 ## Conseils & bonnes pratiques
 
 - **Choisir un api-connecteur distinct quand la plateforme de reporting diffère.** Les installations multi-plateforme ont souvent l'e-invoicing sur une PA et l'e-reporting sur une autre — c'est précisément pour cela que chaque template système porte sa propre référence de connecteur. Choisir le même nom des deux côtés quand ils partagent la même plateforme.
-- **Démarrer en `paMode=` (vide)** lors du câblage d'une nouvelle société. NomaUBL génère le rapport localement, ce qui permet de valider l'identité et le choix des flux contre un échantillon sans toucher la PA. Basculer sur `API` une fois le bundle correct.
+- **Démarrer en `paMode=` (vide)** lors du câblage d'une nouvelle société. NomaUBL génère le rapport localement, ce qui permet de valider l'identité sur un échantillon sans toucher la PA. Basculer sur `API` une fois le bundle correct.
 - **N'utiliser SFTP que quand la PA impose un dépôt fichier.** La soumission REST est plus simple à diagnostiquer et fonctionne avec le panneau de test de l'api-connecteur ; SFTP convient pour des soumissions à fort volume ou quand la PA ne propose pas d'endpoint REST report-import.
 - **Les surcharges par société se trouvent sur `e-reporting-{kco}`.** Copier le template `e-reporting` platform-wide sous le nouveau nom depuis *Paramètres* et ne modifier que les champs qui diffèrent — typiquement `issuerSiren`, la référence `connector` ou les identifiants SFTP quand la société `00070` déclare via une autre plateforme.
 - **La cadence pilote la période auto-calculée.** La régler sur `MONTHLY` fait émettre par le scheduler un bundle par mois couvrant le mois précédent ; `QUARTERLY` étend la fenêtre. La modale *Generate* permet toujours à l'utilisateur de surcharger la période à l'exécution.

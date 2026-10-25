@@ -1,6 +1,6 @@
 ---
 title: Vue d'ensemble des paramètres
-description: "Organisation de la page Paramètres de NomaUBL : une navigation par besoin (Platform, Security, E-invoicing, E-reporting, Jobs & inbound, Views & UI, connecteurs API, SQL et FTP, Reference data), une recherche sur les libellés, aides et clés de tous les champs, des sections Advanced pour les réglages rarement modifiés, et les actions de l'en-tête."
+description: "Organisation de la page Paramètres de NomaUBL : une navigation par besoin (Platform, Security, E-invoicing, E-reporting, Jobs & inbound, Views & UI, connecteurs API, SQL et FTP, Reference data, Custom data), une recherche sur les libellés, aides et clés de tous les champs, des sections Advanced pour les réglages rarement modifiés, et les actions de l'en-tête."
 keywords: [NomaUBL, paramètres, configuration, navigation, recherche, plateforme, sécurité, e-invoicing, e-reporting, tâches, connecteurs, données de référence, avancé, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
@@ -113,11 +113,12 @@ La navigation de gauche regroupe les entrées selon **ce que l'on veut régler**
 | **E-invoicing** | [E-invoicing](./system/einvoicing.md), [types de documents](./system/document-types.md), [catalogue des statuts](./system/statuses.md), [annuaire](./system/edirectory.md). |
 | **E-reporting** | [E-reporting](./system/ereporting.md) et le catalogue des statuts de l'e-reporting. |
 | **Jobs & inbound** | *Job defaults* (onglet global), [file d'impression JDE (BIP)](./system/fetch-invoices.md), [contrôles d'intégrité](./system/integrity-reports.md). |
-| **Views & UI** | [Vues de liste](./list-views.md). |
+| **Views & UI** | [Vues de liste](./list-views.md) et [périodes par défaut](./default-periods.md#default-periods) (onglet global *Periods*). |
 | **API connectors** | Une entrée par [connecteur API](./api-connectors.md), avec le badge `api`. |
 | **SQL connectors** | Une entrée par [connecteur SQL](./sql-connectors.md), avec le badge `sql`. |
 | **FTP connectors** | *JD Edwards file transfer* et les autres [connecteurs FTP](./ftp-connectors.md), avec le badge `ftp`. |
-| **Reference data** | Les [listes de référence](./reference-lists.md) (badge `list`) et les [listes personnalisées](./custom-lists.md) (badge `custom`). |
+| **Reference data** | Les [listes de référence](./reference-lists.md) livrées avec NomaUBL, avec le badge `list`. |
+| **Custom data** | Les [listes personnalisées](./custom-lists.md), avec le badge `custom`. |
 
 Chaque entrée affiche un libellé et une description d'une ligne ; les modèles système gardent leur nom technique, en petits caractères à côté du titre de l'éditeur (par exemple *Job defaults* · `global`). Une entrée globale n'ouvre **que son onglet** de l'éditeur global.
 

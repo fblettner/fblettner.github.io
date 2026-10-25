@@ -37,7 +37,7 @@ The **Server log** page shows the **end of the server log file**, newest lines f
 | Control | Effect |
 |---|---|
 | **Tail** | How much of the end of the file is read: `128 KB`, `512 KB` *(default)*, `2 MB` or `8 MB`. When the file is larger, the status line says so — raise the tail to read further back. |
-| **Severity** | Checkboxes `ERROR`, `WARN`, `INFO` *(the three ticked by default)*, `DEBUG` and **Unstructured** — the lines that do not follow the `** LEVEL ** MODULE ** … : message` form. |
+| **Severity** | A multi-select of `ERROR`, `WARN`, `INFO` *(the three picked by default)*, `DEBUG` and **Unstructured** — the lines that do not follow the `** LEVEL ** MODULE ** … : message` form; *All severities* when none is picked. |
 | **Module** | List built from the modules seen in the lines read (`PROCESS`, `UBL`, `PEPPOL`…); **All modules** by default. |
 | **Search…** | Case-insensitive text filter. |
 | **Auto-refresh** | Reloads the tail every 5 seconds. |

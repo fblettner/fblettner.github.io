@@ -8,7 +8,7 @@ keywords: [NomaUBL, promotion, export, import, paquet, environnements, développ
 
 La page **Promotion** transfère la configuration d'une instance à une autre — du développement vers la recette, de la recette vers la production — **élément par élément**, avec les fichiers utilisés par chaque élément. L'export produit un paquet ; l'import montre ce que le paquet modifierait, champ par champ, puis l'écrit après un instantané de version. Les clés propres à une instance — mots de passe, URL, hôtes, licence, nom de l'environnement… — **ne voyagent jamais** et ne sont jamais écrasées sur la cible.
 
-Accès : **Gestion → Promotion**. La page compte quatre vues : **Exporter** (préparer un paquet), **Promouvoir** (envoyer la sélection directement à une autre instance), **Importer** (appliquer un paquet) et **Historique**.
+Accès : **Gestion → Promotion**. La page compte trois vues : **Export** (préparer un paquet, ou promouvoir la sélection directement vers une autre instance), **Import** (appliquer un paquet) et **Historique**.
 
 ---
 
@@ -206,12 +206,12 @@ La grille est la table de données partagée ; sa vue figure dans l'éditeur des
 
 ## Promouvoir vers une autre instance \{#promote\}
 
-Quand les deux instances peuvent communiquer, la vue **Promouvoir** envoie la sélection de la vue Exporter directement à une instance cible, sans manipuler de fichier ZIP. Le paquet est constitué comme pour un export, puis transmis à l'aperçu de la cible, puis à son import.
+Quand les deux instances peuvent communiquer, la sélection de la vue **Export** est envoyée directement à une instance cible, sans manipuler de fichier ZIP. Le paquet est constitué comme pour un export, transmis à l'aperçu de la cible, puis à son import.
 
-1. **Cocher les éléments** dans la vue Exporter (avec leurs dépendances).
-2. Dans **Promouvoir**, choisir l'**Instance cible** (la dernière utilisée est mémorisée), la règle des **Éléments et fichiers modifiés** — *Remplacer par le paquet* ou *Conserver la cible, n'écrire que les nouveaux* — et un commentaire.
-3. **Simulation sur la cible** : la cible renvoie son propre aperçu — nouveaux, modifiés, identiques, ignorés, avec les écarts par champ — affiché sous *Cible … · Aperçu*. Rien n'est écrit.
-4. **Promouvoir** applique ce plan après confirmation ; la cible prend un instantané de version avant chaque écriture, et ses clés d'instance conservent leur valeur. Le résultat indique *Promue vers … : n élément(s) et n fichier(s) écrits*.
+1. **Cocher les éléments** dans la vue Export (avec leurs dépendances).
+2. Sous **Promouvoir vers une instance**, en bas du panneau latéral de l'export, choisir l'**Instance cible** (la dernière utilisée est mémorisée) puis cliquer sur **Promouvoir…**.
+3. La fenêtre **Promouvoir vers …** affiche l'aperçu de la cible — nouveaux, modifiés, identiques, ignorés, avec les écarts par champ. Rien n'est encore écrit : *Promouvoir vérifie d'abord la sélection sur l'instance cible et montre ce qui y changerait ; rien n'est écrit avant votre confirmation.*
+4. Dans la même fenêtre, choisir la règle des **Éléments et fichiers modifiés** — *Remplacer par le paquet* ou *Conserver la cible, n'écrire que les nouveaux* — et un commentaire, puis cliquer sur **Promouvoir n élément(s) et n fichier(s)**. La cible prend un instantané de version avant chaque écriture, et ses clés d'instance conservent leur valeur. La fenêtre indique ensuite *Promue vers … : n élément(s) et n fichier(s) écrits*.
 
 L'export ZIP reste disponible pour les instances qui ne peuvent pas communiquer.
 

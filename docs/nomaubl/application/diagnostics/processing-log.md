@@ -153,7 +153,7 @@ The toggle at the top of the toolbar switches between the two; the choice is per
 
 ## Toolbar
 
-The toolbar above the table combines a view toggle, a free-text search, two dropdown filters, a date range and a refresh button.
+The toolbar above the table combines a view toggle, a free-text search, dropdown filters (template, mode and, in the grouped view, status), a date range and a refresh button.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
@@ -176,7 +176,8 @@ The toolbar above the table combines a view toggle, a free-text search, two drop
 | **Search file name** | Substring match against the `file` column (e.g. `12345_RI_00070`). Empty disables the filter. |
 | **Templates** | Dropdown populated dynamically from the `document` templates declared in `config.json`. *All templates* removes the filter. |
 | **Modes** | Dropdown of the well-known processing modes — `AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`. *All modes* removes the filter. |
-| **Date range** | Restricts to events whose timestamp falls within the chosen window. Default preset: *Yesterday → Today*. The standard presets (*Today*, *Yesterday*, *Last 7 days*, *This month*, *Last month*, *Custom range*) all apply. |
+| **Status** *(grouped view only)* | *All statuses*, *OK*, *Error* or *Partial (start or end missing)* — keeps only the runs with that outcome. |
+| **Date range** | The shared [period picker](../../configuration/default-periods.md#period-picker): restricts to events whose timestamp falls within the chosen window. It opens on the [default period](../../configuration/default-periods.md#default-periods) of the *Processing log* view. |
 | **Refresh** | Re-runs the current query without changing filters. |
 
 When grouped, the page over-fetches (`pageSize × 4`, capped at 200) so START / END pairs and intermediate steps land on the same page and the grouping engine has the full job in hand.

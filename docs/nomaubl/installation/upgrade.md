@@ -106,6 +106,16 @@ The framework-XSL refresh (step 4) **no longer overwrites `ubl-defaults.xsl`**. 
 
 The upgrade report lists every kept file under an **Assets preserved** section. The same protection covers the `${env}/ubl/` mirror, which the upgrade also refreshes so per-document XSLs never import a stale framework copy.
 
+
+### Reference lists and shipped connectors are completed \{#merged-entries\}
+
+The upgrade **adds** what the bundled configuration has and the instance lacks, matched by code or by name, and changes nothing else:
+
+- **Reference lists** receive their missing codes; codes already there keep their labels. The *Invoice Type Codes* list also gets the [invoice / credit note type](../configuration/reference-lists.md#invoice-types) of each code.
+- **Shipped API and SQL connectors** already present receive the endpoints or queries they lack (for example the queries of [`jde-sql`](../configuration/sql-connectors.md#jde-sql)); their connection settings and existing endpoints and queries are kept.
+
+The upgrade report lists the additions under **New entries — reference lists, connector endpoints and queries**.
+
 ---
 
 ## Before you upgrade

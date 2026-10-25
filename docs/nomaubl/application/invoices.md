@@ -14,262 +14,204 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## At a glance
 
-<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 462" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="inv-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="inv-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="inv-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="inv-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="580" rx="14" fill="url(#inv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
+  <rect x="220" y="20" width="760" height="422" rx="14" fill="url(#inv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">E-Invoicing</text>
-  <rect x="610" y="30" width="80" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="650" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Refresh</text>
-  <rect x="694" y="30" width="86" height="22" rx="5" fill="url(#inv-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="737" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">+ New invoice</text>
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="240" y="84" width="156" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="252" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">📅 Last 7 days ▾</text>
-  <rect x="404" y="84" width="200" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="416" y="102" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">🔍 Doc · Dct · Kco · UBL number</text>
-  <rect x="612" y="84" width="170" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="624" y="102" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Customer name…</text>
-
-  <rect x="240" y="120" width="68" height="22" rx="11" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="274" y="135" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">All</text>
-  <rect x="314" y="120" width="78" height="22" rx="11" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1.5"/>
-  <text x="353" y="135" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">In flight</text>
-  <rect x="398" y="120" width="100" height="22" rx="11" fill="rgba(255,69,58,0.10)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="448" y="135" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Rejected · IT</text>
-  <rect x="504" y="120" width="134" height="22" rx="11" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="571" y="135" fill="#fb923c" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Rejected · Business</text>
-  <rect x="644" y="120" width="74" height="22" rx="11" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="681" y="135" fill="#4ade80" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Terminal</text>
-
-  <rect x="240" y="160" width="540" height="34" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="181" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DOC · DCT · KCO · UBL · ISSUED · CUSTOMER · TOTAL · STATUS · REVIEW</text>
-
-  <rect x="240" y="198" width="540" height="30" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="217" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12345 · RI · 00070 · INV-2026-0142 · 2026-05-09 · ACME · 1 200,00</text>
-  <rect x="666" y="206" width="78" height="16" rx="8" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="705" y="217" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9903 · Sent</text>
-  <rect x="748" y="206" width="24" height="16" rx="3" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="760" y="217" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">⚑</text>
-
-  <rect x="240" y="232" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="251" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12346 · RI · 00070 · INV-2026-0143 · 2026-05-09 · Beta SARL · 540,00</text>
-  <rect x="666" y="240" width="78" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="705" y="251" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">200 · Deposit.</text>
-
-  <rect x="240" y="266" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="285" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12347 · RI · 00001 · INV-2026-0144 · 2026-05-09 · Gamma SAS · 2 980,00</text>
-  <rect x="666" y="274" width="78" height="16" rx="8" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="705" y="285" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9904 · Reject</text>
-
-  <rect x="240" y="300" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="319" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12348 · RI · 00001 · INV-2026-0145 · 2026-05-09 · Delta &amp; Co · 815,00</text>
-  <rect x="666" y="308" width="78" height="16" rx="8" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="705" y="319" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9906 · Pend.</text>
-
-  <rect x="240" y="334" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="353" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12349 · RI · 00001 · INV-2026-0146 · 2026-05-09 · Epsilon · 460,00</text>
-  <rect x="666" y="342" width="78" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="705" y="353" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">200 · Deposit.</text>
-
-  <line x1="240" y1="380" x2="780" y2="380" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="400" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">1 — 50 of 1 248</text>
-  <text x="780" y="400" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="end">Page 1 ▾ · 50 ▾  ‹  ›</text>
-
-  <rect x="240" y="424" width="540" height="156" rx="10" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.4"/>
-  <text x="252" y="446" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">DETAIL MODAL — 7 tabs</text>
-  <rect x="252" y="456" width="68" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="286" y="471" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Summary</text>
-  <rect x="326" y="456" width="60" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="356" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Parties</text>
-  <rect x="392" y="456" width="54" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="419" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Lines</text>
-  <rect x="452" y="456" width="42" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="473" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">VAT</text>
-  <rect x="500" y="456" width="56" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="528" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Notes</text>
-  <rect x="562" y="456" width="64" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="594" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">History</text>
-  <rect x="632" y="456" width="48" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="656" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">PDF</text>
-
-  <rect x="252" y="494" width="142" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="262" y="510" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CUSTOMER</text>
-  <text x="262" y="526" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">ACME</text>
-
-  <rect x="404" y="494" width="142" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="414" y="510" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOTAL TTC</text>
-  <text x="414" y="526" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">1 200,00 EUR</text>
-
-  <rect x="556" y="494" width="218" height="40" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="566" y="510" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUS</text>
-  <text x="566" y="526" fill="#4a9eff" fontSize="11" fontFamily="ui-monospace, monospace" fontWeight="700">9903 · Sent to PA</text>
-
-  <rect x="252" y="544" width="84" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="294" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Edit UBL</text>
-  <rect x="342" y="544" width="64" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="374" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">E-mail</text>
-  <rect x="412" y="544" width="74" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="449" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Resend</text>
-  <rect x="492" y="544" width="90" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="537" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Set status</text>
-  <rect x="588" y="544" width="64" height="24" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="620" y="560" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Delete</text>
-
-  <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Date + search filters</text>
-  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">debounced server-side query</text>
-  <line x1="200" y1="100" x2="240" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-
-  <rect x="20" y="124" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="139" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Status chips</text>
-  <text x="30" y="152" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">multi-code partition · 1 click</text>
-  <line x1="200" y1="140" x2="314" y2="131" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-
-  <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Review badge</text>
-  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">UHALRTPSD</text>
-  <line x1="820" y1="216" x2="772" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-
-  <rect x="820" y="284" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="299" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Click → detail modal</text>
-  <text x="830" y="312" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">7 tabs · open on Summary</text>
-  <line x1="820" y1="300" x2="780" y2="304" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-
-  <rect x="20" y="448" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="463" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Detail modal tabs</text>
-  <text x="30" y="476" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Summary · Parties · Lines · VAT</text>
-  <line x1="200" y1="464" x2="252" y2="464" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-
-  <rect x="20" y="548" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="563" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Action buttons</text>
-  <text x="30" y="576" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Edit · E-mail · Resend · Set status</text>
-  <line x1="200" y1="564" x2="252" y2="558" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="240" y="64" width="206" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="78.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📅 1 – 31 Oct 2026 · Update date ▾</text>
+  <rect x="456" y="64" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="466" y="78.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Issued (sales) ▾</text>
+  <rect x="618" y="70" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="635" y="79" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Exclude reviewed errors</text>
+  <text x="240" y="113" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUS</text>
+  <rect x="286" y="100" width="101" height="20" rx="10.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="336.5" y="113.2" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">To correct  8  ▾</text>
+  <rect x="393" y="100" width="131" height="20" rx="10.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="458.5" y="113.2" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Decision needed  19  ▾</text>
+  <rect x="530" y="100" width="106" height="20" rx="10.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="583.0" y="113.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Processing  96  ▾</text>
+  <rect x="642" y="100" width="136" height="20" rx="10.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="710.0" y="113.2" fill="#c084fc" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">At the platform  136  ▾</text>
+  <rect x="784" y="100" width="116" height="20" rx="10.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="842.0" y="113.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Completed  2 102  ▾</text>
+  <text x="910" y="114" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">✕ Clear filters</text>
+  <rect x="393" y="126" width="210" height="112" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="403" y="135" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M405.5,140.5 L407.8,142.8 L411.8,138" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="420" y="144" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Decision needed · 19</text>
+  <rect x="415" y="157" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M417.5,162.5 L419.8,164.8 L423.8,160" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="432" y="166" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <circle cx="439" cy="162.5" r="3" fill="#fb923c"/>
+  <text x="447" y="166" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">207 Disputed</text>
+  <text x="591" y="166" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">12</text>
+  <rect x="415" y="179" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M417.5,184.5 L419.8,186.8 L423.8,182" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="432" y="188" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <circle cx="439" cy="184.5" r="3" fill="#fb923c"/>
+  <text x="447" y="188" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">210 Refused</text>
+  <text x="591" y="188" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">7</text>
+  <rect x="415" y="201" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="432" y="210" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <circle cx="439" cy="206.5" r="3" fill="#64748b"/>
+  <text x="447" y="210" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">208 Suspended</text>
+  <text x="591" y="210" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="240" y="250" width="117" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="298.5" y="264.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▸ Advanced Filters</text>
+  <rect x="240" y="282" width="220" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="296.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">🔍 Search…</text>
+  <rect x="470" y="282" width="48" height="22" rx="5" fill="url(#inv-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="494.0" y="296.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▶ Run</text>
+  <rect x="240" y="314" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DOC</text>
+  <text x="320" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DCT</text>
+  <text x="360" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">KCO</text>
+  <text x="420" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UBL</text>
+  <text x="540" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ISSUED</text>
+  <text x="620" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CUSTOMER</text>
+  <text x="730" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOTAL</text>
+  <text x="810" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUS</text>
+  <text x="920" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">REVIEW</text>
+  <rect x="240" y="346" width="720" height="24" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">12345</text>
+  <text x="320" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">RI</text>
+  <text x="360" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">00001</text>
+  <text x="420" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">INV-2026-0142</text>
+  <text x="540" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-09</text>
+  <text x="620" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">ACME</text>
+  <text x="730" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1 200,00</text>
+  <rect x="810" y="350.0" width="75" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="847.5" y="361.2" fill="#fb923c" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">207 Disputed</text>
+  <text x="920" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">⚑</text>
+  <rect x="240" y="374" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">12346</text>
+  <text x="320" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">RI</text>
+  <text x="360" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">00001</text>
+  <text x="420" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">INV-2026-0143</text>
+  <text x="540" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-09</text>
+  <text x="620" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Beta SARL</text>
+  <text x="730" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">540,00</text>
+  <rect x="810" y="378.0" width="75" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="847.5" y="389.2" fill="#fb923c" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">207 Disputed</text>
+  <text x="920" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <rect x="240" y="402" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">12347</text>
+  <text x="320" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">RI</text>
+  <text x="360" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">00002</text>
+  <text x="420" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">INV-2026-0144</text>
+  <text x="540" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-10</text>
+  <text x="620" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">ACME</text>
+  <text x="730" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 980,00</text>
+  <rect x="810" y="406.0" width="70" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="845.0" y="417.2" fill="#fb923c" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">210 Refused</text>
+  <text x="920" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <rect x="20" y="60" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Period + date basis</text>
+  <text x="30" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">update, issue or archive</text>
+  <line x1="200" y1="77.0" x2="240" y2="75" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Status by stage</text>
+  <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">one click: the whole stage</text>
+  <line x1="200" y1="113.0" x2="286" y2="110" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="20" y="196" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="211" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Choose statuses</text>
+  <text x="30" y="224" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">the caret opens the panel</text>
+  <line x1="200" y1="213.0" x2="393" y2="186" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="20" y="270" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Advanced Filters + Run</text>
+  <text x="30" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">server query, capped slice</text>
+  <line x1="200" y1="287.0" x2="470" y2="293" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
+  <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">issued by default</text>
+  <line x1="1000" y1="47.0" x2="576" y2="64" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="138" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="153" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clear filters</text>
+  <text x="1010" y="166" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">when a status is picked</text>
+  <line x1="1000" y1="155.0" x2="946" y2="118" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Click → detail window</text>
+  <text x="1010" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">7 tabs, opens on Summary</text>
+  <line x1="1000" y1="377.0" x2="950" y2="370" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
 </svg>
 
 ---
 
 ## Toolbar
 
-The toolbar above the table combines date filtering, free-text search, status chips and quick actions.
+Above the grid, two rows: the **period**, the **direction** and **Exclude reviewed errors**, then the **status by stage**. The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
 
-<div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)'}}>
-  <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
-    <span style={{padding: '6px 12px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '12px', fontWeight: 600, color: '#4a9eff'}}>📅 Yesterday</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Doc</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Dct</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Kco</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Contract</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Customer name</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>BAR ▾</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', fontWeight: 600, opacity: 0.7}}>Exclude reviewed errors</span>
-    <span style={{flex: 1, minWidth: '8px'}} />
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px'}}>↻ Refresh</span>
-    <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '12px', fontWeight: 600, border: '1px solid #4a9eff'}}>+ New invoice</span>
-  </div>
-</div>
+### Period
 
-### Date range
-
-The date filter on the left scopes the list to one window of dates. The default preset is *Yesterday*; other presets are *Today*, *Last 7 days*, *This month*, *Last month* and *Custom range* (manual From / To dates).
-
-The column that the date range is read against is picked by the **Date basis** selector — see below.
+The shared [period picker](../configuration/default-periods.md#period-picker): presets, two-month calendar, and the date basis in its footer. The list opens on *This month*, or on the [default period](../configuration/default-periods.md#default-periods) set for the *Invoices* view. A list opened from a dashboard or a VAT drill-down takes the dates of that page.
 
 ### Date basis \{#date-basis\}
 
-A selector sits next to the date range and controls **which date column the period is read against**.
+The footer of the period picker chooses **which date column the period is read against**.
 
 | Value | Date column | When to use |
 |---|---|---|
-| **Update date** *(default)* | The last time the invoice was modified in NomaUBL. | Day-to-day operations — same behaviour as the list has always had. |
+| **Update date** *(default)* | The last time the invoice was modified in NomaUBL. | Day-to-day operations. |
 | **Issue date** | The date printed on the invoice itself (BT-2 from the UBL). | Reconciling against the [VAT Declaration](./vat-declaration.md) page or any external system that keys off the issue date. |
-| **Archive date** | The date the document was processed into the archive. | Reconciling against the [Reports](reports/overview.md) page and the [Dashboard](./dashboard.md), which offer the same *Archive date* basis. |
+| **Archive date** | The date the document was processed into the archive. | Reconciling against the [IT dashboard](./tech-dashboard.md) and the processing reports. |
 
-The choice is **remembered for the current session** — closing the modal of an invoice and reopening the list keeps the selector where it was. The toggle is also **pre-selected automatically** when the Invoices list is opened from a VAT page drill-down, so the count on Invoices matches the count you came from.
+The choice is **remembered for the current session**. It is also **set automatically** when the list is opened from a dashboard or a VAT drill-down, so the count on E-Invoicing matches the count you came from.
 
-### Free-text filters
+### Direction \{#direction-chip\}
 
-Each input narrows the list as you type — the search updates after a brief pause:
+A selector next to the period: **Issued (sales)** *(default)*, **Received (purchases)**, or **All directions**.
 
-| Field | What it matches |
+| Value | Effect |
 |---|---|
-| **Doc** | The internal document number (e.g. `12345`). |
-| **Dct** | The document type code (e.g. `RI`, `RN`). |
-| **Kco** | The company code (e.g. `00070`). |
-| **Contract** | The contract reference carried by the invoice. |
-| **Customer name** | The buyer party name. |
-| **Country** | ISO 3166 two-letter code of the counterparty (e.g. `FR`, `DE`). Pre-filled automatically when the page is opened from a [VAT Declaration](./vat-declaration.md) drill-down. |
+| **Issued (sales)** | Only the invoices sent to customers (`UHDRIN = '2'`). |
+| **Received (purchases)** | Only the supplier invoices pulled from the PA (see [Sync → Fetch Input → PA inbound](../sync/fetch-input.md) and the bundled `received-ubl` document). |
+| **All directions** | No direction filter — both are listed. |
 
-:::info[How the text filters match]
-A text filter matches from the **start** of the value and uses the column's index, so the list stays fast on a large table. To search for text anywhere in the value, wrap it in percent signs — `%acme%` matches *acme* wherever it appears, at the cost of a full scan. The **Doc** filter takes a shortcut: an all-digits value seeks the document number directly rather than scanning. Filters on columns backed by a reference list (status, routing…) accept **several values at once** — pick more than one and the list shows rows matching any of them.
-:::
-
-### BAR routing dropdown
-
-A separate dropdown filters by **BAR routing** code (`B2B`, `B2G`, `B2BINT`, `B2C`, `OUTOFSCOPE`, `ARCHIVEONLY`, `DOCUMENT`) — the channel classification documented in *UBL Defaults → Document Type / BAR Routing*.
-
-### Status chips
-
-To the right, a row of **status chips** appears: one per status currently present in the date range. Each chip shows the status label, the count, and a colour matching its family. Clicking a chip toggles a status filter on the list — clicking it again clears it.
-
-<div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', margin: '14px 0 4px'}}>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>Approved <span style={{opacity: 0.65}}>(982)</span></span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa'}}>Pending <span style={{opacity: 0.65}}>(184)</span></span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(255,159,10,0.55)', background: 'rgba(255,159,10,0.1)', color: '#fb923c'}}>Disputed <span style={{opacity: 0.65}}>(52)</span></span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(255,69,58,0.55)', background: 'rgba(255,69,58,0.1)', color: '#f87171'}}>Rejected <span style={{opacity: 0.65}}>(29)</span></span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 500, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', opacity: 0.7}}>✕ Clear filter</span>
-</div>
-
-### Clear filters
-
-When at least one filter is active, an **✕ Clear filter** chip appears at the end of the chip row. It clears every active filter except the date range.
-
-### Status chip overflow
-
-The Status chip row caps at **5 inline chips**; the rest fold into a `+N more` dropdown with a coloured dot per code. Multi-status drill-throughs from the dashboards (e.g. *In flight* = 5 codes) hoist the active value back into the inline group when it falls past the cap, so the active filter stays visible.
-
-### Advanced Filters
-
-A collapsible **Advanced Filters** panel sits below the chip row. It exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec — with a per-column operator picker (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay as a draft until **Run** commits them, so typing in the panel does not spam the back-end.
-
-The set of columns that can be filtered is defined in the spec's `filter: true` allow-list — operators decide which columns they actually query and trim the rest from the panel without losing them from the grid. See [List Views](../configuration/list-views.md) for the editor.
-
-The page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, default 5000) and TanStack handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the date range or the *Advanced Filters*.
-
-RefList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union.
-
-### Direction chip
-
-A new chip row sits next to the Status chips: **All** / **Issued** / **Received**.
-
-| Chip | Effect |
-|---|---|
-| **All** *(default)* | No direction filter — both customer-issued (`UHDRIN = '2'`) and supplier-received (`UHDRIN = '1'`) rows are listed. |
-| **Issued** | Only the invoices the operator sends to customers. |
-| **Received** | Only the supplier invoices pulled from the PA (see [Sync → Fetch Input → PA inbound](../sync/fetch-input.md) and the bundled `received-ubl` document). |
-
-The chip resolves against the `UHDRIN` flag stored on each row — a template's *Direction* change does not re-classify historical rows, so the result is stable over time.
+The selector resolves against the `UHDRIN` flag stored on each row — a template's *Direction* change does not re-classify historical rows, so the result is stable over time.
 
 On a *Received* row the **Counterparty** column reads from `AccountingSupplierParty` (the supplier), not from `AccountingCustomerParty` — so the column shows the supplier name on inbound invoices and the customer name on outbound ones. The status workflow, the detail modal and the column catalog are otherwise identical; only the emit-only seller actions (Resend to PA, Send completed, Credit note…) are hidden on received-direction rows.
 
 ### Exclude reviewed errors \{#exclude-reviewed\}
 
-The **Exclude reviewed errors** toggle, next to the direction selector, hides the rows already marked *Reviewed* that still sit in an error status (`errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md)), so the list keeps only the errors nobody has looked at yet. Reviewed rows in any other status stay listed. The toggle is set automatically when the list opens from a [Dashboard](./dashboard.md#exclude-reviewed) tile where it was on. The `GET /api/invoices` endpoint takes the same filter as `excludeReviewedErrors=true`.
+The **Exclude reviewed errors** switch, next to the direction selector, hides the rows already marked *Reviewed* that still sit in an error status (`errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md)), so the list keeps only the errors nobody has looked at yet. Reviewed rows in any other status stay listed. The switch is set automatically when the list opens from a dashboard where it was on ([Billing overview](./billing-overview.md), [Statistics](./statistics.md), [Operations](./dashboard.md#exclude-reviewed)). The `GET /api/invoices` endpoint takes the same filter as `excludeReviewedErrors=true`.
 
-### Refresh and New invoice
+### Status by stage \{#status-by-stage\}
 
-Two buttons sit at the right:
+The **Status** row groups the statuses of the period into the five stages of the [Statistics](./statistics.md#stages) dashboard — **To correct**, **Decision needed**, **Processing**, **At the platform**, **Completed** — plus **Other** when a status outside these groups has invoices or is selected. Each stage is a pill with its colour and count.
 
-| Button | Behaviour |
+| Gesture | Effect |
 |---|---|
-| **Refresh** (circular arrow) | Re-runs the current query without changing the filters. |
-| **+ New invoice** | Opens the *Create / Edit invoice modal*. Hidden on read-only sessions. |
+| Click on the stage name | Selects every status of the stage (*Show only this stage*); a second click shows every status again. |
+| Click on the caret **▾** | Opens *Choose statuses*: a checkbox for the whole stage (all, none or partial) and one per status, with its colour, label and count, biggest first. |
+| Partial selection | The count reads `picked / total` and the pill gets a dashed border. |
+| **✕ Clear filters** | Appears when a status is selected; clears the selection. |
+
+A stage with no invoice on the period is greyed out. A dashboard click (a queue, a stage, a status) lands on the list with the matching statuses already picked.
+
+### Advanced Filters \{#advanced-filters\}
+
+A collapsible **Advanced Filters** panel sits below the status row. It offers one row per filterable column of the active [List Views](../configuration/list-views.md) spec — by default *DOC*, *DCT*, *Company*, *Party Number*, *Party Name*, *Bar code*, *Review*, *Status*, *Invoice type*, *Activity code*, *Reason code* — with a per-column operator picker (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay as a draft until **Run** commits them, so typing in the panel does not spam the back-end.
+
+:::info[How the text filters match]
+A text filter matches from the **start** of the value and uses the column's index, so the list stays fast on a large table. To search for text anywhere in the value, wrap it in percent signs — `%acme%` matches *acme* wherever it appears, at the cost of a full scan. The **DOC** filter takes a shortcut: an all-digits value seeks the document number directly rather than scanning. Filters on columns backed by a reference list (status, routing…) accept **several values at once** — pick more than one and the list shows rows matching any of them.
+:::
+
+The set of columns that can be filtered is defined in the spec's `filter: true` allow-list — operators decide which columns they actually query and trim the rest from the panel without losing them from the grid. See [List Views](../configuration/list-views.md) for the editor.
+
+The page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, default 5000) and the grid handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the period or the *Advanced Filters*.
+
+RefList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union.
+
+### Grid toolbar
+
+Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)** and **Reprocess selected (N)** when rows are ticked (see [Bulk resend](#bulk-resend) and [Reprocess](#reprocess)). A new invoice is created from the **Quick Actions** of the [Operations](./dashboard.md) dashboard.
 
 ---
 
@@ -775,7 +717,7 @@ While the e-mail is sending, an overlay covers the modal until the SMTP server c
 
 ### Create / Edit invoice modal
 
-Opens from **+ New invoice** in the toolbar, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
+Opens from **New Invoice** in the Quick Actions of the [Operations](./dashboard.md) dashboard, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
 
 Editing an existing invoice no longer flips its `cbc:CustomizationID` back to the EN16931 default. The form now carries the `customizationId` value from the source UBL and writes it back verbatim — new invoices still default to `urn:cen.eu:en16931:2017`.
 
@@ -880,8 +822,8 @@ The **Resend** button (in the History tab, or via Seller actions when status is 
 
 ## Tips & best practices
 
-- **Start with a date range.** *Yesterday* (default) is the typical morning view; *Custom range* covers month-end reconciliation. Filters apply on top of the date range.
-- **Status chips are the fastest filter.** A red chip with a non-zero count is usually the right place to start when chasing exceptions.
+- **Start with the period.** *Yesterday* is the typical morning view, a custom range covers month-end reconciliation; set the opening period once under [Default periods](../configuration/default-periods.md). Filters apply on top of the period.
+- **The stages are the fastest filter.** *To correct* and *Decision needed* with a non-zero count are usually the right place to start when chasing exceptions; the caret narrows the stage to one status.
 - **The lifecycle (History tab) is the source of truth.** It records every status the invoice has been in, with messages, rejection reasons and expected actions — the place to investigate disputes or PA-side decisions.
 - **Use the Seller actions banner.** The actions surfaced for `205` / `206` / `207` / `208` / `210` / `213` / `9904` / `9907` are the platform's recommended next step. They reduce a multi-step workflow (finding the customer, drafting the credit note, etc.) to a single click when the connector is configured.
 - **Set status only when needed.** Manual `Set status → DB` desynchronises the local record from the PA. Reserve it for clean-up after restoring backups or for statuses the lifecycle sweep cannot catch.

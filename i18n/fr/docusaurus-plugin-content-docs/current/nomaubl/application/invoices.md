@@ -14,262 +14,204 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 462" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="inv-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="inv-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="inv-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="inv-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="580" rx="14" fill="url(#inv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
+  <rect x="220" y="20" width="760" height="422" rx="14" fill="url(#inv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">E-Invoicing</text>
-  <rect x="608" y="30" width="82" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="649" y="45" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle">↻ Rafraîchir</text>
-  <rect x="694" y="30" width="92" height="22" rx="5" fill="url(#inv-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="740" y="45" fill="#e2e8f0" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="middle" fontWeight="700">+ Nouvelle facture</text>
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="240" y="84" width="156" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="252" y="102" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">📅 7 derniers jours ▾</text>
-  <rect x="404" y="84" width="200" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="416" y="102" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">🔍 Doc · Dct · Kco · Numéro UBL</text>
-  <rect x="612" y="84" width="170" height="28" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="624" y="102" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">Nom du client…</text>
-
-  <rect x="240" y="120" width="76" height="22" rx="11" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
-  <text x="278" y="135" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Toutes</text>
-  <rect x="324" y="120" width="76" height="22" rx="11" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1.5"/>
-  <text x="362" y="135" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">En cours</text>
-  <rect x="408" y="120" width="98" height="22" rx="11" fill="rgba(255,69,58,0.10)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="457" y="135" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Rejetée · IT</text>
-  <rect x="512" y="120" width="120" height="22" rx="11" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="572" y="135" fill="#fb923c" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Rejetée · Métier</text>
-  <rect x="640" y="120" width="74" height="22" rx="11" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="677" y="135" fill="#4ade80" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="600">Terminal</text>
-
-  <rect x="240" y="160" width="540" height="34" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="181" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DOC · DCT · KCO · UBL · ÉMISE · CLIENT · TOTAL · STATUT · REVUE</text>
-
-  <rect x="240" y="198" width="540" height="30" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="217" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12345 · RI · 00070 · INV-2026-0142 · 2026-05-09 · ACME · 1 200,00</text>
-  <rect x="666" y="206" width="78" height="16" rx="8" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="705" y="217" fill="#4a9eff" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9903 · Envoyée</text>
-  <rect x="748" y="206" width="24" height="16" rx="3" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="760" y="217" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">⚑</text>
-
-  <rect x="240" y="232" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="251" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12346 · RI · 00070 · INV-2026-0143 · 2026-05-09 · Beta SARL · 540,00</text>
-  <rect x="666" y="240" width="78" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="705" y="251" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">200 · Déposée</text>
-
-  <rect x="240" y="266" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="285" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12347 · RI · 00001 · INV-2026-0144 · 2026-05-09 · Gamma SAS · 2 980,00</text>
-  <rect x="666" y="274" width="78" height="16" rx="8" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="705" y="285" fill="#f87171" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9904 · Rejetée</text>
-
-  <rect x="240" y="300" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="319" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12348 · RI · 00001 · INV-2026-0145 · 2026-05-09 · Delta &amp; Co · 815,00</text>
-  <rect x="666" y="308" width="78" height="16" rx="8" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
-  <text x="705" y="319" fill="#fb923c" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">9906 · Attente</text>
-
-  <rect x="240" y="334" width="540" height="30" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="353" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">12349 · RI · 00001 · INV-2026-0146 · 2026-05-09 · Epsilon · 460,00</text>
-  <rect x="666" y="342" width="78" height="16" rx="8" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
-  <text x="705" y="353" fill="#4ade80" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">200 · Déposée</text>
-
-  <line x1="240" y1="380" x2="780" y2="380" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="400" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace">1 — 50 sur 1 248</text>
-  <text x="780" y="400" fill="#64748b" fontSize="10" fontFamily="ui-monospace, monospace" textAnchor="end">Page 1 ▾ · 50 ▾  ‹  ›</text>
-
-  <rect x="240" y="424" width="540" height="156" rx="10" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.4"/>
-  <text x="252" y="446" fill="#cbd5e1" fontSize="11" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">MODALE DE DÉTAIL — 7 onglets</text>
-  <rect x="252" y="456" width="68" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="286" y="471" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Résumé</text>
-  <rect x="326" y="456" width="60" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="356" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Parties</text>
-  <rect x="392" y="456" width="58" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="421" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Lignes</text>
-  <rect x="456" y="456" width="42" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="477" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">TVA</text>
-  <rect x="504" y="456" width="56" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="532" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Notes</text>
-  <rect x="566" y="456" width="78" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="605" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Historique</text>
-  <rect x="650" y="456" width="48" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="674" y="471" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">PDF</text>
-
-  <rect x="252" y="494" width="142" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="262" y="510" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CLIENT</text>
-  <text x="262" y="526" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">ACME</text>
-
-  <rect x="404" y="494" width="142" height="40" rx="6" fill="rgba(255,255,255,0.02)" stroke="#334155" strokeWidth="1"/>
-  <text x="414" y="510" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOTAL TTC</text>
-  <text x="414" y="526" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace">1 200,00 EUR</text>
-
-  <rect x="556" y="494" width="218" height="40" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="566" y="510" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUT</text>
-  <text x="566" y="526" fill="#4a9eff" fontSize="11" fontFamily="ui-monospace, monospace" fontWeight="700">9903 · Envoyée à la PA</text>
-
-  <rect x="252" y="544" width="96" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="300" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Modifier UBL</text>
-  <rect x="354" y="544" width="64" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="386" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">E-mail</text>
-  <rect x="424" y="544" width="74" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="461" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Renvoyer</text>
-  <rect x="504" y="544" width="116" height="24" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="562" y="560" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Modifier statut</text>
-  <rect x="626" y="544" width="74" height="24" rx="5" fill="rgba(255,69,58,0.08)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="663" y="560" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Supprimer</text>
-
-  <rect x="20" y="84" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="99" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtres date + recherche</text>
-  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">requête débouncée côté serveur</text>
-  <line x1="200" y1="100" x2="240" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-
-  <rect x="20" y="124" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="139" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Pastilles de statut</text>
-  <text x="30" y="152" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">partition multi-codes · 1 clic</text>
-  <line x1="200" y1="140" x2="324" y2="131" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-
-  <rect x="820" y="200" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="215" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Badge Revue</text>
-  <text x="830" y="228" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">UHALRTPSD</text>
-  <line x1="820" y1="216" x2="772" y2="216" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-
-  <rect x="820" y="284" width="160" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="299" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clic → modale détail</text>
-  <text x="830" y="312" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">7 onglets · ouvre Résumé</text>
-  <line x1="820" y1="300" x2="780" y2="304" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-
-  <rect x="20" y="448" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="463" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Onglets de la modale</text>
-  <text x="30" y="476" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Résumé · Parties · Lignes · TVA</text>
-  <line x1="200" y1="464" x2="252" y2="464" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-
-  <rect x="20" y="548" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="563" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Boutons d'action</text>
-  <text x="30" y="576" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Modifier · E-mail · Renvoyer · Statut</text>
-  <line x1="200" y1="564" x2="252" y2="558" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="240" y="64" width="257" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="78.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📅 1 – 31 oct. 2026 · Date de mise à jour ▾</text>
+  <rect x="507" y="64" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="517" y="78.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Émises (ventes) ▾</text>
+  <rect x="669" y="70" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="686" y="79" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Exclure les erreurs traitées</text>
+  <text x="240" y="113" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUT</text>
+  <rect x="286" y="100" width="101" height="20" rx="10.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="336.5" y="113.2" fill="#f87171" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">À corriger  8  ▾</text>
+  <rect x="393" y="100" width="146" height="20" rx="10.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="466.0" y="113.2" fill="#fb923c" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Décision à prendre  19  ▾</text>
+  <rect x="545" y="100" width="121" height="20" rx="10.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="605.5" y="113.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">En traitement  96  ▾</text>
+  <rect x="672" y="100" width="146" height="20" rx="10.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="745.0" y="113.2" fill="#c084fc" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Sur la plateforme  136  ▾</text>
+  <rect x="824" y="100" width="116" height="20" rx="10.0" fill="rgba(50,215,75,0.18)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
+  <text x="882.0" y="113.2" fill="#4ade80" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Terminées  2 102  ▾</text>
+  <text x="950" y="114" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">✕ Effacer les filtres</text>
+  <rect x="393" y="126" width="210" height="112" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="403" y="135" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M405.5,140.5 L407.8,142.8 L411.8,138" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="420" y="144" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Décision à prendre · 19</text>
+  <rect x="415" y="157" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M417.5,162.5 L419.8,164.8 L423.8,160" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="432" y="166" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <circle cx="439" cy="162.5" r="3" fill="#fb923c"/>
+  <text x="447" y="166" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">207 En litige</text>
+  <text x="591" y="166" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">12</text>
+  <rect x="415" y="179" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M417.5,184.5 L419.8,186.8 L423.8,182" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="432" y="188" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <circle cx="439" cy="184.5" r="3" fill="#fb923c"/>
+  <text x="447" y="188" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">210 Refusée</text>
+  <text x="591" y="188" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">7</text>
+  <rect x="415" y="201" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="432" y="210" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <circle cx="439" cy="206.5" r="3" fill="#64748b"/>
+  <text x="447" y="210" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">208 Suspendue</text>
+  <text x="591" y="210" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">0</text>
+  <rect x="240" y="250" width="112" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
+  <text x="296.0" y="264.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">▸ Filtres avancés</text>
+  <rect x="240" y="282" width="220" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="296.5" fill="#475569" fontSize="9.5" fontFamily="system-ui, sans-serif">🔍 Rechercher…</text>
+  <rect x="470" y="282" width="75" height="22" rx="5" fill="url(#inv-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="507.5" y="296.5" fill="#e2e8f0" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">▶ Exécuter</text>
+  <rect x="240" y="314" width="720" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DOC</text>
+  <text x="320" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DCT</text>
+  <text x="360" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">KCO</text>
+  <text x="420" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">UBL</text>
+  <text x="540" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">ÉMISE</text>
+  <text x="620" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">CLIENT</text>
+  <text x="730" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOTAL</text>
+  <text x="810" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">STATUT</text>
+  <text x="920" y="331.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SUIVI</text>
+  <rect x="240" y="346" width="720" height="24" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">12345</text>
+  <text x="320" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">RI</text>
+  <text x="360" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">00001</text>
+  <text x="420" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">INV-2026-0142</text>
+  <text x="540" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-09</text>
+  <text x="620" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">ACME</text>
+  <text x="730" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1 200,00</text>
+  <rect x="810" y="350.0" width="79" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="849.5" y="361.2" fill="#fb923c" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">207 En litige</text>
+  <text x="920" y="361.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">⚑</text>
+  <rect x="240" y="374" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">12346</text>
+  <text x="320" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">RI</text>
+  <text x="360" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">00001</text>
+  <text x="420" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">INV-2026-0143</text>
+  <text x="540" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-09</text>
+  <text x="620" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Beta SARL</text>
+  <text x="730" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">540,00</text>
+  <rect x="810" y="378.0" width="79" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="849.5" y="389.2" fill="#fb923c" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">207 En litige</text>
+  <text x="920" y="389.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <rect x="240" y="402" width="720" height="24" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">12347</text>
+  <text x="320" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">RI</text>
+  <text x="360" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">00002</text>
+  <text x="420" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">INV-2026-0144</text>
+  <text x="540" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2026-10-10</text>
+  <text x="620" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">ACME</text>
+  <text x="730" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 980,00</text>
+  <rect x="810" y="406.0" width="70" height="16" rx="8.0" fill="rgba(255,159,10,0.18)" stroke="rgba(255,159,10,0.40)" strokeWidth="1"/>
+  <text x="845.0" y="417.2" fill="#fb923c" fontSize="8.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">210 Refusée</text>
+  <text x="920" y="417.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <rect x="20" y="60" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Période + base de date</text>
+  <text x="30" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">mise à jour, émission, archivage</text>
+  <line x1="200" y1="77.0" x2="240" y2="75" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Statut par étape</text>
+  <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">un clic : toute l'étape</text>
+  <line x1="200" y1="113.0" x2="286" y2="110" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="20" y="196" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="211" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Choisir les statuts</text>
+  <text x="30" y="224" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la flèche ouvre le panneau</text>
+  <line x1="200" y1="213.0" x2="393" y2="186" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="20" y="270" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtres avancés + Exécuter</text>
+  <text x="30" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">requête serveur, tranche bornée</text>
+  <line x1="200" y1="287.0" x2="470" y2="293" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
+  <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">émises par défaut</text>
+  <line x1="1000" y1="47.0" x2="627" y2="64" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="138" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="153" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Effacer les filtres</text>
+  <text x="1010" y="166" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dès qu'un statut est choisi</text>
+  <line x1="1000" y1="155.0" x2="986" y2="118" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clic → fenêtre de détail</text>
+  <text x="1010" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">7 onglets, ouvre sur Résumé</text>
+  <line x1="1000" y1="377.0" x2="950" y2="370" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
 </svg>
 
 ---
 
 ## Barre d'outils
 
-La barre d'outils au-dessus du tableau combine filtre de dates, recherche texte, puces de statut et raccourcis.
+Au-dessus de la grille, deux rangées : la **période**, la **direction** et **Exclure les erreurs traitées**, puis le **statut par étape**. Viennent ensuite le panneau [Filtres avancés](#advanced-filters) et la barre d'outils de la grille (recherche, **Exécuter**, actions groupées).
 
-<div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)'}}>
-  <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
-    <span style={{padding: '6px 12px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '12px', fontWeight: 600, color: '#4a9eff'}}>📅 Hier</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Doc</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Dct</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Kco</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Contrat</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.55, fontStyle: 'italic'}}>Nom du client</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>BAR ▾</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', fontWeight: 600, opacity: 0.7}}>Exclure les erreurs traitées</span>
-    <span style={{flex: 1, minWidth: '8px'}} />
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px'}}>↻ Rafraîchir</span>
-    <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '12px', fontWeight: 600, border: '1px solid #4a9eff'}}>+ Nouvelle facture</span>
-  </div>
-</div>
+### Période
 
-### Plage de dates
-
-Le filtre de dates à gauche restreint la liste à une fenêtre de dates. Préréglage par défaut : *Hier*. Autres préréglages : *Aujourd'hui*, *7 derniers jours*, *Ce mois*, *Mois dernier* et *Plage personnalisée* (saisie manuelle des dates de début et de fin).
-
-La colonne sur laquelle la plage de dates est lue est choisie par le sélecteur **Base de date** — voir ci-dessous.
+Le [sélecteur de période](../configuration/default-periods.md#period-picker) commun : périodes prédéfinies, calendrier sur deux mois et base de date au pied du panneau. La liste s'ouvre sur *Ce mois-ci*, ou sur la [période par défaut](../configuration/default-periods.md#default-periods) définie pour la vue *Invoices*. Une liste ouverte depuis un tableau de bord ou un drill-down TVA reprend les dates de cette page.
 
 ### Base de date \{#base-de-date\}
 
-Un sélecteur, à côté du filtre de période, choisit **sur quelle colonne de date la période s'applique**.
+Le pied du sélecteur de période choisit **sur quelle colonne de date la période s'applique**.
 
 | Valeur | Colonne de date | Quand l'utiliser |
 |---|---|---|
-| **Date de mise à jour** *(par défaut)* | Dernière modification de la facture dans NomaUBL. | Exploitation au quotidien — comportement historique de la liste. |
+| **Date de mise à jour** *(par défaut)* | Dernière modification de la facture dans NomaUBL. | Exploitation au quotidien. |
 | **Date d'émission** | Celle imprimée sur la facture (BT-2 du document UBL). | Rapprochement avec la page [Déclaration de TVA](./vat-declaration.md) ou avec un système externe indexé sur la date d'émission. |
-| **Date d'archivage** | La date à laquelle le document a été traité dans l'archive. | Rapprochement avec la page [Rapports](reports/overview.md) et le [Tableau de bord](./dashboard.md), qui proposent la même base *Date d'archivage*. |
+| **Date d'archivage** | La date à laquelle le document a été traité dans l'archive. | Rapprochement avec le [tableau de bord IT](./tech-dashboard.md) et les rapports de traitement. |
 
-Le choix est **conservé pendant la session en cours** — fermer la modale d'une facture et rouvrir la liste maintient la position du sélecteur. Le sélecteur est aussi **positionné automatiquement** quand la liste Factures est ouverte depuis un drill-down de la page TVA, donc le nombre affiché correspond à celui d'où l'on vient.
+Le choix est **conservé pendant la session en cours**. Il est aussi **positionné automatiquement** quand la liste est ouverte depuis un tableau de bord ou un drill-down TVA : le nombre affiché correspond à celui d'où l'on vient.
 
-### Filtres texte
+### Direction \{#chip-direction\}
 
-Chaque champ filtre la liste à la saisie — la recherche se déclenche après une courte pause :
+Un sélecteur à côté de la période : **Émises (ventes)** *(par défaut)*, **Reçues (achats)** ou **Toutes les directions**.
 
-| Champ | Critère |
+| Valeur | Effet |
 |---|---|
-| **Doc** | Numéro de document interne (par ex. `12345`). |
-| **Dct** | Code du type de document (par ex. `RI`, `RN`). |
-| **Kco** | Code société (par ex. `00070`). |
-| **Contrat** | Référence du contrat porté par la facture. |
-| **Nom du client** | Nom de la partie acheteur. |
-| **Pays** | Code pays ISO 3166 à deux lettres de la contrepartie (par ex. `FR`, `DE`). Pré-rempli automatiquement quand la page est ouverte depuis un drill-down de la [Déclaration de TVA](./vat-declaration.md). |
+| **Émises (ventes)** | Seules les factures envoyées aux clients (`UHDRIN = '2'`). |
+| **Reçues (achats)** | Seules les factures fournisseur récupérées depuis la PA (voir [Synchronisation → Fetch Input → PA entrante](../sync/fetch-input.md) et le document livré `received-ubl`). |
+| **Toutes les directions** | Aucun filtre de direction — les deux sont listées. |
 
-:::info[Comment les filtres texte trouvent les lignes]
-Un filtre texte correspond depuis le **début** de la valeur et utilise l'index de la colonne : la liste reste rapide sur une grande table. Pour chercher un texte n'importe où dans la valeur, encadrez-le de signes pourcent — `%acme%` trouve *acme* où qu'il apparaisse, au prix d'un parcours complet. Le filtre **Doc** prend un raccourci : une valeur entièrement numérique recherche le numéro de document directement au lieu de parcourir. Les filtres sur les colonnes adossées à une liste de référence (statut, routage…) acceptent **plusieurs valeurs à la fois** — sélectionnez-en plusieurs et la liste affiche les lignes qui correspondent à l'une d'elles.
-:::
+Le sélecteur s'appuie sur l'indicateur `UHDRIN` enregistré sur chaque ligne — un changement de *Direction* sur un modèle ne reclasse pas les lignes historiques, le résultat reste donc stable dans le temps.
 
-### Sélecteur de routage BAR
-
-Une déroulante distincte filtre par code **BAR** (`B2B`, `B2G`, `B2BINT`, `B2C`, `OUTOFSCOPE`, `ARCHIVEONLY`, `DOCUMENT`) — la classification de canal documentée dans *UBL Defaults → Document Type / BAR Routing*.
-
-### Puces de statut
-
-À droite, une rangée de **puces de statut** affiche un badge par statut présent dans la plage de dates. Chaque puce indique le libellé du statut, son compteur et une couleur de famille. Cliquer sur une puce active un filtre sur la liste ; un nouveau clic le retire.
-
-<div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', margin: '14px 0 4px'}}>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>Déposée <span style={{opacity: 0.65}}>(982)</span></span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa'}}>En attente <span style={{opacity: 0.65}}>(184)</span></span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(255,159,10,0.55)', background: 'rgba(255,159,10,0.1)', color: '#fb923c'}}>En litige <span style={{opacity: 0.65}}>(52)</span></span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1.5px solid rgba(255,69,58,0.55)', background: 'rgba(255,69,58,0.1)', color: '#f87171'}}>Refusée <span style={{opacity: 0.65}}>(29)</span></span>
-<span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '3px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 500, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', opacity: 0.7}}>✕ Effacer le filtre</span>
-</div>
-
-### Effacer les filtres
-
-Quand au moins un filtre est actif, une puce **✕ Effacer le filtre** apparaît en fin de rangée. Elle efface tous les filtres sauf la plage de dates.
-
-### Débordement des pastilles de statut
-
-La ligne de pastilles de statut est plafonnée à **5 pastilles inline** ; le reste se replie dans un menu `+N more` avec un point coloré par code. Les drill-throughs multi-statuts depuis les tableaux de bord (par ex. *En vol* = 5 codes) remontent la valeur active dans le groupe inline quand elle tombe au-delà du plafond, donc le filtre actif reste visible.
-
-### Filtres avancés
-
-Un panneau **Filtres avancés** pliable se trouve sous la rangée de pastilles. Il propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active — avec un sélecteur d'opérateur par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas, donc taper dans le panneau ne sature pas le back-end.
-
-L'ensemble des colonnes filtrables est défini par la liste blanche `filter: true` de la spec — les opérateurs choisissent quelles colonnes ils interrogent réellement et retirent les autres du panneau sans les perdre dans la grille. Voir [Vues de liste](../configuration/list-views.md) pour l'éditeur.
-
-La page fonctionne en **mode hybride client-side** : chaque *Exécuter* charge une tranche capée depuis le serveur (`spec.maxRows`, 5000 par défaut) et TanStack gère filter / sort / paginate / group dans cette tranche — pas d'aller-retour quand on tape dans la ligne de filtre par colonne, les filtres survivent à la pagination. Quand le cap de la tranche est atteint, un message `X / Y lignes` à côté de *Exécuter* indique d'affiner la plage de dates ou les *Filtres avancés*.
-
-Les colonnes refList (Statut, statut e-reporting, listes personnalisées) reçoivent un **picker multi-sélection** dans le panneau Filtres avancés et dans la ligne de filtre par colonne — choisir un nombre quelconque de codes, le déclencheur affiche `N sélectionné(s)` au-delà du plafond inline, et un `✕` à droite réinitialise la sélection en un clic. Le serveur applique une clause `IN (?,?,?)` — choisir trois statuts renvoie l'union.
-
-### Chip Direction
-
-Une nouvelle rangée de chips s'installe à côté des chips Statut : **Toutes** / **Émises** / **Reçues**.
-
-| Chip | Effet |
-|---|---|
-| **Toutes** *(défaut)* | Aucun filtre direction — les factures émises au client (`UHDRIN = '2'`) et reçues du fournisseur (`UHDRIN = '1'`) sont listées ensemble. |
-| **Émises** | Seules les factures envoyées par l'opérateur aux clients. |
-| **Reçues** | Seules les factures fournisseur récupérées depuis la PA (voir [Synchronisation → Fetch Input → PA entrante](../sync/fetch-input.md) et le document livré `received-ubl`). |
-
-Le chip s'appuie sur l'indicateur `UHDRIN` enregistré sur chaque ligne — un changement de *Direction* sur un modèle ne re-classe pas les lignes historiques, le résultat reste donc stable dans le temps.
-
-Sur une ligne *Reçue*, la colonne **Contrepartie** lit depuis `AccountingSupplierParty` (le fournisseur), pas depuis `AccountingCustomerParty` — la colonne affiche donc le nom du fournisseur sur les factures entrantes et le nom du client sur les sortantes. Le cycle de vie, la modale de détail et le catalogue de colonnes sont par ailleurs identiques ; seules les actions vendeur (Renvoyer à la PA, Marquer envoyée, Avoir…) sont masquées sur les lignes Reçues.
+Sur une ligne *Reçue*, la colonne **Contrepartie** lit depuis `AccountingSupplierParty` (le fournisseur), pas depuis `AccountingCustomerParty` — la colonne affiche donc le nom du fournisseur sur les factures entrantes et le nom du client sur les sortantes. Le cycle de vie, la fenêtre de détail et le catalogue de colonnes sont par ailleurs identiques ; seules les actions vendeur (Renvoyer à la PA, Marquer envoyée, Avoir…) sont masquées sur les lignes reçues.
 
 ### Exclure les erreurs traitées \{#exclure-erreurs-traitees\}
 
-Le bouton **Exclure les erreurs traitées**, à côté du sélecteur de direction, masque les lignes déjà marquées *Traité* qui restent dans un statut en erreur (groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md)) : la liste ne garde que les erreurs que personne n'a encore regardées. Les lignes traitées dans tout autre statut restent affichées. Le bouton est activé automatiquement quand la liste s'ouvre depuis une tuile du [Tableau de bord](./dashboard.md#exclure-erreurs-traitees) où il l'était. L'endpoint `GET /api/invoices` accepte le même filtre avec `excludeReviewedErrors=true`.
+Le switch **Exclure les erreurs traitées**, à côté du sélecteur de direction, masque les lignes déjà marquées *Traité* qui restent dans un statut en erreur (groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md)) : la liste ne garde que les erreurs que personne n'a encore regardées. Les lignes traitées dans tout autre statut restent affichées. Le switch est activé automatiquement quand la liste s'ouvre depuis un tableau de bord où il l'était ([Synthèse](./billing-overview.md), [Statistiques](./statistics.md), [Exploitation](./dashboard.md#exclure-erreurs-traitees)). L'endpoint `GET /api/invoices` accepte le même filtre avec `excludeReviewedErrors=true`.
 
-### Rafraîchir et Nouvelle facture
+### Statut par étape \{#status-by-stage\}
 
-Deux boutons sont placés à droite :
+La rangée **Statut** regroupe les statuts de la période dans les cinq étapes du tableau de bord [Statistiques](./statistics.md#stages) — **À corriger**, **Décision à prendre**, **En traitement**, **Sur la plateforme**, **Terminées** — plus **Autres** quand un statut hors de ces groupes a des factures ou est sélectionné. Chaque étape est une pastille avec sa couleur et son nombre.
 
-| Bouton | Comportement |
+| Geste | Effet |
 |---|---|
-| **Rafraîchir** (flèche circulaire) | Relance la requête courante sans modifier les filtres. |
-| **+ Nouvelle facture** | Ouvre la *modale de création / d'édition de facture*. Masqué pour les sessions en lecture seule. |
+| Clic sur le nom de l'étape | Sélectionne tous les statuts de l'étape (*N'afficher que cette étape*) ; un second clic réaffiche tous les statuts. |
+| Clic sur la flèche **▾** | Ouvre *Choisir les statuts* : une case à cocher pour toute l'étape (tout, rien ou partiel) et une par statut, avec sa couleur, son libellé et son nombre, du plus fréquent au moins fréquent. |
+| Sélection partielle | Le nombre s'affiche `choisis / total` et la pastille prend une bordure en pointillés. |
+| **✕ Effacer les filtres** | Apparaît dès qu'un statut est choisi ; efface la sélection. |
+
+Une étape sans facture sur la période est grisée. Un clic depuis un tableau de bord (une file, une étape, un statut) ouvre la liste avec les statuts correspondants déjà choisis.
+
+### Filtres avancés \{#advanced-filters\}
+
+Un panneau **Filtres avancés** pliable se trouve sous la rangée des statuts. Il propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active — par défaut *DOC*, *DCT*, *Société*, *Code Tiers*, *Tiers*, *Type doc.*, *Suivi*, *Statut*, *Type facture*, *Code activité*, *Code motif* — avec un sélecteur d'opérateur par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas : la saisie dans le panneau ne sollicite pas le serveur.
+
+:::info[Comment les filtres texte trouvent les lignes]
+Un filtre texte correspond depuis le **début** de la valeur et utilise l'index de la colonne : la liste reste rapide sur une grande table. Pour chercher un texte n'importe où dans la valeur, l'encadrer de signes pourcent — `%acme%` trouve *acme* où qu'il apparaisse, au prix d'un parcours complet. Le filtre **DOC** prend un raccourci : une valeur entièrement numérique recherche directement le numéro de document. Les filtres sur les colonnes adossées à une liste de référence (statut, routage…) acceptent **plusieurs valeurs à la fois** — la liste affiche alors les lignes qui correspondent à l'une d'elles.
+:::
+
+L'ensemble des colonnes filtrables est défini par la liste blanche `filter: true` de la spec — chacun choisit les colonnes qu'il interroge réellement et retire les autres du panneau sans les perdre dans la grille. Voir [Vues de liste](../configuration/list-views.md) pour l'éditeur.
+
+La page fonctionne en **mode hybride** : chaque *Exécuter* charge une tranche limitée depuis le serveur (`spec.maxRows`, 5000 par défaut) et la grille filtre, trie, pagine et regroupe dans cette tranche — pas d'aller-retour pendant la saisie dans la ligne de filtre par colonne, les filtres se conservent d'une page à l'autre. Quand la limite est atteinte, un message `X / Y lignes` à côté d'*Exécuter* invite à affiner la période ou les *Filtres avancés*.
+
+Les colonnes adossées à une liste de référence (Statut, statut e-reporting, listes personnalisées) reçoivent une **sélection multiple** dans le panneau Filtres avancés et dans la ligne de filtre par colonne — choisir un nombre quelconque de codes, le déclencheur affiche `N sélectionné(s)` au-delà du plafond, et un `✕` à droite réinitialise la sélection en un clic. Le serveur applique une clause `IN (?,?,?)` : choisir trois statuts renvoie l'union.
+
+### Barre d'outils de la grille
+
+À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)** et **Retraiter la sélection (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend) et [Retraitement](#reprocess)). Une nouvelle facture se crée depuis les **Actions rapides** du tableau de bord [Exploitation](./dashboard.md).
 
 ---
 
@@ -775,7 +717,7 @@ Pendant l'envoi, la modale est désactivée par un voile jusqu'à la confirmatio
 
 ### Modale de création / édition de facture
 
-Ouverte depuis **+ Nouvelle facture** dans la barre d'outils, ou depuis les boutons **Modifier l'UBL** / **Copier** de l'onglet Résumé. Permet de créer une facture vierge ou de modifier une facture existante. La modale prend l'apparence d'une facture imprimable. L'utilisateur remplit le formulaire ; à l'enregistrement, NomaUBL génère le document UBL correspondant.
+Ouverte depuis **Nouvelle Facture** dans les Actions rapides du tableau de bord [Exploitation](./dashboard.md), ou depuis les boutons **Modifier l'UBL** / **Copier** de l'onglet Résumé. Permet de créer une facture vierge ou de modifier une facture existante. La modale prend l'apparence d'une facture imprimable. L'utilisateur remplit le formulaire ; à l'enregistrement, NomaUBL génère le document UBL correspondant.
 
 Modifier une facture existante ne réinitialise plus son `cbc:CustomizationID` au défaut EN16931. Le formulaire porte maintenant la valeur `customizationId` du UBL source et l'écrit verbatim — les nouvelles factures restent par défaut à `urn:cen.eu:en16931:2017`.
 
@@ -880,8 +822,8 @@ Le bouton **Renvoyer** (dans l'onglet Historique, ou via le bandeau Actions vend
 
 ## Conseils & bonnes pratiques
 
-- **Commencer par la plage de dates.** *Hier* (défaut) convient au pointage du matin ; *Plage personnalisée* couvre la clôture mensuelle. Les autres filtres s'appliquent en plus.
-- **Les puces de statut sont le filtre le plus rapide.** Une puce rouge à compteur non nul est en général le bon point de départ pour traiter les exceptions.
+- **Commencer par la période.** *Hier* convient au contrôle du matin, une plage personnalisée couvre la clôture mensuelle ; la période d'ouverture se règle une fois dans [Périodes par défaut](../configuration/default-periods.md). Les autres filtres s'appliquent en plus.
+- **Les étapes sont le filtre le plus rapide.** *À corriger* et *Décision à prendre* avec un nombre non nul sont en général le bon point de départ pour traiter les exceptions ; la flèche restreint l'étape à un seul statut.
 - **Le cycle de vie (onglet Historique) est la source de vérité.** Il enregistre tous les statuts traversés, avec messages, motifs de rejet et actions attendues — c'est l'endroit pour instruire un litige ou retrouver une décision côté PA.
 - **Utiliser le bandeau Actions vendeur.** Les actions proposées sur `205` / `206` / `207` / `208` / `210` / `213` / `9904` / `9907` sont les étapes recommandées par la plateforme. Elles ramènent un workflow multi-étapes (retrouver le client, rédiger l'avoir, etc.) à un seul clic, à condition que le connecteur soit configuré.
 - **N'utiliser Modifier le statut qu'en cas de besoin.** Un *Modifier le statut → DB* manuel désynchronise le dossier local de la PA. À réserver aux nettoyages après restauration de sauvegarde ou aux statuts non couverts par le job de cycle de vie.

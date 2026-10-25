@@ -144,28 +144,37 @@ A second concept lives next to the spec: the **column catalog**. Each view ships
 
 The editor shows **one collapsible card per view**. A card loads its spec only when it is opened; **Save**, in the header of the Settings page, writes every change made in the cards.
 
-| Card | Grid driven | Property |
-|---|---|---|
-| **Integration Errors** | [Integration errors](../application/diagnostics/integration-errors.md) view of Diagnostics | `view.integrationErrors` |
-| **Processing Log** | [Processing log](../application/diagnostics/processing-log.md) view of Diagnostics | `view.processingLog` |
-| **E-Reporting** | [E-Reporting](../application/ereporting.md) | `view.ereporting` |
-| **Invoices** | [E-Invoicing](../application/invoices.md) list | `view.invoices` |
-| **E-Documents** | [E-Documents](../application/edocuments.md) list | `view.documents` |
-| **Server Log** | [Server log](../application/diagnostics/server-log.md) view of Diagnostics | `view.serverLog` |
-| **Scheduled Jobs** | [Scheduled jobs](../sync/scheduled-jobs/overview.md) grid | `view.scheduledJobs` |
-| **Job Runs** | Run history of a scheduled job | `view.jobRuns` |
-| **Errors** | [Failures](../application/diagnostics/failures.md) view of Diagnostics | `view.errors` |
-| **Data Dictionary** | Columns grid of the [Developer](../references/developer.md#tables) *Tables* view | `view.dataDictionary` |
-| **Configuration Keys** | [Developer](../references/developer.md#configuration) *Configuration* view | `view.configKeys` |
-| **API Operations** | [Developer](../references/developer.md#api) *API* view | `view.apiOperations` |
-| **Promotion Plan** | Import preview of [Promotion](../management/promotion.md) | `view.promotionPlan` |
+The cards are grouped by the part of the application that shows the grid, sorted by name inside a group:
+
+| Group | Card | Grid driven | Property |
+|---|---|---|---|
+| **E-invoicing** | **E-Documents** | [E-Documents](../application/edocuments.md) list | `view.documents` |
+| | **E-Reporting** | [E-Reporting](../application/ereporting.md) | `view.ereporting` |
+| | **Invoices** | [E-Invoicing](../application/invoices.md) list | `view.invoices` |
+| **Diagnostics** | **Failures** | [Failures](../application/diagnostics/failures.md) view of Diagnostics | `view.errors` |
+| | **Integration Errors** | [Integration errors](../application/diagnostics/integration-errors.md) view of Diagnostics | `view.integrationErrors` |
+| | **Processing Log** | [Processing log](../application/diagnostics/processing-log.md) view of Diagnostics | `view.processingLog` |
+| | **Server Log** | [Server log](../application/diagnostics/server-log.md) view of Diagnostics | `view.serverLog` |
+| **Jobs** | **Job Runs** | Run history of a scheduled job | `view.jobRuns` |
+| | **Scheduled Jobs** | [Scheduled jobs](../sync/scheduled-jobs/overview.md) grid | `view.scheduledJobs` |
+| **Documentation & administration** | **API Operations** | [Developer](../references/developer.md#api) *API* view | `view.apiOperations` |
+| | **Configuration Keys** | [Developer](../references/developer.md#configuration) *Configuration* view | `view.configKeys` |
+| | **Data Dictionary** | Columns grid of the [Developer](../references/developer.md#tables) *Tables* view | `view.dataDictionary` |
+| | **Promotion Plan** | Import preview of [Promotion](../management/promotion.md) | `view.promotionPlan` |
+| | **Schematron Rules** | Rules grid of the [Schematrons](../references/schematrons.md) page | `view.schematronRules` |
+
+### Value lists by default \{#value-lists\}
+
+Out of the box, the **Invoices**, **E-Documents**, **Integration Errors** and **E-Reporting** views show labels for their coded columns — document types, companies, activity codes, processing categories, review, invoice types, countries, reason codes — picked from [reference](./reference-lists.md) or [custom lists](./custom-lists.md#ready-made-lists) in their filters, with the same column names across pages (*Party Number*, *Party Name*). E-Documents also has the status, document type, reason, due date, UBL number and template columns, with their filters. An instance that has saved its list views keeps them.
+
+The **Excel / CSV exports** of these grids write such a column as `code — label`, as shown on screen.
 
 The list chosen for a coded column of the **Invoices**, **E-Documents** and **Integration Errors** views also gives its labels to that field in the [Explorer](../application/explorer.md).
 
 A small badge next to the view name tells the operator whether the active spec comes from the bundled JAR default (`default`) or from an entry stored on `db-nomaubl` (`override`):
 
 - **default** — no `view.<name>` property exists on `db-nomaubl`. The bundled JSON in `config/list-views/view.<name>.json` is what the page renders. Saving from the editor writes a property and switches the badge to `override`.
-- **override** — a property has been stored. The editor reads the stored value, the page reads the stored value, the bundled default is ignored.
+- **override** — a property has been stored. The editor reads the stored value, the page reads the stored value, the bundled default is ignored. **Reset to defaults** drops the stored override; the page then falls back to the bundled default.
 
 ---
 

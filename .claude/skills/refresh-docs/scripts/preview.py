@@ -8,7 +8,7 @@ import re, subprocess, sys, os
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 ATTR = {"fontSize": "font-size", "fontWeight": "font-weight", "fontFamily": "font-family", "textAnchor": "text-anchor",
         "strokeWidth": "stroke-width", "strokeDasharray": "stroke-dasharray", "letterSpacing": "letter-spacing",
-        "stopColor": "stop-color", "stopOpacity": "stop-opacity", "markerEnd": "marker-end", "fontStyle": "font-style"}
+        "stopColor": "stop-color", "stopOpacity": "stop-opacity", "markerEnd": "marker-end", "fillOpacity": "fill-opacity", "fontStyle": "font-style"}
 
 
 def to_html(jsx):

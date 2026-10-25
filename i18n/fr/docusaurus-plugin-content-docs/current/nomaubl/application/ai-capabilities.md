@@ -143,7 +143,7 @@ Chaque réponse se termine par **une à trois relances** : la réponse naturelle
 | **`search_docs`** | 📚 | Recherche dans la documentation NomaUBL, indexée par le serveur à partir de l'export texte intégral du site (`llms-full.txt`) ; renvoie les meilleures pages avec titre, URL et extrait. Appelé en premier pour toute question sur le produit. |
 | **`read_doc_page`** | 📖 | Lit une page trouvée par `search_docs`, par tranches de 12 000 caractères pour les pages longues. |
 | **`list_doc_pages`** | 📑 | La table des matières de la documentation, quand la recherche ne donne rien de pertinent. |
-| **`instance_docs`** | 🔍 | Le [rapport d'implémentation](reports/implementation-report.md) de cette instance : table des matières, une section, ou une recherche dans les sections. Appelé en premier pour toute question sur le paramétrage de *cette* instance. |
+| **`instance_docs`** | 📘 | Le [rapport d'implémentation](reports/implementation-report.md) de cette instance : table des matières, une section, ou une recherche dans les sections. Appelé en premier pour toute question sur le paramétrage de *cette* instance. |
 
 La documentation est indexée par langue : une interface en français interroge les pages françaises, une interface en anglais les pages anglaises. L'index est actualisé toutes les six heures ; quand le site est injoignable, l'assistant utilise la copie de la documentation intégrée à l'application et le signale dans sa réponse.
 
@@ -157,16 +157,20 @@ L'assistant cite la page utilisée et en donne le lien. Il n'invente ni réglage
 | **`list_invoices`** | 🧾 | Jusqu'à 50 factures filtrées sur le statut, la société, le type de transaction (B2B / B2BINT / B2C / B2G / OUTOFSCOPE), le client, le numéro de facture (BT-1) et les dates d'émission. |
 | **`lifecycle_history`** | 🕘 | Tous les événements de statut d'une facture, avec le motif de rejet de la PA, l'action attendue et la note de statut. |
 | **`validation_errors`** | ⚠️ | Les erreurs de validation d'une facture (niveau, source, règle, message), comme dans les [Erreurs d'intégration](./diagnostics/integration-errors.md). |
-| **`period_figures`** | 🔍 | La synthèse d'une période tirée du [rapport d'audit](reports/audit-report.md) : indicateurs avec la période précédente et l'écart, ventilation des factures traitées, constats, et reste à traiter toutes périodes confondues (par statut, société et ancienneté). Par défaut : le mois en cours. |
-| **`dashboard_overview`** | 📊 | Les compteurs du [tableau de bord](./dashboard.md) sur une plage de dates. |
+| **`period_figures`** | 🗓️ | La synthèse d'une période tirée du [rapport d'audit](reports/audit-report.md) : indicateurs avec la période précédente et l'écart, ventilation des factures traitées, constats, et reste à traiter toutes périodes confondues (par statut, société et ancienneté). Par défaut : le mois en cours. |
+| **`billing_overview`** | 💶 | Les chiffres de la [Synthèse](./billing-overview.md) sur une période, en ventes ou en achats : chiffre d'affaires HT avec factures et avoirs séparés, TVA, nombres, taux de transmission ou d'acceptation, comparés à la période précédente ; douze mois selon le devenir des factures ; ce qui demande une décision, toutes dates confondues, en montants ; la répartition par société et par type d'opération. Options : base de date (date document par défaut) et prise en compte des erreurs traitées. |
+| **`status_statistics`** | 📈 | Les données du tableau de bord [Statistiques](./statistics.md) sur une période, en ventes ou en achats : factures par étape, statut, code activité, motif et type d'opération (nombre et montant), la même chose pour la période précédente, l'évolution par jour et les factures ouvertes par temps d'attente. Mêmes options. |
+| **`dashboard_overview`** | 📊 | Les compteurs du tableau de bord [Exploitation](./dashboard.md) sur une plage de dates. |
 | **`tech_dashboard`** | 🩺 | L'état de l'instance, comme sur le [tableau de bord IT](./tech-dashboard.md) : JVM, tâches planifiées et dernières exécutions, échecs d'envoi, factures en attente, anomalies de configuration, volumétrie des tables. |
 | **`server_log`** | 📜 | La fin du [journal serveur](./diagnostics/server-log.md), du plus récent au plus ancien, filtrée sur le niveau, le module et un texte. |
 | **`integrity_checks`** | 🔎 | Les [contrôles d'intégrité](../configuration/system/integrity-reports.md) configurés et, pour un contrôle, son résultat sur une plage de dates. |
-| **`list_ereports`** | 🔍 | Jusqu'à 50 traitements d'e-reporting filtrés sur le flux (10.1 / 10.3), la société et le statut. |
+| **`list_ereports`** | 🔍 | Jusqu'à 50 traitements d'e-reporting filtrés sur le sens (réception / émission — chaque traitement porte les deux flux 10.1 et 10.3), la société et le statut. |
 | **`explain_status_code`** | 🏷️ | Le nom et les libellés FR / EN d'un code de statut de facture ou d'e-reporting. |
 | **`reason_codes`** | 📋 | Les motifs de rejet et actions attendues de la PA, avec leurs libellés. |
 | **`edirectory_lookup`** | 🏢 | Une entreprise de l'[annuaire](./edirectory.md), par SIREN, SIRET ou raison sociale : données légales et lignes d'adressage. |
 | **`template_settings`** | ⚙️ | Les réglages d'un modèle, secrets masqués. Demande la fonctionnalité *Settings access*. |
+
+L'assistant connaît toutes les pages de l'application — parmi elles la [Synthèse](./billing-overview.md), les [Statistiques](./statistics.md), l'[Explorateur](./explorer.md) et les [étapes des factures](./invoices.md#status-by-stage) — et répond à une question sur le chiffre d'affaires, les avoirs, le taux de transmission ou les décisions avec `billing_overview`, à une question sur les étapes, les temps d'attente ou les motifs avec `status_statistics`. Par le rapport d'implémentation (`instance_docs`), il connaît aussi les périodes par défaut et les règles des tableaux de bord de l'instance.
 
 L'assistant reçoit aussi le **catalogue des statuts** à jour : *« en litige »*, *« refusée »* ou *« en attente de dépôt »* sont rattachés au bon code.
 

@@ -144,28 +144,37 @@ Un second concept vit à côté de la spec : le **catalogue de colonnes**. Chaqu
 
 L'éditeur présente **une carte repliable par vue**. Une carte ne charge sa spec qu'à son ouverture ; **Save**, dans l'en-tête de la page Paramètres, enregistre toutes les modifications faites dans les cartes.
 
-| Carte | Grille pilotée | Propriété |
-|---|---|---|
-| **Integration Errors** | Vue [Erreurs d'intégration](../application/diagnostics/integration-errors.md) du Diagnostic | `view.integrationErrors` |
-| **Processing Log** | Vue [Journal des traitements](../application/diagnostics/processing-log.md) du Diagnostic | `view.processingLog` |
-| **E-Reporting** | [E-Reporting](../application/ereporting.md) | `view.ereporting` |
-| **Invoices** | Liste [E-Invoicing](../application/invoices.md) | `view.invoices` |
-| **E-Documents** | Liste [E-Documents](../application/edocuments.md) | `view.documents` |
-| **Server Log** | Vue [Journal serveur](../application/diagnostics/server-log.md) du Diagnostic | `view.serverLog` |
-| **Scheduled Jobs** | Grille des [Tâches planifiées](../sync/scheduled-jobs/overview.md) | `view.scheduledJobs` |
-| **Job Runs** | Historique des exécutions d'une tâche planifiée | `view.jobRuns` |
-| **Errors** | Vue [Anomalies](../application/diagnostics/failures.md) du Diagnostic | `view.errors` |
-| **Data Dictionary** | Grille des colonnes de la vue *Tables* de la [référence développeur](../references/developer.md#tables) | `view.dataDictionary` |
-| **Configuration Keys** | Vue *Configuration* de la [référence développeur](../references/developer.md#configuration) | `view.configKeys` |
-| **API Operations** | Vue *API* de la [référence développeur](../references/developer.md#api) | `view.apiOperations` |
-| **Promotion Plan** | Aperçu d'import de la [promotion](../management/promotion.md) | `view.promotionPlan` |
+Les cartes sont regroupées selon la partie de l'application qui affiche la grille, triées par nom à l'intérieur d'un groupe :
+
+| Groupe | Carte | Grille pilotée | Propriété |
+|---|---|---|---|
+| **E-invoicing** | **E-Documents** | Liste [E-Documents](../application/edocuments.md) | `view.documents` |
+| | **E-Reporting** | [E-Reporting](../application/ereporting.md) | `view.ereporting` |
+| | **Invoices** | Liste [E-Invoicing](../application/invoices.md) | `view.invoices` |
+| **Diagnostics** | **Failures** | Vue [Anomalies](../application/diagnostics/failures.md) du Diagnostic | `view.errors` |
+| | **Integration Errors** | Vue [Erreurs d'intégration](../application/diagnostics/integration-errors.md) du Diagnostic | `view.integrationErrors` |
+| | **Processing Log** | Vue [Journal des traitements](../application/diagnostics/processing-log.md) du Diagnostic | `view.processingLog` |
+| | **Server Log** | Vue [Journal serveur](../application/diagnostics/server-log.md) du Diagnostic | `view.serverLog` |
+| **Jobs** | **Job Runs** | Historique des exécutions d'une tâche planifiée | `view.jobRuns` |
+| | **Scheduled Jobs** | Grille des [Tâches planifiées](../sync/scheduled-jobs/overview.md) | `view.scheduledJobs` |
+| **Documentation & administration** | **API Operations** | Vue *API* de la [référence développeur](../references/developer.md#api) | `view.apiOperations` |
+| | **Configuration Keys** | Vue *Configuration* de la [référence développeur](../references/developer.md#configuration) | `view.configKeys` |
+| | **Data Dictionary** | Grille des colonnes de la vue *Tables* de la [référence développeur](../references/developer.md#tables) | `view.dataDictionary` |
+| | **Promotion Plan** | Aperçu d'import de la [promotion](../management/promotion.md) | `view.promotionPlan` |
+| | **Schematron Rules** | Grille des règles de la page [Schematrons](../references/schematrons.md) | `view.schematronRules` |
+
+### Listes de valeurs par défaut \{#value-lists\}
+
+Dès l'installation, les vues **Invoices**, **E-Documents**, **Integration Errors** et **E-Reporting** affichent les libellés de leurs colonnes codées — types de document, sociétés, codes activité, catégories de traitement, suivi, types de facture, pays, codes motif — choisis dans des [listes de référence](./reference-lists.md) ou des [listes personnalisées](./custom-lists.md#ready-made-lists) dans leurs filtres, avec les mêmes noms de colonnes d'une page à l'autre (*Party Number*, *Party Name*). E-Documents dispose en plus des colonnes statut, type de document, motif, date d'échéance, numéro UBL et modèle, avec leurs filtres. Une instance qui a enregistré ses vues de liste les conserve.
+
+Les **exports Excel / CSV** de ces grilles écrivent une telle colonne sous la forme `code — libellé`, comme à l'écran.
 
 La liste choisie pour une colonne codée des vues **Invoices**, **E-Documents** et **Integration Errors** donne aussi ses libellés à ce champ dans l'[Explorateur](../application/explorer.md).
 
 Un petit badge à côté du nom de vue indique si la spec active vient du défaut embarqué dans le JAR (`default`) ou d'une entrée stockée sur `db-nomaubl` (`override`) :
 
 - **default** — aucune propriété `view.<nom>` n'existe sur `db-nomaubl`. C'est le JSON embarqué dans `config/list-views/view.<nom>.json` qui pilote l'affichage. Enregistrer depuis l'éditeur écrit une propriété et fait basculer le badge en `override`.
-- **override** — une propriété a été stockée. L'éditeur lit la valeur stockée, la page lit la valeur stockée, le défaut embarqué est ignoré.
+- **override** — une propriété a été stockée. L'éditeur lit la valeur stockée, la page lit la valeur stockée, le défaut embarqué est ignoré. **Reset to defaults** supprime la surcharge enregistrée ; la page revient alors au défaut embarqué.
 
 ---
 

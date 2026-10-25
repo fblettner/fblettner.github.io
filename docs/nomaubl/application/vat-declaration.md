@@ -22,126 +22,155 @@ The matrix is served from the persisted VAT detail rows (`F564234`), not by re-p
 
 ## At a glance
 
-<svg viewBox="0 0 1000 460" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1320 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="vat-pg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="vat-pg-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="vat-pg-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="vat-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="vat-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="vat-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="vat-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="580" height="420" rx="14" fill="url(#vat-pg-card)" stroke="#1f2937" strokeWidth="1.4"/>
-
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">VAT Declaration</text>
-  <line x1="220" y1="68" x2="800" y2="68" stroke="#1f2937" strokeWidth="1"/>
-
-  <rect x="240" y="84" width="100" height="26" rx="6" fill="url(#vat-pg-blue)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="290" y="101" fill="#e2e8f0" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">📅 April 2026 ▾</text>
-  <rect x="348" y="84" width="64" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
-  <text x="380" y="101" fill="#4a9eff" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Month</text>
-  <rect x="416" y="84" width="64" height="26" rx="6" fill="none" stroke="#334155" strokeWidth="1"/>
-  <text x="448" y="101" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Quarter</text>
-  <rect x="488" y="84" width="92" height="26" rx="6" fill="none" stroke="#334155" strokeWidth="1"/>
-  <text x="534" y="101" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Company ▾</text>
-  <rect x="660" y="84" width="56" height="26" rx="6" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
-  <text x="688" y="101" fill="#22c55e" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">▣ Excel</text>
-  <rect x="722" y="84" width="58" height="26" rx="6" fill="rgba(192,132,252,0.10)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
-  <text x="751" y="101" fill="#c084fc" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">📄 PDF CA3</text>
-
-  <text x="240" y="138" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">SALES</text>
-  <rect x="240" y="146" width="540" height="32" rx="4" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="166" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▾  Domestic — France</text>
-  <text x="572" y="166" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">128 450.00</text>
-  <text x="672" y="166" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">23 110.00</text>
-  <text x="772" y="166" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">412 invoices</text>
-
-  <rect x="262" y="184" width="518" height="26" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="274" y="201" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">20%</text>
-  <text x="572" y="201" fill="#cbd5e1" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">115 550.00</text>
-  <text x="672" y="201" fill="#cbd5e1" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">23 110.00</text>
-  <text x="772" y="201" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">370</text>
-
-  <rect x="262" y="214" width="518" height="26" rx="4" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="274" y="231" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">5.5%</text>
-  <text x="572" y="231" fill="#cbd5e1" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">12 900.00</text>
-  <text x="672" y="231" fill="#cbd5e1" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">709.50</text>
-  <text x="772" y="231" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">42</text>
-
-  <rect x="240" y="248" width="540" height="28" rx="4" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="266" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▸  Intra-EU</text>
-  <text x="572" y="266" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">18 200.00</text>
-  <text x="672" y="266" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">— (exempt)</text>
-  <text x="772" y="266" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">38</text>
-
-  <rect x="240" y="280" width="540" height="28" rx="4" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="298" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▸  Outside-EU</text>
-  <text x="572" y="298" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">9 800.00</text>
-  <text x="672" y="298" fill="#94a3b8" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace">— (exempt)</text>
-  <text x="772" y="298" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">12</text>
-
-  <text x="240" y="334" fill="#cbd5e1" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">PURCHASES</text>
-  <rect x="240" y="342" width="540" height="28" rx="4" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="360" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▸  Domestic — France</text>
-  <text x="572" y="360" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">42 100.00</text>
-  <text x="672" y="360" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">7 530.00</text>
-  <text x="772" y="360" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">157 invoices</text>
-
-  <rect x="240" y="374" width="540" height="28" rx="4" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="252" y="392" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▸  Intra-EU acquisitions</text>
-  <text x="572" y="392" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">5 600.00</text>
-  <text x="672" y="392" fill="#e2e8f0" fontSize="10" textAnchor="end" fontFamily="ui-monospace, monospace" fontWeight="700">1 120.00</text>
-  <text x="772" y="392" fill="#94a3b8" fontSize="9" textAnchor="end" fontFamily="ui-monospace, monospace">9</text>
-
-  <rect x="240" y="416" width="190" height="22" rx="11" fill="rgba(255,69,58,0.10)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
-  <text x="335" y="431" fill="#f87171" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif" fontWeight="700">Solde · VAT due  16 169.50 €</text>
-
-  <rect x="20" y="80" width="180" height="44" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="98" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Period selector</text>
-  <text x="30" y="112" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">defaults to last full month</text>
-  <line x1="200" y1="100" x2="240" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-pg-arrow)"/>
-
-  <rect x="820" y="156" width="160" height="44" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="174" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three columns</text>
-  <text x="830" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">taxable base · VAT · count</text>
-  <line x1="820" y1="170" x2="780" y2="166" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-pg-arrow)"/>
-
-  <rect x="20" y="240" width="180" height="44" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="258" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Country group</text>
-  <text x="30" y="272" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">France / Intra-EU / Outside-EU</text>
-  <line x1="200" y1="258" x2="240" y2="262" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-pg-arrow)"/>
-
-  <rect x="820" y="404" width="160" height="44" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="830" y="422" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Solde block</text>
-  <text x="830" y="436" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">VAT due or VAT credit</text>
-  <line x1="820" y1="424" x2="780" y2="427" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-pg-arrow)"/>
+  <rect x="220" y="20" width="880" height="430" rx="14" fill="url(#vat-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">VAT declaration</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">The VAT of a period in the CA3 layout: collected, deductible and net; an amount opens the invoices behind it.</text>
+  <rect x="240" y="82" width="115" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="241" y="83" width="50" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="266.0" y="97.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Month</text>
+  <line x1="292" y1="87" x2="292" y2="101" stroke="#334155" strokeWidth="1"/>
+  <text x="323.5" y="97.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Quarter</text>
+  <rect x="363" y="83" width="55" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="373" y="97.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">2026 ▾</text>
+  <rect x="426" y="83" width="83" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="436" y="97.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">September ▾</text>
+  <rect x="517" y="83" width="106" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="527" y="97.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">All companies ▾</text>
+  <rect x="635" y="89" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M637.5,94.5 L639.8,96.8 L643.8,92" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="652" y="98" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif">Exclude refused and rejected</text>
+  <rect x="805.12" y="89" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
+  <text x="822.12" y="98" fill="#cbd5e1" fontSize="8.5" fontFamily="system-ui, sans-serif">Exclude invoices not at the platform</text>
+  <rect x="976" y="112" width="52" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1002.0" y="126.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Excel</text>
+  <rect x="1036" y="112" width="44" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="1058.0" y="126.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">PDF</text>
+  <text x="240" y="126" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">1 Sep 2026 – 30 Sep 2026</text>
+  <text x="390" y="126" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">compared with 1 Aug 2026 – 31 Aug 2026</text>
+  <rect x="240.0" y="138" width="273.3333333333333" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252.0" y="156" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VAT COLLECTED</text>
+  <text x="252.0" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">250 631,56 €</text>
+  <text x="252.0" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">1 253 157,80 € excl. VAT · 2 361 invoices</text>
+  <text x="252.0" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+4,2 % vs 240 524,10 €</text>
+  <rect x="523.3333333333333" y="138" width="273.3333333333333" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="535.3333333333333" y="156" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VAT DEDUCTIBLE</text>
+  <text x="535.3333333333333" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">98 412,30 €</text>
+  <text x="535.3333333333333" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">492 061,50 € excl. VAT · 418 invoices</text>
+  <text x="535.3333333333333" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">−1,8 % vs 100 216,00 €</text>
+  <rect x="806.6666666666666" y="138" width="273.3333333333333" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="818.6666666666666" y="156" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VAT DUE</text>
+  <text x="818.6666666666666" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">152 219,26 €</text>
+  <text x="818.6666666666666" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Collected − deductible</text>
+  <text x="818.6666666666666" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+8,6 % vs 140 308,10 €</text>
+  <rect x="240" y="230" width="840" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LINE</text>
+  <text x="720" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BASE HT</text>
+  <text x="860" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VAT</text>
+  <text x="1000" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">INVOICES</text>
+  <rect x="240" y="258" width="840" height="22" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Sales (VAT collected)</text>
+  <text x="720" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1 253 157,80</text>
+  <text x="860" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">250 631,56</text>
+  <text x="1000" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 361</text>
+  <rect x="240" y="284" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">   France</text>
+  <text x="720" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1 101 840,00</text>
+  <text x="860" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">220 368,00</text>
+  <text x="1000" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 102</text>
+  <rect x="240" y="310" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">      ▸ 20 %</text>
+  <text x="720" y="324.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">1 080 000,00</text>
+  <text x="860" y="324.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">216 000,00</text>
+  <text x="1000" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 050</text>
+  <rect x="240" y="336" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">      ▸ 10 %</text>
+  <text x="720" y="350.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">21 840,00</text>
+  <text x="860" y="350.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">2 184,00</text>
+  <text x="1000" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">52</text>
+  <rect x="240" y="362" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">   Intra-EU</text>
+  <text x="720" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">151 317,80</text>
+  <text x="860" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">30 263,56</text>
+  <text x="1000" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">259</text>
+  <rect x="240" y="388" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Purchases (VAT deductible)</text>
+  <text x="720" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">492 061,50</text>
+  <text x="860" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">98 412,30</text>
+  <text x="1000" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">418</text>
+  <rect x="240" y="414" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">VAT due — Collected − deductible</text>
+  <text x="720" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <text x="860" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">152 219,26</text>
+  <text x="1000" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
+  <rect x="20" y="78" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="93" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Month or quarter</text>
+  <text x="30" y="106" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">last full month by default</text>
+  <line x1="200" y1="95.0" x2="240" y2="94" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="20" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Three headline figures</text>
+  <text x="30" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">vs previous month or quarter</text>
+  <line x1="200" y1="177.0" x2="240" y2="178" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="20" y="260" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="275" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction, zone, rate</text>
+  <text x="30" y="288" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">totals on each line</text>
+  <line x1="200" y1="277.0" x2="250" y2="270" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="20" y="400" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="415" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Net VAT</text>
+  <text x="30" y="428" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">due or credit</text>
+  <line x1="200" y1="417.0" x2="250" y2="426" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="1120" y="52" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="67" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Company</text>
+  <text x="1130" y="80" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">from the list of companies</text>
+  <line x1="1120" y1="69.0" x2="577" y2="82" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="1120" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Two exclusions</text>
+  <text x="1130" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">explained on hover</text>
+  <line x1="1120" y1="113.0" x2="933.48" y2="104" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="1120" y="160" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Excel and PDF</text>
+  <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">summary + details · CA3</text>
+  <line x1="1120" y1="177.0" x2="1080" y2="123" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <rect x="1120" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Click an amount</text>
+  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">opens the invoices</text>
+  <line x1="1120" y1="307.0" x2="780" y2="325" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
 </svg>
 
 ---
 
-## Toolbar
+## Filter bar
 
-The toolbar above the matrix sets the **period**, an optional **company filter** and the **export buttons**.
-
-<div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)'}}>
-  <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
-    <span style={{padding: '6px 12px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '12px', fontWeight: 600, color: '#4a9eff'}}>📅 April 2026 ▾</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '12px', fontWeight: 600, color: '#4a9eff'}}>Month</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>Quarter</span>
-    <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', opacity: 0.7}}>Company ▾</span>
-    <span style={{flex: 1, minWidth: '8px'}} />
-    <span style={{padding: '5px 12px', borderRadius: '6px', background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.4)', fontSize: '12px', fontWeight: 600, color: '#22c55e'}}>▣ Excel</span>
-    <span style={{padding: '5px 12px', borderRadius: '6px', background: 'rgba(192,132,252,0.10)', border: '1px solid rgba(192,132,252,0.4)', fontSize: '12px', fontWeight: 600, color: '#c084fc'}}>📄 PDF CA3</span>
-  </div>
-</div>
+One bar sets the period, the company and the two exclusions, as on the dashboards.
 
 | Control | Effect |
 |---|---|
-| **Period selector** | Picks the period the matrix covers. Defaults to the **previous full month** — what you'd file. Switch to **Quarter** when you declare quarterly. The filter is applied against the **invoice's issue date** (the date printed on the invoice itself), so the period stays stable even if the underlying data is rebuilt later. The Invoices list exposes the same date basis via its [Date basis toggle](./invoices.md#date-basis) — drilling into a VAT amount opens the Invoices list with that toggle pre-selected, so the count matches the one you came from. |
-| **Month / Quarter chips** | Toggle between monthly and quarterly granularity. The label of the period selector adapts (e.g. *Q2 2026*). |
-| **Company** | Optional. Restricts the period to invoices of one company code (KCO). Defaults to *All companies*. |
-| **Exclude all refused and rejected** | On by default. Leaves out every invoice refused by the buyer (`210`) or rejected by the platform (`213`): both call for an internal credit note. Unchecked, only those customer service marked reviewed are left out — see [Invoices left out](#excluded-invoices). |
-| **Exclude to-send invoices not at the platform** | Off by default. Also leaves out the invoices flagged to be sent whose status is still internal: validation, send or import failure, or not yet sent. |
-| **▣ Excel** | Downloads the workbook described under [Excel export](#excel-export). |
-| **📄 PDF CA3** | Downloads the CA3-styled synthesis described under [PDF export — CA3 form layout](#pdf-export--ca3-form-layout). |
+| **Month / Quarter** | Monthly or quarterly declaration. The page opens on the **previous full month** — the one you file. |
+| **Year** and **month** / **quarter** | The period: the current year and the five before it; a month name, or `Q1` to `Q4`. The tag below the bar shows the dates and the previous period used for the changes (*compared with …*). The period is read on the **invoice's issue date**, so it stays stable even if the data is rebuilt later. |
+| **Company** | A picker of the companies (the `list-companies` [custom list](../configuration/custom-lists.md#ready-made-lists)); *All companies* by default. |
+| **Exclude refused and rejected** | On by default. Refused (`210`) and rejected (`213`) invoices call for an internal credit note: on, all are left out; off, only those customer service marked reviewed — see [Invoices left out](#excluded-invoices). The explanation shows on hover. |
+| **Exclude invoices not at the platform** | Off by default. Also leaves out the invoices flagged to be sent whose status is still internal: validation, send or import failure, or not yet sent. |
+| **Excel** | Downloads the workbook described under [Excel export](#excel-export). |
+| **PDF** | Downloads the CA3-styled synthesis described under [PDF export — CA3 form layout](#pdf-export--ca3-form-layout). |
+
+---
+
+## Headline figures
+
+| Figure | Value | Sub-line |
+|---|---|---|
+| **VAT collected** | VAT of the sales. | Base excl. VAT and number of invoices. |
+| **VAT deductible** | VAT of the purchases. | Base excl. VAT and number of invoices. |
+| **VAT due** / **VAT credit** | Collected minus deductible; shown as *VAT credit*, in green, when it is negative. | *Collected − deductible*. |
+
+Below each figure, the change from the previous month or quarter (`+4.2 %`) and the previous amount (`vs …`), computed with the same company and the same exclusions.
 
 ---
 
@@ -160,17 +189,16 @@ The two rules apply to the matrix, the drill-down, the Excel export and the PDF,
 
 ## The CA3 matrix
 
-The matrix opens **collapsed** at the country-group level — *Domestic (France)*, *Intra-EU* and *Outside-EU* for both *Sales* and *Purchases*. Each row shows three figures: **taxable base** (Total HT), **VAT amount** (Total TVA) and the **invoice count**.
+The table reads by **direction**, then by **country group**, then by **rate**:
 
-Click the chevron on any row to expand it; click again to collapse. The matrix has **three drill-down levels** under each country group:
+| Row | Content |
+|---|---|
+| **Sales (VAT collected)** / **Purchases (VAT deductible)** | The direction with its totals — taxable base (*Base HT*), VAT and invoice count. Sales come first; a direction without invoices is not shown. |
+| **France**, **Intra-EU**, **Outside EU** | Each country group once, with its subtotal. |
+| **Rate** (`20 %`, `10 %`…, *No rate*) | One row per rate found in the group, highest first, collapsed. Its chevron opens one row per BAR routing (`B2B`, `B2C`, `B2BINT`, `B2G`…), whose chevron opens the invoices — document, type, company, base and VAT, up to **200 rows** (the Excel export holds the full list). |
+| **VAT due** / **VAT credit** | The net VAT of the period, *Collected − deductible*. |
 
-| Level | What appears | Example |
-|---|---|---|
-| **1 — VAT rate** | One row per rate found in the period inside that group. | `20%`, `10%`, `5.5%`, `2.1%`, `0%`. |
-| **2 — Invoice type** | Under a rate row, one row per BAR routing — `B2B`, `B2C`, `B2BINT`, `B2G`, *unclassified*. | A `20%` row of *Domestic* breaks into B2B / B2C contributions. |
-| **3 — Individual invoices** | Under a type row, one row per invoice: document number, type, company, taxable base, VAT amount. Capped at **200 rows** inline — use the Excel export for the full list. | `12345 / RI / 00070   Acme Industries SA   500.00   100.00`. |
-
-Every amount in the matrix is **clickable**. A click jumps to the [Invoices list](./invoices.md) pre-filtered to the same set — same period, same direction, same country group, same rate, same type when applicable — so you can drop into the operational list without re-typing any filter.
+The amounts of the rate and routing rows open, on hover, *See the invoices*: a click jumps to the [Invoices list](./invoices.md) on the same direction, country group and period, by issue date, and on the same routing for a routing row. The rate itself is not passed as a filter. Amounts are shown in the normal colour.
 
 ### Country group rules
 
@@ -178,9 +206,9 @@ The classification reads from the **counterparty country** captured on each invo
 
 | Country group | Sales (issued) | Purchases (received) |
 |---|---|---|
-| **Domestic** | Buyer country = `FR`. | Supplier country = `FR`. |
+| **France** | Buyer country = `FR`, or unknown. | Supplier country = `FR`, or unknown. |
 | **Intra-EU** | Buyer country in the 26 other EU member states. | Supplier country in the 26 other EU member states. |
-| **Outside-EU** | Everything else (or unknown). | Everything else (or unknown). |
+| **Outside EU** | Any other country. | Any other country. |
 
 VAT rates rolled up under *Intra-EU* sales and *Outside-EU* sales appear as exempt (`—`) — they do not contribute to the VAT column, only to the taxable base. *Intra-EU acquisitions* on the Purchases side carry self-assessed VAT and contribute to both the taxable base and the VAT amount.
 
@@ -205,7 +233,7 @@ A server-side failure — a database error, for instance — is never shown as a
 
 ## Excel export
 
-The **▣ Excel** button downloads a workbook with two sheets:
+The **Excel** button downloads `vat-declaration-<from>-<to>.xlsx`, with two sheets:
 
 | Sheet | Content |
 |---|---|
@@ -218,11 +246,11 @@ Numeric cells are written as real numbers, not as text. Totals, pivot tables and
 
 ## PDF export — CA3 form layout
 
-The **📄 PDF CA3** button downloads a one-page synthesis styled like the official **Cerfa 3310-CA3** so it can be filed alongside the rest of the accounting paperwork without re-typing.
+The **PDF** button downloads a one-page synthesis styled like the official **Cerfa 3310-CA3** (`vat-declaration-<from>-<to>.pdf`), so it can be filed alongside the rest of the accounting paperwork without re-typing. The PDF is in French whatever the interface language, with French number formats: amounts `125 315,78`, rates `5,5 %`, period `01/09/2026 – 30/09/2026`. Its footer states the exclusion rules applied.
 
 | Block | CA3 lines |
 |---|---|
-| **Section A — Operations realised** | Line **01** (sales subject to VAT), **03** (intra-EU acquisitions), **04** (exports outside EU), **06** (intra-EU deliveries), **7B** (other non-taxable operations). |
+| **Section A — Operations realised** | Line **01** (sales subject to VAT), **03** (intra-EU acquisitions), **04** (exports outside EU), **06** (intra-EU deliveries), **7B** (purchases of goods and services outside the EU). |
 | **Section B — VAT brute then déductible** | One row per applicable rate: **08** (20%), **9B** (10%), **09** (5.5%), **10** (2.1%) and **14** (other rates), with total **16**. Then **20** (déductible VAT on goods and services) and total **23**. |
 | **Solde** | Either **28** (*VAT à payer*) when the period ends in debt, or **32** (*crédit*) when déductible VAT outweighs collected VAT. |
 

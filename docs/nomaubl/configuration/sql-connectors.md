@@ -150,7 +150,10 @@ The editor has **three tabs**:
 | **Database Type** | `Oracle` / `PostgreSQL` / `Microsoft SQL Server` / `Custom JDBC (driver class below)` | Backend type. Drives the JDBC URL placeholder and the dialect-specific parsing in the runtime. **Microsoft SQL Server** needs the `mssql-jdbc` jar in `lib/`. **Custom JDBC** points at any other database (DB2, MariaDB, Snowflake, …) by naming its driver class — no new NomaUBL release is required to add one. |
 | **Driver class** | text *(Custom JDBC only)* | Fully-qualified JDBC driver class name, e.g. `com.example.jdbc.MyDriver`. Shown only when *Database Type* is *Custom JDBC*; drop the matching driver jar in `lib/`. |
 | **JDBC URL** | text | Full JDBC connection string — `jdbc:oracle:thin:@host:1521/service_name` (Oracle), `jdbc:postgresql://host:5432/database_name` (PostgreSQL), `jdbc:sqlserver://host:port;databaseName=name` (SQL Server), or the format your custom driver expects. |
-| **Schema** | text *(optional)* | Default schema. Used by the SQL — no automatic prefixing happens at runtime, the value is informational and lets you write unqualified table names when the JDBC user already has the right `current_schema`. |
+| **Schema** | text *(optional)* | Data schema, written as `{{schema}}` in a query (e.g. `PRODDTA`). No automatic prefixing happens otherwise: unqualified table names resolve against the JDBC user's `current_schema`. |
+| **Control schema** | text *(optional)* | Control-table schema, written as `{{ctlSchema}}` in a query (e.g. `PRODCTL`, for the JDE control tables such as `F0005`). |
+
+`{{schema}}` and `{{ctlSchema}}` are filled from these fields when the query runs, never from the caller, and must be plain identifiers. A query that uses one of them while the field is empty fails with *Set the Schema / Control schema of connector …*. That way the same query runs unchanged on every environment.
 
 ### Credentials
 
@@ -237,6 +240,22 @@ A built-in runner that executes the selected query against the live database and
 | **Error** | Red error box with the JDBC / parser error message (`SQLException`, allow-list violation, missing `:placeholder` value, etc.). |
 
 The Test tab calls the live database — *Save* the connector first if you have just edited it; otherwise the test runs against the previously-saved version of the query.
+
+---
+
+## Shipped connector: `jde-sql` \{#jde-sql\}
+
+:::info[JDE-specific]
+NomaUBL ships a **`jde-sql`** connector with ready-made queries on JD Edwards EnterpriseOne tables. Set its connection (database type, JDBC URL, account) and its two schemas, and the queries work as they are.
+:::
+
+| Query | Writable | What it does |
+|---|---|---|
+| `getUDC` — *UDC values* | No | Values of a user-defined code (`F0005`) for a product code (`drsy`) and a code type (`drrt`), as `CODE`, `LABEL_FR`, `LABEL_EN` — ready to feed a [custom list](./custom-lists.md). Uses `{{ctlSchema}}`. |
+| `updateInvoiceStatus` — *Update invoice status* | Yes | Puts the receivable lines of an invoice (`F03B11`, by `doc`, `dct`, `kco`) on pay status `H` and stops dunning letters for them (`RPDNLT = 'N'`), except lines already paid (`P`). Meant for an [action binding](../management/actions.md) on a disputed invoice. Uses `{{schema}}`. |
+| `getCompanies` — *Companies* | No | JDE companies (`F0010`) with their names, as `CODE`, `LABEL_FR`, `LABEL_EN`. It feeds the shipped `list-companies` [custom list](./custom-lists.md#ready-made-lists), which drives the company pickers (VAT declaration, audit report, extraction, status retrieval). Uses `{{schema}}`. |
+
+An upgrade adds the queries the connector lacks and keeps the ones already there; see [Upgrade](../installation/upgrade.md).
 
 ---
 

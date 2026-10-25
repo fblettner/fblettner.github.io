@@ -6,7 +6,7 @@ keywords: [NomaUBL, rapport d'audit, audit facturation électronique, rapport de
 
 # Rapport d'audit
 
-L'onglet **Rapport d'audit** de la page [Rapports](./overview.md) mesure le déroulement de la facturation électronique sur une période : combien de factures ont été traitées, déposées, approuvées, rejetées ou refusées, ce qui attend encore une action, la durée de chaque étape, les erreurs rencontrées et leur traitement. Les chiffres viennent **uniquement des tables NomaUBL** au moment de la génération ; la plateforme n'est pas interrogée.
+La carte **Rapport d'audit** de la page [Rapports](./overview.md) mesure le déroulement de la facturation électronique sur une période : combien de factures ont été traitées, déposées, approuvées, rejetées ou refusées, ce qui attend encore une action, la durée de chaque étape, les erreurs rencontrées et leur traitement. Les chiffres viennent **uniquement des tables NomaUBL** au moment de la génération ; la plateforme n'est pas interrogée.
 
 Le rapport reste court quel que soit le volume — il ne liste aucune facture — et peut donc être transmis tel quel à une direction financière, à un auditeur ou à un comité de pilotage. Il s'applique à tout système source (JD Edwards, SAP, NetSuite ou ERP personnalisé).
 
@@ -16,115 +16,153 @@ Accès : **Rapports → Rapport d'audit**.
 
 ## Vue d'ensemble
 
-<svg viewBox="0 0 1200 389" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 492" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="ar-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
-    <linearGradient id="ar-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
-    <linearGradient id="ar-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="ar-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="rpau-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="rpau-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="rpau-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="rpau-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="345" rx="14" fill="url(#ar-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <rect x="240" y="32" width="122" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="301.0" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Statistiques statuts</text>
-  <rect x="367" y="32" width="67" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="400.5" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Intégrité</text>
-  <rect x="439" y="32" width="97" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="487.5" y="46.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport d'audit</text>
-  <rect x="541" y="32" width="142" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="612.0" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport d'implémentation</text>
-  <rect x="688" y="32" width="107" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
-  <text x="741.5" y="46.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport technique</text>
-  <line x1="220" y1="66" x2="980" y2="66" stroke="#1f2937" strokeWidth="1"/>
-  <text x="240" y="88" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Audit d'une période à partir des tables NomaUBL : chiffres clés, volumes, situation, erreurs et traitement.</text>
-  <text x="240" y="117" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Période</text>
-  <rect x="390" y="103" width="89" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="400" y="117.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Mois civil ▾</text>
-  <rect x="485" y="103" width="65" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="495" y="117.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">2026-09</text>
-  <text x="560" y="117" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">comparé au mois précédent</text>
-  <text x="240" y="149" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Date de référence</text>
-  <rect x="390" y="135" width="156" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="400" y="149.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Date d'émission (BT-2) ▾</text>
-  <text x="640" y="149" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sociétés</text>
-  <rect x="720" y="135" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="730" y="149.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">vide : toutes visibles</text>
-  <text x="240" y="181" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
-  <rect x="390" y="167" width="122" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="400" y="181.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Émises et reçues ▾</text>
-  <text x="640" y="181" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Langue</text>
-  <rect x="720" y="167" width="110" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="730" y="181.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Français ▾</text>
-  <text x="240" y="213" fill="#94a3b8" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
-  <rect x="390" y="204" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M392.5,209.5 L394.8,211.8 L398.8,207" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="407" y="213" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Synthèse</text>
-  <rect x="650" y="204" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M652.5,209.5 L654.8,211.8 L658.8,207" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="667" y="213" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Volumes</text>
-  <rect x="390" y="225" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M392.5,230.5 L394.8,232.8 L398.8,228" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="407" y="234" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Situation par statut</text>
-  <rect x="650" y="225" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M652.5,230.5 L654.8,232.8 L658.8,228" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="667" y="234" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Reste à traiter, toutes périodes</text>
-  <rect x="390" y="246" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M392.5,251.5 L394.8,253.8 L398.8,249" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="407" y="255" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Cycle de vie et délais</text>
-  <rect x="650" y="246" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M652.5,251.5 L654.8,253.8 L658.8,249" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="667" y="255" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Erreurs et traitement</text>
-  <rect x="390" y="267" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M392.5,272.5 L394.8,274.8 L398.8,270" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="407" y="276" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Exploitation sur la période</text>
-  <rect x="650" y="267" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M652.5,272.5 L654.8,274.8 L658.8,270" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="667" y="276" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Contrôles de cohérence</text>
-  <rect x="390" y="292" width="11" height="11" rx="2" fill="#0a0e1a" stroke="#475569" strokeWidth="1"/>
-  <text x="407" y="301" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Exécuter aussi les contrôles d'intégrité SQL avec JDE (plus long)</text>
-  <rect x="240" y="319" width="134" height="26" rx="5" fill="url(#ar-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="307.0" y="335.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Télécharger le PDF</text>
-  <rect x="382" y="319" width="162" height="26" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
-  <text x="463.0" y="335.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">⬇ Télécharger le Markdown</text>
-  <text x="560" y="329" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">En cours — Cycle de vie et délais · 5 / 9</text>
-  <rect x="560" y="335" width="400" height="6" rx="3" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <rect x="560" y="335" width="222" height="6" rx="3" fill="#4a9eff"/>
-  <rect x="20" y="26" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="41" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">3e onglet des Rapports</text>
-  <text x="30" y="54" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Rapports → Rapport d'audit</text>
-  <line x1="200" y1="43.0" x2="240" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-  <rect x="20" y="100" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Période</text>
-  <text x="30" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">mois ou dates libres, comparés</text>
-  <line x1="200" y1="117.0" x2="390" y2="114" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-  <rect x="20" y="210" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="30" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sections</text>
-  <text x="30" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">toutes cochées par défaut</text>
-  <line x1="200" y1="227.0" x2="390" y2="222" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-  <rect x="1000" y="130" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="145" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Périmètre</text>
-  <text x="1010" y="158" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sociétés · direction · langue</text>
-  <line x1="1000" y1="147.0" x2="870" y2="147" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-  <rect x="1000" y="279" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="294" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Contrôles d'intégrité</text>
-  <text x="1010" y="307" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">facultatifs, sur la source</text>
-  <line x1="1000" y1="296.0" x2="720" y2="297" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
-  <rect x="1000" y="349" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="364" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Exécution en arrière-plan</text>
-  <text x="1010" y="377" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la barre nomme l'étape</text>
-  <line x1="1000" y1="366.0" x2="950" y2="338" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#ar-arrow)"/>
+  <rect x="220" y="20" width="760" height="452" rx="14" fill="url(#rpau-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Rapports</text>
+  <rect x="240.0" y="62" width="172.5" height="44" rx="8" fill="rgba(255,255,255,0.01)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="250.0" y="72" width="22" height="22" rx="6" fill="#4ade80" fillOpacity="0.18"/>
+  <text x="280.0" y="81" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Intégrité</text>
+  <text x="280.0" y="95" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Comparer à JDE, intégrer</text>
+  <rect x="422.5" y="62" width="172.5" height="44" rx="8" fill="rgba(255,255,255,0.05)" stroke="#fb923c" strokeWidth="1.4"/>
+  <rect x="432.5" y="72" width="22" height="22" rx="6" fill="#fb923c" fillOpacity="0.18"/>
+  <text x="462.5" y="81" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Rapport d'audit</text>
+  <text x="462.5" y="95" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Indicateurs d'une période</text>
+  <rect x="605.0" y="62" width="172.5" height="44" rx="8" fill="rgba(255,255,255,0.01)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="615.0" y="72" width="22" height="22" rx="6" fill="#4a9eff" fillOpacity="0.18"/>
+  <text x="645.0" y="81" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Rapport d'implémentation</text>
+  <text x="645.0" y="95" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Fonctionnement de l'instance</text>
+  <rect x="787.5" y="62" width="172.5" height="44" rx="8" fill="rgba(255,255,255,0.01)" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="797.5" y="72" width="22" height="22" rx="6" fill="#8a93b0" fillOpacity="0.18"/>
+  <text x="827.5" y="81" fill="#e2e8f0" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Rapport technique</text>
+  <text x="827.5" y="95" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Documentation développeur</text>
+  <rect x="240" y="120" width="250" height="300" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="142" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Réglages</text>
+  <text x="254" y="164" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PÉRIODE</text>
+  <rect x="254" y="172" width="222" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="264" y="186.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">📅 Mois dernier · Date d'émission ▾</text>
+  <text x="254" y="216" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DIRECTION</text>
+  <rect x="254" y="224" width="172" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="255" y="225" width="62" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="286.0" y="238.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Les deux</text>
+  <line x1="318" y1="229" x2="318" y2="241" stroke="#334155" strokeWidth="1"/>
+  <text x="345.0" y="238.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Émises</text>
+  <line x1="372" y1="229" x2="372" y2="241" stroke="#334155" strokeWidth="1"/>
+  <text x="399.0" y="238.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">Reçues</text>
+  <text x="254" y="268" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">SOCIÉTÉS</text>
+  <rect x="254" y="276" width="222" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="264" y="290.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">vide : toutes les sociétés visibles</text>
+  <text x="254" y="320" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LANGUE</text>
+  <rect x="254" y="328" width="123" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="255" y="329" width="62" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="286.0" y="342.5" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Français</text>
+  <line x1="318" y1="333" x2="318" y2="345" stroke="#334155" strokeWidth="1"/>
+  <text x="347.5" y="342.5" fill="#94a3b8" fontSize="9" textAnchor="middle" fontFamily="system-ui, sans-serif">English</text>
+  <rect x="502" y="120" width="458" height="300" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="516" y="142" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Contenu</text>
+  <text x="946" y="142" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">8 sections sur 8 · Toutes · Aucune</text>
+  <rect x="516.0" y="154.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="162" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,167.5 L530.8,169.8 L534.8,165" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="171" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="171" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Synthèse</text>
+  <text x="544.0" y="184" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Indicateurs vs période précédente</text>
+  <rect x="735.0" y="154.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="162" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,167.5 L749.8,169.8 L753.8,165" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="171" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="171" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Volumes</text>
+  <text x="763.0" y="184" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Par activité, société, document…</text>
+  <rect x="516.0" y="206.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="214" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,219.5 L530.8,221.8 L534.8,217" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="223" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="223" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Situation par statut</text>
+  <text x="544.0" y="236" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Statut courant à la génération</text>
+  <rect x="735.0" y="206.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="214" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,219.5 L749.8,221.8 L753.8,217" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="223" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="223" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Reste à traiter</text>
+  <text x="763.0" y="236" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Ce qui reste à traiter</text>
+  <rect x="516.0" y="258.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="266" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,271.5 L530.8,273.8 L534.8,269" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="275" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="275" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Cycle de vie et délais</text>
+  <text x="544.0" y="288" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Étapes et délais</text>
+  <rect x="735.0" y="258.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="266" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,271.5 L749.8,273.8 L753.8,269" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="275" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="275" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Erreurs et traitement</text>
+  <text x="763.0" y="288" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Constats, rejets, échecs</text>
+  <rect x="516.0" y="310.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="318" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,323.5 L530.8,325.8 L534.8,321" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="327" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="327" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Exploitation sur la période</text>
+  <text x="544.0" y="340" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Tâches, fichiers, notifications</text>
+  <rect x="735.0" y="310.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="318" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,323.5 L749.8,325.8 L753.8,321" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="327" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="327" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Contrôles de cohérence</text>
+  <text x="763.0" y="340" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Entre tables, en option JDE</text>
+  <rect x="240" y="432" width="122" height="22" rx="5" fill="url(#rpau-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="301.0" y="446.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Télécharger le PDF</text>
+  <rect x="370" y="432" width="66" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="403.0" y="446.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Markdown</text>
+  <rect x="452" y="440" width="200" height="6" rx="3" fill="#1f2937"/><rect x="452" y="440" width="110" height="6" rx="3" fill="#4a9eff"/>
+  <text x="662" y="447" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">En cours · 12 s · Cycle de vie et délais</text>
+  <rect x="20" y="66" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cartes des rapports</text>
+  <text x="30" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une par rapport</text>
+  <line x1="200" y1="83.0" x2="240" y2="84" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="20" y="170" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="185" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Réglages</text>
+  <text x="30" y="198" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à gauche</text>
+  <line x1="200" y1="187.0" x2="240" y2="180" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="20" y="428" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="443" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">PDF ou Markdown</text>
+  <text x="30" y="456" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">copie gardée dans reports/</text>
+  <line x1="200" y1="445.0" x2="240" y2="443" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="1000" y="126" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="141" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Toutes / Aucune</text>
+  <text x="1010" y="154" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nombre de sections</text>
+  <line x1="1000" y1="143.0" x2="950" y2="142" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="1000" y="240" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tuiles des sections</text>
+  <text x="1010" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une ligne par section</text>
+  <line x1="1000" y1="257.0" x2="950" y2="250" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="20" y="232" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="247" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Sélecteur de période</text>
+  <text x="30" y="260" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">mois dernier par défaut</text>
+  <line x1="200" y1="249.0" x2="254" y2="180" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
+  <rect x="1000" y="428" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="443" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Tâche en arrière-plan</text>
+  <text x="1010" y="456" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">l'avancement nomme l'étape</text>
+  <line x1="1000" y1="445.0" x2="820" y2="443" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#rpau-arrow)"/>
 </svg>
+
+La page présente les **Réglages** à gauche, le **Contenu** à droite et la barre d'actions en dessous.
 
 | Contrôle | Description |
 |---|---|
-| **Période** | Liste déroulante : **Mois civil** (le mois précédent par défaut), comparé au mois d'avant ; ou **Dates libres**, comparées au même nombre de jours avant. Une plage qui couvre des mois entiers, un trimestre ou une année se compare aux mois précédents de même durée. |
-| **Date de référence** | **Date d'émission (BT-2)** — une facture appartient à la période par sa date d'émission — ou **Dernière mise à jour**. Statuts et montants sont toujours ceux du jour de génération. |
-| **Sociétés** | Codes société séparés par des virgules ; vide = toutes les sociétés visibles par l'utilisateur connecté. La visibilité par société du rôle s'applique dans tous les cas. |
-| **Direction** | Émises et reçues, émises seulement, reçues seulement. |
-| **Langue** | Français ou anglais ; par défaut, la langue de l'interface. |
-| **Sections** | Cocher les parties à inclure ; toutes sont cochées par défaut. |
-| **Exécuter aussi les contrôles d'intégrité SQL avec JDE** | Visible quand *Contrôles de cohérence* est cochée. Exécute sur la période les contrôles configurés dans [Rapports d'intégrité](../../configuration/system/integrity-reports.md) et ajoute leur nombre d'écarts. Plus long : chaque contrôle interroge le système source. |
-| **Télécharger le PDF / Télécharger le Markdown** | Lance la génération **en arrière-plan**. Une barre de progression nomme l'étape en cours ; le fichier se télécharge à la fin et une copie est conservée dans `<appHome>/<env>/reports/nomaubl-audit-<date>-<heure>.pdf` ou `.md`. Le reste de l'application reste utilisable pendant ce temps. |
+| **Période** | Le [sélecteur de période](../../configuration/default-periods.md#period-picker) commun, **Mois dernier** par défaut. Comparée à la période précédente de même nature : un mois au mois précédent, d'autres dates au même nombre de jours juste avant. |
+| **Base de date** | Au pied du sélecteur de période : **Date d'émission (BT-2)** *(par défaut)* — une facture appartient à la période par sa date d'émission — ou **Dernière mise à jour**. Statuts et montants sont toujours ceux du jour de génération. |
+| **Direction** | **Les deux** *(par défaut)*, **Émises** ou **Reçues**. |
+| **Sociétés** | Une sélection multiple des sociétés (la [liste personnalisée](../../configuration/custom-lists.md#ready-made-lists) `list-companies`) ; vide = toutes les sociétés visibles par l'utilisateur connecté. La visibilité par société du rôle s'applique dans tous les cas. |
+| **Langue** | **Français** ou **English** ; par défaut, la langue de l'interface. |
+| **Contenu** | Une tuile par section avec une ligne sur son contenu, toutes cochées par défaut ; l'en-tête indique le nombre (`8 sections sur 8`) et les liens **Toutes** / **Aucune**. |
+| **Exécuter aussi les contrôles d'intégrité SQL avec JDE (plus long)** | Dans la tuile *Contrôles de cohérence*, visible tant qu'elle est cochée. Exécute sur la période les contrôles configurés dans [Rapports d'intégrité](../../configuration/system/integrity-reports.md) et ajoute leur nombre d'écarts. Chaque contrôle interroge le système source. |
+| **Télécharger le PDF** / **Markdown** | Lance la génération **en arrière-plan**. Une barre de progression nomme l'étape en cours ; le fichier se télécharge à la fin et une copie est conservée dans `<appHome>/<env>/reports/nomaubl-audit-<date>-<heure>.pdf` ou `.md`. Le reste de l'application reste utilisable pendant ce temps. |
 
 ---
 
@@ -229,7 +267,7 @@ L'API produit le même rapport en arrière-plan : `POST /api/reports/audit/start
 
 ## Accès
 
-L'onglet fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../../configuration/security/roles.md). Les chiffres suivent la visibilité par société de l'utilisateur connecté.
+Le rapport fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../../configuration/security/roles.md). Les chiffres suivent la visibilité par société de l'utilisateur connecté.
 
 ---
 

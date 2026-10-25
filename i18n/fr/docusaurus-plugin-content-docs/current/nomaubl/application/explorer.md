@@ -26,7 +26,7 @@ Accès : **Explorateur**, dans le groupe Navigation du menu, à côté des [Rapp
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Explorateur</text>
   <rect x="370" y="32" width="170" height="22" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <rect x="371" y="33" width="59" height="20" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="400.5" y="46.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Analyse</text>
+  <text x="400.5" y="46.5" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Analyses 12</text>
   <line x1="431" y1="37" x2="431" y2="49" stroke="#334155" strokeWidth="1"/>
   <text x="485.5" y="46.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Tableaux de bord</text>
   <rect x="552" y="32" width="170" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -137,6 +137,12 @@ Accès : **Explorateur**, dans le groupe Navigation du menu, à côté des [Rapp
 
 ---
 
+## Onglets Analyses et Tableaux de bord \{#tabs\}
+
+La première rangée de l'Explorateur porte deux onglets, **Analyses** (par défaut) et **[Tableaux de bord](#dashboards)**, chacun avec le nombre d'éléments enregistrés. Sur la même rangée, à droite, se trouvent la liste des analyses enregistrées (*Analyses enregistrées…*, *— Nouvelle analyse —*) ou des tableaux de bord (*Tableaux de bord…*, *— Nouveau tableau de bord —*), **Enregistrer**, et le bouton de suppression une fois un élément choisi.
+
+---
+
 ## Les champs
 
 Le volet de gauche liste les champs de sept entités, avec une zone de recherche :
@@ -222,7 +228,7 @@ Chaque analyse et chaque tableau de bord est un fichier JSON du dossier de confi
 
 ## Tableaux de bord \{#dashboards\}
 
-Le mode **Tableaux de bord** réunit des analyses enregistrées sous forme de **tuiles** sur une grille de quatre colonnes, chacune avec sa largeur, sa hauteur et sa vue — graphique, tableau ou tableau croisé. Une **période** unique, en haut, s'applique à toutes les tuiles. Une tuile s'explore comme son analyse et l'ouvre dans l'éditeur. **Modifier la disposition** ajoute des tuiles (*Analyse à ajouter…*, *Ajouter une tuile*), les déplace et règle leur taille.
+L'onglet **Tableaux de bord** réunit des analyses enregistrées sous forme de **tuiles** sur une grille de quatre colonnes, chacune avec sa largeur, sa hauteur et sa vue — graphique, tableau ou tableau croisé. Une **période** unique, en haut, s'applique à toutes les tuiles. Une tuile s'explore comme son analyse et l'ouvre dans l'éditeur. **Modifier la disposition** ajoute des tuiles (*Analyse à ajouter…*, *Ajouter une tuile*), les déplace et règle leur taille.
 
 <svg viewBox="0 0 1200 410" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
@@ -338,11 +344,11 @@ NomaUBL installe douze analyses et trois tableaux de bord, une seule fois ; ils 
 
 | Public | Tableau de bord | Analyses |
 |---|---|---|
-| **IT** | Exploitation | Volume par document · Contrôles par jour et par source · Échecs d'envoi et d'import · Factures dans un statut de traitement |
+| **IT** | Exploitation | Volume par document · Contrôles par jour : validation / intégration · Échecs d'envoi et d'import · Factures dans un statut de traitement |
 | **Comptabilité** | Clôture du mois | TVA par mois et par taux · Montants par statut · Principaux clients · Factures et avoirs par mois |
 | **Audit** | Période d'audit | Contrôles par règle · Refus et rejets par motif · Évènements de statut par mois · Statistiques des statuts |
 
-*Statistiques des statuts* reproduit le tableau croisé de la page [Rapports](reports/overview.md), dont l'onglet reste inchangé.
+*Statistiques des statuts* reproduit le tableau détaillé du tableau de bord [Statistiques](./statistics.md#detail-table). *Contrôles par jour* répartit les contrôles de chaque jour entre **validation** (les données de la facture enfreignent une règle Schematron ou XSD, Schematrons client compris) et **intégration** (une étape technique a échoué : plateforme, base de données, transformation, PDF, XML, génération UBL, validateur, traitement).
 
 ---
 

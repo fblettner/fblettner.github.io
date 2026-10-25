@@ -153,7 +153,7 @@ Le bouton de bascule en tête de la barre d'outils permet de basculer entre les 
 
 ## Barre d'outils
 
-La barre d'outils combine la bascule de vue, une recherche libre, deux filtres déroulants, une plage de dates et un bouton de rafraîchissement.
+La barre d'outils combine le choix de la vue, une recherche libre, des filtres déroulants (modèle, mode et, en vue groupée, statut), une plage de dates et un bouton d'actualisation.
 
 <div style={{border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px', margin: '20px 0', background: 'rgba(255,255,255,0.02)'}}>
   <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center'}}>
@@ -176,7 +176,8 @@ La barre d'outils combine la bascule de vue, une recherche libre, deux filtres d
 | **Rechercher un fichier** | Recherche par sous-chaîne sur la colonne `file` (par ex. `12345_RI_00070`). Vide désactive le filtre. |
 | **Templates** | Liste déroulante alimentée dynamiquement depuis les templates de type `document` déclarés dans `config.json`. *Tous les templates* retire le filtre. |
 | **Modes** | Déroulante des modes de traitement standards — `AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`. *Tous les modes* retire le filtre. |
-| **Plage de dates** | Restreint aux événements dont l'horodatage se situe dans la fenêtre choisie. Préréglage par défaut : *Hier → Aujourd'hui*. Les préréglages standards (*Aujourd'hui*, *Hier*, *7 derniers jours*, *Ce mois*, *Mois dernier*, *Plage personnalisée*) s'appliquent. |
+| **Statut** *(vue groupée seulement)* | *Tous les statuts*, *OK*, *Erreur* ou *Partiel (début ou fin manquant)* — ne garde que les exécutions de ce résultat. |
+| **Plage de dates** | Le [sélecteur de période](../../configuration/default-periods.md#period-picker) commun : restreint aux événements dont l'horodatage se situe dans la fenêtre choisie. Il s'ouvre sur la [période par défaut](../../configuration/default-periods.md#default-periods) de la vue *Processing log*. |
 | **Rafraîchir** | Relance la requête courante sans modifier les filtres. |
 
 En vue groupée, la page extrait davantage (`pageSize × 4`, plafonné à 200) pour que les paires START / END et les étapes intermédiaires se retrouvent sur la même page et que le moteur de groupement dispose du job complet.

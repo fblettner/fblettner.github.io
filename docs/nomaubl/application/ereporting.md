@@ -471,66 +471,21 @@ The lifecycle is read-only here; the only action is **Resend to PA** at the moda
 
 ---
 
-## Generate dialog
+## Generate dialog \{#generate-dialog\}
 
-Opens from **Generate report** in the toolbar. Builds and submits one or several reports for a chosen company / flux / period combination.
+Opens from **Generate report** in the toolbar. Builds and submits one or several reports for a chosen company / direction / period combination.
 
-<div style={{border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.025)', maxWidth: '520px', boxShadow: '0 8px 24px rgba(0,0,0,0.25)'}}>
-  <div style={{padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-    <div style={{fontWeight: 700, fontSize: '14px'}}>Generate e-reporting</div>
-    <span style={{opacity: 0.5, fontSize: '12px'}}>✕</span>
-  </div>
-  <div style={{padding: '18px'}}>
-    <div style={{marginBottom: '14px'}}>
-      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, marginBottom: '4px'}}>Company (kco)</div>
-      <div style={{padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', minHeight: '20px'}}>00070</div>
-      <div style={{fontSize: '10px', opacity: 0.55, marginTop: '4px'}}>Leave blank to apply to all configured companies.</div>
-    </div>
-    <div style={{marginBottom: '14px'}}>
-      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, marginBottom: '6px'}}>Flux to generate</div>
-      <div style={{display: 'flex', gap: '8px'}}>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid rgba(74,158,255,0.5)', background: 'rgba(74,158,255,0.12)', color: '#4a9eff'}}>10.1</span>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid rgba(74,158,255,0.5)', background: 'rgba(74,158,255,0.12)', color: '#4a9eff'}}>10.3</span>
-      </div>
-    </div>
-    <div style={{marginBottom: '14px'}}>
-      <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, marginBottom: '6px'}}>Document type</div>
-      <div style={{display: 'flex', gap: '8px'}}>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 600, border: '1px solid rgba(74,158,255,0.5)', background: 'rgba(74,158,255,0.12)', color: '#4a9eff'}}>IN</span>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 500, border: '1px solid rgba(255,255,255,0.15)', opacity: 0.7}}>RE</span>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 500, border: '1px solid rgba(255,255,255,0.15)', opacity: 0.7}}>CO</span>
-        <span style={{padding: '5px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: 500, border: '1px solid rgba(255,255,255,0.15)', opacity: 0.7}}>MO</span>
-      </div>
-    </div>
-    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px'}}>
-      <div>
-        <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, marginBottom: '4px'}}>Period start</div>
-        <div style={{padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px'}}>2026-04-01</div>
-      </div>
-      <div>
-        <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, marginBottom: '4px'}}>Period end</div>
-        <div style={{padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px'}}>2026-04-30</div>
-      </div>
-    </div>
-    <div>
-      <span style={{padding: '6px 14px', borderRadius: '6px', border: '1px solid rgba(74,158,255,0.4)', color: '#4a9eff', fontSize: '12px', fontWeight: 500}}>📅 Compute period</span>
-    </div>
-  </div>
-  <div style={{padding: '12px 18px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'flex-end', gap: '8px', background: 'rgba(255,255,255,0.02)'}}>
-    <span style={{padding: '7px 16px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '12px', fontWeight: 500}}>Cancel</span>
-    <span style={{padding: '7px 16px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '12px', fontWeight: 600}}>Generate</span>
-  </div>
-</div>
+{/* svg:ergen */}
 
 | Field | Description |
 |---|---|
-| **Company (kco)** | Restricts the generation to a single company. Leave blank to apply to **all** companies declared in the *e-reporting* template. |
-| **Flux to generate** | Multi-select between `10.1` and `10.3`. Both are selected by default — the generator emits one report per active flux. |
+| **Company (kco)** | A picker of the companies (the `list-companies` [custom list](../configuration/custom-lists.md#ready-made-lists)). *All configured companies* applies to every company declared in the *e-reporting* template. |
+| **Direction** | **Outbound (sales)** and / or **Inbound (purchases)**, both selected by default; at least one is required. One report is produced per company and direction, and each report carries both flows: 10.1 (B2B international, detail) and 10.3 (B2C, aggregated). |
 | **Document type** | One of `IN` (initial), `RE` (replacement), `CO` (cancellation), `MO` (modification). The default is `IN`. |
 | **Period start / end** | ISO 8601 dates that delimit the declaration window. |
 | **Compute period** | Auto-fills *Period start* / *Period end* with the next due window, exactly as the scheduled run does: it follows the **company's setup** (frequency `MONTHLY` / `DECADAL` / `WEEKLY`) and the **last valid report** of that company for the direction. The dialog states the frequency applied and the report it follows (*after the last report ending …*, or *no previous report, current period*). A company must be entered to compute. |
 | **Cancel** | Closes the dialog without generating. |
-| **Generate** | Builds the XML for each selected flux, stores the report row and submits it to the PA. The run happens **in the background**: the dialog shows its log as it goes, then refreshes the list when done — a large period no longer ends in a proxy error. |
+| **Generate** | Builds the XML for each company and direction, stores the report row and submits it to the PA. The run happens **in the background**: the dialog shows its log as it goes, then refreshes the list when done, so a large period does not end in a proxy error. |
 
 When the generator builds a report, it derives the per-invoice **Sender**, **Issuer** and **Business Process** blocks (TT-7 / TT-12 / TT-28 / TT-29) from the *e-reporting* template — those defaults are configured once in *Settings → System → E-Reporting* (Sender / PA matricule + role `WK`, Issuer / SIREN scheme `0002` for French companies, Business Process emitted only on B2BINT invoices). When no transmission ID is provided manually, the report is identified as **`{siren}-{flux}-{start}-{end}`** so it stays stable across regenerations of the same period and lets the PA deduplicate identical retransmissions.
 

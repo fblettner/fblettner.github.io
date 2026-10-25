@@ -160,8 +160,8 @@ The status groups come from the [status catalogue](../../configuration/system/st
 
 ## Filters
 
-- **Period** — yesterday by default.
-- **Kind** — chips with their counts; untick a kind to leave it out.
+- **Period** — the shared [period picker](../../configuration/default-periods.md#period-picker), on the [default period](../../configuration/default-periods.md#default-periods) of the *Diagnostics* view.
+- **Kind** — a multi-select of the five kinds; *All kinds* when none is picked.
 - **Template** and **Company** — narrow to one document or company; the company grants of the signed-in user always apply to the invoice-linked kinds.
 - **Unresolved only** — on by default. Hides the failures the invoice, file or job has since moved past: the invoice left the error statuses or moved on from the event's status, or a later successful run exists for the file or the job.
 - **Search in messages (all pages)** — the search runs on the server, across every page of the result, not only on the rows displayed.
