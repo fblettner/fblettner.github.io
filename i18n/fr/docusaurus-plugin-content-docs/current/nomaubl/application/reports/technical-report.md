@@ -53,72 +53,78 @@ Il complète les deux autres documents de la page : le [rapport d'implémentatio
   <text x="264" y="238.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">par défaut : aujourd'hui</text>
   <rect x="502" y="120" width="458" height="300" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="516" y="142" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Contenu</text>
-  <text x="946" y="142" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">10 sections sur 10 · Toutes · Aucune</text>
-  <rect x="516.0" y="154.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <rect x="526.0" y="162" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M528.5,167.5 L530.8,169.8 L534.8,165" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="543.0" y="171" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
-  <text x="544.0" y="171" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Périmètre</text>
-  <text x="544.0" y="184" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Version, compilation, sources</text>
-  <rect x="735.0" y="154.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <rect x="745.0" y="162" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M747.5,167.5 L749.8,169.8 L753.8,165" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="762.0" y="171" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
-  <text x="763.0" y="171" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Architecture</text>
-  <text x="763.0" y="184" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Composants, tableaux de bord, sécurité</text>
-  <rect x="516.0" y="206.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <rect x="526.0" y="214" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M528.5,219.5 L530.8,221.8 L534.8,217" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="543.0" y="223" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
-  <text x="544.0" y="223" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Modèle de données</text>
-  <text x="544.0" y="236" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Tables et colonnes</text>
-  <rect x="735.0" y="206.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <rect x="745.0" y="214" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M747.5,219.5 L749.8,221.8 L753.8,217" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="762.0" y="223" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
-  <text x="763.0" y="223" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Flux</text>
-  <text x="763.0" y="236" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Flux et points d'appel</text>
-  <rect x="516.0" y="258.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <rect x="526.0" y="266" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M528.5,271.5 L530.8,273.8 L534.8,269" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="543.0" y="275" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
-  <text x="544.0" y="275" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Référence de configuration</text>
-  <text x="544.0" y="288" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Chaque clé et ses lecteurs</text>
-  <rect x="735.0" y="258.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <rect x="745.0" y="266" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M747.5,271.5 L749.8,273.8 L753.8,269" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="762.0" y="275" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
-  <text x="763.0" y="275" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Modèle de statuts</text>
-  <text x="763.0" y="288" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Statuts et groupes</text>
-  <rect x="516.0" y="310.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <rect x="526.0" y="318" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M528.5,323.5 L530.8,325.8 L534.8,321" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="543.0" y="327" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
-  <text x="544.0" y="327" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Matrice d'impact</text>
-  <text x="544.0" y="340" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Impact par flux</text>
-  <rect x="735.0" y="310.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <rect x="745.0" y="318" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M747.5,323.5 L749.8,325.8 L753.8,321" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="762.0" y="327" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
-  <text x="763.0" y="327" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Référence de l'API</text>
-  <text x="763.0" y="340" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Chaque point d'API et ses droits</text>
-  <rect x="516.0" y="362.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <rect x="526.0" y="370" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M528.5,375.5 L530.8,377.8 L534.8,373" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="543.0" y="379" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
-  <text x="544.0" y="379" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Ligne de commande</text>
-  <text x="544.0" y="392" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Modes et aide intégrée</text>
-  <rect x="735.0" y="362.0" width="211.0" height="46.0" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
-  <rect x="745.0" y="370" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
-  <path d="M747.5,375.5 L749.8,377.8 L753.8,373" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
-  <text x="762.0" y="379" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
-  <text x="763.0" y="379" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Compilation et paquetage</text>
-  <text x="763.0" y="392" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Étapes, artefacts, jar</text>
+  <text x="946" y="142" fill="#94a3b8" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">11 sections sur 11 · Toutes · Aucune</text>
+  <rect x="516.0" y="154.0" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="162.0" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,167.5 L530.8,169.8 L534.8,165.0" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="171.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="171.0" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Périmètre</text>
+  <text x="544.0" y="184.0" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Version, compilation, sources</text>
+  <rect x="735.0" y="154.0" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="162.0" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,167.5 L749.8,169.8 L753.8,165.0" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="171.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="171.0" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Architecture</text>
+  <text x="763.0" y="184.0" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Composants, tableaux de bord, sécurité</text>
+  <rect x="516.0" y="198.3" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="206.33333333333334" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,211.83333333333334 L530.8,214.13333333333335 L534.8,209.33333333333334" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="215.33333333333334" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="215.33333333333334" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Modèle de données</text>
+  <text x="544.0" y="228.33333333333334" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Tables et colonnes</text>
+  <rect x="735.0" y="198.3" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="206.33333333333334" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,211.83333333333334 L749.8,214.13333333333335 L753.8,209.33333333333334" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="215.33333333333334" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="215.33333333333334" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Flux</text>
+  <text x="763.0" y="228.33333333333334" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Flux et points d'appel</text>
+  <rect x="516.0" y="242.7" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="250.66666666666669" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,256.1666666666667 L530.8,258.4666666666667 L534.8,253.66666666666669" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="259.6666666666667" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="259.6666666666667" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Référence de configuration</text>
+  <text x="544.0" y="272.6666666666667" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Chaque clé et ses lecteurs</text>
+  <rect x="735.0" y="242.7" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="250.66666666666669" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,256.1666666666667 L749.8,258.4666666666667 L753.8,253.66666666666669" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="259.6666666666667" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="259.6666666666667" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Modèle de statuts</text>
+  <text x="763.0" y="272.6666666666667" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Statuts et groupes</text>
+  <rect x="516.0" y="287.0" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="295.0" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,300.5 L530.8,302.8 L534.8,298.0" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="304.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="304.0" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Matrice d'impact</text>
+  <text x="544.0" y="317.0" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Impact par flux</text>
+  <rect x="735.0" y="287.0" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="295.0" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,300.5 L749.8,302.8 L753.8,298.0" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="304.0" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="304.0" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Référence de l'API</text>
+  <text x="763.0" y="317.0" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Chaque point d'API et ses droits</text>
+  <rect x="516.0" y="331.3" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="339.33333333333337" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,344.83333333333337 L530.8,347.1333333333334 L534.8,342.33333333333337" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="348.33333333333337" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="348.33333333333337" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Ligne de commande</text>
+  <text x="544.0" y="361.33333333333337" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Modes et aide intégrée</text>
+  <rect x="735.0" y="331.3" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="745.0" y="339.33333333333337" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M747.5,344.83333333333337 L749.8,347.1333333333334 L753.8,342.33333333333337" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="762.0" y="348.33333333333337" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="763.0" y="348.33333333333337" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Compilation et paquetage</text>
+  <text x="763.0" y="361.33333333333337" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Étapes, artefacts, jar</text>
+  <rect x="516.0" y="375.7" width="211.0" height="38.3" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.45)" strokeWidth="1"/>
+  <rect x="526.0" y="383.6666666666667" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M528.5,389.1666666666667 L530.8,391.4666666666667 L534.8,386.6666666666667" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="543.0" y="392.6666666666667" fill="#cbd5e1" fontSize="9" fontFamily="system-ui, sans-serif"></text>
+  <text x="544.0" y="392.6666666666667" fill="#e2e8f0" fontSize="9" fontWeight="700" fontFamily="system-ui, sans-serif">Annexe : références dans le code</text>
+  <text x="544.0" y="405.6666666666667" fill="#94a3b8" fontSize="7.8" fontFamily="system-ui, sans-serif">Références des clés dans le code</text>
   <rect x="240" y="432" width="122" height="22" rx="5" fill="url(#rpte-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="301.0" y="446.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Télécharger le PDF</text>
   <rect x="370" y="432" width="66" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="403.0" y="446.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Markdown</text>
-  <text x="452" y="447" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">10 sections · Français</text>
+  <text x="452" y="447" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">11 sections · Français</text>
   <rect x="20" y="66" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="81" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Cartes des rapports</text>
   <text x="30" y="94" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">une par rapport</text>

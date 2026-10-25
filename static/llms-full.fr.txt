@@ -2221,7 +2221,7 @@ L'assistant cite la page utilisée et en donne le lien. Il n'invente ni réglage
 | **`edirectory_lookup`** | 🏢 | Une entreprise de l'[annuaire](./edirectory.md), par SIREN, SIRET ou raison sociale : données légales et lignes d'adressage. |
 | **`template_settings`** | ⚙️ | Les réglages d'un modèle, secrets masqués. Demande la fonctionnalité *Settings access*. |
 
-L'assistant connaît toutes les pages de l'application — parmi elles la [Synthèse](./billing-overview.md), les [Statistiques](./statistics.md), l'[Explorateur](./explorer.md) et les [étapes des factures](./invoices.md#status-by-stage) — et répond à une question sur le chiffre d'affaires, les avoirs, le taux de transmission ou les décisions avec `billing_overview`, à une question sur les étapes, les temps d'attente ou les motifs avec `status_statistics`. Par le rapport d'implémentation (`instance_docs`), il connaît aussi les périodes par défaut et les règles des tableaux de bord de l'instance.
+L'assistant connaît toutes les pages de l'application — parmi elles la [Synthèse](./billing-overview.md), les [Statistiques](./statistics.md), l'[Explorateur](./explorer.md) et les [étapes des factures](./invoices.md#status-by-stage) — et répond à une question sur le chiffre d'affaires, les avoirs, le taux de transmission ou les décisions avec `billing_overview`, à une question sur les étapes, les temps d'attente ou les motifs avec `status_statistics`. Par le rapport d'implémentation (`instance_docs`), il connaît aussi les périodes par défaut et les règles des tableaux de bord de l'instance. Les deux outils ne répondent que si le rôle de l'utilisateur accorde la page (Synthèse, Statistiques).
 
 L'assistant reçoit aussi le **catalogue des statuts** à jour : *« en litige »*, *« refusée »* ou *« en attente de dépôt »* sont rattachés au bon code.
 
@@ -28684,7 +28684,7 @@ Chaque ligne donne le montant et le nombre de factures ; un clic ouvre [E-Invoic
 
 ## Accès \{#access\}
 
-La page suit le droit **Exploitation** du groupe Navigation de la page [Rôles](../configuration/security/roles.md) : un rôle qui voit le tableau de bord Exploitation voit aussi la Synthèse, sans page supplémentaire à accorder. Les chiffres suivent la visibilité par société de l'utilisateur connecté. Avec une licence restreinte, l'application s'ouvre sur le tableau de bord [Exploitation](./dashboard.md).
+Accorder la page **Synthèse** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; le serveur et l'outil `billing_overview` de l'assistant IA contrôlent le même droit. Les chiffres suivent les sociétés et les [filtres de lignes](../configuration/security/roles.md#filtres-de-lignes) du rôle de l'utilisateur connecté. Un rôle qui a cette page s'ouvre sur elle après la connexion ; avec une licence restreinte, l'application s'ouvre sur le tableau de bord [Exploitation](./dashboard.md).
 
 ---
 
@@ -28694,6 +28694,7 @@ La page suit le droit **Exploitation** du groupe Navigation de la page [Rôles](
 - **Choisir *Date document* pour rapprocher avec la comptabilité.** C'est la date imprimée sur la facture, celle de la déclaration de TVA ; *Date d'archivage* correspond aux rapports de traitement.
 - **Partir de *Ce qui demande une décision*.** Un clic mène aux factures concernées, toutes dates confondues, prêtes à être traitées.
 - **Définir une fois pour tous la période d'ouverture** dans [Périodes par défaut](../configuration/default-periods.md) — par exemple *Mois dernier* pour une équipe qui revoit le mois clos.
+- **L'envoyer par e-mail.** Un [rapport quotidien](../sync/scheduled-jobs/daily-digest.md#business-dashboards) peut envoyer la page en PDF ou en Excel — par exemple le 1er, la synthèse du mois écoulé, telle que la voit un rôle donné.
 
 ---
 
@@ -28704,7 +28705,7 @@ Le tableau de bord Exploitation de NomaUBL : ce que l'équipe a à traiter sur l
 
 Le tableau de bord **Exploitation** montre **ce que l'équipe a à traiter** sur la période. Il s'articule autour de trois files de travail, chacune associée à l'équipe concernée : ce qui est en cours et ne demande rien, ce que l'informatique doit corriger puis renvoyer, et ce que le service client doit régler en émettant une nouvelle facture. Viennent ensuite l'activité de la période, les factures bloquées depuis le plus longtemps, les derniers événements et les règles les plus souvent en échec. Toutes les valeurs proviennent de la base NomaUBL, quel que soit le système source (JD Edwards, SAP, NetSuite ou un ERP personnalisé).
 
-Accès : **Exploitation**, dans le groupe Navigation, après la [Synthèse](./billing-overview.md). Avec une licence restreinte, c'est la page d'ouverture de l'application. L'état technique du serveur se trouve sur le [tableau de bord IT](./tech-dashboard.md).
+Accès : **Exploitation**, dans le groupe Navigation, après la [Synthèse](./billing-overview.md). Avec une licence restreinte, ou pour un rôle sans la Synthèse, c'est la page d'ouverture de l'application. L'état technique du serveur se trouve sur le [tableau de bord IT](./tech-dashboard.md).
 
 ---
 
@@ -28774,29 +28775,15 @@ Une ligne ouvre [E-Invoicing](./invoices.md) sur son statut.
 
 ---
 
-## Actions rapides et À propos
+## À propos de cette version
 
-**Actions rapides** propose *Nouvelle Facture* (ouvre la fenêtre de création de facture sur le tableau de bord, pour les rôles autorisés à créer des factures), *Référentiel statuts* et *Motifs*. Le bloc replié **À propos de cette version**, en bas de page, indique la version, le profil AFNOR et les versions des Schematrons livrés (voir [Schematrons](../references/schematrons.md)).
+Le bloc replié **À propos de cette version**, en bas de page, indique la version, le profil AFNOR et les versions des Schematrons livrés (voir [Schematrons](../references/schematrons.md)).
 
 ---
 
 ## Accès
 
-Accorder la page **Exploitation** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; elle ouvre aussi la [Synthèse](./billing-overview.md) et les [Statistiques](./statistics.md). Dans le tableau de bord, chaque bloc peut être masqué par rôle avec les **cartes du tableau de bord** du rôle (libellés en anglais dans l'éditeur des rôles) :
-
-| Carte | Bloc |
-|---|---|
-| *Total invoices* | La ligne de synthèse de la page. |
-| *In flight* | La file *En cours*. |
-| *Rejected — IT* | La file *À corriger puis renvoyer*. |
-| *Rejected — Business* | La file *Une nouvelle facture doit être émise*. |
-| *Status cards* | Les lignes des trois files. |
-| *Daily invoice volume* | Le graphique d'activité. |
-| *Stale invoices* / *Recent activity* | *Bloquées depuis le plus longtemps* / *Derniers événements*. |
-| *Top error rules* / *PA round-trip stats* / *E-Reporting coverage* | Les trois blocs de la rangée du bas. |
-| *Quick actions* | La section Actions rapides. |
-
-Les chiffres suivent la visibilité par société de l'utilisateur connecté. L'ouverture de la liste des factures depuis un bloc demande une licence complète.
+Accorder la page **Exploitation** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md). Le rôle voit tout le tableau de bord ou rien ; la [Synthèse](./billing-overview.md) et les [Statistiques](./statistics.md) s'accordent à part. Les chiffres suivent les sociétés et les [filtres de lignes](../configuration/security/roles.md#filtres-de-lignes) du rôle. L'ouverture de la liste des factures depuis un bloc demande une licence complète.
 
 ---
 
@@ -28813,9 +28800,9 @@ Les chiffres suivent la visibilité par société de l'utilisateur connecté. L'
 ## NomaUBL — Tableau de bord IT
 Source: https://docs.nomana-it.fr/fr/nomaubl/application/tech-dashboard/
 
-Le tableau de bord IT de NomaUBL (Tech Dashboard) : un bandeau de santé (application, base de données, disque, mémoire, planificateur, configuration), les quatre cartes d'action (échec d'envoi, en attente de revue, à retraiter, à retraiter en totalité), les traitements des 14 derniers jours (volume, erreurs, relances, durée par document), ce qui s'exécute en ce moment, les erreurs récentes, et des détails techniques repliés (système, fichiers, JVM, contrôle de configuration, tables de la base, liens).
+Le tableau de bord IT de NomaUBL : un bandeau de santé (application, base de données, disque, mémoire, planificateur, configuration), les quatre cartes d'action (échec d'envoi, en attente de revue, à retraiter, à retraiter en totalité), les traitements des 14 derniers jours (volume, erreurs, relances, durée par document), ce qui s'exécute en ce moment, les erreurs récentes, et des détails techniques repliés (système, fichiers, JVM, contrôle de configuration, tables de la base, liens).
 
-Le **tableau de bord IT** (*Tech Dashboard* dans l'application) est la vue de NomaUBL destinée à l'équipe informatique. Il se lit de haut en bas comme une liste de contrôle : **tout fonctionne ?** (un bandeau de santé), **qu'y a-t-il à faire ?** (quatre cartes d'action avec leur traitement en masse), **comment se sont passés les traitements des 14 derniers jours ?**, **qu'est-ce qui s'exécute en ce moment ?**, et les **erreurs récentes**. Les cartes techniques détaillées — système, fichiers, JVM, contrôle de configuration, tables de la base — sont repliées en bas de page et s'ouvrent depuis le bandeau de santé. Il complète le tableau de bord [Exploitation](./dashboard.md), qui suit les factures plutôt que le serveur.
+Le **tableau de bord IT** est la vue de NomaUBL destinée à l'équipe informatique. Il se lit de haut en bas comme une liste de contrôle : **tout fonctionne ?** (un bandeau de santé), **qu'y a-t-il à faire ?** (quatre cartes d'action avec leur traitement en masse), **comment se sont passés les traitements des 14 derniers jours ?**, **qu'est-ce qui s'exécute en ce moment ?**, et les **erreurs récentes**. Les cartes techniques détaillées — système, fichiers, JVM, contrôle de configuration, tables de la base — sont repliées en bas de page et s'ouvrent depuis le bandeau de santé. Il complète le tableau de bord [Exploitation](./dashboard.md), qui suit les factures plutôt que le serveur.
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les cartes lisent les métriques de l'hôte et le journal de traitement de NomaUBL.
 
@@ -28824,7 +28811,6 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 ## Accès à la page
 
 - Menu → **Navigation → Tableau de bord IT**, après Exploitation.
-- Le titre et la description de la page restent en anglais dans les deux langues, comme la plupart des titres de cartes.
 
 ---
 
@@ -28840,12 +28826,12 @@ Le bandeau **Tout fonctionne ?** présente six tuiles, chacune avec une pastille
 
 | Tuile | Affiche | Ouvre |
 |---|---|---|
-| **Application** | La version et `démarrée depuis …`. | System Health |
-| **Base de données** | Le ping en ms, ou *Injoignable*. | System Health |
-| **Disque** | `… % libre` sur le disque le plus rempli. | Filesystem |
-| **Mémoire** | L'occupation du heap en %. | JVM · threads + GC |
-| **Planificateur** | *En marche*, `… paused` ou `… job(s) failed`, et la prochaine exécution. | La carte Scheduler d'*En ce moment* |
-| **Configuration** | *Aucun problème* ou `… issue(s)`. | Configuration check |
+| **Application** | La version et `démarrée depuis …`. | Système |
+| **Base de données** | Le ping en ms, ou *Injoignable*. | Système |
+| **Disque** | `… % libre` sur le disque le plus rempli. | Système de fichiers |
+| **Mémoire** | L'occupation du heap en %. | JVM · threads et GC |
+| **Planificateur** | *En marche*, `… en pause` ou `… tâche(s) en échec`, et la prochaine exécution. | La carte Planificateur d'*En ce moment* |
+| **Configuration** | *Aucun problème* ou `… problème(s)`. | Contrôle de la configuration |
 
 ---
 
@@ -28892,15 +28878,15 @@ Une carte à quatre onglets : **Volume**, **Erreurs**, **Relances**, **Durée pa
 
 ### Erreurs
 
-La carte **Error rate · 14d** : une sparkline sur 14 jours des événements d'erreur enregistrés dans `F564237` (niveau `ERROR` ou `FATAL`). Le survol d'un point révèle la date et le compte ; le sous-titre indique la moyenne quotidienne et le total cumulé du jour.
+La carte **Taux d'erreur · 14 j** : une sparkline sur 14 jours des événements d'erreur enregistrés dans `F564237` (niveau `ERROR` ou `FATAL`). Le survol d'un point révèle la date et le compte ; le sous-titre indique la moyenne quotidienne et le total cumulé du jour.
 
 ### Relances
 
-La carte **Retry rate · 14d** : un seul grand chiffre, ratio des *runs ayant abouti après une ou plusieurs relances* sur le total des runs des 14 derniers jours. Le sous-titre donne les valeurs absolues et la variation par rapport à la fenêtre précédente de 14 jours (vert quand le taux baisse, orange quand il monte).
+La carte **Taux de reprise · 14 j** : un seul grand chiffre, ratio des *runs ayant abouti après une ou plusieurs relances* sur le total des runs des 14 derniers jours. Le sous-titre donne les valeurs absolues et la variation par rapport à la fenêtre précédente de 14 jours (vert quand le taux baisse, orange quand il monte).
 
 ### Durée par document
 
-La carte **Template processing time · 14d** : temps moyen de traitement de bout en bout par modèle, en secondes, sur les 14 derniers jours. La carte charge les événements `START` / `END` de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` — la précédente version utilisait une auto-jointure SQL avec un `FETMPL` ambigu et une arithmétique `e.FEUPMT - s.FEUPMT` incorrecte ; ce point est corrigé.
+La carte **Durée de traitement par modèle · 14 j** : temps moyen de traitement de bout en bout par modèle, en secondes, sur les 14 derniers jours. La carte charge les événements `START` / `END` de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` — la précédente version utilisait une auto-jointure SQL avec un `FETMPL` ambigu et une arithmétique `e.FEUPMT - s.FEUPMT` incorrecte ; ce point est corrigé.
 
 #### Décomposition par étape quand `debugProfile` est actif
 
@@ -28961,7 +28947,7 @@ Dans les deux cas, chaque ligne affiche IP / utilisateur, l'horodatage du dernie
 
 ## Erreurs récentes
 
-La carte **Recent errors** liste les 8 derniers événements de `F564237` filtrés sur `level IN ('ERROR', 'FATAL')`. Chaque ligne affiche le badge de niveau, le code de cycle de vie et le triplet, le message et un horodatage relatif (*il y a 2 min*, *il y a 1 h*). Une ligne liée à une facture ouvre la vue *Erreurs d'intégration* du [Diagnostic](./diagnostics/overview.md), restreinte à cette facture ; une ligne de traitement ouvre la vue *Journal des traitements*. **Open Integration Errors →** ouvre la vue sans filtre.
+La carte **Erreurs récentes** liste les 8 derniers événements de `F564237` filtrés sur `level IN ('ERROR', 'FATAL')`. Chaque ligne affiche le badge de niveau, le code de cycle de vie et le triplet, le message et un horodatage relatif (*il y a 2 min*, *il y a 1 h*). Une ligne liée à une facture ouvre la vue *Erreurs d'intégration* du [Diagnostic](./diagnostics/overview.md), restreinte à cette facture ; une ligne de traitement ouvre la vue *Journal des traitements*. **Ouvrir les erreurs d'intégration →** ouvre la vue sans filtre.
 
 ---
 
@@ -28969,7 +28955,7 @@ La carte **Recent errors** liste les 8 derniers événements de `F564237` filtr�
 
 Une section repliée — *système, fichiers, JVM, contrôle de configuration, tables de la base, liens* — qui s'ouvre d'elle-même quand on clique sur une tuile du bandeau de santé.
 
-### Santé système
+### Système
 
 Métriques JVM, base et hôte. Les valeurs les plus surveillées sont colorées :
 
@@ -28986,7 +28972,7 @@ Métriques JVM, base et hôte. Les valeurs les plus surveillées sont colorées 
 
 Le sous-titre de la carte affiche, à droite, la **version du build et la date du build** issues de `nomaubl-version.properties`.
 
-### Raccourcis
+### Liens rapides
 
 Liste statique de raccourcis — les pages les plus utilisées par l'opérateur IT, ouvertes directement : **Journal des traitements** et **Erreurs d'intégration** (deux vues du [Diagnostic](./diagnostics/overview.md)), **Notifications**, **Traiter Document**, **Versions fichiers** et **Paramètres**.
 
@@ -28999,16 +28985,16 @@ Pour chaque chemin configuré (`appHome`, `processHome`, `dirInput`, `singleOutp
 
 Les valeurs de chemin contenant des jokers d'exécution (`%TEMPLATE%`, `%FILE_NAME%`) sont tronquées au premier joker rencontré ; le rapport porte alors sur le répertoire **le plus profond existant par sa forme** au-dessus. `dirOutput` est exclu : il est toujours couvert par `processHome`.
 
-### JVM · threads + GC
+### JVM · threads et GC
 
-Carte complémentaire de Santé système pour un diagnostic JVM plus poussé :
+Carte complémentaire de Système pour un diagnostic JVM plus poussé :
 
 - **Threads** — nombre courant + pic.
 - **Threads démon** — démons en cours.
 - **GC** — nom du collecteur + temps total passé en GC.
 - **Classes chargées** — compteur du class-loader, utile pour repérer une fuite metaspace.
 
-### Vérification de configuration
+### Contrôle de la configuration
 
 Valide la configuration *orientée connecteur* utilisée aujourd'hui par l'application. Les anomalies sont listées par zone avec une sévérité (rouge erreur, orange avertissement, bleu information). La vérification couvre :
 
@@ -29023,7 +29009,7 @@ Les ressources de validation (XSD / Schematron) sont embarquées dans le JAR.
 
 Une vérification propre s'affiche en `✔ 0 anomalie` en vert ; sinon la carte liste les anomalies par ordre de sévérité.
 
-### Tables de base
+### Tables de la base
 
 Nombre de lignes par table NomaUBL — factures (`F564231`), cycle de vie (`F564235`), validation (`F564236`), journal d'exécution (`F564237`), notifications (`F564253`), e-Reporting (`F564260`–`F564262`), auth (`F564250`–`F564252`, `F564254`). Utile pour repérer une croissance inattendue (par exemple une table de notifications qui devrait avoir quelques centaines de lignes mais en a des millions).
 
@@ -29052,12 +29038,12 @@ Le bouton Actualiser (ou l'ouverture de la page) appelle quatre endpoints en par
 
 | Endpoint | Alimente |
 |---|---|
-| `GET /api/system` | Santé système, JVM · threads + GC, Système de fichiers |
-| `GET /api/dashboard/tech` | Volume, Erreurs, Relances, Durée par document, Sessions actives, Tables de base, Erreurs récentes |
+| `GET /api/system` | Système, JVM · threads et GC, Système de fichiers |
+| `GET /api/dashboard/tech` | Volume, Erreurs, Relances, Durée par document, Sessions actives, Tables de la base, Erreurs récentes |
 | `GET /api/dashboard/log-tail` | Traitements en cours · direct (incrémental, sondage 5 s avec `since=`) |
-| `GET /api/dashboard/config-check` | Vérification de configuration |
+| `GET /api/dashboard/config-check` | Contrôle de la configuration |
 
-La carte Scheduler lit `GET /api/scheduler/status`. Chaque appel échoue indépendamment — une base mal configurée renvoie *Non configurée* sur la carte de données sans casser Santé système ou le journal en direct.
+La carte Planificateur lit `GET /api/scheduler/status`. Chaque appel échoue indépendamment — une base mal configurée renvoie *Non configurée* sur la carte de données sans casser la carte Système ou le journal en direct.
 
 ---
 
@@ -29066,7 +29052,7 @@ La carte Scheduler lit `GET /api/scheduler/status`. Chaque appel échoue indépe
 - **Surveiller Heap, ping base et espace disque.** Trois signaux d'alerte précoce — la dérive du heap avant un OOM, la latence base avant un blocage, le volume archive avant la saturation disque.
 - **Le flux Traitements en cours vaut mieux que `tail -f`.** Il montre les tâches du planificateur qui démarrent et se terminent en direct, les erreurs ressortent en rouge, et le flux résiste à une déconnexion SSH. À garder ouvert pendant une mise en production ou un import en lot — la plupart des régressions y apparaissent en quelques secondes, et la pastille verte pulsante indique si une exécution est réellement en cours.
 - **La vérification de configuration doit toujours être verte.** Un nombre d'anomalies non nul après un déploiement est le chemin le plus rapide vers « qu'est-ce qui a changé ? ». À lancer sur chaque environnement après chaque édition de configuration.
-- **Erreurs récentes plutôt que Tables de base.** En triage d'incident, le flux des erreurs récentes est plus dense au pixel ; la carte des tables sert au suivi de tendance sur plusieurs jours.
+- **Erreurs récentes plutôt que Tables de la base.** En triage d'incident, le flux des erreurs récentes est plus dense au pixel ; la carte des tables sert au suivi de tendance sur plusieurs jours.
 - **Une liste *Clients actifs* vide ne signifie pas que personne n'utilise l'application.** Avec l'auth activée, les sessions de plus d'une heure tombent de la liste — la base les conserve dans le cycle de vie. La carte montre *qui est là maintenant*, pas *qui était là ce matin*.
 - **Les pics de durée par document vont avec les creux de volume.** Quand une grande barre de l'onglet Volume est suivie d'un modèle lent le lendemain, la file remonte — l'équipe IT peut anticiper en ajustant la cadence du planificateur.
 
@@ -29162,7 +29148,7 @@ Les lignes se déplient et se replient avec des sous-totaux à chaque niveau ; u
 
 ## Accès
 
-Comme la [Synthèse](./billing-overview.md#access), la page suit le droit **Exploitation** du groupe Navigation de la page [Rôles](../configuration/security/roles.md). Les chiffres suivent la visibilité par société de l'utilisateur connecté.
+Accorder la page **Statistiques** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; le serveur et l'outil `status_statistics` de l'assistant IA contrôlent le même droit. Les chiffres suivent les sociétés et les [filtres de lignes](../configuration/security/roles.md#filtres-de-lignes) du rôle de l'utilisateur connecté.
 
 ---
 
@@ -29172,6 +29158,7 @@ Comme la [Synthèse](./billing-overview.md#access), la page suit le droit **Expl
 - **Comparer ce qui est comparable.** *Ce mois-ci* est comparé au mois précédent entier, *Cette année* aux mêmes dates un an plus tôt : choisir la période en conséquence avant de lire les écarts.
 - **Passer le tableau détaillé en *Montant HT*** avant une réunion avec la comptabilité : le classement des activités change souvent.
 - **Construire un rapport récurrent dans l'[Explorateur](./explorer.md)** quand une ventilation manque sur la page ; l'analyse fournie *Statistiques des statuts* est un bon point de départ.
+- **L'envoyer par e-mail.** Un [rapport quotidien](../sync/scheduled-jobs/daily-digest.md#business-dashboards) peut envoyer la page en PDF ou en Excel, sur le mois écoulé ou le mois en cours, telle que la voit un rôle donné.
 
 ---
 
@@ -29192,7 +29179,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ## Barre d'outils
 
-Au-dessus de la grille, deux rangées : la **période**, la **direction** et **Exclure les erreurs traitées**, puis le **statut par étape**. Viennent ensuite le panneau [Filtres avancés](#advanced-filters) et la barre d'outils de la grille (recherche, **Exécuter**, actions groupées).
+Au-dessus de la grille, deux rangées : la **période**, la **direction** et **Exclure les erreurs traitées**, puis le **statut par étape**. La barre d'outils porte aussi **+ Nouvelle facture**, proposé aux rôles autorisés à créer des factures (`invoice.create`), qui ouvre la [fenêtre de création / modification](#create-invoice). Viennent ensuite le panneau [Filtres avancés](#advanced-filters) et la barre d'outils de la grille (recherche, **Exécuter**, actions groupées).
 
 ### Période
 
@@ -29257,7 +29244,7 @@ Les colonnes adossées à une liste de référence (Statut, statut e-reporting, 
 
 ### Barre d'outils de la grille
 
-À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)** et **Retraiter la sélection (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend) et [Retraitement](#reprocess)). Une nouvelle facture se crée depuis les **Actions rapides** du tableau de bord [Exploitation](./dashboard.md).
+À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)** et **Retraiter la sélection (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend) et [Retraitement](#reprocess)).
 
 ---
 
@@ -29741,9 +29728,9 @@ Le PDF affiché dans l'onglet PDF est attaché automatiquement. Si le PDF n'a pa
 
 Pendant l'envoi, la modale est désactivée par un voile jusqu'à la confirmation du serveur SMTP. Un bandeau vert confirme l'envoi ; la modale se ferme automatiquement après ~2 s.
 
-### Modale de création / édition de facture
+### Modale de création / édition de facture \{#create-invoice\}
 
-Ouverte depuis **Nouvelle Facture** dans les Actions rapides du tableau de bord [Exploitation](./dashboard.md), ou depuis les boutons **Modifier l'UBL** / **Copier** de l'onglet Résumé. Permet de créer une facture vierge ou de modifier une facture existante. La modale prend l'apparence d'une facture imprimable. L'utilisateur remplit le formulaire ; à l'enregistrement, NomaUBL génère le document UBL correspondant.
+Ouverte depuis **+ Nouvelle facture** dans la barre d'outils, ou depuis les boutons **Modifier l'UBL** / **Copier** de l'onglet Résumé. Permet de créer une facture vierge ou de modifier une facture existante. La modale prend l'apparence d'une facture imprimable. L'utilisateur remplit le formulaire ; à l'enregistrement, NomaUBL génère le document UBL correspondant.
 
 Modifier une facture existante ne réinitialise plus son `cbc:CustomizationID` au défaut EN16931. Le formulaire porte maintenant la valeur `customizationId` du UBL source et l'écrit verbatim — les nouvelles factures restent par défaut à `urn:cen.eu:en16931:2017`.
 
@@ -30363,7 +30350,7 @@ Source: https://docs.nomana-it.fr/fr/nomaubl/application/vat-declaration/
 
 Agrège chaque facture d'une période sur les lignes du formulaire CA3 — ventes / achats × France / intra-UE / hors UE × taux de TVA × type de facture — avec dépliement par paliers jusqu'aux factures individuelles derrière chaque montant, et exports en un clic vers Excel ou PDF au format CA3.
 
-L'écran **Déclaration de TVA** agrège chaque facture comptabilisée sur une période sur les lignes du formulaire **CA3** français — ventes / achats × France / intra-UE / hors UE × taux de TVA × type de facture. Chaque cellule se déplie jusqu'aux factures individuelles qui la composent ; le résultat s'exporte vers Excel pour la comptabilité ou vers un PDF au format CA3, prêt à être transmis au comptable.
+L'écran **Déclaration de TVA** agrège chaque facture comptabilisée sur une période sur les lignes du formulaire **CA3** français — ventes / achats × France / intra-UE / hors UE × taux de TVA × type de facture. Chaque taux se déplie en types d'opération puis en factures individuelles ; le résultat s'exporte vers Excel pour la comptabilité ou vers un PDF au format CA3, prêt à être transmis au comptable.
 
 Utilisez cette page quand :
 
@@ -30371,7 +30358,7 @@ Utilisez cette page quand :
 - vous devez rapprocher une ligne CA3 des factures qui la composent — quels clients, quels numéros, quels montants ;
 - vous voulez une synthèse imprimable de la période à joindre au dossier comptable.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Le filtre de période s'applique à la **date d'émission de la facture** — celle imprimée sur la facture elle-même — donc la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures propose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) : un clic sur un montant de la matrice TVA ouvre la liste Factures avec le bon ensemble.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Le filtre de période s'applique à la **date d'émission de la facture** — celle imprimée sur la facture elle-même — donc la période reste stable même si les données sous-jacentes sont reconstruites plus tard.
 
 La matrice est servie depuis les lignes de détail TVA enregistrées (`F564234`), sans relecture de chaque UBL à chaque chargement — la page s'ouvre donc en **quelques secondes que la période contienne 2 000 ou 200 000 factures**. Pour conserver ce comportement, laissez *Enregistrer les détails TVA* activé sous *Paramètres → Connecteurs → db-nomaubl → Tables* — voir [Stockage des détails](../configuration/database-connectors/nomaubl.md#stockage-des-détails).
 
@@ -30433,7 +30420,7 @@ Le tableau se lit par **sens**, puis par **zone**, puis par **taux** :
 | **Taux** (`20 %`, `10 %`…, *Sans taux*) | Une ligne par taux présent dans la zone, du plus élevé au plus faible, repliée. Sa flèche ouvre une ligne par routage BAR (`B2B`, `B2C`, `B2BINT`, `B2G`…), dont la flèche ouvre les factures — document, type, société, base et TVA, jusqu'à **200 lignes** (l'export Excel contient la liste complète). |
 | **TVA à payer** / **Crédit de TVA** | La TVA nette de la période, *Collectée − déductible*. |
 
-Au survol, les montants des lignes de taux et de routage proposent *Voir les factures* : un clic ouvre la [liste des factures](./invoices.md) sur le même sens, la même zone et la même période, en date d'émission, et sur le même routage pour une ligne de routage. Le taux lui-même n'est pas transmis comme filtre. Les montants s'affichent dans la couleur normale.
+Les montants ne renvoient pas à la [liste des factures](./invoices.md), qui ne sait filtrer ni par taux de TVA ni selon les deux exclusions : les factures d'un chiffre se lisent en dépliant ses lignes de taux et de routage, ou dans la feuille *Détails* de l'export Excel. Montants, taux et pourcentages suivent le format numérique de la langue de l'interface.
 
 ### Règles de classement par zone
 
@@ -32248,9 +32235,10 @@ Chaque rapport est une ligne du catalogue. Le panneau d'édition comporte quatre
 | Champ | Obligatoire | Description |
 |---|---|---|
 | **Nom** | oui | Texte libre. Affiché dans la liste du catalogue et en tête du corps de l'email. Exemple : *Comptabilité · ACME*. |
-| **Rapport** | oui (défaut : `Erreurs d'intégration`) | Ce que couvre le rapport. **Erreurs d'intégration** rassemble les évènements en échec de la page [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) — le comportement d'origine. **Toutes les factures archivées** couvre à la place chaque facture archivée sur la fenêtre, et la feuille jointe porte les colonnes de la page [E-Documents](../../application/edocuments.md) et respecte les filtres par colonne ci-dessous ; un rapport peut ainsi servir aussi d'extraction d'archive quotidienne. **Analyse enregistrée (Explorateur)** et **Tableau de bord (Explorateur)** envoient une analyse ou un tableau de bord complet — voir les deux champs ci-dessous. |
+| **Rapport** | oui (défaut : `Erreurs d'intégration`) | Ce que couvre le rapport. **Erreurs d'intégration** rassemble les évènements en échec de la page [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) — le comportement d'origine. **Toutes les factures archivées** couvre à la place chaque facture archivée sur la fenêtre, et la feuille jointe porte les colonnes de la page [E-Documents](../../application/edocuments.md) et respecte les filtres par colonne ci-dessous ; un rapport peut ainsi servir aussi d'extraction d'archive quotidienne. **Analyse enregistrée (Explorateur)** et **Tableau de bord (Explorateur)** envoient une analyse ou un tableau de bord complet — voir les deux champs ci-dessous. **Synthèse de la facturation** et **Statistiques** envoient les chiffres d'un [tableau de bord métier](#business-dashboards). |
 | **Analyse** / **Tableau de bord** | quand le rapport est *Analyse enregistrée (Explorateur)* ou *Tableau de bord (Explorateur)* | L'analyse ou le tableau de bord de l'[Explorateur](../../application/explorer.md) à envoyer, présenté avec son nom et son public. Il est exécuté sur la fenêtre de rétrospective — sa propre période est remplacée — et joint au message. |
 | **Pièce jointe** | avec une analyse ou un tableau de bord | **Excel — les données, une feuille par tuile**, ou **PDF — graphiques et données, mise en page du rapport d'audit**. Produite sur le serveur au moment de l'envoi. |
+| **Période** / **Factures** / **Vue du rôle** / **Pièce jointe** | avec *Synthèse de la facturation* ou *Statistiques* | Voir [Tableaux de bord métier](#business-dashboards). |
 | **Destinataires** | oui | Une ou plusieurs adresses email, séparées par virgule ou point-virgule. Chaque adresse reçoit le même email — il n'y a pas de personnalisation par adresse ici ; créez un autre rapport si les destinataires doivent voir des coupes différentes. |
 | **Activé** | oui (défaut : `on`) | Quand il vaut `off`, le rapport est conservé dans le catalogue mais ignoré au moment de l'envoi. Pratique pour mettre en pause un rapport pendant une fenêtre de maintenance sans perdre la configuration. |
 
@@ -32261,6 +32249,7 @@ Chaque rapport est une ligne du catalogue. Le panneau d'édition comporte quatre
 | **Heure d'envoi** | oui (défaut : `07:00`) | Heure de la journée à laquelle le rapport s'exécute. Heures / minutes ; les secondes sont ignorées. |
 | **Fuseau horaire** | oui (défaut : fuseau du serveur) | Un fuseau IANA (par exemple `Europe/Paris`). Chaque rapport tourne dans son propre fuseau, ce qui permet à une installation multi-régions d'envoyer un rapport à 07:00 Paris et un autre à 07:00 New York. |
 | **Fenêtre d'analyse** | oui (défaut : `hier et aujourd'hui` = 1 jour) | Profondeur de la collecte d'évènements. Valeurs : `today` (jour courant), `1 day` (hier + aujourd'hui — la valeur par défaut), `7 days`, `30 days`, ou une valeur personnalisée `N days`. La fenêtre est glissante et se termine à l'heure d'envoi. |
+| **Jour du mois** | non (défaut : vide = tous les jours) | `1` à `28` n'envoie le rapport que ce jour du mois — `1` avec *Mois précédent* envoie la synthèse du mois écoulé le 1er. **Envoyer maintenant** l'ignore. Disponible pour tous les rapports. |
 
 ### 3. Filtre de sévérité
 
@@ -32289,6 +32278,19 @@ Le rapport porte une liste de paires `(colonne, valeur)` qui restreignent le jeu
 | **Business unit** | `MU-LYO`, `MU-PAR` | Routage par BU. |
 
 Les filtres se combinent en **ET**. Filtres vides = toutes les lignes. Ajouter deux valeurs sur la même colonne demande deux rapports.
+
+### Tableaux de bord métier \{#business-dashboards\}
+
+Avec **Synthèse de la facturation** ou **Statistiques**, le rapport envoie les chiffres de la page [Synthèse](../../application/billing-overview.md) ou [Statistiques](../../application/statistics.md) ; les filtres de sévérité et par colonne sont masqués.
+
+| Champ | Par défaut | Description |
+|---|---|---|
+| **Période** | Mois précédent | **Mois précédent** (du 1er au dernier jour du mois écoulé), **Mois en cours** (du 1er du mois à aujourd'hui) ou **Fenêtre de jours**. Comparée à la période précédente de même nature, comme sur la page. |
+| **Factures** | Ventes | **Ventes** ou **Achats**. |
+| **Vue du rôle** | Tout (sans restriction) | Le rapport montre ce que voit un utilisateur de ce rôle : ses sociétés et ses [filtres de lignes](../../configuration/security/roles.md#filtres-de-lignes). Le rôle doit donner accès à la page, sinon l'exécution échoue avec un message qui nomme le rôle. Un rapport par rôle envoie à chaque groupe de destinataires son propre périmètre. |
+| **Pièce jointe** | Excel | **PDF — indicateurs, graphiques et tableaux de la page**, au format du rapport d'audit, ou **Excel — une feuille par tableau**. |
+
+La pièce jointe reprend les sections de la page : pour la Synthèse, les chiffres clés avec la période précédente, le montant facturé par mois, ce qui demande une décision, la répartition par société, par type d'opération et, pour les ventes, l'e-reporting ; pour les Statistiques, les chiffres clés, les étapes, l'évolution, les temps d'attente, les statuts et le détail par activité, statut et motif. Elle est en français, sauf si la langue de l'instance est l'anglais. Le message indique la période et la présence du rapport joint ; il part même quand la période est vide.
 
 ---
 
@@ -39624,11 +39626,11 @@ Des messages en ligne s'affichent sous le tableau :
 ## NomaUBL — Rôles
 Source: https://docs.nomana-it.fr/fr/nomaubl/configuration/security/roles/
 
-Gestion des rôles NomaUBL : droits en lignes dans F564254, répartis sur quatre onglets — Accès (pages + cartes du tableau de bord + fonctionnalités), Actions (liste blanche par bouton), Périmètre des données (sociétés + filtres de lignes), Membres. Liste sous forme de cartes avec duplication / suppression, libellés de pages traduits depuis le menu, droits granulaires par action et filtres de lignes par colonne qui s'appliquent aux listes, aux requêtes par ligne et au flux PDF généré.
+Gestion des rôles NomaUBL : droits en lignes dans F564254, répartis sur quatre onglets — Accès (pages + fonctionnalités), Actions (liste blanche par bouton), Périmètre des données (sociétés + filtres de lignes), Membres. Liste sous forme de cartes avec duplication / suppression, libellés de pages traduits depuis le menu, droits granulaires par action et filtres de lignes par colonne qui s'appliquent aux listes, aux requêtes par ligne et au flux PDF généré.
 
 Cet écran gère le **contrôle d'accès par rôle** de NomaUBL. Chaque rôle regroupe quatre familles de droits :
 
-- La liste des **pages** accessibles au rôle (et la liste des **cartes du tableau de bord** qu'il voit).
+- La liste des **pages** accessibles au rôle.
 - Une **liste blanche d'actions** — les opérations autorisées (Modifier, Supprimer, Renvoyer, Pousser un statut…).
 - Un **périmètre des données** — les sociétés auxquelles le rôle est limité **et** d'éventuels filtres de lignes qui réduisent encore l'ensemble visible par valeur de colonne.
 - Les **membres** affectés au rôle.
@@ -39678,7 +39680,7 @@ Le **Nom** du rôle *(visible uniquement à la création)* et la **Description**
 
 ## Onglet — Accès
 
-Définit **ce que le rôle peut atteindre** : fonctionnalités, pages et cartes du tableau de bord.
+Définit **ce que le rôle peut atteindre** : fonctionnalités et pages.
 
 ### Fonctionnalités
 
@@ -39731,7 +39733,7 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 
 | Groupe | Pages (identifiant) |
 |---|---|
-| **Navigation** | Exploitation (`dashboard`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
+| **Navigation** | Synthèse (`synthese`), Exploitation (`dashboard`), Statistiques (`statistics`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
 | **Synchronisation** | Récupérer Entrée (`fetchinput`), Récupérer les imports (`import`), Récupérer les statuts (`retrievestatuses`), Tâches planifiées (`scheduledjobs`). |
 | **Traitement** | Traiter Document (`process`), Extraire & Traiter (`extractandprocess`), Traiter API (`processapi`). |
 | **UBL** | Validation UBL (`validate`), Éditeur XSL (`xsleditor`), Visionneuse XML (`xmlviewer`), Défauts UBL (`ubldefaults`). |
@@ -39746,27 +39748,15 @@ Quelques pastilles portent une aide :
 - **Dossiers surveillés** accorde la configuration des dossiers ; leur planification se trouve dans *Tâches planifiées*.
 - **Promotion** demande aussi la fonctionnalité *Settings access*. Voir [Promotion](../../management/promotion.md).
 - **Développeur** ouvre la [référence développeur](../../references/developer.md) : tables, clés de configuration, flux, impact, API.
-- **Exploitation** ouvre aussi la [Synthèse](../../application/billing-overview.md) et les [Statistiques](../../application/statistics.md), qui n'ont pas d'identifiant de page propre ; **Règles de gestion** ouvre aussi les [Schematrons](../../references/schematrons.md). Un rôle qui voit Exploitation arrive sur la Synthèse après la connexion.
+- **Synthèse** et **Statistiques** sont des pages à part entière, contrôlées par le serveur et par les outils de l'assistant IA. La mise à jour les accorde toutes les deux, une seule fois, à chaque rôle qui avait Exploitation, pour que personne ne perde une page ; un retrait ultérieur sur un rôle est conservé.
+- **Règles de gestion** ouvre aussi les [Schematrons](../../references/schematrons.md).
+- Après la connexion, un rôle qui a la Synthèse s'ouvre sur elle ; un rôle qui ne l'a pas s'ouvre sur la première page qu'il accorde, dans l'ordre du menu (Exploitation, Statistiques, Tableau de bord IT, E-Invoicing…).
 
 Règles :
 
 - **All** / **None**, au-dessus des cartes, accordent ou retirent toutes les pages d'un coup.
 - **Liste vide = toutes les pages autorisées.** Même convention que les autres listes : un rôle sans filtre voit tout.
 - Le rôle `admin` créé à l'initialisation reçoit tous les identifiants de page ci-dessus, y compris Déclaration de TVA, Rapports et Historique des mises à jour.
-
-### Cartes du tableau de bord
-
-Chaque bloc du tableau de bord [Exploitation](../../application/dashboard.md) est une permission individuelle indexée par `dashboard.<carte>`. Les cartes se présentent comme les pages — une carte par groupe avec ses pastilles, son compteur et son lien **tout** / **aucun** :
-
-| Groupe | Cartes |
-|---|---|
-| **Indicateurs principaux** | `dashboard.total`, `dashboard.inflight`, `dashboard.errors-tech`, `dashboard.errors-business`, `dashboard.status-cards` (cartes de statut 213 / 9905 / 9907 et 207 / 208 / 210) |
-| **Graphiques et widgets** | `dashboard.volume`, `dashboard.recent`, `dashboard.stale`, `dashboard.error-rules`, `dashboard.ereporting`, `dashboard.round-trip` (l'éditeur propose aussi `dashboard.pipeline` et `dashboard.per-company`, qu'aucun bloc de la page n'utilise) |
-| **Sections** | `dashboard.quick-actions` |
-
-- **Liste vide = toutes les cartes visibles**.
-- Une liste remplie est une liste blanche stricte — les cartes masquées sont **ignorées côté serveur**, leur SQL n'est jamais exécuté et leurs données ne partent pas sur le réseau.
-- Les mêmes boutons **All** / **None** et liens **tout** / **aucun** par groupe sont disponibles, comme sur les cartes des pages.
 
 ---
 
@@ -39798,7 +39788,7 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 
 | Groupe | Action | Clé | Effet |
 |---|---|---|---|
-| **Factures** | Créer | `invoice.create` | *Nouvelle Facture* dans les Actions rapides du tableau de bord Exploitation. |
+| **Factures** | Créer | `invoice.create` | Le bouton *Nouvelle facture* de la liste [E-Invoicing](../../application/invoices.md). |
 | **Factures** | Modifier | `invoice.edit` | Met à jour les champs d'une facture depuis la fenêtre détail ou le panneau d'édition. |
 | **Factures** | Supprimer | `invoice.delete` | Suppression définitive d'une facture et de tous ses enregistrements fils. |
 | **Factures** | Supprimer un événement du cycle de vie | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |
@@ -39834,34 +39824,34 @@ Un tableau ligne par ligne des codes société (`KCO`) auxquels le rôle est res
 
 ### Filtres de lignes
 
-Une restriction plus fine : pour toute colonne de catalogue marquée comme filtrable, le rôle peut être limité à une ou plusieurs **valeurs exactes**. Cas d'usage typique — un client externe qui ne doit voir que les factures émises pour sa propre clé alpha (`UHALKY`).
+Une restriction plus fine : sur un champ, le rôle peut être limité à une ou plusieurs **valeurs exactes**. Cas d'usage typique — un client externe qui ne doit voir que les factures émises pour sa propre clé alpha (`UHALKY`).
 
-Chaque filtre est une carte avec :
+Le **sélecteur de colonne** liste chaque champ une seule fois, **par portée** :
 
-1. Un **sélecteur de colonne** avec recherche, qui liste toutes les colonnes filtrables des quatre catalogues :
-   - **Factures** (colonnes d'en-tête : `UHALKY`, `UHAN8`, nom du client, référence contrat…).
-   - **Erreurs d'intégration** (colonnes filtrables du catalogue *Erreurs d'intégration*).
-   - **Journal des traitements** (colonnes du catalogue *Journal des traitements*).
-   - **E-Reporting** (colonnes du catalogue *E-Reporting*).
-2. Une liste de **valeurs** pour la colonne choisie, chacune sur sa propre ligne avec son bouton **×**. **+ Ajouter une valeur (OU)** ajoute une autre valeur.
-3. Un bouton **×** au niveau de la carte pour supprimer le filtre entier.
+| Groupe | Champs | Protège |
+|---|---|---|
+| **Clés — toutes les tables (doc, dct, kco)** | *Numéro de document*, *Type de document*, *Société*. | Toutes les tables qui portent ces clés. |
+| **Document (F564230) — toutes les tables liées** | Les champs du document archivé : code activité, unité d'activité, sous-type, fichier source, travail, programme, routage… | Toutes les tables liées au document. |
+| **Facture (F564231)** | L'en-tête de facture : clé alpha du client, nom du client, contrat… | Cette table. |
+| **Constats de validation (F564236)** | Sévérité, source, règle… | Cette table. |
+| **Journal des traitements** / **E-reporting** | Leurs propres colonnes. | Cette table. |
 
-Sous la liste, **+ Ajouter un filtre** permet à un même rôle de combiner des filtres sur des colonnes différentes.
+Chaque entrée s'affiche `libellé · CHAMP`. Pour le champ choisi, saisir une ou plusieurs valeurs (*Value (exact match)*) ; **+ Add value (OR)** ajoute une valeur, le **×** retire une valeur ou le filtre entier. **+ Add row filter** combine des filtres sur des champs différents. Comme la plupart de l'éditeur, ces libellés sont en anglais ; les titres de portée suivent la langue de l'interface.
 
 #### Règles de combinaison
 
 | Cas | Combiné en |
 |---|---|
-| Plusieurs **valeurs** sur la **même colonne** | `OU` — le rôle voit les lignes qui correspondent à **au moins une** des valeurs. |
-| Plusieurs **colonnes** dans la liste des filtres | `ET` — le rôle voit uniquement les lignes qui satisfont **chaque** contrainte. |
+| Plusieurs **valeurs** sur le **même champ** | `OU` — le rôle voit les lignes qui correspondent à **au moins une** des valeurs. |
+| Plusieurs **champs** dans la liste des filtres | `ET` — le rôle voit uniquement les lignes qui satisfont **chaque** contrainte. |
 | Droit **Sociétés** + filtres de lignes | `ET` — les deux doivent être satisfaits. |
 
 #### Où s'appliquent les filtres
 
-Un filtre de lignes n'est **pas** un simple voile d'IHM : il est appliqué partout où une ligne interdite pourrait fuir.
+Un filtre de lignes n'est **pas** un simple masquage dans l'interface : il est appliqué partout où une ligne interdite pourrait apparaître.
 
-- Les **listes** (Factures, E-Reporting, Erreurs d'intégration, Journal des traitements) — le filtre est ajouté au SQL.
-- Le **tableau de bord** — compteurs, graphiques et widgets respectent le filtre du rôle.
+- **Chaque liste qui possède le champ**, sous le nom que cette liste lui donne (client, code activité, travail, numéro UBL, statut…). Une liste sans ce champ ignore le filtre : un rôle limité à la sévérité `FATAL` garde ses factures, ses documents et ses tableaux de bord, et ne voit que les constats bloquants.
+- Les **tableaux de bord** — Synthèse, Exploitation, Statistiques, comptages par statut — et la fenêtre **E-Documents**, qui s'ouvre selon les mêmes règles que sa liste.
 - Les **endpoints par ligne** — cycle de vie, lignes, téléchargement XML, rendu PDF, push de statut, suppression, renvoi, envoi par mail.
 - Le **flux PDF généré** — une ligne interdite ne peut même pas être transformée en PDF.
 
@@ -39901,13 +39891,12 @@ Chaque droit est une ligne dans `F564254`. La structure :
 F564254
   PMROLE       — nom du rôle (FK vers F564251.RLNAME)
   PMCRAPPID    — type de droit : 'page' / 'company' / 'feature' / 'action'
-                                  / 'dashboard-card' / 'row-filter'
+                              / 'row-filter'
   PMCRAPPVAL   — valeur, encodée par type :
                    page             → identifiant de page  (ex. 'invoices')
                    company          → code KCO             (ex. '00001')
                    feature          → drapeau              ('settings', 'readonly', 'actions-whitelist')
                    action           → clé d'action         (ex. 'invoice.delete')
-                   dashboard-card   → clé de carte         (ex. 'dashboard.volume')
                    row-filter       → 'colonne=valeur'     (ex. 'UHALKY=123456')
   PMENABL      — '1' activé / '0' désactivé (utilisé lors du bootstrap spécifique au dialecte)
 ```
@@ -39937,7 +39926,7 @@ Confirmer supprime le rôle et toutes les lignes de droits de `F564254` qui lui 
 - **Coupler *Lecture seule* et *Actions* désactivées** pour les comptes de conformité / audit — les deux couches se renforcent.
 - **Le tableau *Sociétés* est l'outil principal de cloisonnement multi-tenant.** Laisser le tableau vide neutralise tout filtrage par société pour le rôle.
 - **D'abord les filtres de lignes, ensuite la liste blanche d'actions** pour cadrer un utilisateur externe. Le filtre de lignes masque ce qu'il ne doit pas voir ; la liste blanche d'actions contrôle ce qu'il peut faire avec ce qu'il voit.
-- **La liste blanche de cartes du tableau de bord s'exécute côté serveur** — les cartes désactivées ne déclenchent même pas leur SQL. Pratique pour masquer des widgets coûteux à des rôles peu privilégiés.
+- **Un rôle voit le tableau de bord Exploitation en entier ou pas du tout.** Pour limiter une équipe aux chiffres métier, accorder la Synthèse et les Statistiques sans Exploitation.
 - **Dupliquer pour dériver un rôle.** Partir d'un rôle existant en ajustant deux ou trois droits est plus rapide que reconstruire la liste depuis zéro — et le résultat reste proche de l'intention du rôle source.
 - **Ré-exécuter *Initialiser la base*** *(Database Connectors → NomaUBL)* si les droits par défaut des rôles `admin` ou `viewer` ont disparu — l'opération réinjecte les lignes sans toucher aux rôles personnalisés.
 - **Supprimer un rôle uniquement après avoir réaffecté ses membres.** Une fois supprimé, les membres perdent l'accès à tout jusqu'à réaffectation. L'onglet *Membres* est le moyen le plus rapide de voir qui serait touché.
@@ -40769,6 +40758,15 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Diagnostic : vues en cartes.** Les quatre vues du Diagnostic — Erreurs d'intégration, Journal des traitements, Anomalies, Journal serveur — se choisissent dans une rangée de cartes compactes sous l'en-tête, chacune indiquant ce qu'elle montre, au lieu du sélecteur en haut à droite ; seules les vues accordées au rôle apparaissent.
 - **Explorateur : Analyses et Tableaux de bord en onglets.** Le sélecteur en haut à droite cède la place à deux onglets sur la première ligne de l'Explorateur, Analyses et Tableaux de bord, chacun avec le nombre d'éléments enregistrés ; le choix de l'analyse ou du tableau de bord enregistré et Enregistrer se trouvent sur la même ligne, à droite.
 - **Déclaration de TVA repensée.** Trois indicateurs ouvrent la page — TVA collectée, TVA déductible et TVA à payer (ou crédit de TVA), chacun avec sa base, son nombre de factures et l'évolution par rapport au mois ou au trimestre précédent. Une seule barre de filtres, comme sur les tableaux de bord : Mois / Trimestre, année, mois ou trimestre, société, les deux exclusions sous forme d'interrupteurs avec leur explication au survol, Excel et PDF. Le tableau se lit par sens, puis par zone, puis par taux : Ventes et Achats portent leurs totaux sur leur ligne, France, Intra-UE et Hors UE apparaissent une seule fois avec leur sous-total, chaque taux en dessous ; les montants restent dans la couleur normale et ouvrent les factures au survol. La TVA nette n'est plus affichée en rouge. Les libellés de période sont traduits. Dans le PDF CA3, les montants s'écrivent 125 315,78, les taux 5,5 % et la période 01/09/2026 – 30/09/2026.
+- **Synthèse et Statistiques : des droits à part.** Les deux tableaux de bord métier ne dépendent plus du droit sur le tableau de bord Exploitation : chacun a sa propre page dans les rôles (Synthèse, Statistiques), vérifiée aussi par le serveur et par les outils de l'assistant IA. À la mise à jour, chaque rôle qui avait le tableau de bord Exploitation reçoit les deux, une seule fois, si bien que personne ne perd de page ; les retirer ensuite d'un rôle est conservé. Un rôle sans la Synthèse s'ouvre sur la première page qu'il autorise.
+- **Filtres de lignes des rôles sur les colonnes du document.** Un rôle restreint sur une colonne du document archivé — code activité, établissement, sous-type, fichier source, job, programme, routage… — ou sur le sens voyait des tableaux de bord, des compteurs de statut et une Synthèse vides, et ne pouvait pas ouvrir ses propres factures depuis la liste. Ces filtres s'appliquent désormais partout comme dans la liste des factures.
+- **Filtres de lignes des rôles d'une liste à l'autre.** Un filtre de lignes s'applique désormais à toutes les listes qui possèdent le champ, sous le nom que chacune lui donne (client, code activité, job, numéro UBL, statut…), et il est ignoré sur une liste qui n'a pas ce champ : un rôle limité à la sévérité FATAL conserve ses factures, ses documents et ses tableaux de bord au lieu de ne plus rien voir. Une fenêtre E-Documents s'ouvre selon les mêmes règles que sa liste.
+- **Rôles : filtres de lignes par table, cartes du tableau de bord supprimées.** Le choix d'un filtre de lignes présente chaque champ une seule fois, par portée : les clés doc, dct et kco, qui sécurisent toutes les tables qui les possèdent ; les champs du document archivé (F564230), qui sécurisent toutes les tables qui lui sont liées ; puis les champs de chaque autre table (facture, constats de validation, journal des traitements, e-reporting), qui ne sécurisent que leur table. Les droits carte par carte du tableau de bord Exploitation disparaissent : un rôle voit le tableau de bord ou non ; les droits déjà enregistrés sont ignorés et supprimés au prochain enregistrement du rôle. La colonne « Réf. contrat » des erreurs d'intégration est la clé alpha du client, comme dans la liste des factures.
+- **Nouvelle facture depuis E-Invoicing.** La création d'une facture passe par un bouton Nouvelle facture dans la liste E-Invoicing (droit invoice.create). Le bloc Actions rapides du tableau de bord Exploitation est supprimé.
+- **Déclaration de TVA : sans renvoi vers la liste.** Les montants n'ouvrent plus la liste des factures, qui ne pouvait reproduire ni le taux ni les exclusions ; chaque taux se déplie toujours en types d'opération puis en factures. Les montants suivent la langue de l'interface.
+- **Tableau de bord IT traduit.** Le titre, la description et toutes les cartes du tableau de bord IT sont traduits.
+- **Récapitulatif quotidien : les tableaux de bord métier.** Un récapitulatif peut envoyer la Synthèse ou les Statistiques, en PDF (indicateurs, graphiques et tableaux de la page) ou en Excel, sur le mois précédent, le mois en cours ou la fenêtre du récapitulatif, pour les ventes ou les achats. Il peut être produit tel qu'un rôle le voit — ses sociétés et ses filtres de lignes — pour que chaque groupe de destinataires ne reçoive que son périmètre. Tout récapitulatif peut n'être envoyé qu'un jour du mois (par exemple le 1er, la synthèse du mois écoulé) ; « Envoyer maintenant » l'ignore.
+- **PDF : signe euro dans les notes en italique.** Dans les notes sous le titre d'une section, le signe euro ne se colle plus au mot suivant.
 - **Assistant IA : nouvelles pages et deux outils.** L'assistant connaît la Synthèse, les Statistiques, l'Explorateur et les étapes des factures, et lit les chiffres des deux tableaux de bord métier : billing_overview (chiffre d'affaires, TVA, avoirs, taux de transmission, décisions, par société et par type d'opération, comparés à la période précédente) et status_statistics (factures par étape, statuts, motifs, temps d'attente, code activité × statut × motif avec la période précédente). Comme il lit le rapport d'implémentation, il connaît aussi les périodes par défaut et les règles des tableaux de bord de l'instance.
 - **Exports des listes avec libellés.** Dans toutes les listes, l'export CSV ou Excel d'une colonne associée à une liste de valeurs (société, type de pièce, code activité, motif…) écrit désormais le code accompagné de son libellé, comme à l'écran, et non plus le code seul.
 - **Tableaux de bord Exploitation et IT réorganisés.** L'ancien tableau de bord s'appelle désormais Exploitation, s'ouvre sur le mois en cours et s'organise autour de ce que l'équipe a à traiter, avec le même en-tête que les autres pages et le même sélecteur Ventes / Achats que la Synthèse, que suivent tous les blocs. Sous une ligne de synthèse de la période, trois files de travail — en cours (suivi automatique), à corriger puis renvoyer (informatique), nouvelle facture à émettre (service client) — affichent chacune son total et son détail par statut, libellé d'abord et code en petite étiquette ; chaque nombre ouvre les factures concernées. Viennent ensuite un graphique d'activité dont la légende porte les totaux de la période (à la place de la barre de répartition séparée), regroupé par semaine au-delà de deux mois et par mois au-delà d'un an ; côte à côte, les factures bloquées depuis le plus longtemps et les derniers événements, en clair ; puis une rangée avec les règles les plus en échec, le délai de la plateforme et l'e-reporting. La répartition par société passe dans la Synthèse. Le tableau de bord IT est réorganisé de la même façon : une bande d'état de six tuiles (application, base de données, planificateur, disque, mémoire, configuration — en vert, orange ou rouge, chacune ouvrant son détail), les quatre cartes d'action (échecs d'envoi, en attente de revue, à retraiter, à retraiter en entier) sur une ligne, chiffres alignés, une carte unique pour les 14 derniers jours avec des onglets — documents traités par jour avec ceux aujourd'hui en erreur technique (une barre ouvre les factures du jour), erreurs, relances, durée par document — ce qui tourne en ce moment (processus, événements en direct, planificateur, sessions), les erreurs récentes, et les détails techniques (système, fichiers, JVM, contrôle de configuration, tables de la base, liens) repliés en bas ; rien n'est retiré.

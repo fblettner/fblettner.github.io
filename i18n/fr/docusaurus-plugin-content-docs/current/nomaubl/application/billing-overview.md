@@ -276,7 +276,7 @@ Chaque ligne donne le montant et le nombre de factures ; un clic ouvre [E-Invoic
 
 ## Accès \{#access\}
 
-La page suit le droit **Exploitation** du groupe Navigation de la page [Rôles](../configuration/security/roles.md) : un rôle qui voit le tableau de bord Exploitation voit aussi la Synthèse, sans page supplémentaire à accorder. Les chiffres suivent la visibilité par société de l'utilisateur connecté. Avec une licence restreinte, l'application s'ouvre sur le tableau de bord [Exploitation](./dashboard.md).
+Accorder la page **Synthèse** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; le serveur et l'outil `billing_overview` de l'assistant IA contrôlent le même droit. Les chiffres suivent les sociétés et les [filtres de lignes](../configuration/security/roles.md#filtres-de-lignes) du rôle de l'utilisateur connecté. Un rôle qui a cette page s'ouvre sur elle après la connexion ; avec une licence restreinte, l'application s'ouvre sur le tableau de bord [Exploitation](./dashboard.md).
 
 ---
 
@@ -286,3 +286,4 @@ La page suit le droit **Exploitation** du groupe Navigation de la page [Rôles](
 - **Choisir *Date document* pour rapprocher avec la comptabilité.** C'est la date imprimée sur la facture, celle de la déclaration de TVA ; *Date d'archivage* correspond aux rapports de traitement.
 - **Partir de *Ce qui demande une décision*.** Un clic mène aux factures concernées, toutes dates confondues, prêtes à être traitées.
 - **Définir une fois pour tous la période d'ouverture** dans [Périodes par défaut](../configuration/default-periods.md) — par exemple *Mois dernier* pour une équipe qui revoit le mois clos.
+- **L'envoyer par e-mail.** Un [rapport quotidien](../sync/scheduled-jobs/daily-digest.md#business-dashboards) peut envoyer la page en PDF ou en Excel — par exemple le 1er, la synthèse du mois écoulé, telle que la voit un rôle donné.

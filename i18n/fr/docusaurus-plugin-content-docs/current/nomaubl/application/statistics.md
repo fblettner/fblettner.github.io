@@ -275,7 +275,7 @@ Les lignes se déplient et se replient avec des sous-totaux à chaque niveau ; u
 
 ## Accès
 
-Comme la [Synthèse](./billing-overview.md#access), la page suit le droit **Exploitation** du groupe Navigation de la page [Rôles](../configuration/security/roles.md). Les chiffres suivent la visibilité par société de l'utilisateur connecté.
+Accorder la page **Statistiques** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; le serveur et l'outil `status_statistics` de l'assistant IA contrôlent le même droit. Les chiffres suivent les sociétés et les [filtres de lignes](../configuration/security/roles.md#filtres-de-lignes) du rôle de l'utilisateur connecté.
 
 ---
 
@@ -285,3 +285,4 @@ Comme la [Synthèse](./billing-overview.md#access), la page suit le droit **Expl
 - **Comparer ce qui est comparable.** *Ce mois-ci* est comparé au mois précédent entier, *Cette année* aux mêmes dates un an plus tôt : choisir la période en conséquence avant de lire les écarts.
 - **Passer le tableau détaillé en *Montant HT*** avant une réunion avec la comptabilité : le classement des activités change souvent.
 - **Construire un rapport récurrent dans l'[Explorateur](./explorer.md)** quand une ventilation manque sur la page ; l'analyse fournie *Statistiques des statuts* est un bon point de départ.
+- **L'envoyer par e-mail.** Un [rapport quotidien](../sync/scheduled-jobs/daily-digest.md#business-dashboards) peut envoyer la page en PDF ou en Excel, sur le mois écoulé ou le mois en cours, telle que la voit un rôle donné.

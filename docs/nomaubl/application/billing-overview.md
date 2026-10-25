@@ -276,7 +276,7 @@ Each row gives the amount and the number of invoices; a click opens [E-Invoicing
 
 ## Access \{#access\}
 
-The page follows the **Operations** grant of the Navigation group on the [Roles](../configuration/security/roles.md) page: a role that sees the Operations dashboard sees the Billing overview too, with no extra page to grant. Figures follow the company visibility of the signed-in user. Under a restricted licence, the application opens on the [Operations](./dashboard.md) dashboard instead.
+Grant the **Billing overview** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; the server and the AI assistant's `billing_overview` tool check the same grant. Figures follow the companies and the [row filters](../configuration/security/roles.md#row-filters) of the signed-in user's role. A role with this page opens on it after sign-in; under a restricted licence, the application opens on the [Operations](./dashboard.md) dashboard.
 
 ---
 
@@ -286,3 +286,4 @@ The page follows the **Operations** grant of the Navigation group on the [Roles]
 - **Use *Document date* to reconcile with accounting.** It is the date printed on the invoice, the one the VAT declaration also relies on; *Archive date* matches the processing reports.
 - **Start from *What needs a decision*.** A click lands on the invoices concerned, all dates, ready to be handled.
 - **Set the opening period once for everyone** under [Default periods](../configuration/default-periods.md) — for example *Last month* for a team that reviews the closed month.
+- **Send it by email.** A [daily digest](../sync/scheduled-jobs/daily-digest.md#business-dashboards) can send the page as PDF or Excel — for example on the 1st, last month's overview, as a given role sees it.

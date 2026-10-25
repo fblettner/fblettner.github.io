@@ -1,12 +1,12 @@
 ---
 title: Tableau de bord IT
-description: "Le tableau de bord IT de NomaUBL (Tech Dashboard) : un bandeau de santé (application, base de données, disque, mémoire, planificateur, configuration), les quatre cartes d'action (échec d'envoi, en attente de revue, à retraiter, à retraiter en totalité), les traitements des 14 derniers jours (volume, erreurs, relances, durée par document), ce qui s'exécute en ce moment, les erreurs récentes, et des détails techniques repliés (système, fichiers, JVM, contrôle de configuration, tables de la base, liens)."
+description: "Le tableau de bord IT de NomaUBL : un bandeau de santé (application, base de données, disque, mémoire, planificateur, configuration), les quatre cartes d'action (échec d'envoi, en attente de revue, à retraiter, à retraiter en totalité), les traitements des 14 derniers jours (volume, erreurs, relances, durée par document), ce qui s'exécute en ce moment, les erreurs récentes, et des détails techniques repliés (système, fichiers, JVM, contrôle de configuration, tables de la base, liens)."
 keywords: [NomaUBL, tableau de bord IT, tech dashboard, santé, JVM, heap, ping base de données, disque, planificateur, contrôle de configuration, échec d'envoi, renvoi, retraitement, documents traités par jour, taux d'erreur, taux de relance, durée de traitement, traitements en cours, événements en direct, sessions actives, erreurs récentes, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Tableau de bord IT
 
-Le **tableau de bord IT** (*Tech Dashboard* dans l'application) est la vue de NomaUBL destinée à l'équipe informatique. Il se lit de haut en bas comme une liste de contrôle : **tout fonctionne ?** (un bandeau de santé), **qu'y a-t-il à faire ?** (quatre cartes d'action avec leur traitement en masse), **comment se sont passés les traitements des 14 derniers jours ?**, **qu'est-ce qui s'exécute en ce moment ?**, et les **erreurs récentes**. Les cartes techniques détaillées — système, fichiers, JVM, contrôle de configuration, tables de la base — sont repliées en bas de page et s'ouvrent depuis le bandeau de santé. Il complète le tableau de bord [Exploitation](./dashboard.md), qui suit les factures plutôt que le serveur.
+Le **tableau de bord IT** est la vue de NomaUBL destinée à l'équipe informatique. Il se lit de haut en bas comme une liste de contrôle : **tout fonctionne ?** (un bandeau de santé), **qu'y a-t-il à faire ?** (quatre cartes d'action avec leur traitement en masse), **comment se sont passés les traitements des 14 derniers jours ?**, **qu'est-ce qui s'exécute en ce moment ?**, et les **erreurs récentes**. Les cartes techniques détaillées — système, fichiers, JVM, contrôle de configuration, tables de la base — sont repliées en bas de page et s'ouvrent depuis le bandeau de santé. Il complète le tableau de bord [Exploitation](./dashboard.md), qui suit les factures plutôt que le serveur.
 
 La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Les cartes lisent les métriques de l'hôte et le journal de traitement de NomaUBL.
 
@@ -15,7 +15,6 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 ## Accès à la page
 
 - Menu → **Navigation → Tableau de bord IT**, après Exploitation.
-- Le titre et la description de la page restent en anglais dans les deux langues, comme la plupart des titres de cartes.
 
 ---
 
@@ -30,7 +29,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   </defs>
 
   <rect x="220" y="20" width="760" height="530" rx="14" fill="url(#tdb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tech Dashboard</text>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tableau de bord IT</text>
   <rect x="876" y="34" width="84" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="918.0" y="48.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Actualiser</text>
   <text x="240" y="80" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">TOUT FONCTIONNE ?</text>
@@ -125,11 +124,11 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   <rect x="240.0" y="414" width="172.5" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="252.0" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Traitements en cours</text>
   <rect x="422.5" y="414" width="172.5" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="434.5" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Live process events</text>
+  <text x="434.5" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Événements en direct</text>
   <rect x="605.0" y="414" width="172.5" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="617.0" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Scheduler</text>
+  <text x="617.0" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Planificateur</text>
   <rect x="787.5" y="414" width="172.5" height="36" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
-  <text x="799.5" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Active sessions</text>
+  <text x="799.5" y="436" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Sessions actives</text>
   <rect x="240" y="464" width="720" height="28" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="254" y="482" fill="#cbd5e1" fontSize="9.5" fontWeight="700" fontFamily="system-ui, sans-serif">Erreurs récentes</text>
   <rect x="240" y="502" width="720" height="28" rx="8" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
@@ -178,12 +177,12 @@ Le bandeau **Tout fonctionne ?** présente six tuiles, chacune avec une pastille
 
 | Tuile | Affiche | Ouvre |
 |---|---|---|
-| **Application** | La version et `démarrée depuis …`. | System Health |
-| **Base de données** | Le ping en ms, ou *Injoignable*. | System Health |
-| **Disque** | `… % libre` sur le disque le plus rempli. | Filesystem |
-| **Mémoire** | L'occupation du heap en %. | JVM · threads + GC |
-| **Planificateur** | *En marche*, `… paused` ou `… job(s) failed`, et la prochaine exécution. | La carte Scheduler d'*En ce moment* |
-| **Configuration** | *Aucun problème* ou `… issue(s)`. | Configuration check |
+| **Application** | La version et `démarrée depuis …`. | Système |
+| **Base de données** | Le ping en ms, ou *Injoignable*. | Système |
+| **Disque** | `… % libre` sur le disque le plus rempli. | Système de fichiers |
+| **Mémoire** | L'occupation du heap en %. | JVM · threads et GC |
+| **Planificateur** | *En marche*, `… en pause` ou `… tâche(s) en échec`, et la prochaine exécution. | La carte Planificateur d'*En ce moment* |
+| **Configuration** | *Aucun problème* ou `… problème(s)`. | Contrôle de la configuration |
 
 ---
 
@@ -230,15 +229,15 @@ Une carte à quatre onglets : **Volume**, **Erreurs**, **Relances**, **Durée pa
 
 ### Erreurs
 
-La carte **Error rate · 14d** : une sparkline sur 14 jours des événements d'erreur enregistrés dans `F564237` (niveau `ERROR` ou `FATAL`). Le survol d'un point révèle la date et le compte ; le sous-titre indique la moyenne quotidienne et le total cumulé du jour.
+La carte **Taux d'erreur · 14 j** : une sparkline sur 14 jours des événements d'erreur enregistrés dans `F564237` (niveau `ERROR` ou `FATAL`). Le survol d'un point révèle la date et le compte ; le sous-titre indique la moyenne quotidienne et le total cumulé du jour.
 
 ### Relances
 
-La carte **Retry rate · 14d** : un seul grand chiffre, ratio des *runs ayant abouti après une ou plusieurs relances* sur le total des runs des 14 derniers jours. Le sous-titre donne les valeurs absolues et la variation par rapport à la fenêtre précédente de 14 jours (vert quand le taux baisse, orange quand il monte).
+La carte **Taux de reprise · 14 j** : un seul grand chiffre, ratio des *runs ayant abouti après une ou plusieurs relances* sur le total des runs des 14 derniers jours. Le sous-titre donne les valeurs absolues et la variation par rapport à la fenêtre précédente de 14 jours (vert quand le taux baisse, orange quand il monte).
 
 ### Durée par document
 
-La carte **Template processing time · 14d** : temps moyen de traitement de bout en bout par modèle, en secondes, sur les 14 derniers jours. La carte charge les événements `START` / `END` de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` — la précédente version utilisait une auto-jointure SQL avec un `FETMPL` ambigu et une arithmétique `e.FEUPMT - s.FEUPMT` incorrecte ; ce point est corrigé.
+La carte **Durée de traitement par modèle · 14 j** : temps moyen de traitement de bout en bout par modèle, en secondes, sur les 14 derniers jours. La carte charge les événements `START` / `END` de `F564237` à plat et les apparie côté Java sur `(FEWDS1|FEUPMJ)` — la précédente version utilisait une auto-jointure SQL avec un `FETMPL` ambigu et une arithmétique `e.FEUPMT - s.FEUPMT` incorrecte ; ce point est corrigé.
 
 #### Décomposition par étape quand `debugProfile` est actif
 
@@ -299,7 +298,7 @@ Dans les deux cas, chaque ligne affiche IP / utilisateur, l'horodatage du dernie
 
 ## Erreurs récentes
 
-La carte **Recent errors** liste les 8 derniers événements de `F564237` filtrés sur `level IN ('ERROR', 'FATAL')`. Chaque ligne affiche le badge de niveau, le code de cycle de vie et le triplet, le message et un horodatage relatif (*il y a 2 min*, *il y a 1 h*). Une ligne liée à une facture ouvre la vue *Erreurs d'intégration* du [Diagnostic](./diagnostics/overview.md), restreinte à cette facture ; une ligne de traitement ouvre la vue *Journal des traitements*. **Open Integration Errors →** ouvre la vue sans filtre.
+La carte **Erreurs récentes** liste les 8 derniers événements de `F564237` filtrés sur `level IN ('ERROR', 'FATAL')`. Chaque ligne affiche le badge de niveau, le code de cycle de vie et le triplet, le message et un horodatage relatif (*il y a 2 min*, *il y a 1 h*). Une ligne liée à une facture ouvre la vue *Erreurs d'intégration* du [Diagnostic](./diagnostics/overview.md), restreinte à cette facture ; une ligne de traitement ouvre la vue *Journal des traitements*. **Ouvrir les erreurs d'intégration →** ouvre la vue sans filtre.
 
 ---
 
@@ -307,7 +306,7 @@ La carte **Recent errors** liste les 8 derniers événements de `F564237` filtr�
 
 Une section repliée — *système, fichiers, JVM, contrôle de configuration, tables de la base, liens* — qui s'ouvre d'elle-même quand on clique sur une tuile du bandeau de santé.
 
-### Santé système
+### Système
 
 Métriques JVM, base et hôte. Les valeurs les plus surveillées sont colorées :
 
@@ -324,7 +323,7 @@ Métriques JVM, base et hôte. Les valeurs les plus surveillées sont colorées 
 
 Le sous-titre de la carte affiche, à droite, la **version du build et la date du build** issues de `nomaubl-version.properties`.
 
-### Raccourcis
+### Liens rapides
 
 Liste statique de raccourcis — les pages les plus utilisées par l'opérateur IT, ouvertes directement : **Journal des traitements** et **Erreurs d'intégration** (deux vues du [Diagnostic](./diagnostics/overview.md)), **Notifications**, **Traiter Document**, **Versions fichiers** et **Paramètres**.
 
@@ -337,16 +336,16 @@ Pour chaque chemin configuré (`appHome`, `processHome`, `dirInput`, `singleOutp
 
 Les valeurs de chemin contenant des jokers d'exécution (`%TEMPLATE%`, `%FILE_NAME%`) sont tronquées au premier joker rencontré ; le rapport porte alors sur le répertoire **le plus profond existant par sa forme** au-dessus. `dirOutput` est exclu : il est toujours couvert par `processHome`.
 
-### JVM · threads + GC
+### JVM · threads et GC
 
-Carte complémentaire de Santé système pour un diagnostic JVM plus poussé :
+Carte complémentaire de Système pour un diagnostic JVM plus poussé :
 
 - **Threads** — nombre courant + pic.
 - **Threads démon** — démons en cours.
 - **GC** — nom du collecteur + temps total passé en GC.
 - **Classes chargées** — compteur du class-loader, utile pour repérer une fuite metaspace.
 
-### Vérification de configuration
+### Contrôle de la configuration
 
 Valide la configuration *orientée connecteur* utilisée aujourd'hui par l'application. Les anomalies sont listées par zone avec une sévérité (rouge erreur, orange avertissement, bleu information). La vérification couvre :
 
@@ -361,7 +360,7 @@ Les ressources de validation (XSD / Schematron) sont embarquées dans le JAR.
 
 Une vérification propre s'affiche en `✔ 0 anomalie` en vert ; sinon la carte liste les anomalies par ordre de sévérité.
 
-### Tables de base
+### Tables de la base
 
 Nombre de lignes par table NomaUBL — factures (`F564231`), cycle de vie (`F564235`), validation (`F564236`), journal d'exécution (`F564237`), notifications (`F564253`), e-Reporting (`F564260`–`F564262`), auth (`F564250`–`F564252`, `F564254`). Utile pour repérer une croissance inattendue (par exemple une table de notifications qui devrait avoir quelques centaines de lignes mais en a des millions).
 
@@ -390,12 +389,12 @@ Le bouton Actualiser (ou l'ouverture de la page) appelle quatre endpoints en par
 
 | Endpoint | Alimente |
 |---|---|
-| `GET /api/system` | Santé système, JVM · threads + GC, Système de fichiers |
-| `GET /api/dashboard/tech` | Volume, Erreurs, Relances, Durée par document, Sessions actives, Tables de base, Erreurs récentes |
+| `GET /api/system` | Système, JVM · threads et GC, Système de fichiers |
+| `GET /api/dashboard/tech` | Volume, Erreurs, Relances, Durée par document, Sessions actives, Tables de la base, Erreurs récentes |
 | `GET /api/dashboard/log-tail` | Traitements en cours · direct (incrémental, sondage 5 s avec `since=`) |
-| `GET /api/dashboard/config-check` | Vérification de configuration |
+| `GET /api/dashboard/config-check` | Contrôle de la configuration |
 
-La carte Scheduler lit `GET /api/scheduler/status`. Chaque appel échoue indépendamment — une base mal configurée renvoie *Non configurée* sur la carte de données sans casser Santé système ou le journal en direct.
+La carte Planificateur lit `GET /api/scheduler/status`. Chaque appel échoue indépendamment — une base mal configurée renvoie *Non configurée* sur la carte de données sans casser la carte Système ou le journal en direct.
 
 ---
 
@@ -404,6 +403,6 @@ La carte Scheduler lit `GET /api/scheduler/status`. Chaque appel échoue indépe
 - **Surveiller Heap, ping base et espace disque.** Trois signaux d'alerte précoce — la dérive du heap avant un OOM, la latence base avant un blocage, le volume archive avant la saturation disque.
 - **Le flux Traitements en cours vaut mieux que `tail -f`.** Il montre les tâches du planificateur qui démarrent et se terminent en direct, les erreurs ressortent en rouge, et le flux résiste à une déconnexion SSH. À garder ouvert pendant une mise en production ou un import en lot — la plupart des régressions y apparaissent en quelques secondes, et la pastille verte pulsante indique si une exécution est réellement en cours.
 - **La vérification de configuration doit toujours être verte.** Un nombre d'anomalies non nul après un déploiement est le chemin le plus rapide vers « qu'est-ce qui a changé ? ». À lancer sur chaque environnement après chaque édition de configuration.
-- **Erreurs récentes plutôt que Tables de base.** En triage d'incident, le flux des erreurs récentes est plus dense au pixel ; la carte des tables sert au suivi de tendance sur plusieurs jours.
+- **Erreurs récentes plutôt que Tables de la base.** En triage d'incident, le flux des erreurs récentes est plus dense au pixel ; la carte des tables sert au suivi de tendance sur plusieurs jours.
 - **Une liste *Clients actifs* vide ne signifie pas que personne n'utilise l'application.** Avec l'auth activée, les sessions de plus d'une heure tombent de la liste — la base les conserve dans le cycle de vie. La carte montre *qui est là maintenant*, pas *qui était là ce matin*.
 - **Les pics de durée par document vont avec les creux de volume.** Quand une grande barre de l'onglet Volume est suivie d'un modèle lent le lendemain, la file remonte — l'équipe IT peut anticiper en ajustant la cadence du planificateur.

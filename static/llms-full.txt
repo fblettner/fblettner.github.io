@@ -2250,7 +2250,7 @@ The assistant quotes the page it used and gives its link. It never invents a set
 | **`edirectory_lookup`** | 🏢 | A company in the [e-directory](./edirectory.md) by SIREN, SIRET or name: legal data and routing lines. |
 | **`template_settings`** | ⚙️ | The settings of one template, secrets masked. Requires the *Settings access* feature. |
 
-The assistant knows every page of the application — among them the [Billing overview](./billing-overview.md), [Statistics](./statistics.md), the [Explorer](./explorer.md) and the [invoice stages](./invoices.md#status-by-stage) — and answers a question on revenue, credit notes, transmission rate or decisions with `billing_overview`, a question on stages, waiting time or reasons with `status_statistics`. Through the implementation report (`instance_docs`) it also knows the default periods and the dashboard rules of the instance.
+The assistant knows every page of the application — among them the [Billing overview](./billing-overview.md), [Statistics](./statistics.md), the [Explorer](./explorer.md) and the [invoice stages](./invoices.md#status-by-stage) — and answers a question on revenue, credit notes, transmission rate or decisions with `billing_overview`, a question on stages, waiting time or reasons with `status_statistics`. Through the implementation report (`instance_docs`) it also knows the default periods and the dashboard rules of the instance. The two tools answer only when the user's role grants the page (Billing overview, Statistics).
 
 The assistant also receives the live **status catalogue**, so *"en litige"*, *"refused"* or *"awaiting deposit"* map to the right code.
 
@@ -29547,7 +29547,7 @@ Each row gives the amount and the number of invoices; a click opens [E-Invoicing
 
 ## Access \{#access\}
 
-The page follows the **Operations** grant of the Navigation group on the [Roles](../configuration/security/roles.md) page: a role that sees the Operations dashboard sees the Billing overview too, with no extra page to grant. Figures follow the company visibility of the signed-in user. Under a restricted licence, the application opens on the [Operations](./dashboard.md) dashboard instead.
+Grant the **Billing overview** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; the server and the AI assistant's `billing_overview` tool check the same grant. Figures follow the companies and the [row filters](../configuration/security/roles.md#row-filters) of the signed-in user's role. A role with this page opens on it after sign-in; under a restricted licence, the application opens on the [Operations](./dashboard.md) dashboard.
 
 ---
 
@@ -29557,6 +29557,7 @@ The page follows the **Operations** grant of the Navigation group on the [Roles]
 - **Use *Document date* to reconcile with accounting.** It is the date printed on the invoice, the one the VAT declaration also relies on; *Archive date* matches the processing reports.
 - **Start from *What needs a decision*.** A click lands on the invoices concerned, all dates, ready to be handled.
 - **Set the opening period once for everyone** under [Default periods](../configuration/default-periods.md) — for example *Last month* for a team that reviews the closed month.
+- **Send it by email.** A [daily digest](../sync/scheduled-jobs/daily-digest.md#business-dashboards) can send the page as PDF or Excel — for example on the 1st, last month's overview, as a given role sees it.
 
 ---
 
@@ -29567,7 +29568,7 @@ The NomaUBL Operations dashboard: what the team has to handle on the period, as 
 
 The **Operations** dashboard shows **what the team has to handle** on the period. Its core is three work queues, each with the team it belongs to: what is in progress and needs nothing, what IT must correct and send again, and what customer service must settle by issuing a new invoice. Below them come the activity of the period, the invoices blocked the longest, the latest events and the rules that fail most. Every number is read from the NomaUBL database, whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
 
-Open it from **Operations** in the Navigation group, after the [Billing overview](./billing-overview.md). Under a restricted licence, it is the page the application opens on. The technical health of the server is on the [IT dashboard](./tech-dashboard.md).
+Open it from **Operations** in the Navigation group, after the [Billing overview](./billing-overview.md). Under a restricted licence, or for a role without the Billing overview, it is the page the application opens on. The technical health of the server is on the [IT dashboard](./tech-dashboard.md).
 
 ---
 
@@ -29637,29 +29638,15 @@ A row opens [E-Invoicing](./invoices.md) on its status.
 
 ---
 
-## Quick actions and About
+## About this build
 
-**Quick Actions** offers *New Invoice* (opens the new invoice window on the dashboard, for the roles allowed to create invoices), *Status Reference* and *Reason Codes*. The folded **About this build** block at the bottom gives the release, the AFNOR profile and the versions of the shipped Schematrons (see [Schematrons](../references/schematrons.md)).
+The folded **About this build** block at the bottom gives the release, the AFNOR profile and the versions of the shipped Schematrons (see [Schematrons](../references/schematrons.md)).
 
 ---
 
 ## Access
 
-Grant the **Operations** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; it also opens the [Billing overview](./billing-overview.md) and [Statistics](./statistics.md). Within the dashboard, each block can be hidden per role with the **dashboard cards** of the role:
-
-| Card | Block |
-|---|---|
-| *Total invoices* | The summary line of the page. |
-| *In flight* | The *In progress* queue. |
-| *Rejected — IT* | The *To correct and send again* queue. |
-| *Rejected — Business* | The *A new invoice must be issued* queue. |
-| *Status cards* | The rows inside the three queues. |
-| *Daily invoice volume* | The activity chart. |
-| *Stale invoices* / *Recent activity* | *Blocked the longest* / *Latest events*. |
-| *Top error rules* / *PA round-trip stats* / *E-Reporting coverage* | The three blocks of the bottom row. |
-| *Quick actions* | The Quick actions section. |
-
-Figures follow the company visibility of the signed-in user. Clicks to the invoice list need a full licence.
+Grant the **Operations** page in the Navigation group on the [Roles](../configuration/security/roles.md) page. The role sees the whole dashboard or nothing; the [Billing overview](./billing-overview.md) and [Statistics](./statistics.md) are granted apart. Figures follow the companies and the [row filters](../configuration/security/roles.md#row-filters) of the role. Clicks to the invoice list need a full licence.
 
 ---
 
@@ -29676,9 +29663,9 @@ Figures follow the company visibility of the signed-in user. Clicks to the invoi
 ## NomaUBL — IT dashboard
 Source: https://docs.nomana-it.fr/nomaubl/application/tech-dashboard/
 
-The NomaUBL IT dashboard (Tech Dashboard): a health strip (application, database, disk, memory, scheduler, configuration), the four action cards (send failed, waiting for review, to reprocess, to reprocess in full), processing over the last 14 days (volume, errors, retries, time per document), what is running right now, recent errors, and folded technical details (system, filesystem, JVM, configuration check, database tables, links).
+The NomaUBL IT dashboard: a health strip (application, database, disk, memory, scheduler, configuration), the four action cards (send failed, waiting for review, to reprocess, to reprocess in full), processing over the last 14 days (volume, errors, retries, time per document), what is running right now, recent errors, and folded technical details (system, filesystem, JVM, configuration check, database tables, links).
 
-The **IT dashboard** (*Tech Dashboard* in the application) is the IT team's view of NomaUBL. It reads top-down like a checklist: **is everything up?** (a health strip), **what is there to do?** (four action cards with their bulk action), **how did processing go over the last 14 days?**, **what is running right now?**, and the **recent errors**. The detailed technical cards — system, filesystem, JVM, configuration check, database tables — are folded at the bottom and open from the health strip. It complements the [Operations](./dashboard.md) dashboard, which follows the invoices rather than the server.
+The **IT dashboard** (*Tech Dashboard* in the menu) is the IT team's view of NomaUBL. It reads top-down like a checklist: **is everything up?** (a health strip), **what is there to do?** (four action cards with their bulk action), **how did processing go over the last 14 days?**, **what is running right now?**, and the **recent errors**. The detailed technical cards — system, filesystem, JVM, configuration check, database tables — are folded at the bottom and open from the health strip. It complements the [Operations](./dashboard.md) dashboard, which follows the invoices rather than the server.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The cards read host-level metrics and the NomaUBL processing log.
 
@@ -29687,7 +29674,6 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 ## Opening the page
 
 - Menu → **Navigation → Tech Dashboard**, after Operations.
-- The page title and description stay in English in both languages, as do most card titles.
 
 ---
 
@@ -30025,7 +30011,7 @@ Rows expand and collapse with subtotals at every level; a status with a single r
 
 ## Access
 
-Like the [Billing overview](./billing-overview.md#access), the page follows the **Operations** grant of the Navigation group on the [Roles](../configuration/security/roles.md) page. Figures follow the company visibility of the signed-in user.
+Grant the **Statistics** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; the server and the AI assistant's `status_statistics` tool check the same grant. Figures follow the companies and the [row filters](../configuration/security/roles.md#row-filters) of the signed-in user's role.
 
 ---
 
@@ -30035,6 +30021,7 @@ Like the [Billing overview](./billing-overview.md#access), the page follows the 
 - **Compare like with like.** *This month* is compared with the whole previous month, *This year* with the same dates a year earlier — pick the period accordingly before reading the changes.
 - **Switch the detail table to *Net amount*** before a meeting with finance: the ranking of activities often changes.
 - **Build a recurring report in the [Explorer](./explorer.md)** when a breakdown is needed that the page does not offer; the ready-made *Status statistics* analysis is a good starting point.
+- **Send it by email.** A [daily digest](../sync/scheduled-jobs/daily-digest.md#business-dashboards) can send the page as PDF or Excel, over last month or the month to date, as a given role sees it.
 
 ---
 
@@ -30055,7 +30042,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## Toolbar
 
-Above the grid, two rows: the **period**, the **direction** and **Exclude reviewed errors**, then the **status by stage**. The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
+Above the grid, two rows: the **period**, the **direction** and **Exclude reviewed errors**, then the **status by stage**. The toolbar also carries **+ New Invoice**, shown to the roles allowed to create invoices (`invoice.create`), which opens the [Create / Edit invoice modal](#create-invoice). The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
 
 ### Period
 
@@ -30120,7 +30107,7 @@ RefList columns (Status, eReporting Status, custom lists) get a **multi-select p
 
 ### Grid toolbar
 
-Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)** and **Reprocess selected (N)** when rows are ticked (see [Bulk resend](#bulk-resend) and [Reprocess](#reprocess)). A new invoice is created from the **Quick Actions** of the [Operations](./dashboard.md) dashboard.
+Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)** and **Reprocess selected (N)** when rows are ticked (see [Bulk resend](#bulk-resend) and [Reprocess](#reprocess)).
 
 ---
 
@@ -30604,9 +30591,9 @@ The PDF currently shown in the PDF tab is automatically attached. If the PDF was
 
 While the e-mail is sending, an overlay covers the modal until the SMTP server confirms the send. A green banner indicates success; the modal closes automatically after ~2 s.
 
-### Create / Edit invoice modal
+### Create / Edit invoice modal \{#create-invoice\}
 
-Opens from **New Invoice** in the Quick Actions of the [Operations](./dashboard.md) dashboard, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
+Opens from **+ New Invoice** in the toolbar, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
 
 Editing an existing invoice no longer flips its `cbc:CustomizationID` back to the EN16931 default. The form now carries the `customizationId` value from the source UBL and writes it back verbatim — new invoices still default to `urn:cen.eu:en16931:2017`.
 
@@ -31226,7 +31213,7 @@ Source: https://docs.nomana-it.fr/nomaubl/application/vat-declaration/
 
 Aggregate every invoice for a period on the standard French CA3 form rows — sales / purchases × domestic / intra-EU / outside-EU × VAT rate × invoice type — with drill-down to the individual invoices behind each figure, and one-click Excel and CA3-formatted PDF exports.
 
-The **VAT Declaration** screen aggregates every invoice booked in a period on the lines of the French **CA3 form** — sales / purchases × France / intra-EU / outside-EU × VAT rate × invoice type. Each cell can be drilled down all the way to the individual invoices that make it up, and the result exports to Excel for accounting or to a CA3-styled PDF you can hand to the accountant.
+The **VAT Declaration** screen aggregates every invoice booked in a period on the lines of the French **CA3 form** — sales / purchases × France / intra-EU / outside-EU × VAT rate × invoice type. Each rate unfolds into its transaction types and the individual invoices that make it up, and the result exports to Excel for accounting or to a CA3-styled PDF you can hand to the accountant.
 
 Use this page when:
 
@@ -31234,7 +31221,7 @@ Use this page when:
 - you need to reconcile a CA3 line with the underlying invoices — which buyers, which document numbers, which amounts;
 - you want a printable synthesis of the period to attach to the accounting file.
 
-The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The period filter is read on the **invoice's issue date** — the date printed on the invoice itself — so the period stays stable even if the underlying data is rebuilt later. The Invoices list exposes the same date basis via its [Date basis toggle](./invoices.md#date-basis), so drilling into a VAT amount lands on the matching set on the Invoices side.
+The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The period filter is read on the **invoice's issue date** — the date printed on the invoice itself — so the period stays stable even if the underlying data is rebuilt later.
 
 The matrix is served from the persisted VAT detail rows (`F564234`), not by re-parsing every UBL on each load — so the page opens in **a couple of seconds whether the period has 2 000 invoices or 200 000**. To keep it that way, leave *Store VAT details* on under *Settings → Connectors → db-nomaubl → Tables* — see [Detail Storage](../configuration/database-connectors/nomaubl.md#detail-storage).
 
@@ -31281,7 +31268,7 @@ The declaration counts the invoices issued in the period, minus:
 | Refused by the buyer (`210`) or rejected by the platform (`213`) | *Exclude all refused and rejected* is checked (default) — or, unchecked, once customer service has marked the invoice reviewed in its window, the internal credit note being done. |
 | To be sent, never reached the platform | *Exclude to-send invoices not at the platform* is checked: the invoice is flagged to be sent and its status is still internal (`99xx` other than `9906`, pending at the platform, and `9911`, export validated). |
 
-The two rules apply to the matrix, the drill-down, the Excel export and the PDF, whose footer states the rules applied. Over the API, the same choices are the `excludeMode` (`all` or `reviewed`) and `excludeUnsent` parameters.
+The two rules apply to the matrix, the unfolded invoices, the Excel export and the PDF, whose footer states the rules applied. Over the API, the same choices are the `excludeMode` (`all` or `reviewed`) and `excludeUnsent` parameters.
 
 ---
 
@@ -31296,7 +31283,7 @@ The table reads by **direction**, then by **country group**, then by **rate**:
 | **Rate** (`20 %`, `10 %`…, *No rate*) | One row per rate found in the group, highest first, collapsed. Its chevron opens one row per BAR routing (`B2B`, `B2C`, `B2BINT`, `B2G`…), whose chevron opens the invoices — document, type, company, base and VAT, up to **200 rows** (the Excel export holds the full list). |
 | **VAT due** / **VAT credit** | The net VAT of the period, *Collected − deductible*. |
 
-The amounts of the rate and routing rows open, on hover, *See the invoices*: a click jumps to the [Invoices list](./invoices.md) on the same direction, country group and period, by issue date, and on the same routing for a routing row. The rate itself is not passed as a filter. Amounts are shown in the normal colour.
+The amounts are not links to the [Invoices list](./invoices.md), which cannot filter by VAT rate nor apply the two exclusions: the invoices behind a figure are read by unfolding its rate and routing rows, or in the *Details* sheet of the Excel export. Amounts, rates and percentages follow the number format of the interface language.
 
 ### Country group rules
 
@@ -33107,9 +33094,10 @@ Each digest is one row in the catalogue. The edit pane has four sections.
 | Field | Required | What |
 |---|---|---|
 | **Name** | yes | Free text. Shown in the catalogue list and at the top of the email body. Example: *Accounting · ACME*. |
-| **Report** | yes (default: `Integration errors`) | What the digest reports. **Integration errors** collects the failing events from the [Integration Errors](../../application/diagnostics/integration-errors.md) page — the historical behaviour. **All archived invoices** instead reports every archived invoice in the window, and the attached spreadsheet carries the [E-Documents](../../application/edocuments.md) columns and honours the per-column filters below, so a digest can double as a daily archive extract. **Saved analysis (Explorer)** and **Dashboard (Explorer)** send an analysis or a whole dashboard — see the two fields below. |
+| **Report** | yes (default: `Integration errors`) | What the digest reports. **Integration errors** collects the failing events from the [Integration Errors](../../application/diagnostics/integration-errors.md) page — the historical behaviour. **All archived invoices** instead reports every archived invoice in the window, and the attached spreadsheet carries the [E-Documents](../../application/edocuments.md) columns and honours the per-column filters below, so a digest can double as a daily archive extract. **Saved analysis (Explorer)** and **Dashboard (Explorer)** send an analysis or a whole dashboard — see the two fields below. **Billing overview (Synthèse)** and **Statistics** send the figures of a [business dashboard](#business-dashboards). |
 | **Analysis** / **Dashboard** | when the report is *Saved analysis (Explorer)* or *Dashboard (Explorer)* | The [Explorer](../../application/explorer.md) analysis or dashboard to send, listed with its name and audience. It is run over the lookback window — its own period is replaced — and attached to the email. |
 | **Attachment** | with an analysis or a dashboard | **Excel — the data, one sheet per tile**, or **PDF — charts and data, audit report layout**. Built on the server at send time. |
+| **Period** / **Invoices** / **Visible as role** / **Attachment** | with *Billing overview* or *Statistics* | See [Business dashboards](#business-dashboards). |
 | **Recipients** | yes | One or more email addresses, comma- or semicolon-separated. Every address gets the same email — there's no per-address customisation here; create another digest if recipients should see different cuts. |
 | **Enabled** | yes (default: `on`) | When `off`, the digest is kept in the catalogue but skipped at send time. Useful for pausing a digest during a maintenance window without losing the configuration. |
 
@@ -33120,6 +33108,7 @@ Each digest is one row in the catalogue. The edit pane has four sections.
 | **Send time** | yes (default: `07:00`) | Time of day the digest runs. Hours / minutes; seconds are ignored. |
 | **Timezone** | yes (default: server timezone) | A IANA timezone (e.g. `Europe/Paris`). Each digest runs in its own timezone so a multi-region install can send one digest at 07:00 Paris and another at 07:00 New York. |
 | **Lookback window** | yes (default: `yesterday and today` = 1 day) | How far back the digest reaches when collecting events. Values: `today` (current day), `1 day` (yesterday + today — the default), `7 days`, `30 days`, or a custom `N days`. The window is rolling and ends at send time. |
+| **Day of the month** | no (default: blank = every day) | `1` to `28` sends the digest on that day of the month only — `1` with *Last month* sends last month's overview on the 1st. **Send now** ignores it. Available for every report. |
 
 ### 3. Severity filter
 
@@ -33148,6 +33137,19 @@ The digest carries a list of `(column, value)` pairs that narrow the event set. 
 | **Business unit** | `MU-LYO`, `MU-PAR` | Per-BU routing. |
 
 Filters combine with **AND**. Empty filters = all rows. Adding two values to the same column requires two digests.
+
+### Business dashboards \{#business-dashboards\}
+
+With **Billing overview (Synthèse)** or **Statistics**, the digest sends the figures of the [Billing overview](../../application/billing-overview.md) or [Statistics](../../application/statistics.md) page; the severity and column filters are hidden.
+
+| Field | Default | What |
+|---|---|---|
+| **Period** | Last month | **Last month** (1st to last day of the previous month), **Month to date** (1st of the month to today) or **Lookback window**. Compared with the previous period of the same kind, as on the page. |
+| **Invoices** | Sales | **Sales** or **Purchases**. |
+| **Visible as role** | Everything (no restriction) | The report shows what a user of this role sees: its companies and [row filters](../../configuration/security/roles.md#row-filters). The role must grant the page; otherwise the run fails with a message naming the role. One digest per role sends each recipient group its own scope. |
+| **Attachment** | Excel | **PDF — the page's figures, charts and tables**, in the layout of the audit report, or **Excel — one sheet per table**. |
+
+The attachment holds the sections of the page: for the Billing overview, the key figures with the previous period, the amount invoiced per month, what needs a decision, per company, per transaction type and, for sales, e-reporting; for Statistics, the key figures, the stages, the trend, the waiting time, the statuses and the detail by activity, status and reason. It is in French unless the instance language is English. The email states the period and that the report is attached; it is sent even when the period is empty.
 
 ---
 
@@ -40475,11 +40477,11 @@ Inline feedback appears below the table:
 ## NomaUBL — Roles
 Source: https://docs.nomana-it.fr/nomaubl/configuration/security/roles/
 
-Manage NomaUBL roles: row-based grants stored in F564254 across four tabs — Access (pages + dashboard cards + features), Actions (per-action whitelist), Data scope (companies + row filters), Members. Card list with copy / delete, friendly page labels from the sidebar i18n, granular per-button action grants and column-based row filters that gate the list views, the per-row endpoints and the rendered PDF stream.
+Manage NomaUBL roles: row-based grants stored in F564254 across four tabs — Access (pages + features), Actions (per-action whitelist), Data scope (companies + row filters), Members. Card list with copy / delete, friendly page labels from the sidebar i18n, granular per-button action grants and column-based row filters that gate the list views, the per-row endpoints and the rendered PDF stream.
 
 This screen manages NomaUBL's **role-based access control**. Each role bundles four kinds of grant:
 
-- A list of **pages** the role can reach (plus a list of **dashboard cards** visible to it).
+- A list of **pages** the role can reach.
 - A per-action **whitelist** of operations the role is allowed to perform (Edit, Delete, Resend, Push status…).
 - A **data scope** — the companies the role is restricted to **and** optional row filters that narrow the visible rows by column value.
 - The **members** assigned to the role.
@@ -40529,7 +40531,7 @@ The role's **Name** *(visible only when creating)* and **Description** sit above
 
 ## Tab — Access
 
-Defines **what the role can reach**: features, pages and dashboard cards.
+Defines **what the role can reach**: features and pages.
 
 ### Features
 
@@ -40582,7 +40584,7 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 | Group | Pages (id) |
 |---|---|
-| **Navigation** | Operations (`dashboard`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
+| **Navigation** | Billing overview (`synthese`), Operations (`dashboard`), Statistics (`statistics`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
 | **Sync** | Fetch Input (`fetchinput`), Fetch Import (`import`), Fetch Statuses (`retrievestatuses`), Scheduled Jobs (`scheduledjobs`). |
 | **Processing** | Process Document (`process`), Extract & Process (`extractandprocess`), Process API (`processapi`). |
 | **UBL** | UBL Validation (`validate`), XSL Editor (`xsleditor`), XML Viewer (`xmlviewer`), UBL Defaults (`ubldefaults`). |
@@ -40597,27 +40599,15 @@ A few chips carry a hint:
 - **Watched Folders** grants the configuration of the folders; their schedule is on *Scheduled Jobs*.
 - **Promotion** also requires the *Settings access* feature. See [Promotion](../../management/promotion.md).
 - **Developer** opens the [Developer reference](../../references/developer.md): tables, configuration keys, flows, impact, API.
-- **Operations** also opens the [Billing overview](../../application/billing-overview.md) and [Statistics](../../application/statistics.md), which have no page id of their own; **Business Rules** also opens [Schematrons](../../references/schematrons.md). A role that sees Operations lands on the Billing overview after sign-in.
+- **Billing overview** and **Statistics** are pages of their own, checked by the server and by the tools of the AI assistant. The upgrade gives both, once, to every role that had Operations, so nobody loses a page; removing them from a role afterwards is kept.
+- **Business Rules** also opens [Schematrons](../../references/schematrons.md).
+- After sign-in, a role with the Billing overview opens on it; a role without it opens on the first page it grants, in menu order (Operations, Statistics, Tech Dashboard, E-Invoicing…).
 
 Rules:
 
 - **All** / **None** above the cards grant or revoke every page at once.
 - **Empty list = all pages allowed.** Same convention as the other lists: an unfiltered role sees everything.
 - The `admin` role created at initialisation receives every page id listed above, including VAT declaration, Reports and Upgrade History.
-
-### Dashboard cards
-
-Each block of the [Operations](../../application/dashboard.md#access) dashboard is an individual permission keyed by `dashboard.<card>`. The cards are laid out like the pages — one card per group with its chips, count and **all** / **none** link:
-
-| Group | Cards |
-|---|---|
-| **Hero metrics** | `dashboard.total`, `dashboard.inflight`, `dashboard.errors-tech`, `dashboard.errors-business`, `dashboard.status-cards` (status cards 213 / 9905 / 9907 and 207 / 208 / 210) |
-| **Charts & widgets** | `dashboard.volume`, `dashboard.recent`, `dashboard.stale`, `dashboard.error-rules`, `dashboard.ereporting`, `dashboard.round-trip` (the editor also lists `dashboard.pipeline` and `dashboard.per-company`, which no block of the page uses) |
-| **Sections** | `dashboard.quick-actions` |
-
-- **Empty list = every card visible**.
-- A populated list is a strict whitelist — hidden cards are **skipped server-side**, so their SQL never runs and their data never reaches the wire.
-- The same **All** / **None** buttons and per-group **all** / **none** links are available as on the Allowed Pages cards.
 
 ---
 
@@ -40649,7 +40639,7 @@ Grouped by the page where the button lives — the same key can power buttons on
 
 | Group | Action | Key | Effect |
 |---|---|---|---|
-| **Invoices** | Create | `invoice.create` | *New Invoice* in the Quick Actions of the Operations dashboard. |
+| **Invoices** | Create | `invoice.create` | The *New Invoice* button of the [E-Invoicing](../../application/invoices.md) list. |
 | **Invoices** | Edit | `invoice.edit` | Update invoice fields from the detail modal / edit panel. |
 | **Invoices** | Delete | `invoice.delete` | Hard-delete an invoice and all its child records. |
 | **Invoices** | Delete lifecycle event | `invoice.lifecycle-delete` | Remove a single status event from an invoice history; the header realigns on the last remaining event. |
@@ -40685,34 +40675,34 @@ An add-row table of company codes (`KCO`) the role is scoped to. Each row carrie
 
 ### Row filters
 
-A more granular restriction: for any catalog column flagged as filterable, the role can be restricted to one or more **exact values**. Typical use case — an external customer who should only see invoices issued to its own alpha key (`UHALKY`).
+A more granular restriction: on a field, the role can be restricted to one or more **exact values**. Typical use case — an external customer who should only see invoices issued to its own alpha key (`UHALKY`).
 
-Each row filter is a card with:
+The **column picker** lists each field once, **by scope**:
 
-1. A **searchable column picker** showing every filterable column across the four catalogs:
-   - **Invoices** (header columns: `UHALKY`, `UHAN8`, customer name, contract reference, …).
-   - **Integration errors** (the integration error catalog's row-filterable columns).
-   - **Processing log** (processing-log catalog columns).
-   - **E-Reporting** (e-reporting catalog columns).
-2. A list of **values** for the picked column, each on its own row with its own remove button. **+ Add value (OR)** appends another value.
-3. A row-level remove button to drop the entire filter.
+| Group | Fields | Secures |
+|---|---|---|
+| **Keys — every table (doc, dct, kco)** | *Document number*, *Document type*, *Company*. | Every table that has these keys. |
+| **Document (F564230) — every linked table** | The fields of the archived document: activity code, business unit, sub-type, source file, job, program, routing… | Every table linked to the document. |
+| **Invoice (F564231)** | The invoice header: customer alpha key, customer name, contract… | That table. |
+| **Validation findings (F564236)** | Severity, source, rule… | That table. |
+| **Processing log** / **E-reporting** | Their own columns. | That table. |
 
-Below the list, **+ Add row filter** lets a single role combine filters on different columns.
+Each entry reads `label · FIELD`. For the picked field, enter one or more values (*Value (exact match)*); **+ Add value (OR)** appends another value, the **×** removes a value or the whole filter. **+ Add row filter** combines filters on different fields. Like most of the editor, these labels are in English; the scope titles follow the interface language.
 
 #### Combination rules
 
 | Pattern | Combined as |
 |---|---|
-| Multiple **values** on the **same column** | `OR` — the role sees rows that match **any** of the values. |
-| Multiple **columns** in the filter list | `AND` — the role sees only rows that match **every** column constraint. |
+| Multiple **values** on the **same field** | `OR` — the role sees rows that match **any** of the values. |
+| Multiple **fields** in the filter list | `AND` — the role sees only rows that match **every** constraint. |
 | **Companies** grant + row filters | `AND` — both must be satisfied. |
 
 #### Where row filters apply
 
 A row filter is **not** a UI hint — it is enforced everywhere a forbidden row could otherwise leak:
 
-- The **list views** (Invoices, E-Reporting, Integration Errors, Processing Log) — the filter is appended to the SQL.
-- The **Dashboard** counters, charts and widgets — every card respects the role's row filter.
+- **Every list that has the field**, under the name that list gives it (customer, activity code, job, UBL number, status…). A list without the field ignores the filter: a role restricted to the `FATAL` severity keeps its invoices, documents and dashboards and sees only the fatal findings.
+- The **dashboards** — Billing overview, Operations, Statistics, status counts — and the **E-Documents** window, which opens under the same rules as its list.
 - **Per-row endpoints** — lifecycle, lines, XML download, PDF render, status push, delete, resend, email PDF.
 - The **rendered PDF byte stream** — a forbidden row cannot even be turned into a PDF.
 
@@ -40752,13 +40742,12 @@ Every grant is one row in `F564254`. The shape:
 F564254
   PMROLE       — role name (FK to F564251.RLNAME)
   PMCRAPPID    — grant type: 'page' / 'company' / 'feature' / 'action'
-                              / 'dashboard-card' / 'row-filter'
+                              / 'row-filter'
   PMCRAPPVAL   — grant value, encoded per type:
                    page             → page id          (e.g. 'invoices')
                    company          → KCO code         (e.g. '00001')
                    feature          → flag             ('settings', 'readonly', 'actions-whitelist')
                    action           → action key       (e.g. 'invoice.delete')
-                   dashboard-card   → card key         (e.g. 'dashboard.volume')
                    row-filter       → 'column=value'   (e.g. 'UHALKY=123456')
   PMENABL      — '1' enabled / '0' disabled (used during dialect-specific bootstrapping)
 ```
@@ -40788,7 +40777,7 @@ Confirming removes the role and every grant row in `F564254` keyed by it. Users 
 - **Pair *Read-only* with *Actions* off** for compliance / audit accounts — both layers reinforce each other.
 - **Use the Companies table to enforce multi-tenant isolation.** Leaving it empty defeats company-level filtering for the role.
 - **Row filters first, action whitelist second** when scoping an external user. The row filter hides everything the user should not see; the action whitelist controls what they can do with what they see.
-- **The dashboard card whitelist runs server-side** — disabled cards never query the database. Use it to hide cost-sensitive widgets from low-trust roles.
+- **A role sees the Operations dashboard as a whole or not at all.** To keep a team on business figures only, grant the Billing overview and Statistics without Operations.
 - **Use Copy when forking a role.** Starting from an existing role with one or two grants flipped is faster than rebuilding the checklists from scratch — and the result is closer to the source role's intent.
 - **Re-run *Initialize Database*** *(Database Connectors → NomaUBL)* if the default `admin` or `viewer` grants are missing — it re-seeds the rows without touching custom roles.
 - **Delete a role only after re-binding its members.** Once deleted, members lose access to everything until reassigned. The Members tab is the fastest way to check who would be affected.
@@ -41620,6 +41609,15 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Diagnostics: views as cards.** The four views of Diagnostics — Integration errors, Processing log, Failures, Server log — are picked from a row of compact cards under the header, each saying what it shows, instead of the switch at the top right; only the views the role grants are shown.
 - **Explorer: Analyses and Dashboards as tabs.** The switch at the top right gives way to two tabs on the first row of the Explorer, Analyses and Dashboards, each with the number saved; the picker of saved analyses or dashboards and Save sit on the same row, at the right.
 - **VAT declaration redesigned.** Three headline figures open the page — VAT collected, VAT deductible and VAT due (or VAT credit), each with its base, its number of invoices and the change from the previous month or quarter. One filter bar as on the dashboards: Month / Quarter, year, month or quarter, company, the two exclusions as switches with their explanation on hover, Excel and PDF. The table reads by direction, then by country group, then by rate: Sales and Purchases carry their totals on their line, France, intra-EU and outside the EU appear once with their subtotal, each rate below them; amounts are in the normal colour and open the invoices on hover. The net VAT is no longer shown in red. The period labels are translated. In the CA3 PDF, amounts are written 125 315,78, rates 5,5 % and the period 01/09/2026 – 30/09/2026.
+- **Synthèse and Statistics: permissions of their own.** The two business dashboards no longer follow the Operations dashboard permission: each has its own page in the roles (Synthèse, Statistics), also checked by the server and the AI assistant's tools. On upgrade, every role that had the Operations dashboard receives both, once, so nobody loses a page; removing them from a role afterwards is kept. A role without the Synthèse opens on the first page it grants.
+- **Role row filters on document columns.** A role restricted on a column of the archived document — activity code, business unit, sub-type, source file, job, program, routing… — or on the direction saw empty dashboards, status counts and Synthèse, and could not open its own invoices from the list. These filters now apply everywhere as they do in the invoice list.
+- **Role row filters across lists.** A row filter now applies to every list that has the field, under the name that list gives it (customer, activity code, job, UBL number, status…), and is ignored on a list that has no such field: a role restricted to FATAL severity keeps its invoices, documents and dashboards instead of seeing nothing. An E-Documents window opens under the same rules as its list.
+- **Roles: row filters by table, dashboard cards removed.** The row-filter picker lists each field once, by scope: the keys doc, dct and kco, which secure every table that has them; the fields of the archived document (F564230), which secure every table linked to it; then the fields of each other table (invoice, validation findings, processing log, e-reporting), which secure that table. The per-card permissions of the Operations dashboard are gone: a role sees the dashboard or not; card grants already stored are ignored and dropped when the role is next saved. The "Contract" column of the integration errors is the customer's alpha key, as on the invoice list.
+- **New invoice on E-Invoicing.** Creating an invoice moves to a New invoice button on the E-Invoicing list (with the invoice.create permission). The Quick actions block of the Operations dashboard is removed.
+- **VAT declaration: no drill-down.** The amounts no longer open the invoice list, which could not reproduce the rate and the exclusions; each rate still unfolds into its transaction types and invoices. Amounts follow the interface language.
+- **IT dashboard translated.** The title, the description and every card of the IT dashboard are translated.
+- **Daily digest: the business dashboards.** A digest can send the Synthèse or the Statistics, as PDF (the page's figures, charts and tables) or Excel, over last month, the month to date or the digest window, for sales or purchases. It can be built as a role sees it — its companies and row filters — so each recipient group receives only its scope. Any digest can be sent on one day of the month only (for example on the 1st, last month's overview); Send now ignores it.
+- **PDF: euro sign in italic notes.** In the notes under a section title, the euro sign no longer runs into the following word.
 - **AI assistant: new pages and two tools.** The assistant knows the Billing overview, Statistics, Explorer and the invoice stages, and reads the figures of the two business dashboards: billing_overview (revenue, VAT, credit notes, transmission rate, decisions, per company and per transaction type, compared with the previous period) and status_statistics (invoices by stage, statuses, reasons, waiting time, activity × status × reason with the previous period). Since it reads the implementation report, it also knows the default periods and the dashboard rules of the instance.
 - **List exports carry the labels.** In every list, the CSV and Excel exports of a column backed by a value list (company, document type, activity code, reason…) now write the code with its label, as on screen, instead of the code alone.
 - **Operations dashboard reorganised, IT dashboard reorganised.** The former Dashboard is now named Operations, opens on this month and is organised around what the team has to handle, with the same header as the other pages and the same Sales / Purchases switch as the Synthèse, which every widget follows. Under a one-line summary of the period, three work queues — in progress (followed automatically), to correct and send again (IT), a new invoice to issue (customer service) — each show their total and their breakdown by status, label first with the code as a small tag; every number opens the invoices concerned. Then one activity chart whose legend carries the period's counts (replacing the separate pipeline bar), grouped by week beyond two months and by month beyond a year; the invoices blocked the longest and the latest events side by side, in plain words; and a row with the most-failing rules, the platform delay and e-reporting. The per-company chart moves to the Synthèse. The IT dashboard is reorganised the same way: a health strip of six tiles (application, database, scheduler, disk, memory, configuration — green, orange or red, each opening its detail), the four action cards (send failures, held for review, to reprocess, to reprocess in full) in one row, their figures aligned, one card for the last 14 days with tabs — documents processed per day with those now in a technical error (a bar opens that day's invoices), errors, retries, time per document — what is running right now (processes, live events, scheduler, sessions), the recent errors, and the technical details (system, filesystem, JVM, configuration check, database tables, links) folded at the bottom; nothing is removed.

@@ -1,14 +1,14 @@
 ---
 title: Rôles
-description: "Gestion des rôles NomaUBL : droits en lignes dans F564254, répartis sur quatre onglets — Accès (pages + cartes du tableau de bord + fonctionnalités), Actions (liste blanche par bouton), Périmètre des données (sociétés + filtres de lignes), Membres. Liste sous forme de cartes avec duplication / suppression, libellés de pages traduits depuis le menu, droits granulaires par action et filtres de lignes par colonne qui s'appliquent aux listes, aux requêtes par ligne et au flux PDF généré."
-keywords: [NomaUBL, rôles, permissions, RBAC, F564254, PMROLE, PMCRAPPID, droits sur les pages, liste blanche d'actions, filtre de lignes, cartes du tableau de bord, accès paramètres, lecture seule, sociétés, dupliquer un rôle, JD Edwards, SAP, NetSuite]
+description: "Gestion des rôles NomaUBL : droits en lignes dans F564254, répartis sur quatre onglets — Accès (pages + fonctionnalités), Actions (liste blanche par bouton), Périmètre des données (sociétés + filtres de lignes), Membres. Liste sous forme de cartes avec duplication / suppression, libellés de pages traduits depuis le menu, droits granulaires par action et filtres de lignes par colonne qui s'appliquent aux listes, aux requêtes par ligne et au flux PDF généré."
+keywords: [NomaUBL, rôles, permissions, RBAC, F564254, PMROLE, PMCRAPPID, droits sur les pages, liste blanche d'actions, filtre de lignes, accès paramètres, lecture seule, sociétés, dupliquer un rôle, JD Edwards, SAP, NetSuite]
 ---
 
 # Rôles
 
 Cet écran gère le **contrôle d'accès par rôle** de NomaUBL. Chaque rôle regroupe quatre familles de droits :
 
-- La liste des **pages** accessibles au rôle (et la liste des **cartes du tableau de bord** qu'il voit).
+- La liste des **pages** accessibles au rôle.
 - Une **liste blanche d'actions** — les opérations autorisées (Modifier, Supprimer, Renvoyer, Pousser un statut…).
 - Un **périmètre des données** — les sociétés auxquelles le rôle est limité **et** d'éventuels filtres de lignes qui réduisent encore l'ensemble visible par valeur de colonne.
 - Les **membres** affectés au rôle.
@@ -190,7 +190,7 @@ Le **Nom** du rôle *(visible uniquement à la création)* et la **Description**
 
 ## Onglet — Accès
 
-Définit **ce que le rôle peut atteindre** : fonctionnalités, pages et cartes du tableau de bord.
+Définit **ce que le rôle peut atteindre** : fonctionnalités et pages.
 
 ### Fonctionnalités
 
@@ -245,7 +245,7 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 
 | Groupe | Pages (identifiant) |
 |---|---|
-| **Navigation** | Exploitation (`dashboard`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
+| **Navigation** | Synthèse (`synthese`), Exploitation (`dashboard`), Statistiques (`statistics`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
 | **Synchronisation** | Récupérer Entrée (`fetchinput`), Récupérer les imports (`import`), Récupérer les statuts (`retrievestatuses`), Tâches planifiées (`scheduledjobs`). |
 | **Traitement** | Traiter Document (`process`), Extraire & Traiter (`extractandprocess`), Traiter API (`processapi`). |
 | **UBL** | Validation UBL (`validate`), Éditeur XSL (`xsleditor`), Visionneuse XML (`xmlviewer`), Défauts UBL (`ubldefaults`). |
@@ -260,27 +260,15 @@ Quelques pastilles portent une aide :
 - **Dossiers surveillés** accorde la configuration des dossiers ; leur planification se trouve dans *Tâches planifiées*.
 - **Promotion** demande aussi la fonctionnalité *Settings access*. Voir [Promotion](../../management/promotion.md).
 - **Développeur** ouvre la [référence développeur](../../references/developer.md) : tables, clés de configuration, flux, impact, API.
-- **Exploitation** ouvre aussi la [Synthèse](../../application/billing-overview.md) et les [Statistiques](../../application/statistics.md), qui n'ont pas d'identifiant de page propre ; **Règles de gestion** ouvre aussi les [Schematrons](../../references/schematrons.md). Un rôle qui voit Exploitation arrive sur la Synthèse après la connexion.
+- **Synthèse** et **Statistiques** sont des pages à part entière, contrôlées par le serveur et par les outils de l'assistant IA. La mise à jour les accorde toutes les deux, une seule fois, à chaque rôle qui avait Exploitation, pour que personne ne perde une page ; un retrait ultérieur sur un rôle est conservé.
+- **Règles de gestion** ouvre aussi les [Schematrons](../../references/schematrons.md).
+- Après la connexion, un rôle qui a la Synthèse s'ouvre sur elle ; un rôle qui ne l'a pas s'ouvre sur la première page qu'il accorde, dans l'ordre du menu (Exploitation, Statistiques, Tableau de bord IT, E-Invoicing…).
 
 Règles :
 
 - **All** / **None**, au-dessus des cartes, accordent ou retirent toutes les pages d'un coup.
 - **Liste vide = toutes les pages autorisées.** Même convention que les autres listes : un rôle sans filtre voit tout.
 - Le rôle `admin` créé à l'initialisation reçoit tous les identifiants de page ci-dessus, y compris Déclaration de TVA, Rapports et Historique des mises à jour.
-
-### Cartes du tableau de bord
-
-Chaque bloc du tableau de bord [Exploitation](../../application/dashboard.md) est une permission individuelle indexée par `dashboard.<carte>`. Les cartes se présentent comme les pages — une carte par groupe avec ses pastilles, son compteur et son lien **tout** / **aucun** :
-
-| Groupe | Cartes |
-|---|---|
-| **Indicateurs principaux** | `dashboard.total`, `dashboard.inflight`, `dashboard.errors-tech`, `dashboard.errors-business`, `dashboard.status-cards` (cartes de statut 213 / 9905 / 9907 et 207 / 208 / 210) |
-| **Graphiques et widgets** | `dashboard.volume`, `dashboard.recent`, `dashboard.stale`, `dashboard.error-rules`, `dashboard.ereporting`, `dashboard.round-trip` (l'éditeur propose aussi `dashboard.pipeline` et `dashboard.per-company`, qu'aucun bloc de la page n'utilise) |
-| **Sections** | `dashboard.quick-actions` |
-
-- **Liste vide = toutes les cartes visibles**.
-- Une liste remplie est une liste blanche stricte — les cartes masquées sont **ignorées côté serveur**, leur SQL n'est jamais exécuté et leurs données ne partent pas sur le réseau.
-- Les mêmes boutons **All** / **None** et liens **tout** / **aucun** par groupe sont disponibles, comme sur les cartes des pages.
 
 ---
 
@@ -312,7 +300,7 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 
 | Groupe | Action | Clé | Effet |
 |---|---|---|---|
-| **Factures** | Créer | `invoice.create` | *Nouvelle Facture* dans les Actions rapides du tableau de bord Exploitation. |
+| **Factures** | Créer | `invoice.create` | Le bouton *Nouvelle facture* de la liste [E-Invoicing](../../application/invoices.md). |
 | **Factures** | Modifier | `invoice.edit` | Met à jour les champs d'une facture depuis la fenêtre détail ou le panneau d'édition. |
 | **Factures** | Supprimer | `invoice.delete` | Suppression définitive d'une facture et de tous ses enregistrements fils. |
 | **Factures** | Supprimer un événement du cycle de vie | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |
@@ -348,34 +336,34 @@ Un tableau ligne par ligne des codes société (`KCO`) auxquels le rôle est res
 
 ### Filtres de lignes
 
-Une restriction plus fine : pour toute colonne de catalogue marquée comme filtrable, le rôle peut être limité à une ou plusieurs **valeurs exactes**. Cas d'usage typique — un client externe qui ne doit voir que les factures émises pour sa propre clé alpha (`UHALKY`).
+Une restriction plus fine : sur un champ, le rôle peut être limité à une ou plusieurs **valeurs exactes**. Cas d'usage typique — un client externe qui ne doit voir que les factures émises pour sa propre clé alpha (`UHALKY`).
 
-Chaque filtre est une carte avec :
+Le **sélecteur de colonne** liste chaque champ une seule fois, **par portée** :
 
-1. Un **sélecteur de colonne** avec recherche, qui liste toutes les colonnes filtrables des quatre catalogues :
-   - **Factures** (colonnes d'en-tête : `UHALKY`, `UHAN8`, nom du client, référence contrat…).
-   - **Erreurs d'intégration** (colonnes filtrables du catalogue *Erreurs d'intégration*).
-   - **Journal des traitements** (colonnes du catalogue *Journal des traitements*).
-   - **E-Reporting** (colonnes du catalogue *E-Reporting*).
-2. Une liste de **valeurs** pour la colonne choisie, chacune sur sa propre ligne avec son bouton **×**. **+ Ajouter une valeur (OU)** ajoute une autre valeur.
-3. Un bouton **×** au niveau de la carte pour supprimer le filtre entier.
+| Groupe | Champs | Protège |
+|---|---|---|
+| **Clés — toutes les tables (doc, dct, kco)** | *Numéro de document*, *Type de document*, *Société*. | Toutes les tables qui portent ces clés. |
+| **Document (F564230) — toutes les tables liées** | Les champs du document archivé : code activité, unité d'activité, sous-type, fichier source, travail, programme, routage… | Toutes les tables liées au document. |
+| **Facture (F564231)** | L'en-tête de facture : clé alpha du client, nom du client, contrat… | Cette table. |
+| **Constats de validation (F564236)** | Sévérité, source, règle… | Cette table. |
+| **Journal des traitements** / **E-reporting** | Leurs propres colonnes. | Cette table. |
 
-Sous la liste, **+ Ajouter un filtre** permet à un même rôle de combiner des filtres sur des colonnes différentes.
+Chaque entrée s'affiche `libellé · CHAMP`. Pour le champ choisi, saisir une ou plusieurs valeurs (*Value (exact match)*) ; **+ Add value (OR)** ajoute une valeur, le **×** retire une valeur ou le filtre entier. **+ Add row filter** combine des filtres sur des champs différents. Comme la plupart de l'éditeur, ces libellés sont en anglais ; les titres de portée suivent la langue de l'interface.
 
 #### Règles de combinaison
 
 | Cas | Combiné en |
 |---|---|
-| Plusieurs **valeurs** sur la **même colonne** | `OU` — le rôle voit les lignes qui correspondent à **au moins une** des valeurs. |
-| Plusieurs **colonnes** dans la liste des filtres | `ET` — le rôle voit uniquement les lignes qui satisfont **chaque** contrainte. |
+| Plusieurs **valeurs** sur le **même champ** | `OU` — le rôle voit les lignes qui correspondent à **au moins une** des valeurs. |
+| Plusieurs **champs** dans la liste des filtres | `ET` — le rôle voit uniquement les lignes qui satisfont **chaque** contrainte. |
 | Droit **Sociétés** + filtres de lignes | `ET` — les deux doivent être satisfaits. |
 
 #### Où s'appliquent les filtres
 
-Un filtre de lignes n'est **pas** un simple voile d'IHM : il est appliqué partout où une ligne interdite pourrait fuir.
+Un filtre de lignes n'est **pas** un simple masquage dans l'interface : il est appliqué partout où une ligne interdite pourrait apparaître.
 
-- Les **listes** (Factures, E-Reporting, Erreurs d'intégration, Journal des traitements) — le filtre est ajouté au SQL.
-- Le **tableau de bord** — compteurs, graphiques et widgets respectent le filtre du rôle.
+- **Chaque liste qui possède le champ**, sous le nom que cette liste lui donne (client, code activité, travail, numéro UBL, statut…). Une liste sans ce champ ignore le filtre : un rôle limité à la sévérité `FATAL` garde ses factures, ses documents et ses tableaux de bord, et ne voit que les constats bloquants.
+- Les **tableaux de bord** — Synthèse, Exploitation, Statistiques, comptages par statut — et la fenêtre **E-Documents**, qui s'ouvre selon les mêmes règles que sa liste.
 - Les **endpoints par ligne** — cycle de vie, lignes, téléchargement XML, rendu PDF, push de statut, suppression, renvoi, envoi par mail.
 - Le **flux PDF généré** — une ligne interdite ne peut même pas être transformée en PDF.
 
@@ -415,13 +403,12 @@ Chaque droit est une ligne dans `F564254`. La structure :
 F564254
   PMROLE       — nom du rôle (FK vers F564251.RLNAME)
   PMCRAPPID    — type de droit : 'page' / 'company' / 'feature' / 'action'
-                                  / 'dashboard-card' / 'row-filter'
+                              / 'row-filter'
   PMCRAPPVAL   — valeur, encodée par type :
                    page             → identifiant de page  (ex. 'invoices')
                    company          → code KCO             (ex. '00001')
                    feature          → drapeau              ('settings', 'readonly', 'actions-whitelist')
                    action           → clé d'action         (ex. 'invoice.delete')
-                   dashboard-card   → clé de carte         (ex. 'dashboard.volume')
                    row-filter       → 'colonne=valeur'     (ex. 'UHALKY=123456')
   PMENABL      — '1' activé / '0' désactivé (utilisé lors du bootstrap spécifique au dialecte)
 ```
@@ -451,7 +438,7 @@ Confirmer supprime le rôle et toutes les lignes de droits de `F564254` qui lui 
 - **Coupler *Lecture seule* et *Actions* désactivées** pour les comptes de conformité / audit — les deux couches se renforcent.
 - **Le tableau *Sociétés* est l'outil principal de cloisonnement multi-tenant.** Laisser le tableau vide neutralise tout filtrage par société pour le rôle.
 - **D'abord les filtres de lignes, ensuite la liste blanche d'actions** pour cadrer un utilisateur externe. Le filtre de lignes masque ce qu'il ne doit pas voir ; la liste blanche d'actions contrôle ce qu'il peut faire avec ce qu'il voit.
-- **La liste blanche de cartes du tableau de bord s'exécute côté serveur** — les cartes désactivées ne déclenchent même pas leur SQL. Pratique pour masquer des widgets coûteux à des rôles peu privilégiés.
+- **Un rôle voit le tableau de bord Exploitation en entier ou pas du tout.** Pour limiter une équipe aux chiffres métier, accorder la Synthèse et les Statistiques sans Exploitation.
 - **Dupliquer pour dériver un rôle.** Partir d'un rôle existant en ajustant deux ou trois droits est plus rapide que reconstruire la liste depuis zéro — et le résultat reste proche de l'intention du rôle source.
 - **Ré-exécuter *Initialiser la base*** *(Database Connectors → NomaUBL)* si les droits par défaut des rôles `admin` ou `viewer` ont disparu — l'opération réinjecte les lignes sans toucher aux rôles personnalisés.
 - **Supprimer un rôle uniquement après avoir réaffecté ses membres.** Une fois supprimé, les membres perdent l'accès à tout jusqu'à réaffectation. L'onglet *Membres* est le moyen le plus rapide de voir qui serait touché.

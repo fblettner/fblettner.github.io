@@ -275,7 +275,7 @@ Rows expand and collapse with subtotals at every level; a status with a single r
 
 ## Access
 
-Like the [Billing overview](./billing-overview.md#access), the page follows the **Operations** grant of the Navigation group on the [Roles](../configuration/security/roles.md) page. Figures follow the company visibility of the signed-in user.
+Grant the **Statistics** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; the server and the AI assistant's `status_statistics` tool check the same grant. Figures follow the companies and the [row filters](../configuration/security/roles.md#row-filters) of the signed-in user's role.
 
 ---
 
@@ -285,3 +285,4 @@ Like the [Billing overview](./billing-overview.md#access), the page follows the 
 - **Compare like with like.** *This month* is compared with the whole previous month, *This year* with the same dates a year earlier — pick the period accordingly before reading the changes.
 - **Switch the detail table to *Net amount*** before a meeting with finance: the ranking of activities often changes.
 - **Build a recurring report in the [Explorer](./explorer.md)** when a breakdown is needed that the page does not offer; the ready-made *Status statistics* analysis is a good starting point.
+- **Send it by email.** A [daily digest](../sync/scheduled-jobs/daily-digest.md#business-dashboards) can send the page as PDF or Excel, over last month or the month to date, as a given role sees it.

@@ -8,7 +8,7 @@ keywords: [NomaUBL, operations dashboard, work queues, in progress, to correct, 
 
 The **Operations** dashboard shows **what the team has to handle** on the period. Its core is three work queues, each with the team it belongs to: what is in progress and needs nothing, what IT must correct and send again, and what customer service must settle by issuing a new invoice. Below them come the activity of the period, the invoices blocked the longest, the latest events and the rules that fail most. Every number is read from the NomaUBL database, whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
 
-Open it from **Operations** in the Navigation group, after the [Billing overview](./billing-overview.md). Under a restricted licence, it is the page the application opens on. The technical health of the server is on the [IT dashboard](./tech-dashboard.md).
+Open it from **Operations** in the Navigation group, after the [Billing overview](./billing-overview.md). Under a restricted licence, or for a role without the Billing overview, it is the page the application opens on. The technical health of the server is on the [IT dashboard](./tech-dashboard.md).
 
 ---
 
@@ -298,29 +298,15 @@ A row opens [E-Invoicing](./invoices.md) on its status.
 
 ---
 
-## Quick actions and About
+## About this build
 
-**Quick Actions** offers *New Invoice* (opens the new invoice window on the dashboard, for the roles allowed to create invoices), *Status Reference* and *Reason Codes*. The folded **About this build** block at the bottom gives the release, the AFNOR profile and the versions of the shipped Schematrons (see [Schematrons](../references/schematrons.md)).
+The folded **About this build** block at the bottom gives the release, the AFNOR profile and the versions of the shipped Schematrons (see [Schematrons](../references/schematrons.md)).
 
 ---
 
 ## Access
 
-Grant the **Operations** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; it also opens the [Billing overview](./billing-overview.md) and [Statistics](./statistics.md). Within the dashboard, each block can be hidden per role with the **dashboard cards** of the role:
-
-| Card | Block |
-|---|---|
-| *Total invoices* | The summary line of the page. |
-| *In flight* | The *In progress* queue. |
-| *Rejected — IT* | The *To correct and send again* queue. |
-| *Rejected — Business* | The *A new invoice must be issued* queue. |
-| *Status cards* | The rows inside the three queues. |
-| *Daily invoice volume* | The activity chart. |
-| *Stale invoices* / *Recent activity* | *Blocked the longest* / *Latest events*. |
-| *Top error rules* / *PA round-trip stats* / *E-Reporting coverage* | The three blocks of the bottom row. |
-| *Quick actions* | The Quick actions section. |
-
-Figures follow the company visibility of the signed-in user. Clicks to the invoice list need a full licence.
+Grant the **Operations** page in the Navigation group on the [Roles](../configuration/security/roles.md) page. The role sees the whole dashboard or nothing; the [Billing overview](./billing-overview.md) and [Statistics](./statistics.md) are granted apart. Figures follow the companies and the [row filters](../configuration/security/roles.md#row-filters) of the role. Clicks to the invoice list need a full licence.
 
 ---
 

@@ -2159,7 +2159,7 @@
       "get": {
         "tags": ["Dashboard"],
         "summary": "Status statistics dashboard",
-        "description": "Invoices of the period (direction=sales, the default, or purchases; dateBasis issue / update / archive; excludeReviewed) grouped by status, activity code, reason and transaction type with count and amount excl.\n\nVAT (rows); the status counts of the previous period of the same length (previousByStatus) and its rows in the same breakdown (previousRows), both null for all dates; invoices per day and status over the period (trend, the last twelve months for all dates); the invoices still open by status and days since their last change (ages: 0-1, 2-3, 4-7, 8-30, 30+); the status labels. Company and row grants apply.\n\n**Access:** any signed-in user.",
+        "description": "Invoices of the period (direction=sales, the default, or purchases; dateBasis issue / update / archive; excludeReviewed) grouped by status, activity code, reason and transaction type with count and amount excl.\n\nVAT (rows); the status counts of the previous period of the same length (previousByStatus) and its rows in the same breakdown (previousRows), both null for all dates; invoices per day and status over the period (trend, the last twelve months for all dates); the invoices still open by status and days since their last change (ages: 0-1, 2-3, 4-7, 8-30, 30+); the status labels. Requires the statistics page; company and row grants apply.\n\n**Access:** any signed-in user.",
         "parameters": [
           { "name": "dateFrom", "in": "query", "schema": { "type": "string" }, "description": "yyyy-MM-dd; with dateTo absent, all dates", "required": false },
           { "name": "dateTo", "in": "query", "schema": { "type": "string" }, "description": "yyyy-MM-dd", "required": false },
@@ -2180,7 +2180,7 @@
         "tags": ["Dashboard"],
         "x-permission": "any signed-in user",
         "summary": "Status statistics as PDF",
-        "description": "Same body and rendering as /api/explorer/pdf, sent by the Statistics page; allowed with the dashboard page. Returns application/pdf (statistics.pdf).\n\n**Access:** any signed-in user.",
+        "description": "Same body and rendering as /api/explorer/pdf, sent by the Statistics page; allowed with the statistics page. Returns application/pdf (statistics.pdf).\n\n**Access:** any signed-in user.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "type": "object", "example": { "lang": "fr", "kind": "analysis", "flow": true, "title": "Statistiques", "period": "2026-10-01 – 2026-10-25", "sections": [] } } } }
@@ -2198,7 +2198,7 @@
         "tags": ["Dashboard"],
         "x-permission": "any signed-in user",
         "summary": "Synthèse as PDF",
-        "description": "Same body and rendering as /api/explorer/pdf, sent by the Synthèse page (category and source name the report, flow runs the sections on from one another); allowed with the dashboard page.\n\nReturns application/pdf (synthese.pdf).\n\n**Access:** any signed-in user.",
+        "description": "Same body and rendering as /api/explorer/pdf, sent by the Synthèse page (category and source name the report, flow runs the sections on from one another); allowed with the synthese page.\n\nReturns application/pdf (synthese.pdf).\n\n**Access:** any signed-in user.",
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "type": "object", "example": { "lang": "fr", "kind": "analysis", "category": "Synthèse", "source": "NomaUBL", "title": "Synthèse — ventes", "period": "2026-10-01 – 2026-10-25", "sections": [] } } } }

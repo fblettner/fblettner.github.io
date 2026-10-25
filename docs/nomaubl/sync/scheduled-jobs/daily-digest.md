@@ -121,9 +121,10 @@ Each digest is one row in the catalogue. The edit pane has four sections.
 | Field | Required | What |
 |---|---|---|
 | **Name** | yes | Free text. Shown in the catalogue list and at the top of the email body. Example: *Accounting · ACME*. |
-| **Report** | yes (default: `Integration errors`) | What the digest reports. **Integration errors** collects the failing events from the [Integration Errors](../../application/diagnostics/integration-errors.md) page — the historical behaviour. **All archived invoices** instead reports every archived invoice in the window, and the attached spreadsheet carries the [E-Documents](../../application/edocuments.md) columns and honours the per-column filters below, so a digest can double as a daily archive extract. **Saved analysis (Explorer)** and **Dashboard (Explorer)** send an analysis or a whole dashboard — see the two fields below. |
+| **Report** | yes (default: `Integration errors`) | What the digest reports. **Integration errors** collects the failing events from the [Integration Errors](../../application/diagnostics/integration-errors.md) page — the historical behaviour. **All archived invoices** instead reports every archived invoice in the window, and the attached spreadsheet carries the [E-Documents](../../application/edocuments.md) columns and honours the per-column filters below, so a digest can double as a daily archive extract. **Saved analysis (Explorer)** and **Dashboard (Explorer)** send an analysis or a whole dashboard — see the two fields below. **Billing overview (Synthèse)** and **Statistics** send the figures of a [business dashboard](#business-dashboards). |
 | **Analysis** / **Dashboard** | when the report is *Saved analysis (Explorer)* or *Dashboard (Explorer)* | The [Explorer](../../application/explorer.md) analysis or dashboard to send, listed with its name and audience. It is run over the lookback window — its own period is replaced — and attached to the email. |
 | **Attachment** | with an analysis or a dashboard | **Excel — the data, one sheet per tile**, or **PDF — charts and data, audit report layout**. Built on the server at send time. |
+| **Period** / **Invoices** / **Visible as role** / **Attachment** | with *Billing overview* or *Statistics* | See [Business dashboards](#business-dashboards). |
 | **Recipients** | yes | One or more email addresses, comma- or semicolon-separated. Every address gets the same email — there's no per-address customisation here; create another digest if recipients should see different cuts. |
 | **Enabled** | yes (default: `on`) | When `off`, the digest is kept in the catalogue but skipped at send time. Useful for pausing a digest during a maintenance window without losing the configuration. |
 
@@ -134,6 +135,7 @@ Each digest is one row in the catalogue. The edit pane has four sections.
 | **Send time** | yes (default: `07:00`) | Time of day the digest runs. Hours / minutes; seconds are ignored. |
 | **Timezone** | yes (default: server timezone) | A IANA timezone (e.g. `Europe/Paris`). Each digest runs in its own timezone so a multi-region install can send one digest at 07:00 Paris and another at 07:00 New York. |
 | **Lookback window** | yes (default: `yesterday and today` = 1 day) | How far back the digest reaches when collecting events. Values: `today` (current day), `1 day` (yesterday + today — the default), `7 days`, `30 days`, or a custom `N days`. The window is rolling and ends at send time. |
+| **Day of the month** | no (default: blank = every day) | `1` to `28` sends the digest on that day of the month only — `1` with *Last month* sends last month's overview on the 1st. **Send now** ignores it. Available for every report. |
 
 ### 3. Severity filter
 
@@ -162,6 +164,19 @@ The digest carries a list of `(column, value)` pairs that narrow the event set. 
 | **Business unit** | `MU-LYO`, `MU-PAR` | Per-BU routing. |
 
 Filters combine with **AND**. Empty filters = all rows. Adding two values to the same column requires two digests.
+
+### Business dashboards \{#business-dashboards\}
+
+With **Billing overview (Synthèse)** or **Statistics**, the digest sends the figures of the [Billing overview](../../application/billing-overview.md) or [Statistics](../../application/statistics.md) page; the severity and column filters are hidden.
+
+| Field | Default | What |
+|---|---|---|
+| **Period** | Last month | **Last month** (1st to last day of the previous month), **Month to date** (1st of the month to today) or **Lookback window**. Compared with the previous period of the same kind, as on the page. |
+| **Invoices** | Sales | **Sales** or **Purchases**. |
+| **Visible as role** | Everything (no restriction) | The report shows what a user of this role sees: its companies and [row filters](../../configuration/security/roles.md#row-filters). The role must grant the page; otherwise the run fails with a message naming the role. One digest per role sends each recipient group its own scope. |
+| **Attachment** | Excel | **PDF — the page's figures, charts and tables**, in the layout of the audit report, or **Excel — one sheet per table**. |
+
+The attachment holds the sections of the page: for the Billing overview, the key figures with the previous period, the amount invoiced per month, what needs a decision, per company, per transaction type and, for sales, e-reporting; for Statistics, the key figures, the stages, the trend, the waiting time, the statuses and the detail by activity, status and reason. It is in French unless the instance language is English. The email states the period and that the report is attached; it is sent even when the period is empty.
 
 ---
 

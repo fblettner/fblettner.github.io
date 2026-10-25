@@ -6,7 +6,7 @@ keywords: [NomaUBL, déclaration de TVA, CA3, Cerfa 3310-CA3, TVA française, in
 
 # Déclaration de TVA
 
-L'écran **Déclaration de TVA** agrège chaque facture comptabilisée sur une période sur les lignes du formulaire **CA3** français — ventes / achats × France / intra-UE / hors UE × taux de TVA × type de facture. Chaque cellule se déplie jusqu'aux factures individuelles qui la composent ; le résultat s'exporte vers Excel pour la comptabilité ou vers un PDF au format CA3, prêt à être transmis au comptable.
+L'écran **Déclaration de TVA** agrège chaque facture comptabilisée sur une période sur les lignes du formulaire **CA3** français — ventes / achats × France / intra-UE / hors UE × taux de TVA × type de facture. Chaque taux se déplie en types d'opération puis en factures individuelles ; le résultat s'exporte vers Excel pour la comptabilité ou vers un PDF au format CA3, prêt à être transmis au comptable.
 
 Utilisez cette page quand :
 
@@ -14,7 +14,7 @@ Utilisez cette page quand :
 - vous devez rapprocher une ligne CA3 des factures qui la composent — quels clients, quels numéros, quels montants ;
 - vous voulez une synthèse imprimable de la période à joindre au dossier comptable.
 
-La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Le filtre de période s'applique à la **date d'émission de la facture** — celle imprimée sur la facture elle-même — donc la période reste stable même si les données sous-jacentes sont reconstruites plus tard. La liste Factures propose la même base de date via son [Sélecteur de base de date](./invoices.md#base-de-date) : un clic sur un montant de la matrice TVA ouvre la liste Factures avec le bon ensemble.
+La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé. Le filtre de période s'applique à la **date d'émission de la facture** — celle imprimée sur la facture elle-même — donc la période reste stable même si les données sous-jacentes sont reconstruites plus tard.
 
 La matrice est servie depuis les lignes de détail TVA enregistrées (`F564234`), sans relecture de chaque UBL à chaque chargement — la page s'ouvre donc en **quelques secondes que la période contienne 2 000 ou 200 000 factures**. Pour conserver ce comportement, laissez *Enregistrer les détails TVA* activé sous *Paramètres → Connecteurs → db-nomaubl → Tables* — voir [Stockage des détails](../configuration/database-connectors/nomaubl.md#stockage-des-détails).
 
@@ -32,7 +32,7 @@ La matrice est servie depuis les lignes de détail TVA enregistrées (`F564234`)
 
   <rect x="220" y="20" width="880" height="430" rx="14" fill="url(#vat-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Déclaration de TVA</text>
-  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">La TVA d'une période au format de la CA3 : collectée, déductible et nette ; un montant ouvre les factures qui le composent.</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">La TVA d'une période au format de la CA3 : collectée, déductible et nette, par sens, zone et taux.</text>
   <rect x="240" y="82" width="120" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <rect x="241" y="83" width="44" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="263.0" y="97.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Mois</text>
@@ -87,13 +87,13 @@ La matrice est servie depuis les lignes de détail TVA enregistrées (`F564234`)
   <text x="1000" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 102</text>
   <rect x="240" y="310" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">      ▸ 20 %</text>
-  <text x="720" y="324.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">1 080 000,00</text>
-  <text x="860" y="324.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">216 000,00</text>
+  <text x="720" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1 080 000,00</text>
+  <text x="860" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">216 000,00</text>
   <text x="1000" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 050</text>
   <rect x="240" y="336" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">      ▸ 10 %</text>
-  <text x="720" y="350.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">21 840,00</text>
-  <text x="860" y="350.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">2 184,00</text>
+  <text x="720" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">21 840,00</text>
+  <text x="860" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 184,00</text>
   <text x="1000" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">52</text>
   <rect x="240" y="362" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">   Intra-UE</text>
@@ -139,9 +139,9 @@ La matrice est servie depuis les lignes de détail TVA enregistrées (`F564234`)
   <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">synthèse + détail · CA3</text>
   <line x1="1120" y1="177.0" x2="1080" y2="123" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
   <rect x="1120" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clic sur un montant</text>
-  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">ouvre les factures</text>
-  <line x1="1120" y1="307.0" x2="780" y2="325" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Un taux se déplie</text>
+  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">en types, puis en factures</text>
+  <line x1="1120" y1="307.0" x2="280" y2="325" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
 </svg>
 
 ---
@@ -198,7 +198,7 @@ Le tableau se lit par **sens**, puis par **zone**, puis par **taux** :
 | **Taux** (`20 %`, `10 %`…, *Sans taux*) | Une ligne par taux présent dans la zone, du plus élevé au plus faible, repliée. Sa flèche ouvre une ligne par routage BAR (`B2B`, `B2C`, `B2BINT`, `B2G`…), dont la flèche ouvre les factures — document, type, société, base et TVA, jusqu'à **200 lignes** (l'export Excel contient la liste complète). |
 | **TVA à payer** / **Crédit de TVA** | La TVA nette de la période, *Collectée − déductible*. |
 
-Au survol, les montants des lignes de taux et de routage proposent *Voir les factures* : un clic ouvre la [liste des factures](./invoices.md) sur le même sens, la même zone et la même période, en date d'émission, et sur le même routage pour une ligne de routage. Le taux lui-même n'est pas transmis comme filtre. Les montants s'affichent dans la couleur normale.
+Les montants ne renvoient pas à la [liste des factures](./invoices.md), qui ne sait filtrer ni par taux de TVA ni selon les deux exclusions : les factures d'un chiffre se lisent en dépliant ses lignes de taux et de routage, ou dans la feuille *Détails* de l'export Excel. Montants, taux et pourcentages suivent le format numérique de la langue de l'interface.
 
 ### Règles de classement par zone
 

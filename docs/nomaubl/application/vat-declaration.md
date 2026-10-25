@@ -6,7 +6,7 @@ keywords: [NomaUBL, VAT declaration, déclaration de TVA, CA3, Cerfa 3310-CA3, F
 
 # VAT Declaration
 
-The **VAT Declaration** screen aggregates every invoice booked in a period on the lines of the French **CA3 form** — sales / purchases × France / intra-EU / outside-EU × VAT rate × invoice type. Each cell can be drilled down all the way to the individual invoices that make it up, and the result exports to Excel for accounting or to a CA3-styled PDF you can hand to the accountant.
+The **VAT Declaration** screen aggregates every invoice booked in a period on the lines of the French **CA3 form** — sales / purchases × France / intra-EU / outside-EU × VAT rate × invoice type. Each rate unfolds into its transaction types and the individual invoices that make it up, and the result exports to Excel for accounting or to a CA3-styled PDF you can hand to the accountant.
 
 Use this page when:
 
@@ -14,7 +14,7 @@ Use this page when:
 - you need to reconcile a CA3 line with the underlying invoices — which buyers, which document numbers, which amounts;
 - you want a printable synthesis of the period to attach to the accounting file.
 
-The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The period filter is read on the **invoice's issue date** — the date printed on the invoice itself — so the period stays stable even if the underlying data is rebuilt later. The Invoices list exposes the same date basis via its [Date basis toggle](./invoices.md#date-basis), so drilling into a VAT amount lands on the matching set on the Invoices side.
+The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The period filter is read on the **invoice's issue date** — the date printed on the invoice itself — so the period stays stable even if the underlying data is rebuilt later.
 
 The matrix is served from the persisted VAT detail rows (`F564234`), not by re-parsing every UBL on each load — so the page opens in **a couple of seconds whether the period has 2 000 invoices or 200 000**. To keep it that way, leave *Store VAT details* on under *Settings → Connectors → db-nomaubl → Tables* — see [Detail Storage](../configuration/database-connectors/nomaubl.md#detail-storage).
 
@@ -24,15 +24,15 @@ The matrix is served from the persisted VAT detail rows (`F564234`), not by re-p
 
 <svg viewBox="0 0 1320 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
-    <marker id="vat-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <marker id="vat-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0.10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="vat-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
     <linearGradient id="vat-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
-    <marker id="vat-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="vat-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0.10 Z" fill="#64748b"/></marker>
   </defs>
 
   <rect x="220" y="20" width="880" height="430" rx="14" fill="url(#vat-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">VAT declaration</text>
-  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">The VAT of a period in the CA3 layout: collected, deductible and net; an amount opens the invoices behind it.</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">The VAT of a period in the CA3 layout: collected, deductible and net, by direction, zone and rate.</text>
   <rect x="240" y="82" width="115" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <rect x="241" y="83" width="50" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="266.0" y="97.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Month</text>
@@ -57,19 +57,19 @@ The matrix is served from the persisted VAT detail rows (`F564234`), not by re-p
   <text x="390" y="126" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">compared with 1 Aug 2026 – 31 Aug 2026</text>
   <rect x="240.0" y="138" width="273.3333333333333" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="252.0" y="156" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VAT COLLECTED</text>
-  <text x="252.0" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">250 631,56 €</text>
-  <text x="252.0" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">1 253 157,80 € excl. VAT · 2 361 invoices</text>
-  <text x="252.0" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+4,2 % vs 240 524,10 €</text>
+  <text x="252.0" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">250,631.56 €</text>
+  <text x="252.0" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">1,253,157.80 € excl. VAT · 2,361 invoices</text>
+  <text x="252.0" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+4.2 % vs 240,524.10 €</text>
   <rect x="523.3333333333333" y="138" width="273.3333333333333" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="535.3333333333333" y="156" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VAT DEDUCTIBLE</text>
-  <text x="535.3333333333333" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">98 412,30 €</text>
-  <text x="535.3333333333333" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">492 061,50 € excl. VAT · 418 invoices</text>
-  <text x="535.3333333333333" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">−1,8 % vs 100 216,00 €</text>
+  <text x="535.3333333333333" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">98,412.30 €</text>
+  <text x="535.3333333333333" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">492,061.50 € excl. VAT · 418 invoices</text>
+  <text x="535.3333333333333" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">−1.8 % vs 100,216.00 €</text>
   <rect x="806.6666666666666" y="138" width="273.3333333333333" height="78" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="818.6666666666666" y="156" fill="#64748b" fontSize="8.5" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">VAT DUE</text>
-  <text x="818.6666666666666" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">152 219,26 €</text>
+  <text x="818.6666666666666" y="180" fill="#e2e8f0" fontSize="16" fontWeight="700" fontFamily="system-ui, sans-serif">152,219.26 €</text>
   <text x="818.6666666666666" y="195" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Collected − deductible</text>
-  <text x="818.6666666666666" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+8,6 % vs 140 308,10 €</text>
+  <text x="818.6666666666666" y="208" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">+8.6 % vs 140,308.10 €</text>
   <rect x="240" y="230" width="840" height="24" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LINE</text>
   <text x="720" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BASE HT</text>
@@ -77,38 +77,38 @@ The matrix is served from the persisted VAT detail rows (`F564234`), not by re-p
   <text x="1000" y="245.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">INVOICES</text>
   <rect x="240" y="258" width="840" height="22" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Sales (VAT collected)</text>
-  <text x="720" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1 253 157,80</text>
-  <text x="860" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">250 631,56</text>
-  <text x="1000" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 361</text>
+  <text x="720" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1,253,157.80</text>
+  <text x="860" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">250,631.56</text>
+  <text x="1000" y="272.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2,361</text>
   <rect x="240" y="284" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">   France</text>
-  <text x="720" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1 101 840,00</text>
-  <text x="860" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">220 368,00</text>
-  <text x="1000" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 102</text>
+  <text x="720" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1,101,840.00</text>
+  <text x="860" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">220,368.00</text>
+  <text x="1000" y="298.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2,102</text>
   <rect x="240" y="310" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">      ▸ 20 %</text>
-  <text x="720" y="324.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">1 080 000,00</text>
-  <text x="860" y="324.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">216 000,00</text>
-  <text x="1000" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2 050</text>
+  <text x="720" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">1,080,000.00</text>
+  <text x="860" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">216,000.00</text>
+  <text x="1000" y="324.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2,050</text>
   <rect x="240" y="336" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">      ▸ 10 %</text>
-  <text x="720" y="350.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">21 840,00</text>
-  <text x="860" y="350.5" fill="#4a9eff" fontSize="9.5" fontFamily="system-ui, sans-serif">2 184,00</text>
+  <text x="720" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">21,840.00</text>
+  <text x="860" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">2,184.00</text>
   <text x="1000" y="350.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">52</text>
   <rect x="240" y="362" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">   Intra-EU</text>
-  <text x="720" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">151 317,80</text>
-  <text x="860" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">30 263,56</text>
+  <text x="720" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">151,317.80</text>
+  <text x="860" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">30,263.56</text>
   <text x="1000" y="376.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">259</text>
   <rect x="240" y="388" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Purchases (VAT deductible)</text>
-  <text x="720" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">492 061,50</text>
-  <text x="860" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">98 412,30</text>
+  <text x="720" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">492,061.50</text>
+  <text x="860" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">98,412.30</text>
   <text x="1000" y="402.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">418</text>
   <rect x="240" y="414" width="840" height="22" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
   <text x="250" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">VAT due — Collected − deductible</text>
   <text x="720" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
-  <text x="860" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">152 219,26</text>
+  <text x="860" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">152,219.26</text>
   <text x="1000" y="428.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif"></text>
   <rect x="20" y="78" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="93" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Month or quarter</text>
@@ -139,9 +139,9 @@ The matrix is served from the persisted VAT detail rows (`F564234`), not by re-p
   <text x="1130" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">summary + details · CA3</text>
   <line x1="1120" y1="177.0" x2="1080" y2="123" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
   <rect x="1120" y="290" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Click an amount</text>
-  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">opens the invoices</text>
-  <line x1="1120" y1="307.0" x2="780" y2="325" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
+  <text x="1130" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A rate unfolds</text>
+  <text x="1130" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">into types, then invoices</text>
+  <line x1="1120" y1="307.0" x2="280" y2="325" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#vat-arrow)"/>
 </svg>
 
 ---
@@ -183,7 +183,7 @@ The declaration counts the invoices issued in the period, minus:
 | Refused by the buyer (`210`) or rejected by the platform (`213`) | *Exclude all refused and rejected* is checked (default) — or, unchecked, once customer service has marked the invoice reviewed in its window, the internal credit note being done. |
 | To be sent, never reached the platform | *Exclude to-send invoices not at the platform* is checked: the invoice is flagged to be sent and its status is still internal (`99xx` other than `9906`, pending at the platform, and `9911`, export validated). |
 
-The two rules apply to the matrix, the drill-down, the Excel export and the PDF, whose footer states the rules applied. Over the API, the same choices are the `excludeMode` (`all` or `reviewed`) and `excludeUnsent` parameters.
+The two rules apply to the matrix, the unfolded invoices, the Excel export and the PDF, whose footer states the rules applied. Over the API, the same choices are the `excludeMode` (`all` or `reviewed`) and `excludeUnsent` parameters.
 
 ---
 
@@ -198,7 +198,7 @@ The table reads by **direction**, then by **country group**, then by **rate**:
 | **Rate** (`20 %`, `10 %`…, *No rate*) | One row per rate found in the group, highest first, collapsed. Its chevron opens one row per BAR routing (`B2B`, `B2C`, `B2BINT`, `B2G`…), whose chevron opens the invoices — document, type, company, base and VAT, up to **200 rows** (the Excel export holds the full list). |
 | **VAT due** / **VAT credit** | The net VAT of the period, *Collected − deductible*. |
 
-The amounts of the rate and routing rows open, on hover, *See the invoices*: a click jumps to the [Invoices list](./invoices.md) on the same direction, country group and period, by issue date, and on the same routing for a routing row. The rate itself is not passed as a filter. Amounts are shown in the normal colour.
+The amounts are not links to the [Invoices list](./invoices.md), which cannot filter by VAT rate nor apply the two exclusions: the invoices behind a figure are read by unfolding its rate and routing rows, or in the *Details* sheet of the Excel export. Amounts, rates and percentages follow the number format of the interface language.
 
 ### Country group rules
 

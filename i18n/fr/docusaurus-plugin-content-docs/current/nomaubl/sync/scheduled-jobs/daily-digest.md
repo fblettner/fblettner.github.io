@@ -121,9 +121,10 @@ Chaque rapport est une ligne du catalogue. Le panneau d'édition comporte quatre
 | Champ | Obligatoire | Description |
 |---|---|---|
 | **Nom** | oui | Texte libre. Affiché dans la liste du catalogue et en tête du corps de l'email. Exemple : *Comptabilité · ACME*. |
-| **Rapport** | oui (défaut : `Erreurs d'intégration`) | Ce que couvre le rapport. **Erreurs d'intégration** rassemble les évènements en échec de la page [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) — le comportement d'origine. **Toutes les factures archivées** couvre à la place chaque facture archivée sur la fenêtre, et la feuille jointe porte les colonnes de la page [E-Documents](../../application/edocuments.md) et respecte les filtres par colonne ci-dessous ; un rapport peut ainsi servir aussi d'extraction d'archive quotidienne. **Analyse enregistrée (Explorateur)** et **Tableau de bord (Explorateur)** envoient une analyse ou un tableau de bord complet — voir les deux champs ci-dessous. |
+| **Rapport** | oui (défaut : `Erreurs d'intégration`) | Ce que couvre le rapport. **Erreurs d'intégration** rassemble les évènements en échec de la page [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) — le comportement d'origine. **Toutes les factures archivées** couvre à la place chaque facture archivée sur la fenêtre, et la feuille jointe porte les colonnes de la page [E-Documents](../../application/edocuments.md) et respecte les filtres par colonne ci-dessous ; un rapport peut ainsi servir aussi d'extraction d'archive quotidienne. **Analyse enregistrée (Explorateur)** et **Tableau de bord (Explorateur)** envoient une analyse ou un tableau de bord complet — voir les deux champs ci-dessous. **Synthèse de la facturation** et **Statistiques** envoient les chiffres d'un [tableau de bord métier](#business-dashboards). |
 | **Analyse** / **Tableau de bord** | quand le rapport est *Analyse enregistrée (Explorateur)* ou *Tableau de bord (Explorateur)* | L'analyse ou le tableau de bord de l'[Explorateur](../../application/explorer.md) à envoyer, présenté avec son nom et son public. Il est exécuté sur la fenêtre de rétrospective — sa propre période est remplacée — et joint au message. |
 | **Pièce jointe** | avec une analyse ou un tableau de bord | **Excel — les données, une feuille par tuile**, ou **PDF — graphiques et données, mise en page du rapport d'audit**. Produite sur le serveur au moment de l'envoi. |
+| **Période** / **Factures** / **Vue du rôle** / **Pièce jointe** | avec *Synthèse de la facturation* ou *Statistiques* | Voir [Tableaux de bord métier](#business-dashboards). |
 | **Destinataires** | oui | Une ou plusieurs adresses email, séparées par virgule ou point-virgule. Chaque adresse reçoit le même email — il n'y a pas de personnalisation par adresse ici ; créez un autre rapport si les destinataires doivent voir des coupes différentes. |
 | **Activé** | oui (défaut : `on`) | Quand il vaut `off`, le rapport est conservé dans le catalogue mais ignoré au moment de l'envoi. Pratique pour mettre en pause un rapport pendant une fenêtre de maintenance sans perdre la configuration. |
 
@@ -134,6 +135,7 @@ Chaque rapport est une ligne du catalogue. Le panneau d'édition comporte quatre
 | **Heure d'envoi** | oui (défaut : `07:00`) | Heure de la journée à laquelle le rapport s'exécute. Heures / minutes ; les secondes sont ignorées. |
 | **Fuseau horaire** | oui (défaut : fuseau du serveur) | Un fuseau IANA (par exemple `Europe/Paris`). Chaque rapport tourne dans son propre fuseau, ce qui permet à une installation multi-régions d'envoyer un rapport à 07:00 Paris et un autre à 07:00 New York. |
 | **Fenêtre d'analyse** | oui (défaut : `hier et aujourd'hui` = 1 jour) | Profondeur de la collecte d'évènements. Valeurs : `today` (jour courant), `1 day` (hier + aujourd'hui — la valeur par défaut), `7 days`, `30 days`, ou une valeur personnalisée `N days`. La fenêtre est glissante et se termine à l'heure d'envoi. |
+| **Jour du mois** | non (défaut : vide = tous les jours) | `1` à `28` n'envoie le rapport que ce jour du mois — `1` avec *Mois précédent* envoie la synthèse du mois écoulé le 1er. **Envoyer maintenant** l'ignore. Disponible pour tous les rapports. |
 
 ### 3. Filtre de sévérité
 
@@ -162,6 +164,19 @@ Le rapport porte une liste de paires `(colonne, valeur)` qui restreignent le jeu
 | **Business unit** | `MU-LYO`, `MU-PAR` | Routage par BU. |
 
 Les filtres se combinent en **ET**. Filtres vides = toutes les lignes. Ajouter deux valeurs sur la même colonne demande deux rapports.
+
+### Tableaux de bord métier \{#business-dashboards\}
+
+Avec **Synthèse de la facturation** ou **Statistiques**, le rapport envoie les chiffres de la page [Synthèse](../../application/billing-overview.md) ou [Statistiques](../../application/statistics.md) ; les filtres de sévérité et par colonne sont masqués.
+
+| Champ | Par défaut | Description |
+|---|---|---|
+| **Période** | Mois précédent | **Mois précédent** (du 1er au dernier jour du mois écoulé), **Mois en cours** (du 1er du mois à aujourd'hui) ou **Fenêtre de jours**. Comparée à la période précédente de même nature, comme sur la page. |
+| **Factures** | Ventes | **Ventes** ou **Achats**. |
+| **Vue du rôle** | Tout (sans restriction) | Le rapport montre ce que voit un utilisateur de ce rôle : ses sociétés et ses [filtres de lignes](../../configuration/security/roles.md#filtres-de-lignes). Le rôle doit donner accès à la page, sinon l'exécution échoue avec un message qui nomme le rôle. Un rapport par rôle envoie à chaque groupe de destinataires son propre périmètre. |
+| **Pièce jointe** | Excel | **PDF — indicateurs, graphiques et tableaux de la page**, au format du rapport d'audit, ou **Excel — une feuille par tableau**. |
+
+La pièce jointe reprend les sections de la page : pour la Synthèse, les chiffres clés avec la période précédente, le montant facturé par mois, ce qui demande une décision, la répartition par société, par type d'opération et, pour les ventes, l'e-reporting ; pour les Statistiques, les chiffres clés, les étapes, l'évolution, les temps d'attente, les statuts et le détail par activité, statut et motif. Elle est en français, sauf si la langue de l'instance est l'anglais. Le message indique la période et la présence du rapport joint ; il part même quand la période est vide.
 
 ---
 

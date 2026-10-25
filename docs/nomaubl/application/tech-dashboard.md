@@ -1,12 +1,12 @@
 ---
 title: IT dashboard
-description: "The NomaUBL IT dashboard (Tech Dashboard): a health strip (application, database, disk, memory, scheduler, configuration), the four action cards (send failed, waiting for review, to reprocess, to reprocess in full), processing over the last 14 days (volume, errors, retries, time per document), what is running right now, recent errors, and folded technical details (system, filesystem, JVM, configuration check, database tables, links)."
+description: "The NomaUBL IT dashboard: a health strip (application, database, disk, memory, scheduler, configuration), the four action cards (send failed, waiting for review, to reprocess, to reprocess in full), processing over the last 14 days (volume, errors, retries, time per document), what is running right now, recent errors, and folded technical details (system, filesystem, JVM, configuration check, database tables, links)."
 keywords: [NomaUBL, IT dashboard, tech dashboard, health, JVM, heap, database ping, disk, scheduler, configuration check, send failed, resend, reprocess, documents processed per day, error rate, retry rate, processing time, running processes, live process events, active sessions, recent errors, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # IT dashboard
 
-The **IT dashboard** (*Tech Dashboard* in the application) is the IT team's view of NomaUBL. It reads top-down like a checklist: **is everything up?** (a health strip), **what is there to do?** (four action cards with their bulk action), **how did processing go over the last 14 days?**, **what is running right now?**, and the **recent errors**. The detailed technical cards — system, filesystem, JVM, configuration check, database tables — are folded at the bottom and open from the health strip. It complements the [Operations](./dashboard.md) dashboard, which follows the invoices rather than the server.
+The **IT dashboard** (*Tech Dashboard* in the menu) is the IT team's view of NomaUBL. It reads top-down like a checklist: **is everything up?** (a health strip), **what is there to do?** (four action cards with their bulk action), **how did processing go over the last 14 days?**, **what is running right now?**, and the **recent errors**. The detailed technical cards — system, filesystem, JVM, configuration check, database tables — are folded at the bottom and open from the health strip. It complements the [Operations](./dashboard.md) dashboard, which follows the invoices rather than the server.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The cards read host-level metrics and the NomaUBL processing log.
 
@@ -15,7 +15,6 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 ## Opening the page
 
 - Menu → **Navigation → Tech Dashboard**, after Operations.
-- The page title and description stay in English in both languages, as do most card titles.
 
 ---
 
@@ -30,7 +29,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
   </defs>
 
   <rect x="220" y="20" width="760" height="530" rx="14" fill="url(#tdb-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Tech Dashboard</text>
+  <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">IT dashboard</text>
   <rect x="876" y="34" width="84" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
   <text x="918.0" y="48.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">↻ Refresh</text>
   <text x="240" y="80" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">IS EVERYTHING UP?</text>

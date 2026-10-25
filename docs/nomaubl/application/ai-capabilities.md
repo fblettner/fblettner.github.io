@@ -170,7 +170,7 @@ The assistant quotes the page it used and gives its link. It never invents a set
 | **`edirectory_lookup`** | 🏢 | A company in the [e-directory](./edirectory.md) by SIREN, SIRET or name: legal data and routing lines. |
 | **`template_settings`** | ⚙️ | The settings of one template, secrets masked. Requires the *Settings access* feature. |
 
-The assistant knows every page of the application — among them the [Billing overview](./billing-overview.md), [Statistics](./statistics.md), the [Explorer](./explorer.md) and the [invoice stages](./invoices.md#status-by-stage) — and answers a question on revenue, credit notes, transmission rate or decisions with `billing_overview`, a question on stages, waiting time or reasons with `status_statistics`. Through the implementation report (`instance_docs`) it also knows the default periods and the dashboard rules of the instance.
+The assistant knows every page of the application — among them the [Billing overview](./billing-overview.md), [Statistics](./statistics.md), the [Explorer](./explorer.md) and the [invoice stages](./invoices.md#status-by-stage) — and answers a question on revenue, credit notes, transmission rate or decisions with `billing_overview`, a question on stages, waiting time or reasons with `status_statistics`. Through the implementation report (`instance_docs`) it also knows the default periods and the dashboard rules of the instance. The two tools answer only when the user's role grants the page (Billing overview, Statistics).
 
 The assistant also receives the live **status catalogue**, so *"en litige"*, *"refused"* or *"awaiting deposit"* map to the right code.
 

@@ -8,7 +8,7 @@ keywords: [NomaUBL, tableau de bord exploitation, files de travail, en cours, à
 
 Le tableau de bord **Exploitation** montre **ce que l'équipe a à traiter** sur la période. Il s'articule autour de trois files de travail, chacune associée à l'équipe concernée : ce qui est en cours et ne demande rien, ce que l'informatique doit corriger puis renvoyer, et ce que le service client doit régler en émettant une nouvelle facture. Viennent ensuite l'activité de la période, les factures bloquées depuis le plus longtemps, les derniers événements et les règles les plus souvent en échec. Toutes les valeurs proviennent de la base NomaUBL, quel que soit le système source (JD Edwards, SAP, NetSuite ou un ERP personnalisé).
 
-Accès : **Exploitation**, dans le groupe Navigation, après la [Synthèse](./billing-overview.md). Avec une licence restreinte, c'est la page d'ouverture de l'application. L'état technique du serveur se trouve sur le [tableau de bord IT](./tech-dashboard.md).
+Accès : **Exploitation**, dans le groupe Navigation, après la [Synthèse](./billing-overview.md). Avec une licence restreinte, ou pour un rôle sans la Synthèse, c'est la page d'ouverture de l'application. L'état technique du serveur se trouve sur le [tableau de bord IT](./tech-dashboard.md).
 
 ---
 
@@ -298,29 +298,15 @@ Une ligne ouvre [E-Invoicing](./invoices.md) sur son statut.
 
 ---
 
-## Actions rapides et À propos
+## À propos de cette version
 
-**Actions rapides** propose *Nouvelle Facture* (ouvre la fenêtre de création de facture sur le tableau de bord, pour les rôles autorisés à créer des factures), *Référentiel statuts* et *Motifs*. Le bloc replié **À propos de cette version**, en bas de page, indique la version, le profil AFNOR et les versions des Schematrons livrés (voir [Schematrons](../references/schematrons.md)).
+Le bloc replié **À propos de cette version**, en bas de page, indique la version, le profil AFNOR et les versions des Schematrons livrés (voir [Schematrons](../references/schematrons.md)).
 
 ---
 
 ## Accès
 
-Accorder la page **Exploitation** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; elle ouvre aussi la [Synthèse](./billing-overview.md) et les [Statistiques](./statistics.md). Dans le tableau de bord, chaque bloc peut être masqué par rôle avec les **cartes du tableau de bord** du rôle (libellés en anglais dans l'éditeur des rôles) :
-
-| Carte | Bloc |
-|---|---|
-| *Total invoices* | La ligne de synthèse de la page. |
-| *In flight* | La file *En cours*. |
-| *Rejected — IT* | La file *À corriger puis renvoyer*. |
-| *Rejected — Business* | La file *Une nouvelle facture doit être émise*. |
-| *Status cards* | Les lignes des trois files. |
-| *Daily invoice volume* | Le graphique d'activité. |
-| *Stale invoices* / *Recent activity* | *Bloquées depuis le plus longtemps* / *Derniers événements*. |
-| *Top error rules* / *PA round-trip stats* / *E-Reporting coverage* | Les trois blocs de la rangée du bas. |
-| *Quick actions* | La section Actions rapides. |
-
-Les chiffres suivent la visibilité par société de l'utilisateur connecté. L'ouverture de la liste des factures depuis un bloc demande une licence complète.
+Accorder la page **Exploitation** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md). Le rôle voit tout le tableau de bord ou rien ; la [Synthèse](./billing-overview.md) et les [Statistiques](./statistics.md) s'accordent à part. Les chiffres suivent les sociétés et les [filtres de lignes](../configuration/security/roles.md#filtres-de-lignes) du rôle. L'ouverture de la liste des factures depuis un bloc demande une licence complète.
 
 ---
 

@@ -1,14 +1,14 @@
 ---
 title: Roles
-description: "Manage NomaUBL roles: row-based grants stored in F564254 across four tabs — Access (pages + dashboard cards + features), Actions (per-action whitelist), Data scope (companies + row filters), Members. Card list with copy / delete, friendly page labels from the sidebar i18n, granular per-button action grants and column-based row filters that gate the list views, the per-row endpoints and the rendered PDF stream."
-keywords: [NomaUBL, roles, permissions, RBAC, F564254, PMROLE, PMCRAPPID, page permissions, action whitelist, row filter, dashboard cards, settings access, read-only, companies, copy role, JD Edwards, SAP, NetSuite]
+description: "Manage NomaUBL roles: row-based grants stored in F564254 across four tabs — Access (pages + features), Actions (per-action whitelist), Data scope (companies + row filters), Members. Card list with copy / delete, friendly page labels from the sidebar i18n, granular per-button action grants and column-based row filters that gate the list views, the per-row endpoints and the rendered PDF stream."
+keywords: [NomaUBL, roles, permissions, RBAC, F564254, PMROLE, PMCRAPPID, page permissions, action whitelist, row filter, settings access, read-only, companies, copy role, JD Edwards, SAP, NetSuite]
 ---
 
 # Roles
 
 This screen manages NomaUBL's **role-based access control**. Each role bundles four kinds of grant:
 
-- A list of **pages** the role can reach (plus a list of **dashboard cards** visible to it).
+- A list of **pages** the role can reach.
 - A per-action **whitelist** of operations the role is allowed to perform (Edit, Delete, Resend, Push status…).
 - A **data scope** — the companies the role is restricted to **and** optional row filters that narrow the visible rows by column value.
 - The **members** assigned to the role.
@@ -190,7 +190,7 @@ The role's **Name** *(visible only when creating)* and **Description** sit above
 
 ## Tab — Access
 
-Defines **what the role can reach**: features, pages and dashboard cards.
+Defines **what the role can reach**: features and pages.
 
 ### Features
 
@@ -245,7 +245,7 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 | Group | Pages (id) |
 |---|---|
-| **Navigation** | Operations (`dashboard`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
+| **Navigation** | Billing overview (`synthese`), Operations (`dashboard`), Statistics (`statistics`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
 | **Sync** | Fetch Input (`fetchinput`), Fetch Import (`import`), Fetch Statuses (`retrievestatuses`), Scheduled Jobs (`scheduledjobs`). |
 | **Processing** | Process Document (`process`), Extract & Process (`extractandprocess`), Process API (`processapi`). |
 | **UBL** | UBL Validation (`validate`), XSL Editor (`xsleditor`), XML Viewer (`xmlviewer`), UBL Defaults (`ubldefaults`). |
@@ -260,27 +260,15 @@ A few chips carry a hint:
 - **Watched Folders** grants the configuration of the folders; their schedule is on *Scheduled Jobs*.
 - **Promotion** also requires the *Settings access* feature. See [Promotion](../../management/promotion.md).
 - **Developer** opens the [Developer reference](../../references/developer.md): tables, configuration keys, flows, impact, API.
-- **Operations** also opens the [Billing overview](../../application/billing-overview.md) and [Statistics](../../application/statistics.md), which have no page id of their own; **Business Rules** also opens [Schematrons](../../references/schematrons.md). A role that sees Operations lands on the Billing overview after sign-in.
+- **Billing overview** and **Statistics** are pages of their own, checked by the server and by the tools of the AI assistant. The upgrade gives both, once, to every role that had Operations, so nobody loses a page; removing them from a role afterwards is kept.
+- **Business Rules** also opens [Schematrons](../../references/schematrons.md).
+- After sign-in, a role with the Billing overview opens on it; a role without it opens on the first page it grants, in menu order (Operations, Statistics, Tech Dashboard, E-Invoicing…).
 
 Rules:
 
 - **All** / **None** above the cards grant or revoke every page at once.
 - **Empty list = all pages allowed.** Same convention as the other lists: an unfiltered role sees everything.
 - The `admin` role created at initialisation receives every page id listed above, including VAT declaration, Reports and Upgrade History.
-
-### Dashboard cards
-
-Each block of the [Operations](../../application/dashboard.md#access) dashboard is an individual permission keyed by `dashboard.<card>`. The cards are laid out like the pages — one card per group with its chips, count and **all** / **none** link:
-
-| Group | Cards |
-|---|---|
-| **Hero metrics** | `dashboard.total`, `dashboard.inflight`, `dashboard.errors-tech`, `dashboard.errors-business`, `dashboard.status-cards` (status cards 213 / 9905 / 9907 and 207 / 208 / 210) |
-| **Charts & widgets** | `dashboard.volume`, `dashboard.recent`, `dashboard.stale`, `dashboard.error-rules`, `dashboard.ereporting`, `dashboard.round-trip` (the editor also lists `dashboard.pipeline` and `dashboard.per-company`, which no block of the page uses) |
-| **Sections** | `dashboard.quick-actions` |
-
-- **Empty list = every card visible**.
-- A populated list is a strict whitelist — hidden cards are **skipped server-side**, so their SQL never runs and their data never reaches the wire.
-- The same **All** / **None** buttons and per-group **all** / **none** links are available as on the Allowed Pages cards.
 
 ---
 
@@ -312,7 +300,7 @@ Grouped by the page where the button lives — the same key can power buttons on
 
 | Group | Action | Key | Effect |
 |---|---|---|---|
-| **Invoices** | Create | `invoice.create` | *New Invoice* in the Quick Actions of the Operations dashboard. |
+| **Invoices** | Create | `invoice.create` | The *New Invoice* button of the [E-Invoicing](../../application/invoices.md) list. |
 | **Invoices** | Edit | `invoice.edit` | Update invoice fields from the detail modal / edit panel. |
 | **Invoices** | Delete | `invoice.delete` | Hard-delete an invoice and all its child records. |
 | **Invoices** | Delete lifecycle event | `invoice.lifecycle-delete` | Remove a single status event from an invoice history; the header realigns on the last remaining event. |
@@ -348,34 +336,34 @@ An add-row table of company codes (`KCO`) the role is scoped to. Each row carrie
 
 ### Row filters
 
-A more granular restriction: for any catalog column flagged as filterable, the role can be restricted to one or more **exact values**. Typical use case — an external customer who should only see invoices issued to its own alpha key (`UHALKY`).
+A more granular restriction: on a field, the role can be restricted to one or more **exact values**. Typical use case — an external customer who should only see invoices issued to its own alpha key (`UHALKY`).
 
-Each row filter is a card with:
+The **column picker** lists each field once, **by scope**:
 
-1. A **searchable column picker** showing every filterable column across the four catalogs:
-   - **Invoices** (header columns: `UHALKY`, `UHAN8`, customer name, contract reference, …).
-   - **Integration errors** (the integration error catalog's row-filterable columns).
-   - **Processing log** (processing-log catalog columns).
-   - **E-Reporting** (e-reporting catalog columns).
-2. A list of **values** for the picked column, each on its own row with its own remove button. **+ Add value (OR)** appends another value.
-3. A row-level remove button to drop the entire filter.
+| Group | Fields | Secures |
+|---|---|---|
+| **Keys — every table (doc, dct, kco)** | *Document number*, *Document type*, *Company*. | Every table that has these keys. |
+| **Document (F564230) — every linked table** | The fields of the archived document: activity code, business unit, sub-type, source file, job, program, routing… | Every table linked to the document. |
+| **Invoice (F564231)** | The invoice header: customer alpha key, customer name, contract… | That table. |
+| **Validation findings (F564236)** | Severity, source, rule… | That table. |
+| **Processing log** / **E-reporting** | Their own columns. | That table. |
 
-Below the list, **+ Add row filter** lets a single role combine filters on different columns.
+Each entry reads `label · FIELD`. For the picked field, enter one or more values (*Value (exact match)*); **+ Add value (OR)** appends another value, the **×** removes a value or the whole filter. **+ Add row filter** combines filters on different fields. Like most of the editor, these labels are in English; the scope titles follow the interface language.
 
 #### Combination rules
 
 | Pattern | Combined as |
 |---|---|
-| Multiple **values** on the **same column** | `OR` — the role sees rows that match **any** of the values. |
-| Multiple **columns** in the filter list | `AND` — the role sees only rows that match **every** column constraint. |
+| Multiple **values** on the **same field** | `OR` — the role sees rows that match **any** of the values. |
+| Multiple **fields** in the filter list | `AND` — the role sees only rows that match **every** constraint. |
 | **Companies** grant + row filters | `AND` — both must be satisfied. |
 
 #### Where row filters apply
 
 A row filter is **not** a UI hint — it is enforced everywhere a forbidden row could otherwise leak:
 
-- The **list views** (Invoices, E-Reporting, Integration Errors, Processing Log) — the filter is appended to the SQL.
-- The **Dashboard** counters, charts and widgets — every card respects the role's row filter.
+- **Every list that has the field**, under the name that list gives it (customer, activity code, job, UBL number, status…). A list without the field ignores the filter: a role restricted to the `FATAL` severity keeps its invoices, documents and dashboards and sees only the fatal findings.
+- The **dashboards** — Billing overview, Operations, Statistics, status counts — and the **E-Documents** window, which opens under the same rules as its list.
 - **Per-row endpoints** — lifecycle, lines, XML download, PDF render, status push, delete, resend, email PDF.
 - The **rendered PDF byte stream** — a forbidden row cannot even be turned into a PDF.
 
@@ -415,13 +403,12 @@ Every grant is one row in `F564254`. The shape:
 F564254
   PMROLE       — role name (FK to F564251.RLNAME)
   PMCRAPPID    — grant type: 'page' / 'company' / 'feature' / 'action'
-                              / 'dashboard-card' / 'row-filter'
+                              / 'row-filter'
   PMCRAPPVAL   — grant value, encoded per type:
                    page             → page id          (e.g. 'invoices')
                    company          → KCO code         (e.g. '00001')
                    feature          → flag             ('settings', 'readonly', 'actions-whitelist')
                    action           → action key       (e.g. 'invoice.delete')
-                   dashboard-card   → card key         (e.g. 'dashboard.volume')
                    row-filter       → 'column=value'   (e.g. 'UHALKY=123456')
   PMENABL      — '1' enabled / '0' disabled (used during dialect-specific bootstrapping)
 ```
@@ -451,7 +438,7 @@ Confirming removes the role and every grant row in `F564254` keyed by it. Users 
 - **Pair *Read-only* with *Actions* off** for compliance / audit accounts — both layers reinforce each other.
 - **Use the Companies table to enforce multi-tenant isolation.** Leaving it empty defeats company-level filtering for the role.
 - **Row filters first, action whitelist second** when scoping an external user. The row filter hides everything the user should not see; the action whitelist controls what they can do with what they see.
-- **The dashboard card whitelist runs server-side** — disabled cards never query the database. Use it to hide cost-sensitive widgets from low-trust roles.
+- **A role sees the Operations dashboard as a whole or not at all.** To keep a team on business figures only, grant the Billing overview and Statistics without Operations.
 - **Use Copy when forking a role.** Starting from an existing role with one or two grants flipped is faster than rebuilding the checklists from scratch — and the result is closer to the source role's intent.
 - **Re-run *Initialize Database*** *(Database Connectors → NomaUBL)* if the default `admin` or `viewer` grants are missing — it re-seeds the rows without touching custom roles.
 - **Delete a role only after re-binding its members.** Once deleted, members lose access to everything until reassigned. The Members tab is the fastest way to check who would be affected.

@@ -24,6 +24,8 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
   <rect x="220" y="20" width="760" height="422" rx="14" fill="url(#inv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">E-Invoicing</text>
+  <rect x="866" y="32" width="94" height="22" rx="5" fill="url(#inv-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="913.0" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ New Invoice</text>
   <rect x="240" y="64" width="206" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="250" y="78.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📅 1 – 31 Oct 2026 · Update date ▾</text>
   <rect x="456" y="64" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -128,14 +130,18 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
   <text x="30" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Advanced Filters + Run</text>
   <text x="30" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">server query, capped slice</text>
   <line x1="200" y1="287.0" x2="470" y2="293" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-  <rect x="1000" y="30" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="45" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
-  <text x="1010" y="58" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">issued by default</text>
-  <line x1="1000" y1="47.0" x2="576" y2="64" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-  <rect x="1000" y="138" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="153" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clear filters</text>
-  <text x="1010" y="166" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">when a status is picked</text>
-  <line x1="1000" y1="155.0" x2="946" y2="118" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="22" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="37" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">New Invoice</text>
+  <text x="1010" y="50" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">with the invoice.create action</text>
+  <line x1="1000" y1="39.0" x2="960" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="64" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="79" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
+  <text x="1010" y="92" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">issued by default</text>
+  <line x1="1000" y1="81.0" x2="606" y2="75" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="148" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="163" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clear filters</text>
+  <text x="1010" y="176" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">when a status is picked</text>
+  <line x1="1000" y1="165.0" x2="946" y2="118" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
   <rect x="1000" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Click → detail window</text>
   <text x="1010" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">7 tabs, opens on Summary</text>
@@ -146,7 +152,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## Toolbar
 
-Above the grid, two rows: the **period**, the **direction** and **Exclude reviewed errors**, then the **status by stage**. The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
+Above the grid, two rows: the **period**, the **direction** and **Exclude reviewed errors**, then the **status by stage**. The toolbar also carries **+ New Invoice**, shown to the roles allowed to create invoices (`invoice.create`), which opens the [Create / Edit invoice modal](#create-invoice). The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
 
 ### Period
 
@@ -211,7 +217,7 @@ RefList columns (Status, eReporting Status, custom lists) get a **multi-select p
 
 ### Grid toolbar
 
-Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)** and **Reprocess selected (N)** when rows are ticked (see [Bulk resend](#bulk-resend) and [Reprocess](#reprocess)). A new invoice is created from the **Quick Actions** of the [Operations](./dashboard.md) dashboard.
+Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)** and **Reprocess selected (N)** when rows are ticked (see [Bulk resend](#bulk-resend) and [Reprocess](#reprocess)).
 
 ---
 
@@ -715,9 +721,9 @@ The PDF currently shown in the PDF tab is automatically attached. If the PDF was
 
 While the e-mail is sending, an overlay covers the modal until the SMTP server confirms the send. A green banner indicates success; the modal closes automatically after ~2 s.
 
-### Create / Edit invoice modal
+### Create / Edit invoice modal \{#create-invoice\}
 
-Opens from **New Invoice** in the Quick Actions of the [Operations](./dashboard.md) dashboard, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
+Opens from **+ New Invoice** in the toolbar, or from the **Edit UBL** / **Copy** buttons in the Summary tab. Lets the user create a new invoice from scratch or adjust an existing one. The modal is laid out like a printable invoice — the user fills the form and NomaUBL produces the corresponding UBL document on **Save**.
 
 Editing an existing invoice no longer flips its `cbc:CustomizationID` back to the EN16931 default. The form now carries the `customizationId` value from the source UBL and writes it back verbatim — new invoices still default to `urn:cen.eu:en16931:2017`.
 
