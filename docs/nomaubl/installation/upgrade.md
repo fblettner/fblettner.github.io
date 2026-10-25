@@ -103,6 +103,7 @@ The framework-XSL refresh (step 4) **no longer overwrites `ubl-defaults.xsl`**. 
 - a **fresh install** receives the bundled defaults;
 - an **upgrade keeps the customer's file** untouched;
 - when the shipped version differs from the customer's, the shipped one is written alongside as **`ubl-defaults.xsl.upstream`** for manual review.
+- when the customer's file holds its own version of a framework template (the seller party, for example), the upgrade adds to it the parameters the new framework passes — with their shipped defaults, the body untouched — so the file keeps compiling; the customised body ignores the new values until it is updated from the `.upstream` copy.
 
 The upgrade report lists every kept file under an **Assets preserved** section. The same protection covers the `${env}/ubl/` mirror, which the upgrade also refreshes so per-document XSLs never import a stale framework copy.
 

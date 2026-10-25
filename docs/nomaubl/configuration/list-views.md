@@ -220,8 +220,8 @@ Above the column rows, each view card carries a *Defaults* row with the per-view
 
 | Field | Description |
 |---|---|
-| **Page size** | Initial page size for the in-grid TanStack paginator. Persists as `spec.defaultPageSize`. Default: `50`. |
-| **Max rows** | Hard cap on the slice loaded by a single Run. The spec-driven views operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Default: `5000`. |
+| **Page size** | Initial page size for the in-grid TanStack paginator. Persists as `spec.defaultPageSize`. Empty = the *Rows per page* of [Settings › Periods and lists](./default-periods.md#lists) (50 unless set). |
+| **Max rows** | Hard cap on the slice loaded by a single Run. The spec-driven views operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Empty = the *Rows loaded* of [Settings › Periods and lists](./default-periods.md#lists) (100 000 unless set). The bundled views set neither. |
 
 When the slice cap is hit during a Run, the page toolbar shows a translated `X / Y rows` notice next to the Run button — a hint that the operator should narrow the date range or the *Advanced Filters* to get the most relevant slice. The notice is informational; the page keeps working.
 

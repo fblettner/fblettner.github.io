@@ -101,8 +101,9 @@ La référence détaillée par étape (ce que `-upgrade` fait en interne, ce qui
 Le rafraîchissement des XSL du socle (étape 4) **n'écrase plus `ubl-defaults.xsl`**. Ce fichier porte en général des personnalisations du client — SIREN / TVA / adresse du vendeur par code société, mappings de catégorie TVA, codes de paiement, format de date — qu'un remplacement intégral effaçait en silence. Il passe désormais en *refresh souple* :
 
 - une **installation neuve** reçoit les valeurs livrées ;
-- une **mise à niveau garde le fichier du client** intact ;
-- quand la version livrée diffère de celle du client, la livrée est écrite à côté sous **`ubl-defaults.xsl.upstream`** pour relecture manuelle.
+- une **mise à niveau garde le fichier du client** ;
+- quand la version livrée diffère de celle du client, la livrée est écrite à côté sous **`ubl-defaults.xsl.upstream`** pour relecture manuelle ;
+- quand le fichier du client contient sa propre version d'un modèle du socle (la partie vendeur, par exemple), la mise à niveau y ajoute les paramètres que le nouveau socle transmet — avec leurs valeurs livrées, sans toucher au corps — pour que le fichier continue de compiler ; le corps personnalisé ignore les nouvelles valeurs jusqu'à sa mise à jour depuis la copie `.upstream`.
 
 Le rapport de mise à niveau liste chaque fichier conservé dans une section **Actifs préservés**. Le miroir `${env}/ubl/` bénéficie de la même protection : la mise à niveau le rafraîchit aussi, pour que les XSL par document n'importent jamais une version périmée du socle.
 

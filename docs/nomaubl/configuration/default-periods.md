@@ -1,12 +1,12 @@
 ---
-title: Period picker and default periods
+title: Period picker, default periods and lists
 description: "The NomaUBL period picker shared by the dashboards and lists — ten presets, a two-month calendar, the date basis of each page, the Exclude reviewed errors switch — and the Default periods settings that choose the period each page opens on, for every view or view by view."
 keywords: [NomaUBL, period picker, date range, default period, This month, Yesterday, date basis, document date, activity date, archive date, exclude reviewed errors, settings, views, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Period picker and default periods
 
-The dashboards and lists of NomaUBL share one **period picker**: the same presets, the same calendar and, where the page offers it, the choice of the **date** the period is read against. The period each page opens on is set once for the instance under **Settings → Views & UI → Default periods** — for every view, then view by view when a team needs another one.
+The dashboards and lists of NomaUBL share one **period picker**: the same presets, the same calendar and, where the page offers it, the choice of the **date** the period is read against. The period each page opens on is set once for the instance under **Settings → Views & UI → Periods and lists** — for every view, then view by view when a team needs another one.
 
 ---
 
@@ -211,7 +211,7 @@ Next to the picker, the **Exclude reviewed errors** switch hides the invoices al
 
 ## Default periods \{#default-periods\}
 
-<svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 426" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="pds-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="pds-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -219,14 +219,13 @@ Next to the picker, the **Exclude reviewed errors** switch hides the invoices al
     <marker id="pds-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="320" rx="14" fill="url(#pds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Settings › Views &amp; UI › Default periods</text>
+  <rect x="220" y="20" width="760" height="386" rx="14" fill="url(#pds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Settings › Views &amp; UI › Periods and lists</text>
   <text x="240" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Default periods</text>
   <text x="240" y="86" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The period a page opens on until the user picks another one. Analyses and dashboards of the Explorer keep their own period.</text>
-  <text x="240" y="112" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EVERY VIEW</text>
+  <text x="240" y="112" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Every view</text>
   <rect x="420" y="100" width="220" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="430" y="114.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">This month ▾</text>
-  <line x1="240" y1="128" x2="960" y2="128" stroke="#1f2937" strokeWidth="1"/>
   <text x="240" y="148" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Per view</text>
   <text x="240" y="175" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Billing overview</text>
   <rect x="390" y="160" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -255,6 +254,15 @@ Next to the picker, the **Exclude reviewed errors** switch hides the invoices al
   <text x="240" y="311" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Reports › Integrity</text>
   <rect x="390" y="296" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="400" y="310.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Last 30 days ▾</text>
+  <line x1="240" y1="332" x2="960" y2="332" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="352" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Lists</text>
+  <text x="290" y="352" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Every list without its own value in Settings › List views.</text>
+  <text x="240" y="380" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Rows per page</text>
+  <rect x="420" y="366" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="380.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">50</text>
+  <text x="610" y="380" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Rows loaded</text>
+  <rect x="740" y="366" width="160" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="750" y="380.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">100000</text>
   <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Every view</text>
   <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">This month when left as is</text>
@@ -263,6 +271,10 @@ Next to the picker, the **Exclude reviewed errors** switch hides the invoices al
   <text x="30" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Override per view</text>
   <text x="30" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">nine views</text>
   <line x1="200" y1="227.0" x2="390" y2="211" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="20" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rows per page</text>
+  <text x="30" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">50 unless set</text>
+  <line x1="200" y1="377.0" x2="420" y2="377" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
   <rect x="1000" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Explorer apart</text>
   <text x="1010" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">analyses keep their period</text>
@@ -271,9 +283,13 @@ Next to the picker, the **Exclude reviewed errors** switch hides the invoices al
   <text x="1010" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">User choice wins</text>
   <text x="1010" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">over the default</text>
   <line x1="1000" y1="227.0" x2="940" y2="211" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="1000" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Rows loaded per refresh</text>
+  <text x="1010" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">100 000 unless set</text>
+  <line x1="1000" y1="377.0" x2="900" y2="377" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
 </svg>
 
-Open it from **Settings → Views & UI → Default periods**. Like most Settings editors, it is in English only.
+Open it from **Settings → Views & UI → Periods and lists**. Like most Settings editors, it is in English only.
 
 | Field | Default | Description |
 |---|---|---|
@@ -285,6 +301,19 @@ The views that can be set, in the order of the editor: *Billing overview*, *Oper
 The default only sets the **opening** period: a period the user picks on a page still wins, and pages that remember their filters (Billing overview, Statistics) reopen on the last one used. The analyses and dashboards of the [Explorer](../application/explorer.md) keep their own period.
 
 The values are saved in the [Global](./system/global.md) settings (tab *Periods*) and served to the pages by `GET /api/ui/period-defaults`.
+
+---
+
+## Lists \{#lists\}
+
+The **Lists** group of the same page sets two values for every list that has none of its own in [List views](./list-views.md):
+
+| Field | Default | Description |
+|---|---|---|
+| **Rows per page** | 50 | Rows shown per page of the grid. |
+| **Rows loaded** | 100 000 | Rows read per refresh (*Run*); filters and sorting then work on them in the browser. A notice `X / Y rows` tells when the limit is reached. |
+
+Stored as `defaultPageSize` and `defaultMaxRows` in the [Global](./system/global.md) settings.
 
 ---
 

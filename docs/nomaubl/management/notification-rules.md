@@ -228,7 +228,7 @@ The recipient model has two independent halves: a **portal target** (user / role
 
 | Field | Description |
 |---|---|
-| **Portal target** | Picks the portal target — `User (by username)`, `Role`, or empty. When auth is disabled, the empty option reads *Broadcast — all portal users* and writes a single `F564253` row under the `*` sentinel. |
+| **Portal target** | Picks the portal target — `User (by username)`, `Role`, or **Everyone** (empty). *Everyone* writes a single `F564253` row under the `*` sentinel, visible in every inbox — with sign-in enabled or not. |
 | **Username / Role name** | The username or role name selected by *Portal target*. Free text — auto-completion comes from the connected database when available. |
 | **Email list** | Independent list of e-mail addresses, separated by `,` or `;`. Each address gets its own email (no shared `To:` header). Independent of the portal target above. |
 

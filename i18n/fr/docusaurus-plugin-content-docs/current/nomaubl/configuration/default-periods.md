@@ -1,12 +1,12 @@
 ---
-title: Sélecteur de période et périodes par défaut
+title: Sélecteur de période, périodes par défaut et listes
 description: "Le sélecteur de période de NomaUBL, commun aux tableaux de bord et aux listes — dix périodes prédéfinies, un calendrier sur deux mois, la base de date de chaque page, le switch Exclure les erreurs traitées — et le paramétrage des périodes par défaut, qui fixe la période d'ouverture de chaque page, pour toutes les vues ou vue par vue."
 keywords: [NomaUBL, sélecteur de période, plage de dates, période par défaut, Ce mois-ci, Hier, base de date, date document, date d'activité, date d'archivage, exclure les erreurs traitées, paramètres, vues, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Sélecteur de période et périodes par défaut
 
-Les tableaux de bord et les listes de NomaUBL partagent un même **sélecteur de période** : mêmes périodes prédéfinies, même calendrier et, quand la page le propose, le choix de la **date** sur laquelle la période s'applique. La période d'ouverture de chaque page se règle une fois pour l'instance dans **Paramètres → Views & UI → Default periods** — pour toutes les vues, puis vue par vue quand une équipe en a besoin.
+Les tableaux de bord et les listes de NomaUBL partagent un même **sélecteur de période** : mêmes périodes prédéfinies, même calendrier et, quand la page le propose, le choix de la **date** sur laquelle la période s'applique. La période d'ouverture de chaque page se règle une fois pour l'instance dans **Paramètres → Views & UI → Periods and lists** — pour toutes les vues, puis vue par vue quand une équipe en a besoin.
 
 ---
 
@@ -211,7 +211,7 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
 
 ## Périodes par défaut \{#default-periods\}
 
-<svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+<svg viewBox="0 0 1200 426" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
   <defs>
     <marker id="pds-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
     <linearGradient id="pds-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
@@ -219,14 +219,13 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
     <marker id="pds-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
   </defs>
 
-  <rect x="220" y="20" width="760" height="320" rx="14" fill="url(#pds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Settings › Views &amp; UI › Default periods</text>
+  <rect x="220" y="20" width="760" height="386" rx="14" fill="url(#pds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="46" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Settings › Views &amp; UI › Periods and lists</text>
   <text x="240" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Default periods</text>
   <text x="240" y="86" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The period a page opens on until the user picks another one. Analyses and dashboards of the Explorer keep their own period.</text>
-  <text x="240" y="112" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">EVERY VIEW</text>
+  <text x="240" y="112" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Every view</text>
   <rect x="420" y="100" width="220" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="430" y="114.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">This month ▾</text>
-  <line x1="240" y1="128" x2="960" y2="128" stroke="#1f2937" strokeWidth="1"/>
   <text x="240" y="148" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Per view</text>
   <text x="240" y="175" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Billing overview</text>
   <rect x="390" y="160" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -255,6 +254,15 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
   <text x="240" y="311" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Reports › Integrity</text>
   <rect x="390" y="296" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="400" y="310.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Last 30 days ▾</text>
+  <line x1="240" y1="332" x2="960" y2="332" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="352" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Lists</text>
+  <text x="290" y="352" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Every list without its own value in Settings › List views.</text>
+  <text x="240" y="380" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Rows per page</text>
+  <rect x="420" y="366" width="120" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="430" y="380.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">50</text>
+  <text x="610" y="380" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Rows loaded</text>
+  <rect x="740" y="366" width="160" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="750" y="380.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">100000</text>
   <rect x="20" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="30" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Toutes les vues</text>
   <text x="30" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">Ce mois-ci si rien n'est choisi</text>
@@ -263,6 +271,10 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
   <text x="30" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Surcharge par vue</text>
   <text x="30" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">neuf vues</text>
   <line x1="200" y1="227.0" x2="390" y2="211" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="20" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="30" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Lignes par page</text>
+  <text x="30" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">50 si rien n'est choisi</text>
+  <line x1="200" y1="377.0" x2="420" y2="377" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
   <rect x="1000" y="96" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="111" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Explorateur à part</text>
   <text x="1010" y="124" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">les analyses gardent la leur</text>
@@ -271,9 +283,13 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
   <text x="1010" y="225" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le choix de l'utilisateur prime</text>
   <text x="1010" y="238" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sur la valeur par défaut</text>
   <line x1="1000" y1="227.0" x2="940" y2="211" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="1000" y="360" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="375" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Lignes chargées</text>
+  <text x="1010" y="388" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">100 000 si rien n'est choisi</text>
+  <line x1="1000" y1="377.0" x2="900" y2="377" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
 </svg>
 
-Accès : **Paramètres → Views & UI → Default periods**. Comme la plupart des éditeurs des Paramètres, cet écran reste en anglais.
+Accès : **Paramètres → Views & UI → Periods and lists**. Comme la plupart des éditeurs des Paramètres, cet écran reste en anglais.
 
 | Champ | Par défaut | Description |
 |---|---|---|
@@ -285,6 +301,19 @@ Les vues réglables, dans l'ordre de l'éditeur : *Billing overview* (Synthèse)
 La valeur par défaut ne fixe que la période **d'ouverture** : une période choisie par l'utilisateur sur une page reste prioritaire, et les pages qui mémorisent leurs filtres (Synthèse, Statistiques) se rouvrent sur la dernière utilisée. Les analyses et tableaux de bord de l'[Explorateur](../application/explorer.md) gardent leur propre période.
 
 Les valeurs sont enregistrées dans les paramètres [Global](./system/global.md) (onglet *Periods*) et transmises aux pages par `GET /api/ui/period-defaults`.
+
+---
+
+## Listes \{#lists\}
+
+Le groupe **Lists** de la même page fixe deux valeurs pour toute liste qui n'a pas les siennes dans les [Vues de liste](./list-views.md) :
+
+| Champ | Par défaut | Description |
+|---|---|---|
+| **Rows per page** | 50 | Lignes affichées par page de la grille. |
+| **Rows loaded** | 100 000 | Lignes lues à chaque actualisation (*Exécuter*) ; filtres et tris s'appliquent ensuite dans le navigateur. Le message `X / Y lignes` signale quand la limite est atteinte. |
+
+Enregistrées sous `defaultPageSize` et `defaultMaxRows` dans les paramètres [Global](./system/global.md).
 
 ---
 

@@ -211,9 +211,9 @@ A text filter matches from the **start** of the value and uses the column's inde
 
 The set of columns that can be filtered is defined in the spec's `filter: true` allow-list — operators decide which columns they actually query and trim the rest from the panel without losing them from the grid. See [List Views](../configuration/list-views.md) for the editor.
 
-The page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, default 5000) and the grid handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the period or the *Advanced Filters*.
+The page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, the *Rows loaded* of [Settings › Periods and lists](../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default) and the grid handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the period or the *Advanced Filters*.
 
-RefList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union.
+RefList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union. A code can also be typed in the search box of the picker (Enter, comma-separated for several), so a list that is incomplete or still empty still filters.
 
 ### Grid toolbar
 

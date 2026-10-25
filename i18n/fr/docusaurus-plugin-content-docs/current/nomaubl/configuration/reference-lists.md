@@ -146,13 +146,15 @@ Les listes contiennent l'intégralité des codes de leur norme — par exemple 6
 
 ### Types de facture : facture ou avoir \{#invoice-types\}
 
-L'éditeur *Invoice Type Codes* comporte une quatrième colonne, **Type**, avec *Invoice* (facture) ou *Credit note* (avoir) — la lecture EN 16931 de chaque code, enregistrée sous la forme `code = libelléFr|libelléEn|INVOICE` ou `CREDIT`. Treize codes sont des avoirs dès l'installation : `81`, `83`, `261`, `262`, `296`, `308`, `381`, `396`, `420`, `458`, `502`, `503`, `532`. Le type détermine :
+L'éditeur *Invoice Type Codes* comporte une colonne **Type**, avec *Invoice* (facture) ou *Credit note* (avoir) — la lecture EN 16931 de chaque code, enregistrée sous la forme `code = libelléFr|libelléEn|INVOICE` ou `CREDIT`. Treize codes sont des avoirs dès l'installation : `81`, `83`, `261`, `262`, `296`, `308`, `381`, `396`, `420`, `458`, `502`, `503`, `532`. Le type détermine :
 
 - si l'UBL est produit sous forme de document **CreditNote** plutôt que d'Invoice ;
 - la façon dont un document compte dans la [Synthèse](../application/billing-overview.md) (les avoirs viennent en déduction du chiffre d'affaires) ;
 - le **signe** des montants B2C en [e-reporting](../application/ereporting.md).
 
 Un code absent de la liste, ou listé sans type, suit la table EN 16931.
+
+Une première colonne, **Active**, décide si un code est proposé. Un code décoché reste dans la liste — ses libellés s'affichent toujours sur les factures existantes et son type facture / avoir s'applique encore — mais il n'est plus proposé dans aucune liste de choix : valeurs par défaut UBL, formulaire de facture, filtres des listes et de l'Explorateur (enregistré comme quatrième champ `N`). Une nouvelle installation contient les 62 codes, dont seuls les **16 codes de la facturation électronique française** sont actifs : `380`, `381`, `384`, `386`, `389`, `393`, `396`, `261`, `262`, `471`, `472`, `473`, `500` à `503`. Une mise à jour complète le type des codes existants et ne modifie jamais ceux qui sont actifs.
 
 ---
 

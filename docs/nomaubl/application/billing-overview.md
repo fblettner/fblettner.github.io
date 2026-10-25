@@ -213,6 +213,7 @@ Open it from **Billing overview**, first entry of the Navigation group. The day-
 | **Date basis** | Document date | *Document date*, *Activity date* or *Archive date*, chosen in the footer of the period picker. |
 | **Exclude reviewed errors** | On | Hides the invoices already reviewed by customer service that still sit in an error status. Reviewed invoices in other statuses stay counted. |
 | **Compared to …** | — | Shows the previous period used for the changes (see below). Hidden when the period is *All*. |
+| **↻** | — | Reloads the page with the same filters. |
 | **PDF** | — | Key figures, chart and tables in the layout of the [audit report](reports/audit-report.md) (`billing-overview.pdf`). |
 
 The period, the date basis, the switch and the direction are remembered in the browser, so the page opens again as it was left.
@@ -238,7 +239,7 @@ The [Statistics](./statistics.md) dashboard uses the same rule.
 | **Revenue excl. VAT** *(Purchases: Purchases excl. VAT)* | Invoices minus credit notes. | `Invoices … · Credit notes −…` | in % |
 | **VAT** | VAT of the invoices minus that of the credit notes. | — | in % |
 | **Invoices and credit notes** | Number of documents. | `… invoices · … credit notes` | in % |
-| **Transmission rate** *(Purchases: Acceptance rate)* | Share of the invoices transmitted to the customer (accepted, for purchases). | `… issued · … not issued` (`… accepted`) | in points |
+| **Transmission rate** *(Purchases: Acceptance rate)* | Share of the invoices transmitted to the customer (accepted, for purchases), counted over the invoices meant for the platform — sent, or held for review; document types not sent to the platform do not lower it. | `… issued · … not issued` (`… accepted`) | in points |
 
 A change is green when it goes up and red when it goes down, followed by the previous value (`vs …`).
 
@@ -268,7 +269,7 @@ Each row gives the amount and the number of invoices; a click opens [E-Invoicing
 
 | Block | Content |
 |---|---|
-| **Per company** | Invoice count, amount excl. VAT and share transmitted, per company. |
+| **Per company** | Invoice count, amount excl. VAT and share transmitted (over the invoices meant for the platform), per company. |
 | **Per transaction type** | One bar per type with its flow: *B2B national* (e-invoicing), *B2B international* (e-reporting 10.1), *B2C* (e-reporting 10.3), *Other*. National B2B goes through the platform; international B2B and B2C are declared in [e-reporting](./ereporting.md). |
 | **E-reporting** *(sales only)* | Per company: the end of the last declared period (or *No declaration yet*), the next period to declare and its status. |
 

@@ -202,7 +202,7 @@ Open it from **Statistics** in the Navigation group, after the [IT dashboard](./
 
 ## Header
 
-The header is the same as on the [Billing overview](./billing-overview.md#header): **Sales / Purchases**, the [period picker](../configuration/default-periods.md#period-picker) (date basis *Document date* by default, also *Activity date* or *Archive date*), **Exclude reviewed errors** (on by default) and the *Compared to …* tag. The previous period follows the [same rule](./billing-overview.md#previous-period). Two buttons export the whole page:
+The header is the same as on the [Billing overview](./billing-overview.md#header): **Sales / Purchases**, the [period picker](../configuration/default-periods.md#period-picker) (date basis *Document date* by default, also *Activity date* or *Archive date*), **Exclude reviewed errors** (on by default) the *Compared to …* tag and **↻** to reload. The previous period follows the [same rule](./billing-overview.md#previous-period). Two buttons export the whole page:
 
 | Button | Content |
 |---|---|

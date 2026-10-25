@@ -146,13 +146,15 @@ The lists hold the complete code lists of their standard — for example 62 invo
 
 ### Invoice types: invoice or credit note \{#invoice-types\}
 
-The *Invoice Type Codes* editor has a fourth column, **Type**, with *Invoice* or *Credit note* (the EN 16931 reading of each code; stored as `code = labelFr|labelEn|INVOICE` or `CREDIT`). Thirteen codes are credit notes out of the box: `81`, `83`, `261`, `262`, `296`, `308`, `381`, `396`, `420`, `458`, `502`, `503`, `532`. The type decides:
+The *Invoice Type Codes* editor has a **Type** column, with *Invoice* or *Credit note* (the EN 16931 reading of each code; stored as `code = labelFr|labelEn|INVOICE` or `CREDIT`). Thirteen codes are credit notes out of the box: `81`, `83`, `261`, `262`, `296`, `308`, `381`, `396`, `420`, `458`, `502`, `503`, `532`. The type decides:
 
 - whether the UBL is produced as a **CreditNote** document rather than an Invoice;
 - how a document counts in the [Billing overview](../application/billing-overview.md) (credit notes are subtracted from the revenue);
 - the **sign** of the B2C amounts in [e-reporting](../application/ereporting.md).
 
 A code missing from the list, or listed without a type, follows the EN 16931 table.
+
+A first column, **Active**, decides whether a code is offered. An unticked code stays in the list — its labels still show on existing invoices and its invoice / credit note type still applies — but it is left out of every picker: UBL defaults, invoice form, list and Explorer filters (stored as a fourth field `N`). A new installation has the 62 codes with only the **16 codes of French e-invoicing** active: `380`, `381`, `384`, `386`, `389`, `393`, `396`, `261`, `262`, `471`, `472`, `473`, `500` to `503`. An upgrade completes the type of the existing codes and never changes which ones are active.
 
 ---
 

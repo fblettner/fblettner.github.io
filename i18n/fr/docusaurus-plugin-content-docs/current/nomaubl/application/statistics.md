@@ -202,7 +202,7 @@ Accès : **Statistiques**, dans le groupe Navigation, après le [tableau de bord
 
 ## En-tête
 
-L'en-tête est le même que celui de la [Synthèse](./billing-overview.md#header) : **Ventes / Achats**, le [sélecteur de période](../configuration/default-periods.md#period-picker) (base *Date document* par défaut, ou *Date d'activité* et *Date d'archivage*), **Exclure les erreurs traitées** (activé par défaut) et l'indication *Comparé au …*. La période précédente suit la [même règle](./billing-overview.md#previous-period). Deux boutons exportent toute la page :
+L'en-tête est le même que celui de la [Synthèse](./billing-overview.md#header) : **Ventes / Achats**, le [sélecteur de période](../configuration/default-periods.md#period-picker) (base *Date document* par défaut, ou *Date d'activité* et *Date d'archivage*), **Exclure les erreurs traitées** (activé par défaut) l'indication *Comparé au …* et **↻** pour recharger. La période précédente suit la [même règle](./billing-overview.md#previous-period). Deux boutons exportent toute la page :
 
 | Bouton | Contenu |
 |---|---|

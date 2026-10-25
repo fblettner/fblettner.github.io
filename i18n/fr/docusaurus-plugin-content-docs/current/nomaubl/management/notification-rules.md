@@ -228,7 +228,7 @@ Le modèle de destinataire comporte deux parties indépendantes : une **cible po
 
 | Champ | Description |
 |---|---|
-| **Cible portail** | Choisit la cible portail — `Utilisateur (par identifiant)`, `Rôle`, ou vide. Quand l'authentification est désactivée, l'option vide affiche *Diffusion — tous les utilisateurs* et écrit une seule ligne `F564253` sous la sentinelle `*`. |
+| **Cible portail** | Choisit la cible portail — `Utilisateur (par identifiant)`, `Rôle`, ou **Tout le monde** (vide). *Tout le monde* écrit une seule ligne `F564253` sous la sentinelle `*`, visible dans toutes les boîtes de réception, que l'authentification soit activée ou non. |
 | **Identifiant / Nom de rôle** | Identifiant ou nom de rôle sélectionné par *Cible portail*. Texte libre — l'auto-complétion vient de la base connectée quand elle est disponible. |
 | **Liste d'e-mails** | Liste indépendante d'adresses e-mail, séparées par `,` ou `;`. Chaque adresse reçoit son propre e-mail (pas d'en-tête `To:` partagé). Indépendante de la cible portail ci-dessus. |
 

@@ -190,7 +190,7 @@ The IT dashboard's throughput-bar drill-through into this page now seeds the V2 
 
 The Flat view renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.processing-log` spec on `db-nomaubl` and the bundled default ships every column described below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../../configuration/list-views.md) editor. The Grouped view keeps its dedicated layout — grouping is not a DataTableV2 feature.
 
-The Flat view runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, default 5000), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. refList columns get the **multi-select picker** when applicable.
+The Flat view runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, the *Rows loaded* of [Settings › Periods and lists](../../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. refList columns get the **multi-select picker** when applicable.
 
 ---
 

@@ -220,8 +220,8 @@ Au-dessus des lignes de colonne, chaque carte de vue a une ligne *Défauts* avec
 
 | Champ | Description |
 |---|---|
-| **Page size** | Taille de page initiale du paginateur TanStack en grille. Enregistrée sous `spec.defaultPageSize`. Défaut : `50`. |
-| **Max rows** | Cap dur sur la tranche chargée par un seul *Exécuter*. Les vues pilotées par spec fonctionnent en **mode hybride côté client** : chaque *Exécuter* charge une tranche capée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — aucun aller-retour pendant la saisie dans la ligne de filtre par colonne. Enregistré sous `spec.maxRows`. Défaut : `5000`. |
+| **Page size** | Taille de page initiale du paginateur TanStack en grille. Enregistrée sous `spec.defaultPageSize`. Vide = le réglage *Rows per page* de [Paramètres › Periods and lists](./default-periods.md#lists) (50 si rien n'est choisi). |
+| **Max rows** | Limite stricte de la tranche chargée par un seul *Exécuter*. Les vues pilotées par spec fonctionnent en **mode hybride côté client** : chaque *Exécuter* charge une tranche limitée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — aucun aller-retour pendant la saisie dans la ligne de filtre par colonne. Enregistré sous `spec.maxRows`. Vide = le réglage *Rows loaded* de [Paramètres › Periods and lists](./default-periods.md#lists) (100 000 si rien n'est choisi). Les vues livrées ne fixent ni l'un ni l'autre. |
 
 Quand le cap de la tranche est atteint pendant un *Exécuter*, la barre d'outils de la page affiche un message traduit `X / Y lignes` à côté du bouton *Exécuter* — indication que l'opérateur devrait affiner la plage de dates ou les *Filtres avancés* pour obtenir la tranche la plus pertinente. Le message est informatif ; la page continue de fonctionner.
 

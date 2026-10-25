@@ -213,6 +213,7 @@ Accès : **Synthèse**, première entrée du groupe Navigation. Les files de tra
 | **Base de date** | Date document | *Date document*, *Date d'activité* ou *Date d'archivage*, au pied du sélecteur de période. |
 | **Exclure les erreurs traitées** | Activé | Masque les factures déjà traitées par le service client qui restent dans un statut en erreur. Les factures traitées dans les autres statuts restent comptées. |
 | **Comparé au …** | — | Indique la période précédente utilisée pour les écarts (voir ci-dessous). Masqué pour la période *Tout*. |
+| **↻** | — | Recharge la page avec les mêmes filtres. |
 | **PDF** | — | Chiffres clés, graphique et tableaux au format du [rapport d'audit](reports/audit-report.md) (`synthese-facturation.pdf`). |
 
 La période, la base de date, le switch et le sens sont mémorisés dans le navigateur : la page se rouvre telle qu'elle a été laissée.
@@ -238,7 +239,7 @@ Le tableau de bord [Statistiques](./statistics.md) applique la même règle.
 | **Chiffre d'affaires HT** *(Achats : Achats HT)* | Factures moins avoirs. | `Factures … · Avoirs −…` | en % |
 | **TVA** | TVA des factures moins celle des avoirs. | — | en % |
 | **Factures et avoirs** | Nombre de documents. | `… factures · … avoirs` | en % |
-| **Taux de transmission** *(Achats : Taux d'acceptation)* | Part des factures transmises au client (acceptées, pour les achats). | `… émises · … non émises` (`… acceptés`) | en points |
+| **Taux de transmission** *(Achats : Taux d'acceptation)* | Part des factures transmises au client (acceptées, pour les achats), calculée sur les factures destinées à la plateforme — envoyées ou retenues pour revue ; les types de document qui ne passent pas par la plateforme ne la font pas baisser. | `… émises · … non émises` (`… acceptés`) | en points |
 
 Un écart s'affiche en vert à la hausse et en rouge à la baisse, suivi de la valeur précédente (`contre …`).
 
@@ -268,7 +269,7 @@ Chaque ligne donne le montant et le nombre de factures ; un clic ouvre [E-Invoic
 
 | Bloc | Contenu |
 |---|---|
-| **Par société** | Nombre de factures, montant HT et part transmise, par société. |
+| **Par société** | Nombre de factures, montant HT et part transmise (sur les factures destinées à la plateforme), par société. |
 | **Par type d'opération** | Une barre par type avec son flux : *B2B national* (facturation électronique), *B2B international* (e-reporting 10.1), *B2C* (e-reporting 10.3), *Autre*. Le B2B national passe par la plateforme ; l'international et le B2C sont déclarés en [e-reporting](./ereporting.md). |
 | **E-reporting** *(ventes seulement)* | Par société : la fin de la dernière période déclarée (ou *Aucune déclaration pour l'instant*), la prochaine période à déclarer et son statut. |
 
