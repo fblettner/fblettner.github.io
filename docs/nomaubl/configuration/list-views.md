@@ -160,6 +160,8 @@ The editor shows **one collapsible card per view**. A card loads its spec only w
 | **API Operations** | [Developer](../references/developer.md#api) *API* view | `view.apiOperations` |
 | **Promotion Plan** | Import preview of [Promotion](../management/promotion.md) | `view.promotionPlan` |
 
+The list chosen for a coded column of the **Invoices**, **E-Documents** and **Integration Errors** views also gives its labels to that field in the [Explorer](../application/explorer.md).
+
 A small badge next to the view name tells the operator whether the active spec comes from the bundled JAR default (`default`) or from an entry stored on `db-nomaubl` (`override`):
 
 - **default** — no `view.<name>` property exists on `db-nomaubl`. The bundled JSON in `config/list-views/view.<name>.json` is what the page renders. Saving from the editor writes a property and switches the badge to `override`.

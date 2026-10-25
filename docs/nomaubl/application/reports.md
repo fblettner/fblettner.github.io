@@ -1,12 +1,12 @@
 ---
 title: Reports
-description: "Analytical reporting for NomaUBL — five tabs: a status-statistics pivot (invoice counts by activity, status and rejection reason, per transaction type) and a no-SQL query tool over invoices, archived documents, lifecycle events and validation errors, with saved named reports and Excel/CSV export, SQL integrity checks, and the audit and implementation reports generated as PDF or Markdown."
-keywords: [NomaUBL, reports, reporting, audit report, implementation report, statistics, status, rejection reason, query tool, pivot, Excel export, saved reports, config-reports, JD Edwards, SAP, NetSuite, custom ERP]
+description: "Reporting for NomaUBL — five tabs: a status-statistics pivot (invoice counts by activity, status and rejection reason, per transaction type), SQL integrity checks against a source system, and the audit, implementation and technical reports generated as PDF or Markdown. Free analyses are built in the Explorer."
+keywords: [NomaUBL, reports, reporting, audit report, implementation report, technical report, statistics, status, rejection reason, integrity checks, pivot, Excel export, Explorer, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
 # Reports
 
-The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has six tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, a build-your-own **Query tool**, and three documents generated on demand, the [Audit report](./audit-report.md), the [Implementation report](./implementation-report.md) and the [Technical report](./technical-report.md).
+The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has five tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, and three documents generated on demand, the [Audit report](./audit-report.md), the [Implementation report](./implementation-report.md) and the [Technical report](./technical-report.md). Free analyses — any field, grouping, chart or dashboard — are built in the [Explorer](./explorer.md), which replaces the former query tool.
 
 Open it from the sidebar — **Reports**. Access is granted per role (see [Access](#access) below).
 
@@ -21,18 +21,16 @@ Open it from the sidebar — **Reports**. Access is granted per role (see [Acces
   <rect x="30" y="24" width="940" height="272" rx="14" fill="url(#rep-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="50" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Reports</text>
 
-  <rect x="50" y="66" width="104" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="102" y="83" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Status statistics</text>
-  <rect x="158" y="66" width="62" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="189" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Integrity</text>
-  <rect x="224" y="66" width="74" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="261" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Query tool</text>
-  <rect x="302" y="66" width="88" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="346" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit report</text>
-  <rect x="394" y="66" width="128" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="458" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Implementation report</text>
-  <rect x="526" y="66" width="104" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="578" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Technical report</text>
+  <rect x="50" y="66" width="110" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="105" y="83" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Status statistics</text>
+  <rect x="166" y="66" width="70" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="201" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Integrity</text>
+  <rect x="242" y="66" width="96" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="290" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Audit report</text>
+  <rect x="344" y="66" width="136" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="412" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Implementation report</text>
+  <rect x="486" y="66" width="112" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="542" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Technical report</text>
 
   <rect x="740" y="66" width="100" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="790" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Archive date ▾</text>
@@ -81,30 +79,9 @@ The **Integrity** tab runs the SQL checks defined under [Configuration → Syste
 
 ---
 
-## Query tool
-
-The second tab builds an extraction **without SQL**. Pick a **dataset**, choose the columns, narrow with filters, run — and optionally save the result as a named report.
-
-| Dataset | What it covers |
-|---|---|
-| **Invoices** | The e-invoicing rows — the same catalog as the [E-Invoicing](./invoices.md) list. |
-| **Archived documents** | Every captured document — the [E-Documents](./edocuments.md) archive. |
-| **Lifecycle events** | One row per status event recorded on the invoice lifecycle. |
-| **Validation errors** | The [Integration Errors](diagnostics/integration-errors.md) findings. |
-
-- **Columns** — pick which columns to include from the dataset's catalog.
-- **Filters** — status, reason, action and transaction-type filters use searchable **multi-select** pickers fed by the reference lists; dates use **range** pickers; the **period bar** with its date-basis toggle leads the screen. A **document-number** filter performs an exact numeric lookup.
-- **Results** land in the standard grid with all its tooling: search, per-column filters, grouping, column show / hide and reorder, and **CSV / Excel** export.
-
-### Saved reports
-
-A query — its **dataset, columns, filters, column layout and grouping** — can be **saved as a named report** and restored in two clicks. The report library lives in its own `config-reports.json` file, so it is easy to back up and to promote from one server to another.
-
----
-
 ## Audit, implementation and technical reports
 
-The last three tabs generate a document, in PDF or Markdown, rather than a grid:
+These three tabs generate a document, in PDF or Markdown, rather than a grid:
 
 | Tab | Document | Page |
 |---|---|---|
@@ -125,5 +102,5 @@ The Reports page is gated **per role**: grant the *Reports* page in the **Naviga
 ## Tips & best practices
 
 - **Start from Status statistics for the recurring read.** It answers "how many invoices, in which status, and why rejected" without any setup — export the two-sheet workbook when a colleague wants to pivot the raw figures.
-- **Save the queries your team re-runs.** A named report keeps its columns, filters and layout, so a monthly extraction is two clicks rather than a rebuild — and `config-reports.json` travels with a deployment.
+- **Build the recurring extractions in the [Explorer](./explorer.md).** A saved analysis keeps its fields, filters and view, can go into a dashboard and be sent by daily digest.
 - **Match the date basis to the question.** *Archive date* answers "what did we process", *Document date* "what did we issue", *Activity date* "what changed" — pick the one the audience expects before reading the counts.

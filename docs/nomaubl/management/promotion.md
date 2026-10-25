@@ -131,6 +131,7 @@ Open it from **Management → Promotion**. The page has four views: **Export** (
 | **PDF template** | A PDF template. | — |
 | **List** | A [reference list](../configuration/reference-lists.md) or a [custom list](../configuration/custom-lists.md). | — |
 | **Notification rule** | A [notification rule](./notification-rules.md). | — |
+| **Explorer analysis** · **Explorer dashboard** | A saved [Explorer](../application/explorer.md) analysis or dashboard. | A dashboard brings the analyses of its tiles. |
 | **Daily digest** · **Auto-retry** · **Lifecycle check** | A [daily digest](../sync/scheduled-jobs/daily-digest.md), an [auto-retry](../sync/scheduled-jobs/auto-retry.md) or a [lifecycle check](../sync/scheduled-jobs/lifecycle-checks.md). | — |
 | **Connector** | An API, SQL, database or FTP connector, without its secrets and targets. | — |
 | **Settings template** | E-invoicing, e-reporting, directory lookup, watched folders, integrity checks, report queries or JDE print queue, without its instance keys. | — |

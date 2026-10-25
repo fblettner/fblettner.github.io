@@ -131,6 +131,7 @@ Accès : **Gestion → Promotion**. La page compte quatre vues : **Exporter** (p
 | **Modèle PDF** | Un modèle PDF. | — |
 | **Liste** | Une [liste de référence](../configuration/reference-lists.md) ou une [liste personnalisée](../configuration/custom-lists.md). | — |
 | **Règle de notification** | Une [règle de notification](./notification-rules.md). | — |
+| **Analyse de l'Explorateur** · **Tableau de bord de l'Explorateur** | Une analyse ou un tableau de bord enregistré de l'[Explorateur](../application/explorer.md). | Un tableau de bord emporte les analyses de ses tuiles. |
 | **Rapport quotidien** · **Reprise auto** · **Contrôle cycle de vie** | Un [rapport quotidien](../sync/scheduled-jobs/daily-digest.md), une [reprise automatique](../sync/scheduled-jobs/auto-retry.md) ou un [contrôle du cycle de vie](../sync/scheduled-jobs/lifecycle-checks.md). | — |
 | **Connecteur** | Un connecteur API, SQL, base de données ou FTP, sans ses secrets ni ses cibles. | — |
 | **Modèle de réglages** | E-invoicing, e-reporting, annuaire, dossiers surveillés, contrôles d'intégrité, requêtes de rapports ou file d'impression JDE, sans ses clés d'instance. | — |

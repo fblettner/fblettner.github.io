@@ -483,6 +483,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/application/edirectory',
         'nomaubl/application/vat-declaration',
         'nomaubl/application/reports',
+        'nomaubl/application/explorer',
         'nomaubl/application/implementation-report',
         'nomaubl/application/audit-report',
         'nomaubl/application/technical-report',

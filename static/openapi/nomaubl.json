@@ -1962,6 +1962,147 @@
         }
       }
     },
+    "/api/explorer/model": {
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Explorer data model",
+        "description": "The data explorer's model (docs/plans/data-explorer.md): one entity per table around the invoice key (invoices, documents, lifecycle, validationErrors, lines, vat, notifications) with its fields — key entity.name, labels, type (string, number, date, datetime), kind (dimension or measure), default aggregate, reference list — and the relations to the hub.\n\nThe SQL of a field is the list-view catalog's; the bundled config/model/nomaubl.json (overridable under the environment's config/model) carries labels, measures and relations. Open to the Reports page's readers.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "id": "nomaubl", "hub": "invoices", "entities": [ { "id": "invoices", "labelEn": "Invoices", "cardinality": "one", "fields": [ { "key": "invoices.totalTTC", "name": "totalTTC", "labelEn": "Total TTC", "type": "number", "kind": "measure", "aggregate": "sum" } ] } ], "relations": [ { "from": "lifecycle", "to": "invoices", "on": "doc, dct, kco", "cardinality": "many" } ] } } } }
+          }
+        }
+      }
+    },
+    "/api/explorer/query": {
+      "post": {
+        "tags": ["Reports"],
+        "x-permission": "any signed-in user",
+        "summary": "Run an explorer query",
+        "description": "Aggregate: body {entity, rows: [{field, bucket}], measures: [{field, agg}], filters: {key: value}, sort: [{key, dir}], limit}.\n\nDimensions come from the entity and its related ones (at most one detail entity may provide rows); a detail entity's measure is aggregated per invoice in a sub-query so rows never multiply; a filter on a detail entity becomes an EXISTS. Date dimensions take a bucket (day, week, month, quarter, year), computed from the day-level groups the database returns, so every JDBC dialect works. Aggregates: count, countDistinct, sum, avg, min, max; amounts are returned in real units. Filters use the list-view convention keyed by entity.name (name, name__op, nameFrom, nameTo). Without rows and measures the body {entity, columns: [], page, pageSize} returns detail rows. calculated: [{name, label, labelFr, expr}] adds fields calc.<name> compiled from a small expression language (arithmetic, conditions, ? :, in, is empty, age, days, year, month, round, abs, coalesce) over the fields of the entity and its one-to-one entities — never free SQL. The role's company and row grants scope every statement. debug: true adds the SQL.\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "entity": "invoices", "rows": [ { "field": "invoices.issueDate", "bucket": "month" }, { "field": "invoices.statusCode" } ], "measures": [ { "agg": "count" }, { "field": "invoices.totalTTC", "agg": "sum" }, { "field": "lines.lineAmount", "agg": "sum" } ], "filters": { "invoices.issueDateFrom": "2026-01-01", "invoices.issueDateTo": "2026-12-31", "lifecycle.eventStatus": "50" }, "sort": [ { "key": "sum(invoices.totalTTC)", "dir": "desc" } ], "limit": 500 } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "mode": "aggregate", "columns": [ { "key": "invoices.issueDate@month", "kind": "dimension", "labelEn": "Issued", "type": "string", "bucket": "month" }, { "key": "count(*)", "kind": "measure", "labelEn": "Count", "type": "number" } ], "rows": [ { "invoices.issueDate@month": "2026-08", "invoices.statusCode": "10", "count(*)": 42, "sum(invoices.totalTTC)": 123456.78 } ], "groups": 12, "scanned": 310, "truncated": false } } } }
+          }
+        }
+      }
+    },
+    "/api/explorer/analyses": {
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Saved analyses",
+        "description": "The saved analyses the caller may see (shared ones and the caller's own), one JSON file each under the configuration folder's analyses/ directory: id, name, description, owner, shared, updatedAt and the definition the Explorer page saved (entity, rows, measures, filters, period, view…).\n\nOn the first call the former query tool's saved reports are converted into detail analyses.\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "analyses": [ { "id": "refusals-per-month", "name": "Refusals per month", "owner": "admin", "shared": true, "updatedAt": "2026-10-24T18:00:00", "definition": { "entity": "invoices", "view": "table", "rows": [ { "field": "invoices.issueDate", "bucket": "month" } ], "measures": [ { "agg": "count" } ] } } ] } } } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Reports"],
+        "x-permission": "any signed-in user",
+        "summary": "Save an analysis",
+        "description": "Body {id?, name, description?, shared?, definition}.\n\nThe id is derived from the name when absent; an existing id is replaced (its owner kept). The definition is stored as sent.\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "name": "Refusals per month", "shared": true, "definition": { "entity": "invoices", "view": "table", "rows": [ { "field": "invoices.issueDate", "bucket": "month" } ], "measures": [ { "agg": "count" } ], "filters": { "invoices.statusCode": "50" } } } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "id": "refusals-per-month" } } } }
+          }
+        }
+      }
+    },
+    "/api/explorer/analyses/{id}": {
+      "delete": {
+        "tags": ["Reports"],
+        "x-permission": "any signed-in user",
+        "summary": "Delete an analysis",
+        "description": "Removes the saved analysis file under the configuration folder's analyses/ directory; the id is the file name.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Analysis id", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/explorer/dashboards": {
+      "get": {
+        "tags": ["Reports"],
+        "summary": "Explorer dashboards",
+        "description": "The dashboards the caller may see (shared ones and the caller's own), one JSON file each under the configuration folder's dashboards/ directory: id, name, owner, shared, updatedAt and the definition — a global period preset and the tiles, each a saved analysis id with a width in grid columns (1–4) and a height (s, m, l).\n\n**Access:** any signed-in user.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "dashboards": [ { "id": "monthly-overview", "name": "Monthly overview", "shared": true, "definition": { "period": { "preset": "last30" }, "tiles": [ { "analysis": "refusals-per-month", "w": 2, "h": "m" } ] } } ] } } } }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Reports"],
+        "x-permission": "any signed-in user",
+        "summary": "Save a dashboard",
+        "description": "Body {id?, name, description?, shared?, definition{period, tiles}}.\n\nThe id is derived from the name when absent; an existing id is replaced and keeps its owner. Promotion carries a dashboard with the analyses of its tiles.\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "name": "Monthly overview", "shared": true, "definition": { "period": { "preset": "last30" }, "tiles": [ { "analysis": "refusals-per-month", "w": 2, "h": "m" } ] } } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "success": true, "id": "monthly-overview" } } } }
+          }
+        }
+      }
+    },
+    "/api/explorer/dashboards/{id}": {
+      "delete": {
+        "tags": ["Reports"],
+        "x-permission": "any signed-in user",
+        "summary": "Delete a dashboard",
+        "description": "Removes the dashboard file under the configuration folder's dashboards/ directory; the analyses of its tiles are kept.\n\n**Access:** any signed-in user.",
+        "parameters": [
+          { "name": "id", "in": "path", "schema": { "type": "string" }, "description": "Dashboard id", "required": true }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/explorer/pdf": {
+      "post": {
+        "tags": ["Reports"],
+        "x-permission": "any signed-in user",
+        "summary": "Explorer analysis or dashboard as PDF",
+        "description": "Body {lang, kind: analysis|dashboard, title, period, sections:[{title, note, chart?:{type: bar|hbar|line|donut, title, labels[], series[{name, values[]}]}, table[[…]], headRows}]}.\n\nThe sections are written as the audit report's Markdown and rendered by the same engine: cover page with environment, period, date, author and version; contents for a dashboard; running headers and footers; the charts drawn by the renderer; tables limited to 3,000 rows. Returns application/pdf.\n\n**Access:** any signed-in user.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "lang": "fr", "kind": "analysis", "title": "Refus et rejets par motif", "period": "2026-01-01 – 2026-10-25", "sections": [ { "title": "Refus et rejets par motif", "chart": { "type": "bar", "labels": ["2026-09", "2026-10"], "series": [ { "name": "210", "values": [5, 2] } ] }, "table": [["Mois", "Nombre"], ["2026-09", "5"]], "headRows": 1 } ] } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "example": { "contentType": "application/pdf" } } } }
+          }
+        }
+      }
+    },
     "/api/reports/query": {
       "get": {
         "tags": ["Reports"],

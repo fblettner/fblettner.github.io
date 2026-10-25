@@ -1,14 +1,14 @@
 ---
 title: Rapports
-description: "Reporting analytique de NomaUBL en cinq onglets — un tableau croisé des statistiques de statuts (nombre de factures par activité, statut et motif de rejet, par type de transaction) et un requêteur sans SQL sur les factures, les documents archivés, les événements de cycle de vie et les erreurs de validation, avec rapports nommés enregistrés et export Excel/CSV, des contrôles d'intégrité SQL, et les rapports d'audit et d'implémentation produits en PDF ou Markdown."
-keywords: [NomaUBL, rapports, reporting, rapport d'audit, rapport d'implémentation, statistiques, statut, motif de rejet, requêteur, tableau croisé, export Excel, rapports enregistrés, config-reports, JD Edwards, SAP, NetSuite, ERP personnalisé]
+description: "Les rapports de NomaUBL en cinq onglets — un tableau croisé des statistiques de statuts (nombre de factures par activité, statut et motif de rejet, par type de transaction), des contrôles d'intégrité SQL avec un système source, et les rapports d'audit, d'implémentation et technique produits en PDF ou Markdown. Les analyses libres se construisent dans l'Explorateur."
+keywords: [NomaUBL, rapports, reporting, rapport d'audit, rapport d'implémentation, rapport technique, statistiques, statut, motif de rejet, contrôles d'intégrité, tableau croisé, export Excel, Explorateur, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
 # Rapports
 
-La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle compte six onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts** ; **Intégrité**, des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source ; un **Requêteur** à composer soi-même ; enfin trois documents produits à la demande, le [rapport d'audit](./audit-report.md), le [rapport d'implémentation](./implementation-report.md) et le [rapport technique](./technical-report.md).
+La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle compte cinq onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts** ; **Intégrité**, des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source ; enfin trois documents produits à la demande, le [rapport d'audit](./audit-report.md), le [rapport d'implémentation](./implementation-report.md) et le [rapport technique](./technical-report.md). Les analyses libres — tout champ, tout regroupement, graphique ou tableau de bord — se construisent dans l'[Explorateur](./explorer.md), qui remplace l'ancien requêteur.
 
-Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [Accès](#access) plus bas).
+Accès : menu **Rapports**. L'accès s'accorde par rôle (voir [Accès](#access) plus bas).
 
 ---
 
@@ -21,18 +21,16 @@ Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [A
   <rect x="30" y="24" width="940" height="272" rx="14" fill="url(#rep-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="50" y="52" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Rapports</text>
 
-  <rect x="50" y="66" width="112" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="106" y="83" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Statistiques statuts</text>
-  <rect x="166" y="66" width="62" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="197" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Intégrité</text>
-  <rect x="232" y="66" width="72" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="268" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Requêteur</text>
-  <rect x="308" y="66" width="98" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="357" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport d’audit</text>
-  <rect x="410" y="66" width="140" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="480" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport d’implémentation</text>
-  <rect x="554" y="66" width="110" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
-  <text x="609" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport technique</text>
+  <rect x="50" y="66" width="118" height="26" rx="6" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="109" y="83" fill="#4a9eff" fontSize="9.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Statistiques statuts</text>
+  <rect x="174" y="66" width="70" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="209" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Intégrité</text>
+  <rect x="250" y="66" width="102" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="301" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport d’audit</text>
+  <rect x="358" y="66" width="146" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="431" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport d’implémentation</text>
+  <rect x="510" y="66" width="116" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="568" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Rapport technique</text>
 
   <rect x="720" y="66" width="120" height="26" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="780" y="83" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Date d'archivage ▾</text>
@@ -81,30 +79,9 @@ L'onglet **Intégrité** exécute les contrôles SQL définis dans [Configuratio
 
 ---
 
-## Requêteur
-
-Le second onglet compose une extraction **sans SQL**. Choisissez un **jeu de données**, sélectionnez les colonnes, affinez avec des filtres, exécutez — et enregistrez au besoin le résultat comme rapport nommé.
-
-| Jeu de données | Ce qu'il couvre |
-|---|---|
-| **Factures** | Les lignes e-invoicing — le même catalogue que la liste [E-Invoicing](./invoices.md). |
-| **Documents archivés** | Tout document capturé — l'archive [E-Documents](./edocuments.md). |
-| **Événements de cycle de vie** | Une ligne par événement de statut du cycle de vie de la facture. |
-| **Erreurs de validation** | Les anomalies des [Erreurs d'intégration](diagnostics/integration-errors.md). |
-
-- **Colonnes** — choisissez les colonnes à inclure dans le catalogue du jeu de données.
-- **Filtres** — les filtres statut, motif, action et type de transaction se choisissent dans des listes déroulantes **multi-sélection** alimentées par les listes de référence ; les dates par **plage** ; la **barre de période** avec son choix de base de date ouvre l'écran. Un filtre **numéro de document** effectue une recherche numérique exacte.
-- **Résultats** dans la grille standard avec tout son outillage : recherche, filtres par colonne, regroupement, affichage / masquage et réordonnancement des colonnes, export **CSV / Excel**.
-
-### Rapports enregistrés
-
-Une requête — son **jeu de données, ses colonnes, ses filtres, la disposition des colonnes et le regroupement** — peut être **enregistrée comme rapport nommé** et rechargée en deux clics. La bibliothèque de rapports se trouve dans un fichier dédié `config-reports.json`, simple à sauvegarder et à promouvoir d'un serveur à l'autre.
-
----
-
 ## Rapports d'audit, d'implémentation et technique
 
-Les trois derniers onglets produisent un document, en PDF ou en Markdown, et non une grille :
+Ces trois onglets produisent un document, en PDF ou en Markdown, et non une grille :
 
 | Onglet | Document | Page |
 |---|---|---|
@@ -124,6 +101,6 @@ La page Rapports s'accorde **par rôle** : activez la page *Rapports* du groupe 
 
 ## Conseils & bonnes pratiques
 
-- **Partez des Statistiques statuts pour la lecture récurrente.** Elles répondent à « combien de factures, dans quel statut, et pourquoi rejetées » sans réglage — exportez le classeur à deux feuilles quand un collègue veut croiser les chiffres bruts.
-- **Enregistrez les requêtes que l'équipe rejoue.** Un rapport nommé conserve ses colonnes, ses filtres et sa disposition : une extraction mensuelle tient en deux clics plutôt qu'une reconstruction — et `config-reports.json` suit le déploiement.
-- **Adaptez la base de date à la question.** *Date d'archivage* répond à « ce que nous avons traité », *Date document* à « ce que nous avons émis », *Date d'activité* à « ce qui a changé » — choisissez celle qu'attend l'audience avant de lire les effectifs.
+- **Partir des Statistiques statuts pour la lecture récurrente.** Elles répondent à « combien de factures, dans quel statut, et pourquoi rejetées » sans réglage — exporter le classeur à deux feuilles quand un collègue veut croiser les chiffres bruts.
+- **Construire les extractions récurrentes dans l'[Explorateur](./explorer.md).** Une analyse enregistrée conserve ses champs, ses filtres et sa vue, peut entrer dans un tableau de bord et partir par rapport quotidien.
+- **Adapter la base de date à la question.** *Date d'archivage* répond à « ce que nous avons traité », *Date document* à « ce que nous avons émis », *Date d'activité* à « ce qui a changé » — choisir celle qu'attend le lecteur avant de lire les effectifs.

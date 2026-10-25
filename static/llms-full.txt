@@ -31261,9 +31261,9 @@ If you spot an intra-EU or outside-EU invoice still showing under *Domestic*, re
 ## NomaUBL — Reports
 Source: https://docs.nomana-it.fr/nomaubl/application/reports/
 
-Analytical reporting for NomaUBL — five tabs: a status-statistics pivot (invoice counts by activity, status and rejection reason, per transaction type) and a no-SQL query tool over invoices, archived documents, lifecycle events and validation errors, with saved named reports and Excel/CSV export, SQL integrity checks, and the audit and implementation reports generated as PDF or Markdown.
+Reporting for NomaUBL — five tabs: a status-statistics pivot (invoice counts by activity, status and rejection reason, per transaction type), SQL integrity checks against a source system, and the audit, implementation and technical reports generated as PDF or Markdown. Free analyses are built in the Explorer.
 
-The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has six tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, a build-your-own **Query tool**, and three documents generated on demand, the [Audit report](./audit-report.md), the [Implementation report](./implementation-report.md) and the [Technical report](./technical-report.md).
+The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has five tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, and three documents generated on demand, the [Audit report](./audit-report.md), the [Implementation report](./implementation-report.md) and the [Technical report](./technical-report.md). Free analyses — any field, grouping, chart or dashboard — are built in the [Explorer](./explorer.md), which replaces the former query tool.
 
 Open it from the sidebar — **Reports**. Access is granted per role (see [Access](#access) below).
 
@@ -31293,30 +31293,9 @@ The **Integrity** tab runs the SQL checks defined under [Configuration → Syste
 
 ---
 
-## Query tool
-
-The second tab builds an extraction **without SQL**. Pick a **dataset**, choose the columns, narrow with filters, run — and optionally save the result as a named report.
-
-| Dataset | What it covers |
-|---|---|
-| **Invoices** | The e-invoicing rows — the same catalog as the [E-Invoicing](./invoices.md) list. |
-| **Archived documents** | Every captured document — the [E-Documents](./edocuments.md) archive. |
-| **Lifecycle events** | One row per status event recorded on the invoice lifecycle. |
-| **Validation errors** | The [Integration Errors](diagnostics/integration-errors.md) findings. |
-
-- **Columns** — pick which columns to include from the dataset's catalog.
-- **Filters** — status, reason, action and transaction-type filters use searchable **multi-select** pickers fed by the reference lists; dates use **range** pickers; the **period bar** with its date-basis toggle leads the screen. A **document-number** filter performs an exact numeric lookup.
-- **Results** land in the standard grid with all its tooling: search, per-column filters, grouping, column show / hide and reorder, and **CSV / Excel** export.
-
-### Saved reports
-
-A query — its **dataset, columns, filters, column layout and grouping** — can be **saved as a named report** and restored in two clicks. The report library lives in its own `config-reports.json` file, so it is easy to back up and to promote from one server to another.
-
----
-
 ## Audit, implementation and technical reports
 
-The last three tabs generate a document, in PDF or Markdown, rather than a grid:
+These three tabs generate a document, in PDF or Markdown, rather than a grid:
 
 | Tab | Document | Page |
 |---|---|---|
@@ -31337,8 +31316,154 @@ The Reports page is gated **per role**: grant the *Reports* page in the **Naviga
 ## Tips & best practices
 
 - **Start from Status statistics for the recurring read.** It answers "how many invoices, in which status, and why rejected" without any setup — export the two-sheet workbook when a colleague wants to pivot the raw figures.
-- **Save the queries your team re-runs.** A named report keeps its columns, filters and layout, so a monthly extraction is two clicks rather than a rebuild — and `config-reports.json` travels with a deployment.
+- **Build the recurring extractions in the [Explorer](./explorer.md).** A saved analysis keeps its fields, filters and view, can go into a dashboard and be sent by daily digest.
 - **Match the date basis to the question.** *Archive date* answers "what did we process", *Document date* "what did we issue", *Activity date* "what changed" — pick the one the audience expects before reading the counts.
+
+---
+
+## NomaUBL — Explorer
+Source: https://docs.nomana-it.fr/nomaubl/application/explorer/
+
+The NomaUBL Explorer — build your own analyses of the invoice data without SQL: fields of seven entities on Rows, Measures and Filters shelves, table, pivot, detail and charts, calculated fields, drill-down to the invoices, dashboards, ready-made analyses for IT, accounting and audit, exports to Excel, PDF and PNG, daily digests.
+
+The **Explorer** builds analyses of the invoice data without writing SQL. The fields of seven entities around the invoice are dropped onto **Rows**, **Measures** and **Filters**; the result shows as a table, a pivot, detail rows or a chart, and any value opens the invoices behind it. Analyses are saved, shared and gathered into **dashboards**. Ready-made analyses and dashboards come for IT, accounting and audit. The Explorer works the same whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP) and on every supported database.
+
+Open it from **Explorer**, in the Navigation group of the menu, next to [Reports](./reports.md). It replaces the former *Query tool* tab of the Reports page; the reports saved there are converted into analyses automatically.
+
+---
+
+## At a glance
+
+---
+
+## The fields
+
+The left pane lists the fields of seven entities, with a search box:
+
+| Entity | One row per |
+|---|---|
+| **Invoices** | Invoice: status, amounts, counterparty, dates. |
+| **Documents (archive)** | Archived document. |
+| **Lifecycle events** | Status event of an invoice. |
+| **Validation findings** | Validation finding of an invoice. |
+| **Invoice lines** | Invoice line. |
+| **VAT breakdown** | VAT breakdown row. |
+| **Notifications** | Notification. |
+
+The **Entity** of the toolbar decides what a row of the result counts; fields of the other entities join through the invoice. A filter on lifecycle events, findings or lines selects the invoices that have such a row.
+
+A field is dragged onto a shelf, or clicked to add it. Amounts are in their real unit. A coded field — status, transaction type… — shows the labels of the list chosen for that column in [List views](../configuration/list-views.md) (Invoices, E-Documents, Integration errors), so a short list set there applies to the Explorer too.
+
+---
+
+## Building an analysis
+
+| Shelf | Use |
+|---|---|
+| **Rows** | The fields the result is grouped by. A date groups by **day**, **week**, **month**, **quarter** or **year**. In a chart, the second row field gives the series. |
+| **Measures** | The values computed per group: **Count**, **Distinct**, **Sum**, **Average**, **Min**, **Max**. *Count of rows* is offered by default. |
+| **Filters** | Conditions on any field — *contains*, `=`, `≠`, `<`, `≤`, `>`, `≥`, *between*, *in*, *is empty*, *is not empty*. A **Period** applies to any date field, or *No period filter*. |
+
+**Top** limits the result to the largest groups; **Run** executes the analysis. Every analysis has an option **Exclude reviewed errors**, which leaves out the errors customer service has already handled.
+
+### Views
+
+| View | Result |
+|---|---|
+| **Table** | One row per group, with the measures. |
+| **Pivot** | A cross table: row fields nested with collapsible subtotals (*Expand all*, *Collapse all*), an optional column axis, and each cell's **share** of its parent or of the total. |
+| **Detail** | The rows themselves, page by page; a row opens the invoice. |
+| **Bars** | Vertical or horizontal, grouped or stacked. |
+| **Line** | Line or area. |
+| **Pie** | Pie or donut. |
+| **KPI** | Cards with the totals over every row of the result. |
+
+In a chart, the ten largest series are drawn and the rest grouped as *Others*; dates read in order, other categories by size. Hovering shows the values. Switching between views does not run the query again, and the options of the chart are saved with the analysis.
+
+### Drilling down
+
+A result row, a pivot cell, a bar, a point or a slice opens the **rows behind it**; a detail row opens the invoice window.
+
+---
+
+## Calculated fields \{#calculated-fields\}
+
+An analysis can define its own fields with a small expression language, under **Calculated fields** → **New calculated field**:
+
+| Field | Description |
+|---|---|
+| **Name** | Letters, digits and `_`. |
+| **Label** / **French label** | Shown in the field list and the results. |
+| **Expression** | Arithmetic on amounts, functions and conditions. *Insert a field…* and *Insert a function…* insert at the cursor. |
+| **Test** | Runs the expression on a few rows before use. |
+
+| Function | Result |
+|---|---|
+| `age(date)` | Days since the date. |
+| `days(from, to)` | Days between two dates. |
+| `year(date)`, `month(date)` | Year, month. |
+| `round(x, decimals)`, `abs(x)` | Rounding, absolute value. |
+| `coalesce(x, value if empty)` | A value when the field is empty. |
+| `condition ? 'a' : 'b'` | A choice — `age(dueDate) > 30 ? 'late' : 'on time'`. |
+| `in ('a', 'b')` | Membership. |
+
+A number can be used as a measure, a text as a row or a filter. The expression runs the same on every supported database.
+
+---
+
+## Saving and sharing
+
+**Save** opens a window with the **Name** (in the interface's language), **Visible to** — *Every user who can open the Explorer* or *Only me* — then **Save** or **Save as**. *Save* replaces the analysis; *Save as* creates a copy under the new name, which is how a provided analysis is adapted while keeping the original. The saved analyses are listed by audience (IT, Accounting, Audit, Custom) and name; picking one runs it at once with its own period.
+
+Each analysis and each dashboard is one JSON file under the environment's configuration folder (`analyses/`, `dashboards/`). Both can be carried to another instance with [Promotion](../management/promotion.md) — a dashboard brings its analyses — and the [implementation report](./implementation-report.md) lists them.
+
+---
+
+## Dashboards \{#dashboards\}
+
+The **Dashboards** mode gathers saved analyses as **tiles** on a four-column grid, each with its width, its height and its view — chart, table or pivot. One **period** at the top applies to every tile. A tile drills like its analysis and opens it in the editor. **Edit layout** adds tiles (*Analysis to add…*, *Add tile*), moves them and sets their size.
+
+---
+
+## Ready-made analyses and dashboards
+
+NomaUBL installs twelve analyses and three dashboards, once; they are never overwritten afterwards, so they can be adapted.
+
+| Audience | Dashboard | Analyses |
+|---|---|---|
+| **IT** | Operations | Volume per document · Findings per day and source · Send and import failures · Invoices in a workflow status |
+| **Accounting** | Month end | VAT per month and rate · Amounts per status · Top customers · Invoices and credit notes per month |
+| **Audit** | Audit period | Findings per rule · Refusals and rejections per reason · Status events per month · Status statistics |
+
+*Status statistics* reproduces the pivot of the [Reports](./reports.md) page, whose tab stays as it is.
+
+---
+
+## Exports and digests
+
+| Export | Content |
+|---|---|
+| **PDF** | An analysis or a dashboard in the [audit report](./audit-report.md) layout: cover with environment, period, date, author and version, contents for a dashboard, running headers, each chart with all its data, filters noted. |
+| **Excel** | The cross table; a dashboard as one sheet per tile. |
+| **PNG** | The chart of an analysis. |
+
+A [daily digest](../sync/scheduled-jobs/daily-digest.md) can send a saved analysis or a whole dashboard, run over the digest's window, as Excel or as a PDF in the same layout.
+
+---
+
+## Access
+
+Grant the **Explorer** page in the Navigation group on the [Roles](../configuration/security/roles.md) page. The results follow the company visibility of the signed-in user.
+
+---
+
+## Tips & best practices
+
+- **Start from a ready-made analysis** and *Save as* to adapt it; the original stays available.
+- **Pick the entity first.** It decides what is counted: invoices, lines, events or findings.
+- **Use the pivot with share of parent** to read a distribution — statuses per company, VAT rates per month.
+- **Give a short list to coded fields** in *List views*: the Explorer reuses it.
+- **Send the Month end dashboard by digest** at the start of the month, as PDF, to the accounting team.
 
 ---
 
@@ -32881,7 +33006,9 @@ Each digest is one row in the catalogue. The edit pane has four sections.
 | Field | Required | What |
 |---|---|---|
 | **Name** | yes | Free text. Shown in the catalogue list and at the top of the email body. Example: *Accounting · ACME*. |
-| **Report** | yes (default: `Integration errors`) | What the digest reports. **Integration errors** collects the failing events from the [Integration Errors](../../application/diagnostics/integration-errors.md) page — the historical behaviour. **All archived invoices** instead reports every archived invoice in the window, and the attached spreadsheet carries the [E-Documents](../../application/edocuments.md) columns and honours the per-column filters below, so a digest can double as a daily archive extract. |
+| **Report** | yes (default: `Integration errors`) | What the digest reports. **Integration errors** collects the failing events from the [Integration Errors](../../application/diagnostics/integration-errors.md) page — the historical behaviour. **All archived invoices** instead reports every archived invoice in the window, and the attached spreadsheet carries the [E-Documents](../../application/edocuments.md) columns and honours the per-column filters below, so a digest can double as a daily archive extract. **Saved analysis (Explorer)** and **Dashboard (Explorer)** send an analysis or a whole dashboard — see the two fields below. |
+| **Analysis** / **Dashboard** | when the report is *Saved analysis (Explorer)* or *Dashboard (Explorer)* | The [Explorer](../../application/explorer.md) analysis or dashboard to send, listed with its name and audience. It is run over the lookback window — its own period is replaced — and attached to the email. |
+| **Attachment** | with an analysis or a dashboard | **Excel — the data, one sheet per tile**, or **PDF — charts and data, audit report layout**. Built on the server at send time. |
 | **Recipients** | yes | One or more email addresses, comma- or semicolon-separated. Every address gets the same email — there's no per-address customisation here; create another digest if recipients should see different cuts. |
 | **Enabled** | yes (default: `on`) | When `off`, the digest is kept in the catalogue but skipped at send time. Useful for pausing a digest during a maintenance window without losing the configuration. |
 
@@ -36721,6 +36848,7 @@ Open it from **Management → Promotion**. The page has four views: **Export** (
 | **PDF template** | A PDF template. | — |
 | **List** | A [reference list](../configuration/reference-lists.md) or a [custom list](../configuration/custom-lists.md). | — |
 | **Notification rule** | A [notification rule](./notification-rules.md). | — |
+| **Explorer analysis** · **Explorer dashboard** | A saved [Explorer](../application/explorer.md) analysis or dashboard. | A dashboard brings the analyses of its tiles. |
 | **Daily digest** · **Auto-retry** · **Lifecycle check** | A [daily digest](../sync/scheduled-jobs/daily-digest.md), an [auto-retry](../sync/scheduled-jobs/auto-retry.md) or a [lifecycle check](../sync/scheduled-jobs/lifecycle-checks.md). | — |
 | **Connector** | An API, SQL, database or FTP connector, without its secrets and targets. | — |
 | **Settings template** | E-invoicing, e-reporting, directory lookup, watched folders, integrity checks, report queries or JDE print queue, without its instance keys. | — |
@@ -39032,6 +39160,8 @@ The editor shows **one collapsible card per view**. A card loads its spec only w
 | **API Operations** | [Developer](../references/developer.md#api) *API* view | `view.apiOperations` |
 | **Promotion Plan** | Import preview of [Promotion](../management/promotion.md) | `view.promotionPlan` |
 
+The list chosen for a coded column of the **Invoices**, **E-Documents** and **Integration Errors** views also gives its labels to that field in the [Explorer](../application/explorer.md).
+
 A small badge next to the view name tells the operator whether the active spec comes from the bundled JAR default (`default`) or from an entry stored on `db-nomaubl` (`override`):
 
 - **default** — no `view.<name>` property exists on `db-nomaubl`. The bundled JSON in `config/list-views/view.<name>.json` is what the page renders. Saving from the editor writes a property and switches the badge to `override`.
@@ -40197,7 +40327,7 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 | Group | Pages (id) |
 |---|---|
-| **Navigation** | Dashboard (`dashboard`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
+| **Navigation** | Dashboard (`dashboard`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
 | **Sync** | Fetch Input (`fetchinput`), Fetch Import (`import`), Fetch Statuses (`retrievestatuses`), Scheduled Jobs (`scheduledjobs`). |
 | **Processing** | Process Document (`process`), Extract & Process (`extractandprocess`), Process API (`processapi`). |
 | **UBL** | UBL Validation (`validate`), XSL Editor (`xsleditor`), XML Viewer (`xmlviewer`), UBL Defaults (`ubldefaults`). |
@@ -40987,17 +41117,18 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 
   
     Versions
+    2026.10.25.1 · 2026-10-25
     2026.10.24.1 · 2026-10-24
     2026.10.23.1 · 2026-10-23
     2026.10.22.1 · 2026-10-22
     2026.10.21.1 · 2026-10-21
     2026.10.20.1 · 2026-10-20
-    2026.10.19.1 · 2026-10-19
   
   
-    All versions (118)
+    All versions (119)
     
       2026-10
+      2026.10.19.1 · 2026-10-19
       2026.10.18.1 · 2026-10-18
       2026.10.16.1 · 2026-10-16
       2026.10.14.1 · 2026-10-14
@@ -41132,6 +41263,21 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
   
 
 {/* versions:end */}
+
+---
+
+## 2026.10.25.1 — 2026-10-25 \{#v2026-10-25-1\}
+
+### Improvements
+
+- **Explorer: build your own analyses.** A new Explorer page, next to Reports, replaces the Requêteur tab. On the left, the fields of seven entities around the invoice (invoices, archived documents, lifecycle events, validation findings, invoice lines, VAT breakdown, notifications); drag or click them onto the Rows, Measures and Filters shelves, pick a period on any date, then run the analysis as a table, a pivot with totals, or detail rows. Dates group by day, week, month, quarter or year; measures are count, distinct count, sum, average, min and max, in real units; a filter on events or lines selects the invoices that have such a row. A result row or pivot cell opens the rows behind it, and a detail row opens the invoice. Analyses are saved and shared, one file each, promotable; the saved reports of the former query tool are converted automatically. Granted per role with the new Explorer page. Works unchanged on every supported database.
+- **Explorer: charts.** An analysis can now be drawn as bars (vertical or horizontal, grouped or stacked), a line or area, a pie or donut, or KPI cards. The second row field gives the series, with the ten largest and the rest grouped as Others; dates read in order, other categories by size. Hovering shows the values, clicking a bar, point or slice opens the rows behind it, and the chart downloads as PNG. Switching between table, pivot and charts does not run the query again; the chart options are saved with the analysis. The toolbar keeps the entity, the views, Top and Run on one fixed row, the options of the current view on a second row.
+- **Explorer: dashboards.** The Explorer gains a Dashboards mode: saved analyses become tiles on a four-column grid, each with its width and height, its chart, table or pivot, and one period at the top applied to every tile. A tile drills like its analysis and opens it in the editor; dashboards are saved and shared like analyses. Analyses and dashboards can be promoted to another instance, a dashboard bringing its analyses, and the implementation report lists them. A daily digest can send a saved analysis: it runs over the digest's window and arrives as a spreadsheet.
+- **Explorer: calculated fields, richer pivot, ready-made analyses.** An analysis can define calculated fields with a small expression language — arithmetic on amounts, the age of an invoice or the days between two dates, conditions and choices such as `age(dueDate) > 30 ? 'late' : 'on time'` — tested on a few rows before use and usable as rows, measures or filters; it runs the same on every supported database. The pivot nests its row fields with collapsible subtotals and shows each cell's share of its parent or of the total. Twelve analyses and three dashboards come ready for IT (Operations), accounting (Month end) and audit (Audit period); they are installed once and never overwritten, so they can be adapted. One of them reproduces the status statistics of the Reports page, whose tab stays as it is. Every analysis has an option to exclude reviewed errors. The cross table and a whole dashboard export to Excel, the dashboard one sheet per tile; the saved analyses and dashboards are listed by audience and name. Saving opens a window with the name in the interface's language, who can see it (everyone or only me), Save and Save as — Save as is how a provided analysis or dashboard is copied and adapted. A coded field shows the labels of the list chosen for that column in Settings › List views (Invoices, E-Documents, Integration errors), so a short list for the transaction types applies to the Explorer as well. An analysis or a dashboard exports to PDF in the audit report's layout — cover page with environment, period, date, author and version, contents for a dashboard, running headers — with each chart and all its data, filters noted. In a calculated field, the fields and the functions are picked from lists and inserted at the cursor. A daily digest can send a saved analysis or a whole dashboard, as Excel (one sheet per tile) or as a PDF in the same layout, built on the server over the digest's window; the lists show the names and audience groups of the Explorer. Picking a saved analysis runs it at once with its own period, as a dashboard tile does.
+
+### Fixes
+
+- **Transaction types in English.** The document-types list carries only French labels; English screens, PDFs and spreadsheets showed its send flag (1, 0) instead. The French label now serves both languages.
 
 ---
 

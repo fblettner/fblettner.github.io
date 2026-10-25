@@ -245,7 +245,7 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 | Group | Pages (id) |
 |---|---|
-| **Navigation** | Dashboard (`dashboard`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
+| **Navigation** | Dashboard (`dashboard`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
 | **Sync** | Fetch Input (`fetchinput`), Fetch Import (`import`), Fetch Statuses (`retrievestatuses`), Scheduled Jobs (`scheduledjobs`). |
 | **Processing** | Process Document (`process`), Extract & Process (`extractandprocess`), Process API (`processapi`). |
 | **UBL** | UBL Validation (`validate`), XSL Editor (`xsleditor`), XML Viewer (`xmlviewer`), UBL Defaults (`ubldefaults`). |

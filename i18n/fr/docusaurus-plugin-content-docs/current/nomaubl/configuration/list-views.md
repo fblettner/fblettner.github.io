@@ -160,6 +160,8 @@ L'éditeur présente **une carte repliable par vue**. Une carte ne charge sa spe
 | **API Operations** | Vue *API* de la [référence développeur](../references/developer.md#api) | `view.apiOperations` |
 | **Promotion Plan** | Aperçu d'import de la [promotion](../management/promotion.md) | `view.promotionPlan` |
 
+La liste choisie pour une colonne codée des vues **Invoices**, **E-Documents** et **Integration Errors** donne aussi ses libellés à ce champ dans l'[Explorateur](../application/explorer.md).
+
 Un petit badge à côté du nom de vue indique si la spec active vient du défaut embarqué dans le JAR (`default`) ou d'une entrée stockée sur `db-nomaubl` (`override`) :
 
 - **default** — aucune propriété `view.<nom>` n'existe sur `db-nomaubl`. C'est le JSON embarqué dans `config/list-views/view.<nom>.json` qui pilote l'affichage. Enregistrer depuis l'éditeur écrit une propriété et fait basculer le badge en `override`.

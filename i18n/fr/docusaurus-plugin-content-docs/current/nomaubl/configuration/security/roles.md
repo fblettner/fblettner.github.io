@@ -245,7 +245,7 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 
 | Groupe | Pages (identifiant) |
 |---|---|
-| **Navigation** | Tableau de bord (`dashboard`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
+| **Navigation** | Tableau de bord (`dashboard`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
 | **Synchronisation** | Récupérer Entrée (`fetchinput`), Récupérer les imports (`import`), Récupérer les statuts (`retrievestatuses`), Tâches planifiées (`scheduledjobs`). |
 | **Traitement** | Traiter Document (`process`), Extraire & Traiter (`extractandprocess`), Traiter API (`processapi`). |
 | **UBL** | Validation UBL (`validate`), Éditeur XSL (`xsleditor`), Visionneuse XML (`xmlviewer`), Défauts UBL (`ubldefaults`). |

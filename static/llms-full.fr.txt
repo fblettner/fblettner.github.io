@@ -30398,11 +30398,11 @@ Si une facture intra-UE ou hors UE apparaît encore sous *France*, la relancer d
 ## NomaUBL — Rapports
 Source: https://docs.nomana-it.fr/fr/nomaubl/application/reports/
 
-Reporting analytique de NomaUBL en cinq onglets — un tableau croisé des statistiques de statuts (nombre de factures par activité, statut et motif de rejet, par type de transaction) et un requêteur sans SQL sur les factures, les documents archivés, les événements de cycle de vie et les erreurs de validation, avec rapports nommés enregistrés et export Excel/CSV, des contrôles d'intégrité SQL, et les rapports d'audit et d'implémentation produits en PDF ou Markdown.
+Les rapports de NomaUBL en cinq onglets — un tableau croisé des statistiques de statuts (nombre de factures par activité, statut et motif de rejet, par type de transaction), des contrôles d'intégrité SQL avec un système source, et les rapports d'audit, d'implémentation et technique produits en PDF ou Markdown. Les analyses libres se construisent dans l'Explorateur.
 
-La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle compte six onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts** ; **Intégrité**, des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source ; un **Requêteur** à composer soi-même ; enfin trois documents produits à la demande, le [rapport d'audit](./audit-report.md), le [rapport d'implémentation](./implementation-report.md) et le [rapport technique](./technical-report.md).
+La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle compte cinq onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts** ; **Intégrité**, des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source ; enfin trois documents produits à la demande, le [rapport d'audit](./audit-report.md), le [rapport d'implémentation](./implementation-report.md) et le [rapport technique](./technical-report.md). Les analyses libres — tout champ, tout regroupement, graphique ou tableau de bord — se construisent dans l'[Explorateur](./explorer.md), qui remplace l'ancien requêteur.
 
-Ouvrez-la depuis le menu — **Rapports**. L'accès s'accorde par rôle (voir [Accès](#access) plus bas).
+Accès : menu **Rapports**. L'accès s'accorde par rôle (voir [Accès](#access) plus bas).
 
 ---
 
@@ -30430,30 +30430,9 @@ L'onglet **Intégrité** exécute les contrôles SQL définis dans [Configuratio
 
 ---
 
-## Requêteur
-
-Le second onglet compose une extraction **sans SQL**. Choisissez un **jeu de données**, sélectionnez les colonnes, affinez avec des filtres, exécutez — et enregistrez au besoin le résultat comme rapport nommé.
-
-| Jeu de données | Ce qu'il couvre |
-|---|---|
-| **Factures** | Les lignes e-invoicing — le même catalogue que la liste [E-Invoicing](./invoices.md). |
-| **Documents archivés** | Tout document capturé — l'archive [E-Documents](./edocuments.md). |
-| **Événements de cycle de vie** | Une ligne par événement de statut du cycle de vie de la facture. |
-| **Erreurs de validation** | Les anomalies des [Erreurs d'intégration](diagnostics/integration-errors.md). |
-
-- **Colonnes** — choisissez les colonnes à inclure dans le catalogue du jeu de données.
-- **Filtres** — les filtres statut, motif, action et type de transaction se choisissent dans des listes déroulantes **multi-sélection** alimentées par les listes de référence ; les dates par **plage** ; la **barre de période** avec son choix de base de date ouvre l'écran. Un filtre **numéro de document** effectue une recherche numérique exacte.
-- **Résultats** dans la grille standard avec tout son outillage : recherche, filtres par colonne, regroupement, affichage / masquage et réordonnancement des colonnes, export **CSV / Excel**.
-
-### Rapports enregistrés
-
-Une requête — son **jeu de données, ses colonnes, ses filtres, la disposition des colonnes et le regroupement** — peut être **enregistrée comme rapport nommé** et rechargée en deux clics. La bibliothèque de rapports se trouve dans un fichier dédié `config-reports.json`, simple à sauvegarder et à promouvoir d'un serveur à l'autre.
-
----
-
 ## Rapports d'audit, d'implémentation et technique
 
-Les trois derniers onglets produisent un document, en PDF ou en Markdown, et non une grille :
+Ces trois onglets produisent un document, en PDF ou en Markdown, et non une grille :
 
 | Onglet | Document | Page |
 |---|---|---|
@@ -30473,9 +30452,155 @@ La page Rapports s'accorde **par rôle** : activez la page *Rapports* du groupe 
 
 ## Conseils & bonnes pratiques
 
-- **Partez des Statistiques statuts pour la lecture récurrente.** Elles répondent à « combien de factures, dans quel statut, et pourquoi rejetées » sans réglage — exportez le classeur à deux feuilles quand un collègue veut croiser les chiffres bruts.
-- **Enregistrez les requêtes que l'équipe rejoue.** Un rapport nommé conserve ses colonnes, ses filtres et sa disposition : une extraction mensuelle tient en deux clics plutôt qu'une reconstruction — et `config-reports.json` suit le déploiement.
-- **Adaptez la base de date à la question.** *Date d'archivage* répond à « ce que nous avons traité », *Date document* à « ce que nous avons émis », *Date d'activité* à « ce qui a changé » — choisissez celle qu'attend l'audience avant de lire les effectifs.
+- **Partir des Statistiques statuts pour la lecture récurrente.** Elles répondent à « combien de factures, dans quel statut, et pourquoi rejetées » sans réglage — exporter le classeur à deux feuilles quand un collègue veut croiser les chiffres bruts.
+- **Construire les extractions récurrentes dans l'[Explorateur](./explorer.md).** Une analyse enregistrée conserve ses champs, ses filtres et sa vue, peut entrer dans un tableau de bord et partir par rapport quotidien.
+- **Adapter la base de date à la question.** *Date d'archivage* répond à « ce que nous avons traité », *Date document* à « ce que nous avons émis », *Date d'activité* à « ce qui a changé » — choisir celle qu'attend le lecteur avant de lire les effectifs.
+
+---
+
+## NomaUBL — Explorateur
+Source: https://docs.nomana-it.fr/fr/nomaubl/application/explorer/
+
+L'Explorateur de NomaUBL — construire ses propres analyses des données de facturation sans SQL : champs de sept entités sur les étagères Lignes, Mesures et Filtres, tableau, tableau croisé, détail et graphiques, champs calculés, accès aux factures sous-jacentes, tableaux de bord, analyses fournies pour l'informatique, la comptabilité et l'audit, exports Excel, PDF et PNG, rapports quotidiens.
+
+L'**Explorateur** construit des analyses des données de facturation sans écrire de SQL. Les champs de sept entités autour de la facture se déposent dans les **Lignes**, les **Mesures** et les **Filtres** ; le résultat s'affiche en tableau, en tableau croisé, en lignes de détail ou en graphique, et chaque valeur ouvre les factures qu'elle recouvre. Les analyses s'enregistrent, se partagent et se regroupent en **tableaux de bord**. Des analyses et tableaux de bord sont fournis pour l'informatique, la comptabilité et l'audit. L'Explorateur fonctionne de la même façon quel que soit le système source (JD Edwards, SAP, NetSuite ou un ERP personnalisé) et sur toutes les bases prises en charge.
+
+Accès : **Explorateur**, dans le groupe Navigation du menu, à côté des [Rapports](./reports.md). Il remplace l'ancien onglet *Requêteur* de la page Rapports ; les rapports enregistrés avec ce dernier sont convertis automatiquement en analyses.
+
+---
+
+## Vue d'ensemble
+
+---
+
+## Les champs
+
+Le volet de gauche liste les champs de sept entités, avec une zone de recherche :
+
+| Entité | Une ligne par |
+|---|---|
+| **Factures** | Facture : statut, montants, contrepartie, dates. |
+| **Documents (archive)** | Document archivé. |
+| **Évènements du cycle de vie** | Évènement de statut d'une facture. |
+| **Contrôles de validation** | Anomalie de validation d'une facture. |
+| **Lignes de facture** | Ligne de facture. |
+| **Ventilation TVA** | Ligne de ventilation de TVA. |
+| **Notifications** | Notification. |
+
+L'**Entité** choisie dans la barre d'outils détermine ce que compte une ligne du résultat ; les champs des autres entités se rattachent par la facture. Un filtre sur les évènements, les contrôles ou les lignes sélectionne les factures qui ont une telle ligne.
+
+Un champ se glisse sur une étagère, ou s'ajoute d'un clic. Les montants sont exprimés dans leur unité réelle. Un champ codé — statut, type de transaction… — affiche les libellés de la liste choisie pour cette colonne dans les [Vues de liste](../configuration/list-views.md) (Factures, E-Documents, Erreurs d'intégration) : une liste courte définie à cet endroit vaut aussi pour l'Explorateur.
+
+---
+
+## Construire une analyse
+
+| Étagère | Rôle |
+|---|---|
+| **Lignes** | Les champs qui regroupent le résultat. Une date se regroupe par **jour**, **semaine**, **mois**, **trimestre** ou **année**. Dans un graphique, le deuxième champ des lignes donne les séries. |
+| **Mesures** | Les valeurs calculées par groupe : **Nombre**, **Distincts**, **Somme**, **Moyenne**, **Min**, **Max**. *Nombre de lignes* est proposé par défaut. |
+| **Filtres** | Conditions sur n'importe quel champ — *contient*, `=`, `≠`, `<`, `≤`, `>`, `≥`, *entre*, *parmi*, *est vide*, *n'est pas vide*. Une **Période** s'applique à n'importe quel champ de date, ou *Sans filtre de période*. |
+
+**Top** limite le résultat aux groupes les plus importants ; **Exécuter** lance l'analyse. Chaque analyse dispose de l'option **Exclure les erreurs suivies**, qui écarte les erreurs déjà prises en charge par le service client.
+
+### Vues
+
+| Vue | Résultat |
+|---|---|
+| **Tableau** | Une ligne par groupe, avec les mesures. |
+| **Croisé** | Un tableau croisé : champs des lignes imbriqués avec sous-totaux repliables (*Tout déplier*, *Tout replier*), un axe en colonnes facultatif, et la **part** de chaque cellule dans son niveau parent ou dans le total. |
+| **Détail** | Les lignes elles-mêmes, page par page ; une ligne ouvre la facture. |
+| **Barres** | Verticales ou horizontales, groupées ou empilées. |
+| **Courbe** | Courbe ou aire. |
+| **Secteurs** | Secteurs ou anneau. |
+| **Indicateurs** | Des cartes avec les totaux sur toutes les lignes du résultat. |
+
+Dans un graphique, les dix séries les plus importantes sont tracées et les autres regroupées sous *Autres* ; les dates se lisent dans l'ordre, les autres catégories par importance. Le survol affiche les valeurs. Passer d'une vue à l'autre ne relance pas la requête, et les options du graphique sont enregistrées avec l'analyse.
+
+### Explorer les données
+
+Une ligne du résultat, une cellule du tableau croisé, une barre, un point ou un secteur ouvre les **lignes sous-jacentes** ; une ligne de détail ouvre la fenêtre de la facture.
+
+---
+
+## Champs calculés \{#calculated-fields\}
+
+Une analyse peut définir ses propres champs avec un petit langage d'expressions, sous **Champs calculés** → **Nouveau champ calculé** :
+
+| Champ | Description |
+|---|---|
+| **Nom** | Lettres, chiffres et `_`. |
+| **Libellé** / **Libellé français** | Affichés dans la liste des champs et dans les résultats. |
+| **Expression** | Calculs sur les montants, fonctions et conditions. *Insérer un champ…* et *Insérer une fonction…* insèrent à la position du curseur. |
+| **Tester** | Applique l'expression à quelques lignes avant de l'utiliser. |
+
+| Fonction | Résultat |
+|---|---|
+| `age(date)` | Jours depuis la date. |
+| `days(début, fin)` | Jours entre deux dates. |
+| `year(date)`, `month(date)` | Année, mois. |
+| `round(x, décimales)`, `abs(x)` | Arrondi, valeur absolue. |
+| `coalesce(x, valeur si vide)` | Une valeur quand le champ est vide. |
+| `condition ? 'a' : 'b'` | Un choix — `age(dueDate) > 30 ? 'en retard' : 'à temps'`. |
+| `in ('a', 'b')` | Appartenance à une liste. |
+
+Un nombre s'utilise comme mesure, un texte comme ligne ou comme filtre. L'expression donne le même résultat sur toutes les bases prises en charge.
+
+---
+
+## Enregistrer et partager
+
+**Enregistrer** ouvre une fenêtre avec le **Nom** (dans la langue de l'interface), **Visible par** — *Tous les utilisateurs qui ouvrent l'Explorateur* ou *Moi seulement* — puis **Enregistrer** ou **Enregistrer sous**. *Enregistrer* remplace l'analyse ; *Enregistrer sous* en crée une copie sous le nouveau nom : c'est ainsi qu'une analyse fournie s'adapte en gardant l'originale. Les analyses enregistrées sont classées par public (IT, Comptabilité, Audit, Personnalisées) et par nom ; en choisir une l'exécute aussitôt avec sa propre période.
+
+Chaque analyse et chaque tableau de bord est un fichier JSON du dossier de configuration de l'environnement (`analyses/`, `dashboards/`). Les deux se transportent vers une autre instance par la [promotion](../management/promotion.md) — un tableau de bord emporte ses analyses — et le [rapport d'implémentation](./implementation-report.md) les recense.
+
+---
+
+## Tableaux de bord \{#dashboards\}
+
+Le mode **Tableaux de bord** réunit des analyses enregistrées sous forme de **tuiles** sur une grille de quatre colonnes, chacune avec sa largeur, sa hauteur et sa vue — graphique, tableau ou tableau croisé. Une **période** unique, en haut, s'applique à toutes les tuiles. Une tuile s'explore comme son analyse et l'ouvre dans l'éditeur. **Modifier la disposition** ajoute des tuiles (*Analyse à ajouter…*, *Ajouter une tuile*), les déplace et règle leur taille.
+
+---
+
+## Analyses et tableaux de bord fournis
+
+NomaUBL installe douze analyses et trois tableaux de bord, une seule fois ; ils ne sont jamais écrasés ensuite et peuvent donc être adaptés.
+
+| Public | Tableau de bord | Analyses |
+|---|---|---|
+| **IT** | Exploitation | Volume par document · Contrôles par jour et par source · Échecs d'envoi et d'import · Factures dans un statut de traitement |
+| **Comptabilité** | Clôture du mois | TVA par mois et par taux · Montants par statut · Principaux clients · Factures et avoirs par mois |
+| **Audit** | Période d'audit | Contrôles par règle · Refus et rejets par motif · Évènements de statut par mois · Statistiques des statuts |
+
+*Statistiques des statuts* reproduit le tableau croisé de la page [Rapports](./reports.md), dont l'onglet reste inchangé.
+
+---
+
+## Exports et rapports quotidiens
+
+| Export | Contenu |
+|---|---|
+| **PDF** | Une analyse ou un tableau de bord dans la mise en page du [rapport d'audit](./audit-report.md) : page de garde avec environnement, période, date, auteur et version, sommaire pour un tableau de bord, en-têtes courants, chaque graphique avec toutes ses données, filtres rappelés. |
+| **Excel** | Le tableau croisé ; un tableau de bord avec une feuille par tuile. |
+| **PNG** | Le graphique d'une analyse. |
+
+Un [rapport quotidien](../sync/scheduled-jobs/daily-digest.md) peut envoyer une analyse enregistrée ou un tableau de bord complet, exécuté sur la fenêtre du rapport, en Excel ou en PDF dans la même mise en page.
+
+---
+
+## Accès
+
+Accorder la page **Explorateur** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md). Les résultats suivent la visibilité par société de l'utilisateur connecté.
+
+---
+
+## Conseils & bonnes pratiques
+
+- **Partir d'une analyse fournie** et l'*Enregistrer sous* pour l'adapter ; l'originale reste disponible.
+- **Choisir d'abord l'entité.** Elle détermine ce qui est compté : factures, lignes, évènements ou contrôles.
+- **Afficher la part du niveau parent dans le tableau croisé** pour lire une répartition — statuts par société, taux de TVA par mois.
+- **Donner une liste courte aux champs codés** dans les *Vues de liste* : l'Explorateur la reprend.
+- **Envoyer le tableau de bord Clôture du mois par rapport quotidien** en début de mois, en PDF, à l'équipe comptable.
 
 ---
 
@@ -32022,7 +32147,9 @@ Chaque rapport est une ligne du catalogue. Le panneau d'édition comporte quatre
 | Champ | Obligatoire | Description |
 |---|---|---|
 | **Nom** | oui | Texte libre. Affiché dans la liste du catalogue et en tête du corps de l'email. Exemple : *Comptabilité · ACME*. |
-| **Rapport** | oui (défaut : `Erreurs d'intégration`) | Ce que couvre le rapport. **Erreurs d'intégration** rassemble les évènements en échec de la page [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) — le comportement d'origine. **Toutes les factures archivées** couvre à la place chaque facture archivée sur la fenêtre, et la feuille jointe porte les colonnes de la page [E-Documents](../../application/edocuments.md) et respecte les filtres par colonne ci-dessous ; un rapport peut ainsi servir aussi d'extraction d'archive quotidienne. |
+| **Rapport** | oui (défaut : `Erreurs d'intégration`) | Ce que couvre le rapport. **Erreurs d'intégration** rassemble les évènements en échec de la page [Erreurs d'intégration](../../application/diagnostics/integration-errors.md) — le comportement d'origine. **Toutes les factures archivées** couvre à la place chaque facture archivée sur la fenêtre, et la feuille jointe porte les colonnes de la page [E-Documents](../../application/edocuments.md) et respecte les filtres par colonne ci-dessous ; un rapport peut ainsi servir aussi d'extraction d'archive quotidienne. **Analyse enregistrée (Explorateur)** et **Tableau de bord (Explorateur)** envoient une analyse ou un tableau de bord complet — voir les deux champs ci-dessous. |
+| **Analyse** / **Tableau de bord** | quand le rapport est *Analyse enregistrée (Explorateur)* ou *Tableau de bord (Explorateur)* | L'analyse ou le tableau de bord de l'[Explorateur](../../application/explorer.md) à envoyer, présenté avec son nom et son public. Il est exécuté sur la fenêtre de rétrospective — sa propre période est remplacée — et joint au message. |
+| **Pièce jointe** | avec une analyse ou un tableau de bord | **Excel — les données, une feuille par tuile**, ou **PDF — graphiques et données, mise en page du rapport d'audit**. Produite sur le serveur au moment de l'envoi. |
 | **Destinataires** | oui | Une ou plusieurs adresses email, séparées par virgule ou point-virgule. Chaque adresse reçoit le même email — il n'y a pas de personnalisation par adresse ici ; créez un autre rapport si les destinataires doivent voir des coupes différentes. |
 | **Activé** | oui (défaut : `on`) | Quand il vaut `off`, le rapport est conservé dans le catalogue mais ignoré au moment de l'envoi. Pratique pour mettre en pause un rapport pendant une fenêtre de maintenance sans perdre la configuration. |
 
@@ -35864,6 +35991,7 @@ Accès : **Gestion → Promotion**. La page compte quatre vues : **Exporter** (p
 | **Modèle PDF** | Un modèle PDF. | — |
 | **Liste** | Une [liste de référence](../configuration/reference-lists.md) ou une [liste personnalisée](../configuration/custom-lists.md). | — |
 | **Règle de notification** | Une [règle de notification](./notification-rules.md). | — |
+| **Analyse de l'Explorateur** · **Tableau de bord de l'Explorateur** | Une analyse ou un tableau de bord enregistré de l'[Explorateur](../application/explorer.md). | Un tableau de bord emporte les analyses de ses tuiles. |
 | **Rapport quotidien** · **Reprise auto** · **Contrôle cycle de vie** | Un [rapport quotidien](../sync/scheduled-jobs/daily-digest.md), une [reprise automatique](../sync/scheduled-jobs/auto-retry.md) ou un [contrôle du cycle de vie](../sync/scheduled-jobs/lifecycle-checks.md). | — |
 | **Connecteur** | Un connecteur API, SQL, base de données ou FTP, sans ses secrets ni ses cibles. | — |
 | **Modèle de réglages** | E-invoicing, e-reporting, annuaire, dossiers surveillés, contrôles d'intégrité, requêtes de rapports ou file d'impression JDE, sans ses clés d'instance. | — |
@@ -38181,6 +38309,8 @@ L'éditeur présente **une carte repliable par vue**. Une carte ne charge sa spe
 | **API Operations** | Vue *API* de la [référence développeur](../references/developer.md#api) | `view.apiOperations` |
 | **Promotion Plan** | Aperçu d'import de la [promotion](../management/promotion.md) | `view.promotionPlan` |
 
+La liste choisie pour une colonne codée des vues **Invoices**, **E-Documents** et **Integration Errors** donne aussi ses libellés à ce champ dans l'[Explorateur](../application/explorer.md).
+
 Un petit badge à côté du nom de vue indique si la spec active vient du défaut embarqué dans le JAR (`default`) ou d'une entrée stockée sur `db-nomaubl` (`override`) :
 
 - **default** — aucune propriété `view.<nom>` n'existe sur `db-nomaubl`. C'est le JSON embarqué dans `config/list-views/view.<nom>.json` qui pilote l'affichage. Enregistrer depuis l'éditeur écrit une propriété et fait basculer le badge en `override`.
@@ -39346,7 +39476,7 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 
 | Groupe | Pages (identifiant) |
 |---|---|
-| **Navigation** | Tableau de bord (`dashboard`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
+| **Navigation** | Tableau de bord (`dashboard`), Tableau de bord IT (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Annuaire (`edirectory`), Déclaration de TVA (`vatdeclaration`), Rapports (`reports`), Explorateur (`explorer`), Notifications (`notifications`), puis **Diagnostic** et ses quatre vues : Erreurs d'intégration (`integrationerrors`), Journal des traitements (`processinglog`), Anomalies (`errors`), Journal serveur (`serverlog`). |
 | **Synchronisation** | Récupérer Entrée (`fetchinput`), Récupérer les imports (`import`), Récupérer les statuts (`retrievestatuses`), Tâches planifiées (`scheduledjobs`). |
 | **Traitement** | Traiter Document (`process`), Extraire & Traiter (`extractandprocess`), Traiter API (`processapi`). |
 | **UBL** | Validation UBL (`validate`), Éditeur XSL (`xsleditor`), Visionneuse XML (`xmlviewer`), Défauts UBL (`ubldefaults`). |
@@ -40136,17 +40266,18 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 
   
     Versions
+    2026.10.25.1 · 2026-10-25
     2026.10.24.1 · 2026-10-24
     2026.10.23.1 · 2026-10-23
     2026.10.22.1 · 2026-10-22
     2026.10.21.1 · 2026-10-21
     2026.10.20.1 · 2026-10-20
-    2026.10.19.1 · 2026-10-19
   
   
-    Toutes les versions (118)
+    Toutes les versions (119)
     
       2026-10
+      2026.10.19.1 · 2026-10-19
       2026.10.18.1 · 2026-10-18
       2026.10.16.1 · 2026-10-16
       2026.10.14.1 · 2026-10-14
@@ -40281,6 +40412,21 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
   
 
 {/* versions:end */}
+
+---
+
+## 2026.10.25.1 — 2026-10-25 \{#v2026-10-25-1\}
+
+### Améliorations
+
+- **Explorateur : construisez vos propres analyses.** Une nouvelle page Explorateur, à côté de Rapports, remplace l'onglet Requêteur. À gauche, les champs de sept entités autour de la facture (factures, documents archivés, évènements du cycle de vie, contrôles de validation, lignes, ventilation TVA, notifications) ; glissez-les ou cliquez-les vers les étagères Lignes, Mesures et Filtres, choisissez une période sur n'importe quelle date, puis exécutez l'analyse en tableau, en tableau croisé avec totaux, ou en lignes de détail. Les dates se regroupent par jour, semaine, mois, trimestre ou année ; les mesures sont le nombre, le nombre distinct, la somme, la moyenne, le min et le max, en unités réelles ; un filtre sur les évènements ou les lignes sélectionne les factures qui en ont. Une ligne de résultat ou une cellule du croisé ouvre les lignes qui la composent, et une ligne de détail ouvre la facture. Les analyses s'enregistrent et se partagent, un fichier chacune, promouvable ; les rapports enregistrés de l'ancien requêteur sont convertis automatiquement. Accordée par rôle avec la nouvelle page Explorateur. Fonctionne à l'identique sur toutes les bases supportées.
+- **Explorateur : graphiques.** Une analyse peut désormais s'afficher en barres (verticales ou horizontales, groupées ou empilées), en courbe ou en aire, en secteurs ou en anneau, ou en cartes d'indicateurs. Le second champ des lignes donne les séries, les dix plus importantes et le reste regroupé en Autres ; les dates se lisent dans l'ordre, les autres catégories par taille. Le survol affiche les valeurs, un clic sur une barre, un point ou un secteur ouvre les lignes correspondantes, et le graphique se télécharge en PNG. Passer du tableau au croisé ou aux graphiques ne relance pas la requête ; les options du graphique s'enregistrent avec l'analyse. La barre d'outils garde l'entité, les vues, le Top et Exécuter sur une ligne fixe, les options de la vue courante sur une seconde ligne.
+- **Explorateur : tableaux de bord.** L'Explorateur gagne un mode Tableaux de bord : les analyses enregistrées deviennent des tuiles sur une grille de quatre colonnes, chacune avec sa largeur et sa hauteur, son graphique, son tableau ou son croisé, et une seule période en tête appliquée à toutes les tuiles. Une tuile permet de zoomer comme son analyse et l'ouvre dans l'éditeur ; les tableaux de bord s'enregistrent et se partagent comme les analyses. Analyses et tableaux de bord se promeuvent vers une autre instance, un tableau de bord emportant ses analyses, et le rapport d'implémentation les recense. Un récapitulatif quotidien peut envoyer une analyse enregistrée : elle s'exécute sur la fenêtre du récapitulatif et arrive en tableur.
+- **Explorateur : champs calculés, croisé enrichi, analyses prêtes à l'emploi.** Une analyse peut définir des champs calculés avec un petit langage d'expressions — calculs sur les montants, ancienneté d'une facture ou nombre de jours entre deux dates, conditions et choix comme `age(dueDate) > 30 ? 'en retard' : 'à jour'` — testés sur quelques lignes avant usage et utilisables en lignes, en mesures ou en filtres ; le résultat est identique sur toutes les bases supportées. Le tableau croisé imbrique ses champs de lignes avec des sous-totaux repliables et affiche la part de chaque cellule dans son niveau parent ou dans le total. Douze analyses et trois tableaux de bord sont fournis pour l'IT (Exploitation), la comptabilité (Clôture du mois) et l'audit (Période d'audit) ; ils sont installés une fois et jamais écrasés, donc adaptables. L'une d'elles reproduit les statistiques des statuts de la page Rapports, dont l'onglet reste inchangé. Chaque analyse propose d'exclure les erreurs suivies. Le tableau croisé et un tableau de bord entier s'exportent vers Excel, le tableau de bord à raison d'une feuille par tuile ; analyses et tableaux de bord enregistrés sont listés par public et par nom. L'enregistrement ouvre une fenêtre avec le nom dans la langue de l'interface, la visibilité (tout le monde ou moi seulement), Enregistrer et Enregistrer sous — Enregistrer sous permet de copier et d'adapter une analyse ou un tableau de bord fourni. Un champ codé affiche les libellés de la liste choisie pour cette colonne dans Paramètres › Vues de liste (Factures, E-Documents, Erreurs d'intégration) : une liste courte des types de transaction s'applique donc aussi à l'Explorateur. Une analyse ou un tableau de bord s'exporte en PDF dans la mise en page du rapport d'audit — page de garde avec environnement, période, date, auteur et version, table des matières pour un tableau de bord, en-têtes courants — avec chaque graphique et toutes ses données, filtres indiqués. Dans un champ calculé, les champs et les fonctions se choisissent dans des listes et s'insèrent au curseur. Un récapitulatif quotidien peut envoyer une analyse enregistrée ou un tableau de bord entier, en Excel (une feuille par tuile) ou en PDF dans la même mise en page, produit par le serveur sur la fenêtre du récapitulatif ; les listes reprennent les noms et les groupes par public de l'Explorateur. Choisir une analyse enregistrée l'exécute aussitôt avec sa propre période, comme une tuile de tableau de bord.
+
+### Corrections
+
+- **Types de transaction en anglais.** La liste des types de documents ne porte que des libellés français ; les écrans, PDF et classeurs en anglais affichaient à la place son indicateur d'envoi (1, 0). Le libellé français sert désormais dans les deux langues.
 
 ---
 
