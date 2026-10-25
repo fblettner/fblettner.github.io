@@ -243,8 +243,6 @@ Each step uses `type_coercion = "jde"` + `decimal_mode = "truncate"` — JDE col
 
 ### `nomajde-remerge-security` \{#nomajde-remerge-security\}
 
-*Added 2026.06.09.*
-
 **Re-merge the JDE security (F00950 / F00950W / F9006) of every parent role affected by a change captured in the active draft package.** Driven by the `nomajde.security:j_remerge_security` plugin with `scope = "package"`.
 
 This job — and its `-all` sibling — solves the JDE-specific problem that role security is **derived** from a tree of parent → child role assignments. Changing a child role's permissions only affects production once every parent that includes it has been re-merged. Doing that by hand on a wide change is tedious and error-prone; the job walks the change package, derives the impacted parents from the captured writes, and re-runs the merge for each.
@@ -271,8 +269,6 @@ The job's diagnostics land in the run log under the `nomajde.*` logger namespace
 ---
 
 ### `nomajde-remerge-security-all` \{#nomajde-remerge-security-all\}
-
-*Added 2026.06.09.*
 
 **Re-merge the JDE security of every parent role in the system, regardless of recent changes.** Same plugin as above (`nomajde.security:j_remerge_security`) but with `scope = "all"`.
 

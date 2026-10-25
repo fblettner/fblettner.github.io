@@ -243,8 +243,6 @@ Chaque étape utilise `type_coercion = "jde"` et `decimal_mode = "truncate"` —
 
 ### `nomajde-remerge-security` \{#nomajde-remerge-security\}
 
-*Ajouté en 2026.06.09.*
-
 **Re-fusion de la sécurité JDE (F00950 / F00950W / F9006) de chaque rôle parent affecté par une modification capturée dans le paquet de modifications brouillon actif.** Pilotée par le plugin `nomajde.security:j_remerge_security` avec `scope = "package"`.
 
 Cette tâche — et son équivalent `-all` — résout le problème propre à JDE : la sécurité d'un rôle est **dérivée** d'un arbre d'affectations rôle parent → rôle enfant. Modifier les permissions d'un rôle enfant n'a d'effet en production qu'une fois que chaque parent qui l'inclut a été re-fusionné. Faire cela à la main sur une modification de grande ampleur est fastidieux et source d'erreurs ; la tâche parcourt le paquet de modifications, déduit les parents impactés à partir des écritures capturées et relance la fusion pour chacun.
@@ -273,8 +271,6 @@ Voir aussi : [Paquets de modifications](./change-packages.md).
 ---
 
 ### `nomajde-remerge-security-all` \{#nomajde-remerge-security-all\}
-
-*Ajouté en 2026.06.09.*
 
 **Re-fusion de la sécurité JDE de chaque rôle parent du système, indépendamment des modifications récentes.** Même plugin que ci-dessus (`nomajde.security:j_remerge_security`) mais avec `scope = "all"`.
 

@@ -38,7 +38,7 @@ Le référentiel de fichiers est commun à tous les déploiements NomaUBL — la
   <text x="266" y="156" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">invoices.xsl</text>
   <text x="266" y="172" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">credit_notes.xsl</text>
   <rect x="262" y="180" width="174" height="22" rx="4" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="270" y="195" fill="#4a9eff" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">isc-normalize.xsl</text>
+  <text x="270" y="195" fill="#4a9eff" fontSize="10" fontFamily="ui-monospace, monospace" fontWeight="700">invoices-pre.xsl</text>
   <text x="252" y="218" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">▾ 📁 config</text>
   <text x="266" y="236" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">config.json</text>
   <text x="266" y="252" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">config-notifications.json</text>
@@ -48,7 +48,7 @@ Le référentiel de fichiers est commun à tous les déploiements NomaUBL — la
   <text x="252" y="332" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">▸ 📁 archive</text>
 
   <rect x="452" y="84" width="328" height="362" rx="8" fill="rgba(74,158,255,0.04)" stroke="#4a9eff" strokeWidth="1.2"/>
-  <text x="464" y="108" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace" fontWeight="700">isc-normalize.xsl</text>
+  <text x="464" y="108" fill="#e2e8f0" fontSize="11" fontFamily="ui-monospace, monospace" fontWeight="700">invoices-pre.xsl</text>
   <rect x="608" y="92" width="80" height="22" rx="5" fill="rgba(255,255,255,0.04)" stroke="#334155" strokeWidth="1"/>
   <text x="648" y="107" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Modifier</text>
   <rect x="694" y="92" width="80" height="22" rx="5" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.40)" strokeWidth="1"/>
