@@ -215,7 +215,7 @@ Certains widgets ignorent volontairement le filtre — *Factures bloquées* (tou
 | **Date document** | La date d'émission des factures (BT-2). |
 | **Date d'archivage** | La date de traitement des documents dans l'archive. |
 
-Cartes de synthèse, pipeline des statuts, volume quotidien, répartition par société et principales erreurs suivent tous ce choix. La liste [E-Invoicing](./invoices.md#base-de-date) et la page [Rapports](./reports.md) proposent la même base *Date d'archivage*.
+Cartes de synthèse, pipeline des statuts, volume quotidien, répartition par société et principales erreurs suivent tous ce choix. La liste [E-Invoicing](./invoices.md#base-de-date) et la page [Rapports](reports/overview.md) proposent la même base *Date d'archivage*.
 
 ### Exclure les erreurs traitées \{#exclure-erreurs-traitees\}
 

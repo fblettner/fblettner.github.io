@@ -3,7 +3,6 @@
     "message": "Actuelle",
     "description": "The label for version current"
   },
-
   "sidebar.libertySidebar.category.Installation": {
     "message": "Installation",
     "description": "The label for category 'Installation' in sidebar 'libertySidebar'"
@@ -21,7 +20,7 @@
     "description": "The generated-index page description for category 'Nomasx-1' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Administrator's Guide": {
-    "message": "Administrator's Guide",
+    "message": "Guide de l'administrateur",
     "description": "The label for category 'Administrator's Guide' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Administrator's Guide.link.generated-index.description": {
@@ -29,7 +28,7 @@
     "description": "The generated-index page description for category 'Administrator's Guide' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.React Components": {
-    "message": "React Components",
+    "message": "Composants React",
     "description": "The label for category 'React Components' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.React Components.link.generated-index.description": {
@@ -45,7 +44,7 @@
     "description": "The generated-index page description for category 'Services' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Core Components": {
-    "message": "Core Components",
+    "message": "Composants de base",
     "description": "The label for category 'Core Components' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Core Components.link.generated-index.description": {
@@ -53,7 +52,7 @@
     "description": "The generated-index page description for category 'Core Components' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.UI Elements": {
-    "message": "UI Elements",
+    "message": "Éléments d'interface",
     "description": "The label for category 'UI Elements' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.UI Elements.link.generated-index.description": {
@@ -61,7 +60,7 @@
     "description": "The generated-index page description for category 'UI Elements' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Inputs & Forms": {
-    "message": "Inputs & Forms",
+    "message": "Saisie et formulaires",
     "description": "The label for category 'Inputs & Forms' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Inputs & Forms.link.generated-index.description": {
@@ -69,7 +68,7 @@
     "description": "The generated-index page description for category 'Inputs & Forms' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Dialogs & Overlays": {
-    "message": "Dialogs & Overlays",
+    "message": "Boîtes de dialogue et surcouches",
     "description": "The label for category 'Dialogs & Overlays' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Dialogs & Overlays.link.generated-index.description": {
@@ -77,7 +76,7 @@
     "description": "The generated-index page description for category 'Dialogs & Overlays' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Tables & Lists": {
-    "message": "Tables & Lists",
+    "message": "Tableaux et listes",
     "description": "The label for category 'Tables & Lists' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Tables & Lists.link.generated-index.description": {
@@ -85,7 +84,7 @@
     "description": "The generated-index page description for category 'Tables & Lists' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Charts": {
-    "message": "Charts",
+    "message": "Graphiques",
     "description": "The label for category 'Charts' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Charts.link.generated-index.description": {
@@ -93,7 +92,7 @@
     "description": "The generated-index page description for category 'Charts' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Main Components": {
-    "message": "Main Components",
+    "message": "Composants principaux",
     "description": "The label for category 'Main Components' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Main Components.link.generated-index.description": {
@@ -101,7 +100,7 @@
     "description": "The generated-index page description for category 'Main Components' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Forms Components": {
-    "message": "Forms Components",
+    "message": "Composants de formulaire",
     "description": "The label for category 'Forms Components' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Forms Components.link.generated-index.description": {
@@ -109,7 +108,7 @@
     "description": "The generated-index page description for category 'Forms Components' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Styled Elements": {
-    "message": "Styled Elements",
+    "message": "Éléments stylés",
     "description": "The label for category 'Styled Elements' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Styled Elements.link.generated-index.description": {
@@ -117,20 +116,19 @@
     "description": "The generated-index page description for category 'Styled Elements' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Reference": {
-    "message": "Reference",
+    "message": "Référence",
     "description": "The label for category 'Reference' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Reference.link.generated-index.description": {
     "message": "API reference, release notes, known issues and incident history.",
     "description": "The generated-index page description for category 'Reference' in sidebar 'libertySidebar'"
   },
-
   "sidebar.nomaublSidebar.category.Application": {
     "message": "Application",
     "description": "The label for category 'Application' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Application.link.generated-index.description": {
-    "message": "Navigation principale : tableau de bord, factures, e-reporting, e-directory et erreurs d'intégration.",
+    "message": "Navigation principale de l'application : tableau de bord, tableau de bord IT, factures, e-reporting, annuaire, déclaration de TVA, rapports (audit, implémentation, technique), Explorateur, notifications, Diagnostic (erreurs d'intégration, journal des traitements, anomalies, journal serveur) et assistant IA.",
     "description": "The generated-index page description for category 'Application' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.References": {
@@ -138,7 +136,7 @@
     "description": "The label for category 'References' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.References.link.generated-index.description": {
-    "message": "Documentation de référence intégrée à l'application : codes statut, codes motif, sémantique UBL et API HTTP.",
+    "message": "Documents de référence repris dans l'application : codes de statut, codes motif, sémantique UBL, règles métier, schéma de base, référence développeur et API HTTP.",
     "description": "The generated-index page description for category 'References' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Sync": {
@@ -146,7 +144,7 @@
     "description": "The label for category 'Sync' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Sync.link.generated-index.description": {
-    "message": "Synchronisation entrante / sortante : récupération des entrées, import et récupération des statuts.",
+    "message": "Synchronisation entrante et sortante : récupération des entrées, import, récupération des statuts et page des tâches planifiées (interrogations, tâches batch, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, rétention).",
     "description": "The generated-index page description for category 'Sync' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Processing": {
@@ -154,7 +152,7 @@
     "description": "The label for category 'Processing' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Processing.link.generated-index.description": {
-    "message": "Lancer les traitements XML/UBL et déclencher l'API de traitement.",
+    "message": "Point d'entrée unique du traitement des documents (XML ou UBL, selon le modèle), enchaînement Extraire et traiter, et testeur des connecteurs API.",
     "description": "The generated-index page description for category 'Processing' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.UBL Tools": {
@@ -162,7 +160,7 @@
     "description": "The label for category 'UBL Tools' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.UBL Tools.link.generated-index.description": {
-    "message": "Valider, éditer et inspecter les documents UBL/XML ; gérer les valeurs UBL par défaut.",
+    "message": "Valider, modifier et inspecter l'UBL et le XML ; jeux de règles, post-transformation vers d'autres syntaxes et valeurs UBL par défaut.",
     "description": "The generated-index page description for category 'UBL Tools' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.UBL Defaults": {
@@ -170,7 +168,7 @@
     "description": "The label for category 'UBL Defaults' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.UBL Defaults.link.generated-index.description": {
-    "message": "Valeurs par défaut appliquées aux documents UBL générés et règles de surcharge par modèle.",
+    "message": "Valeurs par défaut appliquées aux documents UBL produits, et leur remplacement par modèle.",
     "description": "The generated-index page description for category 'UBL Defaults' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Extract": {
@@ -178,15 +176,15 @@
     "description": "The label for category 'Extract' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Extract.link.generated-index.description": {
-    "message": "Canaux d'extraction de la source : répertoires d'archives, serveurs FTP/SFTP et file BIP JD Edwards.",
+    "message": "Canaux d'extraction des sources : répertoires d'archive, serveurs FTP/SFTP et file d'impression BIP de JD Edwards.",
     "description": "The generated-index page description for category 'Extract' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Management": {
-    "message": "Administration",
+    "message": "Gestion",
     "description": "The label for category 'Management' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Management.link.generated-index.description": {
-    "message": "Gestion opérationnelle : versions de fichiers et historique du cycle de vie.",
+    "message": "Gestion opérationnelle : documents, modèles PDF, liaisons d'actions, règles de notification, dossiers surveillés, versions de fichiers, promotion entre instances et ligne de commande.",
     "description": "The generated-index page description for category 'Management' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Configuration": {
@@ -194,7 +192,7 @@
     "description": "The label for category 'Configuration' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Configuration.link.generated-index.description": {
-    "message": "Paramétrage global de l'application : documents, système, listes de référence, connecteurs et sécurité.",
+    "message": "Configuration de l'application : paramètres système, listes de référence, connecteurs et sécurité.",
     "description": "The generated-index page description for category 'Configuration' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.System": {
@@ -202,7 +200,7 @@
     "description": "The label for category 'System' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.System.link.generated-index.description": {
-    "message": "Paramètres système : e-directory, e-invoicing, récupération des factures, types de documents et statuts.",
+    "message": "Paramètres système : annuaire, e-invoicing, e-reporting, file d'impression JDE, contrôles d'intégrité, paramètres globaux, authentification unique, types de documents et statuts.",
     "description": "The generated-index page description for category 'System' in sidebar 'nomaublSidebar'"
   },
   "sidebar.nomaublSidebar.category.Database Connectors": {
@@ -221,9 +219,8 @@
     "message": "Gestion des utilisateurs et des rôles.",
     "description": "The generated-index page description for category 'Security' in sidebar 'nomaublSidebar'"
   },
-
   "sidebar.apiSidebar.category.JD Edwards API": {
-    "message": "JD Edwards API",
+    "message": "API JD Edwards",
     "description": "The label for category 'JD Edwards API' in sidebar 'apiSidebar'"
   },
   "sidebar.apiSidebar.category.JD Edwards API.link.generated-index.description": {
@@ -231,11 +228,331 @@
     "description": "The generated-index page description for category 'JD Edwards API' in sidebar 'apiSidebar'"
   },
   "sidebar.apiSidebar.category.BI Publisher API": {
-    "message": "BI Publisher API",
+    "message": "API BI Publisher",
     "description": "The label for category 'BI Publisher API' in sidebar 'apiSidebar'"
   },
   "sidebar.apiSidebar.category.BI Publisher API.link.generated-index.description": {
     "message": "BI Publisher integration utilities: Code 128 barcodes and the NOMABIP wrapper API.",
     "description": "The generated-index page description for category 'BI Publisher API' in sidebar 'apiSidebar'"
+  },
+  "sidebar.libertySidebar.category.Framework": {
+    "message": "Framework",
+    "description": "The label for category 'Framework' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Framework.link.generated-index.description": {
+    "message": "Liberty Framework — une plateforme low-code pilotée par les connecteurs, pour les applications internes, les outils d'administration et les tableaux de bord décisionnels. Commencer par la présentation, puis suivre l'un des tutoriels pour construire une application complète.",
+    "description": "The generated-index page description for category 'Framework' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Getting Started": {
+    "message": "Prise en main",
+    "description": "The label for category 'Getting Started' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Getting Started.link.generated-index.description": {
+    "message": "Construire une première application, puis découvrir l'organisation du dépôt des applications. Pour l'installation du serveur, voir la section Installation.",
+    "description": "The generated-index page description for category 'Getting Started' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Tutorial — Build a CRM": {
+    "message": "Tutoriel — construire un CRM",
+    "description": "The label for category 'Tutorial — Build a CRM' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Tutorial — Build a CRM.link.generated-index.description": {
+    "message": "Un parcours en six étapes qui construit un CRM complet : clients, affaires et activités, avec un tableau de bord du pipeline, la connexion OIDC, l'assistant IA et une tâche planifiée.",
+    "description": "The generated-index page description for category 'Tutorial — Build a CRM' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Configuration": {
+    "message": "Configuration",
+    "description": "The label for category 'Configuration' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Configuration.link.generated-index.description": {
+    "message": "Interface des paramètres, app.toml, variables d'environnement, rechargement à chaud et secrets chiffrés.",
+    "description": "The generated-index page description for category 'Configuration' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Build an application": {
+    "message": "Construire une application",
+    "description": "The label for category 'Build an application' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Build an application.link.generated-index.description": {
+    "message": "Des pages orientées tâche — créer des requêtes, des écrans, des menus et des applications, puis les sécuriser. À lire avec la section Concepts, qui détaille la référence derrière chaque tâche.",
+    "description": "The generated-index page description for category 'Build an application' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Queries": {
+    "message": "Requêtes",
+    "description": "The label for category 'Queries' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Queries.link.generated-index.description": {
+    "message": "Tout ce qui se fait dans la page Connecteurs — ajouter une requête à partir d'une table, en écrire une sur mesure, la dupliquer, générer séquences et listes de valeurs, lier des paramètres, livrer des variantes par base de données.",
+    "description": "The generated-index page description for category 'Queries' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Screens": {
+    "message": "Écrans",
+    "description": "The label for category 'Screens' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Screens.link.generated-index.description": {
+    "message": "Tout ce qui se fait dans le Concepteur d'écran — relier un écran à une requête, configurer les colonnes, construire la boîte de dialogue, ajouter des champs conditionnels, câbler les actions et les points d'extension, imbriquer des onglets.",
+    "description": "The generated-index page description for category 'Screens' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Menus": {
+    "message": "Menus",
+    "description": "The label for category 'Menus' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Menus.link.generated-index.description": {
+    "message": "La page Menus — déclarer un connecteur comme application dans le sélecteur du haut, construire l'arborescence de navigation (dossiers et entrées), choisir le type d'entrée (requête, point d'API, tableau de bord, page), restreindre par rôle, traduire les libellés et choisir les icônes.",
+    "description": "The generated-index page description for category 'Menus' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Secure": {
+    "message": "Sécuriser",
+    "description": "The label for category 'Secure' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Secure.link.generated-index.description": {
+    "message": "Identité, autorisations et protection des secrets. Les deux sources d'identité (TOML local ou base), OIDC par-dessus, la composition des rôles et permissions avec règles d'autorisation et de refus, la page AccessBuilder, les secrets chiffrés et la clé de licence.",
+    "description": "The generated-index page description for category 'Secure' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Plugins": {
+    "message": "Plugins",
+    "description": "The label for category 'Plugins' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Plugins.link.generated-index.description": {
+    "message": "Du code Python propre, placé dans le dépôt des applications et chargé par le framework au démarrage. Le recours quand les étapes déclaratives ne suffisent pas — contrat de fonction, boîte à outils ETL, déploiement et débogage.",
+    "description": "The generated-index page description for category 'Plugins' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Concepts": {
+    "message": "Concepts",
+    "description": "The label for category 'Concepts' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Concepts.link.generated-index.description": {
+    "message": "La référence détaillée derrière les pages Construire — connecteurs, dictionnaire, tableaux de bord, graphiques et expressions de condition des formulaires.",
+    "description": "The generated-index page description for category 'Concepts' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Apps & Plugins": {
+    "message": "Applications et plugins",
+    "description": "The label for category 'Apps & Plugins' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Apps & Plugins.link.generated-index.description": {
+    "message": "La structure d'une application Liberty, les plugins Python et l'internationalisation.",
+    "description": "The generated-index page description for category 'Apps & Plugins' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Cookbook": {
+    "message": "Recettes",
+    "description": "The label for category 'Cookbook' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Cookbook.link.generated-index.description": {
+    "message": "Des recettes courtes pour les besoins courants — export Excel, envoi de fichiers, connexion OIDC, piste d'audit, import en masse, rapport planifié, accès par ligne, ouverture des données à l'IA.",
+    "description": "The generated-index page description for category 'Cookbook' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Monitoring": {
+    "message": "Supervision",
+    "description": "The label for category 'Monitoring' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Monitoring.link.generated-index.description": {
+    "message": "La page Monitoring — vue en direct de l'exécution : utilisateurs connectés, verrous tenus, statistiques par pool, informations d'exécution, fin du journal. Plus les points de santé et le raccordement d'une supervision externe.",
+    "description": "The generated-index page description for category 'Monitoring' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.References": {
+    "message": "Références",
+    "description": "The label for category 'References' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.References.link.generated-index.description": {
+    "message": "Référence de la ligne de commande et de l'API REST.",
+    "description": "The generated-index page description for category 'References' in sidebar 'libertySidebar'"
+  },
+  "sidebar.nomaflowSidebar.category.Jobs": {
+    "message": "Tâches",
+    "description": "The label for category 'Jobs' in sidebar 'nomaflowSidebar'"
+  },
+  "sidebar.nomaflowSidebar.category.Jobs.link.generated-index.description": {
+    "message": "La page Jobs — parcourir le catalogue, créer ou modifier un flux, le planifier.",
+    "description": "The generated-index page description for category 'Jobs' in sidebar 'nomaflowSidebar'"
+  },
+  "sidebar.nomaflowSidebar.category.Runs": {
+    "message": "Exécutions",
+    "description": "The label for category 'Runs' in sidebar 'nomaflowSidebar'"
+  },
+  "sidebar.nomaflowSidebar.category.Runs.link.generated-index.description": {
+    "message": "Historique des exécutions, suivi en direct, dépannage.",
+    "description": "The generated-index page description for category 'Runs' in sidebar 'nomaflowSidebar'"
+  },
+  "sidebar.nomaflowSidebar.category.Workflow recipes": {
+    "message": "Recettes de flux",
+    "description": "The label for category 'Workflow recipes' in sidebar 'nomaflowSidebar'"
+  },
+  "sidebar.nomaflowSidebar.category.Workflow recipes.link.generated-index.description": {
+    "message": "Des modèles prêts à adapter — synchronisation de base planifiée, récupération depuis une API, nettoyage conditionnel.",
+    "description": "The generated-index page description for category 'Workflow recipes' in sidebar 'nomaflowSidebar'"
+  },
+  "sidebar.nomaflowSidebar.category.Customisation": {
+    "message": "Personnalisation",
+    "description": "The label for category 'Customisation' in sidebar 'nomaflowSidebar'"
+  },
+  "sidebar.nomaflowSidebar.category.Customisation.link.generated-index.description": {
+    "message": "Points d'extension — étapes Python personnalisées et notifications sortantes.",
+    "description": "The generated-index page description for category 'Customisation' in sidebar 'nomaflowSidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Security": {
+    "message": "Sécurité",
+    "description": "The label for category 'Security' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Security.link.generated-index.description": {
+    "message": "Catalogue de sécurité : utilisateurs, rôles, attributions, écarts et doublons.",
+    "description": "The generated-index page description for category 'Security' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.LDAP": {
+    "message": "LDAP",
+    "description": "The label for category 'LDAP' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.LDAP.link.generated-index.description": {
+    "message": "Rapprochement avec l'annuaire LDAP / Active Directory de l'entreprise.",
+    "description": "The generated-index page description for category 'LDAP' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Applications": {
+    "message": "Applications",
+    "description": "The label for category 'Applications' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Applications.link.generated-index.description": {
+    "message": "Vues par application : menus, droits, conflits, journal d'activité et Object Usage Tracking.",
+    "description": "The generated-index page description for category 'Applications' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Rights": {
+    "message": "Droits",
+    "description": "The label for category 'Rights' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Rights.link.generated-index.description": {
+    "message": "Droits effectifs : par utilisateur, par rôle, par rôle et menu, par utilisateur, rôle et OUT.",
+    "description": "The generated-index page description for category 'Rights' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Conflicts": {
+    "message": "Conflits",
+    "description": "The label for category 'Conflicts' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Conflicts.link.generated-index.description": {
+    "message": "Analyse de la séparation des tâches : synthèse, détail, conflits avérés, par utilisateur et par paire de rôles.",
+    "description": "The generated-index page description for category 'Conflicts' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Object Usage Tracking": {
+    "message": "Object Usage Tracking",
+    "description": "The label for category 'Object Usage Tracking' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Object Usage Tracking.link.generated-index.description": {
+    "message": "Object Usage Tracking : composants, détail, utilisateurs et rôles, objets.",
+    "description": "The generated-index page description for category 'Object Usage Tracking' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Database": {
+    "message": "Base de données",
+    "description": "The label for category 'Database' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Database.link.generated-index.description": {
+    "message": "Propriétés de la base de données et piste d'audit.",
+    "description": "The generated-index page description for category 'Database' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Licenses": {
+    "message": "Licences",
+    "description": "The label for category 'Licenses' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Licenses.link.generated-index.description": {
+    "message": "Gestion des licences : inventaire CSI, rapports JD Edwards et Oracle, quantités souscrites, utilisation et impact financier.",
+    "description": "The generated-index page description for category 'Licenses' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Reports": {
+    "message": "Rapports",
+    "description": "The label for category 'Reports' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Reports.link.generated-index.description": {
+    "message": "Livrables produits — rapports de conformité et d'optimisation en PDF ou Markdown.",
+    "description": "The generated-index page description for category 'Reports' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Settings": {
+    "message": "Paramètres",
+    "description": "The label for category 'Settings' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Settings.link.generated-index.description": {
+    "message": "Écrans de configuration : applications, référentiel de séparation des tâches, indicateurs de sécurité, classification JDE, catalogue Oracle et tarifs.",
+    "description": "The generated-index page description for category 'Settings' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Global": {
+    "message": "Global",
+    "description": "The label for category 'Global' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Global.link.generated-index.description": {
+    "message": "Registre global : applications et SQL personnalisé par application.",
+    "description": "The generated-index page description for category 'Global' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Segregation of Duties": {
+    "message": "Séparation des tâches",
+    "description": "The label for category 'Segregation of Duties' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Segregation of Duties.link.generated-index.description": {
+    "message": "Référentiel de séparation des tâches : processus, activités, risques, matrice, objets.",
+    "description": "The generated-index page description for category 'Segregation of Duties' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.User & AD flags": {
+    "message": "Indicateurs utilisateur et AD",
+    "description": "The label for category 'User & AD flags' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.User & AD flags.link.generated-index.description": {
+    "message": "Indicateurs par utilisateur et catalogue des services AD.",
+    "description": "The generated-index page description for category 'User & AD flags' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.JD Edwards": {
+    "message": "JD Edwards",
+    "description": "The label for category 'JD Edwards' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.JD Edwards.link.generated-index.description": {
+    "message": "Catalogue de licences propre à JDE : codes système, reclassement, prérequis, restrictions.",
+    "description": "The generated-index page description for category 'JD Edwards' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Oracle": {
+    "message": "Oracle",
+    "description": "The label for category 'Oracle' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Oracle.link.generated-index.description": {
+    "message": "Catalogue Oracle : versions, options, fonctionnalités.",
+    "description": "The generated-index page description for category 'Oracle' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Pricing": {
+    "message": "Tarifs",
+    "description": "The label for category 'Pricing' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomasx1Sidebar.category.Pricing.link.generated-index.description": {
+    "message": "Catalogue des composants, métriques de licence et grille tarifaire.",
+    "description": "The generated-index page description for category 'Pricing' in sidebar 'nomasx1Sidebar'"
+  },
+  "sidebar.nomajdeSidebar.category.Master Data": {
+    "message": "Données de base",
+    "description": "The label for category 'Master Data' in sidebar 'nomajdeSidebar'"
+  },
+  "sidebar.nomajdeSidebar.category.Security Maintenance": {
+    "message": "Maintenance de la sécurité",
+    "description": "The label for category 'Security Maintenance' in sidebar 'nomajdeSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Installation": {
+    "message": "Installation",
+    "description": "The label for category 'Installation' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Installation.link.generated-index.description": {
+    "message": "Mettre en place un serveur NomaUBL — JDK 17 et Oracle ou PostgreSQL, lancement de -install, configuration de chaque connecteur depuis les Paramètres, démarrage du service par nomaubl.sh (Linux/macOS) ou nomaubl.cmd (Windows), raccordement facultatif à systemd et à un reverse proxy, mise à jour sur place à chaque nouvelle version, et remplissage d'une instance de démonstration avec le corpus de démonstration.",
+    "description": "The generated-index page description for category 'Installation' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Monitoring": {
+    "message": "Supervision",
+    "description": "The label for category 'Monitoring' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Monitoring.link.generated-index.description": {
+    "message": "Où regarder quand NomaUBL est en service — tableau de bord IT, Diagnostic, Tâches planifiées, fichier journal du service, /api/build-info et /api/license. Plus les schémas d'alerte externe et de transfert des journaux.",
+    "description": "The generated-index page description for category 'Monitoring' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Reports": {
+    "message": "Rapports",
+    "description": "The label for category 'Reports' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Diagnostics": {
+    "message": "Diagnostic",
+    "description": "The label for category 'Diagnostics' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.category.Scheduled Jobs": {
+    "message": "Tâches planifiées",
+    "description": "The label for category 'Scheduled Jobs' in sidebar 'nomaublSidebar'"
+  },
+  "sidebar.nomaublSidebar.link.API Reference": {
+    "message": "Référence API",
+    "description": "The label for link 'API Reference' in sidebar 'nomaublSidebar', linking to '/nomaubl/api-reference/'"
   }
 }

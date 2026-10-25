@@ -9,7 +9,7 @@ keywords: [NomaUBL, AI assistant, Claude, tool use, context, suggestions, follow
 The **AI Assistant** is a chat panel embedded in NomaUBL. It answers three kinds of questions:
 
 - *How does the product work?* — from the NomaUBL documentation, indexed by the server, with the title and the link of the page it used.
-- *How is this instance set up?* — from the [implementation report](./implementation-report.md) generated from the configuration of the instance: documents, mappings, rules, jobs, roles.
+- *How is this instance set up?* — from the [implementation report](reports/implementation-report.md) generated from the configuration of the instance: documents, mappings, rules, jobs, roles.
 - *What is the state of my data?* — from the database, in **read-only** mode: one invoice in full, the figures of a period, the backlog, the errors, the server log, the integrity checks.
 
 The assistant knows **the page you are on and the invoice you have open**, so *"why is this invoice refused?"* needs no number typed by hand. Replies stream as the model writes them; every tool call appears as a pill with the filters used; each reply ends with **follow-up buttons**. The assistant works in French or English and follows the language of the question.
@@ -143,7 +143,7 @@ Every reply ends with **one to three follow-ups** — the natural answer to a qu
 | **`search_docs`** | 📚 | Searches the NomaUBL documentation, indexed by the server from the site's full-text export (`llms-full.txt`); returns the best pages with title, URL and passage. Called first for any product question. |
 | **`read_doc_page`** | 📖 | Reads one page found by `search_docs`, in windows of 12,000 characters for long pages. |
 | **`list_doc_pages`** | 📑 | The table of contents of the documentation, when the search finds nothing relevant. |
-| **`instance_docs`** | 🔍 | The [implementation report](./implementation-report.md) of this instance: table of contents, one section, or a search across sections. Called first for any question about how *this* instance is configured. |
+| **`instance_docs`** | 🔍 | The [implementation report](reports/implementation-report.md) of this instance: table of contents, one section, or a search across sections. Called first for any question about how *this* instance is configured. |
 
 The documentation is indexed per language: a French interface searches the French pages, an English interface the English ones. The index is refreshed every six hours; when the site cannot be reached, the assistant uses the copy of the documentation bundled with the application and says so in its answer.
 
@@ -157,7 +157,7 @@ The assistant quotes the page it used and gives its link. It never invents a set
 | **`list_invoices`** | 🧾 | Up to 50 invoices filtered on status, company, transaction type (B2B / B2BINT / B2C / B2G / OUTOFSCOPE), customer, invoice number (BT-1) and issue dates. |
 | **`lifecycle_history`** | 🕘 | Every status event of an invoice, with the PA rejection reason, expected action and status note. |
 | **`validation_errors`** | ⚠️ | The validation errors of an invoice (level, source, rule, message), as in [Integration errors](./diagnostics/integration-errors.md). |
-| **`period_figures`** | 🔍 | The summary of a period from the [audit report](./audit-report.md): indicators with the previous period and the variation, the breakdown of processed invoices, the findings, and the backlog across all periods (by status, company and age). Default: the current month to date. |
+| **`period_figures`** | 🔍 | The summary of a period from the [audit report](reports/audit-report.md): indicators with the previous period and the variation, the breakdown of processed invoices, the findings, and the backlog across all periods (by status, company and age). Default: the current month to date. |
 | **`dashboard_overview`** | 📊 | The counters of the [Dashboard](./dashboard.md) for a date range. |
 | **`tech_dashboard`** | 🩺 | The health of the instance, as on the [IT dashboard](./tech-dashboard.md): JVM, scheduled jobs and their last runs, send failures, waiting invoices, configuration issues, table sizes. |
 | **`server_log`** | 📜 | The end of the [server log](./diagnostics/server-log.md), newest first, filtered on level, module and text. |
@@ -246,4 +246,4 @@ The administrator sets the API key, the default model, the documentation source,
 - **Start a new chat for a new subject.** A long thread on another topic weighs on the answers.
 - **Pick a heavier model for a long diagnosis**, the default for everyday questions.
 - **Treat the panel as an external service.** Questions and tool results are sent to the model provider; avoid pasting personal data that the screens do not already show.
-- **For exhaustive lists, use the dedicated pages.** The assistant characterises a problem; the [E-Invoicing](./invoices.md) list, [Diagnostics](./diagnostics/overview.md) and [Reports](./reports.md) give the full picture.
+- **For exhaustive lists, use the dedicated pages.** The assistant characterises a problem; the [E-Invoicing](./invoices.md) list, [Diagnostics](./diagnostics/overview.md) and [Reports](reports/overview.md) give the full picture.

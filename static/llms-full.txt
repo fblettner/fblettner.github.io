@@ -2162,7 +2162,7 @@ The NomaUBL AI assistant — a chat panel that knows the page and the invoice yo
 The **AI Assistant** is a chat panel embedded in NomaUBL. It answers three kinds of questions:
 
 - *How does the product work?* — from the NomaUBL documentation, indexed by the server, with the title and the link of the page it used.
-- *How is this instance set up?* — from the [implementation report](./implementation-report.md) generated from the configuration of the instance: documents, mappings, rules, jobs, roles.
+- *How is this instance set up?* — from the [implementation report](reports/implementation-report.md) generated from the configuration of the instance: documents, mappings, rules, jobs, roles.
 - *What is the state of my data?* — from the database, in **read-only** mode: one invoice in full, the figures of a period, the backlog, the errors, the server log, the integrity checks.
 
 The assistant knows **the page you are on and the invoice you have open**, so *"why is this invoice refused?"* needs no number typed by hand. Replies stream as the model writes them; every tool call appears as a pill with the filters used; each reply ends with **follow-up buttons**. The assistant works in French or English and follows the language of the question.
@@ -2223,7 +2223,7 @@ Every reply ends with **one to three follow-ups** — the natural answer to a qu
 | **`search_docs`** | 📚 | Searches the NomaUBL documentation, indexed by the server from the site's full-text export (`llms-full.txt`); returns the best pages with title, URL and passage. Called first for any product question. |
 | **`read_doc_page`** | 📖 | Reads one page found by `search_docs`, in windows of 12,000 characters for long pages. |
 | **`list_doc_pages`** | 📑 | The table of contents of the documentation, when the search finds nothing relevant. |
-| **`instance_docs`** | 🔍 | The [implementation report](./implementation-report.md) of this instance: table of contents, one section, or a search across sections. Called first for any question about how *this* instance is configured. |
+| **`instance_docs`** | 🔍 | The [implementation report](reports/implementation-report.md) of this instance: table of contents, one section, or a search across sections. Called first for any question about how *this* instance is configured. |
 
 The documentation is indexed per language: a French interface searches the French pages, an English interface the English ones. The index is refreshed every six hours; when the site cannot be reached, the assistant uses the copy of the documentation bundled with the application and says so in its answer.
 
@@ -2237,7 +2237,7 @@ The assistant quotes the page it used and gives its link. It never invents a set
 | **`list_invoices`** | 🧾 | Up to 50 invoices filtered on status, company, transaction type (B2B / B2BINT / B2C / B2G / OUTOFSCOPE), customer, invoice number (BT-1) and issue dates. |
 | **`lifecycle_history`** | 🕘 | Every status event of an invoice, with the PA rejection reason, expected action and status note. |
 | **`validation_errors`** | ⚠️ | The validation errors of an invoice (level, source, rule, message), as in [Integration errors](./diagnostics/integration-errors.md). |
-| **`period_figures`** | 🔍 | The summary of a period from the [audit report](./audit-report.md): indicators with the previous period and the variation, the breakdown of processed invoices, the findings, and the backlog across all periods (by status, company and age). Default: the current month to date. |
+| **`period_figures`** | 🔍 | The summary of a period from the [audit report](reports/audit-report.md): indicators with the previous period and the variation, the breakdown of processed invoices, the findings, and the backlog across all periods (by status, company and age). Default: the current month to date. |
 | **`dashboard_overview`** | 📊 | The counters of the [Dashboard](./dashboard.md) for a date range. |
 | **`tech_dashboard`** | 🩺 | The health of the instance, as on the [IT dashboard](./tech-dashboard.md): JVM, scheduled jobs and their last runs, send failures, waiting invoices, configuration issues, table sizes. |
 | **`server_log`** | 📜 | The end of the [server log](./diagnostics/server-log.md), newest first, filtered on level, module and text. |
@@ -2326,7 +2326,7 @@ The administrator sets the API key, the default model, the documentation source,
 - **Start a new chat for a new subject.** A long thread on another topic weighs on the answers.
 - **Pick a heavier model for a long diagnosis**, the default for everyday questions.
 - **Treat the panel as an external service.** Questions and tool results are sent to the model provider; avoid pasting personal data that the screens do not already show.
-- **For exhaustive lists, use the dedicated pages.** The assistant characterises a problem; the [E-Invoicing](./invoices.md) list, [Diagnostics](./diagnostics/overview.md) and [Reports](./reports.md) give the full picture.
+- **For exhaustive lists, use the dedicated pages.** The assistant characterises a problem; the [E-Invoicing](./invoices.md) list, [Diagnostics](./diagnostics/overview.md) and [Reports](reports/overview.md) give the full picture.
 
 ---
 
@@ -29493,7 +29493,7 @@ Next to the period filter, a **date basis** selector chooses which date the whol
 | **Document date** | The date invoices were issued (BT-2). |
 | **Archive date** | The date documents were processed into the archive. |
 
-Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the choice. The [E-Invoicing](./invoices.md#date-basis) list and the [Reports](./reports.md) page offer the same *Archive date* basis.
+Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the choice. The [E-Invoicing](./invoices.md#date-basis) list and the [Reports](reports/overview.md) page offer the same *Archive date* basis.
 
 ### Exclude reviewed errors \{#exclude-reviewed\}
 
@@ -29896,7 +29896,7 @@ A selector sits next to the date range and controls **which date column the peri
 |---|---|---|
 | **Update date** *(default)* | The last time the invoice was modified in NomaUBL. | Day-to-day operations — same behaviour as the list has always had. |
 | **Issue date** | The date printed on the invoice itself (BT-2 from the UBL). | Reconciling against the [VAT Declaration](./vat-declaration.md) page or any external system that keys off the issue date. |
-| **Archive date** | The date the document was processed into the archive. | Reconciling against the [Reports](./reports.md) page and the [Dashboard](./dashboard.md), which offer the same *Archive date* basis. |
+| **Archive date** | The date the document was processed into the archive. | Reconciling against the [Reports](reports/overview.md) page and the [Dashboard](./dashboard.md), which offer the same *Archive date* basis. |
 
 The choice is **remembered for the current session** — closing the modal of an invoice and reopening the list keeps the selector where it was. The toggle is also **pre-selected automatically** when the Invoices list is opened from a VAT page drill-down, so the count on Invoices matches the count you came from.
 
@@ -31259,11 +31259,11 @@ If you spot an intra-EU or outside-EU invoice still showing under *Domestic*, re
 ---
 
 ## NomaUBL — Reports
-Source: https://docs.nomana-it.fr/nomaubl/application/reports/
+Source: https://docs.nomana-it.fr/nomaubl/application/reports/overview/
 
 Reporting for NomaUBL — five tabs: a status-statistics pivot (invoice counts by activity, status and rejection reason, per transaction type), SQL integrity checks against a source system, and the audit, implementation and technical reports generated as PDF or Markdown. Free analyses are built in the Explorer.
 
-The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has five tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, and three documents generated on demand, the [Audit report](./audit-report.md), the [Implementation report](./implementation-report.md) and the [Technical report](./technical-report.md). Free analyses — any field, grouping, chart or dashboard — are built in the [Explorer](./explorer.md), which replaces the former query tool.
+The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has five tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, and three documents generated on demand, the [Audit report](./audit-report.md), the [Implementation report](./implementation-report.md) and the [Technical report](./technical-report.md). Free analyses — any field, grouping, chart or dashboard — are built in the [Explorer](../explorer.md), which replaces the former query tool.
 
 Open it from the sidebar — **Reports**. Access is granted per role (see [Access](#access) below).
 
@@ -31281,15 +31281,15 @@ The first tab is a ready-made pivot: **invoice counts** broken down by **activit
 - **Choose the measure.** The **Measure** switch counts invoices (**Invoice count**, the default) or sums their tax-exclusive amount (**Net amount**, BT-109). Cells, subtotals and percentages follow the measure — a handful of invoices can carry most of the money. The Excel export follows the view, and its data sheet carries both figures.
 - **Expand / collapse** any activity or status to drill down; **subtotals** are shown at every level.
 - A status that has a single rejection reason renders as **one compact line** rather than an extra nested row.
-- The **period filter** at the top offers the same three date bases as the [Dashboard](./dashboard.md) — *Activity date*, *Document date* or *Archive date* — so the report reconciles with the figures shown elsewhere.
-- **Exclude reviewed errors** leaves out the invoices already reviewed by customer service that still sit in an error status — the same toggle as on the [Dashboard](./dashboard.md#exclude-reviewed); reviewed invoices in other statuses stay counted.
+- The **period filter** at the top offers the same three date bases as the [Dashboard](../dashboard.md) — *Activity date*, *Document date* or *Archive date* — so the report reconciles with the figures shown elsewhere.
+- **Exclude reviewed errors** leaves out the invoices already reviewed by customer service that still sit in an error status — the same toggle as on the [Dashboard](../dashboard.md#exclude-reviewed); reviewed invoices in other statuses stay counted.
 - **Export Excel** writes a workbook with **two sheets**: the report exactly as displayed, and the flat underlying data ready for your own pivot tables.
 
 ---
 
 ## Integrity \{#integrity\}
 
-The **Integrity** tab runs the SQL checks defined under [Configuration → System → Integrity reports](../configuration/system/integrity-reports.md): pick a check, a period (last 30 days by default) and **Run**. Every row of the result is one anomaly, shown in the standard grid (search, filters, columns, export). A check that carries an action lets you tick rows and **Integrate the selection** — see [Integrity reports](../configuration/system/integrity-reports.md#reports-integrity) for the full walkthrough.
+The **Integrity** tab runs the SQL checks defined under [Configuration → System → Integrity reports](../../configuration/system/integrity-reports.md): pick a check, a period (last 30 days by default) and **Run**. Every row of the result is one anomaly, shown in the standard grid (search, filters, columns, export). A check that carries an action lets you tick rows and **Integrate the selection** — see [Integrity reports](../../configuration/system/integrity-reports.md#reports-integrity) for the full walkthrough.
 
 ---
 
@@ -31303,21 +31303,316 @@ These three tabs generate a document, in PDF or Markdown, rather than a grid:
 | **Implementation report** | The documentation of the instance as it runs — architecture, built-in rules, documents and UBL mappings, platform settings, operations, security — for a hand-over file or an upgrade snapshot. | [Implementation report](./implementation-report.md) |
 | **Technical report** | The developer documentation of the release — data model, flows, configuration reference, status model, API — identical on every instance. | [Technical report](./technical-report.md) |
 
-All three are also available from the [command line](../management/command-line.md#report), to schedule them or keep them with a release.
+All three are also available from the [command line](../../management/command-line.md#report), to schedule them or keep them with a release.
 
 ---
 
 ## Access
 
-The Reports page is gated **per role**: grant the *Reports* page in the **Navigation** group on the [Roles](../configuration/security/roles.md) page. Without it, the sidebar entry is hidden.
+The Reports page is gated **per role**: grant the *Reports* page in the **Navigation** group on the [Roles](../../configuration/security/roles.md) page. Without it, the sidebar entry is hidden.
 
 ---
 
 ## Tips & best practices
 
 - **Start from Status statistics for the recurring read.** It answers "how many invoices, in which status, and why rejected" without any setup — export the two-sheet workbook when a colleague wants to pivot the raw figures.
-- **Build the recurring extractions in the [Explorer](./explorer.md).** A saved analysis keeps its fields, filters and view, can go into a dashboard and be sent by daily digest.
+- **Build the recurring extractions in the [Explorer](../explorer.md).** A saved analysis keeps its fields, filters and view, can go into a dashboard and be sent by daily digest.
 - **Match the date basis to the question.** *Archive date* answers "what did we process", *Document date* "what did we issue", *Activity date* "what changed" — pick the one the audience expects before reading the counts.
+
+---
+
+## NomaUBL — Audit Report
+Source: https://docs.nomana-it.fr/nomaubl/application/reports/audit-report/
+
+Audit the electronic invoicing of a period from the NomaUBL tables — executive summary compared with the previous period, volumes, situation by status, backlog, lifecycle and delays, errors and their handling, operations and consistency checks — as a PDF or Markdown file, in French or English.
+
+The **Audit report** tab of the [Reports](./overview.md) page measures how the electronic invoicing of a period went: how many invoices were processed, deposited, approved, rejected or refused, what is still waiting for an action, how long each step took, which errors occurred and how they were handled. The figures come **only from the NomaUBL tables** at the time of generation; the platform is not queried.
+
+The report is short whatever the volume — it lists no individual invoice — so it can be sent as is to a finance manager, an auditor or a steering committee. It applies to every source system (JD Edwards, SAP, NetSuite or a custom ERP).
+
+Open it from **Reports → Audit report**.
+
+---
+
+## At a glance
+
+| Control | Description |
+|---|---|
+| **Period** | Drop-down: **Calendar month** (the previous month by default), compared to the month before; or **Custom dates**, compared to the same number of days before. A custom range that covers whole months, a quarter or a year compares to the preceding months of the same length. |
+| **Date basis** | **Issue date (BT-2)** — an invoice belongs to the period by its issue date — or **Last update**. Statuses and amounts are always those of the generation day. |
+| **Companies** | Company codes separated by commas; empty = every company the signed-in user can see. The role's company visibility always applies. |
+| **Direction** | Issued and received, issued only, received only. |
+| **Language** | French or English; defaults to the interface language. |
+| **Sections** | Tick the parts to include; all are ticked by default. |
+| **Also run the SQL integrity checks against JDE** | Shown when *Consistency checks* is ticked. Runs the checks configured under [Integrity reports](../../configuration/system/integrity-reports.md) on the period and adds their discrepancy counts. Slower: each check queries the source system. |
+| **Download PDF / Download Markdown** | Starts the generation **in the background**. A progress bar names the current step; the file downloads at the end and a copy is kept in `<appHome>/<env>/reports/nomaubl-audit-<date>-<time>.pdf` or `.md`. The window can stay open on another tab meanwhile. |
+
+---
+
+## Sections
+
+### Scope
+
+Environment, period and comparison period, date basis, companies, direction, generation date and author, release, and the tables read: invoice header (status and amounts), archive, VAT breakdown, lifecycle, validation findings.
+
+### Executive summary
+
+The key figures of the period next to the previous period and the variation:
+
+| Indicator | Meaning |
+|---|---|
+| **Invoices processed** | Invoices of the period, whatever their status. |
+| **Not sent to the platform** | Invoices whose transaction type is configured not to be sent (B2C, international… per [Document types](../../configuration/system/document-types.md)). |
+| **Deposited on the platform** | Invoices whose current status comes from the platform (`200` and following). The **deposit rate** is taken over the invoices **to send**. |
+| **Deposited but not transmitted** | `200` with reason `NON_TRANSMISE`: the recipient is registered with no platform; the invoice has to be delivered through another channel. |
+| **Approved / completed / paid**, **Refused (`210`)**, **Rejected (`213`)** | Outcomes of the period. |
+| **To fix and resend** | `213`, `9905`, `9907`. |
+| **Answer to the buyer expected** | `207`, `208`, `210`. |
+| **In error today**, **Waiting for the platform (`9906`)**, **Excluded by rule (`9914`)**, **Received invoices** | States at generation time. |
+| **Net and gross amounts deposited** | Totals BT-109 and BT-112 of the deposited invoices. |
+| **First-pass validation** | Share of invoices validated without a fatal finding at their first run, taken from the lifecycle. |
+| **Share in a terminal status** | Among the invoices to send. |
+| **Delays** | Creation → deposit and deposit → first buyer status, median and 90th percentile. |
+| **Send attempts, resends, send failure rate** | Every send ends in a failure (`9904`) or an acknowledgement (`9906`); the failure rate measures the platform's availability (HTTP 429, 503…). Resends include the automatic retries. |
+
+A breakdown follows where every level adds up: not to send, to send, deposited (not transmitted, waiting for the next status, in progress at the platform, approved, rejected or refused), not deposited (validation, send or import failure, not sent yet, other). Then the **findings** in plain words — invoices in error not yet reviewed, deposited but not transmitted, to fix and resend, awaiting an answer to the buyer, failed e-reporting envelopes, backlog over all periods, resends, reprocesses and buyer-identifier fixes of the period.
+
+### Volumes
+
+The evolution inside the period — per day up to one month, per week up to six months, per month beyond — with the invoices, those to send, deposited and in error per bucket, and a chart. Then per **activity** (count, share, previous period, variation, amounts; deposit and error rates in a second table), per **company**, per **document**, per **transaction type** (with its send flag) and per **VAT category and rate** (base and VAT).
+
+### Situation at generation time
+
+The current status of the invoices of the period: code, label, catalogue groups, count, share, gross amount; the same per **family** (terminal, in progress, technical error, business error, excluded, other) with a donut chart; and the points of attention (waiting for the platform for more than 2 days, deposited but not transmitted, in error and not reviewed).
+
+### Backlog, all periods
+
+What still waits for an action **whatever its date**: invoices in error or refused not reviewed by customer service, waiting for the platform, deposited without being transmitted. Per status with the count older than 30 days, the reviewed count and the net amount; per company; per age (30 days or less, 31–90, 91–180, over 180) with a chart. The **Min invoice date** of the [e-invoicing settings](../../configuration/system/einvoicing.md) bounds these figures: older invoices are left out.
+
+:::info[What « reviewed » means]
+An invoice is *reviewed* once customer service has marked it handled in the invoice window. It leaves the backlog even if its status did not change (credit note issued outside NomaUBL, abandoned invoice, duplicate…).
+:::
+
+### Lifecycle and delays
+
+The invoices of the period reaching each milestone for the first time — created, validated, validation failed, sent, deposited (first platform status), received, approved, refused, rejected, paid — per bucket with a chart; the delays creation → first send, first send → deposit, creation → deposit, deposit → first buyer status (median and 90th percentile, calendar days); then the action counters: send attempts and failures, resends, reprocesses (`9912`), buyer-identifier fixes.
+
+### Errors and their handling
+
+- **Validation findings by rule**: source (CIUS-FR, EXT-CTC-FR, CPRO-B2G, XSD, NomaUBL rules…), rule, level, findings, invoices, sample message; a chart of the most frequent rules and a per-source table of fatal findings and warnings. The findings of a reprocessed invoice are those of its last run.
+- **Platform and buyer rejections and refusals**: status, reason code and label, events, invoices.
+- **Send and import failures**: the 30 most frequent messages with their counts.
+- **Handling**: invoices with an error in the period, resolved (status left the error statuses), still in error but reviewed, open for 7 days or less, 8 to 30 days, over 30 days; events per status; resends, reprocesses and fixes.
+
+### Operations over the period
+
+What the server did, independently of the invoice date: **scheduled job runs** (runs, errors, average and maximum duration, last outcome), **files processed and invoices integrated** per document with the previous period, **portal notifications** per rule, **e-reporting envelopes** per status. A failed envelope is flagged: its operations are not declared until it is fixed and filed again.
+
+### Consistency checks
+
+Each check counts the invoices that break a rule, for the period and over all periods; `0` means compliant.
+
+| Check | What it finds |
+|---|---|
+| Platform status without platform identifier | The identifier is missing when the status was set by hand or by a status poll without an import confirmation. Not blocking. |
+| Sent invoice without archived UBL | A sent invoice whose UBL is not stored. |
+| Waiting for the platform for more than 2 days | Stale `9906`. |
+| Duplicate invoice number within a company | Two invoices with the same number. |
+| VAT total (BT-110) ≠ sum of the breakdown (BT-117) | Header against the stored VAT breakdown. |
+| Net total (BT-109) ≠ sum of the lines (BT-131) | Header against the stored lines. |
+| VAT breakdown with an amount but no rate (BT-119) | The invoice is declared with VAT and no rate. |
+| To fix and resend without follow-up | `213`, `9905`, `9907` neither followed up nor reviewed. |
+| Answer to the buyer expected without follow-up | `207`, `208`, `210` neither followed up nor reviewed; an internal credit note is mandatory for a refused invoice. |
+
+With the integrity option, the **SQL integrity checks against JDE** follow, with their discrepancy count; the detail is on the [Integrity](./overview.md#integrity) tab. The lifecycle ordering and the platform events missing locally are left to the daily [lifecycle check](../../sync/scheduled-jobs/lifecycle-checks.md).
+
+---
+
+## PDF layout
+
+Same layout as the [implementation report](./implementation-report.md): cover with environment, period, date, author and version; clickable table of contents; running header and footer; shaded reading notes; charts drawn in the PDF (bars per bucket and per activity, status-family donut, milestones per bucket, most frequent rules).
+
+---
+
+## Command line
+
+```bash
+java -jar nomaubl.jar -audit <configFile> [--from <yyyy-MM-dd> --to <yyyy-MM-dd>] \
+     [--basis issue|update] [--kco a,b] [--direction I|R] [--lang fr|en] \
+     [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--integrity]
+```
+
+Defaults: the previous month, every section, Markdown, French. See [Command line](../../management/command-line.md#audit).
+
+The API runs the same report in the background: `POST /api/reports/audit/start` returns a job id, `GET /api/jobs/{id}` gives the current step, `GET /api/reports/audit/result/{jobId}` returns the file once.
+
+---
+
+## Access
+
+The tab belongs to the *Reports* page — grant **Reports** on the [Roles](../../configuration/security/roles.md) page. The figures follow the company visibility of the signed-in user.
+
+---
+
+## Tips & best practices
+
+- **Generate it on the first working day of the month** for the previous month: the default period is exactly that.
+- **Read the backlog with the findings.** The summary covers the invoices of the period; the backlog shows what older periods still leave open.
+- **Mark the invoices handled outside NomaUBL as reviewed.** A credit note issued directly in the ERP does not change the status of the original invoice; marking it reviewed keeps the backlog meaningful.
+- **Set the Min invoice date after a go-live.** Test or migration invoices dated before the go-live then stay out of the all-periods figures.
+- **Each step's duration is written to the server log.** On a large instance, the [Server log](../diagnostics/server-log.md) shows which section takes the time.
+
+---
+
+## NomaUBL — Implementation Report
+Source: https://docs.nomana-it.fr/nomaubl/application/reports/implementation-report/
+
+Generate the technical and functional documentation of a NomaUBL instance from its configuration and database — context, architecture, built-in rules, documents, UBL transform and mappings, platform settings, operations, security and reference data — as a PDF or Markdown file, in French or English, with secrets masked.
+
+The **Implementation report** tab of the [Reports](./overview.md) page writes the documentation of the instance you are signed in to: what is configured, how each document is turned into UBL, which rules apply, who can do what. Everything is read from the configuration files and the database at the time of generation, so the report always describes the instance as it runs — whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
+
+Typical uses: the hand-over file of a project, the description an auditor or a tax adviser asks for, the snapshot taken before an upgrade, the reference a support team keeps next to the production instance.
+
+Open it from **Reports → Implementation report**.
+
+---
+
+## At a glance
+
+| Control | Description |
+|---|---|
+| **Language** | Drop-down: French or English. Defaults to the language of the interface. Labels of settings, statuses and lists follow the language. |
+| **Date label (cover)** | Free text printed on the cover (e.g. *Go-live V2*). Blank = today's date. |
+| **Show technical keys next to setting labels** | Adds the configuration key after each label (`Allow reprocess · allowReprocess`). Useful for a technical reader; off by default. |
+| **Sections** | Tick the parts to include. The first nine are ticked by default; the two appendices are optional because of their length. |
+| **Download PDF / Download Markdown** | Generates the file and downloads it. A copy is kept in the environment's `reports` folder (`<appHome>/<env>/reports/nomaubl-implementation-<date>-<time>.pdf` or `.md`). |
+
+---
+
+## What the report contains
+
+| Section | Content |
+|---|---|
+| **Context** | Environment, release and standard version (XP Z12-014), generation date, application home, database type and schema, companies, number of documents, author. |
+| **Architecture** | The flows enabled on the instance and their trigger: sending to the PA, import poll, status poll, received invoices, e-reporting, directory check, scheduled batch jobs, watched folders, JDE print queue reports, connectors per type, authentication. A flow shown as *off* is configured without a trigger and can still be run on demand. Then the processing chain: sources, transform, validation, archive tables, directions. |
+| **How it works and built-in rules** | The functional guide: what every page is for (in menu order), the invoice lifecycle, the protection of deposited invoices, the rules of edit / fix buyer / resend / validate / set status / e-mail with the permission each one requires, the two reprocess modes, the status poll with the integrity and ordering checks, the review flag and notifications, and a quick reference of the platform statuses (AFNOR XP Z12-014) and of the internal `99xx` stages. |
+| **Documents** | One table of every document (source, direction, processing type, PDF template), the path variables with their value on this instance, then one subsection per document: folders, XSL and RTF files, UBL sheet, reprocess options, links to its pre-transform and UBL sheet, index fields and other settings. Then the PDF templates: documents that use each one, layout, logo, colours, sections and their options. |
+| **UBL transform and rules** | Shared defaults (currency, specification identifier, schemes, defaults per BT), issuing companies, mapping tables and rules (transaction type, VAT category, exemption, payment means, unit of measure…), validation packs with their version and rule counts, house rules, coverage per document, then one subsection per pre-transform (renames, custom rules, drops) and per UBL sheet: profile, redefined mappings, and the full **source field → BT → UBL path** mapping. |
+| **Platform settings** | E-invoicing settings (default and per company), e-reporting, directory, document types with their send and validation flags. |
+| **Operations** | Scheduled jobs with their trigger, watched folders, notification rules with the actions they trigger, invoice actions, integrity checks, connectors with their host and authentication type. |
+| **Security** | Authentication mode and session timeout, roles (pages, actions, companies, features, users), users with role, state and pending password change. |
+| **Reference data** | The status catalogue (labels, PA codes, groups), every reference and custom list with its entries, the configured table names. |
+| **Appendix: configuration keys** | Every property of every system template, secrets masked. |
+| **Appendix: API reference** | The API document of the instance, operation by operation. |
+
+:::info[Secrets are never printed]
+Passwords, tokens, client secrets, API keys, URLs of connectors and instance keys appear as `••••••`. The report can be handed to a third party without editing; check only that the business content (customer e-mails in notification rules, user names) may be shared.
+:::
+
+---
+
+## PDF layout
+
+The PDF follows the document conventions of the product: a cover with the environment, date, author and version; a clickable table of contents and a PDF outline; a running header and a page *x / y* footer; reading notes in shaded boxes; path variables (`APP_HOME`, `ENV`, `PROCESS_HOME`, `TEMPLATE`, `FILE_NAME`) shown as chips inside paths; *see § 5.10* links between a document and its UBL sheet. The Markdown file carries the same content for a wiki or a Git repository.
+
+---
+
+## Command line
+
+The same report is available without the interface, for a scheduled snapshot or a pipeline:
+
+```bash
+java -jar nomaubl.jar -report <configFile> [--lang fr|en] [--format md|pdf] [--out <file>] \
+     [--date <label>] [--keys] [--sections context,architecture,...]
+```
+
+Defaults: the first nine sections, Markdown, French. See [Command line](../../management/command-line.md#report).
+
+---
+
+## Access
+
+The tab belongs to the *Reports* page: grant **Reports** in the Navigation group on the [Roles](../../configuration/security/roles.md) page. The API route is `GET /api/reports/implementation`.
+
+---
+
+## Tips & best practices
+
+- **Generate it after each go-live and each upgrade.** The copy kept in the `reports` folder becomes the dated history of the configuration, next to [File versions](../../management/file-versions.md).
+- **Keep the technical keys off for a business reader.** Labels are enough for a project team; turn the keys on for the people who edit configuration files or read the API.
+- **Add the appendices for an audit file only.** The configuration-keys and API appendices make the PDF several times longer.
+
+---
+
+## NomaUBL — Technical Report
+Source: https://docs.nomana-it.fr/nomaubl/application/reports/technical-report/
+
+The NomaUBL technical report — the developer documentation of the release generated from the code scans bundled at build: architecture, data model, flows, configuration reference, status model, impact matrix, API reference, command line, build and packaging, as PDF or Markdown, in French or English.
+
+The **Technical report** tab of the [Reports](./overview.md) page writes the **developer documentation of the release**: how NomaUBL is built, what each table and configuration key is for, which flows touch them, what the API offers. It is generated from the code scans bundled in the application at build — the same sources as the [Developer reference](../../references/developer.md) — so it is **identical on every instance of a release**, whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
+
+It complements the two other documents of the page: the [implementation report](./implementation-report.md) describes how *this* instance is configured, the [audit report](./audit-report.md) what happened over a period.
+
+---
+
+## At a glance
+
+---
+
+## Controls
+
+| Control | Description |
+|---|---|
+| **Language** | French or English; defaults to the interface language. |
+| **Date label (cover)** | Free text printed on the cover; blank = today's date. |
+| **Sections** | The eleven sections, all ticked by default; each shows its id. |
+| **Detail every API operation (description and parameters)** | Shown when *API reference* is ticked. Off by default: the reference then lists the operations with their access only. |
+| **Include the code snippets in the appendix (long)** | Shown when *Appendix: code references* is ticked. Off by default. |
+| **Download PDF / Download Markdown** | Generates the file and downloads it (`nomaubl-technical-<date>-<time>.pdf` or `.md`). A copy is kept in the environment's `reports` folder. |
+
+---
+
+## Sections
+
+| Section (id) | Content |
+|---|---|
+| **Scope** (`scope`) | The NomaUBL release, its build date, the code scan behind the document, the generation date and author, and the environment whose table names are resolved. |
+| **Architecture** (`architecture`) | Components (interface, server, platform clients, reports), runtime (one folder and one server per environment) and security (authentication, sessions). |
+| **Data model** (`data`) | Every table with its columns, the configuration keys, flows and call sites that use them, and the name resolved in this instance when it differs. |
+| **Flows** (`flows`) | The flow documents — process a file, import poll, status poll, e-reporting, watched folders, reprocess — each completed with the tables, statuses and keys its code touches. |
+| **Configuration reference** (`configuration`) | Every key with its settings field, where it is edited, the flows that read it, its call sites and its state, with a summary of the gaps. |
+| **Status model** (`statuses`) | Invoice and e-reporting statuses: tags, codes, labels, groups and the flows that set them. |
+| **Impact matrix** (`impact`) | Per flow, the most referenced columns and keys. |
+| **API reference** (`api`) | The operations of the API with the access each requires; with the option, their description and parameters. |
+| **Command line** (`cli`) | The switches, from the built-in help. |
+| **Build and packaging** (`build`) | The build steps, the generated artefacts and the layout of the jar. |
+| **Appendix: code references** (`appendix`) | The code references behind the sections; with the option, the snippets. |
+
+---
+
+## Command line and API
+
+```bash
+java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--api-detail] [--snippets]
+```
+
+Defaults: every section, Markdown, French, output `nomaubl-technical-<lang>.md` in the current folder (the command line keeps no copy in `reports`). See [Command line](../../management/command-line.md#techreport).
+
+The API route is `GET /api/reports/technical` with the parameters `lang`, `format`, `date`, `sections`, `apiDetail` and `snippets`.
+
+---
+
+## Access
+
+The tab belongs to the *Reports* page — grant **Reports** on the [Roles](../../configuration/security/roles.md) page. Generating the report also requires the *Settings access* feature.
+
+---
+
+## Tips & best practices
+
+- **Generate it at each upgrade** and keep it with the release notes: it is the developer view of what changed.
+- **Hand it to an integrator** with the [implementation report](./implementation-report.md) of the instance: the first explains the product, the second its configuration.
+- **Tick only the sections needed** for a focused document — the data model and the configuration reference for a database or settings question, the API reference for an integration.
 
 ---
 
@@ -31328,7 +31623,7 @@ The NomaUBL Explorer — build your own analyses of the invoice data without SQL
 
 The **Explorer** builds analyses of the invoice data without writing SQL. The fields of seven entities around the invoice are dropped onto **Rows**, **Measures** and **Filters**; the result shows as a table, a pivot, detail rows or a chart, and any value opens the invoices behind it. Analyses are saved, shared and gathered into **dashboards**. Ready-made analyses and dashboards come for IT, accounting and audit. The Explorer works the same whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP) and on every supported database.
 
-Open it from **Explorer**, in the Navigation group of the menu, next to [Reports](./reports.md). It replaces the former *Query tool* tab of the Reports page; the reports saved there are converted into analyses automatically.
+Open it from **Explorer**, in the Navigation group of the menu, next to [Reports](reports/overview.md). It replaces the former *Query tool* tab of the Reports page; the reports saved there are converted into analyses automatically.
 
 ---
 
@@ -31415,7 +31710,7 @@ A number can be used as a measure, a text as a row or a filter. The expression r
 
 **Save** opens a window with the **Name** (in the interface's language), **Visible to** — *Every user who can open the Explorer* or *Only me* — then **Save** or **Save as**. *Save* replaces the analysis; *Save as* creates a copy under the new name, which is how a provided analysis is adapted while keeping the original. The saved analyses are listed by audience (IT, Accounting, Audit, Custom) and name; picking one runs it at once with its own period.
 
-Each analysis and each dashboard is one JSON file under the environment's configuration folder (`analyses/`, `dashboards/`). Both can be carried to another instance with [Promotion](../management/promotion.md) — a dashboard brings its analyses — and the [implementation report](./implementation-report.md) lists them.
+Each analysis and each dashboard is one JSON file under the environment's configuration folder (`analyses/`, `dashboards/`). Both can be carried to another instance with [Promotion](../management/promotion.md) — a dashboard brings its analyses — and the [implementation report](reports/implementation-report.md) lists them.
 
 ---
 
@@ -31435,7 +31730,7 @@ NomaUBL installs twelve analyses and three dashboards, once; they are never over
 | **Accounting** | Month end | VAT per month and rate · Amounts per status · Top customers · Invoices and credit notes per month |
 | **Audit** | Audit period | Findings per rule · Refusals and rejections per reason · Status events per month · Status statistics |
 
-*Status statistics* reproduces the pivot of the [Reports](./reports.md) page, whose tab stays as it is.
+*Status statistics* reproduces the pivot of the [Reports](reports/overview.md) page, whose tab stays as it is.
 
 ---
 
@@ -31443,7 +31738,7 @@ NomaUBL installs twelve analyses and three dashboards, once; they are never over
 
 | Export | Content |
 |---|---|
-| **PDF** | An analysis or a dashboard in the [audit report](./audit-report.md) layout: cover with environment, period, date, author and version, contents for a dashboard, running headers, each chart with all its data, filters noted. |
+| **PDF** | An analysis or a dashboard in the [audit report](reports/audit-report.md) layout: cover with environment, period, date, author and version, contents for a dashboard, running headers, each chart with all its data, filters noted. |
 | **Excel** | The cross table; a dashboard as one sheet per tile. |
 | **PNG** | The chart of an analysis. |
 
@@ -31467,298 +31762,117 @@ Grant the **Explorer** page in the Navigation group on the [Roles](../configurat
 
 ---
 
-## NomaUBL — Implementation Report
-Source: https://docs.nomana-it.fr/nomaubl/application/implementation-report/
+## NomaUBL — Notifications
+Source: https://docs.nomana-it.fr/nomaubl/application/notifications/
 
-Generate the technical and functional documentation of a NomaUBL instance from its configuration and database — context, architecture, built-in rules, documents, UBL transform and mappings, platform settings, operations, security and reference data — as a PDF or Markdown file, in French or English, with secrets masked.
+Portal inbox for status-change alerts emitted by NomaUBL — All / Unread tabs, mark-all-read, per-row dismiss, click-through to the linked invoice. Combined with the navbar bell that polls every 30 s and previews the last six entries, the page is the read-side of the notification system.
 
-The **Implementation report** tab of the [Reports](./reports.md) page writes the documentation of the instance you are signed in to: what is configured, how each document is turned into UBL, which rules apply, who can do what. Everything is read from the configuration files and the database at the time of generation, so the report always describes the instance as it runs — whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
+The **Notifications** screen is the **portal inbox** that surfaces every notification routed to the current user. Each row is a single delivery — one invoice status change matched by a [Notification Rule](../management/notification-rules.md), wrapped with the right subject, message and metadata, and persisted in the `F564253` table.
 
-Typical uses: the hand-over file of a project, the description an auditor or a tax adviser asks for, the snapshot taken before an upgrade, the reference a support team keeps next to the production instance.
+The page is the *read* side of the notification system. The *write* side — which event triggers what notification, sent to whom, on which channels — lives in the [Notification Rules](../management/notification-rules.md) editor.
 
-Open it from **Reports → Implementation report**.
+A complementary **bell** in the top utility bar polls the unread count every 30 s and previews the last six entries without leaving the current page; clicking a preview opens the linked invoice modal directly.
+
+The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — since the notification payload is built from the persisted UBL invoice, not from the raw source XML.
+
+---
+
+## Opening the inbox
+
+- Sidebar → **Management → Notifications**.
+- Or click the **🔔 bell** in the top utility bar, then **View all** at the bottom of the dropdown.
+- The inbox always opens on the **All** tab; switch to **Unread** to focus on what has not been acknowledged yet.
 
 ---
 
 ## At a glance
 
-| Control | Description |
+A notification row carries five visual cues: the **status badge** at the left (colour from the *statuses* catalogue), the **subject** (default `Invoice {doc} {dct} {kco} — {statusLabel}`), the **message** (the rule's body or the dispatcher's default), the **meta line** with the canonical identifiers, and a **right column** with relative time + the dismiss button.
+
+---
+
+## Toolbar actions
+
+| Action | Effect |
 |---|---|
-| **Language** | Drop-down: French or English. Defaults to the language of the interface. Labels of settings, statuses and lists follow the language. |
-| **Date label (cover)** | Free text printed on the cover (e.g. *Go-live V2*). Blank = today's date. |
-| **Show technical keys next to setting labels** | Adds the configuration key after each label (`Allow reprocess · allowReprocess`). Useful for a technical reader; off by default. |
-| **Sections** | Tick the parts to include. The first nine are ticked by default; the two appendices are optional because of their length. |
-| **Download PDF / Download Markdown** | Generates the file and downloads it. A copy is kept in the environment's `reports` folder (`<appHome>/<env>/reports/nomaubl-implementation-<date>-<time>.pdf` or `.md`). |
+| **Refresh** | Re-fetches the inbox from `/api/notifications`, honouring the active tab filter (All vs Unread). |
+| **Mark all read** | Posts to `/api/notifications/mark-all-read`. Every row that was unread switches to read; the bell badge clears at the next 30 s poll, or immediately on the next focus event. Disabled when there are no unread rows. |
+| **Filter tabs** | *All* shows every undismissed row; *Unread* keeps only the rows where `read = false`. The unread tab carries the `( N )` count next to its label. |
 
 ---
 
-## What the report contains
+## A row, in detail
 
-| Section | Content |
-|---|---|
-| **Context** | Environment, release and standard version (XP Z12-014), generation date, application home, database type and schema, companies, number of documents, author. |
-| **Architecture** | The flows enabled on the instance and their trigger: sending to the PA, import poll, status poll, received invoices, e-reporting, directory check, scheduled batch jobs, watched folders, JDE print queue reports, connectors per type, authentication. A flow shown as *off* is configured without a trigger and can still be run on demand. Then the processing chain: sources, transform, validation, archive tables, directions. |
-| **How it works and built-in rules** | The functional guide: what every page is for (in menu order), the invoice lifecycle, the protection of deposited invoices, the rules of edit / fix buyer / resend / validate / set status / e-mail with the permission each one requires, the two reprocess modes, the status poll with the integrity and ordering checks, the review flag and notifications, and a quick reference of the platform statuses (AFNOR XP Z12-014) and of the internal `99xx` stages. |
-| **Documents** | One table of every document (source, direction, processing type, PDF template), the path variables with their value on this instance, then one subsection per document: folders, XSL and RTF files, UBL sheet, reprocess options, links to its pre-transform and UBL sheet, index fields and other settings. Then the PDF templates: documents that use each one, layout, logo, colours, sections and their options. |
-| **UBL transform and rules** | Shared defaults (currency, specification identifier, schemes, defaults per BT), issuing companies, mapping tables and rules (transaction type, VAT category, exemption, payment means, unit of measure…), validation packs with their version and rule counts, house rules, coverage per document, then one subsection per pre-transform (renames, custom rules, drops) and per UBL sheet: profile, redefined mappings, and the full **source field → BT → UBL path** mapping. |
-| **Platform settings** | E-invoicing settings (default and per company), e-reporting, directory, document types with their send and validation flags. |
-| **Operations** | Scheduled jobs with their trigger, watched folders, notification rules with the actions they trigger, invoice actions, integrity checks, connectors with their host and authentication type. |
-| **Security** | Authentication mode and session timeout, roles (pages, actions, companies, features, users), users with role, state and pending password change. |
-| **Reference data** | The status catalogue (labels, PA codes, groups), every reference and custom list with its entries, the configured table names. |
-| **Appendix: configuration keys** | Every property of every system template, secrets masked. |
-| **Appendix: API reference** | The API document of the instance, operation by operation. |
+| Element | Source | Meaning |
+|---|---|---|
+| **Left accent stripe + tinted background** | `read = false` | Unread rows. The stripe disappears the moment the row is marked read. |
+| **Status badge** | `NTEV01` joined to the *statuses* catalogue | The status that fired the notification. The badge background, foreground and border come from the catalogue colours, so `9904 / PA Reject` is red, `10 / Deposited` is green, `9906 / PA Pending` is orange, etc. |
+| **Subject (top line)** | `NTSUBJ` (rule's `emailSubject`, or the dispatcher default) | Short, human-readable headline. The default is `Invoice {doc} {dct} {kco} — {statusLabel}`. |
+| **Message (second line)** | `NTMSGE` (rule's `emailBody`, or the dispatcher default) | The fuller body text. Truncated on overflow; the modal that opens on click carries the full lifecycle. |
+| **Meta line** | `NTDOC · NTDCT · NTKCO · reason · action · rule` | Canonical invoice identifiers, plus the PA rejection reason / expected action / rule name when present. The reason and action are resolved against the *rejection-reason-codes* and *action-codes* catalogues, so the user reads the human label, not the bare code. |
+| **Action audit chips** | `NTK74MSG2` audit footer | One coloured chip per connector call the dispatcher fired for the rule. See [Action audit chips](#action-audit-chips) below. |
+| **Relative time** | `NTUPMJ` + `NTTDAY` | *just now*, *2 min ago*, *14:32* (today), *Yesterday*, then the absolute `dd/mm/yyyy hh:mm` for older entries. |
+| **Dismiss button** | per-row | Removes the row from the inbox without marking the rest as read. |
 
-:::info[Secrets are never printed]
-Passwords, tokens, client secrets, API keys, URLs of connectors and instance keys appear as `••••••`. The report can be handed to a third party without editing; check only that the business content (customer e-mails in notification rules, user names) may be shared.
-:::
+Clicking anywhere in the row body opens the **invoice detail modal** for the linked `(doc, dct, kco)` triplet — same seven tabs as the [E-Invoicing](./invoices.md) page (Summary, Parties, Lines, VAT, Notes, History, PDF). The row is marked read on the way through.
 
 ---
 
-## PDF layout
+## Action audit chips
 
-The PDF follows the document conventions of the product: a cover with the environment, date, author and version; a clickable table of contents and a PDF outline; a running header and a page *x / y* footer; reading notes in shaded boxes; path variables (`APP_HOME`, `ENV`, `PROCESS_HOME`, `TEMPLATE`, `FILE_NAME`) shown as chips inside paths; *see § 5.10* links between a document and its UBL sheet. The Markdown file carries the same content for a wiki or a Git repository.
+Every notification dispatched by a [Notification Rule](../management/notification-rules.md) that defines one or more action calls carries a permanent **audit trail** stored in the `NTK74MSG2` column. The inbox renders the trail as a row of colour-coded chips below the message, one chip per call:
 
----
+| Chip | Colour | Meaning |
+|---|---|---|
+| **`OK`** | green | The call ran without error. For an api-action: HTTP &lt; 400. For a sql-action: the statement returned without an exception. |
+| **`FAIL`** | red | The call returned an error. The message text on the chip carries the failure reason — HTTP status + body for an api-action, JDBC exception for a sql-action. |
+| **`STOP`** | orange | The call was a `STOP · N remaining call(s) skipped` marker. Set by a previous `FAIL` on a call whose *On failure* flag was `Stop the chain on failure`. |
+| **`SKIP`** | muted | A call that was skipped because an earlier call in the chain hit a `STOP`. |
 
-## Command line
-
-The same report is available without the interface, for a scheduled snapshot or a pipeline:
-
-```bash
-java -jar nomaubl.jar -report <configFile> [--lang fr|en] [--format md|pdf] [--out <file>] \
-     [--date <label>] [--keys] [--sections context,architecture,...]
-```
-
-Defaults: the first nine sections, Markdown, French. See [Command line](../management/command-line.md#report).
+Because the audit lives in `NTK74MSG2` rather than the body, it survives the body's line-clamp truncation and remains readable at a glance — a row whose message ends with `OK · OK · FAIL` is easier to triage than one where the audit was buried in the body text. The audit footer is capped at the column width minus a safety margin; long error messages are truncated, but the *Status* and *count* fields always fit.
 
 ---
 
-## Access
+## The 🔔 bell in the navbar
 
-The tab belongs to the *Reports* page: grant **Reports** in the Navigation group on the [Roles](../configuration/security/roles.md) page. The API route is `GET /api/reports/implementation`.
+A complementary entry sits in the top utility bar of every page. Three things it does:
+
+1. **Polls every 30 s** the unread count (`GET /api/notifications/unread-count`). A red badge shows the count when greater than zero.
+2. **Drops down the last 6 entries** on click — same shape as an inbox row, but condensed: subject, message, doc reference, relative time. Unread rows carry the same blue dot used in the inbox. When the rule fired one or more action calls, the bell preview strips the `NTK74MSG2` audit footer and shows a compact summary line in its place: *2 action(s) ran* (muted) when every call returned `OK`, *1 of 2 action(s) failed* (red) when at least one chip is `FAIL`. A glance at the bell is enough to know whether to drill into the inbox.
+3. **Clicking a preview** marks the entry read and opens the invoice modal directly. The bell uses a small dance to handle both cases: when the user is already on the inbox, it dispatches a `nomaubl:open-notification` window event so the modal opens without a remount; otherwise it stores the payload in `sessionStorage` under `notif-auto-open` and navigates to `/notifications`, which drains the entry on cold mount.
+
+A *View all* footer at the bottom of the dropdown links to `/notifications` for the full inbox.
+
+The bell stays visible regardless of authentication state: when `global.authEnabled != "Y"`, the inbox shows the broadcast notifications written under the `NTUSER='*'` sentinel, and the bell counts them.
+
+---
+
+## Storage & retention
+
+Every delivered notification is one row in **`F564253`** (Oracle + Postgres). The columns the inbox cares about are:
+
+| Column | Type | Role |
+|---|---|---|
+| `NTUKID` | numeric | Primary key. Unique across the whole table — the row addresses no longer carry the `(doc, dct, kco)` triplet. |
+| `NTUSER` | string | Resolved username, or `*` when running with auth disabled (broadcast). |
+| `NTEV01` | string | `0` for unread, `1` for read. The bell badge counts rows where `NTEV01 = 0`. |
+| `NTSUBJ` / `NTMSGE` | string | Subject / message body. |
+| `NTK74MSG2` | string | Action audit footer written by the dispatcher (`OK / FAIL / STOP / SKIP` per call) — drives the chips section. |
+| `NTDOC / NTDCT / NTKCO` | mixed | The invoice triplet; nullable for system-level alerts that don't link to a specific invoice. |
+| `NTUPMJ` / `NTTDAY` | jul / hms | Issue date and time. The composite index on `(NTUSER, NTEV01, NTUPMJ DESC)` keeps the bell badge query and the inbox sort fast. |
+
+A daily retention sweep in `BackgroundScheduler` deletes rows older than `global.notificationsRetentionDays` (default 90 days). Set the property to `0` to disable the sweep — useful for installations that want to keep notifications indefinitely or that drive their own retention policy.
 
 ---
 
 ## Tips & best practices
 
-- **Generate it after each go-live and each upgrade.** The copy kept in the `reports` folder becomes the dated history of the configuration, next to [File versions](../management/file-versions.md).
-- **Keep the technical keys off for a business reader.** Labels are enough for a project team; turn the keys on for the people who edit configuration files or read the API.
-- **Add the appendices for an audit file only.** The configuration-keys and API appendices make the PDF several times longer.
-
----
-
-## NomaUBL — Audit Report
-Source: https://docs.nomana-it.fr/nomaubl/application/audit-report/
-
-Audit the electronic invoicing of a period from the NomaUBL tables — executive summary compared with the previous period, volumes, situation by status, backlog, lifecycle and delays, errors and their handling, operations and consistency checks — as a PDF or Markdown file, in French or English.
-
-The **Audit report** tab of the [Reports](./reports.md) page measures how the electronic invoicing of a period went: how many invoices were processed, deposited, approved, rejected or refused, what is still waiting for an action, how long each step took, which errors occurred and how they were handled. The figures come **only from the NomaUBL tables** at the time of generation; the platform is not queried.
-
-The report is short whatever the volume — it lists no individual invoice — so it can be sent as is to a finance manager, an auditor or a steering committee. It applies to every source system (JD Edwards, SAP, NetSuite or a custom ERP).
-
-Open it from **Reports → Audit report**.
-
----
-
-## At a glance
-
-| Control | Description |
-|---|---|
-| **Period** | Drop-down: **Calendar month** (the previous month by default), compared to the month before; or **Custom dates**, compared to the same number of days before. A custom range that covers whole months, a quarter or a year compares to the preceding months of the same length. |
-| **Date basis** | **Issue date (BT-2)** — an invoice belongs to the period by its issue date — or **Last update**. Statuses and amounts are always those of the generation day. |
-| **Companies** | Company codes separated by commas; empty = every company the signed-in user can see. The role's company visibility always applies. |
-| **Direction** | Issued and received, issued only, received only. |
-| **Language** | French or English; defaults to the interface language. |
-| **Sections** | Tick the parts to include; all are ticked by default. |
-| **Also run the SQL integrity checks against JDE** | Shown when *Consistency checks* is ticked. Runs the checks configured under [Integrity reports](../configuration/system/integrity-reports.md) on the period and adds their discrepancy counts. Slower: each check queries the source system. |
-| **Download PDF / Download Markdown** | Starts the generation **in the background**. A progress bar names the current step; the file downloads at the end and a copy is kept in `<appHome>/<env>/reports/nomaubl-audit-<date>-<time>.pdf` or `.md`. The window can stay open on another tab meanwhile. |
-
----
-
-## Sections
-
-### Scope
-
-Environment, period and comparison period, date basis, companies, direction, generation date and author, release, and the tables read: invoice header (status and amounts), archive, VAT breakdown, lifecycle, validation findings.
-
-### Executive summary
-
-The key figures of the period next to the previous period and the variation:
-
-| Indicator | Meaning |
-|---|---|
-| **Invoices processed** | Invoices of the period, whatever their status. |
-| **Not sent to the platform** | Invoices whose transaction type is configured not to be sent (B2C, international… per [Document types](../configuration/system/document-types.md)). |
-| **Deposited on the platform** | Invoices whose current status comes from the platform (`200` and following). The **deposit rate** is taken over the invoices **to send**. |
-| **Deposited but not transmitted** | `200` with reason `NON_TRANSMISE`: the recipient is registered with no platform; the invoice has to be delivered through another channel. |
-| **Approved / completed / paid**, **Refused (`210`)**, **Rejected (`213`)** | Outcomes of the period. |
-| **To fix and resend** | `213`, `9905`, `9907`. |
-| **Answer to the buyer expected** | `207`, `208`, `210`. |
-| **In error today**, **Waiting for the platform (`9906`)**, **Excluded by rule (`9914`)**, **Received invoices** | States at generation time. |
-| **Net and gross amounts deposited** | Totals BT-109 and BT-112 of the deposited invoices. |
-| **First-pass validation** | Share of invoices validated without a fatal finding at their first run, taken from the lifecycle. |
-| **Share in a terminal status** | Among the invoices to send. |
-| **Delays** | Creation → deposit and deposit → first buyer status, median and 90th percentile. |
-| **Send attempts, resends, send failure rate** | Every send ends in a failure (`9904`) or an acknowledgement (`9906`); the failure rate measures the platform's availability (HTTP 429, 503…). Resends include the automatic retries. |
-
-A breakdown follows where every level adds up: not to send, to send, deposited (not transmitted, waiting for the next status, in progress at the platform, approved, rejected or refused), not deposited (validation, send or import failure, not sent yet, other). Then the **findings** in plain words — invoices in error not yet reviewed, deposited but not transmitted, to fix and resend, awaiting an answer to the buyer, failed e-reporting envelopes, backlog over all periods, resends, reprocesses and buyer-identifier fixes of the period.
-
-### Volumes
-
-The evolution inside the period — per day up to one month, per week up to six months, per month beyond — with the invoices, those to send, deposited and in error per bucket, and a chart. Then per **activity** (count, share, previous period, variation, amounts; deposit and error rates in a second table), per **company**, per **document**, per **transaction type** (with its send flag) and per **VAT category and rate** (base and VAT).
-
-### Situation at generation time
-
-The current status of the invoices of the period: code, label, catalogue groups, count, share, gross amount; the same per **family** (terminal, in progress, technical error, business error, excluded, other) with a donut chart; and the points of attention (waiting for the platform for more than 2 days, deposited but not transmitted, in error and not reviewed).
-
-### Backlog, all periods
-
-What still waits for an action **whatever its date**: invoices in error or refused not reviewed by customer service, waiting for the platform, deposited without being transmitted. Per status with the count older than 30 days, the reviewed count and the net amount; per company; per age (30 days or less, 31–90, 91–180, over 180) with a chart. The **Min invoice date** of the [e-invoicing settings](../configuration/system/einvoicing.md) bounds these figures: older invoices are left out.
-
-:::info[What « reviewed » means]
-An invoice is *reviewed* once customer service has marked it handled in the invoice window. It leaves the backlog even if its status did not change (credit note issued outside NomaUBL, abandoned invoice, duplicate…).
-:::
-
-### Lifecycle and delays
-
-The invoices of the period reaching each milestone for the first time — created, validated, validation failed, sent, deposited (first platform status), received, approved, refused, rejected, paid — per bucket with a chart; the delays creation → first send, first send → deposit, creation → deposit, deposit → first buyer status (median and 90th percentile, calendar days); then the action counters: send attempts and failures, resends, reprocesses (`9912`), buyer-identifier fixes.
-
-### Errors and their handling
-
-- **Validation findings by rule**: source (CIUS-FR, EXT-CTC-FR, CPRO-B2G, XSD, NomaUBL rules…), rule, level, findings, invoices, sample message; a chart of the most frequent rules and a per-source table of fatal findings and warnings. The findings of a reprocessed invoice are those of its last run.
-- **Platform and buyer rejections and refusals**: status, reason code and label, events, invoices.
-- **Send and import failures**: the 30 most frequent messages with their counts.
-- **Handling**: invoices with an error in the period, resolved (status left the error statuses), still in error but reviewed, open for 7 days or less, 8 to 30 days, over 30 days; events per status; resends, reprocesses and fixes.
-
-### Operations over the period
-
-What the server did, independently of the invoice date: **scheduled job runs** (runs, errors, average and maximum duration, last outcome), **files processed and invoices integrated** per document with the previous period, **portal notifications** per rule, **e-reporting envelopes** per status. A failed envelope is flagged: its operations are not declared until it is fixed and filed again.
-
-### Consistency checks
-
-Each check counts the invoices that break a rule, for the period and over all periods; `0` means compliant.
-
-| Check | What it finds |
-|---|---|
-| Platform status without platform identifier | The identifier is missing when the status was set by hand or by a status poll without an import confirmation. Not blocking. |
-| Sent invoice without archived UBL | A sent invoice whose UBL is not stored. |
-| Waiting for the platform for more than 2 days | Stale `9906`. |
-| Duplicate invoice number within a company | Two invoices with the same number. |
-| VAT total (BT-110) ≠ sum of the breakdown (BT-117) | Header against the stored VAT breakdown. |
-| Net total (BT-109) ≠ sum of the lines (BT-131) | Header against the stored lines. |
-| VAT breakdown with an amount but no rate (BT-119) | The invoice is declared with VAT and no rate. |
-| To fix and resend without follow-up | `213`, `9905`, `9907` neither followed up nor reviewed. |
-| Answer to the buyer expected without follow-up | `207`, `208`, `210` neither followed up nor reviewed; an internal credit note is mandatory for a refused invoice. |
-
-With the integrity option, the **SQL integrity checks against JDE** follow, with their discrepancy count; the detail is on the [Integrity](./reports.md#integrity) tab. The lifecycle ordering and the platform events missing locally are left to the daily [lifecycle check](../sync/scheduled-jobs/lifecycle-checks.md).
-
----
-
-## PDF layout
-
-Same layout as the [implementation report](./implementation-report.md): cover with environment, period, date, author and version; clickable table of contents; running header and footer; shaded reading notes; charts drawn in the PDF (bars per bucket and per activity, status-family donut, milestones per bucket, most frequent rules).
-
----
-
-## Command line
-
-```bash
-java -jar nomaubl.jar -audit <configFile> [--from <yyyy-MM-dd> --to <yyyy-MM-dd>] \
-     [--basis issue|update] [--kco a,b] [--direction I|R] [--lang fr|en] \
-     [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--integrity]
-```
-
-Defaults: the previous month, every section, Markdown, French. See [Command line](../management/command-line.md#audit).
-
-The API runs the same report in the background: `POST /api/reports/audit/start` returns a job id, `GET /api/jobs/{id}` gives the current step, `GET /api/reports/audit/result/{jobId}` returns the file once.
-
----
-
-## Access
-
-The tab belongs to the *Reports* page — grant **Reports** on the [Roles](../configuration/security/roles.md) page. The figures follow the company visibility of the signed-in user.
-
----
-
-## Tips & best practices
-
-- **Generate it on the first working day of the month** for the previous month: the default period is exactly that.
-- **Read the backlog with the findings.** The summary covers the invoices of the period; the backlog shows what older periods still leave open.
-- **Mark the invoices handled outside NomaUBL as reviewed.** A credit note issued directly in the ERP does not change the status of the original invoice; marking it reviewed keeps the backlog meaningful.
-- **Set the Min invoice date after a go-live.** Test or migration invoices dated before the go-live then stay out of the all-periods figures.
-- **Each step's duration is written to the server log.** On a large instance, the [Server log](./diagnostics/server-log.md) shows which section takes the time.
-
----
-
-## NomaUBL — Technical Report
-Source: https://docs.nomana-it.fr/nomaubl/application/technical-report/
-
-The NomaUBL technical report — the developer documentation of the release generated from the code scans bundled at build: architecture, data model, flows, configuration reference, status model, impact matrix, API reference, command line, build and packaging, as PDF or Markdown, in French or English.
-
-The **Technical report** tab of the [Reports](./reports.md) page writes the **developer documentation of the release**: how NomaUBL is built, what each table and configuration key is for, which flows touch them, what the API offers. It is generated from the code scans bundled in the application at build — the same sources as the [Developer reference](../references/developer.md) — so it is **identical on every instance of a release**, whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
-
-It complements the two other documents of the page: the [implementation report](./implementation-report.md) describes how *this* instance is configured, the [audit report](./audit-report.md) what happened over a period.
-
----
-
-## At a glance
-
----
-
-## Controls
-
-| Control | Description |
-|---|---|
-| **Language** | French or English; defaults to the interface language. |
-| **Date label (cover)** | Free text printed on the cover; blank = today's date. |
-| **Sections** | The eleven sections, all ticked by default; each shows its id. |
-| **Detail every API operation (description and parameters)** | Shown when *API reference* is ticked. Off by default: the reference then lists the operations with their access only. |
-| **Include the code snippets in the appendix (long)** | Shown when *Appendix: code references* is ticked. Off by default. |
-| **Download PDF / Download Markdown** | Generates the file and downloads it (`nomaubl-technical-<date>-<time>.pdf` or `.md`). A copy is kept in the environment's `reports` folder. |
-
----
-
-## Sections
-
-| Section (id) | Content |
-|---|---|
-| **Scope** (`scope`) | The NomaUBL release, its build date, the code scan behind the document, the generation date and author, and the environment whose table names are resolved. |
-| **Architecture** (`architecture`) | Components (interface, server, platform clients, reports), runtime (one folder and one server per environment) and security (authentication, sessions). |
-| **Data model** (`data`) | Every table with its columns, the configuration keys, flows and call sites that use them, and the name resolved in this instance when it differs. |
-| **Flows** (`flows`) | The flow documents — process a file, import poll, status poll, e-reporting, watched folders, reprocess — each completed with the tables, statuses and keys its code touches. |
-| **Configuration reference** (`configuration`) | Every key with its settings field, where it is edited, the flows that read it, its call sites and its state, with a summary of the gaps. |
-| **Status model** (`statuses`) | Invoice and e-reporting statuses: tags, codes, labels, groups and the flows that set them. |
-| **Impact matrix** (`impact`) | Per flow, the most referenced columns and keys. |
-| **API reference** (`api`) | The operations of the API with the access each requires; with the option, their description and parameters. |
-| **Command line** (`cli`) | The switches, from the built-in help. |
-| **Build and packaging** (`build`) | The build steps, the generated artefacts and the layout of the jar. |
-| **Appendix: code references** (`appendix`) | The code references behind the sections; with the option, the snippets. |
-
----
-
-## Command line and API
-
-```bash
-java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--api-detail] [--snippets]
-```
-
-Defaults: every section, Markdown, French, output `nomaubl-technical-<lang>.md` in the current folder (the command line keeps no copy in `reports`). See [Command line](../management/command-line.md#techreport).
-
-The API route is `GET /api/reports/technical` with the parameters `lang`, `format`, `date`, `sections`, `apiDetail` and `snippets`.
-
----
-
-## Access
-
-The tab belongs to the *Reports* page — grant **Reports** on the [Roles](../configuration/security/roles.md) page. Generating the report also requires the *Settings access* feature.
-
----
-
-## Tips & best practices
-
-- **Generate it at each upgrade** and keep it with the release notes: it is the developer view of what changed.
-- **Hand it to an integrator** with the [implementation report](./implementation-report.md) of the instance: the first explains the product, the second its configuration.
-- **Tick only the sections needed** for a focused document — the data model and the configuration reference for a database or settings question, the API reference for an integration.
+- **Triage with the *Unread* tab.** Switching to *Unread* is faster than scrolling the *All* feed; *Mark all read* clears every row in one click when the day-end review is done.
+- **Use the meta line for context.** The `reason · action · rule` fragment tells you *why* a notification fired — useful when several rules cover overlapping status codes.
+- **The bell is a peek, not the inbox.** It only shows the last six entries; for triage of every undismissed row, open *Notifications*. The *View all* footer of the dropdown is the one-click shortcut.
+- **Dismissing is not the same as marking read.** *Dismiss* removes the row from your inbox; *Mark read* leaves it in *All* with no accent. Use *Dismiss* for entries that don't need an audit trail.
+- **For PA rejections, click through.** A `9904 / PA Reject` row carries the reason in the meta line, but the lifecycle on the invoice modal's *History* tab carries the full PA payload and the expected action.
+- **Configure retention.** Notifications can grow fast — every status change of every invoice produces a row when a matching rule fires. The 90-day default fits most installations; raise or lower it via `global.notificationsRetentionDays`.
 
 ---
 
@@ -32377,120 +32491,6 @@ The page finds the file on its own: the launcher's `nomaubl-<env>.log`, or — o
 - **Start from `ERROR` and `WARN`.** Untick `INFO` to keep only what needs a look, then widen with the module list.
 - **Follow a run with auto-refresh.** Launch a batch or a scan, tick *Auto-refresh* and watch the lines come in.
 - **Raise the tail for an older event.** The default 512 KB covers recent activity; switch to 2 MB or 8 MB to go further back.
-
----
-
-## NomaUBL — Notifications
-Source: https://docs.nomana-it.fr/nomaubl/application/notifications/
-
-Portal inbox for status-change alerts emitted by NomaUBL — All / Unread tabs, mark-all-read, per-row dismiss, click-through to the linked invoice. Combined with the navbar bell that polls every 30 s and previews the last six entries, the page is the read-side of the notification system.
-
-The **Notifications** screen is the **portal inbox** that surfaces every notification routed to the current user. Each row is a single delivery — one invoice status change matched by a [Notification Rule](../management/notification-rules.md), wrapped with the right subject, message and metadata, and persisted in the `F564253` table.
-
-The page is the *read* side of the notification system. The *write* side — which event triggers what notification, sent to whom, on which channels — lives in the [Notification Rules](../management/notification-rules.md) editor.
-
-A complementary **bell** in the top utility bar polls the unread count every 30 s and previews the last six entries without leaving the current page; clicking a preview opens the linked invoice modal directly.
-
-The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP — since the notification payload is built from the persisted UBL invoice, not from the raw source XML.
-
----
-
-## Opening the inbox
-
-- Sidebar → **Management → Notifications**.
-- Or click the **🔔 bell** in the top utility bar, then **View all** at the bottom of the dropdown.
-- The inbox always opens on the **All** tab; switch to **Unread** to focus on what has not been acknowledged yet.
-
----
-
-## At a glance
-
-A notification row carries five visual cues: the **status badge** at the left (colour from the *statuses* catalogue), the **subject** (default `Invoice {doc} {dct} {kco} — {statusLabel}`), the **message** (the rule's body or the dispatcher's default), the **meta line** with the canonical identifiers, and a **right column** with relative time + the dismiss button.
-
----
-
-## Toolbar actions
-
-| Action | Effect |
-|---|---|
-| **Refresh** | Re-fetches the inbox from `/api/notifications`, honouring the active tab filter (All vs Unread). |
-| **Mark all read** | Posts to `/api/notifications/mark-all-read`. Every row that was unread switches to read; the bell badge clears at the next 30 s poll, or immediately on the next focus event. Disabled when there are no unread rows. |
-| **Filter tabs** | *All* shows every undismissed row; *Unread* keeps only the rows where `read = false`. The unread tab carries the `( N )` count next to its label. |
-
----
-
-## A row, in detail
-
-| Element | Source | Meaning |
-|---|---|---|
-| **Left accent stripe + tinted background** | `read = false` | Unread rows. The stripe disappears the moment the row is marked read. |
-| **Status badge** | `NTEV01` joined to the *statuses* catalogue | The status that fired the notification. The badge background, foreground and border come from the catalogue colours, so `9904 / PA Reject` is red, `10 / Deposited` is green, `9906 / PA Pending` is orange, etc. |
-| **Subject (top line)** | `NTSUBJ` (rule's `emailSubject`, or the dispatcher default) | Short, human-readable headline. The default is `Invoice {doc} {dct} {kco} — {statusLabel}`. |
-| **Message (second line)** | `NTMSGE` (rule's `emailBody`, or the dispatcher default) | The fuller body text. Truncated on overflow; the modal that opens on click carries the full lifecycle. |
-| **Meta line** | `NTDOC · NTDCT · NTKCO · reason · action · rule` | Canonical invoice identifiers, plus the PA rejection reason / expected action / rule name when present. The reason and action are resolved against the *rejection-reason-codes* and *action-codes* catalogues, so the user reads the human label, not the bare code. |
-| **Action audit chips** | `NTK74MSG2` audit footer | One coloured chip per connector call the dispatcher fired for the rule. See [Action audit chips](#action-audit-chips) below. |
-| **Relative time** | `NTUPMJ` + `NTTDAY` | *just now*, *2 min ago*, *14:32* (today), *Yesterday*, then the absolute `dd/mm/yyyy hh:mm` for older entries. |
-| **Dismiss button** | per-row | Removes the row from the inbox without marking the rest as read. |
-
-Clicking anywhere in the row body opens the **invoice detail modal** for the linked `(doc, dct, kco)` triplet — same seven tabs as the [E-Invoicing](./invoices.md) page (Summary, Parties, Lines, VAT, Notes, History, PDF). The row is marked read on the way through.
-
----
-
-## Action audit chips
-
-Every notification dispatched by a [Notification Rule](../management/notification-rules.md) that defines one or more action calls carries a permanent **audit trail** stored in the `NTK74MSG2` column. The inbox renders the trail as a row of colour-coded chips below the message, one chip per call:
-
-| Chip | Colour | Meaning |
-|---|---|---|
-| **`OK`** | green | The call ran without error. For an api-action: HTTP &lt; 400. For a sql-action: the statement returned without an exception. |
-| **`FAIL`** | red | The call returned an error. The message text on the chip carries the failure reason — HTTP status + body for an api-action, JDBC exception for a sql-action. |
-| **`STOP`** | orange | The call was a `STOP · N remaining call(s) skipped` marker. Set by a previous `FAIL` on a call whose *On failure* flag was `Stop the chain on failure`. |
-| **`SKIP`** | muted | A call that was skipped because an earlier call in the chain hit a `STOP`. |
-
-Because the audit lives in `NTK74MSG2` rather than the body, it survives the body's line-clamp truncation and remains readable at a glance — a row whose message ends with `OK · OK · FAIL` is easier to triage than one where the audit was buried in the body text. The audit footer is capped at the column width minus a safety margin; long error messages are truncated, but the *Status* and *count* fields always fit.
-
----
-
-## The 🔔 bell in the navbar
-
-A complementary entry sits in the top utility bar of every page. Three things it does:
-
-1. **Polls every 30 s** the unread count (`GET /api/notifications/unread-count`). A red badge shows the count when greater than zero.
-2. **Drops down the last 6 entries** on click — same shape as an inbox row, but condensed: subject, message, doc reference, relative time. Unread rows carry the same blue dot used in the inbox. When the rule fired one or more action calls, the bell preview strips the `NTK74MSG2` audit footer and shows a compact summary line in its place: *2 action(s) ran* (muted) when every call returned `OK`, *1 of 2 action(s) failed* (red) when at least one chip is `FAIL`. A glance at the bell is enough to know whether to drill into the inbox.
-3. **Clicking a preview** marks the entry read and opens the invoice modal directly. The bell uses a small dance to handle both cases: when the user is already on the inbox, it dispatches a `nomaubl:open-notification` window event so the modal opens without a remount; otherwise it stores the payload in `sessionStorage` under `notif-auto-open` and navigates to `/notifications`, which drains the entry on cold mount.
-
-A *View all* footer at the bottom of the dropdown links to `/notifications` for the full inbox.
-
-The bell stays visible regardless of authentication state: when `global.authEnabled != "Y"`, the inbox shows the broadcast notifications written under the `NTUSER='*'` sentinel, and the bell counts them.
-
----
-
-## Storage & retention
-
-Every delivered notification is one row in **`F564253`** (Oracle + Postgres). The columns the inbox cares about are:
-
-| Column | Type | Role |
-|---|---|---|
-| `NTUKID` | numeric | Primary key. Unique across the whole table — the row addresses no longer carry the `(doc, dct, kco)` triplet. |
-| `NTUSER` | string | Resolved username, or `*` when running with auth disabled (broadcast). |
-| `NTEV01` | string | `0` for unread, `1` for read. The bell badge counts rows where `NTEV01 = 0`. |
-| `NTSUBJ` / `NTMSGE` | string | Subject / message body. |
-| `NTK74MSG2` | string | Action audit footer written by the dispatcher (`OK / FAIL / STOP / SKIP` per call) — drives the chips section. |
-| `NTDOC / NTDCT / NTKCO` | mixed | The invoice triplet; nullable for system-level alerts that don't link to a specific invoice. |
-| `NTUPMJ` / `NTTDAY` | jul / hms | Issue date and time. The composite index on `(NTUSER, NTEV01, NTUPMJ DESC)` keeps the bell badge query and the inbox sort fast. |
-
-A daily retention sweep in `BackgroundScheduler` deletes rows older than `global.notificationsRetentionDays` (default 90 days). Set the property to `0` to disable the sweep — useful for installations that want to keep notifications indefinitely or that drive their own retention policy.
-
----
-
-## Tips & best practices
-
-- **Triage with the *Unread* tab.** Switching to *Unread* is faster than scrolling the *All* feed; *Mark all read* clears every row in one click when the day-end review is done.
-- **Use the meta line for context.** The `reason · action · rule` fragment tells you *why* a notification fired — useful when several rules cover overlapping status codes.
-- **The bell is a peek, not the inbox.** It only shows the last six entries; for triage of every undismissed row, open *Notifications*. The *View all* footer of the dropdown is the one-click shortcut.
-- **Dismissing is not the same as marking read.** *Dismiss* removes the row from your inbox; *Mark read* leaves it in *All* with no accent. Use *Dismiss* for entries that don't need an audit trail.
-- **For PA rejections, click through.** A `9904 / PA Reject` row carries the reason in the meta line, but the lifecycle on the invoice modal's *History* tab carries the full PA payload and the expected action.
-- **Configure retention.** Notifications can grow fast — every status change of every invoice produces a row when a matching rule fires. The 90-day default fits most installations; raise or lower it via `global.notificationsRetentionDays`.
 
 ---
 
@@ -37433,7 +37433,7 @@ The job switches — `-fetch-import`, `-fetch-status`, `-fetch-received`, `-erep
 
 ## `-report` — implementation report \{#report\}
 
-Writes the [implementation report](../application/implementation-report.md) of the instance — the same document as the *Implementation report* tab of the Reports page — for a scripted run or to keep it with a release.
+Writes the [implementation report](../application/reports/implementation-report.md) of the instance — the same document as the *Implementation report* tab of the Reports page — for a scripted run or to keep it with a release.
 
 ```bash
 java -jar nomaubl.jar -report /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--keys] [--sections a,b,...]
@@ -37454,7 +37454,7 @@ Secrets are masked, as in the application.
 
 ## `-audit` — audit report of a period \{#audit\}
 
-Writes the [audit report](../application/audit-report.md) of a period — the same document as the *Audit report* tab of the Reports page.
+Writes the [audit report](../application/reports/audit-report.md) of a period — the same document as the *Audit report* tab of the Reports page.
 
 ```bash
 java -jar nomaubl.jar -audit /opt/nomaubl/demo/config/config.json [--from <yyyy-MM-dd> --to <yyyy-MM-dd>] [--basis issue|update] [--kco a,b] [--direction I|R] [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--integrity]
@@ -37476,7 +37476,7 @@ A monthly cron on the first day of the month produces the report of the month ju
 
 ## `-techreport` — technical report \{#techreport\}
 
-Writes the [technical report](../application/technical-report.md) of the release — the developer documentation generated from the code scans bundled at build.
+Writes the [technical report](../application/reports/technical-report.md) of the release — the developer documentation generated from the code scans bundled at build.
 
 ```bash
 java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--api-detail] [--snippets]
@@ -38213,7 +38213,7 @@ Source: https://docs.nomana-it.fr/nomaubl/configuration/system/integrity-reports
 
 Integrity reports are read-only SQL checks that list what is missing or wrong in NomaUBL compared with a source system — print jobs never integrated, amounts that differ — shown on Reports → Integrity, with an optional action on the selected rows.
 
-The **Integrity reports** system template holds a list of **SQL checks** that compare NomaUBL with a source system and list what is **missing or wrong**: print jobs that were never integrated, accounting records whose amounts differ from the e-invoices… Each check runs read-only `SELECT` statements — a single query, or a source query and a target query on two different databases compared in memory — and **every row it returns is one anomaly**. The results are shown on the **Integrity** tab of the [Reports](../../application/reports.md#integrity) page, where a check can also carry an **action** on the selected rows.
+The **Integrity reports** system template holds a list of **SQL checks** that compare NomaUBL with a source system and list what is **missing or wrong**: print jobs that were never integrated, accounting records whose amounts differ from the e-invoices… Each check runs read-only `SELECT` statements — a single query, or a source query and a target query on two different databases compared in memory — and **every row it returns is one anomaly**. The results are shown on the **Integrity** tab of the [Reports](../../application/reports/overview.md#integrity) page, where a check can also carry an **action** on the selected rows.
 
 Open it under **Configuration → System → Integrity reports**. On an installation that does not have the template yet, an **Add integrity reports** button creates it without restarting the service. The template ships empty: nothing appears on the Reports page until a check is defined.
 

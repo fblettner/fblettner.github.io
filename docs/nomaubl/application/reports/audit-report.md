@@ -6,7 +6,7 @@ keywords: [NomaUBL, audit report, e-invoicing audit, period report, KPI, deposit
 
 # Audit Report
 
-The **Audit report** tab of the [Reports](./reports.md) page measures how the electronic invoicing of a period went: how many invoices were processed, deposited, approved, rejected or refused, what is still waiting for an action, how long each step took, which errors occurred and how they were handled. The figures come **only from the NomaUBL tables** at the time of generation; the platform is not queried.
+The **Audit report** tab of the [Reports](./overview.md) page measures how the electronic invoicing of a period went: how many invoices were processed, deposited, approved, rejected or refused, what is still waiting for an action, how long each step took, which errors occurred and how they were handled. The figures come **only from the NomaUBL tables** at the time of generation; the platform is not queried.
 
 The report is short whatever the volume — it lists no individual invoice — so it can be sent as is to a finance manager, an auditor or a steering committee. It applies to every source system (JD Edwards, SAP, NetSuite or a custom ERP).
 
@@ -123,7 +123,7 @@ Open it from **Reports → Audit report**.
 | **Direction** | Issued and received, issued only, received only. |
 | **Language** | French or English; defaults to the interface language. |
 | **Sections** | Tick the parts to include; all are ticked by default. |
-| **Also run the SQL integrity checks against JDE** | Shown when *Consistency checks* is ticked. Runs the checks configured under [Integrity reports](../configuration/system/integrity-reports.md) on the period and adds their discrepancy counts. Slower: each check queries the source system. |
+| **Also run the SQL integrity checks against JDE** | Shown when *Consistency checks* is ticked. Runs the checks configured under [Integrity reports](../../configuration/system/integrity-reports.md) on the period and adds their discrepancy counts. Slower: each check queries the source system. |
 | **Download PDF / Download Markdown** | Starts the generation **in the background**. A progress bar names the current step; the file downloads at the end and a copy is kept in `<appHome>/<env>/reports/nomaubl-audit-<date>-<time>.pdf` or `.md`. The window can stay open on another tab meanwhile. |
 
 ---
@@ -141,7 +141,7 @@ The key figures of the period next to the previous period and the variation:
 | Indicator | Meaning |
 |---|---|
 | **Invoices processed** | Invoices of the period, whatever their status. |
-| **Not sent to the platform** | Invoices whose transaction type is configured not to be sent (B2C, international… per [Document types](../configuration/system/document-types.md)). |
+| **Not sent to the platform** | Invoices whose transaction type is configured not to be sent (B2C, international… per [Document types](../../configuration/system/document-types.md)). |
 | **Deposited on the platform** | Invoices whose current status comes from the platform (`200` and following). The **deposit rate** is taken over the invoices **to send**. |
 | **Deposited but not transmitted** | `200` with reason `NON_TRANSMISE`: the recipient is registered with no platform; the invoice has to be delivered through another channel. |
 | **Approved / completed / paid**, **Refused (`210`)**, **Rejected (`213`)** | Outcomes of the period. |
@@ -166,7 +166,7 @@ The current status of the invoices of the period: code, label, catalogue groups,
 
 ### Backlog, all periods
 
-What still waits for an action **whatever its date**: invoices in error or refused not reviewed by customer service, waiting for the platform, deposited without being transmitted. Per status with the count older than 30 days, the reviewed count and the net amount; per company; per age (30 days or less, 31–90, 91–180, over 180) with a chart. The **Min invoice date** of the [e-invoicing settings](../configuration/system/einvoicing.md) bounds these figures: older invoices are left out.
+What still waits for an action **whatever its date**: invoices in error or refused not reviewed by customer service, waiting for the platform, deposited without being transmitted. Per status with the count older than 30 days, the reviewed count and the net amount; per company; per age (30 days or less, 31–90, 91–180, over 180) with a chart. The **Min invoice date** of the [e-invoicing settings](../../configuration/system/einvoicing.md) bounds these figures: older invoices are left out.
 
 :::info[What « reviewed » means]
 An invoice is *reviewed* once customer service has marked it handled in the invoice window. It leaves the backlog even if its status did not change (credit note issued outside NomaUBL, abandoned invoice, duplicate…).
@@ -203,7 +203,7 @@ Each check counts the invoices that break a rule, for the period and over all pe
 | To fix and resend without follow-up | `213`, `9905`, `9907` neither followed up nor reviewed. |
 | Answer to the buyer expected without follow-up | `207`, `208`, `210` neither followed up nor reviewed; an internal credit note is mandatory for a refused invoice. |
 
-With the integrity option, the **SQL integrity checks against JDE** follow, with their discrepancy count; the detail is on the [Integrity](./reports.md#integrity) tab. The lifecycle ordering and the platform events missing locally are left to the daily [lifecycle check](../sync/scheduled-jobs/lifecycle-checks.md).
+With the integrity option, the **SQL integrity checks against JDE** follow, with their discrepancy count; the detail is on the [Integrity](./overview.md#integrity) tab. The lifecycle ordering and the platform events missing locally are left to the daily [lifecycle check](../../sync/scheduled-jobs/lifecycle-checks.md).
 
 ---
 
@@ -221,7 +221,7 @@ java -jar nomaubl.jar -audit <configFile> [--from <yyyy-MM-dd> --to <yyyy-MM-dd>
      [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--integrity]
 ```
 
-Defaults: the previous month, every section, Markdown, French. See [Command line](../management/command-line.md#audit).
+Defaults: the previous month, every section, Markdown, French. See [Command line](../../management/command-line.md#audit).
 
 The API runs the same report in the background: `POST /api/reports/audit/start` returns a job id, `GET /api/jobs/{id}` gives the current step, `GET /api/reports/audit/result/{jobId}` returns the file once.
 
@@ -229,7 +229,7 @@ The API runs the same report in the background: `POST /api/reports/audit/start` 
 
 ## Access
 
-The tab belongs to the *Reports* page — grant **Reports** on the [Roles](../configuration/security/roles.md) page. The figures follow the company visibility of the signed-in user.
+The tab belongs to the *Reports* page — grant **Reports** on the [Roles](../../configuration/security/roles.md) page. The figures follow the company visibility of the signed-in user.
 
 ---
 
@@ -239,4 +239,4 @@ The tab belongs to the *Reports* page — grant **Reports** on the [Roles](../co
 - **Read the backlog with the findings.** The summary covers the invoices of the period; the backlog shows what older periods still leave open.
 - **Mark the invoices handled outside NomaUBL as reviewed.** A credit note issued directly in the ERP does not change the status of the original invoice; marking it reviewed keeps the backlog meaningful.
 - **Set the Min invoice date after a go-live.** Test or migration invoices dated before the go-live then stay out of the all-periods figures.
-- **Each step's duration is written to the server log.** On a large instance, the [Server log](./diagnostics/server-log.md) shows which section takes the time.
+- **Each step's duration is written to the server log.** On a large instance, the [Server log](../diagnostics/server-log.md) shows which section takes the time.

@@ -8,7 +8,7 @@ keywords: [NomaUBL, Explorateur, analyse, libre-service, tableau croisé, tablea
 
 L'**Explorateur** construit des analyses des données de facturation sans écrire de SQL. Les champs de sept entités autour de la facture se déposent dans les **Lignes**, les **Mesures** et les **Filtres** ; le résultat s'affiche en tableau, en tableau croisé, en lignes de détail ou en graphique, et chaque valeur ouvre les factures qu'elle recouvre. Les analyses s'enregistrent, se partagent et se regroupent en **tableaux de bord**. Des analyses et tableaux de bord sont fournis pour l'informatique, la comptabilité et l'audit. L'Explorateur fonctionne de la même façon quel que soit le système source (JD Edwards, SAP, NetSuite ou un ERP personnalisé) et sur toutes les bases prises en charge.
 
-Accès : **Explorateur**, dans le groupe Navigation du menu, à côté des [Rapports](./reports.md). Il remplace l'ancien onglet *Requêteur* de la page Rapports ; les rapports enregistrés avec ce dernier sont convertis automatiquement en analyses.
+Accès : **Explorateur**, dans le groupe Navigation du menu, à côté des [Rapports](reports/overview.md). Il remplace l'ancien onglet *Requêteur* de la page Rapports ; les rapports enregistrés avec ce dernier sont convertis automatiquement en analyses.
 
 ---
 
@@ -216,7 +216,7 @@ Un nombre s'utilise comme mesure, un texte comme ligne ou comme filtre. L'expres
 
 **Enregistrer** ouvre une fenêtre avec le **Nom** (dans la langue de l'interface), **Visible par** — *Tous les utilisateurs qui ouvrent l'Explorateur* ou *Moi seulement* — puis **Enregistrer** ou **Enregistrer sous**. *Enregistrer* remplace l'analyse ; *Enregistrer sous* en crée une copie sous le nouveau nom : c'est ainsi qu'une analyse fournie s'adapte en gardant l'originale. Les analyses enregistrées sont classées par public (IT, Comptabilité, Audit, Personnalisées) et par nom ; en choisir une l'exécute aussitôt avec sa propre période.
 
-Chaque analyse et chaque tableau de bord est un fichier JSON du dossier de configuration de l'environnement (`analyses/`, `dashboards/`). Les deux se transportent vers une autre instance par la [promotion](../management/promotion.md) — un tableau de bord emporte ses analyses — et le [rapport d'implémentation](./implementation-report.md) les recense.
+Chaque analyse et chaque tableau de bord est un fichier JSON du dossier de configuration de l'environnement (`analyses/`, `dashboards/`). Les deux se transportent vers une autre instance par la [promotion](../management/promotion.md) — un tableau de bord emporte ses analyses — et le [rapport d'implémentation](reports/implementation-report.md) les recense.
 
 ---
 
@@ -342,7 +342,7 @@ NomaUBL installe douze analyses et trois tableaux de bord, une seule fois ; ils 
 | **Comptabilité** | Clôture du mois | TVA par mois et par taux · Montants par statut · Principaux clients · Factures et avoirs par mois |
 | **Audit** | Période d'audit | Contrôles par règle · Refus et rejets par motif · Évènements de statut par mois · Statistiques des statuts |
 
-*Statistiques des statuts* reproduit le tableau croisé de la page [Rapports](./reports.md), dont l'onglet reste inchangé.
+*Statistiques des statuts* reproduit le tableau croisé de la page [Rapports](reports/overview.md), dont l'onglet reste inchangé.
 
 ---
 
@@ -350,7 +350,7 @@ NomaUBL installe douze analyses et trois tableaux de bord, une seule fois ; ils 
 
 | Export | Contenu |
 |---|---|
-| **PDF** | Une analyse ou un tableau de bord dans la mise en page du [rapport d'audit](./audit-report.md) : page de garde avec environnement, période, date, auteur et version, sommaire pour un tableau de bord, en-têtes courants, chaque graphique avec toutes ses données, filtres rappelés. |
+| **PDF** | Une analyse ou un tableau de bord dans la mise en page du [rapport d'audit](reports/audit-report.md) : page de garde avec environnement, période, date, auteur et version, sommaire pour un tableau de bord, en-têtes courants, chaque graphique avec toutes ses données, filtres rappelés. |
 | **Excel** | Le tableau croisé ; un tableau de bord avec une feuille par tuile. |
 | **PNG** | Le graphique d'une analyse. |
 

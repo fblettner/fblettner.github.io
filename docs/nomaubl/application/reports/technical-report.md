@@ -6,7 +6,7 @@ keywords: [NomaUBL, technical report, developer documentation, data model, flows
 
 # Technical Report
 
-The **Technical report** tab of the [Reports](./reports.md) page writes the **developer documentation of the release**: how NomaUBL is built, what each table and configuration key is for, which flows touch them, what the API offers. It is generated from the code scans bundled in the application at build — the same sources as the [Developer reference](../references/developer.md) — so it is **identical on every instance of a release**, whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
+The **Technical report** tab of the [Reports](./overview.md) page writes the **developer documentation of the release**: how NomaUBL is built, what each table and configuration key is for, which flows touch them, what the API offers. It is generated from the code scans bundled in the application at build — the same sources as the [Developer reference](../../references/developer.md) — so it is **identical on every instance of a release**, whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
 
 It complements the two other documents of the page: the [implementation report](./implementation-report.md) describes how *this* instance is configured, the [audit report](./audit-report.md) what happened over a period.
 
@@ -155,7 +155,7 @@ It complements the two other documents of the page: the [implementation report](
 java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--api-detail] [--snippets]
 ```
 
-Defaults: every section, Markdown, French, output `nomaubl-technical-<lang>.md` in the current folder (the command line keeps no copy in `reports`). See [Command line](../management/command-line.md#techreport).
+Defaults: every section, Markdown, French, output `nomaubl-technical-<lang>.md` in the current folder (the command line keeps no copy in `reports`). See [Command line](../../management/command-line.md#techreport).
 
 The API route is `GET /api/reports/technical` with the parameters `lang`, `format`, `date`, `sections`, `apiDetail` and `snippets`.
 
@@ -163,7 +163,7 @@ The API route is `GET /api/reports/technical` with the parameters `lang`, `forma
 
 ## Access
 
-The tab belongs to the *Reports* page — grant **Reports** on the [Roles](../configuration/security/roles.md) page. Generating the report also requires the *Settings access* feature.
+The tab belongs to the *Reports* page — grant **Reports** on the [Roles](../../configuration/security/roles.md) page. Generating the report also requires the *Settings access* feature.
 
 ---
 

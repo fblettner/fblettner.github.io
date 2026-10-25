@@ -18,5 +18,9 @@
   "copyright": {
     "message": "Copyright © 2026 Nomana-IT. Propulsé par Docusaurus.",
     "description": "The footer copyright"
+  },
+  "link.item.label.Cookies": {
+    "message": "Cookies",
+    "description": "The label of footer link with label=Cookies linking to /cookies"
   }
 }

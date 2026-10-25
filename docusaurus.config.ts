@@ -143,6 +143,10 @@ const config: Config = {
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
+          {from: '/nomaubl/application/technical-report', to: '/nomaubl/application/reports/technical-report'},
+          {from: '/nomaubl/application/implementation-report', to: '/nomaubl/application/reports/implementation-report'},
+          {from: '/nomaubl/application/audit-report', to: '/nomaubl/application/reports/audit-report'},
+          {from: '/nomaubl/application/reports', to: '/nomaubl/application/reports/overview'},
           // 2026.10.24 — Diagnostics page hosts the error and log views; Scheduled jobs page hosts digests,
           // auto-retries and lifecycle checks; Watched folders back under Management.
           {from: '/nomaubl/management/lifecycle-checks', to: '/nomaubl/sync/scheduled-jobs/lifecycle-checks'},

@@ -450,7 +450,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Installation',
-      link: {type: 'generated-index', slug: '/nomaubl/installation', description: 'Stand up a NomaUBL server — JDK 17 + Oracle or PostgreSQL, run -install, configure every connector from the Settings UI, start the service via nomaubl.sh (Linux/macOS) or nomaubl.cmd (Windows), optionally wire to systemd + a reverse proxy, and upgrade in place when a new release ships.'},
+      link: {type: 'generated-index', slug: '/nomaubl/installation', description: 'Stand up a NomaUBL server — JDK 17 + Oracle or PostgreSQL, run -install, configure every connector from the Settings UI, start the service via nomaubl.sh (Linux/macOS) or nomaubl.cmd (Windows), optionally wire to systemd + a reverse proxy, upgrade in place when a new release ships, and fill a demonstration instance with the demo corpus.'},
       items: [
         'nomaubl/installation/overview',
         'nomaubl/installation/requirements',
@@ -464,7 +464,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Monitoring',
-      link: {type: 'generated-index', slug: '/nomaubl/monitoring', description: 'Where to look when running NomaUBL — Tech Dashboard, Processing Log, the service log file, /api/build-info and /api/license. Plus patterns for external alerting and log forwarding.'},
+      link: {type: 'generated-index', slug: '/nomaubl/monitoring', description: 'Where to look when running NomaUBL — Tech Dashboard, Diagnostics, Scheduled jobs, the service log file, /api/build-info and /api/license. Plus patterns for external alerting and log forwarding.'},
       items: [
         'nomaubl/monitoring/overview',
         'nomaubl/monitoring/service-and-logs',
@@ -473,7 +473,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Application',
-      link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: dashboard, tech dashboard, invoices, e-reporting, e-directory, VAT declaration, reports (implementation and audit), Diagnostics (integration errors, processing log, failures, server log), notifications and the AI assistant.'},
+      link: {type: 'generated-index', slug: '/nomaubl/application', description: 'Main app navigation: dashboard, tech dashboard, invoices, e-reporting, e-directory, VAT declaration, reports (audit, implementation, technical), the Explorer, notifications, Diagnostics (integration errors, processing log, failures, server log) and the AI assistant.'},
       items: [
         'nomaubl/application/dashboard',
         'nomaubl/application/tech-dashboard',
@@ -482,11 +482,18 @@ const sidebars: SidebarsConfig = {
         'nomaubl/application/ereporting',
         'nomaubl/application/edirectory',
         'nomaubl/application/vat-declaration',
-        'nomaubl/application/reports',
+        {
+          type: 'category',
+          label: 'Reports',
+          link: {type: 'doc', id: 'nomaubl/application/reports/overview'},
+          items: [
+            'nomaubl/application/reports/audit-report',
+            'nomaubl/application/reports/implementation-report',
+            'nomaubl/application/reports/technical-report',
+          ],
+        },
         'nomaubl/application/explorer',
-        'nomaubl/application/implementation-report',
-        'nomaubl/application/audit-report',
-        'nomaubl/application/technical-report',
+        'nomaubl/application/notifications',
         {
           type: 'category',
           label: 'Diagnostics',
@@ -498,7 +505,6 @@ const sidebars: SidebarsConfig = {
             'nomaubl/application/diagnostics/server-log',
           ],
         },
-        'nomaubl/application/notifications',
         'nomaubl/application/ai-capabilities',
       ],
     },
@@ -535,7 +541,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'UBL Tools',
-      link: {type: 'generated-index', slug: '/nomaubl/ubl-tools', description: 'Validate, edit and inspect UBL/XML; manage UBL defaults.'},
+      link: {type: 'generated-index', slug: '/nomaubl/ubl-tools', description: 'Validate, edit and inspect UBL/XML; rule sets, post-transform to other syntaxes and the UBL defaults.'},
       items: [
         'nomaubl/ubl-tools/validate',
         'nomaubl/ubl-tools/xsl-editor',
@@ -641,7 +647,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'References',
-      link: {type: 'generated-index', slug: '/nomaubl/references', description: 'Reference docs surfaced inside the app: status codes, reason codes, UBL semantics, database schema and HTTP API.'},
+      link: {type: 'generated-index', slug: '/nomaubl/references', description: 'Reference docs surfaced inside the app: status codes, reason codes, UBL semantics, business rules, database schema, developer reference and HTTP API.'},
       items: [
         'nomaubl/references/status-reference',
         'nomaubl/references/reason-codes',

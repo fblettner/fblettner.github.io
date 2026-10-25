@@ -6,7 +6,7 @@ keywords: [NomaUBL, integrity reports, integrity checks, SQL, reconciliation, an
 
 # Integrity Reports
 
-The **Integrity reports** system template holds a list of **SQL checks** that compare NomaUBL with a source system and list what is **missing or wrong**: print jobs that were never integrated, accounting records whose amounts differ from the e-invoices… Each check runs read-only `SELECT` statements — a single query, or a source query and a target query on two different databases compared in memory — and **every row it returns is one anomaly**. The results are shown on the **Integrity** tab of the [Reports](../../application/reports.md#integrity) page, where a check can also carry an **action** on the selected rows.
+The **Integrity reports** system template holds a list of **SQL checks** that compare NomaUBL with a source system and list what is **missing or wrong**: print jobs that were never integrated, accounting records whose amounts differ from the e-invoices… Each check runs read-only `SELECT` statements — a single query, or a source query and a target query on two different databases compared in memory — and **every row it returns is one anomaly**. The results are shown on the **Integrity** tab of the [Reports](../../application/reports/overview.md#integrity) page, where a check can also carry an **action** on the selected rows.
 
 Open it under **Configuration → System → Integrity reports**. On an installation that does not have the template yet, an **Add integrity reports** button creates it without restarting the service. The template ships empty: nothing appears on the Reports page until a check is defined.
 

@@ -30,5 +30,9 @@
   "item.label.Blog": {
     "message": "Blog",
     "description": "Navbar item with label Blog"
+  },
+  "item.label.Nomaflow": {
+    "message": "Nomaflow",
+    "description": "Navbar item with label Nomaflow"
   }
 }

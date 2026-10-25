@@ -539,7 +539,7 @@ The job switches — `-fetch-import`, `-fetch-status`, `-fetch-received`, `-erep
 
 ## `-report` — implementation report \{#report\}
 
-Writes the [implementation report](../application/implementation-report.md) of the instance — the same document as the *Implementation report* tab of the Reports page — for a scripted run or to keep it with a release.
+Writes the [implementation report](../application/reports/implementation-report.md) of the instance — the same document as the *Implementation report* tab of the Reports page — for a scripted run or to keep it with a release.
 
 ```bash
 java -jar nomaubl.jar -report /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--keys] [--sections a,b,...]
@@ -560,7 +560,7 @@ Secrets are masked, as in the application.
 
 ## `-audit` — audit report of a period \{#audit\}
 
-Writes the [audit report](../application/audit-report.md) of a period — the same document as the *Audit report* tab of the Reports page.
+Writes the [audit report](../application/reports/audit-report.md) of a period — the same document as the *Audit report* tab of the Reports page.
 
 ```bash
 java -jar nomaubl.jar -audit /opt/nomaubl/demo/config/config.json [--from <yyyy-MM-dd> --to <yyyy-MM-dd>] [--basis issue|update] [--kco a,b] [--direction I|R] [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--integrity]
@@ -582,7 +582,7 @@ A monthly cron on the first day of the month produces the report of the month ju
 
 ## `-techreport` — technical report \{#techreport\}
 
-Writes the [technical report](../application/technical-report.md) of the release — the developer documentation generated from the code scans bundled at build.
+Writes the [technical report](../application/reports/technical-report.md) of the release — the developer documentation generated from the code scans bundled at build.
 
 ```bash
 java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--api-detail] [--snippets]

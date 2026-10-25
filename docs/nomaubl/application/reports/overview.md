@@ -6,7 +6,7 @@ keywords: [NomaUBL, reports, reporting, audit report, implementation report, tec
 
 # Reports
 
-The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has five tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, and three documents generated on demand, the [Audit report](./audit-report.md), the [Implementation report](./implementation-report.md) and the [Technical report](./technical-report.md). Free analyses — any field, grouping, chart or dashboard — are built in the [Explorer](./explorer.md), which replaces the former query tool.
+The **Reports** page is the analytical view of NomaUBL — it turns the invoice, archive, lifecycle and validation data into figures a team can read and export, without writing SQL. It has five tabs: a ready-made **Status statistics** pivot, **Integrity** — SQL checks that list what is missing or wrong compared with a source system —, and three documents generated on demand, the [Audit report](./audit-report.md), the [Implementation report](./implementation-report.md) and the [Technical report](./technical-report.md). Free analyses — any field, grouping, chart or dashboard — are built in the [Explorer](../explorer.md), which replaces the former query tool.
 
 Open it from the sidebar — **Reports**. Access is granted per role (see [Access](#access) below).
 
@@ -67,15 +67,15 @@ The first tab is a ready-made pivot: **invoice counts** broken down by **activit
 - **Choose the measure.** The **Measure** switch counts invoices (**Invoice count**, the default) or sums their tax-exclusive amount (**Net amount**, BT-109). Cells, subtotals and percentages follow the measure — a handful of invoices can carry most of the money. The Excel export follows the view, and its data sheet carries both figures.
 - **Expand / collapse** any activity or status to drill down; **subtotals** are shown at every level.
 - A status that has a single rejection reason renders as **one compact line** rather than an extra nested row.
-- The **period filter** at the top offers the same three date bases as the [Dashboard](./dashboard.md) — *Activity date*, *Document date* or *Archive date* — so the report reconciles with the figures shown elsewhere.
-- **Exclude reviewed errors** leaves out the invoices already reviewed by customer service that still sit in an error status — the same toggle as on the [Dashboard](./dashboard.md#exclude-reviewed); reviewed invoices in other statuses stay counted.
+- The **period filter** at the top offers the same three date bases as the [Dashboard](../dashboard.md) — *Activity date*, *Document date* or *Archive date* — so the report reconciles with the figures shown elsewhere.
+- **Exclude reviewed errors** leaves out the invoices already reviewed by customer service that still sit in an error status — the same toggle as on the [Dashboard](../dashboard.md#exclude-reviewed); reviewed invoices in other statuses stay counted.
 - **Export Excel** writes a workbook with **two sheets**: the report exactly as displayed, and the flat underlying data ready for your own pivot tables.
 
 ---
 
 ## Integrity \{#integrity\}
 
-The **Integrity** tab runs the SQL checks defined under [Configuration → System → Integrity reports](../configuration/system/integrity-reports.md): pick a check, a period (last 30 days by default) and **Run**. Every row of the result is one anomaly, shown in the standard grid (search, filters, columns, export). A check that carries an action lets you tick rows and **Integrate the selection** — see [Integrity reports](../configuration/system/integrity-reports.md#reports-integrity) for the full walkthrough.
+The **Integrity** tab runs the SQL checks defined under [Configuration → System → Integrity reports](../../configuration/system/integrity-reports.md): pick a check, a period (last 30 days by default) and **Run**. Every row of the result is one anomaly, shown in the standard grid (search, filters, columns, export). A check that carries an action lets you tick rows and **Integrate the selection** — see [Integrity reports](../../configuration/system/integrity-reports.md#reports-integrity) for the full walkthrough.
 
 ---
 
@@ -89,18 +89,18 @@ These three tabs generate a document, in PDF or Markdown, rather than a grid:
 | **Implementation report** | The documentation of the instance as it runs — architecture, built-in rules, documents and UBL mappings, platform settings, operations, security — for a hand-over file or an upgrade snapshot. | [Implementation report](./implementation-report.md) |
 | **Technical report** | The developer documentation of the release — data model, flows, configuration reference, status model, API — identical on every instance. | [Technical report](./technical-report.md) |
 
-All three are also available from the [command line](../management/command-line.md#report), to schedule them or keep them with a release.
+All three are also available from the [command line](../../management/command-line.md#report), to schedule them or keep them with a release.
 
 ---
 
 ## Access
 
-The Reports page is gated **per role**: grant the *Reports* page in the **Navigation** group on the [Roles](../configuration/security/roles.md) page. Without it, the sidebar entry is hidden.
+The Reports page is gated **per role**: grant the *Reports* page in the **Navigation** group on the [Roles](../../configuration/security/roles.md) page. Without it, the sidebar entry is hidden.
 
 ---
 
 ## Tips & best practices
 
 - **Start from Status statistics for the recurring read.** It answers "how many invoices, in which status, and why rejected" without any setup — export the two-sheet workbook when a colleague wants to pivot the raw figures.
-- **Build the recurring extractions in the [Explorer](./explorer.md).** A saved analysis keeps its fields, filters and view, can go into a dashboard and be sent by daily digest.
+- **Build the recurring extractions in the [Explorer](../explorer.md).** A saved analysis keeps its fields, filters and view, can go into a dashboard and be sent by daily digest.
 - **Match the date basis to the question.** *Archive date* answers "what did we process", *Document date* "what did we issue", *Activity date* "what changed" — pick the one the audience expects before reading the counts.

@@ -6,7 +6,7 @@ keywords: [NomaUBL, rapport d'implémentation, documentation, documentation tech
 
 # Rapport d'implémentation
 
-L'onglet **Rapport d'implémentation** de la page [Rapports](./reports.md) rédige la documentation de l'instance sur laquelle on est connecté : ce qui est configuré, comment chaque document devient un UBL, quelles règles s'appliquent, qui peut faire quoi. Tout est lu dans les fichiers de configuration et dans la base au moment de la génération : le rapport décrit donc toujours l'instance telle qu'elle fonctionne au moment de la génération, quel que soit le système source (JD Edwards, SAP, NetSuite ou ERP personnalisé).
+L'onglet **Rapport d'implémentation** de la page [Rapports](./overview.md) rédige la documentation de l'instance sur laquelle on est connecté : ce qui est configuré, comment chaque document devient un UBL, quelles règles s'appliquent, qui peut faire quoi. Tout est lu dans les fichiers de configuration et dans la base au moment de la génération : le rapport décrit donc toujours l'instance telle qu'elle fonctionne au moment de la génération, quel que soit le système source (JD Edwards, SAP, NetSuite ou ERP personnalisé).
 
 Usages courants : le dossier de passation d'un projet, la description demandée par un auditeur ou un conseil fiscal, l'état des lieux avant une mise à jour, la référence qu'une équipe de support garde à côté de l'instance de production.
 
@@ -150,18 +150,18 @@ java -jar nomaubl.jar -report <configFile> [--lang fr|en] [--format md|pdf] [--o
      [--date <label>] [--keys] [--sections context,architecture,...]
 ```
 
-Par défaut : les neuf premières sections, en Markdown, en français. Voir [Ligne de commande](../management/command-line.md#report).
+Par défaut : les neuf premières sections, en Markdown, en français. Voir [Ligne de commande](../../management/command-line.md#report).
 
 ---
 
 ## Accès
 
-L'onglet fait partie de la page *Rapports* : accorder **Rapports** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md). La route d'API est `GET /api/reports/implementation`.
+L'onglet fait partie de la page *Rapports* : accorder **Rapports** dans le groupe Navigation de la page [Rôles](../../configuration/security/roles.md). La route d'API est `GET /api/reports/implementation`.
 
 ---
 
 ## Conseils & bonnes pratiques
 
-- **Le produire après chaque mise en production et chaque mise à jour.** La copie conservée dans le dossier `reports` forme l'historique daté de la configuration, à côté des [versions de fichiers](../management/file-versions.md).
+- **Le produire après chaque mise en production et chaque mise à jour.** La copie conservée dans le dossier `reports` forme l'historique daté de la configuration, à côté des [versions de fichiers](../../management/file-versions.md).
 - **Laisser les clés techniques masquées pour un lecteur métier.** Les libellés suffisent à une équipe projet ; les clés servent à ceux qui modifient les fichiers de configuration ou lisent l'API.
 - **Réserver les annexes au dossier d'audit.** Les annexes des clés de configuration et de l'API multiplient la longueur du PDF.

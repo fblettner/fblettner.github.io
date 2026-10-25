@@ -8,7 +8,7 @@ keywords: [NomaUBL, Explorer, analysis, self-service, pivot, cross table, dashbo
 
 The **Explorer** builds analyses of the invoice data without writing SQL. The fields of seven entities around the invoice are dropped onto **Rows**, **Measures** and **Filters**; the result shows as a table, a pivot, detail rows or a chart, and any value opens the invoices behind it. Analyses are saved, shared and gathered into **dashboards**. Ready-made analyses and dashboards come for IT, accounting and audit. The Explorer works the same whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP) and on every supported database.
 
-Open it from **Explorer**, in the Navigation group of the menu, next to [Reports](./reports.md). It replaces the former *Query tool* tab of the Reports page; the reports saved there are converted into analyses automatically.
+Open it from **Explorer**, in the Navigation group of the menu, next to [Reports](reports/overview.md). It replaces the former *Query tool* tab of the Reports page; the reports saved there are converted into analyses automatically.
 
 ---
 
@@ -216,7 +216,7 @@ A number can be used as a measure, a text as a row or a filter. The expression r
 
 **Save** opens a window with the **Name** (in the interface's language), **Visible to** — *Every user who can open the Explorer* or *Only me* — then **Save** or **Save as**. *Save* replaces the analysis; *Save as* creates a copy under the new name, which is how a provided analysis is adapted while keeping the original. The saved analyses are listed by audience (IT, Accounting, Audit, Custom) and name; picking one runs it at once with its own period.
 
-Each analysis and each dashboard is one JSON file under the environment's configuration folder (`analyses/`, `dashboards/`). Both can be carried to another instance with [Promotion](../management/promotion.md) — a dashboard brings its analyses — and the [implementation report](./implementation-report.md) lists them.
+Each analysis and each dashboard is one JSON file under the environment's configuration folder (`analyses/`, `dashboards/`). Both can be carried to another instance with [Promotion](../management/promotion.md) — a dashboard brings its analyses — and the [implementation report](reports/implementation-report.md) lists them.
 
 ---
 
@@ -342,7 +342,7 @@ NomaUBL installs twelve analyses and three dashboards, once; they are never over
 | **Accounting** | Month end | VAT per month and rate · Amounts per status · Top customers · Invoices and credit notes per month |
 | **Audit** | Audit period | Findings per rule · Refusals and rejections per reason · Status events per month · Status statistics |
 
-*Status statistics* reproduces the pivot of the [Reports](./reports.md) page, whose tab stays as it is.
+*Status statistics* reproduces the pivot of the [Reports](reports/overview.md) page, whose tab stays as it is.
 
 ---
 
@@ -350,7 +350,7 @@ NomaUBL installs twelve analyses and three dashboards, once; they are never over
 
 | Export | Content |
 |---|---|
-| **PDF** | An analysis or a dashboard in the [audit report](./audit-report.md) layout: cover with environment, period, date, author and version, contents for a dashboard, running headers, each chart with all its data, filters noted. |
+| **PDF** | An analysis or a dashboard in the [audit report](reports/audit-report.md) layout: cover with environment, period, date, author and version, contents for a dashboard, running headers, each chart with all its data, filters noted. |
 | **Excel** | The cross table; a dashboard as one sheet per tile. |
 | **PNG** | The chart of an analysis. |
 

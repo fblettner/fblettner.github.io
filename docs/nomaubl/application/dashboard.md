@@ -215,7 +215,7 @@ Next to the period filter, a **date basis** selector chooses which date the whol
 | **Document date** | The date invoices were issued (BT-2). |
 | **Archive date** | The date documents were processed into the archive. |
 
-Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the choice. The [E-Invoicing](./invoices.md#date-basis) list and the [Reports](./reports.md) page offer the same *Archive date* basis.
+Hero cards, status pipeline, daily volume, per-company and top-error widgets all follow the choice. The [E-Invoicing](./invoices.md#date-basis) list and the [Reports](reports/overview.md) page offer the same *Archive date* basis.
 
 ### Exclude reviewed errors \{#exclude-reviewed\}
 

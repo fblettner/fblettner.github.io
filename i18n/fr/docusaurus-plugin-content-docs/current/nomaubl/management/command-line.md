@@ -539,7 +539,7 @@ Les options de tâche — `-fetch-import`, `-fetch-status`, `-fetch-received`, `
 
 ## `-report` — rapport d'implémentation \{#report\}
 
-Produit le [rapport d'implémentation](../application/implementation-report.md) de l'instance — le même document que l'onglet *Rapport d'implémentation* de la page Rapports — pour une exécution par script ou pour le conserver avec une version.
+Produit le [rapport d'implémentation](../application/reports/implementation-report.md) de l'instance — le même document que l'onglet *Rapport d'implémentation* de la page Rapports — pour une exécution par script ou pour le conserver avec une version.
 
 ```bash
 java -jar nomaubl.jar -report /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <fichier>] [--date <libellé>] [--keys] [--sections a,b,...]
@@ -560,7 +560,7 @@ Les secrets sont masqués, comme dans l'application.
 
 ## `-audit` — rapport d'audit d'une période \{#audit\}
 
-Produit le [rapport d'audit](../application/audit-report.md) d'une période — le même document que l'onglet *Rapport d'audit* de la page Rapports.
+Produit le [rapport d'audit](../application/reports/audit-report.md) d'une période — le même document que l'onglet *Rapport d'audit* de la page Rapports.
 
 ```bash
 java -jar nomaubl.jar -audit /opt/nomaubl/demo/config/config.json [--from <aaaa-MM-jj> --to <aaaa-MM-jj>] [--basis issue|update] [--kco a,b] [--direction I|R] [--lang fr|en] [--format md|pdf] [--out <fichier>] [--date <libellé>] [--sections a,b,...] [--integrity]
@@ -582,7 +582,7 @@ Un cron mensuel lancé le premier jour du mois produit le rapport du mois écoul
 
 ## `-techreport` — rapport technique \{#techreport\}
 
-Produit le [rapport technique](../application/technical-report.md) de la version — la documentation développeur tirée des analyses du code embarquées à la construction.
+Produit le [rapport technique](../application/reports/technical-report.md) de la version — la documentation développeur tirée des analyses du code embarquées à la construction.
 
 ```bash
 java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <fichier>] [--date <libellé>] [--sections a,b,...] [--api-detail] [--snippets]

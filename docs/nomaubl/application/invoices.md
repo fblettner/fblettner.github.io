@@ -189,7 +189,7 @@ A selector sits next to the date range and controls **which date column the peri
 |---|---|---|
 | **Update date** *(default)* | The last time the invoice was modified in NomaUBL. | Day-to-day operations — same behaviour as the list has always had. |
 | **Issue date** | The date printed on the invoice itself (BT-2 from the UBL). | Reconciling against the [VAT Declaration](./vat-declaration.md) page or any external system that keys off the issue date. |
-| **Archive date** | The date the document was processed into the archive. | Reconciling against the [Reports](./reports.md) page and the [Dashboard](./dashboard.md), which offer the same *Archive date* basis. |
+| **Archive date** | The date the document was processed into the archive. | Reconciling against the [Reports](reports/overview.md) page and the [Dashboard](./dashboard.md), which offer the same *Archive date* basis. |
 
 The choice is **remembered for the current session** — closing the modal of an invoice and reopening the list keeps the selector where it was. The toggle is also **pre-selected automatically** when the Invoices list is opened from a VAT page drill-down, so the count on Invoices matches the count you came from.
 

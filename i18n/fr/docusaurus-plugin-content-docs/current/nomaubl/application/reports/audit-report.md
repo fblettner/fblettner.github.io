@@ -6,7 +6,7 @@ keywords: [NomaUBL, rapport d'audit, audit facturation électronique, rapport de
 
 # Rapport d'audit
 
-L'onglet **Rapport d'audit** de la page [Rapports](./reports.md) mesure le déroulement de la facturation électronique sur une période : combien de factures ont été traitées, déposées, approuvées, rejetées ou refusées, ce qui attend encore une action, la durée de chaque étape, les erreurs rencontrées et leur traitement. Les chiffres viennent **uniquement des tables NomaUBL** au moment de la génération ; la plateforme n'est pas interrogée.
+L'onglet **Rapport d'audit** de la page [Rapports](./overview.md) mesure le déroulement de la facturation électronique sur une période : combien de factures ont été traitées, déposées, approuvées, rejetées ou refusées, ce qui attend encore une action, la durée de chaque étape, les erreurs rencontrées et leur traitement. Les chiffres viennent **uniquement des tables NomaUBL** au moment de la génération ; la plateforme n'est pas interrogée.
 
 Le rapport reste court quel que soit le volume — il ne liste aucune facture — et peut donc être transmis tel quel à une direction financière, à un auditeur ou à un comité de pilotage. Il s'applique à tout système source (JD Edwards, SAP, NetSuite ou ERP personnalisé).
 
@@ -123,7 +123,7 @@ Accès : **Rapports → Rapport d'audit**.
 | **Direction** | Émises et reçues, émises seulement, reçues seulement. |
 | **Langue** | Français ou anglais ; par défaut, la langue de l'interface. |
 | **Sections** | Cocher les parties à inclure ; toutes sont cochées par défaut. |
-| **Exécuter aussi les contrôles d'intégrité SQL avec JDE** | Visible quand *Contrôles de cohérence* est cochée. Exécute sur la période les contrôles configurés dans [Rapports d'intégrité](../configuration/system/integrity-reports.md) et ajoute leur nombre d'écarts. Plus long : chaque contrôle interroge le système source. |
+| **Exécuter aussi les contrôles d'intégrité SQL avec JDE** | Visible quand *Contrôles de cohérence* est cochée. Exécute sur la période les contrôles configurés dans [Rapports d'intégrité](../../configuration/system/integrity-reports.md) et ajoute leur nombre d'écarts. Plus long : chaque contrôle interroge le système source. |
 | **Télécharger le PDF / Télécharger le Markdown** | Lance la génération **en arrière-plan**. Une barre de progression nomme l'étape en cours ; le fichier se télécharge à la fin et une copie est conservée dans `<appHome>/<env>/reports/nomaubl-audit-<date>-<heure>.pdf` ou `.md`. Le reste de l'application reste utilisable pendant ce temps. |
 
 ---
@@ -141,7 +141,7 @@ Les chiffres clés de la période, à côté de la période précédente et de l
 | Indicateur | Signification |
 |---|---|
 | **Factures traitées** | Factures de la période, quel que soit leur statut. |
-| **Hors envoi plateforme** | Factures dont le type de flux est réglé pour ne pas être envoyé (B2C, international… selon les [types de document](../configuration/system/document-types.md)). |
+| **Hors envoi plateforme** | Factures dont le type de flux est réglé pour ne pas être envoyé (B2C, international… selon les [types de document](../../configuration/system/document-types.md)). |
 | **Déposées sur la plateforme** | Factures dont le statut courant vient de la plateforme (`200` et suivants). Le **taux de dépôt** se calcule sur les factures **à envoyer**. |
 | **Déposées mais non transmises** | `200` avec le motif `NON_TRANSMISE` : le destinataire n'est inscrit auprès d'aucune plateforme ; la facture est à remettre par un autre canal. |
 | **Approuvées / complétées / payées**, **Refusées (`210`)**, **Rejetées (`213`)** | Issues de la période. |
@@ -166,7 +166,7 @@ Le statut courant des factures de la période : code, libellé, groupes du catal
 
 ### Reste à traiter, toutes périodes
 
-Ce qui attend encore une action **quelle que soit sa date** : factures en erreur ou refusées non vues par le service client, en attente de la plateforme, déposées sans être transmises. Par statut avec le nombre de plus de 30 jours, le nombre déjà vu et le montant HT ; par société ; par ancienneté (30 jours ou moins, 31 à 90, 91 à 180, plus de 180) avec un graphique. La **Min invoice date** des [réglages e-invoicing](../configuration/system/einvoicing.md) borne ces chiffres : les factures antérieures en sont exclues.
+Ce qui attend encore une action **quelle que soit sa date** : factures en erreur ou refusées non vues par le service client, en attente de la plateforme, déposées sans être transmises. Par statut avec le nombre de plus de 30 jours, le nombre déjà vu et le montant HT ; par société ; par ancienneté (30 jours ou moins, 31 à 90, 91 à 180, plus de 180) avec un graphique. La **Min invoice date** des [réglages e-invoicing](../../configuration/system/einvoicing.md) borne ces chiffres : les factures antérieures en sont exclues.
 
 :::info[Ce que signifie « vue »]
 Une facture est *vue* dès que le service client l'a marquée traitée dans la fenêtre de facture. Elle sort du reste à traiter même si son statut n'a pas changé (avoir émis hors NomaUBL, facture abandonnée, doublon…).
@@ -203,7 +203,7 @@ Chaque contrôle compte les factures qui ne respectent pas une règle, sur la p�
 | À corriger et renvoyer sans suite | `213`, `9905`, `9907` ni traités ni vus. |
 | Réponse à l'acheteur attendue sans suite | `207`, `208`, `210` ni traités ni vus ; un avoir interne est obligatoire pour une facture refusée. |
 
-Avec l'option d'intégrité, suivent les **contrôles d'intégrité SQL avec JDE** et leur nombre d'écarts ; le détail se trouve dans l'onglet [Intégrité](./reports.md#integrite). L'ordre du cycle de vie et les événements de plateforme manquants localement sont couverts par le [contrôle quotidien du cycle de vie](../sync/scheduled-jobs/lifecycle-checks.md).
+Avec l'option d'intégrité, suivent les **contrôles d'intégrité SQL avec JDE** et leur nombre d'écarts ; le détail se trouve dans l'onglet [Intégrité](./overview.md#integrite). L'ordre du cycle de vie et les événements de plateforme manquants localement sont couverts par le [contrôle quotidien du cycle de vie](../../sync/scheduled-jobs/lifecycle-checks.md).
 
 ---
 
@@ -221,7 +221,7 @@ java -jar nomaubl.jar -audit <configFile> [--from <yyyy-MM-dd> --to <yyyy-MM-dd>
      [--format md|pdf] [--out <file>] [--date <label>] [--sections a,b,...] [--integrity]
 ```
 
-Par défaut : le mois précédent, toutes les sections, en Markdown, en français. Voir [Ligne de commande](../management/command-line.md#audit).
+Par défaut : le mois précédent, toutes les sections, en Markdown, en français. Voir [Ligne de commande](../../management/command-line.md#audit).
 
 L'API produit le même rapport en arrière-plan : `POST /api/reports/audit/start` renvoie un identifiant de tâche, `GET /api/jobs/{id}` donne l'étape en cours, `GET /api/reports/audit/result/{jobId}` renvoie le fichier une seule fois.
 
@@ -229,7 +229,7 @@ L'API produit le même rapport en arrière-plan : `POST /api/reports/audit/start
 
 ## Accès
 
-L'onglet fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../configuration/security/roles.md). Les chiffres suivent la visibilité par société de l'utilisateur connecté.
+L'onglet fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../../configuration/security/roles.md). Les chiffres suivent la visibilité par société de l'utilisateur connecté.
 
 ---
 
@@ -239,4 +239,4 @@ L'onglet fait partie de la page *Rapports* : accorder **Rapports** sur la page [
 - **Lire le reste à traiter avec les constats.** La synthèse porte sur les factures de la période ; le reste à traiter montre ce que les périodes antérieures laissent encore ouvert.
 - **Marquer vues les factures traitées hors NomaUBL.** Un avoir émis directement dans l'ERP ne change pas le statut de la facture d'origine ; la marquer vue garde un reste à traiter significatif.
 - **Renseigner la Min invoice date après une mise en production.** Les factures de test ou de reprise antérieures sortent alors des chiffres toutes périodes.
-- **La durée de chaque étape est écrite dans le journal serveur.** Sur une instance volumineuse, le [journal serveur](./diagnostics/server-log.md) montre la section qui prend du temps.
+- **La durée de chaque étape est écrite dans le journal serveur.** Sur une instance volumineuse, le [journal serveur](../diagnostics/server-log.md) montre la section qui prend du temps.

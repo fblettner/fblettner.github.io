@@ -6,7 +6,7 @@ keywords: [NomaUBL, implementation report, documentation, technical documentatio
 
 # Implementation Report
 
-The **Implementation report** tab of the [Reports](./reports.md) page writes the documentation of the instance you are signed in to: what is configured, how each document is turned into UBL, which rules apply, who can do what. Everything is read from the configuration files and the database at the time of generation, so the report always describes the instance as it runs — whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
+The **Implementation report** tab of the [Reports](./overview.md) page writes the documentation of the instance you are signed in to: what is configured, how each document is turned into UBL, which rules apply, who can do what. Everything is read from the configuration files and the database at the time of generation, so the report always describes the instance as it runs — whatever the source system (JD Edwards, SAP, NetSuite or a custom ERP).
 
 Typical uses: the hand-over file of a project, the description an auditor or a tax adviser asks for, the snapshot taken before an upgrade, the reference a support team keeps next to the production instance.
 
@@ -150,18 +150,18 @@ java -jar nomaubl.jar -report <configFile> [--lang fr|en] [--format md|pdf] [--o
      [--date <label>] [--keys] [--sections context,architecture,...]
 ```
 
-Defaults: the first nine sections, Markdown, French. See [Command line](../management/command-line.md#report).
+Defaults: the first nine sections, Markdown, French. See [Command line](../../management/command-line.md#report).
 
 ---
 
 ## Access
 
-The tab belongs to the *Reports* page: grant **Reports** in the Navigation group on the [Roles](../configuration/security/roles.md) page. The API route is `GET /api/reports/implementation`.
+The tab belongs to the *Reports* page: grant **Reports** in the Navigation group on the [Roles](../../configuration/security/roles.md) page. The API route is `GET /api/reports/implementation`.
 
 ---
 
 ## Tips & best practices
 
-- **Generate it after each go-live and each upgrade.** The copy kept in the `reports` folder becomes the dated history of the configuration, next to [File versions](../management/file-versions.md).
+- **Generate it after each go-live and each upgrade.** The copy kept in the `reports` folder becomes the dated history of the configuration, next to [File versions](../../management/file-versions.md).
 - **Keep the technical keys off for a business reader.** Labels are enough for a project team; turn the keys on for the people who edit configuration files or read the API.
 - **Add the appendices for an audit file only.** The configuration-keys and API appendices make the PDF several times longer.

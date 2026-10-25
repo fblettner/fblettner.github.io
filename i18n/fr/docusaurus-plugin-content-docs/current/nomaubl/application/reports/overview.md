@@ -6,7 +6,7 @@ keywords: [NomaUBL, rapports, reporting, rapport d'audit, rapport d'implémentat
 
 # Rapports
 
-La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle compte cinq onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts** ; **Intégrité**, des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source ; enfin trois documents produits à la demande, le [rapport d'audit](./audit-report.md), le [rapport d'implémentation](./implementation-report.md) et le [rapport technique](./technical-report.md). Les analyses libres — tout champ, tout regroupement, graphique ou tableau de bord — se construisent dans l'[Explorateur](./explorer.md), qui remplace l'ancien requêteur.
+La page **Rapports** est la vue analytique de NomaUBL — elle transforme les données de factures, d'archives, de cycle de vie et de validation en chiffres qu'une équipe peut lire et exporter, sans écrire de SQL. Elle compte cinq onglets : un tableau croisé prêt à l'emploi, **Statistiques statuts** ; **Intégrité**, des contrôles SQL qui listent ce qui manque ou diverge par rapport à un système source ; enfin trois documents produits à la demande, le [rapport d'audit](./audit-report.md), le [rapport d'implémentation](./implementation-report.md) et le [rapport technique](./technical-report.md). Les analyses libres — tout champ, tout regroupement, graphique ou tableau de bord — se construisent dans l'[Explorateur](../explorer.md), qui remplace l'ancien requêteur.
 
 Accès : menu **Rapports**. L'accès s'accorde par rôle (voir [Accès](#access) plus bas).
 
@@ -67,15 +67,15 @@ Le premier onglet est un tableau croisé prêt à l'emploi : le **nombre de fact
 - **Choisissez la mesure.** Le switch **Mesure** compte les factures (**Nombre de factures**, par défaut) ou additionne leur montant hors taxes (**Montant HT**, BT-109). Cellules, sous-totaux et pourcentages suivent la mesure — quelques factures peuvent porter l'essentiel des montants. L'export Excel suit l'affichage, et sa feuille de données porte les deux valeurs.
 - **Dépliez / repliez** une activité ou un statut pour descendre dans le détail ; les **sous-totaux** apparaissent à chaque niveau.
 - Un statut à motif de rejet unique tient sur **une seule ligne**, sans ligne imbriquée supplémentaire.
-- Le **filtre de période** en haut propose les trois mêmes bases de dates que le [Tableau de bord](./dashboard.md) — *Date d'activité*, *Date document* ou *Date d'archivage* — pour que le rapport se recoupe avec les chiffres affichés ailleurs.
-- **Exclure les erreurs traitées** écarte les factures déjà traitées par le service client qui restent dans un statut en erreur — le même bouton que sur le [Tableau de bord](./dashboard.md#exclure-erreurs-traitees) ; les factures traitées dans les autres statuts restent comptées.
+- Le **filtre de période** en haut propose les trois mêmes bases de dates que le [Tableau de bord](../dashboard.md) — *Date d'activité*, *Date document* ou *Date d'archivage* — pour que le rapport se recoupe avec les chiffres affichés ailleurs.
+- **Exclure les erreurs traitées** écarte les factures déjà traitées par le service client qui restent dans un statut en erreur — le même bouton que sur le [Tableau de bord](../dashboard.md#exclure-erreurs-traitees) ; les factures traitées dans les autres statuts restent comptées.
 - **Export Excel** produit un classeur à **deux feuilles** : le rapport exactement tel qu'affiché, et les données brutes à plat, prêtes pour vos propres tableaux croisés.
 
 ---
 
 ## Intégrité \{#integrite\}
 
-L'onglet **Intégrité** exécute les contrôles SQL définis dans [Configuration → Système → Integrity reports](../configuration/system/integrity-reports.md) : choisir un contrôle, une période (30 derniers jours par défaut) puis **Exécuter**. Chaque ligne du résultat est une anomalie, affichée dans la grille standard (recherche, filtres, colonnes, export). Un contrôle doté d'une action permet de cocher des lignes puis d'**Intégrer la sélection** — le détail se trouve dans [Rapports d'intégrité](../configuration/system/integrity-reports.md#rapports-integrite).
+L'onglet **Intégrité** exécute les contrôles SQL définis dans [Configuration → Système → Integrity reports](../../configuration/system/integrity-reports.md) : choisir un contrôle, une période (30 derniers jours par défaut) puis **Exécuter**. Chaque ligne du résultat est une anomalie, affichée dans la grille standard (recherche, filtres, colonnes, export). Un contrôle doté d'une action permet de cocher des lignes puis d'**Intégrer la sélection** — le détail se trouve dans [Rapports d'intégrité](../../configuration/system/integrity-reports.md#rapports-integrite).
 
 ---
 
@@ -89,18 +89,18 @@ Ces trois onglets produisent un document, en PDF ou en Markdown, et non une gril
 | **Rapport d'implémentation** | La documentation de l'instance telle qu'elle fonctionne — architecture, règles intégrées, documents et correspondances UBL, paramètres des plateformes, exploitation, sécurité — pour un dossier de passation ou un état des lieux avant mise à jour. | [Rapport d'implémentation](./implementation-report.md) |
 | **Rapport technique** | La documentation développeur de la version — modèle de données, flux, référence de configuration, modèle de statuts, API — identique sur toutes les instances. | [Rapport technique](./technical-report.md) |
 
-Les trois sont aussi disponibles en [ligne de commande](../management/command-line.md#report), pour les planifier ou les conserver avec une version.
+Les trois sont aussi disponibles en [ligne de commande](../../management/command-line.md#report), pour les planifier ou les conserver avec une version.
 
 ---
 
 ## Accès \{#access\}
 
-La page Rapports s'accorde **par rôle** : activez la page *Rapports* du groupe **Navigation** sur la page [Rôles](../configuration/security/roles.md). Sans elle, l'entrée de menu reste masquée.
+La page Rapports s'accorde **par rôle** : activez la page *Rapports* du groupe **Navigation** sur la page [Rôles](../../configuration/security/roles.md). Sans elle, l'entrée de menu reste masquée.
 
 ---
 
 ## Conseils & bonnes pratiques
 
 - **Partir des Statistiques statuts pour la lecture récurrente.** Elles répondent à « combien de factures, dans quel statut, et pourquoi rejetées » sans réglage — exporter le classeur à deux feuilles quand un collègue veut croiser les chiffres bruts.
-- **Construire les extractions récurrentes dans l'[Explorateur](./explorer.md).** Une analyse enregistrée conserve ses champs, ses filtres et sa vue, peut entrer dans un tableau de bord et partir par rapport quotidien.
+- **Construire les extractions récurrentes dans l'[Explorateur](../explorer.md).** Une analyse enregistrée conserve ses champs, ses filtres et sa vue, peut entrer dans un tableau de bord et partir par rapport quotidien.
 - **Adapter la base de date à la question.** *Date d'archivage* répond à « ce que nous avons traité », *Date document* à « ce que nous avons émis », *Date d'activité* à « ce qui a changé » — choisir celle qu'attend le lecteur avant de lire les effectifs.

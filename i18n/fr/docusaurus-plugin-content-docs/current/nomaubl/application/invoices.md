@@ -189,7 +189,7 @@ Un sélecteur, à côté du filtre de période, choisit **sur quelle colonne de 
 |---|---|---|
 | **Date de mise à jour** *(par défaut)* | Dernière modification de la facture dans NomaUBL. | Exploitation au quotidien — comportement historique de la liste. |
 | **Date d'émission** | Celle imprimée sur la facture (BT-2 du document UBL). | Rapprochement avec la page [Déclaration de TVA](./vat-declaration.md) ou avec un système externe indexé sur la date d'émission. |
-| **Date d'archivage** | La date à laquelle le document a été traité dans l'archive. | Rapprochement avec la page [Rapports](./reports.md) et le [Tableau de bord](./dashboard.md), qui proposent la même base *Date d'archivage*. |
+| **Date d'archivage** | La date à laquelle le document a été traité dans l'archive. | Rapprochement avec la page [Rapports](reports/overview.md) et le [Tableau de bord](./dashboard.md), qui proposent la même base *Date d'archivage*. |
 
 Le choix est **conservé pendant la session en cours** — fermer la modale d'une facture et rouvrir la liste maintient la position du sélecteur. Le sélecteur est aussi **positionné automatiquement** quand la liste Factures est ouverte depuis un drill-down de la page TVA, donc le nombre affiché correspond à celui d'où l'on vient.
 

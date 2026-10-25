@@ -6,7 +6,7 @@ keywords: [NomaUBL, rapport technique, documentation développeur, modèle de do
 
 # Rapport technique
 
-L'onglet **Rapport technique** de la page [Rapports](./reports.md) produit la **documentation développeur de la version** : comment NomaUBL est construit, à quoi sert chaque table et chaque clé de configuration, quels flux les utilisent, ce que propose l'API. Il est produit à partir des analyses du code intégrées à l'application à la construction — les mêmes sources que la [référence développeur](../references/developer.md) — et il est donc **identique sur toutes les instances d'une même version**, quel que soit le système source (JD Edwards, SAP, NetSuite ou un ERP personnalisé).
+L'onglet **Rapport technique** de la page [Rapports](./overview.md) produit la **documentation développeur de la version** : comment NomaUBL est construit, à quoi sert chaque table et chaque clé de configuration, quels flux les utilisent, ce que propose l'API. Il est produit à partir des analyses du code intégrées à l'application à la construction — les mêmes sources que la [référence développeur](../../references/developer.md) — et il est donc **identique sur toutes les instances d'une même version**, quel que soit le système source (JD Edwards, SAP, NetSuite ou un ERP personnalisé).
 
 Il complète les deux autres documents de la page : le [rapport d'implémentation](./implementation-report.md) décrit le paramétrage de *cette* instance, le [rapport d'audit](./audit-report.md) l'activité d'une période.
 
@@ -155,7 +155,7 @@ Il complète les deux autres documents de la page : le [rapport d'implémentatio
 java -jar nomaubl.jar -techreport /opt/nomaubl/demo/config/config.json [--lang fr|en] [--format md|pdf] [--out <fichier>] [--date <libellé>] [--sections a,b,...] [--api-detail] [--snippets]
 ```
 
-Par défaut : toutes les sections, Markdown, français, fichier `nomaubl-technical-<langue>.md` dans le dossier courant (la ligne de commande ne conserve pas de copie dans `reports`). Voir [Ligne de commande](../management/command-line.md#techreport).
+Par défaut : toutes les sections, Markdown, français, fichier `nomaubl-technical-<langue>.md` dans le dossier courant (la ligne de commande ne conserve pas de copie dans `reports`). Voir [Ligne de commande](../../management/command-line.md#techreport).
 
 La route de l'API est `GET /api/reports/technical`, avec les paramètres `lang`, `format`, `date`, `sections`, `apiDetail` et `snippets`.
 
@@ -163,7 +163,7 @@ La route de l'API est `GET /api/reports/technical`, avec les paramètres `lang`,
 
 ## Accès
 
-L'onglet fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../configuration/security/roles.md). La génération demande en outre la fonctionnalité *Settings access*.
+L'onglet fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../../configuration/security/roles.md). La génération demande en outre la fonctionnalité *Settings access*.
 
 ---
 

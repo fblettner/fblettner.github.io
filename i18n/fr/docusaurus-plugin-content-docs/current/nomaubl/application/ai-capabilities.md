@@ -9,7 +9,7 @@ keywords: [NomaUBL, assistant IA, Claude, outils, contexte, suggestions, relance
 L'**Assistant IA** est un panneau de conversation intégré à NomaUBL. Il répond à trois types de questions :
 
 - *Comment fonctionne le produit ?* — à partir de la documentation NomaUBL, indexée par le serveur, avec le titre et le lien de la page utilisée.
-- *Comment cette instance est-elle paramétrée ?* — à partir du [rapport d'implémentation](./implementation-report.md) produit depuis la configuration de l'instance : documents, correspondances, règles, tâches, rôles.
+- *Comment cette instance est-elle paramétrée ?* — à partir du [rapport d'implémentation](reports/implementation-report.md) produit depuis la configuration de l'instance : documents, correspondances, règles, tâches, rôles.
 - *Où en sont mes données ?* — à partir de la base, en **lecture seule** : une facture complète, les chiffres d'une période, le reste à traiter, les erreurs, le journal serveur, les contrôles d'intégrité.
 
 L'assistant connaît **la page affichée et la facture ouverte** : *« pourquoi cette facture est-elle refusée ? »* ne demande aucun numéro à saisir. Les réponses s'affichent au fil de leur rédaction ; chaque appel d'outil apparaît sous forme de pastille avec les filtres utilisés ; chaque réponse se termine par des **boutons de relance**. L'assistant fonctionne en français ou en anglais et suit la langue de la question.
@@ -143,7 +143,7 @@ Chaque réponse se termine par **une à trois relances** : la réponse naturelle
 | **`search_docs`** | 📚 | Recherche dans la documentation NomaUBL, indexée par le serveur à partir de l'export texte intégral du site (`llms-full.txt`) ; renvoie les meilleures pages avec titre, URL et extrait. Appelé en premier pour toute question sur le produit. |
 | **`read_doc_page`** | 📖 | Lit une page trouvée par `search_docs`, par tranches de 12 000 caractères pour les pages longues. |
 | **`list_doc_pages`** | 📑 | La table des matières de la documentation, quand la recherche ne donne rien de pertinent. |
-| **`instance_docs`** | 🔍 | Le [rapport d'implémentation](./implementation-report.md) de cette instance : table des matières, une section, ou une recherche dans les sections. Appelé en premier pour toute question sur le paramétrage de *cette* instance. |
+| **`instance_docs`** | 🔍 | Le [rapport d'implémentation](reports/implementation-report.md) de cette instance : table des matières, une section, ou une recherche dans les sections. Appelé en premier pour toute question sur le paramétrage de *cette* instance. |
 
 La documentation est indexée par langue : une interface en français interroge les pages françaises, une interface en anglais les pages anglaises. L'index est actualisé toutes les six heures ; quand le site est injoignable, l'assistant utilise la copie de la documentation intégrée à l'application et le signale dans sa réponse.
 
@@ -157,7 +157,7 @@ L'assistant cite la page utilisée et en donne le lien. Il n'invente ni réglage
 | **`list_invoices`** | 🧾 | Jusqu'à 50 factures filtrées sur le statut, la société, le type de transaction (B2B / B2BINT / B2C / B2G / OUTOFSCOPE), le client, le numéro de facture (BT-1) et les dates d'émission. |
 | **`lifecycle_history`** | 🕘 | Tous les événements de statut d'une facture, avec le motif de rejet de la PA, l'action attendue et la note de statut. |
 | **`validation_errors`** | ⚠️ | Les erreurs de validation d'une facture (niveau, source, règle, message), comme dans les [Erreurs d'intégration](./diagnostics/integration-errors.md). |
-| **`period_figures`** | 🔍 | La synthèse d'une période tirée du [rapport d'audit](./audit-report.md) : indicateurs avec la période précédente et l'écart, ventilation des factures traitées, constats, et reste à traiter toutes périodes confondues (par statut, société et ancienneté). Par défaut : le mois en cours. |
+| **`period_figures`** | 🔍 | La synthèse d'une période tirée du [rapport d'audit](reports/audit-report.md) : indicateurs avec la période précédente et l'écart, ventilation des factures traitées, constats, et reste à traiter toutes périodes confondues (par statut, société et ancienneté). Par défaut : le mois en cours. |
 | **`dashboard_overview`** | 📊 | Les compteurs du [tableau de bord](./dashboard.md) sur une plage de dates. |
 | **`tech_dashboard`** | 🩺 | L'état de l'instance, comme sur le [tableau de bord IT](./tech-dashboard.md) : JVM, tâches planifiées et dernières exécutions, échecs d'envoi, factures en attente, anomalies de configuration, volumétrie des tables. |
 | **`server_log`** | 📜 | La fin du [journal serveur](./diagnostics/server-log.md), du plus récent au plus ancien, filtrée sur le niveau, le module et un texte. |
@@ -246,4 +246,4 @@ L'administrateur définit la clé d'API, le modèle par défaut, la source de do
 - **Ouvrir une nouvelle conversation pour un nouveau sujet.** Un long échange sur un autre thème pèse sur les réponses.
 - **Choisir un modèle plus puissant pour un diagnostic long**, le modèle par défaut pour les questions courantes.
 - **Considérer le panneau comme un service externe.** Les questions et les résultats d'outil sont transmis au fournisseur du modèle ; éviter d'y coller des données personnelles que les écrans n'affichent pas déjà.
-- **Pour une liste exhaustive, passer par les pages dédiées.** L'assistant caractérise un problème ; la liste [E-Invoicing](./invoices.md), le [Diagnostic](./diagnostics/overview.md) et les [Rapports](./reports.md) donnent la vue complète.
+- **Pour une liste exhaustive, passer par les pages dédiées.** L'assistant caractérise un problème ; la liste [E-Invoicing](./invoices.md), le [Diagnostic](./diagnostics/overview.md) et les [Rapports](reports/overview.md) donnent la vue complète.
