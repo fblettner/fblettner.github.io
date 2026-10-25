@@ -2219,7 +2219,7 @@ L'assistant cite la page utilisée et en donne le lien. Il n'invente ni réglage
 | **`explain_status_code`** | 🏷️ | Le nom et les libellés FR / EN d'un code de statut de facture ou d'e-reporting. |
 | **`reason_codes`** | 📋 | Les motifs de rejet et actions attendues de la PA, avec leurs libellés. |
 | **`edirectory_lookup`** | 🏢 | Une entreprise de l'[annuaire](./edirectory.md), par SIREN, SIRET ou raison sociale : données légales et lignes d'adressage. |
-| **`template_settings`** | ⚙️ | Les réglages d'un modèle, secrets masqués. Demande la fonctionnalité *Settings access*. |
+| **`template_settings`** | ⚙️ | Les réglages d'un modèle, secrets masqués. Demande la fonctionnalité *Accès aux paramètres*. |
 
 L'assistant connaît toutes les pages de l'application — parmi elles la [Synthèse](./billing-overview.md), les [Statistiques](./statistics.md), l'[Explorateur](./explorer.md) et les [étapes des factures](./invoices.md#status-by-stage) — et répond à une question sur le chiffre d'affaires, les avoirs, le taux de transmission ou les décisions avec `billing_overview`, à une question sur les étapes, les temps d'attente ou les motifs avec `status_statistics`. Par le rapport d'implémentation (`instance_docs`), il connaît aussi les périodes par défaut et les règles des tableaux de bord de l'instance. Les deux outils ne répondent que si le rôle de l'utilisateur accorde la page (Synthèse, Statistiques).
 
@@ -2286,7 +2286,7 @@ Au plus **10 appels d'outil** s'enchaînent pour une question. Quand un outil é
 ## Limites de l'assistant
 
 - **Aucune modification.** L'assistant se limite à la lecture. Pour un renvoi, un retraitement ou un changement de réglage, il indique l'écran à utiliser.
-- **Pas d'accès au-delà des droits.** Les outils de données appliquent la visibilité par société du rôle, et les réglages demandent la fonctionnalité *Settings access*.
+- **Pas d'accès au-delà des droits.** Les outils de données appliquent la visibilité par société du rôle, et les réglages demandent la fonctionnalité *Accès aux paramètres*.
 - **Pas de fichiers.** La conversation est textuelle : un court XML collé dans la question est lu, un fichier ne peut pas être joint.
 
 L'administrateur définit la clé d'API, le modèle par défaut, la source de documentation, les procédures personnalisées, le prompt système et les outils depuis l'onglet *AI* des [paramètres globaux](../configuration/system/global.md).
@@ -28206,7 +28206,7 @@ Visibilité :
 |---|---|
 | Tableau de bord technique | Disponible pour tout utilisateur connecté — mais les KPI eux-mêmes respectent le filtre de données de chaque utilisateur (ex. portée par société). |
 | Diagnostic | Chaque vue s'accorde séparément sur la page [Rôles](../configuration/security/roles.md) — Erreurs d'intégration, Journal des traitements, Anomalies, Journal serveur. |
-| Tâches planifiées | Le droit de page *Tâches planifiées* ; lancer, suspendre ou enregistrer une tâche demande aussi l'action *Run batch jobs*. |
+| Tâches planifiées | Le droit de page *Tâches planifiées* ; lancer, suspendre ou enregistrer une tâche demande aussi l'action *Lancer les traitements*. |
 | Fichier de log du service / points HTTP | Accessibles à quiconque dispose d'un accès SSH / RDP / HTTP à l'hôte. **À restreindre via le pare-feu et le reverse proxy** — `/api/build-info` et `/api/license` ne sont pas authentifiés. |
 
 Les deux points HTTP non authentifiés ne divulguent aucun secret (pas de mots de passe, pas de jetons, uniquement des métadonnées de build et un résumé de licence), mais ils révèlent la **version** de NomaUBL en service. Pour les installations exposées publiquement, il convient de les filtrer derrière le reverse proxy ou le VPN si ce point est sensible.
@@ -29179,7 +29179,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ## Barre d'outils
 
-Au-dessus de la grille, deux rangées : la **période**, la **direction** et **Exclure les erreurs traitées**, puis le **statut par étape**. La barre d'outils porte aussi **+ Nouvelle facture**, proposé aux rôles autorisés à créer des factures (`invoice.create`), qui ouvre la [fenêtre de création / modification](#create-invoice). Viennent ensuite le panneau [Filtres avancés](#advanced-filters) et la barre d'outils de la grille (recherche, **Exécuter**, actions groupées).
+Au-dessus de la grille, deux rangées : la **période**, la **direction**, **Exclure les erreurs traitées** et, à droite, **+ Nouvelle facture** ; puis le **statut par étape**. **+ Nouvelle facture** est proposé aux rôles autorisés à créer des factures (`invoice.create`), qui ouvre la [fenêtre de création / modification](#create-invoice). Viennent ensuite le panneau [Filtres avancés](#advanced-filters) et la barre d'outils de la grille (recherche, **Exécuter**, actions groupées).
 
 ### Période
 
@@ -30821,7 +30821,7 @@ La route de l'API est `GET /api/reports/technical`, avec les paramètres `lang`,
 
 ## Accès
 
-Le rapport fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../../configuration/security/roles.md). La génération demande en outre la fonctionnalité *Settings access*.
+Le rapport fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../../configuration/security/roles.md). La génération demande en outre la fonctionnalité *Accès aux paramètres*.
 
 ---
 
@@ -30882,7 +30882,7 @@ Un champ se glisse sur une étagère, ou s'ajoute d'un clic. Les montants sont e
 | **Mesures** | Les valeurs calculées par groupe : **Nombre**, **Distincts**, **Somme**, **Moyenne**, **Min**, **Max**. *Nombre de lignes* est proposé par défaut. |
 | **Filtres** | Conditions sur n'importe quel champ — *contient*, `=`, `≠`, `<`, `≤`, `>`, `≥`, *entre*, *parmi*, *est vide*, *n'est pas vide*. Une **Période** s'applique à n'importe quel champ de date, ou *Sans filtre de période*. |
 
-**Top** limite le résultat aux groupes les plus importants ; **Exécuter** lance l'analyse. Chaque analyse dispose de l'option **Exclure les erreurs suivies**, qui écarte les erreurs déjà prises en charge par le service client.
+**Top** limite le résultat aux groupes les plus importants ; **Exécuter** lance l'analyse. Chaque analyse dispose de l'option **Exclure les erreurs traitées**, qui écarte les erreurs déjà prises en charge par le service client.
 
 ### Vues
 
@@ -32290,7 +32290,7 @@ Avec **Synthèse de la facturation** ou **Statistiques**, le rapport envoie les 
 | **Vue du rôle** | Tout (sans restriction) | Le rapport montre ce que voit un utilisateur de ce rôle : ses sociétés et ses [filtres de lignes](../../configuration/security/roles.md#filtres-de-lignes). Le rôle doit donner accès à la page, sinon l'exécution échoue avec un message qui nomme le rôle. Un rapport par rôle envoie à chaque groupe de destinataires son propre périmètre. |
 | **Pièce jointe** | Excel | **PDF — indicateurs, graphiques et tableaux de la page**, au format du rapport d'audit, ou **Excel — une feuille par tableau**. |
 
-La pièce jointe reprend les sections de la page : pour la Synthèse, les chiffres clés avec la période précédente, le montant facturé par mois, ce qui demande une décision, la répartition par société, par type d'opération et, pour les ventes, l'e-reporting ; pour les Statistiques, les chiffres clés, les étapes, l'évolution, les temps d'attente, les statuts et le détail par activité, statut et motif. Elle est en français, sauf si la langue de l'instance est l'anglais. Le message indique la période et la présence du rapport joint ; il part même quand la période est vide.
+La pièce jointe reprend les sections de la page : pour la Synthèse, les chiffres clés avec la période précédente, le montant facturé par mois, ce qui demande une décision, la répartition par société, par type d'opération et, pour les ventes, l'e-reporting ; pour les Statistiques, les chiffres clés, les étapes, l'évolution, les temps d'attente, les statuts et le détail par activité, statut et motif. Elle est en français, sauf si la langue de l'instance est l'anglais. Le message indique la période et la présence du rapport joint ; il part toujours : l'option *Envoyer même si la période ne contient aucune erreur* est donc masquée.
 
 ---
 
@@ -36184,7 +36184,7 @@ Les cibles se définissent une fois dans **Paramètres → Promotion targets** (
 |---|---|
 | **Name** | Affiché dans la liste des cibles de la page Promotion. |
 | **URL** | Racine de l'instance cible, avec son préfixe de chemin s'il y en a un (par exemple `https://test.example/nomaubl`). |
-| **Username** / **Password** | Compte sur la cible, qui doit y disposer de la fonctionnalité *Settings access* ; vide quand la cible fonctionne sans authentification. Le mot de passe est enregistré encodé et décodé sur le serveur uniquement pour l'appel. |
+| **Username** / **Password** | Compte sur la cible, qui doit y disposer de la fonctionnalité *Accès aux paramètres* ; vide quand la cible fonctionne sans authentification. Le mot de passe est enregistré encodé et décodé sur le serveur uniquement pour l'appel. |
 
 Le compte n'est jamais transmis au navigateur et ne voyage jamais dans un paquet. Cet éditeur reste en anglais dans l'application.
 
@@ -38650,7 +38650,7 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
 
 ### Exclure les erreurs traitées \{#exclude-reviewed\}
 
-À côté du sélecteur, le switch **Exclure les erreurs traitées** masque les factures déjà traitées par le service client qui restent dans un statut en erreur ; les factures traitées dans les autres statuts restent comptées. Il est activé par défaut sur la Synthèse et les Statistiques, désactivé sur Exploitation et E-Invoicing (E-Invoicing reprend la valeur du tableau de bord depuis lequel la liste est ouverte). L'[Explorateur](../application/explorer.md) dispose de sa propre option du même type.
+À côté du sélecteur, le switch **Exclure les erreurs traitées** masque les factures déjà traitées par le service client qui restent dans un statut en erreur ; les factures traitées dans les autres statuts restent comptées. Il est activé par défaut sur la Synthèse et les Statistiques, désactivé sur Exploitation et E-Invoicing (E-Invoicing reprend la valeur du tableau de bord depuis lequel la liste est ouverte). L'[Explorateur](../application/explorer.md) propose le même switch dans chaque analyse.
 
 ---
 
@@ -39688,8 +39688,8 @@ Quelques drapeaux binaires. Chaque ligne combine une case à cocher et un libell
 
 | Fonctionnalité | Aide | Effet |
 |---|---|---|
-| **Accès aux paramètres** | *Peut ouvrir la page Configuration (édition des templates / connecteurs).* | Ouvre l'intégralité du menu Configuration. Le rôle reçoit alors la pastille `Admin` dans la liste. |
-| **Mode lecture seule** | *Aucune action de modification / suppression / renvoi, même sur les pages autorisées.* | L'utilisateur peut consulter l'application, mais toutes les actions d'écriture sont désactivées — surcharge entièrement l'onglet *Actions*. |
+| **Accès aux paramètres** | *Peut ouvrir la page Paramètres (modèles, connecteurs)* | Ouvre l'intégralité du menu Configuration. Le rôle reçoit alors la pastille `Admin` dans la liste. |
+| **Lecture seule** | *Aucune modification, suppression ni renvoi, même sur les pages autorisées* | L'utilisateur peut consulter l'application, mais toutes les actions d'écriture sont désactivées — surcharge entièrement l'onglet *Actions*. |
 
 ### Pages autorisées
 
@@ -39744,9 +39744,9 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 Quelques pastilles portent une aide :
 
 - **Diagnostic** est une page à quatre vues : chaque vue est un droit distinct, et le menu affiche *Diagnostic* dès que l'une d'elles est accordée. Voir [Diagnostic](../../application/diagnostics/overview.md).
-- **Tâches planifiées** couvre toutes les tâches — imports, tâches batch, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, rétention. Lancer, suspendre ou enregistrer une tâche demande aussi l'action *Run batch jobs* (`integration.run`). Voir [Tâches planifiées](../../sync/scheduled-jobs/overview.md).
+- **Tâches planifiées** couvre toutes les tâches — imports, tâches batch, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, rétention. Lancer, suspendre ou enregistrer une tâche demande aussi l'action *Lancer les traitements* (`integration.run`). Voir [Tâches planifiées](../../sync/scheduled-jobs/overview.md).
 - **Dossiers surveillés** accorde la configuration des dossiers ; leur planification se trouve dans *Tâches planifiées*.
-- **Promotion** demande aussi la fonctionnalité *Settings access*. Voir [Promotion](../../management/promotion.md).
+- **Promotion** demande aussi la fonctionnalité *Accès aux paramètres*. Voir [Promotion](../../management/promotion.md).
 - **Développeur** ouvre la [référence développeur](../../references/developer.md) : tables, clés de configuration, flux, impact, API.
 - **Synthèse** et **Statistiques** sont des pages à part entière, contrôlées par le serveur et par les outils de l'assistant IA. La mise à jour les accorde toutes les deux, une seule fois, à chaque rôle qui avait Exploitation, pour que personne ne perde une page ; un retrait ultérieur sur un rôle est conservé.
 - **Règles de gestion** ouvre aussi les [Schematrons](../../references/schematrons.md).
@@ -39754,7 +39754,7 @@ Quelques pastilles portent une aide :
 
 Règles :
 
-- **All** / **None**, au-dessus des cartes, accordent ou retirent toutes les pages d'un coup.
+- **Toutes** / **Aucune**, au-dessus des cartes, accordent ou retirent toutes les pages d'un coup ; le lien **tout** / **aucun** d'une carte fait de même pour son groupe.
 - **Liste vide = toutes les pages autorisées.** Même convention que les autres listes : un rôle sans filtre voit tout.
 - Le rôle `admin` créé à l'initialisation reçoit tous les identifiants de page ci-dessus, y compris Déclaration de TVA, Rapports et Historique des mises à jour.
 
@@ -39764,23 +39764,23 @@ Règles :
 
 Définit **ce que le rôle peut faire** sur les pages qu'il peut atteindre.
 
-### Bascule *Restreindre*
+### Switch *Limiter à certaines actions*
 
-| Bascule | Effet |
+| Switch | Effet |
 |---|---|
 | **Désactivée** *(défaut)* | Aucune liste blanche côté serveur — le rôle peut effectuer toutes les actions autorisées par ses pages. |
-| **Activée** | Seules les actions cochées en dessous sont autorisées. Activer la bascule **pré-coche toutes les actions** pour que le rôle ne perde pas brutalement ses droits — il suffit ensuite de décocher. |
+| **Activée** | Seules les actions cochées en dessous sont autorisées. Activer le switch **pré-coche toutes les actions** pour que le rôle ne perde pas brutalement ses droits — il suffit ensuite de décocher. |
 
-L'aide sous la bascule indique : *Désactivée (défaut) = le rôle peut effectuer toutes les actions autorisées par ses pages. Activée = seules les actions cochées en dessous sont autorisées.*
+L'aide sous le switch indique : *Désactivé (par défaut) : le rôle peut faire toutes les actions de ses pages. Activé : seules les actions cochées ci-dessous sont autorisées.*
 
 L'en-tête de la section reflète l'état courant :
 
-- `(toutes les actions sont autorisées — aucune liste blanche)` quand la bascule est désactivée.
-- `(N actions explicitement autorisées — tout le reste est bloqué)` quand la bascule est activée et N actions cochées.
-- `(0 action autorisée — équivalent au Mode lecture seule)` quand la liste blanche est activée mais vide.
-- `(Mode lecture seule activé dans l'onglet Accès — toutes les actions sont bloquées)` quand la fonctionnalité *Lecture seule* est active — l'onglet est alors grisé.
+- `(toutes les actions sont autorisées : aucune liste définie)` quand le switch est désactivé.
+- `(N actions autorisées explicitement : tout le reste est bloqué)` quand le switch est activé et N actions cochées.
+- `(aucune action autorisée : même effet que la lecture seule)` quand la liste est activée mais vide.
+- `(lecture seule activée dans Accès : toutes les actions sont bloquées)` quand la fonctionnalité *Lecture seule* est active — l'onglet est alors grisé.
 
-Les boutons **Tout cocher** / **Tout décocher** apparaissent sous la bascule (désactivés tant que la liste blanche est désactivée).
+Les boutons **Tout cocher** / **Tout décocher** apparaissent sous le switch (désactivés tant que le switch est désactivé).
 
 ### Catalogue des actions
 
@@ -39791,21 +39791,21 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 | **Factures** | Créer | `invoice.create` | Le bouton *Nouvelle facture* de la liste [E-Invoicing](../../application/invoices.md). |
 | **Factures** | Modifier | `invoice.edit` | Met à jour les champs d'une facture depuis la fenêtre détail ou le panneau d'édition. |
 | **Factures** | Supprimer | `invoice.delete` | Suppression définitive d'une facture et de tous ses enregistrements fils. |
-| **Factures** | Supprimer un événement du cycle de vie | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |
+| **Factures** | Supprimer un événement | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |
 | **Factures** | Renvoyer à la PA | `invoice.resend` | Soumet ou re-soumet une facture (ou un lot) à la Plateforme Agréée. |
-| **Factures** | Pousser un statut (PA) | `invoice.status.pa` | Envoie un événement de statut via la PA — paiement reçu, en litige, etc. (onglet *PA* de la fenêtre *Définir le statut*). |
-| **Factures** | Pousser un statut (BDD) | `invoice.status.db` | Met directement à jour un statut en base, sans passer par la PA — voie de réparation utilisée quand l'aller-retour PA est cassé. |
-| **Factures** | Valider UBL | `invoice.validate` | Lance la validation XSD + Schematron sur l'UBL stocké (bouton *Valider* de l'onglet *Historique*). |
-| **Factures** | Télécharger UBL | `invoice.download` | Lecture du BLOB UBL brut — bouton *Télécharger UBL* et endpoint `/xml`. |
-| **Factures** | Actions pré-définies | `invoice.preset-action` | Utilise les boutons pré-définis par statut (Renvoyer sur 9904, …) dans la rangée *vendeur*. |
+| **Factures** | Transmettre un statut (PA) | `invoice.status.pa` | Envoie un événement de statut via la PA — paiement reçu, en litige, etc. (onglet *PA* de la fenêtre *Définir le statut*). |
+| **Factures** | Forcer un statut (base) | `invoice.status.db` | Met directement à jour un statut en base, sans passer par la PA — voie de réparation utilisée quand l'aller-retour PA est cassé. |
+| **Factures** | Valider l'UBL | `invoice.validate` | Lance la validation XSD + Schematron sur l'UBL stocké (bouton *Valider* de l'onglet *Historique*). |
+| **Factures** | Télécharger l'UBL | `invoice.download` | Lecture du BLOB UBL brut — bouton *Télécharger UBL* et endpoint `/xml`. |
+| **Factures** | Actions prédéfinies | `invoice.preset-action` | Utilise les boutons pré-définis par statut (Renvoyer sur 9904, …) dans la rangée *vendeur*. |
 | **Factures** | Actions personnalisées | `invoice.custom-action` | Utilise les boutons personnalisés définis par l'admin dans la rangée *actions personnalisées*. |
-| **Factures** | Envoyer le PDF par mail | `invoice.email` | Envoie le PDF généré via le relais SMTP configuré. |
-| **E-Reporting** | Générer un lot | `ereporting.generate` | Crée un nouveau lot d'e-reporting depuis la fenêtre *Générer*. |
-| **E-Reporting** | Renvoyer un lot | `ereporting.resend` | Re-soumet à la PA un lot d'e-reporting existant. |
-| **Opérations d'intégration** | Exécuter les jobs en lot | `integration.run` | Déclenche *Importer les statuts* / *Récupérer les factures reçues* / *Récupérer les statuts* depuis la barre d'outils. |
+| **Factures** | Envoyer le PDF par e-mail | `invoice.email` | Envoie le PDF généré via le relais SMTP configuré. |
+| **E-reporting** | Générer une déclaration | `ereporting.generate` | Produit une nouvelle déclaration e-reporting depuis la fenêtre *Générer*. |
+| **E-reporting** | Renvoyer une déclaration | `ereporting.resend` | Renvoie à la plateforme une déclaration e-reporting existante. |
+| **Traitements d'intégration** | Lancer les traitements | `integration.run` | Déclenche *Importer les statuts* / *Récupérer les factures reçues* / *Récupérer les statuts* depuis la barre d'outils. |
 
 :::info
-La fenêtre détail rend Parties, Lignes de facture, Récapitulatif TVA et Notes depuis l'endpoint UBL XML, qui est **ouvert en lecture** (mais reste filtré par les filtres de lignes et la visibilité de page). Seul le bouton *Télécharger UBL* est gardé par `invoice.download` — un rôle en lecture peut donc consulter le contenu d'une facture sans avoir le droit d'extraire le XML brut.
+La fenêtre détail rend Parties, Lignes de facture, Récapitulatif TVA et Notes depuis l'endpoint UBL XML, qui est **ouvert en lecture** (mais reste filtré par les filtres de lignes et la visibilité de page). Seul le bouton *Télécharger l'UBL* est gardé par `invoice.download` — un rôle en lecture peut donc consulter le contenu d'une facture sans avoir le droit d'extraire le XML brut.
 :::
 
 ---
@@ -39820,7 +39820,7 @@ Un tableau ligne par ligne des codes société (`KCO`) auxquels le rôle est res
 
 - **Liste vide = toutes les sociétés.** Comportement habituel — laisser le tableau vide donne accès à toutes les sociétés présentes en base.
 - Ajouter ne serait-ce qu'une ligne restreint le rôle aux sociétés listées.
-- Le placeholder propose *Code KCO (par ex. 00001)* et le champ utilise une police monospace pour repérer plus facilement les fautes de frappe.
+- Le champ propose *Code société (ex. 00001)* et utilise une police monospace pour repérer plus facilement les fautes de frappe.
 
 ### Filtres de lignes
 
@@ -39836,7 +39836,7 @@ Le **sélecteur de colonne** liste chaque champ une seule fois, **par portée** 
 | **Constats de validation (F564236)** | Sévérité, source, règle… | Cette table. |
 | **Journal des traitements** / **E-reporting** | Leurs propres colonnes. | Cette table. |
 
-Chaque entrée s'affiche `libellé · CHAMP`. Pour le champ choisi, saisir une ou plusieurs valeurs (*Value (exact match)*) ; **+ Add value (OR)** ajoute une valeur, le **×** retire une valeur ou le filtre entier. **+ Add row filter** combine des filtres sur des champs différents. Comme la plupart de l'éditeur, ces libellés sont en anglais ; les titres de portée suivent la langue de l'interface.
+Chaque entrée s'affiche `libellé · CHAMP` (*— choisir un champ —* tant qu'aucun n'est choisi). Pour le champ choisi, saisir une ou plusieurs valeurs (*Valeur (égalité exacte)*) ; **+ Ajouter une valeur (OU)** ajoute une valeur, **Retirer la valeur** et **Retirer le filtre** suppriment une valeur ou le filtre entier. **+ Ajouter un filtre de lignes** combine des filtres sur des champs différents.
 
 #### Règles de combinaison
 
@@ -40765,6 +40765,7 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Nouvelle facture depuis E-Invoicing.** La création d'une facture passe par un bouton Nouvelle facture dans la liste E-Invoicing (droit invoice.create). Le bloc Actions rapides du tableau de bord Exploitation est supprimé.
 - **Déclaration de TVA : sans renvoi vers la liste.** Les montants n'ouvrent plus la liste des factures, qui ne pouvait reproduire ni le taux ni les exclusions ; chaque taux se déplie toujours en types d'opération puis en factures. Les montants suivent la langue de l'interface.
 - **Tableau de bord IT traduit.** Le titre, la description et toutes les cartes du tableau de bord IT sont traduits.
+- **Éditeur des rôles traduit, libellés harmonisés.** L'éditeur des rôles — onglets, fonctionnalités, actions et leur aide, périmètre des données, messages — est traduit. Le sélecteur de l'Explorateur s'appelle « Exclure les erreurs traitées » comme partout ailleurs, le menu anglais affiche IT dashboard, la description de la déclaration de TVA ne parle plus d'ouvrir les factures, et le récapitulatif quotidien masque « Envoyer même quand la période n'a pas d'erreurs » pour la Synthèse et les Statistiques, qui partent toujours.
 - **Récapitulatif quotidien : les tableaux de bord métier.** Un récapitulatif peut envoyer la Synthèse ou les Statistiques, en PDF (indicateurs, graphiques et tableaux de la page) ou en Excel, sur le mois précédent, le mois en cours ou la fenêtre du récapitulatif, pour les ventes ou les achats. Il peut être produit tel qu'un rôle le voit — ses sociétés et ses filtres de lignes — pour que chaque groupe de destinataires ne reçoive que son périmètre. Tout récapitulatif peut n'être envoyé qu'un jour du mois (par exemple le 1er, la synthèse du mois écoulé) ; « Envoyer maintenant » l'ignore.
 - **PDF : signe euro dans les notes en italique.** Dans les notes sous le titre d'une section, le signe euro ne se colle plus au mot suivant.
 - **Assistant IA : nouvelles pages et deux outils.** L'assistant connaît la Synthèse, les Statistiques, l'Explorateur et les étapes des factures, et lit les chiffres des deux tableaux de bord métier : billing_overview (chiffre d'affaires, TVA, avoirs, taux de transmission, décisions, par société et par type d'opération, comparés à la période précédente) et status_statistics (factures par étape, statuts, motifs, temps d'attente, code activité × statut × motif avec la période précédente). Comme il lit le rapport d'implémentation, il connaît aussi les périodes par défaut et les règles des tableaux de bord de l'instance.

@@ -491,7 +491,7 @@ java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json \
 
 ## `-send-waiting` — send invoices held for review to the PA \{#send-waiting\}
 
-Sends every invoice **held for review** (document type on the `W` — *Waiting* — send flag) to the Plateforme Agréée — the command-line equivalent of the *Waiting for review* card's **Send all** button on the [Tech Dashboard](../application/tech-dashboard.md#waiting-for-review), for scheduling the release outside the web server.
+Sends every invoice **held for review** (document type on the `W` — *Waiting* — send flag) to the Plateforme Agréée — the command-line equivalent of the *Waiting for review* card's **Send all** button on the [IT dashboard](../application/tech-dashboard.md#waiting-for-review), for scheduling the release outside the web server.
 
 ```bash
 java -jar nomaubl.jar -send-waiting /opt/nomaubl/demo/config/config.json [--parallel N] [--delay MS]

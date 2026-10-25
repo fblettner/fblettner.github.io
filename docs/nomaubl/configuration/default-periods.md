@@ -205,7 +205,7 @@ The button shows the range itself (for example *1 – 31 Oct 2026*) and the date
 
 ### Exclude reviewed errors \{#exclude-reviewed\}
 
-Next to the picker, the **Exclude reviewed errors** switch hides the invoices already reviewed by customer service that still sit in an error status; reviewed invoices in other statuses stay counted. It is on by default on the Billing overview and Statistics, off on Operations and E-Invoicing (E-Invoicing takes the value of the dashboard it is opened from). The [Explorer](../application/explorer.md) has its own option of the same kind.
+Next to the picker, the **Exclude reviewed errors** switch hides the invoices already reviewed by customer service that still sit in an error status; reviewed invoices in other statuses stay counted. It is on by default on the Billing overview and Statistics, off on Operations and E-Invoicing (E-Invoicing takes the value of the dashboard it is opened from). The [Explorer](../application/explorer.md) offers the same switch in every analysis.
 
 ---
 

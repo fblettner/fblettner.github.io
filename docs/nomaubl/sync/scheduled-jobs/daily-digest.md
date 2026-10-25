@@ -176,7 +176,7 @@ With **Billing overview (Synthèse)** or **Statistics**, the digest sends the fi
 | **Visible as role** | Everything (no restriction) | The report shows what a user of this role sees: its companies and [row filters](../../configuration/security/roles.md#row-filters). The role must grant the page; otherwise the run fails with a message naming the role. One digest per role sends each recipient group its own scope. |
 | **Attachment** | Excel | **PDF — the page's figures, charts and tables**, in the layout of the audit report, or **Excel — one sheet per table**. |
 
-The attachment holds the sections of the page: for the Billing overview, the key figures with the previous period, the amount invoiced per month, what needs a decision, per company, per transaction type and, for sales, e-reporting; for Statistics, the key figures, the stages, the trend, the waiting time, the statuses and the detail by activity, status and reason. It is in French unless the instance language is English. The email states the period and that the report is attached; it is sent even when the period is empty.
+The attachment holds the sections of the page: for the Billing overview, the key figures with the previous period, the amount invoiced per month, what needs a decision, per company, per transaction type and, for sales, e-reporting; for Statistics, the key figures, the stages, the trend, the waiting time, the statuses and the detail by activity, status and reason. It is in French unless the instance language is English. The email states the period and that the report is attached; it is always sent, so the *Send even when the period has no errors* option is hidden.
 
 ---
 

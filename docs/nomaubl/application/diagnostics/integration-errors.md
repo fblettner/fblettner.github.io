@@ -170,7 +170,7 @@ The same toolbar drives both views.
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../../configuration/list-views.md) spec (`view.integration-errors`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
-The Tech Dashboard's *Recent errors* drill-through also surfaces here: when the dashboard passes `{ doc, dct, kco }`, a chip shows the active drill-through filter and offers a one-click `×` clear. Useful when the panel is collapsed and the filter would otherwise stay invisible.
+The IT dashboard's *Recent errors* drill-through also surfaces here: when the dashboard passes `{ doc, dct, kco }`, a chip shows the active drill-through filter and offers a one-click `×` clear. Useful when the panel is collapsed and the filter would otherwise stay invisible.
 
 The page runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, default 5000), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. The `invoiceStatus` refList column gets a **multi-select picker** that issues an `IN (?,?,?)` clause on the server so picking several statuses returns the union.
 
@@ -221,7 +221,7 @@ The table renders through **DataTableV2** in spec-driven mode: the column shape 
 | Column | Source | Description |
 |---|---|---|
 | **Severity** | `UVY56LEVEL` | Coloured badge — *FATAL* / *ERROR* / *WARNING* / *INFO*. |
-| **Date** | `UVUPMJ` + `UVUPMT` | Date and time the event was recorded. Same time context as the Tech Dashboard's recent-errors card, so triage no longer requires opening a row first. |
+| **Date** | `UVUPMJ` + `UVUPMT` | Date and time the event was recorded. Same time context as the IT dashboard's recent-errors card, so triage no longer requires opening a row first. |
 | **Doc** | `UVDOC` | Document number from the source data. |
 | **Dct** | `UVDCT` | Document type. |
 | **Kco** | `UVKCO` | Company code, with its name from the `list-companies` list. |

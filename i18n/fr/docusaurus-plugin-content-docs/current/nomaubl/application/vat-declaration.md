@@ -32,7 +32,7 @@ La matrice est servie depuis les lignes de détail TVA enregistrées (`F564234`)
 
   <rect x="220" y="20" width="880" height="430" rx="14" fill="url(#vat-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Déclaration de TVA</text>
-  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">La TVA d'une période au format de la CA3 : collectée, déductible et nette, par sens, zone et taux.</text>
+  <text x="240" y="66" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">La TVA d'une période au format de la CA3 : collectée, déductible et nette ; chaque taux se déplie en types d'opération puis en factures.</text>
   <rect x="240" y="82" width="120" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <rect x="241" y="83" width="44" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
   <text x="263.0" y="97.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Mois</text>

@@ -171,7 +171,7 @@ Un champ se glisse sur une étagère, ou s'ajoute d'un clic. Les montants sont e
 | **Mesures** | Les valeurs calculées par groupe : **Nombre**, **Distincts**, **Somme**, **Moyenne**, **Min**, **Max**. *Nombre de lignes* est proposé par défaut. |
 | **Filtres** | Conditions sur n'importe quel champ — *contient*, `=`, `≠`, `<`, `≤`, `>`, `≥`, *entre*, *parmi*, *est vide*, *n'est pas vide*. Une **Période** s'applique à n'importe quel champ de date, ou *Sans filtre de période*. |
 
-**Top** limite le résultat aux groupes les plus importants ; **Exécuter** lance l'analyse. Chaque analyse dispose de l'option **Exclure les erreurs suivies**, qui écarte les erreurs déjà prises en charge par le service client.
+**Top** limite le résultat aux groupes les plus importants ; **Exécuter** lance l'analyse. Chaque analyse dispose de l'option **Exclure les erreurs traitées**, qui écarte les erreurs déjà prises en charge par le service client.
 
 ### Vues
 

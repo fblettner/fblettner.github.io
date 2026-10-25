@@ -168,7 +168,7 @@ L'assistant cite la page utilisée et en donne le lien. Il n'invente ni réglage
 | **`explain_status_code`** | 🏷️ | Le nom et les libellés FR / EN d'un code de statut de facture ou d'e-reporting. |
 | **`reason_codes`** | 📋 | Les motifs de rejet et actions attendues de la PA, avec leurs libellés. |
 | **`edirectory_lookup`** | 🏢 | Une entreprise de l'[annuaire](./edirectory.md), par SIREN, SIRET ou raison sociale : données légales et lignes d'adressage. |
-| **`template_settings`** | ⚙️ | Les réglages d'un modèle, secrets masqués. Demande la fonctionnalité *Settings access*. |
+| **`template_settings`** | ⚙️ | Les réglages d'un modèle, secrets masqués. Demande la fonctionnalité *Accès aux paramètres*. |
 
 L'assistant connaît toutes les pages de l'application — parmi elles la [Synthèse](./billing-overview.md), les [Statistiques](./statistics.md), l'[Explorateur](./explorer.md) et les [étapes des factures](./invoices.md#status-by-stage) — et répond à une question sur le chiffre d'affaires, les avoirs, le taux de transmission ou les décisions avec `billing_overview`, à une question sur les étapes, les temps d'attente ou les motifs avec `status_statistics`. Par le rapport d'implémentation (`instance_docs`), il connaît aussi les périodes par défaut et les règles des tableaux de bord de l'instance. Les deux outils ne répondent que si le rôle de l'utilisateur accorde la page (Synthèse, Statistiques).
 
@@ -235,7 +235,7 @@ Au plus **10 appels d'outil** s'enchaînent pour une question. Quand un outil é
 ## Limites de l'assistant
 
 - **Aucune modification.** L'assistant se limite à la lecture. Pour un renvoi, un retraitement ou un changement de réglage, il indique l'écran à utiliser.
-- **Pas d'accès au-delà des droits.** Les outils de données appliquent la visibilité par société du rôle, et les réglages demandent la fonctionnalité *Settings access*.
+- **Pas d'accès au-delà des droits.** Les outils de données appliquent la visibilité par société du rôle, et les réglages demandent la fonctionnalité *Accès aux paramètres*.
 - **Pas de fichiers.** La conversation est textuelle : un court XML collé dans la question est lu, un fichier ne peut pas être joint.
 
 L'administrateur définit la clé d'API, le modèle par défaut, la source de documentation, les procédures personnalisées, le prompt système et les outils depuis l'onglet *AI* des [paramètres globaux](../configuration/system/global.md).

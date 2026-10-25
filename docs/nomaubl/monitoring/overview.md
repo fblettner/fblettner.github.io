@@ -1,6 +1,6 @@
 ---
 title: Monitoring — overview
-description: "Where to look when running NomaUBL in production — the in-app Tech Dashboard, the Processing Log, the service log file, the build-info / license endpoints. Plus the patterns to wire external monitoring."
+description: "Where to look when running NomaUBL in production — the in-app IT dashboard, the Processing Log, the service log file, the build-info / license endpoints. Plus the patterns to wire external monitoring."
 keywords: [NomaUBL, monitoring, tech dashboard, processing log, build-info, license, log file, external monitoring]
 ---
 
@@ -10,7 +10,7 @@ Visibility into a running NomaUBL install splits across several surfaces — thr
 
 | Surface | What it answers | Where |
 |---|---|---|
-| **Tech Dashboard** | Live KPIs — invoices processed today, in flight, failed; per-PA submission state; scheduler activity; configuration check. | *Navigation → Tech Dashboard* — see [Tech dashboard](../application/tech-dashboard.md). |
+| **IT dashboard** | Live KPIs — invoices processed today, in flight, failed; per-PA submission state; scheduler activity; configuration check. | *Navigation → IT dashboard* — see [Tech dashboard](../application/tech-dashboard.md). |
 | **Diagnostics** | What failed and what the server logged, in four views: integration errors, processing log (every step of every file, with timings), failures (every failure in one list, unresolved by default), server log (the log file, filtered by level and module). | *Navigation → Diagnostics* — see [Diagnostics](../application/diagnostics/overview.md). |
 | **Scheduled jobs** | Every background job with its state, last run, duration, result and next run, and the history of its runs. | *Sync → Scheduled jobs* — see [Scheduled jobs](../sync/scheduled-jobs/overview.md). |
 | **Service log file** | The JVM's stderr / stdout — startup, configuration loading, scheduler ticks, database errors. | `<APP_HOME>/nomaubl-<env>.log` on the host. |
@@ -24,7 +24,7 @@ The web UI pages are the **operator's** view; the log file + endpoints are the *
 
 | Situation | Surface |
 |---|---|
-| "Did today's batch run successfully?" | **Tech Dashboard** — invoices processed today panel. |
+| "Did today's batch run successfully?" | **IT dashboard** — invoices processed today panel. |
 | "What failed and is still open?" | **Diagnostics → Failures** — unresolved only, newest first. |
 | "What's the status of invoice #12345?" | **Diagnostics → Processing log** — search by document number. |
 | "Why is invoice #12345 stuck?" | **Diagnostics → Processing log** — drill into the step trace. |
@@ -47,7 +47,7 @@ Visibility:
 
 | Surface | Permission |
 |---|---|
-| Tech Dashboard | Available to every signed-in user — but the KPIs themselves respect each user's data filter (e.g. per-company scope). |
+| IT dashboard | Available to every signed-in user — but the KPIs themselves respect each user's data filter (e.g. per-company scope). |
 | Diagnostics | Each view is granted on its own on the [Roles](../configuration/security/roles.md) page — Integration errors, Processing log, Failures, Server log. |
 | Scheduled jobs | The *Scheduled Jobs* page grant; running, pausing or saving a job also requires the *Run batch jobs* action. |
 | Service log file / endpoints | Available to anyone with SSH / RDP / HTTP access to the host. **Restrict via the firewall and the reverse proxy** — `/api/build-info` and `/api/license` are unauthenticated. |
@@ -71,7 +71,7 @@ The two unauthenticated HTTP endpoints don't leak secrets (no passwords, no toke
   <text x="150" y="130" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Live KPIs</text>
   <text x="150" y="146" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Today's batch state</text>
   <text x="150" y="162" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Per-PA submission</text>
-  <text x="150" y="184" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Application → Tech Dashboard</text>
+  <text x="150" y="184" fill="#94a3b8" fontSize="9" textAnchor="middle" fontStyle="italic" fontFamily="system-ui, sans-serif">Application → IT dashboard</text>
 
   <rect x="272" y="80" width="220" height="120" rx="10" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)"/>
   <text x="382" y="106" fill="#c084fc" fontSize="11" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PROCESSING LOG</text>
@@ -114,7 +114,7 @@ Knowing the gaps prevents misplaced searches:
 |---|---|
 | **Prometheus `/metrics`** | Not built in. Scrape the host with `node_exporter`; mine the log file for application-level counters; or build a small JMX exporter on top of the JVM. |
 | **OpenTelemetry traces** | Not built in. The processing pipeline emits structured per-step logs — pipe those into a log-based tracing system if you need waterfall views. |
-| **Per-request latency histograms** | The Tech Dashboard surfaces aggregates; for percentiles + request-by-request, wire an APM in front of the reverse proxy. |
+| **Per-request latency histograms** | The IT dashboard surfaces aggregates; for percentiles + request-by-request, wire an APM in front of the reverse proxy. |
 | **Heap / GC stats** | Standard JVM JMX — connect VisualVM or JConsole over JMX, or expose JMX via a JMX-to-Prometheus exporter. |
 | **Live database connection-pool metrics** | NomaUBL uses a simple per-call connection model, not a pooled one. Connection count is a function of in-flight requests — observable through Oracle's `V$SESSION` or PostgreSQL's `pg_stat_activity`. |
 
@@ -141,7 +141,7 @@ Items 3, 4 and 5 are the cheap wins that catch 80% of production incidents.
 
 | Goal | Read |
 |---|---|
-| Walk the Tech Dashboard cards. | [Application → Tech Dashboard](../application/tech-dashboard.md). |
+| Walk the IT dashboard cards. | [Application → IT dashboard](../application/tech-dashboard.md). |
 | Investigate a stuck or failed invoice. | [Diagnostics → Processing log](../application/diagnostics/processing-log.md). |
 | Use the wrapper's `status` + log tailing for incidents (Linux or Windows). | [Service and logs](./service-and-logs.md). |
 | Wire external monitoring (LB probes, alerting, log forwarding). | [Service and logs](./service-and-logs.md). |
@@ -151,5 +151,5 @@ Items 3, 4 and 5 are the cheap wins that catch 80% of production incidents.
 ## What's next
 
 - [Service and logs](./service-and-logs.md) — the CLI + endpoints layer in detail.
-- [Application → Tech Dashboard](../application/tech-dashboard.md) — the in-app live view.
+- [Application → IT dashboard](../application/tech-dashboard.md) — the in-app live view.
 - [Diagnostics → Processing log](../application/diagnostics/processing-log.md) — per-document trace.

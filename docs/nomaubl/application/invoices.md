@@ -24,8 +24,8 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
   <rect x="220" y="20" width="760" height="422" rx="14" fill="url(#inv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">E-Invoicing</text>
-  <rect x="866" y="32" width="94" height="22" rx="5" fill="url(#inv-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="913.0" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ New Invoice</text>
+  <rect x="866" y="64" width="94" height="22" rx="5" fill="url(#inv-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="913.0" y="78.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ New Invoice</text>
   <rect x="240" y="64" width="206" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="250" y="78.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📅 1 – 31 Oct 2026 · Update date ▾</text>
   <rect x="456" y="64" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -130,14 +130,14 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
   <text x="30" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Advanced Filters + Run</text>
   <text x="30" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">server query, capped slice</text>
   <line x1="200" y1="287.0" x2="470" y2="293" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-  <rect x="1000" y="22" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="37" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">New Invoice</text>
-  <text x="1010" y="50" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">with the invoice.create action</text>
-  <line x1="1000" y1="39.0" x2="960" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-  <rect x="1000" y="64" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="79" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
-  <text x="1010" y="92" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">issued by default</text>
-  <line x1="1000" y1="81.0" x2="606" y2="75" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="56" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="71" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">New Invoice</text>
+  <text x="1010" y="84" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">with the invoice.create action</text>
+  <line x1="1000" y1="73.0" x2="960" y2="75" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="12" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="27" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
+  <text x="1010" y="40" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">issued by default</text>
+  <line x1="1000" y1="29.0" x2="606" y2="66" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
   <rect x="1000" y="148" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="163" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clear filters</text>
   <text x="1010" y="176" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">when a status is picked</text>
@@ -152,7 +152,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## Toolbar
 
-Above the grid, two rows: the **period**, the **direction** and **Exclude reviewed errors**, then the **status by stage**. The toolbar also carries **+ New Invoice**, shown to the roles allowed to create invoices (`invoice.create`), which opens the [Create / Edit invoice modal](#create-invoice). The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
+Above the grid, two rows: the **period**, the **direction**, **Exclude reviewed errors** and, at the right, **+ New Invoice**; then the **status by stage**. **+ New Invoice** is shown to the roles allowed to create invoices (`invoice.create`), which opens the [Create / Edit invoice modal](#create-invoice). The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
 
 ### Period
 
@@ -303,7 +303,7 @@ Each row carries a **checkbox**, and a **Resend selected (N)** button appears in
 
 ### Reprocess \{#reprocess\}
 
-A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing is a **reprint**: for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), it regenerates the readable PDF / XML and the UBL file from the JDE XML source archived at first submission, into the output and burst folders. Nothing changes in the database and the UBL is not validated again — the stored e-invoice, including a later *Fix buyer* correction, stays the reference, and its validation results are kept. The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
+A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing is a **reprint**: for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), it regenerates the readable PDF / XML and the UBL file from the JDE XML source archived at first submission, into the output and burst folders. Nothing changes in the database and the UBL is not validated again — the stored e-invoice, including a later *Fix buyer* correction, stays the reference, and its validation results are kept. The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [IT dashboard](tech-dashboard.md#to-reprocess) and the command line.
 
 The selection also covers **validation failures**: an invoice in *Validation failed* (`9905`) on a template with **Allow full reprocess** enabled is **reprocessed in full** — enrichment queried again, UBL regenerated, validated and sent to the PA when the template and document type say so; the history is kept and a new cycle starts. The confirmation states which invoices are reprinted and which are reprocessed in full. The invoice window offers the same full reprocess through a **Reprocess** button on a `9905`.
 

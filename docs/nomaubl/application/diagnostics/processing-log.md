@@ -186,7 +186,7 @@ When grouped, the page over-fetches (`pageSize × 4`, capped at 200) so START / 
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../../configuration/list-views.md) spec (`view.processing-log`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
-The Tech Dashboard's throughput-bar drill-through into this page now seeds the V2 `DateRangeFilter` via `initialRange`, so the period clicked on the bar stays applied here.
+The IT dashboard's throughput-bar drill-through into this page now seeds the V2 `DateRangeFilter` via `initialRange`, so the period clicked on the bar stays applied here.
 
 The Flat view renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.processing-log` spec on `db-nomaubl` and the bundled default ships every column described below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../../configuration/list-views.md) editor. The Grouped view keeps its dedicated layout — grouping is not a DataTableV2 feature.
 

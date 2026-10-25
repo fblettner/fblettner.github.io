@@ -24,8 +24,8 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
   <rect x="220" y="20" width="760" height="422" rx="14" fill="url(#inv-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
   <text x="240" y="48" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">E-Invoicing</text>
-  <rect x="838" y="32" width="122" height="22" rx="5" fill="url(#inv-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
-  <text x="899.0" y="46.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Nouvelle facture</text>
+  <rect x="838" y="64" width="122" height="22" rx="5" fill="url(#inv-g-blue)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="899.0" y="78.5" fill="#e2e8f0" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Nouvelle facture</text>
   <rect x="240" y="64" width="257" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
   <text x="250" y="78.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">📅 1 – 31 oct. 2026 · Date de mise à jour ▾</text>
   <rect x="507" y="64" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
@@ -130,14 +130,14 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
   <text x="30" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Filtres avancés + Exécuter</text>
   <text x="30" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">requête serveur, tranche bornée</text>
   <line x1="200" y1="287.0" x2="470" y2="293" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-  <rect x="1000" y="22" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="37" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nouvelle facture</text>
-  <text x="1010" y="50" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">avec l'action invoice.create</text>
-  <line x1="1000" y1="39.0" x2="960" y2="43" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
-  <rect x="1000" y="64" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
-  <text x="1010" y="79" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
-  <text x="1010" y="92" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">émises par défaut</text>
-  <line x1="1000" y1="81.0" x2="657" y2="75" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="56" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="71" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Nouvelle facture</text>
+  <text x="1010" y="84" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">avec l'action invoice.create</text>
+  <line x1="1000" y1="73.0" x2="960" y2="75" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
+  <rect x="1000" y="12" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="27" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Direction</text>
+  <text x="1010" y="40" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">émises par défaut</text>
+  <line x1="1000" y1="29.0" x2="657" y2="66" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#inv-arrow)"/>
   <rect x="1000" y="148" width="180" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
   <text x="1010" y="163" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Effacer les filtres</text>
   <text x="1010" y="176" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">dès qu'un statut est choisi</text>
@@ -152,7 +152,7 @@ La page fonctionne quel que soit le système source — JD Edwards, SAP, NetSuit
 
 ## Barre d'outils
 
-Au-dessus de la grille, deux rangées : la **période**, la **direction** et **Exclure les erreurs traitées**, puis le **statut par étape**. La barre d'outils porte aussi **+ Nouvelle facture**, proposé aux rôles autorisés à créer des factures (`invoice.create`), qui ouvre la [fenêtre de création / modification](#create-invoice). Viennent ensuite le panneau [Filtres avancés](#advanced-filters) et la barre d'outils de la grille (recherche, **Exécuter**, actions groupées).
+Au-dessus de la grille, deux rangées : la **période**, la **direction**, **Exclure les erreurs traitées** et, à droite, **+ Nouvelle facture** ; puis le **statut par étape**. **+ Nouvelle facture** est proposé aux rôles autorisés à créer des factures (`invoice.create`), qui ouvre la [fenêtre de création / modification](#create-invoice). Viennent ensuite le panneau [Filtres avancés](#advanced-filters) et la barre d'outils de la grille (recherche, **Exécuter**, actions groupées).
 
 ### Période
 

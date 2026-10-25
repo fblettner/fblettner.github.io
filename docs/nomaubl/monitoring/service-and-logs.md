@@ -312,7 +312,7 @@ The server rotates its own log: above the *Log size cap* (100 MB by default) the
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Watching the Tech Dashboard but ignoring the log file. | A scheduler hang shows up in logs hours before the dashboard reflects "no new invoices today". | Wire log-based alerting (Pattern A above). |
+| Watching the IT dashboard but ignoring the log file. | A scheduler hang shows up in logs hours before the dashboard reflects "no new invoices today". | Wire log-based alerting (Pattern A above). |
 | Polling `/api/build-info` every second. | Pointless load + noise in access logs. | 30 s is more than enough. |
 | Treating `/api/license` `restricted` mode as a hard failure. | Service still serves licensed features in restricted mode for grace period configurations; alarms wake people up unnecessarily. | Read the `reason` field; alert on `expired` / `revoked`; tolerate `restricted` only when expected. |
 | Ignoring `OutOfMemoryError` in the log. | The JVM continues serving but the scheduler thread died — no batch is fired. | Set `Restart=on-failure` in systemd; bump `-Xmx`. |
@@ -323,8 +323,8 @@ The server rotates its own log: above the *Log size cap* (100 MB by default) the
 
 ## What's next
 
-- [Overview](./overview.md) — when to look at the Tech Dashboard vs the log.
-- [Application → Tech Dashboard](../application/tech-dashboard.md) — the in-app live view.
+- [Overview](./overview.md) — when to look at the IT dashboard vs the log.
+- [Application → IT dashboard](../application/tech-dashboard.md) — the in-app live view.
 - [Diagnostics → Processing log](../application/diagnostics/processing-log.md) — per-document trace.
 - [Diagnostics → Server log](../application/diagnostics/server-log.md) — the log file in the application, filtered by level and module.
 - [Installation → Service and systemd](../installation/service-and-systemd.md) — supervision + log rotation setup.

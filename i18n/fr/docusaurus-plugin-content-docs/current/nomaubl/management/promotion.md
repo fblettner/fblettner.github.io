@@ -223,7 +223,7 @@ Les cibles se définissent une fois dans **Paramètres → Promotion targets** (
 |---|---|
 | **Name** | Affiché dans la liste des cibles de la page Promotion. |
 | **URL** | Racine de l'instance cible, avec son préfixe de chemin s'il y en a un (par exemple `https://test.example/nomaubl`). |
-| **Username** / **Password** | Compte sur la cible, qui doit y disposer de la fonctionnalité *Settings access* ; vide quand la cible fonctionne sans authentification. Le mot de passe est enregistré encodé et décodé sur le serveur uniquement pour l'appel. |
+| **Username** / **Password** | Compte sur la cible, qui doit y disposer de la fonctionnalité *Accès aux paramètres* ; vide quand la cible fonctionne sans authentification. Le mot de passe est enregistré encodé et décodé sur le serveur uniquement pour l'appel. |
 
 Le compte n'est jamais transmis au navigateur et ne voyage jamais dans un paquet. Cet éditeur reste en anglais dans l'application.
 

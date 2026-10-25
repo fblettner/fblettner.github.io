@@ -6,7 +6,7 @@ keywords: [NomaUBL, IT dashboard, tech dashboard, health, JVM, heap, database pi
 
 # IT dashboard
 
-The **IT dashboard** (*Tech Dashboard* in the menu) is the IT team's view of NomaUBL. It reads top-down like a checklist: **is everything up?** (a health strip), **what is there to do?** (four action cards with their bulk action), **how did processing go over the last 14 days?**, **what is running right now?**, and the **recent errors**. The detailed technical cards — system, filesystem, JVM, configuration check, database tables — are folded at the bottom and open from the health strip. It complements the [Operations](./dashboard.md) dashboard, which follows the invoices rather than the server.
+The **IT dashboard** is the IT team's view of NomaUBL. It reads top-down like a checklist: **is everything up?** (a health strip), **what is there to do?** (four action cards with their bulk action), **how did processing go over the last 14 days?**, **what is running right now?**, and the **recent errors**. The detailed technical cards — system, filesystem, JVM, configuration check, database tables — are folded at the bottom and open from the health strip. It complements the [Operations](./dashboard.md) dashboard, which follows the invoices rather than the server.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The cards read host-level metrics and the NomaUBL processing log.
 
@@ -14,7 +14,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## Opening the page
 
-- Menu → **Navigation → Tech Dashboard**, after Operations.
+- Menu → **Navigation → IT dashboard**, after Operations.
 
 ---
 

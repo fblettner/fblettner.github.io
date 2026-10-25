@@ -1,6 +1,6 @@
 ---
 title: Auto-Retry
-description: "Scheduled jobs → Auto-retry schedules a daily sweep that replays every invoice in a chosen technical-error status (default 9904 at 3 a.m.) back to the Plateforme Agréée. Multi-status picker, optional lookback window, per-row throttle, shared with the Send Failed card on the Tech Dashboard. The overnight pickup for batches stuck on the PA side."
+description: "Scheduled jobs → Auto-retry schedules a daily sweep that replays every invoice in a chosen technical-error status (default 9904 at 3 a.m.) back to the Plateforme Agréée. Multi-status picker, optional lookback window, per-row throttle, shared with the Send Failed card on the IT dashboard. The overnight pickup for batches stuck on the PA side."
 keywords: [NomaUBL, auto-retry, nightly retry, send failed, status 9904, 9905, 9907, Plateforme Agréée, PA replay, scheduled sweep, throttle, lookback, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
@@ -12,7 +12,7 @@ This form opens from the [Scheduled jobs](./overview.md) page: click a job of ki
 
 The **Auto-Retry** screen schedules a recurring sweep that replays every invoice in a chosen technical-error status back to the Plateforme Agréée (PA). The default row sweeps status `9904` (*Send failed*) every night at 3 a.m. — the overnight batch's safety net so that anything stuck on the PA side at the close of business is picked up before operations resume in the morning.
 
-Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [Tech Dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
+Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [IT dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The replay reads `F564231` to pick invoices in scope and calls the configured PA api-connector for each one; the source format is transparent.
 
@@ -21,7 +21,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 ## Opening the editor
 
 - Sidebar → **Configuration → System → Auto-Retry**.
-- Or from the [Tech Dashboard](../../application/tech-dashboard.md) → *Send Failed* card → *Schedule recurring…* link (shortcut from the manual button to the catalogue).
+- Or from the [IT dashboard](../../application/tech-dashboard.md) → *Send Failed* card → *Schedule recurring…* link (shortcut from the manual button to the catalogue).
 
 ---
 
@@ -110,7 +110,7 @@ Each row is one entry in the catalogue. The edit pane has four sections.
 
 | Field | Required | What |
 |---|---|---|
-| **Name** | yes | Free text. Shown in the catalogue list and on the Tech Dashboard's Scheduler card. Example: *Overnight send-failed sweep*. |
+| **Name** | yes | Free text. Shown in the catalogue list and on the IT dashboard's Scheduler card. Example: *Overnight send-failed sweep*. |
 | **Description** | no | One-line caption to help colleagues understand what the sweep is for. |
 | **Enabled** | yes (default: `on`) | When `off`, the row stays in the catalogue but the scheduler skips it. Useful for pausing during a maintenance window or a deliberate PA outage. |
 
@@ -158,7 +158,7 @@ The scheduler is a daemon inside NomaUBL that wakes up every minute and checks e
 | **2. Replay each one** | For every invoice, call the PA api-connector's `submit` task — same code path as the original *Send* action. The lifecycle row is updated with the new status. |
 | **3. Throttle** | Wait `<throttle>` ms between two calls. |
 | **4. Honour Cancel** | The sweep checks for a cancel signal between two invoices — operators can cancel from the dashboard's Scheduler card without waiting for the run to finish. |
-| **5. Log the run** | Write a row to `F564237` with the sweep name, the start / end timestamp, the count processed / succeeded / failed. Visible on the Tech Dashboard's *Live process events* widget. |
+| **5. Log the run** | Write a row to `F564237` with the sweep name, the start / end timestamp, the count processed / succeeded / failed. Visible on the IT dashboard's *Live process events* widget. |
 
 The run progress is also visible in the [shared progress window](../../application/tech-dashboard.md#shared-progress-window) — same component as the manual *Resend all* button. Click any active sweep on the Scheduler card to open it.
 
@@ -203,7 +203,7 @@ The *Run now* run honours the same throttle, same lookback, same status list as 
 
 ## What's next
 
-- [Tech Dashboard → Send Failed](../../application/tech-dashboard.md#send-failed) — the one-click manual replay; same code path, fired by hand.
+- [IT dashboard → Send Failed](../../application/tech-dashboard.md#send-failed) — the one-click manual replay; same code path, fired by hand.
 - [Shared progress window](../../application/tech-dashboard.md#shared-progress-window) — the modal every long-running operation opens.
 - [E-Invoicing](../../configuration/system/einvoicing.md) → the PA api-connector that the replay calls; tune timeouts and retry counts there.
 - [Statuses](../../configuration/system/statuses.md) — the catalogue of status codes, including the *Error – tech* tag that filters the multi-status picker on this page.

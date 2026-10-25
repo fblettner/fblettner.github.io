@@ -49,7 +49,7 @@ Visibilité :
 |---|---|
 | Tableau de bord technique | Disponible pour tout utilisateur connecté — mais les KPI eux-mêmes respectent le filtre de données de chaque utilisateur (ex. portée par société). |
 | Diagnostic | Chaque vue s'accorde séparément sur la page [Rôles](../configuration/security/roles.md) — Erreurs d'intégration, Journal des traitements, Anomalies, Journal serveur. |
-| Tâches planifiées | Le droit de page *Tâches planifiées* ; lancer, suspendre ou enregistrer une tâche demande aussi l'action *Run batch jobs*. |
+| Tâches planifiées | Le droit de page *Tâches planifiées* ; lancer, suspendre ou enregistrer une tâche demande aussi l'action *Lancer les traitements*. |
 | Fichier de log du service / points HTTP | Accessibles à quiconque dispose d'un accès SSH / RDP / HTTP à l'hôte. **À restreindre via le pare-feu et le reverse proxy** — `/api/build-info` et `/api/license` ne sont pas authentifiés. |
 
 Les deux points HTTP non authentifiés ne divulguent aucun secret (pas de mots de passe, pas de jetons, uniquement des métadonnées de build et un résumé de licence), mais ils révèlent la **version** de NomaUBL en service. Pour les installations exposées publiquement, il convient de les filtrer derrière le reverse proxy ou le VPN si ce point est sensible.

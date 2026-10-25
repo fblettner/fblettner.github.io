@@ -245,7 +245,7 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 | Group | Pages (id) |
 |---|---|
-| **Navigation** | Billing overview (`synthese`), Operations (`dashboard`), Statistics (`statistics`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
+| **Navigation** | Billing overview (`synthese`), Operations (`dashboard`), Statistics (`statistics`), IT dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
 | **Sync** | Fetch Input (`fetchinput`), Fetch Import (`import`), Fetch Statuses (`retrievestatuses`), Scheduled Jobs (`scheduledjobs`). |
 | **Processing** | Process Document (`process`), Extract & Process (`extractandprocess`), Process API (`processapi`). |
 | **UBL** | UBL Validation (`validate`), XSL Editor (`xsleditor`), XML Viewer (`xmlviewer`), UBL Defaults (`ubldefaults`). |
@@ -262,7 +262,7 @@ A few chips carry a hint:
 - **Developer** opens the [Developer reference](../../references/developer.md): tables, configuration keys, flows, impact, API.
 - **Billing overview** and **Statistics** are pages of their own, checked by the server and by the tools of the AI assistant. The upgrade gives both, once, to every role that had Operations, so nobody loses a page; removing them from a role afterwards is kept.
 - **Business Rules** also opens [Schematrons](../../references/schematrons.md).
-- After sign-in, a role with the Billing overview opens on it; a role without it opens on the first page it grants, in menu order (Operations, Statistics, Tech Dashboard, E-Invoicing…).
+- After sign-in, a role with the Billing overview opens on it; a role without it opens on the first page it grants, in menu order (Operations, Statistics, IT dashboard, E-Invoicing…).
 
 Rules:
 
@@ -348,7 +348,7 @@ The **column picker** lists each field once, **by scope**:
 | **Validation findings (F564236)** | Severity, source, rule… | That table. |
 | **Processing log** / **E-reporting** | Their own columns. | That table. |
 
-Each entry reads `label · FIELD`. For the picked field, enter one or more values (*Value (exact match)*); **+ Add value (OR)** appends another value, the **×** removes a value or the whole filter. **+ Add row filter** combines filters on different fields. Like most of the editor, these labels are in English; the scope titles follow the interface language.
+Each entry reads `label · FIELD` (*— select column —* until one is picked). For the picked field, enter one or more values (*Value (exact match)*); **+ Add value (OR)** appends another value, **Remove value** and **Remove filter** drop a value or the whole filter. **+ Add row filter** combines filters on different fields.
 
 #### Combination rules
 

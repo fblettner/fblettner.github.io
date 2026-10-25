@@ -194,7 +194,7 @@ La route de l'API est `GET /api/reports/technical`, avec les paramètres `lang`,
 
 ## Accès
 
-Le rapport fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../../configuration/security/roles.md). La génération demande en outre la fonctionnalité *Settings access*.
+Le rapport fait partie de la page *Rapports* : accorder **Rapports** sur la page [Rôles](../../configuration/security/roles.md). La génération demande en outre la fonctionnalité *Accès aux paramètres*.
 
 ---
 

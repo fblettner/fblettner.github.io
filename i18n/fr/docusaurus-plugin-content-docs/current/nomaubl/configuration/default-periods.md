@@ -205,7 +205,7 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
 
 ### Exclure les erreurs traitées \{#exclude-reviewed\}
 
-À côté du sélecteur, le switch **Exclure les erreurs traitées** masque les factures déjà traitées par le service client qui restent dans un statut en erreur ; les factures traitées dans les autres statuts restent comptées. Il est activé par défaut sur la Synthèse et les Statistiques, désactivé sur Exploitation et E-Invoicing (E-Invoicing reprend la valeur du tableau de bord depuis lequel la liste est ouverte). L'[Explorateur](../application/explorer.md) dispose de sa propre option du même type.
+À côté du sélecteur, le switch **Exclure les erreurs traitées** masque les factures déjà traitées par le service client qui restent dans un statut en erreur ; les factures traitées dans les autres statuts restent comptées. Il est activé par défaut sur la Synthèse et les Statistiques, désactivé sur Exploitation et E-Invoicing (E-Invoicing reprend la valeur du tableau de bord depuis lequel la liste est ouverte). L'[Explorateur](../application/explorer.md) propose le même switch dans chaque analyse.
 
 ---
 

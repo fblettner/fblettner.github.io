@@ -29024,13 +29024,13 @@ See [Command line](../management/command-line.md#demo).
 ## NomaUBL — Monitoring — overview
 Source: https://docs.nomana-it.fr/nomaubl/monitoring/overview/
 
-Where to look when running NomaUBL in production — the in-app Tech Dashboard, the Processing Log, the service log file, the build-info / license endpoints. Plus the patterns to wire external monitoring.
+Where to look when running NomaUBL in production — the in-app IT dashboard, the Processing Log, the service log file, the build-info / license endpoints. Plus the patterns to wire external monitoring.
 
 Visibility into a running NomaUBL install splits across several surfaces — three pages of the web UI, the log file on the host and two HTTP endpoints. This page is the map: which surface answers which operational question, when to look where, what's missing and where to wire external monitoring.
 
 | Surface | What it answers | Where |
 |---|---|---|
-| **Tech Dashboard** | Live KPIs — invoices processed today, in flight, failed; per-PA submission state; scheduler activity; configuration check. | *Navigation → Tech Dashboard* — see [Tech dashboard](../application/tech-dashboard.md). |
+| **IT dashboard** | Live KPIs — invoices processed today, in flight, failed; per-PA submission state; scheduler activity; configuration check. | *Navigation → IT dashboard* — see [Tech dashboard](../application/tech-dashboard.md). |
 | **Diagnostics** | What failed and what the server logged, in four views: integration errors, processing log (every step of every file, with timings), failures (every failure in one list, unresolved by default), server log (the log file, filtered by level and module). | *Navigation → Diagnostics* — see [Diagnostics](../application/diagnostics/overview.md). |
 | **Scheduled jobs** | Every background job with its state, last run, duration, result and next run, and the history of its runs. | *Sync → Scheduled jobs* — see [Scheduled jobs](../sync/scheduled-jobs/overview.md). |
 | **Service log file** | The JVM's stderr / stdout — startup, configuration loading, scheduler ticks, database errors. | `<APP_HOME>/nomaubl-<env>.log` on the host. |
@@ -29044,7 +29044,7 @@ The web UI pages are the **operator's** view; the log file + endpoints are the *
 
 | Situation | Surface |
 |---|---|
-| "Did today's batch run successfully?" | **Tech Dashboard** — invoices processed today panel. |
+| "Did today's batch run successfully?" | **IT dashboard** — invoices processed today panel. |
 | "What failed and is still open?" | **Diagnostics → Failures** — unresolved only, newest first. |
 | "What's the status of invoice #12345?" | **Diagnostics → Processing log** — search by document number. |
 | "Why is invoice #12345 stuck?" | **Diagnostics → Processing log** — drill into the step trace. |
@@ -29067,7 +29067,7 @@ Visibility:
 
 | Surface | Permission |
 |---|---|
-| Tech Dashboard | Available to every signed-in user — but the KPIs themselves respect each user's data filter (e.g. per-company scope). |
+| IT dashboard | Available to every signed-in user — but the KPIs themselves respect each user's data filter (e.g. per-company scope). |
 | Diagnostics | Each view is granted on its own on the [Roles](../configuration/security/roles.md) page — Integration errors, Processing log, Failures, Server log. |
 | Scheduled jobs | The *Scheduled Jobs* page grant; running, pausing or saving a job also requires the *Run batch jobs* action. |
 | Service log file / endpoints | Available to anyone with SSH / RDP / HTTP access to the host. **Restrict via the firewall and the reverse proxy** — `/api/build-info` and `/api/license` are unauthenticated. |
@@ -29088,7 +29088,7 @@ Knowing the gaps prevents misplaced searches:
 |---|---|
 | **Prometheus `/metrics`** | Not built in. Scrape the host with `node_exporter`; mine the log file for application-level counters; or build a small JMX exporter on top of the JVM. |
 | **OpenTelemetry traces** | Not built in. The processing pipeline emits structured per-step logs — pipe those into a log-based tracing system if you need waterfall views. |
-| **Per-request latency histograms** | The Tech Dashboard surfaces aggregates; for percentiles + request-by-request, wire an APM in front of the reverse proxy. |
+| **Per-request latency histograms** | The IT dashboard surfaces aggregates; for percentiles + request-by-request, wire an APM in front of the reverse proxy. |
 | **Heap / GC stats** | Standard JVM JMX — connect VisualVM or JConsole over JMX, or expose JMX via a JMX-to-Prometheus exporter. |
 | **Live database connection-pool metrics** | NomaUBL uses a simple per-call connection model, not a pooled one. Connection count is a function of in-flight requests — observable through Oracle's `V$SESSION` or PostgreSQL's `pg_stat_activity`. |
 
@@ -29115,7 +29115,7 @@ Items 3, 4 and 5 are the cheap wins that catch 80% of production incidents.
 
 | Goal | Read |
 |---|---|
-| Walk the Tech Dashboard cards. | [Application → Tech Dashboard](../application/tech-dashboard.md). |
+| Walk the IT dashboard cards. | [Application → IT dashboard](../application/tech-dashboard.md). |
 | Investigate a stuck or failed invoice. | [Diagnostics → Processing log](../application/diagnostics/processing-log.md). |
 | Use the wrapper's `status` + log tailing for incidents (Linux or Windows). | [Service and logs](./service-and-logs.md). |
 | Wire external monitoring (LB probes, alerting, log forwarding). | [Service and logs](./service-and-logs.md). |
@@ -29125,7 +29125,7 @@ Items 3, 4 and 5 are the cheap wins that catch 80% of production incidents.
 ## What's next
 
 - [Service and logs](./service-and-logs.md) — the CLI + endpoints layer in detail.
-- [Application → Tech Dashboard](../application/tech-dashboard.md) — the in-app live view.
+- [Application → IT dashboard](../application/tech-dashboard.md) — the in-app live view.
 - [Diagnostics → Processing log](../application/diagnostics/processing-log.md) — per-document trace.
 
 ---
@@ -29441,7 +29441,7 @@ The server rotates its own log: above the *Log size cap* (100 MB by default) the
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Watching the Tech Dashboard but ignoring the log file. | A scheduler hang shows up in logs hours before the dashboard reflects "no new invoices today". | Wire log-based alerting (Pattern A above). |
+| Watching the IT dashboard but ignoring the log file. | A scheduler hang shows up in logs hours before the dashboard reflects "no new invoices today". | Wire log-based alerting (Pattern A above). |
 | Polling `/api/build-info` every second. | Pointless load + noise in access logs. | 30 s is more than enough. |
 | Treating `/api/license` `restricted` mode as a hard failure. | Service still serves licensed features in restricted mode for grace period configurations; alarms wake people up unnecessarily. | Read the `reason` field; alert on `expired` / `revoked`; tolerate `restricted` only when expected. |
 | Ignoring `OutOfMemoryError` in the log. | The JVM continues serving but the scheduler thread died — no batch is fired. | Set `Restart=on-failure` in systemd; bump `-Xmx`. |
@@ -29452,8 +29452,8 @@ The server rotates its own log: above the *Log size cap* (100 MB by default) the
 
 ## What's next
 
-- [Overview](./overview.md) — when to look at the Tech Dashboard vs the log.
-- [Application → Tech Dashboard](../application/tech-dashboard.md) — the in-app live view.
+- [Overview](./overview.md) — when to look at the IT dashboard vs the log.
+- [Application → IT dashboard](../application/tech-dashboard.md) — the in-app live view.
 - [Diagnostics → Processing log](../application/diagnostics/processing-log.md) — per-document trace.
 - [Diagnostics → Server log](../application/diagnostics/server-log.md) — the log file in the application, filtered by level and module.
 - [Installation → Service and systemd](../installation/service-and-systemd.md) — supervision + log rotation setup.
@@ -29665,7 +29665,7 @@ Source: https://docs.nomana-it.fr/nomaubl/application/tech-dashboard/
 
 The NomaUBL IT dashboard: a health strip (application, database, disk, memory, scheduler, configuration), the four action cards (send failed, waiting for review, to reprocess, to reprocess in full), processing over the last 14 days (volume, errors, retries, time per document), what is running right now, recent errors, and folded technical details (system, filesystem, JVM, configuration check, database tables, links).
 
-The **IT dashboard** (*Tech Dashboard* in the menu) is the IT team's view of NomaUBL. It reads top-down like a checklist: **is everything up?** (a health strip), **what is there to do?** (four action cards with their bulk action), **how did processing go over the last 14 days?**, **what is running right now?**, and the **recent errors**. The detailed technical cards — system, filesystem, JVM, configuration check, database tables — are folded at the bottom and open from the health strip. It complements the [Operations](./dashboard.md) dashboard, which follows the invoices rather than the server.
+The **IT dashboard** is the IT team's view of NomaUBL. It reads top-down like a checklist: **is everything up?** (a health strip), **what is there to do?** (four action cards with their bulk action), **how did processing go over the last 14 days?**, **what is running right now?**, and the **recent errors**. The detailed technical cards — system, filesystem, JVM, configuration check, database tables — are folded at the bottom and open from the health strip. It complements the [Operations](./dashboard.md) dashboard, which follows the invoices rather than the server.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The cards read host-level metrics and the NomaUBL processing log.
 
@@ -29673,7 +29673,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## Opening the page
 
-- Menu → **Navigation → Tech Dashboard**, after Operations.
+- Menu → **Navigation → IT dashboard**, after Operations.
 
 ---
 
@@ -30042,7 +30042,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 
 ## Toolbar
 
-Above the grid, two rows: the **period**, the **direction** and **Exclude reviewed errors**, then the **status by stage**. The toolbar also carries **+ New Invoice**, shown to the roles allowed to create invoices (`invoice.create`), which opens the [Create / Edit invoice modal](#create-invoice). The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
+Above the grid, two rows: the **period**, the **direction**, **Exclude reviewed errors** and, at the right, **+ New Invoice**; then the **status by stage**. **+ New Invoice** is shown to the roles allowed to create invoices (`invoice.create`), which opens the [Create / Edit invoice modal](#create-invoice). The [Advanced Filters](#advanced-filters) panel and the grid toolbar (search, **Run**, bulk actions) follow.
 
 ### Period
 
@@ -30191,7 +30191,7 @@ Each row carries a **checkbox**, and a **Resend selected (N)** button appears in
 
 ### Reprocess \{#reprocess\}
 
-A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing is a **reprint**: for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), it regenerates the readable PDF / XML and the UBL file from the JDE XML source archived at first submission, into the output and burst folders. Nothing changes in the database and the UBL is not validated again — the stored e-invoice, including a later *Fix buyer* correction, stays the reference, and its validation results are kept. The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [Tech Dashboard](tech-dashboard.md#to-reprocess) and the command line.
+A **Reprocess selected (N)** button appears next to *Resend selected* when the ticked rows include invoices eligible for reprocessing. Reprocessing is a **reprint**: for an invoice the platform **deposited but did not transmit** (status 200, reason `NON_TRANSMISE`), it regenerates the readable PDF / XML and the UBL file from the JDE XML source archived at first submission, into the output and burst folders. Nothing changes in the database and the UBL is not validated again — the stored e-invoice, including a later *Fix buyer* correction, stays the reference, and its validation results are kept. The invoice keeps its current status, a *Retraitement* entry is added to its history, nothing is re-sent to the platform, and each invoice is reprocessed only once. Only invoices on a template with **Allow reprocess** enabled (an XML-source template — see [Documents](../management/documents.md)) are eligible; the others are ignored in the selection. The same run is available from the [IT dashboard](tech-dashboard.md#to-reprocess) and the command line.
 
 The selection also covers **validation failures**: an invoice in *Validation failed* (`9905`) on a template with **Allow full reprocess** enabled is **reprocessed in full** — enrichment queried again, UBL regenerated, validated and sent to the PA when the template and document type say so; the history is kept and a new cycle starts. The confirmation states which invoices are reprinted and which are reprocessed in full. The invoice window offers the same full reprocess through a **Reprocess** button on a `9905`.
 
@@ -32045,7 +32045,7 @@ The same toolbar drives both views.
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../../configuration/list-views.md) spec (`view.integration-errors`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
-The Tech Dashboard's *Recent errors* drill-through also surfaces here: when the dashboard passes `{ doc, dct, kco }`, a chip shows the active drill-through filter and offers a one-click `×` clear. Useful when the panel is collapsed and the filter would otherwise stay invisible.
+The IT dashboard's *Recent errors* drill-through also surfaces here: when the dashboard passes `{ doc, dct, kco }`, a chip shows the active drill-through filter and offers a one-click `×` clear. Useful when the panel is collapsed and the filter would otherwise stay invisible.
 
 The page runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, default 5000), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. The `invoiceStatus` refList column gets a **multi-select picker** that issues an `IN (?,?,?)` clause on the server so picking several statuses returns the union.
 
@@ -32096,7 +32096,7 @@ The table renders through **DataTableV2** in spec-driven mode: the column shape 
 | Column | Source | Description |
 |---|---|---|
 | **Severity** | `UVY56LEVEL` | Coloured badge — *FATAL* / *ERROR* / *WARNING* / *INFO*. |
-| **Date** | `UVUPMJ` + `UVUPMT` | Date and time the event was recorded. Same time context as the Tech Dashboard's recent-errors card, so triage no longer requires opening a row first. |
+| **Date** | `UVUPMJ` + `UVUPMT` | Date and time the event was recorded. Same time context as the IT dashboard's recent-errors card, so triage no longer requires opening a row first. |
 | **Doc** | `UVDOC` | Document number from the source data. |
 | **Dct** | `UVDCT` | Document type. |
 | **Kco** | `UVKCO` | Company code, with its name from the `list-companies` list. |
@@ -32251,7 +32251,7 @@ When grouped, the page over-fetches (`pageSize × 4`, capped at 200) so START / 
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../../configuration/list-views.md) spec (`view.processing-log`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
-The Tech Dashboard's throughput-bar drill-through into this page now seeds the V2 `DateRangeFilter` via `initialRange`, so the period clicked on the bar stays applied here.
+The IT dashboard's throughput-bar drill-through into this page now seeds the V2 `DateRangeFilter` via `initialRange`, so the period clicked on the bar stays applied here.
 
 The Flat view renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.processing-log` spec on `db-nomaubl` and the bundled default ships every column described below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../../configuration/list-views.md) editor. The Grouped view keeps its dedicated layout — grouping is not a DataTableV2 feature.
 
@@ -33149,7 +33149,7 @@ With **Billing overview (Synthèse)** or **Statistics**, the digest sends the fi
 | **Visible as role** | Everything (no restriction) | The report shows what a user of this role sees: its companies and [row filters](../../configuration/security/roles.md#row-filters). The role must grant the page; otherwise the run fails with a message naming the role. One digest per role sends each recipient group its own scope. |
 | **Attachment** | Excel | **PDF — the page's figures, charts and tables**, in the layout of the audit report, or **Excel — one sheet per table**. |
 
-The attachment holds the sections of the page: for the Billing overview, the key figures with the previous period, the amount invoiced per month, what needs a decision, per company, per transaction type and, for sales, e-reporting; for Statistics, the key figures, the stages, the trend, the waiting time, the statuses and the detail by activity, status and reason. It is in French unless the instance language is English. The email states the period and that the report is attached; it is sent even when the period is empty.
+The attachment holds the sections of the page: for the Billing overview, the key figures with the previous period, the amount invoiced per month, what needs a decision, per company, per transaction type and, for sales, e-reporting; for Statistics, the key figures, the stages, the trend, the waiting time, the statuses and the detail by activity, status and reason. It is in French unless the instance language is English. The email states the period and that the report is attached; it is always sent, so the *Send even when the period has no errors* option is hidden.
 
 ---
 
@@ -33236,7 +33236,7 @@ The *Send now* run also updates the *last sent* badge, so the scheduled run that
 ## NomaUBL — Auto-Retry
 Source: https://docs.nomana-it.fr/nomaubl/sync/scheduled-jobs/auto-retry/
 
-Scheduled jobs → Auto-retry schedules a daily sweep that replays every invoice in a chosen technical-error status (default 9904 at 3 a.m.) back to the Plateforme Agréée. Multi-status picker, optional lookback window, per-row throttle, shared with the Send Failed card on the Tech Dashboard. The overnight pickup for batches stuck on the PA side.
+Scheduled jobs → Auto-retry schedules a daily sweep that replays every invoice in a chosen technical-error status (default 9904 at 3 a.m.) back to the Plateforme Agréée. Multi-status picker, optional lookback window, per-row throttle, shared with the Send Failed card on the IT dashboard. The overnight pickup for batches stuck on the PA side.
 
 :::info[Where to find it]
 This form opens from the [Scheduled jobs](./overview.md) page: click a job of kind *Auto-retry* to edit it, or **New job → Auto-retry** to create one. **Save & apply** reloads the schedules at once — no server restart. The former *Auto-Retry* page has left the menu.
@@ -33244,7 +33244,7 @@ This form opens from the [Scheduled jobs](./overview.md) page: click a job of ki
 
 The **Auto-Retry** screen schedules a recurring sweep that replays every invoice in a chosen technical-error status back to the Plateforme Agréée (PA). The default row sweeps status `9904` (*Send failed*) every night at 3 a.m. — the overnight batch's safety net so that anything stuck on the PA side at the close of business is picked up before operations resume in the morning.
 
-Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [Tech Dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
+Multiple rows can coexist: one per (hour, status list) combination. The same code path drives the manual *Resend all N* button on the [IT dashboard's Send Failed card](../../application/tech-dashboard.md#send-failed), so the manual replay and the scheduled replay produce identical results — one is fired by hand, the other by cron.
 
 The page applies regardless of source system — JD Edwards, SAP, NetSuite or a custom ERP. The replay reads `F564231` to pick invoices in scope and calls the configured PA api-connector for each one; the source format is transparent.
 
@@ -33253,7 +33253,7 @@ The page applies regardless of source system — JD Edwards, SAP, NetSuite or a 
 ## Opening the editor
 
 - Sidebar → **Configuration → System → Auto-Retry**.
-- Or from the [Tech Dashboard](../../application/tech-dashboard.md) → *Send Failed* card → *Schedule recurring…* link (shortcut from the manual button to the catalogue).
+- Or from the [IT dashboard](../../application/tech-dashboard.md) → *Send Failed* card → *Schedule recurring…* link (shortcut from the manual button to the catalogue).
 
 ---
 
@@ -33269,7 +33269,7 @@ Each row is one entry in the catalogue. The edit pane has four sections.
 
 | Field | Required | What |
 |---|---|---|
-| **Name** | yes | Free text. Shown in the catalogue list and on the Tech Dashboard's Scheduler card. Example: *Overnight send-failed sweep*. |
+| **Name** | yes | Free text. Shown in the catalogue list and on the IT dashboard's Scheduler card. Example: *Overnight send-failed sweep*. |
 | **Description** | no | One-line caption to help colleagues understand what the sweep is for. |
 | **Enabled** | yes (default: `on`) | When `off`, the row stays in the catalogue but the scheduler skips it. Useful for pausing during a maintenance window or a deliberate PA outage. |
 
@@ -33317,7 +33317,7 @@ The scheduler is a daemon inside NomaUBL that wakes up every minute and checks e
 | **2. Replay each one** | For every invoice, call the PA api-connector's `submit` task — same code path as the original *Send* action. The lifecycle row is updated with the new status. |
 | **3. Throttle** | Wait `<throttle>` ms between two calls. |
 | **4. Honour Cancel** | The sweep checks for a cancel signal between two invoices — operators can cancel from the dashboard's Scheduler card without waiting for the run to finish. |
-| **5. Log the run** | Write a row to `F564237` with the sweep name, the start / end timestamp, the count processed / succeeded / failed. Visible on the Tech Dashboard's *Live process events* widget. |
+| **5. Log the run** | Write a row to `F564237` with the sweep name, the start / end timestamp, the count processed / succeeded / failed. Visible on the IT dashboard's *Live process events* widget. |
 
 The run progress is also visible in the [shared progress window](../../application/tech-dashboard.md#shared-progress-window) — same component as the manual *Resend all* button. Click any active sweep on the Scheduler card to open it.
 
@@ -33362,7 +33362,7 @@ The *Run now* run honours the same throttle, same lookback, same status list as 
 
 ## What's next
 
-- [Tech Dashboard → Send Failed](../../application/tech-dashboard.md#send-failed) — the one-click manual replay; same code path, fired by hand.
+- [IT dashboard → Send Failed](../../application/tech-dashboard.md#send-failed) — the one-click manual replay; same code path, fired by hand.
 - [Shared progress window](../../application/tech-dashboard.md#shared-progress-window) — the modal every long-running operation opens.
 - [E-Invoicing](../../configuration/system/einvoicing.md) → the PA api-connector that the replay calls; tune timeouts and retry counts there.
 - [Statuses](../../configuration/system/statuses.md) — the catalogue of status codes, including the *Error – tech* tag that filters the multi-status picker on this page.
@@ -35918,8 +35918,8 @@ A template with *Source = UBL* embeds the same PDFs as the XML flow — after va
 |---|---|
 | **No-Data Key** | Name of an XML element that **must exist** in the spool. If absent, NomaUBL considers the document empty and skips it. Useful to filter out spool sections that aren't real invoices. |
 | **Set Locale** | Locale used to render the PDF (e.g. `en_US`, `fr_FR`). Affects date and number formatting in the PDF only. |
-| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. XML and PDF sources are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
-| **Allow full reprocess** | `Y` / `N` (default `N`). When `Y`, an invoice in *Validation failed* (`9905`) can be **reprocessed in full** from its archived source once the data was corrected at the source: the enrichment is queried again, the UBL regenerated, validated and sent to the PA when the template and document type say so. The status history is kept and a reprocess marker opens a new cycle. XML and PDF sources. Triggered from the invoice window (*Reprocess* button on a `9905`), the [Invoices list](../application/invoices.md#reprocess), the [Tech Dashboard](../application/tech-dashboard.md#to-reprocess-full), the API (`kind: "full"`) or `-reprocess --full`. |
+| **Allow reprocess** | `Y` / `N` (default `N`). When `Y`, invoices produced from this template can be **reprocessed** — rebuilt from the JDE XML source archived at first submission — when they were **deposited but not transmitted** (status 200, reason `NON_TRANSMISE`). Reprocessing regenerates the e-invoice, PDF and XML, keeps the invoice's current status, records a *Retraitement* entry in its history and never re-sends to the platform; each invoice is reprocessed once. XML and PDF sources are eligible. Reprocessing is triggered from the [Invoices list](../application/invoices.md#reprocess), the [IT dashboard](../application/tech-dashboard.md#to-reprocess) or the CLI. |
+| **Allow full reprocess** | `Y` / `N` (default `N`). When `Y`, an invoice in *Validation failed* (`9905`) can be **reprocessed in full** from its archived source once the data was corrected at the source: the enrichment is queried again, the UBL regenerated, validated and sent to the PA when the template and document type say so. The status history is kept and a reprocess marker opens a new cycle. XML and PDF sources. Triggered from the invoice window (*Reprocess* button on a `9905`), the [Invoices list](../application/invoices.md#reprocess), the [IT dashboard](../application/tech-dashboard.md#to-reprocess-full), the API (`kind: "full"`) or `-reprocess --full`. |
 
 ---
 
@@ -37488,7 +37488,7 @@ java -jar nomaubl.jar -fetch-received /opt/nomaubl/demo/config/config.json \
 
 ## `-send-waiting` — send invoices held for review to the PA \{#send-waiting\}
 
-Sends every invoice **held for review** (document type on the `W` — *Waiting* — send flag) to the Plateforme Agréée — the command-line equivalent of the *Waiting for review* card's **Send all** button on the [Tech Dashboard](../application/tech-dashboard.md#waiting-for-review), for scheduling the release outside the web server.
+Sends every invoice **held for review** (document type on the `W` — *Waiting* — send flag) to the Plateforme Agréée — the command-line equivalent of the *Waiting for review* card's **Send all** button on the [IT dashboard](../application/tech-dashboard.md#waiting-for-review), for scheduling the release outside the web server.
 
 ```bash
 java -jar nomaubl.jar -send-waiting /opt/nomaubl/demo/config/config.json [--parallel N] [--delay MS]
@@ -38242,7 +38242,7 @@ The whole card is dimmed when *Send Mode* ≠ `FTP` — these fields only apply 
 
 ## Configuration check
 
-The configuration check on the [Tech Dashboard](../../application/tech-dashboard.md) validates the template against these rules:
+The configuration check on the [IT dashboard](../../application/tech-dashboard.md) validates the template against these rules:
 
 - `paMode=API` without a `connector` is reported as an error (the API transport has nothing to call).
 - `paMode=FTP` without `paFtpHost` is reported as an error (the SFTP transport has no server).
@@ -38555,7 +38555,7 @@ When *Demo instance* is `Y`, the tab also shows a **Demo corpus** block that fil
 |---|---|---|
 | **Update DB** | `Y` / `N` | When `Y`, processing runs persist their results to the database. Set to `N` only for dry runs / debugging. |
 | **Max threads** | *(blank = all cores)* | Caps how many invoices are processed at once. An XML-spool template can process its whole input folder in a single **parallel** pass — much faster on a folder of thousands of single-invoice files, and used the same way by a scheduled scan, an on-demand run and the command-line batch. Each file stays its own unit (name, source archive and traceability kept) and one file's failure doesn't stop the others. Set a value to keep headroom for other services on a shared host; leave it blank to use every available core. UBL templates and per-job (BIP) processing are unaffected. It also bounds the bulk reprocess, which runs one batch per template. |
-| **`debugProfile`** | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [Tech Dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
+| **`debugProfile`** | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [IT dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
 
 :::info[Advanced]
 The **Ghostscript** group is folded under *Advanced* at the bottom of the tab.
@@ -38672,11 +38672,11 @@ Settings shared by the background jobs. The jobs themselves — intervals, daily
 
 | Field | Description |
 |---|---|
-| **Quiet window from / to (HH:mm)** | A daily window during which both PA pollers (import poll and status retrieval) skip their runs automatically — set it over a send campaign so per-invoice import polls don't pile up while the PA is integrating the batch. May cross midnight; leave both empty to disable. It applies without a restart and shows on the Tech Dashboard's *Scheduler* card, highlighted while active. |
+| **Quiet window from / to (HH:mm)** | A daily window during which both PA pollers (import poll and status retrieval) skip their runs automatically — set it over a send campaign so per-invoice import polls don't pile up while the PA is integrating the batch. May cross midnight; leave both empty to disable. It applies without a restart and shows on the IT dashboard's *Scheduler* card, highlighted while active. |
 
 ### Bulk Send
 
-Defaults for every bulk send to the PA — *Send all waiting* and *Resend all* on the [Tech Dashboard](../../application/tech-dashboard.md), the [invoice-list bulk resend](../../application/invoices.md#bulk-resend), and the `-send-waiting` CLI. Each nightly [Auto-Retry](../../sync/scheduled-jobs/auto-retry.md) routine can override them on its own row.
+Defaults for every bulk send to the PA — *Send all waiting* and *Resend all* on the [IT dashboard](../../application/tech-dashboard.md), the [invoice-list bulk resend](../../application/invoices.md#bulk-resend), and the `-send-waiting` CLI. Each nightly [Auto-Retry](../../sync/scheduled-jobs/auto-retry.md) routine can override them on its own row.
 
 | Field | Description |
 |---|---|
@@ -38937,7 +38937,7 @@ Each of the seven codes is one row in the editor. The **Code** column is read-on
 | **Code** | fixed | One of the seven regulatory codes above. Read-only. Hover the code to see the regulatory hint. |
 | **Description** | text | Free-text label shown in documents and UI. Defaults to the regulatory description above. |
 | **Default** | checkbox | When ticked, this code is **pre-selected** in newly created documents. **Only one row can be the default at a time** — ticking another row automatically un-ticks the previous one. |
-| **Send to PA** | `Y` / `N` / `F` / `W` | Per-type override of the runtime *send to Plateforme Agréée* argument: `Y` = send; `N` = do not send; `F` = **force send** even when the runtime argument says skip; `W` = **Waiting** — the invoice is generated and validated but **held for review** instead of being sent, then released from the *Waiting for review* card on the [Tech Dashboard](../../application/tech-dashboard.md). Default: `Y` for B2B, `N` for every other code. A type set to `N` (*Do not send*) is truly non-transmissible: the **Resend** action is hidden on those invoices and any manual or bulk send is refused. |
+| **Send to PA** | `Y` / `N` / `F` / `W` | Per-type override of the runtime *send to Plateforme Agréée* argument: `Y` = send; `N` = do not send; `F` = **force send** even when the runtime argument says skip; `W` = **Waiting** — the invoice is generated and validated but **held for review** instead of being sent, then released from the *Waiting for review* card on the [IT dashboard](../../application/tech-dashboard.md). Default: `Y` for B2B, `N` for every other code. A type set to `N` (*Do not send*) is truly non-transmissible: the **Resend** action is hidden on those invoices and any manual or bulk send is refused. |
 | **GS** | checkbox | When ticked, runs **Ghostscript** post-processing on the produced PDF for this type (e.g. compression / linearisation), regardless of the runtime argument. Off by default. |
 | **Mode** | *(default)* / `UBL` / `BURST` | Per-type override of the runtime *Mode* argument: empty = **no override** (the runtime mode is kept); `UBL` = force UBL-only output for this type; `BURST` = force bursted output for this type. |
 | **UBL** | checkbox | When ticked, keeps the generated **UBL file** in the bursting output directory after processing for this type. Default: `Y` (kept). |
@@ -39501,7 +39501,7 @@ The button shows the range itself (for example *1 – 31 Oct 2026*) and the date
 
 ### Exclude reviewed errors \{#exclude-reviewed\}
 
-Next to the picker, the **Exclude reviewed errors** switch hides the invoices already reviewed by customer service that still sit in an error status; reviewed invoices in other statuses stay counted. It is on by default on the Billing overview and Statistics, off on Operations and E-Invoicing (E-Invoicing takes the value of the dashboard it is opened from). The [Explorer](../application/explorer.md) has its own option of the same kind.
+Next to the picker, the **Exclude reviewed errors** switch hides the invoices already reviewed by customer service that still sit in an error status; reviewed invoices in other statuses stay counted. It is on by default on the Billing overview and Statistics, off on Operations and E-Invoicing (E-Invoicing takes the value of the dashboard it is opened from). The [Explorer](../application/explorer.md) offers the same switch in every analysis.
 
 ---
 
@@ -40584,7 +40584,7 @@ The pages are laid out as **one card per group of the side menu** — same group
 
 | Group | Pages (id) |
 |---|---|
-| **Navigation** | Billing overview (`synthese`), Operations (`dashboard`), Statistics (`statistics`), Tech Dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
+| **Navigation** | Billing overview (`synthese`), Operations (`dashboard`), Statistics (`statistics`), IT dashboard (`techdashboard`), E-Invoicing (`invoices`), E-Documents (`edocuments`), E-Reporting (`ereporting`), E-Directory (`edirectory`), VAT declaration (`vatdeclaration`), Reports (`reports`), Explorer (`explorer`), Notifications (`notifications`), then **Diagnostics** and its four views: Integration errors (`integrationerrors`), Processing log (`processinglog`), Failures (`errors`), Server log (`serverlog`). |
 | **Sync** | Fetch Input (`fetchinput`), Fetch Import (`import`), Fetch Statuses (`retrievestatuses`), Scheduled Jobs (`scheduledjobs`). |
 | **Processing** | Process Document (`process`), Extract & Process (`extractandprocess`), Process API (`processapi`). |
 | **UBL** | UBL Validation (`validate`), XSL Editor (`xsleditor`), XML Viewer (`xmlviewer`), UBL Defaults (`ubldefaults`). |
@@ -40601,7 +40601,7 @@ A few chips carry a hint:
 - **Developer** opens the [Developer reference](../../references/developer.md): tables, configuration keys, flows, impact, API.
 - **Billing overview** and **Statistics** are pages of their own, checked by the server and by the tools of the AI assistant. The upgrade gives both, once, to every role that had Operations, so nobody loses a page; removing them from a role afterwards is kept.
 - **Business Rules** also opens [Schematrons](../../references/schematrons.md).
-- After sign-in, a role with the Billing overview opens on it; a role without it opens on the first page it grants, in menu order (Operations, Statistics, Tech Dashboard, E-Invoicing…).
+- After sign-in, a role with the Billing overview opens on it; a role without it opens on the first page it grants, in menu order (Operations, Statistics, IT dashboard, E-Invoicing…).
 
 Rules:
 
@@ -40687,7 +40687,7 @@ The **column picker** lists each field once, **by scope**:
 | **Validation findings (F564236)** | Severity, source, rule… | That table. |
 | **Processing log** / **E-reporting** | Their own columns. | That table. |
 
-Each entry reads `label · FIELD`. For the picked field, enter one or more values (*Value (exact match)*); **+ Add value (OR)** appends another value, the **×** removes a value or the whole filter. **+ Add row filter** combines filters on different fields. Like most of the editor, these labels are in English; the scope titles follow the interface language.
+Each entry reads `label · FIELD` (*— select column —* until one is picked). For the picked field, enter one or more values (*Value (exact match)*); **+ Add value (OR)** appends another value, **Remove value** and **Remove filter** drop a value or the whole filter. **+ Add row filter** combines filters on different fields.
 
 #### Combination rules
 
@@ -41616,6 +41616,7 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **New invoice on E-Invoicing.** Creating an invoice moves to a New invoice button on the E-Invoicing list (with the invoice.create permission). The Quick actions block of the Operations dashboard is removed.
 - **VAT declaration: no drill-down.** The amounts no longer open the invoice list, which could not reproduce the rate and the exclusions; each rate still unfolds into its transaction types and invoices. Amounts follow the interface language.
 - **IT dashboard translated.** The title, the description and every card of the IT dashboard are translated.
+- **Roles editor translated; wording aligned.** The roles editor — tabs, features, actions with their help, data scope, messages — is translated. The Explorer's switch reads "Exclude handled errors" in French like everywhere else, the English menu says IT dashboard, the VAT declaration's description no longer mentions opening the invoices, and the daily digest hides "Send even when the period has no errors" for the Synthèse and the Statistics, which are always sent.
 - **Daily digest: the business dashboards.** A digest can send the Synthèse or the Statistics, as PDF (the page's figures, charts and tables) or Excel, over last month, the month to date or the digest window, for sales or purchases. It can be built as a role sees it — its companies and row filters — so each recipient group receives only its scope. Any digest can be sent on one day of the month only (for example on the 1st, last month's overview); Send now ignores it.
 - **PDF: euro sign in italic notes.** In the notes under a section title, the euro sign no longer runs into the following word.
 - **AI assistant: new pages and two tools.** The assistant knows the Billing overview, Statistics, Explorer and the invoice stages, and reads the figures of the two business dashboards: billing_overview (revenue, VAT, credit notes, transmission rate, decisions, per company and per transaction type, compared with the previous period) and status_statistics (invoices by stage, statuses, reasons, waiting time, activity × status × reason with the previous period). Since it reads the implementation report, it also knows the default periods and the dashboard rules of the instance.

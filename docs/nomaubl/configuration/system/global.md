@@ -136,7 +136,7 @@ When *Demo instance* is `Y`, the tab also shows a **Demo corpus** block that fil
 |---|---|---|
 | **Update DB** | `Y` / `N` | When `Y`, processing runs persist their results to the database. Set to `N` only for dry runs / debugging. |
 | **Max threads** | *(blank = all cores)* | Caps how many invoices are processed at once. An XML-spool template can process its whole input folder in a single **parallel** pass — much faster on a folder of thousands of single-invoice files, and used the same way by a scheduled scan, an on-demand run and the command-line batch. Each file stays its own unit (name, source archive and traceability kept) and one file's failure doesn't stop the others. Set a value to keep headroom for other services on a shared host; leave it blank to use every available core. UBL templates and per-job (BIP) processing are unaffected. It also bounds the bulk reprocess, which runs one batch per template. |
-| **`debugProfile`** | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [Tech Dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
+| **`debugProfile`** | `Y` / `N` | When `Y`, every processing run writes **per-step timing rows** to `F564237` covering each pipeline stage: header parsing, lines parsing, validation, UBL emit, PA send. The rows surface on the [IT dashboard](../../application/tech-dashboard.md) — the *Live process events* tail flags them with their step name, and the *Template processing time* widget breaks the average down by stage. Leave at `N` in production; flip to `Y` for the duration of a batch run when triaging a slow pipeline. Disable once the slow stage is identified — the extra rows inflate `F564237` quickly under load. |
 
 :::info[Advanced]
 The **Ghostscript** group is folded under *Advanced* at the bottom of the tab.
@@ -253,11 +253,11 @@ Settings shared by the background jobs. The jobs themselves — intervals, daily
 
 | Field | Description |
 |---|---|
-| **Quiet window from / to (HH:mm)** | A daily window during which both PA pollers (import poll and status retrieval) skip their runs automatically — set it over a send campaign so per-invoice import polls don't pile up while the PA is integrating the batch. May cross midnight; leave both empty to disable. It applies without a restart and shows on the Tech Dashboard's *Scheduler* card, highlighted while active. |
+| **Quiet window from / to (HH:mm)** | A daily window during which both PA pollers (import poll and status retrieval) skip their runs automatically — set it over a send campaign so per-invoice import polls don't pile up while the PA is integrating the batch. May cross midnight; leave both empty to disable. It applies without a restart and shows on the IT dashboard's *Scheduler* card, highlighted while active. |
 
 ### Bulk Send
 
-Defaults for every bulk send to the PA — *Send all waiting* and *Resend all* on the [Tech Dashboard](../../application/tech-dashboard.md), the [invoice-list bulk resend](../../application/invoices.md#bulk-resend), and the `-send-waiting` CLI. Each nightly [Auto-Retry](../../sync/scheduled-jobs/auto-retry.md) routine can override them on its own row.
+Defaults for every bulk send to the PA — *Send all waiting* and *Resend all* on the [IT dashboard](../../application/tech-dashboard.md), the [invoice-list bulk resend](../../application/invoices.md#bulk-resend), and the `-send-waiting` CLI. Each nightly [Auto-Retry](../../sync/scheduled-jobs/auto-retry.md) routine can override them on its own row.
 
 | Field | Description |
 |---|---|

@@ -198,8 +198,8 @@ Quelques drapeaux binaires. Chaque ligne combine une case à cocher et un libell
 
 | Fonctionnalité | Aide | Effet |
 |---|---|---|
-| **Accès aux paramètres** | *Peut ouvrir la page Configuration (édition des templates / connecteurs).* | Ouvre l'intégralité du menu Configuration. Le rôle reçoit alors la pastille `Admin` dans la liste. |
-| **Mode lecture seule** | *Aucune action de modification / suppression / renvoi, même sur les pages autorisées.* | L'utilisateur peut consulter l'application, mais toutes les actions d'écriture sont désactivées — surcharge entièrement l'onglet *Actions*. |
+| **Accès aux paramètres** | *Peut ouvrir la page Paramètres (modèles, connecteurs)* | Ouvre l'intégralité du menu Configuration. Le rôle reçoit alors la pastille `Admin` dans la liste. |
+| **Lecture seule** | *Aucune modification, suppression ni renvoi, même sur les pages autorisées* | L'utilisateur peut consulter l'application, mais toutes les actions d'écriture sont désactivées — surcharge entièrement l'onglet *Actions*. |
 
 ### Pages autorisées
 
@@ -256,9 +256,9 @@ Les pages se présentent en **une carte par groupe du menu latéral** — mêmes
 Quelques pastilles portent une aide :
 
 - **Diagnostic** est une page à quatre vues : chaque vue est un droit distinct, et le menu affiche *Diagnostic* dès que l'une d'elles est accordée. Voir [Diagnostic](../../application/diagnostics/overview.md).
-- **Tâches planifiées** couvre toutes les tâches — imports, tâches batch, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, rétention. Lancer, suspendre ou enregistrer une tâche demande aussi l'action *Run batch jobs* (`integration.run`). Voir [Tâches planifiées](../../sync/scheduled-jobs/overview.md).
+- **Tâches planifiées** couvre toutes les tâches — imports, tâches batch, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, rétention. Lancer, suspendre ou enregistrer une tâche demande aussi l'action *Lancer les traitements* (`integration.run`). Voir [Tâches planifiées](../../sync/scheduled-jobs/overview.md).
 - **Dossiers surveillés** accorde la configuration des dossiers ; leur planification se trouve dans *Tâches planifiées*.
-- **Promotion** demande aussi la fonctionnalité *Settings access*. Voir [Promotion](../../management/promotion.md).
+- **Promotion** demande aussi la fonctionnalité *Accès aux paramètres*. Voir [Promotion](../../management/promotion.md).
 - **Développeur** ouvre la [référence développeur](../../references/developer.md) : tables, clés de configuration, flux, impact, API.
 - **Synthèse** et **Statistiques** sont des pages à part entière, contrôlées par le serveur et par les outils de l'assistant IA. La mise à jour les accorde toutes les deux, une seule fois, à chaque rôle qui avait Exploitation, pour que personne ne perde une page ; un retrait ultérieur sur un rôle est conservé.
 - **Règles de gestion** ouvre aussi les [Schematrons](../../references/schematrons.md).
@@ -266,7 +266,7 @@ Quelques pastilles portent une aide :
 
 Règles :
 
-- **All** / **None**, au-dessus des cartes, accordent ou retirent toutes les pages d'un coup.
+- **Toutes** / **Aucune**, au-dessus des cartes, accordent ou retirent toutes les pages d'un coup ; le lien **tout** / **aucun** d'une carte fait de même pour son groupe.
 - **Liste vide = toutes les pages autorisées.** Même convention que les autres listes : un rôle sans filtre voit tout.
 - Le rôle `admin` créé à l'initialisation reçoit tous les identifiants de page ci-dessus, y compris Déclaration de TVA, Rapports et Historique des mises à jour.
 
@@ -276,23 +276,23 @@ Règles :
 
 Définit **ce que le rôle peut faire** sur les pages qu'il peut atteindre.
 
-### Bascule *Restreindre*
+### Switch *Limiter à certaines actions*
 
-| Bascule | Effet |
+| Switch | Effet |
 |---|---|
 | **Désactivée** *(défaut)* | Aucune liste blanche côté serveur — le rôle peut effectuer toutes les actions autorisées par ses pages. |
-| **Activée** | Seules les actions cochées en dessous sont autorisées. Activer la bascule **pré-coche toutes les actions** pour que le rôle ne perde pas brutalement ses droits — il suffit ensuite de décocher. |
+| **Activée** | Seules les actions cochées en dessous sont autorisées. Activer le switch **pré-coche toutes les actions** pour que le rôle ne perde pas brutalement ses droits — il suffit ensuite de décocher. |
 
-L'aide sous la bascule indique : *Désactivée (défaut) = le rôle peut effectuer toutes les actions autorisées par ses pages. Activée = seules les actions cochées en dessous sont autorisées.*
+L'aide sous le switch indique : *Désactivé (par défaut) : le rôle peut faire toutes les actions de ses pages. Activé : seules les actions cochées ci-dessous sont autorisées.*
 
 L'en-tête de la section reflète l'état courant :
 
-- `(toutes les actions sont autorisées — aucune liste blanche)` quand la bascule est désactivée.
-- `(N actions explicitement autorisées — tout le reste est bloqué)` quand la bascule est activée et N actions cochées.
-- `(0 action autorisée — équivalent au Mode lecture seule)` quand la liste blanche est activée mais vide.
-- `(Mode lecture seule activé dans l'onglet Accès — toutes les actions sont bloquées)` quand la fonctionnalité *Lecture seule* est active — l'onglet est alors grisé.
+- `(toutes les actions sont autorisées : aucune liste définie)` quand le switch est désactivé.
+- `(N actions autorisées explicitement : tout le reste est bloqué)` quand le switch est activé et N actions cochées.
+- `(aucune action autorisée : même effet que la lecture seule)` quand la liste est activée mais vide.
+- `(lecture seule activée dans Accès : toutes les actions sont bloquées)` quand la fonctionnalité *Lecture seule* est active — l'onglet est alors grisé.
 
-Les boutons **Tout cocher** / **Tout décocher** apparaissent sous la bascule (désactivés tant que la liste blanche est désactivée).
+Les boutons **Tout cocher** / **Tout décocher** apparaissent sous le switch (désactivés tant que le switch est désactivé).
 
 ### Catalogue des actions
 
@@ -303,21 +303,21 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 | **Factures** | Créer | `invoice.create` | Le bouton *Nouvelle facture* de la liste [E-Invoicing](../../application/invoices.md). |
 | **Factures** | Modifier | `invoice.edit` | Met à jour les champs d'une facture depuis la fenêtre détail ou le panneau d'édition. |
 | **Factures** | Supprimer | `invoice.delete` | Suppression définitive d'une facture et de tous ses enregistrements fils. |
-| **Factures** | Supprimer un événement du cycle de vie | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |
+| **Factures** | Supprimer un événement | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |
 | **Factures** | Renvoyer à la PA | `invoice.resend` | Soumet ou re-soumet une facture (ou un lot) à la Plateforme Agréée. |
-| **Factures** | Pousser un statut (PA) | `invoice.status.pa` | Envoie un événement de statut via la PA — paiement reçu, en litige, etc. (onglet *PA* de la fenêtre *Définir le statut*). |
-| **Factures** | Pousser un statut (BDD) | `invoice.status.db` | Met directement à jour un statut en base, sans passer par la PA — voie de réparation utilisée quand l'aller-retour PA est cassé. |
-| **Factures** | Valider UBL | `invoice.validate` | Lance la validation XSD + Schematron sur l'UBL stocké (bouton *Valider* de l'onglet *Historique*). |
-| **Factures** | Télécharger UBL | `invoice.download` | Lecture du BLOB UBL brut — bouton *Télécharger UBL* et endpoint `/xml`. |
-| **Factures** | Actions pré-définies | `invoice.preset-action` | Utilise les boutons pré-définis par statut (Renvoyer sur 9904, …) dans la rangée *vendeur*. |
+| **Factures** | Transmettre un statut (PA) | `invoice.status.pa` | Envoie un événement de statut via la PA — paiement reçu, en litige, etc. (onglet *PA* de la fenêtre *Définir le statut*). |
+| **Factures** | Forcer un statut (base) | `invoice.status.db` | Met directement à jour un statut en base, sans passer par la PA — voie de réparation utilisée quand l'aller-retour PA est cassé. |
+| **Factures** | Valider l'UBL | `invoice.validate` | Lance la validation XSD + Schematron sur l'UBL stocké (bouton *Valider* de l'onglet *Historique*). |
+| **Factures** | Télécharger l'UBL | `invoice.download` | Lecture du BLOB UBL brut — bouton *Télécharger UBL* et endpoint `/xml`. |
+| **Factures** | Actions prédéfinies | `invoice.preset-action` | Utilise les boutons pré-définis par statut (Renvoyer sur 9904, …) dans la rangée *vendeur*. |
 | **Factures** | Actions personnalisées | `invoice.custom-action` | Utilise les boutons personnalisés définis par l'admin dans la rangée *actions personnalisées*. |
-| **Factures** | Envoyer le PDF par mail | `invoice.email` | Envoie le PDF généré via le relais SMTP configuré. |
-| **E-Reporting** | Générer un lot | `ereporting.generate` | Crée un nouveau lot d'e-reporting depuis la fenêtre *Générer*. |
-| **E-Reporting** | Renvoyer un lot | `ereporting.resend` | Re-soumet à la PA un lot d'e-reporting existant. |
-| **Opérations d'intégration** | Exécuter les jobs en lot | `integration.run` | Déclenche *Importer les statuts* / *Récupérer les factures reçues* / *Récupérer les statuts* depuis la barre d'outils. |
+| **Factures** | Envoyer le PDF par e-mail | `invoice.email` | Envoie le PDF généré via le relais SMTP configuré. |
+| **E-reporting** | Générer une déclaration | `ereporting.generate` | Produit une nouvelle déclaration e-reporting depuis la fenêtre *Générer*. |
+| **E-reporting** | Renvoyer une déclaration | `ereporting.resend` | Renvoie à la plateforme une déclaration e-reporting existante. |
+| **Traitements d'intégration** | Lancer les traitements | `integration.run` | Déclenche *Importer les statuts* / *Récupérer les factures reçues* / *Récupérer les statuts* depuis la barre d'outils. |
 
 :::info
-La fenêtre détail rend Parties, Lignes de facture, Récapitulatif TVA et Notes depuis l'endpoint UBL XML, qui est **ouvert en lecture** (mais reste filtré par les filtres de lignes et la visibilité de page). Seul le bouton *Télécharger UBL* est gardé par `invoice.download` — un rôle en lecture peut donc consulter le contenu d'une facture sans avoir le droit d'extraire le XML brut.
+La fenêtre détail rend Parties, Lignes de facture, Récapitulatif TVA et Notes depuis l'endpoint UBL XML, qui est **ouvert en lecture** (mais reste filtré par les filtres de lignes et la visibilité de page). Seul le bouton *Télécharger l'UBL* est gardé par `invoice.download` — un rôle en lecture peut donc consulter le contenu d'une facture sans avoir le droit d'extraire le XML brut.
 :::
 
 ---
@@ -332,7 +332,7 @@ Un tableau ligne par ligne des codes société (`KCO`) auxquels le rôle est res
 
 - **Liste vide = toutes les sociétés.** Comportement habituel — laisser le tableau vide donne accès à toutes les sociétés présentes en base.
 - Ajouter ne serait-ce qu'une ligne restreint le rôle aux sociétés listées.
-- Le placeholder propose *Code KCO (par ex. 00001)* et le champ utilise une police monospace pour repérer plus facilement les fautes de frappe.
+- Le champ propose *Code société (ex. 00001)* et utilise une police monospace pour repérer plus facilement les fautes de frappe.
 
 ### Filtres de lignes
 
@@ -348,7 +348,7 @@ Le **sélecteur de colonne** liste chaque champ une seule fois, **par portée** 
 | **Constats de validation (F564236)** | Sévérité, source, règle… | Cette table. |
 | **Journal des traitements** / **E-reporting** | Leurs propres colonnes. | Cette table. |
 
-Chaque entrée s'affiche `libellé · CHAMP`. Pour le champ choisi, saisir une ou plusieurs valeurs (*Value (exact match)*) ; **+ Add value (OR)** ajoute une valeur, le **×** retire une valeur ou le filtre entier. **+ Add row filter** combine des filtres sur des champs différents. Comme la plupart de l'éditeur, ces libellés sont en anglais ; les titres de portée suivent la langue de l'interface.
+Chaque entrée s'affiche `libellé · CHAMP` (*— choisir un champ —* tant qu'aucun n'est choisi). Pour le champ choisi, saisir une ou plusieurs valeurs (*Valeur (égalité exacte)*) ; **+ Ajouter une valeur (OU)** ajoute une valeur, **Retirer la valeur** et **Retirer le filtre** suppriment une valeur ou le filtre entier. **+ Ajouter un filtre de lignes** combine des filtres sur des champs différents.
 
 #### Règles de combinaison
 

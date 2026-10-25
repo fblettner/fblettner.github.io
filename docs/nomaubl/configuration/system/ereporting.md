@@ -228,7 +228,7 @@ The whole card is dimmed when *Send Mode* ≠ `FTP` — these fields only apply 
 
 ## Configuration check
 
-The configuration check on the [Tech Dashboard](../../application/tech-dashboard.md) validates the template against these rules:
+The configuration check on the [IT dashboard](../../application/tech-dashboard.md) validates the template against these rules:
 
 - `paMode=API` without a `connector` is reported as an error (the API transport has nothing to call).
 - `paMode=FTP` without `paFtpHost` is reported as an error (the SFTP transport has no server).
