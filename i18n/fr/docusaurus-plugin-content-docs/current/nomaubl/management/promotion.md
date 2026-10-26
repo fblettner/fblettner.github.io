@@ -135,7 +135,7 @@ Accès : **Gestion → Promotion**. La page compte trois vues : **Export** (pré
 | **Rapport quotidien** · **Reprise auto** · **Contrôle cycle de vie** | Un [rapport quotidien](../sync/scheduled-jobs/daily-digest.md), une [reprise automatique](../sync/scheduled-jobs/auto-retry.md) ou un [contrôle du cycle de vie](../sync/scheduled-jobs/lifecycle-checks.md). | — |
 | **Connecteur** | Un connecteur API, SQL, base de données ou FTP, sans ses secrets ni ses cibles. | — |
 | **Modèle de réglages** | E-invoicing, e-reporting, annuaire, dossiers surveillés, contrôles d'intégrité, requêtes de rapports ou file d'impression JDE, sans ses clés d'instance. | — |
-| **Fichier** | Le fichier commun des valeurs UBL par défaut (`ubl-defaults.xsl`, les valeurs propres à l'exploitant dans la XSL commune). | — |
+| **Fichier** | Le fichier commun des valeurs UBL par défaut (`ubl-defaults.xsl`, les valeurs propres à l'exploitant dans la XSL commune), et **chaque fichier utilisé par un document** — transformation, XSL, RTF, feuille UBL, Schematron client, mise en page PDF — listé par son chemin avec *Used by …* les documents qui l'utilisent. Un fichier peut être promu seul, par exemple une feuille partagée par plusieurs documents. | — |
 
 Les paramètres globaux, l'authentification unique et les noms de colonnes remplacés de la base NomaUBL ne sont jamais promus : ils décrivent l'instance elle-même.
 

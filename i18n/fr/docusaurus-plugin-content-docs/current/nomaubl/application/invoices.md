@@ -186,7 +186,7 @@ Sur une ligne *Reçue*, la colonne **Contrepartie** lit depuis `AccountingSuppli
 
 ### Exclure les erreurs traitées \{#exclure-erreurs-traitees\}
 
-Le switch **Exclure les erreurs traitées**, à côté du sélecteur de direction, masque les lignes déjà marquées *Traité* qui restent dans un statut en erreur (groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md)) : la liste ne garde que les erreurs que personne n'a encore regardées. Les lignes traitées dans tout autre statut restent affichées. Le switch est activé automatiquement quand la liste s'ouvre depuis un tableau de bord où il l'était ([Synthèse](./billing-overview.md), [Statistiques](./statistics.md), [Exploitation](./dashboard.md#exclure-erreurs-traitees)). L'endpoint `GET /api/invoices` accepte le même filtre avec `excludeReviewedErrors=true`.
+Le switch **Exclure les erreurs traitées**, à côté du sélecteur de direction, masque les lignes déjà marquées *Traité* qui restent dans un statut en erreur (groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md)) : la liste ne garde que les erreurs que personne n'a encore regardées. Les lignes traitées dans tout autre statut restent affichées. Le switch est activé par défaut ; une liste ouverte depuis un tableau de bord ([Synthèse](./billing-overview.md), [Statistiques](./statistics.md), [Exploitation](./dashboard.md#exclure-erreurs-traitees)) reprend le choix du tableau de bord. L'endpoint `GET /api/invoices` accepte le même filtre avec `excludeReviewedErrors=true`.
 
 ### Statut par étape \{#status-by-stage\}
 
@@ -211,13 +211,13 @@ Un filtre texte correspond depuis le **début** de la valeur et utilise l'index 
 
 L'ensemble des colonnes filtrables est défini par la liste blanche `filter: true` de la spec — chacun choisit les colonnes qu'il interroge réellement et retire les autres du panneau sans les perdre dans la grille. Voir [Vues de liste](../configuration/list-views.md) pour l'éditeur.
 
-La page fonctionne en **mode hybride** : chaque *Exécuter* charge une tranche limitée depuis le serveur (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Periods and lists](../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut) et la grille filtre, trie, pagine et regroupe dans cette tranche — pas d'aller-retour pendant la saisie dans la ligne de filtre par colonne, les filtres se conservent d'une page à l'autre. Quand la limite est atteinte, un message `X / Y lignes` à côté d'*Exécuter* invite à affiner la période ou les *Filtres avancés*.
+La page fonctionne en **mode hybride** : chaque *Exécuter* charge une tranche limitée depuis le serveur (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Navigation & lists](../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut) et la grille filtre, trie, pagine et regroupe dans cette tranche — pas d'aller-retour pendant la saisie dans la ligne de filtre par colonne, les filtres se conservent d'une page à l'autre. Quand la limite est atteinte, un message `X / Y lignes` à côté d'*Exécuter* invite à affiner la période ou les *Filtres avancés*.
 
 Les colonnes adossées à une liste de référence (Statut, statut e-reporting, listes personnalisées) reçoivent une **sélection multiple** dans le panneau Filtres avancés et dans la ligne de filtre par colonne — choisir un nombre quelconque de codes, le déclencheur affiche `N sélectionné(s)` au-delà du plafond, et un `✕` à droite réinitialise la sélection en un clic. Le serveur applique une clause `IN (?,?,?)` : choisir trois statuts renvoie l'union. Un code peut aussi se saisir dans la recherche de la liste (Entrée, plusieurs séparés par des virgules) : une liste incomplète ou encore vide permet donc tout de même de filtrer.
 
 ### Barre d'outils de la grille
 
-À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)** et **Retraiter la sélection (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend) et [Retraitement](#reprocess)).
+À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)**, **Retraiter la sélection (N)** et **Marquer comme traitées (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend), [Retraitement](#reprocess) et [Marquer comme traitées](#mark-reviewed)).
 
 ---
 
@@ -271,6 +271,7 @@ La valeur **Mise à jour** porte l'heure : une colonne *Mise à jour* au format 
 | **Total TTC** | Montant total toutes taxes comprises. |
 | **Devise** | Code ISO 4217. |
 | **Statut** | Badge de statut — code + libellé, coloré par famille. |
+| **Envoi PA** | Destination de la facture : *À transmettre à la PA*, *Non destinée à la PA* ou *En attente de revue avant envoi* (`list-send-pa`), filtrable. |
 | **Suivi** | **Badge de suivi** coloré — *En attente* (du service client) ou *Traité*. Allumé quand la ligne demande une attention opérateur — un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Il s'allume aussi pour une facture **Déposée (200) avec le motif `NON_TRANSMISE`** : pas une erreur, mais le destinataire n'a pas d'adresse de réception active, l'opérateur doit donc la transmettre manuellement — les autres 200 gardent un tiret discret. Une facture **corrigée à la main** — enregistrée depuis la fenêtre facture ou réparée avec *Corriger destinataire* — passe à *Traité* dès que la validation qui suit ne signale aucune erreur, quel que soit son statut. Vide quand rien n'est en attente : quelques badges dans une page sinon nette indiquent précisément par où commencer. |
 
 Un sélecteur de taille de page en bas du tableau est réglé sur 50 par défaut ; des valeurs jusqu'à 500 sont acceptées. Le nombre total de factures correspondant aux filtres apparaît à côté de la pagination.
@@ -297,6 +298,15 @@ La requête SQL de la vue Factures joint maintenant `F564231` (UH) et `F564230` 
 
 Cliquer sur une ligne ouvre la **modale de détail** de la facture. La plupart des actions sont unitaires, mais la liste permet aussi un **renvoi groupé** — voir ci-dessous.
 
+### Marquer comme traitées \{#mark-reviewed\}
+
+Le service client marque comme **traitées** les factures en erreur qu'il a prises en charge : elles sortent des comptages et des listes d'erreurs tant que *Exclure les erreurs traitées* est activé. La facture garde son statut.
+
+- **Depuis la liste** — cocher les factures, puis **Marquer comme traitées (N)**. Le bouton apparaît quand au moins une facture cochée est en erreur et pas encore traitée. Une confirmation précise que *les factures sélectionnées seront considérées comme traitées et n'apparaîtront plus dans les erreurs à traiter* ; seules les factures encore en erreur sont marquées.
+- **Depuis la fenêtre de la facture** — la pastille **Traité**, à droite des onglets, pose la marque (en pointillés quand elle est absente) ou la retire (en vert quand elle est posée), chaque fois après confirmation. La retirer fait réapparaître la facture dans les erreurs à traiter.
+
+Les deux demandent l'action *Marquer comme traitée* (`invoice.review`) dans la page [Rôles](../configuration/security/roles.md). La marque est la colonne **Suivi** (`UHALRTPSD`).
+
 ### Renvoi groupé \{#bulk-resend\}
 
 Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne est cochée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Seules les factures réellement transmissibles sont sélectionnables — les lignes dont le type de document est réglé sur *Ne pas envoyer* sont désactivées, pour qu'une facture non transmissible ne se glisse pas dans un lot par erreur. Pour la même raison, l'action **Renvoyer** unitaire est masquée sur les lignes *Ne pas envoyer*.
@@ -317,7 +327,7 @@ Un bouton **Exporter** dans la barre d'outils exporte la vue courante (filtres c
 
 ## Modale de détail
 
-Cliquer sur une ligne ouvre une modale qui contient sept onglets en haut : **Résumé**, **Parties**, **Lignes**, **TVA**, **Notes**, **Historique**, **PDF**. Le titre de la modale affiche le triplet `DOC / DCT / KCO`. Un **bouton plein écran** dans l'en-tête bascule entre vue fenêtrée et vue plein écran.
+Cliquer sur une ligne ouvre une modale qui contient sept onglets en haut : **Résumé**, **Parties**, **Lignes**, **TVA**, **Notes**, **Historique**, **PDF**. Le titre de la modale affiche le triplet `DOC / DCT / KCO`. Un **bouton plein écran** dans l'en-tête bascule entre vue fenêtrée et vue plein écran. À droite des onglets, la pastille **Traité** pose ou retire la [marque de suivi](#mark-reviewed) d'une facture en erreur.
 
 Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête passent d'une facture à l'autre de la liste sans fermer la fenêtre — même ordre et mêmes filtres que le tableau affiché — avec un indicateur de position (par ex. `3 / 50`). Après la dernière facture, la navigation reboucle sur la première.
 

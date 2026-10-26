@@ -1,12 +1,12 @@
 ---
-title: Sélecteur de période, périodes par défaut et listes
+title: Sélecteur de période, navigation et listes
 description: "Le sélecteur de période de NomaUBL, commun aux tableaux de bord et aux listes — dix périodes prédéfinies, un calendrier sur deux mois, la base de date de chaque page, le switch Exclure les erreurs traitées — et le paramétrage des périodes par défaut, qui fixe la période d'ouverture de chaque page, pour toutes les vues ou vue par vue."
 keywords: [NomaUBL, sélecteur de période, plage de dates, période par défaut, Ce mois-ci, Hier, base de date, date document, date d'activité, date d'archivage, exclure les erreurs traitées, paramètres, vues, JD Edwards, SAP, NetSuite, ERP personnalisé]
 ---
 
-# Sélecteur de période et périodes par défaut
+# Sélecteur de période, navigation et listes
 
-Les tableaux de bord et les listes de NomaUBL partagent un même **sélecteur de période** : mêmes périodes prédéfinies, même calendrier et, quand la page le propose, le choix de la **date** sur laquelle la période s'applique. La période d'ouverture de chaque page se règle une fois pour l'instance dans **Paramètres → Views & UI → Periods and lists** — pour toutes les vues, puis vue par vue quand une équipe en a besoin.
+Les tableaux de bord et les listes de NomaUBL partagent un même **sélecteur de période** : mêmes périodes prédéfinies, même calendrier et, quand la page le propose, le choix de la **date** sur laquelle la période s'applique. La période d'ouverture de chaque page se règle une fois pour l'instance dans **Paramètres → Views & UI → Navigation & lists** — pour toutes les vues, puis vue par vue quand une équipe en a besoin.
 
 ---
 
@@ -205,7 +205,33 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
 
 ### Exclure les erreurs traitées \{#exclude-reviewed\}
 
-À côté du sélecteur, le switch **Exclure les erreurs traitées** masque les factures déjà traitées par le service client qui restent dans un statut en erreur ; les factures traitées dans les autres statuts restent comptées. Il est activé par défaut sur la Synthèse et les Statistiques, désactivé sur Exploitation et E-Invoicing (E-Invoicing reprend la valeur du tableau de bord depuis lequel la liste est ouverte). L'[Explorateur](../application/explorer.md) propose le même switch dans chaque analyse.
+À côté du sélecteur, le switch **Exclure les erreurs traitées** masque les factures déjà traitées par le service client qui restent dans un statut en erreur ; les factures traitées dans les autres statuts restent comptées. Il est activé par défaut sur toutes les pages — Synthèse, Statistiques, Exploitation et E-Invoicing ; une liste ouverte depuis un tableau de bord reprend le choix du tableau de bord. Seule une facture marquée traitée est écartée ; une facture sans marque de suivi reste comptée. L'[Explorateur](../application/explorer.md) propose le même switch dans chaque analyse.
+
+---
+
+## Paramètres › Navigation & lists \{#navigation-and-lists\}
+
+Une page des Paramètres — **Paramètres → Views & UI → Navigation & lists**, en anglais comme la plupart des éditeurs des Paramètres — réunit ce qui façonne l'interface pour tous les utilisateurs : la page de démarrage, la navigation, les périodes par défaut, les listes et le cache des tableaux de bord.
+
+### Page de démarrage \{#start-page\}
+
+| Champ | Par défaut | Description |
+|---|---|---|
+| **After sign-in** | Billing overview | La page affichée après la connexion : *Billing overview* (Synthèse), *Operations dashboard* (Exploitation), *Statistics*, *IT dashboard*, *Invoices*, *E-Documents*, *E-reporting*, *VAT declaration*, *Diagnostics*, *Reports* ou *Explorer*. Un utilisateur dont le rôle ne l'accorde pas ouvre la Synthèse, sinon la première page accordée par son rôle. Avec une licence restreinte, l'application s'ouvre sur le tableau de bord Exploitation. |
+
+### Navigation \{#navigation\}
+
+| Champ | Par défaut | Description |
+|---|---|---|
+| **Auto collapse** | No — expanded, collapse by hand | **Yes — icons only, expands on hover** : le menu se replie en une colonne d'icônes et les pages gagnent la largeur ; le survol des icônes ouvre le menu par-dessus la page, et le choix d'une page le replie. Le bouton de repli manuel est alors masqué. |
+
+### Cache des tableaux de bord \{#dashboard-cache\}
+
+| Champ | Par défaut | Description |
+|---|---|---|
+| **Cache (minutes)** | 60 | Durée pendant laquelle la [Synthèse](../application/billing-overview.md), les [Statistiques](../application/statistics.md) et le tableau de bord [Exploitation](../application/dashboard.md) réutilisent les chiffres chargés — revenir sur un tableau de bord ou changer de page ne relance pas les requêtes — et durée de conservation sur le serveur, pour tous les utilisateurs, des *documents traités par jour* du [tableau de bord IT](../application/tech-dashboard.md). Un tableau de bord ouvert se recharge seul à l'issue du délai ; **↻** recharge aussitôt. `0` = rechargement systématique. |
+
+Chaque tableau de bord indique l'heure de chargement de ses chiffres (*Mis à jour à 14:05*), à côté de **↻** — sur le tableau de bord IT, dans le sous-titre de *Documents traités par jour*. Les chiffres conservés dans le navigateur sont perdus au rechargement de la page.
 
 ---
 
@@ -220,7 +246,7 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
   </defs>
 
   <rect x="220" y="20" width="760" height="386" rx="14" fill="url(#pds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Settings › Views &amp; UI › Periods and lists</text>
+  <text x="240" y="46" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Settings › Views &amp; UI › Navigation & lists</text>
   <text x="240" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Default periods</text>
   <text x="240" y="86" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The period a page opens on until the user picks another one. Analyses and dashboards of the Explorer keep their own period.</text>
   <text x="240" y="112" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Every view</text>
@@ -289,7 +315,7 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
   <line x1="1000" y1="377.0" x2="900" y2="377" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
 </svg>
 
-Accès : **Paramètres → Views & UI → Periods and lists**. Comme la plupart des éditeurs des Paramètres, cet écran reste en anglais.
+Elles se règlent sur la même page, **Paramètres → Views & UI → Navigation & lists**.
 
 | Champ | Par défaut | Description |
 |---|---|---|
@@ -306,7 +332,7 @@ Les valeurs sont enregistrées dans les paramètres [Global](./system/global.md)
 
 ## Listes \{#lists\}
 
-Le groupe **Lists** de la même page fixe deux valeurs pour toute liste qui n'a pas les siennes dans les [Vues de liste](./list-views.md) :
+Le groupe **Lists** de **Navigation & lists** fixe deux valeurs pour toute liste qui n'a pas les siennes dans les [Vues de liste](./list-views.md) :
 
 | Champ | Par défaut | Description |
 |---|---|---|

@@ -201,7 +201,7 @@ NomaUBL ships custom lists that the default [List Views](./list-views.md) use fo
 | `list-activite` | Activity codes, refreshed from the NomaUBL database. |
 | `list-sub-type` | Document sub-types, refreshed from the NomaUBL database. |
 | `list-companies` | Companies, synced from the `getCompanies` query of the shipped [`jde-sql` connector](./sql-connectors.md#jde-sql). |
-| `list-send-pa` | Send to the PA: `1` Send to the PA, `2` Not sent, `3` Held for review. |
+| `list-send-pa` | Destination of the invoice: `1` For the platform, `2` Not for the platform, `3` Held for review before sending. |
 | `list-level` | Severity levels: Fatal, Error, Warning, Information. |
 | `list-validation-sources` | Sources of the validation findings: XSD schema, EN 16931, CIUS-FR, extended CTC FR, Chorus Pro, NomaUBL rules, and the technical steps (UBL, XML, PDF, XSL transformation, validation, PA, database, processing). |
 | `list-flux` | E-reporting direction: `1` Inbound (purchases), `2` Outbound (sales). |

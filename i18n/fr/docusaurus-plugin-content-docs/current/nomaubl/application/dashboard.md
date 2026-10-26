@@ -245,8 +245,8 @@ La description de la page résume la période : `… factures sur la période ·
 | **Ventes / Achats** | Ventes | Bascule tout le tableau de bord entre factures émises et factures reçues. |
 | **Période** | Ce mois-ci, ou la [période par défaut](../configuration/default-periods.md) définie pour *Operations dashboard* | Le [sélecteur de période](../configuration/default-periods.md#period-picker) commun. |
 | **Base de date** | Date d'activité | *Date d'activité* (dernière mise à jour), *Date document* (BT-2) ou *Date d'archivage*, au pied du sélecteur. Tous les blocs la suivent. |
-| **Exclure les erreurs traitées** | Désactivé | Voir ci-dessous. |
-| **↻** | — | Recharge tous les blocs. |
+| **Exclure les erreurs traitées** | Activé | Voir ci-dessous. |
+| **↻** | — | Recharge tous les blocs. Les chiffres sont réutilisés pendant le délai du [cache des tableaux de bord](../configuration/default-periods.md#dashboard-cache) (60 minutes si rien n'est réglé) ; l'heure de leur chargement s'affiche à côté (*Mis à jour à 14:05*). |
 
 Les filtres sont conservés tant que l'application reste ouverte : en quittant le tableau de bord puis en y revenant, on les retrouve tels quels.
 
@@ -314,6 +314,6 @@ Accorder la page **Exploitation** dans le groupe Navigation de la page [Rôles](
 
 - **Lire les files par équipe.** *En cours* ne demande personne ; la file rouge revient à l'informatique, la file orange au service client — chaque équipe part de la sienne.
 - **Choisir *Hier* pour le contrôle du matin.** La période couvre hier et aujourd'hui et compte donc les traitements de nuit en entier ; en faire la [période par défaut](../configuration/default-periods.md) de la vue si l'équipe commence toujours ainsi.
-- **Activer *Exclure les erreurs traitées* en cours de journée.** Les files diminuent au fur et à mesure que le service client marque les factures comme traitées.
+- **Garder *Exclure les erreurs traitées* activé en cours de journée.** Les files diminuent au fur et à mesure que le service client marque les factures comme traitées.
 - **Partir des règles en échec pour corriger.** Une règle qui cumule des centaines d'échecs révèle le plus souvent un seul changement en amont (un champ renommé, un code de taxe périmé) ; sa [règle Schematron](../references/schematrons.md) indique précisément ce qui est attendu.
 - **Analyser ailleurs.** Le tableau de bord repère le problème ; la fenêtre de détail d'[E-Invoicing](./invoices.md) et la page [Erreurs d'intégration](diagnostics/integration-errors.md) l'expliquent.

@@ -213,7 +213,7 @@ Accès : **Synthèse**, première entrée du groupe Navigation. Les files de tra
 | **Base de date** | Date document | *Date document*, *Date d'activité* ou *Date d'archivage*, au pied du sélecteur de période. |
 | **Exclure les erreurs traitées** | Activé | Masque les factures déjà traitées par le service client qui restent dans un statut en erreur. Les factures traitées dans les autres statuts restent comptées. |
 | **Comparé au …** | — | Indique la période précédente utilisée pour les écarts (voir ci-dessous). Masqué pour la période *Tout*. |
-| **↻** | — | Recharge la page avec les mêmes filtres. |
+| **↻** | — | Recharge la page avec les mêmes filtres. Les chiffres sont réutilisés pendant le délai du [cache des tableaux de bord](../configuration/default-periods.md#dashboard-cache) (60 minutes si rien n'est réglé) ; l'heure de leur chargement s'affiche à côté (*Mis à jour à 14:05*). |
 | **PDF** | — | Chiffres clés, graphique et tableaux au format du [rapport d'audit](reports/audit-report.md) (`synthese-facturation.pdf`). |
 
 La période, la base de date, le switch et le sens sont mémorisés dans le navigateur : la page se rouvre telle qu'elle a été laissée.
@@ -277,7 +277,7 @@ Chaque ligne donne le montant et le nombre de factures ; un clic ouvre [E-Invoic
 
 ## Accès \{#access\}
 
-Accorder la page **Synthèse** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; le serveur et l'outil `billing_overview` de l'assistant IA contrôlent le même droit. Les chiffres suivent les sociétés et les [filtres de lignes](../configuration/security/roles.md#filtres-de-lignes) du rôle de l'utilisateur connecté. Un rôle qui a cette page s'ouvre sur elle après la connexion ; avec une licence restreinte, l'application s'ouvre sur le tableau de bord [Exploitation](./dashboard.md).
+Accorder la page **Synthèse** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; le serveur et l'outil `billing_overview` de l'assistant IA contrôlent le même droit. Les chiffres suivent les sociétés et les [filtres de lignes](../configuration/security/roles.md#filtres-de-lignes) du rôle de l'utilisateur connecté. C'est la [page de démarrage](../configuration/default-periods.md#start-page) par défaut après la connexion ; avec une licence restreinte, l'application s'ouvre sur le tableau de bord [Exploitation](./dashboard.md).
 
 ---
 

@@ -459,6 +459,7 @@ const sidebars: SidebarsConfig = {
         'nomaubl/installation/service-and-systemd',
         'nomaubl/installation/upgrade',
         'nomaubl/installation/demo-corpus',
+        'nomaubl/installation/desktop-app',
       ],
     },
     {

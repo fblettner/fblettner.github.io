@@ -782,22 +782,6 @@
             "content": { "application/json": { "schema": { "type": "object", "properties": { "invoices": { "type": "array", "items": { "$ref": "#/components/schemas/Invoice" } }, "total": { "type": "integer" } } } } }
           }
         }
-      },
-      "post": {
-        "tags": ["Invoices"],
-        "x-permission": "invoice.create",
-        "summary": "Create an invoice from form fields",
-        "description": "Creates a new invoice header row from flat form fields — the manual-entry path used by the Create dialog, as opposed to /api/invoices/create-ubl which parses a full UBL document. doc, dct and kco are mandatory and become the primary key; the remaining fields (ublNumber, issueDate, invoiceType, amounts, customer info) are optional.\n\nRequires the invoice-create action grant when roles are enforced.\n\n**Access:** invoice.create.",
-        "requestBody": {
-          "required": true,
-          "content": { "application/json": { "schema": { "type": "object", "example": { "doc": "12345", "dct": "RI", "kco": "00070", "ublNumber": "FA-2026-001", "issueDate": "2026-05-01", "invoiceType": "380" } } } }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
-          }
-        }
       }
     },
     "/api/invoices/{doc}/{dct}/{kco}": {
@@ -1100,6 +1084,24 @@
           "200": {
             "description": "Success",
             "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" } } } } }
+          }
+        }
+      }
+    },
+    "/api/invoices/reviewed": {
+      "post": {
+        "tags": ["Invoices"],
+        "x-permission": "invoice.review",
+        "summary": "Mark invoices reviewed",
+        "description": "Sets (reviewed=true) or clears (reviewed=false) the customer-service review mark (F564231.UHALRTPSD) of each invoice the caller can see.\n\nMarking applies only to invoices in an error status (status groups errorTech and errorBusiness); the others are skipped. A reviewed invoice keeps its status and is left out of the error counts when the excludeReviewed option is on.\n\n**Access:** invoice.review.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "example": { "keys": [ { "doc": "12345", "dct": "RI", "kco": "00070" } ], "reviewed": true } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "success, updated, skipped": { "type": "string" } } } } }
           }
         }
       }

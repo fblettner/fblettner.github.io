@@ -213,7 +213,7 @@ Open it from **Billing overview**, first entry of the Navigation group. The day-
 | **Date basis** | Document date | *Document date*, *Activity date* or *Archive date*, chosen in the footer of the period picker. |
 | **Exclude reviewed errors** | On | Hides the invoices already reviewed by customer service that still sit in an error status. Reviewed invoices in other statuses stay counted. |
 | **Compared to …** | — | Shows the previous period used for the changes (see below). Hidden when the period is *All*. |
-| **↻** | — | Reloads the page with the same filters. |
+| **↻** | — | Reloads the page with the same filters. Figures are reused for the [dashboard cache](../configuration/default-periods.md#dashboard-cache) delay (60 minutes unless set); the time they were loaded shows next to it (*Updated 14:05*). |
 | **PDF** | — | Key figures, chart and tables in the layout of the [audit report](reports/audit-report.md) (`billing-overview.pdf`). |
 
 The period, the date basis, the switch and the direction are remembered in the browser, so the page opens again as it was left.
@@ -277,7 +277,7 @@ Each row gives the amount and the number of invoices; a click opens [E-Invoicing
 
 ## Access \{#access\}
 
-Grant the **Billing overview** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; the server and the AI assistant's `billing_overview` tool check the same grant. Figures follow the companies and the [row filters](../configuration/security/roles.md#row-filters) of the signed-in user's role. A role with this page opens on it after sign-in; under a restricted licence, the application opens on the [Operations](./dashboard.md) dashboard.
+Grant the **Billing overview** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; the server and the AI assistant's `billing_overview` tool check the same grant. Figures follow the companies and the [row filters](../configuration/security/roles.md#row-filters) of the signed-in user's role. It is the default [start page](../configuration/default-periods.md#start-page) after sign-in; under a restricted licence, the application opens on the [Operations](./dashboard.md) dashboard.
 
 ---
 

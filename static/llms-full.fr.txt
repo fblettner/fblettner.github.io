@@ -28159,6 +28159,38 @@ Voir [Ligne de commande](../management/command-line.md#demo).
 
 ---
 
+## NomaUBL — Application de bureau
+Source: https://docs.nomana-it.fr/fr/nomaubl/installation/desktop-app/
+
+Installer NomaUBL comme application de bureau sous Windows et macOS depuis Chrome, Edge ou Safari : sa propre fenêtre et son icône, sans barres du navigateur, une application par environnement portant son nom, toujours à la version du serveur ; HTTPS requis.
+
+NomaUBL s'installe comme **application de bureau** sous Windows et macOS. L'application s'ouvre dans sa propre fenêtre, avec sa propre icône, sans la barre d'adresse ni les onglets du navigateur, et figure dans le menu Démarrer, le Dock ou le lanceur d'applications comme tout autre logiciel. C'est l'application web du serveur : elle affiche toujours la version en service, rien n'est installé sur le poste en dehors du raccourci, et une mise à jour du serveur atteint aussitôt tous les utilisateurs.
+
+---
+
+## Installation
+
+| Navigateur | Procédure |
+|---|---|
+| **Chrome** ou **Edge** (Windows, macOS) | Ouvrir NomaUBL, puis cliquer sur le bouton **Installer** de la barre d'adresse. |
+| **Safari** (macOS) | Ouvrir NomaUBL, puis **Fichier › Ajouter au Dock**. |
+
+Chaque environnement s'installe comme **une application distincte**, au nom de l'*Environment* des paramètres [Global](../configuration/system/global.md) : `NomaUBL · TEST`, `NomaUBL · PD`… ce qui évite de confondre une instance de recette et une instance de production. La fenêtre garde la barre de titre sombre et le logo complet de NomaUBL comme icône.
+
+:::info[HTTPS requis]
+Les navigateurs ne proposent l'installation que si le serveur est joint en **HTTPS** (ou sur `localhost`). Derrière un proxy inverse, publier NomaUBL avec un certificat — voir [Service et systemd](./service-and-systemd.md).
+:::
+
+---
+
+## Ce que l'application ne change pas
+
+- **Même connexion, mêmes droits.** L'application se connecte comme le navigateur et suit le rôle de l'utilisateur.
+- **Pas de mode hors ligne.** Chaque écran est servi par le serveur ; sans connexion avec lui, l'application n'affiche rien.
+- **Rien à mettre à jour sur le poste.** Elle se désinstalle comme toute autre application installée.
+
+---
+
 ## NomaUBL — Supervision — vue d'ensemble
 Source: https://docs.nomana-it.fr/fr/nomaubl/monitoring/overview/
 
@@ -28622,7 +28654,7 @@ Accès : **Synthèse**, première entrée du groupe Navigation. Les files de tra
 | **Base de date** | Date document | *Date document*, *Date d'activité* ou *Date d'archivage*, au pied du sélecteur de période. |
 | **Exclure les erreurs traitées** | Activé | Masque les factures déjà traitées par le service client qui restent dans un statut en erreur. Les factures traitées dans les autres statuts restent comptées. |
 | **Comparé au …** | — | Indique la période précédente utilisée pour les écarts (voir ci-dessous). Masqué pour la période *Tout*. |
-| **↻** | — | Recharge la page avec les mêmes filtres. |
+| **↻** | — | Recharge la page avec les mêmes filtres. Les chiffres sont réutilisés pendant le délai du [cache des tableaux de bord](../configuration/default-periods.md#dashboard-cache) (60 minutes si rien n'est réglé) ; l'heure de leur chargement s'affiche à côté (*Mis à jour à 14:05*). |
 | **PDF** | — | Chiffres clés, graphique et tableaux au format du [rapport d'audit](reports/audit-report.md) (`synthese-facturation.pdf`). |
 
 La période, la base de date, le switch et le sens sont mémorisés dans le navigateur : la page se rouvre telle qu'elle a été laissée.
@@ -28686,7 +28718,7 @@ Chaque ligne donne le montant et le nombre de factures ; un clic ouvre [E-Invoic
 
 ## Accès \{#access\}
 
-Accorder la page **Synthèse** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; le serveur et l'outil `billing_overview` de l'assistant IA contrôlent le même droit. Les chiffres suivent les sociétés et les [filtres de lignes](../configuration/security/roles.md#filtres-de-lignes) du rôle de l'utilisateur connecté. Un rôle qui a cette page s'ouvre sur elle après la connexion ; avec une licence restreinte, l'application s'ouvre sur le tableau de bord [Exploitation](./dashboard.md).
+Accorder la page **Synthèse** dans le groupe Navigation de la page [Rôles](../configuration/security/roles.md) ; le serveur et l'outil `billing_overview` de l'assistant IA contrôlent le même droit. Les chiffres suivent les sociétés et les [filtres de lignes](../configuration/security/roles.md#filtres-de-lignes) du rôle de l'utilisateur connecté. C'est la [page de démarrage](../configuration/default-periods.md#start-page) par défaut après la connexion ; avec une licence restreinte, l'application s'ouvre sur le tableau de bord [Exploitation](./dashboard.md).
 
 ---
 
@@ -28724,8 +28756,8 @@ La description de la page résume la période : `… factures sur la période ·
 | **Ventes / Achats** | Ventes | Bascule tout le tableau de bord entre factures émises et factures reçues. |
 | **Période** | Ce mois-ci, ou la [période par défaut](../configuration/default-periods.md) définie pour *Operations dashboard* | Le [sélecteur de période](../configuration/default-periods.md#period-picker) commun. |
 | **Base de date** | Date d'activité | *Date d'activité* (dernière mise à jour), *Date document* (BT-2) ou *Date d'archivage*, au pied du sélecteur. Tous les blocs la suivent. |
-| **Exclure les erreurs traitées** | Désactivé | Voir ci-dessous. |
-| **↻** | — | Recharge tous les blocs. |
+| **Exclure les erreurs traitées** | Activé | Voir ci-dessous. |
+| **↻** | — | Recharge tous les blocs. Les chiffres sont réutilisés pendant le délai du [cache des tableaux de bord](../configuration/default-periods.md#dashboard-cache) (60 minutes si rien n'est réglé) ; l'heure de leur chargement s'affiche à côté (*Mis à jour à 14:05*). |
 
 Les filtres sont conservés tant que l'application reste ouverte : en quittant le tableau de bord puis en y revenant, on les retrouve tels quels.
 
@@ -28793,7 +28825,7 @@ Accorder la page **Exploitation** dans le groupe Navigation de la page [Rôles](
 
 - **Lire les files par équipe.** *En cours* ne demande personne ; la file rouge revient à l'informatique, la file orange au service client — chaque équipe part de la sienne.
 - **Choisir *Hier* pour le contrôle du matin.** La période couvre hier et aujourd'hui et compte donc les traitements de nuit en entier ; en faire la [période par défaut](../configuration/default-periods.md) de la vue si l'équipe commence toujours ainsi.
-- **Activer *Exclure les erreurs traitées* en cours de journée.** Les files diminuent au fur et à mesure que le service client marque les factures comme traitées.
+- **Garder *Exclure les erreurs traitées* activé en cours de journée.** Les files diminuent au fur et à mesure que le service client marque les factures comme traitées.
 - **Partir des règles en échec pour corriger.** Une règle qui cumule des centaines d'échecs révèle le plus souvent un seul changement en amont (un champ renommé, un code de taxe périmé) ; sa [règle Schematron](../references/schematrons.md) indique précisément ce qui est attendu.
 - **Analyser ailleurs.** Le tableau de bord repère le problème ; la fenêtre de détail d'[E-Invoicing](./invoices.md) et la page [Erreurs d'intégration](diagnostics/integration-errors.md) l'expliquent.
 
@@ -28876,7 +28908,7 @@ Une carte à quatre onglets : **Volume**, **Erreurs**, **Relances**, **Durée pa
 
 ### Volume
 
-**Documents traités par jour** sur les 14 derniers jours, en barres empilées : *Traités* et *En erreur technique* ; le sous-titre donne les totaux. **Un clic sur une barre** ouvre [E-Invoicing](./invoices.md) sur ce jour, en date d'archivage — un chemin rapide entre « la colonne du jour est basse » et « montrer ce qui a été traité ».
+**Documents traités par jour** sur les 14 derniers jours, en barres empilées : *Traités* et *En erreur technique* ; le sous-titre donne les totaux et leur heure de chargement. Cette carte est conservée sur le serveur, pour tous les utilisateurs, pendant le délai du [cache des tableaux de bord](../configuration/default-periods.md#dashboard-cache) ; **Actualiser** la relit. **Un clic sur une barre** ouvre [E-Invoicing](./invoices.md) sur ce jour, en date d'archivage — un chemin rapide entre « la colonne du jour est basse » et « montrer ce qui a été traité ».
 
 ### Erreurs
 
@@ -29077,7 +29109,7 @@ Accès : **Statistiques**, dans le groupe Navigation, après le [tableau de bord
 
 ## En-tête
 
-L'en-tête est le même que celui de la [Synthèse](./billing-overview.md#header) : **Ventes / Achats**, le [sélecteur de période](../configuration/default-periods.md#period-picker) (base *Date document* par défaut, ou *Date d'activité* et *Date d'archivage*), **Exclure les erreurs traitées** (activé par défaut) l'indication *Comparé au …* et **↻** pour recharger. La période précédente suit la [même règle](./billing-overview.md#previous-period). Deux boutons exportent toute la page :
+L'en-tête est le même que celui de la [Synthèse](./billing-overview.md#header) : **Ventes / Achats**, le [sélecteur de période](../configuration/default-periods.md#period-picker) (base *Date document* par défaut, ou *Date d'activité* et *Date d'archivage*), **Exclure les erreurs traitées** (activé par défaut) l'indication *Comparé au …* et **↻** pour recharger — les chiffres sont conservés pendant le délai du [cache des tableaux de bord](../configuration/default-periods.md#dashboard-cache), avec leur heure de chargement (*Mis à jour à 14:05*). La période précédente suit la [même règle](./billing-overview.md#previous-period). Deux boutons exportent toute la page :
 
 | Bouton | Contenu |
 |---|---|
@@ -29091,7 +29123,7 @@ L'en-tête est le même que celui de la [Synthèse](./billing-overview.md#header
 | Chiffre | Valeur | Écart |
 |---|---|---|
 | **Factures émises** *(Achats : Factures reçues)* | Nombre de factures, avec le montant HT en dessous. | en % |
-| **Parvenues à la plateforme** *(Achats : Intégrées)* | Part des factures *Sur la plateforme* ou *Terminées*. | en points |
+| **Parvenues à la plateforme** *(Achats : Intégrées)* | Part des factures *Sur la plateforme* ou *Terminées*, calculée sur les factures destinées à la plateforme (envoyées ou retenues pour revue), comme sur la Synthèse. | en points |
 | **À traiter** | *À corriger* + *Décision à prendre*, en rouge dès qu'il y en a. | en %, une baisse est favorable |
 | **Ouvertes depuis plus de 7 jours** | Factures non terminées dont le dernier changement de statut date de plus de 7 jours, rapportées aux factures ouvertes. | — |
 
@@ -29215,7 +29247,7 @@ Sur une ligne *Reçue*, la colonne **Contrepartie** lit depuis `AccountingSuppli
 
 ### Exclure les erreurs traitées \{#exclure-erreurs-traitees\}
 
-Le switch **Exclure les erreurs traitées**, à côté du sélecteur de direction, masque les lignes déjà marquées *Traité* qui restent dans un statut en erreur (groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md)) : la liste ne garde que les erreurs que personne n'a encore regardées. Les lignes traitées dans tout autre statut restent affichées. Le switch est activé automatiquement quand la liste s'ouvre depuis un tableau de bord où il l'était ([Synthèse](./billing-overview.md), [Statistiques](./statistics.md), [Exploitation](./dashboard.md#exclure-erreurs-traitees)). L'endpoint `GET /api/invoices` accepte le même filtre avec `excludeReviewedErrors=true`.
+Le switch **Exclure les erreurs traitées**, à côté du sélecteur de direction, masque les lignes déjà marquées *Traité* qui restent dans un statut en erreur (groupes `errorTech` / `errorBusiness` du [modèle des statuts](../configuration/system/statuses.md)) : la liste ne garde que les erreurs que personne n'a encore regardées. Les lignes traitées dans tout autre statut restent affichées. Le switch est activé par défaut ; une liste ouverte depuis un tableau de bord ([Synthèse](./billing-overview.md), [Statistiques](./statistics.md), [Exploitation](./dashboard.md#exclure-erreurs-traitees)) reprend le choix du tableau de bord. L'endpoint `GET /api/invoices` accepte le même filtre avec `excludeReviewedErrors=true`.
 
 ### Statut par étape \{#status-by-stage\}
 
@@ -29240,13 +29272,13 @@ Un filtre texte correspond depuis le **début** de la valeur et utilise l'index 
 
 L'ensemble des colonnes filtrables est défini par la liste blanche `filter: true` de la spec — chacun choisit les colonnes qu'il interroge réellement et retire les autres du panneau sans les perdre dans la grille. Voir [Vues de liste](../configuration/list-views.md) pour l'éditeur.
 
-La page fonctionne en **mode hybride** : chaque *Exécuter* charge une tranche limitée depuis le serveur (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Periods and lists](../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut) et la grille filtre, trie, pagine et regroupe dans cette tranche — pas d'aller-retour pendant la saisie dans la ligne de filtre par colonne, les filtres se conservent d'une page à l'autre. Quand la limite est atteinte, un message `X / Y lignes` à côté d'*Exécuter* invite à affiner la période ou les *Filtres avancés*.
+La page fonctionne en **mode hybride** : chaque *Exécuter* charge une tranche limitée depuis le serveur (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Navigation & lists](../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut) et la grille filtre, trie, pagine et regroupe dans cette tranche — pas d'aller-retour pendant la saisie dans la ligne de filtre par colonne, les filtres se conservent d'une page à l'autre. Quand la limite est atteinte, un message `X / Y lignes` à côté d'*Exécuter* invite à affiner la période ou les *Filtres avancés*.
 
 Les colonnes adossées à une liste de référence (Statut, statut e-reporting, listes personnalisées) reçoivent une **sélection multiple** dans le panneau Filtres avancés et dans la ligne de filtre par colonne — choisir un nombre quelconque de codes, le déclencheur affiche `N sélectionné(s)` au-delà du plafond, et un `✕` à droite réinitialise la sélection en un clic. Le serveur applique une clause `IN (?,?,?)` : choisir trois statuts renvoie l'union. Un code peut aussi se saisir dans la recherche de la liste (Entrée, plusieurs séparés par des virgules) : une liste incomplète ou encore vide permet donc tout de même de filtrer.
 
 ### Barre d'outils de la grille
 
-À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)** et **Retraiter la sélection (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend) et [Retraitement](#reprocess)).
+À côté de la recherche de la grille : **Exécuter** (recharge la liste avec les filtres en cours), puis **Renvoyer la sélection (N)**, **Retraiter la sélection (N)** et **Marquer comme traitées (N)** quand des lignes sont cochées (voir [Renvoi groupé](#bulk-resend), [Retraitement](#reprocess) et [Marquer comme traitées](#mark-reviewed)).
 
 ---
 
@@ -29298,6 +29330,7 @@ La valeur **Mise à jour** porte l'heure : une colonne *Mise à jour* au format 
 | **Total TTC** | Montant total toutes taxes comprises. |
 | **Devise** | Code ISO 4217. |
 | **Statut** | Badge de statut — code + libellé, coloré par famille. |
+| **Envoi PA** | Destination de la facture : *À transmettre à la PA*, *Non destinée à la PA* ou *En attente de revue avant envoi* (`list-send-pa`), filtrable. |
 | **Suivi** | **Badge de suivi** coloré — *En attente* (du service client) ou *Traité*. Allumé quand la ligne demande une attention opérateur — un statut que le dispatcher n'a pas su résoudre tout seul, une édition manuelle marquée à l'enregistrement, ou un système aval qui a balisé la ligne pour vérification. Il s'allume aussi pour une facture **Déposée (200) avec le motif `NON_TRANSMISE`** : pas une erreur, mais le destinataire n'a pas d'adresse de réception active, l'opérateur doit donc la transmettre manuellement — les autres 200 gardent un tiret discret. Une facture **corrigée à la main** — enregistrée depuis la fenêtre facture ou réparée avec *Corriger destinataire* — passe à *Traité* dès que la validation qui suit ne signale aucune erreur, quel que soit son statut. Vide quand rien n'est en attente : quelques badges dans une page sinon nette indiquent précisément par où commencer. |
 
 Un sélecteur de taille de page en bas du tableau est réglé sur 50 par défaut ; des valeurs jusqu'à 500 sont acceptées. Le nombre total de factures correspondant aux filtres apparaît à côté de la pagination.
@@ -29324,6 +29357,15 @@ La requête SQL de la vue Factures joint maintenant `F564231` (UH) et `F564230` 
 
 Cliquer sur une ligne ouvre la **modale de détail** de la facture. La plupart des actions sont unitaires, mais la liste permet aussi un **renvoi groupé** — voir ci-dessous.
 
+### Marquer comme traitées \{#mark-reviewed\}
+
+Le service client marque comme **traitées** les factures en erreur qu'il a prises en charge : elles sortent des comptages et des listes d'erreurs tant que *Exclure les erreurs traitées* est activé. La facture garde son statut.
+
+- **Depuis la liste** — cocher les factures, puis **Marquer comme traitées (N)**. Le bouton apparaît quand au moins une facture cochée est en erreur et pas encore traitée. Une confirmation précise que *les factures sélectionnées seront considérées comme traitées et n'apparaîtront plus dans les erreurs à traiter* ; seules les factures encore en erreur sont marquées.
+- **Depuis la fenêtre de la facture** — la pastille **Traité**, à droite des onglets, pose la marque (en pointillés quand elle est absente) ou la retire (en vert quand elle est posée), chaque fois après confirmation. La retirer fait réapparaître la facture dans les erreurs à traiter.
+
+Les deux demandent l'action *Marquer comme traitée* (`invoice.review`) dans la page [Rôles](../configuration/security/roles.md). La marque est la colonne **Suivi** (`UHALRTPSD`).
+
 ### Renvoi groupé \{#bulk-resend\}
 
 Chaque ligne porte une **case à cocher**, et un bouton **Renvoyer la sélection (N)** apparaît dans la barre d'outils dès qu'au moins une ligne est cochée. Il renvoie tout le lot vers la [Plateforme Agréée](../configuration/system/einvoicing.md) en une seule action, via la même fenêtre de progression qu'ailleurs (compteurs en direct, *Annuler*, *Continuer en arrière-plan*). Seules les factures réellement transmissibles sont sélectionnables — les lignes dont le type de document est réglé sur *Ne pas envoyer* sont désactivées, pour qu'une facture non transmissible ne se glisse pas dans un lot par erreur. Pour la même raison, l'action **Renvoyer** unitaire est masquée sur les lignes *Ne pas envoyer*.
@@ -29344,7 +29386,7 @@ Un bouton **Exporter** dans la barre d'outils exporte la vue courante (filtres c
 
 ## Modale de détail
 
-Cliquer sur une ligne ouvre une modale qui contient sept onglets en haut : **Résumé**, **Parties**, **Lignes**, **TVA**, **Notes**, **Historique**, **PDF**. Le titre de la modale affiche le triplet `DOC / DCT / KCO`. Un **bouton plein écran** dans l'en-tête bascule entre vue fenêtrée et vue plein écran.
+Cliquer sur une ligne ouvre une modale qui contient sept onglets en haut : **Résumé**, **Parties**, **Lignes**, **TVA**, **Notes**, **Historique**, **PDF**. Le titre de la modale affiche le triplet `DOC / DCT / KCO`. Un **bouton plein écran** dans l'en-tête bascule entre vue fenêtrée et vue plein écran. À droite des onglets, la pastille **Traité** pose ou retire la [marque de suivi](#mark-reviewed) d'une facture en erreur.
 
 Des **flèches précédent / suivant** (et les touches ← →) dans l'en-tête passent d'une facture à l'autre de la liste sans fermer la fenêtre — même ordre et mêmes filtres que le tableau affiché — avec un indicateur de position (par ex. `3 / 50`). Après la dernière facture, la navigation reboucle sur la première.
 
@@ -30041,7 +30083,7 @@ La barre d'outils au-dessus du tableau combine trois filtres texte avec deux rac
 
 Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne par colonne filtrable de la spec [Vues de liste](../configuration/list-views.md) active (`view.ereporting`) — avec des sélecteurs d'opérateurs par colonne (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Les modifications restent en brouillon tant que **Exécuter** ne les valide pas.
 
-La page fonctionne en **mode hybride client-side** — une tranche serveur limitée par *Exécuter* (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Periods and lists](../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. La colonne refList `status` reçoit un **picker multi-sélection** qui émet une clause `IN (?,?,?)` côté serveur — choisir plusieurs codes de statut renvoie l'union.
+La page fonctionne en **mode hybride client-side** — une tranche serveur limitée par *Exécuter* (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Navigation & lists](../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. La colonne refList `status` reçoit un **picker multi-sélection** qui émet une clause `IN (?,?,?)` côté serveur — choisir plusieurs codes de statut renvoie l'union.
 
 ---
 
@@ -31186,7 +31228,7 @@ Un panneau **Filtres avancés** pliable sous la barre d'outils propose une ligne
 
 Le drill-through *Erreurs récentes* du Tech Dashboard remonte aussi ici : quand le tableau de bord transmet `{ doc, dct, kco }`, une pastille indique le filtre actif et propose un `×` pour le retirer. Utile quand le panneau est replié et que le filtre serait sinon invisible.
 
-La page fonctionne en **mode hybride client-side** — une tranche serveur limitée par *Exécuter* (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Periods and lists](../../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. La colonne refList `invoiceStatus` reçoit un **picker multi-sélection** qui émet une clause `IN (?,?,?)` côté serveur — choisir plusieurs statuts renvoie l'union.
+La page fonctionne en **mode hybride client-side** — une tranche serveur limitée par *Exécuter* (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Navigation & lists](../../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. La colonne refList `invoiceStatus` reçoit un **picker multi-sélection** qui émet une clause `IN (?,?,?)` côté serveur — choisir plusieurs statuts renvoie l'union.
 
 ---
 
@@ -31377,6 +31419,7 @@ La barre d'outils combine le choix de la vue, une recherche libre, des filtres d
 | Contrôle | Comportement |
 |---|---|
 | **Bascule Grouped / Flat** | Bascule la présentation des données. Enregistrée par navigateur. |
+| **Traitements / Tâches planifiées / Tout** | Les exécutions listées. **Traitements** *(par défaut)* — les traitements de fichiers ; **Tâches planifiées** — les exécutions des tâches planifiées (récupération des statuts et des imports, rétention, récapitulatifs…), sans les filtres de modèle et de mode ; **Tout**. Une exécution de tâche ouverte depuis les [Anomalies](./failures.md) arrive sur *Tâches planifiées*. Leur rétention se règle à part : *Job runs (days)* dans [Job defaults › Retention](../../configuration/system/global.md#retention). |
 | **Rechercher un fichier** | Recherche par sous-chaîne sur la colonne `file` (par ex. `12345_RI_00070`). Vide désactive le filtre. |
 | **Templates** | Liste déroulante alimentée dynamiquement depuis les templates de type `document` déclarés dans `config.json`. *Tous les templates* retire le filtre. |
 | **Modes** | Déroulante des modes de traitement standards — `AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`. *Tous les modes* retire le filtre. |
@@ -31394,7 +31437,7 @@ Le drill-through depuis les barres de débit du Tech Dashboard vers cette page a
 
 La vue à plat passe par **DataTableV2** en mode piloté par spec : la forme des colonnes vient de la spec `view.processing-log` sur `db-nomaubl` et le défaut embarqué livre toutes les colonnes décrites plus bas. Ajouter des colonnes depuis le catalogue ou retirer une colonne de la liste blanche de filtres se fait depuis l'éditeur [Vues de liste](../../configuration/list-views.md). La vue groupée conserve sa mise en page dédiée — le groupement ne fait pas partie de DataTableV2.
 
-La vue à plat fonctionne en **mode hybride client-side** — une tranche serveur limitée par *Exécuter* (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Periods and lists](../../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. Les colonnes refList reçoivent le **picker multi-sélection** quand c'est pertinent.
+La vue à plat fonctionne en **mode hybride client-side** — une tranche serveur limitée par *Exécuter* (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Navigation & lists](../../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. Les colonnes refList reçoivent le **picker multi-sélection** quand c'est pertinent.
 
 ---
 
@@ -36100,7 +36143,7 @@ Accès : **Gestion → Promotion**. La page compte trois vues : **Export** (pré
 | **Rapport quotidien** · **Reprise auto** · **Contrôle cycle de vie** | Un [rapport quotidien](../sync/scheduled-jobs/daily-digest.md), une [reprise automatique](../sync/scheduled-jobs/auto-retry.md) ou un [contrôle du cycle de vie](../sync/scheduled-jobs/lifecycle-checks.md). | — |
 | **Connecteur** | Un connecteur API, SQL, base de données ou FTP, sans ses secrets ni ses cibles. | — |
 | **Modèle de réglages** | E-invoicing, e-reporting, annuaire, dossiers surveillés, contrôles d'intégrité, requêtes de rapports ou file d'impression JDE, sans ses clés d'instance. | — |
-| **Fichier** | Le fichier commun des valeurs UBL par défaut (`ubl-defaults.xsl`, les valeurs propres à l'exploitant dans la XSL commune). | — |
+| **Fichier** | Le fichier commun des valeurs UBL par défaut (`ubl-defaults.xsl`, les valeurs propres à l'exploitant dans la XSL commune), et **chaque fichier utilisé par un document** — transformation, XSL, RTF, feuille UBL, Schematron client, mise en page PDF — listé par son chemin avec *Used by …* les documents qui l'utilisent. Un fichier peut être promu seul, par exemple une feuille partagée par plusieurs documents. | — |
 
 Les paramètres globaux, l'authentification unique et les noms de colonnes remplacés de la base NomaUBL ne sont jamais promus : ils décrivent l'instance elle-même.
 
@@ -36971,7 +37014,7 @@ La navigation de gauche regroupe les entrées selon **ce que l'on veut régler**
 | **E-invoicing** | [E-invoicing](./system/einvoicing.md), [types de documents](./system/document-types.md), [catalogue des statuts](./system/statuses.md), [annuaire](./system/edirectory.md). |
 | **E-reporting** | [E-reporting](./system/ereporting.md) et le catalogue des statuts de l'e-reporting. |
 | **Jobs & inbound** | *Job defaults* (onglet global), [file d'impression JDE (BIP)](./system/fetch-invoices.md), [contrôles d'intégrité](./system/integrity-reports.md). |
-| **Views & UI** | [Vues de liste](./list-views.md) et [Periods and lists](./default-periods.md#default-periods) (onglet global *Periods* : périodes par défaut, lignes par page et lignes chargées des listes). |
+| **Views & UI** | [Vues de liste](./list-views.md) et [Navigation & lists](./default-periods.md#default-periods) (onglet global *Periods* : page de démarrage, repli automatique de la navigation, périodes par défaut, lignes par page et lignes chargées des listes, cache des tableaux de bord). |
 | **API connectors** | Une entrée par [connecteur API](./api-connectors.md), avec le badge `api`. |
 | **SQL connectors** | Une entrée par [connecteur SQL](./sql-connectors.md), avec le badge `sql`. |
 | **FTP connectors** | *JD Edwards file transfer* et les autres [connecteurs FTP](./ftp-connectors.md), avec le badge `ftp`. |
@@ -37651,7 +37694,7 @@ Paramètres globaux de NomaUBL en dix onglets : répertoires et environnement, t
 
 Les paramètres **Global** rassemblent ce qui s'applique à **l'ensemble de l'application NomaUBL** : arborescence de fichiers et environnement, options de traitement, journal serveur, rendu PDF, serveur d'e-mails, assistant IA, réglages communs aux tâches planifiées, licence et authentification. Ils valent quel que soit le système source — JD Edwards, SAP, NetSuite ou ERP personnalisé ; les quelques réglages propres à BIP sont signalés là où ils apparaissent.
 
-L'éditeur comporte **dix onglets** : Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication, Periods. Dans la [navigation des paramètres](../settings-overview.md), chaque onglet est une entrée à part — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* et *License* dans **Platform**, *Authentication* dans **Security**, *Job defaults* dans **Jobs & inbound**, *Periods and lists* dans **Views & UI** — qui n'ouvre que cette partie, sans la rangée d'onglets. La zone de recherche des paramètres retrouve n'importe quel champ de ces onglets par son libellé, son aide ou sa clé.
+L'éditeur comporte **dix onglets** : Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication, Periods. Dans la [navigation des paramètres](../settings-overview.md), chaque onglet est une entrée à part — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* et *License* dans **Platform**, *Authentication* dans **Security**, *Job defaults* dans **Jobs & inbound**, *Navigation & lists* dans **Views & UI** — qui n'ouvre que cette partie, sans la rangée d'onglets. La zone de recherche des paramètres retrouve n'importe quel champ de ces onglets par son libellé, son aide ou sa clé.
 
 Les tâches elles-mêmes — interrogations de la PA, lots de documents, rapports quotidiens, reprises automatiques, contrôles du cycle de vie, purge de rétention — ne se règlent pas ici : elles se trouvent sur la page [Tâches planifiées](../../sync/scheduled-jobs/overview.md).
 
@@ -37887,7 +37930,7 @@ Requiert un **SMTP** configuré dans *Onglet 5 — Email*. Les jetons sont enreg
 
 ## Onglet 10 — Periods \{#periods\}
 
-La période d'ouverture de chaque page : **Every view** (*This month* si rien n'est choisi) et une surcharge **Per view** (*Same as every view* par défaut) pour la Synthèse, Exploitation, Statistiques, Invoices, E-Documents, Diagnostic, Erreurs d'intégration, Journal des traitements et Rapports › Intégrité. Enregistrées sous `defaultPeriod` et `defaultPeriod.<vue>`. Un groupe **Lists** fixe les *Rows per page* (50) et *Rows loaded* (100 000) de toute liste sans valeurs propres (`defaultPageSize`, `defaultMaxRows`). Voir [Sélecteur de période, périodes par défaut et listes](../default-periods.md#default-periods).
+Affiché dans la navigation des Paramètres sous **Navigation & lists** : la **page de démarrage** après la connexion (`startPage`), le **repli automatique** de la navigation (`navAutoCollapse`), le **cache des tableaux de bord** en minutes (`dashboardCacheMinutes`, 60), et la période d'ouverture de chaque page : **Every view** (*This month* si rien n'est choisi) et une surcharge **Per view** (*Same as every view* par défaut) pour la Synthèse, Exploitation, Statistiques, Invoices, E-Documents, Diagnostic, Erreurs d'intégration, Journal des traitements et Rapports › Intégrité. Enregistrées sous `defaultPeriod` et `defaultPeriod.<vue>`. Un groupe **Lists** fixe les *Rows per page* (50) et *Rows loaded* (100 000) de toute liste sans valeurs propres (`defaultPageSize`, `defaultMaxRows`). Voir [Sélecteur de période, périodes par défaut et listes](../default-periods.md#default-periods).
 
 ---
 
@@ -38381,7 +38424,7 @@ NomaUBL livre des listes personnalisées utilisées par les [Vues de liste](./li
 | `list-activite` | Codes activité, complétés depuis la base NomaUBL. |
 | `list-sub-type` | Sous-types de document, complétés depuis la base NomaUBL. |
 | `list-companies` | Sociétés, synchronisées par la requête `getCompanies` du [connecteur `jde-sql`](./sql-connectors.md#jde-sql) livré. |
-| `list-send-pa` | Envoi à la PA : `1` Envoi à la PA, `2` Pas d'envoi, `3` En attente de revue. |
+| `list-send-pa` | Destination de la facture : `1` À transmettre à la PA, `2` Non destinée à la PA, `3` En attente de revue avant envoi. |
 | `list-level` | Niveaux de gravité : Bloquant, Erreur, Avertissement, Information. |
 | `list-validation-sources` | Sources des contrôles de validation : schéma XSD, EN 16931, CIUS-FR, CTC FR étendu, Chorus Pro, règles NomaUBL, et les étapes techniques (UBL, XML, PDF, transformation XSL, validation, PA, base de données, traitement). |
 | `list-flux` | Sens de l'e-reporting : `1` Réception (achats), `2` Émission (ventes). |
@@ -38536,8 +38579,8 @@ Au-dessus des lignes de colonne, chaque carte de vue a une ligne *Défauts* avec
 
 | Champ | Description |
 |---|---|
-| **Page size** | Taille de page initiale du paginateur TanStack en grille. Enregistrée sous `spec.defaultPageSize`. Vide = le réglage *Rows per page* de [Paramètres › Periods and lists](./default-periods.md#lists) (50 si rien n'est choisi). |
-| **Max rows** | Limite stricte de la tranche chargée par un seul *Exécuter*. Les vues pilotées par spec fonctionnent en **mode hybride côté client** : chaque *Exécuter* charge une tranche limitée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — aucun aller-retour pendant la saisie dans la ligne de filtre par colonne. Enregistré sous `spec.maxRows`. Vide = le réglage *Rows loaded* de [Paramètres › Periods and lists](./default-periods.md#lists) (100 000 si rien n'est choisi). Les vues livrées ne fixent ni l'un ni l'autre. |
+| **Page size** | Taille de page initiale du paginateur TanStack en grille. Enregistrée sous `spec.defaultPageSize`. Vide = le réglage *Rows per page* de [Paramètres › Navigation & lists](./default-periods.md#lists) (50 si rien n'est choisi). |
+| **Max rows** | Limite stricte de la tranche chargée par un seul *Exécuter*. Les vues pilotées par spec fonctionnent en **mode hybride côté client** : chaque *Exécuter* charge une tranche limitée depuis le serveur et TanStack pagine / trie / filtre dans cette tranche — aucun aller-retour pendant la saisie dans la ligne de filtre par colonne. Enregistré sous `spec.maxRows`. Vide = le réglage *Rows loaded* de [Paramètres › Navigation & lists](./default-periods.md#lists) (100 000 si rien n'est choisi). Les vues livrées ne fixent ni l'un ni l'autre. |
 
 Quand le cap de la tranche est atteint pendant un *Exécuter*, la barre d'outils de la page affiche un message traduit `X / Y lignes` à côté du bouton *Exécuter* — indication que l'opérateur devrait affiner la plage de dates ou les *Filtres avancés* pour obtenir la tranche la plus pertinente. Le message est informatif ; la page continue de fonctionner.
 
@@ -38617,12 +38660,12 @@ Le `name` se joint à l'entrée de catalogue qui a la clé correspondante ; tout
 
 ---
 
-## NomaUBL — Sélecteur de période, périodes par défaut et listes
+## NomaUBL — Sélecteur de période, navigation et listes
 Source: https://docs.nomana-it.fr/fr/nomaubl/configuration/default-periods/
 
 Le sélecteur de période de NomaUBL, commun aux tableaux de bord et aux listes — dix périodes prédéfinies, un calendrier sur deux mois, la base de date de chaque page, le switch Exclure les erreurs traitées — et le paramétrage des périodes par défaut, qui fixe la période d'ouverture de chaque page, pour toutes les vues ou vue par vue.
 
-Les tableaux de bord et les listes de NomaUBL partagent un même **sélecteur de période** : mêmes périodes prédéfinies, même calendrier et, quand la page le propose, le choix de la **date** sur laquelle la période s'applique. La période d'ouverture de chaque page se règle une fois pour l'instance dans **Paramètres → Views & UI → Periods and lists** — pour toutes les vues, puis vue par vue quand une équipe en a besoin.
+Les tableaux de bord et les listes de NomaUBL partagent un même **sélecteur de période** : mêmes périodes prédéfinies, même calendrier et, quand la page le propose, le choix de la **date** sur laquelle la période s'applique. La période d'ouverture de chaque page se règle une fois pour l'instance dans **Paramètres → Views & UI → Navigation & lists** — pour toutes les vues, puis vue par vue quand une équipe en a besoin.
 
 ---
 
@@ -38654,13 +38697,39 @@ La *Date document* (ou *Date d'émission*) est la date imprimée sur la facture 
 
 ### Exclure les erreurs traitées \{#exclude-reviewed\}
 
-À côté du sélecteur, le switch **Exclure les erreurs traitées** masque les factures déjà traitées par le service client qui restent dans un statut en erreur ; les factures traitées dans les autres statuts restent comptées. Il est activé par défaut sur la Synthèse et les Statistiques, désactivé sur Exploitation et E-Invoicing (E-Invoicing reprend la valeur du tableau de bord depuis lequel la liste est ouverte). L'[Explorateur](../application/explorer.md) propose le même switch dans chaque analyse.
+À côté du sélecteur, le switch **Exclure les erreurs traitées** masque les factures déjà traitées par le service client qui restent dans un statut en erreur ; les factures traitées dans les autres statuts restent comptées. Il est activé par défaut sur toutes les pages — Synthèse, Statistiques, Exploitation et E-Invoicing ; une liste ouverte depuis un tableau de bord reprend le choix du tableau de bord. Seule une facture marquée traitée est écartée ; une facture sans marque de suivi reste comptée. L'[Explorateur](../application/explorer.md) propose le même switch dans chaque analyse.
+
+---
+
+## Paramètres › Navigation & lists \{#navigation-and-lists\}
+
+Une page des Paramètres — **Paramètres → Views & UI → Navigation & lists**, en anglais comme la plupart des éditeurs des Paramètres — réunit ce qui façonne l'interface pour tous les utilisateurs : la page de démarrage, la navigation, les périodes par défaut, les listes et le cache des tableaux de bord.
+
+### Page de démarrage \{#start-page\}
+
+| Champ | Par défaut | Description |
+|---|---|---|
+| **After sign-in** | Billing overview | La page affichée après la connexion : *Billing overview* (Synthèse), *Operations dashboard* (Exploitation), *Statistics*, *IT dashboard*, *Invoices*, *E-Documents*, *E-reporting*, *VAT declaration*, *Diagnostics*, *Reports* ou *Explorer*. Un utilisateur dont le rôle ne l'accorde pas ouvre la Synthèse, sinon la première page accordée par son rôle. Avec une licence restreinte, l'application s'ouvre sur le tableau de bord Exploitation. |
+
+### Navigation \{#navigation\}
+
+| Champ | Par défaut | Description |
+|---|---|---|
+| **Auto collapse** | No — expanded, collapse by hand | **Yes — icons only, expands on hover** : le menu se replie en une colonne d'icônes et les pages gagnent la largeur ; le survol des icônes ouvre le menu par-dessus la page, et le choix d'une page le replie. Le bouton de repli manuel est alors masqué. |
+
+### Cache des tableaux de bord \{#dashboard-cache\}
+
+| Champ | Par défaut | Description |
+|---|---|---|
+| **Cache (minutes)** | 60 | Durée pendant laquelle la [Synthèse](../application/billing-overview.md), les [Statistiques](../application/statistics.md) et le tableau de bord [Exploitation](../application/dashboard.md) réutilisent les chiffres chargés — revenir sur un tableau de bord ou changer de page ne relance pas les requêtes — et durée de conservation sur le serveur, pour tous les utilisateurs, des *documents traités par jour* du [tableau de bord IT](../application/tech-dashboard.md). Un tableau de bord ouvert se recharge seul à l'issue du délai ; **↻** recharge aussitôt. `0` = rechargement systématique. |
+
+Chaque tableau de bord indique l'heure de chargement de ses chiffres (*Mis à jour à 14:05*), à côté de **↻** — sur le tableau de bord IT, dans le sous-titre de *Documents traités par jour*. Les chiffres conservés dans le navigateur sont perdus au rechargement de la page.
 
 ---
 
 ## Périodes par défaut \{#default-periods\}
 
-Accès : **Paramètres → Views & UI → Periods and lists**. Comme la plupart des éditeurs des Paramètres, cet écran reste en anglais.
+Elles se règlent sur la même page, **Paramètres → Views & UI → Navigation & lists**.
 
 | Champ | Par défaut | Description |
 |---|---|---|
@@ -38677,7 +38746,7 @@ Les valeurs sont enregistrées dans les paramètres [Global](./system/global.md)
 
 ## Listes \{#lists\}
 
-Le groupe **Lists** de la même page fixe deux valeurs pour toute liste qui n'a pas les siennes dans les [Vues de liste](./list-views.md) :
+Le groupe **Lists** de **Navigation & lists** fixe deux valeurs pour toute liste qui n'a pas les siennes dans les [Vues de liste](./list-views.md) :
 
 | Champ | Par défaut | Description |
 |---|---|---|
@@ -39767,7 +39836,7 @@ Quelques pastilles portent une aide :
 - **Développeur** ouvre la [référence développeur](../../references/developer.md) : tables, clés de configuration, flux, impact, API.
 - **Synthèse** et **Statistiques** sont des pages à part entière, contrôlées par le serveur et par les outils de l'assistant IA. La mise à jour les accorde toutes les deux, une seule fois, à chaque rôle qui avait Exploitation, pour que personne ne perde une page ; un retrait ultérieur sur un rôle est conservé.
 - **Règles de gestion** ouvre aussi les [Schematrons](../../references/schematrons.md).
-- Après la connexion, un rôle qui a la Synthèse s'ouvre sur elle ; un rôle qui ne l'a pas s'ouvre sur la première page qu'il accorde, dans l'ordre du menu (Exploitation, Statistiques, Tableau de bord IT, E-Invoicing…).
+- Après la connexion, l'utilisateur arrive sur la [page de démarrage](../default-periods.md#start-page) de l'instance si son rôle l'accorde, sinon sur la Synthèse, sinon sur la première page accordée par son rôle.
 
 Règles :
 
@@ -39807,6 +39876,7 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 |---|---|---|---|
 | **Factures** | Créer | `invoice.create` | Le bouton *Nouvelle facture* de la liste [E-Invoicing](../../application/invoices.md). |
 | **Factures** | Modifier | `invoice.edit` | Met à jour les champs d'une facture depuis la fenêtre détail ou le panneau d'édition. |
+| **Factures** | Marquer comme traitée | `invoice.review` | Marquer des factures en erreur comme traitées par le service client, ou retirer la marque — [liste et fenêtre des factures](../../application/invoices.md#mark-reviewed). La mise à jour l'accorde aux rôles qui ont *Modifier* ou *Forcer un statut (base)*. |
 | **Factures** | Supprimer | `invoice.delete` | Suppression définitive d'une facture et de tous ses enregistrements fils. |
 | **Factures** | Supprimer un événement | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |
 | **Factures** | Renvoyer à la PA | `invoice.resend` | Soumet ou re-soumet une facture (ou un lot) à la Plateforme Agréée. |
@@ -40789,10 +40859,22 @@ Tout changement visible pour l'utilisateur de NomaUBL — interface, API REST, l
 - **Mise à jour : les défauts UBL personnalisés compilent toujours.** Quand le ubl-defaults.xsl d'une instance contient sa propre version d'un modèle du framework (la partie vendeur, par exemple), la mise à jour y ajoute désormais les paramètres que le nouveau framework lui transmet — avec leur valeur livrée, sans toucher au corps du modèle — comme elle le faisait déjà pour les feuilles propres à chaque document ; le rapport de mise à jour cite toujours le modèle, dont le corps personnalisé ignore les nouvelles valeurs tant qu'il n'est pas repris depuis ubl-defaults.xsl.upstream. Jusqu'ici, une telle instance ne produisait plus d'UBL après la mise à jour (« Parameter … is not declared in the called template »).
 - **Récapitulatif quotidien : les tableaux de bord métier.** Un récapitulatif peut envoyer la Synthèse ou les Statistiques, en PDF (indicateurs, graphiques et tableaux de la page) ou en Excel, sur le mois précédent, le mois en cours ou la fenêtre du récapitulatif, pour les ventes ou les achats. Il peut être produit tel qu'un rôle le voit — ses sociétés et ses filtres de lignes — pour que chaque groupe de destinataires ne reçoive que son périmètre. Tout récapitulatif peut n'être envoyé qu'un jour du mois (par exemple le 1er, la synthèse du mois écoulé) ; « Envoyer maintenant » l'ignore.
 - **Types de facture : activer ou désactiver.** Dans Paramètres › Types de facture, chaque code a une case Actif. Un code décoché reste dans la liste — son libellé s'affiche toujours sur les factures existantes et sa nature facture / avoir s'applique toujours — mais il n'est plus proposé dans les listes de choix (valeurs UBL par défaut, saisie de facture, filtres des listes et de l'Explorateur). Une nouvelle installation propose les 16 codes de la facturation électronique française (380, 381, 384, 386, 389, 393, 396, 261, 262, 471, 472, 473, 500 à 503) ; une montée de version laisse la liste existante telle quelle.
-- **Synthèse : taux de transmission sur les factures à transmettre.** Le taux de transmission, sa répartition émises / non émises et la part transmise par société ne portent plus que sur les factures destinées à la plateforme (envoyées ou en attente de revue) ; les types de document non transmis ne le font plus baisser. Le récapitulatif quotidien suit la même base.
+- **Exclure les erreurs traitées : les factures sans marque conservées.** Une facture en erreur dont la marque de suivi était vide (facture enregistrée sans elle) disparaissait des comptes et des listes d'erreurs comme si elle était traitée ; seule une facture marquée traitée est désormais exclue.
+- **API : route de création par formulaire retirée.** POST /api/invoices répondait succès sans rien créer ; elle est retirée. Les factures se créent par POST /api/invoices/create-ubl (un document UBL) ou POST /api/process (un fichier source passé par le mappage d'un document).
+- **Application de bureau.** NomaUBL s'installe comme une application de bureau sous Windows et macOS depuis Chrome ou Edge (bouton Installer de la barre d'adresse) ou Safari (Fichier › Ajouter au Dock) : sa propre fenêtre et son icône, sans barres du navigateur, toujours dans la version du serveur. Chaque environnement s'installe comme une application distincte, à son nom (« NomaUBL · TEST »). Le serveur doit être accessible en HTTPS. L'icône de l'application reprend le logo NomaUBL complet.
+- **Vues de liste : « Réinitialiser » en un clic.** Le bouton affiche aussitôt les colonnes livrées ; l'enregistrement les conserve. Il réaffichait auparavant les colonnes personnalisées jusqu'à un second clic.
+- **Factures : marquer les erreurs comme traitées.** Le service client peut marquer des factures en erreur comme traitées : depuis la liste des factures (sélection, puis Marquer comme traitées) ou depuis la fenêtre de la facture, où une pastille « Traitée » à droite des onglets pose ou retire la marque ; chaque fois après confirmation. Une facture traitée garde son statut et sort des comptes d'erreurs tant que « Exclure les erreurs traitées » est activé. Nouvelle permission « Marquer comme traitée », donnée à la montée de version aux rôles qui peuvent modifier les factures ou forcer un statut en base.
+- **Factures : colonne Envoi PA.** La liste des factures par défaut indique si chaque facture est destinée à la plateforme (à transmettre, non destinée à la PA, en attente de revue avant envoi), avec ses libellés et un filtre sur la liste, à la place de la note de statut. Une vue de liste déjà personnalisée garde ses colonnes.
+- **Navigation : repli automatique.** Paramètres › Navigation et listes peut replier la navigation sur ses icônes : les pages gagnent la largeur, et le survol des icônes ouvre le menu par-dessus la page ; le choix d'une page le replie.
+- **Promotion : les fichiers d'un document seuls.** Chaque fichier utilisé par un document (transformation, XSL, RTF, feuille UBL, Schematron client, mise en page PDF) figure parmi les fichiers, avec les documents qui l'utilisent, et se promeut seul : une feuille de style partagée par plusieurs documents ne demande plus de promouvoir un document.
+- **Journal des traitements : traitements et tâches planifiées séparés.** Un sélecteur Traitements / Tâches planifiées / Tout s'ajoute à Groupé / Détaillé ; le journal s'ouvre sur Traitements, et les exécutions des récupérations de statuts et d'imports (toutes les quelques minutes) ne noient plus les traitements de fichiers. Une exécution ouverte depuis Anomalies arrive sur Tâches planifiées. Leur rétention est déjà distincte : Paramètres › Valeurs par défaut des tâches › Rétention, « Job runs (days) ».
+- **Page d'accueil.** Paramètres › Navigation et listes choisit la page affichée après la connexion (la Synthèse par défaut) : un tableau de bord, Factures, E-Documents, E-reporting, Déclaration de TVA, Diagnostic, Rapports ou l'Explorateur. Un utilisateur dont le rôle ne l'autorise pas arrive sur la Synthèse, sinon sur la première page que son rôle autorise.
+- **Tableaux de bord : chiffres en cache.** La Synthèse, les Statistiques et le tableau de bord Exploitation conservent les chiffres chargés : y revenir ou changer de page ne relance plus les requêtes ; un tableau de bord resté ouvert se recharge seul au terme du délai, et Actualiser recharge aussitôt. Sur le tableau de bord IT, seuls les documents traités par jour sont conservés, côté serveur et pour tous les utilisateurs. Chacun indique l'heure de chargement. Délai dans Paramètres › Navigation et listes (60 minutes par défaut, 0 = toujours recharger).
+- **Erreurs traitées exclues par défaut.** Le tableau de bord Exploitation et la liste des factures s'ouvrent avec « Exclure les erreurs traitées » activé, comme la Synthèse et les Statistiques ; un lien depuis un tableau de bord garde son propre choix.
+- **Synthèse : taux de transmission sur les factures à transmettre.** Le taux de transmission, sa répartition émises / non émises et la part transmise par société ne portent plus que sur les factures destinées à la plateforme (envoyées ou en attente de revue) ; les types de document non transmis ne le font plus baisser. Le taux « Parvenues à la plateforme » du tableau de bord Statistiques suit la même règle, tout comme le récapitulatif quotidien.
 - **Notifications du portail sans destinataire : pour tout le monde.** Avec l'authentification activée, une règle sur le canal portail sans utilisateur ni rôle n'enregistrait rien ; elle crée désormais une notification visible dans toutes les boîtes, comme sans authentification. L'éditeur de règles nomme ce choix « Tout le monde ».
 - **Notifications issues de la récupération des statuts.** Une récupération planifiée attend les notifications qu'elle a déclenchées avant de se terminer (elles étaient interrompues au bout de deux secondes), et une modification des paramètres sur un serveur en cours laisse aboutir celles en attente.
-- **Listes : lignes par page et lignes chargées par défaut.** Paramètres › Périodes et listes fixe, pour toutes les listes, le nombre de lignes par page (50 par défaut) et le nombre de lignes chargées à chaque actualisation (100 000 par défaut, au lieu de 5 000) ; une vue de Paramètres › Vues de liste peut toujours définir les siennes. La liste E-reporting n'est plus limitée à 200 déclarations.
+- **Listes : lignes par page et lignes chargées par défaut.** Paramètres › Navigation et listes fixe, pour toutes les listes, le nombre de lignes par page (50 par défaut) et le nombre de lignes chargées à chaque actualisation (100 000 par défaut, au lieu de 5 000) ; une vue de Paramètres › Vues de liste peut toujours définir les siennes. La liste E-reporting n'est plus limitée à 200 déclarations.
 - **Filtres sur liste : choisir ou saisir.** Les filtres d'une colonne codée — filtres avancés, filtres de colonne et Explorateur — proposent toujours les valeurs de la liste et acceptent aussi un code saisi dans la zone de recherche (Entrée, séparés par des virgules pour plusieurs) : une liste incomplète ou encore vide (par exemple une liste personnalisée de types ou de sous-types de document) permet donc de filtrer.
 - **Vérification du mappage : code type de facture.** Un BT-3 non mappé n'est plus signalé comme manquant : le code vient des valeurs UBL par défaut (règles de type de facture, puis code par défaut), comme les autres champs remplis par les valeurs par défaut.
 - **Diagnostic › Anomalies : rapide avec « Non résolues seulement ».** Le contrôle d'un traitement réussi plus tard pour un fichier en échec se fait désormais en une seule lecture du journal des traitements, et non plus une lecture par anomalie.

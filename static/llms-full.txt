@@ -29022,6 +29022,38 @@ See [Command line](../management/command-line.md#demo).
 
 ---
 
+## NomaUBL — Desktop app
+Source: https://docs.nomana-it.fr/nomaubl/installation/desktop-app/
+
+Install NomaUBL as a desktop application on Windows and macOS from Chrome, Edge or Safari: its own window and icon, no browser bars, one app per environment named after it, always the server's version; HTTPS required.
+
+NomaUBL can be installed as a **desktop application** on Windows and macOS. The app opens in its own window with its own icon, without the browser's address bar and tabs, and appears in the Start menu, the Dock or the application launcher like any other program. It is the web application of the server, so it always shows the server's current version: nothing is installed on the computer apart from the shortcut, and an upgrade of the server reaches every user at once.
+
+---
+
+## Installing
+
+| Browser | How |
+|---|---|
+| **Chrome** or **Edge** (Windows, macOS) | Open NomaUBL, then click the **Install** button in the address bar. |
+| **Safari** (macOS) | Open NomaUBL, then **File › Add to Dock**. |
+
+Each environment installs as **its own app**, named after the *Environment* of the [Global](../configuration/system/global.md) settings: `NomaUBL · TEST`, `NomaUBL · PD`… so a test and a production instance never get mixed up. The window keeps the dark title bar and the full NomaUBL logo as icon.
+
+:::info[HTTPS required]
+The browsers offer the installation only when the server is reached over **HTTPS** (or on `localhost`). Behind a reverse proxy, publish NomaUBL with a certificate — see [Service and systemd](./service-and-systemd.md).
+:::
+
+---
+
+## What the app does not change
+
+- **Same sign-in, same rights.** The app signs in like the browser and follows the user's role.
+- **No offline mode.** Every screen is served by the server; without a connection to it, the app shows nothing.
+- **Nothing to update on the computer.** It is uninstalled like any other installed app.
+
+---
+
 ## NomaUBL — Monitoring — overview
 Source: https://docs.nomana-it.fr/nomaubl/monitoring/overview/
 
@@ -29485,7 +29517,7 @@ Open it from **Billing overview**, first entry of the Navigation group. The day-
 | **Date basis** | Document date | *Document date*, *Activity date* or *Archive date*, chosen in the footer of the period picker. |
 | **Exclude reviewed errors** | On | Hides the invoices already reviewed by customer service that still sit in an error status. Reviewed invoices in other statuses stay counted. |
 | **Compared to …** | — | Shows the previous period used for the changes (see below). Hidden when the period is *All*. |
-| **↻** | — | Reloads the page with the same filters. |
+| **↻** | — | Reloads the page with the same filters. Figures are reused for the [dashboard cache](../configuration/default-periods.md#dashboard-cache) delay (60 minutes unless set); the time they were loaded shows next to it (*Updated 14:05*). |
 | **PDF** | — | Key figures, chart and tables in the layout of the [audit report](reports/audit-report.md) (`billing-overview.pdf`). |
 
 The period, the date basis, the switch and the direction are remembered in the browser, so the page opens again as it was left.
@@ -29549,7 +29581,7 @@ Each row gives the amount and the number of invoices; a click opens [E-Invoicing
 
 ## Access \{#access\}
 
-Grant the **Billing overview** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; the server and the AI assistant's `billing_overview` tool check the same grant. Figures follow the companies and the [row filters](../configuration/security/roles.md#row-filters) of the signed-in user's role. A role with this page opens on it after sign-in; under a restricted licence, the application opens on the [Operations](./dashboard.md) dashboard.
+Grant the **Billing overview** page in the Navigation group on the [Roles](../configuration/security/roles.md) page; the server and the AI assistant's `billing_overview` tool check the same grant. Figures follow the companies and the [row filters](../configuration/security/roles.md#row-filters) of the signed-in user's role. It is the default [start page](../configuration/default-periods.md#start-page) after sign-in; under a restricted licence, the application opens on the [Operations](./dashboard.md) dashboard.
 
 ---
 
@@ -29587,8 +29619,8 @@ The page description sums up the period: `… invoices on the period · … appr
 | **Sales / Purchases** | Sales | Switches the whole dashboard between issued and received invoices. |
 | **Period** | This month, or the [default period](../configuration/default-periods.md) set for *Operations dashboard* | The shared [period picker](../configuration/default-periods.md#period-picker). |
 | **Date basis** | Activity date | *Activity date* (last update), *Document date* (BT-2) or *Archive date*, in the footer of the picker. Every block follows it. |
-| **Exclude reviewed errors** | Off | See below. |
-| **↻** | — | Reloads every block. |
+| **Exclude reviewed errors** | On | See below. |
+| **↻** | — | Reloads every block. Figures are reused for the [dashboard cache](../configuration/default-periods.md#dashboard-cache) delay (60 minutes unless set); the time they were loaded shows next to it (*Updated 14:05*). |
 
 The filters are kept while the application stays open: leaving the dashboard and coming back finds them as they were.
 
@@ -29656,7 +29688,7 @@ Grant the **Operations** page in the Navigation group on the [Roles](../configur
 
 - **Read the queues by team.** *In progress* needs nobody; the red queue goes to IT, the orange one to customer service — each team starts from its own.
 - **Use *Yesterday* for the morning check.** It covers yesterday and today, so the night batches are counted in full; set it as the [default period](../configuration/default-periods.md) of the view if the team always starts that way.
-- **Turn *Exclude reviewed errors* on during the day.** The queues then shrink as customer service marks invoices as reviewed.
+- **Keep *Exclude reviewed errors* on during the day.** The queues then shrink as customer service marks invoices as reviewed.
 - **Top failing rules drives the corrections.** A single rule with hundreds of hits usually points to one upstream change (a renamed field, an outdated tax code); its [Schematron rule](../references/schematrons.md) says exactly what is expected.
 - **Investigate elsewhere.** The dashboard spots the problem; the [E-Invoicing](./invoices.md) detail window and the [Integration errors](diagnostics/integration-errors.md) page explain it.
 
@@ -29739,7 +29771,7 @@ One card with four tabs: **Volume**, **Errors**, **Retries**, **Time per documen
 
 ### Volume
 
-**Documents processed per day** over the last 14 days, as stacked bars: *Processed* and *In technical error*; the subtitle gives the totals. **Click a bar** to open [E-Invoicing](./invoices.md) on that day, by archive date — a quick path from "today's column is short" to "show me what was processed".
+**Documents processed per day** over the last 14 days, as stacked bars: *Processed* and *In technical error*; the subtitle gives the totals and the time they were loaded. This card is kept on the server for every user for the [dashboard cache](../configuration/default-periods.md#dashboard-cache) delay; **Refresh** reads it again. **Click a bar** to open [E-Invoicing](./invoices.md) on that day, by archive date — a quick path from "today's column is short" to "show me what was processed".
 
 ### Errors
 
@@ -29940,7 +29972,7 @@ Open it from **Statistics** in the Navigation group, after the [IT dashboard](./
 
 ## Header
 
-The header is the same as on the [Billing overview](./billing-overview.md#header): **Sales / Purchases**, the [period picker](../configuration/default-periods.md#period-picker) (date basis *Document date* by default, also *Activity date* or *Archive date*), **Exclude reviewed errors** (on by default) the *Compared to …* tag and **↻** to reload. The previous period follows the [same rule](./billing-overview.md#previous-period). Two buttons export the whole page:
+The header is the same as on the [Billing overview](./billing-overview.md#header): **Sales / Purchases**, the [period picker](../configuration/default-periods.md#period-picker) (date basis *Document date* by default, also *Activity date* or *Archive date*), **Exclude reviewed errors** (on by default) the *Compared to …* tag and **↻** to reload — figures are kept for the [dashboard cache](../configuration/default-periods.md#dashboard-cache) delay, with their load time (*Updated 14:05*). The previous period follows the [same rule](./billing-overview.md#previous-period). Two buttons export the whole page:
 
 | Button | Content |
 |---|---|
@@ -29954,7 +29986,7 @@ The header is the same as on the [Billing overview](./billing-overview.md#header
 | Figure | Value | Change |
 |---|---|---|
 | **Invoices issued** *(Purchases: Invoices received)* | Number of invoices, with the amount excl. VAT below. | in % |
-| **Reached the platform** *(Purchases: Integrated)* | Share of the invoices *At the platform* or *Completed*. | in points |
+| **Reached the platform** *(Purchases: Integrated)* | Share of the invoices *At the platform* or *Completed*, over the invoices meant for the platform (sent, or held for review), as on the Billing overview. | in points |
 | **To handle** | *To correct* + *Decision needed*, shown in red when above zero. | in %, a decrease counts as good |
 | **Open for more than 7 days** | Invoices not completed whose last status change is more than 7 days old, out of the open ones. | — |
 
@@ -30078,7 +30110,7 @@ On a *Received* row the **Counterparty** column reads from `AccountingSupplierPa
 
 ### Exclude reviewed errors \{#exclude-reviewed\}
 
-The **Exclude reviewed errors** switch, next to the direction selector, hides the rows already marked *Reviewed* that still sit in an error status (`errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md)), so the list keeps only the errors nobody has looked at yet. Reviewed rows in any other status stay listed. The switch is set automatically when the list opens from a dashboard where it was on ([Billing overview](./billing-overview.md), [Statistics](./statistics.md), [Operations](./dashboard.md#exclude-reviewed)). The `GET /api/invoices` endpoint takes the same filter as `excludeReviewedErrors=true`.
+The **Exclude reviewed errors** switch, next to the direction selector, hides the rows already marked *Reviewed* that still sit in an error status (`errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md)), so the list keeps only the errors nobody has looked at yet. Reviewed rows in any other status stay listed. The switch is on by default; a list opened from a dashboard ([Billing overview](./billing-overview.md), [Statistics](./statistics.md), [Operations](./dashboard.md#exclude-reviewed)) takes the dashboard's choice. The `GET /api/invoices` endpoint takes the same filter as `excludeReviewedErrors=true`.
 
 ### Status by stage \{#status-by-stage\}
 
@@ -30103,13 +30135,13 @@ A text filter matches from the **start** of the value and uses the column's inde
 
 The set of columns that can be filtered is defined in the spec's `filter: true` allow-list — operators decide which columns they actually query and trim the rest from the panel without losing them from the grid. See [List Views](../configuration/list-views.md) for the editor.
 
-The page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, the *Rows loaded* of [Settings › Periods and lists](../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default) and the grid handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the period or the *Advanced Filters*.
+The page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, the *Rows loaded* of [Settings › Navigation & lists](../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default) and the grid handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the period or the *Advanced Filters*.
 
 RefList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union. A code can also be typed in the search box of the picker (Enter, comma-separated for several), so a list that is incomplete or still empty still filters.
 
 ### Grid toolbar
 
-Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)** and **Reprocess selected (N)** when rows are ticked (see [Bulk resend](#bulk-resend) and [Reprocess](#reprocess)).
+Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)**, **Reprocess selected (N)** and **Mark reviewed (N)** when rows are ticked (see [Bulk resend](#bulk-resend), [Reprocess](#reprocess) and [Mark reviewed](#mark-reviewed)).
 
 ---
 
@@ -30161,6 +30193,7 @@ The **Updated** value carries the time of day, so an *Updated* column formatted 
 | **Total TTC** | Total amount including VAT. |
 | **Currency** | ISO 4217 code. |
 | **Status** | Status badge — code + label, coloured by family. |
+| **Send to PA** | Destination of the invoice: *For the platform*, *Not for the platform* or *Held for review before sending* (`list-send-pa`), filterable. |
 | **Review** | Coloured **review badge** — *Pending* (awaiting customer service) or *Reviewed*. Lit up when the row needs operator attention — a status the dispatcher could not auto-resolve, a manual edit flagged on save, or a downstream system marking the row for re-check. It also lights up for an invoice **Deposited (200) with reason `NON_TRANSMISE`**: not an error, but the recipient has no active reception address, so the operator must forward it manually — other 200s keep a quiet dash. An invoice **corrected by hand** — saved from the invoice window or repaired with *Fix buyer* — is flagged *Reviewed* as soon as the validation that follows raises no error, whatever its status. Empty when nothing is pending: a few badges in an otherwise clear page tell you exactly where to start. |
 
 A page-size selector at the bottom defaults to 50 rows per page; values up to 500 are accepted. The total count of matching invoices is shown next to the pagination controls.
@@ -30187,6 +30220,15 @@ The Invoices view's SQL now joins `F564231` (UH) and `F564230` (FE) on doc / dct
 
 Clicking any row opens the **Detail modal** for that invoice. Most actions are per-invoice, but the list also supports a **bulk resend** — see below.
 
+### Mark reviewed \{#mark-reviewed\}
+
+Customer service marks the invoices in error it has handled as **reviewed**, so they leave the error counts and lists while *Exclude reviewed errors* is on. The invoice keeps its status.
+
+- **From the list** — tick the invoices, then **Mark reviewed (N)**. The button shows when at least one ticked invoice is in error and not yet reviewed. A confirmation says that *the selected invoice(s) will be considered handled and will no longer appear among the errors to handle*; only invoices still in error are marked.
+- **From the invoice window** — the **Reviewed** chip at the right of the tabs sets the mark (dashed when not set) or clears it (green when set), each time after a confirmation. Clearing brings the invoice back among the errors to handle.
+
+Both require the *Mark reviewed* action (`invoice.review`) on the [Roles](../configuration/security/roles.md) page. The mark is the **Review** column (`UHALRTPSD`).
+
 ### Bulk resend \{#bulk-resend\}
 
 Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). Only invoices that may actually be sent are selectable — rows whose document type is set to *Do not send* are disabled, so a non-transmissible invoice can't be swept into a batch by mistake. For the same reason, the per-invoice **Resend** action is hidden on *Do not send* rows.
@@ -30207,7 +30249,7 @@ A small **Export** button in the toolbar exports the current view (filters appli
 
 ## Detail modal
 
-Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parties**, **Lines**, **VAT**, **Notes**, **History**, **PDF**. The modal title shows the invoice's `DOC / DCT / KCO` triplet. A **fullscreen toggle** in the header switches between a windowed and a full-screen view.
+Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parties**, **Lines**, **VAT**, **Notes**, **History**, **PDF**. The modal title shows the invoice's `DOC / DCT / KCO` triplet. At the right of the tabs, the **Reviewed** chip sets or clears the [review mark](#mark-reviewed) of an invoice in error. A **fullscreen toggle** in the header switches between a windowed and a full-screen view.
 
 **Previous / next arrows** (and the ← → keys) in the header move through the invoices of the list without closing the window — the same order and filters as the table on screen — with a position indicator (e.g. `3 / 50`). Past the last invoice, navigation loops back to the first.
 
@@ -30904,7 +30946,7 @@ The toolbar above the table combines three free-text filters with two quick acti
 
 A collapsible **Advanced Filters** panel below the toolbar exposes one row per filterable column from the active [List Views](../configuration/list-views.md) spec (`view.ereporting`) — with per-column operator pickers (`contains`, `equals`, `≠`, `<`, `≤`, `>`, `≥`, `between`, `empty`, `not empty`). Edits stay in draft until **Run** commits them.
 
-The page runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, the *Rows loaded* of [Settings › Periods and lists](../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. The `status` refList column gets a **multi-select picker** that issues an `IN (?,?,?)` clause on the server so picking several status codes returns the union.
+The page runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, the *Rows loaded* of [Settings › Navigation & lists](../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. The `status` refList column gets a **multi-select picker** that issues an `IN (?,?,?)` clause on the server so picking several status codes returns the union.
 
 ---
 
@@ -32049,7 +32091,7 @@ A collapsible **Advanced Filters** panel below the toolbar exposes one row per f
 
 The IT dashboard's *Recent errors* drill-through also surfaces here: when the dashboard passes `{ doc, dct, kco }`, a chip shows the active drill-through filter and offers a one-click `×` clear. Useful when the panel is collapsed and the filter would otherwise stay invisible.
 
-The page runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, the *Rows loaded* of [Settings › Periods and lists](../../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. The `invoiceStatus` refList column gets a **multi-select picker** that issues an `IN (?,?,?)` clause on the server so picking several statuses returns the union.
+The page runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, the *Rows loaded* of [Settings › Navigation & lists](../../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. The `invoiceStatus` refList column gets a **multi-select picker** that issues an `IN (?,?,?)` clause on the server so picking several statuses returns the union.
 
 ---
 
@@ -32240,6 +32282,7 @@ The toolbar above the table combines a view toggle, a free-text search, dropdown
 | Control | Behaviour |
 |---|---|
 | **Grouped / Flat toggle** | Switches the data presentation. Persisted per-browser. |
+| **Processing / Scheduled jobs / All** | Which runs are listed. **Processing** *(default)* — the file processing; **Scheduled jobs** — the runs of the scheduled jobs (status and import polls, retention, digests…), without the template and mode filters; **All**. A job run opened from [Failures](./failures.md) lands on *Scheduled jobs*. Their retention is set apart: *Job runs (days)* under [Job defaults › Retention](../../configuration/system/global.md#retention). |
 | **Search file name** | Substring match against the `file` column (e.g. `12345_RI_00070`). Empty disables the filter. |
 | **Templates** | Dropdown populated dynamically from the `document` templates declared in `config.json`. *All templates* removes the filter. |
 | **Modes** | Dropdown of the well-known processing modes — `AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`. *All modes* removes the filter. |
@@ -32257,7 +32300,7 @@ The IT dashboard's throughput-bar drill-through into this page now seeds the V2 
 
 The Flat view renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.processing-log` spec on `db-nomaubl` and the bundled default ships every column described below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../../configuration/list-views.md) editor. The Grouped view keeps its dedicated layout — grouping is not a DataTableV2 feature.
 
-The Flat view runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, the *Rows loaded* of [Settings › Periods and lists](../../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. refList columns get the **multi-select picker** when applicable.
+The Flat view runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, the *Rows loaded* of [Settings › Navigation & lists](../../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. refList columns get the **multi-select picker** when applicable.
 
 ---
 
@@ -36957,7 +37000,7 @@ Open it from **Management → Promotion**. The page has three views: **Export** 
 | **Daily digest** · **Auto-retry** · **Lifecycle check** | A [daily digest](../sync/scheduled-jobs/daily-digest.md), an [auto-retry](../sync/scheduled-jobs/auto-retry.md) or a [lifecycle check](../sync/scheduled-jobs/lifecycle-checks.md). | — |
 | **Connector** | An API, SQL, database or FTP connector, without its secrets and targets. | — |
 | **Settings template** | E-invoicing, e-reporting, directory lookup, watched folders, integrity checks, report queries or JDE print queue, without its instance keys. | — |
-| **File** | The shared UBL defaults file (`ubl-defaults.xsl`, the operator values of the common XSL). | — |
+| **File** | The shared UBL defaults file (`ubl-defaults.xsl`, the operator values of the common XSL), and **each file a document uses** — transform, XSL, RTF, UBL stylesheet, customer Schematron, PDF layout — listed by its path with *Used by …* the documents that use it. A file can be promoted alone, for example a stylesheet shared by several documents. | — |
 
 The global settings, single sign-on and the column overrides of the NomaUBL database are never promoted: they describe the instance itself.
 
@@ -37824,7 +37867,7 @@ The navigation on the left groups the entries by **what you want to set**, not b
 | **E-invoicing** | [E-invoicing](./system/einvoicing.md), [Document types](./system/document-types.md), [Status catalogue](./system/statuses.md), [Directory lookup](./system/edirectory.md). |
 | **E-reporting** | [E-reporting](./system/ereporting.md) and the *E-reporting status catalogue*. |
 | **Jobs & inbound** | *Job defaults* (global tab), [JDE print queue (BIP)](./system/fetch-invoices.md), [Integrity checks](./system/integrity-reports.md). |
-| **Views & UI** | [List views](./list-views.md) and [Periods and lists](./default-periods.md#default-periods) (global tab *Periods*: default periods, rows per page and rows loaded of the lists). |
+| **Views & UI** | [List views](./list-views.md) and [Navigation & lists](./default-periods.md#default-periods) (global tab *Periods*: start page, navigation auto collapse, default periods, rows per page and rows loaded of the lists, dashboard cache). |
 | **API connectors** | One entry per [API connector](./api-connectors.md), with the `api` badge. |
 | **SQL connectors** | One entry per [SQL connector](./sql-connectors.md), with the `sql` badge. |
 | **FTP connectors** | *JD Edwards file transfer* and the other [FTP connectors](./ftp-connectors.md), with the `ftp` badge. |
@@ -38504,7 +38547,7 @@ Application-wide NomaUBL settings in ten tabs: directories and environment, proc
 
 The **Global** settings hold what applies to the **whole NomaUBL application**: file system layout and environment, processing options, the server log, PDF rendering, the email server, the AI assistant, the defaults shared by the scheduled jobs, the license and the authentication. They apply whatever the source system — JD Edwards, SAP, NetSuite or a custom ERP; the few BIP-specific settings are flagged where they appear.
 
-The editor has **ten tabs**: Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication, Periods. In the [Settings navigation](../settings-overview.md) each tab is an entry of its own — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* and *License* in **Platform**, *Authentication* in **Security**, *Job defaults* in **Jobs & inbound**, *Periods and lists* in **Views & UI** — and opens that part only, without the row of tabs. The search box of Settings finds any field of these tabs by its label, hint or key.
+The editor has **ten tabs**: Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication, Periods. In the [Settings navigation](../settings-overview.md) each tab is an entry of its own — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* and *License* in **Platform**, *Authentication* in **Security**, *Job defaults* in **Jobs & inbound**, *Navigation & lists* in **Views & UI** — and opens that part only, without the row of tabs. The search box of Settings finds any field of these tabs by its label, hint or key.
 
 The jobs themselves — polls, batch document jobs, daily digests, auto-retries, lifecycle checks, retention purge — are not set here: they are on the [Scheduled jobs](../../sync/scheduled-jobs/overview.md) page.
 
@@ -38738,7 +38781,7 @@ Requires **SMTP** configured under *Tab 5 — Email*. Tokens are persisted in `F
 
 ## Tab 10 — Periods \{#periods\}
 
-The period each page opens on: **Every view** (*This month* unless set) and one override **Per view** (*Same as every view* by default) for the Billing overview, Operations, Statistics, Invoices, E-Documents, Diagnostics, Integration errors, Processing log and Reports › Integrity. Stored as `defaultPeriod` and `defaultPeriod.<view>`. A **Lists** group sets the *Rows per page* (50) and *Rows loaded* (100 000) of every list without its own values (`defaultPageSize`, `defaultMaxRows`). See [Period picker, default periods and lists](../default-periods.md#default-periods).
+Shown in the Settings navigation as **Navigation & lists**: the **start page** after sign-in (`startPage`), the **auto collapse** of the navigation (`navAutoCollapse`), the **dashboard cache** in minutes (`dashboardCacheMinutes`, 60), and the period each page opens on: **Every view** (*This month* unless set) and one override **Per view** (*Same as every view* by default) for the Billing overview, Operations, Statistics, Invoices, E-Documents, Diagnostics, Integration errors, Processing log and Reports › Integrity. Stored as `defaultPeriod` and `defaultPeriod.<view>`. A **Lists** group sets the *Rows per page* (50) and *Rows loaded* (100 000) of every list without its own values (`defaultPageSize`, `defaultMaxRows`). See [Period picker, default periods and lists](../default-periods.md#default-periods).
 
 ---
 
@@ -39232,7 +39275,7 @@ NomaUBL ships custom lists that the default [List Views](./list-views.md) use fo
 | `list-activite` | Activity codes, refreshed from the NomaUBL database. |
 | `list-sub-type` | Document sub-types, refreshed from the NomaUBL database. |
 | `list-companies` | Companies, synced from the `getCompanies` query of the shipped [`jde-sql` connector](./sql-connectors.md#jde-sql). |
-| `list-send-pa` | Send to the PA: `1` Send to the PA, `2` Not sent, `3` Held for review. |
+| `list-send-pa` | Destination of the invoice: `1` For the platform, `2` Not for the platform, `3` Held for review before sending. |
 | `list-level` | Severity levels: Fatal, Error, Warning, Information. |
 | `list-validation-sources` | Sources of the validation findings: XSD schema, EN 16931, CIUS-FR, extended CTC FR, Chorus Pro, NomaUBL rules, and the technical steps (UBL, XML, PDF, XSL transformation, validation, PA, database, processing). |
 | `list-flux` | E-reporting direction: `1` Inbound (purchases), `2` Outbound (sales). |
@@ -39387,8 +39430,8 @@ Above the column rows, each view card carries a *Defaults* row with the per-view
 
 | Field | Description |
 |---|---|
-| **Page size** | Initial page size for the in-grid TanStack paginator. Persists as `spec.defaultPageSize`. Empty = the *Rows per page* of [Settings › Periods and lists](./default-periods.md#lists) (50 unless set). |
-| **Max rows** | Hard cap on the slice loaded by a single Run. The spec-driven views operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Empty = the *Rows loaded* of [Settings › Periods and lists](./default-periods.md#lists) (100 000 unless set). The bundled views set neither. |
+| **Page size** | Initial page size for the in-grid TanStack paginator. Persists as `spec.defaultPageSize`. Empty = the *Rows per page* of [Settings › Navigation & lists](./default-periods.md#lists) (50 unless set). |
+| **Max rows** | Hard cap on the slice loaded by a single Run. The spec-driven views operate in **hybrid client-side mode**: each Run loads one capped slice from the server and TanStack paginates / sorts / filters within that slice — no roundtrip while typing in the per-column filter row. Persists as `spec.maxRows`. Empty = the *Rows loaded* of [Settings › Navigation & lists](./default-periods.md#lists) (100 000 unless set). The bundled views set neither. |
 
 When the slice cap is hit during a Run, the page toolbar shows a translated `X / Y rows` notice next to the Run button — a hint that the operator should narrow the date range or the *Advanced Filters* to get the most relevant slice. The notice is informational; the page keeps working.
 
@@ -39468,12 +39511,12 @@ The `name` joins with the catalog entry that has a matching key; everything else
 
 ---
 
-## NomaUBL — Period picker, default periods and lists
+## NomaUBL — Period picker, navigation and lists
 Source: https://docs.nomana-it.fr/nomaubl/configuration/default-periods/
 
 The NomaUBL period picker shared by the dashboards and lists — ten presets, a two-month calendar, the date basis of each page, the Exclude reviewed errors switch — and the Default periods settings that choose the period each page opens on, for every view or view by view.
 
-The dashboards and lists of NomaUBL share one **period picker**: the same presets, the same calendar and, where the page offers it, the choice of the **date** the period is read against. The period each page opens on is set once for the instance under **Settings → Views & UI → Periods and lists** — for every view, then view by view when a team needs another one.
+The dashboards and lists of NomaUBL share one **period picker**: the same presets, the same calendar and, where the page offers it, the choice of the **date** the period is read against. The period each page opens on is set once for the instance under **Settings → Views & UI → Navigation & lists** — for every view, then view by view when a team needs another one.
 
 ---
 
@@ -39505,13 +39548,39 @@ The button shows the range itself (for example *1 – 31 Oct 2026*) and the date
 
 ### Exclude reviewed errors \{#exclude-reviewed\}
 
-Next to the picker, the **Exclude reviewed errors** switch hides the invoices already reviewed by customer service that still sit in an error status; reviewed invoices in other statuses stay counted. It is on by default on the Billing overview and Statistics, off on Operations and E-Invoicing (E-Invoicing takes the value of the dashboard it is opened from). The [Explorer](../application/explorer.md) offers the same switch in every analysis.
+Next to the picker, the **Exclude reviewed errors** switch hides the invoices already reviewed by customer service that still sit in an error status; reviewed invoices in other statuses stay counted. It is on by default on every page — Billing overview, Statistics, Operations and E-Invoicing; a list opened from a dashboard takes the dashboard's choice. An invoice is left out only when it is marked reviewed; an invoice without a review mark stays counted. The [Explorer](../application/explorer.md) offers the same switch in every analysis.
+
+---
+
+## Settings › Navigation & lists \{#navigation-and-lists\}
+
+One page of the Settings — **Settings → Views & UI → Navigation & lists**, in English only like most Settings editors — gathers what shapes the interface for every user: the start page, the navigation, the default periods, the lists and the dashboard cache.
+
+### Start page \{#start-page\}
+
+| Field | Default | Description |
+|---|---|---|
+| **After sign-in** | Billing overview | The page shown after sign-in: *Billing overview*, *Operations dashboard*, *Statistics*, *IT dashboard*, *Invoices*, *E-Documents*, *E-reporting*, *VAT declaration*, *Diagnostics*, *Reports* or *Explorer*. A user whose role does not grant it opens the Billing overview, else the first page the role grants. Under a restricted licence, the application opens on the Operations dashboard. |
+
+### Navigation \{#navigation\}
+
+| Field | Default | Description |
+|---|---|---|
+| **Auto collapse** | No — expanded, collapse by hand | **Yes — icons only, expands on hover**: the menu folds to a rail of icons and the pages get the width; hovering the icons opens the menu over the page, and picking a page folds it back. The manual collapse button is then hidden. |
+
+### Dashboard cache \{#dashboard-cache\}
+
+| Field | Default | Description |
+|---|---|---|
+| **Cache (minutes)** | 60 | How long the [Billing overview](../application/billing-overview.md), [Statistics](../application/statistics.md) and [Operations](../application/dashboard.md) dashboards reuse the figures they loaded — coming back to a dashboard or changing page does not query again — and how long the *documents processed per day* of the [IT dashboard](../application/tech-dashboard.md) are kept on the server for every user. An open dashboard reloads on its own after the delay; **↻** reloads at once. `0` = always reload. |
+
+Each dashboard shows when its figures were loaded (*Updated 14:05*), next to **↻** — on the IT dashboard, in the subtitle of *Documents processed per day*. The figures kept in the browser are lost when the page is reloaded.
 
 ---
 
 ## Default periods \{#default-periods\}
 
-Open it from **Settings → Views & UI → Periods and lists**. Like most Settings editors, it is in English only.
+They are set on the same page, **Settings → Views & UI → Navigation & lists**.
 
 | Field | Default | Description |
 |---|---|---|
@@ -39528,7 +39597,7 @@ The values are saved in the [Global](./system/global.md) settings (tab *Periods*
 
 ## Lists \{#lists\}
 
-The **Lists** group of the same page sets two values for every list that has none of its own in [List views](./list-views.md):
+The **Lists** group of **Navigation & lists** sets two values for every list that has none of its own in [List views](./list-views.md):
 
 | Field | Default | Description |
 |---|---|---|
@@ -40618,7 +40687,7 @@ A few chips carry a hint:
 - **Developer** opens the [Developer reference](../../references/developer.md): tables, configuration keys, flows, impact, API.
 - **Billing overview** and **Statistics** are pages of their own, checked by the server and by the tools of the AI assistant. The upgrade gives both, once, to every role that had Operations, so nobody loses a page; removing them from a role afterwards is kept.
 - **Business Rules** also opens [Schematrons](../../references/schematrons.md).
-- After sign-in, a role with the Billing overview opens on it; a role without it opens on the first page it grants, in menu order (Operations, Statistics, IT dashboard, E-Invoicing…).
+- After sign-in, the user opens on the [start page](../default-periods.md#start-page) of the instance when the role grants it, else on the Billing overview, else on the first page the role grants.
 
 Rules:
 
@@ -40658,6 +40727,7 @@ Grouped by the page where the button lives — the same key can power buttons on
 |---|---|---|---|
 | **Invoices** | Create | `invoice.create` | The *New Invoice* button of the [E-Invoicing](../../application/invoices.md) list. |
 | **Invoices** | Edit | `invoice.edit` | Update invoice fields from the detail modal / edit panel. |
+| **Invoices** | Mark reviewed | `invoice.review` | Mark invoices in error as reviewed by customer service, or clear the mark — [invoice list and window](../../application/invoices.md#mark-reviewed). The upgrade gives it to the roles that have *Edit* or *Push status (DB)*. |
 | **Invoices** | Delete | `invoice.delete` | Hard-delete an invoice and all its child records. |
 | **Invoices** | Delete lifecycle event | `invoice.lifecycle-delete` | Remove a single status event from an invoice history; the header realigns on the last remaining event. |
 | **Invoices** | Resend to PA | `invoice.resend` | Submit / re-submit an invoice (or a bulk batch) to the PA. |
@@ -41640,10 +41710,22 @@ Every user-visible change to NomaUBL — UI, REST API, CLI, behaviour — is con
 - **Upgrade: customised UBL defaults kept compiling.** When an instance's ubl-defaults.xsl holds its own version of a framework template (the seller party, for example), the upgrade now adds the parameters the new framework passes to it — with their shipped defaults, the template's body untouched — as it already did for the per-document stylesheets; the upgrade report still lists the template, whose customised body ignores the new values until it is updated from ubl-defaults.xsl.upstream. Until now such an instance stopped producing UBL after the upgrade ("Parameter … is not declared in the called template").
 - **Daily digest: the business dashboards.** A digest can send the Synthèse or the Statistics, as PDF (the page's figures, charts and tables) or Excel, over last month, the month to date or the digest window, for sales or purchases. It can be built as a role sees it — its companies and row filters — so each recipient group receives only its scope. Any digest can be sent on one day of the month only (for example on the 1st, last month's overview); Send now ignores it.
 - **Invoice types: enable or disable.** In Settings › Invoice types, each code has an Active box. An unticked code stays in the list — its labels still show on existing invoices and its invoice / credit note kind still applies — but it is no longer offered in the pickers (UBL defaults, invoice form, list and Explorer filters). A new installation offers the 16 codes of French e-invoicing (380, 381, 384, 386, 389, 393, 396, 261, 262, 471, 472, 473, 500 to 503); an upgrade leaves the existing list as it is.
-- **Billing overview: transmission rate over the invoices to send.** The transmission rate, its issued / not issued split and the per-company share count only the invoices meant for the platform (sent, or held for review); invoices of document types not sent to the platform no longer lower it. The daily digest uses the same base.
+- **Exclude reviewed errors: invoices without a review mark kept.** An invoice in error whose review mark was empty (an invoice written without it) disappeared from the error counts and lists as if reviewed; only an invoice marked reviewed is left out now.
+- **API: form creation route removed.** POST /api/invoices answered success without creating anything; it is removed. Invoices are created with POST /api/invoices/create-ubl (a UBL document) or POST /api/process (a source file through a document's mapping).
+- **Desktop app.** NomaUBL can be installed as a desktop application on Windows and macOS from Chrome or Edge (Install button in the address bar) or Safari (File › Add to Dock): its own window and icon, no browser bars, always the server's version. Each environment installs as its own app, named after it ("NomaUBL · TEST"). Requires the server to be reached over HTTPS. The application icon shows the full NomaUBL logo.
+- **List views: Reset to defaults in one click.** The button now shows the shipped columns at once; saving keeps them. It used to show the customised columns again until a second click.
+- **Invoices: mark errors as reviewed.** Customer service can mark invoices in error as reviewed: from the invoice list (select them, then Mark reviewed) or from the invoice window, where a "Reviewed" chip at the right of the tabs sets or clears it; each time after a confirmation. A reviewed invoice keeps its status and is left out of the error counts while "Exclude reviewed errors" is on. New permission "Mark reviewed", given on upgrade to the roles that can edit invoices or push a status in the database.
+- **Invoices: Send to PA column.** The default invoice list shows whether each invoice is meant for the platform (for the platform, not for the platform, held for review before sending), with its labels and a filter on the list, instead of the status note. A list view already customised keeps its columns.
+- **Navigation: auto collapse.** Settings › Navigation & lists can fold the navigation to its icons: the pages get the width, and hovering the icons opens the menu over the page; picking a page folds it back.
+- **Promotion: a document's files on their own.** Each file a document uses (transform, XSL, RTF, UBL stylesheet, customer Schematron, PDF layout) is listed among the files, with the documents using it, and can be promoted alone — a stylesheet shared by several documents no longer requires promoting a document.
+- **Processing log: processing and scheduled jobs apart.** A switch Processing / Scheduled jobs / All sits next to Grouped / Flat; the log opens on Processing, so the runs of the status and import polls (every few minutes) no longer bury the file processing. A job run opened from Failures lands on Scheduled jobs. Their retention is already separate: Settings › Job defaults › Retention, "Job runs (days)".
+- **Start page.** Settings › Navigation & lists chooses the page shown after sign-in (Billing overview unless set): a dashboard, Invoices, E-Documents, E-reporting, VAT declaration, Diagnostics, Reports or the Explorer. A user whose role does not grant it opens the Billing overview, else the first page the role grants.
+- **Dashboards: cached figures.** The Billing overview, Statistics and Operations dashboards keep the figures they loaded, so coming back to them or changing page no longer queries again; an open dashboard reloads on its own after the delay, and Refresh reloads at once. On the IT dashboard, only documents processed per day is kept, on the server for every user. Each shows when its figures were loaded. Delay in Settings › Navigation & lists (60 minutes unless set, 0 = always reload).
+- **Reviewed errors left out by default.** The Operations dashboard and the invoice list open with "Exclude reviewed errors" on, like the Billing overview and Statistics; a link from a dashboard keeps its own choice.
+- **Billing overview: transmission rate over the invoices to send.** The transmission rate, its issued / not issued split and the per-company share count only the invoices meant for the platform (sent, or held for review); invoices of document types not sent to the platform no longer lower it. The "Reached the platform" rate of the Statistics dashboard follows the same rule, and so does the daily digest.
 - **Portal notifications without a recipient go to everyone.** With sign-in enabled, a rule on the portal channel with no user or role recorded nothing; it now writes one entry visible in every inbox, as without sign-in. The rule editor names this choice "Everyone".
 - **Notifications from the status poll.** A scheduled status poll waits for the notifications it triggered before exiting (they were cut after two seconds), and a settings change on a running server lets the queued ones finish.
-- **Lists: rows per page and rows loaded by default.** Settings › Periods and lists sets, for every list, the rows per page (50 unless set) and the rows loaded per refresh (100 000 unless set, instead of 5 000); a list view of Settings › List views can still set its own. The E-reporting list is no longer limited to 200 declarations.
+- **Lists: rows per page and rows loaded by default.** Settings › Navigation & lists sets, for every list, the rows per page (50 unless set) and the rows loaded per refresh (100 000 unless set, instead of 5 000); a list view of Settings › List views can still set its own. The E-reporting list is no longer limited to 200 declarations.
 - **List filters: pick or type.** The filters on a coded column — advanced filters, column filters and the Explorer — still offer the list's values, and also accept codes typed in the search box (Enter, comma-separated for several), so a list that is incomplete or still empty (for example a custom list of document types or sub-types) still filters.
 - **Mapping check: invoice type code.** A blank BT-3 mapping is no longer reported as missing: the code comes from the UBL defaults (invoice-type rules, then the default code), like the other fields filled by the defaults.
 - **Diagnostics › Failures: fast with "Unresolved only".** Whether a failed file was processed successfully later is now worked out in one pass over the processing log instead of one pass per failure.

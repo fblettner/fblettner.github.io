@@ -109,7 +109,7 @@ The navigation on the left groups the entries by **what you want to set**, not b
 | **E-invoicing** | [E-invoicing](./system/einvoicing.md), [Document types](./system/document-types.md), [Status catalogue](./system/statuses.md), [Directory lookup](./system/edirectory.md). |
 | **E-reporting** | [E-reporting](./system/ereporting.md) and the *E-reporting status catalogue*. |
 | **Jobs & inbound** | *Job defaults* (global tab), [JDE print queue (BIP)](./system/fetch-invoices.md), [Integrity checks](./system/integrity-reports.md). |
-| **Views & UI** | [List views](./list-views.md) and [Periods and lists](./default-periods.md#default-periods) (global tab *Periods*: default periods, rows per page and rows loaded of the lists). |
+| **Views & UI** | [List views](./list-views.md) and [Navigation & lists](./default-periods.md#default-periods) (global tab *Periods*: start page, navigation auto collapse, default periods, rows per page and rows loaded of the lists, dashboard cache). |
 | **API connectors** | One entry per [API connector](./api-connectors.md), with the `api` badge. |
 | **SQL connectors** | One entry per [SQL connector](./sql-connectors.md), with the `sql` badge. |
 | **FTP connectors** | *JD Edwards file transfer* and the other [FTP connectors](./ftp-connectors.md), with the `ftp` badge. |

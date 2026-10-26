@@ -135,7 +135,7 @@ Open it from **Management → Promotion**. The page has three views: **Export** 
 | **Daily digest** · **Auto-retry** · **Lifecycle check** | A [daily digest](../sync/scheduled-jobs/daily-digest.md), an [auto-retry](../sync/scheduled-jobs/auto-retry.md) or a [lifecycle check](../sync/scheduled-jobs/lifecycle-checks.md). | — |
 | **Connector** | An API, SQL, database or FTP connector, without its secrets and targets. | — |
 | **Settings template** | E-invoicing, e-reporting, directory lookup, watched folders, integrity checks, report queries or JDE print queue, without its instance keys. | — |
-| **File** | The shared UBL defaults file (`ubl-defaults.xsl`, the operator values of the common XSL). | — |
+| **File** | The shared UBL defaults file (`ubl-defaults.xsl`, the operator values of the common XSL), and **each file a document uses** — transform, XSL, RTF, UBL stylesheet, customer Schematron, PDF layout — listed by its path with *Used by …* the documents that use it. A file can be promoted alone, for example a stylesheet shared by several documents. | — |
 
 The global settings, single sign-on and the column overrides of the NomaUBL database are never promoted: they describe the instance itself.
 

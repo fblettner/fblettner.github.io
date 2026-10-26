@@ -262,7 +262,7 @@ A few chips carry a hint:
 - **Developer** opens the [Developer reference](../../references/developer.md): tables, configuration keys, flows, impact, API.
 - **Billing overview** and **Statistics** are pages of their own, checked by the server and by the tools of the AI assistant. The upgrade gives both, once, to every role that had Operations, so nobody loses a page; removing them from a role afterwards is kept.
 - **Business Rules** also opens [Schematrons](../../references/schematrons.md).
-- After sign-in, a role with the Billing overview opens on it; a role without it opens on the first page it grants, in menu order (Operations, Statistics, IT dashboard, E-Invoicing…).
+- After sign-in, the user opens on the [start page](../default-periods.md#start-page) of the instance when the role grants it, else on the Billing overview, else on the first page the role grants.
 
 Rules:
 
@@ -302,6 +302,7 @@ Grouped by the page where the button lives — the same key can power buttons on
 |---|---|---|---|
 | **Invoices** | Create | `invoice.create` | The *New Invoice* button of the [E-Invoicing](../../application/invoices.md) list. |
 | **Invoices** | Edit | `invoice.edit` | Update invoice fields from the detail modal / edit panel. |
+| **Invoices** | Mark reviewed | `invoice.review` | Mark invoices in error as reviewed by customer service, or clear the mark — [invoice list and window](../../application/invoices.md#mark-reviewed). The upgrade gives it to the roles that have *Edit* or *Push status (DB)*. |
 | **Invoices** | Delete | `invoice.delete` | Hard-delete an invoice and all its child records. |
 | **Invoices** | Delete lifecycle event | `invoice.lifecycle-delete` | Remove a single status event from an invoice history; the header realigns on the last remaining event. |
 | **Invoices** | Resend to PA | `invoice.resend` | Submit / re-submit an invoice (or a bulk batch) to the PA. |

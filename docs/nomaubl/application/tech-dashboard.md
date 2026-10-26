@@ -225,7 +225,7 @@ One card with four tabs: **Volume**, **Errors**, **Retries**, **Time per documen
 
 ### Volume
 
-**Documents processed per day** over the last 14 days, as stacked bars: *Processed* and *In technical error*; the subtitle gives the totals. **Click a bar** to open [E-Invoicing](./invoices.md) on that day, by archive date — a quick path from "today's column is short" to "show me what was processed".
+**Documents processed per day** over the last 14 days, as stacked bars: *Processed* and *In technical error*; the subtitle gives the totals and the time they were loaded. This card is kept on the server for every user for the [dashboard cache](../configuration/default-periods.md#dashboard-cache) delay; **Refresh** reads it again. **Click a bar** to open [E-Invoicing](./invoices.md) on that day, by archive date — a quick path from "today's column is short" to "show me what was processed".
 
 ### Errors
 

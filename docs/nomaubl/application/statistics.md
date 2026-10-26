@@ -202,7 +202,7 @@ Open it from **Statistics** in the Navigation group, after the [IT dashboard](./
 
 ## Header
 
-The header is the same as on the [Billing overview](./billing-overview.md#header): **Sales / Purchases**, the [period picker](../configuration/default-periods.md#period-picker) (date basis *Document date* by default, also *Activity date* or *Archive date*), **Exclude reviewed errors** (on by default) the *Compared to …* tag and **↻** to reload. The previous period follows the [same rule](./billing-overview.md#previous-period). Two buttons export the whole page:
+The header is the same as on the [Billing overview](./billing-overview.md#header): **Sales / Purchases**, the [period picker](../configuration/default-periods.md#period-picker) (date basis *Document date* by default, also *Activity date* or *Archive date*), **Exclude reviewed errors** (on by default) the *Compared to …* tag and **↻** to reload — figures are kept for the [dashboard cache](../configuration/default-periods.md#dashboard-cache) delay, with their load time (*Updated 14:05*). The previous period follows the [same rule](./billing-overview.md#previous-period). Two buttons export the whole page:
 
 | Button | Content |
 |---|---|
@@ -216,7 +216,7 @@ The header is the same as on the [Billing overview](./billing-overview.md#header
 | Figure | Value | Change |
 |---|---|---|
 | **Invoices issued** *(Purchases: Invoices received)* | Number of invoices, with the amount excl. VAT below. | in % |
-| **Reached the platform** *(Purchases: Integrated)* | Share of the invoices *At the platform* or *Completed*. | in points |
+| **Reached the platform** *(Purchases: Integrated)* | Share of the invoices *At the platform* or *Completed*, over the invoices meant for the platform (sent, or held for review), as on the Billing overview. | in points |
 | **To handle** | *To correct* + *Decision needed*, shown in red when above zero. | in %, a decrease counts as good |
 | **Open for more than 7 days** | Invoices not completed whose last status change is more than 7 days old, out of the open ones. | — |
 

@@ -186,7 +186,7 @@ On a *Received* row the **Counterparty** column reads from `AccountingSupplierPa
 
 ### Exclude reviewed errors \{#exclude-reviewed\}
 
-The **Exclude reviewed errors** switch, next to the direction selector, hides the rows already marked *Reviewed* that still sit in an error status (`errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md)), so the list keeps only the errors nobody has looked at yet. Reviewed rows in any other status stay listed. The switch is set automatically when the list opens from a dashboard where it was on ([Billing overview](./billing-overview.md), [Statistics](./statistics.md), [Operations](./dashboard.md#exclude-reviewed)). The `GET /api/invoices` endpoint takes the same filter as `excludeReviewedErrors=true`.
+The **Exclude reviewed errors** switch, next to the direction selector, hides the rows already marked *Reviewed* that still sit in an error status (`errorTech` / `errorBusiness` groups of the [statuses template](../configuration/system/statuses.md)), so the list keeps only the errors nobody has looked at yet. Reviewed rows in any other status stay listed. The switch is on by default; a list opened from a dashboard ([Billing overview](./billing-overview.md), [Statistics](./statistics.md), [Operations](./dashboard.md#exclude-reviewed)) takes the dashboard's choice. The `GET /api/invoices` endpoint takes the same filter as `excludeReviewedErrors=true`.
 
 ### Status by stage \{#status-by-stage\}
 
@@ -211,13 +211,13 @@ A text filter matches from the **start** of the value and uses the column's inde
 
 The set of columns that can be filtered is defined in the spec's `filter: true` allow-list — operators decide which columns they actually query and trim the rest from the panel without losing them from the grid. See [List Views](../configuration/list-views.md) for the editor.
 
-The page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, the *Rows loaded* of [Settings › Periods and lists](../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default) and the grid handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the period or the *Advanced Filters*.
+The page runs in **hybrid client-side mode**: each *Run* loads one capped slice from the server (`spec.maxRows`, the *Rows loaded* of [Settings › Navigation & lists](../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default) and the grid handles filter / sort / paginate / group within that slice — no roundtrip while typing in the per-column filter row, filters survive pagination naturally. When the slice cap is hit, an `X / Y rows` notice next to *Run* tells the operator to narrow the period or the *Advanced Filters*.
 
 RefList columns (Status, eReporting Status, custom lists) get a **multi-select picker** in both the Advanced Filters panel and the per-column filter row — pick any number of codes, the trigger shows `N selected` past the inline cap, and a `✕` on the right resets the selection in one click. The server applies an `IN (?,?,?)` clause so picking three statuses returns the union. A code can also be typed in the search box of the picker (Enter, comma-separated for several), so a list that is incomplete or still empty still filters.
 
 ### Grid toolbar
 
-Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)** and **Reprocess selected (N)** when rows are ticked (see [Bulk resend](#bulk-resend) and [Reprocess](#reprocess)).
+Next to the search box of the grid: **Run** (reloads the list with the current filters), then **Resend selected (N)**, **Reprocess selected (N)** and **Mark reviewed (N)** when rows are ticked (see [Bulk resend](#bulk-resend), [Reprocess](#reprocess) and [Mark reviewed](#mark-reviewed)).
 
 ---
 
@@ -271,6 +271,7 @@ The **Updated** value carries the time of day, so an *Updated* column formatted 
 | **Total TTC** | Total amount including VAT. |
 | **Currency** | ISO 4217 code. |
 | **Status** | Status badge — code + label, coloured by family. |
+| **Send to PA** | Destination of the invoice: *For the platform*, *Not for the platform* or *Held for review before sending* (`list-send-pa`), filterable. |
 | **Review** | Coloured **review badge** — *Pending* (awaiting customer service) or *Reviewed*. Lit up when the row needs operator attention — a status the dispatcher could not auto-resolve, a manual edit flagged on save, or a downstream system marking the row for re-check. It also lights up for an invoice **Deposited (200) with reason `NON_TRANSMISE`**: not an error, but the recipient has no active reception address, so the operator must forward it manually — other 200s keep a quiet dash. An invoice **corrected by hand** — saved from the invoice window or repaired with *Fix buyer* — is flagged *Reviewed* as soon as the validation that follows raises no error, whatever its status. Empty when nothing is pending: a few badges in an otherwise clear page tell you exactly where to start. |
 
 A page-size selector at the bottom defaults to 50 rows per page; values up to 500 are accepted. The total count of matching invoices is shown next to the pagination controls.
@@ -297,6 +298,15 @@ The Invoices view's SQL now joins `F564231` (UH) and `F564230` (FE) on doc / dct
 
 Clicking any row opens the **Detail modal** for that invoice. Most actions are per-invoice, but the list also supports a **bulk resend** — see below.
 
+### Mark reviewed \{#mark-reviewed\}
+
+Customer service marks the invoices in error it has handled as **reviewed**, so they leave the error counts and lists while *Exclude reviewed errors* is on. The invoice keeps its status.
+
+- **From the list** — tick the invoices, then **Mark reviewed (N)**. The button shows when at least one ticked invoice is in error and not yet reviewed. A confirmation says that *the selected invoice(s) will be considered handled and will no longer appear among the errors to handle*; only invoices still in error are marked.
+- **From the invoice window** — the **Reviewed** chip at the right of the tabs sets the mark (dashed when not set) or clears it (green when set), each time after a confirmation. Clearing brings the invoice back among the errors to handle.
+
+Both require the *Mark reviewed* action (`invoice.review`) on the [Roles](../configuration/security/roles.md) page. The mark is the **Review** column (`UHALRTPSD`).
+
 ### Bulk resend \{#bulk-resend\}
 
 Each row carries a **checkbox**, and a **Resend selected (N)** button appears in the toolbar once at least one row is ticked. It resends the whole batch to the [Plateforme Agréée](../configuration/system/einvoicing.md) in one action, through the same progress window used elsewhere (live counters, *Cancel*, *Run in background*). Only invoices that may actually be sent are selectable — rows whose document type is set to *Do not send* are disabled, so a non-transmissible invoice can't be swept into a batch by mistake. For the same reason, the per-invoice **Resend** action is hidden on *Do not send* rows.
@@ -317,7 +327,7 @@ A small **Export** button in the toolbar exports the current view (filters appli
 
 ## Detail modal
 
-Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parties**, **Lines**, **VAT**, **Notes**, **History**, **PDF**. The modal title shows the invoice's `DOC / DCT / KCO` triplet. A **fullscreen toggle** in the header switches between a windowed and a full-screen view.
+Clicking a row opens a modal with seven tabs along the top: **Summary**, **Parties**, **Lines**, **VAT**, **Notes**, **History**, **PDF**. The modal title shows the invoice's `DOC / DCT / KCO` triplet. At the right of the tabs, the **Reviewed** chip sets or clears the [review mark](#mark-reviewed) of an invoice in error. A **fullscreen toggle** in the header switches between a windowed and a full-screen view.
 
 **Previous / next arrows** (and the ← → keys) in the header move through the invoices of the list without closing the window — the same order and filters as the table on screen — with a position indicator (e.g. `3 / 50`). Past the last invoice, navigation loops back to the first.
 

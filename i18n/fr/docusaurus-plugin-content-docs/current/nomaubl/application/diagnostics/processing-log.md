@@ -173,6 +173,7 @@ La barre d'outils combine le choix de la vue, une recherche libre, des filtres d
 | Contrôle | Comportement |
 |---|---|
 | **Bascule Grouped / Flat** | Bascule la présentation des données. Enregistrée par navigateur. |
+| **Traitements / Tâches planifiées / Tout** | Les exécutions listées. **Traitements** *(par défaut)* — les traitements de fichiers ; **Tâches planifiées** — les exécutions des tâches planifiées (récupération des statuts et des imports, rétention, récapitulatifs…), sans les filtres de modèle et de mode ; **Tout**. Une exécution de tâche ouverte depuis les [Anomalies](./failures.md) arrive sur *Tâches planifiées*. Leur rétention se règle à part : *Job runs (days)* dans [Job defaults › Retention](../../configuration/system/global.md#retention). |
 | **Rechercher un fichier** | Recherche par sous-chaîne sur la colonne `file` (par ex. `12345_RI_00070`). Vide désactive le filtre. |
 | **Templates** | Liste déroulante alimentée dynamiquement depuis les templates de type `document` déclarés dans `config.json`. *Tous les templates* retire le filtre. |
 | **Modes** | Déroulante des modes de traitement standards — `AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`. *Tous les modes* retire le filtre. |
@@ -190,7 +191,7 @@ Le drill-through depuis les barres de débit du Tech Dashboard vers cette page a
 
 La vue à plat passe par **DataTableV2** en mode piloté par spec : la forme des colonnes vient de la spec `view.processing-log` sur `db-nomaubl` et le défaut embarqué livre toutes les colonnes décrites plus bas. Ajouter des colonnes depuis le catalogue ou retirer une colonne de la liste blanche de filtres se fait depuis l'éditeur [Vues de liste](../../configuration/list-views.md). La vue groupée conserve sa mise en page dédiée — le groupement ne fait pas partie de DataTableV2.
 
-La vue à plat fonctionne en **mode hybride client-side** — une tranche serveur limitée par *Exécuter* (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Periods and lists](../../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. Les colonnes refList reçoivent le **picker multi-sélection** quand c'est pertinent.
+La vue à plat fonctionne en **mode hybride client-side** — une tranche serveur limitée par *Exécuter* (`spec.maxRows`, le réglage *Rows loaded* de [Paramètres › Navigation & lists](../../configuration/default-periods.md#lists), sauf valeur propre à la vue — 100 000 par défaut), puis TanStack gère filter / sort / paginate dans la tranche. Un message `X / Y lignes` à côté de *Exécuter* signale quand le cap est atteint. Les colonnes refList reçoivent le **picker multi-sélection** quand c'est pertinent.
 
 ---
 

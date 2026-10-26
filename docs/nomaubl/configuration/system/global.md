@@ -8,7 +8,7 @@ keywords: [NomaUBL, global settings, directories, SMTP, Ghostscript, XSL, Anthro
 
 The **Global** settings hold what applies to the **whole NomaUBL application**: file system layout and environment, processing options, the server log, PDF rendering, the email server, the AI assistant, the defaults shared by the scheduled jobs, the license and the authentication. They apply whatever the source system — JD Edwards, SAP, NetSuite or a custom ERP; the few BIP-specific settings are flagged where they appear.
 
-The editor has **ten tabs**: Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication, Periods. In the [Settings navigation](../settings-overview.md) each tab is an entry of its own — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* and *License* in **Platform**, *Authentication* in **Security**, *Job defaults* in **Jobs & inbound**, *Periods and lists* in **Views & UI** — and opens that part only, without the row of tabs. The search box of Settings finds any field of these tabs by its label, hint or key.
+The editor has **ten tabs**: Directories, Processing, Logs, PDF, Email, AI, Job defaults, License, Authentication, Periods. In the [Settings navigation](../settings-overview.md) each tab is an entry of its own — *Directories & environment*, *Processing*, *Server log*, *PDF rendering*, *Email*, *AI assistant* and *License* in **Platform**, *Authentication* in **Security**, *Job defaults* in **Jobs & inbound**, *Navigation & lists* in **Views & UI** — and opens that part only, without the row of tabs. The search box of Settings finds any field of these tabs by its label, hint or key.
 
 The jobs themselves — polls, batch document jobs, daily digests, auto-retries, lifecycle checks, retention purge — are not set here: they are on the [Scheduled jobs](../../sync/scheduled-jobs/overview.md) page.
 
@@ -317,7 +317,7 @@ Requires **SMTP** configured under *Tab 5 — Email*. Tokens are persisted in `F
 
 ## Tab 10 — Periods \{#periods\}
 
-The period each page opens on: **Every view** (*This month* unless set) and one override **Per view** (*Same as every view* by default) for the Billing overview, Operations, Statistics, Invoices, E-Documents, Diagnostics, Integration errors, Processing log and Reports › Integrity. Stored as `defaultPeriod` and `defaultPeriod.<view>`. A **Lists** group sets the *Rows per page* (50) and *Rows loaded* (100 000) of every list without its own values (`defaultPageSize`, `defaultMaxRows`). See [Period picker, default periods and lists](../default-periods.md#default-periods).
+Shown in the Settings navigation as **Navigation & lists**: the **start page** after sign-in (`startPage`), the **auto collapse** of the navigation (`navAutoCollapse`), the **dashboard cache** in minutes (`dashboardCacheMinutes`, 60), and the period each page opens on: **Every view** (*This month* unless set) and one override **Per view** (*Same as every view* by default) for the Billing overview, Operations, Statistics, Invoices, E-Documents, Diagnostics, Integration errors, Processing log and Reports › Integrity. Stored as `defaultPeriod` and `defaultPeriod.<view>`. A **Lists** group sets the *Rows per page* (50) and *Rows loaded* (100 000) of every list without its own values (`defaultPageSize`, `defaultMaxRows`). See [Period picker, default periods and lists](../default-periods.md#default-periods).
 
 ---
 

@@ -245,8 +245,8 @@ The page description sums up the period: `… invoices on the period · … appr
 | **Sales / Purchases** | Sales | Switches the whole dashboard between issued and received invoices. |
 | **Period** | This month, or the [default period](../configuration/default-periods.md) set for *Operations dashboard* | The shared [period picker](../configuration/default-periods.md#period-picker). |
 | **Date basis** | Activity date | *Activity date* (last update), *Document date* (BT-2) or *Archive date*, in the footer of the picker. Every block follows it. |
-| **Exclude reviewed errors** | Off | See below. |
-| **↻** | — | Reloads every block. |
+| **Exclude reviewed errors** | On | See below. |
+| **↻** | — | Reloads every block. Figures are reused for the [dashboard cache](../configuration/default-periods.md#dashboard-cache) delay (60 minutes unless set); the time they were loaded shows next to it (*Updated 14:05*). |
 
 The filters are kept while the application stays open: leaving the dashboard and coming back finds them as they were.
 
@@ -314,6 +314,6 @@ Grant the **Operations** page in the Navigation group on the [Roles](../configur
 
 - **Read the queues by team.** *In progress* needs nobody; the red queue goes to IT, the orange one to customer service — each team starts from its own.
 - **Use *Yesterday* for the morning check.** It covers yesterday and today, so the night batches are counted in full; set it as the [default period](../configuration/default-periods.md) of the view if the team always starts that way.
-- **Turn *Exclude reviewed errors* on during the day.** The queues then shrink as customer service marks invoices as reviewed.
+- **Keep *Exclude reviewed errors* on during the day.** The queues then shrink as customer service marks invoices as reviewed.
 - **Top failing rules drives the corrections.** A single rule with hundreds of hits usually points to one upstream change (a renamed field, an outdated tax code); its [Schematron rule](../references/schematrons.md) says exactly what is expected.
 - **Investigate elsewhere.** The dashboard spots the problem; the [E-Invoicing](./invoices.md) detail window and the [Integration errors](diagnostics/integration-errors.md) page explain it.

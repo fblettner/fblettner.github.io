@@ -173,6 +173,7 @@ The toolbar above the table combines a view toggle, a free-text search, dropdown
 | Control | Behaviour |
 |---|---|
 | **Grouped / Flat toggle** | Switches the data presentation. Persisted per-browser. |
+| **Processing / Scheduled jobs / All** | Which runs are listed. **Processing** *(default)* — the file processing; **Scheduled jobs** — the runs of the scheduled jobs (status and import polls, retention, digests…), without the template and mode filters; **All**. A job run opened from [Failures](./failures.md) lands on *Scheduled jobs*. Their retention is set apart: *Job runs (days)* under [Job defaults › Retention](../../configuration/system/global.md#retention). |
 | **Search file name** | Substring match against the `file` column (e.g. `12345_RI_00070`). Empty disables the filter. |
 | **Templates** | Dropdown populated dynamically from the `document` templates declared in `config.json`. *All templates* removes the filter. |
 | **Modes** | Dropdown of the well-known processing modes — `AUTO`, `SINGLE`, `BURST`, `UBL`, `PROCESS`. *All modes* removes the filter. |
@@ -190,7 +191,7 @@ The IT dashboard's throughput-bar drill-through into this page now seeds the V2 
 
 The Flat view renders through **DataTableV2** in spec-driven mode: the column shape comes from the `view.processing-log` spec on `db-nomaubl` and the bundled default ships every column described below. Adding columns from the catalog or trimming the filter allow-list is done from the [List Views](../../configuration/list-views.md) editor. The Grouped view keeps its dedicated layout — grouping is not a DataTableV2 feature.
 
-The Flat view runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, the *Rows loaded* of [Settings › Periods and lists](../../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. refList columns get the **multi-select picker** when applicable.
+The Flat view runs in **hybrid client-side mode** — one capped server slice per *Run* (`spec.maxRows`, the *Rows loaded* of [Settings › Navigation & lists](../../configuration/default-periods.md#lists) unless the view sets its own — 100 000 by default), then TanStack handles filter / sort / paginate inside the slice. An `X / Y rows` notice next to *Run* signals when the cap is hit. refList columns get the **multi-select picker** when applicable.
 
 ---
 

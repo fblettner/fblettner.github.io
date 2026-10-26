@@ -262,7 +262,7 @@ Quelques pastilles portent une aide :
 - **Développeur** ouvre la [référence développeur](../../references/developer.md) : tables, clés de configuration, flux, impact, API.
 - **Synthèse** et **Statistiques** sont des pages à part entière, contrôlées par le serveur et par les outils de l'assistant IA. La mise à jour les accorde toutes les deux, une seule fois, à chaque rôle qui avait Exploitation, pour que personne ne perde une page ; un retrait ultérieur sur un rôle est conservé.
 - **Règles de gestion** ouvre aussi les [Schematrons](../../references/schematrons.md).
-- Après la connexion, un rôle qui a la Synthèse s'ouvre sur elle ; un rôle qui ne l'a pas s'ouvre sur la première page qu'il accorde, dans l'ordre du menu (Exploitation, Statistiques, Tableau de bord IT, E-Invoicing…).
+- Après la connexion, l'utilisateur arrive sur la [page de démarrage](../default-periods.md#start-page) de l'instance si son rôle l'accorde, sinon sur la Synthèse, sinon sur la première page accordée par son rôle.
 
 Règles :
 
@@ -302,6 +302,7 @@ Regroupé par la page où vit le bouton — la même clé peut piloter des bouto
 |---|---|---|---|
 | **Factures** | Créer | `invoice.create` | Le bouton *Nouvelle facture* de la liste [E-Invoicing](../../application/invoices.md). |
 | **Factures** | Modifier | `invoice.edit` | Met à jour les champs d'une facture depuis la fenêtre détail ou le panneau d'édition. |
+| **Factures** | Marquer comme traitée | `invoice.review` | Marquer des factures en erreur comme traitées par le service client, ou retirer la marque — [liste et fenêtre des factures](../../application/invoices.md#mark-reviewed). La mise à jour l'accorde aux rôles qui ont *Modifier* ou *Forcer un statut (base)*. |
 | **Factures** | Supprimer | `invoice.delete` | Suppression définitive d'une facture et de tous ses enregistrements fils. |
 | **Factures** | Supprimer un événement | `invoice.lifecycle-delete` | Retire un seul événement de statut de l'historique d'une facture ; l'en-tête se recale sur le dernier événement restant. |
 | **Factures** | Renvoyer à la PA | `invoice.resend` | Soumet ou re-soumet une facture (ou un lot) à la Plateforme Agréée. |

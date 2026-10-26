@@ -1,12 +1,12 @@
 ---
-title: Period picker, default periods and lists
+title: Period picker, navigation and lists
 description: "The NomaUBL period picker shared by the dashboards and lists — ten presets, a two-month calendar, the date basis of each page, the Exclude reviewed errors switch — and the Default periods settings that choose the period each page opens on, for every view or view by view."
 keywords: [NomaUBL, period picker, date range, default period, This month, Yesterday, date basis, document date, activity date, archive date, exclude reviewed errors, settings, views, JD Edwards, SAP, NetSuite, custom ERP]
 ---
 
-# Period picker and default periods
+# Period picker, navigation and lists
 
-The dashboards and lists of NomaUBL share one **period picker**: the same presets, the same calendar and, where the page offers it, the choice of the **date** the period is read against. The period each page opens on is set once for the instance under **Settings → Views & UI → Periods and lists** — for every view, then view by view when a team needs another one.
+The dashboards and lists of NomaUBL share one **period picker**: the same presets, the same calendar and, where the page offers it, the choice of the **date** the period is read against. The period each page opens on is set once for the instance under **Settings → Views & UI → Navigation & lists** — for every view, then view by view when a team needs another one.
 
 ---
 
@@ -205,7 +205,33 @@ The button shows the range itself (for example *1 – 31 Oct 2026*) and the date
 
 ### Exclude reviewed errors \{#exclude-reviewed\}
 
-Next to the picker, the **Exclude reviewed errors** switch hides the invoices already reviewed by customer service that still sit in an error status; reviewed invoices in other statuses stay counted. It is on by default on the Billing overview and Statistics, off on Operations and E-Invoicing (E-Invoicing takes the value of the dashboard it is opened from). The [Explorer](../application/explorer.md) offers the same switch in every analysis.
+Next to the picker, the **Exclude reviewed errors** switch hides the invoices already reviewed by customer service that still sit in an error status; reviewed invoices in other statuses stay counted. It is on by default on every page — Billing overview, Statistics, Operations and E-Invoicing; a list opened from a dashboard takes the dashboard's choice. An invoice is left out only when it is marked reviewed; an invoice without a review mark stays counted. The [Explorer](../application/explorer.md) offers the same switch in every analysis.
+
+---
+
+## Settings › Navigation & lists \{#navigation-and-lists\}
+
+One page of the Settings — **Settings → Views & UI → Navigation & lists**, in English only like most Settings editors — gathers what shapes the interface for every user: the start page, the navigation, the default periods, the lists and the dashboard cache.
+
+### Start page \{#start-page\}
+
+| Field | Default | Description |
+|---|---|---|
+| **After sign-in** | Billing overview | The page shown after sign-in: *Billing overview*, *Operations dashboard*, *Statistics*, *IT dashboard*, *Invoices*, *E-Documents*, *E-reporting*, *VAT declaration*, *Diagnostics*, *Reports* or *Explorer*. A user whose role does not grant it opens the Billing overview, else the first page the role grants. Under a restricted licence, the application opens on the Operations dashboard. |
+
+### Navigation \{#navigation\}
+
+| Field | Default | Description |
+|---|---|---|
+| **Auto collapse** | No — expanded, collapse by hand | **Yes — icons only, expands on hover**: the menu folds to a rail of icons and the pages get the width; hovering the icons opens the menu over the page, and picking a page folds it back. The manual collapse button is then hidden. |
+
+### Dashboard cache \{#dashboard-cache\}
+
+| Field | Default | Description |
+|---|---|---|
+| **Cache (minutes)** | 60 | How long the [Billing overview](../application/billing-overview.md), [Statistics](../application/statistics.md) and [Operations](../application/dashboard.md) dashboards reuse the figures they loaded — coming back to a dashboard or changing page does not query again — and how long the *documents processed per day* of the [IT dashboard](../application/tech-dashboard.md) are kept on the server for every user. An open dashboard reloads on its own after the delay; **↻** reloads at once. `0` = always reload. |
+
+Each dashboard shows when its figures were loaded (*Updated 14:05*), next to **↻** — on the IT dashboard, in the subtitle of *Documents processed per day*. The figures kept in the browser are lost when the page is reloaded.
 
 ---
 
@@ -220,7 +246,7 @@ Next to the picker, the **Exclude reviewed errors** switch hides the invoices al
   </defs>
 
   <rect x="220" y="20" width="760" height="386" rx="14" fill="url(#pds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
-  <text x="240" y="46" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Settings › Views &amp; UI › Periods and lists</text>
+  <text x="240" y="46" fill="#64748b" fontSize="9" fontFamily="system-ui, sans-serif">Settings › Views &amp; UI › Navigation & lists</text>
   <text x="240" y="68" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Default periods</text>
   <text x="240" y="86" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">The period a page opens on until the user picks another one. Analyses and dashboards of the Explorer keep their own period.</text>
   <text x="240" y="112" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Every view</text>
@@ -289,7 +315,7 @@ Next to the picker, the **Exclude reviewed errors** switch hides the invoices al
   <line x1="1000" y1="377.0" x2="900" y2="377" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
 </svg>
 
-Open it from **Settings → Views & UI → Periods and lists**. Like most Settings editors, it is in English only.
+They are set on the same page, **Settings → Views & UI → Navigation & lists**.
 
 | Field | Default | Description |
 |---|---|---|
@@ -306,7 +332,7 @@ The values are saved in the [Global](./system/global.md) settings (tab *Periods*
 
 ## Lists \{#lists\}
 
-The **Lists** group of the same page sets two values for every list that has none of its own in [List views](./list-views.md):
+The **Lists** group of **Navigation & lists** sets two values for every list that has none of its own in [List views](./list-views.md):
 
 | Field | Default | Description |
 |---|---|---|

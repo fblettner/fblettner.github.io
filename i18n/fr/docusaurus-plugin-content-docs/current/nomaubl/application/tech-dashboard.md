@@ -225,7 +225,7 @@ Une carte à quatre onglets : **Volume**, **Erreurs**, **Relances**, **Durée pa
 
 ### Volume
 
-**Documents traités par jour** sur les 14 derniers jours, en barres empilées : *Traités* et *En erreur technique* ; le sous-titre donne les totaux. **Un clic sur une barre** ouvre [E-Invoicing](./invoices.md) sur ce jour, en date d'archivage — un chemin rapide entre « la colonne du jour est basse » et « montrer ce qui a été traité ».
+**Documents traités par jour** sur les 14 derniers jours, en barres empilées : *Traités* et *En erreur technique* ; le sous-titre donne les totaux et leur heure de chargement. Cette carte est conservée sur le serveur, pour tous les utilisateurs, pendant le délai du [cache des tableaux de bord](../configuration/default-periods.md#dashboard-cache) ; **Actualiser** la relit. **Un clic sur une barre** ouvre [E-Invoicing](./invoices.md) sur ce jour, en date d'archivage — un chemin rapide entre « la colonne du jour est basse » et « montrer ce qui a été traité ».
 
 ### Erreurs
 

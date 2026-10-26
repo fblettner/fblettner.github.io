@@ -201,7 +201,7 @@ NomaUBL livre des listes personnalisées utilisées par les [Vues de liste](./li
 | `list-activite` | Codes activité, complétés depuis la base NomaUBL. |
 | `list-sub-type` | Sous-types de document, complétés depuis la base NomaUBL. |
 | `list-companies` | Sociétés, synchronisées par la requête `getCompanies` du [connecteur `jde-sql`](./sql-connectors.md#jde-sql) livré. |
-| `list-send-pa` | Envoi à la PA : `1` Envoi à la PA, `2` Pas d'envoi, `3` En attente de revue. |
+| `list-send-pa` | Destination de la facture : `1` À transmettre à la PA, `2` Non destinée à la PA, `3` En attente de revue avant envoi. |
 | `list-level` | Niveaux de gravité : Bloquant, Erreur, Avertissement, Information. |
 | `list-validation-sources` | Sources des contrôles de validation : schéma XSD, EN 16931, CIUS-FR, CTC FR étendu, Chorus Pro, règles NomaUBL, et les étapes techniques (UBL, XML, PDF, transformation XSL, validation, PA, base de données, traitement). |
 | `list-flux` | Sens de l'e-reporting : `1` Réception (achats), `2` Émission (ventes). |

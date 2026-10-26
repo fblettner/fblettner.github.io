@@ -113,7 +113,7 @@ La navigation de gauche regroupe les entrées selon **ce que l'on veut régler**
 | **E-invoicing** | [E-invoicing](./system/einvoicing.md), [types de documents](./system/document-types.md), [catalogue des statuts](./system/statuses.md), [annuaire](./system/edirectory.md). |
 | **E-reporting** | [E-reporting](./system/ereporting.md) et le catalogue des statuts de l'e-reporting. |
 | **Jobs & inbound** | *Job defaults* (onglet global), [file d'impression JDE (BIP)](./system/fetch-invoices.md), [contrôles d'intégrité](./system/integrity-reports.md). |
-| **Views & UI** | [Vues de liste](./list-views.md) et [Periods and lists](./default-periods.md#default-periods) (onglet global *Periods* : périodes par défaut, lignes par page et lignes chargées des listes). |
+| **Views & UI** | [Vues de liste](./list-views.md) et [Navigation & lists](./default-periods.md#default-periods) (onglet global *Periods* : page de démarrage, repli automatique de la navigation, périodes par défaut, lignes par page et lignes chargées des listes, cache des tableaux de bord). |
 | **API connectors** | Une entrée par [connecteur API](./api-connectors.md), avec le badge `api`. |
 | **SQL connectors** | Une entrée par [connecteur SQL](./sql-connectors.md), avec le badge `sql`. |
 | **FTP connectors** | *JD Edwards file transfer* et les autres [connecteurs FTP](./ftp-connectors.md), avec le badge `ftp`. |

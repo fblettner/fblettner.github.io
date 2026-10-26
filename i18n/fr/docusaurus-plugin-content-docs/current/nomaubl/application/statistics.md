@@ -202,7 +202,7 @@ Accès : **Statistiques**, dans le groupe Navigation, après le [tableau de bord
 
 ## En-tête
 
-L'en-tête est le même que celui de la [Synthèse](./billing-overview.md#header) : **Ventes / Achats**, le [sélecteur de période](../configuration/default-periods.md#period-picker) (base *Date document* par défaut, ou *Date d'activité* et *Date d'archivage*), **Exclure les erreurs traitées** (activé par défaut) l'indication *Comparé au …* et **↻** pour recharger. La période précédente suit la [même règle](./billing-overview.md#previous-period). Deux boutons exportent toute la page :
+L'en-tête est le même que celui de la [Synthèse](./billing-overview.md#header) : **Ventes / Achats**, le [sélecteur de période](../configuration/default-periods.md#period-picker) (base *Date document* par défaut, ou *Date d'activité* et *Date d'archivage*), **Exclure les erreurs traitées** (activé par défaut) l'indication *Comparé au …* et **↻** pour recharger — les chiffres sont conservés pendant le délai du [cache des tableaux de bord](../configuration/default-periods.md#dashboard-cache), avec leur heure de chargement (*Mis à jour à 14:05*). La période précédente suit la [même règle](./billing-overview.md#previous-period). Deux boutons exportent toute la page :
 
 | Bouton | Contenu |
 |---|---|
@@ -216,7 +216,7 @@ L'en-tête est le même que celui de la [Synthèse](./billing-overview.md#header
 | Chiffre | Valeur | Écart |
 |---|---|---|
 | **Factures émises** *(Achats : Factures reçues)* | Nombre de factures, avec le montant HT en dessous. | en % |
-| **Parvenues à la plateforme** *(Achats : Intégrées)* | Part des factures *Sur la plateforme* ou *Terminées*. | en points |
+| **Parvenues à la plateforme** *(Achats : Intégrées)* | Part des factures *Sur la plateforme* ou *Terminées*, calculée sur les factures destinées à la plateforme (envoyées ou retenues pour revue), comme sur la Synthèse. | en points |
 | **À traiter** | *À corriger* + *Décision à prendre*, en rouge dès qu'il y en a. | en %, une baisse est favorable |
 | **Ouvertes depuis plus de 7 jours** | Factures non terminées dont le dernier changement de statut date de plus de 7 jours, rapportées aux factures ouvertes. | — |
 
