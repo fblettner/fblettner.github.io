@@ -12,6 +12,74 @@ Cette première étape prépare la base de données et crée le connecteur `crm`
 
 ---
 
+## Vue d'ensemble
+
+<svg viewBox="0 0 1200 370" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="tu1-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="tu1-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="tu1-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="tu1-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="30" width="760" height="330" rx="14" fill="url(#tu1-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="250" y="60" width="170" height="164" rx="6" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="262" y="80" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="ui-monospace, monospace">customers</text>
+  <text x="264" y="102" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">id  PK</text>
+  <text x="264" y="120" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">name</text>
+  <text x="264" y="138" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">industry</text>
+  <text x="264" y="156" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">country</text>
+  <text x="264" y="174" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">status</text>
+  <text x="264" y="192" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">primary_email</text>
+  <text x="264" y="210" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">created_by …</text>
+  <rect x="470" y="60" width="170" height="164" rx="6" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="482" y="80" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="ui-monospace, monospace">deals</text>
+  <text x="484" y="102" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">id  PK</text>
+  <text x="484" y="120" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">customer_id</text>
+  <text x="484" y="138" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">name</text>
+  <text x="484" y="156" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">stage</text>
+  <text x="484" y="174" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">amount</text>
+  <text x="484" y="192" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">close_date</text>
+  <text x="484" y="210" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">owner</text>
+  <rect x="690" y="60" width="170" height="146" rx="6" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="702" y="80" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="ui-monospace, monospace">activities</text>
+  <text x="704" y="102" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">id  PK</text>
+  <text x="704" y="120" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">deal_id</text>
+  <text x="704" y="138" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">kind</text>
+  <text x="704" y="156" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">notes</text>
+  <text x="704" y="174" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">happened_at</text>
+  <text x="704" y="192" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">recorded_by</text>
+  <rect x="470" y="250" width="170" height="92" rx="6" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="482" y="270" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="ui-monospace, monospace">deal_stages</text>
+  <text x="484" y="292" fill="#4ade80" fontSize="9" fontFamily="ui-monospace, monospace">code  PK</text>
+  <text x="484" y="310" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">label</text>
+  <text x="484" y="328" fill="#94a3b8" fontSize="9" fontFamily="ui-monospace, monospace">ord</text>
+  <line x1="470" y1="130" x2="420" y2="130" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#tu1-flow)"/>
+  <line x1="690" y1="130" x2="640" y2="130" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#tu1-flow)"/>
+  <line x1="555" y1="250" x2="555" y2="220" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#tu1-flow)"/>
+  <rect x="740" y="270" width="200" height="60" rx="8" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.50)" strokeWidth="1.2"/>
+  <text x="840.0" y="297.0" fill="#4ade80" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">connecteur crm</text>
+  <text x="840.0" y="312.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">SQL · pool default</text>
+  <rect x="10" y="90" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="105" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Clients</text>
+  <text x="20" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">3 lignes d'exemple</text>
+  <line x1="210" y1="107.0" x2="250" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tu1-arrow)"/>
+  <rect x="1000" y="90" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="105" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Activités</text>
+  <text x="1010" y="118" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">plusieurs par affaire</text>
+  <line x1="1000" y1="107.0" x2="860" y2="100" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tu1-arrow)"/>
+  <rect x="10" y="280" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="295" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Étapes</text>
+  <text x="20" y="308" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">liste de valeurs</text>
+  <line x1="210" y1="297.0" x2="470" y2="290" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tu1-arrow)"/>
+  <rect x="1000" y="300" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le connecteur crm</text>
+  <text x="1010" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">devient l'app à l'étape 2</text>
+  <line x1="1000" y1="317.0" x2="940" y2="300" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#tu1-arrow)"/>
+</svg>
+
+---
+
 ## Ce que nous construisons
 
 | Étape | Ajout | Notions abordées |

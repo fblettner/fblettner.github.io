@@ -12,6 +12,50 @@ Liberty lets one query carry **per-dialect SQL** without cloning the query. The 
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1200 334" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="pds-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="pds-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="pds-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="pds-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="14" width="760" height="304" rx="14" fill="url(#pds-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">monthly_revenue · sql</text>
+  <line x1="240" y1="62" x2="960" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="86" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">default (required)</text>
+  <rect x="240" y="94" width="680" height="60" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="128" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">SELECT date_trunc('month', invoice_date) AS M, SUM(total) …</text>
+  <text x="240" y="182" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">oracle</text>
+  <rect x="240" y="190" width="680" height="60" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="224" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">SELECT TRUNC(invoice_date, 'MM') AS M, SUM(total) …</text>
+  <text x="936" y="224" fill="#94a3b8" fontSize="13" fontFamily="system-ui, sans-serif">×</text>
+  <rect x="240" y="274" width="200" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="288.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">dialect (e.g. oracle)</text>
+  <rect x="450" y="274" width="55" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="477.5" y="288.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">single</text>
+  <rect x="10" y="100" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="115" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">default</text>
+  <text x="20" y="128" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">used when no variant matches</text>
+  <line x1="210" y1="117.0" x2="240" y2="86" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="1000" y="160" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A variant</text>
+  <text x="1010" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">picked by the pool's dialect</text>
+  <line x1="1000" y1="177.0" x2="920" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="10" y="280" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="295" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Add a dialect</text>
+  <text x="20" y="308" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">type it, press Enter</text>
+  <line x1="210" y1="297.0" x2="240" y2="285" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+  <rect x="1000" y="290" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">single</text>
+  <text x="1010" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">back to one statement</text>
+  <line x1="1000" y1="307.0" x2="510" y2="285" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pds-arrow)"/>
+</svg>
+
+---
+
 ## The two shapes
 
 ### Single-string `sql` — the default

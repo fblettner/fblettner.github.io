@@ -19,6 +19,57 @@ Une fois les deux filtres appliqués, les dossiers sans enfant survivant sont re
 
 ---
 
+## Vue d'ensemble
+
+<svg viewBox="0 0 1200 330" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="mpr-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="mpr-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="mpr-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="mpr-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="14" width="760" height="300" rx="14" fill="url(#mpr-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Ce que voit chaque utilisateur</text>
+  <line x1="240" y1="62" x2="960" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="74" width="230" height="230" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="96" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Alice</text>
+  <rect x="310" y="84" width="38" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="329.0" y="96.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">user</text>
+  <text x="256" y="124" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📁 Ventes</text>
+  <text x="274" y="146" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Clients</text>
+  <text x="274" y="168" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Affaires</text>
+  <rect x="485" y="74" width="230" height="230" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="497" y="96" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Bob</text>
+  <rect x="555" y="84" width="53" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="581.5" y="96.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">manager</text>
+  <text x="501" y="124" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📁 Ventes</text>
+  <text x="519" y="146" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Clients</text>
+  <text x="519" y="168" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Affaires</text>
+  <text x="501" y="190" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📁 Rapports</text>
+  <text x="519" y="212" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">CA mensuel</text>
+  <rect x="730" y="74" width="230" height="230" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="742" y="96" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">Carol</text>
+  <rect x="800" y="84" width="43" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="821.5" y="96.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">admin</text>
+  <text x="746" y="124" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📁 Ventes</text>
+  <text x="764" y="146" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">…</text>
+  <text x="746" y="168" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📁 Rapports</text>
+  <text x="764" y="190" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">…</text>
+  <text x="746" y="212" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📁 Admin</text>
+  <text x="764" y="234" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">Config</text>
+  <rect x="10" y="120" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Permission implicite</text>
+  <text x="20" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">la requête de l'entrée</text>
+  <line x1="210" y1="137.0" x2="256" y2="146" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mpr-arrow)"/>
+  <rect x="1000" y="160" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">roles sur une entrée</text>
+  <text x="1010" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">filtre en plus : un des rôles</text>
+  <line x1="1000" y1="177.0" x2="950" y2="230" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mpr-arrow)"/>
+</svg>
+
+---
+
 ## La permission implicite
 
 Chaque feuille est conditionnée par la permission de sa cible :

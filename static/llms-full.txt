@@ -440,6 +440,10 @@ A first job: refresh a summary table every night, then run it by hand to check i
 
 ---
 
+## At a glance
+
+---
+
 ## Before you start \{#before\}
 
 - A **superuser** account — the Jobs pages are reserved to superusers.
@@ -1577,6 +1581,10 @@ The Liberty Next AI assistant: the drawer opened from the AI Assistant button, w
 
 ---
 
+## At a glance
+
+---
+
 ## Using it \{#use\}
 
 Type a question and press Enter (Shift+Enter for a new line). The answer arrives as it is written, with the tools the assistant used; **Stop** interrupts it and keeps what was received; **new conversation** starts over. The conversation lives in the drawer: it is not kept after the page is reloaded.
@@ -1979,17 +1987,6 @@ The Liberty Framework is split between **two repositories** that work together a
 
 ## At a glance
 
-  
-    liberty-next
-    The framework binary
-    Open source — FastAPI backend + React frontend, every concept built into the core. Cloned once per host, upgraded by switching tags.
-  
-  
-    liberty-apps
-    Your configuration
-    Per-installation — pools, connectors, screens, menus, dashboards, charts, jobs and any custom Python plugins. Versioned separately.
-  
-
 The framework is told where the apps repo lives via the `LIBERTY_APPS_DIR` environment variable. Out of the box, with `LIBERTY_APPS_DIR` unset, the framework reads its per-section TOML from `liberty-next/config/` — convenient for local experimentation but not the production layout.
 
 ---
@@ -2339,6 +2336,10 @@ For what the two layouts contain, see [Architecture](./architecture.md#layouts).
 
 ---
 
+## At a glance
+
+---
+
 ## Before you start \{#prerequisites\}
 
 | Need | Detail |
@@ -2495,6 +2496,10 @@ Source: https://docs.nomana-it.fr/liberty/installation/python-server/
 Install Liberty Next without Docker: pipx install from PyPI, secrets in an environment file, PostgreSQL bootstrap with liberty-admin init-db, the licensed apps, a systemd unit, and liberty-ops for status, backups and upgrades.
 
 For hosts where Docker is not an option, Liberty Next installs from PyPI as a Python application. The web application is included in the package: there is nothing to build. You bring the PostgreSQL server; `liberty-ops` then does what `./liberty` does on Docker — status, checks, backups, upgrades.
+
+---
+
+## At a glance
 
 ---
 
@@ -2779,6 +2784,10 @@ On the full layout, Traefik receives every request and forwards it: `/` to Liber
 
 ---
 
+## At a glance
+
+---
+
 ## Let's Encrypt \{#letsencrypt\}
 
 For a server reachable from the internet:
@@ -2866,6 +2875,10 @@ No separate install, no extra compose file. Bring up the Full or Swarm stack and
 :::info[Not in the Light layout]
 The Light layout is a single container with a SQLite DB — no Postgres, no Traefik. Portainer and pgAdmin only ship with the Full and Swarm layouts. If you started on Light and want these tools, move to [Full](./docker.md#full).
 :::
+
+---
+
+## At a glance
 
 ---
 
@@ -3095,6 +3108,10 @@ Source: https://docs.nomana-it.fr/liberty/installation/operations/
 Run a Liberty Next install day to day: ./liberty status and doctor, start, stop and logs, backups and restores, common administrator tasks, the liberty-ops twin for Python installs, and the usual problems with their fix.
 
 Everything an administrator does on a running install goes through one command: `./liberty` (run from `release/`) on Docker, `liberty-ops` on a Python install. Both have the same verbs.
+
+---
+
+## At a glance
 
 ---
 
@@ -3428,6 +3445,10 @@ This first step prepares the database and creates the `crm` connector.
 
 ---
 
+## At a glance
+
+---
+
 ## What we're building
 
 | Step | We add | What it teaches |
@@ -3546,6 +3567,10 @@ The `customers` table becomes a screen: a grid with filters, an edit dialog, add
 
 ---
 
+## At a glance
+
+---
+
 ## The queries
 
 1. **Settings → Connectors**, select `crm`, choose **Tables** in the mode bar.
@@ -3631,6 +3656,10 @@ Three things in this step:
 1. The **dictionary**: labels shared by every screen, and lists of values instead of free text.
 2. The **Deals** screen, where each deal picks its customer and its stage from a list.
 3. The deal's **activities**, in a tab of the deal dialog.
+
+---
+
+## At a glance
 
 ---
 
@@ -3729,6 +3758,10 @@ A dashboard puts the pipeline on one page: open amount, won amount over the peri
 
 ---
 
+## At a glance
+
+---
+
 ## The queries
 
 In **Settings → Connectors → crm → Queries**, **＋ Add query** for each:
@@ -3824,6 +3857,10 @@ So far everything was done as a superuser, who sees everything. This step adds t
 
 ---
 
+## At a glance
+
+---
+
 ## Two roles
 
 **Settings → Access → Roles**: create each role. The **Access** tab shows the menu tree of every app, with a three-state control on each node (inherit, allow, deny); allowing a menu entry also grants the query or the dashboard it opens. See [Roles & permissions](../build/secure/roles-and-permissions.md).
@@ -3901,6 +3938,10 @@ Source: https://docs.nomana-it.fr/liberty/framework/tutorial-crm/ai-and-jobs/
 Finish the CRM: the AI assistant answers questions over the CRM's queries within each user's rights, and a Nomaflow job flags stalled deals every morning and notifies the sales team.
 
 Two additions: the **AI assistant**, so that users ask questions in plain language, and a **Nomaflow job** that flags the deals left without news and tells the sales team.
+
+---
+
+## At a glance
 
 ---
 
@@ -4648,6 +4689,10 @@ Each is covered below with when to use it.
 
 ---
 
+## At a glance
+
+---
+
 ## Per-query Clone
 
 A *Clone* button sits in the top-right of the single-query editor (Queries, Sequences and Lookups views). Clicking it:
@@ -4894,6 +4939,10 @@ The query owns the declaration; each caller owns its binding. The same query can
 
 ---
 
+## At a glance
+
+---
+
 ## Declaring a parameter \{#declare\}
 
 The **Params** block of the query editor lists the parameters, one line each:
@@ -5051,6 +5100,10 @@ Ship one Liberty query with different SQL on Postgres, Oracle, MySQL, SQL Server
 Most queries are SQL that runs everywhere — `SELECT col FROM table WHERE k = :k` reads the same on Postgres, Oracle, MySQL, SQL Server, SQLite and DB2. But some don't. Date functions, string concatenation, `LIMIT` / `FETCH FIRST`, sequence syntax, `MERGE` / `ON CONFLICT` — the moment any of those land in a query, you need different SQL per backend.
 
 Liberty lets one query carry **per-dialect SQL** without cloning the query. The `sql` field accepts either a single string (the common case) or a **map** keyed by SQLAlchemy backend name with a mandatory `default` fallback.
+
+---
+
+## At a glance
 
 ---
 
@@ -6158,6 +6211,10 @@ The settings and their exact behaviour are listed on [Form conditions](../../for
 
 ---
 
+## At a glance
+
+---
+
 ## Where to set them
 
 A dialog field displays a screen column, and the column carries every behaviour — the same settings drive the dialog and the grid. In the screen editor:
@@ -6680,6 +6737,10 @@ Any data grid — a screen's table or an ad-hoc Table View — can remember how 
 
 ---
 
+## At a glance
+
+---
+
 ## Your views vs shared views
 
 The **Views** menu on the grid toolbar lists two groups:
@@ -6735,6 +6796,10 @@ Source: https://docs.nomana-it.fr/liberty/framework/apps/overview/
 What an app is in Liberty Next — a connector with a menu, shown in the app picker — what belongs to it (queries, dictionary scope, screens, menu, charts), how users switch between apps, and how an app is copied, moved between environments or installed ready-made.
 
 In Liberty Next, an **app** is a **connector that has a menu**: its name appears in the app picker at the top of the sidebar, and picking it shows its menu. There is no separate app object to create — the connector is the app.
+
+---
+
+## At a glance
 
 ---
 
@@ -7306,6 +7371,10 @@ This page walks each in detail with concrete examples.
 
 ---
 
+## At a glance
+
+---
+
 ## `screen` and `query` — open a screen
 
 The most common leaf kinds. `screen` and `query` open the same view: the target is a read query, and if a screen is designed for it, that screen opens; otherwise the query's rows show in a plain grid. They differ only in what the Inspector's *Target* list offers — designed screens for `screen`, every query for `query`.
@@ -7594,6 +7663,10 @@ After both filters run, folders with no surviving children are collapsed away.
 
 ---
 
+## At a glance
+
+---
+
 ## The implicit permission
 
 Every leaf is gated by the permission of its target:
@@ -7820,6 +7893,10 @@ Source: https://docs.nomana-it.fr/liberty/framework/build/menus/translations-and
 Menu labels per language with the l map (l.fr, l.de…), how the language is chosen, and the icon names the Liberty Next sidebar can draw.
 
 Two fields of every menu item shape what the user reads in the sidebar: `l`, the label per language, and `icon`.
+
+---
+
+## At a glance
 
 ---
 
@@ -8725,6 +8802,10 @@ The framework is free to use. The licensed applications — **Nomasx-1** and **N
 
 ---
 
+## At a glance
+
+---
+
 ## Install the key \{#install\}
 
 Sign in as a superuser, open **Settings → App → License**, paste the key into **License key** and save. The key is encrypted with the install's master key, and the licensed applications load at once — no restart.
@@ -8766,6 +8847,10 @@ Settings → App in Liberty Next: the six sections — App (name, address, logs,
 **Settings → App** holds the application settings. Each section folds; its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Save** validates and applies the whole page at once. The editor is in English.
 
 Secret fields — the licence key, the Anthropic API key, the SMTP password, the OIDC client secret — are masked inputs with an eye; they are encrypted with the master key when saved ([Encryption](../configuration/encryption-secrets.md)).
+
+---
+
+## At a glance
 
 ---
 
@@ -8858,6 +8943,10 @@ The Liberty Next Settings page: one editor per configuration file, grouped per c
 
 ---
 
+## At a glance
+
+---
+
 ## The tabs \{#tabs\}
 
 **Per connector** — each editor first asks which connector (application or data source) it works on:
@@ -8925,6 +9014,10 @@ Source: https://docs.nomana-it.fr/liberty/framework/configuration/environment-va
 The environment variables Liberty Next reads — secrets, configuration folders, database bootstrap, container behaviour, operations — the ${VARIABLE} references allowed in every TOML file, and the variables of the Docker .env file.
 
 The environment holds what must not be written in the configuration files — the secrets — and what depends on the host — folders, ports. The configuration files then refer to it.
+
+---
+
+## At a glance
 
 ---
 
@@ -9114,6 +9207,10 @@ Source: https://docs.nomana-it.fr/liberty/framework/configuration/config-history
 Every config save is snapshotted, every screen save captures its dependency closure as a restorable bundle, version changes are logged, and the bundled release notes are readable in-app — all under Settings → History.
 
 Liberty keeps a history of your configuration. Every time you save a config file from the Settings UI, the previous state is snapshotted; every time you save a **screen**, the framework also captures that screen *with its dependencies* as a restorable bundle. You can diff any snapshot against what is live, restore it, prune the history, and see exactly when the application version last changed — all from **Settings → History**.
+
+---
+
+## At a glance
 
 ---
 
@@ -9425,6 +9522,10 @@ callable = "myapp.security:refresh_users"
 ```
 
 `callable` is `<module.path>:<function>`. The module lives in your plugin; the framework imports it and calls the function.
+
+---
+
+## At a glance
 
 ---
 
@@ -11969,6 +12070,10 @@ The Nomaflow vocabulary: job, step, schedule, preset, trigger, run, parameters, 
 
 ---
 
+## At a glance
+
+---
+
 ## Job \{#job\}
 
 A **job** is an entry of `jobs.toml`: an **id** (letters, digits, `-`, `_`; fixed once created), a description, tags, a schedule and timezone, an enabled switch, shared parameters, presets, a retry policy, alerts, a log level, a timeout — and an ordered list of steps. It is edited on the Jobs pages ([Create a job](./jobs/create.md)).
@@ -12101,6 +12206,10 @@ Source: https://docs.nomana-it.fr/liberty/nomaflow/jobs/create/
 The Nomaflow job editor: the Job section (id, schedule, timezone, tags, enabled), presets and their schedules, the retry policy, alerts, shared parameters and the step pipeline — and what is set only in jobs.toml.
 
 **+ New job** on the Jobs page, or **Edit** on a card, opens the job editor. One **Save** at the top writes the whole job to `jobs.toml`, reloads the scheduler and goes back to the Jobs page; **Cancel** leaves without saving. An invalid job is refused with a message at the top of the editor.
+
+---
+
+## At a glance
 
 ---
 
@@ -12321,6 +12430,10 @@ In the job editor, the **Add step:** bar has one button per type, and each step 
 
 ---
 
+## At a glance
+
+---
+
 ## Common fields \{#common\}
 
 | Field | Default | Notes |
@@ -12495,6 +12608,10 @@ Source: https://docs.nomana-it.fr/liberty/nomaflow/runs/history/
 Where Nomaflow runs are recorded and how to read one: the run states, the Run detail page (summary, per-fire overrides, steps, log with Follow and Download), the Job Runs list, and how long the history is kept.
 
 Every run of a job — scheduled, manual, called by another job, or missed — is recorded with its steps and its log.
+
+---
+
+## At a glance
 
 ---
 
@@ -12897,6 +13014,10 @@ Each job is a thin wrapper over a Python callable shipped in the **`nomasx1`** p
 | **Maintenance** | Materialised-view refresh, cross-reference rebuild, SCN reset, schema upgrade. | [Maintenance jobs](#maintenance) |
 
 All bundled jobs ship with **`enabled = false`** — they appear in the catalogue but don't fire automatically. The operator enables a schedule (or runs them on demand) once the install is wired.
+
+---
+
+## At a glance
 
 ---
 
@@ -14010,6 +14131,10 @@ Source: https://docs.nomana-it.fr/liberty/nomaflow/administration/
 Running Nomaflow on a server: where runs and files are kept, one instance, what happens on restart, run history retention, the run log buffer, who can use the Jobs pages, backup and health.
 
 Nomaflow runs inside the Liberty Next server: its scheduler, its runner and its run history need no separate service.
+
+---
+
+## At a glance
 
 ---
 

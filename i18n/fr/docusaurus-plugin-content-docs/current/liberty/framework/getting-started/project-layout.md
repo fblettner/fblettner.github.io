@@ -12,18 +12,54 @@ Liberty Framework est réparti entre **deux dépôts** qui coopèrent à l'exéc
 
 ## Vue d'ensemble
 
-<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '18px', margin: '24px 0'}}>
-  <div style={{border: '1px solid rgba(74,158,255,0.40)', borderRadius: '10px', padding: '18px', background: 'rgba(74,158,255,0.04)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '8px'}}>liberty-next</div>
-    <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '6px'}}>Le binaire du framework</div>
-    <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.55'}}>Open source — backend FastAPI + frontend React, chaque concept intégré au cœur. Cloné une fois par hôte, mis à niveau en basculant les tags.</div>
-  </div>
-  <div style={{border: '1px solid rgba(192,132,252,0.40)', borderRadius: '10px', padding: '18px', background: 'rgba(192,132,252,0.04)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#c084fc', marginBottom: '8px'}}>liberty-apps</div>
-    <div style={{fontSize: '13px', fontWeight: 700, marginBottom: '6px'}}>Votre configuration</div>
-    <div style={{fontSize: '12px', opacity: 0.85, lineHeight: '1.55'}}>Spécifique à l'installation — pools, connecteurs, écrans, menus, tableaux de bord, graphiques, jobs et tout plugin Python personnalisé. Versionné séparément.</div>
-  </div>
-</div>
+<svg viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="pjl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="pjl-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="pjl-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="pjl-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="260" rx="14" fill="url(#pjl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="240" y="40" width="350" height="150" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="62" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">liberty-next  (le framework)</text>
+  <text x="258" y="88" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">liberty/</text>
+  <text x="576" y="88" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">backend</text>
+  <text x="258" y="110" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">frontend/</text>
+  <text x="576" y="110" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">React</text>
+  <text x="258" y="132" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">config/app.toml</text>
+  <text x="576" y="132" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Paramètres → App</text>
+  <text x="258" y="154" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">config/auth.toml</text>
+  <text x="576" y="154" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">utilisateurs, rôles</text>
+  <text x="258" y="176" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">tests/</text>
+  <rect x="610" y="40" width="350" height="216" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="624" y="62" fill="#e2e8f0" fontSize="11" fontWeight="700" fontFamily="system-ui, sans-serif">liberty-apps  (la configuration)</text>
+  <text x="628" y="88" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">config/  ← LIBERTY_APPS_DIR</text>
+  <text x="642" y="110" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">connectors.toml</text>
+  <text x="946" y="110" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Connecteurs, Pools</text>
+  <text x="642" y="132" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">dictionary.toml</text>
+  <text x="946" y="132" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Dictionnaire</text>
+  <text x="642" y="154" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">screens.toml · menus.toml</text>
+  <text x="946" y="154" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">Écrans, Menus</text>
+  <text x="642" y="176" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">dashboards.toml · charts.toml</text>
+  <text x="642" y="198" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">actions.toml · theme.toml</text>
+  <text x="628" y="220" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">plugins/</text>
+  <text x="946" y="220" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">packages Python</text>
+  <text x="642" y="242" fill="#94a3b8" fontSize="9.5" fontFamily="ui-monospace, monospace">nomaflow/jobs.toml</text>
+  <text x="946" y="242" fill="#64748b" fontSize="8.5" textAnchor="end" fontFamily="system-ui, sans-serif">tâches Nomaflow</text>
+  <rect x="10" y="80" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="95" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Le framework</text>
+  <text x="20" y="108" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">mis à jour, pas modifié</text>
+  <line x1="210" y1="97.0" x2="240" y2="62" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pjl-arrow)"/>
+  <rect x="1000" y="60" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">La configuration</text>
+  <text x="1010" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">écrite par les Paramètres</text>
+  <line x1="1000" y1="77.0" x2="960" y2="62" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pjl-arrow)"/>
+  <rect x="1000" y="220" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="235" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">plugins/</text>
+  <text x="1010" y="248" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">à côté de config/</text>
+  <line x1="1000" y1="237.0" x2="960" y2="222" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pjl-arrow)"/>
+</svg>
 
 Le framework est informé de l'emplacement du dépôt apps via la variable d'environnement `LIBERTY_APPS_DIR`. Par défaut, avec `LIBERTY_APPS_DIR` non défini, le framework lit ses TOML par section depuis `liberty-next/config/` — pratique pour l'expérimentation locale mais pas la disposition de production.
 

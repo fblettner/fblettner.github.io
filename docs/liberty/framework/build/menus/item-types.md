@@ -22,6 +22,60 @@ This page walks each in detail with concrete examples.
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1200 350" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="mit-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="mit-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="mit-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="mit-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="14" width="760" height="320" rx="14" fill="url(#mit-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Settings · Menus</text>
+  <line x1="240" y1="62" x2="960" y2="62" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="74" width="300" height="240" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="256" y="100" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">▾ 📁 Sales</text>
+  <text x="274" y="130" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">👥 Customers</text>
+  <text x="274" y="160" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">📈 Deals</text>
+  <rect x="246" y="174" width="288" height="24" rx="5" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="256" y="190" fill="#e2e8f0" fontSize="10" fontFamily="system-ui, sans-serif">📊 Pipeline</text>
+  <text x="256" y="220" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">⚙ Nomaflow</text>
+  <text x="560" y="92" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Inspector</text>
+  <text x="560" y="119" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">label</text>
+  <rect x="640" y="104" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="650" y="118.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">Pipeline</text>
+  <text x="560" y="151" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">type</text>
+  <rect x="640" y="136" width="230" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="755.0" y="150.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">dashboard ▾</text>
+  <text x="560" y="183" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">target</text>
+  <rect x="640" y="168" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="650" y="182.5" fill="#94a3b8" fontSize="10" fontFamily="ui-monospace, monospace">crm.pipeline ▾</text>
+  <text x="560" y="215" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">connector</text>
+  <rect x="640" y="200" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="650" y="214.5" fill="#475569" fontSize="10" fontFamily="system-ui, sans-serif">—</text>
+  <text x="560" y="247" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">icon</text>
+  <rect x="640" y="232" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="650" y="246.5" fill="#94a3b8" fontSize="10" fontFamily="system-ui, sans-serif">barchart ▾</text>
+  <rect x="640" y="160" width="0.1" height="0.1" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="560" y="290" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">screen · query · endpoint · dashboard · page</text>
+  <rect x="10" y="180" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="195" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">A leaf</text>
+  <text x="20" y="208" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">folders have no type</text>
+  <line x1="210" y1="197.0" x2="256" y2="186" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
+  <rect x="1000" y="120" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Five types</text>
+  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">what the entry opens</text>
+  <line x1="1000" y1="137.0" x2="870" y2="147" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
+  <rect x="1000" y="190" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="205" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">target</text>
+  <text x="1010" y="218" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&lt;app&gt;.&lt;id&gt; for a dashboard</text>
+  <line x1="1000" y1="207.0" x2="870" y2="179" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#mit-arrow)"/>
+</svg>
+
+---
+
 ## `screen` and `query` — open a screen
 
 The most common leaf kinds. `screen` and `query` open the same view: the target is a read query, and if a screen is designed for it, that screen opens; otherwise the query's rows show in a plain grid. They differ only in what the Inspector's *Target* list offers — designed screens for `screen`, every query for `query`.

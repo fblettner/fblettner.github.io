@@ -12,6 +12,62 @@ For what the two layouts contain, see [Architecture](./architecture.md#layouts).
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="dgd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="dgd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="dgd-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="dgd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="20" width="760" height="320" rx="14" fill="url(#dgd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="240" y="120" width="120" height="56" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="300.0" y="145.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Browser</text>
+  <text x="300.0" y="160.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">https://host</text>
+  <rect x="390" y="40" width="560" height="280" rx="8" fill="rgba(74,158,255,0.06)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="406" y="62" fill="#4a9eff" fontSize="10.5" fontWeight="700" fontFamily="ui-monospace, monospace">release/  ·  ./liberty</text>
+  <rect x="410" y="120" width="130" height="56" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="475.0" y="145.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Traefik</text>
+  <text x="475.0" y="160.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">HTTPS (option)</text>
+  <rect x="570" y="120" width="160" height="56" rx="8" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.50)" strokeWidth="1.2"/>
+  <text x="650.0" y="145.0" fill="#4ade80" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">liberty-next</text>
+  <text x="650.0" y="160.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">:8000</text>
+  <rect x="760" y="120" width="170" height="56" rx="8" fill="rgba(168,85,247,0.10)" stroke="rgba(168,85,247,0.50)" strokeWidth="1.2"/>
+  <text x="845.0" y="145.0" fill="#c084fc" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">PostgreSQL</text>
+  <text x="845.0" y="160.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">framework + apps DBs</text>
+  <line x1="360" y1="148" x2="410" y2="148" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgd-flow)"/>
+  <line x1="540" y1="148" x2="570" y2="148" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgd-flow)"/>
+  <line x1="730" y1="148" x2="760" y2="148" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgd-flow)"/>
+  <rect x="410" y="230" width="160" height="56" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1.2"/>
+  <text x="490.0" y="255.0" fill="#fb923c" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">./apps</text>
+  <text x="490.0" y="270.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">config + plugins</text>
+  <rect x="590" y="230" width="160" height="56" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1.2"/>
+  <text x="670.0" y="255.0" fill="#fb923c" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">liberty-config</text>
+  <text x="670.0" y="270.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">app.toml · auth.toml</text>
+  <rect x="770" y="230" width="160" height="56" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1.2"/>
+  <text x="850.0" y="255.0" fill="#fb923c" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">pg-data</text>
+  <text x="850.0" y="270.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">databases</text>
+  <line x1="650" y1="176" x2="490" y2="230" stroke="#64748b" strokeWidth="1.4" strokeDasharray="4 3" markerEnd="url(#dgd-flow)"/>
+  <line x1="650" y1="176" x2="670" y2="230" stroke="#64748b" strokeWidth="1.4" strokeDasharray="4 3" markerEnd="url(#dgd-flow)"/>
+  <line x1="845" y1="176" x2="850" y2="230" stroke="#64748b" strokeWidth="1.4" strokeDasharray="4 3" markerEnd="url(#dgd-flow)"/>
+  <rect x="1000" y="120" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="135" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Light or full</text>
+  <text x="1010" y="148" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">bundled PostgreSQL or yours</text>
+  <line x1="1000" y1="137.0" x2="930" y2="148" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgd-arrow)"/>
+  <rect x="1000" y="60" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">One command</text>
+  <text x="1010" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">install · start · upgrade…</text>
+  <line x1="1000" y1="77.0" x2="620" y2="62" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgd-arrow)"/>
+  <rect x="1000" y="240" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Volumes</text>
+  <text x="1010" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">kept across upgrades</text>
+  <line x1="1000" y1="257.0" x2="950" y2="258" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgd-arrow)"/>
+</svg>
+
+---
+
 ## Before you start \{#prerequisites\}
 
 | Need | Detail |

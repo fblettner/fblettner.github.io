@@ -10,6 +10,62 @@ For hosts where Docker is not an option, Liberty Next installs from PyPI as a Py
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1200 350" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="dgp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="dgp-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="dgp-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="dgp-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="30" width="760" height="300" rx="14" fill="url(#dgp-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="240" y="60" width="160" height="56" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="320.0" y="85.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">systemd</text>
+  <text x="320.0" y="100.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">liberty-next.service</text>
+  <rect x="440" y="60" width="180" height="56" rx="8" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.50)" strokeWidth="1.2"/>
+  <text x="530.0" y="85.0" fill="#4ade80" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">liberty-next</text>
+  <text x="530.0" y="100.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">pipx · user liberty</text>
+  <rect x="660" y="60" width="280" height="56" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1.2"/>
+  <text x="800.0" y="85.0" fill="#fb923c" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Environment file</text>
+  <text x="800.0" y="100.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">LIBERTY_MASTER_KEY · LIBERTY_APPS_DIR…</text>
+  <line x1="400" y1="88" x2="440" y2="88" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgp-flow)"/>
+  <line x1="660" y1="88" x2="620" y2="88" stroke="#64748b" strokeWidth="1.4" strokeDasharray="4 3" markerEnd="url(#dgp-flow)"/>
+  <rect x="240" y="170" width="220" height="60" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="350.0" y="197.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">/var/lib/liberty-next/config</text>
+  <text x="350.0" y="212.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">app.toml · auth.toml</text>
+  <rect x="480" y="170" width="220" height="60" rx="8" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="590.0" y="197.0" fill="#4a9eff" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">…/apps/config</text>
+  <text x="590.0" y="212.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">connectors, screens…</text>
+  <rect x="720" y="170" width="220" height="60" rx="8" fill="rgba(168,85,247,0.10)" stroke="rgba(168,85,247,0.50)" strokeWidth="1.2"/>
+  <text x="830.0" y="197.0" fill="#c084fc" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Database</text>
+  <text x="830.0" y="212.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">SQLite or PostgreSQL</text>
+  <line x1="530" y1="116" x2="350" y2="170" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgp-flow)"/>
+  <line x1="530" y1="116" x2="590" y2="170" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgp-flow)"/>
+  <line x1="530" y1="116" x2="830" y2="170" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgp-flow)"/>
+  <rect x="480" y="260" width="220" height="50" rx="8" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="590.0" y="282.0" fill="#4a9eff" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">…/apps/plugins</text>
+  <text x="590.0" y="297.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Python packages</text>
+  <rect x="720" y="260" width="220" height="50" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="830.0" y="282.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">liberty-ops</text>
+  <text x="830.0" y="297.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">start · stop · logs · doctor</text>
+  <rect x="10" y="60" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Service</text>
+  <text x="20" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">restarts on failure</text>
+  <line x1="210" y1="77.0" x2="240" y2="88" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgp-arrow)"/>
+  <rect x="1000" y="60" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Secrets</text>
+  <text x="1010" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">in the environment</text>
+  <line x1="1000" y1="77.0" x2="940" y2="88" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgp-arrow)"/>
+  <rect x="1000" y="270" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="285" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Day to day</text>
+  <text x="1010" y="298" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">liberty-ops</text>
+  <line x1="1000" y1="287.0" x2="940" y2="285" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgp-arrow)"/>
+</svg>
+
+---
+
 ## Before you start \{#prerequisites\}
 
 | Need | Detail |

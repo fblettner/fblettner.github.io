@@ -18,6 +18,79 @@ The query owns the declaration; each caller owns its binding. The same query can
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1200 370" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="pbd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="pbd-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="pbd-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="pbd-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="14" width="760" height="340" rx="14" fill="url(#pbd-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">invoices_put</text>
+  <rect x="240" y="58" width="188" height="24" rx="6" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <rect x="241" y="59" width="61" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="271.5" y="73.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">General</text>
+  <line x1="303" y1="63" x2="303" y2="77" stroke="#334155" strokeWidth="1"/>
+  <text x="331.5" y="73.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Params</text>
+  <line x1="360" y1="63" x2="360" y2="77" stroke="#334155" strokeWidth="1"/>
+  <text x="394.0" y="73.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Advanced</text>
+  <line x1="240" y1="92" x2="960" y2="92" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="107" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M242.5,112.5 L244.8,114.8 L248.8,110" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="257" y="116" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">writable</text>
+  <rect x="770" y="102" width="80" height="22" rx="5" fill="rgba(74,158,255,0.18)" stroke="#4a9eff" strokeWidth="1"/>
+  <text x="810.0" y="116.5" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Token ▾</text>
+  <rect x="858" y="102" width="110" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="913.0" y="116.5" fill="#94a3b8" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">Pool schemas ▾</text>
+  <rect x="240" y="132" width="720" height="120" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="254" y="152" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">UPDATE invoices</text>
+  <text x="254" y="172" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">SET    STATUS = :STATUS,</text>
+  <text x="254" y="192" fill="#fb923c" fontSize="10" fontFamily="ui-monospace, monospace">       UPDATED_BY = &#123;&#123;LOGIN&#125;&#125;,</text>
+  <text x="254" y="212" fill="#fb923c" fontSize="10" fontFamily="ui-monospace, monospace">       UPDATED_AT = &#123;&#123;SYSTIMESTAMP&#125;&#125;</text>
+  <text x="254" y="232" fill="#cbd5e1" fontSize="10" fontFamily="ui-monospace, monospace">WHERE  INVOICE_ID = :INVOICE_ID_ORIGINAL</text>
+  <rect x="680" y="128" width="260" height="150" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="692" y="150" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">&#123;&#123;LOGIN&#125;&#125;</text>
+  <text x="820" y="150" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">current user</text>
+  <text x="692" y="176" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">&#123;&#123;SYSDATE&#125;&#125;</text>
+  <text x="820" y="176" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">current date</text>
+  <text x="692" y="202" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">&#123;&#123;SYSTIMESTAMP&#125;&#125;</text>
+  <text x="820" y="202" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">date and time</text>
+  <text x="692" y="228" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">&#123;&#123;JDEDATE&#125;&#125;</text>
+  <text x="820" y="228" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">CYYDDD</text>
+  <text x="692" y="254" fill="#e2e8f0" fontSize="9.5" fontFamily="ui-monospace, monospace">&#123;&#123;PID&#125;&#125;</text>
+  <text x="820" y="254" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">connector name</text>
+  <text x="240" y="276" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PARAMS</text>
+  <rect x="240" y="284" width="420" height="28" rx="6" fill="rgba(255,255,255,0.03)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="301.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">NAME</text>
+  <text x="390" y="301.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">LABEL</text>
+  <text x="550" y="301.0" fill="#cbd5e1" fontSize="8.5" fontWeight="700" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">DEFAULT</text>
+  <rect x="240" y="316" width="420" height="26" rx="6" fill="#0d1220" stroke="#1f2937" strokeWidth="1"/>
+  <text x="250" y="332.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">STATUS</text>
+  <text x="390" y="332.5" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Status</text>
+  <text x="550" y="332.5" fill="#cbd5e1" fontSize="9.5" fontFamily="ui-monospace, monospace">PAID</text>
+  <rect x="10" y="150" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">:name parameters</text>
+  <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">bound by the caller</text>
+  <line x1="210" y1="167.0" x2="254" y2="168" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pbd-arrow)"/>
+  <rect x="10" y="290" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="305" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Declared params</text>
+  <text x="20" y="318" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">label and default</text>
+  <line x1="210" y1="307.0" x2="240" y2="300" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pbd-arrow)"/>
+  <rect x="1000" y="60" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="75" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Token menu</text>
+  <text x="1010" y="88" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">values filled by the server</text>
+  <line x1="1000" y1="77.0" x2="810" y2="108" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pbd-arrow)"/>
+  <rect x="1000" y="240" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Server tokens</text>
+  <text x="1010" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&#123;&#123;LOGIN&#125;&#125;, &#123;&#123;SYSDATE&#125;&#125;…</text>
+  <line x1="1000" y1="257.0" x2="940" y2="200" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#pbd-arrow)"/>
+</svg>
+
+---
+
 ## Declaring a parameter \{#declare\}
 
 The **Params** block of the query editor lists the parameters, one line each:

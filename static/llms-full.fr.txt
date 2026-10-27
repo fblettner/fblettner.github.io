@@ -440,6 +440,10 @@ Une première tâche : rafraîchir chaque nuit une table de synthèse, puis la l
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Avant de commencer \{#before\}
 
 - Un compte **superutilisateur** — les pages des Tâches leur sont réservées.
@@ -1548,6 +1552,10 @@ L'assistant IA de Liberty Next : le panneau ouvert par le bouton AI Assistant, c
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Utilisation \{#use\}
 
 Saisir une question et appuyer sur Entrée (Maj+Entrée pour une nouvelle ligne). La réponse s'affiche au fil de l'écriture, avec les outils utilisés ; **Arrêter** l'interrompt et garde ce qui a été reçu ; **nouvelle conversation** repart de zéro. La conversation vit dans le panneau : elle n'est pas conservée après un rechargement de la page.
@@ -1950,17 +1958,6 @@ Liberty Framework est réparti entre **deux dépôts** qui coopèrent à l'exéc
 
 ## Vue d'ensemble
 
-  
-    liberty-next
-    Le binaire du framework
-    Open source — backend FastAPI + frontend React, chaque concept intégré au cœur. Cloné une fois par hôte, mis à niveau en basculant les tags.
-  
-  
-    liberty-apps
-    Votre configuration
-    Spécifique à l'installation — pools, connecteurs, écrans, menus, tableaux de bord, graphiques, jobs et tout plugin Python personnalisé. Versionné séparément.
-  
-
 Le framework est informé de l'emplacement du dépôt apps via la variable d'environnement `LIBERTY_APPS_DIR`. Par défaut, avec `LIBERTY_APPS_DIR` non défini, le framework lit ses TOML par section depuis `liberty-next/config/` — pratique pour l'expérimentation locale mais pas la disposition de production.
 
 ---
@@ -2310,6 +2307,10 @@ Le contenu des deux installations est décrit sur [Architecture](./architecture.
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Avant de commencer \{#prerequisites\}
 
 | Besoin | Détail |
@@ -2466,6 +2467,10 @@ Source: https://docs.nomana-it.fr/fr/liberty/installation/python-server/
 Installer Liberty Next sans Docker : installation pipx depuis PyPI, secrets dans un fichier d'environnement, initialisation de PostgreSQL avec liberty-admin init-db, applications sous licence, unité systemd, et liberty-ops pour l'état, les sauvegardes et les mises à jour.
 
 Pour les hôtes où Docker n'est pas possible, Liberty Next s'installe depuis PyPI comme une application Python. L'application web est incluse dans le paquet : rien à compiler. Le serveur PostgreSQL est le vôtre ; `liberty-ops` fait ensuite ce que fait `./liberty` avec Docker — état, contrôles, sauvegardes, mises à jour.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -2750,6 +2755,10 @@ Dans l'installation complète, Traefik reçoit toutes les requêtes et les trans
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Let's Encrypt \{#letsencrypt\}
 
 Pour un serveur accessible depuis Internet :
@@ -2837,6 +2846,10 @@ Aucune installation séparée, aucun fichier compose supplémentaire. Démarrer 
 :::info[Absents de la disposition Light]
 La disposition Light est un conteneur unique avec une base SQLite — pas de Postgres, pas de Traefik. Portainer et pgAdmin ne sont livrés qu'avec les dispositions Full et Swarm. Pour passer de Light à ces outils, basculer sur [Full](./docker.md#full).
 :::
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -3066,6 +3079,10 @@ Source: https://docs.nomana-it.fr/fr/liberty/installation/operations/
 Exploiter une installation Liberty Next au quotidien : ./liberty status et doctor, démarrage, arrêt et journaux, sauvegardes et restaurations, tâches d'administration courantes, liberty-ops pour les installations Python, et les problèmes fréquents avec leur correction.
 
 Tout ce qu'un administrateur fait sur une installation en service passe par une seule commande : `./liberty` (lancée depuis `release/`) avec Docker, `liberty-ops` avec une installation Python. Les deux ont les mêmes verbes.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -3399,6 +3416,10 @@ Cette première étape prépare la base de données et crée le connecteur `crm`
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Ce que nous construisons
 
 | Étape | Ajout | Notions abordées |
@@ -3517,6 +3538,10 @@ La table `customers` devient un écran : une grille avec filtres, un dialogue de
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Les requêtes
 
 1. **Paramètres → Connecteurs**, sélectionner `crm`, choisir **Tables** dans la barre de modes.
@@ -3602,6 +3627,10 @@ Trois volets dans cette étape :
 1. Le **dictionnaire** : des libellés communs à tous les écrans, et des listes de valeurs au lieu de texte libre.
 2. L'écran **Affaires**, où chaque affaire choisit son client et son étape dans une liste.
 3. Les **activités** de l'affaire, dans un onglet de son dialogue.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -3700,6 +3729,10 @@ Un tableau de bord réunit le pipeline sur une page : montant en cours, montant 
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Les requêtes
 
 Dans **Paramètres → Connecteurs → crm → Requêtes**, **＋ Ajouter une requête** pour chacune :
@@ -3795,6 +3828,10 @@ Jusqu'ici, tout s'est fait en superutilisateur, qui voit tout. Cette étape ajou
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Deux rôles
 
 **Paramètres → Access → Roles** : créer chaque rôle. L'onglet **Access** présente l'arborescence du menu de chaque application, avec un contrôle à trois états sur chaque nœud (hériter, autoriser, refuser) ; autoriser une entrée de menu accorde aussi la requête ou le tableau de bord qu'elle ouvre. L'éditeur est en anglais. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
@@ -3872,6 +3909,10 @@ Source: https://docs.nomana-it.fr/fr/liberty/framework/tutorial-crm/ai-and-jobs/
 Finaliser le CRM : l'assistant IA répond aux questions à partir des requêtes du CRM, dans les droits de chaque utilisateur, et une tâche Nomaflow signale chaque matin les affaires en sommeil et prévient l'équipe commerciale.
 
 Deux ajouts : l'**assistant IA**, pour que les utilisateurs posent leurs questions en langage courant, et une **tâche Nomaflow** qui repère les affaires laissées sans nouvelles et prévient l'équipe commerciale.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -4617,6 +4658,10 @@ Chacun est détaillé ci-dessous avec ses cas d'usage.
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Duplication par requête
 
 Un bouton *Cloner* se trouve en haut à droite de l'éditeur de requête unique (vues Requêtes, Séquences et Lookups). Le clic :
@@ -4863,6 +4908,10 @@ La requête porte la déclaration ; chaque appelant porte sa liaison. Une même 
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Déclarer un paramètre \{#declare\}
 
 Le bloc **Params** de l'éditeur de requête liste les paramètres, un par ligne :
@@ -5020,6 +5069,10 @@ Livrer une requête Liberty unique avec un SQL différent sur Postgres, Oracle, 
 La plupart des requêtes sont du SQL qui s'exécute partout — `SELECT col FROM table WHERE k = :k` se lit pareil sur Postgres, Oracle, MySQL, SQL Server, SQLite et DB2. Mais pas toutes. Fonctions de date, concaténation de chaînes, `LIMIT` / `FETCH FIRST`, syntaxe de séquence, `MERGE` / `ON CONFLICT` — dès qu'une de ces constructions arrive dans une requête, il faut un SQL différent par backend.
 
 Liberty permet à une seule requête de porter un **SQL par dialecte** sans dupliquer la requête. Le champ `sql` accepte soit une chaîne unique (cas courant), soit une **map** indexée par nom de backend SQLAlchemy avec un repli `default` obligatoire.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -6127,6 +6180,10 @@ Les réglages et leur comportement exact sont détaillés dans [Conditions de fo
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Où les régler
 
 Un champ de dialogue affiche une colonne de l'écran, et c'est la colonne qui porte tous les comportements — les mêmes réglages pilotent le dialogue et la grille. Dans l'éditeur d'écran :
@@ -6649,6 +6706,10 @@ Toute grille de données — la table d'un écran ou une Table View ad hoc — p
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Vues personnelles et vues partagées
 
 Le menu **Vues** de la barre d'outils de la grille liste deux groupes :
@@ -6704,6 +6765,10 @@ Source: https://docs.nomana-it.fr/fr/liberty/framework/apps/overview/
 Ce qu'est une application dans Liberty Next — un connecteur doté d'un menu, proposé dans le sélecteur d'application — ce qui lui appartient (requêtes, portée du dictionnaire, écrans, menu, graphiques), le passage d'une application à l'autre, et la copie, le transfert entre environnements ou l'installation d'une application prête à l'emploi.
 
 Dans Liberty Next, une **application** est un **connecteur doté d'un menu** : son nom apparaît dans le sélecteur d'application en haut du menu latéral, et le choisir affiche son menu. Il n'existe pas d'objet « application » distinct à créer — le connecteur est l'application.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -7275,6 +7340,10 @@ Cette page détaille chacun avec des exemples concrets.
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## `screen` et `query` — ouvrir un écran
 
 `screen` et `query` ouvrent la même vue : la cible est une requête de lecture et, si un écran est conçu pour elle, c'est cet écran qui s'ouvre ; sinon les lignes de la requête s'affichent dans une grille simple. Ils ne diffèrent que par ce que propose la liste *Target* de l'Inspecteur — les écrans conçus pour `screen`, toutes les requêtes pour `query`.
@@ -7568,6 +7637,10 @@ Une fois les deux filtres appliqués, les dossiers sans enfant survivant sont re
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## La permission implicite
 
 Chaque feuille est conditionnée par la permission de sa cible :
@@ -7801,6 +7874,10 @@ Source: https://docs.nomana-it.fr/fr/liberty/framework/build/menus/translations-
 Les libellés de menu par langue avec la table l (l.fr, l.de…), le choix de la langue, et les noms d'icônes que le menu latéral de Liberty Next sait afficher.
 
 Deux champs de chaque entrée de menu façonnent ce que l'utilisateur lit dans le menu latéral : `l`, le libellé par langue, et `icon`.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -8710,6 +8787,10 @@ Le framework est libre d'utilisation. Les applications sous licence — **Nomasx
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Installer la clé \{#install\}
 
 Se connecter avec un superutilisateur, ouvrir **Paramètres → App → License**, coller la clé dans **License key** et enregistrer. La clé est chiffrée avec la clé maître de l'installation, et les applications sous licence se chargent aussitôt — sans redémarrage.
@@ -8751,6 +8832,10 @@ Paramètres → App dans Liberty Next : les six sections — App (nom, adresse, 
 **Paramètres → App** regroupe les réglages de l'application. Chaque section se replie ; son en-tête affiche un résumé (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Enregistrer** valide et applique toute la page d'un coup. L'éditeur est en anglais.
 
 Les champs secrets — clé de licence, clé d'API Anthropic, mot de passe SMTP, secret client OIDC — sont des saisies masquées avec un œil ; ils sont chiffrés avec la clé maître à l'enregistrement ([Chiffrement](../configuration/encryption-secrets.md)).
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -8843,6 +8928,10 @@ La page Paramètres de Liberty Next : un éditeur par fichier de configuration, 
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Les onglets \{#tabs\}
 
 **Par connecteur** (*Per connector*) — chaque éditeur demande d'abord sur quel connecteur (application ou source de données) il travaille :
@@ -8910,6 +8999,10 @@ Source: https://docs.nomana-it.fr/fr/liberty/framework/configuration/environment
 Les variables d'environnement lues par Liberty Next — secrets, dossiers de configuration, initialisation de la base, comportement du conteneur, exploitation —, les références ${VARIABLE} admises dans chaque fichier TOML, et les variables du fichier .env de Docker.
 
 L'environnement porte ce qui ne doit pas être écrit dans les fichiers de configuration — les secrets — et ce qui dépend de l'hôte — dossiers, ports. Les fichiers de configuration y font ensuite référence.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -9099,6 +9192,10 @@ Source: https://docs.nomana-it.fr/fr/liberty/framework/configuration/config-hist
 Chaque sauvegarde de configuration est capturée, chaque sauvegarde d'écran capture sa clôture de dépendances sous forme de bundle restaurable, les changements de version sont journalisés et les notes de version se lisent dans l'application — le tout sous Paramètres → Historique.
 
 Liberty garde un historique de votre configuration. À chaque sauvegarde d'un fichier de configuration depuis l'interface Paramètres, l'état précédent est capturé ; à chaque sauvegarde d'un **écran**, le framework capture aussi cet écran *avec ses dépendances* sous forme de bundle restaurable. Vous pouvez comparer un snapshot à ce qui est actif, le restaurer, élaguer l'historique et voir précisément quand la version de l'application a changé — le tout depuis **Paramètres → Historique**.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -9410,6 +9507,10 @@ callable = "myapp.security:refresh_users"
 ```
 
 `callable` suit la forme `<module.path>:<function>`. Le module se trouve dans le plugin ; le framework l'importe et appelle la fonction.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -11954,6 +12055,10 @@ Le vocabulaire de Nomaflow : tâche, étape, planification, préréglage, décle
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Tâche \{#job\}
 
 Une **tâche** est une entrée de `jobs.toml` : un **identifiant** (lettres, chiffres, `-`, `_` ; figé après création), une description, des étiquettes, une planification et un fuseau horaire, un switch d'activation, des paramètres partagés, des préréglages, une politique de réessai, des alertes, un niveau de journal, un délai maximal — et une suite ordonnée d'étapes. Elle se modifie dans les pages des Tâches ([Créer une tâche](./jobs/create.md)).
@@ -12086,6 +12191,10 @@ Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/jobs/create/
 L'éditeur de tâche de Nomaflow : la section Tâche (identifiant, planification, fuseau, étiquettes, activation), les préréglages et leurs planifications, la politique de réessai, les alertes, les paramètres partagés et la suite d'étapes — et ce qui ne se règle que dans jobs.toml.
 
 **+ Nouvelle tâche** dans la page des Tâches, ou **Modifier** sur une carte, ouvre l'éditeur de tâche. Un seul **Enregistrer**, en haut, écrit la tâche entière dans `jobs.toml`, recharge le planificateur et revient à la page des Tâches ; **Annuler** quitte sans enregistrer. Une tâche invalide est refusée avec un message en haut de l'éditeur.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -12306,6 +12415,10 @@ Dans l'éditeur de tâche, la barre **Ajouter une étape :** propose un bouton p
 
 ---
 
+## Vue d'ensemble
+
+---
+
 ## Champs communs \{#common\}
 
 | Champ | Défaut | Remarques |
@@ -12480,6 +12593,10 @@ Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/runs/history/
 Où sont enregistrées les exécutions Nomaflow et comment en lire une : les états d'exécution, la page Détail de l'exécution (résumé, paramètres de l'exécution, étapes, journal avec Suivre et Télécharger), la liste des exécutions, et la durée de conservation de l'historique.
 
 Chaque exécution d'une tâche — planifiée, manuelle, lancée par une autre tâche ou manquée — est enregistrée avec ses étapes et son journal.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -12882,6 +12999,10 @@ Chaque tâche est une fine enveloppe autour d'un appelable Python livré dans le
 | **Maintenance** | Rafraîchissement des vues matérialisées, reconstruction des références croisées, remise à zéro de SCN, mise à niveau du schéma. | [Tâches de maintenance](#maintenance) |
 
 Toutes les tâches livrées arrivent avec **`enabled = false`** — elles apparaissent dans le catalogue mais ne se déclenchent pas automatiquement. L'opérateur active une planification (ou les exécute à la demande) une fois l'installation câblée.
+
+---
+
+## Vue d'ensemble
 
 ---
 
@@ -13995,6 +14116,10 @@ Source: https://docs.nomana-it.fr/fr/liberty/nomaflow/administration/
 Faire fonctionner Nomaflow sur un serveur : le stockage des exécutions et des fichiers, une seule instance, le comportement au redémarrage, la rétention de l'historique, le tampon du journal, l'accès aux pages des Tâches, la sauvegarde et l'état de santé.
 
 Nomaflow s'exécute dans le serveur Liberty Next : son planificateur, son moteur d'exécution et son historique ne demandent aucun service séparé.
+
+---
+
+## Vue d'ensemble
 
 ---
 

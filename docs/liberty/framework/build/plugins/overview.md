@@ -21,6 +21,48 @@ callable = "myapp.security:refresh_users"
 
 ---
 
+## At a glance
+
+<svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="dgl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="dgl-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="dgl-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="dgl-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="40" width="760" height="260" rx="14" fill="url(#dgl-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <rect x="240" y="60" width="180" height="56" rx="8" fill="rgba(168,85,247,0.10)" stroke="rgba(168,85,247,0.50)" strokeWidth="1.2"/>
+  <text x="330.0" y="85.0" fill="#c084fc" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Nomaflow step</text>
+  <text x="330.0" y="100.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">type python · op_kwargs</text>
+  <rect x="240" y="160" width="180" height="56" rx="8" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" strokeWidth="1.2"/>
+  <text x="330.0" y="185.0" fill="#4a9eff" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Screen action</text>
+  <text x="330.0" y="200.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">call_plugin · param_binds</text>
+  <rect x="480" y="100" width="220" height="76" rx="8" fill="rgba(50,215,75,0.10)" stroke="rgba(50,215,75,0.50)" strokeWidth="1.2"/>
+  <text x="590.0" y="135.0" fill="#4ade80" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">package.module:function</text>
+  <text x="590.0" y="150.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">plugins/&lt;package&gt;/ · connectors, ctx</text>
+  <line x1="420" y1="88" x2="480" y2="128" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgl-flow)"/>
+  <line x1="420" y1="188" x2="480" y2="150" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgl-flow)"/>
+  <rect x="760" y="60" width="190" height="56" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="855.0" y="85.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">connectors.sql(…)</text>
+  <text x="855.0" y="100.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">execute(query, params)</text>
+  <rect x="760" y="160" width="190" height="56" rx="8" fill="rgba(255,255,255,0.03)" stroke="#334155" strokeWidth="1.2"/>
+  <text x="855.0" y="185.0" fill="#e2e8f0" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">connectors.api(…)</text>
+  <text x="855.0" y="200.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">call(endpoint, params)</text>
+  <line x1="700" y1="128" x2="760" y2="88" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgl-flow)"/>
+  <line x1="700" y1="150" x2="760" y2="188" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgl-flow)"/>
+  <rect x="480" y="230" width="220" height="50" rx="8" fill="rgba(255,159,10,0.10)" stroke="rgba(255,159,10,0.50)" strokeWidth="1.2"/>
+  <text x="590.0" y="252.0" fill="#fb923c" fontSize="10.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">Return</text>
+  <text x="590.0" y="267.0" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">int · dict · StepResult</text>
+  <line x1="590" y1="176" x2="590" y2="230" stroke="#64748b" strokeWidth="1.4" markerEnd="url(#dgl-flow)"/>
+  <rect x="1000" y="240" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="255" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Named queries</text>
+  <text x="1010" y="268" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tokens, dictionary rules</text>
+  <line x1="1000" y1="257.0" x2="950" y2="88" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dgl-arrow)"/>
+</svg>
+
+---
+
 ## Why plugins (vs writing inside the framework)
 
 The plugin pattern is what makes Liberty extensible without forking. Three properties matter:
