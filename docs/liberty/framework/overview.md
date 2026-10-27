@@ -41,7 +41,7 @@ When something the framework doesn't cover comes up (a custom widget, a one-off 
 | **Internal-tools teams** building admin apps over existing databases. | The CRUD-screen path is six clicks away; no time spent re-inventing it. |
 | **JD Edwards / SAP / NetSuite operators** who need to administer their ERP from a modern UI without waiting on the vendor. | Connect to the ERP's pool, expose the right queries, drop a screen on top. |
 | **BI / analytics teams** consolidating reports across systems. | Dashboards over named SQL queries, charts that reuse the data, no separate BI tool needed. |
-| **Integration teams** that need a UI on top of ETL pipelines, scheduled jobs and webhook receivers. | Nomaflow runs the jobs, the framework gives them a UI; the AI assistant calls the same queries on demand. |
+| **Integration teams** that need a UI on top of data loads and scheduled jobs. | Nomaflow runs the jobs, the framework gives them a UI; the AI assistant calls the same queries on demand. |
 | **Software vendors** packaging customer-facing apps on top of a database product. | The framework is the chassis; you ship per-customer configuration as a portable zip. |
 
 It's **less interesting** for:
@@ -73,7 +73,7 @@ Everything the framework does is composed from five concepts:
 
 | Concept | What it is | What it solves |
 |---|---|---|
-| **[Pool](../installation/python-server.md)** | A connection to a database (a SQLAlchemy URL + credentials). | "How do I reach this data?" |
+| **[Pool](./connectors.md#pools)** | A connection to a database (a SQLAlchemy URL + credentials). | "How do I reach this data?" |
 | **[Connector](./connectors.md)** | A named set of queries / endpoints on top of a pool. | "What questions do I want to ask this data source?" |
 | **[Screen](./build/screens/overview.md)** | A grid + edit dialog over a connector's queries. | "How do I let a person look at this and edit it?" |
 | **[Dashboard](./dashboards.md)** | A layout of KPIs and charts over the same queries. | "How do I summarise this for someone who just wants the headline?" |
@@ -93,7 +93,7 @@ Three paths into the framework — pick whichever suits how you read.
 
 The **[Build a CRM tutorial](./tutorial-crm/01-setup.md)** is a six-step walkthrough that produces a working customer-relationship-management application — customers, deals, activities, a sales-pipeline dashboard, OIDC sign-in, role-based access, the AI assistant and a scheduled job. The domain is generic; no prior knowledge needed beyond SQL.
 
-For a real-world ERP admin built on the framework, the packaged **[Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/)** app covers JD Edwards end-to-end out of the box — users, roles, security workbench, BIP queue, master data. Install it, point it at your JDE database, get a working admin without building anything yourself.
+For a real-world ERP admin built on the framework, the packaged **[Nomajde](../nomajde/overview.md)** app covers JD Edwards end-to-end out of the box — users, roles, security workbench, BIP queue, master data. Install it, point it at your JDE database, get a working admin without building anything yourself.
 
 ### 2. Use-case-driven
 
@@ -109,7 +109,7 @@ If you're the type who reads documentation top-to-bottom, the **[Getting Started
 
 | Section | What it covers |
 |---|---|
-| [Getting Started](../installation/python-server.md) | Install the framework, create your first app, understand the file layout. |
+| [Getting Started](../installation/overview.md) | Install the framework, create your first app, understand the file layout. |
 | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) | End-to-end CRM walkthrough. |
 | [Configuration](./configuration/settings-ui.md) | Settings UI, framework settings, environment variables, hot-reload, encrypted secrets. |
 | [Concepts](./connectors.md) | The five framework primitives + parameter binding and form conditions, each with a "What / Why / When" intro. |
@@ -132,7 +132,7 @@ React 19 + Vite + TypeScript, built once into `frontend/dist` and served as stat
 
 ## Backend in one paragraph
 
-Python 3.12, FastAPI, SQLAlchemy 2.0 async with asyncpg (PostgreSQL) + oracledb (Oracle, thin), Anthropic SDK for the AI assistant, authlib for OIDC, Argon2 for password hashing, cryptography for AES-256-GCM field encryption, APScheduler for cron jobs, Socket.IO for live updates. One process, one port, no companion daemons. You don't write Python unless you want a custom job step or an extension hook.
+Python 3.12, FastAPI, SQLAlchemy 2.0 async with asyncpg (PostgreSQL) + oracledb (Oracle, thin), Anthropic SDK for the AI assistant, authlib for OIDC, Argon2 for password hashing, cryptography for AES-256-GCM field encryption, APScheduler for cron jobs, Socket.IO for live updates. One process, one port, no companion daemons. Python is only written for a custom job step or screen action.
 
 ---
 
@@ -142,6 +142,6 @@ Python 3.12, FastAPI, SQLAlchemy 2.0 async with asyncpg (PostgreSQL) + oracledb 
 |---|---|
 | **Build something now** | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md). |
 | **See what's possible first** | [What you can build](./what-you-can-build.md). |
-| **Install the framework** | [Getting Started → Installation](../installation/python-server.md). |
+| **Install the framework** | [Installation](../installation/overview.md). |
 | **Understand the concepts first** | [Concepts → Connectors](./connectors.md) is the natural entry point. |
 | **Look up a specific field** | [Settings UI](./configuration/settings-ui.md) lists every builder; each Concepts page references the relevant editor. |
