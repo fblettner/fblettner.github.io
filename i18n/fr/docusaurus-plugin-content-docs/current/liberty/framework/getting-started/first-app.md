@@ -62,7 +62,7 @@ Ouvrez **Paramètres → Pools**. Sur une installation neuve, le pool `default` 
   </div>
 </div>
 
-Pour une installation réelle, basculez vers une URL PostgreSQL ou Oracle — tous les formats de chaîne de connexion et les options sont documentés dans [Configuration → Variables d'environnement](../configuration/environment-variables.md#liberty_db_url).
+Pour une installation réelle, basculez vers une URL PostgreSQL ou Oracle — tous les formats de chaîne de connexion et les options sont documentés dans [Configuration → Variables d'environnement](../configuration/environment-variables.md#bootstrap).
 
 Créez ensuite la table d'exemple une seule fois via le shell SQLite :
 

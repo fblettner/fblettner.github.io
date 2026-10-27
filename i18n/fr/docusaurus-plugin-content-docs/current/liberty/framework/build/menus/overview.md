@@ -1,6 +1,6 @@
 ---
 title: Menus — vue d'ensemble
-description: "La page Menus, le modèle de liste à plat reliée par parent, les quatre types de feuilles (query / endpoint / dashboard / page), et comment l'ajout d'un menu transforme un connecteur en application."
+description: "La page Menus, le modèle de liste à plat reliée par parent, les cinq types de feuilles (screen / query / endpoint / dashboard / page), et comment un menu associé à show_in_switcher transforme un connecteur en application."
 keywords: [Liberty Framework, menus, MenusBuilder, application, navigation, arbre, dossier, feuille, éléments, parent]
 ---
 
@@ -12,7 +12,7 @@ Trois points à connaître d'emblée :
 
 | Fait | Conséquence |
 |---|---|
-| Il n'y a **aucun objet « application » séparé** dans Liberty. | Une « application » est simplement un **connecteur qui a un menu attaché** *et* dont l'indicateur `show_in_switcher` est actif. Les deux conditions sont requises pour que sa tuile apparaisse dans le sélecteur d'applications en haut. |
+| Il n'y a **aucun objet « application » séparé** dans Liberty. | Une « application » est simplement un **connecteur qui a un menu attaché** *et* dont l'indicateur `show_in_switcher` est actif. Les deux conditions sont requises pour que sa tuile apparaisse dans le sélecteur d'applications du menu latéral. |
 | Les menus sont stockés sous forme de **liste plate d'éléments** reliés par `parent`. | L'arbre est assemblé par le backend — plus facile à éditer à la main, conversion propre vers TOML et retour, les opérations de glisser-déposer ne modifient qu'une seule liste. |
 | Chaque clé de menu est un nom de connecteur (`[menus.<connector>]`). | Le connecteur nommé `crm` porte le menu sous `[menus.crm]` ; l'écran `customers` sur `crm` est atteint depuis une feuille avec `target = "customers_get"`. |
 
@@ -37,7 +37,7 @@ La page qui gère les menus est **Paramètres → Menus**.
   <rect x="216" y="78" width="80" height="26" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
   <text x="256" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">nomasx1</text>
   <rect x="306" y="78" width="280" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="446" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Ajouter un menu pour un connecteur</text>
+  <text x="446" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add scope</text>
   <rect x="700" y="78" width="80" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="740" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
   <rect x="788" y="78" width="80" height="26" rx="6" fill="#4a9eff" opacity="0.9"/>
@@ -81,7 +81,7 @@ Trois zones :
 
 | Zone | Ce qu'elle porte |
 |---|---|
-| **Barre de portée en haut** | Une pastille par application (un connecteur qui a un menu). Cliquer une pastille → son arbre se charge en dessous. Le bouton *＋ Ajouter un menu pour un connecteur* enregistre un nouveau connecteur sous Menus. *Annuler* / *Enregistrer* à droite valident ou annulent les modifications de la page. |
+| **Barre de portée en haut** | Une pastille par application (un connecteur qui a un menu). Cliquer une pastille → son arbre se charge en dessous. Le bouton **+ Add scope** enregistre un nouveau connecteur sous Menus. *Annuler* / *Enregistrer* à droite valident ou annulent les modifications de la page. |
 | **Arbre (colonne de gauche)** | L'arbre du menu de l'application sélectionnée. Cliquer une ligne pour la sélectionner et la modifier. Au survol, des icônes d'action apparaissent sur le bord droit de la ligne — *Monter / Descendre*, *Indenter / Désindenter*, *Ajouter un enfant*, *Supprimer*. Un champ de filtre réduit la liste. |
 | **Inspecteur (colonne de droite)** | L'éditeur complet de l'élément sélectionné — un formulaire générique sur le schéma `MenuItem`. Les champs s'adaptent au `type` sélectionné (un dossier affiche moins de champs qu'une feuille). |
 
@@ -93,7 +93,7 @@ La forme du schéma au plus haut niveau :
 
 | Champ | Notes |
 |---|---|
-| `label` | Le nom d'affichage de l'application. Retombe sur le nom du connecteur si absent. Affiché dans le sélecteur d'applications en haut. |
+| `label` | Le nom d'affichage de l'application. Retombe sur le nom du connecteur si absent. Affiché dans le sélecteur d'applications du menu latéral. |
 | `items` | Une liste plate d'éléments de menu, reliés par leur champ `parent`. |
 
 Chaque élément :
@@ -104,7 +104,7 @@ Chaque élément :
 | `parent` | non | Choisir un dossier, ou laisser vide pour un élément de premier niveau. |
 | `label` | oui | Le texte affiché dans la barre latérale. |
 | `l` | non | Libellés par langue — `l.fr`, `l.de`, etc. |
-| `icon` | non | Un nom d'icône [Lucide](https://lucide.dev) (`shield`, `users`, `chart-bar`, …). |
+| `icon` | non | L'un des noms d'icônes que dessine le menu latéral (`shield`, `users`, `barchart`, …) — voir [Traductions et icônes](./translations-and-icons.md). |
 | `type` | non | Vide = dossier. Sinon `query`, `endpoint`, `dashboard` ou `page` (voir [Types d'éléments](./item-types.md)). |
 | `connector` | non | Connecteur qui héberge la cible. Vide = le connecteur de l'application (la clé du menu). |
 | `target` | conditionnel | Requis sur chaque feuille ; ignoré sur les dossiers. |
@@ -126,11 +126,12 @@ Les dossiers peuvent être imbriqués sans limite. Les feuilles ne peuvent pas a
 
 ---
 
-## Les quatre types de feuilles
+## Les cinq types de feuilles
 
 | `type` | Ouvre | `target` est | `connector` |
 |---|---|---|---|
-| **`query`** | Un écran (TableView) — utilise l'écran associé à cette requête. | Un nom de requête SELECT (`customers_get`). | Le connecteur qui possède la requête. Vide = celui de l'application. |
+| **`screen`** | Un écran conçu. | La requête de lecture de l'écran (`customers_get`), choisie parmi les écrans conçus. | Le connecteur qui le possède. Vide = celui de l'application. |
+| **`query`** | La même vue en grille, choisie parmi les requêtes brutes — une requête sans écran conçu s'ouvre en simple tableau. | Un nom de requête SELECT. | Le connecteur qui possède la requête. Vide = celui de l'application. |
 | **`endpoint`** | Le HttpRunner — déclenche un endpoint de connecteur API. | Un nom d'endpoint. | Le connecteur API. Vide = celui de l'application. |
 | **`dashboard`** | Un tableau de bord (graphiques + KPI). | Un id de tableau de bord (depuis `[dashboards.*]`). | NE doit PAS être renseigné (les tableaux de bord résident dans leur propre espace de noms plat). |
 | **`page`** | Une route frontend enregistrée (une fonctionnalité personnalisée, par exemple `/nomaflow`). | Le chemin de la route. | NE doit PAS être renseigné (la cible est une route, pas une ressource de connecteur). |
@@ -145,7 +146,7 @@ Le validateur du schéma impose :
 
 ## Enregistrement et rechargement
 
-Le bouton *Enregistrer* valide tout le `MenusFile` (ids uniques, parents existants, pas de cycles), écrit `menus.toml` et déclenche un rechargement à chaud. Les nouveaux menus apparaissent immédiatement dans le sélecteur d'applications en haut — pas de redémarrage de processus.
+Le bouton *Enregistrer* valide tout le `MenusFile` (ids uniques, parents existants, pas de cycles), écrit `menus.toml` et déclenche un rechargement à chaud. Les nouveaux menus s'appliquent immédiatement — pas de redémarrage de processus.
 
 La validation est stricte sur trois points :
 
@@ -161,12 +162,12 @@ Les doublons entre menus différents sont autorisés — `[menus.crm.security]` 
 
 ## Comment un connecteur devient une application
 
-**Un connecteur n'apparaît dans le sélecteur d'applications en haut que quand les deux conditions sont réunies :**
+**Un connecteur n'apparaît dans le sélecteur d'applications du menu latéral que quand les deux conditions sont réunies :**
 
 1. Un menu existe — `[menus.<connector>]` est configuré dans *Paramètres → Menus*.
-2. `show_in_switcher = true` sur le connecteur — à activer dans *Paramètres → Connecteurs → \<connecteur> → Paramètres*.
+2. **Show In Switcher** sur le connecteur — dans *Paramètres → Connecteurs → \<connecteur> → Settings* (activé par défaut).
 
-Si l'une des deux manque, le connecteur existe mais ne s'affiche pas dans le sélecteur. L'ordre habituel : configurer le menu d'abord, **puis** cocher `show_in_switcher`.
+Si l'une des deux manque, le connecteur existe mais n'est pas listé. Le sélecteur lui-même n'apparaît que s'il y a plus d'une application. L'ordre habituel : configurer le menu d'abord, **puis** cocher `show_in_switcher`.
 
 À noter : le regroupement *Applications* / *Sources de données* sur la page Connecteurs se base uniquement sur l'existence d'un menu — un connecteur avec un menu mais `show_in_switcher = false` reste classé sous *Applications* à cet endroit. Ce regroupement est un confort interne à l'interface Paramètres ; le sélecteur d'applications côté utilisateur est ce que `show_in_switcher` gouverne.
 
@@ -178,8 +179,8 @@ La page suivante détaille le câblage des deux côtés.
 
 Quand l'utilisateur ouvre l'application, `GET /api/menus` renvoie l'arbre **filtré à ce que l'utilisateur peut exécuter** :
 
-- La permission sous-jacente de chaque feuille (`sql:<connector>:<target>` pour `query`, `api:<connector>:<target>` pour `endpoint`, voir [Permissions et rôles](./permissions-and-roles.md)) est vérifiée.
-- Les éléments pour lesquels l'utilisateur n'a pas la permission sont retirés.
+- Une feuille est conservée quand l'utilisateur peut exécuter ce qu'elle ouvre (`sql:<connector>:<target>` pour `screen` / `query`, `api:<connector>:<target>` pour `endpoint`), ou quand un rôle autorise explicitement son `menu:<app>:<id>` — voir [Permissions et rôles](./permissions-and-roles.md).
+- Un refus `menu:` ou `dashboard:` la retire.
 - Un dossier sans enfant survivant est replié.
 - Les éléments avec un filtre `roles` ne sont conservés que si les rôles de l'utilisateur croisent la liste.
 
@@ -191,7 +192,7 @@ Un utilisateur ne voit que les parties du menu qu'il peut réellement utiliser �
 
 | Objectif | À lire |
 |---|---|
-| Faire apparaître un connecteur comme application dans le sélecteur en haut. | [Transformer un connecteur en application](./make-connector-an-app.md). |
+| Faire apparaître un connecteur comme application dans le sélecteur d'applications. | [Transformer un connecteur en application](./make-connector-an-app.md). |
 | Construire l'arbre — dossiers, feuilles, glisser-déposer, indentation. | [Construire l'arbre](./build-the-tree.md). |
 | Choisir le bon type de feuille (écran / endpoint / tableau de bord / route). | [Types d'éléments](./item-types.md). |
 | Restreindre les éléments à certains rôles. | [Permissions et rôles](./permissions-and-roles.md). |

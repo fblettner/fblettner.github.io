@@ -8,8 +8,8 @@ keywords: [Liberty Framework, assistant écran, générateur d'écran, scaffold,
 
 L'**Assistant de création d'écran** construit un écran complet en une seule passe. Deux points de départ sont possibles :
 
-- **À partir de tables** — une table de base et d'éventuelles tables jointes. L'assistant écrit un `SELECT` neuf sur le connecteur.
-- **À partir d'une requête existante** — réutilisation en lecture d'une requête déjà définie sur le connecteur. L'assistant lit ses colonnes et construit l'écran par-dessus ; aucune requête dupliquée n'est générée. Un preset de catalogue qui nomme une requête suit le même chemin.
+- **Database table** (une table de la base) — une table de base et d'éventuelles tables jointes. L'assistant écrit un `SELECT` neuf sur le connecteur.
+- **Existing query** (une requête existante) — réutilisation en lecture d'une requête déjà définie sur le connecteur. L'assistant lit ses colonnes et construit l'écran par-dessus ; aucune requête dupliquée n'est générée. Un preset de catalogue qui nomme une requête suit le même chemin.
 
 Une fois la source choisie, vous sélectionnez les colonnes affichées dans la grille (elles deviennent la vue partagée par défaut de l'écran), vous répartissez au besoin des colonnes dans des onglets pour l'édition, vous revoyez les entrées de dictionnaire et vous posez une entrée de menu — l'assistant écrit ensemble la requête de lecture (quand la source est une table), l'écran, son dialogue, la vue par défaut et l'entrée de menu.
 
@@ -69,16 +69,16 @@ Avant les étapes ci-dessus, une courte étape **Cible** demande le **Connecteur
 ### 1 · Source
 Deux choix mutuellement exclusifs :
 
-- **À partir de tables** — choisir une **table de base** sur le connecteur, puis au besoin **ajouter une table jointe** (type de jointure et conditions ON). Un [preset de catalogue](#presets-de-catalogue) câble les jointures en un clic.
-- **À partir d'une requête existante** — choisir une requête de lecture déjà définie sur le connecteur. L'assistant introspecte ses colonnes au lieu d'écrire un nouveau `SELECT` ; l'écran lit à travers la requête existante.
+- **Database table** — choisir une **table de base** sur le connecteur, puis au besoin **ajouter une table jointe** (type de jointure et conditions ON). Un [preset de catalogue](#presets-de-catalogue) câble les jointures en un clic.
+- **Existing query** — choisir une requête de lecture déjà définie sur le connecteur. L'assistant introspecte ses colonnes au lieu d'écrire un nouveau `SELECT` ; l'écran lit à travers la requête existante.
 
 Dans les deux cas, l'assistant lit les colonnes réelles pour que les étapes suivantes disposent de vrais champs.
 
 ### 2 · Vue de grille
-La requête de lecture sélectionne **toutes** les colonnes de la source ; cette étape choisit lesquelles apparaissent dans la grille. La sélection retenue est enregistrée comme **vue partagée par défaut** de l'écran — une vue partagée qu'un utilisateur peut ensuite surcharger avec ses propres [vues enregistrées](../saved-views.md). Marquez aussi les colonnes **clés** (celles qui identifient une ligne) : elles pilotent les requêtes de mise à jour / suppression, et un écran sans clé est en lecture seule par construction.
+La requête de lecture sélectionne **toutes** les colonnes de la source ; cette étape choisit lesquelles apparaissent dans la grille. La sélection retenue est enregistrée comme **vue partagée par défaut** de l'écran — une vue partagée qu'un utilisateur peut ensuite surcharger avec ses propres [vues enregistrées](../saved-views.md).
 
 ### 3 · Colonnes de dialogue *(optionnel)*
-Sauter cette étape produit un écran en lecture seule — pas de dialogue. Sinon, une disposition à deux volets : les **colonnes disponibles** d'un côté, vos **onglets** de dialogue de l'autre. Répartissez les colonnes dans les onglets, ajoutez / renommez / supprimez des onglets. Seules les colonnes posées ici apparaissent dans le dialogue d'édition ; la grille garde la sélection de l'étape 2.
+Sauter cette étape produit un écran en lecture seule — pas de dialogue. Sinon, une disposition à deux volets : les **colonnes disponibles** d'un côté, vos **onglets** de dialogue de l'autre. Répartir les colonnes dans les onglets, ajouter, renommer ou supprimer des onglets, et cocher les colonnes **clés** (celles qui identifient une ligne) : elles pilotent les requêtes de mise à jour et de suppression. Seules les colonnes posées ici apparaissent dans le dialogue d'édition ; la grille garde la sélection de l'étape 2.
 
 ### 4 · Dictionnaire
 L'assistant analyse la source et propose les [entrées de dictionnaire](../dictionary.md) dont l'écran a besoin. Les entrées déjà présentes sont affichées mais grisées et laissées intactes — seules les **manquantes** sont cochées d'avance pour création. Pour chaque entrée proposée, vous réglez le **Libellé**, le **Format**, la **Règle**, la **valeur de règle**, les **paramètres de lookup** (pour une règle UDC / table de correspondance) et la **valeur par défaut**. C'est la même table de scan que l'éditeur de dictionnaire.
@@ -99,7 +99,7 @@ En une passe validée — rien n'est écrit tant que chaque pièce n'est pas val
 
 | Artefact | Ce qui est posé |
 |---|---|
-| **Requête de connecteur** | *À partir de tables* — une nouvelle table sur le connecteur source avec une requête `get`, plus les requêtes d'écriture `post` / `put` / `delete` pour que l'écran soit modifiable. *À partir d'une requête existante* — rien n'est ajouté sur le connecteur ; l'écran lit à travers la requête choisie. |
+| **Requête de connecteur** | *Database table* — une nouvelle table sur le connecteur source avec une requête `get`, plus les requêtes d'écriture `post` / `put` / `delete` pour que l'écran soit modifiable. *Existing query* — rien n'est ajouté sur le connecteur ; l'écran lit à travers la requête choisie. |
 | **Entrées de dictionnaire** | Les entrées proposées que vous avez conservées (les existantes ne sont jamais écrasées). |
 | **Écran + dialogue** | L'écran sous l'application choisie, ses colonnes de grille et — si l'étape 3 a été remplie — un dialogue dont les onglets portent les champs du formulaire. |
 | **Vue partagée par défaut** | La sélection de grille de l'étape 2, enregistrée comme vue partagée par défaut de l'écran. |
@@ -136,8 +136,8 @@ Les sélecteurs des étapes 2 et 3 sont pensés pour les sources larges — un s
 ## Conseils et bonnes pratiques
 
 - **Partez d'un preset quand il convient.** C'est la différence entre choisir une entrée et câbler cinq jointures à la main.
-- **Marquez vos clés à l'étape 2.** Les colonnes clés pilotent les requêtes de mise à jour / suppression ; un écran sans clé est en lecture seule par construction.
-- **Réutilisez une requête existante pour un état en lecture seule.** *À partir d'une requête existante* est le chemin le plus court quand le SQL existe déjà — aucune requête dupliquée n'est ajoutée et l'écran obtient tout de même un dialogue et une revue de dictionnaire.
+- **Marquer les clés à l'étape 3.** Les colonnes clés pilotent les requêtes de mise à jour / suppression ; un écran sans clé est en lecture seule par construction.
+- **Réutilisez une requête existante pour un état en lecture seule.** *Existing query* est le chemin le plus court quand le SQL existe déjà — aucune requête dupliquée n'est ajoutée et l'écran obtient tout de même un dialogue et une revue de dictionnaire.
 - **Sautez l'étape 3 pour un écran en lecture seule.** Laisser *Colonnes de dialogue* vide livre un écran sans dialogue d'édition — pratique pour les écrans d'observation où rien ne doit être modifiable.
 - **Revoyez le dictionnaire, ne le validez pas à l'aveugle.** Le scan déduit le format du type de colonne (ou, sur JDE, du dictionnaire de données) ; un coup d'œil aux colonnes Format et Règle évite un aller-retour plus tard.
 - **Ouvrez l'écran et affinez-le dans le Concepteur.** L'assistant vous donne vite un écran fonctionnel ; les onglets imbriqués, les champs conditionnels et les actions s'ajoutent ensuite dans le [Concepteur d'écran](screens/overview.md).

@@ -1,6 +1,6 @@
 ---
 title: Menus — overview
-description: "The Menus page, the flat-items-linked-by-parent model, the four leaf kinds (query / endpoint / dashboard / page), and how attaching a menu turns a connector into an app."
+description: "The Menus page, the flat-items-linked-by-parent model, the five leaf kinds (screen / query / endpoint / dashboard / page), and how a menu plus show_in_switcher turns a connector into an app."
 keywords: [Liberty Framework, menus, MenusBuilder, app, navigation, tree, folder, leaf, items, parent]
 ---
 
@@ -12,7 +12,7 @@ Three things are worth knowing up front:
 
 | Fact | Implication |
 |---|---|
-| There is **no separate "app" object** in Liberty. | An "app" is just a **connector that has a menu attached** *and* whose `show_in_switcher` flag is on. Both conditions are required for the top app switcher to show its tile. |
+| There is **no separate "app" object** in Liberty. | An "app" is just a **connector that has a menu attached** *and* whose `show_in_switcher` flag is on. Both conditions are required for the application picker of the sidebar to list it. |
 | Menus are stored as a **flat list of items** linked by `parent`. | The tree is assembled by the backend — easier to hand-edit, round-trips cleanly through TOML, drag operations only ever mutate one list. |
 | Every menu key is a connector name (`[menus.<connector>]`). | The connector named `crm` carries the menu under `[menus.crm]`; the screen `customers` on `crm` is reached from a leaf with `target = "customers_get"`. |
 
@@ -37,7 +37,7 @@ The page that manages menus is **Settings → Menus**.
   <rect x="216" y="78" width="80" height="26" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
   <text x="256" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">nomasx1</text>
   <rect x="306" y="78" width="280" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="446" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Add a menu for a connector</text>
+  <text x="446" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">+ Add scope</text>
   <rect x="700" y="78" width="80" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="740" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Discard</text>
   <rect x="788" y="78" width="80" height="26" rx="6" fill="#4a9eff" opacity="0.9"/>
@@ -81,7 +81,7 @@ Three regions:
 
 | Region | What it carries |
 |---|---|
-| **Top scope bar** | One chip per app (a connector that has a menu). Click a chip → its tree loads below. The *＋ Add a menu for a connector* button registers a new connector under Menus. *Discard* / *Save* on the right commit or revert page-wide edits. |
+| **Top scope bar** | One chip per app (a connector that has a menu). Click a chip → its tree loads below. The **+ Add scope** chip gives an existing connector a menu. *Discard* / *Save* on the right commit or revert page-wide edits. |
 | **Tree (left column)** | The selected app's menu tree. Click a row to select it for editing. On hover, action icons appear over the row's right edge — *Move up / down*, *Indent / Outdent*, *Add child*, *Delete*. A filter input narrows the list. |
 | **Inspector (right column)** | The full editor for the selected item — a generic form over the `MenuItem` schema. Fields adapt to the selected `type` (a folder shows fewer fields than a leaf). |
 
@@ -93,7 +93,7 @@ The schema's top-level shape:
 
 | Field | Notes |
 |---|---|
-| `label` | The app's display name. Falls back to the connector name. Shown in the top app switcher. |
+| `label` | The app's display name. Falls back to the connector name. Shown in the application picker. |
 | `items` | A flat list of menu items, linked by their `parent` field. |
 
 Each item:
@@ -104,8 +104,8 @@ Each item:
 | `parent` | no | Pick a folder, or leave blank for a top-level item. |
 | `label` | yes | The sidebar text. |
 | `l` | no | Per-language label overrides — `l.fr`, `l.de`, etc. |
-| `icon` | no | A [Lucide icon](https://lucide.dev) name (`shield`, `users`, `chart-bar`, …). |
-| `type` | no | Blank = folder. Otherwise one of `query`, `endpoint`, `dashboard`, `page` (see [Item types](./item-types.md)). |
+| `icon` | no | One of the icon names the sidebar draws (`shield`, `users`, `barchart`, …) — see [Translations and icons](./translations-and-icons.md). |
+| `type` | no | Blank = folder. Otherwise one of `screen`, `query`, `endpoint`, `dashboard`, `page` (see [Item types](./item-types.md)). |
 | `connector` | no | Connector hosting the target. Blank = the app's own connector (the menu key). |
 | `target` | conditional | Required on every leaf; ignored on folders. |
 | `params` | no | Fixed parameters passed to the target when the item opens. |
@@ -126,11 +126,12 @@ Folders can nest indefinitely. Leaves can't have children — they're terminal n
 
 ---
 
-## The four leaf kinds
+## The five leaf kinds
 
 | `type` | Opens | `target` is | `connector` |
 |---|---|---|---|
-| **`query`** | A screen (TableView) — uses the screen wired to this query. | A SELECT query name (`customers_get`). | The connector that owns the query. Blank = the app's. |
+| **`screen`** | A designed screen. | The screen's read query (`customers_get`), picked from the designed screens. | The connector that owns it. Blank = the app's. |
+| **`query`** | The same grid view, picked from the raw queries — a query with no designed screen opens as a plain table. | A SELECT query name. | The connector that owns the query. Blank = the app's. |
 | **`endpoint`** | The HttpRunner — fires an API connector endpoint. | An endpoint name. | The API connector. Blank = the app's. |
 | **`dashboard`** | A dashboard (charts + KPIs). | A dashboard id (from `[dashboards.*]`). | Must NOT be set (dashboards live in their own flat namespace). |
 | **`page`** | A registered frontend route (a custom feature area, e.g. `/nomaflow`). | The route path. | Must NOT be set (the target is a route, not a connector resource). |
@@ -145,7 +146,7 @@ The schema validator enforces:
 
 ## Save and reload
 
-The *Save* button validates the whole `MenusFile` (unique ids, parents exist, no cycles), writes `menus.toml` and triggers a hot reload. New menus appear in the top switcher immediately — no process restart.
+The *Save* button validates the whole `MenusFile` (unique ids, parents exist, no cycles), writes `menus.toml` and triggers a hot reload. New menus apply immediately — no process restart.
 
 The validation is strict on three things:
 
@@ -161,14 +162,14 @@ Cross-menu duplicates are fine — `[menus.crm.security]` and `[menus.nomasx1.se
 
 ## How a connector becomes an app
 
-**A connector becomes visible in the top app switcher only when both conditions are true:**
+**A connector is listed in the application picker of the sidebar only when both conditions are true:**
 
 1. A menu exists — `[menus.<connector>]` is set up in *Settings → Menus*.
-2. `show_in_switcher = true` on the connector — set in *Settings → Connectors → \<connector> → Settings*.
+2. **Show In Switcher** on the connector — set in *Settings → Connectors → \<connector> → Settings* (on by default).
 
-Miss either one and the connector exists but doesn't appear in the switcher. Setting up the menu first and **then** ticking `show_in_switcher` is the usual order.
+Miss either one and the connector exists but is not listed. The picker itself appears only when there is more than one application. Setting up the menu first and **then** ticking `show_in_switcher` is the usual order.
 
-Note: the Connectors page's own *Apps* / *Data sources* grouping is based on menu existence alone — connectors with a menu but `show_in_switcher = false` still show under *Apps* there. That grouping is an internal Settings-UI affordance; the user-facing top switcher is what `show_in_switcher` gates.
+Note: the Connectors page's own *Apps* / *Data sources* grouping is based on menu existence alone — connectors with a menu but `show_in_switcher = false` still show under *Apps* there. That grouping is an internal Settings-UI affordance; the user-facing picker is what **Show In Switcher** gates.
 
 The next page covers the wiring from both sides.
 
@@ -178,8 +179,8 @@ The next page covers the wiring from both sides.
 
 When the user opens the app, `GET /api/menus` returns the tree **filtered to what the user can run**:
 
-- Each leaf's underlying permission (`sql:<connector>:<target>` for `query`, `api:<connector>:<target>` for `endpoint`, see [Permissions and roles](./permissions-and-roles.md)) is checked.
-- Items the user lacks permission for are dropped.
+- A leaf is kept when the user may run what it opens (`sql:<connector>:<target>` for `screen` / `query`, `api:<connector>:<target>` for `endpoint`), or when a role explicitly allows its `menu:<app>:<id>` — see [Permissions and roles](./permissions-and-roles.md).
+- A `menu:` or `dashboard:` deny removes it.
 - A folder with no surviving children is collapsed away.
 - Items with a `roles` filter are kept only when the user's roles intersect the list.
 
@@ -191,7 +192,7 @@ A user sees only the parts of the menu they can actually use — no greyed-out i
 
 | Goal | Read |
 |---|---|
-| Make a connector show up as an app in the top switcher. | [Make a connector an app](./make-connector-an-app.md). |
+| Make a connector show up as an app in the application picker. | [Make a connector an app](./make-connector-an-app.md). |
 | Build the tree — folders, leaves, drag/reorder, indent. | [Build the tree](./build-the-tree.md). |
 | Pick the right leaf type (screen / endpoint / dashboard / route). | [Item types](./item-types.md). |
 | Restrict items to specific roles. | [Permissions and roles](./permissions-and-roles.md). |

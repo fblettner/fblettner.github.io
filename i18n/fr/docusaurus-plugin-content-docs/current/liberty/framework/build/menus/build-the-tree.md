@@ -18,8 +18,8 @@ Au-dessus de l'arbre :
 
 | Bouton | Rôle |
 |---|---|
-| **＋ Dossier** | Ajoute un dossier au premier niveau (ou en enfant de l'élément sélectionné, selon l'implémentation). Le dossier est le seul type d'élément sans `type`. |
-| **＋ Élément** | Ajoute une feuille, même portée. La feuille s'ouvre par défaut sur le type `query` — à modifier dans l'Inspecteur. |
+| **＋ Dossier** | Ajoute un dossier au premier niveau. Le dossier est le seul type d'élément sans `type`. |
+| **＋ Élément** | Ajoute une feuille au premier niveau — définir son type et sa cible dans l'Inspecteur. Pour l'ajouter sous un dossier, utiliser le **＋ Ajouter un enfant** de la ligne. |
 | **⎘ Dupliquer** | Duplique l'élément sélectionné (sous-arborescence incluse). Demande un nouvel id. Désactivé tant que rien n'est sélectionné. |
 | **🔗 Rechercher les usages** | Ouvre une boîte de dialogue qui liste chaque endroit où cet élément de menu est référencé (par exemple le champ `home` d'un autre connecteur). Utile avant un renommage ou une suppression. Désactivé tant que rien n'est sélectionné. |
 
@@ -77,7 +77,7 @@ Chaque ligne porte :
 |---|---|
 | Indentation | Profondeur visuelle — chaque niveau ajoute 16 pixels. |
 | Chevron | ▾ pour un dossier déplié, ▸ pour replié. |
-| Icône | L'`icon` de l'élément (nom Lucide). Les dossiers retombent sur une icône de dossier ; les feuilles sur une icône de fichier. |
+| Icône | L'`icon` de l'élément (l'une des [icônes du menu latéral](./translations-and-icons.md#icons)). Les dossiers retombent sur une icône de dossier ; les feuilles sur une icône de fichier. |
 | Libellé | Le champ `label`. |
 | Id | Monospace, atténué, après le libellé. S'estompe au survol pour laisser place aux actions. |
 | Actions par ligne (au survol) | *Monter* (↑), *Descendre* (↓), *Indenter* (→), *Désindenter* (←), *Ajouter un enfant* (＋), *Supprimer* (🗑). |
@@ -96,8 +96,8 @@ Les icônes qui apparaissent au survol, de gauche à droite :
 | **↓ Descendre** | Échange avec le frère suivant. Désactivé à la fin. |
 | **→ Indenter** | Reparente l'élément sous le frère précédent. Le frère précédent devient le nouveau parent. Désactivé quand il n'y a pas de frère précédent. |
 | **← Désindenter** | Remonte l'élément d'un niveau — son grand-parent devient le nouveau parent. Désactivé quand l'élément est déjà au premier niveau. |
-| **＋ Ajouter un enfant** | Ajoute une feuille en tant qu'enfant de cet élément (fonctionne sur les dossiers ; sur les feuilles, l'intention est convertie — typiquement ajouté comme frère suivant, pas comme enfant). |
-| **🗑 Supprimer** | Retire l'élément **et toute sa sous-arborescence** après une boîte de dialogue de confirmation. Les éléments descendants sont retirés dans la même opération. |
+| **＋ Ajouter un enfant** | Ajoute un élément en enfant de cette ligne. |
+| **🗑 Supprimer** | Retire l'élément — avec toute sa sous-arborescence, après confirmation, quand il a des enfants. |
 
 Les icônes sont volontairement compactes et n'apparaissent qu'au survol — l'arbre reste lisible en régime stationnaire.
 
@@ -121,7 +121,7 @@ Choisir la convention qui correspond à la façon dont les utilisateurs pensent 
 
 ### Étape 2 — Ajouter les feuilles sous chaque dossier
 
-Cliquer sur la ligne d'un dossier pour la sélectionner, puis **＋ Élément** (ou le *＋ Ajouter un enfant* de la ligne). La nouvelle feuille apparaît sous le dossier. Définir son `type`, `connector`, `target` dans l'Inspecteur — voir [Types d'éléments](./item-types.md).
+Sur la ligne du dossier, cliquer sur **＋ Ajouter un enfant**. Le nouvel élément apparaît sous le dossier. Définir son `type`, `connector`, `target` dans l'Inspecteur — voir [Types d'éléments](./item-types.md).
 
 ### Étape 3 — Réorganiser
 
@@ -147,7 +147,7 @@ Cliquer une ligne → l'Inspecteur à droite charge un formulaire pour l'éléme
 | `parent` | Oui | Un SearchSelect alimenté avec les candidats valides. Les actions d'indentation/désindentation de l'arbre modifient ce champ aussi. |
 | `label` | Oui | Le texte de la barre latérale. |
 | `l` (onglet Traductions) | Oui | Libellés par langue. Voir [Traductions et icônes](./translations-and-icons.md). |
-| `icon` | Oui | Nom d'icône Lucide. |
+| `icon` | Oui | L'une des [icônes du menu latéral](./translations-and-icons.md#icons). |
 | `type` | Oui | Liste déroulante. Vide = dossier. Passer de feuille à dossier efface `target` / `connector` / `params`. |
 | `connector` | Uniquement pour les feuilles `query` / `endpoint` | Vide = le connecteur de l'application. |
 | `target` | Uniquement pour les feuilles | Un SearchSelect alimenté avec les cibles valides pour le `type` + `connector` choisis. |
@@ -187,7 +187,7 @@ Utile quand :
 
 ## Supprimer un élément
 
-L'icône 🗑 (par ligne) ou la touche Suppr du clavier sur une ligne sélectionnée ouvre une boîte de dialogue de confirmation : « *Supprimer '\<nom\>' **et** ses descendants ?* ». Confirmer retire l'élément plus chaque enfant, petit-enfant, etc.
+L'icône 🗑 de la ligne retire l'élément. Quand il a des enfants, une confirmation est demandée d'abord, et confirmer retire toute la sous-arborescence.
 
 Il n'y a pas de suppression douce — l'élément disparaît immédiatement de la mémoire. C'est *Enregistrer* au niveau de la page qui persiste. Tant qu'on n'enregistre pas, *Annuler* permet de revenir en arrière.
 

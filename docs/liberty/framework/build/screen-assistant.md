@@ -8,8 +8,8 @@ keywords: [Liberty Framework, screen assistant, screen builder, scaffold, wizard
 
 The **Screen Creation Assistant** is a guided wizard that builds a complete screen in a single pass. Two starting points are supported:
 
-- **From tables** — a base table and any joined tables. The assistant writes a fresh `SELECT` on the connector.
-- **From an existing query** — a read-only reuse of a connector query already in place. The assistant reads its columns and builds the screen on top; no duplicate query is generated. A catalog preset that names a query goes through the same path.
+- **Database table** — a base table and any joined tables. The assistant writes a fresh `SELECT` on the connector.
+- **Existing query** — a read-only reuse of a connector query already in place. The assistant reads its columns and builds the screen on top; no duplicate query is generated. A catalog preset that names a query goes through the same path.
 
 Once the source is picked, you choose which columns the grid shows (that becomes the screen's default shared view), optionally arrange columns into dialog tabs for editing, review the dictionary entries and drop a menu item — the assistant writes the read query (when from tables), the screen, its dialog, the default view and the menu entry together.
 
@@ -69,16 +69,16 @@ Before the steps above, a short **Target** step asks for the **Source connector*
 ### 1 · Source
 Two mutually-exclusive choices:
 
-- **From tables** — pick a **Base table** from the connector, then optionally add a **joined table** (choose the join type and the ON conditions). A [catalog preset](#catalog-presets) can pre-wire the joins in one click.
-- **From an existing query** — pick a read query already defined on the connector. The assistant introspects its columns instead of writing a new `SELECT`; the screen reads through the existing query.
+- **Database table** — pick a **Base table** from the connector, then optionally add a **joined table** (choose the join type and the ON conditions). A [catalog preset](#catalog-presets) can pre-wire the joins in one click.
+- **Existing query** — pick a read query already defined on the connector. The assistant introspects its columns instead of writing a new `SELECT`; the screen reads through the existing query.
 
 Either way, the assistant introspects live columns so the next steps have real fields to work with.
 
 ### 2 · Grid view
-The read query selects **every** column of the source; this step chooses which of those show up on the grid. The picked set is written as the screen's **default shared view** — a shared view a regular user can override with their own [saved views](../saved-views.md). Also mark the **key** columns (the ones that identify a row): they drive the update / delete queries, and a screen without keys is read-only by construction.
+The read query selects **every** column of the source; this step chooses which of those show up on the grid. The picked set is written as the screen's **default shared view** — a shared view a regular user can override with their own [saved views](../saved-views.md).
 
 ### 3 · Dialog columns *(optional)*
-Skip it to ship a read-only screen — no dialog. Otherwise, a two-pane layout: **Available columns** on one side, your dialog **tabs** on the other. Assign columns into tabs, add / rename / remove tabs. Only the columns you place here appear in the edit dialog; the grid keeps whatever step 2 defined.
+Skip it to ship a read-only screen — no dialog. Otherwise, a two-pane layout: **Available columns** on one side, your dialog **tabs** on the other. Assign columns into tabs, add / rename / remove tabs, and tick the **key** columns (the ones that identify a row): they drive the update / delete queries. Only the columns you place here appear in the edit dialog; the grid keeps whatever step 2 defined.
 
 ### 4 · Dictionary
 The assistant scans the source and proposes the [dictionary entries](../dictionary.md) the screen needs. Entries that already exist are shown but greyed out and left untouched — only the **missing** ones are pre-ticked to be created. For each proposed entry you can set the **Label**, **Format**, **Rule**, **Rule value**, **Lookup params** (for a UDC / lookup rule) and **Default**. This is the same scan table used by the Dictionary editor.
@@ -99,7 +99,7 @@ In one validated pass — nothing is written unless every piece validates — th
 
 | Artifact | What lands |
 |---|---|
-| **Connector query** | *From tables* — a new table on the source connector with a `get` query, plus `post` / `put` / `delete` write queries so the screen is editable. *From an existing query* — nothing added on the connector; the screen reads through the query you picked. |
+| **Connector query** | *Database table* — a new table on the source connector with a `get` query, plus `post` / `put` / `delete` write queries so the screen is editable. *Existing query* — nothing added on the connector; the screen reads through the query you picked. |
 | **Dictionary entries** | The proposed entries you kept (existing ones are never overwritten). |
 | **Screen + dialog** | The screen under the chosen app, its grid columns and — if step 3 was filled — an embedded dialog whose tabs hold the form fields. |
 | **Default shared view** | The grid selection from step 2, saved as the screen's default shared view. |
@@ -136,8 +136,8 @@ The pickers on steps 2 and 3 are built for wide sources — a full JDE `F0101` s
 ## Tips & best practices
 
 - **Start from a preset when one fits.** It is the difference between picking one entry and hand-wiring five joins.
-- **Mark your keys in step 2.** The key columns drive the update / delete queries; a screen without keys is read-only by construction.
-- **Reuse an existing query for read-only reports.** *From an existing query* is the shortest path when the SQL already exists — no duplicate query gets added and the screen still gets a dialog / dictionary review.
+- **Mark your keys in step 3.** The key columns drive the update / delete queries; a screen without keys is read-only by construction.
+- **Reuse an existing query for read-only reports.** *Existing query* is the shortest path when the SQL already exists — no duplicate query gets added and the screen still gets a dialog / dictionary review.
 - **Skip step 3 for read-only screens.** Leaving *Dialog columns* empty ships the screen without an edit dialog — useful for observability screens where nothing should be editable.
 - **Review the dictionary, don't rubber-stamp it.** The scan infers the format from the column type (or, on JDE, from the data dictionary); a quick pass over the Format and Rule columns saves a round-trip later.
 - **Open the screen and refine it in the Designer.** The assistant gets you a working screen fast; nested tabs, conditional fields and actions are then yours to add in the [Screen Designer](screens/overview.md).

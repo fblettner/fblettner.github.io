@@ -1,12 +1,12 @@
 ---
 title: Transformer un connecteur en application
-description: "Un connecteur devient une « application » visible dans le sélecteur en haut quand un menu lui est attaché et que show_in_switcher est actif. Plus comment le champ optionnel home décide de la page d'accueil."
+description: "Un connecteur devient une « application » visible dans le sélecteur d'applications quand un menu lui est attaché et que show_in_switcher est actif. Plus comment le champ optionnel home décide de la page d'accueil."
 keywords: [Liberty Framework, application, show_in_switcher, home, connecteur, menu, sélecteur d'applications, sélecteur]
 ---
 
 # Transformer un connecteur en application
 
-Liberty n'a **aucune configuration Applications séparée**. Ce que les utilisateurs appellent « une application » — ce qui apparaît dans le sélecteur en haut, ce qui porte un menu dans la navigation à gauche — c'est simplement un **connecteur auquel un menu est attaché** avec l'indicateur `show_in_switcher` actif.
+Liberty n'a **aucune configuration Applications séparée**. Ce que les utilisateurs appellent « une application » — ce qui apparaît dans le sélecteur d'applications, ce qui porte un menu dans la navigation à gauche — c'est simplement un **connecteur auquel un menu est attaché** avec l'indicateur `show_in_switcher` actif.
 
 Cette page détaille le câblage des deux côtés : l'indicateur sur le connecteur + la clé du menu.
 
@@ -16,7 +16,7 @@ Cette page détaille le câblage des deux côtés : l'indicateur sur le connecte
 
 | Pièce | Où se trouve-t-elle | Requise pour une application ? |
 |---|---|---|
-| **`show_in_switcher`** | Sur le connecteur (Paramètres → Connecteurs → onglet Paramètres). | Oui — désactivé, le connecteur existe mais n'apparaît pas dans le sélecteur en haut. |
+| **`show_in_switcher`** | Sur le connecteur (Paramètres → Connecteurs → onglet Paramètres). | Oui — désactivé, le connecteur existe mais n'apparaît pas dans le sélecteur d'applications. |
 | **`[menus.<connector>]`** | Le fichier de menus (Paramètres → Menus). | Oui — sans menu, le connecteur est traité comme une *source de données*, pas une application. |
 | **`home`** | Sur le connecteur (Paramètres → Connecteurs → onglet Paramètres). | Optionnel — définit l'élément d'accueil quand l'utilisateur choisit cette application dans le sélecteur. |
 
@@ -25,7 +25,7 @@ Deux effets distincts, déclenchés par des indicateurs différents :
 | Effet | Déclenché par |
 |---|---|
 | La pastille du connecteur passe de *Sources de données* à *Applications* sur la page Connecteurs. | L'existence du menu seule — `[menus.<connector>]` est configuré. |
-| Une tuile pour l'application apparaît dans le sélecteur en haut (le sélecteur d'applications côté utilisateur). | L'existence du menu **et** `show_in_switcher = true`. |
+| Une tuile pour l'application apparaît dans le sélecteur d'applications (le sélecteur d'applications côté utilisateur). | L'existence du menu **et** `show_in_switcher = true`. |
 
 Configurer le menu d'abord ; activer `show_in_switcher` ensuite. Manquer la seconde étape laisse le connecteur classé comme « application » sur la page Connecteurs sans pour autant le faire apparaître dans le sélecteur côté utilisateur.
 
@@ -58,7 +58,7 @@ Configurer le menu d'abord ; activer `show_in_switcher` ensuite. Manquer la seco
   <text x="40" y="232" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">show_in_switcher</text>
   <rect x="200" y="222" width="20" height="20" rx="3" fill="rgba(34,197,94,0.30)" stroke="rgba(34,197,94,0.60)"/>
   <text x="210" y="237" fill="#22c55e" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">✓</text>
-  <text x="234" y="236" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">afficher ce connecteur comme application dans le sélecteur en haut</text>
+  <text x="234" y="236" fill="#64748b" fontSize="10" fontStyle="italic" fontFamily="system-ui, sans-serif">afficher ce connecteur comme application dans le sélecteur d'applications</text>
 
   <text x="40" y="266" fill="#94a3b8" fontSize="11" fontFamily="system-ui, sans-serif">home</text>
   <rect x="200" y="256" width="300" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
@@ -69,7 +69,7 @@ Configurer le menu d'abord ; activer `show_in_switcher` ensuite. Manquer la seco
   <rect x="200" y="286" width="100" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="210" y="301" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">(par défaut)</text>
 
-  <text x="40" y="340" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">Pour une application, créer aussi [menus.crm] depuis Paramètres → Menus → ＋ Ajouter un menu pour un connecteur.</text>
+  <text x="40" y="340" fill="#94a3b8" fontSize="11" fontStyle="italic" fontFamily="system-ui, sans-serif">Pour une application, créer aussi [menus.crm] depuis Paramètres → Menus → + Add scope.</text>
 </svg>
 
 ---
@@ -80,7 +80,7 @@ Ouvrir **Paramètres → Connecteurs**, choisir le connecteur, basculer sur l'on
 
 | Champ | Notes |
 |---|---|
-| **`show_in_switcher`** | Par défaut `true`. Activé, le connecteur apparaît dans le sélecteur d'applications en haut (à condition d'avoir un menu). Désactivé, le connecteur n'est accessible que par URL — utile pour les connecteurs cachés ou d'administration. |
+| **`show_in_switcher`** | Par défaut `true`. Activé, le connecteur apparaît dans le sélecteur d'applications du menu latéral (à condition d'avoir un menu). Désactivé, le connecteur n'est accessible que par URL — utile pour les connecteurs cachés ou d'administration. |
 | **`home`** | Liste déroulante alimentée par les éléments de menu de ce connecteur. Choisit l'élément d'accueil quand l'utilisateur clique sur l'application dans le sélecteur. Vide → le premier élément visible de premier niveau. |
 
 Enregistrer la page du connecteur — la modification s'applique immédiatement (rechargement à chaud).
@@ -89,7 +89,7 @@ Enregistrer la page du connecteur — la modification s'applique immédiatement 
 
 ## Étape 2 — Sur le menu
 
-Ouvrir **Paramètres → Menus**. Si le connecteur n'a pas encore de menu, le bouton *＋ Ajouter un menu pour un connecteur* ouvre une boîte de dialogue qui liste tous les connecteurs **sans** menu — choisir le sien. La boîte de dialogue :
+Ouvrir **Paramètres → Menus**. Si le connecteur n'a pas encore de menu, le bouton **+ Add scope** ouvre une boîte de dialogue qui liste tous les connecteurs **sans** menu — choisir le sien. La boîte de dialogue :
 
 - Crée une nouvelle entrée `[menus.<connector>]` sans éléments.
 - Sélectionne la pastille de la nouvelle application.
@@ -106,14 +106,14 @@ Ajouter des éléments via **＋ Dossier** / **＋ Élément** en haut du pannea
 Avant :
 
 - Le connecteur apparaît sous **Sources de données** sur la page Connecteurs.
-- Il n'apparaît pas dans le sélecteur en haut.
+- Il n'apparaît pas dans le sélecteur d'applications.
 - Les écrans qui pointent vers ses requêtes ne sont accessibles que par URL.
 
 Après :
 
 - Le connecteur apparaît sous **Applications** sur la page Connecteurs.
-- Il apparaît dans le sélecteur en haut sous forme de tuile.
-- Cliquer la tuile amène l'utilisateur à l'élément `home` (ou au premier élément visible de premier niveau).
+- Il apparaît dans le sélecteur d'applications (affiché dans le menu latéral quand il y a plus d'une application).
+- La choisir amène l'utilisateur à l'élément `home` (ou au premier élément visible de premier niveau).
 - La navigation à gauche affiche l'arbre du menu.
 
 La page Connecteurs lit le fichier des menus pour décider du regroupement — il n'y a pas d'indicateur séparé « ceci est une application » au-delà de *« a un menu + est dans le sélecteur »*.
@@ -122,7 +122,7 @@ La page Connecteurs lit le fichier des menus pour décider du regroupement — i
 
 ## Dupliquer une application
 
-La page Connecteurs propose une action **Dupliquer** (couverte dans [Requêtes → Dupliquer une requête ou un connecteur](../queries/clone.md#clone-app--the-whole-application)) qui copie le connecteur + son recouvrement de dictionnaire + ses écrans + son menu + ses tableaux de bord + ses graphiques sous une nouvelle clé de connecteur. Le connecteur dupliqué hérite de `show_in_switcher` ; son menu est câblé automatiquement — l'application dupliquée apparaît dans le sélecteur en haut dès que la duplication se termine.
+La page Connecteurs propose une action **Dupliquer** (couverte dans [Requêtes → Dupliquer une requête ou un connecteur](../queries/clone.md#clone-app--the-whole-application)) qui copie le connecteur + son recouvrement de dictionnaire + ses écrans + son menu + ses tableaux de bord + ses graphiques sous une nouvelle clé de connecteur. Le connecteur dupliqué hérite de `show_in_switcher` ; son menu est câblé automatiquement — l'application dupliquée apparaît dans le sélecteur d'applications dès que la duplication se termine.
 
 C'est le bon choix quand :
 
@@ -157,7 +157,7 @@ Une installation Liberty typique porte plusieurs applications :
 | `nomaflow` | Ordonnanceur de tâches (un produit à part entière). |
 | `default` | Le pool du framework lui-même — généralement sans menu, juste une source de données pour les requêtes partagées. |
 
-Chacune obtient son propre bloc `[menus.<name>]`, sa propre pastille sur la page Menus, sa propre tuile dans le sélecteur. Elles partagent le même processus du framework, la même authentification, le même dictionnaire (avec recouvrements par connecteur).
+Chacune obtient son propre bloc `[menus.<name>]`, sa propre pastille sur la page Menus, sa propre entrée dans le sélecteur d'applications. Elles partagent le même processus du framework, la même authentification, le même dictionnaire (avec recouvrements par connecteur).
 
 Un utilisateur qui se connecte ne voit que les applications pour lesquelles il a les permissions — `GET /api/menus` renvoie un arbre vide pour une application où l'utilisateur ne peut rien exécuter (et la tuile du sélecteur se masque en conséquence).
 
@@ -167,9 +167,9 @@ Un utilisateur qui se connecte ne voit que les applications pour lesquelles il a
 
 | Erreur | Symptôme | Correction |
 |---|---|---|
-| Connecteur avec `show_in_switcher = true` mais sans menu. | Le connecteur apparaît dans le groupe *Sources de données* de la page Connecteurs ; le sélecteur en haut ne le liste pas. | Ajouter un menu dans *Paramètres → Menus*. |
-| Connecteur avec un menu mais `show_in_switcher = false`. | Le menu existe mais le sélecteur masque la tuile. | Soit activer `show_in_switcher`, soit accepter que les utilisateurs n'atteindront l'application que par URL. |
-| `home` pointe vers un élément de menu qui n'existe plus. | Cliquer la tuile du sélecteur atterrit sur le premier élément visible de premier niveau, en ignorant le `home` périmé. | Choisir de nouveau un élément valide — la liste déroulante affiche les éléments de menu actifs. |
+| Connecteur avec `show_in_switcher = true` mais sans menu. | Le connecteur apparaît dans le groupe *Sources de données* de la page Connecteurs ; le sélecteur d'applications ne le liste pas. | Ajouter un menu dans *Paramètres → Menus*. |
+| Connecteur avec un menu mais `show_in_switcher = false`. | Le menu existe mais le sélecteur ne liste pas l'application. | Soit activer `show_in_switcher`, soit accepter que les utilisateurs n'atteindront l'application que par URL. |
+| `home` pointe vers un élément de menu qui n'existe plus. | Choisir l'application mène au le premier élément visible de premier niveau, en ignorant le `home` périmé. | Choisir de nouveau un élément valide — la liste déroulante affiche les éléments de menu actifs. |
 | Ajouter `[menus.<X>]` où `<X>` n'est pas un connecteur. | La page rejette l'entrée à l'enregistrement — la clé du menu doit correspondre à un connecteur connu. | Créer d'abord le connecteur, puis attacher le menu. |
 | Dupliquer une application mais le nouveau pool n'existe pas. | La boîte de dialogue de duplication refuse de soumettre. | Créer le pool dans *Paramètres → Pools* avant de dupliquer. |
 

@@ -177,7 +177,6 @@ Le mode **Settings** d'un connecteur SQL (le bouton *Settings* de la page du con
 | **Pools** | Les pools supplémentaires sur lesquels les mêmes requêtes peuvent s'exécuter — voir [Connecteurs multi-pools](#multi-pool). |
 | **Show In Switcher** | Affiche le connecteur comme une application dans le sélecteur en haut du menu latéral — avec un menu, voir [Faire d'un connecteur une application](./build/menus/make-connector-an-app.md). |
 | **Home** | L'entrée de menu ouverte quand l'application est choisie. |
-| **Licensed** | Le connecteur ne se charge que si la [clé de licence](./build/secure/license-key.md) le couvre. |
 | **Max Rows** | Nombre maximal de lignes d'une lecture par défaut ; sinon celui du pool, puis 1 000. La limite d'un écran ou d'une requête l'emporte. |
 | **Dd Prefix** | Longueur du préfixe de table dans les noms de colonnes (JD Edwards : `2`, pour que `ABCO`, `MCCO` et `SDCO` portent tous l'élément `CO`). Utilisé par le [périmètre de données](./build/secure/roles-and-permissions.md#data-scope) des rôles. `0` : les noms de colonnes sont les éléments. |
 

@@ -177,7 +177,6 @@ The **Settings** mode of a SQL connector (the *Settings* button of the connector
 | **Pools** | Extra pools the same queries may run on — see [Multi-pool connectors](#multi-pool). |
 | **Show In Switcher** | Shows the connector as an application in the switcher at the top of the sidebar — together with a menu, see [Make a connector an app](./build/menus/make-connector-an-app.md). |
 | **Home** | The menu entry opened when the application is picked. |
-| **Licensed** | The connector loads only when the [licence key](./build/secure/license-key.md) covers it. |
 | **Max Rows** | Default row limit of a read; otherwise the pool's, then 1 000. A screen's or a request's limit wins. |
 | **Dd Prefix** | Length of the table prefix in column names (JD Edwards: `2`, so `ABCO`, `MCCO` and `SDCO` all carry the dictionary item `CO`). Used by a role's [data scope](./build/secure/roles-and-permissions.md#data-scope). `0`: column names are the items. |
 

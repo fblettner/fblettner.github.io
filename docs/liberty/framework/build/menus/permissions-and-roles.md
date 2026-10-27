@@ -25,10 +25,12 @@ Every leaf is gated by the permission of its target:
 
 | `type` | Required permission |
 |---|---|
-| `query` | `sql:<connector>:<target>` (the query's permission). |
+| `screen`, `query` | `sql:<connector>:<target>` (the query's permission). |
 | `endpoint` | `api:<connector>:<target>` (the endpoint's permission). |
-| `dashboard` | None at this layer — the dashboard's own access rules apply. |
-| `page` | None at this layer — the route's own access rules apply. |
+| `dashboard` | None at this layer — hidden only by a `dashboard:` or `menu:` deny. |
+| `page` | None at this layer — the page's own access rules apply. |
+
+An explicit `menu:<app>:<id>` allow in a role also shows the leaf, even without the target's permission; a `menu:` deny always hides it. The role editor writes these strings when an entry is allowed or denied on its menu tree — see [Roles and permissions](../secure/roles-and-permissions.md).
 
 A user with `sql:crm:customers_get` sees the menu leaf that opens the Customers screen. A user without it doesn't — the leaf vanishes from the rendered menu.
 
@@ -57,7 +59,7 @@ The `roles` field on a menu item is a list of role names. When set:
 | Surface different sections to different audiences in the same app. | An `admin` folder visible only when `roles = ["admin"]` matches. |
 | Stage a rollout. | Tag a new section `roles = ["beta-testers"]`; flip to empty when launching to everyone. |
 
-The `roles` field is **not** an alternative to the implicit permission — both must hold. If you want operators to see and use a screen, they need both the SQL permission and one of the listed roles.
+The `roles` field is **not** an alternative to the permission — both must hold: the user needs one of the listed roles and the right to open the leaf.
 
 ---
 
@@ -147,9 +149,9 @@ What different users see:
 | **Bob** (manager) | `["manager"]` | every `sql:crm:*` | Pipeline → Customers, Deals · Reports → Monthly revenue. *(no Cohort: not analyst; no Admin)* |
 | **Carol** (admin) | `["admin"]` | every `sql:crm:*` | Pipeline → Customers, Deals · Reports → Monthly revenue, Cohort · Admin → Config. |
 | **Dave** (manager + analyst) | `["manager", "analyst"]` | every `sql:crm:*` | Pipeline → Customers, Deals · Reports → Monthly revenue, Cohort. *(no Admin)* |
-| **Eve** (no permission) | `["guest"]` | none | Empty tree — app's switcher tile hides itself. |
+| **Eve** (no permission) | `["guest"]` | none | Empty tree — the app is left out of the picker. |
 
-Note how the *Reports* folder doesn't appear for Alice (her roles don't intersect any child); the *Admin* folder doesn't appear for Alice / Bob / Dave; the app's tile in the top switcher hides for Eve.
+Note how the *Reports* folder doesn't appear for Alice (her roles don't intersect any child); the *Admin* folder doesn't appear for Alice / Bob / Dave; the app is left out of Eve's application picker.
 
 ---
 
@@ -164,10 +166,12 @@ Liberty's permission strings follow a simple pattern:
 | `sql:*` | Run every query on every connector. |
 | `api:<connector>:<endpoint>` | Call that specific API endpoint. |
 | `api:<connector>:*` | Call every endpoint on that connector. |
-| `screen:<app>:<id>` | Reach that specific screen (less common — most installs gate by `sql:` instead). |
-| `superuser` | Bypasses every check. |
+| `menu:<app>:<id>` | Show that menu entry. A `!menu:…` deny hides it. |
+| `*` | Everything. |
 
-For menu pruning, the relevant permissions are `sql:` and `api:` (matching the leaf's `target`). A role granting `sql:crm:*` opens every `query` leaf on the `crm` app.
+A superuser is a flag on the user, not a permission: it passes every check.
+
+For menu pruning, the relevant permissions are `sql:` and `api:` (matching the leaf's `target`) and `menu:`. A role granting `sql:crm:*` opens every `screen` and `query` leaf on the `crm` app.
 
 Granular vs broad:
 
@@ -203,7 +207,7 @@ Dashboards and routes don't inherit a `sql:` / `api:` permission. They have thei
 
 | Leaf type | Default visibility |
 |---|---|
-| `query` | Hidden unless `sql:<connector>:<target>` is granted. |
+| `screen`, `query` | Hidden unless `sql:<connector>:<target>` or `menu:<app>:<id>` is granted. |
 | `endpoint` | Hidden unless `api:<connector>:<target>` is granted. |
 | `dashboard` | Visible to everyone by default. Use `roles` to gate. |
 | `page` | Visible to everyone by default. Use `roles` to gate. |
@@ -229,6 +233,6 @@ The right pattern for both: **always set `roles`** on dashboard and page leaves 
 
 ## What's next
 
-- [Translations and icons](./translations-and-icons.md) — per-language labels and Lucide icons.
+- [Translations and icons](./translations-and-icons.md) — per-language labels and icons.
 - [Build the tree](./build-the-tree.md) — the editor surface.
 - [Concepts → Authentication → Roles and permissions](../secure/roles-and-permissions.md) — the deeper reference behind the permission strings.

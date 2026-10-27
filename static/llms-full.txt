@@ -1722,163 +1722,56 @@ Oracle BI Publisher is the reporting solution to author, manage, and deliver all
 
 # === AI assistants ===
 
-## Liberty Next — AI Assistant
+## Liberty Next — AI assistant
 Source: https://docs.nomana-it.fr/liberty/framework/ai-assistant/
 
-The framework exposes an Anthropic tool-use assistant at /chat. Every SQL query and HTTP endpoint of every connector the caller can run becomes a tool the assistant can pick. Setup with ANTHROPIC_API_KEY, the tool-generation contract, per-role tool gating and conversation history.
+The Liberty Next AI assistant: the drawer opened from the AI Assistant button, what it can do (read the connectors' queries, call API endpoints, propose configuration, read allowed web pages), how it is restricted (ai:chat, allowed connectors, read-only queries, data scope), and its settings.
 
-The framework ships a built-in **conversational assistant** at `/chat`. The assistant is an Anthropic Claude model with **tool use** enabled — every SQL query and HTTP endpoint of every connector the caller can run is exposed to the model as a tool. The user asks a question in natural language; the model picks the right tool, runs it, reads the result, and answers.
-
-The integration is opt-in (no AI calls happen without an API key) and respects the framework's permission model — the assistant can only see and run what the calling user can see and run.
+**AI Assistant**, at the right of the top bar, opens a drawer where users ask questions about their data in plain language. The assistant answers by running the connectors' queries, with the user's rights.
 
 ---
 
-## At a glance
+## Using it \{#use\}
+
+Type a question and press Enter (Shift+Enter for a new line). The answer arrives as it is written, with the tools the assistant used; **Stop** interrupts it and keeps what was received; **new conversation** starts over. The conversation lives in the drawer: it is not kept after the page is reloaded.
+
+Examples: *How many open orders per company this month?* — *Which users have not signed in since June?* — *Show the five largest invoices of ACME.*
 
 ---
 
-## Setup
+## What it can do \{#tools\}
 
-Two environment variables and one config block:
-
-```bash
-export ANTHROPIC_API_KEY="sk-ant-..."
-```
-
-```toml
-# app.toml
-[ai]
-provider = "anthropic"
-api_key  = "${ANTHROPIC_API_KEY}"
-model    = "claude-sonnet-4-6"
-max_tokens = 4096
-tool_concurrency = 4
-```
-
-| Field | Description |
-|---|---|
-| `provider` | `anthropic`. Only provider supported today. |
-| `api_key` | API key. Always reference an env var — never inline. |
-| `model` | Anthropic model id. Default `claude-sonnet-4-6`. Switch to `claude-opus-4-7` for higher reasoning effort, `claude-haiku-4-5` for cheaper / faster turns. |
-| `max_tokens` | Cap per assistant response. Default 4096. |
-| `tool_concurrency` | Max parallel tool calls per turn. Default 4. |
-
-When `api_key` is empty or absent, the `/chat` page renders a "configure an API key to enable the assistant" notice. Every other feature of the framework keeps working.
-
----
-
-## The tool generation contract
-
-The framework builds the tool list passed to the model from the connector catalog. Each candidate becomes a tool definition with:
-
-| Field | Source |
-|---|---|
-| `name` | Sanitised connector + query / endpoint identifier (`billing__invoices_for_period`, `crm__get_customer`). Lower snake_case to satisfy Anthropic's tool naming rules. |
-| `description` | The connector's `description` + the query / endpoint's `description` from `connectors.toml`. The dictionary's localised labels are inlined. |
-| `input_schema` | A JSON Schema derived from the query's `params` declaration — name, type, description (from `label`), required flag, enum (from `lookup`). |
-
-Every tool call is **scoped to the calling user** — the framework verifies the user's permission on the underlying connector before executing, just like a direct REST call. A user without `sql:billing:invoices-for-period` never sees the corresponding tool in their chat session.
-
-### What gets exposed
-
-By default, every read-only query the user can run becomes a tool. Write queries are **excluded** unless the connector entry sets `expose_to_ai = true`. Two reasons:
-
-- **Predictability** — the assistant occasionally hallucinates parameters; an unintended write is harder to recover from than an unintended read.
-- **Audit clarity** — a chat-triggered write needs the same review path as a UI-triggered one.
-
-For installs that want the assistant to be able to write, set `expose_to_ai = true` on the specific connectors / queries you want exposed, plus the explicit `ai:tool:<name>` permission per role.
-
----
-
-## The `/chat` page
-
-A two-column layout:
-
-| Column | Content |
-|---|---|
-| **Left — conversation** | Message timeline. User messages on the right (blue), assistant messages on the left (grey). Tool calls are folded under expanders showing the tool name, the input params and the result count. |
-| **Right — context** | The active conversation's metadata: turn count, total tokens consumed, the list of tools the model can pick from (filtered by permission). A toggle to clear the conversation. |
-
-The input box at the bottom accepts plain text + `↵` to send + `⇧↵` for a newline.
-
-### Conversation history
-
-Conversations are persisted in `ly2_ai_conversations` + `ly2_ai_messages` against the calling user. Re-opening the `/chat` page resumes the most recent conversation; the toggle in the right column starts a fresh one.
-
-The retention is configured under `[ai] history_days` in `app.toml` (default 30 days). Conversation deletion is a cascade — the messages, tool inputs and tool outputs go together.
-
-### Sharing a conversation
-
-A *Share* action on a finished conversation produces a read-only link consumable by anyone with the `ai:read-shared` permission. The shared view is **static** — it shows the conversation as-is, no further turns can be appended. Useful for handing off an investigation to a colleague.
-
----
-
-## Tool-use limits
-
-The model can call multiple tools per turn — sequentially or in parallel up to `tool_concurrency`. The framework enforces three hard limits to keep costs predictable:
-
-| Limit | Default | Meaning |
+| Tool | Does | Setting |
 |---|---|---|
-| `max_tools_per_turn` | 10 | Past this, the framework refuses further tool calls in the current turn and instructs the model to finalise its answer. |
-| `max_tokens_per_conversation` | 100 000 | Past this, the conversation is **closed** — the user can read it but not send new turns. A new conversation must be started. |
-| `[ai.daily_limits].messages` | License-dependent | Total assistant turns per user per day. Surface a warning at 80%, refuse new turns at 100%. |
+| `list_connectors` | Lists the connectors, their queries and endpoints (descriptions, no SQL, no credentials). | **Connector tools** (on by default). |
+| `sql_query` | Runs a **read** query of a SQL connector. Write queries are always refused. | **Connector tools**. |
+| `api_call` | Calls an endpoint of an API connector. | **API tool** (off by default — an endpoint may change data). |
+| Scaffold tools | Propose a query, a dictionary entry, a screen or a menu item; the user reviews the proposal and applies it. | **Scaffold tools** (off by default). |
+| Web fetch | Reads pages of the allowed domains. | **Allowed domains** (none by default). |
 
-The limits are surfaced in the right column of the chat page — a token gauge and a daily counter.
-
----
-
-## Permissions
-
-| Code | Effect |
-|---|---|
-| `ai:chat` | Use the `/chat` page. Required for every interactive turn. |
-| `ai:tool:<name>` | Use a specific tool. Wildcards: `ai:tool:billing__*` allows every billing tool. By default, the **same permission as the underlying connector** governs the tool — explicit `ai:tool:*` is only needed when the connector is exposed to the AI but you want to fence off a subset. |
-| `ai:share` | Use the *Share* action to produce a read-only link. |
-| `ai:read-shared` | Open a shared conversation. |
-| `ai:write` | Use tools that the framework considers write-side (`expose_to_ai = true` on a write query). |
-
-See [Roles & permissions](./build/secure/roles-and-permissions.md) for the role-assignment workflow.
+The assistant only uses existing named queries: it does not write SQL against the database.
 
 ---
 
-## REST surface
+## Who can use it, and on what \{#access\}
 
-For automation, the assistant is reachable directly via REST — same model, same tool list, same permissions:
-
-```http
-POST /ai/chat
-Authorization: Bearer <token>
-Content-Type: application/json
-
-{
-  "conversation_id": "c-1234",
-  "message": "How many invoices did we issue in April?"
-}
-```
-
-Response is **streamed** as `text/event-stream` (SSE) — one event per token chunk plus distinct events for tool calls, tool results and the final answer. A non-streaming variant is available at `/ai/chat?stream=false`.
-
-`GET /ai/tools` lists the tools the calling user can invoke — the same list the model sees. Useful for debugging permission scoping.
+- The user needs the `ai:chat` permission (a role's *AI assistant* rule, in **Beyond the menus**).
+- **Allowed connectors** in Settings → App limits the connectors the assistant may reach; empty means all.
+- Every query it runs goes through the same server checks as a screen: the user's [data scope](./build/secure/roles-and-permissions.md#data-scope) filters the rows.
 
 ---
 
-## Tips & best practices
+## Settings \{#settings\}
 
-- **Write a good `description` on every connector and query.** The model picks tools based on the description; vague descriptions ("get data") confuse it. Two sentences in the user's language, naming the entity and the typical use case, work best.
-- **Set explicit `enum` lookups on params.** A `status` param with `lookup = "invoice-statuses"` lets the model pick from the known set rather than inventing a value.
-- **Cap `tool_concurrency` low in development.** Parallel tool calls produce concurrent database load that can mask issues that show up in production sequentially.
-- **Use `claude-haiku-*` for cost-sensitive installs.** Haiku is significantly cheaper than Sonnet for the same chat surface; the trade-off is reasoning quality on multi-step questions.
-- **Don't expose write queries by default.** Start with read-only; turn on `expose_to_ai = true` per write query as the team gets comfortable with the assistant's behaviour.
-- **Audit the AI surface.** `GET /ai/tools` for an arbitrary role is the fastest sanity check before granting `ai:chat`.
+In **Settings → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above and **Allowed connectors**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
 
 ---
 
-## What's next
+## Tips \{#tips\}
 
-- [REST API → `/ai/*`](../references/rest-api.md#ai) — the chat endpoint contract.
-- [Concepts → Connectors](./connectors.md) — `description` and `expose_to_ai` fields.
-- [Authentication → Roles & permissions](./build/secure/roles-and-permissions.md) — the `ai:*` permission family.
-- [Configuration → `app.toml`](./configuration/app-toml.md) — the `[ai]` block reference.
+- Give queries a clear label and description (Settings → Connectors): the assistant chooses its queries from them.
+- Write dedicated read queries for the questions users ask often (totals per company, per month), rather than expecting the assistant to aggregate thousands of rows.
+- Keep **API tool** off unless the endpoints are read-only.
 
 ---
 
@@ -4016,773 +3909,367 @@ Total time across the six steps: about **90 minutes** for a first-timer, ~30 for
 ## Liberty Next — Settings UI
 Source: https://docs.nomana-it.fr/liberty/framework/configuration/settings-ui/
 
-The in-app Settings page is the schema-driven editor for every per-section TOML file: pools, connectors, dictionary, screens, menus, dashboards, charts and jobs. One builder per concept, a raw Monaco editor as escape hatch, and a Reload button that pushes every change live.
+The Liberty Next Settings page: one editor per configuration file, grouped per connector (connectors, dictionary, actions, menus, screens, charts, dashboards, reports, notifications) or shared (pools, theme, access, app, history, release notes), how a save is validated and applied, and Reload config.
 
-:::info[Deep reference]
-This page documents the Settings UI architecture itself — the schema-driven builder pattern, validation contract, raw Monaco escape hatch, technical dashboard. For task-oriented walkthroughs of each builder, see the [Build an application](../build/queries/overview.md) section.
-:::
-
-The **Settings** page (gear icon in the header, visible to users with the `settings:read` permission) is the in-app editor for every per-section TOML file. Each config type has a dedicated **builder** — a schema-driven form generated from the Pydantic models that the backend uses to load the file. A raw Monaco editor sits on every tab as an escape hatch when a builder's form doesn't expose the field you need.
-
-Every save writes the TOML on disk, then triggers a server-side reload — the change is live in the same browser tab without a restart.
+**Settings** in the sidebar opens the editors of the configuration. Each editor is a form built from the same model the server uses to load the file, so what it accepts is what the server accepts. The page is reserved to superusers.
 
 ---
 
-## At a glance
+## The tabs \{#tabs\}
 
-The builder column on the left is shown collapsed; each entry opens a detail panel on the right (the screenshot shows the Pools builder).
+**Per connector** — each editor first asks which connector (application or data source) it works on:
 
----
-
-## The builders
-
-The Settings page exposes **nine builders** plus the technical dashboard and the raw TOML escape hatch:
-
-| Tab | Edits | Permission |
+| Tab | Edits | See |
 |---|---|---|
-| **Pools** | `connectors.toml` → `[pools.*]` blocks — JDBC URLs, dialects, pool sizes, credentials. | `settings:pools` |
-| **Connectors** | `connectors.toml` → `[connectors.*]` blocks — SQL queries, HTTP endpoints, API auth. | `settings:connectors` |
-| **Dictionary** | `dictionary.toml` — column metadata: labels, formats, enums, lookups, validation. | `settings:dictionary` |
-| **Menus** | `menus.toml` — sidebar trees per app, folders, leaves and permission gates. | `settings:menus` |
-| **Screens** | `screens.toml` — grids, dialogs, tabs, per-field conditions, audit columns. | `settings:screens` |
-| **Dashboards** | `dashboards.toml` — stat / bar / line / pie / grid layouts. | `settings:dashboards` |
-| **Charts** | `charts.toml` — Recharts wrapper config referenced by dashboards. | `settings:charts` |
-| **Jobs** | `plugins/*/jobs.toml` — Nomaflow job catalogue per app. | `settings:jobs` |
-| **Technical** | Read-only — live pool stats, record locks, in-flight job runs, recent socket events. | `settings:technical` |
-| **Raw TOML** | A Monaco editor per file. Loads the file as-is, saves it back. Last-resort path when a builder lacks a field. | `settings:raw` |
+| **Connectors** | Queries, tables, sequences and lookups of SQL connectors; endpoints of API connectors; connector settings. | [Connectors](../connectors.md), [Queries](../build/queries/overview.md) |
+| **Dictionary** | Entries, enums, lookups, sequences. | [Dictionary](../dictionary.md) |
+| **Actions** | Shared actions reused by screens. | [Actions and lifecycle](../build/screens/actions-and-lifecycle.md) |
+| **Menus** | The sidebar tree of each application. | [Menus](../build/menus/overview.md) |
+| **Screens** | Grids, dialogs, tabs, actions — the Screen Designer. | [Screens](../build/screens/overview.md) |
+| **Charts** | Saved charts. | [Charts](../charts.md) |
+| **Dashboards** | Dashboards and their widgets. | [Dashboards](../dashboards.md) |
+| **Explorer** | The data explorer's model. | — |
+| **Reports** | Custom reports. | — |
+| **Notifications** | Notification rules. | [Notifications](../../nomaflow/notifications.md) |
 
-The permission codes are the canonical strings used by the role engine — see [Authentication → Roles & permissions](../build/secure/roles-and-permissions.md) for how to grant them.
+**Shared** — install-wide:
 
----
+| Tab | Edits | See |
+|---|---|---|
+| **Pools** | Database connections: address, credentials, size, schema and DB-link maps. | [Connectors](../connectors.md) |
+| **Theme** | Colours and branding. | — |
+| **Access** | Users and roles. | [Users](../build/secure/users.md), [Roles and permissions](../build/secure/roles-and-permissions.md) |
+| **App** | `app.toml`: application settings, licence, AI assistant, notifications (e-mail), OpenID Connect, PDF branding. | [App settings](../build/settings-app.md) |
+| **History** | Versions of each configuration file and of each screen, upgrade history and reports. | [Config history](./config-history.md) |
+| **Release notes** | The release notes of the running version. | — |
 
-## How a builder works
-
-Every builder follows the same shape:
-
-1. **List view** — every entry of the underlying TOML section as a row.
-2. **Detail panel** — the entry as a schema-driven form (one field per Pydantic attribute) plus secondary tabs when the model has nested objects.
-3. **Validation** — every input is checked against the Pydantic model; an invalid value highlights the field in red and disables the *Save* button.
-4. **Test** *(SQL / HTTP / API only)* — runs the query or endpoint against the live pool and shows the first 50 rows.
-5. **Save & reload** — writes the TOML on disk and triggers a server-side reload. The success toast carries the affected file path.
-
-### Live preview of nested fields
-
-For configs with nested rows (a screen's columns, a menu's leaves, a job's steps), the detail panel uses a **drag-and-drop list** with inline editors. The TOML order is preserved exactly as the operator arranges it — the framework does not re-sort entries on save.
-
-### Inline references
-
-A connector's *Pool* field is a dropdown of the pools currently defined. A screen's *Connector* field lists every connector. A menu leaf's *Screen* field lists every screen of the selected app. Removing a referenced entry is **refused** — the builder reports which configs still point at it, with a link to each.
+**Reload config**, at the right of the tabs, re-reads every configuration file into the running server.
 
 ---
 
-## Raw TOML editor
+## Saving \{#save\}
 
-The **Raw TOML** tab opens a Monaco editor on the underlying file. Syntax errors are highlighted live; the *Save* button stays disabled until the file parses. The editor is intentionally minimal — no rename helper, no validation against the Pydantic models — because its purpose is to **unblock an operator** when a builder lacks the exact field needed.
+1. **Save** sends the edited configuration; the server validates it against its model and refuses an invalid one with the reason.
+2. The file is written. A version of the previous content is kept in **History**.
+3. The change is applied: at once when the server watches its files (`[app] hot_reload = true`, the setting shipped in `app.toml`), or with **Reload config** otherwise. A reload rebuilds the connectors from the new files; if they fail, the previous configuration stays active.
 
-A confirmation dialog appears when saving raw TOML after a builder edit was made in the same session: the raw save would overwrite the builder's diff. Pick *Keep builder changes* to abort the raw save, or *Use raw content* to discard the builder edits and persist the raw text.
+The pools are not reloaded by the file watcher, so that a running query never loses its connection: after changing a pool, use **Reload config**. Settings → **App** applies its own changes at once, except the address, port and log level, which need a restart.
 
----
-
-## Save semantics
-
-| Step | Effect |
-|---|---|
-| Click **Save & reload** in a builder | Pydantic model is re-validated. On success, the TOML is rewritten on disk through `tomlkit` (so comments are preserved on entries that already had them). |
-| Server-side reload | `POST /admin/reload` is invoked with the file scope — only the affected registry is rebuilt. Live HTTP requests in flight keep their current state; new requests use the reloaded config. |
-| UI refresh | The Settings page re-fetches the parsed config; any other tab open on the same model (e.g. the Connectors catalogue page) refreshes through a Socket.IO broadcast. |
-
-For the exact reload contract — what reloads, what is left in-flight, what falls back to a restart — see [Hot-reload](./hot-reload.md).
+Files are rewritten from the saved model: comments written by hand in a file are not kept.
 
 ---
 
-## Technical dashboard
+## Outside the editors \{#outside\}
 
-The **Technical** tab is read-only and surfaces what the framework is doing right now:
-
-| Panel | Content |
-|---|---|
-| **Pool stats** | Per-pool: open connections, idle, in-use, max, average checkout time. Refreshes every 2 s over Socket.IO. |
-| **Record locks** | Active locks taken by the screen engine (one row per locked `(connector, key)` pair). |
-| **Job runs** | Last 50 Nomaflow runs with their state and elapsed time. |
-| **Socket events** | Tail of recent server-pushed events (lock acquired/released, config reloaded, job step transitioned). |
-
-The page is restricted to users carrying `settings:technical` and is meant for diagnostics — no actions are exposed.
+- The **Monitoring** page, in the sidebar, shows the server's live state — see [The Monitoring page](../../monitoring/dashboard.md).
+- Nomaflow jobs are edited on the Jobs pages — see [Create a job](../../nomaflow/jobs/create.md).
+- `GET /admin/config/raw` reads a file as it is on disk; there is no raw-text editor. Edit the file on the server and **Reload config** when an editor lacks a field.
+- Every editor talks to `/admin/config/<section>/parsed` — see [REST API](../../references/rest-api.md#admin-config).
 
 ---
 
-## Backed by a REST surface
+## Tips \{#tips\}
 
-Every builder talks to a small set of `/admin/config/*` endpoints. They are documented under [REST API reference → Admin config](../../references/rest-api.md#admin-config) and are usable from `curl` for scripting:
-
-| Endpoint | Purpose |
-|---|---|
-| `GET  /admin/config/<section>/parsed` | Return the parsed TOML as JSON. |
-| `PUT  /admin/config/<section>/parsed` | Replace the parsed TOML — server re-serialises with comment preservation. |
-| `POST /admin/config/<section>/raw` | Replace the raw TOML text. |
-| `POST /admin/config/connectors/{name}/test-sql` | Execute a single SQL query and return its first rows. |
-| `POST /admin/config/api/test` | Execute an HTTP endpoint and return the response. |
-| `POST /admin/config/rename` | Rename an entity across every TOML file that references it. |
-| `POST /admin/reload` | Force a global reload (no file change). |
+- Save one editor at a time and check the result before moving to the next.
+- Keep the configuration under version control on the server; **History** keeps the recent versions, not the whole story.
+- Prefer the editors to hand edits: they refuse what the server would refuse.
 
 ---
 
-## Tips & best practices
-
-- **Edit one section at a time.** A *Save & reload* swaps just the affected registry — a multi-section change can leave the system in a transient state where one config is up to date and another isn't.
-- **Use the Raw TOML escape hatch sparingly.** If you reach for it often, file an issue — a builder gap is worth fixing on the framework side.
-- **Run *Test* before *Save* on a SQL or HTTP connector.** The framework rejects the *Save* if the connection-string parser fails, but it lets through a query that the database refuses at execution time. The *Test* button catches that earlier.
-- **Restrict the *Raw TOML* permission tightly.** Operators who only need to edit a connector do not need to be able to overwrite the whole file.
-- **Keep `git status` clean.** Every Settings save lands as a diff in `liberty-apps`; commit with a clear message so the rollback path is obvious.
-
----
-
-## Liberty Next — Framework settings
+## Liberty Next — app.toml
 Source: https://docs.nomana-it.fr/liberty/framework/configuration/app-toml/
 
-Every framework-wide setting — app name, default database pool, authentication backend, OIDC, AI provider, master encryption key, license — edited from Settings → Framework. The builder is schema-driven; this page lists every field, what it does and where it shows up.
+Reference of app.toml, the application settings of Liberty Next — [app], [auth], [oidc], [crypto], [license], [ai], [notify], [jobs], [changesets], [reports] and the file paths — with defaults, and which ones Settings → App edits.
 
-:::info[Deep reference]
-This page lists every framework-wide setting on the *Framework* tab. For task-oriented setup of the security side (wire OIDC, install a license key, encrypt secrets), see [Build → Secure](../build/secure/overview.md).
-:::
+`app.toml` holds the application settings. Most of them are edited in **Settings → App** ([App settings](../build/settings-app.md)), which encrypts secrets and applies changes at once; this page lists every key, for reading the file or setting it at deployment.
 
-The **framework-wide** settings — those that aren't tied to a single connector, screen or menu — are edited from **Settings → Framework**. The page is a schema-driven form with one section per concern: application identity, default database pool, authentication, AI provider, encryption and license. Saving reloads the affected subsystem.
-
-This page lists every field on the *Framework* tab, what it does and where the effect shows up in the rest of the application.
+The file is `config/app.toml` under the server's working directory (or the path in `LIBERTY_APP_CONFIG`). Any value can be written `${VARIABLE}` or `${VARIABLE:-default}` to read it from the environment, and secrets saved from Settings are written `ENC:…` — see [Environment variables](./environment-variables.md) and [Encryption](./encryption-secrets.md).
 
 ---
 
-## At a glance
+## [app] \{#app\}
 
-  
-    Settings → Framework
-    
-      Cancel
-      Save & reload
-    
-  
-  
-    Application
-    
-      NameLiberty
-      Default languageen ▾
-      CORS allowed originshttp://localhost:5173
-    
-  
-  
-    Default database pool
-    
-      URLsqlite+aiosqlite:///liberty.db
-      Dialectsqlite ▾
-      Pool size5
-    
-  
-  
-    Authentication
-    
-      BackendLocal — TOML ▾
-      Access token lifetime15 min
-      Refresh token lifetime7 days
-      OIDC enabled○ Off
-    
-  
-
-The mockup is collapsed; the *AI*, *Encryption* and *License* sections sit below the same way.
-
-The form is the same shape no matter how the install is run — local dev, container, Kubernetes. The few values that legitimately belong in the environment (the JWT signing key, the master encryption key, the license key, the AI API key) are referenced by name in the form fields and bound at startup; see [Environment variables](./environment-variables.md).
+| Key | Default | Meaning |
+|---|---|---|
+| `name` | `Liberty Next` | The application's name. |
+| `host`, `port` | `0.0.0.0`, `8000` | Listening address. Restart to apply. |
+| `log_level` | `info` | `debug`, `info`, `warning`, `error`, `critical`. Restart to apply. |
+| `log_format` | `text` | `json` writes one JSON object per line. File only. |
+| `hot_reload` | `false` (`true` in the shipped file) | Apply configuration files as soon as they change. |
+| `default_language` | `en` | Labels when a request names no language. |
+| `oracle_thick` | `false` | Oracle thick mode for every Oracle pool — see [Connectors](../connectors.md#oracle-thick). Restart to apply. |
+| `default_period` | `thisMonth` | The period a dashboard opens on when it names none. |
+| `default_page_size` | `50` | The grids' initial page size. |
+| `dashboard_cache_seconds` | `60` | How long a reopened dashboard reuses its widgets' results; `0` turns it off. |
 
 ---
 
-## Application
+## [auth] \{#auth\}
 
-| Field | Effect |
+| Key | Default | Meaning |
+|---|---|---|
+| `backend` | `toml` | `toml`: users and roles in `toml_path` (`config/auth.toml`). `db`: in the `ly2_users`, `ly2_roles`, `ly2_user_roles` tables of `pool`. |
+| `jwt_secret` | `${LIBERTY_JWT_SECRET}` | Signs the sessions. Empty: a temporary key, lost at restart. |
+| `access_token_ttl`, `refresh_token_ttl` | `3600`, `1209600` | Token lifetimes in seconds (1 hour, 14 days). |
+| `refresh_reuse_grace` | `60` | Seconds a used refresh token is still accepted. |
+| `login_max_failures`, `login_window_seconds` | `10`, `300` | Sign-in throttle; `0` turns it off. |
+
+See [Sign-in](../build/secure/sign-in.md).
+
+---
+
+## [oidc] \{#oidc\}
+
+`enabled`, `discovery_url`, `client_id`, `client_secret`, `scopes` (`openid email profile`), `username_claim` (`preferred_username`), `email_claim`, `name_claim`, `attribute_claims`, `redirect_url`, `frontend_redirect`, `session_secret` (defaults to the JWT secret). See [Sign-in → OIDC](../build/secure/sign-in.md#oidc).
+
+---
+
+## [crypto] and [license] \{#crypto\}
+
+| Key | Default | Meaning |
+|---|---|---|
+| `[crypto] master_key` | `${LIBERTY_MASTER_KEY}` | Encrypts and decrypts every `ENC:` value. |
+| `[license] key` | `${LIBERTY_LICENSE_KEY}` | The licence key, normally pasted in Settings → App. |
+
+---
+
+## [ai] \{#ai\}
+
+| Key | Default | Meaning |
+|---|---|---|
+| `enabled` | `true` | The assistant. |
+| `api_key` | `${ANTHROPIC_API_KEY}` | Empty: the assistant answers that it is not configured. |
+| `model`, `max_tokens` | — , `8192` | The model and the answer size. |
+| `max_iterations` | `8` | Tool calls per answer, at most. |
+| `system_prompt`, `thinking`, `effort` | built-in, `false`, — | Instructions and reasoning options. |
+| `request_timeout` | `120` | Seconds. |
+| `connector_tools` | `true` | The assistant may list connectors and run their read queries. |
+| `api_tool` | `false` | The assistant may call API endpoints. |
+| `scaffold_tools` | `false` | The assistant may propose configuration (queries, screens). |
+| `allowed_connectors` | `[]` (all) | The connectors the assistant may use. |
+| `web_fetch_domains`, `web_fetch_max_uses` | `[]`, `5` | Web pages the assistant may read. |
+
+See [AI assistant](../ai-assistant.md).
+
+---
+
+## [notify] \{#notify\}
+
+`enabled` (`true`), `pool` (`default`), `config_path` (`notifications.toml`), `smtp_host`, `smtp_port` (`587`), `smtp_user`, `smtp_password`, `smtp_from`, `smtp_tls` (`true`, STARTTLS), `smtp_ssl` (`false`, implicit TLS), `smtp_timeout` (`20`), `retention_days` (`90`). See [Notifications](../../nomaflow/notifications.md).
+
+---
+
+## [jobs] \{#jobs\}
+
+`enabled` (`true`), `pool` (`default`), `config_path`, `run_log_max_lines` (`5000`), `files_dir`, `max_upload_mb` (`200`). See [Nomaflow → Administration](../../nomaflow/administration.md#settings).
+
+---
+
+## [changesets] and [reports] \{#changesets\}
+
+| Key | Meaning |
 |---|---|
-| **Name** | Display name in the header and the page title. Default `Liberty`. |
-| **Default language** | Language used when the caller doesn't carry an `X-Liberty-Lang` header and has no per-user preference. Default `en`. |
-| **CORS allowed origins** | Origins accepted by the browser's CORS preflight. Add the Vite dev server (`http://localhost:5173`) for hot-reload development, the production frontend origin when serving the SPA from a different host. |
-| **Trusted proxies** | Reverse-proxy CIDR ranges that the framework trusts for `X-Forwarded-*` headers. Required behind nginx / Traefik so the framework sees the original client IP. |
-| **Static directory** | Path of the built React SPA. Defaults to `frontend/dist`. When the directory doesn't exist, the server runs **API-only** (every `/api/*` route works, `/` returns 404). Surface this when serving the SPA from a CDN. |
+| `[changesets] enabled`, `pool` | Change packages and the pool of their tables. |
+| `[changesets] post_apply` | The library of post-apply steps (`id`, `type` = `call_plugin` / `call_api` / `run_query`, `connector`, `target`, `params`, `label`). See [Change packages](../../nomaflow/change-packages.md). |
+| `[reports] …` | Custom reports file and the PDF branding (author, colours, cover texts, footer) — the branding is edited in Settings → App. |
 
 ---
 
-## Default database pool
+## File paths \{#paths\}
 
-The **default pool** owns the database that the framework itself uses — auth tables when *Backend* is `db`, Nomaflow run history, record locks, AI conversations. Every other pool is defined on the *Settings → Pools* tab.
-
-| Field | Effect |
-|---|---|
-| **URL** | SQLAlchemy async URL. SQLite defaults to a local `liberty.db` file. PostgreSQL: `postgresql+asyncpg://user:pass@host/db`. Oracle thin mode: `oracle+oracledb://user:pass@host:1521/?service_name=PDB1`. Test connectivity with the *Test connection* button. |
-| **Dialect** | `sqlite` / `postgresql` / `oracle`. Drives per-dialect SQL fallback in the connector engine. |
-| **Pool size** | Max simultaneous connections. Default 5. |
-| **Pool recycle** | Seconds before a stale connection is recycled. Default 1800. |
-| **Password** | Optional. Click the 🔒 icon to switch the field to *Encrypted* — see [Encryption & secrets](./encryption-secrets.md). |
-
----
-
-## Authentication
-
-| Field | Effect |
-|---|---|
-| **Backend** | `Local — TOML` *(default)* / `Local — Database`. Drives where user accounts live. The `Local — TOML` option uses `config/auth.toml` on the host (zero infrastructure). `Local — Database` creates and uses the `ly2_users` / `ly2_roles` / `ly2_permissions` tables on the default pool. |
-| **JWT signing key** | Reference to the environment variable holding the HS256 signing secret. Default `${LIBERTY_JWT_SECRET}`. When the env var is unset, the framework generates an ephemeral key per process — every restart invalidates every token. |
-| **Access token lifetime** | Lifetime of an access token. Default 15 minutes. |
-| **Refresh token lifetime** | Lifetime of a refresh token. Default 7 days. |
-| **Argon2 tuning** | Three numeric fields — *Time cost* (default 2), *Memory cost* in KiB (default 65536), *Parallelism* (default 1). Raise on installs with stronger threat models. |
-
-### OIDC sub-section
-
-A toggle at the top of the sub-section enables OIDC SSO; the form below appears only when *OIDC enabled* is on.
-
-| Field | Effect |
-|---|---|
-| **Issuer URL** | Issuer URL of the IdP. The framework fetches `${issuer}/.well-known/openid-configuration` at startup. |
-| **Client ID** | OAuth2 client ID registered with the IdP. |
-| **Client secret** | OAuth2 client secret. Always **encrypted** — the 🔒 icon is locked on. |
-| **Redirect URI** | The framework's callback URL, e.g. `https://liberty.example.com/auth/oidc/callback`. Must be registered on the IdP side. |
-| **Email claim** | JWT claim used as the local user identifier. Default `email`. |
-| **Groups claim** | JWT claim used to map IdP groups to Liberty roles. Default `groups`. |
-| **Auto-provision** | When on, a Liberty user is created on first OIDC sign-in. When off, the user has to exist already. |
-
-[Authentication](../build/secure/sign-in.md) walks through the complete OIDC flow with IdP-specific notes (Authentik, Keycloak, Azure AD, Okta, Google).
-
----
-
-## AI
-
-| Field | Effect |
-|---|---|
-| **Provider** | `Anthropic`. Currently the only supported provider. |
-| **API key** | Reference to the env var holding the key. Default `${ANTHROPIC_API_KEY}`. When unset, the assistant is disabled and `/chat` renders a "configure an API key" notice. |
-| **Model** | Anthropic model id. Default `claude-sonnet-4-6`. Switch to `claude-opus-4-7` for higher reasoning effort, `claude-haiku-4-5` for cheaper / faster turns. |
-| **Max tokens** | Token cap per assistant response. Default 4096. |
-| **Tool concurrency** | Max parallel tool calls per assistant turn. Default 4. |
-
-See [AI assistant](../ai-assistant.md) for the chat surface, tool generation contract and per-role gating.
-
----
-
-## Encryption
-
-| Field | Effect |
-|---|---|
-| **Master key** | Reference to the env var holding the AES-256-GCM key used to decrypt every `ENC:` field. Default `${LIBERTY_MASTER_KEY}`. Must be 32 bytes, hex- or base64-encoded. Generate with `liberty-crypto genkey`. |
-| **Legacy keys** | List of older keys, used for **decryption only** during a rotation. New encryptions always use *Master key*. Click *➕ Add legacy key* to add an entry. |
-
-See [Encryption & secrets](./encryption-secrets.md) for the rotation procedure and the `ENC:` format.
-
----
-
-## License
-
-| Field | Effect |
-|---|---|
-| **License key** | Reference to the env var holding the RS256-signed license JWT. Default `${LIBERTY_LICENSE_KEY}`. Drives the feature gates on connectors marked *Licensed*. |
-| **Public key path** | Optional override for the bundled public key. Useful when running with a private signing authority. |
-
-The [Settings → License](../build/secure/license-key.md) page surfaces the current status (accepted / rejected / not configured), the customer name, the expiry date and the unlocked feature list.
-
----
-
-## Save & reload
-
-Every save validates the form against the framework's Pydantic models. Invalid values highlight the field in red and disable the *Save & reload* button.
-
-A successful save:
-
-1. **Persists the change** to disk (file-system detail, never edited by hand).
-2. **Re-applies the affected subsystem** — a change to *Default language* triggers a language pack reload; a change to *Access token lifetime* takes effect on the next sign-in; a change to *OIDC enabled* re-runs the OIDC discovery on next sign-in.
-3. **Drops a toast** confirming the section reloaded.
-
-A handful of fields require a **full restart**: the *Authentication backend* swap, the *Master key* rotation, the *License key* swap. The form highlights them with a *Restart required* badge and offers a *Restart now* button next to the *Save & reload* control (admin only).
-
----
-
-## Permissions
-
-The *Framework* tab is gated by `settings:framework`. Reading without writing is also possible — grant `settings:read` + the per-tab permission without `settings:reload` to make the form view-only.
-
----
-
-## Under the hood
-
-The form's storage is `liberty-next/config/app.toml`. Operators **do not edit this file by hand** in normal operation; the Settings UI is the canonical interface, with the *Raw TOML* tab as a last-resort escape hatch. The file is parsed once at startup and on every *Save & reload* of the Framework tab.
-
-For ops scripts and CI pipelines that need to drive the framework without the UI, the same surface is reachable via the REST endpoints under `/admin/config/framework/*` — see [REST API reference](../../references/rest-api.md#admin-config).
-
----
-
-## What's next
-
-- [Environment variables](./environment-variables.md) — every `${LIBERTY_*}` reference resolved at startup.
-- [Encryption & secrets](./encryption-secrets.md) — the 🔒 toggle and the rotation procedure.
-- [Authentication](../build/secure/sign-in.md) — what each backend changes.
-- [Hot-reload](./hot-reload.md) — what reloads vs what requires a restart.
+`[connectors]`, `[menus]`, `[screens]`, `[charts]`, `[actions]`, `[dashboards]`, `[explorer]`, `[theme]` each accept a `config_path`. Leave them unset: they follow `LIBERTY_APPS_DIR`, or `config/` — see [Architecture](../../installation/architecture.md#configuration).
 
 ---
 
 ## Liberty Next — Environment variables
 Source: https://docs.nomana-it.fr/liberty/framework/configuration/environment-variables/
 
-Every LIBERTY_* environment variable documented — database URL, JWT signing key, master encryption key, license key, AI key, apps directory, OIDC settings — with the file it overrides and the default applied when unset.
+The environment variables Liberty Next reads — secrets, configuration folders, database bootstrap, container behaviour, operations — the ${VARIABLE} references allowed in every TOML file, and the variables of the Docker .env file.
 
-The framework reads every secret and most location-dependent settings from the **process environment**, not from disk. `app.toml` references these variables via `${NAME}` interpolation so the same file can be committed without leaking credentials.
-
-This page lists every variable the framework looks at, what it overrides, and what happens when it is left unset.
+The environment holds what must not be written in the configuration files — the secrets — and what depends on the host — folders, ports. The configuration files then refer to it.
 
 ---
 
-## Reading order
+## References in the TOML files \{#references\}
 
-Each variable goes through three layers:
+Any value of any configuration file can be written `${NAME}` or `${NAME:-default}`: it is replaced by the environment variable when the file is loaded (the default when the variable is unset or empty).
 
-1. **Process environment** — the highest priority. Anything exported in the shell, the systemd unit or the container manifest wins.
-2. **`.env` file** *(optional)* — when present at `liberty-next/.env`, it is loaded by `start.sh` before the server boots. Useful for developer machines; never used in production.
-3. **Default** — applied by `app.toml` (`${NAME:-default}`) or hard-coded in the framework. Documented in the table below.
+```toml
+[auth]
+jwt_secret = "${LIBERTY_JWT_SECRET}"
 
----
+[pools.reporting]
+url = "postgresql+asyncpg://report@${REPORTING_HOST:-db}:5432/reporting"
+password = "${REPORTING_PASSWORD}"
+```
 
-## Variables
-
-### `LIBERTY_APPS_DIR`
-
-| Effect | Path of the `liberty-apps` `config/` directory. When set, every per-section TOML is loaded from `${LIBERTY_APPS_DIR}/<name>.toml`. The plugin folder `${LIBERTY_APPS_DIR}/../plugins/` is added to `sys.path`. |
-| --- | --- |
-| Default | unset → per-section TOML is read from `liberty-next/config/` |
-| Example | `export LIBERTY_APPS_DIR="$HOME/work/liberty-apps/config"` |
-
-### `LIBERTY_DB_URL`
-
-| Effect | SQLAlchemy async URL for the `default` pool. Read from `[default_pool] url` in `app.toml`, which defaults to `${LIBERTY_DB_URL:-sqlite+aiosqlite:///liberty.db}`. |
-| --- | --- |
-| Default | `sqlite+aiosqlite:///liberty.db` (local SQLite file) |
-| PostgreSQL | `postgresql+asyncpg://user:pass@host:5432/db` |
-| Oracle (thin mode) | `oracle+oracledb://user:pass@host:1521/?service_name=PDB1` |
-
-The `default` pool is used by the auth backend (when `[auth] backend = "db"`), by Nomaflow's run history tables, and by any connector that doesn't name a pool explicitly.
-
-### `LIBERTY_JWT_SECRET`
-
-| Effect | Symmetric key used to sign access and refresh tokens (HS256). |
-| --- | --- |
-| Default | unset → an **ephemeral** key is generated per process. Every restart invalidates every token. |
-| Length | At least 32 random bytes. Generate with `openssl rand -hex 32`. |
-
-Production installs **must** set this. Two replicas sharing the same secret can mint and verify each other's tokens; replicas with different secrets cannot.
-
-### `LIBERTY_MASTER_KEY`
-
-| Effect | AES-256-GCM key used to decrypt every `ENC:` blob found in the per-section TOML — pool passwords, API tokens, OIDC client secret, etc. |
-| --- | --- |
-| Default | unset → `ENC:` blobs cannot be decrypted; connectors that depend on them refuse to load and the Settings UI flags them red. |
-| Length | 32 bytes, hex- or base64-encoded. Generate with `liberty-crypto genkey`. |
-
-See [Encryption & secrets](./encryption-secrets.md) for the encryption format and the rotation procedure.
-
-### `LIBERTY_LICENSE_KEY`
-
-| Effect | RS256-signed JWT that unlocks the bundled vendor products (Nomasx-1, Nomajde, NomaUBL …). Loaded into `[license] key` at startup. |
-| --- | --- |
-| Default | unset → only the open-source connector subset is available. The Settings UI shows the rest as *Licensed*. |
-| Format | A long JWT — see [License key](../build/secure/license-key.md) for the claim list. |
-
-### `ANTHROPIC_API_KEY`
-
-| Effect | API key used by the AI assistant. Loaded into `[ai] api_key`. |
-| --- | --- |
-| Default | unset → the `/chat` page renders a "configure an API key to enable the assistant" notice. |
-| Where to get one | https://console.anthropic.com → *API keys*. |
-
-### `LIBERTY_OIDC_ISSUER` / `LIBERTY_OIDC_CLIENT_ID` / `LIBERTY_OIDC_CLIENT_SECRET` / `LIBERTY_OIDC_REDIRECT`
-
-| Effect | The four OIDC values referenced from `[auth.oidc]`. `LIBERTY_OIDC_CLIENT_SECRET` may also be an `ENC:` blob in `app.toml` rather than an env var. |
-| --- | --- |
-| Default | unset → `[auth.oidc] enabled = false` and the *Sign in with SSO* button is hidden. |
-
-See [Authentication → OIDC](../build/secure/sign-in.md#oidc) for the full setup with Authentik, Keycloak and Azure AD.
-
-### `HOST`
-
-| Effect | Bind address of the FastAPI server. |
-| --- | --- |
-| Default | `127.0.0.1` (localhost only). Set to `0.0.0.0` to accept connections from the network. |
-
-### `PORT`
-
-| Effect | TCP port of the FastAPI server. |
-| --- | --- |
-| Default | `8000`. |
-
-### `VENV`
-
-| Effect | Path of the Python virtualenv used by `start.sh`. |
-| --- | --- |
-| Default | `.venv` (next to `start.sh`). |
-
-### `LIBERTY_DEBUG_CONFIG`
-
-| Effect | When set to `1`, the resolved configuration is printed at startup with secret values masked. Useful when a setting doesn't take effect and the env layer is suspect. |
-| --- | --- |
-| Default | unset → no debug print. |
-
-### `LIBERTY_LOG_LEVEL`
-
-| Effect | Logging level — `DEBUG`, `INFO`, `WARNING`, `ERROR`. |
-| --- | --- |
-| Default | `INFO`. |
-
-### `LIBERTY_LOG_JSON`
-
-| Effect | When set to `1`, every log line is emitted as one JSON object — required for ingestion by Loki, Datadog, Splunk, etc. |
-| --- | --- |
-| Default | unset → human-readable plain text on stdout. |
+Settings shows such a reference as it is written. For a secret field (a password, a key), saving a new value from Settings replaces the reference with an encrypted `ENC:` value.
 
 ---
 
-## Variable lifecycle
+## Read by the server \{#server\}
 
-| When the variable is read | Variables |
+| Variable | Use |
 |---|---|
-| **Once at startup** | All of them. Interpolation of `${NAME}` happens when `app.toml` is loaded. |
-| **Re-read on `POST /admin/reload`** | None — a config reload re-parses the per-section TOML but does **not** re-read the environment. To pick up a new value, restart the process. |
-
-This is why secrets that rotate (JWT signing key, master key, license key) require a rolling restart, not a hot-reload.
-
----
-
-## Putting it together
-
-A minimal **systemd** unit for a production install:
-
-```ini
-[Service]
-Environment=LIBERTY_APPS_DIR=/opt/liberty-apps/config
-Environment=LIBERTY_DB_URL=postgresql+asyncpg://liberty:%i@db.internal/liberty
-EnvironmentFile=/etc/liberty/secrets.env
-WorkingDirectory=/opt/liberty-next
-ExecStart=/opt/liberty-next/.venv/bin/uvicorn liberty.main:app --host 0.0.0.0 --port 8000
-Restart=on-failure
-```
-
-`/etc/liberty/secrets.env` (mode `0600`, root-owned):
-
-```env
-LIBERTY_JWT_SECRET=...
-LIBERTY_MASTER_KEY=...
-LIBERTY_LICENSE_KEY=...
-ANTHROPIC_API_KEY=...
-LIBERTY_OIDC_CLIENT_SECRET=...
-```
-
-The framework cares about three categories: **where the configuration is** (`LIBERTY_APPS_DIR`, `LIBERTY_DB_URL`), **how to mint and verify identity** (`LIBERTY_JWT_SECRET`, the OIDC quadruple, `LIBERTY_LICENSE_KEY`), and **how to decrypt the rest** (`LIBERTY_MASTER_KEY`, `ANTHROPIC_API_KEY`). Everything else has a sensible default.
+| `LIBERTY_MASTER_KEY` | The key of every `ENC:` value (through `[crypto] master_key = "${LIBERTY_MASTER_KEY}"`). Never change it on an existing install. |
+| `LIBERTY_JWT_SECRET` | Signs the sessions (through `[auth] jwt_secret`). At least 32 characters. |
+| `LIBERTY_LICENSE_KEY` | The licence key, when it is not pasted in Settings → App. |
+| `ANTHROPIC_API_KEY` | The AI assistant's key, when it is not entered in Settings → App. |
+| `LIBERTY_APPS_DIR` | The folder of the configuration files (connectors, screens, menus…); the plugins are in `../plugins`. See [Architecture](../../installation/architecture.md#configuration). |
+| `LIBERTY_APP_CONFIG` | Another `app.toml` than `config/app.toml`. |
+| `LIBERTY_ORACLE_CLIENT_LIB` | The Oracle Instant Client folder for the thick mode (set in the Docker image). |
 
 ---
 
-## What's next
+## Database bootstrap \{#bootstrap\}
 
-- [`app.toml` reference](./app-toml.md) — every key explained.
-- [Encryption & secrets](./encryption-secrets.md) — how `LIBERTY_MASTER_KEY` is used.
-- [Deployment → Running in production](../../installation/production.md) — the systemd / Docker / Kubernetes variants in detail.
+Read by `liberty-admin init-db` (run by the container at each start) to write the `default` pool when it is empty:
+
+| Variable | Use |
+|---|---|
+| `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_DB` | A PostgreSQL framework database; the password is stored encrypted. Without `POSTGRES_PASSWORD`, a SQLite file is used. |
+| `LIBERTY_DB_URL` | The framework database address used by the containers (SQLite in the light layout). |
+| `LIBERTY_ADMIN_PASSWORD` | The password of the first `admin`; otherwise a random one is printed. |
 
 ---
 
-## Liberty Next — Hot-reload
+## Container behaviour \{#container\}
+
+| Variable | Default | Use |
+|---|---|---|
+| `LIBERTY_AUTO_MIGRATE` | off | `1`: apply the licensed apps' schema migrations at start-up. |
+| `LIBERTY_RUN_AS_ROOT` | off | `1`: keep running as root instead of the `liberty` user. |
+| `LIBERTY_SKIP_INITDB` | off | `1`: skip `init-db` at start-up. |
+| `LIBERTY_DB_WAIT_TRIES` | `30` | Seconds to wait for the framework database before `init-db`. |
+| `<NAME>_FILE` | — | For any `LIBERTY_*`, `POSTGRES_*` or `PGADMIN_*` variable: read its value from this file (Docker, Swarm or Kubernetes secrets). |
+
+`liberty-ops` also reads `LIBERTY_SERVICE` — the systemd unit name, `liberty-next` by default.
+
+---
+
+## The Docker .env file \{#env-file\}
+
+`release/.env`, written by `./liberty install`, holds the secrets above and the install's choices:
+
+| Variable | Use |
+|---|---|
+| `LIBERTY_IMAGE_TAG` | `latest` or a version. Changed by `./liberty upgrade --tag`. |
+| `COMPOSE_FILE` | The compose files in use — changed only by `./liberty ssl` and `./liberty apps`. |
+| `LIBERTY_PORT` | Port of the light layout (`8000`). |
+| `TRAEFIK_HTTP_PORT`, `TRAEFIK_HTTPS_PORT` | Ports of the full layout (`80`, `443`). |
+| `POSTGRES_BIND`, `POSTGRES_PORT` | Where PostgreSQL is published (`127.0.0.1:5432`). |
+| `PGADMIN_EMAIL`, `PGADMIN_PASSWORD` | pgAdmin's sign-in. |
+| `TRAEFIK_DASHBOARD_USERS` | The Traefik dashboard's user and password hash. |
+| `LIBERTY_DOMAIN`, `ACME_EMAIL`, `CERT_HOST_PATH` | HTTPS settings. |
+| `APPS_HOST_PATH` | The licensed apps folder on the host. |
+| `LIBERTY_ROLLBACK_TAG`, `LIBERTY_LAST_BACKUP`, `LIBERTY_LAST_REPORT` | Written by `./liberty upgrade` for `./liberty rollback`. |
+
+Edit it only for a port or an address; let the `./liberty` commands manage the rest.
+
+---
+
+## Liberty Next — Hot reload
 Source: https://docs.nomana-it.fr/liberty/framework/configuration/hot-reload/
 
-Every per-section TOML edit done in the Settings UI or pushed via POST /admin/reload is applied to the running framework without a restart. This page documents what reloads, what stays in flight and what genuinely requires a process restart.
+How Liberty Next applies configuration changes without a restart: Reload config (POST /admin/reload), the file watcher of [app] hot_reload and what it reloads per file, pools, Settings → App, and what still needs a restart.
 
-The framework holds every per-section TOML in an in-memory **registry**: there is a connector registry, a dictionary registry, a screens registry, and so on. Each one can be rebuilt from disk on demand — the rebuild is what powers the **Save & reload** button of the Settings UI and the `POST /admin/reload` endpoint.
-
-This page is the contract: what reloads, what doesn't, what happens to requests in flight, and what genuinely requires a process restart.
+Configuration changes apply without restarting the server, in two ways.
 
 ---
 
-## At a glance
+## Reload config \{#reload\}
 
-  
-    ✓ Hot-reloadable
-    connectors · dictionary · screens · menus · dashboards · charts · jobs
-  
-  
-    ⚠ Partial reload
-    pool URL change — old connections drained as in-flight queries finish, new ones use the updated URL
-  
-  
-    ✕ Restart required
-    app.toml · environment variables · auth backend · license key · master encryption key
-  
+**Reload config** at the right of the Settings tabs — or `POST /admin/reload` (superuser) — re-reads every configuration file and rebuilds the server's connectors, screens, menus, dashboards, charts, jobs and notification rules from them. If the new files fail to load, the previous configuration stays active and the error is shown.
+
+Requests in progress finish with the configuration they started with; the next ones use the new one.
 
 ---
 
-## What hot-reload does
+## The file watcher \{#watcher\}
 
-A reload is **scoped per section**. Saving in the *Connectors* tab triggers `POST /admin/reload?scope=connectors` — only the connector registry is rebuilt, every other registry is untouched. The endpoint also accepts `scope=all` (default), which rebuilds every per-section registry in dependency order: pools → connectors → dictionary → screens → dashboards → charts → menus → jobs.
+With `[app] hot_reload = true` — the value of the shipped `app.toml` — the server watches its configuration files and reloads the part concerned a moment after a file changes (a save from Settings, an edit on the server, a `git pull`):
 
-The rebuild always follows the same three phases:
-
-1. **Re-parse the TOML** from disk. A parse error stops the reload before any registry is replaced; the in-memory registry stays usable and the caller is told which line failed.
-2. **Build the new registry off to the side.** Each entry is validated against its Pydantic model; an invalid entry is reported with its name and message. A second pass cross-checks references (a screen pointing at a non-existent connector, a menu leaf pointing at a non-existent screen) and refuses the reload when something is broken.
-3. **Swap the registry atomically.** The new registry replaces the old one inside a single lock. Requests that already started against the old registry **finish on it**; new requests pick up the new one. There is no half-state where part of the request sees the old config and part sees the new one.
-
----
-
-## What happens to in-flight requests
-
-| Surface | In-flight behaviour |
+| File | Reloaded |
 |---|---|
-| **SQL query** | The request finishes against the connector definition that was current when the request arrived. A re-fetch from the same browser tab uses the new one. |
-| **HTTP endpoint** | Same — bound to the connector definition at request entry. |
-| **Screen render** | The grid + dialog is bound to the screen entry at first render. A row click after a reload may open a dialog with a slightly newer column set; the framework re-fetches the screen definition on every dialog open. |
-| **Menu render** | The sidebar re-renders **immediately** — a Socket.IO broadcast notifies every connected client to re-fetch `/api/menus`. |
-| **Dashboard widget** | Same as a screen — the widget is bound at first render and re-fetched on the next refresh tick. |
-| **Job in progress** | A running Nomaflow run uses the job definition it was started with. The next scheduled fire-time picks up the new definition. |
-| **AI assistant** | The connector list (= tool list) is regenerated on the next user prompt. |
+| `menus.toml`, `screens.toml`, `charts.toml`, `dashboards.toml` | That part. |
+| `dictionary.toml` | The connectors' column information and the screens. |
+| `jobs.toml` | The jobs and their schedules. |
+| `notifications.toml` | The notification rules. |
+| `connectors.toml` | The connectors and their queries — **not the pools**. |
 
-A reload **never aborts** an in-flight request and **never invalidates** a session token.
+Changes made within half a second are applied together.
 
 ---
 
-## Trigger paths
+## Pools \{#pools\}
 
-| Path | Who calls it | Scope |
-|---|---|---|
-| **Settings UI → Save & reload** | Operator | The section being edited. |
-| **`POST /admin/reload`** | Operator or CI script with `settings:reload` | Defaults to `all`; `?scope=<section>` narrows it. |
-| **Filesystem watcher** *(optional)* | The framework itself when `[app] watch_config = true` is set in `app.toml` | The section whose file changed. Useful in dev; not recommended in production where edits should go through the UI. |
-| **CLI `liberty-admin reload`** | Operator via shell | Same as `POST /admin/reload`. |
-
-The endpoint contract:
-
-```text
-POST /admin/reload?scope=connectors
-Authorization: Bearer <token with settings:reload>
-
-→ 200 OK
-{
-  "scope": "connectors",
-  "reloaded_at": "2026-05-20T13:42:11Z",
-  "entries": {"connectors": 38, "pools": 4}
-}
-```
-
-A failed reload returns the diagnostic without touching the running registry:
-
-```text
-→ 422 Unprocessable Entity
-{
-  "scope": "connectors",
-  "error": "connector 'crm-customers': pool 'crm-old' not found",
-  "blame_file": "connectors.toml",
-  "blame_line": 142
-}
-```
+A pool change (address, password, size) is not applied by the watcher, so that a query in progress never loses its connection: after editing a pool, use **Reload config**.
 
 ---
 
-## What requires a restart
+## Settings → App \{#app\}
 
-These keep the framework simple at startup; reloading them mid-flight would touch every running request.
-
-| Trigger | Reason | Recovery |
-|---|---|---|
-| **`app.toml` edit** | Loaded once into the process state — auth backend, OIDC issuer, AI provider, master key are wired into singletons at startup. | `systemctl restart liberty-next` or the container equivalent. |
-| **Any `LIBERTY_*` env var change** | Env vars are interpolated into `app.toml` at startup; the process never re-reads them. | Restart. |
-| **JWT secret rotation** | A new secret would invalidate every existing token mid-flight. | Rolling restart — set the new secret on each replica in turn so user sessions migrate smoothly. |
-| **Master key rotation** | Existing decrypted material in memory is fine, but new connector loads need the rotated key. | See [Encryption & secrets → rotation](./encryption-secrets.md#key-rotation). |
-| **License key swap** | Feature gates are evaluated at startup against the JWT payload. | Restart. |
-| **Backend code change** | Python modules are cached. | Restart. `./start.sh dev` does this automatically via `uvicorn --reload`. |
+Saving Settings → App applies the licence, the AI assistant, OpenID Connect, the notifications and the UI defaults at once. The listening address, the port and the log level need a restart; so does the Oracle thick mode.
 
 ---
 
-## Failure modes
+## What needs a restart \{#restart\}
 
-| Symptom | Cause | What the framework does |
-|---|---|---|
-| **TOML parse error** | A trailing comma, unbalanced bracket. | Reload aborts at phase 1; the registry in memory is untouched. The Settings UI surfaces the offending line. |
-| **Reference missing** | A menu leaf points at a screen that was just renamed or deleted. | Reload aborts at phase 2; the diagnostic names the menu leaf and the missing screen. Use *Rename* in the Connectors / Screens / Dictionary builders rather than editing identifiers by hand — it propagates the change across every referencing file. |
-| **Validation error** | A new field with an invalid type (`port = "abc"`). | Reload aborts at phase 2; the Pydantic message is shown verbatim. |
-| **Database unreachable** | A new pool URL points at a host that's down. | The pool is created lazily, so the reload itself succeeds; the first SQL call against the new pool fails with the connection error. The Settings UI's *Test* button catches this earlier. |
-| **Empty TOML** | A `Save` cleared every entry. | Reload succeeds — the registry has zero entries. Every dependent surface (Connectors catalog, menu) becomes empty. Restore from the previous git commit. |
-
----
-
-## Tips & best practices
-
-- **Edit in the Settings UI, not on disk.** The UI runs the same validation pipeline before writing the file, so a builder save can never produce a file the reload would reject.
-- **Use *Rename* across files.** Renaming a connector or a screen from the builder rewrites every reference in one transaction; renaming by hand in TOML risks an orphan reference.
-- **Audit the reload log.** Every successful reload writes one INFO line per registry with the number of entries; a sudden drop in the count is the earliest signal that an operator's edit deleted more than intended.
-- **Keep `watch_config` off in production.** A flapping filesystem watcher (`rsync`, `git pull` mid-day) can trigger a reload while only half the files are updated.
-- **Restart on `app.toml` edits.** A failing JWT rotation is more visible than a silently-loaded stale value.
+| Change | How |
+|---|---|
+| `host`, `port`, `log_level`, `oracle_thick` in `app.toml` | `./liberty restart` or `liberty-ops restart`. |
+| An environment variable (`.env`, the service's environment file) | A restart — `./liberty restart` recreates nothing; for a changed `.env`, `./liberty start`. |
+| A plugin's Python code | A restart: modules are imported once. |
+| A new release | `./liberty upgrade` — see [Upgrade and rollback](../../installation/upgrading.md). |
 
 ---
 
 ## Liberty Next — Encryption & secrets
 Source: https://docs.nomana-it.fr/liberty/framework/configuration/encryption-secrets/
 
-Connector passwords, API tokens and OIDC secrets are stored encrypted with AES-256-GCM. Every secret field in the Settings UI has a 🔒 toggle to switch between plain and encrypted; the master key sits in the environment, never on disk. Rotation is online via legacy keys.
+How Liberty Next keeps secrets out of its configuration files in clear: ENC: values encrypted with the master key, secret fields encrypted on every save from Settings, ${VARIABLE} references, liberty-crypto, and what to do with the master key.
 
-:::info[Deep reference]
-This page documents the encryption system as a whole — environment vs disk separation, master-key sources, rotation procedure, conventions for what to encrypt. For the task-oriented UI walkthrough — flip the 🔒 toggle on a Pool password, an OIDC client secret, an API connector token — see [Build → Secure → Encrypted secrets](../build/secure/encrypted-secrets.md).
-:::
-
-Several settings carry sensitive values — pool passwords, API connector auth tokens, the OIDC client secret. The framework offers a simple primitive to keep them safe: any secret field in the Settings UI has a **🔒 toggle** that switches the input between **plain text** and **encrypted**. Encrypted values are stored as opaque blobs that can only be decrypted by the running process; the **master key** that does the decryption sits in the environment of the host, never on disk.
-
-This page covers the toggle in the UI, the master key, how to rotate keys and the convention for what to encrypt vs what to keep in the environment.
+Passwords and keys in the configuration files are stored encrypted, as `ENC:…` values, with the install's **master key**. The server decrypts them when it loads the files.
 
 ---
 
-## At a glance
+## What is encrypted \{#what\}
 
-  
-    ENVIRONMENT
-    Master key (32-byte AES-256).JWT signing key. License key. AI API key.Never on disk.
-  
-  
-    ON DISK
-    Secret fields stored as opaque ciphertext blobs.Safe to commit to git.
-  
-  
-    AT RUNTIME
-    Decrypted lazily at first use.Cached for the process lifetime.
-  
+Every secret field is encrypted when it is saved from Settings:
 
-The master key never lands on disk; the encrypted blob never lands in the environment. The two only meet at decryption time, inside the running process.
-
----
-
-## The 🔒 toggle in the Settings UI
-
-Any field flagged as a secret — Pool *Password*, Connector *Auth token*, OIDC *Client secret*, Slack *Webhook URL*, etc. — shows a 🔒 icon next to the input. Click it to switch the field between **plain** and **encrypted** mode.
-
-  Pool editor — crm
-  
-    URLpostgresql+asyncpg://crm@db/crm
-    Usercrm_app
-    Password
-    🔒 encrypted ···············Reveal
-  
-
-| Mode | What happens on save |
+| Where | Field |
 |---|---|
-| **Plain** | The literal value is stored. Use only for non-secret defaults (e.g. an empty password on a local SQLite pool). |
-| **🔒 Encrypted** | The framework encrypts the value with the current master key before saving. The field displays *encrypted* + a masked dot row. Editing the field overwrites the previous value (no reveal happens automatically). |
+| Settings → Pools | The pool's password. |
+| Settings → Connectors (API connectors) | Credentials, tokens, client secrets. |
+| Settings → App | The licence key, the AI key, the OpenID Connect client secret, the SMTP password. |
 
-A field already in encrypted mode shows a **Reveal** button (visible only to operators carrying `settings:reveal-secrets`). Clicking it asks for the master-key fingerprint as confirmation, then displays the decrypted plaintext for 10 seconds. The reveal action is audit-logged.
-
-Some fields — the OIDC *Client secret*, the Slack *Webhook URL* — have the 🔒 toggle **locked on**. Plain mode isn't offered because the value is unambiguously sensitive.
+The field is a masked input with an eye to show its content. Saving a new value always writes it encrypted; without a master key the save is refused.
 
 ---
 
-## The master key
+## The master key \{#master-key\}
 
-The master key is a **32-byte AES-256-GCM key** that the framework loads from the environment at startup. The Settings UI's *Framework → Encryption* section configures **where** the key comes from, not what its value is:
+`[crypto] master_key` in `app.toml`, normally `"${LIBERTY_MASTER_KEY}"`. The key is a passphrase: the encryption key is derived from it (PBKDF2), and each value is encrypted with AES-256-GCM.
 
-| Field | Effect |
+- The Docker installation generates it in `release/.env`; a Python install sets it in the service's environment file.
+- Keep a copy outside the server: a backup cannot be used without it.
+- **Never change it on an existing install**: every `ENC:` value would become unreadable and the pools would stop connecting. `./liberty doctor` checks that the key decrypts every pool password.
+
+---
+
+## Other ways to give a secret \{#alternatives\}
+
+| Way | When |
 |---|---|
-| **Master key** | Name of the environment variable holding the key. Default `${LIBERTY_MASTER_KEY}`. |
-| **Legacy keys** | List of older keys, used for **decryption only** during a rotation. New encryptions always use *Master key*. Click *+ Add legacy key* to add an entry — each entry is an env var name. |
-
-Generate a fresh key with the [`liberty-crypto`](../../references/cli.md#liberty-crypto) CLI:
-
-```bash
-.venv/bin/liberty-crypto genkey
-# 7c4f1c2d8e3a6b9f0c1d4e5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c
-```
-
-Export it under the env var name configured above, restart the framework, and every new save through the 🔒 toggle uses the new key.
-
-A master key fingerprint (SHA-256 of the key) is surfaced on the Settings → Framework → Encryption section — useful to confirm two replicas share the same key without exposing the key itself.
+| `${VARIABLE}` in the file | The secret comes from the environment or a secrets manager. Settings shows the reference as it is. |
+| `<NAME>_FILE` | For `LIBERTY_*`, `POSTGRES_*` and `PGADMIN_*` variables: the value is read from a file (Docker, Swarm or Kubernetes secrets). |
+| `liberty-crypto encrypt` | To write an `ENC:` value by hand in a file: `liberty-crypto encrypt` reads the value on its standard input and prints `ENC:…`. See [CLI](../../references/cli.md#liberty-crypto). |
 
 ---
 
-## Rotating the master key \{#key-rotation\}
+## Users' passwords \{#passwords\}
 
-When the master key needs to change — annual policy, suspected leak, change of operator — the rotation is **online**:
-
-| Phase | Action |
-|---|---|
-| **1. Generate a new key** | `liberty-crypto genkey`. Export it under a fresh env var name (e.g. `LIBERTY_MASTER_KEY_NEW`). |
-| **2. Add the old key as legacy** | In *Settings → Framework → Encryption*, set *Master key* to the new env var name and add the old env var to *Legacy keys*. **Save** — the framework now decrypts using either key (tries master first, then each legacy in order). |
-| **3. Restart** | Required because the master key itself is read at startup, not on save-reload. |
-| **4. Re-encrypt every secret** | Run `liberty-crypto rewrap` — see below — to re-encrypt every stored blob with the new master. Idempotent; safe to re-run. |
-| **5. Drop the legacy entry** | Once *Rewrap* reports zero remaining blobs encrypted with the old key, remove the legacy entry from the Settings form and unset the old env var. Restart. |
-
-The `rewrap` command:
-
-```bash
-.venv/bin/liberty-crypto rewrap
-# 4 encrypted fields re-wrapped with the current master key
-# 0 still using legacy keys
-```
-
-The command crawls every storage location, decrypts each blob with whichever key works, and re-encrypts with the current master. Idempotent — re-running produces a different ciphertext (new random nonce) but the plaintext is unchanged.
-
----
-
-## What to encrypt vs. what to keep in the environment
-
-The split is deliberate and worth following:
-
-| Secret | Where it lives | Why |
-|---|---|---|
-| **Pool password** | 🔒 Encrypted in the pool definition. | Lives next to the pool — one storage change updates both. |
-| **API connector auth token** | 🔒 Encrypted on the connector. | Same reason. |
-| **OIDC client secret** | 🔒 Encrypted on the OIDC sub-form. | Always encrypted (toggle locked on). |
-| **Slack webhook** | 🔒 Encrypted on the Notifications sub-form. | Same. |
-| **Per-app API key for an HTTP connector** | 🔒 Encrypted on the connector. | Same as OIDC. |
-| **Master key** | Environment only. | The whole scheme depends on this never landing on disk. |
-| **JWT signing key** | Environment only. | Rotated independently of the master key. |
-| **License key** | Environment only. | RS256-signed JWT, public-key-verifiable; not sensitive to disclose, but kept in env to be replaceable without a save. |
-| **AI provider API key** | Environment only. | Convention in the Anthropic ecosystem. |
-
-A safe rule of thumb: **anything that has a "scope" tied to a single connector / settings entry** goes through the 🔒 toggle; anything that is global to the framework goes in the environment.
-
----
-
-## Permissions
-
-| Code | Effect |
-|---|---|
-| `settings:framework` | View the *Framework → Encryption* section. |
-| `settings:reveal-secrets` | See the *Reveal* button next to encrypted fields. Audit-logged. |
-
-The *Master key fingerprint* read-out is visible to anyone with `settings:read` — it's not sensitive on its own.
-
----
-
-## Failure modes
-
-| Symptom | Cause | Recovery |
-|---|---|---|
-| `connector loaded, but password rejected by database` | The encrypted blob was wrapped with a key that's no longer in *Legacy keys*. | Add the old key back as legacy, restart, run `liberty-crypto rewrap`, then drop the old key. |
-| `crypto: master key not set` at startup | The env var configured on *Master key* is unset and at least one encrypted blob exists. | Export the key under the right name; or temporarily flip the field back to plain to rescue the install. |
-| `crypto: authentication tag mismatch` | A blob was edited by hand, or the wrong key is loaded. | Re-encrypt the value from the plaintext source; never edit ciphertext by hand. |
-| Reveal button greyed out | The caller lacks `settings:reveal-secrets`. | Grant the permission (or refuse — auditors often shouldn't reveal). |
-
----
-
-## Tips & best practices
-
-- **Generate the master key with `liberty-crypto genkey`.** Hand-crafted keys are a footgun — 32 random bytes from the framework's PRNG is the simplest correct path.
-- **Use the same env-var name across replicas.** Settings → Framework → Encryption stores the name, not the value — the same form works on every replica as long as the env var resolves to the same key.
-- **Run `liberty-crypto rewrap` after every rotation.** Otherwise old blobs sit on legacy keys and the rotation isn't really finished.
-- **Don't disable the 🔒 toggle on a value that's already encrypted.** Switching back to plain reveals the value on disk; the operator has to confirm and the action is audit-logged.
-- **Keep legacy keys only as long as needed.** Past one rotation cycle, every still-relevant blob has been rewrapped — the legacy entry can be dropped.
-
----
-
-## Under the hood
-
-Encrypted values are stored as opaque `ENC:`-prefixed blobs inside the per-section TOML files. Operators **do not edit these blobs by hand**; the 🔒 toggle is the only safe path. The master key fingerprint is also stored on disk so the framework can detect a mismatched key on the wrong host without exposing the key itself.
-
-The `liberty-crypto` CLI is the only scripted path for advanced operations (rewrap, fingerprint inspection, hand-encryption for a script-driven setup).
-
----
-
-## What's next
-
-- [Environment variables](./environment-variables.md) — including the master key env var.
-- [Framework settings](./app-toml.md) — the *Encryption* sub-section.
-- [CLI reference → liberty-crypto](../../references/cli.md#liberty-crypto) — every subcommand.
-- [Authentication](../build/secure/sign-in.md) — where the OIDC client secret lives.
+The sign-in passwords of local users are not encrypted but hashed (Argon2id): they cannot be read back. A forgotten password is replaced with `liberty-admin set-password`.
 
 ---
 
@@ -4867,8 +4354,8 @@ A guided wizard that turns a set of database tables — or an existing connector
 
 The **Screen Creation Assistant** is a guided wizard that builds a complete screen in a single pass. Two starting points are supported:
 
-- **From tables** — a base table and any joined tables. The assistant writes a fresh `SELECT` on the connector.
-- **From an existing query** — a read-only reuse of a connector query already in place. The assistant reads its columns and builds the screen on top; no duplicate query is generated. A catalog preset that names a query goes through the same path.
+- **Database table** — a base table and any joined tables. The assistant writes a fresh `SELECT` on the connector.
+- **Existing query** — a read-only reuse of a connector query already in place. The assistant reads its columns and builds the screen on top; no duplicate query is generated. A catalog preset that names a query goes through the same path.
 
 Once the source is picked, you choose which columns the grid shows (that becomes the screen's default shared view), optionally arrange columns into dialog tabs for editing, review the dictionary entries and drop a menu item — the assistant writes the read query (when from tables), the screen, its dialog, the default view and the menu entry together.
 
@@ -4891,16 +4378,16 @@ Before the steps above, a short **Target** step asks for the **Source connector*
 ### 1 · Source
 Two mutually-exclusive choices:
 
-- **From tables** — pick a **Base table** from the connector, then optionally add a **joined table** (choose the join type and the ON conditions). A [catalog preset](#catalog-presets) can pre-wire the joins in one click.
-- **From an existing query** — pick a read query already defined on the connector. The assistant introspects its columns instead of writing a new `SELECT`; the screen reads through the existing query.
+- **Database table** — pick a **Base table** from the connector, then optionally add a **joined table** (choose the join type and the ON conditions). A [catalog preset](#catalog-presets) can pre-wire the joins in one click.
+- **Existing query** — pick a read query already defined on the connector. The assistant introspects its columns instead of writing a new `SELECT`; the screen reads through the existing query.
 
 Either way, the assistant introspects live columns so the next steps have real fields to work with.
 
 ### 2 · Grid view
-The read query selects **every** column of the source; this step chooses which of those show up on the grid. The picked set is written as the screen's **default shared view** — a shared view a regular user can override with their own [saved views](../saved-views.md). Also mark the **key** columns (the ones that identify a row): they drive the update / delete queries, and a screen without keys is read-only by construction.
+The read query selects **every** column of the source; this step chooses which of those show up on the grid. The picked set is written as the screen's **default shared view** — a shared view a regular user can override with their own [saved views](../saved-views.md).
 
 ### 3 · Dialog columns *(optional)*
-Skip it to ship a read-only screen — no dialog. Otherwise, a two-pane layout: **Available columns** on one side, your dialog **tabs** on the other. Assign columns into tabs, add / rename / remove tabs. Only the columns you place here appear in the edit dialog; the grid keeps whatever step 2 defined.
+Skip it to ship a read-only screen — no dialog. Otherwise, a two-pane layout: **Available columns** on one side, your dialog **tabs** on the other. Assign columns into tabs, add / rename / remove tabs, and tick the **key** columns (the ones that identify a row): they drive the update / delete queries. Only the columns you place here appear in the edit dialog; the grid keeps whatever step 2 defined.
 
 ### 4 · Dictionary
 The assistant scans the source and proposes the [dictionary entries](../dictionary.md) the screen needs. Entries that already exist are shown but greyed out and left untouched — only the **missing** ones are pre-ticked to be created. For each proposed entry you can set the **Label**, **Format**, **Rule**, **Rule value**, **Lookup params** (for a UDC / lookup rule) and **Default**. This is the same scan table used by the Dictionary editor.
@@ -4921,7 +4408,7 @@ In one validated pass — nothing is written unless every piece validates — th
 
 | Artifact | What lands |
 |---|---|
-| **Connector query** | *From tables* — a new table on the source connector with a `get` query, plus `post` / `put` / `delete` write queries so the screen is editable. *From an existing query* — nothing added on the connector; the screen reads through the query you picked. |
+| **Connector query** | *Database table* — a new table on the source connector with a `get` query, plus `post` / `put` / `delete` write queries so the screen is editable. *Existing query* — nothing added on the connector; the screen reads through the query you picked. |
 | **Dictionary entries** | The proposed entries you kept (existing ones are never overwritten). |
 | **Screen + dialog** | The screen under the chosen app, its grid columns and — if step 3 was filled — an embedded dialog whose tabs hold the form fields. |
 | **Default shared view** | The grid selection from step 2, saved as the screen's default shared view. |
@@ -4958,8 +4445,8 @@ The pickers on steps 2 and 3 are built for wide sources — a full JDE `F0101` s
 ## Tips & best practices
 
 - **Start from a preset when one fits.** It is the difference between picking one entry and hand-wiring five joins.
-- **Mark your keys in step 2.** The key columns drive the update / delete queries; a screen without keys is read-only by construction.
-- **Reuse an existing query for read-only reports.** *From an existing query* is the shortest path when the SQL already exists — no duplicate query gets added and the screen still gets a dialog / dictionary review.
+- **Mark your keys in step 3.** The key columns drive the update / delete queries; a screen without keys is read-only by construction.
+- **Reuse an existing query for read-only reports.** *Existing query* is the shortest path when the SQL already exists — no duplicate query gets added and the screen still gets a dialog / dictionary review.
 - **Skip step 3 for read-only screens.** Leaving *Dialog columns* empty ships the screen without an edit dialog — useful for observability screens where nothing should be editable.
 - **Review the dictionary, don't rubber-stamp it.** The scan infers the format from the column type (or, on JDE, from the data dictionary); a quick pass over the Format and Rule columns saves a round-trip later.
 - **Open the screen and refine it in the Designer.** The assistant gets you a working screen fast; nested tabs, conditional fields and actions are then yours to add in the [Screen Designer](screens/overview.md).
@@ -7227,7 +6714,7 @@ This means you can build dialogs that progressively reveal data based on the use
 ## Liberty Next — Menus — overview
 Source: https://docs.nomana-it.fr/liberty/framework/build/menus/overview/
 
-The Menus page, the flat-items-linked-by-parent model, the four leaf kinds (query / endpoint / dashboard / page), and how attaching a menu turns a connector into an app.
+The Menus page, the flat-items-linked-by-parent model, the five leaf kinds (screen / query / endpoint / dashboard / page), and how a menu plus show_in_switcher turns a connector into an app.
 
 A **menu** in Liberty is what the user sees in the left navigation panel when they open one of your apps. It groups screens, endpoints, dashboards and routes into a tree of folders and leaves.
 
@@ -7235,7 +6722,7 @@ Three things are worth knowing up front:
 
 | Fact | Implication |
 |---|---|
-| There is **no separate "app" object** in Liberty. | An "app" is just a **connector that has a menu attached** *and* whose `show_in_switcher` flag is on. Both conditions are required for the top app switcher to show its tile. |
+| There is **no separate "app" object** in Liberty. | An "app" is just a **connector that has a menu attached** *and* whose `show_in_switcher` flag is on. Both conditions are required for the application picker of the sidebar to list it. |
 | Menus are stored as a **flat list of items** linked by `parent`. | The tree is assembled by the backend — easier to hand-edit, round-trips cleanly through TOML, drag operations only ever mutate one list. |
 | Every menu key is a connector name (`[menus.<connector>]`). | The connector named `crm` carries the menu under `[menus.crm]`; the screen `customers` on `crm` is reached from a leaf with `target = "customers_get"`. |
 
@@ -7249,7 +6736,7 @@ Three regions:
 
 | Region | What it carries |
 |---|---|
-| **Top scope bar** | One chip per app (a connector that has a menu). Click a chip → its tree loads below. The *＋ Add a menu for a connector* button registers a new connector under Menus. *Discard* / *Save* on the right commit or revert page-wide edits. |
+| **Top scope bar** | One chip per app (a connector that has a menu). Click a chip → its tree loads below. The **+ Add scope** chip gives an existing connector a menu. *Discard* / *Save* on the right commit or revert page-wide edits. |
 | **Tree (left column)** | The selected app's menu tree. Click a row to select it for editing. On hover, action icons appear over the row's right edge — *Move up / down*, *Indent / Outdent*, *Add child*, *Delete*. A filter input narrows the list. |
 | **Inspector (right column)** | The full editor for the selected item — a generic form over the `MenuItem` schema. Fields adapt to the selected `type` (a folder shows fewer fields than a leaf). |
 
@@ -7261,7 +6748,7 @@ The schema's top-level shape:
 
 | Field | Notes |
 |---|---|
-| `label` | The app's display name. Falls back to the connector name. Shown in the top app switcher. |
+| `label` | The app's display name. Falls back to the connector name. Shown in the application picker. |
 | `items` | A flat list of menu items, linked by their `parent` field. |
 
 Each item:
@@ -7272,8 +6759,8 @@ Each item:
 | `parent` | no | Pick a folder, or leave blank for a top-level item. |
 | `label` | yes | The sidebar text. |
 | `l` | no | Per-language label overrides — `l.fr`, `l.de`, etc. |
-| `icon` | no | A [Lucide icon](https://lucide.dev) name (`shield`, `users`, `chart-bar`, …). |
-| `type` | no | Blank = folder. Otherwise one of `query`, `endpoint`, `dashboard`, `page` (see [Item types](./item-types.md)). |
+| `icon` | no | One of the icon names the sidebar draws (`shield`, `users`, `barchart`, …) — see [Translations and icons](./translations-and-icons.md). |
+| `type` | no | Blank = folder. Otherwise one of `screen`, `query`, `endpoint`, `dashboard`, `page` (see [Item types](./item-types.md)). |
 | `connector` | no | Connector hosting the target. Blank = the app's own connector (the menu key). |
 | `target` | conditional | Required on every leaf; ignored on folders. |
 | `params` | no | Fixed parameters passed to the target when the item opens. |
@@ -7294,11 +6781,12 @@ Folders can nest indefinitely. Leaves can't have children — they're terminal n
 
 ---
 
-## The four leaf kinds
+## The five leaf kinds
 
 | `type` | Opens | `target` is | `connector` |
 |---|---|---|---|
-| **`query`** | A screen (TableView) — uses the screen wired to this query. | A SELECT query name (`customers_get`). | The connector that owns the query. Blank = the app's. |
+| **`screen`** | A designed screen. | The screen's read query (`customers_get`), picked from the designed screens. | The connector that owns it. Blank = the app's. |
+| **`query`** | The same grid view, picked from the raw queries — a query with no designed screen opens as a plain table. | A SELECT query name. | The connector that owns the query. Blank = the app's. |
 | **`endpoint`** | The HttpRunner — fires an API connector endpoint. | An endpoint name. | The API connector. Blank = the app's. |
 | **`dashboard`** | A dashboard (charts + KPIs). | A dashboard id (from `[dashboards.*]`). | Must NOT be set (dashboards live in their own flat namespace). |
 | **`page`** | A registered frontend route (a custom feature area, e.g. `/nomaflow`). | The route path. | Must NOT be set (the target is a route, not a connector resource). |
@@ -7313,7 +6801,7 @@ The schema validator enforces:
 
 ## Save and reload
 
-The *Save* button validates the whole `MenusFile` (unique ids, parents exist, no cycles), writes `menus.toml` and triggers a hot reload. New menus appear in the top switcher immediately — no process restart.
+The *Save* button validates the whole `MenusFile` (unique ids, parents exist, no cycles), writes `menus.toml` and triggers a hot reload. New menus apply immediately — no process restart.
 
 The validation is strict on three things:
 
@@ -7329,14 +6817,14 @@ Cross-menu duplicates are fine — `[menus.crm.security]` and `[menus.nomasx1.se
 
 ## How a connector becomes an app
 
-**A connector becomes visible in the top app switcher only when both conditions are true:**
+**A connector is listed in the application picker of the sidebar only when both conditions are true:**
 
 1. A menu exists — `[menus.<connector>]` is set up in *Settings → Menus*.
-2. `show_in_switcher = true` on the connector — set in *Settings → Connectors → \ → Settings*.
+2. **Show In Switcher** on the connector — set in *Settings → Connectors → \ → Settings* (on by default).
 
-Miss either one and the connector exists but doesn't appear in the switcher. Setting up the menu first and **then** ticking `show_in_switcher` is the usual order.
+Miss either one and the connector exists but is not listed. The picker itself appears only when there is more than one application. Setting up the menu first and **then** ticking `show_in_switcher` is the usual order.
 
-Note: the Connectors page's own *Apps* / *Data sources* grouping is based on menu existence alone — connectors with a menu but `show_in_switcher = false` still show under *Apps* there. That grouping is an internal Settings-UI affordance; the user-facing top switcher is what `show_in_switcher` gates.
+Note: the Connectors page's own *Apps* / *Data sources* grouping is based on menu existence alone — connectors with a menu but `show_in_switcher = false` still show under *Apps* there. That grouping is an internal Settings-UI affordance; the user-facing picker is what **Show In Switcher** gates.
 
 The next page covers the wiring from both sides.
 
@@ -7346,8 +6834,8 @@ The next page covers the wiring from both sides.
 
 When the user opens the app, `GET /api/menus` returns the tree **filtered to what the user can run**:
 
-- Each leaf's underlying permission (`sql:<connector>:<target>` for `query`, `api:<connector>:<target>` for `endpoint`, see [Permissions and roles](./permissions-and-roles.md)) is checked.
-- Items the user lacks permission for are dropped.
+- A leaf is kept when the user may run what it opens (`sql:<connector>:<target>` for `screen` / `query`, `api:<connector>:<target>` for `endpoint`), or when a role explicitly allows its `menu:<app>:<id>` — see [Permissions and roles](./permissions-and-roles.md).
+- A `menu:` or `dashboard:` deny removes it.
 - A folder with no surviving children is collapsed away.
 - Items with a `roles` filter are kept only when the user's roles intersect the list.
 
@@ -7359,7 +6847,7 @@ A user sees only the parts of the menu they can actually use — no greyed-out i
 
 | Goal | Read |
 |---|---|
-| Make a connector show up as an app in the top switcher. | [Make a connector an app](./make-connector-an-app.md). |
+| Make a connector show up as an app in the application picker. | [Make a connector an app](./make-connector-an-app.md). |
 | Build the tree — folders, leaves, drag/reorder, indent. | [Build the tree](./build-the-tree.md). |
 | Pick the right leaf type (screen / endpoint / dashboard / route). | [Item types](./item-types.md). |
 | Restrict items to specific roles. | [Permissions and roles](./permissions-and-roles.md). |
@@ -7377,9 +6865,9 @@ A user sees only the parts of the menu they can actually use — no greyed-out i
 ## Liberty Next — Make a connector an app
 Source: https://docs.nomana-it.fr/liberty/framework/build/menus/make-connector-an-app/
 
-A connector becomes an 'app' visible in the top switcher when it has a menu attached and show_in_switcher is on. Plus how the optional home field decides the landing page.
+A connector becomes an 'app' visible in the application picker when it has a menu attached and show_in_switcher is on. Plus how the optional home field decides the landing page.
 
-Liberty has **no separate Apps configuration**. The thing users call "an app" — what shows up in the top switcher, what carries a menu in the left navigation — is just a **connector with a menu attached** and the `show_in_switcher` flag on.
+Liberty has **no separate Apps configuration**. The thing users call "an app" — what shows up in the application picker, what carries a menu in the left navigation — is just a **connector with a menu attached** and the `show_in_switcher` flag on.
 
 This page walks the wiring from both sides: the connector flag + the menu key.
 
@@ -7389,16 +6877,16 @@ This page walks the wiring from both sides: the connector flag + the menu key.
 
 | Piece | Where it lives | Required for an app? |
 |---|---|---|
-| **`show_in_switcher`** | On the connector (Settings → Connectors → Settings tab). | Yes — when off, the connector exists but doesn't appear in the top switcher. |
+| **`show_in_switcher`** | On the connector (Settings → Connectors → Settings tab). | Yes — when off, the connector exists but doesn't appear in the application picker. |
 | **`[menus.<connector>]`** | The menu file (Settings → Menus). | Yes — without a menu, the connector is treated as a *data source*, not an app. |
-| **`home`** | On the connector (Settings → Connectors → Settings tab). | Optional — sets the landing menu item when the user picks this app in the switcher. |
+| **`home`** | On the connector (Settings → Connectors → Settings tab). | Optional — sets the landing menu item when the user picks this app in the picker. |
 
 Two separate effects, decided by different flags:
 
 | Effect | Triggered by |
 |---|---|
 | The connector chip moves from *Data sources* to *Apps* on the Connectors page. | Menu existence alone — `[menus.<connector>]` is set up. |
-| A tile for the app appears in the top switcher (the user-facing app picker). | Both menu existence **and** `show_in_switcher = true`. |
+| A tile for the app appears in the application picker (the user-facing app picker). | Both menu existence **and** `show_in_switcher = true`. |
 
 Set up the menu first; flip `show_in_switcher` on second. Miss the second step and the connector still classifies as an "app" on the Connectors page but doesn't show up for end users in the switcher.
 
@@ -7414,8 +6902,8 @@ Open **Settings → Connectors**, pick the connector, switch to the **Settings**
 
 | Field | Notes |
 |---|---|
-| **`show_in_switcher`** | Default `true`. When on, the connector shows in the top app switcher (provided it has a menu). When off, the connector is reachable only by URL — useful for hidden / admin connectors. |
-| **`home`** | Dropdown sourced from this connector's menu items. Picks the landing menu item when the user clicks the app in the switcher. Blank → the first visible top-level item. |
+| **`show_in_switcher`** | Default `true`. When on, the connector shows in the application picker (provided it has a menu). When off, the connector is reachable only by URL — useful for hidden / admin connectors. |
+| **`home`** | Dropdown sourced from this connector's menu items. Picks the landing menu item when the user picks the app in the picker. Blank → the first visible top-level item. |
 
 Save the connector page — the change applies immediately (hot reload).
 
@@ -7423,7 +6911,7 @@ Save the connector page — the change applies immediately (hot reload).
 
 ## Step 2 — On the menu
 
-Open **Settings → Menus**. If the connector doesn't have a menu yet, the *＋ Add a menu for a connector* button opens a modal listing every connector **without** a menu — pick yours. The modal:
+Open **Settings → Menus**. If the connector doesn't have a menu yet, the **+ Add scope** button opens a modal listing every connector **without** a menu — pick yours. The modal:
 
 - Creates a new `[menus.<connector>]` entry with no items.
 - Selects the new app chip.
@@ -7440,14 +6928,14 @@ Add items via **＋ Folder** / **＋ Item** at the top of the tree pane. See [Bu
 Before:
 
 - The connector shows up under **Data sources** on the Connectors page.
-- It doesn't appear in the top switcher.
+- It isn't listed in the application picker.
 - Screens that point at its queries are reachable only by URL.
 
 After:
 
 - The connector shows up under **Apps** on the Connectors page.
-- It appears in the top switcher as a tile.
-- Clicking the tile takes the user to the `home` item (or the first visible top-level item).
+- It is listed in the application picker (shown in the sidebar when there is more than one application).
+- Picking it takes the user to the `home` item (or the first visible top-level item).
 - The left navigation shows the menu tree.
 
 The Connectors page reads the menus file to decide the grouping — there's no separate "this is an app" flag beyond *"has a menu + is in the switcher"*.
@@ -7456,7 +6944,7 @@ The Connectors page reads the menus file to decide the grouping — there's no s
 
 ## Cloning an app
 
-The Connectors page has a **Clone** action (covered in [Queries → Clone a query or a connector](../queries/clone.md#clone-app--the-whole-application)) that copies the connector + its dictionary overlay + its screens + its menu + its dashboards + its charts under a new connector key. The cloned connector inherits `show_in_switcher`; its menu is wired automatically — the cloned app appears in the top switcher as soon as the clone completes.
+The Connectors page has a **Clone** action (covered in [Queries → Clone a query or a connector](../queries/clone.md#clone-app--the-whole-application)) that copies the connector + its dictionary overlay + its screens + its menu + its dashboards + its charts under a new connector key. The cloned connector inherits `show_in_switcher`; its menu is wired automatically — the cloned app appears in the application picker as soon as the clone completes.
 
 This is the right move when:
 
@@ -7468,7 +6956,7 @@ This is the right move when:
 
 ## Hiding an app temporarily
 
-Two ways to take an app out of the switcher without deleting it:
+Two ways to take an app out of the picker without deleting it:
 
 | Option | Effect |
 |---|---|
@@ -7491,9 +6979,9 @@ A typical Liberty install carries several apps:
 | `nomaflow` | Job scheduler (its own product). |
 | `default` | The framework's own pool — usually no menu, just a data source for shared queries. |
 
-Each gets its own `[menus.<name>]` block, its own chip on the Menus page, its own switcher tile. They share the same framework process, the same authentication, the same dictionary (with per-connector overlays).
+Each gets its own `[menus.<name>]` block, its own chip on the Menus page, its own entry in the application picker. They share the same framework process, the same authentication, the same dictionary (with per-connector overlays).
 
-A user signing in sees only the apps they have permission for — `GET /api/menus` returns an empty tree for an app where the user can't run anything (and the switcher tile hides itself accordingly).
+A user signing in sees only the apps they have permission for — `GET /api/menus` returns an empty tree for an app where the user can't run anything (and the app is left out of the picker).
 
 ---
 
@@ -7501,9 +6989,9 @@ A user signing in sees only the apps they have permission for — `GET /api/menu
 
 | Mistake | Symptom | Fix |
 |---|---|---|
-| Connector has `show_in_switcher = true` but no menu. | The connector shows in the Connectors page's *Data sources* group; the top switcher doesn't list it. | Add a menu in *Settings → Menus*. |
+| Connector has `show_in_switcher = true` but no menu. | The connector shows in the Connectors page's *Data sources* group; the application picker doesn't list it. | Add a menu in *Settings → Menus*. |
 | Connector has a menu but `show_in_switcher = false`. | The menu exists but the switcher hides the tile. | Either turn `show_in_switcher` on, or accept that users will reach the app by URL only. |
-| `home` points at a menu item that no longer exists. | Clicking the switcher tile lands on the first visible top-level item, ignoring the stale `home`. | Re-pick a valid item — the dropdown lists the live menu items. |
+| `home` points at a menu item that no longer exists. | Picking the app lands on the first visible top-level item, ignoring the stale `home`. | Re-pick a valid item — the dropdown lists the live menu items. |
 | Adding `[menus.<X>]` where `<X>` isn't a connector. | The page rejects the entry on save — the menu key must match a known connector. | Create the connector first, then attach the menu. |
 | Cloning an app but the new pool doesn't exist. | The clone modal refuses to submit. | Create the pool in *Settings → Pools* before cloning. |
 
@@ -7534,8 +7022,8 @@ Above the tree:
 
 | Button | What it does |
 |---|---|
-| **＋ Folder** | Adds a folder at the top level (or as a child of the selected item, depending on the implementation). The folder is the only item kind without a `type`. |
-| **＋ Item** | Adds a leaf, same scope. The leaf opens by default as a `query` type — change it in the Inspector. |
+| **＋ Folder** | Adds a folder at the top level. The folder is the only item kind without a `type`. |
+| **＋ Item** | Adds a leaf at the top level — set its type and target in the Inspector. To add under a folder, use the row's **＋ Add child**. |
 | **⎘ Clone** | Duplicates the selected item (subtree included). Prompts for a new id. Disabled when nothing is selected. |
 | **🔗 Find usages** | Opens a modal listing every place this menu item is referenced (e.g. another connector's `home` field). Helps before a rename / delete. Disabled when nothing is selected. |
 
@@ -7551,7 +7039,7 @@ Each row carries:
 |---|---|
 | Indent | Visual depth — each level is 16 pixels in. |
 | Chevron | ▾ for an expanded folder, ▸ for collapsed. |
-| Icon | The item's `icon` (Lucide name). Folders default to a folder icon; leaves default to a file icon. |
+| Icon | The item's `icon` (one of the [sidebar icons](./translations-and-icons.md#icons)). Folders default to a folder icon; leaves default to a file icon. |
 | Label | The `label` field. |
 | Id | Monospace, muted, after the label. Fades out on hover to make room for the actions. |
 | Per-row actions (hover) | *Move up* (↑), *Move down* (↓), *Indent* (→), *Outdent* (←), *Add child* (＋), *Delete* (🗑). |
@@ -7570,8 +7058,8 @@ The icons that appear on hover, left to right:
 | **↓ Move down** | Swap with the next sibling. Disabled at the end. |
 | **→ Indent** | Reparent the item under the previous sibling. The previous sibling becomes the new parent. Disabled when there's no previous sibling. |
 | **← Outdent** | Move the item up one level — its grand-parent becomes the new parent. Disabled when the item is already at the top level. |
-| **＋ Add child** | Add a leaf as a child of this item (works on folders; on leaves it'll convert intent — typically add as next sibling, not child). |
-| **🗑 Delete** | Remove the item **and its whole subtree** after a confirm modal. The descendant items are dropped in the same operation. |
+| **＋ Add child** | Adds an item as a child of this row. |
+| **🗑 Delete** | Removes the item — with its whole subtree, after a confirmation, when it has children. |
 
 The icons are intentionally compact and only show on hover — the tree stays scannable in steady state.
 
@@ -7595,7 +7083,7 @@ Pick the convention that maps to how your users think — not how the data is sh
 
 ### Step 2 — Add the leaves under each folder
 
-Click on a folder row to select it, then **＋ Item** (or the per-row *＋ Add child*). The new leaf appears under the folder. Set its `type`, `connector`, `target` in the Inspector — see [Item types](./item-types.md).
+On the folder's row, click **＋ Add child**. The new item appears under the folder. Set its `type`, `connector`, `target` in the Inspector — see [Item types](./item-types.md).
 
 ### Step 3 — Reorder
 
@@ -7621,7 +7109,7 @@ Click a row → the Inspector on the right loads a form for the selected item. T
 | `parent` | Yes | A SearchSelect populated with the valid candidates. The tree's indent/outdent actions mutate this field too. |
 | `label` | Yes | The sidebar text. |
 | `l` (Translations tab) | Yes | Per-language overrides. See [Translations and icons](./translations-and-icons.md). |
-| `icon` | Yes | Lucide icon name. |
+| `icon` | Yes | One of the [sidebar icons](./translations-and-icons.md#icons). |
 | `type` | Yes | Dropdown. Blank = folder. Switching from leaf to folder clears `target` / `connector` / `params`. |
 | `connector` | Only for `query` / `endpoint` leaves | Blank = the app's own connector. |
 | `target` | Only for leaves | A SearchSelect populated with valid targets for the chosen `type` + `connector`. |
@@ -7661,7 +7149,7 @@ Useful when:
 
 ## Deleting an item
 
-The 🗑 icon (per-row) or the keyboard Delete key on a selected row opens a confirm modal: *Delete '\<name\>' **and** its descendants?*. Confirming removes the item plus every child, grandchild, etc.
+The row's 🗑 icon removes the item. When it has children, a confirmation asks first, and confirming removes the whole subtree.
 
 There's no soft delete — the item disappears immediately from memory. The page-level *Save* is what persists. Until you Save, you can **Discard** to revert.
 
@@ -7702,15 +7190,16 @@ The filter is case-insensitive and matches anywhere in the id or label. Folders 
 ## Liberty Next — Item types
 Source: https://docs.nomana-it.fr/liberty/framework/build/menus/item-types/
 
-The four leaf kinds — query / endpoint / dashboard / page — what each opens, the target field's shape, the connector rule, and when to reach for each.
+The five leaf kinds — screen / query / endpoint / dashboard / page — what each opens, the target field's shape, the connector rule, and when to reach for each.
 
 A menu item is either a **folder** (no `type`) or a **leaf** that opens something. The leaf's `type` decides what that something is and what the `target` / `connector` fields mean.
 
-Four leaf kinds:
+Five leaf kinds:
 
 | `type` | Opens | `target` is | `connector` |
 |---|---|---|---|
-| **`query`** | A TableView screen — driven by the screen wired to this query. | A SELECT query name. | The connector that owns the query. Blank = the app's own connector. |
+| **`screen`** | A designed screen. | The screen's read query, picked from the designed screens. | The connector that owns it. Blank = the app's own connector. |
+| **`query`** | The same grid view, picked from the raw queries. | A SELECT query name. | The connector that owns the query. Blank = the app's own connector. |
 | **`endpoint`** | The HttpRunner — fires one API connector endpoint. | An endpoint name. | The API connector. Blank = the app's. |
 | **`dashboard`** | A dashboard (charts + KPIs). | A dashboard id. | Must NOT be set (dashboards live in a flat namespace). |
 | **`page`** | A registered frontend route — a custom feature area like `/nomaflow`. | The route path. | Must NOT be set. |
@@ -7719,9 +7208,11 @@ This page walks each in detail with concrete examples.
 
 ---
 
-## `query` — open a screen
+## `screen` and `query` — open a screen
 
-The most common leaf kind. The menu item points at a SELECT query; the framework finds the screen wired to that query (see [Create a screen from a query](../screens/create-from-query.md)) and opens it as a TableView.
+The most common leaf kinds. `screen` and `query` open the same view: the target is a read query, and if a screen is designed for it, that screen opens; otherwise the query's rows show in a plain grid. They differ only in what the Inspector's *Target* list offers — designed screens for `screen`, every query for `query`.
+
+The menu item points at a SELECT query; the framework finds the screen wired to that query (see [Create a screen from a query](../screens/create-from-query.md)) and opens it as a TableView.
 
 ### Fields
 
@@ -7955,13 +7446,14 @@ In the Inspector, changing `type` from `query` to `dashboard` clears `connector`
 
 | You want to open… | Use |
 |---|---|
-| A list of rows with optional filter / add / edit. | `query`. |
-| A pre-filtered list (e.g. *My open tickets*). | `query` with `params`. |
+| A list of rows with optional filter / add / edit. | `screen`. |
+| A pre-filtered list (e.g. *My open tickets*). | `screen` with `params`. |
+| A query that has no designed screen yet. | `query`. |
 | A custom write or read-only API call. | `endpoint`. |
 | A page of charts and KPIs. | `dashboard`. |
 | A hand-written React feature (Nomaflow-style). | `page`. |
 
-When in doubt, start with `query` — most user-facing screens are list-based. Promote to `dashboard` when the layout is multiple charts; reach for `endpoint` only for API operations that don't fit a screen; reserve `page` for custom React.
+When in doubt, start with `screen` — most user-facing pages are lists. Promote to `dashboard` when the layout is multiple charts; reach for `endpoint` only for API operations that don't fit a screen; reserve `page` for custom React.
 
 ---
 
@@ -7981,7 +7473,7 @@ When in doubt, start with `query` — most user-facing screens are list-based. P
 ## What's next
 
 - [Permissions and roles](./permissions-and-roles.md) — the `roles` filter + permission inheritance per leaf type.
-- [Translations and icons](./translations-and-icons.md) — per-language labels and the Lucide icon picker.
+- [Translations and icons](./translations-and-icons.md) — per-language labels and icons.
 - [Create a screen from a query](../screens/create-from-query.md) — the screen a `query` leaf opens.
 
 ---
@@ -8010,10 +7502,12 @@ Every leaf is gated by the permission of its target:
 
 | `type` | Required permission |
 |---|---|
-| `query` | `sql:<connector>:<target>` (the query's permission). |
+| `screen`, `query` | `sql:<connector>:<target>` (the query's permission). |
 | `endpoint` | `api:<connector>:<target>` (the endpoint's permission). |
-| `dashboard` | None at this layer — the dashboard's own access rules apply. |
-| `page` | None at this layer — the route's own access rules apply. |
+| `dashboard` | None at this layer — hidden only by a `dashboard:` or `menu:` deny. |
+| `page` | None at this layer — the page's own access rules apply. |
+
+An explicit `menu:<app>:<id>` allow in a role also shows the leaf, even without the target's permission; a `menu:` deny always hides it. The role editor writes these strings when an entry is allowed or denied on its menu tree — see [Roles and permissions](../secure/roles-and-permissions.md).
 
 A user with `sql:crm:customers_get` sees the menu leaf that opens the Customers screen. A user without it doesn't — the leaf vanishes from the rendered menu.
 
@@ -8042,7 +7536,7 @@ The `roles` field on a menu item is a list of role names. When set:
 | Surface different sections to different audiences in the same app. | An `admin` folder visible only when `roles = ["admin"]` matches. |
 | Stage a rollout. | Tag a new section `roles = ["beta-testers"]`; flip to empty when launching to everyone. |
 
-The `roles` field is **not** an alternative to the implicit permission — both must hold. If you want operators to see and use a screen, they need both the SQL permission and one of the listed roles.
+The `roles` field is **not** an alternative to the permission — both must hold: the user needs one of the listed roles and the right to open the leaf.
 
 ---
 
@@ -8132,9 +7626,9 @@ What different users see:
 | **Bob** (manager) | `["manager"]` | every `sql:crm:*` | Pipeline → Customers, Deals · Reports → Monthly revenue. *(no Cohort: not analyst; no Admin)* |
 | **Carol** (admin) | `["admin"]` | every `sql:crm:*` | Pipeline → Customers, Deals · Reports → Monthly revenue, Cohort · Admin → Config. |
 | **Dave** (manager + analyst) | `["manager", "analyst"]` | every `sql:crm:*` | Pipeline → Customers, Deals · Reports → Monthly revenue, Cohort. *(no Admin)* |
-| **Eve** (no permission) | `["guest"]` | none | Empty tree — app's switcher tile hides itself. |
+| **Eve** (no permission) | `["guest"]` | none | Empty tree — the app is left out of the picker. |
 
-Note how the *Reports* folder doesn't appear for Alice (her roles don't intersect any child); the *Admin* folder doesn't appear for Alice / Bob / Dave; the app's tile in the top switcher hides for Eve.
+Note how the *Reports* folder doesn't appear for Alice (her roles don't intersect any child); the *Admin* folder doesn't appear for Alice / Bob / Dave; the app is left out of Eve's application picker.
 
 ---
 
@@ -8149,10 +7643,12 @@ Liberty's permission strings follow a simple pattern:
 | `sql:*` | Run every query on every connector. |
 | `api:<connector>:<endpoint>` | Call that specific API endpoint. |
 | `api:<connector>:*` | Call every endpoint on that connector. |
-| `screen:<app>:<id>` | Reach that specific screen (less common — most installs gate by `sql:` instead). |
-| `superuser` | Bypasses every check. |
+| `menu:<app>:<id>` | Show that menu entry. A `!menu:…` deny hides it. |
+| `*` | Everything. |
 
-For menu pruning, the relevant permissions are `sql:` and `api:` (matching the leaf's `target`). A role granting `sql:crm:*` opens every `query` leaf on the `crm` app.
+A superuser is a flag on the user, not a permission: it passes every check.
+
+For menu pruning, the relevant permissions are `sql:` and `api:` (matching the leaf's `target`) and `menu:`. A role granting `sql:crm:*` opens every `screen` and `query` leaf on the `crm` app.
 
 Granular vs broad:
 
@@ -8188,7 +7684,7 @@ Dashboards and routes don't inherit a `sql:` / `api:` permission. They have thei
 
 | Leaf type | Default visibility |
 |---|---|
-| `query` | Hidden unless `sql:<connector>:<target>` is granted. |
+| `screen`, `query` | Hidden unless `sql:<connector>:<target>` or `menu:<app>:<id>` is granted. |
 | `endpoint` | Hidden unless `api:<connector>:<target>` is granted. |
 | `dashboard` | Visible to everyone by default. Use `roles` to gate. |
 | `page` | Visible to everyone by default. Use `roles` to gate. |
@@ -8214,7 +7710,7 @@ The right pattern for both: **always set `roles`** on dashboard and page leaves 
 
 ## What's next
 
-- [Translations and icons](./translations-and-icons.md) — per-language labels and Lucide icons.
+- [Translations and icons](./translations-and-icons.md) — per-language labels and icons.
 - [Build the tree](./build-the-tree.md) — the editor surface.
 - [Concepts → Authentication → Roles and permissions](../secure/roles-and-permissions.md) — the deeper reference behind the permission strings.
 
@@ -8223,377 +7719,127 @@ The right pattern for both: **always set `roles`** on dashboard and page leaves 
 ## Liberty Next — Translations and icons
 Source: https://docs.nomana-it.fr/liberty/framework/build/menus/translations-and-icons/
 
-Per-language label overrides with the `l` map (l.fr, l.de, …) and Lucide icon names on menu items. Conventions and fallbacks for both.
+Menu labels per language with the l map (l.fr, l.de…), how the language is chosen, and the icon names the Liberty Next sidebar can draw.
 
-Two cosmetic but high-impact fields on every menu item:
-
-| Field | What it does |
-|---|---|
-| **`l`** | Map of per-language label overrides — `l.fr`, `l.de`, `l.es`. The framework picks the one matching the user's language; the default `label` is the fallback. |
-| **`icon`** | A [Lucide icon](https://lucide.dev) name (`shield`, `users`, `chart-bar`, …). Renders at the start of the row in the sidebar. |
-
-This page covers both — when to set them, the picker conventions, the runtime resolution rules.
+Two fields of every menu item shape what the user reads in the sidebar: `l`, the label per language, and `icon`.
 
 ---
 
-## Translations — the `l` map
+## Translations — the `l` map \{#translations\}
 
-The `label` field is the **default** language label. The `l` map adds per-language overrides:
+`label` is the default label; `l` adds one label per language:
 
 ```toml
 [[menus.crm.items]]
 id = "security"
 label = "Security"
-l.fr = "Sécurité"
-l.de = "Sicherheit"
-l.es = "Seguridad"
+l = { fr = "Sécurité", de = "Sicherheit" }
 icon = "shield"
 ```
 
-When a French user opens the app, the sidebar renders *Sécurité*. A German user sees *Sicherheit*. A user whose language doesn't match any `l.*` entry falls back to `Security`.
+In the Inspector, the **Translations** group lists one row per language; the languages offered are `en`, `fr`, `de`, `es`, `it`, `pt`, `nl`, `pl`, `ja`, `zh`, `ar`. An empty row is removed on save.
 
-### Resolution rules
+### Which language \{#language\}
 
-At runtime, for each menu item:
+For each request, the language is, in order:
 
-1. Read the user's language from the JWT (or the browser's `Accept-Language` header).
-2. Look up `l[<language>]`.
-3. If present and non-empty, use that string.
-4. Otherwise, use the default `label`.
+1. the `X-Liberty-Lang` header — the web application sends the language chosen in its interface;
+2. otherwise the first language of the browser's `Accept-Language`, without its region (`fr-CA` → `fr`);
+3. otherwise `[app] default_language`.
 
-The lookup is **exact** — `l.fr` is found for users whose language is `fr`; a user with `fr-CA` won't match `l.fr` unless you add `l["fr-CA"]` too. For maximum coverage, set the bare language code (`fr`, `de`, `es`); locale-specific entries (`fr-CA`, `de-AT`) are reserved for genuine variants.
+When `l` has no entry for that language, `label` is used. Use lowercase codes (`fr`, not `FR`).
 
-### The Translations tab in the Inspector
-
-The Inspector's *Translations* tab groups every `l.*` entry — adding a new language picks from `SUPPORTED_LANGUAGES` (the framework's enabled-languages list from `app.toml`). Removing a language drops the entry.
-
-| Field shown | What |
-|---|---|
-| Default label | The `label` field — fallback for any user whose language has no override. |
-| Per-language rows | One per `l.<lang>` entry. Empty values delete the entry on save. |
-
-### Translating folders
-
-Folders need translations too — the user sees the folder title in the sidebar. Same `l` shape applies. Don't translate the `id` (it's the technical key, never shown).
-
-### Translating leaves
-
-For `query` leaves, the leaf's `label` is the **menu** label. The opened screen's title comes from the **screen's** `label` / `description`, which has its own translations through the dictionary. Two layers:
-
-| Layer | Where translated |
-|---|---|
-| Menu label | `l` on the menu item. |
-| Screen title | `[dictionary.<id>]` entries — language-aware. |
-| Column labels | Same — `[dictionary.<col_id>]` for each column. |
-
-The dictionary system covers screen-side text once; the menu's `l` covers the navigation labels.
-
-### When NOT to translate
-
-| Pattern | Why |
-|---|---|
-| Internal-only apps with one language. | Save the effort; just use `label`. |
-| Apps where the audience all speaks the same business language. | Same. |
-| The label is a code or identifier the user reads as-is. | `F0005`, `IBAN`, `SLA` — leave them as-is. |
+Translate folders too: their label is what the user sees first. The screens' titles and column labels are translated in the dictionary and the screens, not here — see [Dictionary](../../dictionary.md).
 
 ---
 
-## Icons — Lucide names
+## Icons \{#icons\}
 
-The `icon` field accepts any [Lucide icon](https://lucide.dev) name. The icon renders to the left of the label in the sidebar, sized to match the row height.
+`icon` names one of the icons the sidebar draws. Names are matched ignoring case and punctuation (`Shield`, `shield`, `trending-up` all work):
 
-```toml
-[[menus.crm.items]]
-id = "pipeline"
-label = "Pipeline"
-icon = "briefcase"
-```
+| Name | | Name | | Name |
+|---|---|---|---|---|
+| `activity` | | `filter` | | `package` |
+| `alert` | | `folder` | | `search` |
+| `barchart` | | `globe` | | `settings` |
+| `bell` | | `grid` | | `shield` |
+| `briefcase` | | `key` | | `table` |
+| `building` | | `layers` | | `tag` |
+| `calendar` | | `link` | | `trendingup` |
+| `clock` | | `lock` | | `user` |
+| `database` | | `mail` | | `usercheck` |
+| `file` / `filetext` | | `network` | | `users` |
 
-Renders a briefcase icon next to the *Pipeline* folder.
+Any other name draws no icon, without error. The Inspector's icon list offers exactly these names.
 
-### How to pick a name
-
-- Browse [lucide.dev](https://lucide.dev) — every icon has its name visible.
-- Names are **lowercase kebab-case**: `chart-bar`, `git-branch`, `arrow-up-right`.
-- The framework matches case-sensitively — typos render no icon (no error).
-
-### Conventions
-
-A consistent icon vocabulary makes the menu legible at a glance. The patterns most installs settle on:
-
-| Concept | Icon |
-|---|---|
-| Users / people | `users`, `user`, `user-check` |
-| Security / permissions | `shield`, `key`, `lock` |
-| Reports / charts | `chart-bar`, `chart-line`, `chart-pie`, `trending-up` |
-| Tables / data | `table`, `database`, `layers` |
-| Settings / config | `settings`, `cog`, `sliders-horizontal` |
-| Sync / refresh | `refresh-cw`, `repeat`, `cloud-download` |
-| Pipeline / workflow | `briefcase`, `workflow`, `git-branch` |
-| Notifications | `bell`, `mail`, `inbox` |
-| Audit / history | `history`, `clock`, `file-clock` |
-| Calendar | `calendar`, `calendar-clock` |
-| Documents | `file`, `file-text`, `folder` |
-
-Pick one per domain and stay with it across the app. Switching between *Users* (`users`) and *Roles* (`shield`) within a Security folder reads consistently; mixing icons at random doesn't.
-
-### Folders vs leaves
-
-| Item kind | Icon convention |
-|---|---|
-| Folder | Usually an "area" icon (`shield` for Security, `briefcase` for Pipeline). Renders next to the chevron. |
-| Leaf | Usually a "thing" icon (`users` for the Users screen, `file-text` for Documents). |
-
-If you skip `icon` on a folder, the framework renders a default folder glyph. Leaves without `icon` render with a default file glyph.
-
-### When to skip icons
-
-| Pattern | Why |
-|---|---|
-| The label is short and unambiguous. | The icon doesn't add information — just visual noise. |
-| You're prototyping. | Add icons last, after the structure stabilises. |
-| The menu is short (5 items or fewer). | Icons don't help scanability when there's little to scan. |
-
-A consistent icon set helps with **30+ item menus**; below that, labels alone read fine.
-
----
-
-## A concrete example — same menu, three languages
-
-The Nomasx-1 app's *Security* folder, fully translated:
-
-```toml
-[[menus.nomasx1.items]]
-id = "security"
-label = "Security"
-l.fr = "Sécurité"
-l.de = "Sicherheit"
-icon = "shield"
-
-[[menus.nomasx1.items]]
-id = "security.users"
-parent = "security"
-label = "Users"
-l.fr = "Utilisateurs"
-l.de = "Benutzer"
-icon = "users"
-type = "query"
-target = "security_users_get"
-
-[[menus.nomasx1.items]]
-id = "security.roles"
-parent = "security"
-label = "Roles"
-l.fr = "Rôles"
-l.de = "Rollen"
-icon = "key"
-type = "query"
-target = "security_roles_get"
-
-[[menus.nomasx1.items]]
-id = "security.assignments"
-parent = "security"
-label = "User-role assignments"
-l.fr = "Attributions utilisateur ↔ rôle"
-l.de = "Benutzer-Rollen-Zuordnungen"
-icon = "git-branch"
-type = "query"
-target = "security_assignments_get"
-```
-
-A French user sees *Sécurité ▾ → Utilisateurs / Rôles / Attributions utilisateur ↔ rôle*. A German user sees *Sicherheit ▾ → Benutzer / Rollen / Benutzer-Rollen-Zuordnungen*. An English user sees the defaults. All three use the same icons.
-
----
-
-## Common pitfalls
-
-| Mistake | Symptom | Fix |
-|---|---|---|
-| `l.FR` (uppercase). | French users see the default English label — the lookup is case-sensitive. | Use lowercase language codes. |
-| `icon = "Shield"` (capitalised). | No icon renders (no error). | Use lowercase Lucide names. |
-| Icon name from another library (FontAwesome, Material). | No icon renders. | Pick from [lucide.dev](https://lucide.dev). |
-| Translations only on the menu, not on screens / dictionary. | Sidebar shows *Utilisateurs* but the screen title is *Users*. | Translate at both layers — menu's `l` AND the dictionary's `[dictionary.<id>].l_<lang>`. |
-| `l.fr-CA` set; French Canadian user falls back to English. | The exact-match resolution means `fr-CA` doesn't fall through to `fr`. | Either add `l.fr` as a fallback (the regional variant overrides it for `fr-CA` users) or simplify to `l.fr`. |
-
----
-
-## What's next
-
-- [Build the tree](./build-the-tree.md) — the editor where you set `l` and `icon` per item.
-- [Permissions and roles](./permissions-and-roles.md) — translation is independent of pruning, but both shape what the user actually sees.
-- [Concepts → Dictionary](../../dictionary.md) — the screen-side translation layer.
+Common choices: `shield` for security, `users` / `user` for people, `key` for roles, `database` / `table` for data, `barchart` / `trendingup` for reports, `settings` for administration, `folder` for plain folders.
 
 ---
 
 ## Liberty Next — Secure — overview
 Source: https://docs.nomana-it.fr/liberty/framework/build/secure/overview/
 
-Who can sign in (local or OIDC), what they can do (roles + permissions with allow/deny grammar), and what's encrypted at rest. The two layers of Liberty's security model.
+The security of a Liberty Next install: who can sign in (local users, OpenID Connect, sign-in throttle), what they can open (roles, allow and deny permissions), which rows they see (data scope), how secrets are stored (ENC: values), and the licence.
 
-Securing a Liberty install splits into two layers:
-
-| Layer | What it decides | Where you configure it |
+| Question | Answer | Page |
 |---|---|---|
-| **Identity** | *Who is signing in?* | `app.toml` — pick the backend (`toml` or `db`), optionally enable OIDC. |
-| **Authorization** | *What can they do once signed in?* | The Settings → Access page — create roles, assign permissions, attach roles to users. |
-
-Plus two cross-cutting concerns:
-
-| Concern | What it does | Where |
-|---|---|---|
-| **Encrypted secrets** | Pool passwords, OIDC client secret, API tokens are stored as `ENC:<base64>` on disk (AES-256-GCM). | The 🔒 toggle on the corresponding field in any Settings page. |
-| **License key** | Gates the bundled vendor products — Nomasx-1, Nomajde, NomaUBL …. | *Settings → App → License* (encrypted at rest, live on save). `LIBERTY_LICENSE_KEY` env var is the legacy fallback. |
-
-This page is the map; each task gets its own page.
+| Who can sign in? | Local users (`auth.toml`, or database tables) and, optionally, OpenID Connect. | [Sign-in](./sign-in.md), [Users](./users.md) |
+| What can they open? | Roles made of allow and deny permissions, edited on the application's menu tree. | [Roles and permissions](./roles-and-permissions.md) |
+| Which rows do they see? | A role's data scope — by company, region or any dictionary item, possibly from the user's attributes. | [Data scope](./roles-and-permissions.md#data-scope) |
+| How are secrets stored? | Encrypted `ENC:` values, with the install's master key. | [Encrypted secrets](./encrypted-secrets.md) |
+| Which products are unlocked? | The licence key. | [Licence key](./license-key.md) |
 
 ---
 
-## Identity — the two backends
+## Identity \{#identity\}
 
-Liberty doesn't ship with its own user database by default — it reads users from a TOML file unless you opt into the database backend.
-
-| Backend | When |
+| Backend | Users and roles stored in |
 |---|---|
-| **`toml`** (default) | Single instance, small team. Users + roles live in `config/auth.toml`. Edits are atomic; no DB required. |
-| **`db`** | Multi-instance / shared user catalogue. Tables `ly2_users` / `ly2_roles` / `ly2_user_roles` on the framework's pool. |
+| `toml` (default) | `config/auth.toml` — no database needed to sign in. |
+| `db` | The `ly2_users`, `ly2_roles` and `ly2_user_roles` tables of the framework pool. |
 
-Either backend can be **layered with OIDC** — users sign in through their corporate IdP (Keycloak, Azure AD, Auth0, Okta, Google …) and are auto-provisioned on first sign-in. OIDC users still need their roles assigned manually on the Access page; **groups are not auto-mapped** (this is a deliberate design choice, not a missing feature).
+Either can be combined with **OpenID Connect**: users sign in at the company's identity provider and are created at their first sign-in, without roles; an administrator assigns them. Attributes for the data scope can come from the provider's claims.
 
-See [Sign-in](./sign-in.md) for the full setup of either path.
+Local passwords are hashed (Argon2id). After ten failed sign-ins in five minutes for a user, sign-in is refused for a while (*429*).
 
 ---
 
-## Authorization — the permission grammar
+## Authorization \{#authorization\}
 
-Every action goes through a **permission check** before the user gets to do it. Liberty uses colon-segmented permission strings with **allow + deny** semantics:
+A permission is a colon-separated string — `sql:sales:orders_get`, `api:crm:get_customer`, `menu:sales:orders`, `dashboard:sales.overview`, `ai:chat` — and a role is a list of them, allows and denies (`!…`). The role editor writes them from the menu tree.
 
-| Pattern | Grants |
+| Surface | Checked |
 |---|---|
-| `sql:<connector>:<query>` | Run that specific SQL query. |
-| `sql:<connector>:*` | Run every query on that connector. |
-| `api:<connector>:<endpoint>` | Call that specific API endpoint. |
-| `menu:<app>:<id>` | See that menu item (folder or leaf). |
-| `dashboard:<id>` | Open that dashboard. |
-| `ai:chat` | Use the AI assistant. |
-| `*` | Wildcard — everything. The superuser baseline. |
-| `!<any pattern>` | Explicit **deny** — wins over any allow. |
+| Run a screen's read query, write a row | `sql:<connector>:<query>` of that query, then the data scope. |
+| Call an API endpoint | `api:<connector>:<endpoint>`. |
+| See a menu entry | The permission of what the entry runs, or an explicit `menu:` allow; a `menu:` or `dashboard:` deny hides it. |
+| Use the assistant | `ai:chat`; the assistant's queries are filtered by the data scope. |
+| Settings, Monitoring, Nomaflow, change packages | **Superuser** only. |
 
-The deny prefix is the key feature that makes the grammar expressive: instead of listing every permission a role should have, you start with a `*` baseline and **subtract** with `!<pattern>` rules.
+A deny wins over an allow, across all of a user's roles; superusers pass every check and every data scope.
 
-| Recipe | Permissions |
+---
+
+## Sessions \{#sessions\}
+
+A sign-in gives an access token (one hour) and a refresh token (14 days). Each renewal consumes the refresh token, reads the user again and applies changed roles, attributes or a deactivation. A change of rights therefore reaches a signed-in user within the hour, or at once after signing out and in.
+
+---
+
+## Secrets \{#secrets\}
+
+Pool passwords, API credentials, the licence key, the AI key, the OIDC secret and the SMTP password are encrypted when saved from Settings. The master key that encrypts them comes from the environment and must never change on an existing install. See [Encrypted secrets](./encrypted-secrets.md).
+
+---
+
+## Not provided by the framework \{#not-provided\}
+
+| Need | Where to handle it |
 |---|---|
-| Full superuser. | `["*"]` |
-| Everything except deleting customers. | `["*", "!sql:crm:customers_delete"]` |
-| Everything except the Admin menu. | `["*", "!menu:crm:admin", "!menu:crm:admin:*"]` |
-| Only the Reports menu (and its data). | `["menu:crm:reports", "menu:crm:reports:*"]` |
-| Reader on one connector. | `["sql:crm:*", "menu:crm:*"]` |
-
-Allow / deny resolution order:
-
-1. **Superuser bypass** — `is_superuser = true` skips every check (deny rules ignored).
-2. **Explicit deny** — if any `!<pattern>` matches, the request is rejected.
-3. **Explicit allow** — if any non-`!` pattern matches, the request is allowed.
-4. **Default deny** — otherwise, rejected.
-
-The full reference and the AccessBuilder UI for composing rules: [Roles and permissions](./roles-and-permissions.md).
-
----
-
-## What a permission gates — by surface
-
-| Surface | Permission(s) required |
-|---|---|
-| Sign in | A valid local / OIDC identity + `is_active = true`. |
-| See a menu item | `menu:<app>:<id>`. Items the user can't see are pruned from the rendered tree. |
-| Open a screen | `sql:<connector>:<read_query>` — the screen inherits its read query's permission. |
-| Edit a row (dialog or grid) | `sql:<connector>:<update_query>` / `<insert_query>` / `<delete_query>`. |
-| Open a dashboard | `dashboard:<id>`. Underlying chart queries still need their own `sql:` permissions. |
-| Run an API endpoint | `api:<connector>:<endpoint>`. |
-| Use the AI assistant | `ai:chat` + the underlying query permissions for whatever the assistant calls. |
-| Run a Nomaflow job | The job's `job:<name>` permission (covered in [Nomaflow → Permissions](../../../nomaflow/administration.md#permissions)). |
-| Edit Settings (Access, Connectors, Screens, Menus, Pools, Notifications) | `is_superuser = true`. Granular `settings:<section>` permissions exist for finer control. |
-
-The pattern: **most checks reduce to `sql:` or `api:`** because that's where the work actually happens. The other patterns (`menu:`, `dashboard:`, `ai:`) are visibility / surface controls layered on top.
-
----
-
-## JWT and refresh — when permission changes take effect
-
-Liberty issues two tokens at sign-in:
-
-| Token | Lifetime | Purpose |
-|---|---|---|
-| **Access token** | ~1 hour (default) | Sent on every API call. Embeds the user's roles + permissions snapshot. |
-| **Refresh token** | ~14 days (default) | Used to mint a new access token without re-typing the password. |
-
-A consequence: **permission changes don't take effect until the user's next access token mint** — either a refresh or a fresh sign-in. So:
-
-| Action | When the user sees the effect |
-|---|---|
-| You add a role to a user. | On their next refresh (within ~1 hour) or sign-out + sign-in (immediately). |
-| You remove a role. | Same. |
-| You disable a user (`is_active = false`). | On their next refresh — until then the existing access token still works. |
-
-For genuinely urgent revocations, the operational pattern is: disable the user **and** rotate the JWT signing secret (forces every existing token to be rejected). The framework doesn't offer per-user token revocation at the moment.
-
----
-
-## Encrypted secrets — at-rest protection
-
-Every secret field across the framework — pool passwords, OIDC client secret, API connector tokens, custom connector credentials — is encrypted at rest with the framework's **master key**. The UI shows a 🔒 toggle on every such field; the value lands on disk as `ENC:<base64>`.
-
-The encryption is AES-256-GCM with PBKDF2-HMAC-SHA512 key derivation; the master key comes from `[crypto] master_key` in `app.toml` (or the `LIBERTY_MASTER_KEY` env var). Without the master key the encrypted values can't be decrypted — back it up alongside the configuration.
-
-Full coverage: [Encrypted secrets](./encrypted-secrets.md).
-
----
-
-## License — gating licensed connectors
-
-Some bundled vendor products — Nomasx-1, Nomajde, NomaUBL and similar — are loaded only when the framework has a valid license key.
-
-The license is an RS256 JWT signed by the vendor; the canonical place to set it is *Settings → App → License* (encrypted at rest with the install master key, live on save — no restart). The `LIBERTY_LICENSE_KEY` env var still works as a fallback for installs that prefer to keep the secret in an orchestrator's secret store. With a missing or expired license, the licensed connectors don't load — their routes return 404 — but the rest of the framework still works.
-
-Full coverage: [License key](./license-key.md).
-
----
-
-## What's NOT in the framework
-
-Knowing what's missing prevents wrong assumptions when you design your security policy:
-
-| Feature | Status |
-|---|---|
-| **Multi-factor authentication (MFA)** | Not implemented. For MFA, delegate to an OIDC provider that enforces it. |
-| **Password expiry / forced rotation** | Not implemented. |
-| **Account lockout after failed logins** | Not implemented. |
-| **Rate limiting on `/auth/login`** | Not implemented at the framework layer — handle at the reverse proxy (nginx / Traefik). |
-| **OIDC group → Liberty role auto-mapping** | Not implemented. OIDC users land with no roles; an operator assigns them. |
-| **Audit log of role / permission changes** | Not implemented at the framework layer. The `audit_table` mechanism on screens covers data writes, not auth changes. |
-| **LDAP authentication** | Not implemented — use an OIDC bridge in front of LDAP (Keycloak does this well). |
-| **API key authentication** (in addition to JWT) | Not implemented. JWT bearer tokens only. |
-| **Per-user JWT revocation** | Not implemented. Rotating the JWT signing secret invalidates **every** token. |
-
-Most of these can be handled by an upstream OIDC provider (MFA, rate limiting, account lockout, audit) — push them to the IdP rather than expecting the framework to do them.
-
----
-
-## What you actually do — quick map
-
-| Goal | Read |
-|---|---|
-| Configure how users sign in — local or OIDC. | [Sign-in](./sign-in.md). |
-| Create roles and compose permissions. | [Roles and permissions](./roles-and-permissions.md). |
-| Add local users and assign roles. | [Users](./users.md). |
-| Encrypt secret fields at rest. | [Encrypted secrets](./encrypted-secrets.md). |
-| Install a license key for licensed connectors. | [License key](./license-key.md). |
-
----
-
-## What's next
-
-- [Sign-in](./sign-in.md) — local backend, OIDC, the sign-in screen.
-- [Concepts → Authentication](./sign-in.md) — deep reference.
+| Multi-factor authentication, password policies | The OpenID Connect provider. |
+| Mapping the provider's groups to roles | Not provided: roles are assigned in Settings → Access. |
+| Revoking one session at once | Deactivate the user (effective at the next renewal, within the hour); changing the JWT secret signs everybody out. |
+| LDAP sign-in | Through an OpenID Connect provider in front of the directory. |
 
 ---
 
@@ -9135,391 +8381,65 @@ Users are not deleted: to take someone out, switch **Active** off and save. They
 ## Liberty Next — Encrypted secrets
 Source: https://docs.nomana-it.fr/liberty/framework/build/secure/encrypted-secrets/
 
-The 🔒 toggle that encrypts secret fields at rest — what gets encrypted, how AES-256-GCM is wired, where the master key lives, the ENC: prefix, and the rotation story.
+How Liberty Next stores pool passwords, API credentials, the licence key, the AI key, the OIDC client secret and the SMTP password: encrypted as ENC: values on every save from Settings, with the install's master key.
 
-Every field in Liberty that holds a secret — pool passwords, OIDC client secret, API connector tokens, custom credentials — supports **encryption at rest**. The UI shows a 🔒 toggle next to the field; flipping it on stores the value as `ENC:<base64>` on disk instead of plaintext.
+Every secret field of Settings is encrypted when it is saved and written to the configuration file as `ENC:…`. The server decrypts it when it loads the file, with the install's **master key**.
 
-The encryption is **AES-256-GCM** with a key derived from the framework's master key via **PBKDF2-HMAC-SHA512**. The master key is the only secret you have to protect outside the framework — back it up with your configuration.
-
----
-
-## The 🔒 toggle
-
-Every secret field has a small lock icon next to it:
-
-| Toggle state | Storage on disk |
+| Field | Settings |
 |---|---|
-| **🔒 on** (green) | `password = "ENC:<base64>"` — the field is encrypted before being written to the config file. |
-| **🔒 off** | `password = "plaintext"` — discouraged; only useful in dev when the master key isn't set. |
+| Pool password | Settings → Pools |
+| API connector credentials (password, token, client secret) | Settings → Connectors |
+| Licence key, Anthropic API key, OIDC client secret, SMTP password | Settings → App |
 
-The toggle is **per field**, not per file — a pool can have an encrypted password and a plaintext host (since the host isn't a secret).
+A secret field is a masked input with an eye to show its content. There is nothing to switch on: a value saved from Settings is always encrypted, and the save is refused when the server has no master key.
 
----
+To give a secret from the environment instead, write `${VARIABLE}` in the file; to write an `ENC:` value by hand, use `liberty-crypto encrypt`. The details — the key, its derivation, `<NAME>_FILE` secrets — are on [Encryption & secrets](../../configuration/encryption-secrets.md).
 
-## What gets encrypted
-
-The framework's secret fields all support the toggle. The most common:
-
-| Field | Where | Why |
-|---|---|---|
-| **Pool password** | *Settings → Pools → \ → Password* | Database credentials. |
-| **OIDC client secret** | `app.toml` `[oidc] client_secret` (via env var pattern) | OAuth2 client secret. |
-| **API connector token** | *Settings → Connectors → \ → Authentication* | Bearer tokens, API keys, basic-auth passwords. |
-| **Webhook URLs with secrets** | *Settings → Notifications → \* | Slack webhook URLs (the URL itself is the secret). |
-| **JWT signing secret** | `app.toml` `[auth] jwt_secret` (via env var) | The key that signs every access token. Critical — never inline. |
-| **License key** | `app.toml` `[license] key` (via env var) | Not strictly a credential, but treated the same way for safety. |
-
-For UI fields, the toggle is the standard interaction. For `app.toml` entries that aren't surfaced in the UI, the convention is `${ENV_VAR}` syntax — the framework substitutes from the environment at startup and never writes the resolved value back.
-
----
-
-## How the encryption is wired
-
-| Layer | What |
-|---|---|
-| **Algorithm** | AES-256-GCM. Authenticated encryption — tampering with the ciphertext throws on decrypt. |
-| **Key derivation** | PBKDF2-HMAC-SHA512, 2145 iterations, 32-byte key from the master key. Each encryption draws a fresh 64-byte salt. |
-| **Per-value entropy** | A fresh 16-byte IV per encryption. So encrypting the same value twice produces different ciphertexts (expected for GCM). |
-| **Stored payload** | `ENC:` + base64(salt[64] ‖ iv[16] ‖ tag[16] ‖ ciphertext) |
-| **Decrypt** | Done lazily at use-time. A SQL pool reading its password decrypts on connection; an OIDC layer reads its secret on every sign-in. |
-
-The choice of GCM gives **integrity** — if the ciphertext is tampered with on disk, the decrypt fails loudly instead of yielding garbage. PBKDF2 with 2145 iterations matches the framework's installed-base compatibility (it's the v1 default, kept for round-trip).
-
----
-
-## The master key
-
-The master key is the only secret you have to manage outside the framework. Configure it via:
-
-| Source | Notes |
-|---|---|
-| **`[crypto] master_key` in `app.toml`** | Read at startup. Keep the file's permissions tight (`chmod 600`). |
-| **`LIBERTY_MASTER_KEY` env var** | Overrides the file value. The recommended path — the secret lives in your secret manager, not on disk. |
-| (none) | If neither is set, the framework refuses to decrypt `ENC:` values — fields fall back to plaintext or fail. |
-
-The key is **opaque** — any string the framework can hash will do. Generate one with:
-
-```bash
-openssl rand -hex 32   # 64-char hex string
-# or
-liberty-crypto genkey   # generates and prints a key
-```
-
-Don't change the master key once `ENC:` values exist — see [Key rotation](#key-rotation) below.
-
----
-
-## The `ENC:` prefix
-
-The `ENC:` literal prefix is how the framework distinguishes encrypted from plaintext values. The convention:
-
-| Stored value | Treated as |
-|---|---|
-| `password = "ENC:eyJ..."` | Encrypted — decrypt at use-time. |
-| `password = "secret123"` | Plaintext — used as-is. |
-| `password = "${DB_PASSWORD}"` | Env var substitution — the resolved value is used as-is (whether it's `ENC:...` or plaintext). |
-
-The framework **never re-encrypts** on its own — if you write a plaintext value, it stays plaintext. Flipping the 🔒 toggle in the UI is what triggers an encryption pass.
-
-For batch encryption of an existing config (e.g. migrating a plaintext-deployed install to encrypted-at-rest), the CLI provides:
-
-```bash
-liberty-crypto encrypt 'my_password'
-# → ENC:eyJzYWx0IjoiLi4uIiwiaXYiOiIuLi4iLCJ0YWciOiIuLi4ifQ==
-
-liberty-crypto decrypt 'ENC:eyJ...'
-# → my_password
-```
-
-Use these to manually compose values for `app.toml` entries that aren't surfaced in the UI.
-
----
-
-## Key rotation \{#key-rotation\}
-
-Changing the master key is **destructive** for existing `ENC:` values — they're encrypted under the old key and can't be decrypted with the new one. The rotation procedure:
-
-1. **Decrypt every existing `ENC:` value** with the old key (`liberty-crypto decrypt` on each).
-2. **Switch to the new master key** (env var or `app.toml`).
-3. **Re-encrypt** each value with the new key (`liberty-crypto encrypt`).
-4. **Update each field** with the new ciphertext.
-5. **Restart** the framework so it loads with the new key.
-
-For installs with hundreds of encrypted fields, write a script — the framework doesn't ship a bulk rotation tool yet. The shape of such a script:
-
-```bash
-# 1. dump every secret with the old key
-liberty-crypto rotate-prepare --output /tmp/rotation.json
-# 2. swap LIBERTY_MASTER_KEY to the new value, restart workers
-# 3. re-encrypt from the dump
-liberty-crypto rotate-apply --input /tmp/rotation.json
-```
-
-The `rotate-prepare` and `rotate-apply` commands aren't shipped today; the manual procedure above is the current path. **Plan rotations carefully** — every encrypted value across every config file needs updating.
-
-**Safer than rotation: never lose the master key in the first place.** Back it up alongside the configuration. A lost master key with `ENC:` values on disk requires re-entering every secret by hand.
-
----
-
-## Where the master key should NOT live
-
-| Location | Why not |
-|---|---|
-| Plain text in `app.toml` checked into git. | The whole point of `ENC:` is to not have secrets in the repo. Defeats the purpose. |
-| Hard-coded in a Dockerfile. | Same — leaks at build time. |
-| In a CI/CD log. | Some pipelines echo env vars; the key surfaces in logs forever. |
-| The same place as the encrypted backups. | If someone steals one, they steal both. |
-
-**Right places:** a secret manager (AWS Secrets Manager, HashiCorp Vault, Azure Key Vault, 1Password Connect), the OS keyring on a dev machine, an env var injected by your orchestrator at runtime.
-
----
-
-## What happens without a master key
-
-If the framework starts with no master key set and there are `ENC:` values on disk:
-
-- The startup logs a warning.
-- Attempting to use a field with an `ENC:` value raises a decrypt error at use-time (when the pool tries to connect, when OIDC tries to fetch the token, etc.).
-- The rest of the framework keeps working — only the affected paths break.
-
-This is **fail-loud-not-silent** — the framework won't silently fall back to "use ENC: as plaintext" because that would mean signing in with a base64 blob.
-
-For dev environments where you don't want to set a master key, store secrets as plaintext (don't toggle 🔒).
-
----
-
-## What if a secret is exposed
-
-Standard incident response:
-
-1. **Rotate the upstream credential** (change the DB password, regenerate the OIDC client secret, regenerate the API token at the third party).
-2. **Update the field** in Liberty — re-enter the new secret, leave 🔒 on.
-3. The framework picks up the new value on next reload or restart.
-4. (Optional) If the master key itself was exposed: rotate the master key per the procedure above.
-
-The master key compromise is the **only** path that requires touching every encrypted field — credential rotation is a one-field-at-a-time fix.
-
----
-
-## Common pitfalls
-
-| Mistake | Symptom | Fix |
-|---|---|---|
-| Master key in `app.toml` checked into git. | Secret leaks. | Use `LIBERTY_MASTER_KEY` env var sourced from a secret manager. |
-| Different master keys across environments without coordination. | Prod's `ENC:` values fail to decrypt in staging. | Decrypt + re-encrypt when promoting between environments, or use the same master key (with appropriate access control). |
-| Editing an `ENC:` value directly in `app.toml`. | The framework decrypts the file you typed, which isn't valid ciphertext, and fails. | Use the UI's 🔒 toggle (re-types the value, then encrypts on save) or `liberty-crypto encrypt`. |
-| Toggling 🔒 off and saving. | The value lands on disk in plaintext. | Verify the toggle stays on before saving, or use `liberty-crypto encrypt` from the CLI. |
-| Backing up the encrypted config without the master key. | Restoring later yields useless ciphertexts. | Back them up together (in separate secure locations is fine; just don't forget the key). |
-| Assuming `${ENV_VAR}` substitution is "encryption". | It's not — env var substitution just hides the value from the file. If the env var holds plaintext, the runtime value is plaintext. | Pair the substitution with `ENC:` (`${OIDC_CLIENT_SECRET}` where the env var holds `ENC:...`) for at-rest encryption of the resolved value too. |
-
----
-
-## What's next
-
-- [License key](./license-key.md) — managed the same way as a secret, but plays a different role.
-- [Sign-in](./sign-in.md) — OIDC client secret is the canonical encrypted field beyond DB passwords.
-- [Concepts → Configuration → Encrypted secrets](../../configuration/encryption-secrets.md) — the deep reference.
+:::warning[The master key]
+Keep a copy of the master key outside the server and never change it on an existing install: every `ENC:` value would become unreadable. `./liberty doctor` checks that it decrypts every pool password.
+:::
 
 ---
 
 ## Liberty Next — License key
 Source: https://docs.nomana-it.fr/liberty/framework/build/secure/license-key/
 
-What the license gates (the bundled vendor products — Nomasx-1, Nomajde, NomaUBL …), where to set it (Settings → App is the canonical path; LIBERTY_LICENSE_KEY env var still works as a fallback), and what happens when it's missing or expired.
+The Liberty Next licence key: what it unlocks (Nomasx-1, Nomajde), where to paste it (Settings → App → License), how to check it (liberty-license, /api/license), what happens without it, and how to replace it before it expires.
 
-Liberty's open framework — connectors, screens, menus, the AI assistant, Nomaflow — is fully usable without a license. **Licensed connectors** are a separate piece: bundled vendor products like Nomasx-1, Nomajde and NomaUBL that the framework loads only when a valid license is present.
-
-This page covers what the license gates, where to put it, and what's visible when it isn't there.
+The framework is free to use. The licensed applications — **Nomasx-1** and **Nomajde** — are unlocked by a licence key delivered by Nomana-IT.
 
 ---
 
-## What's gated
+## Install the key \{#install\}
 
-A connector is **licensed** when the framework's vendor (Nomana-IT) classifies it that way at build time. The current licensed connectors are **Nomasx-1**, **Nomajde** and **NomaUBL** — and the list grows when new bundled products ship. Liberty Next's open primitives (your own SQL connectors, screens, menus, dashboards, Nomaflow jobs, the AI assistant) are **never** licensed and don't need a key.
+Sign in as a superuser, open **Settings → App → License**, paste the key into **License key** and save. The key is encrypted with the install's master key, and the licensed applications load at once — no restart.
 
-At framework startup:
+Before pasting it, the key can be checked from the server: `liberty-license verify <key>` (on Docker: `docker exec -u liberty liberty-next liberty-license verify <key>`).
 
-| State | Behaviour |
+---
+
+## Check the licence \{#check\}
+
+| Where | Shows |
 |---|---|
-| **Valid license present** | Licensed connectors load normally; their queries, screens, menus and dashboards work as expected. |
-| **No license** (or expired / wrong) | Licensed connectors **don't load**. Routes that reference them return 404; menus pointing at them are pruned. The rest of the framework keeps working. |
-
-The framework's own infrastructure — auth, pools, the open-source connector tooling, Nomaflow — is **never gated**. Only the bundled vendor products are.
-
----
-
-## Where the license lives
-
-Three paths — the UI is the canonical one:
-
-| Path | When | How |
-|---|---|---|
-| **Settings → App → License** *(canonical)* | Default for every new install. The operator pastes the JWT once; the framework encrypts it at rest with the install master key. Live — connectors rebuild on save, no restart. | Open the SPA → *Settings → App* → expand *License* → click *Set* / *Replace* → paste the JWT → save. See [App settings](../settings-app.md). |
-| **`LIBERTY_LICENSE_KEY` env var** *(legacy / power-user)* | Existing installs that already wired the env var; deployments where the operator wants the key to live in a secret manager (Kubernetes Secrets, Docker Secrets, Vault…). Read at startup. | Set in the environment; reference from `app.toml` as `key = "${LIBERTY_LICENSE_KEY}"`. The UI's License field then shows the resolved value as configured but read-only — clear the `${VAR}` reference first if you want to edit from the UI. |
-| **Plain text in `app.toml`** *(discouraged)* | Demo / scratch — same risks as inlining any secret in a committed file. | `[license] key = "eyJhbGciOiJSUzI1NiI…"`. |
-
-On disk after a UI save:
-
-```toml title="config/app.toml"
-[license]
-key = "ENC:eYWBcD…7q=="          # AES-256-GCM with the install master key
-```
-
-The `ENC:` prefix is the framework's sentinel — the loader recognises it, decrypts with `LIBERTY_MASTER_KEY`, hands the plaintext to the verifier. Plaintext values are read as-is; env-var references are resolved at startup as before.
-
-`install.sh` (release/ folder) no longer writes `LIBERTY_LICENSE_KEY` to `.env` — the canonical path is the UI. For the env-var path on a Docker install, edit `.env` by hand and add an `environment:` entry for `liberty-next` in the compose file (or use Docker Secrets in Swarm).
+| The **License** section header | *configured*, or *not set — restricted mode*. |
+| `liberty-license status` | Validity, products covered, expiry date of the configured key. |
+| `GET /api/license` | `{mode, customer, plan, apps, expires_at, error}`. |
+| `GET /info` | `license.mode`: `full` or `restricted`. |
 
 ---
 
-## The license format
+## Without a valid key \{#restricted\}
 
-The license itself is an **RS256-signed JWT** from the vendor (Nomana-IT). Its claims include:
-
-| Claim | What it carries |
-|---|---|
-| `iss` (issuer) | The vendor identity. |
-| `sub` (subject) | The licensed customer or instance. |
-| `exp` (expiry) | Unix timestamp after which the license is rejected. |
-| `aud` (audience) | The product / version family the license covers. |
-| `connectors` (custom) | The list of licensed connector keys this license unlocks. |
-
-Verification uses an **RSA public key embedded in the framework build** (`liberty/licensing/public.pem`). The framework checks the signature, the expiry, and the audience at startup. No network call to the vendor — the verification is offline.
+Without a key, or with an expired or invalid one, the server runs in **restricted mode**: the framework and the applications built on it work, the licensed applications do not load. The server log says why with a line starting `license: not loading licensed connector(s)`.
 
 ---
 
-## What an operator sees
+## Replace the key \{#replace\}
 
-| Surface | With license | Without license |
-|---|---|---|
-| **App switcher** | Licensed apps appear (if they have menus and `show_in_switcher`). | Licensed apps don't appear. |
-| **Connectors page** | Licensed connectors listed under *Apps* or *Data sources*. | The connectors are skipped at load; they don't appear in the Settings UI either. |
-| **Direct URL** (e.g. `/screen/nomasx1/security_users`) | Opens. | Returns 404. |
-| **Framework log at startup** | A line per licensed connector: `Loaded licensed connector nomasx1`. | A line per skipped connector: `Skipping licensed connector nomasx1 — no valid license`. |
+Note the expiry date when the key is installed. Before it expires, paste the new key in **Settings → App → License** and save: it applies at once.
 
-For a quick check from the UI, the framework exposes a license status endpoint:
-
-```
-GET /api/license
-→ { "valid": true, "subject": "ACME Corp", "expires_at": "2026-12-31T00:00:00Z", "connectors": ["nomasx1", "nomajde", "nomaubl"] }
-```
-
-A `valid: false` response with a `reason` tells you why the framework rejected the license — expired, wrong audience, bad signature.
-
----
-
-## When the license expires
-
-The expiry is enforced **at startup** and on **reload**. Practical implications:
-
-| Event | What happens |
-|---|---|
-| Framework keeps running past `exp` without reload. | The licensed connectors **keep working** — the check runs at load time, not per request. |
-| Reload or restart after `exp`. | Licensed connectors **stop loading**. The next operator restart sees them disappear. |
-| Operator installs a fresh license before `exp` minus a buffer. | New license takes effect at next restart / reload. |
-
-The pragmatic operational pattern: **rotate the license well before expiry** — at least a week. Set a calendar reminder a month out so you don't notice expiry by way of a startup error.
-
----
-
-## Installing a license
-
-The standard flow when you receive a new license JWT from the vendor:
-
-### Option A — Settings → App (recommended)
-
-1. Sign in to the SPA as a superuser.
-2. Open *Settings → App* → expand the *License* section.
-3. Click *Set* (first install) or *Replace* (rotation) — the field becomes editable.
-4. Paste the full JWT, click *Save*.
-5. The connector registry rebuilds in place — **no restart**. Licensed connectors that were filtered out at startup reappear immediately.
-6. Open `/api/license` to verify (`valid: true`, expected `subject`, expected `expires_at`), or just check the *License* section's header badge — it shows *configured*.
-
-The JWT is encrypted at rest with the install master key (`ENC:` prefix in `app.toml`). The masked-secret reveal-to-edit pattern means the existing value is never exposed in the UI — clicking *Set* / *Replace* opens an empty input; the stored ciphertext is only decrypted by the framework at startup. See [App settings](../settings-app.md) for the full editor walkthrough.
-
-### Option B — env var
-
-For installs that prefer the secret to live in a secret manager / orchestrator config (Kubernetes Secrets, Docker Secrets, Vault):
-
-1. Put the JWT into your secret manager.
-2. Set `LIBERTY_LICENSE_KEY` in the framework's environment (the `liberty-next` container's `environment:` block, or the systemd unit's `EnvironmentFile`).
-3. Reference it from `config/app.toml`: `[license] key = "${LIBERTY_LICENSE_KEY}"`.
-4. Restart the framework.
-5. Open `/api/license` to verify.
-
-The env-var path means the UI's *License* field shows the resolved value as configured but **read-only** — clear the `${VAR}` reference from `app.toml` first if you want to manage the value from the UI.
-
-### Option C — plain text in `app.toml` (discouraged)
-
-Inlining the JWT directly into the file works (it's the same RS256 string), but lands the secret in version control if the file is committed. Use only for scratch / demo installs.
-
----
-
-## Per-environment licenses
-
-Licenses are often issued **per environment** (production vs staging vs sandbox). Coordinate with the vendor on whether one license covers multiple environments or each needs its own.
-
-For deployments using the env var pattern, each environment's secret manager holds its own license. The framework reads what's there at startup; no environment-specific configuration in `app.toml`.
-
----
-
-## What's NOT in the framework
-
-| Feature | Status |
-|---|---|
-| **License renewal API** | Not implemented at the framework layer. Rotation = receive a new JWT, swap the env var, restart. |
-| **Grace period after expiry** | Not implemented. `exp` is a hard limit. |
-| **Per-instance license counting** | The license is one-per-deployment; the framework doesn't enforce per-tenant limits. Vendor-side policy. |
-| **License revocation** | Not supported. Once issued, a license is valid until `exp`. Don't expose the JWT publicly. |
-| **License hot-reload via the UI** | Yes — *Settings → App → License* rebuilds the connector registry on save. No restart required. The env-var path still needs a restart. |
-
-For grace-period behaviour, run a calendar reminder workflow yourself — most installs add the license expiry to their general expiry tracker (TLS certs, third-party API keys).
-
----
-
-## Diagnosing license problems
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Licensed connectors don't appear after restart. | License absent, expired, or wrong audience. | `GET /api/license` — read the `reason`. |
-| `GET /api/license` returns `valid: false`. | Same as above — check `reason`. | Re-paste the JWT (whitespace gets in the way), or contact the vendor for a fresh license. |
-| Framework log shows `Skipping licensed connector X — no valid license`. | License doesn't cover X. | Check the license's `connectors` claim. |
-| Framework log shows `License signature invalid`. | The JWT was tampered with or truncated. | Re-paste from the vendor's original delivery. |
-| Framework log shows `License expired`. | `exp` claim is in the past. | Get a renewal from the vendor. |
-
-The framework log lines are the **source of truth** — they include the exact reason. The UI just surfaces whatever `GET /api/license` returns.
-
----
-
-## What the license does NOT do
-
-| Misconception | Reality |
-|---|---|
-| The license unlocks features. | It only unlocks **licensed connectors**. The framework's primitives (screens, menus, dashboards, jobs, AI) are not gated. |
-| The license enables the AI assistant. | The AI uses your own API key (Anthropic). The license is separate from any AI cost. |
-| The license rate-limits API calls. | No — the framework doesn't rate-limit based on the license. |
-| The license requires phoning home. | No — verification is offline against the embedded public key. |
-| Without a license, the framework refuses to start. | No — the framework starts and works fully; only the licensed connectors are skipped. |
-
----
-
-## Common pitfalls
-
-| Mistake | Symptom | Fix |
-|---|---|---|
-| Pasting the JWT with line breaks. | The signature check fails. | Strip every whitespace; the JWT is a single line. |
-| Setting `LIBERTY_LICENSE_KEY` but leaving `[license] key` empty in `app.toml`. | Works — env var wins. | This is the intended pattern; nothing to fix. |
-| Setting both, with different values. | Env var wins, file value is ignored. | Pick one source. |
-| Updating the env var but not restarting. | New license isn't picked up. | Restart the framework. |
-| Not setting up an expiry reminder. | License expires; on next restart, licensed connectors vanish; users complain. | Calendar reminder a month before `exp`. |
-| Sharing the JWT across customers. | Vendor-side breach of contract; vendor can revoke and refuse future support. | One license per customer. |
-
----
-
-## What's next
-
-- [Encrypted secrets](./encrypted-secrets.md) — protect the JWT itself at rest if you must inline it.
-- [Concepts → Authentication → License key](./license-key.md) — the deep reference.
-- [Overview](./overview.md) — the rest of the Secure section.
+The key can also come from the environment — `[license] key = "${LIBERTY_LICENSE_KEY}"` in `app.toml` — for installs that keep secrets in an orchestrator; Settings then shows the reference as it is.
 
 ---
 
@@ -10783,9 +9703,9 @@ Run the job from the Nomaflow Jobs page with **Run with parameters**: same plugi
 ## Liberty Next — Packages
 Source: https://docs.nomana-it.fr/liberty/framework/build/packages/
 
-Ship configuration from one Liberty install to another. Settings → Package: pick a few screens / menu items / dashboards as seeds, the dependency walker pulls in everything they reach (queries, dictionary, charts), and the package exports as a ZIP. On the target install, upload + pick a merge strategy (merge / overwrite / replace all). Same UI handles both sides.
+Ship configuration from one Liberty install to another. the Nomaflow Package page: pick a few screens / menu items / dashboards as seeds, the dependency walker pulls in everything they reach (queries, dictionary, charts), and the package exports as a ZIP. On the target install, upload + pick a merge strategy (merge / overwrite / replace all). Same UI handles both sides.
 
-The **Packages** screen (Settings → Package) is Liberty's built-in deployment mechanism: an operator on the **source** install picks a few screens / menu items / dashboards as *seeds*, the framework walks every reference they reach (queries, connectors, dictionary entries, charts), and the result ships as a ZIP. On the **target** install, the same screen accepts a ZIP, lets the operator pick a merge strategy and applies it to the live config — followed by an automatic reload.
+The **Package** page (Nomaflow menu, address `/nomaflow/package`) is Liberty's built-in deployment mechanism: an operator on the **source** install picks a few screens / menu items / dashboards as *seeds*, the framework walks every reference they reach (queries, connectors, dictionary entries, charts), and the result ships as a ZIP. On the **target** install, the same screen accepts a ZIP, lets the operator pick a merge strategy and applies it to the live config — followed by an automatic reload.
 
 This is the standard *staging → production* path. It's also the right tool for cross-customer reuse: build a "starter" package of curated screens, hand it to a fresh install, apply with `replace_all`, done.
 
@@ -10928,7 +9848,7 @@ Two limits worth knowing:
 | **Read the report** | Per-file row showing `+N added`, `~N replaced`, `⊘N skipped`, `✗N errors` plus a sample of the affected entity names. |
 | **A green *Applied + reloaded* badge** | Confirms the reload succeeded — new config is live for the next request. |
 
-If reload fails after a successful apply, the import warning panel shows the reason but the file changes are kept on disk. Run *Settings → Reload* manually after fixing the underlying issue.
+If reload fails after a successful apply, the import warning panel shows the reason but the file changes are kept on disk. Run *Settings → Reload config* manually after fixing the underlying issue.
 
 ---
 
@@ -10970,7 +9890,7 @@ Liberty also exposes a dedicated **Find dependencies** modal from any screen / m
 | Used `replace_all` to apply a small slice — wiped customer-specific screens. | Customer screens missing from the target after import. | Restore the previous TOML from your backup. Re-apply with `overwrite` next time. |
 | Bundled `connectors.toml` (default-excluded) without checking pool names match the target. | Target's pools change unexpectedly; pre-existing queries error at next reload. | Leave connectors / pools default-excluded unless the target is brand-new. Or rename pools on the source before bundling. |
 | Built from a source with unresolved references (broken rename / deleted query). | MANIFEST.md lists items under *Missing references*. | Fix on the source (rename / delete / restore) and rebuild. The target won't get the broken references — but it also won't get the screens / queries that referenced them. |
-| Import landed but `Applied + reloaded` is missing — a *reload failed* warning showed. | Disk has the new config; in-memory state is stale. | Reload manually via *Settings → Reload* once the underlying issue is fixed (often a syntax error in an unrelated TOML the reload caught). |
+| Import landed but `Applied + reloaded` is missing — a *reload failed* warning showed. | Disk has the new config; in-memory state is stale. | Reload manually via *Settings → Reload config* once the underlying issue is fixed (often a syntax error in an unrelated TOML the reload caught). |
 
 ---
 
@@ -11009,283 +9929,92 @@ curl -X POST \
 ## Liberty Next — App settings
 Source: https://docs.nomana-it.fr/liberty/framework/build/settings-app/
 
-Settings → App is the master editor for app.toml — four collapsible sections (App, License, AI Assistant, OpenID Connect) covering host/port, the license key, the AI assistant configuration and OIDC SSO. Sensitive fields (license.key, ai.api_key, oidc.client_secret) round-trip masked and are encrypted at rest with the install master key. Most changes take effect live — only host / port / log_level need a server restart.
+Settings → App in Liberty Next: the six sections — App (name, address, logs, language, UI defaults, hot reload, Oracle thick mode), License, AI Assistant, Notifications (email), OpenID Connect (SSO), PDF branding — what each field does, which secrets are encrypted, and what needs a restart.
 
-The **Settings → App** screen is the master editor for `config/app.toml`. It surfaces the curated subset of the file that an operator legitimately edits at runtime — application defaults, the license key, the AI assistant configuration, and OIDC single sign-on — leaving the boot-time-only sections (`[auth] backend`, `[pools.*]` connection strings, `[connectors] config_path`) on disk untouched.
+**Settings → App** edits `app.toml`. Each section folds; its header shows a summary (*configured*, *not set — restricted mode*, *no API key*, *disabled*…). **Save** validates and applies the whole page at once. The editor is in English.
 
-The page is also the canonical place to store **three secrets** that previously lived as `${LIBERTY_LICENSE_KEY}`, `${ANTHROPIC_API_KEY}` and `${LIBERTY_OIDC_CLIENT_SECRET}` env vars: the license key, the Anthropic API key and the OIDC client secret. Saving them from the UI **encrypts them at rest** with the install master key (`LIBERTY_MASTER_KEY`); the on-disk value carries the `ENC:` prefix. Env-var references still work (the framework reads them at startup if set), but the UI editor is the recommended path — secrets stay sealed to the host.
-
----
-
-## At a glance
-
-The page is a single scrollable column of **four collapsible sections**. The first time you open it, only the App section is expanded; the others remember their state via `localStorage`.
-
-| Section | What it edits | Live? |
-|---|---|---|
-| **App** | `name`, bind `host`, `port`, `log_level`, `hot_reload`, `default_language` | host / port / log_level need a server restart; the rest live. |
-| **License** | `[license] key` — the vendor-signed RS256 JWT that unlocks the licensed connectors (Nomasx-1, Nomajde, NomaUBL…). | Live. The connector registry is rebuilt on save; licensed connectors that were previously filtered out reappear immediately. |
-| **AI Assistant** | `[ai]` — `enabled`, `model`, `api_key`, tool exposure (`connector_tools` / `api_tool` / `scaffold_tools`), per-call limits (`max_tokens`, `max_iterations`, `request_timeout`), `system_prompt`, `effort`, `thinking`, allowed connectors, server-side web-fetch domain allowlist. | Live. The assistant is rebuilt; the next chat turn uses the new config. |
-| **OpenID Connect (SSO)** | `[oidc]` — `enabled`, `discovery_url`, `client_id`, `client_secret`, scopes, claim mappings, optional proxy redirect overrides. | Live. The OIDC handler is rebuilt; sign-in flows use the new config on next request. |
-
-A header badge on each section summarises the current state at a glance: `:8000 · info` on App, `configured` / `not set — restricted mode` on License, `claude-opus-4-8 · no API key` on AI, `https://keycloak.example/…` on OIDC.
-
-The save button writes back to `config/app.toml` via `PUT /admin/config/app/parsed`. The toolbar shows a *Discard* button while the form is dirty.
+Secret fields — the licence key, the Anthropic API key, the SMTP password, the OIDC client secret — are masked inputs with an eye; they are encrypted with the master key when saved ([Encryption](../configuration/encryption-secrets.md)).
 
 ---
 
-## Masked secrets — the reveal-to-edit pattern
+## App \{#app\}
 
-Three fields are sensitive — `license.key`, `ai.api_key`, `oidc.client_secret`. They follow a reveal-to-edit pattern so the operator never sees the stored ciphertext and never accidentally overwrites a configured value while editing other fields.
-
-| State | UI |
+| Field | Notes |
 |---|---|
-| **Not configured** | The row shows `not configured` in italic + a *Set* button. |
-| **Configured** | The row shows `••••••••••••` + a *Replace* button. |
-| **Editing** | The button click reveals a plain-text input pre-filled with empty (the stored value never leaves the server). Type the new secret. |
+| **App name** | The application's name. |
+| **Bind host**, **Port** | Listening address and port. **Restart needed.** |
+| **Log level** | `debug`, `info`, `warning`, `error`, `critical`. **Restart needed.** |
+| **Default language** | Labels when a request names no language. |
+| **Default period (dashboards)** | The preset a dashboard opens on when it names none — see [Dashboards](../dashboards.md#period). |
+| **Grid page size** | The grids' initial page size (10 to 10 000, default 50). A saved view's own size wins. |
+| **Dashboard cache (seconds, 0 = none)** | How long a reopened dashboard reuses its widgets' results (default 60). |
+| **Hot-reload config TOML files on change** | Apply configuration files as soon as they change — see [Hot reload](../configuration/hot-reload.md). |
+| **Oracle thick mode (…)** | Oracle Instant Client for every Oracle pool — needed for Native Network Encryption and LOBs over a database link. Takes effect after a restart. See [Connectors](../connectors.md#oracle-thick). |
 
-While the field is in masked state, the wire payload sends `""`. The backend treats `""` as **leave unchanged** — the on-disk encrypted value is preserved. Once the operator clicks *Set* / *Replace*, the field accepts new input; on save the new plaintext is encrypted with the install master key and replaces the previous value.
-
-To **clear** a configured secret, click *Replace*, leave the input empty, save. The on-disk value becomes `""` and the connector reports unconfigured.
+When a saved change needs a restart, the page says *Saved. Restart the server to apply the new settings.*
 
 ---
 
-## Section 1 — App
+## License \{#license\}
 
-The base application settings — what shows in the title bar, where the server binds, how verbose its logs are.
+**License key**: paste the key delivered by Nomana-IT. The licensed connectors load at once, without a restart. See [Licence key](./secure/license-key.md).
 
-| Field | What |
+---
+
+## AI Assistant \{#ai\}
+
+| Field | Notes |
 |---|---|
-| **App name** | Shown in the SPA's header and the OpenAPI title. Free text. |
-| **Bind host** | The interface uvicorn binds to. `0.0.0.0` (the default in the container) accepts every interface; `127.0.0.1` is loopback-only. |
-| **Port** | uvicorn listen port. Default `8000`. The full Docker layout doesn't change this — Traefik fronts liberty-next on `:80`/`:443`. |
-| **Log level** | `error`, `warning`, `info`, `debug`, `trace`. The choices come from the backend; the dropdown is populated from `/admin/config/app/parsed`'s `choices.log_levels`. |
-| **Default language** | `en`, `fr`, … — fallback when a request has no `Accept-Language` or the user has no preference set. Two-letter code. |
-| **Hot-reload config TOML files on change** | When on, the framework watches `connectors.toml`, `dictionary.toml`, `menus.toml`, etc. and reloads on file change. Useful in dev; in production, leave it off and use *Settings → Reload* or `POST /admin/reload` after intentional edits. |
+| **Enabled** | The assistant answers; users need the `ai:chat` permission. |
+| **Anthropic API key** | Without it, the assistant says it is not configured. |
+| **Model**, **Effort**, **Max tokens**, **Adaptive thinking** | The model and how much it reasons and writes. |
+| **Max tool iterations** | Tool calls per answer, at most (default 8). |
+| **Request timeout (s)** | Default 120. |
+| **System prompt** | Empty: the built-in instructions. |
+| **Connector tools** | The assistant may list connectors and run their **read** queries. |
+| **API tool** | The assistant may call API endpoints — off by default, since an endpoint may change data. |
+| **Scaffold tools** | The assistant may propose queries, dictionary entries, screens and menu items; the user applies the proposal. |
+| **Allowed connectors** | The connectors the assistant may use; empty means all. |
+| **Allowed domains**, **Max fetches per turn** | Web pages the assistant may read; no domain means no web access. |
 
-`host`, `port` and `log_level` are read **once at uvicorn startup** — saving from the UI updates the file but the running process keeps its old values until restart. The PUT response carries `requires_restart: true` for those changes; the UI shows a yellow banner: *Saved. Restart the server to apply the new settings.* The other App fields apply live.
+See [AI assistant](../ai-assistant.md).
 
 ---
 
-## Section 2 — License
+## Notifications (email) \{#notifications\}
 
-The vendor-signed RS256 JWT that unlocks the licensed connectors. Without it the framework runs in **restricted mode** — licensed connectors aren't loaded; the rest of the framework works normally.
+**Notifications enabled**, then the **Server** (SMTP host, Port, Encryption — STARTTLS, implicit TLS or none —, Timeout), the **Account** (User, Password) and **Sending** (From address). See [Notifications](../../nomaflow/notifications.md#smtp).
 
-| Field | What |
+---
+
+## OpenID Connect (SSO) \{#section-4--openid-connect-sso\}
+
+| Field | Notes |
 |---|---|
-| **License key** | The full JWT (`eyJhbGciOiJSUzI1NiI…`). Stored in `[license] key` in `app.toml`, encrypted at rest. The masked-secret reveal-to-edit pattern applies. |
+| **Enabled** | Shows the OIDC button on the sign-in page. |
+| **Discovery URL** | The provider's `.well-known/openid-configuration`. |
+| **Client ID**, **Client secret**, **Scopes** | As registered at the provider (`openid email profile` by default). |
+| **Username claim**, **Email claim**, **Name claim** | Which ID-token claims fill the user (`preferred_username`, `email`, `name`). |
+| **Redirect URL override (proxy)**, **Frontend redirect** | Only behind a proxy that rewrites the host, or for a front-end that handles the tokens itself. |
 
-On save, the framework:
-
-1. Encrypts the plaintext with the install master key (AES-256-GCM, `ENC:` prefix).
-2. Writes only the `[license]` table back to `app.toml` (other tables preserved via `tomlkit` round-trip).
-3. Reloads the settings; verifies the new license via the bundled vendor public key.
-4. Rebuilds the connector registry. Licensed connectors that were filtered out at startup **reappear immediately**; those the new key no longer covers are dropped.
-5. Rebinds the auth backend (when `auth.backend = db`, the auth store sits in `connectors.pools`).
-
-No restart, no full reload, no menu refresh — the next request sees the new license. See [License key](./secure/license-key.md) for the verification rules, expiry handling and the `liberty-license verify` CLI.
+Register `https://<host>/auth/oidc/callback` as redirect URI at the provider. Data-scope attributes from claims (`attribute_claims`) are set in `app.toml`. See [Sign-in](./secure/sign-in.md#oidc).
 
 ---
 
-## Section 3 — AI Assistant
+## PDF branding \{#branding\}
 
-Every knob on the in-app AI assistant — model, key, tool exposure, prompt, per-call limits, server-side web fetch.
+The cover and page settings of the PDF reports: author, primary colours, cover texts, footer. Empty fields keep the framework's defaults.
 
-### Identity and key
+---
 
-| Field | What |
+## Not on this page \{#elsewhere\}
+
+| Setting | Where |
 |---|---|
-| **Enabled** | Master toggle. When off, the `/chat` route returns 404 and the AI bubble disappears from the SPA. |
-| **Anthropic API key** | `sk-ant-…`. Encrypted at rest. The masked-secret pattern applies. |
-| **Model** | The Anthropic model id. The dropdown lists Opus 4.8 (recommended, top of the list), Opus 4.7 / 4.6, Sonnet 4.6 / 4.5, Haiku 4.5. A custom id pinned in `app.toml` (e.g. an experimental release) is shown at the top of the dropdown with a `(custom)` suffix so it stays visible. |
-| **Effort** | Per-call thinking effort — `(default)` / `low` / `medium` / `high`. Higher means more thinking tokens, slower + more expensive responses. |
-
-### Per-call limits
-
-| Field | Default | What |
-|---|---|---|
-| **Max tokens** | 8192 | The token budget per assistant response. Bump for long answers; lower to cap cost. |
-| **Max tool iterations** | 8 | How many tool-call rounds the assistant may run within a single user turn. Raises the ceiling on multi-step queries; lower it to fail fast. |
-| **Request timeout (s)** | 120 | How long to wait for the model before giving up on the turn. |
-| **Adaptive thinking** | off | When on, the assistant uses Anthropic's extended thinking — slower but better at multi-step reasoning. Combine with a non-default *Effort*. |
-| **System prompt** | (empty → built-in default) | Override the framework's bundled system prompt. Empty restores the default. |
-
-### Tool exposure
-
-The assistant has three families of tools; toggle each on / off independently:
-
-| Tool family | What it lets the assistant do |
-|---|---|
-| **Connector tools** (`list_connectors`, `sql_query`, etc.) | Read-only — list pools, run SELECTs against the data the operator is allowed to read. The bedrock of "ask Liberty about your data". |
-| **API tool** (`api_call`) | Call REST endpoints defined under `[connectors.<name>.endpoints]`. Endpoints may have side effects — enable only when the configured endpoints are safe for AI invocation. |
-| **Scaffold tools** | Generate proposals (new queries / dictionary entries / screens / menu items) that the operator reviews and applies via *Apply* in the chat. **Propose-only** — the assistant never writes to disk directly. |
-
-### Allowed connectors
-
-By default, the assistant can introspect every connector. The **Allowed connectors** chip-picker restricts the visible set — useful when the assistant should only see customer-facing pools and not the framework's own audit DB.
-
-### Web fetch
-
-Anthropic-hosted server-side web fetch — the assistant can pull a URL into the conversation, summarise, quote. **Disabled until at least one domain is allowed**:
-
-| Field | What |
-|---|---|
-| **Allowed domains** | Chip list — `example.com`, `docs.nomana-it.fr`. Subdomains match. Empty = web fetch disabled. |
-| **Max fetches per turn** | Default 5. Caps how many URLs the assistant may pull in a single turn — limits cost and prevents runaway loops. |
-
-### What happens on save
-
-The framework rebuilds the assistant from scratch — new model, new tools, new key. The previous assistant instance closes its HTTP client cleanly. The next chat turn lands on the new instance. **No restart needed.**
-
----
-
-## Section 4 — OpenID Connect (SSO)
-
-Wire any OIDC-compliant provider (Keycloak, Okta, Auth0, Microsoft Entra / Azure AD, Google Workspace …). The framework runs the standard authorization-code flow against the provider's discovery URL and minted JWTs are stored against the Liberty user record.
-
-| Field | What |
-|---|---|
-| **Enabled** | Master toggle. When off, the SPA's sign-in page hides the SSO button; the local-user path keeps working. |
-| **Discovery URL** | The provider's `.well-known/openid-configuration` URL. Liberty pulls authorization / token / jwks endpoints from there. |
-| **Client ID** | The client ID the provider issued for this Liberty install. |
-| **Client secret** | The matching secret. Encrypted at rest (masked-secret pattern). |
-| **Scopes** | Space-separated. Default `openid email profile`. |
-| **Username claim** | Which ID-token claim becomes the Liberty username. Default `preferred_username`. |
-| **Email claim** | Default `email`. |
-| **Name claim** | Default `name`. |
-| **Redirect URL override** | When Liberty sits behind a reverse proxy, the auto-detected redirect URL can be wrong (uses the internal host). Override here. |
-| **Frontend redirect** | For SPA-only flows where JWTs land in the URL fragment. Defaults to the same origin. |
-
-### Provider-side registration
-
-The OIDC provider needs to know Liberty's callback URL. Register:
-
-```text
-https://<your-liberty-host>/auth/oidc/callback
-```
-
-Pair the Liberty UI's *Redirect URL override* with the registered URL when there's a reverse proxy in front (Traefik, nginx, etc.) — the auto-detected URL would use the internal hostname otherwise.
-
-### Live vs restart
-
-The OIDC handler is rebuilt on save. The next sign-in attempt uses the new config — **no restart**.
-
-A subtle implication: an operator can flip OIDC on / off and rotate the client secret without booting users out. Active sessions keep their JWTs (signed by the LIBERTY_JWT_SECRET, independent of OIDC) until they expire.
-
-See [Sign-in](./secure/sign-in.md) for the full backend matrix (local TOML / DB) and the SSO flow.
-
----
-
-## What's NOT on this page
-
-Not every key in `app.toml` lives in the Settings → App editor. Some are intentionally out of scope:
-
-| Section / key | Why off-scope | Where to edit |
-|---|---|---|
-| `[auth] backend` | Backend swap (TOML ↔ DB) needs a coordinated migration of the user store — not safe to flip from a single save. | Edit `app.toml` by hand + restart. See [Sign-in](./secure/sign-in.md). |
-| `[crypto] master_key` | The framework reads the master key once at startup. Rotating it requires re-encrypting every `ENC:` value on disk — operator-only ritual. | `LIBERTY_MASTER_KEY` env var or `[crypto] master_key` in `app.toml`. See [Encrypted secrets](./secure/encrypted-secrets.md). |
-| `[pools.*]` connection strings | DB connection edits go through *Settings → Connectors* (with the at-rest encryption). | Settings → Connectors. |
-| `config_path` / `static_dir` / `dictionary_path` | Operators don't relocate config files from the UI — it would break boot. | Edit `app.toml` directly. |
-| `[license]` fields other than `key` | Reserved for future expansion (issuer override, custom verification key). Out of scope today. | Edit `app.toml` directly. |
-| `LIBERTY_JWT_SECRET` | The JWT signing key — rotating it forces every user to re-sign-in. Operator decision, not UI. | Env var only. |
-
-The PUT endpoint **never reads or writes** these — saves are surgical, touching only the four edited tables.
-
----
-
-## Encryption at rest
-
-The three sensitive fields land on disk as:
-
-```toml title="config/app.toml after a UI save"
-[license]
-key = "ENC:eYWBcD…7q=="
-
-[ai]
-api_key = "ENC:Mq6vNg…4r=="
-
-[oidc]
-client_secret = "ENC:Aa9KrH…2z=="
-```
-
-| Detail | Value |
-|---|---|
-| Algorithm | AES-256-GCM with a per-value random nonce. |
-| Key source | The install master key (`LIBERTY_MASTER_KEY` env var or `[crypto] master_key` in `app.toml`). |
-| Prefix | `ENC:` is the framework's sentinel — the decryption path recognises it; plaintext values are read as-is. |
-| Idempotent | Re-encrypting an already-encrypted value is a no-op; saving the form when nothing changed leaves the file byte-identical. |
-
-The same `ENC:` mechanism encrypts pool passwords, API connector secrets and any other declared sensitive field — covered in [Encrypted secrets](./secure/encrypted-secrets.md).
-
-### Env-var fallback
-
-For each of the three fields, the framework still resolves a `${VAR}` reference at startup. So `license.key = "${LIBERTY_LICENSE_KEY}"` works exactly like before — the env var wins, the UI shows the field as "configured" (because the resolved value is non-empty) and the *Edit* path is disabled (the UI editor never writes to env-resolved values).
-
-Two practical implications:
-
-1. If your `app.toml` carries `key = "${LIBERTY_LICENSE_KEY}"` from an older install, the new UI is **read-only** for that field. Either delete the reference (the UI then writes the value) or keep editing via the env var.
-2. New installs from `install.sh` no longer write any of these env vars to `.env` — the canonical path is the UI editor.
-
----
-
-## API contract
-
-| Endpoint | Method | What |
-|---|---|---|
-| `/admin/config/app/parsed` | `GET` | Returns the four sections + the `choices` (log levels, effort levels, available connectors, model list). Sensitive fields are masked: `key: ""` + `key_set: true`. Superuser-only. |
-| `/admin/config/app/parsed` | `PUT` | Validates against the Pydantic models, encrypts sensitive fields with the master key, rewrites only the touched tables in `app.toml` (tomlkit round-trip preserves comments + `${VAR}` references on untouched keys). Returns `{saved: true, path: "…", requires_restart: bool}`. Superuser-only. |
-
-Headless usage:
-
-```bash title="Fetch the current config (sensitive fields masked)"
-curl -X GET -H "Authorization: Bearer <superuser-token>" \
-     https://<liberty-host>/admin/config/app/parsed | jq
-```
-
-```bash title="Rotate the Anthropic key without touching anything else"
-curl -X PUT -H "Authorization: Bearer <superuser-token>" \
-     -H "Content-Type: application/json" \
-     -d '{"app": {...}, "ai": {..., "api_key": "sk-ant-new"}, "license": {"key": ""}, "oidc": {...}}' \
-     https://<liberty-host>/admin/config/app/parsed
-```
-
-Sending `license.key: ""` (or `oidc.client_secret: ""`, etc.) means **leave unchanged**. To explicitly clear a field, the UI sends the empty string with `editing: true` — equivalent in the API to passing the empty string after a previous GET; the backend can't distinguish "didn't touch" from "explicitly cleared" through the API alone, so the UI tracks `editingSecret` state to disambiguate. From a script, pass `null` to clear (the backend's encryption path skips both `""` and `null` for the preserve-unchanged semantics; use a dedicated `DELETE` if you genuinely need to clear via the API — not yet wired).
-
----
-
-## When changes don't take effect
-
-The PUT endpoint applies most changes live, but a few cases land on disk **and** need a manual nudge:
-
-| Symptom | Cause | Fix |
-|---|---|---|
-| Saved a new license — licensed connectors still missing. | The license is valid but a connector pool failed to (re)open. | Check the framework logs — the `connector registry rebuild` line carries the per-connector outcome. Fix the pool (DB unreachable, wrong credentials, etc.) then save again. |
-| New OIDC discovery URL — sign-in still uses the old provider. | The provider's discovery cache is stale (HTTP caching). | The framework re-fetches discovery on rebuild; if it's still wrong, a 5-min wait or a server restart clears it. |
-| Toggled hot_reload on — TOML file edits still don't reload. | hot_reload is read at startup. The file watch is set up once. | Restart the server. The PUT returns `requires_restart: true` for changes to `app.host`, `app.port` or `app.log_level`; hot_reload is a similar boot-time toggle. |
-| AI assistant ignores the new system prompt. | The current chat session keeps a snapshot of the old prompt. | Start a new chat (or refresh the SPA). New turns use the new prompt. |
-| License key save returns 500 with `cannot encrypt`. | `LIBERTY_MASTER_KEY` is unset or has changed since the file was last written. | Re-set the env var; if it was rotated, every `ENC:` value on disk becomes unreadable — restore from backup or re-enter each secret. |
-
----
-
-## Common pitfalls
-
-| Mistake | Symptom | Fix |
-|---|---|---|
-| Edited a masked field by typing in it without clicking *Replace* first. | Save succeeds but the stored value is unchanged. | Click *Replace* (the input is read-only until you do). |
-| Cleared a license to "no license" by accident — operator confusion. | Licensed connectors vanish, screens 404. | Re-enter the key. Active user sessions are unaffected. |
-| Edited `app.host` from `0.0.0.0` to `127.0.0.1` in a container install. | After restart, Liberty is unreachable from outside the container. | The host must accept external connections inside a container — keep `0.0.0.0`. |
-| Pasted an OIDC `client_secret` with a trailing newline. | Sign-in fails with `invalid_client`. | Re-edit, retype without the trailing whitespace. |
-| Bumped `log_level` to `trace` in production. | Disk fills with verbose logs. | Set back to `info`. The trace-level entries already on disk stay there until rotation. |
-| Edited a value via `${ENV_VAR}` reference, then re-saved from UI. | UI save errored with `field is env-bound — edit the env var directly`. | Delete the reference from `app.toml` first if you want the UI to manage the value; otherwise edit the env var. |
-
----
-
-## What's next
-
-- [License key](./secure/license-key.md) — what the license gates, how `liberty-license verify` works, expiry handling.
-- [Sign-in](./secure/sign-in.md) — the two identity backends + the OIDC flow in detail.
-- [Encrypted secrets](./secure/encrypted-secrets.md) — the `ENC:` mechanism, key rotation, what to back up.
-- [Packages](./packages.md) — operators don't promote `app.toml` between installs through the package screen (it's per-host); use it for the screens / menus / dashboards the editor itself uses.
+| Pools and their passwords | Settings → Pools. |
+| Users and roles | Settings → Access. |
+| `log_format`, `[auth]` lifetimes and throttle, `[jobs]`, `[changesets]` | `app.toml` — see [app.toml](../configuration/app-toml.md). |
+| The master key and the JWT secret | The environment — see [Environment variables](../configuration/environment-variables.md). |
 
 ---
 
@@ -11418,7 +10147,6 @@ The **Settings** mode of a SQL connector (the *Settings* button of the connector
 | **Pools** | Extra pools the same queries may run on — see [Multi-pool connectors](#multi-pool). |
 | **Show In Switcher** | Shows the connector as an application in the switcher at the top of the sidebar — together with a menu, see [Make a connector an app](./build/menus/make-connector-an-app.md). |
 | **Home** | The menu entry opened when the application is picked. |
-| **Licensed** | The connector loads only when the [licence key](./build/secure/license-key.md) covers it. |
 | **Max Rows** | Default row limit of a read; otherwise the pool's, then 1 000. A screen's or a request's limit wins. |
 | **Dd Prefix** | Length of the table prefix in column names (JD Edwards: `2`, so `ABCO`, `MCCO` and `SDCO` all carry the dictionary item `CO`). Used by a role's [data scope](./build/secure/roles-and-permissions.md#data-scope). `0`: column names are the items. |
 
@@ -16476,7 +15204,7 @@ SQL, HTTP, file-load and `async` Python steps stop at once. A Python function wr
 | The day is wrong | The scheduler counts the days of the week from 0 = Monday. Write `mon-fri`, not `1-5` — see [Schedules](../jobs/schedules.md#cron). |
 | The **Next runs** preview is not what was expected | Fix the cron or the timezone. |
 | The server was down at that time | The run is recorded **MISSED**; run it by hand. |
-| `[jobs] enabled = false` in `app.toml` | Nothing runs, scheduled or manual. Set it back to `true` and restart. |
+| `[jobs] enabled = false` in `app.toml` | The scheduler is stopped; only manual runs work. Set it back to `true` and restart. |
 
 ---
 
@@ -17824,7 +16552,7 @@ The `[jobs]` section of `app.toml`:
 
 | Key | Default | Meaning |
 |---|---|---|
-| `enabled` | `true` | `false` turns off the scheduler **and** the runner: nothing runs, scheduled or manual. A restart applies it. |
+| `enabled` | `true` | `false` keeps the scheduler stopped: no scheduled run (and no missed-schedule check), but **Run now** still works. A restart applies it. |
 | `pool` | `default` | The pool that holds the run history. |
 | `config_path` | `plugins/nomaflow/jobs.toml` next to the configuration folder | The jobs file. |
 | `run_log_max_lines` | `5000` | The lines kept per run log — raise it for a job that writes a lot. |
@@ -17893,7 +16621,7 @@ The server's `/ready` answers when the framework database — which holds the hi
 | Task | How |
 |---|---|
 | Pause one job | Its **enabled** switch on the Jobs page. |
-| Pause every job | `[jobs] enabled = false` in `app.toml`, then restart. |
+| Pause every schedule | `[jobs] enabled = false` in `app.toml`, then restart — manual runs remain possible. |
 | Move a job to another server | **Export** on its card, then copy the entry into the target's `jobs.toml` — or carry it in a package. The connectors and queries it uses must exist there. |
 | Investigate a job without stopping the others | Switch it off, run it by hand at `DEBUG`. |
 

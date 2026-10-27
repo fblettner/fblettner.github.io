@@ -1,6 +1,6 @@
 ---
 title: Types d'éléments
-description: "Les quatre types de feuilles — query / endpoint / dashboard / page — ce qu'ouvre chacun, la forme du champ target, la règle du connecteur, et quand recourir à chacun."
+description: "Les cinq types de feuilles — screen / query / endpoint / dashboard / page — ce qu'ouvre chacun, la forme du champ target, la règle du connecteur, et quand recourir à chacun."
 keywords: [Liberty Framework, élément de menu, query, endpoint, dashboard, page, target, connector, feuille, dossier]
 ---
 
@@ -8,11 +8,12 @@ keywords: [Liberty Framework, élément de menu, query, endpoint, dashboard, pag
 
 Un élément de menu est soit un **dossier** (sans `type`), soit une **feuille** qui ouvre quelque chose. Le `type` de la feuille décide ce qu'est ce quelque chose et ce que signifient les champs `target` / `connector`.
 
-Quatre types de feuilles :
+Cinq types de feuilles :
 
 | `type` | Ouvre | `target` est | `connector` |
 |---|---|---|---|
-| **`query`** | Un écran TableView — pilote l'écran associé à cette requête. | Un nom de requête SELECT. | Le connecteur qui possède la requête. Vide = le connecteur de l'application. |
+| **`screen`** | Un écran conçu. | La requête de lecture de l'écran, choisie parmi les écrans conçus. | Le connecteur qui le possède. Vide = le connecteur de l'application. |
+| **`query`** | La même vue en grille, choisie parmi les requêtes brutes. | Un nom de requête SELECT. | Le connecteur qui possède la requête. Vide = le connecteur de l'application. |
 | **`endpoint`** | Le HttpRunner — déclenche un endpoint de connecteur API. | Un nom d'endpoint. | Le connecteur API. Vide = celui de l'application. |
 | **`dashboard`** | Un tableau de bord (graphiques + KPI). | Un id de tableau de bord. | NE doit PAS être renseigné (les tableaux de bord résident dans un espace de noms plat). |
 | **`page`** | Une route frontend enregistrée — une fonctionnalité personnalisée comme `/nomaflow`. | Le chemin de la route. | NE doit PAS être renseigné. |
@@ -21,7 +22,9 @@ Cette page détaille chacun avec des exemples concrets.
 
 ---
 
-## `query` — ouvrir un écran
+## `screen` et `query` — ouvrir un écran
+
+`screen` et `query` ouvrent la même vue : la cible est une requête de lecture et, si un écran est conçu pour elle, c'est cet écran qui s'ouvre ; sinon les lignes de la requête s'affichent dans une grille simple. Ils ne diffèrent que par ce que propose la liste *Target* de l'Inspecteur — les écrans conçus pour `screen`, toutes les requêtes pour `query`.
 
 Le type de feuille le plus courant. L'élément de menu pointe vers une requête SELECT ; le framework trouve l'écran associé à cette requête (voir [Créer un écran depuis une requête](../screens/create-from-query.md)) et l'ouvre en TableView.
 
@@ -262,13 +265,14 @@ Dans l'Inspecteur, passer le `type` de `query` à `dashboard` efface `connector`
 
 | Pour ouvrir… | Utiliser |
 |---|---|
-| Une liste de lignes avec filtre / ajout / modification optionnels. | `query`. |
-| Une liste pré-filtrée (par exemple *Mes tickets ouverts*). | `query` avec `params`. |
+| Une liste de lignes avec filtre / ajout / modification optionnels. | `screen`. |
+| Une liste pré-filtrée (par exemple *Mes tickets ouverts*). | `screen` avec `params`. |
+| Une requête qui n'a pas encore d'écran conçu. | `query`. |
 | Un appel API personnalisé en écriture ou en lecture seule. | `endpoint`. |
 | Une page de graphiques et de KPI. | `dashboard`. |
 | Une fonctionnalité React écrite à la main (style Nomaflow). | `page`. |
 
-En cas de doute, commencer par `query` — la plupart des écrans destinés aux utilisateurs sont des listes. Passer à `dashboard` quand la mise en page comprend plusieurs graphiques ; recourir à `endpoint` uniquement pour des opérations API qui ne tiennent pas dans un écran ; réserver `page` au React personnalisé.
+En cas de doute, commencer par `screen` — la plupart des pages destinées aux utilisateurs sont des listes. Passer à `dashboard` quand la mise en page comprend plusieurs graphiques ; recourir à `endpoint` uniquement pour des opérations API qui ne tiennent pas dans un écran ; réserver `page` au React personnalisé.
 
 ---
 
@@ -288,5 +292,5 @@ En cas de doute, commencer par `query` — la plupart des écrans destinés aux 
 ## La suite
 
 - [Permissions et rôles](./permissions-and-roles.md) — le filtre `roles` + l'héritage des permissions par type de feuille.
-- [Traductions et icônes](./translations-and-icons.md) — libellés par langue et sélecteur d'icônes Lucide.
+- [Traductions et icônes](./translations-and-icons.md) — libellés par langue et icônes.
 - [Créer un écran depuis une requête](../screens/create-from-query.md) — l'écran qu'ouvre une feuille `query`.

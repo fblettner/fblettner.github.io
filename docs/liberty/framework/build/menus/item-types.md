@@ -1,18 +1,19 @@
 ---
 title: Item types
-description: "The four leaf kinds — query / endpoint / dashboard / page — what each opens, the target field's shape, the connector rule, and when to reach for each."
-keywords: [Liberty Framework, menu item, query, endpoint, dashboard, page, target, connector, leaf, folder]
+description: "The five leaf kinds — screen / query / endpoint / dashboard / page — what each opens, the target field's shape, the connector rule, and when to reach for each."
+keywords: [Liberty Framework, menu item, screen, query, endpoint, dashboard, page, target, connector, leaf, folder]
 ---
 
 # Item types
 
 A menu item is either a **folder** (no `type`) or a **leaf** that opens something. The leaf's `type` decides what that something is and what the `target` / `connector` fields mean.
 
-Four leaf kinds:
+Five leaf kinds:
 
 | `type` | Opens | `target` is | `connector` |
 |---|---|---|---|
-| **`query`** | A TableView screen — driven by the screen wired to this query. | A SELECT query name. | The connector that owns the query. Blank = the app's own connector. |
+| **`screen`** | A designed screen. | The screen's read query, picked from the designed screens. | The connector that owns it. Blank = the app's own connector. |
+| **`query`** | The same grid view, picked from the raw queries. | A SELECT query name. | The connector that owns the query. Blank = the app's own connector. |
 | **`endpoint`** | The HttpRunner — fires one API connector endpoint. | An endpoint name. | The API connector. Blank = the app's. |
 | **`dashboard`** | A dashboard (charts + KPIs). | A dashboard id. | Must NOT be set (dashboards live in a flat namespace). |
 | **`page`** | A registered frontend route — a custom feature area like `/nomaflow`. | The route path. | Must NOT be set. |
@@ -21,9 +22,11 @@ This page walks each in detail with concrete examples.
 
 ---
 
-## `query` — open a screen
+## `screen` and `query` — open a screen
 
-The most common leaf kind. The menu item points at a SELECT query; the framework finds the screen wired to that query (see [Create a screen from a query](../screens/create-from-query.md)) and opens it as a TableView.
+The most common leaf kinds. `screen` and `query` open the same view: the target is a read query, and if a screen is designed for it, that screen opens; otherwise the query's rows show in a plain grid. They differ only in what the Inspector's *Target* list offers — designed screens for `screen`, every query for `query`.
+
+The menu item points at a SELECT query; the framework finds the screen wired to that query (see [Create a screen from a query](../screens/create-from-query.md)) and opens it as a TableView.
 
 ### Fields
 
@@ -257,13 +260,14 @@ In the Inspector, changing `type` from `query` to `dashboard` clears `connector`
 
 | You want to open… | Use |
 |---|---|
-| A list of rows with optional filter / add / edit. | `query`. |
-| A pre-filtered list (e.g. *My open tickets*). | `query` with `params`. |
+| A list of rows with optional filter / add / edit. | `screen`. |
+| A pre-filtered list (e.g. *My open tickets*). | `screen` with `params`. |
+| A query that has no designed screen yet. | `query`. |
 | A custom write or read-only API call. | `endpoint`. |
 | A page of charts and KPIs. | `dashboard`. |
 | A hand-written React feature (Nomaflow-style). | `page`. |
 
-When in doubt, start with `query` — most user-facing screens are list-based. Promote to `dashboard` when the layout is multiple charts; reach for `endpoint` only for API operations that don't fit a screen; reserve `page` for custom React.
+When in doubt, start with `screen` — most user-facing pages are lists. Promote to `dashboard` when the layout is multiple charts; reach for `endpoint` only for API operations that don't fit a screen; reserve `page` for custom React.
 
 ---
 
@@ -283,5 +287,5 @@ When in doubt, start with `query` — most user-facing screens are list-based. P
 ## What's next
 
 - [Permissions and roles](./permissions-and-roles.md) — the `roles` filter + permission inheritance per leaf type.
-- [Translations and icons](./translations-and-icons.md) — per-language labels and the Lucide icon picker.
+- [Translations and icons](./translations-and-icons.md) — per-language labels and icons.
 - [Create a screen from a query](../screens/create-from-query.md) — the screen a `query` leaf opens.

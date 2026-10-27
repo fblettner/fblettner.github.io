@@ -16,7 +16,7 @@ La section `[jobs]` d'`app.toml` :
 
 | Clé | Défaut | Signification |
 |---|---|---|
-| `enabled` | `true` | `false` arrête le planificateur **et** le moteur d'exécution : rien ne s'exécute, ni planifié ni manuel. Un redémarrage l'applique. |
+| `enabled` | `true` | `false` laisse le planificateur arrêté : aucune exécution planifiée (ni contrôle des planifications manquées), mais **Exécuter** fonctionne toujours. Un redémarrage l'applique. |
 | `pool` | `default` | Le pool qui héberge l'historique. |
 | `config_path` | `plugins/nomaflow/jobs.toml` à côté du dossier de configuration | Le fichier des tâches. |
 | `run_log_max_lines` | `5000` | Le nombre de lignes conservées par journal d'exécution — à augmenter pour une tâche très bavarde. |
@@ -85,6 +85,6 @@ Le `/ready` du serveur répond quand la base du framework — qui contient l'his
 | Tâche | Comment |
 |---|---|
 | Suspendre une tâche | Son switch **activée** dans la page des Tâches. |
-| Suspendre toutes les tâches | `[jobs] enabled = false` dans `app.toml`, puis redémarrer. |
+| Suspendre toutes les planifications | `[jobs] enabled = false` dans `app.toml`, puis redémarrer — les exécutions manuelles restent possibles. |
 | Déplacer une tâche vers un autre serveur | **Export** sur sa carte, puis reprendre l'entrée dans le `jobs.toml` de la cible — ou la transporter dans un package. Les connecteurs et requêtes utilisés doivent y exister. |
 | Analyser une tâche sans arrêter les autres | La désactiver, la lancer à la main en `DEBUG`. |

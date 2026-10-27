@@ -1,185 +1,105 @@
 ---
-title: Paramètres du framework
-description: "Tous les paramètres transverses du framework — nom de l'application, pool de base par défaut, backend d'authentification, OIDC, fournisseur IA, clé maîtresse de chiffrement, licence — se modifient depuis Paramètres → Framework. Le formulaire est piloté par un schéma ; cette page liste chaque champ, son rôle et l'endroit où il s'applique."
-keywords: [Liberty Framework, paramètres, framework settings, app, default pool, authentication, OIDC, AI, master key, license, CORS, static directory]
+title: app.toml
+description: "Référence d'app.toml, les réglages de l'application Liberty Next — [app], [auth], [oidc], [crypto], [license], [ai], [notify], [jobs], [changesets], [reports] et les chemins de fichiers — avec les valeurs par défaut et ceux que Paramètres → App modifie."
+keywords: [Liberty Next, app.toml, réglages, auth, oidc, crypto, licence, ai, notify, jobs, changesets, rapports, valeurs par défaut, variables d'environnement]
 ---
 
-# Paramètres du framework
+# app.toml
 
-:::info[Référence détaillée]
-Cette page liste chaque paramètre du framework sur l'onglet *Framework*. Pour la mise en place orientée tâche du volet sécurité (câbler OIDC, installer une clé de licence, chiffrer des secrets), voir [Construire → Sécurité](../build/secure/overview.md).
-:::
+`app.toml` contient les réglages de l'application. La plupart se modifient dans **Paramètres → App** ([Paramètres de l'application](../build/settings-app.md)), qui chiffre les secrets et applique les changements aussitôt ; cette page liste chaque clé, pour lire le fichier ou le préparer au déploiement.
 
-Les paramètres **transverses au framework** — ceux qui ne sont rattachés ni à un connecteur, ni à un écran, ni à un menu — se modifient depuis **Paramètres → Framework**. La page est un formulaire piloté par schéma, avec une section par sujet : identité de l'application, pool de base de données par défaut, authentification, fournisseur IA, chiffrement et licence. L'enregistrement recharge le sous-système concerné.
-
-Cette page liste chaque champ de l'onglet *Framework*, son effet et l'endroit où il s'applique dans le reste de l'application.
+Le fichier est `config/app.toml` sous le répertoire de travail du serveur (ou le chemin de `LIBERTY_APP_CONFIG`). Toute valeur peut s'écrire `${VARIABLE}` ou `${VARIABLE:-défaut}` pour la lire dans l'environnement, et les secrets enregistrés depuis les Paramètres s'écrivent `ENC:…` — voir [Variables d'environnement](./environment-variables.md) et [Chiffrement](./encryption-secrets.md).
 
 ---
 
-## Vue d'ensemble
+## [app] \{#app\}
 
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
-    <div style={{fontWeight: 700}}>Paramètres → Framework</div>
-    <div style={{display: 'flex', gap: '6px'}}>
-      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Annuler</span>
-      <span style={{padding: '5px 14px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>Enregistrer et recharger</span>
-    </div>
-  </div>
-  <div style={{padding: '14px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, color: '#4a9eff', marginBottom: '10px'}}>Application</div>
-    <div style={{display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: '8px', columnGap: '12px', alignItems: 'center'}}>
-      <div style={{opacity: 0.75}}>Nom</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>Liberty</span></div>
-      <div style={{opacity: 0.75}}>Langue par défaut</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>en ▾</span></div>
-      <div style={{opacity: 0.75}}>Origines CORS autorisées</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>http://localhost:5173</span></div>
-    </div>
-  </div>
-  <div style={{padding: '14px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, color: '#4a9eff', marginBottom: '10px'}}>Pool de base de données par défaut</div>
-    <div style={{display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: '8px', columnGap: '12px', alignItems: 'center'}}>
-      <div style={{opacity: 0.75}}>URL</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontFamily: 'ui-monospace, monospace'}}>sqlite+aiosqlite:///liberty.db</span></div>
-      <div style={{opacity: 0.75}}>Dialecte</div><div><span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '11px', fontWeight: 600, color: '#4a9eff'}}>sqlite ▾</span></div>
-      <div style={{opacity: 0.75}}>Taille du pool</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>5</span></div>
-    </div>
-  </div>
-  <div style={{padding: '14px 16px'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700, color: '#4a9eff', marginBottom: '10px'}}>Authentification</div>
-    <div style={{display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: '8px', columnGap: '12px', alignItems: 'center'}}>
-      <div style={{opacity: 0.75}}>Backend</div><div><span style={{padding: '4px 10px', borderRadius: '6px', background: 'rgba(74,158,255,0.12)', border: '1px solid rgba(74,158,255,0.4)', fontSize: '11px', fontWeight: 600, color: '#4a9eff'}}>Local — TOML ▾</span></div>
-      <div style={{opacity: 0.75}}>Durée de vie du jeton d'accès</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>15 min</span></div>
-      <div style={{opacity: 0.75}}>Durée de vie du jeton de rafraîchissement</div><div><span style={{padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px'}}>7 jours</span></div>
-      <div style={{opacity: 0.75}}>OIDC activé</div><div><span style={{padding: '4px 12px', borderRadius: '999px', background: 'rgba(94,94,94,0.10)', border: '1px solid rgba(255,255,255,0.20)', fontSize: '11px', fontWeight: 600, opacity: 0.7}}>○ Off</span></div>
-    </div>
-  </div>
-</div>
-
-La maquette est repliée ; les sections *IA*, *Chiffrement* et *Licence* se présentent en dessous de la même manière.
-
-Le formulaire a la même forme quel que soit le mode de déploiement — dev local, conteneur, Kubernetes. Les rares valeurs qui appartiennent légitimement à l'environnement (la clé de signature JWT, la clé maîtresse de chiffrement, la clé de licence, la clé d'API IA) sont référencées par nom dans les champs du formulaire et résolues au démarrage ; voir [Variables d'environnement](./environment-variables.md).
+| Clé | Défaut | Signification |
+|---|---|---|
+| `name` | `Liberty Next` | Le nom de l'application. |
+| `host`, `port` | `0.0.0.0`, `8000` | Adresse d'écoute. Redémarrage nécessaire. |
+| `log_level` | `info` | `debug`, `info`, `warning`, `error`, `critical`. Redémarrage nécessaire. |
+| `log_format` | `text` | `json` écrit un objet JSON par ligne. Fichier uniquement. |
+| `hot_reload` | `false` (`true` dans le fichier livré) | Appliquer les fichiers de configuration dès qu'ils changent. |
+| `default_language` | `en` | Langue des libellés quand une requête n'en indique pas. |
+| `oracle_thick` | `false` | Mode thick d'Oracle pour tous les pools Oracle — voir [Connecteurs](../connectors.md#oracle-thick). Redémarrage nécessaire. |
+| `default_period` | `thisMonth` | La période d'ouverture d'un tableau de bord qui n'en indique pas. |
+| `default_page_size` | `50` | La taille de page initiale des grilles. |
+| `dashboard_cache_seconds` | `60` | Durée de réutilisation des résultats des widgets à la réouverture d'un tableau de bord ; `0` le désactive. |
 
 ---
 
-## Application
+## [auth] \{#auth\}
 
-| Champ | Effet |
+| Clé | Défaut | Signification |
+|---|---|---|
+| `backend` | `toml` | `toml` : utilisateurs et rôles dans `toml_path` (`config/auth.toml`). `db` : dans les tables `ly2_users`, `ly2_roles`, `ly2_user_roles` de `pool`. |
+| `jwt_secret` | `${LIBERTY_JWT_SECRET}` | Signe les sessions. Vide : une clé temporaire, perdue au redémarrage. |
+| `access_token_ttl`, `refresh_token_ttl` | `3600`, `1209600` | Durées de vie des jetons en secondes (1 heure, 14 jours). |
+| `refresh_reuse_grace` | `60` | Secondes pendant lesquelles un jeton de rafraîchissement déjà utilisé reste accepté. |
+| `login_max_failures`, `login_window_seconds` | `10`, `300` | Limitation des connexions ; `0` la désactive. |
+
+Voir [Se connecter](../build/secure/sign-in.md).
+
+---
+
+## [oidc] \{#oidc\}
+
+`enabled`, `discovery_url`, `client_id`, `client_secret`, `scopes` (`openid email profile`), `username_claim` (`preferred_username`), `email_claim`, `name_claim`, `attribute_claims`, `redirect_url`, `frontend_redirect`, `session_secret` (le secret JWT par défaut). Voir [Se connecter → OIDC](../build/secure/sign-in.md#oidc).
+
+---
+
+## [crypto] et [license] \{#crypto\}
+
+| Clé | Défaut | Signification |
+|---|---|---|
+| `[crypto] master_key` | `${LIBERTY_MASTER_KEY}` | Chiffre et déchiffre chaque valeur `ENC:`. |
+| `[license] key` | `${LIBERTY_LICENSE_KEY}` | La clé de licence, en principe collée dans Paramètres → App. |
+
+---
+
+## [ai] \{#ai\}
+
+| Clé | Défaut | Signification |
+|---|---|---|
+| `enabled` | `true` | L'assistant. |
+| `api_key` | `${ANTHROPIC_API_KEY}` | Vide : l'assistant indique qu'il n'est pas configuré. |
+| `model`, `max_tokens` | — , `8192` | Le modèle et la longueur des réponses. |
+| `max_iterations` | `8` | Nombre maximal d'appels d'outils par réponse. |
+| `system_prompt`, `thinking`, `effort` | intégré, `false`, — | Consignes et options de raisonnement. |
+| `request_timeout` | `120` | Secondes. |
+| `connector_tools` | `true` | L'assistant peut lister les connecteurs et lancer leurs requêtes de lecture. |
+| `api_tool` | `false` | L'assistant peut appeler des endpoints d'API. |
+| `scaffold_tools` | `false` | L'assistant peut proposer de la configuration (requêtes, écrans). |
+| `allowed_connectors` | `[]` (tous) | Les connecteurs utilisables par l'assistant. |
+| `web_fetch_domains`, `web_fetch_max_uses` | `[]`, `5` | Les pages web que l'assistant peut lire. |
+
+Voir [Assistant IA](../ai-assistant.md).
+
+---
+
+## [notify] \{#notify\}
+
+`enabled` (`true`), `pool` (`default`), `config_path` (`notifications.toml`), `smtp_host`, `smtp_port` (`587`), `smtp_user`, `smtp_password`, `smtp_from`, `smtp_tls` (`true`, STARTTLS), `smtp_ssl` (`false`, TLS implicite), `smtp_timeout` (`20`), `retention_days` (`90`). Voir [Notifications](../../nomaflow/notifications.md).
+
+---
+
+## [jobs] \{#jobs\}
+
+`enabled` (`true`), `pool` (`default`), `config_path`, `run_log_max_lines` (`5000`), `files_dir`, `max_upload_mb` (`200`). Voir [Nomaflow → Administration](../../nomaflow/administration.md#settings).
+
+---
+
+## [changesets] et [reports] \{#changesets\}
+
+| Clé | Signification |
 |---|---|
-| **Nom** | Nom affiché dans l'en-tête et le titre de la page. Défaut `Liberty`. |
-| **Langue par défaut** | Langue utilisée quand l'appelant ne transporte pas l'en-tête `X-Liberty-Lang` et n'a aucune préférence utilisateur. Défaut `en`. |
-| **Origines CORS autorisées** | Origines acceptées par le preflight CORS du navigateur. Ajouter le serveur de dev Vite (`http://localhost:5173`) pour le développement avec rechargement à chaud, l'origine du frontend de production quand le SPA est servi depuis un autre hôte. |
-| **Proxys de confiance** | Plages CIDR des reverse proxys auxquels le framework fait confiance pour les en-têtes `X-Forwarded-*`. Requis derrière nginx / Traefik pour que le framework voie l'IP cliente d'origine. |
-| **Répertoire statique** | Chemin du SPA React construit. Défaut `frontend/dist`. Quand le répertoire n'existe pas, le serveur fonctionne en mode **API seule** (toutes les routes `/api/*` répondent, `/` renvoie 404). À utiliser quand le SPA est servi depuis un CDN. |
+| `[changesets] enabled`, `pool` | Les paquets de modifications et le pool de leurs tables. |
+| `[changesets] post_apply` | La bibliothèque des étapes de post-application (`id`, `type` = `call_plugin` / `call_api` / `run_query`, `connector`, `target`, `params`, `label`). Voir [Paquets de modifications](../../nomaflow/change-packages.md). |
+| `[reports] …` | Le fichier des rapports personnalisés et l'habillage PDF (auteur, couleurs, textes de couverture, pied de page) — l'habillage se modifie dans Paramètres → App. |
 
 ---
 
-## Pool de base de données par défaut
+## Chemins des fichiers \{#paths\}
 
-Le **pool par défaut** porte la base de données utilisée par le framework lui-même — tables d'authentification quand *Backend* vaut `db`, historique des exécutions Nomaflow, verrous d'enregistrement, conversations IA. Tous les autres pools se définissent dans l'onglet *Paramètres → Pools*.
-
-| Champ | Effet |
-|---|---|
-| **URL** | URL async SQLAlchemy. SQLite pointe par défaut vers un fichier local `liberty.db`. PostgreSQL : `postgresql+asyncpg://user:pass@host/db`. Oracle mode thin : `oracle+oracledb://user:pass@host:1521/?service_name=PDB1`. Tester la connectivité avec le bouton *Tester la connexion*. |
-| **Dialecte** | `sqlite` / `postgresql` / `oracle`. Pilote le SQL de repli propre à chaque dialecte dans le moteur de connecteurs. |
-| **Taille du pool** | Nombre maximum de connexions simultanées. Défaut 5. |
-| **Recyclage du pool** | Délai en secondes avant qu'une connexion obsolète soit recyclée. Défaut 1800. |
-| **Mot de passe** | Optionnel. Cliquer sur l'icône du cadenas pour passer le champ en mode *Chiffré* — voir [Chiffrement et secrets](./encryption-secrets.md). |
-
----
-
-## Authentification
-
-| Champ | Effet |
-|---|---|
-| **Backend** | `Local — TOML` *(défaut)* / `Local — Database`. Détermine l'emplacement des comptes utilisateurs. L'option `Local — TOML` utilise `config/auth.toml` sur l'hôte (aucune infrastructure). `Local — Database` crée et utilise les tables `ly2_users` / `ly2_roles` / `ly2_permissions` sur le pool par défaut. |
-| **Clé de signature JWT** | Référence à la variable d'environnement qui contient le secret de signature HS256. Défaut `${LIBERTY_JWT_SECRET}`. Quand la variable n'est pas définie, le framework génère une clé éphémère par processus — chaque redémarrage invalide chaque jeton. |
-| **Durée de vie du jeton d'accès** | Durée de vie d'un jeton d'accès. Défaut 15 minutes. |
-| **Durée de vie du jeton de rafraîchissement** | Durée de vie d'un jeton de rafraîchissement. Défaut 7 jours. |
-| **Réglage Argon2** | Trois champs numériques — *Time cost* (défaut 2), *Memory cost* en KiB (défaut 65536), *Parallelism* (défaut 1). À augmenter sur les installations avec un modèle de menace renforcé. |
-
-### Sous-section OIDC
-
-Un switch en haut de la sous-section active le SSO OIDC ; le formulaire en dessous n'apparaît que quand *OIDC activé* est sur On.
-
-| Champ | Effet |
-|---|---|
-| **URL de l'émetteur** | URL de l'émetteur de l'IdP. Le framework récupère `${issuer}/.well-known/openid-configuration` au démarrage. |
-| **Client ID** | ID client OAuth2 enregistré auprès de l'IdP. |
-| **Client secret** | Secret client OAuth2. Toujours **chiffré au repos** — l'icône du cadenas est verrouillée. |
-| **URI de redirection** | URL de callback du framework, par exemple `https://liberty.example.com/auth/oidc/callback`. Doit être enregistrée côté IdP. |
-| **Claim email** | Claim JWT utilisé comme identifiant utilisateur local. Défaut `email`. |
-| **Claim groupes** | Claim JWT utilisé pour faire correspondre les groupes IdP aux rôles Liberty. Défaut `groups`. |
-| **Auto-provisionnement** | Quand activé, un utilisateur Liberty est créé à la première connexion OIDC. Sinon, l'utilisateur doit déjà exister. |
-
-[Authentification](../build/secure/sign-in.md) parcourt le flux OIDC complet avec des notes propres à chaque IdP (Authentik, Keycloak, Azure AD, Okta, Google).
-
----
-
-## IA
-
-| Champ | Effet |
-|---|---|
-| **Fournisseur** | `Anthropic`. Seul fournisseur pris en charge à ce jour. |
-| **Clé d'API** | Référence à la variable d'environnement qui contient la clé. Défaut `${ANTHROPIC_API_KEY}`. Quand elle n'est pas définie, l'assistant est désactivé et `/chat` affiche un avis « configurer une clé d'API ». |
-| **Modèle** | ID de modèle Anthropic. Défaut `claude-sonnet-4-6`. Passer à `claude-opus-4-7` pour davantage de raisonnement, `claude-haiku-4-5` pour des tours moins chers et plus rapides. |
-| **Max tokens** | Plafond de tokens par réponse de l'assistant. Défaut 4096. |
-| **Concurrence outils** | Nombre maximum d'appels d'outils en parallèle par tour de l'assistant. Défaut 4. |
-
-Voir [AI assistant](../ai-assistant.md) pour la surface de chat, le contrat de génération d'outils et le filtrage par rôle.
-
----
-
-## Chiffrement
-
-| Champ | Effet |
-|---|---|
-| **Clé maîtresse** | Référence à la variable d'environnement qui contient la clé AES-256-GCM utilisée pour déchiffrer chaque champ `ENC:`. Défaut `${LIBERTY_MASTER_KEY}`. Doit faire 32 octets, encodée en hex ou base64. À générer avec `liberty-crypto genkey`. |
-| **Clés héritées** | Liste de clés anciennes, utilisées **uniquement pour le déchiffrement** pendant une rotation. Les nouveaux chiffrements utilisent toujours *Clé maîtresse*. Cliquer sur *➕ Ajouter clé héritée* pour ajouter une entrée. |
-
-Voir [Chiffrement et secrets](./encryption-secrets.md) pour la procédure de rotation et le format `ENC:`.
-
----
-
-## Licence
-
-| Champ | Effet |
-|---|---|
-| **Clé de licence** | Référence à la variable d'environnement qui contient le JWT de licence signé en RS256. Défaut `${LIBERTY_LICENSE_KEY}`. Pilote les verrous de fonctionnalités sur les connecteurs marqués *Licensed*. |
-| **Chemin de la clé publique** | Remplacement optionnel pour la clé publique embarquée. Utile quand l'installation s'exécute avec une autorité de signature privée. |
-
-La page [Paramètres → Licence](../build/secure/license-key.md) affiche l'état courant (acceptée / refusée / non configurée), le nom du client, la date d'expiration et la liste des fonctionnalités déverrouillées.
-
----
-
-## Enregistrer et recharger
-
-Chaque enregistrement valide le formulaire par rapport aux modèles Pydantic du framework. Les valeurs invalides surlignent le champ en rouge et désactivent le bouton *Enregistrer et recharger*.
-
-Un enregistrement réussi :
-
-1. **Enregistre le changement** sur disque (détail du système de fichiers, jamais édité à la main).
-2. **Réapplique le sous-système concerné** — un changement de *Langue par défaut* déclenche un rechargement des packs de langues ; un changement de *Durée de vie du jeton d'accès* prend effet à la prochaine connexion ; un changement d'*OIDC activé* relance la découverte OIDC à la prochaine connexion.
-3. **Affiche un toast** qui confirme le rechargement de la section.
-
-Quelques champs demandent un **redémarrage complet** : le changement de *Backend d'authentification*, la rotation de *Clé maîtresse*, le changement de *Clé de licence*. Le formulaire les marque avec un badge *Redémarrage requis* et propose un bouton *Redémarrer maintenant* à côté du contrôle *Enregistrer et recharger* (admin uniquement).
-
----
-
-## Permissions
-
-L'onglet *Framework* est filtré par `settings:framework`. La lecture sans écriture est possible — accorder `settings:read` + la permission par onglet sans `settings:reload` rend le formulaire consultable seul.
-
----
-
-## Sous le capot
-
-Le stockage du formulaire est `liberty-next/config/app.toml`. Les opérateurs **ne modifient pas ce fichier à la main** en fonctionnement normal ; l'interface Paramètres est l'interface de référence, avec l'onglet *Raw TOML* comme issue de secours. Le fichier est analysé une fois au démarrage et à chaque *Enregistrer et recharger* de l'onglet Framework.
-
-Pour les scripts d'ops et les pipelines CI qui doivent piloter le framework sans l'interface, la même surface est accessible via les endpoints REST sous `/admin/config/framework/*` — voir [REST API reference](../../references/rest-api.md#admin-config).
-
----
-
-## Pour aller plus loin
-
-- [Variables d'environnement](./environment-variables.md) — chaque référence `${LIBERTY_*}` résolue au démarrage.
-- [Chiffrement et secrets](./encryption-secrets.md) — le switch du cadenas et la procédure de rotation.
-- [Authentification](../build/secure/sign-in.md) — ce que chaque backend change.
-- [Rechargement à chaud](./hot-reload.md) — ce qui se recharge à chaud et ce qui demande un redémarrage.
+`[connectors]`, `[menus]`, `[screens]`, `[charts]`, `[actions]`, `[dashboards]`, `[explorer]`, `[theme]` acceptent chacun un `config_path`. Les laisser vides : ils suivent `LIBERTY_APPS_DIR`, ou `config/` — voir [Architecture](../../installation/architecture.md#configuration).

@@ -1,12 +1,12 @@
 ---
 title: Packages
-description: "Ship configuration from one Liberty install to another. Settings → Package: pick a few screens / menu items / dashboards as seeds, the dependency walker pulls in everything they reach (queries, dictionary, charts), and the package exports as a ZIP. On the target install, upload + pick a merge strategy (merge / overwrite / replace all). Same UI handles both sides."
+description: "Ship configuration from one Liberty install to another. the Nomaflow Package page: pick a few screens / menu items / dashboards as seeds, the dependency walker pulls in everything they reach (queries, dictionary, charts), and the package exports as a ZIP. On the target install, upload + pick a merge strategy (merge / overwrite / replace all). Same UI handles both sides."
 keywords: [Liberty Framework, package, export, import, deploy, ZIP, dependency closure, seeds, merge, overwrite, replace all, override, encrypted secrets, build-package, import-package]
 ---
 
 # Packages
 
-The **Packages** screen (Settings → Package) is Liberty's built-in deployment mechanism: an operator on the **source** install picks a few screens / menu items / dashboards as *seeds*, the framework walks every reference they reach (queries, connectors, dictionary entries, charts), and the result ships as a ZIP. On the **target** install, the same screen accepts a ZIP, lets the operator pick a merge strategy and applies it to the live config — followed by an automatic reload.
+The **Package** page (Nomaflow menu, address `/nomaflow/package`) is Liberty's built-in deployment mechanism: an operator on the **source** install picks a few screens / menu items / dashboards as *seeds*, the framework walks every reference they reach (queries, connectors, dictionary entries, charts), and the result ships as a ZIP. On the **target** install, the same screen accepts a ZIP, lets the operator pick a merge strategy and applies it to the live config — followed by an automatic reload.
 
 This is the standard *staging → production* path. It's also the right tool for cross-customer reuse: build a "starter" package of curated screens, hand it to a fresh install, apply with `replace_all`, done.
 
@@ -199,7 +199,7 @@ Two limits worth knowing:
 | **Read the report** | Per-file row showing `+N added`, `~N replaced`, `⊘N skipped`, `✗N errors` plus a sample of the affected entity names. |
 | **A green *Applied + reloaded* badge** | Confirms the reload succeeded — new config is live for the next request. |
 
-If reload fails after a successful apply, the import warning panel shows the reason but the file changes are kept on disk. Run *Settings → Reload* manually after fixing the underlying issue.
+If reload fails after a successful apply, the import warning panel shows the reason but the file changes are kept on disk. Run *Settings → Reload config* manually after fixing the underlying issue.
 
 ---
 
@@ -241,7 +241,7 @@ Liberty also exposes a dedicated **Find dependencies** modal from any screen / m
 | Used `replace_all` to apply a small slice — wiped customer-specific screens. | Customer screens missing from the target after import. | Restore the previous TOML from your backup. Re-apply with `overwrite` next time. |
 | Bundled `connectors.toml` (default-excluded) without checking pool names match the target. | Target's pools change unexpectedly; pre-existing queries error at next reload. | Leave connectors / pools default-excluded unless the target is brand-new. Or rename pools on the source before bundling. |
 | Built from a source with unresolved references (broken rename / deleted query). | MANIFEST.md lists items under *Missing references*. | Fix on the source (rename / delete / restore) and rebuild. The target won't get the broken references — but it also won't get the screens / queries that referenced them. |
-| Import landed but `Applied + reloaded` is missing — a *reload failed* warning showed. | Disk has the new config; in-memory state is stale. | Reload manually via *Settings → Reload* once the underlying issue is fixed (often a syntax error in an unrelated TOML the reload caught). |
+| Import landed but `Applied + reloaded` is missing — a *reload failed* warning showed. | Disk has the new config; in-memory state is stale. | Reload manually via *Settings → Reload config* once the underlying issue is fixed (often a syntax error in an unrelated TOML the reload caught). |
 
 ---
 

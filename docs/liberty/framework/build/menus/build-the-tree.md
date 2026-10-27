@@ -18,8 +18,8 @@ Above the tree:
 
 | Button | What it does |
 |---|---|
-| **＋ Folder** | Adds a folder at the top level (or as a child of the selected item, depending on the implementation). The folder is the only item kind without a `type`. |
-| **＋ Item** | Adds a leaf, same scope. The leaf opens by default as a `query` type — change it in the Inspector. |
+| **＋ Folder** | Adds a folder at the top level. The folder is the only item kind without a `type`. |
+| **＋ Item** | Adds a leaf at the top level — set its type and target in the Inspector. To add under a folder, use the row's **＋ Add child**. |
 | **⎘ Clone** | Duplicates the selected item (subtree included). Prompts for a new id. Disabled when nothing is selected. |
 | **🔗 Find usages** | Opens a modal listing every place this menu item is referenced (e.g. another connector's `home` field). Helps before a rename / delete. Disabled when nothing is selected. |
 
@@ -77,7 +77,7 @@ Each row carries:
 |---|---|
 | Indent | Visual depth — each level is 16 pixels in. |
 | Chevron | ▾ for an expanded folder, ▸ for collapsed. |
-| Icon | The item's `icon` (Lucide name). Folders default to a folder icon; leaves default to a file icon. |
+| Icon | The item's `icon` (one of the [sidebar icons](./translations-and-icons.md#icons)). Folders default to a folder icon; leaves default to a file icon. |
 | Label | The `label` field. |
 | Id | Monospace, muted, after the label. Fades out on hover to make room for the actions. |
 | Per-row actions (hover) | *Move up* (↑), *Move down* (↓), *Indent* (→), *Outdent* (←), *Add child* (＋), *Delete* (🗑). |
@@ -96,8 +96,8 @@ The icons that appear on hover, left to right:
 | **↓ Move down** | Swap with the next sibling. Disabled at the end. |
 | **→ Indent** | Reparent the item under the previous sibling. The previous sibling becomes the new parent. Disabled when there's no previous sibling. |
 | **← Outdent** | Move the item up one level — its grand-parent becomes the new parent. Disabled when the item is already at the top level. |
-| **＋ Add child** | Add a leaf as a child of this item (works on folders; on leaves it'll convert intent — typically add as next sibling, not child). |
-| **🗑 Delete** | Remove the item **and its whole subtree** after a confirm modal. The descendant items are dropped in the same operation. |
+| **＋ Add child** | Adds an item as a child of this row. |
+| **🗑 Delete** | Removes the item — with its whole subtree, after a confirmation, when it has children. |
 
 The icons are intentionally compact and only show on hover — the tree stays scannable in steady state.
 
@@ -121,7 +121,7 @@ Pick the convention that maps to how your users think — not how the data is sh
 
 ### Step 2 — Add the leaves under each folder
 
-Click on a folder row to select it, then **＋ Item** (or the per-row *＋ Add child*). The new leaf appears under the folder. Set its `type`, `connector`, `target` in the Inspector — see [Item types](./item-types.md).
+On the folder's row, click **＋ Add child**. The new item appears under the folder. Set its `type`, `connector`, `target` in the Inspector — see [Item types](./item-types.md).
 
 ### Step 3 — Reorder
 
@@ -147,7 +147,7 @@ Click a row → the Inspector on the right loads a form for the selected item. T
 | `parent` | Yes | A SearchSelect populated with the valid candidates. The tree's indent/outdent actions mutate this field too. |
 | `label` | Yes | The sidebar text. |
 | `l` (Translations tab) | Yes | Per-language overrides. See [Translations and icons](./translations-and-icons.md). |
-| `icon` | Yes | Lucide icon name. |
+| `icon` | Yes | One of the [sidebar icons](./translations-and-icons.md#icons). |
 | `type` | Yes | Dropdown. Blank = folder. Switching from leaf to folder clears `target` / `connector` / `params`. |
 | `connector` | Only for `query` / `endpoint` leaves | Blank = the app's own connector. |
 | `target` | Only for leaves | A SearchSelect populated with valid targets for the chosen `type` + `connector`. |
@@ -187,7 +187,7 @@ Useful when:
 
 ## Deleting an item
 
-The 🗑 icon (per-row) or the keyboard Delete key on a selected row opens a confirm modal: *Delete '\<name\>' **and** its descendants?*. Confirming removes the item plus every child, grandchild, etc.
+The row's 🗑 icon removes the item. When it has children, a confirmation asks first, and confirming removes the whole subtree.
 
 There's no soft delete — the item disappears immediately from memory. The page-level *Save* is what persists. Until you Save, you can **Discard** to revert.
 

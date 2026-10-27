@@ -25,10 +25,12 @@ Chaque feuille est conditionnée par la permission de sa cible :
 
 | `type` | Permission requise |
 |---|---|
-| `query` | `sql:<connector>:<target>` (la permission de la requête). |
+| `screen`, `query` | `sql:<connector>:<target>` (la permission de la requête). |
 | `endpoint` | `api:<connector>:<target>` (la permission de l'endpoint). |
-| `dashboard` | Aucune à ce niveau — les règles d'accès propres au tableau de bord s'appliquent. |
-| `page` | Aucune à ce niveau — les règles d'accès propres à la route s'appliquent. |
+| `dashboard` | Aucune à ce niveau — masqué seulement par un refus `dashboard:` ou `menu:`. |
+| `page` | Aucune à ce niveau — les règles d'accès propres à la page s'appliquent. |
+
+Une autorisation explicite `menu:<app>:<id>` dans un rôle affiche aussi la feuille, même sans la permission de la cible ; un refus `menu:` la masque toujours. L'éditeur de rôles écrit ces chaînes quand une entrée est autorisée ou refusée sur son arborescence de menus — voir [Rôles et permissions](../secure/roles-and-permissions.md).
 
 Un utilisateur qui a `sql:crm:customers_get` voit la feuille de menu qui ouvre l'écran Clients. Un utilisateur sans cette permission ne la voit pas — la feuille disparaît du menu rendu.
 
@@ -57,7 +59,7 @@ Le champ `roles` d'un élément de menu est une liste de noms de rôles. Quand i
 | Présenter des sections différentes à des audiences différentes dans la même application. | Un dossier `admin` visible uniquement quand `roles = ["admin"]` correspond. |
 | Échelonner un déploiement. | Marquer une nouvelle section `roles = ["beta-testers"]` ; passer à vide au lancement général. |
 
-Le champ `roles` n'est **pas** une alternative à la permission implicite — les deux doivent être vraies. Pour qu'un opérateur voie et utilise un écran, il lui faut à la fois la permission SQL et un des rôles listés.
+Le champ `roles` n'est **pas** une alternative à la permission — les deux doivent être vraies : l'utilisateur a besoin d'un des rôles listés et du droit d'ouvrir la feuille.
 
 ---
 
@@ -156,7 +158,7 @@ Ce que voient différents utilisateurs :
 | **Dave** (manager + analyst) | `["manager", "analyst"]` | tous les `sql:crm:*` | Pipeline → Clients, Affaires · Rapports → Revenu mensuel, Cohorte. *(pas d'Administration)* |
 | **Eve** (sans permission) | `["guest"]` | aucune | Arbre vide — la tuile de l'application dans le sélecteur se masque. |
 
-Noter que le dossier *Rapports* n'apparaît pas pour Alice (ses rôles ne croisent aucun enfant) ; le dossier *Administration* n'apparaît pas pour Alice, Bob ou Dave ; la tuile de l'application dans le sélecteur en haut se masque pour Eve.
+Noter que le dossier *Rapports* n'apparaît pas pour Alice (ses rôles ne croisent aucun enfant) ; le dossier *Administration* n'apparaît pas pour Alice, Bob ou Dave ; la tuile de l'application dans le sélecteur d'applications se masque pour Eve.
 
 ---
 
@@ -171,10 +173,12 @@ Les chaînes de permission Liberty suivent un schéma simple :
 | `sql:*` | Exécuter toutes les requêtes de tous les connecteurs. |
 | `api:<connector>:<endpoint>` | Appeler cet endpoint API précis. |
 | `api:<connector>:*` | Appeler tous les endpoints de ce connecteur. |
-| `screen:<app>:<id>` | Atteindre cet écran précis (moins courant — la plupart des installations conditionnent par `sql:` à la place). |
-| `superuser` | Contourne toutes les vérifications. |
+| `menu:<app>:<id>` | Afficher cette entrée de menu. Un refus `!menu:…` la masque. |
+| `*` | Tout. |
 
-Pour l'élagage des menus, les permissions pertinentes sont `sql:` et `api:` (qui correspondent au `target` de la feuille). Un rôle qui accorde `sql:crm:*` ouvre toutes les feuilles `query` de l'application `crm`.
+Un superutilisateur est un indicateur porté par l'utilisateur, pas une permission : il passe toutes les vérifications.
+
+Pour l'élagage des menus, les permissions pertinentes sont `sql:` et `api:` (qui correspondent au `target` de la feuille) et `menu:`. Un rôle qui accorde `sql:crm:*` ouvre toutes les feuilles `screen` et `query` de l'application `crm`.
 
 Granulaire ou large :
 
@@ -210,7 +214,7 @@ Les tableaux de bord et les routes n'héritent pas d'une permission `sql:` / `ap
 
 | Type de feuille | Visibilité par défaut |
 |---|---|
-| `query` | Masquée sauf si `sql:<connector>:<target>` est accordée. |
+| `screen`, `query` | Masquée sauf si `sql:<connector>:<target>` ou `menu:<app>:<id>` est accordée. |
 | `endpoint` | Masquée sauf si `api:<connector>:<target>` est accordée. |
 | `dashboard` | Visible pour tout le monde par défaut. Utiliser `roles` pour conditionner. |
 | `page` | Visible pour tout le monde par défaut. Utiliser `roles` pour conditionner. |
@@ -236,6 +240,6 @@ Le bon schéma pour les deux : **toujours définir `roles`** sur les feuilles de
 
 ## La suite
 
-- [Traductions et icônes](./translations-and-icons.md) — libellés par langue et icônes Lucide.
+- [Traductions et icônes](./translations-and-icons.md) — libellés par langue et icônes.
 - [Construire l'arbre](./build-the-tree.md) — la surface de l'éditeur.
 - [Concepts → Authentification → Rôles et permissions](../secure/roles-and-permissions.md) — la référence approfondie derrière les chaînes de permission.

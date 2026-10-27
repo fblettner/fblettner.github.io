@@ -16,7 +16,7 @@ The `[jobs]` section of `app.toml`:
 
 | Key | Default | Meaning |
 |---|---|---|
-| `enabled` | `true` | `false` turns off the scheduler **and** the runner: nothing runs, scheduled or manual. A restart applies it. |
+| `enabled` | `true` | `false` keeps the scheduler stopped: no scheduled run (and no missed-schedule check), but **Run now** still works. A restart applies it. |
 | `pool` | `default` | The pool that holds the run history. |
 | `config_path` | `plugins/nomaflow/jobs.toml` next to the configuration folder | The jobs file. |
 | `run_log_max_lines` | `5000` | The lines kept per run log — raise it for a job that writes a lot. |
@@ -85,6 +85,6 @@ The server's `/ready` answers when the framework database — which holds the hi
 | Task | How |
 |---|---|
 | Pause one job | Its **enabled** switch on the Jobs page. |
-| Pause every job | `[jobs] enabled = false` in `app.toml`, then restart. |
+| Pause every schedule | `[jobs] enabled = false` in `app.toml`, then restart — manual runs remain possible. |
 | Move a job to another server | **Export** on its card, then copy the entry into the target's `jobs.toml` — or carry it in a package. The connectors and queries it uses must exist there. |
 | Investigate a job without stopping the others | Switch it off, run it by hand at `DEBUG`. |

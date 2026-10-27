@@ -1,12 +1,12 @@
 ---
 title: Packages
-description: "Transporter la configuration d'une installation Liberty vers une autre. Settings → Package : sélectionner quelques écrans / entrées de menu / tableaux de bord comme amorces, le résolveur de dépendances parcourt tout ce qu'ils atteignent (requêtes, dictionnaire, graphiques) et le package est exporté sous forme de ZIP. Sur l'installation cible, téléverser le ZIP et choisir une stratégie de fusion (merge / overwrite / replace all). La même interface gère les deux côtés."
+description: "Transporter la configuration d'une installation Liberty vers une autre. la page Package de Nomaflow : sélectionner quelques écrans / entrées de menu / tableaux de bord comme amorces, le résolveur de dépendances parcourt tout ce qu'ils atteignent (requêtes, dictionnaire, graphiques) et le package est exporté sous forme de ZIP. Sur l'installation cible, téléverser le ZIP et choisir une stratégie de fusion (merge / overwrite / replace all). La même interface gère les deux côtés."
 keywords: [Liberty Framework, package, export, import, déploiement, ZIP, clôture de dépendances, amorces, merge, overwrite, replace all, override, secrets chiffrés, build-package, import-package]
 ---
 
 # Packages
 
-L'écran **Packages** (Settings → Package) est le mécanisme de déploiement intégré de Liberty : un opérateur sur l'installation **source** sélectionne quelques écrans / entrées de menu / tableaux de bord comme *amorces*, le framework parcourt chaque référence atteinte (requêtes, connecteurs, entrées de dictionnaire, graphiques) et le résultat est livré sous forme de ZIP. Sur l'installation **cible**, le même écran accepte un ZIP, permet de choisir une stratégie de fusion et l'applique à la configuration active — suivi d'un rechargement automatique.
+La page **Package** (menu Nomaflow, adresse `/nomaflow/package`) est le mécanisme de déploiement intégré de Liberty : un opérateur sur l'installation **source** sélectionne quelques écrans / entrées de menu / tableaux de bord comme *amorces*, le framework parcourt chaque référence atteinte (requêtes, connecteurs, entrées de dictionnaire, graphiques) et le résultat est livré sous forme de ZIP. Sur l'installation **cible**, le même écran accepte un ZIP, permet de choisir une stratégie de fusion et l'applique à la configuration active — suivi d'un rechargement automatique.
 
 C'est le parcours standard *préproduction → production*. C'est aussi l'outil adapté à la réutilisation inter-clients : construire un package « starter » d'écrans sélectionnés, le remettre à une nouvelle installation, l'appliquer avec `replace_all`, et c'est terminé.
 
@@ -199,7 +199,7 @@ Deux limites à connaître :
 | **Lire le rapport** | Une ligne par fichier indiquant `+N added`, `~N replaced`, `⊘N skipped`, `✗N errors` ainsi qu'un échantillon des noms d'entités concernés. |
 | **Un badge vert *Applied + reloaded*** | Confirme la réussite du rechargement — la nouvelle configuration est active pour la prochaine requête. |
 
-Si le rechargement échoue après une application réussie, le panneau d'avertissement d'import indique la raison mais les modifications de fichiers sont conservées sur le disque. Il convient alors de lancer manuellement *Settings → Reload* après avoir corrigé la cause sous-jacente.
+Si le rechargement échoue après une application réussie, le panneau d'avertissement d'import indique la raison mais les modifications de fichiers sont conservées sur le disque. Il convient alors de lancer manuellement *Paramètres → Recharger la config* après avoir corrigé la cause sous-jacente.
 
 ---
 
@@ -241,7 +241,7 @@ Liberty propose également une fenêtre modale dédiée **Find dependencies** de
 | Usage de `replace_all` pour appliquer une petite tranche — écrans spécifiques au client effacés. | Les écrans client manquent sur la cible après l'import. | Restaurer le TOML précédent depuis la sauvegarde. Appliquer la fois suivante avec `overwrite`. |
 | Inclusion de `connectors.toml` (exclu par défaut) sans vérifier que les noms de pool correspondent à la cible. | Les pools de la cible changent à l'improviste ; les requêtes préexistantes échouent au prochain rechargement. | Laisser les connecteurs / pools exclus par défaut tant que la cible n'est pas toute neuve. Ou renommer les pools sur la source avant le regroupement. |
 | Construction depuis une source aux références non résolues (renommage cassé / requête supprimée). | MANIFEST.md liste des éléments sous *Missing references*. | Corriger sur la source (renommer / supprimer / restaurer) et reconstruire. La cible ne recevra pas les références cassées — mais elle ne recevra pas non plus les écrans / requêtes qui les référençaient. |
-| L'import a réussi mais `Applied + reloaded` est absent — un avertissement *reload failed* est apparu. | Le disque porte la nouvelle configuration ; l'état en mémoire est obsolète. | Recharger manuellement via *Settings → Reload* une fois la cause sous-jacente corrigée (souvent une erreur de syntaxe dans un TOML sans rapport, détectée par le rechargement). |
+| L'import a réussi mais `Applied + reloaded` est absent — un avertissement *reload failed* est apparu. | Le disque porte la nouvelle configuration ; l'état en mémoire est obsolète. | Recharger manuellement via *Paramètres → Recharger la config* une fois la cause sous-jacente corrigée (souvent une erreur de syntaxe dans un TOML sans rapport, détectée par le rechargement). |
 
 ---
 
