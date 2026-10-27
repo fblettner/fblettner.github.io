@@ -214,7 +214,7 @@ The page has two tabs: **Changes** (the package catalogue) and **Apply** (covere
 
 ### Post-apply steps on the header
 
-A screen can name **post-apply steps** (`Screen.post_apply`): actions to run once on the target after the package's rows have landed — re-merge a security model, refresh a materialised view. They come from a shared library declared under `[changesets] post_apply` in `app.toml`, each step being a plugin call (`call_plugin`), an API endpoint (`call_api`) or a query (`run_query`). Their ids accumulate on the package header, and on export they are appended to the bundle as final operations.
+A screen can name **post-apply steps** (`Screen.post_apply`): actions to run once on the target after the package's rows have landed — re-merge a security model, refresh a materialised view. They come from a library of post-apply steps shared by the application, each step being a plugin call (`call_plugin`), an API endpoint (`call_api`) or a query (`run_query`). Their ids accumulate on the package header, and on export they are appended to the bundle as final operations.
 
 ---
 
@@ -294,7 +294,7 @@ The screen's *General* tab carries three toggles:
 |---|---|
 | **`change_tracked`** | Master toggle. When on, the screen's writes attach to the active package on its application. |
 | **`change_entity`** | Optional label that groups entries on the detail page. Free text — `role`, `user`, `relationship`, `security` are conventions. Empty falls back to the query name. |
-| **`Screen.post_apply`** | Ids of post-apply steps (from the `[changesets] post_apply` library) to run **once on the target** after the package's rows have landed. Use sparingly — these are the cross-cutting "now re-merge security" / "now refresh materialised views" steps. |
+| **`Screen.post_apply`** | Ids of post-apply steps (from the post-apply library) to run **once on the target** after the package's rows have landed. Use sparingly — these are the cross-cutting "now re-merge security" / "now refresh materialised views" steps. |
 
 For an action embedded in the screen, an additional toggle on the action's *General* tab:
 
@@ -363,7 +363,7 @@ The framework does ship the engine for these but the UI today is intentionally b
 | Bundle applied on the wrong target (staging instead of prod). | Apply lands; rows exist on staging. | Capture a reverse package on staging, promote to prod — the framework doesn't synthesise this automatically. Workflow discipline matters more than tooling here. |
 | `conflict` on every UPDATE in the dry-run. | The target's pre-image diverged broadly — typically because the source and target weren't in sync to begin with. | Audit the divergence first. Forcing everything propagates the source's state wholesale; sometimes that's right, sometimes the source is the one that's stale. |
 | `CALL_PLUGIN` captured but didn't fire on apply. | `change_replay` is off on the action. | Open the action's *General* tab, toggle `change_replay` on, save. Future captures will replay; past ones in already-exported packages stay as-is. |
-| Post-apply step never ran. | The contributing screen's `Screen.post_apply` field is empty. | Declare the step in `[changesets] post_apply` and add its id to the screen's `post_apply`. New captures accumulate it on the package header; existing packages are not back-filled. |
+| Post-apply step never ran. | The contributing screen's `Screen.post_apply` field is empty. | Add the step's id to the screen's `post_apply`. New captures accumulate it on the package header; existing packages are not back-filled. |
 | Bundle re-applied accidentally. | Dry-run shows `already_applied` with the previous timestamp. | Read the existing apply's report. Re-applying is allowed and idempotent on clean rows; only do it intentionally. |
 
 ---

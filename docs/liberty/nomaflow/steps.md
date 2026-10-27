@@ -115,7 +115,7 @@ Each cell is converted to the type of its target column: integers, decimals (`12
 
 The run detail shows *N read · N inserted · N rejected* and, when rows were rejected, **Rejected rows (csv)** to download them. The log adds the partitions replaced and the rows deleted.
 
-Uploaded files and reject files go to the job's work area: `[jobs] files_dir` in `app.toml` (default `.nomaflow/files` next to the configuration); `[jobs] max_upload_mb` (200) caps an upload.
+Uploaded files and reject files go to the jobs' work area, `.nomaflow/files` next to the configuration; an upload is limited to 200 MB.
 
 ```toml title="jobs.toml"
 [[jobs.steps]]

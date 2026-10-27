@@ -46,7 +46,7 @@ La page se rafraîchit toutes les deux secondes tant que l'exécution est en cou
 | **Étapes** | Une ligne par étape : n°, nom, Type, Tentative, État, Erreur. Une étape `file_load` affiche aussi *N read · N inserted · N rejected* et, si besoin, **Rejected rows (csv)**. |
 | **Journal** | Les lignes écrites pendant l'exécution, au niveau de journal de l'exécution. **Suivre** garde les dernières lignes visibles (**Pause** l'arrête) ; **Télécharger** enregistre le journal complet. |
 
-Le journal conserve les `[jobs] run_log_max_lines` dernières lignes d'une exécution (5 000 par défaut, dans `app.toml`).
+Le journal conserve les 5 000 dernières lignes d'une exécution.
 
 ---
 

@@ -450,6 +450,49 @@ LogMiner-driven change-data capture from the audit-source database — Oracle ar
 
 ---
 
+### `nomasx1-audit-trail-purge-values-1` \{#nomasx1-audit-trail-purge-values-1\}
+
+**Purge the audit-trail values to reclaim space.** Deletes rows of `AUDIT_TRAIL_VALUES` — the field-level before / after values the Audit Lookup screen filters on. The captured statements (`AUDIT_TRAIL_QUERY`) are kept, so any period can be rebuilt later with [`nomasx1-audit-trail-rebuild-values-1`](#nomasx1-audit-trail-rebuild-values-1).
+
+| Step | Callable |
+|---|---|
+| `AUDIT_TRAIL_PURGE_VALUES` | `nomasx1.audit_trail:j_audit_trail_purge_values` |
+
+**Params** — standard shape, plus:
+
+| Param | Default | Meaning |
+|---|---|---|
+| `older_than_days` | `0` | `0` or less: delete every value of the application. More than `0`: delete only the values whose statement is older than that number of days. |
+| `table` | `""` | Limit the purge to one table. Empty: every table. |
+
+Records the number of value rows deleted.
+
+**When to run** — on demand, when the values table grows too large. Not scheduled.
+
+---
+
+### `nomasx1-audit-trail-rebuild-values-1` \{#nomasx1-audit-trail-rebuild-values-1\}
+
+**Rebuild the audit-trail values of a table and a period** by parsing again the statements kept in `AUDIT_TRAIL_QUERY` — after a purge, when value-level analysis is needed again. The audited columns set per table are applied, so the rebuilt values match what live capture would have written.
+
+| Step | Callable |
+|---|---|
+| `AUDIT_TRAIL_REBUILD_VALUES` | `nomasx1.audit_trail:j_audit_trail_rebuild_values` |
+
+**Params** — standard shape, plus:
+
+| Param | Default | Meaning |
+|---|---|---|
+| `table` | `""` | The table to rebuild. Empty: every table. |
+| `date_from`, `date_to` | `""` | The period, `YYYY-MM-DD`, end date included. Empty: no bound. |
+| `replace` | `true` | Clear the values of the window first, so that running the job twice gives the same result. |
+
+Records the number of value rows written.
+
+**When to run** — on demand, after a purge. Not scheduled.
+
+---
+
 ## Maintenance jobs \{#maintenance\}
 
 ### `nomasx1-refresh-views` \{#nomasx1-refresh-views\}
@@ -482,6 +525,25 @@ LogMiner-driven change-data capture from the audit-source database — Oracle ar
 
 ---
 
+### `nomasx1-xref-dump-object-1` \{#nomasx1-xref-dump-object-1\}
+
+**Diagnostic: dump the raw definition of one JD Edwards object.** Writes to files the decompressed OMW XML of the object's forms (F98751) and the text it references (F98750), to inspect the raw structure — for example a missing tab or control id. Read-only: nothing is written to the target database.
+
+| Step | Callable |
+|---|---|
+| `JDE_XREF_DUMP_OBJECT` | `nomasx1.xref:j_jde_xref_dump_object` |
+
+**Params** — standard shape, plus:
+
+| Param | Default | Meaning |
+|---|---|---|
+| `object_id` | `P01012` | The object to dump — set it in *Run with parameters*. |
+| `output_dir` | `""` | The folder of the files. Empty: a temporary folder on the server. |
+
+**When to run** — on demand, to analyse a cross-reference gap. Not scheduled.
+
+---
+
 ### `nomasx1-activity-log-1` \{#nomasx1-activity-log-1\}
 
 **Refresh Activity Log.** Queries every JDE table that has been modified recently and aggregates records for user + date. **Only the modified tables are scanned** — the job tracks per-table watermarks so it doesn't re-read the whole history each run.
@@ -493,6 +555,22 @@ LogMiner-driven change-data capture from the audit-source database — Oracle ar
 **Long-run alert** — 15 minutes.
 
 **When to run** — daily.
+
+---
+
+### `config-versions-purge` \{#config-versions-purge\}
+
+**Purge the old configuration versions** kept by the [configuration history](../framework/configuration/config-history.md) — file snapshots and screen bundles. For each file, a version is removed when it is beyond the 20 most recent or older than 90 days; the newest version of each file is always kept, so the history never empties.
+
+| Step | Callable |
+|---|---|
+| `purge` | `liberty.jobs.maintenance:purge_config_versions` |
+
+**Step arguments** — `max_versions = 20`, `max_age_days = 90`; `0` or less turns that rule off.
+
+Records the number of versions removed. Two attempts in all on failure.
+
+**Schedule** — **enabled**, every day at 03:00 (Europe/Paris).
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Administration
-description: "Faire fonctionner Nomaflow sur un serveur : les réglages [jobs] d'app.toml, une seule instance, le comportement au redémarrage, la rétention de l'historique, le tampon du journal, l'accès aux pages des Tâches, la sauvegarde et l'état de santé."
+description: "Faire fonctionner Nomaflow sur un serveur : le stockage des exécutions et des fichiers, une seule instance, le comportement au redémarrage, la rétention de l'historique, le tampon du journal, l'accès aux pages des Tâches, la sauvegarde et l'état de santé."
 keywords: [Nomaflow, administration, réglages jobs, rétention, journal d'exécution, redémarrage, reprise, superutilisateur, sauvegarde, Liberty Next]
 ---
 
@@ -10,20 +10,15 @@ Nomaflow s'exécute dans le serveur Liberty Next : son planificateur, son moteur
 
 ---
 
-## Réglages \{#settings\}
+## Stockage et limites \{#settings\}
 
-La section `[jobs]` d'`app.toml` :
-
-| Clé | Défaut | Signification |
-|---|---|---|
-| `enabled` | `true` | `false` laisse le planificateur arrêté : aucune exécution planifiée (ni contrôle des planifications manquées), mais **Exécuter** fonctionne toujours. Un redémarrage l'applique. |
-| `pool` | `default` | Le pool qui héberge l'historique. |
-| `config_path` | `plugins/nomaflow/jobs.toml` à côté du dossier de configuration | Le fichier des tâches. |
-| `run_log_max_lines` | `5000` | Le nombre de lignes conservées par journal d'exécution — à augmenter pour une tâche très bavarde. |
-| `files_dir` | `.nomaflow/files` à côté de la configuration | Les fichiers envoyés et les fichiers de rejets des étapes `file_load`. |
-| `max_upload_mb` | `200` | La taille maximale d'un fichier accepté par **Run with parameters**. |
-
-L'historique est stocké dans cinq tables de ce pool : `nomaflow_job_runs`, `nomaflow_step_runs`, `nomaflow_run_logs`, `nomaflow_run_overrides`, `nomaflow_step_run_extras`. Le serveur les crée et les complète au démarrage.
+| Élément | Valeur |
+|---|---|
+| Historique des exécutions | Dans la base de données du framework, cinq tables : `nomaflow_job_runs`, `nomaflow_step_runs`, `nomaflow_run_logs`, `nomaflow_run_overrides`, `nomaflow_step_run_extras`. Le serveur les crée et les complète au démarrage. |
+| Tâches | Le fichier des tâches `plugins/nomaflow/jobs.toml`, à côté du dossier de configuration — modifié depuis les pages des Tâches. |
+| Journal d'exécution | Les 5 000 dernières lignes de chaque exécution sont conservées. |
+| Fichiers | Les fichiers envoyés par **Run with parameters** et les fichiers de rejets des étapes `file_load` sont rangés dans `.nomaflow/files`, à côté de la configuration. |
+| Taille d'envoi | 200 Mo au plus par fichier. |
 
 ---
 
@@ -85,6 +80,5 @@ Le `/ready` du serveur répond quand la base du framework — qui contient l'his
 | Tâche | Comment |
 |---|---|
 | Suspendre une tâche | Son switch **activée** dans la page des Tâches. |
-| Suspendre toutes les planifications | `[jobs] enabled = false` dans `app.toml`, puis redémarrer — les exécutions manuelles restent possibles. |
-| Déplacer une tâche vers un autre serveur | **Export** sur sa carte, puis reprendre l'entrée dans le `jobs.toml` de la cible — ou la transporter dans un package. Les connecteurs et requêtes utilisés doivent y exister. |
+| Déplacer une tâche vers un autre serveur | La transporter dans un package — voir [Packages](../framework/build/packages.md). Les connecteurs et requêtes utilisés doivent y exister. |
 | Analyser une tâche sans arrêter les autres | La désactiver, la lancer à la main en `DEBUG`. |

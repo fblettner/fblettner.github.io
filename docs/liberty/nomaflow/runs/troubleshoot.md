@@ -51,7 +51,6 @@ SQL, HTTP, file-load and `async` Python steps stop at once. A Python function wr
 | The day is wrong | The scheduler counts the days of the week from 0 = Monday. Write `mon-fri`, not `1-5` — see [Schedules](../jobs/schedules.md#cron). |
 | The **Next runs** preview is not what was expected | Fix the cron or the timezone. |
 | The server was down at that time | The run is recorded **MISSED**; run it by hand. |
-| `[jobs] enabled = false` in `app.toml` | The scheduler is stopped; only manual runs work. Set it back to `true` and restart. |
 
 ---
 

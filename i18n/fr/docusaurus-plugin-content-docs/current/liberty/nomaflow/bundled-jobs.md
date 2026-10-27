@@ -452,6 +452,49 @@ Capture de données modifiées pilotée par LogMiner depuis la base source d'aud
 
 ---
 
+### `nomasx1-audit-trail-purge-values-1` \{#nomasx1-audit-trail-purge-values-1\}
+
+**Purge des valeurs de l'audit trail pour libérer de la place.** Supprime des lignes de `AUDIT_TRAIL_VALUES` — les valeurs avant / après par champ sur lesquelles filtre l'écran Audit Lookup. Les instructions capturées (`AUDIT_TRAIL_QUERY`) sont conservées : toute période peut être reconstruite plus tard avec [`nomasx1-audit-trail-rebuild-values-1`](#nomasx1-audit-trail-rebuild-values-1).
+
+| Étape | Appelable |
+|---|---|
+| `AUDIT_TRAIL_PURGE_VALUES` | `nomasx1.audit_trail:j_audit_trail_purge_values` |
+
+**Paramètres** — forme standard, plus :
+
+| Paramètre | Défaut | Signification |
+|---|---|---|
+| `older_than_days` | `0` | `0` ou moins : supprime toutes les valeurs de l'application. Plus de `0` : supprime seulement les valeurs dont l'instruction date de plus de ce nombre de jours. |
+| `table` | `""` | Limite la purge à une table. Vide : toutes les tables. |
+
+Enregistre le nombre de lignes de valeurs supprimées.
+
+**Quand l'exécuter** — à la demande, quand la table des valeurs devient trop volumineuse. Non planifiée.
+
+---
+
+### `nomasx1-audit-trail-rebuild-values-1` \{#nomasx1-audit-trail-rebuild-values-1\}
+
+**Reconstruction des valeurs de l'audit trail d'une table sur une période**, par une nouvelle analyse des instructions conservées dans `AUDIT_TRAIL_QUERY` — après une purge, quand l'analyse au niveau des valeurs redevient nécessaire. Les colonnes auditées définies par table sont respectées : les valeurs reconstruites sont celles qu'aurait écrites la capture en direct.
+
+| Étape | Appelable |
+|---|---|
+| `AUDIT_TRAIL_REBUILD_VALUES` | `nomasx1.audit_trail:j_audit_trail_rebuild_values` |
+
+**Paramètres** — forme standard, plus :
+
+| Paramètre | Défaut | Signification |
+|---|---|---|
+| `table` | `""` | La table à reconstruire. Vide : toutes les tables. |
+| `date_from`, `date_to` | `""` | La période, `AAAA-MM-JJ`, date de fin incluse. Vide : sans borne. |
+| `replace` | `true` | Efface d'abord les valeurs de la fenêtre, pour qu'une seconde exécution donne le même résultat. |
+
+Enregistre le nombre de lignes de valeurs écrites.
+
+**Quand l'exécuter** — à la demande, après une purge. Non planifiée.
+
+---
+
 ## Tâches de maintenance \{#maintenance\}
 
 ### `nomasx1-refresh-views` \{#nomasx1-refresh-views\}
@@ -484,6 +527,25 @@ Capture de données modifiées pilotée par LogMiner depuis la base source d'aud
 
 ---
 
+### `nomasx1-xref-dump-object-1` \{#nomasx1-xref-dump-object-1\}
+
+**Diagnostic : extraction de la définition brute d'un objet JD Edwards.** Écrit dans des fichiers le XML OMW décompressé des écrans de l'objet (F98751) et les textes qu'ils référencent (F98750), pour en examiner la structure brute — par exemple un onglet ou un identifiant de contrôle manquant. En lecture seule : rien n'est écrit dans la base cible.
+
+| Étape | Appelable |
+|---|---|
+| `JDE_XREF_DUMP_OBJECT` | `nomasx1.xref:j_jde_xref_dump_object` |
+
+**Paramètres** — forme standard, plus :
+
+| Paramètre | Défaut | Signification |
+|---|---|---|
+| `object_id` | `P01012` | L'objet à extraire — à renseigner dans *Exécuter avec paramètres*. |
+| `output_dir` | `""` | Le dossier des fichiers. Vide : un dossier temporaire sur le serveur. |
+
+**Quand l'exécuter** — à la demande, pour analyser un manque dans les références croisées. Non planifiée.
+
+---
+
 ### `nomasx1-activity-log-1` \{#nomasx1-activity-log-1\}
 
 **Rafraîchissement du journal d'activité.** Interroge chaque table JDE modifiée récemment et agrège les enregistrements par utilisateur et par date. **Seules les tables modifiées sont parcourues** — la tâche suit un repère par table afin de ne pas relire l'historique complet à chaque exécution.
@@ -495,6 +557,22 @@ Capture de données modifiées pilotée par LogMiner depuis la base source d'aud
 **Alerte d'exécution longue** — 15 minutes.
 
 **Quand l'exécuter** — quotidiennement.
+
+---
+
+### `config-versions-purge` \{#config-versions-purge\}
+
+**Purge des anciennes versions de configuration** conservées par l'[historique de configuration](../framework/configuration/config-history.md) — instantanés de fichiers et lots d'écrans. Pour chaque fichier, une version est supprimée quand elle dépasse les 20 plus récentes ou date de plus de 90 jours ; la version la plus récente de chaque fichier est toujours conservée, l'historique ne se vide donc jamais.
+
+| Étape | Appelable |
+|---|---|
+| `purge` | `liberty.jobs.maintenance:purge_config_versions` |
+
+**Arguments de l'étape** — `max_versions = 20`, `max_age_days = 90` ; `0` ou moins désactive la règle correspondante.
+
+Enregistre le nombre de versions supprimées. Deux tentatives au total en cas d'échec.
+
+**Planification** — **activée**, tous les jours à 3 h (Europe/Paris).
 
 ---
 

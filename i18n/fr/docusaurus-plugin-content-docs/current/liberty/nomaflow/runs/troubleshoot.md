@@ -51,7 +51,6 @@ Les étapes SQL, HTTP, de chargement de fichier et les fonctions Python `async` 
 | Le jour est faux | Le planificateur numérote les jours de la semaine à partir de 0 = lundi. Écrire `mon-fri`, pas `1-5` — voir [Planifications](../jobs/schedules.md#cron). |
 | L'aperçu **Prochaines exécutions** n'est pas celui attendu | Corriger le cron ou le fuseau horaire. |
 | Le serveur était arrêté à ce moment-là | L'exécution est enregistrée **MISSED** ; la lancer à la main. |
-| `[jobs] enabled = false` dans `app.toml` | Le planificateur est arrêté ; seules les exécutions manuelles fonctionnent. Remettre `true` et redémarrer. |
 
 ---
 

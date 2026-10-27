@@ -214,7 +214,7 @@ La page a deux onglets : **Changements** (le catalogue des paquets) et **Appliqu
 
 ### Étapes de post-application en en-tête
 
-Un écran peut nommer des **étapes de post-application** (`Screen.post_apply`) : des actions à exécuter une fois sur la cible après l'écriture des lignes du paquet — refusionner un modèle de sécurité, rafraîchir une vue matérialisée. Elles proviennent d'une bibliothèque commune déclarée sous `[changesets] post_apply` dans `app.toml`, chaque étape étant un appel de plugin (`call_plugin`), un endpoint d'API (`call_api`) ou une requête (`run_query`). Leurs identifiants s'accumulent en en-tête du paquet et, à l'export, s'ajoutent au paquet JSON comme dernières opérations.
+Un écran peut nommer des **étapes de post-application** (`Screen.post_apply`) : des actions à exécuter une fois sur la cible après l'écriture des lignes du paquet — refusionner un modèle de sécurité, rafraîchir une vue matérialisée. Elles proviennent d'une bibliothèque d'étapes de post-application commune à l'application, chaque étape étant un appel de plugin (`call_plugin`), un endpoint d'API (`call_api`) ou une requête (`run_query`). Leurs identifiants s'accumulent en en-tête du paquet et, à l'export, s'ajoutent au paquet JSON comme dernières opérations.
 
 ---
 
@@ -292,7 +292,7 @@ L'onglet *Général* de l'écran porte trois réglages :
 |---|---|
 | **`change_tracked`** | Réglage principal. Activé, les écritures de l'écran rejoignent le paquet actif de son application. |
 | **`change_entity`** | Libellé facultatif qui regroupe les entrées dans le détail. Texte libre — `role`, `user`, `relationship`, `security` par convention. Vide : le nom de la requête. |
-| **`Screen.post_apply`** | Identifiants d'étapes de post-application (de la bibliothèque `[changesets] post_apply`) à exécuter **une fois sur la cible** après l'écriture des lignes du paquet. À utiliser avec parcimonie — ce sont les étapes transverses du type « refusionner la sécurité » ou « rafraîchir les vues matérialisées ». |
+| **`Screen.post_apply`** | Identifiants d'étapes de post-application (de la bibliothèque des étapes de post-application) à exécuter **une fois sur la cible** après l'écriture des lignes du paquet. À utiliser avec parcimonie — ce sont les étapes transverses du type « refusionner la sécurité » ou « rafraîchir les vues matérialisées ». |
 
 Pour une action intégrée à l'écran, un réglage supplémentaire dans l'onglet *Général* de l'action :
 
@@ -361,7 +361,7 @@ Le framework livre le moteur pour ce qui suit, mais l'interface aujourd'hui est 
 | Paquet appliqué sur la mauvaise cible (recette au lieu de prod). | L'application réussit ; les lignes existent sur la recette. | Capturer un paquet inverse sur la recette, le promouvoir en production — le framework ne synthétise pas cela automatiquement. La discipline de flux compte plus que l'outil ici. |
 | `conflict` sur chaque UPDATE à l'essai à blanc. | L'image avant de la cible a divergé largement — typiquement parce que la source et la cible n'étaient pas synchronisées au départ. | Auditer la divergence d'abord. Tout forcer propage l'état de la source en bloc ; parfois c'est juste, parfois c'est la source qui est obsolète. |
 | `CALL_PLUGIN` capturé mais non déclenché à l'application. | `change_replay` est désactivé sur l'action. | Ouvrir l'onglet *Général* de l'action, activer `change_replay`, enregistrer. Les captures futures seront rejouées ; les précédentes dans des paquets déjà exportés restent telles quelles. |
-| L'étape de post-application ne s'est jamais exécutée. | Le champ `Screen.post_apply` de l'écran contributeur est vide. | Déclarer l'étape dans `[changesets] post_apply` et ajouter son identifiant au `post_apply` de l'écran. Les nouvelles captures l'ajoutent en en-tête du paquet ; les paquets existants ne sont pas complétés. |
+| L'étape de post-application ne s'est jamais exécutée. | Le champ `Screen.post_apply` de l'écran contributeur est vide. | Ajouter l'identifiant de l'étape au `post_apply` de l'écran. Les nouvelles captures l'ajoutent en en-tête du paquet ; les paquets existants ne sont pas complétés. |
 | Paquet réappliqué par accident. | L'essai à blanc affiche `already_applied` avec l'horodatage précédent. | Lire le rapport de l'application existante. Réappliquer est permis et ré-exécutable sans danger sur les lignes propres ; à ne faire qu'en connaissance de cause. |
 
 ---

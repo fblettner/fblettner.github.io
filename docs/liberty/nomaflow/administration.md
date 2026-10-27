@@ -1,6 +1,6 @@
 ---
 title: Administration
-description: "Running Nomaflow on a server: the [jobs] settings in app.toml, one instance, what happens on restart, run history retention, the run log buffer, who can use the Jobs pages, backup and health."
+description: "Running Nomaflow on a server: where runs and files are kept, one instance, what happens on restart, run history retention, the run log buffer, who can use the Jobs pages, backup and health."
 keywords: [Nomaflow, administration, jobs settings, retention, run log, restart, recovery, superuser, backup, Liberty Next]
 ---
 
@@ -10,20 +10,15 @@ Nomaflow runs inside the Liberty Next server: its scheduler, its runner and its 
 
 ---
 
-## Settings \{#settings\}
+## Storage and limits \{#settings\}
 
-The `[jobs]` section of `app.toml`:
-
-| Key | Default | Meaning |
-|---|---|---|
-| `enabled` | `true` | `false` keeps the scheduler stopped: no scheduled run (and no missed-schedule check), but **Run now** still works. A restart applies it. |
-| `pool` | `default` | The pool that holds the run history. |
-| `config_path` | `plugins/nomaflow/jobs.toml` next to the configuration folder | The jobs file. |
-| `run_log_max_lines` | `5000` | The lines kept per run log — raise it for a job that writes a lot. |
-| `files_dir` | `.nomaflow/files` next to the configuration | Uploaded files and reject files of `file_load` steps. |
-| `max_upload_mb` | `200` | The largest file accepted by **Run with parameters**. |
-
-The history lives in five tables of that pool: `nomaflow_job_runs`, `nomaflow_step_runs`, `nomaflow_run_logs`, `nomaflow_run_overrides`, `nomaflow_step_run_extras`. They are created and completed by the server at start-up.
+| Item | Value |
+|---|---|
+| Run history | In the framework's database, five tables: `nomaflow_job_runs`, `nomaflow_step_runs`, `nomaflow_run_logs`, `nomaflow_run_overrides`, `nomaflow_step_run_extras`. The server creates and completes them at start-up. |
+| Jobs | The jobs file `plugins/nomaflow/jobs.toml`, next to the configuration folder — edited from the Jobs pages. |
+| Run log | The last 5,000 lines of each run are kept. |
+| Files | Files uploaded with **Run with parameters** and the reject files of `file_load` steps go to `.nomaflow/files`, next to the configuration. |
+| Upload size | 200 MB at most per file. |
 
 ---
 
@@ -85,6 +80,5 @@ The server's `/ready` answers when the framework database — which holds the hi
 | Task | How |
 |---|---|
 | Pause one job | Its **enabled** switch on the Jobs page. |
-| Pause every schedule | `[jobs] enabled = false` in `app.toml`, then restart — manual runs remain possible. |
-| Move a job to another server | **Export** on its card, then copy the entry into the target's `jobs.toml` — or carry it in a package. The connectors and queries it uses must exist there. |
+| Move a job to another server | Carry it in a package — see [Packages](../framework/build/packages.md). The connectors and queries it uses must exist there. |
 | Investigate a job without stopping the others | Switch it off, run it by hand at `DEBUG`. |

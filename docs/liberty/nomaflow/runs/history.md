@@ -46,7 +46,7 @@ The page refreshes itself every two seconds while the run is in progress (*live*
 | **Steps** | One row per step: #, name, Type, Attempt, State, Error. A `file_load` step also shows *N read · N inserted · N rejected* and, if needed, **Rejected rows (csv)**. |
 | **Log** | The lines written during the run, at the run's log level. **Follow** keeps the newest lines in view (**Pause** stops it); **Download** saves the whole log. |
 
-The log keeps the last `[jobs] run_log_max_lines` lines of a run (5 000 by default, `app.toml`).
+The log keeps the last 5,000 lines of a run.
 
 ---
 

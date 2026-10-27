@@ -256,7 +256,7 @@
     "description": "The label for category 'Tutorial — Build a CRM' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Tutorial — Build a CRM.link.generated-index.description": {
-    "message": "Un parcours en six étapes qui construit un CRM complet : clients, affaires et activités, avec un tableau de bord du pipeline, la connexion OIDC, l'assistant IA et une tâche planifiée.",
+    "message": "Un parcours en six étapes qui construit un CRM complet : clients, affaires et activités, avec un tableau de bord du pipeline, des rôles, l'assistant IA et une tâche planifiée.",
     "description": "The generated-index page description for category 'Tutorial — Build a CRM' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Configuration": {
@@ -288,7 +288,7 @@
     "description": "The label for category 'Screens' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Screens.link.generated-index.description": {
-    "message": "Tout ce qui se fait dans le Concepteur d'écran — relier un écran à une requête, configurer les colonnes, construire la boîte de dialogue, ajouter des champs conditionnels, câbler les actions et les points d'extension, imbriquer des onglets.",
+    "message": "Paramètres → Écrans : relier un écran à ses requêtes, régler les colonnes, construire le dialogue, champs conditionnels, actions et hooks, onglets imbriqués, vues enregistrées.",
     "description": "The generated-index page description for category 'Screens' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Menus": {
@@ -312,7 +312,7 @@
     "description": "The label for category 'Plugins' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Plugins.link.generated-index.description": {
-    "message": "Du code Python propre, placé dans le dépôt des applications et chargé par le framework au démarrage. Le recours quand les étapes déclaratives ne suffisent pas — contrat de fonction, boîte à outils ETL, déploiement et débogage.",
+    "message": "Code Python spécifique appelé par les étapes Nomaflow et les actions d'écran — contrat des fonctions, primitives ETL, déploiement et débogage.",
     "description": "The generated-index page description for category 'Plugins' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Concepts": {
@@ -336,7 +336,7 @@
     "description": "The label for category 'Cookbook' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Cookbook.link.generated-index.description": {
-    "message": "Des recettes courtes pour les besoins courants — export Excel, envoi de fichiers, connexion OIDC, piste d'audit, import en masse, rapport planifié, accès par ligne, ouverture des données à l'IA.",
+    "message": "Recettes courtes pour les besoins courants — CRUD, export Excel, fichiers, piste d'audit, import en masse, workflow, connexion OIDC, rapport planifié, assistant IA, accès par ligne.",
     "description": "The generated-index page description for category 'Cookbook' in sidebar 'libertySidebar'"
   },
   "sidebar.libertySidebar.category.Monitoring": {
@@ -554,5 +554,45 @@
   "sidebar.nomaublSidebar.link.API Reference": {
     "message": "Référence API",
     "description": "The label for link 'API Reference' in sidebar 'nomaublSidebar', linking to '/nomaubl/api-reference/'"
+  },
+  "sidebar.libertySidebar.category.Connectors & queries": {
+    "message": "Connecteurs et requêtes",
+    "description": "The label for category 'Connectors & queries' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Connectors & queries.link.generated-index.description": {
+    "message": "Paramètres → Connecteurs : pools, connecteurs SQL et API, et leurs requêtes — générées depuis une table, écrites à la main, clonées, séquences et lookups, paramètres, variantes par dialecte.",
+    "description": "The generated-index page description for category 'Connectors & queries' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Menus & apps": {
+    "message": "Menus et applications",
+    "description": "The label for category 'Menus & apps' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Menus & apps.link.generated-index.description": {
+    "message": "Paramètres → Menus et applications : ce qu'est une application, l'arborescence du menu, les types d'entrées, les permissions, les traductions et les icônes.",
+    "description": "The generated-index page description for category 'Menus & apps' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Dashboards & charts": {
+    "message": "Tableaux de bord et graphiques",
+    "description": "The label for category 'Dashboards & charts' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Security": {
+    "message": "Sécurité",
+    "description": "The label for category 'Security' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Security.link.generated-index.description": {
+    "message": "Connexion, rôles et périmètre de données, utilisateurs, secrets chiffrés et clé de licence.",
+    "description": "The generated-index page description for category 'Security' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Administration": {
+    "message": "Administration",
+    "description": "The label for category 'Administration' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Administration.link.generated-index.description": {
+    "message": "Paramètres → App, les pages des Paramètres, variables d'environnement, rechargement à chaud, chiffrement, historique de configuration et packages.",
+    "description": "The generated-index page description for category 'Administration' in sidebar 'libertySidebar'"
+  },
+  "sidebar.libertySidebar.category.Dashboards & charts.link.generated-index.description": {
+    "message": "Paramètres → Tableaux de bord et Paramètres → Graphiques : indicateurs, graphiques et tables sur une grille, avec période et filtres.",
+    "description": "The generated-index page description for category 'Dashboards & charts' in sidebar 'libertySidebar'"
   }
 }
