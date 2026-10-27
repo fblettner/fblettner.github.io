@@ -9,6 +9,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'liberty/framework/overview',
         'liberty/framework/what-you-can-build',
+        'liberty/framework/demo-app',
         'liberty/framework/getting-started/first-app',
         'liberty/framework/getting-started/project-layout',
       ],
@@ -239,6 +240,8 @@ const sidebars: SidebarsConfig = {
 
   nomasx1Sidebar: [
     'liberty/nomasx1/overview',
+    'liberty/nomasx1/audit-synthesis',
+    'liberty/nomasx1/data-explorer',
     {
       type: 'category',
       label: 'Security',

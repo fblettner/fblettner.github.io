@@ -135,13 +135,13 @@ In **Dashboards** mode, a dashboard is a grid of **tiles**, four columns wide, e
 
 | | Excel | PDF |
 |---|---|---|
-| Layout | One sheet per section, bold headers and subtotals, period and filters as a note. | A title, one chapter per section, tables with bold group rows, the install's PDF branding. |
-| A pivot | Flattened, with its subtotals. | Same. |
-| A chart | Its data table. | Same. |
-| KPI | A row of totals. | Same. |
-| Detail | Its rows. | Same. |
+| Layout | One sheet per section, bold headers and subtotals, period and filters as a note. | A synthesis: a cover with the application, the period, the date, the author and the version, then the sections one after the other, in the install's PDF branding. |
+| A pivot | Flattened, with its subtotals. | A table with bold group rows. |
+| A chart | Its data table. | The chart drawn — bars (grouped, stacked or horizontal), line, pie or donut — in print colours, with a legend, compact axis ticks and the values on the bars. |
+| KPI | A row of totals. | Cards. |
+| Detail | Its rows. | A table. |
 
-Each section holds up to 3,000 rows. The pivot view also has its own Excel button, which exports the pivot as shown. PDF branding is set in [Settings → App](../build/settings-app.md).
+Numbers in the PDF follow the reader's language (`1 234,5` / `1,234.5`). The same document is produced when a Nomaflow job renders the analysis on a schedule — see [Steps → Report](../../nomaflow/steps.md#report). Each section holds up to 3,000 rows. The pivot view also has its own Excel button, which exports the pivot as shown. PDF branding is set in [Settings → App](../build/settings-app.md).
 
 ---
 

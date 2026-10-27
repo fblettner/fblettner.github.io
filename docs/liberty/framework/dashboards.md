@@ -1,12 +1,12 @@
 ---
 title: Dashboards
-description: "Liberty Next dashboards: KPIs, charts and tables over connector queries on a 12-column grid, a period with presets and comparison with the previous period, dictionary filters, a cache with Refresh — built in Settings → Dashboards and opened from the menu."
-keywords: [Liberty Next, dashboard, KPI, chart, table, widget, period, previous period, compare_previous, PERIOD_FROM, filters, dashboards.toml, cache]
+description: "Liberty Next dashboards: KPIs, figures, decision lists, proportion bars, charts and tables over connector queries on a 12-column grid, Excel and PDF export, a period with presets and comparison with the previous period, dictionary filters, a cache with Refresh — built in Settings → Dashboards and opened from the menu."
+keywords: [Liberty Next, dashboard, KPI, figure, list, bars, synthesis, export, Excel, PDF, chart, table, widget, period, previous period, compare_previous, PERIOD_FROM, filters, dashboards.toml, cache]
 ---
 
 # Dashboards
 
-A dashboard puts several **widgets** — figures, charts, tables — side by side, each fed by a query of a connector. It opens from the menu like a screen, and it is built in **Settings → Dashboards**.
+A dashboard puts several **widgets** — figures, decision lists, proportion bars, charts, tables — side by side, each fed by a query of a connector. It opens from the menu like a screen, and it is built in **Settings → Dashboards**.
 
 ---
 
@@ -108,15 +108,132 @@ A dashboard puts several **widgets** — figures, charts, tables — side by sid
 
 ## Widgets \{#widgets\}
 
-Widgets sit on a 12-column grid, in the order they are declared. Each one takes a width of 1 to 12 columns and a height of 1 to 8 rows, and may carry a title.
+Widgets sit on a 12-column grid, in the order they are declared. Each one takes a width of 1 to 12 columns and a height of 1 to 8 rows, and carries a title and an optional **subtitle** — one line under the title that says what the widget covers.
 
 | Widget | Shows | Settings |
 |---|---|---|
 | **KPI** | One figure computed over every row of a query. | Connector, query, column, aggregation (`count`, `sum`, `avg`, `min`, `max`, or `none` for the first row's value), format, and **compare with the previous period**. |
+| **Figure** | A figure card read from the query's **first row**, with a line of detail under it. | **Value column**, **Format**, **Unit**, **Sub line**. |
+| **List** | A decision or ranked list: one line per row, with a coloured dot, a title, a subtitle, a figure and a tag. | **Title column** (required), **Subtitle column**, **Value column**, format, unit, **Count column** and **Count wording**, **Tone column**, **Tag column**, **Rows shown**. |
+| **Bars** | A ranked list with a proportion bar under each row. | **Label column** and **Value column** (required), **Sub label column**, format, unit, **Bar as a share of**, **Note under the bars**, **Rows shown**. |
 | **Chart** | A bar, line, area or pie chart. | A chart saved in **Settings → Charts**, or a connector, a query and a chart definition written in the widget — see [Charts](./charts.md). |
 | **Table** | The rows of a query. | Connector, query, the columns to show (all when empty), a row limit. |
 
 A widget whose query the user may not run is hidden; the rest of the dashboard still shows.
+
+<svg viewBox="0 0 1200 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="dsy-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="dsy-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="dsy-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="dsy-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="14" width="760" height="440" rx="14" fill="url(#dsy-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">Sales synthesis</text>
+  <text x="240" y="60" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">The loaded periods, the quantities and the revenue at a glance</text>
+  <line x1="240" y1="72" x2="960" y2="72" stroke="#1f2937" strokeWidth="1"/>
+  <text x="240" y="92" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">PERIOD</text>
+  <rect x="240" y="98" width="150" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="112.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Last 12 months ▾</text>
+  <text x="406" y="92" fill="#64748b" fontSize="9" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">BUSINESS UNIT</text>
+  <rect x="406" y="98" width="130" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="416" y="112.5" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">All ▾</text>
+  <rect x="730" y="98" width="48" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="754.0" y="112.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">Excel</text>
+  <rect x="784" y="98" width="37" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="802.5" y="112.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">PDF</text>
+  <rect x="827" y="98" width="27" height="22" rx="5" fill="#1e293b" stroke="#334155" strokeWidth="1"/>
+  <text x="840.5" y="112.5" fill="#94a3b8" fontSize="9.5" textAnchor="middle" fontFamily="system-ui, sans-serif">↻</text>
+  <text x="862" y="113" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Updated at 08:02</text>
+  <rect x="240" y="134" width="233.33333333333334" height="96" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="152" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Revenue</text>
+  <text x="252" y="165" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Invoiced over the period</text>
+  <text x="252" y="194" fill="#e2e8f0" fontSize="22" fontWeight="700" fontFamily="system-ui, sans-serif">€1,284,350</text>
+  <text x="252" y="220" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">12 companies · 4 business units</text>
+  <rect x="483.33333333333337" y="134" width="233.33333333333334" height="96" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="495.33333333333337" y="152" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Invoice lines</text>
+  <text x="495.33333333333337" y="165" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Loaded lines</text>
+  <text x="495.33333333333337" y="194" fill="#e2e8f0" fontSize="22" fontWeight="700" fontFamily="system-ui, sans-serif">48,920</text>
+  <text x="495.33333333333337" y="220" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">5 periods · 2 closed</text>
+  <rect x="726.6666666666667" y="134" width="233.33333333333334" height="96" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="738.6666666666667" y="152" fill="#cbd5e1" fontSize="9.5" fontFamily="system-ui, sans-serif">Customers</text>
+  <text x="738.6666666666667" y="165" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">With at least one sale</text>
+  <text x="738.6666666666667" y="194" fill="#e2e8f0" fontSize="22" fontWeight="700" fontFamily="system-ui, sans-serif">1,135</text>
+  <text x="738.6666666666667" y="220" fill="#94a3b8" fontSize="8" fontFamily="system-ui, sans-serif">38 new this month</text>
+  <rect x="240" y="244" width="355.0" height="196" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="252" y="262" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Periods to look at</text>
+  <text x="252" y="275" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Status of each loaded period</text>
+  <circle cx="256" cy="297" r="3.5" fill="#4ade80"/>
+  <text x="268" y="299" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">2026-02</text>
+  <text x="268" y="311" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">validated</text>
+  <text x="583.0" y="299" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">9,812</text>
+  <circle cx="256" cy="331" r="3.5" fill="#fb923c"/>
+  <text x="268" y="333" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">2026-03</text>
+  <text x="268" y="345" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">open — lines still arriving</text>
+  <text x="583.0" y="333" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">4,206</text>
+  <circle cx="256" cy="365" r="3.5" fill="#f87171"/>
+  <text x="268" y="367" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">2026-01</text>
+  <text x="268" y="379" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">closed — a reload was refused</text>
+  <rect x="309.28" y="358" width="43" height="14" rx="7.0" fill="rgba(255,69,58,0.18)" stroke="rgba(255,69,58,0.40)" strokeWidth="1"/>
+  <text x="330.78" y="368.2" fill="#f87171" fontSize="7.5" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">closed</text>
+  <text x="583.0" y="367" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">10,440</text>
+  <circle cx="256" cy="399" r="3.5" fill="#4a9eff"/>
+  <text x="268" y="401" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">2025-12</text>
+  <text x="268" y="413" fill="#64748b" fontSize="7.5" fontFamily="system-ui, sans-serif">validated</text>
+  <text x="583.0" y="401" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">8,965</text>
+  <rect x="605.0" y="244" width="355.0" height="196" rx="8" fill="rgba(255,255,255,0.02)" stroke="#1f2937" strokeWidth="1"/>
+  <text x="617.0" y="262" fill="#e2e8f0" fontSize="10.5" fontWeight="700" fontFamily="system-ui, sans-serif">Quantity by family</text>
+  <text x="617.0" y="275" fill="#64748b" fontSize="8.5" fontFamily="system-ui, sans-serif">Share of the largest family</text>
+  <text x="617.0" y="298" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Beverages</text>
+  <text x="948.0" y="298" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">18,400</text>
+  <rect x="617.0" y="303" width="331.0" height="5" rx="2.5" fill="#1e293b"/>
+  <rect x="617.0" y="303" width="331" height="5" rx="2.5" fill="#4a9eff"/>
+  <text x="617.0" y="328" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Groceries</text>
+  <text x="948.0" y="328" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">12,950</text>
+  <rect x="617.0" y="333" width="331.0" height="5" rx="2.5" fill="#1e293b"/>
+  <rect x="617.0" y="333" width="232" height="5" rx="2.5" fill="#4a9eff"/>
+  <text x="617.0" y="358" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Fresh produce</text>
+  <text x="948.0" y="358" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">9,310</text>
+  <rect x="617.0" y="363" width="331.0" height="5" rx="2.5" fill="#1e293b"/>
+  <rect x="617.0" y="363" width="169" height="5" rx="2.5" fill="#4a9eff"/>
+  <text x="617.0" y="388" fill="#e2e8f0" fontSize="9" fontFamily="system-ui, sans-serif">Household</text>
+  <text x="948.0" y="388" fill="#cbd5e1" fontSize="9" textAnchor="end" fontFamily="system-ui, sans-serif">4,120</text>
+  <rect x="617.0" y="393" width="331.0" height="5" rx="2.5" fill="#1e293b"/>
+  <rect x="617.0" y="393" width="73" height="5" rx="2.5" fill="#4a9eff"/>
+  <rect x="10" y="150" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="165" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Figure</text>
+  <text x="20" y="178" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a value, a templated sub line</text>
+  <line x1="210" y1="167.0" x2="240" y2="180" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dsy-arrow)"/>
+  <rect x="10" y="300" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="315" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">List</text>
+  <text x="20" y="328" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tone dot, subtitle, figure, tag</text>
+  <line x1="210" y1="317.0" x2="254" y2="300" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dsy-arrow)"/>
+  <rect x="1000" y="56" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="71" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Export</text>
+  <text x="1010" y="84" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">what the bar holds, to Excel or PDF</text>
+  <line x1="1000" y1="73.0" x2="755" y2="98" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dsy-arrow)"/>
+  <rect x="1000" y="160" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="175" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Subtitle</text>
+  <text x="1010" y="188" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">on every widget</text>
+  <line x1="1000" y1="177.0" x2="860" y2="165" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dsy-arrow)"/>
+  <rect x="1000" y="310" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="325" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Bars</text>
+  <text x="1010" y="338" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">share of the total or the largest</text>
+  <line x1="1000" y1="327.0" x2="950" y2="316" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#dsy-arrow)"/>
+</svg>
+
+### Figure, List and Bars \{#synthesis\}
+
+These three widgets turn a dashboard into a **synthesis page**: the figures that matter, what needs a decision, and the proportions, each read from a query written for it.
+
+- **Format**: *Number*, *Integer*, *Currency* (euros, no decimals for a whole amount) or *Percent* — a ratio between 0 and 1, shown as a percentage. The **Unit** follows the figure (`users`, `lines`); a currency carries its own symbol.
+- **Sub line** (Figure): a sentence with placeholders filled from the first row, `{COLUMN}` or `{COLUMN:format}` — `{ENABLED:integer} enabled · {DISABLED:integer} disabled` gives *380 enabled · 32 disabled*. A placeholder naming an unknown column stays as written.
+- **Tone column** (List): a column holding `ok`, `warn`, `error` or `info` colours the dot green, orange, red or blue; any other value gives a grey dot. The query decides the tone — a period that is closed, an amount above a threshold.
+- **Count wording** (List): the text around the count column, `{n} conflict lines`. The **Tag column** shows its value as a pill next to the title, in the line's tone.
+- **Bar as a share of** (Bars): **The total of the rows** — the bars add up to 100 % — or **The largest row**, which gets the full bar.
+
+The editor shows a live preview of the widget as soon as the connector, the query and the required columns are chosen.
 
 ---
 
@@ -156,13 +273,30 @@ With **Compare with the previous period** ticked, a KPI runs its query a second 
 
 ## Filters \{#filters\}
 
-A dashboard can also carry **filters**, shown as dropdowns in its bar. Each filter has a label, a dictionary item and a query that provides its choices (value column and label column), and an optional default value. Choosing a value reloads every widget whose screen has a column carrying that dictionary item; the other widgets are left as they are.
+A dashboard can also carry **filters**, shown as dropdowns in its bar. Each filter has a label, a dictionary item and a query that provides its choices (value column and label column), and an optional default value. Choosing a value reloads every widget whose query returns a column carrying that dictionary item — through the widget's screen, or directly from the query's result columns: a column with the item's name, or with the connector's column prefix in front of it. The other widgets are left as they are. A period whose date column is given as a dictionary item finds its column the same way.
+
+With **All**, nothing is filtered: a query that returns one total row first, then one row per value, shows the totals in its Figure and List widgets.
 
 ---
 
 ## Refresh and cache \{#cache\}
 
 When a dashboard is opened again, each widget reuses its last result for **Settings → App → Dashboard cache (seconds, 0 = none)** — 60 seconds by default. The **↻** button in the bar reloads everything, and *Updated at 14:05* says when the data was fetched. The cache is kept in the browser, per user, until the page is reloaded.
+
+---
+
+## Export to Excel and PDF \{#export\}
+
+The **Excel** and **PDF** buttons, next to **↻**, export what the bar holds: the filter picks, the period and its date basis, under the user's data scope. The server runs every widget again; nothing is taken from the screen.
+
+| | Excel | PDF |
+|---|---|---|
+| Layout | One sheet per widget; the KPIs together on a *Key figures* sheet. | A cover with the dashboard, the period and the filters, then the widgets one after the other. |
+| KPI, Figure | A row of values. | A card, with the sub line in small type under the figure. |
+| List, Bars, Table | Its rows. | A table. |
+| Chart | Its data table. | The chart drawn, with a legend and the values on the bars. |
+
+A widget whose query fails becomes an error section; the rest of the export still renders. Numbers follow the reader's language (`1 234,5` / `1,234.5`). PDF branding is set in [Settings → App](./build/settings-app.md#branding).
 
 ---
 
@@ -175,7 +309,7 @@ In **Settings → Dashboards**, pick the application, then add or open a dashboa
 | General | Title, description. |
 | Period | **Add a period**: *Opens on* (a preset, or *App default*), *Date column* or *dictionary item*, and optional **Date bases** (key, label, date column or dictionary item). |
 | Filters | The dropdowns of the bar. |
-| Widgets | **Add widget**: Chart, KPI or Table. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
+| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List** or **Bars**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
 
 The editor's labels are in English. To make the dashboard reachable, add a **dashboard** entry to a menu ([Menus](./build/menus/item-types.md)); its permission is `dashboard:<app>.<id>`.
 
@@ -208,5 +342,6 @@ period = { column = "DOC_DATE", default = "thisMonth" }
 ## Tips \{#tips\}
 
 - Give the dashboard a period rather than date filters in each query: one control, and the comparison comes for free.
+- For a synthesis page, write one small query per Figure or List and let the query compute the tone: the dashboard only shows it.
 - A KPI with `none` shows the first row's value: let the query compute the figure when the aggregation is complex.
 - Keep the cache on for dashboards opened often; **↻** always gives fresh figures.

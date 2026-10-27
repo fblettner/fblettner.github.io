@@ -216,6 +216,10 @@ The escape hatch. A `page` leaf navigates to a hand-written React route — a cu
 | **`connector`** | **Must not be set**. The target is a route, not a connector resource. |
 | **`params`** | Optional. The runtime appends them as query-string parameters on the route. |
 
+### The Data Explorer \{#explorer\}
+
+`/explorer` opens the [Data Explorer](../../explorer/overview.md) on the application's first model. `/explorer/<app>/<model>` opens it on one model — `/explorer/crm/sales` — and the model picker still lets the user switch. A **Data Explorer** entry in each functional folder of the menu, each on its own model, takes users straight to the right data.
+
 ### When to use
 
 - A bundled product (Nomaflow, Nomasx-1's specialised dashboards).

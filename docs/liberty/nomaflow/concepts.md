@@ -64,7 +64,7 @@ A **job** is an entry of `jobs.toml`: an **id** (letters, digits, `-`, `_`; fixe
 
 ## Step \{#step\}
 
-A **step** is one unit of work, of one of seven types: `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job` ([Steps](./steps.md)). Steps run in order; a failed step stops the job, and the following ones are recorded as skipped.
+A **step** is one unit of work, of one of nine types: `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job`, `report`, `notify` ([Steps](./steps.md)). Steps run in order; a failed step stops the job, and the following ones are recorded as skipped.
 
 ## Schedule \{#schedule\}
 

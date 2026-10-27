@@ -234,6 +234,12 @@ body = "{ERROR}"
 
 ---
 
+## From a job step \{#notify-step\}
+
+A job can also send a message itself, as one of its steps, with the files it produced attached — a scheduled digest. See [Steps → Notify](./steps.md#notify).
+
+---
+
 ## A job's own alerts \{#job-alerts\}
 
 A job can also warn on failure without a rule, from the **Alerts** block of the job editor:

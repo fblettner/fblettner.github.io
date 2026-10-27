@@ -219,6 +219,10 @@ L'échappatoire. Une feuille `page` navigue vers une route React écrite à la m
 | **`connector`** | **Ne doit pas être renseigné**. La cible est une route, pas une ressource de connecteur. |
 | **`params`** | Optionnel. Le runtime les ajoute en tant que paramètres de chaîne de requête sur la route. |
 
+### L'explorateur de données \{#explorer\}
+
+`/explorer` ouvre l'[explorateur de données](../../explorer/overview.md) sur le premier modèle de l'application. `/explorer/<app>/<model>` l'ouvre sur un modèle précis — `/explorer/crm/sales` — et le sélecteur de modèle permet toujours d'en changer. Une entrée **Explorateur de données** dans chaque dossier fonctionnel du menu, chacune sur son propre modèle, mène directement aux bonnes données.
+
 ### Quand l'utiliser
 
 - Un produit embarqué (Nomaflow, les tableaux de bord spécialisés de Nomasx-1).

@@ -135,13 +135,13 @@ En mode **Tableaux de bord**, un tableau de bord est une grille de **tuiles** su
 
 | | Excel | PDF |
 |---|---|---|
-| Mise en page | Une feuille par section, en-têtes et sous-totaux en gras, période et filtres en note. | Un titre, un chapitre par section, des tableaux avec lignes de groupe en gras, la charte PDF de l'installation. |
-| Un croisé | Aplati, avec ses sous-totaux. | Idem. |
-| Un graphique | Son tableau de données. | Idem. |
-| KPI | Une ligne de totaux. | Idem. |
-| Détail | Ses lignes. | Idem. |
+| Mise en page | Une feuille par section, en-têtes et sous-totaux en gras, période et filtres en note. | Une synthèse : une page de garde avec l'application, la période, la date, l'auteur et la version, puis les sections à la suite, dans la charte PDF de l'installation. |
+| Un croisé | Aplati, avec ses sous-totaux. | Un tableau avec lignes de groupe en gras. |
+| Un graphique | Son tableau de données. | Le graphique dessiné — barres (groupées, empilées ou horizontales), courbe, secteurs ou anneau — en couleurs d'impression, avec légende, graduations abrégées et valeurs sur les barres. |
+| KPI | Une ligne de totaux. | Des cartes. |
+| Détail | Ses lignes. | Un tableau. |
 
-Chaque section contient au plus 3 000 lignes. La vue croisée a aussi son propre bouton Excel, qui exporte le croisé tel qu'il est affiché. La charte PDF se règle dans [Paramètres → App](../build/settings-app.md).
+Les nombres du PDF suivent la langue du lecteur (`1 234,5` / `1,234.5`). Le même document est produit quand une tâche Nomaflow rend l'analyse selon un planning — voir [Étapes → Rapport](../../nomaflow/steps.md#report). Chaque section contient au plus 3 000 lignes. La vue croisée a aussi son propre bouton Excel, qui exporte le croisé tel qu'il est affiché. La charte PDF se règle dans [Paramètres → App](../build/settings-app.md).
 
 ---
 

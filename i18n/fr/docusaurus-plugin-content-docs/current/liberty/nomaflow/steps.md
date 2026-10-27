@@ -1,6 +1,6 @@
 ---
 title: Étapes
-description: "Les sept types d'étapes de Nomaflow — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job — ce que fait chacun, ses champs et leurs valeurs par défaut, et ce qu'il enregistre dans l'exécution."
+description: "Les neuf types d'étapes de Nomaflow — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, report, notify — ce que fait chacun, ses champs et leurs valeurs par défaut, et ce qu'il enregistre dans l'exécution."
 keywords: [Nomaflow, étapes, sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, chargement de tableur, CSV, replace_partition, Liberty Next]
 ---
 
@@ -17,6 +17,8 @@ Une **étape** est une unité de travail d'une tâche. Les étapes s'exécutent 
 | appelle une URL | **`http`** |
 | lit un annuaire LDAP / Active Directory dans une table | **`ldap_sync`** |
 | lance une autre tâche et l'attend | **`call_job`** |
+| produit un fichier Excel ou PDF à partir d'une analyse enregistrée, d'un tableau de bord ou d'un rapport | **`report`** |
+| envoie un message, accompagné des fichiers de l'exécution | **`notify`** |
 
 Dans l'éditeur de tâche, la barre **Ajouter une étape :** propose un bouton par type, et chaque étape ouvre un formulaire avec ses propres champs. Quelques clés n'existent que dans `jobs.toml` (signalées ci-dessous).
 
@@ -98,9 +100,11 @@ Dans l'éditeur de tâche, la barre **Ajouter une étape :** propose un bouton p
 | Champ | Défaut | Remarques |
 |---|---|---|
 | `name` | — | Affiché dans le détail de l'exécution ; unique dans la tâche. |
-| `type` | — | L'un des sept types. |
+| `type` | — | L'un des neuf types. |
 | `enabled` | `true` | `false` saute l'étape (enregistrée comme *skipped: disabled*). Se règle dans `jobs.toml`, ou pour une exécution dans la fenêtre **Run with parameters**. |
 | `timeout_seconds` | `3600` | L'étape est annulée passé ce délai. Se règle dans `jobs.toml`. |
+
+Quand une étape échoue sur une erreur de base de données, le détail de l'exécution affiche la phrase de la base elle-même — *invalid input for query argument $1: 2025 (expected str, got int)* — et l'instruction part dans le journal du serveur.
 
 ---
 
@@ -179,7 +183,7 @@ Chaque cellule est convertie au type de sa colonne cible : entiers, décimaux (`
 
 | Champ | Remarques |
 |---|---|
-| `refuse_query` | Une requête nommée lancée avant toute écriture, avec les paramètres d'exécution et les constantes comme paramètres liés. Si elle renvoie une ligne, le chargement est refusé et la première colonne en donne le motif : *période 2026-02 clôturée*. `refuse_connector` : son connecteur, celui de la cible par défaut. |
+| `refuse_query` | Une requête nommée lancée avant toute écriture, avec les paramètres d'exécution et les constantes comme paramètres liés. Avec `partition_by`, elle s'exécute une fois par partition présente dans le fichier, les colonnes de partition servant de paramètres liés (`:YEAR`, `:MONTH`, `:COMPANY_CODE`) : la garde suit le fichier, et non un paramètre saisi au lancement. Si elle renvoie une ligne, le chargement est refusé et la première colonne en donne le motif : *période 2026-02 clôturée*. `refuse_connector` : son connecteur, celui de la cible par défaut. |
 | `control_column` + `control_total` | La colonne est sommée sur les lignes chargées et comparée à une valeur, à `${params.total}` ou à une cellule du fichier (`@B2`, `@Totaux!B2`), à `control_tolerance` près. Un écart annule le chargement du fichier et cite les deux montants. |
 
 ### Dans l'exécution
@@ -252,6 +256,148 @@ Enregistre le nombre d'entrées lues et de lignes écrites.
 ## Lancer une tâche — `call_job` \{#call-job\}
 
 `target_job_id` désigne une autre tâche. L'étape la lance, attend sa fin et en prend le résultat : succès, échec ou annulation. La tâche appelée a sa propre exécution dans l'historique et reprend le niveau de journal et les paramètres d'exécution de l'appelante. Une tâche qui finirait par s'appeler elle-même est refusée.
+
+---
+
+## Rapport — `report` \{#report\}
+
+Produit un document dans la zone de travail de l'exécution : une [analyse ou un tableau de bord enregistré de l'explorateur de données](../framework/explorer/saved-and-dashboards.md), ou un rapport d'un plugin. Suivie d'une étape `notify`, elle fait d'une **synthèse planifiée** une tâche ordinaire.
+
+<svg viewBox="0 0 1200 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="sdg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="sdg-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="sdg-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="sdg-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="14" width="760" height="440" rx="14" fill="url(#sdg-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">sales-monthly-digest</text>
+  <text x="240" y="60" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Chiffre d'affaires par business unit, rendu le mois dernier et envoyé</text>
+  <line x1="240" y1="72" x2="960" y2="72" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="86" width="48" height="18" rx="9.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="264.0" y="98.2" fill="#c084fc" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">report</text>
+  <text x="304" y="99" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">revenue</text>
+  <text x="370" y="99" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">analysis:revenue_by_business_unit → xlsx</text>
+  <text x="240" y="126" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">QUOI RENDRE</text>
+  <text x="240" y="146" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Source</text>
+  <rect x="240" y="151" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="165.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Une analyse enregistrée (Explorateur) ▾</text>
+  <text x="488" y="146" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Modèle d'exploration</text>
+  <rect x="488" y="151" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="498" y="165.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sales · sales ▾</text>
+  <text x="736" y="146" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Analyses</text>
+  <rect x="736" y="151" width="224" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="746" y="165.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">CA par business unit ▾</text>
+  <text x="240" y="194" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Format</text>
+  <rect x="240" y="199" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="213.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Excel ▾</text>
+  <text x="488" y="194" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Nom du fichier</text>
+  <rect x="488" y="199" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="498" y="213.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">monthly-sales</text>
+  <text x="736" y="194" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Période</text>
+  <rect x="736" y="199" width="224" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="746" y="213.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Mois dernier ▾</text>
+  <text x="240" y="242" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Rendre comme l'utilisateur</text>
+  <rect x="240" y="247" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="261.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">cfo</text>
+  <text x="488" y="242" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Rendre comme le rôle</text>
+  <rect x="488" y="247" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="498" y="261.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sans restriction ▾</text>
+  <line x1="240" y1="290" x2="960" y2="290" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="302" width="48" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="264.0" y="314.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">notify</text>
+  <text x="304" y="315" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">send</text>
+  <text x="240" y="340" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">MESSAGE</text>
+  <text x="240" y="360" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Destinataires</text>
+  <rect x="240" y="366" width="89" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="284.5" y="378.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">role:management</text>
+  <rect x="335" y="366" width="117" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="393.5" y="378.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">email:cfo@example.com</text>
+  <text x="636" y="360" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Objet</text>
+  <rect x="636" y="365" width="324" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="646" y="379.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Synthèse des ventes &#123;DATE&#125;</text>
+  <text x="240" y="404" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Joindre (fichiers du run ; ∗ = tous)</text>
+  <rect x="240" y="409" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="423.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">∗</text>
+  <text x="488" y="404" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Canaux</text>
+  <rect x="488" y="415" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M490.5,420.5 L492.8,422.8 L496.8,418" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="505" y="424" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">portal</text>
+  <rect x="554.6" y="415" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M557.1,420.5 L559.4,422.8 L563.4,418" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="571.6" y="424" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">email</text>
+  <rect x="10" y="140" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Objet enregistré</text>
+  <text x="20" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">analyses et tableaux partagés</text>
+  <line x1="210" y1="157.0" x2="240" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdg-arrow)"/>
+  <rect x="10" y="250" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Visibilité</text>
+  <text x="20" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">périmètre d'un utilisateur ou d'un rôle</text>
+  <line x1="210" y1="267.0" x2="240" y2="258" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdg-arrow)"/>
+  <rect x="10" y="380" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Fichiers du run joints</text>
+  <text x="20" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">tous, ou par nom</text>
+  <line x1="210" y1="397.0" x2="240" y2="418" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdg-arrow)"/>
+  <rect x="1000" y="196" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="211" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Période prédéfinie</text>
+  <text x="1010" y="224" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">sinon celle de l'analyse</text>
+  <line x1="1000" y1="213.0" x2="960" y2="212" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdg-arrow)"/>
+  <rect x="1000" y="350" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Marqueurs</text>
+  <text x="1010" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&#123;JOB&#125; &#123;RUN_ID&#125; &#123;FILES&#125; &#123;DATE&#125;</text>
+  <line x1="1000" y1="367.0" x2="960" y2="375" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdg-arrow)"/>
+</svg>
+
+| Champ (éditeur) | Remarques |
+|---|---|
+| **Source** | *Une analyse enregistrée (Explorateur)*, *Un tableau de bord d'analyses (Explorateur)* — une section par tuile — ou *Un rapport (plugin)*. |
+| **Modèle d'exploration**, **Analyses** / **Tableaux de bord** | Le modèle, puis l'une de ses analyses ou l'un de ses tableaux de bord **partagés**. Un élément privé n'est pas proposé. |
+| **Rapport** | Pour un rapport de plugin : le rapport, parmi ceux des applications installées. |
+| **Format** | Excel ou PDF — les mêmes documents que l'export de l'explorateur, graphiques dessinés dans le PDF. |
+| **Période** | Un préréglage (*Mois dernier*, *Ce trimestre*, *7 derniers jours*…, ou toutes les dates), ou *La période propre de l'analyse*. |
+| **Nom du fichier** | Le nom du fichier ; par défaut, le titre de l'analyse. |
+| **Rendre comme l'utilisateur** | Le document contient ce que voit cet utilisateur : le périmètre de données de ses rôles, avec ses attributs. Une synthèse rendue pour le responsable d'une société ne contient que cette société. |
+| **Rendre comme le rôle** | Le périmètre de données d'un rôle. Une règle dont les valeurs viennent d'un attribut utilisateur n'autorise rien dans ce cas : pour ces rôles, préférer **Rendre comme l'utilisateur**. |
+
+Sans l'un ni l'autre, le document est **sans restriction**. Le détail de l'exécution propose le fichier au téléchargement sous l'étape ; le journal le nomme avec sa taille.
+
+---
+
+## Notification — `notify` \{#notify\}
+
+Envoie un message par les [canaux de notification](./notifications.md), accompagné des fichiers produits par l'exécution.
+
+| Champ (éditeur) | Remarques |
+|---|---|
+| **Destinataires** | `user:<identifiant>`, `role:<rôle>` ou `email:<adresse>`, un par ligne. |
+| **Objet**, **Corps** | Texte avec marqueurs : `{JOB}`, `{RUN_ID}`, `{FILES}` (les noms des fichiers joints), `{DATE}` (la date du jour). |
+| **Joindre (fichiers du run ; `*` = tous)** | `*` joint tous les fichiers produits par l'exécution — chaque `report`, et les lignes rejetées d'un `file_load` ; sinon, nommer les fichiers. Un fichier nommé que l'exécution n'a pas produit fait échouer l'étape. |
+| **Canaux** | **portal** (la cloche) et **email**. Le compte de messagerie est celui des [notifications](./notifications.md#smtp). |
+
+Le message renvoie vers l'exécution. Le détail de l'exécution liste les fichiers joints sous l'étape.
+
+```toml title="jobs.toml — une synthèse mensuelle"
+[[jobs.steps]]
+type = "report"
+name = "revenue"
+report = "analysis:revenue_by_business_unit"
+app = "sales"
+model = "sales"
+format = "pdf"
+period = "lastMonth"
+as_user = "cfo"
+
+[[jobs.steps]]
+type = "notify"
+name = "send"
+recipients = ["role:management"]
+subject = "Synthèse des ventes {DATE}"
+body = "La synthèse mensuelle des ventes est jointe : {FILES}."
+attach = ["*"]
+```
+
+Planifier la tâche le premier du mois (cron `0 7 1 * *`) — voir [Planifications](./jobs/schedules.md).
 
 ---
 

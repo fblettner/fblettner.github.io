@@ -1,7 +1,7 @@
 ---
 title: Steps
-description: "The seven Nomaflow step types — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job — what each one does, its fields and defaults, and what it records in the run."
-keywords: [Nomaflow, steps, sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, spreadsheet load, CSV, replace_partition, Liberty Next]
+description: "The nine Nomaflow step types — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, report, notify — what each one does, its fields and defaults, and what it records in the run."
+keywords: [Nomaflow, steps, sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, report, notify, digest, spreadsheet load, CSV, replace_partition, Liberty Next]
 ---
 
 # Steps
@@ -17,6 +17,8 @@ A **step** is one unit of work in a job. Steps run in order; when one fails, the
 | calls a URL | **`http`** |
 | reads an LDAP / Active Directory directory into a table | **`ldap_sync`** |
 | runs another job and waits for it | **`call_job`** |
+| renders a saved analysis, a dashboard or a report to an Excel or PDF file | **`report`** |
+| sends a message, with the files of the run attached | **`notify`** |
 
 In the job editor, the **Add step:** bar has one button per type, and each step opens a form with its own fields. A few keys exist only in `jobs.toml` (noted below).
 
@@ -98,9 +100,11 @@ In the job editor, the **Add step:** bar has one button per type, and each step 
 | Field | Default | Notes |
 |---|---|---|
 | `name` | — | Shown in the run detail; unique within the job. |
-| `type` | — | One of the seven types. |
+| `type` | — | One of the nine types. |
 | `enabled` | `true` | `false` skips the step (recorded as *skipped: disabled*). Set in `jobs.toml`, or for one run in the **Run with parameters** window. |
 | `timeout_seconds` | `3600` | The step is cancelled after this time. Set in `jobs.toml`. |
+
+When a step fails on a database error, the run detail shows the database's own sentence — *invalid input for query argument $1: 2025 (expected str, got int)* — and the statement goes to the server log.
 
 ---
 
@@ -179,7 +183,7 @@ Each cell is converted to the type of its target column: integers, decimals (`12
 
 | Field | Notes |
 |---|---|
-| `refuse_query` | A named query run before anything is touched, with the run parameters and the constants as binds. If it returns a row, the load is refused and the first column is the reason: *period 2026-02 is closed*. `refuse_connector`: its connector, the target's by default. |
+| `refuse_query` | A named query run before anything is touched, with the run parameters and the constants as binds. With `partition_by`, it runs once for each partition the file carries, with the partition columns as binds (`:YEAR`, `:MONTH`, `:COMPANY_CODE`): the guard follows the file, not a parameter typed when the job is run. If it returns a row, the load is refused and the first column is the reason: *period 2026-02 is closed*. `refuse_connector`: its connector, the target's by default. |
 | `control_column` + `control_total` | The column is summed over the loaded rows and compared with a value, `${params.total}`, or a cell of the file (`@B2`, `@Totals!B2`), within `control_tolerance`. A difference rolls the file's load back and names both figures. |
 
 ### In the run
@@ -252,6 +256,148 @@ Records the number of entries read and rows written.
 ## Call a job — `call_job` \{#call-job\}
 
 `target_job_id` names another job. The step starts it, waits for it to end and takes its result: success, failure or cancellation. The called job has its own run in the history, and inherits the caller's log level and run parameters. A job that would end up calling itself is refused.
+
+---
+
+## Report — `report` \{#report\}
+
+Renders a document into the run's work area: a [saved analysis or dashboard of the Data Explorer](../framework/explorer/saved-and-dashboards.md), or a report of a plugin. Followed by a `notify` step, it makes a **scheduled digest** a plain job.
+
+<svg viewBox="0 0 1200 470" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', height: 'auto', margin: '24px 0', display: 'block'}}>
+  <defs>
+    <marker id="sdg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <linearGradient id="sdg-g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b" stopOpacity="0.95"/><stop offset="100%" stopColor="#0f172a" stopOpacity="0.95"/></linearGradient>
+    <linearGradient id="sdg-g-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a9eff" stopOpacity="0.32"/><stop offset="100%" stopColor="#2b8cff" stopOpacity="0.12"/></linearGradient>
+    <marker id="sdg-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect x="220" y="14" width="760" height="440" rx="14" fill="url(#sdg-g-card)" stroke="#1f2937" strokeWidth="1.4"/>
+  <text x="240" y="44" fill="#e2e8f0" fontSize="13" fontWeight="700" fontFamily="system-ui, sans-serif">sales-monthly-digest</text>
+  <text x="240" y="60" fill="#94a3b8" fontSize="9.5" fontFamily="system-ui, sans-serif">Revenue by business unit, rendered last month and e-mailed</text>
+  <line x1="240" y1="72" x2="960" y2="72" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="86" width="48" height="18" rx="9.0" fill="rgba(168,85,247,0.18)" stroke="rgba(168,85,247,0.40)" strokeWidth="1"/>
+  <text x="264.0" y="98.2" fill="#c084fc" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">report</text>
+  <text x="304" y="99" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">revenue</text>
+  <text x="370" y="99" fill="#64748b" fontSize="9" fontFamily="ui-monospace, monospace">analysis:revenue_by_business_unit → xlsx</text>
+  <text x="240" y="126" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">WHAT TO RENDER</text>
+  <text x="240" y="146" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Source</text>
+  <rect x="240" y="151" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="165.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">A saved analysis (Explorer) ▾</text>
+  <text x="488" y="146" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Explorer model</text>
+  <rect x="488" y="151" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="498" y="165.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sales · sales ▾</text>
+  <text x="736" y="146" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Analyses</text>
+  <rect x="736" y="151" width="224" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="746" y="165.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Revenue by business unit ▾</text>
+  <text x="240" y="194" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Format</text>
+  <rect x="240" y="199" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="213.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Excel ▾</text>
+  <text x="488" y="194" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">File name</text>
+  <rect x="488" y="199" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="498" y="213.5" fill="#475569" fontSize="9" fontFamily="system-ui, sans-serif">monthly-sales</text>
+  <text x="736" y="194" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Period</text>
+  <rect x="736" y="199" width="224" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="746" y="213.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Last month ▾</text>
+  <text x="240" y="242" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Render as user</text>
+  <rect x="240" y="247" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="261.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">cfo</text>
+  <text x="488" y="242" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Render as role</text>
+  <rect x="488" y="247" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="498" y="261.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Unrestricted ▾</text>
+  <line x1="240" y1="290" x2="960" y2="290" stroke="#1f2937" strokeWidth="1"/>
+  <rect x="240" y="302" width="48" height="18" rx="9.0" fill="rgba(74,158,255,0.18)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
+  <text x="264.0" y="314.2" fill="#4a9eff" fontSize="9" fontWeight="700" textAnchor="middle" fontFamily="system-ui, sans-serif">notify</text>
+  <text x="304" y="315" fill="#e2e8f0" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">send</text>
+  <text x="240" y="340" fill="#cbd5e1" fontSize="9" fontWeight="700" letterSpacing="0.06em" fontFamily="system-ui, sans-serif">MESSAGE</text>
+  <text x="240" y="360" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Recipients</text>
+  <rect x="240" y="366" width="89" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="284.5" y="378.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">role:management</text>
+  <rect x="335" y="366" width="117" height="18" rx="9.0" fill="rgba(255,255,255,0.06)" stroke="#334155" strokeWidth="1"/>
+  <text x="393.5" y="378.2" fill="#94a3b8" fontSize="8.5" textAnchor="middle" fontFamily="system-ui, sans-serif">email:cfo@example.com</text>
+  <text x="636" y="360" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Subject</text>
+  <rect x="636" y="365" width="324" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="646" y="379.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">Sales digest &#123;DATE&#125;</text>
+  <text x="240" y="404" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Attach (run files; ∗ = all)</text>
+  <rect x="240" y="409" width="230" height="22" rx="5" fill="#0a0e1a" stroke="#334155" strokeWidth="1"/>
+  <text x="250" y="423.5" fill="#94a3b8" fontSize="9" fontFamily="system-ui, sans-serif">∗</text>
+  <text x="488" y="404" fill="#94a3b8" fontSize="8.5" fontFamily="system-ui, sans-serif">Channels</text>
+  <rect x="488" y="415" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M490.5,420.5 L492.8,422.8 L496.8,418" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="505" y="424" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">portal</text>
+  <rect x="554.6" y="415" width="11" height="11" rx="2" fill="rgba(74,158,255,0.25)" stroke="#4a9eff" strokeWidth="1"/>
+  <path d="M557.1,420.5 L559.4,422.8 L563.4,418" fill="none" stroke="#4a9eff" strokeWidth="1.6"/>
+  <text x="571.6" y="424" fill="#cbd5e1" fontSize="10" fontFamily="system-ui, sans-serif">email</text>
+  <rect x="10" y="140" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="155" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Saved object</text>
+  <text x="20" y="168" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">shared analyses and dashboards</text>
+  <line x1="210" y1="157.0" x2="240" y2="160" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdg-arrow)"/>
+  <rect x="10" y="250" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="265" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Visibility</text>
+  <text x="20" y="278" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">a user's or a role's data scope</text>
+  <line x1="210" y1="267.0" x2="240" y2="258" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdg-arrow)"/>
+  <rect x="10" y="380" width="200" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="20" y="395" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Run files attached</text>
+  <text x="20" y="408" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">every file, or by name</text>
+  <line x1="210" y1="397.0" x2="240" y2="418" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdg-arrow)"/>
+  <rect x="1000" y="196" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="211" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Period preset</text>
+  <text x="1010" y="224" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">else the analysis's own</text>
+  <line x1="1000" y1="213.0" x2="960" y2="212" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdg-arrow)"/>
+  <rect x="1000" y="350" width="190" height="34" rx="8" fill="none" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3"/>
+  <text x="1010" y="365" fill="currentColor" fontSize="10" fontWeight="700" fontFamily="system-ui, sans-serif">Placeholders</text>
+  <text x="1010" y="378" fill="currentColor" fontSize="9" fontFamily="system-ui, sans-serif" opacity="0.7">&#123;JOB&#125; &#123;RUN_ID&#125; &#123;FILES&#125; &#123;DATE&#125;</text>
+  <line x1="1000" y1="367.0" x2="960" y2="375" stroke="#94a3b8" strokeWidth="1.2" markerEnd="url(#sdg-arrow)"/>
+</svg>
+
+| Field (editor) | Notes |
+|---|---|
+| **Source** | *A saved analysis (Explorer)*, *A dashboard of analyses (Explorer)* — one section per tile — or *A report (plugin)*. |
+| **Explorer model**, **Analyses** / **Dashboards** | The model, then one of its **shared** analyses or dashboards. A private one cannot be picked. |
+| **Report** | For a plugin report: the report, from the reports of the installed applications. |
+| **Format** | Excel or PDF — the same documents as the Explorer's export, the charts drawn in the PDF. |
+| **Period** | A preset (*Last month*, *This quarter*, *Last 7 days*…, or all dates), or *The analysis's own period*. |
+| **File name** | The file's name; by default, the analysis's title. |
+| **Render as user** | The document holds what that user sees: the data scope of their roles, with their attributes. A digest rendered as the manager of one company holds that company only. |
+| **Render as role** | The data scope of a role. A rule whose values come from a user attribute allows nothing here: prefer **Render as user** for such roles. |
+
+With neither, the document is **unrestricted**. The run detail offers the file for download under the step; the log names it with its size.
+
+---
+
+## Notify — `notify` \{#notify\}
+
+Sends a message through the [notification channels](./notifications.md), with the files this run produced attached.
+
+| Field (editor) | Notes |
+|---|---|
+| **Recipients** | `user:<login>`, `role:<role>` or `email:<address>`, one per line. |
+| **Subject**, **Body** | Text with placeholders: `{JOB}`, `{RUN_ID}`, `{FILES}` (the names of the attached files), `{DATE}` (today). |
+| **Attach (run files; `*` = all)** | `*` attaches every file the run produced — every `report`, and the rejected rows of a `file_load`; or name the files. A named file the run did not produce fails the step. |
+| **Channels** | **portal** (the bell) and **email**. The e-mail account is the one of [Notifications](./notifications.md#smtp). |
+
+The message links to the run. The run detail lists the attached files under the step.
+
+```toml title="jobs.toml — a monthly digest"
+[[jobs.steps]]
+type = "report"
+name = "revenue"
+report = "analysis:revenue_by_business_unit"
+app = "sales"
+model = "sales"
+format = "pdf"
+period = "lastMonth"
+as_user = "cfo"
+
+[[jobs.steps]]
+type = "notify"
+name = "send"
+recipients = ["role:management"]
+subject = "Sales digest {DATE}"
+body = "The monthly sales digest is attached: {FILES}."
+attach = ["*"]
+```
+
+Schedule the job on the first of the month (cron `0 7 1 * *`) — see [Schedules](./jobs/schedules.md).
 
 ---
 

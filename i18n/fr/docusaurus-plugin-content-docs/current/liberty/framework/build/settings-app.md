@@ -134,6 +134,9 @@ Quand un changement enregistré demande un redémarrage, la page l'indique : *Sa
 | **Scaffold tools** | L'assistant peut proposer requêtes, entrées du dictionnaire, écrans et entrées de menu ; l'utilisateur applique la proposition. |
 | **Allowed connectors** | Les connecteurs utilisables par l'assistant ; vide signifie tous. |
 | **Allowed domains**, **Max fetches per turn** | Les pages web que l'assistant peut lire ; sans domaine, aucun accès au web. |
+| **Operations tools** | L'assistant peut lire l'état des tâches, la fin du journal du serveur et les contrôles d'intégrité — désactivé par défaut, réservé aux installations dont les utilisateurs du chat sont des administrateurs. |
+| **Models users may pick** | Les modèles proposés par le sélecteur **Modèle** du panneau en plus du modèle ci-dessus ; vide : le modèle ci-dessus seul, sans sélecteur. |
+| **Starter questions** | Les questions affichées sur une conversation vide : partout (`*`), par application, ou par couple *application/écran* — l'ensemble le plus précis l'emporte. Elles priment sur les questions livrées par une application ([Paramètres → IA](../ai-assistant.md#settings-ai)). |
 
 Voir [Assistant IA](../ai-assistant.md).
 

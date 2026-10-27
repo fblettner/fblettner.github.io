@@ -130,9 +130,10 @@ The tab loads a sample of the query's rows and draws the chart as it is set:
 | **Chart** | The type: bar, line, area or pie. |
 | **X axis** | The column along the X axis — the slice labels on a pie. |
 | **Series** | One line per Y column: the column, a colour swatch, and **L** / **R** to put the series on the left or the right Y axis. **+** adds a series. A pie uses the first series only. |
+| **Pivot by** | Optional, not on a pie. A column whose distinct values become the series: one series per value (a process, a status), each the aggregate of the first Y column. A query returning *refresh date · process · lines* gives one bar per refresh, stacked by process, without pivoting in SQL. |
 | **Aggregate** | How rows sharing the same X value are combined: **Sum**, **Average**, **Count** (counts rows, ignores the Y value), **Min**, **Max**, or **None (per row)** to keep each row — for a time series whose X is already unique. |
 
-As soon as one series is on the right axis, the chart gets a second Y axis — useful for two scales, such as an amount and a count. The legend shows when there is more than one series. Without a colour, a series takes the next colour of the palette.
+The Y axis shows compact ticks (1.2k, 27.5M); the tooltip gives the full figure. As soon as one series is on the right axis, the chart gets a second Y axis — useful for two scales, such as an amount and a count. The legend shows when there is more than one series. Without a colour, a series takes the next colour of the palette.
 
 An X column and at least one series are required to save.
 

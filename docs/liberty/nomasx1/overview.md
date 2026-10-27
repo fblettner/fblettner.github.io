@@ -327,11 +327,12 @@ A second example: a Segregation-of-Duties summary by user, with the conflicts ra
 
 ## The application map
 
-The sidebar splits the day-to-day work into five sections plus the configuration area.
+The sidebar splits the day-to-day work into six sections plus the configuration area.
 
 | Section | What it covers |
 |---|---|
-| **Overview** | The dashboard — open conflicts, expiring assignments, licence gap, last refresh status. |
+| **Overview** | The [Audit synthesis](./audit-synthesis.md) — users, roles, SoD conflicts and licence exposure at a glance, what needs a decision, data freshness; exported to Excel or PDF. |
+| **Data Explorer** | [Free analysis](./data-explorer.md) of the security, segregation-of-duties and licence data, with ready-made analyses and dashboards; also in the Security, Conflicts and Licenses folders. |
 | **Security** | Users, roles, role assignments, role matrix (combinations), duplicate users, users without roles, LDAP / AD reconciliation. |
 | **Applications** | Per connected application: menus, rights (per user, per role, combined), Object Usage Tracking (components, objects, details), Conflicts (summary, by user, by role, by object), Activity Log. |
 | **Database** | Oracle properties (edition, packs, options, partitions), Audit Trail (Oracle archive log changes), Audit Lookup (row-level before / after). |

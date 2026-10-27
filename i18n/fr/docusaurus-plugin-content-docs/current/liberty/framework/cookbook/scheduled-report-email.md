@@ -1,6 +1,6 @@
 ---
 title: Rapport planifié par e-mail
-description: "Recette — un rapport envoyé par e-mail selon une planification : une tâche Nomaflow qui calcule les chiffres, une règle de notification sur la réussite de la tâche qui les envoie, et le tableau de bord ou l'écran où les lecteurs trouvent le détail. Que faire quand un fichier joint est exigé."
+description: "Recette — un rapport envoyé par e-mail selon une planification : une tâche Nomaflow qui calcule les chiffres, une règle de notification sur la réussite de la tâche qui les envoie, et le tableau de bord ou l'écran où les lecteurs trouvent le détail. Avec un fichier joint : les étapes report et notify."
 keywords: [Liberty Next, cookbook, rapport planifié, e-mail, Nomaflow, notifications, SMTP, tâche, tableau de bord]
 ---
 
@@ -78,10 +78,12 @@ Les alertes propres à la tâche préviennent les exploitants par e-mail en cas 
 
 ## Quand un fichier doit être joint
 
-Les notifications envoient un objet et un corps, sans pièce jointe. Pour un fichier joint à l'e-mail, deux solutions :
+Une tâche envoie elle-même un fichier en deux étapes, sans code :
 
-- les lecteurs le téléchargent eux-mêmes : menu **Exporter** de l'écran, ou ses classeurs configurés — voir [Export Excel](./excel-export.md) ;
-- une étape `python` de la tâche construit le fichier et l'envoie avec la bibliothèque de messagerie de l'entreprise — du code spécifique, voir [Plugins](../apps/plugins.md).
+1. une étape **`report`** produit en Excel ou en PDF une analyse ou un tableau de bord partagé de l'[explorateur de données](../explorer/overview.md), sur une période prédéfinie (*Mois dernier*), et pour un utilisateur donné quand les destinataires ne doivent voir que leur propre périmètre ;
+2. une étape **`notify`** envoie le message à `role:management`, avec **Joindre** à `*` : tous les fichiers produits par l'exécution partent avec l'e-mail.
+
+La règle de notification sur la réussite de la tâche devient alors inutile. Voir [Étapes → Rapport](../../nomaflow/steps.md#report) et [Étapes → Notification](../../nomaflow/steps.md#notify).
 
 ## Variantes
 

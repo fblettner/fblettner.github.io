@@ -361,6 +361,7 @@ Liberty Next fits when **most screens list and edit data from a database**, with
 | You want to… | Start with |
 |---|---|
 | Learn the framework on a full example | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) |
+| See every feature working on real-looking data | [The sales demo](./demo-app.md) |
 | Build a first screen quickly | [First app walkthrough](./getting-started/first-app.md) |
 | Administer JD Edwards | [Nomajde](../nomajde/overview.md) |
 | Install the framework | [Installation](../installation/overview.md) |
@@ -710,11 +711,12 @@ A second example: a Segregation-of-Duties summary by user, with the conflicts ra
 
 ## The application map
 
-The sidebar splits the day-to-day work into five sections plus the configuration area.
+The sidebar splits the day-to-day work into six sections plus the configuration area.
 
 | Section | What it covers |
 |---|---|
-| **Overview** | The dashboard — open conflicts, expiring assignments, licence gap, last refresh status. |
+| **Overview** | The [Audit synthesis](./audit-synthesis.md) — users, roles, SoD conflicts and licence exposure at a glance, what needs a decision, data freshness; exported to Excel or PDF. |
+| **Data Explorer** | [Free analysis](./data-explorer.md) of the security, segregation-of-duties and licence data, with ready-made analyses and dashboards; also in the Security, Conflicts and Licenses folders. |
 | **Security** | Users, roles, role assignments, role matrix (combinations), duplicate users, users without roles, LDAP / AD reconciliation. |
 | **Applications** | Per connected application: menus, rights (per user, per role, combined), Object Usage Tracking (components, objects, details), Conflicts (summary, by user, by role, by object), Activity Log. |
 | **Database** | Oracle properties (edition, packs, options, partitions), Audit Trail (Oracle archive log changes), Audit Lookup (row-level before / after). |
@@ -1576,7 +1578,7 @@ Oracle BI Publisher is the reporting solution to author, manage, and deliver all
 ## Liberty Next — AI assistant
 Source: https://docs.nomana-it.fr/liberty/framework/ai-assistant/
 
-The Liberty Next AI assistant: the drawer opened from the AI Assistant button, what it can do (read the connectors' queries, call API endpoints, propose configuration, read allowed web pages), how it is restricted (ai:chat, allowed connectors, read-only queries, data scope), and its settings.
+The Liberty Next AI assistant: the drawer opened from the AI Assistant button, the page context it receives, starter questions and follow-ups, the model picker, what it can do (read the connectors' queries, describe the installation, follow playbooks, read the jobs and the server log, call API endpoints, propose configuration), how it is restricted (ai:chat, allowed connectors, read-only queries, data scope), and its settings.
 
 **AI Assistant**, at the right of the top bar, opens a drawer where users ask questions about their data in plain language. The assistant answers by running the connectors' queries, with the user's rights.
 
@@ -1588,9 +1590,36 @@ The Liberty Next AI assistant: the drawer opened from the AI Assistant button, w
 
 ## Using it \{#use\}
 
-Type a question and press Enter (Shift+Enter for a new line). The answer arrives as it is written, with the tools the assistant used; **Stop** interrupts it and keeps what was received; **new conversation** starts over. The conversation lives in the drawer: it is not kept after the page is reloaded.
+Type a question and press Enter (Shift+Enter for a new line), or click one of the **starter questions** shown on an empty conversation. The answer arrives as it is written; **Stop** interrupts it and keeps what was received.
 
-Examples: *How many open orders per company this month?* — *Which users have not signed in since June?* — *Show the five largest invoices of ACME.*
+- **Tool calls** are folded into one muted line — *3 tool call(s)* — that opens to show them; a failed call keeps its message visible.
+- A table in an answer scrolls sideways, each figure on one line.
+- Each answer ends with two or three **follow-up questions** as chips; a click sends one.
+- The conversation stays when the drawer is closed and after a reload: the last 40 messages, on this device. **+** (*new conversation*) clears it.
+- When several models are allowed, a **Model** picker in the drawer's header chooses the one that answers. The choice is kept on this device.
+
+The assistant knows today's date: *last month* or *this quarter* need no explanation.
+
+Examples: *How many open orders per company this month?* — *Which users have not signed in since June?* — *Where do I close a period?*
+
+---
+
+## What the page tells it \{#context\}
+
+While a data screen is the active tab, every message carries what the user is looking at: the application, the screen and its read query, the active filters, the number of rows loaded and their columns, and the row last clicked (or whose row menu was opened). *This screen*, *these rows* or *the selected row* need no further explanation, and the assistant runs the screen's own query when it needs more data.
+
+A chip under the drawer's header shows what is sent — *Page: Sales lines · filters: 2 · the clicked row*. Its **×** stops sending the page for as long as the user stays on it. The context is limited to 4,000 characters.
+
+---
+
+## Starter questions \{#starters\}
+
+On an empty conversation, the drawer offers questions suited to where the user is: those of the current screen, else those of the application, else those set for everywhere. An application can group them under headings, shown as pills above the questions; after an answer, the follow-ups take their place.
+
+Questions come from two sources:
+
+- **Settings → AI**: the questions an application ships, per application and per screen — see [below](#settings-ai);
+- **Settings → App → AI Assistant → Starter questions**: the operator's own, for everywhere, an application or an *application/screen*. They win over the application's questions for the same place.
 
 ---
 
@@ -1600,25 +1629,51 @@ Examples: *How many open orders per company this month?* — *Which users have n
 |---|---|---|
 | `list_connectors` | Lists the connectors, their queries and endpoints (descriptions, no SQL, no credentials). | **Connector tools** (on by default). |
 | `sql_query` | Runs a **read** query of a SQL connector. Write queries are always refused. | **Connector tools**. |
+| `describe_instance` | Summarises what the installation holds: applications, menus, screens with their read query, dashboards, Data Explorer models, jobs, playbooks. *Where do I find…* is answered from the real configuration. | Always. |
+| Playbooks | Lists the applications' procedures and loads the one that fits — see [Playbooks](#playbooks). | Always. |
+| `jobs_status`, `server_log`, `integrity_checks` | The Nomaflow jobs with their schedule, last run and next start, and one job's recent runs with the failing step; the recent server log lines, by level and text; the configuration cross-checks. | **Operations tools** (off by default). |
 | `api_call` | Calls an endpoint of an API connector. | **API tool** (off by default — an endpoint may change data). |
 | Scaffold tools | Propose a query, a dictionary entry, a screen or a menu item; the user reviews the proposal and applies it. | **Scaffold tools** (off by default). |
 | Web fetch | Reads pages of the allowed domains. | **Allowed domains** (none by default). |
 
-The assistant only uses existing named queries: it does not write SQL against the database.
+The assistant only uses existing named queries: it does not write SQL against the database. A tool result above 60,000 characters is cut, and the assistant is asked to narrow its call.
+
+The **Operations tools** let the assistant read the running server rather than guess when a job failed, is late or is missing. They are meant for installations whose chat users are administrators: the server log can hold anything the server wrote.
+
+---
+
+## Playbooks \{#playbooks\}
+
+A **playbook** is a step-by-step procedure an application ships for the assistant: *Close a period*, *Add a user to a role*. When a user asks how to do something in an application, the assistant looks for a playbook that fits, loads it and follows its steps in order, saying which one it follows. Without a suitable playbook, it says so and answers from what it can read.
+
+---
+
+## Settings → AI \{#settings-ai\}
+
+**Settings → AI** edits what each application ships for the assistant. **Add an app** picks an application; for each one:
+
+| Part | Content |
+|---|---|
+| **Starter questions anywhere in** *app* | The questions offered everywhere in the application. |
+| **Starter questions per screen** | **+ a screen…** adds a screen and its own questions. |
+| **Playbooks** | **Add playbook**: an **Id** (letters, digits, `_` and `-`, unique in the application), a **Title** — what the procedure achieves, the assistant picks a playbook by it —, **When it applies** (one line, optional) and **The procedure** in Markdown. |
+
+**Save** writes and reloads at once. This material travels with the application: it is installed and upgraded with it, versioned like the rest of the configuration. The questions set under **Settings → App → AI Assistant** win over the application's, place by place.
 
 ---
 
 ## Who can use it, and on what \{#access\}
 
 - The user needs the `ai:chat` permission (a role's *AI assistant* rule, in **Beyond the menus**).
-- **Allowed connectors** in Settings → App limits the connectors the assistant may reach; empty means all.
+- **Allowed connectors** in Settings → App limits the connectors the assistant may reach, and the applications `describe_instance` and the playbooks cover; empty means all.
 - Every query it runs goes through the same server checks as a screen: the user's [data scope](./build/secure/roles-and-permissions.md#data-scope) filters the rows.
+- **Model** in the drawer only offers the models allowed in the settings; the server refuses any other.
 
 ---
 
 ## Settings \{#settings\}
 
-In **Settings → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above and **Allowed connectors**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
+In **Settings → App → AI Assistant**: **Enabled**, **Anthropic API key** (encrypted), **Model**, **Effort**, **Max tokens**, **Max tool iterations** (8), **Request timeout (s)**, **Adaptive thinking**, **System prompt**, the tools above, **Allowed connectors**, and for the chat drawer the **Models users may pick** and the **Starter questions**. See [App settings](./build/settings-app.md#ai). Without a key, the drawer says the assistant is not configured.
 
 ---
 
@@ -1626,7 +1681,8 @@ In **Settings → App → AI Assistant**: **Enabled**, **Anthropic API key** (en
 
 - Give queries a clear label and description (Settings → Connectors): the assistant chooses its queries from them.
 - Write dedicated read queries for the questions users ask often (totals per company, per month), rather than expecting the assistant to aggregate thousands of rows.
-- Keep **API tool** off unless the endpoints are read-only.
+- Write a playbook for each procedure users ask about more than once: the answer is then the application's procedure, not a guess.
+- Keep **API tool** and **Operations tools** off unless the endpoints are read-only and the chat users are administrators.
 
 ---
 
@@ -1879,6 +1935,135 @@ The administrator sets the API key, the default model, the documentation source,
 ---
 
 # === Liberty Next — framework ===
+
+## Liberty Next — The sales demo
+Source: https://docs.nomana-it.fr/liberty/framework/demo-app/
+
+The Sales demo application shipped with Liberty Next: invoice lines loaded from Excel by period, period validation and closing, a home dashboard, the Data Explorer with ready-made analyses, the AI assistant's starter questions, a monthly digest e-mailed by Nomaflow, and three demo users who see different rows — every feature built from the Settings, without code.
+
+**Sales demo** is a small application shipped with Liberty Next to show, on one coherent subject, what the framework does without code: monthly invoice lines loaded from Excel, periods validated then closed, a home dashboard, free analysis in the Data Explorer, the AI assistant, a digest e-mailed every month, and users who see only their own company. Everything in it is configuration — connector, dictionary, screens, menus, dashboards, model, jobs — readable and editable in the Settings.
+
+It is a showcase, not a product: open it to see a feature at work, copy what fits into an application of your own.
+
+---
+
+## At a glance
+
+---
+
+## The data \{#data\}
+
+| Table | Holds |
+|---|---|
+| **Items** | The items, with their family and sub-family. |
+| **Companies** | The companies, with their business unit, region and currency. |
+| **Customers** | The customers met in the sales; the codes are added by each load, the names completed by hand. |
+| **Sales lines** | One row per invoice line: period, company, item, customer, destination country, quantity, weight, revenue in the company's currency. |
+| **Periods** | One row per loaded period: status (*open*, *validated*, *closed*), number of companies and lines, quantity, who changed the status and when, a comment. |
+
+The revenue is in each company's own currency: it is never summed across currencies, so the analyses give it per currency or per company.
+
+---
+
+## The screens \{#screens\}
+
+- **Sales → Sales lines**: the invoice lines, read-only, up to 5,000 rows. The grid opens empty: pick a period, a business unit, a family… first. The filters cascade — the companies follow the business unit, the sub-families the family, the items both.
+- **Sales → Periods**: the loaded periods. The row menu offers **Validate**, **Close** and **Reopen**, each after a confirmation. A **closed** period is read-only in the grid — see [Conditional fields](./build/screens/conditional-fields.md) — and a new load of that period is refused.
+- **Reference data → Items, Companies, Customers**: the reference tables, editable.
+
+---
+
+## Loading the files \{#loads\}
+
+The data arrives through Nomaflow jobs, run from **Nomaflow → Jobs** with **Run now** or **Run with parameters**:
+
+| Job | Does |
+|---|---|
+| `nomademo-init-db` | Creates the tables in the database of the `nomademo` pool. Can be run again. |
+| `nomademo-load-items` | Loads the item file (sheet *Items*: code, name, family, sub-family), replacing the table. |
+| `nomademo-load-companies` | Loads the company file (sheet *Companies*: code, name, business unit, region, currency), replacing the table. |
+| `nomademo-load-sales` | Loads one month of invoice lines (sheet *Sales*), chosen when the job is run. |
+| `nomademo-refresh-periods` | Rebuilds the period rows from the loaded lines, keeping their status. |
+| `nomademo-demo-accounts` | Creates the demo roles and users — see [below](#accounts). |
+| `nomademo-monthly-digest` | The monthly digest — see [below](#digest). |
+
+The sales load shows the [`file_load` step](../nomaflow/steps.md#file-load) at work:
+
+- it **replaces** the partitions the file carries — year, month and company — in one transaction: reloading a corrected month replaces that month only, and a failed load leaves the previous data in place;
+- a **guard** refuses the file when one of its periods is closed, with the reason in the run;
+- rejected rows are kept for download from the run;
+- the following steps add the new customers and refresh the period rows.
+
+The jobs are delivered without a schedule.
+
+---
+
+## The home dashboard \{#dashboard\}
+
+**Overview** is the application's home page: the [dashboard](./dashboards.md) *Sales overview*. It shows the periods loaded, the companies with sales, the invoice lines and the quantity sold; the monthly quantity, the quantity by business unit and by family, the revenue by currency; the periods table and the top items. The **Business unit** filter in the bar narrows every widget whose query returns the business unit — no screen needed behind the widgets.
+
+---
+
+## The Data Explorer \{#explorer\}
+
+**Sales → Data Explorer** opens the [Data Explorer](./explorer/overview.md) on the *Sales* model: the invoice lines at the centre, with the item (family, sub-family), the company (business unit, currency) and the customer around them.
+
+The model ships ten shared analyses — quantity by business unit, by company, by family; revenue by currency, by business unit, by company; the monthly quantity, alone and by business unit as a pivot; the top items; the number of invoice lines — and the *Sales overview* dashboard that gathers them. They are a starting point: open one, change it, save it under another name.
+
+---
+
+## The AI assistant \{#ai\}
+
+The application ships its [starter questions](./ai-assistant.md#starters) under four headings — *Sales*, *Periods*, *Loads*, *Reference data* — with *Which business unit sold the most last month?* or *How do I reload a month that was wrong?*. The *Sales lines* screen has its own, which use the page context: *Sum the quantities of the rows I see, by business unit*.
+
+Three [playbooks](./ai-assistant.md#playbooks) — *Load a month of sales*, *Validate or close a period*, *Analyse quantities and revenue* — let the assistant walk a user through the application's procedures. All of it is visible and editable in **Settings → AI**.
+
+---
+
+## The monthly digest \{#digest\}
+
+`nomademo-monthly-digest` is a scheduled digest without code:
+
+1. two [`report` steps](../nomaflow/steps.md#report) render the analyses *Revenue by business unit* and *Quantity by company* to Excel, over the previous month;
+2. a [`notify` step](../nomaflow/steps.md#notify) sends them to the holders of the group role, the two files attached.
+
+Schedule it on the first of the month once the e-mail account is set in [Notifications](../nomaflow/notifications.md#smtp).
+
+---
+
+## Three users, three views \{#accounts\}
+
+`nomademo-demo-accounts` creates two roles and three users, password `demo`:
+
+| User | Role | Sees |
+|---|---|---|
+| `demo_group` | `nomademo_group` | Everything. |
+| `demo_bu` | `nomademo_scoped` | The companies of one business unit. |
+| `demo_company` | `nomademo_scoped` | One company. |
+
+Both roles grant the same things: the application's queries, its Data Explorer models and the assistant. The scoped role adds a [data scope](./build/secure/roles-and-permissions.md#data-scope) on the company, whose values come from each user's *companies* attribute. Sign in as each user in turn: the same screens, dashboard, analyses and exports show other rows, the totals included.
+
+Load the companies before running this job: it reads them to fill the users' attributes.
+
+---
+
+## Setting it up \{#setup\}
+
+1. In **Settings → Pools**, a pool named `nomademo` pointing at an empty database.
+2. In Nomaflow, run `nomademo-init-db`, then the item and company loads, then one or more sales months.
+3. Run `nomademo-demo-accounts`.
+4. Open **Sales demo** from the application switcher.
+
+---
+
+## What's next
+
+- [Dashboards](./dashboards.md) — the widgets and the export.
+- [Data Explorer](./explorer/overview.md) — models, analyses, dashboards.
+- [Steps](../nomaflow/steps.md) — file loads, reports and notifications.
+- [Roles and permissions](./build/secure/roles-and-permissions.md) — the data scope.
+
+---
 
 ## Liberty Next — First app walkthrough
 Source: https://docs.nomana-it.fr/liberty/framework/getting-started/first-app/
@@ -7516,6 +7701,10 @@ The escape hatch. A `page` leaf navigates to a hand-written React route — a cu
 | **`connector`** | **Must not be set**. The target is a route, not a connector resource. |
 | **`params`** | Optional. The runtime appends them as query-string parameters on the route. |
 
+### The Data Explorer \{#explorer\}
+
+`/explorer` opens the [Data Explorer](../../explorer/overview.md) on the application's first model. `/explorer/<app>/<model>` opens it on one model — `/explorer/crm/sales` — and the model picker still lets the user switch. A **Data Explorer** entry in each functional folder of the menu, each on its own model, takes users straight to the right data.
+
 ### When to use
 
 - A bundled product (Nomaflow, Nomasx-1's specialised dashboards).
@@ -8017,9 +8206,9 @@ Column headers come from the dictionary: a column without its own label takes th
 ## Liberty Next — Dashboards
 Source: https://docs.nomana-it.fr/liberty/framework/dashboards/
 
-Liberty Next dashboards: KPIs, charts and tables over connector queries on a 12-column grid, a period with presets and comparison with the previous period, dictionary filters, a cache with Refresh — built in Settings → Dashboards and opened from the menu.
+Liberty Next dashboards: KPIs, figures, decision lists, proportion bars, charts and tables over connector queries on a 12-column grid, Excel and PDF export, a period with presets and comparison with the previous period, dictionary filters, a cache with Refresh — built in Settings → Dashboards and opened from the menu.
 
-A dashboard puts several **widgets** — figures, charts, tables — side by side, each fed by a query of a connector. It opens from the menu like a screen, and it is built in **Settings → Dashboards**.
+A dashboard puts several **widgets** — figures, decision lists, proportion bars, charts, tables — side by side, each fed by a query of a connector. It opens from the menu like a screen, and it is built in **Settings → Dashboards**.
 
 ---
 
@@ -8029,15 +8218,30 @@ A dashboard puts several **widgets** — figures, charts, tables — side by sid
 
 ## Widgets \{#widgets\}
 
-Widgets sit on a 12-column grid, in the order they are declared. Each one takes a width of 1 to 12 columns and a height of 1 to 8 rows, and may carry a title.
+Widgets sit on a 12-column grid, in the order they are declared. Each one takes a width of 1 to 12 columns and a height of 1 to 8 rows, and carries a title and an optional **subtitle** — one line under the title that says what the widget covers.
 
 | Widget | Shows | Settings |
 |---|---|---|
 | **KPI** | One figure computed over every row of a query. | Connector, query, column, aggregation (`count`, `sum`, `avg`, `min`, `max`, or `none` for the first row's value), format, and **compare with the previous period**. |
+| **Figure** | A figure card read from the query's **first row**, with a line of detail under it. | **Value column**, **Format**, **Unit**, **Sub line**. |
+| **List** | A decision or ranked list: one line per row, with a coloured dot, a title, a subtitle, a figure and a tag. | **Title column** (required), **Subtitle column**, **Value column**, format, unit, **Count column** and **Count wording**, **Tone column**, **Tag column**, **Rows shown**. |
+| **Bars** | A ranked list with a proportion bar under each row. | **Label column** and **Value column** (required), **Sub label column**, format, unit, **Bar as a share of**, **Note under the bars**, **Rows shown**. |
 | **Chart** | A bar, line, area or pie chart. | A chart saved in **Settings → Charts**, or a connector, a query and a chart definition written in the widget — see [Charts](./charts.md). |
 | **Table** | The rows of a query. | Connector, query, the columns to show (all when empty), a row limit. |
 
 A widget whose query the user may not run is hidden; the rest of the dashboard still shows.
+
+### Figure, List and Bars \{#synthesis\}
+
+These three widgets turn a dashboard into a **synthesis page**: the figures that matter, what needs a decision, and the proportions, each read from a query written for it.
+
+- **Format**: *Number*, *Integer*, *Currency* (euros, no decimals for a whole amount) or *Percent* — a ratio between 0 and 1, shown as a percentage. The **Unit** follows the figure (`users`, `lines`); a currency carries its own symbol.
+- **Sub line** (Figure): a sentence with placeholders filled from the first row, `{COLUMN}` or `{COLUMN:format}` — `{ENABLED:integer} enabled · {DISABLED:integer} disabled` gives *380 enabled · 32 disabled*. A placeholder naming an unknown column stays as written.
+- **Tone column** (List): a column holding `ok`, `warn`, `error` or `info` colours the dot green, orange, red or blue; any other value gives a grey dot. The query decides the tone — a period that is closed, an amount above a threshold.
+- **Count wording** (List): the text around the count column, `{n} conflict lines`. The **Tag column** shows its value as a pill next to the title, in the line's tone.
+- **Bar as a share of** (Bars): **The total of the rows** — the bars add up to 100 % — or **The largest row**, which gets the full bar.
+
+The editor shows a live preview of the widget as soon as the connector, the query and the required columns are chosen.
 
 ---
 
@@ -8077,13 +8281,30 @@ With **Compare with the previous period** ticked, a KPI runs its query a second 
 
 ## Filters \{#filters\}
 
-A dashboard can also carry **filters**, shown as dropdowns in its bar. Each filter has a label, a dictionary item and a query that provides its choices (value column and label column), and an optional default value. Choosing a value reloads every widget whose screen has a column carrying that dictionary item; the other widgets are left as they are.
+A dashboard can also carry **filters**, shown as dropdowns in its bar. Each filter has a label, a dictionary item and a query that provides its choices (value column and label column), and an optional default value. Choosing a value reloads every widget whose query returns a column carrying that dictionary item — through the widget's screen, or directly from the query's result columns: a column with the item's name, or with the connector's column prefix in front of it. The other widgets are left as they are. A period whose date column is given as a dictionary item finds its column the same way.
+
+With **All**, nothing is filtered: a query that returns one total row first, then one row per value, shows the totals in its Figure and List widgets.
 
 ---
 
 ## Refresh and cache \{#cache\}
 
 When a dashboard is opened again, each widget reuses its last result for **Settings → App → Dashboard cache (seconds, 0 = none)** — 60 seconds by default. The **↻** button in the bar reloads everything, and *Updated at 14:05* says when the data was fetched. The cache is kept in the browser, per user, until the page is reloaded.
+
+---
+
+## Export to Excel and PDF \{#export\}
+
+The **Excel** and **PDF** buttons, next to **↻**, export what the bar holds: the filter picks, the period and its date basis, under the user's data scope. The server runs every widget again; nothing is taken from the screen.
+
+| | Excel | PDF |
+|---|---|---|
+| Layout | One sheet per widget; the KPIs together on a *Key figures* sheet. | A cover with the dashboard, the period and the filters, then the widgets one after the other. |
+| KPI, Figure | A row of values. | A card, with the sub line in small type under the figure. |
+| List, Bars, Table | Its rows. | A table. |
+| Chart | Its data table. | The chart drawn, with a legend and the values on the bars. |
+
+A widget whose query fails becomes an error section; the rest of the export still renders. Numbers follow the reader's language (`1 234,5` / `1,234.5`). PDF branding is set in [Settings → App](./build/settings-app.md#branding).
 
 ---
 
@@ -8096,7 +8317,7 @@ In **Settings → Dashboards**, pick the application, then add or open a dashboa
 | General | Title, description. |
 | Period | **Add a period**: *Opens on* (a preset, or *App default*), *Date column* or *dictionary item*, and optional **Date bases** (key, label, date column or dictionary item). |
 | Filters | The dropdowns of the bar. |
-| Widgets | **Add widget**: Chart, KPI or Table. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
+| Widgets | **Add widget**: Chart, KPI, Table, **Figure**, **List** or **Bars**. Each widget has a **Subtitle**. Each widget has buttons to make it narrower or wider (W−, W+), lower or taller (H−, H+), and to move it earlier or later in the grid. |
 
 The editor's labels are in English. To make the dashboard reachable, add a **dashboard** entry to a menu ([Menus](./build/menus/item-types.md)); its permission is `dashboard:<app>.<id>`.
 
@@ -8129,6 +8350,7 @@ period = { column = "DOC_DATE", default = "thisMonth" }
 ## Tips \{#tips\}
 
 - Give the dashboard a period rather than date filters in each query: one control, and the comparison comes for free.
+- For a synthesis page, write one small query per Figure or List and let the query compute the tone: the dashboard only shows it.
 - A KPI with `none` shows the first row's value: let the query compute the figure when the aggregation is complex.
 - Keep the cache on for dashboards opened often; **↻** always gives fresh figures.
 
@@ -8188,9 +8410,10 @@ The tab loads a sample of the query's rows and draws the chart as it is set:
 | **Chart** | The type: bar, line, area or pie. |
 | **X axis** | The column along the X axis — the slice labels on a pie. |
 | **Series** | One line per Y column: the column, a colour swatch, and **L** / **R** to put the series on the left or the right Y axis. **+** adds a series. A pie uses the first series only. |
+| **Pivot by** | Optional, not on a pie. A column whose distinct values become the series: one series per value (a process, a status), each the aggregate of the first Y column. A query returning *refresh date · process · lines* gives one bar per refresh, stacked by process, without pivoting in SQL. |
 | **Aggregate** | How rows sharing the same X value are combined: **Sum**, **Average**, **Count** (counts rows, ignores the Y value), **Min**, **Max**, or **None (per row)** to keep each row — for a time series whose X is already unique. |
 
-As soon as one series is on the right axis, the chart gets a second Y axis — useful for two scales, such as an amount and a count. The legend shows when there is more than one series. Without a colour, a series takes the next colour of the palette.
+The Y axis shows compact ticks (1.2k, 27.5M); the tooltip gives the full figure. As soon as one series is on the right axis, the chart gets a second Y axis — useful for two scales, such as an amount and a count. The legend shows when there is more than one series. Without a colour, a series takes the next colour of the palette.
 
 An X column and at least one series are required to save.
 
@@ -8255,6 +8478,7 @@ An operator first describes the data once, as a **model**, in **Settings → Exp
 
 - A model is offered to the holders of a role that grants it: in **Settings → Access → Roles**, **Beyond the menus**, type **Data Explorer**, then a model, or every model of an app. Superusers see every model. See [Roles & permissions](../build/secure/roles-and-permissions.md#access).
 - The role's **data scope** applies inside every query the explorer runs: a user who sees one company's rows in the screens sees the same rows in the explorer, the totals included. See [Data scope](../build/secure/roles-and-permissions.md#data-scope).
+- A menu entry can open the explorer on one model (`/explorer/<app>/<model>`), so each functional folder of an app reaches its own data; the model picker still lets the user switch. See [Menu item types](../build/menus/item-types.md#explorer).
 - Only a superuser edits **Settings → Explorer**, and sees the SQL of an analysis and the model's warnings (a column that disappeared, a measure that is not numeric).
 
 ---
@@ -8588,13 +8812,13 @@ In **Dashboards** mode, a dashboard is a grid of **tiles**, four columns wide, e
 
 | | Excel | PDF |
 |---|---|---|
-| Layout | One sheet per section, bold headers and subtotals, period and filters as a note. | A title, one chapter per section, tables with bold group rows, the install's PDF branding. |
-| A pivot | Flattened, with its subtotals. | Same. |
-| A chart | Its data table. | Same. |
-| KPI | A row of totals. | Same. |
-| Detail | Its rows. | Same. |
+| Layout | One sheet per section, bold headers and subtotals, period and filters as a note. | A synthesis: a cover with the application, the period, the date, the author and the version, then the sections one after the other, in the install's PDF branding. |
+| A pivot | Flattened, with its subtotals. | A table with bold group rows. |
+| A chart | Its data table. | The chart drawn — bars (grouped, stacked or horizontal), line, pie or donut — in print colours, with a legend, compact axis ticks and the values on the bars. |
+| KPI | A row of totals. | Cards. |
+| Detail | Its rows. | A table. |
 
-Each section holds up to 3,000 rows. The pivot view also has its own Excel button, which exports the pivot as shown. PDF branding is set in [Settings → App](../build/settings-app.md).
+Numbers in the PDF follow the reader's language (`1 234,5` / `1,234.5`). The same document is produced when a Nomaflow job renders the analysis on a schedule — see [Steps → Report](../../nomaflow/steps.md#report). Each section holds up to 3,000 rows. The pivot view also has its own Excel button, which exports the pivot as shown. PDF branding is set in [Settings → App](../build/settings-app.md).
 
 ---
 
@@ -9281,6 +9505,9 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **Scaffold tools** | The assistant may propose queries, dictionary entries, screens and menu items; the user applies the proposal. |
 | **Allowed connectors** | The connectors the assistant may use; empty means all. |
 | **Allowed domains**, **Max fetches per turn** | Web pages the assistant may read; no domain means no web access. |
+| **Operations tools** | The assistant may read the jobs' status, the server log tail and the integrity checks — off by default, for installations whose chat users are administrators. |
+| **Models users may pick** | The models offered in the drawer's **Model** picker besides the one above; empty → the model above only, and no picker. |
+| **Starter questions** | Questions shown on an empty conversation: everywhere (`*`), per application, or per *application/screen* — the most specific set wins. They take precedence over the questions an application ships ([Settings → AI](../ai-assistant.md#settings-ai)). |
 
 See [AI assistant](../ai-assistant.md).
 
@@ -9349,6 +9576,7 @@ The Liberty Next Settings page: one editor per configuration file, grouped per c
 | **Charts** | Saved charts. | [Charts](../charts.md) |
 | **Dashboards** | Dashboards and their widgets. | [Dashboards](../dashboards.md) |
 | **Explorer** | The Data Explorer's models. | [Build a model](../explorer/model.md) |
+| **AI** | What each application ships for the AI assistant: starter questions and playbooks. | [AI assistant](../ai-assistant.md#settings-ai) |
 | **Reports** | Custom reports. | — |
 | **Notifications** | Notification rules. | [Notifications](../../nomaflow/notifications.md) |
 
@@ -11841,7 +12069,7 @@ Users appear in **Settings → Access → Users** at their first sign-in, active
 ## Liberty Next — Scheduled report email
 Source: https://docs.nomana-it.fr/liberty/framework/cookbook/scheduled-report-email/
 
-Recipe — a report e-mailed on a schedule: a Nomaflow job that computes the figures, a notification rule on the job's success that e-mails them, and the dashboard or screen where readers find the detail. What to do when an attached file is required.
+Recipe — a report e-mailed on a schedule: a Nomaflow job that computes the figures, a notification rule on the job's success that e-mails them, and the dashboard or screen where readers find the detail. With a file attached: the report and notify steps.
 
 ## The problem
 
@@ -11915,10 +12143,12 @@ The job's own alerts e-mail the operators on failure — see [Notifications → 
 
 ## When a file must be attached
 
-Notifications send a subject and a body, without attachments. For a file attached to the e-mail, two ways:
+A job sends a file itself with two steps — no code:
 
-- readers download it themselves: the screen's **Export** menu, or its configured workbooks — see [Excel export](./excel-export.md);
-- a `python` step of the job builds the file and sends it with the company's mail library — custom code, see [Plugins](../apps/plugins.md).
+1. a **`report`** step renders a shared analysis or dashboard of the [Data Explorer](../explorer/overview.md) to Excel or PDF, over a period preset (*Last month*), and as a given user when the recipients must only see their own scope;
+2. a **`notify`** step sends the message to `role:management`, with **Attach** set to `*`: every file the run produced goes with the e-mail.
+
+The notification rule on the job's success is then no longer needed. See [Steps → Report](../../nomaflow/steps.md#report) and [Steps → Notify](../../nomaflow/steps.md#notify).
 
 ## Variations
 
@@ -12468,7 +12698,7 @@ A **job** is an entry of `jobs.toml`: an **id** (letters, digits, `-`, `_`; fixe
 
 ## Step \{#step\}
 
-A **step** is one unit of work, of one of seven types: `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job` ([Steps](./steps.md)). Steps run in order; a failed step stops the job, and the following ones are recorded as skipped.
+A **step** is one unit of work, of one of nine types: `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job`, `report`, `notify` ([Steps](./steps.md)). Steps run in order; a failed step stops the job, and the following ones are recorded as skipped.
 
 ## Schedule \{#schedule\}
 
@@ -12800,7 +13030,7 @@ The policy is saved in `jobs.toml` under `[meta.missed]`. A missed time is recor
 ## Nomaflow — Steps
 Source: https://docs.nomana-it.fr/liberty/nomaflow/steps/
 
-The seven Nomaflow step types — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job — what each one does, its fields and defaults, and what it records in the run.
+The nine Nomaflow step types — sql_query, sql_copy, file_load, python, http, ldap_sync, call_job, report, notify — what each one does, its fields and defaults, and what it records in the run.
 
 A **step** is one unit of work in a job. Steps run in order; when one fails, the following ones are recorded as *skipped: earlier step failed*.
 
@@ -12813,6 +13043,8 @@ A **step** is one unit of work in a job. Steps run in order; when one fails, the
 | calls a URL | **`http`** |
 | reads an LDAP / Active Directory directory into a table | **`ldap_sync`** |
 | runs another job and waits for it | **`call_job`** |
+| renders a saved analysis, a dashboard or a report to an Excel or PDF file | **`report`** |
+| sends a message, with the files of the run attached | **`notify`** |
 
 In the job editor, the **Add step:** bar has one button per type, and each step opens a form with its own fields. A few keys exist only in `jobs.toml` (noted below).
 
@@ -12827,9 +13059,11 @@ In the job editor, the **Add step:** bar has one button per type, and each step 
 | Field | Default | Notes |
 |---|---|---|
 | `name` | — | Shown in the run detail; unique within the job. |
-| `type` | — | One of the seven types. |
+| `type` | — | One of the nine types. |
 | `enabled` | `true` | `false` skips the step (recorded as *skipped: disabled*). Set in `jobs.toml`, or for one run in the **Run with parameters** window. |
 | `timeout_seconds` | `3600` | The step is cancelled after this time. Set in `jobs.toml`. |
+
+When a step fails on a database error, the run detail shows the database's own sentence — *invalid input for query argument $1: 2025 (expected str, got int)* — and the statement goes to the server log.
 
 ---
 
@@ -12908,7 +13142,7 @@ Each cell is converted to the type of its target column: integers, decimals (`12
 
 | Field | Notes |
 |---|---|
-| `refuse_query` | A named query run before anything is touched, with the run parameters and the constants as binds. If it returns a row, the load is refused and the first column is the reason: *period 2026-02 is closed*. `refuse_connector`: its connector, the target's by default. |
+| `refuse_query` | A named query run before anything is touched, with the run parameters and the constants as binds. With `partition_by`, it runs once for each partition the file carries, with the partition columns as binds (`:YEAR`, `:MONTH`, `:COMPANY_CODE`): the guard follows the file, not a parameter typed when the job is run. If it returns a row, the load is refused and the first column is the reason: *period 2026-02 is closed*. `refuse_connector`: its connector, the target's by default. |
 | `control_column` + `control_total` | The column is summed over the loaded rows and compared with a value, `${params.total}`, or a cell of the file (`@B2`, `@Totals!B2`), within `control_tolerance`. A difference rolls the file's load back and names both figures. |
 
 ### In the run
@@ -12981,6 +13215,62 @@ Records the number of entries read and rows written.
 ## Call a job — `call_job` \{#call-job\}
 
 `target_job_id` names another job. The step starts it, waits for it to end and takes its result: success, failure or cancellation. The called job has its own run in the history, and inherits the caller's log level and run parameters. A job that would end up calling itself is refused.
+
+---
+
+## Report — `report` \{#report\}
+
+Renders a document into the run's work area: a [saved analysis or dashboard of the Data Explorer](../framework/explorer/saved-and-dashboards.md), or a report of a plugin. Followed by a `notify` step, it makes a **scheduled digest** a plain job.
+
+| Field (editor) | Notes |
+|---|---|
+| **Source** | *A saved analysis (Explorer)*, *A dashboard of analyses (Explorer)* — one section per tile — or *A report (plugin)*. |
+| **Explorer model**, **Analyses** / **Dashboards** | The model, then one of its **shared** analyses or dashboards. A private one cannot be picked. |
+| **Report** | For a plugin report: the report, from the reports of the installed applications. |
+| **Format** | Excel or PDF — the same documents as the Explorer's export, the charts drawn in the PDF. |
+| **Period** | A preset (*Last month*, *This quarter*, *Last 7 days*…, or all dates), or *The analysis's own period*. |
+| **File name** | The file's name; by default, the analysis's title. |
+| **Render as user** | The document holds what that user sees: the data scope of their roles, with their attributes. A digest rendered as the manager of one company holds that company only. |
+| **Render as role** | The data scope of a role. A rule whose values come from a user attribute allows nothing here: prefer **Render as user** for such roles. |
+
+With neither, the document is **unrestricted**. The run detail offers the file for download under the step; the log names it with its size.
+
+---
+
+## Notify — `notify` \{#notify\}
+
+Sends a message through the [notification channels](./notifications.md), with the files this run produced attached.
+
+| Field (editor) | Notes |
+|---|---|
+| **Recipients** | `user:<login>`, `role:<role>` or `email:<address>`, one per line. |
+| **Subject**, **Body** | Text with placeholders: `{JOB}`, `{RUN_ID}`, `{FILES}` (the names of the attached files), `{DATE}` (today). |
+| **Attach (run files; `*` = all)** | `*` attaches every file the run produced — every `report`, and the rejected rows of a `file_load`; or name the files. A named file the run did not produce fails the step. |
+| **Channels** | **portal** (the bell) and **email**. The e-mail account is the one of [Notifications](./notifications.md#smtp). |
+
+The message links to the run. The run detail lists the attached files under the step.
+
+```toml title="jobs.toml — a monthly digest"
+[[jobs.steps]]
+type = "report"
+name = "revenue"
+report = "analysis:revenue_by_business_unit"
+app = "sales"
+model = "sales"
+format = "pdf"
+period = "lastMonth"
+as_user = "cfo"
+
+[[jobs.steps]]
+type = "notify"
+name = "send"
+recipients = ["role:management"]
+subject = "Sales digest {DATE}"
+body = "The monthly sales digest is attached: {FILES}."
+attach = ["*"]
+```
+
+Schedule the job on the first of the month (cron `0 7 1 * *`) — see [Schedules](./jobs/schedules.md).
 
 ---
 
@@ -14492,6 +14782,12 @@ body = "{ERROR}"
 
 ---
 
+## From a job step \{#notify-step\}
+
+A job can also send a message itself, as one of its steps, with the files it produced attached — a scheduled digest. See [Steps → Notify](./steps.md#notify).
+
+---
+
 ## A job's own alerts \{#job-alerts\}
 
 A job can also warn on failure without a rule, from the **Alerts** block of the job editor:
@@ -14606,6 +14902,174 @@ The server's `/ready` answers when the framework database — which holds the hi
 ---
 
 # === Nomasx-1 — security and licence compliance ===
+
+## Nomasx-1 — Overview — Audit synthesis
+Source: https://docs.nomana-it.fr/liberty/nomasx1/audit-synthesis/
+
+The Nomasx-1 home page: the Audit synthesis dashboard — users, roles, segregation-of-duties conflicts and licence exposure at a glance, the conflicts per refresh by process, the findings that need a decision, per process, per licence component, data freshness, activity and the users with the most conflicts — with an application filter, a period and Excel / PDF export.
+
+**Overview**, the first entry of the Nomasx-1 menu, opens the **Audit synthesis**: on one page, the accounts, the segregation-of-duties conflicts and the licence position of every connected application, what needs a decision, and how fresh the data is. It is the page to open before an internal review, and the one to export for a steering committee.
+
+---
+
+## At a glance
+
+---
+
+## The bar \{#bar\}
+
+| Control | Effect |
+|---|---|
+| **Period** | Opens on *Last 12 months*. It applies to the two time charts: the conflicts per refresh and the transacting users per month. |
+| **Application** | **All** shows the totals across the applications; picking one narrows every widget to it. |
+| **Excel**, **PDF** | Export the page as it stands — the application picked and the period. The PDF is a synthesis: a cover naming the period and the filter, the four figures as cards, the charts drawn, the lists as tables. |
+| **↻** | Reloads every widget; *Updated at* gives the time of the data. |
+
+---
+
+## The four figures \{#figures\}
+
+| Card | Figure | Detail line |
+|---|---|---|
+| **Users** — declared accounts | The accounts collected. | Enabled · disabled · **dormant**: enabled without a login in the last 90 days. |
+| **Roles** — defined roles and their assignment | The roles defined. | Assigned · **orphan** (assigned to no user) · users holding more than 10 roles, with the maximum. |
+| **Segregation of duties** — users carrying a conflict | The users with at least one conflict. | Conflict lines · privileged users in conflict · business processes concerned. |
+| **Licence exposure** — components deployed beyond the subscription | The value of the users over the subscribed quantities: list price plus three years of support per user over. | Components over the subscription out of all components · users over. |
+
+The exposure reads the [Subscribed Licenses](./licenses/subscribed.md) and the [pricing catalogue](./settings/pricing/pricing.md): a component without a price counts zero.
+
+---
+
+## What needs a decision \{#decisions\}
+
+The findings of the [Security & SoD assessment report](./reports/security-sox.md), one line each, with a coloured dot — red to act on, orange to review, blue for information, green when nothing is found — and the count or the amount on the right:
+
+| Finding | What to do |
+|---|---|
+| **Active SoD violations** — or *No SoD violation*, or *No SoD matrix defined* | The matrix rules triggered out of all rules, and the privileged pairings. Red when a privileged user is concerned. Without a matrix, define it under [Settings → SoD](./settings/sod/matrix.md). |
+| **Self-conflicting roles** | A role grants both sides of an incompatible pair on its own: fix the role, and every holder is resolved. |
+| **Conflicting role combinations** | Pairs of roles that breach SoD only when held together: split the duties or revise the assignments. |
+| **Components over subscription** | More users with rights than licences: buy, or remove rights. The amount is the exposure; red from 250,000, orange from 25,000. |
+| **Privileged accounts** | Super-user access: confirm each one is owned, justified and reviewed quarterly. |
+| **Dormant enabled accounts** | No login within 90 days, with those that never logged in: disable or re-certify. |
+| **Generic / shared accounts** | Actions cannot be attributed to a person: replace them with nominative accounts. |
+| **\*PUBLIC object grants** | Objects open to every user by default: confirm none is a sensitive transaction. |
+| **Enabled accounts without roles** | Incomplete provisioning, or accounts to disable. |
+| **Direct user-level grants** | Rights granted to a user instead of a role, outside role-based access control. |
+| **Users with more than 10 roles** | Broad role accumulation: right-size, then run the detection again. |
+| **Orphan roles** | Roles assigned to no user: remove or repurpose. |
+
+---
+
+## Trend and detail \{#detail\}
+
+| Widget | Shows |
+|---|---|
+| **Conflicts per refresh** | The conflict lines at each SoD refresh over the period, stacked by business process — the trend of the remediation. |
+| **Per process** | Users in conflict per business process, with the number of conflict lines; red when privileged users are among them. |
+| **Per licence component** | Users with rights per component, against the subscribed quantity. Technical and linked accounts are excluded; active users are those with a login in the last 90 days. |
+| **Data freshness** | The last collection per module, with its age: green under 2 days, orange under 8, red beyond. A red line means the figures above it are old. |
+| **Transacting users per month** | The distinct users with transactions each month, the applications added up. |
+| **Users with the most conflicts** | The users carrying the most conflict lines, with the number of processes; privileged accounts are tagged. |
+
+The detail behind each widget is in the screens: [Conflicts](./applications/conflicts/summary.md), [Users](./security/users.md), [Roles](./security/roles.md), [Usage Report](./licenses/usage-report.md), [Financial Report](./licenses/financial-report.md).
+
+---
+
+## Who sees it \{#access\}
+
+Each widget shows only when the user may run its query: a user without access to the segregation-of-duties data sees the page without those widgets. The row-level scope of the user's roles applies to every figure and to the export.
+
+---
+
+## Related
+
+- [Data Explorer](./data-explorer.md) — to go beyond the synthesis, by any field.
+- [Security & SoD assessment](./reports/security-sox.md) — the full report behind the decision list.
+
+---
+
+## Nomasx-1 — Data Explorer
+Source: https://docs.nomana-it.fr/liberty/nomasx1/data-explorer/
+
+Free analysis of the Nomasx-1 data in the Data Explorer: three models — Security, Segregation of duties, Licence compliance — each with its ready-made shared analyses and dashboard, reached from the menu of each domain.
+
+The **Data Explorer** lets compliance and licence teams analyse the Nomasx-1 data on their own, without a new screen: rows, measures, filters and a period picked from a list of fields, shown as a table, a pivot, a chart or a KPI, then saved, shared, gathered into a dashboard and exported to Excel or PDF. It reads the data collected from **every connected application**, under the same rights as the screens.
+
+How the explorer works — fields, shelves, views, drill, calculated fields — is described in the [Liberty Next documentation](../framework/explorer/analysis.md). This page lists what Nomasx-1 ships.
+
+---
+
+## At a glance
+
+---
+
+## Where to find it \{#menu\}
+
+| Menu entry | Opens |
+|---|---|
+| **Data Explorer** (top level) | The explorer, with every Nomasx-1 model in its picker. |
+| **Security → Data Explorer** | The *Security* model. |
+| **Applications → Conflicts → Data Explorer** | The *Segregation of duties* model. |
+| **Licenses → Data Explorer** | The *Licence compliance* model. |
+
+The model picker lets the user switch at any time.
+
+---
+
+## Security \{#security\}
+
+The users of each application, their status and last login, their role assignments, their profile (company, business unit, country, category codes) and their directory entry (department, title, manager), with the application and the roles around them.
+
+**Analyses**: *Users* (with the technical and generic accounts), *Users by status*, *Users by application*, *Users by company*, *Users by country*, *Users by department*, *Technical and generic accounts*, *Last logins by month* — the older the month, the more dormant the accounts —, *Accounts created by month*, *Users with the most roles*, *Users per role*.
+
+**Dashboard** *Security overview*: users by status, application, company and department; the last logins; the roles with the most users.
+
+---
+
+## Segregation of duties \{#sod\}
+
+Every conflict found by the [SoD matrix](./settings/sod/matrix.md): the user, the two activities, the two roles that grant them, the process and the risk — and the summary of each refresh, for the trend.
+
+**Analyses**: *Users in conflict*, *Users in conflict by process*, *Users in conflict by risk level*, *Conflicts by risk*, *Privileged conflicts*, *Users with the most conflicts*, *Role pairs in conflict*, *Activity pairs in conflict*, *Users in conflict by company*, *Conflicts per refresh*, *Conflicts per refresh and process* — one column per process.
+
+**Dashboard** *SoD overview*: users in conflict by process, risk level and company; the role pairs; the trend across refreshes.
+
+---
+
+## Licence compliance \{#licenses\}
+
+The transactions of each user per table and day, the chain object → system code → licence component, the usage against the subscribed quantities, the financial exposure, and the employees per extraction date.
+
+**Analyses**: *Financial exposure*, *Financial exposure by component* (price, support and total), *Usage vs subscribed by component*, *Compliance gap by component* — negative means more users than subscribed —, *Transactions by month*, *Transacting users by component* and *by company* — pick the period to apply a 90-day rule —, *Most used tables*, *Employees per extraction*.
+
+**Dashboard** *Licence overview*: the financial exposure, the usage against the subscription per component, the transaction trend and the transacting users.
+
+:::info[JDE-specific]
+The transactions and the object → system code → licence component chain come from the JD Edwards EnterpriseOne usage collection. For another source, the *Licence compliance* model holds what that source's collection provides.
+:::
+
+---
+
+## Shipped analyses \{#bundled\}
+
+The analyses and dashboards above are **shared**: every user who may open the model sees them. They are updated with new versions of Nomasx-1, until someone saves changes to one — the local version is then kept. To adapt one without touching it, open it and use **Save as**.
+
+---
+
+## Who sees what \{#access\}
+
+- A model is offered to the holders of a role that grants it (**Data Explorer** in the role's *Beyond the menus* rules) — see [Roles & permissions](../framework/build/secure/roles-and-permissions.md#access).
+- The row-level scope of the user's roles applies inside every analysis: a user limited to one application or company sees only its rows, totals included.
+
+---
+
+## Related
+
+- [Overview — Audit synthesis](./audit-synthesis.md) — the synthesis page.
+- [Saved analyses and dashboards](../framework/explorer/saved-and-dashboards.md) — saving, sharing, exporting.
+
+---
 
 ## Nomasx-1 — Users
 Source: https://docs.nomana-it.fr/liberty/nomasx1/security/users/

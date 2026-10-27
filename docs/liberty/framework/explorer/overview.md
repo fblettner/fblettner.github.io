@@ -189,6 +189,7 @@ An operator first describes the data once, as a **model**, in **Settings → Exp
 
 - A model is offered to the holders of a role that grants it: in **Settings → Access → Roles**, **Beyond the menus**, type **Data Explorer**, then a model, or every model of an app. Superusers see every model. See [Roles & permissions](../build/secure/roles-and-permissions.md#access).
 - The role's **data scope** applies inside every query the explorer runs: a user who sees one company's rows in the screens sees the same rows in the explorer, the totals included. See [Data scope](../build/secure/roles-and-permissions.md#data-scope).
+- A menu entry can open the explorer on one model (`/explorer/<app>/<model>`), so each functional folder of an app reaches its own data; the model picker still lets the user switch. See [Menu item types](../build/menus/item-types.md#explorer).
 - Only a superuser edits **Settings → Explorer**, and sees the SQL of an analysis and the model's warnings (a column that disappeared, a measure that is not numeric).
 
 ---

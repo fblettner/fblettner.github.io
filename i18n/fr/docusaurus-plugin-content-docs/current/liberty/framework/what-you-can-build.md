@@ -127,6 +127,7 @@ Liberty Next convient quand **la plupart des écrans listent et modifient les do
 | Objectif | Point de départ |
 |---|---|
 | Découvrir le framework sur un exemple complet | [Tutoriel — Construire un CRM](./tutorial-crm/01-setup.md) |
+| Voir chaque fonction à l'œuvre sur des données réalistes | [La démo des ventes](./demo-app.md) |
 | Construire rapidement un premier écran | [Première application pas à pas](./getting-started/first-app.md) |
 | Administrer JD Edwards | [Nomajde](../nomajde/overview.md) |
 | Installer le framework | [Installation — vue d'ensemble](../installation/overview.md) |

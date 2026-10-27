@@ -134,9 +134,10 @@ L'onglet charge un échantillon des lignes de la requête et dessine le graphiqu
 | **Graphique** | Le type : barres, courbe, aire ou camembert. |
 | **Axe X** | La colonne portée par l'axe X — les libellés des parts pour un camembert. |
 | **Series** | Une ligne par colonne Y : la colonne, une pastille de couleur, et **L** / **R** pour placer la série sur l'axe Y de gauche ou de droite. **+** ajoute une série. Un camembert n'utilise que la première série. |
+| **Pivot by** | Facultatif, absent pour un camembert. Une colonne dont chaque valeur distincte devient une série (un processus, un statut), chacune agrégeant la première colonne Y. Une requête qui renvoie *date de rafraîchissement · processus · lignes* donne une barre par rafraîchissement, empilée par processus, sans pivot en SQL. Le libellé reste en anglais dans l'éditeur. |
 | **Agréger** | La façon de combiner les lignes de même valeur X : **Somme**, **Moyenne**, **Compte** (compte les lignes, sans tenir compte de la valeur Y), **Min**, **Max**, ou **Aucune (par ligne)** pour conserver chaque ligne — pour une série chronologique dont l'axe X est déjà unique. |
 
-Dès qu'une série est placée sur l'axe de droite, le graphique reçoit un second axe Y — utile pour deux échelles, comme un montant et un nombre. La légende s'affiche à partir de deux séries. Sans couleur choisie, une série prend la couleur suivante de la palette.
+L'axe Y affiche des graduations abrégées (1,2 k, 27,5 M, selon la langue du navigateur) ; l'infobulle donne le chiffre complet. Dès qu'une série est placée sur l'axe de droite, le graphique reçoit un second axe Y — utile pour deux échelles, comme un montant et un nombre. La légende s'affiche à partir de deux séries. Sans couleur choisie, une série prend la couleur suivante de la palette.
 
 L'enregistrement exige une colonne X et au moins une série.
 

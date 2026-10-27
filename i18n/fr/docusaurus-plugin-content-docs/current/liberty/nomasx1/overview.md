@@ -327,11 +327,12 @@ Un deuxième exemple : une synthèse de Séparation des tâches par utilisateur,
 
 ## La carte de l'application
 
-La barre latérale découpe le travail quotidien en cinq sections plus la zone de configuration.
+La barre latérale découpe le travail quotidien en six sections plus la zone de configuration.
 
 | Section | Ce qu'elle couvre |
 |---|---|
-| **Vue d'ensemble** | Le tableau de bord — conflits ouverts, affectations qui expirent, écart de licence, statut du dernier rafraîchissement. |
+| **Vue d'ensemble** | La [synthèse d'audit](./audit-synthesis.md) — utilisateurs, rôles, conflits SoD et exposition de licences en un coup d'œil, ce qui demande une décision, fraîcheur des données ; export Excel ou PDF. |
+| **Explorateur de données** | L'[analyse libre](./data-explorer.md) des données de sécurité, de séparation des tâches et de licences, avec des analyses et tableaux de bord prêts à l'emploi ; également présent dans les dossiers Sécurité, Conflits et Licences. |
 | **Sécurité** | Utilisateurs, rôles, affectations, matrice des rôles (combinaisons), utilisateurs en doublon, utilisateurs sans rôle, réconciliation LDAP / AD. |
 | **Applications** | Par application connectée : menus, droits (par utilisateur, par rôle, combinés), Object Usage Tracking (composants, objets, détails), conflits (synthèse, par utilisateur, par rôle, par objet), journal d'activité. |
 | **Base de données** | Propriétés Oracle (édition, packs, options, partitions), Audit Trail (changements issus des archive logs Oracle), Audit Lookup (avant / après ligne à ligne). |

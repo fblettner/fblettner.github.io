@@ -64,7 +64,7 @@ Une **tâche** est une entrée de `jobs.toml` : un **identifiant** (lettres, chi
 
 ## Étape \{#step\}
 
-Une **étape** est une unité de travail, de l'un des sept types : `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job` ([Étapes](./steps.md)). Les étapes s'exécutent dans l'ordre ; une étape en échec arrête la tâche, et les suivantes sont enregistrées comme sautées.
+Une **étape** est une unité de travail, de l'un des neuf types : `sql_query`, `sql_copy`, `file_load`, `python`, `http`, `ldap_sync`, `call_job`, `report`, `notify` ([Étapes](./steps.md)). Les étapes s'exécutent dans l'ordre ; une étape en échec arrête la tâche, et les suivantes sont enregistrées comme sautées.
 
 ## Planification \{#schedule\}
 

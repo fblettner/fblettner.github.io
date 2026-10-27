@@ -234,6 +234,12 @@ body = "{ERROR}"
 
 ---
 
+## Depuis une étape de tâche \{#notify-step\}
+
+Une tâche peut aussi envoyer elle-même un message, sous forme d'étape, avec en pièces jointes les fichiers qu'elle a produits — une synthèse planifiée. Voir [Étapes → Notification](./steps.md#notify).
+
+---
+
 ## Les alertes propres à une tâche \{#job-alerts\}
 
 Une tâche peut aussi prévenir en cas d'échec sans règle, depuis le bloc **Alertes** de l'éditeur de tâche :

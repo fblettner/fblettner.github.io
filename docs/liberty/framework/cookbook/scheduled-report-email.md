@@ -1,6 +1,6 @@
 ---
 title: Scheduled report email
-description: "Recipe — a report e-mailed on a schedule: a Nomaflow job that computes the figures, a notification rule on the job's success that e-mails them, and the dashboard or screen where readers find the detail. What to do when an attached file is required."
+description: "Recipe — a report e-mailed on a schedule: a Nomaflow job that computes the figures, a notification rule on the job's success that e-mails them, and the dashboard or screen where readers find the detail. With a file attached: the report and notify steps."
 keywords: [Liberty Next, cookbook, scheduled report, email, Nomaflow, notifications, SMTP, job, dashboard]
 ---
 
@@ -78,10 +78,12 @@ The job's own alerts e-mail the operators on failure — see [Notifications → 
 
 ## When a file must be attached
 
-Notifications send a subject and a body, without attachments. For a file attached to the e-mail, two ways:
+A job sends a file itself with two steps — no code:
 
-- readers download it themselves: the screen's **Export** menu, or its configured workbooks — see [Excel export](./excel-export.md);
-- a `python` step of the job builds the file and sends it with the company's mail library — custom code, see [Plugins](../apps/plugins.md).
+1. a **`report`** step renders a shared analysis or dashboard of the [Data Explorer](../explorer/overview.md) to Excel or PDF, over a period preset (*Last month*), and as a given user when the recipients must only see their own scope;
+2. a **`notify`** step sends the message to `role:management`, with **Attach** set to `*`: every file the run produced goes with the e-mail.
+
+The notification rule on the job's success is then no longer needed. See [Steps → Report](../../nomaflow/steps.md#report) and [Steps → Notify](../../nomaflow/steps.md#notify).
 
 ## Variations
 

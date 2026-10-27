@@ -124,6 +124,7 @@ keywords: [Liberty Next, Paramètres, éditeurs, connecteurs, dictionnaire, acti
 | **Graphiques** | Les graphiques enregistrés. | [Graphiques](../charts.md) |
 | **Tableaux de bord** | Les tableaux de bord et leurs widgets. | [Tableaux de bord](../dashboards.md) |
 | **Explorateur** | Les modèles de l'explorateur de données. | [Construire un modèle](../explorer/model.md) |
+| **IA** | Ce que chaque application livre pour l'assistant IA : questions de départ et procédures. | [Assistant IA](../ai-assistant.md#settings-ai) |
 | **Rapports** | Les rapports personnalisés. | — |
 | **Notifications** | Les règles de notification. | [Notifications](../../nomaflow/notifications.md) |
 

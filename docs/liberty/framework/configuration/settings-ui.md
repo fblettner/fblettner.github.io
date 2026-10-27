@@ -124,6 +124,7 @@ keywords: [Liberty Next, Settings UI, editors, connectors, dictionary, actions, 
 | **Charts** | Saved charts. | [Charts](../charts.md) |
 | **Dashboards** | Dashboards and their widgets. | [Dashboards](../dashboards.md) |
 | **Explorer** | The Data Explorer's models. | [Build a model](../explorer/model.md) |
+| **AI** | What each application ships for the AI assistant: starter questions and playbooks. | [AI assistant](../ai-assistant.md#settings-ai) |
 | **Reports** | Custom reports. | — |
 | **Notifications** | Notification rules. | [Notifications](../../nomaflow/notifications.md) |
 

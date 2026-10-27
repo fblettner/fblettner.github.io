@@ -134,6 +134,9 @@ When a saved change needs a restart, the page says *Saved. Restart the server to
 | **Scaffold tools** | The assistant may propose queries, dictionary entries, screens and menu items; the user applies the proposal. |
 | **Allowed connectors** | The connectors the assistant may use; empty means all. |
 | **Allowed domains**, **Max fetches per turn** | Web pages the assistant may read; no domain means no web access. |
+| **Operations tools** | The assistant may read the jobs' status, the server log tail and the integrity checks — off by default, for installations whose chat users are administrators. |
+| **Models users may pick** | The models offered in the drawer's **Model** picker besides the one above; empty → the model above only, and no picker. |
+| **Starter questions** | Questions shown on an empty conversation: everywhere (`*`), per application, or per *application/screen* — the most specific set wins. They take precedence over the questions an application ships ([Settings → AI](../ai-assistant.md#settings-ai)). |
 
 See [AI assistant](../ai-assistant.md).
 

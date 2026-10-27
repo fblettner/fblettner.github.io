@@ -127,6 +127,7 @@ Liberty Next fits when **most screens list and edit data from a database**, with
 | You want to… | Start with |
 |---|---|
 | Learn the framework on a full example | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) |
+| See every feature working on real-looking data | [The sales demo](./demo-app.md) |
 | Build a first screen quickly | [First app walkthrough](./getting-started/first-app.md) |
 | Administer JD Edwards | [Nomajde](../nomajde/overview.md) |
 | Install the framework | [Installation](../installation/overview.md) |
