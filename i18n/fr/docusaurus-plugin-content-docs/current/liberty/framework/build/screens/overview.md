@@ -29,7 +29,7 @@ La page qui gère les écrans est **Paramètres → Écrans**. Cette vue d'ensem
   <rect x="216" y="78" width="80" height="26" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
   <text x="256" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">nomasx1</text>
   <rect x="306" y="78" width="240" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="426" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Ajouter des écrans pour un connecteur</text>
+  <text x="426" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Ajouter une portée</text>
   <rect x="700" y="78" width="80" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="740" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Annuler</text>
   <rect x="788" y="78" width="80" height="26" rx="6" fill="#4a9eff" opacity="0.9"/>
@@ -68,7 +68,7 @@ Trois régions :
 
 | Région | Contenu |
 |---|---|
-| **Barre de portée en haut** | Une puce par application (un connecteur disposant d'un menu). Cliquer sur une puce → ses écrans se chargent en dessous. Le bouton *＋ Ajouter des écrans pour un connecteur* enregistre un connecteur tout neuf dans l'espace de nommage Écrans. *Annuler* / *Enregistrer* à droite valident ou annulent les modifications de toute la page. |
+| **Barre de portée en haut** | Une puce par application (un connecteur disposant d'un menu). Cliquer sur une puce → ses écrans se chargent en dessous. Le bouton *＋ Ajouter une portée* enregistre un connecteur tout neuf dans l'espace de nommage Écrans. *Annuler* / *Enregistrer* à droite valident ou annulent les modifications de toute la page. |
 | **Barre de filtre** | Un champ de recherche pour la liste d'écrans. Visible quand l'application sélectionnée comporte plus de quelques écrans. |
 | **Liste des écrans** | Une carte par écran, défilement vertical. Chaque carte affiche l'identifiant, le libellé, la requête de lecture, le nombre d'onglets, le nombre de champs et les actions par carte : *Renommer*, *Dupliquer*, *Supprimer*. **Cliquer sur une carte ouvre la boîte de dialogue modale du Concepteur d'écran.** |
 

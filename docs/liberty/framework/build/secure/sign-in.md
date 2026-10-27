@@ -11,7 +11,7 @@ A user signs into Liberty through one of two paths:
 | Path | When |
 |---|---|
 | **Local username + password** | The user types credentials on the sign-in screen. The framework checks them against `auth.toml` (or the `ly2_users` table) and mints a JWT. |
-| **OIDC** | The user clicks *Sign in with \<provider>*, is redirected to the IdP, signs in there, and returns to Liberty with their identity. The framework provisions / updates the user and mints a JWT. |
+| **OIDC** | The user clicks *Sign in with OIDC*, is redirected to the IdP, signs in there, and returns to Liberty with their identity. The framework provisions / updates the user and mints a JWT. |
 
 Both can coexist — a single install offers both buttons on the sign-in screen, and users pick whichever applies.
 

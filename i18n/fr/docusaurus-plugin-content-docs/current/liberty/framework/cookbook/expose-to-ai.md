@@ -1,114 +1,66 @@
 ---
 title: Donner accès aux données à l'assistant IA
-description: "Recette — choisir les connecteurs que l'assistant IA peut lire, restreindre les écritures, rédiger une bonne description d'outil pour que le modèle choisisse la bonne requête. La différence entre un assistant utile et un assistant qui hallucine."
-keywords: [Liberty Framework, cookbook, AI, assistant, IA, accès, tool description, scoping, périmètre]
+description: "Recette — choisir ce que l'assistant IA peut atteindre et l'aider à choisir la bonne requête : la permission ai:chat, les connecteurs autorisés, les seules requêtes de lecture, le périmètre de données de l'utilisateur, et des libellés et descriptions de requêtes rédigés pour le modèle."
+keywords: [Liberty Next, cookbook, IA, assistant, ai:chat, connecteurs autorisés, description de requête, périmètre de données, sql_query]
 ---
 
 # Donner accès aux données à l'assistant IA
 
-## Le problème
+## Le besoin
 
-L'assistant IA du framework exécute les mêmes requêtes de connecteur que l'interface — mais il ne peut choisir le bon outil que si vous lui indiquez ce que fait chacun d'eux. Un connecteur rendu visible à l'assistant avec une description floue (« get data ») sera choisi au hasard ; un connecteur avec une description claire de deux phrases sera choisi correctement.
+L'[assistant IA](../ai-assistant.md) répond aux questions en exécutant les requêtes nommées des connecteurs. Il doit atteindre les bonnes données — et seulement celles-là — et choisir la bonne requête pour chaque question.
 
-Cette recette couvre le **cadrage** — quels connecteurs l'assistant voit, quels chemins d'écriture il peut emprunter, comment rédiger les descriptions que le modèle utilise.
+## La démarche
 
-## Le modèle
-
-Trois couches de cadrage, chacune indépendante :
-
-| Couche | Emplacement | Effet |
+| Niveau | Réglage | Effet |
 |---|---|---|
-| **Par connecteur — Expose to AI** | Paramètres → Connecteurs → \<connecteur\> → sous-formulaire Connection. | Désactivé → aucune des requêtes du connecteur n'apparaît dans la liste d'outils. |
-| **Par requête — Operation type** | Paramètres → Connecteurs → \<connecteur\> → \<requête\> → Operation. | Les requêtes `Read` sont visibles par défaut (quand le switch du connecteur est activé) ; les requêtes `Write` demandent une activation supplémentaire. |
-| **Par rôle — `ai:chat` + `ai:tool:<name>`** | Paramètres → Rôles. | Même une requête visible est masquée à un appelant sans `ai:chat`. La permission fine `ai:tool:<name>` permet d'autoriser les outils rôle par rôle. |
-
-Combinées, ces couches font que l'assistant voit exactement ce que chaque utilisateur est censé voir — ni plus, ni moins.
+| **Qui** | La permission `ai:chat`, accordée par un rôle. | Sans elle, l'utilisateur n'a pas d'assistant. |
+| **Quels connecteurs** | **Allowed connectors**, Paramètres → App → AI Assistant. | Vide : tous les connecteurs ; sinon, seulement ceux de la liste. |
+| **Quelles requêtes** | Les requêtes de lecture uniquement. | Les requêtes d'écriture sont toujours refusées ; l'assistant n'écrit jamais de SQL lui-même. |
+| **Quelles lignes** | Les droits et le [périmètre de données](../build/secure/roles-and-permissions.md#data-scope) de l'utilisateur. | Une requête lancée par l'assistant est contrôlée comme celle d'un écran : l'utilisateur voit les mêmes lignes. |
+| **Quelle requête choisir** | Le **libellé** et la **description** des requêtes. | L'assistant s'en sert pour choisir. |
 
 ## La recette
 
-### 1. Régler le switch Expose to AI du connecteur
+### 1. Ouvrir l'assistant
 
-Ouvrez le connecteur. Le sous-formulaire *Connection* contient un switch **Expose to AI assistant** vers le bas. Activé par défaut quand vous créez un nouveau connecteur.
+Dans **Paramètres → Access → Roles**, donner au rôle des utilisateurs la règle *AI assistant* (`ai:chat`), dans le bloc **Beyond the menus**. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
 
-Désactivez-le pour les connecteurs qui contiennent :
+### 2. Limiter les connecteurs
 
-- Des données sensibles que l'assistant ne doit pas faire remonter (données personnelles, montants financiers au-delà d'un seuil, tout ce que l'équipe juridique a signalé).
-- Des connecteurs internes du framework ou de débogage (`liberty-self`, technical-dashboard).
-- Des connecteurs opérationnels qui n'ont de sens que dans un parcours d'interface (la resoumission BIP du tutoriel JDE).
+Dans **Paramètres → App → AI Assistant**, renseigner **Allowed connectors** avec les connecteurs dont l'assistant peut lire les données — par exemple celui du CRM, sans celui des RH. Laisser **API tool** désactivé, sauf si les endpoints sont en lecture seule.
 
-### 2. Rédiger de bonnes descriptions de requête
+### 3. Décrire les requêtes
 
-Chaque requête de lecture a un champ **Description**. Ce texte est transmis au modèle comme description de l'outil. Le modèle choisit les outils à partir de cette chaîne.
+Dans **Paramètres → Connecteurs**, donner à chaque requête utile à l'assistant un **libellé** et une **description** (onglet Advanced). L'assistant liste les connecteurs avec leurs requêtes et leurs descriptions, puis en choisit une :
 
-| Bon | Mauvais |
+| Efficace | Insuffisant |
 |---|---|
-| `Returns every invoice in a period with customer, amount, status. Use to answer questions about invoicing volume, recent invoices, status distribution.` | `Get invoices` |
-| `Counts deals per stage of the sales pipeline. Use for pipeline-distribution questions.` | `Aggregate deals` |
-| `Lists customer activities (calls, meetings, emails) ordered most-recent-first. Filter by customer or by date.` | `Activities` |
+| `Factures d'une période avec client, montant et statut. Pour les questions sur le volume facturé, les factures récentes, la répartition par statut.` | `Récupérer les factures` |
+| `Nombre d'affaires par étape du pipeline. Pour les questions de répartition du pipeline.` | `Agréger les affaires` |
+| `Activités d'un client (appels, réunions, e-mails), les plus récentes d'abord. Paramètre CUSTOMER_ID.` | `Activités` |
 
-Deux schémas qui fonctionnent :
+Deux phrases suffisent : **ce que contiennent les lignes**, et **à quelles questions la requête répond**. Mentionner les paramètres et leur format.
 
-1. **Ce qu'elle renvoie** — une phrase qui décrit les lignes.
-2. **Quand l'utiliser** — une phrase qui oriente le modèle vers la forme de question à laquelle elle répond.
+### 4. Ajouter des requêtes dédiées
 
-Les deux dans la langue de l'utilisateur (l'assistant s'aligne sur la langue de la question).
+Pour les questions fréquentes — totaux par société, par mois —, écrire une requête de lecture qui les calcule, plutôt que de laisser l'assistant parcourir des milliers de lignes. Nommer clairement ses paramètres (`PERIOD_FROM`, `COMPANY`) et déclarer leurs libellés.
 
-### 3. Activer explicitement les requêtes d'écriture
+### 5. Vérifier
 
-Les requêtes d'écriture sont **exclues par défaut** même quand le connecteur est visible par l'assistant — le framework ne veut pas que l'assistant déclenche des écritures non voulues.
+Se connecter avec un utilisateur du rôle, poser une question à laquelle le rôle doit pouvoir répondre, puis une autre hors de son périmètre : l'assistant affiche les outils utilisés et les requêtes exécutées.
 
-Pour activer une requête d'écriture :
+## Erreurs fréquentes
 
-| Paramètre | Effet |
+| Erreur | Conséquence |
 |---|---|
-| Sur la requête → switch **Expose to AI assistant** | Quand il est activé, la requête apparaît dans la liste d'outils avec le suffixe `:write`. |
-| Sur les rôles autorisés à déclencher des écritures IA | Ajoutez la permission `ai:write`. |
-
-Réservez cela aux écritures **relançables sans risque, à faible impact** (une relecture d'une API externe, le basculement d'un drapeau, le déclenchement d'une synchronisation). Jamais pour des `DELETE`.
-
-### 4. Filtrage par rôle avec `ai:tool:<name>`
-
-Pour un contrôle plus fin, la permission `ai:tool:&lt;connector&gt;__&lt;query&gt;` filtre chaque outil individuellement. Par défaut, accorder `ai:chat` rend visible chaque outil de lecture que l'utilisateur peut exécuter ; ajouter `ai:tool:billing__*` restreint à la facturation.
-
-Recettes de rôles typiques :
-
-| Rôle | Permissions |
-|---|---|
-| `crm-viewer` | `ai:chat` + (implicite : tous les outils de lecture qu'il peut exécuter). |
-| `crm-power-user` | `ai:chat` + `ai:tool:deals__*` + `ai:write`. Les « outils d'écriture » n'apparaissent qu'à cause du `ai:write` explicite. |
-| `data-analyst` | `ai:chat` seul, mais un ensemble de permissions de lecture beaucoup plus large sur les requêtes sous-jacentes — l'assistant en hérite. |
-
-### 5. Vérifier ce que chaque rôle voit
-
-Le point d'accès `GET /ai/tools` renvoie la liste d'outils telle que l'utilisateur appelant la verrait. Utilisez-le pour confirmer le cadrage :
-
-```bash
-curl -H "Authorization: Bearer $(get_token alice)" \
-     http://127.0.0.1:8000/ai/tools | jq '.[].name'
-```
-
-La liste doit correspondre aux permissions de lecture de l'utilisateur. Si un outil attendu manque, vérifiez le switch *Expose to AI* du connecteur et la permission de l'utilisateur sur la requête sous-jacente.
-
-## Erreurs courantes
-
-| Erreur | Symptôme |
-|---|---|
-| **Connecteur visible mais description vide** | Le modèle choisit des outils au hasard, hallucine des noms de paramètres. |
-| **Requête d'écriture visible sans `ai:write` sur aucun rôle** | La requête apparaît dans `GET /ai/tools` mais l'assistant refuse de l'appeler (« you don't have permission to write »). |
-| **Plusieurs requêtes avec des descriptions similaires** | Le modèle prend la première par ordre lexicographique et ignore les autres. Différenciez les descriptions. |
-| **Description dans une langue, requête dans une autre** | Le modèle se trouble. Alignez la langue de la description du connecteur sur la `session.lang` de l'utilisateur. |
-
-## Variantes
-
-| Vous voulez… | Faites ceci |
-|---|---|
-| **Limiter l'IA à une seule application** | Ne donnez pas `ai:chat` aux utilisateurs des autres applications. Ou n'accordez que `ai:tool:crm__*`. |
-| **Un plafond journalier d'appels IA par utilisateur** | Réglez `[ai] max_messages_per_day` dans les paramètres du framework ; le framework refuse au-delà du plafond. |
-| **Que le modèle ne voie jamais de vraies données personnelles** | Marquez la colonne `Rule = PASSWORD` dans l'entrée du dictionnaire — l'IA reçoit `••••` dans le résultat de l'outil, et non la valeur sous-jacente. |
-| **Un connecteur précis visible uniquement par les admins** | Réglez la permission de la requête sous-jacente sur `sql:financial:*` et ne l'accordez qu'à `admin` ; `Expose to AI` peut rester activé — le framework filtre. |
+| Requêtes sans description | L'assistant hésite entre des requêtes proches, ou se trompe. |
+| Plusieurs requêtes avec la même description | Idem. Rendre chaque description spécifique. |
+| Un connecteur sensible accessible parce que **Allowed connectors** est vide | L'assistant peut le lire pour tout utilisateur qui a des droits sur ses requêtes. Lister explicitement les connecteurs. |
+| Attendre de l'assistant qu'il modifie des données | Les requêtes d'écriture sont refusées ; les modifications passent par les écrans et les actions. |
 
 ## Pour aller plus loin
 
-- [Assistant IA](../ai-assistant.md) pour la surface complète du chat.
-- [Rôles et permissions](../build/secure/roles-and-permissions.md) pour la famille de permissions `ai:*`.
-- [Tutoriel CRM → Étape 6](../tutorial-crm/06-ai-and-jobs.md) pour un cas de bout en bout.
+- [Assistant IA](../ai-assistant.md) — le panneau, les outils, les réglages.
+- [Rôles et permissions](../build/secure/roles-and-permissions.md) — `ai:chat` et le périmètre de données.
+- [Paramètres de l'application → AI Assistant](../build/settings-app.md#ai) — tous les réglages.

@@ -187,7 +187,7 @@ La barre de l'élément propose **Find usages**, **Renommer**, **Cloner** et **S
 | `jdedate`, `jdetime` | Une date (CYYDDD) ou une heure (HHMMSS) JD Edwards, affichée comme une date ou une heure ordinaire. |
 | `boolean` | Une coche ou une croix. |
 | `password` | Une valeur masquée. |
-| `email`, `url`, `color` | Une adresse e-mail, un lien, une couleur. |
+| `email`, `url`, `color` | Du texte, affiché tel quel. |
 
 L'onglet **Framework** permet d'ajouter des valeurs à cette liste.
 
@@ -209,10 +209,18 @@ Les règles appliquées par le serveur (`SEQUENCE`, `LOGIN`, `SYSDATE`, `PASSWOR
 
 ### Colonnes d'audit \{#form-layer-defaults\}
 
-Pour une colonne d'audit, l'association habituelle est la suivante :
+Une règle s'applique à toute écriture dont la requête lie la colonne :
 
-| Colonne | Règle |
-|---|---|
+| Colonne | Règle | Condition |
+|---|---|---|
+| `UPDATED_BY` | `LOGIN` | — |
+| `UPDATED_AT` | `SYSDATE` | La colonne doit arriver vide : la laisser hors du dialogue. |
+| `CREATED_BY`, `CREATED_AT` | `LOGIN`, `SYSDATE` | Seulement si la requête de mise à jour ne les écrit pas — sinon chaque mise à jour les remplacerait. |
+| `ID` | `SEQUENCE` | Quand la base ne numérote pas elle-même les lignes. |
+
+Les jetons `{{LOGIN}}` / `{{SYSTIMESTAMP}}` écrits dans les requêtes d'insertion et de mise à jour sont le moyen le plus simple de renseigner ces colonnes — voir [Piste d'audit](./cookbook/audit-trail.md).
+
+---|---|
 | `CREATED_BY`, `UPDATED_BY` | `LOGIN` |
 | `CREATED_AT`, `UPDATED_AT` | `SYSDATE` |
 | `ID` | `SEQUENCE` (quand la base ne numérote pas elle-même les lignes) |

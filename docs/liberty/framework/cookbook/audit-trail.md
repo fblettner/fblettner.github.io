@@ -1,122 +1,92 @@
 ---
 title: Audit trail
-description: "Recipe — automatically populate created_by, created_at, updated_by, updated_at columns on every write, without trusting the client. The framework's form-layer LOGIN and SYSDATE defaults do the work."
-keywords: [Liberty Framework, cookbook, audit, created_by, updated_at, form-layer defaults, LOGIN, SYSDATE]
+description: "Recipe — record who created and last changed each row, and keep the history of every write, without trusting the browser: {{LOGIN}} / {{SYSTIMESTAMP}} tokens in the write queries, dictionary rules, and the screen's audit table."
+keywords: [Liberty Next, cookbook, audit, created_by, updated_by, "{{LOGIN}}", "{{SYSTIMESTAMP}}", LOGIN, SYSDATE, audit_table, AUD_ACTION]
 ---
 
 # Audit trail
 
 ## The problem
 
-Compliance, debugging, knowing who-did-what: every write needs to record who performed it and when. Doing this in client code is wrong (the user can tamper); doing it in every `INSERT` / `UPDATE` is fragile (one missing query and the audit gap appears).
+Who created this row, who changed it last, and what did it look like before? The answer must not depend on what the browser sends.
 
 ## The pattern
 
-The framework's **form-layer defaults** populate audit columns on the server at save time. The client never sees them; the operator never types them; every connector that writes to the table gets the same audit data by construction.
+Two levels, which combine:
 
-Two layers:
-
-| Layer | What it does |
-|---|---|
-| **Schema** | Four columns on the table — `created_by`, `created_at`, `updated_by`, `updated_at`. |
-| **Dictionary** | Two dictionary entries with *Form-layer defaults* `LOGIN` + `SYSDATE`. |
-
-The connector write queries reference these columns and the framework substitutes the values on the server.
+| Level | Mechanism | Result |
+|---|---|---|
+| **Last change, on the row** | Tokens `{{LOGIN}}` / `{{SYSTIMESTAMP}}` in the write queries. | `CREATED_BY`, `CREATED_AT`, `UPDATED_BY`, `UPDATED_AT` filled by the server. |
+| **Every write, in a history table** | The screen's **audit_table**. | One row per insert, update or delete, with the action, the user and the date. |
 
 ## The recipe
 
-### 1. Add the columns to the table
+### 1. Audit columns on the table
 
 ```sql
-ALTER TABLE customers
-  ADD COLUMN created_by VARCHAR(64),
-  ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  ADD COLUMN updated_by VARCHAR(64),
-  ADD COLUMN updated_at TIMESTAMP;
+ALTER TABLE customers ADD created_by VARCHAR(64);
+ALTER TABLE customers ADD created_at TIMESTAMP;
+ALTER TABLE customers ADD updated_by VARCHAR(64);
+ALTER TABLE customers ADD updated_at TIMESTAMP;
 ```
 
-### 2. Dictionary entries
+### 2. Stamp them in the write queries
 
-**Settings → Dictionary → Columns → + New column**:
-
-| Field | `audit_created_by` | `audit_updated_by` |
-|---|---|---|
-| **Type** | string | string |
-| **Rule** | LOOKUP against users *(optional, for chip display)* | LOOKUP against users |
-| **Form-layer default — Create** | `LOGIN` | — |
-| **Form-layer default — Update** | — | `LOGIN` |
-| **Read-only on forms** | ✓ | ✓ |
-| **Hide on create** | ✓ | ✓ |
-
-Same shape for `audit_created_at` / `audit_updated_at`:
-
-| Field | `audit_created_at` | `audit_updated_at` |
-|---|---|---|
-| **Type** | datetime | datetime |
-| **Format** | `dd/MM/yyyy HH:mm` | `dd/MM/yyyy HH:mm` |
-| **Form-layer default — Create** | `SYSDATE` | — |
-| **Form-layer default — Update** | — | `SYSDATE` |
-| **Read-only** | ✓ | ✓ |
-
-### 3. Wire the column hints on the read query
-
-On the connector's `list` query, add column hints:
-
-| Column | Dictionary |
-|---|---|
-| `created_by` | `audit_created_by` |
-| `created_at` | `audit_created_at` |
-| `updated_by` | `audit_updated_by` |
-| `updated_at` | `audit_updated_at` |
-
-### 4. Reference the columns in the write queries
+In **Settings → Connectors**, edit the insert and update queries of the table:
 
 ```sql
--- create
-INSERT INTO customers (name, status, created_by, created_at)
-VALUES (:name, :status, :session_user, CURRENT_TIMESTAMP);
+-- customers_post
+INSERT INTO customers (ID, NAME, STATUS, CREATED_BY, CREATED_AT)
+VALUES (:ID, :NAME, :STATUS, {{LOGIN}}, {{SYSTIMESTAMP}})
 
--- update
-UPDATE customers SET
-  name = :name, status = :status,
-  updated_by = :session_user, updated_at = CURRENT_TIMESTAMP
-WHERE id = :id;
+-- customers_put
+UPDATE customers
+SET NAME = :NAME, STATUS = :STATUS,
+    UPDATED_BY = {{LOGIN}}, UPDATED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID_ORIGINAL
 ```
 
-The `:session_user` placeholder is what makes this safe — it's bound on the server from the JWT, not from the dialog payload.
+The server replaces the tokens at execution — the signed-in user's name in upper case, the current date and time — whatever the form sends. The update query does not touch `CREATED_BY` / `CREATED_AT`, which keep their values.
 
-### 5. Done
+:::note[Dictionary rules instead of tokens]
+The `LOGIN` and `SYSDATE` [dictionary rules](../dictionary.md#rules) do the same on any write that binds the column — but `LOGIN` rewrites the column on **every** write, updates included, and `SYSDATE` only fills an **empty** value. They suit `UPDATED_BY` on a query that binds it; for creation columns, the tokens in the insert query are the safer choice.
+:::
 
-The dialog now shows the four audit columns as read-only fields on the *History* tab (or wherever you choose to place them in the dialog editor). The grid optionally shows *Last modified* with the `updated_at` value as a right-aligned chip.
+### 3. Show the columns
 
-## Where it shows up
+On the screen, give the four columns labels (dictionary entries) and a datetime format, tick **disabled** (read-only), and place them on a *History* tab of the dialog — or leave them out of the dialog and show them in the grid only.
 
-| Surface | What it shows |
+### 4. Keep every write — `audit_table`
+
+On the screen's **General** tab, set **audit_table** to `AUD_CUSTOMERS`. From then on, each insert, update or delete made through the screen also writes a row into `AUD_CUSTOMERS`:
+
+| Column | Content |
 |---|---|
-| Grid | Optional *Last modified* / *Created by* columns (you decide). |
-| Dialog | Read-only fields, typically on an *Audit* or *History* tab. |
-| REST API | The columns flow through unchanged. |
-| Excel export | Included if you set *Include in export* on. |
-| AI assistant | Visible to queries the assistant can run. |
+| The table's columns | The values sent with the write. |
+| `AUD_ACTION` | `INSERT`, `UPDATE` or `DELETE`. |
+| `AUD_USER` | The user's name. |
+| `AUD_DATE` | The server's date and time. |
 
-## Why this is safe
+The table is created on the first write from the structure of the source table. Several screens can share one audit table.
 
-| What a malicious user might try | What the framework does |
+## Why it is safe
+
+| Attempt | Result |
 |---|---|
-| Edit the form's HTML to send `created_by = "victim"` on save. | The server ignores the form's value for that field — the dictionary's `LOGIN` default wins. |
-| POST directly to the REST endpoint with a fake `created_by` body. | Same — the form-layer default is applied **on the server** at save time, after the request body is parsed. |
-| Use `liberty-connectors run` (CLI) to bypass auth. | The CLI runs as the local user; the same `LOGIN` default substitutes the OS user. Audit trail intact. |
+| Change the form to send `UPDATED_BY = 'someone else'`. | The token is resolved by the server; the form's value is not used. |
+| Call the REST API directly with a forged body. | Same: tokens and rules are applied by the server, after the request is read. |
+| Write without signing in. | The write needs an authenticated user with the query's permission. |
 
 ## Variations
 
-| You want… | Do this |
+| Need | How |
 |---|---|
-| **A `version` column** | Add a `version` column, increment it in the `update` query (`SET version = version + 1`). Combined with the framework's record locks, you get optimistic concurrency control. |
-| **An immutable audit log** (every change, not just last) | Add an `audit_log` child table; write a row from a Python step on every save. See [Plugins](../apps/plugins.md). |
-| **Log who *viewed* a row** | Different problem. The framework records every API call in the request log; for row-level read auditing, write a Python `hook` on `screen.before_read`. |
+| **A version number** | `SET VERSION = VERSION + 1` in the update query. |
+| **History of a whole application** | One shared audit table for its screens (`AUD_SECURITY`). |
+| **Changes shipped from one environment to another** | Change tracking on the screen — see [Change packages](../../nomaflow/change-packages.md). |
 
 ## What's next
 
-- [Dictionary → Form-layer defaults](../dictionary.md#form-layer-defaults).
-- [Cookbook → CRUD over an existing table](./crud-existing-table.md).
-- [Concepts → Screens](../build/screens/overview.md) for the dialog tab where audit columns sit.
+- [Parameter binding → Tokens](../build/queries/parameter-binding.md#tokens)
+- [Dictionary → Rules](../dictionary.md#rules)
+- [CRUD over an existing table](./crud-existing-table.md)

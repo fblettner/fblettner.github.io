@@ -1,110 +1,89 @@
 ---
 title: CRUD sur une table existante
-description: "Recette — prendre n'importe quelle table de base de données existante et produire une interface liste / édition / ajout / suppression fonctionnelle par-dessus en cinq clics dans les Paramètres. Le chemin le plus rapide de « j'ai une table » à « les utilisateurs s'en servent »."
-keywords: [Liberty Framework, cookbook, CRUD, recette, table existante, connecteur, écran, menu]
+description: "Recette — poser une interface de liste, ajout, modification et suppression sur une table existante depuis les Paramètres : pool, requêtes générées par l'assistant CRUD, écran, entrée de menu."
+keywords: [Liberty Next, cookbook, CRUD, recette, table existante, assistant CRUD, connecteur, écran, menu]
 ---
 
 # CRUD sur une table existante
 
-## Le problème
+## Le besoin
 
-Vous avez une table de base de données — `products`, `tickets`, `contracts`, n'importe quoi — et il vous faut une interface propre pour que l'équipe puisse la consulter et la modifier. Vous ne voulez pas écrire de frontend.
+Une table de la base — `products`, `tickets`, `contracts` — et une équipe qui doit la consulter et la modifier, sans développer d'interface.
 
-## Le modèle
-
-Cinq clics dans Paramètres, quatre requêtes SQL, un écran, une entrée de menu. Durée totale : **5 à 10 minutes**.
+## La démarche
 
 ```
-table → connecteur avec 4 requêtes → écran → feuille de menu → terminé
+table → connecteur avec 4 requêtes générées → écran → entrée de menu
 ```
 
 ## La recette
 
-### 1. Vérifier que le framework peut atteindre la table
+### 1. Atteindre la base
 
-Ouvrez **Paramètres → Pools**. Si la table est dans la même base que le framework, le pool `default` fonctionne. Sinon, ajoutez un nouveau pool pointant vers la bonne base et *Tester la connexion*.
+**Paramètres → Pools** : le pool `default` convient quand la table se trouve dans la base du framework ; sinon, ajouter un pool avec l'URL de la base. Voir [Connecteurs](../connectors.md#connection-fields).
 
-### 2. Définir le connecteur — quatre requêtes
+### 2. Générer les requêtes
 
-**Paramètres → Connecteurs → + Nouveau connecteur**. Type `SQL`, pool de votre choix. Puis quatre requêtes :
+**Paramètres → Connecteurs** : créer (ou choisir) le connecteur SQL, passer dans la vue **Tables**, puis **＋ Ajouter des requêtes → Générer depuis la BDD**. Choisir la table `products`, garder les colonnes à afficher, cocher **clé** sur `ID`, conserver les quatre instructions et enregistrer. L'assistant écrit :
 
 ```sql
--- list (lecture)
-SELECT * FROM products ORDER BY name;
+-- products_get
+SELECT ID, NAME, PRICE, STOCK FROM products
 
--- create (écriture)
-INSERT INTO products (name, price, stock, created_by, created_at)
-VALUES (:name, :price, :stock, :session_user, CURRENT_TIMESTAMP)
-RETURNING id;
+-- products_post
+INSERT INTO products (ID, NAME, PRICE, STOCK) VALUES (:ID, :NAME, :PRICE, :STOCK)
 
--- update (écriture)
-UPDATE products
-SET name = :name, price = :price, stock = :stock,
-    updated_by = :session_user, updated_at = CURRENT_TIMESTAMP
-WHERE id = :id;
+-- products_put
+UPDATE products SET NAME = :NAME, PRICE = :PRICE, STOCK = :STOCK WHERE ID = :ID_ORIGINAL
 
--- delete (écriture)
-DELETE FROM products WHERE id = :id;
+-- products_delete
+DELETE FROM products WHERE ID = :ID
 ```
 
-Le placeholder `:session_user` est le raccourci d'audit du framework — il se lie à l'identifiant de l'utilisateur appelant (le `sub` du JWT).
+Pour enregistrer l'auteur et la date d'une modification, ajouter les colonnes d'audit aux requêtes d'écriture avec des jetons serveur — le navigateur n'a aucun moyen de les modifier :
 
-Cliquez sur **▶ Tester** sur la requête `list` pour confirmer la connectivité + laisser le framework découvrir le schéma.
+```sql
+UPDATE products
+SET NAME = :NAME, PRICE = :PRICE, STOCK = :STOCK,
+    UPDATED_BY = {{LOGIN}}, UPDATED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID_ORIGINAL
+```
+
+Autre solution : donner aux entrées `UPDATED_BY` / `UPDATED_AT` du dictionnaire les règles `LOGIN` / `SYSDATE`. Voir [Liaison de paramètres → Jetons](../build/queries/parameter-binding.md#tokens).
 
 ### 3. Construire l'écran
 
-**Paramètres → Écrans → + Nouvel écran** :
+**Paramètres → Écrans**, pastille du connecteur (**＋ Ajouter une portée** la première fois), **＋ Ajouter un écran** `products`, puis dans l'éditeur d'écran :
 
-| Champ | Valeur |
+| Onglet | Réglage |
 |---|---|
-| **Id** | `&lt;app&gt;/products` |
-| **Titre** | `Products` |
-| **Colonnes clés** | `id` |
-| **Modifiable** | ✓ |
-| **Connecteur / Requête** | `products` / `list` |
-| **Actions → Ajouter** | `products` / `create` |
-| **Actions → Enregistrer** | `products` / `update` |
-| **Actions → Supprimer** | `products` / `delete` |
+| **Général** | Libellé `Produits` ; **Editable** pour la saisie dans la grille ; **uploadable** pour l'import Excel / CSV. |
+| **Requêtes** | Lecture `products_get`, mise à jour `products_put`, insertion `products_post`, suppression `products_delete`. |
+| **Colonnes** | Libellés, formats, largeurs, filtres. |
+| **Dialogue** | Glisser les colonnes sur le formulaire. |
 
-L'onglet Grille vous laisse choisir quelles colonnes apparaissent (faites glisser depuis le catalogue vers la liste visible). L'onglet Dialogue fait pareil pour le formulaire d'édition.
+L'[Assistant de création d'écran](../build/screen-assistant.md) réalise les étapes 2 et 3 en une fois.
 
-### 4. Câbler le menu
+### 4. Ajouter l'entrée de menu
 
-**Paramètres → Menus → &lt;app&gt; → + Ajouter feuille** :
-
-| Champ | Valeur |
-|---|---|
-| **Libellé** | `Products` |
-| **Type** | `Écran` |
-| **Écran** | `&lt;app&gt;/products` |
-
-### 5. Enregistrer et recharger
-
-La barre latérale se met à jour immédiatement. Cliquez sur *Products* → la grille s'affiche, le dialogue d'édition s'ouvre au clic sur une ligne, *+ Ajouter* ouvre un formulaire vide.
+**Paramètres → Menus**, pastille du connecteur (**+ Ajouter une portée** la première fois), **＋ Item** : libellé `Produits`, type `screen`, cible `products_get`. Enregistrer.
 
 ## Résultat
 
-Une interface CRUD fonctionnelle sur votre table existante, avec :
-
-- Filtrage (puces de filtre par colonne dans la barre d'outils)
-- Tri (clic sur les en-têtes de colonnes)
-- Pagination (50 lignes par défaut)
-- Un bouton *Export Excel* (toujours présent)
-- Des codes de permission par action (`sql:products:list`, `sql:products:update:write`, etc.) prêts pour l'affectation de rôle
-- Une piste d'audit automatique sur `created_by` / `updated_by`
+Un clic sur *Produits* ouvre la grille : tri et filtres par colonne, regroupement, vues enregistrées ; une ligne ouvre le dialogue de modification, **＋ Ajouter** un dialogue vide, **Supprimer** retire la ligne. Chaque requête a sa propre permission — `sql:<connecteur>:products_get`, `sql:<connecteur>:products_put`… — à accorder par les rôles.
 
 ## Variantes
 
-| Vous voulez… | Faites ceci |
+| Besoin | Moyen |
 |---|---|
-| **Des puces de statut colorées** | Ajoutez une entrée dictionnaire avec `Règle = ENUM` sur la colonne de statut — voir [Dictionnaire](../dictionary.md). |
-| **Une liste déroulante alimentée par une autre table** | Ajoutez un Lookup dans *Paramètres → Dictionnaire → Lookups* — voir [Cookbook → CRUD sur une table existante](#) (cette recette) pour le modèle. |
-| **Mode lecture seule pour un rôle** | Ne donnez pas au rôle les codes `:write` ; l'écran s'affiche sans les boutons Ajouter / Modifier / Supprimer pour eux. |
-| **Une seconde table liée dans le dialogue** | Voir le [Tutoriel CRM → Étape 3](../tutorial-crm/03-deals.md) — le modèle *sous-grille Activities dans Deals*. |
-| **Un import en masse depuis CSV** | Voir [Cookbook → Import en masse](./bulk-import.md). |
-| **Un rapport planifié envoyé chaque nuit** | Voir [Cookbook → Rapport planifié par email](./scheduled-report-email.md). |
+| **Libellés et listes de valeurs** | Des entrées du dictionnaire sur les colonnes, avec une règle `ENUM` ou `LOOKUP` — voir [Dictionnaire](../dictionary.md). |
+| **Lecture seule pour certains utilisateurs** | N'accorder à leur rôle que la permission de la requête de lecture : les écritures sont refusées. Pour un écran en lecture seule pour tous, cocher **Read-only** dans l'onglet Général. |
+| **Export Excel** | L'onglet **Export** de l'écran — voir [Export Excel](./excel-export.md). |
+| **Lignes liées dans le dialogue** | Un onglet `nested_table` — voir [Onglets imbriqués](../build/screens/nested-tabs.md). |
+| **Chargement en masse depuis un fichier** | Voir [Import en masse](./bulk-import.md). |
 
 ## Pour aller plus loin
 
-- Pour une admin JD Edwards spécifiquement, l'app packagée [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/) livre tous les écrans que vous bâtiriez ici — pré-construits, sous licence.
-- Le modèle mental complet : [Concepts → Connecteurs](../connectors.md).
+- [Créer depuis une table de la base](../build/queries/create-from-database.md) — l'assistant CRUD en détail.
+- [Écrans](../build/screens/overview.md) — tous les réglages d'un écran.
+- [Rôles et permissions](../build/secure/roles-and-permissions.md) — qui voit et modifie quoi.

@@ -1,122 +1,92 @@
 ---
 title: Piste d'audit
-description: "Recette — peupler automatiquement les colonnes created_by, created_at, updated_by, updated_at à chaque écriture, sans faire confiance au client. Les valeurs par défaut LOGIN et SYSDATE de la couche formulaire du framework font le travail."
-keywords: [Liberty Framework, cookbook, audit, created_by, updated_at, valeurs par défaut couche formulaire, LOGIN, SYSDATE]
+description: "Recette — enregistrer l'auteur de la création et de la dernière modification de chaque ligne, et conserver l'historique de chaque écriture, sans se fier au navigateur : jetons {{LOGIN}} / {{SYSTIMESTAMP}} dans les requêtes d'écriture, règles du dictionnaire et table d'audit de l'écran."
+keywords: [Liberty Next, cookbook, audit, created_by, updated_by, "{{LOGIN}}", "{{SYSTIMESTAMP}}", LOGIN, SYSDATE, audit_table, AUD_ACTION]
 ---
 
 # Piste d'audit
 
-## Le problème
+## Le besoin
 
-Conformité, débogage, savoir qui-a-fait-quoi : chaque écriture doit enregistrer qui l'a faite et quand. Le faire dans le code client est mauvais (l'utilisateur peut falsifier) ; le faire dans chaque `INSERT` / `UPDATE` est fragile (une requête manquante et le trou d'audit apparaît).
+Qui a créé cette ligne, qui l'a modifiée en dernier, et quel était son contenu auparavant ? La réponse ne doit pas dépendre de ce qu'envoie le navigateur.
 
-## Le modèle
+## La démarche
 
-Les **valeurs par défaut de la couche formulaire** du framework peuplent les colonnes d'audit côté serveur au moment de l'enregistrement. Le client ne les voit jamais ; l'opérateur ne les saisit jamais ; chaque connecteur qui écrit dans la table obtient les mêmes données d'audit par construction.
+Deux niveaux, qui se combinent :
 
-Deux couches :
-
-| Couche | Ce qu'elle fait |
-|---|---|
-| **Schéma** | Quatre colonnes sur la table — `created_by`, `created_at`, `updated_by`, `updated_at`. |
-| **Dictionnaire** | Deux entrées dictionnaire avec *Valeurs par défaut couche formulaire* `LOGIN` + `SYSDATE`. |
-
-Les requêtes d'écriture du connecteur référencent ces colonnes et le framework substitue les valeurs côté serveur.
+| Niveau | Mécanisme | Résultat |
+|---|---|---|
+| **Dernière modification, sur la ligne** | Jetons `{{LOGIN}}` / `{{SYSTIMESTAMP}}` dans les requêtes d'écriture. | `CREATED_BY`, `CREATED_AT`, `UPDATED_BY`, `UPDATED_AT` renseignés par le serveur. |
+| **Chaque écriture, dans une table d'historique** | Le réglage **audit_table** de l'écran. | Une ligne par insertion, mise à jour ou suppression, avec l'action, l'utilisateur et la date. |
 
 ## La recette
 
-### 1. Ajouter les colonnes à la table
+### 1. Colonnes d'audit sur la table
 
 ```sql
-ALTER TABLE customers
-  ADD COLUMN created_by VARCHAR(64),
-  ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  ADD COLUMN updated_by VARCHAR(64),
-  ADD COLUMN updated_at TIMESTAMP;
+ALTER TABLE customers ADD created_by VARCHAR(64);
+ALTER TABLE customers ADD created_at TIMESTAMP;
+ALTER TABLE customers ADD updated_by VARCHAR(64);
+ALTER TABLE customers ADD updated_at TIMESTAMP;
 ```
 
-### 2. Entrées dictionnaire
+### 2. Les renseigner dans les requêtes d'écriture
 
-**Paramètres → Dictionnaire → Colonnes → + Nouvelle colonne** :
-
-| Champ | `audit_created_by` | `audit_updated_by` |
-|---|---|---|
-| **Type** | string | string |
-| **Règle** | LOOKUP sur users *(optionnel, pour l'affichage en puce)* | LOOKUP sur users |
-| **Valeur par défaut couche formulaire — Création** | `LOGIN` | — |
-| **Valeur par défaut couche formulaire — Mise à jour** | — | `LOGIN` |
-| **Lecture seule sur les formulaires** | ✓ | ✓ |
-| **Masquer à la création** | ✓ | ✓ |
-
-Même forme pour `audit_created_at` / `audit_updated_at` :
-
-| Champ | `audit_created_at` | `audit_updated_at` |
-|---|---|---|
-| **Type** | datetime | datetime |
-| **Format** | `dd/MM/yyyy HH:mm` | `dd/MM/yyyy HH:mm` |
-| **Valeur par défaut couche formulaire — Création** | `SYSDATE` | — |
-| **Valeur par défaut couche formulaire — Mise à jour** | — | `SYSDATE` |
-| **Lecture seule** | ✓ | ✓ |
-
-### 3. Câbler les indices de colonnes sur la requête de lecture
-
-Sur la requête `list` du connecteur, ajoutez les indices de colonnes :
-
-| Colonne | Dictionnaire |
-|---|---|
-| `created_by` | `audit_created_by` |
-| `created_at` | `audit_created_at` |
-| `updated_by` | `audit_updated_by` |
-| `updated_at` | `audit_updated_at` |
-
-### 4. Référencer les colonnes dans les requêtes d'écriture
+Dans **Paramètres → Connecteurs**, modifier les requêtes d'insertion et de mise à jour de la table :
 
 ```sql
--- create
-INSERT INTO customers (name, status, created_by, created_at)
-VALUES (:name, :status, :session_user, CURRENT_TIMESTAMP);
+-- customers_post
+INSERT INTO customers (ID, NAME, STATUS, CREATED_BY, CREATED_AT)
+VALUES (:ID, :NAME, :STATUS, {{LOGIN}}, {{SYSTIMESTAMP}})
 
--- update
-UPDATE customers SET
-  name = :name, status = :status,
-  updated_by = :session_user, updated_at = CURRENT_TIMESTAMP
-WHERE id = :id;
+-- customers_put
+UPDATE customers
+SET NAME = :NAME, STATUS = :STATUS,
+    UPDATED_BY = {{LOGIN}}, UPDATED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID_ORIGINAL
 ```
 
-Le placeholder `:session_user` est ce qui rend cela sûr — il est lié côté serveur depuis le JWT, pas depuis le payload du dialogue.
+Le serveur remplace les jetons à l'exécution — nom de l'utilisateur connecté en majuscules, date et heure courantes — quelles que soient les valeurs envoyées par le formulaire. La requête de mise à jour ne touche pas à `CREATED_BY` / `CREATED_AT`, qui conservent leur valeur.
 
-### 5. Terminé
+:::note[Règles du dictionnaire plutôt que jetons]
+Les [règles du dictionnaire](../dictionary.md#rules) `LOGIN` et `SYSDATE` font de même pour toute écriture qui lie la colonne — mais `LOGIN` réécrit la colonne à **chaque** écriture, mises à jour comprises, et `SYSDATE` ne complète qu'une valeur **vide**. Elles conviennent à `UPDATED_BY` sur une requête qui le lie ; pour les colonnes de création, les jetons dans la requête d'insertion sont le choix le plus sûr.
+:::
 
-Le dialogue affiche maintenant les quatre colonnes d'audit comme champs en lecture seule sur l'onglet *Historique* (ou là où vous choisissez de les placer dans l'éditeur de dialogue). La grille affiche optionnellement *Dernière modification* avec la valeur `updated_at` comme puce alignée à droite.
+### 3. Afficher les colonnes
 
-## Où cela apparaît
+Sur l'écran, donner aux quatre colonnes un libellé (entrées du dictionnaire) et un format date-heure, cocher **disabled** (lecture seule) et les placer dans un onglet *Historique* du dialogue — ou les laisser hors du dialogue et ne les afficher que dans la grille.
 
-| Surface | Ce qui s'affiche |
+### 4. Conserver chaque écriture — `audit_table`
+
+Dans l'onglet **Général** de l'écran, renseigner **audit_table** avec `AUD_CUSTOMERS`. Dès lors, chaque insertion, mise à jour ou suppression faite depuis l'écran écrit aussi une ligne dans `AUD_CUSTOMERS` :
+
+| Colonne | Contenu |
 |---|---|
-| Grille | Colonnes optionnelles *Dernière modification* / *Créé par* (vous décidez). |
-| Dialogue | Champs en lecture seule, typiquement sur un onglet *Audit* ou *Historique*. |
-| API REST | Les colonnes passent sans modification. |
-| Export Excel | Inclus si vous activez *Inclure dans l'export*. |
-| Assistant IA | Visible pour les requêtes que l'assistant peut exécuter. |
+| Les colonnes de la table | Les valeurs envoyées avec l'écriture. |
+| `AUD_ACTION` | `INSERT`, `UPDATE` ou `DELETE`. |
+| `AUD_USER` | Le nom de l'utilisateur. |
+| `AUD_DATE` | La date et l'heure du serveur. |
+
+La table est créée à la première écriture, à partir de la structure de la table source. Plusieurs écrans peuvent partager la même table d'audit.
 
 ## Pourquoi c'est sûr
 
-| Ce qu'un utilisateur malveillant pourrait essayer | Ce que fait le framework |
+| Tentative | Résultat |
 |---|---|
-| Modifier le HTML du formulaire pour envoyer `created_by = "victime"` à l'enregistrement. | Le serveur ignore la valeur du formulaire pour ce champ — la valeur par défaut `LOGIN` du dictionnaire l'emporte. |
-| POSTer directement sur l'endpoint REST avec un corps `created_by` falsifié. | Idem — la valeur par défaut de la couche formulaire est appliquée **côté serveur** au moment de l'enregistrement, après l'analyse du corps de la requête. |
-| Utiliser `liberty-connectors run` (CLI) pour contourner l'auth. | La CLI s'exécute comme l'utilisateur local ; la même valeur par défaut `LOGIN` substitue l'utilisateur OS. Piste d'audit intacte. |
+| Modifier le formulaire pour envoyer `UPDATED_BY = 'quelqu'un d'autre'`. | Le jeton est résolu par le serveur ; la valeur du formulaire n'est pas utilisée. |
+| Appeler directement l'API REST avec un contenu forgé. | Même chose : jetons et règles sont appliqués par le serveur, après lecture de la requête. |
+| Écrire sans être connecté. | L'écriture exige un utilisateur authentifié disposant de la permission de la requête. |
 
 ## Variantes
 
-| Vous voulez… | Faites ceci |
+| Besoin | Moyen |
 |---|---|
-| **Une colonne `version`** | Ajoutez une colonne `version`, incrémentez-la dans la requête `update` (`SET version = version + 1`). Combinée avec les verrous d'enregistrement du framework, vous obtenez un contrôle de concurrence optimiste. |
-| **Un journal d'audit immuable** (chaque modification, pas seulement la dernière) | Ajoutez une table enfant `audit_log` ; écrivez une ligne depuis une étape Python à chaque enregistrement. Voir [Plugins](../apps/plugins.md). |
-| **Suivre qui a *consulté* une ligne** | Problème différent. Le framework enregistre chaque appel API dans le journal des requêtes ; pour l'audit de lecture au niveau ligne, écrivez un `hook` Python sur `screen.before_read`. |
+| **Un numéro de version** | `SET VERSION = VERSION + 1` dans la requête de mise à jour. |
+| **L'historique de toute une application** | Une table d'audit commune à ses écrans (`AUD_SECURITY`). |
+| **Des modifications livrées d'un environnement à l'autre** | Le suivi des modifications sur l'écran — voir [Paquets de modifications](../../nomaflow/change-packages.md). |
 
 ## Pour aller plus loin
 
-- [Dictionnaire → Valeurs par défaut couche formulaire](../dictionary.md#form-layer-defaults).
-- [Cookbook → CRUD sur une table existante](./crud-existing-table.md).
-- [Concepts → Écrans](../build/screens/overview.md) pour l'onglet de dialogue où les colonnes d'audit se trouvent.
+- [Liaison de paramètres → Jetons](../build/queries/parameter-binding.md#tokens)
+- [Dictionnaire → Règles](../dictionary.md#rules)
+- [CRUD sur une table existante](./crud-existing-table.md)

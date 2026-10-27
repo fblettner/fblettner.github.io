@@ -167,7 +167,7 @@ Cliquer sur une ligne ouvre un éditeur à trois onglets à droite. Les onglets 
   </div>
 </div>
 
-### Champs de connexion
+### Champs de connexion \{#connection-fields\}
 
 Le mode **Settings** d'un connecteur SQL (le bouton *Settings* de la page du connecteur) regroupe ses réglages de connexion. Les libellés du formulaire sont en anglais.
 

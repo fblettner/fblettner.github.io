@@ -1,14 +1,14 @@
 ---
-title: Première app pas à pas
-description: "Construire une app Liberty fonctionnelle de bout en bout en moins de cinq minutes : déclarer un pool de base de données, définir un connecteur SQL, présenter un écran avec une grille + dialogue d'édition et l'intégrer dans le menu latéral — le tout depuis l'UI des Paramètres, le tout rechargé à chaud."
+title: Première application pas à pas
+description: "Construire de bout en bout une application Liberty Next : un pool, un connecteur SQL et ses requêtes générées depuis une table, un écran avec une grille et un dialogue de modification, une entrée de menu — le tout depuis les Paramètres, appliqué sans redémarrage."
 keywords: [Liberty Framework, première app, pas à pas, pool, connecteur, écran, menu, rechargement à chaud, UI Paramètres, dictionnaire, low-code]
 ---
 
-# Première app pas à pas
+# Première application pas à pas
 
-Cette page vous guide d'une installation vide à une app fonctionnelle — une entrée de menu latéral qui ouvre une grille adossée à une requête SQL, avec un dialogue d'édition. Tout se fait depuis l'UI **Paramètres** in-app ; rien n'est édité à la main en TOML. La séquence complète prend **moins de cinq minutes** une fois le framework installé.
+Cette page part d'une installation vide pour aboutir à une application opérationnelle — une entrée du menu latéral qui ouvre une grille sur une table, avec un dialogue de modification. Tout se fait depuis les **Paramètres** (superutilisateur), sans aucune modification manuelle de fichier.
 
-Vous toucherez quatre types de configuration dans l'ordre — **pool → connecteur → écran → menu** — chacun enregistré à chaud et rechargé par le framework dans le même onglet du navigateur.
+Quatre éléments, dans l'ordre — **pool → connecteur → écran → menu** — chacun enregistré et appliqué aussitôt.
 
 ---
 
@@ -29,11 +29,11 @@ Vous toucherez quatre types de configuration dans l'ordre — **pool → connect
 
   <rect x="280" y="100" width="200" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
   <text x="380" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">2 · CONNECTEUR</text>
-  <text x="380" y="142" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">requête SQL nommée</text>
+  <text x="380" y="142" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">requêtes SQL nommées</text>
 
   <rect x="500" y="100" width="200" height="60" rx="10" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
   <text x="600" y="124" fill="#c084fc" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 · ÉCRAN</text>
-  <text x="600" y="142" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">grille + dialogue d'édition</text>
+  <text x="600" y="142" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">grille + dialogue de modification</text>
 
   <rect x="720" y="100" width="220" height="60" rx="10" fill="rgba(34,197,94,0.10)" stroke="rgba(34,197,94,0.40)" strokeWidth="1"/>
   <text x="830" y="124" fill="#22c55e" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">4 · MENU</text>
@@ -44,149 +44,84 @@ Vous toucherez quatre types de configuration dans l'ordre — **pool → connect
   <line x1="700" y1="130" x2="720" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#fa-arrow)"/>
 </svg>
 
-L'exemple utilise le pool SQLite intégré (`default`) et une petite table `tasks` — aucune base externe nécessaire.
+L'exemple utilise le pool `default` et une petite table `tasks`.
 
 ---
 
-## Étape 1 — Vérifier que le pool `default` existe
+## Étape 1 — Le pool \{#pool\}
 
-Ouvrez **Paramètres → Pools**. Sur une installation neuve, le pool `default` pointe déjà vers le fichier SQLite local (`liberty.db`). C'est suffisant pour ce parcours — aucune modification requise.
+Ouvrir **Paramètres → Pools**. L'installation a créé le pool `default` : sur une installation Docker, il pointe vers la base PostgreSQL fournie ; sur une installation Python sans PostgreSQL, vers un fichier SQLite local. Il suffit pour ce parcours. Pour travailler sur une autre base, ajouter un pool avec son URL — voir [Connecteurs](../connectors.md#connection-fields).
 
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 700}}>Pools</div>
-  <div style={{display: 'grid', gridTemplateColumns: '120px 1fr 120px 80px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div style={{fontWeight: 600}}>default</div>
-    <div style={{fontFamily: 'ui-monospace, monospace', opacity: 0.85}}>sqlite+aiosqlite:///liberty.db</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>connecté</span></div>
-    <div style={{textAlign: 'right'}}>✏️</div>
-  </div>
-</div>
-
-Pour une installation réelle, basculez vers une URL PostgreSQL ou Oracle — tous les formats de chaîne de connexion et les options sont documentés dans [Configuration → Variables d'environnement](../configuration/environment-variables.md#bootstrap).
-
-Créez ensuite la table d'exemple une seule fois via le shell SQLite :
+Créer la table d'exemple avec n'importe quel client SQL connecté à cette base :
 
 ```sql
 CREATE TABLE tasks (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  title       TEXT    NOT NULL,
-  status      TEXT    NOT NULL DEFAULT 'open',
-  due_date    DATE,
-  created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+  id        INTEGER PRIMARY KEY,
+  title     VARCHAR(200) NOT NULL,
+  status    VARCHAR(10)  NOT NULL DEFAULT 'open',
+  due_date  DATE
 );
-INSERT INTO tasks(title, status, due_date) VALUES
-  ('Draft sprint plan',      'open',   '2026-06-10'),
-  ('Review pull request 42', 'done',   '2026-06-05'),
-  ('Customer follow-up',     'open',   '2026-06-12');
+INSERT INTO tasks (id, title, status, due_date) VALUES
+  (1, 'Préparer le plan de sprint', 'open', '2026-06-10'),
+  (2, 'Relire la pull request 42',  'done', '2026-06-05'),
+  (3, 'Relancer le client',         'open', '2026-06-12');
 ```
 
 ---
 
-## Étape 2 — Définir un connecteur SQL
+## Étape 2 — Le connecteur et ses requêtes \{#connector\}
 
-Un connecteur est une **requête nommée sur un pool**. Ouvrez **Paramètres → Connecteurs → ➕ Nouveau connecteur** et remplissez :
+1. **Paramètres → Connecteurs → ＋ Connecteur** : nom `tasks`, type **SQL**, pool `default`. Enregistrer.
+2. Avec `tasks` sélectionné, choisir **Tables** dans la barre de modes, puis **＋ Ajouter des requêtes → Générer depuis la BDD**.
+3. Dans l'assistant CRUD, choisir la table `tasks`, garder toutes les colonnes, cocher **clé** sur `ID` et conserver les quatre instructions (SELECT, UPDATE, INSERT, DELETE).
+4. Enregistrer. Le connecteur contient désormais `tasks_get`, `tasks_put`, `tasks_post` et `tasks_delete` :
 
-| Champ | Valeur |
-|---|---|
-| **Nom** | `tasks` |
-| **Pool** | `default` |
-| **Type** | `sql` |
-| **Requête de lecture** | `SELECT id, title, status, due_date FROM tasks ORDER BY due_date` |
-| **Écriture — insert** | `INSERT INTO tasks(title, status, due_date) VALUES (:title, :status, :due_date)` |
-| **Écriture — update** | `UPDATE tasks SET title = :title, status = :status, due_date = :due_date WHERE id = :id` |
-| **Écriture — delete** | `DELETE FROM tasks WHERE id = :id` |
+```sql
+SELECT ID, TITLE, STATUS, DUE_DATE FROM tasks
+UPDATE tasks SET TITLE = :TITLE, STATUS = :STATUS, DUE_DATE = :DUE_DATE WHERE ID = :ID_ORIGINAL
+```
 
-Le schéma de la requête de lecture est **découvert à l'exécution** — le framework demande à la base de données « quelles colonnes renvoie cette requête ? » la première fois que le connecteur est utilisé. Inutile de le déclarer à l'avance.
-
-Cliquez sur **Enregistrer**. Le connecteur apparaît dans la page catalogue (ouvrez `/` dans un autre onglet pour le voir). [Connecteurs](../connectors.md) couvre toutes les options et les types de connecteurs HTTP / API.
+Les colonnes sont lues dans la base à l'exécution de la requête ; rien d'autre n'est à déclarer. Voir [Créer depuis une table de la base](../build/queries/create-from-database.md).
 
 ---
 
-## Étape 3 — Construire un écran sur le connecteur
+## Étape 3 — L'écran \{#screen\}
 
-Un écran enveloppe un connecteur dans une **grille + dialogue d'édition**. Ouvrez **Paramètres → Écrans → ➕ Nouvel écran** :
+1. **Paramètres → Écrans → ＋ Ajouter une portée**, choisir `tasks` : la pastille `tasks` apparaît.
+2. **＋ Ajouter un écran**, identifiant `tasks`. Cliquer sur la nouvelle carte pour ouvrir l'éditeur d'écran.
+3. Onglet **Général** : libellé `Tâches` ; cocher **Editable** pour la saisie dans la grille.
+4. Onglet **Requêtes** : lecture `tasks_get`, mise à jour `tasks_put`, insertion `tasks_post`, suppression `tasks_delete`.
+5. Onglet **Dialogue** : glisser les colonnes sur le formulaire.
+6. **Enregistrer**.
 
-| Champ | Valeur |
-|---|---|
-| **App** | `tutorial` |
-| **Identifiant d'écran** | `tasks` |
-| **Titre** | `Tasks` |
-| **Connecteur** | `tasks` |
-| **Colonnes clés** | `id` |
-| **Modifiable** | ✓ (active les actions Ajouter / Modifier / Supprimer) |
-
-Les colonnes de la grille et le dialogue d'édition se déduisent automatiquement des colonnes de la requête de lecture. Pour ajouter des libellés localisés, des règles de validation ou des badges booléens, la prochaine étape est la page [Dictionnaire](../dictionary.md).
-
-Cliquez sur **Enregistrer**, puis ouvrez l'URL `http://127.0.0.1:8000/screens/tutorial/tasks` — la grille est déjà active.
-
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
-    <div style={{fontWeight: 700}}>Tasks</div>
-    <div style={{display: 'flex', gap: '6px'}}>
-      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontWeight: 600}}>↻ Rafraîchir</span>
-      <span style={{padding: '5px 12px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>+ Ajouter</span>
-    </div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '60px 2fr 100px 110px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', fontSize: '11px', fontWeight: 600}}>
-    <div>ID</div><div>Titre</div><div>Statut</div><div>Échéance</div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '60px 2fr 100px 110px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div>1</div><div>Draft sprint plan</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa'}}>open</span></div>
-    <div>10/06/2026</div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '60px 2fr 100px 110px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div>2</div><div>Review pull request 42</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>done</span></div>
-    <div>05/06/2026</div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '60px 2fr 100px 110px', padding: '10px 14px', alignItems: 'center'}}>
-    <div>3</div><div>Customer follow-up</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa'}}>open</span></div>
-    <div>12/06/2026</div>
-  </div>
-</div>
-
-Cliquez sur n'importe quelle ligne — le dialogue d'édition s'ouvre avec les quatre champs, **Enregistrer** déclenche la requête de mise à jour, **Supprimer** déclenche la requête de suppression, **+ Ajouter** ouvre un formulaire vide lié à la requête d'insertion.
-
-[Écrans](../build/screens/overview.md) couvre les onglets, les conditions par champ, les lectures/écritures inter-connecteurs et l'ensemble complet des options du dialogue.
+Les colonnes de la grille viennent de la requête de lecture ; leurs libellés et formats, du [dictionnaire](../dictionary.md) quand des entrées existent (son bouton **Scan a table** les propose). L'[Assistant de création d'écran](../build/screen-assistant.md) réalise les étapes 2 et 3 en une fois pour une table.
 
 ---
 
-## Étape 4 — Le brancher dans le menu latéral
+## Étape 4 — L'entrée de menu \{#menu\}
 
-Ouvrez **Paramètres → Menus → ➕ Nouvelle feuille** (ou étendez une arborescence existante) :
+1. **Paramètres → Menus → + Ajouter une portée**, choisir `tasks` : l'arborescence vide de l'application apparaît.
+2. **＋ Item**, puis dans l'inspecteur : libellé `Tâches`, type `screen`, cible `tasks_get` (l'écran construit dessus), icône `table`.
+3. Enregistrer.
 
-| Champ | Valeur |
-|---|---|
-| **Parent** | *Niveau racine* |
-| **Libellé** | `Tasks` |
-| **Type** | `query` |
-| **Connecteur** | `tasks` |
-| **Écran** | `tutorial/tasks` |
-| **Icône** | `list-todo` *(n'importe quelle [icône Lucide](https://lucide.dev/icons))* |
-
-Enregistrez. Le menu latéral se rafraîchit automatiquement — l'entrée **Tasks** apparaît avec l'icône et ouvre l'écran au clic. Le pipeline de rechargement à chaud du framework a propagé la nouvelle arborescence de menu sans redémarrage ; il en va de même pour toute édition dans Paramètres. Voir [Rechargement à chaud](../configuration/hot-reload.md) pour la mécanique exacte.
+Maintenant doté d'un menu, `tasks` est une application : il apparaît dans le sélecteur d'application, et son menu latéral affiche **Tâches**. Un clic ouvre la grille : une ligne ouvre le dialogue de modification, **＋ Ajouter** un dialogue vide. Voir [Construire l'arbre](../build/menus/build-the-tree.md) et [Transformer un connecteur en application](../build/menus/make-connector-an-app.md).
 
 ---
 
-## Ce que vous avez maintenant
+## Résultat
 
-Une app fonctionnelle avec :
+- **Un pool** — la connexion à la base.
+- **Un connecteur** — les quatre requêtes sur la table.
+- **Un écran** — la grille et le dialogue sur ces requêtes.
+- **Un menu** — l'entrée qui ouvre l'écran, et qui fait du connecteur une application.
 
-- **Un pool** qui détient la connexion à la base de données.
-- **Un connecteur** qui porte les requêtes de lecture + écriture.
-- **Un écran** qui transforme le connecteur en grille + dialogue d'édition.
-- **Une entrée de menu** qui présente l'écran dans le menu latéral.
-
-Quatre blocs TOML en coulisses — les quatre fichiers ont été mis à jour sur place sous `liberty-apps/config/`, aucun redémarrage nécessaire. Regardez-les avec `git diff` pour voir à quoi ressemble une édition typique.
+Chaque enregistrement s'est appliqué sans redémarrage. Le pool et le connecteur sont enregistrés dans `connectors.toml`, l'écran dans `screens.toml`, le menu dans `menus.toml`.
 
 ---
 
 ## Pour aller plus loin
 
-- [Structure du projet](./project-layout.md) — la cartographie des fichiers de `liberty-apps`.
-- [Concepts → Connecteurs](../connectors.md) — HTTP, API, requêtes paramétrées, indications de schéma.
-- [Concepts → Dictionnaire](../dictionary.md) — libellés, énumérations, lookups, règles de format.
-- [Authentification → Rôles et permissions](../build/secure/roles-and-permissions.md) — restreindre le nouvel écran à un rôle spécifique.
-- [UI des Paramètres](../configuration/settings-ui.md) — chaque éditeur en détail.
+- [Structure du projet](./project-layout.md) — l'emplacement de ces fichiers.
+- [Dictionnaire](../dictionary.md) — libellés, listes de valeurs et formats.
+- [Rôles et permissions](../build/secure/roles-and-permissions.md) — qui peut ouvrir le nouvel écran.
+- [Tutoriel CRM](../tutorial-crm/01-setup.md) — une application complète avec plusieurs écrans, un tableau de bord et des tâches.

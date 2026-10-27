@@ -187,7 +187,7 @@ The record bar offers **Find usages**, **Rename**, **Clone** and **Delete**. Ren
 | `jdedate`, `jdetime` | A JD Edwards date (CYYDDD) or time (HHMMSS), shown as a regular date or time. |
 | `boolean` | A tick or a cross. |
 | `password` | A masked value. |
-| `email`, `url`, `color` | An e-mail address, a link, a colour. |
+| `email`, `url`, `color` | Text, shown as entered. |
 
 The **Framework** tab can add values to this list.
 
@@ -207,12 +207,20 @@ The **Framework** tab can add values to this list.
 
 The server-side rules (`SEQUENCE`, `LOGIN`, `SYSDATE`, `PASSWORD`, `DEFAULT`) apply to every write through the query — form, grid editing, API — not only to the form. A writable query can also stamp values explicitly with tokens such as `{{LOGIN}}` or `{{SYSDATE}}` — see [Parameter binding](./build/queries/parameter-binding.md).
 
-### Form-layer defaults \{#form-layer-defaults\}
+### Audit columns \{#form-layer-defaults\}
 
-For an audit column, the usual pairing is:
+A rule applies to every write whose query binds the column:
 
-| Column | Rule |
-|---|---|
+| Column | Rule | Condition |
+|---|---|---|
+| `UPDATED_BY` | `LOGIN` | — |
+| `UPDATED_AT` | `SYSDATE` | The column must come empty: keep it out of the dialog. |
+| `CREATED_BY`, `CREATED_AT` | `LOGIN`, `SYSDATE` | Only if the update query does not write them — otherwise each update would replace them. |
+| `ID` | `SEQUENCE` | When the database does not number the rows itself. |
+
+The `{{LOGIN}}` / `{{SYSTIMESTAMP}}` tokens written in the insert and update queries are the simplest way to stamp these columns — see [Audit trail](./cookbook/audit-trail.md).
+
+---|---|
 | `CREATED_BY`, `UPDATED_BY` | `LOGIN` |
 | `CREATED_AT`, `UPDATED_AT` | `SYSDATE` |
 | `ID` | `SEQUENCE` (when the database does not number the rows itself) |

@@ -1,109 +1,70 @@
 ---
 title: OIDC sign-in
-description: "Recipe — wire the framework against Authentik, Keycloak, Azure AD or Okta in 10 minutes. Single sign-on, group-to-role mapping, auto-provisioning, break-glass admin."
-keywords: [Liberty Framework, cookbook, OIDC, SSO, Authentik, Keycloak, Azure AD, Okta]
+description: "Recipe — let users sign in with the company's identity provider (Microsoft Entra ID, Keycloak, Okta, Auth0…): register the application at the provider, fill Settings → App → OpenID Connect (SSO), then give the new users their roles."
+keywords: [Liberty Next, cookbook, OIDC, SSO, OpenID Connect, Entra ID, Azure AD, Keycloak, Okta, sign-in, attribute_claims]
 ---
 
 # OIDC sign-in
 
 ## The problem
 
-Users sign in with the company's identity provider, not a per-app password. You want SSO without bespoke code, with the IdP's group membership translating to Liberty roles.
+Users should sign in with their company account, not with a separate password.
 
 ## The pattern
 
-Two halves:
-
-1. **On the IdP** — register the framework as an OAuth2/OIDC client, expose a `groups` claim, register the redirect URI.
-2. **On the framework** — flip *OIDC enabled* on under *Settings → Framework → Authentication*, fill in the four standard values, click *Test sign-in*.
+Liberty Next signs users in through any OpenID Connect provider. The local sign-in form stays available; a **Sign in with OIDC** button is added below it.
 
 ## The recipe
 
-### Step 1 — register Liberty on the IdP
+### 1. Register the application at the provider
 
-The procedure depends on the IdP but the shape is identical.
+At the provider (Entra ID, Keycloak, Okta…), create a web application (confidential client) with:
 
-#### Authentik
+- **Redirect URI**: `https://<host>/auth/oidc/callback`;
+- the scopes `openid email profile`;
+- a **client secret**.
 
-1. *Applications → Providers* → *Create* → **OAuth2/OpenID Provider**.
-2. *Redirect URIs*: `https://liberty.example.com/auth/oidc/callback`.
-3. *Property mappings*: add the default `openid email groups` set.
-4. Note the **Client ID** + **Client secret**.
-5. *Applications → Applications* → *Create* → link to the provider; pick which groups to expose.
+Note the **client ID**, the **client secret** and the **discovery URL** (`…/.well-known/openid-configuration`).
 
-#### Keycloak
+### 2. Fill the settings
 
-1. *Realm* → *Clients* → *Create* — Client ID `liberty`, OpenID Connect protocol.
-2. *Valid redirect URIs*: `https://liberty.example.com/auth/oidc/callback`.
-3. *Credentials* tab → note the secret.
-4. *Client scopes* → *liberty-dedicated* → *Add mapper* → **Group Membership** → claim name `groups`, omit `/` prefix.
-
-#### Azure AD / Entra
-
-1. *App registrations* → *New registration*.
-2. *Redirect URI*: `https://liberty.example.com/auth/oidc/callback` (Web).
-3. *Certificates & secrets* → *New client secret* — note the value.
-4. *Token configuration* → *Add groups claim* → All groups; emit as `groups` (not object IDs).
-
-#### Okta
-
-1. *Applications* → *Create App Integration* → OIDC, Web Application.
-2. *Sign-in redirect URI*: `https://liberty.example.com/auth/oidc/callback`.
-3. *Assignments* — choose the groups.
-4. *Authorization servers → default → Claims* → add a `groups` claim, type Groups.
-
-### Step 2 — configure Liberty
-
-**Settings → Framework → Authentication**:
+**Settings → App → OpenID Connect (SSO)**:
 
 | Field | Value |
 |---|---|
-| **OIDC enabled** | ✓ |
-| **Issuer URL** | The IdP's issuer. Examples: `https://auth.example.com/application/o/liberty/` *(Authentik, trailing slash matters)* — `https://kc.example.com/realms/<realm>` *(Keycloak)* — `https://login.microsoftonline.com/<tenant>/v2.0` *(Azure)* — `https://<domain>.okta.com/oauth2/default` *(Okta)*. |
-| **Client ID** | From the IdP. |
-| **Client secret** | 🔒 From the IdP — paste in encrypted mode. |
-| **Redirect URI** | `https://liberty.example.com/auth/oidc/callback` *(must match what's registered on the IdP)*. |
-| **Email claim** | `email` *(default)*. |
-| **Groups claim** | `groups` *(default)*. |
-| **Auto-provision** | ✓ *(creates a Liberty user on first SSO sign-in)*. |
+| **Enabled** | On. |
+| **Discovery URL** | The provider's `.well-known/openid-configuration`. |
+| **Client ID**, **Client secret** | As registered — the secret is encrypted when saved. |
+| **Scopes** | `openid email profile`. |
+| **Username claim** | `preferred_username` by default; `email` or `upn` depending on the provider. |
 
-Click **▶ Test sign-in** at the bottom of the OIDC sub-form. A new tab opens, you sign in on the IdP, the tab returns "OIDC test successful" plus the resolved claims (email, groups) so you can confirm the mapping.
+Save: the change applies without a restart. See [App settings → OpenID Connect](../build/settings-app.md#section-4--openid-connect-sso).
 
-**Save & reload**.
+### 3. First sign-in and roles
 
-### Step 3 — map IdP groups to Liberty roles
+Users appear in **Settings → Access → Users** at their first sign-in, active and **without roles**: they see an empty application until a role is given to them. The usual onboarding: the person signs in once, an administrator assigns the roles. See [Users](../build/secure/users.md).
 
-The framework maps the `groups` claim 1:1 to Liberty role identifiers. Open **Settings → Roles**, make sure each IdP group you care about has a matching Liberty role with the right permissions.
+### 4. Attributes from the directory (optional)
 
-| IdP group | Liberty role | Permissions |
-|---|---|---|
-| `crm-sales` | `crm-sales` | `sql:customers:*`, `sql:deals:*`, `screen:crm:*`, `menu:crm:*` |
-| `crm-managers` | `crm-managers` | `crm-sales` *(inherits)* + dashboard access |
-| `admins` | `admin` | `*` |
+To filter rows by company or department from the directory, map user attributes to ID-token claims with `attribute_claims` in `app.toml`:
 
-### Step 4 — test as a real user
+```toml
+[oidc]
+attribute_claims = { company = "company", pole = "department" }
+```
 
-Sign out as `admin`. The login page now has a **Sign in with SSO** button. Click it, authenticate on the IdP, return to the framework — you have the roles the IdP claims you do, you see what those roles let you see.
+At every sign-in, the mapped attributes are refreshed from the token; a role's [data scope](../build/secure/roles-and-permissions.md#data-scope) using `#USER.company#` then follows the directory. See [Sign-in → Attributes from the provider](../build/secure/sign-in.md#attribute-claims).
 
-## Break-glass access
+## Check
 
-The local username/password form **stays available** alongside the SSO button. The `admin` user can still sign in directly even when the IdP is unreachable. Keep at least one local admin for this reason — never delete it.
-
-## Single sign-out
-
-For end-session propagation back to the IdP, set **End-session endpoint** in the OIDC sub-form. The framework redirects through it on `POST /auth/logout`.
-
-## Variations
-
-| You want… | Do this |
+| Symptom | Cause |
 |---|---|
-| **Restrict to a specific email domain** | The framework refuses sign-in if `email_claim` doesn't end with the value of `[auth.oidc] allowed_domains` (set in the sub-form). Multiple domains supported as a comma list. |
-| **Prevent auto-provisioning** | Turn *Auto-provision* off. Users must exist in *Settings → Users* before they can sign in. The IdP provides authentication; you control authorisation. |
-| **Multiple IdPs** | Not supported in one form; the typical alternative is to use the IdP-of-IdPs (Authentik / Keycloak federating Azure + Google + …) and point Liberty at the broker. |
-| **A custom claim instead of `email`** | Set *Email claim* to whatever the IdP exposes (`preferred_username`, `upn`, etc.). |
+| No OIDC button | **Enabled** is off. |
+| The provider refuses the redirect | The redirect URI registered at the provider is not exactly `https://<host>/auth/oidc/callback`. |
+| Signed in, empty application | Expected for a new user: assign roles. |
+| Wrong user name | Change **Username claim** to the claim the provider fills. |
 
 ## What's next
 
-- [Authentication → OIDC](../build/secure/sign-in.md#oidc) for the full field reference.
-- [Roles & permissions](../build/secure/roles-and-permissions.md) for the IdP-group-to-role mapping.
-- [CRM tutorial → Step 5](../tutorial-crm/05-auth.md) for a worked example.
+- [Sign-in](../build/secure/sign-in.md) — local and OIDC sign-in in detail.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) — what the new users may open.

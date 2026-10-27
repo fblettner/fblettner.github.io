@@ -1,130 +1,98 @@
 ---
 title: Scheduled report email
-description: "Recipe — every weekday at 08:00, run a SQL aggregate, render it as XLSX, email it to a recipient list. The framework's Nomaflow job + http step + Excel export endpoint do the work."
-keywords: [Liberty Framework, cookbook, scheduled, report, email, Nomaflow, XLSX, daily, weekly]
+description: "Recipe — a report e-mailed on a schedule: a Nomaflow job that computes the figures, a notification rule on the job's success that e-mails them, and the dashboard or screen where readers find the detail. What to do when an attached file is required."
+keywords: [Liberty Next, cookbook, scheduled report, email, Nomaflow, notifications, SMTP, job, dashboard]
 ---
 
 # Scheduled report email
 
 ## The problem
 
-Management wants a "yesterday's numbers" report at 08:00 every weekday in their inbox. Or "weekly pipeline summary" on Mondays. Without writing a custom cron + email script.
+Management wants yesterday's figures by e-mail at 08:00 on weekdays, without a separate script.
 
 ## The pattern
 
-A Nomaflow job with three steps:
-
-1. **Render the report** as an XLSX (via the framework's screen-export endpoint, or a Python helper).
-2. **Attach + send the email** via your SMTP relay or a transactional service.
-3. **Log the send** for audit (optional).
-
-The framework handles the scheduling, the retry on failure, the run history, the alerting.
+| Part | Mechanism |
+|---|---|
+| Compute the figures | A Nomaflow job on a schedule, with a `sql_query` step that writes them into a report table. |
+| Send them | A notification rule on the job's **succeeded** event, channel `email`, to a role or addresses. |
+| Show the detail | A dashboard or a screen on the report table. |
 
 ## The recipe
 
-### Step 1 — make sure the data is queryable
+### 1. The e-mail account
 
-You need a connector query that produces the rows you want to report. If you already have a screen that shows the right data, you're done — its read query is what you'll export.
+**Settings → App → Notifications**: SMTP server, port, security, account and sender address. **Send a test** checks it. See [Notifications → The e-mail account](../../nomaflow/notifications.md#smtp).
 
-For the example we'll reuse the CRM tutorial's `deals.list` query.
+### 2. The report table and its query
 
-### Step 2 — configure the SMTP relay
+```sql
+CREATE TABLE daily_pipeline (
+  report_date DATE,
+  stage       VARCHAR(30),
+  deals       INTEGER,
+  amount      DECIMAL(14,2)
+);
+```
 
-**Settings → Framework → Notifications → SMTP**:
+A writable query `compute_daily_pipeline` on the CRM connector:
 
-| Field | Value |
-|---|---|
-| **Host** | `smtp.example.com` |
-| **Port** | `587` |
-| **Username** | `liberty@example.com` |
-| **Password** | 🔒 *(encrypted)* |
-| **TLS** | `STARTTLS` |
-| **From address** | `Liberty <liberty@example.com>` |
+```sql
+INSERT INTO daily_pipeline (report_date, stage, deals, amount)
+SELECT CURRENT_DATE - 1, stage, COUNT(*), SUM(amount)
+FROM deals
+WHERE updated_at >= CURRENT_DATE - 1 AND updated_at < CURRENT_DATE
+GROUP BY stage
+```
 
-Send a test email from the form to verify.
+### 3. The job
 
-### Step 3 — build the job
+In Nomaflow, a job `crm-daily-pipeline` with:
 
-**Settings → Jobs → + New job**:
+- a schedule `0 8 * * 0-4` — 08:00 Monday to Friday (in Liberty Next's cron, day 0 is Monday; see [Schedules → Cron](../../nomaflow/jobs/schedules.md#cron));
+- a `sql_query` step running `compute_daily_pipeline`.
 
-| Field | Value |
-|---|---|
-| **Name** | `crm-daily-pipeline-report` |
-| **App** | `crm` |
-| **Description** | `Daily 08:00 weekday: pipeline export to management.` |
-| **Schedule** | `0 8 * * 1-5` |
-| **Timezone** | `Europe/Paris` |
-| **Single instance** | ✓ |
-| **Timeout** | 120 seconds |
+**Run now** checks it at once. See [Create a job](../../nomaflow/jobs/create.md).
 
-### Step 4 — the three steps
+### 4. The e-mail
 
-#### Step 1 — render the XLSX
-
-| Field | Value |
-|---|---|
-| **Name** | `render` |
-| **Type** | `HTTP` |
-| **Variant** | `Connector endpoint` |
-| **Connector** | `liberty-self` |
-| **Endpoint** | `screens.export` |
-| **Parameters** | `app = crm`, `screen_id = deals`, `format = xlsx`, `from_date = ${yesterday}`, `to_date = ${yesterday}` |
-| **Result alias** | `xlsx` |
-
-The `liberty-self` connector is built into the framework — it exposes the framework's own REST surface to job steps.
-
-#### Step 2 — send the email
+**Settings → Notifications**, a new rule:
 
 | Field | Value |
 |---|---|
-| **Name** | `email` |
-| **Type** | `HTTP` |
-| **Variant** | `Raw URL` |
-| **Method** | `POST` |
-| **URL** | The framework's SMTP-bridge endpoint: `http://127.0.0.1:8000/api/notifications/email` *(authenticated with the system user's JWT — the framework handles this for system-triggered jobs)*. |
-| **Headers** | `Content-Type: application/json` |
-| **Body** | `{ "to": ["management@example.com"], "subject": "Pipeline daily — ${yesterday}", "body": "Find attached the pipeline as of ${yesterday}.", "attachments": [{ "name": "pipeline-${yesterday}.xlsx", "content": "${steps.render.body}", "encoding": "base64" }] }` |
+| Trigger | **A job event**, job `crm-daily-pipeline`, event `succeeded`. |
+| Channels | `email` (and `portal` for the bell). |
+| Recipients | `role:management`, or `email:management@example.com`. |
+| Subject | `Pipeline of the day — {ROWS} lines computed` |
+| Body | `The daily pipeline is ready. Open the CRM dashboard for the detail.` |
 
-#### Step 3 — log the send (optional)
+The placeholders of a job event are `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES` and `ROWS`. **Send a test** sends the rule with sample values. See [Notifications → Rules](../../nomaflow/notifications.md#rules).
 
-| Field | Value |
-|---|---|
-| **Name** | `log-send` |
-| **Type** | `SQL Query` |
-| **Connector / Query** | `audit` / `log-event:write` |
-| **Parameters** | `event = "pipeline-report-sent"`, `payload = ${steps.email.body}` |
+### 5. The detail
 
-A small `audit` table that records every system-triggered email — useful when someone says "I didn't get the report".
+A dashboard widget or a screen on `daily_pipeline` (for example a bar chart by stage, filtered on the last `report_date`), reachable from the menu. See [Dashboards](../dashboards.md).
 
-### Step 5 — notifications on failure
+### 6. When it fails
 
-In the job's *Notifications* block:
+The job's own alerts e-mail the operators on failure — see [Notifications → A job's own alerts](../../nomaflow/notifications.md#job-alerts).
 
-| Field | Value |
-|---|---|
-| **On failure** | `slack:#ops-alerts` |
-| **On skipped** | *(leave empty)* |
+## When a file must be attached
 
-If the job fails (database down, SMTP rejects the email), the ops channel pings.
+Notifications send a subject and a body, without attachments. For a file attached to the e-mail, two ways:
 
-### Step 6 — test and ship
-
-Click **▶ Run now** in the job builder. The run-detail page opens with the three steps; on success the email lands in the recipients' inbox and the audit table gets a row.
-
-The job's *Next 5 fires* preview confirms it'll fire tomorrow at 08:00.
+- readers download it themselves: the screen's **Export** menu, or its configured workbooks — see [Excel export](./excel-export.md);
+- a `python` step of the job builds the file and sends it with the company's mail library — custom code, see [Plugins](../apps/plugins.md).
 
 ## Variations
 
-| You want… | Do this |
+| Need | How |
 |---|---|
-| **A PDF instead of XLSX** | Replace `format = xlsx` with `format = pdf` on Step 1. Works for dashboards; screens render their print stylesheet to PDF. |
-| **A weekly report (Mondays only)** | Change the cron to `0 8 * * 1`. |
-| **Multiple recipients with different views** | Loop in a Python step instead of one HTTP step — pass a list of `(recipient, screen_id, filters)` tuples. |
-| **An inline HTML body instead of attachment** | The framework's `screens.export` endpoint supports `format = html` — embed the response directly in the email body. |
-| **Slack instead of email** | Replace Step 2 with an HTTP POST to the Slack webhook, with the file uploaded via `files.upload` instead of attached. |
+| **Weekly, on Mondays** | Cron `0 8 * * 0`. |
+| **A message in Teams or another tool** | A notification rule with the `action` channel, calling an API connector endpoint (a webhook). |
+| **A warning only when something is wrong** | A step that fails when a check is not met, and a rule on the `failure` event. |
 
 ## What's next
 
-- [Jobs — Nomaflow → Overview](../../nomaflow/overview.md) for the scheduling model.
-- [Cookbook → Excel export](./excel-export.md) for the export endpoint.
-- [CRM tutorial → Step 6](../tutorial-crm/06-ai-and-jobs.md) for a similar nightly-job pattern (stale deals).
+- [Notifications](../../nomaflow/notifications.md) — rules, channels, recipients, placeholders.
+- [Schedules](../../nomaflow/jobs/schedules.md) — cron and presets.
+- [Dashboards](../dashboards.md) — show the figures.

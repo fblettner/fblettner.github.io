@@ -1,133 +1,66 @@
 ---
 title: Import en masse
-description: "Recette — permettre aux opérateurs de téléverser un fichier CSV ou Excel et d'importer ses lignes dans une table. Validation par ligne, rapport des succès et échecs, base de données intacte en cas d'erreurs."
-keywords: [Liberty Framework, cookbook, import en masse, CSV, Excel, upsert, validation]
+description: "Recette — charger de nombreuses lignes depuis un fichier Excel ou CSV : la fenêtre d'import d'un écran, qui vérifie chaque ligne au regard des règles de l'écran et de la base avant d'enregistrer les lignes valides, et l'étape Nomaflow file_load pour les chargements récurrents."
+keywords: [Liberty Next, cookbook, import en masse, Excel, CSV, import, uploadable, upsert, validation, file_load, Nomaflow]
 ---
 
 # Import en masse
 
-## Le problème
+## Le besoin
 
-Un utilisateur a un CSV (ou XLSX) avec des centaines de lignes et veut les importer dans une table — nouveaux clients d'un salon professionnel, produits d'un catalogue fournisseur, contrats d'une migration. Il ne veut pas saisir chacun via le dialogue d'édition.
+Un fichier de plusieurs centaines de lignes — clients rencontrés sur un salon, catalogue d'un fournisseur — à charger dans une table, sans les saisir une à une.
 
-## Le modèle
+## La démarche
 
-Deux parties :
-
-1. **Une action d'écran** qui ouvre un dialogue d'*Import* avec un sélecteur de fichier.
-2. **Un job Nomaflow** déclenché par le téléversement qui parse le fichier, valide chaque ligne, effectue des upserts, renvoie un rapport par ligne.
-
-Le framework parse le fichier (CSV / XLSX / TSV) ; votre seul travail est de déclarer le **mapping** entre colonnes source et colonnes cibles.
-
-## La recette
-
-### 1. Préparation du schéma
-
-Si votre table cible a besoin d'une **clé externe** pour détecter les doublons (et décider insert vs update), assurez-vous qu'elle existe :
-
-```sql
-ALTER TABLE customers
-  ADD COLUMN external_code VARCHAR(64) UNIQUE;
-```
-
-L'import en masse mettra en correspondance les lignes entrantes avec cette colonne.
-
-### 2. Définir le connecteur d'import
-
-**Paramètres → Connecteurs → customers → + Ajouter requête** :
-
-```sql
--- upsert
-INSERT INTO customers (external_code, name, status, country)
-VALUES (:external_code, :name, :status, :country)
-ON CONFLICT (external_code) DO UPDATE SET
-  name = EXCLUDED.name,
-  status = EXCLUDED.status,
-  country = EXCLUDED.country,
-  updated_by = :session_user,
-  updated_at = CURRENT_TIMESTAMP;
-```
-
-Opération : `Write`. Déclarez les quatre paramètres.
-
-Pour Oracle / SQLite, remplacez `ON CONFLICT` par l'équivalent (`MERGE` sur Oracle, `INSERT OR REPLACE` sur SQLite).
-
-### 3. Construire le job d'import
-
-**Paramètres → Jobs → + Nouveau job** :
-
-| Champ | Valeur |
+| Besoin | Outil |
 |---|---|
-| **Nom** | `customers-bulk-import` |
-| **Application** | `&lt;app&gt;` |
-| **Planification** | vide *(déclenchement manuel uniquement)* |
-| **Instance unique** | ✓ |
+| Un utilisateur charge ponctuellement un fichier depuis un écran. | La fenêtre **Importer** de l'écran. |
+| Un fichier arrive régulièrement et doit être chargé sans intervention. | Une tâche Nomaflow avec une étape **`file_load`**. |
 
-Deux étapes :
+## Import depuis un écran
 
-#### Étape 1 — parser le fichier
+### 1. Activer l'import
 
-| Champ | Valeur |
-|---|---|
-| **Nom** | `parse` |
-| **Type** | `Python` |
-| **Callable** | `liberty.builtin.bulk_import:parse_file` *(helper du framework)* |
-| **Kwargs** | `file_url = ${params.file_url}`, `mapping = { "Customer code": "external_code", "Name": "name", "Country": "country", "Status": "status" }` |
+Dans l'éditeur d'écran, onglet **Général**, cocher **uploadable**. L'écran doit avoir une requête d'insertion (et une requête de mise à jour pour modifier les lignes existantes). Les utilisateurs autorisés à insérer voient un bouton **Importer** au-dessus de la grille.
 
-Le helper :
+### 2. Préparer le fichier
 
-- Détecte CSV / XLSX depuis l'extension du fichier.
-- Parse les en-têtes ; les met en correspondance avec le mapping.
-- Renvoie une liste de lignes avec les noms de colonnes cibles.
+Un fichier `.xlsx` (première feuille) ou `.csv` avec une ligne d'en-têtes. Chaque en-tête est rapproché d'une colonne de l'écran, sans tenir compte de la casse :
 
-#### Étape 2 — upsert chaque ligne
+- par le nom de la colonne (`NAME`, `PRICE`) ou par son libellé (`Nom`, `Prix`) ;
+- pour une colonne à liste de valeurs (`LOOKUP` ou `ENUM`), par le code : l'en-tête `<libellé> (ID)` ou le nom de la colonne — la disposition de l'export Excel de l'écran, si bien qu'un fichier exporté peut être réimporté.
 
-| Champ | Valeur |
-|---|---|
-| **Nom** | `upsert` |
-| **Type** | `Python` |
-| **Callable** | `liberty.builtin.bulk_import:upsert_rows` |
-| **Kwargs** | `rows = ${steps.parse.rows}`, `connector = "customers"`, `query = "upsert"`, `chunk_size = 500` |
+Les colonnes non reconnues sont ignorées.
 
-Le helper :
+### 3. Vérifier, puis enregistrer
 
-- Découpe les lignes en morceaux de 500.
-- Appelle la requête upsert par ligne, capture succès et échecs.
-- Renvoie `{ "ok": 487, "failed": 13, "failures": [...] }`.
+La fenêtre **Importer depuis Excel** demande le fichier et le traitement des **lignes existantes** : *Mettre à jour ou insérer*, *Insérer seulement* ou *Mettre à jour seulement*. **Vérifier** procède en deux passes :
 
-Les paramètres du job déclarent `file_url` — défini sur l'onglet *Paramètres*.
+1. **Règles de l'écran** — chaque valeur au regard de sa colonne : un code de lookup doit exister, une valeur d'énumération doit être autorisée, un booléen doit prendre l'une des deux valeurs.
+2. **Base de données** — les lignes retenues exécutent l'insertion ou la mise à jour réelle dans une transaction annulée ensuite : violations de contraintes, valeurs manquantes et clés existantes apparaissent comme lors d'un véritable enregistrement.
 
-### 4. Ajouter l'action d'écran
+Le rapport liste les lignes valides et invalides, avec l'erreur de chacune. **Enregistrer N lignes valides** n'écrit que les lignes valides, par lots.
 
-**Paramètres → Écrans → customers → onglet Actions → + Bouton personnalisé** au niveau de la barre d'outils (pas le dialogue) :
+Les requêtes d'insertion et de mise à jour s'appliquent comme pour un enregistrement de dialogue : jetons, règles du dictionnaire (`LOGIN`, `SYSDATE`, `SEQUENCE`), table d'audit de l'écran et hooks de ligne.
 
-| Champ | Valeur |
-|---|---|
-| **Libellé** | `↑ Importer` |
-| **Icône** | `upload` |
-| **Variante** | `Secondary` |
-| **Action** | `Exécuter le job` |
-| **Job** | `customers-bulk-import` |
-| **Dialogue de paramètres** | ✓ *(affiche le sélecteur de fichier avant exécution)* |
+### Coller depuis Excel
 
-### 5. Permissions
+En mode édition, des lignes copiées depuis Excel peuvent aussi être collées dans la grille : elles s'ajoutent comme nouvelles lignes, enregistrées par le bouton **Enregistrer** de la grille.
 
-Accordez `job:customers-bulk-import` aux rôles autorisés à importer. Passez pour les rôles en lecture seule.
+## Chargements récurrents — `file_load`
 
-## Voir le résultat
-
-Ouvrez l'écran *Customers*, cliquez sur **↑ Importer**. Le framework affiche un dialogue avec un sélecteur de fichier. Déposez un CSV, cliquez sur *Exécuter*. La page de détail d'exécution du job s'ouvre avec une queue de log en direct ; à la fin vous voyez « 487 importés, 13 échoués », avec les échecs listés par ligne (numéro de ligne + message d'erreur).
+Pour un fichier qui revient régulièrement, une tâche Nomaflow avec une étape **`file_load`** le charge dans une table : fichier choisi au lancement, chemin sur le serveur ou dossier surveillé ; correspondance en-têtes-colonnes et constantes ; mode `append` ou `replace_partition` (remplacement d'une période, en une transaction) ; requête de refus et total de contrôle ; lignes rejetées téléchargeables en CSV. Voir [Étapes → Chargement de fichier](../../nomaflow/steps.md#file-load).
 
 ## Variantes
 
-| Vous voulez… | Faites ceci |
+| Besoin | Moyen |
 |---|---|
-| **Valider avant d'importer** | Ajoutez une étape entre `parse` et `upsert` qui exécute une validation par ligne. Renvoyez la liste d'erreurs ; arrêtez le job s'il y en a. |
-| **Afficher un aperçu avant validation** | Exécutez le job en mode `dry_run = true` ; le helper `upsert_rows` accepte ce flag et ne journalise que ce qu'il ferait. Puis un second clic déclenche l'exécution réelle. |
-| **Annuler sur toute erreur** | Encadrez les upserts dans une transaction ; le helper a un mode `transactional = true`. |
-| **Planifier un import quotidien depuis S3** | Même job, définissez un planning cron + remplacez l'étape 1 par une étape `http` qui tire depuis S3. |
+| **Une clé autre que celle de la table** pour décider entre insertion et mise à jour | Marquer cette colonne comme **clé** sur l'écran. |
+| **Des valeurs calculées pendant l'import** | Les placer dans les requêtes (`{{LOGIN}}`, `{{SYSDATE}}`) ou dans les règles du dictionnaire. |
+| **Compléter des colonnes liées depuis un lookup** | Les `return_binds` de la colonne : à l'import, ils renseignent la colonne cible quand le fichier la laisse vide. |
 
 ## Pour aller plus loin
 
-- [Jobs → Types d'étape → python](../../nomaflow/steps.md) pour la signature du helper.
-- [Cookbook → Téléversement de fichier](./file-upload.md) pour la couche de stockage de fichier que l'import utilise.
+- [CRUD sur une table existante](./crud-existing-table.md) — l'écran qui reçoit l'import.
+- [Export Excel](./excel-export.md) — la disposition de fichier que l'import relit.
+- [Étapes → Chargement de fichier](../../nomaflow/steps.md#file-load) — les chargements par tâche.

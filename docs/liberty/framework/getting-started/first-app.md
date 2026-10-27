@@ -1,14 +1,14 @@
 ---
 title: First app walkthrough
-description: "Build a working Liberty app end-to-end in under five minutes: declare a database pool, define a SQL connector, expose a screen with a grid + edit modal and wire it into the sidebar menu — all from the Settings UI, all reloaded live."
+description: "Build a working Liberty Next app end to end: a pool, a SQL connector with its queries generated from a table, a screen with a grid and an edit dialog, and a menu entry — all from Settings, applied without a restart."
 keywords: [Liberty Framework, first app, walkthrough, pool, connector, screen, menu, hot-reload, Settings UI, dictionary, low-code]
 ---
 
 # First app walkthrough
 
-This page walks you from an empty install to a working app — a sidebar entry that opens a grid backed by a SQL query, with an edit dialog. Everything is done from the in-app **Settings** UI; nothing is hand-edited in TOML. The whole sequence takes **under five minutes** once the framework is installed.
+This page goes from an empty install to a working app — a sidebar entry that opens a grid on a table, with an edit dialog. Everything is done from **Settings** (superuser), nothing is edited by hand.
 
-You'll touch four configuration types in order — **pool → connector → screen → menu** — each saved live and reloaded by the framework in the same browser tab.
+Four elements, in order — **pool → connector → screen → menu** — each saved and applied at once.
 
 ---
 
@@ -29,7 +29,7 @@ You'll touch four configuration types in order — **pool → connector → scre
 
   <rect x="280" y="100" width="200" height="60" rx="10" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.40)" strokeWidth="1"/>
   <text x="380" y="124" fill="#4a9eff" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">2 · CONNECTOR</text>
-  <text x="380" y="142" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">named SQL query</text>
+  <text x="380" y="142" fill="#cbd5e1" fontSize="10" textAnchor="middle" fontFamily="system-ui, sans-serif">named SQL queries</text>
 
   <rect x="500" y="100" width="200" height="60" rx="10" fill="rgba(192,132,252,0.08)" stroke="rgba(192,132,252,0.40)" strokeWidth="1"/>
   <text x="600" y="124" fill="#c084fc" fontSize="10" fontWeight="700" textAnchor="middle" letterSpacing="0.04em" fontFamily="system-ui, sans-serif">3 · SCREEN</text>
@@ -44,149 +44,84 @@ You'll touch four configuration types in order — **pool → connector → scre
   <line x1="700" y1="130" x2="720" y2="130" stroke="#4a9eff" strokeWidth="1.5" markerEnd="url(#fa-arrow)"/>
 </svg>
 
-The example uses the built-in SQLite pool (`default`) and a tiny `tasks` table — no external database needed.
+The example uses the `default` pool and a small `tasks` table.
 
 ---
 
-## Step 1 — Make sure the `default` pool exists
+## Step 1 — The pool \{#pool\}
 
-Open **Settings → Pools**. On a fresh install the `default` pool already points at the local SQLite file (`liberty.db`). It's enough for this walkthrough — no changes required.
+Open **Settings → Pools**. The installation created the `default` pool: on a Docker install it points at the bundled PostgreSQL database, on a Python install without PostgreSQL at a local SQLite file. It is enough for this walkthrough. To work on another database, add a pool with its URL — see [Connectors](../connectors.md#connection-fields).
 
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', fontWeight: 700}}>Pools</div>
-  <div style={{display: 'grid', gridTemplateColumns: '120px 1fr 120px 80px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div style={{fontWeight: 600}}>default</div>
-    <div style={{fontFamily: 'ui-monospace, monospace', opacity: 0.85}}>sqlite+aiosqlite:///liberty.db</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>connected</span></div>
-    <div style={{textAlign: 'right'}}>✏️</div>
-  </div>
-</div>
-
-For a real install, switch to a PostgreSQL or Oracle URL — every connection-string format and option is documented under [Configuration → Environment variables](../configuration/environment-variables.md#bootstrap).
-
-Then create the example table once via the SQLite shell:
+Create the example table with any SQL client connected to that database:
 
 ```sql
 CREATE TABLE tasks (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  title       TEXT    NOT NULL,
-  status      TEXT    NOT NULL DEFAULT 'open',
-  due_date    DATE,
-  created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+  id        INTEGER PRIMARY KEY,
+  title     VARCHAR(200) NOT NULL,
+  status    VARCHAR(10)  NOT NULL DEFAULT 'open',
+  due_date  DATE
 );
-INSERT INTO tasks(title, status, due_date) VALUES
-  ('Draft sprint plan',      'open',   '2026-06-10'),
-  ('Review pull request 42', 'done',   '2026-06-05'),
-  ('Customer follow-up',     'open',   '2026-06-12');
+INSERT INTO tasks (id, title, status, due_date) VALUES
+  (1, 'Draft sprint plan',      'open', '2026-06-10'),
+  (2, 'Review pull request 42', 'done', '2026-06-05'),
+  (3, 'Customer follow-up',     'open', '2026-06-12');
 ```
 
 ---
 
-## Step 2 — Define a SQL connector
+## Step 2 — The connector and its queries \{#connector\}
 
-A connector is a **named query against a pool**. Open **Settings → Connectors → ➕ New connector** and fill in:
+1. **Settings → Connectors → ＋ Connector**: name `tasks`, type **SQL**, pool `default`. Save.
+2. With `tasks` selected, choose **Tables** in the mode bar, then **＋ Add queries → Generate from DB**.
+3. In the CRUD wizard, pick the `tasks` table, keep every column, tick **key** on `ID`, and keep the four statements (SELECT, UPDATE, INSERT, DELETE).
+4. Save. The connector now holds `tasks_get`, `tasks_put`, `tasks_post` and `tasks_delete`:
 
-| Field | Value |
-|---|---|
-| **Name** | `tasks` |
-| **Pool** | `default` |
-| **Type** | `sql` |
-| **Read query** | `SELECT id, title, status, due_date FROM tasks ORDER BY due_date` |
-| **Write — insert** | `INSERT INTO tasks(title, status, due_date) VALUES (:title, :status, :due_date)` |
-| **Write — update** | `UPDATE tasks SET title = :title, status = :status, due_date = :due_date WHERE id = :id` |
-| **Write — delete** | `DELETE FROM tasks WHERE id = :id` |
+```sql
+SELECT ID, TITLE, STATUS, DUE_DATE FROM tasks
+UPDATE tasks SET TITLE = :TITLE, STATUS = :STATUS, DUE_DATE = :DUE_DATE WHERE ID = :ID_ORIGINAL
+```
 
-The schema of the read query is **discovered at runtime** — the framework asks the database "what columns does this return?" the first time the connector is used. No need to declare it ahead of time.
-
-Click **Save**. The connector appears on the catalog page (open `/` in another tab to see it). [Connectors](../connectors.md) covers every option and the HTTP / API connector types.
+The columns are read from the database when the query runs; nothing else needs declaring. See [Create from a database table](../build/queries/create-from-database.md).
 
 ---
 
-## Step 3 — Build a screen on top of the connector
+## Step 3 — The screen \{#screen\}
 
-A screen wraps a connector into a **grid + edit dialog**. Open **Settings → Screens → ➕ New screen**:
+1. **Settings → Screens → ＋ Add scope**, pick `tasks`: the `tasks` chip appears.
+2. **＋ Add screen**, id `tasks`. Click the new card to open the screen editor.
+3. **General** tab: label `Tasks`; check **Editable** for in-grid editing.
+4. **Queries** tab: read `tasks_get`, update `tasks_put`, insert `tasks_post`, delete `tasks_delete`.
+5. **Dialog** tab: drag the columns onto the form.
+6. **Save**.
 
-| Field | Value |
-|---|---|
-| **App** | `tutorial` |
-| **Screen id** | `tasks` |
-| **Title** | `Tasks` |
-| **Connector** | `tasks` |
-| **Key columns** | `id` |
-| **Editable** | ✓ (turns on the Add / Edit / Delete actions) |
-
-The grid columns and the edit dialog auto-derive from the read query's columns. To add localized labels, validation rules or boolean badges, the [Dictionary](../dictionary.md) page is the next stop.
-
-Click **Save**, then open the URL `http://127.0.0.1:8000/screens/tutorial/tasks` — the grid is already live.
-
-<div style={{border: '1px solid rgba(255,255,255,0.10)', borderRadius: '10px', overflow: 'hidden', margin: '20px 0', background: 'rgba(255,255,255,0.02)', fontSize: '12px'}}>
-  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)'}}>
-    <div style={{fontWeight: 700}}>Tasks</div>
-    <div style={{display: 'flex', gap: '6px'}}>
-      <span style={{padding: '5px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', fontSize: '11px', fontWeight: 600}}>↻ Refresh</span>
-      <span style={{padding: '5px 12px', borderRadius: '6px', background: '#4a9eff', color: '#fff', fontSize: '11px', fontWeight: 700}}>+ Add</span>
-    </div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '60px 2fr 100px 110px', padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.7, borderBottom: '1px solid rgba(255,255,255,0.08)', fontSize: '11px', fontWeight: 600}}>
-    <div>ID</div><div>Title</div><div>Status</div><div>Due date</div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '60px 2fr 100px 110px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div>1</div><div>Draft sprint plan</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa'}}>open</span></div>
-    <div>10/06/2026</div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '60px 2fr 100px 110px', padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', alignItems: 'center'}}>
-    <div>2</div><div>Review pull request 42</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(50,215,75,0.55)', background: 'rgba(50,215,75,0.1)', color: '#4ade80'}}>done</span></div>
-    <div>05/06/2026</div>
-  </div>
-  <div style={{display: 'grid', gridTemplateColumns: '60px 2fr 100px 110px', padding: '10px 14px', alignItems: 'center'}}>
-    <div>3</div><div>Customer follow-up</div>
-    <div><span style={{padding: '2px 9px', borderRadius: '999px', fontSize: '10px', fontWeight: 600, border: '1px solid rgba(0,122,255,0.55)', background: 'rgba(0,122,255,0.1)', color: '#60a5fa'}}>open</span></div>
-    <div>12/06/2026</div>
-  </div>
-</div>
-
-Click any row — the edit dialog opens with the four fields, **Save** triggers the update query, **Delete** triggers the delete query, **+ Add** opens an empty form bound to the insert query.
-
-[Screens](../build/screens/overview.md) covers tabs, per-field conditions, cross-connector reads/writes and the full set of dialog options.
+The grid columns come from the read query; their labels and formats from the [dictionary](../dictionary.md) when entries exist (its **Scan a table** button proposes them). The [Screen Creation Assistant](../build/screen-assistant.md) does steps 2 and 3 in one pass for a table.
 
 ---
 
-## Step 4 — Wire it into the sidebar menu
+## Step 4 — The menu entry \{#menu\}
 
-Open **Settings → Menus → ➕ New leaf** (or extend an existing tree):
+1. **Settings → Menus → + Add scope**, pick `tasks`: the empty tree of the app appears.
+2. **＋ Item**, then in the inspector: label `Tasks`, type `screen`, target `tasks_get` (the screen built on it), icon `table`.
+3. Save.
 
-| Field | Value |
-|---|---|
-| **Parent** | *Top-level* |
-| **Label** | `Tasks` |
-| **Type** | `query` |
-| **Connector** | `tasks` |
-| **Screen** | `tutorial/tasks` |
-| **Icon** | `list-todo` *(any [Lucide icon](https://lucide.dev/icons))* |
-
-Save. The sidebar refreshes automatically — the **Tasks** entry appears with the icon and opens the screen on click. The framework's hot-reload pipeline pushed the new menu tree without a restart; the same is true for every Settings edit. See [Hot-reload](../configuration/hot-reload.md) for the exact mechanics.
+Since `tasks` now has a menu, it is an app: it appears in the app picker, and its sidebar shows **Tasks**. A click opens the grid: a row opens the edit dialog, **＋ Add** an empty one. See [Build the tree](../build/menus/build-the-tree.md) and [Make a connector an app](../build/menus/make-connector-an-app.md).
 
 ---
 
 ## What you have now
 
-A working app with:
+- **A pool** — the database connection.
+- **A connector** — the four queries on the table.
+- **A screen** — the grid and the dialog on these queries.
+- **A menu** — the entry that opens the screen, which makes the connector an app.
 
-- **A pool** that owns the database connection.
-- **A connector** holding the read + write queries.
-- **A screen** that turns the connector into a grid + edit dialog.
-- **A menu entry** that exposes the screen in the sidebar.
-
-Four TOML blocks behind the scenes — the four files were updated in place under `liberty-apps/config/`, no restart needed. Look at them with `git diff` to see how a typical edit lands.
+Every save was applied without a restart. The pool and the connector are stored in `connectors.toml`, the screen in `screens.toml`, the menu in `menus.toml`.
 
 ---
 
 ## What's next
 
-- [Project layout](./project-layout.md) — the file map of `liberty-apps`.
-- [Concepts → Connectors](../connectors.md) — HTTP, API, parameterised queries, schema hints.
-- [Concepts → Dictionary](../dictionary.md) — labels, enums, lookups, format rules.
-- [Authentication → Roles & permissions](../build/secure/roles-and-permissions.md) — restrict the new screen to a specific role.
-- [Settings UI](../configuration/settings-ui.md) — every builder in detail.
+- [Project layout](./project-layout.md) — where these files live.
+- [Dictionary](../dictionary.md) — labels, lists of values and formats.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) — who may open the new screen.
+- [CRM tutorial](../tutorial-crm/01-setup.md) — a complete app with several screens, a dashboard and jobs.

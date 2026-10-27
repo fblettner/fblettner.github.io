@@ -38,25 +38,27 @@ liberty-next/
 ├── liberty/                  ← backend FastAPI (Python 3.12)
 │   ├── main.py               ← fabrique d'app, lifespan, routeurs
 │   ├── config.py             ← chargement TOML + expansion d'env
-│   ├── connectors/           ← moteur des connecteurs SQL / HTTP / API
+│   ├── connectors/           ← moteur des connecteurs SQL / API, dictionnaire (dictionary.py)
 │   ├── auth/                 ← utilisateurs locaux, OIDC, JWT, permissions
-│   ├── dictionary/           ← métadonnées de champ partagées
 │   ├── screens/              ← moteur d'écran (runtime grille + dialogue)
 │   ├── dashboards/           ← mise en page tableau de bord + rendu des widgets
 │   ├── charts/               ← définitions des graphiques
 │   ├── menus/                ← arborescence menu + élagage par permissions
-│   ├── jobs/                 ← Nomaflow (ETL + planificateur)
+│   ├── jobs/                 ← Nomaflow (tâches, étapes, planificateur)
+│   ├── actions/              ← actions partagées
+│   ├── notify/               ← notifications
 │   ├── ai/                   ← assistant Anthropic tool-use
 │   ├── licensing/            ← vérification de clé de licence RS256
-│   ├── web/                  ← gestionnaires de routes HTTP (*_router.py)
+│   ├── web/                  ← routes HTTP (un module par domaine)
 │   └── *_cli.py              ← points d'entrée CLI (admin, connectors, crypto, license)
 │
 ├── frontend/                 ← SPA React 19 + Vite (build vers frontend/dist/)
 │   └── src/
-│       ├── pages/            ← composants de route en chargement différé
-│       ├── builders/         ← éditeurs UI des Paramètres (un par type de config)
-│       ├── components/       ← atomes UI partagés (table, dialogue, chart, …)
-│       └── api/              ← wrappers client REST
+│       ├── pages/            ← pages, dont Settings/ (un éditeur par type de configuration)
+│       ├── common/           ← éléments d'interface partagés (champs, listes, dialogues, éditeur SQL…)
+│       ├── components/       ← mise en page (menu latéral, sélecteur d'application, onglets)
+│       ├── locales/          ← textes de l'interface, en et fr
+│       └── api/              ← client REST
 │
 ├── config/                   ← modèles fournis + fichiers spécifiques à l'installation
 │   ├── app.toml              ← paramètres du framework (auth, OIDC, IA, crypto, licence)
@@ -64,7 +66,7 @@ liberty-next/
 │   ├── *.toml.example        ← modèles pour connectors / dictionary / menus / screens / charts / dashboards
 │   └── *.toml                ← fichiers réels par section (uniquement quand LIBERTY_APPS_DIR n'est pas défini)
 │
-├── tests/                    ← suite pytest (≥ 335 tests)
+├── tests/                    ← suite pytest
 └── docs/                     ← notes de planification internes au framework (pas la doc publique)
 ```
 
@@ -72,49 +74,53 @@ liberty-next/
 |---|---|---|
 | `liberty/`, `frontend/`, `pyproject.toml`, `start.sh` | Versionné | Mainteneurs du framework — *ne pas* modifier par installation. |
 | `config/app.toml` | Spécifique à l'installation | Opérateur — backend d'auth, issuer OIDC, référence de clé IA, chemin du fichier de licence. |
-| `config/auth.toml` | Spécifique à l'installation, ignoré par git | CLI `liberty-admin` / UI des Paramètres. |
+| `config/auth.toml` | Spécifique à l'installation, ignoré par git | CLI `liberty-admin` / Paramètres. |
 | `config/*.toml.example` | Versionné | Mainteneurs du framework — modèles fournis. |
-| `config/*.toml` (sans `.example`) | Spécifique à l'installation, ignoré par git | Modifiable depuis l'UI des Paramètres quand `LIBERTY_APPS_DIR` n'est pas défini. |
+| `config/*.toml` (sans `.example`) | Spécifique à l'installation, ignoré par git | Modifiable depuis les Paramètres quand `LIBERTY_APPS_DIR` n'est pas défini. |
 
 ---
 
-## `liberty-apps` — votre configuration
+## `liberty-apps` — la configuration
 
 ```text
 liberty-apps/
 ├── README.md
 ├── config/                   ← TOML par section — lu par liberty-next à l'exécution
-│   ├── connectors.toml       ← pools + requêtes nommées / endpoints
-│   ├── dictionary.toml       ← métadonnées de champ réutilisables
-│   ├── menus.toml            ← arborescences du menu latéral par app
-│   ├── screens.toml          ← définitions de grille + dialogue
-│   ├── charts.toml           ← config wrapper Recharts
-│   └── dashboards.toml       ← mises en page des tableaux de bord
+│   ├── connectors.toml       ← pools, connecteurs et leurs requêtes / endpoints
+│   ├── dictionary.toml       ← données, énumérations, lookups, séquences
+│   ├── menus.toml            ← un menu par application
+│   ├── screens.toml          ← grilles et dialogues
+│   ├── charts.toml           ← graphiques enregistrés
+│   ├── dashboards.toml       ← tableaux de bord
+│   ├── actions.toml          ← actions partagées
+│   └── theme.toml            ← couleurs et identité visuelle
 │
-├── plugins/                  ← modules Python personnalisés (callables d'étapes de job, hooks, …)
-│   └── <package>/            ← un dossier par app
-│       ├── __init__.py
-│       └── jobs.toml         ← catalogue de jobs Nomaflow pour cette app
+├── plugins/                  ← packages Python (fonctions appelées par les étapes et les actions)
+│   ├── <package>/            ← un dossier par package, avec __init__.py
+│   └── nomaflow/
+│       └── jobs.toml         ← le catalogue des tâches Nomaflow
 │
 └── docs/                     ← notes de déploiement et d'exploitation (spécifiques à l'installation)
 ```
 
 | Fichier | Édité par | Notes |
 |---|---|---|
-| `config/connectors.toml` | UI Paramètres → *Connecteurs* | Détient le registre des pools plus chaque connecteur. |
-| `config/dictionary.toml` | UI Paramètres → *Dictionnaire* | Métadonnées par colonne réutilisées par les écrans et les graphiques. |
-| `config/menus.toml` | UI Paramètres → *Menus* | Une racine par app, hiérarchie dossier/feuille optionnelle. |
-| `config/screens.toml` | UI Paramètres → *Écrans* | Grilles + dialogues + conditions par champ. |
-| `config/dashboards.toml` | UI Paramètres → *Tableaux de bord* | Panneaux stat / bar / line / pie. |
-| `config/charts.toml` | UI Paramètres → *Graphiques* | Définitions de graphiques référencées par les tableaux de bord. |
-| `plugins/*/jobs.toml` | UI Paramètres → *Jobs* | Catalogue Nomaflow — un fichier par package d'app. |
+| `config/connectors.toml` | Paramètres → *Connecteurs* | Détient le registre des pools plus chaque connecteur. |
+| `config/dictionary.toml` | Paramètres → *Dictionnaire* | Métadonnées par colonne réutilisées par les écrans et les graphiques. |
+| `config/menus.toml` | Paramètres → *Menus* | Une racine par app, hiérarchie dossier/feuille optionnelle. |
+| `config/screens.toml` | Paramètres → *Écrans* | Grilles + dialogues + conditions par champ. |
+| `config/dashboards.toml` | Paramètres → *Tableaux de bord* | Widgets indicateur, graphique et table. |
+| `config/charts.toml` | Paramètres → *Graphiques* | Définitions de graphiques référencées par les tableaux de bord. |
+| `config/actions.toml` | Paramètres → *Actions* | Actions partagées appelées par les écrans. |
+| `config/theme.toml` | Paramètres → *Thème* | Couleurs et identité visuelle. |
+| `plugins/nomaflow/jobs.toml` | Nomaflow → *Tâches* | Le catalogue des tâches. |
 | `plugins/*/*.py` | Développeur | Callables d'étapes personnalisés — chargés par le framework via `sys.path`. |
 
-Chaque fichier est du TOML simple que vous pouvez lire avec `cat`, comparer avec `git`, éditer dans `vim`. L'UI des Paramètres utilise le même format sur disque — ce que vous enregistrez dans le navigateur est ce que `git status` rapporte.
+Chaque fichier est du TOML lisible avec `cat` et comparable avec `git`. Les Paramètres écrivent ce même format : ce qui est enregistré dans le navigateur est ce que montre `git status`.
 
 ---
 
-## Comment le framework trouve votre configuration
+## Comment le framework trouve la configuration
 
 Le câblage tient en une seule variable d'environnement :
 
@@ -142,20 +148,20 @@ Le contrat complet des variables d'environnement est documenté dans [Configurat
 - **Identifiant d'app** — chaque écran, menu et job porte un champ `app` (par exemple `nomajde`, `nomasx1`, `tutorial`). C'est l'espace de noms pour les identifiants d'écran et le préfixe de l'entrée du menu latéral.
 - **Nom de connecteur** — court, en kebab-case (`jdedwards`, `tasks`, `crm-sql`). Le même nom apparaît dans la page catalogue, la liste d'outils de l'assistant IA et l'URL d'une requête.
 - **Nom de pool** — court, en minuscules. `default` est réservé au pool propre du framework.
-- **Code de permission** — `sql:<connector>:<query>` pour les requêtes SQL et `api:<connector>:<endpoint>` pour les endpoints HTTP/API. L'UI des Paramètres les construit automatiquement ; aucun code manuel n'est nécessaire.
+- **Code de permission** — `sql:<connector>:<query>` pour les requêtes SQL et `api:<connector>:<endpoint>` pour les endpoints HTTP/API. Les Paramètres les construisent d'eux-mêmes.
 
 ---
 
 ## Conventions de gestion de versions
 
 - `liberty-next` se met à niveau en **basculant les tags git** — le binaire du framework est traité comme une dépendance externe, non modifiée sur place. Le dépôt `liberty-apps` reste intact lors des montées de version du framework.
-- `liberty-apps` est versionné normalement — chaque édition TOML faite dans l'UI des Paramètres produit un diff dans le dépôt. Les commits faits par l'opérateur sont relisables comme n'importe quel autre changement de code.
+- `liberty-apps` est versionné normalement — chaque modification faite dans les Paramètres produit un diff dans le dépôt. Les commits faits par l'opérateur sont relisables comme n'importe quel autre changement de code.
 - Les secrets — clé de signature JWT, clé maître, clé de licence, clé IA — se trouvent dans l'**environnement**, jamais dans l'un ou l'autre dépôt. Voir [Chiffrement et secrets](../configuration/encryption-secrets.md).
 
 ---
 
 ## Pour aller plus loin
 
-- [Configuration → UI des Paramètres](../configuration/settings-ui.md) — l'éditeur in-browser pour tout ce qui se trouve sous `liberty-apps/config/`.
+- [Configuration → Interface des paramètres](../configuration/settings-ui.md) — les éditeurs de tout ce qui se trouve sous `liberty-apps/config/`.
 - [Configuration → Référence `app.toml`](../configuration/app-toml.md) — chaque clé documentée.
 - [Apps et Plugins → Apps](../apps/overview.md) — comment organiser plusieurs apps dans `liberty-apps`.

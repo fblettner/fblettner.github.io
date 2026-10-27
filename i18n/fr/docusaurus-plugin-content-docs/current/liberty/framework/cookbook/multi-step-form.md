@@ -1,146 +1,137 @@
 ---
 title: Formulaire multi-étapes / workflow
-description: "Recette — modéliser un workflow d'approbation avec transitions de statut, visibilité des champs par état, actions filtrées par rôle et relances planifiées. Les conditions de formulaire + les actions personnalisées du framework font le travail."
-keywords: [Liberty Framework, cookbook, workflow, approbation, statut, transitions, conditions de formulaire, relance]
+description: "Recette — un circuit de validation sur une colonne de statut : une requête gardée par transition, des actions de menu de ligne avec confirmation et saisie du motif, une permission par transition, des champs affichés ou verrouillés selon le statut, des lignes clôturées en lecture seule, des notifications et une tâche de relance quotidienne."
+keywords: [Liberty Next, cookbook, workflow, validation, statut, transitions, actions, prompt_fields, conditions de formulaire, editable_when, notifications, Nomaflow]
 ---
 
 # Formulaire multi-étapes / workflow
 
-## Le problème
+## Le besoin
 
-Un document passe par une séquence d'états — *Brouillon → Soumis → Approuvé / Rejeté → Clôturé*. Chaque transition est un bouton visible uniquement par le bon rôle. Certains champs n'apparaissent qu'après la soumission ; d'autres se figent après l'approbation. Les documents bloqués doivent relancer quelqu'un après N jours.
+Une note de frais passe par *Brouillon → Soumise → Validée / Refusée*. Chaque transition revient à un rôle donné ; certains champs n'ont de sens que dans certains états ; une note en attente depuis trop longtemps doit être relancée.
 
-## Le modèle
+## La démarche
 
-Trois fonctionnalités du framework se composent pour modéliser le workflow :
-
-| Fonctionnalité | Ce qu'elle fait |
+| Besoin | Mécanisme |
 |---|---|
-| **Colonne de statut avec règle `ENUM`** | Affiche l'état courant comme une puce colorée. |
-| **Actions personnalisées sur le dialogue** | Un bouton par transition (Soumettre, Approuver, Rejeter). L'expression `Visible quand` de chaque action masque le bouton en dehors de son état valide. |
-| **Conditions de formulaire** (`Visible quand`, `Obligatoire quand`, `Désactivé quand`) | Afficher / masquer / figer des champs selon le statut courant. |
-| **Job Nomaflow** | Une relance nocturne qui pousse les documents bloqués. |
+| Une transition qui ne s'applique que depuis le bon état | Une requête d'écriture par transition, avec `AND STATUS = '<attendu>'` dans sa clause WHERE. |
+| Un bouton par transition | Une action du menu de ligne : une `chain` avec confirmation, saisie et requête. |
+| Seuls les managers valident | La permission de la requête de transition, accordée au rôle des managers. |
+| Des champs selon l'état | `visible_when`, `required_when`, `disabled_when` sur les colonnes. |
+| Figé une fois la décision prise | Le réglage `editable_when` de l'écran. |
+| Prévenir les bonnes personnes | Des règles de notification sur les écritures de l'écran. |
+| Relancer les notes en attente | Une tâche Nomaflow quotidienne. |
 
 ## La recette
 
-### 1. Schéma
+### 1. La table
 
 ```sql
 CREATE TABLE expense_claims (
-  id           SERIAL PRIMARY KEY,
-  employee     VARCHAR(64) NOT NULL,
-  amount       DECIMAL(10,2) NOT NULL,
-  description  TEXT,
-  status       VARCHAR(16) NOT NULL DEFAULT 'draft',
-  submitted_at TIMESTAMP,
-  approved_by  VARCHAR(64),
-  approved_at  TIMESTAMP,
-  rejected_by  VARCHAR(64),
-  rejected_at  TIMESTAMP,
-  reject_reason TEXT,
-  created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at   TIMESTAMP
+  id            INTEGER PRIMARY KEY,
+  employee      VARCHAR(64) NOT NULL,
+  amount        DECIMAL(10,2) NOT NULL,
+  description   VARCHAR(2000),
+  status        VARCHAR(16) NOT NULL DEFAULT 'DRAFT',
+  submitted_at  TIMESTAMP,
+  decided_by    VARCHAR(64),
+  decided_at    TIMESTAMP,
+  reject_reason VARCHAR(500),
+  reminded_at   TIMESTAMP
 );
 ```
 
-### 2. Dictionnaire — l'enum de statut
+### 2. La liste des statuts
 
-| Valeur | Libellé | Couleur |
-|---|---|---|
-| `draft` | Brouillon | `#94a3b8` |
-| `submitted` | Soumis | `#60a5fa` |
-| `approved` | Approuvé | `#4ade80` |
-| `rejected` | Rejeté | `#f87171` |
-| `closed` | Clôturé | `#475569` |
+**Paramètres → Dictionnaire → Énumérations** : une énumération `CLAIM_STATUS` avec les valeurs `DRAFT` (Brouillon), `SUBMITTED` (Soumise), `APPROVED` (Validée), `REJECTED` (Refusée). L'entrée `STATUS` reçoit **Rules** `ENUM` et **Rules values** `CLAIM_STATUS` : la grille affiche les libellés et le dialogue une liste.
 
-### 3. Requêtes d'écriture par statut (une par transition)
+### 3. Une requête par transition
+
+Dans **Paramètres → Connecteurs → expenses → Requêtes**, trois requêtes d'écriture :
 
 ```sql
--- submit
+-- submit_claim
 UPDATE expense_claims
-SET status = 'submitted', submitted_at = CURRENT_TIMESTAMP,
-    updated_at = CURRENT_TIMESTAMP
-WHERE id = :id AND status = 'draft';
+SET STATUS = 'SUBMITTED', SUBMITTED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID AND STATUS = 'DRAFT' AND EMPLOYEE = {{LOGIN}}
 
--- approve
+-- approve_claim
 UPDATE expense_claims
-SET status = 'approved', approved_by = :session_user, approved_at = CURRENT_TIMESTAMP,
-    updated_at = CURRENT_TIMESTAMP
-WHERE id = :id AND status = 'submitted';
+SET STATUS = 'APPROVED', DECIDED_BY = {{LOGIN}}, DECIDED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID AND STATUS = 'SUBMITTED'
 
--- reject
+-- reject_claim
 UPDATE expense_claims
-SET status = 'rejected', rejected_by = :session_user, rejected_at = CURRENT_TIMESTAMP,
-    reject_reason = :reject_reason, updated_at = CURRENT_TIMESTAMP
-WHERE id = :id AND status = 'submitted';
+SET STATUS = 'REJECTED', DECIDED_BY = {{LOGIN}}, DECIDED_AT = {{SYSTIMESTAMP}},
+    REJECT_REASON = :REJECT_REASON
+WHERE ID = :ID AND STATUS = 'SUBMITTED'
 ```
 
-Le garde-fou `AND status = '<attendu>'` au niveau SQL empêche les doubles transitions accidentelles (un déposant ne peut pas re-soumettre ; un manager ne peut pas approuver une demande rejetée).
+La garde `AND STATUS = …` fait qu'une transition depuis un mauvais état ne modifie rien ; `EMPLOYEE = {{LOGIN}}` limite la soumission aux notes du salarié lui-même (`{{LOGIN}}` vaut le nom de l'utilisateur en majuscules, forme sous laquelle `EMPLOYEE` doit être enregistré).
 
-### 4. Écran — actions + conditions
+### 4. Les boutons de transition
 
-**Paramètres → Écrans → expense-claims**.
+Dans l'éditeur d'écran, onglet **Menu de ligne**, une entrée par transition :
 
-#### Actions
+```toml
+[[screens.expenses.expense_claims.row_menu]]
+type  = "chain"
+id    = "reject"
+label = "Refuser"
+prompt_title  = "Refuser la note"
+prompt_fields = [{ name = "REJECT_REASON", label = "Motif", required = true }]
+steps = [
+  { type = "run_query", id = "do", query = "reject_claim",
+    param_binds = [{ param = "ID", source = "ID" },
+                   { param = "REJECT_REASON", source = "INPUT.REJECT_REASON" }] },
+  { type = "refresh", id = "reload" },
+]
+```
 
-| Action | Connecteur / Requête | Visible quand | Rôles |
-|---|---|---|---|
-| **Soumettre** | `expense-claims` / `submit` | `status == 'draft' && employee == session.user` | Tous (filtré par le filtre niveau ligne) |
-| **Approuver** | `expense-claims` / `approve` | `status == 'submitted' && 'manager' in session.roles` | Manager |
-| **Rejeter** | `expense-claims` / `reject` | `status == 'submitted' && 'manager' in session.roles` | Manager. Le dialogue de confirmation demande `reject_reason`. |
+*Valider* suit le même modèle, avec une étape `confirm` à la place de la saisie ; *Soumettre*, avec `submit_claim`. Pour afficher un message clair quand la note n'est pas dans le bon état, placer les étapes dans un `if` sur `STATUS` (`equals` `SUBMITTED`) : `then_steps` exécutent la requête, `else_steps` un `notify`. Voir [Actions et cycle de vie](../build/screens/actions-and-lifecycle.md).
 
-#### Conditions de champs
+### 5. Qui peut faire quoi
 
-| Champ | Visible quand | Obligatoire quand | Désactivé quand |
-|---|---|---|---|
-| **Description** | toujours | `status == 'draft'` | `status != 'draft'` |
-| **Amount** | toujours | `status == 'draft'` | `status != 'draft'` |
-| **Submitted at** | `status != 'draft'` | — | toujours (lecture seule) |
-| **Approved by / at** | `status == 'approved'` | — | toujours |
-| **Reject reason** | `status == 'rejected'` | — | toujours |
+Chaque requête a sa propre permission : `sql:expenses:submit_claim`, `sql:expenses:approve_claim`, `sql:expenses:reject_claim`. Dans **Paramètres → Access → Roles**, accorder la première aux salariés et les deux autres aux seuls managers : un salarié qui clique sur *Valider* se voit opposer un refus. Voir [Rôles et permissions](../build/secure/roles-and-permissions.md).
 
-Le dialogue est la même ligne — il masque / fige simplement différents champs selon le statut.
+### 6. Les champs selon l'état
 
-### 5. Codes de permission
+Sur les colonnes (onglets Edit et Filter de l'inspecteur) :
 
-Les transitions génèrent automatiquement trois codes d'écriture :
-
-- `sql:expense-claims:submit:write`
-- `sql:expense-claims:approve:write`
-- `sql:expense-claims:reject:write`
-
-Rôles :
-
-| Rôle | Codes accordés |
+| Colonne | Réglage |
 |---|---|
-| `employee` | `sql:expense-claims:submit:write` *(ne peut soumettre que les siennes — le garde-fou SQL gère le reste)* |
-| `manager` | `sql:expense-claims:approve:write` + `sql:expense-claims:reject:write` |
+| `DESCRIPTION`, `AMOUNT` | `required_when` STATUS = `DRAFT` |
+| `SUBMITTED_AT` | `visible_when` STATUS = `SUBMITTED`, `APPROVED`, `REJECTED` ; `disabled` |
+| `DECIDED_BY`, `DECIDED_AT` | `visible_when` STATUS = `APPROVED`, `REJECTED` ; `disabled` |
+| `REJECT_REASON` | `visible_when` STATUS = `REJECTED` ; `disabled` |
 
-### 6. Le job de relance
+Et dans l'onglet **Général**, `editable_when` STATUS = `DRAFT` : une fois soumise, la note s'ouvre en lecture seule et seules les transitions du menu de ligne la font évoluer. Voir [Conditions de formulaire](../form-conditions.md).
 
-Relance des demandes bloquées — même modèle que le [job CRM nocturne deals bloqués](../tutorial-crm/06-ai-and-jobs.md) :
+### 7. Les notifications
+
+Dans **Paramètres → Notifications**, une règle sur l'événement **update** de l'écran, avec *Only when the written row has* `STATUS = SUBMITTED`, canaux `portal` et `email`, destinataires `role:managers`, objet `Note {ID} de {EMPLOYEE} à valider`. Une seconde règle sur `STATUS = REJECTED` peut prévenir le demandeur. Voir [Notifications](../../nomaflow/notifications.md).
+
+### 8. Les relances
+
+Une tâche Nomaflow, chaque matin, avec une étape `sql_query` :
 
 ```sql
--- nag-stale-submissions
-SELECT id, employee, amount, submitted_at
-FROM expense_claims
-WHERE status = 'submitted'
-  AND submitted_at < CURRENT_TIMESTAMP - INTERVAL '5 days';
+UPDATE expense_claims SET REMINDED_AT = CURRENT_TIMESTAMP
+WHERE STATUS = 'SUBMITTED' AND SUBMITTED_AT < CURRENT_TIMESTAMP - INTERVAL '5' DAY
 ```
 
-Job Nomaflow, quotidien à 09:00, poste sur le canal Slack `#expenses-managers`.
+et une règle de notification sur l'événement `succeeded` de cette tâche : `{ROWS} notes en attente depuis plus de 5 jours`, à `role:managers`.
 
 ## Variantes
 
-| Vous voulez… | Faites ceci |
+| Besoin | Moyen |
 |---|---|
-| **Une chaîne d'approbateurs libre** (liste variable d'approbateurs) | Ajoutez une table enfant `approval_steps` ; le statut devient `awaiting:<step_n>`. Les requêtes d'approbation incrémentent le compteur d'étape. Plus complexe mais avec les mêmes primitives. |
-| **Un journal d'historique de chaque transition** | Ajoutez une table `expense_audit` ; chaque requête de transition insère une ligne depuis une étape Python. |
-| **Réouvrir les rejetés** | Ajoutez une action `reopen` visible quand `status == 'rejected'`, qui rebascule en `draft`. |
-| **Notifier le demandeur à chaque transition** | Bloc de notifications sur chaque requête d'écriture — voir [Jobs → Notifications](../../nomaflow/concepts.md). |
+| **Historique de chaque transition** | La table d'audit de l'écran (`audit_table`) — voir [Piste d'audit](./audit-trail.md). |
+| **Rouvrir une note refusée** | Une requête `reopen_claim` (`STATUS = 'DRAFT' … WHERE STATUS = 'REJECTED'`) et son entrée de menu de ligne. |
+| **Un long formulaire en étapes** | Des onglets de dialogue, avec `hide_on_add` / `hide_on_edit` pour les onglets propres à un mode. |
 
 ## Pour aller plus loin
 
-- [Conditions de formulaire](../form-conditions.md) pour la syntaxe d'expression par champ.
-- [Rôles et permissions](../build/secure/roles-and-permissions.md) pour filtrer les actions par rôle.
-- [Cookbook → Piste d'audit](./audit-trail.md) pour les colonnes `submitted_at` / `approved_at`.
+- [Actions et cycle de vie](../build/screens/actions-and-lifecycle.md) — chaînes, saisies préalables, conditions.
+- [Conditions de formulaire](../form-conditions.md) — les champs selon l'état.
+- [Notifications](../../nomaflow/notifications.md) — règles et destinataires.

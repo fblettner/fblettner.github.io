@@ -1,129 +1,45 @@
 ---
-title: Téléversement de fichier
-description: "Recette — permettre aux utilisateurs d'attacher des fichiers à une ligne (contrats, factures, photos) et de les retrouver depuis la même ligne. Deux modèles : stocker le fichier en base, ou stocker une référence et déporter vers un stockage objet."
-keywords: [Liberty Framework, cookbook, téléversement, pièce jointe, blob, S3, MinIO, écrans]
+title: Fichiers et pièces jointes
+description: "Recette — ce que Liberty Next propose pour les fichiers : les écrans n'ont pas de champ pièce jointe, mais une ligne peut porter l'adresse d'un document stocké ailleurs, les lignes d'un fichier peuvent être importées dans un écran, et une tâche Nomaflow peut charger un fichier choisi au lancement."
+keywords: [Liberty Next, cookbook, fichiers, pièces jointes, url, lien, import, file_load, téléversement]
 ---
 
-# Téléversement de fichier
+# Fichiers et pièces jointes
 
-## Le problème
+## Le besoin
 
-Une ligne a un fichier associé — un PDF de contrat sur le client, un reçu numérisé sur la note de frais, une photo sur l'ordre de maintenance. Les opérateurs doivent pouvoir le téléverser, le voir, le remplacer, le télécharger.
+Une ligne s'accompagne d'un fichier — le contrat signé d'un client, le scan d'un justificatif — ou un fichier contient des lignes à charger dans une table.
 
-## Le modèle
+## L'existant
 
-Deux modèles de stockage, choisissez-en un :
+Les écrans n'ont **pas de champ pièce jointe** : un dialogue ne peut ni enregistrer un fichier dans une ligne ni le rendre téléchargeable. Trois mécanismes couvrent les besoins courants :
 
-| Modèle | Avantage | Inconvénient |
-|---|---|---|
-| **A. Blob en base de données** | Sauvegarde unique, pas d'infra supplémentaire, ACID avec la ligne. | La base gonfle ; pas adapté aux gros fichiers (>10 Mo). |
-| **B. Référence en base, fichier dans un stockage objet** (S3, MinIO, Azure Blob, Google Cloud Storage) | Passe à l'échelle. Bon marché. Facile à changer. | Deux systèmes à sauvegarder. Deux systèmes qui peuvent diverger. |
+| Besoin | Mécanisme |
+|---|---|
+| Retrouver le document d'une ligne | Une **colonne d'adresse** : la ligne enregistre l'adresse du document dans le stockage documentaire déjà en place (partage de fichiers, SharePoint, stockage objet). |
+| Charger les lignes d'un fichier Excel / CSV dans une table, depuis un écran | L'**import** de l'écran — voir [Import en masse](./bulk-import.md). |
+| Charger un fichier dans une table, par une tâche | Une étape Nomaflow **`file_load`** : le fichier est choisi dans la fenêtre **Run with parameters**, lu sur un chemin du serveur ou pris dans un dossier surveillé — voir [Étapes → Chargement de fichier](../../nomaflow/steps.md#file-load). |
 
-A convient jusqu'à peut-être quelques Go de fichiers totaux ; au-delà, B.
+## Adresse d'un document
 
-## Modèle A — blob en base de données
-
-### Schéma
-
-Ajoutez une colonne `BYTEA` (PostgreSQL) / `BLOB` (Oracle, SQLite) à la table :
+### 1. Une colonne pour l'adresse
 
 ```sql
-ALTER TABLE customers
-  ADD COLUMN contract_pdf      BYTEA,
-  ADD COLUMN contract_filename VARCHAR(255),
-  ADD COLUMN contract_mime     VARCHAR(64);
+ALTER TABLE contracts ADD document_url VARCHAR(500);
 ```
 
-Les colonnes de métadonnées (nom de fichier, type MIME) aident à servir le fichier en retour.
+### 2. L'afficher
 
-### Entrée dictionnaire
+Donner à l'entrée `DOCUMENT_URL` du dictionnaire un libellé et le format **url** (Paramètres → Dictionnaire → Entrées). La grille et le dialogue affichent l'adresse sous forme de texte, à copier dans le navigateur — elle n'est pas transformée en lien cliquable.
 
-| Champ | Valeur |
-|---|---|
-| **Nom** | `file_attachment` |
-| **Type** | `bytea` *(ou `blob`)* |
-| **Règle** | `—` |
-| **Surcharge widget** | `FileUpload` |
+### 3. La renseigner
 
-Puis sur la requête `list` du connecteur customers, ajoutez un indice de colonne pour `contract_pdf` pointant vers `file_attachment`.
+Les utilisateurs collent l'adresse dans le dialogue, ou une tâche la renseigne — par exemple une étape `python` qui range les documents d'un dossier dans le stockage et écrit leurs adresses dans la table (voir [Plugins](../apps/plugins.md)).
 
-### Écran
-
-Le dialogue rend le champ comme une **zone de glisser-déposer de téléversement** :
-
-- Si vide, une zone « Déposez le fichier ici ou cliquez pour parcourir ».
-- Si rempli, une ligne « 📎 contract.pdf (412 Ko) — Remplacer / Télécharger / Supprimer ».
-
-Enregistrer téléverse le fichier dans le payload du dialogue (multipart/form-data) ; le framework écrit le BYTEA à l'`update`.
-
-### Limites
-
-Le framework plafonne un téléversement unique à la valeur de `[app] max_upload_size_mb` (défaut 25 Mo). Au-delà, basculez vers le Modèle B.
-
-## Modèle B — stockage objet avec colonne de référence
-
-### Schéma
-
-Juste les références :
-
-```sql
-ALTER TABLE customers
-  ADD COLUMN contract_s3_key VARCHAR(255),
-  ADD COLUMN contract_filename VARCHAR(255);
-```
-
-### Configuration du stockage objet
-
-**Paramètres → Framework → Stockage** (sous-formulaire) :
-
-| Champ | Valeur |
-|---|---|
-| **Fournisseur** | `S3` / `Azure Blob` / `GCS` / `Local filesystem` (développement uniquement) |
-| **Endpoint** | L'endpoint du bucket (URL compatible S3). |
-| **Bucket** | Le nom du bucket. |
-| **Identifiants** | Clé d'accès + secret (chiffrés au repos). |
-
-### Widget dictionnaire
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `s3_attachment` |
-| **Surcharge widget** | `S3Upload` |
-| **Colonne de référence** | `contract_s3_key` |
-| **Colonne nom de fichier** | `contract_filename` |
-
-Le widget gère :
-
-- Le téléversement (stream directement vers S3, ne passe pas par le framework — économe en bande passante).
-- L'URL pré-signée au téléchargement (le framework ne fait jamais proxy du fichier).
-- L'action « supprimer » qui supprime l'objet S3 + met à null la colonne de référence.
-
-### Permissions
-
-Deux codes de permission sont générés automatiquement :
-
-| Code | Accordé à |
-|---|---|
-| `storage:read:<bucket>` | Émettre une URL pré-signée de téléchargement. |
-| `storage:write:<bucket>` | Émettre une URL pré-signée de téléversement. |
-
-Accordez-les sur les rôles concernés.
-
-## Pièces jointes multi-fichiers
-
-Les deux modèles fonctionnent pour un-fichier-par-ligne. Pour le multi-fichier (un client peut avoir N contrats), suivez le modèle de sous-grille du [Tutoriel CRM → Étape 3](../tutorial-crm/03-deals.md) — faites de `attachments` une table enfant jointe par `customer_id`, avec une ligne par fichier.
-
-## Variantes
-
-| Vous voulez… | Faites ceci |
-|---|---|
-| **Seulement PDF / image / etc** | Définissez le champ `accept` sur le widget dictionnaire — `application/pdf`, `image/*`. |
-| **Analyse antivirus avant enregistrement** | Ajoutez une étape Nomaflow `python` sur l'événement de téléversement qui appelle votre service antivirus. Rejeter si positif. |
-| **Glisser-déposer multi-fichiers** | Utilisez le modèle de sous-grille ci-dessus ; le widget du framework gère le téléversement en masse vers la même cible. |
-| **Un aperçu en miniature** | Ajoutez une requête `&lt;connector&gt;.thumbnail` qui renvoie un aperçu base64 ; affichez-le dans la grille via une règle `Image`. |
+L'accès au document lui-même relève du stockage documentaire, pas de Liberty Next.
 
 ## Pour aller plus loin
 
-- [Concepts → Écrans](../build/screens/overview.md) pour le modèle de champ du dialogue.
-- [Interface Paramètres → Framework](../configuration/app-toml.md) pour le sous-formulaire *Stockage*.
-- [Cookbook → CRUD sur une table existante](./crud-existing-table.md) — le modèle d'écran environnant.
+- [Import en masse](./bulk-import.md) — charger les lignes d'un fichier depuis un écran.
+- [Étapes → Chargement de fichier](../../nomaflow/steps.md#file-load) — charger un fichier par une tâche.
+- [Dictionnaire → Formats](../dictionary.md#formats) — les formats d'affichage.

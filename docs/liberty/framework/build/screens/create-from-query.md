@@ -16,7 +16,7 @@ This page walks the **General** and **Queries** tabs of the Screen Designer. Col
 
 On **Settings → Screens**, the scope bar lists every app (= connector) that already has at least one screen. If the connector you want to add a screen to isn't there:
 
-1. Click **＋ Add screens for a connector**.
+1. Click **＋ Add scope**.
 2. Pick the connector from the dropdown (only connectors **without** a screens namespace are listed — once registered, the connector becomes an app chip).
 3. The chip appears at the top; the screen list below is empty.
 

@@ -167,7 +167,7 @@ Clicking a row opens a three-tab editor on the right. The tabs are the same for 
   </div>
 </div>
 
-### Connection fields
+### Connection fields \{#connection-fields\}
 
 The **Settings** mode of a SQL connector (the *Settings* button of the connector page) holds its connection settings. The form's labels are in English.
 

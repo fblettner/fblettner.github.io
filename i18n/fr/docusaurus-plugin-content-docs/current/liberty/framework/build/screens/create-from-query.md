@@ -16,7 +16,7 @@ Cette page parcourt les onglets **Général** et **Requêtes** du Concepteur d'�
 
 Sur **Paramètres → Écrans**, la barre de portée liste chaque application (= connecteur) qui possède déjà au moins un écran. Si le connecteur qui doit recevoir l'écran n'y figure pas :
 
-1. Cliquer sur **＋ Ajouter des écrans pour un connecteur**.
+1. Cliquer sur **＋ Ajouter une portée**.
 2. Sélectionner le connecteur dans la liste déroulante (seuls les connecteurs **sans** espace de nommage Écrans apparaissent — une fois enregistré, le connecteur devient une puce d'application).
 3. La puce apparaît en haut ; la liste d'écrans en dessous est vide.
 

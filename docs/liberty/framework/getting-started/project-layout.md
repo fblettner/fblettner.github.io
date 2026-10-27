@@ -38,25 +38,27 @@ liberty-next/
 ├── liberty/                  ← FastAPI backend (Python 3.12)
 │   ├── main.py               ← app factory, lifespan, routers
 │   ├── config.py             ← TOML loading + env expansion
-│   ├── connectors/           ← SQL / HTTP / API connector engine
+│   ├── connectors/           ← SQL / API connector engine, dictionary (dictionary.py)
 │   ├── auth/                 ← local users, OIDC, JWT, permissions
-│   ├── dictionary/           ← shared field metadata
 │   ├── screens/              ← screen engine (grid + dialog runtime)
 │   ├── dashboards/           ← dashboard layout + widget rendering
 │   ├── charts/               ← chart definitions
 │   ├── menus/                ← menu tree + permission pruning
-│   ├── jobs/                 ← Nomaflow (ETL + scheduler)
+│   ├── jobs/                 ← Nomaflow (jobs, steps, scheduler)
+│   ├── actions/              ← shared actions
+│   ├── notify/               ← notifications
 │   ├── ai/                   ← Anthropic tool-use assistant
 │   ├── licensing/            ← RS256 license-key verification
-│   ├── web/                  ← HTTP route handlers (*_router.py)
+│   ├── web/                  ← HTTP routes (one module per area)
 │   └── *_cli.py              ← CLI entry points (admin, connectors, crypto, license)
 │
 ├── frontend/                 ← React 19 + Vite SPA (built to frontend/dist/)
 │   └── src/
-│       ├── pages/            ← lazy-loaded route components
-│       ├── builders/         ← Settings UI builders (one per config type)
-│       ├── components/       ← shared UI atoms (table, dialog, chart, …)
-│       └── api/              ← REST client wrappers
+│       ├── pages/            ← pages, including Settings/ (one editor per configuration type)
+│       ├── common/           ← shared UI parts (fields, lists, dialogs, SQL editor…)
+│       ├── components/       ← layout (sidebar, app picker, tabs)
+│       ├── locales/          ← interface texts, en and fr
+│       └── api/              ← REST client
 │
 ├── config/                   ← bundled templates + per-installation files
 │   ├── app.toml              ← framework settings (auth, OIDC, AI, crypto, license)
@@ -64,7 +66,7 @@ liberty-next/
 │   ├── *.toml.example        ← templates for connectors / dictionary / menus / screens / charts / dashboards
 │   └── *.toml                ← real per-section files (only when LIBERTY_APPS_DIR is unset)
 │
-├── tests/                    ← pytest suite (≥ 335 tests)
+├── tests/                    ← pytest suite
 └── docs/                     ← framework-internal planning notes (not the public docs)
 ```
 
@@ -84,17 +86,19 @@ liberty-next/
 liberty-apps/
 ├── README.md
 ├── config/                   ← per-section TOML — read by liberty-next at runtime
-│   ├── connectors.toml       ← pools + named queries / endpoints
-│   ├── dictionary.toml       ← reusable field metadata
-│   ├── menus.toml            ← sidebar trees per app
-│   ├── screens.toml          ← grid + dialog definitions
-│   ├── charts.toml           ← Recharts wrapper config
-│   └── dashboards.toml       ← dashboard layouts
+│   ├── connectors.toml       ← pools, connectors and their queries / endpoints
+│   ├── dictionary.toml       ← data items, enums, lookups, sequences
+│   ├── menus.toml            ← one menu per app
+│   ├── screens.toml          ← grids and dialogs
+│   ├── charts.toml           ← saved charts
+│   ├── dashboards.toml       ← dashboards
+│   ├── actions.toml          ← shared actions
+│   └── theme.toml            ← colours and branding
 │
-├── plugins/                  ← custom Python modules (job step callables, hooks, …)
-│   └── <package>/            ← one folder per app
-│       ├── __init__.py
-│       └── jobs.toml         ← Nomaflow job catalogue for this app
+├── plugins/                  ← Python packages (functions called by steps and actions)
+│   ├── <package>/            ← one folder per package, with __init__.py
+│   └── nomaflow/
+│       └── jobs.toml         ← the Nomaflow job catalogue
 │
 └── docs/                     ← deployment & operations notes (per-installation)
 ```
@@ -105,9 +109,11 @@ liberty-apps/
 | `config/dictionary.toml` | Settings UI → *Dictionary* | Per-column metadata reused by screens and charts. |
 | `config/menus.toml` | Settings UI → *Menus* | One root per app, optional folder/leaf hierarchy. |
 | `config/screens.toml` | Settings UI → *Screens* | Grids + dialogs + per-field conditions. |
-| `config/dashboards.toml` | Settings UI → *Dashboards* | Stat / bar / line / pie panels. |
+| `config/dashboards.toml` | Settings UI → *Dashboards* | KPI, chart and table widgets. |
 | `config/charts.toml` | Settings UI → *Charts* | Chart definitions referenced by dashboards. |
-| `plugins/*/jobs.toml` | Settings UI → *Jobs* | Nomaflow catalogue — one file per app package. |
+| `config/actions.toml` | Settings UI → *Actions* | Shared actions called by screens. |
+| `config/theme.toml` | Settings UI → *Theme* | Colours and branding. |
+| `plugins/nomaflow/jobs.toml` | Nomaflow → *Jobs* | The job catalogue. |
 | `plugins/*/*.py` | Developer | Custom step callables — exposed to the framework via `sys.path`. |
 
 Every file is plain TOML you can read with `cat`, diff with `git`, edit in `vim`. The Settings UI uses the same on-disk format — what you save in the browser is what `git status` reports.

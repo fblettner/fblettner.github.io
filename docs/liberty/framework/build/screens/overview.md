@@ -29,7 +29,7 @@ The page that manages screens is **Settings → Screens**. This overview maps it
   <rect x="216" y="78" width="80" height="26" rx="6" fill="rgba(74,158,255,0.10)" stroke="rgba(74,158,255,0.40)"/>
   <text x="256" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">nomasx1</text>
   <rect x="306" y="78" width="240" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
-  <text x="426" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Add screens for a connector</text>
+  <text x="426" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">＋ Add scope</text>
   <rect x="700" y="78" width="80" height="26" rx="6" fill="rgba(255,255,255,0.04)" stroke="#334155"/>
   <text x="740" y="95" fill="#cbd5e1" fontSize="11" textAnchor="middle" fontFamily="system-ui, sans-serif">Discard</text>
   <rect x="788" y="78" width="80" height="26" rx="6" fill="#4a9eff" opacity="0.9"/>
@@ -68,7 +68,7 @@ Three regions:
 
 | Region | What it carries |
 |---|---|
-| **Top scope bar** | One chip per app (a connector that has a menu). Click a chip → its screens load below. The *＋ Add screens for a connector* button registers a brand-new connector under the Screens namespace. *Discard* / *Save* on the right commit or revert page-wide edits. |
+| **Top scope bar** | One chip per app (a connector that has a menu). Click a chip → its screens load below. The *＋ Add scope* button registers a brand-new connector under the Screens namespace. *Discard* / *Save* on the right commit or revert page-wide edits. |
 | **Filter bar** | A search input for the screen list. Visible when the selected app has more than a handful of screens. |
 | **Screen list** | One card per screen, vertical scroll. Each card shows the id, label, read query, tab count, field count and per-card actions: *Rename*, *Clone*, *Delete*. **Clicking a card opens the Screen Designer modal.** |
 

@@ -1,130 +1,98 @@
 ---
-title: Rapport planifié par email
-description: "Recette — chaque jour ouvré à 08:00, exécuter un agrégat SQL, le rendre en XLSX, l'envoyer par email à une liste de destinataires. Le job Nomaflow + l'étape http + l'endpoint d'export Excel du framework font le travail."
-keywords: [Liberty Framework, cookbook, planifié, rapport, email, Nomaflow, XLSX, quotidien, hebdomadaire]
+title: Rapport planifié par e-mail
+description: "Recette — un rapport envoyé par e-mail selon une planification : une tâche Nomaflow qui calcule les chiffres, une règle de notification sur la réussite de la tâche qui les envoie, et le tableau de bord ou l'écran où les lecteurs trouvent le détail. Que faire quand un fichier joint est exigé."
+keywords: [Liberty Next, cookbook, rapport planifié, e-mail, Nomaflow, notifications, SMTP, tâche, tableau de bord]
 ---
 
-# Rapport planifié par email
+# Rapport planifié par e-mail
 
-## Le problème
+## Le besoin
 
-La direction veut un rapport « chiffres d'hier » à 08:00 chaque jour ouvré dans sa boîte de réception. Ou un « résumé pipeline hebdomadaire » le lundi. Sans écrire un script cron + email personnalisé.
+La direction veut recevoir les chiffres de la veille par e-mail à 8 h les jours ouvrés, sans script à part.
 
-## Le modèle
+## La démarche
 
-Un job Nomaflow avec trois étapes :
-
-1. **Rendre le rapport** en XLSX (via l'endpoint d'export d'écran du framework, ou un helper Python).
-2. **Attacher + envoyer l'email** via votre relais SMTP ou un service transactionnel.
-3. **Journaliser l'envoi** pour audit (optionnel).
-
-Le framework gère la planification, les tentatives en cas d'échec, l'historique d'exécution, les alertes.
+| Élément | Mécanisme |
+|---|---|
+| Calculer les chiffres | Une tâche Nomaflow planifiée, avec une étape `sql_query` qui les écrit dans une table de rapport. |
+| Les envoyer | Une règle de notification sur l'événement **succeeded** de la tâche, canal `email`, vers un rôle ou des adresses. |
+| Présenter le détail | Un tableau de bord ou un écran sur la table de rapport. |
 
 ## La recette
 
-### Étape 1 — vérifier que les données sont interrogeables
+### 1. Le compte e-mail
 
-Vous avez besoin d'une requête de connecteur qui produit les lignes à inclure dans le rapport. Si vous avez déjà un écran qui montre les bonnes données, c'est terminé — sa requête de lecture est ce que vous exporterez.
+**Paramètres → App → Notifications** : serveur SMTP, port, sécurité, compte et adresse d'expédition. **Send a test** le vérifie. Voir [Notifications → Le compte e-mail](../../nomaflow/notifications.md#smtp).
 
-Pour l'exemple, nous réutiliserons la requête `deals.list` du tutoriel CRM.
+### 2. La table de rapport et sa requête
 
-### Étape 2 — configurer le relais SMTP
+```sql
+CREATE TABLE daily_pipeline (
+  report_date DATE,
+  stage       VARCHAR(30),
+  deals       INTEGER,
+  amount      DECIMAL(14,2)
+);
+```
 
-**Paramètres → Framework → Notifications → SMTP** :
+Une requête d'écriture `compute_daily_pipeline` sur le connecteur du CRM :
 
-| Champ | Valeur |
-|---|---|
-| **Hôte** | `smtp.example.com` |
-| **Port** | `587` |
-| **Identifiant** | `liberty@example.com` |
-| **Mot de passe** | *(chiffré au repos)* |
-| **TLS** | `STARTTLS` |
-| **Adresse d'expédition** | `Liberty <liberty@example.com>` |
+```sql
+INSERT INTO daily_pipeline (report_date, stage, deals, amount)
+SELECT CURRENT_DATE - 1, stage, COUNT(*), SUM(amount)
+FROM deals
+WHERE updated_at >= CURRENT_DATE - 1 AND updated_at < CURRENT_DATE
+GROUP BY stage
+```
 
-Envoyez un email de test depuis le formulaire pour vérifier.
+### 3. La tâche
 
-### Étape 3 — construire le job
+Dans Nomaflow, une tâche `crm-daily-pipeline` avec :
 
-**Paramètres → Jobs → + Nouveau job** :
+- une planification `0 8 * * 0-4` — 8 h du lundi au vendredi (dans le cron de Liberty Next, le jour 0 est le lundi ; voir [Planifications → Cron](../../nomaflow/jobs/schedules.md#cron)) ;
+- une étape `sql_query` qui exécute `compute_daily_pipeline`.
 
-| Champ | Valeur |
-|---|---|
-| **Nom** | `crm-daily-pipeline-report` |
-| **Application** | `crm` |
-| **Description** | `Quotidien 08:00 jours ouvrés : export pipeline à la direction.` |
-| **Planification** | `0 8 * * 1-5` |
-| **Fuseau horaire** | `Europe/Paris` |
-| **Instance unique** | ✓ |
-| **Délai d'expiration** | 120 secondes |
+**Run now** permet de la vérifier aussitôt. Voir [Créer une tâche](../../nomaflow/jobs/create.md).
 
-### Étape 4 — les trois étapes
+### 4. L'e-mail
 
-#### Étape 1 — rendre le XLSX
-
-| Champ | Valeur |
-|---|---|
-| **Nom** | `render` |
-| **Type** | `HTTP` |
-| **Variante** | `Connector endpoint` |
-| **Connecteur** | `liberty-self` |
-| **Endpoint** | `screens.export` |
-| **Paramètres** | `app = crm`, `screen_id = deals`, `format = xlsx`, `from_date = ${yesterday}`, `to_date = ${yesterday}` |
-| **Alias de résultat** | `xlsx` |
-
-Le connecteur `liberty-self` est intégré au framework — il rend la surface REST du framework appelable depuis les étapes de job.
-
-#### Étape 2 — envoyer l'email
+**Paramètres → Notifications**, une nouvelle règle :
 
 | Champ | Valeur |
 |---|---|
-| **Nom** | `email` |
-| **Type** | `HTTP` |
-| **Variante** | `Raw URL` |
-| **Méthode** | `POST` |
-| **URL** | L'endpoint pont SMTP du framework : `http://127.0.0.1:8000/api/notifications/email` *(authentifié avec le JWT de l'utilisateur système — le framework gère cela pour les jobs déclenchés par le système)*. |
-| **Headers** | `Content-Type: application/json` |
-| **Corps** | `{ "to": ["management@example.com"], "subject": "Pipeline quotidien — ${yesterday}", "body": "Veuillez trouver ci-joint le pipeline au ${yesterday}.", "attachments": [{ "name": "pipeline-${yesterday}.xlsx", "content": "${steps.render.body}", "encoding": "base64" }] }` |
+| Déclencheur | **Un événement de tâche**, tâche `crm-daily-pipeline`, événement `succeeded`. |
+| Canaux | `email` (et `portal` pour la cloche). |
+| Destinataires | `role:management`, ou `email:direction@example.com`. |
+| Objet | `Pipeline du jour — {ROWS} lignes calculées` |
+| Corps | `Le pipeline du jour est prêt. Le détail se trouve dans le tableau de bord du CRM.` |
 
-#### Étape 3 — journaliser l'envoi (optionnel)
+Les variables d'un événement de tâche sont `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES` et `ROWS`. **Send a test** envoie la règle avec des valeurs d'exemple. Voir [Notifications → Règles](../../nomaflow/notifications.md#rules).
 
-| Champ | Valeur |
-|---|---|
-| **Nom** | `log-send` |
-| **Type** | `SQL Query` |
-| **Connecteur / Requête** | `audit` / `log-event:write` |
-| **Paramètres** | `event = "pipeline-report-sent"`, `payload = ${steps.email.body}` |
+### 5. Le détail
 
-Une petite table `audit` qui enregistre chaque email déclenché par le système — utile quand quelqu'un dit « je n'ai pas reçu le rapport ».
+Un widget de tableau de bord ou un écran sur `daily_pipeline` (par exemple un graphique en barres par étape, filtré sur la dernière `report_date`), accessible depuis le menu. Voir [Tableaux de bord](../dashboards.md).
 
-### Étape 5 — notifications en cas d'échec
+### 6. En cas d'échec
 
-Dans le bloc *Notifications* du job :
+Les alertes propres à la tâche préviennent les exploitants par e-mail en cas d'échec — voir [Notifications → Les alertes propres à une tâche](../../nomaflow/notifications.md#job-alerts).
 
-| Champ | Valeur |
-|---|---|
-| **En échec** | `slack:#ops-alerts` |
-| **En sauté** | *(laisser vide)* |
+## Quand un fichier doit être joint
 
-Si le job échoue (base en panne, SMTP rejette l'email), le canal ops est notifié.
+Les notifications envoient un objet et un corps, sans pièce jointe. Pour un fichier joint à l'e-mail, deux solutions :
 
-### Étape 6 — tester et livrer
-
-Cliquez sur **▶ Exécuter maintenant** dans le constructeur de job. La page de détail d'exécution s'ouvre avec les trois étapes ; en cas de succès, l'email arrive dans la boîte de réception des destinataires et la table d'audit reçoit une ligne.
-
-L'aperçu *5 prochaines exécutions* du job confirme qu'il s'exécutera demain à 08:00.
+- les lecteurs le téléchargent eux-mêmes : menu **Exporter** de l'écran, ou ses classeurs configurés — voir [Export Excel](./excel-export.md) ;
+- une étape `python` de la tâche construit le fichier et l'envoie avec la bibliothèque de messagerie de l'entreprise — du code spécifique, voir [Plugins](../apps/plugins.md).
 
 ## Variantes
 
-| Vous voulez… | Faites ceci |
+| Besoin | Moyen |
 |---|---|
-| **Un PDF au lieu d'un XLSX** | Remplacez `format = xlsx` par `format = pdf` à l'étape 1. Fonctionne pour les tableaux de bord ; les écrans rendent leur feuille de style d'impression en PDF. |
-| **Un rapport hebdomadaire (lundis seulement)** | Changez le cron en `0 8 * * 1`. |
-| **Plusieurs destinataires avec des vues différentes** | Bouclez dans une étape Python au lieu d'une seule étape HTTP — passez une liste de tuples `(destinataire, screen_id, filtres)`. |
-| **Un corps HTML inline au lieu d'une pièce jointe** | L'endpoint `screens.export` du framework supporte `format = html` — intégrez la réponse directement dans le corps de l'email. |
-| **Slack au lieu d'email** | Remplacez l'étape 2 par un HTTP POST sur le webhook Slack, avec le fichier téléversé via `files.upload` au lieu d'attaché. |
+| **Chaque lundi** | Cron `0 8 * * 0`. |
+| **Un message dans Teams ou un autre outil** | Une règle de notification avec le canal `action`, qui appelle un endpoint d'un connecteur API (un webhook). |
+| **Un avertissement seulement en cas d'anomalie** | Une étape qui échoue quand un contrôle n'est pas satisfait, et une règle sur l'événement `failure`. |
 
 ## Pour aller plus loin
 
-- [Jobs — Nomaflow → Vue d'ensemble](../../nomaflow/overview.md) pour le modèle de planification.
-- [Cookbook → Export Excel](./excel-export.md) pour l'endpoint d'export.
-- [Tutoriel CRM → Étape 6](../tutorial-crm/06-ai-and-jobs.md) pour un modèle de job nocturne similaire (deals bloqués).
+- [Notifications](../../nomaflow/notifications.md) — règles, canaux, destinataires, variables.
+- [Planifications](../../nomaflow/jobs/schedules.md) — cron et préréglages.
+- [Tableaux de bord](../dashboards.md) — présenter les chiffres.

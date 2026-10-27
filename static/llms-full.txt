@@ -238,286 +238,132 @@ Python 3.12, FastAPI, SQLAlchemy 2.0 async with asyncpg (PostgreSQL) + oracledb 
 ## Liberty Next — What you can build
 Source: https://docs.nomana-it.fr/liberty/framework/what-you-can-build/
 
-Concrete use cases for the Liberty Framework — internal admin tools, BI dashboards, ERP administration, integration glue, customer portals, ETL orchestration. Each section shows what the framework does for you, what you still write, and how long it takes.
+What teams build with Liberty Next — admin apps over existing tables, dashboards, an interface over an ERP database, integration and data-loading jobs, workflows with conditional forms — with what the framework provides, what is left to configure, and when another tool fits better.
 
-The framework is small on purpose — a handful of concepts that compose into a wide surface. This page is the catalogue of what teams actually build with it, with the **path** for each: how much is configuration, how much is custom code, how the existing tutorials and cookbook recipes plug in.
+Liberty Next combines a few building blocks — connectors and their queries, screens, menus, dashboards, jobs, roles — configured from Settings. This page lists what teams build with them, what each case relies on, and where to start.
 
-If you're not sure whether the framework fits your problem, this page is the place to check.
-
----
-
-## At a glance
-
-  
-    📋 Internal admin apps
-    CRUD over existing tables, role-gated, with a sensible default UX. The framework's bread and butter — 1 day from "I have a database" to "users are using it".
-  
-  
-    📊 BI dashboards
-    KPIs and charts over named SQL queries. Shared filter bar, drill-down to grids, PDF export. No separate BI tool needed for the 80% case.
-  
-  
-    🗄 ERP administration
-    A modern UI over JD Edwards, SAP or NetSuite — users, security, BIP queue, master data. Doesn't replace the ERP; gives operators a faster way to live in it.
-  
-  
-    🔌 Integration glue
-    UI on top of webhook receivers, scheduled syncs, ETL pipelines. Nomaflow runs the jobs; the framework renders the runs.
-  
-  
-    🤝 Customer portals
-    A scoped slice of an internal app exposed to outside users via OIDC. Row-level access, audit trail, file uploads — all framework-native.
-  
-  
-    ⚙ Workflow orchestration
-    Approve / reject / route — multi-step forms, status workflows, scheduled escalations. Form conditions handle the per-state UX; Nomaflow handles the timers.
-  
-
-The pattern is the same for every use case: **define the data sources, point the screens at them, organise the menu, set the permissions**. The differences are in which features get the spotlight.
+The pattern is always the same: **connect the database, write the queries, build the screens, organise the menu, set the roles**.
 
 ---
 
-## 1. Internal admin apps
+## 1. Admin apps over existing tables \{#admin\}
 
-The canonical use case. You have a database (users, products, contracts, tickets — anything) and you want a clean interface for the team to look at the data, edit it, filter it, export it.
+A database (customers, products, contracts, tickets…) and a team that must read, filter, edit and export it.
 
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **Grid** with sortable / filterable columns, pagination, multi-select. | ✓ |
-| **Edit dialog** with tabs, fields, validation, save flow. | ✓ |
-| **Add / Edit / Delete** actions with role-based gates. | ✓ |
-| **Excel export** of the current filtered view. | ✓ |
-| **Audit columns** (`created_by`, `created_at`, `updated_by`, `updated_at`) auto-populated on save. | ✓ |
-| **Record locks** — two operators can't edit the same row simultaneously. | ✓ |
-| **Localisation** — every label, every status, every error message. | ✓ |
+| Grid with sorting, filters, grouping and saved views | [Screens](./build/screens/overview.md), [Saved views](./saved-views.md) |
+| Edit dialog with tabs, lists of values, conditional fields | [Dialog builder](./build/screens/dialog-builder.md), [Form conditions](./form-conditions.md) |
+| Add / edit / delete, in the dialog or in the grid, with Excel / CSV import | [Screens](./build/screens/overview.md) |
+| Excel export | [Excel export](./cookbook/excel-export.md) |
+| Audit columns filled by the server (`LOGIN`, `SYSDATE`) and a history table (`audit_table`) | [Dictionary](./dictionary.md#rules), [Audit trail](./cookbook/audit-trail.md) |
+| Record locks: two users cannot edit the same row at once | [Monitoring](../monitoring/dashboard.md) |
+| Interface in English and French, translated labels | [i18n](./apps/i18n.md) |
 
-### What you write
+**To configure**: the pool, the queries (the CRUD wizard writes them from a table), the screens and the menu. Most of the time goes into the SQL.
 
-| Task | Time |
-|---|---|
-| Decide which tables your app needs. | A few minutes. |
-| Configure the pool that points at your database. | 2 minutes — paste the JDBC URL, test connection. |
-| Write **one SQL read query per screen** (`SELECT ... FROM ...`). | 5–10 minutes per screen. |
-| Write the write queries (`INSERT`, `UPDATE`, `DELETE`) for editable screens. | 5 minutes per screen. |
-| Pick the columns to show, the dialog tabs to expose, the field widgets. | 5–10 minutes per screen in the Settings UI. |
-
-A typical 10-screen admin app, with one operator who knows the schema, lands in **a day**. Most of the time goes into the SQL.
-
-### Walkthrough
-
-The **[Build a CRM tutorial](./tutorial-crm/01-setup.md)** is exactly this — customers, deals, activities, with relationships and a dashboard on top. Six guided steps, end-to-end.
-
-For a recipe-style cheat sheet on a single CRUD screen, see **[Cookbook → CRUD over an existing table](./cookbook/crud-existing-table.md)**.
+**Start with**: [Tutorial — Build a CRM](./tutorial-crm/01-setup.md), or [CRUD over an existing table](./cookbook/crud-existing-table.md) for a single screen.
 
 ---
 
-## 2. BI dashboards
+## 2. Dashboards \{#dashboards\}
 
-The framework has built-in [charts](./charts.md) (line, bar, pie, area, scatter), [dashboards](./dashboards.md) (12-column layout with stat / chart / table panels) and a [shared filter bar](./dashboards.md) that propagates a period or a scope across every panel.
-
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **Stat panels** with delta vs the previous period and trend sparklines. | ✓ |
-| **Charts** wrapping named SQL queries — colour palettes, legends, tooltips, stacking. | ✓ |
-| **Tables** as small "top 5 rejected / pending / overdue" panels. | ✓ |
-| **Shared filter bar** propagating a period, a company, a region across every panel. | ✓ |
-| **Drill-down** from any panel to the underlying screen, pre-filtered. | ✓ |
-| **PDF export** of the rendered dashboard. | ✓ |
-| **Permission pruning** — panels referencing queries the caller can't run disappear silently. | ✓ |
+| KPI, chart (bar, line, area, pie) and table widgets on a 12-column grid | [Dashboards](./dashboards.md), [Charts](./charts.md) |
+| A period with presets, and the change compared with the previous period | [Dashboards](./dashboards.md) |
+| Filters from the dictionary, shared by every widget | [Dashboards](./dashboards.md) |
+| A cache with a **Refresh** button | [Dashboards](./dashboards.md) |
 
-### What you write
+**To configure**: the aggregate queries (usually `GROUP BY` on the period), then the widgets.
 
-| Task | Time |
-|---|---|
-| Write the SQL queries that aggregate your data (typically `GROUP BY` per period). | The bulk of the work — 10–30 minutes per query depending on the join complexity. |
-| Wire a chart per query and a stat per KPI. | 2 minutes per chart in the Settings UI. |
-| Lay them out on the dashboard grid. | 5 minutes. |
-
-A dashboard with 4 KPIs + 2 charts + 1 drill-down table — half a day, with most of the time going into SQL.
-
-### Walkthrough
-
-[Tutorial — CRM → Step 4 "Sales pipeline dashboard"](./tutorial-crm/04-dashboard.md) walks through it.
+**Start with**: [Tutorial — CRM → Dashboard](./tutorial-crm/04-dashboard.md).
 
 ---
 
-## 3. ERP administration (JD Edwards, SAP, NetSuite)
+## 3. An interface over an ERP database \{#erp\}
 
-ERPs ship with native UIs that are functional but slow, dated and clunky. The framework gives you a modern interface **on top of the ERP's database**, without modifying the ERP itself.
+A faster interface for the ERP's operators, reading and writing its database without changing the ERP.
 
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **Connect to JDE / SAP / NetSuite** via Oracle or SQL Server pools. | ✓ |
-| **Read ERP master data** — users, addresses, items, accounts, work centres. | ✓ |
-| **Visualise security** — roles, permissions, object tracking, audit trail. | ✓ |
-| **Monitor batch jobs** — BIP print queue, job submissions, scheduler. | ✓ |
-| **Per-environment views** — DV / PY / PD with the same screens. | ✓ |
-| **Read-only by default** for safety, write paths added explicitly per screen. | ✓ |
+| Oracle, SQL Server and PostgreSQL pools; Oracle thick mode for older servers | [Connectors](./connectors.md#oracle-thick) |
+| One app on several environments (development, test, production) through a **Pool** picker | [Connectors → Multi-pool](./connectors.md#multi-pool) |
+| JD Edwards conventions: Julian dates, right-justified codes, data dictionary import | [Dictionary](./dictionary.md#formats), [Scan a table](./dictionary.md#scan-a-table) |
+| Read-only screens, writes enabled screen by screen | [Screens](./build/screens/overview.md) |
 
-### What you write
-
-| Task | Time |
-|---|---|
-| Define the ERP pool — Oracle URL, schema, credentials. | 5 minutes (Oracle thin mode, no client install needed). |
-| Write SELECT queries against the ERP tables. | The interesting part — needs ERP-table knowledge. |
-| Set screens to *read-only* by default; opt into write paths intentionally. | A line per screen. |
-
-### How to get there
-
-JD Edwards has a packaged answer: **[Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/)** is a Nomana-IT vendor app built on the framework that ships a complete JDE admin — F0092 users, security workbench, BIP queue, master data, audit. Install it, point it at your JDE database, you're done. No tutorial needed.
-
-For SAP (`SAPSR3` schema), NetSuite (suite-analytics API), Microsoft Dynamics (on-prem SQL backend) or a non-ERP "admin over an existing database", the [Build a CRM tutorial](./tutorial-crm/01-setup.md) walks through the framework's full surface — the same pattern transfers, you just point the pool at the right database and write the queries.
-
-The Nomana-IT vendor app [Nomasx-1](https://docs.nomana-it.fr/liberty/nomasx1/overview/) is another productionised example of this pattern — security maintenance over JDE / SAP / NetSuite. Both Nomasx-1 and Nomajde are license-gated; the framework underneath is the same one this documentation describes.
+For JD Edwards, the ready-made apps cover the common needs: [Nomajde](../nomajde/overview.md) for administration and master data, [Nomasx-1](../nomasx1/overview.md) for security analysis over any connected application. For another ERP, the [CRM tutorial](./tutorial-crm/01-setup.md) shows the pattern: point the pool at the database and write the queries.
 
 ---
 
-## 4. Integration glue
+## 4. Integration and data loading \{#integration\}
 
-The framework's [Jobs / Nomaflow](../nomaflow/overview.md) engine + HTTP connectors + scheduled triggers cover the "integration platform" need without a separate tool.
+[Nomaflow](../nomaflow/overview.md) runs scheduled or manual jobs made of steps.
 
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **Cron-scheduled jobs** with retry, timeouts, single-instance lock. | ✓ |
-| **HTTP / REST connectors** with auth (Basic, Bearer, OAuth2), parameters, response shaping. | ✓ |
-| **SQL-to-SQL copy** with type coercion, chunking, atomic table swap. | ✓ |
-| **LDAP sync** with attribute mapping and upsert. | ✓ |
-| **Webhook receivers** — REST endpoints exposed by the framework. | ✓ |
-| **Run history** with per-step input / output / logs. | ✓ |
-| **Live log tail** over Socket.IO. | ✓ |
-| **Failure notifications** to Slack / email / webhook. | ✓ |
+| Jobs on a cron schedule or run by hand, with retries (fixed or exponential wait) and a timeout | [Schedules](../nomaflow/jobs/schedules.md), [Steps](../nomaflow/steps.md#retry) |
+| Steps: SQL query, SQL copy between databases, file load, HTTP call, LDAP sync, Python, call of another job | [Steps](../nomaflow/steps.md) |
+| API connectors with Basic, Bearer, API key or OAuth2 authentication | [Connectors](./connectors.md) |
+| Run history per step, live log | [Run history](../nomaflow/runs/history.md) |
+| Notifications on failure, success or a missed schedule — in the app, by e-mail, or through a connector | [Notifications](../nomaflow/notifications.md) |
 
-### What you write
+**To configure**: the source and target connectors, then the job's steps. Python only for what the steps cannot express — see [Plugins](./apps/plugins.md).
 
-| Task | Time |
-|---|---|
-| Define the source and target connectors. | 5 minutes each. |
-| Write the job step definitions in the Jobs builder. | 10–30 minutes per job. |
-| Custom Python only for what doesn't fit the declarative step types. | The escape hatch — rarely needed. |
-
-### Walkthrough
-
-[Tutorial — CRM → Step 6 "AI and jobs"](./tutorial-crm/06-ai-and-jobs.md) covers a scheduled job that re-runs nightly. For a runnable recipe, [Cookbook → Scheduled report email](./cookbook/scheduled-report-email.md).
+**Start with**: [Getting started with Nomaflow](../nomaflow/getting-started.md).
 
 ---
 
-## 5. Customer portals
+## 5. Apps for outside users \{#portals\}
 
-A customer portal is just **an internal admin app scoped to row-level data of one tenant**. The framework's permission model (`sql:<connector>:<query>` codes + the `session.user` placeholder) covers the row-level isolation without bespoke code.
+An app opened to users outside the team, each seeing only their own rows.
 
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **OIDC sign-in** — your IdP, the customer's IdP, or both. | ✓ |
-| **Per-user row filtering** via `WHERE owner = :session_user` patterns. | ✓ |
-| **Permission codes per screen** — your operators see different screens from the customer. | ✓ |
-| **File upload** and download. | ✓ |
-| **Audit trail** of every write the customer performs. | ✓ |
-| **Branded UI** — customer-app theme, custom logo, custom favicon. | ✓ |
-
-### What you write
-
-| Task | Time |
-|---|---|
-| Wire OIDC against your IdP (or the customer's). | 10 minutes per IdP. |
-| Add `WHERE owner = :session_user` to every customer-facing query. | A line per query. |
-| Give the customer a single role with the right permissions. | 2 minutes. |
-
-### Walkthrough
-
-The roles + OIDC parts are in [Tutorial — CRM → Step 5 "Roles and SSO"](./tutorial-crm/05-auth.md). The row-level filter pattern is documented under [Cookbook → Row-level access](./cookbook/row-level-access.md).
+| Sign-in through an OpenID Connect provider | [Sign-in](./build/secure/sign-in.md), [OIDC SSO](./cookbook/oidc-sso.md) |
+| Roles: which menus, screens and queries each user reaches | [Roles & permissions](./build/secure/roles-and-permissions.md) |
+| Data scope: rows filtered by user attributes, applied by the server | [Row-level access](./cookbook/row-level-access.md) |
+| Queries filtered on the signed-in user with `{{LOGIN}}` | [Parameter binding](./build/queries/parameter-binding.md#tokens) |
+| App name, colours and fonts | Settings → Theme |
 
 ---
 
-## 6. Workflow orchestration
+## 6. Workflows \{#workflow\}
 
-The combination of [screens](./build/screens/overview.md) + [form conditions](./form-conditions.md) + [jobs](../nomaflow/overview.md) covers most state-machine workflows — approve / reject, escalate, route to the right team.
+Approve, reject, escalate: a status column and screens that adapt to it.
 
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **Status field** rendered as a coloured chip with role-gated transitions. | ✓ |
-| **Multi-step forms** — a long process split across tabs of the same dialog. | ✓ |
-| **Per-state visibility** — "Comments" field only visible after Submit; "Reject reason" only on Reject. | ✓ |
-| **Scheduled escalations** — a job that nags after N days in a state. | ✓ |
-| **Notifications** to the relevant operator on state changes. | ✓ |
+| Fields shown, required or locked depending on the status | [Form conditions](./form-conditions.md) |
+| Rows read-only once closed (`editable_when`) | [Form conditions](./form-conditions.md#editable-when) |
+| Buttons running queries, with confirmation and a prompt for a reason | [Actions and lifecycle](./build/screens/actions-and-lifecycle.md) |
+| Notifications when a screen writes a row, or from an action | [Notifications](../nomaflow/notifications.md) |
+| Reminder jobs on a schedule | [Nomaflow](../nomaflow/overview.md) |
 
-### What you write
-
-| Task | Time |
-|---|---|
-| Model the state machine in your database (a `status` column + a `transitions` table if you want fine-grained gates). | One table. |
-| Wire the conditions on form fields. | Per-field, but fast — see the editor in [Form conditions](./form-conditions.md). |
-| Wire the notifications on the status-change write query. | A few minutes. |
-
-### Walkthrough
-
-[Cookbook → Multi-step form](./cookbook/multi-step-form.md) is the runnable recipe.
+**Start with**: [Multi-step form](./cookbook/multi-step-form.md).
 
 ---
 
-## 7. ETL and data warehousing
+## When another tool fits better
 
-For teams that ingest data from multiple sources into a warehouse, Nomaflow + the framework's connectors cover the orchestration **and** the operator UI.
+- **Consumer-facing apps.** The grid-and-dialog interface is made for operators.
+- **Mobile-first apps.** The application works on a tablet but is designed for a desktop screen.
+- **Real-time co-editing.** Record locks prevent conflicting edits; there is no shared live editing.
+- **Screens with a unique layout** (Kanban board, Gantt chart, map): the grid-and-dialog model does not suit them.
 
-### What the framework does for you
-
-| Feature | Built in |
-|---|---|
-| **`sql_copy` step** — streams rows source → target with type coercion, chunking, atomic rename. | ✓ |
-| **Per-step retry** with exponential backoff. | ✓ |
-| **Concurrency control** — single-instance per job. | ✓ |
-| **Dependencies** between jobs. | ✓ |
-| **A UI to monitor every run**, with live log tail. | ✓ |
-
-### What you write
-
-| Task | Time |
-|---|---|
-| Define the source and target pools. | 5 minutes each. |
-| Write the source queries (often plain `SELECT * FROM source_table`). | Trivial. |
-| Wire the job in the Jobs builder. | 10 minutes per copy. |
-
-### Walkthrough
-
-[Cookbook → Bulk import](./cookbook/bulk-import.md) covers the inbound side; the [Jobs documentation](../nomaflow/overview.md) covers the orchestration.
-
----
-
-## When the framework isn't the right tool
-
-Honesty section:
-
-- **Public consumer apps.** The grid + dialog UX is operator-oriented, not consumer-oriented. Use Next.js / Remix for that.
-- **Mobile-first apps.** The SPA works on mobile but isn't built for it. Use React Native / Flutter for native.
-- **Real-time collaboration apps.** Locks prevent concurrent edits, but the framework doesn't ship operational-transform or CRDTs. Use Yjs / Liveblocks.
-- **Heavy custom UX.** If most of your screens need a unique layout (a Kanban board, a Gantt chart, a map), the framework's grid + dialog grammar fights you. Better to embed custom React routes; or pick a different tool.
-- **Static marketing sites.** Use a static-site generator.
-
-The framework is the right tool when **most of your screens are list-and-edit on top of a database**, with sprinklings of dashboards, jobs and integrations. Which describes the vast majority of internal applications.
+Liberty Next fits when **most screens list and edit data from a database**, with dashboards, jobs and integrations around them.
 
 ---
 
 ## Pick your path
 
-| You are… | Start with |
+| You want to… | Start with |
 |---|---|
-| **New to the framework and want a clean tutorial** | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) — six steps, generic domain. |
-| **Planning a JDE admin** | Install the packaged app [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/) — JDE-specific, no DIY needed. |
-| **Planning a SAP / NetSuite / other ERP admin** | Walk through [Tutorial — Build a CRM](./tutorial-crm/01-setup.md), the framework pattern transfers. |
-| **Just installing it for the first time** | [Getting Started → Installation](../installation/python-server.md). |
-| **Looking up how to do X specifically** | [Cookbook](./cookbook/crud-existing-table.md) — short recipes. |
-| **Reading the framework's grammar first** | [Connectors](./connectors.md) is the natural entry point. |
+| Learn the framework on a full example | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) |
+| Build a first screen quickly | [First app walkthrough](./getting-started/first-app.md) |
+| Administer JD Edwards | [Nomajde](../nomajde/overview.md) |
+| Install the framework | [Installation](../installation/overview.md) |
+| Find how to do one thing | The cookbook, starting with [CRUD over an existing table](./cookbook/crud-existing-table.md) |
 
 ---
 
@@ -1778,114 +1624,66 @@ In **Settings → App → AI Assistant**: **Enabled**, **Anthropic API key** (en
 ## Liberty Next — Expose data to the AI assistant
 Source: https://docs.nomana-it.fr/liberty/framework/cookbook/expose-to-ai/
 
-Recipe — decide which connectors the AI assistant can read, restrict writes, write a good tool description so the model picks the right query. The difference between a useful assistant and one that hallucinates.
+Recipe — choose what the AI assistant reaches and help it pick the right query: the ai:chat permission, the allowed connectors, read queries only, the user's data scope, and query labels and descriptions written for the model.
 
 ## The problem
 
-The framework's AI assistant runs the same connector queries the UI does — but it can only pick the right tool if you tell it what each tool does. A connector exposed to the assistant with a vague description ("get data") will be picked at random; a connector with a clear two-sentence description will be picked correctly.
-
-This recipe covers the **scoping** — which connectors the assistant sees, which write paths it can take, how to write descriptions the model uses.
+The [AI assistant](../ai-assistant.md) answers questions by running the connectors' named queries. It must reach the right data — and only that — and pick the right query for each question.
 
 ## The pattern
 
-Three layers of scoping, each independent:
-
-| Layer | Where | Effect |
+| Layer | Setting | Effect |
 |---|---|---|
-| **Per connector — Expose to AI** | Settings → Connectors → \<connector\> → Connection sub-form. | Off → none of the connector's queries appear in the tool list. |
-| **Per query — Operation type** | Settings → Connectors → \<connector\> → \<query\> → Operation. | `Read` queries are exposed by default (when the connector toggle is on); `Write` queries require an extra opt-in. |
-| **Per role — `ai:chat` + `ai:tool:<name>`** | Settings → Roles. | Even an exposed query is hidden from a caller without `ai:chat`. The fine-grained `ai:tool:<name>` permission lets you whitelist tools per role. |
-
-Layered together, the assistant sees exactly what each user is supposed to see — no more, no less.
+| **Who** | The `ai:chat` permission, through a role. | Without it, the user has no assistant. |
+| **Which connectors** | **Allowed connectors**, Settings → App → AI Assistant. | Empty: every connector; otherwise only those listed. |
+| **Which queries** | Read queries only. | Write queries are always refused; the assistant never writes SQL of its own. |
+| **Which rows** | The user's rights and [data scope](../build/secure/roles-and-permissions.md#data-scope). | A query run by the assistant is checked like a screen's: the user sees the same rows. |
+| **Which query to pick** | The queries' **label** and **description**. | The assistant reads them to choose. |
 
 ## The recipe
 
-### 1. Set the connector's Expose to AI toggle
+### 1. Grant the assistant
 
-Open the connector. The *Connection* sub-form has an **Expose to AI assistant** toggle near the bottom. Defaults to *on* when you create a new connector.
+In **Settings → Access → Roles**, give the users' role the *AI assistant* rule (`ai:chat`), in **Beyond the menus**. See [Roles & permissions](../build/secure/roles-and-permissions.md).
 
-Turn it **off** for connectors that hold:
+### 2. Limit the connectors
 
-- Sensitive data the assistant shouldn't surface (PII, financials past a threshold, anything the legal team has flagged).
-- Internal framework / debugging connectors (`liberty-self`, technical-dashboard).
-- Operational connectors that only make sense in a UI flow (the BIP resubmit from the JDE tutorial).
+In **Settings → App → AI Assistant**, fill **Allowed connectors** with the connectors whose data the assistant may read — for example the CRM's, without the HR one. Keep **API tool** off unless the endpoints only read.
 
-### 2. Write good query descriptions
+### 3. Describe the queries
 
-Every read query has a **Description** field. The text is passed to the model as the tool's description. The model picks tools based on this string.
+In **Settings → Connectors**, give each query the assistant should use a **label** and a **description** (Advanced tab). The assistant lists the connectors with their queries and descriptions, then picks one:
 
-| Good | Bad |
+| Good | Weak |
 |---|---|
-| `Returns every invoice in a period with customer, amount, status. Use to answer questions about invoicing volume, recent invoices, status distribution.` | `Get invoices` |
-| `Counts deals per stage of the sales pipeline. Use for pipeline-distribution questions.` | `Aggregate deals` |
-| `Lists customer activities (calls, meetings, emails) ordered most-recent-first. Filter by customer or by date.` | `Activities` |
+| `Invoices of a period with customer, amount and status. For questions about invoicing volume, recent invoices, status breakdown.` | `Get invoices` |
+| `Number of deals per pipeline stage. For pipeline breakdown questions.` | `Aggregate deals` |
+| `Customer activities (calls, meetings, e-mails), most recent first. Parameter CUSTOMER_ID.` | `Activities` |
 
-Two patterns work:
+Two sentences are enough: **what the rows are**, and **which questions it answers**. Mention the parameters and their format.
 
-1. **What it returns** — one sentence describing the rows.
-2. **When to use it** — one sentence pointing the model at the question shape it answers.
+### 4. Add dedicated queries
 
-Both in the user's language (the assistant matches the language of the question).
+For the questions asked often — totals per company, per month — write a read query that computes them, rather than letting the assistant go through thousands of rows. Name its parameters clearly (`PERIOD_FROM`, `COMPANY`) and declare their labels.
 
-### 3. Opt write queries in explicitly
+### 5. Check
 
-Write queries are **excluded by default** even when the connector is exposed — the framework doesn't want the assistant doing unintended writes.
-
-To opt a write query in:
-
-| Setting | Effect |
-|---|---|
-| On the query → **Expose to AI assistant** toggle | When *on*, the query appears in the tool list with the `:write` suffix. |
-| On roles that should be allowed to trigger AI writes | Add `ai:write` permission. |
-
-Reserve this for **idempotent, low-risk** writes (a re-fetch of an external API, a flag toggle, a sync trigger). Never for `DELETE`s.
-
-### 4. Per-role gating with `ai:tool:<name>`
-
-For finer control, the `ai:tool:&lt;connector&gt;__&lt;query&gt;` permission gates each tool individually. By default, granting `ai:chat` exposes every read tool the user can run; adding `ai:tool:billing__*` restricts to billing.
-
-Typical role recipes:
-
-| Role | Permissions |
-|---|---|
-| `crm-viewer` | `ai:chat` + (implicit: every read tool they can run). |
-| `crm-power-user` | `ai:chat` + `ai:tool:deals__*` + `ai:write`. The "write tools" only appear because of the explicit `ai:write`. |
-| `data-analyst` | `ai:chat` only, but a much wider read-permission set on the underlying queries — the assistant inherits. |
-
-### 5. Verify what each role sees
-
-The endpoint `GET /ai/tools` returns the tool list as the calling user would see it. Use it to confirm scoping:
-
-```bash
-curl -H "Authorization: Bearer $(get_token alice)" \
-     http://127.0.0.1:8000/ai/tools | jq '.[].name'
-```
-
-The list should match the user's read permissions. If a tool you expected is missing, check the connector's *Expose to AI* toggle + the user's permission on the underlying query.
+Sign in as a user of the role and ask a question the role should answer, then one it should not: the assistant shows the tools it used and the queries it ran.
 
 ## Common mistakes
 
 | Mistake | Symptom |
 |---|---|
-| **Connector exposed but description empty** | Model picks random tools, hallucinates parameter names. |
-| **Write query exposed without `ai:write` on any role** | The query appears in `GET /ai/tools` but the assistant refuses to call it ("you don't have permission to write"). |
-| **Multiple queries with similar descriptions** | Model picks the first lexicographically and ignores the rest. Differentiate the descriptions. |
-| **Description in one language, query in another** | The model gets confused. Match the connector's description language to the user's `session.lang`. |
-
-## Variations
-
-| You want… | Do this |
-|---|---|
-| **Limit AI to one app** | Don't `ai:chat` users from other apps. Or grant `ai:tool:crm__*` only. |
-| **A daily cap on AI calls per user** | Set `[ai] max_messages_per_day` on the framework settings; the framework refuses past the cap. |
-| **The model never to see real PII** | Mark the column `Rule = PASSWORD` on the dictionary entry — the AI gets `••••` in the tool result, not the underlying value. |
-| **A specific connector exposed only to admin** | Set the underlying query's permission to `sql:financial:*` and only grant it to `admin`; `Expose to AI` can stay on — the framework filters. |
+| Queries without description | The assistant hesitates between similar queries, or picks the wrong one. |
+| Several queries with the same description | Same. Make each description specific. |
+| A sensitive connector left in an empty **Allowed connectors** list | The assistant may read it for any user who has rights on its queries. List the connectors explicitly. |
+| Expecting the assistant to update data | Write queries are refused; changes go through screens and actions. |
 
 ## What's next
 
-- [AI Assistant](../ai-assistant.md) for the full chat surface.
-- [Roles & permissions](../build/secure/roles-and-permissions.md) for the `ai:*` permission family.
-- [CRM tutorial → Step 6](../tutorial-crm/06-ai-and-jobs.md) for a worked end-to-end setup.
+- [AI assistant](../ai-assistant.md) — the drawer, the tools, the settings.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) — `ai:chat` and the data scope.
+- [App settings → AI Assistant](../build/settings-app.md#ai) — every setting.
 
 ---
 
@@ -2076,158 +1874,97 @@ The administrator sets the API key, the default model, the documentation source,
 ## Liberty Next — First app walkthrough
 Source: https://docs.nomana-it.fr/liberty/framework/getting-started/first-app/
 
-Build a working Liberty app end-to-end in under five minutes: declare a database pool, define a SQL connector, expose a screen with a grid + edit modal and wire it into the sidebar menu — all from the Settings UI, all reloaded live.
+Build a working Liberty Next app end to end: a pool, a SQL connector with its queries generated from a table, a screen with a grid and an edit dialog, and a menu entry — all from Settings, applied without a restart.
 
-This page walks you from an empty install to a working app — a sidebar entry that opens a grid backed by a SQL query, with an edit dialog. Everything is done from the in-app **Settings** UI; nothing is hand-edited in TOML. The whole sequence takes **under five minutes** once the framework is installed.
+This page goes from an empty install to a working app — a sidebar entry that opens a grid on a table, with an edit dialog. Everything is done from **Settings** (superuser), nothing is edited by hand.
 
-You'll touch four configuration types in order — **pool → connector → screen → menu** — each saved live and reloaded by the framework in the same browser tab.
+Four elements, in order — **pool → connector → screen → menu** — each saved and applied at once.
 
 ---
 
 ## At a glance
 
-The example uses the built-in SQLite pool (`default`) and a tiny `tasks` table — no external database needed.
+The example uses the `default` pool and a small `tasks` table.
 
 ---
 
-## Step 1 — Make sure the `default` pool exists
+## Step 1 — The pool \{#pool\}
 
-Open **Settings → Pools**. On a fresh install the `default` pool already points at the local SQLite file (`liberty.db`). It's enough for this walkthrough — no changes required.
+Open **Settings → Pools**. The installation created the `default` pool: on a Docker install it points at the bundled PostgreSQL database, on a Python install without PostgreSQL at a local SQLite file. It is enough for this walkthrough. To work on another database, add a pool with its URL — see [Connectors](../connectors.md#connection-fields).
 
-  Pools
-  
-    default
-    sqlite+aiosqlite:///liberty.db
-    connected
-    ✏️
-  
-
-For a real install, switch to a PostgreSQL or Oracle URL — every connection-string format and option is documented under [Configuration → Environment variables](../configuration/environment-variables.md#bootstrap).
-
-Then create the example table once via the SQLite shell:
+Create the example table with any SQL client connected to that database:
 
 ```sql
 CREATE TABLE tasks (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  title       TEXT    NOT NULL,
-  status      TEXT    NOT NULL DEFAULT 'open',
-  due_date    DATE,
-  created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+  id        INTEGER PRIMARY KEY,
+  title     VARCHAR(200) NOT NULL,
+  status    VARCHAR(10)  NOT NULL DEFAULT 'open',
+  due_date  DATE
 );
-INSERT INTO tasks(title, status, due_date) VALUES
-  ('Draft sprint plan',      'open',   '2026-06-10'),
-  ('Review pull request 42', 'done',   '2026-06-05'),
-  ('Customer follow-up',     'open',   '2026-06-12');
+INSERT INTO tasks (id, title, status, due_date) VALUES
+  (1, 'Draft sprint plan',      'open', '2026-06-10'),
+  (2, 'Review pull request 42', 'done', '2026-06-05'),
+  (3, 'Customer follow-up',     'open', '2026-06-12');
 ```
 
 ---
 
-## Step 2 — Define a SQL connector
+## Step 2 — The connector and its queries \{#connector\}
 
-A connector is a **named query against a pool**. Open **Settings → Connectors → ➕ New connector** and fill in:
+1. **Settings → Connectors → ＋ Connector**: name `tasks`, type **SQL**, pool `default`. Save.
+2. With `tasks` selected, choose **Tables** in the mode bar, then **＋ Add queries → Generate from DB**.
+3. In the CRUD wizard, pick the `tasks` table, keep every column, tick **key** on `ID`, and keep the four statements (SELECT, UPDATE, INSERT, DELETE).
+4. Save. The connector now holds `tasks_get`, `tasks_put`, `tasks_post` and `tasks_delete`:
 
-| Field | Value |
-|---|---|
-| **Name** | `tasks` |
-| **Pool** | `default` |
-| **Type** | `sql` |
-| **Read query** | `SELECT id, title, status, due_date FROM tasks ORDER BY due_date` |
-| **Write — insert** | `INSERT INTO tasks(title, status, due_date) VALUES (:title, :status, :due_date)` |
-| **Write — update** | `UPDATE tasks SET title = :title, status = :status, due_date = :due_date WHERE id = :id` |
-| **Write — delete** | `DELETE FROM tasks WHERE id = :id` |
+```sql
+SELECT ID, TITLE, STATUS, DUE_DATE FROM tasks
+UPDATE tasks SET TITLE = :TITLE, STATUS = :STATUS, DUE_DATE = :DUE_DATE WHERE ID = :ID_ORIGINAL
+```
 
-The schema of the read query is **discovered at runtime** — the framework asks the database "what columns does this return?" the first time the connector is used. No need to declare it ahead of time.
-
-Click **Save**. The connector appears on the catalog page (open `/` in another tab to see it). [Connectors](../connectors.md) covers every option and the HTTP / API connector types.
+The columns are read from the database when the query runs; nothing else needs declaring. See [Create from a database table](../build/queries/create-from-database.md).
 
 ---
 
-## Step 3 — Build a screen on top of the connector
+## Step 3 — The screen \{#screen\}
 
-A screen wraps a connector into a **grid + edit dialog**. Open **Settings → Screens → ➕ New screen**:
+1. **Settings → Screens → ＋ Add scope**, pick `tasks`: the `tasks` chip appears.
+2. **＋ Add screen**, id `tasks`. Click the new card to open the screen editor.
+3. **General** tab: label `Tasks`; check **Editable** for in-grid editing.
+4. **Queries** tab: read `tasks_get`, update `tasks_put`, insert `tasks_post`, delete `tasks_delete`.
+5. **Dialog** tab: drag the columns onto the form.
+6. **Save**.
 
-| Field | Value |
-|---|---|
-| **App** | `tutorial` |
-| **Screen id** | `tasks` |
-| **Title** | `Tasks` |
-| **Connector** | `tasks` |
-| **Key columns** | `id` |
-| **Editable** | ✓ (turns on the Add / Edit / Delete actions) |
-
-The grid columns and the edit dialog auto-derive from the read query's columns. To add localized labels, validation rules or boolean badges, the [Dictionary](../dictionary.md) page is the next stop.
-
-Click **Save**, then open the URL `http://127.0.0.1:8000/screens/tutorial/tasks` — the grid is already live.
-
-  
-    Tasks
-    
-      ↻ Refresh
-      + Add
-    
-  
-  
-    IDTitleStatusDue date
-  
-  
-    1Draft sprint plan
-    open
-    10/06/2026
-  
-  
-    2Review pull request 42
-    done
-    05/06/2026
-  
-  
-    3Customer follow-up
-    open
-    12/06/2026
-  
-
-Click any row — the edit dialog opens with the four fields, **Save** triggers the update query, **Delete** triggers the delete query, **+ Add** opens an empty form bound to the insert query.
-
-[Screens](../build/screens/overview.md) covers tabs, per-field conditions, cross-connector reads/writes and the full set of dialog options.
+The grid columns come from the read query; their labels and formats from the [dictionary](../dictionary.md) when entries exist (its **Scan a table** button proposes them). The [Screen Creation Assistant](../build/screen-assistant.md) does steps 2 and 3 in one pass for a table.
 
 ---
 
-## Step 4 — Wire it into the sidebar menu
+## Step 4 — The menu entry \{#menu\}
 
-Open **Settings → Menus → ➕ New leaf** (or extend an existing tree):
+1. **Settings → Menus → + Add scope**, pick `tasks`: the empty tree of the app appears.
+2. **＋ Item**, then in the inspector: label `Tasks`, type `screen`, target `tasks_get` (the screen built on it), icon `table`.
+3. Save.
 
-| Field | Value |
-|---|---|
-| **Parent** | *Top-level* |
-| **Label** | `Tasks` |
-| **Type** | `query` |
-| **Connector** | `tasks` |
-| **Screen** | `tutorial/tasks` |
-| **Icon** | `list-todo` *(any [Lucide icon](https://lucide.dev/icons))* |
-
-Save. The sidebar refreshes automatically — the **Tasks** entry appears with the icon and opens the screen on click. The framework's hot-reload pipeline pushed the new menu tree without a restart; the same is true for every Settings edit. See [Hot-reload](../configuration/hot-reload.md) for the exact mechanics.
+Since `tasks` now has a menu, it is an app: it appears in the app picker, and its sidebar shows **Tasks**. A click opens the grid: a row opens the edit dialog, **＋ Add** an empty one. See [Build the tree](../build/menus/build-the-tree.md) and [Make a connector an app](../build/menus/make-connector-an-app.md).
 
 ---
 
 ## What you have now
 
-A working app with:
+- **A pool** — the database connection.
+- **A connector** — the four queries on the table.
+- **A screen** — the grid and the dialog on these queries.
+- **A menu** — the entry that opens the screen, which makes the connector an app.
 
-- **A pool** that owns the database connection.
-- **A connector** holding the read + write queries.
-- **A screen** that turns the connector into a grid + edit dialog.
-- **A menu entry** that exposes the screen in the sidebar.
-
-Four TOML blocks behind the scenes — the four files were updated in place under `liberty-apps/config/`, no restart needed. Look at them with `git diff` to see how a typical edit lands.
+Every save was applied without a restart. The pool and the connector are stored in `connectors.toml`, the screen in `screens.toml`, the menu in `menus.toml`.
 
 ---
 
 ## What's next
 
-- [Project layout](./project-layout.md) — the file map of `liberty-apps`.
-- [Concepts → Connectors](../connectors.md) — HTTP, API, parameterised queries, schema hints.
-- [Concepts → Dictionary](../dictionary.md) — labels, enums, lookups, format rules.
-- [Authentication → Roles & permissions](../build/secure/roles-and-permissions.md) — restrict the new screen to a specific role.
-- [Settings UI](../configuration/settings-ui.md) — every builder in detail.
+- [Project layout](./project-layout.md) — where these files live.
+- [Dictionary](../dictionary.md) — labels, lists of values and formats.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) — who may open the new screen.
+- [CRM tutorial](../tutorial-crm/01-setup.md) — a complete app with several screens, a dashboard and jobs.
 
 ---
 
@@ -2266,25 +2003,27 @@ liberty-next/
 ├── liberty/                  ← FastAPI backend (Python 3.12)
 │   ├── main.py               ← app factory, lifespan, routers
 │   ├── config.py             ← TOML loading + env expansion
-│   ├── connectors/           ← SQL / HTTP / API connector engine
+│   ├── connectors/           ← SQL / API connector engine, dictionary (dictionary.py)
 │   ├── auth/                 ← local users, OIDC, JWT, permissions
-│   ├── dictionary/           ← shared field metadata
 │   ├── screens/              ← screen engine (grid + dialog runtime)
 │   ├── dashboards/           ← dashboard layout + widget rendering
 │   ├── charts/               ← chart definitions
 │   ├── menus/                ← menu tree + permission pruning
-│   ├── jobs/                 ← Nomaflow (ETL + scheduler)
+│   ├── jobs/                 ← Nomaflow (jobs, steps, scheduler)
+│   ├── actions/              ← shared actions
+│   ├── notify/               ← notifications
 │   ├── ai/                   ← Anthropic tool-use assistant
 │   ├── licensing/            ← RS256 license-key verification
-│   ├── web/                  ← HTTP route handlers (*_router.py)
+│   ├── web/                  ← HTTP routes (one module per area)
 │   └── *_cli.py              ← CLI entry points (admin, connectors, crypto, license)
 │
 ├── frontend/                 ← React 19 + Vite SPA (built to frontend/dist/)
 │   └── src/
-│       ├── pages/            ← lazy-loaded route components
-│       ├── builders/         ← Settings UI builders (one per config type)
-│       ├── components/       ← shared UI atoms (table, dialog, chart, …)
-│       └── api/              ← REST client wrappers
+│       ├── pages/            ← pages, including Settings/ (one editor per configuration type)
+│       ├── common/           ← shared UI parts (fields, lists, dialogs, SQL editor…)
+│       ├── components/       ← layout (sidebar, app picker, tabs)
+│       ├── locales/          ← interface texts, en and fr
+│       └── api/              ← REST client
 │
 ├── config/                   ← bundled templates + per-installation files
 │   ├── app.toml              ← framework settings (auth, OIDC, AI, crypto, license)
@@ -2292,7 +2031,7 @@ liberty-next/
 │   ├── *.toml.example        ← templates for connectors / dictionary / menus / screens / charts / dashboards
 │   └── *.toml                ← real per-section files (only when LIBERTY_APPS_DIR is unset)
 │
-├── tests/                    ← pytest suite (≥ 335 tests)
+├── tests/                    ← pytest suite
 └── docs/                     ← framework-internal planning notes (not the public docs)
 ```
 
@@ -2312,17 +2051,19 @@ liberty-next/
 liberty-apps/
 ├── README.md
 ├── config/                   ← per-section TOML — read by liberty-next at runtime
-│   ├── connectors.toml       ← pools + named queries / endpoints
-│   ├── dictionary.toml       ← reusable field metadata
-│   ├── menus.toml            ← sidebar trees per app
-│   ├── screens.toml          ← grid + dialog definitions
-│   ├── charts.toml           ← Recharts wrapper config
-│   └── dashboards.toml       ← dashboard layouts
+│   ├── connectors.toml       ← pools, connectors and their queries / endpoints
+│   ├── dictionary.toml       ← data items, enums, lookups, sequences
+│   ├── menus.toml            ← one menu per app
+│   ├── screens.toml          ← grids and dialogs
+│   ├── charts.toml           ← saved charts
+│   ├── dashboards.toml       ← dashboards
+│   ├── actions.toml          ← shared actions
+│   └── theme.toml            ← colours and branding
 │
-├── plugins/                  ← custom Python modules (job step callables, hooks, …)
-│   └── <package>/            ← one folder per app
-│       ├── __init__.py
-│       └── jobs.toml         ← Nomaflow job catalogue for this app
+├── plugins/                  ← Python packages (functions called by steps and actions)
+│   ├── <package>/            ← one folder per package, with __init__.py
+│   └── nomaflow/
+│       └── jobs.toml         ← the Nomaflow job catalogue
 │
 └── docs/                     ← deployment & operations notes (per-installation)
 ```
@@ -2333,9 +2074,11 @@ liberty-apps/
 | `config/dictionary.toml` | Settings UI → *Dictionary* | Per-column metadata reused by screens and charts. |
 | `config/menus.toml` | Settings UI → *Menus* | One root per app, optional folder/leaf hierarchy. |
 | `config/screens.toml` | Settings UI → *Screens* | Grids + dialogs + per-field conditions. |
-| `config/dashboards.toml` | Settings UI → *Dashboards* | Stat / bar / line / pie panels. |
+| `config/dashboards.toml` | Settings UI → *Dashboards* | KPI, chart and table widgets. |
 | `config/charts.toml` | Settings UI → *Charts* | Chart definitions referenced by dashboards. |
-| `plugins/*/jobs.toml` | Settings UI → *Jobs* | Nomaflow catalogue — one file per app package. |
+| `config/actions.toml` | Settings UI → *Actions* | Shared actions called by screens. |
+| `config/theme.toml` | Settings UI → *Theme* | Colours and branding. |
+| `plugins/nomaflow/jobs.toml` | Nomaflow → *Jobs* | The job catalogue. |
 | `plugins/*/*.py` | Developer | Custom step callables — exposed to the framework via `sys.path`. |
 
 Every file is plain TOML you can read with `cat`, diff with `git`, edit in `vim`. The Settings UI uses the same on-disk format — what you save in the browser is what `git status` reports.
@@ -5536,7 +5279,7 @@ Three regions:
 
 | Region | What it carries |
 |---|---|
-| **Top scope bar** | One chip per app (a connector that has a menu). Click a chip → its screens load below. The *＋ Add screens for a connector* button registers a brand-new connector under the Screens namespace. *Discard* / *Save* on the right commit or revert page-wide edits. |
+| **Top scope bar** | One chip per app (a connector that has a menu). Click a chip → its screens load below. The *＋ Add scope* button registers a brand-new connector under the Screens namespace. *Discard* / *Save* on the right commit or revert page-wide edits. |
 | **Filter bar** | A search input for the screen list. Visible when the selected app has more than a handful of screens. |
 | **Screen list** | One card per screen, vertical scroll. Each card shows the id, label, read query, tab count, field count and per-card actions: *Rename*, *Clone*, *Delete*. **Clicking a card opens the Screen Designer modal.** |
 
@@ -5664,7 +5407,7 @@ This page walks the **General** and **Queries** tabs of the Screen Designer. Col
 
 On **Settings → Screens**, the scope bar lists every app (= connector) that already has at least one screen. If the connector you want to add a screen to isn't there:
 
-1. Click **＋ Add screens for a connector**.
+1. Click **＋ Add scope**.
 2. Pick the connector from the dropdown (only connectors **without** a screens namespace are listed — once registered, the connector becomes an app chip).
 3. The chip appears at the top; the screen list below is empty.
 
@@ -7656,7 +7399,7 @@ A user signs into Liberty through one of two paths:
 | Path | When |
 |---|---|
 | **Local username + password** | The user types credentials on the sign-in screen. The framework checks them against `auth.toml` (or the `ly2_users` table) and mints a JWT. |
-| **OIDC** | The user clicks *Sign in with \*, is redirected to the IdP, signs in there, and returns to Liberty with their identity. The framework provisions / updates the user and mints a JWT. |
+| **OIDC** | The user clicks *Sign in with OIDC*, is redirected to the IdP, signs in there, and returns to Liberty with their identity. The framework provisions / updates the user and mints a JWT. |
 
 Both can coexist — a single install offers both buttons on the sign-in screen, and users pick whichever applies.
 
@@ -9940,7 +9683,7 @@ Clicking a row opens a three-tab editor on the right. The tabs are the same for 
     
   
 
-### Connection fields
+### Connection fields \{#connection-fields\}
 
 The **Settings** mode of a SQL connector (the *Settings* button of the connector page) holds its connection settings. The form's labels are in English.
 
@@ -10189,7 +9932,7 @@ The record bar offers **Find usages**, **Rename**, **Clone** and **Delete**. Ren
 | `jdedate`, `jdetime` | A JD Edwards date (CYYDDD) or time (HHMMSS), shown as a regular date or time. |
 | `boolean` | A tick or a cross. |
 | `password` | A masked value. |
-| `email`, `url`, `color` | An e-mail address, a link, a colour. |
+| `email`, `url`, `color` | Text, shown as entered. |
 
 The **Framework** tab can add values to this list.
 
@@ -10209,12 +9952,20 @@ The **Framework** tab can add values to this list.
 
 The server-side rules (`SEQUENCE`, `LOGIN`, `SYSDATE`, `PASSWORD`, `DEFAULT`) apply to every write through the query — form, grid editing, API — not only to the form. A writable query can also stamp values explicitly with tokens such as `{{LOGIN}}` or `{{SYSDATE}}` — see [Parameter binding](./build/queries/parameter-binding.md).
 
-### Form-layer defaults \{#form-layer-defaults\}
+### Audit columns \{#form-layer-defaults\}
 
-For an audit column, the usual pairing is:
+A rule applies to every write whose query binds the column:
 
-| Column | Rule |
-|---|---|
+| Column | Rule | Condition |
+|---|---|---|
+| `UPDATED_BY` | `LOGIN` | — |
+| `UPDATED_AT` | `SYSDATE` | The column must come empty: keep it out of the dialog. |
+| `CREATED_BY`, `CREATED_AT` | `LOGIN`, `SYSDATE` | Only if the update query does not write them — otherwise each update would replace them. |
+| `ID` | `SEQUENCE` | When the database does not number the rows itself. |
+
+The `{{LOGIN}}` / `{{SYSTIMESTAMP}}` tokens written in the insert and update queries are the simplest way to stamp these columns — see [Audit trail](./cookbook/audit-trail.md).
+
+---|---|
 | `CREATED_BY`, `UPDATED_BY` | `LOGIN` |
 | `CREATED_AT`, `UPDATED_AT` | `SYSDATE` |
 | `ID` | `SEQUENCE` (when the database does not number the rows itself) |
@@ -10689,1646 +10440,934 @@ Filtering a timestamp column doesn't force you to type a full `YYYY-MM-DD HH:MM:
 ## Liberty Next — Apps
 Source: https://docs.nomana-it.fr/liberty/framework/apps/overview/
 
-A Liberty app groups connectors, screens, menus, dashboards, charts and jobs around one business domain. Apps are surfaced in the workspace selector at the top of the sidebar, edited per-entity from each Settings tab, and packaged as zip exports for transfer between environments.
+What an app is in Liberty Next — a connector with a menu, shown in the app picker — what belongs to it (queries, dictionary scope, screens, menu, charts), how users switch between apps, and how an app is copied, moved between environments or installed ready-made.
 
-:::info[Deep reference]
-This page documents Liberty's app model — workspace selector behaviour, packaged app export / import and per-app permission patterns. For task-oriented setup — make a connector visible as an app in the top switcher — see [Build → Menus → Make a connector an app](../build/menus/make-connector-an-app.md).
-:::
-
-A Liberty **app** is a **namespace** — a logical grouping of connectors, screens, menus, dashboards, charts and jobs that belong to one business domain (CRM, billing, JD Edwards admin, internal HR…). The framework collects every entity's *App* field at load time and exposes the resulting list as the **workspace selector** in the header — switching workspaces changes the sidebar to that app's menu tree.
-
-Apps aren't a separate concept to wire — every Settings builder exposes an *App* dropdown on each entity. This page covers how the workspace selector works, how to package an app for transfer between environments, and the per-app permission pattern.
+In Liberty Next, an **app** is a **connector that has a menu**: its name appears in the app picker at the top of the sidebar, and picking it shows its menu. There is no separate app object to create — the connector is the app.
 
 ---
 
-## At a glance
+## What belongs to an app \{#scope\}
 
-  
-    WORKSPACE SELECTOR
-    Top of the header. Lists every app the caller can see, sorted by display order.
-  
-  
-    APP FIELD
-    Every connector / screen / menu / chart / dashboard / job carries one. Defaults to _default.
-  
-  
-    SETTINGS → APPS
-    Friendly labels, icons, display order — plus zip export / import for transfer between environments.
-  
-  
-    PERMISSIONS
-    {"sql:-*:*"}, {"screen::*"}, {"menu::*"} — one role per app keeps things tidy.
-  
+Everything an app shows is filed under its connector's name:
+
+| Element | Where it is set | Stored under |
+|---|---|---|
+| Queries (tables, queries, sequences, lookups) | Settings → Connectors | The connector itself. |
+| Dictionary entries, enums, lookups, sequences | Settings → Dictionary, the connector's **scope** | `[connectors.<app>.*]` — on top of the shared entries. |
+| Screens | Settings → Screens, the app's chip | `[screens.<app>.<id>]` |
+| Menu | Settings → Menus, the app's chip | `[menus.<app>]` |
+| Charts | Settings → Charts, the connector's scope | `[charts.<app>.<id>]` |
+
+Dashboards and shared actions have a single namespace; a menu item of the app opens them by id. Nomaflow jobs are not tied to an app.
 
 ---
 
-## How an app is created
+## The app picker \{#picker\}
 
-Apps don't have a "create" action of their own. **An app exists as soon as one entity references it.** Open *Settings → Connectors → New connector*, type `billing` in the *App* field — `billing` is now an app with one connector. Add a menu under *Settings → Menus → New menu* with the same *App* value, and the workspace selector starts showing *Billing*.
+The picker sits at the top of the sidebar:
 
-To give the app a friendly label, icon and display order, the **Settings → Apps** tab provides per-app metadata:
+- it lists the apps whose menu the user can see, and appears only when there are at least two;
+- picking an app switches the sidebar menu and the workspace tabs to that app — it is a switch, not a filter;
+- the choice is remembered in the browser;
+- when the app's connector has several pools, a **Pool** picker next to it chooses the database instance every screen runs against — see [Connectors → Multi-pool](../connectors.md#multi-pool).
 
-  
-    Settings → Apps
-    
-      ↑ Import app
-      + New app
-    
-  
-  
-    IDDisplay nameIconOrder
-  
-  
-    📜billingBillingreceipt10⬇ ✏️
-  
-  
-    👥crmCRMusers20⬇ ✏️
-  
-  
-    📊nomajdeNomaJDEserver30⬇ ✏️
-  
+A connector's **show_in_switcher** (on by default) and **home** settings decide whether it is offered in the picker and which menu item opens first. See [Make a connector an app](../build/menus/make-connector-an-app.md).
 
-| Field | Effect |
+---
+
+## Creating an app \{#create\}
+
+1. **Settings → Connectors** — create the SQL connector and its pool, then its queries (the CRUD wizard writes them from a table).
+2. **Settings → Screens** — build the screens on these queries.
+3. **Settings → Menus** — **+ Add scope**, pick the connector, add the items that open the screens.
+4. Back on the connector, check **show_in_switcher** and, optionally, set **home**.
+
+The [Screen Creation Assistant](../build/screen-assistant.md) chains steps 1 to 3 for one table. The [CRM tutorial](../tutorial-crm/01-setup.md) builds a complete app.
+
+---
+
+## Copying and moving an app \{#copy\}
+
+| Need | Tool |
 |---|---|
-| **ID** | The app identifier — short, kebab-case (`billing`, `crm`). Used as namespace prefix throughout. Renaming triggers a rewrite of every reference. |
-| **Display name** | Shown in the workspace selector and as the sidebar header. Localised through the dictionary. |
-| **Icon** | A [Lucide icon](https://lucide.dev/icons) name. Appears next to the workspace name. |
-| **Order** | Drives the position in the workspace selector. Lower numbers first. |
-| **Description** | Free text — appears as the tooltip in the workspace selector. |
-
-Per-row actions:
-
-- **⬇ Export** — produces a zip of every entity carrying this app's identifier (see [Export / import](#export-import)).
-- **✏️ Edit** — opens the metadata editor.
-
-The framework still works with apps that have no metadata entry — the workspace selector just shows the raw identifier instead of the friendly name.
+| A second app built on an existing one (another database, a test copy). | **Clone** on the connector: copies the queries with the dictionary scope, screens, menu, charts and dashboards under the new name. See [Clone a query or a connector](../build/queries/clone.md). |
+| Move an app, or part of it, to another environment (development → production). | **Packages**: pick the screens, menus, dashboards… to ship, download the ZIP with everything they depend on, import it on the target. See [Packages](../build/packages.md). |
+| Rename a connector, a screen or a query. | **Rename** in its editor — every reference is rewritten. |
 
 ---
 
-## The workspace selector
+## Ready-made apps \{#ready-made\}
 
-The header shows a workspace chip with a dropdown. The dropdown lists every app the calling user can see at least one menu of (filtered by per-app permissions), sorted by *Order* then alphabetically.
-
-| Behaviour | When |
-|---|---|
-| **Selector visible** | At least two apps have menus the caller can see. |
-| **Selector hidden** | Only one app (the default case for single-tenant installs). |
-| **Remembered per user** | The last picked workspace is stored in `localStorage`. |
-
-A user with permission to only one app sees no selector — the framework defaults straight to that workspace.
+**Nomasx-1** and **Nomajde** are delivered as ready-made apps with their Nomaflow jobs. They are installed and upgraded as described in [Deploy the licensed apps](../../installation/deploy-prebuilt-apps.md). Their screens, menus and dictionary are visible and editable in Settings like any app; an entry marked **override** keeps local changes through upgrades.
 
 ---
 
-## Conventions per app
+## Who sees an app \{#access\}
 
-| Convention | Reason |
-|---|---|
-| **One menu per app** under *Settings → Menus*. The menu's *App* drives the workspace key. | Declaring a menu is what makes the workspace selectable. |
-| **Prefix connectors with the app** (`billing-customers`, `crm-contacts`). | Keeps the connector catalogue readable and prevents collisions when two apps query the same database. |
-| **Namespace screen ids by app** (`billing/invoices`, `crm/customers`). | The framework allows the same screen id under two apps; the namespace prevents the wrong one being picked. |
-| **Dictionary entries can be shared.** | The dictionary is global by default — labels and lookups defined once are referenced from every app. |
-| **Jobs live in the app's namespace** (the job builder's *App* dropdown). | Keeps the *Settings → Jobs* catalogue organised; framework-wide jobs sit under `_default`. |
-
----
-
-## Export / import \{#export-import\}
-
-Apps move between environments (dev → staging → prod) via the **Settings → Apps** export / import flow.
-
-### Exporting
-
-Click **⬇ Export** on an app row, or open the app's metadata editor and use the *Export* action. The framework produces a zip containing:
-
-| Path inside the zip | Content |
-|---|---|
-| `manifest.toml` | Metadata: app id, version, exported timestamp, dependencies (other apps required), framework version compatible. |
-| `connectors.toml` | The connector entries whose *App* matches. Plus the pools they reference (a warning appears when a pool is shared with another app). |
-| `dictionary.toml` | The dictionary entries referenced by the app's screens (lookups, formats, labels). |
-| `screens.toml` | The app's screens. |
-| `menus.toml` | The app's menu tree. |
-| `dashboards.toml` | The app's dashboards. |
-| `charts.toml` | The charts referenced by the dashboards. |
-| `jobs.toml` | The app's Nomaflow jobs. |
-| `plugins/` *(if any)* | The whole plugin directory (custom Python callables). |
-
-The zip is downloaded by the browser. For multi-app exports, tick the checkboxes on each row + *Export selected*.
-
-### Importing
-
-Click **↑ Import app** at the top of the *Apps* tab. A dialog asks for the zip file, then surfaces a **diff preview** before applying:
-
-| Section | What the preview shows |
-|---|---|
-| **Will add** | Entities present in the zip and absent on the install. |
-| **Will replace** | Entities present in both; the diff is shown inline ("label change", "extra column"). |
-| **Will refuse** | Identifier collisions across apps (e.g. zip's `billing` collides with an existing screen). Operator clears them before *Confirm*. |
-
-*Confirm* applies the import in one transaction. A failure rolls back; the install stays on its previous state.
-
-For installations under version control, the easier path is a **git patch** on `liberty-apps` — the change is reviewable in the PR, partial imports are possible and rollback is `git revert`. The zip flow is for installs that don't share a git repo (vendor-shipped customer apps, demo data).
-
----
-
-## Packaged vendor apps
-
-Some apps ship pre-built from Nomana-IT — **NomaUBL** (e-invoicing), **NomaSX-1** (security maintenance), **NomaJDE** (JD Edwards admin). They follow the same convention: an app identifier, a menu tree, screens, dashboards. Installing one is a **license-gated *Import app*** — the license key's `features.apps` list controls which can be imported.
-
-A packaged app is opaque to the customer in the sense that the content is delivered as-is and meant to be used as-is, but every entity is still **visible and editable** from the Settings UI. Customer-side modifications survive vendor upgrades when they sit in a **separate customer namespace** (`billing-customer` next to vendor's `billing`) — see [Deployment → Upgrading](../../installation/upgrading.md) for the recommended layout.
-
----
-
-## Permissions per app
-
-The role engine integrates with apps via the `<surface>:<app>:*` wildcard pattern. A typical pair of roles for a two-app install:
-
-| Role | Permissions |
-|---|---|
-| **billing-user** | `sql:billing-*:*`, `screen:billing:*`, `menu:billing:*`, `dashboard:billing-*` |
-| **crm-user** | `sql:crm-*:*`, `screen:crm:*`, `menu:crm:*`, `dashboard:crm-*` |
-
-A user carrying both roles sees both workspaces. A user carrying only `billing-user` sees the *Billing* workspace and isn't aware of the *CRM* one. See [Roles & permissions](../build/secure/roles-and-permissions.md).
-
----
-
-## Tips & best practices
-
-- **Pick app identifiers early.** Renaming an app triggers a propagation rewrite, but the simpler path is to start with the right name. Renames are supported through the Apps editor's *Rename* action.
-- **Use the default app for single-tenant installs.** Don't manufacture an app identifier just to fill the field.
-- **Group connectors per app even when sharing a pool.** A `billing-invoices` + `billing-credits` querying the same `default` pool is clearer than `invoices` + `credits`.
-- **Keep dictionary entries shared.** A `currency` lookup defined once and referenced from `billing` and `crm` is preferable to two parallel definitions.
-- **Export before a risky vendor upgrade.** A `billing.zip` snapshot of the current state is a one-click rollback path if the new vendor version regresses.
-
----
-
-## Under the hood
-
-Each entity's *App* field is stored on the entity itself in the per-section TOML. App metadata (display name, icon, order) lives under `dictionary.toml` → `apps`. Operators **do not edit these files by hand**; the Settings UI is the canonical interface. The export / import flow round-trips through zip files containing the same TOML excerpts; the *Apps* tab is the canonical surface for that too.
+An app appears for a user when its menu has items that user may open. Roles decide which menu items, screens and queries each user reaches — see [Roles & permissions](../build/secure/roles-and-permissions.md) and [Menus → Permissions and roles](../build/menus/permissions-and-roles.md).
 
 ---
 
 ## What's next
 
-- [Plugins](./plugins.md) — custom Python callables packaged with apps.
-- [i18n](./i18n.md) — adding languages and per-app label packs.
-- [Deployment → Upgrading](../../installation/upgrading.md) — moving customer customisations across framework and vendor-app upgrades.
+- [Make a connector an app](../build/menus/make-connector-an-app.md) — the two settings that put a connector in the picker.
+- [Plugins](./plugins.md) — Python functions called from jobs and screen actions.
+- [Translations](./i18n.md) — labels per language.
 
 ---
 
 ## Liberty Next — Plugins
 Source: https://docs.nomana-it.fr/liberty/framework/apps/plugins/
 
-How to write custom Python code that the framework calls — Nomaflow job step callables, password validators, dispatch hooks. Drop a Python module under liberty-apps/plugins/, reference it by import path from TOML, the framework wires sys.path and calls it with the runtime context.
+Custom Python code called by Liberty Next — where plugin packages live, how a Nomaflow python step and a screen's call_plugin action call a module:function, what the framework injects (connectors, ctx, settings, changesets), how to query connectors and what to return.
 
-:::info[Deep reference]
-This page documents the plugin runtime — every extension point, the full callable context dictionary and advanced patterns. For task-oriented walkthroughs — write a callable, use the ETL primitives, deploy and debug a plugin — see [Build → Plugins](../build/plugins/overview.md).
-:::
+Everything in Liberty Next is configured, except one thing: **plugins**, plain Python functions for what a query or an API call cannot express — a transformation, a call sequence specific to a source system, an integration.
 
-The framework's job step engine, password validator and a few other extension points accept **callable references** of the form `"module.path:function"`. The function is plain Python; the framework imports it lazily on first use and calls it with the runtime context as keyword arguments.
+A plugin function is referenced as `"package.module:function"` from two places:
 
-This is the **only** place where a customer install runs custom code — the rest of the configuration is purely declarative. Use plugins for what TOML can't express: bespoke transformations, ERP-specific quirks, external system integrations.
+| Caller | Setting |
+|---|---|
+| A Nomaflow **`python`** step | `callable` and `op_kwargs` on the step — see [Step types](../../nomaflow/steps.md). |
+| A screen action **`call_plugin`** | `callable` and `param_binds` on the action — see [Actions and lifecycle](../build/screens/actions-and-lifecycle.md#types). |
 
----
-
-## At a glance
-
-  
-    WHERE THEY LIVE
-    liberty-apps/plugins/&lt;package&gt;/ — added to sys.path at startup.
-  
-  
-    REFERENCED FROM
-    TOML — callable = "billing.invoicing:run"
-  
-  
-    SIGNATURE
-    def run(**ctx) -&gt; dict \| None — sync or async def.
-  
-  
-    EXTENSION POINTS
-    Job python step · password validator · dispatch hooks
-  
+The task pages are under [Build → Plugins](../build/plugins/overview.md): [Write a callable](../build/plugins/write-a-callable.md), [ETL primitives](../build/plugins/etl-primitives.md), [Deploy and debug](../build/plugins/deploy-and-debug.md). This page is the summary.
 
 ---
 
-## Folder layout
+## Where plugins live \{#folder\}
 
-A plugin is a regular Python package under `liberty-apps/plugins/`:
+Plugins are Python packages in the `plugins/` folder next to the apps configuration folder — `<LIBERTY_APPS_DIR>/../plugins/` (in Docker, `/apps/plugins`):
 
 ```text
-liberty-apps/
+apps/
+├── config/            ← LIBERTY_APPS_DIR
 └── plugins/
     └── billing/
-        ├── __init__.py        ← package marker
-        ├── invoicing.py       ← step callables
-        ├── adjustments.py
-        └── README.md
+        ├── __init__.py
+        └── invoicing.py   ← callable = "billing.invoicing:reissue_drafts"
 ```
 
-The framework adds `liberty-apps/plugins/` to `sys.path` at startup (when `LIBERTY_APPS_DIR` is set; with `LIBERTY_APPS_DIR` unset, it's `liberty-next/plugins/`). The package is then importable as `billing.invoicing`, just like a normal Python module.
+At startup the server puts this folder at the front of the Python path and logs `liberty.plugins importable from …`. A package installed in the server's Python environment works too; its functions are referenced the same way.
 
-### Package vs single file
-
-```text
-plugins/
-├── billing/                    ← package — multi-module, recommended
-│   ├── __init__.py
-│   ├── invoicing.py
-│   └── adjustments.py
-└── ad_sync.py                  ← single module — works for one-off helpers
-```
-
-Both work. Packages scale better as you add features; single modules are convenient when one function fits one file.
+The module is imported when the step or the action runs, not when the configuration is saved: a wrong path shows up as a failed run with the import error.
 
 ---
 
-## Writing a callable
-
-The canonical shape is:
+## The function \{#function\}
 
 ```python
 # plugins/billing/invoicing.py
-from __future__ import annotations
+from liberty.jobs.steps.base import StepResult
 
-import logging
-from typing import Any
-
-log = logging.getLogger(__name__)
-
-def run(*, period: str, dry_run: bool = False, **ctx: Any) -> dict:
-    """Re-issue every draft invoice for the given period.
-
-    Args:
-        period:   YYYY-MM the job is running for.
-        dry_run:  if True, count but don't write.
-        ctx:      every other key the framework injects (see below).
-
-    Returns:
-        Step result dict — surfaced in the run history.
-    """
-    connectors = ctx["connectors"]                     # type: ConnectorRegistry
-    billing    = connectors.sql("billing")
-
-    drafts = billing.run("drafts-for-period", period=period)
-    log.info("billing.invoicing.run period=%s drafts=%d dry_run=%s", period, len(drafts), dry_run)
-
+async def reissue_drafts(*, connectors, ctx, period: str, dry_run: bool = False, **_) -> StepResult:
+    billing = connectors.sql("billing")
+    drafts = (await billing.execute("drafts_for_period", {"PERIOD": period})).rows
     if dry_run:
-        return {"rows_affected": 0, "matched": len(drafts)}
-
-    inserted = 0
-    for draft in drafts:
-        billing.run("issue-invoice:write", id=draft["id"])
-        inserted += 1
-
-    return {"rows_affected": inserted}
+        return StepResult(rows_affected=0, extras={"matched": len(drafts)})
+    for d in drafts:
+        await billing.execute("issue_invoice", {"INVOICE_ID": d["INVOICE_ID"]})
+    return StepResult(rows_affected=len(drafts), extras={"run": ctx.run_id})
 ```
 
-| Element | Notes |
+### What it receives
+
+| Argument | Source |
 |---|---|
-| **`*` then `**ctx`** | The framework always passes context as keyword arguments. The leading `*` forces the explicit parameters (`period`, `dry_run`) to be passed by name — the call from TOML uses keyword arguments. |
-| **Return type** | `dict` with at least `rows_affected` (int) is the convention. The dict is persisted on the run record. `None` is allowed and means "no count". |
-| **Logging** | Use `logging.getLogger(__name__)` — the framework's log handler routes the messages into the run-log stream visible in the UI. |
-| **Exceptions** | Raise normally. The job runner catches, records the exception in the run history and applies the configured retry / backoff. |
+| Its own parameters (`period`, `dry_run`) | The step's `op_kwargs`, or the action's `param_binds`. Values are converted to the annotated type (`int`, `bool`, dates…). |
+| **`connectors`** | Injected: every SQL and API connector. |
+| **`ctx`** | Injected for a step: the run's context — `run_id`, `job_id`, `trigger`, `prev_rows_affected`, `parent_chain`. |
+| **`settings`** | Injected: the live configuration. |
+| **`changesets`** | Injected for a step: the change-package store. |
 
-### Async callables
+An injected argument is passed only when the function declares it by name or accepts `**kwargs`; a value set in `op_kwargs` under the same name wins.
 
-`async def` is supported and automatically awaited by the framework — useful when the work fans out to network calls:
+### Querying connectors
+
+| Call | Returns |
+|---|---|
+| `await connectors.sql("billing").execute("query_name", {"PARAM": value})` | A result with `.rows` (list of dicts) and `.rowcount`. Runs the named query with its tokens and dictionary rules; pass `user="…"` to set the name written by `LOGIN` / `{{LOGIN}}` (`ANONYMOUS` otherwise). |
+| `await connectors.api("crm").call("endpoint_name", {"param": value})` | The endpoint's response. |
+
+### What it returns
+
+| Return | Recorded as |
+|---|---|
+| `None` | Nothing. |
+| `int` | The number of rows affected. |
+| `dict` | Extra details stored with the step (not a row count). |
+| `StepResult(rows_affected=…, extras={…})` | Both. |
+
+From a screen action, the return value is kept in the chain's context when the action has `bind_result` on, for the next steps to read.
+
+### Sync or async
+
+An `async def` function is awaited; a plain `def` runs in a worker thread. A thread cannot be interrupted: cancelling the run marks it cancelled, but the function goes on until it returns — long work is better written `async`. Raising an exception fails the step (and triggers its retries); `StepFailed` gives a clearer message. Messages logged through `register_namespace` appear in the run's log — see [Write a callable](../build/plugins/write-a-callable.md).
+
+---
+
+## Testing \{#testing\}
+
+A plugin is ordinary Python: test it with pytest, passing fake `connectors` and `ctx` as arguments.
 
 ```python
-import httpx
+from unittest.mock import AsyncMock, MagicMock
+from billing.invoicing import reissue_drafts
 
-async def push_to_crm(*, deal_id: int, **ctx) -> dict:
-    async with httpx.AsyncClient() as client:
-        r = await client.post(f"https://crm.example.com/api/deals/{deal_id}/sync")
-        r.raise_for_status()
-    return {"rows_affected": 1}
+async def test_dry_run_counts_only():
+    billing = MagicMock(execute=AsyncMock(return_value=MagicMock(rows=[{"INVOICE_ID": 1}, {"INVOICE_ID": 2}])))
+    connectors = MagicMock(sql=MagicMock(return_value=billing))
+    result = await reissue_drafts(connectors=connectors, ctx=MagicMock(run_id="r1"), period="2026-05", dry_run=True)
+    assert result.extras == {"matched": 2}
 ```
-
-The framework detects the coroutine via `inspect.iscoroutinefunction` and awaits it on the event loop.
 
 ---
 
-## The runtime context
+## Good practices
 
-Every callable receives a base context of keys the framework provides. The exact set depends on the extension point:
-
-### Job `python` step
-
-| Key | Type | Description |
-|---|---|---|
-| `connectors` | `ConnectorRegistry` | Access to every connector by name — `connectors.sql("billing").run("query-name", **params)`. |
-| `pools` | `PoolRegistry` | Lower-level access to raw pools when you need a transaction across multiple connectors. |
-| `job_id` | `str` | The current job's identifier. |
-| `run_id` | `str` | The run identifier — useful for cross-referencing log lines. |
-| `step_name` | `str` | The step's name within the job. |
-| `params` | `dict` | The job's `params` block (from `jobs.toml`). |
-| `step_kwargs` | `dict` | The step's own `kwargs` block. |
-| `previous_step` | `dict \| None` | The previous step's result (when chained). |
-| `logger` | `logging.Logger` | Pre-configured logger that routes to the run-log stream. |
-| `session_user` | `str` | `"system"` when the job was scheduled, or the user identifier when triggered manually. |
-
-Plus every key declared in the step's `kwargs` block (TOML — see [Step types](../../nomaflow/steps.md)).
-
-### Password validator
-
-| Key | Type | Description |
-|---|---|---|
-| `username` | `str` | The user the password is being set for. |
-| `password` | `str` | The candidate password (plain text). |
-| `existing_user` | `dict \| None` | User record if the user already exists. `None` on `create-user`. |
-
-Return `None` to accept; raise `ValueError("reason")` to reject.
-
-### Dispatch hooks (rare)
-
-A handful of internal events (`screen.before_save`, `screen.after_save`, `connector.before_query`) accept optional hooks via the `[hooks]` block in `app.toml`. The signature mirrors the event payload; see the source under `liberty/hooks/` for the full list.
-
----
-
-## Referencing a callable from TOML
-
-The reference format is `"<module.path>:<function>"`:
-
-```toml
-# plugins/billing/jobs.toml
-[[jobs]]
-name     = "reissue-monthly-drafts"
-schedule = "0 2 1 * *"        # 02:00 on the 1st of every month
-
-  [[jobs.steps]]
-  name     = "reissue-drafts"
-  type     = "python"
-  callable = "billing.invoicing:run"
-  kwargs   = { period = "${month.previous}", dry_run = false }
-```
-
-The framework imports `billing.invoicing` lazily on first use, looks up `run`, validates the signature against the runtime context plus the step's kwargs, and caches the resolved callable for subsequent runs.
-
-A non-existent module or function fails the **load** of the job (reload-time error), not the first run — broken plugins are caught when *Save & reload* is triggered.
-
----
-
-## Calling connectors from a plugin
-
-The `connectors` key in the context exposes the same registry the framework uses internally. Three call shapes:
-
-```python
-# SQL connector
-rows = ctx["connectors"].sql("billing").run("monthly-totals", month="2026-05")
-
-# HTTP / API connector
-resp = await ctx["connectors"].api("crm").call("get-customer", id=42)
-
-# Raw pool — for transactions across multiple queries
-async with ctx["pools"].get("billing").begin() as conn:
-    await conn.execute(text("UPDATE invoices SET status = 'issued' WHERE batch_id = :b"), {"b": batch})
-    await conn.execute(text("INSERT INTO audit (...) VALUES (...)"), {...})
-```
-
-Use the high-level `connectors.sql(...)` / `connectors.api(...)` when the operation maps to a named query / endpoint — they respect permission gates and audit logging. Drop to `pools.get(...)` only when you need a transaction that crosses connectors.
-
----
-
-## Distributing a plugin across environments
-
-Two patterns work:
-
-### Pattern 1 — checked into `liberty-apps`
-
-The plugin source sits in `liberty-apps/plugins/<package>/` and ships with the rest of the configuration. Versioning, deployment and rollback follow the `liberty-apps` repository.
-
-| Pro | Con |
-|---|---|
-| Single git history for config + custom code. | Mixes Python code with TOML configuration. |
-| Code review goes through the same PR as the config change. | A bigger plugin (multi-thousand lines) bloats the configuration repo. |
-
-### Pattern 2 — published as a Python package
-
-Build the plugin as a regular Python package, publish to a private PyPI (or just install from git), pip-install it in the `liberty-next` virtualenv:
-
-```bash
-cd liberty-next
-.venv/bin/pip install git+https://github.com/acme/liberty-billing-plugin@v1.4.2
-```
-
-The TOML reference is the same — `callable = "liberty_billing.invoicing:run"` — because the package is now importable through the virtualenv's site-packages, not through `liberty-apps/plugins/`.
-
-| Pro | Con |
-|---|---|
-| Plugin code lives in its own repo with its own tests / CI. | Two release pipelines to manage. |
-| Multiple installs can share one plugin version. | Hot-reload doesn't pick up a pip upgrade — a restart is required. |
-
-Pick Pattern 1 for small plugins (a few hundred lines, install-specific); pick Pattern 2 for plugins shared across many installs or maintained by a separate team.
-
----
-
-## Testing a plugin
-
-Write tests in the plugin folder:
-
-```text
-plugins/billing/
-├── invoicing.py
-└── tests/
-    └── test_invoicing.py
-```
-
-A pytest-compatible test that mocks the context:
-
-```python
-# plugins/billing/tests/test_invoicing.py
-from unittest.mock import MagicMock
-from billing.invoicing import run
-
-def test_dry_run_returns_count_only(monkeypatch):
-    billing = MagicMock()
-    billing.run.return_value = [{"id": 1}, {"id": 2}, {"id": 3}]
-    ctx = {"connectors": MagicMock(sql=MagicMock(return_value=billing))}
-
-    result = run(period="2026-05", dry_run=True, **ctx)
-
-    assert result == {"rows_affected": 0, "matched": 3}
-    billing.run.assert_called_once_with("drafts-for-period", period="2026-05")
-```
-
-Run with `cd liberty-next && PYTHONPATH=../liberty-apps/plugins .venv/bin/pytest ../liberty-apps/plugins/billing`.
-
----
-
-## Tips & best practices
-
-- **Keep callables small.** A plugin function is hard to debug remotely; one function per step is easier to reason about than a 500-line orchestration class.
-- **Always type the explicit kwargs.** `def run(*, period: str, ...)` catches a TOML typo (`peroid = "2026-05"`) at import time instead of at run time.
-- **Log with `__name__`.** The Nomaflow log tail filters per logger — using the module path makes the lines greppable.
-- **Don't catch broad exceptions in a step.** Let the runner record the traceback; a `try / except: pass` produces a green run that silently did nothing.
-- **Never reach into the framework internals beyond the context.** The `ctx["connectors"]` / `ctx["pools"]` keys are the stable contract; everything else might change between framework versions.
-- **Treat plugins as code.** They get committed, code-reviewed, tested. The TOML configuration is data; plugins are code.
+- **One function per step.** Short functions are easier to follow in the run history.
+- **Annotate the parameters** (`period: str`, `apps_id: int`): values coming from the UI are converted, and a wrong value fails clearly.
+- **Call named queries** through `connectors.sql(...)` rather than raw SQL: the query stays visible in Settings, and its tokens and dictionary rules apply.
+- **Let exceptions out.** A `try / except: pass` turns a failure into a green run that did nothing.
+- **Keep the plugins with the apps configuration**, under version control, so they move with it between environments.
 
 ---
 
 ## What's next
 
-- [Apps](./overview.md) — where the plugin folder fits in the app structure.
-- [i18n](./i18n.md) — adding language packs (also lives under `plugins/`).
-- [Jobs → Step types](../../nomaflow/steps.md) — the `python` step that calls plugins.
+- [Build → Plugins](../build/plugins/overview.md) — the step-by-step pages.
+- [Step types](../../nomaflow/steps.md) — the `python` step.
+- [Actions and lifecycle](../build/screens/actions-and-lifecycle.md) — `call_plugin` from a screen.
 
 ---
 
-## Liberty Next — Internationalization
+## Liberty Next — i18n
 Source: https://docs.nomana-it.fr/liberty/framework/apps/i18n/
 
-How the framework picks the language for labels, dictionary entries and error messages — X-Liberty-Lang request header, per-user preference, falling back to the default. How to add a new language and override labels per app or per environment.
+Languages in Liberty Next — the interface in English and French, the per-language labels (l) of dictionary entries, enum values, menu items, dialog tabs and prompts, and how the language of each request is chosen.
 
-:::info[Deep reference]
-This page documents the i18n resolution chain, the language pack format, per-app overrides and RTL handling. For task-oriented translation of a menu (`l.fr`, `l.de` and Lucide icons), see [Build → Menus → Translations and icons](../build/menus/translations-and-icons.md).
-:::
+Two layers carry text in Liberty Next:
 
-Every label the framework renders — menu entries, screen titles, dictionary column labels, dialog buttons, error messages — goes through a single resolution path: the **active language**, picked per request from one of three sources. The same path covers the React frontend (UI chrome translated via `react-i18next`) and the backend (dictionary labels resolved server-side and returned with the API payload).
-
-This page covers the resolution order, the format of a language pack, how to add a new language and how to override labels per app or per environment.
-
----
-
-## At a glance
+| Layer | Content | Languages |
+|---|---|---|
+| **The interface** | Buttons, Settings, Nomaflow pages, messages. | English and French, shipped with the framework. |
+| **The configuration** | Labels of data items, list values, menu items, dialog tabs, prompts. | One default label plus one translation per language, set in Settings. |
 
 ---
 
-## How a label is resolved
+## The interface language \{#interface\}
 
-A label in `dictionary.toml` carries one value per language:
+Each user picks **EN** or **FR** in the bar at the top of the window. The choice is kept in the browser and applies at once: menus, column headers and list labels are reloaded in the new language.
+
+Every request the application sends carries that language (`X-Liberty-Lang` header). A request without it — a direct API call — uses the first language of its `Accept-Language` header, without the region (`fr-CA` → `fr`), then the configuration's default language.
+
+---
+
+## Translating the configuration \{#configuration\}
+
+Translatable elements have a default **label** and a **Translations** list — one line per language code (`fr`, `de`, `es`…), stored as `l`:
+
+| Element | Where it is translated |
+|---|---|
+| **Dictionary entry** — the label of a data item, hence of every column that uses it | Settings → Dictionary → Entries, **Translations** tab. |
+| **Enum value** | Settings → Dictionary → Enums, on each value. |
+| **Menu item and folder** | Settings → Menus, **Translations** group of the inspector. |
+| **Dialog tab** | Screen editor, Dialog tab, on the tab. |
+| **Action prompt title** | The action's **prompt_l**. |
 
 ```toml
-[columns.invoice_number]
-label = { en = "Invoice number", fr = "Numéro de facture", de = "Rechnungsnummer" }
+[entries.CUSTOMER_STATUS]
+label = "Customer status"
+l = { fr = "Statut client", de = "Kundenstatus" }
 ```
 
-When the framework returns a screen definition, it picks the active language, looks the label up in the map, and serialises only the resolved string. A missing language falls back to:
+When no translation matches the request's language, the default label is used. Language codes are written in lower case.
 
-1. The active language exactly (`fr`).
-2. The active language stripped of its region (`fr` from `fr-CA`).
-3. The default language (`en` if `[app] default_lang = "en"`).
-4. The first available language in the map.
-
-A label with no map at all (`label = "Invoice number"`) is returned verbatim — used for technical labels that don't need translation.
-
-The same resolution is used for `description`, `placeholder`, `tooltip`, and every other user-facing string in the dictionary.
+Column headers come from the dictionary: a column without its own label takes the translated label of its entry. A label typed directly on a screen column is not translated — leave it empty to inherit from the dictionary. See [Dictionary](../dictionary.md).
 
 ---
 
-## The active language
+## Good practices
 
-| Source | When it applies |
-|---|---|
-| **`X-Liberty-Lang` request header** | Sent by the React frontend on every API call. Reflects the language picker in the header. Overrides everything else. |
-| **User preference (`users.<name>.lang`)** | Stored on the user record. Applied when the request has no header — typically a direct API call (CLI, integration). |
-| **`[app] default_lang`** | The install-wide default. Applied when no header and no user preference. Defaults to `"en"` when not set. |
-
-The `X-Liberty-Lang` header overrides the user preference deliberately — a user signed in with `fr` who switches the header dropdown to `en` sees the UI in English without changing their stored preference.
-
----
-
-## Supported languages
-
-The framework ships with **English (`en`)** and **French (`fr`)** UI translations. Every other language can be added by dropping a language pack — see below. The Settings UI lists every loaded language in the header picker; languages are loaded at framework startup.
-
-The two-letter ISO 639-1 codes are the convention (`en`, `fr`, `de`, `es`, `it`, …). Regional variants are accepted (`fr-CA`, `en-GB`); the resolution falls back to the base code when the regional variant isn't defined.
-
----
-
-## Adding a new language
-
-A language pack is a JSON file per surface. The framework expects them under `liberty-apps/i18n/<lang>/`:
-
-```text
-liberty-apps/
-└── i18n/
-    └── de/
-        ├── common.json           ← framework chrome (buttons, errors, dialogs)
-        ├── apps.json             ← workspace selector labels
-        ├── billing.json          ← per-app overrides
-        └── crm.json
-```
-
-### `common.json` — framework chrome
-
-```json
-{
-  "actions": {
-    "save":   "Speichern",
-    "cancel": "Abbrechen",
-    "delete": "Löschen",
-    "edit":   "Bearbeiten",
-    "refresh": "Aktualisieren"
-  },
-  "errors": {
-    "required": "Pflichtfeld",
-    "invalid_format": "Ungültiges Format"
-  }
-}
-```
-
-The keys are stable across framework versions; new keys land in the bundled `en` and `fr` packs and need translating when added. The framework's CI exports the diff between `en` and every other language on each release as a translation backlog.
-
-### Per-app overrides
-
-`billing.json` overrides any label the `billing` app declared in `dictionary.toml`. Useful when:
-
-- You want a different wording for one app without touching the central dictionary.
-- A packaged vendor app ships only `en` and `fr`; you add a `de` translation install-side.
-
-```json
-{
-  "columns.invoice_number.label":   "Rechnungsnummer",
-  "columns.due_date.label":         "Fälligkeitsdatum",
-  "menus.billing.label":            "Rechnungsstellung",
-  "screens.billing.invoices.title": "Rechnungen"
-}
-```
-
-The keys are the **dotted path** into the central TOML — the same path the *Rename* operation uses.
-
-### Activation
-
-After dropping the files, restart the framework (language packs are loaded once at startup). The Settings UI's *Languages* page lists every detected pack with its key count; a partial pack is fine — missing keys fall back to the resolution chain.
-
----
-
-## Override priority
-
-A label can be defined in several places. The resolution order (first wins):
-
-1. **Per-app pack** in `liberty-apps/i18n/<lang>/<app>.json`.
-2. **Inline `label` map** in the dictionary entry of `dictionary.toml`.
-3. **Common pack** in `liberty-apps/i18n/<lang>/common.json` (for framework chrome).
-4. **Bundled pack** in `liberty-next/liberty/i18n/<lang>/*.json` (the framework's own defaults).
-
-A customer that wants to rename the *Save* button to *Submit* for one app does it in `liberty-apps/i18n/en/<app>.json` without editing the framework or the central dictionary:
-
-```json
-{ "actions.save": "Submit" }
-```
-
----
-
-## API access to translations
-
-The frontend bundles translations for the active language at build time; the backend serves the same translations via `GET /api/i18n/<lang>` for runtime consumers (Excel exports, PDF generation, etc.):
-
-```http
-GET /api/i18n/fr
-X-Liberty-Lang: fr
-
-→ 200 OK
-{
-  "actions": { "save": "Enregistrer", "cancel": "Annuler", ... },
-  "errors":  { "required": "Champ obligatoire", ... },
-  "apps":    { "billing": "Facturation", ... },
-  "billing": { "columns.invoice_number.label": "Numéro de facture", ... }
-}
-```
-
-The response is cached server-side and tagged with the i18n bundle's revision — clients re-fetch only when the revision changes (after `POST /admin/reload` for the i18n scope).
-
----
-
-## Right-to-left languages
-
-The framework's React layer respects the `dir="rtl"` attribute when the active language is one of `ar`, `he`, `fa`, `ur`. Mirror-friendly icons, padding and table alignment switch automatically. SVG mockups embedded in screens don't mirror — you'll need a per-direction variant if a flow diagram must read right-to-left.
-
----
-
-## Tips & best practices
-
-- **Translate dictionary entries inline, framework chrome via packs.** The dictionary is where every domain label lives; common UI strings belong in shared packs.
-- **Keep the keys stable.** Renaming a dictionary entry breaks every per-app translation override; use the Settings UI's *Rename* operation, which rewrites the language packs in lockstep.
-- **Run the translation backlog after each release.** The bundled `en` pack is the reference; `liberty-admin i18n-diff fr` lists every key missing from the French pack.
-- **Don't translate technical labels.** Database column names, error codes, log messages keep their English-only form — they're for operators, not end users.
-- **Test under each language.** A long German label breaks tight table columns; flipping the UI to `de` catches it.
+- **Translate in the dictionary** rather than on each screen: one entry feeds every column of every screen.
+- **Write the default labels in the language most users read**, and add the others as translations.
+- **Translate the menu folders too**: they are the first thing a user reads.
 
 ---
 
 ## What's next
 
-- [Apps](./overview.md) — workspace selector that uses the `apps` translation namespace.
-- [Concepts → Dictionary](../dictionary.md) — where inline `label = { … }` maps are declared.
-- [REST API reference](../../references/rest-api.md) — `GET /api/i18n/<lang>` and the `X-Liberty-Lang` header contract.
+- [Dictionary](../dictionary.md) — labels, formats and rules of data items.
+- [Menus → Translations and icons](../build/menus/translations-and-icons.md) — menu labels per language.
+- [Apps](./overview.md) — what belongs to an app.
 
 ---
 
 ## Liberty Next — CRUD over an existing table
 Source: https://docs.nomana-it.fr/liberty/framework/cookbook/crud-existing-table/
 
-Recipe — take any existing database table and produce a working list / edit / add / delete UI on top of it in five Settings clicks. The fastest path from 'I have a table' to 'users are using it'.
+Recipe — put a list / add / edit / delete interface on an existing database table from Settings: pool, queries generated by the CRUD wizard, screen, menu entry.
 
 ## The problem
 
-You have a database table — `products`, `tickets`, `contracts`, anything — and you need a clean UI for the team to look at it and edit it. You don't want to write a frontend.
+A database table — `products`, `tickets`, `contracts` — and a team that needs to read and edit it, without writing a front end.
 
 ## The pattern
 
-Five Settings clicks, four SQL queries, one screen, one menu entry. Total time: **5–10 minutes**.
-
 ```
-table → connector with 4 queries → screen → menu leaf → done
+table → connector with 4 generated queries → screen → menu entry
 ```
 
 ## The recipe
 
-### 1. Make sure the framework can reach the table
+### 1. Reach the database
 
-Open **Settings → Pools**. If the table sits in the same database as the framework, the `default` pool works. Otherwise add a new pool pointing at the right database and *Test connection*.
+**Settings → Pools**: the `default` pool works when the table is in the framework's database; otherwise add a pool with the database's URL. See [Connectors](../connectors.md#connection-fields).
 
-### 2. Define the connector — four queries
+### 2. Generate the queries
 
-**Settings → Connectors → + New connector**. Type `SQL`, pool of your choice. Then four queries:
+**Settings → Connectors**: create (or pick) the SQL connector, choose the **Tables** view, then **＋ Add queries → Generate from DB**. Pick the `products` table, keep the columns to show, tick **key** on `ID`, keep the four statements and save. The wizard writes:
 
 ```sql
--- list (read)
-SELECT * FROM products ORDER BY name;
+-- products_get
+SELECT ID, NAME, PRICE, STOCK FROM products
 
--- create (write)
-INSERT INTO products (name, price, stock, created_by, created_at)
-VALUES (:name, :price, :stock, :session_user, CURRENT_TIMESTAMP)
-RETURNING id;
+-- products_post
+INSERT INTO products (ID, NAME, PRICE, STOCK) VALUES (:ID, :NAME, :PRICE, :STOCK)
 
--- update (write)
-UPDATE products
-SET name = :name, price = :price, stock = :stock,
-    updated_by = :session_user, updated_at = CURRENT_TIMESTAMP
-WHERE id = :id;
+-- products_put
+UPDATE products SET NAME = :NAME, PRICE = :PRICE, STOCK = :STOCK WHERE ID = :ID_ORIGINAL
 
--- delete (write)
-DELETE FROM products WHERE id = :id;
+-- products_delete
+DELETE FROM products WHERE ID = :ID
 ```
 
-The `:session_user` placeholder is the framework's audit shorthand — it binds to the calling user's identifier (the JWT's `sub`).
+To stamp who changed a row and when, add the audit columns to the write queries with server tokens — the browser cannot alter them:
 
-Click **▶ Test** on the `list` query to confirm connectivity + let the framework discover the schema.
+```sql
+UPDATE products
+SET NAME = :NAME, PRICE = :PRICE, STOCK = :STOCK,
+    UPDATED_BY = {{LOGIN}}, UPDATED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID_ORIGINAL
+```
+
+Or give the `UPDATED_BY` / `UPDATED_AT` dictionary entries the `LOGIN` / `SYSDATE` rules. See [Parameter binding → Tokens](../build/queries/parameter-binding.md#tokens).
 
 ### 3. Build the screen
 
-**Settings → Screens → + New screen**:
+**Settings → Screens**, the connector's chip (**＋ Add scope** the first time), **＋ Add screen** `products`, then in the screen editor:
 
-| Field | Value |
+| Tab | Setting |
 |---|---|
-| **Id** | `&lt;app&gt;/products` |
-| **Title** | `Products` |
-| **Key columns** | `id` |
-| **Editable** | ✓ |
-| **Connector / Query** | `products` / `list` |
-| **Actions → Add** | `products` / `create` |
-| **Actions → Save** | `products` / `update` |
-| **Actions → Delete** | `products` / `delete` |
+| **General** | Label `Products`; **Editable** for in-grid editing; **uploadable** for Excel / CSV import. |
+| **Queries** | Read `products_get`, update `products_put`, insert `products_post`, delete `products_delete`. |
+| **Columns** | Labels, formats, widths, filters. |
+| **Dialog** | Drag the columns onto the form. |
 
-The Grid tab lets you pick which columns appear (drag from the catalog into the visible list). The Dialog tab does the same for the edit form.
+The [Screen Creation Assistant](../build/screen-assistant.md) does steps 2 and 3 in one pass.
 
-### 4. Wire the menu
+### 4. Add the menu entry
 
-**Settings → Menus → &lt;app&gt; → + Add leaf**:
-
-| Field | Value |
-|---|---|
-| **Label** | `Products` |
-| **Type** | `Screen` |
-| **Screen** | `&lt;app&gt;/products` |
-
-### 5. Save & reload
-
-The sidebar updates immediately. Click *Products* → grid renders, edit dialog opens on row click, *+ Add* opens an empty form.
+**Settings → Menus**, the connector's chip (**+ Add scope** the first time), **＋ Item**: label `Products`, type `screen`, target `products_get`. Save.
 
 ## Result
 
-A working CRUD interface over your existing table, with:
-
-- Filtering (per-column filter chips in the toolbar)
-- Sorting (click column headers)
-- Pagination (50 rows by default)
-- An *Excel export* button (always included)
-- Per-action permission codes (`sql:products:list`, `sql:products:update:write`, etc.) ready for role assignment
-- Audit trail on `created_by` / `updated_by` automatic
+Clicking *Products* opens the grid: sort and filter by column, group, save views; a row opens the edit dialog, **＋ Add** an empty one, **Delete** removes the row. Each query has its own permission — `sql:<connector>:products_get`, `sql:<connector>:products_put`… — to grant through roles.
 
 ## Variations
 
-| You want… | Do this |
+| Need | How |
 |---|---|
-| **Coloured status chips** | Add a dictionary entry with `Rule = ENUM` on the status column — see [Dictionary](../dictionary.md). |
-| **Dropdown sourced from another table** | Add a Lookup in *Settings → Dictionary → Lookups* — see [Cookbook → CRUD over an existing table](#) (this recipe) for the pattern. |
-| **Read-only mode for one role** | Don't give the role the `:write` codes; the screen renders without Add / Edit / Delete buttons for them. |
-| **A second related table inside the dialog** | See the [CRM tutorial → Step 3](../tutorial-crm/03-deals.md) — the *Activities sub-grid in Deals* pattern. |
-| **A bulk import from CSV** | See [Cookbook → Bulk import](./bulk-import.md). |
-| **A scheduled report mailed nightly** | See [Cookbook → Scheduled report email](./scheduled-report-email.md). |
+| **Labels and lists of values** | Dictionary entries on the columns, with an `ENUM` or `LOOKUP` rule — see [Dictionary](../dictionary.md). |
+| **Read-only for some users** | Give their role only the read query's permission: writes are refused. To make the screen read-only for everyone, tick **Read-only** on the General tab. |
+| **Excel export** | The screen's **Export** tab — see [Excel export](./excel-export.md). |
+| **Related rows inside the dialog** | A `nested_table` tab — see [Nested tabs](../build/screens/nested-tabs.md). |
+| **Bulk loading from a file** | See [Bulk import](./bulk-import.md). |
 
 ## What's next
 
-- For JD Edwards admin specifically, the packaged [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/) app ships every screen you'd build here — pre-built, license-gated.
-- The full mental model: [Concepts → Connectors](../connectors.md).
+- [Create from a database table](../build/queries/create-from-database.md) — the CRUD wizard in detail.
+- [Screens](../build/screens/overview.md) — every screen setting.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) — who sees and edits what.
 
 ---
 
 ## Liberty Next — Excel export
 Source: https://docs.nomana-it.fr/liberty/framework/cookbook/excel-export/
 
-Recipe — every screen ships with an Excel export by default. Customise the column list, add a server-side aggregation export, or schedule a daily Excel sent to email.
+Recipe — export a screen to Excel: the grid's Export menu (current view, Excel or CSV, visible or all columns), and configured workbooks from the screen's Export tab — several sheets, one file per group, built on the server.
 
 ## The problem
 
-Operators want an XLSX of the current filtered view (or a fixed aggregate) — for offline analysis, for compliance, for handing to someone who doesn't have access to the system.
+Users want the data of a screen in Excel — to work on it offline, to hand it to someone without access, to produce a recurring report.
 
 ## The pattern
 
-The framework gives you **three levels** of Excel export, in increasing order of effort:
-
-| Level | What you do | What ships |
+| Level | Setting | Result |
 |---|---|---|
-| **1. Free** | Nothing. | Every screen has an *⬇ Export* button that downloads the current filtered view as `<screen>.xlsx`. |
-| **2. Customised** | Pick which columns appear in the export. | Same button, but with the columns you want — including columns *hidden by default* in the grid. |
-| **3. Scheduled / templated** | Add a Nomaflow job + an HTTP step that calls the export endpoint and mails the result. | A nightly email with the XLSX attached. |
+| **The grid's export** | Nothing — every grid has it. | The current view as `.xlsx` or `.csv`. |
+| **Configured workbooks** | The screen's **Export** tab. | One or several `.xlsx` files with several sheets, built on the server. |
 
-## Level 1 — the default export
+## The grid's export
 
-It's already there. Open any screen, click **⬇ Export** in the toolbar, the XLSX downloads.
+The **Export** menu above every grid offers **Excel (.xlsx)** and **CSV (.csv)**. The file holds the rows loaded in the grid, with its filters, sort and visible columns; **All columns (incl. hidden)** adds the hidden ones.
 
-The export respects:
+A column with a list of values gets two columns in the file: the label, and the code under `<label> (ID)` — the layout the screen's [import](./bulk-import.md) reads back.
 
-- Every active filter (the file has the same rows as the on-screen grid).
-- The current sort order.
-- The visible columns *and* the column hidden but available in the catalog with the *Include in export* toggle on.
-- The user's locale (date formats, number separators, language of labels).
+The export covers the rows the grid has loaded: raise the screen's row cap, or narrow the filters, for a complete file.
 
-Nothing to configure unless level 2 applies.
+## Configured workbooks
 
-## Level 2 — customise the column list
+For a structured report — several sheets, one file per department — set the screen's **Export** tab. An **Export workbooks** button then appears above the grid; the server builds the files and the browser downloads them (a `.zip` when there are several).
 
-By default the export contains every visible grid column. To override:
-
-1. Open **Settings → Screens → &lt;your screen&gt; → Grid tab**.
-2. For each column, the editor has a **Visible** toggle and an **Include in export** toggle. They're independent.
-3. Set *Include in export* on for the columns that should land in the XLSX even if they're hidden from the grid (typical case: `id`, `created_by`, `updated_at`).
-
-Save & reload. The next *⬇ Export* click reflects the new column set.
-
-## Level 3 — a scheduled Excel report
-
-For a recurring report — e.g. "every Monday at 08:00 send the previous week's sales as an XLSX to the management team" — combine a Nomaflow job + an HTTP step.
-
-### Build the job
-
-**Settings → Jobs → + New job**:
-
-| Field | Value |
+| Setting | Effect |
 |---|---|
-| **Name** | `weekly-sales-export` |
-| **Schedule** | `0 8 * * 1` *(Mondays at 08:00)* |
-| **Timezone** | `Europe/Paris` |
+| **split_by** | A column of the screen's read query: one file per distinct value. Blank: a single file. |
+| **sheets** | The sheets of each file, in order. Each sheet has a **name**, a **query** (with its **connector**), and **param_binds** — `source = "split_value"` passes the file's group value to the query. |
+| A sheet's **split_by** | A column of the sheet's query: one worksheet per distinct value. |
+| **file_name_template** | The file name; `{{split_value}}` and `{{screen}}` are replaced. Default: `<screen>_<value>.xlsx`. |
 
-### Step 1 — render the XLSX
+Sheet names accept `{{split_value}}` and `{{sheet_value}}`; they are shortened to Excel's 31 characters.
 
-Type: `HTTP`. Variant: `Connector endpoint`.
+### Example — one file per department
 
-| Field | Value |
-|---|---|
-| **Connector** | `liberty-self` *(the framework's own REST surface)* |
-| **Endpoint** | `screens.export` |
-| **Parameters** | `app = crm`, `screen_id = deals`, `from_date = ${week.monday}`, `to_date = ${week.sunday}` |
+```toml
+[screens.hr.employees.export]
+split_by = "DEPARTMENT"
+file_name_template = "staff_{{split_value}}.xlsx"
 
-The endpoint returns an XLSX as `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`. The step records it as a binary blob.
+[[screens.hr.employees.export.sheets]]
+name  = "Employees"
+query = "employees_by_department"
+param_binds = [{ param = "DEPARTMENT", source = "split_value" }]
 
-### Step 2 — email the XLSX
+[[screens.hr.employees.export.sheets]]
+name  = "Applications"
+query = "applications_by_department"
+param_binds = [{ param = "DEPARTMENT", source = "split_value" }]
+```
 
-Type: `HTTP`. Variant: `Raw URL`.
-
-| Field | Value |
-|---|---|
-| **Method** | `POST` |
-| **URL** | Your SMTP-relay HTTP wrapper, or use the Settings → Framework → Notifications → SMTP setup |
-| **Body** | `{ "to": "ops@example.com", "subject": "Weekly sales", "attachment": "${previous_step.body}" }` |
-
-### Save and test
-
-Click **▶ Run now** in the job builder to verify without waiting for Monday. The run history shows the two steps, the attached blob, the email-server response.
+The button produces a `.zip` with one workbook per department, each with an *Employees* and an *Applications* sheet.
 
 ## Variations
 
-| You want… | Do this |
+| Need | How |
 |---|---|
-| **An aggregated export, not a row-by-row dump** | Write a SQL view (`vw_weekly_sales`) that does the aggregation, build a connector + screen on top of the view, set the screen's *Editable* off, export the view's rows. |
-| **A PDF instead of XLSX** | Screens don't natively export PDF; the framework's [print stylesheet](../configuration/settings-ui.md) handles printable HTML. For a real PDF, the `crm-pipeline-overview` dashboard has a *⬇ Export PDF* button by default. |
-| **A CSV instead of XLSX** | The endpoint accepts `?format=csv` — same job, different parameter. |
-| **The receiver to download from a link instead of attachment** | Step 1 stays the same. Step 2 becomes a step that uploads the blob to S3 / Azure / Google Drive and emails the link. Custom Python step. |
+| **An aggregated export** | A query (or a database view) that aggregates, used as a sheet's query — or a screen on that view. |
+| **A report sent every week** | See [Scheduled report email](./scheduled-report-email.md). |
 
 ## What's next
 
-- [Jobs — Nomaflow → Overview](../../nomaflow/overview.md) for the scheduling model.
-- [REST API reference → screens export](../../references/rest-api.md) for the endpoint contract.
-- [Cookbook → Scheduled report email](./scheduled-report-email.md) for the recurring-job variant.
+- [Bulk import](./bulk-import.md) — load the exported layout back.
+- [Screens](../build/screens/overview.md) — the Export tab among the others.
+- [REST API](../../references/rest-api.md) — `POST /api/screens/{app}/{id}/export` builds the workbooks.
 
 ---
 
-## Liberty Next — File upload
+## Liberty Next — Files and attachments
 Source: https://docs.nomana-it.fr/liberty/framework/cookbook/file-upload/
 
-Recipe — let users attach files to a row (contracts, invoices, photos) and serve them back from the same row. Two patterns: store the file in the database, or store a reference and offload to object storage.
+Recipe — what Liberty Next offers for files: screens have no attachment field, but a row can carry the address of a document stored elsewhere, a file's rows can be imported into a screen, and a Nomaflow job can load a file chosen at run time.
 
 ## The problem
 
-A row has an associated file — a PDF contract on the customer, a scanned receipt on the expense, a photo on the maintenance order. Operators need to upload it, see it, replace it, download it.
+A row goes with a file — the signed contract of a customer, the scan of a receipt — or a file holds rows to load into a table.
 
-## The pattern
+## What exists
 
-Two storage models, pick one:
+Screens have **no attachment field**: a dialog cannot store a file in a row nor serve it back. Three mechanisms cover the usual needs:
 
-| Model | Pro | Con |
-|---|---|---|
-| **A. Blob in the database** | Single backup, no extra infra, ACID with the row. | Database bloats; not for large files (>10 MB). |
-| **B. Reference in the database, file in object storage** (S3, MinIO, Azure Blob, Google Cloud Storage) | Scales. Cheap. Easy to swap. | Two systems to back up. Two systems that can drift. |
+| Need | Mechanism |
+|---|---|
+| Reach the document of a row | An **address column**: the row stores the document's address in the document store already in place (file share, SharePoint, object storage). |
+| Load the rows of an Excel / CSV file into a table, through a screen | The screen's **Import** — see [Bulk import](./bulk-import.md). |
+| Load a file into a table, by job | A Nomaflow **`file_load`** step: the file is picked in the **Run with parameters** window, read from a server path, or taken from a watched folder — see [Steps → File load](../../nomaflow/steps.md#file-load). |
 
-A is fine up to maybe a few GB of total files; past that, B.
+## Address of a document
 
-## Pattern A — blob in the database
-
-### Schema
-
-Add a `BYTEA` (PostgreSQL) / `BLOB` (Oracle, SQLite) column to the table:
+### 1. A column for the address
 
 ```sql
-ALTER TABLE customers
-  ADD COLUMN contract_pdf      BYTEA,
-  ADD COLUMN contract_filename VARCHAR(255),
-  ADD COLUMN contract_mime     VARCHAR(64);
+ALTER TABLE contracts ADD document_url VARCHAR(500);
 ```
 
-The metadata columns (filename, MIME type) help when serving the file back.
+### 2. Show it
 
-### Dictionary entry
+Give the `DOCUMENT_URL` dictionary entry a label and the **url** format (Settings → Dictionary → Entries). The grid and the dialog show the address as text, to copy into the browser — they do not turn it into a clickable link.
 
-| Field | Value |
-|---|---|
-| **Name** | `file_attachment` |
-| **Type** | `bytea` *(or `blob`)* |
-| **Rule** | `—` |
-| **Widget override** | `FileUpload` |
+### 3. Fill it
 
-Then on the customers connector's `list` query, add a column hint for `contract_pdf` pointing at `file_attachment`.
+Users paste the address in the dialog, or a job fills it — for example a `python` step that files the documents of a folder in the store and writes their addresses into the table (see [Plugins](../apps/plugins.md)).
 
-### Screen
-
-The dialog renders the field as a **drag-and-drop upload zone**:
-
-- If empty, a "Drop file here or click to browse" zone.
-- If populated, a "📎 contract.pdf (412 KB) — Replace / Download / Remove" row.
-
-Save uploads the file as part of the dialog's payload (multipart/form-data); the framework writes the BYTEA on `update`.
-
-### Limits
-
-The framework caps a single upload at the value of `[app] max_upload_size_mb` (default 25 MB). Past that, switch to Pattern B.
-
-## Pattern B — object storage with a reference column
-
-### Schema
-
-Just the references:
-
-```sql
-ALTER TABLE customers
-  ADD COLUMN contract_s3_key VARCHAR(255),
-  ADD COLUMN contract_filename VARCHAR(255);
-```
-
-### Object-storage configuration
-
-**Settings → Framework → Storage** (sub-form):
-
-| Field | Value |
-|---|---|
-| **Provider** | `S3` / `Azure Blob` / `GCS` / `Local filesystem` (development only) |
-| **Endpoint** | The bucket endpoint (S3-compatible URL). |
-| **Bucket** | The bucket name. |
-| **Credentials** | 🔒 access key + secret. |
-
-### Dictionary widget
-
-| Field | Value |
-|---|---|
-| **Name** | `s3_attachment` |
-| **Widget override** | `S3Upload` |
-| **Reference column** | `contract_s3_key` |
-| **Filename column** | `contract_filename` |
-
-The widget handles:
-
-- The upload (streams directly to S3, doesn't go through the framework — bandwidth-friendly).
-- The pre-signed URL on download (the framework never proxies the file).
-- The "remove" action that deletes the S3 object + nulls the reference column.
-
-### Permissions
-
-Two permission codes are automatically generated:
-
-| Code | Granted to |
-|---|---|
-| `storage:read:<bucket>` | Issue a download pre-signed URL. |
-| `storage:write:<bucket>` | Issue an upload pre-signed URL. |
-
-Grant them on the relevant roles.
-
-## Multi-file attachments
-
-Both patterns work for one-file-per-row. For multi-file (a customer can have N contracts), follow the [CRM tutorial → Step 3](../tutorial-crm/03-deals.md) sub-grid pattern — make `attachments` a child table joined by `customer_id`, with one row per file.
-
-## Variations
-
-| You want… | Do this |
-|---|---|
-| **Only PDF / image / etc** | Set the `accept` field on the dictionary widget — `application/pdf`, `image/*`. |
-| **Virus scanning before save** | Add a Nomaflow `python` step on the upload event that calls your AV scanner. Reject on hit. |
-| **Multi-file drag-and-drop** | Use the sub-grid pattern above; the framework's widget handles bulk upload to the same target. |
-| **A thumbnail preview** | Add a `&lt;connector&gt;.thumbnail` query that returns a base64 preview; render it in the grid via a `Image` rule. |
+Access to the document itself is governed by the document store, not by Liberty Next.
 
 ## What's next
 
-- [Concepts → Screens](../build/screens/overview.md) for the dialog field model.
-- [Settings UI → Framework](../configuration/app-toml.md) for the *Storage* sub-form.
-- [Cookbook → CRUD over an existing table](./crud-existing-table.md) — the surrounding screen pattern.
+- [Bulk import](./bulk-import.md) — load a file's rows through a screen.
+- [Steps → File load](../../nomaflow/steps.md#file-load) — load a file by job.
+- [Dictionary → Formats](../dictionary.md#formats) — the display formats.
 
 ---
 
 ## Liberty Next — Audit trail
 Source: https://docs.nomana-it.fr/liberty/framework/cookbook/audit-trail/
 
-Recipe — automatically populate created_by, created_at, updated_by, updated_at columns on every write, without trusting the client. The framework's form-layer LOGIN and SYSDATE defaults do the work.
+Recipe — record who created and last changed each row, and keep the history of every write, without trusting the browser: {{LOGIN}} / {{SYSTIMESTAMP}} tokens in the write queries, dictionary rules, and the screen's audit table.
 
 ## The problem
 
-Compliance, debugging, knowing who-did-what: every write needs to record who performed it and when. Doing this in client code is wrong (the user can tamper); doing it in every `INSERT` / `UPDATE` is fragile (one missing query and the audit gap appears).
+Who created this row, who changed it last, and what did it look like before? The answer must not depend on what the browser sends.
 
 ## The pattern
 
-The framework's **form-layer defaults** populate audit columns on the server at save time. The client never sees them; the operator never types them; every connector that writes to the table gets the same audit data by construction.
+Two levels, which combine:
 
-Two layers:
-
-| Layer | What it does |
-|---|---|
-| **Schema** | Four columns on the table — `created_by`, `created_at`, `updated_by`, `updated_at`. |
-| **Dictionary** | Two dictionary entries with *Form-layer defaults* `LOGIN` + `SYSDATE`. |
-
-The connector write queries reference these columns and the framework substitutes the values on the server.
+| Level | Mechanism | Result |
+|---|---|---|
+| **Last change, on the row** | Tokens `{{LOGIN}}` / `{{SYSTIMESTAMP}}` in the write queries. | `CREATED_BY`, `CREATED_AT`, `UPDATED_BY`, `UPDATED_AT` filled by the server. |
+| **Every write, in a history table** | The screen's **audit_table**. | One row per insert, update or delete, with the action, the user and the date. |
 
 ## The recipe
 
-### 1. Add the columns to the table
+### 1. Audit columns on the table
 
 ```sql
-ALTER TABLE customers
-  ADD COLUMN created_by VARCHAR(64),
-  ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  ADD COLUMN updated_by VARCHAR(64),
-  ADD COLUMN updated_at TIMESTAMP;
+ALTER TABLE customers ADD created_by VARCHAR(64);
+ALTER TABLE customers ADD created_at TIMESTAMP;
+ALTER TABLE customers ADD updated_by VARCHAR(64);
+ALTER TABLE customers ADD updated_at TIMESTAMP;
 ```
 
-### 2. Dictionary entries
+### 2. Stamp them in the write queries
 
-**Settings → Dictionary → Columns → + New column**:
-
-| Field | `audit_created_by` | `audit_updated_by` |
-|---|---|---|
-| **Type** | string | string |
-| **Rule** | LOOKUP against users *(optional, for chip display)* | LOOKUP against users |
-| **Form-layer default — Create** | `LOGIN` | — |
-| **Form-layer default — Update** | — | `LOGIN` |
-| **Read-only on forms** | ✓ | ✓ |
-| **Hide on create** | ✓ | ✓ |
-
-Same shape for `audit_created_at` / `audit_updated_at`:
-
-| Field | `audit_created_at` | `audit_updated_at` |
-|---|---|---|
-| **Type** | datetime | datetime |
-| **Format** | `dd/MM/yyyy HH:mm` | `dd/MM/yyyy HH:mm` |
-| **Form-layer default — Create** | `SYSDATE` | — |
-| **Form-layer default — Update** | — | `SYSDATE` |
-| **Read-only** | ✓ | ✓ |
-
-### 3. Wire the column hints on the read query
-
-On the connector's `list` query, add column hints:
-
-| Column | Dictionary |
-|---|---|
-| `created_by` | `audit_created_by` |
-| `created_at` | `audit_created_at` |
-| `updated_by` | `audit_updated_by` |
-| `updated_at` | `audit_updated_at` |
-
-### 4. Reference the columns in the write queries
+In **Settings → Connectors**, edit the insert and update queries of the table:
 
 ```sql
--- create
-INSERT INTO customers (name, status, created_by, created_at)
-VALUES (:name, :status, :session_user, CURRENT_TIMESTAMP);
+-- customers_post
+INSERT INTO customers (ID, NAME, STATUS, CREATED_BY, CREATED_AT)
+VALUES (:ID, :NAME, :STATUS, {{LOGIN}}, {{SYSTIMESTAMP}})
 
--- update
-UPDATE customers SET
-  name = :name, status = :status,
-  updated_by = :session_user, updated_at = CURRENT_TIMESTAMP
-WHERE id = :id;
+-- customers_put
+UPDATE customers
+SET NAME = :NAME, STATUS = :STATUS,
+    UPDATED_BY = {{LOGIN}}, UPDATED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID_ORIGINAL
 ```
 
-The `:session_user` placeholder is what makes this safe — it's bound on the server from the JWT, not from the dialog payload.
+The server replaces the tokens at execution — the signed-in user's name in upper case, the current date and time — whatever the form sends. The update query does not touch `CREATED_BY` / `CREATED_AT`, which keep their values.
 
-### 5. Done
+:::note[Dictionary rules instead of tokens]
+The `LOGIN` and `SYSDATE` [dictionary rules](../dictionary.md#rules) do the same on any write that binds the column — but `LOGIN` rewrites the column on **every** write, updates included, and `SYSDATE` only fills an **empty** value. They suit `UPDATED_BY` on a query that binds it; for creation columns, the tokens in the insert query are the safer choice.
+:::
 
-The dialog now shows the four audit columns as read-only fields on the *History* tab (or wherever you choose to place them in the dialog editor). The grid optionally shows *Last modified* with the `updated_at` value as a right-aligned chip.
+### 3. Show the columns
 
-## Where it shows up
+On the screen, give the four columns labels (dictionary entries) and a datetime format, tick **disabled** (read-only), and place them on a *History* tab of the dialog — or leave them out of the dialog and show them in the grid only.
 
-| Surface | What it shows |
+### 4. Keep every write — `audit_table`
+
+On the screen's **General** tab, set **audit_table** to `AUD_CUSTOMERS`. From then on, each insert, update or delete made through the screen also writes a row into `AUD_CUSTOMERS`:
+
+| Column | Content |
 |---|---|
-| Grid | Optional *Last modified* / *Created by* columns (you decide). |
-| Dialog | Read-only fields, typically on an *Audit* or *History* tab. |
-| REST API | The columns flow through unchanged. |
-| Excel export | Included if you set *Include in export* on. |
-| AI assistant | Visible to queries the assistant can run. |
+| The table's columns | The values sent with the write. |
+| `AUD_ACTION` | `INSERT`, `UPDATE` or `DELETE`. |
+| `AUD_USER` | The user's name. |
+| `AUD_DATE` | The server's date and time. |
 
-## Why this is safe
+The table is created on the first write from the structure of the source table. Several screens can share one audit table.
 
-| What a malicious user might try | What the framework does |
+## Why it is safe
+
+| Attempt | Result |
 |---|---|
-| Edit the form's HTML to send `created_by = "victim"` on save. | The server ignores the form's value for that field — the dictionary's `LOGIN` default wins. |
-| POST directly to the REST endpoint with a fake `created_by` body. | Same — the form-layer default is applied **on the server** at save time, after the request body is parsed. |
-| Use `liberty-connectors run` (CLI) to bypass auth. | The CLI runs as the local user; the same `LOGIN` default substitutes the OS user. Audit trail intact. |
+| Change the form to send `UPDATED_BY = 'someone else'`. | The token is resolved by the server; the form's value is not used. |
+| Call the REST API directly with a forged body. | Same: tokens and rules are applied by the server, after the request is read. |
+| Write without signing in. | The write needs an authenticated user with the query's permission. |
 
 ## Variations
 
-| You want… | Do this |
+| Need | How |
 |---|---|
-| **A `version` column** | Add a `version` column, increment it in the `update` query (`SET version = version + 1`). Combined with the framework's record locks, you get optimistic concurrency control. |
-| **An immutable audit log** (every change, not just last) | Add an `audit_log` child table; write a row from a Python step on every save. See [Plugins](../apps/plugins.md). |
-| **Log who *viewed* a row** | Different problem. The framework records every API call in the request log; for row-level read auditing, write a Python `hook` on `screen.before_read`. |
+| **A version number** | `SET VERSION = VERSION + 1` in the update query. |
+| **History of a whole application** | One shared audit table for its screens (`AUD_SECURITY`). |
+| **Changes shipped from one environment to another** | Change tracking on the screen — see [Change packages](../../nomaflow/change-packages.md). |
 
 ## What's next
 
-- [Dictionary → Form-layer defaults](../dictionary.md#form-layer-defaults).
-- [Cookbook → CRUD over an existing table](./crud-existing-table.md).
-- [Concepts → Screens](../build/screens/overview.md) for the dialog tab where audit columns sit.
+- [Parameter binding → Tokens](../build/queries/parameter-binding.md#tokens)
+- [Dictionary → Rules](../dictionary.md#rules)
+- [CRUD over an existing table](./crud-existing-table.md)
 
 ---
 
 ## Liberty Next — Bulk import
 Source: https://docs.nomana-it.fr/liberty/framework/cookbook/bulk-import/
 
-Recipe — let operators upload a CSV or Excel file and import its rows into a database table. Validates per row, reports successes and failures, leaves the database untouched on errors.
+Recipe — load many rows from an Excel or CSV file: the screen's Import dialog, which checks every row against the screen's rules and the database before saving the valid ones, and the Nomaflow file_load step for recurring loads.
 
 ## The problem
 
-A user has a CSV (or XLSX) with hundreds of rows and wants to import them into a table — new customers from a trade show, products from a vendor catalogue, contracts from a migration. They don't want to type each one through the edit dialog.
+A file with hundreds of rows — customers from a trade show, products from a supplier catalogue — to load into a table, without typing them one by one.
 
 ## The pattern
 
-Two parts:
-
-1. **A screen action** that opens an *Import* dialog with a file picker.
-2. **A Nomaflow job** triggered by the upload that parses the file, validates each row, performs upserts, returns a per-row report.
-
-The framework parses the file (CSV / XLSX / TSV); your only job is to declare the **mapping** between source columns and target columns.
-
-## The recipe
-
-### 1. Schema preparation
-
-If your target table needs an **external key** to detect duplicates (and decide insert vs update), make sure it exists:
-
-```sql
-ALTER TABLE customers
-  ADD COLUMN external_code VARCHAR(64) UNIQUE;
-```
-
-The bulk import will match incoming rows against this column.
-
-### 2. Define the import connector
-
-**Settings → Connectors → customers → + Add query**:
-
-```sql
--- upsert
-INSERT INTO customers (external_code, name, status, country)
-VALUES (:external_code, :name, :status, :country)
-ON CONFLICT (external_code) DO UPDATE SET
-  name = EXCLUDED.name,
-  status = EXCLUDED.status,
-  country = EXCLUDED.country,
-  updated_by = :session_user,
-  updated_at = CURRENT_TIMESTAMP;
-```
-
-Operation: `Write`. Declare the four parameters.
-
-For Oracle / SQLite, swap `ON CONFLICT` for the equivalent (`MERGE` on Oracle, `INSERT OR REPLACE` on SQLite).
-
-### 3. Build the import job
-
-**Settings → Jobs → + New job**:
-
-| Field | Value |
+| Need | Tool |
 |---|---|
-| **Name** | `customers-bulk-import` |
-| **App** | `&lt;app&gt;` |
-| **Schedule** | empty *(manual trigger only)* |
-| **Single instance** | ✓ |
+| A user loads a file now and then, through a screen. | The screen's **Import** dialog. |
+| A file arrives regularly and must be loaded without anyone. | A Nomaflow job with a **`file_load`** step. |
 
-Two steps:
+## Import through a screen
 
-#### Step 1 — parse the file
+### 1. Enable the import
 
-| Field | Value |
-|---|---|
-| **Name** | `parse` |
-| **Type** | `Python` |
-| **Callable** | `liberty.builtin.bulk_import:parse_file` *(framework helper)* |
-| **Kwargs** | `file_url = ${params.file_url}`, `mapping = { "Customer code": "external_code", "Name": "name", "Country": "country", "Status": "status" }` |
+In the screen editor, **General** tab, tick **uploadable**. The screen must have an insert query (and an update query to update existing rows). Users who may insert see an **Import** button above the grid.
 
-The helper:
+### 2. Prepare the file
 
-- Detects CSV / XLSX from the file extension.
-- Parses the headers; matches against the mapping.
-- Returns a list of rows with the target column names.
+An `.xlsx` (first sheet) or `.csv` file with a header row. Each header is matched to a column of the screen, ignoring case:
 
-#### Step 2 — upsert each row
+- by the column name (`NAME`, `PRICE`) or its label (`Name`, `Price`);
+- for a column with a list of values (`LOOKUP` or `ENUM`), by the code: the header `<label> (ID)` or the column name — the same layout as the screen's Excel export, so an exported file can be re-imported.
 
-| Field | Value |
-|---|---|
-| **Name** | `upsert` |
-| **Type** | `Python` |
-| **Callable** | `liberty.builtin.bulk_import:upsert_rows` |
-| **Kwargs** | `rows = ${steps.parse.rows}`, `connector = "customers"`, `query = "upsert"`, `chunk_size = 500` |
+Columns not matched are ignored.
 
-The helper:
+### 3. Check, then save
 
-- Splits the rows into chunks of 500.
-- Calls the upsert query per row, capturing successes and failures.
-- Returns `{ "ok": 487, "failed": 13, "failures": [...] }`.
+The **Import from Excel** dialog asks for the file and for what to do with **existing rows**: *Update or insert*, *Insert only* or *Update only*. **Check** runs two passes:
 
-The job parameters expose `file_url` — declared on the *Parameters* tab.
+1. **Screen rules** — every value against its column: a lookup code must exist, an enum value must be allowed, a Boolean must be one of the two values.
+2. **Database** — the rows that passed run the real insert or update inside a transaction that is rolled back: constraint violations, missing values and existing keys show up as in a real save.
 
-### 4. Add the screen action
+The report lists the valid and invalid rows with the error of each. **Save N valid rows** writes only the valid rows, in batches.
 
-**Settings → Screens → customers → Actions tab → + Custom button** at the toolbar level (not the dialog):
+The insert and update queries apply as for a dialog save: tokens, dictionary rules (`LOGIN`, `SYSDATE`, `SEQUENCE`), the screen's `audit_table` and its row hooks.
 
-| Field | Value |
-|---|---|
-| **Label** | `↑ Import` |
-| **Icon** | `upload` |
-| **Variant** | `Secondary` |
-| **Action** | `Run job` |
-| **Job** | `customers-bulk-import` |
-| **Parameters dialog** | ✓ *(shows the file picker before running)* |
+### Paste from Excel
 
-### 5. Permissions
+In edit mode, rows copied from Excel can also be pasted into the grid: they are added as new rows, saved with the grid's **Save**.
 
-Grant `job:customers-bulk-import` to the roles that should be allowed to import. Skip for read-only roles.
+## Recurring loads — `file_load`
 
-## See it work
-
-Open the *Customers* screen, click **↑ Import**. The framework shows a dialog with a file picker. Drop a CSV in, click *Run*. The job's run-detail page opens with a live log tail; on completion you see "487 imported, 13 failed", with the failures listed per row (line number + error message).
+For a file that comes back regularly, a Nomaflow job with a **`file_load`** step loads it into a table: a file chosen at run time, a server path or a watched folder; header-to-column mapping and constants; `append` or `replace_partition` (replace one period, in one transaction); a refusal query and a control total; rejected rows downloadable as CSV. See [Steps → File load](../../nomaflow/steps.md#file-load).
 
 ## Variations
 
-| You want… | Do this |
+| Need | How |
 |---|---|
-| **Validate before importing** | Add a step between `parse` and `upsert` that runs per-row validation. Return the list of errors; halt the job if any. |
-| **Show a preview before commit** | Run the job in `dry_run = true` mode; the `upsert_rows` helper accepts this flag and only logs what it would do. Then a second click triggers the real run. |
-| **Roll back on any error** | Wrap the upserts in a transaction; the helper has a `transactional = true` mode. |
-| **Schedule a daily import from S3** | Same job, set a cron schedule + replace step 1 with an `http` step pulling from S3. |
+| **A key other than the table's** to decide insert or update | Mark that column as **key** on the screen. |
+| **Values to compute during the import** | Put them in the queries (`{{LOGIN}}`, `{{SYSDATE}}`) or the dictionary rules. |
+| **Fill related columns from a lookup** | The column's `return_binds`: on import, they fill the target column when the file leaves it empty. |
 
 ## What's next
 
-- [Jobs → Step types → python](../../nomaflow/steps.md) for the helper signature.
-- [Cookbook → File upload](./file-upload.md) for the file-storage layer the import uses.
+- [CRUD over an existing table](./crud-existing-table.md) — the screen to import into.
+- [Excel export](./excel-export.md) — the file layout the import reads back.
+- [Steps → File load](../../nomaflow/steps.md#file-load) — loads by job.
 
 ---
 
 ## Liberty Next — Multi-step form / workflow
 Source: https://docs.nomana-it.fr/liberty/framework/cookbook/multi-step-form/
 
-Recipe — model an approval workflow with status transitions, per-state visibility of fields, role-gated actions and scheduled escalations. The framework's form conditions + custom actions do the work.
+Recipe — an approval workflow on a status column: one guarded query per transition, row-menu actions with confirmation and a prompt for the reason, permissions per transition, fields shown or locked by status, read-only closed rows, notifications and a daily reminder job.
 
 ## The problem
 
-A document goes through a sequence of states — *Draft → Submitted → Approved / Rejected → Closed*. Each transition is a button visible only to the right role. Some fields appear only after submit; others freeze after approval. Stalled documents need to nudge someone after N days.
+An expense claim goes through *Draft → Submitted → Approved / Rejected*. Each transition belongs to a given role; some fields only matter in some states; a claim waiting too long must be chased.
 
 ## The pattern
 
-Three framework features compose to model the workflow:
-
-| Feature | What it does |
+| Need | Mechanism |
 |---|---|
-| **Status column with `ENUM` rule** | Renders the current state as a coloured chip. |
-| **Custom actions on the dialog** | One button per transition (Submit, Approve, Reject). Each action's `Visible when` expression hides the button outside its valid state. |
-| **Form conditions** (`Visible when`, `Required when`, `Disabled when`) | Show / hide / freeze fields based on the current status. |
-| **Nomaflow job** | A nightly escalation that nudges stalled documents. |
+| A transition that only applies from the right state | One write query per transition, with `AND STATUS = '<expected>'` in its WHERE. |
+| A button per transition | A row-menu action: a `chain` with confirmation, prompt and query. |
+| Only managers approve | The transition query's permission, granted to the managers' role. |
+| Fields by state | `visible_when`, `required_when`, `disabled_when` on the columns. |
+| Frozen once decided | The screen's `editable_when`. |
+| Warn the right people | Notification rules on the screen's writes. |
+| Chase stalled claims | A daily Nomaflow job. |
 
 ## The recipe
 
-### 1. Schema
+### 1. Table
 
 ```sql
 CREATE TABLE expense_claims (
-  id           SERIAL PRIMARY KEY,
-  employee     VARCHAR(64) NOT NULL,
-  amount       DECIMAL(10,2) NOT NULL,
-  description  TEXT,
-  status       VARCHAR(16) NOT NULL DEFAULT 'draft',
-  submitted_at TIMESTAMP,
-  approved_by  VARCHAR(64),
-  approved_at  TIMESTAMP,
-  rejected_by  VARCHAR(64),
-  rejected_at  TIMESTAMP,
-  reject_reason TEXT,
-  created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at   TIMESTAMP
+  id            INTEGER PRIMARY KEY,
+  employee      VARCHAR(64) NOT NULL,
+  amount        DECIMAL(10,2) NOT NULL,
+  description   VARCHAR(2000),
+  status        VARCHAR(16) NOT NULL DEFAULT 'DRAFT',
+  submitted_at  TIMESTAMP,
+  decided_by    VARCHAR(64),
+  decided_at    TIMESTAMP,
+  reject_reason VARCHAR(500),
+  reminded_at   TIMESTAMP
 );
 ```
 
-### 2. Dictionary — the status enum
+### 2. Status list
 
-| Value | Label | Colour |
-|---|---|---|
-| `draft` | Draft | `#94a3b8` |
-| `submitted` | Submitted | `#60a5fa` |
-| `approved` | Approved | `#4ade80` |
-| `rejected` | Rejected | `#f87171` |
-| `closed` | Closed | `#475569` |
+**Settings → Dictionary → Enums**: an enum `CLAIM_STATUS` with the values `DRAFT` (Draft), `SUBMITTED` (Submitted), `APPROVED` (Approved), `REJECTED` (Rejected). The `STATUS` entry gets **Rules** `ENUM`, **Rules values** `CLAIM_STATUS`: the grid shows the labels and the dialog a list.
 
-### 3. Per-status write queries (one per transition)
+### 3. One query per transition
+
+In **Settings → Connectors → expenses → Queries**, three writable queries:
 
 ```sql
--- submit
+-- submit_claim
 UPDATE expense_claims
-SET status = 'submitted', submitted_at = CURRENT_TIMESTAMP,
-    updated_at = CURRENT_TIMESTAMP
-WHERE id = :id AND status = 'draft';
+SET STATUS = 'SUBMITTED', SUBMITTED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID AND STATUS = 'DRAFT' AND EMPLOYEE = {{LOGIN}}
 
--- approve
+-- approve_claim
 UPDATE expense_claims
-SET status = 'approved', approved_by = :session_user, approved_at = CURRENT_TIMESTAMP,
-    updated_at = CURRENT_TIMESTAMP
-WHERE id = :id AND status = 'submitted';
+SET STATUS = 'APPROVED', DECIDED_BY = {{LOGIN}}, DECIDED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID AND STATUS = 'SUBMITTED'
 
--- reject
+-- reject_claim
 UPDATE expense_claims
-SET status = 'rejected', rejected_by = :session_user, rejected_at = CURRENT_TIMESTAMP,
-    reject_reason = :reject_reason, updated_at = CURRENT_TIMESTAMP
-WHERE id = :id AND status = 'submitted';
+SET STATUS = 'REJECTED', DECIDED_BY = {{LOGIN}}, DECIDED_AT = {{SYSTIMESTAMP}},
+    REJECT_REASON = :REJECT_REASON
+WHERE ID = :ID AND STATUS = 'SUBMITTED'
 ```
 
-The `AND status = '<expected>'` guard at the SQL level prevents accidental double transitions (a submitter can't re-submit; a manager can't approve a rejected claim).
+The `AND STATUS = …` guard makes a transition from the wrong state change nothing; `EMPLOYEE = {{LOGIN}}` lets employees submit only their own claims (`{{LOGIN}}` is the user name in upper case, as `EMPLOYEE` must be stored).
 
-### 4. Screen — actions + conditions
+### 4. The transition buttons
 
-**Settings → Screens → expense-claims**.
+In the screen editor, **Row menu** tab, one entry per transition:
 
-#### Actions
+```toml
+[[screens.expenses.expense_claims.row_menu]]
+type  = "chain"
+id    = "reject"
+label = "Reject"
+prompt_title  = "Reject the claim"
+prompt_fields = [{ name = "REJECT_REASON", label = "Reason", required = true }]
+steps = [
+  { type = "run_query", id = "do", query = "reject_claim",
+    param_binds = [{ param = "ID", source = "ID" },
+                   { param = "REJECT_REASON", source = "INPUT.REJECT_REASON" }] },
+  { type = "refresh", id = "reload" },
+]
+```
 
-| Action | Connector / Query | Visible when | Roles |
-|---|---|---|---|
-| **Submit** | `expense-claims` / `submit` | `status == 'draft' && employee == session.user` | All (gated by the row-level filter) |
-| **Approve** | `expense-claims` / `approve` | `status == 'submitted' && 'manager' in session.roles` | Manager |
-| **Reject** | `expense-claims` / `reject` | `status == 'submitted' && 'manager' in session.roles` | Manager. Confirmation dialog asks for `reject_reason`. |
+*Approve* follows the same shape with a `confirm` step instead of the prompt; *Submit* with `submit_claim`. To show a clear message when the claim is not in the right state, wrap the steps in an `if` on `STATUS` (`equals` `SUBMITTED`): `then_steps` run the query, `else_steps` a `notify`. See [Actions and lifecycle](../build/screens/actions-and-lifecycle.md).
 
-#### Field conditions
+### 5. Who may do what
 
-| Field | Visible when | Required when | Disabled when |
-|---|---|---|---|
-| **Description** | always | `status == 'draft'` | `status != 'draft'` |
-| **Amount** | always | `status == 'draft'` | `status != 'draft'` |
-| **Submitted at** | `status != 'draft'` | — | always (read-only) |
-| **Approved by / at** | `status == 'approved'` | — | always |
-| **Reject reason** | `status == 'rejected'` | — | always |
+Each query has its own permission: `sql:expenses:submit_claim`, `sql:expenses:approve_claim`, `sql:expenses:reject_claim`. In **Settings → Access → Roles**, grant the first one to employees and the other two to managers only: an employee who clicks *Approve* gets a refusal. See [Roles & permissions](../build/secure/roles-and-permissions.md).
 
-The dialog is the same row — it just hides / freezes different fields based on the status.
+### 6. Fields by state
 
-### 5. Permission codes
+On the columns (Edit and Filter tabs of the inspector):
 
-The transitions auto-generate three write codes:
-
-- `sql:expense-claims:submit:write`
-- `sql:expense-claims:approve:write`
-- `sql:expense-claims:reject:write`
-
-Roles:
-
-| Role | Codes granted |
+| Column | Setting |
 |---|---|
-| `employee` | `sql:expense-claims:submit:write` *(can only submit their own — the SQL guard handles the rest)* |
-| `manager` | `sql:expense-claims:approve:write` + `sql:expense-claims:reject:write` |
+| `DESCRIPTION`, `AMOUNT` | `required_when` STATUS = `DRAFT` |
+| `SUBMITTED_AT` | `visible_when` STATUS = `SUBMITTED`, `APPROVED`, `REJECTED`; `disabled` |
+| `DECIDED_BY`, `DECIDED_AT` | `visible_when` STATUS = `APPROVED`, `REJECTED`; `disabled` |
+| `REJECT_REASON` | `visible_when` STATUS = `REJECTED`; `disabled` |
 
-### 6. The escalation job
+And on the **General** tab, `editable_when` STATUS = `DRAFT`: once submitted, the claim opens read-only and only the row-menu transitions change it. See [Form conditions](../form-conditions.md).
 
-Stale-claim nudge — same pattern as the [CRM nightly stale-deal job](../tutorial-crm/06-ai-and-jobs.md):
+### 7. Notifications
+
+In **Settings → Notifications**, a rule on the screen's **update** event, *Only when the written row has* `STATUS = SUBMITTED`, channel `portal` and `email`, recipients `role:managers`, subject `Claim {ID} of {EMPLOYEE} to approve`. A second rule on `STATUS = REJECTED` can warn the requester. See [Notifications](../../nomaflow/notifications.md).
+
+### 8. Reminders
+
+A Nomaflow job, every morning, with a `sql_query` step:
 
 ```sql
--- nag-stale-submissions
-SELECT id, employee, amount, submitted_at
-FROM expense_claims
-WHERE status = 'submitted'
-  AND submitted_at < CURRENT_TIMESTAMP - INTERVAL '5 days';
+UPDATE expense_claims SET REMINDED_AT = CURRENT_TIMESTAMP
+WHERE STATUS = 'SUBMITTED' AND SUBMITTED_AT < CURRENT_TIMESTAMP - INTERVAL '5' DAY
 ```
 
-Nomaflow job, daily at 09:00, posts to `#expenses-managers` Slack channel.
+and a notification rule on that job's `succeeded` event: `{ROWS} claims waiting for more than 5 days`, to `role:managers`.
 
 ## Variations
 
-| You want… | Do this |
+| Need | How |
 |---|---|
-| **A free-form approver chain** (variable list of approvers) | Add an `approval_steps` child table; status becomes `awaiting:<step_n>`. Approve queries advance the step counter. More complex but the same primitives. |
-| **A history log of every transition** | Add an `expense_audit` table; each transition query inserts a row from a Python step. |
-| **Reopen rejected** | Add a `reopen` action visible when `status == 'rejected'`, flips back to `draft`. |
-| **Email the requester on every transition** | Notifications block on each write query — see [Jobs → Notifications](../../nomaflow/concepts.md). |
+| **History of every transition** | The screen's `audit_table` — see [Audit trail](./audit-trail.md). |
+| **Reopen a rejected claim** | A `reopen_claim` query (`STATUS = 'DRAFT' … WHERE STATUS = 'REJECTED'`) and its row-menu entry. |
+| **A long form in steps** | Dialog tabs, with `hide_on_add` / `hide_on_edit` for the tabs that only make sense in one mode. |
 
 ## What's next
 
-- [Form conditions](../form-conditions.md) for the per-field expression syntax.
-- [Roles & permissions](../build/secure/roles-and-permissions.md) for gating actions per role.
-- [Cookbook → Audit trail](./audit-trail.md) for the `submitted_at` / `approved_at` columns.
+- [Actions and lifecycle](../build/screens/actions-and-lifecycle.md) — chains, prompts, conditions.
+- [Form conditions](../form-conditions.md) — fields by state.
+- [Notifications](../../nomaflow/notifications.md) — rules and recipients.
 
 ---
 
 ## Liberty Next — OIDC sign-in
 Source: https://docs.nomana-it.fr/liberty/framework/cookbook/oidc-sso/
 
-Recipe — wire the framework against Authentik, Keycloak, Azure AD or Okta in 10 minutes. Single sign-on, group-to-role mapping, auto-provisioning, break-glass admin.
+Recipe — let users sign in with the company's identity provider (Microsoft Entra ID, Keycloak, Okta, Auth0…): register the application at the provider, fill Settings → App → OpenID Connect (SSO), then give the new users their roles.
 
 ## The problem
 
-Users sign in with the company's identity provider, not a per-app password. You want SSO without bespoke code, with the IdP's group membership translating to Liberty roles.
+Users should sign in with their company account, not with a separate password.
 
 ## The pattern
 
-Two halves:
-
-1. **On the IdP** — register the framework as an OAuth2/OIDC client, expose a `groups` claim, register the redirect URI.
-2. **On the framework** — flip *OIDC enabled* on under *Settings → Framework → Authentication*, fill in the four standard values, click *Test sign-in*.
+Liberty Next signs users in through any OpenID Connect provider. The local sign-in form stays available; a **Sign in with OIDC** button is added below it.
 
 ## The recipe
 
-### Step 1 — register Liberty on the IdP
+### 1. Register the application at the provider
 
-The procedure depends on the IdP but the shape is identical.
+At the provider (Entra ID, Keycloak, Okta…), create a web application (confidential client) with:
 
-#### Authentik
+- **Redirect URI**: `https://<host>/auth/oidc/callback`;
+- the scopes `openid email profile`;
+- a **client secret**.
 
-1. *Applications → Providers* → *Create* → **OAuth2/OpenID Provider**.
-2. *Redirect URIs*: `https://liberty.example.com/auth/oidc/callback`.
-3. *Property mappings*: add the default `openid email groups` set.
-4. Note the **Client ID** + **Client secret**.
-5. *Applications → Applications* → *Create* → link to the provider; pick which groups to expose.
+Note the **client ID**, the **client secret** and the **discovery URL** (`…/.well-known/openid-configuration`).
 
-#### Keycloak
+### 2. Fill the settings
 
-1. *Realm* → *Clients* → *Create* — Client ID `liberty`, OpenID Connect protocol.
-2. *Valid redirect URIs*: `https://liberty.example.com/auth/oidc/callback`.
-3. *Credentials* tab → note the secret.
-4. *Client scopes* → *liberty-dedicated* → *Add mapper* → **Group Membership** → claim name `groups`, omit `/` prefix.
-
-#### Azure AD / Entra
-
-1. *App registrations* → *New registration*.
-2. *Redirect URI*: `https://liberty.example.com/auth/oidc/callback` (Web).
-3. *Certificates & secrets* → *New client secret* — note the value.
-4. *Token configuration* → *Add groups claim* → All groups; emit as `groups` (not object IDs).
-
-#### Okta
-
-1. *Applications* → *Create App Integration* → OIDC, Web Application.
-2. *Sign-in redirect URI*: `https://liberty.example.com/auth/oidc/callback`.
-3. *Assignments* — choose the groups.
-4. *Authorization servers → default → Claims* → add a `groups` claim, type Groups.
-
-### Step 2 — configure Liberty
-
-**Settings → Framework → Authentication**:
+**Settings → App → OpenID Connect (SSO)**:
 
 | Field | Value |
 |---|---|
-| **OIDC enabled** | ✓ |
-| **Issuer URL** | The IdP's issuer. Examples: `https://auth.example.com/application/o/liberty/` *(Authentik, trailing slash matters)* — `https://kc.example.com/realms/<realm>` *(Keycloak)* — `https://login.microsoftonline.com/<tenant>/v2.0` *(Azure)* — `https://<domain>.okta.com/oauth2/default` *(Okta)*. |
-| **Client ID** | From the IdP. |
-| **Client secret** | 🔒 From the IdP — paste in encrypted mode. |
-| **Redirect URI** | `https://liberty.example.com/auth/oidc/callback` *(must match what's registered on the IdP)*. |
-| **Email claim** | `email` *(default)*. |
-| **Groups claim** | `groups` *(default)*. |
-| **Auto-provision** | ✓ *(creates a Liberty user on first SSO sign-in)*. |
+| **Enabled** | On. |
+| **Discovery URL** | The provider's `.well-known/openid-configuration`. |
+| **Client ID**, **Client secret** | As registered — the secret is encrypted when saved. |
+| **Scopes** | `openid email profile`. |
+| **Username claim** | `preferred_username` by default; `email` or `upn` depending on the provider. |
 
-Click **▶ Test sign-in** at the bottom of the OIDC sub-form. A new tab opens, you sign in on the IdP, the tab returns "OIDC test successful" plus the resolved claims (email, groups) so you can confirm the mapping.
+Save: the change applies without a restart. See [App settings → OpenID Connect](../build/settings-app.md#section-4--openid-connect-sso).
 
-**Save & reload**.
+### 3. First sign-in and roles
 
-### Step 3 — map IdP groups to Liberty roles
+Users appear in **Settings → Access → Users** at their first sign-in, active and **without roles**: they see an empty application until a role is given to them. The usual onboarding: the person signs in once, an administrator assigns the roles. See [Users](../build/secure/users.md).
 
-The framework maps the `groups` claim 1:1 to Liberty role identifiers. Open **Settings → Roles**, make sure each IdP group you care about has a matching Liberty role with the right permissions.
+### 4. Attributes from the directory (optional)
 
-| IdP group | Liberty role | Permissions |
-|---|---|---|
-| `crm-sales` | `crm-sales` | `sql:customers:*`, `sql:deals:*`, `screen:crm:*`, `menu:crm:*` |
-| `crm-managers` | `crm-managers` | `crm-sales` *(inherits)* + dashboard access |
-| `admins` | `admin` | `*` |
+To filter rows by company or department from the directory, map user attributes to ID-token claims with `attribute_claims` in `app.toml`:
 
-### Step 4 — test as a real user
+```toml
+[oidc]
+attribute_claims = { company = "company", pole = "department" }
+```
 
-Sign out as `admin`. The login page now has a **Sign in with SSO** button. Click it, authenticate on the IdP, return to the framework — you have the roles the IdP claims you do, you see what those roles let you see.
+At every sign-in, the mapped attributes are refreshed from the token; a role's [data scope](../build/secure/roles-and-permissions.md#data-scope) using `#USER.company#` then follows the directory. See [Sign-in → Attributes from the provider](../build/secure/sign-in.md#attribute-claims).
 
-## Break-glass access
+## Check
 
-The local username/password form **stays available** alongside the SSO button. The `admin` user can still sign in directly even when the IdP is unreachable. Keep at least one local admin for this reason — never delete it.
-
-## Single sign-out
-
-For end-session propagation back to the IdP, set **End-session endpoint** in the OIDC sub-form. The framework redirects through it on `POST /auth/logout`.
-
-## Variations
-
-| You want… | Do this |
+| Symptom | Cause |
 |---|---|
-| **Restrict to a specific email domain** | The framework refuses sign-in if `email_claim` doesn't end with the value of `[auth.oidc] allowed_domains` (set in the sub-form). Multiple domains supported as a comma list. |
-| **Prevent auto-provisioning** | Turn *Auto-provision* off. Users must exist in *Settings → Users* before they can sign in. The IdP provides authentication; you control authorisation. |
-| **Multiple IdPs** | Not supported in one form; the typical alternative is to use the IdP-of-IdPs (Authentik / Keycloak federating Azure + Google + …) and point Liberty at the broker. |
-| **A custom claim instead of `email`** | Set *Email claim* to whatever the IdP exposes (`preferred_username`, `upn`, etc.). |
+| No OIDC button | **Enabled** is off. |
+| The provider refuses the redirect | The redirect URI registered at the provider is not exactly `https://<host>/auth/oidc/callback`. |
+| Signed in, empty application | Expected for a new user: assign roles. |
+| Wrong user name | Change **Username claim** to the claim the provider fills. |
 
 ## What's next
 
-- [Authentication → OIDC](../build/secure/sign-in.md#oidc) for the full field reference.
-- [Roles & permissions](../build/secure/roles-and-permissions.md) for the IdP-group-to-role mapping.
-- [CRM tutorial → Step 5](../tutorial-crm/05-auth.md) for a worked example.
+- [Sign-in](../build/secure/sign-in.md) — local and OIDC sign-in in detail.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) — what the new users may open.
 
 ---
 
 ## Liberty Next — Scheduled report email
 Source: https://docs.nomana-it.fr/liberty/framework/cookbook/scheduled-report-email/
 
-Recipe — every weekday at 08:00, run a SQL aggregate, render it as XLSX, email it to a recipient list. The framework's Nomaflow job + http step + Excel export endpoint do the work.
+Recipe — a report e-mailed on a schedule: a Nomaflow job that computes the figures, a notification rule on the job's success that e-mails them, and the dashboard or screen where readers find the detail. What to do when an attached file is required.
 
 ## The problem
 
-Management wants a "yesterday's numbers" report at 08:00 every weekday in their inbox. Or "weekly pipeline summary" on Mondays. Without writing a custom cron + email script.
+Management wants yesterday's figures by e-mail at 08:00 on weekdays, without a separate script.
 
 ## The pattern
 
-A Nomaflow job with three steps:
-
-1. **Render the report** as an XLSX (via the framework's screen-export endpoint, or a Python helper).
-2. **Attach + send the email** via your SMTP relay or a transactional service.
-3. **Log the send** for audit (optional).
-
-The framework handles the scheduling, the retry on failure, the run history, the alerting.
+| Part | Mechanism |
+|---|---|
+| Compute the figures | A Nomaflow job on a schedule, with a `sql_query` step that writes them into a report table. |
+| Send them | A notification rule on the job's **succeeded** event, channel `email`, to a role or addresses. |
+| Show the detail | A dashboard or a screen on the report table. |
 
 ## The recipe
 
-### Step 1 — make sure the data is queryable
+### 1. The e-mail account
 
-You need a connector query that produces the rows you want to report. If you already have a screen that shows the right data, you're done — its read query is what you'll export.
+**Settings → App → Notifications**: SMTP server, port, security, account and sender address. **Send a test** checks it. See [Notifications → The e-mail account](../../nomaflow/notifications.md#smtp).
 
-For the example we'll reuse the CRM tutorial's `deals.list` query.
+### 2. The report table and its query
 
-### Step 2 — configure the SMTP relay
+```sql
+CREATE TABLE daily_pipeline (
+  report_date DATE,
+  stage       VARCHAR(30),
+  deals       INTEGER,
+  amount      DECIMAL(14,2)
+);
+```
 
-**Settings → Framework → Notifications → SMTP**:
+A writable query `compute_daily_pipeline` on the CRM connector:
 
-| Field | Value |
-|---|---|
-| **Host** | `smtp.example.com` |
-| **Port** | `587` |
-| **Username** | `liberty@example.com` |
-| **Password** | 🔒 *(encrypted)* |
-| **TLS** | `STARTTLS` |
-| **From address** | `Liberty <liberty@example.com>` |
+```sql
+INSERT INTO daily_pipeline (report_date, stage, deals, amount)
+SELECT CURRENT_DATE - 1, stage, COUNT(*), SUM(amount)
+FROM deals
+WHERE updated_at >= CURRENT_DATE - 1 AND updated_at < CURRENT_DATE
+GROUP BY stage
+```
 
-Send a test email from the form to verify.
+### 3. The job
 
-### Step 3 — build the job
+In Nomaflow, a job `crm-daily-pipeline` with:
 
-**Settings → Jobs → + New job**:
+- a schedule `0 8 * * 0-4` — 08:00 Monday to Friday (in Liberty Next's cron, day 0 is Monday; see [Schedules → Cron](../../nomaflow/jobs/schedules.md#cron));
+- a `sql_query` step running `compute_daily_pipeline`.
 
-| Field | Value |
-|---|---|
-| **Name** | `crm-daily-pipeline-report` |
-| **App** | `crm` |
-| **Description** | `Daily 08:00 weekday: pipeline export to management.` |
-| **Schedule** | `0 8 * * 1-5` |
-| **Timezone** | `Europe/Paris` |
-| **Single instance** | ✓ |
-| **Timeout** | 120 seconds |
+**Run now** checks it at once. See [Create a job](../../nomaflow/jobs/create.md).
 
-### Step 4 — the three steps
+### 4. The e-mail
 
-#### Step 1 — render the XLSX
-
-| Field | Value |
-|---|---|
-| **Name** | `render` |
-| **Type** | `HTTP` |
-| **Variant** | `Connector endpoint` |
-| **Connector** | `liberty-self` |
-| **Endpoint** | `screens.export` |
-| **Parameters** | `app = crm`, `screen_id = deals`, `format = xlsx`, `from_date = ${yesterday}`, `to_date = ${yesterday}` |
-| **Result alias** | `xlsx` |
-
-The `liberty-self` connector is built into the framework — it exposes the framework's own REST surface to job steps.
-
-#### Step 2 — send the email
+**Settings → Notifications**, a new rule:
 
 | Field | Value |
 |---|---|
-| **Name** | `email` |
-| **Type** | `HTTP` |
-| **Variant** | `Raw URL` |
-| **Method** | `POST` |
-| **URL** | The framework's SMTP-bridge endpoint: `http://127.0.0.1:8000/api/notifications/email` *(authenticated with the system user's JWT — the framework handles this for system-triggered jobs)*. |
-| **Headers** | `Content-Type: application/json` |
-| **Body** | `{ "to": ["management@example.com"], "subject": "Pipeline daily — ${yesterday}", "body": "Find attached the pipeline as of ${yesterday}.", "attachments": [{ "name": "pipeline-${yesterday}.xlsx", "content": "${steps.render.body}", "encoding": "base64" }] }` |
+| Trigger | **A job event**, job `crm-daily-pipeline`, event `succeeded`. |
+| Channels | `email` (and `portal` for the bell). |
+| Recipients | `role:management`, or `email:management@example.com`. |
+| Subject | `Pipeline of the day — {ROWS} lines computed` |
+| Body | `The daily pipeline is ready. Open the CRM dashboard for the detail.` |
 
-#### Step 3 — log the send (optional)
+The placeholders of a job event are `JOB`, `RUN_ID`, `STATE`, `ERROR`, `DURATION_MINUTES` and `ROWS`. **Send a test** sends the rule with sample values. See [Notifications → Rules](../../nomaflow/notifications.md#rules).
 
-| Field | Value |
-|---|---|
-| **Name** | `log-send` |
-| **Type** | `SQL Query` |
-| **Connector / Query** | `audit` / `log-event:write` |
-| **Parameters** | `event = "pipeline-report-sent"`, `payload = ${steps.email.body}` |
+### 5. The detail
 
-A small `audit` table that records every system-triggered email — useful when someone says "I didn't get the report".
+A dashboard widget or a screen on `daily_pipeline` (for example a bar chart by stage, filtered on the last `report_date`), reachable from the menu. See [Dashboards](../dashboards.md).
 
-### Step 5 — notifications on failure
+### 6. When it fails
 
-In the job's *Notifications* block:
+The job's own alerts e-mail the operators on failure — see [Notifications → A job's own alerts](../../nomaflow/notifications.md#job-alerts).
 
-| Field | Value |
-|---|---|
-| **On failure** | `slack:#ops-alerts` |
-| **On skipped** | *(leave empty)* |
+## When a file must be attached
 
-If the job fails (database down, SMTP rejects the email), the ops channel pings.
+Notifications send a subject and a body, without attachments. For a file attached to the e-mail, two ways:
 
-### Step 6 — test and ship
-
-Click **▶ Run now** in the job builder. The run-detail page opens with the three steps; on success the email lands in the recipients' inbox and the audit table gets a row.
-
-The job's *Next 5 fires* preview confirms it'll fire tomorrow at 08:00.
+- readers download it themselves: the screen's **Export** menu, or its configured workbooks — see [Excel export](./excel-export.md);
+- a `python` step of the job builds the file and sends it with the company's mail library — custom code, see [Plugins](../apps/plugins.md).
 
 ## Variations
 
-| You want… | Do this |
+| Need | How |
 |---|---|
-| **A PDF instead of XLSX** | Replace `format = xlsx` with `format = pdf` on Step 1. Works for dashboards; screens render their print stylesheet to PDF. |
-| **A weekly report (Mondays only)** | Change the cron to `0 8 * * 1`. |
-| **Multiple recipients with different views** | Loop in a Python step instead of one HTTP step — pass a list of `(recipient, screen_id, filters)` tuples. |
-| **An inline HTML body instead of attachment** | The framework's `screens.export` endpoint supports `format = html` — embed the response directly in the email body. |
-| **Slack instead of email** | Replace Step 2 with an HTTP POST to the Slack webhook, with the file uploaded via `files.upload` instead of attached. |
+| **Weekly, on Mondays** | Cron `0 8 * * 0`. |
+| **A message in Teams or another tool** | A notification rule with the `action` channel, calling an API connector endpoint (a webhook). |
+| **A warning only when something is wrong** | A step that fails when a check is not met, and a rule on the `failure` event. |
 
 ## What's next
 
-- [Jobs — Nomaflow → Overview](../../nomaflow/overview.md) for the scheduling model.
-- [Cookbook → Excel export](./excel-export.md) for the export endpoint.
-- [CRM tutorial → Step 6](../tutorial-crm/06-ai-and-jobs.md) for a similar nightly-job pattern (stale deals).
+- [Notifications](../../nomaflow/notifications.md) — rules, channels, recipients, placeholders.
+- [Schedules](../../nomaflow/jobs/schedules.md) — cron and presets.
+- [Dashboards](../dashboards.md) — show the figures.
 
 ---
 

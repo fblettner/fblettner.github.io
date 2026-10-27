@@ -11,7 +11,7 @@ Un utilisateur se connecte à Liberty par l'un de ces deux chemins :
 | Chemin | Quand |
 |---|---|
 | **Nom d'utilisateur + mot de passe local** | L'utilisateur saisit ses identifiants sur l'écran de connexion. Le framework les vérifie face à `auth.toml` (ou à la table `ly2_users`) et émet un JWT. |
-| **OIDC** | L'utilisateur clique sur *Se connecter avec \<fournisseur>*, est redirigé vers l'IdP, s'y connecte, puis revient sur Liberty avec son identité. Le framework provisionne / met à jour l'utilisateur et émet un JWT. |
+| **OIDC** | L'utilisateur clique sur *Se connecter avec OIDC*, est redirigé vers l'IdP, s'y connecte, puis revient sur Liberty avec son identité. Le framework provisionne / met à jour l'utilisateur et émet un JWT. |
 
 Les deux peuvent coexister — une seule installation propose les deux boutons sur l'écran de connexion, et chacun choisit celui qui s'applique.
 

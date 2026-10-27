@@ -1,114 +1,66 @@
 ---
 title: Expose data to the AI assistant
-description: "Recipe — decide which connectors the AI assistant can read, restrict writes, write a good tool description so the model picks the right query. The difference between a useful assistant and one that hallucinates."
-keywords: [Liberty Framework, cookbook, AI, assistant, expose to AI, tool description, scoping]
+description: "Recipe — choose what the AI assistant reaches and help it pick the right query: the ai:chat permission, the allowed connectors, read queries only, the user's data scope, and query labels and descriptions written for the model."
+keywords: [Liberty Next, cookbook, AI, assistant, ai:chat, allowed connectors, query description, data scope, sql_query]
 ---
 
 # Expose data to the AI assistant
 
 ## The problem
 
-The framework's AI assistant runs the same connector queries the UI does — but it can only pick the right tool if you tell it what each tool does. A connector exposed to the assistant with a vague description ("get data") will be picked at random; a connector with a clear two-sentence description will be picked correctly.
-
-This recipe covers the **scoping** — which connectors the assistant sees, which write paths it can take, how to write descriptions the model uses.
+The [AI assistant](../ai-assistant.md) answers questions by running the connectors' named queries. It must reach the right data — and only that — and pick the right query for each question.
 
 ## The pattern
 
-Three layers of scoping, each independent:
-
-| Layer | Where | Effect |
+| Layer | Setting | Effect |
 |---|---|---|
-| **Per connector — Expose to AI** | Settings → Connectors → \<connector\> → Connection sub-form. | Off → none of the connector's queries appear in the tool list. |
-| **Per query — Operation type** | Settings → Connectors → \<connector\> → \<query\> → Operation. | `Read` queries are exposed by default (when the connector toggle is on); `Write` queries require an extra opt-in. |
-| **Per role — `ai:chat` + `ai:tool:<name>`** | Settings → Roles. | Even an exposed query is hidden from a caller without `ai:chat`. The fine-grained `ai:tool:<name>` permission lets you whitelist tools per role. |
-
-Layered together, the assistant sees exactly what each user is supposed to see — no more, no less.
+| **Who** | The `ai:chat` permission, through a role. | Without it, the user has no assistant. |
+| **Which connectors** | **Allowed connectors**, Settings → App → AI Assistant. | Empty: every connector; otherwise only those listed. |
+| **Which queries** | Read queries only. | Write queries are always refused; the assistant never writes SQL of its own. |
+| **Which rows** | The user's rights and [data scope](../build/secure/roles-and-permissions.md#data-scope). | A query run by the assistant is checked like a screen's: the user sees the same rows. |
+| **Which query to pick** | The queries' **label** and **description**. | The assistant reads them to choose. |
 
 ## The recipe
 
-### 1. Set the connector's Expose to AI toggle
+### 1. Grant the assistant
 
-Open the connector. The *Connection* sub-form has an **Expose to AI assistant** toggle near the bottom. Defaults to *on* when you create a new connector.
+In **Settings → Access → Roles**, give the users' role the *AI assistant* rule (`ai:chat`), in **Beyond the menus**. See [Roles & permissions](../build/secure/roles-and-permissions.md).
 
-Turn it **off** for connectors that hold:
+### 2. Limit the connectors
 
-- Sensitive data the assistant shouldn't surface (PII, financials past a threshold, anything the legal team has flagged).
-- Internal framework / debugging connectors (`liberty-self`, technical-dashboard).
-- Operational connectors that only make sense in a UI flow (the BIP resubmit from the JDE tutorial).
+In **Settings → App → AI Assistant**, fill **Allowed connectors** with the connectors whose data the assistant may read — for example the CRM's, without the HR one. Keep **API tool** off unless the endpoints only read.
 
-### 2. Write good query descriptions
+### 3. Describe the queries
 
-Every read query has a **Description** field. The text is passed to the model as the tool's description. The model picks tools based on this string.
+In **Settings → Connectors**, give each query the assistant should use a **label** and a **description** (Advanced tab). The assistant lists the connectors with their queries and descriptions, then picks one:
 
-| Good | Bad |
+| Good | Weak |
 |---|---|
-| `Returns every invoice in a period with customer, amount, status. Use to answer questions about invoicing volume, recent invoices, status distribution.` | `Get invoices` |
-| `Counts deals per stage of the sales pipeline. Use for pipeline-distribution questions.` | `Aggregate deals` |
-| `Lists customer activities (calls, meetings, emails) ordered most-recent-first. Filter by customer or by date.` | `Activities` |
+| `Invoices of a period with customer, amount and status. For questions about invoicing volume, recent invoices, status breakdown.` | `Get invoices` |
+| `Number of deals per pipeline stage. For pipeline breakdown questions.` | `Aggregate deals` |
+| `Customer activities (calls, meetings, e-mails), most recent first. Parameter CUSTOMER_ID.` | `Activities` |
 
-Two patterns work:
+Two sentences are enough: **what the rows are**, and **which questions it answers**. Mention the parameters and their format.
 
-1. **What it returns** — one sentence describing the rows.
-2. **When to use it** — one sentence pointing the model at the question shape it answers.
+### 4. Add dedicated queries
 
-Both in the user's language (the assistant matches the language of the question).
+For the questions asked often — totals per company, per month — write a read query that computes them, rather than letting the assistant go through thousands of rows. Name its parameters clearly (`PERIOD_FROM`, `COMPANY`) and declare their labels.
 
-### 3. Opt write queries in explicitly
+### 5. Check
 
-Write queries are **excluded by default** even when the connector is exposed — the framework doesn't want the assistant doing unintended writes.
-
-To opt a write query in:
-
-| Setting | Effect |
-|---|---|
-| On the query → **Expose to AI assistant** toggle | When *on*, the query appears in the tool list with the `:write` suffix. |
-| On roles that should be allowed to trigger AI writes | Add `ai:write` permission. |
-
-Reserve this for **idempotent, low-risk** writes (a re-fetch of an external API, a flag toggle, a sync trigger). Never for `DELETE`s.
-
-### 4. Per-role gating with `ai:tool:<name>`
-
-For finer control, the `ai:tool:&lt;connector&gt;__&lt;query&gt;` permission gates each tool individually. By default, granting `ai:chat` exposes every read tool the user can run; adding `ai:tool:billing__*` restricts to billing.
-
-Typical role recipes:
-
-| Role | Permissions |
-|---|---|
-| `crm-viewer` | `ai:chat` + (implicit: every read tool they can run). |
-| `crm-power-user` | `ai:chat` + `ai:tool:deals__*` + `ai:write`. The "write tools" only appear because of the explicit `ai:write`. |
-| `data-analyst` | `ai:chat` only, but a much wider read-permission set on the underlying queries — the assistant inherits. |
-
-### 5. Verify what each role sees
-
-The endpoint `GET /ai/tools` returns the tool list as the calling user would see it. Use it to confirm scoping:
-
-```bash
-curl -H "Authorization: Bearer $(get_token alice)" \
-     http://127.0.0.1:8000/ai/tools | jq '.[].name'
-```
-
-The list should match the user's read permissions. If a tool you expected is missing, check the connector's *Expose to AI* toggle + the user's permission on the underlying query.
+Sign in as a user of the role and ask a question the role should answer, then one it should not: the assistant shows the tools it used and the queries it ran.
 
 ## Common mistakes
 
 | Mistake | Symptom |
 |---|---|
-| **Connector exposed but description empty** | Model picks random tools, hallucinates parameter names. |
-| **Write query exposed without `ai:write` on any role** | The query appears in `GET /ai/tools` but the assistant refuses to call it ("you don't have permission to write"). |
-| **Multiple queries with similar descriptions** | Model picks the first lexicographically and ignores the rest. Differentiate the descriptions. |
-| **Description in one language, query in another** | The model gets confused. Match the connector's description language to the user's `session.lang`. |
-
-## Variations
-
-| You want… | Do this |
-|---|---|
-| **Limit AI to one app** | Don't `ai:chat` users from other apps. Or grant `ai:tool:crm__*` only. |
-| **A daily cap on AI calls per user** | Set `[ai] max_messages_per_day` on the framework settings; the framework refuses past the cap. |
-| **The model never to see real PII** | Mark the column `Rule = PASSWORD` on the dictionary entry — the AI gets `••••` in the tool result, not the underlying value. |
-| **A specific connector exposed only to admin** | Set the underlying query's permission to `sql:financial:*` and only grant it to `admin`; `Expose to AI` can stay on — the framework filters. |
+| Queries without description | The assistant hesitates between similar queries, or picks the wrong one. |
+| Several queries with the same description | Same. Make each description specific. |
+| A sensitive connector left in an empty **Allowed connectors** list | The assistant may read it for any user who has rights on its queries. List the connectors explicitly. |
+| Expecting the assistant to update data | Write queries are refused; changes go through screens and actions. |
 
 ## What's next
 
-- [AI Assistant](../ai-assistant.md) for the full chat surface.
-- [Roles & permissions](../build/secure/roles-and-permissions.md) for the `ai:*` permission family.
-- [CRM tutorial → Step 6](../tutorial-crm/06-ai-and-jobs.md) for a worked end-to-end setup.
+- [AI assistant](../ai-assistant.md) — the drawer, the tools, the settings.
+- [Roles & permissions](../build/secure/roles-and-permissions.md) — `ai:chat` and the data scope.
+- [App settings → AI Assistant](../build/settings-app.md#ai) — every setting.

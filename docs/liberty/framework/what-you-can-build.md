@@ -1,288 +1,132 @@
 ---
 title: What you can build
-description: "Concrete use cases for the Liberty Framework — internal admin tools, BI dashboards, ERP administration, integration glue, customer portals, ETL orchestration. Each section shows what the framework does for you, what you still write, and how long it takes."
-keywords: [Liberty Framework, use cases, internal apps, admin tools, BI dashboards, ERP, JDE, integration, ETL, customer portal, examples]
+description: "What teams build with Liberty Next — admin apps over existing tables, dashboards, an interface over an ERP database, integration and data-loading jobs, workflows with conditional forms — with what the framework provides, what is left to configure, and when another tool fits better."
+keywords: [Liberty Next, use cases, admin apps, dashboards, ERP, JD Edwards, integration, ETL, workflow, Nomaflow, examples]
 ---
 
 # What you can build
 
-The framework is small on purpose — a handful of concepts that compose into a wide surface. This page is the catalogue of what teams actually build with it, with the **path** for each: how much is configuration, how much is custom code, how the existing tutorials and cookbook recipes plug in.
+Liberty Next combines a few building blocks — connectors and their queries, screens, menus, dashboards, jobs, roles — configured from Settings. This page lists what teams build with them, what each case relies on, and where to start.
 
-If you're not sure whether the framework fits your problem, this page is the place to check.
-
----
-
-## At a glance
-
-<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', margin: '24px 0'}}>
-  <div style={{border: '1px solid rgba(74,158,255,0.40)', borderRadius: '12px', padding: '18px', background: 'rgba(74,158,255,0.04)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>📋 Internal admin apps</div>
-    <div style={{fontSize: '12px', lineHeight: '1.55'}}>CRUD over existing tables, role-gated, with a sensible default UX. The framework's bread and butter — 1 day from "I have a database" to "users are using it".</div>
-  </div>
-  <div style={{border: '1px solid rgba(192,132,252,0.40)', borderRadius: '12px', padding: '18px', background: 'rgba(192,132,252,0.04)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#c084fc', marginBottom: '6px'}}>📊 BI dashboards</div>
-    <div style={{fontSize: '12px', lineHeight: '1.55'}}>KPIs and charts over named SQL queries. Shared filter bar, drill-down to grids, PDF export. No separate BI tool needed for the 80% case.</div>
-  </div>
-  <div style={{border: '1px solid rgba(34,197,94,0.40)', borderRadius: '12px', padding: '18px', background: 'rgba(34,197,94,0.04)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#22c55e', marginBottom: '6px'}}>🗄 ERP administration</div>
-    <div style={{fontSize: '12px', lineHeight: '1.55'}}>A modern UI over JD Edwards, SAP or NetSuite — users, security, BIP queue, master data. Doesn't replace the ERP; gives operators a faster way to live in it.</div>
-  </div>
-  <div style={{border: '1px solid rgba(255,159,10,0.40)', borderRadius: '12px', padding: '18px', background: 'rgba(255,159,10,0.04)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#fb923c', marginBottom: '6px'}}>🔌 Integration glue</div>
-    <div style={{fontSize: '12px', lineHeight: '1.55'}}>UI on top of webhook receivers, scheduled syncs, ETL pipelines. Nomaflow runs the jobs; the framework renders the runs.</div>
-  </div>
-  <div style={{border: '1px solid rgba(74,158,255,0.40)', borderRadius: '12px', padding: '18px', background: 'rgba(74,158,255,0.04)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#4a9eff', marginBottom: '6px'}}>🤝 Customer portals</div>
-    <div style={{fontSize: '12px', lineHeight: '1.55'}}>A scoped slice of an internal app exposed to outside users via OIDC. Row-level access, audit trail, file uploads — all framework-native.</div>
-  </div>
-  <div style={{border: '1px solid rgba(192,132,252,0.40)', borderRadius: '12px', padding: '18px', background: 'rgba(192,132,252,0.04)'}}>
-    <div style={{fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700, color: '#c084fc', marginBottom: '6px'}}>⚙ Workflow orchestration</div>
-    <div style={{fontSize: '12px', lineHeight: '1.55'}}>Approve / reject / route — multi-step forms, status workflows, scheduled escalations. Form conditions handle the per-state UX; Nomaflow handles the timers.</div>
-  </div>
-</div>
-
-The pattern is the same for every use case: **define the data sources, point the screens at them, organise the menu, set the permissions**. The differences are in which features get the spotlight.
+The pattern is always the same: **connect the database, write the queries, build the screens, organise the menu, set the roles**.
 
 ---
 
-## 1. Internal admin apps
+## 1. Admin apps over existing tables \{#admin\}
 
-The canonical use case. You have a database (users, products, contracts, tickets — anything) and you want a clean interface for the team to look at the data, edit it, filter it, export it.
+A database (customers, products, contracts, tickets…) and a team that must read, filter, edit and export it.
 
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **Grid** with sortable / filterable columns, pagination, multi-select. | ✓ |
-| **Edit dialog** with tabs, fields, validation, save flow. | ✓ |
-| **Add / Edit / Delete** actions with role-based gates. | ✓ |
-| **Excel export** of the current filtered view. | ✓ |
-| **Audit columns** (`created_by`, `created_at`, `updated_by`, `updated_at`) auto-populated on save. | ✓ |
-| **Record locks** — two operators can't edit the same row simultaneously. | ✓ |
-| **Localisation** — every label, every status, every error message. | ✓ |
+| Grid with sorting, filters, grouping and saved views | [Screens](./build/screens/overview.md), [Saved views](./saved-views.md) |
+| Edit dialog with tabs, lists of values, conditional fields | [Dialog builder](./build/screens/dialog-builder.md), [Form conditions](./form-conditions.md) |
+| Add / edit / delete, in the dialog or in the grid, with Excel / CSV import | [Screens](./build/screens/overview.md) |
+| Excel export | [Excel export](./cookbook/excel-export.md) |
+| Audit columns filled by the server (`LOGIN`, `SYSDATE`) and a history table (`audit_table`) | [Dictionary](./dictionary.md#rules), [Audit trail](./cookbook/audit-trail.md) |
+| Record locks: two users cannot edit the same row at once | [Monitoring](../monitoring/dashboard.md) |
+| Interface in English and French, translated labels | [i18n](./apps/i18n.md) |
 
-### What you write
+**To configure**: the pool, the queries (the CRUD wizard writes them from a table), the screens and the menu. Most of the time goes into the SQL.
 
-| Task | Time |
-|---|---|
-| Decide which tables your app needs. | A few minutes. |
-| Configure the pool that points at your database. | 2 minutes — paste the JDBC URL, test connection. |
-| Write **one SQL read query per screen** (`SELECT ... FROM ...`). | 5–10 minutes per screen. |
-| Write the write queries (`INSERT`, `UPDATE`, `DELETE`) for editable screens. | 5 minutes per screen. |
-| Pick the columns to show, the dialog tabs to expose, the field widgets. | 5–10 minutes per screen in the Settings UI. |
-
-A typical 10-screen admin app, with one operator who knows the schema, lands in **a day**. Most of the time goes into the SQL.
-
-### Walkthrough
-
-The **[Build a CRM tutorial](./tutorial-crm/01-setup.md)** is exactly this — customers, deals, activities, with relationships and a dashboard on top. Six guided steps, end-to-end.
-
-For a recipe-style cheat sheet on a single CRUD screen, see **[Cookbook → CRUD over an existing table](./cookbook/crud-existing-table.md)**.
+**Start with**: [Tutorial — Build a CRM](./tutorial-crm/01-setup.md), or [CRUD over an existing table](./cookbook/crud-existing-table.md) for a single screen.
 
 ---
 
-## 2. BI dashboards
+## 2. Dashboards \{#dashboards\}
 
-The framework has built-in [charts](./charts.md) (line, bar, pie, area, scatter), [dashboards](./dashboards.md) (12-column layout with stat / chart / table panels) and a [shared filter bar](./dashboards.md) that propagates a period or a scope across every panel.
-
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **Stat panels** with delta vs the previous period and trend sparklines. | ✓ |
-| **Charts** wrapping named SQL queries — colour palettes, legends, tooltips, stacking. | ✓ |
-| **Tables** as small "top 5 rejected / pending / overdue" panels. | ✓ |
-| **Shared filter bar** propagating a period, a company, a region across every panel. | ✓ |
-| **Drill-down** from any panel to the underlying screen, pre-filtered. | ✓ |
-| **PDF export** of the rendered dashboard. | ✓ |
-| **Permission pruning** — panels referencing queries the caller can't run disappear silently. | ✓ |
+| KPI, chart (bar, line, area, pie) and table widgets on a 12-column grid | [Dashboards](./dashboards.md), [Charts](./charts.md) |
+| A period with presets, and the change compared with the previous period | [Dashboards](./dashboards.md) |
+| Filters from the dictionary, shared by every widget | [Dashboards](./dashboards.md) |
+| A cache with a **Refresh** button | [Dashboards](./dashboards.md) |
 
-### What you write
+**To configure**: the aggregate queries (usually `GROUP BY` on the period), then the widgets.
 
-| Task | Time |
-|---|---|
-| Write the SQL queries that aggregate your data (typically `GROUP BY` per period). | The bulk of the work — 10–30 minutes per query depending on the join complexity. |
-| Wire a chart per query and a stat per KPI. | 2 minutes per chart in the Settings UI. |
-| Lay them out on the dashboard grid. | 5 minutes. |
-
-A dashboard with 4 KPIs + 2 charts + 1 drill-down table — half a day, with most of the time going into SQL.
-
-### Walkthrough
-
-[Tutorial — CRM → Step 4 "Sales pipeline dashboard"](./tutorial-crm/04-dashboard.md) walks through it.
+**Start with**: [Tutorial — CRM → Dashboard](./tutorial-crm/04-dashboard.md).
 
 ---
 
-## 3. ERP administration (JD Edwards, SAP, NetSuite)
+## 3. An interface over an ERP database \{#erp\}
 
-ERPs ship with native UIs that are functional but slow, dated and clunky. The framework gives you a modern interface **on top of the ERP's database**, without modifying the ERP itself.
+A faster interface for the ERP's operators, reading and writing its database without changing the ERP.
 
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **Connect to JDE / SAP / NetSuite** via Oracle or SQL Server pools. | ✓ |
-| **Read ERP master data** — users, addresses, items, accounts, work centres. | ✓ |
-| **Visualise security** — roles, permissions, object tracking, audit trail. | ✓ |
-| **Monitor batch jobs** — BIP print queue, job submissions, scheduler. | ✓ |
-| **Per-environment views** — DV / PY / PD with the same screens. | ✓ |
-| **Read-only by default** for safety, write paths added explicitly per screen. | ✓ |
+| Oracle, SQL Server and PostgreSQL pools; Oracle thick mode for older servers | [Connectors](./connectors.md#oracle-thick) |
+| One app on several environments (development, test, production) through a **Pool** picker | [Connectors → Multi-pool](./connectors.md#multi-pool) |
+| JD Edwards conventions: Julian dates, right-justified codes, data dictionary import | [Dictionary](./dictionary.md#formats), [Scan a table](./dictionary.md#scan-a-table) |
+| Read-only screens, writes enabled screen by screen | [Screens](./build/screens/overview.md) |
 
-### What you write
-
-| Task | Time |
-|---|---|
-| Define the ERP pool — Oracle URL, schema, credentials. | 5 minutes (Oracle thin mode, no client install needed). |
-| Write SELECT queries against the ERP tables. | The interesting part — needs ERP-table knowledge. |
-| Set screens to *read-only* by default; opt into write paths intentionally. | A line per screen. |
-
-### How to get there
-
-JD Edwards has a packaged answer: **[Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/)** is a Nomana-IT vendor app built on the framework that ships a complete JDE admin — F0092 users, security workbench, BIP queue, master data, audit. Install it, point it at your JDE database, you're done. No tutorial needed.
-
-For SAP (`SAPSR3` schema), NetSuite (suite-analytics API), Microsoft Dynamics (on-prem SQL backend) or a non-ERP "admin over an existing database", the [Build a CRM tutorial](./tutorial-crm/01-setup.md) walks through the framework's full surface — the same pattern transfers, you just point the pool at the right database and write the queries.
-
-The Nomana-IT vendor app [Nomasx-1](https://docs.nomana-it.fr/liberty/nomasx1/overview/) is another productionised example of this pattern — security maintenance over JDE / SAP / NetSuite. Both Nomasx-1 and Nomajde are license-gated; the framework underneath is the same one this documentation describes.
+For JD Edwards, the ready-made apps cover the common needs: [Nomajde](../nomajde/overview.md) for administration and master data, [Nomasx-1](../nomasx1/overview.md) for security analysis over any connected application. For another ERP, the [CRM tutorial](./tutorial-crm/01-setup.md) shows the pattern: point the pool at the database and write the queries.
 
 ---
 
-## 4. Integration glue
+## 4. Integration and data loading \{#integration\}
 
-The framework's [Jobs / Nomaflow](../nomaflow/overview.md) engine + HTTP connectors + scheduled triggers cover the "integration platform" need without a separate tool.
+[Nomaflow](../nomaflow/overview.md) runs scheduled or manual jobs made of steps.
 
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **Cron-scheduled jobs** with retry, timeouts, single-instance lock. | ✓ |
-| **HTTP / REST connectors** with auth (Basic, Bearer, OAuth2), parameters, response shaping. | ✓ |
-| **SQL-to-SQL copy** with type coercion, chunking, atomic table swap. | ✓ |
-| **LDAP sync** with attribute mapping and upsert. | ✓ |
-| **Webhook receivers** — REST endpoints exposed by the framework. | ✓ |
-| **Run history** with per-step input / output / logs. | ✓ |
-| **Live log tail** over Socket.IO. | ✓ |
-| **Failure notifications** to Slack / email / webhook. | ✓ |
+| Jobs on a cron schedule or run by hand, with retries (fixed or exponential wait) and a timeout | [Schedules](../nomaflow/jobs/schedules.md), [Steps](../nomaflow/steps.md#retry) |
+| Steps: SQL query, SQL copy between databases, file load, HTTP call, LDAP sync, Python, call of another job | [Steps](../nomaflow/steps.md) |
+| API connectors with Basic, Bearer, API key or OAuth2 authentication | [Connectors](./connectors.md) |
+| Run history per step, live log | [Run history](../nomaflow/runs/history.md) |
+| Notifications on failure, success or a missed schedule — in the app, by e-mail, or through a connector | [Notifications](../nomaflow/notifications.md) |
 
-### What you write
+**To configure**: the source and target connectors, then the job's steps. Python only for what the steps cannot express — see [Plugins](./apps/plugins.md).
 
-| Task | Time |
-|---|---|
-| Define the source and target connectors. | 5 minutes each. |
-| Write the job step definitions in the Jobs builder. | 10–30 minutes per job. |
-| Custom Python only for what doesn't fit the declarative step types. | The escape hatch — rarely needed. |
-
-### Walkthrough
-
-[Tutorial — CRM → Step 6 "AI and jobs"](./tutorial-crm/06-ai-and-jobs.md) covers a scheduled job that re-runs nightly. For a runnable recipe, [Cookbook → Scheduled report email](./cookbook/scheduled-report-email.md).
+**Start with**: [Getting started with Nomaflow](../nomaflow/getting-started.md).
 
 ---
 
-## 5. Customer portals
+## 5. Apps for outside users \{#portals\}
 
-A customer portal is just **an internal admin app scoped to row-level data of one tenant**. The framework's permission model (`sql:<connector>:<query>` codes + the `session.user` placeholder) covers the row-level isolation without bespoke code.
+An app opened to users outside the team, each seeing only their own rows.
 
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **OIDC sign-in** — your IdP, the customer's IdP, or both. | ✓ |
-| **Per-user row filtering** via `WHERE owner = :session_user` patterns. | ✓ |
-| **Permission codes per screen** — your operators see different screens from the customer. | ✓ |
-| **File upload** and download. | ✓ |
-| **Audit trail** of every write the customer performs. | ✓ |
-| **Branded UI** — customer-app theme, custom logo, custom favicon. | ✓ |
-
-### What you write
-
-| Task | Time |
-|---|---|
-| Wire OIDC against your IdP (or the customer's). | 10 minutes per IdP. |
-| Add `WHERE owner = :session_user` to every customer-facing query. | A line per query. |
-| Give the customer a single role with the right permissions. | 2 minutes. |
-
-### Walkthrough
-
-The roles + OIDC parts are in [Tutorial — CRM → Step 5 "Roles and SSO"](./tutorial-crm/05-auth.md). The row-level filter pattern is documented under [Cookbook → Row-level access](./cookbook/row-level-access.md).
+| Sign-in through an OpenID Connect provider | [Sign-in](./build/secure/sign-in.md), [OIDC SSO](./cookbook/oidc-sso.md) |
+| Roles: which menus, screens and queries each user reaches | [Roles & permissions](./build/secure/roles-and-permissions.md) |
+| Data scope: rows filtered by user attributes, applied by the server | [Row-level access](./cookbook/row-level-access.md) |
+| Queries filtered on the signed-in user with `{{LOGIN}}` | [Parameter binding](./build/queries/parameter-binding.md#tokens) |
+| App name, colours and fonts | Settings → Theme |
 
 ---
 
-## 6. Workflow orchestration
+## 6. Workflows \{#workflow\}
 
-The combination of [screens](./build/screens/overview.md) + [form conditions](./form-conditions.md) + [jobs](../nomaflow/overview.md) covers most state-machine workflows — approve / reject, escalate, route to the right team.
+Approve, reject, escalate: a status column and screens that adapt to it.
 
-### What the framework does for you
-
-| Feature | Built in |
+| Provided | Where |
 |---|---|
-| **Status field** rendered as a coloured chip with role-gated transitions. | ✓ |
-| **Multi-step forms** — a long process split across tabs of the same dialog. | ✓ |
-| **Per-state visibility** — "Comments" field only visible after Submit; "Reject reason" only on Reject. | ✓ |
-| **Scheduled escalations** — a job that nags after N days in a state. | ✓ |
-| **Notifications** to the relevant operator on state changes. | ✓ |
+| Fields shown, required or locked depending on the status | [Form conditions](./form-conditions.md) |
+| Rows read-only once closed (`editable_when`) | [Form conditions](./form-conditions.md#editable-when) |
+| Buttons running queries, with confirmation and a prompt for a reason | [Actions and lifecycle](./build/screens/actions-and-lifecycle.md) |
+| Notifications when a screen writes a row, or from an action | [Notifications](../nomaflow/notifications.md) |
+| Reminder jobs on a schedule | [Nomaflow](../nomaflow/overview.md) |
 
-### What you write
-
-| Task | Time |
-|---|---|
-| Model the state machine in your database (a `status` column + a `transitions` table if you want fine-grained gates). | One table. |
-| Wire the conditions on form fields. | Per-field, but fast — see the editor in [Form conditions](./form-conditions.md). |
-| Wire the notifications on the status-change write query. | A few minutes. |
-
-### Walkthrough
-
-[Cookbook → Multi-step form](./cookbook/multi-step-form.md) is the runnable recipe.
+**Start with**: [Multi-step form](./cookbook/multi-step-form.md).
 
 ---
 
-## 7. ETL and data warehousing
+## When another tool fits better
 
-For teams that ingest data from multiple sources into a warehouse, Nomaflow + the framework's connectors cover the orchestration **and** the operator UI.
+- **Consumer-facing apps.** The grid-and-dialog interface is made for operators.
+- **Mobile-first apps.** The application works on a tablet but is designed for a desktop screen.
+- **Real-time co-editing.** Record locks prevent conflicting edits; there is no shared live editing.
+- **Screens with a unique layout** (Kanban board, Gantt chart, map): the grid-and-dialog model does not suit them.
 
-### What the framework does for you
-
-| Feature | Built in |
-|---|---|
-| **`sql_copy` step** — streams rows source → target with type coercion, chunking, atomic rename. | ✓ |
-| **Per-step retry** with exponential backoff. | ✓ |
-| **Concurrency control** — single-instance per job. | ✓ |
-| **Dependencies** between jobs. | ✓ |
-| **A UI to monitor every run**, with live log tail. | ✓ |
-
-### What you write
-
-| Task | Time |
-|---|---|
-| Define the source and target pools. | 5 minutes each. |
-| Write the source queries (often plain `SELECT * FROM source_table`). | Trivial. |
-| Wire the job in the Jobs builder. | 10 minutes per copy. |
-
-### Walkthrough
-
-[Cookbook → Bulk import](./cookbook/bulk-import.md) covers the inbound side; the [Jobs documentation](../nomaflow/overview.md) covers the orchestration.
-
----
-
-## When the framework isn't the right tool
-
-Honesty section:
-
-- **Public consumer apps.** The grid + dialog UX is operator-oriented, not consumer-oriented. Use Next.js / Remix for that.
-- **Mobile-first apps.** The SPA works on mobile but isn't built for it. Use React Native / Flutter for native.
-- **Real-time collaboration apps.** Locks prevent concurrent edits, but the framework doesn't ship operational-transform or CRDTs. Use Yjs / Liveblocks.
-- **Heavy custom UX.** If most of your screens need a unique layout (a Kanban board, a Gantt chart, a map), the framework's grid + dialog grammar fights you. Better to embed custom React routes; or pick a different tool.
-- **Static marketing sites.** Use a static-site generator.
-
-The framework is the right tool when **most of your screens are list-and-edit on top of a database**, with sprinklings of dashboards, jobs and integrations. Which describes the vast majority of internal applications.
+Liberty Next fits when **most screens list and edit data from a database**, with dashboards, jobs and integrations around them.
 
 ---
 
 ## Pick your path
 
-| You are… | Start with |
+| You want to… | Start with |
 |---|---|
-| **New to the framework and want a clean tutorial** | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) — six steps, generic domain. |
-| **Planning a JDE admin** | Install the packaged app [Nomajde](https://docs.nomana-it.fr/liberty/nomajde/overview/) — JDE-specific, no DIY needed. |
-| **Planning a SAP / NetSuite / other ERP admin** | Walk through [Tutorial — Build a CRM](./tutorial-crm/01-setup.md), the framework pattern transfers. |
-| **Just installing it for the first time** | [Getting Started → Installation](../installation/python-server.md). |
-| **Looking up how to do X specifically** | [Cookbook](./cookbook/crud-existing-table.md) — short recipes. |
-| **Reading the framework's grammar first** | [Connectors](./connectors.md) is the natural entry point. |
+| Learn the framework on a full example | [Tutorial — Build a CRM](./tutorial-crm/01-setup.md) |
+| Build a first screen quickly | [First app walkthrough](./getting-started/first-app.md) |
+| Administer JD Edwards | [Nomajde](../nomajde/overview.md) |
+| Install the framework | [Installation](../installation/overview.md) |
+| Find how to do one thing | The cookbook, starting with [CRUD over an existing table](./cookbook/crud-existing-table.md) |

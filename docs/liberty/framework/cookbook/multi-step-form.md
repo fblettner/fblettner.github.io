@@ -1,146 +1,137 @@
 ---
 title: Multi-step form / workflow
-description: "Recipe — model an approval workflow with status transitions, per-state visibility of fields, role-gated actions and scheduled escalations. The framework's form conditions + custom actions do the work."
-keywords: [Liberty Framework, cookbook, workflow, approval, status, transitions, form conditions, escalation]
+description: "Recipe — an approval workflow on a status column: one guarded query per transition, row-menu actions with confirmation and a prompt for the reason, permissions per transition, fields shown or locked by status, read-only closed rows, notifications and a daily reminder job."
+keywords: [Liberty Next, cookbook, workflow, approval, status, transitions, actions, prompt_fields, form conditions, editable_when, notifications, Nomaflow]
 ---
 
 # Multi-step form / workflow
 
 ## The problem
 
-A document goes through a sequence of states — *Draft → Submitted → Approved / Rejected → Closed*. Each transition is a button visible only to the right role. Some fields appear only after submit; others freeze after approval. Stalled documents need to nudge someone after N days.
+An expense claim goes through *Draft → Submitted → Approved / Rejected*. Each transition belongs to a given role; some fields only matter in some states; a claim waiting too long must be chased.
 
 ## The pattern
 
-Three framework features compose to model the workflow:
-
-| Feature | What it does |
+| Need | Mechanism |
 |---|---|
-| **Status column with `ENUM` rule** | Renders the current state as a coloured chip. |
-| **Custom actions on the dialog** | One button per transition (Submit, Approve, Reject). Each action's `Visible when` expression hides the button outside its valid state. |
-| **Form conditions** (`Visible when`, `Required when`, `Disabled when`) | Show / hide / freeze fields based on the current status. |
-| **Nomaflow job** | A nightly escalation that nudges stalled documents. |
+| A transition that only applies from the right state | One write query per transition, with `AND STATUS = '<expected>'` in its WHERE. |
+| A button per transition | A row-menu action: a `chain` with confirmation, prompt and query. |
+| Only managers approve | The transition query's permission, granted to the managers' role. |
+| Fields by state | `visible_when`, `required_when`, `disabled_when` on the columns. |
+| Frozen once decided | The screen's `editable_when`. |
+| Warn the right people | Notification rules on the screen's writes. |
+| Chase stalled claims | A daily Nomaflow job. |
 
 ## The recipe
 
-### 1. Schema
+### 1. Table
 
 ```sql
 CREATE TABLE expense_claims (
-  id           SERIAL PRIMARY KEY,
-  employee     VARCHAR(64) NOT NULL,
-  amount       DECIMAL(10,2) NOT NULL,
-  description  TEXT,
-  status       VARCHAR(16) NOT NULL DEFAULT 'draft',
-  submitted_at TIMESTAMP,
-  approved_by  VARCHAR(64),
-  approved_at  TIMESTAMP,
-  rejected_by  VARCHAR(64),
-  rejected_at  TIMESTAMP,
-  reject_reason TEXT,
-  created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at   TIMESTAMP
+  id            INTEGER PRIMARY KEY,
+  employee      VARCHAR(64) NOT NULL,
+  amount        DECIMAL(10,2) NOT NULL,
+  description   VARCHAR(2000),
+  status        VARCHAR(16) NOT NULL DEFAULT 'DRAFT',
+  submitted_at  TIMESTAMP,
+  decided_by    VARCHAR(64),
+  decided_at    TIMESTAMP,
+  reject_reason VARCHAR(500),
+  reminded_at   TIMESTAMP
 );
 ```
 
-### 2. Dictionary — the status enum
+### 2. Status list
 
-| Value | Label | Colour |
-|---|---|---|
-| `draft` | Draft | `#94a3b8` |
-| `submitted` | Submitted | `#60a5fa` |
-| `approved` | Approved | `#4ade80` |
-| `rejected` | Rejected | `#f87171` |
-| `closed` | Closed | `#475569` |
+**Settings → Dictionary → Enums**: an enum `CLAIM_STATUS` with the values `DRAFT` (Draft), `SUBMITTED` (Submitted), `APPROVED` (Approved), `REJECTED` (Rejected). The `STATUS` entry gets **Rules** `ENUM`, **Rules values** `CLAIM_STATUS`: the grid shows the labels and the dialog a list.
 
-### 3. Per-status write queries (one per transition)
+### 3. One query per transition
+
+In **Settings → Connectors → expenses → Queries**, three writable queries:
 
 ```sql
--- submit
+-- submit_claim
 UPDATE expense_claims
-SET status = 'submitted', submitted_at = CURRENT_TIMESTAMP,
-    updated_at = CURRENT_TIMESTAMP
-WHERE id = :id AND status = 'draft';
+SET STATUS = 'SUBMITTED', SUBMITTED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID AND STATUS = 'DRAFT' AND EMPLOYEE = {{LOGIN}}
 
--- approve
+-- approve_claim
 UPDATE expense_claims
-SET status = 'approved', approved_by = :session_user, approved_at = CURRENT_TIMESTAMP,
-    updated_at = CURRENT_TIMESTAMP
-WHERE id = :id AND status = 'submitted';
+SET STATUS = 'APPROVED', DECIDED_BY = {{LOGIN}}, DECIDED_AT = {{SYSTIMESTAMP}}
+WHERE ID = :ID AND STATUS = 'SUBMITTED'
 
--- reject
+-- reject_claim
 UPDATE expense_claims
-SET status = 'rejected', rejected_by = :session_user, rejected_at = CURRENT_TIMESTAMP,
-    reject_reason = :reject_reason, updated_at = CURRENT_TIMESTAMP
-WHERE id = :id AND status = 'submitted';
+SET STATUS = 'REJECTED', DECIDED_BY = {{LOGIN}}, DECIDED_AT = {{SYSTIMESTAMP}},
+    REJECT_REASON = :REJECT_REASON
+WHERE ID = :ID AND STATUS = 'SUBMITTED'
 ```
 
-The `AND status = '<expected>'` guard at the SQL level prevents accidental double transitions (a submitter can't re-submit; a manager can't approve a rejected claim).
+The `AND STATUS = …` guard makes a transition from the wrong state change nothing; `EMPLOYEE = {{LOGIN}}` lets employees submit only their own claims (`{{LOGIN}}` is the user name in upper case, as `EMPLOYEE` must be stored).
 
-### 4. Screen — actions + conditions
+### 4. The transition buttons
 
-**Settings → Screens → expense-claims**.
+In the screen editor, **Row menu** tab, one entry per transition:
 
-#### Actions
+```toml
+[[screens.expenses.expense_claims.row_menu]]
+type  = "chain"
+id    = "reject"
+label = "Reject"
+prompt_title  = "Reject the claim"
+prompt_fields = [{ name = "REJECT_REASON", label = "Reason", required = true }]
+steps = [
+  { type = "run_query", id = "do", query = "reject_claim",
+    param_binds = [{ param = "ID", source = "ID" },
+                   { param = "REJECT_REASON", source = "INPUT.REJECT_REASON" }] },
+  { type = "refresh", id = "reload" },
+]
+```
 
-| Action | Connector / Query | Visible when | Roles |
-|---|---|---|---|
-| **Submit** | `expense-claims` / `submit` | `status == 'draft' && employee == session.user` | All (gated by the row-level filter) |
-| **Approve** | `expense-claims` / `approve` | `status == 'submitted' && 'manager' in session.roles` | Manager |
-| **Reject** | `expense-claims` / `reject` | `status == 'submitted' && 'manager' in session.roles` | Manager. Confirmation dialog asks for `reject_reason`. |
+*Approve* follows the same shape with a `confirm` step instead of the prompt; *Submit* with `submit_claim`. To show a clear message when the claim is not in the right state, wrap the steps in an `if` on `STATUS` (`equals` `SUBMITTED`): `then_steps` run the query, `else_steps` a `notify`. See [Actions and lifecycle](../build/screens/actions-and-lifecycle.md).
 
-#### Field conditions
+### 5. Who may do what
 
-| Field | Visible when | Required when | Disabled when |
-|---|---|---|---|
-| **Description** | always | `status == 'draft'` | `status != 'draft'` |
-| **Amount** | always | `status == 'draft'` | `status != 'draft'` |
-| **Submitted at** | `status != 'draft'` | — | always (read-only) |
-| **Approved by / at** | `status == 'approved'` | — | always |
-| **Reject reason** | `status == 'rejected'` | — | always |
+Each query has its own permission: `sql:expenses:submit_claim`, `sql:expenses:approve_claim`, `sql:expenses:reject_claim`. In **Settings → Access → Roles**, grant the first one to employees and the other two to managers only: an employee who clicks *Approve* gets a refusal. See [Roles & permissions](../build/secure/roles-and-permissions.md).
 
-The dialog is the same row — it just hides / freezes different fields based on the status.
+### 6. Fields by state
 
-### 5. Permission codes
+On the columns (Edit and Filter tabs of the inspector):
 
-The transitions auto-generate three write codes:
-
-- `sql:expense-claims:submit:write`
-- `sql:expense-claims:approve:write`
-- `sql:expense-claims:reject:write`
-
-Roles:
-
-| Role | Codes granted |
+| Column | Setting |
 |---|---|
-| `employee` | `sql:expense-claims:submit:write` *(can only submit their own — the SQL guard handles the rest)* |
-| `manager` | `sql:expense-claims:approve:write` + `sql:expense-claims:reject:write` |
+| `DESCRIPTION`, `AMOUNT` | `required_when` STATUS = `DRAFT` |
+| `SUBMITTED_AT` | `visible_when` STATUS = `SUBMITTED`, `APPROVED`, `REJECTED`; `disabled` |
+| `DECIDED_BY`, `DECIDED_AT` | `visible_when` STATUS = `APPROVED`, `REJECTED`; `disabled` |
+| `REJECT_REASON` | `visible_when` STATUS = `REJECTED`; `disabled` |
 
-### 6. The escalation job
+And on the **General** tab, `editable_when` STATUS = `DRAFT`: once submitted, the claim opens read-only and only the row-menu transitions change it. See [Form conditions](../form-conditions.md).
 
-Stale-claim nudge — same pattern as the [CRM nightly stale-deal job](../tutorial-crm/06-ai-and-jobs.md):
+### 7. Notifications
+
+In **Settings → Notifications**, a rule on the screen's **update** event, *Only when the written row has* `STATUS = SUBMITTED`, channel `portal` and `email`, recipients `role:managers`, subject `Claim {ID} of {EMPLOYEE} to approve`. A second rule on `STATUS = REJECTED` can warn the requester. See [Notifications](../../nomaflow/notifications.md).
+
+### 8. Reminders
+
+A Nomaflow job, every morning, with a `sql_query` step:
 
 ```sql
--- nag-stale-submissions
-SELECT id, employee, amount, submitted_at
-FROM expense_claims
-WHERE status = 'submitted'
-  AND submitted_at < CURRENT_TIMESTAMP - INTERVAL '5 days';
+UPDATE expense_claims SET REMINDED_AT = CURRENT_TIMESTAMP
+WHERE STATUS = 'SUBMITTED' AND SUBMITTED_AT < CURRENT_TIMESTAMP - INTERVAL '5' DAY
 ```
 
-Nomaflow job, daily at 09:00, posts to `#expenses-managers` Slack channel.
+and a notification rule on that job's `succeeded` event: `{ROWS} claims waiting for more than 5 days`, to `role:managers`.
 
 ## Variations
 
-| You want… | Do this |
+| Need | How |
 |---|---|
-| **A free-form approver chain** (variable list of approvers) | Add an `approval_steps` child table; status becomes `awaiting:<step_n>`. Approve queries advance the step counter. More complex but the same primitives. |
-| **A history log of every transition** | Add an `expense_audit` table; each transition query inserts a row from a Python step. |
-| **Reopen rejected** | Add a `reopen` action visible when `status == 'rejected'`, flips back to `draft`. |
-| **Email the requester on every transition** | Notifications block on each write query — see [Jobs → Notifications](../../nomaflow/concepts.md). |
+| **History of every transition** | The screen's `audit_table` — see [Audit trail](./audit-trail.md). |
+| **Reopen a rejected claim** | A `reopen_claim` query (`STATUS = 'DRAFT' … WHERE STATUS = 'REJECTED'`) and its row-menu entry. |
+| **A long form in steps** | Dialog tabs, with `hide_on_add` / `hide_on_edit` for the tabs that only make sense in one mode. |
 
 ## What's next
 
-- [Form conditions](../form-conditions.md) for the per-field expression syntax.
-- [Roles & permissions](../build/secure/roles-and-permissions.md) for gating actions per role.
-- [Cookbook → Audit trail](./audit-trail.md) for the `submitted_at` / `approved_at` columns.
+- [Actions and lifecycle](../build/screens/actions-and-lifecycle.md) — chains, prompts, conditions.
+- [Form conditions](../form-conditions.md) — fields by state.
+- [Notifications](../../nomaflow/notifications.md) — rules and recipients.

@@ -1,109 +1,70 @@
 ---
 title: Connexion OIDC
-description: "Recette — brancher le framework sur Authentik, Keycloak, Azure AD ou Okta en 10 minutes. Single sign-on, mapping groupes vers rôles, auto-provisionnement, accès de secours admin."
-keywords: [Liberty Framework, cookbook, OIDC, SSO, Authentik, Keycloak, Azure AD, Okta]
+description: "Recette — permettre aux utilisateurs de se connecter avec le fournisseur d'identité de l'entreprise (Microsoft Entra ID, Keycloak, Okta, Auth0…) : déclarer l'application chez le fournisseur, renseigner Paramètres → App → OpenID Connect (SSO), puis attribuer leurs rôles aux nouveaux utilisateurs."
+keywords: [Liberty Next, cookbook, OIDC, SSO, OpenID Connect, Entra ID, Azure AD, Keycloak, Okta, connexion, attribute_claims]
 ---
 
 # Connexion OIDC
 
-## Le problème
+## Le besoin
 
-Les utilisateurs se connectent avec le fournisseur d'identité de l'entreprise, pas un mot de passe par application. Vous voulez le SSO sans code sur mesure, avec l'appartenance aux groupes du fournisseur d'identité qui se traduit en rôles Liberty.
+Les utilisateurs doivent se connecter avec leur compte d'entreprise, sans mot de passe distinct.
 
-## Le modèle
+## La démarche
 
-Deux moitiés :
-
-1. **Sur le fournisseur d'identité** — enregistrer le framework comme client OAuth2/OIDC, fournir un claim `groups`, enregistrer l'URI de redirection.
-2. **Sur le framework** — activer *OIDC enabled* sous *Paramètres → Framework → Authentification*, remplir les quatre valeurs standard, cliquer sur *Tester la connexion*.
+Liberty Next accepte la connexion par tout fournisseur OpenID Connect. Le formulaire de connexion locale reste disponible ; un bouton **Se connecter avec OIDC** s'ajoute en dessous.
 
 ## La recette
 
-### Étape 1 — enregistrer Liberty sur le fournisseur d'identité
+### 1. Déclarer l'application chez le fournisseur
 
-La procédure dépend du fournisseur d'identité mais la forme est identique.
+Chez le fournisseur (Entra ID, Keycloak, Okta…), créer une application web (client confidentiel) avec :
 
-#### Authentik
+- l'**URI de redirection** `https://<hôte>/auth/oidc/callback` ;
+- les scopes `openid email profile` ;
+- un **secret client**.
 
-1. *Applications → Providers* → *Create* → **OAuth2/OpenID Provider**.
-2. *Redirect URIs* : `https://liberty.example.com/auth/oidc/callback`.
-3. *Property mappings* : ajouter l'ensemble par défaut `openid email groups`.
-4. Noter le **Client ID** + le **Client secret**.
-5. *Applications → Applications* → *Create* → lier au provider ; choisir les groupes à transmettre.
+Relever l'**identifiant client**, le **secret client** et l'**URL de découverte** (`…/.well-known/openid-configuration`).
 
-#### Keycloak
+### 2. Renseigner les paramètres
 
-1. *Realm* → *Clients* → *Create* — Client ID `liberty`, protocole OpenID Connect.
-2. *Valid redirect URIs* : `https://liberty.example.com/auth/oidc/callback`.
-3. Onglet *Credentials* → noter le secret.
-4. *Client scopes* → *liberty-dedicated* → *Add mapper* → **Group Membership** → nom du claim `groups`, omettre le préfixe `/`.
-
-#### Azure AD / Entra
-
-1. *App registrations* → *New registration*.
-2. *Redirect URI* : `https://liberty.example.com/auth/oidc/callback` (Web).
-3. *Certificates & secrets* → *New client secret* — noter la valeur.
-4. *Token configuration* → *Add groups claim* → All groups ; émettre comme `groups` (pas les object IDs).
-
-#### Okta
-
-1. *Applications* → *Create App Integration* → OIDC, Web Application.
-2. *Sign-in redirect URI* : `https://liberty.example.com/auth/oidc/callback`.
-3. *Assignments* — choisir les groupes.
-4. *Authorization servers → default → Claims* → ajouter un claim `groups`, type Groups.
-
-### Étape 2 — configurer Liberty
-
-**Paramètres → Framework → Authentification** :
+**Paramètres → App → OpenID Connect (SSO)** :
 
 | Champ | Valeur |
 |---|---|
-| **OIDC enabled** | ✓ |
-| **Issuer URL** | L'issuer du fournisseur d'identité. Exemples : `https://auth.example.com/application/o/liberty/` *(Authentik, le slash final compte)* — `https://kc.example.com/realms/<realm>` *(Keycloak)* — `https://login.microsoftonline.com/<tenant>/v2.0` *(Azure)* — `https://<domain>.okta.com/oauth2/default` *(Okta)*. |
-| **Client ID** | Depuis le fournisseur d'identité. |
-| **Client secret** | Depuis le fournisseur d'identité — chiffré au repos. |
-| **Redirect URI** | `https://liberty.example.com/auth/oidc/callback` *(doit correspondre à ce qui est enregistré sur le fournisseur d'identité)*. |
-| **Email claim** | `email` *(défaut)*. |
-| **Groups claim** | `groups` *(défaut)*. |
-| **Auto-provision** | ✓ *(crée un utilisateur Liberty à la première connexion SSO)*. |
+| **Enabled** | Activé. |
+| **Discovery URL** | Le `.well-known/openid-configuration` du fournisseur. |
+| **Client ID**, **Client secret** | Tels que déclarés — le secret est chiffré à l'enregistrement. |
+| **Scopes** | `openid email profile`. |
+| **Username claim** | `preferred_username` par défaut ; `email` ou `upn` selon le fournisseur. |
 
-Cliquez sur **▶ Tester la connexion** en bas du sous-formulaire OIDC. Un nouvel onglet s'ouvre, vous vous connectez sur le fournisseur d'identité, l'onglet renvoie « Test OIDC réussi » plus les claims résolus (email, groupes) pour que vous puissiez confirmer le mapping.
+Enregistrer : la modification s'applique sans redémarrage. Voir [Paramètres de l'application → OpenID Connect](../build/settings-app.md#section-4--openid-connect-sso).
 
-**Enregistrer et recharger**.
+### 3. Première connexion et rôles
 
-### Étape 3 — mapper les groupes du fournisseur d'identité aux rôles Liberty
+Les utilisateurs apparaissent dans **Paramètres → Access → Users** à leur première connexion, actifs et **sans rôle** : l'application leur apparaît vide tant qu'aucun rôle ne leur est attribué. Usage courant : la personne se connecte une première fois, puis un administrateur lui attribue ses rôles. Voir [Utilisateurs](../build/secure/users.md).
 
-Le framework mappe le claim `groups` 1:1 aux identifiants de rôles Liberty. Ouvrez **Paramètres → Rôles**, assurez-vous que chaque groupe du fournisseur d'identité qui vous intéresse a un rôle Liberty correspondant avec les bonnes permissions.
+### 4. Attributs issus de l'annuaire (facultatif)
 
-| Groupe IdP | Rôle Liberty | Permissions |
-|---|---|---|
-| `crm-sales` | `crm-sales` | `sql:customers:*`, `sql:deals:*`, `screen:crm:*`, `menu:crm:*` |
-| `crm-managers` | `crm-managers` | `crm-sales` *(hérite)* + accès tableau de bord |
-| `admins` | `admin` | `*` |
+Pour filtrer les lignes par société ou par service à partir de l'annuaire, associer des attributs utilisateur à des claims du jeton d'identité avec `attribute_claims`, dans `app.toml` :
 
-### Étape 4 — tester comme un vrai utilisateur
+```toml
+[oidc]
+attribute_claims = { company = "company", pole = "department" }
+```
 
-Déconnectez-vous d'`admin`. La page de connexion a maintenant un bouton **Sign in with SSO**. Cliquez dessus, authentifiez-vous sur le fournisseur d'identité, revenez au framework — vous avez les rôles que le fournisseur d'identité revendique pour vous, vous voyez ce que ces rôles vous laissent voir.
+À chaque connexion, les attributs associés sont mis à jour depuis le jeton ; le [périmètre de données](../build/secure/roles-and-permissions.md#data-scope) d'un rôle qui utilise `#USER.company#` suit alors l'annuaire. Voir [Se connecter → Attributs fournis par le fournisseur](../build/secure/sign-in.md#attribute-claims).
 
-## Accès de secours
+## Vérifications
 
-Le formulaire local utilisateur/mot de passe **reste disponible** aux côtés du bouton SSO. L'utilisateur `admin` peut toujours se connecter directement même quand le fournisseur d'identité est injoignable. Conservez au moins un admin local pour cette raison — ne le supprimez jamais.
-
-## Déconnexion unique
-
-Pour la propagation de fin de session vers le fournisseur d'identité, définissez **End-session endpoint** dans le sous-formulaire OIDC. Le framework redirige par là sur `POST /auth/logout`.
-
-## Variantes
-
-| Vous voulez… | Faites ceci |
+| Symptôme | Cause |
 |---|---|
-| **Restreindre à un domaine d'email spécifique** | Le framework refuse la connexion si `email_claim` ne se termine pas par la valeur de `[auth.oidc] allowed_domains` (défini dans le sous-formulaire). Plusieurs domaines supportés en liste séparée par virgules. |
-| **Empêcher l'auto-provisionnement** | Désactivez *Auto-provision*. Les utilisateurs doivent exister dans *Paramètres → Utilisateurs* avant de pouvoir se connecter. Le fournisseur d'identité fournit l'authentification ; vous contrôlez l'autorisation. |
-| **Plusieurs fournisseurs d'identité** | Pas supporté dans un seul formulaire ; l'alternative typique est d'utiliser le fournisseur-de-fournisseurs (Authentik / Keycloak fédérant Azure + Google + …) et de pointer Liberty sur le broker. |
-| **Un claim personnalisé au lieu d'`email`** | Définissez *Email claim* sur ce que le fournisseur d'identité renvoie (`preferred_username`, `upn`, etc.). |
+| Pas de bouton OIDC | **Enabled** est désactivé. |
+| Le fournisseur refuse la redirection | L'URI de redirection déclarée chez le fournisseur n'est pas exactement `https://<hôte>/auth/oidc/callback`. |
+| Connecté, mais application vide | Normal pour un nouvel utilisateur : lui attribuer des rôles. |
+| Mauvais nom d'utilisateur | Changer **Username claim** pour le claim que renseigne le fournisseur. |
 
 ## Pour aller plus loin
 
-- [Authentification → OIDC](../build/secure/sign-in.md#oidc) pour la référence complète des champs.
-- [Rôles et permissions](../build/secure/roles-and-permissions.md) pour le mapping groupes-vers-rôles.
-- [Tutoriel CRM → Étape 5](../tutorial-crm/05-auth.md) pour un exemple détaillé.
+- [Se connecter — local et OIDC](../build/secure/sign-in.md) — la connexion locale et OIDC en détail.
+- [Rôles et permissions](../build/secure/roles-and-permissions.md) — ce que les nouveaux utilisateurs peuvent ouvrir.
